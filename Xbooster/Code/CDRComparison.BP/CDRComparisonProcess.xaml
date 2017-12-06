@@ -31,6 +31,7 @@
       <x:String>CDRComparison.BP.Arguments</x:String>
       <x:String>Vanrise.Queueing</x:String>
       <x:String>Vanrise.BusinessProcess</x:String>
+      <x:String>Vanrise.BusinessProcess.Entities</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -50,6 +51,7 @@
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.MainExtensions</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing.Entities</AssemblyReference>
       <AssemblyReference>CDRComparison.BP.Activities</AssemblyReference>
@@ -77,7 +79,16 @@
       <Variable x:TypeArguments="vq:BaseQueue(ce:InvalidCDRBatch)" Name="OutputQueueInvalidCDR" />
       <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="PreparedInvalidCDRsForDBApplyQueue" />
       <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="PrepareInvalidCDRsStatus" />
+      <Variable x:TypeArguments="x:TimeSpan" Name="DelayDuration" />
+      <Variable x:TypeArguments="vbe:CreateBPTaskOutput" Name="CreateBPTaskOutput" />
     </Sequence.Variables>
+    <cba1:SetDelayDuration sap2010:WorkflowViewState.IdRef="SetDelayDuration_1">
+      <cba1:SetDelayDuration.DelayDuration>
+        <OutArgument x:TypeArguments="x:TimeSpan">
+          <mca:CSharpReference x:TypeArguments="x:TimeSpan">DelayDuration</mca:CSharpReference>
+        </OutArgument>
+      </cba1:SetDelayDuration.DelayDuration>
+    </cba1:SetDelayDuration>
     <cba1:CreateCDRTables sap2010:WorkflowViewState.IdRef="CreateCDRTables_1">
       <cba1:CreateCDRTables.TableKey>
         <OutArgument x:TypeArguments="x:String">
@@ -183,23 +194,54 @@
         </cba1:ApplyCDRsToDB.TableKey>
       </cba1:ApplyCDRsToDB>
     </Parallel>
-    <vbw:AssignTask x:TypeArguments="cba:SettingTaskExecutionInformation" ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask`1_3" TaskTitle="CDR Comparison Settings">
-      <vbw:AssignTask.AssignedTo>
-        <InArgument x:TypeArguments="vbe:BPTaskAssignee">
-          <mca:CSharpValue x:TypeArguments="vbe:BPTaskAssignee">new Vanrise.BusinessProcess.MainExtensions.InitiatorBPTaskAssignee()</mca:CSharpValue>
-        </InArgument>
-      </vbw:AssignTask.AssignedTo>
-      <vbw:AssignTask.TaskData>
-        <InArgument x:TypeArguments="vbe:BPTaskData">
-          <mca:CSharpValue x:TypeArguments="vbe:BPTaskData">new SettingTaskData() { TableKey = TableKey, PartnerCDRSourceConfigId = Input.PartnerCDRSourceConfigId }</mca:CSharpValue>
-        </InArgument>
-      </vbw:AssignTask.TaskData>
-      <vbw:AssignTask.TaskExecutionInformation>
-        <OutArgument x:TypeArguments="cba:SettingTaskExecutionInformation">
-          <mca:CSharpReference x:TypeArguments="cba:SettingTaskExecutionInformation">ContinueExecution</mca:CSharpReference>
-        </OutArgument>
-      </vbw:AssignTask.TaskExecutionInformation>
-    </vbw:AssignTask>
+    <Pick sap2010:WorkflowViewState.IdRef="Pick_1">
+      <PickBranch DisplayName="Branch1" sap2010:WorkflowViewState.IdRef="PickBranch_1">
+        <PickBranch.Trigger>
+          <vbw:AssignTask x:TypeArguments="cba:SettingTaskExecutionInformation" ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask`1_6" TaskTitle="CDR Comparison Settings">
+            <vbw:AssignTask.AssignedTo>
+              <InArgument x:TypeArguments="vbe:BPTaskAssignee">
+                <mca:CSharpValue x:TypeArguments="vbe:BPTaskAssignee">new Vanrise.BusinessProcess.MainExtensions.InitiatorBPTaskAssignee()</mca:CSharpValue>
+              </InArgument>
+            </vbw:AssignTask.AssignedTo>
+            <vbw:AssignTask.TaskData>
+              <InArgument x:TypeArguments="vbe:BPTaskData">
+                <mca:CSharpValue x:TypeArguments="vbe:BPTaskData">new SettingTaskData() { TableKey = TableKey, PartnerCDRSourceConfigId = Input.PartnerCDRSourceConfigId }</mca:CSharpValue>
+              </InArgument>
+            </vbw:AssignTask.TaskData>
+            <vbw:AssignTask.TaskExecutionInformation>
+              <OutArgument x:TypeArguments="cba:SettingTaskExecutionInformation">
+                <mca:CSharpReference x:TypeArguments="cba:SettingTaskExecutionInformation">ContinueExecution</mca:CSharpReference>
+              </OutArgument>
+            </vbw:AssignTask.TaskExecutionInformation>
+          </vbw:AssignTask>
+        </PickBranch.Trigger>
+      </PickBranch>
+      <PickBranch DisplayName="Branch2" sap2010:WorkflowViewState.IdRef="PickBranch_2">
+        <PickBranch.Trigger>
+          <Delay sap2010:WorkflowViewState.IdRef="Delay_1">
+            <InArgument x:TypeArguments="x:TimeSpan">
+              <mca:CSharpValue x:TypeArguments="x:TimeSpan">DelayDuration</mca:CSharpValue>
+            </InArgument>
+          </Delay>
+        </PickBranch.Trigger>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+          <cba1:DeleteCDRTables sap2010:WorkflowViewState.IdRef="DeleteCDRTables_2">
+            <cba1:DeleteCDRTables.TableKey>
+              <InArgument x:TypeArguments="x:String">
+                <mca:CSharpValue x:TypeArguments="x:String">TableKey</mca:CSharpValue>
+              </InArgument>
+            </cba1:DeleteCDRTables.TableKey>
+          </cba1:DeleteCDRTables>
+          <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1" Reason="Task timed out">
+            <TerminateWorkflow.Exception>
+              <InArgument x:TypeArguments="s:Exception">
+                <mca:CSharpValue x:TypeArguments="s:Exception">new Vanrise.Entities.VRBusinessException("Task timed out")</mca:CSharpValue>
+              </InArgument>
+            </TerminateWorkflow.Exception>
+          </TerminateWorkflow>
+        </Sequence>
+      </PickBranch>
+    </Pick>
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_2">
       <Parallel.Variables>
         <Variable x:TypeArguments="vq:BaseQueue(ce:CDRBatch)" Name="OutputQueueOrderedCDRs" />
@@ -422,7 +464,7 @@
           </InArgument>
         </cba1:ApplyDisputeCDRsToDB.TableKey>
       </cba1:ApplyDisputeCDRsToDB>
-      <cba1:PrepareInvalidCDRsForDBApply>
+      <cba1:PrepareInvalidCDRsForDBApply sap2010:WorkflowViewState.IdRef="PrepareInvalidCDRsForDBApply_1">
         <cba1:PrepareInvalidCDRsForDBApply.InputQueue>
           <InArgument x:TypeArguments="vq:BaseQueue(ce:InvalidCDRBatch)">
             <mca:CSharpValue x:TypeArguments="vq:BaseQueue(ce:InvalidCDRBatch)">OutputQueueInvalidCDR</mca:CSharpValue>
@@ -448,9 +490,8 @@
             <mca:CSharpValue x:TypeArguments="x:String">TableKey</mca:CSharpValue>
           </InArgument>
         </cba1:PrepareInvalidCDRsForDBApply.TableKey>
-        <sap2010:WorkflowViewState.IdRef>PrepareInvalidCDRsForDBApply_1</sap2010:WorkflowViewState.IdRef>
       </cba1:PrepareInvalidCDRsForDBApply>
-      <cba1:ApplyInvalidCDRsToDB Status="{x:Null}">
+      <cba1:ApplyInvalidCDRsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyInvalidCDRsToDB_1">
         <cba1:ApplyInvalidCDRsToDB.InputQueue>
           <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
             <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">PreparedInvalidCDRsForDBApplyQueue</mca:CSharpValue>
@@ -466,26 +507,104 @@
             <mca:CSharpValue x:TypeArguments="x:String">TableKey</mca:CSharpValue>
           </InArgument>
         </cba1:ApplyInvalidCDRsToDB.TableKey>
-        <sap2010:WorkflowViewState.IdRef>ApplyInvalidCDRsToDB_1</sap2010:WorkflowViewState.IdRef>
       </cba1:ApplyInvalidCDRsToDB>
     </Parallel>
-    <vbw:AssignTask x:TypeArguments="cba:ComparisonResultTaskExecutionInformation" ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask`1_4" TaskTitle="CDR Comparison Result">
-      <vbw:AssignTask.AssignedTo>
-        <InArgument x:TypeArguments="vbe:BPTaskAssignee">
-          <mca:CSharpValue x:TypeArguments="vbe:BPTaskAssignee">new Vanrise.BusinessProcess.MainExtensions.InitiatorBPTaskAssignee()</mca:CSharpValue>
-        </InArgument>
-      </vbw:AssignTask.AssignedTo>
-      <vbw:AssignTask.TaskData>
-        <InArgument x:TypeArguments="vbe:BPTaskData">
-          <mca:CSharpValue x:TypeArguments="vbe:BPTaskData">new ComparisonResultTaskData() { TableKey =TableKey}</mca:CSharpValue>
-        </InArgument>
-      </vbw:AssignTask.TaskData>
-      <vbw:AssignTask.TaskExecutionInformation>
-        <OutArgument x:TypeArguments="cba:ComparisonResultTaskExecutionInformation">
-          <mca:CSharpReference x:TypeArguments="cba:ComparisonResultTaskExecutionInformation">FinishExecution</mca:CSharpReference>
-        </OutArgument>
-      </vbw:AssignTask.TaskExecutionInformation>
-    </vbw:AssignTask>
+    <Pick sap2010:WorkflowViewState.IdRef="Pick_2">
+      <PickBranch DisplayName="Branch1" sap2010:WorkflowViewState.IdRef="PickBranch_3">
+        <PickBranch.Trigger>
+          <vbw:AssignTask x:TypeArguments="cba:ComparisonResultTaskExecutionInformation" ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask`1_4" TaskTitle="CDR Comparison Result">
+            <vbw:AssignTask.AssignedTo>
+              <InArgument x:TypeArguments="vbe:BPTaskAssignee">
+                <mca:CSharpValue x:TypeArguments="vbe:BPTaskAssignee">new Vanrise.BusinessProcess.MainExtensions.InitiatorBPTaskAssignee()</mca:CSharpValue>
+              </InArgument>
+            </vbw:AssignTask.AssignedTo>
+            <vbw:AssignTask.TaskData>
+              <InArgument x:TypeArguments="vbe:BPTaskData">
+                <mca:CSharpValue x:TypeArguments="vbe:BPTaskData">new ComparisonResultTaskData() { TableKey = TableKey }</mca:CSharpValue>
+              </InArgument>
+            </vbw:AssignTask.TaskData>
+            <vbw:AssignTask.TaskExecutionInformation>
+              <OutArgument x:TypeArguments="cba:ComparisonResultTaskExecutionInformation">
+                <mca:CSharpReference x:TypeArguments="cba:ComparisonResultTaskExecutionInformation">FinishExecution</mca:CSharpReference>
+              </OutArgument>
+            </vbw:AssignTask.TaskExecutionInformation>
+          </vbw:AssignTask>
+        </PickBranch.Trigger>
+      </PickBranch>
+      <PickBranch DisplayName="Branch2" sap2010:WorkflowViewState.IdRef="PickBranch_4">
+        <PickBranch.Trigger>
+          <Delay sap2010:WorkflowViewState.IdRef="Delay_2">
+            <InArgument x:TypeArguments="x:TimeSpan">
+              <mca:CSharpValue x:TypeArguments="x:TimeSpan">DelayDuration</mca:CSharpValue>
+            </InArgument>
+          </Delay>
+        </PickBranch.Trigger>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_4">
+          <cba1:DeleteCDRTables sap2010:WorkflowViewState.IdRef="DeleteCDRTables_3">
+            <cba1:DeleteCDRTables.TableKey>
+              <InArgument x:TypeArguments="x:String">
+                <mca:CSharpValue x:TypeArguments="x:String">TableKey</mca:CSharpValue>
+              </InArgument>
+            </cba1:DeleteCDRTables.TableKey>
+          </cba1:DeleteCDRTables>
+          <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_2" Reason="Task timed out">
+            <TerminateWorkflow.Exception>
+              <InArgument x:TypeArguments="s:Exception">
+                <mca:CSharpValue x:TypeArguments="s:Exception">new Vanrise.Entities.VRBusinessException("Task timed out")</mca:CSharpValue>
+              </InArgument>
+            </TerminateWorkflow.Exception>
+          </TerminateWorkflow>
+        </Sequence>
+      </PickBranch>
+    </Pick>
+    <Pick sap2010:WorkflowViewState.IdRef="Pick_3">
+      <PickBranch DisplayName="Branch1" sap2010:WorkflowViewState.IdRef="PickBranch_5">
+        <PickBranch.Trigger>
+          <vbw:AssignTask x:TypeArguments="cba:CDRComparisonConfigTaskExecutionInformation" ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask`1_5" TaskTitle="CDR Comparison Configuration">
+            <vbw:AssignTask.AssignedTo>
+              <InArgument x:TypeArguments="vbe:BPTaskAssignee">
+                <mca:CSharpValue x:TypeArguments="vbe:BPTaskAssignee">new Vanrise.BusinessProcess.MainExtensions.InitiatorBPTaskAssignee()</mca:CSharpValue>
+              </InArgument>
+            </vbw:AssignTask.AssignedTo>
+            <vbw:AssignTask.TaskData>
+              <InArgument x:TypeArguments="vbe:BPTaskData">
+                <mca:CSharpValue x:TypeArguments="vbe:BPTaskData">new CDRComparisonConfigTaskData() { PartnerCDRSourceConfigId = Input.PartnerCDRSourceConfigId , SystemCDRSourceConfigId = Input.SystemCDRSourceConfigId }</mca:CSharpValue>
+              </InArgument>
+            </vbw:AssignTask.TaskData>
+            <vbw:AssignTask.TaskExecutionInformation>
+              <OutArgument x:TypeArguments="cba:CDRComparisonConfigTaskExecutionInformation">
+                <mca:CSharpReference x:TypeArguments="cba:CDRComparisonConfigTaskExecutionInformation">SaveConfig</mca:CSharpReference>
+              </OutArgument>
+            </vbw:AssignTask.TaskExecutionInformation>
+          </vbw:AssignTask>
+        </PickBranch.Trigger>
+      </PickBranch>
+      <PickBranch DisplayName="Branch2" sap2010:WorkflowViewState.IdRef="PickBranch_6">
+        <PickBranch.Trigger>
+          <Delay sap2010:WorkflowViewState.IdRef="Delay_3">
+            <InArgument x:TypeArguments="x:TimeSpan">
+              <mca:CSharpValue x:TypeArguments="x:TimeSpan">DelayDuration</mca:CSharpValue>
+            </InArgument>
+          </Delay>
+        </PickBranch.Trigger>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_5">
+          <cba1:DeleteCDRTables sap2010:WorkflowViewState.IdRef="DeleteCDRTables_4">
+            <cba1:DeleteCDRTables.TableKey>
+              <InArgument x:TypeArguments="x:String">
+                <mca:CSharpValue x:TypeArguments="x:String">TableKey</mca:CSharpValue>
+              </InArgument>
+            </cba1:DeleteCDRTables.TableKey>
+          </cba1:DeleteCDRTables>
+          <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_3" Reason="Task timed out">
+            <TerminateWorkflow.Exception>
+              <InArgument x:TypeArguments="s:Exception">
+                <mca:CSharpValue x:TypeArguments="s:Exception">new Vanrise.Entities.VRBusinessException("Task timed out")</mca:CSharpValue>
+              </InArgument>
+            </TerminateWorkflow.Exception>
+          </TerminateWorkflow>
+        </Sequence>
+      </PickBranch>
+    </Pick>
     <cba1:DeleteCDRTables sap2010:WorkflowViewState.IdRef="DeleteCDRTables_1">
       <cba1:DeleteCDRTables.TableKey>
         <InArgument x:TypeArguments="x:String">
@@ -493,23 +612,6 @@
         </InArgument>
       </cba1:DeleteCDRTables.TableKey>
     </cba1:DeleteCDRTables>
-    <vbw:AssignTask x:TypeArguments="cba:CDRComparisonConfigTaskExecutionInformation" ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask`1_5" TaskTitle="CDR Comparison Configuration">
-      <vbw:AssignTask.AssignedTo>
-        <InArgument x:TypeArguments="vbe:BPTaskAssignee">
-          <mca:CSharpValue x:TypeArguments="vbe:BPTaskAssignee">new Vanrise.BusinessProcess.MainExtensions.InitiatorBPTaskAssignee()</mca:CSharpValue>
-        </InArgument>
-      </vbw:AssignTask.AssignedTo>
-      <vbw:AssignTask.TaskData>
-        <InArgument x:TypeArguments="vbe:BPTaskData">
-          <mca:CSharpValue x:TypeArguments="vbe:BPTaskData">new CDRComparisonConfigTaskData() { PartnerCDRSourceConfigId = Input.PartnerCDRSourceConfigId , SystemCDRSourceConfigId = Input.SystemCDRSourceConfigId}</mca:CSharpValue>
-        </InArgument>
-      </vbw:AssignTask.TaskData>
-      <vbw:AssignTask.TaskExecutionInformation>
-        <OutArgument x:TypeArguments="cba:CDRComparisonConfigTaskExecutionInformation">
-          <mca:CSharpReference x:TypeArguments="cba:CDRComparisonConfigTaskExecutionInformation">SaveConfig</mca:CSharpReference>
-        </OutArgument>
-      </vbw:AssignTask.TaskExecutionInformation>
-    </vbw:AssignTask>
     <cba1:SaveCDRSourceConfigs sap2010:WorkflowViewState.IdRef="SaveCDRSourceConfigs_1">
       <cba1:SaveCDRSourceConfigs.PartnerCDRSource>
         <InArgument x:TypeArguments="ce:CDRSource">
@@ -565,11 +667,12 @@
         </InArgument>
       </cba1:SaveCDRSourceConfigs.SystemCDRSourceConfigName>
     </cba1:SaveCDRSourceConfigs>
-    <sads:DebugSymbol.Symbol>dz9DOlxURlNcWGJvb3N0ZXJcQ29kZVxDRFJDb21wYXJpc29uLkJQXENEUkNvbXBhcmlzb25Qcm9jZXNzLnhhbWxyPgO5BA4CAQFHC0ebAQIBAlEFVxwDAcoMWAW5ARADAc8KugEFygEWAwGjCssBBdcDEAMB9gHYAwXoAxYDAcoB6QMF7wMcAwG7AfADBYAEFgMBjwGBBAW3BCECARBUC1RZAwHLDF0HjAESAwHSC40BB6cBJAMBgQuoAQe4ARwDAdAKxwELxwF9AwHBCsIBC8IBtwEDAbMKugGeAboBtwEDAbIKvQELvQGXAQMBpArXAQfnAR4DAd0J6AEHpAIaAwHfB6UCB78CKwMB6wbAAgfQAiMDAaUG0QIH6wIwAwGxBewCB/wCKAMB6wT9AgeXAysDAfcDmAMHqAMjAwGxA6kDB8QDKwMBvQLFAwfWAyMDAfcB5QML5QOEAQMB6AHgAwvgA4MBAwHaAdgDpwHYA74BAwHZAdsDC9sDlwEDAcsB7AML7ANRAwG8Af0DC/0DggEDAa0B+AML+APnAQMBnwHwA6oB8APIAQMBngHzAwvzA5cBAwGQAbQEC7QEbQMBgQGvBAuvBHECAXOdBAulBBQCAWWOBAuOBG4CAVeqBAuqBGICAUmJBAuJBHICATuTBAuTBG8CAS2EBAuEBGMCAR+YBAuYBG4CARFeCWkSAwGpDGoJdRkDAYcMdgmBARkDAeULggEJiwESAwHTC5oBDZoBZwMBwguQAQ2QAXIDAbILnwENnwF8AwGiC5UBDZUBfAMBkgukAQ2kAVMDAYILsAENsAF0AwHxCqsBDasBfAMB4Qq1AQ21AVMDAdEK3wEN3wF2AwGMCtoBDdoBegMB9QnkAQ3kAVMDAd4J/AEN/AGAAQMBxgmQAg2QAm4DAa8J9wEN9wF6AwGYCfABDfIBQwMBgQmLAg2LAooBAwHqCKECDaECaQMB0wiVAg2VAnIDAbwIhgINhgKAAQMBpQiaAg2cAj8DAY4IgQINgQKAAQMB9wfrAQ3rAWkDAeAHsgINsgJqAwHIB6gCDagCeAMBsQe3Ag23AnkDAZoHrQINrQKDAQMBgwe8Ag28AlMDAewGyAINyAJxAwHUBsMCDcMCewMBvQbNAg3NAlMDAaYG3gIN3gJqAwGOBtQCDdQCggEDAfcF4wIN4wJ+AwHgBdkCDdkCiAEDAckF6AIN6AJTAwGyBfQCDfQCdgMBmgXvAg3vAoABAwGDBfkCDfkCUwMB7ASKAw2KA2oDAdQEgAMNgAN4AwG9BI8DDY8DeQMBpgSFAw2FA4MBAwGPBJQDDZQDUwMB+AOgAw2gA3EDAeADmwMNmwN7AwHJA6UDDaUDUwMBsgO2Aw22A2oDAZoDrAMNrAN4AwGDA7sDDbsDeQMB7AKxAw2xA4MBAwHVAsADDcADUwMBvgLNAw3NA3EDAaYCyAMNyAN7AwGPAtIDDdIDUwMB+AFmD2Z0AwG6DGEPYXEDAaoMamVqbAMBqAxyD3J0AwGYDG0PbWYDAYgMdmV2awMBhgx+D350AwH2C3kPeWcDAeYLiQE1iQE5AwHkC4UBD4UBbwMB1As=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="CreateCDRTables_1" sap:VirtualizedContainerService.HintSize="2474,22" />
+      <sap2010:ViewStateData Id="SetDelayDuration_1" sap:VirtualizedContainerService.HintSize="636,22" />
+      <sap2010:ViewStateData Id="CreateCDRTables_1" sap:VirtualizedContainerService.HintSize="636,22" />
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
       <sap2010:ViewStateData Id="LoadCDRs_3" sap:VirtualizedContainerService.HintSize="242,22" />
       <sap2010:ViewStateData Id="LoadCDRs_4" sap:VirtualizedContainerService.HintSize="242,22" />
@@ -583,8 +686,40 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="PrepareCDRsForDBApply_2" sap:VirtualizedContainerService.HintSize="200,412" />
       <sap2010:ViewStateData Id="ApplyCDRsToDB_2" sap:VirtualizedContainerService.HintSize="200,412" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="2474,458" />
-      <sap2010:ViewStateData Id="AssignTask`1_3" sap:VirtualizedContainerService.HintSize="2474,22" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="636,51" />
+      <sap2010:ViewStateData Id="AssignTask`1_6" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="PickBranch_1" sap:VirtualizedContainerService.HintSize="230,466">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Delay_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="DeleteCDRTables_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="222,208">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="PickBranch_2" sap:VirtualizedContainerService.HintSize="252,466">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Pick_1" sap:VirtualizedContainerService.HintSize="636,512">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="LoadOrderedCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ProcessCDRs_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareMissingCDRsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
@@ -595,19 +730,96 @@
       <sap2010:ViewStateData Id="ApplyDisputeCDRsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareInvalidCDRsForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyInvalidCDRsToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="2474,86" />
-      <sap2010:ViewStateData Id="AssignTask`1_4" sap:VirtualizedContainerService.HintSize="2474,22" />
-      <sap2010:ViewStateData Id="DeleteCDRTables_1" sap:VirtualizedContainerService.HintSize="2474,22" />
-      <sap2010:ViewStateData Id="AssignTask`1_5" sap:VirtualizedContainerService.HintSize="2474,22" />
-      <sap2010:ViewStateData Id="SaveCDRSourceConfigs_1" sap:VirtualizedContainerService.HintSize="2474,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="2496,1080">
+      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="636,51">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="AssignTask`1_4" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="PickBranch_3" sap:VirtualizedContainerService.HintSize="230,466">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Delay_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="DeleteCDRTables_3" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="TerminateWorkflow_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="222,208">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="PickBranch_4" sap:VirtualizedContainerService.HintSize="252,466">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Pick_2" sap:VirtualizedContainerService.HintSize="636,512">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="AssignTask`1_5" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="PickBranch_5" sap:VirtualizedContainerService.HintSize="230,466">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Delay_3" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="DeleteCDRTables_4" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="TerminateWorkflow_3" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="222,208">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="PickBranch_6" sap:VirtualizedContainerService.HintSize="252,466">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Pick_3" sap:VirtualizedContainerService.HintSize="636,512">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="DeleteCDRTables_1" sap:VirtualizedContainerService.HintSize="636,22" />
+      <sap2010:ViewStateData Id="SaveCDRSourceConfigs_1" sap:VirtualizedContainerService.HintSize="636,22" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="658,2170">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="CDRComparison.BP.CDRComparisonProcess_1" sap:VirtualizedContainerService.HintSize="2536,1160" />
+      <sap2010:ViewStateData Id="CDRComparison.BP.CDRComparisonProcess_1" sap:VirtualizedContainerService.HintSize="698,2250">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="ShouldCollapseAll">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

@@ -67,6 +67,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Data">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
     </Reference>
@@ -103,6 +107,7 @@
     <Compile Include="CDR\ProcessCDRs.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaveCDRSourceConfigs.cs" />
+    <Compile Include="SetDelayDuration.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CDRComparison.Business\CDRComparison.Business.csproj">
