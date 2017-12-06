@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Model.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ActionTypes">
           <Key>
             <PropertyRef Name="ID" />
@@ -209,6 +209,10 @@
           <Property Name="AutoBlockEmail" Type="varchar" MaxLength="50" />
           <Property Name="AutoReportSecurity" Type="bit" Nullable="false" />
           <Property Name="AutoReportSecurityEmail" Type="varchar" MaxLength="50" />
+          <Property Name="EnableFTP" Type="bit" />
+          <Property Name="FTPAddress" Type="nvarchar" MaxLength="50" />
+          <Property Name="FTPUserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="FTPPassword" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="OriginationNetworks">
           <Key>
@@ -2961,6 +2965,10 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <Property Name="AutoReportSecurity" Type="Boolean" Nullable="false" />
           <Property Name="AutoReportSecurityEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="GeneratedCalls" Relationship="Model.FK_GeneratedCalls_MobileOperators" FromRole="MobileOperator" ToRole="GeneratedCall" />
+          <Property Name="EnableFTP" Type="Boolean" />
+          <Property Name="FTPAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FTPUserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FTPPassword" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="OriginationNetwork">
           <Key>
@@ -4617,6 +4625,10 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <EntitySetMapping Name="MobileOperators">
             <EntityTypeMapping TypeName="Model.MobileOperator">
               <MappingFragment StoreEntitySet="MobileOperators">
+                <ScalarProperty Name="FTPPassword" ColumnName="FTPPassword" />
+                <ScalarProperty Name="FTPUserName" ColumnName="FTPUserName" />
+                <ScalarProperty Name="FTPAddress" ColumnName="FTPAddress" />
+                <ScalarProperty Name="EnableFTP" ColumnName="EnableFTP" />
                 <ScalarProperty Name="AutoReportSecurityEmail" ColumnName="AutoReportSecurityEmail" />
                 <ScalarProperty Name="AutoReportSecurity" ColumnName="AutoReportSecurity" />
                 <ScalarProperty Name="AutoBlockEmail" ColumnName="AutoBlockEmail" />

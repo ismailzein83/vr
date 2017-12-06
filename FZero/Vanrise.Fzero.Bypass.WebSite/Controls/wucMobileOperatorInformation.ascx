@@ -182,8 +182,36 @@
                                         </tr>
 
                                         
-
-
+                                          <tr>
+                                            <td class="caption">Enable FTP</td>
+                                            <td></td>
+                                            <td class="inputdata">
+                                                <asp:CheckBox ID="enableFTP" runat="server"></asp:CheckBox>
+                                            </td>
+                                         </tr>
+                                          <tr id="trFTPAddress" runat="server">
+                                            <td class="caption">FTP Address</td>
+                                            <td></td>
+                                              <td class="inputdata">
+                                                <telerik:RadTextBox ID="ftpAddress" runat="server"></telerik:RadTextBox>
+                                            </td>
+                                          
+                                        </tr>
+                                         <tr  id="trFTPUserName" runat="server">
+                                            <td class="caption">FTP UserName</td>
+                                            <td></td>
+                                            <td class="inputdata">
+                                                <telerik:RadTextBox ID="ftpUserName" runat="server"></telerik:RadTextBox>
+                                            </td>
+                                           
+                                        </tr>
+                                         <tr id="trFTPPassword" runat="server">
+                                            <td class="caption">FTP Password</td>
+                                            <td></td>
+                                            <td class="inputdata">
+                                                <telerik:RadTextBox ID="ftpPassword" runat="server"></telerik:RadTextBox>
+                                            </td>
+                                        </tr>
                                     </table>
                                 </td>
                             </tr>

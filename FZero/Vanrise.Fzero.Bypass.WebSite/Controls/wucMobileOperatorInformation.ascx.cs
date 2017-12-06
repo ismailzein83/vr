@@ -249,7 +249,51 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
             txtMobileOperatorUserName.ReadOnly = value;
         }
     }
+    public bool EnableFTP
+    {
+        get
+        {
+           return enableFTP.Checked;
+        }
+        set
+        {
+            enableFTP.Checked = value;
+        }
+    }
 
+    public string FTPAddress
+    {
+        get
+        {
+            return ftpAddress.Text;
+        }
+        set
+        {
+            ftpAddress.Text = value;
+        }
+    }
+    public string FTPPassword
+    {
+        get
+        {
+            return ftpPassword.Text;
+        }
+        set
+        {
+            ftpPassword.Text = value;
+        }
+    }
+    public string FTPUserName
+    {
+        get
+        {
+            return ftpUserName.Text;
+        }
+        set
+        {
+            ftpUserName.Text = value;
+        }
+    }
     #endregion
 
     #region Methods
@@ -289,7 +333,7 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
                 {
                     foreach (MobileOperator mobileOperator in listMobileOperator)
                     {
-                        if (mobileOperator.User.Prefix.Contains(p) && mobileOperator.ID != MobileOperatorId.ToInt())
+                        if (mobileOperator.User.Prefix != null && mobileOperator.User.Prefix.Contains(p) && mobileOperator.ID != MobileOperatorId.ToInt())
                         {
                             return Resources.Resources.ThisPrefixAlreadyUsedBy + " " + mobileOperator.User.FullName;
                         }
@@ -376,6 +420,12 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         SecurityEmail = MobileOperator.AutoReportSecurityEmail;
         EnableSecurity = MobileOperator.AutoReportSecurity;
 
+        if (MobileOperator.EnableFTP.HasValue)
+         EnableFTP = MobileOperator.EnableFTP.Value;
+        FTPAddress = MobileOperator.FTPAddress;
+        FTPPassword = MobileOperator.FTPPassword;
+        FTPUserName = MobileOperator.FTPUserName;
+      
         if (SysParameter.Global_DefaultMobileOperator != MobileOperator.User.FullName)
         {
             Prefix = MobileOperator.User.Prefix.ToText().Trim();
@@ -388,7 +438,6 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
             txtPrefix.Visible = false;
             lblPrefixes.Visible = true;
         }
-
 
         Website = MobileOperator.User.Website.ToText().Trim();
         PasswordVisible = false;
@@ -430,7 +479,10 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         MobileOperator.AutoReportSecurityEmail = SecurityEmail;
         MobileOperator.AutoReportSecurity = EnableSecurity;
 
-
+        MobileOperator.EnableFTP = EnableFTP;
+        MobileOperator.FTPAddress = FTPAddress;
+        MobileOperator.FTPUserName = FTPUserName;
+        MobileOperator.FTPPassword = FTPPassword;
 
         if (!txtUserNameReadOnly)
         {
@@ -447,6 +499,5 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
 
         return MobileOperator;
     }
-
     #endregion
 }
