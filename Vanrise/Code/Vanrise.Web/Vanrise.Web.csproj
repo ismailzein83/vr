@@ -157,6 +157,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Client\Images\loadingbar.gif" />
     <Content Include="Client\Javascripts\Directives\Containers\vr-legend-directive.js" />
+    <Content Include="Client\Javascripts\Directives\Diagram\vr-diagram-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Select\vr-toolbox-select.html" />
     <Content Include="Client\Javascripts\Directives\Recompiler\vr-recompiler-ready.js" />
     <Content Include="Client\Javascripts\Services\vr-dragdrop-service.js" />
@@ -364,6 +365,7 @@
     <Content Include="Client\Javascripts\Services\VRDateTimeService.js" />
     <Content Include="Client\Libraries\AngularExtensions\BsDateTimePicker\bootstrap-datetimepicker.js" />
     <Content Include="Client\Libraries\AngularExtensions\BsDateTimePicker\moment-with-locales.js" />
+    <Content Include="Client\Libraries\AngularExtensions\GoJs\go.js" />
     <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\dist\jstree.js" />
     <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\dist\themes\default-dark\32px.png" />
     <Content Include="Client\Libraries\AngularExtensions\JSTreeView\jstree\dist\themes\default-dark\40px.png" />
@@ -1179,6 +1181,7 @@
     <Content Include="Client\Styles\ng-sortable.style.css" />
     <Content Include="Client\FontStyle\open-sans.css" />
     <Content Include="Client\Styles\simple-sidebar.css" />
+    <Content Include="Client\Styles\Style-rtl.css" />
     <Content Include="Client\Styles\Styles.css" />
     <None Include="Client\Themes\theme-extented-blue.css.exclude" />
     <Content Include="Client\Themes\theme-extented-INSOFT.css.exclude" />

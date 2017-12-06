@@ -1,0 +1,180 @@
+﻿body.rtl {
+  direction:rtl;
+}
+.rtl .nav{
+    -webkit-padding-start: 0px;
+}
+.rtl .loading-container> img {   
+   right: 50%;
+   left: unset !important;
+}
+/* start main-menu*/
+
+@media (min-width: 768px){
+    .rtl #wrapper {
+        padding-left: unset !important;
+    }
+}
+
+.rtl .wrapper-toogled{
+    padding-right:185px;
+}
+.rtl .wrapper-normal{
+     padding-right:25px;     
+}
+
+.rtl .vr-nav-custom .minilogo {   
+    left: -5px;
+    right: unset !important;
+}
+
+.rtl .vr-nav-custom .menu-icon {   
+    left: 140px;
+    right: unset !important;
+}
+
+.rtl .support-call{
+    left: -110px !important;
+}
+
+.rtl .vr-nav-custom .warning-icon {   
+    right: unset !important;
+    left:175px;
+}
+.rtl .vr-logout-span { 
+    right: unset !important;    
+    left: 220px;
+}
+.rtl .vr-user-icon {   
+    left: unset !important;
+    right:-10px
+}
+.rtl .vr-user-separator {
+    margin-left: unset !important;
+    margin-right: 15px;
+}
+.rtl .support-call >a >img{    
+    transform:rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+}
+
+@media (min-width: 768px) {
+    .rtl .navbar-header {
+        float: right;
+    }
+}
+
+
+.rtl #sidebar-wrapper {   
+    right: 225px;
+    left: unset !important;
+    margin-right: -225px;
+    margin-left: unset !important;
+}
+
+.rtl .sub-header-open {
+    margin-right: 200px;
+    margin-left: unset !important;
+}
+.rtl .clock {    
+    right: 0px;
+    left: 0px !important;
+}
+.rtl .collapsed-clock {
+    right: -50px !important;
+    left: unset !important;    
+}
+.rtl .sub-header-closed {
+    margin-right: 40px;
+    margin-left: unset !important;
+}
+
+.rtl .toogle-icon{   
+    left: 16px;
+    right:unset !important;
+}
+.rtl .pin-icon{
+    right:unset !important;
+    left:-1px;
+}
+.rtl .unpined-icon {
+    left: -1px !important;
+    right:unset !important;    
+}
+.rtl .pined-icon {
+   transform: rotate(-85deg);
+}
+.rtl #collapsedmenu .unpined-icon {
+    left: -10px !important;
+}
+.rtl .collapsed-pin-icon {    
+    left: unset !important;
+    right: 10px;
+}   
+.rtl .toogle-icon::before{   
+    content: "\e080" !important;
+}
+.rtl .collapsed-toggle-icon{   
+    right: unset !important;
+    left:10px
+}
+.rtl .collapsed-toggle-icon::before{   
+    content: "\e079" !important;
+}
+.rtl .inner-sub-menu{
+    padding-right: 15px;
+    margin-left: unset !important;
+}
+.rtl .inner-list-item {
+    margin-right: -25px;
+    padding-right: 25px;
+    padding-left: unset !important;
+}
+.rtl .dropdown-menu-custom-serf {  
+    right: 40px;
+    left :unset !important;
+    text-align: right;
+}
+.rtl .title-label {   
+    padding: 2px 15px 0px 0px;
+}
+.rtl .toggel {
+    float: left;
+}
+.rtl .menulink{
+    padding: 3px 25px 3px 0px!important;
+    text-align: right !important;
+}
+.rtl .dll-parent-menu div:before {   
+    border-width: 0.35em 0.45em 0.35em 0em;
+    left: unset !important;
+    right:-5px;
+   
+}
+.rtl .innerlist div:before {
+    border-width: 0.35em 0.45em 0.35em 0em;
+    left: unset !important;
+    right: -5px;
+}
+.rtl .innerlist a:before {  
+    left: unset !important;
+    right: -5px;
+}
+.rtl .child-menu-link{
+    padding:0px 30px 0px 0px !important ;
+}
+.rtl .dll-menu a:before {   
+    left: unset !important;
+    right: -5px;
+}
+.rtl .dropdown-menu {
+    float: right;
+}
+.rtl .vr-company-name {
+    right: -15px;
+    left: unset !important;
+}
+/* end main-menu*/
+
