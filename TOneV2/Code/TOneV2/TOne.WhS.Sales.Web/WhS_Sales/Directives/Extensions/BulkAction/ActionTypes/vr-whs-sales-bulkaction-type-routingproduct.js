@@ -48,6 +48,8 @@ app.directive('vrWhsSalesBulkactionTypeRoutingproduct', ['WhS_Sales_BulkActionUt
                 rateSourceSelectorReadyDeferred.resolve();
             };
             $scope.scopeModel.onRoutingProductSelected = function (selectedRoutingProduct) {
+                if (selectedRoutingProduct.IsDefinedForAllZones == false)
+                    VRNotificationService.showWarning("Routing product " + selectedRoutingProduct.Name + " is defined only for specific zones");
                 _selectedRoutingProduct = selectedRoutingProduct;
                     WhS_Sales_BulkActionUtilsService.onBulkActionChanged(bulkActionContext);
             };          
