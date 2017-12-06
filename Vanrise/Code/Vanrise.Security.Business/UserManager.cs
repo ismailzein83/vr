@@ -28,7 +28,7 @@ namespace Vanrise.Security.Business
 
             _securityManager = new SecurityManager();
 
-           _configManager = new ConfigManager();
+            _configManager = new ConfigManager();
 
         }
         static UserManager()
@@ -176,12 +176,12 @@ namespace Vanrise.Security.Business
             if (cloudServiceProxy != null)
             {
                 var output = cloudServiceProxy.AddUserToApplication(new AddUserToApplicationInput
-                    {
-                        Email = userObject.Email,
-                        EnabledTill = userObject.EnabledTill,
-                        Description = userObject.Description,
-                        TenantId = userObject.TenantId
-                    });
+                {
+                    Email = userObject.Email,
+                    EnabledTill = userObject.EnabledTill,
+                    Description = userObject.Description,
+                    TenantId = userObject.TenantId
+                });
                 if (output.OperationOutput != null && output.OperationOutput.Result == InsertOperationResult.Succeeded)
                 {
                     insertActionSucc = true;
@@ -203,7 +203,7 @@ namespace Vanrise.Security.Business
             }
             else
             {
-                
+
                 string pwd;
                 if (!String.IsNullOrWhiteSpace(userObject.Password))//password is not required when adding User, it is auto-generated
                 {
@@ -213,6 +213,7 @@ namespace Vanrise.Security.Business
                         insertOperationOutput.Message = validationMessage;
                         return insertOperationOutput;
                     }
+
                     pwd = userObject.Password;
                 }
                 else
@@ -242,13 +243,7 @@ namespace Vanrise.Security.Business
                 if (insertActionSucc)
                 {
                     addedUser.UserId = userId;
-                    //EmailTemplateManager emailTemplateManager = new EmailTemplateManager();
-                    //EmailTemplate template = emailTemplateManager.GeEmailTemplateByType(Constants.NewPasswordType);
-                    //PasswordEmailContext context = new PasswordEmailContext() { Name = userObject.Name, Password = pwd };
-                    //emailTemplateManager.SendEmail(userObject.Email, template.GetParsedBodyTemplate(context), template.GetParsedSubjectTemplate(context));
 
-
-            
                     Guid newUserId = _configManager.GetNewUserId();
                     if (_configManager.ShouldSendEmailOnNewUser())
                     {
@@ -287,8 +282,6 @@ namespace Vanrise.Security.Business
 
             return insertOperationOutput;
         }
-
-
 
         public Vanrise.Entities.UpdateOperationOutput<UserDetail> UpdateUser(UserToUpdate userObject)
         {
@@ -412,11 +405,41 @@ namespace Vanrise.Security.Business
 
             return updateOperationOutput;
         }
-
+        public bool IsUserDisabledTill(User user, out TimeSpan? disableTill)
+        {
+            disableTill = null;
+            if (user.DisabledTill.HasValue && user.DisabledTill.Value > DateTime.Now)
+            {
+                disableTill = user.DisabledTill.Value - DateTime.Now;
+                return true;
+            }
+            return false;
+        }
         public bool IsUserEnable(User user)
         {
-            return (!user.EnabledTill.HasValue || user.EnabledTill.Value > DateTime.Now);
+            if (user.EnabledTill.HasValue && user.EnabledTill.Value < DateTime.Now)
+                return false;
+            if (user.DisabledTill.HasValue && user.DisabledTill.Value > DateTime.Now)
+                return false;
+            return true;
         }
+
+        public bool IsUserEnable(User user, out UserStatus userStatus)
+        {
+            userStatus = UserStatus.Active;
+            if (user.EnabledTill.HasValue && user.EnabledTill.Value < DateTime.Now)
+            {
+                userStatus = UserStatus.Inactive;
+                return false;
+            }
+            if (user.DisabledTill.HasValue && user.DisabledTill.Value > DateTime.Now)
+            {
+                userStatus = UserStatus.Locked;
+                return false;
+            }
+            return true;
+        }
+
         public Vanrise.Entities.UpdateOperationOutput<UserDetail> EnableUser(User userObject)
         {
             UpdateOperationOutput<UserDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<UserDetail>();
@@ -441,6 +464,43 @@ namespace Vanrise.Security.Business
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 var user = GetUserbyId(userObject.UserId);
                 VRActionLogger.Current.LogObjectCustomAction(UserLoggableEntity.Instance, "Enable", true, user, null);
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = UserDetailMapper(user);
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            }
+
+            return updateOperationOutput;
+        }
+
+        public Vanrise.Entities.UpdateOperationOutput<UserDetail> UnlockUser(User userObject)
+        {
+            UpdateOperationOutput<UserDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<UserDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            bool updateActionSucc;
+            var cloudServiceProxy = GetCloudServiceProxy();
+            if (cloudServiceProxy != null)
+            {
+                throw new ArgumentNullException("cloudServiceProxy");
+            }
+            else
+            {
+                IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+                updateActionSucc = dataManager.UnlockUser(userObject.UserId);
+            }
+
+            if (updateActionSucc)
+            {
+                UserFailedLoginManager userFailedLoginManager = new UserFailedLoginManager();
+                userFailedLoginManager.DeleteUserFailedLogin(userObject.UserId);
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                var user = GetUserbyId(userObject.UserId);
+                VRActionLogger.Current.LogObjectCustomAction(UserLoggableEntity.Instance, "Unlock", true, user, null);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = UserDetailMapper(user);
             }
@@ -489,10 +549,14 @@ namespace Vanrise.Security.Business
                 if (string.IsNullOrEmpty(password))
                     throw new ArgumentNullException("password");
 
+                string hashedPassword = HashingUtility.ComputeHash(password, "", null);
                 IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-                updateActionSucc = dataManager.ResetPassword(userId, HashingUtility.ComputeHash(password, "", null));
+                updateActionSucc = dataManager.ResetPassword(userId, hashedPassword);
+
+
                 if (updateActionSucc)
                 {
+                    new UserPasswordHistoryManager().AddPasswordHistory(userId, hashedPassword, true);
                     //EmailTemplateManager emailTemplateManager = new EmailTemplateManager();
                     //EmailTemplate template = emailTemplateManager.GeEmailTemplateByType(Constants.ForgotPasswordType);
                     //PasswordEmailContext context = new PasswordEmailContext() { Name = user.Name, Password = pwd };
@@ -747,6 +811,17 @@ namespace Vanrise.Security.Business
             User user = GetUserbyId(userId);
             return GetUserDetails(user);
         }
+
+        public bool UpdateDisableTill(int userId, DateTime disableTill)
+        {
+            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+            bool succ = dataManager.UpdateDisableTill(userId, disableTill);
+            if (succ)
+            {
+                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+            }
+            return succ;
+        }
         #endregion
 
         #region Private Methods
@@ -998,9 +1073,11 @@ namespace Vanrise.Security.Business
 
         private UserDetail UserDetailMapper(User userObject)
         {
+            UserStatus status = UserStatus.Active;
+            bool isActive = IsUserEnable(userObject, out status);
             UserDetail userDetail = new UserDetail();
             userDetail.Entity = userObject;
-            userDetail.Status = IsUserEnable(userObject) ? UserStatus.Active : UserStatus.Inactive;
+            userDetail.Status = status;
             userDetail.GroupNames = GetGroupNames(userObject.UserId);
             return userDetail;
         }
@@ -1008,9 +1085,11 @@ namespace Vanrise.Security.Business
 
         private UserInfo UserInfoMapper(User userObject)
         {
+            UserStatus status = UserStatus.Active;
+            bool isActive = IsUserEnable(userObject, out status);
             UserInfo userInfo = new UserInfo();
             userInfo.Name = userObject.Name;
-            userInfo.Status = IsUserEnable(userObject) ? UserStatus.Active : UserStatus.Inactive;
+            userInfo.Status = status;
             userInfo.UserId = userObject.UserId;
             return userInfo;
         }

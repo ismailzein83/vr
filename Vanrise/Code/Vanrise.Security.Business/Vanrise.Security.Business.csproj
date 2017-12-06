@@ -80,6 +80,8 @@
     <Compile Include="SystemActionManager.cs" />
     <Compile Include="TenantManager.cs" />
     <Compile Include="UserGroupManager.cs" />
+    <Compile Include="UserFailedLoginManager.cs" />
+    <Compile Include="UserPasswordHistoryManager.cs" />
     <Compile Include="ViewManager.cs" />
     <Compile Include="MenuManager.cs" />
     <Compile Include="PermissionManager.cs" />

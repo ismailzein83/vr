@@ -11,8 +11,12 @@ namespace Vanrise.Security.Entities
         public int PasswordLength { get; set; }
 
         public int MaxPasswordLength { get; set; }
-
+        public int MaximumUserLoginTries { get; set; }
+        public int UserPasswordHistoryCount { get; set; }
+        public int MinutesToLock { get; set; }
+        public TimeSpan? FailedInterval { get; set; }
         public PasswordComplexity? PasswordComplexity { get; set; }
+        public Guid? NotificationMailTemplateId { get; set; }
     }
 
     public enum PasswordComplexity

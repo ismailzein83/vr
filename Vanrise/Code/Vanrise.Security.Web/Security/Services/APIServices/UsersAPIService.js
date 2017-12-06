@@ -26,6 +26,7 @@
             ForgotPassword: ForgotPassword,
             DisableUser: DisableUser,
             EnableUser: EnableUser,
+            UnlockUser: UnlockUser,
             GetUserHistoryDetailbyHistoryId: GetUserHistoryDetailbyHistoryId
         });
 
@@ -78,6 +79,10 @@
 
         function EnableUser(user) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'EnableUser'), user);
+        }
+
+        function UnlockUser(user) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'UnlockUser'), user);
         }
 
         function CheckUserName(name) {

@@ -62,6 +62,27 @@ namespace Vanrise.Security.Business
             return GetPasswordSettings().MaxPasswordLength;
         }
 
+        public int GetMaxRecordsCount()
+        {
+            return GetPasswordSettings().UserPasswordHistoryCount;
+        }
+        public int GetMaxFailedTries()
+        {
+            return GetPasswordSettings().MaximumUserLoginTries;
+        }
+        public int GetLockForMinutes()
+        {
+            return GetPasswordSettings().MinutesToLock;
+        }
+        public TimeSpan? GetFailedInterval()
+        {
+            return GetPasswordSettings().FailedInterval;
+        }
+        public Guid? GetNotificationMailTemplateId()
+        {
+            return GetPasswordSettings().NotificationMailTemplateId;
+        }
+
         public PasswordComplexity? GetPasswordComplexity()
         {
             return GetPasswordSettings().PasswordComplexity;

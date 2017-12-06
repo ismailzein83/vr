@@ -121,6 +121,7 @@
     <Content Include="Security\Constants\MenuTypeEnum.js" />
     <Content Include="Security\Constants\ModuleConfig.js" />
     <Content Include="Security\Constants\PermissionFlagEnum.js" />
+    <Content Include="Security\Constants\UserActivationStatusEnum.js" />
     <Content Include="Security\Constants\UserProfilePropertyEnum.js" />
     <Content Include="Security\Constants\PasswordComplexityEnum.js" />
     <Content Include="Security\Constants\ViewTypeEnum.js" />
@@ -330,7 +331,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>17691</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

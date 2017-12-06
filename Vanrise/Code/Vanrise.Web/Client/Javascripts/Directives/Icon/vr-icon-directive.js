@@ -11,12 +11,13 @@ app.directive('vrIcon', ['$compile', function ($compile) {
         'Disabled': { value: "Client/Images/onebit_33.png", isimage: true, tooltip: 'Disabled' },
         '1': { value: "Client/Images/true.png", isimage: true, tooltip: '1' },
         '0': { value: "Client/Images/onebit_33.png", isimage: true, tooltip: '0' },
+        '2': { value: "Client/Images/banned.png", isimage: true, tooltip: '2' },//#ff1111        
         'music': { value: "glyphicon-music", isimage: false, tooltip: 'Music' },
         'above': { value: "glyphicon-arrow-up arrow-above", isimage: false, tooltip: 'Above' },//#37c737
         'below': { value: "glyphicon-arrow-down arrow-below", isimage: false, tooltip: 'Below' },//#ff1111
         'increase': { value: "glyphicon-arrow-up arrow-below", isimage: false, tooltip: 'Increase' },
         'decrease': { value: "glyphicon-arrow-down arrow-above", isimage: false, tooltip: 'Decrease' }, //#37c737
-        'explicit': { value: 'Client/Images/explicit.png', isimage: true, tooltip: 'Explicit',width:"15px",height:"15px" },
+        'explicit': { value: 'Client/Images/explicit.png', isimage: true, tooltip: 'Explicit', width: "15px", height: "15px" },
         'inherited': { value: 'Client/Images/inherited.png', isimage: true, tooltip: 'Inherited' }
     };
 

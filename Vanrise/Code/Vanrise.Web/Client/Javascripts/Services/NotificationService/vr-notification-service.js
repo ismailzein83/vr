@@ -166,7 +166,7 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
                 return true;
                 break;
             case AuthenticateOperationResultEnum.Inactive.value:
-                showError("Login Failed. Inactive User"); break;
+                showError(authenticateOperationOutput.Message != undefined ? authenticateOperationOutput.Message : "Login Failed. Inactive User"); break;
             case AuthenticateOperationResultEnum.WrongCredentials.value:
                 showError("Login Failed. Wrong Credentials"); break;
             case AuthenticateOperationResultEnum.UserNotExists.value:

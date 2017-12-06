@@ -56,7 +56,9 @@
     <Compile Include="SystemActionDataManager.cs" />
     <Compile Include="TenantDataManager.cs" />
     <Compile Include="UserDataManager.cs" />
+    <Compile Include="UserFailedLoginDataManager.cs" />
     <Compile Include="UserGroupDataManager.cs" />
+    <Compile Include="UserPasswordHistoryDataManager.cs" />
     <Compile Include="ViewDataManager.cs" />
     <Compile Include="ViewTypeDataManager.cs" />
     <Compile Include="WidgetDataManager.cs" />

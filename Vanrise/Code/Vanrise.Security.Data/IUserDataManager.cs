@@ -22,7 +22,7 @@ namespace Vanrise.Security.Data
         bool DisableUser(int userID);
 
         bool EnableUser(int userID);
-
+        bool UnlockUser(int userID);
         bool UpdateLastLogin(int userID);
 
         bool ResetPassword(int userId, string password);
@@ -38,5 +38,7 @@ namespace Vanrise.Security.Data
         bool UpdateTempPasswordById(int userId, string password, DateTime? passwordValidTill);
         
         bool UpdateTempPasswordByEmail(string email, string password, DateTime? passwordValidTill);
+
+        bool UpdateDisableTill(int userID, DateTime disableTill);
     }
 }

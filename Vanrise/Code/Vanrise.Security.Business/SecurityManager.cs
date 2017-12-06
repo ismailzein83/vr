@@ -47,6 +47,38 @@ namespace Vanrise.Security.Business
                 authToken.UserDisplayName = user.Name;
                 authToken.ExpirationIntervalInMinutes = (int)Math.Ceiling(s_tokenExpirationInterval.TotalMinutes);
 
+                ConfigManager cManager = new ConfigManager();
+
+                TimeSpan? disableTillTime;
+                if (manager.IsUserDisabledTill(user, out disableTillTime))
+                {
+                    authenticationOperationOutput.Result = AuthenticateOperationResult.Inactive;
+                    authenticationOperationOutput.Message = string.Format("User is locked, try after {0} minutes, {1} seconds", disableTillTime.Value.Minutes, disableTillTime.Value.Seconds);
+                    return authenticationOperationOutput;
+                }
+
+                if (cManager.GetFailedInterval().HasValue)
+                {
+                    UserFailedLoginManager userFailedLoginManager = new UserFailedLoginManager();
+                    var failedLogins = userFailedLoginManager.GetUserFailedLoginByUserId(user.UserId, DateTime.Now.AddMinutes(-1), DateTime.Now.AddTicks(cManager.GetFailedInterval().Value.Ticks));
+                    if (failedLogins.Count() == cManager.GetMaxFailedTries())
+                    {
+                        UserManager userManager = new UserManager();
+                        DateTime disableTill = DateTime.Now.AddMinutes(cManager.GetLockForMinutes());
+                        var disableTillTimeSpan = disableTill - DateTime.Now;
+
+                        SendNotificationMail(user, cManager);
+
+                        if (userManager.UpdateDisableTill(user.UserId, disableTill))
+                        {
+                            VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "User is locked after multiple failed logins");
+                            authenticationOperationOutput.Result = AuthenticateOperationResult.Inactive;
+                            authenticationOperationOutput.Message = string.Format("User is locked, try after {0} minutes, {1} seconds", disableTillTimeSpan.Minutes, disableTillTimeSpan.Seconds);
+                            return authenticationOperationOutput;
+                        }
+                    }
+                }
+
                 if (!manager.IsUserEnable(user))
                 {
                     authenticationOperationOutput.Result = AuthenticateOperationResult.Inactive;
@@ -84,12 +116,18 @@ namespace Vanrise.Security.Business
                             VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Try login with activation needed");
 
                         }
-
                         else
                         {
+
+                            int addedId;
+                            UserFailedLoginManager userFailedLoginManager = new UserFailedLoginManager();
+                            userFailedLoginManager.AddUserFailedLogin(new UserFailedLogin
+                            {
+                                FailedResultId = (int)AuthenticateOperationResult.WrongCredentials,
+                                UserId = user.UserId
+                            }, out addedId);
                             authenticationOperationOutput.Result = AuthenticateOperationResult.WrongCredentials;
                             VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Try login with wrong credentials");
-
                         }
                     }
                 }
@@ -102,6 +140,19 @@ namespace Vanrise.Security.Business
             }
 
             return authenticationOperationOutput;
+        }
+
+        private static void SendNotificationMail(User user, ConfigManager cManager)
+        {
+            Guid? notificationId = cManager.GetNotificationMailTemplateId();
+
+            if (notificationId.HasValue)
+            {
+                Dictionary<string, dynamic> mailObjects = new Dictionary<string, dynamic>();
+                mailObjects.Add("User", user);
+                VRMailManager vrMailManager = new VRMailManager();
+                vrMailManager.SendMail(notificationId.Value, mailObjects);
+            }
         }
 
         private void AddTokenExtensions(SecurityToken securityToken)
@@ -181,24 +232,49 @@ namespace Vanrise.Security.Business
                 return updateOperationOutput;
             }
 
+            if (IsPasswordSame(loggedInUserId, newPassword, out validationMessage))
+            {
+                updateOperationOutput.Message = validationMessage;
+                return updateOperationOutput;
+            }
+
             User currentUser = manager.GetUserbyId(loggedInUserId);
             string currentUserPassword = manager.GetUserPassword(loggedInUserId);
 
             bool changePasswordActionSucc = false;
             bool oldPasswordIsCorrect = HashingUtility.VerifyHash(oldPassword, "", currentUserPassword);
-
+            string encryptedNewPassword = "";
             if (oldPasswordIsCorrect)
             {
-                string encryptedNewPassword = HashingUtility.ComputeHash(newPassword, "", null);
+                encryptedNewPassword = HashingUtility.ComputeHash(newPassword, "", null);
                 changePasswordActionSucc = dataManager.ChangePassword(loggedInUserId, encryptedNewPassword);
             }
 
             if (changePasswordActionSucc)
             {
+                new UserPasswordHistoryManager().AddPasswordHistory(loggedInUserId, encryptedNewPassword, false);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
             }
 
             return updateOperationOutput;
+        }
+
+        public bool IsPasswordSame(int userId, string newPassword, out string validationMessage)
+        {
+            validationMessage = "";
+            ConfigManager configManager = new ConfigManager();
+            int maxRecordCount = configManager.GetMaxRecordsCount();
+
+            IEnumerable<UserPasswordHistory> passwordHistoryLogs = new UserPasswordHistoryManager().GetUserPasswordHistoryByUserId(userId, maxRecordCount);
+            foreach (var log in passwordHistoryLogs)
+            {
+                if (HashingUtility.VerifyHash(newPassword, "", log.Password))
+                {
+                    validationMessage = "Password entered matches old passwords. Please enter a new password";
+                    return true;
+                }
+            }
+            return false;
         }
 
         public string GetCookieName()
@@ -273,6 +349,7 @@ namespace Vanrise.Security.Business
             int passwordLength = configManager.GetPasswordLength();
             int maxPasswordLength = configManager.GetMaxPasswordLength();
             var complexity = configManager.GetPasswordComplexity();
+
             if (password.Trim().Length < passwordLength)
             {
                 errorMessage = string.Format("Password must be at least {0} characters.", passwordLength);
@@ -288,6 +365,7 @@ namespace Vanrise.Security.Business
                 errorMessage = "Password does not match complexity level.";
                 return false;
             }
+
             errorMessage = null;
             return true;
         }

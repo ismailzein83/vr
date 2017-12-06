@@ -18,12 +18,13 @@ namespace Vanrise.Security.Entities
         {
             get
             {
-                if(_passwordSettings == null)
+                if (_passwordSettings == null)
                 {
                     _passwordSettings = new PasswordSettings
                     {
                         PasswordLength = 6,
                         MaxPasswordLength = 8
+
                     };
                 }
                 return _passwordSettings;
@@ -38,7 +39,7 @@ namespace Vanrise.Security.Entities
 
         public bool SendEmailOnResetPasswordByAdmin { get; set; }
 
-       
+
     }
 
 }

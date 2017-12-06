@@ -81,6 +81,12 @@ namespace Vanrise.Security.Web.Controllers
             return _manager.EnableUser(userObject);
         }
         [HttpPost]
+        [Route("UnlockUser")]
+        public Vanrise.Entities.UpdateOperationOutput<UserDetail> UnlockUser(User userObject)
+        {
+            return _manager.UnlockUser(userObject);
+        }
+        [HttpPost]
         [Route("AddUser")]
         public Vanrise.Entities.InsertOperationOutput<UserDetail> AddUser(UserToAdd userObject)
         {

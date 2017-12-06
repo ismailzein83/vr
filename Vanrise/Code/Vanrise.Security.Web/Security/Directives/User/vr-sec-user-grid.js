@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", 'VRUIUtilsService', 'VR_Sec_PermissionAPIService', "VR_Sec_PermissionService", "VR_Sec_HolderTypeEnum", 'VRNotificationService', 'VR_Sec_SecurityAPIService',
-    function (VR_Sec_UserAPIService, VR_Sec_UserService, VRUIUtilsService, VR_Sec_PermissionAPIService, VR_Sec_PermissionService, VR_Sec_HolderTypeEnum, VRNotificationService, VR_Sec_SecurityAPIService) {
+app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", 'VRUIUtilsService', 'VR_Sec_PermissionAPIService', "VR_Sec_PermissionService", "VR_Sec_HolderTypeEnum", 'VRNotificationService', 'VR_Sec_SecurityAPIService', 'VR_Sec_UserActivationStatusEnum',
+    function (VR_Sec_UserAPIService, VR_Sec_UserService, VRUIUtilsService, VR_Sec_PermissionAPIService, VR_Sec_PermissionService, VR_Sec_HolderTypeEnum, VRNotificationService, VR_Sec_SecurityAPIService, VR_Sec_UserActivationStatusEnum) {
 
         var directiveDefinitionObject = {
 
@@ -84,7 +84,7 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
             function defineMenuActions() {
 
                 $scope.gridMenuActions = function (dataItem) {
-                   
+
                     var menuActions = [
                         {
                             name: "Edit",
@@ -101,25 +101,38 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
                         }
                     ];
 
-                    if (dataItem.Status) {
-                        var menuAction1 = {
-                            name: "Disable",
-                            clicked: disableUser,
-                            haspermission: hasDisableSystemEntityPermissionsPermission
-                        };
-                        menuActions.push(menuAction1);
-                    } else {
-                        var menuAction2 = {
-                            name: "Enable",
-                            clicked: enableUser,
-                            haspermission: hasEnableSystemEntityPermissionsPermission
-                        };
-                        menuActions.push(menuAction2);
+                    var menuAction;
+                    switch (dataItem.Status) {
+                        case VR_Sec_UserActivationStatusEnum.Inactive.value:
+                            menuAction = {
+                                name: "Enable",
+                                clicked: enableUser,
+                                haspermission: hasEnableSystemEntityPermissionsPermission
+                            };
+                            break;
+                        case VR_Sec_UserActivationStatusEnum.Active.value:
+                            menuAction = {
+                                name: "Disable",
+                                clicked: disableUser,
+                                haspermission: hasDisableSystemEntityPermissionsPermission
+                            };
+                            break;
+                        case VR_Sec_UserActivationStatusEnum.Locked.value:
+                            menuAction = {
+                                name: "Unlock",
+                                clicked: unlockUser,
+                                haspermission: hasUnlockSystemEntityPermissionsPermission
+                            };
+                            break;
                     }
-                        return menuActions;
-                 
+
+                    menuActions.push(menuAction);
+
+
+                    return menuActions;
+
                 };
-                
+
             }
 
             function hasUpdateUserPermission() {
@@ -134,10 +147,13 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
             function hasDisableSystemEntityPermissionsPermission() {
                 return VR_Sec_UserAPIService.HasResetUserPasswordPermission();
             }
+            function hasUnlockSystemEntityPermissionsPermission() {
+                return VR_Sec_UserAPIService.HasResetUserPasswordPermission();
+            }
             function hasEnableSystemEntityPermissionsPermission() {
                 return VR_Sec_UserAPIService.HasResetUserPasswordPermission();
             }
-         
+
 
             function editUser(userObj) {
                 var onUserUpdated = function (userObj) {
@@ -163,7 +179,7 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
             function disableUser(dataItem) {
                 var onPermissionDisabled = function (entity) {
                     var gridDataItem = { Entity: entity };
-                    gridDataItem.Status = false;
+                    gridDataItem.Status = VR_Sec_UserActivationStatusEnum.Inactive.value;
                     gridDrillDownTabsObj.setDrillDownExtensionObject(gridDataItem);
                     $scope.gridMenuActions(gridDataItem);
                     gridAPI.itemUpdated(gridDataItem);
@@ -171,12 +187,35 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
 
                 VRNotificationService.showConfirmation().then(function (confirmed) {
                     if (confirmed) {
-                        return VR_Sec_UserAPIService.DisableUser(dataItem.Entity).then(function(response) {
+                        return VR_Sec_UserAPIService.DisableUser(dataItem.Entity).then(function (response) {
                             if (onPermissionDisabled && typeof onPermissionDisabled == 'function') {
                                 dataItem.Entity.EnabledTill = response.UpdatedObject.Entity.EnabledTill;
                                 onPermissionDisabled(dataItem.Entity);
                             }
-                        }).catch(function(error) {
+                        }).catch(function (error) {
+                            VRNotificationService.notifyException(error, scope);
+                        });
+                    }
+                });
+            }
+
+            function unlockUser(dataItem) {
+                var onPermissionUnlocked = function (entity) {
+                    var gridDataItem = { Entity: entity };
+                    gridDataItem.Status = VR_Sec_UserActivationStatusEnum.Active.value;
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(gridDataItem);
+                    $scope.gridMenuActions(gridDataItem);
+                    gridAPI.itemUpdated(gridDataItem);
+                };
+
+                VRNotificationService.showConfirmation().then(function (confirmed) {
+                    if (confirmed) {
+                        return VR_Sec_UserAPIService.UnlockUser(dataItem.Entity).then(function (response) {
+                            if (onPermissionUnlocked && typeof onPermissionUnlocked == 'function') {
+                                dataItem.Entity.EnabledTill = response.UpdatedObject.Entity.EnabledTill;
+                                onPermissionUnlocked(dataItem.Entity);
+                            }
+                        }).catch(function (error) {
                             VRNotificationService.notifyException(error, scope);
                         });
                     }
@@ -186,7 +225,7 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
             function enableUser(dataItem) {
                 var onPermissionEnabled = function (entity) {
                     var gridDataItem = { Entity: entity };
-                    gridDataItem.Status = true;
+                    gridDataItem.Status = VR_Sec_UserActivationStatusEnum.Active.value;
                     gridDrillDownTabsObj.setDrillDownExtensionObject(gridDataItem);
 
                     $scope.gridMenuActions(gridDataItem);
@@ -200,7 +239,7 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
                                 dataItem.Entity.EnabledTill = response.UpdatedObject.Entity.EnabledTill;
                                 onPermissionEnabled(dataItem.Entity);
                             }
-                        }).catch(function(error) {
+                        }).catch(function (error) {
                             VRNotificationService.notifyException(error, scope);
                         });
                     }

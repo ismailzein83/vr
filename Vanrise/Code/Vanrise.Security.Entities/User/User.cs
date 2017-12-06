@@ -11,7 +11,9 @@ namespace Vanrise.Security.Entities
         [Description("Active")]
         Active = 1,
         [Description("Inactive")]
-        Inactive = 0
+        Inactive = 0,
+        [Description("Locked")]
+        Locked = 2
     }
 
     public class User
@@ -29,6 +31,7 @@ namespace Vanrise.Security.Entities
         public string Description { get; set; }
 
         public DateTime? EnabledTill { get; set; }
+        public DateTime? DisabledTill { get; set; }
 
         public Dictionary<string, Object> ExtendedSettings { get; set; }
     }

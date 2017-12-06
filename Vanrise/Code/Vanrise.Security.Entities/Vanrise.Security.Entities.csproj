@@ -108,7 +108,9 @@
     <Compile Include="Tenant\TenantQuery.cs" />
     <Compile Include="Tenant\TenantType.cs" />
     <Compile Include="Tenant\TenantTypeSettings.cs" />
+    <Compile Include="UserFailedLogin.cs" />
     <Compile Include="UserGroup.cs" />
+    <Compile Include="UserPasswordHistory.cs" />
     <Compile Include="User\UserDTO.cs" />
     <Compile Include="User\UserDetail.cs" />
     <Compile Include="User\User.cs" />

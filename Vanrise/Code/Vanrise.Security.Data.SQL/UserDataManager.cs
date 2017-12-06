@@ -60,14 +60,26 @@ namespace Vanrise.Security.Data.SQL
             return (recordesEffected > 0);
         }
 
+
         public bool EnableUser(int userID)
         {
             int recordesEffected = ExecuteNonQuerySP("sec.sp_User_SetEnable", userID);
             return (recordesEffected > 0);
         }
+
+        public bool UnlockUser(int userID)
+        {
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Unlock", userID);
+            return (recordesEffected > 0);
+        }
         public bool UpdateLastLogin(int userID)
         {
             int recordsAffected = (int)ExecuteNonQuerySP("sec.sp_User_UpdateLastLogin", userID);
+            return (recordsAffected > 0);
+        }
+        public bool UpdateDisableTill(int userId, DateTime disableTill)
+        {
+            int recordsAffected = (int)ExecuteNonQuerySP("sec.sp_User_UpdateDisableTill", userId, disableTill);
             return (recordsAffected > 0);
         }
         public bool ResetPassword(int userId, string password)
@@ -119,6 +131,7 @@ namespace Vanrise.Security.Data.SQL
                 Email = reader["Email"] as string,
                 LastLogin = GetReaderValue<DateTime?>(reader, "LastLogin"),
                 EnabledTill = GetReaderValue<DateTime?>(reader, "EnabledTill"),
+                DisabledTill = GetReaderValue<DateTime?>(reader, "DisabledTill"),
                 Description = reader["Description"] as string,
                 TenantId = Convert.ToInt32(reader["TenantId"]),
                 ExtendedSettings = reader["ExtendedSettings"] != DBNull.Value ? Vanrise.Common.Serializer.Deserialize<Dictionary<string, object>>(reader["ExtendedSettings"] as string) : null
@@ -178,7 +191,7 @@ namespace Vanrise.Security.Data.SQL
     //        return new RDBSelect(_builder);
     //    }
 
-        
+
     //}
 
     //public class RDBInsert
@@ -228,7 +241,7 @@ namespace Vanrise.Security.Data.SQL
     //    {
     //        _builder = builder;
     //    }
-        
+
     //    public RDBSelectTable FromTable(string tableName, string alias)
     //    {
     //        _builder.AppendFormat("{0} {1}", tableName, alias);

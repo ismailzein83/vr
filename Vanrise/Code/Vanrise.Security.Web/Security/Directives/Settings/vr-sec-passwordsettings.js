@@ -27,6 +27,8 @@ app.directive('vrSecPasswordsettings', ['UtilsService', 'VRUIUtilsService',
             var passwordComplexityAPI;
             var passwordComplexityReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var mailMessageTemplateSelectorAPI;
+            var mailMessageTemplateSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             $scope.scopeModel = {};
 
@@ -39,7 +41,11 @@ app.directive('vrSecPasswordsettings', ['UtilsService', 'VRUIUtilsService',
                     return "Min password length should be less then Max password length.";
                 return null;
             };
-            
+
+            $scope.scopeModel.onMailMessageTemplateDirectiveReady = function (api) {
+                mailMessageTemplateSelectorAPI = api;
+                mailMessageTemplateSelectorReadyDeferred.resolve();
+            };
 
             function initializeController() {
                 passwordComplexityReadyPromiseDeferred.promise.then(function () {
@@ -53,25 +59,59 @@ app.directive('vrSecPasswordsettings', ['UtilsService', 'VRUIUtilsService',
                     if (payload != undefined) {
                         $scope.scopeModel.passwordLength = payload.PasswordLength;
                         $scope.scopeModel.maxPasswordLength = payload.MaxPasswordLength;
+                        $scope.scopeModel.maxUserLoginTries = payload.MaximumUserLoginTries;
+                        $scope.scopeModel.maxUserPasswordHistoryCount = payload.UserPasswordHistoryCount;
+                        $scope.scopeModel.lockInterval = payload.FailedInterval;
+                        $scope.scopeModel.lockFor = payload.MinutesToLock;
+                        $scope.scopeModel.notificationMailTemplateId = payload.NotificationMailTemplateId;
+                        $scope.scopeModel.sendNotification = payload.NotificationMailTemplateId != undefined;
                     }
 
-                    var passwordComplexityLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    var passwordComplexityPayload = {
-                        selectedIds: payload != undefined && payload.PasswordComplexity || undefined
-                    };
-                    VRUIUtilsService.callDirectiveLoad(passwordComplexityAPI, passwordComplexityPayload, passwordComplexityLoadPromiseDeferred);
-                    return passwordComplexityLoadPromiseDeferred.promise;
+                    var promises = [];
 
+                    function loadPasswordSection() {
+
+                        var passwordComplexityLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        var passwordComplexityPayload = {
+                            selectedIds: payload != undefined && payload.PasswordComplexity || undefined
+                        };
+                        VRUIUtilsService.callDirectiveLoad(passwordComplexityAPI, passwordComplexityPayload, passwordComplexityLoadPromiseDeferred);
+                        return passwordComplexityLoadPromiseDeferred.promise;
+                    }
+
+                    function loadMailMessageTypeSelector() {
+                        var mailMessageTemplateSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                        mailMessageTemplateSelectorReadyDeferred.promise.then(function () {
+                            var mailMessageTemplateSelectorPayload = {
+                                filter: {
+                                    VRMailMessageTypeId: '3b45aed6-1094-48f4-b3e5-099858909949'
+                                },
+                                selectedIds: $scope.scopeModel.notificationMailTemplateId
+                            };
+                            VRUIUtilsService.callDirectiveLoad(mailMessageTemplateSelectorAPI, mailMessageTemplateSelectorPayload, mailMessageTemplateSelectorLoadPromiseDeferred);
+                        });
+                        return mailMessageTemplateSelectorLoadPromiseDeferred.promise;
+                    }
+
+                    promises.push(loadPasswordSection());
+                    promises.push(loadMailMessageTypeSelector());
+
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
                     return {
                         PasswordLength: $scope.scopeModel.passwordLength,
-                        MaxPasswordLength:$scope.scopeModel.maxPasswordLength,
-                        PasswordComplexity: passwordComplexityAPI.getSelectedIds()
+                        MaxPasswordLength: $scope.scopeModel.maxPasswordLength,
+                        PasswordComplexity: passwordComplexityAPI.getSelectedIds(),
+                        MaximumUserLoginTries: $scope.scopeModel.maxUserLoginTries,
+                        UserPasswordHistoryCount: $scope.scopeModel.maxUserPasswordHistoryCount,
+                        FailedInterval: $scope.scopeModel.lockInterval,
+                        MinutesToLock: $scope.scopeModel.lockFor,
+                        NotificationMailTemplateId: $scope.scopeModel.sendNotification ? mailMessageTemplateSelectorAPI.getSelectedIds() : undefined
                     };
                 };
-                
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
