@@ -31,7 +31,12 @@ namespace TOne.WhS.SupplierPriceList.Business
 
             context.NotImportedCodes = PrepareNotImportedCodes(existingCodesByCodeValue, importedCodesHashSet);
         }
-
+        public int GetCountryId(List<ImportedCode> importedCodes)
+        {
+            var orderedCodes = importedCodes.OrderBy(c=>c.Code).ToList();
+            ImportedCode firstCode = orderedCodes.First();
+            return firstCode.CodeGroup.CountryId;
+        }
         private ExistingZonesByName StructureExistingZonesByName(IEnumerable<ExistingZone> existingZones)
         {
             ExistingZonesByName existingZonesByName = new ExistingZonesByName();
@@ -96,21 +101,13 @@ namespace TOne.WhS.SupplierPriceList.Business
                             importedCode.ChangeType = CodeChangeType.New;
                         }
 
-                        AddImportedCode(importedCode, newAndExistingZones, existingZonesByName);
+                        AddImportedCode(importedCode,countryId, newAndExistingZones, existingZonesByName);
                     }
                 }
                 else
                 {
                     importedCode.ChangeType = CodeChangeType.New;
-                    AddImportedCode(importedCode, newAndExistingZones, existingZonesByName);
-                }
-                if (importedCode.BED < priceListDate)
-                {
-                    switch (importedCode.ChangeType)
-                    {
-                        //case CodeChangeType.New: _validations.Add(new CodeValidation { Code = importedCode.Code, ValidationType = CodeValidationType.RetroActiveNewCode }); break;
-                        // case CodeChangeType.Moved: _validations.Add(new CodeValidation { Code = importedCode.Code, ValidationType = CodeValidationType.RetroActiveMovedCode }); break;
-                    }
+                    AddImportedCode(importedCode,countryId, newAndExistingZones, existingZonesByName);
                 }
             }
 
@@ -119,7 +116,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             IEnumerable<ExistingCode> existingCodesToClose = GetExistingCodesToClose(countryId, supplierPriceListType, importedZones, importedCodes, existingCodes, existingZonesByName, importedCodeValues);
             CloseNotImportedCodes(existingCodesToClose, importedCodeValues, codeCloseDate);
             CloseZonesWithNoCodes(existingZones);
-            
+
         }
 
         private IEnumerable<NotImportedCode> PrepareNotImportedCodes(ExistingCodesByCodeValue existingCodesByCodeValue, HashSet<string> importedCodes)
@@ -192,7 +189,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             }
         }
 
-        private void AddImportedCode(ImportedCode importedCode, ZonesByName newAndExistingZones, ExistingZonesByName allExistingZones)
+        private void AddImportedCode(ImportedCode importedCode,int countryId, ZonesByName newAndExistingZones, ExistingZonesByName allExistingZones)
         {
             List<IZone> zones;
             if (!newAndExistingZones.TryGetValue(importedCode.ZoneName, out zones))
@@ -215,7 +212,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                 {
                     if (currentCodeBED < zone.BED)//add new zone to fill gap
                     {
-                        NewZone newZone = AddNewZone(addedZones, importedCode.ZoneName, codeGroup.CountryId, currentCodeBED, zone.BED);
+                        NewZone newZone = AddNewZone(addedZones, importedCode.ZoneName, countryId, currentCodeBED, zone.BED);
                         AddNewCode(importedCode, codeGroup.CodeGroupId, ref currentCodeBED, newZone, out shouldAddMoreCodes);
                         if (!shouldAddMoreCodes)
                             break;
@@ -227,7 +224,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             }
             if (shouldAddMoreCodes)
             {
-                NewZone newZone = AddNewZone(addedZones, importedCode.ZoneName, codeGroup.CountryId, currentCodeBED, importedCode.EED);
+                NewZone newZone = AddNewZone(addedZones, importedCode.ZoneName, countryId, currentCodeBED, importedCode.EED);
                 AddNewCode(importedCode, codeGroup.CodeGroupId, ref currentCodeBED, newZone, out shouldAddMoreCodes);
             }
             if (addedZones.Count > 0)
@@ -288,7 +285,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                     foreach (ImportedZone importedZone in importedZones)
                     {
                         List<ExistingZone> existingZones = null;
-                        if(existingZonesByName.TryGetValue(importedZone.ZoneName, out existingZones))
+                        if (existingZonesByName.TryGetValue(importedZone.ZoneName, out existingZones))
                         {
                             foreach (ExistingZone zone in existingZones)
                                 existingCodesToClose.AddRange(zone.ExistingCodes);
@@ -329,7 +326,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                 {
                     //Get max between BED and Close Date to avoid closing a code with EED before BED
                     DateTime? closureDate = Utilities.Max(codeCloseDate, existingCode.BED);
-                    if(!existingCode.CodeEntity.EED.HasValue && closureDate.VRLessThan(existingCode.EED))
+                    if (!existingCode.CodeEntity.EED.HasValue && closureDate.VRLessThan(existingCode.EED))
                     {
                         //Only in this case closing has a meaning, otherwise no need to close the code
                         existingCode.ChangedCode = new ChangedCode

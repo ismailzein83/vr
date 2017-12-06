@@ -29,6 +29,8 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
         var drillDownManager;
         var onlyModified;
         var processInstanceId;
+        var countryId;
+
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -46,6 +48,7 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
                     directiveAPI.load = function (query) {
                         processInstanceId = query.ProcessInstanceId;
                         onlyModified = query.OnlyModified;
+                        countryId = query.CountryId;
                         return gridAPI.retrieveData(query);
                     };
 
@@ -85,7 +88,8 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_ZoneChangeTypeE
                     var codeGridPayload = {
                         ProcessInstanceId: processInstanceId,
                         ZoneName: zoneDataItem.ZoneName,
-                        OnlyModified: onlyModified
+                        OnlyModified: onlyModified,
+                        CountryId: countryId
                     };
 
                     return zoneDataItem.codeGridAPI.load(codeGridPayload);

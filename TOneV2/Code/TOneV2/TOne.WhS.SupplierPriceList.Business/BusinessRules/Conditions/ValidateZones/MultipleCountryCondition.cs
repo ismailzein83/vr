@@ -21,20 +21,20 @@ namespace TOne.WhS.SupplierPriceList.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
-            ImportedDataByZone zone = context.Target as ImportedDataByZone;
-            var countries = new HashSet<string>();
-            CountryManager countryManager = new CountryManager ();
-            foreach (var importedCode in zone.ImportedCodes)
-            {
-                if (!string.IsNullOrEmpty(importedCode.Code) && importedCode.CodeGroup != null)
-                    countries.Add(countryManager.GetCountryName(importedCode.CodeGroup.CountryId));
-            }
+            //ImportedDataByZone zone = context.Target as ImportedDataByZone;
+            //var countries = new HashSet<string>();
+            //CountryManager countryManager = new CountryManager ();
+            //foreach (var importedCode in zone.ImportedCodes)
+            //{
+            //    if (!string.IsNullOrEmpty(importedCode.Code) && importedCode.CodeGroup != null)
+            //        countries.Add(countryManager.GetCountryName(importedCode.CodeGroup.CountryId));
+            //}
 
-            if (countries.Count>1)
-            {
-                context.Message = string.Format("Can not add zone '{0}' with codes belong to different countries: {1}.", zone.ZoneName, string.Join(", ", countries));
-                return false;
-            }
+            //if (countries.Count>1)
+            //{
+            //    context.Message = string.Format("Can not add zone '{0}' with codes belong to different countries: {1}.", zone.ZoneName, string.Join(", ", countries));
+            //    return false;
+            //}
 
             return true;
         }

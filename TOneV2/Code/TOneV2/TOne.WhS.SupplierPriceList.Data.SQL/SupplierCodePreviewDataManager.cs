@@ -45,7 +45,7 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
 
         public IEnumerable<CodePreview> GetFilteredCodePreview(SPLPreviewQuery query)
         {
-            return GetItemsSP("[TOneWhS_SPL].[sp_SupplierCode_Preview_GetFiltered]", CodePreviewMapper, query.ProcessInstanceId, query.ZoneName, query.OnlyModified);
+            return GetItemsSP("[TOneWhS_SPL].[sp_SupplierCode_Preview_GetFiltered]", CodePreviewMapper, query.ProcessInstanceId, query.ZoneName, query.CountryId, query.OnlyModified);
         }
  
 

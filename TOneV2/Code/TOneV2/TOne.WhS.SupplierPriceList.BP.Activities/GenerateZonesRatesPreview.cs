@@ -31,7 +31,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             BaseQueue<IEnumerable<ZoneRatePreview>> previewZonesRatesQueue = this.PreviewZonesRatesQueue.Get(context);
             IEnumerable<ImportedZone> importedZones = this.ImportedZones.Get(context);
             IEnumerable<NotImportedZone> notImportedZones = this.NotImportedZones.Get(context);
-
+            PriceListCodeManager priceListCodeManager = new PriceListCodeManager();
             List<ZoneRatePreview> zonesRatesPreview = new List<ZoneRatePreview>();
 
 
@@ -43,7 +43,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
                     ZoneRatePreview zoneRatePreview = new ZoneRatePreview()
                     {
-                        CountryId = GetCountryId(importedZone),
+                        CountryId = priceListCodeManager.GetCountryId(importedZone.ImportedCodes),
                         ZoneName = importedZone.ZoneName,
                         RecentZoneName = importedZone.RecentZoneName,
                         ChangeTypeZone = importedZone.ChangeType,
@@ -77,8 +77,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         }
 
                     };
-                   
-                   
+
+
                     NotImportedZoneServiceGroup notImportedZoneService = importedZone.NotImportedZoneServiceGroup;
                     if (notImportedZoneService != null)
                     {
@@ -89,8 +89,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     }
 
                     zonesRatesPreview.Add(zoneRatePreview);
-                    
-                    
+
+
                 }
             }
 
@@ -121,7 +121,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     }
 
 
-                    if(notImportedZone.NotImportedZoneServiceGroup != null)
+                    if (notImportedZone.NotImportedZoneServiceGroup != null)
                     {
                         NotImportedZoneServiceGroup notImportedZoneService = notImportedZone.NotImportedZoneServiceGroup;
                         zoneRatePreview.ZoneServicesChangeType = notImportedZone.HasChanged ? ZoneServiceChangeType.Deleted : ZoneServiceChangeType.NotChanged;
@@ -129,18 +129,12 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         zoneRatePreview.SystemServicesEED = notImportedZoneService.EED;
                         zoneRatePreview.SystemServiceIds = notImportedZoneService.ZoneServicesIds;
                     }
-                    
+
                     zonesRatesPreview.Add(zoneRatePreview);
                 }
             }
 
             previewZonesRatesQueue.Enqueue(zonesRatesPreview);
-        }
-
-        private int GetCountryId(ImportedZone importedZone)
-        {
-            ImportedCode importedCode = importedZone.ImportedCodes.First();
-            return importedCode.CodeGroup.CountryId;
         }
     }
 }
