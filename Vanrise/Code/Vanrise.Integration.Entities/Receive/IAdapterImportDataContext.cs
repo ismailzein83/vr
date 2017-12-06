@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.Integration.Entities
 {
@@ -14,7 +10,7 @@ namespace Vanrise.Integration.Entities
         
         void GetStateWithLock(Func<BaseAdapterState, BaseAdapterState> onStateReady);
 
-        void OnDataReceived(IImportedData data);
+        ImportedBatchProcessingOutput OnDataReceived(IImportedData data);
 
         void StartNewInstanceIfAllowed();
     }

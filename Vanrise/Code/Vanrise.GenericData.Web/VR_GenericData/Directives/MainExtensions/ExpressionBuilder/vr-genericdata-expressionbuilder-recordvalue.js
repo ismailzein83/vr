@@ -106,7 +106,7 @@ app.directive('vrGenericdataExpressionbuilderRecordvalue', ['VR_GenericData_Data
                 mainPayload = payload;
 
                 var selectedRecordName;
-                if (payload != undefined) {
+                if (payload != undefined && payload.context != undefined) {
                     ctrl.recordNames = payload.context.getRecordNames();
                     if (payload.selectedRecords != undefined) {
                         ctrl.selectedRecordName = UtilsService.getItemByVal(ctrl.recordNames, payload.selectedRecords.split('.')[0], "Name");

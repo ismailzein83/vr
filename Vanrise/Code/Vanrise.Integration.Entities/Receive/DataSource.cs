@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.Integration.Entities
 {
@@ -35,6 +32,8 @@ namespace Vanrise.Integration.Entities
         public string MapperCustomCode { get; set; }
 
         public Guid ExecutionFlowId { get; set; }
+
+        public Guid? ErrorMailTemplateId { get; set; }
     }
 
     public class DataSourceMappingSettings

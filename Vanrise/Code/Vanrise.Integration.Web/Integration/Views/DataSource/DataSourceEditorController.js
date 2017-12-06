@@ -17,6 +17,9 @@
         var adapterTypeDirectiveAPI;
         var adapterTypeDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var mailMessageTemplateSelectorAPI;
+        var mailMessageTemplateSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -33,7 +36,7 @@
 
             isEditMode = (dataSourceId != undefined);
             isViewHistoryMode = (context != undefined && context.historyId != undefined);
-            
+
         }
 
         function defineScope() {
@@ -70,6 +73,11 @@
                 adapterTypeDirectiveAPI = api;
                 var setLoader = function (value) { $scope.scopeModel.isLoadingAdapterDirective = value };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, adapterTypeDirectiveAPI, undefined, setLoader, adapterTypeDirectiveReadyPromiseDeferred);
+            };
+
+            $scope.scopeModel.onMailMessageTemplateDirectiveReady = function (api) {
+                mailMessageTemplateSelectorAPI = api;
+                mailMessageTemplateSelectorReadyDeferred.resolve();
             };
 
             $scope.scopeModel.addExecutionFlow = function () {
@@ -134,7 +142,7 @@
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                         $scope.scopeModel.isLoading = false;
                     });
-                  
+
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.isLoading = false;
@@ -166,7 +174,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadAdapterType, loadExecutionFlows, loadTaskTrigger, setTitle, loadStaticData]).then(function () {
+            return UtilsService.waitMultipleAsyncOperations([loadAdapterType, loadExecutionFlows, loadTaskTrigger, loadMailMessageTypeSelector, setTitle, loadStaticData]).then(function () {
                 dataSourceTask = undefined;
                 dataSourceEntity = undefined;
             }).catch(function (error) {
@@ -231,6 +239,20 @@
 
         }
 
+        function loadMailMessageTypeSelector() {
+            var mailMessageTemplateSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+            mailMessageTemplateSelectorReadyDeferred.promise.then(function () {
+                var mailMessageTemplateSelectorPayload = {
+                    filter: {
+                        VRMailMessageTypeId: '0f64da0b-e2d0-4421-beb9-32c6e749f8f1'
+                    },
+                    selectedIds: dataSourceEntity != undefined && dataSourceEntity.Entity != undefined && dataSourceEntity.Entity.Settings != undefined ? dataSourceEntity.Entity.Settings.ErrorMailTemplateId : undefined
+                };
+                VRUIUtilsService.callDirectiveLoad(mailMessageTemplateSelectorAPI, mailMessageTemplateSelectorPayload, mailMessageTemplateSelectorLoadPromiseDeferred);
+            });
+            return mailMessageTemplateSelectorLoadPromiseDeferred.promise;
+        }
+
         function loadTaskTrigger() {
             var triggersPayload;
             if (dataSourceTask != undefined && dataSourceTask.TaskData != undefined && dataSourceTask.TaskData.TaskSettings != undefined) {
@@ -268,6 +290,7 @@
 
             $scope.scopeModel.startEffDate = dataSourceTask.TaskData.TaskSettings.StartEffDate;
             $scope.scopeModel.endEffDate = dataSourceTask.TaskData.TaskSettings.EndEffDate;
+            $scope.scopeModel.sendNotification = dataSourceEntity != undefined && dataSourceEntity.Entity != undefined && dataSourceEntity.Entity.Settings != undefined && dataSourceEntity.Entity.Settings.ErrorMailTemplateId != undefined ? true : false;
         }
 
         function buildDataSourceObjFromScope() {
@@ -278,7 +301,12 @@
                 AdapterTypeId: $scope.scopeModel.selectedAdapterType.ExtensionConfigurationId,
                 AdapterState: adapterTypeDirectiveAPI.getStateData(),
                 TaskId: taskId,
-                Settings: { AdapterArgument: adapterTypeDirectiveAPI.getData(), MapperCustomCode: $scope.scopeModel.customCode, ExecutionFlowId: $scope.scopeModel.selectedExecutionFlow.ExecutionFlowId }
+                Settings: {
+                    AdapterArgument: adapterTypeDirectiveAPI.getData(),
+                    MapperCustomCode: $scope.scopeModel.customCode,
+                    ExecutionFlowId: $scope.scopeModel.selectedExecutionFlow.ExecutionFlowId,
+                    ErrorMailTemplateId: mailMessageTemplateSelectorAPI != undefined && $scope.scopeModel.sendNotification ? mailMessageTemplateSelectorAPI.getSelectedIds() : undefined
+                }
             };
 
             var taskData = {

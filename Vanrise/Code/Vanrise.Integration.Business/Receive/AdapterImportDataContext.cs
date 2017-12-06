@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Integration.Entities;
 
 namespace Vanrise.Integration.Business
@@ -10,12 +6,12 @@ namespace Vanrise.Integration.Business
     public class AdapterImportDataContext : IAdapterImportDataContext
     {
         DataSource _dataSource;
-        Action<IImportedData> _onDataReceivedAction;
+        Func<IImportedData, ImportedBatchProcessingOutput> _onDataReceivedAction;
 
         DataSourceStateManager _dsStateManager = new DataSourceStateManager();
         DataSourceRuntimeInstanceManager _dsRuntimeInstanceManager = new DataSourceRuntimeInstanceManager();
 
-        public AdapterImportDataContext(DataSource dataSource, Action<IImportedData> onDataReceivedAction)
+        public AdapterImportDataContext(DataSource dataSource, Func<IImportedData, ImportedBatchProcessingOutput> onDataReceivedAction)
         {
             _dataSource = dataSource;
             _onDataReceivedAction = onDataReceivedAction;
@@ -36,14 +32,15 @@ namespace Vanrise.Integration.Business
             _dsStateManager.GetStateWithLock(this.DataSourceId, onStateReady);
         }
 
-        public void OnDataReceived(IImportedData data)
+        public ImportedBatchProcessingOutput OnDataReceived(IImportedData data)
         {
-            _onDataReceivedAction(data);
+            return _onDataReceivedAction(data);
         }
 
         public void StartNewInstanceIfAllowed()
         {
             _dsRuntimeInstanceManager.TryAddNewInstance(this.DataSourceId, this.AdapterArgument.MaxParallelRuntimeInstances);
         }
+
     }
 }

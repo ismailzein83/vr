@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.Integration.Entities
 {
@@ -65,6 +61,13 @@ namespace Vanrise.Integration.Entities
         {
             get;
             set;
+        }
+        public bool IsFile
+        {
+            get
+            {
+                return true;
+            }
         }
     }
 }

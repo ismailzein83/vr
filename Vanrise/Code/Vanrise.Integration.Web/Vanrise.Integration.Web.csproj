@@ -108,6 +108,7 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="Integration\Constants\CompressionTypeEnum.js" />
+    <Content Include="Integration\Constants\FailedBatchInfoFieldsEnum.js" />
     <Content Include="Integration\Constants\MappingResultEnum.js" />
     <Content Include="Integration\Constants\ExecutionStatusEnum.js" />
     <Content Include="Integration\Constants\ModuleConfig.js" />
@@ -134,6 +135,10 @@
     <Content Include="Integration\Directives\DataSource\vr-integration-log-grid.js" />
     <Content Include="Integration\Directives\DataSource\vr-integration-importedbatch-grid.js" />
     <Content Include="Integration\Directives\DataSource\vr-integration-datasource-selector.js" />
+    <Content Include="Integration\Directives\MainExtensions\VRObjectTypes\Templates\FaildBatchInfoObjectTypeTemplate.html" />
+    <Content Include="Integration\Directives\MainExtensions\VRObjectTypes\Templates\FaildBatchInfoPropertyEvaluatorTemplate.html" />
+    <Content Include="Integration\Directives\MainExtensions\VRObjectTypes\vr-integration-faildbatchinfo-objecttype.js" />
+    <Content Include="Integration\Directives\MainExtensions\VRObjectTypes\vr-integration-faildbatchinfo-propertyevaluator.js" />
     <Content Include="Integration\ModuleInitialization.js" />
     <Content Include="Integration\Services\APIServices\DataSourceAPIService.js" />
     <Content Include="Integration\Services\APIServices\DataSourceImportedBatchAPIService.js" />

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.Common;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Vanrise.Integration.Entities
 {
@@ -37,7 +33,7 @@ namespace Vanrise.Integration.Entities
 
         public long? BatchSize
         {
-            get { return null ; }
+            get { return null; }
         }
 
 
@@ -60,6 +56,13 @@ namespace Vanrise.Integration.Entities
         {
             get;
             set;
+        }
+        public bool IsFile
+        {
+            get
+            {
+                return false;
+            }
         }
     }
 }

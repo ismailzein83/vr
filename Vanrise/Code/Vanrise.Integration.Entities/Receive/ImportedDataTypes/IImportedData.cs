@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Vanrise.Integration.Entities
 {
     public interface IImportedData
@@ -14,8 +9,9 @@ namespace Vanrise.Integration.Entities
 
         void OnDisposed();
 
-        bool IsMultipleReadings { get;}
+        bool IsMultipleReadings { get; }
 
         bool IsEmpty { get; }
+        bool IsFile { get; }
     }
 }

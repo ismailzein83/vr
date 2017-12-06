@@ -48,6 +48,8 @@
   <ItemGroup>
     <Compile Include="BusinessManagers\BEManagerFactory.cs" />
     <Compile Include="BusinessManagers\IBEManager.cs" />
+    <Compile Include="FailedBatchInfo.cs" />
+    <Compile Include="ImportedBatchProcessingOutput.cs" />
     <Compile Include="Receive\BaseAdapterArgument.cs" />
     <Compile Include="Receive\BaseAdapterState.cs" />
     <Compile Include="Receive\BaseReceiveAdapter.cs" />

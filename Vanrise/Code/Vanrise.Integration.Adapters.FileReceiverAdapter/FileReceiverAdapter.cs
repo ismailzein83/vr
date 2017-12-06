@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using Vanrise.Integration.Adapters.FileReceiveAdapter.Arguments;
 using Vanrise.Integration.Entities;
 
@@ -22,7 +18,7 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
 
         #region Private Functions
 
-        private void CreateStreamReader(FileAdapterArgument fileAdapterArgument, Action<IImportedData> receiveData, FileInfo file)
+        private void CreateStreamReader(FileAdapterArgument fileAdapterArgument, Func<IImportedData, ImportedBatchProcessingOutput> receiveData, FileInfo file)
         {
             base.LogVerbose("Creating stream reader for file with name {0}", file.Name);
             StreamReaderImportedData data = new StreamReaderImportedData()

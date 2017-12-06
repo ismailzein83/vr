@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Vanrise.Integration.Entities
 {
     public class TextFileImportedData : IImportedData
@@ -27,7 +21,7 @@ namespace Vanrise.Integration.Entities
 
         public void OnDisposed()
         {
-            
+
         }
 
         public bool IsMultipleReadings
@@ -39,6 +33,15 @@ namespace Vanrise.Integration.Entities
         {
             get;
             set;
+        }
+
+
+        public bool IsFile
+        {
+            get
+            {
+                return true;
+            }
         }
     }
 }

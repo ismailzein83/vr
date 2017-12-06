@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Integration.Entities;
 
 namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments
@@ -37,6 +33,7 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments
         public CompressionTypes CompressionType { get; set; }
         public short? NumberOfFiles { get; set; }
         public short? FileCompletenessCheckInterval { get; set; }
+        public string InvalidFilesDirectory { get; set; }
 
         # endregion
     }

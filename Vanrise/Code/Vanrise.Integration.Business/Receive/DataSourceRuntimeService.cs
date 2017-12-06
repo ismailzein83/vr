@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
 using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common;
-using Vanrise.Integration.Data;
+using Vanrise.Common.Business;
 using Vanrise.Integration.Entities;
 using Vanrise.Queueing.Entities;
+using Vanrise.Security.Business;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Integration.Business
 {
@@ -18,14 +17,15 @@ namespace Vanrise.Integration.Business
         protected override void Execute()
         {
             DataSourceRuntimeInstance dsRuntimeInstance = _dsRuntimeInstanceManager.TryGetOneAndLock();
-            if(dsRuntimeInstance != null)
+            if (dsRuntimeInstance != null)
             {
+
                 Console.WriteLine("{0}: DataSourceRuntimeService Data Source is started", DateTime.Now);
                 var dataSourceManager = new DataSourceManager();
                 var dataSource = dataSourceManager.GetDataSourceDetail(dsRuntimeInstance.DataSourceId);
                 if (dataSource == null)
                     throw new ArgumentNullException(String.Format("dataSource '{0}'", dsRuntimeInstance.DataSourceId));
-                
+
                 DataSourceLogger logger = new DataSourceLogger();
 
                 logger.DataSourceId = dataSource.Entity.DataSourceId;
@@ -61,13 +61,24 @@ namespace Vanrise.Integration.Business
                 try
                 {
                     BaseReceiveAdapter adapter = (BaseReceiveAdapter)Activator.CreateInstance(Type.GetType(dataSource.AdapterInfo.FQTN));
+
                     adapter.SetLogger(logger);
                     adapter.SetDataSourceManager(dataSourceManager);
-                    Action<IImportedData> onDataReceivedAction = data =>
+                    Func<IImportedData, ImportedBatchProcessingOutput> onDataReceivedAction = (data) =>
                     {
                         logger.WriteVerbose("Executing the custom code written for the mapper");
                         MappedBatchItemsToEnqueue outputItems = new MappedBatchItemsToEnqueue();
                         MappingOutput outputResult = this.ExecuteCustomCode(dataSource.Entity.DataSourceId, dataSource.Entity.Settings.MapperCustomCode, data, outputItems, logger);
+
+                        ImportedBatchProcessingOutput batchProcessingOutput = new ImportedBatchProcessingOutput
+                        {
+                            OutputResult = outputResult
+                        };
+
+                        if (SendErrorNotification(dataSource, data, outputResult))
+                        {
+                            return batchProcessingOutput;
+                        }
 
                         if (!data.IsMultipleReadings)
                             data.OnDisposed();
@@ -75,8 +86,9 @@ namespace Vanrise.Integration.Business
                         if (data.IsEmpty)
                         {
                             logger.WriteInformation("Received Empty Batch");
-                            return;
+                            return null;
                         }
+
                         ImportedBatchEntry importedBatchEntry = new ImportedBatchEntry();
                         importedBatchEntry.BatchSize = data.BatchSize;
                         importedBatchEntry.BatchDescription = data.Description;
@@ -120,6 +132,8 @@ namespace Vanrise.Integration.Business
 
                         long importedBatchId = logger.LogImportedBatchEntry(importedBatchEntry);
                         logger.LogEntry(Vanrise.Entities.LogEntryType.Information, importedBatchId, "Imported a new batch with Id '{0}'", importedBatchId);
+
+                        return batchProcessingOutput;
                     };
 
                     AdapterImportDataContext adapterContext = new AdapterImportDataContext(dataSource.Entity, onDataReceivedAction);
@@ -132,9 +146,40 @@ namespace Vanrise.Integration.Business
                     logger.WriteInformation("A runtime Instance is finished for the Data Source '{0}'", dataSource.Entity.Name);
                     Console.WriteLine("{0}: DataSourceRuntimeService Data Source is Done", DateTime.Now);
                 }
-            }            
+            }
         }
 
+        bool SendErrorNotification(DataSourceDetail dataSource, IImportedData data, MappingOutput outputResult)
+        {            
+            if (dataSource.Entity.Settings.ErrorMailTemplateId.HasValue && (data.IsFile || outputResult.Result == MappingResult.Invalid))
+            {
+                FailedBatchInfo batchInfo = BuildFailedBatchInfo(dataSource, data, outputResult);
+                if (!data.BatchSize.HasValue || data.BatchSize.Value == 0)
+                {
+                    batchInfo.IsEmpty = true;
+                }
+                Dictionary<string, dynamic> mailObjects = new Dictionary<string, dynamic>();
+                User user = new UserManager().GetUserbyId(SecurityContext.Current.GetLoggedInUserId());
+                mailObjects.Add("User", user);
+                mailObjects.Add("Failed Batch Info", batchInfo);
+                VRMailManager vrMailManager = new VRMailManager();
+                vrMailManager.SendMail(dataSource.Entity.Settings.ErrorMailTemplateId.Value, mailObjects);
+                return true;
+            }
+            else
+                return false;
+        }
+        FailedBatchInfo BuildFailedBatchInfo(DataSourceDetail dataSource, IImportedData data, MappingOutput outputResult)
+        {
+            FailedBatchInfo batchInfo = new FailedBatchInfo
+            {
+                Message = outputResult.Message,
+                DataSourceId = dataSource.Entity.DataSourceId,
+                BatchDescription = data.Description,
+                DataSourceName = dataSource.Entity.Name
+            };
+            return batchInfo;
+        }
         private MappingOutput ExecuteCustomCode(Guid dataSourceId, string customCode, IImportedData data, MappedBatchItemsToEnqueue outputItems, IDataSourceLogger logger)
         {
             MappingOutput outputResult = new MappingOutput();
@@ -168,7 +213,7 @@ namespace Vanrise.Integration.Business
                     var dataSource = dsManager.GetDataSource(dataSourceId);
                     if (dataSource == null)
                         throw new NullReferenceException(String.Format("dataSource '{0}'", dataSourceId));
-                    if(dataSource.Settings == null)
+                    if (dataSource.Settings == null)
                         throw new NullReferenceException(String.Format("dataSource.Settings '{0}'", dataSourceId));
                     if (dataSource.Settings.MapperCustomCode == null)
                         throw new NullReferenceException(String.Format("dataSource.Settings.MapperCustomCode '{0}'", dataSourceId));
@@ -222,7 +267,7 @@ namespace Vanrise.Integration.Business
             string className = "DataSourceDataMapper";
             classDefinitionBuilder.Replace("#NAMESPACE#", classNamespace);
             classDefinitionBuilder.Replace("#CLASSNAME#", className);
-            fullTypeName = String.Format("{0}.{1}", classNamespace, className);  
+            fullTypeName = String.Format("{0}.{1}", classNamespace, className);
 
             return classDefinitionBuilder.ToString();
         }
