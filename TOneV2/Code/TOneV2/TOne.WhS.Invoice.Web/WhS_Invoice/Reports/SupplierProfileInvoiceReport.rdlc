@@ -1521,6 +1521,9 @@
                             <Parameter Name="DisplayCommission">
                               <Value>=Parameters!DisplayCommission.Value</Value>
                             </Parameter>
+                            <Parameter Name="RegAddress">
+                              <Value>=Parameters!RegAddress.Value</Value>
+                            </Parameter>
                           </Parameters>
                           <Top>0.1875in</Top>
                           <Height>4.11458in</Height>
