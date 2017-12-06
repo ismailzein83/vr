@@ -18,5 +18,7 @@ namespace Vanrise.BusinessProcess.Data
         List<BPTask> GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, int? processInstanceId, int? userId);
 
         List<BPTask> GetBeforeId(long lessThanID, int nbOfRows, int? processInstanceId, int? userId);
+
+        void CancelNotCompletedTasks(long processInstanceId);
     }
 }

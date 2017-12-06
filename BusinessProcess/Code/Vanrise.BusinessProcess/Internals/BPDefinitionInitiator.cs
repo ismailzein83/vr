@@ -246,6 +246,8 @@ namespace Vanrise.BusinessProcess
                 Exception finalException = Utilities.WrapException(e.TerminationException, String.Format("Process '{0}' failed", processTitle));
                 LoggerFactory.GetExceptionLogger().WriteException(logEventType, GetGeneralLogViewRequiredPermissionSetId(bpInstance), finalException);
                 Console.WriteLine("{0}: {1}", DateTime.Now, bpInstance.LastMessage);
+
+                BPDataManagerFactory.GetDataManager<IBPTaskDataManager>().CancelNotCompletedTasks(bpInstance.ProcessInstanceID);
             }
 
             if (BPInstanceStatusAttribute.GetAttribute(bpInstance.Status).IsClosed)
@@ -313,6 +315,8 @@ namespace Vanrise.BusinessProcess
             }
             BPDefinitionBPExecutionCompletedContext context = new BPDefinitionBPExecutionCompletedContext() { BPInstance = bpInstance };
             new BPDefinitionManager().GetBPDefinitionExtendedSettings(bpDefinition).OnBPExecutionCompleted(context);
+
+            BPDataManagerFactory.GetDataManager<IBPTaskDataManager>().CancelNotCompletedTasks(bpInstance.ProcessInstanceID);
         }
 
         void TriggerWFEvent(long processInstanceId, string bookmarkName, object eventData)

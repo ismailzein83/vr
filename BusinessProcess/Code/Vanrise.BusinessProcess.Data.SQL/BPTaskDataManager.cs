@@ -68,6 +68,12 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
             return GetItemsSP("[bp].[sp_BPTask_GetBeforeID]", BPTaskMapper, lessThanID, nbOfRows, processInstanceId, userId);
         }
+
+        public void CancelNotCompletedTasks(long processInstanceId)
+        {
+            ExecuteNonQuerySP("bp.sp_BPTask_CancelNotCompleted", processInstanceId);
+        }
+
         #endregion
 
         #region Mappers
@@ -78,7 +84,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
             {
                 BPTaskId = (long)reader["ID"],
                 ProcessInstanceId = (long)reader["ProcessInstanceID"],
-                TypeId = GetReaderValue<Guid>(reader,"TypeID"),
+                TypeId = GetReaderValue<Guid>(reader, "TypeID"),
                 Title = reader["Title"] as string,
                 ExecutedById = GetReaderValue<int?>(reader, "ExecutedBy"),
                 Status = (BPTaskStatus)reader["Status"],
