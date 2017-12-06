@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("retailBeAccountmanagerAccountmanagrassignmentGrid", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "Retail_BE_AccountManagerAssignmentAPIService", "Retail_BE_AccountManagerAssignmentService","VRCommon_ObjectTrackingService",
-function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_AccountManagerAssignmentAPIService, Retail_BE_AccountManagerAssignmentService, VRCommon_ObjectTrackingService) {
+app.directive("retailBeAccountmanagerAccountmanagrassignmentGrid", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "Retail_BE_AccountManagerAssignmentAPIService", "Retail_BE_AccountManagerAssignmentService","VRCommon_ObjectTrackingService","VR_AccountManager_AccountManagerAssignmentService",
+function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_AccountManagerAssignmentAPIService, Retail_BE_AccountManagerAssignmentService, VRCommon_ObjectTrackingService, VR_AccountManager_AccountManagerAssignmentService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -63,6 +63,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
                         return gridAPI.retrieveData(getGridQuery());
                     };
                     directiveAPI.onAccountManagerAssignmentAdded = function (accountManagerAssignment) {
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(accountManagerAssignment);
                         gridAPI.itemAdded(accountManagerAssignment);
                     };
                     directiveAPI.getData = function () {
@@ -132,7 +133,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
                         accountManagerAssignment.objectTrackingGridAPI = directiveAPI;
                         var query = {
                             ObjectId: accountManagerAssignment.AccountManagerAssignementId,
-                            EntityUniqueName: Retail_BE_AccountManagerAssignmentService.getEntityUniqueName(accountManagerAssignment.AccountManagerAssignementDefinitionId)
+                            EntityUniqueName: VR_AccountManager_AccountManagerAssignmentService.getEntityUniqueName(accountManagerAssignment.AccountManagerAssignementDefinitionId)
                         };
                         return accountManagerAssignment.objectTrackingGridAPI.load(query);
                     }

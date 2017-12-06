@@ -16,7 +16,7 @@ namespace Retail.BusinessEntity.Business
     public class RetailAccountManagerAssignmentManager
     {
         #region Public Methods
-        Vanrise.AccountManager.Business.AccountManagerAssignmentManager manager = new Vanrise.AccountManager.Business.AccountManagerAssignmentManager();
+        Vanrise.AccountManager.Business.AccountManagerAssignmentManager _manager = new Vanrise.AccountManager.Business.AccountManagerAssignmentManager();
         public IDataRetrievalResult<AccountManagerAssignmentDetail> GetFilteredAccountManagerAssignments(DataRetrievalInput<AccountManagerAssignmentQuery> input)
         {
             var accountManagerAssignementDefinitionId = input.Query.AccountManagerAssignementDefinitionId;
@@ -26,7 +26,7 @@ namespace Retail.BusinessEntity.Business
                 if (accountManagerDefInfoByAccount != null && accountManagerDefInfoByAccount.AccountManagerAssignmentDefinition != null)
                     accountManagerAssignementDefinitionId = accountManagerDefInfoByAccount.AccountManagerAssignmentDefinition.AccountManagerAssignementDefinitionId;
             }
-            var accountManagerAssignments = manager.GetAccountManagerAssignments(accountManagerAssignementDefinitionId);
+            var accountManagerAssignments = _manager.GetAccountManagerAssignments(accountManagerAssignementDefinitionId);
             Func<AccountManagerAssignment, bool> filterExpression = (prod) =>
             {
                 if (input.Query.AccountManagerId.HasValue && !input.Query.AccountManagerId.Equals(prod.AccountManagerId))
@@ -35,14 +35,13 @@ namespace Retail.BusinessEntity.Business
                     return false;
                 return true;
             };
-            VRActionLogger.Current.LogGetFilteredAction(new AccountManagrAssignmnetLoggableEntity(input.Query.AccountManagerAssignementDefinitionId), input);
+            VRActionLogger.Current.LogGetFilteredAction(new AccountManagerAssignmnetLoggableEntity(accountManagerAssignementDefinitionId), input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, accountManagerAssignments.ToBigResult(input, filterExpression, AccountManagerDetailMapper));
 
         }
         public bool HasManageAssignmentPermission(Guid accountManagerDefinitionId)
         {
             AccountManagerAssignmentManager assignmnetManager = new AccountManagerAssignmentManager();
-            bool test = assignmnetManager.HasManageAssignmentPermission(accountManagerDefinitionId);
             return assignmnetManager.HasManageAssignmentPermission(accountManagerDefinitionId);
         }
         public bool HasViewAssignmentPermission(Guid accountManagerDefinitionId)
@@ -71,7 +70,7 @@ namespace Retail.BusinessEntity.Business
             if (accountManagerAssignmentRuntimeInput.AccountManagerAssignementId.HasValue)
             {
                 var accountManagerAssignmentId = accountManagerAssignmentRuntimeInput.AccountManagerAssignementId.Value;
-                accountManagerAssignmentRuntime.AccountManagerAssignment = manager.GetAccountManagerAssignment(accountManagerAssignmentId, accountManagerAssignmentRuntimeInput.AssignmentDefinitionId);
+                accountManagerAssignmentRuntime.AccountManagerAssignment = _manager.GetAccountManagerAssignment(accountManagerAssignmentId, accountManagerAssignmentRuntimeInput.AssignmentDefinitionId);
                 accountManagerAssignmentRuntime.AccountName = accountManagerAssignmentRuntime.AccountManagrAssignmentDefinition.Settings.GetAccountName(accountManagerAssignmentRuntime.AccountManagerAssignment.AccountId);
             }
             return accountManagerAssignmentRuntime;
@@ -82,7 +81,7 @@ namespace Retail.BusinessEntity.Business
             InsertOperationOutput<AccountManagerAssignmentDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<AccountManagerAssignmentDetail>();
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            bool insertActionSucc = manager.AssignAccountManagerToAccounts(accountManagerAssignment, out errorMessage);
+            bool insertActionSucc = _manager.AssignAccountManagerToAccounts(accountManagerAssignment, out errorMessage);
             if (insertActionSucc)
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
@@ -100,12 +99,11 @@ namespace Retail.BusinessEntity.Business
             UpdateOperationOutput<AccountManagerAssignmentDetail> updateOperationOutput = new UpdateOperationOutput<AccountManagerAssignmentDetail>();
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
-            bool updateActionSucc = manager.UpdateAccountManagerAssignment(accountManagerAssignment, out errorMessage);
+            bool updateActionSucc = _manager.UpdateAccountManagerAssignment(accountManagerAssignment, out errorMessage);
             if (updateActionSucc)
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                var accountManagerAssignmentUpdated = manager.GetAccountManagerAssignment(accountManagerAssignment.AccountManagerAssignmentId, accountManagerAssignment.AccountManagerAssignmentDefinitionId);
-                VRActionLogger.Current.TrackAndLogObjectUpdated(new AccountManagrAssignmnetLoggableEntity(accountManagerAssignment.AccountManagerAssignmentDefinitionId), accountManagerAssignmentUpdated);
+                var accountManagerAssignmentUpdated = _manager.GetAccountManagerAssignment(accountManagerAssignment.AccountManagerAssignmentId, accountManagerAssignment.AccountManagerAssignmentDefinitionId);
                 updateOperationOutput.UpdatedObject = AccountManagerDetailMapper(accountManagerAssignmentUpdated);
             }
             else
@@ -189,52 +187,6 @@ namespace Retail.BusinessEntity.Business
 
         #region Private Classes
 
-        public class AccountManagrAssignmnetLoggableEntity : VRLoggableEntityBase
-        {
-            AccountManagerAssignmentsInfo accountManageAssignmnetInfo;
-            Guid _accountManagerAssignmentDefinitionId;
-            static AccountManagerDefinitionManager s_accountManagerDefinitionManager = new AccountManagerDefinitionManager();
-            static AccountManagerManager s_accountManagerManager = new AccountManagerManager();
-
-            public AccountManagrAssignmnetLoggableEntity(Guid assignmentDefinitionId)
-            {
-                 accountManageAssignmnetInfo = s_accountManagerDefinitionManager.GetAccountManagerAssignmnetInfoByAssignmentDefinitionId(assignmentDefinitionId);
-                _accountManagerAssignmentDefinitionId = assignmentDefinitionId;
-            }
-
-            public override string EntityUniqueName
-            {
-                get { return String.Format("Retail_AccountManager_AccountManagerAssignment_{0}", _accountManagerAssignmentDefinitionId); }
-            }
-
-            public override string EntityDisplayName
-            {
-                get { return accountManageAssignmnetInfo.AssignmentDefinition.Name; }
-            }
-
-            public override string ViewHistoryItemClientActionName
-            {
-                get { return "Retail_AccountManager_AccountManagerAssignment_ViewHistoryItem"; }
-            }
-
-
-            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
-            {
-                AccountManagerAssignment accountManagerAssignment = context.Object.CastWithValidate<AccountManagerAssignment>("context.Object");
-                return accountManagerAssignment.AccountManagerAssignementId;
-            }
-
-            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
-            {
-                AccountManagerAssignment accountManagerAssignment = context.Object.CastWithValidate<AccountManagerAssignment>("context.Object");
-                return s_accountManagerManager.GetAccountManagerName(accountManagerAssignment.AccountManagerId) + "_To_" + accountManageAssignmnetInfo.AssignmentDefinition.Settings.GetAccountName(accountManagerAssignment.AccountId);
-            }
-
-            public override string ModuleName
-            {
-                get { return "Business Entity"; }
-            }
-        }
         #endregion
     }
 }

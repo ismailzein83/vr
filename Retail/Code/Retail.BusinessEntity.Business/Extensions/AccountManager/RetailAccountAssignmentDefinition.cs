@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.AccountManager.Business;
 using Vanrise.AccountManager.Entities;
+using Vanrise.Common.Business;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -13,6 +15,14 @@ namespace Retail.BusinessEntity.Business
         {
             AccountBEManager accountBeManager = new AccountBEManager();
             return accountBeManager.GetAccountName(this.AccountBEDefinitionId, Convert.ToInt64(accountId));
+        }
+        public override void TrackAndLogObject(IAssignmentDefinitionTrackAndLogObject context)
+        {
+            AccountBEManager accountBeManager = new AccountBEManager();
+            AccountManagerManager accountManager = new AccountManagerManager();
+            var account = accountBeManager.GetAccount(this.AccountBEDefinitionId, Convert.ToInt64(context.AccountManagerAssignment.AccountId));
+            var accountManagerName = accountManager.GetAccountManagerName(context.AccountManagerAssignment.AccountManagerId);
+            VRActionLogger.Current.LogObjectCustomAction(new Retail.BusinessEntity.Business.AccountBEManager.AccountBELoggableEntity(this.AccountBEDefinitionId), "Assign AccountManager", true, account, String.Format("Account -> AccountManager {0} {1} {2}", accountManagerName, context.AccountManagerAssignment.BED, context.AccountManagerAssignment.EED));
         }
         public Guid AccountBEDefinitionId { get; set; }
         public Retail.BusinessEntity.Entities.AccountCondition AccountCondition { get; set; }
