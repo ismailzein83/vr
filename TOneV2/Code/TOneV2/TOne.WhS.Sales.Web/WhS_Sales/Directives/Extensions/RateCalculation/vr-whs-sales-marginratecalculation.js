@@ -97,16 +97,13 @@ app.directive("vrWhsSalesMarginratecalculation", ['WhS_Sales_BulkActionUtilsServ
             $scope.scopeModel.validateMargin = function () {
                 if ($scope.scopeModel.margin == undefined)
                     return;
-                if ($scope.scopeModel.margin == 0)
-                    return 'Margin must be different than 0';
+
                 return null;
             };
             $scope.scopeModel.validateMarginPercentage = function () {
                 if ($scope.scopeModel.marginPercentage!=undefined) {
                     if ($scope.scopeModel.marginPercentage < 0 || $scope.scopeModel.marginPercentage > 100)
                        return 'Margin % must be between 0 and 100';
-                    if ($scope.scopeModel.margin == 0)
-                        return 'Margin must be different than 0';
                 }
                 return null;
             };
