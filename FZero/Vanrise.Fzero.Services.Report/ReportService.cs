@@ -89,13 +89,13 @@ namespace Vanrise.Fzero.Services.Report
                             if (listDistinctFraudCases.Count > 0)
                             {
                                 GeneratedCall.UpdateReportStatus(listDistinctFraudCases, (int)Enums.ReportingStatuses.TobeReported, null);
-
-                                SendReport(DistinctCLIs, listDistinctFraudCases, i.User.FullName, (int)Enums.Statuses.Fraud, i.ID, i.User.EmailAddress, i.User.ClientID.Value, (i.User.GMT - SysParameter.Global_GMT));
-
                                 if (i.EnableFTP.HasValue && i.EnableFTP.Value)
                                 {
-                                   SaveToFTPFile(i.FTPAddress,i.FTPUserName, i.FTPPassword,i.User.FullName, listDistinctFraudCases);
+                                    SaveToFTPFile(i.FTPAddress, i.FTPUserName, i.FTPPassword, i.User.FullName, listDistinctFraudCases);
                                 }
+                                SendReport(DistinctCLIs, listDistinctFraudCases, i.User.FullName, (int)Enums.Statuses.Fraud, i.ID, i.User.EmailAddress, i.User.ClientID.Value, (i.User.GMT - SysParameter.Global_GMT));
+
+                              
 
                             }
                         }
