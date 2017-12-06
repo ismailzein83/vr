@@ -1377,7 +1377,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 var filteredNotification = FilterSalePlZoneNotification(salePriceList.OwnerId, zoneNotification.Value);
                 VRFile vrFile = GetPriceListFile(customer.CarrierAccountId, filteredNotification, salePriceListContext.EffectiveDate,
-                    overriddenListType, salePricelistTemplateId, salePriceList.CurrencyId);
+                    overriddenListType, salePricelistTemplateId, zoneNotification.Key);
 
                 vrFiles.Add(new SalePricelistVRFile
                 {
