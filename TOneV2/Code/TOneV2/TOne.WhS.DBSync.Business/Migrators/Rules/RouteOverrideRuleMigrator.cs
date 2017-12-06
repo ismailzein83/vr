@@ -112,13 +112,19 @@ namespace TOne.WhS.DBSync.Business
 
             foreach (var option in sourceRule.SupplierOptions)
             {
-                var supplierId = _allCarrierAccounts[option.SupplierId].CarrierAccountId;
+                CarrierAccount supplier;
+                if (!_allCarrierAccounts.TryGetValue(option.SupplierId, out supplier))
+                {
+                    Context.MigrationContext.WriteWarning(string.Format("Failed adding Supplier Option for Supplier Source Id {0}, Supplier is not imported", option.SupplierId));
+                    continue;
+                }
+
                 if (!option.IsLoss)
                 {
-                    if (!filters.TryGetValue(supplierId, out supplierFilters))
+                    if (!filters.TryGetValue(supplier.CarrierAccountId, out supplierFilters))
                     {
                         supplierFilters = new List<RouteOptionFilterSettings>();
-                        filters.Add(supplierId, supplierFilters);
+                        filters.Add(supplier.CarrierAccountId, supplierFilters);
                     }
                     supplierFilters.Add(new RateOptionFilter
                     {
@@ -134,11 +140,22 @@ namespace TOne.WhS.DBSync.Business
         }
         List<RouteOptionSettings> GetOptions(SourceRouteOverrideRule sourceRule)
         {
-            return sourceRule.SupplierOptions.Select(option => new RouteOptionSettings
+            List<RouteOptionSettings> result = new List<RouteOptionSettings>();
+            foreach (var option in sourceRule.SupplierOptions)
             {
-                SupplierId = _allCarrierAccounts[option.SupplierId].CarrierAccountId,
-                Percentage = option.Percentage
-            }).ToList();
+                CarrierAccount supplier;
+                if (!_allCarrierAccounts.TryGetValue(option.SupplierId, out supplier))
+                {
+                    Context.MigrationContext.WriteWarning(string.Format("Failed adding Supplier Option for Supplier Source Id {0}, Supplier is not imported", option.SupplierId));
+                    continue;
+                }
+                result.Add(new RouteOptionSettings
+                {
+                    SupplierId = supplier.CarrierAccountId,
+                    Percentage = option.Percentage
+                });
+            }
+            return result;
         }
 
         #region ZonePart
@@ -315,7 +332,6 @@ namespace TOne.WhS.DBSync.Business
             if (!_allCarrierAccounts.TryGetValue(sourceRule.CustomerId, out customer))
             {
                 Context.MigrationContext.WriteWarning(string.Format("Failed migrating Route Option Block, Source Id: {0}, Carrier Account {1}", sourceRule.SourceId, sourceRule.CustomerId));
-
                 return null;
             }
             else
