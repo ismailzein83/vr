@@ -192,7 +192,8 @@
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-accountmanagerdefinition-selector.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-accountmanagerdefinitionsettings.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-accountmanagerdefinition-subviews-grid.js" />
-    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanager-history.js" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Directives\vr-accountmanagerview-history.js" />
+    <Content Include="VR_AccountManager\Elements\AccountManager\Services\AccountManagerAssignmentService.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Services\AccountManagerService.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Services\APIServices\AccountManagerAPIService.js" />
     <Content Include="VR_AccountManager\Elements\AccountManager\Services\APIServices\AccountManagerDefinitionAPIService.js" />

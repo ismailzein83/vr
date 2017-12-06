@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrAccountmanagerHistory', ['UtilsService', 'VRUIUtilsService', 'VRNavigationService',
+app.directive('vrAccountmanagerviewHistory', ['UtilsService', 'VRUIUtilsService', 'VRNavigationService',
 function (UtilsService, VRUIUtilsService, VRNavigationService) {
 
     var directiveDefinitionObject = {

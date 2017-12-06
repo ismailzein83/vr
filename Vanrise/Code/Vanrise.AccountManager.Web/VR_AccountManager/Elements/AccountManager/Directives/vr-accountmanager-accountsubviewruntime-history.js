@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrAccountmanagerAccountsubviewruntimeHistory", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "Retail_BE_AccountManagerAssignmentService", "Retail_BE_AccountManagerAssignmentAPIService",
-function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_AccountManagerAssignmentService, Retail_BE_AccountManagerAssignmentAPIService) {
+app.directive("vrAccountmanagerAccountsubviewruntimeHistory", ["UtilsService", "VRNotificationService", "VRUIUtilsService","VR_AccountManager_AccountManagerService",
+function (UtilsService, VRNotificationService, VRUIUtilsService, VR_AccountManager_AccountManagerService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -42,7 +42,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Accou
                     }
                     var query = {
                         ObjectId: accountManagerId,
-                        EntityUniqueName: "VR_AccountManager_AccountManager_" + accountManagerDefinitionId,
+                        EntityUniqueName: VR_AccountManager_AccountManagerService.getEntityUniqueName(accountManagerDefinitionId)//"VR_AccountManager_AccountManager_" + accountManagerDefinitionId,
                     };
                     historyGridAPI.load(query);
                 };

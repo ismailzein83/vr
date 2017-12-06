@@ -14,7 +14,8 @@
             editAccountmanager: editAccountmanager,
             addSubView: addSubView,
             editSubView: editSubView,
-            defineAccountManagerSubViewTabs: defineAccountManagerSubViewTabs
+            defineAccountManagerSubViewTabs: defineAccountManagerSubViewTabs,
+            getEntityUniqueName: getEntityUniqueName
         });
         function addAssignmentDefinition(onAssignmentDefinitionAdded)
        {
@@ -133,6 +134,10 @@
                 var drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI);
                 drillDownManager.setDrillDownExtensionObject(accountManager);
             }
+           
+        }
+        function getEntityUniqueName(accountManagerDefinitionId) {
+            return "VR_AccountManager_AccountManager_" + accountManagerDefinitionId;
         }
 
 

@@ -29,23 +29,36 @@ namespace Vanrise.AccountManager.Business
         }
         internal bool TryAddAccountManagerAssignment(AccountManagerAssignment accountManagerAssignment, out int insertedID, out string errorMessage)
         {
+            AccountManagerDefinitionManager accountManagerDefinitionManager = new AccountManagerDefinitionManager();
             insertedID = -1;
             errorMessage = null;
             IAccountManagerAssignmentDataManager dataManager = AccountManagerDataManagerFactory.GetDataManager<IAccountManagerAssignmentDataManager>();
             bool insertActionSucc = dataManager.AddAccountManagerAssignment(accountManagerAssignment, out insertedID);
             if (insertActionSucc)
             {
+                var assignmentDefinition = accountManagerDefinitionManager.GetAccountManagerAssignmnetInfoByAssignmentDefinitionId(accountManagerAssignment.AccountManagerAssignementDefinitionId).AssignmentDefinition;
+                AssignmentDefinitionTrackAndLogObject assignmentDefinitionTrackAndLogObject = new AssignmentDefinitionTrackAndLogObject();
+                assignmentDefinitionTrackAndLogObject.AccountManagerAssignment = accountManagerAssignment;
                 accountManagerAssignment.AccountManagerAssignementId = insertedID;
+                VRActionLogger.Current.TrackAndLogObjectAdded(new AccountManagerAssignmnetLoggableEntity(accountManagerAssignment.AccountManagerAssignementDefinitionId), accountManagerAssignment);
+                assignmentDefinition.Settings.TrackAndLogObject(assignmentDefinitionTrackAndLogObject);
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountManagerAssignment.AccountManagerAssignementDefinitionId);
             }
             return insertActionSucc;
         }
         internal bool TryUpdateAccountManagerAssignment(long accountManagerAssignmentId, DateTime bed, DateTime? eed, AccountManagerAssignmentSettings settings, Guid accountManagerAssignementDefinitionId)
         {
+            AccountManagerDefinitionManager accountManagerDefinitionManager = new AccountManagerDefinitionManager();
             IAccountManagerAssignmentDataManager dataManager = AccountManagerDataManagerFactory.GetDataManager<IAccountManagerAssignmentDataManager>();
             bool updateActionSucc = dataManager.UpdateAccountManagerAssignment(accountManagerAssignmentId, bed, eed, settings);
             if (updateActionSucc)
             {
+                var accountManagerAssignment = GetAccountManagerAssignment(accountManagerAssignmentId, accountManagerAssignementDefinitionId);
+                var assignmentDefinition = accountManagerDefinitionManager.GetAccountManagerAssignmnetInfoByAssignmentDefinitionId(accountManagerAssignementDefinitionId).AssignmentDefinition;
+                AssignmentDefinitionTrackAndLogObject assignmentDefinitionTrackAndLogObject = new AssignmentDefinitionTrackAndLogObject();
+                assignmentDefinitionTrackAndLogObject.AccountManagerAssignment = accountManagerAssignment;
+                VRActionLogger.Current.TrackAndLogObjectUpdated(new AccountManagerAssignmnetLoggableEntity(accountManagerAssignementDefinitionId), accountManagerAssignment);
+                assignmentDefinition.Settings.TrackAndLogObject(assignmentDefinitionTrackAndLogObject);
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountManagerAssignementDefinitionId);
             }
             return updateActionSucc;
@@ -309,5 +322,55 @@ namespace Vanrise.AccountManager.Business
         public AccountManagerAssignmentSettings AssignementSettings { get; set; }
     }
      #endregion
+    #region Private Classes
+
+    public class AccountManagerAssignmnetLoggableEntity : VRLoggableEntityBase
+    {
+        AccountManagerAssignmentsInfo accountManageAssignmnetInfo;
+        Guid _accountManagerAssignmentDefinitionId;
+        static AccountManagerDefinitionManager s_accountManagerDefinitionManager = new AccountManagerDefinitionManager();
+        static AccountManagerManager s_accountManagerManager = new AccountManagerManager();
+
+        public AccountManagerAssignmnetLoggableEntity(Guid assignmentDefinitionId)
+        {
+            accountManageAssignmnetInfo = s_accountManagerDefinitionManager.GetAccountManagerAssignmnetInfoByAssignmentDefinitionId(assignmentDefinitionId);
+            _accountManagerAssignmentDefinitionId = assignmentDefinitionId;
+        }
+
+        public override string EntityUniqueName
+        {
+            get { return String.Format("VR_AccountManager_AccountManagerAssignment_{0}", _accountManagerAssignmentDefinitionId); }
+        }
+
+        public override string EntityDisplayName
+        {
+            get { return accountManageAssignmnetInfo.AssignmentDefinition.Name; }
+        }
+
+        public override string ViewHistoryItemClientActionName
+        {
+            get { return "VR_AccountManager_AccountManagerAssignment_ViewHistoryItem"; }
+        }
+
+
+        public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+        {
+            AccountManagerAssignment accountManagerAssignment = context.Object.CastWithValidate<AccountManagerAssignment>("context.Object");
+            return accountManagerAssignment.AccountManagerAssignementId;
+        }
+
+        public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+        {
+            AccountManagerAssignment accountManagerAssignment = context.Object.CastWithValidate<AccountManagerAssignment>("context.Object");
+            if (accountManageAssignmnetInfo.AssignmentDefinition == null || accountManageAssignmnetInfo.AssignmentDefinition.Settings == null)
+                throw new Exception("AssignmnetDefinition  is Null");
+            return String.Format("{0}_To_{1}", s_accountManagerManager.GetAccountManagerName(accountManagerAssignment.AccountManagerId), accountManageAssignmnetInfo.AssignmentDefinition.Settings.GetAccountName(accountManagerAssignment.AccountId));
+        }
+        public override string ModuleName
+        {
+            get { return "Account Manager"; }
+        }
+    }
+    #endregion
    
 }
