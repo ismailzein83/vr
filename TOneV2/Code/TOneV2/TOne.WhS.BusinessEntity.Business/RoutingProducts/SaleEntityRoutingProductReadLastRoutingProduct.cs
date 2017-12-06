@@ -9,18 +9,16 @@ using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class SaleEntityRoutingProductReadByRateBED : ISaleEntityRoutingProductReader
+    public class SaleEntityRoutingProductReadLastRoutingProduct : ISaleEntityRoutingProductReader
     {
         SaleZoneRoutingProductsByOwner _allSaleZoneRoutingProductsByOwner;
-        Dictionary<long, DateTime> _zoneIdsWithRateBED;
         Dictionary<int, List<DefaultRoutingProduct>> _defaultRoutingProductByCustomerId;
         Dictionary<int, List<DefaultRoutingProduct>> _defaultRoutingProductBySellingProductId;
-        public SaleEntityRoutingProductReadByRateBED(IEnumerable<int> customerIds, Dictionary<long, DateTime> zoneIdsWithRateBED)
+        public SaleEntityRoutingProductReadLastRoutingProduct()
         {
-            this._zoneIdsWithRateBED = zoneIdsWithRateBED;
             LoadDictionaries();
         }
-        
+
         public SaleZoneRoutingProductsByZone GetRoutingProductsOnZones(Entities.SalePriceListOwnerType ownerType, int ownerId)
         {
             var saleZoneRoutingProductsByOwner = ownerType == SalePriceListOwnerType.Customer
@@ -33,8 +31,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public DefaultRoutingProduct GetDefaultRoutingProduct(Entities.SalePriceListOwnerType ownerType, int ownerId, long? zoneId)
         {
-            DateTime rateBED;
-            if (zoneId.HasValue && _zoneIdsWithRateBED.TryGetValue(zoneId.Value, out rateBED))
+            if (zoneId.HasValue)
             {
                 List<DefaultRoutingProduct> defaultRoutingProducts = null;
                 if (ownerType == SalePriceListOwnerType.Customer)
@@ -43,33 +40,26 @@ namespace TOne.WhS.BusinessEntity.Business
                     _defaultRoutingProductBySellingProductId.TryGetValue(ownerId, out defaultRoutingProducts);
 
                 if (defaultRoutingProducts != null)
-                    return defaultRoutingProducts.FindRecord(defaultRp => defaultRp.IsEffective(rateBED));
+                    return defaultRoutingProducts.FindRecord(defaultRp => defaultRp.EED == null);
             }
             return null;
         }
 
-
-        #region Private Methods
-                
-
         private void LoadDictionaries()
         {
             RoutingProductManager routingProductManager = new RoutingProductManager();
-            var allZoneRPs = routingProductManager.GetAllCachedSaleZoneRoutingProducts();
             _allSaleZoneRoutingProductsByOwner = new SaleZoneRoutingProductsByOwner { SaleZoneRoutingProductsByCustomer = new Dictionary<int, SaleZoneRoutingProductsByZone>(), SaleZoneRoutingProductsByProduct = new Dictionary<int, SaleZoneRoutingProductsByZone>() };
+
+            var allZoneRPs = routingProductManager.GetAllCachedSaleZoneRoutingProducts();
             foreach (var zoneRPsByOwner in allZoneRPs)
             {
                 SaleZoneRoutingProductsByZone newZoneRPsByZone = new SaleZoneRoutingProductsByZone();
                 foreach (var zoneRPByZone in zoneRPsByOwner.Value)
                 {
                     long zoneId = zoneRPByZone.Key;
-                    DateTime zoneRateBED;
-                    if (this._zoneIdsWithRateBED.TryGetValue(zoneId, out zoneRateBED))
-                    {
-                        var effectiveZoneRP = zoneRPByZone.Value.FindRecord(itm => itm.IsEffective(zoneRateBED));
-                        if (effectiveZoneRP != null)
-                            newZoneRPsByZone.Add(zoneId, effectiveZoneRP);
-                    }
+                    var lastZoneRP = zoneRPByZone.Value.FindRecord(itm => itm.EED == null);
+                    if (lastZoneRP != null)
+                        newZoneRPsByZone.Add(zoneId, lastZoneRP);
                 }
                 if (zoneRPsByOwner.Key.OwnerType == SalePriceListOwnerType.Customer)
                     _allSaleZoneRoutingProductsByOwner.SaleZoneRoutingProductsByCustomer.Add(zoneRPsByOwner.Key.OwnerId, newZoneRPsByZone);
@@ -89,6 +79,5 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
 
-        #endregion
     }
 }

@@ -162,6 +162,7 @@
     <Compile Include="PricingRules\PricingRuleRateTypeItemContext.cs" />
     <Compile Include="ReleaseCodeManager.cs" />
     <Compile Include="RoutingProducts\SaleEntityRoutingProductReadByRateBED.cs" />
+    <Compile Include="RoutingProducts\SaleEntityRoutingProductReadLastRoutingProduct.cs" />
     <Compile Include="SalePriceListTemplate\Context\MappedCellContext.cs" />
     <Compile Include="SaleRate\History\CustomerZoneRateHistoryLocator.cs" />
     <Compile Include="SaleRate\History\CustomerZoneRateHistoryReader.cs" />

@@ -216,7 +216,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     if (soldCountries != null)
                     {
                         List<SalePricelistRPChange> routingProductChanges = GetRoutingProductChanges(customerInfo.CustomerId, customerInfo.SellingProductId,
-                            soldCountries.Select(x => x.CountryId), existingZonesByCountryId, effectiveRoutingProductLocator, currenRoutingProductLocator);
+                            soldCountries, existingZonesByCountryId, effectiveRoutingProductLocator, currenRoutingProductLocator);
                         outRoutingProductChanges.AddRange(routingProductChanges);
                         changesForThisCustomer.RoutingProductChanges.AddRange(routingProductChanges);
                     }
@@ -324,7 +324,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     context.ImportedZonesByCountryId, context.LastRateNoCachelocator);
 
                 IEnumerable<SalePricelistRPChange> routingProductChanges = GetRoutingProductChanges(customer.CustomerId, customer.SellingProductId,
-                    soldCountries.Select(itm => itm.CountryId), context.ExistingZonesByCountryId, context.EffectiveRoutingProductLocator, context.CurrentRoutingProductLocator);
+                    soldCountries, context.ExistingZonesByCountryId, context.EffectiveRoutingProductLocator, context.CurrentRoutingProductLocator);
                 outRoutingProductChanges.AddRange(routingProductChanges);
                 if (rateChanges.Any())
                 {
@@ -1035,14 +1035,13 @@ namespace TOne.WhS.Sales.BP.Activities
             });
         }
 
-        private List<SalePricelistRPChange> GetRoutingProductChanges(int customerId, int sellingProductId, IEnumerable<int> soldCountriesIds, Dictionary<int, List<SaleZone>> existingZonesByCountryId,
+        private List<SalePricelistRPChange> GetRoutingProductChanges(int customerId, int sellingProductId, IEnumerable<CustomerCountry2> soldCountries, Dictionary<int, List<SaleZone>> existingZonesByCountryId,
             SaleEntityZoneRoutingProductLocator routingProductEffectiveLocator, SaleEntityZoneRoutingProductLocator routingProductCurrentLocator)
         {
             List<SalePricelistRPChange> routingProductChanges = new List<SalePricelistRPChange>();
-
-            foreach (var countryId in soldCountriesIds)
+            foreach (var soldCountry in soldCountries)
             {
-                IEnumerable<SaleZone> zones = existingZonesByCountryId.GetRecord(countryId);
+                IEnumerable<SaleZone> zones = existingZonesByCountryId.GetRecord(soldCountry.CountryId);
 
                 if (zones == null)
                     continue;
@@ -1054,14 +1053,26 @@ namespace TOne.WhS.Sales.BP.Activities
 
                     if (currentRoutingProduct == null || effectiveRoutingProduct.RoutingProductId != currentRoutingProduct.RoutingProductId)
                     {
+                        var zoneBEDs = new List<DateTime?>();
+                        zoneBEDs.Add(saleZone.BED);
+                        zoneBEDs.Add(effectiveRoutingProduct.BED);
+                        zoneBEDs.Add(soldCountry.BED);
+                        var zoneBED = UtilitiesManager.GetMaxDate(zoneBEDs).Value;
+
+                        var zoneEEDs = new List<DateTime?>();
+                        zoneEEDs.Add(saleZone.EED);
+                        zoneEEDs.Add(effectiveRoutingProduct.EED);
+                        zoneEEDs.Add(soldCountry.EED);
+                        var zoneEED = UtilitiesManager.GetMinDate(zoneEEDs);
+                        
                         var routingProduct = new SalePricelistRPChange
                         {
                             CountryId = saleZone.CountryId,
                             ZoneName = saleZone.Name,
                             ZoneId = saleZone.SaleZoneId,
                             RoutingProductId = effectiveRoutingProduct.RoutingProductId,
-                            BED = effectiveRoutingProduct.BED,
-                            EED = effectiveRoutingProduct.EED,
+                            BED = zoneBED,
+                            EED = zoneEED.VRGreaterThan(zoneBED) ? zoneEED : zoneBED,
                             CustomerId = customerId
                         };
                         if (currentRoutingProduct != null)

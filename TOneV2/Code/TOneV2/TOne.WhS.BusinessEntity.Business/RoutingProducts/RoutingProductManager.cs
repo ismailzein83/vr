@@ -14,6 +14,46 @@ namespace TOne.WhS.BusinessEntity.Business
     public class RoutingProductManager
     {
         #region Public Methods
+        public Dictionary<RoutingProductOwnerKey, Dictionary<long, List<SaleZoneRoutingProduct>>> GetAllCachedSaleZoneRoutingProducts()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleEntityRoutingProductCacheManager>().GetOrCreateObject("GetAllCachedSaleZoneRoutingProducts", () =>
+            {
+                ISaleEntityRoutingProductDataManager saleEntityRoutingProductDataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
+                var allSaleZoneRoutingProducts = saleEntityRoutingProductDataManager.GetAllZoneRoutingProducts();
+                Dictionary<RoutingProductOwnerKey, Dictionary<long, List<SaleZoneRoutingProduct>>> rslt = new Dictionary<RoutingProductOwnerKey, Dictionary<long, List<SaleZoneRoutingProduct>>>();
+
+                if (allSaleZoneRoutingProducts != null)
+                {
+                    foreach (var szRP in allSaleZoneRoutingProducts)
+                    {
+                        rslt.GetOrCreateItem(new RoutingProductOwnerKey { OwnerId = szRP.OwnerId, OwnerType = szRP.OwnerType }).GetOrCreateItem(szRP.SaleZoneId).Add(szRP);
+                    }
+                }
+                return rslt;
+            });
+        }
+
+        public Dictionary<RoutingProductOwnerKey, List<DefaultRoutingProduct>> GetAllCachedDefaultRoutingProducts()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<SaleEntityRoutingProductCacheManager>().GetOrCreateObject("GetAllCachedDefaultRoutingProducts", () =>
+            {
+                ISaleEntityRoutingProductDataManager saleEntityRoutingProductDataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
+                var allSaleZoneRoutingProducts = saleEntityRoutingProductDataManager.GetAllDefaultRoutingProducts();
+                Dictionary<RoutingProductOwnerKey, List<DefaultRoutingProduct>> rslt = new Dictionary<RoutingProductOwnerKey, List<DefaultRoutingProduct>>();
+
+                if (allSaleZoneRoutingProducts != null)
+                {
+                    foreach (var szRP in allSaleZoneRoutingProducts)
+                    {
+                        rslt.GetOrCreateItem(new RoutingProductOwnerKey { OwnerId = szRP.OwnerId, OwnerType = szRP.OwnerType }).Add(szRP);
+                    }
+                }
+                return rslt;
+            });
+        }
+
+
+
 
         public Vanrise.Entities.IDataRetrievalResult<RoutingProductDetail> GetFilteredRoutingProducts(Vanrise.Entities.DataRetrievalInput<RoutingProductQuery> input)
         {
@@ -648,5 +688,10 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         #endregion
+    }
+    public struct RoutingProductOwnerKey
+    {
+        public SalePriceListOwnerType OwnerType { get; set; }
+        public int OwnerId { get; set; }
     }
 }
