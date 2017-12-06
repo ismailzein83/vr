@@ -46,6 +46,10 @@ namespace Vanrise.AccountManager.Business
             }
             return insertActionSucc;
         }
+        public void LogGetFilteredAction<T>(Guid assignmentDefinitionId, DataRetrievalInput<T> input)
+        {
+            VRActionLogger.Current.LogGetFilteredAction(new AccountManagerAssignmnetLoggableEntity(assignmentDefinitionId), input);
+        }
         internal bool TryUpdateAccountManagerAssignment(long accountManagerAssignmentId, DateTime bed, DateTime? eed, AccountManagerAssignmentSettings settings, Guid accountManagerAssignementDefinitionId)
         {
             AccountManagerDefinitionManager accountManagerDefinitionManager = new AccountManagerDefinitionManager();
