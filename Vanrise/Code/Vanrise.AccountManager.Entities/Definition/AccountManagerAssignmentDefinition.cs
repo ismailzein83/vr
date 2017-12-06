@@ -27,6 +27,6 @@ namespace Vanrise.AccountManager.Entities
     }
     public interface IAssignmentDefinitionTrackAndLogObject
     {
-        AccountManagerAssignment AccountManagerAssignment{get;}
+        AccountManagerAssignment AccountManagerAssignmentToTrack{get;}
     }
 }

@@ -9,6 +9,6 @@ namespace Vanrise.AccountManager.Business
 {
     public class AssignmentDefinitionTrackAndLogObject : IAssignmentDefinitionTrackAndLogObject
     {
-        public AccountManagerAssignment AccountManagerAssignment { get; set; }
+        public AccountManagerAssignment AccountManagerAssignmentToTrack { get; set; }
     }
 }

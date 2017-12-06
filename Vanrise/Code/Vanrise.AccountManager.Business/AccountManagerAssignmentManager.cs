@@ -36,12 +36,9 @@ namespace Vanrise.AccountManager.Business
             bool insertActionSucc = dataManager.AddAccountManagerAssignment(accountManagerAssignment, out insertedID);
             if (insertActionSucc)
             {
-                var assignmentDefinition = accountManagerDefinitionManager.GetAccountManagerAssignmnetInfoByAssignmentDefinitionId(accountManagerAssignment.AccountManagerAssignementDefinitionId).AssignmentDefinition;
-                AssignmentDefinitionTrackAndLogObject assignmentDefinitionTrackAndLogObject = new AssignmentDefinitionTrackAndLogObject();
-                assignmentDefinitionTrackAndLogObject.AccountManagerAssignment = accountManagerAssignment;
                 accountManagerAssignment.AccountManagerAssignementId = insertedID;
                 VRActionLogger.Current.TrackAndLogObjectAdded(new AccountManagerAssignmnetLoggableEntity(accountManagerAssignment.AccountManagerAssignementDefinitionId), accountManagerAssignment);
-                assignmentDefinition.Settings.TrackAndLogObject(assignmentDefinitionTrackAndLogObject);
+                TrackAndLogObject(accountManagerAssignment);
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountManagerAssignment.AccountManagerAssignementDefinitionId);
             }
             return insertActionSucc;
@@ -50,20 +47,17 @@ namespace Vanrise.AccountManager.Business
         {
             VRActionLogger.Current.LogGetFilteredAction(new AccountManagerAssignmnetLoggableEntity(assignmentDefinitionId), input);
         }
-        internal bool TryUpdateAccountManagerAssignment(long accountManagerAssignmentId, DateTime bed, DateTime? eed, AccountManagerAssignmentSettings settings, Guid accountManagerAssignementDefinitionId)
+        internal bool TryUpdateAccountManagerAssignment(long accountManagerAssignmentId, DateTime bed, DateTime? eed, AccountManagerAssignmentSettings settings, Guid accountManagerAssignmentDefinitionId)
         {
             AccountManagerDefinitionManager accountManagerDefinitionManager = new AccountManagerDefinitionManager();
             IAccountManagerAssignmentDataManager dataManager = AccountManagerDataManagerFactory.GetDataManager<IAccountManagerAssignmentDataManager>();
             bool updateActionSucc = dataManager.UpdateAccountManagerAssignment(accountManagerAssignmentId, bed, eed, settings);
             if (updateActionSucc)
             {
-                var accountManagerAssignment = GetAccountManagerAssignment(accountManagerAssignmentId, accountManagerAssignementDefinitionId);
-                var assignmentDefinition = accountManagerDefinitionManager.GetAccountManagerAssignmnetInfoByAssignmentDefinitionId(accountManagerAssignementDefinitionId).AssignmentDefinition;
-                AssignmentDefinitionTrackAndLogObject assignmentDefinitionTrackAndLogObject = new AssignmentDefinitionTrackAndLogObject();
-                assignmentDefinitionTrackAndLogObject.AccountManagerAssignment = accountManagerAssignment;
-                VRActionLogger.Current.TrackAndLogObjectUpdated(new AccountManagerAssignmnetLoggableEntity(accountManagerAssignementDefinitionId), accountManagerAssignment);
-                assignmentDefinition.Settings.TrackAndLogObject(assignmentDefinitionTrackAndLogObject);
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountManagerAssignementDefinitionId);
+                var accountManagerAssignment = GetAccountManagerAssignment(accountManagerAssignmentId, accountManagerAssignmentDefinitionId);
+                VRActionLogger.Current.TrackAndLogObjectUpdated(new AccountManagerAssignmnetLoggableEntity(accountManagerAssignmentDefinitionId), accountManagerAssignment);
+                TrackAndLogObject(accountManagerAssignment);
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountManagerAssignmentDefinitionId);
             }
             return updateActionSucc;
         }
@@ -248,6 +242,21 @@ namespace Vanrise.AccountManager.Business
                    return accountManagerAssignments.ToDictionary(cn => cn.AccountManagerAssignementId, cn => cn);
                });
         }
+        private void TrackAndLogObject (AccountManagerAssignment accountManagerAssignment)
+        {
+            AccountManagerDefinitionManager accountManagerDefinitionManager = new AccountManagerDefinitionManager();
+            var assignmentInfo = accountManagerDefinitionManager.GetAccountManagerAssignmnetInfoByAssignmentDefinitionId(accountManagerAssignment.AccountManagerAssignementDefinitionId);
+            assignmentInfo.ThrowIfNull("Assignment info");
+            var assignmentDefinition = assignmentInfo.AssignmentDefinition;
+            var assignmentDefinitionTrackAndLogObject = new AssignmentDefinitionTrackAndLogObject
+            {
+                AccountManagerAssignmentToTrack = accountManagerAssignment
+            };
+            assignmentDefinition.Settings.TrackAndLogObject(assignmentDefinitionTrackAndLogObject);
+            assignmentDefinition.ThrowIfNull("Assignment Definition");
+            assignmentDefinition.Settings.ThrowIfNull("AssignmentDefinitionSettings");
+            assignmentDefinition.Settings.TrackAndLogObject(assignmentDefinitionTrackAndLogObject);
+        }
         #endregion
 
         #region Mappers
@@ -338,6 +347,9 @@ namespace Vanrise.AccountManager.Business
         public AccountManagerAssignmnetLoggableEntity(Guid assignmentDefinitionId)
         {
             accountManageAssignmnetInfo = s_accountManagerDefinitionManager.GetAccountManagerAssignmnetInfoByAssignmentDefinitionId(assignmentDefinitionId);
+            accountManageAssignmnetInfo.ThrowIfNull("AssignmentInfo");
+            accountManageAssignmnetInfo.AssignmentDefinition.ThrowIfNull("AssignmentDefinition");
+            accountManageAssignmnetInfo.AssignmentDefinition.Settings.ThrowIfNull("AssignmentDefinitionSettings");
             _accountManagerAssignmentDefinitionId = assignmentDefinitionId;
         }
 
@@ -366,8 +378,6 @@ namespace Vanrise.AccountManager.Business
         public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
         {
             AccountManagerAssignment accountManagerAssignment = context.Object.CastWithValidate<AccountManagerAssignment>("context.Object");
-            if (accountManageAssignmnetInfo.AssignmentDefinition == null || accountManageAssignmnetInfo.AssignmentDefinition.Settings == null)
-                throw new Exception("AssignmnetDefinition  is Null");
             return String.Format("{0}_To_{1}", s_accountManagerManager.GetAccountManagerName(accountManagerAssignment.AccountManagerId), accountManageAssignmnetInfo.AssignmentDefinition.Settings.GetAccountName(accountManagerAssignment.AccountId));
         }
         public override string ModuleName
