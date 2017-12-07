@@ -58,24 +58,25 @@ namespace TOne.WhS.DBSync.Data.SQL
                 BED = (DateTime)arg["BeginEffectiveDate"],
                 SourceFileBytes = GetReaderValue<byte[]>(arg, "SourceFileBytes"),
                 SourceFileName = arg["SourceFileName"] as string,
-                IsSent = string.IsNullOrEmpty(isSent) || isSent.Equals("N") ? false : true
+                IsSent = string.IsNullOrEmpty(isSent) || isSent.Equals("N") ? false : true,
+                Description = arg["Description"] as string               
             };
         }
 
 
 
         const string query_getSaleSourcePriceLists = @"SELECT  PriceListID ,  SupplierID, CustomerID,  Description, CurrencyID,  BeginEffectiveDate ,  EndEffectiveDate,
-                                                            NULL SourceFileBytes, NULL SourceFileName, IsSent FROM PriceList p WITH (NOLOCK) 
+                                                            NULL SourceFileBytes, NULL SourceFileName, IsSent, Description FROM PriceList p WITH (NOLOCK) 
 															join CarrierAccount ca on ca.CarrierAccountID = p.CustomerID
 															where SupplierID = 'SYS' and ca.AccountType <> 2 ";
 
-        const string query_getSupplierSourcePriceLists = @"SELECT     p.PriceListID, p.SupplierID, p.CustomerID, p.CurrencyID, NULL SourceFileName, p.BeginEffectiveDate , NULL SourceFileBytes, IsSent
+        const string query_getSupplierSourcePriceLists = @"SELECT     p.PriceListID, p.SupplierID, p.CustomerID, p.CurrencyID, NULL SourceFileName, p.BeginEffectiveDate , NULL SourceFileBytes, IsSent,Description
                                                             FROM         PriceList AS p WITH (NOLOCK)
                                                            join CarrierAccount ca on ca.CarrierAccountID = p.SupplierID
 															where p.CustomerID = 'SYS' and ca.AccountType <> 0 ";
 
-        const string query_getSupplierSourcePriceListsWithData = @"															SELECT     p.PriceListID, p.SupplierID, p.CustomerID, p.CurrencyID, p.SourceFileName, p.BeginEffectiveDate , data.SourceFileBytes, p.IsSent
-                                                            FROM         PriceList AS p WITH (NOLOCK)
+        const string query_getSupplierSourcePriceListsWithData = @"SELECT     p.PriceListID, p.SupplierID, p.CustomerID, p.CurrencyID, p.SourceFileName, p.BeginEffectiveDate , data.SourceFileBytes, p.IsSent,p.Description
+                                                            FROM PriceList AS p WITH (NOLOCK)
 															LEFT JOIN PriceListData AS data WITH (NOLOCK) ON p.PriceListID = data.PriceListID
 															join CarrierAccount ca on ca.CarrierAccountID = p.SupplierID
                                                             WHERE     (p.CustomerID = 'SYS') and ca.AccountType <> 0 ";

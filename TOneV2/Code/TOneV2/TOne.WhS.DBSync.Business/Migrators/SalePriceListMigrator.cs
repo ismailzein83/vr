@@ -66,7 +66,10 @@ namespace TOne.WhS.DBSync.Business
                     SourceId = sourceItem.SourceId,
                     EffectiveOn = sourceItem.BED,
                     CreatedTime = sourceItem.BED,
-                    IsSent = true
+                    IsSent = true,
+                    Description = sourceItem.Description,
+                    PricelistSource = SalePricelistSource.RatePlan
+
                 };
             else
             {

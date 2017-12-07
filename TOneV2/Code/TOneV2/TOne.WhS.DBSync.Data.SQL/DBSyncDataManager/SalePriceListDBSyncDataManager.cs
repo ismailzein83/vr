@@ -31,6 +31,8 @@ namespace TOne.WhS.DBSync.Data.SQL
             dt.Columns.Add("CreatedTime", typeof(DateTime));
             dt.Columns.Add("ID", typeof(int));
             dt.Columns.Add("IsSent", typeof(bool));
+            dt.Columns.Add(new DataColumn { AllowDBNull = true, ColumnName = "PriceListType", DataType = typeof(byte) });
+            dt.Columns.Add("Description", typeof(string));
             dt.BeginLoadData();
             foreach (var item in salePriceLists)
             {
@@ -43,6 +45,12 @@ namespace TOne.WhS.DBSync.Data.SQL
                 row["CreatedTime"] = item.CreatedTime;
                 row["IsSent"] = item.IsSent;
                 row["ID"] = startingId++;
+                row["Description"] = item.Description;
+                if (item.PriceListType.HasValue)
+                    row["PriceListType"] = item.PriceListType.Value;
+                else
+                    row["PriceListType"] = DBNull.Value;
+
                 dt.Rows.Add(row);
             }
             dt.EndLoadData();

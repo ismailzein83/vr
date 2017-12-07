@@ -68,7 +68,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 if (rule != null)
                 {
                     routeRules.Add(rule);
-                }                
+                }
             }
             return routeRules;
 
@@ -127,8 +127,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 {
                     SuppliersWithZonesGroupSettings = new SelectiveSuppliersWithZonesGroup
                     {
-                        SuppliersWithZones =
-                            new List<SupplierWithZones>(sourceRule.BlockedOptions.Select(b => new SupplierWithZones { SupplierId = _allCarrierAccounts[b.SupplierId].CarrierAccountId }).ToList())
+                        SuppliersWithZones = GetBlockedOptions(sourceRule.BlockedOptions)
 
                     }
                 }
@@ -182,6 +181,19 @@ namespace TOne.WhS.DBSync.Business.Migrators
 
             }
             return settings;
+        }
+
+        private List<SupplierWithZones> GetBlockedOptions(IEnumerable<BlockedOption> blockedOptions)
+        {
+            List<SupplierWithZones> result = new List<SupplierWithZones>();
+            foreach (var bOption in blockedOptions)
+            {
+                CarrierAccount supplier;
+                if (!_allCarrierAccounts.TryGetValue(bOption.SupplierId, out supplier))
+                    continue;
+                result.Add(new SupplierWithZones { SupplierId = supplier.CarrierAccountId });
+            }
+            return result;
         }
     }
 }
