@@ -74,7 +74,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
             foreach (NewCode code in importedData.NewCodes)
             {
                 TOne.WhS.BusinessEntity.Entities.CodeGroup codeGroup = codeGroupManager.GetMatchCodeGroup(code.Code);
-                DeletedCode deletedCode = importedData.DeletedCodes.FirstOrDefault(x => x.Code == code.Code);
+                DeletedCode deletedCode = importedData.DeletedCodes.FirstOrDefault(x => x.Code == code.Code && !x.Zone.Equals(code.Zone));
                 if (deletedCode != null)
                 {
                     codesToMove.Add(new CodeToMove
