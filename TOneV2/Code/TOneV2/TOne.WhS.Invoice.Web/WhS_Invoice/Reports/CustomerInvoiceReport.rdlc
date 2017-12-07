@@ -229,7 +229,7 @@
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>1.73681in</Height>
+              <Height>2.17431in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -256,7 +256,7 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>SaleAmount</rd:DefaultName>
-                          <Left>1.4293in</Left>
+                          <Left>1.62722in</Left>
                           <Height>0.2in</Height>
                           <Width>2.38859in</Width>
                           <Style>
@@ -291,7 +291,7 @@
                           </Paragraphs>
                           <rd:DefaultName>SaleAmount</rd:DefaultName>
                           <Top>0.2in</Top>
-                          <Left>1.4293in</Left>
+                          <Left>1.62722in</Left>
                           <Height>0.2in</Height>
                           <Width>2.38859in</Width>
                           <ZIndex>1</ZIndex>
@@ -327,7 +327,7 @@
                           </Paragraphs>
                           <rd:DefaultName>SaleAmount</rd:DefaultName>
                           <Top>0.4in</Top>
-                          <Left>1.4293in</Left>
+                          <Left>1.62722in</Left>
                           <Height>0.2in</Height>
                           <Width>2.38859in</Width>
                           <ZIndex>2</ZIndex>
@@ -363,7 +363,7 @@
                           </Paragraphs>
                           <rd:DefaultName>SaleAmount</rd:DefaultName>
                           <Top>0.6in</Top>
-                          <Left>1.4293in</Left>
+                          <Left>1.62722in</Left>
                           <Height>0.2in</Height>
                           <Width>2.38859in</Width>
                           <ZIndex>3</ZIndex>
@@ -399,7 +399,7 @@
                           </Paragraphs>
                           <rd:DefaultName>SaleAmount</rd:DefaultName>
                           <Top>0.8in</Top>
-                          <Left>1.4293in</Left>
+                          <Left>1.62722in</Left>
                           <Height>0.2in</Height>
                           <Width>2.38859in</Width>
                           <ZIndex>4</ZIndex>
@@ -435,7 +435,7 @@
                           </Paragraphs>
                           <rd:DefaultName>SaleAmount</rd:DefaultName>
                           <Top>1in</Top>
-                          <Left>1.4293in</Left>
+                          <Left>1.62722in</Left>
                           <Height>0.2in</Height>
                           <Width>2.38859in</Width>
                           <ZIndex>5</ZIndex>
@@ -468,9 +468,9 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox73</rd:DefaultName>
-                          <Left>0.15402in</Left>
+                          <Left>0.02902in</Left>
                           <Height>0.2in</Height>
-                          <Width>1.15in</Width>
+                          <Width>1.48333in</Width>
                           <ZIndex>6</ZIndex>
                           <Style>
                             <Border>
@@ -504,7 +504,7 @@
                           </Paragraphs>
                           <rd:DefaultName>SaleAmount</rd:DefaultName>
                           <Top>1.2in</Top>
-                          <Left>1.4293in</Left>
+                          <Left>1.62722in</Left>
                           <Height>0.2in</Height>
                           <Width>2.38859in</Width>
                           <ZIndex>7</ZIndex>
@@ -538,9 +538,9 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox73</rd:DefaultName>
                           <Top>0.2in</Top>
-                          <Left>0.15402in</Left>
+                          <Left>0.02902in</Left>
                           <Height>0.2in</Height>
-                          <Width>1.15in</Width>
+                          <Width>1.48333in</Width>
                           <ZIndex>8</ZIndex>
                           <Style>
                             <Border>
@@ -572,9 +572,9 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox73</rd:DefaultName>
                           <Top>0.4in</Top>
-                          <Left>0.15402in</Left>
+                          <Left>0.02902in</Left>
                           <Height>0.2in</Height>
-                          <Width>1.15in</Width>
+                          <Width>1.48333in</Width>
                           <ZIndex>9</ZIndex>
                           <Style>
                             <Border>
@@ -606,9 +606,9 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox73</rd:DefaultName>
                           <Top>0.6in</Top>
-                          <Left>0.15402in</Left>
+                          <Left>0.02902in</Left>
                           <Height>0.2in</Height>
-                          <Width>1.15in</Width>
+                          <Width>1.48333in</Width>
                           <ZIndex>10</ZIndex>
                           <Style>
                             <Border>
@@ -640,9 +640,9 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox73</rd:DefaultName>
                           <Top>0.8in</Top>
-                          <Left>0.15402in</Left>
+                          <Left>0.02902in</Left>
                           <Height>0.2in</Height>
-                          <Width>1.15in</Width>
+                          <Width>1.48333in</Width>
                           <ZIndex>11</ZIndex>
                           <Style>
                             <Border>
@@ -674,9 +674,9 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox73</rd:DefaultName>
                           <Top>1in</Top>
-                          <Left>0.15402in</Left>
+                          <Left>0.02902in</Left>
                           <Height>0.2in</Height>
-                          <Width>1.15in</Width>
+                          <Width>1.48333in</Width>
                           <ZIndex>12</ZIndex>
                           <Style>
                             <Border>
@@ -708,9 +708,9 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox73</rd:DefaultName>
                           <Top>1.2in</Top>
-                          <Left>0.15402in</Left>
+                          <Left>0.02902in</Left>
                           <Height>0.2in</Height>
-                          <Width>1.15in</Width>
+                          <Width>1.48333in</Width>
                           <ZIndex>13</ZIndex>
                           <Style>
                             <Border>
@@ -744,7 +744,7 @@
                           </Paragraphs>
                           <rd:DefaultName>SaleAmount</rd:DefaultName>
                           <Top>1.41944in</Top>
-                          <Left>1.4293in</Left>
+                          <Left>1.62722in</Left>
                           <Height>0.2in</Height>
                           <Width>2.38859in</Width>
                           <ZIndex>14</ZIndex>
@@ -778,10 +778,150 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox73</rd:DefaultName>
                           <Top>1.41944in</Top>
-                          <Left>0.15402in</Left>
+                          <Left>0.02902in</Left>
                           <Height>0.2in</Height>
-                          <Width>1.15in</Width>
+                          <Width>1.48333in</Width>
                           <ZIndex>15</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox81">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Correspondent Bank:</Value>
+                                  <Style>
+                                    <FontFamily>Verdana</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox73</rd:DefaultName>
+                          <Top>1.64722in</Top>
+                          <Left>0.02902in</Left>
+                          <Height>0.2in</Height>
+                          <Width>1.48333in</Width>
+                          <ZIndex>16</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="SaleAmount10">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!CorrespondentBank.Value</Value>
+                                  <Style>
+                                    <FontFamily>Verdana</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>SaleAmount</rd:DefaultName>
+                          <Top>1.64722in</Top>
+                          <Left>1.62722in</Left>
+                          <Height>0.2in</Height>
+                          <Width>2.38859in</Width>
+                          <ZIndex>17</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="Textbox83">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Swift Code:</Value>
+                                  <Style>
+                                    <FontFamily>Verdana</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox73</rd:DefaultName>
+                          <Top>1.88888in</Top>
+                          <Left>0.02902in</Left>
+                          <Height>0.2in</Height>
+                          <Width>1.48333in</Width>
+                          <ZIndex>18</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Textbox Name="SaleAmount11">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>=Fields!CorrespondentBankSwiftCode.Value</Value>
+                                  <Style>
+                                    <FontFamily>Verdana</FontFamily>
+                                    <FontSize>8pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style>
+                                <TextAlign>Left</TextAlign>
+                              </Style>
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>SaleAmount</rd:DefaultName>
+                          <Top>1.88888in</Top>
+                          <Left>1.62722in</Left>
+                          <Height>0.2in</Height>
+                          <Width>2.38859in</Width>
+                          <ZIndex>19</ZIndex>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -819,9 +959,9 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
-        <Top>7.10778in</Top>
+        <Top>6.73278in</Top>
         <Left>0.1425in</Left>
-        <Height>1.73681in</Height>
+        <Height>2.17431in</Height>
         <Width>4.1629in</Width>
         <ZIndex>7</ZIndex>
         <Style>
@@ -849,7 +989,7 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox72</rd:DefaultName>
-        <Top>6.7182in</Top>
+        <Top>6.3432in</Top>
         <Left>0.1425in</Left>
         <Height>0.17708in</Height>
         <Width>1.26042in</Width>
@@ -866,7 +1006,7 @@
       </Textbox>
       <Rectangle Name="Rectangle4">
         <KeepTogether>true</KeepTogether>
-        <Top>6.93417in</Top>
+        <Top>6.55917in</Top>
         <Left>0.1425in</Left>
         <Height>0.02083in</Height>
         <Width>4.1629in</Width>
@@ -3589,6 +3729,18 @@
         </Field>
         <Field Name="SortCode">
           <DataField>SortCode</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ChannelName">
+          <DataField>ChannelName</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CorrespondentBank">
+          <DataField>CorrespondentBank</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="CorrespondentBankSwiftCode">
+          <DataField>CorrespondentBankSwiftCode</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
