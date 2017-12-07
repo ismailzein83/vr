@@ -36,6 +36,12 @@ namespace TOne.WhS.Routing.Business
 
         public override bool ShouldCreateScheduledInstance(Vanrise.BusinessProcess.Entities.IBPDefinitionShouldCreateScheduledInstanceContext context)
         {
+            DateTime effectiveDate = DateTime.Now;
+
+            RoutingDatabase routingDatabase = new RoutingDatabaseManager().GetLatestRoutingDatabase(RoutingProcessType.CustomerRoute, RoutingDatabaseType.Current);
+            if (routingDatabase == null)
+                return false;
+
             PartialRoutingProcessInput inputArg = context.BaseProcessInputArgument.CastWithValidate<PartialRoutingProcessInput>("context.BaseProcessInputArgument");
 
             var routeRulesChanged = new RouteRuleManager().GetRulesChanged();
@@ -46,18 +52,15 @@ namespace TOne.WhS.Routing.Business
             if (routeOptionRulesChanged != null && routeOptionRulesChanged.Count > 0)
                 return true;
 
-            RoutingDatabase routingDatabase = new RoutingDatabaseManager().GetLatestRoutingDatabase(RoutingProcessType.CustomerRoute, RoutingDatabaseType.Current);
             IRoutingEntityDetailsDataManager routingEntityDetailsDataManager = RoutingDataManagerFactory.GetDataManager<IRoutingEntityDetailsDataManager>();
             routingEntityDetailsDataManager.RoutingDatabase = routingDatabase;
-            RoutingEntityDetails routingEntityDetails = routingEntityDetailsDataManager.GetRoutingEntityDetails(RoutingEntityType.PartialRouteInfo);
 
-            DateTime now = DateTime.Now;
-            if (routingEntityDetails != null)
-            {
-                PartialRouteInfo partialRouteInfo = routingEntityDetails.RoutingEntityInfo.CastWithValidate<PartialRouteInfo>("routingEntityDetails.RoutingEntityInfo");
-                if (partialRouteInfo.NextOpenOrCloseRuleTime.HasValue && partialRouteInfo.NextOpenOrCloseRuleTime < now)
-                    return true;
-            }
+            RoutingEntityDetails routingEntityDetails = routingEntityDetailsDataManager.GetRoutingEntityDetails(RoutingEntityType.PartialRouteInfo);
+            routingEntityDetails.ThrowIfNull("routingEntityDetails");
+
+            PartialRouteInfo partialRouteInfo = routingEntityDetails.RoutingEntityInfo.CastWithValidate<PartialRouteInfo>("partialRouteInfo");
+            if (partialRouteInfo.NextOpenOrCloseRuleTime.HasValue && partialRouteInfo.NextOpenOrCloseRuleTime < effectiveDate)
+                return true;
 
             return false;
         }

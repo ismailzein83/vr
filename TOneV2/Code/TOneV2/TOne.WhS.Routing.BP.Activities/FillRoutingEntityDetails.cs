@@ -68,7 +68,7 @@ namespace TOne.WhS.Routing.BP.Activities
                 routingEntityDetailsDataManager.ApplyRoutingEntityDetails(partialRoutingEntityDetails);
 
                 BERouteInfo beRouteInfo = new BERouteInfo() { SaleRateRouteInfo = saleRateRouteInfo, SupplierRateRouteInfo = supplierRateRouteInfo };
-                RoutingEntityDetails beRoutingEntityDetails = new RoutingEntityDetails() { RoutingEntityType = RoutingEntityType.BERoute, RoutingEntityInfo = beRouteInfo };
+                RoutingEntityDetails beRoutingEntityDetails = new RoutingEntityDetails() { RoutingEntityType = RoutingEntityType.BERouteInfo, RoutingEntityInfo = beRouteInfo };
                 routingEntityDetailsDataManager.ApplyRoutingEntityDetails(beRoutingEntityDetails);
             }
 

@@ -74,45 +74,45 @@ namespace TOne.WhS.Routing.BP.Activities
             //this.RebuildSupplierZoneDetails.Set(context, rebuildSupplierZoneDetails);
         }
 
-        private DateTime ModifyDate(DateTime dateTime)
-        {
-            int minuteNumber = dateTime.Hour * 60 + dateTime.Minute;
-            int roundedMinuteNumber = (((int)minuteNumber / 30) * 30);
-            TimeSpan ts = TimeSpan.FromMinutes(roundedMinuteNumber);
-            return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, ts.Hours, ts.Minutes, 0);
-        }
+        //private DateTime ModifyDate(DateTime dateTime)
+        //{
+        //    int minuteNumber = dateTime.Hour * 60 + dateTime.Minute;
+        //    int roundedMinuteNumber = (((int)minuteNumber / 30) * 30);
+        //    TimeSpan ts = TimeSpan.FromMinutes(roundedMinuteNumber);
+        //    return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, ts.Hours, ts.Minutes, 0);
+        //}
 
-        private bool ShouldRebuildCustomerZoneDetails(RateRouteInfo saleRateRouteInfo, DateTime effectiveDate)
-        {
-            if (saleRateRouteInfo.NextOpenOrCloseRateTime.HasValue && saleRateRouteInfo.NextOpenOrCloseRateTime <= effectiveDate)
-                return true;
+        //private bool ShouldRebuildCustomerZoneDetails(RateRouteInfo saleRateRouteInfo, DateTime effectiveDate)
+        //{
+        //    if (saleRateRouteInfo.NextOpenOrCloseRateTime.HasValue && saleRateRouteInfo.NextOpenOrCloseRateTime <= effectiveDate)
+        //        return true;
 
-            ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
+        //    ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
 
-            object maxSaleRateTimeStamp = saleRateRouteInfo.MaxRateTimeStamp;
-            if (dataManager.AreSaleRatesUpdated(ref maxSaleRateTimeStamp))
-            {
-                saleRateRouteInfo.MaxRateTimeStamp = maxSaleRateTimeStamp;
-                return true;
-            }
-            return false;
-        }
+        //    object maxSaleRateTimeStamp = saleRateRouteInfo.MaxRateTimeStamp;
+        //    if (dataManager.AreSaleRatesUpdated(ref maxSaleRateTimeStamp))
+        //    {
+        //        saleRateRouteInfo.MaxRateTimeStamp = maxSaleRateTimeStamp;
+        //        return true;
+        //    }
+        //    return false;
+        //}
 
-        private bool ShouldRebuildSupplierZoneDetails(RateRouteInfo supplierRateRouteInfo, DateTime effectiveDate)
-        {
-            if (supplierRateRouteInfo.NextOpenOrCloseRateTime.HasValue && supplierRateRouteInfo.NextOpenOrCloseRateTime <= effectiveDate)
-                return true;
+        //private bool ShouldRebuildSupplierZoneDetails(RateRouteInfo supplierRateRouteInfo, DateTime effectiveDate)
+        //{
+        //    if (supplierRateRouteInfo.NextOpenOrCloseRateTime.HasValue && supplierRateRouteInfo.NextOpenOrCloseRateTime <= effectiveDate)
+        //        return true;
 
-            ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
+        //    ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
 
-            object maxSupplierRateTimeStamp = supplierRateRouteInfo.MaxRateTimeStamp;
-            if (dataManager.AreSupplierRatesUpdated(ref maxSupplierRateTimeStamp))
-            {
-                supplierRateRouteInfo.MaxRateTimeStamp = maxSupplierRateTimeStamp;
-                return true;
-            }
+        //    object maxSupplierRateTimeStamp = supplierRateRouteInfo.MaxRateTimeStamp;
+        //    if (dataManager.AreSupplierRatesUpdated(ref maxSupplierRateTimeStamp))
+        //    {
+        //        supplierRateRouteInfo.MaxRateTimeStamp = maxSupplierRateTimeStamp;
+        //        return true;
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
     }
 }

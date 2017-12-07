@@ -6,25 +6,21 @@ using TOne.WhS.Routing.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
-    public sealed class GetBERouteInfo : CodeActivity
+    public sealed class UpdateBERouteInfo : CodeActivity
     {
         [RequiredArgument]
         public InArgument<RoutingDatabase> RoutingDatabase { get; set; }
 
         [RequiredArgument]
-        public OutArgument<BERouteInfo> BERouteInfo { get; set; }
+        public InArgument<BERouteInfo> BERouteInfo { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
             IRoutingEntityDetailsDataManager routingEntityDetailsDataManager = RoutingDataManagerFactory.GetDataManager<IRoutingEntityDetailsDataManager>();
             routingEntityDetailsDataManager.RoutingDatabase = this.RoutingDatabase.Get(context);
 
-            RoutingEntityDetails routingEntityDetails = routingEntityDetailsDataManager.GetRoutingEntityDetails(RoutingEntityType.BERouteInfo);
-            routingEntityDetails.ThrowIfNull("routingEntityDetails");
-
-            BERouteInfo beRouteInfo = routingEntityDetails.RoutingEntityInfo.CastWithValidate<BERouteInfo>("routingEntityDetails.RoutingEntityInfo");
-
-            this.BERouteInfo.Set(context, beRouteInfo);
+            RoutingEntityDetails routingEntityDetails = new RoutingEntityDetails() { RoutingEntityType = RoutingEntityType.BERouteInfo, RoutingEntityInfo = this.BERouteInfo.Get(context) };
+            routingEntityDetailsDataManager.ApplyRoutingEntityDetails(routingEntityDetails);
         }
     }
 }

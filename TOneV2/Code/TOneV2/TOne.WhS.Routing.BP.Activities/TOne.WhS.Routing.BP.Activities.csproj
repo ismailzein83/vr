@@ -110,6 +110,7 @@
     <Compile Include="EntitiesUpdater\ApplyModifiedCustomerZoneDetails.cs" />
     <Compile Include="EntitiesUpdater\CheckModifiedSupplierZoneDetails.cs" />
     <Compile Include="EntitiesUpdater\CheckZoneDetails.cs" />
+    <Compile Include="EntitiesUpdater\UpdateBERouteInfo.cs" />
     <Compile Include="EntitiesUpdater\GetBERouteInfo.cs" />
     <Compile Include="FillRoutingEntityDetails.cs" />
     <Compile Include="EntitiesUpdater\CheckModifiedCustomerZoneDetails.cs" />

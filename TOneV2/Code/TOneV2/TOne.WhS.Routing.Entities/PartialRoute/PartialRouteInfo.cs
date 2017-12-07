@@ -2,7 +2,7 @@
 
 namespace TOne.WhS.Routing.Entities
 {
-    public enum RoutingEntityType { PartialRouteInfo = 0, BERoute = 1 }
+    public enum RoutingEntityType { PartialRouteInfo = 0, BERouteInfo = 1 }
 
     public class RoutingEntityDetails
     {
@@ -32,6 +32,7 @@ namespace TOne.WhS.Routing.Entities
 
     public class BERouteInfo : RoutingEntityInfo
     {
+        public DateTime LatestProcessDate { get; set; }
         public RateRouteInfo SaleRateRouteInfo { get; set; }
 
         public RateRouteInfo SupplierRateRouteInfo { get; set; }
