@@ -1631,6 +1631,9 @@
               <Parameter Name="AmountAfterCommission">
                 <Value>=Parameters!AmountAfterCommission.Value</Value>
               </Parameter>
+              <Parameter Name="Carrier">
+                <Value>=Parameters!Carrier.Value</Value>
+              </Parameter>
             </Parameters>
             <Top>0.14722in</Top>
             <Height>3in</Height>
