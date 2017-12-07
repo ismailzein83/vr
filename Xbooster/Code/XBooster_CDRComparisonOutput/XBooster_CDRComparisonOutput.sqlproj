@@ -73,5 +73,8 @@
     <Build Include="common\Stored Procedures\sp_File_Insert.sql" />
     <Build Include="common\Stored Procedures\sp_File_SetUsed.sql" />
     <Build Include="Security\common.sql" />
+    <Build Include="common\Stored Procedures\sp_File_SetUsedAndUpdateSettings.sql" />
+    <Build Include="common\Stored Procedures\sp_File_Insert_Temp.sql" />
+    <Build Include="common\Stored Procedures\sp_File_GetByFileIds.sql" />
   </ItemGroup>
 </Project>

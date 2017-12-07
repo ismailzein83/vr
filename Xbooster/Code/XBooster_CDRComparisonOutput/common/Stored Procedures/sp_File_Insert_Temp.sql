@@ -1,5 +1,5 @@
 ﻿
-CREATE PROCEDURE [common].[sp_File_Insert] 
+CREATE PROCEDURE [common].[sp_File_Insert_Temp] 
 	@Name Nvarchar(255),
 	@Extension Nvarchar(50),
 	@Content varbinary(max),
@@ -15,7 +15,7 @@ BEGIN
 	IF @CreatedTime IS NULL
 		SET @CreatedTime = GETDATE()
 
-	Insert into common.[File] ([Name], [Extension], [Content], [ModuleName], [UserID], [IsTemp], [ConfigID], [Settings],[CreatedTime])
+	Insert into common.[File_Temp] ([Name], [Extension], [Content], [ModuleName], [UserID], [IsTemp], [ConfigID], [Settings], [CreatedTime])
 	values(@Name, @Extension, @Content, @ModuleName, @UserID, @IsTemp, @ConfigId, @Settings, @CreatedTime)
 	SET @Id = SCOPE_IDENTITY()
 END
