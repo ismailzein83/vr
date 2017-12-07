@@ -108,6 +108,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SaveCDRSourceConfigs.cs" />
     <Compile Include="SetDelayDuration.cs" />
+    <Compile Include="ThrowTimeoutException.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CDRComparison.Business\CDRComparison.Business.csproj">

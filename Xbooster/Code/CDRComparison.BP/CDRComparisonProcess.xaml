@@ -232,13 +232,7 @@
               </InArgument>
             </cba1:DeleteCDRTables.TableKey>
           </cba1:DeleteCDRTables>
-          <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_1" Reason="Task timed out">
-            <TerminateWorkflow.Exception>
-              <InArgument x:TypeArguments="s:Exception">
-                <mca:CSharpValue x:TypeArguments="s:Exception">new Vanrise.Entities.VRBusinessException("Task timed out")</mca:CSharpValue>
-              </InArgument>
-            </TerminateWorkflow.Exception>
-          </TerminateWorkflow>
+          <cba1:ThrowTimeoutException sap2010:WorkflowViewState.IdRef="ThrowTimeoutException_1" />
         </Sequence>
       </PickBranch>
     </Pick>
@@ -547,13 +541,7 @@
               </InArgument>
             </cba1:DeleteCDRTables.TableKey>
           </cba1:DeleteCDRTables>
-          <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_2" Reason="Task timed out">
-            <TerminateWorkflow.Exception>
-              <InArgument x:TypeArguments="s:Exception">
-                <mca:CSharpValue x:TypeArguments="s:Exception">new Vanrise.Entities.VRBusinessException("Task timed out")</mca:CSharpValue>
-              </InArgument>
-            </TerminateWorkflow.Exception>
-          </TerminateWorkflow>
+          <cba1:ThrowTimeoutException sap2010:WorkflowViewState.IdRef="ThrowTimeoutException_2" />
         </Sequence>
       </PickBranch>
     </Pick>
@@ -595,13 +583,7 @@
               </InArgument>
             </cba1:DeleteCDRTables.TableKey>
           </cba1:DeleteCDRTables>
-          <TerminateWorkflow sap2010:WorkflowViewState.IdRef="TerminateWorkflow_3" Reason="Task timed out">
-            <TerminateWorkflow.Exception>
-              <InArgument x:TypeArguments="s:Exception">
-                <mca:CSharpValue x:TypeArguments="s:Exception">new Vanrise.Entities.VRBusinessException("Task timed out")</mca:CSharpValue>
-              </InArgument>
-            </TerminateWorkflow.Exception>
-          </TerminateWorkflow>
+          <cba1:ThrowTimeoutException sap2010:WorkflowViewState.IdRef="ThrowTimeoutException_3" />
         </Sequence>
       </PickBranch>
     </Pick>
@@ -667,7 +649,7 @@
         </InArgument>
       </cba1:SaveCDRSourceConfigs.SystemCDRSourceConfigName>
     </cba1:SaveCDRSourceConfigs>
-    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>dz9DOlxURlNcWGJvb3N0ZXJcQ29kZVxDRFJDb21wYXJpc29uLkJQXENEUkNvbXBhcmlzb25Qcm9jZXNzLnhhbWyPAUADjQUOAgEBSQtJmwECAQJVBVsdAwHyDlwFYhwDAeEOYwXEARADAcgMxQEF7gEMAwHvC+8BBfkDEAMB5gL6AwWjBAwDAY0CpAQFzQQMAwG0Ac4EBdQEHAMBowHVBAWLBSECARJYC1hgAwHzDl8LX1kDAeIOaAeXARIDAdsNmAEHsgEkAwGADbMBB8MBHAMByQzGAQfaARQDAZUM2wEH7QEUAwHwC/sBB4sCHgMBowuMAgfIAhoDAY8JyQIH4wIrAwGRCOQCB/QCIwMBxQf1AgePAzADAccGkAMHoAMoAwH7BaEDB7sDKwMB/QS8AwfMAyMDAbEEzQMH5wMrAwGzA+gDB/gDIwMB5wL7AwePBBQDAbMCkAQHogQUAwGOAqUEB7kEFAMB2gG6BAfMBBQDAbUB0QQL0QRRAwGkAYgFC4gFbQMBkwGDBQuDBXEDAYMB8QQL+QQUAgFz4gQL4gRuAgFj/gQL/gRiAgFT3QQL3QRyAgFD5wQL5wRvAgEz2AQL2ARjAgEj7AQL7ARuAgETaQl0EgMBvA51CYABGQMBlg6BAQmMARkDAfANjQEJlgESAwHcDaUBDaUBZwMByQ2bAQ2bAXIDAbcNqgENqgF8AwGlDaABDaABfAMBkw2vAQ2vAVMDAYENuwENuwF0AwHuDLYBDbYBfAMB3AzAAQ3AAVMDAcoMyAEL2AEcAwGWDN0BC+EBEwMBhAzjAQnsARQDAfELgwINgwJ2AwHWC/4BDf4BegMBvQuIAg2IAlMDAaQLoAINoAKAAQMBigu0Ag20Am4DAfEKmwINmwJ6AwHYCpQCDZYCQwMBvwqvAg2vAooBAwGmCsUCDcUCaQMBjQq5Ag25AnIDAfQJqgINqgKAAQMB2wm+Ag3AAj8DAcIJpQINpQKAAQMBqQmPAg2PAmkDAZAJ1gIN1gJqAwH2CMwCDcwCeAMB3QjbAg3bAnkDAcQI0QIN0QKDAQMBqwjgAg3gAlMDAZII7AIN7AJxAwH4B+cCDecCewMB3wfxAg3xAlMDAcYHggMNggNqAwGsB/gCDfgCggEDAZMHhwMNhwN+AwH6Bv0CDf0CiAEDAeEGjAMNjANTAwHIBpgDDZgDdgMBrgaTAw2TA4ABAwGVBp0DDZ0DUwMB/AWuAw2uA2oDAeIFpAMNpAN4AwHJBbMDDbMDeQMBsAWpAw2pA4MBAwGXBbgDDbgDUwMB/gTEAw3EA3EDAeQEvwMNvwN7AwHLBMkDDckDUwMBsgTaAw3aA2oDAZgE0AMN0AN4AwH/A98DDd8DeQMB5gPVAw3VA4MBAwHNA+QDDeQDUwMBtAPwAw3wA3EDAZoD6wMN6wN7AwGBA/UDDfUDUwMB6AL9AwuNBBwDAbQCkgQLlgQTAwGiApgECaEEFAMBjwKnBAu3BBwDAdsBvAQLwAQTAwHJAcIECcsEFAMBtgFxD3F0AwHPDmwPbHEDAb0OdWV1bAMBuw59D310AwGpDngPeGYDAZcOgQFlgQFrAwGVDokBD4kBdAMBgw6EAQ+EAWcDAfENlAE1lAE5AwHvDZABD5ABbwMB3Q3VARHVAYMBAwG4DNABEdABvQEDAagMyAGkAcgBvQEDAacMywERywGdAQMBlwzfAQ/fAVwDAYUM5AEL6gEiAwHzC+sBC+sBYwMB8guKBBGKBIoBAwHWAoUEEYUEiwEDAcYC/QOtAf0DxAEDAcUCgAQRgASdAQMBtQKUBA+UBFwDAaMCmQQLnwQiAwGRAqAEC6AEYwMBkAK0BBG0BIgBAwH9Aa8EEa8E7gEDAe0BpwSwAacEzgEDAewBqgQRqgSdAQMB3AG+BA++BFwDAcoBwwQLyQQiAwG4AcoEC8oEYwMBtwHnARHnAVcDAfQLnAQRnARXAwGSAsYEEcYEVwMBuQE=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -697,7 +679,7 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="Delay_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="DeleteCDRTables_2" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ThrowTimeoutException_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="222,208">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -748,7 +730,7 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="Delay_2" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="DeleteCDRTables_3" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="TerminateWorkflow_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ThrowTimeoutException_2" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_4" sap:VirtualizedContainerService.HintSize="222,208">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
@@ -781,7 +763,7 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="Delay_3" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="DeleteCDRTables_4" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="TerminateWorkflow_3" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="ThrowTimeoutException_3" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="Sequence_5" sap:VirtualizedContainerService.HintSize="222,208">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
