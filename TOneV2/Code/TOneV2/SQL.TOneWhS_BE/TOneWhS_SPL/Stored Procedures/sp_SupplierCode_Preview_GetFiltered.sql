@@ -1,14 +1,17 @@
 ﻿CREATE PROCEDURE  [TOneWhS_SPL].[sp_SupplierCode_Preview_GetFiltered]
 @ProcessInstanceID_IN INT,
 @ZoneName_IN nvarchar(255),
+@CountryID_IN INT,
 @OnlyModified_IN bit
 AS
 BEGIN
 	DECLARE @ProcessInstanceId INT,
 	@ZoneName nvarchar(255),
+	@CountryID INT,
 	@OnlyModified bit
 	
 	SELECT @ProcessInstanceId  = @ProcessInstanceId_IN,
+	@CountryID = @CountryID_IN,
 	@ZoneName = @ZoneName_IN,
 	@OnlyModified = @OnlyModified_IN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -20,6 +23,6 @@ BEGIN
 	Where	Z.ProcessInstanceID=@ProcessInstanceID
 			AND (@ZoneName is null or C.ZoneName = @ZoneName or c.RecentZoneName= @ZoneName) 
 			AND (@OnlyModified = 0 or C.ChangeType != 0)
-	
+			AND (@CountryID is null or Z.CountryID = @CountryID)
 	SET NOCOUNT OFF
 END
