@@ -88,7 +88,7 @@
                 userSelectorReadyDeferred.promise.then(function () {
                     var payload = {};
                     if (accountManagerEntity != undefined) {
-                        payload. selectedIds= accountManagerEntity.UserId
+                        payload.selectedIds = accountManagerEntity.UserId;
                         editedUserId = accountManagerEntity.UserId;
                     }
                     payload.filter = {
@@ -143,7 +143,7 @@
                 AccountManagerDefinitionId: accountManagerDefinitionId
             };
             if (isEditMode) {
-                accountManagerObject.AccountManagerId = accountManagerId
+                accountManagerObject.AccountManagerId = accountManagerId;
             };
             return accountManagerObject;
         }

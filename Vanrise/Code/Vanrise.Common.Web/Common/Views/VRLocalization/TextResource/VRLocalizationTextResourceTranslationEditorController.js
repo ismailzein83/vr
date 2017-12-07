@@ -61,7 +61,7 @@
             $scope.scopeModel.isLoading = true;
             if (isEditMode) {
                 getVRLocalizationTextResourceTranslation().then(function () {
-                    loadAllControls()
+                    loadAllControls();
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.scopeModel.isLoading = false;
