@@ -65,10 +65,10 @@ app.directive('vrSecPasswordsettings', ['UtilsService', 'VRUIUtilsService',
                     if (payload != undefined) {
                         $scope.scopeModel.passwordLength = payload.PasswordLength;
                         $scope.scopeModel.maxPasswordLength = payload.MaxPasswordLength;
-                        $scope.scopeModel.maxUserLoginTries = payload.MaximumUserLoginTries;
-                        $scope.scopeModel.maxUserPasswordHistoryCount = payload.UserPasswordHistoryCount;
+                        $scope.scopeModel.maxUserLoginTries = payload.MaximumUserLoginTries == 0 ? undefined : payload.MaximumUserLoginTries;
+                        $scope.scopeModel.maxUserPasswordHistoryCount = payload.UserPasswordHistoryCount == 0 ? undefined : payload.UserPasswordHistoryCount;
                         $scope.scopeModel.lockInterval = payload.FailedInterval;
-                        $scope.scopeModel.lockFor = payload.MinutesToLock;
+                        $scope.scopeModel.lockFor = payload.MinutesToLock == 0 ? undefined : payload.MinutesToLock;
                         $scope.scopeModel.notificationMailTemplateId = payload.NotificationMailTemplateId;
                         $scope.scopeModel.sendNotification = payload.NotificationMailTemplateId != undefined;
                     }
