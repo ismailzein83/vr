@@ -1820,7 +1820,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!AmountAfterCommissionWithTaxes.Value,2)</Value>
+                              <Value>=Round(Fields!OriginalAmountAfterCommissionWithTaxes.Value,2)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2130,7 +2130,7 @@
                               <Value>=Parameters!DisplayCommission.Value</Value>
                             </Parameter>
                             <Parameter Name="TotalAmountAfterCommission">
-                              <Value>=Fields!AmountAfterCommissionWithTaxes.Value</Value>
+                              <Value>=Fields!OriginalAmountAfterCommissionWithTaxes.Value</Value>
                             </Parameter>
                           </Parameters>
                           <Top>0.15625in</Top>

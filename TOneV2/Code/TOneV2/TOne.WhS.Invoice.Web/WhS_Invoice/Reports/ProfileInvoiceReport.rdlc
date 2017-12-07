@@ -1507,13 +1507,13 @@
                               <Value>=Parameters!InvoiceDueDate.Value</Value>
                             </Parameter>
                             <Parameter Name="TotalDuration">
-                              <Value>=Parameters!Minutes.Value</Value>
+                              <Value>=Fields!Duration.Value</Value>
                             </Parameter>
                             <Parameter Name="TotalAmount">
                               <Value>=Fields!SaleAmountWithTaxes.Value</Value>
                             </Parameter>
                             <Parameter Name="Currency">
-                              <Value>=Parameters!Currency.Value</Value>
+                              <Value>=Fields!SaleCurrencyIdDescription.Value</Value>
                             </Parameter>
                             <Parameter Name="DisplayCommission">
                               <Value>=Parameters!DisplayCommission.Value</Value>

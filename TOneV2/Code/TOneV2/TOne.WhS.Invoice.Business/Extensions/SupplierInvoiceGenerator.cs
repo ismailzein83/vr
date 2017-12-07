@@ -371,13 +371,13 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         {
                             foreach (var tax in taxItemDetails)
                             {
-                                invoiceBillingRecord.InvoiceMeasures.AmountAfterCommissionWithTaxes = invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission+((invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
+                                invoiceBillingRecord.InvoiceMeasures.AmountAfterCommissionWithTaxes += ((invoiceBillingRecord.InvoiceMeasures.AmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
 
-                                invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommissionWithTaxes = invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission+((invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
+                                invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommissionWithTaxes +=((invoiceBillingRecord.InvoiceMeasures.OriginalAmountAfterCommission * Convert.ToDecimal(tax.Value)) / 100);
 
-                                invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurrWithTaxes = invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr+((invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr * Convert.ToDecimal(tax.Value)) / 100);
+                                invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurrWithTaxes += ((invoiceBillingRecord.InvoiceMeasures.CostNet_OrigCurr * Convert.ToDecimal(tax.Value)) / 100);
 
-                                invoiceBillingRecord.InvoiceMeasures.CostNetWithTaxes = invoiceBillingRecord.InvoiceMeasures.CostNet+((invoiceBillingRecord.InvoiceMeasures.CostNet * Convert.ToDecimal(tax.Value)) / 100);
+                                invoiceBillingRecord.InvoiceMeasures.CostNetWithTaxes +=((invoiceBillingRecord.InvoiceMeasures.CostNet * Convert.ToDecimal(tax.Value)) / 100);
                             }
                         }
 
