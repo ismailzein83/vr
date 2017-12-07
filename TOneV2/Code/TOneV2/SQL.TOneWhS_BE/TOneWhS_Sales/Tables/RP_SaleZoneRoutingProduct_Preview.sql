@@ -2,10 +2,15 @@
     [ZoneName]                                 NVARCHAR (255) NOT NULL,
     [ProcessInstanceID]                        BIGINT         NOT NULL,
     [CurrentSaleZoneRoutingProductName]        NVARCHAR (255) NULL,
+    [CurrentSaleZoneRoutingProductId]          INT            NULL,
     [IsCurrentSaleZoneRoutingProductInherited] BIT            NULL,
     [NewSaleZoneRoutingProductName]            NVARCHAR (255) NULL,
-    [EffectiveOn]                              DATETIME       NOT NULL
+    [NewSaleZoneRoutingProductId]              INT            NOT NULL,
+    [EffectiveOn]                              DATETIME       NOT NULL,
+    [ZoneId]                                   BIGINT         NULL
 );
+
+
 
 
 

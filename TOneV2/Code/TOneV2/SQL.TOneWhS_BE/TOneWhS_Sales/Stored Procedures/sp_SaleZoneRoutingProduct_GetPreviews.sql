@@ -14,7 +14,7 @@ BEGIN
 	SET NOCOUNT ON;	
 
 
-	select ZoneName, CurrentSaleZoneRoutingProductName, IsCurrentSaleZoneRoutingProductInherited, NewSaleZoneRoutingProductName, EffectiveOn
+	select ZoneName, CurrentSaleZoneRoutingProductName, IsCurrentSaleZoneRoutingProductInherited, NewSaleZoneRoutingProductName, EffectiveOn,ZoneId,NewSaleZoneRoutingProductId,CurrentSaleZoneRoutingProductId
 	from TOneWhS_Sales.RP_SaleZoneRoutingProduct_Preview WITH(NOLOCK) 
 	where ProcessInstanceID = @ProcessInstanceID
 		

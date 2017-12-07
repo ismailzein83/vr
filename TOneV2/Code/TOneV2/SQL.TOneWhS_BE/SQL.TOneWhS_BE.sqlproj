@@ -457,7 +457,6 @@
     <Build Include="TOneWhS_BE\Tables\SalePricelistCustomerChange_New.sql" />
     <Build Include="TOneWhS_BE\Tables\SalePricelistCodeChange_New.sql" />
     <Build Include="TOneWhS_BE\Tables\SalePriceList_New.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetAllBySellingProductsAndCustomer.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListChange_GetNotSentRateChanges.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListChange_GetNotSentCodeChanges.sql" />
     <Build Include="TOneWhS_Invoice\Tables\CarrierInvoiceAccount.sql" />
@@ -530,5 +529,18 @@
     <Build Include="TOneWhS_Invoice\Tables\InvoiceComparisonTemplate.sql" />
     <Build Include="TOneWhS_Invoice\Stored Procedures\sp_InvoiceComparisonTemplate_TryAddOrUpdate.sql" />
     <Build Include="TOneWhS_Invoice\Stored Procedures\sp_InvoiceComparisonTemplate_GetAll.sql" />
+    <Build Include="TOneWhS_Invoice\Stored Procedures\sp_InvoiceComparisonTemplate_GetById.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierRate_GetNextOpenOrCloseTime.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierRate_GetMaxTimeStamp.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetNextOpenOrCloseTime.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetMaxTimeStamp.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetAllBySellingProductAndCustomer.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetExistingByZoneIDs.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetAllZoneRPsBySellingProductAndCustomer.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetAllZoneRPsByOwnersOfType.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetAllZoneRPsByOwners.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetAllDefaultRPsBySellingProductAndCustomer.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetAllDefaultRPsByOwnersOfType.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetAllDefaultRPsByOwners.sql" />
   </ItemGroup>
 </Project>
