@@ -215,6 +215,8 @@ namespace TOne.WhS.DBSync.Business
                 #endregion
             }
 
+            TotalRowsSuccess += result.Count;
+
             return result;
         }
 
