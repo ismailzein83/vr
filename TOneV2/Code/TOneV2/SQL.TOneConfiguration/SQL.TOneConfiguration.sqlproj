@@ -694,6 +694,15 @@
     <Build Include="VR_AccountBalance\Stored Procedures\sp_BillingTransaction_HasData.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_BalanceUsageQueue_HasData.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_LiveBalance_HasBalancesUpdateData.sql" />
+    <Build Include="sec\Tables\UserPasswordHistory.sql" />
+    <Build Include="sec\Tables\UserFailedLogin.sql" />
+    <Build Include="sec\Stored Procedures\sp_UserPasswordHistory_Insert.sql" />
+    <Build Include="sec\Stored Procedures\sp_UserPasswordHistory_GetByUserId.sql" />
+    <Build Include="sec\Stored Procedures\sp_UserFailedLogin_Insert.sql" />
+    <Build Include="sec\Stored Procedures\sp_UserFailedLogin_GetByUserId.sql" />
+    <Build Include="sec\Stored Procedures\sp_UserFailedLogin_DeleteByUserId.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_UpdateDisableTill.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_Unlock.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
