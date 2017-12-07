@@ -77,6 +77,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 throw new InvoiceGeneratorException("No data available between the selected period.");
             }
             Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data, currencyId, commission, commissionType, taxItemDetails);
+            if(itemSetNamesDic.Count == 0)
+            {
+                context.ErrorMessage = "No data available between the selected period.";
+                throw new InvoiceGeneratorException("No data available between the selected period.");
+            }
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic, taxItemDetails);
             #region BuildCustomerInvoiceDetails
             CustomerInvoiceDetails customerInvoiceDetails = BuilCustomerInvoiceDetails(itemSetNamesDic, partnerType, context.FromDate, context.ToDate, commission, commissionType);
@@ -287,9 +292,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     ParentDimensions = new List<string>(),
                     Filters = new List<DimensionFilter>(),
                     CurrencyId = currencyId,
-                    OrderType =AnalyticQueryOrderType.ByAllDimensions
+                   // OrderType =AnalyticQueryOrderType.ByAllDimensions
                 },
-                SortByColumnName = "DimensionValues[0].Name"
+                SortByColumnName = "DimensionValues[1].Name"
             };
             DimensionFilter dimensionFilter = new DimensionFilter()
             {
