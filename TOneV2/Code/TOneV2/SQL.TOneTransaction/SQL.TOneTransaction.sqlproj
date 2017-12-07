@@ -220,6 +220,7 @@
     <Build Include="queue\Stored Procedures\sp_HoldRequest_Delete.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_GetAfterID.sql" />
     <Build Include="bp\Stored Procedures\sp_BPDefinitionSummary_GetUpdated.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPTask_CancelNotCompleted.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />
