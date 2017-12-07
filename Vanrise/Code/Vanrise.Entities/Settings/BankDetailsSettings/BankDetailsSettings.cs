@@ -24,6 +24,8 @@ namespace Vanrise.Entities
         public string SwiftCode { get; set; }
         public string SortCode { get; set; }
         public string ChannelName { get; set; }
+        public string CorrespondentBank { get; set; }
+        public string CorrespondentBankSwiftCode { get; set; }
 
     }
 }

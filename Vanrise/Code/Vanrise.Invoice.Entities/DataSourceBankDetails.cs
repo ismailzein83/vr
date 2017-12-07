@@ -20,6 +20,8 @@ namespace Vanrise.Invoice.Entities
         public string AccountNumber { get; set; }
         public string SwiftCode { get; set; }
         public string SortCode { get; set; }
+        public string CorrespondentBank { get; set; }
+        public string CorrespondentBankSwiftCode { get; set; }
         public IEnumerable<DataSourceBankDetails> GetBankDetailsRDLCSchema()
         {
             return null;

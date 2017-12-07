@@ -84,7 +84,8 @@
             $scope.swiftCode = bankDetailEntity.SwiftCode;
             $scope.sortCode = bankDetailEntity.SortCode;
             $scope.channelName = bankDetailEntity.ChannelName;
-
+            $scope.correspondentBank = bankDetailEntity.CorrespondentBank;
+            $scope.correspondentBankSwiftCode = bankDetailEntity.CorrespondentBankSwiftCode;
         }
 
         function loadCurrencySelector() {
@@ -111,7 +112,9 @@
                 AccountNumber: $scope.accountNumber,
                 SwiftCode: $scope.swiftCode,
                 SortCode: $scope.sortCode,
-                ChannelName: $scope.channelName
+                ChannelName: $scope.channelName,
+                CorrespondentBank: $scope.correspondentBank ,
+                CorrespondentBankSwiftCode:  $scope.correspondentBankSwiftCode
             };
             return obj;
         }
