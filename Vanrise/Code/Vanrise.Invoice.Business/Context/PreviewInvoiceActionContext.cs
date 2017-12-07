@@ -58,7 +58,7 @@ namespace Vanrise.Invoice.Business
             
             this.GeneratedInvoice = context.Invoice;
 
-
+            GeneratedInvoice.ThrowIfNull("GeneratedInvoice");
            // var serialNumber = new PartnerManager().GetPartnerSerialNumberPattern(this.InvoiceTypeId, this.PartnerId);
 
             this._Invoice = new Entities.Invoice
