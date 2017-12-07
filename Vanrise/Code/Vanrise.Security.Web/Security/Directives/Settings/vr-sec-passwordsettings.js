@@ -47,6 +47,12 @@ app.directive('vrSecPasswordsettings', ['UtilsService', 'VRUIUtilsService',
                 mailMessageTemplateSelectorReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.validateLockInterval = function () {
+                if ($scope.scopeModel.maxUserLoginTries > 0)
+                    return true;
+                return false;
+            };
+
             function initializeController() {
                 passwordComplexityReadyPromiseDeferred.promise.then(function () {
                     defineAPI();

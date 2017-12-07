@@ -270,7 +270,7 @@ namespace Vanrise.Security.Business
             {
                 if (HashingUtility.VerifyHash(newPassword, "", log.Password))
                 {
-                    validationMessage = "Password entered matches old passwords. Please enter a new password";
+                    validationMessage = string.Format("Password entered matches previous {0} history passwords. Please enter a new password", maxRecordCount);
                     return true;
                 }
             }

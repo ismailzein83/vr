@@ -727,9 +727,9 @@ namespace Vanrise.Security.Business
             if (!HashingUtility.VerifyHash(tempPassword, "", loggedInUserTempPassword))
                 return new UpdateOperationOutput<object>() { Result = UpdateOperationResult.Failed };
 
+            string hashedPass = HashingUtility.ComputeHash(password, "", null);
 
-
-            bool updateActionSucc = dataManager.ActivatePassword(email, HashingUtility.ComputeHash(password, "", null), name);
+            bool updateActionSucc = dataManager.ActivatePassword(email, hashedPass, name);
 
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
@@ -737,6 +737,7 @@ namespace Vanrise.Security.Business
 
             if (updateActionSucc)
             {
+                new UserPasswordHistoryManager().AddPasswordHistory(user.UserId, hashedPass, false);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
             }
 
