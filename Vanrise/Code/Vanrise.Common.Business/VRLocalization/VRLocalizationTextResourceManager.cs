@@ -32,6 +32,13 @@ namespace Vanrise.Common.Business
                 return null;
             return vrLocalizationTextResources.GetRecord(vrLocalizationTextResourceId);
         }
+        public string GetVRLocalizationResourceKey(Guid VRLocalizationTextResourceId)
+        {
+            var vrLocalizationTextResource = GetVRLocalizationTextResource(VRLocalizationTextResourceId);
+            if (vrLocalizationTextResource == null)
+                return null;
+            return vrLocalizationTextResource.ResourceKey;
+        }
         public InsertOperationOutput<VRLocalizationTextResourceDetail> AddVRLocalizationTextResource(VRLocalizationTextResource vrLocalizationTextResource)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<VRLocalizationTextResourceDetail>();
@@ -79,6 +86,19 @@ namespace Vanrise.Common.Business
 
             return updateOperationOutput;
         }
+        public IEnumerable<VRLocalizationTextResourceInfo> GetVRLocalizationTextResourceInfo(VRLocalizationTextResourceInfoFilter filter)
+        {
+            Func<VRLocalizationTextResource, bool> filterExpression = (x) =>
+            {
+                if (filter != null)
+                {
+                    if (filter.VRLocalizationTextResourceIds != null && filter.VRLocalizationTextResourceIds.Contains(x.VRLocalizationTextResourceId))
+                        return false;
+                }
+                return true;
+            };
+            return this.GetCachedVRLocalizationTextResources().MapRecords(VRLocalizationTextResourceInfoMapper, filterExpression).OrderBy(x => x.ResourceKey);
+        }
 
         public Dictionary<Guid, VRLocalizationTextResource> GetAllResources()
         {
@@ -125,6 +145,15 @@ namespace Vanrise.Common.Business
             VRLocalizationModuleManager vrLocalizationModuleManager = new VRLocalizationModuleManager();
             vrLocalizationTextResourceDetail.ModuleName = vrLocalizationModuleManager.GetVRModuleName(localizationTextResource.ModuleId);
             return vrLocalizationTextResourceDetail;
+        }
+        public VRLocalizationTextResourceInfo VRLocalizationTextResourceInfoMapper(VRLocalizationTextResource vrTextResourceLanguage)
+        {
+            VRLocalizationTextResourceInfo vrLocalizationTextResourceInfo = new VRLocalizationTextResourceInfo()
+            {
+                VRLocalizationTextResourceId = vrTextResourceLanguage.VRLocalizationTextResourceId,
+                ResourceKey = vrTextResourceLanguage.ResourceKey
+            };
+            return vrLocalizationTextResourceInfo;
         }
         #endregion
     }

@@ -8,5 +8,6 @@ namespace Vanrise.Entities
 {
     public class VRLocalizationTextResourceInfoFilter
     {
+       public List<Guid> VRLocalizationTextResourceIds { get; set; }
     }
 }

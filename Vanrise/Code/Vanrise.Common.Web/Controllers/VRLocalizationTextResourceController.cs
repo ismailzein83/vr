@@ -24,7 +24,14 @@ namespace Vanrise.Common.Web.Controllers
         {
             return GetWebResponse(input, _manager.GetFilteredVRLocalizationTextResources(input));
         }
+       [HttpGet]
+        [Route("GetVRLocalizationTextResourceInfo")]
+        public IEnumerable<VRLocalizationTextResourceInfo> GetVRLocalizationTextResourceInfo(string filter = null)
+        {
 
+            VRLocalizationTextResourceInfoFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<VRLocalizationTextResourceInfoFilter>(filter) : null;
+            return _manager.GetVRLocalizationTextResourceInfo(deserializedFilter);
+        }
         [HttpGet]
         [Route("GetVRLocalizationTextResource")]
         public VRLocalizationTextResource GetVRLocalizationTextResource(Guid vrLocalizationTextResource)

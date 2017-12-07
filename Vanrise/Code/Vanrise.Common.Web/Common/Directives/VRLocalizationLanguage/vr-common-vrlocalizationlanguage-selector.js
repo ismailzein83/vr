@@ -1,73 +1,98 @@
 ﻿'use strict';
+app.directive('vrCommonVrlocalizationlanguageSelector', ['VR_AccountManager_AccountManagerAPIService', 'UtilsService', 'VRUIUtilsService', 'VRCommon_VRLocalizationLanguageAPIService',
+    function (VR_AccountManager_AccountManagerAPIService, UtilsService, VRUIUtilsService, VRCommon_VRLocalizationLanguageAPIService) {
 
-app.directive("vrCommonLocalizationlanguageSelector", ['VRCommon_VRLocalizationLanguageAPIService', 'UtilsService', 'VRUIUtilsService',
-
-    function (VRCommon_VRLocalizationLanguageAPIService, UtilsService, VRUIUtilsService) {
-
-        return {
+        var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
                 onReady: '=',
-                ismultipleselection: '@',
-                selectedvalues: '=',
+                ismultipleselection: "@",
                 onselectionchanged: '=',
-                onselectitem: '=',
-                ondeselectitem: '=',
-                isrequired: '=',
+                selectedvalues: '=',
+                isrequired: "=",
+                onselectitem: "=",
+                ondeselectitem: "=",
+                isdisabled: "=",
                 hideremoveicon: '@',
-                normalColNum: '@',
-                customvalidate: '='
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
+
                 var ctrl = this;
                 ctrl.datasource = [];
+
                 ctrl.selectedvalues;
                 if ($attrs.ismultipleselection != undefined)
                     ctrl.selectedvalues = [];
-                var localizationLanguageSelector = new LocalizationLanguageSelector(ctrl, $scope, $attrs);
-                localizationLanguageSelector.initializeController();
+
+                var ctor = new languageSelectorCtor(ctrl, $scope, $attrs);
+                ctor.initializeController();
+
             },
             controllerAs: 'ctrl',
             bindToController: true,
+            compile: function (element, attrs) {
+                return {
+                    pre: function ($scope, iElem, iAttrs, ctrl) {
+
+                    }
+                };
+            },
             template: function (element, attrs) {
-                return getTemplate(attrs);
+                return getLanguageSelectorTemplate(attrs);
             }
+
         };
-        function LocalizationLanguageSelector(ctrl, $scope, attrs) {
+
+
+        function getLanguageSelectorTemplate(attrs) {
+
+            var multipleselection = "";
+            var label = "Language";
+            if (attrs.ismultipleselection != undefined) {
+                label = "Language";
+                multipleselection = "ismultipleselection";
+            }
+            if (attrs.customlabel != undefined) {
+                label = attrs.customlabel;
+            }
+
+            return '<vr-columns colnum="{{ctrl.normalColNum}}"><vr-select ' + multipleselection + '  on-ready="ctrl.onSelectorReady" datatextfield="Name" datavaluefield="LocalizationLanguageId" label="' + label + '" ' + '  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Language" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" isrequired="ctrl.isrequired" haspermission="ctrl.haspermission"></vr-select></vr-columns>';
+        }
+
+        function languageSelectorCtor(ctrl, $scope, attrs) {
+
             var selectorAPI;
 
-            this.initializeController = function () {
+            function initializeController() {
+
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
                 };
-            };
+
+            }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-
                     var selectedIds;
                     var filter;
 
+                    selectorAPI.clearDataSource();
                     if (payload != undefined) {
-                        console.log(payload);
-
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
+
                     }
-                    return VRCommon_VRLocalizationLanguageAPIService.GetVRLocalizationLanguageInfo(UtilsService.serializetoJson(filter)).then(function (response) {
-                        selectorAPI.clearDataSource();
-
+                    VRCommon_VRLocalizationLanguageAPIService.GetVRLocalizationLanguageInfo(UtilsService.serializetoJson(filter)).then(function (response) {
+                       
                         if (response != null) {
-                            for (var i = 0; i < response.length; i++) {
+                            for (var i = 0; i < response.length; i++)
                                 ctrl.datasource.push(response[i]);
-                            }
-
-                            if (selectedIds != undefined) {
+                            if (selectedIds != undefined)
                                 VRUIUtilsService.setSelectedValues(selectedIds, 'LocalizationLanguageId', attrs, ctrl);
-                            }
                         }
                     });
                 };
@@ -76,32 +101,12 @@ app.directive("vrCommonLocalizationlanguageSelector", ['VRCommon_VRLocalizationL
                     return VRUIUtilsService.getIdSelectedIds('LocalizationLanguageId', attrs, ctrl);
                 };
 
-
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
+
+            this.initializeController = initializeController;
         }
 
-        function getTemplate(attrs) {
-
-            var multipleselection = "";
-            var label = "Language";
-
-            if (attrs.ismultipleselection != undefined) {
-                label = "Languages";
-                multipleselection = "ismultipleselection";
-            }
-
-            if (attrs.customlabel != undefined)
-                label = attrs.customlabel;
-
-            return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
-                       '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="LocalizationLanguageId" isrequired="ctrl.isrequired" label="' + label +
-                           '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
-                           '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" customvalidate="ctrl.customvalidate">' +
-                       '</vr-select>' +
-                   '</vr-columns>';
-        }
-    }
-
-]);
+        return directiveDefinitionObject;
+    }]);

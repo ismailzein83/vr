@@ -1,0 +1,25 @@
+﻿<vr-panel ng-controller="VRCommon_VRLocalizationTextResourceTranslationManagementController" vr-loader="scopeModel.isLoading">
+    <vr-form name="formFilter">
+        <vr-row>
+            <vr-column colnum="4">
+                <vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onTextResourceSelectorReady" normal-col-num="3" ismultipleselection="true"></vr-common-vrlocalizationtextresource-selector>
+            </vr-column>
+           
+            <vr-common-vrlocalizationlanguage-selector on-ready="scopeModel.onLanguageSelectorReady" normal-col-num="3" ismultipleselection="true"></vr-common-vrlocalizationlanguage-selector>
+     
+        </vr-row>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.search"></vr-button>
+                    <vr-button type="Add" data-onclick="scopeModel.addTextResourceTranslation"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow" simplecol>
+                <vr-common-vrlocalizationtextresourcetranslation-grid on-ready="scopeModel.onGridReady"></vr-common-vrlocalizationtextresourcetranslation-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>
