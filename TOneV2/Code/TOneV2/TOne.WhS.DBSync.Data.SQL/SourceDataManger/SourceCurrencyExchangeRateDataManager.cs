@@ -31,6 +31,6 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         }
 
-        const string query_getSourceCurrencyExchangeRates = @"SELECT [CurrencyExchangeRateID] ,[CurrencyID]  ,[Rate]   ,[ExchangeDate]  FROM [dbo].[CurrencyExchangeRate] WITH (NOLOCK)";
+        const string query_getSourceCurrencyExchangeRates = @"SELECT [CurrencyExchangeRateID] ,[CurrencyID]  ,[Rate]   ,[ExchangeDate]  FROM [dbo].[CurrencyExchangeRate] WITH (NOLOCK) order by CurrencyID";
     }
 }

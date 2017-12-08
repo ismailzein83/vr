@@ -1,4 +1,5 @@
 ﻿
+using System;
 using Vanrise.Entities.EntitySynchronization;
 namespace TOne.WhS.DBSync.Entities
 {
@@ -15,5 +16,7 @@ namespace TOne.WhS.DBSync.Entities
 
         public bool IsMainCurrency { get; set; }
         public string Symbol { get; set; }
+        public decimal LastRate { get; set; }
+        public DateTime LastUpdated { get; set; }
     }
 }
