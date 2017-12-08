@@ -4,7 +4,9 @@
             <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row removeline>
-                        <vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onTextResourceSelectorReady" normal-col-num="3" isrequired="true"></vr-common-vrlocalizationtextresource-selector>
+                        <span vr-disabled="scopeModel.textResourceSelectorDisabled">
+                            <vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onTextResourceSelectorReady" normal-col-num="3" isrequired="true"></vr-common-vrlocalizationtextresource-selector>
+                        </span>
                         <vr-common-vrlocalizationlanguage-selector on-ready="scopeModel.onLanguageSelectorReady" normal-col-num="3" isrequired="true"></vr-common-vrlocalizationlanguage-selector>
                     </vr-row>
                 </vr-tab>

@@ -8,6 +8,8 @@
 
         var gridAPI;
 
+        var textResourceId;
+
         var textResourceSelectorAPI;
         var textResourceSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -74,12 +76,14 @@
             });
         }
         function getGridQuery() {
-           
-            var query = {
-                ResourceIds: textResourceSelectorAPI.getSelectedIds(),
-                LanguageIds: languageSelectorAPI.getSelectedIds(),
-            };
-            return query;
+            var gridPayload= {
+                 query : {
+                    ResourceIds: textResourceSelectorAPI.getSelectedIds(),
+                    LanguageIds: languageSelectorAPI.getSelectedIds(),
+                 },
+                 textResourceId: textResourceId,
+            }
+            return gridPayload;
         }
 
     }

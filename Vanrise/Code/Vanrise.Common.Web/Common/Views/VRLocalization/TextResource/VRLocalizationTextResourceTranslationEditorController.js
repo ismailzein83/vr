@@ -18,6 +18,8 @@
 
         var textResourceTranslationEntity;
 
+        var textResourceId;
+
         var isEditMode;
 
         loadParameters();
@@ -30,6 +32,7 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 textResourceTranslationId = parameters.vrLocalizationTextResourceTranslationId;
+                textResourceId=parameters.textResourceId;
             }
             isEditMode = (textResourceTranslationId != undefined);
         }
@@ -60,6 +63,9 @@
         function load() {
             $scope.scopeModel.isLoading = true;
             if (isEditMode) {
+                if (textResourceId != undefined) {
+                    $scope.scopeModel.textResourceSelectorDisabled = true;
+                }
                 getVRLocalizationTextResourceTranslation().then(function () {
                     loadAllControls();
                 }).catch(function (error) {
@@ -83,6 +89,10 @@
                     var payload = {};
                     if (textResourceTranslationEntity != undefined)
                         payload.selectedIds = textResourceTranslationEntity.ResourceId;
+                    if (textResourceId != undefined) {
+                        payload.selectedIds = textResourceId;
+                        $scope.scopeModel.textResourceSelectorDisabled = true;          
+                    }
                     VRUIUtilsService.callDirectiveLoad(textResourceSelectorAPI, payload, textResourceSelectorLoadDeferred);
                 });
                 return textResourceSelectorLoadDeferred.promise;

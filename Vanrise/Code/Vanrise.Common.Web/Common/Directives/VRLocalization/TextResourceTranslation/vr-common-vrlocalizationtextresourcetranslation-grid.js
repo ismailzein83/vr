@@ -22,6 +22,8 @@ app.directive("vrCommonVrlocalizationtextresourcetranslationGrid", ["VRNotificat
 
             var gridAPI;
 
+            var textResourceId;
+
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -52,8 +54,11 @@ app.directive("vrCommonVrlocalizationtextresourcetranslationGrid", ["VRNotificat
 
                 var api = {};
 
-                api.load = function (query) {
-                    return gridAPI.retrieveData(query);
+                api.load = function (payload) {
+                    if (payload != undefined) {
+                        textResourceId = payload.textResourceId;
+                        return gridAPI.retrieveData(payload.query);
+                    }
                 };
                 api.onVRLocalizationTextResourceTranslationAdded = function (textResourceTranslation) {
                     gridAPI.itemAdded(textResourceTranslation);
@@ -74,7 +79,7 @@ app.directive("vrCommonVrlocalizationtextresourcetranslationGrid", ["VRNotificat
                     gridAPI.itemUpdated(updatedvrLocalizationTextResourceTranslation);
                 };
 
-                VRCommon_VRLocalizationTextResourceTranslationService.editVRLocalizationTextResourceTranslation(vrLocalizationTextResourceTranslation.VRLocalizationTextResourceTranslationId, onVRLocalizationTextResourceTranslationUpdated);
+                VRCommon_VRLocalizationTextResourceTranslationService.editVRLocalizationTextResourceTranslation(vrLocalizationTextResourceTranslation.VRLocalizationTextResourceTranslationId, textResourceId, onVRLocalizationTextResourceTranslationUpdated);
             }
         }
 

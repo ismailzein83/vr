@@ -2,13 +2,14 @@
 
     "use strict";
 
-    VRLocalizationTextResourceTranslationService.$inject = ['VRCommon_VRLocalizationModuleService', 'VRModalService'];
+    VRLocalizationTextResourceTranslationService.$inject = ['VRCommon_VRLocalizationModuleService', 'VRModalService', 'VRCommon_VRLocalizationTextResourceService'];
 
-    function VRLocalizationTextResourceTranslationService(VRCommon_VRLocalizationModuleService, VRModalService) {
+    function VRLocalizationTextResourceTranslationService(VRCommon_VRLocalizationModuleService, VRModalService, VRCommon_VRLocalizationTextResourceService) {
 
-        function addVRLocalizationTextResourceTranslation(onVRLocalizationTextResourceTranslationAdded) {
+        function addVRLocalizationTextResourceTranslation(onVRLocalizationTextResourceTranslationAdded,textResourceId) {
             var settings = {};
             var parameters = {
+                textResourceId: textResourceId
             };
             settings.onScopeReady = function (modalScope) {
                 modalScope.onVRLocalizationTextResourceTranslationAdded = onVRLocalizationTextResourceTranslationAdded;
@@ -16,10 +17,11 @@
             VRModalService.showModal('/Client/Modules/Common/Views/VRLocalization/TextResource/VRLocalizationTextResourceTranslationEditor.html', parameters, settings);
         }
 
-        function editVRLocalizationTextResourceTranslation(vrLocalizationTextResourceTranslationId, onVRLocalizationTextResourceTranslationUpdated) {
+        function editVRLocalizationTextResourceTranslation(vrLocalizationTextResourceTranslationId, textResourceId, onVRLocalizationTextResourceTranslationUpdated) {
             var settings = {};
             var parameters = {
-                vrLocalizationTextResourceTranslationId: vrLocalizationTextResourceTranslationId
+                vrLocalizationTextResourceTranslationId: vrLocalizationTextResourceTranslationId,
+                textResourceId: textResourceId
             };
 
             settings.onScopeReady = function (modalScope) {
@@ -27,11 +29,27 @@
             };
             VRModalService.showModal('/Client/Modules/Common/Views/VRLocalization/TextResource/VRLocalizationTextResourceTranslationEditor.html', parameters, settings);
         }
+        function registerDrillDownToTextResource() {
+            var drillDownDefinition = {};
 
+            drillDownDefinition.title = "Translations";
+            drillDownDefinition.directive = "vr-common-vrlocalizationtextresourcetranslation-search";
+            drillDownDefinition.loadDirective = function (directiveAPI, textResourceItem) {
+                textResourceItem.textReasourceTranslationSearchAPI = directiveAPI;
+                var query = {
+                    TextResourceIds: [textResourceItem.VRLocalizationTextResourceId],
+                };
+
+                return textResourceItem.textReasourceTranslationSearchAPI.load(query);
+            };
+
+            VRCommon_VRLocalizationTextResourceService.addDrillDownDefinition(drillDownDefinition);
+        }
 
         return {
             addVRLocalizationTextResourceTranslation: addVRLocalizationTextResourceTranslation,
             editVRLocalizationTextResourceTranslation: editVRLocalizationTextResourceTranslation,
+            registerDrillDownToTextResource: registerDrillDownToTextResource
            
         };
     }

@@ -56,10 +56,11 @@
                     loadAllControls()
                         .finally(function () {
                             vrLocalizationLanguageEntity = undefined;
+                            $scope.scopeModel.isLoading = false;
                         });
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.scopeModel.isLoading = false;
+                  
                 });
             }
             else {
@@ -85,6 +86,7 @@
             function loadStaticData() {
                 if (vrLocalizationLanguageEntity != undefined) {
                     $scope.scopeModel.name = vrLocalizationLanguageEntity.Name;
+                    $scope.scopeModel.rightToLeft = vrLocalizationLanguageEntity.Settings.IsRTL;
                 }
             }
 
@@ -119,7 +121,10 @@
             return {
                 VRLanguageId: vrLocalizationLanguageId,
                 Name: $scope.scopeModel.name,
-                ParentLanguageId: localizationLanguageSelectorAPI.getSelectedIds()
+                ParentLanguageId: localizationLanguageSelectorAPI.getSelectedIds(),
+                Settings: {
+                    IsRTL: $scope.scopeModel.rightToLeft
+                }
             };
         }
 

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrCommonLocalizationtextresourceGrid", ["VRNotificationService", 'VRCommon_VRLocalizationTextResourceAPIService', 'VRCommon_VRLocalizationTextResourceService',
-    function (VRNotificationService, VRCommon_VRLocalizationTextResourceAPIService, VRCommon_VRLocalizationTextResourceService) {
+app.directive("vrCommonLocalizationtextresourceGrid", ["VRNotificationService", 'VRCommon_VRLocalizationTextResourceAPIService', 'VRCommon_VRLocalizationTextResourceService','VRUIUtilsService',
+    function (VRNotificationService, VRCommon_VRLocalizationTextResourceAPIService, VRCommon_VRLocalizationTextResourceService, VRUIUtilsService) {
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
@@ -22,6 +22,8 @@ app.directive("vrCommonLocalizationtextresourceGrid", ["VRNotificationService", 
 
             var gridAPI;
 
+            var gridDrillDownTabsObj;
+
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -32,12 +34,19 @@ app.directive("vrCommonLocalizationtextresourceGrid", ["VRNotificationService", 
 
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
+                    var drillDownDefinitions = VRCommon_VRLocalizationTextResourceService.getDrillDownDefinition();
+                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
                     defineAPI();
                 };
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VRCommon_VRLocalizationTextResourceAPIService.GetFilteredVRLocalizationTextResources(dataRetrievalInput)
                     .then(function (response) {
+                        if (response.Data != undefined) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
@@ -64,6 +73,7 @@ app.directive("vrCommonLocalizationtextresourceGrid", ["VRNotificationService", 
                 };
 
                 api.onVRLocalizationTextResourceAdded = function (addedVRLocalizationTextResource) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(addedVRLocalizationTextResource);
                     gridAPI.itemAdded(addedVRLocalizationTextResource);
                 };
 
@@ -81,6 +91,7 @@ app.directive("vrCommonLocalizationtextresourceGrid", ["VRNotificationService", 
             function editVRLocalizationTextResource(vrLocalizationTextResourceItem) {
 
                 var onVRLocalizationTextResourceUpdated = function (updatedvrLocalizationTextResource) {
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedvrLocalizationTextResource);
                     gridAPI.itemUpdated(updatedvrLocalizationTextResource);
                 };
 

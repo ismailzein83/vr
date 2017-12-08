@@ -6,6 +6,7 @@
     VRLocalizationTextResourceService.$inject = ['VRCommon_VRLocalizationModuleService', 'VRModalService'];
 
     function VRLocalizationTextResourceService(VRCommon_VRLocalizationModuleService, VRModalService) {
+       var drillDownDefinitions = [];
 
         function addVRLocalizationTextResource(onVRLocalizationTextResourceAdded,moduleId) {
             var settings = {};
@@ -47,11 +48,20 @@
 
             VRCommon_VRLocalizationModuleService.addDrillDownDefinition(drillDownDefinition);
         }
+        function addDrillDownDefinition(drillDownDefinition) {
+            drillDownDefinitions.push(drillDownDefinition);
+        }
+
+        function getDrillDownDefinition() {
+            return drillDownDefinitions;
+        }
 
         return {
             addVRLocalizationTextResource: addVRLocalizationTextResource,
             editVRLocalizationTextResource: editVRLocalizationTextResource,
             registerDrillDownToModule: registerDrillDowntoModule,
+            addDrillDownDefinition: addDrillDownDefinition,
+            getDrillDownDefinition: getDrillDownDefinition
         };
     }
 
