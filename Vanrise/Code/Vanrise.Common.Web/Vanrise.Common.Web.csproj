@@ -317,7 +317,9 @@
     <Content Include="Common\Directives\VRLocalization\Module\vr-common-vrlocalizationmodule-grid.js" />
     <Content Include="Common\Directives\VRLocalization\Module\vr-common-vrlocalizationmodule-selector.js" />
     <Content Include="Common\Directives\VRLocalization\TextResourceTranslation\Templates\VRLocalizationTextResourceTranslationGridTemplate.html" />
+    <Content Include="Common\Directives\VRLocalization\TextResourceTranslation\Templates\VrLocalizationTextResourceTranslationSearch.html" />
     <Content Include="Common\Directives\VRLocalization\TextResourceTranslation\vr-common-vrlocalizationtextresourcetranslation-grid.js" />
+    <Content Include="Common\Directives\VRLocalization\TextResourceTranslation\vr-common-vrlocalizationtextresourcetranslation-search.js" />
     <Content Include="Common\Directives\VRLocalization\TextResource\Templates\VRLocalizationTextResourceSearchTemplate.html" />
     <Content Include="Common\Directives\VRLocalization\TextResource\Templates\VRLocalizationTextResourceGridTemplate.html" />
     <Content Include="Common\Directives\VRLocalizationLanguage\Templates\VRLocalizationLanguageGridTemplate.html" />
