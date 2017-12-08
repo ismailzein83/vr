@@ -841,13 +841,6 @@
               </InArgument>
             </twsba1:SetContextInheritedRatesByZoneId.MinimumActionDate>
           </twsba1:SetContextInheritedRatesByZoneId>
-          <twsba1:SetContextInheretidSaleZoneRoutingProductByZoneId sap2010:WorkflowViewState.IdRef="SetContextInheretidSaleZoneRoutingProductByZoneId_1">
-            <twsba1:SetContextInheretidSaleZoneRoutingProductByZoneId.MinimumActionDate>
-              <InArgument x:TypeArguments="s:DateTime">
-                <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
-              </InArgument>
-            </twsba1:SetContextInheretidSaleZoneRoutingProductByZoneId.MinimumActionDate>
-          </twsba1:SetContextInheretidSaleZoneRoutingProductByZoneId>
           <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_4" Message="Processing changes..." />
           <twsba1:ProcessCustomerCountries Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessCustomerCountries_1">
             <twsba1:ProcessCustomerCountries.ChangedCustomerCountries>

@@ -92,7 +92,6 @@
     <Compile Include="PricingTemplate\ZonePricingTemplate.cs" />
     <Compile Include="RateManagement\Country\AllCustomerCountriesToAdd.cs" />
     <Compile Include="RateManagement\Country\AllCustomerCountriesToChange.cs" />
-    <Compile Include="RateManagement\RoutingProduct\Zone\InheritedZoneRoutingProductsByZoneId.cs" />
     <Compile Include="RateManagement\Zone\AllDataByZone.cs" />
     <Compile Include="RateManagement\Zone\ZoneDataByCountryIds.cs" />
     <Compile Include="RatePlanning\CarrierAccount\AffectedCarrierAccountFilter.cs" />

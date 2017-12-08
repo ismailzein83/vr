@@ -109,7 +109,6 @@
     <Compile Include="SetContextDataByZoneList.cs" />
     <Compile Include="SetContextEffectiveAfterCustomerZoneRatesByZone.cs" />
     <Compile Include="SetContextExistingZonesByCountry.cs" />
-    <Compile Include="SetContextInheretidSaleZoneRoutingProductByZoneId.cs" />
     <Compile Include="SetContextInheritedRatesByZoneId.cs" />
     <Compile Include="SetDefaultRates.cs" />
     <Compile Include="SetRatePlanContext.cs" />

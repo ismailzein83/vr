@@ -95,9 +95,10 @@ namespace TOne.WhS.Sales.BP.Activities
             IEnumerable<ExistingSaleZoneRoutingProduct> existingSaleZoneRoutingProducts = inputArgument.ExistingSaleZoneRoutingProducts;
             IEnumerable<ExistingZone> existingZones = inputArgument.ExistingZones;
             IEnumerable<ExistingCustomerCountry> explicitlyChangedExistingCustomerCountries = inputArgument.ExplicitlyChangedExistingCustomerCountries;
-
+            RatePlanContext ratePlanContext = handle.CustomData.GetRecord("RatePlanContext") as RatePlanContext;
             var processSaleZoneRoutingProductsContext = new ProcessSaleZoneRoutingProductsContext()
             {
+                OwnerId = ratePlanContext.OwnerId,
                 SaleZoneRoutingProductsToAdd = saleZoneRoutingProductsToAdd,
                 SaleZoneRoutingProductsToClose = saleZoneRoutingProductsToClose,
                 ExistingSaleZoneRoutingProducts = existingSaleZoneRoutingProducts,
@@ -110,7 +111,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
             if (DoZoneRoutingProductChangesExist(processSaleZoneRoutingProductsContext))
             {
-                RatePlanContext ratePlanContext = handle.CustomData.GetRecord("RatePlanContext") as RatePlanContext;
+               
                 ratePlanContext.SetProcessHasChangesToTrueWithLock();
             }
 

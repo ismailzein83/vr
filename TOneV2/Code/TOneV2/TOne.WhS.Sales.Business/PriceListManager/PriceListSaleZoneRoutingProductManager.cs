@@ -4,8 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Sales.Business
 {
@@ -13,14 +15,19 @@ namespace TOne.WhS.Sales.Business
 	{
 		public void ProcessZoneRoutingProducts(IProcessSaleZoneRoutingProductsContext context)
 		{
-			Process(context.SaleZoneRoutingProductsToAdd, context.SaleZoneRoutingProductsToClose, context.ExistingSaleZoneRoutingProducts, context.ExistingZones, context.ExplicitlyChangedExistingCustomerCountries);
-			context.NewSaleZoneRoutingProducts = context.SaleZoneRoutingProductsToAdd.SelectMany(x => x.NewSaleZoneRoutingProducts);
+            var newSaleZoneRoutingProducts = new List<NewSaleZoneRoutingProduct>();
+            Process(context.SaleZoneRoutingProductsToAdd, context.SaleZoneRoutingProductsToClose, context.ExistingSaleZoneRoutingProducts, context.ExistingZones, context.ExplicitlyChangedExistingCustomerCountries, newSaleZoneRoutingProducts, context.OwnerId);
+
+            List<NewSaleZoneRoutingProduct> newRoutingProducts = new List<NewSaleZoneRoutingProduct>();
+            newRoutingProducts.AddRange(context.SaleZoneRoutingProductsToAdd.SelectMany(x => x.NewSaleZoneRoutingProducts));
+            newRoutingProducts.AddRange(newSaleZoneRoutingProducts);
+            context.NewSaleZoneRoutingProducts = newRoutingProducts;
 			context.ChangedSaleZoneRoutingProducts = context.ExistingSaleZoneRoutingProducts.Where(x => x.ChangedSaleZoneRoutingProduct != null).Select(x => x.ChangedSaleZoneRoutingProduct);
 		}
 
 		#region Private Methods
 
-		private void Process(IEnumerable<SaleZoneRoutingProductToAdd> routingProductsToAdd, IEnumerable<SaleZoneRoutingProductToClose> routingProductsToClose, IEnumerable<ExistingSaleZoneRoutingProduct> existingRoutingProducts, IEnumerable<ExistingZone> existingZones, IEnumerable<ExistingCustomerCountry> explicitlyChangedExistingCustomerCountries)
+        private void Process(IEnumerable<SaleZoneRoutingProductToAdd> routingProductsToAdd, IEnumerable<SaleZoneRoutingProductToClose> routingProductsToClose, IEnumerable<ExistingSaleZoneRoutingProduct> existingRoutingProducts, IEnumerable<ExistingZone> existingZones, IEnumerable<ExistingCustomerCountry> explicitlyChangedExistingCustomerCountries, List<NewSaleZoneRoutingProduct> newSaleZoneRoutingProducts,int ownerId)
 		{
 			Dictionary<int, List<ExistingZone>> existingZonesByCountry;
 			ExistingZonesByName existingZonesByName;
@@ -46,15 +53,42 @@ namespace TOne.WhS.Sales.Business
 					CloseExistingRoutingProducts(routingProductToClose, matchedExistingRoutingProduct);
 				}
 			}
+            if (explicitlyChangedExistingCustomerCountries.Count() > 0)
+            {
+                
+                Dictionary<int, CountryRange> endedCountryRangesByCountryId = GetEndedCountryRangesByCountryId(explicitlyChangedExistingCustomerCountries);
+                IEnumerable<int> customerIds = CreateListFromItem<int>(ownerId);
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+                int sellingProductId = carrierAccountManager.GetSellingProductId(ownerId);
+                List<int> sellingProductIds = CreateListFromItem<int>(sellingProductId); 
+                int sellingNumberPlanId = carrierAccountManager.GetSellingNumberPlanId(ownerId);
+                SaleZoneManager saleZoneManager = new SaleZoneManager();
+                IEnumerable<long> zoneIds = saleZoneManager.GetEffectiveSaleZonesByCountryIds(sellingNumberPlanId, endedCountryRangesByCountryId.Keys, DateTime.Today, true).Select(z => z.SaleZoneId);
+                CustomerZoneRoutingProductHistoryReader customerZoneRoutingProductHistoryReader = new CustomerZoneRoutingProductHistoryReader(customerIds, sellingProductIds, zoneIds);
+                CustomerZoneRoutingProductHistoryLocator customerZoneRoutingProductHistoryLocator = new CustomerZoneRoutingProductHistoryLocator(customerZoneRoutingProductHistoryReader);
+                var countryManager = new Vanrise.Common.Business.CountryManager();
 
-			foreach (ExistingCustomerCountry changedExistingCountry in explicitlyChangedExistingCustomerCountries)
-			{
-				List<ExistingZone> matchedExistingZones;
-				if (existingZonesByCountry.TryGetValue(changedExistingCountry.CustomerCountryEntity.CountryId, out matchedExistingZones))
-					ProcessChangedExistingCountry(changedExistingCountry, matchedExistingZones);
-			}
+                foreach (ExistingCustomerCountry changedExistingCountry in explicitlyChangedExistingCustomerCountries)
+                {
+                    int countryId = changedExistingCountry.CustomerCountryEntity.CountryId;
+                    string countryName = countryManager.GetCountryName(countryId);
+
+                    List<ExistingZone> matchedExistingZones = existingZonesByCountry.GetRecord(countryId);
+                    if (matchedExistingZones == null || matchedExistingZones.Count == 0)
+                        throw new DataIntegrityValidationException(string.Format("No existing zones for country '{0}' were found", countryName));
+
+                    CountryRange countryRange = endedCountryRangesByCountryId.GetRecord(countryId);
+                    if (countryRange == null)
+                        throw new DataIntegrityValidationException(string.Format("The BED of country '{0}' was not found", countryName));
+
+                    ProcessChangedExistingCountry(changedExistingCountry, matchedExistingZones, countryRange, customerZoneRoutingProductHistoryLocator, newSaleZoneRoutingProducts,ownerId,sellingProductId);
+                }
+            }
 		}
-
+        private List<T> CreateListFromItem<T>(T item)
+        {
+            return new List<T>() { item };
+        }
 		private void StructureExistingZonesByCountryAndName(IEnumerable<ExistingZone> existingZones, out Dictionary<int, List<ExistingZone>> existingZonesByCountry, out ExistingZonesByName existingZonesByName)
 		{
 			existingZonesByCountry = new Dictionary<int, List<ExistingZone>>();
@@ -178,7 +212,7 @@ namespace TOne.WhS.Sales.Business
 			}
 		}
 
-		private void ProcessChangedExistingCountry(ExistingCustomerCountry changedExistingCountry, IEnumerable<ExistingZone> matchedExistingZones)
+        private void ProcessChangedExistingCountry(ExistingCustomerCountry changedExistingCountry, IEnumerable<ExistingZone> matchedExistingZones, CountryRange countryRange, CustomerZoneRoutingProductHistoryLocator customerZoneRoutingProductHistoryLocator, List<NewSaleZoneRoutingProduct> newSaleZoneRoutingProducts,int ownerId,int sellingproductId)
 		{
 			foreach (ExistingZone existingZone in matchedExistingZones)
 			{
@@ -192,10 +226,80 @@ namespace TOne.WhS.Sales.Business
 							EED = Vanrise.Common.Utilities.Max(existingZoneRP.BED, changedExistingCountry.ChangedCustomerCountry.EED)
 						};
 					}
+
 				}
+                if (countryRange.EED.VRGreaterThan(countryRange.BED) && existingZone.BED < changedExistingCountry.EED.Value)
+                    AddZoneRoutingProducts(existingZone, customerZoneRoutingProductHistoryLocator, countryRange, newSaleZoneRoutingProducts, ownerId, sellingproductId);
 			}
 		}
 
+        private void AddZoneRoutingProducts(ExistingZone existingZone, CustomerZoneRoutingProductHistoryLocator customerZoneRoutingProductHistoryLocator, CountryRange countryRange, List<NewSaleZoneRoutingProduct> newSaleZoneRoutingProducts,int ownerId, int sellingProductId)
+        {
+            List<SaleEntityZoneRoutingProductHistoryRecord> customerZoneRoutingProductHistory = customerZoneRoutingProductHistoryLocator.GetCustomerZoneRoutingProductHistory(ownerId, sellingProductId, existingZone.Name, existingZone.CountryId).ToList();
+            Action<SaleEntityZoneRoutingProductHistoryRecord, ZoneRoutingProduct> mapSaleZoneroutingProduct = (saleEntityZoneRoutingProductHistoryRecord, zoneRoutingProduct) =>
+            {
+                zoneRoutingProduct.OwnerId = ownerId;
+                zoneRoutingProduct.RoutingProductId = saleEntityZoneRoutingProductHistoryRecord.RoutingProductId;
+                zoneRoutingProduct.BED = saleEntityZoneRoutingProductHistoryRecord.BED;
+                zoneRoutingProduct.EED = saleEntityZoneRoutingProductHistoryRecord.EED;
+                zoneRoutingProduct.SaleZoneId = existingZone.ZoneId;
+                zoneRoutingProduct.Source = saleEntityZoneRoutingProductHistoryRecord.Source;
+            };
+            var countryRangeAsList = new List<CountryRange>() { countryRange };
+            IEnumerable<ZoneRoutingProduct> ZoneRoutingProducts = Utilities.GetQIntersectT<CountryRange, SaleEntityZoneRoutingProductHistoryRecord, ZoneRoutingProduct>(countryRangeAsList, customerZoneRoutingProductHistory, mapSaleZoneroutingProduct);
+
+            foreach (ZoneRoutingProduct zoneRoutingProduct in ZoneRoutingProducts)
+            {
+                if (zoneRoutingProduct.Source != SaleEntityZoneRoutingProductSource.CustomerZone)
+                {
+                    newSaleZoneRoutingProducts.Add(new NewSaleZoneRoutingProduct()
+                    {
+                        RoutingProductId = zoneRoutingProduct.RoutingProductId,
+                        SaleZoneId = zoneRoutingProduct.SaleZoneId,
+                        BED = zoneRoutingProduct.BED,
+                        EED = zoneRoutingProduct.EED
+                    });
+                }
+            }
+        }
+        private class ZoneRoutingProduct : Vanrise.Entities.IDateEffectiveSettings, Vanrise.Entities.IDateEffectiveSettingsEditable
+        {
+            public int OwnerId { get; set; }
+
+            public long SaleZoneId { get; set; }
+
+            public int RoutingProductId { get; set; }
+
+            public DateTime BED { get; set; }
+
+            public DateTime? EED { get; set; }
+            public SaleEntityZoneRoutingProductSource Source { get; set; }
+        }
+        private Dictionary<int, CountryRange> GetEndedCountryRangesByCountryId(IEnumerable<ExistingCustomerCountry> changedExistingCountries)
+        {
+            var endedCountryRangesByCountryId = new Dictionary<int, CountryRange>();
+
+            foreach (ExistingCustomerCountry endedCountry in changedExistingCountries)
+            {
+                int endedCountryId = endedCountry.CustomerCountryEntity.CountryId;
+
+                if (!endedCountryRangesByCountryId.ContainsKey(endedCountryId))
+                {
+                    endedCountryRangesByCountryId.Add(endedCountryId, new CountryRange()
+                    {
+                        BED = Utilities.Max(endedCountry.BED, DateTime.Today),
+                        EED = endedCountry.EED
+                    });
+                }
+            }
+
+            return endedCountryRangesByCountryId;
+        }
+        private class CountryRange : Vanrise.Entities.IDateEffectiveSettingsEditable
+        {
+            public DateTime BED { get; set; }
+            public DateTime? EED { get; set; }
+        }
 		#endregion
     }
 }
