@@ -20,11 +20,6 @@ namespace Vanrise.BusinessProcess
             }
         }
 
-        protected override void OnStarted(IRuntimeServiceStartContext context)
-        {
-            base.OnStarted(context);
-        }
-
         protected override void Execute()
         {
             Guid definitionId;
