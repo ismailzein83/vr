@@ -11,7 +11,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
     {
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("80453eca-c1b1-431d-8c56-9bb92ee0551c"); }
         }
 
         public override bool DoesUserHaveAdminAccess(IVRExclusiveSessionDoesUserHaveAdminAccessContext context)
