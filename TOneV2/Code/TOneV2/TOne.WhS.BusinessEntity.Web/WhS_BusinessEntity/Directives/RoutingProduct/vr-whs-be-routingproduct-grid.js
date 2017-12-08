@@ -46,6 +46,7 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
 
                     directiveAPI.onRoutingProductAdded = function (routingProductObject) {
                         drillDownManager.setDrillDownExtensionObject(routingProductObject);
+                        setService(routingProductObject);
                         gridAPI.itemAdded(routingProductObject);
                     };
 
