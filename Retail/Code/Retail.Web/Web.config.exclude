@@ -25,8 +25,7 @@
   <connectionStrings>
     <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=Retail_Configuration;User ID=sa;Password= "/>
     
-    <add name="RetailCDRDBConnString" connectionString="Server=localhost;Database=Retail_EDR;User ID=sa;Password= "/>
-    <add name="VRLocalizationDBConnString" connectionString="Server=localhost;Database=VRLocalizationDB;User ID=sa;Password= "/>
+    <add name="RetailCDRDBConnString" connectionString="Server=localhost;Database=Retail_EDR;User ID=sa;Password= "/>    
 
     <add name="RetailAnalyticsDBConnString" connectionString="Server=localhost;Database=Retail_Analytics;User ID=sa;Password= "/>
     
@@ -70,6 +69,7 @@
     <add key="RulesDBConnStringKey"                             value="ConfigurationDBConnString"/>    
     <add key="InvoiceDBConnStringKey"                           value="ConfigurationDBConnString"/>
     <add key="LoggingConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
+    <add key="VRLocalizationDBConnStringKey"                    value="ConfigurationDBConnString"/>
     
     <add key="VR_AccountBalance_TransactionDBConnStringKey"     value="ConfigurationDBConnString"/>
     <add key="NumberingPlanDBConnStringKey"                     value="ConfigurationDBConnString"/>
@@ -77,14 +77,12 @@
     <add key="Retail_BE_DBConnStringKey"                        value="ConfigurationDBConnString"/>
     
     <add key="RetailCDRDBConnStringKey"                         value="RetailCDRDBConnString"/>
-    <add key="Retail_Analytics_DBConnStringKey"                 value="RetailAnalyticsDBConnString"/>
+    <add key="Retail_Analytics_DBConnStringKey"                 value="RetailAnalyticsDBConnString"/>    
     
     <add key="ImportCodePreparationTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/Code preperation sample.xls"/>
     <add key="DownloadVRCodeGroupTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/CodeGroupTemplate.xlsx"/>
 
     <add key="ExposedConnectionStringNames" value="RetailCDRDBConnString,RetailAnalyticsDBConnString"/>
-    <add key="VRLocalizationDBConnStringKey"     value="VRLocalizationDBConnString"/>
-
   </appSettings>
 
   <system.web>
