@@ -59,6 +59,7 @@
     <Compile Include="RuntimeManager\IRuntimeManagerWCFService.cs" />
     <Compile Include="RuntimeManager\RuntimeManager.cs" />
     <Compile Include="RuntimeHost.cs" />
+    <Compile Include="RuntimeManager\RuntimeManagerClient.cs" />
     <Compile Include="RuntimeManager\RuntimeManagerWCFService.cs" />
     <Compile Include="RuntimeManager\TransactionLockHandler.cs" />
     <Compile Include="RuntimeService.cs" />

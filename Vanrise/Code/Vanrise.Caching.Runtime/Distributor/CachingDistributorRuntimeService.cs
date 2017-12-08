@@ -19,11 +19,6 @@ namespace Vanrise.Caching.Runtime
             }
         }
 
-        protected override void OnStarted(IRuntimeServiceStartContext context)
-        {
-            base.OnStarted(context);
-        }
-
         RunningProcessManager _runningProcessManager = new RunningProcessManager();
 
         static Object s_lockExecutionObj = new object();

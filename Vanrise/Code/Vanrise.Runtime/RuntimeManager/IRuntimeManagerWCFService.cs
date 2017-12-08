@@ -12,7 +12,11 @@ namespace Vanrise.Runtime
     internal interface IRuntimeManagerWCFService
     {
         [OperationContract]
-        HeartBeatResponse UpdateHeartBeat(HeartBeatRequest request);
+        bool IsThisCurrentRuntimeManager();
+
+        [OperationContract]
+        void UnlockFreezedTransactions(List<TransactionLockItem> freezedTransactionLocks);
+
 
         [OperationContract]
         bool TryLockRuntimeService(string serviceTypeUniqueName, int runtimeProcessId);
@@ -25,7 +29,10 @@ namespace Vanrise.Runtime
 
         [OperationContract]
         void UnLock(TransactionLockItem lockItem);
-    }
+
+        [OperationContract]
+        string RegisterRunningProcess(string serializedInput);
+    }    
 
     public class HeartBeatRequest
     {

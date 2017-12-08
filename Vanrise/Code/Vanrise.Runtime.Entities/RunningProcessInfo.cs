@@ -22,7 +22,5 @@ namespace Vanrise.Runtime.Entities
     public class RunningProcessAdditionalInfo
     {
         public string TCPServiceURL { get; set; }
-
-        public string ServicePortNumber { get; set; }
     }
 }

@@ -44,10 +44,9 @@ namespace Vanrise.Runtime
             if (lockAction == null)
                 throw new ArgumentNullException("lockAction");
 
-            string runtimeManagerServiceURL = RunningProcessManager.GetRuntimeManagerServiceURL();  
             TransactionLockItem lockItem = CreateLockItem(transactionUniqueName);
             bool isLocked = false;
-            ServiceClientFactory.CreateTCPServiceClient<IRuntimeManagerWCFService>(runtimeManagerServiceURL, (client) =>
+            RuntimeManagerClient.CreateClient((client) =>
             {
                 isLocked = client.TryLock(lockItem, maxAllowedConcurrency);
             });
@@ -62,7 +61,7 @@ namespace Vanrise.Runtime
                 {
                     try
                     {
-                        ServiceClientFactory.CreateTCPServiceClient<IRuntimeManagerWCFService>(runtimeManagerServiceURL, (client) =>
+                        RuntimeManagerClient.CreateClient((client) =>
                         {
                             client.UnLock(lockItem);
                         });
@@ -70,7 +69,7 @@ namespace Vanrise.Runtime
                     catch(Exception ex)
                     {
                         LoggerFactory.GetExceptionLogger().WriteException(ex);
-                        (new RunningProcessManager()).SetTransactionLockFreezed(lockItem);
+                        RuntimeHost.SetTransactionLockFreezed(lockItem);
                     }
                 }
                 return true;

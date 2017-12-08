@@ -22,11 +22,6 @@ namespace Vanrise.Caching.Runtime
         internal static HashSet<string> s_currentCacheFullNames = new HashSet<string>();
         //internal static bool s_isCurrent
 
-        protected override void OnStarted(IRuntimeServiceStartContext context)
-        {
-            base.OnStarted(context);
-        }
-
         protected override void Execute()
         {            
         }

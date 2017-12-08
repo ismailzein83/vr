@@ -21,14 +21,14 @@ namespace Vanrise.Common.Business
             }
         }
 
-        protected override void OnStarted(IRuntimeServiceStartContext context)
+        protected override void OnInitialized(IRuntimeServiceInitializeContext context)
         {
             HostServiceIfNeeded();
             context.ServiceInstanceInfo = new DataGroupingDistributorServiceInstanceInfo
             {
                 TCPServiceURL = s_serviceURL
             };
-            base.OnStarted(context);
+            base.OnInitialized(context);
         }
 
         static ServiceHost s_serviceHost;

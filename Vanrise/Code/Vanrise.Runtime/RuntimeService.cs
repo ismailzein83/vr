@@ -67,14 +67,34 @@ namespace Vanrise.Runtime
 
         protected abstract void Execute();
 
-        internal protected virtual void OnStarted(IRuntimeServiceStartContext context)
+        internal void Initialize(IRuntimeServiceInitializeContext context)
         {
+            OnInitialized(context);
+        }
+
+        protected virtual void OnInitialized(IRuntimeServiceInitializeContext context)
+        {
+
+        }
+
+        internal void Start(IRuntimeServiceStartContext context)
+        {
+            OnStarted(context);
             _logger.WriteInformation("{0} Runtime Service Started", this.GetType().Name);
+        }
+
+        protected virtual void OnStarted(IRuntimeServiceStartContext context)
+        {            
+        }
+
+        internal void Stop(IRuntimeServiceStopContext context)
+        {
+            OnStopped(context);
+            _logger.WriteInformation("{0} Runtime Service Stopped", this.GetType().Name);
         }
 
         internal protected virtual void OnStopped(IRuntimeServiceStopContext context)
         {
-            _logger.WriteInformation("{0} Runtime Service Stopped", this.GetType().Name);
         }
 
         public void Dispose()
@@ -88,12 +108,16 @@ namespace Vanrise.Runtime
         }
     }
 
-    public interface IRuntimeServiceStartContext
+    public interface IRuntimeServiceInitializeContext
     {
         ServiceInstanceInfo ServiceInstanceInfo { set; }
     }
 
-    internal class RuntimeServiceStartContext : IRuntimeServiceStartContext
+    public interface IRuntimeServiceStartContext
+    {
+    }
+
+    internal class RuntimeServiceInitializeContext : IRuntimeServiceInitializeContext
     {
         public ServiceInstanceInfo ServiceInstanceInfo
         {
@@ -102,6 +126,9 @@ namespace Vanrise.Runtime
         }
     }
 
+    internal class RuntimeServiceStartContext : IRuntimeServiceStartContext
+    {
+    }
 
     public interface IRuntimeServiceStopContext
     {

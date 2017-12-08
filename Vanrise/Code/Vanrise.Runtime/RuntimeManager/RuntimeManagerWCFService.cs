@@ -3,27 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
+using Vanrise.Runtime.Entities;
 
 namespace Vanrise.Runtime
 {
    internal class RuntimeManagerWCFService : IRuntimeManagerWCFService
     {
-        public HeartBeatResponse UpdateHeartBeat(HeartBeatRequest request)
+       public bool IsThisCurrentRuntimeManager()
+       {
+           return RuntimeManager.Current != null && RuntimeManager.Current._isCurrentRuntimeManagerReady;
+       }
+
+        public void UnlockFreezedTransactions(List<TransactionLockItem> freezedTransactionLocks)
         {
-            HeartBeatResponse response = new HeartBeatResponse();
-            if (ProcessHeartBeatManager.Current.UpdateProcessHB(request.RunningProcessId))
-                response.Result = HeartBeatResult.Succeeded;
-            else
-                response.Result = HeartBeatResult.ProcessNotExists;
-            if(request.FreezedTransactionLocks != null)
+            if (freezedTransactionLocks != null)
             {
-                foreach(var transactionLockItem in request.FreezedTransactionLocks)
+                foreach (var transactionLockItem in freezedTransactionLocks)
                 {
                     UnLock(transactionLockItem);
                 }
             }
-            //Console.WriteLine("{0: HH:mm:ss} heartbeat received from process {1}. Result is {2}", DateTime.Now, request.RunningProcessId, response.Result);
-            return response;
         }
 
         static Dictionary<string, int> s_runtimeServiceTypeProcessIds = new Dictionary<string, int>();
@@ -91,6 +91,13 @@ namespace Vanrise.Runtime
             if (transactionLockHandler == null)
                 throw new NullReferenceException("TransactionLockHandler.Current");
             transactionLockHandler.UnLock(lockItem);
+        }
+
+
+        public string RegisterRunningProcess(string serializedInput)
+        {
+            var output = RuntimeManager.Current.RegisterRunningProcess(Serializer.Deserialize<RunningProcessRegistrationInput>(serializedInput));
+            return Serializer.Serialize(output);
         }
     }
 }

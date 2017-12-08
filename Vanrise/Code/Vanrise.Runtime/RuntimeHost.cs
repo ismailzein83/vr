@@ -1,59 +1,36 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.ServiceModel;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using Vanrise.Common;
+using Vanrise.Runtime.Data;
+using Vanrise.Runtime.Entities;
 
 namespace Vanrise.Runtime
 {
     public enum RuntimeStatus { NotStarted, Started, Stopped }
     public class RuntimeHost
     {
-        public RuntimeHost(List<RuntimeService> services)
-            : this(services, true)
-        {
+        Logger _logger = LoggerFactory.GetLogger();
+        List<RuntimeService> _services;
+        Timer _timerServicesManager;
+        Timer _timerRuntimeManager;
+        List<ChildRuntimeProcessProxy> _childRuntimeProcessProxies;
 
+        public RuntimeHost(List<RuntimeService> services)
+            : this()
+        {
+            InitializeRuntimeManager(true);
+            _services = services;
         }
 
         public RuntimeHost(string[] applicationArgs)
-            : this(CreateServicesFromArgs(applicationArgs), false)
-        {
-        }
-
-        private RuntimeHost(List<RuntimeService> services, bool tryHostRuntimeManager)
-        {
-            Vanrise.Common.Utilities.CompilePredefinedPropValueReaders();
-            _services = services;
-
-            if (tryHostRuntimeManager)
-                InitializeRuntimeManager();
-
-            TimeSpan timerInterval = TimeSpan.FromSeconds(1);
-            //if (services != null && services.Count > 0)
-            //{
-            //    if (services.Min(itm => itm.Interval) < timerInterval)
-            //        timerInterval = services.Min(itm => itm.Interval);
-            //}
-            _timer = new Timer(timerInterval.TotalMilliseconds);
-            _timer.Elapsed += timer_Elapsed;
-
-            if (services != null && services.Count > 0)
-            {
-                try
-                {
-                    var currentProcess = RunningProcessManager.CurrentProcess;//this is only to trigger the Heartbeat process
-                }
-                catch (Exception ex)
-                {
-                    LoggerFactory.GetExceptionLogger().WriteException(ex);
-                }
-            }
-        }
-
-        private static List<RuntimeService> CreateServicesFromArgs(string[] applicationArgs)
+            : this()
         {
             var runtimeConfig = Configuration.RuntimeConfig.GetConfig();
             if (runtimeConfig == null)
@@ -68,43 +45,112 @@ namespace Vanrise.Runtime
                 var parentProcess = Process.GetProcessById(parentProcessId);
                 parentProcess.EnableRaisingEvents = true;
                 parentProcess.Exited += (sender, e) =>
-                    {
-                        Environment.Exit(0);
-                    };
+                {
+                    Environment.Exit(0);
+                };
 
                 var runtimeServiceGroupName = applicationArgs[2];
                 var runtimeServiceGroupConfig = runtimeConfig.RuntimeServiceGroups[runtimeServiceGroupName];
                 CreateAndAddRuntimeServices(runtimeServices, runtimeServiceGroupConfig);
-                return runtimeServices;
+                _services = runtimeServices;
             }
             else
             {
-                parentProcessId = Process.GetCurrentProcess().Id;
-                var processPath = System.Reflection.Assembly.GetEntryAssembly().Location;
-
-                InitializeRuntimeManager();
-
+                _childRuntimeProcessProxies = new List<ChildRuntimeProcessProxy>();
                 foreach (Configuration.RuntimeServiceGroup runtimeServiceGroupConfig in runtimeConfig.RuntimeServiceGroups)
                 {
                     for (int i = 0; i < runtimeServiceGroupConfig.NbOfRuntimeInstances; i++)
                     {
-                        StartChildProcess(parentProcessId, processPath, runtimeServiceGroupConfig.Name);
-                        System.Threading.Thread.Sleep(250);
+                        _childRuntimeProcessProxies.Add(new ChildRuntimeProcessProxy
+                            {
+                                 ServiceGroupName = runtimeServiceGroupConfig.Name
+                            });
                     }
                 }
-                return null;
+                InitializeRuntimeManager(false);
             }
         }
 
-        static RuntimeManager s_runtimeManager;
-        private static void InitializeRuntimeManager()
+        private RuntimeHost()
         {
-            s_runtimeManager = new RuntimeManager();
-            ExecuteRuntimeManagerIfIdle();
+            Vanrise.Common.Utilities.CompilePredefinedPropValueReaders();                
         }
 
-        private static void CreateAndAddRuntimeServices(List<RuntimeService> runtimeServices, Configuration.RuntimeServiceGroup runtimeServiceGroupConfig)
+
+        private void InitializeRuntimeManager(bool executeRuntimeManager)
         {
+            RuntimeManager.Current = new RuntimeManager();
+            if (executeRuntimeManager)
+                RuntimeManager.Current.Execute(false);
+            _timerRuntimeManager = new Timer(2000);
+            _timerRuntimeManager.Elapsed += timerRuntimeManager_Elapsed;
+            _timerRuntimeManager.Start();
+        }
+
+        bool _runtimeManagerFailed;
+        void timerRuntimeManager_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            lock (s_runtimeManagerExecutingLockObj)
+            {
+                if (s_isRuntimeManagerExecuting)
+                    return;
+                s_isRuntimeManagerExecuting = true;
+            }
+            try
+            {
+                RuntimeManager.Current.Execute(_runtimeManagerFailed);
+                _runtimeManagerFailed = false;
+                if (_childRuntimeProcessProxies != null)
+                {
+                    foreach (var childRuntimeProcessProxy in _childRuntimeProcessProxies)
+                    {
+                        if (!childRuntimeProcessProxy.IsStarted)
+                        {
+                            StartChildProcess(childRuntimeProcessProxy);
+                            System.Threading.Thread.Sleep(250);
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _runtimeManagerFailed = true;
+                LoggerFactory.GetExceptionLogger().WriteException(ex);
+            }
+            lock (s_runtimeManagerExecutingLockObj)
+            {
+                s_isRuntimeManagerExecuting = false;
+            }
+        }
+
+        private void StartChildProcess(ChildRuntimeProcessProxy childRuntimeProcessProxy)
+        {
+            int currentProcessId = Process.GetCurrentProcess().Id;
+            var processPath = System.Reflection.Assembly.GetEntryAssembly().Location;
+            ProcessStartInfo startInfo = new ProcessStartInfo
+            {
+                FileName = processPath,
+                Arguments = String.Format("ProcessId {0} {1}", currentProcessId, childRuntimeProcessProxy.ServiceGroupName)
+            };
+            var childProcess = Process.Start(startInfo);
+            lock (childRuntimeProcessProxy)
+            {
+                childRuntimeProcessProxy.IsStarted = true;
+            }
+            childProcess.EnableRaisingEvents = true;
+            childProcess.Exited += (sender, e) =>
+            {
+                lock (childRuntimeProcessProxy)
+                {
+                    childRuntimeProcessProxy.IsStarted = false;
+                }
+            };
+        }
+
+        private void CreateAndAddRuntimeServices(List<RuntimeService> runtimeServices, Configuration.RuntimeServiceGroup runtimeServiceGroupConfig)
+        {
+            runtimeServices.ThrowIfNull("runtimeServices");
+            runtimeServiceGroupConfig.ThrowIfNull("runtimeServiceGroupConfig");
             foreach (Configuration.RuntimeService runtimeServiceConfig in runtimeServiceGroupConfig.RuntimeServices)
             {
                 RuntimeService service = CreateRuntimeService(runtimeServiceConfig);
@@ -112,32 +158,13 @@ namespace Vanrise.Runtime
             }
         }
 
-        private static RuntimeService CreateRuntimeService(Configuration.RuntimeService serviceConfig)
+        private RuntimeService CreateRuntimeService(Configuration.RuntimeService serviceConfig)
         {
             Type type = Type.GetType(serviceConfig.Type);
             var service = Activator.CreateInstance(type) as RuntimeService;
             service.Interval = serviceConfig.Interval;
             return service;
         }
-
-        private static void StartChildProcess(int parentProcessId, string processPath, string serviceGroupName)
-        {            
-            ProcessStartInfo startInfo = new ProcessStartInfo
-            {
-                FileName = processPath,
-                Arguments = String.Format("ProcessId {0} {1}", parentProcessId, serviceGroupName)
-            };
-            var childProcess = Process.Start(startInfo);
-            childProcess.EnableRaisingEvents = true;
-            childProcess.Exited += (sender, e) =>
-            {
-                StartChildProcess(parentProcessId, processPath, serviceGroupName);
-            };
-        }
-
-        Logger _logger = LoggerFactory.GetLogger();
-        List<RuntimeService> _services;
-        Timer _timer;
 
         public RuntimeStatus Status { get; private set; }
 
@@ -149,19 +176,105 @@ namespace Vanrise.Runtime
             _logger.WriteInformation("Starting Host...");
             if (_services != null)
             {
-                RuntimeServiceInstanceManager serviceInstanceManager = new RuntimeServiceInstanceManager();
+                LoggerFactory.GetLogger().WriteInformation("Registering Runtime Host...");
+                string currentProcessInterRuntimeServiceURL;
+                ServiceHostManager.Current.CreateAndOpenTCPServiceHost(typeof(InterRuntimeWCFService), typeof(IInterRuntimeWCFService), OnServiceHostCreated, OnServiceHostRemoved, out currentProcessInterRuntimeServiceURL);
+
+                List<RegisterRuntimeServiceInput> runtimeServicesRegistrationInfos = new List<RegisterRuntimeServiceInput>();
+                Dictionary<Guid, RuntimeService> runtimeServicesByInstanceId = new Dictionary<Guid, RuntimeService>();
                 foreach (var service in _services)
                 {
-                    RuntimeServiceStartContext startContext = new RuntimeServiceStartContext();
-                    service.OnStarted(startContext);
-                    service.ServiceInstance = serviceInstanceManager.RegisterServiceInstance(service.ServiceTypeUniqueName, startContext.ServiceInstanceInfo);
-                    service.Status = RuntimeStatus.Started;
+                    RuntimeServiceInitializeContext initializeContext = new RuntimeServiceInitializeContext();
+                    service.Initialize(initializeContext);
+                    Guid serviceInstanceId = Guid.NewGuid();
+                    runtimeServicesRegistrationInfos.Add(new RegisterRuntimeServiceInput
+                        {
+                            ServiceInstanceId = serviceInstanceId,
+                            ServiceTypeUniqueName = service.ServiceTypeUniqueName,
+                            ServiceInstanceInfo = initializeContext.ServiceInstanceInfo
+                        });
+                    runtimeServicesByInstanceId.Add(serviceInstanceId, service);
                 }
-            }
-            _timer.Start();
+                RunningProcessAdditionalInfo additionalInfo = new RunningProcessAdditionalInfo
+                {
+                    TCPServiceURL = currentProcessInterRuntimeServiceURL
+                };
+                
+                RuntimeManagerClient.CreateClient((client) =>
+                                           {
+                                               var input = new RunningProcessRegistrationInput
+                                               {
+                                                   ProcessName = System.Diagnostics.Process.GetCurrentProcess().ProcessName,
+                                                   MachineName = Environment.MachineName,
+                                                   RuntimeServices = runtimeServicesRegistrationInfos,
+                                                   AdditionalInfo = additionalInfo
+                                               };
+                                               string serializedRegistrationOutput = client.RegisterRunningProcess(Serializer.Serialize(input));
+                                               var registrationOutput = Serializer.Deserialize<RunningProcessRegistrationOutput>(serializedRegistrationOutput);
+                                               RunningProcessManager.CurrentProcess = registrationOutput.RunningProcessInfo;
+                                               RunningProcessManager.LastReceivedPingTime = DateTime.Now;
+                                               RunningProcessManager.SetRunningProcesses(registrationOutput.AllRunningProcesses);
+                                               RuntimeServiceInstanceManager.SetRuntimeServices(registrationOutput.AllRunningServices);
+                                               foreach (var runtimeServiceInstance in registrationOutput.RegisteredServices)
+                                               {
+                                                   RuntimeService service = runtimeServicesByInstanceId.GetRecord(runtimeServiceInstance.ServiceInstanceId);
+                                                   service.ThrowIfNull("service", runtimeServiceInstance.ServiceInstanceId);
+                                                   service.ServiceInstance = runtimeServiceInstance;
+                                                   RuntimeServiceStartContext startContext = new RuntimeServiceStartContext();
+                                                   service.Start(startContext);
+                                                   service.Status = RuntimeStatus.Started;
+                                               }
+                                           });
+
+                LoggerFactory.GetLogger().WriteInformation("Runtime Host registered"); 
+                System.Threading.Thread.Sleep(3000);//wait some time to ensure that all runtimes takes the latest version of running processes and runtime services            
+                _timerServicesManager = new Timer(1000);
+                _timerServicesManager.Elapsed += timerServicesManager_Elapsed;
+                _timerServicesManager.Start();
+            }   
             this.Status = RuntimeStatus.Started;
             _logger.WriteInformation("Host Started");
         }
+
+        #region WCF Host Events
+
+        static void OnServiceHostCreated(ServiceHost serviceHost)
+        {
+            serviceHost.Opening += serviceHost_Opening;
+            serviceHost.Opened += serviceHost_Opened;
+            serviceHost.Closing += serviceHost_Closing;
+            serviceHost.Closed += serviceHost_Closed;
+        }
+
+        static void OnServiceHostRemoved(ServiceHost serviceHost)
+        {
+            serviceHost.Opening -= serviceHost_Opening;
+            serviceHost.Opened -= serviceHost_Opened;
+            serviceHost.Closing -= serviceHost_Closing;
+            serviceHost.Closed -= serviceHost_Closed;
+        }
+
+        static void serviceHost_Opening(object sender, EventArgs e)
+        {
+            LoggerFactory.GetLogger().WriteInformation("InterRuntimeWCFService Service is opening..");
+        }
+
+        static void serviceHost_Opened(object sender, EventArgs e)
+        {
+            LoggerFactory.GetLogger().WriteInformation("InterRuntimeWCFService Service opened");
+        }
+
+        static void serviceHost_Closed(object sender, EventArgs e)
+        {
+            LoggerFactory.GetLogger().WriteInformation("InterRuntimeWCFService Service closed");
+        }
+
+        static void serviceHost_Closing(object sender, EventArgs e)
+        {
+            LoggerFactory.GetLogger().WriteInformation("InterRuntimeWCFService is closing..");
+        }
+
+        #endregion
 
         public void Stop()
         {
@@ -169,56 +282,69 @@ namespace Vanrise.Runtime
                 throw new Exception(String.Format("Cannot Stop a {0} RuntimeHost", this.Status));
 
             _logger.WriteInformation("Stopping Host...");
-            _timer.Stop();
-
-            foreach (var service in _services)
+            if (_services != null)
             {
-                while (service.IsExecuting)
-                    System.Threading.Thread.Sleep(1000);
-                service.OnStopped(null);
-                service.Status = RuntimeStatus.Stopped;
-                service.Dispose();
+                _timerServicesManager.Stop();
+
+                foreach (var service in _services)
+                {
+                    while (service.IsExecuting)
+                        System.Threading.Thread.Sleep(1000);
+                    service.Stop(null);
+                    service.Status = RuntimeStatus.Stopped;
+                    service.Dispose();
+                }
             }
             this.Status = RuntimeStatus.Stopped;
             _logger.WriteInformation("Host Stopped");
         }
 
+
+        static ConcurrentQueue<TransactionLockItem> s_queueFreezedTransactionLocks = new ConcurrentQueue<TransactionLockItem>();
+        static List<TransactionLockItem> s_FreezedTransactionLocks = new List<TransactionLockItem>();       
+
+        internal static void SetTransactionLockFreezed(TransactionLockItem transactionLockItem)
+        {
+            s_queueFreezedTransactionLocks.Enqueue(transactionLockItem);
+        }
+
+
         static bool s_isRuntimeManagerExecuting;
         static object s_runtimeManagerExecutingLockObj = new object();
 
-        void timer_Elapsed(object sender, ElapsedEventArgs e)
+        void timerServicesManager_Elapsed(object sender, ElapsedEventArgs e)
         {
-            if (s_runtimeManager != null)
-            {
-                ExecuteRuntimeManagerIfIdle();
-            }
+            if (RunningProcessManager.IsCurrentProcessARuntime && (DateTime.Now - RunningProcessManager.LastReceivedPingTime) >= RuntimeManager.s_RunningProcessHeartBeatTimeout)
+                Environment.Exit(0);
             if (_services != null && _services.Count > 0)
             {
                 foreach (var service in _services)
                     service.ExecuteIfIdleAndDue();
             }
+            TransactionLockItem lockItem;
+            while (s_queueFreezedTransactionLocks.TryDequeue(out lockItem))
+            {
+                s_FreezedTransactionLocks.Add(lockItem);
+            }
+            if (s_FreezedTransactionLocks.Count > 0)
+            {
+                RuntimeManagerClient.CreateClient((client) =>
+                    {
+                        client.UnlockFreezedTransactions(s_FreezedTransactionLocks);
+                        s_FreezedTransactionLocks.Clear();
+                    });
+            }
         }
 
-        private static void ExecuteRuntimeManagerIfIdle()
+        #region Private Classes
+
+        private class ChildRuntimeProcessProxy
         {
-            lock(s_runtimeManagerExecutingLockObj)
-            {
-                if (s_isRuntimeManagerExecuting)
-                    return;
-                s_isRuntimeManagerExecuting = true;
-            }
-            try
-            {
-                s_runtimeManager.Execute();
-            }
-            catch(Exception ex)
-            {
-                LoggerFactory.GetExceptionLogger().WriteException(ex);
-            }
-            lock(s_runtimeManagerExecutingLockObj)
-            {
-                s_isRuntimeManagerExecuting = false;
-            }
+            public string ServiceGroupName { get; set; }
+
+            public bool IsStarted { get; set; }
         }
+
+        #endregion
     }
 }

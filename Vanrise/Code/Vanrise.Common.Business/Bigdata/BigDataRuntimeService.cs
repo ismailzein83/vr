@@ -20,6 +20,7 @@ namespace Vanrise.Common.Business
 
         TimeSpan _deleteTimedOutServicesInterval;
         DateTime _deleteTimedOutServicesLastTime;
+        string _serviceUrl;
 
         public BigDataRuntimeService()
         {
@@ -28,16 +29,17 @@ namespace Vanrise.Common.Business
                 _deleteTimedOutServicesInterval = TimeSpan.FromMinutes(2);
         }
 
-
-        protected override void OnStarted(IRuntimeServiceStartContext context)
+        protected override void OnInitialized(IRuntimeServiceInitializeContext context)
         {
             BigDataManager.Instance._isBigDataHost = true;
-            var random = new Random();
+            _serviceHost = ServiceHostManager.Current.CreateAndOpenTCPServiceHost(typeof(BigDataWCFService), typeof(IBigDataWCFService), OnServiceHostCreated, OnServiceHostRemoved, out _serviceUrl);            
+            base.OnInitialized(context);
+        }
 
-            string serviceUrl;
-            _serviceHost = ServiceHostManager.Current.CreateAndOpenTCPServiceHost(typeof(BigDataWCFService), typeof(IBigDataWCFService), OnServiceHostCreated, OnServiceHostRemoved, out serviceUrl);
-            
-            if (!_dataManager.Insert(serviceUrl, Vanrise.Runtime.RunningProcessManager.CurrentProcess.ProcessId, out _bigDataServiceId))
+
+        protected override void OnStarted(IRuntimeServiceStartContext context)
+        {            
+            if (!_dataManager.Insert(_serviceUrl, Vanrise.Runtime.RunningProcessManager.CurrentProcess.ProcessId, out _bigDataServiceId))
                 throw new Exception("Could not insert BigDataService into database");
             base.OnStarted(context);
         }
