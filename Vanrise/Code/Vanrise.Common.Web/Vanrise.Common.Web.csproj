@@ -126,6 +126,7 @@
     <Compile Include="Controllers\GenericLKUPDefinitionController.cs" />
     <Compile Include="Controllers\OverriddenConfigurationController.cs" />
     <Compile Include="Controllers\OverriddenConfigurationGroupController.cs" />
+    <Compile Include="Controllers\VRExclusiveSessionTypeController.cs" />
     <Compile Include="Controllers\VRLocalizationLanguageController.cs" />
     <Compile Include="Controllers\VRLocalizationModuleController.cs" />
     <Compile Include="Controllers\VRLocalizationTextResourceController.cs" />
@@ -308,6 +309,10 @@
     <Content Include="Common\Directives\VRDocument\Templates\VRDocumentGridTemplate.html" />
     <Content Include="Common\Directives\VRDocument\vr-common-document-grid.js" />
     <Content Include="Common\Directives\VRDocument\vr-common-documentcategory-selector.js" />
+    <Content Include="Common\Directives\VRExclusiveSessionType\Templates\VRExclusiveSessionTypeExtendedSettingsTemplate.html" />
+    <Content Include="Common\Directives\VRExclusiveSessionType\Templates\VRExclusiveSessionTypeSettingsTemplate.html" />
+    <Content Include="Common\Directives\VRExclusiveSessionType\vr-common-exclusivesessiontype-extendedsettings.js" />
+    <Content Include="Common\Directives\VRExclusiveSessionType\vr-common-exclusivesessiontype-settings.js" />
     <Content Include="Common\Directives\VRLocalization\Module\Templates\VRLocalizationModuleGridTemplate.html" />
     <Content Include="Common\Directives\VRLocalization\Module\vr-common-vrlocalizationmodule-grid.js" />
     <Content Include="Common\Directives\VRLocalization\Module\vr-common-vrlocalizationmodule-selector.js" />
@@ -492,6 +497,7 @@
     <Content Include="Common\Services\VRApplicationVisibilityService.js" />
     <Content Include="Common\Services\VRConnectionService.js" />
     <Content Include="Common\Services\VRComponentTypeService.js" />
+    <Content Include="Common\Services\VRExclusiveSessionTypeService.js" />
     <Content Include="Common\Services\VRLocalizationLanguageService.js" />
     <Content Include="Common\Services\VRLocalizationModuleService.js" />
     <Content Include="Common\Services\VRLocalizationTextResourceService.js" />
