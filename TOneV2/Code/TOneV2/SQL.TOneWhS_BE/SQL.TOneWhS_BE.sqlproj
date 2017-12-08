@@ -542,5 +542,6 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetAllDefaultRPsBySellingProductAndCustomer.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetAllDefaultRPsByOwnersOfType.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetAllDefaultRPsByOwners.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetAllByOwners.sql" />
   </ItemGroup>
 </Project>
