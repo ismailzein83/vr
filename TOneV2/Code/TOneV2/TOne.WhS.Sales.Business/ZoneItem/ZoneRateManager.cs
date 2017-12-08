@@ -111,7 +111,7 @@ namespace TOne.WhS.Sales.Business
             // Don't set the future rates of future zones or of those sold in the future
             if (!zoneItem.IsFutureZone && (!zoneItem.CountryBED.HasValue || zoneItem.CountryBED.Value <= DateTime.Today))
                 SetFutureRates(zoneItem);
-            
+
             SetZoneRateChanges(zoneItem);
             SetZoneRateTypes(zoneItem);
         }
@@ -192,6 +192,14 @@ namespace TOne.WhS.Sales.Business
             else
             {
                 zoneItem.NewRates = _newRates.FindAllRecords(x => x.ZoneId == zoneItem.ZoneId);
+            }
+
+            if (zoneItem.NewRates != null)
+            {
+                foreach (var newRate in zoneItem.NewRates)
+                {
+                    newRate.Rate = decimal.Round(newRate.Rate, _longPrecision);
+                }
             }
 
             DraftRateToClose closedNormalRate = null;
