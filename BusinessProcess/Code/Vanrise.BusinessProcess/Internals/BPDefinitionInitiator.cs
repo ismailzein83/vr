@@ -246,8 +246,6 @@ namespace Vanrise.BusinessProcess
                 Exception finalException = Utilities.WrapException(e.TerminationException, String.Format("Process '{0}' failed", processTitle));
                 LoggerFactory.GetExceptionLogger().WriteException(logEventType, GetGeneralLogViewRequiredPermissionSetId(bpInstance), finalException);
                 Console.WriteLine("{0}: {1}", DateTime.Now, bpInstance.LastMessage);
-
-                BPDataManagerFactory.GetDataManager<IBPTaskDataManager>().CancelNotCompletedTasks(bpInstance.ProcessInstanceID);
             }
 
             if (BPInstanceStatusAttribute.GetAttribute(bpInstance.Status).IsClosed)
@@ -303,6 +301,8 @@ namespace Vanrise.BusinessProcess
 
         internal static void NotifyBPCompleted(BPDefinition bpDefinition, BPInstance bpInstance, object processOutput)
         {
+            if (bpInstance.Status != BPInstanceStatus.Completed)
+                BPDataManagerFactory.GetDataManager<IBPTaskDataManager>().CancelNotCompletedTasks(bpInstance.ProcessInstanceID);
             if (bpInstance.CompletionNotifier != null)
             {
                 var eventData = new Entities.ProcessCompletedEventPayload
@@ -314,9 +314,7 @@ namespace Vanrise.BusinessProcess
                 bpInstance.CompletionNotifier.OnProcessInstanceCompleted(eventData);
             }
             BPDefinitionBPExecutionCompletedContext context = new BPDefinitionBPExecutionCompletedContext() { BPInstance = bpInstance };
-            new BPDefinitionManager().GetBPDefinitionExtendedSettings(bpDefinition).OnBPExecutionCompleted(context);
-
-            BPDataManagerFactory.GetDataManager<IBPTaskDataManager>().CancelNotCompletedTasks(bpInstance.ProcessInstanceID);
+            new BPDefinitionManager().GetBPDefinitionExtendedSettings(bpDefinition).OnBPExecutionCompleted(context);            
         }
 
         void TriggerWFEvent(long processInstanceId, string bookmarkName, object eventData)
