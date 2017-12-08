@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -38,7 +39,13 @@ namespace Vanrise.Common.Business
 
         public bool IsLocalizationEnabled()
         {
-            return true;
+            bool isLocalizationEnabled = false;
+            var localizationEnabledSetting = ConfigurationManager.AppSettings["IsLocalizationEnabled"];
+            if (localizationEnabledSetting != null)
+            {
+                bool.TryParse(localizationEnabledSetting, out isLocalizationEnabled);
+            }
+            return isLocalizationEnabled;
         }
         #endregion
 

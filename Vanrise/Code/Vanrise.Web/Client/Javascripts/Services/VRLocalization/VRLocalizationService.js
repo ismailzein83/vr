@@ -8,13 +8,12 @@
 
         function isLocalizationEnabled()
         {
-            if (localizationEnabled != undefined)
-                return localizationEnabled;
-            else
-            {
-                localizationEnabled = $rootScope.isLocalizationEnabled;
-                return localizationEnabled;
-            }
+          return localizationEnabled;
+        }
+
+        function setLocalizationEnabled(isLocalizationEnabled)
+        {
+            localizationEnabled = isLocalizationEnabled;
         }
 
         function getResourceValue(resourceKey, defaultValue, variables) {
@@ -33,6 +32,7 @@
 
         return ({
             getResourceValue: getResourceValue,
+            setLocalizationEnabled: setLocalizationEnabled
         });
     }
 

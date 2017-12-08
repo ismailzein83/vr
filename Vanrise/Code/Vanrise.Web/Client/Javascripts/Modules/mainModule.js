@@ -26,9 +26,9 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
     };
     $rootScope.setLocalizationEnabled = function (isLocalizationEnabled) {
         if (isLocalizationEnabled != undefined) {
-            $rootScope.isLocalizationEnabled = isLocalizationEnabled;
+            VRLocalizationService.setLocalizationEnabled(isLocalizationEnabled);
         }
-    };
+    }; 
     
 
     $rootScope.setLoginURL = function (loginURL) {
@@ -373,14 +373,14 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
 
 }]);
 
-app.controller('loginCtrl', function loginCtrl($scope, SecurityService, $rootScope) {
+app.controller('loginCtrl', function loginCtrl($scope, SecurityService, $rootScope, VRLocalizationService) {
     $scope.setCookieName = function (cookieName) {
         if (cookieName != undefined && cookieName != '')
             SecurityService.setAccessCookieName(cookieName);
     };
     $scope.setLocalizationEnabled = function (isLocalizationEnabled) {
         if (isLocalizationEnabled != undefined) {
-            $rootScope.isLocalizationEnabled = isLocalizationEnabled;
+            VRLocalizationService.setLocalizationEnabled(isLocalizationEnabled);
         }
     };
 });
