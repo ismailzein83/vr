@@ -34,5 +34,11 @@ namespace Vanrise.Security.Entities
         public DateTime? DisabledTill { get; set; }
 
         public Dictionary<string, Object> ExtendedSettings { get; set; }
+
+        public UserSetting Settings { get; set; }
+    }
+    public class UserSetting
+    {
+        public Guid? LanguageId { get; set; }
     }
 }
