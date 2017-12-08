@@ -498,6 +498,8 @@
                 var afterHideDropdown = function (id) {
                     controller.filtername = '';
                     controller.searchLocal();
+                    if (controller.isRemoteLoad())
+                        controller.setdatasource([]);
                     $('div[name=' + id + ']').find('#filterInput').blur();
                     if (controller.onblurdropdown != null) {
                         controller.onblurdropdown();
