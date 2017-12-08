@@ -86,9 +86,20 @@ namespace TOne.WhS.BusinessEntity.Entities
 
     }
 
-    public class RoutingProductZone
+    public class RoutingProductZone : IEquatable<RoutingProductZone>
     {
         public long ZoneId { get; set; }
+
+        public override bool Equals(Object obj)
+        {
+            return this.Equals(obj as RoutingProductZone);
+        }
+        public bool Equals(RoutingProductZone routingProductZone)
+        {
+            if (routingProductZone == null)
+                return false;
+            return (this.ZoneId==routingProductZone.ZoneId);
+        }
     }
 
     public class RoutingProductZoneService : IEquatable<RoutingProductZoneService>
