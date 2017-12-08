@@ -364,6 +364,7 @@
     <Content Include="Client\Javascripts\Services\utils-service.js" />
     <Content Include="Client\Javascripts\Services\ValidationService.js" />
     <Content Include="Client\Javascripts\Services\VRDateTimeService.js" />
+    <Content Include="Client\Javascripts\Services\VRLocalization\VRLocalizationService.js" />
     <Content Include="Client\Libraries\AngularExtensions\BsDateTimePicker\bootstrap-datetimepicker.js" />
     <Content Include="Client\Libraries\AngularExtensions\BsDateTimePicker\moment-with-locales.js" />
     <Content Include="Client\Libraries\AngularExtensions\GoJs\go.js" />

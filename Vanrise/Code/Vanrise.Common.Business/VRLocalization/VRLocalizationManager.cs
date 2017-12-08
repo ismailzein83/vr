@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 
-namespace Vanrise.Common.Business.VRLocalization
+namespace Vanrise.Common.Business
 {
     public class VRLocalizationManager
     {
@@ -36,6 +36,10 @@ namespace Vanrise.Common.Business.VRLocalization
             }
         }
 
+        public bool IsLocalizationEnabled()
+        {
+            return false;
+        }
         #endregion
 
         #region Private Methods
