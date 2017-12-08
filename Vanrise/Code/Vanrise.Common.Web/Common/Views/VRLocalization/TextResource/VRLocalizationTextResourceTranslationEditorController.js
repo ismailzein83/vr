@@ -83,6 +83,11 @@
                     $scope.title = UtilsService.buildTitleForUpdateEditor('Text Resource Translation');
 
             }
+            function loadStaticData()
+            {
+                if (textResourceTranslationEntity != undefined)
+                    $scope.scopeModel.value = textResourceTranslationEntity.Settings.Value;
+            }
             function loadTextResourceSelector() {
                 var textResourceSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                 textResourceSelectorReadyDeferred.promise.then(function () {
@@ -109,7 +114,7 @@
                 return languageSelectorLoadDeferred.promise;
             }
 
-            return UtilsService.waitMultipleAsyncOperations([loadLanguageSelector, loadTextResourceSelector, setTitle]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadLanguageSelector, loadTextResourceSelector, setTitle, loadStaticData]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -118,7 +123,10 @@
         function buildObjectFromScope() {
             var obj = {
                 ResourceId: textResourceSelectorAPI.getSelectedIds(),
-                LanguageId: languageSelectorAPI.getSelectedIds()
+                LanguageId: languageSelectorAPI.getSelectedIds(),
+                Settings: {
+                    Value:$scope.scopeModel.value
+                }
             };
             if (isEditMode)
                 obj.VRLocalizationTextResourceTranslationId = textResourceTranslationId;

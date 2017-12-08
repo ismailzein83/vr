@@ -93,6 +93,8 @@
             function loadStaticData() {
                 if (vrLocalizationTextResourceEntity != undefined) {
                     $scope.scopeModel.resourceKey = vrLocalizationTextResourceEntity.ResourceKey;
+                    if (vrLocalizationTextResourceEntity.Settings != null)
+                    $scope.scopeModel.defaultValue = vrLocalizationTextResourceEntity.Settings.DefaultValue;
                 }
             }
 
@@ -135,7 +137,10 @@
             return {
                 VRLocalizationTextResourceId: vrLocalizationTextResourceId,
                 ResourceKey: $scope.scopeModel.resourceKey,
-                ModuleId: localizationModuleSelectorAPI.getSelectedIds()
+                ModuleId: localizationModuleSelectorAPI.getSelectedIds(),
+                Settings: {
+                    DefaultValue: $scope.scopeModel.defaultValue
+                }
             };
         }
 

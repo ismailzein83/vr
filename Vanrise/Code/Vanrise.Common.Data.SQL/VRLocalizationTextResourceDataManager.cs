@@ -46,7 +46,8 @@ namespace Vanrise.Common.Data.SQL
             {
                 VRLocalizationTextResourceId = (Guid)reader["ID"],
                 ResourceKey = reader["ResourceKey"] as string,
-                ModuleId = (Guid)reader["ModuleID"]
+                ModuleId = (Guid)reader["ModuleID"],
+                Settings = Vanrise.Common.Serializer.Deserialize<VRLocalizationTextResourceSettings>(reader["Settings"] as string),
             };
 
             return vrLocalizationTextResource;

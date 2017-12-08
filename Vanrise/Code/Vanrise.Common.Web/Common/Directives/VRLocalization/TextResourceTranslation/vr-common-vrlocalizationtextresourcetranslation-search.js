@@ -59,10 +59,10 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
             var api = {};
             api.load = function (payload) {
                 if (payload != undefined) {
-                    textResourceId = payload.TextResourceIds[0];
+                    textResourceId = payload.textResourceIds[0];
                     var payload = {
                         query: {
-                            ResourceIds: payload.TextResourceIds,
+                            ResourceIds: payload.textResourceIds,
                             LanguageIds: LanguageIds,
                         },
                         textResourceId: textResourceId

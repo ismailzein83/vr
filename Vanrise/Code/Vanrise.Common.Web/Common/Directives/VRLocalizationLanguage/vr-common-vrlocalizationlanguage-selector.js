@@ -48,9 +48,9 @@ app.directive('vrCommonVrlocalizationlanguageSelector', ['VR_AccountManager_Acco
         function getLanguageSelectorTemplate(attrs) {
 
             var multipleselection = "";
-            var label = "Language";
+            var label = "Languages";
             if (attrs.ismultipleselection != undefined) {
-                label = "Language";
+                label = "Languages";
                 multipleselection = "ismultipleselection";
             }
             if (attrs.customlabel != undefined) {

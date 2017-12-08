@@ -33,8 +33,6 @@ namespace Vanrise.Common.Business
         public VRLocalizationTextResourceTranslation GetVRLocalizationTextResourceTranslation(Guid vrLocalizationTextResourceTranslationId)
         {
             var vrLocalizationTextResources = GetCachedVRLocalizationTextResourcesTranslation();
-            if (vrLocalizationTextResources == null)
-                return null;
             return vrLocalizationTextResources.GetRecord(vrLocalizationTextResourceTranslationId);
         }
         public InsertOperationOutput<VRLocalizationTextResourceTranslationDetail> AddVRLocalizationTextResourceTranslation(VRLocalizationTextResourceTranslation vrLocalizationTextResourceTranslation)
@@ -89,7 +87,7 @@ namespace Vanrise.Common.Business
         #region Private Methods
         private Dictionary<Guid, VRLocalizationTextResourceTranslation> GetCachedVRLocalizationTextResourcesTranslation()
         {
-            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedVRLocalizationTextResources",
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedVRLocalizationTextResourcesTranslation",
                () =>
                {
                    IVRLocalizationTextResourceTranslationDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRLocalizationTextResourceTranslationDataManager>();
@@ -122,9 +120,7 @@ namespace Vanrise.Common.Business
                 LanguageId = localizationTextResourceTranslation.LanguageId,
                 Settings = localizationTextResourceTranslation.Settings,
             };
-            if (vrLocalizationTextResourceDetail.ResourceId != null)
                 vrLocalizationTextResourceDetail.ResourceKey = textResourceManager.GetVRLocalizationResourceKey(vrLocalizationTextResourceDetail.ResourceId);
-            if (vrLocalizationTextResourceDetail.LanguageId != null)
                 vrLocalizationTextResourceDetail.languageName = languageManager.GetVRLocalizationLanguageName(vrLocalizationTextResourceDetail.LanguageId);
             return vrLocalizationTextResourceDetail;
         }

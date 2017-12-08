@@ -17,7 +17,7 @@
             VRModalService.showModal('/Client/Modules/Common/Views/VRLocalization/TextResource/VRLocalizationTextResourceTranslationEditor.html', parameters, settings);
         }
 
-        function editVRLocalizationTextResourceTranslation(vrLocalizationTextResourceTranslationId, textResourceId, onVRLocalizationTextResourceTranslationUpdated) {
+        function editVRLocalizationTextResourceTranslation(vrLocalizationTextResourceTranslationId, onVRLocalizationTextResourceTranslationUpdated,textResourceId) {
             var settings = {};
             var parameters = {
                 vrLocalizationTextResourceTranslationId: vrLocalizationTextResourceTranslationId,
@@ -37,7 +37,7 @@
             drillDownDefinition.loadDirective = function (directiveAPI, textResourceItem) {
                 textResourceItem.textReasourceTranslationSearchAPI = directiveAPI;
                 var query = {
-                    TextResourceIds: [textResourceItem.VRLocalizationTextResourceId],
+                    textResourceIds: [textResourceItem.VRLocalizationTextResourceId],
                 };
 
                 return textResourceItem.textReasourceTranslationSearchAPI.load(query);

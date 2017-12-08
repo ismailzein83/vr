@@ -48,9 +48,9 @@ app.directive('vrCommonVrlocalizationtextresourceSelector', ['UtilsService', 'VR
         function getTextResourceSelectorTemplate(attrs) {
 
             var multipleselection = "";
-            var label = "TextResource";
+            var label = "Text Resources";
             if (attrs.ismultipleselection != undefined) {
-                label = "TextResource";
+                label = "Text Resources";
                 multipleselection = "ismultipleselection";
             }
             if (attrs.customlabel != undefined) {

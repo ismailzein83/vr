@@ -79,7 +79,7 @@ app.directive("vrCommonVrlocalizationtextresourcetranslationGrid", ["VRNotificat
                     gridAPI.itemUpdated(updatedvrLocalizationTextResourceTranslation);
                 };
 
-                VRCommon_VRLocalizationTextResourceTranslationService.editVRLocalizationTextResourceTranslation(vrLocalizationTextResourceTranslation.VRLocalizationTextResourceTranslationId, textResourceId, onVRLocalizationTextResourceTranslationUpdated);
+                VRCommon_VRLocalizationTextResourceTranslationService.editVRLocalizationTextResourceTranslation(vrLocalizationTextResourceTranslation.VRLocalizationTextResourceTranslationId, onVRLocalizationTextResourceTranslationUpdated,textResourceId);
             }
         }
 
