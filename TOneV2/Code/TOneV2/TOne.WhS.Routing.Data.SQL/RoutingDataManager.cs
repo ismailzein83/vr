@@ -167,7 +167,7 @@ namespace TOne.WhS.Routing.Data.SQL
         #region Constants
 
         const string query_QualityConfigurationTable = @"CREATE TABLE [dbo].[QualityConfiguration](
-                                                        [ID] [Guid] NOT NULL,
+                                                        [ID] [uniqueidentifier] NOT NULL,
                                                         [Supplier] [varchar](max) NOT NULL,
                                                         [Salezone] [varchar](max) NOT NULL,
                                                         [Quality] [varchar](max) NOT NULL
@@ -256,7 +256,7 @@ namespace TOne.WhS.Routing.Data.SQL
 															    ) ON [PRIMARY];";
 
         private const string query_SwitchSyncDataTable = @"CREATE TABLE [dbo].[SwitchSyncData](
-																[SwitchId] int NOT NULL,
+																[SwitchId] [nvarchar](MAX) NOT NULL,
                                                                 [LastVersionNumber] int NOT NULL
 															) ON [PRIMARY];";
 
