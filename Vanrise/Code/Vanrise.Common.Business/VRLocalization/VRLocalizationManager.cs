@@ -38,7 +38,7 @@ namespace Vanrise.Common.Business
 
         public bool IsLocalizationEnabled()
         {
-            return false;
+            return true;
         }
         #endregion
 

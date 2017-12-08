@@ -21,7 +21,7 @@ namespace Vanrise.Web.Controllers
             ViewBag.ProductVersion = cManager.GetProductVersionNumber();
             ViewBag.CompanyName = cManager.GetDefaultCompanyName();
             ViewBag.isEnabledGA = settingManager.GetGoogleAnalyticsEnabled();
-            ViewBag.IsLocalizationEnabled = new VRLocalizationManager().IsLocalizationEnabled();
+            ViewBag.IsLocalizationEnabled = new VRLocalizationManager().IsLocalizationEnabled().ToString().ToLower();
             Vanrise.Security.Business.SecurityManager securityManager = new SecurityManager();
             var loginUrl = securityManager.GetLoginURL();
             if (loginUrl != null)

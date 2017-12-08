@@ -16,6 +16,8 @@ namespace Vanrise.Web.Controllers
             ViewBag.CookieName = (new SecurityManager()).GetCookieName();
             var cacheSettingData = new GeneralSettingsManager().GetCacheSettingData();
             ViewBag.version = cacheSettingData != null ? cacheSettingData.ClientCacheNumber : 0;
+            ViewBag.IsLocalizationEnabled = new VRLocalizationManager().IsLocalizationEnabled().ToString().ToLower();
+
             ViewBag.RedirectTo = redirectTo;
             return View("~/Client/CSViews/Security/Login.cshtml");
         }
@@ -26,6 +28,7 @@ namespace Vanrise.Web.Controllers
             ViewBag.CookieName = (new SecurityManager()).GetCookieName();
             var cacheSettingData = new GeneralSettingsManager().GetCacheSettingData();
             ViewBag.version = cacheSettingData != null ? cacheSettingData.ClientCacheNumber : 0;
+            ViewBag.IsLocalizationEnabled = new VRLocalizationManager().IsLocalizationEnabled().ToString().ToLower();
             ViewBag.RedirectTo = redirectTo;
             return View("~/Client/CSViews/Security/Payment.cshtml");
         }

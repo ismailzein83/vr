@@ -25,7 +25,9 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         $scope.userDisplayName = userInfo.UserDisplayName;
     };
     $rootScope.setLocalizationEnabled = function (isLocalizationEnabled) {
-        $rootScope.isLocalizationEnabled = isLocalizationEnabled;
+        if (isLocalizationEnabled != undefined) {
+            $rootScope.isLocalizationEnabled = isLocalizationEnabled;
+        }
     };
     
 
@@ -371,10 +373,15 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
 
 }]);
 
-app.controller('loginCtrl', function loginCtrl($scope, SecurityService) {
+app.controller('loginCtrl', function loginCtrl($scope, SecurityService, $rootScope) {
     $scope.setCookieName = function (cookieName) {
         if (cookieName != undefined && cookieName != '')
             SecurityService.setAccessCookieName(cookieName);
+    };
+    $scope.setLocalizationEnabled = function (isLocalizationEnabled) {
+        if (isLocalizationEnabled != undefined) {
+            $rootScope.isLocalizationEnabled = isLocalizationEnabled;
+        }
     };
 });
 app.controller('DocumentCtrl', ['$scope', function documentCtrl($scope) {
