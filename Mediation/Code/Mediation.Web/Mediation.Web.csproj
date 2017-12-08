@@ -321,6 +321,9 @@
     <Reference Include="Vanrise.Integration.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Integration.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.MainExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Integration.Mappers">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Mappers.dll</HintPath>
     </Reference>
