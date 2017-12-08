@@ -150,5 +150,13 @@ namespace Vanrise.Common.Business
             };
             return vrLocalizationLanguageInfo;
         }
+
+        public IEnumerable<Guid> GetAllLanguagesIds()
+        {
+            var allLanguages = GetAllLanguages();
+            if (allLanguages == null)
+                return null;
+            return GetAllLanguages().Values.MapRecords(x => x.VRLanguageId);
+        }
     }
 }

@@ -14,7 +14,7 @@ namespace Vanrise.Common.Business
         #region Public Methods
         public Dictionary<Guid, VRLocalizationTextResourceTranslationsById> GetAllResourceTranslationsByLanguageId()
         {
-            throw new NotImplementedException();
+            return GetCachedResourceTranslationsByLanguageId();
         }
         public IDataRetrievalResult<VRLocalizationTextResourceTranslationDetail> GetFilteredVRLocalizationTextResourcesTranslation(DataRetrievalInput<VRLocalizationTextResourceTranslationQuery> input)
         {
@@ -95,7 +95,28 @@ namespace Vanrise.Common.Business
                    return vrLocalizationTextResourcesTranslation.ToDictionary(itm => itm.VRLocalizationTextResourceTranslationId, itm => itm);
                });
         }
-
+        private Dictionary<Guid, VRLocalizationTextResourceTranslationsById> GetCachedResourceTranslationsByLanguageId()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedResourceTranslationsByLanguageId",
+               () =>
+               {
+                   Dictionary<Guid, VRLocalizationTextResourceTranslationsById> allResourceTranslationsByLanguageId = null;
+                   var allResourcesTranslations = GetCachedVRLocalizationTextResourcesTranslation();
+                   if (allResourcesTranslations != null)
+                   {
+                       allResourceTranslationsByLanguageId = new Dictionary<Guid, VRLocalizationTextResourceTranslationsById>();
+                       foreach (var resourcesTranslation in allResourcesTranslations)
+                       {
+                           var vrLocalizationTextResourceTranslationsById = allResourceTranslationsByLanguageId.GetOrCreateItem(resourcesTranslation.Value.LanguageId);
+                           if (!vrLocalizationTextResourceTranslationsById.ContainsKey(resourcesTranslation.Key))
+                           {
+                               vrLocalizationTextResourceTranslationsById.Add(resourcesTranslation.Key, resourcesTranslation.Value);
+                           }
+                       }
+                   }
+                   return allResourceTranslationsByLanguageId;
+               });
+        }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             IVRLocalizationTextResourceTranslationDataManager _dataManager = CommonDataManagerFactory.GetDataManager<IVRLocalizationTextResourceTranslationDataManager>();

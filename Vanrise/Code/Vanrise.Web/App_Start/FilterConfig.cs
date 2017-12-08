@@ -5,6 +5,8 @@ using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using System.Linq;
+using System.Configuration;
+using Vanrise.Common.Business;
 
 namespace Vanrise.Web
 {
@@ -44,13 +46,16 @@ namespace Vanrise.Web
         {
             HttpApplication application = (HttpApplication)sender;
             HttpContext context = application.Context;
-            string languageIdAsString = context.Request["vrlangId"];
-            if (languageIdAsString == null && context.Request.Url.AbsolutePath.EndsWith(".js"))
-                languageIdAsString = "3B5C3266-9F4E-43E4-99EA-A936CF989E33";
+            //string languageIdAsString = context.Request["vrlangId"];
+            //if (languageIdAsString == null && context.Request.Url.AbsolutePath.EndsWith(".js"))
+            //    languageIdAsString = "3B5C3266-9F4E-43E4-99EA-A936CF989E33";
+
+            string languageIdAsString = ConfigurationManager.AppSettings["LocalizationLanguageId"];
             Guid languageId;
             if (languageIdAsString != null && Guid.TryParse(languageIdAsString, out languageId) && 
                 (context.Request.Url.AbsolutePath.EndsWith(".html") || context.Request.Url.AbsolutePath.EndsWith(".js")))
             {
+                VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
                 string physicalPath = context.Request.PhysicalPath;
                 FileLocalizationInfo localizationInfo = GetFileLocalizationInfo(application, physicalPath);
                 if(localizationInfo.LocalizedFileName != null)
@@ -67,7 +72,8 @@ namespace Vanrise.Web
                         }
                         foreach(var resourceKey in localizationInfo.TextResourceKeys)
                         {
-                            fileContentBuilder.Replace(String.Concat("VRRes.", resourceKey, ".VREnd"), resourceKey + " (localized)");//TODO, replace all resources with valid resources
+
+                            fileContentBuilder.Replace(String.Concat("VRRes.", resourceKey, ".VREnd"), vrLocalizationManager.GetTranslatedTextResourceValue(resourceKey, languageId));//TODO, replace all resources with valid resources
                         }
                         string fileContent = fileContentBuilder.ToString();
                         lock(s_lockObj)
@@ -175,6 +181,9 @@ namespace Vanrise.Web
                     {
                         string newLastResourcesUpdateInfo = GetLastResourceUpdateInfo();
                         s_localizationInfosFilePath = application.Server.MapPath("/vr-generated/LocalizationInfos.vr");
+                        var directoryName = Path.GetDirectoryName(s_localizationInfosFilePath);
+                        if (!Directory.Exists(directoryName))
+                            Directory.CreateDirectory(directoryName);
                         if (!File.Exists(s_localizationInfosFilePath))
                             File.Create(s_localizationInfosFilePath).Close();
                         s_fileLocalizationInfos = new Dictionary<string, FileLocalizationInfo>();
@@ -221,9 +230,9 @@ namespace Vanrise.Web
 
         private void CleanUnUsedLocalizedFiles(HttpApplication application, Dictionary<string, FileLocalizationInfo> s_fileLocalizationInfos)
         {
-            List<Guid> allLanguageIds = new List<Guid> { new Guid("3B5C3266-9F4E-43E4-99EA-A936CF989E33"), new Guid("3DD50E19-6DDD-4023-95B9-FB0D3BDD2255") };
+            IEnumerable<Guid> allLanguageIds = new VRLocalizationLanguageManager().GetAllLanguagesIds();
             string generatedFilesRootPath = application.Server.MapPath("/vr-generated");
-            if (allLanguageIds != null && allLanguageIds.Count > 0)
+            if (allLanguageIds != null && allLanguageIds.Count() > 0)
             {
                 HashSet<string> allLocalizedFileNames = new HashSet<string>(s_fileLocalizationInfos.Values.Where(itm => itm.LocalizedFileName != null).Select(itm => itm.LocalizedFileName.ToLower()));
                 foreach(var langId in allLanguageIds)
