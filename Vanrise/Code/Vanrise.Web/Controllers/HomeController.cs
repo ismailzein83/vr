@@ -22,6 +22,9 @@ namespace Vanrise.Web.Controllers
             ViewBag.CompanyName = cManager.GetDefaultCompanyName();
             ViewBag.isEnabledGA = settingManager.GetGoogleAnalyticsEnabled();
             ViewBag.IsLocalizationEnabled = new VRLocalizationManager().IsLocalizationEnabled().ToString().ToLower();
+            var isRTL = new VRLocalizationManager().IsRTL();
+            ViewBag.IsRTL = isRTL.ToString().ToLower();
+            ViewBag.RTLClass = isRTL ? " class= rtl " : "";
             Vanrise.Security.Business.SecurityManager securityManager = new SecurityManager();
             var loginUrl = securityManager.GetLoginURL();
             if (loginUrl != null)

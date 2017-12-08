@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html ng-app="mainModule" ng-controller="mainCtrl" ng-init="setCookieName('@ViewBag.CookieName');setLoginURL('@ViewBag.LoginURL'); spinner=true;setVersionNumber('@ViewBag.version');setLocalizationEnabled(@ViewBag.IsLocalizationEnabled);">
+<html ng-app="mainModule" ng-controller="mainCtrl" ng-init="setCookieName('@ViewBag.CookieName');setLoginURL('@ViewBag.LoginURL'); spinner=true;setVersionNumber('@ViewBag.version');setLocalizationEnabled(@ViewBag.IsLocalizationEnabled);setLocalizationRTL(@ViewBag.IsRTL);">
 <head>
     <meta charset="utf-8" />
     <link rel="shortcut icon" href="/images/iconheader.ico" type="image/ico" />
@@ -25,7 +25,7 @@
     @Styles.Render("~/Content/Styles")
     @Styles.Render("~/Content/Themes")
 </head>
-<body>
+<body @ViewBag.RTLClass>
     <div ng-if="spinner" class="loading-container"><img src="Client/Images/loader-mask.gif" /></div>
     <div ng-if="!spinner" ng-cloak>
         <nav class="navbar navbar-inverse navbar-fixed-top vr-nav-custom">

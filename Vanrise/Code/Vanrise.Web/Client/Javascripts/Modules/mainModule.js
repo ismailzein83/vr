@@ -29,9 +29,13 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
             VRLocalizationService.setLocalizationEnabled(isLocalizationEnabled);
         }
     }; 
-    
+    $rootScope.setLocalizationRTL = function (isRTL) {
+        if(isRTL != undefined) {
+            VRLocalizationService.setLocalizationRTL(isRTL);
+            }
+        };
 
-    $rootScope.setLoginURL = function (loginURL) {
+ $rootScope.setLoginURL = function (loginURL) {
         if (loginURL != undefined && loginURL != '') {
             SecurityService.setLoginURL(loginURL);
             BaseAPIService.setLoginURL(loginURL);
@@ -382,7 +386,13 @@ app.controller('loginCtrl', function loginCtrl($scope, SecurityService, $rootSco
         if (isLocalizationEnabled != undefined) {
             VRLocalizationService.setLocalizationEnabled(isLocalizationEnabled);
         }
-    };
+        };
+
+             $scope.setLocalizationRTL = function (isRTL) {
+        if(isRTL != undefined) {
+            VRLocalizationService.setLocalizationRTL(isRTL);
+            }
+            };
 });
 app.controller('DocumentCtrl', ['$scope', function documentCtrl($scope) {
     $scope.downloadDocument = function (file) {

@@ -47,6 +47,26 @@ namespace Vanrise.Common.Business
             }
             return isLocalizationEnabled;
         }
+        public bool IsRTL()
+        {
+            if (IsLocalizationEnabled())
+            {
+                var localizationLanguageIdSetting = ConfigurationManager.AppSettings["LocalizationLanguageId"];
+                if(localizationLanguageIdSetting != null)
+                {
+                    Guid localizationLanguageId;
+                    if (Guid.TryParse(localizationLanguageIdSetting, out localizationLanguageId))
+                    {
+                        VRLocalizationLanguageManager vrLocalizationLanguageManager = new VRLocalizationLanguageManager();
+                        var vrLocalizationLanguage = vrLocalizationLanguageManager.GetVRLocalizationLanguage(localizationLanguageId);
+                        vrLocalizationLanguage.ThrowIfNull("vrLocalizationLanguage", localizationLanguageId);
+                        vrLocalizationLanguage.Settings.ThrowIfNull("rLocalizationLanguage.Settings", localizationLanguageId);
+                        return vrLocalizationLanguage.Settings.IsRTL;
+                    }
+                }
+            }
+            return false;
+        }
         #endregion
 
         #region Private Methods
