@@ -19,7 +19,6 @@ namespace Vanrise.Entities
 
     public class VRLocalizationLanguageSettings
     {
-        public bool RTL { get; set; }
-
+        public bool IsRTL { get; set; }
     }
 }
