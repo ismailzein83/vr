@@ -25,12 +25,12 @@ namespace Vanrise.Common.Data.SQL
 
         public bool Update(VRLocalizationTextResource localizationTextResource)
         {
-            return ExecuteNonQuerySP("[VRLocalization].[sp_TextResource_Update]", localizationTextResource.VRLocalizationTextResourceId, localizationTextResource.ResourceKey, localizationTextResource.ModuleId) > 0;
+            return ExecuteNonQuerySP("[VRLocalization].[sp_TextResource_Update]", localizationTextResource.VRLocalizationTextResourceId, localizationTextResource.ResourceKey, localizationTextResource.ModuleId, Serializer.Serialize(localizationTextResource.Settings)) > 0;
         }
 
         public bool Insert(VRLocalizationTextResource localizationTextResource)
         {
-            return ExecuteNonQuerySP("[VRLocalization].[sp_TextResource_Insert]", localizationTextResource.VRLocalizationTextResourceId, localizationTextResource.ResourceKey, localizationTextResource.ModuleId) > 0;
+            return ExecuteNonQuerySP("[VRLocalization].[sp_TextResource_Insert]", localizationTextResource.VRLocalizationTextResourceId, localizationTextResource.ResourceKey, localizationTextResource.ModuleId, Serializer.Serialize(localizationTextResource.Settings)) > 0;
         }
 
         public bool AreVRLocalizationTextResourcesUpdated(ref object updateHandle)
