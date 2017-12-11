@@ -84,10 +84,10 @@ function ( UtilsService, VRUIUtilsService) {
                 }
                 ctrl.datasource = [{
                     value: true,
-                    description: "Yes"
+                    description: "True"
                 }, {
                     value: false,
-                    description: "No"
+                    description: "False"
                 }];
                 if (selectedIds != undefined)
                     VRUIUtilsService.setSelectedValues(selectedIds, 'value', $attrs, ctrl);
