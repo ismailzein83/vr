@@ -40,7 +40,7 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
         public void PrepareTables(ISwitchRouteSynchronizerInitializeContext context)
         {
             SwitchSyncOutput switchSyncOutput;
-            ExecdbPostgresDataManagerAction((telesIdbPostgresDataManager, dataManagerIndex) =>
+            ExecIdbPostgresDataManagerAction((telesIdbPostgresDataManager, dataManagerIndex) =>
             {
                 telesIdbPostgresDataManager.PrepareTables();
             }, context.SwitchName, context.SwitchId, null, context.WriteBusinessHandledException, true, "initializing", out switchSyncOutput);
@@ -57,7 +57,7 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
             List<IdbConvertedRoute> idbRoutes = (context.PreparedItemsForApply as List<ConvertedRoute>).Select(itm => itm as IdbConvertedRoute).ToList();
 
             SwitchSyncOutput switchSyncOutput;
-            ExecdbPostgresDataManagerAction((telesIdbPostgresDataManager, dataManagerIndex) =>
+            ExecIdbPostgresDataManagerAction((telesIdbPostgresDataManager, dataManagerIndex) =>
             {
                 telesIdbPostgresDataManager.ApplyIdbRoutesForDB(idbRoutes);
             }, context.SwitchName, context.SwitchId, context.PreviousSwitchSyncOutput, context.WriteBusinessHandledException, false, null, out switchSyncOutput);
@@ -68,7 +68,7 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
         public void SwapTables(ISwapTableContext context)
         {
             SwitchSyncOutput switchSyncOutput;
-            ExecdbPostgresDataManagerAction((telesIdbPostgresDataManager, dataManagerIndex) =>
+            ExecIdbPostgresDataManagerAction((telesIdbPostgresDataManager, dataManagerIndex) =>
             {
                 string[] args = new string[] { (dataManagerIndex + 1).ToString(), context.SwitchName };
 
@@ -112,20 +112,26 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
             return true;
         }
 
-        //public void ApplyDifferentialRoutes(IIdbDataManagerApplyDifferentialRoutesContext context)
-        //{
-        //    List<IdbConvertedRoute> idbRoutes = context.ConvertedUpdatedRoutes.Select(itm => itm as IdbConvertedRoute).ToList();
+        public void ApplyDifferentialRoutes(IApplyDifferentialRoutesContext context)
+        {
+            PrepareDataManagers();
+            
+            List<IdbConvertedRoute> idbRoutes = context.ConvertedUpdatedRoutes.Select(itm => itm as IdbConvertedRoute).ToList();
 
-        //    Parallel.For(0, _telesIdbPostgresDataManagers.Count, (i) =>
-        //    {
-        //        _telesIdbPostgresDataManagers[i].ApplyDifferentialRoutes(idbRoutes);
-        //    });
-        //}
+            SwitchSyncOutput switchSyncOutput;
+            ExecIdbPostgresDataManagerAction((telesIdbPostgresDataManager, dataManagerIndex) =>
+            {
+                telesIdbPostgresDataManager.ApplyDifferentialRoutes(idbRoutes);
+            }, context.SwitchName, context.SwitchId, null, context.WriteBusinessHandledException, true, "applying differential routes to", out switchSyncOutput);
 
-        private void ExecdbPostgresDataManagerAction(Action<TelesIdbPostgresDataManager, int> action, string switchName, string switchId, SwitchSyncOutput previousSwitchSyncOutput,
+            context.SwitchSyncOutput = switchSyncOutput;
+        }
+
+        private void ExecIdbPostgresDataManagerAction(Action<TelesIdbPostgresDataManager, int> action, string switchName, string switchId, SwitchSyncOutput previousSwitchSyncOutput,
             Action<Exception, bool> writeBusinessHandledException, bool isBusinessException, string businessExceptionMessage, out SwitchSyncOutput switchSyncOutput)
         {
             PrepareDataManagers();
+
             HashSet<int> failedNodeIndexes = null;
             if (previousSwitchSyncOutput != null && previousSwitchSyncOutput.SwitchRouteSynchroniserOutputList != null)
             {
@@ -161,6 +167,7 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
                     }
                 }
             });
+
             switchSyncOutput = exceptions.Count > 0 ? new SwitchSyncOutput()
             {
                 SwitchId = switchId,
@@ -231,18 +238,24 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
             ExecuteNonQuery(new string[] { createindexScript, swapTableScript }, indexesCommandTimeoutInSeconds);
         }
 
-        //public void ApplyDifferentialRoutes(List<IdbConvertedRoute> idbRoutes)
-        //{
-        //    if (idbRoutes == null || idbRoutes.Count == 0)
-        //        return;
+        public void ApplyDifferentialRoutes(List<IdbConvertedRoute> idbRoutes)
+        {
+            if (idbRoutes == null || idbRoutes.Count == 0)
+                return;
 
-        //    List<string> updateQueries = new List<string>();
+            int index = 0;
 
-        //    foreach (var idbRoute in idbRoutes)
-        //        updateQueries.Add(string.Format("Update {0} Set route = '{1}' Where pref = '{2}'", TableNameWithSchema, idbRoute.Route, idbRoute.Pref));
+            Func<string> getNextQuery = () =>
+            {
+                if (index >= idbRoutes.Count)
+                    return null;
 
-        //    ExecuteNonQuery(updateQueries.ToArray());
-        //}
+                IdbConvertedRoute idbConvertedRoute = idbRoutes[index++];
+                return string.Format("Update {0} Set route = '{1}' Where pref = '{2}'", TableNameWithSchema, idbConvertedRoute.Route, idbConvertedRoute.Pref);
+            };
+
+            ExecuteNonQuery(getNextQuery);
+        }
 
         void BuildRouteTempTable()
         {

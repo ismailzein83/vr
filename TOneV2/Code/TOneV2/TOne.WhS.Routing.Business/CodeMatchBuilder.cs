@@ -50,6 +50,7 @@ namespace TOne.WhS.Routing.Business
             else
                 return null;
         }
+
         public SaleCodeMatchWithMaster GetSaleCodeMatchWithMaster(string number, int? customerId, DateTime effectiveOn)
         {
             SaleCodeMatchWithMaster codeMatch = new SaleCodeMatchWithMaster();
@@ -91,7 +92,7 @@ namespace TOne.WhS.Routing.Business
 
         #region Private Methods
 
-        void StructuresSaleCodes(IEnumerable<SaleCode> saleCodes, out List<SaleCodeIterator> saleCodeIterators, out HashSet<string> distinctSaleCodes)
+        private void StructuresSaleCodes(IEnumerable<SaleCode> saleCodes, out List<SaleCodeIterator> saleCodeIterators, out HashSet<string> distinctSaleCodes)
         {
             saleCodeIterators = new List<SaleCodeIterator>();
             SaleZoneManager saleZoneManager = new SaleZoneManager();
@@ -115,7 +116,7 @@ namespace TOne.WhS.Routing.Business
             }
         }
 
-        void StructuresSupplierCodes(IEnumerable<SupplierCode> supplierCodes, out List<SupplierCodeIterator> supplierCodeIterators, out HashSet<string> distinctSupplierCodes)
+        private void StructuresSupplierCodes(IEnumerable<SupplierCode> supplierCodes, out List<SupplierCodeIterator> supplierCodeIterators, out HashSet<string> distinctSupplierCodes)
         {
             supplierCodeIterators = new List<SupplierCodeIterator>();
             SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
@@ -266,7 +267,6 @@ namespace TOne.WhS.Routing.Business
             });
         }
 
-
         private struct GetSupplierCodeIteratorCacheName : IBEDayFilterCacheName
         {
             public int SupplierId { get; set; }
@@ -282,11 +282,12 @@ namespace TOne.WhS.Routing.Business
         private SupplierCodeIteratorInfo GetSupplierCodeIterator(int supplierId, DateTime effectiveOn)
         {
             List<SupplierCodeIteratorInfo> supplierCodeIteratorInfos = GetSupplierCodeIterators(supplierId, effectiveOn);
-            return Helper.GetBusinessEntityInfo<SupplierCodeIteratorInfo>(supplierCodeIteratorInfos, effectiveOn);
+            return TOne.WhS.BusinessEntity.Business.Helper.GetBusinessEntityInfo<SupplierCodeIteratorInfo>(supplierCodeIteratorInfos, effectiveOn);
         }
+
         private List<SupplierCodeIteratorInfo> GetSupplierCodeIterators(int supplierId, DateTime effectiveOn)
         {
-            DateTimeRange dateTimeRange = Helper.GetDateTimeRangeWithOffset(effectiveOn);
+            DateTimeRange dateTimeRange = TOne.WhS.BusinessEntity.Business.Helper.GetDateTimeRangeWithOffset(effectiveOn);
 
             var cacheName = new GetSupplierCodeIteratorCacheName { SupplierId = supplierId, EffectiveOn = dateTimeRange.From };// String.Concat("GetSupplierCodeIterator_", supplierId, "_", effectiveOn.Date);
             var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierCodeCacheManager>();
@@ -302,7 +303,7 @@ namespace TOne.WhS.Routing.Business
 
                    List<SupplierCodeIteratorInfo> supplierCodeIterators = new List<SupplierCodeIteratorInfo>();
 
-                   Helper.StructureBusinessEntitiesByDate(supplierCodes, dateTimeRange.From, dateTimeRange.To, (matchingSupplierCodes, bed, eed) =>
+                   TOne.WhS.BusinessEntity.Business.Helper.StructureBusinessEntitiesByDate(supplierCodes, dateTimeRange.From, dateTimeRange.To, (matchingSupplierCodes, bed, eed) =>
                    {
                        SupplierCodeIteratorInfo supplierCodeIteratorInfo = new SupplierCodeIteratorInfo()
                        {
@@ -349,7 +350,6 @@ namespace TOne.WhS.Routing.Business
                  return rslt;
              });
         }
-
 
         #endregion
     }

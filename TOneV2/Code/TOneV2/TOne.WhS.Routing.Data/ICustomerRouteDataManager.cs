@@ -29,5 +29,7 @@ namespace TOne.WhS.Routing.Data
         void UpdateCustomerRoutes(List<CustomerRouteData> customerRouteDataList);
 
         long GetTotalCount();
+
+        List<CustomerRoute> GetCustomerRoutesAfterVersionNb(int versionNb);
     }
 }

@@ -18,6 +18,8 @@ namespace TOne.WhS.RouteSync.BP.Arguments
 
         public int RouteSyncDefinitionId { get; set; }
 
+        public List<SwitchInfo> FullRouteSyncSwitches { get; set; }
+
         public RouteRangeType RangeType { get; set; }
 
         public RouteRangeInfo RangeInfo { get; set; }

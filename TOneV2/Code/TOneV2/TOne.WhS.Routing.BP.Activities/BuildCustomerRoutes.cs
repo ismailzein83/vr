@@ -157,12 +157,7 @@ namespace TOne.WhS.Routing.BP.Activities
 
         private void FillSwitchInProcessQueues(List<SwitchInProcess> switchesInProcess, IEnumerable<CustomerRoute> customerRoutes)
         {
-            RouteBatch routeBatch = new RouteBatch() { Routes = new List<Route>() };
-            foreach (CustomerRoute customerRoute in customerRoutes)
-            {
-                Route route = RouteSyncReader.BuildRouteFromCustomerRoute(customerRoute);
-                routeBatch.Routes.Add(route);
-            }
+            RouteBatch routeBatch = new RouteBatch() { Routes = Helper.BuildRoutesFromCustomerRoutes(customerRoutes) };
 
             foreach (SwitchInProcess switchInProcess in switchesInProcess)
             {

@@ -13,7 +13,6 @@ namespace TOne.WhS.RouteSync.MVTSRadius
 
         public IRadiusDataManager DataManager { get; set; }
 
-
         /// <summary>
         /// Key = Carrier Account Id
         /// </summary>
@@ -62,7 +61,6 @@ namespace TOne.WhS.RouteSync.MVTSRadius
                     }
                 }
             }
-            context.InvalidRoutes = invalidRoutes.Count > 0 ? invalidRoutes : null;
             context.ConvertedRoutes = radiusRoutes;
         }
 
@@ -76,8 +74,6 @@ namespace TOne.WhS.RouteSync.MVTSRadius
             CarrierMapping carrierMapping;
             List<MVTSRadiusOption> options = new List<MVTSRadiusOption>();
             StringBuilder strOptions = new StringBuilder();
-
-            //MVTSRouteSyncOptions roundedOptions = BuildRoundedPercentages(route, invalidRoutes);
 
             foreach (RouteOption routeOption in route.Options)
             {
@@ -108,36 +104,6 @@ namespace TOne.WhS.RouteSync.MVTSRadius
 
             return options;
         }
-
-        //private MVTSRouteSyncOptions BuildRoundedPercentages(Route route, List<string> invalidRoutes)
-        //{
-        //    MVTSRouteSyncOptions mvtsRouteSyncOptions = new MVTSRouteSyncOptions();
-        //    int roundedPercentages = 0;
-        //    foreach (RouteOption routeOption in route.Options)
-        //    {
-        //        int? roundedPercentage = null;
-        //        if (routeOption.Percentage.HasValue)
-        //        {
-        //            roundedPercentage = Convert.ToInt32(routeOption.Percentage.Value);
-        //            roundedPercentages += roundedPercentage.Value;
-        //        }
-        //        if (!mvtsRouteSyncOptions.ContainsKey(routeOption.SupplierId))
-        //            mvtsRouteSyncOptions.Add(routeOption.SupplierId, roundedPercentage);
-        //        else
-        //        {
-        //            invalidRoutes.Add(string.Format("Customer {0} and Code {1} have the supplier {2} more than once", route.CustomerId, route.Code, routeOption.SupplierId));
-        //        }
-        //    }
-        //    if (roundedPercentages > 0 && roundedPercentages < 100)
-        //    {
-        //        var firstItemHasPercentage = mvtsRouteSyncOptions.FirstOrDefault(itm => itm.Value.HasValue);
-        //        if (!firstItemHasPercentage.Equals(default(KeyValuePair<string, int?>)))
-        //            mvtsRouteSyncOptions[firstItemHasPercentage.Key] = firstItemHasPercentage.Value.Value + (100 - roundedPercentages);
-        //    }
-
-        //    return mvtsRouteSyncOptions;
-        //}
-
 
         public override Object PrepareDataForApply(ISwitchRouteSynchronizerPrepareDataForApplyContext context)
         {

@@ -51,12 +51,16 @@
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.RouteSync.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.RouteSync.BP.Arguments</AssemblyReference>
       <AssemblyReference>TOne.WhS.RouteSync.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.Runtime</AssemblyReference>
-      <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.Business</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Routing.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>TOne.WhS.RouteSync.BP</AssemblyReference>
     </sco:Collection>
@@ -94,7 +98,7 @@
     <twrba1:LoadSwitchesInProcess sap2010:WorkflowViewState.IdRef="LoadSwitchesInProcess_1">
       <twrba1:LoadSwitchesInProcess.SwitchIds>
         <InArgument x:TypeArguments="scg:List(x:String)">
-          <mca:CSharpValue x:TypeArguments="scg:List(x:String)">routeSyncDefinition.Settings.SwitchIds</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="scg:List(x:String)">Input.FullRouteSyncSwitches.Select(itm =&gt; itm.SwitchId).ToList()</mca:CSharpValue>
         </InArgument>
       </twrba1:LoadSwitchesInProcess.SwitchIds>
       <twrba1:LoadSwitchesInProcess.SwitchesInProcess>
@@ -212,7 +216,7 @@
         </local:BuildRouteSyncByRange.SwitchesInProcess>
       </local:BuildRouteSyncByRange>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d01DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRlU3luYy5CUFxSb3V0ZVN5bmNGb3JSYW5nZVByb2Nlc3MueGFtbCJAA9gBDgIBAUYFUQ4DAZkBUgVdJQMBjAFeBXMkAgFzdAWWAQoCAVKXAQXWARACAQJOC06JAQMBoAFJC0lzAwGaAVULVXQDAZMBWgtaYwMBjQFrC2uhAQMBhgFmC2Z6AwGAAWELYXkCAXpwC3B1AgF0dwt3cAIBU3sJhgESAgFmiQEJlAEwAgFZmwEHtQEbAgEutgEH1QElAgEDgwEPgwGeAQIBbX4PfqABAgFnkQEPkQGgAQIBYIwBD4wBagIBWqgBDagBewIBS7IBDbIBdAIBRJ4BDZ4BZQIBPa0BDa0BcQIBNqMBDaMBcQIBL9IBDdIBdAIBJ80BDc0BnwECASDIAQ3IAWUCARm+AQ2+AWkCARK5AQ25AZYBAgELwwENwwFlAgEE</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d01DOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRlU3luYy5CUFxSb3V0ZVN5bmNGb3JSYW5nZVByb2Nlc3MueGFtbCJEA9wBDgIBAUoFVQ4DAZkBVgVhJQMBjAFiBXckAgFzeAWaAQoCAVKbAQXaARACAQJSC1KJAQMBoAFNC01zAwGaAVkLWXQDAZMBXgteYwMBjQFvC2+hAQMBhgFqC2p6AwGAAWULZZYBAgF6dAt0dQIBdHsLe3ACAVN/CYoBEgIBZo0BCZgBMAIBWZ8BB7kBGwIBLroBB9kBJQIBA4cBD4cBngECAW2CAQ+CAaABAgFnlQEPlQGgAQIBYJABD5ABagIBWqwBDawBewIBS7YBDbYBdAIBRKIBDaIBZQIBPbEBDbEBcQIBNqcBDacBcQIBL9YBDdYBdAIBJ9EBDdEBnwECASDMAQ3MAWUCARnCAQ3CAWkCARK9AQ29AZYBAgELxwENxwFlAgEE</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

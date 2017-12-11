@@ -18,5 +18,7 @@ namespace TOne.WhS.RouteSync.Entities
         public int RouteBatchSize { get; set; }
 
         public int IndexCommandTimeoutInMinutes { get; set; }
+
+        public bool ExecuteFullRouteSyncWhenPartialNotSupported { get; set; } 
     }
 }

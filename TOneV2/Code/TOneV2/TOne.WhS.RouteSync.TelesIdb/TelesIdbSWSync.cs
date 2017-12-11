@@ -31,6 +31,8 @@ namespace TOne.WhS.RouteSync.TelesIdb
         /// </summary>
         public Dictionary<string, CarrierMapping> CarrierMappings { get; set; }
 
+        #region Public Methods
+
         public override void Initialize(ISwitchRouteSynchronizerInitializeContext context)
         {
             this.DataManager.PrepareTables(context);
@@ -70,7 +72,6 @@ namespace TOne.WhS.RouteSync.TelesIdb
                 }
             }
 
-            context.InvalidRoutes = invalidRoutes.Count > 0 ? invalidRoutes : null;
             context.ConvertedRoutes = idbRoutes;
         }
 
@@ -195,6 +196,26 @@ namespace TOne.WhS.RouteSync.TelesIdb
             context.ValidationMessages = validationMessages;
             return false;
         }
+
+        public override bool SupportPartialRouteSync { get { return true; } }
+
+        public override void ApplyDifferentialRoutes(ISwitchRouteSynchronizerApplyDifferentialRoutesContext context)
+        {
+            var convertRoutesContext = new SwitchRouteSynchronizerConvertRoutesContext() { Routes = context.UpdatedRoutes };
+            this.ConvertRoutes(convertRoutesContext);
+
+            var applyDifferentialRoutesContext = new ApplyDifferentialRoutesContext() 
+            { 
+                SwitchId = context.SwitchId,
+                SwitchName = context.SwitchName,
+                ConvertedUpdatedRoutes = convertRoutesContext.ConvertedRoutes,
+                WriteBusinessHandledException = context.WriteBusinessHandledException
+            };
+            this.DataManager.ApplyDifferentialRoutes(applyDifferentialRoutesContext);
+            context.SwitchSyncOutput = applyDifferentialRoutesContext.SwitchSyncOutput;
+        }
+
+        #endregion
 
         #region Private Methods
 

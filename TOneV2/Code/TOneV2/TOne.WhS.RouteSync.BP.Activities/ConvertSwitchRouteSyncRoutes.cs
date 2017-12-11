@@ -70,13 +70,7 @@ namespace TOne.WhS.RouteSync.BP.Activities
                             InitializationData = switchInProcess.InitializationData
                         };
                         switchInProcess.Switch.RouteSynchronizer.ConvertRoutes(switchRouteSynchronizerConvertRoutesContext);
-                        if (switchRouteSynchronizerConvertRoutesContext.InvalidRoutes != null && switchRouteSynchronizerConvertRoutesContext.InvalidRoutes.Count > 0)
-                        {
-                            foreach (string invalidRoute in switchRouteSynchronizerConvertRoutesContext.InvalidRoutes)
-                            {
-                                handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Warning, invalidRoute);
-                            }
-                        }
+
                         if (switchRouteSynchronizerConvertRoutesContext.ConvertedRoutes != null && switchRouteSynchronizerConvertRoutesContext.ConvertedRoutes.Count > 0)
                         {
                             totalBatchesConverted++;
@@ -107,23 +101,5 @@ namespace TOne.WhS.RouteSync.BP.Activities
         {
 
         }
-
-        #region Private Classes
-
-        public class SwitchRouteSynchronizerConvertRoutesContext : ISwitchRouteSynchronizerConvertRoutesContext
-        {
-            public RouteRangeType? RouteRangeType { get; set; }
-
-            public RouteRangeInfo RouteRangeInfo { get; set; }
-
-            public SwitchRouteSyncInitializationData InitializationData { get; set; }
-
-            public List<Route> Routes { get; set; }
-
-            public List<ConvertedRoute> ConvertedRoutes { get; set; }
-
-            public List<string> InvalidRoutes { get; set; }
-        }
-        #endregion
     }
 }

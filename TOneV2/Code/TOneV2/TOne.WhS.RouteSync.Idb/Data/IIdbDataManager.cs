@@ -12,5 +12,6 @@ namespace TOne.WhS.RouteSync.Idb
         void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context);
         void SwapTables(ISwapTableContext context);
         bool BlockCustomer(IdbBlockCustomerContext context);
+        void ApplyDifferentialRoutes(IApplyDifferentialRoutesContext context);
     }
 }

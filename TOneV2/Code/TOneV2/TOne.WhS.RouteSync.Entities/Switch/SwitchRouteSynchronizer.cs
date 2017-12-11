@@ -35,6 +35,13 @@ namespace TOne.WhS.RouteSync.Entities
         {
             return true;
         }
+
+        public virtual bool SupportPartialRouteSync { get { return false; } }
+
+        public virtual void ApplyDifferentialRoutes(ISwitchRouteSynchronizerApplyDifferentialRoutesContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public enum RouteSyncDeliveryMethod { Batches = 0, AllRoutes = 1 }
@@ -57,21 +64,6 @@ namespace TOne.WhS.RouteSync.Entities
         SwitchSyncOutput SwitchSyncOutput { set; }
 
         Action<Exception, bool> WriteBusinessHandledException { get; }
-    }
-
-    public interface ISwitchRouteSynchronizerConvertRoutesContext
-    {
-        RouteRangeType? RouteRangeType { get; }
-
-        RouteRangeInfo RouteRangeInfo { get; }
-
-        SwitchRouteSyncInitializationData InitializationData { get; }
-
-        List<Route> Routes { get; }
-
-        List<ConvertedRoute> ConvertedRoutes { set; }
-
-        List<string> InvalidRoutes { set; }
     }
 
     public interface ISwitchRouteSynchronizerFinalizeContext
@@ -123,6 +115,57 @@ namespace TOne.WhS.RouteSync.Entities
         Action<Exception, bool> WriteBusinessHandledException { get; }
     }
 
+    public interface ISwitchRouteSynchronizerConvertRoutesContext
+    {
+        RouteRangeType? RouteRangeType { get; }
+
+        RouteRangeInfo RouteRangeInfo { get; }
+
+        SwitchRouteSyncInitializationData InitializationData { get; }
+
+        List<Route> Routes { get; }
+
+        List<ConvertedRoute> ConvertedRoutes { set; }
+    }
+    public class SwitchRouteSynchronizerConvertRoutesContext : ISwitchRouteSynchronizerConvertRoutesContext
+    {
+        public RouteRangeType? RouteRangeType { get; set; }
+
+        public RouteRangeInfo RouteRangeInfo { get; set; }
+
+        public SwitchRouteSyncInitializationData InitializationData { get; set; }
+
+        public List<Route> Routes { get; set; }
+
+        public List<ConvertedRoute> ConvertedRoutes { get; set; }
+    }
+
+    public interface ISwitchRouteSynchronizerApplyDifferentialRoutesContext
+    {
+        string SwitchId { get; }
+
+        string SwitchName { get; }
+
+        List<Route> UpdatedRoutes { get; }
+
+        Action<Exception, bool> WriteBusinessHandledException { get; }
+
+        SwitchSyncOutput SwitchSyncOutput { set; }
+
+    }
+    public class SwitchRouteSynchronizerApplyDifferentialRoutesContext : ISwitchRouteSynchronizerApplyDifferentialRoutesContext
+    {
+        public string SwitchId { get; set; }
+
+        public string SwitchName { get; set; }
+
+        public List<Route> UpdatedRoutes { get; set; }
+
+        public Action<Exception, bool> WriteBusinessHandledException { get; set; }
+
+        public SwitchSyncOutput SwitchSyncOutput { get;  set; }
+    }
+     
     public interface ITryBlockCustomerContext
     {
         string SwitchName { get; }
@@ -134,7 +177,7 @@ namespace TOne.WhS.RouteSync.Entities
     public class TryBlockCustomerContext : ITryBlockCustomerContext
     {
         public string SwitchName { get; set; }
-        
+
         public string CustomerId { get; set; }
 
         public object SwitchBlockingInfo { get; set; }
@@ -159,6 +202,6 @@ namespace TOne.WhS.RouteSync.Entities
     }
     public class IsSwitchRouteSynchronizerValidContext : IIsSwitchRouteSynchronizerValidContext
     {
-        public List<string> ValidationMessages { get; set; } 
+        public List<string> ValidationMessages { get; set; }
     }
 }

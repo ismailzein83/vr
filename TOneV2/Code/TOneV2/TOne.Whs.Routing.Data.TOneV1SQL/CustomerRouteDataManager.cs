@@ -553,7 +553,6 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             public StreamBulkInsertInfo RouteOptionStreamForBulkInsertInfo { get; set; }
         }
 
-
         public Vanrise.BusinessProcess.IBPContext BPContext
         {
             set;
@@ -561,6 +560,11 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         }
 
         public long GetTotalCount()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<CustomerRoute> GetCustomerRoutesAfterVersionNb(int versionNb)
         {
             throw new NotImplementedException();
         }

@@ -65,7 +65,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PartialRouteInfoDataManager.cs" />
+    <Compile Include="RoutingEntityDetailsDataManager.cs" />
     <Compile Include="CodeMatchesDataManager.cs" />
     <Compile Include="CarrierAccountDataManager.cs" />
     <Compile Include="SaleZoneDataManager.cs" />
@@ -74,6 +74,7 @@
     <Compile Include="CustomerRouteDataManager.cs" />
     <Compile Include="CustomerZoneDetailsDataManager.cs" />
     <Compile Include="MasterDatabaseDataManager.cs" />
+    <Compile Include="SwitchSyncDataDataManager.cs" />
     <Compile Include="TrafficStatsMeasureDataManager.cs" />
     <Compile Include="RPRouteDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

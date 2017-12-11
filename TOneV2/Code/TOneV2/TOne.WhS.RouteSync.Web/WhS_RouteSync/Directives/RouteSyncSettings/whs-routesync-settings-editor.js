@@ -6,7 +6,7 @@ app.directive('whsRoutesyncSettingsEditor', ['UtilsService', 'VRUIUtilsService',
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
-                onReady: '=',
+                onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -24,9 +24,9 @@ app.directive('whsRoutesyncSettingsEditor', ['UtilsService', 'VRUIUtilsService',
         function settingEditorCtor(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
 
-            $scope.scopeModel = {};
-
             function initializeController() {
+                $scope.scopeModel = {};
+
                 defineAPI();
             }
             function defineAPI() {
@@ -36,6 +36,7 @@ app.directive('whsRoutesyncSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                     if (payload != undefined && payload.data != undefined) {
                         $scope.scopeModel.routeBatchSize = payload.data.RouteSyncProcess.RouteBatchSize;
                         $scope.scopeModel.indexCommandTimeoutInMinutes = payload.data.RouteSyncProcess.IndexCommandTimeoutInMinutes;
+                        $scope.scopeModel.executeFullRouteSyncWhenPartialNotSupported = payload.data.RouteSyncProcess.ExecuteFullRouteSyncWhenPartialNotSupported;
                     }
                 };
 
@@ -44,7 +45,8 @@ app.directive('whsRoutesyncSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                         $type: "TOne.WhS.RouteSync.Entities.RouteSyncSettings, TOne.WhS.RouteSync.Entities",
                         RouteSyncProcess: {
                             RouteBatchSize: $scope.scopeModel.routeBatchSize,
-                            IndexCommandTimeoutInMinutes: $scope.scopeModel.indexCommandTimeoutInMinutes
+                            IndexCommandTimeoutInMinutes: $scope.scopeModel.indexCommandTimeoutInMinutes,
+                            ExecuteFullRouteSyncWhenPartialNotSupported: $scope.scopeModel.executeFullRouteSyncWhenPartialNotSupported
                         }
                     };
                     return data;

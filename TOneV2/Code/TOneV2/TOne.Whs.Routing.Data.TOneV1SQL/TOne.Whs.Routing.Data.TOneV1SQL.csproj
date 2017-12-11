@@ -78,7 +78,7 @@
     <Compile Include="CodeSaleZoneDataManager.cs" />
     <Compile Include="CustomerRouteDataManager.cs" />
     <Compile Include="CustomerZoneDetailsDataManager.cs" />
-    <Compile Include="PartialRouteInfoDataManager.cs" />
+    <Compile Include="RoutingEntityDetailsDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RoutingDatabaseDataManager.cs" />
     <Compile Include="RoutingDataManager.cs" />

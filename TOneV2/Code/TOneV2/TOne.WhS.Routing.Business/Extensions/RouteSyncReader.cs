@@ -12,10 +12,8 @@ namespace TOne.WhS.Routing.Business.Extensions
 
     public class RouteSyncReader : RouteReader
     {
-        public override Guid ConfigId
-        {
-            get { return new Guid("C03EF53F-5022-443F-8833-639E67F88A62"); }
-        }
+        public override Guid ConfigId { get { return new Guid("C03EF53F-5022-443F-8833-639E67F88A62"); } }
+
         public TOneRouteRangeType? RangeType { get; set; }
 
         public override bool TryGetReadRanges(IRouteReaderGetReadRangesContext context)
@@ -32,7 +30,9 @@ namespace TOne.WhS.Routing.Business.Extensions
                 return true;
             }
             else
+            {
                 return false;
+            }
         }
 
         public override void ReadRoutes(IRouteReaderContext context)
@@ -51,40 +51,10 @@ namespace TOne.WhS.Routing.Business.Extensions
         {
             Action<CustomerRoute> onCustomerRouteLoaded = (customerRoute) =>
             {
-                Route route = BuildRouteFromCustomerRoute(customerRoute);
+                Route route = Helper.BuildRouteFromCustomerRoute(customerRoute);
                 context.OnRouteReceived(route, null);
             };
             return onCustomerRouteLoaded;
-        }
-
-        public static Route BuildRouteFromCustomerRoute(CustomerRoute customerRoute)
-        {
-            Route route = new Route
-            {
-                CustomerId = customerRoute.CustomerId.ToString(),
-                SaleZoneId = customerRoute.SaleZoneId,
-                SaleRate = customerRoute.Rate,
-                Code = customerRoute.Code
-            };
-            if (customerRoute.Options != null)
-            {
-                route.Options = new List<RouteSync.Entities.RouteOption>();
-                foreach (var customerRouteOption in customerRoute.Options)
-                {
-                    if (customerRouteOption.IsBlocked)
-                        continue;
-
-                    route.Options.Add(new RouteSync.Entities.RouteOption
-                    {
-                        SupplierId = customerRouteOption.SupplierId.ToString(),
-                        SupplierRate = customerRouteOption.SupplierRate,
-                        Percentage = customerRouteOption.Percentage,
-                        IsBlocked = customerRouteOption.IsBlocked,
-                        NumberOfTries = customerRouteOption.NumberOfTries
-                    });
-                }
-            }
-            return route;
         }
 
         private static void GetCustomerAndCode(IRouteReaderContext context, out int? customerId, out string codePrefix)
