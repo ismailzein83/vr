@@ -44,7 +44,7 @@
                                 <li role="presentation">
                                     <a href="" ng-click="openEditProfileModal()">Edit My Profile</a>
                                 </li>
-                                <li role="presentation">
+                                <li role="presentation" ng-if="@ViewBag.IsLocalizationEnabled">
                                     <a href="" ng-click="openEditMyLanguageModal()">Edit My Language</a>
                                 </li>
                                 <li role="presentation">
