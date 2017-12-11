@@ -183,10 +183,10 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 result = string.Format(result + "Moved Codes: {0} ", movedCodesCounter);
             if (closedCodesCounter != 0)
                 result = string.Format(result + "Closed Codes: {0} ", closedCodesCounter);
-            if (newRatesCounter != 0)
-                result = string.Format(result + "New Rates: {0} ", newRatesCounter);
-            if (closedRatesCounter != 0)
-                result = string.Format(result + "Closed Rates: {0} ", closedRatesCounter);
+            //if (newRatesCounter != 0)
+            //    result = string.Format(result + "New Rates: {0} ", newRatesCounter);
+            //if (closedRatesCounter != 0)
+            //    result = string.Format(result + "Closed Rates: {0} ", closedRatesCounter);
             return result;
         }
 
