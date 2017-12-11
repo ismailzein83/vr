@@ -111,6 +111,7 @@ namespace Vanrise.Data.Postgres
         #endregion
 
         #region ExecuteNonQuery
+
         public void ExecuteNonQuery(string[] sqlStrings, int? commandTimeout = null)
         {
             using (NpgsqlConnection connection = new NpgsqlConnection(GetConnectionString()))
@@ -126,6 +127,29 @@ namespace Vanrise.Data.Postgres
                 connection.Close();
             }
         }
+
+        public void ExecuteNonQuery(Func<string> getNextQuery, int? commandTimeout = null)
+        {
+            using (NpgsqlConnection connection = new NpgsqlConnection(GetConnectionString()))
+            {
+                if (connection.State == ConnectionState.Closed) connection.Open();
+
+                while (true)
+                {
+                    string query = getNextQuery();
+                    if (string.IsNullOrEmpty(query))
+                        break;
+
+                    using (NpgsqlCommand command = CreateCommand(connection, query, commandTimeout))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                }
+
+                connection.Close();
+            }
+        }
+
         protected int ExecuteNonQueryText(string cmdText, Action<NpgsqlCommand> prepareCommand, int? commandTimeout = null)
         {
             int rowsAffected;
