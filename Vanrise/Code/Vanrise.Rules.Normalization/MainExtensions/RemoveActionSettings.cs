@@ -43,7 +43,6 @@ namespace Vanrise.Rules.Normalization.MainExtensions
 
             if (string.IsNullOrEmpty(TextToRemove))
                 return;
-            //throw new NullReferenceException("TextToRemove");
 
             int index = -1;
 
@@ -60,7 +59,7 @@ namespace Vanrise.Rules.Normalization.MainExtensions
                 default: throw new NotSupportedException(string.Format("TextOccurrence {0} not supported.", TextOccurrence));
             }
 
-            if (index > 0)
+            if (index >= 0)
             {
                 switch (this.RemoveDirection)
                 {
