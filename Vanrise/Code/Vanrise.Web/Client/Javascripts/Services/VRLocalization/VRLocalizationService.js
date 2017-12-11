@@ -5,7 +5,7 @@
 
     function VRLocalizationService(UtilsService, $rootScope) {
         var localizationEnabled;
-        var isRTL;
+        var isRTLLocalization;
 
         function isLocalizationEnabled() {
             return localizationEnabled;
@@ -16,11 +16,11 @@
         }
 
         function isLocalizationRTL() {
-            return isRTL;
+            return isRTLLocalization;
         }
 
         function setLocalizationRTL(isRTL) {
-            isRTL = isRTL;
+            isRTLLocalization = isRTL;
         }
 
         function getResourceValue(resourceKey, defaultValue, variables) {
@@ -41,7 +41,8 @@
             getResourceValue: getResourceValue,
             setLocalizationEnabled: setLocalizationEnabled,
             isLocalizationEnabled: isLocalizationEnabled,
-            setLocalizationRTL: setLocalizationRTL
+            setLocalizationRTL: setLocalizationRTL,
+            isLocalizationRTL: isLocalizationRTL
         });
     }
 
