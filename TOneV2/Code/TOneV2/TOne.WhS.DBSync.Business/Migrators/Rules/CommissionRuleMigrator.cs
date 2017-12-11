@@ -116,6 +116,11 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 EndEffectiveTime = defaultCommission.EED
             };
 
+            extraChargeRule.Criteria.FieldsValues.Add("SupplierId", new StaticValues
+            {
+                Values = new List<object>() { supplier.CarrierAccountId }
+            });
+
             if (includeZonesCriteria)
             {
                 foreach (SourceCommission sourceCommission in commissionRules)
@@ -131,32 +136,15 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 if (zoneIds.Count == 0)
                     return null;
 
-                extraChargeRule.Criteria.FieldsValues.Add("SupplierZoneId", new BusinessEntityValues
+                extraChargeRule.Criteria.FieldsValues.Add("SupplierZoneId", new StaticValues
                 {
-                    BusinessEntityGroup = new SelectiveSupplierZoneGroup()
-                    {
-                        SuppliersWithZones = new List<SupplierWithZones>
-                    {
-                        new SupplierWithZones
-                        {
-                            SupplierId = supplier.CarrierAccountId,
-                            SupplierZoneIds = zoneIds
-                        }
-                    }
-                    }
-                });
-
-            }
-            else
-            {
-                extraChargeRule.Criteria.FieldsValues.Add("SupplierId", new StaticValues
-                {
-                    Values = ((new List<int> { supplier.CarrierAccountId }).Cast<Object>()).ToList()
+                    Values = zoneIds.Cast<Object>().ToList()
                 });
             }
 
             return GetSourceRule(extraChargeRule, defaultCommission);
         }
+
         SourceRule GetSellingSourceRule(List<SourceCommission> commissionRules, bool includeZones)
         {
             List<long> zoneIds = new List<long>();
@@ -185,12 +173,9 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 EndEffectiveTime = defaultCommission.EED
             };
 
-            extraChargeRule.Criteria.FieldsValues.Add("CustomerId", new BusinessEntityValues
+            extraChargeRule.Criteria.FieldsValues.Add("CustomerId", new StaticValues
             {
-                BusinessEntityGroup = new SelectiveCustomerGroup
-                {
-                    CustomerIds = new List<int>() { customer.CarrierAccountId },
-                }
+                Values = new List<object>() { customer.CarrierAccountId }
             });
 
             if (includeZones)
@@ -205,17 +190,14 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 if (zoneIds.Count == 0)
                     return null;
 
-                extraChargeRule.Criteria.FieldsValues.Add("SaleZoneId", new BusinessEntityValues
+                extraChargeRule.Criteria.FieldsValues.Add("SaleZoneId", new StaticValues
                 {
-                    BusinessEntityGroup = new SelectiveSaleZoneGroup
-                    {
-                        SellingNumberPlanId = Context.MigrationContext.DefaultSellingNumberPlanId,
-                        ZoneIds = zoneIds
-                    }
+                    Values = zoneIds.Cast<Object>().ToList()
                 });
             }
             return GetSourceRule(extraChargeRule, defaultCommission);
         }
+
         List<PricingRuleExtraChargeActionSettings> GetActions(SourceCommission commission, RuleType type)
         {
             List<PricingRuleExtraChargeActionSettings> actions = new List<PricingRuleExtraChargeActionSettings>();

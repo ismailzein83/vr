@@ -61,7 +61,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
         public override IEnumerable<SourceRule> GetSourceRules()
         {
             List<SourceRule> sourceRules = new List<SourceRule>();
-            SourceTodDataManager dataManager = new SourceTodDataManager(Context.MigrationContext.ConnectionString,Context.MigrationContext.EffectiveAfterDate, Context.MigrationContext.OnlyEffective);
+            SourceTodDataManager dataManager = new SourceTodDataManager(Context.MigrationContext.ConnectionString, Context.MigrationContext.EffectiveAfterDate, Context.MigrationContext.OnlyEffective);
             var todRules = dataManager.GetSourceTods();
             sourceRules = GetRules(todRules);
 
@@ -101,7 +101,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
             {
                 if (!_allSupplierZones.ContainsKey(sourceTod.ZoneId.ToString()))
                 {
-                    Context.MigrationContext.WriteWarning(string.Format("Failed migrating TOD, Source Id: {0}, Sale Zone Id {1}", sourceTod.TodId, sourceTod.ZoneId));
+                    Context.MigrationContext.WriteWarning(string.Format("Failed migrating TOD, Source Id: {0}, Supplier Zone Id {1}", sourceTod.TodId, sourceTod.ZoneId));
                     this.TotalRowsFailed++;
                 }
                 else
@@ -125,19 +125,14 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 DefinitionId = _purchaseRuleDefinitionId
             };
 
-            extraChargeRule.Criteria.FieldsValues.Add("SupplierZoneId", new BusinessEntityValues
+            extraChargeRule.Criteria.FieldsValues.Add("SupplierId", new StaticValues
             {
-                BusinessEntityGroup = new SelectiveSupplierZoneGroup()
-                {
-                    SuppliersWithZones = new List<SupplierWithZones>
-                    {
-                        new SupplierWithZones
-                        {
-                            SupplierId = _allCarrierAccounts[defaultTod.SupplierId].CarrierAccountId,
-                            SupplierZoneIds = zoneIds.ToList()
-                        }
-                    }
-                }
+                Values = new List<object>() { _allCarrierAccounts[defaultTod.SupplierId].CarrierAccountId }
+            });
+
+            extraChargeRule.Criteria.FieldsValues.Add("SupplierZoneId", new StaticValues()
+            {
+                Values = zoneIds.Cast<Object>().ToList()
             });
 
             return GetSourceRule(extraChargeRule, defaultTod);
@@ -182,20 +177,14 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 DefinitionId = _saleRuleDefinitionId
             };
 
-            extraChargeRule.Criteria.FieldsValues.Add("CustomerId", new BusinessEntityValues
+            extraChargeRule.Criteria.FieldsValues.Add("CustomerId", new StaticValues
             {
-                BusinessEntityGroup = new SelectiveCustomerGroup
-                {
-                    CustomerIds = customers.ToList(),
-                }
+                Values = customers.Cast<Object>().ToList()
             });
-            extraChargeRule.Criteria.FieldsValues.Add("SaleZoneId", new BusinessEntityValues
+
+            extraChargeRule.Criteria.FieldsValues.Add("SaleZoneId", new StaticValues
             {
-                BusinessEntityGroup = new SelectiveSaleZoneGroup
-                {
-                    SellingNumberPlanId = Context.MigrationContext.DefaultSellingNumberPlanId,
-                    ZoneIds = zoneIds
-                }
+                Values = zoneIds.Cast<Object>().ToList()
             });
 
             return GetSourceRule(extraChargeRule, defaultTod);

@@ -114,21 +114,14 @@ namespace TOne.WhS.DBSync.Business.Migrators
                 case RuleType.Sale:
                     if (!_allCarrierAccounts.TryGetValue(defaultRule.CustomerId, out carrier))
                         throw new NullReferenceException(string.Format("customer not found. Customer Source Id {0}.", defaultRule.CustomerId));
-                    tariffRule.Criteria.FieldsValues.Add("CustomerId", new BusinessEntityValues()
+                    tariffRule.Criteria.FieldsValues.Add("CustomerId", new StaticValues()
                     {
-                        BusinessEntityGroup = new SelectiveCustomerGroup
-                        {
-                            CustomerIds = new List<int>() { carrier.CarrierAccountId }
-                        }
+                        Values = new List<object>() { carrier.CarrierAccountId }
                     });
                     if (includeZonesCriteria)
-                        tariffRule.Criteria.FieldsValues.Add("SaleZoneId", new BusinessEntityValues()
+                        tariffRule.Criteria.FieldsValues.Add("SaleZoneId", new StaticValues()
                         {
-                            BusinessEntityGroup = new SelectiveSaleZoneGroup
-                            {
-                                SellingNumberPlanId = Context.MigrationContext.DefaultSellingNumberPlanId,
-                                ZoneIds = GetZoneIds(rules, type).ToList()
-                            }
+                            Values = GetZoneIds(rules, type).Cast<Object>().ToList()
                         });
 
                     tariffRule.Settings.CurrencyId = carrier.CarrierAccountSettings == null ? Context.CurrencyId : carrier.CarrierAccountSettings.CurrencyId;
@@ -147,30 +140,19 @@ namespace TOne.WhS.DBSync.Business.Migrators
                     tariffRule.Description = string.Format("Migrated Supplier Tariff Rule {0}", Context.Counter++);
                     tariffRule.DefinitionId = _CostDefinitionId;
 
+                    tariffRule.Criteria.FieldsValues.Add("SupplierId", new StaticValues
+                        {
+                            Values = new List<object>() { carrier.CarrierAccountId }
+                        });
+
                     if (includeZonesCriteria)
                     {
-                        tariffRule.Criteria.FieldsValues.Add("SupplierZoneId", new BusinessEntityValues()
+                        tariffRule.Criteria.FieldsValues.Add("SupplierZoneId", new StaticValues()
                         {
-                            BusinessEntityGroup = new SelectiveSupplierZoneGroup()
-                            {
-                                SuppliersWithZones = new List<SupplierWithZones>()
-                            {
-                               new SupplierWithZones
-                                {
-                                    SupplierId = carrier.CarrierAccountId,
-                                    SupplierZoneIds =   GetZoneIds(rules, type).ToList()
-                                }
-                            }
-                            }
+                            Values = GetZoneIds(rules, type).Cast<Object>().ToList()
                         });
                     }
-                    else
-                    {
-                        tariffRule.Criteria.FieldsValues.Add("SupplierId", new StaticValues
-                        {
-                            Values = ((new List<int> { carrier.CarrierAccountId }).Cast<Object>()).ToList()
-                        });
-                    }
+
                     break;
             }
             SourceRule sourceRule = new SourceRule

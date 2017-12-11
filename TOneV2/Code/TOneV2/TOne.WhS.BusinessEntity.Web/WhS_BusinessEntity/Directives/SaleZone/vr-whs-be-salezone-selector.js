@@ -54,9 +54,9 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                 multipleselection = "ismultipleselection";
             }
 
-            return '<span  ng-show="ctrl.isSellingNumberPlanVisible">'
+            return '<span  ng-show="ctrl.isSellingNumberPlanVisible" vr-disabled="ctrl.isSellingNumberPlanDisabled">'
                    + ' <vr-whs-be-sellingnumberplan-selector  normal-col-num="{{ctrl.normalColNum}}" on-ready="ctrl.onSellingNumberReady" isrequired="ctrl.isrequired && ctrl.isSellingNumberPlanVisible"'
-                   + ' onselectionchanged="ctrl.onSellingNumberPlanSelectionchanged"></vr-whs-be-sellingnumberplan-selector>'
+                   + ' onselectionchanged="ctrl.onSellingNumberPlanSelectionchanged" selectedvalues="ctrl.selectedSellingNumberPlan"></vr-whs-be-sellingnumberplan-selector>'
                    + ' </span>'
                    + ' <vr-columns colnum="{{ctrl.normalColNum}}">'
                    + '<span vr-disabled="ctrl.isdisabled"><vr-select on-ready="ctrl.onSelectorReady"'
@@ -79,6 +79,8 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
 
         function saleZoneCtor(saleZoneSelectorCtrl, $scope, attrs) {
 
+            var areSaleZonesRequired = true;
+
             var filter;
             var availableZoneIds;
             var excludedZoneIds;
@@ -95,6 +97,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
             var availableSaleZones = [];
 
             var payloadSellingNumberPlanId;
+            var genericUIContext;
 
             function initializeController() {
 
@@ -128,12 +131,12 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                 };
 
 
-                saleZoneSelectorCtrl.search = function (nameFilter) {                
+                saleZoneSelectorCtrl.search = function (nameFilter) {
                     if (sellingNumberPlanId == undefined)
                         return function () { };
 
-                    if (sellingDirectiveApi != undefined && sellingDirectiveApi.getSelectedIds() == undefined && payloadSellingNumberPlanId==undefined) {
-                          return function () {  };
+                    if (sellingDirectiveApi != undefined && sellingDirectiveApi.getSelectedIds() == undefined && payloadSellingNumberPlanId == undefined) {
+                        return function () { };
                     }
                     if (filter == undefined)
                         filter = {};
@@ -157,7 +160,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
 
                 saleZoneSelectorCtrl.isSaleZoneRequired = function () {
                     if (saleZoneSelectorCtrl.isSellingNumberPlanVisible)
-                        return sellingDirectiveApi.getSelectedIds() != undefined;
+                        return sellingDirectiveApi.getSelectedIds() != undefined && areSaleZonesRequired;
                     else
                         return saleZoneSelectorCtrl.isrequired;
                 };
@@ -174,7 +177,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
 
                     selectorApi.clearDataSource();
 
-                    var selectedIds;                  
+                    var selectedIds;
 
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
@@ -182,6 +185,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                         filter = payload.filter;
                         availableZoneIds = payload.availableZoneIds;
                         excludedZoneIds = payload.excludedZoneIds;
+                        genericUIContext = payload.genericUIContext;
                     }
 
                     if (payloadSellingNumberPlanId != undefined) {
@@ -213,6 +217,79 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
 
                     else {
                         saleZoneSelectorCtrl.isSellingNumberPlanVisible = true;
+
+                        if (genericUIContext != undefined && genericUIContext.getFields != undefined && typeof (genericUIContext.getFields) == "function") {
+                            var fields = genericUIContext.getFields();
+                            if (fields != undefined) {
+                                for (var x = 0; x < fields.length; x++) {
+                                    var currentField = fields[x];
+                                    if (currentField != undefined && currentField.FieldType != undefined && currentField.FieldType.BusinessEntityDefinitionId != undefined
+                                        && currentField.FieldType.BusinessEntityDefinitionId.toUpperCase() == "BA5A57BD-1F03-440F-A469-463A48762B8F") {
+
+                                        genericUIContext.onvaluechanged = function (field, selectedValue) {
+                                            if (field.FieldType.BusinessEntityDefinitionId.toUpperCase() == "BA5A57BD-1F03-440F-A469-463A48762B8F") {
+                                                areSaleZonesRequired = true;
+
+                                                if (selectedValue == undefined)
+                                                    return;
+
+                                                if (selectedValue instanceof Array) {
+                                                    switch (selectedValue.length) {
+                                                        case 0:
+                                                            saleZoneSelectorCtrl.isSellingNumberPlanDisabled = false;
+                                                            saleZoneSelectorCtrl.isdisabled = false;
+                                                            break;
+
+                                                        default:
+                                                            areSaleZonesRequired = false;
+                                                            saleZoneSelectorCtrl.isSellingNumberPlanDisabled = true;
+                                                            var hasDifferentSNPs = false;
+
+                                                            var newSellingNumberPlanId = selectedValue[0].SellingNumberPlanId;
+
+                                                            if (selectedValue.length > 1) {
+                                                                for (var x = 1; x < selectedValue.length; x++) {
+                                                                    var currentValue = selectedValue[x];
+                                                                    if (currentValue.SellingNumberPlanId != newSellingNumberPlanId) {
+                                                                        hasDifferentSNPs = true;
+                                                                    }
+                                                                }
+                                                            }
+         
+                                                            if (hasDifferentSNPs) {
+                                                                saleZoneSelectorCtrl.isdisabled = true;
+                                                                saleZoneSelectorCtrl.selectedSellingNumberPlan = undefined;
+                                                                selectorApi.clearDataSource();
+                                                            }
+                                                            else {
+                                                                saleZoneSelectorCtrl.isdisabled = false;
+                                                                var selectedSellingNumberPlan = saleZoneSelectorCtrl.selectedSellingNumberPlan;
+                                                                if (selectedSellingNumberPlan != undefined) {
+
+                                                                    if (selectedSellingNumberPlan.SellingNumberPlanId == newSellingNumberPlanId) {
+
+                                                                    } else {
+                                                                        sellingDirectiveApi.setSelectedIds(newSellingNumberPlanId);
+                                                                        selectorApi.clearDataSource();
+                                                                    }
+                                                                }
+                                                                else {
+                                                                    sellingDirectiveApi.setSelectedIds(newSellingNumberPlanId);
+                                                                    selectorApi.clearDataSource();
+                                                                }
+                                                            }
+                                                           
+                                                            break;
+                                                    }
+                                                }
+                                            }
+                                        };
+
+                                        break;
+                                    }
+                                }
+                            }
+                        }
 
                         if (selectedIds != undefined) {
 
@@ -260,7 +337,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
                                             setSelectedSaleZonesPromiseDeferred.resolve();
                                         });
 
-                                    })
+                                    });
 
 
                                 });
@@ -275,7 +352,7 @@ app.directive('vrWhsBeSalezoneSelector', ['WhS_BE_SaleZoneAPIService', 'VRCommon
 
                             });
 
-                            return loadSellingNumberPlanSectionPromiseDeferred.promise
+                            return loadSellingNumberPlanSectionPromiseDeferred.promise;
 
                         }
 

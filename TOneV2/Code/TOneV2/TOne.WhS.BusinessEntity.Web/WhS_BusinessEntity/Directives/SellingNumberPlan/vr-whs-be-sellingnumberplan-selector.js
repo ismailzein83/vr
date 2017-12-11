@@ -108,7 +108,7 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
                     }
 
                     return WhS_BE_SellingNumberPlanAPIService.GetSellingNumberPlans().then(function (response) {
-                        ctrl.datasource.length = 0;                      
+                        ctrl.datasource.length = 0;
                         angular.forEach(response, function (itm) {
                             ctrl.datasource.push(itm);
                         });
@@ -124,6 +124,13 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
 
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('SellingNumberPlanId', attrs, ctrl);
+                };
+
+                api.setSelectedIds = function (selectedIds) {
+                    setTimeout(function () {
+                        VRUIUtilsService.setSelectedValues(selectedIds, 'SellingNumberPlanId', attrs, ctrl);
+                        UtilsService.safeApply($scope);
+                    });
                 };
 
                 if (ctrl.onReady != null)
