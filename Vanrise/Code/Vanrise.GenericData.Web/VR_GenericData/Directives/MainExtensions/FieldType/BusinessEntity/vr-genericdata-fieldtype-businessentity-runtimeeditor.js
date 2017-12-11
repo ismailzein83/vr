@@ -56,13 +56,13 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
             }
 
             if (attrs.selectionmode == "dynamic") {
-                return '<vr-directivewrapper directive="selector.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="selector.onDirectiveReady" '
+                return '<vr-directivewrapper directive="selector.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="selector.onDirectiveReady" onselectionchanged="selector.onselectionchanged" '
                 + multipleselection + ' isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>'
                 + '<vr-row removeline> <vr-columns width="fullrow"> <vr-section title="{{scopeModel.fieldTitle}}" ng-if="scopeModel.showInDynamicMode"><vr-directivewrapper directive="dynamic.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="dynamic.onDirectiveReady" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>' +
                 '</vr-section> </vr-columns> </vr-row> ';
             }
             else {
-                return '<vr-directivewrapper directive="selector.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="selector.onDirectiveReady" '
+                return '<vr-directivewrapper directive="selector.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="selector.onDirectiveReady" onselectionchanged="selector.onselectionchanged" '
                 + multipleselection + ' isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>'
                 + '<vr-section title="{{scopeModel.fieldTitle}}" ng-if="scopeModel.showInDynamicMode"><vr-directivewrapper directive="dynamic.directive" normal-col-num="{{scopeModel.calculatedColNum}}" on-ready="dynamic.onDirectiveReady" isrequired="runtimeEditorCtrl.isrequired"></vr-directivewrapper>' +
                 '</vr-section>';
@@ -71,7 +71,6 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
         }
 
         function businessEntityCtor(ctrl, $scope, $attrs) {
-
             var missingGroupSelectorUIControl;
 
             function initializeController() {
@@ -87,13 +86,16 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                     var fieldType;
                     var fieldValue;
                     var fieldTitle;
+                    var genericUIContext;
                     if (payload != undefined) {
                         $scope.scopeModel.fieldTitle = payload.fieldTitle;
                         fieldType = payload.fieldType;
                         fieldValue = payload.fieldValue;
+                        genericUIContext = payload.genericUIContext;
                     }
 
                     if (fieldType != undefined) {
+                        var pendingNotifications = [];
 
                         var promises = [];
 
@@ -130,7 +132,6 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
 
                                         VRUIUtilsService.callDirectiveLoad($scope.dynamic.directiveAPI, payload, $scope.dynamic.directiveLoadPromiseDeferred);
                                     });
-
                                 }
                                 else {
                                     $scope.selector = {};
@@ -141,6 +142,12 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                                         $scope.selector.directiveReadyPromiseDeferred.resolve();
                                     };
 
+                                    $scope.selector.onselectionchanged = function (selectedvalue) {
+                                        if (genericUIContext != undefined && genericUIContext.notifyValueChanged != undefined && typeof (genericUIContext.notifyValueChanged) == "function") {
+                                            genericUIContext.notifyValueChanged(selectedvalue);
+                                        }
+                                    };
+
                                     $scope.selector.directiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                                     innerSectionPromises.push($scope.selector.directiveLoadPromiseDeferred.promise);
 
@@ -148,7 +155,8 @@ app.directive('vrGenericdataFieldtypeBusinessentityRuntimeeditor', ['UtilsServic
                                         var payload = {
                                             businessEntityDefinitionId: fieldType.BusinessEntityDefinitionId,
                                             fieldTitle: $scope.scopeModel.fieldTitle,
-                                            beRuntimeSelectorFilter: fieldType.BERuntimeSelectorFilter
+                                            beRuntimeSelectorFilter: fieldType.BERuntimeSelectorFilter,
+                                            genericUIContext: genericUIContext
                                         };
                                         if (fieldValue != undefined) {
                                             payload.selectedIds = ($attrs.selectionmode == "dynamic" && missingGroupSelectorUIControl) ? fieldValue.Values : fieldValue;

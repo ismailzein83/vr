@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericRuleCriteriaDirective.$inject = ['VR_GenericData_DataRecordFieldAPIService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService'];
+    GenericRuleCriteriaDirective.$inject = ['VR_GenericData_DataRecordFieldAPIService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VR_GenericData_GenericUIService'];
 
-    function GenericRuleCriteriaDirective(VR_GenericData_DataRecordFieldAPIService, UtilsService, VRNotificationService, VRUIUtilsService) {
+    function GenericRuleCriteriaDirective(VR_GenericData_DataRecordFieldAPIService, UtilsService, VRNotificationService, VRUIUtilsService, VR_GenericData_GenericUIService) {
 
         return {
             restrict: 'E',
@@ -28,6 +28,7 @@
             this.initializeController = initializeController;
 
             var accessibility;
+            var genericUIObj;
 
             function initializeController() {
                 $scope.criteriaDefinitionFields;
@@ -61,8 +62,9 @@
                 api.load = function (payload) {
                     if (payload == undefined || payload.criteriaDefinitionFields == undefined) {
                         return;
-                    }                    
-
+                    }
+                    
+                    genericUIObj = VR_GenericData_GenericUIService.createGenericUIObj(payload.criteriaDefinitionFields);
                     $scope.criteriaDefinitionFields = payload.criteriaDefinitionFields;
                     var criteriaFieldsValues = payload.criteriaFieldsValues;
                     var criteriaAccessibility = payload.criteriaAccessibility;
@@ -96,6 +98,8 @@
                                 }
                             }
 
+                            field.genericUIContext = genericUIObj.getFieldContext(field);  //VR_GenericData_GenericUIService.buildGenericUIContext($scope.criteriaDefinitionFields, field);
+
                             field.runtimeEditor.onReadyPromiseDeferred.promise.then(function () {
                                 var payload = {
                                     fieldTitle: field.Title,
@@ -103,7 +107,8 @@
                                     fieldValue: (criteriaFieldsValues != undefined) ?
                                         criteriaFieldsValues[field.FieldName] :
                                         (criteriaPredefinedData != undefined ?
-                                        criteriaPredefinedData[field.FieldName] : undefined)
+                                        criteriaPredefinedData[field.FieldName] : undefined),
+                                    genericUIContext: field.genericUIContext
                                 };
                                 VRUIUtilsService.callDirectiveLoad(field.runtimeEditor.directiveAPI, payload, field.runtimeEditor.loadPromiseDeferred);
                             });
@@ -120,7 +125,9 @@
                     });
                     promises.push(loadFieldTypeConfigPromise);
 
-                    return UtilsService.waitMultiplePromises(promises);
+                    return UtilsService.waitMultiplePromises(promises).then(function () {
+                            genericUIObj.loadingFinish();
+                    });
                 };
 
                 if (ctrl.onReady != null)

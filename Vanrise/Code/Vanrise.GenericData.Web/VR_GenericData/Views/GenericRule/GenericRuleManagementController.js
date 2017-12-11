@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    genericRuleManagementController.$inject = ['$scope', 'VRNavigationService', 'VR_GenericData_GenericRule', 'VR_GenericData_GenericRuleAPIService', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_GenericData_GenericRuleTypeConfigAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRDateTimeService'];
+    genericRuleManagementController.$inject = ['$scope', 'VRNavigationService', 'VR_GenericData_GenericRule', 'VR_GenericData_GenericRuleAPIService', 'VR_GenericData_GenericRuleDefinitionAPIService', 'VR_GenericData_DataRecordFieldAPIService', 'VR_GenericData_GenericRuleTypeConfigAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRDateTimeService', 'VR_GenericData_GenericUIService'];
 
-    function genericRuleManagementController($scope, VRNavigationService, VR_GenericData_GenericRule, VR_GenericData_GenericRuleAPIService, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_DataRecordFieldAPIService, VR_GenericData_GenericRuleTypeConfigAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VRDateTimeService) {
+    function genericRuleManagementController($scope, VRNavigationService, VR_GenericData_GenericRule, VR_GenericData_GenericRuleAPIService, VR_GenericData_GenericRuleDefinitionAPIService, VR_GenericData_DataRecordFieldAPIService, VR_GenericData_GenericRuleTypeConfigAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VRDateTimeService, VR_GenericData_GenericUIService) {
 
         var gridAPI;
 
@@ -12,7 +12,7 @@
 
         var settingsFilterDirectiveAPI;
         var settingsFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-
+        var genericUIObj;
 
         loadParameters();
         defineScope();
@@ -190,6 +190,7 @@
                 function getRuleDefinition() {
                     return VR_GenericData_GenericRuleDefinitionAPIService.GetGenericRuleDefinition(genericRuleDefinitionAPI.getSelectedIds()).then(function (response) {
                         ruleDefinition = response;
+                        genericUIObj = VR_GenericData_GenericUIService.createGenericUIObj(ruleDefinition.CriteriaDefinition.Fields);
                     });
                 }
                 function getFieldTypeConfigs() {
@@ -215,10 +216,16 @@
 
                     filter.onDirectiveReady = function (api) {
                         filter.directiveAPI = api;
+
+                        criteriaField.genericUIContext = genericUIObj.getFieldContext(criteriaField); //VR_GenericData_GenericUIService.buildGenericUIContext(ruleDefinition.CriteriaDefinition.Fields, criteriaField);
+
                         var directivePayload = {
                             fieldTitle: criteriaField.Title,
-                            fieldType: criteriaField.FieldType
+                            fieldType: criteriaField.FieldType,
+                            genericUIContext: criteriaField.genericUIContext
                         };
+
+
                         VRUIUtilsService.callDirectiveLoad(api, directivePayload, filter.directiveLoadDeferred);
                     };
 
@@ -256,7 +263,9 @@
                     });
                 }
 
-                return UtilsService.waitMultiplePromises(promises);
+                return UtilsService.waitMultiplePromises(promises).then(function () {
+                    genericUIObj.loadingFinish();
+                });
             }
 
             return UtilsService.waitMultipleAsyncOperations([setStaticData, loadFilters]).catch(function (error) {
