@@ -170,6 +170,16 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         VRModalService.showModal('/Client/Modules/Security/Views/User/EditProfile.html', null, modalSettings);
     };
 
+    $scope.openEditMyLanguageModal = function () {
+        var modalSettings = {
+        };
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.title = "Edit My Language";
+            modalScope.onLanguageUpdated = function (response) {
+        };
+        };
+    VRModalService.showModal('/Client/Modules/Security/Views/User/EditMyLanguage.html', null, modalSettings);
+        };
     $scope.menuItemsCurrent = null;
     $scope.setIndex = function (item) {
         $('.vr-menu-item').slideUp();
