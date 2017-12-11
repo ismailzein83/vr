@@ -887,7 +887,7 @@ namespace TOne.WhS.BusinessEntity.Business
             var priceListName = new StringBuilder(_carrierAccountManager.GetCustomerPricelistFileNamePattern(carrierAccountId));
             priceListName.Replace("#CustomerName#", customerName);
             priceListName.Replace("#ProfileName#", profileName);
-            priceListName.Replace("#PricelistDate#", priceListDate.ToString("yyyy-MM-dd_HH-mm-ss"));
+            priceListName.Replace("#PricelistDate#", priceListDate.ToString("yyyy-MM-dd"));
             priceListName.Replace("#PriclistType#", salePriceListType.ToString());
 
             priceListName = priceListName.Append(extension);
@@ -1357,7 +1357,7 @@ namespace TOne.WhS.BusinessEntity.Business
             SalePriceListInputContext salePriceListContext = new SalePriceListInputContext
             {
                 CustomerPriceListChange = customerPriceListChange,
-                EffectiveDate = salePriceList.CreatedTime,
+                EffectiveDate = salePriceList.EffectiveOn,
                 SellingNumberPlanId = sellingNumberPlanId,
                 ProcessInstanceId = salePriceList.ProcessInstanceId,
                 UserId = salePriceList.UserId,
