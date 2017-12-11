@@ -256,9 +256,10 @@ namespace TOne.WhS.BusinessEntity.Business
                     for (int i = 0; i < filter.Filters.Count(); i++)
                     {
                         var saleZoneFilterContext = new SaleZoneFilterContext() { SaleZone = zone, CustomData = customObjects[i] };
-                        if (filter.Filters.ElementAt(i).IsExcluded(saleZoneFilterContext))
-                            return false;
+                        bool filterResult = filter.Filters.ElementAt(i).IsExcluded(saleZoneFilterContext);
                         customObjects[i] = saleZoneFilterContext.CustomData;
+                        if (filterResult)
+                            return false;
                     }
                 }
 
