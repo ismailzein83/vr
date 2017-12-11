@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrCommonVrlocalizationlanguageSelector', ['VR_AccountManager_AccountManagerAPIService', 'UtilsService', 'VRUIUtilsService', 'VRCommon_VRLocalizationLanguageAPIService',
-    function (VR_AccountManager_AccountManagerAPIService, UtilsService, VRUIUtilsService, VRCommon_VRLocalizationLanguageAPIService) {
+app.directive('vrCommonVrlocalizationlanguageSelector', ['UtilsService', 'VRUIUtilsService', 'VRCommon_VRLocalizationLanguageAPIService',
+    function (UtilsService, VRUIUtilsService, VRCommon_VRLocalizationLanguageAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -89,6 +89,7 @@ app.directive('vrCommonVrlocalizationlanguageSelector', ['VR_AccountManager_Acco
                     VRCommon_VRLocalizationLanguageAPIService.GetVRLocalizationLanguageInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                        
                         if (response != null) {
+                            console.log(response);
                             for (var i = 0; i < response.length; i++)
                                 ctrl.datasource.push(response[i]);
                             if (selectedIds != undefined)
