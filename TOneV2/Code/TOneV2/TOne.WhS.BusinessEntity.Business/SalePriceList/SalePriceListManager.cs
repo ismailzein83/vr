@@ -734,7 +734,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     closedCodeOption == IncludeClosedEntitiesEnum.UntilClosureDate));
 
                 filteredCodeNotifications.AddRange(changedClosedCodes.Where(codeNotification =>
-                    closedCodeOption == IncludeClosedEntitiesEnum.OnlyFirstTime));
+                    closedCodeOption != IncludeClosedEntitiesEnum.Never));
 
                 //if all codes are filtered we will not add the related zone.
                 if (filteredCodeNotifications.Any())
