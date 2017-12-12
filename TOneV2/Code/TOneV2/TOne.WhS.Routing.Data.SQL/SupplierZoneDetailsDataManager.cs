@@ -71,7 +71,8 @@ namespace TOne.WhS.Routing.Data.SQL
 
         public IEnumerable<SupplierZoneDetail> GetSupplierZoneDetails()
         {
-            return GetItemsText(query_GetSupplierZoneDetails, SupplierZoneDetailMapper, null);
+            string query = query_GetSupplierZoneDetails.Replace("#FILTER#", string.Empty);
+            return GetItemsText(query, SupplierZoneDetailMapper, null);
         }
 
         public IEnumerable<SupplierZoneDetail> GetFilteredSupplierZoneDetailsBySupplierZone(IEnumerable<long> supplierZoneIds)
@@ -84,6 +85,12 @@ namespace TOne.WhS.Routing.Data.SQL
                 dtPrm.Value = dtZoneIds;
                 cmd.Parameters.Add(dtPrm);
             });
+        }
+
+        public List<SupplierZoneDetail> GetSupplierZoneDetailsAfterVersionNumber(int versionNumber)
+        {
+            string query = query_GetSupplierZoneDetails.Replace("#FILTER#", string.Format("WHERE VersionNumber > {0}", versionNumber));
+            return GetItemsText(query, SupplierZoneDetailMapper, null);
         }
 
         public void UpdateSupplierZoneDetails(List<SupplierZoneDetail> supplierZoneDetails)

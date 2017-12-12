@@ -31,7 +31,8 @@ namespace TOne.WhS.Routing.Data.SQL
         }
         public IEnumerable<Entities.CustomerZoneDetail> GetCustomerZoneDetails()
         {
-            return GetItemsText(query_GetCustomerZoneDetails, CustomerZoneDetailMapper, null);
+            string query = query_GetCustomerZoneDetails.Replace("#FILTER#", string.Empty);
+            return GetItemsText(query, CustomerZoneDetailMapper, null);
         }
         public object FinishDBApplyStream(object dbApplyStream)
         {
@@ -97,6 +98,11 @@ namespace TOne.WhS.Routing.Data.SQL
                 dtPrm.Value = dtCustomerZones;
                 cmd.Parameters.Add(dtPrm);
             });
+        }
+        public List<CustomerZoneDetail> GetCustomerZoneDetailsAfterVersionNumber(int versionNumber)
+        {
+            string query = query_GetCustomerZoneDetails.Replace("#FILTER#", string.Format("WHERE VersionNumber > {0}", versionNumber));
+            return GetItemsText(query, CustomerZoneDetailMapper, null);
         }
 
         public void UpdateCustomerZoneDetails(List<CustomerZoneDetail> customerZoneDetails)
@@ -190,7 +196,8 @@ namespace TOne.WhS.Routing.Data.SQL
                                                   ,zd.[RateSource]
                                                   ,zd.[SaleZoneServiceIds]
                                                   ,zd.[VersionNumber]
-                                              FROM [dbo].[CustomerZoneDetail] zd with(nolock)";
+                                              FROM [dbo].[CustomerZoneDetail] zd with(nolock)
+                                              #FILTER#";
 
         const string query_GetFilteredCustomerZoneDetailsByZone = @"                                                       
                                             SELECT zd.[CustomerId]

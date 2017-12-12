@@ -62,6 +62,18 @@ namespace TOne.WhS.Routing.Business
             if (partialRouteInfo.NextOpenOrCloseRuleTime.HasValue && partialRouteInfo.NextOpenOrCloseRuleTime < effectiveDate)
                 return true;
 
+            RoutingEntityDetails beRoutingEntityDetails = routingEntityDetailsDataManager.GetRoutingEntityDetails(RoutingEntityType.BERouteInfo);
+            beRoutingEntityDetails.ThrowIfNull("beRoutingEntityDetails");
+
+            BERouteInfo beRouteInfo = beRoutingEntityDetails.RoutingEntityInfo.CastWithValidate<BERouteInfo>("beRouteInfo");
+            beRouteInfo.ThrowIfNull("beRouteInfo");
+            beRouteInfo.SaleRateRouteInfo.ThrowIfNull("beRouteInfo.SaleRateRouteInfo");
+            beRouteInfo.SupplierRateRouteInfo.ThrowIfNull("beRouteInfo.SupplierRateRouteInfo");
+
+            if (beRouteInfo.SaleRateRouteInfo.LatestVersionNumber > partialRouteInfo.LatestSaleRateVersionNumber ||
+                beRouteInfo.SupplierRateRouteInfo.LatestVersionNumber > partialRouteInfo.LatestCostRateVersionNumber)
+                return true;
+
             return false;
         }
     }

@@ -244,5 +244,11 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         {
             throw new NotImplementedException();
         }
+
+
+        public List<SupplierZoneDetail> GetSupplierZoneDetailsAfterVersionNumber(int versionNumber)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

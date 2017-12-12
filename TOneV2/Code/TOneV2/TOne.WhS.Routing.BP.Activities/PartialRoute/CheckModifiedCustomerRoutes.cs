@@ -17,7 +17,12 @@ namespace TOne.WhS.Routing.BP.Activities
         public BaseQueue<List<CustomerRouteData>> CustomerRoutesDataQueueOutput { get; set; }
     }
 
-    public sealed class CheckModifiedCustomerRoutes : DependentAsyncActivity<CheckModifiedCustomerRoutesInput>
+    public class CheckModifiedCustomerRoutesOutput
+    {
+        public bool HasModifiedCustomerRoute { get; set; }
+    }
+
+    public sealed class CheckModifiedCustomerRoutes : DependentAsyncActivity<CheckModifiedCustomerRoutesInput, CheckModifiedCustomerRoutesOutput>
     {
         [RequiredArgument]
         public InArgument<BaseQueue<PartialCustomerRoutesBatch>> CustomerRoutesBatchQueueInput { get; set; }
@@ -25,13 +30,17 @@ namespace TOne.WhS.Routing.BP.Activities
         [RequiredArgument]
         public InArgument<BaseQueue<List<CustomerRouteData>>> CustomerRoutesDataQueueOutput { get; set; }
 
-        protected override void DoWork(CheckModifiedCustomerRoutesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
+        [RequiredArgument]
+        public OutArgument<bool> HasModifiedCustomerRoute { get; set; }
+
+        protected override CheckModifiedCustomerRoutesOutput DoWorkWithResult(CheckModifiedCustomerRoutesInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             BaseQueue<PartialCustomerRoutesBatch> customerRoutesBatchQueueInput = inputArgument.CustomerRoutesBatchQueueInput;
             BaseQueue<List<CustomerRouteData>> customerRoutesDataQueueOutput = inputArgument.CustomerRoutesDataQueueOutput;
             CustomerRouteManager customerRouteManager = new CustomerRouteManager();
 
             long numberOfRoutesToUpdate = 0;
+            bool hasModifiedCustomerRoute = false;
 
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
@@ -59,8 +68,10 @@ namespace TOne.WhS.Routing.BP.Activities
                     });
                 } while (!ShouldStop(handle) && hasItem);
             });
-
+            hasModifiedCustomerRoute = numberOfRoutesToUpdate > 0;
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Checking Modified Routes is done. {0} Routes are modified", numberOfRoutesToUpdate);
+
+            return new CheckModifiedCustomerRoutesOutput() { HasModifiedCustomerRoute = hasModifiedCustomerRoute };
         }
 
         private bool AreEquals(CustomerRouteData currentCustomerRouteData, CustomerRouteData previousCustomerRouteData)
@@ -98,6 +109,11 @@ namespace TOne.WhS.Routing.BP.Activities
                 CustomerRoutesBatchQueueInput = this.CustomerRoutesBatchQueueInput.Get(context),
                 CustomerRoutesDataQueueOutput = this.CustomerRoutesDataQueueOutput.Get(context)
             };
+        }
+
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, CheckModifiedCustomerRoutesOutput result)
+        {
+            this.HasModifiedCustomerRoute.Set(context, result.HasModifiedCustomerRoute);
         }
     }
 }

@@ -13,6 +13,7 @@ namespace TOne.WhS.Routing.Data
         IEnumerable<CustomerZoneDetail> GetCustomerZoneDetails();
         IEnumerable<CustomerZoneDetail> GetFilteredCustomerZoneDetailsByZone(IEnumerable<long> saleZoneIds);
         List<CustomerZoneDetail> GetCustomerZoneDetails(HashSet<CustomerSaleZone> customerSaleZones);
+        List<CustomerZoneDetail> GetCustomerZoneDetailsAfterVersionNumber(int versionNumber);
         void UpdateCustomerZoneDetails(List<CustomerZoneDetail> customerZoneDetails);
     }
 }

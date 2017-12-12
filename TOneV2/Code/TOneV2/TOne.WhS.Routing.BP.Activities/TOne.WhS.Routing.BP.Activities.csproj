@@ -84,6 +84,10 @@
     <Reference Include="Vanrise.Rules">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Rules.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.Data.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Rules.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.Entities.dll</HintPath>
@@ -114,6 +118,7 @@
     <Compile Include="EntitiesUpdater\GetBERouteInfo.cs" />
     <Compile Include="FillRoutingEntityDetails.cs" />
     <Compile Include="EntitiesUpdater\CheckModifiedCustomerZoneDetails.cs" />
+    <Compile Include="InitializeRouteProcess.cs" />
     <Compile Include="PartialRoute\CheckModifiedCustomerRoutes.cs" />
     <Compile Include="PartialRoute\BuildPartialCustomerRoutes.cs" />
     <Compile Include="BuildCustomerRoutes.cs" />

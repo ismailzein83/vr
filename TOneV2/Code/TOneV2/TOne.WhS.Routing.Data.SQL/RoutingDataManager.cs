@@ -206,6 +206,11 @@ namespace TOne.WhS.Routing.Data.SQL
                                                         CREATE CLUSTERED INDEX [IX_SupplierZoneDetail_SupplierZoneId] ON [dbo].[SupplierZoneDetail] 
                                                         (
 	                                                        [SupplierZoneId] ASC
+                                                        );
+
+                                                        CREATE NONCLUSTERED INDEX [IX_SupplierZoneDetail_VersionNumber] ON [dbo].[SupplierZoneDetail] 
+                                                        (
+	                                                        [VersionNumber] DESC
                                                         );";
 
         const string query_CustomerZoneDetailTable = @" CREATE TABLE [dbo].[CustomerZoneDetail](
@@ -222,6 +227,10 @@ namespace TOne.WhS.Routing.Data.SQL
                                                         CREATE CLUSTERED INDEX [IX_CustomerZoneDetail_SaleZoneId] ON [dbo].[CustomerZoneDetail] 
                                                         (
 	                                                        [SaleZoneId] ASC
+                                                        );
+                                                        CREATE NONCLUSTERED INDEX [IX_CustomerZoneDetail_VersionNumber] ON [dbo].[CustomerZoneDetail] 
+                                                        (
+	                                                        [VersionNumber] DESC
                                                         );";
 
         const string query_CodeSaleZoneTable = @"CREATE TABLE [dbo].[CodeSaleZone](
