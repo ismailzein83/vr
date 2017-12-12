@@ -180,6 +180,7 @@ function GridDrillDownTabs(UtilsService, drillDownDefinitions, gridAPI, gridMenu
 
         drillDownDirectiveTab.drillDownDefinitionId = drillDownDefinition.drillDownDefinitionId;
         drillDownDirectiveTab.title = drillDownDefinition.title;
+        drillDownDirectiveTab.localizedtitle = drillDownDefinition.localizedtitle;
         drillDownDirectiveTab.directive = drillDownDefinition.directive;
         drillDownDirectiveTab.loadDirective = function (directiveAPI) {
             return drillDownDefinition.loadDirective(directiveAPI, dataItem);

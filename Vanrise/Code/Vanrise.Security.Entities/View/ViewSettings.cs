@@ -17,6 +17,9 @@ namespace Vanrise.Security.Entities
         {
             return true;
         }
+        public string ViewTitleResourceKey { get; set; }
+        public string ViewNameResourceKey { get; set; }
+
     }
 
     public interface IViewUserAccessContext

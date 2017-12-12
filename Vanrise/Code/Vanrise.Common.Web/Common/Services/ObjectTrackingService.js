@@ -8,13 +8,16 @@
         return ({
             getObjectTrackingGridTitle: getObjectTrackingGridTitle,
             registerActionHistory: registerActionHistory,
-            getActionTrackIfExist: getActionTrackIfExist
+            getActionTrackIfExist: getActionTrackIfExist,
+            getObjectTrackingGridLocalizedTitle: getObjectTrackingGridLocalizedTitle
         });
 
         function getObjectTrackingGridTitle() {
             return "History";
         }
-
+        function getObjectTrackingGridLocalizedTitle() {
+            return "VRRes.History.VREnd";
+        }
 
         function getActionTrackIfExist(actionHistoryName) {
             for (var i = 0; i < historyActions.length; i++) {

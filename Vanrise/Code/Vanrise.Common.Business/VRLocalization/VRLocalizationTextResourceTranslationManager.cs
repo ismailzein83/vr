@@ -108,9 +108,9 @@ namespace Vanrise.Common.Business
                        foreach (var resourcesTranslation in allResourcesTranslations)
                        {
                            var vrLocalizationTextResourceTranslationsById = allResourceTranslationsByLanguageId.GetOrCreateItem(resourcesTranslation.Value.LanguageId);
-                           if (!vrLocalizationTextResourceTranslationsById.ContainsKey(resourcesTranslation.Key))
+                           if (!vrLocalizationTextResourceTranslationsById.ContainsKey(resourcesTranslation.Value.ResourceId))
                            {
-                               vrLocalizationTextResourceTranslationsById.Add(resourcesTranslation.Key, resourcesTranslation.Value);
+                               vrLocalizationTextResourceTranslationsById.Add(resourcesTranslation.Value.ResourceId, resourcesTranslation.Value);
                            }
                        }
                    }

@@ -80,6 +80,7 @@ app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 
             var drillDownDefinition = {};
 
             drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
+            drillDownDefinition.localizedtitle =  VRCommon_ObjectTrackingService.getObjectTrackingGridLocalizedTitle();
             drillDownDefinition.directive = "vr-common-objecttracking-grid";
 
 
@@ -109,6 +110,7 @@ app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 
             var drillDownDefinition = {};
 
             drillDownDefinition.title = "Cities";
+            drillDownDefinition.localizedtitle = "VRRes.Cities.VREnd";
             drillDownDefinition.directive = "vr-common-city-grid";
             drillDownDefinition.parentMenuActions = [{
                 name: "New City",
@@ -142,6 +144,8 @@ app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 
             var drillDownDefinition = {};
 
             drillDownDefinition.title = "Cities";
+            drillDownDefinition.localizedtitle = "VRRes.Cities.VREnd";
+
             drillDownDefinition.directive = "vr-common-city-grid";
             drillDownDefinition.parentMenuActions = [{
                 name: "New City",
