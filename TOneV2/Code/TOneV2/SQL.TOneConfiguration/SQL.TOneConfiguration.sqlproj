@@ -137,6 +137,7 @@
     <Folder Include="genericdata\User Defined Types\" />
     <Folder Include="VR_AccountManager\" />
     <Folder Include="VR_AccountManager\Tables\" />
+    <Folder Include="VR_AccountManager\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -703,6 +704,14 @@
     <Build Include="sec\Stored Procedures\sp_UserFailedLogin_DeleteByUserId.sql" />
     <Build Include="sec\Stored Procedures\sp_User_UpdateDisableTill.sql" />
     <Build Include="sec\Stored Procedures\sp_User_Unlock.sql" />
+    <Build Include="rules\Tables\RuleChangedForProcessing.sql" />
+    <Build Include="VR_AccountManager\Stored Procedures\sp_AccountManagerAssignment_Update.sql" />
+    <Build Include="VR_AccountManager\Stored Procedures\sp_AccountManagerAssignment_Insert.sql" />
+    <Build Include="VR_AccountManager\Stored Procedures\sp_AccountManagerAssignment_GetAll.sql" />
+    <Build Include="VR_AccountManager\Stored Procedures\sp_AccountManager_Update.sql" />
+    <Build Include="VR_AccountManager\Stored Procedures\sp_AccountManager_Insert.sql" />
+    <Build Include="VR_AccountManager\Stored Procedures\sp_AccountManager_GetAll.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_UpdateLanguage.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

@@ -9,5 +9,5 @@ CREATE PROCEDURE [rules].[sp_RuleChanged_DeleteByType]
 	@RuleTypeID INT
 AS
 BEGIN
-	DELETE FROM [rules].[RuleChanged] WHERE [RuleTypeID] = @RuleTypeID
+	DELETE FROM [rules].[RuleChangedForProcessing] WHERE [RuleTypeID] = @RuleTypeID
 END
