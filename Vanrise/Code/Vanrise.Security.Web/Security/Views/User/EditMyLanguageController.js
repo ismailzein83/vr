@@ -70,7 +70,7 @@
             VR_Sec_UserAPIService.UpdateMyLanguage(userSetting).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Language", response)) {
                     if ($scope.onLanguageUpdated != undefined) {
-                        $scope.onLanguageUpdated(response);
+                        $scope.onLanguageUpdated(response.UpdatedObject);
                     }
                     $scope.modalContext.closeModal();
                 }
