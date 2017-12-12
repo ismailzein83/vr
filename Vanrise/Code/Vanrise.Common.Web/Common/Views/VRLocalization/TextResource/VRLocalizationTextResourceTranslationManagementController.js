@@ -82,7 +82,7 @@
                     LanguageIds: languageSelectorAPI.getSelectedIds(),
                  },
                  textResourceId: textResourceId,
-            }
+            };
             return gridPayload;
         }
 

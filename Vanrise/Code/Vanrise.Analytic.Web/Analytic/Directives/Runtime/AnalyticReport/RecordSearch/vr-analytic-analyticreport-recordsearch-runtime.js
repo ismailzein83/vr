@@ -273,8 +273,8 @@
                 $scope.drSearchPageStorageSources = [];
                 if (settings != undefined) {
                     // $scope.drSearchPageStorageSources = settings.Sources;
-                    for (var i = 0; i < settings.Sources.length ; i++) {
-                        for (var j = 0; j < settings.Sources[i].RecordStorageIds.length ; j++) {
+                    for (var i = 0; i < settings.Sources.length; i++) {
+                        for (var j = 0; j < settings.Sources[i].RecordStorageIds.length; j++) {
                             var id = settings.Sources[i].RecordStorageIds[j];
                             if (tabids.indexOf(id) == -1)
                                 tabids[tabids.length] = id;
@@ -282,10 +282,10 @@
                     }
 
                     return VR_GenericData_DataRecordStorageAPIService.CheckRecordStoragesAccess(tabids).then(function (response) {
-                        for (var i = 0; i < settings.Sources.length ; i++) {
+                        for (var i = 0; i < settings.Sources.length; i++) {
                             var neededIds = settings.Sources[i].RecordStorageIds;
                             if (checkIfAllow(settings.Sources[i].RecordStorageIds, response))
-                                $scope.drSearchPageStorageSources[$scope.drSearchPageStorageSources.length] = settings.Sources[i]
+                                $scope.drSearchPageStorageSources[$scope.drSearchPageStorageSources.length] = settings.Sources[i];
                         }
 
                         if (sourceName != undefined) {
@@ -333,7 +333,7 @@
                                 FieldTitle: dataRecordField.Entity.Title,
                                 Type: dataRecordField.Entity.Type,
                             });
-                        };
+                        }
                     }
                 });
             }
@@ -386,7 +386,7 @@
                     LogicalOperator: 0,
                     Filters: [filterObj, sourceRecordFilter]
                 };
-            };
+            }
             function buildRecordFilterFieldInfosByFieldName(recordFields) {
                 if (recordFields == undefined)
                     return;
@@ -399,7 +399,7 @@
                 }
 
                 return recordFilterFieldInfosByFieldName;
-            };
+            }
         }
     }
 
