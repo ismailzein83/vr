@@ -63,16 +63,23 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 var entityDescriptions = new List<string>();
 
                 IEnumerable<object> valueAsList = FieldTypeHelper.ConvertFieldValueToList<object>(value);
-
+                int fullCount = 0;
                 if (valueAsList != null)
                 {
                     if (valueAsList.Count() == 0)
                         return null;
                     else
                     {
+                        fullCount = valueAsList.Count();
+                        int takenCount = 0;
                         foreach (var entityId in valueAsList)
                         {
+                            if(takenCount > 10)
+                            {
+                                continue;
+                            }
                             entityDescriptions.Add(beManager.GetEntityDescription(new BusinessEntityDescriptionContext() { EntityDefinition = beDefinition, EntityId = entityId }));
+                            takenCount++;
                         }
                     }
                 }
@@ -80,7 +87,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 {
                     entityDescriptions.Add(beManager.GetEntityDescription(new BusinessEntityDescriptionContext() { EntityDefinition = beDefinition, EntityId = value }));
                 }
-                return String.Join(",", entityDescriptions);
+                return String.Concat(String.Join(",", entityDescriptions), entityDescriptions.Count != fullCount ? String.Format(" ...... ({0} selected)", fullCount) : "");
             }
         }
 
