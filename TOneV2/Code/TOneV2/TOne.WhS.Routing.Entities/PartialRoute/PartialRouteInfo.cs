@@ -18,15 +18,10 @@ namespace TOne.WhS.Routing.Entities
     public class PartialRouteInfo : RoutingEntityInfo
     {
         public int LastVersionNumber { get; set; }
-
         public int LatestSaleRateVersionNumber { get; set; }
-
         public int LatestCostRateVersionNumber { get; set; }
-
         public DateTime LatestRoutingDate { get; set; }
-
         public DateTime FullRoutingDate { get; set; }
-
         public DateTime? NextOpenOrCloseRuleTime { get; set; }
     }
 
@@ -34,7 +29,6 @@ namespace TOne.WhS.Routing.Entities
     {
         public DateTime LatestProcessDate { get; set; }
         public RateRouteInfo SaleRateRouteInfo { get; set; }
-
         public RateRouteInfo SupplierRateRouteInfo { get; set; }
     }
 
