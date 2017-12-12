@@ -5,6 +5,7 @@ using System.Linq;
 using TestRuntime;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.TelesIdb;
 using TOne.WhS.Routing.Data.SQL;
 using TOne.WhS.Routing.Entities;
@@ -14,8 +15,8 @@ using Vanrise.Common.Business;
 using Vanrise.Integration.Entities;
 using Vanrise.Integration.Mappers;
 using Vanrise.Queueing;
+using Vanrise.Rules.Normalization;
 using Vanrise.Runtime;
-using TOne.WhS.RouteSync.Entities;
 
 namespace TOne.WhS.Runtime.Tasks
 {
@@ -25,6 +26,21 @@ namespace TOne.WhS.Runtime.Tasks
 
         public void Execute()
         {
+            #region NormalizationRule RemoveAction
+
+            NormalizeNumberTarget target = new NormalizeNumberTarget() { PhoneNumber = "abc123acc145abc" }; //"abc123abc145"
+
+            var removeActionSettings = new Vanrise.Rules.Normalization.MainExtensions.RemoveActionSettings();
+            removeActionSettings.TextToRemove = "abc";
+            removeActionSettings.IncludingText = false;
+            removeActionSettings.TextOccurrence = Vanrise.Rules.Normalization.MainExtensions.TextOccurrence.FirstOccurrence;
+            removeActionSettings.RemoveDirection = Vanrise.Rules.Normalization.MainExtensions.RemoveDirection.Before;
+            removeActionSettings.Execute(null, target);
+
+            string normalizedPhoneNB = target.PhoneNumber;
+
+            #endregion
+
             #region TelesIdbSWSyncTask
             //TelesIdbSWSyncTask telesIdbSWSyncTask = new TelesIdbSWSyncTask();
             //telesIdbSWSyncTask.TelesIdbSWSync_Main();
@@ -159,8 +175,8 @@ namespace TOne.WhS.Runtime.Tasks
             CarrierMapping carrierMapping5 = new CarrierMapping() { CarrierId = 1, SupplierMapping = new List<string>() { "C009" } };
 
             Dictionary<string, CarrierMapping> carrierMappings = new Dictionary<string, CarrierMapping>();
-            carrierMappings.Add("1", carrierMapping1); 
-            carrierMappings.Add("2", carrierMapping2); 
+            carrierMappings.Add("1", carrierMapping1);
+            carrierMappings.Add("2", carrierMapping2);
             carrierMappings.Add("3", carrierMapping3); carrierMappings.Add("4", carrierMapping4); carrierMappings.Add("5", carrierMapping5);
 
             var routeOption1 = new RouteSync.Entities.RouteOption() { SupplierId = "1", SupplierRate = 2, IsBlocked = false, NumberOfTries = 2, Percentage = 30 };
