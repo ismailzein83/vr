@@ -100,22 +100,22 @@ namespace TOne.WhS.RouteSync.TelesIdb
             this.DataManager.ApplySwitchRouteSyncRoutes(context);
         }
 
-        public override bool TryBlockCustomer(ITryBlockCustomerContext context)
-        {
-            CarrierMapping customerMapping;
-            if (!CarrierMappings.TryGetValue(context.CustomerId, out customerMapping))
-                return false;
+        //public override bool TryBlockCustomer(ITryBlockCustomerContext context)
+        //{
+        //    CarrierMapping customerMapping;
+        //    if (!CarrierMappings.TryGetValue(context.CustomerId, out customerMapping))
+        //        return false;
 
-            if (customerMapping.CustomerMapping == null || customerMapping.CustomerMapping.Count == 0)
-                return false;
+        //    if (customerMapping.CustomerMapping == null || customerMapping.CustomerMapping.Count == 0)
+        //        return false;
 
-            IdbBlockCustomerContext blockCustomerContext = new IdbBlockCustomerContext() { CustomerMappings = customerMapping.CustomerMapping, SwitchName = context.SwitchName };
+        //    IdbBlockCustomerContext blockCustomerContext = new IdbBlockCustomerContext() { CustomerMappings = customerMapping.CustomerMapping, SwitchName = context.SwitchName };
 
-            if (!this.DataManager.BlockCustomer(blockCustomerContext))
-                throw new Exception(blockCustomerContext.ErrorMessage);
+        //    if (!this.DataManager.BlockCustomer(blockCustomerContext))
+        //        throw new Exception(blockCustomerContext.ErrorMessage);
 
-            return true;
-        }
+        //    return true;
+        //}
 
         public override bool IsSwitchRouteSynchronizerValid(IIsSwitchRouteSynchronizerValidContext context)
         {
