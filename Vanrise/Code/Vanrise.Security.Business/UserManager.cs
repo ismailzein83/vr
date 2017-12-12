@@ -68,7 +68,7 @@ namespace Vanrise.Security.Business
             if (userSettings == null)
                 userSettings = new UserSetting();
             userSettings.LanguageId = languageId;
-            bool updateActionSucc = dataManager.UpdateMyLanguage(userSettings, userId);
+            bool updateActionSucc = dataManager.UpdateUserSetting(userSettings, userId);
             if (updateActionSucc)
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;

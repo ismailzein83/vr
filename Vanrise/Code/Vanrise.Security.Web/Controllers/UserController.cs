@@ -73,8 +73,8 @@ namespace Vanrise.Security.Web.Controllers
             return _manager.UpdateUser(userObject);
         }
         [HttpPost]
-        [Route("UpdateMyLanguage")]
-        public UpdateOperationOutput<Guid?> UpdateMyLanguage(UpdateLanguageInput languageInput)
+        [Route("UpdateLoggedInUserLanguage")]
+        public UpdateOperationOutput<Guid?> UpdateLoggedInUserLanguage(UpdateLanguageInput languageInput)
         {
             return _manager.UpdateLoggedInUserLanguage(languageInput.LanguageId);
         }

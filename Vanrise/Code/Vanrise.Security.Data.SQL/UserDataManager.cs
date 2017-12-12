@@ -28,9 +28,9 @@ namespace Vanrise.Security.Data.SQL
         {
             return GetItemsSP("sec.sp_User_GetAll", UserMapper);
         }
-        public bool UpdateMyLanguage(UserSetting userSetting,int userId)
+        public bool UpdateUserSetting(UserSetting userSetting, int userId)
         {
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_UpdateLanguage", Serializer.Serialize(userSetting), userId);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_UpdateSetting", Serializer.Serialize(userSetting), userId);
             return (recordesEffected > 0);
         }
         public string GetUserPassword(int userId)

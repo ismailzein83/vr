@@ -29,7 +29,7 @@
             UnlockUser: UnlockUser,
             GetUserHistoryDetailbyHistoryId: GetUserHistoryDetailbyHistoryId,
             GetUserLanguageId: GetUserLanguageId,
-            UpdateMyLanguage: UpdateMyLanguage
+            UpdateLoggedInUserLanguage: UpdateLoggedInUserLanguage
         });
 
         function GetFilteredUsers(input) {
@@ -47,8 +47,8 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetUserLanguageId'));
      
         }
-        function UpdateMyLanguage(languageInput) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'UpdateMyLanguage'), languageInput);
+        function UpdateLoggedInUserLanguage(languageInput) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'UpdateLoggedInUserLanguage'), languageInput);
         }
 
         function GetUsers() {
