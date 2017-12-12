@@ -1,13 +1,16 @@
 ﻿using System;
-using Vanrise.Common;
+using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.Routing.BP.Arguments;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.Routing.Business
 {
     public class RoutingEntitiesUpdaterBPDefinitionSettings : Vanrise.BusinessProcess.Business.DefaultBPDefinitionExtendedSettings
     {
+        public const int todIntervalInMinutes = 30;
+
         public override bool CanRunBPInstance(Vanrise.BusinessProcess.Entities.IBPDefinitionCanRunBPInstanceContext context)
         {
             context.IntanceToRun.ThrowIfNull("context.IntanceToRun");
@@ -46,119 +49,100 @@ namespace TOne.WhS.Routing.Business
             IRoutingEntityDetailsDataManager routingEntityDetailsDataManager = RoutingDataManagerFactory.GetDataManager<IRoutingEntityDetailsDataManager>();
             routingEntityDetailsDataManager.RoutingDatabase = routingDatabase;
 
-            RoutingEntityDetails routingEntityDetails = routingEntityDetailsDataManager.GetRoutingEntityDetails(RoutingEntityType.BERouteInfo);
-            routingEntityDetails.ThrowIfNull("routingEntityDetails");
+            RoutingEntityDetails beRouteInfoDetails = routingEntityDetailsDataManager.GetRoutingEntityDetails(RoutingEntityType.BERouteInfo);
+            beRouteInfoDetails.ThrowIfNull("routingEntityDetails");
+            BERouteInfo beRouteInfo = beRouteInfoDetails.RoutingEntityInfo.CastWithValidate<BERouteInfo>("beRouteInfo");
 
-            BERouteInfo beRouteInfo = routingEntityDetails.RoutingEntityInfo.CastWithValidate<BERouteInfo>("beRouteInfo");
-            PartialRouteInfo partialRouteInfo = routingEntityDetails.RoutingEntityInfo.CastWithValidate<PartialRouteInfo>("partialRouteInfo");
+            RoutingEntityDetails partialRouteInfoDetails = routingEntityDetailsDataManager.GetRoutingEntityDetails(RoutingEntityType.PartialRouteInfo);
+            partialRouteInfoDetails.ThrowIfNull("routingEntityDetails");
+            PartialRouteInfo partialRouteInfo = partialRouteInfoDetails.RoutingEntityInfo.CastWithValidate<PartialRouteInfo>("partialRouteInfo");
+
+            if (partialRouteInfo.FullRoutingDate > effectiveDate)
+                return false;
+
+            DateTime roundedEffectiveDate = RoundDate(effectiveDate);
+            DateTime roundedLastProcessTime = RoundDate(beRouteInfo.LatestProcessDate);
+
+            if (roundedLastProcessTime != roundedEffectiveDate)
+            {
+                ISaleRateDataManager saleRateDataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
+                ISupplierRateDataManager supplierRateDataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
+
+                UpdateRoutingEntitiesUpdaterProcessInputArg(inputArg, true, saleRateDataManager.GetNextOpenOrCloseTime(effectiveDate), saleRateDataManager.GetMaximumTimeStamp(),
+                    true, supplierRateDataManager.GetNextOpenOrCloseTime(effectiveDate), supplierRateDataManager.GetMaximumTimeStamp());
+                return true;
+            }
+
+            DateTime? nextOpenOrCloseSaleRateTime;
+            object maxSaleRateTimeStamp;
+
+            DateTime? nextOpenOrCloseSupplierRateTime;
+            object maxSupplierRateTimeStamp;
+
+            bool rebuildCustomerZoneDetails = ShouldRebuildCustomerZoneDetails(beRouteInfo.SaleRateRouteInfo, effectiveDate, out nextOpenOrCloseSaleRateTime, out maxSaleRateTimeStamp);
+            bool rebuildSupplierZoneDetails = ShouldRebuildSupplierZoneDetails(beRouteInfo.SupplierRateRouteInfo, effectiveDate, out nextOpenOrCloseSupplierRateTime, out maxSupplierRateTimeStamp);
+            if (rebuildCustomerZoneDetails || rebuildSupplierZoneDetails)
+            {
+                UpdateRoutingEntitiesUpdaterProcessInputArg(inputArg, rebuildCustomerZoneDetails, nextOpenOrCloseSaleRateTime, maxSaleRateTimeStamp,
+                    rebuildSupplierZoneDetails, nextOpenOrCloseSupplierRateTime, maxSupplierRateTimeStamp);
+                return true;
+            }
 
             return false;
-
-
-
-
-
-            //RoutingDatabase routingDatabase = new RoutingDatabaseManager().GetLatestRoutingDatabase(RoutingProcessType.CustomerRoute, RoutingDatabaseType.Current);
-            //if (routingDatabase == null)
-            //    return false;
-
-            //RoutingEntitiesUpdaterProcessInput inputArg = context.BaseProcessInputArgument.CastWithValidate<RoutingEntitiesUpdaterProcessInput>("context.BaseProcessInputArgument");
-
-            //IRoutingEntityDetailsDataManager routingEntityDetailsDataManager = RoutingDataManagerFactory.GetDataManager<IRoutingEntityDetailsDataManager>();
-            //routingEntityDetailsDataManager.RoutingDatabase = routingDatabase;
-            //RoutingEntityDetails routingEntityDetails = routingEntityDetailsDataManager.GetRoutingEntityDetails(RoutingEntityType.BERouteInfo);
-
-            //DateTime now = DateTime.Now;
-            //if (routingEntityDetails != null)
-            //{
-            //    PartialRouteInfo partialRouteInfo = routingEntityDetails.RoutingEntityInfo.CastWithValidate<PartialRouteInfo>("routingEntityDetails.RoutingEntityInfo");
-            //    if (partialRouteInfo.NextOpenOrCloseRuleTime.HasValue && partialRouteInfo.NextOpenOrCloseRuleTime < now)
-            //        return true;
-            //}
-
-            //if (routingEntitiesUpdaterProcessState == null || !routingEntitiesUpdaterProcessState.LastProcessTime.HasValue)
-            //{
-            //    this.RebuildCustomerZoneDetails.Set(context, true);
-            //    this.RebuildSupplierZoneDetails.Set(context, true);
-            //    return;
-            //}
-
-            //DateTime lastProcessTime = routingEntitiesUpdaterProcessState.LastProcessTime.Value;
-            //DateTime modifiedLastProcessTime = ModifyDate(lastProcessTime);
-
-            //DateTime effectiveDate = this.EffectiveDate.Get(context);
-            //DateTime modifiedEffectiveDate = ModifyDate(effectiveDate);
-
-            //if (modifiedLastProcessTime != modifiedEffectiveDate)
-            //{
-            //    this.RebuildCustomerZoneDetails.Set(context, true);
-            //    this.RebuildSupplierZoneDetails.Set(context, true);
-            //    return;
-            //}
-
-            //BERouteInfo beRouteInfo = this.BERouteInfo.Get(context);
-            //beRouteInfo.ThrowIfNull("beRouteInfo");
-            //beRouteInfo.SaleRateRouteInfo.ThrowIfNull("beRouteInfo.SaleRateRouteInfo");
-            //beRouteInfo.SupplierRateRouteInfo.ThrowIfNull("beRouteInfo.SupplierRateRouteInfo");
-
-            //PartialRouteInfo partialRouteInfo = this.PartialRouteInfo.Get(context);
-            //partialRouteInfo.ThrowIfNull("partialRouteInfo");
-
-            //if (partialRouteInfo.FullRoutingDate > effectiveDate)
-            //{
-            //    this.RebuildCustomerZoneDetails.Set(context, false);
-            //    this.RebuildSupplierZoneDetails.Set(context, false);
-            //    return;
-            //}
-
-            //bool rebuildCustomerZoneDetails = ShouldRebuildCustomerZoneDetails(beRouteInfo.SaleRateRouteInfo, effectiveDate);
-            //bool rebuildSupplierZoneDetails = ShouldRebuildSupplierZoneDetails(beRouteInfo.SupplierRateRouteInfo, effectiveDate);
-
-            //this.RebuildCustomerZoneDetails.Set(context, rebuildCustomerZoneDetails);
-            //this.RebuildSupplierZoneDetails.Set(context, rebuildSupplierZoneDetails);
-
-            //return false;
         }
 
-        //private DateTime ModifyDate(DateTime dateTime)
-        //{
-        //    int minuteNumber = dateTime.Hour * 60 + dateTime.Minute;
-        //    int roundedMinuteNumber = (((int)minuteNumber / 30) * 30);
-        //    TimeSpan ts = TimeSpan.FromMinutes(roundedMinuteNumber);
-        //    return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, ts.Hours, ts.Minutes, 0);
-        //}
+        private void UpdateRoutingEntitiesUpdaterProcessInputArg(RoutingEntitiesUpdaterProcessInput inputArg,
+            bool rebuildCustomerZoneDetails, DateTime? nextOpenOrCloseSaleRateTime, Object maxSaleRateTimeStamp,
+            bool rebuildSupplierZoneDetails, DateTime? nextOpenOrCloseSupplierRateTime, Object maxSupplierRateTimeStamp)
+        {
+            inputArg.RebuildCustomerZoneDetails = rebuildCustomerZoneDetails;
+            inputArg.RebuildSupplierZoneDetails = rebuildSupplierZoneDetails;
+            inputArg.NextOpenOrCloseSaleRateTime = nextOpenOrCloseSaleRateTime;
+            inputArg.MaxSaleRateTimeStamp = maxSaleRateTimeStamp;
+            inputArg.NextOpenOrCloseSupplierRateTime = nextOpenOrCloseSupplierRateTime;
+            inputArg.MaxSupplierRateTimeStamp = maxSupplierRateTimeStamp;
+        }
 
-        //private bool ShouldRebuildCustomerZoneDetails(RateRouteInfo saleRateRouteInfo, DateTime effectiveDate)
-        //{
-        //    if (saleRateRouteInfo.NextOpenOrCloseRateTime.HasValue && saleRateRouteInfo.NextOpenOrCloseRateTime <= effectiveDate)
-        //        return true;
+        private bool ShouldRebuildCustomerZoneDetails(RateRouteInfo saleRateRouteInfo, DateTime effectiveDate, out DateTime? nextOpenOrCloseSaleRateTime, out object maxSaleRateTimeStamp)
+        {
+            ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
 
-        //    ISaleRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>();
+            maxSaleRateTimeStamp = saleRateRouteInfo.MaxRateTimeStamp;
+            nextOpenOrCloseSaleRateTime = saleRateRouteInfo.NextOpenOrCloseRateTime;
 
-        //    object maxSaleRateTimeStamp = saleRateRouteInfo.MaxRateTimeStamp;
-        //    if (dataManager.AreSaleRatesUpdated(ref maxSaleRateTimeStamp))
-        //    {
-        //        saleRateRouteInfo.MaxRateTimeStamp = maxSaleRateTimeStamp;
-        //        return true;
-        //    }
-        //    return false;
-        //}
+            if (dataManager.AreSaleRatesUpdated(ref maxSaleRateTimeStamp) ||
+                (saleRateRouteInfo.NextOpenOrCloseRateTime.HasValue && saleRateRouteInfo.NextOpenOrCloseRateTime <= effectiveDate))
+            {
+                nextOpenOrCloseSaleRateTime = dataManager.GetNextOpenOrCloseTime(effectiveDate); ;
+                return true;
+            }
 
-        //private bool ShouldRebuildSupplierZoneDetails(RateRouteInfo supplierRateRouteInfo, DateTime effectiveDate)
-        //{
-        //    if (supplierRateRouteInfo.NextOpenOrCloseRateTime.HasValue && supplierRateRouteInfo.NextOpenOrCloseRateTime <= effectiveDate)
-        //        return true;
+            return false;
+        }
 
-        //    ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
+        private bool ShouldRebuildSupplierZoneDetails(RateRouteInfo supplierRateRouteInfo, DateTime effectiveDate, out DateTime? nextOpenOrCloseSupplierRateTime, out object maxSupplierRateTimeStamp)
+        {
+            ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
 
-        //    object maxSupplierRateTimeStamp = supplierRateRouteInfo.MaxRateTimeStamp;
-        //    if (dataManager.AreSupplierRatesUpdated(ref maxSupplierRateTimeStamp))
-        //    {
-        //        supplierRateRouteInfo.MaxRateTimeStamp = maxSupplierRateTimeStamp;
-        //        return true;
-        //    }
+            maxSupplierRateTimeStamp = supplierRateRouteInfo.MaxRateTimeStamp;
+            nextOpenOrCloseSupplierRateTime = supplierRateRouteInfo.NextOpenOrCloseRateTime;
 
-        //    return false;
-        //}
+            if (dataManager.AreSupplierRatesUpdated(ref maxSupplierRateTimeStamp) ||
+                (supplierRateRouteInfo.NextOpenOrCloseRateTime.HasValue && supplierRateRouteInfo.NextOpenOrCloseRateTime <= effectiveDate))
+            {
+                nextOpenOrCloseSupplierRateTime = dataManager.GetNextOpenOrCloseTime(effectiveDate); ;
+                return true;
+            }
+
+            return false;
+        }
+
+        private DateTime RoundDate(DateTime dateTime)
+        {
+            int minuteNumber = dateTime.Hour * 60 + dateTime.Minute;
+            int roundedMinuteNumber = (((int)minuteNumber / todIntervalInMinutes) * todIntervalInMinutes);
+            TimeSpan ts = TimeSpan.FromMinutes(roundedMinuteNumber);
+            return new DateTime(dateTime.Year, dateTime.Month, dateTime.Day, ts.Hours, ts.Minutes, 0);
+        }
     }
 }

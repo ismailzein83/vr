@@ -118,8 +118,6 @@
         <Sequence DisplayName="Process_Sequence" sap2010:WorkflowViewState.IdRef="Sequence_7">
           <Sequence.Variables>
             <Variable x:TypeArguments="twre:BERouteInfo" Name="BERouteInfo" />
-            <Variable x:TypeArguments="x:Boolean" Default="True" Name="RebuildCustomerZoneDetails" />
-            <Variable x:TypeArguments="x:Boolean" Default="True" Name="RebuildSupplierZoneDetails" />
             <Variable x:TypeArguments="x:Int32" Name="SaleRateVersionNumber" />
             <Variable x:TypeArguments="x:Int32" Name="SupplierRateVersionNumber" />
             <Variable x:TypeArguments="scg:IEnumerable(twbe:RoutingCustomerInfo)" Name="CustomerInfos" />
@@ -183,7 +181,7 @@
             <If sap2010:WorkflowViewState.IdRef="If_5">
               <If.Condition>
                 <InArgument x:TypeArguments="x:Boolean">
-                  <mca:CSharpValue x:TypeArguments="x:Boolean">RebuildCustomerZoneDetails</mca:CSharpValue>
+                  <mca:CSharpValue x:TypeArguments="x:Boolean">Input.RebuildCustomerZoneDetails</mca:CSharpValue>
                 </InArgument>
               </If.Condition>
               <If.Then>
@@ -310,7 +308,7 @@
             <If sap2010:WorkflowViewState.IdRef="If_6">
               <If.Condition>
                 <InArgument x:TypeArguments="x:Boolean">
-                  <mca:CSharpValue x:TypeArguments="x:Boolean">RebuildSupplierZoneDetails</mca:CSharpValue>
+                  <mca:CSharpValue x:TypeArguments="x:Boolean">Input.RebuildSupplierZoneDetails</mca:CSharpValue>
                 </InArgument>
               </If.Condition>
               <If.Then>
@@ -435,63 +433,62 @@
               </If.Then>
             </If>
           </Parallel>
-          <If sap2010:WorkflowViewState.IdRef="If_7">
-            <If.Condition>
-              <InArgument x:TypeArguments="x:Boolean">
-                <mca:CSharpValue x:TypeArguments="x:Boolean">HasModifiedCustomerZoneDetails</mca:CSharpValue>
-              </InArgument>
-            </If.Condition>
-            <If.Then>
-              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_16">
-                <Assign sap2010:WorkflowViewState.IdRef="Assign_5">
-                  <Assign.To>
-                    <OutArgument x:TypeArguments="x:Int32">
-                      <mca:CSharpReference x:TypeArguments="x:Int32">BERouteInfo.SaleRateRouteInfo.LatestVersionNumber</mca:CSharpReference>
-                    </OutArgument>
-                  </Assign.To>
-                  <Assign.Value>
-                    <InArgument x:TypeArguments="x:Int32">
-                      <mca:CSharpValue x:TypeArguments="x:Int32">SaleRateVersionNumber</mca:CSharpValue>
-                    </InArgument>
-                  </Assign.Value>
-                </Assign>
-              </Sequence>
-            </If.Then>
-          </If>
-          <If sap2010:WorkflowViewState.IdRef="If_8">
-            <If.Condition>
-              <InArgument x:TypeArguments="x:Boolean">
-                <mca:CSharpValue x:TypeArguments="x:Boolean">HasModifiedSupplierZoneDetails</mca:CSharpValue>
-              </InArgument>
-            </If.Condition>
-            <If.Then>
-              <Sequence sap2010:WorkflowViewState.IdRef="Sequence_17">
-                <Assign sap2010:WorkflowViewState.IdRef="Assign_8">
-                  <Assign.To>
-                    <OutArgument x:TypeArguments="x:Int32">
-                      <mca:CSharpReference x:TypeArguments="x:Int32">BERouteInfo.SupplierRateRouteInfo.LatestVersionNumber</mca:CSharpReference>
-                    </OutArgument>
-                  </Assign.To>
-                  <Assign.Value>
-                    <InArgument x:TypeArguments="x:Int32">
-                      <mca:CSharpValue x:TypeArguments="x:Int32">SupplierRateVersionNumber</mca:CSharpValue>
-                    </InArgument>
-                  </Assign.Value>
-                </Assign>
-              </Sequence>
-            </If.Then>
-          </If>
           <twrba1:UpdateBERouteInfo sap2010:WorkflowViewState.IdRef="UpdateBERouteInfo_1">
             <twrba1:UpdateBERouteInfo.BERouteInfo>
               <InArgument x:TypeArguments="twre:BERouteInfo">
                 <mca:CSharpValue x:TypeArguments="twre:BERouteInfo">BERouteInfo</mca:CSharpValue>
               </InArgument>
             </twrba1:UpdateBERouteInfo.BERouteInfo>
+            <twrba1:UpdateBERouteInfo.EffectiveDate>
+              <InArgument x:TypeArguments="s:DateTime">
+                <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveDate</mca:CSharpValue>
+              </InArgument>
+            </twrba1:UpdateBERouteInfo.EffectiveDate>
+            <twrba1:UpdateBERouteInfo.HasModifiedCustomerZoneDetails>
+              <InArgument x:TypeArguments="x:Boolean">
+                <mca:CSharpValue x:TypeArguments="x:Boolean">HasModifiedCustomerZoneDetails</mca:CSharpValue>
+              </InArgument>
+            </twrba1:UpdateBERouteInfo.HasModifiedCustomerZoneDetails>
+            <twrba1:UpdateBERouteInfo.HasModifiedSupplierZoneDetails>
+              <InArgument x:TypeArguments="x:Boolean">
+                <mca:CSharpValue x:TypeArguments="x:Boolean">HasModifiedSupplierZoneDetails</mca:CSharpValue>
+              </InArgument>
+            </twrba1:UpdateBERouteInfo.HasModifiedSupplierZoneDetails>
+            <twrba1:UpdateBERouteInfo.MaxSaleRateTimeStamp>
+              <InArgument x:TypeArguments="x:Object">
+                <mca:CSharpValue x:TypeArguments="x:Object">Input.MaxSaleRateTimeStamp</mca:CSharpValue>
+              </InArgument>
+            </twrba1:UpdateBERouteInfo.MaxSaleRateTimeStamp>
+            <twrba1:UpdateBERouteInfo.MaxSupplierRateTimeStamp>
+              <InArgument x:TypeArguments="x:Object">
+                <mca:CSharpValue x:TypeArguments="x:Object">Input.MaxSupplierRateTimeStamp</mca:CSharpValue>
+              </InArgument>
+            </twrba1:UpdateBERouteInfo.MaxSupplierRateTimeStamp>
+            <twrba1:UpdateBERouteInfo.NextOpenOrCloseSaleRateTime>
+              <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+                <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.NextOpenOrCloseSaleRateTime</mca:CSharpValue>
+              </InArgument>
+            </twrba1:UpdateBERouteInfo.NextOpenOrCloseSaleRateTime>
+            <twrba1:UpdateBERouteInfo.NextOpenOrCloseSupplierRateTime>
+              <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+                <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.NextOpenOrCloseSupplierRateTime</mca:CSharpValue>
+              </InArgument>
+            </twrba1:UpdateBERouteInfo.NextOpenOrCloseSupplierRateTime>
             <twrba1:UpdateBERouteInfo.RoutingDatabase>
               <InArgument x:TypeArguments="twre:RoutingDatabase">
                 <mca:CSharpValue x:TypeArguments="twre:RoutingDatabase">RoutingDatabase</mca:CSharpValue>
               </InArgument>
             </twrba1:UpdateBERouteInfo.RoutingDatabase>
+            <twrba1:UpdateBERouteInfo.SaleRateVersionNumber>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">SaleRateVersionNumber</mca:CSharpValue>
+              </InArgument>
+            </twrba1:UpdateBERouteInfo.SaleRateVersionNumber>
+            <twrba1:UpdateBERouteInfo.SupplierRateVersionNumber>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">SupplierRateVersionNumber</mca:CSharpValue>
+              </InArgument>
+            </twrba1:UpdateBERouteInfo.SupplierRateVersionNumber>
           </twrba1:UpdateBERouteInfo>
         </Sequence>
       </If.Then>
@@ -512,7 +509,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d1BDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUm91dGluZ0VudGl0aWVzVXBkYXRlclByb2Nlc3MueGFtbG5OA4QEDgIBAVMLU1cCAQJXBV0gAwG/B14FbicDAbIHbwX7AwoCAQz8AwWCBCACAQZaC1qFAQMBwQdXYFeMAQMBwAdmC2aOAQMBuwdhC2FsAwG3B2sLa5IBAwGzB3ILcl8CAQ12CfADFAIBF/MDCfkDJAIBEf8DC/8DhQECAQj8A2D8A4wBAgEHeTt5QQIBGXo7ekECARiCAQuNASMDAZcHjgELmQEUAwH8BpoBC6UBFAMB4QamAQu1ARYDAcQGtgELtQMWAwGJAbYDC8wDEAIBX80DC+MDEAIBNeQDC+8DJgIBGvYDD/YDhQECARPzA2TzA4IBAgEShQERhQFqAwGlB4oBEYoBagMBmAeWARGWAYMBAwGKB5EBEZEBawMB/QaiARGiAYcBAwHvBp0BEZ0BbwMB4ganAQ2tAS0DAdMGrgENtAEtAwHFBrcBDbUCEgMB5wO2Ag20AxIDAYoBuQMRuQNuAgFgvQMPygMaAgFt0AMR0ANuAgE21AMP4QMaAgFD5wMR5wNiAgEo7AMR7ANqAgEbqgETqgGHAQMB1AaxAROxAYcBAwHGBroBE7oBbAMB6AO+ARGzAhwDAfUDuQITuQJsAwGLAb0CEbIDHAMBmAG+AxHJAxoCAW7VAxHgAxoCAUS/AROyAh4DAfYDvgITsQMeAwGZAcYDF8YDaQIBfMEDF8EDjQECAW/dAxfdA20CAVLYAxfYA5EBAgFFxAEbxAGrAQMB9wPJARXjAToDAfIF5AEVsQIgAwGHBMMCG8MCqwEDAZoByAIV4gI6AwGVA+MCFbADIAMBqgHJAY0ByQGUAQMBwwbRARvRAXQDAbMGzAEbzAGHAQMBowbbARvbAZABAwGTBtYBG9YBpAEDAYMG4AEb4AFtAwHzBeUBF/ABNwMB0QXxARewAiIDAYgEyAKNAcgClAEDAeYDywIbywJ0AwHWA9UCG9UCkAEDAcYD0AIb0AKkAQMBtgPfAhvfAnEDAaYD2gIb2gKHAQMBlgPkAhfvAjcDAfQC8AIXrwMiAwGrAegBHegBkwEDAeIF7QEd7QFsAwHSBfUBH/UBuwEDAYkE+gEZngJDAwHSBJ8CGa8CQwMBmwTnAh3nAmwDAYUD7AId7AKTAQMB9QL1Ah/1ArsBAwGsAfkCGZ0DQwMB9QGeAxmuA0MDAb4BkQIfkQKMAQMBvwWHAh+HAqABAwGtBYICH4IChAEDAZsFlgIflgJ4AwGJBZsCH5sClAEDAfcEjAIfjAKlAQMB5QT9AR/9AY0BAwHTBKcCH6cCjAEDAcAEogIfogKlAQMBrgSsAh+sAngDAZwEmgMfmgONAQMB4gKLAx+LA4wBAwHQAoEDH4EDoAEDAb4C/AIf/AKEAQMBrAKQAx+QA3gDAZoClQMflQOUAQMBiAKGAx+GA6UBAwH2AaYDH6YDjAEDAeMBoQMfoQOlAQMB0QGrAx+rA3gDAb8B</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1BDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUm91dGluZ0VudGl0aWVzVXBkYXRlclByb2Nlc3MueGFtbGlOA4EEDgIBAVMLU1cCAQJXBV0gAwHoBl4FbicDAdsGbwX4AwoCAQz5AwX/AyACAQZaC1qFAQMB6gZXYFeMAQMB6QZmC2aOAQMB5AZhC2FsAwHgBmsLa5IBAwHcBnILcl8CAQ12Ce0DFAIBF/ADCfYDJAIBEfwDC/wDhQECAQj5A2D5A4wBAgEHgAELiwEjAwHEBowBC5cBFAMBrQaYAQujARQDAZYGpAELswEWAwH9BbQBC7MDFgMBkgG0AwvsAyYCARjzAw/zA4UBAgET8ANk8AOCAQIBEoMBEYMBagMB0AaIARGIAWoDAcUGlAERlAGDAQMBuQaPARGPAWsDAa4GoAERoAGHAQMBogabARGbAW8DAZcGpQENqwEtAwGKBqwBDbIBLQMB/gW1AQ2zAhIDAcgDtAINsgMSAwGTAbcDEbcDYgMBhwHVAxHVA34CAXzBAxHBA24CAXG8AxG8A14CAWbGAxHGA24CAVvfAxHfA2oCAVDaAxHaA4IBAgFFywMRywNpAgE66QMR6QNnAgEv0AMR0ANtAgEk5AMR5ANjAgEZqAETqAGHAQMBiwavAROvAYcBAwH/BbgBE7gBcgMByQO8ARGxAhwDAdQDtwITtwJyAwGUAbsCEbADHAMBnwG9AROwAh4DAdUDvAITrwMeAwGgAcIBG8IBqwEDAdYDxwEV4QE6AwG1BeIBFa8CIAMB5APBAhvBAqsBAwGhAcYCFeACOgMBgAPhAhWuAyADAa8BxwGNAccBlAEDAfwFzwEbzwF0AwHuBcoBG8oBhwEDAeAF2QEb2QGQAQMB0gXUARvUAaQBAwHEBd4BG94BbQMBtgXjARfuATcDAZgF7wEXrgIiAwHlA8YCjQHGApQBAwHHA8kCG8kCdAMBuQPTAhvTApABAwGrA84CG84CpAEDAZ0D3QIb3QJxAwGPA9gCG9gChwEDAYED4gIX7QI3AwHjAu4CF60DIgMBsAHmAR3mAZMBAwGnBesBHesBbAMBmQXzAR/zAbsBAwHmA/gBGZwCQwMBpwSdAhmtAkMDAfYD5QId5QJsAwHyAuoCHeoCkwEDAeQC8wIf8wK7AQMBsQH3AhmbA0MDAfIBnAMZrANDAwHBAY8CH48CjAEDAYgFhQIfhQKgAQMB+ASAAh+AAoQBAwHoBJQCH5QCeAMB2ASZAh+ZApQBAwHIBIoCH4oCpQEDAbgE+wEf+wGNAQMBqASlAh+lAowBAwGXBKACH6ACpQEDAYcEqgIfqgJ4AwH3A5gDH5gDjQEDAdMCiQMfiQOMAQMBwwL/Ah//AqABAwGzAvoCH/oChAEDAaMCjgMfjgN4AwGTApMDH5MDlAEDAYMChAMfhAOlAQMB8wGkAx+kA4wBAwHiAZ8DH58DpQEDAdIBqQMfqQN4AwHCAQ==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -567,26 +564,8 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="If_6" sap:VirtualizedContainerService.HintSize="1077,592" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="2308,638" />
-      <sap2010:ViewStateData Id="Assign_5" sap:VirtualizedContainerService.HintSize="242,62" />
-      <sap2010:ViewStateData Id="Sequence_16" sap:VirtualizedContainerService.HintSize="264,186">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_7" sap:VirtualizedContainerService.HintSize="2308,336" />
-      <sap2010:ViewStateData Id="Assign_8" sap:VirtualizedContainerService.HintSize="242,62" />
-      <sap2010:ViewStateData Id="Sequence_17" sap:VirtualizedContainerService.HintSize="264,186">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_8" sap:VirtualizedContainerService.HintSize="2308,336" />
       <sap2010:ViewStateData Id="UpdateBERouteInfo_1" sap:VirtualizedContainerService.HintSize="2308,22" />
-      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="2330,1968">
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="2330,1216">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -594,16 +573,16 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="200,22" />
-      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="2555,2118" />
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="2555,1366" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="2555,22" />
-      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="2577,2428">
+      <sap2010:ViewStateData Id="Sequence_6" sap:VirtualizedContainerService.HintSize="2577,1676">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RoutingEntitiesUpdaterProcess_1" sap:VirtualizedContainerService.HintSize="2617,2508" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RoutingEntitiesUpdaterProcess_1" sap:VirtualizedContainerService.HintSize="2617,1756" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
