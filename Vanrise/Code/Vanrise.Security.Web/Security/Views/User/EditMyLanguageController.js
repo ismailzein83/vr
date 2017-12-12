@@ -33,7 +33,7 @@
         }
 
         function load() {
-            VR_Sec_UserAPIService.GetUserLanguageId().then(function (response) {
+            VR_Sec_UserAPIService.GetLoggedInUserLanguageId().then(function (response) {
                 if (response != null)
                     languageId = response;
                 loadAllControls();

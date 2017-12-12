@@ -53,10 +53,10 @@ namespace Vanrise.Security.Web.Controllers
             return _manager.GetUserHistoryDetailbyHistoryId(userHistoryId);
         }
         [HttpGet]
-        [Route("GetUserLanguageId")]
-        public Guid? GetUserLanguageId()
+        [Route("GetLoggedInUserLanguageId")]
+        public Guid? GetLoggedInUserLanguageId()
         {
-            return _manager.GetUserLanguageId();
+            return _manager.GetLoggedInUserLanguageId();
         }
 
         [HttpGet]

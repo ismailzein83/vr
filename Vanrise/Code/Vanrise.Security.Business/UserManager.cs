@@ -76,7 +76,7 @@ namespace Vanrise.Security.Business
             }
             return updateOperationOutput;
         }
-        public Guid? GetUserLanguageId()
+        public Guid? GetLoggedInUserLanguageId()
         {
             var userId = SecurityContext.Current.GetLoggedInUserId();
             var userSettings = GetUserSetting(userId);

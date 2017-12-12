@@ -28,7 +28,7 @@
             EnableUser: EnableUser,
             UnlockUser: UnlockUser,
             GetUserHistoryDetailbyHistoryId: GetUserHistoryDetailbyHistoryId,
-            GetUserLanguageId: GetUserLanguageId,
+            GetLoggedInUserLanguageId: GetLoggedInUserLanguageId,
             UpdateLoggedInUserLanguage: UpdateLoggedInUserLanguage
         });
 
@@ -43,8 +43,8 @@
                 filter: filter
             });
         }
-        function GetUserLanguageId() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetUserLanguageId'));
+        function GetLoggedInUserLanguageId() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'GetLoggedInUserLanguageId'));
      
         }
         function UpdateLoggedInUserLanguage(languageInput) {
