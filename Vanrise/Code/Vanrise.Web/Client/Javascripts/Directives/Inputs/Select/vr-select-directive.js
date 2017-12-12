@@ -499,7 +499,7 @@
                     controller.filtername = '';
                     controller.searchLocal();
                     if (controller.isRemoteLoad())
-                        controller.setdatasource([]);
+                        controller.search();
                     $('div[name=' + id + ']').find('#filterInput').blur();
                     if (controller.onblurdropdown != null) {
                         controller.onblurdropdown();
