@@ -106,6 +106,10 @@ namespace TOne.WhS.Sales.BP.Activities
 
             var processRatesContext = new ProcessRatesContext()
             {
+                OwnerType = ratePlanContext.OwnerType,
+                OwnerId = ratePlanContext.OwnerId,
+                CurrencyId = ratePlanContext.CurrencyId,
+                LongPrecisionValue = ratePlanContext.LongPrecision,
                 RatesToChange = ratesToChange,
                 RatesToClose = ratesToClose,
                 ExistingZones = existingZones,

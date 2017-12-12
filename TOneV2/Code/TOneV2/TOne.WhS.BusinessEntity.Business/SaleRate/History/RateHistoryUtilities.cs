@@ -164,5 +164,63 @@ namespace TOne.WhS.BusinessEntity.Business
             targetRecord.SourceId = record.SourceId;
         };
         #endregion
+
+        public static IEnumerable<SaleRateHistoryRecord> GetZoneRateHistory(SaleRateHistoryBySource rateHistoryBySource, IEnumerable<SaleEntityZoneRateSource> orderedRateSources, int targetCurrencyId, int longPrecision)
+        {
+            if (rateHistoryBySource.GetCount() == 0)
+                return null;
+
+            OrderedZoneRateHistories orderedZoneRateHistories = GetOrderedZoneRateHistories(rateHistoryBySource, orderedRateSources);
+
+            IEnumerable<SaleRateHistoryRecord> tList;
+            IEnumerable<SaleRateHistoryRecord> qList;
+            IEnumerable<SaleRateHistoryRecord> rList = orderedZoneRateHistories.GetZoneRateHistory(0);
+
+            var currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
+
+            Action<SaleRateHistoryRecord, SaleRateHistoryRecord> saleRateHistoryRecordMapper = (saleRateHistoryRecord, targetSaleRateHistoryRecord) =>
+            {
+                targetSaleRateHistoryRecord.SaleRateId = saleRateHistoryRecord.SaleRateId;
+                targetSaleRateHistoryRecord.Rate = saleRateHistoryRecord.Rate;
+
+                decimal convertedRate = currencyExchangeRateManager.ConvertValueToCurrency(saleRateHistoryRecord.Rate, saleRateHistoryRecord.CurrencyId, targetCurrencyId, saleRateHistoryRecord.BED);
+                targetSaleRateHistoryRecord.ConvertedRate = decimal.Round(convertedRate, longPrecision);
+
+                targetSaleRateHistoryRecord.PriceListId = saleRateHistoryRecord.PriceListId;
+                targetSaleRateHistoryRecord.ChangeType = saleRateHistoryRecord.ChangeType;
+                targetSaleRateHistoryRecord.CurrencyId = saleRateHistoryRecord.CurrencyId;
+                targetSaleRateHistoryRecord.SellingProductId = saleRateHistoryRecord.SellingProductId;
+                targetSaleRateHistoryRecord.SourceId = saleRateHistoryRecord.SourceId;
+            };
+
+            for (int i = 0; (i + 1) < orderedZoneRateHistories.GetCount(); i++)
+            {
+                tList = rList;
+                qList = orderedZoneRateHistories.GetZoneRateHistory(i + 1);
+
+                List<SaleRateHistoryRecord> tAsList = (tList != null) ? tList.ToList() : null;
+                List<SaleRateHistoryRecord> qAsList = (qList != null) ? qList.ToList() : null;
+
+                rList = Utilities.MergeUnionWithQForce(tAsList, qAsList, saleRateHistoryRecordMapper, saleRateHistoryRecordMapper);
+            }
+
+            List<SaleRateHistoryRecord> resultList = rList.ToList();
+            PrepareSaleRateHistoryRecords(resultList, targetCurrencyId);
+
+            return resultList;
+        }
+        private static OrderedZoneRateHistories GetOrderedZoneRateHistories(SaleRateHistoryBySource rateHistoryBySource, IEnumerable<SaleEntityZoneRateSource> orderedRateSources)
+        {
+            var orderedRateHistories = new OrderedZoneRateHistories();
+
+            foreach (SaleEntityZoneRateSource rateSource in orderedRateSources)
+            {
+                IEnumerable<SaleRateHistoryRecord> rateHistory = rateHistoryBySource.GetSaleRateHistory(rateSource);
+                if (rateHistory != null)
+                    orderedRateHistories.AddRateHistory(rateHistory);
+            }
+
+            return orderedRateHistories;
+        }
     }
 }

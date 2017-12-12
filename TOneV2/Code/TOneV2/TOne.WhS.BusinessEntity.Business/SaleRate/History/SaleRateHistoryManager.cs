@@ -45,11 +45,14 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
                 else
                 {
-                    var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocator(input.Query.OwnerId, new CustomerZoneRateHistoryReader(input.Query.OwnerId, zoneIds, true, false));
-                    return customerZoneRateHistoryLocator.GetSaleRateHistory(input.Query.ZoneName, input.Query.CountryId, null, currencyId);
+                    int sellingProductId = new CarrierAccountManager().GetSellingProductId(input.Query.OwnerId);
+                    var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocatorV2(new CustomerZoneRateHistoryReaderV2(CreateListFromItem(input.Query.OwnerId), CreateListFromItem(sellingProductId), zoneIds));
+
+                    int longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
+                    return customerZoneRateHistoryLocator.GetCustomerZoneRateHistory(input.Query.OwnerId, sellingProductId, input.Query.ZoneName, input.Query.CountryId, input.Query.CurrencyId, longPrecision);
+                    //GetSaleRateHistory(input.Query.ZoneName, input.Query.CountryId, null, currencyId);
                 }
             }
-
 
             protected override BigResult<SaleRateHistoryRecordDetail> AllRecordsToBigResult(DataRetrievalInput<SaleRateHistoryQuery> input, IEnumerable<SaleRateHistoryRecord> allRecords)
             {
@@ -99,6 +102,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     return new CarrierAccountManager().GetSellingNumberPlanId(ownerId, CarrierAccountType.Customer);
                 }
+            }
+
+            private List<T> CreateListFromItem<T>(T item)
+            {
+                return new List<T>() { item };
             }
 
             #endregion

@@ -24,5 +24,6 @@ namespace TOne.WhS.BusinessEntity.Data
         IEnumerable<SaleRate> GetSaleRatesEffectiveAfterByOwnersAndZones(SalePriceListOwnerType ownerType, IEnumerable<int> ownerIds, IEnumerable<long> zoneIds, DateTime minimumDate);
         DateTime? GetNextOpenOrCloseTime(DateTime effectiveDate);
         object GetMaximumTimeStamp();
+        IEnumerable<SaleRate> GetAllSaleRatesByOwners(IEnumerable<int> sellingProductIds, IEnumerable<int> customerIds, IEnumerable<long> zoneIds);
     }
 }

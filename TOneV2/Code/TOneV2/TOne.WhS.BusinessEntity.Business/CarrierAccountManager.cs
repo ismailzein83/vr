@@ -836,6 +836,11 @@ namespace TOne.WhS.BusinessEntity.Business
             return true;
         }
 
+        public IEnumerable<int> GetCustomerIdsBySellingProductId(int sellingProductId)
+        {
+            return GetAllCustomers().MapRecords(x => x.CarrierAccountId, x => x.SellingProductId.Value == sellingProductId);
+        }
+
         #endregion
 
         #region ExtensionConfiguration
