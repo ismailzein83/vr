@@ -61,7 +61,11 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
 
             if (context.DestinationCurrencyId.HasValue)
             {
-                convertedFirstPeriodRate = currencyExchangeManager.ConvertValueToCurrency(firstPeriodRateToUse, context.SourceCurrencyId, context.DestinationCurrencyId.Value, currencyEffectiveOn);
+                switch (this.FirstPeriodRateType)
+                {
+                    case Tariff.FirstPeriodRateType.EffectiveRate: convertedFirstPeriodRate = firstPeriodRateToUse; break;
+                    default: convertedFirstPeriodRate = currencyExchangeManager.ConvertValueToCurrency(firstPeriodRateToUse, context.SourceCurrencyId, context.DestinationCurrencyId.Value, currencyEffectiveOn); break;
+                }
                 convertedCallFee = currencyExchangeManager.ConvertValueToCurrency(CallFee, context.SourceCurrencyId, context.DestinationCurrencyId.Value, currencyEffectiveOn);
             }
             else
