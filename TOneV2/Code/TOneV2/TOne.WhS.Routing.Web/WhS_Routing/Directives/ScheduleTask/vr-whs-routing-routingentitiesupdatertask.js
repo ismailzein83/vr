@@ -1,6 +1,5 @@
 ﻿"use strict";
-
-app.directive("vWhsRoutingRoutingentitiesupdatertask", ['UtilsService',
+app.directive("vrWhsRoutingRoutingentitiesupdatertask", ['UtilsService',
     function (UtilsService) {
         var directiveDefinitionObject = {
             restrict: "E",
