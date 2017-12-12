@@ -73,7 +73,7 @@
                     $scope.scopeModel.isLoading = false;
                 });
             }
-            loadAllControls();
+          else  loadAllControls();
         }
         function loadAllControls() {
             function setTitle() {
