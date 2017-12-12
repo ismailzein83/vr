@@ -153,6 +153,8 @@ namespace TOne.WhS.Sales.Business
             {
                 ProcessOwnerRateToChange(rateToChange, existingZonesByName, existingRatesByZoneName);
 
+                continue;
+
                 int? countryId = saleZoneManager.GetSaleZoneCountryId(rateToChange.ZoneId);
                 if (!countryId.HasValue)
                     throw new NullReferenceException("countryId");
