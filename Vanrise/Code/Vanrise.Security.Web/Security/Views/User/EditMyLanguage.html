@@ -1,0 +1,17 @@
+﻿<div vr-modalcontent ng-controller="VR_Sec_EditMyLanguageController" vr-loader="isLoading">
+    <vr-modalbody width="'20%'">
+        <vr-form name="formEditMyLanguage">
+            <vr-row>
+                <vr-common-vrlocalizationlanguage-selector on-ready="onLanguageSelectorReady" normal-col-num="3" isrequired="true"></vr-common-vrlocalizationlanguage-selector>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="save" formname="formEditMyLanguage" isasynchronous="true"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

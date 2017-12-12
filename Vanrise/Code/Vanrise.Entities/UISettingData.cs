@@ -23,6 +23,7 @@ namespace Vanrise.Entities
         public int? GridPageSize { get; set; }
 
         public long MaxSearchRecordCount { get; set; }
+        public Guid? DefaultLanguageId { get; set; }
     }
 
     public class CacheSettingData
@@ -32,9 +33,9 @@ namespace Vanrise.Entities
     public class GeneralTechnicalSettingData :SettingData
     {
 
-        public CompanySettingDefinition CompanySettingDefinition { get; set; } 
-       
+        public CompanySettingDefinition CompanySettingDefinition { get; set; }
 
+        public bool IsLocalizationEnabled { get; set; }
     }
 
     public class GoogleAnalyticsData : SettingData

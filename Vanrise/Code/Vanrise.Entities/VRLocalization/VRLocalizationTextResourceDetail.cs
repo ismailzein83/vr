@@ -12,6 +12,7 @@ namespace Vanrise.Entities
         public string ResourceKey { get; set; }
         public Guid ModuleId { get; set; }
         public string ModuleName { get; set; }
+        public VRLocalizationTextResourceSettings Settings { get; set; }
 
     }
 }

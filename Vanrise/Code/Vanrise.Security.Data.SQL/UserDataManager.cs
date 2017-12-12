@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Data.SQL;
 using Vanrise.Security.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.Security.Data.SQL
 {
@@ -27,7 +28,11 @@ namespace Vanrise.Security.Data.SQL
         {
             return GetItemsSP("sec.sp_User_GetAll", UserMapper);
         }
-
+        public bool UpdateMyLanguage(UserSetting userSetting,int userId)
+        {
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_UpdateLanguage", Serializer.Serialize(userSetting), userId);
+            return (recordesEffected > 0);
+        }
         public string GetUserPassword(int userId)
         {
             return ExecuteScalarSP("sec.sp_User_GetPassword", userId) as string;
@@ -134,6 +139,7 @@ namespace Vanrise.Security.Data.SQL
                 DisabledTill = GetReaderValue<DateTime?>(reader, "DisabledTill"),
                 Description = reader["Description"] as string,
                 TenantId = Convert.ToInt32(reader["TenantId"]),
+                Settings =  Vanrise.Common.Serializer.Deserialize<UserSetting>(reader["Settings"] as string),
                 ExtendedSettings = reader["ExtendedSettings"] != DBNull.Value ? Vanrise.Common.Serializer.Deserialize<Dictionary<string, object>>(reader["ExtendedSettings"] as string) : null
             };
         }

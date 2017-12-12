@@ -233,6 +233,8 @@
     <Content Include="Security\Views\Tenant\TenantManagementController.js" />
     <Content Include="Security\Views\Tenant\TenantEditor.html" />
     <Content Include="Security\Views\Tenant\TenantEditorController.js" />
+    <Content Include="Security\Views\User\EditMyLanguage.html" />
+    <Content Include="Security\Views\User\EditMyLanguageController.js" />
     <Content Include="Security\Views\User\ForgotPasswordEditor.html" />
     <Content Include="Security\Views\User\ForgotPasswordEditorController.js" />
     <Content Include="Security\Views\User\EditProfile.html" />

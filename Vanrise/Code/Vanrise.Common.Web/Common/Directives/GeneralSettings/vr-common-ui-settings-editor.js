@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrCommonUiSettingsEditor', ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+app.directive('vrCommonUiSettingsEditor', ['UtilsService', 'VRUIUtilsService','VRLocalizationService',
+    function (UtilsService, VRUIUtilsService, VRLocalizationService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -23,6 +23,9 @@ app.directive('vrCommonUiSettingsEditor', ['UtilsService', 'VRUIUtilsService',
             var viewSelectorReadyDeferred = UtilsService.createPromiseDeferred();
             var pagesizeSelectorAPI;
             var pagesizeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            var languageSelectorAPI;
+            var languageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            var languageId;
             $scope.scopeModel = {};
             $scope.scopeModel.onViewSelectorReady = function (api) {
                 viewSelectorAPI = api;
@@ -32,6 +35,11 @@ app.directive('vrCommonUiSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                 pagesizeSelectorAPI = api;
                 pagesizeSelectorReadyDeferred.resolve();
             };
+            $scope.scopeModel.onLanguageSelectorReady = function (api) {
+                languageSelectorAPI = api;
+                languageSelectorReadyDeferred.resolve();
+            };
+            $scope.scopeModel.isLocalizationEnabled = VRLocalizationService.isLocalizationEnabled();
             function initializeController() {
                 defineAPI();
             }
@@ -45,6 +53,8 @@ app.directive('vrCommonUiSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                         $scope.scopeModel.normalPrecision = payload.data.NormalPrecision;
                         $scope.scopeModel.longPrecision = payload.data.LongPrecision;
                         $scope.scopeModel.maxSearchRecordCount = payload.data.MaxSearchRecordCount;
+                        languageId = payload.data.DefaultLanguageId;
+
                     }
 
                     var promises = [];
@@ -68,7 +78,15 @@ app.directive('vrCommonUiSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                         };
                         VRUIUtilsService.callDirectiveLoad(pagesizeSelectorAPI, pageSizePayload, pagesizeSelectorLoadDeferred);
                     });
+                    var languageSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                 
 
+                    languageSelectorReadyDeferred.promise.then(function () {
+                        promises.push(languageSelectorLoadDeferred.promise);
+                        var selectorPayload = {};
+                        selectorPayload.selectedIds = languageId;
+                        VRUIUtilsService.callDirectiveLoad(languageSelectorAPI, selectorPayload, languageSelectorLoadDeferred);
+                    });
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -79,7 +97,8 @@ app.directive('vrCommonUiSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                         NormalPrecision: $scope.scopeModel.normalPrecision,
                         LongPrecision: $scope.scopeModel.longPrecision,
                         GridPageSize: pagesizeSelectorAPI.getSelectedIds(),
-                        MaxSearchRecordCount: $scope.scopeModel.maxSearchRecordCount
+                        MaxSearchRecordCount: $scope.scopeModel.maxSearchRecordCount,
+                        DefaultLanguageId: languageSelectorAPI != undefined ? languageSelectorAPI.getSelectedIds() : undefined
                     };
                 };
               

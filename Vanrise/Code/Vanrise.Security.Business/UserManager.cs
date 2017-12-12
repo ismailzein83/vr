@@ -56,7 +56,32 @@ namespace Vanrise.Security.Business
 
             return DataRetrievalManager.Instance.ProcessResult(input, allItems.ToBigResult(input, filterExpression, UserDetailMapper), resultProcessingHandler);
         }
+        public UpdateOperationOutput<Guid?> UpdateLoggedInUserLanguage(Guid? languageId)
+        {
+            UpdateOperationOutput<Guid?> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<Guid?>();
 
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+            var userId = SecurityContext.Current.GetLoggedInUserId();
+            var userSettings = GetUserSetting(userId);
+            if (userSettings == null)
+                userSettings = new UserSetting();
+            userSettings.LanguageId = languageId;
+            bool updateActionSucc = dataManager.UpdateMyLanguage(userSettings, userId);
+            if (updateActionSucc)
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = languageId;
+            }
+            return updateOperationOutput;
+        }
+        public Guid? GetUserLanguageId()
+        {
+            var userId = SecurityContext.Current.GetLoggedInUserId();
+            var userSettings = GetUserSetting(userId);
+            return userSettings != null ? userSettings.LanguageId : null;
+        }
         public T GetUserExtendedSettings<T>(int userId) where T : class
         {
             User user = GetUserbyId(userId);
@@ -826,6 +851,14 @@ namespace Vanrise.Security.Business
         #endregion
 
         #region Private Methods
+
+        private UserSetting  GetUserSetting (int userId)
+        {
+            var user = GetUserbyId(userId);
+            user.ThrowIfNull("user is null");
+            return user.Settings;
+               
+        }
         private UserDTO GetUserDetails(User user)
         {
             if (user == null)

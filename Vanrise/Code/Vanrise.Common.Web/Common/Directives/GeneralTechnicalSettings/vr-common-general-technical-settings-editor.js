@@ -46,9 +46,10 @@ app.directive('vrCommonGeneralTechnicalSettingsEditor', ['UtilsService', 'VRUIUt
                 var api = {};
 
                 api.load = function (payload) {
-
                     var promises = [];
                     var companySettingDefinition = payload != undefined && payload.data != undefined ? payload.data.CompanySettingDefinition : undefined;
+                    if (payload != undefined && payload.data != undefined)
+                        $scope.scopeModel.isLocalizationEnabled = payload.data.IsLocalizationEnabled;
 
                     function loadCompanyContactSettings() {
                         var companyContactPayload = {
@@ -79,7 +80,8 @@ app.directive('vrCommonGeneralTechnicalSettingsEditor', ['UtilsService', 'VRUIUt
                         CompanySettingDefinition: {
                             ContactTypes: companyContactSettingsAPI.getData().ContactTypes,
                             ExtendedSettings: companyDefinitionSettingsAPI.getData(),
-                        }
+                        },
+                        IsLocalizationEnabled: $scope.scopeModel.isLocalizationEnabled
                     };
                 };
 

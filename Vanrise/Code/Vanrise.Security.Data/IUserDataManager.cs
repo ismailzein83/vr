@@ -40,5 +40,6 @@ namespace Vanrise.Security.Data
         bool UpdateTempPasswordByEmail(string email, string password, DateTime? passwordValidTill);
 
         bool UpdateDisableTill(int userID, DateTime disableTill);
+        bool UpdateMyLanguage(UserSetting userSetting,int userId);
     }
 }

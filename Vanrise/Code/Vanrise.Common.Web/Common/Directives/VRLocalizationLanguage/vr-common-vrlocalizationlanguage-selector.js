@@ -48,7 +48,7 @@ app.directive('vrCommonVrlocalizationlanguageSelector', ['UtilsService', 'VRUIUt
         function getLanguageSelectorTemplate(attrs) {
 
             var multipleselection = "";
-            var label = "Languages";
+            var label = "Language";
             if (attrs.ismultipleselection != undefined) {
                 label = "Languages";
                 multipleselection = "ismultipleselection";
@@ -89,7 +89,6 @@ app.directive('vrCommonVrlocalizationlanguageSelector', ['UtilsService', 'VRUIUt
                     VRCommon_VRLocalizationLanguageAPIService.GetVRLocalizationLanguageInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                        
                         if (response != null) {
-                            console.log(response);
                             for (var i = 0; i < response.length; i++)
                                 ctrl.datasource.push(response[i]);
                             if (selectedIds != undefined)

@@ -11,5 +11,6 @@
         <vr-columns width="1/2row">
             <vr-textbox value="scopeModel.maxSearchRecordCount" label="Max Search Record Count" type="number" minvalue="1" decimalprecision="0" isrequired="true"></vr-textbox>
         </vr-columns>
+        <vr-common-vrlocalizationlanguage-selector ng-if="scopeModel.isLocalizationEnabled" on-ready="scopeModel.onLanguageSelectorReady" normal-col-num="3" isrequired="true"></vr-common-vrlocalizationlanguage-selector>
     </vr-row>
 </vr-tab>

@@ -140,7 +140,8 @@ namespace Vanrise.Common.Business
             {
                 VRLocalizationTextResourceId = localizationTextResource.VRLocalizationTextResourceId,
                 ResourceKey = localizationTextResource.ResourceKey,
-                ModuleId = localizationTextResource.ModuleId
+                ModuleId = localizationTextResource.ModuleId,
+                Settings = localizationTextResource.Settings
             };
             VRLocalizationModuleManager vrLocalizationModuleManager = new VRLocalizationModuleManager();
             vrLocalizationTextResourceDetail.ModuleName = vrLocalizationModuleManager.GetVRModuleName(localizationTextResource.ModuleId);

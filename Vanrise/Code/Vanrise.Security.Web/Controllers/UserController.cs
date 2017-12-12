@@ -52,6 +52,12 @@ namespace Vanrise.Security.Web.Controllers
         {
             return _manager.GetUserHistoryDetailbyHistoryId(userHistoryId);
         }
+        [HttpGet]
+        [Route("GetUserLanguageId")]
+        public Guid? GetUserLanguageId()
+        {
+            return _manager.GetUserLanguageId();
+        }
 
         [HttpGet]
         [Route("GetUserbyId")]
@@ -65,6 +71,12 @@ namespace Vanrise.Security.Web.Controllers
         public Vanrise.Entities.UpdateOperationOutput<UserDetail> UpdateUser(UserToUpdate userObject)
         {
             return _manager.UpdateUser(userObject);
+        }
+        [HttpPost]
+        [Route("UpdateMyLanguage")]
+        public UpdateOperationOutput<Guid?> UpdateMyLanguage(UpdateLanguageInput languageInput)
+        {
+            return _manager.UpdateLoggedInUserLanguage(languageInput.LanguageId);
         }
 
         [HttpPost]
@@ -165,5 +177,9 @@ namespace Vanrise.Security.Web.Controllers
         public string Password { get; set; }
         public string Name { get; set; }
         public string TempPassword { get; set; }
+    }
+    public class UpdateLanguageInput
+    {
+        public Guid LanguageId { get; set; }
     }
 }
