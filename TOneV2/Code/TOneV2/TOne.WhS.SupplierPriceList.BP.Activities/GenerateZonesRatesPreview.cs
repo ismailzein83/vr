@@ -34,14 +34,13 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             PriceListCodeManager priceListCodeManager = new PriceListCodeManager();
             List<ZoneRatePreview> zonesRatesPreview = new List<ZoneRatePreview>();
 
-
             if (importedZones != null)
             {
                 foreach (ImportedZone importedZone in importedZones)
                 {
                     ImportedRate importedNormalRate = importedZone.ImportedNormalRate;
 
-                    ZoneRatePreview zoneRatePreview = new ZoneRatePreview()
+                    ZoneRatePreview zoneRatePreview = new ZoneRatePreview
                     {
                         CountryId = priceListCodeManager.GetCountryId(importedZone.ImportedCodes),
                         ZoneName = importedZone.ZoneName,
@@ -73,11 +72,11 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         {
                             zoneRatePreview.SystemServiceIds = importedZoneServiceGroup.SystemZoneServiceGroup.ZoneServicesIds;
                             zoneRatePreview.SystemServicesBED = importedZoneServiceGroup.SystemZoneServiceGroup.BED;
-                            zoneRatePreview.SystemServicesEED = importedZoneServiceGroup.SystemZoneServiceGroup.EED;
+                            zoneRatePreview.SystemServicesEED = zoneRatePreview.ImportedServicesBED <= zoneRatePreview.SystemServicesBED
+                                                                ? zoneRatePreview.SystemServicesBED
+                                                                : zoneRatePreview.ImportedServicesBED;
                         }
-
-                    };
-
+                    }
 
                     NotImportedZoneServiceGroup notImportedZoneService = importedZone.NotImportedZoneServiceGroup;
                     if (notImportedZoneService != null)
@@ -89,11 +88,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                     }
 
                     zonesRatesPreview.Add(zoneRatePreview);
-
-
                 }
             }
-
 
             if (notImportedZones != null)
             {
@@ -119,7 +115,6 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
                         zoneRatePreview.SystemRateBED = notImportedZone.NormalRate.BED;
                         zoneRatePreview.SystemRateEED = notImportedZone.NormalRate.EED;
                     }
-
 
                     if (notImportedZone.NotImportedZoneServiceGroup != null)
                     {
