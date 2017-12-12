@@ -86,7 +86,9 @@ namespace TOne.WhS.DBSync.Business.Migrators
 
                 if (tariffRulesByKeyWithMaxCounts.TryGetValue(carrierId, out tariffRulesByKeyWithMaxCount))
                 {
-                    routeRules.Add(GetSourceRule(tariffRulesByKeyWithMaxCount.TariffRulesByKey.TariffRules, type, true));
+                    var tariffRule = GetSourceRule(tariffRulesByKeyWithMaxCount.TariffRulesByKey.TariffRules, type, true);
+                    if (tariffRule != null)
+                        routeRules.Add(tariffRule);
                 }
 
                 foreach (var tariffByKey in item.Value)
@@ -119,18 +121,27 @@ namespace TOne.WhS.DBSync.Business.Migrators
                         Values = new List<object>() { carrier.CarrierAccountId }
                     });
                     if (includeZonesCriteria)
+                    {
+                        var zoneIds = GetZoneIds(rules, type);
+                        if (zoneIds.Count == 0)
+                        {
+                            Context.MigrationContext.WriteWarning(string.Format("Failed migrating Sale Tariff Rule, No Zones Found, Customer Source Id {0}", defaultRule.CustomerId));
+
+                            return null;
+                        }
+
                         tariffRule.Criteria.FieldsValues.Add("SaleZoneId", new StaticValues()
                         {
-                            Values = GetZoneIds(rules, type).Cast<Object>().ToList()
+                            Values = zoneIds.Cast<Object>().ToList()
                         });
-
+                    }
                     tariffRule.Settings.CurrencyId = carrier.CarrierAccountSettings == null ? Context.CurrencyId : carrier.CarrierAccountSettings.CurrencyId;
                     tariffRule.Description = string.Format("Migrated Sale Tariff Rule {0}", Context.Counter++);
                     tariffRule.DefinitionId = _SaleDefinitionId;
                     break;
                 case RuleType.Purchase:
                     if (!_allCarrierAccounts.TryGetValue(defaultRule.SupplierId, out carrier))
-                        throw new NullReferenceException(string.Format("Supplier not found. Supplier Source Id {0}.", defaultRule.CustomerId));
+                        throw new NullReferenceException(string.Format("Supplier not found. Supplier Source Id {0}.", defaultRule.SupplierId));
                     CarrierProfile profile;
                     if (!_allCarrierProfiles.TryGetValue(defaultRule.SupplierProfileID, out profile))
                         throw new NullReferenceException(string.Format("Profile not found. Profile Source Id {0}.", defaultRule.SupplierProfileID));
@@ -147,9 +158,15 @@ namespace TOne.WhS.DBSync.Business.Migrators
 
                     if (includeZonesCriteria)
                     {
+                        var zoneIds = GetZoneIds(rules, type);
+                        if (zoneIds.Count == 0)
+                        {
+                            Context.MigrationContext.WriteWarning(string.Format("Failed migrating Supplier Tariff Rule, No Zones Found, Supplier Source Id {0}", defaultRule.SupplierId));
+                            return null;
+                        }
                         tariffRule.Criteria.FieldsValues.Add("SupplierZoneId", new StaticValues()
                         {
-                            Values = GetZoneIds(rules, type).Cast<Object>().ToList()
+                            Values = zoneIds.Cast<Object>().ToList()
                         });
                     }
 
@@ -159,8 +176,8 @@ namespace TOne.WhS.DBSync.Business.Migrators
             {
                 Rule = new Rule
                 {
-                    BED = RuleMigrator.s_defaultRuleBED,
-                    EED = null,
+                    BED = defaultRule.BED,
+                    EED = defaultRule.EED,
                     TypeId = _ruleTypeId,
                     RuleDetails = Serializer.Serialize(tariffRule)
                 }
