@@ -42,8 +42,8 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, Switch> GetSwitches(bool useTempTables)
         {
-            return GetItemsText("SELECT [ID]  ,[Name], [SourceID], [Settings] FROM "
-                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), SwitchMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+            return GetItemsText(string.Format("SELECT [ID]  ,[Name], [SourceID], [Settings] FROM {0} where sourceid is not null"
+                , MigrationUtils.GetTableName(_Schema, _TableName, useTempTables)), SwitchMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
         public void FixSwitchIds()

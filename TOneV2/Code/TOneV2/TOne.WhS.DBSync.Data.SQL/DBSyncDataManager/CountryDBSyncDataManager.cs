@@ -26,7 +26,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             dt.Columns.Add("Name", typeof(string));
             dt.Columns.Add("SourceID", typeof(string));
             dt.Columns.Add("ID", typeof(int));
-           
+
             dt.BeginLoadData();
             foreach (var item in countries)
             {
@@ -43,8 +43,8 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, Country> GetCountries(bool useTempTables)
         {
-            return GetItemsText("SELECT [ID] ,[Name] ,[SourceID] FROM"
-                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), CountryMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+            return GetItemsText(string.Format("SELECT [ID] ,[Name] ,[SourceID] FROM {0} where sourceid is not null",
+                MigrationUtils.GetTableName(_Schema, _TableName, useTempTables)), CountryMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
         public Country CountryMapper(IDataReader reader)

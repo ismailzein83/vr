@@ -68,8 +68,8 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, SaleEntityZoneService> GetSSaleZoneServices(bool useTempTables)
         {
-            return GetItemsText("SELECT [ID], [PriceListID], [ZoneID], [Services], [BED], [EED] FROM "
-                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), SaleZoneServiceMapper, cmd => { }).ToDictionary(x => x.SaleEntityServiceId.ToString(), x => x);
+            return GetItemsText(string.Format("SELECT [ID], [PriceListID], [ZoneID], [Services], [BED], [EED] FROM {0} where sourceid is not null"
+                , MigrationUtils.GetTableName(_Schema, _TableName, useTempTables)), SaleZoneServiceMapper, cmd => { }).ToDictionary(x => x.SaleEntityServiceId.ToString(), x => x);
         }
 
         public SaleEntityZoneService SaleZoneServiceMapper(IDataReader reader)

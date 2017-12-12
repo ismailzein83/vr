@@ -18,7 +18,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         {
             _UseTempTables = useTempTables;
         }
-        static string[] s_columns = new string[] { "ID", "PriceListID", "ZoneID", "Rate", "BED", "EED", "Change", "RateTypeID", "SourceID"};
+        static string[] s_columns = new string[] { "ID", "PriceListID", "ZoneID", "Rate", "BED", "EED", "Change", "RateTypeID", "SourceID" };
 
         public void ApplySaleRatesToTemp(List<SaleRate> saleRates, long startingId)
         {
@@ -74,8 +74,8 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, SaleRate> GetSaleRates(bool useTempTables)
         {
-            return GetItemsText("SELECT [ID]  ,[ZoneID] ,[PriceListID],[Rate],[BED], [EED],[Change], [SourceID] FROM "
-                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), SaleRateMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+            return GetItemsText(string.Format("SELECT [ID]  ,[ZoneID] ,[PriceListID],[Rate],[BED], [EED],[Change], [SourceID] FROM {0} where sourceid is not null"
+                , MigrationUtils.GetTableName(_Schema, _TableName, useTempTables)), SaleRateMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
         public SaleRate SaleRateMapper(IDataReader reader)

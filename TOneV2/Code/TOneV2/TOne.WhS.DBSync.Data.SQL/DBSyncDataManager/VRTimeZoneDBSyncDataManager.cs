@@ -27,7 +27,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             dt.Columns.Add("Settings", typeof(string));
             dt.Columns.Add("SourceID", typeof(string));
             dt.Columns.Add("ID", typeof(int));
-           
+
             dt.BeginLoadData();
             foreach (var item in timeZones)
             {
@@ -44,8 +44,8 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, VRTimeZone> GetVrTimeZones(bool useTempTables)
         {
-            return GetItemsText("SELECT [ID] ,[Name] ,[Settings] ,[SourceID] FROM"
-                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), VrTimeZoneMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+            return GetItemsText(string.Format("SELECT [ID] ,[Name] ,[Settings] ,[SourceID] FROM {0} where sourceid is not null"
+                , MigrationUtils.GetTableName(_Schema, _TableName, useTempTables)), VrTimeZoneMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
         public VRTimeZone VrTimeZoneMapper(IDataReader reader)

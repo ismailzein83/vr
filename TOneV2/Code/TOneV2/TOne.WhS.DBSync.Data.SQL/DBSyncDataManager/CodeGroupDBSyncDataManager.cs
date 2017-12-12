@@ -46,8 +46,8 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, CodeGroup> GetCodeGroups(bool useTempTables)
         {
-            return GetItemsText("SELECT [ID], [CountryID], [Code],[Name], [SourceID] FROM"
-                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), CodeGroupMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+            return GetItemsText(string.Format("SELECT [ID], [CountryID], [Code],[Name], [SourceID] FROM {0} where sourceid is not null",
+                 MigrationUtils.GetTableName(_Schema, _TableName, useTempTables)), CodeGroupMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
         public CodeGroup CodeGroupMapper(IDataReader reader)

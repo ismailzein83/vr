@@ -55,8 +55,8 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, SaleCode> GetSaleCodes(bool useTempTables)
         {
-            return GetItemsText("SELECT [ID] ,[Code]  ,[ZoneID]  ,[BED], [EED], [SourceID] FROM "
-                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), SaleCodeMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+            return GetItemsText(string.Format("SELECT [ID] ,[Code]  ,[ZoneID]  ,[BED], [EED], [SourceID] FROM {0} where sourceid is not null"
+                , MigrationUtils.GetTableName(_Schema, _TableName, useTempTables)), SaleCodeMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
         public SaleCode SaleCodeMapper(IDataReader reader)
@@ -86,6 +86,6 @@ namespace TOne.WhS.DBSync.Data.SQL
         {
             return _Schema;
         }
-       
+
     }
 }

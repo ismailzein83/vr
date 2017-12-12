@@ -45,8 +45,8 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, ZoneServiceConfig> GetZoneServicesConfig(bool useTempTables)
         {
-            return GetItemsText("SELECT [ID] , [Symbol], [Settings], [SourceID] FROM "
-                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), ZoneServiceConfigMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+            return GetItemsText(string.Format("SELECT [ID] , [Symbol], [Settings], [SourceID] FROM {0} where sourceid is not null"
+                , MigrationUtils.GetTableName(_Schema, _TableName, useTempTables)), ZoneServiceConfigMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
         public ZoneServiceConfig ZoneServiceConfigMapper(IDataReader reader)

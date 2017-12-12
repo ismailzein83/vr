@@ -59,8 +59,8 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, CarrierAccount> GetCarrierAccounts(bool useTempTables)
         {
-            return GetItemsText("SELECT [ID] ,[NameSuffix], SupplierSettings, [AccountType] ,[SellingNumberPlanID],[CarrierProfileId], [CarrierAccountSettings],[SourceID] FROM"
-                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), CarrierAccountMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+            return GetItemsText(string.Format("SELECT [ID] ,[NameSuffix], SupplierSettings, [AccountType] ,[SellingNumberPlanID],[CarrierProfileId], [CarrierAccountSettings],[SourceID] FROM {0} where sourceid is not null",
+                MigrationUtils.GetTableName(_Schema, _TableName, useTempTables)), CarrierAccountMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
         private CarrierAccount CarrierAccountMapper(IDataReader reader)

@@ -45,8 +45,8 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, CurrencyExchangeRate> GetCurrencyExchangeRates(bool useTempTables)
         {
-            return GetItemsText("SELECT [ID],[CurrencyID] ,[Rate]  ,[ExchangeDate]  ,[SourceID] FROM "
-                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), CurrencyExchangeRateMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+            return GetItemsText(string.Format("SELECT [ID],[CurrencyID] ,[Rate]  ,[ExchangeDate]  ,[SourceID] FROM {0} where sourceid is not null ",
+                MigrationUtils.GetTableName(_Schema, _TableName, useTempTables)), CurrencyExchangeRateMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
         public CurrencyExchangeRate CurrencyExchangeRateMapper(IDataReader reader)

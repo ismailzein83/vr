@@ -45,8 +45,8 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, CarrierProfile> GetCarrierProfiles(bool useTempTables)
         {
-            return GetItemsText("SELECT [ID] ,[Settings]  ,[Name] ,[SourceID] FROM"
-                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), CarrierProfileMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+            return GetItemsText(string.Format("SELECT [ID] ,[Settings]  ,[Name] ,[SourceID] FROM {0} where sourceId is not null",
+                 MigrationUtils.GetTableName(_Schema, _TableName, useTempTables)), CarrierProfileMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
         private CarrierProfile CarrierProfileMapper(IDataReader reader)

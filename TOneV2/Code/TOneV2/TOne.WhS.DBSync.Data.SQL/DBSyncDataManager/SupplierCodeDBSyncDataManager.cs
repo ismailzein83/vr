@@ -25,7 +25,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         {
             //DataTable dt = new DataTable();
             //dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
-            
+
             var stream = base.InitializeStreamForBulkInsert();
             foreach (var item in supplierCodes)
             {
@@ -48,7 +48,7 @@ namespace TOne.WhS.DBSync.Data.SQL
             //dt.Columns.Add(new DataColumn { AllowDBNull = true, ColumnName = "EED", DataType = typeof(DateTime) });
             //dt.Columns.Add("SourceID", typeof(string));
             //dt.Columns.Add("ID", typeof(long));
-           
+
             //dt.BeginLoadData();
             //foreach (var item in supplierCodes)
             //{
@@ -77,8 +77,8 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, SupplierCode> GetSupplierCodes(bool useTempTables)
         {
-            return GetItemsText("SELECT [ID] ,[Code]  ,[ZoneID] ,[BED], [EED], [SourceID] FROM "
-                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), SupplierCodeMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+            return GetItemsText(string.Format("SELECT [ID] ,[Code]  ,[ZoneID] ,[BED], [EED], [SourceID] FROM {0} where sourceid is not null"
+                , MigrationUtils.GetTableName(_Schema, _TableName, useTempTables)), SupplierCodeMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
         public SupplierCode SupplierCodeMapper(IDataReader reader)

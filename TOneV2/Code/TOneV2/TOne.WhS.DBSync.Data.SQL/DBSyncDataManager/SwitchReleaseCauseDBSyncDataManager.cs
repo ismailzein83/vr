@@ -50,8 +50,8 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, SwitchReleaseCause> GetSwitchReleaseCauses(bool useTempTables)
         {
-            return GetItemsText("SELECT [ID],[SwitchID],[ReleaseCode],[Settings], [SourceID] FROM"
-                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), SwitchReleaseCauseMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+            return GetItemsText(string.Format("SELECT [ID],[SwitchID],[ReleaseCode],[Settings], [SourceID] FROM {0} where sourceid is not null"
+                , MigrationUtils.GetTableName(_Schema, _TableName, useTempTables)), SwitchReleaseCauseMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
         }
 
         private SwitchReleaseCause SwitchReleaseCauseMapper(IDataReader reader)

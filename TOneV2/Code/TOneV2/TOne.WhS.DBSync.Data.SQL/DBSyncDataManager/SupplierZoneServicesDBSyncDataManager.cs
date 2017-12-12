@@ -62,8 +62,8 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, SupplierZoneService> GetSupplierZoneServices(bool useTempTables)
         {
-            return GetItemsText("SELECT [ID], [ZoneID], [SupplierID], [ReceivedServicesFlag], [EffectiveServiceFlag], [BED], [EED] FROM "
-                + MigrationUtils.GetTableName(_Schema, _TableName, useTempTables), SupplierZoneServiceMapper, cmd => { }).ToDictionary(x => x.SupplierZoneServiceId.ToString(), x => x);
+            return GetItemsText(string.Format("SELECT [ID], [ZoneID], [SupplierID], [ReceivedServicesFlag], [EffectiveServiceFlag], [BED], [EED] FROM {0} where sourceid is not null"
+                , MigrationUtils.GetTableName(_Schema, _TableName, useTempTables)), SupplierZoneServiceMapper, cmd => { }).ToDictionary(x => x.SupplierZoneServiceId.ToString(), x => x);
         }
 
         public SupplierZoneService SupplierZoneServiceMapper(IDataReader reader)
