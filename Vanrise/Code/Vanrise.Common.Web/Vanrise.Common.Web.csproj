@@ -456,6 +456,7 @@
     <Content Include="Common\Services\APIServices\ObjectTrackingAPIService.js" />
     <Content Include="Common\Services\APIServices\OverriddenConfigAPIService.js" />
     <Content Include="Common\Services\APIServices\OverriddenConfigGroupAPIService.js" />
+    <Content Include="Common\Services\APIServices\VRExclusiveSessionTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\VRLocalizationLanguageAPIService.js" />
     <Content Include="Common\Services\APIServices\VRLocalizationModuleAPIService.js" />
     <Content Include="Common\Services\APIServices\VRLocalizationTextResourceAPIService.js" />
