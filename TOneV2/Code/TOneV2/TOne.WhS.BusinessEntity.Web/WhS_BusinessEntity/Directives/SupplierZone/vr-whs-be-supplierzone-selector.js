@@ -54,7 +54,7 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
 
             return '<span  ng-show="ctrl.isSupplierVisible">'
                    + '  <vr-whs-be-carrieraccount-selector  normal-col-num="{{ctrl.normalColNum}}"   getsuppliers on-ready="ctrl.onSupplierReady"'
-                   + ' onselectionchanged="ctrl.onSupplierSelectionchanged"></vr-whs-be-sellingnumberplan-selector>'
+                   + ' onselectionchanged="ctrl.onSupplierSelectionchanged"></vr-whs-be-carrieraccount-selector>'
                    + ' </span>'
                    + ' <span vr-disabled="ctrl.isSupplierZoneDisabled">'
                    + ' <vr-columns colnum="{{ctrl.normalColNum}}" >'
@@ -175,17 +175,17 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                                         genericUIContext.onvaluechanged = function (field, selectedValue) {
                                             if (field.FieldType.BusinessEntityDefinitionId.toUpperCase() == "8C286BCD-5766-487A-8B32-5D167EC342C0") {
 
-                                                selectorApi.clearDataSource();
                                                 ctrl.isSupplierZoneDisabled = true;
-                                                supplierId = undefined;
-
-                                                if (selectedValue == undefined)
+                                                
+                                                if (selectedValue == undefined) {
+                                                    selectorApi.clearDataSource();
                                                     return;
+                                                }
 
                                                 if (selectedValue instanceof Array) {
                                                     switch (selectedValue.length) {
                                                         case 1: ctrl.isSupplierZoneDisabled = false; supplierId = selectedValue[0].CarrierAccountId; break;
-                                                        default: break;
+                                                        default: selectorApi.clearDataSource(); supplierId = undefined; break;
                                                     }
                                                 }
                                                 else {
