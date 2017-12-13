@@ -289,10 +289,6 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             var salePriceListManager = new SalePriceListManager();
             SalePriceList pricelist = salePriceListManager.GetPriceList((int)salePricelistCodeChange.PricelistId);
-
-            var customerCountryManager = new CustomerCountryManager();
-            CustomerCountry2 customerCountry = customerCountryManager.GetEffectiveOrFutureCustomerCountry(pricelist.OwnerId, salePricelistCodeChange.CountryId, pricelist.EffectiveOn);
-
             SalePricelistCodeChange codeChange = new SalePricelistCodeChange
             {
                 ZoneId = salePricelistCodeChange.ZoneId,
@@ -305,9 +301,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 BatchId = salePricelistCodeChange.BatchId,
                 RecentZoneName = salePricelistCodeChange.RecentZoneName
             };
-            codeChange.BED = customerCountry.BED > salePricelistCodeChange.BED
-                ? customerCountry.BED
-                : salePricelistCodeChange.BED;
+            codeChange.BED =salePricelistCodeChange.BED;
             codeChange.EED = salePricelistCodeChange.EED.VRGreaterThan(codeChange.BED) ? salePricelistCodeChange.EED : codeChange.BED;
             return codeChange;
         }
