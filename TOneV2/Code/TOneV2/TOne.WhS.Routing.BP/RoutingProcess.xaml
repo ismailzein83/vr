@@ -644,38 +644,47 @@
               </InArgument>
             </twrba2:FinalizeCustomerRouteDatabase.RoutingDatabaseId>
           </twrba2:FinalizeCustomerRouteDatabase>
-          <twrba2:FillRoutingEntityDetails Status="{x:Null}" sap2010:WorkflowViewState.IdRef="FillRoutingEntityDetails_1">
-            <twrba2:FillRoutingEntityDetails.EffectiveDate>
-              <InArgument x:TypeArguments="s:DateTime">
-                <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveTime.Value</mca:CSharpValue>
+          <If sap2010:WorkflowViewState.IdRef="If_9">
+            <If.Condition>
+              <InArgument x:TypeArguments="x:Boolean">
+                <mca:CSharpValue x:TypeArguments="x:Boolean">Input.RoutingDatabaseType == RoutingDatabaseType.Current</mca:CSharpValue>
               </InArgument>
-            </twrba2:FillRoutingEntityDetails.EffectiveDate>
-            <twrba2:FillRoutingEntityDetails.MaxSaleRateTimeStamp>
-              <InArgument x:TypeArguments="x:Object">
-                <mca:CSharpValue x:TypeArguments="x:Object">MaxSaleRateTimeStamp</mca:CSharpValue>
-              </InArgument>
-            </twrba2:FillRoutingEntityDetails.MaxSaleRateTimeStamp>
-            <twrba2:FillRoutingEntityDetails.MaxSupplierRateTimeStamp>
-              <InArgument x:TypeArguments="x:Object">
-                <mca:CSharpValue x:TypeArguments="x:Object">MaxSupplierRateTimeStamp</mca:CSharpValue>
-              </InArgument>
-            </twrba2:FillRoutingEntityDetails.MaxSupplierRateTimeStamp>
-            <twrba2:FillRoutingEntityDetails.NextOpenOrCloseSaleRateTime>
-              <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
-                <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">NextOpenOrCloseSaleRateTime</mca:CSharpValue>
-              </InArgument>
-            </twrba2:FillRoutingEntityDetails.NextOpenOrCloseSaleRateTime>
-            <twrba2:FillRoutingEntityDetails.NextOpenOrCloseSupplierRateTime>
-              <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
-                <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">NextOpenOrCloseSupplierRateTime</mca:CSharpValue>
-              </InArgument>
-            </twrba2:FillRoutingEntityDetails.NextOpenOrCloseSupplierRateTime>
-            <twrba2:FillRoutingEntityDetails.RoutingDatabaseId>
-              <InArgument x:TypeArguments="x:Int32">
-                <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
-              </InArgument>
-            </twrba2:FillRoutingEntityDetails.RoutingDatabaseId>
-          </twrba2:FillRoutingEntityDetails>
+            </If.Condition>
+            <If.Then>
+              <twrba2:FillRoutingEntityDetails Status="{x:Null}" sap2010:WorkflowViewState.IdRef="FillRoutingEntityDetails_1">
+                <twrba2:FillRoutingEntityDetails.EffectiveDate>
+                  <InArgument x:TypeArguments="s:DateTime">
+                    <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveTime.Value</mca:CSharpValue>
+                  </InArgument>
+                </twrba2:FillRoutingEntityDetails.EffectiveDate>
+                <twrba2:FillRoutingEntityDetails.MaxSaleRateTimeStamp>
+                  <InArgument x:TypeArguments="x:Object">
+                    <mca:CSharpValue x:TypeArguments="x:Object">MaxSaleRateTimeStamp</mca:CSharpValue>
+                  </InArgument>
+                </twrba2:FillRoutingEntityDetails.MaxSaleRateTimeStamp>
+                <twrba2:FillRoutingEntityDetails.MaxSupplierRateTimeStamp>
+                  <InArgument x:TypeArguments="x:Object">
+                    <mca:CSharpValue x:TypeArguments="x:Object">MaxSupplierRateTimeStamp</mca:CSharpValue>
+                  </InArgument>
+                </twrba2:FillRoutingEntityDetails.MaxSupplierRateTimeStamp>
+                <twrba2:FillRoutingEntityDetails.NextOpenOrCloseSaleRateTime>
+                  <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+                    <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">NextOpenOrCloseSaleRateTime</mca:CSharpValue>
+                  </InArgument>
+                </twrba2:FillRoutingEntityDetails.NextOpenOrCloseSaleRateTime>
+                <twrba2:FillRoutingEntityDetails.NextOpenOrCloseSupplierRateTime>
+                  <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
+                    <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">NextOpenOrCloseSupplierRateTime</mca:CSharpValue>
+                  </InArgument>
+                </twrba2:FillRoutingEntityDetails.NextOpenOrCloseSupplierRateTime>
+                <twrba2:FillRoutingEntityDetails.RoutingDatabaseId>
+                  <InArgument x:TypeArguments="x:Int32">
+                    <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
+                  </InArgument>
+                </twrba2:FillRoutingEntityDetails.RoutingDatabaseId>
+              </twrba2:FillRoutingEntityDetails>
+            </If.Then>
+          </If>
         </Parallel>
         <twrba2:SetRoutingDatabaseReady PreviousActivityStatus="{x:Null}" Status="{x:Null}" sap2010:WorkflowViewState.IdRef="SetRoutingDatabaseReady_1">
           <twrba2:SetRoutingDatabaseReady.RoutingDatabaseId>
@@ -794,7 +803,7 @@
         </TerminateWorkflow>
       </If.Then>
     </If>
-    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>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</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -951,13 +960,14 @@
       <sap2010:ViewStateData Id="GetNextOpenOrCloseSupplierRateTime_2" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_5" sap:VirtualizedContainerService.HintSize="1034,86" />
       <sap2010:ViewStateData Id="If_8" sap:VirtualizedContainerService.HintSize="1159,236" />
-      <sap2010:ViewStateData Id="FinalizeCustomerRouteDatabase_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="FillRoutingEntityDetails_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_6" sap:VirtualizedContainerService.HintSize="1159,86" />
+      <sap2010:ViewStateData Id="FinalizeCustomerRouteDatabase_1" sap:VirtualizedContainerService.HintSize="200,210" />
+      <sap2010:ViewStateData Id="FillRoutingEntityDetails_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_9" sap:VirtualizedContainerService.HintSize="464,210" />
+      <sap2010:ViewStateData Id="Parallel_6" sap:VirtualizedContainerService.HintSize="1159,256" />
       <sap2010:ViewStateData Id="SetRoutingDatabaseReady_1" sap:VirtualizedContainerService.HintSize="1159,22" />
       <sap2010:ViewStateData Id="DeleteRouteRuleChanged_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="If_7" sap:VirtualizedContainerService.HintSize="1159,210" />
-      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="1181,798">
+      <sap2010:ViewStateData Id="Sequence_7" sap:VirtualizedContainerService.HintSize="1181,968">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -975,20 +985,20 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="464,798" />
-      <sap2010:ViewStateData Id="Parallel_3" sap:VirtualizedContainerService.HintSize="1799,844" />
+      <sap2010:ViewStateData Id="If_4" sap:VirtualizedContainerService.HintSize="464,968" />
+      <sap2010:ViewStateData Id="Parallel_3" sap:VirtualizedContainerService.HintSize="1799,1014" />
       <sap2010:ViewStateData Id="FinalizeRouteProcess_1" sap:VirtualizedContainerService.HintSize="1799,22" />
       <sap2010:ViewStateData Id="DropOldRoutingDatabases_1" sap:VirtualizedContainerService.HintSize="1799,22" />
       <sap2010:ViewStateData Id="TerminateWorkflow_3" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="If_6" sap:VirtualizedContainerService.HintSize="1799,210" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1821,4822">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1821,4992">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RoutingProcess_1" sap:VirtualizedContainerService.HintSize="1861,4902" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RoutingProcess_1" sap:VirtualizedContainerService.HintSize="1861,5072" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
