@@ -9,6 +9,5 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class SupplierRateForZoneQuery
     {
         public long SupplierZoneId { get; set; }
-        public DateTime EffectiveOn { get; set; }
     }
 }

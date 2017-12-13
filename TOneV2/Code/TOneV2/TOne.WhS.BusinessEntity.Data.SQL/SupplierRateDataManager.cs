@@ -77,9 +77,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             return GetItemsSP("[TOneWhS_BE].[sp_SupplierRate_GetPending]", SupplierRateMapper, query.SupplierId, countriesIds, query.SupplierZoneName, effectiveOn);
         }
-        public IEnumerable<SupplierRate> GetSupplierRatesForZone(SupplierRateForZoneQuery query)
+        public IEnumerable<SupplierRate> GetSupplierRatesForZone(SupplierRateForZoneQuery query, DateTime effectiveOn)
         {
-            return GetItemsSP("[TOneWhS_BE].[sp_SupplierRate_GetSupplierRatesForZone]", SupplierRateMapper, query.SupplierZoneId, query.EffectiveOn);
+            return GetItemsSP("[TOneWhS_BE].[sp_SupplierRate_GetSupplierRatesForZone]", SupplierRateMapper, query.SupplierZoneId, effectiveOn);
         }
 
         public IEnumerable<SupplierRate> GetZoneRateHistory(List<long> zoneIds, List<int> countryIds, int supplierId)

@@ -11,7 +11,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public override IEnumerable<Entities.SupplierRate> GetFilteredSupplierRates()
         {
             ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
-            return dataManager.GetSupplierRatesForZone(Query);
+            return dataManager.GetSupplierRatesForZone(Query,EffectiveOn);
         }
     }
 }

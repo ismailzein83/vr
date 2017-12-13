@@ -21,11 +21,11 @@
                 supplierZoneItem.supplierRateGridAPI = directiveAPI;
                 var payload = {
                     $type: "TOne.WhS.BusinessEntity.Business.SupplierRateForZoneQueryHandler,TOne.WhS.BusinessEntity.Business",
-                    Query: {
+                    EffectiveOn: supplierZoneItem.EffectiveOn,
+                            Query: {
                         SupplierZoneId: supplierZoneItem.Entity.SupplierZoneId,
-                            EffectiveOn: supplierZoneItem.EffectiveOn,
-                            HideHistory: true
-            }
+                        HideHistory: true
+                    }
                 };
                 return supplierZoneItem.supplierRateGridAPI.loadGrid(payload);
             };
