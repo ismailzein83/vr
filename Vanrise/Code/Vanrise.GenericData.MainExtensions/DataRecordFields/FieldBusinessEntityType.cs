@@ -85,6 +85,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 }
                 else
                 {
+                    fullCount = 1;
                     entityDescriptions.Add(beManager.GetEntityDescription(new BusinessEntityDescriptionContext() { EntityDefinition = beDefinition, EntityId = value }));
                 }
                 return String.Concat(String.Join(",", entityDescriptions), entityDescriptions.Count != fullCount ? String.Format(" ...... ({0} selected)", fullCount) : "");
