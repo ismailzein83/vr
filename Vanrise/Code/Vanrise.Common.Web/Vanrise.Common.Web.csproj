@@ -320,6 +320,7 @@
     <Content Include="Common\Directives\VRLocalization\TextResourceTranslation\Templates\VrLocalizationTextResourceTranslationSearch.html" />
     <Content Include="Common\Directives\VRLocalization\TextResourceTranslation\vr-common-vrlocalizationtextresourcetranslation-grid.js" />
     <Content Include="Common\Directives\VRLocalization\TextResourceTranslation\vr-common-vrlocalizationtextresourcetranslation-search.js" />
+    <Content Include="Common\Directives\VRLocalization\TextResource\Templates\ResourceKeySelectorTemplate.html" />
     <Content Include="Common\Directives\VRLocalization\TextResource\Templates\VRLocalizationTextResourceSearchTemplate.html" />
     <Content Include="Common\Directives\VRLocalization\TextResource\Templates\VRLocalizationTextResourceGridTemplate.html" />
     <Content Include="Common\Directives\VRLocalizationLanguage\Templates\VRLocalizationLanguageGridTemplate.html" />
@@ -328,6 +329,7 @@
     <Content Include="Common\Directives\VRLocalization\TextResource\vr-common-vrlocalizationtextresource-grid.js" />
     <Content Include="Common\Directives\VRLocalization\TextResource\vr-common-vrlocalizationtextresource-selector.js" />
     <Content Include="Common\Directives\VRLocalization\TextResource\vr-common-vrlocalizationtextresource-search.js" />
+    <Content Include="Common\Directives\VRLocalization\TextResource\vr-common-localizationressourcekey-selector.js" />
     <Content Include="Common\Directives\VRMail\Templates\OverriddenConfigurationVRMailType.html" />
     <Content Include="Common\Directives\VRMail\vr-common-overriddenconfiguration-mailtype.js" />
     <Content Include="Common\Directives\VRObjectTypeDefinition\Templates\OverriddenConfigurationObjectTypeDefinition.html" />
