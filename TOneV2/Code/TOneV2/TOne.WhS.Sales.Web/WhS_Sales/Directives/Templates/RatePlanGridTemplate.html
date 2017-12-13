@@ -490,8 +490,7 @@
                                                                     <div class="vr-datagrid-cell">
                                                                         <div class="vr-datagrid-celltext ">
                                                                             <vr-label isvalue="true">
-                                                                                <a ng-if="::(!dataItem.IsCountryNew)" href="" ng-click="::onZoneNameClicked(dataItem)" style="white-space: normal;" title="{{::dataItem.ZoneName}}">{{::(dataItem.ZoneName + (dataItem.IsFutureZone ? "*" : ""))}}</a>
-                                                                                <span ng-if="::dataItem.IsCountryNew" style="white-space: normal;">{{::(dataItem.ZoneName + (dataItem.IsFutureZone ? "*" : ""))}}</span>
+                                                                                <a href="" ng-click="::onZoneNameClicked(dataItem)" style="white-space: normal;" title="{{::dataItem.ZoneName}}">{{::(dataItem.ZoneName + (dataItem.IsFutureZone ? "*" : ""))}}</a>
                                                                             </vr-label>
                                                                         </div>
                                                                     </div>
