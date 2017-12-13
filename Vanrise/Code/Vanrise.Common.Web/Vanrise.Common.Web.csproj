@@ -273,6 +273,8 @@
     <Content Include="Common\Directives\Settings\CompanySettings\vr-common-company-setting-selector.js" />
     <Content Include="Common\Directives\Settings\CompanySettings\Templates\CompanySettingsTemplate.html" />
     <Content Include="Common\Directives\Settings\CompanySettings\vr-common-companysettings-editor.js" />
+    <Content Include="Common\Directives\Settings\SessionLockSettings\Templates\SessionLockSettings.html" />
+    <Content Include="Common\Directives\Settings\SessionLockSettings\vr-common-sessionlock-settings-editor.js" />
     <Content Include="Common\Directives\Settings\Templates\OverriddenConfigurationSettings.html" />
     <Content Include="Common\Directives\Settings\vr-common-overriddenconfiguration-settings.js" />
     <Content Include="Common\Directives\Settings\vr-common-settings-selector.js" />

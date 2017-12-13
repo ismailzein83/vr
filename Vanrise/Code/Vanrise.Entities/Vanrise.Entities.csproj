@@ -100,6 +100,7 @@
     <Compile Include="Region\RegionQuery.cs" />
     <Compile Include="Region\Region.cs" />
     <Compile Include="SaveOperationType.cs" />
+    <Compile Include="Settings\SessionLockSettings\SessionLockSettings.cs" />
     <Compile Include="Settings\SettingInfo.cs" />
     <Compile Include="Settings\SettingInfoFilter.cs" />
     <Compile Include="StatusDefinition\IStatusDefinitionFilter.cs" />
