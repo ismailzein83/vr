@@ -8,8 +8,8 @@ namespace TOne.WhS.Routing.BP.Activities
     {
         protected override void VRExecute(IBaseCodeActivityContext context)
         {
-            new RouteRuleManager().GetRulesChanged();
-            new RouteOptionRuleManager().GetRulesChanged();
+            new RouteRuleManager().FillAndGetRulesChangedForProcessing();
+            new RouteOptionRuleManager().FillAndGetRulesChangedForProcessing();
         }
     }
 }

@@ -44,11 +44,21 @@ namespace TOne.WhS.Routing.Business
 
             PartialRoutingProcessInput inputArg = context.BaseProcessInputArgument.CastWithValidate<PartialRoutingProcessInput>("context.BaseProcessInputArgument");
 
-            var routeRulesChanged = new RouteRuleManager().GetRulesChanged();
+            RouteRuleManager routeRuleManager = new RouteRuleManager();
+            var routeRulesChangedForProcessing = routeRuleManager.GetRulesChangedForProcessing();
+            if (routeRulesChangedForProcessing != null && routeRulesChangedForProcessing.Count > 0)
+                return true;
+
+            var routeRulesChanged = routeRuleManager.GetRulesChanged();
             if (routeRulesChanged != null && routeRulesChanged.Count > 0)
                 return true;
 
-            var routeOptionRulesChanged = new RouteOptionRuleManager().GetRulesChanged();
+            RouteOptionRuleManager routeOptionRuleManager = new RouteOptionRuleManager();
+            var routeOptionRulesChangedForProcessing = routeOptionRuleManager.GetRulesChangedForProcessing();
+            if (routeOptionRulesChangedForProcessing != null && routeOptionRulesChangedForProcessing.Count > 0)
+                return true;
+
+            var routeOptionRulesChanged = routeOptionRuleManager.GetRulesChanged();
             if (routeOptionRulesChanged != null && routeOptionRulesChanged.Count > 0)
                 return true;
 

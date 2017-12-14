@@ -45,12 +45,12 @@ namespace TOne.WhS.Routing.BP.Activities
 
             if (routeRuleId.HasValue)
             {
-                routeRuleChangedList = new List<RuleChangedData<RouteRule>>() { routeRuleManager.GetRuleChanged(routeRuleId.Value) };
+                routeRuleChangedList = new List<RuleChangedData<RouteRule>>() { routeRuleManager.FillAndGetRuleChangedForProcessing(routeRuleId.Value) };
             }
             else
             {
-                routeRuleChangedList = routeRuleManager.GetRulesChanged();
-                routeOptionRuleChangedList = routeOptionRuleManager.GetRulesChanged();
+                routeRuleChangedList = routeRuleManager.FillAndGetRulesChangedForProcessing();
+                routeOptionRuleChangedList = routeOptionRuleManager.FillAndGetRulesChangedForProcessing();
             }
 
             AffectedRouteRules affectedRouteRules = new AffectedRouteRules();

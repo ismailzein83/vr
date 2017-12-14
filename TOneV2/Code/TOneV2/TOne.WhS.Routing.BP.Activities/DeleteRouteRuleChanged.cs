@@ -19,12 +19,12 @@ namespace TOne.WhS.Routing.BP.Activities
             RouteOptionRuleManager routeOptionRuleManager = new RouteOptionRuleManager();
             if (routeRuleId.HasValue)
             {
-                routeRuleManager.DeleteRuleChanged(routeRuleId.Value);
+                routeRuleManager.DeleteRuleChangedForProcessing(routeRuleId.Value);
             }
             else
             {
-                routeRuleManager.DeleteRulesChanged();
-                routeOptionRuleManager.DeleteRulesChanged();
+                routeRuleManager.DeleteRulesChangedForProcessing();
+                routeOptionRuleManager.DeleteRulesChangedForProcessing();
             }
         }
     }
