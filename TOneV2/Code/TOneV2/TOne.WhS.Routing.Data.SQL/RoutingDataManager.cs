@@ -169,14 +169,14 @@ namespace TOne.WhS.Routing.Data.SQL
 
         const string query_CustomerQualityConfigurationTable = @"CREATE TABLE [dbo].[QualityConfigurationData](
                                                         [ID] [uniqueidentifier] NOT NULL,
-                                                        [SupplierZoneId] [long] NULL,
+                                                        [SupplierZoneId] [bigint] NULL,
                                                         [Quality] [decimal](20, 8) NOT NULL
                                                         )ON [PRIMARY]";
 
         const string query_RPQualityConfigurationTable = @"CREATE TABLE [dbo].[QualityConfigurationData](
                                                         [ID] [uniqueidentifier] NOT NULL,
                                                         [SupplierId] [int] NULL,
-                                                        [SalezoneId] [long] NULL,
+                                                        [SalezoneId] [bigint] NULL,
                                                         [Quality] [decimal](20, 8) NOT NULL
                                                         )ON [PRIMARY]";
 
