@@ -109,6 +109,7 @@
     <Compile Include="ApplyProductRoutesToDB.cs" />
     <Compile Include="ApplySupplierZoneDetailsToDB.cs" />
     <Compile Include="BuildCodeMatches.cs" />
+    <Compile Include="CalculateCustomerRouteQualityData.cs" />
     <Compile Include="CalculateRPQualityData.cs" />
     <Compile Include="EntitiesUpdater\ApplyModifiedSupplierZoneDetails.cs" />
     <Compile Include="EntitiesUpdater\ApplyModifiedCustomerZoneDetails.cs" />

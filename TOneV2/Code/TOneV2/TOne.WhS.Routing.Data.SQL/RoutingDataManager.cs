@@ -127,6 +127,7 @@ namespace TOne.WhS.Routing.Data.SQL
         {
             StringBuilder query = new StringBuilder();
             query.AppendLine(query_SupplierZoneDetailsTable);
+            query.AppendLine(query_CustomerQualityConfigurationTable);
             query.AppendLine(query_CustomerZoneDetailTable);
             query.AppendLine(query_CustomerRouteTable);
             query.AppendLine(query_TableTypes);
@@ -149,7 +150,7 @@ namespace TOne.WhS.Routing.Data.SQL
             StringBuilder query = new StringBuilder();
 
             query.AppendLine(query_SupplierZoneDetailsTable);
-            query.AppendLine(query_QualityConfigurationTable);
+            query.AppendLine(query_RPQualityConfigurationTable);
             query.AppendLine(query_CustomerZoneDetailTable);
             query.AppendLine(query_CodeSaleZoneTable);
             query.AppendLine(query_TableTypes);
@@ -166,11 +167,17 @@ namespace TOne.WhS.Routing.Data.SQL
 
         #region Constants
 
-        const string query_QualityConfigurationTable = @"CREATE TABLE [dbo].[QualityConfiguration](
+        const string query_CustomerQualityConfigurationTable = @"CREATE TABLE [dbo].[QualityConfigurationData](
                                                         [ID] [uniqueidentifier] NOT NULL,
-                                                        [Supplier] [varchar](max) NOT NULL,
-                                                        [Salezone] [varchar](max) NOT NULL,
-                                                        [Quality] [varchar](max) NOT NULL
+                                                        [SupplierZoneId] [long] NULL,
+                                                        [Quality] [decimal](20, 8) NOT NULL
+                                                        )ON [PRIMARY]";
+
+        const string query_RPQualityConfigurationTable = @"CREATE TABLE [dbo].[QualityConfigurationData](
+                                                        [ID] [uniqueidentifier] NOT NULL,
+                                                        [SupplierId] [int] NULL,
+                                                        [SalezoneId] [long] NULL,
+                                                        [Quality] [decimal](20, 8) NOT NULL
                                                         )ON [PRIMARY]";
 
         const string query_SaleZoneTable = @"CREATE TABLE [dbo].[SaleZone](

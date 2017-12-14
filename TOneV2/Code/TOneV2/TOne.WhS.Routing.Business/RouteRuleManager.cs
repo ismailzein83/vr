@@ -75,6 +75,41 @@ namespace TOne.WhS.Routing.Business
             return linkedRouteRule;
         }
 
+
+        public List<RouteRule> GetEffectiveRPRouteRules(DateTime effectiveDate)
+        {
+            var routeRules = base.GetAllRules();
+            List<RouteRule> rpRouteRules = new List<RouteRule>();
+
+            foreach (var routeRuleKvp in routeRules)
+            {
+                RouteRule routeRule = routeRuleKvp.Value;
+
+                if (routeRule.IsEffective(effectiveDate))
+                {
+                    int? routingProductId = routeRule.Criteria.GetRoutingProductId();
+                    if (routingProductId.HasValue)
+                        rpRouteRules.Add(routeRule);
+                }
+            }
+            return rpRouteRules;
+        }
+
+        public List<RouteRule> GetEffectiveCustomerRouteRules(DateTime effectiveDate)
+        {
+            var routeRules = base.GetAllRules();
+            List<RouteRule> customerRouteRules = new List<RouteRule>();
+
+            foreach (var routeRuleKvp in routeRules)
+            {
+                RouteRule routeRule = routeRuleKvp.Value;
+                if (routeRule.IsEffective(effectiveDate))
+                    customerRouteRules.Add(routeRule);
+
+            }
+            return customerRouteRules;
+        }
+
         public Vanrise.Entities.IDataRetrievalResult<RouteRuleDetail> GetFilteredRouteRules(Vanrise.Entities.DataRetrievalInput<RouteRuleQuery> input)
         {
             var routeRules = base.GetAllRules();

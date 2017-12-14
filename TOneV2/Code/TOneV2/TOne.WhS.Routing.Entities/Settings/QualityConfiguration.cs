@@ -11,6 +11,8 @@ namespace TOne.WhS.Routing.Entities
 
     public class RouteRuleQualityConfiguration
     {
+        public Guid QualityConfigurationId { get; set; }
+
         public VRTimePeriod TimePeriod { get; set; }
 
         public string Name { get; set; }

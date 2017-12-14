@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsRoutingRouterulesettingsOrderByquality', ['UtilsService',
-    function (UtilsService) {
+app.directive('vrWhsRoutingRouterulesettingsOrderByquality', ['UtilsService', 'VRUIUtilsService', 'WhS_Routing_QualityConfigurationAPIService',
+    function (UtilsService, VRUIUtilsService, WhS_Routing_QualityConfigurationAPIService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -25,15 +25,26 @@ app.directive('vrWhsRoutingRouterulesettingsOrderByquality', ['UtilsService',
                     }
                 };
             },
-            template: function (element, attrs) {
-                return '';
+            templateUrl: function (element, attrs) {
+                return '/Client/Modules/WhS_Routing/Directives/Extensions/RouteRuleSettings/Order/Templates/OrderByQualityDirective.html';
             }
 
         };
 
         function orderByQualityCtor(ctrl, $scope) {
 
+            $scope.scopeModel = {};
+            $scope.qualityConfigurations = [];
+            var qualityConfigurationSelectorAPI;
+            var qualityConfigurationPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
             function initializeController() {
+                $scope.scopeModel.onQualityConfigurationSelectorReady = function (api) {
+                    qualityConfigurationSelectorAPI = api;
+                    qualityConfigurationPromiseDeferred.resolve();
+                };
+
                 defineAPI();
             }
 
@@ -41,12 +52,31 @@ app.directive('vrWhsRoutingRouterulesettingsOrderByquality', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
+                    var loadQualityConfigurationSelectorPromise = loadQualityConfigurationSelector();
+                    promises.push(loadQualityConfigurationSelectorPromise);
 
+                    function loadQualityConfigurationSelector() {
+                        var loadQualityConfigurationPromiseDeferred = UtilsService.createPromiseDeferred();
+                        qualityConfigurationPromiseDeferred.promise.then(function () {
+
+                            var qualityConfigurationPayload = undefined;
+                            if (payload != undefined) {
+                                qualityConfigurationPayload = { selectedIds: payload.QualityConfigurationIds };
+                            }
+
+                            VRUIUtilsService.callDirectiveLoad(qualityConfigurationSelectorAPI, qualityConfigurationPayload, loadQualityConfigurationPromiseDeferred);
+                        });
+                        return loadQualityConfigurationPromiseDeferred.promise;
+                    }
+
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.Routing.Business.RouteRules.Orders.OptionOrderByQuality, TOne.WhS.Routing.Business"
+                        $type: "TOne.WhS.Routing.Business.RouteRules.Orders.OptionOrderByQuality, TOne.WhS.Routing.Business",
+                        QualityConfigurationIds: qualityConfigurationSelectorAPI.getSelectedIds()
                     };
                 };
 

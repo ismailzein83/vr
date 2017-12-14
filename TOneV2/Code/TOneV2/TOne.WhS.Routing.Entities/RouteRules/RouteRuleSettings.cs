@@ -16,6 +16,9 @@ namespace TOne.WhS.Routing.Entities
         {
             return null;
         }
+        public virtual void GetQualityConfigurationIds(IRouteRuleQualityContext context)
+        {
+        }
 
         public virtual bool IsOptionFiltered(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target, RouteOptionRuleTarget option)
         {

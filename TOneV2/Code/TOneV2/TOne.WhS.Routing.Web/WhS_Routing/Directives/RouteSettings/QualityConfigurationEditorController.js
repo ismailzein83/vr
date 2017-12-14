@@ -65,7 +65,7 @@
             };
 
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
             $scope.scopeModel.onTimeperiodReady = function (api) {
@@ -84,7 +84,7 @@
 
         function load() {
             $scope.scopeModel.isLoading = true;
-            loadAllControls()
+            loadAllControls();
         }
 
         function loadAllControls() {
@@ -99,6 +99,7 @@
             function loadStaticData() {
                 if (isEditMode) {
                     $scope.scopeModel.qualityConfigurationyName = qualityConfigurationEntity.Name;
+                    $scope.scopeModel.qualityConfigurationId = qualityConfigurationEntity.QualityConfigurationId;
                     $scope.scopeModel.expression = qualityConfigurationEntity.Expression;
                 }
             }
@@ -145,24 +146,27 @@
 
         }
 
-        function buildQualityConfigurationObjectFromScope() {
+        function buildQualityConfigurationObjectFromScope(qualityConfigurationId) {
             var obj = {
                 Name: $scope.scopeModel.qualityConfigurationyName,
                 TimePeriod: timePeriodApi.getData(),
                 Expression: $scope.scopeModel.expression,
+                QualityConfigurationId: qualityConfigurationId
             };
             return obj;
         }
 
         function insertQualityConfiguration() {
-            var qualityConfigurationObject = buildQualityConfigurationObjectFromScope();
+            var qualityConfigurationObject = buildQualityConfigurationObjectFromScope(UtilsService.guid());
+
             if ($scope.onQualityConfigurationAdded != undefined)
                 $scope.onQualityConfigurationAdded(qualityConfigurationObject);
             $scope.modalContext.closeModal();
         }
 
         function updateQualityConfiguration() {
-            var qualityConfigurationObject = buildQualityConfigurationObjectFromScope();
+            var qualityConfigurationObject = buildQualityConfigurationObjectFromScope($scope.scopeModel.qualityConfigurationId);
+
             if ($scope.onQualityConfigurationUpdated != undefined)
                 $scope.onQualityConfigurationUpdated(qualityConfigurationObject);
             $scope.modalContext.closeModal();

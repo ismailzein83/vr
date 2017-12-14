@@ -5,6 +5,7 @@ using Vanrise.Common.Business;
 using Vanrise.Analytic.Business;
 using Vanrise.Analytic.Entities;
 using Vanrise.Common;
+
 namespace TOne.WhS.Routing.Business
 {
     public class ConfigManager
@@ -131,12 +132,22 @@ namespace TOne.WhS.Routing.Business
             return productRouteDatabaseConfiguration;
         }
 
+        public QualityConfiguration GetQualityConfiguration()
+        {
+            RouteSettingsData routeSettingsData = GetRouteSettingData();
+
+            if (routeSettingsData.QualityConfiguration == null)
+                throw new NullReferenceException("routeSettingsData.QualityConfiguration");
+
+            return routeSettingsData.QualityConfiguration;
+        }
+
         public List<AnalyticMeasureInfo> GetQualityConfigurationFields()
         {
             Guid qualityAnalyticTableId = GetQualityAnalyticTableId();
             AnalyticItemConfigManager analyticItemConfigManager = new AnalyticItemConfigManager();
             Dictionary<string, AnalyticMeasure> analyticItemConfigs = analyticItemConfigManager.GetMeasures(qualityAnalyticTableId);
-            List <AnalyticMeasureInfo> analyticMeasureInfos= new List<AnalyticMeasureInfo>();
+            List<AnalyticMeasureInfo> analyticMeasureInfos = new List<AnalyticMeasureInfo>();
             if (analyticItemConfigs != null)
             {
                 foreach (var analyticItemConfig in analyticItemConfigs)
@@ -172,7 +183,7 @@ namespace TOne.WhS.Routing.Business
             return routeTechnicalSettingData.RouteRuleDataTransformation;
         }
 
-        private TechnicalPartialRouting GetTechnicalPartialRouting() 
+        private TechnicalPartialRouting GetTechnicalPartialRouting()
         {
             RouteTechnicalSettingData routeTechnicalSettingData = GetRouteTechnicalSettingData();
 

@@ -5,7 +5,7 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Business.RouteRules.OptionSettingsGroups;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
-
+using TOne.WhS.Routing.Business.RouteRules.Orders;
 namespace TOne.WhS.Routing.Business
 {
     public partial class RegularRouteRule : RouteRuleSettings
@@ -51,6 +51,32 @@ namespace TOne.WhS.Routing.Business
                 return ApplyOptionsOrder(options);
             else
                 return null;
+        }
+
+        public override void GetQualityConfigurationIds(IRouteRuleQualityContext context)
+        {
+            OptionOrderByQuality optionOrderByQuality;
+            List<Guid> qualityConfigurationIds = new List<Guid>();
+
+            foreach (var optionOrderSetting in OptionOrderSettings)
+            {
+                if (optionOrderSetting.ConfigId == OptionOrderByQuality.s_ConfigId)
+                {
+                    optionOrderByQuality = optionOrderSetting.CastWithValidate<OptionOrderByQuality>("optionOrderSetting");
+                    if (optionOrderByQuality.QualityConfigurationIds == null || optionOrderByQuality.QualityConfigurationIds.Count == 0)
+                    {
+                        context.IsDefault = true;
+                    }
+                    else
+                    {
+                        foreach (var qualityConfigurationId in optionOrderByQuality.QualityConfigurationIds)
+                        {
+                            qualityConfigurationIds.Add(qualityConfigurationId);
+                        }
+                    }
+                }
+            }
+            context.QualityConfigurationIds = qualityConfigurationIds.Count > 0 ? qualityConfigurationIds : null;
         }
 
         public override bool IsOptionFiltered(ISaleEntityRouteRuleExecutionContext context, TOne.WhS.Routing.Entities.RouteRuleTarget target, TOne.WhS.Routing.Entities.RouteOptionRuleTarget option)

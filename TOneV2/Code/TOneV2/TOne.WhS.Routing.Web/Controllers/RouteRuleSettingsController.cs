@@ -69,5 +69,12 @@ namespace TOne.WhS.Routing.Web.Controllers
             ConfigManager configManager = new ConfigManager();
             return configManager.GetQualityConfigurationFields();
         }
+        
+        [HttpGet]
+        [Route("GetQualityConfigurationInfo")]
+        public IEnumerable<QualityConfigurationInfo> GetQualityConfigurationInfo (string filter = null) {  
+            QualityConfigurationInfoFilter qualityConfigurationInfoFilter = filter != null ? Vanrise.Common.Serializer.Deserialize<QualityConfigurationInfoFilter>(filter) : null;
+            return new QualityConfigurationManager().GetQualityConfigurationInfo(qualityConfigurationInfoFilter);
+        }
     }
 }

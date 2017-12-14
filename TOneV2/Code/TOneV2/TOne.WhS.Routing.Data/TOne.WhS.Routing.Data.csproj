@@ -57,6 +57,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IRPQualityConfigurationDataManager.cs" />
+    <Compile Include="ICustomerQualityConfigurationDataManager.cs" />
     <Compile Include="IRoutingEntityDetailsDataManager.cs" />
     <Compile Include="ICodeMatchesDataManager.cs" />
     <Compile Include="ICodeSaleZoneDataManager.cs" />

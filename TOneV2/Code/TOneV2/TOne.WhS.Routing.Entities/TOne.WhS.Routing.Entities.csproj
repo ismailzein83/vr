@@ -41,6 +41,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Analytic.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
@@ -70,7 +73,13 @@
     <Compile Include="CodeZoneMatch\CodeSupplierZoneMatch.cs" />
     <Compile Include="IFinalizeRouteOptionContext.cs" />
     <Compile Include="IRPRouteRuleExecutionContext.cs" />
+    <Compile Include="IRouteRuleQualityContext.cs" />
     <Compile Include="ISupplierZoneToRPOptionPolicyExecutionContext.cs" />
+    <Compile Include="QualityConfiguration\QualityAnalyticRecord.cs" />
+    <Compile Include="QualityConfiguration\CustomerQualityConfigurationData.cs" />
+    <Compile Include="QualityConfiguration\QualityConfigurationInfoFilter.cs" />
+    <Compile Include="QualityConfiguration\RPQualityConfigurationData.cs" />
+    <Compile Include="QualityConfiguration\QualityConfigurationInfo.cs" />
     <Compile Include="RouteSync\SwitchSyncData.cs" />
     <Compile Include="PartialRoute\AffectedRouteOptionRules.cs" />
     <Compile Include="PartialRoute\AffectedRouteRules.cs" />
@@ -80,6 +89,7 @@
     <Compile Include="RouteRuleCriteria\RouteRuleCriteriaConfig.cs" />
     <Compile Include="RouteRuleCriteria\RouteRuleCriteria.cs" />
     <Compile Include="Routes\IFinalizeRouteContext.cs" />
+    <Compile Include="RouteRuleQualityContext.cs" />
     <Compile Include="Settings\QualityConfiguration.cs" />
     <Compile Include="Settings\TechnicalQualityConfiguration.cs" />
     <Compile Include="SpecialRequestRouteRule\SpecialRequestRouteOptionSettings.cs" />

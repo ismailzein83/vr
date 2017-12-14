@@ -207,10 +207,12 @@
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\vr-whs-routing-routerulesettings-filter.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Option\Templates\ExcludedOptionDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Option\vr-whs-routing-routerulesettings-excluded.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\Templates\OrderByQualityDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\Templates\RouteRuleOrderDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\Templates\RouteRuleOrderTypeSelector.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order-byquality.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order-byservice.js" />
+    <Content Include="WhS_Routing\Directives\QualityConfiguration\vr-whs-routing-qualityconfiguration-selector.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-ordertype-selector.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Percentage\Templates\OptionPercentageOptimizationDirective.html" />
@@ -348,7 +350,9 @@
     <Content Include="WhS_Routing\Views\RPRoute\RPRouteOptionSupplier.html" />
     <Content Include="WhS_Routing\Views\RPRoute\RPRouteOptionSupplierController.js" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="WhS_Routing\Directives\QualityConfiguration\Templates\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

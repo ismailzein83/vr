@@ -6,8 +6,10 @@ namespace TOne.WhS.Routing.Business.RouteRules.Orders
 {
     public class OptionOrderByQuality : RouteOptionOrderSettings
     {
+        public static Guid s_ConfigId { get { return new Guid("c107e207-6597-4e45-b22f-d4f0bb7dd211"); } }
+        public override Guid ConfigId { get { return s_ConfigId; } }
 
-        public override Guid ConfigId { get { return new Guid("c107e207-6597-4e45-b22f-d4f0bb7dd211"); } }
+        public List<Guid> QualityConfigurationIds { get; set; }
 
         public override void Execute(IRouteOptionOrderExecutionContext context)
         {

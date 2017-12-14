@@ -9,9 +9,13 @@
         function GetQualityConfigurationFields(input) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetQualityConfigurationFields"), input);
         }
+        function GetQualityConfigurationInfo(input) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetQualityConfigurationInfo"), input);
+        }
 
         return ({
-            GetQualityConfigurationFields: GetQualityConfigurationFields
+            GetQualityConfigurationFields: GetQualityConfigurationFields,
+            GetQualityConfigurationInfo: GetQualityConfigurationInfo
         });
     }
 
