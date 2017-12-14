@@ -10,20 +10,24 @@ namespace Vanrise.Web
     {
         public static Guid? GetLanguageIdFromCookies(HttpCookieCollection cookies)
         {
-            string languageCookieName = "VR_Common_LocalizationLangauge";
-            string languageIdAsString = cookies[languageCookieName].Value;
-
             Guid? languageId = null;
-            if (languageIdAsString == null)
+            string languageCookieName = "VR_Common_LocalizationLangauge";
+            var cookie = cookies[languageCookieName];
+            if(cookie!= null)
             {
-                languageId = new VRLocalizationManager().GetDefaultLanguage();
+                string languageIdAsString = cookies[languageCookieName].Value;
+                if (languageIdAsString == null)
+                {
+                    languageId = new VRLocalizationManager().GetDefaultLanguage();
+                }
+                else
+                {
+                    Guid parsedLanguagedId;
+                    if (Guid.TryParse(languageIdAsString, out parsedLanguagedId))
+                        languageId = parsedLanguagedId;
+                }
             }
-            else
-            {
-                Guid parsedLanguagedId;
-                if (Guid.TryParse(languageIdAsString, out parsedLanguagedId))
-                    languageId = parsedLanguagedId;
-            }
+           
             return languageId;
         }
 
