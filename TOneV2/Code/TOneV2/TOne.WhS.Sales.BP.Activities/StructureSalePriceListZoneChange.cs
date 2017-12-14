@@ -74,13 +74,14 @@ namespace TOne.WhS.Sales.BP.Activities
                 {
                     #region Selling Product
 
-                    //var futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(dataByCustomer, ratePlanContext.EffectiveDate, true));
+                    var futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(dataByCustomer, ratePlanContext.EffectiveDate, false));
 
                     SellingProductChangesContext sellingProductContext = new SellingProductChangesContext
                     {
                         ImportedZonesByCountryId = importedZonesByCountryId,
                         ExistingZonesByCountryId = existingZonesByCountryId,
                         Customers = dataByCustomer,
+                        Futurelocator = futureRateLocator,
                         LastRateNoCachelocator = lastRateNoCachelocator,
                         MinimumDate = minimumDate,
                         EffectiveRoutingProductLocator = effectiveRoutingProductLocator,
@@ -321,7 +322,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     continue;
 
                 List<SalePricelistRateChange> rateChanges = this.GetRateChangesForCustomer(customer.CustomerId, customer.SellingProductId, soldCountries,
-                    context.ImportedZonesByCountryId, context.LastRateNoCachelocator);
+                    context.ImportedZonesByCountryId, context.LastRateNoCachelocator, context.Futurelocator);
 
                 IEnumerable<SalePricelistRPChange> routingProductChanges = GetRoutingProductChanges(customer.CustomerId, customer.SellingProductId,
                     soldCountries, context.ExistingZonesByCountryId, context.EffectiveRoutingProductLocator, context.CurrentRoutingProductLocator);
@@ -346,7 +347,7 @@ namespace TOne.WhS.Sales.BP.Activities
         }
 
         private List<SalePricelistRateChange> GetRateChangesForCustomer(int customerId, int sellingProductId, IEnumerable<CustomerCountry2> soldCountries,
-            Dictionary<int, List<DataByZone>> importedZonesByCountryId, SaleEntityZoneRateLocator lastRateNoCachelocator)
+            Dictionary<int, List<DataByZone>> importedZonesByCountryId, SaleEntityZoneRateLocator lastRateNoCachelocator, SaleEntityZoneRateLocator futurelocator)
         {
             List<SalePricelistRateChange> rateChanges = new List<SalePricelistRateChange>();
             var saleRateManager = new SaleRateManager();
@@ -382,7 +383,7 @@ namespace TOne.WhS.Sales.BP.Activities
                             EED = zone.NormalRateToChange.EED,
                             CurrencyId = saleRateManager.GetCurrencyId(zoneRate.Rate)
                         };
-
+                        rateChange.BED = GetRateChangeBED(customerId, sellingProductId, zone.ZoneId, rateChange.BED, futurelocator);
                         if (zone.NormalRateToChange.RecentExistingRate != null)
                             rateChange.RecentRate = zone.NormalRateToChange.RecentExistingRate.ConvertedRate;
 
@@ -394,6 +395,14 @@ namespace TOne.WhS.Sales.BP.Activities
             return rateChanges;
         }
 
+        private DateTime GetRateChangeBED(int customerId, int sellingProductId, long zoneId, DateTime originalBED, SaleEntityZoneRateLocator futurelocator)
+        {
+            SaleEntityZoneRate zoneRate = futurelocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
+            DateTime? currentEEd = zoneRate.Rate.EED;
+            if (currentEEd.HasValue)
+                return originalBED > currentEEd ? originalBED : currentEEd.Value;
+            return originalBED;
+        }
         #endregion
 
         #region Get Pricelist Changes from Customer Methods
@@ -563,7 +572,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     var zone = saleZoneManager.GetSaleZone(zoneId);
                     if (zone == null)
                         throw new DataIntegrityValidationException(string.Format("Zone with Id {0} not found"));
-                    
+
                     #region Get Rate Changes
 
                     var zoneRate = context.RateChangeLocator.GetCustomerZoneRate(context.CustomerInfo.CustomerId, context.CustomerInfo.SellingProductId, zoneId);
@@ -1064,7 +1073,7 @@ namespace TOne.WhS.Sales.BP.Activities
                         zoneEEDs.Add(effectiveRoutingProduct.EED);
                         zoneEEDs.Add(soldCountry.EED);
                         var zoneEED = UtilitiesManager.GetMinDate(zoneEEDs);
-                        
+
                         var routingProduct = new SalePricelistRPChange
                         {
                             CountryId = saleZone.CountryId,
@@ -1187,6 +1196,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
             public IEnumerable<RoutingCustomerInfoDetails> Customers { get; set; }
             public SaleEntityZoneRateLocator LastRateNoCachelocator { get; set; }
+            public SaleEntityZoneRateLocator Futurelocator { get; set; }
             public SaleEntityZoneRoutingProductLocator EffectiveRoutingProductLocator { get; set; }
             public SaleEntityZoneRoutingProductLocator CurrentRoutingProductLocator { get; set; }
             public DateTime MinimumDate { get; set; }
