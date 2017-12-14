@@ -57,6 +57,8 @@ namespace Retail.Cost.Business
                     if (!string.IsNullOrEmpty(cdrCostFieldNames.CostCurrency))
                         cdr.SetFieldValue(cdrCostFieldNames.CostCurrency, systemCurrencyId);
 
+                    FillCDRWithoutCostProfitData(cdr, cdrProfitFieldNames);
+
                     continue;
                 }
 
@@ -149,14 +151,22 @@ namespace Retail.Cost.Business
             {
                 List<CDRCost> cdrCostList = cdrCostDataManager.GetCDRCostByCDPNs(cdrCostBatchRequest);
                 if (cdrCostList == null || cdrCostList.Count == 0)
+                {
+                    foreach (CDRCostRequest cdrCostRequest in cdrCostBatchRequest.CDRCostRequests)
+                        FillCDRWithoutCostProfitData(cdrCostRequest.OriginalCDR, cdrProfitFieldNames);
+
                     continue;
+                }
 
                 Dictionary<string, CDRCostData> cdrCostDataByCDPN = this.BuildCDRCostDataByCDPN(cdrCostList);
                 foreach (CDRCostRequest cdrCostRequest in cdrCostBatchRequest.CDRCostRequests)
                 {
                     CDRCostData tempCDRCostData;
                     if (!cdrCostDataByCDPN.TryGetValue(cdrCostRequest.CDPN, out tempCDRCostData))
+                    {
+                        FillCDRWithoutCostProfitData(cdrCostRequest.OriginalCDR, cdrProfitFieldNames);
                         continue;
+                    }
 
                     List<CDRCost> cdrCostsByCGPN = null;
                     if (!string.IsNullOrEmpty(cdrCostRequest.CGPN))
@@ -170,6 +180,10 @@ namespace Retail.Cost.Business
                     {
                         FillCDRCostData(cdrCostRequest.OriginalCDR, matchingCDRCost, cdrCostFieldNames);
                         FillCDRProfitData(cdrCostRequest.OriginalCDR, matchingCDRCost, cdrCostFieldNames, cdrProfitFieldNames, cdrCostRequest.AttemptDateTime, profitPrecision);
+                    }
+                    else
+                    {
+                        FillCDRWithoutCostProfitData(cdrCostRequest.OriginalCDR, cdrProfitFieldNames);
                     }
                 }
             }
@@ -323,6 +337,33 @@ namespace Retail.Cost.Business
             decimal convertedCostAmount = new CurrencyExchangeRateManager().ConvertValueToCurrency(cdrCost.Amount.Value, cdrCost.CurrencyId.Value, saleCurrencyId.Value, attemptDateTime);
             decimal profitValue = saleAmount.Value - convertedCostAmount;
             ProfitStatus profitStatus = this.GetProfitStatus(profitValue, profitPrecision);
+
+            if (!string.IsNullOrEmpty(cdrProfitFieldNames.Profit))
+                cdr.SetFieldValue(cdrProfitFieldNames.Profit, profitValue);
+
+            if (!string.IsNullOrEmpty(cdrProfitFieldNames.ProfitStatus))
+                cdr.SetFieldValue(cdrProfitFieldNames.ProfitStatus, profitStatus);
+        }
+
+        private void FillCDRWithoutCostProfitData(dynamic cdr, CDRProfitFieldNames cdrProfitFieldNames)
+        {
+            if (cdrProfitFieldNames == null || string.IsNullOrEmpty(cdrProfitFieldNames.SaleAmount))
+                return;
+
+            decimal profitValue;
+            ProfitStatus profitStatus;
+
+            decimal? saleAmount = cdr.GetFieldValue(cdrProfitFieldNames.SaleAmount);
+            if (!saleAmount.HasValue || saleAmount.Value == 0)
+            {
+                profitValue = 0;
+                profitStatus = ProfitStatus.NoProfit;
+            }
+            else
+            {
+                profitValue = saleAmount.Value;
+                profitStatus = ProfitStatus.Profitable;
+            }
 
             if (!string.IsNullOrEmpty(cdrProfitFieldNames.Profit))
                 cdr.SetFieldValue(cdrProfitFieldNames.Profit, profitValue);
