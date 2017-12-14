@@ -36,8 +36,11 @@ namespace Retail.BusinessEntity.Entities
         public List<AccountActionDefinition> ActionDefinitions { get; set; }
 
         public FixedChargingDefinition FixedChargingDefinition { get; set; }
+
         public AccountCondition PackageAssignmentCondition { get; set; }
+
         public bool UseFinancialAccountModule { get; set; }
+
         public AccountBEDefinitionSecurity Security { get; set; }
 
         public override Vanrise.Entities.VRLoggableEntityBase GetLoggableEntity(Vanrise.GenericData.Entities.IBusinessEntityDefinitionSettingsGetLoggableEntityContext context)
@@ -54,21 +57,25 @@ namespace Retail.BusinessEntity.Entities
 
         public AccountExtraFieldDefinitionSettings Settings { get; set; }
     }
+
     public abstract class AccountExtraFieldDefinitionSettings
     {
         public abstract Guid ConfigId { get; }
 
         public abstract IEnumerable<AccountGenericField> GetFields(IAccountExtraFieldSettingsContext context);
     }
+
     public interface IAccountExtraFieldSettingsContext
     {
     }
+
     public abstract class AccountBEDefinitionCondition
     {
         public abstract Guid ConfigId { get; }
 
         public abstract bool Evaluate(IAccountConditionEvaluationContext context);
     }
+
     public interface IAccountBEDefinitionConditionContext
     {
         AccountBEDefinitionSettings AccountBEDefinitionSettings { get; }
