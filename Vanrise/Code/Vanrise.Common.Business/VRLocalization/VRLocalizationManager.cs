@@ -29,14 +29,17 @@ namespace Vanrise.Common.Business
         }
         public string GetTranslatedTextResourceValue(string resourceKey, string defaultValue, Guid languageId)
         {
-            TextResourceWithTranslation resourceWithTranslation = GetTextResourcesWithTranslationsByKey().GetRecord(resourceKey);
-            if (resourceWithTranslation != null)
+            if(IsLocalizationEnabled())
             {
-                VRLocalizationTextResourceTranslation translation;
-                if (resourceWithTranslation.TranslationsByLanguageId.TryGetValue(languageId, out translation))
-                    return translation.Settings.Value;
-                else
-                    return resourceWithTranslation.Resource.Settings.DefaultValue;
+                TextResourceWithTranslation resourceWithTranslation = GetTextResourcesWithTranslationsByKey().GetRecord(resourceKey);
+                if (resourceWithTranslation != null)
+                {
+                    VRLocalizationTextResourceTranslation translation;
+                    if (resourceWithTranslation.TranslationsByLanguageId.TryGetValue(languageId, out translation))
+                        return translation.Settings.Value;
+                    else
+                        return resourceWithTranslation.Resource.Settings.DefaultValue;
+                }
             }
             return defaultValue;
         }
@@ -72,47 +75,46 @@ namespace Vanrise.Common.Business
         #region Private Methods
         private Guid? GetDefaultLanguage()
         {
-            if (IsLocalizationEnabled())
-            {
-                ConfigManager configManager = new ConfigManager();
-                var generalSettings = configManager.GetGeneralSetting();
-                generalSettings.ThrowIfNull("generalSettings");
-                generalSettings.UIData.ThrowIfNull("generalSettings.UIData");
-                return generalSettings.UIData.DefaultLanguageId;
-            }
-            return null;
+            ConfigManager configManager = new ConfigManager();
+            var generalSettings = configManager.GetGeneralSetting();
+            generalSettings.ThrowIfNull("generalSettings");
+            generalSettings.UIData.ThrowIfNull("generalSettings.UIData");
+            return generalSettings.UIData.DefaultLanguageId;
         }
         private bool TryGetLanguageId(out Guid languageId)
         {
             languageId = Guid.Empty;
-            if (HttpContext.Current == null)
-                return false;
-            string languageIdAsString = null;
+            if (IsLocalizationEnabled())
+            {
+                if (HttpContext.Current == null)
+                    return false;
+                string languageIdAsString = null;
 
-            if(HttpContext.Current.Request["vrlangId"] != null)
-            {
-                languageIdAsString = HttpContext.Current.Request["vrlangId"];
-                if (Guid.TryParse(languageIdAsString, out languageId))
-                    return true;
-            }
-
-            string languageCookieName = "VR_Common_LocalizationLangauge";
-            if (HttpContext.Current.Request.Cookies[languageCookieName] != null)
-                languageIdAsString = HttpContext.Current.Request.Cookies[languageCookieName].Value;
-            if (!string.IsNullOrEmpty(languageIdAsString))
-            {
-                Guid parsedLanguagedId;
-                if (Guid.TryParse(languageIdAsString, out parsedLanguagedId))
-                    languageId = parsedLanguagedId;
-                return true;
-            }
-            else
-            {
-                var defaultLanguageId = GetDefaultLanguage();
-                if (defaultLanguageId.HasValue)
+                if (HttpContext.Current.Request["vrlangId"] != null)
                 {
-                    languageId = defaultLanguageId.Value;
+                    languageIdAsString = HttpContext.Current.Request["vrlangId"];
+                    if (Guid.TryParse(languageIdAsString, out languageId))
+                        return true;
+                }
+
+                string languageCookieName = "VR_Common_LocalizationLangauge";
+                if (HttpContext.Current.Request.Cookies[languageCookieName] != null)
+                    languageIdAsString = HttpContext.Current.Request.Cookies[languageCookieName].Value;
+                if (!string.IsNullOrEmpty(languageIdAsString))
+                {
+                    Guid parsedLanguagedId;
+                    if (Guid.TryParse(languageIdAsString, out parsedLanguagedId))
+                        languageId = parsedLanguagedId;
                     return true;
+                }
+                else
+                {
+                    var defaultLanguageId = GetDefaultLanguage();
+                    if (defaultLanguageId.HasValue)
+                    {
+                        languageId = defaultLanguageId.Value;
+                        return true;
+                    }
                 }
             }
             return false;
