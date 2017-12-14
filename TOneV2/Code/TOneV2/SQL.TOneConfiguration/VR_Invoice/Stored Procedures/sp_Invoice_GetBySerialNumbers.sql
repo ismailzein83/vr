@@ -4,6 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [VR_Invoice].[sp_Invoice_GetBySerialNumbers]
+	@InvoiceTypeId uniqueidentifier,
 	@SerialNumbers nvarchar(max)
 AS
 BEGIN
@@ -32,7 +33,7 @@ select  ParsedString from [VR_Invoice].ParseStringList(@SerialNumbers)
 			vrIn.SentDate
 	FROM	VR_Invoice.Invoice vrIn with(nolock)  
 	where	
-			(@SerialNumbers is Null or vrIn.SerialNumber IN (SELECT SerialNumber FROM @SerialNumbersTable)) 
+			@InvoiceTypeId = vrIn.InvoiceTypeID and (@SerialNumbers is Null or vrIn.SerialNumber IN (SELECT SerialNumber FROM @SerialNumbersTable)) 
 			and ISNULL( vrIn.IsDeleted,0) = 0 AND ISNULL(vrIn.IsDraft, 0) = 0
 			
 END

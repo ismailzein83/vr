@@ -5,7 +5,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [rules].[sp_RuleChanged_DeleteByRuleAndType]
+CREATE PROCEDURE [rules].[sp_RuleChangedForProcessing_DeleteByRuleAndType]
 	@RuleID INT,
 	@RuleTypeID INT
 AS

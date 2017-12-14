@@ -6,7 +6,8 @@
     [InitialRule]           NVARCHAR (MAX) NULL,
     [AdditionalInformation] NVARCHAR (MAX) NULL,
     [CreatedTime]           DATETIME       NULL,
-    [timestamp]             ROWVERSION     NULL,
-    CONSTRAINT [PK_RuleChangedForProcessing] PRIMARY KEY CLUSTERED ([ID] ASC)
+    [timestamp]             ROWVERSION     NULL
 );
+
+
 
