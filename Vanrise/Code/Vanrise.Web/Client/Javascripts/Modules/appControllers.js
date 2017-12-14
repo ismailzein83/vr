@@ -53,12 +53,12 @@ appControllers.directive('draggable', ['$document', function ($document) {
         });
     };
 }]);
-appControllers.factory('vrInterceptor', ['$q', '$rootScope', function ($q, $rootScope) {
+appControllers.factory('vrInterceptor', ['$q', '$rootScope', 'VRLocalizationService', function ($q, $rootScope, VRLocalizationService) {
 
     var requestInterceptor = {
         request: function (config) {
             if (/\.html$/.test(config.url) && config.url.indexOf("Client/") > -1) {
-                config.url = config.url + "?v=" + $rootScope.version;
+                config.url = config.url + "?v=" + $rootScope.version + "&vrlangId=" + VRLocalizationService.getLanguageCookie();
             }
 
             var deferred = $q.defer();

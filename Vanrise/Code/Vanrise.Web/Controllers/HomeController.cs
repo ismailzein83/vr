@@ -11,7 +11,7 @@ namespace Vanrise.Web.Controllers
 
     public class HomeController : Controller
     {
-       
+       VRLocalizationManager _vrLocalizationManager = new VRLocalizationManager();
         public ActionResult Index()
         {
           
@@ -27,16 +27,9 @@ namespace Vanrise.Web.Controllers
 
             var isLocalizationEnabled = new VRLocalizationManager().IsLocalizationEnabled();
             ViewBag.IsLocalizationEnabled = isLocalizationEnabled.ToString().ToLower();
-            if(isLocalizationEnabled)
-            {
-                Guid? languageId = LocalizationConfig.GetLanguageIdFromCookies(Request.Cookies);
-                if (languageId.HasValue)
-                {
-                    var isRTL = new VRLocalizationLanguageManager().IsRTL(languageId.Value);
-                    ViewBag.IsRTL = isRTL.ToString().ToLower();
-                    ViewBag.RTLClass = isRTL ? " class= rtl " : "";
-                }
-            }
+            var isRTL = _vrLocalizationManager.IsRTL();
+            ViewBag.IsRTL = isRTL.ToString().ToLower();
+            ViewBag.RTLClass = isRTL ? " class= rtl " : "";
           
            
             Vanrise.Security.Business.SecurityManager securityManager = new SecurityManager();

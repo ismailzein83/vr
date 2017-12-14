@@ -10,6 +10,8 @@ namespace Vanrise.Web.Controllers
 {
     public class SecurityController : Controller
     {
+        VRLocalizationManager _vrLocalizationManager = new VRLocalizationManager();
+
         public ActionResult Login(string redirectTo)
         {
             ViewBag.Title = "Login Page";
@@ -17,19 +19,11 @@ namespace Vanrise.Web.Controllers
             var cacheSettingData = new GeneralSettingsManager().GetCacheSettingData();
             ViewBag.version = cacheSettingData != null ? cacheSettingData.ClientCacheNumber : 0;
 
-            var isLocalizationEnabled = new VRLocalizationManager().IsLocalizationEnabled();
+            var isLocalizationEnabled = _vrLocalizationManager.IsLocalizationEnabled();
             ViewBag.IsLocalizationEnabled = isLocalizationEnabled.ToString().ToLower();
-            if (isLocalizationEnabled)
-            {
-                Guid? languageId = LocalizationConfig.GetLanguageIdFromCookies(Request.Cookies);
-                if (languageId.HasValue)
-                {
-                    var isRTL = new VRLocalizationLanguageManager().IsRTL(languageId.Value);
-                    ViewBag.IsRTL = isRTL.ToString().ToLower();
-                    ViewBag.RTLClass = isRTL ? " class= rtl " : "";
-                }
-            }
-
+            var isRTL = _vrLocalizationManager.IsRTL();
+            ViewBag.IsRTL = isRTL.ToString().ToLower();
+            ViewBag.RTLClass = isRTL ? " class= rtl " : "";
 
             ViewBag.RedirectTo = redirectTo;
             return View("~/Client/CSViews/Security/Login.cshtml");
@@ -41,18 +35,12 @@ namespace Vanrise.Web.Controllers
             ViewBag.CookieName = (new SecurityManager()).GetCookieName();
             var cacheSettingData = new GeneralSettingsManager().GetCacheSettingData();
             ViewBag.version = cacheSettingData != null ? cacheSettingData.ClientCacheNumber : 0;
-            var isLocalizationEnabled = new VRLocalizationManager().IsLocalizationEnabled();
+            var isLocalizationEnabled = _vrLocalizationManager.IsLocalizationEnabled();
             ViewBag.IsLocalizationEnabled = isLocalizationEnabled.ToString().ToLower();
-            if (isLocalizationEnabled)
-            {
-                Guid? languageId = LocalizationConfig.GetLanguageIdFromCookies(Request.Cookies);
-                if (languageId.HasValue)
-                {
-                    var isRTL = new VRLocalizationLanguageManager().IsRTL(languageId.Value);
-                    ViewBag.IsRTL = isRTL.ToString().ToLower();
-                    ViewBag.RTLClass = isRTL ? " class= rtl " : "";
-                }
-            }
+            
+            var isRTL = _vrLocalizationManager.IsRTL();
+            ViewBag.IsRTL = isRTL.ToString().ToLower();
+            ViewBag.RTLClass = isRTL ? " class= rtl " : "";
 
             ViewBag.RedirectTo = redirectTo;
             return View("~/Client/CSViews/Security/Payment.cshtml");

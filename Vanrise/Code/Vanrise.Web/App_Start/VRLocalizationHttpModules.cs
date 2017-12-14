@@ -39,10 +39,8 @@ namespace Vanrise.Web
         {
             HttpApplication application = (HttpApplication)sender;
             HttpContext context = application.Context;
-            //string languageIdAsString = context.Request["vrlangId"];
-            //if (languageIdAsString == null && context.Request.Url.AbsolutePath.EndsWith(".js"))
-            //    languageIdAsString = "3B5C3266-9F4E-43E4-99EA-A936CF989E33";
-            Guid? languageId = LocalizationConfig.GetLanguageIdFromCookies(application.Request.Cookies);
+           // string languageIdAsString = context.Request["vrlangId"];
+            Guid? languageId = new VRLocalizationManager().GetCurrentLanguageId();
             if (languageId.HasValue && (context.Request.Url.AbsolutePath.EndsWith(".html") || context.Request.Url.AbsolutePath.EndsWith(".js")))
             {
                 VRLocalizationManager vrLocalizationManager = new VRLocalizationManager();
@@ -63,7 +61,7 @@ namespace Vanrise.Web
                         foreach (var resourceKey in localizationInfo.TextResourceKeys)
                         {
 
-                            fileContentBuilder.Replace(String.Concat("VRRes.", resourceKey, ".VREnd"), vrLocalizationManager.GetTranslatedTextResourceValue(resourceKey, languageId.Value));//TODO, replace all resources with valid resources
+                            fileContentBuilder.Replace(String.Concat("VRRes.", resourceKey, ".VREnd"), vrLocalizationManager.GetTranslatedTextResourceValue(resourceKey, null,languageId.Value));//TODO, replace all resources with valid resources
                         }
                         string fileContent = fileContentBuilder.ToString();
                         lock (s_lockObj)

@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
@@ -19,8 +20,14 @@ namespace Vanrise.Common.Business
         #endregion
 
         #region Public Methods
-
-        public string GetTranslatedTextResourceValue(string resourceKey, Guid languageId)
+        public Guid? GetCurrentLanguageId()
+        {
+            Guid languageId;
+            if(TryGetLanguageId(out languageId))
+                return languageId;
+            return null;
+        }
+        public string GetTranslatedTextResourceValue(string resourceKey, string defaultValue, Guid languageId)
         {
             TextResourceWithTranslation resourceWithTranslation = GetTextResourcesWithTranslationsByKey().GetRecord(resourceKey);
             if (resourceWithTranslation != null)
@@ -31,12 +38,17 @@ namespace Vanrise.Common.Business
                 else
                     return resourceWithTranslation.Resource.Settings.DefaultValue;
             }
-            else
-            {
-                return null;
-            }
+            return defaultValue;
         }
-
+        public string GetTranslatedTextResourceValue(string resourceKey, string defaultValue)
+        {
+            var languageId = GetCurrentLanguageId();
+            if (languageId.HasValue)
+            {
+                return GetTranslatedTextResourceValue(resourceKey, defaultValue, languageId.Value);
+            }
+            return defaultValue;
+        }
         public bool IsLocalizationEnabled()
         {
             ConfigManager configManager = new ConfigManager();
@@ -44,7 +56,21 @@ namespace Vanrise.Common.Business
             generalTechnicalSettings.ThrowIfNull("generalTechicalSettings");
             return generalTechnicalSettings.IsLocalizationEnabled;
         }
-        public Guid? GetDefaultLanguage()
+        public bool IsRTL()
+        {
+            var languageId = GetCurrentLanguageId();
+            if(languageId.HasValue)
+            {
+                VRLocalizationLanguageManager vrLocalizationLanguageManager = new VRLocalizationLanguageManager();
+                return vrLocalizationLanguageManager.IsRTL(languageId.Value);
+            }
+            return false;
+        }
+        
+        #endregion
+
+        #region Private Methods
+        private Guid? GetDefaultLanguage()
         {
             if (IsLocalizationEnabled())
             {
@@ -56,24 +82,41 @@ namespace Vanrise.Common.Business
             }
             return null;
         }
-      //  public bool IsRTL()
-      //  {
-        //    var defaultLanguage = GetDefaultLanguage();
-         //   if (defaultLanguage.HasValue)
-         //   {
-          //      VRLocalizationLanguageManager vrLocalizationLanguageManager = new VRLocalizationLanguageManager();
-          //      var vrLocalizationLanguage = vrLocalizationLanguageManager.GetVRLocalizationLanguage(defaultLanguage.Value);
-           //     vrLocalizationLanguage.ThrowIfNull("vrLocalizationLanguage", defaultLanguage.Value);
-          //      vrLocalizationLanguage.Settings.ThrowIfNull("rLocalizationLanguage.Settings", defaultLanguage.Value);
-         //       return vrLocalizationLanguage.Settings.IsRTL;
-        //    }
-         //   return false;
-      //  }
-        
-        #endregion
+        private bool TryGetLanguageId(out Guid languageId)
+        {
+            languageId = Guid.Empty;
+            if (HttpContext.Current == null)
+                return false;
+            string languageIdAsString = null;
 
-        #region Private Methods
+            if(HttpContext.Current.Request["vrlangId"] != null)
+            {
+                languageIdAsString = HttpContext.Current.Request["vrlangId"];
+                if (Guid.TryParse(languageIdAsString, out languageId))
+                    return true;
+            }
 
+            string languageCookieName = "VR_Common_LocalizationLangauge";
+            if (HttpContext.Current.Request.Cookies[languageCookieName] != null)
+                languageIdAsString = HttpContext.Current.Request.Cookies[languageCookieName].Value;
+            if (!string.IsNullOrEmpty(languageIdAsString))
+            {
+                Guid parsedLanguagedId;
+                if (Guid.TryParse(languageIdAsString, out parsedLanguagedId))
+                    languageId = parsedLanguagedId;
+                return true;
+            }
+            else
+            {
+                var defaultLanguageId = GetDefaultLanguage();
+                if (defaultLanguageId.HasValue)
+                {
+                    languageId = defaultLanguageId.Value;
+                    return true;
+                }
+            }
+            return false;
+        }
         Dictionary<string, TextResourceWithTranslation> GetTextResourcesWithTranslationsByKey()
         {
             Dictionary<string, TextResourceWithTranslation> resourcesWithTranslations = new Dictionary<string, TextResourceWithTranslation>();

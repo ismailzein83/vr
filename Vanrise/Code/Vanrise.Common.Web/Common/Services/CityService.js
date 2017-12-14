@@ -1,16 +1,8 @@
-﻿
-app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 'UtilsService', 'VRCommon_CountryService', 'VRCommon_CityAPIService', 'VRCommon_ObjectTrackingService','VRCommon_RegionService',
-    function (VRModalService, VRNotificationService, UtilsService, VRCommon_CountryService, VRCommon_CityAPIService, VRCommon_ObjectTrackingService, VRCommon_RegionService) {
+﻿(function (appControllers) {
+    'use stict';
+    CityService.$inject = ['VRModalService', 'VRNotificationService', 'UtilsService', 'VRCommon_CountryService', 'VRCommon_CityAPIService', 'VRCommon_ObjectTrackingService', 'VRCommon_RegionService'];
+    function CityService(VRModalService, VRNotificationService, UtilsService, VRCommon_CountryService, VRCommon_CityAPIService, VRCommon_ObjectTrackingService, VRCommon_RegionService) {
         var drillDownDefinitions = [];
-        return ({
-            editCity: editCity,
-            addCity: addCity,
-            registerDrillDownToCountry: registerDrillDownToCountry,
-            registerDrillDownToRegion:registerDrillDownToRegion,
-            registerObjectTrackingDrillDownToCity: registerObjectTrackingDrillDownToCity,
-            getDrillDownDefinition: getDrillDownDefinition,
-            registerHistoryViewAction: registerHistoryViewAction
-        });
 
         function viewHistoryCity(context) {
             var modalParameters = {
@@ -23,6 +15,7 @@ app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 
             };
             VRModalService.showModal('/Client/Modules/Common/Views/City/CityEditor.html', modalParameters, modalSettings);
         };
+
         function editCity(cityId, onCityUpdated) {
             var settings = {
             };
@@ -36,7 +29,8 @@ app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 
 
             VRModalService.showModal('/Client/Modules/Common/Views/City/CityEditor.html', parameters, settings);
         }
-        function addCity(onCityAdded , countryId , regionId) {
+
+        function addCity(onCityAdded, countryId, regionId) {
             var settings = {
             };
 
@@ -45,7 +39,7 @@ app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 
             };
             var parameters = {};
             if (countryId != undefined) {
-                parameters.CountryId = countryId; 
+                parameters.CountryId = countryId;
             }
 
             if (countryId != undefined) {
@@ -71,7 +65,6 @@ app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 
             VRCommon_ObjectTrackingService.registerActionHistory(actionHistory);
         }
 
-
         function getEntityUniqueName() {
             return "VR_Common_City";
         }
@@ -80,7 +73,7 @@ app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 
             var drillDownDefinition = {};
 
             drillDownDefinition.title = VRCommon_ObjectTrackingService.getObjectTrackingGridTitle();
-            drillDownDefinition.localizedtitle =  VRCommon_ObjectTrackingService.getObjectTrackingGridLocalizedTitle();
+            drillDownDefinition.localizedtitle = VRCommon_ObjectTrackingService.getObjectTrackingGridLocalizedTitle();
             drillDownDefinition.directive = "vr-common-objecttracking-grid";
 
 
@@ -99,6 +92,7 @@ app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 
             addDrillDownDefinition(drillDownDefinition);
 
         }
+
         function addDrillDownDefinition(drillDownDefinition) {
             drillDownDefinitions.push(drillDownDefinition);
         }
@@ -106,18 +100,19 @@ app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 
         function getDrillDownDefinition() {
             return drillDownDefinitions;
         }
+
         function registerDrillDownToCountry() {
             var drillDownDefinition = {};
 
             drillDownDefinition.title = "Cities";
-            drillDownDefinition.localizedtitle = "VRRes.Cities.VREnd";
+
             drillDownDefinition.directive = "vr-common-city-grid";
             drillDownDefinition.parentMenuActions = [{
                 name: "New City",
                 clicked: function (countryItem) {
                     if (drillDownDefinition.setTabSelected != undefined)
                         drillDownDefinition.setTabSelected(countryItem);
-                   
+
                     var onCityAdded = function (cityObj) {
                         if (countryItem.cityGridAPI != undefined) {
                             countryItem.cityGridAPI.onCityAdded(cityObj);
@@ -133,7 +128,7 @@ app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 
                 var query = {
                     CountryIds: [countryItem.Entity.CountryId],
                 };
-               
+
                 return countryItem.cityGridAPI.loadGrid(query);
             };
 
@@ -180,4 +175,17 @@ app.service('VRCommon_CityService', ['VRModalService', 'VRNotificationService', 
             return VRCommon_CityAPIService.HasAddCityPermission();
         }
 
-    }]);
+        return {
+            editCity: editCity,
+            addCity: addCity,
+            registerDrillDownToCountry: registerDrillDownToCountry,
+            registerDrillDownToRegion: registerDrillDownToRegion,
+            registerObjectTrackingDrillDownToCity: registerObjectTrackingDrillDownToCity,
+            getDrillDownDefinition: getDrillDownDefinition,
+            registerHistoryViewAction: registerHistoryViewAction
+        };
+    }
+
+    appControllers.service('VRCommon_CityService', CityService);
+
+})(appControllers);
