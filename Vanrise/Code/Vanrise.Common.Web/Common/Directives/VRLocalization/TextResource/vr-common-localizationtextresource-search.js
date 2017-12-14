@@ -60,7 +60,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                 if (payload != undefined) {
                     moduleId = payload.moduleIds;
                 }
-                return UtilsService.waitMultiplePromises(promises).finally(function () {
+                return UtilsService.waitMultiplePromises(promises).then(function () {
                     loadResourceAddGrid();
                     $scope.scopeModel.isLoading = false;
                 });
