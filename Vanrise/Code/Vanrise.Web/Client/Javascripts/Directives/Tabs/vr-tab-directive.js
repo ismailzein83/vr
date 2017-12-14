@@ -1,7 +1,7 @@
 ﻿"use strict";
 
 
-app.directive("vrTab", ["MultiTranscludeService", "UtilsService", function (MultiTranscludeService, UtilsService) {
+app.directive("vrTab", ["MultiTranscludeService", "UtilsService","VRLocalizationService", function (MultiTranscludeService, UtilsService, VRLocalizationService) {
 
     var directiveDefinitionObject = {
         transclude: true,
@@ -22,9 +22,15 @@ app.directive("vrTab", ["MultiTranscludeService", "UtilsService", function (Mult
             if (ctrl.tabobject == undefined)
                 ctrl.tabobject = {};
             var tab = ctrl.tabobject;
-            tab.onremove = iAttrs.onremove != undefined ? $scope.$parent.$eval(iAttrs.onremove) : undefined;         
-            tab.header = iAttrs.header != undefined ? $scope.$parent.$eval(iAttrs.header): iAttrs.header;
-            tab.data = iAttrs.data != undefined ? $scope.$parent.$eval(iAttrs.data) : iAttrs.header;
+            tab.onremove = iAttrs.onremove != undefined ? $scope.$parent.$eval(iAttrs.onremove) : undefined;
+
+            var header = iAttrs.header != undefined ? $scope.$parent.$eval(iAttrs.header) : iAttrs.header;
+            if (iAttrs.localizedheader != undefined) {
+                var localizedheader = $scope.$parent.$eval(iAttrs.localizedheader);
+                header = VRLocalizationService.getResourceValue(localizedheader, header);
+            }
+            tab.header = header;
+            tab.data = iAttrs.data != undefined ? $scope.$parent.$eval(iAttrs.data) : header;
             if (tab.showTab==undefined)
                 tab.showTab = iAttrs.showtab != undefined ? $scope.$parent.$eval(iAttrs.showtab) : undefined;
             var dontLoad = iAttrs.dontload != undefined ? $scope.$parent.$eval(iAttrs.dontload) : false;

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    LoginController.$inject = ['$rootScope', '$scope', 'VR_Sec_SecurityAPIService', 'SecurityService', 'VRNotificationService', 'VR_Sec_UserService', 'UISettingsService'];
+    LoginController.$inject = ['$rootScope', '$scope', 'VR_Sec_SecurityAPIService', 'SecurityService', 'VRNotificationService', 'VR_Sec_UserService', 'UISettingsService','UtilsService','VR_Sec_UserAPIService','VRLocalizationService'];
 
-    function LoginController($rootScope,$scope, VR_Sec_SecurityAPIService, SecurityService, VRNotificationService, VR_Sec_UserService, UISettingsService) {
+    function LoginController($rootScope, $scope, VR_Sec_SecurityAPIService, SecurityService, VRNotificationService, VR_Sec_UserService, UISettingsService, UtilsService, VR_Sec_UserAPIService, VRLocalizationService) {
         defineScope();
         load();
 
@@ -46,8 +46,15 @@
                 $scope.password = passwordAfterActivation;
                 login();
             };
+
+            var loginPromisedeferred = UtilsService.createPromiseDeferred();
+
             return SecurityService.authenticate($scope.email, $scope.password, reloginAfterPasswordActivation).then(function () {
-                UISettingsService.loadUISettings().then(function () {
+                var promises = [];
+                promises.push(UISettingsService.loadUISettings());
+                promises.push(getLoggedInUserLanguage());
+
+                UtilsService.waitMultiplePromises(promises).then(function () {
                     if ($scope.redirectURL != undefined && $scope.redirectURL != '' && $scope.redirectURL.indexOf('default') == -1 && $scope.redirectURL.indexOf('#') > -1) {
                         window.location.href = $scope.redirectURL;
                     }
@@ -55,8 +62,22 @@
                         window.location.href = UISettingsService.getDefaultPageURl();
                     else
                         window.location.href = '/';
+
+                    loginPromisedeferred.resolve();
+                }).catch(function (error) {
+                    loginPromisedeferred.reject(error);
                 });
+            }).catch(function (error) {
+                loginPromisedeferred.reject(error);
             });
+
+            function getLoggedInUserLanguage()
+            {
+                return VR_Sec_UserAPIService.GetLoggedInUserLanguageId().then(function (response) {
+                    VRLocalizationService.createOrUpdateLanguageCookie(response);
+                });
+            }
+            return loginPromisedeferred.promise;
         }
     }
 

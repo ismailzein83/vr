@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrSection', ['UtilsService', function (UtilsService) {
+app.directive('vrSection', ['UtilsService','VRLocalizationService', function (UtilsService, VRLocalizationService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -9,6 +9,12 @@ app.directive('vrSection', ['UtilsService', function (UtilsService) {
             var classlevel = "1";
             var collapsible = tAttrs.collapsible != undefined;
             var title = tAttrs.header || tAttrs.title;
+
+            var localizedtitle = tAttrs.localizedtitle || tAttrs.localizedheader;
+            title = VRLocalizationService.getResourceValue(localizedtitle, title);
+           
+            
+
             var expanded = (collapsible == undefined || tAttrs.collapsed == undefined);
             if (tAttrs.level != undefined && tAttrs.level == "2")
                 classlevel = " panel-vr-child ";

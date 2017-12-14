@@ -2,9 +2,9 @@
 
     "use strict";
 
-    vrNumeric.$inject = ['BaseDirService', 'VRValidationService', 'UtilsService'];
+    vrNumeric.$inject = ['BaseDirService', 'VRValidationService', 'UtilsService','VRLocalizationService'];
 
-    function vrNumeric(BaseDirService, VRValidationService, UtilsService) {
+    function vrNumeric(BaseDirService, VRValidationService, UtilsService, VRLocalizationService) {
 
         return {
             restrict: 'E',
@@ -216,8 +216,12 @@
                 var startTemplate = '<div id="rootDiv" style="position: relative;">';
                 var endTemplate = '</div>';
                 var labelTemplate = '';
-                if (attrs.label != undefined)
-                    labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';               
+                var label = VRLocalizationService.getResourceValue(attrs.localizedlabel, attrs.label);
+
+                if (label != undefined)
+                {
+                    labelTemplate = '<vr-label>' + label + '</vr-label>';
+                }
                 var numericTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
                                             + '<div  class="vr-numeric" >'
                                             + '<vr-validator validate="ctrl.validate()" vr-input>'

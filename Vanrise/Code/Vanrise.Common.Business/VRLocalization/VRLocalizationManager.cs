@@ -39,34 +39,37 @@ namespace Vanrise.Common.Business
 
         public bool IsLocalizationEnabled()
         {
-            bool isLocalizationEnabled = false;
-            var localizationEnabledSetting = ConfigurationManager.AppSettings["IsLocalizationEnabled"];
-            if (localizationEnabledSetting != null)
-            {
-                bool.TryParse(localizationEnabledSetting, out isLocalizationEnabled);
-            }
-            return isLocalizationEnabled;
+            ConfigManager configManager = new ConfigManager();
+            var generalTechnicalSettings = configManager.GetGeneralTechnicalSetting();
+            generalTechnicalSettings.ThrowIfNull("generalTechicalSettings");
+            return generalTechnicalSettings.IsLocalizationEnabled;
         }
-        public bool IsRTL()
+        public Guid? GetDefaultLanguage()
         {
             if (IsLocalizationEnabled())
             {
-                var localizationLanguageIdSetting = ConfigurationManager.AppSettings["LocalizationLanguageId"];
-                if(localizationLanguageIdSetting != null)
-                {
-                    Guid localizationLanguageId;
-                    if (Guid.TryParse(localizationLanguageIdSetting, out localizationLanguageId))
-                    {
-                        VRLocalizationLanguageManager vrLocalizationLanguageManager = new VRLocalizationLanguageManager();
-                        var vrLocalizationLanguage = vrLocalizationLanguageManager.GetVRLocalizationLanguage(localizationLanguageId);
-                        vrLocalizationLanguage.ThrowIfNull("vrLocalizationLanguage", localizationLanguageId);
-                        vrLocalizationLanguage.Settings.ThrowIfNull("rLocalizationLanguage.Settings", localizationLanguageId);
-                        return vrLocalizationLanguage.Settings.IsRTL;
-                    }
-                }
+                ConfigManager configManager = new ConfigManager();
+                var generalSettings = configManager.GetGeneralSetting();
+                generalSettings.ThrowIfNull("generalSettings");
+                generalSettings.UIData.ThrowIfNull("generalSettings.UIData");
+                return generalSettings.UIData.DefaultLanguageId;
             }
-            return false;
+            return null;
         }
+      //  public bool IsRTL()
+      //  {
+        //    var defaultLanguage = GetDefaultLanguage();
+         //   if (defaultLanguage.HasValue)
+         //   {
+          //      VRLocalizationLanguageManager vrLocalizationLanguageManager = new VRLocalizationLanguageManager();
+          //      var vrLocalizationLanguage = vrLocalizationLanguageManager.GetVRLocalizationLanguage(defaultLanguage.Value);
+           //     vrLocalizationLanguage.ThrowIfNull("vrLocalizationLanguage", defaultLanguage.Value);
+          //      vrLocalizationLanguage.Settings.ThrowIfNull("rLocalizationLanguage.Settings", defaultLanguage.Value);
+         //       return vrLocalizationLanguage.Settings.IsRTL;
+        //    }
+         //   return false;
+      //  }
+        
         #endregion
 
         #region Private Methods

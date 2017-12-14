@@ -2,9 +2,9 @@
 
     "use strict";
 
-    vrTextarea.$inject = ['BaseDirService', 'VRValidationService', 'UtilsService'];
+    vrTextarea.$inject = ['BaseDirService', 'VRValidationService', 'UtilsService','VRLocalizationService'];
 
-    function vrTextarea(BaseDirService, VRValidationService, UtilsService) {
+    function vrTextarea(BaseDirService, VRValidationService, UtilsService, VRLocalizationService) {
 
         return {
             restrict: 'E',
@@ -107,23 +107,30 @@
                 var startTemplate = '<div id="rootDiv" style="position: relative;">';
                 var endTemplate = '</div>';
 
-                    var labelTemplate = '';
-                    if (attrs.label != undefined)
-                        labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';
-                    var rows = 3;                  
-                    if ($(element).parents('.vr-datagrid-celltext').length > 0)
-                        rows = 2;
-                    if (attrs.rows != undefined)
-                        rows = attrs.rows;
-                    var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false" >'
-                            + '<vr-validator validate="ctrl.validate()" vr-textarea-element>'
-                            + '<textarea tabindex="{{ctrl.tabindex}}" readonly="ctrl.readOnly"  placeholder="{{ctrl.placelHolder}}" ng-readonly="ctrl.readOnly" id="mainInput"  ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()" rows="' + rows + '" class="form-control vanrise-inpute" style="width: 100%; resize: none;" ></textarea>'
-                            + '</vr-validator>'
-                            + '<span ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" html="true"   placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>';
-                    + '</div>';
-                
+                var labelTemplate = '';
+                var label = "";
 
-                    //var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined ,true);
+                if (attrs.label != undefined)
+                    label = VRLocalizationService.getResourceValue(attrs.localizedlabel, attrs.label);
+                 
+                if (attrs.label != undefined)
+                    labelTemplate = '<vr-label>' + label + '</vr-label>';
+               
+
+                var rows = 3;
+                if ($(element).parents('.vr-datagrid-celltext').length > 0)
+                    rows = 2;
+                if (attrs.rows != undefined)
+                    rows = attrs.rows;
+                var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false" >'
+                        + '<vr-validator validate="ctrl.validate()" vr-textarea-element>'
+                        + '<textarea tabindex="{{ctrl.tabindex}}" readonly="ctrl.readOnly"  placeholder="{{ctrl.placelHolder}}" ng-readonly="ctrl.readOnly" id="mainInput"  ng-model="ctrl.value" ng-change="ctrl.notifyUserChange()" rows="' + rows + '" class="form-control vanrise-inpute" style="width: 100%; resize: none;" ></textarea>'
+                        + '</vr-validator>'
+                        + '<span ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" html="true"   placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>';
+                + '</div>';
+
+
+                //var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined ,true);
 
                 return startTemplate + labelTemplate + textboxTemplate + endTemplate;
             }

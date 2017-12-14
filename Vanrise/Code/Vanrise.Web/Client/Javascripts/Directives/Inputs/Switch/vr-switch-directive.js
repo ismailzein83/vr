@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrSwitch', ['SecurityService', 'UtilsService', function (SecurityService, UtilsService) {
+app.directive('vrSwitch', ['SecurityService', 'UtilsService','VRLocalizationService', function (SecurityService, UtilsService, VRLocalizationService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -67,9 +67,13 @@ app.directive('vrSwitch', ['SecurityService', 'UtilsService', function (Security
         bindToController: true,
         template: function (element, attrs) {
             if (attrs.permissions === undefined || SecurityService.isAllowed(attrs.permissions)) {
-                var label = attrs.label;
-                if (label == undefined)
-                    label = '';
+                var label = "";
+
+                if (attrs.label != undefined) {
+                    label = VRLocalizationService.getResourceValue(attrs.localizedlabel, attrs.label);
+                }
+
+
                 var onspan = '';
                 if (attrs.on != undefined)
                     onspan = '<span class="on">' + attrs.on + '</span>';

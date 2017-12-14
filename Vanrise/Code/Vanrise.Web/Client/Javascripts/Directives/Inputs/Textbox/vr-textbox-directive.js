@@ -2,9 +2,9 @@
 
     "use strict";
 
-    vrTextbox.$inject = ['BaseDirService', 'TextboxTypeEnum', 'VRValidationService', 'UtilsService'];
+    vrTextbox.$inject = ['BaseDirService', 'TextboxTypeEnum', 'VRValidationService', 'UtilsService','VRLocalizationService'];
 
-    function vrTextbox(BaseDirService, TextboxTypeEnum, VRValidationService, UtilsService) {
+    function vrTextbox(BaseDirService, TextboxTypeEnum, VRValidationService, UtilsService, VRLocalizationService) {
 
         return {
             restrict: 'E',
@@ -240,8 +240,15 @@
                     var endTemplate = '</div>';
 
                     var labelTemplate = '';
+
+                    var label = "";
+
+                    if (attrs.label != undefined) {
+                        label = VRLocalizationService.getResourceValue(attrs.localizedlabel, attrs.label);
+                    }
+
                     if (attrs.label != undefined)
-                        labelTemplate = '<vr-label>{{ctrl.label}}</vr-label>';
+                        labelTemplate = '<vr-label>' + label + '</vr-label>';
                     var type = 'text';
                     if (attrs.type != undefined && attrs.type === TextboxTypeEnum.Password.name)
                         type = 'password';

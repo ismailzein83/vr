@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsService', function ($parse, VR_GridColCSSClassEnum, UtilsService) {
+app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsService','VRLocalizationService', function ($parse, VR_GridColCSSClassEnum, UtilsService, VRLocalizationService) {
     return {
         restrict: 'E',
         require: '^vrDatagrid',
@@ -14,9 +14,9 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
                     var col = {};
                     if (gridColumnAttribute != undefined) {
                         col = {
-                            headerText: gridColumnAttribute.HeaderText,
+                            headerText: VRLocalizationService.getResourceValue(gridColumnAttribute.LocalizedHeaderText, gridColumnAttribute.HeaderText),
                             disableSorting: gridColumnAttribute.DisableSorting,
-                            headerDescription: gridColumnAttribute.HeaderDescription,
+                            headerDescription: VRLocalizationService.getResourceValue(gridColumnAttribute.LocalizedHeaderDescription, gridColumnAttribute.HeaderDescription),
                             field: gridColumnAttribute.Field,
                             isFieldDynamic: gridColumnAttribute.IsFieldDynamic,
                             widthFactor: gridColumnAttribute.WidthFactor,
@@ -38,14 +38,18 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
                     }
                     if (iAttrs.headertext != undefined)
                         col.headerText = $scope.$eval(iAttrs.headertext);
+                    if (iAttrs.localizedheadertext != undefined)
+                        col.headerText = VRLocalizationService.getResourceValue($scope.$eval(iAttrs.localizedheadertext), col.headerText);
+                    if (iAttrs.field != undefined)
+                        col.field = $scope.$eval(iAttrs.field);
                     if (iAttrs.disablesorting != undefined)
                         col.disableSorting = $scope.$eval(iAttrs.disablesorting);
                     else if (col.disableSorting == undefined)
                         col.disableSorting = false;
                     if (iAttrs.headerdescription != undefined)
-                        col.headerDescription = $scope.$eval(iAttrs.headerdescription);
-                    if (iAttrs.field != undefined)
-                        col.field = $scope.$eval(iAttrs.field);
+                        col.headerDescription =  $scope.$eval(iAttrs.headerdescription);
+                    if (iAttrs.localizedheaderdescription != undefined)
+                        col.headerDescription = VRLocalizationService.getResourceValue($scope.$eval(iAttrs.localizedheaderdescription), $scope.$eval(iAttrs.headerdescription));
                     if (iAttrs.isfielddynamic != undefined)
                         col.isFieldDynamic = $scope.$eval(iAttrs.isfielddynamic);
                     if (iAttrs.summaryfield != undefined)
@@ -100,7 +104,7 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
 
                     var headertextWatch;
                     var ngshowWatch;
-                    if (iAttrs.headertext != undefined) {
+                    if (iAttrs.headertext != undefined && iAttrs.localizedheadertext == undefined) {
                         headertextWatch = $scope.$watch(iAttrs.headertext, function (val) {
                             if (colDef != undefined && val != undefined)
                                 dataGridCtrl.updateColumnHeader(colDef, val);

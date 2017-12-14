@@ -1,7 +1,7 @@
 ﻿'use strict';
 
 
-app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotificationService', 'BaseAPIService', 'UtilsService', 'SecurityService', 'FileAPIService', function (VRValidationService, BaseDirService, VRNotificationService, BaseAPIService, UtilsService, SecurityService, FileAPIService) {
+app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotificationService', 'BaseAPIService', 'UtilsService', 'SecurityService', 'FileAPIService','VRLocalizationService', function (VRValidationService, BaseDirService, VRNotificationService, BaseAPIService, UtilsService, SecurityService, FileAPIService, VRLocalizationService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -270,8 +270,10 @@ app.directive('vrFileupload', ['VRValidationService', 'BaseDirService', 'VRNotif
             var endTemplate = '</div>';
 
             var labelTemplate = '';
-            if (attrs.label != undefined)
-                labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';
+            var label = VRLocalizationService.getResourceValue(attrs.localizedlabel, attrs.label);
+
+            if (label != undefined)
+                labelTemplate = '<vr-label>' + label + '</vr-label>';
             var fileTemplate =
                  '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false" ng-class="isUploading == true? \'vr-disabled-div\':\'\'" >'
                   + '<vr-validator validate="ctrl.validate()" vr-input>'

@@ -36,6 +36,17 @@ namespace Vanrise.Common.Business
                 return null;
             return vrLocalizationLanguage.Name;
         }
+        public bool IsRTL(Guid languageId)
+        {
+            var vrLocalizationLanguage = GetVRLocalizationLanguage(languageId);
+            if (vrLocalizationLanguage != null)
+            {
+                vrLocalizationLanguage.ThrowIfNull("vrLocalizationLanguage", languageId);
+                vrLocalizationLanguage.Settings.ThrowIfNull("rLocalizationLanguage.Settings", languageId);
+                return vrLocalizationLanguage.Settings.IsRTL;
+            }
+            return false;
+        }
         public InsertOperationOutput<VRLocalizationLanguageDetail> AddVRLocalizationLanguage(VRLocalizationLanguage vrLocalizationLanguage)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<VRLocalizationLanguageDetail>();

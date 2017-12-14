@@ -1,9 +1,9 @@
 ﻿'use strict';
 (function (app) {
 
-    VRLocalizationService.$inject = ['UtilsService', '$rootScope'];
+    VRLocalizationService.$inject = ['UtilsService', '$rootScope','$cookies'];
 
-    function VRLocalizationService(UtilsService, $rootScope) {
+    function VRLocalizationService(UtilsService, $rootScope, $cookies) {
         var localizationEnabled;
         var isRTLLocalization;
 
@@ -37,12 +37,26 @@
             return resourceValue;
         }
 
+        function getLanguageCookieName() {
+            return "VR_Common_LocalizationLangauge";
+        }
+
+        function createOrUpdateLanguageCookie(languageId) {
+            $cookies.put(getLanguageCookieName(), languageId, { path: '/', domain: location.hostname, expires: '', secure: false });
+        }
+
+        function getLanguageCookie() {
+            return $cookies.get(getLanguageCookieName());
+        }
         return ({
             getResourceValue: getResourceValue,
             setLocalizationEnabled: setLocalizationEnabled,
             isLocalizationEnabled: isLocalizationEnabled,
             setLocalizationRTL: setLocalizationRTL,
-            isLocalizationRTL: isLocalizationRTL
+            isLocalizationRTL: isLocalizationRTL,
+            getLanguageCookieName: getLanguageCookieName,
+            createOrUpdateLanguageCookie: createOrUpdateLanguageCookie,
+            getLanguageCookie: getLanguageCookie
         });
     }
 

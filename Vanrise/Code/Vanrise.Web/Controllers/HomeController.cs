@@ -8,10 +8,13 @@ using Vanrise.Security.Business;
 
 namespace Vanrise.Web.Controllers
 {
+
     public class HomeController : Controller
     {
+       
         public ActionResult Index()
         {
+          
             ViewBag.Title = "Home Page";
             ViewBag.CookieName = (new SecurityManager()).GetCookieName();
             GeneralSettingsManager settingManager =  new GeneralSettingsManager();
@@ -21,10 +24,21 @@ namespace Vanrise.Web.Controllers
             ViewBag.ProductVersion = cManager.GetProductVersionNumber();
             ViewBag.CompanyName = cManager.GetDefaultCompanyName();
             ViewBag.isEnabledGA = settingManager.GetGoogleAnalyticsEnabled();
-            ViewBag.IsLocalizationEnabled = new VRLocalizationManager().IsLocalizationEnabled().ToString().ToLower();
-            var isRTL = new VRLocalizationManager().IsRTL();
-            ViewBag.IsRTL = isRTL.ToString().ToLower();
-            ViewBag.RTLClass = isRTL ? " class= rtl " : "";
+
+            var isLocalizationEnabled = new VRLocalizationManager().IsLocalizationEnabled();
+            ViewBag.IsLocalizationEnabled = isLocalizationEnabled.ToString().ToLower();
+            if(isLocalizationEnabled)
+            {
+                Guid? languageId = LocalizationConfig.GetLanguageIdFromCookies(Request.Cookies);
+                if (languageId.HasValue)
+                {
+                    var isRTL = new VRLocalizationLanguageManager().IsRTL(languageId.Value);
+                    ViewBag.IsRTL = isRTL.ToString().ToLower();
+                    ViewBag.RTLClass = isRTL ? " class= rtl " : "";
+                }
+            }
+          
+           
             Vanrise.Security.Business.SecurityManager securityManager = new SecurityManager();
             var loginUrl = securityManager.GetLoginURL();
             if (loginUrl != null)

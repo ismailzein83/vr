@@ -2,9 +2,9 @@
 
     "use strict";
 
-    vrEditor.$inject = ['BaseDirService', 'VRValidationService', 'UtilsService'];
+    vrEditor.$inject = ['BaseDirService', 'VRValidationService', 'UtilsService','VRLocalizationService'];
 
-    function vrEditor(BaseDirService, VRValidationService, UtilsService) {
+    function vrEditor(BaseDirService, VRValidationService, UtilsService, VRLocalizationService) {
 
         return {
             restrict: 'E',
@@ -134,9 +134,10 @@
                 var startTemplate = '<div id="rootDiv" style="position: relative;">';
                 var endTemplate = '</div>';
 
-                    var labelTemplate = '';
-                    if (attrs.label != undefined)
-                        labelTemplate = '<vr-label>' + attrs.label + '</vr-label>';
+                var labelTemplate = '';
+                var label = VRLocalizationService.getResourceValue(attrs.localizedlabel, attrs.label);
+                if (label != undefined)
+                    labelTemplate = '<vr-label>' + label + '</vr-label>';
                     var rows = 3;
                     if (attrs.rows != undefined)
                         rows = attrs.rows;

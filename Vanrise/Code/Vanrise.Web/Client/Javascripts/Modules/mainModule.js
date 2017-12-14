@@ -2,7 +2,7 @@
 
 
 var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCookies'])
-.controller('mainCtrl', ['$scope', '$rootScope', 'VR_Sec_MenuAPIService', 'SecurityService', 'BaseAPIService', 'VR_Sec_PermissionAPIService', 'notify', '$cookies', '$timeout', 'MenuItemTypeEnum', 'UtilsService', 'VRModalService', 'VRNavigationService', 'UISettingsService', '$location', '$window',"VRLocalizationService",
+.controller('mainCtrl', ['$scope', '$rootScope', 'VR_Sec_MenuAPIService', 'SecurityService', 'BaseAPIService', 'VR_Sec_PermissionAPIService', 'notify', '$cookies', '$timeout', 'MenuItemTypeEnum', 'UtilsService', 'VRModalService', 'VRNavigationService', 'UISettingsService', '$location', '$window', "VRLocalizationService",
 function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, BaseAPIService, VR_Sec_PermissionAPIService, notify, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService, VRNavigationService, UISettingsService, $location, $window, VRLocalizationService) {
     Waves.displayEffect();
 
@@ -175,9 +175,15 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         };
         modalSettings.onScopeReady = function (modalScope) {
             modalScope.title = "Edit My Language";
-            modalScope.onLanguageUpdated = function (response) {
-        };
-        };
+            modalScope.onLanguageUpdated = function (languageId) {
+                var languageCookie = VRLocalizationService.getLanguageCookie();
+                if (languageCookie != languageId)
+                {
+                    VRLocalizationService.createOrUpdateLanguageCookie(languageId);
+                    location.reload();
+                }
+            };
+    };
     VRModalService.showModal('/Client/Modules/Security/Views/User/EditMyLanguage.html', null, modalSettings);
         };
     $scope.menuItemsCurrent = null;
@@ -396,13 +402,13 @@ app.controller('loginCtrl', function loginCtrl($scope, SecurityService, $rootSco
         if (isLocalizationEnabled != undefined) {
             VRLocalizationService.setLocalizationEnabled(isLocalizationEnabled);
         }
-        };
+    };
 
-             $scope.setLocalizationRTL = function (isRTL) {
-        if(isRTL != undefined) {
+    $scope.setLocalizationRTL = function (isRTL) {
+        if (isRTL != undefined) {
             VRLocalizationService.setLocalizationRTL(isRTL);
-            }
-            };
+        }
+    };
 });
 app.controller('DocumentCtrl', ['$scope', function documentCtrl($scope) {
     $scope.downloadDocument = function (file) {

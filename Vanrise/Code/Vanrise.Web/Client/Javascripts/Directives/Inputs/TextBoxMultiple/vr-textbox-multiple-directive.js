@@ -2,9 +2,9 @@
 
     "use strict";
 
-    vrTextboxMultiple.$inject = ['BaseDirService', 'TextboxTypeEnum', 'VRValidationService', 'UtilsService'];
+    vrTextboxMultiple.$inject = ['BaseDirService', 'TextboxTypeEnum', 'VRValidationService', 'UtilsService','VRLocalizationService'];
 
-    function vrTextboxMultiple(BaseDirService, TextboxTypeEnum, VRValidationService, UtilsService) {
+    function vrTextboxMultiple(BaseDirService, TextboxTypeEnum, VRValidationService, UtilsService, VRLocalizationService) {
 
         return {
             restrict: 'E',
@@ -282,8 +282,12 @@
                 var endTemplate = '</div>';
 
                 var labelTemplate = '';
+                var label = '';
                 if (attrs.label != undefined)
-                    labelTemplate = '<vr-label>{{ctrl.label}}</vr-label>';
+                {
+                    label = VRLocalizationService.getResourceValue(attrs.localizedlabel, attrs.label);
+                    labelTemplate = '<vr-label>' + label + '</vr-label>';
+                }
                 var type = 'text';
                 if (attrs.type != undefined && attrs.type === TextboxTypeEnum.Password.name)
                     type = 'password';
