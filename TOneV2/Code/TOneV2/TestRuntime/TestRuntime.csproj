@@ -504,6 +504,9 @@
     <Reference Include="Vanrise.Integration.Extensions">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Extensions.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Integration.MainExtensions">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.MainExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Integration.Mappers">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Integration.Mappers.dll</HintPath>
     </Reference>
