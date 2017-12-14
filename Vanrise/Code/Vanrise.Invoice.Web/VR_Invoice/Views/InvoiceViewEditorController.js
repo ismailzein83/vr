@@ -2,9 +2,9 @@
 
     "use strict";
 
-    InvoiceViewEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_Sec_ViewAPIService', 'VR_Sec_MenuAPIService'];
+    InvoiceViewEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_Sec_ViewAPIService', 'VR_Sec_MenuAPIService', 'VRLocalizationService'];
 
-    function InvoiceViewEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Sec_ViewAPIService, VR_Sec_MenuAPIService) {
+    function InvoiceViewEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Sec_ViewAPIService, VR_Sec_MenuAPIService, VRLocalizationService) {
 
         var isEditMode;
         var viewTypeName = "VR_Invoice_GenericInvoice";
@@ -18,6 +18,10 @@
 
         var treeAPI;
         var treeReadyDeferred = UtilsService.createPromiseDeferred();
+        
+        var viewCommonPropertiesAPI;
+        var viewCommonPropertiesReadyDeferred = UtilsService.createPromiseDeferred();
+
         var viewEntity;
         loadParameters();
         defineScope();
@@ -45,6 +49,10 @@
                 else {
                     return insert();
                 }
+            };
+            $scope.scopeModel.onViewCommonPropertiesReady = function (api) {
+                viewCommonPropertiesAPI = api;
+                viewCommonPropertiesReadyDeferred.resolve();
             };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal()
@@ -90,17 +98,19 @@
                     $scope.scopeModel.isLoading = false;
                 });
             }
+            
             function buildViewObjectFromScope() {
 
                 var viewSettings = {
                     $type: "Vanrise.Invoice.Entities.InvoiceViewSettings, Vanrise.Invoice.Entities",
                     InvoiceTypeId: invoiceTypeSelectorAPI != undefined ? invoiceTypeSelectorAPI.getSelectedIds() : undefined,
                 };
+                    viewCommonPropertiesAPI.setCommonProperties(viewSettings);
                 var view = {
                     ViewId: (viewEntity != undefined) ? viewEntity.ViewId : null,
                     Name: $scope.scopeModel.invoiceName,
                     Title: $scope.scopeModel.invoiceTitle,
-                    ModuleId:$scope.scopeModel.selectedMenuItem != undefined ? $scope.scopeModel.selectedMenuItem.Id : undefined,
+                    ModuleId: $scope.scopeModel.selectedMenuItem != undefined ? $scope.scopeModel.selectedMenuItem.Id : undefined,
                     Settings: viewSettings,
                     Type: viewEntity != undefined ? viewEntity.Type : undefined,
 
@@ -126,6 +136,17 @@
             }
 
             function loadAllControls() {
+                function loadViewCommonProperties() {
+                        var viewCommmonPropertiesLoadDeferred = UtilsService.createPromiseDeferred();
+                        viewCommonPropertiesReadyDeferred.promise.then(function () {
+                            var payload = {};
+                            if (viewEntity != undefined) {
+                                payload.viewEntity = viewEntity;
+                            }
+                            VRUIUtilsService.callDirectiveLoad(viewCommonPropertiesAPI, payload, viewCommmonPropertiesLoadDeferred);
+                        });
+                        return viewCommmonPropertiesLoadDeferred.promise;
+                }
 
                 function setTitle() {
                     if (isEditMode && viewEntity != undefined)
@@ -187,7 +208,7 @@
                     return loadInvoiceTypeSelectorPromiseDeferred.promise;
                 }
 
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadTree, loadInvoiceTypeSelector]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadTree, loadInvoiceTypeSelector, loadViewCommonProperties]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;

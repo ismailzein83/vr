@@ -154,6 +154,7 @@
     <Content Include="Security\Directives\Tenant\vr-sec-tenant-grid.js" />
     <Content Include="Security\Directives\Tenant\vr-sec-tenant-selector.js" />
     <Content Include="Security\Directives\View\Templates\ViewGridTemplate.html" />
+    <Content Include="Security\Directives\View\Templates\ViewCommonPropertiesEditorTemplate.html" />
     <Content Include="Security\Directives\View\vr-sec-view-selector.js" />
     <Content Include="Security\Directives\View\vr-sec-view-grid.js" />
     <Content Include="Security\Directives\OrgChart\Templates\OrgChartGrid.html" />
@@ -164,6 +165,7 @@
     <Content Include="Security\Directives\User\Templates\UsersGrid.html" />
     <Content Include="Security\Directives\User\vr-sec-user-selector.js" />
     <Content Include="Security\Directives\User\vr-sec-user-grid.js" />
+    <Content Include="Security\Directives\View\vr-sec-viewcommonproperties-editor.js" />
     <Content Include="Security\Directives\View\vr-sec-viewtype-selector.js" />
     <Content Include="Security\Directives\Widget\Templates\WidgetPreview.html" />
     <Content Include="Security\Directives\Widget\Templates\WidgetsGrid.html" />

@@ -2,9 +2,9 @@
 
     "use strict";
 
-    AnalyticReportViewEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_Sec_ViewAPIService', 'VR_Sec_MenuAPIService', 'Analytic_AnalyticService'];
+    AnalyticReportViewEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_Sec_ViewAPIService', 'VR_Sec_MenuAPIService', 'Analytic_AnalyticService','VRLocalizationService'];
 
-    function AnalyticReportViewEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Sec_ViewAPIService, VR_Sec_MenuAPIService, Analytic_AnalyticService) {
+    function AnalyticReportViewEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Sec_ViewAPIService, VR_Sec_MenuAPIService, Analytic_AnalyticService, VRLocalizationService) {
 
         var isEditMode;
         var viewTypeName = "VR_AnalyticReport";
@@ -18,6 +18,9 @@
 
         var reportTypeSelectorAPI;
         var reportTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var viewCommonPropertiesAPI;
+        var viewCommonPropertiesReadyDeferred = UtilsService.createPromiseDeferred();
 
         var treeAPI;
         var treeReadyDeferred = UtilsService.createPromiseDeferred();
@@ -44,6 +47,11 @@
             $scope.scopeModel.onReportTypeSelectorDirectiveReady = function (api) {
                 reportTypeSelectorAPI = api;
                 reportTypeSelectorReadyDeferred.resolve();
+            };
+           
+            $scope.scopeModel.onViewCommonPropertiesReady = function (api) {
+                viewCommonPropertiesAPI = api;
+                viewCommonPropertiesReadyDeferred.resolve();
             };
 
             $scope.scopeModel.onReportTypeSelectionChanged = function () {
@@ -97,7 +105,7 @@
             }
 
             function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadTree, loadReportTypeSelector, loadReportSelector]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadTree, loadReportTypeSelector, loadReportSelector, loadViewCommonProperties]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -110,6 +118,7 @@
             }
 
             function setTitle() {
+               
                 if (isEditMode && viewEntity != undefined)
                     $scope.title = UtilsService.buildTitleForUpdateEditor(viewEntity.Name, 'Analytic Report View Editor');
                 else
@@ -117,6 +126,7 @@
             }
 
             function loadStaticData() {
+              
                 if (viewEntity != undefined) {
                     $scope.scopeModel.reportName = viewEntity.Name;
                     $scope.scopeModel.reportTitle = viewEntity.Title;
@@ -130,6 +140,7 @@
             }
 
             function loadTree() {
+                
                 var treeLoadDeferred = UtilsService.createPromiseDeferred();
 
                 loadMenuItems().then(function () {
@@ -155,13 +166,13 @@
                         }
                     });
                 }
-
                 return treeLoadDeferred.promise;
 
 
             }
 
             function loadReportTypeSelector() {
+               
                 var loadReportTypeSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
                 reportTypeSelectorReadyDeferred.promise.then(function () {
                     var payLoad;
@@ -176,7 +187,7 @@
             }
 
             function loadReportSelector() {
-
+               
                 if (viewEntity != undefined && viewEntity.Settings != undefined) {
                     reportReadyDeferred = UtilsService.createPromiseDeferred();
                     var loadReportPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -197,6 +208,18 @@
                 }
 
             }
+            function loadViewCommonProperties() {
+                    var viewCommmonPropertiesLoadDeferred = UtilsService.createPromiseDeferred();
+                    viewCommonPropertiesReadyDeferred.promise.then(function () {
+                        var payload = {};
+                        if (viewEntity != undefined) {
+                            payload.viewEntity = viewEntity;
+                        }
+                        VRUIUtilsService.callDirectiveLoad(viewCommonPropertiesAPI, payload, viewCommmonPropertiesLoadDeferred);
+                    });
+                    return viewCommmonPropertiesLoadDeferred.promise;
+               
+            }
 
             function getView() {
                 return VR_Sec_ViewAPIService.GetView(viewId).then(function (viewEntityObj) {
@@ -213,11 +236,12 @@
                 AnalyticReportId: reportDirectiveAPI != undefined ? reportDirectiveAPI.getSelectedIds() : undefined,
                 TypeId: reportTypeSelectorAPI != undefined ? reportTypeSelectorAPI.getSelectedIds() : undefined,
             };
+                viewCommonPropertiesAPI.setCommonProperties(viewSettings);
             var view = {
                 ViewId: (viewEntity != undefined) ? viewEntity.ViewId : null,
                 Name: $scope.scopeModel.reportName,
                 Title: $scope.scopeModel.reportTitle,
-                ModuleId:($scope.scopeModel.selectedMenuItem!=undefined)? $scope.scopeModel.selectedMenuItem.Id : undefined,
+                ModuleId: ($scope.scopeModel.selectedMenuItem != undefined) ? $scope.scopeModel.selectedMenuItem.Id : undefined,
                 Settings: viewSettings,
                 Type: viewEntity != undefined ? viewEntity.Type : undefined,
 

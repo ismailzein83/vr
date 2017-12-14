@@ -21,7 +21,7 @@
                             <vr-row ng-if="scopeModel.selectedReportType !=undefined">
                                 <vr-analytic-analyticreport-selector on-ready="scopeModel.onReportSelectorDirectiveReady" isrequired="true" selectedvalues="scopeModel.selectedReport" normal-col-num="12"></vr-analytic-analyticreport-selector>
                             </vr-row>
-
+                            <vr-sec-viewcommonproperties-editor  on-ready="scopeModel.onViewCommonPropertiesReady"></vr-sec-viewcommonproperties-editor>
                         </vr-columns>
                         <vr-columns width="2/3row">
                             <vr-section title="Menu Location">

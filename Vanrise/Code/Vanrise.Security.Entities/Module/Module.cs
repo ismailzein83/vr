@@ -20,5 +20,12 @@ namespace Vanrise.Security.Entities
         public string Icon { get; set; }
         public bool AllowDynamic { get; set; }
         public int Rank { get; set; }
+
+        public ModuleSettings Settings { get; set; }
+    }
+
+    public class ModuleSettings
+    {
+        public string LocalizedName { get; set; }
     }
 }

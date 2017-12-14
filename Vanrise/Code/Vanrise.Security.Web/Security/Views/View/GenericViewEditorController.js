@@ -2,9 +2,9 @@
 
     "use strict";
 
-    GenericViewEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_Sec_ViewAPIService', 'VR_Sec_MenuAPIService'];
+    GenericViewEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_Sec_ViewAPIService', 'VR_Sec_MenuAPIService', 'VRLocalizationService'];
 
-    function GenericViewEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Sec_ViewAPIService, VR_Sec_MenuAPIService) {
+    function GenericViewEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Sec_ViewAPIService, VR_Sec_MenuAPIService, VRLocalizationService) {
 
         var isEditMode;
         var viewId;
@@ -15,6 +15,10 @@
         var treeAPI;
         var treeReadyDeferred = UtilsService.createPromiseDeferred();
         var viewEntity;
+
+        var viewCommonPropertiesAPI;
+        var viewCommonPropertiesReadyDeferred = UtilsService.createPromiseDeferred();
+
         $scope.scopeModel = {};
         loadParameters();
         defineScope();
@@ -44,6 +48,10 @@
                 else {
                     return insert();
                 }
+            };
+            $scope.scopeModel.onViewCommonPropertiesReady = function (api) {
+                viewCommonPropertiesAPI = api;
+                viewCommonPropertiesReadyDeferred.resolve();
             };
 
             $scope.scopeModel.close = function () {
@@ -134,8 +142,19 @@
                     });
                     return loadSettingsDirectivePromiseDeferred.promise;
                 }
+                function loadViewCommonProperties() {
+                        var viewCommmonPropertiesLoadDeferred = UtilsService.createPromiseDeferred();
+                        viewCommonPropertiesReadyDeferred.promise.then(function () {
+                            var payload = {};
+                            if (viewEntity != undefined) {
+                                payload.viewEntity = viewEntity;
+                            }
+                            VRUIUtilsService.callDirectiveLoad(viewCommonPropertiesAPI, payload, viewCommmonPropertiesLoadDeferred);
+                        });
+                        return viewCommmonPropertiesLoadDeferred.promise;
+                }
 
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadTree, loadSettingsDirective]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadTree, loadSettingsDirective, loadViewCommonProperties]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -158,10 +177,11 @@
                 ViewId: (viewEntity != undefined) ? viewEntity.ViewId : null,
                 Name: $scope.scopeModel.reportName,
                 Title: $scope.scopeModel.reportTitle,
-                ModuleId:$scope.scopeModel.selectedMenuItem != undefined ?  $scope.scopeModel.selectedMenuItem.Id : undefined,
+                ModuleId: $scope.scopeModel.selectedMenuItem != undefined ? $scope.scopeModel.selectedMenuItem.Id : undefined,
                 Settings: settingsDirectiveAPI.getData(),
-                Type: viewType != undefined ? viewType.ExtensionConfigurationId: undefined,
+                Type: viewType != undefined ? viewType.ExtensionConfigurationId : undefined,
             };
+                viewCommonPropertiesAPI.setCommonProperties(view.Settings);
             return view;
         }
 

@@ -2,9 +2,9 @@
 
     "use strict";
 
-    GenericRuleViewEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_Sec_ViewAPIService', 'VR_Sec_MenuAPIService'];
+    GenericRuleViewEditorController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VR_Sec_ViewAPIService', 'VR_Sec_MenuAPIService', 'VRLocalizationService'];
 
-    function GenericRuleViewEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Sec_ViewAPIService, VR_Sec_MenuAPIService) {
+    function GenericRuleViewEditorController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VR_Sec_ViewAPIService, VR_Sec_MenuAPIService, VRLocalizationService) {
 
         var isEditMode;
         var viewTypeName = "VR_GenericData_GenericView";
@@ -18,6 +18,9 @@
 
         var genericRuleDefinitionAPI;
         var genericRuleDefinitionReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var viewCommonPropertiesAPI;
+        var viewCommonPropertiesReadyDeferred = UtilsService.createPromiseDeferred();
 
         var treeAPI;
         var treeReadyDeferred = UtilsService.createPromiseDeferred();
@@ -48,6 +51,10 @@
                 else {
                     return insert();
                 }
+            };
+            $scope.scopeModel.onViewCommonPropertiesReady = function (api) {
+                viewCommonPropertiesAPI = api;
+                viewCommonPropertiesReadyDeferred.resolve();
             };
 
             $scope.scopeModel.close = function () {
@@ -80,7 +87,7 @@
             }
 
             function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadTree, loadGenericRuleDefinition]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadTree, loadGenericRuleDefinition, loadViewCommonProperties]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -94,6 +101,17 @@
                     $scope.title = UtilsService.buildTitleForUpdateEditor(viewEntity.Name, 'Generic Rule View Editor');
                 else
                     $scope.title = UtilsService.buildTitleForAddEditor('Generic Rule View Editor');
+            }
+            function loadViewCommonProperties() {
+                    var viewCommmonPropertiesLoadDeferred = UtilsService.createPromiseDeferred();
+                    viewCommonPropertiesReadyDeferred.promise.then(function () {
+                        var payload = {};
+                        if (viewEntity != undefined) {
+                            payload.viewEntity = viewEntity;
+                        }
+                        VRUIUtilsService.callDirectiveLoad(viewCommonPropertiesAPI, payload, viewCommmonPropertiesLoadDeferred);
+                    });
+                    return viewCommmonPropertiesLoadDeferred.promise;
             }
 
             function loadStaticData() {
@@ -160,8 +178,9 @@
 
             var viewSettings = {
                 $type: "Vanrise.GenericData.Entities.GenericRuleViewSettings, Vanrise.GenericData.Entities",
-                RuleDefinitionIds:genericRuleDefinitionAPI.getSelectedIds()
+                RuleDefinitionIds: genericRuleDefinitionAPI.getSelectedIds()
             };
+                viewCommonPropertiesAPI.setCommonProperties(viewSettings);
             var view = {
                 ViewId: (viewEntity != undefined) ? viewEntity.ViewId : null,
                 Name: $scope.scopeModel.reportName,

@@ -1,13 +1,14 @@
 ﻿"use strict";
 
-app.directive("vrCommonLocalizationressourcekeySelector", ["VRNotificationService", 'VRCommon_VRLocalizationTextResourceAPIService', 'VRCommon_VRLocalizationTextResourceService', 'VRUIUtilsService', 'UtilsService',
-    function (VRNotificationService, VRCommon_VRLocalizationTextResourceAPIService, VRCommon_VRLocalizationTextResourceService, VRUIUtilsService, UtilsService) {
+app.directive("vrCommonLocalizationressourcekeySelector", ["VRNotificationService", 'VRCommon_VRLocalizationTextResourceAPIService', 'VRCommon_VRLocalizationTextResourceService', 'VRUIUtilsService', 'UtilsService','VRLocalizationService',
+    function (VRNotificationService, VRCommon_VRLocalizationTextResourceAPIService, VRCommon_VRLocalizationTextResourceService, VRUIUtilsService, UtilsService, VRLocalizationService) {
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
                 onReady: '=',
                 selectedValue: '=',
-                customlabel:'@'
+                customlabel: '@',
+                normalColNum:'@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -27,7 +28,10 @@ app.directive("vrCommonLocalizationressourcekeySelector", ["VRNotificationServic
             if (attrs.customlabel != undefined) {
                 label = attrs.customlabel;
             }
-            return '<vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onTextResourceSelectorReady" normal-col-num="12" selectedvalues="scopeModel.selectedResourceKey" isrequired="true" customlabel="' + label + '"></vr-common-vrlocalizationtextresource-selector>'
+            var colnum = 12;
+            if (attrs.normalColNum != undefined)
+                colnum = attrs.normalColNum;
+            return '<vr-common-vrlocalizationtextresource-selector on-ready="scopeModel.onTextResourceSelectorReady" ng-if="scopeModel.isLocalizationEnabled" normal-col-num="' + colnum + '" selectedvalues="scopeModel.selectedResourceKey" isrequired="true" customlabel="' + label + '"></vr-common-vrlocalizationtextresource-selector>'
 
         }
         function VrLocalizationressourcekeySelector($scope, ctrl, $attrs) {
@@ -46,6 +50,7 @@ app.directive("vrCommonLocalizationressourcekeySelector", ["VRNotificationServic
                     textResourceSelectorAPI = api;
                     textResourceSelectorReadyDeferred.resolve();
                 };
+                $scope.scopeModel.isLocalizationEnabled = VRLocalizationService.isLocalizationEnabled();
                 defineAPI();
             }
 
@@ -55,11 +60,12 @@ app.directive("vrCommonLocalizationressourcekeySelector", ["VRNotificationServic
 
                 api.load = function (payload) {
                     var promises = [];
-                
+
                     if (payload != undefined) {
                         selectedResourceKey = payload.selectedResourceKey;
                     }
-                    promises.push(loadTextResourceSelector());
+                    if (VRLocalizationService.isLocalizationEnabled())
+                        promises.push(loadTextResourceSelector());
 
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -73,16 +79,15 @@ app.directive("vrCommonLocalizationressourcekeySelector", ["VRNotificationServic
                 ctrl.selectedValue = $scope.scopeModel.selectedResourceKey;
             }
             function loadTextResourceSelector() {
-                var textResourceSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                textResourceSelectorReadyDeferred.promise.then(function () {
-                    var payload = {};
-                    if (selectedResourceKey != undefined)
-                        payload.selectedValue = selectedResourceKey;
-                    VRUIUtilsService.callDirectiveLoad(textResourceSelectorAPI, payload, textResourceSelectorLoadDeferred);
-                });
-                return textResourceSelectorLoadDeferred.promise;
+                    var textResourceSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    textResourceSelectorReadyDeferred.promise.then(function () {
+                        var payload = {};
+                        if (selectedResourceKey != undefined)
+                            payload.selectedValue = selectedResourceKey;
+                        VRUIUtilsService.callDirectiveLoad(textResourceSelectorAPI, payload, textResourceSelectorLoadDeferred);
+                    });
+                    return textResourceSelectorLoadDeferred.promise;
             }
-           
         }
        
 

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Data.SQL;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Security.Data.SQL
 {
@@ -36,14 +37,14 @@ namespace Vanrise.Security.Data.SQL
         public bool AddModule(Entities.Module moduleObject)
         {
 
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_Insert",moduleObject.ModuleId, moduleObject.Name,moduleObject.ParentId,moduleObject.DefaultViewId, moduleObject.AllowDynamic);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_Insert", moduleObject.ModuleId, moduleObject.Name, moduleObject.ParentId, moduleObject.DefaultViewId, moduleObject.AllowDynamic, Vanrise.Common.Serializer.Serialize(moduleObject.Settings));
 
             return (recordesEffected > 0);
         }
 
         public bool UpdateModule(Entities.Module moduleObject)
         {
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_Update", moduleObject.ModuleId, moduleObject.Name,moduleObject.ParentId,moduleObject.DefaultViewId, moduleObject.AllowDynamic);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_Module_Update", moduleObject.ModuleId, moduleObject.Name, moduleObject.ParentId, moduleObject.DefaultViewId, moduleObject.AllowDynamic, Vanrise.Common.Serializer.Serialize(moduleObject.Settings));
             return (recordesEffected > 0);
         }
         #endregion
@@ -61,6 +62,7 @@ namespace Vanrise.Security.Data.SQL
                 Icon = reader["Icon"] as string,
                 AllowDynamic = true,// GetReaderValue<Boolean>(reader, "AllowDynamic"),
                 Rank = GetReaderValue<int>(reader, "Rank"),
+                Settings = Vanrise.Common.Serializer.Deserialize<ModuleSettings>(reader["Settings"] as string),
             };
             return module;
         }

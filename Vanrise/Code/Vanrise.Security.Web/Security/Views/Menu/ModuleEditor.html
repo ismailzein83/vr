@@ -1,13 +1,14 @@
-﻿<div vr-modalcontent ng-controller="VR_Sec_ModuleEditorController" vr-loader="scopeModel.isLoading" width="'30%'">
+﻿<div vr-modalcontent ng-controller="VR_Sec_ModuleEditorController" vr-loader="scopeModel.isLoading" width="'50%'">
     <vr-modalbody>
         <vr-form name="formModuleEditor">
             <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row>
-                        <vr-columns width="1/2row">
+                        <vr-columns colnum="4">
                             <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
                         </vr-columns>
-                        <vr-sec-view-selector normal-col-num="6" on-ready="scopeModel.onViewSelectorReady" customlabel="Default View"></vr-sec-view-selector>
+                        <vr-sec-view-selector normal-col-num="4" on-ready="scopeModel.onViewSelectorReady" customlabel="Default View"></vr-sec-view-selector>
+                        <vr-common-localizationressourcekey-selector on-ready="scopeModel.onNameResourceKeySelectorReady" normal-col-num="4" isrequired="true" customlabel="View Name Resource Key"></vr-common-localizationressourcekey-selector>
                     </vr-row>
                 </vr-tab>
             </vr-tabs>

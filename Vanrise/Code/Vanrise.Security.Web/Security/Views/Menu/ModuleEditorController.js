@@ -13,6 +13,10 @@
         var moduleId;
         var moduleEntity;
         var parentId;
+
+        var nameResourceKeySelectorAPI;
+        var nameResourceKeySelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -50,6 +54,11 @@
                 viewSelectorReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.onNameResourceKeySelectorReady = function (api) {
+                nameResourceKeySelectorAPI = api;
+                nameResourceKeySelectorReadyDeferred.resolve();
+            };
+
         }
         
         function load() {
@@ -77,13 +86,25 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData ,loadViewSelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadViewSelector, loadNameResourceKeySelector])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
               .finally(function () {
                   $scope.scopeModel.isLoading = false;
               });
+        }
+
+        function loadNameResourceKeySelector() {
+            var resourceKeySelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            nameResourceKeySelectorReadyDeferred.promise.then(function () {
+                var payload = {};
+                if (moduleEntity != undefined && moduleEntity.Settings != undefined) {
+                    payload.selectedResourceKey = moduleEntity.Settings.LocalizedName;
+              }
+                VRUIUtilsService.callDirectiveLoad(nameResourceKeySelectorAPI, payload, resourceKeySelectorLoadDeferred);
+            });
+            return resourceKeySelectorLoadDeferred.promise;
         }
        
         function setTitle() {
@@ -117,7 +138,10 @@
                 Name: $scope.scopeModel.name,
                 AllowDynamic:moduleEntity && moduleEntity.isDynamic || false,
                 DefaultViewId : viewSelectorAPI.getSelectedIds(),
-                ParentId: moduleEntity != undefined ? moduleEntity.ParentId : parentId
+                ParentId: moduleEntity != undefined ? moduleEntity.ParentId : parentId,
+                Settings: {
+                    LocalizedName: nameResourceKeySelectorAPI.getResourceKey()
+                }
             };
             return moduleObject;
         }
