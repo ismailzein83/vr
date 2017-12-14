@@ -82,14 +82,34 @@ namespace Vanrise.Rules.Data.SQL
             return GetItemsSP("rules.sp_RuleChanged_GetByType", RuleChangedMapper, ruleTypeId);
         }
 
-        public void DeleteRuleChanged(int ruleId, int ruleTypeId)
+        public RuleChanged GetRuleChangedForProcessing(int ruleId, int ruleTypeId)
         {
-            ExecuteNonQuerySP("rules.sp_RuleChanged_DeleteByRuleAndType", ruleId, ruleTypeId);
+            return GetItemSP("rules.sp_RuleChangedForProcessing_GetByRuleAndType", RuleChangedMapper, ruleId, ruleTypeId);
         }
 
-        public void DeleteRulesChanged(int ruleTypeId)
+        public List<RuleChanged> GetRulesChangedForProcessing(int ruleTypeId)
         {
-            ExecuteNonQuerySP("rules.sp_RuleChanged_DeleteByType", ruleTypeId);
+            return GetItemsSP("rules.sp_RuleChangedForProcessing_GetByType", RuleChangedMapper, ruleTypeId);
+        }
+
+        public RuleChanged FillAndGetRuleChangedForProcessing(int ruleId, int ruleTypeId)
+        {
+            return GetItemSP("rules.sp_RuleChangedForProcessing_FillAndGetByRuleAndType", RuleChangedMapper, ruleId, ruleTypeId);
+        }
+
+        public List<RuleChanged> FillAndGetRulesChangedForProcessing(int ruleTypeId)
+        {
+            return GetItemsSP("rules.sp_RuleChangedForProcessing_FillAndGetByType", RuleChangedMapper, ruleTypeId);
+        }
+
+        public void DeleteRuleChangedForProcessing(int ruleId, int ruleTypeId)
+        {
+            ExecuteNonQuerySP("rules.sp_RuleChangedForProcessing_DeleteByRuleAndType", ruleId, ruleTypeId);
+        }
+
+        public void DeleteRulesChangedForProcessing(int ruleTypeId)
+        {
+            ExecuteNonQuerySP("rules.sp_RuleChangedForProcessing_DeleteByType", ruleTypeId);
         }
         #endregion
 

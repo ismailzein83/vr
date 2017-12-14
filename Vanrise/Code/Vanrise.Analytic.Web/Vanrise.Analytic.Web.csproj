@@ -179,7 +179,7 @@
     <Content Include="Analytic\Directives\DataAnalysis\DataAnalysisItemDefinition\vr-analytic-dataanalysisitemdefinition-settings.js" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\OutputDefinitions\Templates\RecordProfilingOutputSettingsEditorTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\OutputDefinitions\vr-analytic-recordprofilingoutputsettings-editor.js" />
-    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\Common\Templates\DAProfCalcSettingsSelectorTemplate.html" />
+    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\Common\Templates\DAProfCalcSettingsTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\Common\Templates\DAProfCalcAggregationFieldManagementTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\Common\vr-analytic-darecordaggregate-selective.js" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\ScheduleTask\Templates\GenerateAlertProcessTaskTemplate.html" />

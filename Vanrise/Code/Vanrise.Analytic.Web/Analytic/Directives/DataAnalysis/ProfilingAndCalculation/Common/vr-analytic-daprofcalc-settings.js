@@ -17,7 +17,7 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/Analytic/Directives/DataAnalysis/ProfilingAndCalculation/Common/Templates/DAProfCalcSettingsSelectorTemplate.html"
+            templateUrl: "/Client/Modules/Analytic/Directives/DataAnalysis/ProfilingAndCalculation/Common/Templates/DAProfCalcSettingsTemplate.html"
 
         };
         function DAProfCalcSettings($scope, ctrl, $attrs) {
@@ -42,6 +42,7 @@
 
                     if (payload != undefined && payload.dataAnalysisDefinitionSettings != undefined) {
                         selectorPayload = { selectedIds: payload.dataAnalysisDefinitionSettings.DataRecordTypeId };
+                        $scope.scopeModel.hideActionRuleRecordFilter = payload.dataAnalysisDefinitionSettings.HideActionRuleRecordFilter;
                     }
 
                     var daProfCalcSettingsSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -54,7 +55,8 @@
                 api.getData = function () {
                     var data = {
                         $type: "Vanrise.Analytic.Entities.DAProfCalcSettings, Vanrise.Analytic.Entities",
-                        DataRecordTypeId: selectorAPI.getSelectedIds()
+                        DataRecordTypeId: selectorAPI.getSelectedIds(),
+                        HideActionRuleRecordFilter: $scope.scopeModel.hideActionRuleRecordFilter
                     };
                     return data;
                 };

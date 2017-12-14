@@ -1,0 +1,14 @@
+﻿
+
+<vr-columns colnum="3">
+    <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onDAProfCalcSettingsSelectorReady"
+                                            onselectionchanged="scopeModel.onDAProfCalcSettingsSelectionChanged"
+                                            isrequired="true"
+                                            label="Record Type"
+                                            hideremoveicon colnum>
+    </vr-genericdata-datarecordtype-selector>
+</vr-columns>
+
+<vr-columns colnum="3">
+    <vr-switch value="scopeModel.hideActionRuleRecordFilter" label="Hide Rule Record Filter"></vr-switch>
+</vr-columns>

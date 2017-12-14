@@ -162,7 +162,6 @@ namespace Vanrise.Rules
             }
             return false;
         }
-
         public RuleChangedData<T> GetRuleChanged(int ruleId)
         {
             IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
@@ -184,16 +183,58 @@ namespace Vanrise.Rules
             return result;
         }
 
-        public void DeleteRuleChanged(int ruleId)
+        public RuleChangedData<T> GetRuleChangedForProcessing(int ruleId)
         {
             IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
-            ruleDataManager.DeleteRuleChanged(ruleId, GetRuleTypeId());
+            return RuleChangedDataMapper(ruleDataManager.GetRuleChangedForProcessing(ruleId, GetRuleTypeId()));
         }
 
-        public void DeleteRulesChanged()
+        public List<RuleChangedData<T>> GetRulesChangedForProcessing()
         {
             IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
-            ruleDataManager.DeleteRulesChanged(GetRuleTypeId());
+            List<RuleChanged> ruleChangedList = ruleDataManager.GetRulesChangedForProcessing(GetRuleTypeId());
+            if (ruleChangedList == null)
+                return null;
+
+            List<RuleChangedData<T>> result = new List<RuleChangedData<T>>();
+            foreach (RuleChanged ruleChanged in ruleChangedList)
+            {
+                result.Add(RuleChangedDataMapper(ruleChanged));
+            }
+            return result;
+        }
+
+        public RuleChangedData<T> FillAndGetRuleChangedForProcessing(int ruleId)
+        {
+            IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
+            return RuleChangedDataMapper(ruleDataManager.FillAndGetRuleChangedForProcessing(ruleId, GetRuleTypeId()));
+        }
+
+        public List<RuleChangedData<T>> FillAndGetRulesChangedForProcessing()
+        {
+            IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
+            List<RuleChanged> ruleChangedList = ruleDataManager.FillAndGetRulesChangedForProcessing(GetRuleTypeId());
+            if (ruleChangedList == null)
+                return null;
+
+            List<RuleChangedData<T>> result = new List<RuleChangedData<T>>();
+            foreach (RuleChanged ruleChanged in ruleChangedList)
+            {
+                result.Add(RuleChangedDataMapper(ruleChanged));
+            }
+            return result;
+        }
+
+        public void DeleteRuleChangedForProcessing(int ruleId)
+        {
+            IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
+            ruleDataManager.DeleteRuleChangedForProcessing(ruleId, GetRuleTypeId());
+        }
+
+        public void DeleteRulesChangedForProcessing()
+        {
+            IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
+            ruleDataManager.DeleteRulesChangedForProcessing(GetRuleTypeId());
         }
 
         private RuleChangedData<T> RuleChangedDataMapper(RuleChanged ruleChanged)
