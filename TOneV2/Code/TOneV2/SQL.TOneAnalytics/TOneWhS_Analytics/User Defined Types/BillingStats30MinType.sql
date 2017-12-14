@@ -1,6 +1,7 @@
 ﻿CREATE TYPE [TOneWhS_Analytics].[BillingStats30MinType] AS TABLE (
     [Id]                       BIGINT           NULL,
     [BatchStart]               DATETIME         NULL,
+    [SwitchID]                 INT              NULL,
     [CustomerId]               INT              NULL,
     [SupplierId]               INT              NULL,
     [CustomerProfileId]        INT              NULL,
@@ -46,6 +47,8 @@
     [SaleFinancialAccountId]   INT              NULL,
     [CostFinancialAccountId]   INT              NULL,
     [Type]                     INT              NULL);
+
+
 
 
 

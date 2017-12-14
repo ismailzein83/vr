@@ -1,6 +1,7 @@
 ﻿CREATE TABLE [TOneWhS_Analytics].[BillingStatsDaily] (
     [Id]                       BIGINT           NULL,
     [BatchStart]               DATETIME         NULL,
+    [SwitchID]                 INT              NULL,
     [CustomerId]               INT              NULL,
     [CustomerProfileId]        INT              NULL,
     [SaleZoneId]               BIGINT           NULL,
@@ -48,6 +49,8 @@
     [Type]                     INT              NULL,
     CONSTRAINT [IX_BillingStatsDaily_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 
