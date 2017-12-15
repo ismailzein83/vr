@@ -54,10 +54,18 @@ namespace Vanrise.Common.Business
         }
         public bool IsLocalizationEnabled()
         {
+
+            var isLocalizationEnabled = ConfigurationManager.AppSettings["IsLocalizationEnabled"];
+            if (isLocalizationEnabled != null && isLocalizationEnabled == "true")
+            {
+                return true;
+            }
+
             ConfigManager configManager = new ConfigManager();
             var generalTechnicalSettings = configManager.GetGeneralTechnicalSetting();
-            generalTechnicalSettings.ThrowIfNull("generalTechicalSettings");
-            return generalTechnicalSettings.IsLocalizationEnabled;
+            if (generalTechnicalSettings != null)
+                return generalTechnicalSettings.IsLocalizationEnabled;
+            return false;
         }
         public bool IsRTL()
         {

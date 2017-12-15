@@ -139,7 +139,6 @@
             var drillDownDefinition = {};
 
             drillDownDefinition.title = "Cities";
-            drillDownDefinition.localizedtitle = "VRRes.Cities.VREnd";
 
             drillDownDefinition.directive = "vr-common-city-grid";
             drillDownDefinition.parentMenuActions = [{
