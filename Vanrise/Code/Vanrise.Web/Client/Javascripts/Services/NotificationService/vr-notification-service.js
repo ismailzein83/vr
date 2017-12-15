@@ -5,6 +5,7 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
     return ({
         showConfirmation: showConfirmation,
         showInformation: showInformation,
+        showPromptWarning: showPromptWarning,
         showSuccess: showSuccess,
         showError: showError,
         showWarning: showWarning,
@@ -37,6 +38,27 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
             };
         };
         VRModalService.showModal('/Client/Javascripts/Services/NotificationService/vr-confirmation-modal.html', null, settings);
+        return deferred.promise;
+    }
+
+    function showPromptWarning(message) {
+        var settings = {
+            size: "small"
+        };
+        var deferred = $q.defer();
+        settings.onScopeReady = function (modalScope) {
+            if (message != null && message != undefined && message != "")
+                modalScope.message = message;
+            else
+                modalScope.message = "Prompt message!!";
+            modalScope.type = "alert  alert-warning";
+            modalScope.okClicked = function () {
+                modalScope.modalContext.closeModal();
+                deferred.resolve(true);
+            };
+           
+        };
+        VRModalService.showModal('/Client/Javascripts/Services/NotificationService/vr-prompt-modal.html', null, settings);
         return deferred.promise;
     }
 

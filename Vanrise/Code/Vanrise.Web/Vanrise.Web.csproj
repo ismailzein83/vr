@@ -163,6 +163,7 @@
     <Content Include="Client\Javascripts\Directives\Diagram\vr-diagram-directive.js" />
     <Content Include="Client\Javascripts\Directives\Inputs\Select\vr-toolbox-select.html" />
     <Content Include="Client\Javascripts\Directives\Recompiler\vr-recompiler-ready.js" />
+    <Content Include="Client\Javascripts\Services\NotificationService\vr-prompt-modal.html" />
     <Content Include="Client\Javascripts\Services\vr-dragdrop-service.js" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SecurityController.cs" />

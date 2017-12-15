@@ -1,0 +1,12 @@
+﻿<div vr-modalcontent resclass="'small'" >
+    <vr-modalbody maxheight="'100px'" ng-class="type" style="display: block;margin-bottom: -10px;">
+        <span>{{message}}</span>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Ok" data-onclick="okClicked"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
