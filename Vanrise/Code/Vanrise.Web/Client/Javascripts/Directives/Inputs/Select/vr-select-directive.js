@@ -2,7 +2,7 @@
 
     "use strict";
 
-    function vrSelectDirective(selectService, baseDirService, validationMessagesEnum, utilsService, VRValidationService, $timeout, $rootScope) {
+    function vrSelectDirective(selectService, baseDirService, validationMessagesEnum, utilsService, VRValidationService, $timeout, $rootScope, VRLocalizationService) {
 
         var openedDropDownIds = [], rootScope;
         var vrSelectSharedObject = {
@@ -475,7 +475,7 @@
                     var selfOffset = dropdown.offset();
                     var basetop = selfOffset.top - $(window).scrollTop() + selfHeight;
                     var heigth = dropdown.parents('.vr-pager-container').length > 0 ? 235 : 200;
-                    if ((innerHeight - 100) - basetop < heigth) {
+                    if (menuPosition.toTop) {
                         var dropdownMenu = dropdown.find('.dropdown-menu');
                         var height = dropdownMenu.css({ display: "block" }).height();
                         $element.find('.vr-select-add').css({ top: selfHeight + 16 });
@@ -492,7 +492,6 @@
                             $('div[name=' + id + ']').removeClass("changing-state");
                         });
                     }
-                    $('div[name=' + id + ']').find('.dropdown-menu').css({ position: 'fixed', top: menuPosition.top, left: menuPosition.left });
 
                 };
                 var afterHideDropdown = function (id) {
@@ -510,18 +509,23 @@
                 };
                 controller.focusFilterInput = function () {
                     setTimeout(function () {
-                        $('#filterInput').focus();
+                        $('.filter-input').focus();
                     }, 100);
                 };
-                function getDropDownDirection(id) {
+                function getDropDownDirection(id,getTopDirection) {
+                    cleanUpPositionClass(id);
                     var self = $('div[name=' + id + ']').find('.dropdown-toggle').first();
+                    var dropDown = $('div[name=' + id + ']').find('.dropdown-menu');
                     var selfHeight = $(self).parent().height();
                     var selfOffset = $(self).offset();
                     var initialtop = 0;
                     var basetop = selfOffset.top - $(window).scrollTop() + selfHeight;
                     var baseleft = selfOffset.left - $(window).scrollLeft();
                     var heigth = $('div[name=' + id + ']').parents('.vr-pager-container').length > 0 ? 235 : 200;
-                    if ((innerHeight - 100) - basetop < heigth) {
+                    var toTopDirection = (innerHeight - 50) - basetop < heigth;
+                    if (getTopDirection)
+                        return { toTop: toTopDirection };
+                    if (toTopDirection) {
                         initialtop = basetop - (heigth + (selfHeight * 2.9));
                         if (isRemoteLoad()) {
                             initialtop = initialtop - 35;
@@ -533,10 +537,58 @@
                     }
                     else
                         initialtop = selfOffset.top - $(window).scrollTop() + selfHeight;
+                    var ddleft = baseleft;
+
+                    if (!VRLocalizationService.isLocalizationRTL()) {
+                        if (innerWidth - baseleft < 226 && !controller.isMultiple()) {
+                            ddleft = baseleft + $(self).parent().width() - $(dropDown).width();
+                            $(dropDown).addClass('dropdown-top-right');
+
+                        }
+                        if ((innerWidth - baseleft < 444) && controller.isMultiple()) {
+                            $(dropDown).addClass('dropdown-top-right');
+                            if (innerWidth - baseleft < 226) {
+                                ddleft = baseleft + $(self).parent().width() - $(dropDown).width();
+                                if (controller.selectedSectionVisible())
+                                    $(dropDown).addClass('top-max');
+                                else
+                                    $(dropDown).removeClass('top-max');
+                            }
+                        }
+                        if ((innerWidth - baseleft < 468) && controller.includeAdvancedSearch) {
+                            $(dropDown).find('.data-presentation').addClass('advance-search-top-right');
+                            $(dropDown).find('.vr-select-advance-search').addClass('advance-search-top-right');
+                        }
+                    }
+                    if (VRLocalizationService.isLocalizationRTL()) {
+                        ddleft = baseleft + ($(self).parent().width() - 226);
+                        if ($(dropDown).parents('vr-pagination').length > 0) {
+                            ddleft = baseleft - 39;
+                        }
+                        if (baseleft + $(self).parent().width() < 226 && !controller.isMultiple()) {
+                            ddleft = baseleft > 0 && baseleft || 0;
+                            $(dropDown).addClass('dropdown-top-left');
+                        }
+                        if (baseleft + $(self).parent().width() < 444 && controller.isMultiple()) {
+                            $(dropDown).addClass('dropdown-top-left');
+                            if ($(self).parent().width() < 226) {
+                                ddleft = baseleft;
+                                if (controller.selectedSectionVisible())
+                                    $(dropDown).addClass('top-max');
+                                else
+                                    $(dropDown).removeClass('top-max');
+                            }
+                        }
+
+                        if ( baseleft < 468  && controller.includeAdvancedSearch) {
+                            $(dropDown).find('.data-presentation').addClass('advance-search-top-left');
+                            $(dropDown).find('.vr-select-advance-search').addClass('advance-search-top-left');
+                        }
+                    }
                     return {
-                        toTop: ((innerHeight - 100) - basetop < heigth),
+                        toTop: toTopDirection,
                         top: initialtop,
-                        left: baseleft
+                        left: ddleft
                     };
                 };
                 function hideAllOtherDropDown(currentId) {
@@ -555,7 +607,7 @@
                                 $('div[name=' + id + ']').find('.dropdown-menu').hide();
                             }
                             else {
-                                if (getDropDownDirection(id).toTop == true) {
+                                if (getDropDownDirection(id,true).toTop == true) {
                                     $('div[name=' + id + ']').find('.dropdown-menu').hide();
                                 }
                                 else {
@@ -572,7 +624,6 @@
                         if ($('div[name=' + $attrs.id + ']').hasClass('changing-state'))
                             return;
                         $('div[name=' + $attrs.id + ']').addClass("changing-state");
-                        var menuPosition = getDropDownDirection($attrs.id);
                         if (!$('div[name=' + $attrs.id + ']').hasClass('open-select')) {
                             $('div[name=' + $attrs.id + ']').addClass("open-select");
                             vrSelectSharedObject.onOpenDropDown($attrs.id);
@@ -580,6 +631,7 @@
                             $(document).bind('click', boundDocumentSeclectOutside);
                         }
                         else {
+                            var menuPosition = getDropDownDirection($attrs.id,true);
                             $('div[name=' + $attrs.id + ']').removeClass("open-select");
                             if (menuPosition.toTop == true) {
                                 $('div[name=' + $attrs.id + ']').find('.dropdown-menu').hide(function () {
@@ -663,6 +715,11 @@
                     if (controller.datasource.length == 1)
                         api.selectItem(controller.datasource[0]);
                 };
+                function cleanUpPositionClass(id) {
+                    $('div[name=' + id + ']').find('.dropdown-menu').removeClass('dropdown-top-right');
+                    $('div[name=' + id + ']').find('.dropdown-menu').removeClass('dropdown-top-left');
+                    $('div[name=' + id + ']').find('.dropdown-menu').removeClass('top-max');
+                }
                 //api.openDropDown = function () {
                 //    var event = $(window.event);
                 //    if (event) {
@@ -951,7 +1008,7 @@
 
     }
 
-    vrSelectDirective.$inject = ['SelectService', 'BaseDirService', 'ValidationMessagesEnum', 'UtilsService', 'VRValidationService', '$timeout', '$rootScope'];
+    vrSelectDirective.$inject = ['SelectService', 'BaseDirService', 'ValidationMessagesEnum', 'UtilsService', 'VRValidationService', '$timeout', '$rootScope', 'VRLocalizationService'];
 
     app.directive('vrSelect', vrSelectDirective);
 

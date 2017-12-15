@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrButton', ['ButtonDirService', 'UtilsService', function (ButtonDirService, UtilsService) {
+app.directive('vrButton', ['ButtonDirService', 'UtilsService', 'VRLocalizationService', function (ButtonDirService, UtilsService, VRLocalizationService) {
 
     var directiveDefinitionObject = {
         transclude: true,
@@ -17,45 +17,45 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', function (ButtonD
             ctrl.isSubmitting = false;
 
             ctrl.onInternalClick = function (evnt) {
-                       
-                    if (ctrl.menuActions != undefined) {
-                        var self = angular.element(evnt.currentTarget);
-                        ctrl.showMenuActions = true;
 
-                        var selfHeight = $(self).height();
-                        var selfOffset = $(self).offset();
-                        var dropDown = self.parent().find('.dropdown-menu')[0];
-                        var basetop = selfOffset.top - $(window).scrollTop() + $(self).height();
-                        var eltop = selfOffset.top - $(window).scrollTop();
-                        var elleft = selfOffset.left - $(window).scrollLeft();
-                        if ($(self).parents('.section-menu').length > 0)
-                            elleft -= $(self).width();
-                        if ($(self).parents('.vr-datagrid-celltext').length > 0)
-                            basetop -= 10;
+                if (ctrl.menuActions != undefined) {
+                    var self = angular.element(evnt.currentTarget);
+                    ctrl.showMenuActions = true;
 
-                        $(dropDown).css({ position: 'fixed', top: basetop, left: elleft, bottom: 'unset' });
+                    var selfHeight = $(self).height();
+                    var selfOffset = $(self).offset();
+                    var dropDown = self.parent().find('.dropdown-menu')[0];
+                    var basetop = selfOffset.top - $(window).scrollTop() + $(self).height();
+                    var eltop = selfOffset.top - $(window).scrollTop();
+                    var elleft = selfOffset.left - $(window).scrollLeft();
+                    if ($(self).parents('.section-menu').length > 0 || VRLocalizationService.isLocalizationRTL())
+                        elleft -= $(self).width();
+                    if ($(self).parents('.vr-datagrid-celltext').length > 0)
+                        basetop -= 10;
 
-                    }
-                    else {
-                        if (ctrl.onclick != undefined && typeof (ctrl.onclick) == 'function' && ctrl.isSubmitting == false) {
-                            ctrl.isSubmitting = true;
-                            var promise = ctrl.onclick();//this function should return a promise in case it is performing asynchronous task
-                            if (promise != undefined && promise != null) {
-                                promise.finally(function () {
-                                    ctrl.isSubmitting = false;
-                                });
-                            }
-                            else {
-                                var dummypromise = UtilsService.createPromiseDeferred();
-                                setTimeout(function () {
-                                    dummypromise.resolve();
-                                }, 10);
-                                dummypromise.promise.finally(function () {
-                                    ctrl.isSubmitting = false;
-                                });
-                            }
+                    $(dropDown).css({ position: 'fixed', top: basetop, left: elleft, bottom: 'unset' });
+
+                }
+                else {
+                    if (ctrl.onclick != undefined && typeof (ctrl.onclick) == 'function' && ctrl.isSubmitting == false) {
+                        ctrl.isSubmitting = true;
+                        var promise = ctrl.onclick();//this function should return a promise in case it is performing asynchronous task
+                        if (promise != undefined && promise != null) {
+                            promise.finally(function () {
+                                ctrl.isSubmitting = false;
+                            });
+                        }
+                        else {
+                            var dummypromise = UtilsService.createPromiseDeferred();
+                            setTimeout(function () {
+                                dummypromise.resolve();
+                            }, 10);
+                            dummypromise.promise.finally(function () {
+                                ctrl.isSubmitting = false;
+                            });
                         }
                     }
+                }
             };
 
             ctrl.menuActionClicked = function (action) {
@@ -71,7 +71,7 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', function (ButtonD
                 $scope.$on('submit' + $attrs.submitname, function () {
                     if (!ctrl.isDisabled())
                         ctrl.onInternalClick();
-                }) ;
+                });
             }
             ctrl.showIcon = function () {
                 return !ctrl.isSubmitting;
@@ -105,32 +105,31 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', function (ButtonD
 
             };
             var menu;
-            if ($attrs.menuactions != undefined ) {
-                    menu = $scope.$parent.$eval($attrs.menuactions);
-                    if (menu != undefined)
-                    {
-                        var checkMenuActionPermission = function () {
-                            for (var i = 0; i < menu.length; i++) {
-                                invokeHasPermission(menu[i]);
-                            }
-                        };
+            if ($attrs.menuactions != undefined) {
+                menu = $scope.$parent.$eval($attrs.menuactions);
+                if (menu != undefined) {
+                    var checkMenuActionPermission = function () {
+                        for (var i = 0; i < menu.length; i++) {
+                            invokeHasPermission(menu[i]);
+                        }
+                    };
 
-                        var invokeHasPermission = function (menuAction) {
-                            if (menuAction.haspermission == undefined || menuAction.haspermission == null) { return; }
-                            menuAction.disable = true;
-                            UtilsService.convertToPromiseIfUndefined(menuAction.haspermission()).then(function (isAllowed) {
-                                if (isAllowed) { menuAction.disable = false; }
-                            });
-                        };
-                        checkMenuActionPermission();
-                    }
-                    
-               
+                    var invokeHasPermission = function (menuAction) {
+                        if (menuAction.haspermission == undefined || menuAction.haspermission == null) { return; }
+                        menuAction.disable = true;
+                        UtilsService.convertToPromiseIfUndefined(menuAction.haspermission()).then(function (isAllowed) {
+                            if (isAllowed) { menuAction.disable = false; }
+                        });
+                    };
+                    checkMenuActionPermission();
+                }
+
+
             }
             ctrl.menuActions = menu;
 
-            
-            
+
+
             ctrl.hideTemplate = false;
             if (ctrl.haspermission != undefined && typeof (ctrl.haspermission) == 'function') {
                 ctrl.hideTemplate = true;
@@ -149,11 +148,11 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', function (ButtonD
         //        });
         //    }
         //    //var fn = $parse(attributes.rcSubmit);
- 
+
         //    //formElement.bind('submit', function (event) {
         //    //    // if form is not valid cancel it.
         //    //    if (!formController.$valid) return false;
- 
+
         //    //    scope.$apply(function() {
         //    //        fn(scope, {$event:event});
         //    //    });

@@ -28,14 +28,14 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         if (isLocalizationEnabled != undefined) {
             VRLocalizationService.setLocalizationEnabled(isLocalizationEnabled);
         }
-    }; 
+    };
     $rootScope.setLocalizationRTL = function (isRTL) {
-        if(isRTL != undefined) {
+        if (isRTL != undefined) {
             VRLocalizationService.setLocalizationRTL(isRTL);
-            }
-        };
+        }
+    };
 
- $rootScope.setLoginURL = function (loginURL) {
+    $rootScope.setLoginURL = function (loginURL) {
         if (loginURL != undefined && loginURL != '') {
             SecurityService.setLoginURL(loginURL);
             BaseAPIService.setLoginURL(loginURL);
@@ -54,14 +54,17 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         var elleft = selfOffset.left - $(window).scrollLeft() + $(self).width();
         var left = 0;
         var tooltip = self.parent().find('.tooltip-error');
-        if (innerWidth - elleft < 100) {
+        $(tooltip).removeClass('tooltip-error-right');
+        $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft });
+        if (innerWidth - elleft < 100 && !VRLocalizationService.isLocalizationRTL()) {
             elleft = elleft - (100 + $(self).width() + 10);
             $(tooltip).addClass('tooltip-error-right');
             $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft, width: 100 })
         }
-        else {
-            $(tooltip).removeClass('tooltip-error-right');
-            $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft })
+        else if (VRLocalizationService.isLocalizationRTL() && (selfOffset.left - $(window).scrollLeft()) > 100) {
+            elleft = elleft - (100 + $(self).width() + 10);
+            $(tooltip).addClass('tooltip-error-right');
+            $(tooltip).css({ position: 'fixed', top: selfOffset.top - $(window).scrollTop() + topVar + TophasLable, left: elleft, width: 100 })
         }
         e.stopPropagation();
     };
@@ -177,15 +180,14 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
             modalScope.title = "Edit My Language";
             modalScope.onLanguageUpdated = function (languageId) {
                 var languageCookie = VRLocalizationService.getLanguageCookie();
-                if (languageCookie != languageId)
-                {
+                if (languageCookie != languageId) {
                     VRLocalizationService.createOrUpdateLanguageCookie(languageId);
                     location.reload();
                 }
             };
-    };
-    VRModalService.showModal('/Client/Modules/Security/Views/User/EditMyLanguage.html', null, modalSettings);
         };
+        VRModalService.showModal('/Client/Modules/Security/Views/User/EditMyLanguage.html', null, modalSettings);
+    };
     $scope.menuItemsCurrent = null;
     $scope.setIndex = function (item) {
         $('.vr-menu-item').slideUp();
@@ -285,7 +287,7 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
     });
     function checkGoogleTracking() {
         var status = UISettingsService.getGoogleTrackingStatus();
-        if (status != undefined &&  status == true) {
+        if (status != undefined && status == true) {
             $window.ga('send', 'pageview', $location.path());
         }
     }

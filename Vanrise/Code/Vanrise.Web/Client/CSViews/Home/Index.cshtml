@@ -56,7 +56,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div class="menu-icon">
+                    <div class="menu-icon support-call">
                         <a href="" ng-click="openSupportModal()" style="position:relative"><img style="position:absolute;left:110px" src="Client/Images/support.png" class="vr-support" /></a>
                     </div>
                     <div class="menu-icon" title="Alert(s)">
@@ -75,7 +75,7 @@
                 <h4 class="vr-page-title" ng-bind="currentPage.Title"></h4>
             </div>
         </div>
-        <div id="wrapper" ng-style="toogled==true?{'padding-left':'185px'}:{'padding-left':'25px'}">
+        <div id="wrapper" ng-class="toogled==true?'wrapper-toogled':'wrapper-normal'">
             <!-- Sidebar -->
             <div id="sidebar-wrapper" ng-style="toogled==true?{'width':'200px'}:{'width':'0px'}">
 
@@ -83,8 +83,8 @@
                     <div class="panel panel-default toggle-panel ">
                         <div class="panel-heading dll-menu" style="height: 36px;">
                             <span title="@ViewBag.CompanyName" class="vr-company-name">@ViewBag.CompanyName</span>
-                            <span class=" hand-cursor glyphicon glyphicon glyphicon-pushpin " style="font-size: 17px; margin: 6px 4px; position: absolute; right: -1px; top:5px;" ng-click="pinpanel()" ng-class="pinned==true?'unpined-icon':''"></span>
-                            <span class=" hand-cursor glyphicon glyphicon-chevron-left" ng-click="hideToogled()" style="font-size: 17px; margin: 6px 4px; position: absolute; right: 16px; top:5px;" ng-if="pinned==true"></span>
+                            <span class=" hand-cursor glyphicon glyphicon glyphicon-pushpin pin-icon" ng-click="pinpanel()" ng-class="pinned==true?'unpined-icon':'pined-icon'"></span>
+                            <span class=" hand-cursor glyphicon glyphicon-chevron-left toogle-icon" ng-click="hideToogled()" ng-if="pinned==true"></span>
                         </div>
                     </div>
                     <div style="overflow-x:hidden;position:absolute;width:200px;height:calc(100% - 115px);">
@@ -115,7 +115,7 @@
                                         </ul>
                                         <div ng-if="c.Childs.length > 0" class="dll-parent-menu menu-item-list-ligth">
                                             <div class="menulink waves-effect waves-block" ng-class="menusubItemsCurrent.Id == c.Id  ? 'down selected-url ':''" ng-click="setIndexSub(c)">{{::c.Name}}</div>
-                                            <ul style="padding-left:15px" class="nav slideanimation" ng-if="menusubItemsCurrent.Id == c.Id">
+                                            <ul class="nav slideanimation inner-sub-menu" ng-if="menusubItemsCurrent.Id == c.Id">
                                                 <li ng-repeat="a in c.Childs" class="waves-effect waves-classic inner-list-item" ng-class="a.isSelected?'selected-node':''">
                                                     <a class="menulink" style="color:#333;" ng-class="a.isSelected?'selected-url':''" ng-href="{{::a.Location}}">{{::a.Name}}</a>
                                                 </li>
@@ -139,15 +139,15 @@
                 <div id="collapsedmenu" style="background-color: #ddd; height: 100%; width: 40px; position: fixed;" ng-if="toogled==false">
                     <div class="dropdown dropdown-custom-serf leftdiv">
                         <div class="dropdown-toggle dropdown-item" style="font-size: 17px;top:9px;left:5px;display:block">
-                            <span class=" hand-cursor glyphicon glyphicon glyphicon-pushpin " ng-class="pinned==true?'unpined-icon':''" style="font-size: 17px !important;top: 8px;left: 10px;" ng-click="pinpanel()"></span>
-                            <span class=" hand-cursor glyphicon glyphicon-chevron-right" ng-click="showToogled()" style="font-size: 17px !important;top: -17px;right: 10px;" ng-if="pinned==true"></span>
+                            <span class=" hand-cursor glyphicon glyphicon glyphicon-pushpin collapsed-pin-icon" ng-class="pinned==true?'unpined-icon':'pined-icon'" style="font-size: 17px !important;" ng-click="pinpanel()"></span>
+                            <span class=" hand-cursor glyphicon glyphicon-chevron-right collapsed-toggle-icon" style="font-size: 17px !important;" ng-click="showToogled()" ng-if="pinned==true"></span>
                         </div>
                     </div>
                     <div ng-mouseout="mouseout()" ng-mouseover="mouseover()">
                         <div ng-repeat="item in menuItems" class="dropdown dropdown-custom-serf leftdiv " ng-class="item.isSelected? 'bgcolor-grad-{{::item.keyclass}}':'bgcolor-{{::item.keyclass}}'" ng-mouseenter="showMenu($event,item.Id)" ng-mouseleave="hideMenu($event)">
                             <div class="dropdown-toggle hand-cursor glyphicon dll-menu-theme dropdown-item" id="dropdownMenuCu-{{::$index}}" style="top: 5px;" aria-expanded="true" data-toggle="dropdown">
-                                <img ng-src="{{::item.Icon}}" />
-                            </div>
+                            <img ng-src="{{::item.Icon}}" />
+                        </div>
                             <ul class="dropdown-menu dropdown-menu-custom-serf" role="menu" aria-labelledby="dropdownMenuCu-{{::$index}}" ng-if="currentMenuIndex==item.Id">
                                 <li class="title-groupe" role="presentation">
                                     <label class="title-label"> {{::item.Name}}</label>
@@ -160,7 +160,7 @@
                                         <div class="div-link hand-cursor" ng-class="menusubItemsCurrent.Id == c.Id ? 'selected-url down':''" ng-click="$event.preventDefault();$event.stopPropagation();setIndexSub(c)">{{::c.Name}}</div>
                                         <ul class="nav" ng-show="menusubItemsCurrent.Id == c.Id">
                                             <li ng-repeat="a in c.Childs" class="innerlist">
-                                                <a class="menulink" ng-class="a.isSelected?'selected-url bold-item':''" style="padding:0px 0px 0px 30px !important ; color:#333" ng-href="{{::a.Location}}">{{::a.Name}}</a>
+                                                <a class="menulink child-menu-link" ng-class="a.isSelected?'selected-url bold-item':''" ng-href="{{::a.Location}}">{{::a.Name}}</a>
                                             </li>
                                         </ul>
                                     </li>

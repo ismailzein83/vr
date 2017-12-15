@@ -11,9 +11,9 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
         var actionsMenuTemplate = ''
           + '<ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show="ctrl.showMenuActions" ng-style="{\'position\': \'fixed\', \'top\': \'initial\' , \'left\': \'initial\' , \'min-width\': \'120px\'} " >'
        + ' <li role="presentation">'
-       + '     <div ng-repeat="action in ctrl.menuActions"  ng-hide="action.disable" class="mark-select " style="padding-left: 2px; ">'
+       + '     <div ng-repeat="action in ctrl.menuActions"  ng-hide="action.disable" class="btn-menu-item mark-select ">'
          + '       <div class=" hand-cursor" ng-click="ctrl.menuActionClicked(action)"><span style="font-size:11px">{{action.name}}</span>'
-         + '<img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin-left:3px" ng-show="action.isSubmitting" /></div>'
+                    + '<img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" class="img-loader"  ng-show="action.isSubmitting" /></div>'
         + '    </div>'
        + ' </li>'
  + '   </ul>';
@@ -21,14 +21,14 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
         var type = attrs.type;
 
         var customlabel = attrs.customlabel;
-        var customLabelTag = (customlabel != undefined && customlabel != "") ? '<span style="padding-left: 4px;">' + customlabel + '</span>' : '';
+        var customLabelTag = (customlabel != undefined && customlabel != "") ? '<span class="btn-label" >' + customlabel + '</span>' : '';
         var buttonAttributes = getButtonAttributes(type);
         if (type == "Login") {
             return '<div style="position:relative;display:inline-block;width:100%" ng-mouseleave="ctrl.showMenuActions = false" ng-hide="ctrl.hideTemplate">'
                 + '<button style="width:100%" type="button" class="btn btn-danger login-btn"'
             + 'aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()">' + buttonAttributes.text
-                + '<span style="padding-left:4px"  aria-hidden="true" ng-show="ctrl.showIcon()"></span>'
-                + '<img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin-left:3px" ng-show="ctrl.showLoader()" />'
+                + '<span class="btn-label"  aria-hidden="true" ng-show="ctrl.showIcon()"></span>'
+                + '<img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" class="img-loader" style="width:14px;margin-left:3px" ng-show="ctrl.showLoader()" />'
                 + '</button>'
                 + actionsMenuTemplate + '</div>';
 
@@ -36,16 +36,16 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
         else if (attrs.standalone != undefined) {
             return '<div style="position:relative;display:inline-block;height:28px" ng-if="ctrl.isExculdedOnreadOnly()" ng-mouseleave="ctrl.showMenuActions = false"  title="' + buttonAttributes.text + '" '
            + ' aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()" ng-hide="ctrl.hideTemplate">'
-               + '<span style="padding-left:4px;font-size:24px" class="' + buttonAttributes.class + ' hand-cursor" aria-hidden="true" ng-show="ctrl.showIcon()"></span>'
-               + '<img src="Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:20px;margin-left:3px;margin-top:3px;" ng-show="ctrl.showLoader()" />'
+               + '<span  style="font-size:24px" class="' + buttonAttributes.class + ' btn-label hand-cursor" aria-hidden="true" ng-show="ctrl.showIcon()"></span>'
+               + '<img src="Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:20px;margin-top:3px;" class="img-loader" ng-show="ctrl.showLoader()" />'
                 + actionsMenuTemplate + '</div>';
         }
         else {
             return '<div style="position:relative;display:inline-block" ng-if="ctrl.isExculdedOnreadOnly()" ng-mouseleave="ctrl.showMenuActions = false" ng-hide="ctrl.hideTemplate">'
                 + '<button style="border-radius: 0px; border-color: transparent;  background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom"'
             + 'aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()">' + buttonAttributes.text
-                + '<span style="padding-left:4px" class="' + buttonAttributes.class + ' aria-hidden="true" ng-show="ctrl.showIcon()"></span>'
-                + '<img src="Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin-left:3px" ng-show="ctrl.showLoader()" />'
+                + '<span  class="' + buttonAttributes.class +' btn-label"  aria-hidden="true" ng-show="ctrl.showIcon()"></span>'
+                + '<img src="Client/Javascripts/Directives/Button/images/loader-mask.gif" class="img-loader" style="width:14px;" ng-show="ctrl.showLoader()" />'
 
                 + '</button>'
                 + actionsMenuTemplate + '</div>';
