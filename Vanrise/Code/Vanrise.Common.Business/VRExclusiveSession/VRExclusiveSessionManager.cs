@@ -58,6 +58,7 @@ namespace Vanrise.Common.Business
 
         public void ReleaseSession(VRExclusiveSessionReleaseInput input)
         {
+            if (input == null) return;
             int currentUserId = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
             s_dataManager.ReleaseSession(input.SessionTypeId, input.TargetId, currentUserId);
         }
@@ -83,11 +84,44 @@ namespace Vanrise.Common.Business
             }
         }
 
+        public bool DoesUserHaveTakeAccess(Guid sessionTypeId)
+        {
+            var extendedTypeSettings = this.GetVRExclusiveSessionTypeExtendedSettingsById(sessionTypeId);
+            var context = new VRExclusiveSessionDoesUserHaveTakeAccessContext { UserId = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId() };
+            extendedTypeSettings.ThrowIfNull("DoesUserHaveTakeAccess");
+            return extendedTypeSettings.DoesUserHaveTakeAccess(context);
+
+        }
+
         private int GetTimeOutInSeconds()
         {
-            return 60;
+            var configManager = new ConfigManager();
+            return configManager.GetSessionLockTimeOutInSeconds();
+        }
+
+        public IEnumerable<VRExclusiveSessionTypeExtendedSettingsConfig> GetVRExclusiveSessionTypeExtendedSettingsConfigs()
+        {
+            var configManager = new ExtensionConfigurationManager();
+            return configManager.GetExtensionConfigurations<VRExclusiveSessionTypeExtendedSettingsConfig>(VRExclusiveSessionTypeExtendedSettingsConfig.EXTENSION_TYPE);
+        }
+
+        private class VRExclusiveSessionDoesUserHaveTakeAccessContext : IVRExclusiveSessionDoesUserHaveTakeAccessContext
+        {
+            public int UserId
+            {
+                get;
+                set;
+            }
         }
 
         #endregion
+
+        public VRExclusiveSessionTypeExtendedSettings GetVRExclusiveSessionTypeExtendedSettingsById(Guid configId)
+        {
+            VRComponentTypeManager vrComponentTypeManager = new VRComponentTypeManager();
+            var sessionTypeSettings = vrComponentTypeManager.GetComponentTypeSettings<VRExclusiveSessionTypeSettings>(configId);
+            sessionTypeSettings.ThrowIfNull("GetVRExclusiveSessionTypeExtendedSettingsById");
+            return sessionTypeSettings.ExtendedSettings;
+        }
     }
 }

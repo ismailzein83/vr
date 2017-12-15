@@ -1,37 +1,43 @@
-﻿//(function (appControllers) {
+﻿(function (appControllers) {
 
-//    "use strict";
+    "use strict";
 
-//    VRExclusiveSessionTypeAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VRCommon_ModuleConfig', 'SecurityService'];
+    VRExclusiveSessionTypeAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VRCommon_ModuleConfig', 'SecurityService'];
 
-//    function VRExclusiveSessionTypeAPIService(BaseAPIService, UtilsService, VRCommon_ModuleConfig, SecurityService) {
+    function VRExclusiveSessionTypeAPIService(BaseAPIService, UtilsService, VRCommon_ModuleConfig, SecurityService) {
 
-//        var controllerName = "VRExclusiveSessionType";
+        var controllerName = "VRExclusiveSessionType";
 
-//        function GetVRExclusiveSessionTypeExtendedSettingsConfigs() {
-//            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetVRExclusiveSessionTypeExtendedSettingsConfigs"));
-//        }
+        function GetVRExclusiveSessionTypeExtendedSettingsConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetVRExclusiveSessionTypeExtendedSettingsConfigs"));
+        }
 
-//        function TryTakeSession(input) {
-//            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "TryTakeSession"), input);
-//        }
+        function TryTakeSession(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "TryTakeSession"), input);
+        }
 
-//        function TryKeepSession(input) {
-//            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "TryKeepSession"), input);
-//        }
+        function TryKeepSession(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "TryKeepSession"), input);
+        }
 
-//        function ReleaseSession(input) {
-//            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "ReleaseSession"), input);
-//        }
+        function ReleaseSession(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "ReleaseSession"), input);
+        }
 
-//        return ({
-//            GetVRExclusiveSessionTypeExtendedSettingsConfigs: GetVRExclusiveSessionTypeExtendedSettingsConfigs,
-//            TryTakeSession: TryTakeSession,
-//            TryKeepSession: TryKeepSession,
-//            ReleaseSession: ReleaseSession,
-//        });
-//    }
+        function GetSessionLockHeartbeatIntervalInSeconds() {
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetSessionLockHeartbeatIntervalInSeconds"));
 
-//    appControllers.service('VRCommon_VRExclusiveSessionTypeAPIService', VRExclusiveSessionTypeAPIService);
+        }
 
-//})(appControllers);
+        return ({
+            GetVRExclusiveSessionTypeExtendedSettingsConfigs: GetVRExclusiveSessionTypeExtendedSettingsConfigs,
+            TryTakeSession: TryTakeSession,
+            TryKeepSession: TryKeepSession,
+            ReleaseSession: ReleaseSession,
+            GetSessionLockHeartbeatIntervalInSeconds: GetSessionLockHeartbeatIntervalInSeconds,
+        });
+    }
+
+    appControllers.service('VRCommon_VRExclusiveSessionTypeAPIService', VRExclusiveSessionTypeAPIService);
+
+})(appControllers);

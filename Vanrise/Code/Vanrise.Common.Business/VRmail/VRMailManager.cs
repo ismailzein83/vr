@@ -101,15 +101,7 @@ namespace Vanrise.Common.Business
                 throw new NullReferenceException("subject");
 
             MailMessage mailMessage = new MailMessage();
-            if (!string.IsNullOrEmpty(from))
-            {
-                mailMessage.From = new MailAddress(from);
-            }
-            else if (!string.IsNullOrEmpty(emailSettingData.AlternativeSenderEmail))
-            {
-                mailMessage.From = new MailAddress(emailSettingData.AlternativeSenderEmail);
-            }
-            else mailMessage.From = new MailAddress(emailSettingData.SenderEmail);
+            mailMessage.From = GetSenderMailAddress(from, emailSettingData);
             string[] toAddresses = to.Split(';', ',', ':');
             foreach (var toAddress in toAddresses)
             {
@@ -127,7 +119,7 @@ namespace Vanrise.Common.Business
 
         public void SendMail(string to, string cc, string bcc, string subject, string body, List<VRMailAttachement> attachements, bool compressAttachement = false)
         {
-            SendMail(string.Empty, to, cc, bcc, subject, body, attachements, compressAttachement);
+            SendMail(null, to, cc, bcc, subject, body, attachements, compressAttachement);
         }
         public void SendMail(string from, string to, string cc, string bcc, string subject, string body, List<VRMailAttachement> attachements, bool compressAttachement = false)
         {
@@ -137,16 +129,7 @@ namespace Vanrise.Common.Business
             EmailSettingData emailSettingData = configManager.GetSystemEmail();
 
             MailMessage mailMessage = new MailMessage ();
-
-            if (!string.IsNullOrEmpty(from))
-            {
-                mailMessage.From = new MailAddress(from);
-            }
-            else if (!string.IsNullOrEmpty(emailSettingData.AlternativeSenderEmail))
-            {
-                mailMessage.From = new MailAddress(emailSettingData.AlternativeSenderEmail);
-            }
-            else mailMessage.From = new MailAddress(emailSettingData.SenderEmail);
+            mailMessage.From = GetSenderMailAddress(from, emailSettingData);
 
             string[] toAddresses = to.Split(';', ',', ':');
             foreach (var toAddress in toAddresses)
@@ -191,6 +174,17 @@ namespace Vanrise.Common.Business
                 LoggerFactory.GetExceptionLogger().WriteException(logEventType, null, businessException);
                 throw;
             }
+        }
+
+        private MailAddress GetSenderMailAddress(string from, EmailSettingData emailSettingData)
+        {
+            if (!string.IsNullOrEmpty(from))
+                return new MailAddress(from);
+
+            if (!string.IsNullOrEmpty(emailSettingData.AlternativeSenderEmail))
+                return new MailAddress(emailSettingData.AlternativeSenderEmail);
+
+            return new MailAddress(emailSettingData.SenderEmail);
         }
 
         private void SetAttachement(MailMessage mailMessage, List<VRMailAttachement> attachements, bool compressAttachement)

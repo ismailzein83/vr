@@ -20,6 +20,25 @@ namespace Vanrise.Common.Business
 
             return systemCurrency.CurrencyId;
         }
+        public int GetSessionLockTimeOutInSeconds()
+        {
+            SettingManager settingManager = new SettingManager();
+            SessionLockSettings sessionLockSettings = settingManager.GetSetting<SessionLockSettings>(Constants.SessionLockSettingsType);
+
+            sessionLockSettings.ThrowIfNull("Session Lock Settings");
+            
+            return sessionLockSettings.TimeOutInSeconds;
+        }
+
+        public int GetSessionLockHeartbeatIntervalInSeconds()
+        {
+            SettingManager settingManager = new SettingManager();
+            SessionLockSettings sessionLockSettings = settingManager.GetSetting<SessionLockSettings>(Constants.SessionLockSettingsType);
+
+            sessionLockSettings.ThrowIfNull("Session Lock Settings");
+
+            return sessionLockSettings.HeartbeatIntervalInSeconds;
+        }
 
         public EmailSettingData GetSystemEmail()
         {

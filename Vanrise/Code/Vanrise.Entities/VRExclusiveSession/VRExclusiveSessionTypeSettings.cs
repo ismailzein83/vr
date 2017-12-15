@@ -41,4 +41,11 @@ namespace Vanrise.Entities
     {
         int UserId { get; }
     }
+
+    public class VRExclusiveSessionTypeExtendedSettingsConfig : ExtensionConfiguration
+    {
+        public const string EXTENSION_TYPE = "ExclusiveSessionTypeSettings";
+
+        public string Editor { get; set; }
+    }
 }
