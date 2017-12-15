@@ -7,7 +7,7 @@
                         <vr-select label="Pricelist Type" datasource="scopeModel.priceListTypes" datavaluefield="value" datatextfield="description" selectedvalues="scopeModel.selectedPriceListType" isrequired="true" hideremoveicon="true"></vr-select>
                     </vr-columns>
 
-                    <vr-whs-be-carrieraccount-selector getsuppliers on-ready="scopeModel.onCarrierAccountDirectiveReady" normal-col-num="2" selectedvalues="scopeModel.selectedSupplier" onselectitem="scopeModel.carrierAccountSelectItem" isrequired="true"></vr-whs-be-carrieraccount-selector>
+                    <vr-whs-be-carrieraccount-selector getsuppliers on-ready="scopeModel.onCarrierAccountDirectiveReady" normal-col-num="2" selectedvalues="scopeModel.selectedSupplier" onselectionchanged="scopeModel.carrierAccountSelectItem" isrequired="true"></vr-whs-be-carrieraccount-selector>
 
                     <span vr-loader="scopeModel.isLoadingCurrencySelector">
                         <vr-common-currency-selector on-ready="scopeModel.onCurrencyDirectiveReady" isrequired="true" normal-col-num="2"></vr-common-currency-selector>

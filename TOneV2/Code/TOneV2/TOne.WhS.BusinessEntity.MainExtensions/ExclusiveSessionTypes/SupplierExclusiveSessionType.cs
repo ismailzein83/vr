@@ -4,6 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
+using Vanrise.Common;
+using Vanrise.Common.Business;
+
+
 
 namespace TOne.WhS.BusinessEntity.MainExtensions
 {
@@ -21,7 +25,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
         public override bool DoesUserHaveTakeAccess(IVRExclusiveSessionDoesUserHaveTakeAccessContext context)
         {
-            throw new NotImplementedException();
+            Vanrise.Security.Business.SecurityManager securityManager = new Vanrise.Security.Business.SecurityManager();
+            return securityManager.HasPermissionToActions("WhS_SupPL/SupplierPriceListTemplate/GetSupplierPriceListTemplateBySupplierId", context.UserId);
         }
 
         public override string GetTargetName(IVRExclusiveSessionGetTargetNameContext context)

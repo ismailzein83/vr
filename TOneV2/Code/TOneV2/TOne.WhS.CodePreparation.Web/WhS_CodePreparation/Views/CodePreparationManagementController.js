@@ -2,9 +2,9 @@
 
     'use strict';
 
-    CodePreparationManagementController.$inject = ['$scope', 'WhS_CP_CodePrepAPIService', 'WhS_BP_CreateProcessResultEnum', 'VRUIUtilsService', 'UtilsService', 'VRCommon_CountryAPIService', 'WhS_BE_SaleZoneAPIService', 'VRModalService', 'VRNotificationService', 'WhS_CP_NewCPOutputResultEnum', 'WhS_CP_ZoneItemDraftStatusEnum', 'WhS_CP_ZoneItemStatusEnum', 'WhS_CP_ValidationOutput', 'WhS_CP_CodePrepService', 'WhS_BE_SellingNumberPlanAPIService', 'WhS_CP_NumberingPlanDefinitionEnum', 'BusinessProcess_BPInstanceService'];
+    CodePreparationManagementController.$inject = ['$window', '$scope', 'WhS_CP_CodePrepAPIService', 'WhS_BP_CreateProcessResultEnum', 'VRUIUtilsService', 'UtilsService', 'VRCommon_CountryAPIService', 'WhS_BE_SaleZoneAPIService', 'VRModalService', 'VRNotificationService', 'WhS_CP_NewCPOutputResultEnum', 'WhS_CP_ZoneItemDraftStatusEnum', 'WhS_CP_ZoneItemStatusEnum', 'WhS_CP_ValidationOutput', 'WhS_CP_CodePrepService', 'WhS_BE_SellingNumberPlanAPIService', 'WhS_CP_NumberingPlanDefinitionEnum', 'BusinessProcess_BPInstanceService', 'VRCommon_VRExclusiveSessionTypeService', 'VRCommon_VRExclusiveSessionTypeAPIService', 'WhS_BE_ExclusiveSessionTypeIdEnum', 'WhS_BE_ExclusiveSessionTargetIdPrefixEnum'];
 
-    function CodePreparationManagementController($scope, WhS_CP_CodePrepAPIService, WhS_BP_CreateProcessResultEnum, VRUIUtilsService, UtilsService, VRCommon_CountryAPIService, WhS_BE_SaleZoneAPIService, VRModalService, VRNotificationService, WhS_CP_NewCPOutputResultEnum, WhS_CP_ZoneItemDraftStatusEnum, WhS_CP_ZoneItemStatusEnum, WhS_CP_ValidationOutput, WhS_CP_CodePrepService, WhS_BE_SellingNumberPlanAPIService, WhS_CP_NumberingPlanDefinitionEnum, BusinessProcess_BPInstanceService) {
+    function CodePreparationManagementController($window, $scope, WhS_CP_CodePrepAPIService, WhS_BP_CreateProcessResultEnum, VRUIUtilsService, UtilsService, VRCommon_CountryAPIService, WhS_BE_SaleZoneAPIService, VRModalService, VRNotificationService, WhS_CP_NewCPOutputResultEnum, WhS_CP_ZoneItemDraftStatusEnum, WhS_CP_ZoneItemStatusEnum, WhS_CP_ValidationOutput, WhS_CP_CodePrepService, WhS_BE_SellingNumberPlanAPIService, WhS_CP_NumberingPlanDefinitionEnum, BusinessProcess_BPInstanceService, VRCommon_VRExclusiveSessionTypeService, VRCommon_VRExclusiveSessionTypeAPIService, WhS_BE_ExclusiveSessionTypeIdEnum, WhS_BE_ExclusiveSessionTargetIdPrefixEnum) {
 
         //#region Global Variables
 
@@ -16,6 +16,7 @@
         var filter;
         var incrementalId = 0;
 
+        var exclusiveSessionObject = null;
         //#endregion
 
         //#region Load
@@ -100,20 +101,30 @@
             };
 
             $scope.onSellingNumberPlanSelectorChanged = function () {
-               
+
+                releaseSession();
                 var selectedSellingNumberingPlan = sellingNumberPlanDirectiveAPI.getSelectedIds();
                 if (selectedSellingNumberingPlan != undefined) {
                     $scope.isLoading = true;
                     WhS_CP_CodePrepService.hasRunningProcessesForSellingNumberPlan(selectedSellingNumberingPlan).then(function (response) {
-                        $scope.isLoading = false;
-                        onSellingNumberPlanSelectorChanged();
+                        var targetId = WhS_BE_ExclusiveSessionTargetIdPrefixEnum.NumberingPlan.value + selectedSellingNumberingPlan;
+                        tryTakeSession(targetId).then(function (response) {
+                            if (response.IsSucceeded) {
+                                $scope.isLoading = false;
+                                onSellingNumberPlanSelectorChanged();
+                            }
+                            else
+                                onTryTakeFailure(response).then(function () {
+                                    $scope.isLoading = false;
+                                });
+                        });
                     }).catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
                     });
                 }
                 else
                     $scope.currentNode = undefined;
-                
+
             };
 
 
@@ -215,6 +226,10 @@
 
             $scope.buildTreeId = function (item) {
                 return buildTreeId(item);
+            };
+
+            $window.onbeforeunload = function () {
+                releaseSession();
             };
         }
 
@@ -628,6 +643,39 @@
 
 
         //#endregion
+
+        function tryTakeSession(targetId) {
+            var exclusiveSessionInput = {
+                SessionTypeId: WhS_BE_ExclusiveSessionTypeIdEnum.SaleArea.value,
+                TargetId: targetId,
+            };
+            var promiseDeffered = UtilsService.createPromiseDeferred();
+            VRCommon_VRExclusiveSessionTypeService.tryTakeSession($scope, exclusiveSessionInput).then(function (response) {
+                promiseDeffered.resolve(response);
+                if (response.IsSucceeded) {
+                    response.onTryTakeFailure = onTryTakeFailure;
+                    $scope.$on("$destroy", function () {
+                        response.Release();
+                    });
+                    exclusiveSessionObject = response;
+                }
+            }).catch(function (error) {
+                VRNotificationService.notifyException(error, $scope);
+            });
+            return promiseDeffered.promise;
+        }
+        function onTryTakeFailure(failureObject) {
+            return VRNotificationService.showPromptWarning(failureObject.FailureMessage).then(function () {
+                $scope.selectedSellingNumberPlan = null;
+            });
+        }
+
+        function releaseSession() {
+            if (exclusiveSessionObject != null) {
+                exclusiveSessionObject.Release();
+                exclusiveSessionObject = null;
+            }
+        }
 
     }
 

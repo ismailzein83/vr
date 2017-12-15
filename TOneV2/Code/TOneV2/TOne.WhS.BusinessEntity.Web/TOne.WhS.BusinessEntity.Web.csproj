@@ -211,6 +211,8 @@
     <Content Include="WhS_BusinessEntity\Constant\CommisssionTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ContactTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountTypeEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\ExclusiveSessionTargetIdPrefixEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\ExclusiveSessionTypeIdEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\FinancialAccountCarrierTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\FinancialAccountPropertyEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\FinancialAccountStatusEnum.js" />

@@ -22,7 +22,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
         public override bool DoesUserHaveTakeAccess(IVRExclusiveSessionDoesUserHaveTakeAccessContext context)
         {
-            throw new NotImplementedException();
+            Vanrise.Security.Business.SecurityManager securityManager = new Vanrise.Security.Business.SecurityManager();
+            return securityManager.HasPermissionToActions("WhS_Sales/RatePlan/GetRatePlanSettingsData", context.UserId);
         }
 
         public override string GetTargetName(IVRExclusiveSessionGetTargetNameContext context)
