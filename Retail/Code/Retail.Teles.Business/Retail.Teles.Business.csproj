@@ -80,6 +80,8 @@
     <Compile Include="AccountBEActionTypes\MappingTelesAccountActionSettings.cs" />
     <Compile Include="AccountBEActionTypes\MappingTelesUserActionSettings.cs" />
     <Compile Include="AccountTelesDIDsAndBusinessTrunksView.cs" />
+    <Compile Include="AccountMappedToTelesFieldDefinition.cs" />
+    <Compile Include="AccountMappedToTelesGenericField.cs" />
     <Compile Include="TelesTemplateEntityDefinitionFilter.cs" />
     <Compile Include="EnterpriseBEDefinitionFilter.cs" />
     <Compile Include="EnterpriseNotMappedToAccountFilter.cs" />
