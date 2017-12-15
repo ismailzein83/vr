@@ -6,7 +6,8 @@ app.directive("vrSecViewcommonpropertiesEditor", ['VRNotificationService', 'VRMo
 
         restrict: "E",
         scope: {
-            onReady: "="
+            onReady: "=",
+            normalColNum:'@'
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -68,8 +69,10 @@ app.directive("vrSecViewcommonpropertiesEditor", ['VRNotificationService', 'VRMo
                 return UtilsService.waitMultiplePromises(promises);
             };
             directiveAPI.setCommonProperties = function (viewSettings) {
-                viewSettings.ViewTitleResourceKey = titleResourceKeySelectorAPI.getResourceKey();
-                viewSettings.ViewNameResourceKey = nameResourceKeySelectorAPI.getResourceKey();
+                if (titleResourceKeySelectorAPI != undefined)
+                    viewSettings.ViewTitleResourceKey = titleResourceKeySelectorAPI.getResourceKey();
+                if (nameResourceKeySelectorAPI)
+                    viewSettings.ViewNameResourceKey = nameResourceKeySelectorAPI.getResourceKey();
             };
 
             return directiveAPI;

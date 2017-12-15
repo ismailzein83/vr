@@ -17,6 +17,9 @@
         var groupDirectiveAPI;
         var groupReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var viewCommonPropertiesAPI;
+        var viewCommonPropertiesReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -34,6 +37,11 @@
             $scope.scopeModal.save = function () {
                 if ($scope.scopeModal.isEditMode)
                     return updateView();
+            };
+
+            $scope.scopeModal.onViewCommonPropertiesReady = function (api) {
+                viewCommonPropertiesAPI = api;
+                viewCommonPropertiesReadyDeferred.resolve();
             };
 
             $scope.hasSaveViewPermission = function () {
@@ -76,7 +84,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadUsers, loadGroups])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadUsers, loadGroups, loadViewCommonProperties])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -117,6 +125,19 @@
                 $scope.title = UtilsService.buildTitleForAddEditor('View');
         }
 
+        function loadViewCommonProperties() {
+            var viewCommmonPropertiesLoadDeferred = UtilsService.createPromiseDeferred();
+            viewCommonPropertiesReadyDeferred.promise.then(function () {
+                var payload = {};
+                if (viewEntity != undefined) {
+                    payload.viewEntity = viewEntity;
+                }
+                VRUIUtilsService.callDirectiveLoad(viewCommonPropertiesAPI, payload, viewCommmonPropertiesLoadDeferred);
+            });
+            return viewCommmonPropertiesLoadDeferred.promise;
+        }
+
+
         function loadStaticData() {
 
             if (viewEntity == undefined)
@@ -127,10 +148,12 @@
         }
 
         function buildViewObjFromScope() {
+            var viewSettings = {};
             var audiences = {
                 Users: userDirectiveAPI.getSelectedIds(),
                 Groups: groupDirectiveAPI.getSelectedIds()
             };
+                viewCommonPropertiesAPI.setCommonProperties(viewSettings);
             var viewObject = {
                 ViewId: viewId,
                 Name: $scope.scopeModal.name,
@@ -139,10 +162,10 @@
                 ModuleId: viewEntity.ModuleId,
                 ActionNames: viewEntity.ActionNames,
                 Audience: audiences,
-                Type:viewEntity.Type,
-                ViewContent:viewEntity.ViewContent,
-                Rank:viewEntity.Rank,
-                Settings:viewEntity.Settings
+                Type: viewEntity.Type,
+                ViewContent: viewEntity.ViewContent,
+                Rank: viewEntity.Rank,
+                Settings: viewSettings,
             };
             return viewObject;
         }

@@ -18,7 +18,9 @@
                             <vr-row>
                                 <vr-invoicetype-selector on-ready="scopeModel.onInvoiceTypeSelectorDirectiveReady" isrequired="true" selectedvalues="scopeModel.selectedReportType" normal-col-num="12"></vr-invoicetype-selector>
                             </vr-row>
-                            <vr-sec-viewcommonproperties-editor  on-ready="scopeModel.onViewCommonPropertiesReady"></vr-sec-viewcommonproperties-editor>
+                            <vr-row>
+                                <vr-sec-viewcommonproperties-editor on-ready="scopeModel.onViewCommonPropertiesReady"></vr-sec-viewcommonproperties-editor>
+                            </vr-row>
                         </vr-columns>
                         <vr-columns width="2/3row">
                             <vr-section title="Menu Location">
