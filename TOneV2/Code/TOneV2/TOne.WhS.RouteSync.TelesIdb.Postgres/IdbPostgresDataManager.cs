@@ -260,7 +260,7 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
         void BuildRouteTempTable()
         {
             string dropTempTableScript = string.Format("DROP TABLE IF EXISTS {0};", TempTableNameWithSchema);
-            string dropOldTableScript = string.Format("DROP TABLE IF EXISTS {0}; ", TableNameWithSchema);
+            string dropOldTableScript = string.Format("DROP TABLE IF EXISTS {0}; ", OldTableNameWithSchema);
             string createTempTableScript = string.Format(@"CREATE TABLE {0} (       
                                                            pref character varying(255) COLLATE pg_catalog.""default"" NOT NULL DEFAULT ''::character varying,
                                                            route character varying(255) COLLATE pg_catalog.""default"" NOT NULL DEFAULT ''::character varying);", TempTableNameWithSchema);
