@@ -359,6 +359,12 @@ namespace TOne.WhS.BusinessEntity.Business
             PurchaseAreaSettingsData purchaseAreaSettings = GetPurchaseAreaSettings();
             return purchaseAreaSettings.MaximumRate;
         }
+
+        public long GetPurchaseMaximumCodeRange()
+        {
+            PurchaseAreaSettingsData purchaseAreaSettings = GetPurchaseAreaSettings();
+            return purchaseAreaSettings.MaximumCodeRange;
+        }
         public int GetPurchaseAreaRetroactiveDayOffset()
         {
             PurchaseAreaSettingsData purchaseAreaSettings = GetPurchaseAreaSettings();

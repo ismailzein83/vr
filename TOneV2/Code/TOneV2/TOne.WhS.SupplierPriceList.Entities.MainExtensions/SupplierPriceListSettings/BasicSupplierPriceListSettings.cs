@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.SupplierPriceList.Entities;
+using Vanrise.Entities;
 using Vanrise.ExcelConversion.Business;
 using Vanrise.ExcelConversion.Entities;
 
@@ -42,13 +41,13 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
             excelConversionSettings.DateTimeFormat = this.DateTimeFormat;
             excelConversionSettings.ListMappings = new List<ListMapping>();
             excelConversionSettings.ListMappings.Add(this.CodeListMapping);
-            excelConversionSettings.Precision=this.Precision;
+            excelConversionSettings.Precision = this.Precision;
             excelConversionSettings.RatePrecicionType = this.RatePrecicionType;
-            excelConversionSettings.ExtendedSettings = new ImportSupplierPriceListExtendedSettings { PricelistDate = context.PricelistDate};
+            excelConversionSettings.ExtendedSettings = new ImportSupplierPriceListExtendedSettings { PricelistDate = context.PricelistDate };
 
             if (this.NormalRateListMapping != null)
                 excelConversionSettings.ListMappings.Add(this.NormalRateListMapping);
-            
+
             if (this.OtherRateListMapping != null)
             {
                 foreach (var list in this.OtherRateListMapping)
@@ -107,7 +106,8 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
         private List<PriceListCode> GetPricelistCodes(List<ConvertedExcelRecord> excelRecords)
         {
             List<PriceListCode> priceListCodes = new List<PriceListCode>();
-
+            BusinessEntity.Business.ConfigManager configManager = new BusinessEntity.Business.ConfigManager();
+            long maximumCodeRange = configManager.GetPurchaseMaximumCodeRange();
             foreach (var record in excelRecords)
             {
                 ConvertedExcelField zoneField;
@@ -162,19 +162,22 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                                     {
                                         IEnumerable<char> firstPrefix = rangeCode.FirstOrDefault().TakeWhile(item => item == '0');
                                         IEnumerable<char> secondPrefix = rangeCode.LastOrDefault().TakeWhile(item => item == '0');
-                                        if(firstPrefix.Count()!=secondPrefix.Count())
+                                        if (firstPrefix.Count() != secondPrefix.Count())
                                             throw new Exception(String.Format("Invalid code {0} due to a wrong range separator.", codeValueTrimmed));
 
                                         long firstCode;
                                         long lastCode;
                                         if (long.TryParse(rangeCode.FirstOrDefault(), out firstCode) && long.TryParse(rangeCode.LastOrDefault(), out lastCode))
                                         {
+                                            long codeRange = lastCode - firstCode;
+                                            if (codeRange > maximumCodeRange)
+                                                throw new VRBusinessException(String.Format("The number of codes({0}) in  range ({0},{1}) exceeded the maximum allowed code range: '{2}'.", firstCode, lastCode, maximumCodeRange));
                                             while (firstCode <= lastCode)
                                             {
                                                 string increasedCode = (firstCode++).ToString().Trim();
                                                 priceListCodes.Add(new PriceListCode
                                                 {
-                                                    Code = codeGroup != null ? string.Concat(codeGroup, string.Join("",firstPrefix), increasedCode) : increasedCode,
+                                                    Code = codeGroup != null ? string.Concat(codeGroup, string.Join("", firstPrefix), increasedCode) : increasedCode,
                                                     EffectiveDate = result,
                                                     ZoneName = zone,
                                                 });
@@ -182,7 +185,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                                         }
                                         else
                                         {
-                                            if(zone != null)
+                                            if (zone != null)
                                                 throw new Exception(String.Format("Invalid code found in zone {0} due to a wrong range separator.", zone));
                                             else
                                                 throw new Exception(String.Format("Invalid code {0} due to a wrong range separator.", rangeCode));

@@ -1,76 +1,77 @@
 ﻿'use strict';
 
-app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsService', 'VRCommon_CurrencyAPIService','VRNotificationService', function (UtilsService, VRUIUtilsService, VRCommon_CurrencyAPIService,VRNotificationService) {
-	return {
-		restrict: 'E',
-		scope: {
-			onReady: '='
-		},
-		controller: function ($scope, $element, $attrs) {
-			var ctrl = this;
-			var purchaseAreaSettings = new PurchaseAreaSettings(ctrl, $scope, $attrs);
-			purchaseAreaSettings.initializeController();
-		},
-		controllerAs: 'ctrl',
-		bindToController: true,
-		templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/Settings/Templates/PurchaseAreaSettingsTemplate.html"
-	};
+app.directive('vrWhsBePurchaseareaSettingsEditor', ['UtilsService', 'VRUIUtilsService', 'VRCommon_CurrencyAPIService', 'VRNotificationService', function (UtilsService, VRUIUtilsService, VRCommon_CurrencyAPIService, VRNotificationService) {
+    return {
+        restrict: 'E',
+        scope: {
+            onReady: '='
+        },
+        controller: function ($scope, $element, $attrs) {
+            var ctrl = this;
+            var purchaseAreaSettings = new PurchaseAreaSettings(ctrl, $scope, $attrs);
+            purchaseAreaSettings.initializeController();
+        },
+        controllerAs: 'ctrl',
+        bindToController: true,
+        templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/Settings/Templates/PurchaseAreaSettingsTemplate.html"
+    };
 
-	function PurchaseAreaSettings(ctrl, $scope, $attrs) {
-	    
-		this.initializeController = initializeController;
+    function PurchaseAreaSettings(ctrl, $scope, $attrs) {
 
-		function initializeController() {
-		    
-			defineAPI();
-		}
-		function defineAPI() {
-			var api = {};
+        this.initializeController = initializeController;
 
-			api.load = function (payload) {
+        function initializeController() {
+            defineAPI();
+        }
+        function defineAPI() {
+            var api = {};
 
-			    var data;
+            api.load = function (payload) {
 
-			    if (payload != undefined) {
-			        data = payload.data;
-			    }
+                var data;
 
-			    var promises = [];
+                if (payload != undefined) {
+                    data = payload.data;
+                }
 
-			    loadStaticData(data);
+                var promises = [];
 
-			    var getSystemCurrencyPromise = getSystemCurrency();
-			    promises.push(getSystemCurrencyPromise);
+                loadStaticData(data);
 
-			    return UtilsService.waitMultiplePromises(promises);
-			};
-			
-			api.getData = function () {
-				return {
-					$type: "TOne.WhS.BusinessEntity.Entities.PurchaseAreaSettingsData, TOne.WhS.BusinessEntity.Entities",
-					EffectiveDateDayOffset: ctrl.effectiveDateDayOffset,
-					RetroactiveDayOffset: ctrl.retroactiveDayOffset,
-					MaximumRate: ctrl.maximumRate
-				};
-			};
+                var getSystemCurrencyPromise = getSystemCurrency();
+                promises.push(getSystemCurrencyPromise);
 
-			if (ctrl.onReady != null)
-				ctrl.onReady(api);
-		}
-		
-		function loadStaticData(data) {
-		    if (data == undefined)
-		        return;
-		    ctrl.effectiveDateDayOffset = data.EffectiveDateDayOffset;
-		    ctrl.retroactiveDayOffset = data.RetroactiveDayOffset;
-		    ctrl.maximumRate = data.MaximumRate;
-		}
-		function getSystemCurrency() {
-		    return VRCommon_CurrencyAPIService.GetSystemCurrency().then(function (response) {
-		        if (response != undefined) {
-		            ctrl.systemCurrencySymbol = response.Symbol;
-		        }
-		    });
-		}
-	}
+                return UtilsService.waitMultiplePromises(promises);
+            };
+
+            api.getData = function () {
+                return {
+                    $type: "TOne.WhS.BusinessEntity.Entities.PurchaseAreaSettingsData, TOne.WhS.BusinessEntity.Entities",
+                    EffectiveDateDayOffset: ctrl.effectiveDateDayOffset,
+                    RetroactiveDayOffset: ctrl.retroactiveDayOffset,
+                    MaximumRate: ctrl.maximumRate,
+                    MaximumCodeRange: ctrl.maximumCodeRange
+                };
+            };
+
+            if (ctrl.onReady != null)
+                ctrl.onReady(api);
+        }
+
+        function loadStaticData(data) {
+            if (data == undefined)
+                return;
+            ctrl.effectiveDateDayOffset = data.EffectiveDateDayOffset;
+            ctrl.retroactiveDayOffset = data.RetroactiveDayOffset;
+            ctrl.maximumRate = data.MaximumRate;
+            ctrl.maximumCodeRange = data.MaximumCodeRange;
+        }
+        function getSystemCurrency() {
+            return VRCommon_CurrencyAPIService.GetSystemCurrency().then(function (response) {
+                if (response != undefined) {
+                    ctrl.systemCurrencySymbol = response.Symbol;
+                }
+            });
+        }
+    }
 }]);
