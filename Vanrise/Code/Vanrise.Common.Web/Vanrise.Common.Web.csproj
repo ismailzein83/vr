@@ -230,6 +230,8 @@
     <Content Include="Common\Directives\GeneralTechnicalSettings\vr-common-companydefinition-settings-editor.js" />
     <Content Include="Common\Directives\GeneralTechnicalSettings\vr-common-companydefinition-selective.js" />
     <Content Include="Common\Directives\GeneralTechnicalSettings\vr-common-general-technical-settings-editor.js" />
+    <Content Include="Common\Directives\MainExtensions\ConnectionTypes\Templates\POP3ConnectionEditorTemplate.html" />
+    <Content Include="Common\Directives\MainExtensions\ConnectionTypes\vr-common-pop3connection-editor.js" />
     <Content Include="Common\Directives\MainExtensions\VRObjectTypes\Templates\CompanySettingObjectTypeTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\VRObjectTypes\Templates\CompanySettingPropertyEvaluatorTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\VRObjectTypes\vr-common-companysettingobjecttype.js" />
