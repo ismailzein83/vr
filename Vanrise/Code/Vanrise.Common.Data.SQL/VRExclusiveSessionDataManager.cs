@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Data.SQL;
+using Vanrise.Entities;
 
 namespace Vanrise.Common.Data.SQL
 {
@@ -30,6 +32,27 @@ namespace Vanrise.Common.Data.SQL
         public void ReleaseSession(Guid sessionTypeId, string targetId, int userId)
         {
             ExecuteNonQuerySP("[common].[sp_VRExclusiveSession_Release]", sessionTypeId, targetId, userId);
+        }
+
+
+        public List<VRExclusiveSession> GetAllVRExclusiveSessions(int timeOutInSeconds)
+        {
+            return GetItemsSP("[common].[sp_VRExclusiveSession_GetAll]", VRExclusiveSessionMapper);
+        }
+
+        VRExclusiveSession VRExclusiveSessionMapper(IDataReader reader)
+        {
+            VRExclusiveSession vrExclusiveSession = new VRExclusiveSession
+            {
+                VRExclusiveSessionID = (int)reader["ID"],
+                SessionTypeId = (Guid)reader["ID"],
+                TargetId =  reader["TargetId"] as string,
+                TakenByUserId = GetReaderValue<int>(reader, "TakenByUserId"),
+                LastTakenUpdateTime = GetReaderValue<DateTime>(reader, "LastTakenUpdateTime"),
+                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
+            };
+
+            return vrExclusiveSession;
         }
     }
 }

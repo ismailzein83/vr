@@ -22,6 +22,14 @@ namespace Vanrise.Common.Web.Controllers
             return _manager.GetVRExclusiveSessionTypeExtendedSettingsConfigs();
         }
 
+
+        [HttpGet]
+        [Route("GetVRExclusiveSessionTypeInfos")]
+        public object GetVRExclusiveSessionTypeInfos(string filter = null)
+        {
+            VRExclusiveSessionTypeInfoFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<VRExclusiveSessionTypeInfoFilter>(filter) : null;
+            return _manager.GetVRExclusiveSessionTypeInfos(deserializedFilter);
+        }
         [HttpPost]
         [Route("TryTakeSession")]
         public object TryTakeSession(VRExclusiveSessionTryTakeInput input)

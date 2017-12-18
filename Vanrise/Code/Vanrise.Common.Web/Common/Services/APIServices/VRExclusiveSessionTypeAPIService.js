@@ -29,12 +29,18 @@
 
         }
 
+        function GetVRExclusiveSessionTypeInfos(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetVRExclusiveSessionTypeInfos"), { filter: filter });
+
+        }
+
         return ({
             GetVRExclusiveSessionTypeExtendedSettingsConfigs: GetVRExclusiveSessionTypeExtendedSettingsConfigs,
             TryTakeSession: TryTakeSession,
             TryKeepSession: TryKeepSession,
             ReleaseSession: ReleaseSession,
             GetSessionLockHeartbeatIntervalInSeconds: GetSessionLockHeartbeatIntervalInSeconds,
+            GetVRExclusiveSessionTypeInfos: GetVRExclusiveSessionTypeInfos
         });
     }
 

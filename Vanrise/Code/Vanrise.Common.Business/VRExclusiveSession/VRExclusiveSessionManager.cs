@@ -36,6 +36,17 @@ namespace Vanrise.Common.Business
             }
         }
 
+
+        public IEnumerable<VRExclusiveSessionTypeInfo> GetVRExclusiveSessionTypeInfos(VRExclusiveSessionTypeInfoFilter filter)
+        {
+            Func<VRExclusiveSessionType, bool> filterExpression = null;
+            if (filter != null)
+            {
+                
+            }
+            VRComponentTypeManager _vrComponentTypeManager = new VRComponentTypeManager();
+            return _vrComponentTypeManager.GetComponentTypes<VRExclusiveSessionTypeSettings, VRExclusiveSessionType>().MapRecords(RExclusiveSessionTypeInfoMapper, filterExpression);
+        }
         public VRExclusiveSessionTryKeepOutput TryKeepSession(VRExclusiveSessionTryKeepInput input)
         {
             string failureMessage;
@@ -112,6 +123,14 @@ namespace Vanrise.Common.Business
                 get;
                 set;
             }
+        }
+        private VRExclusiveSessionTypeInfo RExclusiveSessionTypeInfoMapper(VRExclusiveSessionType vrSessionType)
+        {
+            return new VRExclusiveSessionTypeInfo
+            {
+                VRExclusiveSessionTypeId = vrSessionType.VRComponentTypeId,
+                Name = vrSessionType.Name,
+            };
         }
 
         #endregion

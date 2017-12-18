@@ -144,7 +144,7 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
             angular.forEach(response, function (itm) {
                 ctrl.datasource.push(itm);
             });
-
+            console.log(ctrl.datasource)
             if (selectedIds != undefined) {
                 VRUIUtilsService.setSelectedValues(selectedIds, 'CountryId', attrs, ctrl);
             }

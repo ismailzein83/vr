@@ -164,6 +164,11 @@
     <Compile Include="VREvent\VREventHandlerSettings.cs" />
     <Compile Include="VREvent\VREventPayload.cs" />
     <Compile Include="VREvent\VREventHandler.cs" />
+    <Compile Include="VRExclusiveSession\VRExclusiveSessionQuery.cs" />
+    <Compile Include="VRExclusiveSession\VRExclusiveSessionTypeInfoFilter.cs" />
+    <Compile Include="VRExclusiveSession\VRExclusiveSessionTypeInfo.cs" />
+    <Compile Include="VRExclusiveSession\VRExclusiveSessionDetail.cs" />
+    <Compile Include="VRExclusiveSession\VRExclusiveSession.cs" />
     <Compile Include="VRExclusiveSession\VRExclusiveSessionOperArgs.cs" />
     <Compile Include="VRExclusiveSession\VRExclusiveSessionType.cs" />
     <Compile Include="VRExclusiveSession\VRExclusiveSessionTypeSettings.cs" />

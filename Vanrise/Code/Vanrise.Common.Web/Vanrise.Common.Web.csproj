@@ -315,6 +315,7 @@
     <Content Include="Common\Directives\VRDocument\vr-common-documentcategory-selector.js" />
     <Content Include="Common\Directives\VRExclusiveSessionType\Templates\VRExclusiveSessionTypeExtendedSettingsTemplate.html" />
     <Content Include="Common\Directives\VRExclusiveSessionType\Templates\VRExclusiveSessionTypeSettingsTemplate.html" />
+    <Content Include="Common\Directives\VRExclusiveSessionType\vr-common-exclusivesessiontype-selector.js" />
     <Content Include="Common\Directives\VRExclusiveSessionType\vr-common-exclusivesessiontype-extendedsettings.js" />
     <Content Include="Common\Directives\VRExclusiveSessionType\vr-common-exclusivesessiontype-settings.js" />
     <Content Include="Common\Directives\VRLocalization\Module\Templates\VRLocalizationModuleGridTemplate.html" />
@@ -629,6 +630,8 @@
     <Content Include="Common\Views\VRComponentType\VRComponentTypeEditorController.js" />
     <Content Include="Common\Views\VRComponentType\VRComponentTypeManagement.html" />
     <Content Include="Common\Views\VRComponentType\VRComponentTypeManagementController.js" />
+    <Content Include="Common\Views\VRExclusiveSession\VRExclusiveSessionManagement.html" />
+    <Content Include="Common\Views\VRExclusiveSession\VRExclusiveSessionManagementController.js" />
     <Content Include="Common\Views\VRConnection\VRConnectionEditor.html" />
     <Content Include="Common\Views\VRConnection\VRConnectionEditorController.js" />
     <Content Include="Common\Views\VRConnection\VRConnectionManagement.html" />
