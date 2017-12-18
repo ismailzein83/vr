@@ -50,7 +50,7 @@ namespace Vanrise.Common.Business
         public VRExclusiveSessionTryKeepOutput TryKeepSession(VRExclusiveSessionTryKeepInput input)
         {
             string failureMessage;
-            if (TryTakeSession(input.SessionTypeId, input.TargetId, out failureMessage))
+            if (TryKeepSession(input.SessionTypeId, input.TargetId, out failureMessage))
             {
                 return new VRExclusiveSessionTryKeepOutput
                 {
@@ -83,6 +83,23 @@ namespace Vanrise.Common.Business
             int currentUserId = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
             int takenByUserId;
             s_dataManager.TryTakeSession(sessionTypeId, targetId, currentUserId, GetTimeOutInSeconds(), out takenByUserId);
+            if (currentUserId == takenByUserId)
+            {
+                failureMessage = null;
+                return true;
+            }
+            else
+            {
+                failureMessage = String.Format("Session is locked by '{0}'", s_userManager.GetUserName(takenByUserId));
+                return false;
+            }
+        }
+
+        private bool TryKeepSession(Guid sessionTypeId, string targetId, out string failureMessage)
+        {
+            int currentUserId = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
+            int takenByUserId;
+            s_dataManager.TryKeepSession(sessionTypeId, targetId, currentUserId, GetTimeOutInSeconds(), out takenByUserId);
             if (currentUserId == takenByUserId)
             {
                 failureMessage = null;

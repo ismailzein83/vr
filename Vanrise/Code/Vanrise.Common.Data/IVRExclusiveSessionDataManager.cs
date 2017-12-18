@@ -13,6 +13,8 @@ namespace Vanrise.Common.Data
 
         void TryTakeSession(Guid sessionTypeId, string targetId, int userId, int timeoutInSeconds, out int takenByUserId);
 
+        void TryKeepSession(Guid sessionTypeId, string targetId, int userId, int timeoutInSeconds, out int takenByUserId);
+
         void ReleaseSession(Guid sessionTypeId, string targetId, int userId);
 
         List<VRExclusiveSession> GetAllVRExclusiveSessions(int timeOutInSeconds);
