@@ -362,6 +362,8 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\whs-be-financialaccountobjecttype.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\whs-be-financialaccountpropertyevaluator.js" />
     <Content Include="WhS_BusinessEntity\Directives\Period\vr-whs-be-period-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\POP3Filter\Templates\POP3SupplierPricelistFilterTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\POP3Filter\vr-whs-be-pop3supplierpricelistfilter.js" />
     <Content Include="WhS_BusinessEntity\Directives\SaleAreaTechnicalSettings\Templates\SaleAreaTechnicalSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SaleAreaTechnicalSettings\vr-whs-be-salearea-technical-settings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListChange\Templates\CustomerRatePreviewGrid.html" />
