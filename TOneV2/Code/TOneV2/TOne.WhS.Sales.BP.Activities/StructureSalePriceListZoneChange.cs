@@ -18,6 +18,7 @@ namespace TOne.WhS.Sales.BP.Activities
 {
     public class StructureSalePriceListZoneChange : CodeActivity
     {
+        #region Input Arguments
         public InArgument<int?> RerservedSalePriceListId { get; set; }
         public InArgument<int> CurrencyId { get; set; }
         public InArgument<IEnumerable<SaleZone>> SaleZones { get; set; }
@@ -32,9 +33,14 @@ namespace TOne.WhS.Sales.BP.Activities
         public InArgument<DefaultRoutingProductToAdd> DefaultRoutingProductToAdd { get; set; }
         public InArgument<DefaultRoutingProductToClose> DefaultRoutingProductToClose { get; set; }
         public InArgument<DateTime> EffectiveOn { get; set; }
+        #endregion
+
+        #region Output Arguments
         public OutArgument<IEnumerable<NewCustomerPriceListChange>> CustomerChange { get; set; }
         public OutArgument<IEnumerable<NewPriceList>> NewSalePriceList { get; set; }
         public OutArgument<IEnumerable<SalePricelistRPChange>> AllSalePricelistRPChanges { get; set; }
+        #endregion
+
         protected override void Execute(CodeActivityContext context)
         {
             #region Getting Arguments From Context
