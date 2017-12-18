@@ -89,13 +89,6 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
         		defineAPI();
         	};
 
-        	$scope.scopeModel.onCancelSearch = function (api) {
-        	    $scope.scopeModel.searchcountry = undefined;
-        	};
-        	$scope.scopeModel.customdata = [
-                { id: 1, name: "test 1" },
-                { id: 2, name: "test 2" }
-        	];
         }
 
         function defineAPI() {
@@ -144,7 +137,6 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
             angular.forEach(response, function (itm) {
                 ctrl.datasource.push(itm);
             });
-            console.log(ctrl.datasource)
             if (selectedIds != undefined) {
                 VRUIUtilsService.setSelectedValues(selectedIds, 'CountryId', attrs, ctrl);
             }
