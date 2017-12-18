@@ -10,28 +10,22 @@ namespace TOne.WhS.Sales.Business
 {
     public class ProcessRatesContext : IProcessRatesContext
     {
+        #region Input Properties
         public SalePriceListOwnerType OwnerType { get; set; }
-
         public int OwnerId { get; set; }
-
         public int CurrencyId { get; set; }
-
         public int LongPrecisionValue { get; set; }
-
         public IEnumerable<RateToChange> RatesToChange { get; set; }
-
         public IEnumerable<RateToClose> RatesToClose { get; set; }
-
         public IEnumerable<ExistingRate> ExistingRates { get; set; }
-
         public IEnumerable<ExistingZone> ExistingZones { get; set; }
-
         public IEnumerable<ExistingCustomerCountry> ExplicitlyChangedExistingCustomerCountries { get; set; }
-
         public InheritedRatesByZoneId InheritedRatesByZoneId { get; set; }
+        #endregion
 
+        #region Output Properties
         public IEnumerable<NewRate> NewRates { get; set; }
-
         public IEnumerable<ChangedRate> ChangedRates { get; set; }
+        #endregion
     }
 }

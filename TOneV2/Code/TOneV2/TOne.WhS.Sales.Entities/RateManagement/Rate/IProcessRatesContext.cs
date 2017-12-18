@@ -9,28 +9,22 @@ namespace TOne.WhS.Sales.Entities
 {
     public interface IProcessRatesContext
     {
+        #region Input Properties
         SalePriceListOwnerType OwnerType { get; }
-
         int OwnerId { get; }
-
         int CurrencyId { get; }
-
         int LongPrecisionValue { get; }
-
         IEnumerable<RateToChange> RatesToChange { get; }
-
         IEnumerable<RateToClose> RatesToClose { get; }
-
         IEnumerable<ExistingRate> ExistingRates { get; }
-
         IEnumerable<ExistingZone> ExistingZones { get; }
-
         IEnumerable<ExistingCustomerCountry> ExplicitlyChangedExistingCustomerCountries { get; }
-
         InheritedRatesByZoneId InheritedRatesByZoneId { get; }
+        #endregion
 
+        #region Output Properties
         IEnumerable<NewRate> NewRates { set; }
-
         IEnumerable<ChangedRate> ChangedRates { set; }
+        #endregion
     }
 }
