@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using TOne.WhS.BusinessEntity.Business;
 
 
 
@@ -31,7 +32,16 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
         public override string GetTargetName(IVRExclusiveSessionGetTargetNameContext context)
         {
-            throw new NotImplementedException();
+            var carrierAccountManager = new CarrierAccountManager();
+            int carrierAccountId;
+            context.TargetId.ThrowIfNull("Target ID");
+
+            if (Int32.TryParse(context.TargetId,out carrierAccountId))
+            {
+                return "Customer: "+carrierAccountManager.GetCarrierAccountName(carrierAccountId);
+            }
+            else
+                throw new DataIntegrityValidationException(string.Format("Traget ID is in wrong Format : {0}", context.TargetId));
         }
     }
 }

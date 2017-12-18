@@ -3,7 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using Vanrise.Entities;
+using Vanrise.Common;
+using Vanrise.Common.Business;
+using System.ComponentModel;
 
 namespace TOne.WhS.BusinessEntity.MainExtensions
 {
@@ -28,7 +32,48 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
         public override string GetTargetName(IVRExclusiveSessionGetTargetNameContext context)
         {
-            throw new NotImplementedException();
+            var carrierAccountManager = new CarrierAccountManager();
+            var sellingProductManager = new SellingProductManager();
+            var sellingNumberPlanManager = new SellingNumberPlanManager();
+
+            context.TargetId.ThrowIfNull("Target ID");
+
+            string[] targetIdComponents = context.TargetId.Split('_');
+            if (targetIdComponents.Length !=2)
+                return null;
+
+            string targetPrefix = targetIdComponents[0];
+            string id = targetIdComponents[1];
+
+            int targetIdValue;
+
+            if (!Int32.TryParse(id, out targetIdValue))
+                throw new DataIntegrityValidationException(string.Format("Traget ID is in wrong Format : {0}", context.TargetId));
+
+            ExclusiveSessionTargetIdPrefixEnum prefixConstant;
+            if (!Enum.TryParse(targetPrefix, out prefixConstant))
+                throw new DataIntegrityValidationException(string.Format("Traget ID is in wrong Format : {0}", context.TargetId));
+
+            switch (prefixConstant)
+            {
+                case ExclusiveSessionTargetIdPrefixEnum.Customer:
+                    return "Customer: "+carrierAccountManager.GetCarrierAccountName(targetIdValue);
+                case ExclusiveSessionTargetIdPrefixEnum.SellingProduct:
+                    return "SellingProduct: " + sellingProductManager.GetSellingProductName(targetIdValue);
+                case ExclusiveSessionTargetIdPrefixEnum.NumberingPlan:
+                    return "NumberingPlan: " + sellingNumberPlanManager.GetSellingNumberPlanName(targetIdValue);
+            }
+             return null;
+        }
+
+        public enum ExclusiveSessionTargetIdPrefixEnum
+        {
+            [Description("Customer")]
+            Customer = 0,
+            [Description("SellingProduct")]
+            SellingProduct = 1,
+            [Description("NumberingPlan")]
+            NumberingPlan = 2,
         }
     }
 }
