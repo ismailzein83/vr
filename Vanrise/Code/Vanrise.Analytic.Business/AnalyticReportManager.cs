@@ -33,12 +33,14 @@ namespace Vanrise.Analytic.Business
         public IEnumerable<AnalyticReportInfo> GetAnalyticReportsInfo(AnalyticReportInfoFilter filter)
         {
             var analyticReports = GetCachedAnalyticReports();
+
             if(filter !=null)
             {
-                Func<AnalyticReport, bool> filterExpression = (prod) =>
-                 (filter.TypeId == null || prod.Settings.ConfigId == filter.TypeId)
-                 && (filter.TypeName == null || prod.Settings.ConfigId == GetAnalyticReportConfigTypeByName(filter.TypeName).ExtensionConfigurationId)
-                 && (prod.AccessType == AccessType.Public || prod.UserID == _loggedInUserId);
+                Func<AnalyticReport, bool> filterExpression = (item) =>
+                 (filter.TypeId == null || item.Settings.ConfigId == filter.TypeId) &&
+                 (filter.TypeName == null || item.Settings.ConfigId == GetAnalyticReportConfigTypeByName(filter.TypeName).ExtensionConfigurationId) &&
+                 (item.AccessType == AccessType.Public || item.UserID == _loggedInUserId);
+
                  return analyticReports.MapRecords(AnalyticReportInfoMapper, filterExpression);
             }
 
