@@ -42,9 +42,13 @@ namespace Vanrise.Common.Data.SQL
         }
 
 
-        public List<VRExclusiveSession> GetAllVRExclusiveSessions(int timeOutInSeconds)
+        public List<VRExclusiveSession> GetAllVRExclusiveSessions(int timeOutInSeconds,List<Guid> sessionTypeIds)
         {
-            return GetItemsSP("[common].[sp_VRExclusiveSession_GetAll]", VRExclusiveSessionMapper);
+            
+            return GetItemsSP("[common].[sp_VRExclusiveSession_GetAll]", VRExclusiveSessionMapper,
+                timeOutInSeconds,
+                sessionTypeIds == null ? null : string.Join(",",sessionTypeIds.Select(n => n.ToString()).ToArray())
+            );
         }
 
         VRExclusiveSession VRExclusiveSessionMapper(IDataReader reader)
@@ -57,6 +61,8 @@ namespace Vanrise.Common.Data.SQL
                 TakenByUserId = GetReaderValue<int>(reader, "TakenByUserId"),
                 LastTakenUpdateTime = GetReaderValue<DateTime>(reader, "LastTakenUpdateTime"),
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
+                TakenTime = GetReaderValue<DateTime>(reader, "TakenTime")
+                
             };
 
             return vrExclusiveSession;

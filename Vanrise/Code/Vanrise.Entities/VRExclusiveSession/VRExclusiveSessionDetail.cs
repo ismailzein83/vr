@@ -20,10 +20,12 @@ namespace Vanrise.Entities
 
         public int TakenByUserId { get; set; }      
 
-        public int LockedByUser { get; set; }
+        public string LockedByUser { get; set; }
 
         public DateTime LastTakenUpdateTime { get; set;  }
 
         public DateTime CreatedTime { get; set; }
+
+        public DateTime TakenTime { get; set; }
     }
 }

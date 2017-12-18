@@ -12,8 +12,30 @@ namespace Vanrise.Common.Business
     {
         static IVRExclusiveSessionDataManager s_dataManager = CommonDataManagerFactory.GetDataManager<IVRExclusiveSessionDataManager>();
         static Vanrise.Security.Entities.IUserManager s_userManager = Vanrise.Security.Entities.BEManagerFactory.GetManager<Vanrise.Security.Entities.IUserManager>();
-
+        VRComponentTypeManager _vrComponentTypeManager;
         #region Public Methods
+
+        public VRExclusiveSessionManager()
+        {
+            _vrComponentTypeManager = new VRComponentTypeManager();
+        }
+        public IDataRetrievalResult<VRExclusiveSessionDetail> GetFilteredVRExclusiveSessions(DataRetrievalInput<VRExclusiveSessionQuery> input)
+        {
+            var allVRExclusiveSessions = s_dataManager.GetAllVRExclusiveSessions(GetTimeOutInSeconds(), input.Query.SessionTypeIds).MapRecords(VRExclusiveSessionDetailMapper);
+            Func<VRExclusiveSessionDetail, bool> filterExpression = (x) =>
+            {
+                if (input.Query.TargetName != null && !x.TargetName.ToLower().Contains(input.Query.TargetName.ToLower()))
+                    return false;               
+                return true;
+            };
+
+            ResultProcessingHandler<VRExclusiveSessionDetail> handler = new ResultProcessingHandler<VRExclusiveSessionDetail>()
+            {
+                ExportExcelHandler = new VRExclusiveSessionDetailExcelExportHandler()
+            };
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRExclusiveSessions.ToBigResult(input, filterExpression), handler);
+        }
+
 
         public VRExclusiveSessionTryTakeOutput TryTakeSession(VRExclusiveSessionTryTakeInput input)
         {
@@ -44,7 +66,6 @@ namespace Vanrise.Common.Business
             {
                 
             }
-            VRComponentTypeManager _vrComponentTypeManager = new VRComponentTypeManager();
             return _vrComponentTypeManager.GetComponentTypes<VRExclusiveSessionTypeSettings, VRExclusiveSessionType>().MapRecords(RExclusiveSessionTypeInfoMapper, filterExpression);
         }
         public VRExclusiveSessionTryKeepOutput TryKeepSession(VRExclusiveSessionTryKeepInput input)
@@ -148,6 +169,67 @@ namespace Vanrise.Common.Business
                 VRExclusiveSessionTypeId = vrSessionType.VRComponentTypeId,
                 Name = vrSessionType.Name,
             };
+        }
+
+        private VRExclusiveSessionDetail VRExclusiveSessionDetailMapper(VRExclusiveSession vrExclusiveSession)
+        {
+            var vrExclusiveSessionTypeExtendedSettings = GetVRExclusiveSessionTypeExtendedSettingsById(vrExclusiveSession.SessionTypeId);
+            var context = new VRExclusiveSessionGetTargetNameContext() { TargetId = vrExclusiveSession.TargetId };
+            var sessionType =  _vrComponentTypeManager.GetComponentType(vrExclusiveSession.SessionTypeId);
+
+            return new VRExclusiveSessionDetail
+            {
+                VRExclusiveSessionID = vrExclusiveSession.VRExclusiveSessionID,
+                SessionTypeId = vrExclusiveSession.SessionTypeId,
+                SessionType = sessionType!=null ? sessionType.Name : null,
+                TargetId = vrExclusiveSession.TargetId,
+                TargetName = vrExclusiveSessionTypeExtendedSettings.GetTargetName(context),
+                TakenByUserId = vrExclusiveSession.TakenByUserId,
+                LockedByUser = s_userManager.GetUserName(vrExclusiveSession.TakenByUserId),
+                LastTakenUpdateTime = vrExclusiveSession.LastTakenUpdateTime,
+                CreatedTime = vrExclusiveSession.CreatedTime,
+                TakenTime = vrExclusiveSession.TakenTime
+
+            };
+        }
+
+        private class VRExclusiveSessionDetailExcelExportHandler : ExcelExportHandler<VRExclusiveSessionDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<VRExclusiveSessionDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Exclusive Sessions",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Id", Width = 50 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Session Type", Width = 50 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name", Width = 50 }); // target name
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Locked By User"});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Last Taken Update Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Created Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Taken Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.VRExclusiveSessionID });
+                            row.Cells.Add(new ExportExcelCell { Value = record.SessionType });                            
+                            row.Cells.Add(new ExportExcelCell { Value = record.TargetName });                            
+                            row.Cells.Add(new ExportExcelCell { Value = record.LastTakenUpdateTime });                            
+                            row.Cells.Add(new ExportExcelCell { Value = record.CreatedTime }); 
+                            row.Cells.Add(new ExportExcelCell { Value = record.TakenTime });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
         }
 
         #endregion

@@ -32,6 +32,12 @@ namespace Vanrise.Entities
         string TargetId { get; }
     }
 
+    public class VRExclusiveSessionGetTargetNameContext : IVRExclusiveSessionGetTargetNameContext
+    {
+        public string TargetId { get; set; }
+    }
+
+
     public interface IVRExclusiveSessionDoesUserHaveTakeAccessContext
     {
         int UserId { get; }

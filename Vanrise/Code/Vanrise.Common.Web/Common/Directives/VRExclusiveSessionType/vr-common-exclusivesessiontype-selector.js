@@ -110,7 +110,7 @@ app.directive('vrCommonExclusivesessiontypeSelector', ['VRCommon_VRExclusiveSess
                         selectfirstitem = payload.selectfirstitem != undefined && payload.selectfirstitem == true;
                     }
 
-                    return VR_AccountBalance_BalanceAccountTypeAPIService.GetVRExclusiveSessionTypeInfos(filter).then(function (response) {
+                    return VRCommon_VRExclusiveSessionTypeAPIService.GetVRExclusiveSessionTypeInfos(filter).then(function (response) {
                         if (response != null) {
                             for (var i = 0; i < response.length; i++) {
                                 ctrl.datasource.push(response[i]);

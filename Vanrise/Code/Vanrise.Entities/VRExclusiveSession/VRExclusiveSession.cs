@@ -19,5 +19,7 @@ namespace Vanrise.Entities
         public DateTime LastTakenUpdateTime { get; set;  }
 
         public DateTime CreatedTime { get; set; }
+
+        public DateTime TakenTime { get; set; }
     }
 }
