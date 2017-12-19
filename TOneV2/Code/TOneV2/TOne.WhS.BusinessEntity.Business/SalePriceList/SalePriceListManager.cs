@@ -720,6 +720,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             List<SalePLZoneNotification> filteredZoneNotifications = new List<SalePLZoneNotification>();
             var closedCodeOption = _carrierAccountManager.GetCustomerIncludeClosedEntitiesStatus(customerId);
+            bool onlyClosedChanges = true;
             foreach (var salePlZoneNotification in salePlZoneNotifications)
             {
                 List<SalePLCodeNotification> filteredCodeNotifications = new List<SalePLCodeNotification>();
@@ -727,7 +728,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 var opennedCodes = salePlZoneNotification.Codes.Where(c => !c.EED.HasValue);
                 var notChangedClosedCodes = salePlZoneNotification.Codes.Where(c => c.EED.HasValue && c.CodeChange == CodeChange.NotChanged);
                 var changedClosedCodes = salePlZoneNotification.Codes.Where(c => c.EED.HasValue && c.CodeChange != CodeChange.NotChanged);
-
+                if (opennedCodes.Any() || notChangedClosedCodes.Any())
+                {
+                    onlyClosedChanges = false;
+                }
                 filteredCodeNotifications.AddRange(opennedCodes);
 
                 filteredCodeNotifications.AddRange(notChangedClosedCodes.Where(codeNotification =>
@@ -750,6 +754,8 @@ namespace TOne.WhS.BusinessEntity.Business
                     filteredZoneNotifications.Add(filteredZoneNotification);
                 }
             }
+            if (closedCodeOption == IncludeClosedEntitiesEnum.Never && onlyClosedChanges)
+                return salePlZoneNotifications;
             return filteredZoneNotifications;
         }
 
