@@ -109,6 +109,20 @@ namespace Retail.Teles.Business
             List<dynamic> routingGroups = telesRestConnection.Get<List<dynamic>>(actionPath);
             return routingGroups.ToDictionary(x => (string)x.id, x => x);
         }
+        public IEnumerable<TelesSiteRoutingGroupInfo> GetSiteRoutingGroupsInfo(Guid vrConnectionId, string siteId, TelesSiteRoutingGroupFilter filter)
+        {
+            var siteRoutingGroups = GetSiteRoutingGroups(vrConnectionId, siteId);
+
+            Func<dynamic, bool> filterFunc = (telesSiteRoutingGroupInfo) =>
+            {
+                return true;
+            };
+            return siteRoutingGroups.MapRecords(x =>
+            {
+                return new TelesSiteRoutingGroupInfo { Name = x.name, TelesSiteRoutingGroupId = x.id.ToString() };
+            }, filterFunc);
+
+        }
         public Vanrise.Entities.UpdateOperationOutput<AccountDetail> MapSiteToAccount(MapSiteToAccountInput input)
         {
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<AccountDetail>();

@@ -165,6 +165,8 @@
     <Content Include="Retail_Teles\Constant\NewRGMultiMatchHandlingEnum.js" />
     <Content Include="Retail_Teles\Constant\NewRGNoMatchHandlingEnum.js" />
     <Content Include="Retail_Teles\Constant\RoutingGroupFilterOperatorEnum.js" />
+    <Content Include="Retail_Teles\Constant\EnterpriseTypeEnum.js" />
+    <Content Include="Retail_Teles\Constant\UserTypeEnum.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\MappingTelesUserEditorController.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\MappingTelesSiteEditorController.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\MappingTelesAccountEditorController.js" />
@@ -185,6 +187,8 @@
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ChangeUsersRGs\Templates\RevertUsersRGsProvisionerDefinitionSettingsTemplate.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ChangeUsersRGs\Templates\ChangeUsersRGsProvisionerRuntimeSettingsTemplate.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\MainExtensions\retail-teles-accountextrafield-internationalcallsblocked.js" />
+    <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\MainExtensions\retail-teles-accountextrafield-accountmappedtoteles.js" />
+    <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\MainExtensions\Templates\AccountMappedToTelesExtraFieldTemplate.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\MainExtensions\Templates\InternationalCallsBlockedExtraFieldTemplate.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ProvisioningScreenedNumbers\retail-teles-provisioner-definitionsettings-provisionuser.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\Provisioning\ProvisioningScreenedNumbers\retail-teles-provisioner-definitionsettings-provisionsite.js" />
@@ -211,6 +215,7 @@
     <Content Include="Retail_Teles\Directives\AccountCondition\Templates\TelesAccountConditionTemplate.html" />
     <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-accounttelesdidsandbusinesstrunks-view.js" />
     <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-accountviewdefinitionsettings-telesdidsandbusinesstrunks.js" />
+    <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-siteroutinggroup-selector.js" />
     <Content Include="Retail_Teles\Directives\TelesEnterprises\Templates\AccountTelesDIDsAndBusinessTrunksView.html" />
     <Content Include="Retail_Teles\Directives\TelesEnterprises\Templates\AccountTelesDIDsAndBusinessTrunksViewSettingsTemplate.html" />
     <Content Include="Retail_Teles\Directives\TelesTemplateEntity\Definition\retail-teles-telestemplateentitydefinitionsettings.js" />

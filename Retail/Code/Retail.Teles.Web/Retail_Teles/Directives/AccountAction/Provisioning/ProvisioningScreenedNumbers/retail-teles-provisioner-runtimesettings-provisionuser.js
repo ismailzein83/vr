@@ -2,9 +2,9 @@
 
     'use strict';
 
-    ProvisionerRuntimesettingsDirective.$inject = ["UtilsService", 'VRUIUtilsService'];
+    ProvisionerRuntimesettingsDirective.$inject = ["UtilsService", 'VRUIUtilsService','Retail_Teles_UserTypeEnum','Retail_Teles_EnterpriseTypeEnum','Retail_Teles_UserAPIService'];
 
-    function ProvisionerRuntimesettingsDirective(UtilsService, VRUIUtilsService) {
+    function ProvisionerRuntimesettingsDirective(UtilsService, VRUIUtilsService, Retail_Teles_UserTypeEnum, Retail_Teles_EnterpriseTypeEnum, Retail_Teles_UserAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -43,11 +43,17 @@
             var provisionUserSettingsReadyDeferred = UtilsService.createPromiseDeferred();
             var provisionerDefinitionSettings;
 
+            var siteRoutingGroupDirectiveAPI;
+            var siteRoutingGroupDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
             var accountId;
             var accountBEDefinitionId;
             var mainPayload;
+            var accountDIDsCount;
             function initializeController() {
                 $scope.scopeModel = {};
+                $scope.scopeModel.userTypes = UtilsService.getArrayEnum(Retail_Teles_UserTypeEnum);
+                $scope.scopeModel.selectedUserType = Retail_Teles_UserTypeEnum.BusinessTrunk;
 
                 $scope.scopeModel.onDomainsDirectiveReady = function (api) {
                     domainsDirectiveAPI = api;
@@ -96,6 +102,8 @@
                             };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, sitesDirectiveAPI, payload, setLoader, undefined);
                             gatewaysDirectiveAPI.clearDataSource();
+                            siteRoutingGroupDirectiveAPI.clearDataSource();
+
                         }
                     }
                 };
@@ -103,6 +111,11 @@
                     sitesDirectiveAPI = api;
                     sitesDirectiveReadyDeferred.resolve();
                 };
+                $scope.scopeModel.onSiteRoutingGroupDirectiveReady = function (api) {
+                    siteRoutingGroupDirectiveAPI = api;
+                    siteRoutingGroupDirectiveReadyDeferred.resolve();
+                };
+
                 $scope.scopeModel.onSitesSelectionChanged = function (value) {
                     if (value != undefined) {
                         if (selectedSiteDeferred != undefined)
@@ -119,6 +132,17 @@
                                 $scope.scopeModel.isGatewaysSelectorLoading = value;
                             };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, gatewaysDirectiveAPI, payload, setLoader, undefined);
+
+                            var routingGroupPayload = {
+                                vrConnectionId: provisionerDefinitionSettings.VRConnectionId,
+                                siteId: sitesDirectiveAPI.getSelectedIds(),
+                            };
+                            var setRoutingGroupLoader = function (value) {
+                                $scope.scopeModel.isRoutingGroupSelectorLoading = value;
+                            };
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, siteRoutingGroupDirectiveAPI, routingGroupPayload, setRoutingGroupLoader, undefined);
+
+
                         }
 
                     }
@@ -131,7 +155,34 @@
                     provisionUserSettingsAPI = api;
                     provisionUserSettingsReadyDeferred.resolve();
                 };
-
+                $scope.scopeModel.onUserTypeSelectionChanged = function (userType) {
+                    if (provisionUserSettingsAPI != undefined) {
+                        if (userType != undefined && userType.value == Retail_Teles_UserTypeEnum.BusinessTrunk.value) {
+                            provisionUserSettingsAPI.showBusinessTrunkFields(true);
+                        } else {
+                            provisionUserSettingsAPI.showBusinessTrunkFields(false);
+                        }
+                    }
+                };
+                $scope.scopeModel.validateUserType = function () {
+                    if ($scope.scopeModel.selectedUserType != undefined) {
+                        switch ($scope.scopeModel.selectedUserType.value) {
+                            case Retail_Teles_UserTypeEnum.Subscriber.value:
+                                if ($scope.scopeModel.selectedEnterprise != undefined && $scope.scopeModel.selectedEnterprise.EnterpriseType == Retail_Teles_EnterpriseTypeEnum.Residential.value) {
+                                    if (accountDIDsCount > 10)
+                                        return "Dids cannot be more than 10 items.";
+                                }
+                                break;
+                            case Retail_Teles_UserTypeEnum.BusinessTrunk.value:
+                                if (accountDIDsCount == 0) {
+                                        return "At lease one DID required.";
+                                }
+                                break;
+                        }
+                    }
+                    return null;
+                };
+               
                 UtilsService.waitMultiplePromises([provisionUserSettingsReadyDeferred.promise]).then(function () {
                     defineAPI();
                 });
@@ -244,8 +295,6 @@
                         }
 
                     }
-
-
                     function loadProvisionUserSettings() {
 
                         var provisionUserSettingsPayload = {
@@ -259,8 +308,14 @@
                         }
                         return provisionUserSettingsAPI.load(provisionUserSettingsPayload);
                     }
+                    function loadAccountDIDsCount()
+                    {
+                        return Retail_Teles_UserAPIService.GetAccountDIDsCount(accountBEDefinitionId, accountId).then(function (response) {
+                            accountDIDsCount = response;
+                        });
+                    }
 
-                    return UtilsService.waitMultipleAsyncOperations([loadDomainsDirective, loadEnterprisesDirective, loadSitesDirective, loadGatwaysDirective, loadProvisionUserSettings]);
+                    return UtilsService.waitMultipleAsyncOperations([loadDomainsDirective,loadAccountDIDsCount, loadEnterprisesDirective, loadSitesDirective, loadGatwaysDirective, loadProvisionUserSettings]);
                 };
 
                 api.getData = getData;
@@ -276,7 +331,9 @@
                         TelesDomainId: domainsDirectiveAPI.getSelectedIds(),
                         TelesEnterpriseId:enterprisesDirectiveAPI.getSelectedIds(),
                         TelesSiteId: sitesDirectiveAPI.getSelectedIds(),
-                        TelesGatewayId: gatewaysDirectiveAPI.getSelectedIds()
+                        TelesGatewayId: gatewaysDirectiveAPI.getSelectedIds(),
+                        UserType: $scope.scopeModel.selectedUserType.value,
+                        TelesSiteRoutingGroupId: siteRoutingGroupDirectiveAPI.getSelectedIds()
                     };
                     return data;
                 }

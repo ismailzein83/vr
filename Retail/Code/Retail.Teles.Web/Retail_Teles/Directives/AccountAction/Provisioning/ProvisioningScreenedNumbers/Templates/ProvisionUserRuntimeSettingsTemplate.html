@@ -1,7 +1,7 @@
 ﻿<vr-row>
     <retail-teles-domains-selector on-ready="scopeModel.onDomainsDirectiveReady" normal-col-num="4" isrequired="true" onselectionchanged="scopeModel.onDomainsSelectionChanged"></retail-teles-domains-selector>
     <span vr-loader="scopeModel.isEnterprisesSelectorLoading">
-        <retail-teles-enterprises-selector on-ready="scopeModel.onEnterprisesDirectiveReady" normal-col-num="4" isrequired="true" onselectionchanged="scopeModel.onEnterprisesSelectionChanged"></retail-teles-enterprises-selector>
+        <retail-teles-enterprises-selector on-ready="scopeModel.onEnterprisesDirectiveReady" normal-col-num="4" selectedvalues="scopeModel.selectedEnterprise" isrequired="true" onselectionchanged="scopeModel.onEnterprisesSelectionChanged"></retail-teles-enterprises-selector>
     </span>
     <span vr-loader="scopeModel.isSitesSelectorLoading">
         <retail-teles-sites-selector showaddbutton on-ready="scopeModel.onSitesDirectiveReady" normal-col-num="4" isrequired="true" onselectionchanged="scopeModel.onSitesSelectionChanged"></retail-teles-sites-selector>
@@ -9,6 +9,22 @@
     <span vr-loader="scopeModel.isGatewaysSelectorLoading">
         <retail-teles-gateways-selector on-ready="scopeModel.onGatewaysDirectiveReady" normal-col-num="4" isrequired="true"></retail-teles-gateways-selector>
     </span>
+    <span vr-loader="scopeModel.isRoutingGroupSelectorLoading">
+        <retail-teles-siteroutinggroup-selector on-ready="scopeModel.onSiteRoutingGroupDirectiveReady" normal-col-num="4" isrequired="true"></retail-teles-siteroutinggroup-selector>
+    </span>
+    <vr-columns width="1/3row">
+        <vr-select datasource="scopeModel.userTypes"
+                   isrequired
+                   label="User Type"
+                   hideremoveicon
+                   datatextfield="description"
+                   datavaluefield="value"
+                   onselectionchanged="scopeModel.onUserTypeSelectionChanged"
+                   selectedvalues="scopeModel.selectedUserType"
+                   hidefilterbox
+                   customvalidate="scopeModel.validateUserType()"></vr-select>
+    </vr-columns>
+   
 </vr-row>
 <retail-teles-provisioner-provisionuser-settings on-ready="scopeModel.onProvisionUserSettingsReady"></retail-teles-provisioner-provisionuser-settings>
 

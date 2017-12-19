@@ -19,6 +19,7 @@ namespace Retail.Teles.Business
         AccountBEManager _accountBEManager = new AccountBEManager();
         public string CreateUser(Guid vrConnectionId, string siteName, string gateway, User request)
         {
+
             TelesRestConnection telesRestConnection = GetTelesRestConnection(vrConnectionId);
             var actionPath = string.Format("/domain/{0}/user?gateway={1}", siteName, gateway);
             VRWebAPIResponse<string> response = telesRestConnection.Post<User, string>(actionPath, request, true);
@@ -156,7 +157,47 @@ namespace Retail.Teles.Business
             return user.name;
         }
 
+        public string CreateNumberRanges(Guid vrConnectionId, string telesUserId, List<NumberRange> numberRangs)
+        {
+            TelesRestConnection telesRestConnection = GetTelesRestConnection(vrConnectionId);
+            var actionPath = string.Format("/user/{0}/numRange/add", telesUserId);
+            string response = telesRestConnection.Put<List<NumberRange>, string>(actionPath, numberRangs);
+            return response;
+        }
+        public string CreateMSN(Guid vrConnectionId, string telesUserId, PhoneNumber msn)
+        {
+            TelesRestConnection telesRestConnection = GetTelesRestConnection(vrConnectionId);
+            var actionPath = string.Format("/user/{0}/msn", telesUserId);
+            string response = telesRestConnection.Post<PhoneNumber, string>(actionPath, msn);
+            return response;
+        }
 
+        public string CreatePhoneNumbers(Guid vrConnectionId, string telesUserId, List<PhoneNumber> phoneNumbers)
+        {
+            TelesRestConnection telesRestConnection = GetTelesRestConnection(vrConnectionId);
+            var actionPath = string.Format("/user/{0}/phoneNumList", telesUserId);
+            string response = telesRestConnection.Post<List<PhoneNumber>, string>(actionPath, phoneNumbers);
+            return response;
+        }
+
+        public int GetAccountDIDsCount(Guid accountBEDefinitionId, long accountId)
+        {
+            DIDManager didManager = new DIDManager();
+            var dids = didManager.GetDIDsByParentId(accountId.ToString(), DateTime.Now);
+            List<string> allDIDs = new List<string>();
+            if (dids != null)
+            {
+                foreach (var did in dids)
+                {
+                    List<string> didNumbers = didManager.GetAllDIDNumbers(did);
+                    if (didNumbers != null)
+                    {
+                        allDIDs.AddRange(didNumbers);
+                    }
+                }
+            }
+            return allDIDs.Count;
+        }
         public Dictionary<string, long> GetCachedAccountsByUsers(Guid accountBEDefinitionId)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<AccountBEManager.CacheManager>().GetOrCreateObject("GetCachedAccountsByUsers", accountBEDefinitionId, () =>

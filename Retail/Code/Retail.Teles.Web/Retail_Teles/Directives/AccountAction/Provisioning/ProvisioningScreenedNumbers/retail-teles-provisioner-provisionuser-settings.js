@@ -26,6 +26,8 @@
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.pin = '0000';
+                $scope.scopeModel.showBusinessTrunkFields = true;
+                $scope.scopeModel.maximumRegistrations = 3;
                 $scope.scopeModel.validatePinNumber = function () {
                     if($scope.scopeModel.pin != undefined && $scope.scopeModel.pin.length == 4)
                     {
@@ -99,17 +101,31 @@
 
                 api.getData = getData;
 
+                api.showBusinessTrunkFields = function (value) {
+                    $scope.scopeModel.showBusinessTrunkFields = value;
+                    if(!value)
+                    {
+                        $scope.scopeModel.maximumRegistrations = undefined;
+                        $scope.scopeModel.concurrentCalls = undefined;
+                    }else
+                    {
+                        $scope.scopeModel.maximumRegistrations = 3;
+                    }
+                };
+
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
               
                 function getData() {
                     var data = {
-                            FirstName: $scope.scopeModel.firstName,
-                            LastName: $scope.scopeModel.lastName,
-                            LoginName: $scope.scopeModel.loginName,
-                            LoginPassword: $scope.scopeModel.loginPassword,
-                            Pin: $scope.scopeModel.pin,
+                        FirstName: $scope.scopeModel.firstName,
+                        LastName: $scope.scopeModel.lastName,
+                        LoginName: $scope.scopeModel.loginName,
+                        LoginPassword: $scope.scopeModel.loginPassword,
+                        Pin: $scope.scopeModel.pin,
+                        MaxRegistrations: $scope.scopeModel.maximumRegistrations,
+                        MaxCalls: $scope.scopeModel.concurrentCalls
                     };
                     return data;
                 }

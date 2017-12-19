@@ -475,7 +475,8 @@ namespace Retail.Teles.Business
                                telesEnterpriseInfo.Add(new TelesEnterpriseInfo
                                {
                                    Name = enterprise.name,
-                                   TelesEnterpriseId = enterprise.id.Value.ToString()
+                                   TelesEnterpriseId = enterprise.id.Value.ToString(),
+                                   EnterpriseType = enterprise.type == "RESIDENTIAL" ? EnterpriseType.Residential : EnterpriseType.Enterprise
                                });
                            }
                        }

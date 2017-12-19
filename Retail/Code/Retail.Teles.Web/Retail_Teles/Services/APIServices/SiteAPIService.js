@@ -14,16 +14,28 @@
                 serializedFilter: serializedFilter,
             });
         }
+
+        function GetSiteRoutingGroupsInfo(vrConnectionId, siteId, serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_Teles_ModuleConfig.moduleName, controllerName, "GetSiteRoutingGroupsInfo"), {
+                vrConnectionId: vrConnectionId,
+                siteId: siteId,
+                serializedFilter: serializedFilter,
+            });
+        }
+
         function MapSiteToAccount(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_Teles_ModuleConfig.moduleName, controllerName, "MapSiteToAccount"), input);
         }
+
         function AddTelesSite(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_Teles_ModuleConfig.moduleName, controllerName, "AddTelesSite"), input);
         }
+
         return ({
             GetEnterpriseSitesInfo: GetEnterpriseSitesInfo,
             MapSiteToAccount: MapSiteToAccount,
-            AddTelesSite: AddTelesSite
+            AddTelesSite: AddTelesSite,
+            GetSiteRoutingGroupsInfo: GetSiteRoutingGroupsInfo
         });
     }
 

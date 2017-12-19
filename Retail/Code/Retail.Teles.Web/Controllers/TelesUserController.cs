@@ -30,5 +30,11 @@ namespace Retail.Teles.Web.Controllers
                 return GetUnauthorizedResponse();
             return _manager.MapUserToAccount(input);
         }
+        [HttpGet]
+        [Route("GetAccountDIDsCount")]
+        public int GetAccountDIDsCount(Guid accountBEDefinitionId, long accountId)
+        {
+            return _manager.GetAccountDIDsCount(accountBEDefinitionId, accountId);
+        }
     }
 }

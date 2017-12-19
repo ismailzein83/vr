@@ -32,5 +32,7 @@ namespace Retail.Teles.Business.Provisioning
         public string LoginName { get; set; }
         public string LoginPassword { get; set; }
         public string Pin { get; set; }
+        public int? MaxRegistrations { get; set; }
+        public int? MaxCalls { get; set; }
     }
 }

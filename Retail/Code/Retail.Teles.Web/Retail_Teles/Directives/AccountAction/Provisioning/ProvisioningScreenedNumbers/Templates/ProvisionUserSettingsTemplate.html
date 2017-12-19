@@ -17,6 +17,23 @@
             <vr-columns width="1/3row">
                 <vr-textbox value="scopeModel.pin" label="Pin" type="number" customvalidate="scopeModel.validatePinNumber()" isrequired="true"></vr-textbox>
             </vr-columns>
+            <vr-columns width="1/3row" ng-if="scopeModel.showBusinessTrunkFields">
+                <vr-textbox label="Maximum Registrations"
+                            isrequired
+                            value="scopeModel.maximumRegistrations"
+                            type="number"
+                            minvalue="1"
+                            maxvalue="3">
+                </vr-textbox>
+            </vr-columns>
+            <vr-columns width="1/3row" ng-if="scopeModel.showBusinessTrunkFields">
+                <vr-textbox label="Concurrent Calls"
+                            value="scopeModel.concurrentCalls"
+                            isrequired
+                            type="number"
+                            minvalue="1"
+                            maxvalue="200"></vr-textbox>
+            </vr-columns>
         </vr-tab>
     </vr-tabs>
 </vr-row>

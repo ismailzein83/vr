@@ -30,14 +30,19 @@ namespace Retail.Teles.Web.Controllers
                 return GetUnauthorizedResponse();
             return _manager.MapSiteToAccount(input);
         }
-         [HttpPost]
-         [Route("AddTelesSite")]
+        [HttpPost]
+        [Route("AddTelesSite")]
         public Vanrise.Entities.InsertOperationOutput<TelesEnterpriseSiteInfo> AddTelesSite(TelesSiteInput input)
         {
             return _manager.AddTelesSite(input);
         }
+        [HttpGet]
+        [Route("GetSiteRoutingGroupsInfo")]
+        public IEnumerable<TelesSiteRoutingGroupInfo> GetSiteRoutingGroupsInfo(Guid vrConnectionId, string siteId, string serializedFilter = null)
+        {
+            TelesSiteRoutingGroupFilter filter = Vanrise.Common.Serializer.Deserialize<TelesSiteRoutingGroupFilter>(serializedFilter);
+            return _manager.GetSiteRoutingGroupsInfo(vrConnectionId, siteId, filter);
+        }
 
-
-        
     }
 }
