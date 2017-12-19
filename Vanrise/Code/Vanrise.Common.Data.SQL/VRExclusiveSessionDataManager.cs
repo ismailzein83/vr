@@ -42,6 +42,16 @@ namespace Vanrise.Common.Data.SQL
         }
 
 
+        public void ForceReleaseSession(int vrExclusiveSessionId)
+        {
+            ExecuteNonQuerySP("[common].[sp_VRExclusiveSession_ForceRelease]", vrExclusiveSessionId);
+        }
+
+        public void ForceReleaseAllSessions()
+        {
+            ExecuteNonQuerySP("[common].[sp_VRExclusiveSession_ForceReleaseAll]");
+        }
+
         public List<VRExclusiveSession> GetAllVRExclusiveSessions(int timeOutInSeconds,List<Guid> sessionTypeIds)
         {
             

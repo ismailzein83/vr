@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrCommonExclusivesessionGrid', ['VRCommon_VRExclusiveSessionAPIService', 'VRNotificationService', 'VRUIUtilsService',
-    function (VRCommon_VRExclusiveSessionAPIService, VRNotificationService, VRUIUtilsService) {
+app.directive('vrCommonExclusivesessionGrid', ['VRCommon_VRExclusiveSessionAPIService', 'VRNotificationService', 'VRUIUtilsService','VRCommon_VRExclusiveSessionService',
+    function (VRCommon_VRExclusiveSessionAPIService, VRNotificationService, VRUIUtilsService, VRCommon_VRExclusiveSessionService) {
         return {
             restrict: 'E',
             scope: {
@@ -19,7 +19,7 @@ app.directive('vrCommonExclusivesessionGrid', ['VRCommon_VRExclusiveSessionAPISe
 
         function VRExclusiveSessionGrid($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-
+            var queryObject;
             var gridAPI;
             var gridDrillDownTabsObj;
             function initializeController() {
@@ -48,6 +48,7 @@ app.directive('vrCommonExclusivesessionGrid', ['VRCommon_VRExclusiveSessionAPISe
                 var api = {};
 
                 api.load = function (query) {
+                    queryObject = query;
                     return gridAPI.retrieveData(query);
                 };
 
@@ -59,18 +60,21 @@ app.directive('vrCommonExclusivesessionGrid', ['VRCommon_VRExclusiveSessionAPISe
 
             function defineMenuActions() {
                 $scope.scopeModel.menuActions.push({
-                    name: 'Release Session',
-                    clicked: releaseSession//,
-                    //haspermission: hasEditVRConnectionPermission
+                    name: 'Force Release',
+                    clicked: forceReleaseSession,
+                    haspermission: hasForceReleaseSessionPermission
                 });
             }
 
-            function releaseSession(vrExclusiveSessionItem) {
-                
+            function forceReleaseSession(vrExclusiveSessionItem) {
+                var onVRExclusiveSessionForceRelease = function () {
+                    return gridAPI.retrieveData(queryObject);
+                }
+                return VRCommon_VRExclusiveSessionService.forceRelease(vrExclusiveSessionItem.VRExclusiveSessionId, onVRExclusiveSessionForceRelease);
             }
 
-            function hasEditVRConnectionPermission() {
-                return VRCommon_VRConnectionAPIService.HasEditVRConnectionPermission();
+            function hasForceReleaseSessionPermission() {
+                return VRCommon_VRExclusiveSessionAPIService.HasForceReleaseSessionPermission();
             }
         }
     }]);

@@ -2,9 +2,9 @@
 
     "use strict";
 
-    VRExclusiveSessionManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    VRExclusiveSessionManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRCommon_VRExclusiveSessionService', 'VRCommon_VRExclusiveSessionAPIService'];
 
-    function VRExclusiveSessionManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function VRExclusiveSessionManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRCommon_VRExclusiveSessionService, VRCommon_VRExclusiveSessionAPIService) {
 
         var exclusiveSessionTypeAPI;
         var exclusiveSessionTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -20,7 +20,7 @@
 
             $scope.scopeModel = {};
             $scope.scopeModel.search = function () {
-                loadGrid(buildGridQuery());
+                return loadGrid(buildGridQuery());
             };
 
             $scope.scopeModel.onExclusiveSessionTypeSelectorReady = function (api) {
@@ -28,14 +28,19 @@
                 exclusiveSessionTypeSelectorReadyDeferred.resolve();
             };
             $scope.scopeModel.releaseAll = function () {
-                
+                var onVRExclusiveSessionForceRelease = function () {
+                    return gridAPI.load(buildGridQuery());
+                }
+                return VRCommon_VRExclusiveSessionService.forceReleaseAll(onVRExclusiveSessionForceRelease);
             };
 
-           
+            $scope.scopeModel.hasForceReleaseAllSessionsPermission = function () {
+                return VRCommon_VRExclusiveSessionAPIService.HasForceReleaseAllSessionsPermission();
+            };
 
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
-                gridAPI.load(buildGridQuery());
+                return gridAPI.load(buildGridQuery());
             };
         }
 

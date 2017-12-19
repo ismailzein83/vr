@@ -1,7 +1,7 @@
 ﻿<vr-panel ng-controller="VRCommon_VRExclusiveSessionManagementController" vr-loader="scopeModel.isLoading">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
-            <vr-row removeline>
+            <vr-row removeline>                
                 <vr-columns width="normal">
                     <vr-textbox label="Target Name" value="scopeModel.targetName"></vr-textbox>
                 </vr-columns>
@@ -14,7 +14,7 @@
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.search"></vr-button>
-                    <vr-button type="Add" formname="formFilter" data-onclick="scopeModel.releaseAll" ></vr-button>
+                    <vr-button type="ReleaseAll" formname="formFilter" data-onclick="scopeModel.releaseAll" haspermission="scopeModel.hasForceReleaseAllSessionsPermission"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>

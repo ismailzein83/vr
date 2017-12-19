@@ -514,6 +514,7 @@
     <Content Include="Common\Services\VRApplicationVisibilityService.js" />
     <Content Include="Common\Services\VRConnectionService.js" />
     <Content Include="Common\Services\VRComponentTypeService.js" />
+    <Content Include="Common\Services\VRExclusiveSessionService .js" />
     <Content Include="Common\Services\VRExclusiveSessionTypeService.js" />
     <Content Include="Common\Services\VRLocalizationLanguageService.js" />
     <Content Include="Common\Services\VRLocalizationModuleService.js" />

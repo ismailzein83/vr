@@ -21,6 +21,19 @@ namespace Vanrise.Common.Web.Controllers
         {
             return GetWebResponse(input, _manager.GetFilteredVRExclusiveSessions(input));
         }
-        
+
+        [HttpGet]
+        [Route("ForceReleaseSession")]
+        public void ForceReleaseSession(int vrExclusiveSessionId)
+        {
+             _manager.ForceReleaseSession(vrExclusiveSessionId);
+        }
+
+        [HttpGet]
+        [Route("ForceReleaseAllSessions")]
+        public void ForceReleaseAllSessions()
+        {
+            _manager.ForceReleaseAllSessions();
+        }
     }
 }

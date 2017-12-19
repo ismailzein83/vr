@@ -95,6 +95,16 @@ namespace Vanrise.Common.Business
             s_dataManager.ReleaseSession(input.SessionTypeId, input.TargetId, currentUserId);
         }
 
+        public void ForceReleaseSession(int vrExclusiveSessionId)
+        {
+            s_dataManager.ForceReleaseSession(vrExclusiveSessionId);
+        }
+
+        public void ForceReleaseAllSessions()
+        {
+            s_dataManager.ForceReleaseAllSessions();
+        }
+
         #endregion
 
         #region Private Methods
@@ -179,7 +189,7 @@ namespace Vanrise.Common.Business
 
             return new VRExclusiveSessionDetail
             {
-                VRExclusiveSessionID = vrExclusiveSession.VRExclusiveSessionID,
+                VRExclusiveSessionId = vrExclusiveSession.VRExclusiveSessionID,
                 SessionTypeId = vrExclusiveSession.SessionTypeId,
                 SessionType = sessionType!=null ? sessionType.Name : null,
                 TargetId = vrExclusiveSession.TargetId,
@@ -219,7 +229,7 @@ namespace Vanrise.Common.Business
                         {
                             var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
                             sheet.Rows.Add(row);
-                            row.Cells.Add(new ExportExcelCell { Value = record.VRExclusiveSessionID });
+                            row.Cells.Add(new ExportExcelCell { Value = record.VRExclusiveSessionId });
                             row.Cells.Add(new ExportExcelCell { Value = record.SessionType });                            
                             row.Cells.Add(new ExportExcelCell { Value = record.TargetName });                            
                             row.Cells.Add(new ExportExcelCell { Value = record.LastTakenUpdateTime });                            

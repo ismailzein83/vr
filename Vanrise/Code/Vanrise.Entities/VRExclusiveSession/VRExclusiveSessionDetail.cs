@@ -8,7 +8,7 @@ namespace Vanrise.Entities
 {
     public class VRExclusiveSessionDetail
     {
-        public int VRExclusiveSessionID { get; set; }
+        public int VRExclusiveSessionId { get; set; }
 
         public Guid SessionTypeId { get; set; }
 

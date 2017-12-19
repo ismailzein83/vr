@@ -18,5 +18,9 @@ namespace Vanrise.Common.Data
         void ReleaseSession(Guid sessionTypeId, string targetId, int userId);
 
         List<VRExclusiveSession> GetAllVRExclusiveSessions(int timeOutInSeconds, List<Guid> sessionTypeIds);
+
+        void ForceReleaseSession(int vrExclusiveSessionId);
+
+        void ForceReleaseAllSessions();
     }
 }
