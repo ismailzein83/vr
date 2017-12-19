@@ -213,6 +213,25 @@
     <Reference Include="Vanrise.Analytic.Web">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Web.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.BEBridge.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.BEBridge.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BEBridge.Data">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.BEBridge.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BEBridge.Data.SQL">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.BEBridge.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BEBridge.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.BEBridge.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BEBridge.MainExtensions">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.BEBridge.MainExtensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.BEBridge.Web">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.BEBridge.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BI.Business">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.BI.Business.dll</HintPath>
     </Reference>

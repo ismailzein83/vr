@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsBePop3supplierpricelistfilter', ['UtilsService', 'VRUIUtilsService',
+app.directive('vrWhsBePop3supplierpricelistmessagefilter', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
@@ -9,15 +9,15 @@ app.directive('vrWhsBePop3supplierpricelistfilter', ['UtilsService', 'VRUIUtilsS
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new Pop3supplierpricelistfilter($scope, ctrl, $attrs);
+                var ctor = new Pop3SupplierPricelistMessageFilter($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/POP3Filter/Templates/POP3SupplierPricelistFilterTemplate.html'
+            templateUrl: '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/POP3Filter/Templates/POP3SupplierPricelistMessageFilterTemplate.html'
         };
 
-        function Pop3supplierpricelistfilter($scope, ctrl, $attrs) {
+        function Pop3SupplierPricelistMessageFilter($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -41,7 +41,7 @@ app.directive('vrWhsBePop3supplierpricelistfilter', ['UtilsService', 'VRUIUtilsS
                 api.getData = function () {
 
                     return {
-                        $type: "TOne.WhS.BusinessEntity.MainExtensions.POP3, TOne.WhS.BusinessEntity.MainExtensions"
+                        $type: "TOne.WhS.BusinessEntity.MainExtensions.Pop3SupplierPricelistMessageFilter, TOne.WhS.BusinessEntity.MainExtensions"
                     };
                 };
 

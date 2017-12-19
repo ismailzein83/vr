@@ -38,7 +38,8 @@ namespace TOne.Web
                 "~/Client/Modules/VR_Invoice", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/WhS_Invoice", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/VR_Notification", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/WhS_Deal", "*.js", true);
+                "~/Client/Modules/WhS_Deal", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/VR_BEBridge", "*.js", true);
 
             bundles.Add(modulesJSBundle);
         }
