@@ -403,6 +403,12 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: 'Compare',
                     class: "glyphicon glyphicon-retweet"
                 };
+
+          case "ReleaseAll":
+            return {
+                text: "Release All",
+                class: "glyphicon  glyphicon-play"
+            };
         }
     }
 }]);
