@@ -56,13 +56,12 @@ namespace Vanrise.Common.Data.SQL
             VRExclusiveSession vrExclusiveSession = new VRExclusiveSession
             {
                 VRExclusiveSessionID = (int)reader["ID"],
-                SessionTypeId = (Guid)reader["ID"],
+                SessionTypeId = (Guid)reader["SessionTypeId"],
                 TargetId =  reader["TargetId"] as string,
                 TakenByUserId = GetReaderValue<int>(reader, "TakenByUserId"),
                 LastTakenUpdateTime = GetReaderValue<DateTime>(reader, "LastTakenUpdateTime"),
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
                 TakenTime = GetReaderValue<DateTime>(reader, "TakenTime")
-                
             };
 
             return vrExclusiveSession;
