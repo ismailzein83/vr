@@ -76,6 +76,7 @@
     <Compile Include="SourceBEReaders\MicrosoftCRMSourceReader.cs" />
     <Compile Include="SourceBEReaders\FileSourceReader.cs" />
     <Compile Include="SourceBEReaders\FTPSourceReader.cs" />
+    <Compile Include="SourceBEReaders\Pop3SourceReader.cs" />
     <Compile Include="SourceBEReaders\SqlSourceReader.cs" />
     <Compile Include="Synchronizers\DataBaseSynchronizer.cs" />
   </ItemGroup>

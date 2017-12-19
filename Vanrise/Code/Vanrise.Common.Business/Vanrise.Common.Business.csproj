@@ -41,6 +41,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="OpenPop">
+      <HintPath>..\Resources\DLLs\OpenPop.dll</HintPath>
+    </Reference>
     <Reference Include="RazorEngine, Version=3.9.3.0, Culture=neutral, PublicKeyToken=9ee697374c7e744a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Resources\DLLs\RazorEngine.dll</HintPath>

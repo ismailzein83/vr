@@ -143,6 +143,7 @@
     <Compile Include="Controllers\VRApplicationVisibilityController.cs" />
     <Compile Include="Controllers\VRComponentTypeController.cs" />
     <Compile Include="Controllers\VRConnectionController.cs" />
+    <Compile Include="Controllers\VRPop3MessageFilterController.cs" />
     <Compile Include="Controllers\VRRuleDefinitionController.cs" />
     <Compile Include="Controllers\VRTileController.cs" />
     <Compile Include="Controllers\VRTimePeriodController.cs" />
@@ -340,6 +341,7 @@
     <Content Include="Common\Directives\VRLocalization\TextResource\vr-common-localizationressourcekey-selector.js" />
     <Content Include="Common\Directives\VRMail\Templates\OverriddenConfigurationVRMailType.html" />
     <Content Include="Common\Directives\VRMail\vr-common-overriddenconfiguration-mailtype.js" />
+    <Content Include="Common\Directives\VRMail\vr-common-pop3messagefilter-selector.js" />
     <Content Include="Common\Directives\VRObjectTypeDefinition\Templates\OverriddenConfigurationObjectTypeDefinition.html" />
     <Content Include="Common\Directives\VRObjectTypeDefinition\Templates\VRObjectTypeDefinitionSettings.html" />
     <Content Include="Common\Directives\VRObjectTypeDefinition\vr-common-objecttypedefinition-settings.js" />
@@ -472,6 +474,7 @@
     <Content Include="Common\Services\APIServices\VRLocalizationModuleAPIService.js" />
     <Content Include="Common\Services\APIServices\VRLocalizationTextResourceAPIService.js" />
     <Content Include="Common\Services\APIServices\VRLocalizationTextResourceTranslationAPIService.js" />
+    <Content Include="Common\Services\APIServices\VRPop3MessageFilterAPIService.js" />
     <Content Include="Common\Services\APIServices\VRRuleDefinitionAPIService.js" />
     <Content Include="Common\Services\APIServices\VRTileAPIService.js" />
     <Content Include="Common\Services\APIServices\VRApplicationVisibilityAPIService.js" />
