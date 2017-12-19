@@ -168,6 +168,10 @@
     <Compile Include="VRPopulatedPeriod.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Analytic.Entities\Vanrise.Analytic.Entities.csproj">
+      <Project>{bf85d7b4-84c2-441b-bca0-b42fe2619ae9}</Project>
+      <Name>Vanrise.Analytic.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.BEBridge.Entities\Vanrise.BEBridge.Entities.csproj">
       <Project>{9e370ac3-9718-4e10-ab12-b71605880d67}</Project>
       <Name>Vanrise.BEBridge.Entities</Name>

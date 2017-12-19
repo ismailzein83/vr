@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Analytic.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.Security.Entities;
 
@@ -133,12 +134,17 @@ namespace Vanrise.Invoice.Entities
         public string Title { get; set; }
         public AutomaticInvoiceActionSettings Settings { get; set; }
     }
+
+    public enum ItemGroupingOrderType { ByAllDimensions = 1, ByAllMeasures = 2 }
     public class ItemGrouping
     {
         public Guid ItemGroupingId { get; set; }
         public string ItemSetName { get; set; }
         public List<DimensionItemField> DimensionItemFields { get; set; }
         public List<AggregateItemField> AggregateItemFields { get; set; }
+        public AnalyticQueryOrderType? OrderType { get; set; }
+        public AnalyticQueryAdvancedOrderOptionsBase AdvancedOrderOptions { get; set; }
+
     }
     public class DimensionItemField
     {
