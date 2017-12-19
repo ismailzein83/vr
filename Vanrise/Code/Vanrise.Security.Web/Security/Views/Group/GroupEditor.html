@@ -5,14 +5,14 @@
                 <vr-tab header="'Definition'">
                     <vr-row>
                         <vr-columns width="fullrow">
-                            <vr-textbox label="Name" value="scopeModal.name" isrequired></vr-textbox>
+                            <vr-textbox label="Name" localizedlabel="VRRes.Name.VREnd" value="scopeModal.name" isrequired></vr-textbox>
                         </vr-columns>
                         <vr-columns width="fullrow">
-                            <vr-textarea label="Description" value="scopeModal.description" />
+                            <vr-textarea label="Description" localizedlabel="VRRes.Description.VREnd" value="scopeModal.description" />
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Settings'">
+                <vr-tab header="'Settings'" localizedheader="'VRRes.Settings.VREnd'">
                     <vr-row>
                         <vr-columns width="1/2row">
                             <vr-select datatextfield="Title" datavaluefield="ExtensionConfigurationId" label="Group Type" datasource="scopeModal.groupTypeTemplates" text="None"

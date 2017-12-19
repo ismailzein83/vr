@@ -5,16 +5,16 @@
              menuactions="gridMenuActions"
              idfield="Entity.LogEntryId" defaultsortdirection="'DESC'" defaultsortbyfieldname="'Entity.EventTime'" enableautoexport="true">
 
-    <vr-datagridcolumn headertext="'ID'" field="'Entity.LogEntryId'" type="'Text'" widthfactor="1"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Time'" field="'Entity.EventTime'" type="'LongDatetime'" fixedwidth="'120'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Level'" field="'EntryTypeName'" type="'Text'" widthfactor="2" getcolor="getTypeColor" fixedwidth="'100'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Event Type'" field="'EventTypeName'" type="'Text'" widthfactor="2" fixedwidth="'150'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'ID'" localizedheadertext="'VRRes.ID.VREnd'" field="'Entity.LogEntryId'" type="'Text'" widthfactor="1"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Time'" localizedheadertext="'VRRes.Time.VREnd'" field="'Entity.EventTime'" type="'LongDatetime'" fixedwidth="'120'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Level'" localizedheadertext="'VRRes.Level.VREnd'" field="'EntryTypeName'" type="'Text'" widthfactor="2" getcolor="getTypeColor" fixedwidth="'100'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Event Type'" localizedheadertext="'VRRes.Event Type.VREnd'" field="'EventTypeName'" type="'Text'" widthfactor="2" fixedwidth="'150'"></vr-datagridcolumn>
 
-    <vr-datagridcolumn headertext="'Machine'" field="'MachineName'" type="'Text'" widthfactor="2" ng-show="false"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Application'" field="'ApplicationName'" type="'Text'" widthfactor="2" ng-show="false"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Assembly'" field="'AssemblyName'" type="'Text'" widthfactor="2" ng-show="false"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Type'" field="'TypeName'" type="'Text'" widthfactor="2" ng-show="false"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Method'" field="'MethodName'" type="'Text'" widthfactor="2" ng-show="false"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Machine'" localizedheadertext="'VRRes.Machine.VREnd'" field="'MachineName'" type="'Text'" widthfactor="2" ng-show="false"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Application'" localizedheadertext="'VRRes.Application.VREnd'" field="'ApplicationName'" type="'Text'" widthfactor="2" ng-show="false"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Assembly'" localizedheadertext="'VRRes.Assembly.VREnd'" field="'AssemblyName'" type="'Text'" widthfactor="2" ng-show="false"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Type'" localizedheadertext="'VRRes.Type.VREnd'" field="'TypeName'" type="'Text'" widthfactor="2" ng-show="false"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Method'" localizedheadertext="'VRRes.Method.VREnd'" field="'MethodName'" type="'Text'" widthfactor="2" ng-show="false"></vr-datagridcolumn>
 
-    <vr-datagridcolumn headertext="'Message'" field="'Entity.Message'" type="'Text'" widthfactor="6" expendablecolumn expendablecolumntitle="'Entity.Message'" expendablecolumndescription="'Entity.ExceptionDetail'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Message'" localizedheadertext="'VRRes.Message.VREnd'" field="'Entity.Message'" type="'Text'" widthfactor="6" expendablecolumn expendablecolumntitle="'Entity.Message'" expendablecolumndescription="'Entity.ExceptionDetail'"></vr-datagridcolumn>
 </vr-datagrid>

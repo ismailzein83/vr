@@ -4,9 +4,9 @@
              on-ready="scopeModel.onGridReady"
              menuactions="scopeModel.menuActions"
              idfield="VRTextResourceId">
-    <vr-datagridcolumn headertext="'Id'" field="'VRLocalizationTextResourceId'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Resource Key'" field="'ResourceKey'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Default Value'" field="'Settings.DefaultValue'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'ID'" localizedheadertext="'VRRes.ID.VREnd'" field="'VRLocalizationTextResourceId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'ResourceKey'" localizedheadertext="'VRRes.ResourceKey.VREnd'" field="'ResourceKey'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Default Value'" localizedheadertext="'VRRes.Default Value.VREnd'" field="'Settings.DefaultValue'"></vr-datagridcolumn>
     <vr-datagridcolumn ng-show="scopeModel.moduleShow" headertext="'Module Name'" field="'ModuleName'"></vr-datagridcolumn>
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>

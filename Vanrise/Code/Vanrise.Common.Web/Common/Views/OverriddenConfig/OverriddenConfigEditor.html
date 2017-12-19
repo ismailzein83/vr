@@ -2,10 +2,10 @@
     <vr-modalbody>
         <vr-form name="formOverriddenConfigEditor">
             <vr-tabs>
-                <vr-tab header="'Definition'">
+                <vr-tab header="'Definition'" localizedheader="'VRRes.Definition.VREnd'">
                     <vr-row removeline>
                         <vr-columns width="1/2row">
-                            <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
+                            <vr-textbox value="scopeModel.name" label="Name" localizedlabel="VRRes.Name.VREnd" isrequired></vr-textbox>
                         </vr-columns>
                     </vr-row>
                     <vr-row removeline>
@@ -19,7 +19,7 @@
                             </vr-select>
                         </vr-columns>
                     </vr-row>
-                    </vr-tab>
+                </vr-tab>
                 <vr-directivewrapper vr-loader="scopeModel.isLoadingDirective"
                                      ng-if="scopeModel.selectedSetingsTypeConfig != undefined"
                                      directive="scopeModel.selectedSetingsTypeConfig.Editor"

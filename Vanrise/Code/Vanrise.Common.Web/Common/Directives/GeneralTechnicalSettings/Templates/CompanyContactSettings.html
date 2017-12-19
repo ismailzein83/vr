@@ -1,4 +1,4 @@
-﻿<vr-tab header="'Contact Types'">
+﻿<vr-tab header="'Contact Types'" localizedheader="'VRRes.Contact Types.VREnd'">
     <vr-row>
         <vr-columns width="fullrow">
             <vr-button type="Add" data-onclick="scopeModel.addContactType" standalone></vr-button>
@@ -7,7 +7,7 @@
             <vr-validator validate="scopeModel.validateCompanyContacts()">
                 <vr-datagrid datasource="scopeModel.contactTypes" norowhighlightonclick="true" enabledraggablerow="true"
                              on-ready="scopeModel.onGridReady" ondeleterow="scopeModel.removeContactType" hidegridmenu>
-                    <vr-datagridcolumn headertext="'Name'" disablesorting="true">
+                    <vr-datagridcolumn headertext="'Name'" localizedheadertext="'VRRes.Name.VREnd'" disablesorting="true">
                         <vr-textbox value="dataItem.Name" isrequired="true"></vr-textbox>
                     </vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Title'" disablesorting="true">

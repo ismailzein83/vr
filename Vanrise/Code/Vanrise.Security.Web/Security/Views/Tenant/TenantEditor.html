@@ -3,7 +3,7 @@
         <vr-form name="formTenantEditor">
             <vr-row>
                 <vr-columns width="1/2row">
-                    <vr-textbox value="name" label="Name" isrequired vr-disabled="hasAuthServer && isInEditMode"></vr-textbox>
+                    <vr-textbox value="name" label="Name" localizedheadertext="VRRes.Name.VREnd" isrequired vr-disabled="hasAuthServer && isInEditMode"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="1/2row">
                     <vr-sec-tenant-selector on-ready="onTenantSelectorReady" vr-disabled="isInEditMode" customlabel="Parent Tenant" isrequired="true"></vr-sec-tenant-selector>

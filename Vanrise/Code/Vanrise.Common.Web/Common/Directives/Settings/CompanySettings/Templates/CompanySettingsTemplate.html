@@ -1,18 +1,18 @@
 ﻿
 <vr-columns width="fullrow">
     <vr-tabs>
-        <vr-tab header="'Company'">
+        <vr-tab header="'Company'" localizedheader="'VRRes.Company.VREnd'">
             <vr-columns width="fullrow">
                 <vr-button type="Add" data-onclick="ctrl.addCompanySetting" standalone></vr-button>
 
                 <vr-validator validate="ctrl.isValid()">
                     <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
                                  on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeCompanySetting" hidegridmenu>
-                        <vr-datagridcolumn headertext="'Company Name'" field="'Entity.CompanyName'" widthfactor="10" disablesorting></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Profile Name'" field="'Entity.ProfileName'" widthfactor="10" disablesorting></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Registration Number'" field="'Entity.RegistrationNumber'" widthfactor="10" disablesorting></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Registration Address'" field="'Entity.RegistrationAddress'" widthfactor="10" disablesorting></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'Default'" f widthfactor="10" disablesorting isfielddynamic="true">
+                        <vr-datagridcolumn headertext="'Company Name'" localizedheadertext="'VRRes.Company Name.VREnd'" field="'Entity.CompanyName'" widthfactor="10" disablesorting></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Profile Name'" localizedheadertext="'VRRes.Profile Name.VREnd'" field="'Entity.ProfileName'" widthfactor="10" disablesorting></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Registration Number'" localizedheadertext="'VRRes.Registration Number.VREnd'" field="'Entity.RegistrationNumber'" widthfactor="10" disablesorting></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Registration Address'" localizedheadertext="'VRRes.Registration Address.VREnd'" field="'Entity.RegistrationAddress'" widthfactor="10" disablesorting></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Default'" localizedheadertext="'VRRes.Default.VREnd'" f widthfactor="10" disablesorting isfielddynamic="true">
                             <vr-icon icontype="dataItem.Entity.IsDefault"></vr-icon>
                         </vr-datagridcolumn>
                     </vr-datagrid>

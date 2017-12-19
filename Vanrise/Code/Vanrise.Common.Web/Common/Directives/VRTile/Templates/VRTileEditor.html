@@ -5,18 +5,18 @@
                 <vr-tab header="'Definition'">
                     <vr-row removeline>
                         <vr-columns width="1/2row">
-                            <vr-textbox value="scopeModel.tileName" label="Name" isrequired="true"></vr-textbox>
+                            <vr-textbox value="scopeModel.tileName" label="Name" localizedlabel="VRRes.Name.VREnd" isrequired="true"></vr-textbox>
                         </vr-columns>
                         <vr-columns width="1/2row">
                             <vr-select datasource="scopeModel.columnWidth" datatextfield="description" datavaluefield="value" hideremoveicon label="Column Width" selectedvalues="scopeModel.selectedColumnWidth" isrequired hidefilterbox></vr-select>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
-                <vr-tab header="'Settings'">
+                <vr-tab header="'Settings'" localizedheader="'VRRes.Settings.VREnd'">
                     <vr-row>
                         <vr-common-tile-extendedsettings on-ready="scopeModel.onExtendedSettingsDirectiveReady" normal-col-num="6"></vr-common-tile-extendedsettings>
-                    </vr-row>               
-                 </vr-tab>
+                    </vr-row>
+                </vr-tab>
             </vr-tabs>
         </vr-form>
     </vr-modalbody>

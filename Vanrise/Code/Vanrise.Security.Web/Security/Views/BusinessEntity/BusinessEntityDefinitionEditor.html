@@ -2,20 +2,20 @@
     <vr-modalbody>
         <vr-form name="formBusinessEntityDefinitionEditor">
             <vr-tabs>
-                <vr-tab header="'Definition'">
+                <vr-tab header="'Definition'" localizedheader="'VRRes.Definition.VREnd'">
                     <vr-row>
                         <vr-columns width="1/2row">
-                            <vr-textbox value="scopeModal.name" label="Entity Name" isrequired></vr-textbox>
+                            <vr-textbox value="scopeModal.name" label="Entity Name" localizedlabel="VRRes.Entity Name.VREnd" isrequired></vr-textbox>
                         </vr-columns>
 
                         <vr-columns width="1/2row">
-                            <vr-textbox value="scopeModal.titleValue" label="Entity Title" isrequired></vr-textbox>
+                            <vr-textbox value="scopeModal.titleValue" label="Entity Title" localizedlabel="VRRes.Entity Title.VREnd" isrequired></vr-textbox>
                         </vr-columns>
 
                     </vr-row>
                     <vr-row>
                         <vr-columns width="1/2row">
-                            <vr-textbox value="scopeModal.permissionOption" label="Permission Option"></vr-textbox>
+                            <vr-textbox value="scopeModal.permissionOption" label="Permission Option" localizedlabel="VRRes.Permission Option.VREnd"></vr-textbox>
                         </vr-columns>
                         <vr-columns width="1/2row" withemptyline>
                             <div>
@@ -30,7 +30,7 @@
                                     <vr-label>{{dataItem}}</vr-label>
                                 </vr-datalist>
                             </vr-validator>
-                           
+
                         </vr-columns>
                     </vr-row>
                 </vr-tab>

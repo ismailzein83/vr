@@ -41,7 +41,7 @@
 
         function buildGridQuery() {
             return {
-                Name: $scope.scopeModel.name,
+                ResourceKey: $scope.scopeModel.name,
             };
         }
 

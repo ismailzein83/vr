@@ -2,14 +2,14 @@
     <vr-row>
         <vr-sec-view-selector normal-col-num="6" on-ready="scopeModel.onViewSelectorReady" customlabel="Default View"></vr-sec-view-selector>
         <vr-columns width="1/2row">
-            <vr-textbox value="scopeModel.normalPrecision" label="Other Precision" type="number" minvalue="0" decimalprecision="0" isrequired="true" hint="Duration, Amount, KPI ..."></vr-textbox>
+            <vr-textbox value="scopeModel.normalPrecision" label="Other Precision" localizedlabel="VRRes.Other Precision.VREnd" type="number" minvalue="0" decimalprecision="0" isrequired="true" hint="Duration, Amount, KPI ..."></vr-textbox>
         </vr-columns>
         <vr-columns width="1/2row">
-            <vr-textbox value="scopeModel.longPrecision" label="Rate Precision" type="number" minvalue="0" decimalprecision="0" isrequired="true"></vr-textbox>
+            <vr-textbox value="scopeModel.longPrecision" label="Rate Precision" localizedlabel="VRRes.Rate Precision.VREnd" type="number" minvalue="0" decimalprecision="0" isrequired="true"></vr-textbox>
         </vr-columns>
         <vr-common-pagesize-selector normal-col-num="6" on-ready="scopeModel.onPageSelectorReady" isrequired="true" ></vr-common-pagesize-selector>
         <vr-columns width="1/2row">
-            <vr-textbox value="scopeModel.maxSearchRecordCount" label="Max Search Record Count" type="number" minvalue="1" decimalprecision="0" isrequired="true"></vr-textbox>
+            <vr-textbox value="scopeModel.maxSearchRecordCount" label="Max Search Record Count" localizedlabel="VRRes.Max Search Record Count.VREnd" type="number" minvalue="1" decimalprecision="0" isrequired="true"></vr-textbox>
         </vr-columns>
         <vr-common-vrlocalizationlanguage-selector ng-if="scopeModel.isLocalizationEnabled" on-ready="scopeModel.onLanguageSelectorReady" normal-col-num="6" isrequired="true"></vr-common-vrlocalizationlanguage-selector>
     </vr-row>

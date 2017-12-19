@@ -4,21 +4,21 @@
              norowhighlightonclick="true"
              on-ready="onGridReady">
 
-    <vr-datagridcolumn headertext="'Attachment'" disablesorting="true" widthfactor="15">
+    <vr-datagridcolumn headertext="'Attachment'" localizedheadertext="'VRRes.Attachment.VREnd'" disablesorting="true" widthfactor="15">
         <vr-fileupload tempfile="true" extension="doc,dot,wbk,docx,docm,dotx,dotm,dotm,xls,xlt,xlm,xlsx,xlsm,xltx,xltm,ppt,pot,pps,pptx,pptm,potx,potm,ppam,ppsx,ppsm,sldx,sldm,accdb,accde,accdt,accdr,jpeg,jfif,gif,png,zip,zipx,pdf"
                        value="dataItem.Entity.documentAttachment" isrequired="true">
         </vr-fileupload>
     </vr-datagridcolumn>
 
-    <vr-datagridcolumn headertext="'Category'" widthfactor="12">
+    <vr-datagridcolumn headertext="'Category'" localizedheadertext="'VRRes.Category.VREnd'" widthfactor="12">
         <vr-common-documentcategory-selector on-ready="dataItem.Entity.onDocumentCategorySelectorReady"
                                              isrequired="true">
         </vr-common-documentcategory-selector>
     </vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Description'" widthfactor="20">
+    <vr-datagridcolumn headertext="'Description'" localizedheadertext="'VRRes.Description.VREnd'" widthfactor="20">
         <vr-textbox value="dataItem.Entity.documentDescription">
         </vr-textbox>
     </vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Uploaded On'" field="'Entity.createdOn'" type="'Datetime'" widthfactor="7"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Uploaded On'" localizedheadertext="'VRRes.Uploaded On.VREnd'" field="'Entity.createdOn'" type="'Datetime'" widthfactor="7"></vr-datagridcolumn>
 
 </vr-datagrid>

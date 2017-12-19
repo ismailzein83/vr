@@ -1,8 +1,8 @@
-﻿<vr-tab header="'Settings'">
-        <vr-common-objecttype-selective on-ready="scopeModel.onObjectTypeSelectiveReady"
-                                        onselectionchanged="scopeModel.onObjectTypeSelectionChanged"
-                                        normal-col-num="6" isrequired="true">
-        </vr-common-objecttype-selective>
+﻿<vr-tab header="'Settings'" localizedheader="'VRRes.Settings.VREnd'">
+    <vr-common-objecttype-selective on-ready="scopeModel.onObjectTypeSelectiveReady"
+                                    onselectionchanged="scopeModel.onObjectTypeSelectionChanged"
+                                    normal-col-num="6" isrequired="true">
+    </vr-common-objecttype-selective>
 
     <vr-common-objecttypepropertydefinition-management on-ready="scopeModel.onPropertyDirectiveReady" ng-show="scopeModel.canDefineProperties" normal-col-num="4"></vr-common-objecttypepropertydefinition-management>
 </vr-tab>

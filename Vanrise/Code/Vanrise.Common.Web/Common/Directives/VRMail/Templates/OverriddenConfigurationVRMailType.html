@@ -1,4 +1,4 @@
-﻿<vr-tab header="'MailMessageTypeSettings'">
+﻿<vr-tab header="'MailMessageTypeSettings'" localizedheader="'VRRes.MailMessageTypeSettings.VREnd'">
     <vr-row>
         <vr-columns width="1/2row">
             <vr-common-mailmessagetype-selector on-ready="scopeModel.onMailMessageTypeSelectorReady" isrequired="true"
@@ -6,11 +6,11 @@
                                                 onselectionchanged="scopeModel.mailMessageTypeSelectorSelectionChanged">
             </vr-common-mailmessagetype-selector>
         </vr-columns>
-        
+
     </vr-row>
     <vr-row>
         <vr-columns width="1/2row">
-            <vr-textbox value="scopeModel.name" label="Name"></vr-textbox>
+            <vr-textbox value="scopeModel.name" label="Name" localizedlabel="VRRes.Name.VREnd"></vr-textbox>
         </vr-columns>
     </vr-row>
     <vr-row>
@@ -19,8 +19,8 @@
         </vr-columns>
     </vr-row>
 </vr-tab>
-<vr-tab header="'Objects'">
+<vr-tab header="'Objects'" localizedheader="'VRRes.Objects.VREnd'">
     <div ng-if="scopeModel.showDirectiveSettings">
         <vr-common-objectvariable-management on-ready="scopeModel.onObjectDirectiveReady" normal-col-num="4" isrequired enableadd="true"></vr-common-objectvariable-management>
-        </div>
+    </div>
 </vr-tab>

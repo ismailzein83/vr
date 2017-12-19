@@ -4,12 +4,12 @@
              pagingtype="'PagingOnScroll'"
              menuactions="gridMenuActions"
              idfield="Entity.CurrencyExchangeRateId" defaultsortbyfieldname="'CurrencyName'" defaultsortdirection="'ACS'" enableautoexport="true">
-    <vr-datagridcolumn headertext="'ID'" field="'Entity.CurrencyExchangeRateId'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Exchange Date'" field="'Entity.ExchangeDate'" type="'Date'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Currency'" field="'CurrencySymbol'" type="'Text'" ng-show="!hidecurrencycolumn"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Name'" field="'CurrencyName'" type="'Text'" ng-show="!hidecurrencycolumn"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Rate'" field="'Entity.Rate'" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Main Currency'" field="'IsMain'" type="'Text'" ng-if="!hidecurrencycolumn">
+    <vr-datagridcolumn headertext="'ID'" localizedheadertext="'VRRes.ID.VREnd'" field="'Entity.CurrencyExchangeRateId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Exchange Date'" localizedheadertext="'VRRes.Exchange Date.VREnd'" field="'Entity.ExchangeDate'" type="'Date'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Currency'" localizedheadertext="'VRRes.Currency.VREnd'" field="'CurrencySymbol'" type="'Text'" ng-show="!hidecurrencycolumn"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" localizedheadertext="'VRRes.Name.VREnd'" field="'CurrencyName'" type="'Text'" ng-show="!hidecurrencycolumn"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Rate'" localizedheadertext="'VRRes.Rate.VREnd'" field="'Entity.Rate'" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Main Currency'" localizedheadertext="'VRRes.ID.VREnd'" field="'IsMain'" type="'Text'" ng-if="!hidecurrencycolumn">
         <span ng-if="dataItem.IsMain == true "><vr-icon icontype="'true'"></vr-icon></span>
     </vr-datagridcolumn>
 </vr-datagrid>

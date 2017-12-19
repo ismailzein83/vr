@@ -4,16 +4,16 @@
              on-ready="onGridReady"
              menuactions="gridMenuActions"
              idfield="Entity.UserId" enableautoexport="true">
-    <vr-datagridcolumn headertext="'Id'" field="'Entity.UserId'" fixedwidth="'50'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" fixedwidth="'250'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Email'" field="'Entity.Email'" fixedwidth="'200'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Status'" fixedwidth="'75'">
+    <vr-datagridcolumn headertext="'Id'" field="'Entity.UserId'" fixedwidth="'50'" localizedheadertext="'VRRes.Id.VREnd'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" fixedwidth="'250'" localizedheadertext="'VRRes.Name.VREnd'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Email'" field="'Entity.Email'" fixedwidth="'200'" localizedheadertext="'VRRes.Email.VREnd'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Status'" fixedwidth="'75'" localizedheadertext="'VRRes.Status.VREnd'">
         <vr-icon icontype="dataItem.Status"></vr-icon>
     </vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Enable Till'" field="'Entity.EnabledTill'" type="'Date'" fixedwidth="'100'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Last Login Date'" field="'Entity.LastLogin'" type="'Datetime'" fixedwidth="'150'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Groups'" field="'GroupNames'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Description'" field="'Entity.Description'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Enable Till'" field="'Entity.EnabledTill'" type="'Date'" fixedwidth="'100'" localizedheadertext="'VRRes.Enable Till.VREnd'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Last Login Date'" field="'Entity.LastLogin'" type="'Datetime'" fixedwidth="'150'" localizedheadertext="'VRRes.Last Login Date.VREnd'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Groups'" field="'GroupNames'" localizedheadertext="'VRRes.Groups.VREnd'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Description'" field="'Entity.Description'" localizedheadertext="'VRRes.Description.VREnd'"></vr-datagridcolumn>
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
     </vr-datagridexpandablerow>
