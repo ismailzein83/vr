@@ -25,8 +25,8 @@
         };
 
         function DataRecordStorageLogGrid($scope, ctrl, $attrs) {
-            ctrl.showGrid = false;
             this.initializeController = initializeController;
+
             var gridWidths;
             var detailWidths;
             var gridAPI;
@@ -35,25 +35,19 @@
             var sortColumns;
             var dataRecordTypeAttributes;
 
-            $scope.isExpandable = function (dataItem) {
-                return ctrl.showDetails;
-            };
-
             function initializeController() {
-                gridWidths = UtilsService.getArrayEnum(VR_Analytic_GridWidthEnum);
-                detailWidths = UtilsService.getArrayEnum(ColumnWidthEnum);
-
+                ctrl.showGrid = false;
                 ctrl.sortField = 'DateTimeField';
                 ctrl.sortDirection = undefined;
                 ctrl.dataRecordStorageLogs = [];
                 ctrl.columns = [];
 
+                gridWidths = UtilsService.getArrayEnum(VR_Analytic_GridWidthEnum);
+                detailWidths = UtilsService.getArrayEnum(ColumnWidthEnum);
+
                 ctrl.onGridReady = function (api) {
                     gridAPI = api;
-
-                    if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
-                        ctrl.onReady(getDirectiveAPI());
-                    }
+                    defineAPI();
                 };
 
                 ctrl.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady, retrieveDataContext) {
@@ -88,12 +82,17 @@
                         VRNotificationService.notifyException(error, $scope);
                     });
                 };
+
+                ctrl.isExpandable = function (dataItem) {
+                    return ctrl.showDetails;
+                };
             }
 
-            function getDirectiveAPI() {
+            function defineAPI() {
                 var api = {};
 
                 api.loadGrid = function (query) {
+
                     ctrl.showDetails = false;
 
                     if (query.ItemDetails && query.ItemDetails.length > 0)
@@ -138,7 +137,8 @@
                     return promiseDeffer.promise;
                 };
 
-                return api;
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') 
+                    ctrl.onReady(api);
             }
 
             function getDataRecordAttributes(query) {

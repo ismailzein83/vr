@@ -1,13 +1,16 @@
-﻿<!--<div ng-show="ctrl.showGrid">-->
-<div>
-    <vr-datagrid datasource="ctrl.dataRecordStorageLogs" showexpand="isExpandable"
+﻿<div>
+    <vr-datagrid on-ready="ctrl.onGridReady"
+                 datasource="ctrl.dataRecordStorageLogs"
                  dataretrievalfunction="ctrl.dataRetrievalFunction"
                  pagingtype="'PagingOnScroll'"
-                 on-ready="ctrl.onGridReady"
-                 menuactions="ctrl.menuActions" defaultsortbyfieldname="ctrl.defaultSortByFieldName" defaultsortdirection="ctrl.sortDirection" enableautoexport="true" normalcell>
-        <vr-datagridcolumn ng-repeat="column in ctrl.columns" headertext="column.FieldTitle" numberprecision="column.numberprecision" type="column.type"
-                           field="column.Field"
-                           tag="column" columnindex="$index" widthfactor="column.Widthfactor" fixedwidth="column.ColumnSettings.FixedWidth"></vr-datagridcolumn>
+                 menuactions="ctrl.menuActions"
+                 defaultsortbyfieldname="ctrl.defaultSortByFieldName"
+                 defaultsortdirection="ctrl.sortDirection"
+                 showexpand="ctrl.isExpandable" enableautoexport="true" normalcell>
+        <vr-datagridcolumn ng-repeat="column in ctrl.columns" headertext="column.FieldTitle" type="column.type" field="column.Field" tag="column"
+                           numberprecision="column.numberprecision" columnindex="$index" widthfactor="column.Widthfactor" fixedwidth="column.ColumnSettings.FixedWidth">
+        </vr-datagridcolumn>
+
         <vr-datagridexpandablerow>
             <span ng-repeat="detail in dataItem.details">
                 <vr-directivewrapper directive="detail.editor" on-ready="detail.onDetailViewerReady"></vr-directivewrapper>
