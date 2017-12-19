@@ -128,7 +128,8 @@ delete from [sec].[View] where [Id] in ('C65ED28A-36D0-4047-BEC5-030D35B02308',-
 										'E5CA33D9-18AC-4BA1-8E8E-FB476ECAA9A9', --'Exchange Rates'
 										'0F111ADC-B7F6-46A4-81BC-72FFDEB305EB', --'Time Zone'
 										'2CF7E0BE-1396-4305-AA27-11070ACFC18F',--'Application Visibilities'
-										'4D7BF410-E4C6-4D6F-B519-D6B5C2C2F712'--'Rate Types'
+										'4D7BF410-E4C6-4D6F-B519-D6B5C2C2F712',--'Rate Types'
+										'2D39B12D-8FBF-4D4E-B2A5-5E3FE57580DF'--,'Locked Sessions'
 										)
 GO
 --[sec].[View]-----------------------------9001 to 10000--------------------------------------------------------
@@ -270,6 +271,7 @@ end
 --Delete from [common].[Setting] where [ID] in (	'1CB20F2C-A835-4320-AEC7-E034C5A756E9',--'Bank Details'
 --												'1C833B2D-8C97-4CDD-A1C1-C1B4D9D299DE',--'System Currency'
 --												'81F62AC3-BAE4-4A2F-A60D-A655494625EA' )--'Company Setting'
+Delete from [common].[Setting] where ID = '4047054E-1CF4-4BE6-A005-6D4706757AD3'--,'Session Lock'
 --[common].[Setting]---------------------------701 to 800-------------------------------------------
 begin
 set nocount on;

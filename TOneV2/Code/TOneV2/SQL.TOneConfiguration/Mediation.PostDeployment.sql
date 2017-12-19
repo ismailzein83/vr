@@ -14,7 +14,10 @@ Post-Deployment Script Template
 
 
 GO--delete useless views from ClearVoice product such 'My Scheduler Service', 'Style Definitions', 'Organizational Charts', Lookups, etc...
-delete from [sec].[View] where [Id] in ('C65ED28A-36D0-4047-BEC5-030D35B02308','66DE2441-8A96-41E7-94EA-9F8AF38A3515','604B2CB5-B839-4E51-8D13-3C1C84D05DEE','DCF8CA21-852C-41B9-9101-6990E545509D','A1CE55FE-6CF4-4F15-9BC2-8E1F8DF68561','25994374-CB99-475B-8047-3CDB7474A083','9F691B87-4936-4C4C-A757-4B3E12F7E1D9', 'E5CA33D9-18AC-4BA1-8E8E-FB476ECAA9A9', '0F111ADC-B7F6-46A4-81BC-72FFDEB305EB', '4D7BF410-E4C6-4D6F-B519-D6B5C2C2F712')
+delete from [sec].[View] where [Id] in ('C65ED28A-36D0-4047-BEC5-030D35B02308','66DE2441-8A96-41E7-94EA-9F8AF38A3515','604B2CB5-B839-4E51-8D13-3C1C84D05DEE','DCF8CA21-852C-41B9-9101-6990E545509D','A1CE55FE-6CF4-4F15-9BC2-8E1F8DF68561',
+										'25994374-CB99-475B-8047-3CDB7474A083','9F691B87-4936-4C4C-A757-4B3E12F7E1D9', 'E5CA33D9-18AC-4BA1-8E8E-FB476ECAA9A9', '0F111ADC-B7F6-46A4-81BC-72FFDEB305EB',
+										'4D7BF410-E4C6-4D6F-B519-D6B5C2C2F712','2D39B12D-8FBF-4D4E-B2A5-5E3FE57580DF'--,'Locked Sessions'
+										)
 GO
 --[sec].[View]------------------------17001 to 18000------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -150,6 +153,7 @@ when not matched by target then
     insert([ID],[Name],[Details])
     values(s.[ID],s.[Name],s.[Details]);
 
+Delete from [common].[Setting] where ID = '4047054E-1CF4-4BE6-A005-6D4706757AD3'--,'Session Lock'
 --[common].[Setting]---------------------------501 to 600-------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
