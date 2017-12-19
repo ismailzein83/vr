@@ -2,7 +2,7 @@
 
     "use strict";
 
-    vrPop3FilterAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VRCommon_ModuleConfig', 'SecurityService'];
+    vrPop3MessageFilterAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VRCommon_ModuleConfig', 'SecurityService'];
 
     function vrPop3MessageFilterAPIService(BaseAPIService, UtilsService, VRCommon_ModuleConfig, SecurityService) {
         var controllerName = 'VRPop3Filter';
@@ -15,6 +15,6 @@
         });
     }
 
-    appControllers.service('VRCommon_VRPop3FilterAPIService', vrPop3FilterAPIService);
+    appControllers.service('VRCommon_VRPop3MessageFilterAPIService', vrPop3MessageFilterAPIService);
 
 })(appControllers);

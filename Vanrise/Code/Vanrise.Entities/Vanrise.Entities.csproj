@@ -190,6 +190,8 @@
     <Compile Include="VRLocalization\VRLocalizationTextResourceTranslation.cs" />
     <Compile Include="VRLocalization\VRLocalizationTextResourceTranslationDetail.cs" />
     <Compile Include="VRLocalization\VRLocalizationTextResourceTranslationQuery.cs" />
+    <Compile Include="VRMail\POP3\VRPop3MessageFilter.cs" />
+    <Compile Include="VRMail\POP3\VRPop3MessageFilterConfig.cs" />
     <Compile Include="VRMail\VRMail.cs" />
     <Compile Include="VRMail\VRMailAttachement.cs" />
     <Compile Include="VRMail\VRMailAttachements\VRMailAttachmentExcel.cs" />

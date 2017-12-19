@@ -57,17 +57,5 @@ namespace Vanrise.Common.Business
 
             return true;
         }
-    }
-
-    public abstract class VRPop3MessageFilter
-    {
-        public abstract Guid ConfigId { get; }
-        public abstract bool IsApplicable();
-    }
-
-    public class VRPop3MessageFilterConfig : ExtensionConfiguration
-    {
-        public const string EXTENSION_TYPE = "VRCommon_Pop3MessageFilter";
-        public string Editor { get; set; }
-    }
+    }    
 }

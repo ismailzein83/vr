@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 using Vanrise.Web.Base;
 
 namespace Vanrise.Common.Web.Controllers
