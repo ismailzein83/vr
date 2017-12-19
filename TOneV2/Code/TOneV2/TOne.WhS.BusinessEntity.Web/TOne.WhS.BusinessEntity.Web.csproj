@@ -674,6 +674,8 @@
     <Content Include="WhS_BusinessEntity\Views\Switch\SwitchEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\Switch\SwitchManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\Switch\SwitchManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\ZoneRoutingProduct\ZoneRoutingProductEditor.html" />
+    <Content Include="WhS_BusinessEntity\Views\ZoneRoutingProduct\ZoneRoutingProductEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\ZoneRoutingProduct\ZoneRoutingProductManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\ZoneRoutingProduct\ZoneRoutingProductManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\ZoneServiceConfig\ZoneServiceConfigEditor.html" />
