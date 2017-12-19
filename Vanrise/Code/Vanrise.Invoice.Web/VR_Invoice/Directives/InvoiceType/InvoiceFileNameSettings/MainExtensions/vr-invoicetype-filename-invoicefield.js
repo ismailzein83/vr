@@ -42,6 +42,24 @@ app.directive("vrInvoicetypeFilenameInvoicefield", ["UtilsService", "VRNotificat
                     return false;
                 };
 
+
+                $scope.scopeModel.onInvoiceFieldSelectionChanged = function () {
+                    if ($scope.scopeModel.selectedInvoiceField != undefined) {
+                        if ($scope.scopeModel.selectedInvoiceField.value == VR_Invoice_InvoiceFieldEnum.FromDate.value)
+                            $scope.scopeModel.showDateTimeFormat = true;
+                        else if ($scope.scopeModel.selectedInvoiceField.value == VR_Invoice_InvoiceFieldEnum.ToDate.value)
+                            $scope.scopeModel.showDateTimeFormat = true;
+                        else if ($scope.scopeModel.selectedInvoiceField.value == VR_Invoice_InvoiceFieldEnum.IssueDate.value)
+                            $scope.scopeModel.showDateTimeFormat = true;
+                        else if ($scope.scopeModel.selectedInvoiceField.value == VR_Invoice_InvoiceFieldEnum.DueDate.value)
+                            $scope.scopeModel.showDateTimeFormat = true;
+                        else {
+                            $scope.scopeModel.showDateTimeFormat = false;
+                        }
+                    } else {
+                        $scope.scopeModel.showDateTimeFormat = false;
+                    }
+                };
                 defineAPI();
             }
 
@@ -59,6 +77,7 @@ app.directive("vrInvoicetypeFilenameInvoicefield", ["UtilsService", "VRNotificat
                         if (payload.concatenatedPartSettings != undefined) {
                             $scope.scopeModel.selectedInvoiceField = UtilsService.getItemByVal($scope.scopeModel.invoiceFields, payload.concatenatedPartSettings.Field, "value");
                             $scope.scopeModel.selectedRecordField = UtilsService.getItemByVal($scope.scopeModel.recordFields, payload.concatenatedPartSettings.FieldName, "FieldName");
+                            $scope.scopeModel.dateTimeFormat = payload.concatenatedPartSettings.DateTimeFormat;
                         }
 
                         var promises = [];
@@ -70,7 +89,8 @@ app.directive("vrInvoicetypeFilenameInvoicefield", ["UtilsService", "VRNotificat
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.InvoiceFileNamePart.InvoiceFieldFileNamePart ,Vanrise.Invoice.MainExtensions",
                         Field: $scope.scopeModel.selectedInvoiceField.value,
-                        FieldName: $scope.scopeModel.isCustomFieldRequired() ? $scope.scopeModel.selectedRecordField.FieldName : undefined
+                        FieldName: $scope.scopeModel.isCustomFieldRequired() ? $scope.scopeModel.selectedRecordField.FieldName : undefined,
+                        DateTimeFormat:$scope.scopeModel.dateTimeFormat,
                     };
                 };
 

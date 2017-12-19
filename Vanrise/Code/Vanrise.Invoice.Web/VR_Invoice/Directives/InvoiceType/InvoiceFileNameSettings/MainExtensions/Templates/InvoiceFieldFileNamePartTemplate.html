@@ -5,6 +5,7 @@
                    datavaluefield="value"
                    selectedvalues="scopeModel.selectedInvoiceField"
                    isrequired="true"
+                   onselectionchanged="scopeModel.onInvoiceFieldSelectionChanged"
                    label="Field">
         </vr-select>
     </vr-columns>
@@ -17,5 +18,11 @@
                    entityname="Field Name"
                    isrequired="scopeModel.isCustomFieldRequired()">
         </vr-select>
+    </vr-columns>
+    <vr-columns width="1/2row" ng-if="scopeModel.showDateTimeFormat">
+        <vr-textbox label="Datetime Format"
+                     value="scopeModel.dateTimeFormat"
+                     isrequired="true">
+        </vr-textbox>
     </vr-columns>
 </vr-row>

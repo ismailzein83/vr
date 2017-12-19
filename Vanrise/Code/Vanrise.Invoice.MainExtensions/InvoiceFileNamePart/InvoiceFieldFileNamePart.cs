@@ -15,19 +15,20 @@ namespace Vanrise.Invoice.MainExtensions.InvoiceFileNamePart
         public override Guid ConfigId { get { return new Guid("203D36DD-F867-48D9-A748-0CAC483B5407"); } }
         public Entities.InvoiceField Field { get; set; }
         public string FieldName { get; set; }
+        public string DateTimeFormat { get; set; }
         public override string GetPartText(IInvoiceFileNamePartContext context)
         {
             switch (this.Field)
             {
-                case Entities.InvoiceField.DueDate: return context.Invoice.DueDate.ToString();
-                case Entities.InvoiceField.FromDate: return context.Invoice.FromDate.ToString();
-                case Entities.InvoiceField.IssueDate: return context.Invoice.IssueDate.ToString();
+                case Entities.InvoiceField.DueDate: return context.Invoice.DueDate.ToString(DateTimeFormat);
+                case Entities.InvoiceField.FromDate: return context.Invoice.FromDate.ToString(DateTimeFormat);
+                case Entities.InvoiceField.IssueDate: return context.Invoice.IssueDate.ToString(DateTimeFormat);
                 case InvoiceField.IsAutomatic: return context.Invoice.IsAutomatic.ToString();
                 case Entities.InvoiceField.Partner:
                     var partnerManager = new PartnerManager();
                     return partnerManager.GetPartnerName(context.InvoiceTypeId, context.Invoice.PartnerId);
                 case Entities.InvoiceField.SerialNumber: return context.Invoice.SerialNumber;
-                case Entities.InvoiceField.ToDate: return context.Invoice.ToDate.ToString();
+                case Entities.InvoiceField.ToDate: return context.Invoice.ToDate.ToString(DateTimeFormat);
                 case Entities.InvoiceField.CustomField: return context.Invoice.Details != null ? context.Invoice.Details.GetType().GetProperty(this.FieldName).GetValue(context.Invoice.Details, null)
                : null;
             }
