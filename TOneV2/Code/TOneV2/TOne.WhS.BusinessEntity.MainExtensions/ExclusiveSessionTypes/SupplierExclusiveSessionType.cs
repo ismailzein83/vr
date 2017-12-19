@@ -38,7 +38,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
 
             if (Int32.TryParse(context.TargetId,out carrierAccountId))
             {
-                return "Customer: "+carrierAccountManager.GetCarrierAccountName(carrierAccountId);
+                return "Supplier Pricelist: "+carrierAccountManager.GetCarrierAccountName(carrierAccountId);
             }
             else
                 throw new DataIntegrityValidationException(string.Format("Traget ID is in wrong Format : {0}", context.TargetId));
