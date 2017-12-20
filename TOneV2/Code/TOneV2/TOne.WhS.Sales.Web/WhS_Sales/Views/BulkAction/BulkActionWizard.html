@@ -46,8 +46,8 @@
                 </vr-columns>
             </vr-row>
             <div style="min-height: 335px;">
-                <vr-tabs ng-show="scopeModel.showTabs">
-                    <vr-tab header="'Applicable Zones'">
+                <vr-tabs ng-show="scopeModel.showTabs" on-ready="scopeModel.onTabsAPIReady">
+                    <vr-tab header="'Applicable Zones'" >
                         <vr-row>
                             <vr-columns width="fullrow">
                                 <vr-whs-sales-rateplan-grid on-ready="scopeModel.onGridReady" ispreview></vr-whs-sales-rateplan-grid>

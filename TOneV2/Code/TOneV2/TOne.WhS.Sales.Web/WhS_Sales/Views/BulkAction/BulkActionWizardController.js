@@ -14,7 +14,7 @@
         var numberOfOptions;
         var currencyId;
         var longPrecision;
-
+        var tabsApi;
         var bulkActionContext;
         var pricingSettings;
 
@@ -72,6 +72,9 @@
                 bulkActionSelectiveReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.onTabsAPIReady = function (api) {
+                tabsApi = api;
+            };
             $scope.scopeModel.onDropdownSectionCollapsed = function () {
                 var actionSummary = bulkActionSelectiveAPI.getSummary();
                 if (actionSummary != undefined) {
@@ -160,6 +163,8 @@
         }
 
         function evaluate() {
+
+            tabsApi.setTabSelected(0);
             $scope.scopeModel.isLoading = true;
 
             var promises = [];
