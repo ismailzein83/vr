@@ -1,7 +1,7 @@
 ﻿(function (appControllers) {
     "use strict";
-    EnterprisesDIDsViewController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'Retail_Teles_EnterpriseAPIService'];
-    function EnterprisesDIDsViewController($scope, UtilsService, VRUIUtilsService, Retail_Teles_EnterpriseAPIService) {
+    EnterprisesDIDsViewController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'Retail_Teles_EnterpriseAPIService'];
+    function EnterprisesDIDsViewController($scope, UtilsService, VRNotificationService, Retail_Teles_EnterpriseAPIService) {
 
         var gridAPI;
 
@@ -15,7 +15,11 @@
                 gridAPI.load({});
             };
             $scope.save = function () {
-               return Retail_Teles_EnterpriseAPIService.SaveAccountEnterprisesDIDs();
+                return Retail_Teles_EnterpriseAPIService.SaveAccountEnterprisesDIDs().then(function () {
+                    VRNotificationService.showSuccess("Saved Successfully.");
+                }).catch(function (error) {
+                    VRNotificationService.notifyException(error, $scope);
+                });
             };
             $scope.search = function () {
                 var query = buildGridQuery();
