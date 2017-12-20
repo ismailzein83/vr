@@ -203,9 +203,9 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
         const string TempTableName = "route_temp";
         const string OldTableName = "route_old";
 
-        string TableNameWithSchema { get { return !string.IsNullOrEmpty(_idbConnectionString.SchemaName) ? string.Format("{0}.{1}", _idbConnectionString.SchemaName, TableName) : TableName; } }
-        string TempTableNameWithSchema { get { return !string.IsNullOrEmpty(_idbConnectionString.SchemaName) ? string.Format("{0}.{1}", _idbConnectionString.SchemaName, TempTableName) : TempTableName; } }
-        string OldTableNameWithSchema { get { return !string.IsNullOrEmpty(_idbConnectionString.SchemaName) ? string.Format("{0}.{1}", _idbConnectionString.SchemaName, OldTableName) : OldTableName; } }
+        string TableNameWithSchema { get { return !string.IsNullOrEmpty(_idbConnectionString.SchemaName) ? string.Format(@"""{0}"".{1}", _idbConnectionString.SchemaName, TableName) : TableName; } }
+        string TempTableNameWithSchema { get { return !string.IsNullOrEmpty(_idbConnectionString.SchemaName) ? string.Format(@"""{0}"".{1}", _idbConnectionString.SchemaName, TempTableName) : TempTableName; } }
+        string OldTableNameWithSchema { get { return !string.IsNullOrEmpty(_idbConnectionString.SchemaName) ? string.Format(@"""{0}"".{1}", _idbConnectionString.SchemaName, OldTableName) : OldTableName; } }
 
         IdbConnectionString _idbConnectionString;
 
