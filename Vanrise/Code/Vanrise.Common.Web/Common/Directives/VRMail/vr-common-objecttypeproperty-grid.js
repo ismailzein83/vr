@@ -31,6 +31,27 @@ app.directive('vrCommonObjecttypepropertyGrid', ['VRCommon_VRObjectTypeDefinitio
                 defineAPI();
             };
 
+            $scope.scopeModel.copyValueExpression = function (dataItem, coldef, event) {
+              
+                var copyElement = document.createElement("textarea");
+                copyElement.style.position = 'fixed';
+                copyElement.style.opacity = '0';
+                copyElement.textContent = dataItem.ValueExpression;
+                var body = document.getElementsByTagName('body')[0];
+                body.appendChild(copyElement);
+                copyElement.select();
+                document.execCommand('copy');
+                body.removeChild(copyElement);
+                var self = angular.element(event.currentTarget);
+                var divParent = $(self).parent();
+                $(divParent).append('<span id="quickMsg"  class="alert alert-info vr-quickmsg">Expression Copied</span>');
+                $(divParent).find("#quickMsg").fadeIn(300);
+                setTimeout(function () {
+                    $(divParent).find("#quickMsg").fadeOut(3000, function () {
+                        $(divParent).find("#quickMsg").remove();
+                    });
+                },100)
+            };
             defineMenuActions();
         }
         function defineAPI() {
@@ -63,6 +84,7 @@ app.directive('vrCommonObjecttypepropertyGrid', ['VRCommon_VRObjectTypeDefinitio
         function extendVariableObject(property) {
 
             property.ValueExpression = "@Model.GetVal(\"" + objectVariable.ObjectName + "\",\"" + property.Name + "\")";
+            property.title = "Click To Copy Expression";
         }
 
         function defineMenuActions() {

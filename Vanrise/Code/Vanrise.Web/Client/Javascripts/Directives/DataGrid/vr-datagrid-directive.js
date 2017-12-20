@@ -171,7 +171,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
         };
 
         var cellTemplateNormalContent = '<span ng-style="::$parent.ctrl.cellLayoutStyle" ng-class="#CELLCLASS#"> {{#CELLVALUE# #CELLFILTER#}}#PERCENTAGE#</span>';
-        var cellTemplateClickableContent = '<a ng-class="#CELLCLASS#" ng-click="$parent.ctrl.onColumnClicked(colDef, dataItem)" style="cursor:pointer;"> {{#CELLVALUE# #CELLFILTER#}}#PERCENTAGE#</a>';
+        var cellTemplateClickableContent = '<a ng-class="#CELLCLASS#" ng-click="$parent.ctrl.onColumnClicked(colDef, dataItem , $event)" style="cursor:pointer;"> {{#CELLVALUE# #CELLFILTER#}}#PERCENTAGE#</a>';
         var cellTemplateExpendableContent = '<a ng-class="#CELLCLASS#" ng-click="$parent.ctrl.onDescriptionClicked(colDef, dataItem)" style="cursor:pointer;"> {{#CELLVALUE# #CELLFILTER#}}#PERCENTAGE#</a>';
 
         var cellTemplate = '<div style="text-align: #TEXTALIGN#;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;" title="{{#CELLTOOLTIP# #TOOLTIPFILTER#}}" >'
@@ -501,9 +501,9 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 ctrl.showColumn = showColumn;
                 ctrl.updateColumnHeader = updateColumnHeader;
 
-                ctrl.onColumnClicked = function (colDef, dataItem) {
+                ctrl.onColumnClicked = function (colDef, dataItem , event) {
                     if (colDef.onClickedAttr != undefined)
-                        colDef.onClickedAttr(dataItem, colDef);
+                        colDef.onClickedAttr(dataItem, colDef, event);
                 };
                 ctrl.onDescriptionClicked = function (colDef, dataItem) {
                     var modalSettings = {

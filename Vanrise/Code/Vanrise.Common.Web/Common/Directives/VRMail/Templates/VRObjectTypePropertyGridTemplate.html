@@ -2,8 +2,11 @@
              datasource="scopeModel.objectTypeProperties"
              menuactions="scopeModel.menuActions"
              pagingtype="'PagingOnScroll'"
-             hidegridmenu normalcell maxheight="300px">
+             hidegridmenu normalcell maxheight="300px" norowhighlightonclick="true">
     <vr-datagridcolumn headertext="'Name'" localizedheadertext="'VRRes.Name.VREnd'" type="'Text'" field="'Name'" widthfactor="1" disablesorting></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Description'" localizedheadertext="'VRRes.Description.VREnd'" type="'Text'" field="'Description'" widthfactor="1" disablesorting></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Value Expression'" localizedheadertext="'VRRes.Value Expression.VREnd'" type="'Text'" field="'ValueExpression'" widthfactor="2" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Status'" fixedwidth="'20'" invisibleheader>
+        <img title="Click To Copy Expression" src="Client/Images/copy-icon.png" style="width:14px;height:14px" class="hand-cursor" ng-click="viewScope.scopeModel.copyValueExpression(dataItem,null,$event)" />
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Value Expression'" localizedheadertext="'VRRes.ValueExpression.VREnd'" type="'Text'" field="'ValueExpression'" widthfactor="2" disablesorting isclickable="true" onclicked="scopeModel.copyValueExpression" tooltipfield="'title'"></vr-datagridcolumn>
 </vr-datagrid>

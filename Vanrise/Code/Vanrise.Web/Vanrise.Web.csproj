@@ -158,6 +158,7 @@
     <Compile Include="App_Start\VRLocalizationHttpModules.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Content Include="Client\Images\banned.png" />
+    <Content Include="Client\Images\copy-icon.png" />
     <Content Include="Client\Images\loadingbar.gif" />
     <Content Include="Client\Javascripts\Directives\Containers\vr-legend-directive.js" />
     <Content Include="Client\Javascripts\Directives\Diagram\vr-diagram-directive.js" />

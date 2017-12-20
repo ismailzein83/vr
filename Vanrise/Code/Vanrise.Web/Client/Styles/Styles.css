@@ -3989,3 +3989,17 @@ vr-toolbox[large] .item {
     width: 10px;
 }
 /*end of vr-legend*/
+
+/*vr-quick msg*/
+.vr-quickmsg{
+    position: fixed;
+    top: auto;
+    left: auto;
+    padding: 2px;
+    border-radius: 4px;
+    margin: 4px;
+    font-size: 11px;    
+    display: none;
+    z-index:1;
+}
+/*vr-quick msg*/
