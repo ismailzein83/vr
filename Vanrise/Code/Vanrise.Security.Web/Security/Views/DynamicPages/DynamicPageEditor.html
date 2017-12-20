@@ -8,10 +8,10 @@
                             <vr-columns width="1/3row">
                                 <vr-section title="Page Setting">
                                     <vr-row removeline>
-                                        <vr-textbox value="scopeModal.pageName" label="Page Name" localizedlabel="VRRes.Page Name.VREnd" isrequired></vr-textbox>
+                                        <vr-textbox value="scopeModal.pageName" label="Page Name" localizedlabel="VRRes.PageName.VREnd" isrequired></vr-textbox>
                                     </vr-row>
                                     <vr-row>
-                                        <vr-switch value="scopeModal.nonSearchable" label="Non Searchable" localizedlabel="VRRes.Non Searchable.VREnd" onvaluechanged="scopeModal.nonSearchableValueChanged()" "></vr-switch>
+                                        <vr-switch value="scopeModal.nonSearchable" label="Non Searchable" localizedlabel="VRRes.NonSearchable.VREnd" onvaluechanged="scopeModal.nonSearchableValueChanged()" "></vr-switch>
                                     </vr-row>
                                     <vr-row ng-if="!scopeModal.nonSearchable">
                                         <vr-period-selector on-ready="scopeModal.onPeriodDirectiveReady" label="Default Period" selectedvalues="scopeModal.selectedPeriod" onselectionchanged="scopeModal.periodSelectionChanged" isrequired="true"></vr-period-selector>
@@ -61,7 +61,7 @@
                                                datasource="scopeModal.widgets" selectedvalues="scopeModal.selectedWidget" onselectionchanged="scopeModal.onWidgetSelectionChanged"></vr-select>
                                 </vr-columns>
                                 <vr-columns width="normal" ng-show="scopeModal.selectedWidget">
-                                    <vr-textbox value="scopeModal.sectionTitle" label="Section Title" localizedlabel="VRRes.Section Title.VREnd"></vr-textbox>
+                                    <vr-textbox value="scopeModal.sectionTitle" label="Section Title" localizedlabel="VRRes.SectionTitle.VREnd"></vr-textbox>
                                 </vr-columns>
                                 <vr-columns width="normal">
                                     <vr-select datasource="scopeModal.columnWidth" datatextfield="description" datavaluefield="value" hideremoveicon label="Row Space" selectedvalues="scopeModal.selectedColumnWidth" isrequired hidefilterbox></vr-select>

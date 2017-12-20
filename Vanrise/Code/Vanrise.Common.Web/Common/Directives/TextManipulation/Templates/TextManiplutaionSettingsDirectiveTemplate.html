@@ -9,7 +9,7 @@
             <vr-validator validate="ctrl.isValid()">
                 <vr-datagrid datasource="ctrl.datasource"
                              on-ready="ctrl.onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeFilter" hidegridmenu dragdropsetting="ctrl.dragdropSetting" >
-                    <vr-datagridcolumn headertext="'Filter Type'" localizedheadertext="'VRRes.Filter Type.VREnd'" field="'name'" widthfactor="2"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'FilterType'" localizedheadertext="'VRRes.Filter Type.VREnd'" field="'name'" widthfactor="2"></vr-datagridcolumn>
                     <vr-datagridcolumn widthfactor="8"><vr-directivewrapper directive="dataItem.editor" on-ready="dataItem.onDirectiveReady"></vr-directivewrapper></vr-datagridcolumn>
                 </vr-datagrid>
             </vr-validator>
