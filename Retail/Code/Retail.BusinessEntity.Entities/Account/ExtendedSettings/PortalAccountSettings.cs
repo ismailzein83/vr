@@ -12,5 +12,13 @@ namespace Retail.BusinessEntity.Entities
         public string Name { get; set; }
         public string Email { get; set; }
         public int TenantId { get; set; }
+        public List<AdditionalPortalAccountSettings> AdditionalUsers { get; set; }
+    }
+    public class AdditionalPortalAccountSettings 
+    {
+        public int UserId { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public int TenantId { get; set; }
     }
 }
