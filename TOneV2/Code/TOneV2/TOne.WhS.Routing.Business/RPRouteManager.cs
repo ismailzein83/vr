@@ -139,7 +139,7 @@ namespace TOne.WhS.Routing.Business
             int? systemCurrencyId = null;
             int? toCurrencyId = null;
 
-            if (!input.Query.ShowInSystemCurrency)
+            if (!input.Query.ShowInSystemCurrency && input.Query.CustomerId.HasValue)
             {
                 toCurrencyId = new CarrierAccountManager().GetCarrierAccountCurrencyId(input.Query.CustomerId.Value);
                 systemCurrencyId = new Vanrise.Common.Business.ConfigManager().GetSystemCurrencyId();

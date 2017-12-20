@@ -171,8 +171,8 @@ function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteServic
             return gridAPI.retrieveData(query);
         }
         function extendRPRouteOptionObject(rpRouteOption) {
-            if (rpRouteOption.Entity.SupplierRate == 0) {
-                rpRouteOption.Entity.SupplierRate = 'N/A';
+            if (rpRouteOption.ConvertedSupplierRate == 0) {
+                rpRouteOption.ConvertedSupplierRate = 'N/A';
             }
             rpRouteOption.SupplierStatus = UtilsService.getEnumDescription(WhS_Routing_SupplierStatusEnum, rpRouteOption.Entity.SupplierStatus);
         }
