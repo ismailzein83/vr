@@ -199,6 +199,7 @@
     <Content Include="VR_Invoice\Constants\ItemSetNameCompareOperatorEnum.js" />
     <Content Include="VR_Invoice\Constants\LogicalOperatorEnum.js" />
     <Content Include="VR_Invoice\Constants\ModuleConfig.js" />
+    <Content Include="VR_Invoice\Constants\OrderTypeEnum.js" />
     <Content Include="VR_Invoice\Directives\AccountStatus\vr-invoice-accountstatus-selector.js" />
     <Content Include="VR_Invoice\Directives\AutomaticInvoice\ProcessInput\Normal\Templates\AutomaticInvoiceProcessManualTemplate.html" />
     <Content Include="VR_Invoice\Directives\AutomaticInvoice\ProcessInput\Normal\vr-invoice-automaticinvoiceprocess-manual.js" />
@@ -428,6 +429,7 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\vr-invoicetype-invoicesubsectiongridcolumns.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\InvoiceUISubSectionSettings\vr-invoicetype-invoiceuisubsectionsettings.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\vr-invoicetype-maingridcolumns.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-ordertype-selective.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-selector.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\vr-invoicetype-subsections.js" />
     <Content Include="VR_Invoice\Directives\Extensions\VRObjectTypes\Templates\InvoiceObjectTypeTemplate.html" />

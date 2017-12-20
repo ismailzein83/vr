@@ -142,9 +142,7 @@ namespace Vanrise.Invoice.Entities
         public string ItemSetName { get; set; }
         public List<DimensionItemField> DimensionItemFields { get; set; }
         public List<AggregateItemField> AggregateItemFields { get; set; }
-        public AnalyticQueryOrderType? OrderType { get; set; }
-        public AnalyticQueryAdvancedOrderOptionsBase AdvancedOrderOptions { get; set; }
-
+        public ItemGroupingOrderType? OrderType { get; set; }
     }
     public class DimensionItemField
     {

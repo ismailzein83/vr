@@ -16,6 +16,10 @@
 
         var aggregatesAPI;
         var aggregatesReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var orderTypeSelectorAPI;
+        var orderTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -46,13 +50,19 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
+            $scope.scopeModel.onOrderTypeSelectorReady = function (api) {
+                orderTypeSelectorAPI = api;
+                orderTypeSelectorReadyDeferred.resolve();
+            };
 
             function builItemGroupingObjFromScope() {
                 return {
                     ItemGroupingId: itemGroupingEntity != undefined ? itemGroupingEntity.ItemGroupingId : UtilsService.guid(),
                     ItemSetName: $scope.scopeModel.itemGroupingName,
                     DimensionItemFields: dimensionsAPI.getData(),
-                    AggregateItemFields: aggregatesAPI.getData()
+                    AggregateItemFields: aggregatesAPI.getData(),
+                    OrderType: orderTypeSelectorAPI.getData()
+
                 };
             }
 
@@ -104,8 +114,19 @@
                     });
                     return aggregatesLoadPromiseDeferred.promise;
                 }
+                function loadOrderTypeSelective() {
+                    var orderTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                    orderTypeSelectorReadyDeferred.promise.then(function () {
+                        var orderTypeSelectorPayload = {};
+                      //  var orderTypeSelectorPayload = { tableIds: payload.tableIds };
+                         if (itemGroupingEntity != undefined)
+                             orderTypeSelectorPayload.orderTypeEntity = { OrderType: itemGroupingEntity.OrderType };
+                        VRUIUtilsService.callDirectiveLoad(orderTypeSelectorAPI, orderTypeSelectorPayload, orderTypeSelectorLoadDeferred);
+                    });
+                    return orderTypeSelectorLoadDeferred.promise;
+                }
 
-                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDimensionsDirective, loadAggregatesDirective]).then(function () {
+                return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDimensionsDirective, loadAggregatesDirective, loadOrderTypeSelective]).then(function () {
 
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
