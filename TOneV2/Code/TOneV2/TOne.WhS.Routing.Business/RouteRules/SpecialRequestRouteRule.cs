@@ -16,7 +16,29 @@ namespace TOne.WhS.Routing.Business
 
         public override bool UseOrderedExecution { get { return true; } }
 
-        public Dictionary<int, SpecialRequestRouteOptionSettings> Options { get; set; }
+        public List<SpecialRequestRouteOptionSettings> Options { get; set; }
+
+        Dictionary<int, List<SpecialRequestRouteOptionSettings>> _optionsBySupplierId;
+        Dictionary<int, List<SpecialRequestRouteOptionSettings>> OptionsBySupplierId
+        {
+            get
+            {
+                if (_optionsBySupplierId == null)
+                {
+                    if (Options != null)
+                    {
+                        _optionsBySupplierId = new Dictionary<int, List<SpecialRequestRouteOptionSettings>>();
+
+                        foreach (SpecialRequestRouteOptionSettings option in Options)
+                        {
+                            List<SpecialRequestRouteOptionSettings> optionList = _optionsBySupplierId.GetOrCreateItem(option.SupplierId);
+                            optionList.Add(option);
+                        }
+                    }
+                }
+                return _optionsBySupplierId;
+            }
+        }
 
         #endregion
 
@@ -27,19 +49,25 @@ namespace TOne.WhS.Routing.Business
             SpecialRequestRouteRule specialRequestRouteRule = new SpecialRequestRouteRule();
             if (context.RouteOptions != null && context.RouteOptions.Count > 0)
             {
-                specialRequestRouteRule.Options = new Dictionary<int, SpecialRequestRouteOptionSettings>();
+                Dictionary<int, List<SpecialRequestRouteOptionSettings>> clonedOptionsBySupplierId = null;
+                if (OptionsBySupplierId != null)
+                    clonedOptionsBySupplierId = Vanrise.Common.Utilities.CloneObject<Dictionary<int, List<SpecialRequestRouteOptionSettings>>>(OptionsBySupplierId);
+
+                specialRequestRouteRule.Options = new List<SpecialRequestRouteOptionSettings>();
                 int counter = 0;
                 foreach (RouteOption routeOption in context.RouteOptions)
                 {
                     counter++;
                     SpecialRequestRouteOptionSettings optionSettings;
-                    SpecialRequestRouteOptionSettings relatedOption;
-                    if (Options != null && Options.TryGetValue(routeOption.SupplierId, out relatedOption))
+                    List<SpecialRequestRouteOptionSettings> relatedOptions;
+                    if (clonedOptionsBySupplierId != null && clonedOptionsBySupplierId.TryGetValue(routeOption.SupplierId, out relatedOptions) && relatedOptions.Count > 0)
                     {
+                        SpecialRequestRouteOptionSettings relatedOption = relatedOptions.First();
+                        relatedOptions.Remove(relatedOption);
                         optionSettings = new SpecialRequestRouteOptionSettings()
                         {
                             ForceOption = relatedOption.ForceOption,
-                            NumberOfTries = relatedOption.NumberOfTries,
+                            NumberOfTries = routeOption.NumberOfTries,
                             Percentage = routeOption.Percentage,
                             Position = counter,
                             SupplierId = routeOption.SupplierId
@@ -56,7 +84,7 @@ namespace TOne.WhS.Routing.Business
                             SupplierId = routeOption.SupplierId
                         };
                     }
-                    specialRequestRouteRule.Options.Add(routeOption.SupplierId, optionSettings);
+                    specialRequestRouteRule.Options.Add(optionSettings);
                 }
             }
             return specialRequestRouteRule;
@@ -139,7 +167,7 @@ namespace TOne.WhS.Routing.Business
             if (context.RouteOptions == null)
                 return null;
 
-            if (Options == null)
+            if (OptionsBySupplierId == null)
                 return context.RouteOptions;
 
             int blockedOptionsCount = context.RouteOptions.Count(itm => itm.IsBlocked || itm.IsFiltered);
@@ -152,20 +180,12 @@ namespace TOne.WhS.Routing.Business
             for (int i = routeOptionsCount - 1; i >= totalCount; i--)
             {
                 var currentRouteOption = context.RouteOptions[i];
-                if (!Options.ContainsKey(currentRouteOption.SupplierId))
+                if (!OptionsBySupplierId.ContainsKey(currentRouteOption.SupplierId))
                     context.RouteOptions.Remove(currentRouteOption);
                 else
                     break;
             }
             return context.RouteOptions;
-        }
-
-        private int AddOption(List<RouteOption> options, RouteOption optionToAdd, int currentIndex, HashSet<int> addedSupplierIds, bool incrementIndex)
-        {
-            int newIndex = incrementIndex ? currentIndex++ : currentIndex;
-            options.Add(optionToAdd);
-            addedSupplierIds.Add(optionToAdd.SupplierId);
-            return newIndex;
         }
 
         #endregion
@@ -179,7 +199,7 @@ namespace TOne.WhS.Routing.Business
             {
                 foreach (var supplierCodeMatch in allSuppliersCodeMatches)
                 {
-                    var option = CreateOption(target, supplierCodeMatch);
+                    var option = CreateRPOption(target, supplierCodeMatch);
                     if (!FilterOption(supplierCodeMatch, context.SaleZoneServiceIds, target, option))
                         context.TryAddSupplierZoneOption(option);
                 }
@@ -190,7 +210,7 @@ namespace TOne.WhS.Routing.Business
         {
             if (options != null)
             {
-                options = ApplyOptionsOrder(options, null);
+                options = ApplyRPOptionsOrder(options, null);
 
                 int? totalAssignedPercentage = null;
 
@@ -233,40 +253,122 @@ namespace TOne.WhS.Routing.Business
             }
         }
 
+
+        private List<RPRouteOption> ApplyRPOptionsOrder(IEnumerable<RPRouteOption> options, int? numberOfOptions)
+        {
+            if (options == null)
+                return null;
+
+            List<SpecialRequestRPRouteOption> rpRouteOptions = new List<SpecialRequestRPRouteOption>();
+
+            List<SpecialRequestRouteOptionSettings> relatedOptions;
+            foreach (RPRouteOption option in options)
+            {
+                SpecialRequestRPRouteOption specialRequestRPRouteOption;
+                if (OptionsBySupplierId.TryGetValue(option.SupplierId, out relatedOptions) && relatedOptions.Count > 0)
+                {
+                    SpecialRequestRouteOptionSettings relatedOption = relatedOptions.First();
+                    specialRequestRPRouteOption = new SpecialRequestRPRouteOption() { Position = relatedOption.Position, RPRouteOption = option };
+                }
+                else
+                {
+                    specialRequestRPRouteOption = new SpecialRequestRPRouteOption() { Position = Int32.MaxValue, RPRouteOption = option };
+                }
+                rpRouteOptions.Add(specialRequestRPRouteOption);
+
+            }
+            return rpRouteOptions.OrderBy(itm => itm.Position).ThenBy(itm => itm.RPRouteOption.SupplierRate).ThenByDescending(itm => itm.RPRouteOption.SupplierServiceWeight).
+                ThenBy(itm => itm.RPRouteOption.SupplierId).Select(itm => itm.RPRouteOption).ToList();
+        }
         #endregion
 
         #region Private Methods
 
-        private List<RouteOptionRuleTarget> CreateOptions(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
+        private List<SpecialRequestRouteOptionRuleTarget> CreateOptions(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
         {
-            var options = new List<RouteOptionRuleTarget>();
+            var options = new List<SpecialRequestRouteOptionRuleTarget>();
 
             var allSuppliersCodeMatches = context.GetAllSuppliersCodeMatches();
             if (allSuppliersCodeMatches != null)
             {
                 foreach (var supplierCodeMatch in allSuppliersCodeMatches)
                 {
-                    var option = CreateOption(target, supplierCodeMatch);
-                    options.Add(option);
+                    var optionsCreated = CreateOptionList(target, supplierCodeMatch);
+                    options.AddRange(optionsCreated);
                 }
             }
 
             return options;
         }
-        private RouteOptionRuleTarget CreateOption(RouteRuleTarget routeRuleTarget, SupplierCodeMatchWithRate supplierCodeMatchWithRate)
+
+        private List<SpecialRequestRouteOptionRuleTarget> CreateOptionList(RouteRuleTarget routeRuleTarget, SupplierCodeMatchWithRate supplierCodeMatchWithRate)
         {
             var supplierCodeMatch = supplierCodeMatchWithRate.CodeMatch;
-            SpecialRequestRouteOptionSettings supplierSettings;
-            int? numberOfTries = null;
-            int? percentage = null;
+            List<SpecialRequestRouteOptionSettings> supplierSettings = null;
 
-            if (Options != null && Options.TryGetValue(supplierCodeMatch.SupplierId, out supplierSettings))
+            if (OptionsBySupplierId != null)
+                supplierSettings = OptionsBySupplierId.GetRecord(supplierCodeMatch.SupplierId);
+
+            List<SpecialRequestRouteOptionRuleTarget> options = new List<SpecialRequestRouteOptionRuleTarget>();
+            if (supplierSettings != null && supplierSettings.Count > 0)
             {
-                numberOfTries = supplierSettings.NumberOfTries;
-                percentage = supplierSettings.Percentage;
+                foreach (SpecialRequestRouteOptionSettings supplierSetting in supplierSettings)
+                {
+                    var option = BuildRouteOptionRuleTarget(routeRuleTarget, supplierCodeMatchWithRate, supplierCodeMatch, supplierSetting.Percentage, supplierSetting.NumberOfTries, supplierSetting.Position, supplierSetting.ForceOption);
+                    options.Add(option);
+                }
             }
+            else
+            {
+                var option = BuildRouteOptionRuleTarget(routeRuleTarget, supplierCodeMatchWithRate, supplierCodeMatch, null, 1, Int32.MaxValue, false);
+                options.Add(option);
+            }
+            return options;
+        }
 
-            var option = new RouteOptionRuleTarget
+        private SpecialRequestRouteOptionRuleTarget CreateRPOption(RouteRuleTarget routeRuleTarget, SupplierCodeMatchWithRate supplierCodeMatchWithRate)
+        {
+            var supplierCodeMatch = supplierCodeMatchWithRate.CodeMatch;
+            List<SpecialRequestRouteOptionSettings> supplierSettings = null;
+
+            if (OptionsBySupplierId != null)
+                supplierSettings = OptionsBySupplierId.GetRecord(supplierCodeMatch.SupplierId);
+
+            List<SpecialRequestRouteOptionRuleTarget> options = new List<SpecialRequestRouteOptionRuleTarget>();
+            if (supplierSettings != null && supplierSettings.Count > 0)
+            {
+                bool forceOption = false;
+                int? percentage = null;
+                int numberOfTries = 0;
+                int position = 0;
+
+                foreach (SpecialRequestRouteOptionSettings supplierSetting in supplierSettings)
+                {
+                    forceOption = forceOption || supplierSetting.ForceOption;
+                    numberOfTries = Math.Max(numberOfTries, supplierSetting.NumberOfTries);
+                    position = Math.Min(position, supplierSetting.Position);
+
+                    if (supplierSetting.Percentage.HasValue)
+                    {
+                        if (!percentage.HasValue)
+                            percentage = supplierSetting.Percentage.Value;
+                        else
+                            percentage += supplierSetting.Percentage.Value;
+                    }
+                }
+
+                return BuildRouteOptionRuleTarget(routeRuleTarget, supplierCodeMatchWithRate, supplierCodeMatch, percentage, numberOfTries, position, forceOption);
+            }
+            else
+            {
+                return BuildRouteOptionRuleTarget(routeRuleTarget, supplierCodeMatchWithRate, supplierCodeMatch, null, 1, Int32.MaxValue, false);
+            }
+        }
+
+        private SpecialRequestRouteOptionRuleTarget BuildRouteOptionRuleTarget(RouteRuleTarget routeRuleTarget, SupplierCodeMatchWithRate supplierCodeMatchWithRate, SupplierCodeMatch supplierCodeMatch,
+            int? percentage, int numberOfTries, int position, bool forceOption)
+        {
+            var option = new SpecialRequestRouteOptionRuleTarget
             {
                 RouteTarget = routeRuleTarget,
                 SupplierId = supplierCodeMatch.SupplierId,
@@ -278,23 +380,19 @@ namespace TOne.WhS.Routing.Business
                 ExactSupplierServiceIds = supplierCodeMatchWithRate.ExactSupplierServiceIds,
                 SupplierServiceWeight = supplierCodeMatchWithRate.SupplierServiceWeight,
                 Percentage = percentage,
-                NumberOfTries = numberOfTries.HasValue ? numberOfTries.Value : 1,
+                NumberOfTries = numberOfTries,
                 SupplierRateId = supplierCodeMatchWithRate.SupplierRateId,
-                SupplierRateEED = supplierCodeMatchWithRate.SupplierRateEED
+                SupplierRateEED = supplierCodeMatchWithRate.SupplierRateEED,
+                Position = position,
+                ForceOption = forceOption
             };
-
             return option;
         }
 
         private bool FilterOption(SupplierCodeMatchWithRate supplierCodeMatchWithRate, HashSet<int> customerServiceIds, RouteRuleTarget target, RouteOptionRuleTarget option)
         {
-            bool checkFilters = true;
-            SpecialRequestRouteOptionSettings supplierSettings;
-
-            if (Options != null && Options.TryGetValue(option.SupplierId, out supplierSettings))
-            {
-                checkFilters = !supplierSettings.ForceOption;
-            }
+            SpecialRequestRouteOptionRuleTarget castOption = option.CastWithValidate<SpecialRequestRouteOptionRuleTarget>("option");
+            bool checkFilters = !castOption.ForceOption;
 
             if (checkFilters)
             {
@@ -308,6 +406,7 @@ namespace TOne.WhS.Routing.Business
             }
             return false;
         }
+
         private bool ExecuteServiceOptionFilter(HashSet<int> customerServices, HashSet<int> supplierServices)
         {
             if (customerServices == null)
@@ -329,37 +428,31 @@ namespace TOne.WhS.Routing.Business
             return (saleRate.Value - supplierRate) < 0;
         }
 
-        private List<T> ApplyOptionsOrder<T>(IEnumerable<T> options, int? numberOfOptions) where T : IRouteOptionOrderTarget
+        private List<RouteOptionRuleTarget> ApplyOptionsOrder<T>(IEnumerable<T> options, int? numberOfOptions) where T : ISpecialRequestRouteOptionOrderTarget
         {
             if (options == null)
                 return null;
 
-            IEnumerable<T> finalOptions = new List<T>(options);
-
-            if (Options != null)
-                finalOptions = finalOptions.FindAllRecords(itm => !Options.ContainsKey(itm.SupplierId));
-
-            finalOptions = finalOptions.OrderBy(itm => itm.SupplierRate).ThenByDescending(itm => itm.SupplierServiceWeight).ThenBy(itm => itm.SupplierId);
-
-            List<T> orderedOptions = finalOptions.ToList();
-
-            if (Options != null)
-            {
-                List<SpecialRequestRouteOptionSettings> settings = Options.Values.OrderByDescending(itm => itm.Position).ToList();
-
-                foreach (SpecialRequestRouteOptionSettings setting in settings)
-                {
-                    var matchedSupplier = options.FindRecord(itm => itm.SupplierId == setting.SupplierId);
-                    if (matchedSupplier != null)
-                    {
-                        orderedOptions.Insert(0, matchedSupplier);
-                    }
-                }
-            }
-
-            return orderedOptions;
+            return options.OrderBy(itm => itm.Position).ThenBy(itm => itm.SupplierRate).ThenByDescending(itm => itm.SupplierServiceWeight).ThenBy(itm => itm.SupplierId).Select(itm => itm as RouteOptionRuleTarget).ToList();
         }
 
         #endregion
+
+        private class SpecialRequestRouteOptionRuleTarget : RouteOptionRuleTarget, ISpecialRequestRouteOptionOrderTarget
+        {
+            public int Position { get; set; }
+            public bool ForceOption { get; set; }
+        }
+
+        private interface ISpecialRequestRouteOptionOrderTarget : IRouteOptionOrderTarget
+        {
+            int Position { get; set; }
+        }
+
+        private class SpecialRequestRPRouteOption
+        {
+            public RPRouteOption RPRouteOption { get; set; }
+            public int Position { get; set; }
+        }
     }
 }

@@ -36,8 +36,14 @@
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetCarrierAccount"), {
                 carrierAccountId: carrierAccountId
             });
-
         }
+
+        function GetCarrierAccountInfos(serializedCarrierAccountIds) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetCarrierAccountInfos"), {
+                serializedCarrierAccountIds: serializedCarrierAccountIds
+            });
+        }
+
         function GetCarrierAccountName(carrierAccountId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetCarrierAccountName"), {
                 carrierAccountId: carrierAccountId
@@ -98,6 +104,7 @@
             GetCustomerGroupTemplates: GetCustomerGroupTemplates,
             GetFilteredCarrierAccounts: GetFilteredCarrierAccounts,
             GetCarrierAccount: GetCarrierAccount,
+            GetCarrierAccountInfos: GetCarrierAccountInfos,
             GetCarrierAccountName:GetCarrierAccountName,
             GetCarrierAccountCurrencyId: GetCarrierAccountCurrencyId,
             GetCustomersBySellingNumberPlanId: GetCustomersBySellingNumberPlanId,

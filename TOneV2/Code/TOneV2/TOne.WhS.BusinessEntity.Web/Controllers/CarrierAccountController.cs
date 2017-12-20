@@ -36,6 +36,15 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetCarrierAccountInfos")]
+        public List<CarrierAccountInfo> GetCarrierAccountInfos(string serializedCarrierAccountIds)
+        {
+            CarrierAccountManager manager = new CarrierAccountManager();
+            List<int> carrierAccountIds = serializedCarrierAccountIds != null ? Vanrise.Common.Serializer.Deserialize<List<int>>(serializedCarrierAccountIds) : null;
+            return manager.GetCarrierAccountInfos(carrierAccountIds);
+        }
+
+        [HttpGet]
         [Route("GetCarrierAccountCurrencyId")]
         public int GetCarrierAccountCurrencyId(int carrierAccountId)
         {

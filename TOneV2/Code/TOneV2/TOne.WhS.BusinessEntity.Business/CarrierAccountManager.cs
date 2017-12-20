@@ -510,6 +510,20 @@ namespace TOne.WhS.BusinessEntity.Business
             var CarrierAccounts = GetCachedCarrierAccounts();
             return CarrierAccounts.GetRecord(carrierAccountId);
         }
+
+        public List<CarrierAccountInfo> GetCarrierAccountInfos(List<int> carrierAccountIds)
+        {
+            if (carrierAccountIds == null || carrierAccountIds.Count == 0)
+                return null;
+
+            var carrierAccounts = GetCachedCarrierAccounts();
+            List<CarrierAccountInfo> carrierAccountInfos = new List<CarrierAccountInfo>();
+            foreach (int carrierAccountId in carrierAccountIds)
+                carrierAccountInfos.Add(CarrierAccountInfoMapper(GetCarrierAccount(carrierAccountId)));
+
+            return carrierAccountInfos;
+        }
+
         public string GetDescription(IEnumerable<int> carrierAccountsIds, bool getCustomers, bool getSuppliers)
         {
             if (carrierAccountsIds.Count() > 0)

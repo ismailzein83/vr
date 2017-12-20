@@ -18,9 +18,29 @@ namespace TOne.WhS.Routing.Business
 
         public override bool UseOrderedExecution { get { return true; } }
 
-        public List<RouteOptionSettings> Options { get; set; }
+        public List<FixedRuleOptionSettings> Options { get; set; }
 
-        public Dictionary<int, List<RouteOptionFilterSettings>> Filters { get; set; }
+        Dictionary<int, List<FixedRuleOptionSettings>> _optionsBySupplierId;
+        Dictionary<int, List<FixedRuleOptionSettings>> OptionsBySupplierId
+        {
+            get
+            {
+                if (_optionsBySupplierId == null)
+                {
+                    if (Options != null)
+                    {
+                        _optionsBySupplierId = new Dictionary<int, List<FixedRuleOptionSettings>>();
+
+                        foreach (FixedRuleOptionSettings option in Options)
+                        {
+                            List<FixedRuleOptionSettings> optionList = _optionsBySupplierId.GetOrCreateItem(option.SupplierId);
+                            optionList.Add(option);
+                        }
+                    }
+                }
+                return _optionsBySupplierId;
+            }
+        }
 
         #endregion
 
@@ -32,19 +52,24 @@ namespace TOne.WhS.Routing.Business
 
             if (context.RouteOptions != null && context.RouteOptions.Count > 0)
             {
-                fixedRouteRule.Options = new List<RouteOptionSettings>();
-                fixedRouteRule.Filters = new Dictionary<int, List<RouteOptionFilterSettings>>();
+                Dictionary<int, List<FixedRuleOptionSettings>> clonedOptionsBySupplierId = null;
+                if (OptionsBySupplierId != null)
+                    clonedOptionsBySupplierId = Vanrise.Common.Utilities.CloneObject<Dictionary<int, List<FixedRuleOptionSettings>>>(OptionsBySupplierId);
+
+                fixedRouteRule.Options = new List<FixedRuleOptionSettings>();
 
                 foreach (RouteOption routeOption in context.RouteOptions)
                 {
-                    RouteOptionSettings optionSettings = new RouteOptionSettings() { Percentage = routeOption.Percentage, SupplierId = routeOption.SupplierId };
-                    fixedRouteRule.Options.Add(optionSettings);
+                    FixedRuleOptionSettings optionSettings = new FixedRuleOptionSettings() { Percentage = routeOption.Percentage, SupplierId = routeOption.SupplierId };
 
-                    List<RouteOptionFilterSettings> routeOptionFilterSettings;
-                    if (Filters != null && Filters.TryGetValue(routeOption.SupplierId, out routeOptionFilterSettings) && routeOptionFilterSettings != null)
+                    List<FixedRuleOptionSettings> relatedOptions;
+                    if (clonedOptionsBySupplierId != null && clonedOptionsBySupplierId.TryGetValue(routeOption.SupplierId, out relatedOptions) && relatedOptions.Count > 0)
                     {
-                        fixedRouteRule.Filters.Add(routeOption.SupplierId, Vanrise.Common.Utilities.CloneObject<List<RouteOptionFilterSettings>>(routeOptionFilterSettings));
+                        FixedRuleOptionSettings relatedOption = relatedOptions.First();
+                        relatedOptions.Remove(relatedOption);
+                        optionSettings.Filters = relatedOption.Filters != null ? Vanrise.Common.Utilities.CloneObject<List<RouteOptionFilterSettings>>(relatedOption.Filters) : null;
                     }
+                    fixedRouteRule.Options.Add(optionSettings);
                 }
             }
 
@@ -128,27 +153,41 @@ namespace TOne.WhS.Routing.Business
                     RoutingProductId = target.RoutingProductId
                 };
 
-                var fixedOptions = this.Options;
                 HashSet<int> filteredSupplierIds = SupplierGroupContext.GetFilteredSupplierIds(supplierFilterSettings);
-                if (filteredSupplierIds != null)
+                if (OptionsBySupplierId != null)
                 {
-                    var filteredSuppliers = fixedOptions.Where(option => filteredSupplierIds.Contains(option.SupplierId));
-                    if (filteredSuppliers != null && filteredSuppliers.Count() > 0)
-                        fixedOptions = filteredSuppliers.ToList();
-                }
-
-                if (fixedOptions != null)
-                {
-                    foreach (var optionSettings in fixedOptions)
+                    foreach (var options in OptionsBySupplierId)
                     {
-                        List<SupplierCodeMatchWithRate> optionSupplierCodeMatches = context.GetSupplierCodeMatches(optionSettings.SupplierId);
-                        if (optionSupplierCodeMatches != null)
+                        int supplierId = options.Key;
+                        List<FixedRuleOptionSettings> fixedRuleOptionSettingsList = options.Value;
+
+                        if (filteredSupplierIds == null || filteredSupplierIds.Count == 0 || filteredSupplierIds.Contains(supplierId))
                         {
-                            foreach (var supplierCodeMatch in optionSupplierCodeMatches)
+                            List<SupplierCodeMatchWithRate> optionSupplierCodeMatches = context.GetSupplierCodeMatches(supplierId);
+                            if (optionSupplierCodeMatches != null)
                             {
-                                var option = CreateOption(target, supplierCodeMatch, optionSettings.Percentage);
-                                if (!FilterOption(supplierCodeMatch, context.SaleZoneServiceIds, target, option))
-                                    context.TryAddSupplierZoneOption(option);
+                                int? percentage = null;
+                                if (fixedRuleOptionSettingsList != null)
+                                {
+                                    foreach (FixedRuleOptionSettings fixedRuleOptionSettings in fixedRuleOptionSettingsList)
+                                    {
+                                        if (fixedRuleOptionSettings.Percentage.HasValue)
+                                        {
+                                            if (!percentage.HasValue)
+                                                percentage = fixedRuleOptionSettings.Percentage;
+                                            else
+                                                percentage += fixedRuleOptionSettings.Percentage;
+                                        }
+                                    }
+                                }
+
+                                FixedRuleOptionSettings optionSettings = new FixedRuleOptionSettings() { SupplierId = supplierId, Percentage = percentage };
+                                foreach (var supplierCodeMatch in optionSupplierCodeMatches)
+                                {
+                                    var option = CreateOption(target, supplierCodeMatch, optionSettings);
+                                    if (!FilterOption(supplierCodeMatch, context.SaleZoneServiceIds, target, option))
+                                        context.TryAddSupplierZoneOption(option);
+                                }
                             }
                         }
                     }
@@ -229,7 +268,7 @@ namespace TOne.WhS.Routing.Business
                     SupplierCodeMatchWithRate optionSupplierCodeMatch = context.GetSupplierCodeMatch(optionSettings.SupplierId);
                     if (optionSupplierCodeMatch != null)
                     {
-                        var option = CreateOption(target, optionSupplierCodeMatch, optionSettings.Percentage);
+                        var option = CreateOption(target, optionSupplierCodeMatch, optionSettings);
                         options.Add(option);
                     }
                 }
@@ -238,10 +277,10 @@ namespace TOne.WhS.Routing.Business
             return options;
         }
 
-        private RouteOptionRuleTarget CreateOption(RouteRuleTarget routeRuleTarget, SupplierCodeMatchWithRate supplierCodeMatchWithRate, int? percentage)
+        private FixedRouteOptionRuleTarget CreateOption(RouteRuleTarget routeRuleTarget, SupplierCodeMatchWithRate supplierCodeMatchWithRate, FixedRuleOptionSettings fixedOption)
         {
             var supplierCodeMatch = supplierCodeMatchWithRate.CodeMatch;
-            var option = new RouteOptionRuleTarget
+            var option = new FixedRouteOptionRuleTarget
             {
                 RouteTarget = routeRuleTarget,
                 SupplierId = supplierCodeMatch.SupplierId,
@@ -254,34 +293,34 @@ namespace TOne.WhS.Routing.Business
                 SupplierServiceWeight = supplierCodeMatchWithRate.SupplierServiceWeight,
                 NumberOfTries = 1,
                 SupplierRateId = supplierCodeMatchWithRate.SupplierRateId,
-                SupplierRateEED = supplierCodeMatchWithRate.SupplierRateEED
+                SupplierRateEED = supplierCodeMatchWithRate.SupplierRateEED,
+                Filters = fixedOption.Filters
             };
-            if (percentage.HasValue)
-                option.Percentage = percentage.Value;
+
+            if (fixedOption != null && fixedOption.Percentage.HasValue)
+                option.Percentage = fixedOption.Percentage.Value;
+
             return option;
         }
 
         private bool FilterOption(SupplierCodeMatchWithRate supplierCodeMatchWithRate, HashSet<int> customerServiceIds, RouteRuleTarget target, RouteOptionRuleTarget option)
         {
-            if (Filters != null)
+            FixedRouteOptionRuleTarget fixedRouteOptionRuleTarget = option.CastWithValidate<FixedRouteOptionRuleTarget>("option");
+            if (fixedRouteOptionRuleTarget.Filters != null)
             {
-                List<RouteOptionFilterSettings> optionFilters = Filters.GetRecord(supplierCodeMatchWithRate.CodeMatch.SupplierId);
-                if (optionFilters != null)
+                foreach (var optionFilter in fixedRouteOptionRuleTarget.Filters)
                 {
-                    foreach (var optionFilter in optionFilters)
+                    var routeOptionFilterExecutionContext = new RouteOptionFilterExecutionContext()
                     {
-                        var routeOptionFilterExecutionContext = new RouteOptionFilterExecutionContext()
-                        {
-                            Option = option,
-                            SaleRate = target.SaleRate,
-                            CustomerServices = customerServiceIds,
-                            SupplierServices = supplierCodeMatchWithRate != null ? supplierCodeMatchWithRate.SupplierServiceIds : null,
-                            SupplierId = option.SupplierId
-                        };
-                        optionFilter.Execute(routeOptionFilterExecutionContext);
-                        if (routeOptionFilterExecutionContext.FilterOption)
-                            return true;
-                    }
+                        Option = option,
+                        SaleRate = target.SaleRate,
+                        CustomerServices = customerServiceIds,
+                        SupplierServices = supplierCodeMatchWithRate != null ? supplierCodeMatchWithRate.SupplierServiceIds : null,
+                        SupplierId = option.SupplierId
+                    };
+                    optionFilter.Execute(routeOptionFilterExecutionContext);
+                    if (routeOptionFilterExecutionContext.FilterOption)
+                        return true;
                 }
             }
 
@@ -289,5 +328,10 @@ namespace TOne.WhS.Routing.Business
         }
 
         #endregion
+
+        private class FixedRouteOptionRuleTarget : RouteOptionRuleTarget
+        {
+            public List<RouteOptionFilterSettings> Filters { get; set; }
+        }
     }
 }
