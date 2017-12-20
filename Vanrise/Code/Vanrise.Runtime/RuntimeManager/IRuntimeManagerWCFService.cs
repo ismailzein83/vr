@@ -32,6 +32,9 @@ namespace Vanrise.Runtime
 
         [OperationContract]
         string RegisterRunningProcess(string serializedInput);
+
+        [OperationContract]
+        bool IsRunningProcessStillRegistered(int runningProcessId);
     }    
 
     public class HeartBeatRequest

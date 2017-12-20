@@ -151,7 +151,7 @@ namespace Vanrise.Runtime
                     TransactionLockHandler.InitializeCurrent();
                     var runningProcesses = _runningProcessDataManager.GetRunningProcesses();
                     var runtimeServiceInstances = _runtimeServiceDataManager.GetServices();
-                        
+
                     lock (_runtimeManagerLockObj)
                     {
                         _runningProcesses = runningProcesses;
@@ -188,7 +188,7 @@ namespace Vanrise.Runtime
             else
             {
                 lock (_runtimeManagerLockObj)
-                {                    
+                {
                     TransactionLockHandler.RemoveCurrent();
                     _runningProcesses = null;
                     _runtimeServiceInstances = null;
@@ -240,22 +240,22 @@ namespace Vanrise.Runtime
                 runningProcessSyncInfos = new List<RunningProcessSyncInfo>(_runningProcessSyncInfos.Values);
             }
             Parallel.ForEach(runningProcessSyncInfos, (runningProcessSyncInfo) =>
-            {                
-                    try
+            {
+                try
+                {
+                    if (!TryPing(runningProcessSyncInfo))
                     {
-                        if (!TryPing(runningProcessSyncInfo))
-                        {
-                            DeleteRunningProcess(runningProcessSyncInfo);
-                        }
+                        DeleteRunningProcess(runningProcessSyncInfo);
                     }
-                    catch(Exception ex)
+                }
+                catch (Exception ex)
+                {
+                    runningProcessSyncInfo.FailedRetryCount++;
+                    if (runningProcessSyncInfo.FailedRetryCount >= s_pingRunningProcessMaxRetryCount && (DateTime.Now - runningProcessSyncInfo.LastHeartBeatTime) >= s_RunningProcessHeartBeatTimeout)
                     {
-                        runningProcessSyncInfo.FailedRetryCount++;
-                        if (runningProcessSyncInfo.FailedRetryCount >= s_pingRunningProcessMaxRetryCount && (DateTime.Now - runningProcessSyncInfo.LastHeartBeatTime) >= s_RunningProcessHeartBeatTimeout)
-                        {
-                            DeleteRunningProcess(runningProcessSyncInfo);
-                        }
+                        DeleteRunningProcess(runningProcessSyncInfo);
                     }
+                }
             });
         }
 
@@ -277,9 +277,12 @@ namespace Vanrise.Runtime
             var response = new InterRuntimeServiceManager().SendRequest(runningProcessSyncInfo.RunningProcessInfo.ProcessId, pingRequest);
             if (response != null && response.Result == PingRunningProcessResult.Succeeded)
             {
-                runningProcessSyncInfo.NeedsRunningProcessesUpdate = false;
-                runningProcessSyncInfo.LastHeartBeatTime = DateTime.Now;
-                runningProcessSyncInfo.FailedRetryCount = 0;
+                lock (_runtimeManagerLockObj)
+                {
+                    runningProcessSyncInfo.NeedsRunningProcessesUpdate = false;
+                    runningProcessSyncInfo.LastHeartBeatTime = DateTime.Now;
+                    runningProcessSyncInfo.FailedRetryCount = 0;
+                }
                 return true;
             }
             else
@@ -295,12 +298,12 @@ namespace Vanrise.Runtime
             {
                 runtimeServicesToDelete = new HashSet<RuntimeServiceInstance>(_runtimeServiceInstances.Where(itm => itm.ProcessId == runningProcessSyncInfo.RunningProcessInfo.ProcessId));
             }
-            foreach(var runtimeService in runtimeServicesToDelete)
+            foreach (var runtimeService in runtimeServicesToDelete)
             {
                 _runtimeServiceDataManager.Delete(runtimeService.ServiceInstanceId);
             }
             _runningProcessDataManager.DeleteRunningProcess(runningProcessSyncInfo.RunningProcessInfo.ProcessId);
-            lock(_runtimeManagerLockObj)
+            lock (_runtimeManagerLockObj)
             {
                 _runtimeServiceInstances.RemoveAll(itm => runtimeServicesToDelete.Contains(itm));
                 _runningProcessSyncInfos.Remove(runningProcessSyncInfo.RunningProcessInfo.ProcessId);
@@ -352,6 +355,21 @@ namespace Vanrise.Runtime
             return output;
         }
 
+        internal bool IsRunningProcessStillRegistered(int runningProcessId)
+        {
+            bool isRunningProcessStillRegistered = false;
+            lock(_runtimeManagerLockObj)
+            {
+                RunningProcessSyncInfo runningProcessSyncInfo;
+                isRunningProcessStillRegistered = _runningProcessSyncInfos.TryGetValue(runningProcessId, out runningProcessSyncInfo);
+                if (isRunningProcessStillRegistered)
+                    runningProcessSyncInfo.LastHeartBeatTime = DateTime.Now;
+            }
+            return isRunningProcessStillRegistered;
+        }
+
+        #region Private Classes
+
         private class RunningProcessSyncInfo
         {
             public RunningProcessInfo RunningProcessInfo { get; set; }
@@ -362,6 +380,8 @@ namespace Vanrise.Runtime
 
             public bool NeedsRunningProcessesUpdate { get; set; }
         }
+
+        #endregion
     }
 
     public class RunningProcessRegistrationInput

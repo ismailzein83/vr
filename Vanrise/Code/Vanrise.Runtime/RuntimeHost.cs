@@ -312,27 +312,74 @@ namespace Vanrise.Runtime
         static bool s_isRuntimeManagerExecuting;
         static object s_runtimeManagerExecutingLockObj = new object();
 
+        static bool s_isTimerServicesManagerExecuting;
+        static object s_timerServicesManagerExecutingLockObj = new object();
+
         void timerServicesManager_Elapsed(object sender, ElapsedEventArgs e)
         {
+            lock (s_timerServicesManagerExecutingLockObj)
+            {
+                if (s_isTimerServicesManagerExecuting)
+                    return;
+                s_isTimerServicesManagerExecuting = true;
+            }
+            try
+            {
+                ExitCurrentProcessIfNotRegistered();
+                if (_services != null && _services.Count > 0)
+                {
+                    foreach (var service in _services)
+                        service.ExecuteIfIdleAndDue();
+                }
+                TransactionLockItem lockItem;
+                while (s_queueFreezedTransactionLocks.TryDequeue(out lockItem))
+                {
+                    s_FreezedTransactionLocks.Add(lockItem);
+                }
+                if (s_FreezedTransactionLocks.Count > 0)
+                {
+                    RuntimeManagerClient.CreateClient((client) =>
+                        {
+                            client.UnlockFreezedTransactions(s_FreezedTransactionLocks);
+                            s_FreezedTransactionLocks.Clear();
+                        });
+                }
+            }
+            catch(Exception ex)
+            {
+                LoggerFactory.GetExceptionLogger().WriteException(ex);
+            }
+            lock (s_timerServicesManagerExecutingLockObj)
+            {
+                s_isTimerServicesManagerExecuting = false;
+            }
+        }
+
+        private void ExitCurrentProcessIfNotRegistered()
+        {
             if (RunningProcessManager.IsCurrentProcessARuntime && (DateTime.Now - RunningProcessManager.LastReceivedPingTime) >= RuntimeManager.s_RunningProcessHeartBeatTimeout)
-                Environment.Exit(0);
-            if (_services != null && _services.Count > 0)
             {
-                foreach (var service in _services)
-                    service.ExecuteIfIdleAndDue();
-            }
-            TransactionLockItem lockItem;
-            while (s_queueFreezedTransactionLocks.TryDequeue(out lockItem))
-            {
-                s_FreezedTransactionLocks.Add(lockItem);
-            }
-            if (s_FreezedTransactionLocks.Count > 0)
-            {
-                RuntimeManagerClient.CreateClient((client) =>
+                bool isRunningProcessStillRegistered = false;
+                for (int i = 0; i < 3; i++)//this forloop to retry the call 3 times in case the call to RuntimeManager fails
+                {
+                    try
                     {
-                        client.UnlockFreezedTransactions(s_FreezedTransactionLocks);
-                        s_FreezedTransactionLocks.Clear();
-                    });
+                        RuntimeManagerClient.CreateClient((client) =>
+                        {
+                            isRunningProcessStillRegistered = client.IsRunningProcessStillRegistered(RunningProcessManager.CurrentProcess.ProcessId);
+                        });
+                        break;
+                    }
+                    catch
+                    {
+                        isRunningProcessStillRegistered = false;
+                        System.Threading.Thread.Sleep(1000);
+                    }
+                }
+                if (isRunningProcessStillRegistered)
+                    RunningProcessManager.LastReceivedPingTime = DateTime.Now;
+                else
+                    Environment.Exit(0);
             }
         }
 

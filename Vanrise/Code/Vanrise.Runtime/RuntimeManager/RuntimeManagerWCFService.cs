@@ -99,5 +99,10 @@ namespace Vanrise.Runtime
             var output = RuntimeManager.Current.RegisterRunningProcess(Serializer.Deserialize<RunningProcessRegistrationInput>(serializedInput));
             return Serializer.Serialize(output);
         }
+
+       public bool IsRunningProcessStillRegistered(int runningProcessId)
+        {
+            return RuntimeManager.Current.IsRunningProcessStillRegistered(runningProcessId);
+        }
     }
 }
