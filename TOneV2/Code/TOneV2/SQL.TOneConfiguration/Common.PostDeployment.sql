@@ -81,7 +81,9 @@ as (select * from (values
 
 ('VRCommon/Region/GetFilteredRegions','VRCommon_Region: View'),('VRCommon/Region/GetRegionHistoryDetailbyHistoryId',null),('VRCommon/Region/GetRegionsInfo',null),('VRCommon/Region/GetRegion',null),('VRCommon/Region/AddRegion','VRCommon_Region: Add'),('VRCommon/Region/UpdateRegion','VRCommon_Region: Edit'),
 
-('VRCommon/VRExclusiveSession/GetFilteredVRExclusiveSessions','VR_System_Administration: View')
+('VRCommon/VRExclusiveSession/GetFilteredVRExclusiveSessions','VR_System_Administration: View'),
+('VRCommon/VRExclusiveSession/ForceReleaseAllSessions','VR_System_Administration: Manage'),
+('VRCommon/VRExclusiveSession/ForceReleaseSession','VR_System_Administration: Manage')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
