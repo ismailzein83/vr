@@ -231,7 +231,8 @@ namespace Vanrise.Common.Business
                             sheet.Rows.Add(row);
                             row.Cells.Add(new ExportExcelCell { Value = record.VRExclusiveSessionId });
                             row.Cells.Add(new ExportExcelCell { Value = record.SessionType });                            
-                            row.Cells.Add(new ExportExcelCell { Value = record.TargetName });                            
+                            row.Cells.Add(new ExportExcelCell { Value = record.TargetName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.LockedByUser });
                             row.Cells.Add(new ExportExcelCell { Value = record.LastTakenUpdateTime });                            
                             row.Cells.Add(new ExportExcelCell { Value = record.CreatedTime }); 
                             row.Cells.Add(new ExportExcelCell { Value = record.TakenTime });
