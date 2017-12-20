@@ -1,5 +1,4 @@
-﻿
-(function (appControllers) {
+﻿(function (appControllers) {
 
     "use strict";
 
@@ -28,9 +27,7 @@
             };
             VRModalService.showModal('/Client/Modules/Analytic/Views/DataAnalysis/DataAnalysisDefinition/DataAnalysisDefinitionEditor.html', parameters, settings);
         }
-        function getEntityUniqueName() {
-            return "VR_Analytic_DataAnalysisDefinition";
-        }
+
         function defineDataAnalysisItemDefinitionTabsAndMenuActions(dataAnalysisDefinition, gridAPI) {
             if (dataAnalysisDefinition.Entity.Settings == null || dataAnalysisDefinition.Entity.Settings.ItemsConfig == null)
                 return;
@@ -42,10 +39,10 @@
                 var dataAnalysisItemDefinitionConfig = dataAnalysisDefinition.Entity.Settings.ItemsConfig[i];
 
                 addDrillDownTab(dataAnalysisItemDefinitionConfig);
-               
                 addMenuAction(dataAnalysisItemDefinitionConfig, i);
             }
-          addDrillDownObjectTrackingTab();
+
+            addDrillDownObjectTrackingTab();
 
             setDrillDownTabs();
             setMenuActions();
@@ -56,7 +53,7 @@
 
                 drillDownTab.title = dataAnalysisItemDefinitionConfig.Title;
                 drillDownTab.directive = dataAnalysisItemDefinitionConfig.GridDirective;
-                
+
                 drillDownTab.loadDirective = function (dataAnalysisItemDefinitionGridAPI, dataAnalysisDefinition) {
                     dataAnalysisDefinition.dataAnalysisItemDefinitionGridAPI = dataAnalysisItemDefinitionGridAPI;
 
@@ -75,7 +72,6 @@
 
                 drillDownTabs.push(drillDownTab);
             }
-
             function addDrillDownObjectTrackingTab() {
 
                 var drillDownObjectTrackingDefinition = {};
@@ -89,17 +85,11 @@
                     var query = {
                         ObjectId: dataAnalysisDefinition.Entity.DataAnalysisDefinitionId,
                         EntityUniqueName: getEntityUniqueName(),
-
                     };
                     return dataAnalysisDefinition.objectTrackingGridAPI.load(query);
                 };
 
                 drillDownTabs.push(drillDownObjectTrackingDefinition);
-            }
-
-            function setDrillDownTabs() {
-                var drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI);
-                drillDownManager.setDrillDownExtensionObject(dataAnalysisDefinition);
             }
 
             function addMenuAction(dataAnalysisItemDefinitionConfig, dataAnalysisItemDefinitionConfigIndex) {
@@ -123,6 +113,11 @@
 
                 menuActions.push(menuAction);
             }
+
+            function setDrillDownTabs() {
+                var drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI);
+                drillDownManager.setDrillDownExtensionObject(dataAnalysisDefinition);
+            }
             function setMenuActions() {
                 dataAnalysisDefinition.menuActions = [];
                 for (var i = 0; i < menuActions.length; i++)
@@ -130,6 +125,9 @@
             }
         }
 
+        function getEntityUniqueName() {
+            return "VR_Analytic_DataAnalysisDefinition";
+        }
 
         return {
             addDataAnalysisDefinition: addDataAnalysisDefinition,
