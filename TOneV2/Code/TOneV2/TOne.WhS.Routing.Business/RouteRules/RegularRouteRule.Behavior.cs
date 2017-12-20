@@ -153,6 +153,13 @@ namespace TOne.WhS.Routing.Business
 
             if (this.OptionPercentageSettings != null && options != null)
             {
+                var blockedOptions = options.FindAllRecords(itm => itm.SupplierStatus == SupplierStatus.Block);
+                if (blockedOptions != null)
+                {
+                    foreach (var blockedOption in blockedOptions)
+                        blockedOption.Percentage = null;
+                }
+
                 var unblockedOptions = options.FindAllRecords(itm => itm.SupplierStatus != SupplierStatus.Block);
                 if (unblockedOptions != null)
                     ApplyOptionsPercentage(unblockedOptions);
