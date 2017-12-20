@@ -47,12 +47,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountEnterpriseDID.cs" />
+    <Compile Include="AccountEnterpriseDIDDetail.cs" />
     <Compile Include="EnterpriseBusinessTrunk.cs" />
     <Compile Include="EnterpriseBusinessTrunkDetail.cs" />
     <Compile Include="EnterpriseBusinessTrunksQuery.cs" />
     <Compile Include="EnterpriseDID.cs" />
     <Compile Include="EnterpriseDIDDetail.cs" />
     <Compile Include="EnterpriseDIDsQuery.cs" />
+    <Compile Include="AccountEnterpriseDIDQuery.cs" />
     <Compile Include="TelesSiteRoutingGroupFilter.cs" />
     <Compile Include="TelesSiteRoutingGroupInfo.cs" />
     <Compile Include="TelesTemplateEntity\TelesTemplateEntityDefinitionSettings.cs" />

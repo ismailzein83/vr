@@ -215,9 +215,11 @@
     <Content Include="Retail_Teles\Directives\AccountCondition\Templates\TelesAccountConditionTemplate.html" />
     <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-accounttelesdidsandbusinesstrunks-view.js" />
     <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-accountviewdefinitionsettings-telesdidsandbusinesstrunks.js" />
+    <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-enterprisesdids-grid.js" />
     <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-siteroutinggroup-selector.js" />
     <Content Include="Retail_Teles\Directives\TelesEnterprises\Templates\AccountTelesDIDsAndBusinessTrunksView.html" />
     <Content Include="Retail_Teles\Directives\TelesEnterprises\Templates\AccountTelesDIDsAndBusinessTrunksViewSettingsTemplate.html" />
+    <Content Include="Retail_Teles\Directives\TelesEnterprises\Templates\AccountEnterprisesDIDsGridTemplate.html" />
     <Content Include="Retail_Teles\Directives\TelesTemplateEntity\Definition\retail-teles-telestemplateentitydefinitionsettings.js" />
     <Content Include="Retail_Teles\Directives\TelesTemplateEntity\Definition\Templates\TelesTemplateEntityEntityDefinitionSettingDirective.html" />
     <Content Include="Retail_Teles\Directives\TelesTemplateEntity\retail-teles-telestemplateentitysettings.js" />
@@ -246,6 +248,8 @@
     <Content Include="Retail_Teles\Services\APIServices\TelesRoutingGroupAPIService.js" />
     <Content Include="Retail_Teles\Services\SiteService.js" />
     <Content Include="Retail_Teles\Services\TelesAccountActionService.js" />
+    <Content Include="Retail_Teles\Views\EnterprisesDIDsView.html" />
+    <Content Include="Retail_Teles\Views\EnterprisesDIDsViewController.js" />
     <Content Include="Retail_Teles\Views\TelesSiteEditor.html" />
     <Content Include="Retail_Teles\Views\TelesSiteEditorController.js" />
   </ItemGroup>

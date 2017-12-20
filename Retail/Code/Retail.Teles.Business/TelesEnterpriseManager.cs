@@ -14,6 +14,7 @@ using Vanrise.Security.Entities;
 using Retail.Teles.Business.AccountBEActionTypes;
 using System.Security.Policy;
 using Retail.Teles.Business.Provisioning;
+using Retail.Teles.Data;
 
 namespace Retail.Teles.Business
 {
@@ -30,7 +31,17 @@ namespace Retail.Teles.Business
         {
             return BigDataManager.Instance.RetrieveData(input, new EnterpriseBusinessTrunksRequestHandler());
         }
+        public IDataRetrievalResult<AccountEnterpriseDIDDetail> GetFilteredAccountEnterprisesDIDs(DataRetrievalInput<AccountEnterpriseDIDQuery> input)
+        {
+            return BigDataManager.Instance.RetrieveData(input, new AccountEnterpriseDIDRequestHandler());
+        }
 
+        public void SaveAccountEnterprisesDIDs()
+        {
+            var accountEnterprisesDIDs = GetAccountEnterprisesDIDs();
+            ITelesAccountEnterpriseDataManager dataManager = TelesDataManagerFactory.GetDataManager<ITelesAccountEnterpriseDataManager>();
+            dataManager.SaveAccountEnterprisesDIDs(accountEnterprisesDIDs);
+        }
         public IEnumerable<TelesEnterpriseInfo> GetEnterprisesInfo(Guid vrConnectionId, TelesEnterpriseFilter filter)
         {
             var cachedEnterprises = GetCachedEnterprises(vrConnectionId,filter.TelesDomainId, false);
@@ -210,6 +221,74 @@ namespace Retail.Teles.Business
                     return settings.DoesUserHaveExecutePermission();
             }
             return false;
+        }
+        public List<AccountEnterpriseDID> GetAccountEnterprisesDIDs()
+        {
+            Guid vrConnectionId = Guid.Parse("93035c7d-8334-4434-a0d6-a9691951668c");
+            Guid accountBEDefinitionId = Guid.Parse("9a427357-cf55-4f33-99f7-745206dee7cd");
+            string countryCode = "965";
+
+
+            AccountBEManager accountBEManager = new AccountBEManager();
+            var accountByInterpriseId = new TelesEnterpriseManager().GetCachedAccountsByEnterprises(accountBEDefinitionId);
+            var screenNumbers = GetScreanNumbersByCountryCode(vrConnectionId, countryCode);
+
+            List<AccountEnterpriseDID> accountEnterprisesDIDs = new List<AccountEnterpriseDID>();
+
+
+            if (screenNumbers != null)
+            {
+                foreach (var screenNumber in screenNumbers)
+                {
+                    string domainId = screenNumber.domainId.ToString();
+                    long? accountId = null;
+                    long enterpriseAccountId;
+                    if (accountByInterpriseId.TryGetValue(domainId, out enterpriseAccountId))
+                        accountId = enterpriseAccountId;
+                    accountEnterprisesDIDs.Add(new AccountEnterpriseDID()
+                    {
+                        AccountId = accountId,
+                        ScreenNumber = screenNumber.sn.ToString(),
+                        EnterpriseId = domainId,
+                        MaxCalls = 1,
+                        Type = AccountEnterpriseDIDType.SN
+                    });
+                }
+            }
+            var businessTrunks = GetUsersBTs(vrConnectionId);
+            if (businessTrunks != null)
+            {
+                foreach (var businessTrunk in businessTrunks)
+                {
+                    string domainId = businessTrunk.enterpriseId.ToString();
+                    long? accountId = null;
+                    long enterpriseAccountId;
+                    if (accountByInterpriseId.TryGetValue(domainId, out enterpriseAccountId))
+                        accountId = enterpriseAccountId;
+                    string screenNumber = null;
+                    if (businessTrunk.numberRanges != null)
+                    {
+                        foreach (var numberRange in businessTrunk.numberRanges)
+                        {
+                            if (numberRange.systemRange == true)
+                            {
+                                screenNumber = numberRange.startSn.ToString();
+                            }
+                        }
+                    }
+
+                    accountEnterprisesDIDs.Add(new AccountEnterpriseDID()
+                    {
+                        AccountId = accountId,
+                        ScreenNumber = screenNumber,
+                        EnterpriseId = domainId,
+                        MaxCalls = businessTrunk.maxCalls,
+                        Type = AccountEnterpriseDIDType.BT
+                    });
+                }
+            }
+
+            return accountEnterprisesDIDs;
         }
         public static void SetCacheExpired()
         {
@@ -437,6 +516,98 @@ namespace Retail.Teles.Business
                 context.MainSheet = sheet;
             }
         }
+
+
+        private class AccountEnterpriseDIDRequestHandler : BigDataRequestHandler<AccountEnterpriseDIDQuery, AccountEnterpriseDID, AccountEnterpriseDIDDetail>
+        {
+            public AccountEnterpriseDIDRequestHandler()
+            {
+
+            }
+            public override AccountEnterpriseDIDDetail EntityDetailMapper(AccountEnterpriseDID entity)
+            {
+                Guid accountBEDefinitionId = Guid.Parse("9a427357-cf55-4f33-99f7-745206dee7cd");
+                Guid vrConnectionId = Guid.Parse("93035c7d-8334-4434-a0d6-a9691951668c");
+                VRConnectionManager vrConnectionManager = new VRConnectionManager();
+                VRConnection vrConnection = vrConnectionManager.GetVRConnection<TelesRestConnection>(vrConnectionId);
+                var telesRestConnection = vrConnection.Settings.CastWithValidate<TelesRestConnection>("telesRestConnection", vrConnectionId);
+                if (!telesRestConnection.DefaultDomainId.HasValue)
+                    throw new NullReferenceException("telesRestConnection.DefaultDomainId");
+
+                return new AccountEnterpriseDIDDetail
+                {
+                    AccountName = entity.AccountId.HasValue? new AccountBEManager().GetAccountName(accountBEDefinitionId,entity.AccountId.Value):null,
+                    ScreenNumber = entity.ScreenNumber,
+                    EnterpriseName = new TelesEnterpriseManager().GetEnterpriseName(vrConnectionId, entity.EnterpriseId, telesRestConnection.DefaultDomainId.Value.ToString()),
+                    MaxCalls = entity.MaxCalls,
+                    Type = Utilities.GetEnumDescription(entity.Type)
+                };
+            }
+            protected override Vanrise.Entities.BigResult<AccountEnterpriseDIDDetail> AllRecordsToBigResult(Vanrise.Entities.DataRetrievalInput<AccountEnterpriseDIDQuery> input, IEnumerable<AccountEnterpriseDID> allRecords)
+            {
+                return allRecords.ToBigResult(input, null, EntityDetailMapper);
+            }
+            public override IEnumerable<AccountEnterpriseDID> RetrieveAllData(DataRetrievalInput<AccountEnterpriseDIDQuery> input)
+            {
+                return new TelesEnterpriseManager().GetAccountEnterprisesDIDs();
+            }
+            protected override ResultProcessingHandler<AccountEnterpriseDIDDetail> GetResultProcessingHandler(DataRetrievalInput<AccountEnterpriseDIDQuery> input, BigResult<AccountEnterpriseDIDDetail> bigResult)
+            {
+                return new ResultProcessingHandler<AccountEnterpriseDIDDetail>
+                {
+                    ExportExcelHandler = new AccountEnterpriseDIDExcelExportHandler(input.Query)
+                };
+            }
+        }
+        private class AccountEnterpriseDIDExcelExportHandler : ExcelExportHandler<AccountEnterpriseDIDDetail>
+        {
+            AccountEnterpriseDIDQuery _query;
+            public AccountEnterpriseDIDExcelExportHandler(AccountEnterpriseDIDQuery query)
+            {
+                if (query == null)
+                    throw new ArgumentNullException("query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<AccountEnterpriseDIDDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Enterprises",
+                    Header = new ExportExcelHeader
+                    {
+                        Cells = new List<ExportExcelHeaderCell> { 
+                            new ExportExcelHeaderCell { Title = "Account Name" },
+                            new ExportExcelHeaderCell { Title = "Enterprise Name" },
+                            new ExportExcelHeaderCell { Title = "Screen Number" },
+                             new ExportExcelHeaderCell { Title = "Type" },
+                            new ExportExcelHeaderCell { Title = "Channels" }
+                        }
+                    }
+                };
+
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    var results = context.BigResult as BigResult<AccountEnterpriseDIDDetail>;
+
+                    if (results != null && results.Data != null)
+                    {
+                        sheet.Rows = new List<ExportExcelRow>();
+                        foreach (var item in results.Data)
+                        {
+                            var accountNameRow = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            accountNameRow.Cells.Add(new ExportExcelCell { Value = item.AccountName });
+                            accountNameRow.Cells.Add(new ExportExcelCell { Value = item.EnterpriseName });
+                            accountNameRow.Cells.Add(new ExportExcelCell { Value = item.ScreenNumber });
+                            accountNameRow.Cells.Add(new ExportExcelCell { Value = item.Type });
+                            accountNameRow.Cells.Add(new ExportExcelCell { Value = item.MaxCalls });
+                            sheet.Rows.Add(accountNameRow);
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
+
         #endregion
 
         #region Private Methods
@@ -513,7 +684,21 @@ namespace Retail.Teles.Business
             VRConnectionManager vrConnectionManager = new VRConnectionManager();
             VRConnection vrConnection = vrConnectionManager.GetVRConnection<TelesRestConnection>(vrConnectionId);
             return vrConnection.Settings.CastWithValidate<TelesRestConnection>("telesRestConnection", vrConnectionId);
-        }  
+        }
+
+        
+        private List<dynamic> GetScreanNumbersByCountryCode(Guid vrConnectionId, string countryCode)
+        {
+            var telesRestConnection = GetTelesRestConnection( vrConnectionId);
+            string actionPath = string.Format("/screenNum/search?cc={0}", countryCode);
+            return telesRestConnection.Get<List<dynamic>>(actionPath);
+        }
+        private List<dynamic> GetUsersBTs(Guid vrConnectionId)
+        {
+            var telesRestConnection = GetTelesRestConnection(vrConnectionId);
+            string actionPath = string.Format("/user/search?role=BT");
+            return telesRestConnection.Get<List<dynamic>>(actionPath);
+        }
         #endregion
 
         #region IBusinessEntityManager

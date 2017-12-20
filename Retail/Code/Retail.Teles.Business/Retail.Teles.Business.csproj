@@ -128,6 +128,10 @@
       <Project>{c08fd318-049c-49ce-8bc4-85bf296cbab9}</Project>
       <Name>Retail.BusinessEntity.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.Teles.Data\Retail.Teles.Data.csproj">
+      <Project>{bdb92084-88cb-49e7-925b-6fbb58d03eee}</Project>
+      <Name>Retail.Teles.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.Teles.Entities\Retail.Teles.Entities.csproj">
       <Project>{e7df81ab-c163-4dfb-b50b-5dff1b9f0aec}</Project>
       <Name>Retail.Teles.Entities</Name>

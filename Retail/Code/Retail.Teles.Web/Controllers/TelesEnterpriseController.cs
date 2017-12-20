@@ -52,5 +52,18 @@ namespace Retail.Teles.Web.Controllers
 
             return GetWebResponse(input, _manager.GetFilteredEnterpriseBusinessTrunks(input));
         }
+        [HttpPost]
+        [Route("GetFilteredAccountEnterprisesDIDs")]
+        public object GetFilteredAccountEnterprisesDIDs(Vanrise.Entities.DataRetrievalInput<AccountEnterpriseDIDQuery> input)
+        {
+
+            return GetWebResponse(input, _manager.GetFilteredAccountEnterprisesDIDs(input));
+        }
+        [HttpPost]
+        [Route("SaveAccountEnterprisesDIDs")]
+        public void SaveAccountEnterprisesDIDs()
+        {
+            _manager.SaveAccountEnterprisesDIDs();
+        }
     }
 }
