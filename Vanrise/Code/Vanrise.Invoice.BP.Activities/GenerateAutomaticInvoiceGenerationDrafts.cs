@@ -47,7 +47,7 @@ namespace Vanrise.Invoice.BP.Activities
             int issueDateOffsetFromToday = this.IssueDateOffsetFromToday.Get(context.ActivityContext);
             DateTime issueDate = todayDate.AddDays(-issueDateOffsetFromToday);
 
-            int endDateOffsetFromToday = this.IssueDateOffsetFromToday.Get(context.ActivityContext);
+            int endDateOffsetFromToday = this.EndDateOffsetFromToday.Get(context.ActivityContext);
             DateTime maximumToDate = DateTime.Today.AddDays(-endDateOffsetFromToday);
 
             Guid invoiceGenerationIdentifier = Guid.NewGuid();
