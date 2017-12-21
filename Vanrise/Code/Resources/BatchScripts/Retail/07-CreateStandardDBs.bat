@@ -7,6 +7,6 @@ For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 
 ::if not exist "\\192.168.110.185\Fixes\WebSite\Retail\%YYYYMMDD%\DataBaseFirstDeploymentScripts\DBsStructure\" mkdir "\\192.168.110.185\Fixes\WebSite\Retail\%YYYYMMDD%\DataBaseFirstDeploymentScripts\DBsStructure\"
 
-ECHO Retail Create Standard DBs Structure files
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\DBsStructure.txt" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\Retail\%YYYYMMDD%\DataBaseFirstDeploymentScripts\DBsStructure\"
-start /b /w /D"C:\TFS\Vanrise\Code\Vanrise.HelperTools\bin\Release" Vanrise.HelperTools.exe "DBs" "Retail"
+::ECHO Retail Create Standard DBs Structure files
+::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\DBsStructure.txt" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\Retail\%YYYYMMDD%\DataBaseFirstDeploymentScripts\DBsStructure\"
+::start /b /w /D"C:\TFS\Vanrise\Code\Vanrise.HelperTools\bin\Release" Vanrise.HelperTools.exe "DBs" "Retail"

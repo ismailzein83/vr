@@ -434,9 +434,10 @@
     <None Include="BatchScripts\Retail.MultiNet\01-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\Retail.MultiNet\02-Runtime.bat" />
     <None Include="BatchScripts\Retail.MultiNet\03-WebSite.bat" />
-    <None Include="BatchScripts\Retail.MultiNet\04-GroupSQLFiles.bat" />
+    <None Include="BatchScripts\Retail.MultiNet\08-GroupSQLFiles.bat" />
     <None Include="BatchScripts\Retail.MultiNet\05-CompressFiles.bat" />
     <None Include="BatchScripts\Retail.MultiNet\06-GroupJSFiles.bat" />
+    <None Include="BatchScripts\Retail.MultiNet\07-CreateStandardDBs.bat" />
     <None Include="BatchScripts\Retail.MultiNet\All.bat" />
     <None Include="BatchScripts\Retail.NtegraV2\All.bat" />
     <None Include="BatchScripts\Retail.NtegraV2\DataBaseFirstDeploymentScripts.bat" />
@@ -444,7 +445,7 @@
     <None Include="BatchScripts\Retail.Ringo\01-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\Retail.Ringo\02-Runtime.bat" />
     <None Include="BatchScripts\Retail.Ringo\03-WebSite.bat" />
-    <None Include="BatchScripts\Retail.Ringo\04-GroupSQLFiles.bat" />
+    <None Include="BatchScripts\Retail.Ringo\08-GroupSQLFiles.bat" />
     <None Include="BatchScripts\Retail.Ringo\05-CompressFiles.bat" />
     <None Include="BatchScripts\Retail.Ringo\06-GroupJSFiles.bat" />
     <None Include="BatchScripts\Retail.Ringo\07-CreateStandardDBs.bat" />
@@ -452,9 +453,10 @@
     <None Include="BatchScripts\Retail.Zajil\01-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\Retail.Zajil\02-Runtime.bat" />
     <None Include="BatchScripts\Retail.Zajil\03-WebSite.bat" />
-    <None Include="BatchScripts\Retail.Zajil\04-GroupSQLFiles.bat" />
+    <None Include="BatchScripts\Retail.Zajil\08-GroupSQLFiles.bat" />
     <None Include="BatchScripts\Retail.Zajil\05-CompressFiles.bat" />
     <None Include="BatchScripts\Retail.Zajil\06-GroupJSFiles.bat" />
+    <None Include="BatchScripts\Retail.Zajil\07-CreateStandardDBs.bat" />
     <None Include="BatchScripts\Retail.Zajil\All.bat" />
     <None Include="BatchScripts\Retail\01-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\Retail\02-Runtime.bat" />
