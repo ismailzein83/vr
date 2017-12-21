@@ -5,13 +5,13 @@
     vrPop3MessageFilterAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VRCommon_ModuleConfig', 'SecurityService'];
 
     function vrPop3MessageFilterAPIService(BaseAPIService, UtilsService, VRCommon_ModuleConfig, SecurityService) {
-        var controllerName = 'VRPop3Filter';
+        var controllerName = 'VRPop3MessageFilter';
 
-        function GetVRPop3Filters(filter) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetVRPop3MessageFilters"));
+        function GetVRPop3MessageFilterConfigs(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetVRPop3MessageFilterConfigs"));
         };
         return ({
-            GetVRPop3Filters: GetVRPop3Filters,
+            GetVRPop3MessageFilterConfigs: GetVRPop3MessageFilterConfigs,
         });
     }
 

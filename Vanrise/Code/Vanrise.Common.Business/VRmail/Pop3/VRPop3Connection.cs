@@ -1,8 +1,11 @@
-﻿using System;
+﻿using OpenPop.Mime;
+using OpenPop.Mime.Header;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common.Data;
 using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
@@ -26,17 +29,65 @@ namespace Vanrise.Common.Business
             throw new NotImplementedException();
         }
 
-        public void ReadNewMessages(string senderIdentifier, Func<VRPop3MailMessageHeader, bool> mailMessageFilter, Action<VRPop3MailMessage> onMessageRead)
+        public void ReadNewMessages(Guid connectionId, string senderIdentifier, Func<VRPop3MailMessageHeader, bool> mailMessageFilter, Action<VRReceivedMailMessage> onMessageRead)
         {
-            List<VRPop3MailMessageHeader> pop3List = new List<VRPop3MailMessageHeader>();
-            IEnumerable<VRPop3MailMessageHeader> filtered = pop3List.Where(mailMessageFilter);
+            OpenPop.Pop3.Pop3Client openPopClient = new OpenPop.Pop3.Pop3Client();
+            openPopClient.Connect(Server, Port, SSL);
+            openPopClient.Authenticate(UserName,Password);
 
+            IVRPop3MailMessageDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRPop3MailMessageDataManager>();
+            DateTime lastMessageSendTime = dataManager.GetLastMessageSendTime(connectionId,senderIdentifier);
+            lastMessageSendTime=lastMessageSendTime.AddHours(-1);
+            List<string> messagesId = dataManager.GetPop3MailMessagesIdsFromDateTime(connectionId, senderIdentifier, lastMessageSendTime);
             
+            
+            List<VRPop3MailMessageHeader> pop3MailMessageHeaders = new List<VRPop3MailMessageHeader>();
+            
+            int messagesCount = openPopClient.GetMessageCount();
+            int messageIndex = messagesCount;
+            
+            while (messageIndex >= 0)
+            {
+                MessageHeader messageHeader = openPopClient.GetMessageHeaders(messageIndex);
+                if (messageHeader.DateSent < lastMessageSendTime) break;
+                VRPop3MailMessageHeader pop3MailMessageHeader = new VRPop3MailMessageHeader 
+                {
+                    From=messageHeader.From.Address,
+                    Subject=messageHeader.Subject,
+                    MessageSendTime=messageHeader.DateSent,
+                    MessageId=messageHeader.MessageId,
+                    Sender=messageHeader.Sender.Address,
+                    MessageIndex = messageIndex,
+                };
+                
+                if (!messagesId.Contains(messageHeader.MessageId) && mailMessageFilter(pop3MailMessageHeader))
+                {
+                    pop3MailMessageHeaders.Add(pop3MailMessageHeader);
+                }
+                messageIndex--;
+            }
+            for (var i = pop3MailMessageHeaders.Count - 1; i >= 0; i--)
+            {
+                Message message = openPopClient.GetMessage(pop3MailMessageHeaders[i].MessageIndex);
+                List<MessagePart> files = message.FindAllAttachments();
+                List<VRFile> vrFiles = new List<VRFile>();
+                foreach(var file in files)
+                {
+
+                }
+                VRReceivedMailMessage pop3MailMessage = new VRPop3MailMessage
+                {
+                    Header = pop3MailMessageHeaders[i],
+                    Attachments = vrFiles,
+                };
+                onMessageRead(pop3MailMessage);
+            }
         }
 
         public void SetMessagesRead(string senderIdentifier, List<VRPop3MailMessage> messages)
         {
-            throw new NotImplementedException();
+            DateTime lastSendTime = messages.Max(item => item.Header.MessageSendTime);
+            //add new messages and delete all messages before 1 hour
         }
     }
 
@@ -57,5 +108,18 @@ namespace Vanrise.Common.Business
 
             return true;
         }
-    }    
+    }
+
+    public abstract class VRPop3MessageFilter
+    {
+        public abstract Guid ConfigId { get; }
+        public Func<VRReceivedMailMessageHeader, bool> IsApplicable;
+        public abstract bool IsApplicableFunction(VRPop3MailMessageHeader receivedMailMessageHeader); 
+    }
+
+    public class VRPop3MessageFilterConfig : ExtensionConfiguration
+    {
+        public const string EXTENSION_TYPE = "VRCommon_Pop3MessageFilter";
+        public string Editor { get; set; }
+    }
 }

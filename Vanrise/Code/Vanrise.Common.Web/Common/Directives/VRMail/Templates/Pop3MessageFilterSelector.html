@@ -1,0 +1,15 @@
+﻿<vr-columns colnum="{{ctrl.normalColNum}}">
+    <vr-select on-ready="scopeModel.onSelectorReady"
+               datasource="scopeModel.templateConfigs"
+               selectedvalues="scopeModel.selectedTemplateConfiga"
+               datavaluefield="ExtensionConfigurationId"
+               datatextfield="Title"
+               isrequired="true"
+               label="Filter">
+    </vr-select>
+</vr-columns>
+<vr-columns colnum="12">
+    <vr-directivewrapper ng-if="scopeModel.selectedTemplateConfiga != undefined" directive="scopeModel.selectedTemplateConfiga.Editor" vr-loader="scopeModel.isLoadingDirective"
+                         on-ready="scopeModel.onDirectiveReady" customvalidate="ctrl.customvalidate" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired">
+    </vr-directivewrapper>
+</vr-columns>

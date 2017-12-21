@@ -17,4 +17,11 @@ namespace Vanrise.Common.Data
 
         bool Update(VRMailMessageTemplate vrMailMessageTemplateItem);
     }
+
+    public interface IVRPop3MailMessageDataManager : IDataManager
+    {
+        DateTime GetLastMessageSendTime(Guid connectionId, string senderIdentifier);
+        bool Insert();
+        List<string> GetPop3MailMessagesIdsFromDateTime(Guid connectionId, string senderIdentifier, DateTime fromDate);
+    }
 }
