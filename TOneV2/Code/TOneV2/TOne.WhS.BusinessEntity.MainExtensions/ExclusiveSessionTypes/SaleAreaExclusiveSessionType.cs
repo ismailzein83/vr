@@ -57,9 +57,9 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             switch (prefixConstant)
             {
                 case ExclusiveSessionTargetIdPrefixEnum.Customer:
-                    return "Rate Planing: Customer: "+carrierAccountManager.GetCarrierAccountName(targetIdValue);
+                    return "Rate Planning: Customer: "+carrierAccountManager.GetCarrierAccountName(targetIdValue);
                 case ExclusiveSessionTargetIdPrefixEnum.SellingProduct:
-                    return "Rate Planing: Selling Product: " + sellingProductManager.GetSellingProductName(targetIdValue);
+                    return "Rate Planning: Selling Product: " + sellingProductManager.GetSellingProductName(targetIdValue);
                 case ExclusiveSessionTargetIdPrefixEnum.NumberingPlan:
                     return "Numbering Plan: " + sellingNumberPlanManager.GetSellingNumberPlanName(targetIdValue);
             }
