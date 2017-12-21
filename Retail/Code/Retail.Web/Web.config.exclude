@@ -69,7 +69,6 @@
     <add key="RulesDBConnStringKey"                             value="ConfigurationDBConnString"/>    
     <add key="InvoiceDBConnStringKey"                           value="ConfigurationDBConnString"/>
     <add key="LoggingConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
-    <add key="VRLocalizationDBConnStringKey"                    value="ConfigurationDBConnString"/>
     
     <add key="VR_AccountBalance_TransactionDBConnStringKey"     value="ConfigurationDBConnString"/>
     <add key="NumberingPlanDBConnStringKey"                     value="ConfigurationDBConnString"/>
