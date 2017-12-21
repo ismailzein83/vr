@@ -80,26 +80,98 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
 
             return insertOperationOutput;
         }
-
-        public Vanrise.Entities.UpdateOperationOutput<object> ResetPassword(Guid accountBEDefinitionId, long accountId, Guid accountViewDefinitionId, string password)
+        public Vanrise.Entities.InsertOperationOutput<AdditionalPortalAccountSettings> AddAdditionalPortalAccount(Guid accountBEDefinitionId, long accountId, Guid accountViewDefinitionId, string name, string email)
         {
+            List<AdditionalPortalAccountSettings> additionalPortalAccountSettingsList = new List<AdditionalPortalAccountSettings>();
+            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<AdditionalPortalAccountSettings>();
+            insertOperationOutput.InsertedObject = null;
+
             PortalAccount portalAccount = new AccountBEDefinitionManager().GetAccountViewDefinitionSettings<PortalAccount>(accountBEDefinitionId, accountViewDefinitionId);
 
-            var portalAccountSettings = new AccountBEManager().GetExtendedSettings<PortalAccountSettings>(accountBEDefinitionId, accountId);
-            if (portalAccountSettings == null)
-                throw new NullReferenceException(String.Format("portalAccountSettings of accountBEDefinitionId '{0}' and accountId '{1}'", accountBEDefinitionId, accountId));
-
-            var resetPasswordInput = new Vanrise.Security.Entities.ResetPasswordInput()
+            var retailAccount = new PartnerPortal.CustomerAccess.Entities.RetailAccount()
             {
-                UserId = portalAccountSettings.UserId,
-                Password = password
+                AccountId = accountId,
+                Name = name,
+                Email = email,
+                TenantId = portalAccount.TenantId,
+                AccountBEDefinitionId = accountBEDefinitionId
             };
 
             VRConnectionManager connectionManager = new VRConnectionManager();
             var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(portalAccount.ConnectionId);
             VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
 
-            return connectionSettings.Post<Vanrise.Security.Entities.ResetPasswordInput, Vanrise.Entities.UpdateOperationOutput<object>>("/api/PartnerPortal_CustomerAccess/RetailAccountUser/ResetPassword", resetPasswordInput);
+            InsertOperationOutput<UserDetail> userDetails =
+                connectionSettings.Post<PartnerPortal.CustomerAccess.Entities.RetailAccount, InsertOperationOutput<UserDetail>>("/api/PartnerPortal_CustomerAccess/RetailAccountUser/AddRetailAccountUser", retailAccount);
+
+            insertOperationOutput.Result = userDetails.Result;
+            insertOperationOutput.Message = userDetails.Message;
+
+            switch (userDetails.Result)
+            {
+                case InsertOperationResult.Succeeded:
+                    var additionalPortalAccountSettings = new AdditionalPortalAccountSettings
+                    {
+                        UserId = userDetails.InsertedObject.Entity.UserId,
+                        Name = userDetails.InsertedObject.Entity.Name,
+                        Email = userDetails.InsertedObject.Entity.Email,
+                        TenantId = userDetails.InsertedObject.Entity.TenantId
+                    };
+
+                    var portalAccountSettings = GetPortalAccountSettings( accountBEDefinitionId,  accountId,  accountViewDefinitionId);
+                    if (portalAccountSettings != null)
+                    {
+                        if (portalAccountSettings.AdditionalUsers == null)
+                            portalAccountSettings.AdditionalUsers = new List<AdditionalPortalAccountSettings>();
+
+                       
+                       portalAccountSettings.AdditionalUsers.Add(additionalPortalAccountSettings);
+                    }
+                   
+                    AccountBEManager accountBEManager = new AccountBEManager();
+
+                    bool IsAccountExtendedSettingsUpdated = accountBEManager.UpdateAccountExtendedSetting(accountBEDefinitionId, accountId, portalAccountSettings);
+                    if (IsAccountExtendedSettingsUpdated)
+                    {
+                        accountBEManager.TrackAndLogObjectCustomAction(accountBEDefinitionId, accountId, "Configure Portal Account", string.Format("Email: {0}", portalAccountSettings.Email), portalAccountSettings);
+                        insertOperationOutput.InsertedObject = additionalPortalAccountSettings;
+                    }
+                    else
+                    {
+                        insertOperationOutput.Result = InsertOperationResult.Failed;
+                        insertOperationOutput.Message = "Update Retail Account has failed";
+                    }
+                    break;
+
+
+                case InsertOperationResult.Failed:
+                case InsertOperationResult.SameExists:
+                default: break;
+
+            }
+
+            return insertOperationOutput;
+        }
+
+        public Vanrise.Entities.UpdateOperationOutput<object> ResetPassword(Guid accountBEDefinitionId, long accountId, Guid accountViewDefinitionId, string password,int userId)
+        {
+            var portalAccountSettings = GetPortalAccountSettings(accountBEDefinitionId, accountId, accountViewDefinitionId);
+          
+            PortalAccount portalAccount = new AccountBEDefinitionManager().GetAccountViewDefinitionSettings<PortalAccount>(accountBEDefinitionId, accountViewDefinitionId);
+            var resetPasswordInput = new Vanrise.Security.Entities.ResetPasswordInput()
+            {
+                UserId = userId,
+                Password = password
+            };
+            if (userId == portalAccountSettings.UserId || (portalAccountSettings.AdditionalUsers != null && portalAccountSettings.AdditionalUsers.Any(item => item.UserId == userId)))
+            {
+                VRConnectionManager connectionManager = new VRConnectionManager();
+                var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(portalAccount.ConnectionId);
+                VRInterAppRestConnection connectionSettings = vrConnection.Settings as VRInterAppRestConnection;
+                return connectionSettings.Post<Vanrise.Security.Entities.ResetPasswordInput, Vanrise.Entities.UpdateOperationOutput<object>>("/api/PartnerPortal_CustomerAccess/RetailAccountUser/ResetPassword", resetPasswordInput);
+            }
+
+            throw new Exception();
         }
 
         #region Security

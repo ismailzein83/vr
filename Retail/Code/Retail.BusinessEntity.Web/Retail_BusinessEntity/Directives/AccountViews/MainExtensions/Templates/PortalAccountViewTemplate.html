@@ -1,7 +1,7 @@
 ﻿
 
 <div>
-    <vr-section-v2 header="Portal Account Details" menuactions="scopeModel.sectionMenuActions">
+    <vr-section-v2 header="Primary Account" menuactions="scopeModel.sectionMenuActions">
 
         <vr-row ng-if="scopeModel.isPortalUserAccountCreated">
             <vr-row removeline>
@@ -29,4 +29,7 @@
         </vr-row>
 
     </vr-section-v2>
+    <vr-section-v2 header ="Additional Accounts" ng-if="scopeModel.doesPrimaryAccountExists">
+        <retail-be-account-portalaccount-grid on-ready="scopeModel.onPortalAccountGridReady"></retail-be-account-portalaccount-grid>
+</vr-section-v2>
 </div>

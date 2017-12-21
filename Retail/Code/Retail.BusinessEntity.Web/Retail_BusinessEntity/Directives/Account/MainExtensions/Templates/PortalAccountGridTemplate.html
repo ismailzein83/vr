@@ -1,0 +1,12 @@
+﻿<vr-button type="Add" data-onclick="addNewPortalAccount" standalone></vr-button>
+<vr-datagrid datasource="portalAccounts"
+             ondeleterow="removerow"
+             on-ready="onGridReady"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="UserId"
+             enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" field="'UserId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Email'" field="'Email'" type="'Text'"></vr-datagridcolumn>
+</vr-datagrid>

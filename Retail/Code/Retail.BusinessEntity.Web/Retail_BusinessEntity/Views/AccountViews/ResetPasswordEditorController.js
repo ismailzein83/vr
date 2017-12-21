@@ -8,6 +8,7 @@
         var accountBEDefinitionId;
         var parentAccountId;
         var accountViewDefinitionId;
+        var userId;
 
         loadParameters();
         defineScope();
@@ -19,11 +20,14 @@
             if (parameters) {
                 accountBEDefinitionId = parameters.accountBEDefinitionId;
                 parentAccountId = parameters.parentAccountId;
+                userId = parameters.userId;
 
                 var context = parameters.context;
                 if (context != undefined) {
                     accountViewDefinitionId = context.getAccountViewDefinitionId();
                 }
+                else
+                    accountViewDefinitionId = parameters.accountViewDefinitionId;
             }
         }
         function defineScope() {
@@ -39,7 +43,8 @@
                     AccountBEDefinitionId: accountBEDefinitionId,
                     AccountId: parentAccountId,
                     AccountViewDefinitionId: accountViewDefinitionId,
-                    Password: $scope.scopeModel.password
+                    Password: $scope.scopeModel.password,
+                    UserId: userId
                 };
 
                 return Retail_BE_PortalAccountAPIService.ResetPassword(resetPasswordInput).then(function (response) {

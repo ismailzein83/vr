@@ -39,6 +39,15 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
             return _manager.AddPortalAccount(portalAccountEditorObject.AccountBEDefinitionId, portalAccountEditorObject.AccountId, portalAccountEditorObject.AccountViewDefinitionId,
                                              portalAccountEditorObject.Name, portalAccountEditorObject.Email);
         }
+        [HttpPost]
+        [Route("AddAdditionalPortalAccount")]
+        public object AddAdditionalPortalAccount(PortalAccountEditorObject portalAccountEditorObject)
+        {
+            if (!DosesUserHaveConfigureAccess(portalAccountEditorObject.AccountBEDefinitionId, portalAccountEditorObject.AccountViewDefinitionId))
+                return GetUnauthorizedResponse();
+            return _manager.AddAdditionalPortalAccount(portalAccountEditorObject.AccountBEDefinitionId, portalAccountEditorObject.AccountId, portalAccountEditorObject.AccountViewDefinitionId,
+                                             portalAccountEditorObject.Name, portalAccountEditorObject.Email);
+        }
         [HttpGet]
         [Route("DosesUserHaveResetPasswordAccess")]
         public bool DosesUserHaveAccess(Guid accountBEDefinitionId, Guid accountViewDefinitionId)
@@ -51,7 +60,7 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
         {
             if (!_manager.DosesUserHaveResetPasswordAccess(resetPasswordInput.AccountBEDefinitionId, resetPasswordInput.AccountViewDefinitionId))
                 return GetUnauthorizedResponse();
-            return _manager.ResetPassword(resetPasswordInput.AccountBEDefinitionId, resetPasswordInput.AccountId, resetPasswordInput.AccountViewDefinitionId, resetPasswordInput.Password);
+            return _manager.ResetPassword(resetPasswordInput.AccountBEDefinitionId, resetPasswordInput.AccountId, resetPasswordInput.AccountViewDefinitionId, resetPasswordInput.Password, resetPasswordInput.UserId);
         }
     }
 
@@ -77,5 +86,6 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
         public Guid AccountViewDefinitionId { get; set; }
 
         public string Password { get; set; }
+        public int UserId { get; set; }
     }
 }

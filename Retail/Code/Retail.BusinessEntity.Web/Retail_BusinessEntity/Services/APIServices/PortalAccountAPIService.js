@@ -36,12 +36,23 @@
                 accountViewDefinitionId: accountViewDefinitionId
             });
         }
+        function AddAdditionalPortalAccount(portalAccountEditorObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'AddAdditionalPortalAccount'), portalAccountEditorObject);
+        }
+
+        function UpdateAdditionalPortalAccount(portalAccountEditorObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdateAdditionalPortalAccount'), portalAccountEditorObject);
+        }
+
+
         return ({
             GetPortalAccountSettings: GetPortalAccountSettings,
             AddPortalAccount: AddPortalAccount,
             ResetPassword: ResetPassword,
             DosesUserHaveConfigureAccess: DosesUserHaveConfigureAccess,
-            DosesUserHaveResetPasswordAccess: DosesUserHaveResetPasswordAccess
+            DosesUserHaveResetPasswordAccess: DosesUserHaveResetPasswordAccess,
+            AddAdditionalPortalAccount: AddAdditionalPortalAccount,
+            UpdateAdditionalPortalAccount: UpdateAdditionalPortalAccount
         });
     }
 

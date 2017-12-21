@@ -375,8 +375,10 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\FinancialTransactionsViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\PortalAccountViewTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountViews\MainExtensions\Templates\SubAccountsViewTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Account\MainExtensions\retail-be-account-portalaccount-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\MainExtensions\retail-be-accountbe-runtimeselectorfilter.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\MainExtensions\Templates\AccountBERuntimeSelectorFilterTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Account\MainExtensions\Templates\PortalAccountGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-genericfielddefinition-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-synchronizer-editor.js" />
@@ -803,6 +805,8 @@
     <Content Include="Retail_BusinessEntity\Views\AccountPartDefinition\AccountPartDefinitionManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountService\AccountServiceEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountService\AccountServiceEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\AccountViews\AdditionalPortalAccountEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\AccountViews\AdditionalPortalAccountEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountViews\ResetPasswordEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountViews\ResetPasswordEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Account\Account360DegreeEditor.html" />
