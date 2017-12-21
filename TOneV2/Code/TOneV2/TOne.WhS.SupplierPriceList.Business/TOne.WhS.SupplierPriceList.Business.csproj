@@ -41,6 +41,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.BEBridge.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.BEBridge.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BusinessProcess.Business">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Business.dll</HintPath>
     </Reference>
@@ -103,6 +107,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Context\SupplierPriceListExecutionContext.cs" />
     <Compile Include="ImportPriceListManager.cs" />
+    <Compile Include="Pop3MailMessageSynchronizer.cs" />
     <Compile Include="PriceListCodeManager.cs" />
     <Compile Include="PriceListZoneServiceManager.cs" />
     <Compile Include="PriceListRateManager.cs" />

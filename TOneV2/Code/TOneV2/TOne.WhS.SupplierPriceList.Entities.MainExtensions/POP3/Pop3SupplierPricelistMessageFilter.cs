@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 
 namespace TOne.WhS.BusinessEntity.MainExtensions
@@ -11,14 +12,17 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
     {
         public override Guid ConfigId
         {
-            get { return new Guid("5D23C45E-49D0-46CD-AED1-173E340070A3"); }
+            get { return new Guid("05382832-5CBB-46C0-8214-B3B81769FB80"); }
         }
 
-        public override bool IsApplicable()
+        public Func<VRReceivedMailMessageHeader, bool> IsApplicable = messageHeader =>
+            {
+                return true;
+            };
+
+        public override bool IsApplicableFunction(VRPop3MailMessageHeader receivedMailMessageHeader)
         {
-            throw new NotImplementedException();
+            return true;
         }
-
-    
     }
 }

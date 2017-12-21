@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsBePop3supplierpricelistmessagefilter', ['UtilsService', 'VRUIUtilsService',
+app.directive('vrWhsBePop3supplierpricelistmessageSynchronizer', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
@@ -9,15 +9,15 @@ app.directive('vrWhsBePop3supplierpricelistmessagefilter', ['UtilsService', 'VRU
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new Pop3SupplierPricelistMessageFilter($scope, ctrl, $attrs);
+                var ctor = new Pop3SupplierPricelistMessageSynchronizer($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/WhS_SupplierPriceList/Directives/MainExtensions/POP3Filter/Templates/POP3SupplierPricelistMessageFilterTemplate.html'
+            templateUrl: '/Client/Modules/WhS_SupplierPriceList/Directives/MainExtensions/POP3Synchronizer/Templates/POP3SupplierPricelistMessageSynchronizer.html'
         };
 
-        function Pop3SupplierPricelistMessageFilter($scope, ctrl, $attrs) {
+        function Pop3SupplierPricelistMessageSynchronizer($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -41,7 +41,8 @@ app.directive('vrWhsBePop3supplierpricelistmessagefilter', ['UtilsService', 'VRU
                 api.getData = function () {
 
                     return {
-                        $type: "TOne.WhS.BusinessEntity.MainExtensions.Pop3SupplierPricelistMessageFilter, TOne.WhS.BusinessEntity.MainExtensions"
+                        $type: "TOne.WhS.SupplierPriceList.Business.Pop3MailMessageSynchronizer, TOne.WhS.SupplierPriceList.Business",
+                        Name: "Supplier POP3 Mail Message Synchronizer"
                     };
                 };
 
