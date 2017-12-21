@@ -453,6 +453,7 @@
     <None Include="BatchScripts\Retail.Zajil\01-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\Retail.Zajil\02-Runtime.bat" />
     <None Include="BatchScripts\Retail.Zajil\03-WebSite.bat" />
+    <None Include="BatchScripts\Retail.Zajil\04-GroupSQLFiles.bat" />
     <None Include="BatchScripts\Retail.Zajil\08-GroupSQLFiles.bat" />
     <None Include="BatchScripts\Retail.Zajil\05-CompressFiles.bat" />
     <None Include="BatchScripts\Retail.Zajil\06-GroupJSFiles.bat" />
