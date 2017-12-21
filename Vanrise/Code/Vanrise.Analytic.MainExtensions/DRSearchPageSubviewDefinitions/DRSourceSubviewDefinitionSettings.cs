@@ -12,7 +12,9 @@ namespace Vanrise.Analytic.MainExtensions.DRSearchPageSubviewDefinitions
 
         public Guid AnalyticReportId { get; set; }
 
-        public string DRSourceName { get; set; } 
+        public string DRSourceName { get; set; }
+
+        public bool IncludeTimeFilter { get; set; }
 
         public List<DRSourceSubviewColumnMapping> Mappings { get; set; }
     }

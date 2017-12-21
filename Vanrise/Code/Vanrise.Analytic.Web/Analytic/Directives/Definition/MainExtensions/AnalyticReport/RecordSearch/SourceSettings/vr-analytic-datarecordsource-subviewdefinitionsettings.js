@@ -140,6 +140,8 @@
                     promises.push(analyticReportSelectorLoadPromise);
 
                     if (subviewDefinitionSettings) {
+                        $scope.scopeModel.includeTimeFilter = subviewDefinitionSettings.IncludeTimeFilter;
+
                         if (subviewDefinitionSettings.AnalyticReportId) {
                             onAnalyticReportSelectorSelectionChangedDeferred = UtilsService.createPromiseDeferred();
 
@@ -173,7 +175,7 @@
                         var dataRecordSourceSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                         onAnalyticReportSelectorSelectionChangedDeferred.promise.then(function () {
-                            onAnalyticReportSelectorSelectionChangedDeferred = undefined
+                            onAnalyticReportSelectorSelectionChangedDeferred = undefined;
 
                             getAnalyticReportDefinition(reportId).then(function () {
                                 if (subviewDefinitionSettings && subviewDefinitionSettings.DRSourceName)
@@ -191,7 +193,7 @@
                         var promises = [];
 
                         onDataRecordSourceSelectorSelectionChangedDeferred.promise.then(function () {
-                            onDataRecordSourceSelectorSelectionChangedDeferred = undefined
+                            onDataRecordSourceSelectorSelectionChangedDeferred = undefined;
 
                             for (var index = 0; index < subviewDefinitionSettings.Mappings.length; index++) {
                                 var currentItem = subviewDefinitionSettings.Mappings[index];
@@ -225,13 +227,14 @@
                             ParentColumnName: currentParentSubviewMapping.parentDataRecordFieldSelectorAPI.getSelectedIds(),
                             SubviewColumnName: currentParentSubviewMapping.subviewDataRecordFieldSelectorAPI.getSelectedIds()
                         };
-                        mappings.push(mappingObj)
+                        mappings.push(mappingObj);
                     }
 
                     var data = {
                         $type: "Vanrise.Analytic.MainExtensions.DRSearchPageSubviewDefinitions.DRSourceSubviewDefinitionSettings, Vanrise.Analytic.MainExtensions",
                         AnalyticReportId: $scope.scopeModel.selectedAnalyticReport.AnalyticReportId,
                         DRSourceName: $scope.scopeModel.selectedDataRecordSources.Name,
+                        IncludeTimeFilter: $scope.scopeModel.includeTimeFilter,
                         Mappings: mappings
                     };
                     return data;

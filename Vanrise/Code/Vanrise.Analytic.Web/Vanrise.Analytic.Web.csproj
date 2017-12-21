@@ -304,7 +304,6 @@
     <Content Include="Analytic\Services\DAProfCalcGroupingFieldService.js" />
     <Content Include="Analytic\Services\DataAnalysisDefinitionService.js" />
     <Content Include="Analytic\Services\DataAnalysisItemDefinitionService.js" />
-    <Content Include="Analytic\Services\DataRecordStorageLogService.js" />
     <Content Include="Analytic\Services\RecordSearchService.js" />
     <Content Include="Analytic\Services\AnalyticService.js" />
     <Content Include="Analytic\Services\AnalyticTableService.js" />

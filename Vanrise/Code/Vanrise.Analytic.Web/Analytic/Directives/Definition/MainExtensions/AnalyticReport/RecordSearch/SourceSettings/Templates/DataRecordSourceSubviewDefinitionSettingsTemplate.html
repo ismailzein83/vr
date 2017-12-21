@@ -13,6 +13,9 @@
                label="Source" hideremoveicon>
     </vr-select>
 </vr-columns>
+<vr-columns width="1/2row" ng-show="scopeModel.selectedAnalyticReport != undefined" vr-loader="scopeModel.isDataRecordSourceSelectorLoading">
+    <vr-switch value="scopeModel.includeTimeFilter" label="Include Time Filter"></vr-switch>
+</vr-columns>
 
 <vr-columns width="fullrow" ng-show="scopeModel.selectedDataRecordSources != undefined" vr-loader="scopeModel.isGridLoading">
     <vr-section title="Mappings">

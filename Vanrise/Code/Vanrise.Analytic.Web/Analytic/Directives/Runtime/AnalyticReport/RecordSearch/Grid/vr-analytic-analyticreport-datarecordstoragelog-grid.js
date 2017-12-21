@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordStorageLogGridDirective.$inject = ['VR_GenericData_DataRecordStorageLogAPIService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService', 'UtilsService', 'VR_Analytic_GridWidthEnum', 'ColumnWidthEnum', 'VRUIUtilsService', 'VR_Analytic_DataRecordStorageLogService'];
+    DataRecordStorageLogGridDirective.$inject = ['VR_GenericData_DataRecordStorageLogAPIService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService', 'UtilsService', 'VR_Analytic_GridWidthEnum', 'ColumnWidthEnum', 'VRUIUtilsService'];
 
-    function DataRecordStorageLogGridDirective(VR_GenericData_DataRecordStorageLogAPIService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, UtilsService, VR_Analytic_GridWidthEnum, ColumnWidthEnum, VRUIUtilsService, VR_Analytic_DataRecordStorageLogService) {
+    function DataRecordStorageLogGridDirective(VR_GenericData_DataRecordStorageLogAPIService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, UtilsService, VR_Analytic_GridWidthEnum, ColumnWidthEnum, VRUIUtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -33,6 +33,7 @@
             var subviewDefinitions;
             var sortColumns;
             var searchQuery;
+            var dataRecordTypeId;
             var dataRecordTypeAttributes;
 
             var gridAPI;
@@ -76,7 +77,7 @@
                                     }
                                 }
 
-                                VR_Analytic_DataRecordStorageLogService.defineDataRecordStorageLogTabs(dataRecordStorageLog, subviewDefinitions, searchQuery, gridAPI);
+                                defineDataRecordStorageLogTabs(gridAPI, dataRecordStorageLog, subviewDefinitions, dataRecordTypeId, searchQuery.LimitResult);
                             }
                         }
 
@@ -95,6 +96,10 @@
                 var api = {};
 
                 api.loadGrid = function (query) {
+
+                    if (query) {
+                        dataRecordTypeId = query.DataRecordTypeId;
+                    }
 
                     ctrl.showDetails = false;
                     if (query.ItemDetails && query.ItemDetails.length > 0)
@@ -174,7 +179,6 @@
                         ctrl.columns.push(column);
                     });
 
-
                     if (sortColumns && sortColumns.length > 0) {
                         var firstSortColumn = sortColumns[0];
                         var matchingAttribute = UtilsService.getItemByVal(dataRecordTypeAttributes, firstSortColumn.FieldName, "Name");
@@ -210,7 +214,6 @@
                 query.Columns = [];
                 query.ColumnTitles = [];
 
-                var columns = [];
                 for (var x = 0; x < gridColumns.length; x++) {
                     var currentColumn = gridColumns[x];
                     if (query.Columns.indexOf(currentColumn.FieldName) < 0) {
@@ -228,9 +231,72 @@
                         }
                     }
                 }
-                return columns;
+            }
+
+            function defineDataRecordStorageLogTabs(gridAPI, dataRecordStorageLog, subviewDefinitions, parentDataRecordTypeId, limitResult) {
+
+                var drillDownTabs = [];
+
+                if (dataRecordStorageLog.details != undefined && dataRecordStorageLog.details.length > 0) {
+                    buildDetailsDrillDownTab();
+                }
+
+                if (subviewDefinitions != undefined) {
+                    for (var i = 0; i < subviewDefinitions.length; i++) {
+                        var subviewDefinition = subviewDefinitions[i];
+
+                        addDrillDownTab(dataRecordStorageLog, subviewDefinition);
+                    }
+                }
+
+                setDrillDownTabs();
+
+
+                function buildDetailsDrillDownTab() {
+                    var detailsTab = {};
+                    detailsTab.title = 'Details';
+                    detailsTab.directive = 'vr-analytic-datarecordsearchpage-itemdetails';
+
+                    detailsTab.loadDirective = function (directiveAPI, dataRecordStorageLog) {
+                        dataRecordStorageLog.directiveAPI = directiveAPI;
+                        var payload = { dataRecordStorageLog: dataRecordStorageLog };
+                        return dataRecordStorageLog.directiveAPI.load(payload);
+                    };
+
+                    drillDownTabs.push(detailsTab);
+                }
+
+                function addDrillDownTab(dataRecordStorageLog, subviewDefinition) {
+                    var drillDownTab = {};
+                    drillDownTab.title = subviewDefinition.Name;
+                    drillDownTab.directive = subviewDefinition.Settings.RuntimeEditor;
+
+                    drillDownTab.loadDirective = function (directiveAPI, dataRecordStorageLog) {
+                        dataRecordStorageLog.dataRecordStorageLogSubviewGridAPI = directiveAPI;
+
+                        var payload = {
+                            subviewDefinition: subviewDefinition,
+                            dataRecordStorageLog: dataRecordStorageLog,
+                            parentDataRecordTypeId: parentDataRecordTypeId,
+                            limitResult: limitResult
+                        };
+
+                        return dataRecordStorageLog.dataRecordStorageLogSubviewGridAPI.load(payload);
+                    };
+
+                    drillDownTabs.push(drillDownTab);
+                }
+
+                function setDrillDownTabs() {
+                    if (drillDownTabs.length == 0)
+                        return;
+
+                    var drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI);
+                    drillDownManager.setDrillDownExtensionObject(dataRecordStorageLog);
+                }
             }
         }
+
     }
 
     app.directive('vrAnalyticAnalyticreportDatarecordstoragelogGrid', DataRecordStorageLogGridDirective);

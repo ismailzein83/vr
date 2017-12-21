@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AnalyticDataRecordSourceSubviewSettingsDirective.$inject = ['UtilsService', 'VR_Analytic_AnalyticReportAPIService'];
+    AnalyticDataRecordSourceSubviewSettingsDirective.$inject = ['UtilsService', 'VR_Analytic_AnalyticReportAPIService', 'VR_GenericData_DataRecordTypeAPIService'];
 
-    function AnalyticDataRecordSourceSubviewSettingsDirective(UtilsService, VR_Analytic_AnalyticReportAPIService) {
+    function AnalyticDataRecordSourceSubviewSettingsDirective(UtilsService, VR_Analytic_AnalyticReportAPIService, VR_GenericData_DataRecordTypeAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -26,9 +26,11 @@
         function AnalyticDataRecordSourceSubviewSettingsCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
-            var subviewDefinition;
-            var parentSearchQuery;
             var dataRecordStorageLog;
+            var subviewDefinition;
+            var parentDataRecordTypeId;
+            var limitResult;
+            var dateTimeFieldValue;
             var analyticReportSource;
 
             var gridAPI;
@@ -41,21 +43,28 @@
                     defineAPI();
                 };
             }
-
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
 
                     if (payload != undefined) {
-                        subviewDefinition = payload.subviewDefinition;
-                        parentSearchQuery = payload.parentSearchQuery;
                         dataRecordStorageLog = payload.dataRecordStorageLog;
+                        subviewDefinition = payload.subviewDefinition;
+                        parentDataRecordTypeId = payload.parentDataRecordTypeId;
+                        limitResult = payload.limitResult;
                     }
 
                     var loadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                    getReportDefinition(subviewDefinition.Settings.AnalyticReportId).then(function () {
+                    var promises = [];
+                    promises.push(getReportDefinition(subviewDefinition.Settings.AnalyticReportId));
+
+                    if (subviewDefinition.Settings.IncludeTimeFilter) {
+                        promises.push(getDateTimeFieldValue());
+                    }
+
+                    UtilsService.waitMultiplePromises(promises).then(function () {
                         var query = getGridQuery();
                         gridAPI.loadGrid(query);
 
@@ -78,6 +87,18 @@
                     }
                 });
             }
+            function getDateTimeFieldValue() {
+                return VR_GenericData_DataRecordTypeAPIService.GetDataRecordType(parentDataRecordTypeId).then(function (dataRecordType) {
+                    var dateTimeFieldName = dataRecordType.Settings.DateTimeField;
+                    if (dateTimeFieldName == undefined)
+                        return;
+
+                    if (dataRecordStorageLog.FieldValues[dateTimeFieldName] == undefined)
+                        return;
+
+                    dateTimeFieldValue = dataRecordStorageLog.FieldValues[dateTimeFieldName].Value;
+                });
+            }
 
             function getGridQuery() {
 
@@ -90,9 +111,9 @@
                     SortColumns: analyticReportSource.SortColumns,
                     FilterGroup: analyticReportSource.RecordFilter,
                     Filters: buildMappingFilters(),
-                    LimitResult: parentSearchQuery.LimitResult,
-                    FromTime: parentSearchQuery.FromTime,
-                    ToTime: parentSearchQuery.ToTime,
+                    LimitResult: limitResult,
+                    FromTime: dateTimeFieldValue,
+                    ToTime: dateTimeFieldValue,
                     //Direction: $scope.selectedOrderDirection.value,
                     //sortDirection: $scope.selectedOrderDirection.sortDirection,
                 };
@@ -102,13 +123,17 @@
 
                 for (var i = 0; i < subviewDefinition.Settings.Mappings.length; i++) {
                     var currentMapping = subviewDefinition.Settings.Mappings[i];
+                    var currentFilter = { FieldName: currentMapping.SubviewColumnName };
 
-                    for (var fieldValueName in dataRecordStorageLog.FieldValues) {
-                        if (fieldValueName == currentMapping.ParentColumnName) {
-                            var currentFieldValue = dataRecordStorageLog.FieldValues[fieldValueName];
-                            filters.push({ FieldName: currentMapping.SubviewColumnName, FilterValues: [currentFieldValue.Value] });
-                        }
+                    var currentFieldValue = dataRecordStorageLog.FieldValues[currentMapping.ParentColumnName];
+                    if (currentFieldValue != undefined && currentFieldValue.Value != undefined){
+                        currentFilter.FilterValues = [currentFieldValue.Value];
                     }
+                    else {
+                        currentFilter.FilterValues = null;
+                    }
+
+                    filters.push(currentFilter);
                 }
 
                 return filters;

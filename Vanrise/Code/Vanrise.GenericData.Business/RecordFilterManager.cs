@@ -85,7 +85,7 @@ namespace Vanrise.GenericData.Business
             filterGroup.SetValueFromParameters(context);
         }
 
-        public RecordFilterGroup BuildRecordFilterGroup(Guid dataRecordTypeId, List<DataRecordFilter> filters,RecordFilter filterGroup)
+        public RecordFilterGroup BuildRecordFilterGroup(Guid dataRecordTypeId, List<DataRecordFilter> filters, RecordFilter filterGroup)
         {
             DataRecordTypeManager dataRecordTypeManager = new GenericData.Business.DataRecordTypeManager();
             var recordType = dataRecordTypeManager.GetDataRecordType(dataRecordTypeId);
@@ -93,6 +93,7 @@ namespace Vanrise.GenericData.Business
             RecordFilterGroup recordFilterGroup = new RecordFilterGroup();
             recordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.And;
             recordFilterGroup.Filters = new List<RecordFilter>();
+
             if(filterGroup != null)
             {
                recordFilterGroup.Filters.Add(filterGroup);
@@ -101,6 +102,12 @@ namespace Vanrise.GenericData.Business
             {
                 foreach (var filter in filters)
                 {
+                    if(filter.FilterValues == null)
+                    {
+                        recordFilterGroup.Filters.Add(new EmptyRecordFilter() { FieldName = filter.FieldName });
+                        continue;
+                    }
+
                     var record = recordType.Fields.FindRecord(x => x.Name == filter.FieldName);
                     List<object> notNullFilterValues = filter.FilterValues.Where(itm => itm != null).ToList();
                     RecordFilter notNullValuesRecordFilter = notNullFilterValues.Count > 0 ? record.Type.ConvertToRecordFilter(record.Name, notNullFilterValues) : null;
@@ -126,6 +133,7 @@ namespace Vanrise.GenericData.Business
                     }
                 }
             }
+
             return recordFilterGroup;
         }
 
