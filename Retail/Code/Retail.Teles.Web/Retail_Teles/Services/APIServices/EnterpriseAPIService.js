@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
 
     "use strict";
-    EnterpriseAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Retail_Teles_ModuleConfig'];
+    EnterpriseAPIService.$inject = ['BaseAPIService', 'UtilsService', 'Retail_Teles_ModuleConfig','SecurityService'];
 
-    function EnterpriseAPIService(BaseAPIService, UtilsService, Retail_Teles_ModuleConfig) {
+    function EnterpriseAPIService(BaseAPIService, UtilsService, Retail_Teles_ModuleConfig, SecurityService) {
 
         var controllerName = "TelesEnterprise";
 
@@ -38,6 +38,9 @@
         function SaveAccountEnterprisesDIDs() {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_Teles_ModuleConfig.moduleName, controllerName, "SaveAccountEnterprisesDIDs"));
         }
+        function HasSaveAccountEnterprisesPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(Retail_Teles_ModuleConfig.moduleName, controllerName, ['SaveAccountEnterprisesDIDs']));
+        }
 
         return ({
             GetEnterprisesInfo: GetEnterprisesInfo,
@@ -46,7 +49,8 @@
             GetFilteredEnterpriseDIDs: GetFilteredEnterpriseDIDs,
             GetFilteredEnterpriseBusinessTrunks: GetFilteredEnterpriseBusinessTrunks,
             GetFilteredAccountEnterprisesDIDs: GetFilteredAccountEnterprisesDIDs,
-            SaveAccountEnterprisesDIDs: SaveAccountEnterprisesDIDs
+            SaveAccountEnterprisesDIDs: SaveAccountEnterprisesDIDs,
+            HasSaveAccountEnterprisesPermission: HasSaveAccountEnterprisesPermission
         });
     }
 

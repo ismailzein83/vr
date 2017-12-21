@@ -14,6 +14,9 @@
                 gridAPI = api;
                 gridAPI.load({});
             };
+            $scope.hasSaveAccountEnterprisesPermission = function () {
+                return Retail_Teles_EnterpriseAPIService.HasSaveAccountEnterprisesPermission();
+            };
             $scope.save = function () {
                 return Retail_Teles_EnterpriseAPIService.SaveAccountEnterprisesDIDs().then(function () {
                     VRNotificationService.showSuccess("Saved Successfully.");
