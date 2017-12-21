@@ -360,17 +360,18 @@
 
                 return {
                     DataRecordStorageIds: $scope.selectedDRSearchPageStorageSource.RecordStorageIds,
-                    FromTime: $scope.fromDate,
-                    ToTime: $scope.toDate,
+                    DataRecordTypeId: $scope.selectedDRSearchPageStorageSource.DataRecordTypeId,
                     GridColumns: $scope.selectedDRSearchPageStorageSource.GridColumns,
                     ItemDetails: $scope.selectedDRSearchPageStorageSource.ItemDetails,
+                    SubviewDefinitions: $scope.selectedDRSearchPageStorageSource.SubviewDefinitions,
                     SortColumns: $scope.selectedDRSearchPageStorageSource.SortColumns,
                     FilterGroup: buildFilterGroupObj(filterObj, $scope.selectedDRSearchPageStorageSource.RecordFilter),
-                    LimitResult: $scope.limit,
-                    Direction: $scope.selectedOrderDirection.value,
-                    sortDirection: $scope.selectedOrderDirection.sortDirection,
-                    DataRecordTypeId: $scope.selectedDRSearchPageStorageSource.DataRecordTypeId,
                     Filters: filters,
+                    LimitResult: $scope.limit,
+                    FromTime: $scope.fromDate,
+                    ToTime: $scope.toDate,
+                    Direction: $scope.selectedOrderDirection.value,
+                    sortDirection: $scope.selectedOrderDirection.sortDirection
                 };
             }
 
