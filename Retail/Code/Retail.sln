@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{C9D155CA-F029-4600-994D-B363EB3036AC}"
 EndProject
@@ -177,9 +177,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Teles.Data.SQL", "Re
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Teles.Data", "Retail.Teles.Data\Retail.Teles.Data.csproj", "{BDB92084-88CB-49E7-925B-6FBB58D03EEE}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQl.RetailTeles", "SQl.RetailTeles\SQl.RetailTeles.sqlproj", "{01B9B806-7457-4A26-A6E2-0EC136E9DADB}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 72
+		SccNumberOfProjects = 73
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -467,6 +469,10 @@ Global
 		SccProjectTopLevelParentUniqueName71 = Retail.sln
 		SccProjectName71 = Retail.Teles.Data
 		SccLocalPath71 = Retail.Teles.Data
+		SccProjectUniqueName72 = SQl.RetailTeles\\SQl.RetailTeles.sqlproj
+		SccProjectTopLevelParentUniqueName72 = Retail.sln
+		SccProjectName72 = SQl.RetailTeles
+		SccLocalPath72 = SQl.RetailTeles
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -765,6 +771,12 @@ Global
 		{BDB92084-88CB-49E7-925B-6FBB58D03EEE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BDB92084-88CB-49E7-925B-6FBB58D03EEE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BDB92084-88CB-49E7-925B-6FBB58D03EEE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01B9B806-7457-4A26-A6E2-0EC136E9DADB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01B9B806-7457-4A26-A6E2-0EC136E9DADB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01B9B806-7457-4A26-A6E2-0EC136E9DADB}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{01B9B806-7457-4A26-A6E2-0EC136E9DADB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01B9B806-7457-4A26-A6E2-0EC136E9DADB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01B9B806-7457-4A26-A6E2-0EC136E9DADB}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -852,5 +864,6 @@ Global
 		{BB188405-2BCB-410C-918B-6187CBEBF857} = {2A6F5C05-5413-4A7D-A37E-652BFBBB985D}
 		{124351A1-965B-4D85-BFEF-E0D7DD151FEE} = {B308930C-7B05-4773-8AA9-67A1653A4F21}
 		{BDB92084-88CB-49E7-925B-6FBB58D03EEE} = {B308930C-7B05-4773-8AA9-67A1653A4F21}
+		{01B9B806-7457-4A26-A6E2-0EC136E9DADB} = {DBCF7D23-8951-4886-9024-282788E5D24F}
 	EndGlobalSection
 EndGlobal
