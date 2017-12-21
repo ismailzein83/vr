@@ -69,7 +69,7 @@ app.directive('vrCommonExclusivesessionGrid', ['VRCommon_VRExclusiveSessionAPISe
             function forceReleaseSession(vrExclusiveSessionItem) {
                 var onVRExclusiveSessionForceRelease = function () {
                     return gridAPI.retrieveData(queryObject);
-                }
+                };
                 return VRCommon_VRExclusiveSessionService.forceRelease(vrExclusiveSessionItem.VRExclusiveSessionId, onVRExclusiveSessionForceRelease);
             }
 

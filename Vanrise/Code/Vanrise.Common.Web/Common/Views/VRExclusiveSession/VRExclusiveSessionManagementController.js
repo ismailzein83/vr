@@ -30,7 +30,7 @@
             $scope.scopeModel.releaseAll = function () {
                 var onVRExclusiveSessionForceRelease = function () {
                     return gridAPI.load(buildGridQuery());
-                }
+                };
                 return VRCommon_VRExclusiveSessionService.forceReleaseAll(onVRExclusiveSessionForceRelease);
             };
 
