@@ -1,0 +1,38 @@
+﻿<vr-analytic-analyticreport-selector on-ready="scopeModel.onAnalyticReportSelectorDirectiveReady"
+                                     onselectionchanged="scopeModel.onAnalyticReportSelectionChanged"
+                                     selectedvalues="scopeModel.selectedAnalyticReport"
+                                     isrequired="true" normal-col-num="6" hideremoveicon>
+</vr-analytic-analyticreport-selector>
+<vr-columns width="1/2row" ng-show="scopeModel.selectedAnalyticReport != undefined" vr-loader="scopeModel.isDataRecordSourceSelectorLoading">
+    <vr-select datasource="scopeModel.dataRecordSources"
+               selectedvalues="scopeModel.selectedDataRecordSources"
+               onselectionchanged="scopeModel.onDataRecordSourceSelectionChanged"
+               datavaluefield="Name"
+               datatextfield="Title"
+               isrequired="true"
+               label="Source" hideremoveicon>
+    </vr-select>
+</vr-columns>
+
+<vr-columns width="fullrow" ng-show="scopeModel.selectedDataRecordSources != undefined" vr-loader="scopeModel.isGridLoading">
+    <vr-section title="Mappings">
+        <vr-columns width="fullrow">
+            <vr-button type="Add" data-onclick="scopeModel.onAddParentSubviewMapping" standalone></vr-button>
+        </vr-columns>
+        <vr-columns width="fullrow">
+            <vr-validator validate="scopeModel.validate()">
+                <vr-datagrid datasource="scopeModel.parentSubviewMappings"
+                             ondeleterow="scopeModel.removeParentSubviewMapping"
+                             norowhighlightonclick="true" hidegridmenu>
+
+                    <vr-datagridcolumn headertext="'Parent Field Name'" disablesorting="true">
+                        <vr-genericdata-datarecordtypefields-selector on-ready="dataItem.onParentDataRecordFieldSelectorReady" isrequired="true" hideremoveicon hidelabel></vr-genericdata-datarecordtypefields-selector>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Subview Field Name'" disablesorting="true">
+                        <vr-genericdata-datarecordtypefields-selector on-ready="dataItem.onSubviewDataRecordFieldSelectorReady" isrequired="true" hideremoveicon hidelabel></vr-genericdata-datarecordtypefields-selector>
+                    </vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-validator>
+        </vr-columns>
+    </vr-section>
+</vr-columns>

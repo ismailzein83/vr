@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordStorageLogGridDirective.$inject = ['VR_GenericData_DataRecordStorageLogAPIService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService', 'UtilsService', 'VR_Analytic_GridWidthEnum', 'ColumnWidthEnum', 'VRUIUtilsService'];
+    DataRecordStorageLogGridDirective.$inject = ['VR_GenericData_DataRecordStorageLogAPIService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService', 'UtilsService', 'VR_Analytic_GridWidthEnum', 'ColumnWidthEnum', 'VRUIUtilsService', 'VR_Analytic_DataRecordStorageLogService'];
 
-    function DataRecordStorageLogGridDirective(VR_GenericData_DataRecordStorageLogAPIService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, UtilsService, VR_Analytic_GridWidthEnum, ColumnWidthEnum, VRUIUtilsService) {
+    function DataRecordStorageLogGridDirective(VR_GenericData_DataRecordStorageLogAPIService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, UtilsService, VR_Analytic_GridWidthEnum, ColumnWidthEnum, VRUIUtilsService, VR_Analytic_DataRecordStorageLogService) {
         return {
             restrict: 'E',
             scope: {
@@ -29,14 +29,15 @@
 
             var gridWidths;
             var detailWidths;
-            var gridAPI;
             var itemDetails;
-
+            var subviewDefinitions;
             var sortColumns;
+            var searchQuery;
             var dataRecordTypeAttributes;
 
+            var gridAPI;
+
             function initializeController() {
-                ctrl.showGrid = false;
                 ctrl.sortField = 'DateTimeField';
                 ctrl.sortDirection = undefined;
                 ctrl.dataRecordStorageLogs = [];
@@ -54,15 +55,16 @@
                     if (!retrieveDataContext.isDataSorted) {
                         dataRetrievalInput.SortByColumnName = null;
                     }
+
                     return VR_GenericData_DataRecordStorageLogAPIService.GetFilteredDataRecordStorageLogs(dataRetrievalInput).then(function (response) {
                         if (response && response.Data) {
                             for (var z = 0; z < response.Data.length; z++) {
-                                var currentData = response.Data[z];
+                                var dataRecordStorageLog = response.Data[z];
                                 if (itemDetails != undefined) {
-                                    currentData.details = UtilsService.cloneObject(itemDetails, false);
+                                    dataRecordStorageLog.details = UtilsService.cloneObject(itemDetails, false);
 
-                                    for (var x = 0; x < currentData.details.length; x++) {
-                                        var currentDetail = currentData.details[x];
+                                    for (var x = 0; x < dataRecordStorageLog.details.length; x++) {
+                                        var currentDetail = dataRecordStorageLog.details[x];
 
                                         for (var y = 0; y <= dataRecordTypeAttributes.length; y++) {
                                             var currentAttribute = dataRecordTypeAttributes[y];
@@ -71,9 +73,10 @@
                                                 break;
                                             }
                                         }
-                                        extendDetailItemObject(currentDetail, currentData);
                                     }
                                 }
+
+                                VR_Analytic_DataRecordStorageLogService.defineDataRecordStorageLogTabs(dataRecordStorageLog, subviewDefinitions, searchQuery, gridAPI);
                             }
                         }
 
@@ -94,9 +97,13 @@
                 api.loadGrid = function (query) {
 
                     ctrl.showDetails = false;
-
                     if (query.ItemDetails && query.ItemDetails.length > 0)
                         ctrl.showDetails = true;
+
+                    if (query.SubviewDefinitions && query.SubviewDefinitions.length > 0) {
+                        subviewDefinitions = query.SubviewDefinitions;
+                        ctrl.showDetails = true;
+                    }
 
                     itemDetails = buildItemDetails(query.ItemDetails);
                     sortColumns = query.SortColumns;
@@ -104,7 +111,7 @@
                     var promiseDeffer = UtilsService.createPromiseDeferred();
                     getDataRecordAttributes(query).then(function () {
 
-                        var searchQuery = {
+                        searchQuery = {
                             DataRecordStorageIds: query.DataRecordStorageIds,
                             FromTime: query.FromTime,
                             ToTime: query.ToTime,
@@ -137,7 +144,7 @@
                     return promiseDeffer.promise;
                 };
 
-                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') 
+                if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function')
                     ctrl.onReady(api);
             }
 
@@ -169,7 +176,6 @@
 
 
                     if (sortColumns && sortColumns.length > 0) {
-
                         var firstSortColumn = sortColumns[0];
                         var matchingAttribute = UtilsService.getItemByVal(dataRecordTypeAttributes, firstSortColumn.FieldName, "Name");
                         ctrl.defaultSortByFieldName = getFieldValue(matchingAttribute.Attribute.Type, matchingAttribute.Name);
@@ -179,9 +185,21 @@
                         ctrl.defaultSortByFieldName = 'RecordTime';
                         ctrl.sortDirection = query.sortDirection;
                     }
-
-                    ctrl.showGrid = true;
                 });
+            }
+
+            function buildItemDetails(itemDetails) {
+                if (itemDetails) {
+                    for (var t = 0; t < itemDetails.length; t++) {
+                        var currentDetailItem = itemDetails[t];
+                        var columnWidth = UtilsService.getItemByVal(detailWidths, currentDetailItem.ColumnWidth, "value");
+                        if (columnWidth != undefined)
+                            currentDetailItem.colnum = columnWidth.numberOfColumns;
+                        else
+                            currentDetailItem.colnum = 2;
+                    }
+                }
+                return itemDetails;
             }
 
             function getFieldValue(type, fieldName) {
@@ -212,30 +230,6 @@
                 }
                 return columns;
             }
-
-            function buildItemDetails(itemDetails) {
-                if (itemDetails) {
-                    for (var t = 0; t < itemDetails.length; t++) {
-                        var currentDetailItem = itemDetails[t];
-                        var columnWidth = UtilsService.getItemByVal(detailWidths, currentDetailItem.ColumnWidth, "value");
-                        if (columnWidth != undefined)
-                            currentDetailItem.colnum = columnWidth.numberOfColumns;
-                        else
-                            currentDetailItem.colnum = 2;
-                    }
-                }
-                return itemDetails;
-            }
-
-            function extendDetailItemObject(detailItem, data) {
-                detailItem.detailViewerLoadDeferred = UtilsService.createPromiseDeferred();
-                detailItem.onDetailViewerReady = function (api) {
-                    detailItem.detailViewerAPI = api;
-                    var payload = { detailItem: detailItem, fieldValue: data.FieldValues[detailItem.FieldName] };
-                    VRUIUtilsService.callDirectiveLoad(detailItem.detailViewerAPI, payload, detailItem.detailViewerLoadDeferred);
-                };
-                return detailItem.detailViewerLoadDeferred.promise;
-            };
         }
     }
 

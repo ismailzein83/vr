@@ -35,6 +35,7 @@ namespace Vanrise.Analytic.Entities
         public List<Guid> RecordStorageIds { get; set; }
         public List<DRSearchPageGridColumn> GridColumns { get; set; }
         public List<DRSearchPageItemDetail> ItemDetails { get; set; }
+        public List<DRSearchPageSubviewDefinition> SubviewDefinitions { get; set; }
         public List<DRSearchPageSortColumn> SortColumns { get; set; }
         public List<DRSearchPageFilter> Filters { get; set; }
         public RecordFilterGroup RecordFilter { get; set; }
@@ -65,5 +66,21 @@ namespace Vanrise.Analytic.Entities
     {
         public string FieldName { get; set; }
         public bool IsDescending { get; set; }
+    }
+
+    public class DRSearchPageSubviewDefinition
+    {
+        public Guid SubviewDefinitionId { get; set; }  
+
+        public string Name { get; set; }
+
+        public DRSearchPageSubviewDefinitionSettings Settings { get; set; }
+    }
+
+    public abstract class DRSearchPageSubviewDefinitionSettings
+    {
+        public abstract Guid ConfigId { get; }
+
+        public abstract string RuntimeEditor { get; }
     }
 }

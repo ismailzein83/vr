@@ -16,6 +16,7 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
             showaddbutton: '@',
             hidelabel: '@',
             onselectitem: "=",
+            onbeforeselectionchanged: '='
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -23,9 +24,6 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
             ctrl.selectedvalues = ($attrs.ismultipleselection != undefined) ? [] : undefined;
             ctrl.datasource = [];
 
-
-
-            ctrl.datasource = [];
             var ctor = new recordTypeCtor(ctrl, $scope, $attrs);
             ctor.initializeController();
         },
@@ -49,7 +47,7 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
             if (attrs.label == undefined)
                 label = 'label="Type"';
             else
-                label = 'label="' + attrs.label+'"';
+                label = 'label="' + attrs.label + '"';
 
         var disabled = "";
         if (attrs.isdisabled)
@@ -68,8 +66,9 @@ app.directive('vrGenericdataDatarecordtypeSelector', ['VR_GenericData_DataRecord
 
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
 
-        return ' <vr-select ' + multipleselection + ' datasource="ctrl.datasource" isrequired="ctrl.isrequired" ' + hideselectedvaluessection + ' ' + hideremoveicon + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="DataRecordTypeId"  onselectitem="ctrl.onselectitem"'
-               + 'entityname="Type" ' + label + '></vr-select>';
+        return ' <vr-select ' + multipleselection + ' datasource="ctrl.datasource" isrequired="ctrl.isrequired" ' + hideselectedvaluessection + ' ' + hideremoveicon + ' selectedvalues="ctrl.selectedvalues" ' + disabled +
+               ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="DataRecordTypeId"  onselectitem="ctrl.onselectitem"' +
+               ' entityname="Type" ' + label + ' onbeforeselectionchanged="ctrl.onbeforeselectionchanged"></vr-select>';
 
     }
 

@@ -60,5 +60,12 @@ namespace Vanrise.Analytic.Web.Controllers
         {
             return _manager.GetVRRestAPIAnalyticQueryInterceptorConfigs();
         }
+
+        [HttpGet]
+        [Route("GetDRSearchPageSubviewDefinitionSettingsConfigs")]
+        public IEnumerable<DRSearchPageSubviewDefinitionSettingsConfig> GetDRSearchPageSubviewDefinitionSettingsConfigs()
+        {
+            return _manager.GetDRSearchPageSubviewDefinitionSettingsConfigs();
+        }
     }
 }

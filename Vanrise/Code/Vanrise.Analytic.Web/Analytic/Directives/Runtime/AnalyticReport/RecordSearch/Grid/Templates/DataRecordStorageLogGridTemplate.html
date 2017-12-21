@@ -12,9 +12,7 @@
         </vr-datagridcolumn>
 
         <vr-datagridexpandablerow>
-            <span ng-repeat="detail in dataItem.details">
-                <vr-directivewrapper directive="detail.editor" on-ready="detail.onDetailViewerReady"></vr-directivewrapper>
-            </span>
+            <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
         </vr-datagridexpandablerow>
     </vr-datagrid>
 </div>

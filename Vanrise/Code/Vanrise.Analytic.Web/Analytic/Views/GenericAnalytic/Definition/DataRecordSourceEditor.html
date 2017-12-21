@@ -13,9 +13,9 @@
                         <vr-columns width="1/4row">
                             <vr-genericdata-datarecordtype-selector on-ready="onDataRecordTypeSelectorReady"
                                                                     selectedvalues="scopeModel.selectedDataRecordType"
+                                                                    onbeforeselectionchanged="onBeforeDataRecordTypeSelectionChanged"
                                                                     onselectionchanged="onDataRecordTypeSelectionChanged"
-                                                                    isrequired="true"
-                                                                    hideremoveicon>
+                                                                    isrequired="true" hideremoveicon>
                             </vr-genericdata-datarecordtype-selector>
                         </vr-columns>
                         <vr-columns width="1/4row" vr-loader="isRecordStorageLoading">
@@ -74,7 +74,7 @@
                         <vr-tab header="'Item Details'">
                             <vr-row removeline>
                                 <vr-columns width="1/4row" vr-loader="isRecordTypeFieldsLoading">
-                                    <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedDetails" onselectitem="onSelectedDetailItem" ondeselectitem="    onDeSelectedDetailItem"
+                                    <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedDetails" onselectitem="onSelectedDetailItem" ondeselectitem="onDeSelectedDetailItem"
                                                datavaluefield="Name" datatextfield="Title" hideremoveicon ismultipleselection hideselectedvaluessection>
                                     </vr-select>
                                 </vr-columns>
@@ -94,10 +94,23 @@
                                 </vr-columns>
                             </vr-row>
                         </vr-tab>
+                        <vr-tab header="'Sub Views'">
+                            <vr-row removeline>
+                                <vr-columns width="1/4row">
+                                    <vr-button type="Add" data-onclick="onAddSubviewDefinition" vr-disabled="scopeModel.selectedDataRecordType == undefined" standalone></vr-button>
+                                </vr-columns>
+                                <vr-columns width="fullrow">
+                                    <vr-datagrid on-ready="onSubviewGridReady" datasource="selectedSubviewDefinitionsGrid" menuactions="subviewDefinitionMenuActions"
+                                                 ondeleterow="removeSubviewDefinition" enabledraggablerow="true" hidegridmenu>
+                                        <vr-datagridcolumn headertext="'Name'" widthfactor="5" field="'Name'" disablesorting="true"></vr-datagridcolumn>
+                                    </vr-datagrid>
+                                </vr-columns>
+                            </vr-row>
+                        </vr-tab>
                         <vr-tab header="'Sort Columns'">
                             <vr-row removeline>
                                 <vr-columns width="1/4row" vr-loader="isRecordTypeFieldsLoading">
-                                    <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedSortColumns" onselectitem="onSelectedSortColumn" ondeselectitem="    onDeSelectedSortColumn"
+                                    <vr-select label="Field" datasource="dataRecordTypeFields" selectedvalues="selectedSortColumns" onselectitem="onSelectedSortColumn" ondeselectitem="onDeSelectedSortColumn"
                                                datavaluefield="Name" datatextfield="Title" hideremoveicon ismultipleselection hideselectedvaluessection>
                                     </vr-select>
                                 </vr-columns>

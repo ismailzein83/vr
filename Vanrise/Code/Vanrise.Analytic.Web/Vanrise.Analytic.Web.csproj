@@ -203,7 +203,11 @@
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RealTime\vr-analytic-analyticreport-realtime-definition.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RealTime\Widgets\Templates\RealTimeWidgetsSelectiveTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RealTime\Widgets\vr-analytic-realtime-widgets-selective.js" />
+    <Content Include="Analytic\Directives\Definition\AnalyticReport\RecordSearch\SourceSettings\DRSearchPageSubviewDefinitionEditorController.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RecordSearch\SourceSettings\Templates\DataRecordSourceGridTemplate.html" />
+    <Content Include="Analytic\Directives\Definition\AnalyticReport\RecordSearch\SourceSettings\Templates\DRSearchPageSubviewDefinitionEditor.html" />
+    <Content Include="Analytic\Directives\Definition\AnalyticReport\RecordSearch\SourceSettings\Templates\DRSearchPageSubviewDefinitionSettingsTemplate.html" />
+    <Content Include="Analytic\Directives\Definition\AnalyticReport\RecordSearch\SourceSettings\vr-analytic-datarecordsearchpage-subviewdefinition-settings.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RecordSearch\SourceSettings\vr-analytic-datarecordsource-grid.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RecordSearch\Templates\RecordSearchAnalyticReportTemplates.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\RecordSearch\vr-analytic-analyticreport-recordsearch-definition.js" />
@@ -233,6 +237,12 @@
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\RealTime\Widgets\Chart\Templates\RealTimeChartWidgetDefinitionTemplate.html" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\RealTime\Widgets\Chart\vr-analytic-realtime-widgets-timevariation-definition.js" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\RealTime\Widgets\Chart\vr-analytic-realtime-widgets-chart-definition.js" />
+    <Content Include="Analytic\Directives\Runtime\AnalyticReport\RecordSearch\MainExtensions\SourceSettings\Templates\DataRecordSourceSubviewSettingsTemplate.html" />
+    <Content Include="Analytic\Directives\Runtime\AnalyticReport\RecordSearch\MainExtensions\SourceSettings\vr-analytic-datarecordsource-subviewsettings.js" />
+    <Content Include="Analytic\Directives\Runtime\AnalyticReport\RecordSearch\Templates\DataRecordSearchPageItemDetailsTemplate.html" />
+    <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\RecordSearch\SourceSettings\Templates\DataRecordSourceSubviewDefinitionSettingsTemplate.html" />
+    <Content Include="Analytic\Directives\Runtime\AnalyticReport\RecordSearch\vr-analytic-datarecordsearchpage-itemdetails.js" />
+    <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\RecordSearch\SourceSettings\vr-analytic-datarecordsource-subviewdefinitionsettings.js" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\StyleRuleConditions\Templates\CompareConditionTemplate.html" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\StyleRuleConditions\Templates\RangeConditionTemplate.html" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\StyleRuleConditions\vr-analytic-measurestyle-stylerulecondition-compare.js" />
@@ -293,6 +303,7 @@
     <Content Include="Analytic\Services\DAProfCalcGroupingFieldService.js" />
     <Content Include="Analytic\Services\DataAnalysisDefinitionService.js" />
     <Content Include="Analytic\Services\DataAnalysisItemDefinitionService.js" />
+    <Content Include="Analytic\Services\DataRecordStorageLogService.js" />
     <Content Include="Analytic\Services\RecordSearchService.js" />
     <Content Include="Analytic\Services\AnalyticService.js" />
     <Content Include="Analytic\Services\AnalyticTableService.js" />

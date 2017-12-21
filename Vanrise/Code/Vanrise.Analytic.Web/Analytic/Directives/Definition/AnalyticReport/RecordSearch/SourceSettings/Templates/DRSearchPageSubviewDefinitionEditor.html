@@ -1,0 +1,22 @@
+﻿<div vr-modalcontent ng-controller="VR_Analytic_DRSearchPageSubviewDefinitionEditorController" width="'50%'" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formDRSearchPageSubviewDefinitionEditor">
+            <vr-row>
+                <vr-columns width="1/2row">
+                    <vr-textbox value="scopeModel.name" label="Name" isrequired="true"></vr-textbox>
+                </vr-columns>
+                <vr-analytic-datarecordsearchpage-subviewdefinition-settings on-ready="scopeModel.onSubviewDefinitionSettingsDirectiveReady" 
+                                                                             normal-col-num="6" isrequired="true">
+                </vr-analytic-datarecordsearchpage-subviewdefinition-settings>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formDRSearchPageSubviewDefinitionEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

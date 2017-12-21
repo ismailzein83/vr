@@ -36,6 +36,10 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetVRRestAPIAnalyticQueryInterceptorConfigs"));
         }
 
+        function GetDRSearchPageSubviewDefinitionSettingsConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDRSearchPageSubviewDefinitionSettingsConfigs"));
+        }
+
         return ({
             GetAnalyticReportSettingsTemplateConfigs: GetAnalyticReportSettingsTemplateConfigs,
             GetWidgetsTemplateConfigs: GetWidgetsTemplateConfigs,
@@ -43,7 +47,8 @@
             GetRealTimeWidgetsTemplateConfigs: GetRealTimeWidgetsTemplateConfigs,
             GetMeasureStyleRuleTemplateConfigs: GetMeasureStyleRuleTemplateConfigs,
             GetAnalyticDataProviderConfigs: GetAnalyticDataProviderConfigs,
-            GetVRRestAPIAnalyticQueryInterceptorConfigs: GetVRRestAPIAnalyticQueryInterceptorConfigs
+            GetVRRestAPIAnalyticQueryInterceptorConfigs: GetVRRestAPIAnalyticQueryInterceptorConfigs,
+            GetDRSearchPageSubviewDefinitionSettingsConfigs: GetDRSearchPageSubviewDefinitionSettingsConfigs
         });
     }
 

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordSourceEditorController.$inject = ['$scope', 'VR_GenericData_DataRecordStorageAPIService', 'VR_GenericData_DataStoreAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService', 'ColumnWidthEnum', 'VR_Analytic_OrderDirectionEnum', 'VRCommon_GridWidthFactorEnum'];
+    DataRecordSourceEditorController.$inject = ['$scope', 'VR_GenericData_DataRecordStorageAPIService', 'VR_GenericData_DataStoreAPIService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService', 'ColumnWidthEnum', 'VR_Analytic_OrderDirectionEnum', 'VRCommon_GridWidthFactorEnum', 'Analytic_RecordSearchService'];
 
-    function DataRecordSourceEditorController($scope, VR_GenericData_DataRecordStorageAPIService, VR_GenericData_DataStoreAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, ColumnWidthEnum, VR_Analytic_OrderDirectionEnum, VRCommon_GridWidthFactorEnum) {
+    function DataRecordSourceEditorController($scope, VR_GenericData_DataRecordStorageAPIService, VR_GenericData_DataStoreAPIService, VRNavigationService, UtilsService, VRUIUtilsService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, ColumnWidthEnum, VR_Analytic_OrderDirectionEnum, VRCommon_GridWidthFactorEnum, Analytic_RecordSearchService) {
 
         var isEditMode;
         var dataRecordSource;
@@ -20,6 +20,8 @@
         var recordFilterDirectiveAPI;
         var recordFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var subviewDefinitionGridAPI;
+        var subviewDefinitionGridReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -40,16 +42,17 @@
             $scope.scopeModel.detailWidths = UtilsService.getArrayEnum(ColumnWidthEnum);
             $scope.scopeModel.orderDirectionList = UtilsService.getArrayEnum(VR_Analytic_OrderDirectionEnum);
 
+            $scope.dataRecordTypeFields = [];
             $scope.selectedFields = [];
             $scope.selectedFilters = [];
             $scope.selectedDetails = [];
             $scope.selectedSortColumns = [];
 
-            $scope.selectedFiltersGrid = [];
             $scope.selectedFieldsGrid = [];
+            $scope.selectedFiltersGrid = [];
             $scope.selectedDetailsGrid = [];
+            $scope.selectedSubviewDefinitionsGrid = [];
             $scope.selectedSortColumnsGrid = [];
-            $scope.dataRecordTypeFields = [];
 
             $scope.onDataRecordTypeSelectorReady = function (api) {
                 dataRecordTypeSelectorAPI = api;
@@ -62,7 +65,34 @@
                 recordFilterDirectiveAPI = api;
                 recordFilterDirectiveReadyDeferred.resolve();
             };
+            $scope.onSubviewGridReady = function (api) {
+                subviewDefinitionGridAPI = api;
+                subviewDefinitionGridReadyDeferred.resolve();
+            };
 
+            $scope.onBeforeDataRecordTypeSelectionChanged = function () {
+
+                var selectedDataRecordType = $scope.scopeModel.selectedDataRecordType;
+                if (selectedDataRecordType == undefined)
+                    return true;
+
+                return VRNotificationService.showConfirmation("Below Tabs Data will be deleted. Are you sure you want to continue?").then(function (response) {
+                    if (response) {
+                        $scope.selectedFields = [];
+                        $scope.selectedFilters = [];
+                        $scope.selectedDetails = [];
+                        $scope.selectedSortColumns = [];
+
+                        $scope.selectedFieldsGrid = [];
+                        $scope.selectedFiltersGrid = [];
+                        $scope.selectedDetailsGrid = [];
+                        $scope.selectedSubviewDefinitionsGrid = [];
+                        $scope.selectedSortColumnsGrid = [];
+                    }
+
+                    return response;
+                });
+            };
             $scope.onDataRecordTypeSelectionChanged = function (option) {
                 if (option != undefined) {
                     if (dataRecordStorageSelectorAPI != undefined) {
@@ -158,9 +188,45 @@
                 $scope.selectedDetailsGrid.splice($scope.selectedDetailsGrid.indexOf(detail), 1);
                 $scope.selectedDetails.splice(UtilsService.getItemIndexByVal($scope.selectedDetails, detail.FieldName, "Name"), 1);
             };
+            $scope.removeSubviewDefinition = function (subviewDefinition) {
+                $scope.selectedSubviewDefinitionsGrid.splice(UtilsService.getItemIndexByVal($scope.selectedSubviewDefinitionsGrid, subviewDefinition.Name, "Name"), 1);
+            };
             $scope.removeSortColumn = function (sortColumn) {
                 $scope.selectedSortColumnsGrid.splice($scope.selectedSortColumnsGrid.indexOf(sortColumn), 1);
                 $scope.selectedSortColumns.splice(UtilsService.getItemIndexByVal($scope.selectedSortColumns, sortColumn.FieldName, "Name"), 1);
+            };
+
+            $scope.onAddSubviewDefinition = function () {
+                var onSubviewDefinitionAdded = function (subviewDefinition) {
+                    $scope.selectedSubviewDefinitionsGrid.push(subviewDefinition);
+                };
+
+                var dataRecordTypeId;
+                if ($scope.scopeModel.selectedDataRecordType != undefined) {
+                    dataRecordTypeId = $scope.scopeModel.selectedDataRecordType.DataRecordTypeId;
+                }
+
+                Analytic_RecordSearchService.addDRSearchPageSubviewDefinition(onSubviewDefinitionAdded, dataRecordTypeId);
+            };
+            $scope.subviewDefinitionMenuActions = function () {
+                function editSubviewDefinition(subviewDefinition) {
+                    var onSubviewDefinitionUpdated = function (updatedSubviewDefinition) {
+                        var index = UtilsService.getItemIndexByVal($scope.selectedSubviewDefinitionsGrid, subviewDefinition.Name, 'Name');
+                        $scope.selectedSubviewDefinitionsGrid[index] = updatedSubviewDefinition;
+                    };
+
+                    var dataRecordTypeId;
+                    if ($scope.scopeModel.selectedDataRecordType != undefined) {
+                        dataRecordTypeId = $scope.scopeModel.selectedDataRecordType.DataRecordTypeId;
+                    }
+
+                    Analytic_RecordSearchService.editDRSearchPageSubviewDefinition(onSubviewDefinitionUpdated, subviewDefinition, dataRecordTypeId);
+                }
+
+                return [{
+                    name: 'Edit',
+                    clicked: editSubviewDefinition
+                }];
             };
 
             $scope.isFieldGridValid = function () {
@@ -226,7 +292,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, setData, loadDataRecordTypeSelector, loadDataRecordFields, loadRecordFilterDirectiveLoadPromise]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, setData, loadDataRecordTypeSelector, loadDataRecordFields, loadRecordFilterDirectiveLoadPromise, loadSubviewGrid]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
@@ -349,6 +415,26 @@
 
             return recordFilterDirectiveLoadDeferred.promise;
         }
+        function loadSubviewGrid() {
+            if (!isEditMode)
+                return;
+
+            var subviewGridLoadDeferred = UtilsService.createPromiseDeferred();
+
+            subviewDefinitionGridReadyDeferred.promise.then(function () {
+
+                if (dataRecordSource != undefined && dataRecordSource.SubviewDefinitions) {
+                    for (var index = 0; index < dataRecordSource.SubviewDefinitions.length; index++) {
+                        var currentSubviewDefinition = dataRecordSource.SubviewDefinitions[index];
+                        $scope.selectedSubviewDefinitionsGrid.push(currentSubviewDefinition)
+                    }
+                }
+
+                subviewGridLoadDeferred.resolve();
+            });
+
+            return subviewGridLoadDeferred.promise;
+        }
 
         function loadDataRecord(dataRecordTypeId) {
             return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(dataRecordTypeId).then(function (response) {
@@ -437,6 +523,7 @@
         }
 
         function buildSourceObj() {
+
             var columns = [];
             for (var x = 0; x < $scope.selectedFieldsGrid.length; x++) {
                 var currentItem = $scope.selectedFieldsGrid[x];
@@ -459,6 +546,12 @@
                 details.push({ FieldName: currentDetail.FieldName, FieldTitle: currentDetail.FieldTitle, ColumnWidth: currentDetail.SelectedDetailWidth.value });
             }
 
+            var subviewDefinitions = [];
+            for (var t = 0; t < $scope.selectedSubviewDefinitionsGrid.length; t++) {
+                var currentSubviewDefinition = $scope.selectedSubviewDefinitionsGrid[t];
+                subviewDefinitions.push(currentSubviewDefinition);
+            }
+
             var sortColumns = [];
             for (var z = 0; z < $scope.selectedSortColumnsGrid.length; z++) {
                 var currentSortColumn = $scope.selectedSortColumnsGrid[z];
@@ -472,6 +565,7 @@
                 RecordStorageIds: dataRecordStorageSelectorAPI.getSelectedIds(),
                 GridColumns: columns,
                 ItemDetails: details,
+                SubviewDefinitions: subviewDefinitions,
                 SortColumns: sortColumns,
                 Filters: filters,
                 RecordFilter: recordFilterDirectiveAPI.getData().filterObj

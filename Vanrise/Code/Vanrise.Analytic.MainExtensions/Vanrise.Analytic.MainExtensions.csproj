@@ -55,6 +55,7 @@
     <Compile Include="DARecordAggregates\DistinctCountAggregate.cs" />
     <Compile Include="DARecordAggregates\SumAggregate.cs" />
     <Compile Include="DataAnalysisAggregates\WhSFilters.cs" />
+    <Compile Include="DRSearchPageSubviewDefinitions\DRSourceSubviewDefinitionSettings.cs" />
     <Compile Include="StyleRuleConditions\CompareCondition.cs" />
     <Compile Include="StyleRuleConditions\RangeCondition.cs" />
     <Compile Include="History\Widgets\AnalyticPieChartWidget.cs" />

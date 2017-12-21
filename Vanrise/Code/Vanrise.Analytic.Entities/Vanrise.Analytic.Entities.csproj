@@ -64,6 +64,7 @@
     <Compile Include="AnalyticReport\RealTimeReport\RealTimeSearchSetting.cs" />
     <Compile Include="AnalyticReport\RealTimeReport\RealTimeWidgetSetting.cs" />
     <Compile Include="AnalyticReport\RecordSearch\DataRecordSearchPageSettings.cs" />
+    <Compile Include="AnalyticReport\RecordSearch\DRSearchPageSubviewDefinitionSettingsConfig.cs" />
     <Compile Include="AnalyticSummaryBigResult.cs" />
     <Compile Include="AnalyticTableDetail.cs" />
     <Compile Include="AnalyticTableQuery.cs" />
