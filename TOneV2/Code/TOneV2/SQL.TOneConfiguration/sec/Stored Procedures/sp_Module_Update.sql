@@ -3,7 +3,8 @@
 	@Name Nvarchar(255),
 	@ParentId uniqueidentifier,	
 	@DefaultViewId uniqueidentifier,
-	@AllowDynamic bit
+	@AllowDynamic bit,
+	@Settings nvarchar(max)
 AS
 BEGIN
 	IF NOT EXISTS(SELECT 1 FROM sec.[Module] WHERE ID != @ID AND Name = @Name and ParentId = @ParentId)
@@ -12,7 +13,8 @@ BEGIN
 		SET Name = @Name,
 			ParentId = @ParentId,
 			[DefaultViewId] = @DefaultViewId,
-			[AllowDynamic] = @AllowDynamic
+			[AllowDynamic] = @AllowDynamic,
+			[Settings] = @Settings
 		WHERE ID = @ID
 	end
 END

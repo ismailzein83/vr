@@ -12,7 +12,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT  [Id],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[AllowDynamic],[Rank] 
+	SELECT  [Id],[Name],[Url],[DefaultViewId],[ParentId],[Icon],[AllowDynamic],[Rank],[Settings]
 	from	[sec].Module WITH(NOLOCK) 
     ORDER BY [Rank]
 END
