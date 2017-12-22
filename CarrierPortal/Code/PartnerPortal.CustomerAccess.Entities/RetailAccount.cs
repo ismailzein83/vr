@@ -28,4 +28,10 @@ namespace PartnerPortal.CustomerAccess.Entities
         public DateTime? EnabledTill { get; set; }
         public Guid AccountBEDefinitionId { get; set; }
     }
+    public class RetailAccountToUpdate
+    {
+        public int UserId { get; set; }
+        public string Email { get; set; }
+        public string Name { get; set; }
+    }
 }
