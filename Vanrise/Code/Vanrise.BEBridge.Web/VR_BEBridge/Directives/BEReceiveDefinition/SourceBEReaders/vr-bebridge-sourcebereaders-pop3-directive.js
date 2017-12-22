@@ -81,7 +81,7 @@ app.directive('vrBebridgeSourcebereadersPop3Directive', ['VRNotificationService'
                         Pop3MessageFilter: pop3FilterSelectorAPI.getData(),
                     };
                     return {
-                        $type: "Vanrise.BEBridge.MainExtensions.SourceBEReaders.Pop3SourceReader, Vanrise.BEBridge.MainExtensions.SourceBEReaders",
+                        $type: "Vanrise.BEBridge.MainExtensions.SourceBEReaders.Pop3SourceReader, Vanrise.BEBridge.MainExtensions",
                         Setting: setting
                     };
                 };
