@@ -138,6 +138,8 @@ app.directive('vrWhsRoutingRouterulesettingsSpecialrequest', ['UtilsService', 'V
                                         });
                                     }
                                     loadSupplierPromiseDeferred.resolve();
+                                }).catch(function (error) {
+                                    loadSupplierPromiseDeferred.reject(error);
                                 });
                             }
                             else {
