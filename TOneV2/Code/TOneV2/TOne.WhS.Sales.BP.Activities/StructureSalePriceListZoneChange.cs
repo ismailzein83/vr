@@ -33,6 +33,8 @@ namespace TOne.WhS.Sales.BP.Activities
         public InArgument<DefaultRoutingProductToAdd> DefaultRoutingProductToAdd { get; set; }
         public InArgument<DefaultRoutingProductToClose> DefaultRoutingProductToClose { get; set; }
         public InArgument<DateTime> EffectiveOn { get; set; }
+        [RequiredArgument]
+        public InArgument<Dictionary<int, List<NewPriceList>>> CustomerPriceListsByCurrencyId { get; set; }
         #endregion
 
         #region Output Arguments
@@ -58,6 +60,7 @@ namespace TOne.WhS.Sales.BP.Activities
             DateTime effectiveOn = this.EffectiveOn.Get(context);
             int? priceListId = RerservedSalePriceListId.Get(context);
             int currencyId = CurrencyId.Get(context);
+            Dictionary<int, List<NewPriceList>> customerPriceListsByCurrencyId = CustomerPriceListsByCurrencyId.Get(context);
 
             #endregion
 
@@ -247,7 +250,7 @@ namespace TOne.WhS.Sales.BP.Activities
             long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
             int userId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId;
 
-            var pricelistByCurrencyId = CreatePriceList(ownerId, ownerType, priceListId, currencyId, processInstanceId, userId);
+            var pricelistByCurrencyId = CreatePriceList(ownerId, ownerType, priceListId, currencyId, processInstanceId, userId, ratePlanContext.PriceListCreationDate, customerPriceListsByCurrencyId);
             var structuredCustomers = salePriceListManager.StructureCustomerPricelistChange(customerPriceListChanges);
             var changes = salePriceListManager.CreateCustomerChanges(structuredCustomers, lastRateNoCachelocator, pricelistByCurrencyId, effectiveOn, processInstanceId, userId);
 
@@ -413,24 +416,25 @@ namespace TOne.WhS.Sales.BP.Activities
 
         #region Get Pricelist Changes from Customer Methods
 
-        private Dictionary<int, List<NewPriceList>> CreatePriceList(int ownerId, SalePriceListOwnerType ownerType, int? reservedId, int currencyId, long processInstanceId
-            , int userId)
+        private Dictionary<int, List<NewPriceList>> CreatePriceList(int ownerId, SalePriceListOwnerType ownerType, int? reservedId, int currencyId, long processInstanceId, int userId, DateTime priceListCreationDate, Dictionary<int, List<NewPriceList>> customerPriceListsByCurrencyId)
         {
-            Dictionary<int, List<NewPriceList>> priceListByCurrencyId = new Dictionary<int, List<NewPriceList>>();
+            Dictionary<int, List<NewPriceList>> priceListByCurrencyId = (customerPriceListsByCurrencyId != null) ? customerPriceListsByCurrencyId : new Dictionary<int, List<NewPriceList>>();
             if (reservedId.HasValue)
             {
                 NewPriceList newPricelist = new NewPriceList
-                 {
-                     OwnerId = ownerId,
-                     PriceListId = reservedId.Value,
-                     CurrencyId = currencyId,
-                     OwnerType = ownerType,
-                     //PriceListType = salePriceListType,
-                     EffectiveOn = DateTime.Now,
-                     ProcessInstanceId = processInstanceId,
-                     UserId = userId
-                 };
-                priceListByCurrencyId.Add(currencyId, new List<NewPriceList> { newPricelist });
+                {
+                    OwnerId = ownerId,
+                    PriceListId = reservedId.Value,
+                    CurrencyId = currencyId,
+                    OwnerType = ownerType,
+                    //PriceListType = salePriceListType,
+                    EffectiveOn = priceListCreationDate,
+                    ProcessInstanceId = processInstanceId,
+                    UserId = userId
+                };
+
+                List<NewPriceList> priceLists = priceListByCurrencyId.GetOrCreateItem(currencyId, () => { return new List<NewPriceList>(); });
+                priceLists.Add(newPricelist);
             }
             return priceListByCurrencyId;
         }

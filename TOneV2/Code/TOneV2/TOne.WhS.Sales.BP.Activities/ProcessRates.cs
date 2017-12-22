@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
 using Vanrise.BusinessProcess;
@@ -15,6 +16,8 @@ namespace TOne.WhS.Sales.BP.Activities
 
     public class ProcessRatesInput
     {
+        public int? ReservedOwnerPriceListId { get; set; }
+
         public IEnumerable<RateToChange> RatesToChange { get; set; }
 
         public IEnumerable<RateToClose> RatesToClose { get; set; }
@@ -31,6 +34,8 @@ namespace TOne.WhS.Sales.BP.Activities
         public IEnumerable<NewRate> NewRates { get; set; }
 
         public IEnumerable<ChangedRate> ChangedRates { get; set; }
+
+        public Dictionary<int, List<NewPriceList>> CustomerPriceListsByCurrencyId { get; set; }
     }
 
     #endregion
@@ -38,6 +43,9 @@ namespace TOne.WhS.Sales.BP.Activities
     public class ProcessRates : BaseAsyncActivity<ProcessRatesInput, ProcessRatesOutput>
     {
         #region Input Arguments
+
+        [RequiredArgument]
+        public InArgument<int?> ReservedOwnerPriceListId { get; set; }
 
         [RequiredArgument]
         public InArgument<IEnumerable<RateToChange>> RatesToChange { get; set; }
@@ -64,12 +72,16 @@ namespace TOne.WhS.Sales.BP.Activities
         [RequiredArgument]
         public OutArgument<IEnumerable<ChangedRate>> ChangedRates { get; set; }
 
+        [RequiredArgument]
+        public OutArgument<Dictionary<int, List<NewPriceList>>> CustomerPriceListsByCurrencyId { get; set; }
+
         #endregion
 
         protected override ProcessRatesInput GetInputArgument(AsyncCodeActivityContext context)
         {
             return new ProcessRatesInput()
             {
+                ReservedOwnerPriceListId = ReservedOwnerPriceListId.Get(context),
                 RatesToChange = this.RatesToChange.Get(context),
                 RatesToClose = this.RatesToClose.Get(context),
                 ExistingZones = this.ExistingZones.Get(context),
@@ -89,6 +101,9 @@ namespace TOne.WhS.Sales.BP.Activities
             if (this.ChangedRates.Get(context) == null)
                 this.ChangedRates.Set(context, new List<ChangedRate>());
 
+            if (CustomerPriceListsByCurrencyId.Get(context) == null)
+                CustomerPriceListsByCurrencyId.Set(context, new Dictionary<int, List<NewPriceList>>());
+
             base.OnBeforeExecute(context, handle);
         }
 
@@ -96,6 +111,7 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             RatePlanContext ratePlanContext = handle.CustomData.GetRecord("RatePlanContext") as RatePlanContext;
 
+            int? reservedOwnerPriceListId = inputArgument.ReservedOwnerPriceListId;
             IEnumerable<RateToChange> ratesToChange = inputArgument.RatesToChange;
             IEnumerable<RateToClose> ratesToClose = inputArgument.RatesToClose;
             IEnumerable<ExistingZone> existingZones = inputArgument.ExistingZones;
@@ -106,8 +122,11 @@ namespace TOne.WhS.Sales.BP.Activities
 
             var processRatesContext = new ProcessRatesContext()
             {
+                ProcessInstanceId = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID,
+                UserId = handle.SharedInstanceData.InstanceInfo.InitiatorUserId,
                 OwnerType = ratePlanContext.OwnerType,
                 OwnerId = ratePlanContext.OwnerId,
+                PriceListCreationDate = ratePlanContext.PriceListCreationDate,
                 CurrencyId = ratePlanContext.CurrencyId,
                 LongPrecisionValue = ratePlanContext.LongPrecision,
                 RatesToChange = ratesToChange,
@@ -115,7 +134,8 @@ namespace TOne.WhS.Sales.BP.Activities
                 ExistingZones = existingZones,
                 ExistingRates = existingRates,
                 ExplicitlyChangedExistingCustomerCountries = explicitlyChangedExistingCustomerCountries,
-                InheritedRatesByZoneId = ratePlanContext.InheritedRatesByZoneId
+                InheritedRatesByZoneId = ratePlanContext.InheritedRatesByZoneId,
+                ReservedPriceListId = (reservedOwnerPriceListId.HasValue) ? reservedOwnerPriceListId.Value : 0
             };
 
             priceListRateManager.ProcessCountryRates(processRatesContext);
@@ -128,7 +148,8 @@ namespace TOne.WhS.Sales.BP.Activities
             return new ProcessRatesOutput()
             {
                 NewRates = processRatesContext.NewRates,
-                ChangedRates = processRatesContext.ChangedRates
+                ChangedRates = processRatesContext.ChangedRates,
+                CustomerPriceListsByCurrencyId = processRatesContext.CustomerPriceListsByCurrencyId
             };
         }
 
@@ -136,6 +157,7 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             this.NewRates.Set(context, result.NewRates);
             this.ChangedRates.Set(context, result.ChangedRates);
+            CustomerPriceListsByCurrencyId.Set(context, result.CustomerPriceListsByCurrencyId);
         }
 
         #region Private Methods

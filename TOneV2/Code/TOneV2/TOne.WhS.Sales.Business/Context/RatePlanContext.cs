@@ -31,6 +31,7 @@ namespace TOne.WhS.Sales.Business
             _systemCurrencyId = systemCurrency.CurrencyId;
             LongPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
             DateFormat = new Vanrise.Common.Business.GeneralSettingsManager().GetDateFormat();
+            PriceListCreationDate = DateTime.Now;
         }
 
         #endregion
@@ -79,6 +80,7 @@ namespace TOne.WhS.Sales.Business
         public bool? IsFirstSellingProductOffer { get; set; }
         public IEnumerable<DataByZone> DataByZoneList { get; set; }
         public string DateFormat { get; set; }
+        public DateTime PriceListCreationDate { get; set; }
 
         #endregion
 
@@ -146,6 +148,7 @@ namespace TOne.WhS.Sales.Business
         bool? IsFirstSellingProductOffer { get; }
         IEnumerable<DataByZone> DataByZoneList { get; }
         string DateFormat { get; }
+        DateTime PriceListCreationDate { get; }
 
         #endregion
 

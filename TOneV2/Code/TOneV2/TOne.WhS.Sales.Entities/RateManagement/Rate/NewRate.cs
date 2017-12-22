@@ -9,6 +9,8 @@ namespace TOne.WhS.Sales.Entities
 {
     public class NewRate
     {
+        public int PriceListId { get; set; }
+
         public long RateId { get; set; }
 
         public ExistingZone Zone { get; set; }

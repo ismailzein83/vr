@@ -16,7 +16,27 @@ namespace TOne.WhS.Sales.Business
         public void ProcessCountryRates(IProcessRatesContext context)
         {
             var newExplicitRates = new List<NewRate>();
-            ProcessRates(context.OwnerType, context.OwnerId, context.CurrencyId, context.LongPrecisionValue, context.RatesToChange, context.RatesToClose, context.ExistingRates, context.ExistingZones, context.ExplicitlyChangedExistingCustomerCountries, context.InheritedRatesByZoneId, newExplicitRates);
+            var customerPriceListsByCurrencyId = new Dictionary<int, List<NewPriceList>>();
+
+            ProcessRates(new ProcessRatesInput()
+            {
+                ProcessInstanceId = context.ProcessInstanceId,
+                UserId = context.UserId,
+                OwnerType = context.OwnerType,
+                OwnerId = context.OwnerId,
+                PriceListCreationDate = context.PriceListCreationDate,
+                CurrencyId = context.CurrencyId,
+                LongPrecisionValue = context.LongPrecisionValue,
+                ReservedPriceListId = context.ReservedPriceListId,
+                RatesToChange = context.RatesToChange,
+                RatesToClose = context.RatesToClose,
+                ExistingRates = context.ExistingRates,
+                ExistingZones = context.ExistingZones,
+                ExplicitlyChangedExistingCustomerCountries = context.ExplicitlyChangedExistingCustomerCountries,
+                InheritedRatesByZoneId = context.InheritedRatesByZoneId,
+                NewExplicitRates = newExplicitRates,
+                CustomerPriceListsByCurrencyId = customerPriceListsByCurrencyId
+            });
 
             List<NewRate> newRates = new List<NewRate>();
             newRates.AddRange(context.RatesToChange.SelectMany(x => x.NewRates));
@@ -24,38 +44,58 @@ namespace TOne.WhS.Sales.Business
 
             context.NewRates = newRates;
             context.ChangedRates = context.ExistingRates.Where(x => x.ChangedRate != null).Select(x => x.ChangedRate);
+            context.CustomerPriceListsByCurrencyId = customerPriceListsByCurrencyId;
         }
 
         #region Private Methods
 
-        private void ProcessRates(SalePriceListOwnerType ownerType, int ownerId, int currencyId, int longPrecisionValue, IEnumerable<RateToChange> ratesToChange, IEnumerable<RateToClose> ratesToClose, IEnumerable<ExistingRate> existingRates, IEnumerable<ExistingZone> existingZones, IEnumerable<ExistingCustomerCountry> explicitlyChangedExistingCustomerCountries, InheritedRatesByZoneId inheritedRatesByZoneId, List<NewRate> newExplicitRates)
+        private void ProcessRates(ProcessRatesInput input)
         {
             Dictionary<int, List<ExistingZone>> existingZonesByCountry;
             ExistingZonesByName existingZonesByName;
             Dictionary<long, ExistingZone> existingZonesByZoneId;
-            StructureExistingZonesByCountryAndName(existingZones, out existingZonesByCountry, out existingZonesByName, out existingZonesByZoneId);
+            StructureExistingZonesByCountryAndName(input.ExistingZones, out existingZonesByCountry, out existingZonesByName, out existingZonesByZoneId);
 
-            ExistingRatesByZoneName existingRatesByZoneName = StructureExistingRatesByZoneName(existingRates);
+            ExistingRatesByZoneName existingRatesByZoneName = StructureExistingRatesByZoneName(input.ExistingRates);
 
-            if (ownerType == SalePriceListOwnerType.SellingProduct)
-                ProcessProductRatesToChange(ownerId, ratesToChange, currencyId, longPrecisionValue, existingZonesByZoneId, existingZonesByName, existingRatesByZoneName, newExplicitRates);
+            #region Process Rates To Change
+            if (input.OwnerType == SalePriceListOwnerType.Customer)
+                ProcessCustomerRatesToChange(input.OwnerId, input.RatesToChange, existingZonesByName, existingRatesByZoneName, input.ReservedPriceListId);
             else
-                ProcessCustomerRatesToChange(ownerId, ratesToChange, existingZonesByName, existingRatesByZoneName);
+            {
+                ProcessProductRatesToChange(new ProcessProductRatesToChangeContext()
+                {
+                    ProcessInstanceId = input.ProcessInstanceId,
+                    UserId = input.UserId,
+                    SellingProductId = input.OwnerId,
+                    PriceListCreationDate = input.PriceListCreationDate,
+                    RatesToChange = input.RatesToChange,
+                    CurrencyId = input.CurrencyId,
+                    LongPrecisionValue = input.LongPrecisionValue,
+                    ReservedPriceListId = input.ReservedPriceListId,
+                    ExistingZonesByZoneId = existingZonesByZoneId,
+                    ExistingZonesByName = existingZonesByName,
+                    ExistingRatesByZoneName = existingRatesByZoneName,
+                    NewRates = input.NewExplicitRates,
+                    CustomerPriceListsByCurrencyId = input.CustomerPriceListsByCurrencyId
+                });
+            }
+            #endregion
 
-            foreach (RateToClose rateToClose in ratesToClose)
+            foreach (RateToClose rateToClose in input.RatesToClose)
             {
                 IEnumerable<ExistingRate> matchExistingRates = GetMatchedExistingRates(existingRatesByZoneName, rateToClose.ZoneName, rateToClose.RateTypeId);
                 if (matchExistingRates != null)
                     CloseExistingRates(rateToClose, matchExistingRates);
             }
 
-            if (explicitlyChangedExistingCustomerCountries.Count() > 0)
+            if (input.ExplicitlyChangedExistingCustomerCountries.Count() > 0)
             {
-                Dictionary<int, CountryRange> endedCountryRangesByCountryId = GetEndedCountryRangesByCountryId(explicitlyChangedExistingCustomerCountries);
+                Dictionary<int, CountryRange> endedCountryRangesByCountryId = GetEndedCountryRangesByCountryId(input.ExplicitlyChangedExistingCustomerCountries);
 
                 var countryManager = new Vanrise.Common.Business.CountryManager();
 
-                foreach (ExistingCustomerCountry changedExistingCountry in explicitlyChangedExistingCustomerCountries)
+                foreach (ExistingCustomerCountry changedExistingCountry in input.ExplicitlyChangedExistingCustomerCountries)
                 {
                     int countryId = changedExistingCountry.CustomerCountryEntity.CountryId;
                     string countryName = countryManager.GetCountryName(countryId);
@@ -67,7 +107,7 @@ namespace TOne.WhS.Sales.Business
                     CountryRange countryRange = endedCountryRangesByCountryId.GetRecord(countryId);
                     if (countryRange == null)
                         throw new DataIntegrityValidationException(string.Format("The BED of country '{0}' was not found", countryName));
-                    ProcessChangedExistingCountry(changedExistingCountry, matchedExistingZones, inheritedRatesByZoneId, countryRange, newExplicitRates);
+                    ProcessChangedExistingCountry(changedExistingCountry, matchedExistingZones, input.InheritedRatesByZoneId, countryRange, input.NewExplicitRates);
                 }
             }
         }
@@ -140,37 +180,52 @@ namespace TOne.WhS.Sales.Business
         #region Process Rates To Change
 
         #region Process Product Rates To Change
-        private void ProcessProductRatesToChange(int sellingProductId, IEnumerable<RateToChange> ratesToChange, int currencyId, int longPrecisionValue, Dictionary<long, ExistingZone> existingZonesByZoneId, ExistingZonesByName existingZonesByName, ExistingRatesByZoneName existingRatesByZoneName, List<NewRate> newRates)
+        private void ProcessProductRatesToChange(ProcessProductRatesToChangeContext context)
         {
-            IEnumerable<int> customerIds = new CarrierAccountManager().GetCustomerIdsBySellingProductId(sellingProductId);
-            IEnumerable<int> sellingProductIds = new List<int>() { sellingProductId };
-            IEnumerable<long> zoneIds = ratesToChange.MapRecords(x => x.ZoneId);
+            IEnumerable<int> customerIds = new CarrierAccountManager().GetCustomerIdsBySellingProductId(context.SellingProductId);
+            IEnumerable<int> sellingProductIds = new List<int>() { context.SellingProductId };
+            IEnumerable<long> zoneIds = context.RatesToChange.MapRecords(x => x.ZoneId);
 
             var saleZoneManager = new SaleZoneManager();
             var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocatorV2(new CustomerZoneRateHistoryReaderV2(customerIds, sellingProductIds, zoneIds));
 
-            foreach (RateToChange rateToChange in ratesToChange)
+            foreach (RateToChange rateToChange in context.RatesToChange)
             {
-                ProcessOwnerRateToChange(rateToChange, existingZonesByName, existingRatesByZoneName);
-
-                continue;
+                ProcessOwnerRateToChange(rateToChange, context.ExistingZonesByName, context.ExistingRatesByZoneName, context.ReservedPriceListId);
 
                 int? countryId = saleZoneManager.GetSaleZoneCountryId(rateToChange.ZoneId);
                 if (!countryId.HasValue)
                     throw new NullReferenceException("countryId");
 
-                ExistingZone existingZone = existingZonesByZoneId.GetRecord(rateToChange.ZoneId);
-                ProcessProductRateToChange(sellingProductId, customerIds, rateToChange, existingZone, countryId.Value, currencyId, longPrecisionValue, customerZoneRateHistoryLocator, newRates);
+                ExistingZone existingZone = context.ExistingZonesByZoneId.GetRecord(rateToChange.ZoneId);
+
+                ProcessProductRateToChange(new ProcessProductRateToChangeContext()
+                {
+                    ProcessInstanceId = context.ProcessInstanceId,
+                    UserId = context.UserId,
+                    SellingProductId = context.SellingProductId,
+                    PriceListCreationDate = context.PriceListCreationDate,
+                    CustomerIds = customerIds,
+                    RateToChange = rateToChange,
+                    ExistingZone = existingZone,
+                    CountryId = countryId.Value,
+                    CurrencyId = context.CurrencyId,
+                    LongPrecisionValue = context.LongPrecisionValue,
+                    CustomerZoneRateHistoryLocator = customerZoneRateHistoryLocator,
+                    NewRates = context.NewRates,
+                    CustomerPriceListsByCurrencyId = context.CustomerPriceListsByCurrencyId,
+                });
             }
         }
-        private void ProcessProductRateToChange(int sellingProductId, IEnumerable<int> customerIds, RateToChange rateToChange, ExistingZone existingZone, int countryId, int currencyId, int longPrecisionValue, CustomerZoneRateHistoryLocatorV2 customerZoneRateHistoryLocator, List<NewRate> newRates)
+        private void ProcessProductRateToChange(ProcessProductRateToChangeContext context)
         {
-            var productRateDateConfig = new ProductRateDateConfig() { BED = rateToChange.BED, EED = existingZone.EED };
+            int reservedCustomerPriceListId = (int)new SalePriceListManager().ReserveIdRange(context.CustomerIds.Count());
+            var productRateDateConfig = new ProductRateDateConfig() { BED = context.RateToChange.BED, EED = context.ExistingZone.EED };
 
-            foreach (int customerId in customerIds)
+            foreach (int customerId in context.CustomerIds)
             {
                 IEnumerable<SaleRateHistoryRecord> customerZoneRateHistory =
-                    customerZoneRateHistoryLocator.GetCustomerZoneRateHistory(customerId, sellingProductId, rateToChange.ZoneName, countryId, currencyId, longPrecisionValue);
+                    context.CustomerZoneRateHistoryLocator.GetCustomerZoneRateHistory(customerId, context.SellingProductId, context.RateToChange.ZoneName, context.CountryId, context.CurrencyId, context.LongPrecisionValue);
 
                 if (customerZoneRateHistory == null || customerZoneRateHistory.Count() == 0)
                     continue;
@@ -181,24 +236,97 @@ namespace TOne.WhS.Sales.Business
                 if (overlappedCustomerZoneRateHistory == null || overlappedCustomerZoneRateHistory.Count() == 0)
                     continue;
 
-                foreach (SaleRateHistoryRecord saleRateHistoryRecord in overlappedCustomerZoneRateHistory)
+                bool doSameRatesExist = false;
+                int ratesCount = overlappedCustomerZoneRateHistory.Count();
+
+                for (int i = 0; i < ratesCount; i++)
                 {
-                    if (saleRateHistoryRecord.SellingProductId.HasValue)
+                    SaleRateHistoryRecord nextRate = ((i + 1) < ratesCount) ? overlappedCustomerZoneRateHistory.ElementAt(i + 1) : null;
+                    if (nextRate == null)
+                        break;
+                    SaleRateHistoryRecord currentRate = overlappedCustomerZoneRateHistory.ElementAt(i);
+                    if (currentRate.SellingProductId.HasValue && !nextRate.SellingProductId.HasValue)
                     {
-                        newRates.Add(new NewRate()
+                        doSameRatesExist = true;
+                        context.NewRates.Add(new NewRate()
                         {
-                            RateId = saleRateHistoryRecord.SaleRateId,
-                            Zone = existingZone,
+                            PriceListId = reservedCustomerPriceListId,
+                            RateId = currentRate.SaleRateId,
+                            Zone = context.ExistingZone,
                             RateTypeId = null,
-                            Rate = saleRateHistoryRecord.Rate,
-                            CurrencyId = saleRateHistoryRecord.CurrencyId,
-                            BED = saleRateHistoryRecord.BED,
-                            EED = saleRateHistoryRecord.EED,
-                            ChangeType = saleRateHistoryRecord.ChangeType
+                            Rate = currentRate.Rate,
+                            CurrencyId = null, // The rate's currency will be determined by the currency of its pricelist that'll be created below
+                            BED = currentRate.BED,
+                            EED = currentRate.EED,
+                            ChangeType = RateChangeType.NotChanged
                         });
                     }
                 }
+
+                if (doSameRatesExist)
+                {
+                    List<NewPriceList> customerPriceLists = context.CustomerPriceListsByCurrencyId.GetOrCreateItem(context.CurrencyId, () => { return new List<NewPriceList>(); });
+                    NewPriceList customerPriceList = customerPriceLists.FindRecord(x => x.OwnerId == customerId);
+                    if (customerPriceList == null)
+                    {
+                        customerPriceLists.Add(new NewPriceList()
+                        {
+                            ProcessInstanceId = context.ProcessInstanceId,
+                            UserId = context.UserId,
+                            PriceListId = reservedCustomerPriceListId,
+                            PriceListType = SalePriceListType.Hidden,
+                            OwnerType = SalePriceListOwnerType.Customer,
+                            OwnerId = customerId,
+                            CurrencyId = context.CurrencyId,
+                            EffectiveOn = context.PriceListCreationDate
+                        });
+                    }
+                }
+
+                reservedCustomerPriceListId++;
             }
+        }
+        private class ProcessProductRatesToChangeContext
+        {
+            #region Input Properties
+            public long ProcessInstanceId { get; set; }
+            public int UserId { get; set; }
+            public int SellingProductId { get; set; }
+            public DateTime PriceListCreationDate { get; set; }
+            public IEnumerable<RateToChange> RatesToChange { get; set; }
+            public int CurrencyId { get; set; }
+            public int LongPrecisionValue { get; set; }
+            public int ReservedPriceListId { get; set; }
+            public Dictionary<long, ExistingZone> ExistingZonesByZoneId { get; set; }
+            public ExistingZonesByName ExistingZonesByName { get; set; }
+            public ExistingRatesByZoneName ExistingRatesByZoneName { get; set; }
+            #endregion
+
+            #region Output Properties
+            public List<NewRate> NewRates { get; set; }
+            public Dictionary<int, List<NewPriceList>> CustomerPriceListsByCurrencyId { get; set; }
+            #endregion
+        }
+        private class ProcessProductRateToChangeContext
+        {
+            #region Input Properties
+            public int UserId { get; set; }
+            public long ProcessInstanceId { get; set; }
+            public int SellingProductId { get; set; }
+            public DateTime PriceListCreationDate { get; set; }
+            public IEnumerable<int> CustomerIds { get; set; }
+            public RateToChange RateToChange { get; set; }
+            public ExistingZone ExistingZone { get; set; }
+            public int CountryId { get; set; }
+            public int CurrencyId { get; set; }
+            public int LongPrecisionValue { get; set; }
+            public CustomerZoneRateHistoryLocatorV2 CustomerZoneRateHistoryLocator { get; set; }
+            #endregion
+
+            #region Output Properties
+            public List<NewRate> NewRates { get; set; }
+            public Dictionary<int, List<NewPriceList>> CustomerPriceListsByCurrencyId { get; set; }
+            #endregion
         }
         private class ProductRateDateConfig : IDateEffectiveSettingsEditable
         {
@@ -220,14 +348,14 @@ namespace TOne.WhS.Sales.Business
         };
         #endregion
 
-        private void ProcessCustomerRatesToChange(int customerId, IEnumerable<RateToChange> ratesToChange, ExistingZonesByName existingZonesByName, ExistingRatesByZoneName existingRatesByZoneName)
+        private void ProcessCustomerRatesToChange(int customerId, IEnumerable<RateToChange> ratesToChange, ExistingZonesByName existingZonesByName, ExistingRatesByZoneName existingRatesByZoneName, int reservedPriceListId)
         {
             foreach (RateToChange rateToChange in ratesToChange)
-                ProcessOwnerRateToChange(rateToChange, existingZonesByName, existingRatesByZoneName);
+                ProcessOwnerRateToChange(rateToChange, existingZonesByName, existingRatesByZoneName, reservedPriceListId);
         }
 
         #region Common Methods
-        private void ProcessOwnerRateToChange(RateToChange rateToChange, ExistingZonesByName existingZonesByName, ExistingRatesByZoneName existingRatesByZoneName)
+        private void ProcessOwnerRateToChange(RateToChange rateToChange, ExistingZonesByName existingZonesByName, ExistingRatesByZoneName existingRatesByZoneName, int reservedPriceListId)
         {
             IEnumerable<ExistingRate> matchedExistingRates = GetMatchedExistingRates(existingRatesByZoneName, rateToChange.ZoneName, rateToChange.RateTypeId);
             if (matchedExistingRates != null)
@@ -249,13 +377,13 @@ namespace TOne.WhS.Sales.Business
                         rateToChange.RecentExistingRate = recentExistingRate;
                     }
 
-                    ProcessRateToChange(rateToChange, existingZonesByName);
+                    ProcessRateToChange(rateToChange, existingZonesByName, reservedPriceListId);
                 }
             }
             else
             {
                 rateToChange.ChangeType = RateChangeType.New;
-                ProcessRateToChange(rateToChange, existingZonesByName);
+                ProcessRateToChange(rateToChange, existingZonesByName, reservedPriceListId);
             }
         }
         private void CloseExistingOverlappedRates(RateToChange rateToChange, IEnumerable<ExistingRate> matchExistingRates, out bool shouldNotAddRate, out ExistingRate recentExistingRate)
@@ -279,7 +407,7 @@ namespace TOne.WhS.Sales.Business
             }
 
         }
-        private void ProcessRateToChange(RateToChange rateToChange, ExistingZonesByName existingZones)
+        private void ProcessRateToChange(RateToChange rateToChange, ExistingZonesByName existingZones, int reservedPriceListId)
         {
             List<ExistingZone> matchExistingZones;
             existingZones.TryGetValue(rateToChange.ZoneName, out matchExistingZones);
@@ -291,17 +419,18 @@ namespace TOne.WhS.Sales.Business
             {
                 if (zone.EED.VRGreaterThan(zone.BED) && zone.EED.VRGreaterThan(currentRateBED) && rateToChange.EED.VRGreaterThan(zone.BED))
                 {
-                    AddNewRate(rateToChange, ref currentRateBED, zone, out shouldAddMoreRates);
+                    AddNewRate(rateToChange, ref currentRateBED, zone, out shouldAddMoreRates, reservedPriceListId);
                     if (!shouldAddMoreRates)
                         break;
                 }
             }
         }
-        private void AddNewRate(RateToChange rateToChange, ref DateTime currentRateBED, ExistingZone zone, out bool shouldAddMoreRates)
+        private void AddNewRate(RateToChange rateToChange, ref DateTime currentRateBED, ExistingZone zone, out bool shouldAddMoreRates, int reservedPriceListId)
         {
             shouldAddMoreRates = false;
             var newRate = new NewRate
             {
+                PriceListId = reservedPriceListId,
                 RateTypeId = rateToChange.RateTypeId,
                 Rate = rateToChange.NormalRate,
                 Zone = zone,
@@ -488,6 +617,28 @@ namespace TOne.WhS.Sales.Business
 
         #endregion
 
+        #endregion
+
+        #region Private Classes
+        public class ProcessRatesInput
+        {
+            public long ProcessInstanceId { get; set; }
+            public int UserId { get; set; }
+            public SalePriceListOwnerType OwnerType { get; set; }
+            public int OwnerId { get; set; }
+            public DateTime PriceListCreationDate { get; set; }
+            public int CurrencyId { get; set; }
+            public int LongPrecisionValue { get; set; }
+            public int ReservedPriceListId { get; set; }
+            public IEnumerable<RateToChange> RatesToChange { get; set; }
+            public IEnumerable<RateToClose> RatesToClose { get; set; }
+            public IEnumerable<ExistingRate> ExistingRates { get; set; }
+            public IEnumerable<ExistingZone> ExistingZones { get; set; }
+            public IEnumerable<ExistingCustomerCountry> ExplicitlyChangedExistingCustomerCountries { get; set; }
+            public InheritedRatesByZoneId InheritedRatesByZoneId { get; set; }
+            public List<NewRate> NewExplicitRates { get; set; }
+            public Dictionary<int, List<NewPriceList>> CustomerPriceListsByCurrencyId { get; set; }
+        }
         #endregion
     }
 }
