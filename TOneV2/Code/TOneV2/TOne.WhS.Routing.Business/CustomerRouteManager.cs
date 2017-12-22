@@ -19,11 +19,15 @@ namespace TOne.WhS.Routing.Business
 
         CarrierAccountManager _carrierAccountManager;
         SupplierZoneManager _supplierZoneManager;
+        Dictionary<Guid, RouteRuleSettingsConfig> _routeRuleSettingsConfigDict;
 
         public CustomerRouteManager()
         {
             _carrierAccountManager = new CarrierAccountManager();
             _supplierZoneManager = new SupplierZoneManager();
+
+            IEnumerable<RouteRuleSettingsConfig> routeRuleSettingsConfig = new RouteRuleManager().GetRouteRuleTypesTemplates();
+            _routeRuleSettingsConfigDict = routeRuleSettingsConfig.ToDictionary(itm => itm.ExtensionConfigurationId, itm => itm);
         }
 
         #endregion
@@ -126,11 +130,24 @@ namespace TOne.WhS.Routing.Business
 
             List<CustomerRouteOptionDetail> optionDetails = this.GetRouteOptionDetails(customerRoute);
 
+            RouteRule routeRule = null;
+            string executedRouteRuleSettingsTypeName = null;
+            if (customerRoute.ExecutedRuleId.HasValue)
+            {
+                routeRule = routeRuleManager.GetRule(customerRoute.ExecutedRuleId.Value);
+
+                RouteRuleSettingsConfig RouteRuleSettingsConfig;
+                if (_routeRuleSettingsConfigDict.TryGetValue(routeRule.Settings.ConfigId, out RouteRuleSettingsConfig))
+                    executedRouteRuleSettingsTypeName = RouteRuleSettingsConfig.Name;
+            }
+
             return new CustomerRouteDetail()
             {
                 Entity = customerRoute,
                 RouteOptionDetails = optionDetails,
-                LinkedRouteRuleIds = linkedRouteRules != null ? linkedRouteRules.Select(itm => itm.RuleId).ToList() : null
+                LinkedRouteRuleIds = linkedRouteRules != null ? linkedRouteRules.Select(itm => itm.RuleId).ToList() : null,
+                ExecutedRouteRuleName = routeRule != null ? routeRule.Name : null,
+                ExecutedRouteRuleSettingsTypeName = executedRouteRuleSettingsTypeName
             };
         }
 

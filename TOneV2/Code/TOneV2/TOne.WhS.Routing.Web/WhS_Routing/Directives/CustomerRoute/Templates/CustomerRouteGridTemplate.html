@@ -6,7 +6,7 @@
                  menuactions="gridMenuActions"
                  getrowstyle="getRowStyle"
                  defaultsortbyfieldname="'Entity.CustomerName'"
-                 idfield="CustomerRouteDetailId" enableautoexport="true">
+                 idfield="CustomerRouteDetailId" enableautoexport="true" normalcell>
 
         <vr-datagridcolumn headertext="'Code'" field="'Entity.Code'" fixedwidth="100"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Customer'" field="'Entity.CustomerName'" fixedwidth="200"></vr-datagridcolumn>
@@ -17,6 +17,8 @@
         </vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Blocked'" field="'Entity.IsBlocked'" fixedwidth="50"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Linked Rules'" field="'LinkedRouteRuleCount'" fixedwidth="100" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Rule Type'" field="'ExecutedRouteRuleSettingsTypeName'" fixedwidth="100"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Rule Name'" field="'ExecutedRouteRuleName'" fixedwidth="200"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Route Options'" disablesorting>
             <div class="responsive-container" style="white-space: normal;">
                 <span ng-repeat="details in dataItem.RouteOptionDetails" ng-class="{'text-danger bold-label':details.IsBlocked}"

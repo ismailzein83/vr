@@ -11,11 +11,16 @@ namespace TOne.WhS.Routing.Entities
         public string CustomerRouteDetailId { get { return string.Format("{0}@{1}", Entity.CustomerId, Entity.Code); } }
 
         public CustomerRoute Entity { get; set; }
+
         public List<CustomerRouteOptionDetail> RouteOptionDetails { get; set; }
 
         public List<int> LinkedRouteRuleIds { get; set; }
 
         public int LinkedRouteRuleCount { get { return LinkedRouteRuleIds != null ? LinkedRouteRuleIds.Count : 0; } }
+
+        public string ExecutedRouteRuleName { get; set; }
+
+        public string ExecutedRouteRuleSettingsTypeName { get; set; }  
     }
 
     public class CustomerRouteOptionDetail
