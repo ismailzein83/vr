@@ -4,11 +4,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.Sales.Entities;
+using Vanrise.Common.Business;
+
 
 namespace TOne.WhS.Sales.Business.BusinessRules
 {
     public class NewRateIsGreaterThanMaximumRateCondition : Vanrise.BusinessProcess.Entities.BusinessRuleCondition
     {
+        CurrencyManager currencyManager = new CurrencyManager();
+        int rateToChangeCurrencyId;
+        decimal convertedMaximumRate;
         public override bool ShouldValidate(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {
             return target is AllDataByZone;
@@ -33,12 +38,18 @@ namespace TOne.WhS.Sales.Business.BusinessRules
                     continue;
 
                 if (BusinessRuleUtilities.IsAnyZoneRateGreaterThanMaxRate(zoneData, ratePlanContext))
+                {
+                     rateToChangeCurrencyId = ratePlanContext.GetRateToChangeCurrencyId(zoneData.NormalRateToChange);
+                     convertedMaximumRate = ratePlanContext.GetMaximumRateConverted(rateToChangeCurrencyId);
                     invalidCountryNames.Add(countryName);
+                }
+                   
             }
 
             if (invalidCountryNames.Count > 0)
             {
-                context.Message = string.Format("New rates of following sold country(ies) are greater than maximum rate '{0}': {1}", ratePlanContext.MaximumRate, string.Join(", ", invalidCountryNames));
+                currencyManager.GetCurrencySymbol(rateToChangeCurrencyId);
+                context.Message = string.Format("New rates of following sold country(ies) are greater than maximum rate '{0} {1}': {2}", convertedMaximumRate, currencyManager.GetCurrencySymbol(rateToChangeCurrencyId), string.Join(", ", invalidCountryNames));
                 return false;
             }
 
