@@ -113,8 +113,7 @@ namespace Vanrise.Common.Business
     public abstract class VRPop3MessageFilter
     {
         public abstract Guid ConfigId { get; }
-        public Func<VRReceivedMailMessageHeader, bool> IsApplicable;
-        public abstract bool IsApplicableFunction(VRPop3MailMessageHeader receivedMailMessageHeader); 
+        public abstract bool IsApplicableFunction(VRPop3MailMessageHeader receivedMailMessageHeader);
     }
 
     public class VRPop3MessageFilterConfig : ExtensionConfiguration

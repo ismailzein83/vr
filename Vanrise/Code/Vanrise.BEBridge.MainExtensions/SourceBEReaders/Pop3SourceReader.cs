@@ -31,7 +31,7 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
                     messages = new List<VRReceivedMailMessage>();
                 }
             });
-            pop3Connection.ReadNewMessages(Setting.VRConnectionId, "", Setting.Pop3MessageFilter.IsApplicable, OnMessageRead);
+            pop3Connection.ReadNewMessages(Setting.VRConnectionId, "", Setting.Pop3MessageFilter.IsApplicableFunction, OnMessageRead);
 
             if (messages.Count > 0)
             {
