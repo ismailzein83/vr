@@ -14,12 +14,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
         {
             get { return new Guid("05382832-5CBB-46C0-8214-B3B81769FB80"); }
         }
-
-        public Func<VRReceivedMailMessageHeader, bool> IsApplicable = messageHeader =>
-            {
-                return true;
-            };
-
+        
         public override bool IsApplicableFunction(VRPop3MailMessageHeader receivedMailMessageHeader)
         {
             return true;
