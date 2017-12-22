@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticDaprofcalcGeneratealertprocesstask", ['UtilsService', 'VRUIUtilsService', 'VRValidationService', 'ReprocessChunkTimeEnum',
-    function (UtilsService, VRUIUtilsService, VRValidationService, ReprocessChunkTimeEnum) {
+app.directive("vrAnalyticDaprofcalcGeneratealertprocesstask", ['UtilsService', 'VRUIUtilsService', 'VRValidationService', 'VR_Notification_VRAlertRuleTypeAPIService', 'VR_Analytic_DataAnalysisDefinitionAPIService', 'VRNotificationService',
+    function (UtilsService, VRUIUtilsService, VRValidationService, VR_Notification_VRAlertRuleTypeAPIService, VR_Analytic_DataAnalysisDefinitionAPIService, VRNotificationService) {
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
@@ -30,15 +30,49 @@ app.directive("vrAnalyticDaprofcalcGeneratealertprocesstask", ['UtilsService', '
 
             var alertRuleTypeSelectorAPI;
             var alertRuleTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            var onalertRuleTypeSelectorSelectionChangedDeferred;
 
             var chunkTimeSelectorAPI;
             var chunkTimeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
+                $scope.showChunkTimeSelector = false;
 
                 $scope.onAlertRuleTypeSelectorReady = function (api) {
                     alertRuleTypeSelectorAPI = api;
                     alertRuleTypeSelectorReadyDeferred.resolve();
+                };
+
+                $scope.onAlertRuleTypeSelectionChanged = function (selectedItem) {
+                    if (selectedItem != undefined) {
+                        if (onalertRuleTypeSelectorSelectionChangedDeferred != undefined) {
+                            onalertRuleTypeSelectorSelectionChangedDeferred.resolve();
+                        }
+                        else {
+                            $scope.isLoading = true;
+                            VR_Notification_VRAlertRuleTypeAPIService.GetVRAlertRuleType(selectedItem.VRAlertRuleTypeId).then(function (alertRuleType) {
+                                VR_Analytic_DataAnalysisDefinitionAPIService.GetDataAnalysisDefinition(alertRuleType.Settings.DataAnalysisDefinitionId).then(function (dataAnalysisDefintion) {
+                                    $scope.showChunkTimeSelector = dataAnalysisDefintion.Settings.UseChunkTime;
+                                    console.log(1);
+                                    if ($scope.showChunkTimeSelector) {
+                                        chunkTimeSelectorReadyDeferred.promise.then(function () {
+                                            VRUIUtilsService.callDirectiveLoad(chunkTimeSelectorAPI, undefined, undefined);
+                                        });
+                                    }
+
+                                }).catch(function (error) {
+                                    VRNotificationService.notifyException(error, $scope);
+                                }).finally(function () {
+                                    $scope.isLoading = false;
+                                });
+
+                            }).catch(function (error) {
+                                VRNotificationService.notifyException(error, $scope);
+                            }).finally(function () {
+                                $scope.isLoading = false;
+                            });
+                        }
+                    }
                 };
 
                 $scope.onChunkTimeSelectorReady = function (api) {
@@ -51,7 +85,6 @@ app.directive("vrAnalyticDaprofcalcGeneratealertprocesstask", ['UtilsService', '
                         if (parseFloat($scope.numberOfDays) > parseFloat($scope.daysBack)) {
                             return 'Number Of Days should be less than or equal to Days Back.';
                         }
-
                     }
                     return null;
                 };
@@ -81,6 +114,23 @@ app.directive("vrAnalyticDaprofcalcGeneratealertprocesstask", ['UtilsService', '
                     }
 
                     var promises = [];
+                    console.log(chunkTime);
+                    if (chunkTime != undefined) {
+
+                        onalertRuleTypeSelectorSelectionChangedDeferred = UtilsService.createPromiseDeferred();
+
+                        $scope.showChunkTimeSelector = true;
+                        var chunkTimeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                        UtilsService.waitMultiplePromises([onalertRuleTypeSelectorSelectionChangedDeferred.promise, chunkTimeSelectorReadyDeferred.promise]).then(function () {
+                            onalertRuleTypeSelectorSelectionChangedDeferred = undefined;
+
+                            var chunkTimeSelectorPayload = {
+                                selectedIds: chunkTime
+                            };
+                            VRUIUtilsService.callDirectiveLoad(chunkTimeSelectorAPI, chunkTimeSelectorPayload, chunkTimeSelectorLoadDeferred);
+                        });
+                        promises.push(chunkTimeSelectorLoadDeferred.promise);
+                    }
 
                     var alertRuleTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                     alertRuleTypeSelectorReadyDeferred.promise.then(function () {
@@ -92,18 +142,6 @@ app.directive("vrAnalyticDaprofcalcGeneratealertprocesstask", ['UtilsService', '
                         VRUIUtilsService.callDirectiveLoad(alertRuleTypeSelectorAPI, alertRuleTypePayload, alertRuleTypeSelectorLoadDeferred);
                     });
                     promises.push(alertRuleTypeSelectorLoadDeferred.promise);
-
-                    var chunkTimeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-                    chunkTimeSelectorReadyDeferred.promise.then(function () {
-                        var chunkTimeSelectorPayload;
-                        if (chunkTime != undefined) {
-                            chunkTimeSelectorPayload = {
-                                selectedIds: chunkTime
-                            };
-                        }
-                        VRUIUtilsService.callDirectiveLoad(chunkTimeSelectorAPI, chunkTimeSelectorPayload, chunkTimeSelectorLoadDeferred);
-                    });
-                    promises.push(chunkTimeSelectorLoadDeferred.promise);
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -117,7 +155,7 @@ app.directive("vrAnalyticDaprofcalcGeneratealertprocesstask", ['UtilsService', '
                     return {
                         $type: "Vanrise.Analytic.BP.Arguments.DAProfCalcGenerateAlertInput, Vanrise.Analytic.BP.Arguments",
                         AlertRuleTypeId: alertRuleTypeSelectorAPI.getSelectedIds(),
-                        ChunkTime: chunkTimeSelectorAPI.getSelectedIds()
+                        ChunkTime: chunkTimeSelectorAPI != undefined ? chunkTimeSelectorAPI.getSelectedIds() : undefined
                     };
                 };
 

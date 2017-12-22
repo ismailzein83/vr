@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DAProfCalcAlertRuleCriteriaDirective.$inject = ["VR_Analytic_DAProfCalcOutputSettingsAPIService", "UtilsService", 'VRUIUtilsService', 'VRNotificationService', 'VR_Analytic_DAProfCalcOutputFieldTypeEnum'];
+    DAProfCalcAlertRuleCriteriaDirective.$inject = ["VR_Analytic_DAProfCalcOutputSettingsAPIService", "UtilsService", 'VRUIUtilsService', 'VRNotificationService', 'VR_Analytic_DAProfCalcOutputFieldTypeEnum', 'VR_Analytic_DataAnalysisDefinitionAPIService'];
 
-    function DAProfCalcAlertRuleCriteriaDirective(VR_Analytic_DAProfCalcOutputSettingsAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VR_Analytic_DAProfCalcOutputFieldTypeEnum) {
+    function DAProfCalcAlertRuleCriteriaDirective(VR_Analytic_DAProfCalcOutputSettingsAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VR_Analytic_DAProfCalcOutputFieldTypeEnum, VR_Analytic_DataAnalysisDefinitionAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -161,6 +161,10 @@
                     var dataAnalysisRecordFilterDirectiveLoadPromise = getDataAnalysisRecordFilterDirectiveLoadPromise();
                     promises.push(dataAnalysisRecordFilterDirectiveLoadPromise);
 
+                    //Loading Data Analysis
+                    var dataAnalysisDefinitionLoadPromise = getDataAnalysisDefinitionLoadPromise();
+                    promises.push(dataAnalysisDefinitionLoadPromise);
+
                     //Loading Data Analysis Item Definition Selector
                     var dataAnalysisItemDefinitionSelectorLoadPromise = getDataAnalysisItemDefinitionSelectorLoadPromise();
                     promises.push(dataAnalysisItemDefinitionSelectorLoadPromise);
@@ -185,6 +189,13 @@
 
                         return dataAnalysisRecordFilterDirectiveLoadDeferred.promise;
                     };
+
+                    function getDataAnalysisDefinitionLoadPromise() {
+                        return VR_Analytic_DataAnalysisDefinitionAPIService.GetDataAnalysisDefinition(dataAnalysisDefinitionId).then(function (response) {
+                            $scope.scopeModel.hideActionRuleRecordFilter = response.Settings.HideActionRuleRecordFilter;
+                        });
+                    };
+                    
                     function getDataAnalysisItemDefinitionSelectorLoadPromise() {
                         if (daProfCalcOutputItemDefinitionId != undefined)
                             dataAnalysisItemDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();

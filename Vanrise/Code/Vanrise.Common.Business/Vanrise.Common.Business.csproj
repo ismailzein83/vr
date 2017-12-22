@@ -77,6 +77,9 @@
     <Compile Include="ComponentType\VRComponentTypeManager.cs" />
     <Compile Include="ComponentType\VRComponentTypeOverriddenConfiguration.cs" />
     <Compile Include="ConfigManager.cs" />
+    <Compile Include="DataGrouping\DataGrouper.cs" />
+    <Compile Include="DataGrouping\RemoteDataGrouper.cs" />
+    <Compile Include="DataGrouping\LocalDataGrouper.cs" />
     <Compile Include="UtilityManager.cs" />
     <Compile Include="Filters\GenericLKUPBEDefinitionFilter.cs" />
     <Compile Include="GenericLKUP\GenericLKUPBEDefinitionSettings.cs" />

@@ -94,15 +94,15 @@ namespace Vanrise.GenericData.Business
             recordFilterGroup.LogicalOperator = RecordQueryLogicalOperator.And;
             recordFilterGroup.Filters = new List<RecordFilter>();
 
-            if(filterGroup != null)
+            if (filterGroup != null)
             {
-               recordFilterGroup.Filters.Add(filterGroup);
+                recordFilterGroup.Filters.Add(filterGroup);
             }
             if (filters != null)
             {
                 foreach (var filter in filters)
                 {
-                    if(filter.FilterValues == null)
+                    if (filter.FilterValues == null)
                     {
                         recordFilterGroup.Filters.Add(new EmptyRecordFilter() { FieldName = filter.FieldName });
                         continue;
@@ -264,8 +264,10 @@ namespace Vanrise.GenericData.Business
             if (!_recordTypeFieldsByName.TryGetValue(fieldName, out field))
                 throw new NullReferenceException(String.Format("field. fieldName '{0}'", fieldName));
             fieldType = field.Type;
-            return _dataRecord[fieldName];
+
+            object fieldValue;
+            _dataRecord.TryGetValue(fieldName, out fieldValue);
+            return fieldValue;
         }
     }
-
 }

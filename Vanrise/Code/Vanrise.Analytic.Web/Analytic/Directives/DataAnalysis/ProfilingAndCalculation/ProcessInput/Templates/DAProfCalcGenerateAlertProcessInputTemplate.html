@@ -1,6 +1,6 @@
 ﻿<vr-row removeline>
     <vr-columns colnum="3">
-        <vr-notification-alertruletype-selector on-ready="onAlertRuleTypeSelectorReady" isrequired="true"></vr-notification-alertruletype-selector>
+        <vr-notification-alertruletype-selector on-ready="onAlertRuleTypeSelectorReady" isrequired="true" onselectionchanged="onAlertRuleTypeSelectionChanged"></vr-notification-alertruletype-selector>
     </vr-columns>
     <vr-columns colnum="3">
         <vr-datetimepicker label="From" isrequired="true" value="fromDate" type="longDateTime" customvalidate="validateTimeRange()"></vr-datetimepicker>
@@ -10,8 +10,8 @@
         <vr-datetimepicker label="To" isrequired="true" value="toDate" type="longDateTime" customvalidate="validateTimeRange()"></vr-datetimepicker>
     </vr-columns>
 
-    <vr-columns colnum="3">
+    <vr-columns colnum="3" ng-if="showChunkTimeSelector" vr-loader="isLoading">
         <vr-select label="Chunk Time" datatextfield="description" datavaluefield="value" isrequired="true"
-                   datasource="chunkTimes" selectedvalues="selectedChunkTime"></vr-select>
+                   datasource="chunkTimes" selectedvalues="scopeModel.selectedChunkTime"></vr-select>
     </vr-columns>
 </vr-row>

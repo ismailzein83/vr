@@ -44,6 +44,7 @@
       <AssemblyReference>System.Activities.Presentation</AssemblyReference>
       <AssemblyReference>System.Core</AssemblyReference>
       <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.DurableInstancing</AssemblyReference>
       <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
       <AssemblyReference>System.ServiceModel</AssemblyReference>
       <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
@@ -53,7 +54,6 @@
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
-      <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.BP.Activities</AssemblyReference>
@@ -61,12 +61,12 @@
       <AssemblyReference>Vanrise.Analytic.Business</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Caching</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Notification.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Notification.Entities</AssemblyReference>
-      <AssemblyReference>System.Runtime.DurableInstancing</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.Analytic.BP</AssemblyReference>
     </sco:Collection>
@@ -172,9 +172,14 @@
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">executeRecordsProfilingStatus</mca:CSharpReference>
           </OutArgument>
         </vabad:ExecuteRecordProfiling.Status>
+        <vabad:ExecuteRecordProfiling.UseRemoteDataGrouper>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.UseRemoteDataGrouper</mca:CSharpValue>
+          </InArgument>
+        </vabad:ExecuteRecordProfiling.UseRemoteDataGrouper>
       </vabad:ExecuteRecordProfiling>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0ZDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY0ZvclJhbmdlUHJvY2Vzcy54YW1sF0oDsgEOAgEBSwVWDgMBhQFXBbABEAIBAlMLU4ABAwGJAU4LTm4DAYYBWw1boQECARNiDWLBAQIBC2cNZ74BAgEDaweKASYCAVSLAQevASYCARtuDW5jAgF9fQ19aQIBdYIBDYIBcgIBbXgNeHQCAWVzDXNbAgFdhwENhwFZAgFVpwENpwFqAgFMmAENmAFsAgFEjgENjgFlAgE8ogENogGCAQIBNJ0BDZ0BlQECASysAQ2sAX4CASSTAQ2TAYoBAgEc</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0ZDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY0ZvclJhbmdlUHJvY2Vzcy54YW1sGEoDtwEOAgEBSwVWDgMBjQFXBbUBEAIBAlMLU4ABAwGRAU4LTm4DAY4BWw1boQECARNiDWLBAQIBC2cNZ74BAgEDaweKASYCAVyLAQe0ASYCARtuDW5jAwGFAX0NfWkCAX2CAQ2CAXICAXV4DXh0AgFtcw1zWwIBZYcBDYcBWQIBXacBDacBagIBVJgBDZgBbAIBTI4BDY4BZQIBRKIBDaIBggECATydAQ2dAZUBAgE0rAENrAF+AgEssQENsQFmAgEkkwENkwGKAQIBHA==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

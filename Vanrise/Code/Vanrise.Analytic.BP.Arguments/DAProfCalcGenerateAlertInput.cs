@@ -13,7 +13,7 @@ namespace Vanrise.Analytic.BP.Arguments
 
         public DateTime ToTime { get; set; }
 
-        public DAProfCalcChunkTimeEnum ChunkTime { get; set; }
+        public DAProfCalcChunkTimeEnum? ChunkTime { get; set; }
 
         public override string GetTitle()
         {

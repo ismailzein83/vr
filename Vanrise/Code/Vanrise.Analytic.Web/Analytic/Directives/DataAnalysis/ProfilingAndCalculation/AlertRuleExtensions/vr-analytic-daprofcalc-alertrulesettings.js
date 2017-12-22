@@ -83,7 +83,6 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
 
                 api.load = function (payload) {
                     var promises = [];
-                    console.log(payload);
                     if (payload != undefined) {
                         vrAlertRuleTypeId = payload.vrAlertRuleTypeId;
                         alertTypeSettings = payload.alertTypeSettings;

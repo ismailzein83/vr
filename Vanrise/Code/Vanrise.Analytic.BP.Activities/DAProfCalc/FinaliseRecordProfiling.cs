@@ -12,6 +12,8 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
         public DAProfCalcExecInputDetail DAProfCalcExecInputDetail { get; set; }
 
         public IDAProfCalcOutputRecordProcessor OutputRecordProcessor { get; set; }
+
+        public bool UseRemoteDataGrouper { get; set; }
     }
 
     public class FinaliseRecordProfilingOutput
@@ -29,6 +31,9 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
         [RequiredArgument]
         public InArgument<IDAProfCalcOutputRecordProcessor> OutputRecordProcessor { get; set; }
 
+        [RequiredArgument]
+        public InArgument<bool> UseRemoteDataGrouper { get; set; }
+
         protected override FinaliseRecordProfilingOutput DoWorkWithResult(FinaliseRecordProfilingInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
             FinaliseRecordProfilingOutput output = new FinaliseRecordProfilingOutput();
@@ -39,7 +44,7 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                 {
                     DAProfCalcExecInput = inputArgument.DAProfCalcExecInputDetail.DAProfCalcExecInput,
                     OutputRecordProcessor = inputArgument.OutputRecordProcessor
-                });
+                }, inputArgument.UseRemoteDataGrouper);
 
             distributedDataGrouper.StartGettingFinalResults(null);
 
@@ -51,7 +56,8 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
             return new FinaliseRecordProfilingInput()
             {
                 DAProfCalcExecInputDetail = DAProfCalcExecInputDetail.Get(context),
-                OutputRecordProcessor = OutputRecordProcessor.Get(context)
+                OutputRecordProcessor = OutputRecordProcessor.Get(context),
+                UseRemoteDataGrouper = UseRemoteDataGrouper.Get(context)
             };
         }
 

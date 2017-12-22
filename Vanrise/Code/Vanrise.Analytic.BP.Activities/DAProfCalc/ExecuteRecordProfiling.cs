@@ -25,6 +25,7 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
         public BaseQueue<RecordBatch> InputQueue { get; set; }
         public List<BaseQueue<DAProfCalcOutputRecordBatch>> OutputQueues { get; set; }
         public IDAProfCalcOutputRecordProcessor OutputRecordProcessor { get; set; }
+        public bool UseRemoteDataGrouper { get; set; }
     }
 
     public class ExecuteRecordProfilingOutput
@@ -49,6 +50,9 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
         public InArgument<List<BaseQueue<DAProfCalcOutputRecordBatch>>> OutputQueues { get; set; }
 
         public InArgument<IDAProfCalcOutputRecordProcessor> OutputRecordProcessor { get; set; }
+
+        [RequiredArgument]
+        public InArgument<bool> UseRemoteDataGrouper { get; set; }
 
         protected override ExecuteRecordProfilingOutput DoWorkWithResult(ExecuteRecordProfilingInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
         {
@@ -80,7 +84,7 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                 {
                     DARecordFilterGroup = BuildDataAnalysisRecordFilter(daProfCalcPayload != null ? dAProfCalcExecInputItem.DAProfCalcExecInput.DataAnalysisRecordFilter : null, recordProfilingOutputSettings.RecordFilter),
                     DataAnalysisItemDefinition = dataAnalysisItemDefinition,
-                    DistributedDataGrouper = new DistributedDataGrouper(dataAnalysisUniqueName, new ProfilingDGHandler { DAProfCalcExecInput = dAProfCalcExecInputItem.DAProfCalcExecInput, OutputRecordProcessor = inputArgument.OutputRecordProcessor }),
+                    DistributedDataGrouper = new DistributedDataGrouper(dataAnalysisUniqueName, new ProfilingDGHandler { DAProfCalcExecInput = dAProfCalcExecInputItem.DAProfCalcExecInput, OutputRecordProcessor = inputArgument.OutputRecordProcessor }, inputArgument.UseRemoteDataGrouper),
                     GroupingFieldNames = dAProfCalcExecInputItem.DAProfCalcExecInput.GroupingFieldNames
                 });
             }
@@ -169,7 +173,8 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                 DAProfCalcExecInputDetails = DAProfCalcExecInputDetails.Get(context),
                 InputQueue = InputQueue.Get(context),
                 OutputQueues = OutputQueues.Get(context),
-                OutputRecordProcessor = OutputRecordProcessor.Get(context)
+                OutputRecordProcessor = OutputRecordProcessor.Get(context),
+                UseRemoteDataGrouper = UseRemoteDataGrouper.Get(context)
             };
         }
 

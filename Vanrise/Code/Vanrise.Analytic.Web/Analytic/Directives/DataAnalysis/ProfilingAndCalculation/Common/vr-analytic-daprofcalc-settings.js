@@ -43,6 +43,7 @@
                     if (payload != undefined && payload.dataAnalysisDefinitionSettings != undefined) {
                         selectorPayload = { selectedIds: payload.dataAnalysisDefinitionSettings.DataRecordTypeId };
                         $scope.scopeModel.hideActionRuleRecordFilter = payload.dataAnalysisDefinitionSettings.HideActionRuleRecordFilter;
+                        $scope.scopeModel.useChunkTime = payload.dataAnalysisDefinitionSettings.UseChunkTime;
                     }
 
                     var daProfCalcSettingsSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -56,7 +57,8 @@
                     var data = {
                         $type: "Vanrise.Analytic.Entities.DAProfCalcSettings, Vanrise.Analytic.Entities",
                         DataRecordTypeId: selectorAPI.getSelectedIds(),
-                        HideActionRuleRecordFilter: $scope.scopeModel.hideActionRuleRecordFilter
+                        HideActionRuleRecordFilter: $scope.scopeModel.hideActionRuleRecordFilter,
+                        UseChunkTime: $scope.scopeModel.useChunkTime
                     };
                     return data;
                 };

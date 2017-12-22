@@ -184,23 +184,6 @@ namespace Vanrise.Common.Business
                 _queueItems.Enqueue(serializedItems);
             }
         }
-
-        private class DataGroupingHandlerUpdateExistingFromNewContext : IDataGroupingHandlerUpdateExistingFromNewContext
-        {
-            public IDataGroupingItem Existing
-            {
-                get;
-                set;
-            }
-
-            public IDataGroupingItem New
-            {
-                get;
-                set;
-            }
-        }
-
-
         #endregion
     }
 }

@@ -46,7 +46,7 @@ namespace Vanrise.Common.Business
                 throw new ArgumentNullException("serializedItems");
             dynamic deserializedAsObject = Serializer.Deserialize(serializedItems);
             List<dynamic> output = new List<dynamic>();
-            foreach(var item in deserializedAsObject)
+            foreach (var item in deserializedAsObject)
             {
                 output.Add(item as dynamic);
             }
@@ -88,6 +88,21 @@ namespace Vanrise.Common.Business
         }
 
         public List<dynamic> FinalResults
+        {
+            get;
+            set;
+        }
+    }
+
+    public class DataGroupingHandlerUpdateExistingFromNewContext : IDataGroupingHandlerUpdateExistingFromNewContext
+    {
+        public IDataGroupingItem Existing
+        {
+            get;
+            set;
+        }
+
+        public IDataGroupingItem New
         {
             get;
             set;

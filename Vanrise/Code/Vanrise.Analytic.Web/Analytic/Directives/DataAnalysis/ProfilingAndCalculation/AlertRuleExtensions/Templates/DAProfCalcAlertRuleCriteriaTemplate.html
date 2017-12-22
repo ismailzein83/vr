@@ -1,5 +1,5 @@
 ﻿<vr-row>
-    <vr-columns width="fullrow">
+    <vr-columns width="fullrow" ng-show="!scopeModel.hideActionRuleRecordFilter">
         <vr-section title="{{scopeModel.rawRecordFilterLabel}}" collapsible>
             <vr-genericdata-recordfilter on-ready="scopeModel.onDataAnalaysisRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
         </vr-section>

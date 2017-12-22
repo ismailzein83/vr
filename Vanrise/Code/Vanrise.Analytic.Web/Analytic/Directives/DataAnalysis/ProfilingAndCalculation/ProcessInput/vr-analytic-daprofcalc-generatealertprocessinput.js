@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticDaprofcalcGeneratealertprocessinput", ['UtilsService', 'VRUIUtilsService', 'VRValidationService', 'DAProfCalcChunkTimeEnum',
-    function (UtilsService, VRUIUtilsService, VRValidationService, DAProfCalcChunkTimeEnum) {
+app.directive("vrAnalyticDaprofcalcGeneratealertprocessinput", ['UtilsService', 'VRUIUtilsService', 'VRValidationService', 'DAProfCalcChunkTimeEnum', 'VR_Notification_VRAlertRuleTypeAPIService', 'VR_Analytic_DataAnalysisDefinitionAPIService', 'VRNotificationService',
+    function (UtilsService, VRUIUtilsService, VRValidationService, DAProfCalcChunkTimeEnum, VR_Notification_VRAlertRuleTypeAPIService, VR_Analytic_DataAnalysisDefinitionAPIService, VRNotificationService) {
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
@@ -34,12 +34,39 @@ app.directive("vrAnalyticDaprofcalcGeneratealertprocessinput", ['UtilsService', 
             }
 
             $scope.scopeModel = {};
+
+            $scope.showChunkTimeSelector = false;
+            $scope.isLoading = false;
+
             var alertRuleTypeSelectorAPI;
             var alertRuleTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             $scope.onAlertRuleTypeSelectorReady = function (api) {
                 alertRuleTypeSelectorAPI = api;
                 alertRuleTypeSelectorReadyDeferred.resolve();
+            };
+
+            $scope.onAlertRuleTypeSelectionChanged = function (selectedItem) {
+                if (selectedItem == undefined) {
+                    $scope.showChunkTimeSelector = false;
+                }
+                else {
+                    $scope.isLoading = true;
+                    VR_Notification_VRAlertRuleTypeAPIService.GetVRAlertRuleType(selectedItem.VRAlertRuleTypeId).then(function (alertRuleType) {
+                        VR_Analytic_DataAnalysisDefinitionAPIService.GetDataAnalysisDefinition(alertRuleType.Settings.DataAnalysisDefinitionId).then(function (dataAnalysisDefintion) {
+                            $scope.showChunkTimeSelector = dataAnalysisDefintion.Settings.UseChunkTime;
+                        }).catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        }).finally(function () {
+                            $scope.isLoading = false;
+                        });
+
+                    }).catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                    }).finally(function () {
+                        $scope.isLoading = false;
+                    });
+                }
             };
 
             $scope.validateTimeRange = function () {
@@ -56,7 +83,7 @@ app.directive("vrAnalyticDaprofcalcGeneratealertprocessinput", ['UtilsService', 
                             AlertRuleTypeId: alertRuleTypeSelectorAPI.getSelectedIds(),
                             FromTime: $scope.fromDate,
                             ToTime: $scope.toDate,
-                            ChunkTime: $scope.selectedChunkTime.value
+                            ChunkTime: $scope.scopeModel.selectedChunkTime != undefined ? $scope.scopeModel.selectedChunkTime.value : undefined
                         }
                     };
                 };

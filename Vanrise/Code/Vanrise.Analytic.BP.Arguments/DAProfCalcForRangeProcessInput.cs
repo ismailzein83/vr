@@ -21,6 +21,8 @@ namespace Vanrise.Analytic.BP.Arguments
 
         public IDAProfCalcOutputRecordProcessor OutputRecordProcessor { get; set; }
 
+        public bool UseRemoteDataGrouper { get; set; }
+
         public override string GetTitle()
         {
             return string.Format("From {0} To {1}", FromTime.ToString("yyyy-MM-dd HH:mm:ss"), ToTime.ToString("yyyy-MM-dd HH:mm:ss"));

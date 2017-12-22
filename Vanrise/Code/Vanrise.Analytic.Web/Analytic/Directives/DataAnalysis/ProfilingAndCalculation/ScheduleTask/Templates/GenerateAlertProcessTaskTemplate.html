@@ -1,6 +1,6 @@
 ﻿<vr-row>
     <vr-columns colnum="4">
-        <vr-notification-alertruletype-selector isrequired="true" on-ready="onAlertRuleTypeSelectorReady"></vr-notification-alertruletype-selector>
+        <vr-notification-alertruletype-selector on-ready="onAlertRuleTypeSelectorReady" isrequired="true" onselectionchanged="onAlertRuleTypeSelectionChanged"></vr-notification-alertruletype-selector>
     </vr-columns>
     <vr-columns colnum="8" haschildcolumns>
         <vr-validator validate="isValid()">
@@ -14,6 +14,6 @@
         </vr-validator>
     </vr-columns>
 </vr-row>
-<vr-row>
-    <reprocess-chunktime-selector on-ready="onChunkTimeSelectorReady" normal-col-num="4" isrequired="true"></reprocess-chunktime-selector>
+<vr-row ng-if="showChunkTimeSelector" vr-loader="isLoading">
+    <vr-analytic-daprofcalc-chunktime-selector on-ready="onChunkTimeSelectorReady" normal-col-num="4" isrequired="true"></vr-analytic-daprofcalc-chunktime-selector>
 </vr-row>

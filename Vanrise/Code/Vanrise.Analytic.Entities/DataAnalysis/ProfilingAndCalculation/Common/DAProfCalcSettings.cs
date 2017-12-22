@@ -12,6 +12,10 @@ namespace Vanrise.Analytic.Entities
 
         public Guid DataRecordTypeId { get; set; }
 
+        public bool HideActionRuleRecordFilter { get; set; }
+
+        public bool UseChunkTime { get; set; }
+
         public override List<DataAnalysisItemDefinitionConfig> ItemsConfig
         {
             get
