@@ -41,7 +41,7 @@ app.directive('vrWhsBePop3supplierpricelistmessagefilter', ['UtilsService', 'VRU
                 api.getData = function () {
 
                     return {
-                        $type: "TOne.WhS.BusinessEntity.MainExtensions.Pop3SupplierPricelistMessageFilter, TOne.WhS.BusinessEntity.MainExtensions"
+                        $type: "TOne.WhS.SupplierPriceList.MainExtensions.Pop3SupplierPricelistMessageFilter, TOne.WhS.SupplierPriceList.MainExtensions"
                     };
                 };
 

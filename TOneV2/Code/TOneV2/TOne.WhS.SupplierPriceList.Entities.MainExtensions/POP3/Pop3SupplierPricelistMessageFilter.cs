@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 
-namespace TOne.WhS.BusinessEntity.MainExtensions
+namespace TOne.WhS.SupplierPriceList.MainExtensions
 {
     public class Pop3SupplierPricelistMessageFilter : VRPop3MessageFilter
     {
