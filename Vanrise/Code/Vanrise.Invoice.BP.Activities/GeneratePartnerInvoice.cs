@@ -154,7 +154,7 @@ namespace Vanrise.Invoice.BP.Activities
                                         messages.Add(new InvoiceGenerationMessageOutput
                                         {
                                             LogEntryType = Vanrise.Entities.LogEntryType.Warning,
-                                            Message = automaticActionContext.ErrorMessage
+                                            Message = string.Format("{0} For account '{1}'", automaticActionContext.ErrorMessage, invoiceGenerationDraft.PartnerName)
                                         });
                                     }
                                  }
