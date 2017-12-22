@@ -69,6 +69,9 @@ app.directive("vrInvoicetypeDatasourcesettingsRdlcitems", ["UtilsService", "VRNo
                                     ctrl.listItems.push(itemSetName);
                                 }
                             }
+                            $scope.scopeModel.orderByField = payload.dataSourceEntity.OrderByField;
+                            $scope.scopeModel.isDescending = payload.dataSourceEntity.IsDescending;
+
                         }
                     }
                     var promises = [];
@@ -81,6 +84,8 @@ app.directive("vrInvoicetypeDatasourcesettingsRdlcitems", ["UtilsService", "VRNo
                         $type: "Vanrise.Invoice.MainExtensions.ItemsDataSourceSettings ,Vanrise.Invoice.MainExtensions",
                         ItemSetNames: ctrl.listItems,
                         CompareOperator: $scope.scopeModel.selectedItemSetNameCompareOperator != undefined ? $scope.scopeModel.selectedItemSetNameCompareOperator.value : undefined,
+                        OrderByField: $scope.scopeModel.orderByField,
+                        IsDescending: $scope.scopeModel.isDescending
                     };
                 };
 
