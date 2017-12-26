@@ -690,7 +690,7 @@ namespace Retail.Teles.Business
         private List<dynamic> GetScreanNumbersByCountryCode(Guid vrConnectionId, string countryCode)
         {
             var telesRestConnection = GetTelesRestConnection( vrConnectionId);
-            string actionPath = string.Format("/screenNum/search?cc={0}", countryCode);
+            string actionPath = string.Format("/screenNum/search?cc={0}&limit=1000", countryCode);
             return telesRestConnection.Get<List<dynamic>>(actionPath);
         }
         private List<dynamic> GetUsersBTs(Guid vrConnectionId)
