@@ -216,6 +216,8 @@ namespace TOne.WhS.BusinessEntity.Business
             Dictionary<int, SalePriceList> cachedSalePriceLists = GetCustomerCachedSalePriceLists();
             Func<SalePriceList, bool> filterExpression = salePriceList =>
             {
+                if (salePriceList.PriceListType.HasValue && salePriceList.PriceListType.Value == SalePriceListType.None)
+                    return false;
                 if (input.Query.OwnerId != null && input.Query.OwnerId != salePriceList.OwnerId)
                     return false;
                 if (input.Query.CreationDate.HasValue && salePriceList.CreatedTime.Date != input.Query.CreationDate)
@@ -298,7 +300,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public IEnumerable<int> GetSalePriceListIdsByProcessInstanceId(long processInstanceId)
         {
-            return GetCustomerCachedSalePriceLists().MapRecords(x => x.Value.PriceListId, x => x.Value.ProcessInstanceId == processInstanceId);
+            return GetCustomerCachedSalePriceLists().MapRecords(x => x.Value.PriceListId, x => x.Value.ProcessInstanceId == processInstanceId && x.Value.PriceListType != SalePriceListType.None);
         }
 
         public bool SendCustomerPriceLists(SendPricelistsInput input)

@@ -274,7 +274,7 @@ namespace TOne.WhS.Sales.Business
                             ProcessInstanceId = context.ProcessInstanceId,
                             UserId = context.UserId,
                             PriceListId = reservedCustomerPriceListId,
-                            PriceListType = SalePriceListType.Hidden,
+                            PriceListType = SalePriceListType.None,
                             OwnerType = SalePriceListOwnerType.Customer,
                             OwnerId = customerId,
                             CurrencyId = context.CurrencyId,

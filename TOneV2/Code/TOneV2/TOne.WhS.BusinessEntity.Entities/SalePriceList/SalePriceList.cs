@@ -16,7 +16,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         Full = 0,
         Country = 1,
         RateChange = 2,
-        Hidden = 3
+        None = 3
     }
 
     public enum SalePricelistSource
