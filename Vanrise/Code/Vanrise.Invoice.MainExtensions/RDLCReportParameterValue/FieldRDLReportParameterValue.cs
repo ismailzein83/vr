@@ -29,7 +29,8 @@ namespace Vanrise.Invoice.MainExtensions
                 case Entities.InvoiceField.SerialNumber: return context.Invoice.SerialNumber;
                 case Entities.InvoiceField.ToDate: return context.Invoice.ToDate;
                 case Entities.InvoiceField.IsAutomatic: return context.Invoice.IsAutomatic;
-                   
+                case Entities.InvoiceField.IsSent: return context.Invoice.SentDate.HasValue;
+
                 case Entities.InvoiceField.CustomField:
                     DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
 

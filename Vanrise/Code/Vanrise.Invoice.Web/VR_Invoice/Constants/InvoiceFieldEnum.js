@@ -13,4 +13,6 @@
     Lock: { value: 11, description: "Lock", fieldName: "Lock", type: "Datetime" },
     Note: { value: 12, description: "Note", fieldName: "HasNote", type: "Text" },
     IsAutomatic: { value: 15, description: "Is Automatic", fieldName: "Entity.IsAutomatic", type: "Text" },
+    IsSent: { value: 16, description: "Is Sent", fieldName: "IsSent", type: "Text" },
+
 });

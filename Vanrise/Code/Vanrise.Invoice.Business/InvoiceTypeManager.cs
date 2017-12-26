@@ -178,6 +178,12 @@ namespace Vanrise.Invoice.Business
                 Field = InvoiceField.IsAutomatic,
                 Header = "Is Automatic"
             });
+            gridColumns.Add(new InvoiceUIGridColumnRunTime
+            {
+                Attribute = new FieldBooleanType().GetGridColumnAttribute(null),
+                Field = InvoiceField.IsSent,
+                Header = "Is Sent"
+            });
             foreach (var dataRecordTypeField in dataRecordTypeFields)
             {
                 GridColumnAttribute attribute = dataRecordTypeField.Value.Type.GetGridColumnAttribute(null);

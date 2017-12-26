@@ -24,6 +24,8 @@ namespace Vanrise.Invoice.MainExtensions.VRConcatenatedPart.SerialNumberParts
                 case Entities.InvoiceField.FromDate: return context.Invoice.FromDate.ToString();
                 case Entities.InvoiceField.IssueDate: return context.Invoice.IssueDate.ToString();
                 case InvoiceField.IsAutomatic: return context.Invoice.IsAutomatic.ToString();
+                case InvoiceField.IsSent: return context.Invoice.SentDate.HasValue.ToString();
+
                 case Entities.InvoiceField.Partner: 
                     PartnerManager partnerManager = new PartnerManager();
                     var partnerId = partnerManager.GetActualPartnerId(context.InvoiceTypeId, context.Invoice.PartnerId);

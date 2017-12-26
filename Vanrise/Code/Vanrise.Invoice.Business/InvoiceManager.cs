@@ -777,6 +777,8 @@ namespace Vanrise.Invoice.Business
                                         break;
                                     case InvoiceField.UserId: value = item.UserName;
                                         break;
+                                    case InvoiceField.IsSent: value = item.IsSent;
+                                        break;
                                     case InvoiceField.CustomField:
                                         foreach (var field in dataRecordType.Fields)
                                         {

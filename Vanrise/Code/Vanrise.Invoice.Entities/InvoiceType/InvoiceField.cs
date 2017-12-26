@@ -21,6 +21,7 @@ namespace Vanrise.Invoice.Entities
         CreatedTime = 10,
         Lock = 11,
         Note = 12,
-        IsAutomatic = 15
+        IsAutomatic = 15,
+        IsSent = 16
     }
 }

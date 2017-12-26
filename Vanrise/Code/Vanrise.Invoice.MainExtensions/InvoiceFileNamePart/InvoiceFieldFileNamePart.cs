@@ -24,6 +24,7 @@ namespace Vanrise.Invoice.MainExtensions.InvoiceFileNamePart
                 case Entities.InvoiceField.FromDate: return context.Invoice.FromDate.ToString(DateTimeFormat);
                 case Entities.InvoiceField.IssueDate: return context.Invoice.IssueDate.ToString(DateTimeFormat);
                 case InvoiceField.IsAutomatic: return context.Invoice.IsAutomatic.ToString();
+                case InvoiceField.IsSent: return context.Invoice.SentDate.HasValue.ToString();
                 case Entities.InvoiceField.Partner:
                     var partnerManager = new PartnerManager();
                     return partnerManager.GetPartnerName(context.InvoiceTypeId, context.Invoice.PartnerId);
