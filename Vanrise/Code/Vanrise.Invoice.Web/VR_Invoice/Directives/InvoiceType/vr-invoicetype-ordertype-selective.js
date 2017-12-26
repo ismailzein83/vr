@@ -125,7 +125,7 @@ app.directive('vrInvoicetypeOrdertypeSelective', ['VR_Invoice_OrderTypeEnum', 'U
                             + ' selectedvalues="scopeModel.selectedValue"'
                             + ' datavaluefield="value"'
                             + ' datatextfield="description"'
-                            + 'isrequired="true"'
+                            + 'isrequired="ctrl.isrequired"'
             + 'onselectionchanged="scopeModel.onSelectionChanged"'
                             + 'label="Order Type" '
                             + ' >'

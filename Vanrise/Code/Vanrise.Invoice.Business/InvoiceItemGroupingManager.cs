@@ -8,7 +8,7 @@ using Vanrise.GenericData.Entities;
 using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Data;
 using Vanrise.Invoice.Entities;
-
+using Vanrise.Common;
 namespace Vanrise.Invoice.Business
 {
     public class InvoiceItemGroupingManager
@@ -23,12 +23,79 @@ namespace Vanrise.Invoice.Business
             InvoiceItemManager invoiceItemManager = new InvoiceItemManager();
             var results = invoiceItemManager.GetInvoiceItemsByItemSetNames(query.InvoiceId, new List<string> { groupItem.ItemSetName }, CompareOperator.Equal);
 
-            return ApplyFinalGroupingAndFiltering(new GroupingInvoiceItemQueryContext(query), results, query.DimensionIds, query.MeasureIds, query.Filters, groupItem);
+            var context = new GroupingInvoiceItemQueryContext(query);
+           return ApplyFinalGroupingAndFiltering(context, results, query.DimensionIds, query.MeasureIds, query.Filters, groupItem);
+
+           
         }
         #endregion
 
         #region Private Methods
-        public List<GroupingInvoiceItemDetail> ApplyFinalGroupingAndFiltering(IGroupingInvoiceItemQueryContext groupingInvoiceItemQueryContext, IEnumerable<InvoiceItem> invoiceItems, List<Guid> requestedDimensionIds, List<Guid> measureIds, List<InvoiceGroupingDimensionFilter> dimensionFilters, ItemGrouping itemGrouping)
+
+        private IEnumerable<GroupingInvoiceItemDetail> GetOrderedByAllDimensions(IGroupingInvoiceItemQueryContext groupingInvoiceItemQueryContext, List<Guid> dimensionIds, IEnumerable<GroupingInvoiceItemDetail> allRecords)
+        {
+
+            List<string> orderByDimensions = new List<string>();
+            if (dimensionIds != null)
+            {
+                foreach (var dimensionId in dimensionIds)
+                {
+                    var dimension = groupingInvoiceItemQueryContext.GetDimensionItemField(dimensionId);
+                    if (dimension != null)
+                        orderByDimensions.Add(dimension.FieldName);
+                }
+            }
+            if (orderByDimensions == null || orderByDimensions.Count == 0)
+                throw new NullReferenceException("orderByDimensions");
+            IOrderedEnumerable<GroupingInvoiceItemDetail> orderedRecords;
+            var firstDimensionConfig = groupingInvoiceItemQueryContext.GetDimensionItemField(dimensionIds[0]);
+            if (firstDimensionConfig.FieldType.OrderType == DataRecordFieldOrderType.ByFieldValue)
+                orderedRecords = allRecords.OrderBy(record => record.DimensionValues[0].Value);
+            else
+                orderedRecords = allRecords.OrderBy(record => record.DimensionValues[0].Name);
+            if (orderByDimensions.Count > 1)
+            {
+                for (int i = 1; i < orderByDimensions.Count; i++)
+                {
+                    var dimensionIndex = i;
+                    var dimensionConfig = groupingInvoiceItemQueryContext.GetDimensionItemField(dimensionIds[dimensionIndex]);
+                    if (dimensionConfig.FieldType.OrderType == DataRecordFieldOrderType.ByFieldValue)
+                        orderedRecords = orderedRecords.ThenBy(record => record.DimensionValues[dimensionIndex].Value);
+                    else
+                        orderedRecords = orderedRecords.ThenBy(record => record.DimensionValues[dimensionIndex].Name);
+                }
+            }
+            return orderedRecords;
+        }
+        private IEnumerable<GroupingInvoiceItemDetail> GetOrderedByAllMeasures(IGroupingInvoiceItemQueryContext groupingInvoiceItemQueryContext,List<Guid> measureIds, IEnumerable<GroupingInvoiceItemDetail> allRecords)
+        {
+
+            List<string> orderByMeasures = new List<string>();
+            if (measureIds != null)
+            {
+                foreach (var measureId in measureIds)
+                {
+                    var measure = groupingInvoiceItemQueryContext.GetAggregateItemField(measureId);
+                    if (measure != null)
+                        orderByMeasures.Add(measure.FieldName);
+                }
+            }
+
+            if (orderByMeasures == null || orderByMeasures.Count() == 0)
+                throw new NullReferenceException("orderByMeasures");
+            string firstMeasureName = orderByMeasures[0];
+            IOrderedEnumerable<GroupingInvoiceItemDetail> orderedRecords = allRecords.OrderByDescending(record => record.MeasureValues[firstMeasureName].Value);
+            if (orderByMeasures.Count > 1)
+            {
+                for (int i = 1; i < orderByMeasures.Count; i++)
+                {
+                    string measureName = orderByMeasures[i];
+                    orderedRecords = orderedRecords.ThenByDescending(itm => itm.MeasureValues[measureName].Value);
+                }
+            }
+            return orderedRecords;
+        }
+        public IEnumerable<GroupingInvoiceItemDetail> ApplyFinalGroupingAndFiltering(IGroupingInvoiceItemQueryContext groupingInvoiceItemQueryContext, IEnumerable<InvoiceItem> invoiceItems, List<Guid> requestedDimensionIds, List<Guid> measureIds, List<InvoiceGroupingDimensionFilter> dimensionFilters, ItemGrouping itemGrouping)
         {
             List<GroupingInvoiceItemDetail> records = new List<GroupingInvoiceItemDetail>();
 
@@ -94,7 +161,21 @@ namespace Vanrise.Invoice.Business
                 GroupingInvoiceItemDetail analyticRecord = BuildGroupingInvoiceItemDetail(groupingInvoiceItemQueryContext, item, requestedDimensionIds, measureIds);
                 records.Add(analyticRecord);
             }
-            return records;
+
+            IEnumerable<GroupingInvoiceItemDetail> orderedRecords;
+            if (itemGrouping.OrderType.HasValue)
+            {
+                switch (itemGrouping.OrderType.Value)
+                {
+                    case ItemGroupingOrderType.ByAllDimensions: orderedRecords = GetOrderedByAllDimensions(groupingInvoiceItemQueryContext, requestedDimensionIds, records); break;
+                    case ItemGroupingOrderType.ByAllMeasures: orderedRecords = GetOrderedByAllMeasures(groupingInvoiceItemQueryContext, measureIds, records); break;
+                    default: orderedRecords = null; break;
+                }
+            }
+            else
+                orderedRecords = records;
+
+            return orderedRecords;
         }
         private bool ApplyFilters(IGroupingInvoiceItemQueryContext groupingInvoiceItemQueryContext, InvoiceItemRecord invoiceItemRecord, List<InvoiceGroupingDimensionFilter> dimensionFilters)
         {
