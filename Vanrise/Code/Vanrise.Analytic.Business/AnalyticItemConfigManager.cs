@@ -18,7 +18,6 @@ namespace Vanrise.Analytic.Business
     public class AnalyticItemConfigManager : IAnalyticItemConfigManager
     {
         #region Public Methods
-
         public AnalyticDimensionEditorRuntime GetAnalyticDimensionEditorRuntime(AnalyticDimensionEditorInput input)
         {
             AnalyticTableManager analyticTableManager = new AnalyticTableManager();
@@ -137,7 +136,7 @@ namespace Vanrise.Analytic.Business
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
                 () =>
                 {
-                    var measureSourceConfigs = GetCachedAnalyticItemConfigs<AnalyticMeasureExternalSourceConfig>(tableId, AnalyticItemType.MeasureSource);
+                    var measureSourceConfigs = GetCachedAnalyticItemConfigs<AnalyticMeasureExternalSourceConfig>(tableId, AnalyticItemType.MeasureExternalSource);
                     Dictionary<string, AnalyticMeasureExternalSource> measureSources = new Dictionary<string, AnalyticMeasureExternalSource>();
                     foreach (var itemConfig in measureSourceConfigs)
                     {
@@ -406,7 +405,7 @@ namespace Vanrise.Analytic.Business
                 case AnalyticItemType.Join: data = GetCachedAnalyticItemConfigs<AnalyticJoinConfig>(tableId, itemType).MapRecords(AnalyticConfigDetailMapper<AnalyticJoinConfig>); break;
                 case AnalyticItemType.Measure: data = GetCachedAnalyticItemConfigs<AnalyticMeasureConfig>(tableId, itemType).MapRecords(AnalyticConfigDetailMapper<AnalyticMeasureConfig>); break;
                 case AnalyticItemType.Aggregate: data = GetCachedAnalyticItemConfigs<AnalyticAggregateConfig>(tableId, itemType).MapRecords(AnalyticConfigDetailMapper<AnalyticAggregateConfig>); break;
-
+                case AnalyticItemType.MeasureExternalSource: data = GetCachedAnalyticItemConfigs<AnalyticMeasureExternalSourceConfig>(tableId, itemType).MapRecords(AnalyticConfigDetailMapper<AnalyticMeasureExternalSourceConfig>); break;
             }
             return data;
         }

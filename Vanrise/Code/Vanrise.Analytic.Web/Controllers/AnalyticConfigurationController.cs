@@ -67,5 +67,24 @@ namespace Vanrise.Analytic.Web.Controllers
         {
             return _manager.GetDRSearchPageSubviewDefinitionSettingsConfigs();
         }
+        [HttpGet]
+        [Route("GetMeasureExternalSourceTemplateConfigs")]
+        public IEnumerable<MeasureExternalSourceSetting> GetMeasureExternalSourceTemplateConfigs()
+        {
+            return _manager.GetMeasureExternalSourceTemplateConfigs();
+        }
+
+        [HttpGet]
+        [Route("GetDimensionMappingRuleTemplateConfigs")]
+        public IEnumerable<DimensionMappingRuleSetting> GetDimensionMappingRuleTemplateConfigs()
+        {
+            return _manager.GetDimensionMappingRuleTemplateConfigs();
+        }
+        [HttpGet]
+        [Route("GetMeasureMappingRuleTemplateConfigs")]
+        public IEnumerable<MeasureMappingRuleSetting> GetMeasureMappingRuleTemplateConfigs()
+        {
+            return _manager.GetMeasureMappingRuleTemplateConfigs();
+        }
     }
 }

@@ -44,5 +44,17 @@ namespace Vanrise.Analytic.Business
         {
             return _templateConfigManager.GetExtensionConfigurations<DRSearchPageSubviewDefinitionSettingsConfig>(DRSearchPageSubviewDefinitionSettingsConfig.EXTENSION_TYPE);
         }
+        public IEnumerable<MeasureExternalSourceSetting> GetMeasureExternalSourceTemplateConfigs()
+        {
+            return _templateConfigManager.GetExtensionConfigurations<MeasureExternalSourceSetting>(MeasureExternalSourceSetting.EXTENSION_TYPE);
+        }
+        public IEnumerable<DimensionMappingRuleSetting> GetDimensionMappingRuleTemplateConfigs()
+        {
+            return _templateConfigManager.GetExtensionConfigurations<DimensionMappingRuleSetting>(DimensionMappingRuleSetting.EXTENSION_TYPE);
+        }
+        public IEnumerable<MeasureMappingRuleSetting> GetMeasureMappingRuleTemplateConfigs()
+        {
+            return _templateConfigManager.GetExtensionConfigurations<MeasureMappingRuleSetting>(MeasureMappingRuleSetting.EXTENSION_TYPE);
+        }
     }
 }

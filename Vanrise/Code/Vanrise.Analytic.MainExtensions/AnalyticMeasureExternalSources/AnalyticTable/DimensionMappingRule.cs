@@ -9,6 +9,8 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
 {
     public class DimensionMappingRule
     {
+        public string Name { get; set; }
+
         public DimensionMappingRuleSettings Settings { get; set; }
     }
 

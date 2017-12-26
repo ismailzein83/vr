@@ -40,6 +40,17 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDRSearchPageSubviewDefinitionSettingsConfigs"));
         }
 
+        function GetMeasureExternalSourceTemplateConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetMeasureExternalSourceTemplateConfigs"));
+        }
+
+        function GetDimensionMappingRuleTemplateConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDimensionMappingRuleTemplateConfigs"));
+        }
+
+        function GetMeasureMappingRuleTemplateConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetMeasureMappingRuleTemplateConfigs"));
+        }
         return ({
             GetAnalyticReportSettingsTemplateConfigs: GetAnalyticReportSettingsTemplateConfigs,
             GetWidgetsTemplateConfigs: GetWidgetsTemplateConfigs,
@@ -48,7 +59,10 @@
             GetMeasureStyleRuleTemplateConfigs: GetMeasureStyleRuleTemplateConfigs,
             GetAnalyticDataProviderConfigs: GetAnalyticDataProviderConfigs,
             GetVRRestAPIAnalyticQueryInterceptorConfigs: GetVRRestAPIAnalyticQueryInterceptorConfigs,
-            GetDRSearchPageSubviewDefinitionSettingsConfigs: GetDRSearchPageSubviewDefinitionSettingsConfigs
+            GetDRSearchPageSubviewDefinitionSettingsConfigs: GetDRSearchPageSubviewDefinitionSettingsConfigs,
+            GetMeasureExternalSourceTemplateConfigs: GetMeasureExternalSourceTemplateConfigs,
+            GetDimensionMappingRuleTemplateConfigs: GetDimensionMappingRuleTemplateConfigs,
+            GetMeasureMappingRuleTemplateConfigs: GetMeasureMappingRuleTemplateConfigs
         });
     }
 

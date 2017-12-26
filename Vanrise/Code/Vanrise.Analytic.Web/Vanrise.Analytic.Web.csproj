@@ -79,7 +79,9 @@
     <Compile Include="Controllers\DataAnalysisItemDefinitionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Analytic\Directives\MainExtensions\MeasureExternalSource\Templates\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Analytic.Business\Vanrise.Analytic.Business.csproj">
       <Project>{374e7ef0-2080-4b79-bcd9-b5563694197c}</Project>
@@ -140,9 +142,15 @@
     <Content Include="Analytic\Directives\AnalyticDataProvider\Templates\AnalyticDataProviderSettings.html" />
     <Content Include="Analytic\Directives\AnalyticDataProvider\vr-analytic-dataprovider-settings.js" />
     <Content Include="Analytic\Directives\AnalyticItemConfig\Templates\AggregateEditorTemplate.html" />
+    <Content Include="Analytic\Directives\AnalyticItemConfig\Templates\AnalyticTableExternalSourceDirective.html" />
     <Content Include="Analytic\Directives\AnalyticItemConfig\Templates\DimensionEditorTemplate.html" />
+    <Content Include="Analytic\Directives\AnalyticItemConfig\Templates\EditDimensionMappingRule.html" />
+    <Content Include="Analytic\Directives\AnalyticItemConfig\Templates\EditMeasureMappingRule.html" />
+    <Content Include="Analytic\Directives\AnalyticItemConfig\Templates\ExcludeDimensionDirective.html" />
     <Content Include="Analytic\Directives\AnalyticItemConfig\Templates\JoinEditorTemplate.html" />
     <Content Include="Analytic\Directives\AnalyticItemConfig\Templates\MeasureEditorTemplate.html" />
+    <Content Include="Analytic\Directives\AnalyticItemConfig\Templates\MeasureExternalSourceEditorTemplate.html" />
+    <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-itemconfig-measureexternalsource-editor.js" />
     <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-itemconfig-aggregate-editor.js" />
     <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-itemconfig-dimension-editor.js" />
     <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-itemconfig-join-editor.js" />
@@ -185,11 +193,13 @@
     <Content Include="Analytic\Directives\DataAnalysis\Common\vr-analytic-darecordaggregate-selective.js" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\ScheduleTask\Templates\GenerateAlertProcessTaskTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\ScheduleTask\vr-analytic-daprofcalc-generatealertprocesstask.js" />
+    <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticMeasureExternalSourceGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticDimensionGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticJoinGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticAggregateGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticMeasureGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\vr-analytic-analyticconfig-aggregate-grid.js" />
+    <Content Include="Analytic\Directives\Definition\AnalyticConfig\vr-analytic-analyticconfig-measureexternalsource-grid.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\vr-analytic-analyticconfig-dimension-grid.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\vr-analytic-analyticconfig-join-grid.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\vr-analytic-analyticconfig-measure-grid.js" />
@@ -238,6 +248,7 @@
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\RealTime\Widgets\Chart\Templates\RealTimeChartWidgetDefinitionTemplate.html" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\RealTime\Widgets\Chart\vr-analytic-realtime-widgets-timevariation-definition.js" />
     <Content Include="Analytic\Directives\Definition\MainExtensions\AnalyticReport\RealTime\Widgets\Chart\vr-analytic-realtime-widgets-chart-definition.js" />
+    <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\vr-analytic-itemconfig-aggregate-editor.js" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\RecordSearch\MainExtensions\SourceSettings\Templates\DataRecordSourceSubviewSettingsTemplate.html" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\RecordSearch\MainExtensions\SourceSettings\vr-analytic-datarecordsource-subviewsettings.js" />
     <Content Include="Analytic\Directives\Runtime\AnalyticReport\RecordSearch\Templates\DataRecordSearchPageItemDetailsTemplate.html" />
@@ -294,6 +305,7 @@
     <Content Include="Analytic\Services\AnalyticItemActionService.js" />
     <Content Include="Analytic\Services\AnalyticItemConfigService.js" />
     <Content Include="Analytic\Services\AnalyticReportService.js" />
+    <Content Include="Analytic\Services\MappingRulesService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticItemActionAPIService.js" />
     <Content Include="Analytic\Services\APIServices\DAProfCalcNotitificationAPIService.js" />
     <Content Include="Analytic\Services\APIServices\DAProfCalcOutputSettingsAPIService.js" />
