@@ -67,6 +67,7 @@
     <Compile Include="InvoiceBulkActionRuntime.cs" />
     <Compile Include="InvoiceBulkActionsDraftSummary.cs" />
     <Compile Include="InvoiceByPartnerInvoiceType.cs" />
+    <Compile Include="InvoiceGapAction.cs" />
     <Compile Include="InvoiceGeneratorException.cs" />
     <Compile Include="InvoiceItem\ConvertItemGroupingToGridColumnAttributeInput.cs" />
     <Compile Include="InvoiceItem\GroupingInvoiceItemDetail.cs" />

@@ -31,6 +31,10 @@ app.directive("vrInvoiceAutomaticinvoiceprocessManual", ['UtilsService', 'VRUIUt
         var invoiceTypeSelectorAPIReadyDeferred = UtilsService.createPromiseDeferred();
         var invoiceTypeSelectorAPISelectionChangedDeferred;
 
+        var invoicePeriodGapActionReadyDeferred = UtilsService.createPromiseDeferred();
+        var invoicePeriodGapActionAPI;
+
+
         var invoicePartnerGroupAPI;
         var invoicePartnerGroupReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -41,6 +45,10 @@ app.directive("vrInvoiceAutomaticinvoiceprocessManual", ['UtilsService', 'VRUIUt
 
         function initializeController() {
 
+            $scope.onInvoicePeriodGapActionReady = function (api) {
+                invoicePeriodGapActionAPI = api;
+                invoicePeriodGapActionReadyDeferred.resolve();
+            };
 
             $scope.invoiceTypeSelectorReady = function (api) {
                 invoiceTypeSelectorAPI = api;
@@ -103,6 +111,9 @@ app.directive("vrInvoiceAutomaticinvoiceprocessManual", ['UtilsService', 'VRUIUt
                 var loadInvoiceTypeSelectorPromise = loadInvoiceTypeSelector();
                 promises.push(loadInvoiceTypeSelectorPromise);
 
+                var loadInvoicePeriodGapActionPromise = loadInvoicePeriodGapActionSelector();
+                promises.push(loadInvoicePeriodGapActionPromise);
+
                 var loadAccountStatusSelectorDirectivePromise = loadAccountStatusSelectorDirective();
                 promises.push(loadAccountStatusSelectorDirectivePromise);
 
@@ -113,6 +124,20 @@ app.directive("vrInvoiceAutomaticinvoiceprocessManual", ['UtilsService', 'VRUIUt
                     promises.push(loadPartnerGroupSelectorPromise);
                 }
 
+                function loadInvoicePeriodGapActionSelector() {
+                    var invoicePeriodGapActionLoadDeferred = UtilsService.createPromiseDeferred();
+
+                    invoicePeriodGapActionReadyDeferred.promise.then(function () {
+
+                        var payloadInvoicePeriodGapAction = {selectFirstItem:true};
+                        if (payload != undefined && payload.data != undefined) {
+                            payloadInvoicePeriodGapAction.selectedIds = payload.data.InvoiceGapAction;
+                        }
+                        VRUIUtilsService.callDirectiveLoad(invoicePeriodGapActionAPI, payloadInvoicePeriodGapAction, invoicePeriodGapActionLoadDeferred);
+                    });
+
+                    return invoicePeriodGapActionLoadDeferred.promise;
+                }
 
                 function loadInvoiceTypeSelector() {
                     var invoiceTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -179,7 +204,8 @@ app.directive("vrInvoiceAutomaticinvoiceprocessManual", ['UtilsService', 'VRUIUt
                         IsEffectiveInFuture: accountStatusData.IsEffectiveInFuture,
                         Status: accountStatusData.Status,
                         AccountStatus: accountStatusData.selectedId,
-                        PartnerGroup: invoicePartnerGroupAPI.getData()
+                        PartnerGroup: invoicePartnerGroupAPI.getData(),
+                        InvoiceGapAction: invoicePeriodGapActionAPI.getSelectedIds()
                     }
                 };
             };

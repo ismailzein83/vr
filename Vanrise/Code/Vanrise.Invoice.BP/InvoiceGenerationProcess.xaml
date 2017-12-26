@@ -48,6 +48,7 @@
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>Vanrise.Invoice.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Invoice.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.Invoice.Entities</AssemblyReference>
@@ -122,6 +123,11 @@
                       <mca:CSharpReference x:TypeArguments="x:Boolean">generationErrorOccured</mca:CSharpReference>
                     </OutArgument>
                   </viba1:GeneratePartnerInvoice.GenerationErrorOccured>
+                  <viba1:GeneratePartnerInvoice.InvoiceGapAction>
+                    <InArgument x:TypeArguments="vie:InvoiceGapAction">
+                      <mca:CSharpValue x:TypeArguments="vie:InvoiceGapAction">Input.InvoiceGapAction</mca:CSharpValue>
+                    </InArgument>
+                  </viba1:GeneratePartnerInvoice.InvoiceGapAction>
                   <viba1:GeneratePartnerInvoice.InvoiceGenerationDraft>
                     <InArgument x:TypeArguments="vie:InvoiceGenerationDraft">
                       <mca:CSharpValue x:TypeArguments="vie:InvoiceGenerationDraft">invoiceGenerationDraft</mca:CSharpValue>
@@ -261,7 +267,7 @@
         </InArgument>
       </Assign.Value>
     </Assign>
-    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxJbnZvaWNlR2VuZXJhdGlvblByb2Nlc3MueGFtbDE6A4kCDgIBAT0zPTYCAQQ+Mz42AgEDPzM/NgIBAkEFTCkDAaECTQX3AQoCART4AQWHAg4CAQVJC0loAwGpAkQLRIQBAwGiAlALUJkBAgEVVAnsARQCASXvAQn1ASQCARyAAguEAhQCAQ37AQv7AXICAQZVC2AUAwGSAmEL6wEVAgEm8gEP8gF0AgEe7wFk7wGHAQIBHV0RXWsDAZoCWBFYYwMBkwJkEWSJAQMBiwJrD+kBGgIBJ3IRlgEwAwG2AZcBEaIBGgMBnQGjARHDARYCAWjEARHTARYCAU7UARHoARYCASiEAReEAWcDAf8BkwEXkwFnAwHzAYkBF4kBZgMB5wF6F3p0AwHbAY4BF44BiQEDAc8BdRd1eAMBwwF/F399AwG3AZ8BF58BbAMBqgGaAReaAXIDAZ4BpgEXpgFmAgFpqgEVwQEfAgF1xwEXxwF0AgFPywEV0QEpAgFb1wEX1wFfAgEp2wEV5gEeAgE1rQEbrQGMAQMBkQG0ARm/ATQCAXbOARvOAXQCAVzjARvjAWoCAULeARveAW4CATa8AR+8AYQBAwGEAbcBH7cB0gECAXc=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0RDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxJbnZvaWNlR2VuZXJhdGlvblByb2Nlc3MueGFtbDI7A48CDgIBAT4zPjYCAQQ/Mz82AgEDQDNANgIBAkIFTSkDAa0CTgX9AQoCART+AQWNAg4CAQVKC0poAwG1AkULRYQBAwGuAlELUZkBAgEVVQnyARQCASX1AQn7ASQCARyGAguKAhQCAQ2BAguBAnICAQZWC2EUAwGeAmIL8QEVAgEm+AEP+AF0AgEe9QFk9QGHAQIBHV4RXmsDAaYCWRFZYwMBnwJlEWWJAQMBlwJsD+8BGgIBJ3MRnAEwAwG2AZ0BEagBGgMBnQGpARHJARYCAWjKARHZARYCAU7aARHuARYCASiKAReKAWcDAYsCmQEXmQFnAwH/AY8BF48BZgMB8wF7F3t0AwHnAZQBF5QBiQEDAdsBgAEXgAF3AwHPAXYXdngDAcMBhQEXhQF9AwG3AaUBF6UBbAMBqgGgARegAXIDAZ4BrAEXrAFmAgFpsAEVxwEfAgF1zQEXzQF0AgFP0QEV1wEpAgFb3QEX3QFfAgEp4QEV7AEeAgE1swEbswGMAQMBkQG6ARnFATQCAXbUARvUAXQCAVzpARvpAWoCAULkARvkAW4CATbCAR/CAYQBAwGEAb0BH70B0gECAXc=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

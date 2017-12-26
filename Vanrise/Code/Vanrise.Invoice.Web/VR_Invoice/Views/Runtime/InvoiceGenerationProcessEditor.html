@@ -1,19 +1,19 @@
-﻿<div vr-modalcontent ng-controller="VR_Invoice_InvoiceGenerationProcessEditorController" size="medium" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent ng-controller="VR_Invoice_InvoiceGenerationProcessEditorController" size="large" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formGeneration">
             <vr-row>
-                <vr-invoice-accountstatus-selector hideremoveicon isrequired="true" on-ready="scopeModel.onAccountStatusSelectorReady" normal-col-num="3" onselectionchanged="scopeModel.onAccountStatusSelectionChanged"></vr-invoice-accountstatus-selector>
+                <vr-invoice-accountstatus-selector hideremoveicon isrequired="true" on-ready="scopeModel.onAccountStatusSelectorReady" normal-col-num="2" onselectionchanged="scopeModel.onAccountStatusSelectionChanged"></vr-invoice-accountstatus-selector>
 
-                <vr-invoice-partnergroup normal-col-num="3" isrequired="true" on-ready="scopeModel.onInvoicePartnerGroupReady"></vr-invoice-partnergroup>
+                <vr-invoice-partnergroup normal-col-num="2" isrequired="true" on-ready="scopeModel.onInvoicePartnerGroupReady"></vr-invoice-partnergroup>
             </vr-row>
             <vr-row>
-                <vr-columns colnum="3">
+                <vr-columns colnum="2">
                     <vr-select datatextfield="description" datavaluefield="value" label="Period" datasource="scopeModel.invoiceGenerationPeriods"
                                selectedvalues="scopeModel.selectedInvoiceGenerationPeriod" on-ready="scopeModel.onInvoiceGenerationPeriodReady" hideremoveicon isrequired="true">
                     </vr-select>
                 </vr-columns>
 
-                <vr-columns colnum="6" haschildcolumns>
+                <vr-columns colnum="4" haschildcolumns>
                     <vr-columns colnum="6">
                         <vr-datetimepicker value="scopeModel.fromDate" type="date" label="From" customvalidate="scopeModel.validateFromDate()" isrequired="scopeModel.areDatesRequired()"></vr-datetimepicker>
                     </vr-columns>
@@ -25,11 +25,14 @@
                         <vr-label isvalue style="text-align:center">From & To should be specified if some partners don't have billing cycle</vr-label>
                     </vr-columns>
                 </vr-columns>
-              
-                <vr-columns colnum="3">
+
+                <vr-columns colnum="2">
                     <vr-datetimepicker value="scopeModel.issueDate" type="date" label="Issue Date" isrequired="true"></vr-datetimepicker>
                 </vr-columns>
-            </vr-row>           
+                <vr-invoice-periodgapaction-selector on-ready="scopeModel.onInvoicePeriodGapActionReady" normal-col-num="2" isrequired="true"></vr-invoice-periodgapaction-selector>
+
+            </vr-row>
+
         </vr-form>
 
         <vr-row removeline>

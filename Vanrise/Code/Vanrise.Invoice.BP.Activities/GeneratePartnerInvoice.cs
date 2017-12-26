@@ -7,6 +7,7 @@ using Vanrise.Invoice.Entities;
 using Vanrise.Invoice.Business.Context;
 using System.Collections.Generic;
 using Vanrise.Common;
+using Vanrise.Invoice.BP.Arguments;
 namespace Vanrise.Invoice.BP.Activities
 {
     public sealed class GeneratePartnerInvoice : BaseCodeActivity
@@ -18,6 +19,7 @@ namespace Vanrise.Invoice.BP.Activities
 
         [RequiredArgument]
         public InArgument<bool> IsAutomatic { get; set; }
+        public InArgument<InvoiceGapAction> InvoiceGapAction { get; set; }
 
         [RequiredArgument]
         public InArgument<DateTime> IssueDate { get; set; }
@@ -34,6 +36,7 @@ namespace Vanrise.Invoice.BP.Activities
         [RequiredArgument]
         public OutArgument<Exception> GenerationErrorException { get; set; }
 
+
         #endregion
 
         protected override void VRExecute(IBaseCodeActivityContext context)
@@ -43,6 +46,7 @@ namespace Vanrise.Invoice.BP.Activities
             var invoiceTypeId = invoiceGenerationDraft.InvoiceTypeId;
             var isAutomatic = context.ActivityContext.GetValue(this.IsAutomatic);
             var issueDate = context.ActivityContext.GetValue(this.IssueDate);
+            var invoiceGapAction = context.ActivityContext.GetValue(this.InvoiceGapAction);
             List<InvoiceGenerationMessageOutput> messages = new List<InvoiceGenerationMessageOutput>();
             InvoiceManager invoiceManager = new InvoiceManager();
             InvoiceSettingManager invoiceSettingManager = new Business.InvoiceSettingManager();
@@ -98,7 +102,23 @@ namespace Vanrise.Invoice.BP.Activities
                         return;
                     }
                 }
-
+                var invoiceGenerationGap = invoiceManager.CheckGeneratedInvoicePeriodGaP(invoiceGenerationDraft.From,invoiceTypeId,partnerId);
+                if (invoiceGenerationGap.HasValue)
+                {
+                    switch (invoiceGapAction)
+                    {
+                        case Entities.InvoiceGapAction.GenerateInvoice:
+                            break;
+                        case Entities.InvoiceGapAction.SkipInvoice:
+                            messages.Add(new InvoiceGenerationMessageOutput
+                            {
+                                LogEntryType = Vanrise.Entities.LogEntryType.Warning,
+                                Message = string.Format("Invoice not generated for {0} from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}. Reason : 'invoice must be generated from date {3:yyyy-MM-dd}.'", invoiceGenerationDraft.PartnerName, invoiceGenerationDraft.From, invoiceGenerationDraft.To, invoiceGenerationGap.Value)
+                            });
+                            this.Messages.Set(context.ActivityContext, messages);
+                            return;
+                    }
+                }
                 bool succeeded;
                 var generatedInvoice = invoiceManager.GenerateInvoice(new Entities.GenerateInvoiceInput
                 {

@@ -177,7 +177,7 @@ namespace Vanrise.Invoice.Web.Controllers
             if (!_invoiceTypeManager.DoesUserHaveViewAccess(input.InvoiceTypeId))
                 return GetUnauthorizedResponse();
             InvoiceManager manager = new InvoiceManager();
-            return manager.GenerateInvoices(input.InvoiceTypeId, input.InvoiceGenerationIdentifier, input.IssueDate, input.ChangedItems);
+            return manager.GenerateInvoices(input.InvoiceTypeId, input.InvoiceGenerationIdentifier, input.IssueDate, input.ChangedItems,input.InvoiceGapAction);
         }
         [HttpGet]
         [Route("DeleteGeneratedInvoice")]
@@ -206,5 +206,6 @@ namespace Vanrise.Invoice.Web.Controllers
         public Guid InvoiceTypeId { get; set; }
         public Guid InvoiceGenerationIdentifier { get; set; }
         public List<InvoiceGenerationDraftToEdit> ChangedItems { get; set; }
+        public InvoiceGapAction InvoiceGapAction { get; set; }
     }
 }

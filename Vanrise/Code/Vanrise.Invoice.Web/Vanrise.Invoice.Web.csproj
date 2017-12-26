@@ -196,6 +196,7 @@
     <Content Include="VR_Invoice\Constants\InvoiceDateEnum.js" />
     <Content Include="VR_Invoice\Constants\InvoiceFieldEnum.js" />
     <Content Include="VR_Invoice\Constants\InvoiceMonthlyTypeEnum.js" />
+    <Content Include="VR_Invoice\Constants\InvoicePeriodGapActionEnum.js" />
     <Content Include="VR_Invoice\Constants\ItemSetNameCompareOperatorEnum.js" />
     <Content Include="VR_Invoice\Constants\LogicalOperatorEnum.js" />
     <Content Include="VR_Invoice\Constants\ModuleConfig.js" />
@@ -429,6 +430,7 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\vr-invoicetype-invoicesubsectiongridcolumns.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\InvoiceUISubSectionSettings\vr-invoicetype-invoiceuisubsectionsettings.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\vr-invoicetype-maingridcolumns.js" />
+    <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-periodgapaction-selector.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-ordertype-selective.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-selector.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\vr-invoicetype-subsections.js" />

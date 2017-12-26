@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.BP.Arguments
 {
@@ -19,5 +20,7 @@ namespace Vanrise.Invoice.BP.Arguments
         public DateTime IssueDate { get; set; }
         public DateTime MinimumFrom { get; set; }
         public DateTime MaximumTo { get; set; }
+        public InvoiceGapAction InvoiceGapAction { get; set; }
+
     }
 }

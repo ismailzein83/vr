@@ -969,7 +969,7 @@ namespace Vanrise.Invoice.Business
 
         #endregion
 
-        public GenerateInvoicesOutput GenerateInvoices(Guid invoiceTypeId, Guid invoiceGenerationIdentifier, DateTime issueDate, List<InvoiceGenerationDraftToEdit> changedItems)
+        public GenerateInvoicesOutput GenerateInvoices(Guid invoiceTypeId, Guid invoiceGenerationIdentifier, DateTime issueDate, List<InvoiceGenerationDraftToEdit> changedItems, InvoiceGapAction invoiceGapAction)
         {
             InvoiceGenerationDraftManager invoiceGenerationDraftManager = new InvoiceGenerationDraftManager();
             InvoiceGenerationDraftSummary invoiceGenerationDraftSummary = invoiceGenerationDraftManager.ApplyInvoiceGenerationDraftsChanges(changedItems, invoiceGenerationIdentifier);
@@ -992,7 +992,8 @@ namespace Vanrise.Invoice.Business
                 UserId = userId,
                 IssueDate = issueDate.Date,
                 MinimumFrom = invoiceGenerationDraftSummary.MinimumFrom.Value,
-                MaximumTo = invoiceGenerationDraftSummary.MaximumTo.Value
+                MaximumTo = invoiceGenerationDraftSummary.MaximumTo.Value,
+                InvoiceGapAction = invoiceGapAction
             };
 
             var createProcessInput = new Vanrise.BusinessProcess.Entities.CreateProcessInput

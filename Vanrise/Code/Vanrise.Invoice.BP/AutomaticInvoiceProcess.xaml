@@ -51,6 +51,7 @@
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>Vanrise.Invoice.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Invoice.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.Invoice.Entities</AssemblyReference>
@@ -150,7 +151,8 @@
     UserId = Input.UserId,
     EntityId = Input.EntityId,
     MinimumFrom = InvoiceGenerationDraftOutput.MinimumFrom,
-    MaximumTo = InvoiceGenerationDraftOutput.MaximumTo
+    MaximumTo = InvoiceGenerationDraftOutput.MaximumTo,
+    InvoiceGapAction = Input.InvoiceGapAction
 }</mca:CSharpValue>
               </InArgument>
             </vbw:RunProcess.Input>
@@ -201,7 +203,7 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxBdXRvbWF0aWNJbnZvaWNlUHJvY2Vzcy54YW1sIT0DzQEOAgEBRQV4NgIBWXkFywEKAgECTQtNZAMBmQFcC1xaAwGSAVILUoUBAwGLAWsLa2YDAYQBVwtXagIBfWYLZlwCAXZhC2FvAgFvSAtIagIBaHULdV8CAWFwC3BjAgFafAt8lwECAQOAAQm7ARQCARm+AQnJASQCAQqBAQuMASYCAUqNAQuiARwCATijAQuuARQCASmvAQu6ASYCARrGAQ/GAYUBAgESwQEPwQFxAgELiQERiQGLAQIBUoQBEYQBxgECAUuNAXmNAX8CAUmQARGaARQCAUKNAZMBjQHGAQIBQZ8BEZ8BhAECATqNAdwBjQHiAQIBOasBEasBsAECATGmARGmAZABAgEqtwERtwGLAQIBIrIBEbIBdQIBGw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxBdXRvbWF0aWNJbnZvaWNlUHJvY2Vzcy54YW1sIT4DzwEOAgEBRgV5NgIBWXoFzQEKAgECTgtOZAMBmQFdC11aAwGSAVMLU4UBAwGLAWwLbGYDAYQBWAtYagIBfWcLZ1wCAXZiC2JvAgFvSQtJagIBaHYLdl8CAWFxC3FjAgFafQt9lwECAQOBAQm9ARQCARnAAQnLASQCAQqCAQuNASYCAUqOAQukARwCATilAQuwARQCASmxAQu8ASYCARrIAQ/IAYUBAgESwwEPwwFxAgELigERigGLAQIBUoUBEYUBxgECAUuOAXmOAX8CAUmRARGcARQCAUKOAZMBjgHGAQIBQaEBEaEBhAECATqOAdwBjgHiAQIBOa0BEa0BsAECATGoARGoAZABAgEquQERuQGLAQIBIrQBEbQBdQIBGw==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

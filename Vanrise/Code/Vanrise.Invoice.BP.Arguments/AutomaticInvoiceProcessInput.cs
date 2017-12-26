@@ -8,6 +8,7 @@ using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.BP.Arguments
 {
+
     public class AutomaticInvoiceProcessInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument
     {
         public Guid InvoiceTypeId { get; set; }
@@ -18,6 +19,7 @@ namespace Vanrise.Invoice.BP.Arguments
         public VRAccountStatus Status { get; set; }
         public PartnerGroup PartnerGroup { get; set; }
         public int AccountStatus { get; set; }
+        public InvoiceGapAction InvoiceGapAction { get; set; }
         public override string GetTitle()
         {
             return "Automatic Invoice Process";

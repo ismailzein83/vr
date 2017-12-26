@@ -21,6 +21,9 @@
         var invoiceGenerationDraftGridAPI;
         var invoiceGenerationDraftGridReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var invoicePeriodGapActionReadyDeferred = UtilsService.createPromiseDeferred();
+        var invoicePeriodGapActionAPI;
+
         var invoiceGenerationIdentifier;
 
         defineScope();
@@ -36,6 +39,11 @@
         function defineScope() {
             $scope.scopeModel = {};
 
+
+            $scope.scopeModel.onInvoicePeriodGapActionReady = function (api) {
+                invoicePeriodGapActionAPI = api;
+                invoicePeriodGapActionReadyDeferred.resolve();
+            };
             $scope.scopeModel.onInvoicePartnerGroupReady = function (api) {
                 invoicePartnerGroupAPI = api;
                 invoicePartnerGroupReadyDeferred.resolve();
@@ -136,7 +144,7 @@
                         VRNotificationService.showError('At least one invoice should be selected for generation process', $scope);
                     }
                     else {
-                        var input = { InvoiceGenerationIdentifier: invoiceGenerationIdentifier, IssueDate: issueDate, ChangedItems: changedItems, InvoiceTypeId: invoiceTypeId };
+                        var input = { InvoiceGenerationIdentifier: invoiceGenerationIdentifier, IssueDate: issueDate, ChangedItems: changedItems, InvoiceTypeId: invoiceTypeId, InvoiceGapAction: invoicePeriodGapActionAPI.getSelectedIds() };
 
                         return VR_Invoice_InvoiceAPIService.GenerateInvoices(input).then(function (response) {
                             if (response.Succeed) {
@@ -214,8 +222,19 @@
                 $scope.scopeModel.issueDate = VRDateTimeService.getTodayDate();
             }
 
+            function loadInvoicePeriodGapActionSelector() {
+                var invoicePeriodGapActionLoadDeferred = UtilsService.createPromiseDeferred();
+                invoicePeriodGapActionReadyDeferred.promise.then(function () {
+                    var payloadInvoicePeriodGapAction = {
+                        selectFirstItem: true
+                    };
+                    VRUIUtilsService.callDirectiveLoad(invoicePeriodGapActionAPI, payloadInvoicePeriodGapAction, invoicePeriodGapActionLoadDeferred);
+                });
 
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadPartnerGroupSelector]).then(function () {
+                return invoicePeriodGapActionLoadDeferred.promise;
+            }
+
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadPartnerGroupSelector, loadInvoicePeriodGapActionSelector]).then(function () {
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
                 $scope.scopeModel.isLoading = false;
