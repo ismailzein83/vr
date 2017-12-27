@@ -20,6 +20,8 @@ namespace TOne.WhS.Analytics.Web.Controllers
         [Route("GetFilteredVariationReportRecords")]
         public object GetFilteredVariationReportRecords(DataRetrievalInput<VariationReportQuery> input)
         {
+            if (!_manager.DoesUserHaveVariationReportViewAccess(input.Query.ReportType))
+                return GetUnauthorizedResponse();
             return GetWebResponse(input, _manager.GetFilteredVariationReportRecords(input));
         }
     }

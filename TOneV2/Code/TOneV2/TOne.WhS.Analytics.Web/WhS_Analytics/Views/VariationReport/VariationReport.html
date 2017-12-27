@@ -3,15 +3,8 @@
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
                 <vr-columns width="normal">
-                    <vr-select label="Variation"
-                               datasource="scopeModel.reportTypes"
-                               selectedvalues="scopeModel.selectedReportType"
-                               onselectionchanged="scopeModel.onReportTypeSelectionChanged"
-                               datavaluefield="value"
-                               datatextfield="description"
-                               isrequired
-                               hideremoveicon>
-                    </vr-select>
+                    <vr-whs-analytics-variationreporttype-selector onselectionchanged="scopeModel.onReportTypeSelectionChanged" isrequired="true" on-ready="scopeModel.onVariationReportTypeReady">
+                    </vr-whs-analytics-variationreporttype-selector>
                 </vr-columns>
                 <vr-columns width="normal">
                     <vr-datetimepicker type="date" label="To Date" value="scopeModel.toDate" isrequired></vr-datetimepicker>

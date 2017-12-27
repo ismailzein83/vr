@@ -214,6 +214,7 @@
     <Content Include="WhS_Analytics\Directives\ReleaseCodeStatistic\Templates\ReleaseCodeGridTemplate.html" />
     <Content Include="WhS_Analytics\Directives\ReleaseCodeStatistic\vr-whs-analytics-releasecode-grid.js" />
     <Content Include="WhS_Analytics\Directives\ReleaseCodeStatistic\vr-whs-analytics-releasecode-dimenssion-selector.js" />
+    <Content Include="WhS_Analytics\Directives\VariationReport\vr-whs-analytics-variationreporttype-selector.js" />
     <Content Include="WhS_Analytics\Reports\Analytics\BillingReports.aspx" />
     <Content Include="WhS_Analytics\Constant\BillingCDRMeasureEnum.js" />
     <Content Include="WhS_Analytics\Constant\BillingCDROptionMeasureEnum.js" />

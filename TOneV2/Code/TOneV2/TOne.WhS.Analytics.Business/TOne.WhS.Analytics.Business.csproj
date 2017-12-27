@@ -67,6 +67,10 @@
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Security.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BillingReportManager.cs" />
@@ -96,6 +100,8 @@
     <Compile Include="ReleaseCodeManager.cs" />
     <Compile Include="RepeatedNumberManager.cs" />
     <Compile Include="ReportDefinitionManager.cs" />
+    <Compile Include="AnalyticHelper.cs" />
+    <Compile Include="VariationReportViewSettings.cs" />
     <Compile Include="VariationReportManager.cs" />
   </ItemGroup>
   <ItemGroup>

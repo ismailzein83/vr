@@ -10,11 +10,14 @@ using TOne.WhS.BusinessEntity.Business;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Security.Entities;
 
 namespace TOne.WhS.Analytics.Business
 {
     public class VariationReportManager
     {
+        AnalyticHelper _analyticHelper = new AnalyticHelper();
+
         #region Public Methods
 
         public IDataRetrievalResult<VariationReportRecord> GetFilteredVariationReportRecords(Vanrise.Entities.DataRetrievalInput<VariationReportQuery> input)
@@ -28,6 +31,31 @@ namespace TOne.WhS.Analytics.Business
             });
         }
 
+
+        public bool DoesUserHaveVariationReportViewAccess(VariationReportType type)
+        {
+            int userId = ContextFactory.GetContext().GetLoggedInUserId();
+            switch (type)
+            {
+                case VariationReportType.InBoundAmount:
+                case VariationReportType.OutBoundAmount:
+                case VariationReportType.InOutBoundAmount:
+                case VariationReportType.OutBoundProfit:
+                case VariationReportType.Profit:
+                case VariationReportType.TopDestinationAmount:
+                case VariationReportType.TopDestinationProfit:
+                    return _analyticHelper.DoesUserHaveBillingViewAccess(userId);
+
+                case VariationReportType.InBoundMinutes:
+                case VariationReportType.OutBoundMinutes:
+                case VariationReportType.TopDestinationMinutes:
+                case VariationReportType.InOutBoundMinutes:
+                    return _analyticHelper.DoesUserHaveTrafficViewAccess(userId);
+
+                default:
+                    return false;
+            }
+        }
         #endregion
 
         #region Private Classes
@@ -424,5 +452,6 @@ namespace TOne.WhS.Analytics.Business
 
 
         #endregion
+
     }
 }

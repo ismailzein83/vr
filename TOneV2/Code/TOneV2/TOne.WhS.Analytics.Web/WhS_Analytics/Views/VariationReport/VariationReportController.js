@@ -6,6 +6,9 @@
 
     function VariationReportController($scope, WhS_Analytics_VariationReportTypeEnum, WhS_Analytics_VariationReportTimePeriodEnum, UtilsService, VRUIUtilsService, VRNotificationService, VRDateTimeService) {
 
+        var reportTypeSelectorAPI;
+        var reportTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         var currencySelectorAPI;
         var currencySelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -18,13 +21,8 @@
         defineScope();
         load();
 
-        function defineScope()
-        {
+        function defineScope() {
             $scope.scopeModel = {};
-
-            var reportTypes = UtilsService.getArrayEnum(WhS_Analytics_VariationReportTypeEnum);
-            $scope.scopeModel.reportTypes = UtilsService.getFilteredArrayFromArray(reportTypes, true, 'isVisible');
-            $scope.scopeModel.selectedReportType = UtilsService.getEnum(WhS_Analytics_VariationReportTypeEnum, 'value', WhS_Analytics_VariationReportTypeEnum.InBoundMinutes.value);
 
             $scope.scopeModel.toDate = VRDateTimeService.getNowDateTime();
 
@@ -34,8 +32,7 @@
             $scope.scopeModel.numberOfPeriods = 7;
             $scope.scopeModel.top = 5;
 
-            $scope.scopeModel.onReportTypeSelectionChanged = function ()
-            {
+            $scope.scopeModel.onReportTypeSelectionChanged = function () {
                 if ($scope.scopeModel.selectedPeriodType == undefined)
                     return;
 
@@ -44,9 +41,9 @@
 
                 showTopFilter();
                 showCurrencyFilter();
-                
+
                 function showTopFilter() {
-                    switch ($scope.scopeModel.selectedReportType.value) {
+                    switch (reportTypeSelectorAPI.getSelectedIds()) {
                         case WhS_Analytics_VariationReportTypeEnum.InOutBoundMinutes.value:
                         case WhS_Analytics_VariationReportTypeEnum.InOutBoundAmount.value:
                             $scope.scopeModel.showTopFilter = false;
@@ -55,7 +52,7 @@
                     $scope.scopeModel.showTopFilter = true;
                 }
                 function showCurrencyFilter() {
-                    switch ($scope.scopeModel.selectedReportType.value) {
+                    switch (reportTypeSelectorAPI.getSelectedIds()) {
                         case WhS_Analytics_VariationReportTypeEnum.InBoundAmount.value:
                         case WhS_Analytics_VariationReportTypeEnum.OutBoundAmount.value:
                         case WhS_Analytics_VariationReportTypeEnum.InOutBoundAmount.value:
@@ -67,14 +64,16 @@
                     $scope.scopeModel.showCurrencyFilter = false;
                 }
             };
-
+            $scope.scopeModel.onVariationReportTypeReady = function (api) {
+                reportTypeSelectorAPI = api;
+                reportTypeSelectorReadyDeferred.resolve();
+            };
             $scope.scopeModel.onCurrencySelectorReady = function (api) {
                 currencySelectorAPI = api;
                 currencySelectorReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.onGridReady = function (api)
-            {
+            $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
                 gridReadyDeferred.resolve();
             };
@@ -97,34 +96,41 @@
             };
         }
 
-        function load()
-        {
+        function load() {
             $scope.scopeModel.isLoading = true;
             loadAllControls();
         }
 
-        function loadAllControls()
-        {
+        function loadAllControls() {
             var loadCurrencySelectorPromise = loadCurrencySelector();
+            var loadReportTypeSelectorPromise = loadReportTypeSelector();
 
-            return UtilsService.waitMultiplePromises([loadCurrencySelectorPromise, gridReadyDeferred.promise, chartReadyDeferred.promise]).catch(function (error) {
+            return UtilsService.waitMultiplePromises([loadReportTypeSelectorPromise, loadCurrencySelectorPromise, gridReadyDeferred.promise, chartReadyDeferred.promise]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
         }
 
-        function loadCurrencySelector()
-        {
+        function loadCurrencySelector() {
             var currencySelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-            currencySelectorReadyDeferred.promise.then(function ()
-            {
+            currencySelectorReadyDeferred.promise.then(function () {
                 var currencySelectorPayload = { selectSystemCurrency: true };
                 VRUIUtilsService.callDirectiveLoad(currencySelectorAPI, currencySelectorPayload, currencySelectorLoadDeferred);
             });
 
             return currencySelectorLoadDeferred.promise;
+        }
+
+        function loadReportTypeSelector() {
+            var reportTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+            reportTypeSelectorReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(reportTypeSelectorAPI, { selectfirstitem: true }, reportTypeSelectorLoadDeferred);
+            });
+
+            return reportTypeSelectorLoadDeferred.promise;
         }
 
         function search() {
@@ -150,7 +156,7 @@
 
         function getGridQuery() {
             return {
-                ReportType: $scope.scopeModel.selectedReportType.value,
+                ReportType: reportTypeSelectorAPI.getSelectedIds(),
                 ToDate: $scope.scopeModel.toDate,
                 TimePeriod: $scope.scopeModel.selectedPeriodType.value,
                 NumberOfPeriods: $scope.scopeModel.numberOfPeriods,
@@ -159,10 +165,8 @@
             };
         }
 
-        function loadChart()
-        {
-            switch ($scope.scopeModel.selectedReportType.value)
-            {
+        function loadChart() {
+            switch (reportTypeSelectorAPI.getSelectedIds()) {
                 case WhS_Analytics_VariationReportTypeEnum.InOutBoundMinutes.value:
                 case WhS_Analytics_VariationReportTypeEnum.InOutBoundAmount.value:
                     return;
@@ -171,7 +175,7 @@
             $scope.scopeModel.showChart = true;
 
             var reportData = gridAPI.getData();
-            
+
             var chartConfig =
             {
                 type: 'column',
@@ -188,8 +192,7 @@
                 seriesData: []
             });
 
-            for (var i = 0; i < reportData.timePeriods.length; i++)
-            {
+            for (var i = 0; i < reportData.timePeriods.length; i++) {
                 var seriesItem =
                 {
                     seriesTitle: reportData.timePeriods[i].PeriodDescription,
@@ -199,8 +202,7 @@
             }
 
             var seriesDefinition = [];
-            for (var i = 0; i < reportData.records.length && i < $scope.scopeModel.top; i++)
-            {
+            for (var i = 0; i < reportData.records.length && i < $scope.scopeModel.top; i++) {
                 var record = reportData.records[i];
 
                 seriesDefinition.push
@@ -212,8 +214,7 @@
 
                 seriesList[0].seriesData[i] = record.Average;
 
-                for (var j = 1; j <= reportData.timePeriods.length; j++)
-                {
+                for (var j = 1; j <= reportData.timePeriods.length; j++) {
                     seriesList[j].seriesData[i] = record.TimePeriodValues[j - 1];
                 }
             }
@@ -221,10 +222,8 @@
             chartAPI.renderChart(seriesList, chartConfig, seriesDefinition, seriesConfig);
         }
 
-        function getReportResultTypeDescription()
-        {
-            switch ($scope.scopeModel.selectedReportType.value)
-            {
+        function getReportResultTypeDescription() {
+            switch (reportTypeSelectorAPI.getSelectedIds()) {
                 case WhS_Analytics_VariationReportTypeEnum.InBoundMinutes.value:
                 case WhS_Analytics_VariationReportTypeEnum.OutBoundMinutes.value:
                 case WhS_Analytics_VariationReportTypeEnum.InOutBoundMinutes.value:
