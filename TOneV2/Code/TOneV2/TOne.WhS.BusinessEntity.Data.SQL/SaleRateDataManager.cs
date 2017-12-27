@@ -177,9 +177,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return ExecuteScalarSP("[TOneWhS_BE].[sp_SaleRate_GetMaxTimeStamp]");
         }
 
-        public IEnumerable<SaleRate> GetAllSaleRatesByOwners(IEnumerable<int> sellingProductIds, IEnumerable<int> customerIds, IEnumerable<long> zoneIds)
+        public IEnumerable<SaleRate> GetAllSaleRatesByOwners(IEnumerable<int> sellingProductIds, IEnumerable<int> customerIds, IEnumerable<long> zoneIds, bool getNormalRates, bool getOtherRates)
         {
-            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetAllByOwners", SaleRateMapper, string.Join(",", sellingProductIds), string.Join(",", customerIds), string.Join(",", zoneIds));
+            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetAllByOwners", SaleRateMapper, string.Join(",", sellingProductIds), string.Join(",", customerIds), string.Join(",", zoneIds), getNormalRates, getOtherRates);
         }
 
         #endregion

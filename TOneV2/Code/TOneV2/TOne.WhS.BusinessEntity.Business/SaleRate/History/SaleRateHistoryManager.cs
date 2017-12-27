@@ -46,11 +46,10 @@ namespace TOne.WhS.BusinessEntity.Business
                 else
                 {
                     int sellingProductId = new CarrierAccountManager().GetSellingProductId(input.Query.OwnerId);
-                    var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocatorV2(new CustomerZoneRateHistoryReaderV2(CreateListFromItem(input.Query.OwnerId), CreateListFromItem(sellingProductId), zoneIds));
+                    var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocatorV2(new CustomerZoneRateHistoryReaderV2(CreateListFromItem(input.Query.OwnerId), CreateListFromItem(sellingProductId), zoneIds, true, false));
 
                     int longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
-                    return customerZoneRateHistoryLocator.GetCustomerZoneRateHistory(input.Query.OwnerId, sellingProductId, input.Query.ZoneName, input.Query.CountryId, input.Query.CurrencyId, longPrecision);
-                    //GetSaleRateHistory(input.Query.ZoneName, input.Query.CountryId, null, currencyId);
+                    return customerZoneRateHistoryLocator.GetCustomerZoneRateHistory(input.Query.OwnerId, sellingProductId, input.Query.ZoneName, null, input.Query.CountryId, input.Query.CurrencyId, longPrecision);
                 }
             }
 

@@ -10,24 +10,25 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class SaleEntityRates
     {
         #region Fields
-        private Dictionary<string, List<SaleRate>> _ratesByZoneName;
+        private Dictionary<string, SaleEntityZoneRates> _ratesByZoneName;
         #endregion
 
         #region Constructors
         public SaleEntityRates()
         {
-            _ratesByZoneName = new Dictionary<string, List<SaleRate>>();
+            _ratesByZoneName = new Dictionary<string, SaleEntityZoneRates>();
         }
         #endregion
 
         public void AddZoneRate(string zoneName, SaleRate rate)
         {
-            List<SaleRate> zoneRates = _ratesByZoneName.GetOrCreateItem(GetZoneNameKey(zoneName), () => { return new List<SaleRate>(); });
-            zoneRates.Add(rate);
+            SaleEntityZoneRates zoneRates = _ratesByZoneName.GetOrCreateItem(GetZoneNameKey(zoneName), () => { return new SaleEntityZoneRates(); });
+            zoneRates.AddZoneRate(rate);
         }
-        public IEnumerable<SaleRate> GetZoneRates(string zoneName)
+        public IEnumerable<SaleRate> GetZoneRates(string zoneName, int? rateTypeId)
         {
-            return _ratesByZoneName.GetRecord(GetZoneNameKey(zoneName));
+            SaleEntityZoneRates zoneRates = _ratesByZoneName.GetRecord(GetZoneNameKey(zoneName));
+            return (zoneRates != null) ? zoneRates.GetZoneRates(rateTypeId) : null;
         }
 
         #region Private Methods

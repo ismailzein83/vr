@@ -17,22 +17,22 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Constructors
-        public CustomerZoneRateHistoryReaderV2(IEnumerable<int> customerIds, IEnumerable<int> sellingProductIds, IEnumerable<long> zoneIds)
+        public CustomerZoneRateHistoryReaderV2(IEnumerable<int> customerIds, IEnumerable<int> sellingProductIds, IEnumerable<long> zoneIds, bool getNormalRates, bool getOtherRates)
         {
             InitializeFields();
-            ReadRates(customerIds, sellingProductIds, zoneIds);
+            ReadRates(customerIds, sellingProductIds, zoneIds, getNormalRates, getOtherRates);
         }
         #endregion
 
-        public IEnumerable<SaleRate> GetProductZoneRates(int sellingProductId, string zoneName)
+        public IEnumerable<SaleRate> GetProductZoneRates(int sellingProductId, string zoneName, int? rateTypeId)
         {
             SaleEntityRates productRates = _productRatesByProductId.GetRecord(sellingProductId);
-            return (productRates != null) ? productRates.GetZoneRates(zoneName) : null;
+            return (productRates != null) ? productRates.GetZoneRates(zoneName, rateTypeId) : null;
         }
-        public IEnumerable<SaleRate> GetCustomerZoneRates(int customerId, string zoneName)
+        public IEnumerable<SaleRate> GetCustomerZoneRates(int customerId, string zoneName, int? rateTypeId)
         {
             SaleEntityRates customerRates = _customerRatesByCustomerId.GetRecord(customerId);
-            return (customerRates != null) ? customerRates.GetZoneRates(zoneName) : null;
+            return (customerRates != null) ? customerRates.GetZoneRates(zoneName, rateTypeId) : null;
         }
 
         #region Private Methods
@@ -41,9 +41,9 @@ namespace TOne.WhS.BusinessEntity.Business
             _productRatesByProductId = new Dictionary<int, SaleEntityRates>();
             _customerRatesByCustomerId = new Dictionary<int, SaleEntityRates>();
         }
-        private void ReadRates(IEnumerable<int> customerIds, IEnumerable<int> sellingProductIds, IEnumerable<long> zoneIds)
+        private void ReadRates(IEnumerable<int> customerIds, IEnumerable<int> sellingProductIds, IEnumerable<long> zoneIds, bool getNormalRates, bool getOtherRates)
         {
-            IEnumerable<SaleRate> rates = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>().GetAllSaleRatesByOwners(sellingProductIds, customerIds, zoneIds);
+            IEnumerable<SaleRate> rates = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>().GetAllSaleRatesByOwners(sellingProductIds, customerIds, zoneIds, getNormalRates, getOtherRates);
             StructureRates(rates);
         }
         private void StructureRates(IEnumerable<SaleRate> rates)
@@ -54,7 +54,7 @@ namespace TOne.WhS.BusinessEntity.Business
             var saleZoneManager = new SaleZoneManager();
             var salePriceListManager = new SalePriceListManager();
 
-            foreach (SaleRate rate in rates)
+            foreach (SaleRate rate in rates.OrderBy(x => x.BED))
             {
                 SalePriceList salePriceList = salePriceListManager.GetPriceList(rate.PriceListId);
                 salePriceList.ThrowIfNull("salePriceList");

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -23,7 +24,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         #endregion
 
-        public IEnumerable<SaleRateHistoryRecord> GetCustomerZoneRateHistory(int customerId, int sellingProductId, string zoneName, int countryId, int targetCurrencyId, int longPrecision)
+        public IEnumerable<SaleRateHistoryRecord> GetCustomerZoneRateHistory(int customerId, int sellingProductId, string zoneName, int? rateTypeId, int countryId, int targetCurrencyId, int longPrecision)
         {
             var rateHistoryBySource = new SaleRateHistoryBySource();
             List<CustomerCountry2> customerCountries = GetAllCustomerCountries(customerId, countryId);
@@ -31,10 +32,15 @@ namespace TOne.WhS.BusinessEntity.Business
             if (customerCountries == null || customerCountries.Count == 0)
                 return null;
 
-            AddProductZoneRateHistory(rateHistoryBySource, sellingProductId, zoneName, customerCountries);
-            AddCustomerZoneRateHistory(rateHistoryBySource, customerId, zoneName);
+            AddProductZoneRateHistory(rateHistoryBySource, sellingProductId, zoneName, rateTypeId, customerCountries);
+            AddCustomerZoneRateHistory(rateHistoryBySource, customerId, zoneName, rateTypeId);
 
             return RateHistoryUtilities.GetZoneRateHistory(rateHistoryBySource, _orderedRateSources, targetCurrencyId, longPrecision);
+        }
+        public SaleRateHistoryRecord GetCustomerZoneRateHistoryRecord(int customerId, int sellingProductId, string zoneName, int? rateTypeId, int countryId, DateTime effectiveOn, int targetCurrencyId, int longPrecision)
+        {
+            IEnumerable<SaleRateHistoryRecord> customerZoneRateHistory = GetCustomerZoneRateHistory(customerId, sellingProductId, zoneName, rateTypeId, countryId, targetCurrencyId, longPrecision);
+            return (customerZoneRateHistory != null) ? customerZoneRateHistory.FindRecord(x => x.IsEffective(effectiveOn)) : null;
         }
 
         #region Private Methods
@@ -65,9 +71,9 @@ namespace TOne.WhS.BusinessEntity.Business
             if (list == null || list.Count() == 0)
                 throw new NullReferenceException(errorMessage);
         }
-        private void AddProductZoneRateHistory(SaleRateHistoryBySource rateHistoryBySource, int sellingProductId, string zoneName, List<CustomerCountry2> customerCountries)
+        private void AddProductZoneRateHistory(SaleRateHistoryBySource rateHistoryBySource, int sellingProductId, string zoneName, int? rateTypeId, List<CustomerCountry2> customerCountries)
         {
-            IEnumerable<SaleRate> productZoneRates = _reader.GetProductZoneRates(sellingProductId, zoneName);
+            IEnumerable<SaleRate> productZoneRates = _reader.GetProductZoneRates(sellingProductId, zoneName, rateTypeId);
 
             if (productZoneRates == null || productZoneRates.Count() == 0)
                 return;
@@ -89,9 +95,9 @@ namespace TOne.WhS.BusinessEntity.Business
             if (productZoneRateHistory != null && productZoneRateHistory.Count() > 0)
                 rateHistoryBySource.AddSaleRateHistoryRange(SaleEntityZoneRateSource.ProductZone, productZoneRateHistory);
         }
-        private void AddCustomerZoneRateHistory(SaleRateHistoryBySource rateHistoryBySource, int customerId, string zoneName)
+        private void AddCustomerZoneRateHistory(SaleRateHistoryBySource rateHistoryBySource, int customerId, string zoneName, int? rateTypeId)
         {
-            IEnumerable<SaleRate> customerZoneRates = _reader.GetCustomerZoneRates(customerId, zoneName);
+            IEnumerable<SaleRate> customerZoneRates = _reader.GetCustomerZoneRates(customerId, zoneName, rateTypeId);
 
             if (customerZoneRates == null || customerZoneRates.Count() == 0)
                 return;

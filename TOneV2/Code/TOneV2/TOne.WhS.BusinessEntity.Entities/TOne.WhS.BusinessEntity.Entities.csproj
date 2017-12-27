@@ -170,6 +170,7 @@
     <Compile Include="SaleRate\History\CustomerZoneRates.cs" />
     <Compile Include="SaleRate\History\OrderedZoneRateHistories.cs" />
     <Compile Include="SaleRate\History\SaleEntityRates.cs" />
+    <Compile Include="SaleRate\History\SaleEntityZoneRates.cs" />
     <Compile Include="SaleRate\History\SaleRateHistoryBySource.cs" />
     <Compile Include="SaleRate\History\SaleRateHistoryQuery.cs" />
     <Compile Include="SaleRate\History\SaleRateHistoryRecord.cs" />

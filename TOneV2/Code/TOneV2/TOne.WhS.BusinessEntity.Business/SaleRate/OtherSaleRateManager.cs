@@ -49,7 +49,12 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private IEnumerable<SaleRateDetail> GetCustomerZoneOtherRates(OtherSaleRateQuery query, IEnumerable<long> zoneIds, long zoneId, IEnumerable<RateTypeInfo> allRateTypes)
         {
-            var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocator(query.OwnerId, new CustomerZoneRateHistoryReader(query.OwnerId, zoneIds, false, true));
+            //var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocator(query.OwnerId, new CustomerZoneRateHistoryReader(query.OwnerId, zoneIds, false, true));
+
+            int longPrecisionValue = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
+            int sellingProductId = new CarrierAccountManager().GetSellingProductId(query.OwnerId);
+            var customerZoneRateHistoryLocatorV2 = new CustomerZoneRateHistoryLocatorV2(new CustomerZoneRateHistoryReaderV2(CreateListFromItem(query.OwnerId), CreateListFromItem(sellingProductId), zoneIds, false, true));
+
             IEnumerable<RateTypeInfo> customerZoneRateTypes = GetCustomerZoneRateTypes(query.OwnerId, zoneId, allRateTypes);
             int currencyId = query.IsSystemCurrency ? new Vanrise.Common.Business.ConfigManager().GetSystemCurrencyId() : query.CurrencyId;
 
@@ -60,7 +65,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
             foreach (RateTypeInfo rateType in customerZoneRateTypes)
             {
-                SaleRateHistoryRecord saleRateHistoryRecord = customerZoneRateHistoryLocator.GetSaleRateHistoryRecord(query.ZoneName, query.CountryId, rateType.RateTypeId, currencyId, query.EffectiveOn);
+                //SaleRateHistoryRecord saleRateHistoryRecord = customerZoneRateHistoryLocator.GetSaleRateHistoryRecord(query.ZoneName, query.CountryId, rateType.RateTypeId, currencyId, query.EffectiveOn);
+                SaleRateHistoryRecord saleRateHistoryRecord =
+                    customerZoneRateHistoryLocatorV2.GetCustomerZoneRateHistoryRecord(query.OwnerId, sellingProductId, query.ZoneName, rateType.RateTypeId, query.CountryId, query.EffectiveOn, query.CurrencyId, longPrecisionValue);
 
                 if (saleRateHistoryRecord == null)
                     continue;
@@ -113,6 +120,11 @@ namespace TOne.WhS.BusinessEntity.Business
             saleRate.IsRateInherited = saleRateHistoryRecord.SellingProductId.HasValue;
 
             saleRates.Add(saleRate);
+        }
+
+        private IEnumerable<T> CreateListFromItem<T>(T item)
+        {
+            return new List<T>() { item };
         }
 
         #endregion

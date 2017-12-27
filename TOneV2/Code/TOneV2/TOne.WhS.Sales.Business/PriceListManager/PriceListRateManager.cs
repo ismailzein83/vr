@@ -187,7 +187,7 @@ namespace TOne.WhS.Sales.Business
             IEnumerable<long> zoneIds = context.RatesToChange.MapRecords(x => x.ZoneId);
 
             var saleZoneManager = new SaleZoneManager();
-            var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocatorV2(new CustomerZoneRateHistoryReaderV2(customerIds, sellingProductIds, zoneIds));
+            var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocatorV2(new CustomerZoneRateHistoryReaderV2(customerIds, sellingProductIds, zoneIds, true, false));
 
             foreach (RateToChange rateToChange in context.RatesToChange)
             {
@@ -225,7 +225,7 @@ namespace TOne.WhS.Sales.Business
             foreach (int customerId in context.CustomerIds)
             {
                 IEnumerable<SaleRateHistoryRecord> customerZoneRateHistory =
-                    context.CustomerZoneRateHistoryLocator.GetCustomerZoneRateHistory(customerId, context.SellingProductId, context.RateToChange.ZoneName, context.CountryId, context.CurrencyId, context.LongPrecisionValue);
+                    context.CustomerZoneRateHistoryLocator.GetCustomerZoneRateHistory(customerId, context.SellingProductId, context.RateToChange.ZoneName, null, context.CountryId, context.CurrencyId, context.LongPrecisionValue);
 
                 if (customerZoneRateHistory == null || customerZoneRateHistory.Count() == 0)
                     continue;
