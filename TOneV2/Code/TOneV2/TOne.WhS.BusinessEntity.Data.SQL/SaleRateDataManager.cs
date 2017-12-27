@@ -182,6 +182,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetAllByOwners", SaleRateMapper, string.Join(",", sellingProductIds), string.Join(",", customerIds), string.Join(",", zoneIds), getNormalRates, getOtherRates);
         }
 
+        public IEnumerable<SaleRate> GetAllSaleRatesByOwnerType(SalePriceListOwnerType ownerType, IEnumerable<int> ownerIds, IEnumerable<long> zoneIds, bool getNormalRates, bool getOtherRates)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_SaleRate_GetAllByOwnerType", SaleRateMapper, ownerType, string.Join(",", ownerIds), string.Join(",", zoneIds), getNormalRates, getOtherRates);
+        }
+
         #endregion
 
         #region Mappers

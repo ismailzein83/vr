@@ -25,5 +25,6 @@ namespace TOne.WhS.BusinessEntity.Data
         DateTime? GetNextOpenOrCloseTime(DateTime effectiveDate);
         object GetMaximumTimeStamp();
         IEnumerable<SaleRate> GetAllSaleRatesByOwners(IEnumerable<int> sellingProductIds, IEnumerable<int> customerIds, IEnumerable<long> zoneIds, bool getNormalRates, bool getOtherRates);
+        IEnumerable<SaleRate> GetAllSaleRatesByOwnerType(SalePriceListOwnerType ownerType, IEnumerable<int> ownerIds, IEnumerable<long> zoneIds, bool getNormalRates, bool getOtherRates);
     }
 }

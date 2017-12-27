@@ -40,8 +40,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 int currencyId = (input.Query.IsSystemCurrency) ? _configManager.GetSystemCurrencyId() : input.Query.CurrencyId;
                 if (input.Query.OwnerType == SalePriceListOwnerType.SellingProduct)
                 {
-                    var spZoneRateHistoryLocator = new SellingProductZoneRateHistoryLocator(new SellingProductZoneRateHistoryReader(input.Query.OwnerId, zoneIds, true, false));
-                    return spZoneRateHistoryLocator.GetSaleRateHistory(input.Query.ZoneName, null, currencyId);
+                    var productZoneRateHistoryLocator = new ProductZoneRateHistoryLocator(new ProductZoneRateHistoryReader(CreateListFromItem(input.Query.OwnerId), zoneIds, true, false));
+                    return productZoneRateHistoryLocator.GetProductZoneRateHistory(input.Query.OwnerId, input.Query.ZoneName, null, input.Query.CurrencyId);
                 }
                 else
                 {
