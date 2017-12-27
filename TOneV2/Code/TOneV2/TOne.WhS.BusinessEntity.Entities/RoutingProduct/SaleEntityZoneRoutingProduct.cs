@@ -10,6 +10,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
     public class SaleEntityZoneRoutingProduct
     {
+        public long SaleEntityZoneRoutingProductId { get; set; }
         public int RoutingProductId { get; set; }
 
         public SaleEntityZoneRoutingProductSource Source { get; set; }

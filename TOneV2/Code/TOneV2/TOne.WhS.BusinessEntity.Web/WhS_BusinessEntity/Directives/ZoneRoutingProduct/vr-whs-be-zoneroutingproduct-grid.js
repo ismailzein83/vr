@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsBeZoneroutingproductGrid", ["UtilsService", "VRNotificationService", "WhS_BE_ZoneRoutingProductAPIService", "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_BE_PrimarySaleEntityEnum", "VRUIUtilsService",
-function (utilsService, vrNotificationService, whSBeZoneRoutingProductApiService, whSBeSalePriceListOwnerTypeEnum, whSBePrimarySaleEntityEnum, vruiUtilsService) {
+app.directive("vrWhsBeZoneroutingproductGrid", ["UtilsService", "VRNotificationService", "WhS_BE_ZoneRoutingProductAPIService", "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_BE_PrimarySaleEntityEnum", "VRUIUtilsService", "WhS_BE_SaleEntityZoneRoutingProductService",
+function (utilsService, vrNotificationService, whSBeZoneRoutingProductApiService, whSBeSalePriceListOwnerTypeEnum, whSBePrimarySaleEntityEnum, vruiUtilsService, WhS_BE_SaleEntityZoneRoutingProductService) {
 
     var directiveDefinitionObject = {
 
@@ -27,6 +27,8 @@ function (utilsService, vrNotificationService, whSBeZoneRoutingProductApiService
         var gridApi;
         var gridQuery;
         var gridDrillDownTabs;
+        var customerId;
+        var sellingNumberPlanId;
 
         function initializeController() {
             $scope.zoneRoutingProduct = [];
@@ -38,6 +40,9 @@ function (utilsService, vrNotificationService, whSBeZoneRoutingProductApiService
                 defineAPI();
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+
+                customerId = dataRetrievalInput.Query.OwnerId;
+                sellingNumberPlanId = dataRetrievalInput.Query.SellingNumberPlanId;
                 var promises = [];
 
                 var getFilteredZoneRoutingProductsPromise = whSBeZoneRoutingProductApiService.GetFilteredZoneRoutingProducts(dataRetrievalInput);
@@ -74,7 +79,27 @@ function (utilsService, vrNotificationService, whSBeZoneRoutingProductApiService
 
                 return utilsService.waitMultiplePromises(promises);
             };
+            defineMenuActions();
         }
+
+        function defineMenuActions() {
+            $scope.gridMenuActions = [{
+                name: "Edit",
+                clicked: editRoutingProduct
+            }];
+        }
+
+        function editRoutingProduct(routingProductObj) {
+            var onZoneRoutingProductUpdated = function (updatedObj) {
+                gridApi.itemUpdated(updatedObj);
+                gridDrillDownTabs.setDrillDownExtensionObject(updatedObj);
+                setRateIconProperties(updatedObj);
+                setService(updatedObj);
+            };
+            WhS_BE_SaleEntityZoneRoutingProductService.editSaleEntityZoneRouting(customerId,sellingNumberPlanId, routingProductObj.Entity.ZoneId,
+             routingProductObj.ZoneName, routingProductObj.Entity.RoutingProductId, onZoneRoutingProductUpdated);
+        }
+
         function defineAPI() {
             var api = {};
 

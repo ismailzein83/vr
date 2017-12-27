@@ -60,6 +60,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     customerZoneRoutingProduct = new SaleEntityZoneRoutingProduct
                     {
+                        SaleEntityZoneRoutingProductId = saleZoneRoutingProduct.SaleEntityRoutingProductId,
                         RoutingProductId = saleZoneRoutingProduct.RoutingProductId,
                         BED = saleZoneRoutingProduct.BED,
                         EED = saleZoneRoutingProduct.EED,
@@ -80,6 +81,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 customerZoneRoutingProduct = new SaleEntityZoneRoutingProduct
                 {
+                    SaleEntityZoneRoutingProductId = defaultRoutingProduct.SaleEntityRoutingProductId,
                     RoutingProductId = defaultRoutingProduct.RoutingProductId,
                     Source = ownerType == SalePriceListOwnerType.Customer ? SaleEntityZoneRoutingProductSource.CustomerDefault : SaleEntityZoneRoutingProductSource.ProductDefault,
                     BED = defaultRoutingProduct.BED,

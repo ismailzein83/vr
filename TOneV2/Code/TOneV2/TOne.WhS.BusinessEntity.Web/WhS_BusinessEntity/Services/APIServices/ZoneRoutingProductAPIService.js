@@ -12,9 +12,13 @@
         function GetPrimarySaleEntity() {
             return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GetPrimarySaleEntity"));
         }
+        function UpdateZoneRoutingProduct(routingProductObject) {
+            return baseApiService.post(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "UpdateZoneRoutingProduct"), routingProductObject);
+        }
         return ({
             GetFilteredZoneRoutingProducts: GetFilteredZoneRoutingProducts,
-            GetPrimarySaleEntity: GetPrimarySaleEntity
+            GetPrimarySaleEntity: GetPrimarySaleEntity,
+            UpdateZoneRoutingProduct: UpdateZoneRoutingProduct
         });
     }
     appControllers.service("WhS_BE_ZoneRoutingProductAPIService", zoneRoutingProductApiService);

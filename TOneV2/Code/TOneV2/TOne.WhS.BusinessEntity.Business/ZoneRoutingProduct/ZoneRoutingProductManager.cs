@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
@@ -18,9 +20,87 @@ namespace TOne.WhS.BusinessEntity.Business
             VRActionLogger.Current.LogGetFilteredAction(ZoneRoutingProductLoggableEntity.Instance, input);
             return BigDataManager.Instance.RetrieveData(input, new ZoneRoutingProductHandler());
         }
+        public UpdateOperationOutput<ZoneRoutingProductDetail> UpdateZoneRoutingProduct(ZoneRoutingProductToEdit zoneRoutingProductToEdit)
+        {
+            ISaleEntityRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
+            UpdateOperationOutput<ZoneRoutingProductDetail> updateOperationOutput = new UpdateOperationOutput<ZoneRoutingProductDetail>
+            {
+                Result = UpdateOperationResult.Failed,
+                UpdatedObject = null
+            };
+
+            var saleZoneRoutingProductToCloseList = new List<ZoneRoutingProductToChange>();
+
+            IEnumerable<SaleZoneRoutingProduct> existingZoneRoutingProducts = GetZoneRoutingProduct(zoneRoutingProductToEdit.CustomerId,
+                SalePriceListOwnerType.Customer, zoneRoutingProductToEdit.ZoneId, zoneRoutingProductToEdit.BED);
+
+            DateTime closeDate;
+            foreach (SaleZoneRoutingProduct existingRoutingProduct in existingZoneRoutingProducts)
+            {
+                closeDate = Utilities.Max(zoneRoutingProductToEdit.BED, existingRoutingProduct.BED);
+                saleZoneRoutingProductToCloseList.Add(new ZoneRoutingProductToChange
+                {
+                    ZoneRoutingProductId = existingRoutingProduct.SaleEntityRoutingProductId,
+                    EED = closeDate
+                });
+            }
+            long zoneRoutingProductReservedId = this.ReserveIdRange(1);
+            bool updateActionSucc = dataManager.Update(zoneRoutingProductToEdit, zoneRoutingProductReservedId, (int)SalePriceListOwnerType.Customer, saleZoneRoutingProductToCloseList);
+            if (updateActionSucc)
+            {
+                var zoneManager = new SaleZoneManager();
+                var zoneName = zoneManager.GetSaleZoneName(zoneRoutingProductToEdit.ZoneId);
+
+                var routingProductManager = new RoutingProductManager();
+                var routingProductName = routingProductManager.GetRoutingProductName(zoneRoutingProductToEdit.ChangedRoutingProductId);
+                var servicesIds = routingProductManager.GetZoneServiceIds(zoneRoutingProductToEdit.ChangedRoutingProductId, zoneRoutingProductToEdit.ZoneId);
+
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+
+                ZoneRoutingProduct zoneRoutingProduct = new ZoneRoutingProduct
+                {
+                    ZoneId = zoneRoutingProductToEdit.ZoneId,
+                    RoutingProductId = zoneRoutingProductToEdit.ChangedRoutingProductId,
+                    SaleEntityZoneRoutingProductId = zoneRoutingProductReservedId,
+                    BED = zoneRoutingProductToEdit.BED,
+                    ServiceIds = servicesIds.ToList()
+                };
+
+                var zoneRoutingProductDetail = new ZoneRoutingProductDetail
+                {
+                    Entity = zoneRoutingProduct,
+                    RoutingProductName = routingProductName,
+                    ZoneName = zoneName
+                };
+                updateOperationOutput.UpdatedObject = zoneRoutingProductDetail;
+            }
+
+            return updateOperationOutput;
+
+        }
+        public long ReserveIdRange(int numberOfIDs)
+        {
+            long startingId;
+            IDManager.Instance.ReserveIDRange(GetSaleEntityZoneRoutingProductType(), numberOfIDs, out startingId);
+            return startingId;
+        }
+
         #endregion
 
         #region private Methods
+
+
+        private Type GetSaleEntityZoneRoutingProductType()
+        {
+            return this.GetType();
+        }
+
+        private IEnumerable<SaleZoneRoutingProduct> GetZoneRoutingProduct(int ownerId, SalePriceListOwnerType ownerType, long zoneId, DateTime effectiveDate)
+        {
+            SaleEntityRoutingProductManager saleEntityRoutingProductManager = new SaleEntityRoutingProductManager();
+            var saleZoneroutingProducts = saleEntityRoutingProductManager.GetSaleZoneRoutingProductsEffectiveAfter(ownerType, ownerId, effectiveDate);
+            return saleZoneroutingProducts.Where(rp => rp.SaleZoneId == zoneId);
+        }
         private class ZoneRoutingProductHandler : BigDataRequestHandler<ZoneRoutingProductQuery, ZoneRoutingProduct, ZoneRoutingProductDetail>
         {
             RoutingProductManager _routingProductManager = new RoutingProductManager();
@@ -34,7 +114,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     BED = dates.Max<DateTime>(),
                     EED = saleEntityZoneRoutingProduct.EED,
-                    ZoneRoutingProductId = saleEntityZoneRoutingProduct.RoutingProductId,
+                    SaleEntityZoneRoutingProductId = saleEntityZoneRoutingProduct.SaleEntityZoneRoutingProductId,
+                    RoutingProductId = saleEntityZoneRoutingProduct.RoutingProductId,
                     ZoneId = zoneId,
                     CountryId = countryId,
                     ServiceIds = serviceIds.ToList(),
@@ -46,7 +127,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return new ZoneRoutingProductDetail
                 {
                     Entity = entity,
-                    RoutingProductName = _routingProductManager.GetRoutingProductName(entity.ZoneRoutingProductId),
+                    RoutingProductName = _routingProductManager.GetRoutingProductName(entity.RoutingProductId),
                     ZoneName = _saleZoneManager.GetSaleZoneName(entity.ZoneId)
                 };
             }
@@ -158,7 +239,7 @@ namespace TOne.WhS.BusinessEntity.Business
                         {
                             var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
                             sheet.Rows.Add(row);
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.ZoneRoutingProductId });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.SaleEntityZoneRoutingProductId });
                             row.Cells.Add(new ExportExcelCell { Value = record.ZoneName });
                             row.Cells.Add(new ExportExcelCell { Value = record.RoutingProductName });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.ServiceIds == null ? "" : zoneServiceConfigManager.GetZoneServicesNames(record.Entity.ServiceIds) });
@@ -206,7 +287,7 @@ namespace TOne.WhS.BusinessEntity.Business
             public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
             {
                 ZoneRoutingProduct zoneRoutingProduct = context.Object.CastWithValidate<ZoneRoutingProduct>("context.Object");
-                return zoneRoutingProduct.ZoneRoutingProductId;
+                return zoneRoutingProduct.SaleEntityZoneRoutingProductId;
             }
 
             public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
