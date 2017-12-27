@@ -35,7 +35,7 @@ app.directive('vrCommonExclusivesessionGrid', ['VRCommon_VRExclusiveSessionAPISe
 
                 $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     return VRCommon_VRExclusiveSessionAPIService.GetFilteredVRExclusiveSessions(dataRetrievalInput).then(function (response) {
-                        onResponseReady(response);
+                        onResponseReady(response);                      
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     });
@@ -50,17 +50,14 @@ app.directive('vrCommonExclusivesessionGrid', ['VRCommon_VRExclusiveSessionAPISe
                 api.load = function (query) {
                     queryObject = query;
                     return gridAPI.retrieveData(query);
-                };
-
-               
-
+                };                
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
 
             function defineMenuActions() {
                 $scope.scopeModel.menuActions.push({
-                    name: 'Force Release',
+                    name: 'Release',
                     clicked: forceReleaseSession,
                     haspermission: hasForceReleaseSessionPermission
                 });

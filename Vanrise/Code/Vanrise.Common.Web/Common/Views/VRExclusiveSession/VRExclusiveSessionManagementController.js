@@ -28,7 +28,7 @@
                 exclusiveSessionTypeSelectorReadyDeferred.resolve();
             };
             $scope.scopeModel.releaseAll = function () {
-                var onVRExclusiveSessionForceRelease = function () {
+                var onVRExclusiveSessionForceRelease = function () {                    
                     return gridAPI.load(buildGridQuery());
                 };
                 return VRCommon_VRExclusiveSessionService.forceReleaseAll(onVRExclusiveSessionForceRelease);
@@ -39,7 +39,7 @@
             };
 
             $scope.scopeModel.onGridReady = function (api) {
-                gridAPI = api;
+                gridAPI = api;               
                 return gridAPI.load(buildGridQuery());
             };
         }
@@ -54,10 +54,9 @@
         }
 
         function loadGrid() {
-            if (gridAPI != undefined) {
-                var query = buildGridQuery();
+            if (gridAPI != undefined) {               
                 $scope.scopeModel.isLoading = true;
-                return gridAPI.load(query).finally(function () {
+                return gridAPI.load(buildGridQuery()).finally(function () {
                     $scope.scopeModel.isLoading = false;
                 });
             }
@@ -77,6 +76,7 @@
                 SessionTypeIds: exclusiveSessionTypeAPI.getSelectedIds()
             };
         }
+                
     }
 
     app.controller('VRCommon_VRExclusiveSessionManagementController', VRExclusiveSessionManagementController);

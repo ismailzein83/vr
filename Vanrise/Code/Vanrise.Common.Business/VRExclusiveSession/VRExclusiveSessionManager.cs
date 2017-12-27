@@ -25,7 +25,7 @@ namespace Vanrise.Common.Business
             Func<VRExclusiveSessionDetail, bool> filterExpression = (x) =>
             {
                 if (input.Query.TargetName != null && !x.TargetName.ToLower().Contains(input.Query.TargetName.ToLower()))
-                    return false;               
+                    return false;
                 return true;
             };
 
@@ -61,12 +61,7 @@ namespace Vanrise.Common.Business
 
         public IEnumerable<VRExclusiveSessionTypeInfo> GetVRExclusiveSessionTypeInfos(VRExclusiveSessionTypeInfoFilter filter)
         {
-            Func<VRExclusiveSessionType, bool> filterExpression = null;
-            if (filter != null)
-            {
-                
-            }
-            return _vrComponentTypeManager.GetComponentTypes<VRExclusiveSessionTypeSettings, VRExclusiveSessionType>().MapRecords(RExclusiveSessionTypeInfoMapper, filterExpression);
+            return _vrComponentTypeManager.GetComponentTypes<VRExclusiveSessionTypeSettings, VRExclusiveSessionType>().MapRecords(VRExclusiveSessionTypeInfoMapper);
         }
         public VRExclusiveSessionTryKeepOutput TryKeepSession(VRExclusiveSessionTryKeepInput input)
         {
@@ -172,7 +167,7 @@ namespace Vanrise.Common.Business
                 set;
             }
         }
-        private VRExclusiveSessionTypeInfo RExclusiveSessionTypeInfoMapper(VRExclusiveSessionType vrSessionType)
+        private VRExclusiveSessionTypeInfo VRExclusiveSessionTypeInfoMapper(VRExclusiveSessionType vrSessionType)
         {
             return new VRExclusiveSessionTypeInfo
             {
@@ -183,17 +178,19 @@ namespace Vanrise.Common.Business
 
         private VRExclusiveSessionDetail VRExclusiveSessionDetailMapper(VRExclusiveSession vrExclusiveSession)
         {
-            var vrExclusiveSessionTypeExtendedSettings = GetVRExclusiveSessionTypeExtendedSettingsById(vrExclusiveSession.SessionTypeId);
-            var context = new VRExclusiveSessionGetTargetNameContext() { TargetId = vrExclusiveSession.TargetId };
-            var sessionType =  _vrComponentTypeManager.GetComponentType(vrExclusiveSession.SessionTypeId);
+            var targetNameContext = new VRExclusiveSessionGetTargetNameContext() { TargetId = vrExclusiveSession.TargetId };
+            var sessionType = _vrComponentTypeManager.GetComponentType(vrExclusiveSession.SessionTypeId);
+            var sessionTypeSetting = sessionType.Settings as VRExclusiveSessionTypeSettings;
+
+
 
             return new VRExclusiveSessionDetail
             {
                 VRExclusiveSessionId = vrExclusiveSession.VRExclusiveSessionID,
                 SessionTypeId = vrExclusiveSession.SessionTypeId,
-                SessionType = sessionType!=null ? sessionType.Name : null,
+                SessionType = sessionType != null ? sessionType.Name : null,
                 TargetId = vrExclusiveSession.TargetId,
-                TargetName = vrExclusiveSessionTypeExtendedSettings.GetTargetName(context),
+                TargetName = sessionTypeSetting != null && sessionTypeSetting.ExtendedSettings != null ? sessionTypeSetting.ExtendedSettings.GetTargetName(targetNameContext) : null,
                 TakenByUserId = vrExclusiveSession.TakenByUserId,
                 LockedByUser = s_userManager.GetUserName(vrExclusiveSession.TakenByUserId),
                 LastTakenUpdateTime = vrExclusiveSession.LastTakenUpdateTime,
@@ -215,10 +212,9 @@ namespace Vanrise.Common.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Id", Width = 50 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Session Type", Width = 50 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name", Width = 50 }); // target name
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Locked By User"});
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Last Taken Update Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Created Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Locked By User" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Taken Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Created Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
 
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
@@ -230,12 +226,11 @@ namespace Vanrise.Common.Business
                             var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
                             sheet.Rows.Add(row);
                             row.Cells.Add(new ExportExcelCell { Value = record.VRExclusiveSessionId });
-                            row.Cells.Add(new ExportExcelCell { Value = record.SessionType });                            
+                            row.Cells.Add(new ExportExcelCell { Value = record.SessionType });
                             row.Cells.Add(new ExportExcelCell { Value = record.TargetName });
                             row.Cells.Add(new ExportExcelCell { Value = record.LockedByUser });
-                            row.Cells.Add(new ExportExcelCell { Value = record.LastTakenUpdateTime });                            
-                            row.Cells.Add(new ExportExcelCell { Value = record.CreatedTime }); 
                             row.Cells.Add(new ExportExcelCell { Value = record.TakenTime });
+                            row.Cells.Add(new ExportExcelCell { Value = record.CreatedTime });
                         }
                     }
                 }
