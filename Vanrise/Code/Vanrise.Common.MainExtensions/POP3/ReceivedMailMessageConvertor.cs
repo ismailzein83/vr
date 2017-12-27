@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BEBridge.Entities;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace Vanrise.Common.MainExtensions
 {
-    class Pop3MailMessageConvertor : TargetBEConvertor
+    class ReceivedMailMessageConvertor : TargetBEConvertor
     {
         public override string Name
         {

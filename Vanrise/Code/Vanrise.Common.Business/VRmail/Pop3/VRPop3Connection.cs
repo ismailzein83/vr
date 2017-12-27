@@ -33,34 +33,32 @@ namespace Vanrise.Common.Business
         {
             OpenPop.Pop3.Pop3Client openPopClient = new OpenPop.Pop3.Pop3Client();
             openPopClient.Connect(Server, Port, SSL);
-            openPopClient.Authenticate(UserName,Password);
+            openPopClient.Authenticate(UserName, Password);
 
-            IVRPop3MailMessageDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRPop3MailMessageDataManager>();
-            DateTime lastMessageSendTime = dataManager.GetLastMessageSendTime(connectionId,senderIdentifier);
-            lastMessageSendTime=lastMessageSendTime.AddHours(-1);
-            List<string> messagesId = dataManager.GetPop3MailMessagesIdsFromDateTime(connectionId, senderIdentifier, lastMessageSendTime);
-            
-            
+            IVRReceivedMailMessageDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRReceivedMailMessageDataManager>();
+            DateTime lastMessageSendTime = dataManager.GetLastMessageSendTime(connectionId, senderIdentifier);
+            Vanrise.Common.Business.UtilityManager utilityManager = new Vanrise.Common.Business.UtilityManager();
+            utilityManager.GetDateTimeRange();
+            if (lastMessageSendTime > utilityManager.GetDateTimeRange().From.AddHours(1))
+                lastMessageSendTime = lastMessageSendTime.AddHours(-1);
+            else lastMessageSendTime = utilityManager.GetDateTimeRange().From;
+
+            List<string> messagesIds = dataManager.GetReceivedMailMessagesIdsFromSpecificTime(connectionId, senderIdentifier, lastMessageSendTime);
+            if (messagesIds == null)
+                messagesIds = new List<string>();
+
             List<VRPop3MailMessageHeader> pop3MailMessageHeaders = new List<VRPop3MailMessageHeader>();
-            
-            int messagesCount = openPopClient.GetMessageCount();
-            int messageIndex = messagesCount;
-            
-            while (messageIndex >= 0)
+
+            int messageIndex = openPopClient.GetMessageCount();
+
+            while (messageIndex > 0)
             {
                 MessageHeader messageHeader = openPopClient.GetMessageHeaders(messageIndex);
                 if (messageHeader.DateSent < lastMessageSendTime) break;
-                VRPop3MailMessageHeader pop3MailMessageHeader = new VRPop3MailMessageHeader 
-                {
-                    From=messageHeader.From.Address,
-                    Subject=messageHeader.Subject,
-                    MessageSendTime=messageHeader.DateSent,
-                    MessageId=messageHeader.MessageId,
-                    Sender=messageHeader.Sender.Address,
-                    MessageIndex = messageIndex,
-                };
-                
-                if (!messagesId.Contains(messageHeader.MessageId) && mailMessageFilter(pop3MailMessageHeader))
+                VRPop3MailMessageHeader pop3MailMessageHeader = new VRPop3MailMessageHeader(messageHeader);
+                pop3MailMessageHeader.MessageIndex = messageIndex;
+
+                if (!messagesIds.Contains(messageHeader.MessageId) && mailMessageFilter(pop3MailMessageHeader))
                 {
                     pop3MailMessageHeaders.Add(pop3MailMessageHeader);
                 }
@@ -69,25 +67,20 @@ namespace Vanrise.Common.Business
             for (var i = pop3MailMessageHeaders.Count - 1; i >= 0; i--)
             {
                 Message message = openPopClient.GetMessage(pop3MailMessageHeaders[i].MessageIndex);
-                List<MessagePart> files = message.FindAllAttachments();
+                List<MessagePart> attachments = message.FindAllAttachments();
                 List<VRFile> vrFiles = new List<VRFile>();
-                foreach(var file in files)
-                {
 
-                }
-                VRReceivedMailMessage pop3MailMessage = new VRPop3MailMessage
-                {
-                    Header = pop3MailMessageHeaders[i],
-                    Attachments = vrFiles,
-                };
+
+                
+                VRReceivedMailMessage pop3MailMessage = new VRPop3MailMessage(message);
                 onMessageRead(pop3MailMessage);
             }
         }
 
-        public void SetMessagesRead(string senderIdentifier, List<VRPop3MailMessage> messages)
+        public void SetMessagesRead(Guid connectionId, string senderIdentifier, List<VRReceivedMailMessage> messages)
         {
-            DateTime lastSendTime = messages.Max(item => item.Header.MessageSendTime);
-            //add new messages and delete all messages before 1 hour
+            IVRReceivedMailMessageDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRReceivedMailMessageDataManager>();
+            dataManager.Insert(connectionId, senderIdentifier, messages);
         }
     }
 

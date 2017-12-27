@@ -63,7 +63,7 @@
     <Compile Include="BusinessManagers\BusinessManagerFactory.cs" />
     <Compile Include="BusinessManagers\IBEReceiveDefinitionManager.cs" />
     <Compile Include="BusinessManagers\IBusinessManager.cs" />
-    <Compile Include="SourceBatch\Pop3SourceBatch.cs" />
+    <Compile Include="SourceBatch\ReceivedMailSourceBatch.cs" />
     <Compile Include="VRObjectsTargetBE.cs" />
     <Compile Include="SourceBatch\CRMSourceBatch.cs" />
     <Compile Include="ITargetBE.cs" />

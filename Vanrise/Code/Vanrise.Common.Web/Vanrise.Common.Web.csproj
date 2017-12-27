@@ -340,10 +340,10 @@
     <Content Include="Common\Directives\VRLocalization\TextResource\vr-common-localizationtextresource-search.js" />
     <Content Include="Common\Directives\VRLocalization\TextResource\vr-common-localizationressourcekey-selector.js" />
     <Content Include="Common\Directives\VRMail\Templates\OverriddenConfigurationVRMailType.html" />
-    <Content Include="Common\Directives\VRMail\Templates\Pop3MailMessageConvertorEditorTemplate.html" />
+    <Content Include="Common\Directives\VRMail\Templates\ReceivedMailMessageConvertorEditorTemplate.html" />
     <Content Include="Common\Directives\VRMail\Templates\Pop3MessageFilterSelector.html" />
     <Content Include="Common\Directives\VRMail\vr-common-overriddenconfiguration-mailtype.js" />
-    <Content Include="Common\Directives\VRMail\vr-common-pop3mailmessageconvertor-editor.js" />
+    <Content Include="Common\Directives\VRMail\vr-common-receivedmailmessageconvertor-editor.js" />
     <Content Include="Common\Directives\VRMail\vr-common-pop3messagefilter-selector.js" />
     <Content Include="Common\Directives\VRObjectTypeDefinition\Templates\OverriddenConfigurationObjectTypeDefinition.html" />
     <Content Include="Common\Directives\VRObjectTypeDefinition\Templates\VRObjectTypeDefinitionSettings.html" />

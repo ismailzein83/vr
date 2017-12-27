@@ -17,8 +17,9 @@ namespace Vanrise.BEBridge.BP.Activities
 
         List<ITargetBE> _targetBEsToInsert;
         List<ITargetBE> _targetBEsToUpdate;
+        Guid _BEDefinitionId;
 
-        internal BatchProcessingContext(SourceBEBatch sourceBEBatch, SourceBEReader sourceBEReader, List<BaseQueue<BatchProcessingContext>> outputQueues)
+        internal BatchProcessingContext(SourceBEBatch sourceBEBatch, SourceBEReader sourceBEReader, List<BaseQueue<BatchProcessingContext>> outputQueues, Guid BEDefinitionId)
         {
             if (sourceBEBatch == null)
                 throw new ArgumentNullException("sourceBEBatch");
@@ -28,6 +29,7 @@ namespace Vanrise.BEBridge.BP.Activities
                 throw new ArgumentNullException("outputQueues");
             _sourceBEBatch = sourceBEBatch;
             _sourceBEReader = sourceBEReader;
+            _BEDefinitionId = BEDefinitionId;
             foreach (var outputQueue in outputQueues)
             {
                 _qOutputQueues.Enqueue(outputQueue);
@@ -81,7 +83,7 @@ namespace Vanrise.BEBridge.BP.Activities
             }
             else
             {
-                _sourceBEReader.SetBatchCompleted(new SourceBEReaderSetBatchImportedContext { Batch = _sourceBEBatch });
+                _sourceBEReader.SetBatchCompleted(new SourceBEReaderSetBatchImportedContext { Batch = _sourceBEBatch, BEReceiveDefinitionId = _BEDefinitionId });
                 _isComplete = true;
             }
         }
@@ -94,6 +96,12 @@ namespace Vanrise.BEBridge.BP.Activities
         {
             get;
             set;
+        }
+
+        public Guid BEReceiveDefinitionId 
+        { 
+            get;
+            set; 
         }
     }
 }

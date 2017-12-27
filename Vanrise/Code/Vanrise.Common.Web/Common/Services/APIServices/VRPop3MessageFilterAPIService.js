@@ -9,7 +9,7 @@
 
         function GetVRPop3MessageFilterConfigs(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetVRPop3MessageFilterConfigs"));
-        };
+        }
         return ({
             GetVRPop3MessageFilterConfigs: GetVRPop3MessageFilterConfigs,
         });

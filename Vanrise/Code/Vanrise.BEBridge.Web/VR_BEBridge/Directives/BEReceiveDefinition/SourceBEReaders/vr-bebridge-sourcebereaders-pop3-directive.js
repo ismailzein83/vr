@@ -1,4 +1,4 @@
-﻿    'use strict';
+﻿'use strict';
 
 app.directive('vrBebridgeSourcebereadersPop3Directive', ['VRNotificationService', 'UtilsService', 'VRUIUtilsService',
     function (vrNotificationService, UtilsService, VRUIUtilsService) {
@@ -43,8 +43,8 @@ app.directive('vrBebridgeSourcebereadersPop3Directive', ['VRNotificationService'
             function defineAPI() {
                 var api = {};
                 api.load = function (payload) {
-                    if (payload != undefined) {
-
+                    if (payload != null && payload.Setting != null) {
+                        $scope.scopeModel.batchSize = payload.Setting.BatchSize;
                     }
 
                     var promises = [];
@@ -79,6 +79,7 @@ app.directive('vrBebridgeSourcebereadersPop3Directive', ['VRNotificationService'
                     {
                         VRConnectionId: connectionSelectorAPI.getSelectedIds(),
                         Pop3MessageFilter: pop3FilterSelectorAPI.getData(),
+                        BatchSize: $scope.scopeModel.batchSize,
                     };
                     return {
                         $type: "Vanrise.BEBridge.MainExtensions.SourceBEReaders.Pop3SourceReader, Vanrise.BEBridge.MainExtensions",

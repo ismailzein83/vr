@@ -71,34 +71,4 @@ namespace Vanrise.Common.Data.SQL
         #endregion
     }
 
-    class VRPop3MailMessageDataManager : BaseSQLDataManager, IVRPop3MailMessageDataManager
-    {
-        public DateTime GetLastMessageSendTime(Guid connectionId, string senderIdentifier)
-        {
-            DateTime dateTime = new DateTime();
-            dateTime = (DateTime)ExecuteScalarSP("common.sp_VRPop3ReadMessageId_GetLastMessageSendTime", connectionId, senderIdentifier);
-            return dateTime;
-        }
-
-        public bool Insert()
-        {
-            int affectedRecords = ExecuteNonQuerySP("common.sp_VRPop3ReadMessageId_Insert");
-
-            if (affectedRecords > 0)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public List<string> GetPop3MailMessagesIdsFromDateTime(Guid connectionId, string senderIdentifier, DateTime fromDate)
-        {
-            return GetItemsSP("common.sp_VRPop3ReadMessageId_GetFromDate", MessageIdMapper, connectionId, senderIdentifier, fromDate);
-        }
-        string MessageIdMapper(IDataReader reader)
-        {
-            return reader["MessageID"] as string;
-        }
-    }
 }

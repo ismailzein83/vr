@@ -23,11 +23,14 @@ namespace Vanrise.BEBridge.Entities
         void OnSourceBEBatchRetrieved(SourceBEBatch sourceBEs, SourceBEBatchRetrievedContext context);
 
         object ReaderState { get; set; }
+
+        Guid BEReceiveDefinitionId { get; set; }
     }
 
     public interface ISourceBEReaderSetBatchImportedContext
     {
         SourceBEBatch Batch { get; }
+        Guid BEReceiveDefinitionId { get; set; }
     }
 
     public class SourceBEBatchRetrievedContext

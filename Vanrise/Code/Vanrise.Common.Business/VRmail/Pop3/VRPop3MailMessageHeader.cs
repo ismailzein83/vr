@@ -10,14 +10,28 @@ namespace Vanrise.Common.Business
 {
     public class VRPop3MailMessageHeader : VRReceivedMailMessageHeader
     {
-        public string Sender { get; set; }
+        private OpenPop.Mime.Header.MessageHeader _messageHeader;
+
+        public VRPop3MailMessageHeader(OpenPop.Mime.Header.MessageHeader messageHeader)
+        {
+            this._messageHeader = messageHeader;
+        }
+        public override string From
+        {
+            get { return this._messageHeader.From.Address; }
+        }
+        public override string Subject
+        {
+            get { return this._messageHeader.Subject; }
+        }
+        public override string MessageId
+        {
+            get { return this._messageHeader.MessageId; }
+        }
+        public override DateTime MessageSendTime
+        {
+            get { return this._messageHeader.DateSent; }
+        }
         public int MessageIndex { get; set; }
-    }
-    public abstract class VRReceivedMailMessageHeader
-    {
-        public string From { get; set; }
-        public string Subject { get; set; }
-        public DateTime MessageSendTime { get; set; }
-        public string MessageId { get; set; }
     }
 }

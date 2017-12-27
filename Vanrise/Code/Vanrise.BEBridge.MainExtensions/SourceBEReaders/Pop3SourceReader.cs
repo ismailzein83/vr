@@ -15,13 +15,13 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
         public override void RetrieveUpdatedBEs(ISourceBEReaderRetrieveUpdatedBEsContext context)
         {
             VRPop3Connection pop3Connection = new VRConnectionManager().GetVRConnection(Setting.VRConnectionId).Settings as VRPop3Connection;
-            
+            string senderIdentifier = getSenderIdentifier(context.BEReceiveDefinitionId);
             List<VRReceivedMailMessage> messages = new List<VRReceivedMailMessage>();
 
             var OnMessageRead = new Action<VRReceivedMailMessage>(delegate(VRReceivedMailMessage receivedMailMessage)
             {
                 messages.Add(receivedMailMessage);
-                if (messages.Count == 5)
+                if (messages.Count == Setting.BatchSize)
                 {
                     var receivedMailSourceBatch = new ReceivedMailSourceBatch
                     {
@@ -31,7 +31,7 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
                     messages = new List<VRReceivedMailMessage>();
                 }
             });
-            pop3Connection.ReadNewMessages(Setting.VRConnectionId, "", Setting.Pop3MessageFilter.IsApplicableFunction, OnMessageRead);
+            pop3Connection.ReadNewMessages(Setting.VRConnectionId, senderIdentifier, Setting.Pop3MessageFilter.IsApplicableFunction, OnMessageRead);
 
             if (messages.Count > 0)
             {
@@ -45,7 +45,16 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
 
         public override void SetBatchCompleted(ISourceBEReaderSetBatchImportedContext context)
         {
+            VRPop3Connection pop3Connection = new VRConnectionManager().GetVRConnection(Setting.VRConnectionId).Settings as VRPop3Connection;
+            string senderIdentifier = getSenderIdentifier(context.BEReceiveDefinitionId);
+            List<VRReceivedMailMessage> messagesList = (context.Batch as ReceivedMailSourceBatch).Messages;
+            pop3Connection.SetMessagesRead(Setting.VRConnectionId, senderIdentifier, messagesList);
             base.SetBatchCompleted(context);
+        }
+
+        private string getSenderIdentifier(Guid BEReceiveDefinitionId)
+        {
+            return "BEReceiveDefinition_" + BEReceiveDefinitionId;
         }
     }
 
@@ -53,5 +62,6 @@ namespace Vanrise.BEBridge.MainExtensions.SourceBEReaders
     {
         public Guid VRConnectionId { get; set; }
         public VRPop3MessageFilter Pop3MessageFilter { get; set; }
+        public int BatchSize { get; set; }
     }
 }

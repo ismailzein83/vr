@@ -42,7 +42,7 @@ namespace Vanrise.BEBridge.BP.Activities
             Action<SourceBEBatch, SourceBEBatchRetrievedContext> onSourceBEBatchRetrieved = (sourceBEBatch, sourceRetrievedContext) =>
             {
                 handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Source BE file {0} read.", sourceBEBatch.BatchName);
-                var batchProcessContext = new BatchProcessingContext(sourceBEBatch, inputArgument.SourceReader, inputArgument.OutputQueues);
+                var batchProcessContext = new BatchProcessingContext(sourceBEBatch, inputArgument.SourceReader, inputArgument.OutputQueues,inputArgument.BeDefinitionId);
                 lock (pendingBatchProcessings)
                 {
                     pendingBatchProcessings.Add(batchProcessContext);
@@ -56,7 +56,7 @@ namespace Vanrise.BEBridge.BP.Activities
                {
                    ReaderState = processManager.GetDefinitionObjectState<object>(handle.SharedInstanceData.InstanceInfo.DefinitionID, inputArgument.BeDefinitionId.ToString())
                };
-
+            sourceBEReaderContext.BEReceiveDefinitionId = inputArgument.BeDefinitionId;
             inputArgument.SourceReader.RetrieveUpdatedBEs(sourceBEReaderContext);
 
             #endregion
@@ -133,6 +133,12 @@ namespace Vanrise.BEBridge.BP.Activities
             }
 
             public object ReaderState
+            {
+                get;
+                set;
+            }
+
+            public Guid BEReceiveDefinitionId
             {
                 get;
                 set;

@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrCommonPop3mailmessageconvertorEditor', ['VRUIUtilsService', 'UtilsService',
+app.directive('vrCommonReceivedmailmessageconvertorEditor', ['VRUIUtilsService', 'UtilsService',
     function (VRUIUtilsService, UtilsService) {
         return {
             restrict: 'E',
@@ -9,15 +9,15 @@ app.directive('vrCommonPop3mailmessageconvertorEditor', ['VRUIUtilsService', 'Ut
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var pop3MessageConvertor = new Pop3MessageConvertor($scope, ctrl, $attrs);
-                pop3MessageConvertor.initializeController();
+                var receivedMessageConvertor = new ReceivedMessageConvertor($scope, ctrl, $attrs);
+                receivedMessageConvertor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Common/Directives/VRMail/Templates/Pop3MailMessageConvertorEditorTemplate.html'
+            templateUrl: '/Client/Modules/Common/Directives/VRMail/Templates/ReceivedMailMessageConvertorEditorTemplate.html'
         };
 
-        function Pop3MessageConvertor($scope, ctrl, $attrs) {
+        function ReceivedMessageConvertor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -33,7 +33,7 @@ app.directive('vrCommonPop3mailmessageconvertorEditor', ['VRUIUtilsService', 'Ut
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.Common.MainExtensions.Pop3MailMessageConvertor, Vanrise.Common.MainExtensions",
+                        $type: "Vanrise.Common.MainExtensions.ReceivedMailMessageConvertor, Vanrise.Common.MainExtensions",
                         Name: "Received Mail Message Convertor",
                     };
                 };
