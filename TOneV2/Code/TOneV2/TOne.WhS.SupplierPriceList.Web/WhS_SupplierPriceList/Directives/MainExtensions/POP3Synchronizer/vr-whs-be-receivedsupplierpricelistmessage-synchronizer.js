@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsBePop3supplierpricelistmessageSynchronizer', ['UtilsService', 'VRUIUtilsService',
+app.directive('vrWhsBeReceivedsupplierpricelistmessageSynchronizer', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
@@ -9,15 +9,15 @@ app.directive('vrWhsBePop3supplierpricelistmessageSynchronizer', ['UtilsService'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new Pop3SupplierPricelistMessageSynchronizer($scope, ctrl, $attrs);
+                var ctor = new ReceivedSupplierPricelistMessageSynchronizer($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/WhS_SupplierPriceList/Directives/MainExtensions/POP3Synchronizer/Templates/POP3SupplierPricelistMessageSynchronizer.html'
+            templateUrl: '/Client/Modules/WhS_SupplierPriceList/Directives/MainExtensions/POP3Synchronizer/Templates/ReceivedSupplierPricelistMessageSynchronizer.html'
         };
 
-        function Pop3SupplierPricelistMessageSynchronizer($scope, ctrl, $attrs) {
+        function ReceivedSupplierPricelistMessageSynchronizer($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -41,8 +41,8 @@ app.directive('vrWhsBePop3supplierpricelistmessageSynchronizer', ['UtilsService'
                 api.getData = function () {
 
                     return {
-                        $type: "TOne.WhS.SupplierPriceList.Business.Pop3MailMessageSynchronizer, TOne.WhS.SupplierPriceList.Business",
-                        Name: "Supplier POP3 Mail Message Synchronizer"
+                        $type: "TOne.WhS.SupplierPriceList.Business.SupplierPricelistReceivedMailMessageSynchronizer, TOne.WhS.SupplierPriceList.Business",
+                        Name: "Supplier Received Mail Message Synchronizer"
                     };
                 };
 

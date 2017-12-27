@@ -107,7 +107,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Context\SupplierPriceListExecutionContext.cs" />
     <Compile Include="ImportPriceListManager.cs" />
-    <Compile Include="Pop3MailMessageSynchronizer.cs" />
+    <Compile Include="SupplierPricelistReceivedMailMessageSynchronizer.cs" />
     <Compile Include="PriceListCodeManager.cs" />
     <Compile Include="PriceListZoneServiceManager.cs" />
     <Compile Include="PriceListRateManager.cs" />

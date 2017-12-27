@@ -352,7 +352,6 @@
             var operations = [
                 setTitle,
                 loadDefinitionTab,
-                loadPricingSettingsTab
             ];
 
             setGlobalVarsAndAddOperations();
@@ -649,7 +648,7 @@
 
 
         function loadSupplierSettingsTab() {
-            return UtilsService.waitMultipleAsyncOperations([loadSupplierTimeZoneSelector, loadZoneServiceConfigSelector, loadSupplierRoutingStatusSelector]);
+            return UtilsService.waitMultipleAsyncOperations([loadSupplierTimeZoneSelector, loadZoneServiceConfigSelector, loadSupplierRoutingStatusSelector, loadPricingSettingsTab]);
         }
         function loadSupplierTimeZoneSelector() {
             var supplierTimeZoneSelectorLoadDeferred = UtilsService.createPromiseDeferred();
