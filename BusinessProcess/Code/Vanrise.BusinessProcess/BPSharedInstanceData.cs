@@ -61,12 +61,12 @@ namespace Vanrise.BusinessProcess
 
         public void WriteTrackingMessage(LogEntryType severity, string messageFormat, params object[] args)
         {
-            WriteTrackingMessages(false, true, severity, messageFormat, args);
+            WriteTrackingMessages(false, false, severity, messageFormat, args);
         }
 
         public void WriteTrackingMessageToParentProcess(LogEntryType severity, string messageFormat, params object[] args)
         {
-            WriteTrackingMessages(true, false, severity, messageFormat, args);
+            WriteTrackingMessages(true, true, severity, messageFormat, args);
         }
 
         public void WriteBusinessTrackingMsg(LogEntryType severity, string messageFormat, params object[] args)
