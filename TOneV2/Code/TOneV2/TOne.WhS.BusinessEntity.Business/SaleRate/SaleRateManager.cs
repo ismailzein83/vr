@@ -390,11 +390,13 @@ namespace TOne.WhS.BusinessEntity.Business
             private IEnumerable<SaleRateDetail> GetSellingProductZoneRates(int sellingProductId, IEnumerable<SaleZone> saleZones, IEnumerable<long> saleZoneIds, DateTime effectiveOn, int currencyId, bool isSystemCurrency)
             {
                 var saleRates = new List<SaleRateDetail>();
-                var sellingProductZoneRateHistoryLocator = new SellingProductZoneRateHistoryLocator(new SellingProductZoneRateHistoryReader(sellingProductId, saleZoneIds, true, false));
+
+                IEnumerable<int> sellingProductIds = new List<int>() { sellingProductId };
+                var productZoneRateHistoryLocator = new ProductZoneRateHistoryLocator(new ProductZoneRateHistoryReader(sellingProductIds, saleZoneIds, true, false));
 
                 foreach (SaleZone saleZone in saleZones)
                 {
-                    SaleRateHistoryRecord saleRateHistoryRecord = sellingProductZoneRateHistoryLocator.GetSaleRateHistoryRecord(saleZone.Name, null, currencyId, effectiveOn);
+                    SaleRateHistoryRecord saleRateHistoryRecord = productZoneRateHistoryLocator.GetProductZoneRateHistoryRecord(sellingProductId, saleZone.Name, null, currencyId, effectiveOn);
 
                     if (saleRateHistoryRecord != null)
                     {
@@ -409,15 +411,16 @@ namespace TOne.WhS.BusinessEntity.Business
             private IEnumerable<SaleRateDetail> GetCustomerSaleZoneRates(int customerId, IEnumerable<SaleZone> saleZones, IEnumerable<long> saleZoneIds, DateTime effectiveOn, int currencyId, bool isSystemCurrency)
             {
                 var saleRates = new List<SaleRateDetail>();
-                var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocator(customerId, new CustomerZoneRateHistoryReader(customerId, saleZoneIds, true, false));
-                var salePriceListManager = new SalePriceListManager();
 
-                int? sellingProductId = new CustomerSellingProductManager().GetEffectiveSellingProductId(customerId, effectiveOn, false);
-                if (!sellingProductId.HasValue) return null;
+                int sellingProductId = new CarrierAccountManager().GetSellingProductId(customerId);
+                var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocatorV2(new CustomerZoneRateHistoryReaderV2(new List<int>() { customerId }, new List<int>() { sellingProductId }, saleZoneIds, true, false));
+
+                var salePriceListManager = new SalePriceListManager();
+                int longPrecisionValue = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
 
                 foreach (SaleZone saleZone in saleZones)
                 {
-                    SaleRateHistoryRecord saleRateHistoryRecord = customerZoneRateHistoryLocator.GetSaleRateHistoryRecord(saleZone.Name, saleZone.CountryId, null, currencyId, effectiveOn);
+                    SaleRateHistoryRecord saleRateHistoryRecord = customerZoneRateHistoryLocator.GetCustomerZoneRateHistoryRecord(customerId, sellingProductId, saleZone.Name, null, saleZone.CountryId, effectiveOn, currencyId, longPrecisionValue);
 
                     if (saleRateHistoryRecord != null)
                     {
