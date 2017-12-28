@@ -173,6 +173,7 @@
     <Compile Include="Preview\RatePreviewManager.cs" />
     <Compile Include="Preview\SaleZoneRoutingProductPreviewManager.cs" />
     <Compile Include="Reader\SaleRateReadRPChanges.cs" />
+    <Compile Include="Reader\SPZoneEffectiveDateSaleRateReader.cs" />
     <Compile Include="SaleZone\ApplicableSaleZoneFilter.cs" />
     <Compile Include="SaleZone\SaleZoneCountrySoldToCustomerFilter.cs" />
     <Compile Include="SellingRuleManager.cs" />

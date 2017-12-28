@@ -274,7 +274,20 @@ namespace TOne.WhS.Sales.Business
             }
             return zoneEffectiveDatesByZoneId;
         }
-
+        public static Dictionary<long, DateTime> GetZoneEffectiveDatesByZoneId(IEnumerable<SaleZone> saleZones)
+        {
+            var zoneEffectiveDatesByZoneId = new Dictionary<long, DateTime>();
+            DateTime today = DateTime.Today;
+            foreach (SaleZone saleZone in saleZones)
+            {
+                if (!zoneEffectiveDatesByZoneId.ContainsKey(saleZone.SaleZoneId))
+                {
+                    DateTime zoneEffectiveDate = Utilities.Max(today, saleZone.BED);
+                    zoneEffectiveDatesByZoneId.Add(saleZone.SaleZoneId, zoneEffectiveDate);
+                }
+            }
+            return zoneEffectiveDatesByZoneId;
+        }
         public static void SetBulkActionContextCurrentRateHelpers(ISaleRateReader rateReader, out SaleEntityZoneRateLocator rateLocator, out Func<int, long, SaleEntityZoneRate> getSellingProductZoneRate, out Func<int, int, long, SaleEntityZoneRate> getCustomerZoneRate)
         {
             var rateLocatorValue = new SaleEntityZoneRateLocator(rateReader);

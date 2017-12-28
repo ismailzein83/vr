@@ -1210,20 +1210,21 @@ namespace TOne.WhS.Sales.Business
 
             int sellingProductIdValue;
             Dictionary<int, DateTime> countryBEDsByCountryIdValue;
-
+            IEnumerable<long> zoneIds = saleZones.MapRecords(x => x.SaleZoneId);
+            
             if (ownerType == SalePriceListOwnerType.SellingProduct)
             {
                 sellingProductIdValue = ownerId;
                 countryBEDsByCountryIdValue = new Dictionary<int, DateTime>();
-                currentRateReader = new SaleRateReadWithCache(effectiveOn);
+                Dictionary<long, DateTime> zoneEffectiveDatesByZoneId = UtilitiesManager.GetZoneEffectiveDatesByZoneId(saleZones);
+                currentRateReader = new SPZoneEffectiveDateSaleRateReader(sellingProductIdValue, zoneIds, DateTime.Today, zoneEffectiveDatesByZoneId);
             }
             else
             {
                 sellingProductIdValue = new CarrierAccountManager().GetSellingProductId(ownerId);
-                IEnumerable<long> zoneIds = saleZones.MapRecords(x => x.SaleZoneId);
                 countryBEDsByCountryIdValue = UtilitiesManager.GetDatesByCountry(ownerId, effectiveOn, true);
-                Dictionary<long, DateTime> zoneEffectiveDatesByZoneId = UtilitiesManager.GetZoneEffectiveDatesByZoneId(saleZones, countryBEDsByCountryIdValue);
-                currentRateReader = new SaleRateReadRPChanges(ownerId, sellingProductIdValue, zoneIds, DateTime.Today, zoneEffectiveDatesByZoneId);
+                Dictionary<long, DateTime> customerZoneEffectiveDatesByZoneId = UtilitiesManager.GetZoneEffectiveDatesByZoneId(saleZones, countryBEDsByCountryIdValue);
+                currentRateReader = new SaleRateReadRPChanges(ownerId, sellingProductIdValue, zoneIds, DateTime.Today, customerZoneEffectiveDatesByZoneId);
             }
 
             sellingProductId = sellingProductIdValue;
