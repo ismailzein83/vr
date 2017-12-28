@@ -61,12 +61,17 @@ namespace Vanrise.BusinessProcess
 
         public void WriteTrackingMessage(LogEntryType severity, string messageFormat, params object[] args)
         {
-            WriteTrackingMessages(false, severity, messageFormat, args);
+            WriteTrackingMessages(false, true, severity, messageFormat, args);
+        }
+
+        public void WriteTrackingMessageToParentProcess(LogEntryType severity, string messageFormat, params object[] args)
+        {
+            WriteTrackingMessages(true, false, severity, messageFormat, args);
         }
 
         public void WriteBusinessTrackingMsg(LogEntryType severity, string messageFormat, params object[] args)
         {
-            WriteTrackingMessages(true, severity, messageFormat, args);
+            WriteTrackingMessages(true, false, severity, messageFormat, args);
         }
 
         public void WriteHandledException(Exception ex, bool isError = false)
@@ -86,14 +91,17 @@ namespace Vanrise.BusinessProcess
                 LoggerFactory.GetExceptionLogger().WriteException(_generalLogEventType, this._generalLogViewRequiredPermissionSetId, ex);
         }
 
-        void WriteTrackingMessages(bool writeBusinessTracking, LogEntryType severity, string messageFormat, params object[] args)
+        void WriteTrackingMessages(bool writeBusinessTracking, bool writeToParent, LogEntryType severity, string messageFormat, params object[] args)
         {
+            if (writeToParent && !this.InstanceInfo.ParentProcessID.HasValue)
+                throw new InvalidOperationException("Cannot write tracking to parent process while parent process id is null");
+
             BPTrackingMessage trackingMessage = new BPTrackingMessage
             {
                 TrackingMessage = args != null ? String.Format(messageFormat, args) : messageFormat,
                 EventTime = DateTime.Now,
-                ProcessInstanceId = this.InstanceInfo.ProcessInstanceID,
-                ParentProcessId = this.InstanceInfo.ParentProcessID,
+                ProcessInstanceId = writeToParent ? this.InstanceInfo.ParentProcessID.Value : this.InstanceInfo.ProcessInstanceID,
+                ParentProcessId = writeToParent ? null : this.InstanceInfo.ParentProcessID,
                 Severity = severity
             };
             BPTrackingChannel.Current.WriteTrackingMessage(trackingMessage);

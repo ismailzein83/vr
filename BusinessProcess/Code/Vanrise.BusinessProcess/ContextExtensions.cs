@@ -24,6 +24,11 @@ namespace Vanrise.BusinessProcess
             context.GetSharedInstanceData().WriteTrackingMessage(severity, messageFormat, args);
         }
 
+        public static void WriteTrackingMessageToParentProcess(this ActivityContext context, LogEntryType severity, string messageFormat, params object[] args)
+        {
+            context.GetSharedInstanceData().WriteTrackingMessageToParentProcess(severity, messageFormat, args);
+        }
+
         public static void WriteBusinessTrackingMsg(this ActivityContext context, LogEntryType severity, string messageFormat, params object[] args)
         {
             context.GetSharedInstanceData().WriteBusinessTrackingMsg(severity, messageFormat, args);

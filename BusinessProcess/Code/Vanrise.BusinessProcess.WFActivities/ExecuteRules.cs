@@ -15,10 +15,17 @@ namespace Vanrise.BusinessProcess.WFActivities
         [RequiredArgument]
         public InArgument<string> BusinessRulesKey { get; set; }
 
+        public InArgument<bool> WriteMessagesToParentProcess { get; set; }
+
+        public InArgument<string> ParentMessagePrefix { get; set; }
+
         protected override void Execute(CodeActivityContext context)
         {
             IEnumerable<IRuleTarget> importedDataToValidate = this.ImportedDataToValidate.Get(context);
             string businessRulesKey = this.BusinessRulesKey.Get(context);
+
+            bool writeMessagesToParentProcess = this.WriteMessagesToParentProcess.Get(context);
+            string parentMessagePrefix = this.ParentMessagePrefix.Get(context);
 
             List<BPViolatedRule> violatedBusinessRulesByTarget = new List<BPViolatedRule>(); ;
             bool stopExecutionFlag;
@@ -28,7 +35,7 @@ namespace Vanrise.BusinessProcess.WFActivities
 
             IEnumerable<BusinessRule> rules = BuildBusinessRules(bpBusinessRules);
             ExecuteValidation(rules, importedDataToValidate, context, violatedBusinessRulesByTarget, out stopExecutionFlag);
-            AppendValidationMessages(context, violatedBusinessRulesByTarget);
+            AppendValidationMessages(context, violatedBusinessRulesByTarget, writeMessagesToParentProcess, parentMessagePrefix);
 
             if (stopExecutionFlag)
                 throw new VRBusinessException("One or more business rules were not satisfied and led to stop the execution of the worklfow");
@@ -92,7 +99,7 @@ namespace Vanrise.BusinessProcess.WFActivities
             }
         }
 
-        private void AppendValidationMessages(CodeActivityContext context, List<BPViolatedRule> violatedBusinessRulesByTarget)
+        private void AppendValidationMessages(CodeActivityContext context, List<BPViolatedRule> violatedBusinessRulesByTarget, bool writeMessagesToParentProcess, string parentMessagePrefix)
         {
             long processIntanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
             long? parentProcessId = context.GetSharedInstanceData().InstanceInfo.ParentProcessID;
@@ -113,6 +120,10 @@ namespace Vanrise.BusinessProcess.WFActivities
                 };
 
                 messages.Add(msg);
+
+                if (writeMessagesToParentProcess)
+                    context.WriteTrackingMessageToParentProcess(MapSeverity(msg.Severity), string.Concat(parentMessagePrefix, msg.Message));
+                    
                 context.WriteTrackingMessage(MapSeverity(msg.Severity), msg.Message);
             }
 
