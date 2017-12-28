@@ -55,6 +55,7 @@
     <Compile Include="AccountStatement\AccountStatementViewSettings.cs" />
     <Compile Include="AccountUsageOverride\AccountUsageOverride.cs" />
     <Compile Include="AccountUsage\AccountUsage.cs" />
+    <Compile Include="AccountUsage\AccountUsageByTime.cs" />
     <Compile Include="AccountUsage\AccountUsageInfo.cs" />
     <Compile Include="AccountUsage\AccountUsagePeriodSettings.cs" />
     <Compile Include="AccountUsage\AccountUsagePeriodSettingsConfig.cs" />

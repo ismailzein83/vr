@@ -20,6 +20,8 @@ namespace Vanrise.Invoice.Data
         bool UpdateInvoiceNote(long invoiceId, string invoiceNote);
         void LoadInvoicesAfterImportedId(Guid invoiceTypeId, long lastImportedId, Action<Entities.Invoice> onInvoiceReady);
         IEnumerable<Entities.Invoice> GetUnPaidPartnerInvoices(IEnumerable<PartnerInvoiceType> partnerInvoiceTypes);
+        IEnumerable<InvoiceByPartnerInfo> GetLastInvoicesByPartners(IEnumerable<PartnerInvoiceType> partnerInvoiceTypes);
+
         bool Update(Entities.Invoice invoice);
         Entities.Invoice GetInvoiceBySourceId(Guid invoiceTypeId, string sourceId);
         Entities.Invoice GetLastInvoice(Guid invoiceTypeId, string partnerId);

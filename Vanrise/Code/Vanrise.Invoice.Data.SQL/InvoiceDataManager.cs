@@ -75,6 +75,29 @@ namespace Vanrise.Invoice.Data.SQL
 
             return GetItemsSP("VR_Invoice.sp_Invoice_GetFiltered", InvoiceMapper, input.Query.InvoiceTypeId, partnerIds, input.Query.PartnerPrefix, input.Query.FromTime, input.Query.ToTime, input.Query.IssueDate, input.Query.EffectiveDate, input.Query.IsEffectiveInFuture, input.Query.Status, input.Query.IsSelectAll, input.Query.InvoiceBulkActionIdentifier, input.Query.IsSent,input.Query.IsPaid);
         }
+
+
+
+        public IEnumerable<InvoiceByPartnerInfo> GetLastInvoicesByPartners(IEnumerable<PartnerInvoiceType> partnerInvoiceTypes)
+        {
+            DataTable partnerInvoiceTypeTable = GetPartnerInvoiceTypeTable();
+            foreach (var partnerInvoiceType in partnerInvoiceTypes)
+            {
+                DataRow dr = partnerInvoiceTypeTable.NewRow();
+                FillPartnerInvoiceTypeRow(dr, partnerInvoiceType.InvoiceTypeId, partnerInvoiceType.PartnerId);
+                partnerInvoiceTypeTable.Rows.Add(dr);
+            }
+            partnerInvoiceTypeTable.EndLoadData();
+            if (partnerInvoiceTypeTable.Rows.Count > 0)
+                return GetItemsSPCmd("[VR_Invoice].[sp_Invoice_GetLastByPartners]", InvoiceByPartnerInfoMapper,
+                          (cmd) =>
+                          {
+                              var dtPrm = new System.Data.SqlClient.SqlParameter("@PartnerInvoiceTypeTable", SqlDbType.Structured);
+                              dtPrm.Value = partnerInvoiceTypeTable;
+                              cmd.Parameters.Add(dtPrm);
+                          });
+            return null;
+        }
         public IEnumerable<Entities.Invoice> GetUnPaidPartnerInvoices(IEnumerable<PartnerInvoiceType> partnerInvoiceTypes)
         {
             DataTable partnerInvoiceTypeTable = GetPartnerInvoiceTypeTable();
@@ -352,6 +375,17 @@ namespace Vanrise.Invoice.Data.SQL
             return invoice;
         }
 
+        public InvoiceByPartnerInfo InvoiceByPartnerInfoMapper(IDataReader reader)
+        {
+            return new InvoiceByPartnerInfo
+            {
+                InvoiceTypeId = GetReaderValue<Guid>(reader, "InvoiceTypeId"),
+                IssueDate = GetReaderValue<DateTime>(reader, "IssueDate"),
+                PartnerId = reader["PartnerId"] as string,
+                ToDate = GetReaderValue<DateTime>(reader, "ToDate"),
+                DueDate = GetReaderValue<DateTime>(reader, "DueDate"),
+            };
+        }
         public VRPopulatedPeriod VRPopulatedPeriodMapper(IDataReader reader)
         {
             return new VRPopulatedPeriod

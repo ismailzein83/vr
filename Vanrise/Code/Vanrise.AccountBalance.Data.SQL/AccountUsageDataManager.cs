@@ -14,6 +14,7 @@ namespace Vanrise.AccountBalance.Data.SQL
     public class AccountUsageDataManager : BaseSQLDataManager, IAccountUsageDataManager
     {
         #region Fields / Constructors
+        private const string AccountUsageByTime_TABLENAME = "AccountUsageByTime";
 
         private const string AccountUsage_TABLENAME = "AccountUsage";
         public AccountUsageDataManager()
@@ -125,9 +126,59 @@ namespace Vanrise.AccountBalance.Data.SQL
         {
             return GetItemSP("VR_AccountBalance.sp_AccountUsage_GetLast", AccountUsageMapper, accountTypeId, accountId);
         }
+
+        public IEnumerable<AccountUsage> GetAccountUsagesByTransactionTypes(Guid accountTypeId, List<AccountUsageByTime> accountUsagesByTime, List<Guid> transactionTypeIds)
+        {
+
+            string transactionTypeIDs = null;
+            if (transactionTypeIds != null && transactionTypeIds.Count() > 0)
+                transactionTypeIDs = string.Join<Guid>(",", transactionTypeIds);
+
+
+            DataTable accountUsagesByTimeTable = GetAccountUsagesByTimeTable();
+            if (accountUsagesByTime != null)
+            {
+                foreach (var accountUsageByTime in accountUsagesByTime)
+                {
+                    DataRow dr = accountUsagesByTimeTable.NewRow();
+                    FillAccountUsagesByTimeRow(dr, accountUsageByTime);
+                    accountUsagesByTimeTable.Rows.Add(dr);
+                }
+            }
+
+            accountUsagesByTimeTable.EndLoadData();
+            if (accountUsagesByTimeTable.Rows.Count > 0)
+                return GetItemsSPCmd("[VR_AccountBalance].[sp_AccountUsage_GetByTime]", AccountUsageMapper,
+                       (cmd) =>
+                       {
+                           var dtPrm = new System.Data.SqlClient.SqlParameter("@AccountUsagesByTimeTable", SqlDbType.Structured);
+                           dtPrm.Value = accountUsagesByTimeTable;
+                           cmd.Parameters.Add(dtPrm);
+
+                           var accountTypeIdPrm = new System.Data.SqlClient.SqlParameter("@AccountTypeId", accountTypeId);
+                           cmd.Parameters.Add(accountTypeIdPrm);
+
+                           var transactionTypeIdsPrm = new System.Data.SqlClient.SqlParameter("@TransactionTypeIds", transactionTypeIDs);
+                           cmd.Parameters.Add(transactionTypeIdsPrm);
+                       });
+            return null;
+        }
+
         #endregion
 
         #region Mappers
+        DataTable GetAccountUsagesByTimeTable()
+        {
+            DataTable dt = new DataTable(AccountUsageByTime_TABLENAME);
+            dt.Columns.Add("AccountID", typeof(String));
+            dt.Columns.Add("PeriodEnd", typeof(DateTime));
+            return dt;
+        }
+        void FillAccountUsagesByTimeRow(DataRow dr, AccountUsageByTime accoutnUsageByTime)
+        {
+            dr["AccountID"] = accoutnUsageByTime.AccountId;
+            dr["PeriodEnd"] = accoutnUsageByTime.EndPeriod;
+        }
         private DataTable GetAccountUsageTable()
         {
             DataTable dt = new DataTable(AccountUsage_TABLENAME);
