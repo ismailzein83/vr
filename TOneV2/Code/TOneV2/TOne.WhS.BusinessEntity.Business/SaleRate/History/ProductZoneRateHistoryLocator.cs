@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -48,6 +49,11 @@ namespace TOne.WhS.BusinessEntity.Business
                     SourceId = saleRate.SourceId
                 };
             });
+        }
+        public SaleRateHistoryRecord GetProductZoneRateHistoryRecord(int sellingProductId, string zoneName, int? rateTypeId, int targetCurrencyId, DateTime effectiveOn)
+        {
+            IEnumerable<SaleRateHistoryRecord> productZoneRateHistory = GetProductZoneRateHistory(sellingProductId, zoneName, rateTypeId, targetCurrencyId);
+            return (productZoneRateHistory != null) ? productZoneRateHistory.FindRecord(x => x.IsEffective(effectiveOn)) : null;
         }
 
         #region Private Methods
