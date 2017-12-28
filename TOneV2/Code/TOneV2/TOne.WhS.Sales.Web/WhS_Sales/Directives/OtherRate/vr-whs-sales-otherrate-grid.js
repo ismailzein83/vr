@@ -72,94 +72,86 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
 
             var api = {};
 
-            api.loadGrid = function (query)
-            {
-            	zoneItem = query.zoneItem;
-            	settings = query.settings;
-            	ownerCurrencyId = query.ownerCurrencyId;
+            api.loadGrid = function (query) {
+                zoneItem = query.zoneItem;
+                settings = query.settings;
+                ownerCurrencyId = query.ownerCurrencyId;
 
-            	$scope.isCountryEnded = query.zoneItem.IsCountryEnded;
-            	$scope.isZonePendingClosed = query.zoneItem.IsZonePendingClosed;
-            	$scope.isCountryNew = query.zoneItem.IsCountryNew;
+                $scope.isCountryEnded = query.zoneItem.IsCountryEnded;
+                $scope.isZonePendingClosed = query.zoneItem.IsZonePendingClosed;
+                $scope.isCountryNew = query.zoneItem.IsCountryNew;
 
-            	$scope.isSellingProductZone = zoneItem.isSellingProductZone;
+                $scope.isSellingProductZone = zoneItem.isSellingProductZone;
 
-            	if (zoneItem.NewRates == null)
-            		zoneItem.NewRates = [];
-            	if (zoneItem.ClosedRates == null)
-            		zoneItem.ClosedRates = [];
+                if (zoneItem.NewRates == null)
+                    zoneItem.NewRates = [];
+                if (zoneItem.ClosedRates == null)
+                    zoneItem.ClosedRates = [];
 
-            	return loadGrid();
+                return loadGrid();
             };
-            
-            function loadGrid()
-            {
-            	if (zoneItem.RateTypes == null)
-            		return;
 
-            	for (var i = 0; i < zoneItem.RateTypes.length; i++)
-            	{
-            		var otherRate = {};
+            function loadGrid() {
+                if (zoneItem.RateTypes == null)
+                    return;
 
+                for (var i = 0; i < zoneItem.RateTypes.length; i++) {
+                    var otherRate = {};
 
+                    otherRate.RateTypeId = zoneItem.RateTypes[i].RateTypeId;
+                    otherRate.Name = zoneItem.RateTypes[i].Name;
 
-            		otherRate.RateTypeId = zoneItem.RateTypes[i].RateTypeId;
-            		otherRate.Name = zoneItem.RateTypes[i].Name;
+                    otherRate.ZoneBED = zoneItem.ZoneBED;
+                    otherRate.ZoneEED = zoneItem.ZoneEED;
 
-            		otherRate.ZoneBED = zoneItem.ZoneBED;
-            		otherRate.ZoneEED = zoneItem.ZoneEED;
+                    otherRate.CountryBED = zoneItem.CountryBED;
+                    otherRate.IsCountryNew = zoneItem.IsCountryNew;
 
-            		otherRate.CountryBED = zoneItem.CountryBED;
-            		otherRate.IsCountryNew = zoneItem.IsCountryNew;
+                    if (zoneItem.CurrentOtherRates != null) {
+                        var currentOtherRate = zoneItem.CurrentOtherRates[otherRate.RateTypeId];
+                        if (currentOtherRate != undefined) {
+                            otherRate.CurrentRate = currentOtherRate.Rate;
+                            otherRate.CurrentRateCurrencyId = currentOtherRate.CurrencyId;
+                            otherRate.IsCurrentRateEditable = currentOtherRate.IsRateEditable;
+                            otherRate.CurrentRateBED = currentOtherRate.BED;
+                            otherRate.CurrentRateEED = currentOtherRate.EED;
+                            otherRate.CurrentRateNewEED = currentOtherRate.EED;
+                        }
+                    }
 
-            		if (zoneItem.CurrentOtherRates != null) {
-            			var currentOtherRate = zoneItem.CurrentOtherRates[otherRate.RateTypeId];
-            			if (currentOtherRate != undefined) {
-            			    otherRate.CurrentRate = currentOtherRate.Rate;
-            			    otherRate.CurrentRateCurrencyId = currentOtherRate.CurrencyId;
-            				otherRate.IsCurrentRateEditable = currentOtherRate.IsRateEditable;
-            				otherRate.CurrentRateBED = currentOtherRate.BED;
-            				otherRate.CurrentRateEED = currentOtherRate.EED;
-            				otherRate.CurrentRateNewEED = currentOtherRate.EED;
-            			}
-            		}
+                    var newOtherRate = UtilsService.getItemByVal(zoneItem.NewRates, otherRate.RateTypeId, 'RateTypeId');
+                    if (newOtherRate != null) {
+                        zoneItem.IsDirty = true;
+                        otherRate.NewRate = newOtherRate.Rate;
+                        otherRate.NewRateBED = newOtherRate.BED;
+                        otherRate.NewRateEED = newOtherRate.EED;
+                    }
+                    else {
+                        var closedOtherRate = UtilsService.getItemByVal(zoneItem.ClosedRates, otherRate.RateTypeId, 'RateTypeId');
+                        if (closedOtherRate != null) {
+                            zoneItem.IsDirty = true;
+                            otherRate.CurrentRateNewEED = closedOtherRate.EED;
+                        }
+                    }
 
-            		var newOtherRate = UtilsService.getItemByVal(zoneItem.NewRates, otherRate.RateTypeId, 'RateTypeId');
-            		if (newOtherRate != null) {
-            			zoneItem.IsDirty = true;
-            			otherRate.NewRate = newOtherRate.Rate;
-            			otherRate.NewRateBED = newOtherRate.BED;
-            			otherRate.NewRateEED = newOtherRate.EED;
-            		}
-            		else {
-            			var closedOtherRate = UtilsService.getItemByVal(zoneItem.ClosedRates, otherRate.RateTypeId, 'RateTypeId');
-            			if (closedOtherRate != null) {
-            				zoneItem.IsDirty = true;
-            				otherRate.CurrentRateNewEED = closedOtherRate.EED;
-            			}
-            		}
+                    if (zoneItem.FutureOtherRates != null) {
+                        otherRate.FutureRate = zoneItem.FutureOtherRates[otherRate.RateTypeId];
+                    }
 
-            		if (zoneItem.FutureOtherRates != null) {
-            			otherRate.FutureRate = zoneItem.FutureOtherRates[otherRate.RateTypeId];
-            		}
-
-            		WhS_Sales_RatePlanUtilsService.onNewRateChanged(otherRate);
-            		$scope.otherRates.push(otherRate);
-            	}
+                    WhS_Sales_RatePlanUtilsService.onNewRateChanged(otherRate);
+                    $scope.otherRates.push(otherRate);
+                }
             }
 
-            api.applyChanges = function ()
-            {
+            api.applyChanges = function () {
                 if (!$scope.areOtherRatesEditable())
                     return;
 
-                for (var i = 0; i < $scope.otherRates.length; i++)
-                {
+                for (var i = 0; i < $scope.otherRates.length; i++) {
                     var otherRate = $scope.otherRates[i];
                     clearOtherRateDrafts(otherRate.RateTypeId);
 
-                    if (otherRate.NewRate != null)
-                    {
+                    if (otherRate.NewRate != null) {
                         zoneItem.NewRates.push({
                             ZoneId: zoneItem.ZoneId,
                             RateTypeId: otherRate.RateTypeId,
@@ -168,8 +160,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
                             EED: otherRate.NewRateEED
                         });
                     }
-                    else if (!WhS_Sales_RatePlanService.areDatesTheSame(otherRate.CurrentRateEED, otherRate.CurrentRateNewEED))
-                    {
+                    else if (!WhS_Sales_RatePlanService.areDatesTheSame(otherRate.CurrentRateEED, otherRate.CurrentRateNewEED)) {
                         zoneItem.ClosedRates.push({
                             ZoneId: zoneItem.ZoneId,
                             RateTypeId: otherRate.RateTypeId,
@@ -178,30 +169,34 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
                     }
                 }
 
-                if (zoneItem.NewRates.length == 0)
-                	zoneItem.NewRates = null;
-                if (zoneItem.ClosedRates.length == 0)
-                	zoneItem.ClosedRates = null;
+                if (zoneItem.NewRates != null && zoneItem.NewRates.length == 0)
+                    zoneItem.NewRates = null;
+                if (zoneItem.ClosedRates != null && zoneItem.ClosedRates.length == 0)
+                    zoneItem.ClosedRates = null;
             };
 
             function clearOtherRateDrafts(rateTypeId) {
-            	if (!clearNewOtherRate(rateTypeId))
-            		clearClosedOtherRate(rateTypeId);
+                if (!clearNewOtherRate(rateTypeId))
+                    clearClosedOtherRate(rateTypeId);
             }
             function clearNewOtherRate(rateTypeId) {
-            	var newOtherRateIndex = UtilsService.getItemIndexByVal(zoneItem.NewRates, rateTypeId, 'RateTypeId');
-            	if (newOtherRateIndex != -1) {
-            		zoneItem.NewRates.splice(newOtherRateIndex, 1);
-            		return true;
-            	}
-            	return false;
+                if (zoneItem.NewRates == null)
+                    return false;
+                var newOtherRateIndex = UtilsService.getItemIndexByVal(zoneItem.NewRates, rateTypeId, 'RateTypeId');
+                if (newOtherRateIndex != -1) {
+                    zoneItem.NewRates.splice(newOtherRateIndex, 1);
+                    return true;
+                }
+                return false;
             }
             function clearClosedOtherRate(rateTypeId) {
-            	var closedOtherRateIndex = UtilsService.getItemIndexByVal(zoneItem.ClosedRates, rateTypeId, 'RateTypeId');
-            	if (closedOtherRateIndex != -1) {
-            		zoneItem.ClosedRates.splice(closedOtherRateIndex, 1);
-            		return true;
-            	}
+                if (zoneItem.ClosedRates == null)
+                    return false;
+                var closedOtherRateIndex = UtilsService.getItemIndexByVal(zoneItem.ClosedRates, rateTypeId, 'RateTypeId');
+                if (closedOtherRateIndex != -1) {
+                    zoneItem.ClosedRates.splice(closedOtherRateIndex, 1);
+                    return true;
+                }
                 return false;
             }
 
