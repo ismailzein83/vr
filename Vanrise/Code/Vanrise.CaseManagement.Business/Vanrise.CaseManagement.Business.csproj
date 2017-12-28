@@ -44,6 +44,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CaseManagementBEDefinitionSettings.cs" />
+    <Compile Include="CaseManagementDefinitionManager.cs" />
+    <Compile Include="CaseManagementManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -54,6 +56,14 @@
     <ProjectReference Include="..\Vanrise.CaseManagement.Entities\Vanrise.CaseManagement.Entities.csproj">
       <Project>{d4a27cda-8984-448b-8177-a9e3f26bf56b}</Project>
       <Name>Vanrise.CaseManagement.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
+      <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
+      <Name>Vanrise.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.GenericData.Business\Vanrise.GenericData.Business.csproj">
       <Project>{e196c862-be33-49dd-9e0d-2948fb289861}</Project>
