@@ -17,6 +17,8 @@ namespace Vanrise.BusinessProcess.Entities
         public Guid DefinitionID { get; set; }
         public Guid? WorkflowInstanceID { get; set; }
         public BPInstanceStatus Status { get; set; }
+
+        public BPInstanceAssignmentStatus AssignmentStatus { get; set; }
         public BaseProcessInputArgument InputArgument { get; set; }
 
         public int? ViewRequiredPermissionSetId { get; set; }

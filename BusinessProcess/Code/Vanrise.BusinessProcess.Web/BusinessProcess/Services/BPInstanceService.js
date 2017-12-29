@@ -8,7 +8,7 @@
             if (status === BPInstanceStatusEnum.New.value) return LabelColorsEnum.New.color;
             if (status === BPInstanceStatusEnum.Postponed.value) return LabelColorsEnum.WarningLevel1.color;
             if (status === BPInstanceStatusEnum.Running.value) return LabelColorsEnum.Processing.color;
-            if (status === BPInstanceStatusEnum.ProcessFailed.value) return LabelColorsEnum.Warning.color;
+            if (status === BPInstanceStatusEnum.Waiting.value) return LabelColorsEnum.WarningLevel1.color;
             if (status === BPInstanceStatusEnum.Completed.value) return LabelColorsEnum.Success.color;
             if (status === BPInstanceStatusEnum.Aborted.value) return LabelColorsEnum.Error.color;
             if (status === BPInstanceStatusEnum.Suspended.value) return LabelColorsEnum.Error.color;

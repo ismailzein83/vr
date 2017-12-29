@@ -92,7 +92,7 @@
     <Compile Include="Base Classes\DependentAsyncActivity.cs" />
     <Compile Include="BPContext.cs" />
     <Compile Include="IBPContext.cs" />
-    <Compile Include="InterBPServicePendingEventsRequest.cs" />
+    <Compile Include="Internals\BPInstanceStore.cs" />
     <Compile Include="RuntimeServices\BPRegulatorRuntimeService.cs" />
     <Compile Include="RuntimeServices\BusinessProcessService.cs" />
     <Compile Include="BusinessRuleActions\BusinessRuleActionExecutionContext.cs" />

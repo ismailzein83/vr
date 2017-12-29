@@ -15,24 +15,25 @@ namespace Vanrise.BusinessProcess.Data
 
         List<BPInstance> GetBeforeId(BPInstanceBeforeIdInput input, List<int> grantedPermissionSetIds);
 
-        List<BPInstance> GetAfterId(long? processInstanceId, Guid bpDefinitionId); 
+        List<BPInstance> GetAfterId(long? processInstanceId, Guid bpDefinitionId);
 
-        List<BPInstance> GetPendingInstances(Guid definitionId, IEnumerable<BPInstanceStatus> acceptableBPStatuses, int maxCounts, Guid serviceInstanceId);
+        List<BPInstance> GetPendingInstances(Guid definitionId, IEnumerable<BPInstanceStatus> acceptableBPStatuses, BPInstanceAssignmentStatus assignmentStatus, int maxCounts, Guid serviceInstanceId);
 
         List<BPInstance> GetPendingInstancesInfo(IEnumerable<BPInstanceStatus> statuses);
 
-        List<long> GetInstanceIdsHavingChildren(IEnumerable<BPInstanceStatus> statuses);
-
-        void UpdateInstanceStatus(long processInstanceId, BPInstanceStatus status, string message, Guid? workflowInstanceId);
+        void UpdateInstanceStatus(long processInstanceId, BPInstanceStatus status, BPInstanceAssignmentStatus assignmentStatus, string message, bool clearServiceInstanceId, Guid? workflowInstanceId);
 
         void UpdateInstanceLastMessage(long processInstanceId, string message);
 
         long InsertInstance(string processTitle, long? parentId, ProcessCompletionNotifier completionNotifier, Guid definitionID, object inputArguments, BPInstanceStatus executionStatus, int initiatorUserId, string entityId, int? viewInstanceRequiredPermissionSetId, Guid? taskId);
 
-        void SetServiceInstancesOfBPInstances(List<BPInstance> pendingInstancesToUpdate);
+
+        void UpdateServiceInstancesAndAssignmentStatus(List<BPInstance> pendingInstancesToUpdate);
 
         bool HasRunningInstances(Guid definitionId, List<string> entityIds, IEnumerable<BPInstanceStatus> statuses);
 
         List<BPDefinitionSummary> GetBPDefinitionSummary(IEnumerable<BPInstanceStatus> executionStatus);
+
+        void UpdateInstanceAssignmentStatus(long processInstanceId, BPInstanceAssignmentStatus assignmentStatus);
     }
 }

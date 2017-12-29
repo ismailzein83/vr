@@ -175,7 +175,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return GetItemsSP("[BP].[sp_BPInstance_GetAfterID]", BPInstanceMapper, processInstanceId, bpDefinitionId);
         }
 
-        public List<BPInstance> GetPendingInstances(Guid definitionId, IEnumerable<BPInstanceStatus> acceptableBPStatuses, int maxCounts, Guid serviceInstanceId)
+        public List<BPInstance> GetPendingInstances(Guid definitionId, IEnumerable<BPInstanceStatus> acceptableBPStatuses, BPInstanceAssignmentStatus assignmentStatus, int maxCounts, Guid serviceInstanceId)
         {
             StringBuilder queryBuilder = new StringBuilder();
             queryBuilder.Append("SELECT TOP(");
@@ -186,7 +186,9 @@ namespace Vanrise.BusinessProcess.Data.SQL
             queryBuilder.Append(definitionId);
             queryBuilder.Append("' AND ServiceInstanceID = '");
             queryBuilder.Append(serviceInstanceId);
-            queryBuilder.Append("' AND ");
+            queryBuilder.Append("' AND ISNULL(AssignmentStatus, 0) = ");
+            queryBuilder.Append((int)assignmentStatus);
+            queryBuilder.Append(" AND ");
             queryBuilder.Append(BuildStatusesFilter(acceptableBPStatuses));
             queryBuilder.Append(" ORDER BY bp.[ID]");
             return GetItemsText(queryBuilder.ToString(), BPInstanceMapper, null);
@@ -203,18 +205,9 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return GetItemsText(queryBuilder.ToString(), BPInstanceMapper, null);
         }
 
-        public List<long> GetInstanceIdsHavingChildren(IEnumerable<BPInstanceStatus> statuses)
+        public void UpdateInstanceStatus(long processInstanceId, BPInstanceStatus status, BPInstanceAssignmentStatus assignmentStatus, string message, bool clearServiceInstanceId, Guid? workflowInstanceId)
         {
-            StringBuilder queryBuilder = new StringBuilder();
-            queryBuilder.Append("SELECT bp.[ParentID] FROM bp.[BPInstance] bp WITH(NOLOCK) WHERE bp.[ParentID] IS NOT NULL AND ");
-            queryBuilder.Append(BuildStatusesFilter(statuses));
-            queryBuilder.Append(" GROUP by bp.[ParentID] ");
-            return GetItemsText(queryBuilder.ToString(), (reader) => (long)reader["ParentID"], null);
-        }
-
-        public void UpdateInstanceStatus(long processInstanceId, BPInstanceStatus status, string message, Guid? workflowInstanceId)
-        {
-            ExecuteNonQuerySP("bp.sp_BPInstance_UpdateStatus", processInstanceId, (int)status, message, workflowInstanceId);
+            ExecuteNonQuerySP("bp.sp_BPInstance_UpdateStatus", processInstanceId, (int)status, (int)assignmentStatus, message, clearServiceInstanceId, workflowInstanceId);
         }
 
         public void UpdateInstanceLastMessage(long processInstanceId, string message)
@@ -259,17 +252,16 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 return 0;
         }
 
-        public void SetServiceInstancesOfBPInstances(List<BPInstance> pendingInstancesToUpdate)
+        public void UpdateServiceInstancesAndAssignmentStatus(List<BPInstance> pendingInstancesToUpdate)
         {
             foreach (var pendingInstance in pendingInstancesToUpdate)
             {
                 if (!pendingInstance.ServiceInstanceId.HasValue)
                     throw new NullReferenceException(String.Format("pendingInstance.ServiceInstanceId. ProcessInstanceId '{0}'", pendingInstance.ProcessInstanceID));
-                ExecuteNonQuerySP("[bp].[sp_BPInstance_UpdateServiceInstanceID]", pendingInstance.ProcessInstanceID, pendingInstance.ServiceInstanceId.Value);
+                ExecuteNonQuerySP("[bp].[sp_BPInstance_UpdateServiceInstanceIDAndAssignmentStatus]", pendingInstance.ProcessInstanceID, pendingInstance.ServiceInstanceId.Value, (int)pendingInstance.AssignmentStatus);
             }
         }
-
-
+        
         public List<BPDefinitionSummary> GetBPDefinitionSummary(IEnumerable<BPInstanceStatus> executionStatus)
         {
 
@@ -280,6 +272,12 @@ namespace Vanrise.BusinessProcess.Data.SQL
             return GetItemsSP("[bp].[sp_BPDefinitionSummary_GetUpdated]", BPDefinitionSummaryMapper, excutionStatusIdsAsString);
 
         }
+
+        public void UpdateInstanceAssignmentStatus(long processInstanceId, BPInstanceAssignmentStatus assignmentStatus)
+        {
+            ExecuteNonQuerySP("[bp].[sp_BPInstance_UpdateAssignmentStatus]", processInstanceId, assignmentStatus);
+        }
+
         #endregion
 
         #region mapper
@@ -292,6 +290,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
       ,[InputArgument]
 	  , [CompletionNotifier]
       ,[ExecutionStatus]
+      ,[AssignmentStatus]
       ,[LastMessage]
 	   ,EntityID
       ,[ViewRequiredPermissionSetId]
@@ -312,6 +311,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 DefinitionID = GetReaderValue<Guid>(reader, "DefinitionID"),
                 WorkflowInstanceID = GetReaderValue<Guid?>(reader, "WorkflowInstanceID"),
                 Status = (BPInstanceStatus)reader["ExecutionStatus"],
+                AssignmentStatus = (BPInstanceAssignmentStatus)GetReaderValue<int>(reader, "AssignmentStatus"),
                 LastMessage = reader["LastMessage"] as string,
                 CreatedTime = (DateTime)reader["CreatedTime"],
                 StatusUpdatedTime = GetReaderValue<DateTime?>(reader, "StatusUpdatedTime"),

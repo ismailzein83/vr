@@ -85,6 +85,11 @@ namespace Vanrise.BusinessProcess.Entities
         {
             return true;
         }
+
+        public virtual bool ShouldPersist(IBPDefinitionShouldPersistContext context)
+        {
+            return false;
+        }
     }
 
     //public interface IBPDefinitionShouldRestrictBPInstanceCreationContext

@@ -13,30 +13,17 @@ using Vanrise.BusinessProcess.Business;
 
 namespace Vanrise.BusinessProcess
 {
-    public class BusinessProcessRuntime
+    internal class BusinessProcessRuntime
     {
-        #region Singleton
-
-        static BusinessProcessRuntime _current;
-        public static BusinessProcessRuntime Current
-        {
-            get
-            {
-                return _current;
-            }
-        }
-
-        static BusinessProcessRuntime()
-        {
-            _current = new BusinessProcessRuntime();
-        }
-
-        #endregion
+        
 
         #region ctor/Local Variables
 
-        private BusinessProcessRuntime()
+        Guid _serviceInstanceId;
+
+        internal BusinessProcessRuntime(Guid serviceInstanceId)
         {
+            _serviceInstanceId = serviceInstanceId;
         }
         
         BPDefinitionManager _definitionManager = new BPDefinitionManager();
@@ -48,22 +35,13 @@ namespace Vanrise.BusinessProcess
         
         #region Process Execution
 
-        public void ExecutePendings(Guid bpDefinitionId, Guid serviceInstanceId)
+        public void ExecutePendings(Guid bpDefinitionId)
         {
             LoadProcessDefinitionInitiators();
             BPDefinitionInitiator bpDefinitionInitiator;
             if (!this._processDefinitionInitiators.TryGetValue(bpDefinitionId, out bpDefinitionInitiator))
                 throw new NullReferenceException(String.Format("bpDefinitionInitiator. bpDefinitionId '{0}'", bpDefinitionId));
-            bpDefinitionInitiator.RunPendingProcesses(serviceInstanceId);
-        }
-
-        public void TriggerPendingEvents(Guid bpDefinitionId, Guid serviceInstanceId)
-        {
-            LoadProcessDefinitionInitiators();
-            BPDefinitionInitiator bpDefinitionInitiator;
-            if (!this._processDefinitionInitiators.TryGetValue(bpDefinitionId, out bpDefinitionInitiator))
-                throw new NullReferenceException(String.Format("bpDefinitionInitiator. bpDefinitionId '{0}'", bpDefinitionId));
-            bpDefinitionInitiator.TriggerPendingEvents(serviceInstanceId);
+            bpDefinitionInitiator.RunPendingProcesses();
         }
 
         #endregion
@@ -80,7 +58,7 @@ namespace Vanrise.BusinessProcess
                 foreach (var bpDefinition in definitions)
                 {
                     if (!_processDefinitionInitiators.ContainsKey(bpDefinition.BPDefinitionID))
-                        _processDefinitionInitiators.Add(bpDefinition.BPDefinitionID, new BPDefinitionInitiator(this, bpDefinition));
+                        _processDefinitionInitiators.Add(bpDefinition.BPDefinitionID, new BPDefinitionInitiator(_serviceInstanceId, bpDefinition));
                 }
             }
         }

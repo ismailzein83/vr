@@ -20,16 +20,19 @@ namespace Vanrise.BusinessProcess
             }
         }
 
+        BusinessProcessRuntime _businessProcessRuntime;
+        protected override void OnStarted(IRuntimeServiceStartContext context)
+        {
+            _businessProcessRuntime = new BusinessProcessRuntime(base.ServiceInstance.ServiceInstanceId);
+            base.OnStarted(context);
+        }
+
         protected override void Execute()
         {
             Guid definitionId;
             while(PendingItemsHandler.Current.TryGetPendingDefinitionsToProcess(base.ServiceInstance.ServiceInstanceId, out definitionId))
             {
-                BusinessProcessRuntime.Current.ExecutePendings(definitionId, base.ServiceInstance.ServiceInstanceId);
-            }
-            while (PendingItemsHandler.Current.TryGetPendingEventDefinitionsToProcess(base.ServiceInstance.ServiceInstanceId, out definitionId))
-            {
-                BusinessProcessRuntime.Current.TriggerPendingEvents(definitionId, base.ServiceInstance.ServiceInstanceId);
+                _businessProcessRuntime.ExecutePendings(definitionId);
             }
         }
     }

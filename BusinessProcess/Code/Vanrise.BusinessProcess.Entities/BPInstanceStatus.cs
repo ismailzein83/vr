@@ -15,6 +15,8 @@ namespace Vanrise.BusinessProcess.Entities
         Postponed = 5,
         [BPInstanceStatus(TrackingSeverity = LogEntryType.Information, IsClosed = false)]
         Running = 10,
+        [BPInstanceStatus(TrackingSeverity = LogEntryType.Information, IsClosed = false)]
+        Waiting = 20,
         [BPInstanceStatus(TrackingSeverity = LogEntryType.Information, IsClosed = true)]
         Completed = 50,
         [BPInstanceStatus(TrackingSeverity = LogEntryType.Error, IsClosed = true)]
@@ -23,6 +25,13 @@ namespace Vanrise.BusinessProcess.Entities
         Suspended = 70,
         [BPInstanceStatus(TrackingSeverity = LogEntryType.Error, IsClosed = true)]
         Terminated = 80
+    }
+
+    public enum BPInstanceAssignmentStatus
+    {
+        Free = 0,
+        AssignedForExecution = 1,
+        Executing = 2
     }
 
     public class BPInstanceStatusAttribute : Attribute
