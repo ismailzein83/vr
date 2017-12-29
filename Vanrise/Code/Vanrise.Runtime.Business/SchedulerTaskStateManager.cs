@@ -28,12 +28,6 @@ namespace Vanrise.Runtime.Business
             return updateOperationOutput;
         }
 
-        public List<SchedulerTaskState> GetDueTasks()
-        {
-            ISchedulerTaskStateDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskStateDataManager>();
-            return dataManager.GetDueTasks();
-        }
-
         public bool TryLockTask(Guid taskId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds)
         {
             ISchedulerTaskStateDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskStateDataManager>();

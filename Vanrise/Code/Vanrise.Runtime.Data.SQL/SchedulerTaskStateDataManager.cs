@@ -36,11 +36,6 @@ namespace Vanrise.Runtime.Data.SQL
             return GetItemSP("runtime.sp_SchedulerTaskState_GetByTaskId", TaskStateMapper, taskId);
         }
 
-        public List<Entities.SchedulerTaskState> GetDueTasks()
-        {
-            return GetItemsSP("runtime.sp_SchedulerTaskState_GetDueTasks", TaskStateMapper);
-        }
-
         public void UnlockTask(Guid taskId)
         {
             ExecuteNonQuerySP("runtime.sp_SchedulerTaskState_UnlockTask", taskId);
@@ -95,7 +90,7 @@ namespace Vanrise.Runtime.Data.SQL
             return new SchedulerTaskState
             {
                 TaskId = GetReaderValue<Guid>(reader, "TaskId"),
-                Status = (SchedulerTaskStatus)int.Parse(reader["Status"].ToString()),
+                Status = (SchedulerTaskStatus)reader["Status"],
                 LastRunTime = GetReaderValue<DateTime?>(reader, "LastRunTime"),
                 NextRunTime = GetReaderValue<DateTime?>(reader, "NextRunTime"),
                 ExecutionInfo = reader["ExecutionInfo"] == DBNull.Value ? null : Common.Serializer.Deserialize<Object>(reader["ExecutionInfo"] as string)

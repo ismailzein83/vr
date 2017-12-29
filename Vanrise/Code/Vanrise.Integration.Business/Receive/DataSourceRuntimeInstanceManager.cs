@@ -23,27 +23,9 @@ namespace Vanrise.Integration.Business
             _dataManager.TryAddNewInstance(Guid.NewGuid(), dataSourceId, maxNumberOfParallelInstances);
         }
 
-        internal DataSourceRuntimeInstance TryGetOneAndLock()
+        internal bool DoesAnyDSRuntimeInstanceExist(Guid dataSourceId)
         {
-            return _dataManager.TryGetOneAndLock(RunningProcessManager.CurrentProcess.ProcessId);
-        }
-
-        internal void SetInstanceCompleted(Guid dsRuntimeInstanceId)
-        {
-            _dataManager.SetInstanceCompleted(dsRuntimeInstanceId);
-        }
-
-        internal bool AreDSInstancesCompleted(Guid dataSourceId)
-        {
-            RunningProcessManager runningProcessManager = new RunningProcessManager();
-            IEnumerable<int> runningRuntimeProcessesIds = runningProcessManager.GetCachedRunningProcesses().Select(itm => itm.ProcessId);
-            if (!_dataManager.IsAnyInstanceRunning(dataSourceId, runningRuntimeProcessesIds))
-            {
-                _dataManager.DeleteDSInstances(dataSourceId);
-                return true;
-            }
-            else
-                return false;
+            return _dataManager.DoesAnyDSRuntimeInstanceExist(dataSourceId);
         }
     }
 }

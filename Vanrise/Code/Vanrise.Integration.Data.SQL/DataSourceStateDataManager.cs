@@ -17,29 +17,15 @@ namespace Vanrise.Integration.Data.SQL
 
         }
 
-        public bool TryLockAndGet(Guid dataSourceId, int currentRuntimeProcessId, IEnumerable<int> runningRuntimeProcessesIds, out BaseAdapterState adapterState)
+        public string GetDataSourceState(Guid dataSourceId)
         {
-            string runningProcessIdsAsString = null;
-            if (runningRuntimeProcessesIds != null)
-                runningProcessIdsAsString = String.Join(",", runningRuntimeProcessesIds);
-            bool isLocked = false;
-            string adapterStateString_Local = null;
-            ExecuteReaderSP("integration.sp_DataSourceState_TryLockAndGet",
-                (reader) =>
-                {
-                    if(reader.Read())
-                    {
-                        isLocked = true;
-                        adapterStateString_Local = reader["State"] as string;
-                    }
-                }, dataSourceId, currentRuntimeProcessId, runningProcessIdsAsString);
-            adapterState = adapterStateString_Local != null ? Serializer.Deserialize(adapterStateString_Local) as BaseAdapterState : null;
-            return isLocked;
+            return ExecuteScalarSP("[integration].[sp_DataSourceState_GetByID]", dataSourceId) as string;
         }
 
-        public void UpdateStateAndUnlock(Guid dataSourceId, Entities.BaseAdapterState state)
+        public void InsertOrUpdateDataSourceState(Guid dataSourceId, string dataSourceState)
         {
-            ExecuteNonQuerySP("integration.sp_DataSourceState_UpdateStateAndUnlock", dataSourceId, state != null ? Serializer.Serialize(state) : null);
+            if (ExecuteNonQuerySP("[integration].[sp_DataSourceState_Update]", dataSourceId, dataSourceState) <= 0)
+                ExecuteNonQuerySP("[integration].[sp_DataSourceState_Insert]", dataSourceId, dataSourceState);
         }
     }
 }

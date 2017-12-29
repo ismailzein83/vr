@@ -13,12 +13,12 @@ namespace Vanrise.Integration.Data
 
         void TryAddNewInstance(Guid runtimeInstanceId, Guid dataSourceId, int maxNumberOfParallelInstances);
 
-        DataSourceRuntimeInstance TryGetOneAndLock(int currentRuntimeProcessId);
+        List<DataSourceRuntimeInstance> GetAll();
 
-        void SetInstanceCompleted(Guid dsRuntimeInstanceId);
+        bool IsStillExist(Guid dsRuntimeInstanceId);
 
-        bool IsAnyInstanceRunning(Guid dataSourceId, IEnumerable<int> runningRuntimeProcessesIds);
+        void DeleteInstance(Guid dsRuntimeInstanceId);
 
-        void DeleteDSInstances(Guid dataSourceId);
+        bool DoesAnyDSRuntimeInstanceExist(Guid dataSourceId);
     }
 }

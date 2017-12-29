@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Text;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Integration.Data;
 using Vanrise.Integration.Entities;
 using Vanrise.Queueing.Entities;
+using Vanrise.Runtime;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
 
@@ -13,161 +15,181 @@ namespace Vanrise.Integration.Business
     public class DataSourceRuntimeService : Vanrise.Runtime.RuntimeService
     {
         DataSourceRuntimeInstanceManager _dsRuntimeInstanceManager = new DataSourceRuntimeInstanceManager();
-
+        IDataSourceRuntimeInstanceDataManager _dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceRuntimeInstanceDataManager>();
+        DataSourceManager _dataSourceManager = new DataSourceManager();
         protected override void Execute()
         {
-            DataSourceRuntimeInstance dsRuntimeInstance = _dsRuntimeInstanceManager.TryGetOneAndLock();
-            if (dsRuntimeInstance != null)
+            List<DataSourceRuntimeInstance> dataSourceRuntimeInstances = _dataManager.GetAll();
+            if(dataSourceRuntimeInstances != null && dataSourceRuntimeInstances.Count > 0)
             {
-
-                Console.WriteLine("{0}: DataSourceRuntimeService Data Source is started", DateTime.Now);
-                var dataSourceManager = new DataSourceManager();
-                var dataSource = dataSourceManager.GetDataSourceDetail(dsRuntimeInstance.DataSourceId);
-                if (dataSource == null)
-                    throw new ArgumentNullException(String.Format("dataSource '{0}'", dsRuntimeInstance.DataSourceId));
-
-                DataSourceLogger logger = new DataSourceLogger();
-
-                logger.DataSourceId = dataSource.Entity.DataSourceId;
-                logger.WriteInformation("A new runtime instance started for the Data Source '{0}'", dataSource.Entity.Name);
-
-                logger.WriteVerbose("Preparing queues and stages");
-
-                QueuesByStages queuesByStages = null;
-                try
+                foreach(var dsRuntimeInstance in dataSourceRuntimeInstances)
                 {
-                    Vanrise.Queueing.QueueExecutionFlowManager executionFlowManager = new Vanrise.Queueing.QueueExecutionFlowManager();
-                    queuesByStages = executionFlowManager.GetQueuesByStages(dataSource.Entity.Settings.ExecutionFlowId);
-
-                    if (queuesByStages == null || queuesByStages.Count == 0)
-                    {
-                        logger.WriteError("No stages ready for use");
-
-                        return;
-                    }
-                    else
-                    {
-                        logger.WriteInformation("{0} stage(s) are ready for use", queuesByStages.Count);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    logger.WriteError("An error occurred while preparing stages. Exception Details {0}", ex.ToString());
-                    throw;
-                }
-
-                logger.WriteVerbose("Preparing adapters to start the import process");
-
-                try
-                {
-                    BaseReceiveAdapter adapter = (BaseReceiveAdapter)Activator.CreateInstance(Type.GetType(dataSource.AdapterInfo.FQTN));
-
-                    adapter.SetLogger(logger);
-                    adapter.SetDataSourceManager(dataSourceManager);
-                    Func<IImportedData, ImportedBatchProcessingOutput> onDataReceivedAction = (data) =>
-                    {
-                        logger.WriteVerbose("Executing the custom code written for the mapper");
-                        MappedBatchItemsToEnqueue outputItems = new MappedBatchItemsToEnqueue();
-                        MappingOutput outputResult = this.ExecuteCustomCode(dataSource.Entity.DataSourceId, dataSource.Entity.Settings.MapperCustomCode, data, outputItems, logger);
-
-                        ImportedBatchProcessingOutput batchProcessingOutput = new ImportedBatchProcessingOutput
+                    bool isInstanceLockedAndExecuted = false;
+                    TransactionLocker.Instance.TryLock(String.Concat("DataSourceRuntimeInstance_", dsRuntimeInstance.DataSourceRuntimeInstanceId),
+                        () =>
                         {
-                            OutputResult = outputResult
-                        };
-
-                        if (SendErrorNotification(dataSource, data, outputResult))
-                        {
-                            return batchProcessingOutput;
-                        }
-
-                        if (!data.IsMultipleReadings)
-                            data.OnDisposed();
-
-                        if (data.IsEmpty)
-                        {
-                            logger.WriteInformation("Received Empty Batch");
-                            return null;
-                        }
-
-                        ImportedBatchEntry importedBatchEntry = new ImportedBatchEntry();
-                        importedBatchEntry.BatchSize = data.BatchSize;
-                        importedBatchEntry.BatchDescription = data.Description;
-
-                        importedBatchEntry.Result = outputResult.Result;
-                        importedBatchEntry.MapperMessage = outputResult.Message;
-
-                        List<long> queueItemsIds = new List<long>();
-                        int totalRecordsCount = 0;
-
-                        if (outputItems != null && outputItems.Count > 0)
-                        {
-                            foreach (var outputItem in outputItems)
+                            if (_dataManager.IsStillExist(dsRuntimeInstance.DataSourceRuntimeInstanceId))
                             {
+                                var dataSource = _dataSourceManager.GetDataSourceDetail(dsRuntimeInstance.DataSourceId);
+                                if (dataSource == null)
+                                    throw new ArgumentNullException(String.Format("dataSource '{0}'", dsRuntimeInstance.DataSourceId));
+
                                 try
                                 {
-                                    outputItem.Item.DataSourceID = dataSource.Entity.DataSourceId;
-                                    outputItem.Item.BatchDescription = data.Description;
-                                    logger.WriteInformation("Enqueuing item '{0}' to stage '{1}'", outputItem.Item.GenerateDescription(), outputItem.StageName);
-
-                                    long queueItemId = queuesByStages[outputItem.StageName].Queue.EnqueueObject(outputItem.Item);
-                                    logger.WriteInformation("Enqueued the item successfully");
-
-                                    queueItemsIds.Add(queueItemId);
-                                    totalRecordsCount += outputItem.Item.GetRecordCount();
+                                    ExecuteDataSource(dataSource);
                                 }
-                                catch (Exception ex)
+                                finally
                                 {
-                                    logger.WriteError("An error occured while enqueuing item in stage {0}. Exception details {1}", outputItem.StageName, ex.ToString());
-                                    throw;
+                                    _dataManager.DeleteInstance(dsRuntimeInstance.DataSourceRuntimeInstanceId);
                                 }
+
+                                isInstanceLockedAndExecuted = true;
                             }
-                        }
-                        else
-                        {
-                            logger.WriteWarning("No mapped items to enqueue, the written custom code should specify at least one output item to enqueue items to");
-                        }
-
-                        importedBatchEntry.QueueItemsIds = string.Join(",", queueItemsIds);
-                        importedBatchEntry.RecordsCount = totalRecordsCount;
-
-                        long importedBatchId = logger.LogImportedBatchEntry(importedBatchEntry);
-                        logger.LogEntry(Vanrise.Entities.LogEntryType.Information, importedBatchId, "Imported a new batch with Id '{0}'", importedBatchId);
-
-                        return batchProcessingOutput;
-                    };
-
-                    AdapterImportDataContext adapterContext = new AdapterImportDataContext(dataSource.Entity, onDataReceivedAction);
-                    adapter.ImportData(adapterContext);
-                }
-                finally
-                {
-                    _dsRuntimeInstanceManager.SetInstanceCompleted(dsRuntimeInstance.DataSourceRuntimeInstanceId);
-
-                    logger.WriteInformation("A runtime Instance is finished for the Data Source '{0}'", dataSource.Entity.Name);
-                    Console.WriteLine("{0}: DataSourceRuntimeService Data Source is Done", DateTime.Now);
+                        });
+                    if (isInstanceLockedAndExecuted)
+                        break;
                 }
             }
         }
 
-        bool SendErrorNotification(DataSourceDetail dataSource, IImportedData data, MappingOutput outputResult)
-        {            
-            if (dataSource.Entity.Settings.ErrorMailTemplateId.HasValue && (data.IsFile || outputResult.Result == MappingResult.Invalid))
+        void ExecuteDataSource(DataSourceDetail dataSource)
+        {
+            DataSourceLogger logger = new DataSourceLogger();
+
+            logger.DataSourceId = dataSource.Entity.DataSourceId;
+            logger.WriteInformation("A new runtime instance started for the Data Source '{0}'", dataSource.Entity.Name);
+
+            logger.WriteVerbose("Preparing queues and stages");
+
+            QueuesByStages queuesByStages = null;
+            try
             {
-                FailedBatchInfo batchInfo = BuildFailedBatchInfo(dataSource, data, outputResult);
-                if (!data.BatchSize.HasValue || data.BatchSize.Value == 0)
+                Vanrise.Queueing.QueueExecutionFlowManager executionFlowManager = new Vanrise.Queueing.QueueExecutionFlowManager();
+                queuesByStages = executionFlowManager.GetQueuesByStages(dataSource.Entity.Settings.ExecutionFlowId);
+
+                if (queuesByStages == null || queuesByStages.Count == 0)
                 {
-                    batchInfo.IsEmpty = true;
+                    logger.WriteError("No stages ready for use");
+
+                    return;
                 }
-                Dictionary<string, dynamic> mailObjects = new Dictionary<string, dynamic>();
-                User user = new UserManager().GetUserbyId(SecurityContext.Current.GetLoggedInUserId());
-                mailObjects.Add("User", user);
-                mailObjects.Add("Failed Batch Info", batchInfo);
-                VRMailManager vrMailManager = new VRMailManager();
-                vrMailManager.SendMail(dataSource.Entity.Settings.ErrorMailTemplateId.Value, mailObjects);
-                return true;
+                else
+                {
+                    logger.WriteInformation("{0} stage(s) are ready for use", queuesByStages.Count);
+                }
             }
-            else
-                return false;
+            catch (Exception ex)
+            {
+                logger.WriteError("An error occurred while preparing stages. Exception Details {0}", ex.ToString());
+                throw;
+            }
+
+            logger.WriteVerbose("Preparing adapters to start the import process");
+
+            BaseReceiveAdapter adapter = (BaseReceiveAdapter)Activator.CreateInstance(Type.GetType(dataSource.AdapterInfo.FQTN));
+
+            adapter.SetLogger(logger);
+            adapter.SetDataSourceManager(_dataSourceManager);
+            Func<IImportedData, ImportedBatchProcessingOutput> onDataReceivedAction = (data) =>
+            {
+                logger.WriteVerbose("Executing the custom code written for the mapper");
+                MappedBatchItemsToEnqueue outputItems = new MappedBatchItemsToEnqueue();
+                MappingOutput outputResult = this.ExecuteCustomCode(dataSource.Entity.DataSourceId, dataSource.Entity.Settings.MapperCustomCode, data, outputItems, logger);
+
+                ImportedBatchProcessingOutput batchProcessingOutput = new ImportedBatchProcessingOutput
+                {
+                    OutputResult = outputResult
+                };
+
+                if (SendErrorNotification(dataSource, data, outputResult))
+                {
+                    return batchProcessingOutput;
+                }
+
+                if (!data.IsMultipleReadings)
+                    data.OnDisposed();
+
+                if (data.IsEmpty)
+                {
+                    logger.WriteInformation("Received Empty Batch");
+                    return null;
+                }
+
+                ImportedBatchEntry importedBatchEntry = new ImportedBatchEntry();
+                importedBatchEntry.BatchSize = data.BatchSize;
+                importedBatchEntry.BatchDescription = data.Description;
+
+                importedBatchEntry.Result = outputResult.Result;
+                importedBatchEntry.MapperMessage = outputResult.Message;
+
+                List<long> queueItemsIds = new List<long>();
+                int totalRecordsCount = 0;
+
+                if (outputItems != null && outputItems.Count > 0)
+                {
+                    foreach (var outputItem in outputItems)
+                    {
+                        try
+                        {
+                            outputItem.Item.DataSourceID = dataSource.Entity.DataSourceId;
+                            outputItem.Item.BatchDescription = data.Description;
+                            logger.WriteInformation("Enqueuing item '{0}' to stage '{1}'", outputItem.Item.GenerateDescription(), outputItem.StageName);
+
+                            long queueItemId = queuesByStages[outputItem.StageName].Queue.EnqueueObject(outputItem.Item);
+                            logger.WriteInformation("Enqueued the item successfully");
+
+                            queueItemsIds.Add(queueItemId);
+                            totalRecordsCount += outputItem.Item.GetRecordCount();
+                        }
+                        catch (Exception ex)
+                        {
+                            logger.WriteError("An error occured while enqueuing item in stage {0}. Exception details {1}", outputItem.StageName, ex.ToString());
+                            throw;
+                        }
+                    }
+                }
+                else
+                {
+                    logger.WriteWarning("No mapped items to enqueue, the written custom code should specify at least one output item to enqueue items to");
+                }
+
+                importedBatchEntry.QueueItemsIds = string.Join(",", queueItemsIds);
+                importedBatchEntry.RecordsCount = totalRecordsCount;
+
+                long importedBatchId = logger.LogImportedBatchEntry(importedBatchEntry);
+                logger.LogEntry(Vanrise.Entities.LogEntryType.Information, importedBatchId, "Imported a new batch with Id '{0}'", importedBatchId);
+
+                return batchProcessingOutput;
+            };
+
+            AdapterImportDataContext adapterContext = new AdapterImportDataContext(dataSource.Entity, onDataReceivedAction);
+            adapter.ImportData(adapterContext);
+
+            logger.WriteInformation("A runtime Instance is finished for the Data Source '{0}'", dataSource.Entity.Name);
+        }
+
+        bool SendErrorNotification(DataSourceDetail dataSource, IImportedData data, MappingOutput outputResult)
+        {
+            if (dataSource.Entity.Settings.ErrorMailTemplateId.HasValue)
+            {
+                bool isEmptyFile = data.IsFile && (!data.BatchSize.HasValue || data.BatchSize.Value == 0);
+                if (isEmptyFile || outputResult.Result == MappingResult.Invalid)
+                {
+                    FailedBatchInfo batchInfo = BuildFailedBatchInfo(dataSource, data, outputResult);
+                    if (isEmptyFile)
+                    {
+                        batchInfo.IsEmpty = true;
+                    }
+                    Dictionary<string, dynamic> mailObjects = new Dictionary<string, dynamic>();
+                    User user = new UserManager().GetUserbyId(SecurityContext.Current.GetLoggedInUserId());
+                    mailObjects.Add("User", user);
+                    mailObjects.Add("Failed Batch Info", batchInfo);
+                    VRMailManager vrMailManager = new VRMailManager();
+                    vrMailManager.SendMail(dataSource.Entity.Settings.ErrorMailTemplateId.Value, mailObjects);
+                    return true;
+                }
+            }
+            return false;
         }
         FailedBatchInfo BuildFailedBatchInfo(DataSourceDetail dataSource, IImportedData data, MappingOutput outputResult)
         {

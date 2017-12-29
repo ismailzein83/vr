@@ -8,14 +8,6 @@ namespace Vanrise.Runtime.Entities
 {
     public abstract class SchedulerTaskAction
     {
-        public virtual bool IsHeavyTask
-        {
-            get
-            {
-                return false;
-            }
-        }
-
         public abstract SchedulerTaskExecuteOutput Execute(SchedulerTask task, BaseTaskActionArgument taskActionArgument, Dictionary<string, object> evaluatedExpressions);
 
         public virtual SchedulerTaskCheckProgressOutput CheckProgress(ISchedulerTaskCheckProgressContext context, int ownerId)

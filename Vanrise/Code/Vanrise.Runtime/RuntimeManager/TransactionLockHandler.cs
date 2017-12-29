@@ -61,12 +61,12 @@ namespace Vanrise.Runtime
 
         public void UnLock(TransactionLockItem lockItem)
         {
+            DeleteTransactionLockFromDB(lockItem.LockItemUniqueId);
             lock (_memStore)
             {
                 TransactionLocksById existingLocks;
                 if (_memStore.TransactionLocksByTransName.TryGetValue(lockItem.TransactionUniqueName, out existingLocks))
                 {
-                    DeleteTransactionLockFromDB(lockItem.LockItemUniqueId);
                     if (existingLocks.ContainsKey(lockItem.LockItemUniqueId))
                         existingLocks.Remove(lockItem.LockItemUniqueId);
 

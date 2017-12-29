@@ -43,40 +43,67 @@ namespace Vanrise.Runtime
         {
             if (lockAction == null)
                 throw new ArgumentNullException("lockAction");
-
-            TransactionLockItem lockItem = CreateLockItem(transactionUniqueName);
-            bool isLocked = false;
-            RuntimeManagerClient.CreateClient((client) =>
-            {
-                isLocked = client.TryLock(lockItem, maxAllowedConcurrency);
-            });
-
-            if (isLocked)
+            TransactionLockItem lockItem;
+            if (TryLock(transactionUniqueName, maxAllowedConcurrency, out lockItem))
             {
                 try
                 {
                     lockAction();
+                    return true;
                 }
                 finally
                 {
-                    try
-                    {
-                        RuntimeManagerClient.CreateClient((client) =>
-                        {
-                            client.UnLock(lockItem);
-                        });
-                    }
-                    catch(Exception ex)
-                    {
-                        LoggerFactory.GetExceptionLogger().WriteException(ex);
-                        RuntimeHost.SetTransactionLockFreezed(lockItem);
-                    }
+                    Unlock(lockItem);
                 }
-                return true;
             }
             else
             {
                 return false;
+            }
+        }
+
+        public bool TryLock(string transactionUniqueName, out TransactionLockItem lockItem)
+        {
+            return TryLock(transactionUniqueName, 1, out lockItem);
+        }
+
+        public bool TryLock(string transactionUniqueName, int maxAllowedConcurrency, out TransactionLockItem lockItem)
+        {
+            lockItem = CreateLockItem(transactionUniqueName);
+            bool isLocked = false;
+            try
+            {
+                var lockItem_local = lockItem;
+                RuntimeManagerClient.CreateClient((client) =>
+                {
+                    isLocked = client.TryLock(lockItem_local, maxAllowedConcurrency);
+                });
+                if (!isLocked)
+                    lockItem = null;
+                return isLocked;
+            }
+            catch
+            {
+                if (lockItem != null)
+                    Unlock(lockItem);//unlock the transaction in case it is locked but response not returned from the RuntimeManager
+                throw;
+            }
+        }
+
+
+        public void Unlock(TransactionLockItem lockItem)
+        {
+            try
+            {
+                RuntimeManagerClient.CreateClient((client) =>
+                {
+                    client.UnLock(lockItem);
+                });
+            }
+            catch (Exception ex)
+            {
+                RuntimeHost.SetTransactionLockFreezed(lockItem);
+                LoggerFactory.GetExceptionLogger().WriteException(ex);
             }
         }
 

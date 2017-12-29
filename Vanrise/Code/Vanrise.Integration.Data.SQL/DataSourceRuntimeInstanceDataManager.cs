@@ -27,27 +27,25 @@ namespace Vanrise.Integration.Data.SQL
             ExecuteNonQuerySP("[integration].[sp_DataSourceRuntimeInstance_InsertIfNotMaximum]", runtimeInstanceId, dataSourceId, maxNumberOfParallelInstances);
         }
 
-        public Entities.DataSourceRuntimeInstance TryGetOneAndLock(int currentRuntimeProcessId)
+
+        public List<DataSourceRuntimeInstance> GetAll()
         {
-            return GetItemSP("[integration].[sp_DataSourceRuntimeInstance_TryGetAndLock]", DataSourceRuntimeInstanceMapper, currentRuntimeProcessId);
+            return GetItemsSP("[integration].[sp_DataSourceRuntimeInstance_GetAll]", DataSourceRuntimeInstanceMapper);
         }
 
-        public void SetInstanceCompleted(Guid dsRuntimeInstanceId)
+        public bool IsStillExist(Guid dsRuntimeInstanceId)
         {
-            ExecuteNonQuerySP("[integration].[sp_DataSourceRuntimeInstance_SetCompleted]", dsRuntimeInstanceId);
+            return Convert.ToBoolean(ExecuteScalarSP("[integration].[sp_DataSourceRuntimeInstance_DoesExistByID]", dsRuntimeInstanceId));
         }
 
-        public bool IsAnyInstanceRunning(Guid dataSourceId, IEnumerable<int> runningRuntimeProcessesIds)
+        public void DeleteInstance(Guid dsRuntimeInstanceId)
         {
-            string runningProcessIdsAsString = null;
-            if (runningRuntimeProcessesIds != null)
-                runningProcessIdsAsString = String.Join(",", runningRuntimeProcessesIds);
-            return Convert.ToBoolean(ExecuteScalarSP("[integration].[sp_DataSourceRuntimeInstance_IsAnyRunning]", dataSourceId, runningProcessIdsAsString));
+            ExecuteNonQuerySP("[integration].[sp_DataSourceRuntimeInstance_Delete]", dsRuntimeInstanceId);
         }
 
-        public void DeleteDSInstances(Guid dataSourceId)
+        public bool DoesAnyDSRuntimeInstanceExist(Guid dataSourceId)
         {
-            ExecuteNonQuerySP("[integration].[sp_DataSourceRuntimeInstance_DeleteBySource]", dataSourceId);
+            return Convert.ToBoolean(ExecuteScalarSP("[integration].[sp_DataSourceRuntimeInstance_DoesExistByDataSourceID]", dataSourceId));
         }
 
         #region Private Methods

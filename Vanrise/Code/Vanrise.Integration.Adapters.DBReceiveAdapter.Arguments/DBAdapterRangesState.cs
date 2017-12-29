@@ -21,7 +21,5 @@ namespace Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments
         public Object RangeEnd { get; set; }
 
         public Object LastImportedId { get; set; }
-
-        public int? LockedByProcessId { get; set; }
     }
 }

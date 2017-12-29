@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Vanrise.Common;
 using Vanrise.Integration.Data;
 using Vanrise.Integration.Entities;
 using Vanrise.Runtime;
@@ -29,26 +30,31 @@ namespace Vanrise.Integration.Business
 
         public void GetStateWithLock(Guid dataSourceId, Func<BaseAdapterState, BaseAdapterState> onStateReady)
         {
-            BaseAdapterState dsState = LockDSState(dataSourceId);
-            var updatedState = onStateReady(dsState);
-            _dataManager.UpdateStateAndUnlock(dataSourceId, updatedState);
+            LockDataSourceState(dataSourceId,
+                () =>
+                {
+                    string dsStateAsString = _dataManager.GetDataSourceState(dataSourceId);
+                    BaseAdapterState dsState = dsStateAsString != null ? Serializer.Deserialize(dsStateAsString) as BaseAdapterState : null;
+                    BaseAdapterState updatedDSState = onStateReady(dsState);
+                    string updatedDSStateAsString = updatedDSState != null ? Serializer.Serialize(updatedDSState) : null;
+                    if (updatedDSStateAsString != dsStateAsString)
+                        _dataManager.InsertOrUpdateDataSourceState(dataSourceId, updatedDSStateAsString);
+                });
         }
 
-        private BaseAdapterState LockDSState(Guid dataSourceId)
+        private void LockDataSourceState(Guid dataSourceId, Action afterLockAction)
         {
-            int currentRuntimeProcessId = RunningProcessManager.CurrentProcess.ProcessId;
-            RunningProcessManager runningProcessManager = new RunningProcessManager();
+            string dsStateTransactionLockName = String.Concat("DataSourceState_", dataSourceId);
             int retryCount = 0;
             while (retryCount < s_maxLockRetryCount)
             {
-                IEnumerable<int> runningRuntimeProcessesIds = runningProcessManager.GetCachedRunningProcesses().Select(itm => itm.ProcessId);
-                BaseAdapterState adapterState;
-                if (_dataManager.TryLockAndGet(dataSourceId, currentRuntimeProcessId, runningRuntimeProcessesIds, out adapterState))
-                    return adapterState;
+                if (TransactionLocker.Instance.TryLock(dsStateTransactionLockName, afterLockAction))
+                    return;
                 Thread.Sleep(s_lockRetryInterval);
                 retryCount++;
             }
             throw new Exception(String.Format("Cannot Lock Data Source State. data source Id '{0}'", dataSourceId));
+            
         }
     }
 }

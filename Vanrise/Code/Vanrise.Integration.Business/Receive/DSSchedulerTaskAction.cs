@@ -20,8 +20,7 @@ namespace Vanrise.Integration.Business
         DataSourceRuntimeInstanceManager _dsRuntimeInstanceManager = new DataSourceRuntimeInstanceManager();
 
         public override SchedulerTaskExecuteOutput Execute(SchedulerTask task, BaseTaskActionArgument taskActionArgument, Dictionary<string, object> evaluatedExpressions)
-        {
-           
+        {           
             Vanrise.Integration.Entities.DataSource dataSource = _dataSourceManager.GetDataSourcebyTaskId(task.TaskId);
             if (dataSource == null)
                 throw new NullReferenceException(String.Format("dataSource, Task Id '{0}'", task.TaskId));
@@ -44,10 +43,13 @@ namespace Vanrise.Integration.Business
         public override SchedulerTaskCheckProgressOutput CheckProgress(ISchedulerTaskCheckProgressContext context, int ownerId)
         {
             Vanrise.Integration.Entities.DataSource dataSource = _dataSourceManager.GetDataSourcebyTaskId(context.Task.TaskId);
-            IDataSourceLogger logger = new DataSourceLogger();
-            logger.DataSourceId = dataSource.DataSourceId;
-            if (_dsRuntimeInstanceManager.AreDSInstancesCompleted(dataSource.DataSourceId))
+            if (dataSource == null)
+                throw new NullReferenceException(String.Format("dataSource, Task Id '{0}'", context.Task.TaskId));
+
+            if (!_dsRuntimeInstanceManager.DoesAnyDSRuntimeInstanceExist(dataSource.DataSourceId))
             {
+                IDataSourceLogger logger = new DataSourceLogger();
+                logger.DataSourceId = dataSource.DataSourceId;
                 logger.WriteInformation("Finished running Data Source '{0}' ", dataSource.Name);
                 return new SchedulerTaskCheckProgressOutput { Result = ExecuteOutputResult.Completed };
             }

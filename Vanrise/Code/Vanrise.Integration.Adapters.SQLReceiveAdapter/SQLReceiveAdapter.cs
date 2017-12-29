@@ -5,6 +5,7 @@ using System.Data.SqlClient;
 using Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments;
 using Vanrise.Integration.Entities;
 using Vanrise.Runtime;
+using Vanrise.Runtime.Entities;
 
 namespace Vanrise.Integration.Adapters.SQLReceiveAdapter
 {
@@ -22,22 +23,25 @@ namespace Vanrise.Integration.Adapters.SQLReceiveAdapter
         private void RunInParallelMode(IAdapterImportDataContext context, DBAdapterArgument dbAdapterArgument)
         {
             bool isLastRange;
-            DBAdapterRangeState rangeToRead = GetAndLockNextRangeToRead(context, null, dbAdapterArgument, out isLastRange);
-
-            if (rangeToRead == null)
-            {
-                LogInformation("No More Ranges to read");
-                return;
-            }
-
-            string queryWithTop1 = dbAdapterArgument.Query.Replace("#TopRows#", "top 1");
-            string queryWithNoTop = dbAdapterArgument.Query.Replace("#TopRows#", "");
+            TransactionLockItem rangeTransactionLockItem = null;
+            
 
             DBReaderImportedData data = null;
             SqlConnection connection = null;
 
             try
             {
+                DBAdapterRangeState rangeToRead = GetAndLockNextRangeToRead(context, null, dbAdapterArgument, out isLastRange, out rangeTransactionLockItem);
+
+                if (rangeToRead == null)
+                {
+                    LogInformation("No More Ranges to read");
+                    return;
+                }
+
+                string queryWithTop1 = dbAdapterArgument.Query.Replace("#TopRows#", "top 1");
+                string queryWithNoTop = dbAdapterArgument.Query.Replace("#TopRows#", "");
+
                 connection = new SqlConnection(dbAdapterArgument.ConnectionString);
                 connection.Open();
 
@@ -55,9 +59,11 @@ namespace Vanrise.Integration.Adapters.SQLReceiveAdapter
                     finally
                     {
                         ReleaseRange(context, rangeToRead);
+                        TransactionLocker.Instance.Unlock(rangeTransactionLockItem);
+                        rangeTransactionLockItem = null;
                     }
 
-                    rangeToRead = GetAndLockNextRangeToRead(context, rangeToRead, dbAdapterArgument, out isLastRange);
+                    rangeToRead = GetAndLockNextRangeToRead(context, rangeToRead, dbAdapterArgument, out isLastRange, out rangeTransactionLockItem);
                     if (rangeToRead == null)
                         LogInformation("No More Ranges to read");
                 }
@@ -65,6 +71,8 @@ namespace Vanrise.Integration.Adapters.SQLReceiveAdapter
             }
             catch (Exception ex)
             {
+                if (rangeTransactionLockItem != null)
+                    TransactionLocker.Instance.Unlock(rangeTransactionLockItem);
                 LogError("An error occurred in SQL Adapter while importing data. Exception Details: {0}", ex.ToString());
             }
             finally
@@ -245,7 +253,6 @@ namespace Vanrise.Integration.Adapters.SQLReceiveAdapter
 
                 DBAdapterRangeState matchCurrentRange = GetMatchRangeFromState(range, rangesState);
                 range = matchCurrentRange;
-                range.LockedByProcessId = null;
                 var indexOfCurrentRange = rangesState.Ranges.IndexOf(range);
                 if (indexOfCurrentRange != rangesState.Ranges.Count - 1)//not last range
                 {
@@ -306,61 +313,71 @@ namespace Vanrise.Integration.Adapters.SQLReceiveAdapter
             return rangesState.Ranges.FirstOrDefault(itm => itm.RangeId == range.RangeId);
         }
 
-        private DBAdapterRangeState GetAndLockNextRangeToRead(IAdapterImportDataContext context, DBAdapterRangeState currentRange, DBAdapterArgument dbAdapterArgument, out bool isLastRange)
+        private DBAdapterRangeState GetAndLockNextRangeToRead(IAdapterImportDataContext context, DBAdapterRangeState currentRange, DBAdapterArgument dbAdapterArgument, out bool isLastRange, out TransactionLockItem transactionLockItem)
         {
             DBAdapterRangeState rangeToRead = null;
 
             bool islastRange_local = false;
-
-            context.GetStateWithLock((state) =>
+            TransactionLockItem transactionLockItem_local = null;
+            try
             {
-                DBAdapterRangesState rangesState = state as DBAdapterRangesState;
-                if (rangesState == null)
-                    rangesState = new DBAdapterRangesState { Ranges = new List<DBAdapterRangeState>() };
+                context.GetStateWithLock((state) =>
+                {
+                    DBAdapterRangesState rangesState = state as DBAdapterRangesState;
+                    if (rangesState == null)
+                        rangesState = new DBAdapterRangesState { Ranges = new List<DBAdapterRangeState>() };
 
-                RunningProcessManager runningProcessManager = new RunningProcessManager();
-                IEnumerable<int> runningRuntimeProcessesIds = runningProcessManager.GetCachedRunningProcesses().Select(itm => itm.ProcessId);
-                int startingIndex = 0;
-                if(currentRange != null)
-                {
-                    var matchCurrentRange = GetMatchRangeFromState(currentRange, rangesState);
-                    if (matchCurrentRange != null)
-                        startingIndex = rangesState.Ranges.IndexOf(matchCurrentRange) + 1;
-                }
-                for (int i = startingIndex; i < rangesState.Ranges.Count; i++)
-                {
-                    var range = rangesState.Ranges[i];
-                    if (!range.LockedByProcessId.HasValue || !runningRuntimeProcessesIds.Contains(range.LockedByProcessId.Value))
+                    int startingIndex = 0;
+                    if (currentRange != null)
                     {
-                        rangeToRead = range;
-                        if (i == rangesState.Ranges.Count - 1)
+                        var matchCurrentRange = GetMatchRangeFromState(currentRange, rangesState);
+                        if (matchCurrentRange != null)
+                            startingIndex = rangesState.Ranges.IndexOf(matchCurrentRange) + 1;
+                    }
+                    for (int i = startingIndex; i < rangesState.Ranges.Count; i++)
+                    {
+                        var range = rangesState.Ranges[i];
+                        if (TransactionLocker.Instance.TryLock(BuildRangeTransactionLockName(context.DataSourceId, range.RangeId), out transactionLockItem_local))
+                        {
+                            rangeToRead = range;
+                            if (i == rangesState.Ranges.Count - 1)
+                                islastRange_local = true;
+                            break;
+                        }
+                    }
+
+                    if (rangeToRead == null)
+                    {
+                        DBAdapterRangeState lastRange = rangesState.Ranges.LastOrDefault();
+                        if (lastRange == null //no ranges yet (first time import)
+                                ||
+                                lastRange.LastImportedId != null)//last range has imported data
+                        {
+                            rangeToRead = CreateRange(dbAdapterArgument, rangesState);
+                            if (!TransactionLocker.Instance.TryLock(BuildRangeTransactionLockName(context.DataSourceId, rangeToRead.RangeId), out transactionLockItem_local))
+                                throw new Exception(String.Format("Cannot Lock Range '{0}' on data source '{1}'", rangeToRead.RangeId, context.DataSourceId));//new range should be always able to be locked because no other datasource runtime service has yet access to it
+                            rangesState.Ranges.Add(rangeToRead);
                             islastRange_local = true;
-                        break;
+                        }
                     }
-                }
 
-                if (rangeToRead == null)
-                {
-                    DBAdapterRangeState lastRange = rangesState.Ranges.LastOrDefault();
-                    if(lastRange == null //no ranges yet (first time import)
-                            ||
-                            lastRange.LastImportedId != null)//last range has imported data
-                    {                        
-                        rangeToRead = CreateRange(dbAdapterArgument, rangesState);
-                        rangesState.Ranges.Add(rangeToRead);
-                        islastRange_local = true;
-                    }
-                }
-
-                if (rangeToRead != null)
-                {
-                    rangeToRead.LockedByProcessId = RunningProcessManager.CurrentProcess.ProcessId;
-                }
-
-                return rangesState;
-            });
+                    return rangesState;
+                });
+            }
+            catch
+            {
+                if (transactionLockItem_local != null)
+                    TransactionLocker.Instance.Unlock(transactionLockItem_local);
+                throw;
+            }
             isLastRange = islastRange_local;
+            transactionLockItem = transactionLockItem_local;
             return rangeToRead;
+        }
+
+        private static string BuildRangeTransactionLockName(Guid dataSourceId, Guid rangeId)
+        {
+            return String.Concat("DataSourceId:", dataSourceId, "_RangeId:", rangeId);
         }
 
         private DBAdapterRangeState CreateRange(DBAdapterArgument dbAdapterArgument, DBAdapterRangesState rangesState)
