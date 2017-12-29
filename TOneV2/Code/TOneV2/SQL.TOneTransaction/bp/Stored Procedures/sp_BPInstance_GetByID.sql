@@ -6,8 +6,8 @@ BEGIN
 	DECLARE @ID_Local bigint
 	SELECT @ID_Local = @ID
 	
-    SELECT	[ID],[Title],[ParentID],[DefinitionID],[WorkflowInstanceID],[InputArgument], [CompletionNotifier],[ExecutionStatus],[LastMessage],EntityID
-      ,[ViewRequiredPermissionSetId],[CreatedTime],[StatusUpdatedTime],[InitiatorUserId],[ServiceInstanceID], TaskId
+    SELECT	[ID],[Title],[ParentID],[DefinitionID],[WorkflowInstanceID],[InputArgument], [CompletionNotifier],[ExecutionStatus], AssignmentStatus,[LastMessage],EntityID
+      ,[ViewRequiredPermissionSetId],[CreatedTime],[StatusUpdatedTime],[InitiatorUserId], [ServiceInstanceID], TaskId
 	FROM	bp.[BPInstance] WITH(NOLOCK)
 	WHERE	ID = @ID_Local
 END

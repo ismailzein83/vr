@@ -17,8 +17,8 @@ BEGIN
 	INSERT INTO @ViewRequiredPermissionSetTable (ViewRequiredPermissionSetId)
 	select Convert(int, ParsedString) from [bp].[ParseStringList](@ViewRequiredPermissionSetIds)
 
-	SELECT	[ID],[Title],[ParentID],[DefinitionID],[WorkflowInstanceID],[InputArgument], [CompletionNotifier],[ExecutionStatus],
-			[LastMessage],[CreatedTime],[StatusUpdatedTime],[InitiatorUserId],EntityID,[ViewRequiredPermissionSetId],[ServiceInstanceID], TaskId
+	SELECT	[ID],[Title],[ParentID],[DefinitionID],[WorkflowInstanceID],[InputArgument], [CompletionNotifier],[ExecutionStatus], AssignmentStatus,
+			[LastMessage],[CreatedTime],[StatusUpdatedTime],[InitiatorUserId],EntityID,[ViewRequiredPermissionSetId], [ServiceInstanceID], TaskId
 
 	FROM	bp.[BPInstance] as bps WITH(NOLOCK)
 	WHERE	(@EntityID is null OR EntityID = @EntityID) 

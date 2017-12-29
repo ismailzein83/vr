@@ -131,14 +131,8 @@
     <Build Include="integration\Tables\DataSourceState.sql" />
     <Build Include="integration\Tables\DataSourceRuntimeInstance.sql" />
     <Build Include="integration\Functions\ParseStringList.sql" />
-    <Build Include="integration\Stored Procedures\sp_DataSourceState_UpdateStateAndUnlock.sql" />
-    <Build Include="integration\Stored Procedures\sp_DataSourceState_TryLockAndGet.sql" />
-    <Build Include="integration\Stored Procedures\sp_DataSourceRuntimeInstance_TryGetAndLock.sql" />
-    <Build Include="integration\Stored Procedures\sp_DataSourceRuntimeInstance_SetCompleted.sql" />
-    <Build Include="integration\Stored Procedures\sp_DataSourceRuntimeInstance_IsAnyRunning.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSourceRuntimeInstance_InsertIfNotMaximum.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSourceRuntimeInstance_Insert.sql" />
-    <Build Include="integration\Stored Procedures\sp_DataSourceRuntimeInstance_DeleteBySource.sql" />
     <Build Include="bp\Stored Procedures\sp_BPEvent_GetByInstanceIDs.sql" />
     <Build Include="runtime\Tables\ScheduleTaskState_1.sql" />
     <Build Include="runtime\Functions\ParseStringList_1.sql" />
@@ -146,7 +140,6 @@
     <Build Include="runtime\Stored Procedures\sp_SchedulerTaskState_UnlockTask_1.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTaskState_TryLockAndUpdateScheduleTask_1.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTaskState_Insert_1.sql" />
-    <Build Include="runtime\Stored Procedures\sp_SchedulerTaskState_GetDueTasks_1.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTaskState_GetByTaskIds_1.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTaskState_GetByTaskId_1.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTaskState_GetAll_1.sql" />
@@ -180,7 +173,6 @@
     <Build Include="runtime\Stored Procedures\sp_RunningProcess_IsExists.sql" />
     <Build Include="runtime\Stored Procedures\sp_RunningProcess_GetAll.sql" />
     <Build Include="runtime\Stored Procedures\sp_RunningProcess_Delete.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPInstance_UpdateServiceInstanceID.sql" />
     <Build Include="Security\VRNotification.sql" />
     <Build Include="common\Tables\DataGroupingAnalysisInfo.sql" />
     <Build Include="common\Stored Procedures\sp_DataGroupingAnalysisInfo_TryAssignServiceInstanceIdAndGet.sql" />
@@ -221,6 +213,16 @@
     <Build Include="bp\Stored Procedures\sp_BPInstance_GetAfterID.sql" />
     <Build Include="bp\Stored Procedures\sp_BPDefinitionSummary_GetUpdated.sql" />
     <Build Include="bp\Stored Procedures\sp_BPTask_CancelNotCompleted.sql" />
+    <Build Include="bp\Tables\BPInstancePersistence.sql" />
+    <Build Include="integration\Stored Procedures\sp_DataSourceState_Update.sql" />
+    <Build Include="integration\Stored Procedures\sp_DataSourceState_Insert.sql" />
+    <Build Include="integration\Stored Procedures\sp_DataSourceState_GetByID.sql" />
+    <Build Include="integration\Stored Procedures\sp_DataSourceRuntimeInstance_GetAll.sql" />
+    <Build Include="integration\Stored Procedures\sp_DataSourceRuntimeInstance_DoesExistByID.sql" />
+    <Build Include="integration\Stored Procedures\sp_DataSourceRuntimeInstance_DoesExistByDataSourceID.sql" />
+    <Build Include="integration\Stored Procedures\sp_DataSourceRuntimeInstance_Delete.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPInstance_UpdateServiceInstanceIDAndAssignmentStatus.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPInstance_UpdateAssignmentStatus.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />

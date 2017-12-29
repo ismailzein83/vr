@@ -9,6 +9,7 @@
     [InputArgument]               NVARCHAR (MAX)   NULL,
     [CompletionNotifier]          NVARCHAR (MAX)   NULL,
     [ExecutionStatus]             INT              NOT NULL,
+    [AssignmentStatus]            INT              NULL,
     [LastMessage]                 NVARCHAR (MAX)   NULL,
     [EntityId]                    VARCHAR (255)    NULL,
     [ViewRequiredPermissionSetId] INT              NULL,
@@ -18,6 +19,8 @@
     [timestamp]                   ROWVERSION       NULL,
     CONSTRAINT [PK_BPInstance_1] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
