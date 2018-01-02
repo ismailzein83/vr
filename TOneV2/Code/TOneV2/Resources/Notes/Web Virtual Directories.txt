@@ -42,3 +42,4 @@
 	WhS_InvToAccBalanceRelation C:\TFS\TOneV2\Code\TOneV2\TOne.WhS.InvToAccBalanceRelation.Web\WhS_InvToAccBalanceRelation
 	VR_InvToAccBalanceRelation  C:\TFS\Vanrise\Code\Vanrise.InvToAccBalanceRelation.Web\VR_InvToAccBalanceRelation
 	VR_BEBridge				C:\TFS\Vanrise\Code\Vanrise.BEBridge.Web\VR_BEBridge
+	VR_CaseManagement		C:\TFS\Vanrise\Code\Vanrise.CaseManagement.Web\VR_CaseManagement

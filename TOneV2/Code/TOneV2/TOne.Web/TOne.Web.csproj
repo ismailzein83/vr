@@ -278,6 +278,21 @@
     <Reference Include="Vanrise.Caching.Runtime">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Caching.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.CaseManagement.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.CaseManagement.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.CaseManagement.Data">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.CaseManagement.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.CaseManagement.Data.SQL">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.CaseManagement.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.CaseManagement.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.CaseManagement.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.CaseManagement.Web">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.CaseManagement.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
@@ -723,7 +738,9 @@
     <Content Include="Reports\Analytics\ZoneProfit.aspx" />
     <Content Include="Reports\ReportChart.aspx" />
     <Content Include="Reports\ReportPage.aspx" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <None Include="Web.config.exclude">
       <SubType>Designer</SubType>
     </None>
