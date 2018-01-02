@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.CaseManagement.Business
 {
-    public class CaseManagementManager
+    public class VRCaseManager
     {
 
     }

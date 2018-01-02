@@ -79,6 +79,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\VRCaseController.cs" />
+    <Compile Include="Controllers\VRCaseDefinitionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -95,9 +97,19 @@
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
-    <Folder Include="Controllers\" />
-    <Folder Include="VR_CaseManagement\" />
+    <Content Include="VR_CaseManagement\Constant\ModuleConfig.js" />
+    <Content Include="VR_CaseManagement\Elements\CaseManagement\Directives\Templates\CaseViewEditor.html" />
+    <Content Include="VR_CaseManagement\Elements\CaseManagement\Directives\vr-casemanagement-casedefinition-vieweditor.js" />
+    <Content Include="VR_CaseManagement\Elements\CaseManagement\Directives\vr-casemanagement-casebedefinition-selector.js" />
+    <Content Include="VR_CaseManagement\Elements\CaseManagement\Services\APIServices\VRCaseAPIService.js" />
+    <Content Include="VR_CaseManagement\Elements\CaseManagement\Services\APIServices\VRCaseDefinitionAPIService.js" />
+    <Content Include="VR_CaseManagement\Elements\CaseManagement\Services\VRCaseService.js" />
+    <Content Include="VR_CaseManagement\Elements\CaseManagement\Views\VRCaseManagement.html" />
+    <Content Include="VR_CaseManagement\Elements\CaseManagement\Views\VRCaseManagementController.js" />
+    <Content Include="VR_CaseManagement\Elements\CaseManagement\Views\VRCaseEditor.html" />
+    <Content Include="VR_CaseManagement\Elements\CaseManagement\Views\VRCaseEditorController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -124,6 +136,9 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /y $(TargetPath) ..\..\Output</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

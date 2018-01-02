@@ -68,6 +68,9 @@
     <Compile Include="DataStorages\SQLDataRecordStorageSettings.cs" />
     <Compile Include="DataStorages\SQLDataRecordStorageState.cs" />
     <Compile Include="DataStorages\StaticSQLDataStoreSettings.cs" />
+    <Compile Include="GenericEditorDefinitionSetting\GenericEditorDefinitionSetting.cs" />
+    <Compile Include="GenericEditorDefinitionSetting\StaticEditorDefinitionSetting.cs" />
+    <Compile Include="GenericEditorDefinitionSetting\TabsContainerEditorDefinitionSetting.cs" />
     <Compile Include="GenericRuleCriteriaFieldValues\BusinessEntityValues.cs" />
     <Compile Include="GenericRuleCriteriaFieldValues\StaticValues.cs" />
     <Compile Include="MappingSteps\BELookupRuleMappingStep.cs" />

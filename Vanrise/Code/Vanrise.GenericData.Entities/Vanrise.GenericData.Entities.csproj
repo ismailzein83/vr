@@ -99,6 +99,7 @@
     <Compile Include="DataStorage\IGetRemoteRecordStorageDataManagerContext.cs" />
     <Compile Include="DataStorage\TempStorageInformation.cs" />
     <Compile Include="DataStorage\IGetStorageRowCountContext.cs" />
+    <Compile Include="GenericEditorDefinitionSetting\VRGenericEditorDefinitionSetting.cs" />
     <Compile Include="RecordFilter\FilterParameter.cs" />
     <Compile Include="RecordFilter\Filters.cs" />
     <Compile Include="DataRecords\DataRecordDetail.cs" />

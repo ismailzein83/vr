@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.CaseManagement.Entities
 {
-    public class CaseManagement
+    public class VRCase
     {
-        public  CaseManagementValues CaseManagementValues { get; set; }
+        public VRCaseValues CaseManagementValues { get; set; }
         
         //public long CaseManagementId { get; set; }
         //public Guid CaseManagementDefinitionId { get; set; }
@@ -24,11 +24,11 @@ namespace Vanrise.CaseManagement.Entities
         //public int OwnerId { get; set; }
         //public CaseManagementSettings Settings { get; set; }
     }
-    public class CaseManagementValues:Dictionary<string, CaseManagementValue>
+    public class VRCaseValues : Dictionary<string, VRCaseValue>
     {
 
     }
-    public class CaseManagementValue
+    public class VRCaseValue
     {
         public object Value { get; set; }
     }
