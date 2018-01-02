@@ -14,7 +14,6 @@
             var parameters = VRNavigationService.getParameters($scope);
 
             if (parameters != undefined && parameters != null) {
-                console.log(parameters.customers);
                 customers = parameters.customers;
             }
         }
