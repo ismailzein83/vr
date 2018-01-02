@@ -372,15 +372,15 @@ namespace TOne.WhS.BusinessEntity.Business
 
             IEnumerable<SalePriceList> customerPricelists = GetCustomerCachedSalePriceLists().FindAllRecords(filterExpression);
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            List<CarrierAccountInfo> customers = new List<CarrierAccountInfo>();
+            Dictionary<int, CarrierAccountInfo> customers = new Dictionary<int, CarrierAccountInfo>();
             List<int> customerPricelistIds = customerPricelists.Select(item => item.PriceListId).ToList();
             bool allEmailsHaveBeenSent = false;
 
             foreach (var customerPricelist in customerPricelists)
             {
-                if (CheckIfCustomerHasNotSendPricelists(customerPricelist.OwnerId, customerPricelist.CreatedTime))
+                if (CheckIfCustomerHasNotSendPricelists(customerPricelist.OwnerId, customerPricelist.CreatedTime) && customers.GetRecord(customerPricelist.OwnerId)==null)
                 {
-                    customers.Add(new CarrierAccountInfo { CarrierAccountId = customerPricelist.OwnerId, Name = carrierAccountManager.GetCarrierAccountName(customerPricelist.OwnerId) });
+                    customers.Add(customerPricelist.OwnerId,new CarrierAccountInfo { CarrierAccountId = customerPricelist.OwnerId, Name = carrierAccountManager.GetCarrierAccountName(customerPricelist.OwnerId) });
                 }
             }
             if (customers.Count == 0)
@@ -388,7 +388,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             var sendCustomerPricelistsResponse = new SendCustomerPricelistsResponse()
             {
-                Customers = customers,
+                Customers = customers.Values.ToList(),
                 PricelistIds = customerPricelistIds,
                 AllEmailsHaveBeenSent = allEmailsHaveBeenSent,
             };
