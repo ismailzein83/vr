@@ -728,8 +728,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 List<SalePLCodeNotification> filteredCodeNotifications = new List<SalePLCodeNotification>();
 
                 var opennedCodes = salePlZoneNotification.Codes.Where(c => !c.EED.HasValue);
-                var notChangedClosedCodes = salePlZoneNotification.Codes.Where(c => c.EED.HasValue && c.CodeChange == CodeChange.NotChanged);
-                var changedClosedCodes = salePlZoneNotification.Codes.Where(c => c.EED.HasValue && c.CodeChange != CodeChange.NotChanged);
+                var notChangedClosedCodes = salePlZoneNotification.Codes.Where(c => c.EED.HasValue && c.EED.Value > DateTime.Today && c.CodeChange == CodeChange.NotChanged);
+                var changedClosedCodes = salePlZoneNotification.Codes.Where(c => c.EED.HasValue && c.EED.Value > DateTime.Today && c.CodeChange != CodeChange.NotChanged);
                 if (opennedCodes.Any() || notChangedClosedCodes.Any())
                 {
                     onlyClosedChanges = false;
