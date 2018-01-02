@@ -378,15 +378,21 @@ namespace TOne.WhS.BusinessEntity.Business
 
             foreach (var customerPricelist in customerPricelists)
             {
-                if (CheckIfCustomerHasNotSendPricelists(customerPricelist.OwnerId, customerPricelist.CreatedTime) && customers.GetRecord(customerPricelist.OwnerId)==null)
+                if (!customers.ContainsKey(customerPricelist.OwnerId) && CheckIfCustomerHasNotSendPricelists(customerPricelist.OwnerId, customerPricelist.CreatedTime))
                 {
-                    customers.Add(customerPricelist.OwnerId,new CarrierAccountInfo { CarrierAccountId = customerPricelist.OwnerId, Name = carrierAccountManager.GetCarrierAccountName(customerPricelist.OwnerId) });
+                    customers.Add(
+                        customerPricelist.OwnerId,
+                        new CarrierAccountInfo
+                        {
+                            CarrierAccountId = customerPricelist.OwnerId,
+                            Name = carrierAccountManager.GetCarrierAccountName(customerPricelist.OwnerId)
+                        });
                 }
             }
             if (customers.Count == 0)
-                allEmailsHaveBeenSent = SendCustomerPriceLists(new SendPricelistsInput() { PricelistIds = customerPricelistIds, CompressAttachement = input.CompressAttachement });
+                allEmailsHaveBeenSent = SendCustomerPriceLists(new SendPricelistsInput { PricelistIds = customerPricelistIds, CompressAttachement = input.CompressAttachement });
 
-            var sendCustomerPricelistsResponse = new SendCustomerPricelistsResponse()
+            var sendCustomerPricelistsResponse = new SendCustomerPricelistsResponse
             {
                 Customers = customers.Values.ToList(),
                 PricelistIds = customerPricelistIds,
