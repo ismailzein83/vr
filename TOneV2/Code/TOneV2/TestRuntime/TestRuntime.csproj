@@ -382,6 +382,21 @@
     <Reference Include="Vanrise.Caching.Runtime">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Caching.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.CaseManagement.Business">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.CaseManagement.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.CaseManagement.Data">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.CaseManagement.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.CaseManagement.Data.SQL">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.CaseManagement.Data.SQL.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.CaseManagement.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.CaseManagement.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.CaseManagement.Web">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.CaseManagement.Web.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
