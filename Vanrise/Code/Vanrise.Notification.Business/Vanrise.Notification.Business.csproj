@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="BPDefinitionExtendedSettings\BalanceAlertCheckerBPDefinitionSettings.cs" />
     <Compile Include="BPDefinitionExtendedSettings\BalanceAlertThresholdUpdateBPDefinitionSettings.cs" />
+    <Compile Include="BPDefinitionExtendedSettings\ClearNotificationBPDefinitionExtendedSettings.cs" />
     <Compile Include="BPDefinitionExtendedSettings\ExecuteNotificationBPDefinitionExtendedSettings.cs" />
     <Compile Include="Filters\IBusinessEntityDefinitionFilter\VRAlertLevelBEDefinitionFilter.cs" />
     <Compile Include="Filters\IVRAlertRuleTypeFilter\VRBalanceAlertRuleTypeFilter.cs" />
