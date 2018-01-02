@@ -759,7 +759,7 @@
                         Email: $scope.scopeModel.automaticPriceListEmail,
                         FileMask: $scope.scopeModel.fileMask,
                         SubjectCode: $scope.scopeModel.automaticPriceListSubjectCode,
-                        BPBusinessRuleSetIds: bpBusinessRuleSetDirectiveAPI.getSelectedIds()
+                        BPBusinessRuleSetIds: bpBusinessRuleSetDirectiveAPI != undefined ? bpBusinessRuleSetDirectiveAPI.getSelectedIds() : null,
                     }
                 },
                 SupplierSettings: {
