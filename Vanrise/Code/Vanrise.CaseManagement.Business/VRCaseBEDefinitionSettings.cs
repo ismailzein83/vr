@@ -18,6 +18,11 @@ namespace Vanrise.CaseManagement.Business
         public Guid DataRecordStorageId { get; set; }
         public VRCaseGridDefinition GridDefinition { get; set; }
         public VRCaseEditorDefinition EditorDefinition { get; set; }
+        public override string IdType { get { return "System.Int64"; } }
+        public override string ManagerFQTN
+        {
+            get { return "Vanrise.CaseManagement.Business.VRCaseDefinitionManager, Vanrise.CaseManagement.Business"; }
+        }
     }
     public class VRCaseEditorDefinition
     {
