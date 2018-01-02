@@ -58,6 +58,8 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RatePlanInput.cs" />
+    <Compile Include="RatePlanSubProcessInput.cs" />
+    <Compile Include="RatePlanSubProcessOutput.cs" />
     <Compile Include="Tasks\EmailCustomerTaskData.cs" />
     <Compile Include="Tasks\EmailCustomerTaskExecutionInformation.cs" />
     <Compile Include="Tasks\EmailTaskData.cs" />
@@ -75,6 +77,10 @@
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Sales.Entities\TOne.WhS.Sales.Entities.csproj">
+      <Project>{d604102b-eca7-4f50-b9a1-be46ee701dc0}</Project>
+      <Name>TOne.WhS.Sales.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

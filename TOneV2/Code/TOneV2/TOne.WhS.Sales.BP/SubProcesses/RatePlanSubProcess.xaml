@@ -1,0 +1,1947 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.Sales.BP.SubProcesses.RatePlanSubProcess"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:sc="clr-namespace:System.Collections;assembly=mscorlib"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:twbe="clr-namespace:TOne.WhS.BusinessEntity.Entities;assembly=TOne.WhS.BusinessEntity.Entities"
+ xmlns:twsba="clr-namespace:TOne.WhS.Sales.BP.Arguments;assembly=TOne.WhS.Sales.BP.Arguments"
+ xmlns:twsba1="clr-namespace:TOne.WhS.Sales.BP.Activities;assembly=TOne.WhS.Sales.BP.Activities"
+ xmlns:twsbat="clr-namespace:TOne.WhS.Sales.BP.Arguments.Tasks;assembly=TOne.WhS.Sales.BP.Arguments"
+ xmlns:twse="clr-namespace:TOne.WhS.Sales.Entities;assembly=TOne.WhS.Sales.Entities"
+ xmlns:vbe="clr-namespace:Vanrise.BusinessProcess.Entities;assembly=Vanrise.BusinessProcess.Entities"
+ xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
+ xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(twsba:RatePlanSubProcessInput)" />
+    <x:Property Name="Output" Type="OutArgument(twsba:RatePlanSubProcessOutput)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>TOne.WhS.Sales.BP.SubProcesses.RatePlanSubProcess_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>TOne.WhS.Sales.BP.Arguments</x:String>
+      <x:String>TOne.WhS.Sales.Entities</x:String>
+      <x:String>TOne.WhS.Sales.BP.Arguments.Tasks</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.MainExtensions</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.BusinessEntity.Business</AssemblyReference>
+      <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Sales.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Sales.BP.Arguments</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Sales.Entities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.SupplierPriceList.BP.Activities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Sales.BP</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence DisplayName="Root" sap2010:WorkflowViewState.IdRef="Sequence_14">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="twse:Changes" Name="Changes" />
+      <Variable x:TypeArguments="scg:List(twse:RateToChange)" Name="RatesToChange" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:RateToClose)" Name="RatesToClose" />
+      <Variable x:TypeArguments="s:DateTime" Name="MinimumDate" />
+      <Variable x:TypeArguments="scg:IEnumerable(twbe:SaleZone)" Name="ExistingSaleZones" />
+      <Variable x:TypeArguments="scg:IEnumerable(twbe:SaleRate)" Name="ExistingSaleRates" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:ExistingZone)" Name="ExistingZones" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:ExistingRate)" Name="ExistingRates" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:NewRate)" Name="NewRates" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:ChangedRate)" Name="ChangedRates" />
+      <Variable x:TypeArguments="s:Nullable(x:Int32)" Name="ReservedSalePriceListId" />
+      <Variable x:TypeArguments="twse:DefaultRoutingProductToAdd" Name="DefaultRoutingProductToAdd" />
+      <Variable x:TypeArguments="twse:DefaultRoutingProductToClose" Name="DefaultRoutingProductToClose" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:ExistingDefaultRoutingProduct)" Name="ExistingDefaultRoutingProducts" />
+      <Variable x:TypeArguments="scg:IEnumerable(twbe:DefaultRoutingProduct)" Name="ExistingSaleEntityDefaultRoutingProducts" />
+      <Variable x:TypeArguments="twse:NewDefaultRoutingProduct" Name="NewDefaultRoutingProduct" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:ChangedDefaultRoutingProduct)" Name="ChangedDefaultRoutingProducts" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductToAdd)" Name="SaleZoneRoutingProductsToAdd" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductToClose)" Name="SaleZoneRoutingProductsToClose" />
+      <Variable x:TypeArguments="scg:IEnumerable(twbe:SaleZoneRoutingProduct)" Name="ExistingSaleEntityZoneRoutingProducts" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:NewSaleZoneRoutingProduct)" Name="NewSaleZoneRoutingProducts" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:ChangedSaleZoneRoutingProduct)" Name="ChangedSaleZoneRoutingProducts" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:ExistingSaleZoneRoutingProduct)" Name="ExistingSaleZoneRoutingProducts" />
+      <Variable x:TypeArguments="twsbat:PreviewTaskExecutionInformation" Name="ContinueExecution">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="twsbat:PreviewTaskExecutionInformation">new PreviewTaskExecutionInformation()</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="scg:IEnumerable(twse:RatePreview)" Name="RatePreviews" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductPreview)" Name="SaleZoneRoutingProductPreviews" />
+      <Variable x:TypeArguments="twse:RatePlanPreviewSummary" Name="RatePlanPreviewSummary" />
+      <Variable x:TypeArguments="scg:Dictionary(x:Int64, twse:ExistingZone)" Name="ExistingZonesById" />
+      <Variable x:TypeArguments="twse:DefaultRoutingProductPreview" Name="DefaultRoutingProductPreview" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:DataByZone)" Name="DataByZone" />
+      <Variable x:TypeArguments="twse:DefaultServiceToAdd" Name="DefaultServiceToAdd" />
+      <Variable x:TypeArguments="twse:DefaultServiceToClose" Name="DefaultServiceToClose" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:SaleZoneServiceToAdd)" Name="SaleZoneServicesToAdd" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:SaleZoneServiceToClose)" Name="SaleZoneServicesToClose" />
+      <Variable x:TypeArguments="scg:IEnumerable(twbe:SaleEntityDefaultService)" Name="ExistingSaleEntityDefaultServices" />
+      <Variable x:TypeArguments="scg:IEnumerable(twbe:SaleEntityZoneService)" Name="ExistingSaleEntityZoneServices" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:ExistingDefaultService)" Name="ExistingDefaultServices" />
+      <Variable x:TypeArguments="twse:NewDefaultService" Name="NewDefaultService" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:ChangedDefaultService)" Name="ChangedDefaultServices" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:ExistingSaleZoneService)" Name="ExistingSaleZoneServices" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:NewSaleZoneService)" Name="NewSaleZoneServices" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:ChangedSaleZoneService)" Name="ChangedSaleZoneServices" />
+      <Variable x:TypeArguments="twse:DefaultServicePreview" Name="DefaultServicePreview" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:SaleZoneServicePreview)" Name="SaleZoneServicePreviews" />
+      <Variable x:TypeArguments="twse:DefaultData" Name="DefaultData" />
+      <Variable x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)" Name="ImportedDataToValidate" />
+      <Variable x:TypeArguments="twsbat:EmailTaskExecutionInformation" Name="EmailTaskExecutionInformation" />
+      <Variable x:TypeArguments="scg:IEnumerable(x:Int32)" Name="CustomerIdsToEmail" />
+      <Variable x:TypeArguments="x:Boolean" Name="ShouldNotifyCustomers" />
+      <Variable x:TypeArguments="scg:IEnumerable(twbe:SalePLZoneChange)" Name="SalePLZoneChanges" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToAdd)" Name="CustomerCountriesToAdd" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToChange)" Name="CustomerCountriesToChange" />
+      <Variable x:TypeArguments="scg:IEnumerable(twbe:CustomerCountry2)" Name="ExistingSaleCustomerCountries" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:ExistingCustomerCountry)" Name="ExistingCustomerCountries" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:NewCustomerCountry)" Name="NewCustomerCountries" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:ChangedCustomerCountry)" Name="ChangedCustomerCountries" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:DraftNewCountry)" Name="DraftNewCountries" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:ExistingCustomerCountry)" Name="ExplicitlyChangedExistingCustomerCountries" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:ChangedCustomerCountryPreview)" Name="ChangedCustomerCountryPreviews" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:NewCustomerCountryPreview)" Name="NewCustomerCountryPreviews" />
+      <Variable x:TypeArguments="twsbat:EmailCustomerTaskExecutionInformation" Name="EmailCustomerTaskExecutionInformation" />
+      <Variable x:TypeArguments="scg:IEnumerable(x:Int32)" Name="CustomerIdsWithPriceList" />
+      <Variable x:TypeArguments="scg:IEnumerable(twbe:CarrierAccountInfo)" Name="CustomersWithPriceList" />
+      <Variable x:TypeArguments="x:Boolean" Name="ProcessHasChanges" />
+      <Variable x:TypeArguments="scg:IEnumerable(twse:CountryData)" Name="DataByCountry" />
+      <Variable x:TypeArguments="twse:ZoneDataByCountryIds" Name="ZoneDataByCountryIds" />
+      <Variable x:TypeArguments="scg:List(x:Int32)" Name="CountryIdsWithDefaultRates" />
+      <Variable x:TypeArguments="scg:List(x:Int64)" Name="ZoneIdsWithDefaultRates" />
+      <Variable x:TypeArguments="twsbat:SellingZonesWithDefaultRatesTaskExecutionInformation" Name="sellingZonesWithDefaultRatesTaskExecutionInformation">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="twsbat:SellingZonesWithDefaultRatesTaskExecutionInformation">new SellingZonesWithDefaultRatesTaskExecutionInformation()</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="x:Boolean" Default="True" Name="ContinueProcess" />
+      <Variable x:TypeArguments="scg:Dictionary(x:Int32, scg:List(x:Int64))" Name="ZoneIdsWithDefaultRatesByCountryIds">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:Int32, scg:List(x:Int64))">new Dictionary&lt;int, List&lt;long&gt;&gt;()</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="scg:List(x:Int64)" Name="ZoneIdsWithMissingRates" />
+      <Variable x:TypeArguments="scg:IEnumerable(twbe:NewPriceList)" Name="SalePricelists" />
+      <Variable x:TypeArguments="scg:IEnumerable(twbe:NewCustomerPriceListChange)" Name="CustomerChanges" />
+      <Variable x:TypeArguments="scg:IEnumerable(twbe:SalePricelistRPChange)" Name="AllSalePricelistRPChanges" />
+      <Variable x:TypeArguments="x:Int64" Name="StateBackupId" />
+      <Variable x:TypeArguments="twse:AllCustomerCountriesToChange" Name="AllCustomerCountriesToChange" />
+      <Variable x:TypeArguments="twse:AllCustomerCountriesToAdd" Name="AllCustomerCountriesToAdd" />
+      <Variable x:TypeArguments="twse:AllDataByZone" Name="AllDataByZone" />
+      <Variable x:TypeArguments="scg:Dictionary(x:Int32, scg:List(twbe:NewPriceList))" Name="CustomerPriceListsByCurrencyId" />
+      <Variable x:TypeArguments="s:Nullable(x:Int32)" Name="ReservedOwnerPriceListId" />
+    </Sequence.Variables>
+    <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
+      <Assign.To>
+        <OutArgument x:TypeArguments="twsba:RatePlanSubProcessOutput">
+          <mca:CSharpReference x:TypeArguments="twsba:RatePlanSubProcessOutput">Output</mca:CSharpReference>
+        </OutArgument>
+      </Assign.To>
+      <Assign.Value>
+        <InArgument x:TypeArguments="twsba:RatePlanSubProcessOutput">
+          <mca:CSharpValue x:TypeArguments="twsba:RatePlanSubProcessOutput">new RatePlanSubProcessOutput()</mca:CSharpValue>
+        </InArgument>
+      </Assign.Value>
+    </Assign>
+    <twsba1:SetRatePlanContext sap2010:WorkflowViewState.IdRef="SetRatePlanContext_2">
+      <twsba1:SetRatePlanContext.CurrencyId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.CurrencyId</mca:CSharpValue>
+        </InArgument>
+      </twsba1:SetRatePlanContext.CurrencyId>
+      <twsba1:SetRatePlanContext.EffectiveDate>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveDate</mca:CSharpValue>
+        </InArgument>
+      </twsba1:SetRatePlanContext.EffectiveDate>
+      <twsba1:SetRatePlanContext.IsAdditionalOwner>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">Input.IsAdditionaOwner</mca:CSharpValue>
+        </InArgument>
+      </twsba1:SetRatePlanContext.IsAdditionalOwner>
+      <twsba1:SetRatePlanContext.OwnerId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.OwnerId</mca:CSharpValue>
+        </InArgument>
+      </twsba1:SetRatePlanContext.OwnerId>
+      <twsba1:SetRatePlanContext.OwnerType>
+        <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+          <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+        </InArgument>
+      </twsba1:SetRatePlanContext.OwnerType>
+    </twsba1:SetRatePlanContext>
+    <twsba1:PrepareActions sap2010:WorkflowViewState.IdRef="PrepareActions_2">
+      <twsba1:PrepareActions.AllCustomerCountriesToAdd>
+        <OutArgument x:TypeArguments="twse:AllCustomerCountriesToAdd">
+          <mca:CSharpReference x:TypeArguments="twse:AllCustomerCountriesToAdd">AllCustomerCountriesToAdd</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:PrepareActions.AllCustomerCountriesToAdd>
+      <twsba1:PrepareActions.AllCustomerCountriesToChange>
+        <OutArgument x:TypeArguments="twse:AllCustomerCountriesToChange">
+          <mca:CSharpReference x:TypeArguments="twse:AllCustomerCountriesToChange">AllCustomerCountriesToChange</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:PrepareActions.AllCustomerCountriesToChange>
+      <twsba1:PrepareActions.Changes>
+        <InArgument x:TypeArguments="twse:Changes">
+          <mca:CSharpValue x:TypeArguments="twse:Changes">Input.Changes</mca:CSharpValue>
+        </InArgument>
+      </twsba1:PrepareActions.Changes>
+      <twsba1:PrepareActions.CurrencyId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.CurrencyId</mca:CSharpValue>
+        </InArgument>
+      </twsba1:PrepareActions.CurrencyId>
+      <twsba1:PrepareActions.CustomerCountriesToAdd>
+        <OutArgument x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToAdd)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToAdd)">CustomerCountriesToAdd</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:PrepareActions.CustomerCountriesToAdd>
+      <twsba1:PrepareActions.CustomerCountriesToChange>
+        <OutArgument x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToChange)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToChange)">CustomerCountriesToChange</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:PrepareActions.CustomerCountriesToChange>
+      <twsba1:PrepareActions.DefaultRoutingProductToAdd>
+        <OutArgument x:TypeArguments="twse:DefaultRoutingProductToAdd">
+          <mca:CSharpReference x:TypeArguments="twse:DefaultRoutingProductToAdd">DefaultRoutingProductToAdd</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:PrepareActions.DefaultRoutingProductToAdd>
+      <twsba1:PrepareActions.DefaultRoutingProductToClose>
+        <OutArgument x:TypeArguments="twse:DefaultRoutingProductToClose">
+          <mca:CSharpReference x:TypeArguments="twse:DefaultRoutingProductToClose">DefaultRoutingProductToClose</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:PrepareActions.DefaultRoutingProductToClose>
+      <twsba1:PrepareActions.DefaultServiceToAdd>
+        <OutArgument x:TypeArguments="twse:DefaultServiceToAdd">
+          <mca:CSharpReference x:TypeArguments="twse:DefaultServiceToAdd">DefaultServiceToAdd</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:PrepareActions.DefaultServiceToAdd>
+      <twsba1:PrepareActions.DefaultServiceToClose>
+        <OutArgument x:TypeArguments="twse:DefaultServiceToClose">
+          <mca:CSharpReference x:TypeArguments="twse:DefaultServiceToClose">DefaultServiceToClose</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:PrepareActions.DefaultServiceToClose>
+      <twsba1:PrepareActions.EffectiveDate>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveDate</mca:CSharpValue>
+        </InArgument>
+      </twsba1:PrepareActions.EffectiveDate>
+      <twsba1:PrepareActions.MinimumDate>
+        <OutArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpReference x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:PrepareActions.MinimumDate>
+      <twsba1:PrepareActions.OwnerId>
+        <InArgument x:TypeArguments="x:Int32">
+          <mca:CSharpValue x:TypeArguments="x:Int32">Input.OwnerId</mca:CSharpValue>
+        </InArgument>
+      </twsba1:PrepareActions.OwnerId>
+      <twsba1:PrepareActions.OwnerType>
+        <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+          <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+        </InArgument>
+      </twsba1:PrepareActions.OwnerType>
+      <twsba1:PrepareActions.RatesToChange>
+        <OutArgument x:TypeArguments="scg:List(twse:RateToChange)">
+          <mca:CSharpReference x:TypeArguments="scg:List(twse:RateToChange)">RatesToChange</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:PrepareActions.RatesToChange>
+      <twsba1:PrepareActions.RatesToClose>
+        <OutArgument x:TypeArguments="scg:IEnumerable(twse:RateToClose)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:RateToClose)">RatesToClose</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:PrepareActions.RatesToClose>
+      <twsba1:PrepareActions.SaleZoneRoutingProductsToAdd>
+        <OutArgument x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductToAdd)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductToAdd)">SaleZoneRoutingProductsToAdd</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:PrepareActions.SaleZoneRoutingProductsToAdd>
+      <twsba1:PrepareActions.SaleZoneRoutingProductsToClose>
+        <OutArgument x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductToClose)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductToClose)">SaleZoneRoutingProductsToClose</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:PrepareActions.SaleZoneRoutingProductsToClose>
+      <twsba1:PrepareActions.SaleZoneServicesToAdd>
+        <OutArgument x:TypeArguments="scg:IEnumerable(twse:SaleZoneServiceToAdd)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:SaleZoneServiceToAdd)">SaleZoneServicesToAdd</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:PrepareActions.SaleZoneServicesToAdd>
+      <twsba1:PrepareActions.SaleZoneServicesToClose>
+        <OutArgument x:TypeArguments="scg:IEnumerable(twse:SaleZoneServiceToClose)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:SaleZoneServiceToClose)">SaleZoneServicesToClose</mca:CSharpReference>
+        </OutArgument>
+      </twsba1:PrepareActions.SaleZoneServicesToClose>
+    </twsba1:PrepareActions>
+    <Parallel DisplayName="Parallel_GetExistingEntities" sap2010:WorkflowViewState.IdRef="Parallel_8">
+      <Parallel.Variables>
+        <Variable x:TypeArguments="scg:IEnumerable(twbe:SaleEntityDefaultService)" Name="SaleEntityDefaultServices" />
+      </Parallel.Variables>
+      <twsba1:GetExistingSaleZones Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetExistingSaleZones_2">
+        <twsba1:GetExistingSaleZones.ExistingSaleZones>
+          <OutArgument x:TypeArguments="scg:IEnumerable(twbe:SaleZone)">
+            <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:SaleZone)">ExistingSaleZones</mca:CSharpReference>
+          </OutArgument>
+        </twsba1:GetExistingSaleZones.ExistingSaleZones>
+        <twsba1:GetExistingSaleZones.MinimumDate>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
+          </InArgument>
+        </twsba1:GetExistingSaleZones.MinimumDate>
+        <twsba1:GetExistingSaleZones.OwnerId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.OwnerId</mca:CSharpValue>
+          </InArgument>
+        </twsba1:GetExistingSaleZones.OwnerId>
+        <twsba1:GetExistingSaleZones.OwnerType>
+          <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+            <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+          </InArgument>
+        </twsba1:GetExistingSaleZones.OwnerType>
+      </twsba1:GetExistingSaleZones>
+      <twsba1:GetExistingSaleRates Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetExistingSaleRates_2">
+        <twsba1:GetExistingSaleRates.ExistingSaleRates>
+          <OutArgument x:TypeArguments="scg:IEnumerable(twbe:SaleRate)">
+            <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:SaleRate)">ExistingSaleRates</mca:CSharpReference>
+          </OutArgument>
+        </twsba1:GetExistingSaleRates.ExistingSaleRates>
+        <twsba1:GetExistingSaleRates.MinimumDate>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
+          </InArgument>
+        </twsba1:GetExistingSaleRates.MinimumDate>
+        <twsba1:GetExistingSaleRates.OwnerId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.OwnerId</mca:CSharpValue>
+          </InArgument>
+        </twsba1:GetExistingSaleRates.OwnerId>
+        <twsba1:GetExistingSaleRates.OwnerType>
+          <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+            <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+          </InArgument>
+        </twsba1:GetExistingSaleRates.OwnerType>
+      </twsba1:GetExistingSaleRates>
+      <twsba1:GetExistingSaleEntityDefaultRoutingProducts Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetExistingSaleEntityDefaultRoutingProducts_2">
+        <twsba1:GetExistingSaleEntityDefaultRoutingProducts.ExistingSaleEntityDefaultRoutingProducts>
+          <OutArgument x:TypeArguments="scg:IEnumerable(twbe:DefaultRoutingProduct)">
+            <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:DefaultRoutingProduct)">ExistingSaleEntityDefaultRoutingProducts</mca:CSharpReference>
+          </OutArgument>
+        </twsba1:GetExistingSaleEntityDefaultRoutingProducts.ExistingSaleEntityDefaultRoutingProducts>
+        <twsba1:GetExistingSaleEntityDefaultRoutingProducts.MinimumDate>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
+          </InArgument>
+        </twsba1:GetExistingSaleEntityDefaultRoutingProducts.MinimumDate>
+        <twsba1:GetExistingSaleEntityDefaultRoutingProducts.OwnerId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.OwnerId</mca:CSharpValue>
+          </InArgument>
+        </twsba1:GetExistingSaleEntityDefaultRoutingProducts.OwnerId>
+        <twsba1:GetExistingSaleEntityDefaultRoutingProducts.OwnerType>
+          <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+            <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+          </InArgument>
+        </twsba1:GetExistingSaleEntityDefaultRoutingProducts.OwnerType>
+      </twsba1:GetExistingSaleEntityDefaultRoutingProducts>
+      <twsba1:GetExistingSaleEntityZoneRoutingProducts Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetExistingSaleEntityZoneRoutingProducts_2">
+        <twsba1:GetExistingSaleEntityZoneRoutingProducts.ExistingSaleEntityZoneRoutingProducts>
+          <OutArgument x:TypeArguments="scg:IEnumerable(twbe:SaleZoneRoutingProduct)">
+            <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:SaleZoneRoutingProduct)">ExistingSaleEntityZoneRoutingProducts</mca:CSharpReference>
+          </OutArgument>
+        </twsba1:GetExistingSaleEntityZoneRoutingProducts.ExistingSaleEntityZoneRoutingProducts>
+        <twsba1:GetExistingSaleEntityZoneRoutingProducts.MinimumDate>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
+          </InArgument>
+        </twsba1:GetExistingSaleEntityZoneRoutingProducts.MinimumDate>
+        <twsba1:GetExistingSaleEntityZoneRoutingProducts.OwnerId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.OwnerId</mca:CSharpValue>
+          </InArgument>
+        </twsba1:GetExistingSaleEntityZoneRoutingProducts.OwnerId>
+        <twsba1:GetExistingSaleEntityZoneRoutingProducts.OwnerType>
+          <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+            <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+          </InArgument>
+        </twsba1:GetExistingSaleEntityZoneRoutingProducts.OwnerType>
+      </twsba1:GetExistingSaleEntityZoneRoutingProducts>
+      <twsba1:GetExistingSaleEntityDefaultServices Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetExistingSaleEntityDefaultServices_2">
+        <twsba1:GetExistingSaleEntityDefaultServices.ExistingSaleEntityDefaultServices>
+          <OutArgument x:TypeArguments="scg:IEnumerable(twbe:SaleEntityDefaultService)">
+            <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:SaleEntityDefaultService)">ExistingSaleEntityDefaultServices</mca:CSharpReference>
+          </OutArgument>
+        </twsba1:GetExistingSaleEntityDefaultServices.ExistingSaleEntityDefaultServices>
+        <twsba1:GetExistingSaleEntityDefaultServices.MinimumDate>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
+          </InArgument>
+        </twsba1:GetExistingSaleEntityDefaultServices.MinimumDate>
+        <twsba1:GetExistingSaleEntityDefaultServices.OwnerId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.OwnerId</mca:CSharpValue>
+          </InArgument>
+        </twsba1:GetExistingSaleEntityDefaultServices.OwnerId>
+        <twsba1:GetExistingSaleEntityDefaultServices.OwnerType>
+          <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+            <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+          </InArgument>
+        </twsba1:GetExistingSaleEntityDefaultServices.OwnerType>
+      </twsba1:GetExistingSaleEntityDefaultServices>
+      <twsba1:GetExistingSaleEntityZoneServices Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetExistingSaleEntityZoneServices_2">
+        <twsba1:GetExistingSaleEntityZoneServices.ExistingSaleEntityZoneServices>
+          <OutArgument x:TypeArguments="scg:IEnumerable(twbe:SaleEntityZoneService)">
+            <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:SaleEntityZoneService)">ExistingSaleEntityZoneServices</mca:CSharpReference>
+          </OutArgument>
+        </twsba1:GetExistingSaleEntityZoneServices.ExistingSaleEntityZoneServices>
+        <twsba1:GetExistingSaleEntityZoneServices.MinimumDate>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
+          </InArgument>
+        </twsba1:GetExistingSaleEntityZoneServices.MinimumDate>
+        <twsba1:GetExistingSaleEntityZoneServices.OwnerId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.OwnerId</mca:CSharpValue>
+          </InArgument>
+        </twsba1:GetExistingSaleEntityZoneServices.OwnerId>
+        <twsba1:GetExistingSaleEntityZoneServices.OwnerType>
+          <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+            <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+          </InArgument>
+        </twsba1:GetExistingSaleEntityZoneServices.OwnerType>
+      </twsba1:GetExistingSaleEntityZoneServices>
+      <twsba1:GetExistingCustomerCountries Status="{x:Null}" sap2010:WorkflowViewState.IdRef="GetExistingCustomerCountries_2">
+        <twsba1:GetExistingCustomerCountries.ExistingSaleCustomerCountries>
+          <OutArgument x:TypeArguments="scg:IEnumerable(twbe:CustomerCountry2)">
+            <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:CustomerCountry2)">ExistingSaleCustomerCountries</mca:CSharpReference>
+          </OutArgument>
+        </twsba1:GetExistingCustomerCountries.ExistingSaleCustomerCountries>
+        <twsba1:GetExistingCustomerCountries.MinimumDate>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
+          </InArgument>
+        </twsba1:GetExistingCustomerCountries.MinimumDate>
+        <twsba1:GetExistingCustomerCountries.OwnerId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.OwnerId</mca:CSharpValue>
+          </InArgument>
+        </twsba1:GetExistingCustomerCountries.OwnerId>
+        <twsba1:GetExistingCustomerCountries.OwnerType>
+          <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+            <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+          </InArgument>
+        </twsba1:GetExistingCustomerCountries.OwnerType>
+      </twsba1:GetExistingCustomerCountries>
+    </Parallel>
+    <twsba1:SetContextActionRateLocator sap2010:WorkflowViewState.IdRef="SetContextActionRateLocator_2">
+      <twsba1:SetContextActionRateLocator.ExistingSaleRates>
+        <InArgument x:TypeArguments="scg:IEnumerable(twbe:SaleRate)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SaleRate)">ExistingSaleRates</mca:CSharpValue>
+        </InArgument>
+      </twsba1:SetContextActionRateLocator.ExistingSaleRates>
+      <twsba1:SetContextActionRateLocator.RatesToClose>
+        <InArgument x:TypeArguments="scg:IEnumerable(twse:RateToClose)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:RateToClose)">RatesToClose</mca:CSharpValue>
+        </InArgument>
+      </twsba1:SetContextActionRateLocator.RatesToClose>
+    </twsba1:SetContextActionRateLocator>
+    <Parallel DisplayName="Parallel_PrepareExistingEntities" sap2010:WorkflowViewState.IdRef="Parallel_10">
+      <Sequence sap2010:WorkflowViewState.IdRef="Sequence_9">
+        <twsba1:PrepareExistingZones sap2010:WorkflowViewState.IdRef="PrepareExistingZones_2">
+          <twsba1:PrepareExistingZones.ExistingSaleZones>
+            <InArgument x:TypeArguments="scg:IEnumerable(twbe:SaleZone)">
+              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SaleZone)">ExistingSaleZones</mca:CSharpValue>
+            </InArgument>
+          </twsba1:PrepareExistingZones.ExistingSaleZones>
+          <twsba1:PrepareExistingZones.ExistingZones>
+            <OutArgument x:TypeArguments="scg:IEnumerable(twse:ExistingZone)">
+              <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:ExistingZone)">ExistingZones</mca:CSharpReference>
+            </OutArgument>
+          </twsba1:PrepareExistingZones.ExistingZones>
+          <twsba1:PrepareExistingZones.ExistingZonesById>
+            <OutArgument x:TypeArguments="scg:Dictionary(x:Int64, twse:ExistingZone)">
+              <mca:CSharpReference x:TypeArguments="scg:Dictionary(x:Int64, twse:ExistingZone)">ExistingZonesById</mca:CSharpReference>
+            </OutArgument>
+          </twsba1:PrepareExistingZones.ExistingZonesById>
+        </twsba1:PrepareExistingZones>
+        <Parallel sap2010:WorkflowViewState.IdRef="Parallel_9">
+          <twsba1:PrepareExistingRates sap2010:WorkflowViewState.IdRef="PrepareExistingRates_2">
+            <twsba1:PrepareExistingRates.CurrencyId>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">Input.CurrencyId</mca:CSharpValue>
+              </InArgument>
+            </twsba1:PrepareExistingRates.CurrencyId>
+            <twsba1:PrepareExistingRates.ExistingRates>
+              <OutArgument x:TypeArguments="scg:IEnumerable(twse:ExistingRate)">
+                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:ExistingRate)">ExistingRates</mca:CSharpReference>
+              </OutArgument>
+            </twsba1:PrepareExistingRates.ExistingRates>
+            <twsba1:PrepareExistingRates.ExistingSaleRates>
+              <InArgument x:TypeArguments="scg:IEnumerable(twbe:SaleRate)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SaleRate)">ExistingSaleRates</mca:CSharpValue>
+              </InArgument>
+            </twsba1:PrepareExistingRates.ExistingSaleRates>
+            <twsba1:PrepareExistingRates.ExistingZonesById>
+              <InArgument x:TypeArguments="scg:Dictionary(x:Int64, twse:ExistingZone)">
+                <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:Int64, twse:ExistingZone)">ExistingZonesById</mca:CSharpValue>
+              </InArgument>
+            </twsba1:PrepareExistingRates.ExistingZonesById>
+          </twsba1:PrepareExistingRates>
+          <twsba1:PrepareExistingSaleZoneRoutingProducts sap2010:WorkflowViewState.IdRef="PrepareExistingSaleZoneRoutingProducts_2">
+            <twsba1:PrepareExistingSaleZoneRoutingProducts.ExistingSaleEntityZoneRoutingProducts>
+              <InArgument x:TypeArguments="scg:IEnumerable(twbe:SaleZoneRoutingProduct)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SaleZoneRoutingProduct)">ExistingSaleEntityZoneRoutingProducts</mca:CSharpValue>
+              </InArgument>
+            </twsba1:PrepareExistingSaleZoneRoutingProducts.ExistingSaleEntityZoneRoutingProducts>
+            <twsba1:PrepareExistingSaleZoneRoutingProducts.ExistingSaleZoneRoutingProducts>
+              <OutArgument x:TypeArguments="scg:IEnumerable(twse:ExistingSaleZoneRoutingProduct)">
+                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:ExistingSaleZoneRoutingProduct)">ExistingSaleZoneRoutingProducts</mca:CSharpReference>
+              </OutArgument>
+            </twsba1:PrepareExistingSaleZoneRoutingProducts.ExistingSaleZoneRoutingProducts>
+            <twsba1:PrepareExistingSaleZoneRoutingProducts.ExistingZonesById>
+              <InArgument x:TypeArguments="scg:Dictionary(x:Int64, twse:ExistingZone)">
+                <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:Int64, twse:ExistingZone)">ExistingZonesById</mca:CSharpValue>
+              </InArgument>
+            </twsba1:PrepareExistingSaleZoneRoutingProducts.ExistingZonesById>
+          </twsba1:PrepareExistingSaleZoneRoutingProducts>
+        </Parallel>
+      </Sequence>
+      <twsba1:PrepareExistingDefaultRoutingProducts sap2010:WorkflowViewState.IdRef="PrepareExistingDefaultRoutingProducts_2">
+        <twsba1:PrepareExistingDefaultRoutingProducts.ExistingDefaultRoutingProducts>
+          <OutArgument x:TypeArguments="scg:IEnumerable(twse:ExistingDefaultRoutingProduct)">
+            <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:ExistingDefaultRoutingProduct)">ExistingDefaultRoutingProducts</mca:CSharpReference>
+          </OutArgument>
+        </twsba1:PrepareExistingDefaultRoutingProducts.ExistingDefaultRoutingProducts>
+        <twsba1:PrepareExistingDefaultRoutingProducts.ExistingSaleEntityDefaultRoutingProducts>
+          <InArgument x:TypeArguments="scg:IEnumerable(twbe:DefaultRoutingProduct)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:DefaultRoutingProduct)">ExistingSaleEntityDefaultRoutingProducts</mca:CSharpValue>
+          </InArgument>
+        </twsba1:PrepareExistingDefaultRoutingProducts.ExistingSaleEntityDefaultRoutingProducts>
+      </twsba1:PrepareExistingDefaultRoutingProducts>
+      <twsba1:PrepareExistingDefaultServices sap2010:WorkflowViewState.IdRef="PrepareExistingDefaultServices_2">
+        <twsba1:PrepareExistingDefaultServices.ExistingDefaultServices>
+          <OutArgument x:TypeArguments="scg:IEnumerable(twse:ExistingDefaultService)">
+            <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:ExistingDefaultService)">ExistingDefaultServices</mca:CSharpReference>
+          </OutArgument>
+        </twsba1:PrepareExistingDefaultServices.ExistingDefaultServices>
+        <twsba1:PrepareExistingDefaultServices.ExistingSaleEntityDefaultServices>
+          <InArgument x:TypeArguments="scg:IEnumerable(twbe:SaleEntityDefaultService)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SaleEntityDefaultService)">ExistingSaleEntityDefaultServices</mca:CSharpValue>
+          </InArgument>
+        </twsba1:PrepareExistingDefaultServices.ExistingSaleEntityDefaultServices>
+      </twsba1:PrepareExistingDefaultServices>
+      <twsba1:PrepareExistingSaleZoneServices sap2010:WorkflowViewState.IdRef="PrepareExistingSaleZoneServices_2">
+        <twsba1:PrepareExistingSaleZoneServices.ExistingSaleEntityZoneServices>
+          <InArgument x:TypeArguments="scg:IEnumerable(twbe:SaleEntityZoneService)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SaleEntityZoneService)">ExistingSaleEntityZoneServices</mca:CSharpValue>
+          </InArgument>
+        </twsba1:PrepareExistingSaleZoneServices.ExistingSaleEntityZoneServices>
+        <twsba1:PrepareExistingSaleZoneServices.ExistingSaleZoneServices>
+          <OutArgument x:TypeArguments="scg:IEnumerable(twse:ExistingSaleZoneService)">
+            <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:ExistingSaleZoneService)">ExistingSaleZoneServices</mca:CSharpReference>
+          </OutArgument>
+        </twsba1:PrepareExistingSaleZoneServices.ExistingSaleZoneServices>
+      </twsba1:PrepareExistingSaleZoneServices>
+      <twsba1:PrepareExistingCustomerCountries sap2010:WorkflowViewState.IdRef="PrepareExistingCustomerCountries_2">
+        <twsba1:PrepareExistingCustomerCountries.ExistingCustomerCountries>
+          <OutArgument x:TypeArguments="scg:IEnumerable(twse:ExistingCustomerCountry)">
+            <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:ExistingCustomerCountry)">ExistingCustomerCountries</mca:CSharpReference>
+          </OutArgument>
+        </twsba1:PrepareExistingCustomerCountries.ExistingCustomerCountries>
+        <twsba1:PrepareExistingCustomerCountries.ExistingSaleCustomerCountries>
+          <InArgument x:TypeArguments="scg:IEnumerable(twbe:CustomerCountry2)">
+            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:CustomerCountry2)">ExistingSaleCustomerCountries</mca:CSharpValue>
+          </InArgument>
+        </twsba1:PrepareExistingCustomerCountries.ExistingSaleCustomerCountries>
+        <twsba1:PrepareExistingCustomerCountries.OwnerType>
+          <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+            <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+          </InArgument>
+        </twsba1:PrepareExistingCustomerCountries.OwnerType>
+      </twsba1:PrepareExistingCustomerCountries>
+    </Parallel>
+    <twsba1:SetContextExistingZonesByCountry sap2010:WorkflowViewState.IdRef="SetContextExistingZonesByCountry_2">
+      <twsba1:SetContextExistingZonesByCountry.ExistingZones>
+        <InArgument x:TypeArguments="scg:IEnumerable(twse:ExistingZone)">
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ExistingZone)">ExistingZones</mca:CSharpValue>
+        </InArgument>
+      </twsba1:SetContextExistingZonesByCountry.ExistingZones>
+    </twsba1:SetContextExistingZonesByCountry>
+    <Sequence DisplayName="SetDefaultRate" sap2010:WorkflowViewState.IdRef="Sequence_12">
+      <Sequence.Variables>
+        <Variable x:TypeArguments="x:Boolean" Name="IsFirstSellingProductOffer" />
+        <Variable x:TypeArguments="x:String" Name="variable1" />
+        <Variable x:TypeArguments="x:String" Name="variable2" />
+      </Sequence.Variables>
+      <If sap2010:WorkflowViewState.IdRef="If_10">
+        <If.Condition>
+          <InArgument x:TypeArguments="x:Boolean">
+            <mca:CSharpValue x:TypeArguments="x:Boolean">Input.OwnerType == BusinessEntity.Entities.SalePriceListOwnerType.SellingProduct</mca:CSharpValue>
+          </InArgument>
+        </If.Condition>
+        <If.Then>
+          <Sequence sap2010:WorkflowViewState.IdRef="Sequence_11">
+            <twsba1:FillArgumentFromContext sap2010:WorkflowViewState.IdRef="FillArgumentFromContext_2">
+              <twsba1:FillArgumentFromContext.IsFirstSellingProductOffer>
+                <OutArgument x:TypeArguments="x:Boolean">
+                  <mca:CSharpReference x:TypeArguments="x:Boolean">IsFirstSellingProductOffer</mca:CSharpReference>
+                </OutArgument>
+              </twsba1:FillArgumentFromContext.IsFirstSellingProductOffer>
+            </twsba1:FillArgumentFromContext>
+            <twsba1:GetZonesWithMissingRates sap2010:WorkflowViewState.IdRef="GetZonesWithMissingRates_2">
+              <twsba1:GetZonesWithMissingRates.RatesToChange>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:RateToChange)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:RateToChange)">RatesToChange</mca:CSharpValue>
+                </InArgument>
+              </twsba1:GetZonesWithMissingRates.RatesToChange>
+              <twsba1:GetZonesWithMissingRates.ZoneIdsWithMissingRates>
+                <OutArgument x:TypeArguments="scg:List(x:Int64)">
+                  <mca:CSharpReference x:TypeArguments="scg:List(x:Int64)">ZoneIdsWithMissingRates</mca:CSharpReference>
+                </OutArgument>
+              </twsba1:GetZonesWithMissingRates.ZoneIdsWithMissingRates>
+            </twsba1:GetZonesWithMissingRates>
+            <If sap2010:WorkflowViewState.IdRef="If_9">
+              <If.Condition>
+                <InArgument x:TypeArguments="x:Boolean">
+                  <mca:CSharpValue x:TypeArguments="x:Boolean">IsFirstSellingProductOffer &amp;&amp; (ZoneIdsWithMissingRates!=null &amp;&amp; ZoneIdsWithMissingRates.Count()!=0)</mca:CSharpValue>
+                </InArgument>
+              </If.Condition>
+              <If.Then>
+                <Sequence sap2010:WorkflowViewState.IdRef="Sequence_10">
+                  <vbw:AssignTask x:TypeArguments="twsbat:SellingZonesWithDefaultRatesTaskExecutionInformation" ExecutedTask="{x:Null}" sap2010:WorkflowViewState.IdRef="AssignTask`1_3" TaskTitle="Set Default Rates">
+                    <vbw:AssignTask.AssignedTo>
+                      <InArgument x:TypeArguments="vbe:BPTaskAssignee">
+                        <mca:CSharpValue x:TypeArguments="vbe:BPTaskAssignee">new Vanrise.BusinessProcess.MainExtensions.InitiatorBPTaskAssignee()</mca:CSharpValue>
+                      </InArgument>
+                    </vbw:AssignTask.AssignedTo>
+                    <vbw:AssignTask.TaskData>
+                      <InArgument x:TypeArguments="vbe:BPTaskData">
+                        <mca:CSharpValue x:TypeArguments="vbe:BPTaskData" xml:space="preserve">new SellingZonesWithDefaultRatesTasKData() { 
+            OwnerType=Input.OwnerType,
+            OwnerId=Input.OwnerId
+            }</mca:CSharpValue>
+                      </InArgument>
+                    </vbw:AssignTask.TaskData>
+                    <vbw:AssignTask.TaskExecutionInformation>
+                      <OutArgument x:TypeArguments="twsbat:SellingZonesWithDefaultRatesTaskExecutionInformation">
+                        <mca:CSharpReference x:TypeArguments="twsbat:SellingZonesWithDefaultRatesTaskExecutionInformation">sellingZonesWithDefaultRatesTaskExecutionInformation</mca:CSharpReference>
+                      </OutArgument>
+                    </vbw:AssignTask.TaskExecutionInformation>
+                  </vbw:AssignTask>
+                  <If sap2010:WorkflowViewState.IdRef="If_8">
+                    <If.Condition>
+                      <InArgument x:TypeArguments="x:Boolean">
+                        <mca:CSharpValue x:TypeArguments="x:Boolean">sellingZonesWithDefaultRatesTaskExecutionInformation.Decision</mca:CSharpValue>
+                      </InArgument>
+                    </If.Condition>
+                    <If.Then>
+                      <twsba1:SetDefaultRates sap2010:WorkflowViewState.IdRef="SetDefaultRates_2">
+                        <twsba1:SetDefaultRates.RatesToChange>
+                          <InArgument x:TypeArguments="scg:List(twse:RateToChange)">
+                            <mca:CSharpValue x:TypeArguments="scg:List(twse:RateToChange)">RatesToChange</mca:CSharpValue>
+                          </InArgument>
+                        </twsba1:SetDefaultRates.RatesToChange>
+                        <twsba1:SetDefaultRates.ZoneIdsWithMissingRates>
+                          <InArgument x:TypeArguments="scg:List(x:Int64)">
+                            <mca:CSharpValue x:TypeArguments="scg:List(x:Int64)">ZoneIdsWithMissingRates</mca:CSharpValue>
+                          </InArgument>
+                        </twsba1:SetDefaultRates.ZoneIdsWithMissingRates>
+                      </twsba1:SetDefaultRates>
+                    </If.Then>
+                    <If.Else>
+                      <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
+                        <Assign.To>
+                          <OutArgument x:TypeArguments="x:Boolean">
+                            <mca:CSharpReference x:TypeArguments="x:Boolean">ContinueProcess</mca:CSharpReference>
+                          </OutArgument>
+                        </Assign.To>
+                        <Assign.Value>
+                          <InArgument x:TypeArguments="x:Boolean">
+                            <mca:CSharpValue x:TypeArguments="x:Boolean">sellingZonesWithDefaultRatesTaskExecutionInformation.Decision</mca:CSharpValue>
+                          </InArgument>
+                        </Assign.Value>
+                      </Assign>
+                    </If.Else>
+                  </If>
+                </Sequence>
+              </If.Then>
+            </If>
+          </Sequence>
+        </If.Then>
+      </If>
+    </Sequence>
+    <If sap2010:WorkflowViewState.IdRef="If_12">
+      <If.Condition>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">ContinueProcess</mca:CSharpValue>
+        </InArgument>
+      </If.Condition>
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_13">
+          <Parallel DisplayName="Parallel_StructureData" sap2010:WorkflowViewState.IdRef="Parallel_11">
+            <twsba1:StructureDefaultData sap2010:WorkflowViewState.IdRef="StructureDefaultData_2">
+              <twsba1:StructureDefaultData.DefaultData>
+                <OutArgument x:TypeArguments="twse:DefaultData">
+                  <mca:CSharpReference x:TypeArguments="twse:DefaultData">DefaultData</mca:CSharpReference>
+                </OutArgument>
+              </twsba1:StructureDefaultData.DefaultData>
+              <twsba1:StructureDefaultData.DefaultRoutingProductToAdd>
+                <InArgument x:TypeArguments="twse:DefaultRoutingProductToAdd">
+                  <mca:CSharpValue x:TypeArguments="twse:DefaultRoutingProductToAdd">DefaultRoutingProductToAdd</mca:CSharpValue>
+                </InArgument>
+              </twsba1:StructureDefaultData.DefaultRoutingProductToAdd>
+              <twsba1:StructureDefaultData.EffectiveOn>
+                <InArgument x:TypeArguments="s:DateTime">
+                  <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveDate</mca:CSharpValue>
+                </InArgument>
+              </twsba1:StructureDefaultData.EffectiveOn>
+              <twsba1:StructureDefaultData.OwnerId>
+                <InArgument x:TypeArguments="x:Int32">
+                  <mca:CSharpValue x:TypeArguments="x:Int32">Input.OwnerId</mca:CSharpValue>
+                </InArgument>
+              </twsba1:StructureDefaultData.OwnerId>
+              <twsba1:StructureDefaultData.OwnerType>
+                <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+                  <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+                </InArgument>
+              </twsba1:StructureDefaultData.OwnerType>
+            </twsba1:StructureDefaultData>
+            <twsba1:StructureDataByZones sap2010:WorkflowViewState.IdRef="StructureDataByZones_2">
+              <twsba1:StructureDataByZones.AllDataByZone>
+                <OutArgument x:TypeArguments="twse:AllDataByZone">
+                  <mca:CSharpReference x:TypeArguments="twse:AllDataByZone">AllDataByZone</mca:CSharpReference>
+                </OutArgument>
+              </twsba1:StructureDataByZones.AllDataByZone>
+              <twsba1:StructureDataByZones.CurrencyId>
+                <InArgument x:TypeArguments="x:Int32">
+                  <mca:CSharpValue x:TypeArguments="x:Int32">Input.CurrencyId</mca:CSharpValue>
+                </InArgument>
+              </twsba1:StructureDataByZones.CurrencyId>
+              <twsba1:StructureDataByZones.CustomerCountriesToAdd>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToAdd)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToAdd)">CustomerCountriesToAdd</mca:CSharpValue>
+                </InArgument>
+              </twsba1:StructureDataByZones.CustomerCountriesToAdd>
+              <twsba1:StructureDataByZones.CustomerCountriesToChange>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToChange)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToChange)">CustomerCountriesToChange</mca:CSharpValue>
+                </InArgument>
+              </twsba1:StructureDataByZones.CustomerCountriesToChange>
+              <twsba1:StructureDataByZones.DataByZone>
+                <OutArgument x:TypeArguments="scg:IEnumerable(twse:DataByZone)">
+                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:DataByZone)">DataByZone</mca:CSharpReference>
+                </OutArgument>
+              </twsba1:StructureDataByZones.DataByZone>
+              <twsba1:StructureDataByZones.RatesToChange>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:RateToChange)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:RateToChange)">RatesToChange</mca:CSharpValue>
+                </InArgument>
+              </twsba1:StructureDataByZones.RatesToChange>
+              <twsba1:StructureDataByZones.RatesToClose>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:RateToClose)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:RateToClose)">RatesToClose</mca:CSharpValue>
+                </InArgument>
+              </twsba1:StructureDataByZones.RatesToClose>
+              <twsba1:StructureDataByZones.SaleZoneRoutingProductsToAdd>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductToAdd)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductToAdd)">SaleZoneRoutingProductsToAdd</mca:CSharpValue>
+                </InArgument>
+              </twsba1:StructureDataByZones.SaleZoneRoutingProductsToAdd>
+              <twsba1:StructureDataByZones.SaleZoneRoutingProductsToClose>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductToClose)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductToClose)">SaleZoneRoutingProductsToClose</mca:CSharpValue>
+                </InArgument>
+              </twsba1:StructureDataByZones.SaleZoneRoutingProductsToClose>
+              <twsba1:StructureDataByZones.SaleZoneServicesToAdd>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:SaleZoneServiceToAdd)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:SaleZoneServiceToAdd)">SaleZoneServicesToAdd</mca:CSharpValue>
+                </InArgument>
+              </twsba1:StructureDataByZones.SaleZoneServicesToAdd>
+              <twsba1:StructureDataByZones.SaleZoneServicesToClose>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:SaleZoneServiceToClose)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:SaleZoneServiceToClose)">SaleZoneServicesToClose</mca:CSharpValue>
+                </InArgument>
+              </twsba1:StructureDataByZones.SaleZoneServicesToClose>
+            </twsba1:StructureDataByZones>
+          </Parallel>
+          <twsba1:SetContextDataByZoneList sap2010:WorkflowViewState.IdRef="SetContextDataByZoneList_2">
+            <twsba1:SetContextDataByZoneList.DataByZoneList>
+              <InArgument x:TypeArguments="scg:IEnumerable(twse:DataByZone)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:DataByZone)">DataByZone</mca:CSharpValue>
+              </InArgument>
+            </twsba1:SetContextDataByZoneList.DataByZoneList>
+          </twsba1:SetContextDataByZoneList>
+          <twsba1:StructureDataByCountry sap2010:WorkflowViewState.IdRef="StructureDataByCountry_2">
+            <twsba1:StructureDataByCountry.CustomerCountriesToAdd>
+              <InArgument x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToAdd)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToAdd)">CustomerCountriesToAdd</mca:CSharpValue>
+              </InArgument>
+            </twsba1:StructureDataByCountry.CustomerCountriesToAdd>
+            <twsba1:StructureDataByCountry.DataByCountry>
+              <OutArgument x:TypeArguments="scg:IEnumerable(twse:CountryData)">
+                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:CountryData)">DataByCountry</mca:CSharpReference>
+              </OutArgument>
+            </twsba1:StructureDataByCountry.DataByCountry>
+            <twsba1:StructureDataByCountry.DataByZone>
+              <InArgument x:TypeArguments="scg:IEnumerable(twse:DataByZone)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:DataByZone)">DataByZone</mca:CSharpValue>
+              </InArgument>
+            </twsba1:StructureDataByCountry.DataByZone>
+          </twsba1:StructureDataByCountry>
+          <twsba1:SetContextEffectiveAfterCustomerZoneRatesByZone sap2010:WorkflowViewState.IdRef="SetContextEffectiveAfterCustomerZoneRatesByZone_2">
+            <twsba1:SetContextEffectiveAfterCustomerZoneRatesByZone.DataByZone>
+              <InArgument x:TypeArguments="scg:IEnumerable(twse:DataByZone)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:DataByZone)">DataByZone</mca:CSharpValue>
+              </InArgument>
+            </twsba1:SetContextEffectiveAfterCustomerZoneRatesByZone.DataByZone>
+          </twsba1:SetContextEffectiveAfterCustomerZoneRatesByZone>
+          <twsba1:StructZoneDataByCountryIds sap2010:WorkflowViewState.IdRef="StructZoneDataByCountryIds_2">
+            <twsba1:StructZoneDataByCountryIds.DataByZone>
+              <InArgument x:TypeArguments="scg:IEnumerable(twse:DataByZone)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:DataByZone)">DataByZone</mca:CSharpValue>
+              </InArgument>
+            </twsba1:StructZoneDataByCountryIds.DataByZone>
+            <twsba1:StructZoneDataByCountryIds.ZoneDataByCountryIds>
+              <OutArgument x:TypeArguments="twse:ZoneDataByCountryIds">
+                <mca:CSharpReference x:TypeArguments="twse:ZoneDataByCountryIds">ZoneDataByCountryIds</mca:CSharpReference>
+              </OutArgument>
+            </twsba1:StructZoneDataByCountryIds.ZoneDataByCountryIds>
+          </twsba1:StructZoneDataByCountryIds>
+          <twsba1:SetContextInheritedRatesByZoneId sap2010:WorkflowViewState.IdRef="SetContextInheritedRatesByZoneId_2">
+            <twsba1:SetContextInheritedRatesByZoneId.MinimumActionDate>
+              <InArgument x:TypeArguments="s:DateTime">
+                <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
+              </InArgument>
+            </twsba1:SetContextInheritedRatesByZoneId.MinimumActionDate>
+          </twsba1:SetContextInheritedRatesByZoneId>
+          <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_10" Message="Processing changes..." />
+          <twsba1:ProcessCustomerCountries Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessCustomerCountries_2">
+            <twsba1:ProcessCustomerCountries.ChangedCustomerCountries>
+              <OutArgument x:TypeArguments="scg:IEnumerable(twse:ChangedCustomerCountry)">
+                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:ChangedCustomerCountry)">ChangedCustomerCountries</mca:CSharpReference>
+              </OutArgument>
+            </twsba1:ProcessCustomerCountries.ChangedCustomerCountries>
+            <twsba1:ProcessCustomerCountries.CustomerCountriesToAdd>
+              <InArgument x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToAdd)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToAdd)">CustomerCountriesToAdd</mca:CSharpValue>
+              </InArgument>
+            </twsba1:ProcessCustomerCountries.CustomerCountriesToAdd>
+            <twsba1:ProcessCustomerCountries.CustomerCountriesToChange>
+              <InArgument x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToChange)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToChange)">CustomerCountriesToChange</mca:CSharpValue>
+              </InArgument>
+            </twsba1:ProcessCustomerCountries.CustomerCountriesToChange>
+            <twsba1:ProcessCustomerCountries.ExistingCustomerCountries>
+              <InArgument x:TypeArguments="scg:IEnumerable(twse:ExistingCustomerCountry)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ExistingCustomerCountry)">ExistingCustomerCountries</mca:CSharpValue>
+              </InArgument>
+            </twsba1:ProcessCustomerCountries.ExistingCustomerCountries>
+            <twsba1:ProcessCustomerCountries.ExplicitlyChangedExistingCustomerCountries>
+              <OutArgument x:TypeArguments="scg:IEnumerable(twse:ExistingCustomerCountry)">
+                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:ExistingCustomerCountry)">ExplicitlyChangedExistingCustomerCountries</mca:CSharpReference>
+              </OutArgument>
+            </twsba1:ProcessCustomerCountries.ExplicitlyChangedExistingCustomerCountries>
+            <twsba1:ProcessCustomerCountries.NewCustomerCountries>
+              <OutArgument x:TypeArguments="scg:IEnumerable(twse:NewCustomerCountry)">
+                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:NewCustomerCountry)">NewCustomerCountries</mca:CSharpReference>
+              </OutArgument>
+            </twsba1:ProcessCustomerCountries.NewCustomerCountries>
+            <twsba1:ProcessCustomerCountries.OwnerType>
+              <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+                <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+              </InArgument>
+            </twsba1:ProcessCustomerCountries.OwnerType>
+          </twsba1:ProcessCustomerCountries>
+          <twsba1:ReserveOwnerPriceListId sap2010:WorkflowViewState.IdRef="ReserveOwnerPriceListId_2">
+            <twsba1:ReserveOwnerPriceListId.RatesToChangeCount>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">RatesToChange.Count</mca:CSharpValue>
+              </InArgument>
+            </twsba1:ReserveOwnerPriceListId.RatesToChangeCount>
+            <twsba1:ReserveOwnerPriceListId.RatesToCloseCount>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">RatesToClose.Count()</mca:CSharpValue>
+              </InArgument>
+            </twsba1:ReserveOwnerPriceListId.RatesToCloseCount>
+            <twsba1:ReserveOwnerPriceListId.ReservedOwnerPriceListId>
+              <OutArgument x:TypeArguments="s:Nullable(x:Int32)">
+                <mca:CSharpReference x:TypeArguments="s:Nullable(x:Int32)">ReservedOwnerPriceListId</mca:CSharpReference>
+              </OutArgument>
+            </twsba1:ReserveOwnerPriceListId.ReservedOwnerPriceListId>
+          </twsba1:ReserveOwnerPriceListId>
+          <Parallel DisplayName="Parallel_ProcessActions" sap2010:WorkflowViewState.IdRef="Parallel_12">
+            <twsba1:ProcessRates Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessRates_2">
+              <twsba1:ProcessRates.ChangedRates>
+                <OutArgument x:TypeArguments="scg:IEnumerable(twse:ChangedRate)">
+                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:ChangedRate)">ChangedRates</mca:CSharpReference>
+                </OutArgument>
+              </twsba1:ProcessRates.ChangedRates>
+              <twsba1:ProcessRates.CustomerPriceListsByCurrencyId>
+                <OutArgument x:TypeArguments="scg:Dictionary(x:Int32, scg:List(twbe:NewPriceList))">
+                  <mca:CSharpReference x:TypeArguments="scg:Dictionary(x:Int32, scg:List(twbe:NewPriceList))">CustomerPriceListsByCurrencyId</mca:CSharpReference>
+                </OutArgument>
+              </twsba1:ProcessRates.CustomerPriceListsByCurrencyId>
+              <twsba1:ProcessRates.ExistingRates>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:ExistingRate)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ExistingRate)">ExistingRates</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ProcessRates.ExistingRates>
+              <twsba1:ProcessRates.ExistingZones>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:ExistingZone)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ExistingZone)">ExistingZones</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ProcessRates.ExistingZones>
+              <twsba1:ProcessRates.ExplicitlyChangedExistingCustomerCountries>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:ExistingCustomerCountry)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ExistingCustomerCountry)">ExplicitlyChangedExistingCustomerCountries</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ProcessRates.ExplicitlyChangedExistingCustomerCountries>
+              <twsba1:ProcessRates.NewRates>
+                <OutArgument x:TypeArguments="scg:IEnumerable(twse:NewRate)">
+                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:NewRate)">NewRates</mca:CSharpReference>
+                </OutArgument>
+              </twsba1:ProcessRates.NewRates>
+              <twsba1:ProcessRates.RatesToChange>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:RateToChange)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:RateToChange)">RatesToChange</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ProcessRates.RatesToChange>
+              <twsba1:ProcessRates.RatesToClose>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:RateToClose)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:RateToClose)">RatesToClose</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ProcessRates.RatesToClose>
+              <twsba1:ProcessRates.ReservedOwnerPriceListId>
+                <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+                  <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">ReservedOwnerPriceListId</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ProcessRates.ReservedOwnerPriceListId>
+            </twsba1:ProcessRates>
+            <twsba1:ProcessDefaultRoutingProduct Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessDefaultRoutingProduct_2">
+              <twsba1:ProcessDefaultRoutingProduct.ChangedDefaultRoutingProducts>
+                <OutArgument x:TypeArguments="scg:IEnumerable(twse:ChangedDefaultRoutingProduct)">
+                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:ChangedDefaultRoutingProduct)">ChangedDefaultRoutingProducts</mca:CSharpReference>
+                </OutArgument>
+              </twsba1:ProcessDefaultRoutingProduct.ChangedDefaultRoutingProducts>
+              <twsba1:ProcessDefaultRoutingProduct.DefaultRoutingProductToAdd>
+                <InArgument x:TypeArguments="twse:DefaultRoutingProductToAdd">
+                  <mca:CSharpValue x:TypeArguments="twse:DefaultRoutingProductToAdd">DefaultRoutingProductToAdd</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ProcessDefaultRoutingProduct.DefaultRoutingProductToAdd>
+              <twsba1:ProcessDefaultRoutingProduct.DefaultRoutingProductToClose>
+                <InArgument x:TypeArguments="twse:DefaultRoutingProductToClose">
+                  <mca:CSharpValue x:TypeArguments="twse:DefaultRoutingProductToClose">DefaultRoutingProductToClose</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ProcessDefaultRoutingProduct.DefaultRoutingProductToClose>
+              <twsba1:ProcessDefaultRoutingProduct.ExistingDefaultRoutingProducts>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:ExistingDefaultRoutingProduct)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ExistingDefaultRoutingProduct)">ExistingDefaultRoutingProducts</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ProcessDefaultRoutingProduct.ExistingDefaultRoutingProducts>
+              <twsba1:ProcessDefaultRoutingProduct.NewDefaultRoutingProduct>
+                <OutArgument x:TypeArguments="twse:NewDefaultRoutingProduct">
+                  <mca:CSharpReference x:TypeArguments="twse:NewDefaultRoutingProduct">NewDefaultRoutingProduct</mca:CSharpReference>
+                </OutArgument>
+              </twsba1:ProcessDefaultRoutingProduct.NewDefaultRoutingProduct>
+            </twsba1:ProcessDefaultRoutingProduct>
+            <twsba1:ProcessSaleZoneRoutingProducts Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessSaleZoneRoutingProducts_2">
+              <twsba1:ProcessSaleZoneRoutingProducts.ChangedSaleZoneRoutingProducts>
+                <OutArgument x:TypeArguments="scg:IEnumerable(twse:ChangedSaleZoneRoutingProduct)">
+                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:ChangedSaleZoneRoutingProduct)">ChangedSaleZoneRoutingProducts</mca:CSharpReference>
+                </OutArgument>
+              </twsba1:ProcessSaleZoneRoutingProducts.ChangedSaleZoneRoutingProducts>
+              <twsba1:ProcessSaleZoneRoutingProducts.ExistingSaleZoneRoutingProducts>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:ExistingSaleZoneRoutingProduct)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ExistingSaleZoneRoutingProduct)">ExistingSaleZoneRoutingProducts</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ProcessSaleZoneRoutingProducts.ExistingSaleZoneRoutingProducts>
+              <twsba1:ProcessSaleZoneRoutingProducts.ExistingZones>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:ExistingZone)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ExistingZone)">ExistingZones</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ProcessSaleZoneRoutingProducts.ExistingZones>
+              <twsba1:ProcessSaleZoneRoutingProducts.ExplicitlyChangedExistingCustomerCountries>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:ExistingCustomerCountry)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ExistingCustomerCountry)">ExplicitlyChangedExistingCustomerCountries</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ProcessSaleZoneRoutingProducts.ExplicitlyChangedExistingCustomerCountries>
+              <twsba1:ProcessSaleZoneRoutingProducts.NewSaleZoneRoutingProducts>
+                <OutArgument x:TypeArguments="scg:IEnumerable(twse:NewSaleZoneRoutingProduct)">
+                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:NewSaleZoneRoutingProduct)">NewSaleZoneRoutingProducts</mca:CSharpReference>
+                </OutArgument>
+              </twsba1:ProcessSaleZoneRoutingProducts.NewSaleZoneRoutingProducts>
+              <twsba1:ProcessSaleZoneRoutingProducts.SaleZoneRoutingProductsToAdd>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductToAdd)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductToAdd)">SaleZoneRoutingProductsToAdd</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ProcessSaleZoneRoutingProducts.SaleZoneRoutingProductsToAdd>
+              <twsba1:ProcessSaleZoneRoutingProducts.SaleZoneRoutingProductsToClose>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductToClose)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductToClose)">SaleZoneRoutingProductsToClose</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ProcessSaleZoneRoutingProducts.SaleZoneRoutingProductsToClose>
+            </twsba1:ProcessSaleZoneRoutingProducts>
+            <twsba1:ProcessDefaultService Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessDefaultService_2">
+              <twsba1:ProcessDefaultService.ChangedDefaultServices>
+                <OutArgument x:TypeArguments="scg:IEnumerable(twse:ChangedDefaultService)">
+                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:ChangedDefaultService)">ChangedDefaultServices</mca:CSharpReference>
+                </OutArgument>
+              </twsba1:ProcessDefaultService.ChangedDefaultServices>
+              <twsba1:ProcessDefaultService.DefaultServiceToAdd>
+                <InArgument x:TypeArguments="twse:DefaultServiceToAdd">
+                  <mca:CSharpValue x:TypeArguments="twse:DefaultServiceToAdd">DefaultServiceToAdd</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ProcessDefaultService.DefaultServiceToAdd>
+              <twsba1:ProcessDefaultService.DefaultServiceToClose>
+                <InArgument x:TypeArguments="twse:DefaultServiceToClose">
+                  <mca:CSharpValue x:TypeArguments="twse:DefaultServiceToClose">DefaultServiceToClose</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ProcessDefaultService.DefaultServiceToClose>
+              <twsba1:ProcessDefaultService.ExistingDefaultServices>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:ExistingDefaultService)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ExistingDefaultService)">ExistingDefaultServices</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ProcessDefaultService.ExistingDefaultServices>
+              <twsba1:ProcessDefaultService.NewDefaultService>
+                <OutArgument x:TypeArguments="twse:NewDefaultService">
+                  <mca:CSharpReference x:TypeArguments="twse:NewDefaultService">NewDefaultService</mca:CSharpReference>
+                </OutArgument>
+              </twsba1:ProcessDefaultService.NewDefaultService>
+            </twsba1:ProcessDefaultService>
+            <twsba1:ProcessSaleZoneServices Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ProcessSaleZoneServices_2">
+              <twsba1:ProcessSaleZoneServices.ChangedSaleZoneServices>
+                <OutArgument x:TypeArguments="scg:IEnumerable(twse:ChangedSaleZoneService)">
+                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:ChangedSaleZoneService)">ChangedSaleZoneServices</mca:CSharpReference>
+                </OutArgument>
+              </twsba1:ProcessSaleZoneServices.ChangedSaleZoneServices>
+              <twsba1:ProcessSaleZoneServices.ExistingSaleZoneServices>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:ExistingSaleZoneService)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ExistingSaleZoneService)">ExistingSaleZoneServices</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ProcessSaleZoneServices.ExistingSaleZoneServices>
+              <twsba1:ProcessSaleZoneServices.ExistingZones>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:ExistingZone)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ExistingZone)">ExistingZones</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ProcessSaleZoneServices.ExistingZones>
+              <twsba1:ProcessSaleZoneServices.NewSaleZoneServices>
+                <OutArgument x:TypeArguments="scg:IEnumerable(twse:NewSaleZoneService)">
+                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:NewSaleZoneService)">NewSaleZoneServices</mca:CSharpReference>
+                </OutArgument>
+              </twsba1:ProcessSaleZoneServices.NewSaleZoneServices>
+              <twsba1:ProcessSaleZoneServices.SaleZoneServicesToAdd>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:SaleZoneServiceToAdd)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:SaleZoneServiceToAdd)">SaleZoneServicesToAdd</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ProcessSaleZoneServices.SaleZoneServicesToAdd>
+              <twsba1:ProcessSaleZoneServices.SaleZoneServicesToClose>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:SaleZoneServiceToClose)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:SaleZoneServiceToClose)">SaleZoneServicesToClose</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ProcessSaleZoneServices.SaleZoneServicesToClose>
+            </twsba1:ProcessSaleZoneServices>
+          </Parallel>
+          <twsba1:UpdateZonesData sap2010:WorkflowViewState.IdRef="UpdateZonesData_2">
+            <twsba1:UpdateZonesData.DataByZone>
+              <InArgument x:TypeArguments="scg:IEnumerable(twse:DataByZone)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:DataByZone)">DataByZone</mca:CSharpValue>
+              </InArgument>
+            </twsba1:UpdateZonesData.DataByZone>
+            <twsba1:UpdateZonesData.ExistingZones>
+              <InArgument x:TypeArguments="scg:IEnumerable(twse:ExistingZone)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ExistingZone)">ExistingZones</mca:CSharpValue>
+              </InArgument>
+            </twsba1:UpdateZonesData.ExistingZones>
+          </twsba1:UpdateZonesData>
+          <vbw:CombineLists x:TypeArguments="vbe:IRuleTarget" sap2010:WorkflowViewState.IdRef="CombineLists`1_2">
+            <vbw:CombineLists.InputLists>
+              <InArgument x:TypeArguments="scg:List(sc:IEnumerable)">
+                <mca:CSharpValue x:TypeArguments="scg:List(sc:IEnumerable)" xml:space="preserve">new List&lt;System.Collections.IEnumerable&gt;()
+{
+    DataByZone,
+    CustomerCountriesToAdd,
+    CustomerCountriesToChange,
+    DataByCountry,
+    new List&lt;Vanrise.BusinessProcess.Entities.IRuleTarget&gt;() { DefaultData, ZoneDataByCountryIds, AllCustomerCountriesToAdd, AllCustomerCountriesToChange, AllDataByZone }
+};</mca:CSharpValue>
+              </InArgument>
+            </vbw:CombineLists.InputLists>
+            <vbw:CombineLists.OutputList>
+              <OutArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
+                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">ImportedDataToValidate</mca:CSharpReference>
+              </OutArgument>
+            </vbw:CombineLists.OutputList>
+          </vbw:CombineLists>
+          <vbw:ExecuteRules ParentMessagePrefix="{x:Null}" WriteMessagesToParentProcess="{x:Null}" BusinessRulesKey="RatePlan_ValidateAfterProcessing" DisplayName="ExecuteRules_ValidateZonesAfterProcessing" sap2010:WorkflowViewState.IdRef="ExecuteRules_2">
+            <vbw:ExecuteRules.ImportedDataToValidate>
+              <InArgument x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(vbe:IRuleTarget)">ImportedDataToValidate</mca:CSharpValue>
+              </InArgument>
+            </vbw:ExecuteRules.ImportedDataToValidate>
+          </vbw:ExecuteRules>
+          <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_11" Message="Changes have been processed" />
+          <Parallel DisplayName="Parallel_PrepareForDBApply" sap2010:WorkflowViewState.IdRef="Parallel_13">
+            <twsba1:ReserveIdsForNewEntities Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ReserveIdsForNewEntities_2">
+              <twsba1:ReserveIdsForNewEntities.NewCustomerCountries>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:NewCustomerCountry)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:NewCustomerCountry)">NewCustomerCountries</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ReserveIdsForNewEntities.NewCustomerCountries>
+              <twsba1:ReserveIdsForNewEntities.NewDefaultRoutingProduct>
+                <InArgument x:TypeArguments="twse:NewDefaultRoutingProduct">
+                  <mca:CSharpValue x:TypeArguments="twse:NewDefaultRoutingProduct">NewDefaultRoutingProduct</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ReserveIdsForNewEntities.NewDefaultRoutingProduct>
+              <twsba1:ReserveIdsForNewEntities.NewDefaultService>
+                <InArgument x:TypeArguments="twse:NewDefaultService">
+                  <mca:CSharpValue x:TypeArguments="twse:NewDefaultService">NewDefaultService</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ReserveIdsForNewEntities.NewDefaultService>
+              <twsba1:ReserveIdsForNewEntities.NewRates>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:NewRate)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:NewRate)">NewRates</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ReserveIdsForNewEntities.NewRates>
+              <twsba1:ReserveIdsForNewEntities.NewSaleZoneRoutingProducts>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:NewSaleZoneRoutingProduct)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:NewSaleZoneRoutingProduct)">NewSaleZoneRoutingProducts</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ReserveIdsForNewEntities.NewSaleZoneRoutingProducts>
+              <twsba1:ReserveIdsForNewEntities.NewSaleZoneServices>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:NewSaleZoneService)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:NewSaleZoneService)">NewSaleZoneServices</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ReserveIdsForNewEntities.NewSaleZoneServices>
+            </twsba1:ReserveIdsForNewEntities>
+            <twsba1:PrepareRatePlanPreviewSummary Status="{x:Null}" sap2010:WorkflowViewState.IdRef="PrepareRatePlanPreviewSummary_2">
+              <twsba1:PrepareRatePlanPreviewSummary.CustomerCountriesToAdd>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToAdd)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToAdd)">CustomerCountriesToAdd</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareRatePlanPreviewSummary.CustomerCountriesToAdd>
+              <twsba1:PrepareRatePlanPreviewSummary.CustomerCountriesToChange>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToChange)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToChange)">CustomerCountriesToChange</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareRatePlanPreviewSummary.CustomerCountriesToChange>
+              <twsba1:PrepareRatePlanPreviewSummary.DefaultRoutingProductToAdd>
+                <InArgument x:TypeArguments="twse:DefaultRoutingProductToAdd">
+                  <mca:CSharpValue x:TypeArguments="twse:DefaultRoutingProductToAdd">DefaultRoutingProductToAdd</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareRatePlanPreviewSummary.DefaultRoutingProductToAdd>
+              <twsba1:PrepareRatePlanPreviewSummary.DefaultRoutingProductToClose>
+                <InArgument x:TypeArguments="twse:DefaultRoutingProductToClose">
+                  <mca:CSharpValue x:TypeArguments="twse:DefaultRoutingProductToClose">DefaultRoutingProductToClose</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareRatePlanPreviewSummary.DefaultRoutingProductToClose>
+              <twsba1:PrepareRatePlanPreviewSummary.DefaultServiceToAdd>
+                <InArgument x:TypeArguments="twse:DefaultServiceToAdd">
+                  <mca:CSharpValue x:TypeArguments="twse:DefaultServiceToAdd">DefaultServiceToAdd</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareRatePlanPreviewSummary.DefaultServiceToAdd>
+              <twsba1:PrepareRatePlanPreviewSummary.DefaultServiceToClose>
+                <InArgument x:TypeArguments="twse:DefaultServiceToClose">
+                  <mca:CSharpValue x:TypeArguments="twse:DefaultServiceToClose">DefaultServiceToClose</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareRatePlanPreviewSummary.DefaultServiceToClose>
+              <twsba1:PrepareRatePlanPreviewSummary.RatePlanPreviewSummary>
+                <OutArgument x:TypeArguments="twse:RatePlanPreviewSummary">
+                  <mca:CSharpReference x:TypeArguments="twse:RatePlanPreviewSummary">RatePlanPreviewSummary</mca:CSharpReference>
+                </OutArgument>
+              </twsba1:PrepareRatePlanPreviewSummary.RatePlanPreviewSummary>
+              <twsba1:PrepareRatePlanPreviewSummary.RatesToChange>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:RateToChange)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:RateToChange)">RatesToChange</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareRatePlanPreviewSummary.RatesToChange>
+              <twsba1:PrepareRatePlanPreviewSummary.RatesToClose>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:RateToClose)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:RateToClose)">RatesToClose</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareRatePlanPreviewSummary.RatesToClose>
+              <twsba1:PrepareRatePlanPreviewSummary.SaleZoneRoutingProductsToAdd>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductToAdd)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductToAdd)">SaleZoneRoutingProductsToAdd</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareRatePlanPreviewSummary.SaleZoneRoutingProductsToAdd>
+              <twsba1:PrepareRatePlanPreviewSummary.SaleZoneRoutingProductsToClose>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductToClose)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductToClose)">SaleZoneRoutingProductsToClose</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareRatePlanPreviewSummary.SaleZoneRoutingProductsToClose>
+              <twsba1:PrepareRatePlanPreviewSummary.SaleZoneServicesToAdd>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:SaleZoneServiceToAdd)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:SaleZoneServiceToAdd)">SaleZoneServicesToAdd</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareRatePlanPreviewSummary.SaleZoneServicesToAdd>
+              <twsba1:PrepareRatePlanPreviewSummary.SaleZoneServicesToClose>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:SaleZoneServiceToClose)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:SaleZoneServiceToClose)">SaleZoneServicesToClose</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareRatePlanPreviewSummary.SaleZoneServicesToClose>
+            </twsba1:PrepareRatePlanPreviewSummary>
+            <twsba1:PrepareRatePreviews Status="{x:Null}" sap2010:WorkflowViewState.IdRef="PrepareRatePreviews_2">
+              <twsba1:PrepareRatePreviews.DataByZone>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:DataByZone)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:DataByZone)">DataByZone</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareRatePreviews.DataByZone>
+              <twsba1:PrepareRatePreviews.OwnerType>
+                <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+                  <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareRatePreviews.OwnerType>
+              <twsba1:PrepareRatePreviews.RatePreviews>
+                <OutArgument x:TypeArguments="scg:IEnumerable(twse:RatePreview)">
+                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:RatePreview)">RatePreviews</mca:CSharpReference>
+                </OutArgument>
+              </twsba1:PrepareRatePreviews.RatePreviews>
+            </twsba1:PrepareRatePreviews>
+            <twsba1:PrepareDefaultRoutingProductPreview Status="{x:Null}" sap2010:WorkflowViewState.IdRef="PrepareDefaultRoutingProductPreview_2">
+              <twsba1:PrepareDefaultRoutingProductPreview.DefaultRoutingProductPreview>
+                <OutArgument x:TypeArguments="twse:DefaultRoutingProductPreview">
+                  <mca:CSharpReference x:TypeArguments="twse:DefaultRoutingProductPreview">DefaultRoutingProductPreview</mca:CSharpReference>
+                </OutArgument>
+              </twsba1:PrepareDefaultRoutingProductPreview.DefaultRoutingProductPreview>
+              <twsba1:PrepareDefaultRoutingProductPreview.DefaultRoutingProductToAdd>
+                <InArgument x:TypeArguments="twse:DefaultRoutingProductToAdd">
+                  <mca:CSharpValue x:TypeArguments="twse:DefaultRoutingProductToAdd">DefaultRoutingProductToAdd</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareDefaultRoutingProductPreview.DefaultRoutingProductToAdd>
+              <twsba1:PrepareDefaultRoutingProductPreview.DefaultRoutingProductToClose>
+                <InArgument x:TypeArguments="twse:DefaultRoutingProductToClose">
+                  <mca:CSharpValue x:TypeArguments="twse:DefaultRoutingProductToClose">DefaultRoutingProductToClose</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareDefaultRoutingProductPreview.DefaultRoutingProductToClose>
+              <twsba1:PrepareDefaultRoutingProductPreview.MinimumDate>
+                <InArgument x:TypeArguments="s:DateTime">
+                  <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareDefaultRoutingProductPreview.MinimumDate>
+              <twsba1:PrepareDefaultRoutingProductPreview.OwnerId>
+                <InArgument x:TypeArguments="x:Int32">
+                  <mca:CSharpValue x:TypeArguments="x:Int32">Input.OwnerId</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareDefaultRoutingProductPreview.OwnerId>
+              <twsba1:PrepareDefaultRoutingProductPreview.OwnerType>
+                <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+                  <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareDefaultRoutingProductPreview.OwnerType>
+            </twsba1:PrepareDefaultRoutingProductPreview>
+            <twsba1:PrepareSaleZoneRoutingProductPreviews Status="{x:Null}" sap2010:WorkflowViewState.IdRef="PrepareSaleZoneRoutingProductPreviews_2">
+              <twsba1:PrepareSaleZoneRoutingProductPreviews.MinimumDate>
+                <InArgument x:TypeArguments="s:DateTime">
+                  <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareSaleZoneRoutingProductPreviews.MinimumDate>
+              <twsba1:PrepareSaleZoneRoutingProductPreviews.OwnerId>
+                <InArgument x:TypeArguments="x:Int32">
+                  <mca:CSharpValue x:TypeArguments="x:Int32">Input.OwnerId</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareSaleZoneRoutingProductPreviews.OwnerId>
+              <twsba1:PrepareSaleZoneRoutingProductPreviews.OwnerType>
+                <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+                  <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareSaleZoneRoutingProductPreviews.OwnerType>
+              <twsba1:PrepareSaleZoneRoutingProductPreviews.SaleZoneRoutingProductPreviews>
+                <OutArgument x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductPreview)">
+                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductPreview)">SaleZoneRoutingProductPreviews</mca:CSharpReference>
+                </OutArgument>
+              </twsba1:PrepareSaleZoneRoutingProductPreviews.SaleZoneRoutingProductPreviews>
+              <twsba1:PrepareSaleZoneRoutingProductPreviews.SaleZoneRoutingProductsToAdd>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductToAdd)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductToAdd)">SaleZoneRoutingProductsToAdd</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareSaleZoneRoutingProductPreviews.SaleZoneRoutingProductsToAdd>
+              <twsba1:PrepareSaleZoneRoutingProductPreviews.SaleZoneRoutingProductsToClose>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductToClose)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductToClose)">SaleZoneRoutingProductsToClose</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareSaleZoneRoutingProductPreviews.SaleZoneRoutingProductsToClose>
+            </twsba1:PrepareSaleZoneRoutingProductPreviews>
+            <twsba1:PrepareDefaultServicePreview Status="{x:Null}" sap2010:WorkflowViewState.IdRef="PrepareDefaultServicePreview_2">
+              <twsba1:PrepareDefaultServicePreview.DefaultServicePreview>
+                <OutArgument x:TypeArguments="twse:DefaultServicePreview">
+                  <mca:CSharpReference x:TypeArguments="twse:DefaultServicePreview">DefaultServicePreview</mca:CSharpReference>
+                </OutArgument>
+              </twsba1:PrepareDefaultServicePreview.DefaultServicePreview>
+              <twsba1:PrepareDefaultServicePreview.DefaultServiceToAdd>
+                <InArgument x:TypeArguments="twse:DefaultServiceToAdd">
+                  <mca:CSharpValue x:TypeArguments="twse:DefaultServiceToAdd">DefaultServiceToAdd</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareDefaultServicePreview.DefaultServiceToAdd>
+              <twsba1:PrepareDefaultServicePreview.DefaultServiceToClose>
+                <InArgument x:TypeArguments="twse:DefaultServiceToClose">
+                  <mca:CSharpValue x:TypeArguments="twse:DefaultServiceToClose">DefaultServiceToClose</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareDefaultServicePreview.DefaultServiceToClose>
+              <twsba1:PrepareDefaultServicePreview.MinimumDate>
+                <InArgument x:TypeArguments="s:DateTime">
+                  <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareDefaultServicePreview.MinimumDate>
+              <twsba1:PrepareDefaultServicePreview.OwnerId>
+                <InArgument x:TypeArguments="x:Int32">
+                  <mca:CSharpValue x:TypeArguments="x:Int32">Input.OwnerId</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareDefaultServicePreview.OwnerId>
+              <twsba1:PrepareDefaultServicePreview.OwnerType>
+                <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+                  <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareDefaultServicePreview.OwnerType>
+            </twsba1:PrepareDefaultServicePreview>
+            <twsba1:PrepareSaleZoneServicePreviews Status="{x:Null}" sap2010:WorkflowViewState.IdRef="PrepareSaleZoneServicePreviews_2">
+              <twsba1:PrepareSaleZoneServicePreviews.MinimumDate>
+                <InArgument x:TypeArguments="s:DateTime">
+                  <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareSaleZoneServicePreviews.MinimumDate>
+              <twsba1:PrepareSaleZoneServicePreviews.OwnerId>
+                <InArgument x:TypeArguments="x:Int32">
+                  <mca:CSharpValue x:TypeArguments="x:Int32">Input.OwnerId</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareSaleZoneServicePreviews.OwnerId>
+              <twsba1:PrepareSaleZoneServicePreviews.OwnerType>
+                <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+                  <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareSaleZoneServicePreviews.OwnerType>
+              <twsba1:PrepareSaleZoneServicePreviews.SaleZoneServicePreviews>
+                <OutArgument x:TypeArguments="scg:IEnumerable(twse:SaleZoneServicePreview)">
+                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:SaleZoneServicePreview)">SaleZoneServicePreviews</mca:CSharpReference>
+                </OutArgument>
+              </twsba1:PrepareSaleZoneServicePreviews.SaleZoneServicePreviews>
+              <twsba1:PrepareSaleZoneServicePreviews.SaleZoneServicesToAdd>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:SaleZoneServiceToAdd)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:SaleZoneServiceToAdd)">SaleZoneServicesToAdd</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareSaleZoneServicePreviews.SaleZoneServicesToAdd>
+              <twsba1:PrepareSaleZoneServicePreviews.SaleZoneServicesToClose>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:SaleZoneServiceToClose)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:SaleZoneServiceToClose)">SaleZoneServicesToClose</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareSaleZoneServicePreviews.SaleZoneServicesToClose>
+            </twsba1:PrepareSaleZoneServicePreviews>
+            <twsba1:PrepareCustomerCountryPreviews Status="{x:Null}" sap2010:WorkflowViewState.IdRef="PrepareCustomerCountryPreviews_2">
+              <twsba1:PrepareCustomerCountryPreviews.ChangedCustomerCountryPreviews>
+                <OutArgument x:TypeArguments="scg:IEnumerable(twse:ChangedCustomerCountryPreview)">
+                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:ChangedCustomerCountryPreview)">ChangedCustomerCountryPreviews</mca:CSharpReference>
+                </OutArgument>
+              </twsba1:PrepareCustomerCountryPreviews.ChangedCustomerCountryPreviews>
+              <twsba1:PrepareCustomerCountryPreviews.CustomerCountriesToAdd>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToAdd)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToAdd)">CustomerCountriesToAdd</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareCustomerCountryPreviews.CustomerCountriesToAdd>
+              <twsba1:PrepareCustomerCountryPreviews.CustomerCountriesToChange>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToChange)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToChange)">CustomerCountriesToChange</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareCustomerCountryPreviews.CustomerCountriesToChange>
+              <twsba1:PrepareCustomerCountryPreviews.NewCustomerCountryPreviews>
+                <OutArgument x:TypeArguments="scg:IEnumerable(twse:NewCustomerCountryPreview)">
+                  <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twse:NewCustomerCountryPreview)">NewCustomerCountryPreviews</mca:CSharpReference>
+                </OutArgument>
+              </twsba1:PrepareCustomerCountryPreviews.NewCustomerCountryPreviews>
+              <twsba1:PrepareCustomerCountryPreviews.OwnerType>
+                <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+                  <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+                </InArgument>
+              </twsba1:PrepareCustomerCountryPreviews.OwnerType>
+            </twsba1:PrepareCustomerCountryPreviews>
+          </Parallel>
+          <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_12" Message="Preparing preview page..." />
+          <twsba1:ReadRatePlanContext sap2010:WorkflowViewState.IdRef="ReadRatePlanContext_2">
+            <twsba1:ReadRatePlanContext.ProcessHasChanges>
+              <OutArgument x:TypeArguments="x:Boolean">
+                <mca:CSharpReference x:TypeArguments="x:Boolean">Output.ContinueRatePlanProcess</mca:CSharpReference>
+              </OutArgument>
+            </twsba1:ReadRatePlanContext.ProcessHasChanges>
+          </twsba1:ReadRatePlanContext>
+          <twsba1:StructureSalePriceListZoneChange sap2010:WorkflowViewState.IdRef="StructureSalePriceListZoneChange_2">
+            <twsba1:StructureSalePriceListZoneChange.AllSalePricelistRPChanges>
+              <OutArgument x:TypeArguments="scg:IEnumerable(twbe:SalePricelistRPChange)">
+                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:SalePricelistRPChange)">AllSalePricelistRPChanges</mca:CSharpReference>
+              </OutArgument>
+            </twsba1:StructureSalePriceListZoneChange.AllSalePricelistRPChanges>
+            <twsba1:StructureSalePriceListZoneChange.CurrencyId>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">Input.CurrencyId</mca:CSharpValue>
+              </InArgument>
+            </twsba1:StructureSalePriceListZoneChange.CurrencyId>
+            <twsba1:StructureSalePriceListZoneChange.CustomerChange>
+              <OutArgument x:TypeArguments="scg:IEnumerable(twbe:NewCustomerPriceListChange)">
+                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:NewCustomerPriceListChange)">CustomerChanges</mca:CSharpReference>
+              </OutArgument>
+            </twsba1:StructureSalePriceListZoneChange.CustomerChange>
+            <twsba1:StructureSalePriceListZoneChange.CustomerCountriesToAdd>
+              <InArgument x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToAdd)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToAdd)">CustomerCountriesToAdd</mca:CSharpValue>
+              </InArgument>
+            </twsba1:StructureSalePriceListZoneChange.CustomerCountriesToAdd>
+            <twsba1:StructureSalePriceListZoneChange.CustomerCountriesToChange>
+              <InArgument x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToChange)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToChange)">CustomerCountriesToChange</mca:CSharpValue>
+              </InArgument>
+            </twsba1:StructureSalePriceListZoneChange.CustomerCountriesToChange>
+            <twsba1:StructureSalePriceListZoneChange.CustomerPriceListsByCurrencyId>
+              <InArgument x:TypeArguments="scg:Dictionary(x:Int32, scg:List(twbe:NewPriceList))">
+                <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:Int32, scg:List(twbe:NewPriceList))">CustomerPriceListsByCurrencyId</mca:CSharpValue>
+              </InArgument>
+            </twsba1:StructureSalePriceListZoneChange.CustomerPriceListsByCurrencyId>
+            <twsba1:StructureSalePriceListZoneChange.DataByZone>
+              <InArgument x:TypeArguments="scg:IEnumerable(twse:DataByZone)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:DataByZone)">DataByZone</mca:CSharpValue>
+              </InArgument>
+            </twsba1:StructureSalePriceListZoneChange.DataByZone>
+            <twsba1:StructureSalePriceListZoneChange.DefaultRoutingProductToAdd>
+              <InArgument x:TypeArguments="twse:DefaultRoutingProductToAdd">
+                <mca:CSharpValue x:TypeArguments="twse:DefaultRoutingProductToAdd">DefaultRoutingProductToAdd</mca:CSharpValue>
+              </InArgument>
+            </twsba1:StructureSalePriceListZoneChange.DefaultRoutingProductToAdd>
+            <twsba1:StructureSalePriceListZoneChange.DefaultRoutingProductToClose>
+              <InArgument x:TypeArguments="twse:DefaultRoutingProductToClose">
+                <mca:CSharpValue x:TypeArguments="twse:DefaultRoutingProductToClose">DefaultRoutingProductToClose</mca:CSharpValue>
+              </InArgument>
+            </twsba1:StructureSalePriceListZoneChange.DefaultRoutingProductToClose>
+            <twsba1:StructureSalePriceListZoneChange.Draft>
+              <InArgument x:TypeArguments="twse:Changes">
+                <mca:CSharpValue x:TypeArguments="twse:Changes">Changes</mca:CSharpValue>
+              </InArgument>
+            </twsba1:StructureSalePriceListZoneChange.Draft>
+            <twsba1:StructureSalePriceListZoneChange.EffectiveOn>
+              <InArgument x:TypeArguments="s:DateTime">
+                <mca:CSharpValue x:TypeArguments="s:DateTime">Input.EffectiveDate</mca:CSharpValue>
+              </InArgument>
+            </twsba1:StructureSalePriceListZoneChange.EffectiveOn>
+            <twsba1:StructureSalePriceListZoneChange.MinimumDateTime>
+              <InArgument x:TypeArguments="s:DateTime">
+                <mca:CSharpValue x:TypeArguments="s:DateTime">MinimumDate</mca:CSharpValue>
+              </InArgument>
+            </twsba1:StructureSalePriceListZoneChange.MinimumDateTime>
+            <twsba1:StructureSalePriceListZoneChange.NewSalePriceList>
+              <OutArgument x:TypeArguments="scg:IEnumerable(twbe:NewPriceList)">
+                <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twbe:NewPriceList)">SalePricelists</mca:CSharpReference>
+              </OutArgument>
+            </twsba1:StructureSalePriceListZoneChange.NewSalePriceList>
+            <twsba1:StructureSalePriceListZoneChange.OwnerId>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">Input.OwnerId</mca:CSharpValue>
+              </InArgument>
+            </twsba1:StructureSalePriceListZoneChange.OwnerId>
+            <twsba1:StructureSalePriceListZoneChange.OwnerType>
+              <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+                <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+              </InArgument>
+            </twsba1:StructureSalePriceListZoneChange.OwnerType>
+            <twsba1:StructureSalePriceListZoneChange.RerservedSalePriceListId>
+              <InArgument x:TypeArguments="s:Nullable(x:Int32)">
+                <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">ReservedOwnerPriceListId</mca:CSharpValue>
+              </InArgument>
+            </twsba1:StructureSalePriceListZoneChange.RerservedSalePriceListId>
+            <twsba1:StructureSalePriceListZoneChange.SaleRates>
+              <InArgument x:TypeArguments="scg:IEnumerable(twbe:SaleRate)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SaleRate)">ExistingSaleRates</mca:CSharpValue>
+              </InArgument>
+            </twsba1:StructureSalePriceListZoneChange.SaleRates>
+            <twsba1:StructureSalePriceListZoneChange.SaleZones>
+              <InArgument x:TypeArguments="scg:IEnumerable(twbe:SaleZone)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SaleZone)">ExistingSaleZones</mca:CSharpValue>
+              </InArgument>
+            </twsba1:StructureSalePriceListZoneChange.SaleZones>
+          </twsba1:StructureSalePriceListZoneChange>
+          <Parallel DisplayName="Parallel_ApplyToDB" sap2010:WorkflowViewState.IdRef="Parallel_14">
+            <twsba1:ApplyNewRatesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyNewRatesToDB_2">
+              <twsba1:ApplyNewRatesToDB.NewRates>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:NewRate)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:NewRate)">NewRates</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ApplyNewRatesToDB.NewRates>
+            </twsba1:ApplyNewRatesToDB>
+            <twsba1:ApplyChangedRatesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyChangedRatesToDB_2">
+              <twsba1:ApplyChangedRatesToDB.ChangedCustomerCountries>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:ChangedCustomerCountry)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ChangedCustomerCountry)">ChangedCustomerCountries</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ApplyChangedRatesToDB.ChangedCustomerCountries>
+              <twsba1:ApplyChangedRatesToDB.ChangedRates>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:ChangedRate)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ChangedRate)">ChangedRates</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ApplyChangedRatesToDB.ChangedRates>
+            </twsba1:ApplyChangedRatesToDB>
+            <twsba1:ApplyNewDefaultRoutingProductToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyNewDefaultRoutingProductToDB_2">
+              <twsba1:ApplyNewDefaultRoutingProductToDB.NewDefaultRoutingProduct>
+                <InArgument x:TypeArguments="twse:NewDefaultRoutingProduct">
+                  <mca:CSharpValue x:TypeArguments="twse:NewDefaultRoutingProduct">NewDefaultRoutingProduct</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ApplyNewDefaultRoutingProductToDB.NewDefaultRoutingProduct>
+            </twsba1:ApplyNewDefaultRoutingProductToDB>
+            <twsba1:ApplyChangedDefaultRoutingProductsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyChangedDefaultRoutingProductsToDB_2">
+              <twsba1:ApplyChangedDefaultRoutingProductsToDB.ChangedDefaultRoutingProducts>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:ChangedDefaultRoutingProduct)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ChangedDefaultRoutingProduct)">ChangedDefaultRoutingProducts</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ApplyChangedDefaultRoutingProductsToDB.ChangedDefaultRoutingProducts>
+            </twsba1:ApplyChangedDefaultRoutingProductsToDB>
+            <twsba1:ApplyDefaultRoutingProductPreviewToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyDefaultRoutingProductPreviewToDB_2">
+              <twsba1:ApplyDefaultRoutingProductPreviewToDB.DefaultRoutingProductPreview>
+                <InArgument x:TypeArguments="twse:DefaultRoutingProductPreview">
+                  <mca:CSharpValue x:TypeArguments="twse:DefaultRoutingProductPreview">DefaultRoutingProductPreview</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ApplyDefaultRoutingProductPreviewToDB.DefaultRoutingProductPreview>
+            </twsba1:ApplyDefaultRoutingProductPreviewToDB>
+            <twsba1:ApplyNewSaleZoneRoutingProductsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyNewSaleZoneRoutingProductsToDB_2">
+              <twsba1:ApplyNewSaleZoneRoutingProductsToDB.NewSaleZoneRoutingProducts>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:NewSaleZoneRoutingProduct)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:NewSaleZoneRoutingProduct)">NewSaleZoneRoutingProducts</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ApplyNewSaleZoneRoutingProductsToDB.NewSaleZoneRoutingProducts>
+            </twsba1:ApplyNewSaleZoneRoutingProductsToDB>
+            <twsba1:ApplyChangedSaleZoneRoutingProductsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyChangedSaleZoneRoutingProductsToDB_2">
+              <twsba1:ApplyChangedSaleZoneRoutingProductsToDB.ChangedSaleZoneRoutingProducts>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:ChangedSaleZoneRoutingProduct)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ChangedSaleZoneRoutingProduct)">ChangedSaleZoneRoutingProducts</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ApplyChangedSaleZoneRoutingProductsToDB.ChangedSaleZoneRoutingProducts>
+            </twsba1:ApplyChangedSaleZoneRoutingProductsToDB>
+            <twsba1:ApplyRatePreviewsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyRatePreviewsToDB_2">
+              <twsba1:ApplyRatePreviewsToDB.RatePreviews>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:RatePreview)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:RatePreview)">RatePreviews</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ApplyRatePreviewsToDB.RatePreviews>
+            </twsba1:ApplyRatePreviewsToDB>
+            <twsba1:ApplySaleZoneRoutingProductPreviewsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplySaleZoneRoutingProductPreviewsToDB_2">
+              <twsba1:ApplySaleZoneRoutingProductPreviewsToDB.SaleZoneRoutingProductPreviews>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductPreview)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:SaleZoneRoutingProductPreview)">SaleZoneRoutingProductPreviews</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ApplySaleZoneRoutingProductPreviewsToDB.SaleZoneRoutingProductPreviews>
+            </twsba1:ApplySaleZoneRoutingProductPreviewsToDB>
+            <twsba1:ApplyRatePlanPreviewSummaryToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyRatePlanPreviewSummaryToDB_2">
+              <twsba1:ApplyRatePlanPreviewSummaryToDB.RatePlanPreviewSummary>
+                <InArgument x:TypeArguments="twse:RatePlanPreviewSummary">
+                  <mca:CSharpValue x:TypeArguments="twse:RatePlanPreviewSummary">RatePlanPreviewSummary</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ApplyRatePlanPreviewSummaryToDB.RatePlanPreviewSummary>
+            </twsba1:ApplyRatePlanPreviewSummaryToDB>
+            <twsba1:ApplyNewDefaultServiceToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyNewDefaultServiceToDB_2">
+              <twsba1:ApplyNewDefaultServiceToDB.NewDefaultService>
+                <InArgument x:TypeArguments="twse:NewDefaultService">
+                  <mca:CSharpValue x:TypeArguments="twse:NewDefaultService">NewDefaultService</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ApplyNewDefaultServiceToDB.NewDefaultService>
+            </twsba1:ApplyNewDefaultServiceToDB>
+            <twsba1:ApplyChangedDefaultServicesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyChangedDefaultServicesToDB_2">
+              <twsba1:ApplyChangedDefaultServicesToDB.ChangedDefaultServices>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:ChangedDefaultService)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ChangedDefaultService)">ChangedDefaultServices</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ApplyChangedDefaultServicesToDB.ChangedDefaultServices>
+            </twsba1:ApplyChangedDefaultServicesToDB>
+            <twsba1:ApplyDefaultServicePreviewToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyDefaultServicePreviewToDB_2">
+              <twsba1:ApplyDefaultServicePreviewToDB.DefaultServicePreview>
+                <InArgument x:TypeArguments="twse:DefaultServicePreview">
+                  <mca:CSharpValue x:TypeArguments="twse:DefaultServicePreview">DefaultServicePreview</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ApplyDefaultServicePreviewToDB.DefaultServicePreview>
+            </twsba1:ApplyDefaultServicePreviewToDB>
+            <twsba1:ApplyNewSaleZoneServicesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyNewSaleZoneServicesToDB_2">
+              <twsba1:ApplyNewSaleZoneServicesToDB.NewSaleZoneServices>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:NewSaleZoneService)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:NewSaleZoneService)">NewSaleZoneServices</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ApplyNewSaleZoneServicesToDB.NewSaleZoneServices>
+            </twsba1:ApplyNewSaleZoneServicesToDB>
+            <twsba1:ApplyChangedSaleZoneServicesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyChangedSaleZoneServicesToDB_2">
+              <twsba1:ApplyChangedSaleZoneServicesToDB.ChangedSaleZoneServices>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:ChangedSaleZoneService)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ChangedSaleZoneService)">ChangedSaleZoneServices</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ApplyChangedSaleZoneServicesToDB.ChangedSaleZoneServices>
+            </twsba1:ApplyChangedSaleZoneServicesToDB>
+            <twsba1:ApplySaleZoneServicePreviewsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplySaleZoneServicePreviewsToDB_2">
+              <twsba1:ApplySaleZoneServicePreviewsToDB.SaleZoneServicePreviews>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:SaleZoneServicePreview)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:SaleZoneServicePreview)">SaleZoneServicePreviews</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ApplySaleZoneServicePreviewsToDB.SaleZoneServicePreviews>
+            </twsba1:ApplySaleZoneServicePreviewsToDB>
+            <twsba1:ApplyNewCustomerCountriesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyNewCustomerCountriesToDB_2">
+              <twsba1:ApplyNewCustomerCountriesToDB.NewCustomerCountries>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:NewCustomerCountry)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:NewCustomerCountry)">NewCustomerCountries</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ApplyNewCustomerCountriesToDB.NewCustomerCountries>
+              <twsba1:ApplyNewCustomerCountriesToDB.OwnerType>
+                <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+                  <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ApplyNewCustomerCountriesToDB.OwnerType>
+            </twsba1:ApplyNewCustomerCountriesToDB>
+            <twsba1:ApplyChangedCustomerCountriesToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyChangedCustomerCountriesToDB_2">
+              <twsba1:ApplyChangedCustomerCountriesToDB.ChangedCustomerCountries>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:ChangedCustomerCountry)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ChangedCustomerCountry)">ChangedCustomerCountries</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ApplyChangedCustomerCountriesToDB.ChangedCustomerCountries>
+              <twsba1:ApplyChangedCustomerCountriesToDB.OwnerType>
+                <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+                  <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ApplyChangedCustomerCountriesToDB.OwnerType>
+            </twsba1:ApplyChangedCustomerCountriesToDB>
+            <twsba1:ApplyChangedCustomerCountryPreviewsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyChangedCustomerCountryPreviewsToDB_2">
+              <twsba1:ApplyChangedCustomerCountryPreviewsToDB.ChangedCustomerCountryPreviews>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:ChangedCustomerCountryPreview)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:ChangedCustomerCountryPreview)">ChangedCustomerCountryPreviews</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ApplyChangedCustomerCountryPreviewsToDB.ChangedCustomerCountryPreviews>
+              <twsba1:ApplyChangedCustomerCountryPreviewsToDB.OwnerType>
+                <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+                  <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ApplyChangedCustomerCountryPreviewsToDB.OwnerType>
+            </twsba1:ApplyChangedCustomerCountryPreviewsToDB>
+            <twsba1:ApplyNewCustomerCountryPreviewsToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyNewCustomerCountryPreviewsToDB_2">
+              <twsba1:ApplyNewCustomerCountryPreviewsToDB.NewCustomerCountryPreviews>
+                <InArgument x:TypeArguments="scg:IEnumerable(twse:NewCustomerCountryPreview)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:NewCustomerCountryPreview)">NewCustomerCountryPreviews</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ApplyNewCustomerCountryPreviewsToDB.NewCustomerCountryPreviews>
+              <twsba1:ApplyNewCustomerCountryPreviewsToDB.OwnerType>
+                <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+                  <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+                </InArgument>
+              </twsba1:ApplyNewCustomerCountryPreviewsToDB.OwnerType>
+            </twsba1:ApplyNewCustomerCountryPreviewsToDB>
+          </Parallel>
+          <twsba1:SavePricelistFiles CustomerChanges="{x:Null}" sap2010:WorkflowViewState.IdRef="SavePricelistFiles_2">
+            <twsba1:SavePricelistFiles.CurrencyId>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">Input.CurrencyId</mca:CSharpValue>
+              </InArgument>
+            </twsba1:SavePricelistFiles.CurrencyId>
+            <twsba1:SavePricelistFiles.CustomerCountriesToChange>
+              <InArgument x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToChange)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twse:CustomerCountryToChange)">CustomerCountriesToChange</mca:CSharpValue>
+              </InArgument>
+            </twsba1:SavePricelistFiles.CustomerCountriesToChange>
+            <twsba1:SavePricelistFiles.NewCustomerChanges>
+              <InArgument x:TypeArguments="scg:IEnumerable(twbe:NewCustomerPriceListChange)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:NewCustomerPriceListChange)">CustomerChanges</mca:CSharpValue>
+              </InArgument>
+            </twsba1:SavePricelistFiles.NewCustomerChanges>
+            <twsba1:SavePricelistFiles.NewSalePriceList>
+              <InArgument x:TypeArguments="scg:IEnumerable(twbe:NewPriceList)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:NewPriceList)">SalePricelists</mca:CSharpValue>
+              </InArgument>
+            </twsba1:SavePricelistFiles.NewSalePriceList>
+            <twsba1:SavePricelistFiles.OwnerId>
+              <InArgument x:TypeArguments="x:Int32">
+                <mca:CSharpValue x:TypeArguments="x:Int32">Input.OwnerId</mca:CSharpValue>
+              </InArgument>
+            </twsba1:SavePricelistFiles.OwnerId>
+            <twsba1:SavePricelistFiles.OwnerType>
+              <InArgument x:TypeArguments="twbe:SalePriceListOwnerType">
+                <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
+              </InArgument>
+            </twsba1:SavePricelistFiles.OwnerType>
+            <twsba1:SavePricelistFiles.SalePLZoneChanges>
+              <InArgument x:TypeArguments="scg:IEnumerable(twbe:SalePLZoneChange)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SalePLZoneChange)">SalePLZoneChanges</mca:CSharpValue>
+              </InArgument>
+            </twsba1:SavePricelistFiles.SalePLZoneChanges>
+          </twsba1:SavePricelistFiles>
+          <If sap2010:WorkflowViewState.IdRef="If_11">
+            <If.Condition>
+              <InArgument x:TypeArguments="x:Boolean">
+                <mca:CSharpValue x:TypeArguments="x:Boolean">CustomerChanges.Count()==0</mca:CSharpValue>
+              </InArgument>
+            </If.Condition>
+            <If.Then>
+              <twsba1:SaveRoutingProductChanges sap2010:WorkflowViewState.IdRef="SaveRoutingProductChanges_2">
+                <twsba1:SaveRoutingProductChanges.AllSalePricelistRPChanges>
+                  <InArgument x:TypeArguments="scg:IEnumerable(twbe:SalePricelistRPChange)">
+                    <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twbe:SalePricelistRPChange)">AllSalePricelistRPChanges</mca:CSharpValue>
+                  </InArgument>
+                </twsba1:SaveRoutingProductChanges.AllSalePricelistRPChanges>
+              </twsba1:SaveRoutingProductChanges>
+            </If.Then>
+          </If>
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_13" Message="The process did not detect any changes">
+          <vbw:WriteTrackingMessage.Severity>
+            <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+              <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+            </InArgument>
+          </vbw:WriteTrackingMessage.Severity>
+        </vbw:WriteTrackingMessage>
+      </If.Else>
+    </If>
+    <sads:DebugSymbol.Symbol>d1BDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlNhbGVzLkJQXFN1YlByb2Nlc3Nlc1xSYXRlUGxhblN1YlByb2Nlc3MueGFtbPQCRAO1DQ4CAQFfC1+MAQMBqwGQAQuQAbYBAgFXkwE1kwE7AgFWlgELlgGYAQIBAqQBBa8BDgQBmbEBsAEFygEhBAH0rQHLAQWwAh0EAeOgAbECBc8DEAQBj44B0AMF2wMqBAHmjAHcAwXOBBAEAaCAAc8EBdUELwMBy3/WBAW8BRADAdR2vQUFsw0KAwH/AawBC6wBfQQB7rEBpwELpwFtBAGasQG9AQu9AWAEAcWwAbMBC7MBWAQB8a8BuAELuAFeBAGdrwHCAQvCAVUEAcmuAccBC8cBawQB9a0BzgELzgGAAQQBoK0BmQILmQJ2BAHMrAHYAQvYAVoEAfirAd0BC90BWAQBpKsBhQILhQJeBAHQqgHsAQvsAYIBBAH8qQGtAgutAowBBAGoqQGUAguUAnEEAdSoAYACC4ACXgQBgKgBigILigJVBAGspwHTAQvTAYYBBAHYpgGeAgueApYBBAGEpgH7AQv7AXgEAbClAecBC+cBjwEEAdykAaMCC6MCmgEEAYikAfYBC/YBdAQBtKMBjwILjwJrBAHgogHxAQvxAYYBBAGMogGoAguoAogBBAG4oQHiAQviAYkBBAHkoAG1AgfKAiUEAY6eAcsCB+ACJQQBuZsB4QIH9gI8BAHkmAH3AgeMAzkEAY+WAY0DB6IDNQQBupMBowMHuAMyBAHlkAG5AwfOAy0EAZCOAdgDC9gDbgQBu40B0wML0wNwBAHnjAHdAweYBBIEAZmGAZkEB6QENgQB8IQBpQQHsAQvBAHHgwGxBAe8BDAEAZ6CAb0EB80EMQQBoYAB0gQL0gRwAwHMf9wEB7sFDAMB1XbABQvABVkDAYACxAUJqA0UAwGqA6sNCbENJAMB1AK9Ag29AlgEAY6gAbgCDbgCegQBuZ8BwgINwgJXBAHkngHHAg3HAm0EAY+eAdMCDdMCWAQBuZ0B2AIN2AJXBAHknAHOAg3OAnoEAY+cAd0CDd0CbQQBupsB6QIN6QJYBAHkmgHuAg3uAlcEAY+aAeQCDeQCngEEAbqZAfMCDfMCbQQB5ZgB/wIN/wJYBAGPmAH6Ag36ApwBBAG6lwGEAw2EA1cEAeWWAYkDDYkDbQQBkJYBkAMNkAOaAQQBupUBlQMNlQNYBAHllAGaAw2aA1cEAZCUAZ8DDZ8DbQQBu5MBqwMNqwNYBAHlkgGwAw2wA1cEAZCSAaYDDaYDlAEEAbuRAbUDDbUDbQQB5pABwQMNwQNYBAGQkAHGAw3GA1cEAbuPAcsDDcsDbQQB5o4BvAMNvAOOAQQBkY4B3gMJ7gMnBAHpigHvAwmXBBQEAZqGAZwEDZwEnAEEAcWFAaEEDaEElgEEAfGEAa0EDa0EkgEEAZyEAagEDagEjgEEAciDAbQEDbQEjAEEAfOCAbkEDbkEkAEEAZ+CAcAEDcAEkQEEAcqBAcoEDcoEbQQB9oABxQQNxQSGAQQBooAB3wQN3wScAQMB1nbjBAu5BRYDAa13xQULmgYWAwGRbJsGC6EGLQMBvGuiBguyBisDAb9pswYLuQZEAwHqaLoGC8UGLwMBwWfGBgvMBjUDAexmzQYLzQaVAQMB6mbOBgvyBi0DAZ1i8wYLgwcsAwGgYIQHC68IFgMBmkuwCAu7CCQDAfFJvAgLzggeAwHISM8IC9UIHgMB8kfWCAvWCJsBAwHwR9cIC+cKFgMBqyboCgvoCpkBAwGpJukKC+8KKAMB1CXwCgvLCzUDAesZzAsL8gwWAwGiCfMMC5cNJwMB1QSYDQunDRADAasDrg0Prg2JAQMB1gKrDWWrDY0BAwHVAuEDD+EDdAQBkowB5gMP5gN8BAG+iwHrAw/rA4gBBAHqigHwAwuFBCkEAZiIAYYEC5YEOwQBm4YB5AQN6gQuAwHzfusEDfYELwMBxH33BA24BRIDAa53xgUN4AUrAwGvc+EFDZkGKwMBkmyeBhGeBnEDAb1rrwYRrwZxAwHoaqoGEaoGfQMBlGqlBhGlBocBAwHAabYGEbYGcQMB62i9BhG9BnEDAZZowgYRwgZ8AwHCZ8kGEckGXAMB7WbNBnvNBpIBAwHrZtEGEdEGkwEDAZZm6gYR6gaLAQMBwmXgBhHgBo0BAwHuZNsGEdsGjQEDAZpk7wYR7wZxAwHGY+UGEeUGpgEDAfJi1gYR1gaHAQMBnmL2BhH2BmEDAclhgAcRgAd6AwH1YPsGEfsGYgMBoWCFBw2zByMDAatatAcNzgczAwGGV88HDfMHNQMBuVL0Bw2OCCwDAZRPjwgNrgguAwGbS7MIEbMIcQMBxkq4CBG4CHYDAfJJvwgRxggVAwGdScsIEcsIhQEDAclIzwh1zwiXAQMBx0jSCBHSCH0DAfNH1gh71giYAQMB8UfYCA33CC8DAfdD+AgNugk0AwGyO7sJDcsJKgMBtTnMCQ3rCToDAbw17AkNiwo8AwHDMYwKDasKMwMByi2sCg3LCjUDAdEpzAoN5go1AwGsJugKe+gKlgEDAaom7AoR7Ap2AwHVJcMLEcMLdgMBgCWqCxGqC1wDAawkkQsRkQtxAwHYI/gKEfgKXgMBhCOlCxGlC2QDAbAilgsRlguAAQMB3CGvCxGvC38DAYghvgsRvgtyAwG0IP0KEf0KjgEDAeAftAsRtAtbAwGMH/MKEfMKkwEDAbgehwsRhwuNAQMB5B3ICxHIC3YDAZAdoAsRoAtaAwG8HLkLEbkLcQMB6BubCxGbC4QBAwGUG4ILEYILhwEDAcAajAsRjAuZAQMB7BnNCw3TCygDAZYZ1AsN3wssAwHtF+ALDeYLOAMBmBfnCw3tCz0DAcMW7gsN9As8AwHuFfULDfsLOgMBmRX8Cw2CDD4DAcQUgwwNiQwsAwHvE4oMDZAMPgMBmhORDA2XDDYDAcUSmAwNngwxAwHwEZ8MDaUMNgMBmxGmDA2sDDUDAcYQrQwNswwzAwHxD7QMDboMNwMBnA+7DA3BDDcDAccOwgwNzQw0AwGeDc4MDdkMOAMB9QvaDA3lDD4DAcwK5gwN8Qw6AwGjCYANEYANhgEDAc4I9gwR9gxeAwH6B4UNEYUNdwMBpgeKDRGKDVsDAdIG+wwR+wyNAQMB/gWUDRGUDX4DAaoFjw0Rjw1xAwHWBJsNEZsNagMBrAOfDQ+lDTIDAYAE8wMR8wNeBAGVigH4AxH4A34EAcGJAf0DEf0DdgQB7YgBggQRggSCAQQBmYgBiQQRiQSYAQQBxIcBjgQRjgSiAQQB8IYBkwQRkwSCAQQBnIYB5wQT5wR0AwH0fu4EE+4EeAMBnH7zBBPzBHkDAcV9+gQT+gTFAQMBr3f+BBG2BRwDAYZ40wUT0wVmAwGAds4FE84FggEDAax1yQUTyQVsAwHYdNgFE9gFXQMBhHTdBRPdBXMDAbBz+AUT+AV7AwHbcoIGE4IGdgMBh3LpBRPpBWADAbNxlgYTlgaMAQMB33DkBRPkBXADAYtw/QUT/QV4AwG3b4cGE4cGlgEDAeNu8wUT8wWPAQMBj26MBhOMBpoBAwG7bZEGE5EGiAEDAeds7gUT7gWJAQMBk2yIBxOIB34DAcxfqwcTqwd2AwH4XrAHE7AHdAMBpF6hBxOhB3YDAdBdkgcTkgd4AwH8XKYHE6YHeAMBqFyXBxOXB3gDAdRbnAcTnAegAQMBgFuNBxONB6MBAwGsWsYHE8YHmgEDAddZtwcTtwegAQMBg1m8BxO8B4IBAwGvWMsHE8sHhgEDAdtXwQcTwQeGAQMBh1fSBxPSB6IBAwGyVuYHE+YHmgEDAd5V1wcT1wecAQMBilXcBxPcB3gDAbZU6wcT6weWAQMB4lPwBxPwB5oBAwGOU+EHE+EHoAEDAbpSiwgTiwh4AwHlUfcHE/cHkgEDAZFRhggThgiMAQMBvVCBCBOBCHgDAelP/AcT/Ad0AwGVT6EIE6EIjAEDAcBOqwgTqwiMAQMB7E2SCBOSCJQBAwGYTZwIE5wIeAMBxEyXCBOXCI4BAwHwS6YIE6YIiAEDAZxL9AgT9AiEAQMBnEflCBPlCHADAchG2wgT2wiFAQMB9EXvCBPvCJIBAwGgReoIE+oIbgMBzETgCBPgCH4DAfhDmQkTmQmCAQMBo0OjCROjCXYDAc9ChQkThQmCAQMB+0G3CRO3CYwBAwGnQZ4JE54JeAMB00CoCROoCZYBAwH/P5QJE5QJeAMBqz+ACROACY8BAwHXPq0JE60JmgEDAYM+jwkTjwl0AwGvPYoJE4oJhgEDAds8sgkTsgmIAQMBhzz7CBP7CIkBAwGzO74JE74JcwMB3jrICRPICX4DAYo6wwkTwwlzAwG2Od4JE94JXgMB4TjUCRPUCYIBAwGNOM8JE88JjgEDAbk34wkT4wldAwHlNugJE+gJcwMBkTbZCRPZCYYBAwG9Ne8JE+8JXgMB6DT0CRP0CV0DAZQ0gwoTgwqWAQMBwDOIChOICpoBAwHsMv4JE/4JogEDAZgy+QkT+QlzAwHEMZ4KE54KXgMB7zCPChOPCoABAwGbMKMKE6MKXQMBxy+ZChOZCngDAfMulAoTlAp0AwGfLqgKE6gKcwMByy2vChOvCl4DAfYsvgoTvgqUAQMBoizIChPICowBAwHOK7QKE7QKXQMB+iq5ChO5CnMDAaYqwwoTwwqIAQMB0ineChPeCpoBAwH9KM8KE88KogEDAako2QoT2QqPAQMB1SfjChPjCnMDAYEn1AoT1AqJAQMBrSbQCxPQC24DAZcZ3AsT3At2AwHCGNcLE9cLjQEDAe4X4wsT4wt+AwGZF+oLE+oLmAEDAcQW8QsT8QuGAQMB7xX4CxP4C5IBAwGaFf8LE/8LmgEDAcUUhgwThgx2AwHwE40ME40MmgEDAZsTlAwTlAx6AwHGEpsME5sMcAMB8RGiDBOiDIoBAwGcEakME6kMeAMBxxCwDBOwDIQBAwHyD7cME7cMjAEDAZ0PvgwTvgyMAQMByA7FDBPFDIUBAwHzDcoME8oMcwMBnw3RDBPRDI0BAwHKDNYME9YMcwMB9gvdDBPdDJoBAwGhC+IME+IMcwMBzQrpDBPpDJIBAwH4Ce4ME+4McwMBpAmiDRWiDY8BAwGBBP8EE5IFJAMBvXuTBRO1BRgDAYd4jwUZjwXGAQMB7XyHBRmKBSADAZZ8/wTEAf8E1wEDAZV8ggUZggWlAQMBvnuWBRmWBZUBAwGIeJoFF6UFMAMBjnqoBRezBSADAd94nQUdnQV7AwHmeqIFHaIFewMBj3qwBR2wBZkBAwG3easFHasFcwMB4Hg=</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="Assign_3" sap:VirtualizedContainerService.HintSize="5121,62" />
+      <sap2010:ViewStateData Id="SetRatePlanContext_2" sap:VirtualizedContainerService.HintSize="5121,22" />
+      <sap2010:ViewStateData Id="PrepareActions_2" sap:VirtualizedContainerService.HintSize="5121,22" />
+      <sap2010:ViewStateData Id="GetExistingSaleZones_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="GetExistingSaleRates_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="GetExistingSaleEntityDefaultRoutingProducts_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="GetExistingSaleEntityZoneRoutingProducts_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="GetExistingSaleEntityDefaultServices_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="GetExistingSaleEntityZoneServices_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="GetExistingCustomerCountries_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_8" sap:VirtualizedContainerService.HintSize="5121,86">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="SetContextActionRateLocator_2" sap:VirtualizedContainerService.HintSize="5121,22" />
+      <sap2010:ViewStateData Id="PrepareExistingZones_2" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="PrepareExistingRates_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareExistingSaleZoneRoutingProducts_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_9" sap:VirtualizedContainerService.HintSize="554,86">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_9" sap:VirtualizedContainerService.HintSize="576,272">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="PrepareExistingDefaultRoutingProducts_2" sap:VirtualizedContainerService.HintSize="200,272" />
+      <sap2010:ViewStateData Id="PrepareExistingDefaultServices_2" sap:VirtualizedContainerService.HintSize="200,272" />
+      <sap2010:ViewStateData Id="PrepareExistingSaleZoneServices_2" sap:VirtualizedContainerService.HintSize="200,272" />
+      <sap2010:ViewStateData Id="PrepareExistingCustomerCountries_2" sap:VirtualizedContainerService.HintSize="200,272" />
+      <sap2010:ViewStateData Id="Parallel_10" sap:VirtualizedContainerService.HintSize="5121,318">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="SetContextExistingZonesByCountry_2" sap:VirtualizedContainerService.HintSize="5121,22" />
+      <sap2010:ViewStateData Id="FillArgumentFromContext_2" sap:VirtualizedContainerService.HintSize="614,22" />
+      <sap2010:ViewStateData Id="GetZonesWithMissingRates_2" sap:VirtualizedContainerService.HintSize="614,22" />
+      <sap2010:ViewStateData Id="AssignTask`1_3" sap:VirtualizedContainerService.HintSize="467,22" />
+      <sap2010:ViewStateData Id="SetDefaultRates_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="Assign_2" sap:VirtualizedContainerService.HintSize="242,62" />
+      <sap2010:ViewStateData Id="If_8" sap:VirtualizedContainerService.HintSize="467,212">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_10" sap:VirtualizedContainerService.HintSize="489,398">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_9" sap:VirtualizedContainerService.HintSize="614,548">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_11" sap:VirtualizedContainerService.HintSize="636,796">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="If_10" sap:VirtualizedContainerService.HintSize="761,946">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_12" sap:VirtualizedContainerService.HintSize="5121,1070">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="StructureDefaultData_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="StructureDataByZones_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_11" sap:VirtualizedContainerService.HintSize="4874,86">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="SetContextDataByZoneList_2" sap:VirtualizedContainerService.HintSize="4874,22" />
+      <sap2010:ViewStateData Id="StructureDataByCountry_2" sap:VirtualizedContainerService.HintSize="4874,22" />
+      <sap2010:ViewStateData Id="SetContextEffectiveAfterCustomerZoneRatesByZone_2" sap:VirtualizedContainerService.HintSize="4874,22" />
+      <sap2010:ViewStateData Id="StructZoneDataByCountryIds_2" sap:VirtualizedContainerService.HintSize="4874,22" />
+      <sap2010:ViewStateData Id="SetContextInheritedRatesByZoneId_2" sap:VirtualizedContainerService.HintSize="4874,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_10" sap:VirtualizedContainerService.HintSize="4874,22" />
+      <sap2010:ViewStateData Id="ProcessCustomerCountries_2" sap:VirtualizedContainerService.HintSize="4874,22" />
+      <sap2010:ViewStateData Id="ReserveOwnerPriceListId_2" sap:VirtualizedContainerService.HintSize="4874,22" />
+      <sap2010:ViewStateData Id="ProcessRates_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ProcessDefaultRoutingProduct_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ProcessSaleZoneRoutingProducts_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ProcessDefaultService_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ProcessSaleZoneServices_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_12" sap:VirtualizedContainerService.HintSize="4874,86">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="UpdateZonesData_2" sap:VirtualizedContainerService.HintSize="4874,22" />
+      <sap2010:ViewStateData Id="CombineLists`1_2" sap:VirtualizedContainerService.HintSize="4874,22" />
+      <sap2010:ViewStateData Id="ExecuteRules_2" sap:VirtualizedContainerService.HintSize="4874,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_11" sap:VirtualizedContainerService.HintSize="4874,22" />
+      <sap2010:ViewStateData Id="ReserveIdsForNewEntities_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareRatePlanPreviewSummary_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareRatePreviews_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareDefaultRoutingProductPreview_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareSaleZoneRoutingProductPreviews_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareDefaultServicePreview_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareSaleZoneServicePreviews_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="PrepareCustomerCountryPreviews_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_13" sap:VirtualizedContainerService.HintSize="4874,86">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WriteTrackingMessage_12" sap:VirtualizedContainerService.HintSize="4874,22" />
+      <sap2010:ViewStateData Id="ReadRatePlanContext_2" sap:VirtualizedContainerService.HintSize="4874,22" />
+      <sap2010:ViewStateData Id="StructureSalePriceListZoneChange_2" sap:VirtualizedContainerService.HintSize="4874,22" />
+      <sap2010:ViewStateData Id="ApplyNewRatesToDB_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyChangedRatesToDB_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyNewDefaultRoutingProductToDB_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyChangedDefaultRoutingProductsToDB_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyDefaultRoutingProductPreviewToDB_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyNewSaleZoneRoutingProductsToDB_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyChangedSaleZoneRoutingProductsToDB_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyRatePreviewsToDB_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplySaleZoneRoutingProductPreviewsToDB_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyRatePlanPreviewSummaryToDB_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyNewDefaultServiceToDB_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyChangedDefaultServicesToDB_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyDefaultServicePreviewToDB_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyNewSaleZoneServicesToDB_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyChangedSaleZoneServicesToDB_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplySaleZoneServicePreviewsToDB_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyNewCustomerCountriesToDB_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyChangedCustomerCountriesToDB_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyChangedCustomerCountryPreviewsToDB_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ApplyNewCustomerCountryPreviewsToDB_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_14" sap:VirtualizedContainerService.HintSize="4874,86">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="SavePricelistFiles_2" sap:VirtualizedContainerService.HintSize="4874,22" />
+      <sap2010:ViewStateData Id="SaveRoutingProductChanges_2" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_11" sap:VirtualizedContainerService.HintSize="4874,210">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_13" sap:VirtualizedContainerService.HintSize="4896,1830">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WriteTrackingMessage_13" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_12" sap:VirtualizedContainerService.HintSize="5121,1980">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Sequence_14" sap:VirtualizedContainerService.HintSize="5143,4048">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.WhS.Sales.BP.SubProcesses.RatePlanSubProcess_1" sap:VirtualizedContainerService.HintSize="5183,4128">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="ShouldCollapseAll">False</x:Boolean>
+            <x:Boolean x:Key="ShouldExpandAll">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>
