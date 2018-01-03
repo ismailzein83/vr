@@ -141,10 +141,8 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
 
                 decimal? recordSaleRateId = record.SaleRateId;
                 decimal? recordSaleCurrencyId = record.SaleCurrencyId;
-                int? recordSaleFinancialAccount = record.SaleFinancialAccount;
                 decimal? recordCostRateId = record.CostRateId;
                 decimal? recordCostCurrencyId = record.CostCurrencyId;
-                int? recordCostFinancialAccount = record.CostFinancialAccount;
 
                 bool saleValid = recordSaleRateId.HasValue && recordSaleCurrencyId.HasValue;
                 bool costValid = recordCostRateId.HasValue && recordCostCurrencyId.HasValue;
