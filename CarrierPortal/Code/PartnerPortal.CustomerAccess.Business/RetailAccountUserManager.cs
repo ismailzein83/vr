@@ -32,12 +32,11 @@ namespace PartnerPortal.CustomerAccess.Business
 
         public List<UserDetailInfo> GetUsersStatus (UserStatusInput userStatusInput)
         {
-            UserManager userManager = new UserManager();
             List<UserDetailInfo> userDetailInfo = new List<UserDetailInfo>();
-            UserStatus userStatus;
+            userStatusInput.UserIds.ThrowIfNull("UserStatusInput");
             foreach (var userId in userStatusInput.UserIds)
             {
-                userManager.IsUserEnable(userId,out userStatus);
+                var userStatus = GetUserStatusByUserId(userId);
                 UserDetailInfo userDetail = new UserDetailInfo()
                 {
                     UserId = userId,
@@ -51,28 +50,28 @@ namespace PartnerPortal.CustomerAccess.Business
         {
             UserManager userManager = new UserManager();
             var user = userManager.GetUserbyId(userId);
+            user.ThrowIfNull("user");
             return userManager.EnableUser(user);
         }
         public UserStatus GetUserStatusByUserId(int userId)
         {
-            UserStatusInput userStatusInput = new UserStatusInput();
-            if (userStatusInput.UserIds == null)
-                userStatusInput.UserIds = new List<int>();
-            userStatusInput.UserIds.Add(userId);
-            var userDetailInfo = GetUsersStatus(userStatusInput);
-            userDetailInfo.ThrowIfNull("UserDetailInfo");
-            return userDetailInfo.First().UserStatus;
+            UserManager userManager = new UserManager();
+            UserStatus userStatus;
+            userManager.IsUserEnable(userId, out userStatus);
+            return userStatus;
         }
         public UpdateOperationOutput<UserDetail> DisableUser(int userId)
         {
             UserManager userManager = new UserManager();
             var user = userManager.GetUserbyId(userId);
+            user.ThrowIfNull("user");
             return userManager.DisableUser(user);
         }
         public UpdateOperationOutput<UserDetail> UnlockPortalAccount(int userId)
         {
             UserManager userManager = new UserManager();
             var user = userManager.GetUserbyId(userId);
+            user.ThrowIfNull("user");
             return userManager.UnlockUser(user);
         }
         public UpdateOperationOutput<UserDetail> UpdateRetailAccountUser(RetailAccountToUpdate retailAccount)
@@ -82,7 +81,7 @@ namespace PartnerPortal.CustomerAccess.Business
            user.ThrowIfNull("User");
            user.Name = retailAccount.Name;
            user.Email = retailAccount.Email;
-            UserToUpdate userToUpdate = new UserToUpdate(){
+            UserToUpdate userToUpdate = new UserToUpdate{
                 UserId = user.UserId,
                 Name = user.Name,
                 Email = user.Email,
