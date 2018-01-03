@@ -70,7 +70,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
             if (definitionIdsFilter != null)
                 filters.Add(definitionIdsFilter);
 
-            string grantedPermissionSetIdsFilter = BuildFilterFromInts("bp.ViewRequiredPermissionSetId", grantedPermissionSetIds);
+            string grantedPermissionSetIdsFilter = BuildViewRequiredPermissionsFilter(grantedPermissionSetIds);
             if (grantedPermissionSetIdsFilter != null)
                 filters.Add(grantedPermissionSetIdsFilter);
 
@@ -145,7 +145,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
             if (definitionIdsFilter != null)
                 filters.Add(definitionIdsFilter);
 
-            string grantedPermissionSetIdsFilter = BuildFilterFromInts("bp.ViewRequiredPermissionSetId", grantedPermissionSetIds);
+            string grantedPermissionSetIdsFilter = BuildViewRequiredPermissionsFilter(grantedPermissionSetIds);
             if (grantedPermissionSetIdsFilter != null)
                 filters.Add(grantedPermissionSetIdsFilter);
 
@@ -367,12 +367,12 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 return string.Concat(columnName, " IN (", String.Join(",", items.Select(itm => String.Concat("'", itm.ToString(), "'"))), ")");
         }
 
-        private string BuildFilterFromInts(string columnName, IEnumerable<int> items)
+        private string BuildViewRequiredPermissionsFilter(List<int> grantedPermissionSetIds)
         {
-            if (items == null || items.Count() == 0)
-                return null;
+            if (grantedPermissionSetIds == null || grantedPermissionSetIds.Count == 0)
+                return "bp.ViewRequiredPermissionSetId IS NULL";
             else
-                return string.Concat(columnName, " IN (", String.Join(",", items), ")");
+                return string.Concat("(bp.ViewRequiredPermissionSetId IS NULL OR bp.ViewRequiredPermissionSetId IN (", String.Join(",", grantedPermissionSetIds), "))");
         }
 
         #endregion
