@@ -657,6 +657,26 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     return colDef && colDef.cssClass;
                 };
 
+                ctrl.fixHeaderLayout = function () {
+                    // to rigth padding in old data loading methode in bi
+                    var div = $(elem).find("#gridBodyContainer")[0];// need real DOM Node, not jQuery wrapper
+                    var mh = $(div).css('max-height');
+                    mh = mh && parseInt(mh.substring(0, mh.length - 1)) || 0;
+                    if (ctrl.datasource.length * 25 < mh) {
+                        $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' });
+                        ctrl.headerStyle = {
+                            "padding-right": "0px"
+                        };
+                    }
+
+                    else {
+                        $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' });
+                        ctrl.headerStyle = {
+                            "padding-right": getScrollbarWidth() + "px"
+                        };
+                    }
+                };
+
                 function getRowCSSClass(dataItem) {
                     if (ctrl.getrowstyle != undefined && typeof (ctrl.getrowstyle) == 'function') {
                         var object = ctrl.getrowstyle(dataItem);
@@ -686,6 +706,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                             dataItem.isColumnValuesFilled = true;
                         }
                     }
+
+                    ctrl.fixHeaderLayout();
                 }
 
             }
@@ -888,26 +910,6 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     setMainItemsViewVisible();
                     retrieveDataResultKey = null;
                     return retrieveData(false, false, false, DataGridRetrieveDataEventType.ExternalTrigger);
-                };
-
-                gridApi.renderLayout = function () {
-                    // to rigth padding in old data loading methode in bi
-                    var div = $(elem).find("#gridBodyContainer")[0];// need real DOM Node, not jQuery wrapper
-                    var mh = $(div).css('max-height');
-                    mh = mh && parseInt(mh.substring(0, mh.length - 1)) || 0;
-                    if (ctrl.datasource.length * 25 < mh) {
-                        $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' });
-                        ctrl.headerStyle = {
-                            "padding-right": "0px"
-                        };
-                    }
-
-                    else {
-                        $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' });
-                        ctrl.headerStyle = {
-                            "padding-right": getScrollbarWidth() + "px"
-                        };
-                    }
                 };
 
                 function addBatchItemsToBeginSource(items) {
