@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Security.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
@@ -20,5 +21,14 @@ namespace Retail.BusinessEntity.Entities
         public string Name { get; set; }
         public string Email { get; set; }
         public int TenantId { get; set; }
+    }
+    public class PortalAccountDetail
+    {
+        public int UserId { get; set; }
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public int TenantId { get; set; }
+        public UserStatus UserStatus { get; set; }
+        public string UserStatusDescription { get; set; }
     }
 }

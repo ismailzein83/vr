@@ -26,8 +26,6 @@
                 if (context != undefined) {
                     accountViewDefinitionId = context.getAccountViewDefinitionId();
                 }
-                else
-                    accountViewDefinitionId = parameters.accountViewDefinitionId;
             }
         }
         function defineScope() {

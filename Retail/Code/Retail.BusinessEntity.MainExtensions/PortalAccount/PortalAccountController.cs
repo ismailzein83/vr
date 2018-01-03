@@ -24,12 +24,33 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
             return _manager.GetPortalAccountSettings(accountBEDefinitionId, accountId, accountViewDefinitionId);
         }
         [HttpGet]
+        [Route("GetPortalAccount")]
+        public object GetPortalAccount(Guid accountBEDefinitionId, long accountId, Guid accountViewDefinitionId, int userId)
+        {
+            return _manager.GetPortalAccount(accountBEDefinitionId, accountId, accountViewDefinitionId, userId);
+        }
+        [HttpGet]
+        [Route("GetPortalAccountDetails")]
+        public List<PortalAccountDetail> GetPortalAccountDetails(Guid accountBEDefinitionId, long accountId, Guid accountViewDefinitionId)
+        {
+            return _manager.GetPortalAccountDetails(accountBEDefinitionId, accountId, accountViewDefinitionId);
+        }
+        [HttpGet]
         [Route("DosesUserHaveConfigureAccess")]
         public bool DosesUserHaveConfigureAccess(Guid accountBEDefinitionId, Guid accountViewDefinitionId)
         {
             return _manager.DosesUserHaveConfigureAccess(accountBEDefinitionId, accountViewDefinitionId);
         }
 
+        [HttpPost]
+        [Route("UpdatePortalAccount")]
+        public object UpdatePortalAccount(PortalAccountEditorObject portalAccountEditorObject)
+        {
+            if (!DosesUserHaveConfigureAccess(portalAccountEditorObject.AccountBEDefinitionId, portalAccountEditorObject.AccountViewDefinitionId))
+                return GetUnauthorizedResponse();
+            return _manager.UpdatePortalAccount(portalAccountEditorObject.AccountBEDefinitionId, portalAccountEditorObject.AccountId, portalAccountEditorObject.AccountViewDefinitionId, portalAccountEditorObject.UserId,
+                                             portalAccountEditorObject.Name, portalAccountEditorObject.Email);
+        }
         [HttpPost]
         [Route("AddPortalAccount")]
         public object AddPortalAccount(PortalAccountEditorObject portalAccountEditorObject)
@@ -39,20 +60,29 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
             return _manager.AddPortalAccount(portalAccountEditorObject.AccountBEDefinitionId, portalAccountEditorObject.AccountId, portalAccountEditorObject.AccountViewDefinitionId,
                                              portalAccountEditorObject.Name, portalAccountEditorObject.Email);
         }
-        [HttpPost]
-        [Route("AddAdditionalPortalAccount")]
-        public object AddAdditionalPortalAccount(PortalAccountEditorObject portalAccountEditorObject)
-        {
-            if (!DosesUserHaveConfigureAccess(portalAccountEditorObject.AccountBEDefinitionId, portalAccountEditorObject.AccountViewDefinitionId))
-                return GetUnauthorizedResponse();
-            return _manager.AddAdditionalPortalAccount(portalAccountEditorObject.AccountBEDefinitionId, portalAccountEditorObject.AccountId, portalAccountEditorObject.AccountViewDefinitionId,
-                                             portalAccountEditorObject.Name, portalAccountEditorObject.Email);
-        }
         [HttpGet]
         [Route("DosesUserHaveResetPasswordAccess")]
         public bool DosesUserHaveAccess(Guid accountBEDefinitionId, Guid accountViewDefinitionId)
         {
             return _manager.DosesUserHaveResetPasswordAccess(accountBEDefinitionId, accountViewDefinitionId);
+        }
+        [HttpGet]
+        [Route("EnbalePortalAccount")]
+        public object EnbalePortalAccount(Guid accountBEDefinitionId, Guid accountViewDefinitionId,long accountId,int userId)
+        {
+            return _manager.EnbalePortalAccount(accountBEDefinitionId, accountViewDefinitionId,accountId, userId);
+        }
+        [HttpGet]
+        [Route("DisablePortalAccount")]
+        public object DisablePortalAccount(Guid accountBEDefinitionId, Guid accountViewDefinitionId, long accountId, int userId)
+        {
+            return _manager.DisablePortalAccount(accountBEDefinitionId, accountViewDefinitionId, accountId, userId);
+        }
+        [HttpGet]
+        [Route("UnlockPortalAccount")]
+        public object UnlockPortalAccount(Guid accountBEDefinitionId, Guid accountViewDefinitionId, long accountId, int userId)
+        {
+            return _manager.UnlockPortalAccount(accountBEDefinitionId, accountViewDefinitionId, accountId, userId);
         }
         [HttpPost]
         [Route("ResetPassword")]
@@ -75,6 +105,7 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
         public string Name { get; set; }
 
         public string Email { get; set; }
+        public int UserId { get; set; }
     }
 
     public class ResetPasswordInput
@@ -87,5 +118,14 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
 
         public string Password { get; set; }
         public int UserId { get; set; }
+    }
+    public class PortalAccountInput
+    {
+        public Guid AccountBEDefinitionId { get; set; }
+
+        public long AccountId { get; set; }
+
+        public Guid AccountViewDefinitionId { get; set; }
+
     }
 }

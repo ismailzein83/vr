@@ -1,35 +1,11 @@
 ﻿
 
 <div>
-    <vr-section-v2 header="Primary Account" menuactions="scopeModel.sectionMenuActions">
 
-        <vr-row ng-if="scopeModel.isPortalUserAccountCreated">
-            <vr-row removeline>
-                <vr-columns width="fullrow">
-                    <vr-label>Name:</vr-label>
-                    <vr-label isvalue>{{scopeModel.name}}</vr-label>
-                </vr-columns>
-            </vr-row>
-            <vr-row>
-                <vr-columns width="fullrow">
-                    <vr-label>Email:</vr-label>
-                    <vr-label isvalue>{{scopeModel.email}}</vr-label>
-                </vr-columns>
-            </vr-row>
-        </vr-row>
+    <vr-row vr-loader="scopeModel.isGridLoading">
+        <vr-columns colnum="12">
+            <retail-be-account-portalaccount-grid on-ready="scopeModel.onPortalAccountGridReady"></retail-be-account-portalaccount-grid>
+        </vr-columns>
+    </vr-row>
 
-        <vr-row ng-if="!scopeModel.isPortalUserAccountCreated">
-            <vr-row width="fullrow">
-                <vr-columns width="fullrow">
-                    <vr-label>
-                        Portal User Account is not yet created. <a href="" ng-click="scopeModel.addPortalAccount()" ng-show="scopeModel.showAddProtalAccount" style="color:#ff0000">Click to Add</a>
-                    </vr-label>
-                </vr-columns>
-            </vr-row>
-        </vr-row>
-
-    </vr-section-v2>
-    <vr-section-v2 header ="Additional Accounts" ng-if="scopeModel.doesPrimaryAccountExists">
-        <retail-be-account-portalaccount-grid on-ready="scopeModel.onPortalAccountGridReady"></retail-be-account-portalaccount-grid>
-</vr-section-v2>
 </div>

@@ -1,4 +1,5 @@
-﻿<vr-button type="Add" data-onclick="addNewPortalAccount" standalone></vr-button>
+﻿<div vr-loader ="isLoading">
+<vr-button type="Add" data-onclick="addNewPortalAccount" standalone></vr-button>
 <vr-datagrid datasource="portalAccounts"
              ondeleterow="removerow"
              on-ready="onGridReady"
@@ -9,4 +10,6 @@
     <vr-datagridcolumn headertext="'ID'" field="'UserId'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Email'" field="'Email'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Status'" field="'UserStatusDescription'" type="'Text'"></vr-datagridcolumn>
 </vr-datagrid>
+</div>

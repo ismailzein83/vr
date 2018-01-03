@@ -2,9 +2,9 @@
 
     'use strict';
 
-    PortalAccountViewDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_PortalAccountService', 'Retail_BE_PortalAccountAPIService'];
+    PortalAccountViewDirective.$inject = ['UtilsService', 'VRNotificationService', 'Retail_BE_PortalAccountService', 'Retail_BE_PortalAccountAPIService', 'Retail_BE_AccountTypeAPIService'];
 
-    function PortalAccountViewDirective(UtilsService, VRNotificationService, Retail_BE_PortalAccountService, Retail_BE_PortalAccountAPIService) {
+    function PortalAccountViewDirective(UtilsService, VRNotificationService, Retail_BE_PortalAccountService, Retail_BE_PortalAccountAPIService, Retail_BE_AccountTypeAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -43,35 +43,14 @@
                     portalAccountGridAPI = api;
                     portalAccountReadyDeferred.resolve();
                 };
-                $scope.scopeModel.sectionMenuActions = [];
-                $scope.scopeModel.isPortalUserAccountCreated = false;
-                $scope.scopeModel.showAddProtalAccount = false;
-
-                $scope.scopeModel.addPortalAccount = function () {
-                    var onPortalAccountAdded = function (addedPortalAccount) {
-                        $scope.scopeModel.isPortalUserAccountCreated = true;
-                        $scope.scopeModel.doesPrimaryAccountExists = true;
-                        $scope.scopeModel.name = addedPortalAccount.Name;
-                        $scope.scopeModel.email = addedPortalAccount.Email;
-
-                        $scope.scopeModel.sectionMenuActions.length = 0;
-                        $scope.scopeModel.sectionMenuActions.push({
-                            name: 'Reset Password',
-                            clicked: function () {
-                                Retail_BE_PortalAccountService.resetPassword(accountBEDefinitionId, parentAccountId, buildContext());
-                            }
-                        });
-                    };
-
-                    Retail_BE_PortalAccountService.addPortalAccount(onPortalAccountAdded, accountBEDefinitionId, parentAccountId, buildContext());
-                };
 
                 defineAPI();
             }
             function defineAPI() {
                 var api = {};
-
+                var promises = [];
                 api.load = function (payload) {
+                    $scope.scopeModel.isGridLoading = true;
                     var accountViewDefinitionId;
 
                     if (payload != undefined) {
@@ -85,47 +64,25 @@
                     }
                    
                     Retail_BE_PortalAccountAPIService.GetPortalAccountSettings(accountBEDefinitionId, parentAccountId, accountViewDefinitionId).then(function (response) {
-                        if (response != undefined) {
-                            $scope.scopeModel.doesPrimaryAccountExists = true;
-                            var portalAccountSettings = response;
-                            portalAccountReadyDeferred.promise.then(function () {
-                                var portalAccountGridPayload = {};
-                                if (payload != undefined) {
-                                    portalAccountGridPayload.accountBEDefinitionId = payload.accountBEDefinitionId;
-                                    portalAccountGridPayload.parentAccountId = payload.parentAccountId;
-                                    portalAccountGridPayload.accountViewDefinition = payload.accountViewDefinition;
-                                    if (payload.accountViewDefinition != undefined && payload.accountViewDefinition.Settings != undefined)
+                        var portalAccountSettings = response;
+                        portalAccountReadyDeferred.promise.then(function () {
+                            var portalAccountGridPayload = {};
+                            if (payload != undefined) {
+                                portalAccountGridPayload.accountBEDefinitionId = payload.accountBEDefinitionId;
+                                portalAccountGridPayload.parentAccountId = payload.parentAccountId;
+                                portalAccountGridPayload.accountViewDefinition = payload.accountViewDefinition;
+                                portalAccountGridPayload.context = buildContext();
+                                if (payload.accountViewDefinition != undefined && payload.accountViewDefinition.Settings != undefined)
+                                    if (response != undefined) {
                                         portalAccountGridPayload.portalAccounts = portalAccountSettings.AdditionalUsers;
+                                       
+                                    }
+                            }
+                            return portalAccountGridAPI.load(portalAccountGridPayload).then(function () {
+                                $scope.scopeModel.isGridLoading = false;
+                            });;
+                        });
 
-                                }
-                                portalAccountGridAPI.load(portalAccountGridPayload);
-                            });
-                            $scope.scopeModel.isPortalUserAccountCreated = true;
-                            $scope.scopeModel.name = portalAccountSettings.Name;
-                            $scope.scopeModel.email = portalAccountSettings.Email;
-
-                            $scope.scopeModel.sectionMenuActions.push({
-                                name: 'Reset Password',
-                                clicked: function () {
-                                    Retail_BE_PortalAccountService.resetPassword(accountBEDefinitionId, parentAccountId, buildContext(), portalAccountSettings.UserId,undefined);
-                                },
-                                haspermission: function () {
-                                    return Retail_BE_PortalAccountAPIService.DosesUserHaveResetPasswordAccess(accountBEDefinitionId, accountViewDefinitionId);
-                                }
-                                
-                            });
-                        }
-                        else {
-                            $scope.scopeModel.sectionMenuActions.push({
-                                name: 'Add Portal Account',
-                                clicked: $scope.scopeModel.addPortalAccount,
-                                haspermission: function () {
-                                    return Retail_BE_PortalAccountAPIService.DosesUserHaveConfigureAccess(accountBEDefinitionId, accountViewDefinitionId).then(function (response) {
-                                        return  $scope.scopeModel.showAddProtalAccount = response;
-                                    });
-                                }
-                            });
-                        }
                     });
                 };
 
@@ -133,7 +90,7 @@
                     ctrl.onReady(api);
                 }
             }
-
+            
             function buildContext() {
                 var context = {
                     getAccountViewDefinitionId: function () {

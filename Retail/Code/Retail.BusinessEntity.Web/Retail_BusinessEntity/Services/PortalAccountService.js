@@ -6,54 +6,42 @@
 
     function PortalAccountService(VRModalService) {
 
-        function addPortalAccount(onPortalAccountAdded, accountBEDefinitionId, parentAccountId, context) {
+        function addPortalAccount(onPortalAccountAdded, accountBEDefinitionId, parentAccountId, accountViewDefinition, context, isPrimaryPortalAccount) {
 
             var parameters = {
                 accountBEDefinitionId: accountBEDefinitionId,
                 parentAccountId: parentAccountId,
-                context: context
+                accountViewDefinition: accountViewDefinition,
+                context: context,
+                isPrimaryPortalAccount: isPrimaryPortalAccount
             };
-
             var settings = {};
-
             settings.onScopeReady = function (modalScope) {
                 modalScope.onPortalAccountAdded = onPortalAccountAdded
             };
-
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountViews/PortalAccountEditor.html', parameters, settings);
         };
-
-        function addAddintionalPortalAccount(onPortalAccountAdded, accountBEDefinitionId, parentAccountId, accountViewDefinition) {
-
+        function editPortalAccount(accountBEDefinitionId, parentAccountId, accountViewDefinitionId, userId,context, onPortalAccountUpdated) {
             var parameters = {
                 accountBEDefinitionId: accountBEDefinitionId,
                 parentAccountId: parentAccountId,
-                accountViewDefinition: accountViewDefinition
-            };
-            var settings = {};
-            settings.onScopeReady = function (modalScope) {
-                modalScope.onPortalAccountAdded = onPortalAccountAdded
-            };
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountViews/AdditionalPortalAccountEditor.html', parameters, settings);
-        };
-        function editPortalAccount(portalAccountEntity,onAssignmentDefinitionUpdated) {
-            var parameters = {
-                portalAccountEntity: portalAccountEntity
+                accountViewDefinitionId: accountViewDefinitionId,
+                userId: userId,
+                context: context
             }
             var settings = {};
             settings.onScopeReady = function (modalScope) {
-                modalScope.onAssignmentDefinitionUpdated = onAssignmentDefinitionUpdated
+                modalScope.onPortalAccountUpdated = onPortalAccountUpdated
             };
-            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountViews/AdditionalPortalAccountEditor.html', parameters, settings);
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/AccountViews/PortalAccountEditor.html', parameters, settings);
         };
-        function resetPassword(accountBEDefinitionId, parentAccountId, context, userId, accountViewDefinitionId) {
+        function resetPassword(accountBEDefinitionId, parentAccountId, context, userId) {
 
             var parameters = {
                 accountBEDefinitionId: accountBEDefinitionId,
                 parentAccountId: parentAccountId,
                 context: context,
                 userId: userId,
-                accountViewDefinitionId: accountViewDefinitionId
             };
 
             var settings = {};
@@ -68,7 +56,7 @@
         return {
             addPortalAccount: addPortalAccount,
             resetPassword: resetPassword,
-            addAddintionalPortalAccount: addAddintionalPortalAccount
+            editPortalAccount: editPortalAccount
         };
     }
 

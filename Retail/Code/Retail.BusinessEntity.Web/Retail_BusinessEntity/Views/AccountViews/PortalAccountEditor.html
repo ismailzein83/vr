@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="Retail_BE_PortalAccountEditorController" vr-loader="scopeModel.isLoading" size="small">
+﻿<div vr-modalcontent ng-controller="Retail_BE_AdditionalPortalAccountEditorController" vr-loader="scopeModel.isLoading" size="small">
     <vr-modalbody>
         <vr-form name="formPortalAccountEditor">
             <vr-row>
@@ -14,8 +14,8 @@
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" data-onclick="scopeModel.save" formname="formPortalAccountEditor" haspermission="hasSavePortalAccountPermission"></vr-button>
-                <vr-button type="Close" customlabel="Create User" data-onclick="scopeModel.close"></vr-button>
+                <vr-button type="Save" data-onclick="scopeModel.save" formname="formPortalAccountEditor"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>
     </div>
