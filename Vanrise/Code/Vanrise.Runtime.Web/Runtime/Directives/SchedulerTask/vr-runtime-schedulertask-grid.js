@@ -166,30 +166,21 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
                     });
                 }
 
+                function editTask(task) {
+                    var onTaskUpdated = function (updatedItem) {
+                        var updatedItemObj = updatedItem;
+                        gridDrillDownTabsObj.setDrillDownExtensionObject(updatedItemObj);
+                        gridAPI.itemUpdated(updatedItemObj);
+                        enableDisableAll();
+                    };
+
+                    VR_Runtime_SchedulerTaskService.editTask(task.Entity.TaskId, onTaskUpdated);
+                }
+                function hasUpdateSchedulerTaskPermission() {
+                    return SchedulerTaskAPIService.HasUpdateSchedulerTaskPermission();
+                }
+
                 return staticMenuActions;
-            }
-            function editTask(task) {
-                var onTaskUpdated = function (updatedItem) {
-
-                    var updatedItemObj = updatedItem;
-                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedItemObj);
-                    gridAPI.itemUpdated(updatedItemObj);
-                    enableDisableAll();
-                };
-
-                VR_Runtime_SchedulerTaskService.editTask(task.Entity.TaskId, onTaskUpdated);
-            }
-            function hasUpdateSchedulerTaskPermission() {
-                return SchedulerTaskAPIService.HasUpdateSchedulerTaskPermission();
-            }
-
-            function runSchedulerTask(dataItem) {
-                $scope.showLoader = true;
-                return SchedulerTaskAPIService.RunSchedulerTask(dataItem.Entity.TaskId).then(function () {
-                    setTimeout(function () { $scope.showLoader = false; }, 5000);
-                }).catch(function (error) {
-                    $scope.showLoader = false;
-                });
             }
 
             function isSchedulerTaskRunning(statusDescription) {
@@ -204,6 +195,15 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
                     case VR_Runtime_SchedulerTaskStatusEnum.WaitingEvent.description:
                     default: return true;
                 }
+            }
+
+            function runSchedulerTask(dataItem) {
+                $scope.showLoader = true;
+                return SchedulerTaskAPIService.RunSchedulerTask(dataItem.Entity.TaskId).then(function () {
+                    setTimeout(function () { $scope.showLoader = false; }, 5000);
+                }).catch(function (error) {
+                    $scope.showLoader = false;
+                });
             }
 
             function createTimer() {
