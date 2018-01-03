@@ -92,7 +92,7 @@
                                         <i class="glyphicon glyphicon-trash hand-cursor "></i>
                                     </a>
                                 </div>
-                                <div style="height: 210px; overflow: auto;padding-top:5px">
+                                <div style="height: 210px; overflow: auto;padding-top:5px;white-space: pre-line;">
                                     <span class="label custom-label" style="position:relative" ng-repeat="obj in ctrl.selectedvalues" ng-mouseenter="showeye = true;" ng-mouseleave="showeye = false;" title="{{ctrl.getTooltipValue(obj)}}">
                                         {{::ctrl.getObjectText(obj)}}
                                         <span class="glyphicon glyphicon-eye-open hand-cursor view-selected-item" ng-click="ctrl.onViewHandler(obj)" ng-if="ctrl.includeOnViewHandler() && ctrl.showViewButton"></span>
