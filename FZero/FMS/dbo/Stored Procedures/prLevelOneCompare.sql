@@ -13,6 +13,9 @@ SELECT   @ConcatString =  COALESCE(@ConcatString + ';', '') + fraudprefix FROM C
 SELECT distinct Value as Prefix  into #DistinctPrefixes FROM dbo.split ( REPLACE(@ConcatString,';;',';')) where Value <>''
 
 
+CREATE TABLE #patterns (  pattern VARCHAR(20));
+INSERT INTO #patterns  select Prefix +'%' from #DistinctPrefixes
+
 
 Declare @LevelOneComparisonDateTime datetime
 set @LevelOneComparisonDateTime= GETDATE();
@@ -108,14 +111,39 @@ BEGIN
   
 if ((select COUNT(*) from #RecievedCalls) = 0)
    Begin
-		INSERT INTO #RecievedCalls (ID,  CLI, a_number, b_number, AttemptDateTime, IsEqual, IsLocal, DateDifference ) 
-		select	top 1 ID,  CLI, a_number, b_number, AttemptDateTime, dbo.fn_CheckIfEqual(CLI,b_number) as IsEqual ,  dbo.fn_CheckIfLocal(CLI) as IsLocal, 
-				ABS (DATEDIFF(SECOND, AttemptDateTime, @AttemptDateTime))as DateDifference 
-		from	RecievedCalls with(nolock,index=I_AttemptDateTime) 
-		where (AttemptDateTime >= @RecievedFromAttemptDateTime  and AttemptDateTime <= @RecievedToAttemptDateTime)
+   ---- Duration for fraud Prefix
+   If exists (select 1 from RecievedCalls rc  inner JOIN #patterns p ON (rc.cli LIKE p.pattern)   where
+    (AttemptDateTime >= @RecievedFromAttemptDateTime  and AttemptDateTime <= @RecievedToAttemptDateTime)
 				and (b_number =@RecievedB_number or b_number in (SELECT distinct '0'+REPLACE(@RecievedB_number, CountryCode,'') from Clients)) 
-				and (GeneratedCallID is NULL )				  
-		order by DateDifference;
+				and (GeneratedCallID is NULL )	
+				)
+		--- 
+		begin
+			INSERT INTO #RecievedCalls (ID,  CLI, a_number, b_number, AttemptDateTime, IsEqual, IsLocal, DateDifference ) 
+			select	top 1 ID,  CLI, a_number, b_number, AttemptDateTime, dbo.fn_CheckIfEqual(CLI,b_number) as IsEqual ,  dbo.fn_CheckIfLocal(CLI) as IsLocal, 
+					ABS (DATEDIFF(SECOND, AttemptDateTime, @AttemptDateTime))as DateDifference 
+			from	RecievedCalls with(nolock,index=I_AttemptDateTime) 
+			where (AttemptDateTime >= @RecievedFromAttemptDateTime  and AttemptDateTime <= @RecievedToAttemptDateTime)
+			and (DurationInSeconds >= 1 and DurationInSeconds <= 33)
+					and (b_number =@RecievedB_number or b_number in (SELECT distinct '0'+REPLACE(@RecievedB_number, CountryCode,'') from Clients)) 
+					and (GeneratedCallID is NULL )				  
+			order by DateDifference;
+		end
+		---
+	Else
+		----- -----
+		begin 
+			INSERT INTO #RecievedCalls (ID,  CLI, a_number, b_number, AttemptDateTime, IsEqual, IsLocal, DateDifference ) 
+			select	top 1 ID,  CLI, a_number, b_number, AttemptDateTime, dbo.fn_CheckIfEqual(CLI,b_number) as IsEqual ,  dbo.fn_CheckIfLocal(CLI) as IsLocal, 
+					ABS (DATEDIFF(SECOND, AttemptDateTime, @AttemptDateTime))as DateDifference 
+			from	RecievedCalls with(nolock,index=I_AttemptDateTime) 
+			where (AttemptDateTime >= @RecievedFromAttemptDateTime  and AttemptDateTime <= @RecievedToAttemptDateTime)
+					and (b_number =@RecievedB_number or b_number in (SELECT distinct '0'+REPLACE(@RecievedB_number, CountryCode,'') from Clients)) 
+					and (GeneratedCallID is NULL )				  
+			order by DateDifference;
+		
+		end
+		----- -----
    End
     
    
@@ -168,5 +196,5 @@ END
 CLOSE @getID
 DEALLOCATE @getID
 
-exec prLevelOneCompare_HaveNoGenerated @LevelOneComparisonDateTime
-exec prLevelOneCompare_HaveNoGenerated_Android  @LevelOneComparisonDateTime
+--exec prLevelOneCompare_HaveNoGenerated @LevelOneComparisonDateTime
+--exec prLevelOneCompare_HaveNoGenerated_Android  @LevelOneComparisonDateTime

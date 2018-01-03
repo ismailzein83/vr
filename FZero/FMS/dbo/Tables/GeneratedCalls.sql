@@ -28,9 +28,13 @@
     [Carrier]                    VARCHAR (100)  NULL,
     [Reference]                  VARCHAR (50)   NULL,
     [Type]                       VARCHAR (5)    NULL,
+    [ReportingStatusSecurityID]  INT            CONSTRAINT [DF_GeneratedCalls_ReportingStatusSecurityID] DEFAULT ((1)) NULL,
+    [ReportSecID]                INT            NULL,
     CONSTRAINT [PK_GeneratedCalls] PRIMARY KEY CLUSTERED ([ID] ASC) WITH (FILLFACTOR = 85),
     CONSTRAINT [FK_GeneratedCalls_MobileOperators] FOREIGN KEY ([MobileOperatorID]) REFERENCES [dbo].[MobileOperators] ([ID])
 );
+
+
 
 
 GO

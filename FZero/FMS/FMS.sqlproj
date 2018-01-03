@@ -165,5 +165,6 @@
     <Build Include="dbo\Functions\Split.sql" />
     <Build Include="dbo\Functions\SplitwithValue.sql" />
     <Build Include="dbo\Stored Procedures\prGetEmails.sql" />
+    <Build Include="dbo\Functions\fn_CheckIfReportedBeforeSecurity.sql" />
   </ItemGroup>
 </Project>
