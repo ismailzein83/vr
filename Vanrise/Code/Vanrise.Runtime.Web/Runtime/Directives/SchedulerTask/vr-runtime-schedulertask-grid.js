@@ -10,7 +10,6 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-
                 var schedulerTaskGrid = new SchedulerTaskGrid($scope, ctrl, $attrs);
                 schedulerTaskGrid.initializeController();
             },
@@ -34,28 +33,25 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
                 NbOfRows: nbOfRows,
                 Name: name
             };
-
+            var context;
 
             var gridAPI;
             var gridDrillDownTabsObj;
-            var context;
-            function initializeController() {
 
+            function initializeController() {
                 $scope.schedulerTasks = [];
 
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
                     var drillDownDefinitions = VR_Runtime_SchedulerTaskService.getDrillDownDefinition();
-
                     gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
+
                     if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                         ctrl.onReady(getDirectiveAPI());
 
                     function getDirectiveAPI() {
 
                         var directiveAPI = {};
-
-
 
                         directiveAPI.loadGrid = function (query) {
                             input.Filter = query;
@@ -67,10 +63,12 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
                             var query = payload.query;
                             return directiveAPI.loadGrid(query);
                         };
+
                         directiveAPI.onTaskAdded = function (taskObject) {
                             gridDrillDownTabsObj.setDrillDownExtensionObject(taskObject);
                             gridAPI.itemAdded(taskObject);
                         };
+
                         directiveAPI.updateDataItemsStatuts = function (status) {
                             updateDataItemsStatuts(status);
                         };
@@ -158,6 +156,33 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
                 }
             }
 
+            function defineStaticMenuActions(dataItem) {
+                var staticMenuActions = [];
+
+                if (dataItem.AllowEdit == true) {
+                    staticMenuActions.push({
+                        name: "Edit",
+                        clicked: editTask
+                    });
+                }
+
+                return staticMenuActions;
+            }
+            function editTask(task) {
+                var onTaskUpdated = function (updatedItem) {
+
+                    var updatedItemObj = updatedItem;
+                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedItemObj);
+                    gridAPI.itemUpdated(updatedItemObj);
+                    enableDisableAll();
+                };
+
+                VR_Runtime_SchedulerTaskService.editTask(task.Entity.TaskId, onTaskUpdated);
+            }
+            function hasUpdateSchedulerTaskPermission() {
+                return SchedulerTaskAPIService.HasUpdateSchedulerTaskPermission();
+            }
+
             function runSchedulerTask(dataItem) {
                 $scope.showLoader = true;
                 return SchedulerTaskAPIService.RunSchedulerTask(dataItem.Entity.TaskId).then(function () {
@@ -243,31 +268,6 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
                 }
             }
 
-            function defineStaticMenuActions(dataItem) {
-
-                var staticMenuActions = [];
-                if (dataItem.AllowEdit == true)
-                    staticMenuActions.push({
-                        name: "Edit",
-                        clicked: editTask
-                    });
-                return staticMenuActions;
-            }
-            function editTask(task) {
-                var onTaskUpdated = function (updatedItem) {
-
-                    var updatedItemObj = updatedItem;
-                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedItemObj);
-                    gridAPI.itemUpdated(updatedItemObj);
-                    enableDisableAll();
-                };
-
-                VR_Runtime_SchedulerTaskService.editTask(task.Entity.TaskId, onTaskUpdated);
-            }
-            function hasUpdateSchedulerTaskPermission() {
-                return SchedulerTaskAPIService.HasUpdateSchedulerTaskPermission();
-            }
-
             function disableTask(dataItem) {
                 var onPermissionDisabled = function (entity) {
                     var gridDataItem = {
@@ -320,7 +320,6 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
                 });
             }
 
-
             function updateDataItemsStatuts(status) {
                 for (var j = 0; j < $scope.schedulerTasks.length; j++) {
                     if ($scope.schedulerTasks[j].Entity.IsEnabled != status) {
@@ -345,12 +344,12 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
                 }
             }
 
-
             function enableDisableAll() {
-                if (context != undefined && typeof (context.getTaskManagmentInfo) == "function") {                   
+                if (context != undefined && typeof (context.getTaskManagmentInfo) == "function") {
                     context.getTaskManagmentInfo();
                 }
             }
         }
+
         return directiveDefinitionObject;
     }]);
