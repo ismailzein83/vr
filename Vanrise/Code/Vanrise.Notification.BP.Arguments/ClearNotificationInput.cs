@@ -7,7 +7,7 @@ using Vanrise.Notification.Entities;
 
 namespace Vanrise.Notification.BP.Arguments
 {
-    public class ClearNotificationInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument
+    public class ClearNotificationInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument, INotificationProcessArgument
     {
         public override string GetTitle()
         {

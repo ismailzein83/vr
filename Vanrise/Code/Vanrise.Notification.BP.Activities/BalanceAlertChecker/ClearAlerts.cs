@@ -61,6 +61,7 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
                                     ClearAlertRuleNotificationInput notificationInput = new ClearAlertRuleNotificationInput
                                     {
                                         UserId = handle.SharedInstanceData.InstanceInfo.InitiatorUserId,
+                                        EntityId = entityBalanceInfo.EntityId,
                                         EventKey = string.Format("{0}_{1}", entityBalanceInfo.EntityId, activeThreshold.Threshold),
                                         AlertRuleId = activeThreshold.AlertRuleId,
                                         RuleTypeId = alertRule.RuleTypeId,

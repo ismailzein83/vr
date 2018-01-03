@@ -51,6 +51,7 @@
     <Compile Include="ClearNotificationInput.cs" />
     <Compile Include="CreateActionProcessInput.cs" />
     <Compile Include="ExecuteNotificationProcessInput.cs" />
+    <Compile Include="INotificationProcessArgument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

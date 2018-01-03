@@ -21,6 +21,7 @@ namespace Vanrise.Notification.Business
                 ParentTypes = notificationParentTypes,
                 Description = notificationInput.Description,
                 AlertLevelId = notificationInput.AlertLevelId,
+                EntityId = notificationInput.EntityId,
                 EventKey = notificationInput.EventKey,
                 EventPayload = notificationInput.EventPayload,
                 Actions = notificationInput.Actions,
@@ -41,6 +42,7 @@ namespace Vanrise.Notification.Business
             {
                 EventKey = notificationInput.EventKey,
                 NotificationTypeId = notificationInput.NotificationTypeId,
+                EntityId = notificationInput.EntityId,
                 ParentTypes = notificationParentTypes,
                 Description = notificationInput.Description,
                 UserId = notificationInput.UserId,

@@ -57,14 +57,16 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate
                                     RuleTypeSettings = inputArgument.RuleTypeSettings
                                 };
 
+                                long? finalAlertRuleId = null;
+
+                                decimal? finalNextThreshold = null;
+
                                 GenericRuleTarget ruleTarget = inputArgument.RuleTypeSettings.Behavior.CreateRuleTarget(vrBalanceAlertRuleCreateRuleTargetContext);
                                 VRAlertRule matchedRule = vrBalanceAlertRuleManager.GetMatchRule(inputArgument.AlertTypeId, ruleTarget);                                
 
                                 if (matchedRule != null)
                                 {
-                                    long finalAlertRuleId = matchedRule.VRAlertRuleId;
-
-                                    decimal? finalNextThreshold = null;
+                                    finalAlertRuleId = matchedRule.VRAlertRuleId;
 
                                     matchedRule.Settings.ThrowIfNull("matchedRule.Settings", matchedRule.VRAlertRuleId);
                                     VRBalanceAlertRuleSettings balanceAlertRuleSettings = matchedRule.Settings.ExtendedSettings.CastWithValidate<VRBalanceAlertRuleSettings>("matchedRule.Settings.ExtendedSettings", matchedRule.VRAlertRuleId);
@@ -82,6 +84,12 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate
                                         if (entityBalanceInfo.LastExecutedAlertThreshold.HasValue && entityBalanceInfo.LastExecutedAlertThreshold.Value <= threshold)
                                             continue;
 
+                                        if(!currentNextThreshold.HasValue)
+                                        {
+                                            finalNextThreshold = threshold;
+                                            break;
+                                        }
+
                                         if (threshold < entityBalanceInfo.CurrentBalance)
                                         {
                                             finalNextThreshold = threshold;
@@ -97,18 +105,17 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertThresholdUpdate
                                             }
                                         }
                                     }
-
-                                    if (finalAlertRuleId != currentAlertRuleId || finalNextThreshold != currentNextThreshold)
+                                }
+                                if (finalAlertRuleId != currentAlertRuleId || finalNextThreshold != currentNextThreshold)
+                                {
+                                    totalAccountsUpdated++;
+                                    VRBalanceUpdateRuleInfoPayload updateRuleInfoPayload = new VRBalanceUpdateRuleInfoPayload
                                     {
-                                        totalAccountsUpdated++;
-                                        VRBalanceUpdateRuleInfoPayload updateRuleInfoPayload = new VRBalanceUpdateRuleInfoPayload
-                                        {
-                                            EntityBalanceInfo = entityBalanceInfo,
-                                            AlertRuleId = finalAlertRuleId,
-                                            NextAlertThreshold = finalNextThreshold
-                                        };
-                                        updateRuleInfoPayloadBatch.Items.Add(updateRuleInfoPayload);
-                                    }
+                                        EntityBalanceInfo = entityBalanceInfo,
+                                        AlertRuleId = finalAlertRuleId,
+                                        NextAlertThreshold = finalNextThreshold
+                                    };
+                                    updateRuleInfoPayloadBatch.Items.Add(updateRuleInfoPayload);
                                 }
                             }
                             if (updateRuleInfoPayloadBatch.Items.Count > 0)

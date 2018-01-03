@@ -86,6 +86,7 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
                                         Actions = thresholdInfo.ThresholdAction.Actions,
                                         ClearanceActions = thresholdInfo.ThresholdAction.RollbackActions,
                                         AlertRuleId = alertRule.VRAlertRuleId,
+                                        EntityId = entityBalanceInfo.EntityId,
                                         EventKey = string.Format("{0}_{1}", entityBalanceInfo.EntityId, currentThreshold),
                                         EventPayload = new VRBalanceAlertEventPayload
                                         {

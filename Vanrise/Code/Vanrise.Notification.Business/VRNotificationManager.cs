@@ -46,6 +46,9 @@ namespace Vanrise.Notification.Business
             var executeNotificationProcessInput = new ExecuteNotificationProcessInput
             {
                 NotificationId = notificationId,
+                NotificationTypeId = input.NotificationTypeId,
+                EntityId = input.EntityId,
+                EventKey = input.EventKey,
                 ProcessTitle = input.Description != null ? input.Description : null,
                 UserId = input.UserId
             };
@@ -72,6 +75,7 @@ namespace Vanrise.Notification.Business
             {
                 EventKey = input.EventKey,
                 NotificationTypeId = input.NotificationTypeId,
+                EntityId = input.EntityId,
                 ParentTypes = input.ParentTypes,
                 ProcessTitle = input.Description,
                 UserId = input.UserId

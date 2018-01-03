@@ -29,5 +29,7 @@ namespace Vanrise.Notification.Entities
         public List<VRAction> ClearanceActions { get; set; }
 
         public bool IsAutoClearable { get; set; }
+
+        public string EntityId { get; set; }
     }
 }

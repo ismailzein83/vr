@@ -15,5 +15,7 @@ namespace Vanrise.Notification.Entities
         public string Description { get; set; }
 
         public Guid NotificationTypeId { get; set; }
+
+        public string EntityId { get; set; }
     }
 }

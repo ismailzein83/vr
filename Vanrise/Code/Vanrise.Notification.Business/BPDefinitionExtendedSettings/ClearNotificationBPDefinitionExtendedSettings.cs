@@ -13,19 +13,20 @@ namespace Vanrise.Notification.Business
     {
         public override bool CanRunBPInstance(BusinessProcess.Entities.IBPDefinitionCanRunBPInstanceContext context)
         {
-            context.IntanceToRun.ThrowIfNull("context.IntanceToRun");
-            ClearNotificationInput executeNotificationProcessInput = context.IntanceToRun.InputArgument.CastWithValidate<ClearNotificationInput>("context.IntanceToRun.InputArgument", context.IntanceToRun.ProcessInstanceID);
             var startedInstances = context.GetStartedBPInstances();
-            if (startedInstances != null)
+            if (startedInstances != null && startedInstances.Count > 0)
             {
+                context.IntanceToRun.ThrowIfNull("context.IntanceToRun");
+                ClearNotificationInput currentInstanceProcessInput = context.IntanceToRun.InputArgument.CastWithValidate<ClearNotificationInput>("context.IntanceToRun.InputArgument", context.IntanceToRun.ProcessInstanceID);
+
                 foreach (var bpInstance in startedInstances)
                 {
-                    ClearNotificationInput inputArgAsClearNofication = bpInstance.InputArgument as ClearNotificationInput;
-                    if (inputArgAsClearNofication != null)
+                    INotificationProcessArgument otherInstanceProcessArg = bpInstance.InputArgument as INotificationProcessArgument;
+                    if (otherInstanceProcessArg != null)
                     {
-                        if (inputArgAsClearNofication.NotificationTypeId == executeNotificationProcessInput.NotificationTypeId && inputArgAsClearNofication.EntityId == executeNotificationProcessInput.EntityId)
+                        if (ExecuteNotificationBPDefinitionExtendedSettings.IsNotificationProcessArgRelatedToSameEntity(currentInstanceProcessInput, otherInstanceProcessArg))
                         {
-                            context.Reason = "Another notification is being cleared for the same Entity";
+                            context.Reason = "Another notification is running for the same Entity";
                             return false;
                         }
                     }
