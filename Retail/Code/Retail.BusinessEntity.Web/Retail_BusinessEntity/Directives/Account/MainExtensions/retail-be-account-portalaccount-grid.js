@@ -33,14 +33,11 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Porta
         var primaryAccountName;
         var primaryAccountEmail;
         var context;
-        var isPrimaryPortalAccount;
         var accountViewDefinitionId;
 
         function initializeController() {
             $scope.portalAccounts = [];
             $scope.addNewPortalAccount = function () {
-                if ($scope.portalAccounts.length != 0)
-                    isPrimaryPortalAccount = false;
                 var onPortalAccountAdded = function (portalAccount) {
                     $scope.portalAccounts.push(portalAccount);
                     gridAPI.itemAdded(portalAccount);
@@ -70,11 +67,6 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Porta
 
                             return Retail_BE_PortalAccountAPIService.GetPortalAccountDetails(accountBEDefinitionId, parentAccountId, accountViewDefinitionId).then(function (response) {
                                 $scope.portalAccounts = response;
-
-                                if ($scope.portalAccounts.length == 0)
-                                    isPrimaryPortalAccount = true;
-                                else
-                                    isPrimaryPortalAccount = false;
 
                             });
                         }
@@ -193,7 +185,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Porta
             if (currentContext == undefined)
                 currentContext = {};
             currentContext.isPrimaryAccount = function () {
-                return isPrimaryPortalAccount;
+                return ($scope.portalAccounts.length == 0);
             };
             return currentContext;
         }
