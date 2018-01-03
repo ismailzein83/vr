@@ -72,6 +72,8 @@
     <Compile Include="RetailAccountInfo\AccountGridField.cs" />
     <Compile Include="RetailAccountInfo\AccountGridFieldInput.cs" />
     <Compile Include="RetailAccountInfo\RetailAccountInfo.cs" />
+    <Compile Include="UserDetailInfo.cs" />
+    <Compile Include="UserStatusInput.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

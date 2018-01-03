@@ -30,6 +30,69 @@ namespace PartnerPortal.CustomerAccess.Business
             };
         }
 
+        public List<UserDetailInfo> GetUsersStatus (UserStatusInput userStatusInput)
+        {
+            UserManager userManager = new UserManager();
+            List<UserDetailInfo> userDetailInfo = new List<UserDetailInfo>();
+            UserStatus userStatus;
+            foreach (var userId in userStatusInput.UserIds)
+            {
+                userManager.IsUserEnable(userId,out userStatus);
+                UserDetailInfo userDetail = new UserDetailInfo()
+                {
+                    UserId = userId,
+                    UserStatus = userStatus
+                };
+                userDetailInfo.Add(userDetail);
+            }
+            return userDetailInfo;
+        }
+        public UpdateOperationOutput<UserDetail> EnableUser(int userId)
+        {
+            UserManager userManager = new UserManager();
+            var user = userManager.GetUserbyId(userId);
+            return userManager.EnableUser(user);
+        }
+        public UserStatus GetUserStatusByUserId(int userId)
+        {
+            UserStatusInput userStatusInput = new UserStatusInput();
+            if (userStatusInput.UserIds == null)
+                userStatusInput.UserIds = new List<int>();
+            userStatusInput.UserIds.Add(userId);
+            var userDetailInfo = GetUsersStatus(userStatusInput);
+            userDetailInfo.ThrowIfNull("UserDetailInfo");
+            return userDetailInfo.First().UserStatus;
+        }
+        public UpdateOperationOutput<UserDetail> DisableUser(int userId)
+        {
+            UserManager userManager = new UserManager();
+            var user = userManager.GetUserbyId(userId);
+            return userManager.DisableUser(user);
+        }
+        public UpdateOperationOutput<UserDetail> UnlockPortalAccount(int userId)
+        {
+            UserManager userManager = new UserManager();
+            var user = userManager.GetUserbyId(userId);
+            return userManager.UnlockUser(user);
+        }
+        public UpdateOperationOutput<UserDetail> UpdateRetailAccountUser(RetailAccountToUpdate retailAccount)
+        {
+            UserManager userManager = new UserManager();
+           var user = userManager.GetUserbyId(retailAccount.UserId);
+           user.ThrowIfNull("User");
+           user.Name = retailAccount.Name;
+           user.Email = retailAccount.Email;
+            UserToUpdate userToUpdate = new UserToUpdate(){
+                UserId = user.UserId,
+                Name = user.Name,
+                Email = user.Email,
+                TenantId = user.TenantId,
+                Description = user.Description,
+                EnabledTill = user.EnabledTill,
+                ExtendedSettings = user.ExtendedSettings
+            };
+           return userManager.UpdateUser(userToUpdate);
+        }
         public InsertOperationOutput<Vanrise.Security.Entities.UserDetail> AddRetailAccountUser(RetailAccount retailAccount)
         {
             object userExtendedSettings;
