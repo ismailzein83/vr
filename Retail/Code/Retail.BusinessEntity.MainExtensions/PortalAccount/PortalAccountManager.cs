@@ -30,10 +30,9 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
             var portalAccountSettings = GetPortalAccountSettings(accountBEDefinitionId, accountId, accountViewDefinitionId);
             if (portalAccountSettings.UserId == userId)
                 return PortalAccountDetailMapper(userId, portalAccountSettings.Name, portalAccountSettings.Email, portalAccountSettings.TenantId, userStatus);
-            if (portalAccountSettings.AdditionalUsers == null)
-                portalAccountSettings.AdditionalUsers.ThrowIfNull("Additional Users");
+            portalAccountSettings.AdditionalUsers.ThrowIfNull("Additional Users");
             var additionalPortalSettings = portalAccountSettings.AdditionalUsers.FindRecord(x => x.UserId == userId);
-            additionalPortalSettings.ThrowIfNull("additionalPortalSettings");
+            additionalPortalSettings.ThrowIfNull("additionalPortalSettings", userId);
             return PortalAccountDetailMapper(userId, additionalPortalSettings.Name, additionalPortalSettings.Email, additionalPortalSettings.TenantId, userStatus);
         }
 
@@ -42,8 +41,6 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
             UserStatusInput userStatusInput = new UserStatusInput();
             List<PortalAccountDetail> portalAccountDetails = new List<PortalAccountDetail>();
             var portalAccountSettings = GetPortalAccountSettings(accountBEDefinitionId, accountId, accountViewDefinitionId);
-
-
             if (portalAccountSettings != null)
             {
                 if (userStatusInput.UserIds == null)
@@ -61,18 +58,17 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
                 var connectionSettings = GetCarrierPortalConnectionSettings(accountBEDefinitionId, accountViewDefinitionId);
 
                 List<UserDetailInfo> userDetailInfo = connectionSettings.Post<UserStatusInput, List<UserDetailInfo>>("/api/PartnerPortal_CustomerAccess/RetailAccountUser/GetUsersStatus", userStatusInput);
-                var primaryUserDetailInfo = userDetailInfo.Find(x => x.UserId == portalAccountSettings.UserId);
-                if (primaryUserDetailInfo == null)
-                    primaryUserDetailInfo.ThrowIfNull("PrimaryUserInfo");
+                var primaryUserDetailInfo = userDetailInfo.FindRecord(x => x.UserId == portalAccountSettings.UserId);
+                primaryUserDetailInfo.ThrowIfNull("PrimaryUserInfo");
                 var portalAccountDetail = PortalAccountDetailMapper(portalAccountSettings.UserId, portalAccountSettings.Name, portalAccountSettings.Email, portalAccountSettings.TenantId, primaryUserDetailInfo.UserStatus);
                 portalAccountDetails.Add(portalAccountDetail);
                 if (portalAccountSettings.AdditionalUsers != null)
                 {
                     foreach (var poratlAccountSetting in portalAccountSettings.AdditionalUsers)
                     {
-                        var additionalUserDetailInfo = userDetailInfo.Find(x => x.UserId == poratlAccountSetting.UserId);
-                        if (additionalUserDetailInfo == null)
-                            additionalUserDetailInfo.ThrowIfNull("Additional UserInfo");
+                        var additionalUserDetailInfo = userDetailInfo.FindRecord(x => x.UserId == poratlAccountSetting.UserId);
+
+                        additionalUserDetailInfo.ThrowIfNull("Additional UserInfo");
                         var additionalPortalAccountDetail = PortalAccountDetailMapper(poratlAccountSetting.UserId, poratlAccountSetting.Name, poratlAccountSetting.Email, poratlAccountSetting.TenantId, additionalUserDetailInfo.UserStatus);
 
                         portalAccountDetails.Add(additionalPortalAccountDetail);
@@ -81,7 +77,7 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
             }
             return portalAccountDetails;
         }
-        public UpdateOperationOutput<PortalAccountDetail> EnbalePortalAccount(Guid accountBEDefinitionId, Guid accountViewDefinitionId, long accountId, int userId)
+        public UpdateOperationOutput<PortalAccountDetail> EnablePortalAccount(Guid accountBEDefinitionId, Guid accountViewDefinitionId, long accountId, int userId)
         {
             UpdateOperationOutput<PortalAccountDetail> updateOperationOutput = new UpdateOperationOutput<PortalAccountDetail>();
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
@@ -89,23 +85,15 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
             var connectionSettings = GetCarrierPortalConnectionSettings(accountBEDefinitionId, accountViewDefinitionId);
 
             UpdateOperationOutput<UserDetail> userDetail = connectionSettings.Get<UpdateOperationOutput<UserDetail>>(string.Format("/api/PartnerPortal_CustomerAccess/RetailAccountUser/EnableUser?userId={0}", userId));
-            switch (userDetail.Result)
+            if (userDetail.Result == UpdateOperationResult.Succeeded)
             {
-                case UpdateOperationResult.Succeeded:
-
-                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                    var portalAccountUpdated = GetPortalAccount(accountBEDefinitionId, accountId, accountViewDefinitionId, userId);
-                    updateOperationOutput.UpdatedObject = PortalAccountDetailMapper(portalAccountUpdated.UserId, portalAccountUpdated.Name, portalAccountUpdated.Email, portalAccountUpdated.TenantId, userDetail.UpdatedObject.Status);
-                    break;
-
-                case UpdateOperationResult.Failed:
-                case UpdateOperationResult.SameExists:
-
-                default: break;
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                var portalAccountUpdated = GetPortalAccount(accountBEDefinitionId, accountId, accountViewDefinitionId, userId);
+                updateOperationOutput.UpdatedObject = PortalAccountDetailMapper(portalAccountUpdated.UserId, portalAccountUpdated.Name, portalAccountUpdated.Email, portalAccountUpdated.TenantId, userDetail.UpdatedObject.Status);
             }
             return updateOperationOutput;
         }
-       
+
         public UpdateOperationOutput<PortalAccountDetail> UnlockPortalAccount(Guid accountBEDefinitionId, Guid accountViewDefinitionId, long accountId, int userId)
         {
             UpdateOperationOutput<PortalAccountDetail> updateOperationOutput = new UpdateOperationOutput<PortalAccountDetail>();
@@ -115,19 +103,11 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
             var connectionSettings = GetCarrierPortalConnectionSettings(accountBEDefinitionId, accountViewDefinitionId);
 
             UpdateOperationOutput<UserDetail> userDetail = connectionSettings.Get<UpdateOperationOutput<UserDetail>>(string.Format("/api/PartnerPortal_CustomerAccess/RetailAccountUser/UnlockPortalAccount?userId={0}", userId));
-            switch (userDetail.Result)
+            if (userDetail.Result == UpdateOperationResult.Succeeded)
             {
-                case UpdateOperationResult.Succeeded:
-
-                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                    var portalAccountUpdated = GetPortalAccount(accountBEDefinitionId, accountId, accountViewDefinitionId, userId);
-                    updateOperationOutput.UpdatedObject = PortalAccountDetailMapper(portalAccountUpdated.UserId, portalAccountUpdated.Name, portalAccountUpdated.Email, portalAccountUpdated.TenantId, userDetail.UpdatedObject.Status);
-                    break;
-
-                case UpdateOperationResult.Failed:
-                case UpdateOperationResult.SameExists:
-
-                default: break;
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                var portalAccountUpdated = GetPortalAccount(accountBEDefinitionId, accountId, accountViewDefinitionId, userId);
+                updateOperationOutput.UpdatedObject = PortalAccountDetailMapper(portalAccountUpdated.UserId, portalAccountUpdated.Name, portalAccountUpdated.Email, portalAccountUpdated.TenantId, userDetail.UpdatedObject.Status);
             }
             return updateOperationOutput;
         }
@@ -140,19 +120,11 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
             var connectionSettings = GetCarrierPortalConnectionSettings(accountBEDefinitionId, accountViewDefinitionId);
             string actionPath = string.Format("/api/PartnerPortal_CustomerAccess/RetailAccountUser/DisableUser?userId={0}", userId);
             UpdateOperationOutput<UserDetail> userDetail = connectionSettings.Get<UpdateOperationOutput<UserDetail>>(actionPath);
-            switch (userDetail.Result)
+            if (userDetail.Result == UpdateOperationResult.Succeeded)
             {
-                case UpdateOperationResult.Succeeded:
-
-                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                    var portalAccountUpdated = GetPortalAccount(accountBEDefinitionId, accountId, accountViewDefinitionId, userId);
-                    updateOperationOutput.UpdatedObject = PortalAccountDetailMapper(portalAccountUpdated.UserId, portalAccountUpdated.Name, portalAccountUpdated.Email, portalAccountUpdated.TenantId, userDetail.UpdatedObject.Status);
-                    break;
-
-                case UpdateOperationResult.Failed:
-                case UpdateOperationResult.SameExists:
-
-                default: break;
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                var portalAccountUpdated = GetPortalAccount(accountBEDefinitionId, accountId, accountViewDefinitionId, userId);
+                updateOperationOutput.UpdatedObject = PortalAccountDetailMapper(portalAccountUpdated.UserId, portalAccountUpdated.Name, portalAccountUpdated.Email, portalAccountUpdated.TenantId, userDetail.UpdatedObject.Status);
             }
             return updateOperationOutput;
         }
@@ -397,20 +369,20 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
             var vrConnection = connectionManager.GetVRConnection<VRInterAppRestConnection>(portalAccount.ConnectionId);
             return vrConnection.Settings as VRInterAppRestConnection;
         }
-        private bool DoesUserEmailExists (PortalAccountSettings portalAccountSettings,string email,int? userId)
+        private bool DoesUserEmailExists(PortalAccountSettings portalAccountSettings, string email, int? userId)
+        
         {
             if (portalAccountSettings == null)
                 return false;
-            if (portalAccountSettings.Email == null)
-                return false;
-            if (portalAccountSettings.Email == email && portalAccountSettings.UserId != userId)
+            if ( portalAccountSettings.Email == email && portalAccountSettings.UserId != userId)
                 return true;
-            if (portalAccountSettings.AdditionalUsers == null)
-                return false;
-            foreach(var portalSetting in portalAccountSettings.AdditionalUsers )
+            if (portalAccountSettings.AdditionalUsers != null)
             {
-                if (portalSetting.Email == email && portalSetting.UserId != userId)
-                    return true;
+                foreach (var portalSetting in portalAccountSettings.AdditionalUsers)
+                {
+                    if (portalSetting.Email == email && portalSetting.UserId != userId)
+                        return true;
+                }
             }
             return false;
         }

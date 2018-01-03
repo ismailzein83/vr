@@ -67,10 +67,10 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
             return _manager.DosesUserHaveResetPasswordAccess(accountBEDefinitionId, accountViewDefinitionId);
         }
         [HttpGet]
-        [Route("EnbalePortalAccount")]
+        [Route("EnablePortalAccount")]
         public object EnbalePortalAccount(Guid accountBEDefinitionId, Guid accountViewDefinitionId,long accountId,int userId)
         {
-            return _manager.EnbalePortalAccount(accountBEDefinitionId, accountViewDefinitionId,accountId, userId);
+            return _manager.EnablePortalAccount(accountBEDefinitionId, accountViewDefinitionId, accountId, userId);
         }
         [HttpGet]
         [Route("DisablePortalAccount")]

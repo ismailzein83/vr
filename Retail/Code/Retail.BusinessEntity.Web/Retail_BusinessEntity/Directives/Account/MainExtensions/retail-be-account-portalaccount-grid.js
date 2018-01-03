@@ -174,7 +174,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Porta
             $scope.isLoading = true;
             VRNotificationService.showConfirmation().then(function (confirmed) {
                 if (confirmed) {
-                    return Retail_BE_PortalAccountAPIService.EnbalePortalAccount(accountBEDefinitionId, accountViewDefinitionId, parentAccountId, dataItem.UserId).then(function (response) {
+                    return Retail_BE_PortalAccountAPIService.EnablePortalAccount(accountBEDefinitionId, accountViewDefinitionId, parentAccountId, dataItem.UserId).then(function (response) {
                         if (VRNotificationService.notifyOnItemUpdated("Portal Account", response, "Email")) {
                             gridAPI.itemUpdated(response.UpdatedObject);
                         }

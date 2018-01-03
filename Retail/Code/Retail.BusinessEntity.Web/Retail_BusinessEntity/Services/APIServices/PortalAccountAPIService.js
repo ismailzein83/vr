@@ -61,8 +61,8 @@
         function UpdatePortalAccount(portalAccountEditorObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'UpdatePortalAccount'), portalAccountEditorObject);
         }
-        function EnbalePortalAccount(accountBEDefinitionId, accountViewDefinitionId, accountId, userId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'EnbalePortalAccount'), {
+        function EnablePortalAccount(accountBEDefinitionId, accountViewDefinitionId, accountId, userId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'EnablePortalAccount'), {
                 accountBEDefinitionId: accountBEDefinitionId,
                 accountViewDefinitionId: accountViewDefinitionId,
                 userId: userId,
@@ -100,7 +100,7 @@
             UpdatePortalAccount: UpdatePortalAccount,
             GetPortalAccountDetails: GetPortalAccountDetails,
             GetPortalAccount: GetPortalAccount,
-            EnbalePortalAccount: EnbalePortalAccount,
+            EnablePortalAccount: EnablePortalAccount,
             DisablePortalAccount: DisablePortalAccount,
             UnlockPortalAccount: UnlockPortalAccount
         });
