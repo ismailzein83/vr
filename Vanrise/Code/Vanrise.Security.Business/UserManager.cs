@@ -395,6 +395,11 @@ namespace Vanrise.Security.Business
 
             return updateOperationOutput;
         }
+        public bool DisableUser (int userId)
+        {
+            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+            return dataManager.DisableUser(userId);
+        }
 
         public Vanrise.Entities.UpdateOperationOutput<UserDetail> DisableUser(User userObject)
         {
@@ -411,8 +416,8 @@ namespace Vanrise.Security.Business
             }
             else
             {
-                IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-                updateActionSucc = dataManager.DisableUser(userObject.UserId);
+
+                updateActionSucc = DisableUser(userObject.UserId);
             }
 
             if (updateActionSucc)
@@ -448,7 +453,12 @@ namespace Vanrise.Security.Business
                 return false;
             return true;
         }
-
+        public bool IsUserEnable(int userId, out  UserStatus userStatus)
+        
+        {
+            var user = GetUserbyId(userId);
+            return IsUserEnable(user, out userStatus);
+        }
         public bool IsUserEnable(User user, out UserStatus userStatus)
         {
             userStatus = UserStatus.Active;
@@ -464,6 +474,12 @@ namespace Vanrise.Security.Business
             }
             return true;
         }
+        public bool EnableUser(int userId)
+        {
+            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+            return dataManager.EnableUser(userId);
+        }
+      
 
         public Vanrise.Entities.UpdateOperationOutput<UserDetail> EnableUser(User userObject)
         {
@@ -480,8 +496,8 @@ namespace Vanrise.Security.Business
             }
             else
             {
-                IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-                updateActionSucc = dataManager.EnableUser(userObject.UserId);
+
+                updateActionSucc = EnableUser(userObject.UserId);
             }
 
             if (updateActionSucc)
