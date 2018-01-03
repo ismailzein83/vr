@@ -234,19 +234,20 @@ namespace TOne.WhS.Sales.Business
                 zoneItem.RateTypes = _rateTypes.ToList();
             else
             {
-                Vanrise.GenericData.Entities.GenericRuleTarget target = GetTarget(zoneItem.ZoneId);
+                Vanrise.GenericData.Entities.GenericRuleTarget target = GetTarget(zoneItem.ZoneId, zoneItem.CurrentRateBED);
                 IEnumerable<int> rateTypeIds = _rateTypeRuleManager.GetRateTypes(_rateTypeRuleDefinitionId, target);
                 if (rateTypeIds != null)
                     zoneItem.RateTypes = _rateTypes.FindAllRecords(x => rateTypeIds.Contains(x.RateTypeId)).ToList();
             }
         }
 
-        private Vanrise.GenericData.Entities.GenericRuleTarget GetTarget(long zoneId)
+        private Vanrise.GenericData.Entities.GenericRuleTarget GetTarget(long zoneId, DateTime? effectiveDate)
         {
             var target = new Vanrise.GenericData.Entities.GenericRuleTarget();
             target.TargetFieldValues = new Dictionary<string, object>();
             target.TargetFieldValues.Add("CustomerId", _ownerId);
             target.TargetFieldValues.Add("SaleZoneId", zoneId);
+            target.EffectiveOn = effectiveDate;
             return target;
         }
 
