@@ -57,6 +57,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
 
+
                 ZoneRoutingProduct zoneRoutingProduct = new ZoneRoutingProduct
                 {
                     ZoneId = zoneRoutingProductToEdit.ZoneId,
@@ -65,6 +66,10 @@ namespace TOne.WhS.BusinessEntity.Business
                     BED = zoneRoutingProductToEdit.BED,
                     ServiceIds = servicesIds.ToList()
                 };
+
+                int? countryId = zoneManager.GetSaleZoneCountryId(zoneRoutingProductToEdit.ZoneId);
+                if (countryId.HasValue)
+                    zoneRoutingProduct.CountryId = countryId.Value;
 
                 var zoneRoutingProductDetail = new ZoneRoutingProductDetail
                 {
