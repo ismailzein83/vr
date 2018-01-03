@@ -74,7 +74,13 @@
                                                 <telerik:RadComboBox ID="ddlGMT" runat="server"></telerik:RadComboBox>
                                             </td>
                                         </tr>
-
+                                        <tr>
+                                            <td class="caption">Include CSV File</td>
+                                            <td></td>
+                                             <td class="inputdata">
+                                                <asp:CheckBox ID="includeCSVFile" runat="server"></asp:CheckBox>
+                                            </td>
+                                        </tr>
                                     </table>
                                 </td>
                             </tr>

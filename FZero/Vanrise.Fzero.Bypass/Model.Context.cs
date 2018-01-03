@@ -10,7 +10,6 @@
 namespace Vanrise.Fzero.Bypass
 {
     using System;
-    using System.Configuration;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     using System.Data.Objects;
@@ -22,26 +21,12 @@ namespace Vanrise.Fzero.Bypass
         public Entities()
             : base("name=Entities")
         {
-            var commandTimeInterval = ConfigurationManager.AppSettings["CommandTimeInterval"];
-            if (commandTimeInterval != null)
-            {
-                int commandTimeIntervalValue;
-                if (int.TryParse(commandTimeInterval, out commandTimeIntervalValue))
-                {
-                    this.SetCommandTimeOut(commandTimeIntervalValue);
-                }
-            }
         }
-        public void SetCommandTimeOut(int timeout)
-        {
-            var objectContext = (this as IObjectContextAdapter).ObjectContext;
-            objectContext.CommandTimeout = timeout;
-        }
+    
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             throw new UnintentionalCodeFirstException();
         }
-
     
         public DbSet<ActionType> ActionTypes { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }

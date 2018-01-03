@@ -368,6 +368,9 @@ namespace Vanrise.Fzero.Services.Report
                 parameters[2] = new ReportParameter("HideSignature", "true");
                 rvToOperator.LocalReport.SetParameters(parameters);
                 rvToOperator.LocalReport.Refresh();
+              
+                
+                
                 string filenameExcel = ClientVariables.ExportReportToExcel(report.ReportID + ".xls", rvToOperator);
                 string filenameExcel2 = "";
                 if (ClientID == (int)Enums.Clients.ITPC)
@@ -387,15 +390,22 @@ namespace Vanrise.Fzero.Services.Report
                 parameters[2] = new ReportParameter("HideSignature", "false");
                 rvToOperator.LocalReport.SetParameters(parameters);
                 rvToOperator.LocalReport.Refresh();
+
+                string attachedPath = null;
+                MobileOperator mobileOperator = Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperatorID);
+                if (mobileOperator.IncludeCSVFile.HasValue && mobileOperator.IncludeCSVFile.Value)
+                {
+                    attachedPath = ClientVariables.ExportReportToCSV(report.ReportID + ".csv", rvToOperator);
+                }
+
+
                 string filenamePDF = ClientVariables.ExportReportToPDF(report.ReportID + ".pdf", rvToOperator);
 
                 ErrorLog("filenamePDF: " + filenamePDF);
 
 
 
-
-
-
+              
 
                 string CCs = EmailCC.GetEmailCCs(MobileOperatorID, ClientID);
 
@@ -405,7 +415,14 @@ namespace Vanrise.Fzero.Services.Report
              
                 if (ClientID == 3)
                 {
-                    EmailManager.SendReporttoMobileSyrianOperator(reportedCallsCount, filenameExcel + ";" + filenamePDF,
+                    if (attachedPath != null)
+                    {
+                        attachedPath += ";" + filenameExcel + ";" + filenamePDF;
+                    }else
+                    {
+                        attachedPath = filenameExcel + ";" + filenamePDF;
+                    }
+                    EmailManager.SendReporttoMobileSyrianOperator(reportedCallsCount, attachedPath,
                                 EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs,
                                 report.ReportID, profileName);
                 }
@@ -426,7 +443,18 @@ namespace Vanrise.Fzero.Services.Report
                     ErrorLog("zainExcel: " + zainExcel);
 
                     if (string.IsNullOrEmpty(zainExcel))
-                        EmailManager.SendReporttoMobileOperator(reportedCallsCount, filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profileName);
+                    {
+                        if (attachedPath != null)
+                        {
+                            attachedPath += ";" +  filenamePDF;
+                        }
+                        else
+                        {
+                            attachedPath = filenamePDF;
+                        }
+
+                        EmailManager.SendReporttoMobileOperator(reportedCallsCount, attachedPath, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profileName);
+                    }
                     else
                     {
                         string reportCode = ReportID.Substring(0, 3);
@@ -440,19 +468,51 @@ namespace Vanrise.Fzero.Services.Report
                                 ErrorLog("reportedCallsCount: " + reportedCallsCount + " filenameExcel2: " + filenameExcel2 + " filenamePDF: " + filenamePDF
                                         + " EmailAddress: " + EmailAddress + " report.ReportID: " + report.ReportID);
 
-                                EmailManager.SendReporttoMobileOperator(reportedCallsCount, filenameExcel2 + ";" + filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profileName);
+                                if (attachedPath != null)
+                                {
+                                    attachedPath += ";" + filenameExcel2 + ";" + filenamePDF;
+                                }
+                                else
+                                {
+                                    attachedPath = filenameExcel2 + ";" + filenamePDF;
+                                }
+
+                                EmailManager.SendReporttoMobileOperator(reportedCallsCount, attachedPath, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profileName);
                             }
                             else
-                                EmailManager.SendReporttoMobileOperator(reportedCallsCount, filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profileName);
+                            {
+                                if (attachedPath != null)
+                                {
+                                    attachedPath += ";" + filenamePDF;
+                                }
+                                else
+                                {
+                                    attachedPath = filenamePDF;
+                                }
+
+                                EmailManager.SendReporttoMobileOperator(reportedCallsCount, attachedPath, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profileName);
+                            }
+                               
                         }
                         else
-                            EmailManager.SendReporttoMobileOperator(reportedCallsCount, filenamePDF, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profileName);
+                        {
+                            if (attachedPath != null)
+                            {
+                                attachedPath += ";"+ filenamePDF;
+                            }
+                            else
+                            {
+                                attachedPath = filenamePDF;
+                            }
+
+
+                            EmailManager.SendReporttoMobileOperator(reportedCallsCount, attachedPath, EmailAddress, ConfigurationManager.AppSettings["OperatorPath"] + "?ReportID=" + report.ReportID, CCs, report.ReportID, profileName);
+                        }
                     }
 
                 }
 
 
-                MobileOperator mobileOperator = Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperatorID);
 
                 if (mobileOperator.EnableAutoBlock && !string.IsNullOrEmpty(mobileOperator.AutoBlockEmail))
                 {

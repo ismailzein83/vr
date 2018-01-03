@@ -37,6 +37,7 @@ namespace Vanrise.Fzero.Bypass
         public string FTPPassword { get; set; }
         public string FTPPort { get; set; }
         public Nullable<int> FTPType { get; set; }
+        public Nullable<bool> IncludeCSVFile { get; set; }
     
         public virtual ICollection<EmailCC> EmailCCs { get; set; }
         public virtual User User { get; set; }

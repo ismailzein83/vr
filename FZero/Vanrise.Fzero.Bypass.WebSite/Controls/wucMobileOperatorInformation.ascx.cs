@@ -304,6 +304,17 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
             ftpType.SelectedValue = value.ToString();
         }
     }
+    public bool IncludeCSVFile
+    {
+        get
+        {
+            return includeCSVFile.Checked;
+        }
+        set
+        {
+            includeCSVFile.Checked = value;
+        }
+    }
     public string FTPPort
     {
         get
@@ -441,7 +452,8 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         AutoBlockEmail = MobileOperator.AutoBlockEmail;
         SecurityEmail = MobileOperator.AutoReportSecurityEmail;
         EnableSecurity = MobileOperator.AutoReportSecurity;
-
+        if(MobileOperator.IncludeCSVFile.HasValue)
+          IncludeCSVFile = MobileOperator.IncludeCSVFile.Value;
         if (MobileOperator.EnableFTP.HasValue)
          EnableFTP = MobileOperator.EnableFTP.Value;
         FTPAddress = MobileOperator.FTPAddress;
@@ -510,6 +522,7 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         MobileOperator.FTPPassword = FTPPassword;
         MobileOperator.FTPPort = FTPPort;
         MobileOperator.FTPType = FTPType;
+        MobileOperator.IncludeCSVFile = IncludeCSVFile;
         if (!txtUserNameReadOnly)
         {
             MobileOperator.User.UserName = MobileOperatorUserName;
