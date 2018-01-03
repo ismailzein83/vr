@@ -192,11 +192,6 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
                     }
                     break;
 
-
-                case UpdateOperationResult.Failed:
-                case UpdateOperationResult.SameExists:
-                default: break;
-
             }
 
             return updateOperationOutput;
@@ -289,9 +284,6 @@ namespace Retail.BusinessEntity.MainExtensions.PortalAccount
                         }
                         break;
                     }
-                case InsertOperationResult.Failed:
-                case InsertOperationResult.SameExists:
-                default: break;
 
             }
 

@@ -34,7 +34,7 @@
                     accountViewDefinitionId = context.getAccountViewDefinitionId();
                     name = context.getName();
                     email = context.getEmail();
-                    isPrimaryPortalAccount = parameters.isPrimaryPortalAccount;
+                    isPrimaryPortalAccount = context.isPrimaryAccount();
                 }
             }
             isEditMode = (userId != undefined);

@@ -6,14 +6,13 @@
 
     function PortalAccountService(VRModalService) {
 
-        function addPortalAccount(onPortalAccountAdded, accountBEDefinitionId, parentAccountId, accountViewDefinition, context, isPrimaryPortalAccount) {
+        function addPortalAccount(onPortalAccountAdded, accountBEDefinitionId, parentAccountId, accountViewDefinition, context) {
 
             var parameters = {
                 accountBEDefinitionId: accountBEDefinitionId,
                 parentAccountId: parentAccountId,
                 accountViewDefinition: accountViewDefinition,
                 context: context,
-                isPrimaryPortalAccount: isPrimaryPortalAccount
             };
             var settings = {};
             settings.onScopeReady = function (modalScope) {

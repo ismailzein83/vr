@@ -46,7 +46,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Porta
                     gridAPI.itemAdded(portalAccount);
                 };
 
-                Retail_BE_PortalAccountService.addPortalAccount(onPortalAccountAdded, accountBEDefinitionId, parentAccountId, accountViewDefinition, context, isPrimaryPortalAccount);
+                Retail_BE_PortalAccountService.addPortalAccount(onPortalAccountAdded, accountBEDefinitionId, parentAccountId, accountViewDefinition, getContext());
             };
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -157,7 +157,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Porta
             var userId;
             if (dataItem != undefined)
                 userId = dataItem.UserId;
-            Retail_BE_PortalAccountService.resetPassword(accountBEDefinitionId, parentAccountId, context, userId);
+            Retail_BE_PortalAccountService.resetPassword(accountBEDefinitionId, parentAccountId, getContext(), userId);
         }
         function editPortalAccount(portalAccountObj) {
             var userId;
@@ -168,7 +168,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Porta
                 $scope.portalAccounts[index] = portalAccount;
                 gridAPI.itemUpdated(portalAccount);
             };
-            Retail_BE_PortalAccountService.editPortalAccount(accountBEDefinitionId, parentAccountId, accountViewDefinitionId, userId, context, onPortalAccountUpdated, $scope.portalAccounts);
+            Retail_BE_PortalAccountService.editPortalAccount(accountBEDefinitionId, parentAccountId, accountViewDefinitionId, userId, getContext(), onPortalAccountUpdated, $scope.portalAccounts);
         }
         function enablePortalAccount(dataItem) {
             $scope.isLoading = true;
@@ -187,6 +187,15 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Porta
                 else
                     $scope.isLoading = false;
             });
+        }
+        function getContext() {
+            var currentContext = context;
+            if (currentContext == undefined)
+                currentContext = {};
+            currentContext.isPrimaryAccount = function () {
+                return isPrimaryPortalAccount;
+            };
+            return currentContext;
         }
         function disablePortalAccount(dataItem) {
             $scope.isLoading = true;
