@@ -65,24 +65,24 @@ app.directive('vrAccountbalanceNotificationsGrid', ['UtilsService', 'VR_AccountB
                     if (dataItem.Entity.ExecuteBPInstanceID != undefined) {
                         menuActions.push({
                             name: 'Action Process',
-                            clicked: executeBPInstance
+                            clicked: viewExecutedBPInstance
                         });
                     }
 
                     if (dataItem.Entity.ClearBPInstanceID != undefined) {
                         menuActions.push({
                             name: 'Rollback Process',
-                            clicked: clearBPInstance
+                            clicked: viewRolledBackBPInstance
                         });
                     }
 
                     function viewVRAlertRule(vrNotificationItem) {
                         VR_Notification_VRAlertRuleService.viewVRAlertRule(vrNotificationItem.Entity.ParentTypes.ParentType2);
                     }
-                    function executeBPInstance(vrNotificationItem) {
+                    function viewExecutedBPInstance(vrNotificationItem) {
                         BusinessProcess_BPInstanceService.openProcessTracking(vrNotificationItem.Entity.ExecuteBPInstanceID);
                     }
-                    function clearBPInstance(vrNotificationItem) {
+                    function viewRolledBackBPInstance(vrNotificationItem) {
                         BusinessProcess_BPInstanceService.openProcessTracking(vrNotificationItem.Entity.ClearBPInstanceID);
                     }
 

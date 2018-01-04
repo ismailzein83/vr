@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrGenericdataDatarecordnotificationtypesettingsGrid', ['UtilsService', 'VR_GenericData_DataRecordNotificationTypeSettingsAPIService', 'VR_GenericData_DataRecordNotificationTypeSettingsService', 'VR_Notification_VRNotificationService',
-    function (UtilsService, VR_GenericData_DataRecordNotificationTypeSettingsAPIService, VR_GenericData_DataRecordNotificationTypeSettingsService, VR_Notification_VRNotificationService) {
+app.directive('vrGenericdataDatarecordnotificationtypesettingsGrid', ['UtilsService', 'VR_GenericData_DataRecordNotificationTypeSettingsAPIService', 'VR_GenericData_DataRecordNotificationTypeSettingsService', 'VR_Notification_VRNotificationService', 'VR_Notification_VRAlertRuleService', 'BusinessProcess_BPInstanceService',
+    function (UtilsService, VR_GenericData_DataRecordNotificationTypeSettingsAPIService, VR_GenericData_DataRecordNotificationTypeSettingsService, VR_Notification_VRNotificationService, VR_Notification_VRAlertRuleService, BusinessProcess_BPInstanceService) {
         return {
             restrict: 'E',
             scope: {
@@ -47,6 +47,43 @@ app.directive('vrGenericdataDatarecordnotificationtypesettingsGrid', ['UtilsServ
 
                 $scope.scopeModel.getAlertLevelStyleColor = function (dataItem) {
                     return dataItem.AlertLevelStyle;
+                };
+
+                $scope.scopeModel.menuActions = function (dataItem) {
+                    var menuActions = [];
+
+                    if (dataItem.Entity.ParentTypes.ParentType2 != undefined) {
+                        menuActions.push({
+                            name: 'Matching Rule',
+                            clicked: viewVRAlertRule
+                        });
+                    }
+
+                    if (dataItem.Entity.ExecuteBPInstanceID != undefined) {
+                        menuActions.push({
+                            name: 'Action Process',
+                            clicked: viewExecutedBPInstance
+                        });
+                    }
+
+                    if (dataItem.Entity.ClearBPInstanceID != undefined) {
+                        menuActions.push({
+                            name: 'Rollback Process',
+                            clicked: viewRolledBackBPInstance
+                        });
+                    }
+
+                    function viewVRAlertRule(vrNotificationItem) {
+                        VR_Notification_VRAlertRuleService.viewVRAlertRule(vrNotificationItem.Entity.ParentTypes.ParentType2);
+                    }
+                    function viewExecutedBPInstance(vrNotificationItem) {
+                        BusinessProcess_BPInstanceService.openProcessTracking(vrNotificationItem.Entity.ExecuteBPInstanceID);
+                    }
+                    function viewRolledBackBPInstance(vrNotificationItem) {
+                        BusinessProcess_BPInstanceService.openProcessTracking(vrNotificationItem.Entity.ClearBPInstanceID);
+                    }
+
+                    return menuActions;
                 };
             }
 
