@@ -20,20 +20,22 @@ BEGIN
 				Select	splnew.ID, splnew.OwnerType, splnew.OwnerID, splnew.CurrencyID, splnew.EffectiveOn, @ProcessInstanceID,splnew.FileID, splnew.PriceListType, UserID,splnew.[Description],@PricelistStateBackupID,0
 				from TOneWhS_BE.SalePriceList_New splnew WITH(NOLOCK) Where splnew.ProcessInstanceID = @ProcessInstanceID 
 	
-			if @ReservedSalePriceListId is not null
-			begin
-				-- Sync rates					
+				-- Sync rates
 				
 				insert into TOneWhS_BE.SaleRate (ID, PriceListID, ZoneID, CurrencyID, RateTypeID, Rate, Change, BED, EED)
-				select ID, @ReservedSalePriceListId, ZoneID, CurrencyId, RateTypeID, Rate, ChangeType, BED, EED
+				select ID, PriceListID, ZoneID, CurrencyId, RateTypeID, Rate, ChangeType, BED, EED
 				from TOneWhS_Sales.RP_SaleRate_New newRate with(nolock)
 				where newRate.ProcessInstanceID = @ProcessInstanceId
-				
+
 				update TOneWhS_BE.SaleRate
 				set EED = changedRate.EED
 				from TOneWhS_BE.SaleRate rate inner join TOneWhS_Sales.RP_SaleRate_Changed changedRate with(nolock) on rate.ID = changedRate.ID
 				where changedRate.ProcessInstanceID = @ProcessInstanceId
 
+
+			--This if statement should be removed as services are no longer controlled by the rate plan process
+			if @ReservedSalePriceListId is not null
+			begin
 				-- Sync default services
 
 				insert into TOneWhS_BE.SaleEntityService (ID, PriceListID, ZoneID, [Services], BED, EED)

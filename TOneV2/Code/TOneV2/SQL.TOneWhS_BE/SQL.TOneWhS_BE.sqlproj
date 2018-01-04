@@ -543,5 +543,10 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetAllDefaultRPsByOwnersOfType.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetAllDefaultRPsByOwners.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetAllByOwners.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_SalePriceList_SetStateBackupIdForOwnerPricelists.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_ZoneRoutingProduct_Update.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetAllByOwnerType.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetSaleZoneRoutingProducts.sql" />
+    <Build Include="TOneWhS_BE\User Defined Types\RoutingProductToClose.sql" />
   </ItemGroup>
 </Project>
