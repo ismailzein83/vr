@@ -487,6 +487,14 @@ vr-columns[medium-spacing] > div[class^="col"] {
     padding-right: 5px !important;
 }
 
+vr-columns[right-medium-spacing] > div[class^="col"] {
+    padding-right: 5px !important;
+}
+
+vr-columns[left-medium-spacing] > div[class^="col"] {
+    padding-left: 5px !important;
+}
+
 vr-row[singleitemrow] > .row {
     margin: 0px !important;
     padding: 10px 0px !important;
