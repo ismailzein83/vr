@@ -724,6 +724,8 @@
     <Build Include="common\Stored Procedures\sp_VRExclusiveSession_GetAll.sql" />
     <Build Include="common\Stored Procedures\sp_VRExclusiveSession_ForceReleaseAll.sql" />
     <Build Include="common\Stored Procedures\sp_VRExclusiveSession_ForceRelease.sql" />
+    <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetByTime.sql" />
+    <Build Include="VR_AccountBalance\User Defined Types\AccountUsagesByTimeTable.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

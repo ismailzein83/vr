@@ -1,13 +1,15 @@
 ﻿CREATE TABLE [common].[VRPop3ReadMessageId] (
     [ID]               BIGINT           IDENTITY (1, 1) NOT NULL,
     [ConnectionID]     UNIQUEIDENTIFIER NOT NULL,
-    [SenderIdentifier] VARCHAR (255)    NOT NULL,
+    [SenderIdentifier] VARCHAR (255)    NULL,
     [MessageId]        NVARCHAR (400)   NOT NULL,
     [MessageTime]      DATETIME         NOT NULL,
     [timestamp]        ROWVERSION       NULL,
-    [CreatedTime]      DATETIME         CONSTRAINT [DF_VRPop3ReadMessageId_CreatedTime] DEFAULT (getdate()) NULL,
+    [CreatedTime]      DATETIME         NULL,
     CONSTRAINT [IX_VRPop3ReadMessageId_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
 
 
 GO
