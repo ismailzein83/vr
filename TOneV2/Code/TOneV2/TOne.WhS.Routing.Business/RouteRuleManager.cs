@@ -367,7 +367,7 @@ namespace TOne.WhS.Routing.Business
             if (customerGroupSettings != null)
             {
                 IRuleCustomerCriteria ruleCode = routeRule as IRuleCustomerCriteria;
-                if (ruleCode.CustomerIds != null && ruleCode.CustomerIds.Intersect(customerIds).Count() > 0)
+                if (ruleCode.CustomerIds == null || ruleCode.CustomerIds.Intersect(customerIds).Count() > 0)
                     return true;
             }
 

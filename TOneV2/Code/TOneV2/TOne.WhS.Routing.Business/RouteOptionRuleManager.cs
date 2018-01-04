@@ -117,6 +117,12 @@ namespace TOne.WhS.Routing.Business
                 if (input.Query.SaleZoneIds != null && !CheckIfSaleZoneSettingsContains(routeOptionRule, input.Query.SaleZoneIds))
                     return false;
 
+                if (input.Query.SupplierId.HasValue && !CheckIfSupplierSettingsContains(routeOptionRule, input.Query.SupplierId.Value))
+                    return false;
+
+                if (input.Query.SupplierZoneIds != null && !CheckIfSupplierZoneSettingsContains(routeOptionRule, input.Query.SupplierZoneIds))
+                    return false;
+
                 if (input.Query.RouteOptionRuleSettingsConfigIds != null && !CheckIfSameRouteOptionRuleSettingsConfigId(routeOptionRule, input.Query.RouteOptionRuleSettingsConfigIds))
                     return false;
 
@@ -129,7 +135,7 @@ namespace TOne.WhS.Routing.Business
                 return true;
             };
 
-            
+
             ResultProcessingHandler<RouteOptionRuleDetail> handler = new ResultProcessingHandler<RouteOptionRuleDetail>()
             {
                 ExportExcelHandler = new RouteOptionRuleExcelExportHandler()
@@ -342,10 +348,32 @@ namespace TOne.WhS.Routing.Business
             if (routeOptionRule.Criteria.CustomerGroupSettings != null)
             {
                 IRuleCustomerCriteria ruleCode = routeOptionRule as IRuleCustomerCriteria;
-                if (ruleCode.CustomerIds != null && ruleCode.CustomerIds.Intersect(customerIds).Count() > 0)
+                if (ruleCode.CustomerIds == null || ruleCode.CustomerIds.Intersect(customerIds).Count() > 0)
                     return true;
             }
 
+            return false;
+        }
+        private bool CheckIfSupplierSettingsContains(RouteOptionRule routeOptionRule, int supplierId)
+        {
+            if (routeOptionRule.Criteria.SuppliersWithZonesGroupSettings != null)
+            {
+                IRuleSupplierCriteria ruleCode = routeOptionRule as IRuleSupplierCriteria;
+                if (ruleCode.SupplierIds != null && ruleCode.SupplierIds.Contains(supplierId))
+                    return true;
+            }
+            return false;
+        }
+
+        private bool CheckIfSupplierZoneSettingsContains(RouteOptionRule routeOptionRule, IEnumerable<long> supplierZoneIds)
+        {
+            if (routeOptionRule.Criteria.SuppliersWithZonesGroupSettings != null)
+            {
+                IRuleSupplierZoneCriteria ruleCode = routeOptionRule as IRuleSupplierZoneCriteria;
+                //supplierZoneIds = null -> all zones for the supplier
+                if (ruleCode.SupplierZoneIds == null || ruleCode.SupplierZoneIds.Intersect(supplierZoneIds).Count() > 0)
+                    return true;
+            }
             return false;
         }
         private bool CheckIfSaleZoneSettingsContains(RouteOptionRule routeOptionRule, IEnumerable<long> saleZoneIds)
@@ -476,7 +504,7 @@ namespace TOne.WhS.Routing.Business
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
 
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name", Width = 30});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name", Width = 30 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Included Codes" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customers", Width = 30 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Suppliers", Width = 45 });
