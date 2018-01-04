@@ -2,8 +2,8 @@
              on-ready="onGridReady"
              dataretrievalfunction="dataRetrievalFunction"
              pagingtype="'PagingOnScroll'"
-             menuactions="gridMenuActions" idfield="SupplierZoneServiceId"  enableautoexport="true">
-    <vr-datagridcolumn headertext="'ID'" field="'SupplierZoneServiceId'" type="'Text'"></vr-datagridcolumn>
+             menuactions="gridMenuActions" idfield="SupplierZoneId" enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" field="'SupplierZoneId'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Services'" fixedwidth="100" disablesorting>
         <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>

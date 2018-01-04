@@ -41,6 +41,7 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         public DateTime? EED { get; set; }
         public String ZoneName { get; set; }
+        public long SupplierZoneId { get; set; }
         public List<int> Services { get; set; }
     }
 

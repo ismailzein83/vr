@@ -38,8 +38,7 @@
             $scope.scopeModel.onServiceItemDeSelected = function () {
                 $scope.scopeModel.isSaveButtonDisabled = false;
             };
-            $scope.scopeModel.bedChangedValue = function ()
-            {
+            $scope.scopeModel.bedChangedValue = function () {
                 $scope.scopeModel.isSaveButtonDisabled = false;
             };
             $scope.scopeModel.onZoneServiceConfigSelectorReady = function (api) {
@@ -65,7 +64,7 @@
             $scope.isLoading = true;
 
             if (editMode) {
-                
+
                 loadAllControls()
                         .finally(function () {
                         });
@@ -126,8 +125,9 @@
         }
 
         function buildSupplierZoneService() {
-            
+
             var obj = {
+                SupplierZoneId: (supplierServiceEntity != undefined) ? supplierServiceEntity.SupplierZoneId : null,
                 SupplierZoneServiceId: (supplierServiceEntity != undefined) ? supplierServiceEntity.SupplierZoneServiceId : null,
                 ZoneName: (supplierServiceEntity != undefined) ? supplierServiceEntity.ZoneName : null,
                 SupplierId: supplierId,
@@ -138,7 +138,7 @@
         }
 
         function insertSupplierService() {
-           
+
 
         }
         function updateSupplierService() {
@@ -148,18 +148,17 @@
             WhS_BE_SupplierZoneServiceAPIService.UpdateSupplierZoneService(serviceObject)
             .then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("SupplierZoneService", response, "Name")) {
-                    if ($scope.onSupplierServiceUpdated != undefined)
-                    {
+                    if ($scope.onSupplierServiceUpdated != undefined) {
                         response.UpdatedObject.Services = zoneServiceConfigSelectorAPI.getSelectedIds();
                         $scope.onSupplierServiceUpdated(response.UpdatedObject);
                     }
-                        
+
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
-             
+
                 $scope.isLoading = false;
             });
         }
