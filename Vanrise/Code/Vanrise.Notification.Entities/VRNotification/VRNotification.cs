@@ -12,14 +12,14 @@ namespace Vanrise.Notification.Entities
         Executing = 10,
         [Description("Executed")]
         Executed = 20,
-        [Description("Cleared")]
-        Cleared = 30,
-        [Description("Error")]
+        [Description("Rolled Back")]
+        RolledBack = 30,
+        [Description("Execution Error")]
         ExecutionError = 40,
-        [Description("Error")]
-        ClearanceError = 50,
-        [Description("Clearing")]
-        Clearing = 60
+        [Description("Rollback Error")]
+        RollbackError = 50,
+        [Description("Rollback")]
+        Rollback = 60
     }
 
     public class VRNotification

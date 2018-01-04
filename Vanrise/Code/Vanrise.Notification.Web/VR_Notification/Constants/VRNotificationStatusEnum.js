@@ -2,8 +2,8 @@
     New: { value: 0, description: 'New' },
     Executing: { value: 10, description: 'Executing' },
     Executed: { value: 20, description: 'Executed' },
-    Cleared: { value: 30, description: 'Cleared' },
+    RolledBack: { value: 30, description: 'Rolled Back' },
     ErrorOnExecution: { value: 40, description: 'Execution Error' },
-    ClearanceError: { value: 50, description: 'Clearance Error' },
-    Clearing: { value: 60, description: 'Clearing' }
+    ErrorOnRollback: { value: 50, description: 'Rollback Error' },
+    Rollback: { value: 60, description: 'Rollback' }
 });

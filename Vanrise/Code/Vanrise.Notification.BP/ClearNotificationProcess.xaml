@@ -100,7 +100,7 @@
           <vnba1:UpdateNotificationStatus sap2010:WorkflowViewState.IdRef="UpdateNotificationStatus_2">
             <vnba1:UpdateNotificationStatus.Status>
               <InArgument x:TypeArguments="vne:VRNotificationStatus">
-                <mca:CSharpValue x:TypeArguments="vne:VRNotificationStatus">VRNotificationStatus.Clearing</mca:CSharpValue>
+                <mca:CSharpValue x:TypeArguments="vne:VRNotificationStatus">VRNotificationStatus.Rollback</mca:CSharpValue>
               </InArgument>
             </vnba1:UpdateNotificationStatus.Status>
             <vnba1:UpdateNotificationStatus.VRNotificationBPInstanceType>
@@ -194,7 +194,7 @@
               <vnba1:UpdateNotificationStatus VRNotificationBPInstanceType="{x:Null}" DisplayName="UpdateStatusCleared" sap2010:WorkflowViewState.IdRef="UpdateNotificationStatus_3">
                 <vnba1:UpdateNotificationStatus.Status>
                   <InArgument x:TypeArguments="vne:VRNotificationStatus">
-                    <mca:CSharpValue x:TypeArguments="vne:VRNotificationStatus">VRNotificationStatus.Cleared</mca:CSharpValue>
+                    <mca:CSharpValue x:TypeArguments="vne:VRNotificationStatus">VRNotificationStatus.RolledBack</mca:CSharpValue>
                   </InArgument>
                 </vnba1:UpdateNotificationStatus.Status>
                 <vnba1:UpdateNotificationStatus.VRNotificationId>
@@ -209,7 +209,7 @@
                 <vnba1:UpdateNotificationStatus VRNotificationBPInstanceType="{x:Null}" DisplayName="UpdateStatusError" sap2010:WorkflowViewState.IdRef="UpdateNotificationStatus_4">
                   <vnba1:UpdateNotificationStatus.Status>
                     <InArgument x:TypeArguments="vne:VRNotificationStatus">
-                      <mca:CSharpValue x:TypeArguments="vne:VRNotificationStatus">VRNotificationStatus.ClearanceError</mca:CSharpValue>
+                      <mca:CSharpValue x:TypeArguments="vne:VRNotificationStatus">VRNotificationStatus.RollbackError</mca:CSharpValue>
                     </InArgument>
                   </vnba1:UpdateNotificationStatus.Status>
                   <vnba1:UpdateNotificationStatus.VRNotificationId>
@@ -250,7 +250,7 @@
         </TerminateWorkflow>
       </If.Then>
     </If>
-    <sads:DebugSymbol.Symbol>d0lDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuTm90aWZpY2F0aW9uLkJQXENsZWFyTm90aWZpY2F0aW9uUHJvY2Vzcy54YW1sLDsD/gEOAgEBQAVVHwMBiQFWBewBFwIBDO0BBfwBCgIBAkMLQ1cDAZYBUgtSbwMBkgFNC010AwGOAUgLSF8DAYoBWQtZcwMBhQFgCeoBFAIBDfABC/ABXwIBA/QBCfoBHQIBB2QLdCwCAXJ1C7oBEAIBOLsBC+kBEAIBDvcBD/cBowECAQhxEXFtAgF/bBFslQECAXlnEWd8AgFzeBF4owECATl8D7gBIQIBP74BEb4BYAIBD8IBD80BMAIBK9ABD+cBGgIBFX8Vf4wBAgFshgETtgEeAgFAygEVygFxAgEyxQEVxQF/AgEs0QER3AEyAgEe3QER5gEaAgEWiAEXkwE0AgFdmwEbsgEmAgFB2QEX2QFzAgEl1AEX1AGIAQIBH+QBPeQBQQIBHeABF+ABcwIBF4sBHYsBhwECAWWQAR2QAWcCAV6cAR2nATgCAUyoAR2xASYCAUKkASOkAZkBAgFVnwEjnwHDAQIBTa8BSa8BTQIBS6sBI6sBeQIBQw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0lDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuTm90aWZpY2F0aW9uLkJQXENsZWFyTm90aWZpY2F0aW9uUHJvY2Vzcy54YW1sLDsD/gEOAgEBQAVVHwMBiQFWBewBFwIBDO0BBfwBCgIBAkMLQ1cDAZYBUgtSbwMBkgFNC010AwGOAUgLSF8DAYoBWQtZcwMBhQFgCeoBFAIBDfABC/ABXwIBA/QBCfoBHQIBB2QLdCwCAXJ1C7oBEAIBOLsBC+kBEAIBDvcBD/cBowECAQhxEXFtAgF/bBFslQECAXlnEWd8AgFzeBF4owECATl8D7gBIQIBP74BEb4BYAIBD8IBD80BMAIBK9ABD+cBGgIBFX8Vf4wBAgFshgETtgEeAgFAygEVygFxAgEyxQEVxQGCAQIBLNEBEdwBMgIBHt0BEeYBGgIBFogBF5MBNAIBXZsBG7IBJgIBQdkBF9kBcwIBJdQBF9QBhwECAR/kAT3kAUECAR3gARfgAXMCAReLAR2LAYcBAgFlkAEdkAFnAgFenAEdpwE4AgFMqAEdsQEmAgFCpAEjpAGZAQIBVZ8BI58BwwECAU2vAUmvAU0CAUurASOrAXkCAUM=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -259,14 +259,23 @@
       <sap2010:ViewStateData Id="ExecuteActionProcess_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="242,22" />
       <sap2010:ViewStateData Id="Assign_1" sap:VirtualizedContainerService.HintSize="242,62" />
-      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="264,248">
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="264,247">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Catch`1_1" sap:VirtualizedContainerService.HintSize="400,317">
+      <sap2010:ViewStateData Id="Catch`1_1" sap:VirtualizedContainerService.HintSize="400,21">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">False</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TryCatch_1" sap:VirtualizedContainerService.HintSize="414,183" />
+      <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="444,333">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -274,16 +283,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TryCatch_1" sap:VirtualizedContainerService.HintSize="414,479" />
-      <sap2010:ViewStateData Id="ParallelForEach`1_1" sap:VirtualizedContainerService.HintSize="444,629">
-        <sap:WorkflowViewStateService.ViewState>
-          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-            <x:Boolean x:Key="IsPinned">False</x:Boolean>
-          </scg:Dictionary>
-        </sap:WorkflowViewStateService.ViewState>
-      </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="569,779">
+      <sap2010:ViewStateData Id="If_1" sap:VirtualizedContainerService.HintSize="569,483">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -302,7 +302,7 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="569,398" />
-      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="591,1403">
+      <sap2010:ViewStateData Id="Sequence_2" sap:VirtualizedContainerService.HintSize="591,1107">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -310,17 +310,17 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="621,1553" />
+      <sap2010:ViewStateData Id="ParallelForEach`1_2" sap:VirtualizedContainerService.HintSize="621,1257" />
       <sap2010:ViewStateData Id="TerminateWorkflow_1" sap:VirtualizedContainerService.HintSize="200,22" />
       <sap2010:ViewStateData Id="If_3" sap:VirtualizedContainerService.HintSize="621,210" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="643,1989">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="643,1693">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.Notification.BP.ClearNotificationProcess_1" sap:VirtualizedContainerService.HintSize="683,2069" />
+      <sap2010:ViewStateData Id="Vanrise.Notification.BP.ClearNotificationProcess_1" sap:VirtualizedContainerService.HintSize="683,1773" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>
