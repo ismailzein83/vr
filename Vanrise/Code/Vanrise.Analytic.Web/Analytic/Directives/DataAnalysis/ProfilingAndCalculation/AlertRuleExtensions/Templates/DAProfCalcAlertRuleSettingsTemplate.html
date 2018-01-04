@@ -1,4 +1,4 @@
-﻿<vr-tab header="'Criteria'">
+﻿<vr-tab header="'Analysis Settings'">
     <vr-row>
         <vr-columns width="fullrow">
             <vr-analytic-daprofcalc-alertrulecriteria on-ready="scopeModel.onCriteriaDirectiveReady" on-criteria-selection-changed="scopeModel.onCriteriaSelectionChanged"
@@ -7,7 +7,7 @@
         </vr-columns>
     </vr-row>
 </vr-tab>
-<vr-tab header="'Settings'" ng-if="scopeModel.selectedAnalysisTypeId!=undefined">
+<vr-tab header="'Action Settings'" ng-if="scopeModel.selectedAnalysisTypeId!=undefined">
     <span vr-loader="scopeModel.isDataRecordAlertRuleSettingsDirectiveLoading">
         <vr-genericdata-datarecordalertrule-settings on-ready="scopeModel.onDataRecordAlertRuleSettingsReady"></vr-genericdata-datarecordalertrule-settings>
     </span>

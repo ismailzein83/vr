@@ -81,9 +81,9 @@ app.directive('vrGenericdataDatarecordalertruleSettings', ['UtilsService', 'VRUI
                         var dataRecordAlertRuleConfigSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                         dataRecordAlertRuleConfigSelectorReadyDeferred.promise.then(function () {
-                            var dataRecordAlertRuleConfigSelectorPayload;
+                            var dataRecordAlertRuleConfigSelectorPayload = { selectIfSingleItem: true };
                             if (settings != undefined) {
-                                dataRecordAlertRuleConfigSelectorPayload = { selectedIds: settings.ConfigId };
+                                dataRecordAlertRuleConfigSelectorPayload.selectedIds = settings.ConfigId;
                             }
                             else {
                                 $scope.scopeModel.selectedDataRecordAlertRuleConfig = undefined;

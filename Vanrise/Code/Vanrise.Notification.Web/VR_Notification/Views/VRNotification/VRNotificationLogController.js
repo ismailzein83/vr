@@ -2,7 +2,7 @@
 
     "use strict";
 
-    VRNotificationLogController.$inject = ['$scope', 'VRCommon_MasterLogAPIService', 'UtilsService', 'VRNavigationService', 'VRUIUtilsService','VRNotificationService'];
+    VRNotificationLogController.$inject = ['$scope', 'VRCommon_MasterLogAPIService', 'UtilsService', 'VRNavigationService', 'VRUIUtilsService', 'VRNotificationService'];
 
     function VRNotificationLogController($scope, VRCommon_MasterLogAPIService, UtilsService, VRNavigationService, VRUIUtilsService, VRNotificationService) {
 
@@ -139,7 +139,8 @@
                             $type: "Vanrise.Notification.Business.VRNotificationTypeViewFilter, Vanrise.Notification.Business",
                             ViewId: viewId
                         }]
-                    }
+                    },
+                    selectIfSingleItem: true
                 };
                 VRUIUtilsService.callDirectiveLoad(notificationTypeSettingsSelectorAPI, notificationTypeSelectorPayload, notificationTypeSelectorLoadDeferred);
             });
@@ -160,13 +161,13 @@
 
         function buildSearchEditorContext() {
             var context = {
-                    isNotificationTypeSettingSelected: function () {
+                isNotificationTypeSettingSelected: function () {
                     return $scope.scopeModel.isNotificationTypeSettingSelected;
-            },
-                    isAdvancedTabSelected: function () {
+                },
+                isAdvancedTabSelected: function () {
                     return $scope.advancedSelected;
-            }
-        };
+                }
+            };
             return context;
         }
 

@@ -195,7 +195,7 @@
                             $scope.scopeModel.hideActionRuleRecordFilter = response.Settings.HideActionRuleRecordFilter;
                         });
                     };
-                    
+
                     function getDataAnalysisItemDefinitionSelectorLoadPromise() {
                         if (daProfCalcOutputItemDefinitionId != undefined)
                             dataAnalysisItemDefinitionSelectionChangedDeferred = UtilsService.createPromiseDeferred();
@@ -204,7 +204,8 @@
 
                         var dataAnalysisItemDefinitionSelectorPayload = {
                             dataAnalysisDefinitionId: dataAnalysisDefinitionId,
-                            selectedIds: daProfCalcOutputItemDefinitionId
+                            selectedIds: daProfCalcOutputItemDefinitionId,
+                            selectIfSingleItem: true
                         };
                         VRUIUtilsService.callDirectiveLoad(dataAnalysisItemDefinitionSelectorAPI, dataAnalysisItemDefinitionSelectorPayload, dataAnalysisItemDefinitionSelectorLoadDeferred);
 

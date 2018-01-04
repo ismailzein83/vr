@@ -5,6 +5,25 @@ using Vanrise.BusinessProcess.Entities;
 
 namespace Vanrise.Analytic.BP.Arguments
 {
+    public enum DAProfCalcTimeUnit
+    {
+        [DAProfCalcTimeUnitAttribute(1440)]
+        Days = 0,
+        [DAProfCalcTimeUnitAttribute(60)]
+        Hours = 1,
+        [DAProfCalcTimeUnitAttribute(1)]
+        Minutes = 2
+    }
+
+    public class DAProfCalcTimeUnitAttribute : Attribute
+    {
+        public DAProfCalcTimeUnitAttribute(int value)
+        {
+            this.Value = value;
+        }
+        public int Value { get; set; }
+    }
+
     public class DAProfCalcGenerateAlertInput : BaseProcessInputArgument
     {
         public Guid AlertRuleTypeId { get; set; }
@@ -22,11 +41,20 @@ namespace Vanrise.Analytic.BP.Arguments
 
         public override void MapExpressionValues(Dictionary<string, object> evaluatedExpressions)
         {
-            if (evaluatedExpressions.ContainsKey("ScheduleTime") && evaluatedExpressions.ContainsKey("DaysBack") && evaluatedExpressions.ContainsKey("NumberOfDays"))
+            if (evaluatedExpressions.ContainsKey("ScheduleTime"))
             {
                 var effectiveDate = (DateTime)evaluatedExpressions["ScheduleTime"];
-                this.FromTime = effectiveDate.Date.AddDays(-1 * int.Parse(evaluatedExpressions["DaysBack"].ToString()));
-                this.ToTime = this.FromTime.AddDays(int.Parse(evaluatedExpressions["NumberOfDays"].ToString()));
+                int timeBack = int.Parse(evaluatedExpressions["TimeBack"].ToString());
+                int period = int.Parse(evaluatedExpressions["Period"].ToString());
+
+                DAProfCalcTimeUnit timeBackTimeUnit = (DAProfCalcTimeUnit)int.Parse(evaluatedExpressions["TimeBackTimeUnit"].ToString());
+                DAProfCalcTimeUnit periodTimeUnit = (DAProfCalcTimeUnit)int.Parse(evaluatedExpressions["PeriodTimeUnit"].ToString());
+
+                DAProfCalcTimeUnitAttribute timeBackAttribute = Vanrise.Common.Utilities.GetEnumAttribute<DAProfCalcTimeUnit,DAProfCalcTimeUnitAttribute>(timeBackTimeUnit);
+                DAProfCalcTimeUnitAttribute periodAttribute = Vanrise.Common.Utilities.GetEnumAttribute<DAProfCalcTimeUnit,DAProfCalcTimeUnitAttribute>(periodTimeUnit);
+
+                this.FromTime = effectiveDate.AddMinutes(-1 * timeBack * timeBackAttribute.Value);
+                this.ToTime = this.FromTime.AddMinutes(period * periodAttribute.Value);
             }
         }
     }

@@ -58,12 +58,13 @@ app.directive('vrAnalyticDataanalysisitemdefinitionSelector', ['VR_Analytic_Data
                     var selectedIds;
                     var filter;
                     var dataAnalysisDefinitionId;
-
+                    var selectIfSingleItem;
 
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
                         dataAnalysisDefinitionId = payload.dataAnalysisDefinitionId;
+                        selectIfSingleItem = payload.selectIfSingleItem;
                     }
 
                     var serializedFilter = UtilsService.serializetoJson(filter) != undefined ? UtilsService.serializetoJson(filter) : {};
@@ -77,6 +78,9 @@ app.directive('vrAnalyticDataanalysisitemdefinitionSelector', ['VR_Analytic_Data
 
                             if (selectedIds != undefined) {
                                 VRUIUtilsService.setSelectedValues(selectedIds, 'DataAnalysisItemDefinitionId', attrs, ctrl);
+                            }
+                            else if (selectIfSingleItem == true) {
+                                selectorAPI.selectIfSingleItem();
                             }
                         }
                     });

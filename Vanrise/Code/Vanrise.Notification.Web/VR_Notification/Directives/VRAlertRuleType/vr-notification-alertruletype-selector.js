@@ -56,9 +56,10 @@ app.directive('vrNotificationAlertruletypeSelector', ['VR_Notification_VRAlertRu
 
                     var selectedIds;
                     var filter;
-
+                    var selectIfSingleItem;
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
+                        selectIfSingleItem = payload.selectIfSingleItem;
                         filter = payload.filter;
                     }
 
@@ -71,6 +72,9 @@ app.directive('vrNotificationAlertruletypeSelector', ['VR_Notification_VRAlertRu
 
                             if (selectedIds != undefined) {
                                 VRUIUtilsService.setSelectedValues(selectedIds, 'VRAlertRuleTypeId', attrs, ctrl);
+                            }
+                            else if (selectIfSingleItem == true) {
+                                selectorAPI.selectIfSingleItem();
                             }
                         }
                     });

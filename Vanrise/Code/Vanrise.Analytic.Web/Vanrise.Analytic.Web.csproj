@@ -129,6 +129,7 @@
     <Content Include="Analytic\Constants\StyleCodeEnum.js" />
     <Content Include="Analytic\Constants\TimeGroupingUnitEnum.js" />
     <Content Include="Analytic\Constants\DAProfCalcChunkTimeEnum.js" />
+    <Content Include="Analytic\Constants\DAProfCalcTimeUnitEnum.js" />
     <Content Include="Analytic\Constants\TimeUnitEnum.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\MainExtensions\OrderType\Templates\AdvancedMeasureOrderOptionsTemplate.html" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\MainExtensions\OrderType\vr-analytic-ordertype-advancedmeasureorderoptions.js" />

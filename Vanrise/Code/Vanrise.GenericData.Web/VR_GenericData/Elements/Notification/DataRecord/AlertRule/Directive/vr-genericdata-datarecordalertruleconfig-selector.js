@@ -80,9 +80,10 @@ app.directive('vrGenericdataDatarecordalertruleconfigSelector', ['VR_GenericData
 
                 api.load = function (payload) {
                     var selectedIds;
-
+                    var selectIfSingleItem;
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
+                        selectIfSingleItem = payload.selectIfSingleItem;
                     }
 
                     return VR_GenericData_DataRecordAlertRuleAPIService.GetDataRecordAlertRuleConfigs().then(function (response) {
@@ -93,6 +94,9 @@ app.directive('vrGenericdataDatarecordalertruleconfigSelector', ['VR_GenericData
                             }
                             if (selectedIds != undefined) {
                                 VRUIUtilsService.setSelectedValues(selectedIds, 'ExtensionConfigurationId', $attrs, ctrl);
+                            }
+                            else if (selectIfSingleItem == true) {
+                                selectorAPI.selectIfSingleItem();
                             }
                         }
                     });

@@ -27,7 +27,6 @@ app.directive('vrGenericdataDatarecordnotificationtypesettingsGrid', ['UtilsServ
             //API
             var gridAPI;
 
-
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.columns = [];
@@ -56,7 +55,6 @@ app.directive('vrGenericdataDatarecordnotificationtypesettingsGrid', ['UtilsServ
 
                 api.load = function (payload) {
                     $scope.scopeModel.isLoading = true;
-
                     var promises = [];
 
                     var reloadColumns = true;
@@ -65,15 +63,22 @@ app.directive('vrGenericdataDatarecordnotificationtypesettingsGrid', ['UtilsServ
                         reloadColumns = $scope.scopeModel.columns.length == 0 || notificationTypeId != payload.notificationTypeId;
                         notificationTypeId = payload.notificationTypeId;
                     }
+                    var notificationGridColumnsLoadPromise = undefined;
 
                     if (reloadColumns) {
                         $scope.scopeModel.columns.length = 0;
-                        var notificationGridColumnsLoadPromise = getNotificationGridColumnsLoadPromise(notificationTypeId);
+                        notificationGridColumnsLoadPromise = getNotificationGridColumnsLoadPromise(notificationTypeId);
                         promises.push(notificationGridColumnsLoadPromise);
                     }
 
-                    notificationGridCtor = new VR_Notification_VRNotificationService.notificationGridCtor($scope, gridAPI, $scope.scopeModel.vrNotifications, payload);
-
+                    if (notificationGridColumnsLoadPromise == undefined) {
+                        notificationGridCtor = new VR_Notification_VRNotificationService.notificationGridCtor($scope, gridAPI, $scope.scopeModel.vrNotifications, payload);
+                    }
+                    else {
+                        UtilsService.waitMultiplePromises([notificationGridColumnsLoadPromise]).then(function () {
+                            notificationGridCtor = new VR_Notification_VRNotificationService.notificationGridCtor($scope, gridAPI, $scope.scopeModel.vrNotifications, payload);
+                        });
+                    }
                     //Retrieving Data
                     var gridLoadDeferred = UtilsService.createPromiseDeferred();
 

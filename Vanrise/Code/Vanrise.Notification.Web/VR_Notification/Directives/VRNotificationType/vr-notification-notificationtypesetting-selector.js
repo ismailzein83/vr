@@ -54,6 +54,7 @@ app.directive('vrNotificationNotificationtypesettingSelector', ['UtilsService', 
                 var api = {};
 
                 api.load = function (payload) {
+                    var selectIfSingleItem;
                     selectorAPI.clearDataSource();
 
                     var selectedIds;
@@ -62,6 +63,7 @@ app.directive('vrNotificationNotificationtypesettingSelector', ['UtilsService', 
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
                         filter = payload.filter;
+                        selectIfSingleItem = payload.selectIfSingleItem;
                     }
                     if (filter == undefined)
                         filter = {};
@@ -74,6 +76,9 @@ app.directive('vrNotificationNotificationtypesettingSelector', ['UtilsService', 
 
                             if (selectedIds != undefined) {
                                 VRUIUtilsService.setSelectedValues(selectedIds, 'Id', attrs, ctrl);
+                            }
+                            else if (selectIfSingleItem == true) {
+                                selectorAPI.selectIfSingleItem();
                             }
                         }
                     });

@@ -2,16 +2,23 @@
     <vr-columns colnum="4">
         <vr-notification-alertruletype-selector on-ready="onAlertRuleTypeSelectorReady" isrequired="true" onselectionchanged="onAlertRuleTypeSelectionChanged"></vr-notification-alertruletype-selector>
     </vr-columns>
-    <vr-columns colnum="8" haschildcolumns>
-        <vr-validator validate="isValid()">
-            <vr-columns colnum="6">
-                <vr-textbox value="daysBack" type="number" label="Days Back" isrequired="true" minvalue="1"></vr-textbox>
-            </vr-columns>
-
-            <vr-columns colnum="6">
-                <vr-textbox value="numberOfDays" type="number" label="Number Of Days" isrequired="true" minvalue="1"></vr-textbox>
-            </vr-columns>
-        </vr-validator>
+    <vr-columns colnum="4" haschildcolumns>
+        <vr-columns colnum="6" right-medium-spacing>
+            <vr-textbox value="timeBack" type="number" label="Time Back" isrequired minvalue="1" decimalprecision="0"></vr-textbox>
+        </vr-columns>
+        <vr-columns colnum="6" withemptyline left-medium-spacing>
+            <vr-select datatextfield="description" datavaluefield="value" datasource="timeUnits"
+                       selectedvalues="timeBackTimeUnit" hideremoveicon isrequired="true" />
+        </vr-columns>
+    </vr-columns>
+    <vr-columns colnum="4" haschildcolumns>
+        <vr-columns colnum="6" right-medium-spacing>
+            <vr-textbox value="period" type="number" label="Period" isrequired minvalue="1" decimalprecision="0"></vr-textbox>
+        </vr-columns>
+        <vr-columns colnum="6" withemptyline left-medium-spacing>
+            <vr-select datatextfield="description" datavaluefield="value" datasource="timeUnits"
+                       selectedvalues="periodTimeUnit" hideremoveicon isrequired="true" />
+        </vr-columns>
     </vr-columns>
 </vr-row>
 <vr-row ng-if="showChunkTimeSelector" vr-loader="isLoading">
