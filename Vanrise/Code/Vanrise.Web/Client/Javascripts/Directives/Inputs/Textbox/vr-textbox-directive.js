@@ -2,7 +2,7 @@
 
     "use strict";
 
-    vrTextbox.$inject = ['BaseDirService', 'TextboxTypeEnum', 'VRValidationService', 'UtilsService','VRLocalizationService'];
+    vrTextbox.$inject = ['BaseDirService', 'TextboxTypeEnum', 'VRValidationService', 'UtilsService', 'VRLocalizationService'];
 
     function vrTextbox(BaseDirService, TextboxTypeEnum, VRValidationService, UtilsService, VRLocalizationService) {
 
@@ -77,7 +77,7 @@
 
                 if ($attrs.setfocus != undefined)
                     setTimeout(function () {
-                        $element.find('#mainInput').focus();
+                        $element.find('.main-input').focus();
                     }, 10);
 
                 $scope.ctrl.onBlurDirective = function (e) {
@@ -85,11 +85,11 @@
                         var onblurtextboxMethod = $scope.$parent.$eval($attrs.onblurtextbox);
                         if (onblurtextboxMethod != undefined && onblurtextboxMethod != null && typeof (onblurtextboxMethod) == 'function') {
                             onblurtextboxMethod();
-                }
+                        }
                     }
-                    };
+                };
             },
-                compile: function (element, attrs) {
+            compile: function (element, attrs) {
 
                 //var inputElement = element.find('#mainInput');
                 //var validationOptions = {};
@@ -107,7 +107,7 @@
                         var ctrl = $scope.ctrl;
                         $scope.$on("$destroy", function () {
                             valueWatch();
-                });
+                        });
                         var isUserChange;
 
                         var valueWatch = $scope.$watch('ctrl.value', function (newValue, oldValue) {
@@ -122,21 +122,21 @@
                                 setTimeout(function () {
                                     ctrl.value = undefined;
                                     $scope.$apply();
-                            });
-                        }
+                                });
+                            }
                             if (!newValue == "") {
 
                                 retrunedValue = newValue;
-                        }
+                            }
 
                             if (iAttrs.type === TextboxTypeEnum.Number.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Number.name) {
                                 var arr = String(newValue).split("");
                                 var decimalArray = String(newValue).split(".");
                                 var negativeArray = String(newValue).split("-");
-                                if(String(newValue).indexOf(".") > - 1 && ctrl.decimalprecision == 0) {
+                                if (String(newValue).indexOf(".") > -1 && ctrl.decimalprecision == 0) {
                                     ctrl.value = oldValue;
                                     return;
-                            }
+                                }
                                 //if (arr.length === 0) return;
                                 //if (iAttrs.onlypositive != undefined && negativeArray.length > 1)
                                 //    ctrl.value = oldValue;
@@ -155,144 +155,150 @@
                                 if (arr.length === 2 && newValue === '-.') return;
                                 if (!isNaN(newValue) && newValue != "") {
                                     retrunedValue = newValue;
-                            }
+                                }
                                 if (isNaN(newValue) && (newValue != '-') && (newValue != '.')) {
                                     ctrl.value = oldValue;
                                     retrunedValue = undefined;
                                     return;
+                                }
+
+
                             }
-
-
-                        }
 
                             if (iAttrs.maxlength != undefined) {
                                 var charArray = String(newValue).split("");
                                 if (charArray.length > ctrl.maxlength)
                                     ctrl.value = oldValue;
                                 return;
-                        }
+                            }
 
                             if (iAttrs.onvaluechanged != undefined) {
                                 var onvaluechangedMethod = $scope.$parent.$eval(iAttrs.onvaluechanged);
                                 if (onvaluechangedMethod != undefined && typeof (onvaluechangedMethod) == 'function') {
                                     onvaluechangedMethod(retrunedValue);
+                                }
                             }
-                        }
 
-                });
+                        });
 
-                ctrl.notifyUserChange = function () {
-                    isUserChange = true;
+                        ctrl.notifyUserChange = function () {
+                            isUserChange = true;
                         };
-                        ctrl.placelHolder = (attrs.placeholder != undefined) ? ctrl.placeholder: '';
-                    // ctrl.readOnly = attrs.readonly != undefined;
-                    if (attrs.hint != undefined) {
-                        ctrl.hint = attrs.hint;
+                        ctrl.placelHolder = (attrs.placeholder != undefined) ? ctrl.placeholder : '';
+                        // ctrl.readOnly = attrs.readonly != undefined;
+                        if (attrs.hint != undefined) {
+                            ctrl.hint = attrs.hint;
                         }
                         (function () {
                             if (attrs.hint != undefined) {
-                                iElem.find("#validator-container").css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px"
-                            });
-                        }
-                }) ();
+                                iElem.find("#validator-container").css({
+                                    "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px"
+                                });
+                            }
+                        })();
 
-                ctrl.onKeyUp = function ($event) {
+                        ctrl.onKeyUp = function ($event) {
                             if (iAttrs.onenterpress != undefined) {
                                 var onEnterPress = $scope.$parent.$eval(iAttrs.onenterpress);
                                 if (onEnterPress != undefined && typeof (onEnterPress) == 'function' && $event.which == 13) {
                                     onEnterPress();
+                                }
                             }
-                }
-                };
+                        };
 
-                ctrl.adjustTooltipPosition = function (e) {
+                        ctrl.adjustTooltipPosition = function (e) {
                             setTimeout(function () {
                                 var self = angular.element(e.currentTarget);
                                 var selfHeight = $(self).height();
                                 var selfOffset = $(self).offset();
                                 var tooltip = self.parent().find('.tooltip-info')[0];
                                 $(tooltip).css({
-                                display: 'block'
-                            });
+                                    display: 'block'
+                                });
                                 var innerTooltip = self.parent().find('.tooltip-inner')[0];
                                 var innerTooltipArrow = self.parent().find('.tooltip-arrow')[0];
                                 if (iAttrs.largehint != undefined)
                                     $(innerTooltip).addClass('large-hint');
-                                var innerTooltipWidth = parseFloat(($(innerTooltip).width() / 2) +2.5);
-                                $(innerTooltip).css({ position: 'fixed', top: selfOffset.top -$(window).scrollTop() +selfHeight + 15, left: selfOffset.left -innerTooltipWidth
-                            });
-                                $(innerTooltipArrow).css({ position: 'fixed', top: selfOffset.top -$(window).scrollTop() +selfHeight +10, left: selfOffset.left
-                            });
+                                var innerTooltipWidth = parseFloat(($(innerTooltip).width() / 2) + 2.5);
+                                $(innerTooltip).css({
+                                    position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 15, left: selfOffset.left - innerTooltipWidth
+                                });
+                                $(innerTooltipArrow).css({
+                                    position: 'fixed', top: selfOffset.top - $(window).scrollTop() + selfHeight + 10, left: selfOffset.left
+                                });
 
-                }, 1);
-                };
+                            }, 1);
+                        };
 
-                    //BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
+                        //BaseDirService.addScopeValidationMethods(ctrl, elementName, formCtrl);
 
-            }
-                };
-                },
-
-                controllerAs: 'ctrl',
-                bindToController: true,
-                    template: function (element, attrs) {
-                        var startTemplate = '<div id="rootDiv" style="position: relative;">';
-                    var endTemplate = '</div>';
-
-                    var labelTemplate = '';
-
-                    var label = "";
-
-                    if (attrs.label != undefined) {
-                        label = VRLocalizationService.getResourceValue(attrs.localizedlabel, attrs.label);
                     }
+                };
+            },
 
-                    if (attrs.label != undefined)
-                        labelTemplate = '<vr-label>' + label + '</vr-label>';
-                    var type = 'text';
-                    if (attrs.type != undefined && attrs.type === TextboxTypeEnum.Password.name)
-                        type = 'password';
-                    var keypress = '';
-                    var keypressclass = '';
-                    if (attrs.tonextinput != undefined) {
-                        keypressclass = 'next-input';
+            controllerAs: 'ctrl',
+            bindToController: true,
+            template: function (element, attrs) {
+                var startTemplate = '<div id="rootDiv" style="position: relative;">';
+                var endTemplate = '</div>';
+
+                var labelTemplate = '';
+
+                var label = "";
+
+                if (attrs.label != undefined) {
+                    label = VRLocalizationService.getResourceValue(attrs.localizedlabel, attrs.label);
                 }
-                    //var format = "";
-                    //if (attrs.type === TextboxTypeEnum.Number.name)
-                    //    format = 'format="number"'; '+format+'
-                    var textboxTemplate = '<div ng-mouseenter="::(showtd=true)" ng-mouseleave="::(showtd=false)">'
-                                + '<vr-validator validate="ctrl.validate()" vr-input>'
-                                + '<input  tabindex="{{ctrl.tabindex}}" ng-readonly="::ctrl.readOnly" id="mainInput"  placeholder="{{::ctrl.placelHolder}}"  ng-model="ctrl.value" ng-change="::ctrl.notifyUserChange()" size="10" class="form-control vanrise-inpute ' +keypressclass + ' " data-autoclose="1" type="' +type + '" ng-keyup="::ctrl.onKeyUp($event)" ng-blur="::ctrl.onBlurDirective($event)">'
-                                + '</vr-validator>'
-                                + '<span ng-if="(ctrl.hint!=undefined)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" html="true"  placement="bottom"  trigger="hover" ng-mouseenter="::ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>'
-                            + '</div>';
+
+                if (attrs.label != undefined)
+                    labelTemplate = '<vr-label>' + label + '</vr-label>';
+                var type = 'text';
+                if (attrs.type != undefined && attrs.type === TextboxTypeEnum.Password.name)
+                    type = 'password';
+                var keypress = '';
+                var keypressclass = '';
+                if (attrs.tonextinput != undefined) {
+                    keypressclass = 'next-input';
+                }
+                //var format = "";
+                //if (attrs.type === TextboxTypeEnum.Number.name)
+                //    format = 'format="number"'; '+format+'
+                var textboxTemplate = '<div ng-mouseenter="::(showtd=true)" ng-mouseleave="::(showtd=false)">'
+                            + '<vr-validator validate="ctrl.validate()" vr-input>'
+                            + '<input  tabindex="{{ctrl.tabindex}}" ng-readonly="::ctrl.readOnly"  placeholder="{{::ctrl.placelHolder}}"  ng-model="ctrl.value" ng-change="::ctrl.notifyUserChange()" size="10" class="form-control vanrise-inpute main-input' + keypressclass + ' " data-autoclose="1" type="' + type + '" ng-keyup="::ctrl.onKeyUp($event)" ng-blur="::ctrl.onBlurDirective($event)">'
+                            + '</vr-validator>'
+                            + '<span ng-if="(ctrl.hint!=undefined)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" html="true"  placement="bottom"  trigger="hover" ng-mouseenter="::ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>'
+                        + '</div>';
 
 
-                    //var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined ,true);
+                //var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined ,true);
 
-                    return startTemplate + labelTemplate +textboxTemplate +endTemplate;
-}
+                return startTemplate + labelTemplate + textboxTemplate + endTemplate;
+            }
 
-};
+        };
 
-}
+    }
 
     app.directive('vrTextbox', vrTextbox);
 
     app.constant('TextboxTypeEnum', {
         Email: { name: "email" },
-        Ip: { name: "ip"
+        Ip: {
+            name: "ip"
         },
         FileName: {
-        name: "filename" },
+            name: "filename"
+        },
         Number: {
-            name: "number" },
+            name: "number"
+        },
         Password: {
-    name: "password"
-}
-});
+            name: "password"
+        }
+    });
 
-}) (app);
+})(app);
 
 //app.directive('format', ['$filter', function ($filter) {
 //    return {
