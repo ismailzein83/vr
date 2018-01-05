@@ -18,6 +18,6 @@ BEGIN
 
 	where es.TakenByUserId IS NOT NULL
 	AND es.LastTakenUpdateTime IS NOT NULL 
-	AND (GETDATE() - es.LastTakenUpdateTime < @TimeOut) 
+	AND (DATEDIFF(ss, LastTakenUpdateTime, GETDATE()) < @TimeOut) 
 	AND (@SessionTypeIds is NULL or  es.SessionTypeId in (SELECT ParsedString FROM ParseStringList(@SessionTypeIds) ) ) 		
 END
