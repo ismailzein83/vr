@@ -35,6 +35,10 @@ namespace TOne.WhS.Analytics.Business
         public bool DoesUserHaveVariationReportViewAccess(VariationReportType type)
         {
             int userId = ContextFactory.GetContext().GetLoggedInUserId();
+
+            bool  haveTrafficView = _analyticHelper.DoesUserHaveTrafficViewAccess(userId);
+            bool  haveBillingView = _analyticHelper.DoesUserHaveBillingViewAccess(userId);
+
             switch (type)
             {
                 case VariationReportType.InBoundAmount:
@@ -44,13 +48,13 @@ namespace TOne.WhS.Analytics.Business
                 case VariationReportType.Profit:
                 case VariationReportType.TopDestinationAmount:
                 case VariationReportType.TopDestinationProfit:
-                    return _analyticHelper.DoesUserHaveBillingViewAccess(userId);
+                    return haveBillingView;
 
                 case VariationReportType.InBoundMinutes:
                 case VariationReportType.OutBoundMinutes:
                 case VariationReportType.TopDestinationMinutes:
                 case VariationReportType.InOutBoundMinutes:
-                    return _analyticHelper.DoesUserHaveTrafficViewAccess(userId);
+                    return haveTrafficView || haveBillingView;
 
                 default:
                     return false;
