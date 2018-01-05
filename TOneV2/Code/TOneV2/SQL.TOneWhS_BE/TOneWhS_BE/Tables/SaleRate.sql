@@ -34,7 +34,14 @@
 
 
 
+
+
 GO
 CREATE NONCLUSTERED INDEX [IX_SaleRate_timestamp]
     ON [TOneWhS_BE].[SaleRate]([timestamp] DESC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_SaleRate_ZoneID]
+    ON [TOneWhS_BE].[SaleRate]([ZoneID] ASC);
 
