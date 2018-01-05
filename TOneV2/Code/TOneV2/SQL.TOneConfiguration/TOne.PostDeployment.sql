@@ -370,8 +370,7 @@ as (select * from (values
 ('F17CFB95-BC48-428C-8BF3-0E59B3415D74','Route Options','Route Options Rules Management','#/view/WhS_Routing/Views/RouteOptionRule/RouteOptionRuleManagement','5EA95F6C-D3C8-426D-A8F0-8F4B0ECE478C','WhS_Routing/RouteOptionRule/GetFilteredRouteOptionRules',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',3),
 
 ('6EDB23CF-5ECF-4020-80CE-21241D661720','Traffic Summary','Traffic Summary',null															,'EB303A61-929A-4D33-BF50-18F40308BC86',null,null,null,'{"$type":"Vanrise.Analytic.Entities.AnalyticReportViewSettings, Vanrise.Analytic.Entities","AnalyticReportId":"96113101-C1D3-4EF0-A28A-52E1AF892A49","TypeId":"E5FB0790-5428-44B4-BB1F-4F79B69CD6EF"}','82FF3B8A-0C39-4376-9602-B84A240FBF82',5),
-('0A028781-C435-4E45-B3DD-0F4FFAD80223','Variation Report','Variation Report','#/view/WhS_Analytics/Views/VariationReport/VariationReport'	,'EB303A61-929A-4D33-BF50-18F40308BC86','WhS_Analytics/VariationReport/GetFilteredVariationReportRecords',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10),
-
+('0A028781-C435-4E45-B3DD-0F4FFAD80223','Variation Report','Variation Report','#/view/WhS_Analytics/Views/VariationReport/VariationReport'	,'EB303A61-929A-4D33-BF50-18F40308BC86',null,null,null,'{"$type":"TOne.WhS.Analytics.Business.VariationReportViewSettings, TOne.WhS.Analytics.Business"}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10),
 --('83C94D63-2650-46A2-B4DC-147FFEF9804B','Switch Release Cause','Switch Release Cause',null																				,'D7146EBA-A2B1-484C-A498-0DDE876A7580',null,null,null,'{"$type":"Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities","BusinessEntityDefinitionId":"4652abe7-81f7-4129-a222-31933747018d"}','372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',8),
 ('3F7327B6-0742-4C6D-8B2C-BE9B5D4DECD4','Switch Release Cause','Switch Release Cause','#/view/WhS_BusinessEntity/Views/SwitchReleaseCause/SwitchReleaseCauseManagement'	,'D7146EBA-A2B1-484C-A498-0DDE876A7580','WhS_BE/SwitchReleaseCause/GetFilteredSwitchReleaseCauses',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',8),
 ('0D2A2A90-A3B7-42BE-AA37-7C9D2DECE9D3','Switches Configuration','Switches Configuration','#/view/WhS_BusinessEntity/Views/Switch/SwitchManagement'						,'D7146EBA-A2B1-484C-A498-0DDE876A7580','WhS_BE/Switch/GetFilteredSwitches',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',4),
@@ -537,6 +536,9 @@ when not matched by target then
 end
 
 --[sec].[SystemAction]------------------------------------------------------------------------------
+
+DELETE FROM [sec].[SystemAction] WHERE [Name]='WhS_Analytics/VariationReport/GetFilteredVariationReportRecords'
+
 begin
 set nocount on;
 ;with cte_data([Name],[RequiredPermissions])
@@ -713,7 +715,6 @@ as (select * from (values
 ('WhS_SupPL/SupplierPriceListPreview/GetFilteredCodePreview',null),
 ('WhS_SupPL/SupplierPriceListPreview/GetFilteredRatePreview',null),
 
-('WhS_Analytics/VariationReport/GetFilteredVariationReportRecords','BillingData: View'),
 ('WhS_Analytics/ReportDefinition/GetAllRDLCReportDefinition','BillingData: View'),
 
 ('WhS_Analytics/RepeatedNumber/GetAllFilteredRepeatedNumbers','TrafficData: View'),
