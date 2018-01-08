@@ -454,8 +454,16 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         EnableSecurity = MobileOperator.AutoReportSecurity;
         if(MobileOperator.IncludeCSVFile.HasValue)
           IncludeCSVFile = MobileOperator.IncludeCSVFile.Value;
+        else
+        {
+            IncludeCSVFile = false;
+        }
         if (MobileOperator.EnableFTP.HasValue)
          EnableFTP = MobileOperator.EnableFTP.Value;
+        else
+        {
+            EnableFTP = false;
+        }
         FTPAddress = MobileOperator.FTPAddress;
         FTPPassword = MobileOperator.FTPPassword;
         FTPUserName = MobileOperator.FTPUserName;
