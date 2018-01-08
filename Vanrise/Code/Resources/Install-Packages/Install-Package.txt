@@ -27,3 +27,5 @@ make sure that below DLLs has reference from C:\TFS\Vanrise\Code\Resources\DLLs\
 Newtonsoft.Json.dll
 
 Add reference to protobuf-net.dll
+
+configure x64 on Runtime
