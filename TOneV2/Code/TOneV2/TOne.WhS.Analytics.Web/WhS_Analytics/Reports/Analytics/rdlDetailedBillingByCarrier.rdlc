@@ -604,7 +604,6 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -2561,7 +2560,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatPercent(Round( (Sum(IIf(Fields!SaleRate.Value &lt;&gt; 0 ,Fields!SaleAmount.Value , 0) ) - Sum(Fields!CostAmount.Value ))  / Sum(IIf(Fields!SaleRate.Value &lt;&gt; 0 ,Fields!SaleAmount.Value , 0) )  ,2) ,2)</Value>
+                              <Value>=IIf(Sum(Fields!CostAmount.Value) &lt;&gt; 0 ,FormatPercent(Round( (Sum(IIf(Fields!SaleRate.Value &lt;&gt; 0 ,Fields!SaleAmount.Value , 0) ) - Sum(Fields!CostAmount.Value ))  / Sum(IIf(Fields!SaleRate.Value &lt;&gt; 0 ,Fields!SaleAmount.Value , 0) )    ,Parameters!DigitRate.Value) ,Parameters!Digit.Value) , " ")</Value>
                               <Style>
                                 <FontSize>8pt</FontSize>
                                 <FontWeight>Bold</FontWeight>
@@ -2584,6 +2583,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
               </TablixCells>
