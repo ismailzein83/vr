@@ -74,7 +74,8 @@ function (UtilsService, VRNotificationService, WhS_Analytics_ReleaseCodeAPIServi
                 }
             };
             $scope.onClickReleaseCode = function (dataItem) {
-                WhS_BE_SwitchReleaseCauseService.openReleaseCodeDescriptions(dataItem.Entity.ReleaseCode, dataItem.Entity.SwitchId);
+                var switchIds = [dataItem.Entity.SwitchId];
+                WhS_BE_SwitchReleaseCauseService.openReleaseCodeDescriptions(dataItem.Entity.ReleaseCode, switchIds);
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                  ctrl.showGrid = true;            

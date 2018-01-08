@@ -16,9 +16,9 @@ namespace TOne.WhS.BusinessEntity.Business
 {
     public class SwitchReleaseCauseManager
     {
-     
+
         SwitchManager switchManager = new SwitchManager();
-      
+
         #region Public Methods
         public Vanrise.Entities.IDataRetrievalResult<SwitchReleaseCauseDetail> GetFilteredSwitchReleaseCauses(Vanrise.Entities.DataRetrievalInput<SwitchReleaseCauseQuery> input)
         {
@@ -58,7 +58,7 @@ namespace TOne.WhS.BusinessEntity.Business
             var allSwitchReleaseCauses = this.GetCachedSwitchReleaseCauses();
             var switchReleaseCause = allSwitchReleaseCauses.GetRecord(switchReleaseCauseId);
             if (switchReleaseCause != null && isViewedFromUI)
-            VRActionLogger.Current.LogObjectViewed(SwitchReleaseCauseLoggableEntity.Instance, switchReleaseCause);
+                VRActionLogger.Current.LogObjectViewed(SwitchReleaseCauseLoggableEntity.Instance, switchReleaseCause);
             return switchReleaseCause;
         }
         public SwitchReleaseCause GetSwitchReleaseCause(int switchReleaseCauseId)
@@ -190,7 +190,7 @@ namespace TOne.WhS.BusinessEntity.Business
                         rowIndex++;
                     }
                 }
-                else 
+                else
                 {
                     switchReleaseCauseWorkSheet.Cells[rowIndex, colIndex].PutValue("Failed");
                     colIndex++;
@@ -215,7 +215,7 @@ namespace TOne.WhS.BusinessEntity.Business
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             return uploadSwitchReleaseCauseLog;
         }
-        
+
         public byte[] DownloadSwitchReleaseCauseLog(long fileID)
         {
             VRFileManager fileManager = new VRFileManager();
@@ -224,7 +224,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
 
-        public List<SwitchReleaseCauseDetail> GetReleaseCauseDetailsByCode(string code, int? switchId)
+        public List<SwitchReleaseCauseDetail> GetReleaseCauseDetailsByCode(string code, List<int> switchIds)
         {
             List<SwitchReleaseCauseDetail> releaseCauses = new List<SwitchReleaseCauseDetail>();
             if (code != null)
@@ -232,11 +232,15 @@ namespace TOne.WhS.BusinessEntity.Business
                 Dictionary<int, SwitchReleaseCause> releaseCausesBySwitch = GetReleaseCausesByCodeThenSwitch().GetRecord(code);
                 if (releaseCausesBySwitch != null)
                 {
-                    if (switchId.HasValue)
+                    if (switchIds!=null && switchIds.Count > 0)
                     {
-                        var rc = releaseCausesBySwitch.GetRecord(switchId.Value);
-                        if (rc != null)
-                            releaseCauses.Add(SwitchReleaseCauseDetailMapper(rc));
+                        foreach (int sid in switchIds)
+                        {
+                            var rc = releaseCausesBySwitch.GetRecord(sid);
+                            if (rc != null)
+                                releaseCauses.Add(SwitchReleaseCauseDetailMapper(rc));
+                        }
+
                     }
                     else
                     {
@@ -266,7 +270,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return null;
             SwitchReleaseCause switchReleaseCause = null;
             var releaseCausesByCode = GetReleaseCausesByCodeThenSwitch().GetRecord(code);
-            if(releaseCausesByCode != null)
+            if (releaseCausesByCode != null)
             {
                 if (switchId.HasValue)
                     switchReleaseCause = releaseCausesByCode.GetRecord(switchId.Value);
@@ -333,7 +337,7 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
         #endregion
-     
+
         #region Mappers
         private SwitchReleaseCauseDetail SwitchReleaseCauseDetailMapper(SwitchReleaseCause switchReleaseCause)
         {
@@ -354,7 +358,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return switchReleaseCauseDetail;
         }
         #endregion
-     
+
         #region Private Methods
         Dictionary<int, SwitchReleaseCause> GetCachedSwitchReleaseCauses()
         {
@@ -374,9 +378,9 @@ namespace TOne.WhS.BusinessEntity.Business
                {
                    Dictionary<string, Dictionary<int, SwitchReleaseCause>> rslt = new Dictionary<string, Dictionary<int, SwitchReleaseCause>>();
                    Dictionary<int, SwitchReleaseCause> allReleaseCauses = GetCachedSwitchReleaseCauses();
-                   if(allReleaseCauses != null)
+                   if (allReleaseCauses != null)
                    {
-                       foreach(var rc in allReleaseCauses.Values)
+                       foreach (var rc in allReleaseCauses.Values)
                        {
                            Dictionary<int, SwitchReleaseCause> releaseCausesBySwitch = rslt.GetOrCreateItem(rc.ReleaseCode);
                            if (!releaseCausesBySwitch.ContainsKey(rc.SwitchId))
@@ -389,6 +393,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #endregion
 
- 
+
     }
 }

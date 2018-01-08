@@ -27,6 +27,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_BlockedAttemptsAPIS
     function Grid($scope, ctrl, $attrs) {
 
         var gridAPI;
+        var queryObject;
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -42,7 +43,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_BlockedAttemptsAPIS
 
                     var directiveAPI = {};
                     directiveAPI.loadGrid = function (query) {
-
+                        queryObject = query;
                         return gridAPI.retrieveData(query);
                     };
 
@@ -50,7 +51,10 @@ function (UtilsService, VRNotificationService, WhS_Analytics_BlockedAttemptsAPIS
                 }
             };
             $scope.onClickReleaseCode = function (dataItem) {
-                WhS_BE_SwitchReleaseCauseService.openReleaseCodeDescriptions(dataItem.Entity.ReleaseCode);
+                var switchIds;
+                if (queryObject != undefined && queryObject.Filter != undefined && queryObject.Filter.SwitchIds != undefined)
+                    switchIds = queryObject.Filter.SwitchIds;
+                WhS_BE_SwitchReleaseCauseService.openReleaseCodeDescriptions(dataItem.Entity.ReleaseCode, switchIds);
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 ctrl.showGrid = true;

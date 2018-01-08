@@ -50,13 +50,13 @@
         function getEntityUniqueName() {
             return "WhS_BE_SwitchReleaseCause";
         }
-        function openReleaseCodeDescriptions(code, switchId) {
+        function openReleaseCodeDescriptions(code, switchIds) {
             var modalSettings = {
                 autoclose: true
             };
             var parameters = {
                 code: code,
-                switchId: switchId
+                switchIds: switchIds
             };
             VRModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/ReleaseCodeDescription/ReleaseCodeDescriptionViewer.html', parameters, modalSettings);
         }

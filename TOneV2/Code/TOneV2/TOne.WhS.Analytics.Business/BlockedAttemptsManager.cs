@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using TOne.WhS.Analytics.Data;
 using TOne.WhS.Analytics.Entities;
 using TOne.WhS.BusinessEntity.Business;
@@ -28,14 +29,14 @@ namespace TOne.WhS.Analytics.Business
         }
 
 
-        public BlockedAttemptDetail BlockedAttemptDetailMapper(BlockedAttempt blockedAttempt)
+        public BlockedAttemptDetail BlockedAttemptDetailMapper(BlockedAttempt blockedAttempt, int? switchId)
         {
             BlockedAttemptDetail blockedAttemptDetail = new BlockedAttemptDetail
             {
                 Entity = blockedAttempt,
                 CustomerName = _carrierAccountManager.GetCarrierAccountName(blockedAttempt.CustomerID),
                 SaleZoneName = _saleZoneManager.GetSaleZoneName(blockedAttempt.SaleZoneID),
-                ReleaseCodeDescription = _switchReleaseCauseManager.GetReleaseCodeDescription(blockedAttempt.ReleaseCode, null)
+                ReleaseCodeDescription = _switchReleaseCauseManager.GetReleaseCodeDescription(blockedAttempt.ReleaseCode, switchId)
 
             };
             return blockedAttemptDetail;
@@ -46,10 +47,10 @@ namespace TOne.WhS.Analytics.Business
 
         private class BlockedAttemptRequestHandler : BigDataRequestHandler<BlockedAttemptQuery, BlockedAttempt, BlockedAttemptDetail>
         {
+            BlockedAttemptsManager _manager = new BlockedAttemptsManager();
             public override BlockedAttemptDetail EntityDetailMapper(BlockedAttempt entity)
             {
-                BlockedAttemptsManager manager = new BlockedAttemptsManager();
-                return manager.BlockedAttemptDetailMapper(entity);
+                throw new NotImplementedException();
             }
 
             public override IEnumerable<BlockedAttempt> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<BlockedAttemptQuery> input)
@@ -65,6 +66,14 @@ namespace TOne.WhS.Analytics.Business
                     ExportExcelHandler = new BlockedAttemptsExcelExportHandler()
                 };
             }
+
+            protected override BigResult<BlockedAttemptDetail> AllRecordsToBigResult(DataRetrievalInput<BlockedAttemptQuery> input, IEnumerable<BlockedAttempt> allRecords)
+            {
+                int? switchId = null;
+                if (input.Query.Filter != null && input.Query.Filter.SwitchIds != null && input.Query.Filter.SwitchIds.Count >= 1)
+                    switchId = input.Query.Filter.SwitchIds[0];
+                return allRecords.ToBigResult(input, null, (entity) => _manager.BlockedAttemptDetailMapper(entity, switchId));
+            }
         }
 
         private class BlockedAttemptsExcelExportHandler : ExcelExportHandler<BlockedAttemptDetail>
@@ -77,7 +86,7 @@ namespace TOne.WhS.Analytics.Business
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
 
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customer", Width = 50});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customer", Width = 50 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Sale Zone", Width = 40 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Blocked Attempts" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Release Code" });
@@ -86,7 +95,7 @@ namespace TOne.WhS.Analytics.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Last Attempt" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Caller Number" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Dialed Number" });
-                
+
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
                 {

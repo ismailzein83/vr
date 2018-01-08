@@ -47,9 +47,9 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 
         [HttpGet]
         [Route("GetReleaseCausesByCode")]
-        public List<SwitchReleaseCauseDetail> GetReleaseCausesByCode(string code, int? switchId = null)
+        public List<SwitchReleaseCauseDetail> GetReleaseCausesByCode(string code,[FromUri] List<int> switchIds)
         {
-            return _manager.GetReleaseCauseDetailsByCode(code, switchId);
+            return _manager.GetReleaseCauseDetailsByCode(code, switchIds);
         }
         [HttpGet]
         [Route("DownloadSwitchReleaseCausesTemplate")]
@@ -77,5 +77,6 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             byte[] bytes = _manager.DownloadSwitchReleaseCauseLog(fileID);
             return GetExcelResponse(bytes, "ImportedSwitchReleaseCausesResults.xls");
         }
+
     }
 }
