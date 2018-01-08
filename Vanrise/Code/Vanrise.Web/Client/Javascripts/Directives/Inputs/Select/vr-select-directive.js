@@ -561,20 +561,23 @@
                         }
                     }
                     if (VRLocalizationService.isLocalizationRTL()) {
-                        ddleft = baseleft + ($(self).parent().width() - 226);
+                        var ddwidth = $attrs.smallselect != undefined ? 150 : 226;
+                        ddleft = baseleft + ($(self).parent().width() - ddwidth);
                         if ($(dropDown).parents('vr-pagination').length > 0) {
                             ddleft = baseleft - 39;
                         }
-                        if (baseleft + $(self).parent().width() < 226 && !controller.isMultiple()) {
+                        if (baseleft + $(self).parent().width() < ddwidth && !controller.isMultiple()) {
                             ddleft = baseleft > 0 && baseleft || 0;
                             $(dropDown).addClass('dropdown-top-left');
                         }
                         if (baseleft + $(self).parent().width() < 444 && controller.isMultiple()) {
                             $(dropDown).addClass('dropdown-top-left');
-                            if ($(self).parent().width() < 226) {
+                            if ($(self).parent().width() < ddwidth) {
                                 ddleft = baseleft;
-                                if (controller.selectedSectionVisible())
+                                if (controller.selectedSectionVisible() )
                                     $(dropDown).addClass('top-max');
+                                else if(!controller.selectedSectionVisible() && $attrs.smallselect != undefined)
+                                    ddleft = baseleft - 135;
                                 else
                                     $(dropDown).removeClass('top-max');
                             }
