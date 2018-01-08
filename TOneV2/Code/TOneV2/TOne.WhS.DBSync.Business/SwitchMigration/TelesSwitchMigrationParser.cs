@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Xml;
 using TOne.WhS.BusinessEntity.Entities;
@@ -8,6 +9,9 @@ using TOne.WhS.RouteSync.Idb;
 using TOne.WhS.RouteSync.TelesIdb;
 using TOne.WhS.RouteSync.TelesIdb.Postgres;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
+using Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues;
+using Vanrise.GenericData.Transformation.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
@@ -20,12 +24,12 @@ namespace TOne.WhS.DBSync.Business
             _configuration = configuration;
         }
 
-        public override SwitchRouteSynchronizer GetSwitchRouteSynchronizer(MigrationContext context, Dictionary<string, CarrierAccount> allCarrierAccounts)
+        public override SwitchData GetSwitchData(MigrationContext context, int switchId, Dictionary<string, CarrierAccount> allCarrierAccounts)
         {
-            return ReadXml(context, allCarrierAccounts);
+            return ReadXml(context, switchId, allCarrierAccounts);
         }
 
-        private TelesIdbSWSync ReadXml(MigrationContext context, Dictionary<string, CarrierAccount> allCarrierAccounts)
+        private SwitchData ReadXml(MigrationContext context, int switchId, Dictionary<string, CarrierAccount> allCarrierAccounts)
         {
             XmlDocument xml = new XmlDocument();
             xml.LoadXml(_configuration);
@@ -35,9 +39,11 @@ namespace TOne.WhS.DBSync.Business
             XmlNode parametersNode = xml.DocumentElement.SelectSingleNode("Parameters");
             XmlNode carrierMappingsNode = xml.DocumentElement.SelectSingleNode("CarrierMapping");
 
-            TelesIdbSWSync synchroniser = new TelesIdbSWSync()
+            TelesCarrierMapping carrierMappings = BuildCarrierMapping(carrierMappingsNode, context, allCarrierAccounts);
+
+            TelesIdbSWSync synchroniser = new TelesIdbSWSync
             {
-                CarrierMappings = BuildCarrierMapping(carrierMappingsNode, context, allCarrierAccounts),
+                CarrierMappings = carrierMappings != null ? carrierMappings.RoutingMapping : null,
                 MappingSeparator = ";",
                 NumberOfOptions = GetNumberOfOptions(parametersNode),
                 SupplierOptionsSeparator = GetSupplierOptionsSeparator(parametersNode),
@@ -64,17 +70,24 @@ namespace TOne.WhS.DBSync.Business
             if (!isSwitchValid)
                 throw new VRBusinessException(string.Join(" - ", isSwitchRouteSynchronizerValidContext.ValidationMessages));
 
-            return synchroniser;
+            List<MappingRule> mappingRules = null;
+            if (carrierMappings != null && carrierMappings.CDRMapping != null)
+                mappingRules = BuildMapingRules(switchId, carrierMappings.CDRMapping, context.EffectiveAfterDate);
+
+            return new SwitchData
+            {
+                MappingRules = mappingRules,
+                SwitchRouteSynchronizer = synchroniser
+            };
         }
 
-
-
-        private Dictionary<string, CarrierMapping> BuildCarrierMapping(XmlNode carrierMappingsNode, MigrationContext context, Dictionary<string, CarrierAccount> allCarrierAccounts)
+        private TelesCarrierMapping BuildCarrierMapping(XmlNode carrierMappingsNode, MigrationContext context, Dictionary<string, CarrierAccount> allCarrierAccounts)
         {
             if (carrierMappingsNode == null)
                 return null;
 
-            Dictionary<string, CarrierMapping> mappings = new Dictionary<string, CarrierMapping>();
+            var routingMappings = new Dictionary<string, CarrierMapping>();
+            var CDRMappings = new Dictionary<string, CarrierMapping>();
 
             foreach (XmlNode carrierMappingNode in carrierMappingsNode.ChildNodes)
             {
@@ -87,44 +100,57 @@ namespace TOne.WhS.DBSync.Business
 
                 string carrierAccountId = carrierAccountIdNode.InnerText;
 
+                CarrierAccount carrier;
+                if (!allCarrierAccounts.TryGetValue(carrierAccountId, out carrier))
+                {
+                    context.WriteWarning(string.Format("Carrier Account ID {0} doesn't exist in Carrier Accounts", carrierAccountId));
+                    continue;
+                }
+
                 XmlNode inNode = carrierMappingNode.Attributes["In"];
                 XmlNode outNode = carrierMappingNode.Attributes["Out"];
 
                 string inTrunk = inNode != null ? inNode.InnerText : null;
                 string outTrunk = outNode != null ? outNode.InnerText : null;
 
-                List<string> inTrunkList = BuildTrunkList(inTrunk);
-                List<string> outTrunkList = BuildTrunkList(outTrunk);
+                Gateway inGateways = BuildGatewayList(inTrunk);
+                Gateway outGateways = BuildGatewayList(outTrunk);
 
-                if (inTrunkList != null || outTrunkList != null)
+                CarrierMapping routingCarrierMapping = new CarrierMapping
                 {
-                    CarrierAccount carrier;
-                    if (allCarrierAccounts.TryGetValue(carrierAccountId, out carrier))
-                    {
-                        CarrierMapping carrierMapping = new CarrierMapping()
-                        {
-                            CarrierId = carrier.CarrierAccountId,
-                            CustomerMapping = (carrier.AccountType == CarrierAccountType.Customer || carrier.AccountType == CarrierAccountType.Exchange) ? inTrunkList : null,
-                            SupplierMapping = (carrier.AccountType == CarrierAccountType.Supplier || carrier.AccountType == CarrierAccountType.Exchange) ? outTrunkList : null
-                        };
-                        mappings.Add(carrierMapping.CarrierId.ToString(), carrierMapping);
-                    }
-                    else
-                    {
-                        context.WriteWarning(string.Format("Carrier Account ID {0} doesn't exist in Carrier Accounts", carrierAccountId));
-                    }
-                }
-            }
+                    CarrierId = carrier.CarrierAccountId,
+                    CustomerMapping = (carrier.AccountType == CarrierAccountType.Customer || carrier.AccountType == CarrierAccountType.Exchange) ? (inGateways.RoutingGateways.Any() ? inGateways.RoutingGateways : null) : null,
+                    SupplierMapping = (carrier.AccountType == CarrierAccountType.Supplier || carrier.AccountType == CarrierAccountType.Exchange) ? (outGateways.RoutingGateways.Any() ? outGateways.RoutingGateways : null) : null
+                };
+                routingMappings.Add(routingCarrierMapping.CarrierId.ToString(), routingCarrierMapping);
 
-            return mappings.Count > 0 ? mappings : null;
+                // to dictionnaries are added to prevent changes from route synch
+                CarrierMapping CDRcarrierMapping = new CarrierMapping
+                {
+                    CarrierId = carrier.CarrierAccountId,
+                    CustomerMapping = (carrier.AccountType == CarrierAccountType.Customer || carrier.AccountType == CarrierAccountType.Exchange) ? (inGateways.CDRGateways.Any() ? inGateways.CDRGateways : null) : null,
+                    SupplierMapping = (carrier.AccountType == CarrierAccountType.Supplier || carrier.AccountType == CarrierAccountType.Exchange) ? (outGateways.CDRGateways.Any() ? outGateways.CDRGateways : null) : null
+                };
+                CDRMappings.Add(CDRcarrierMapping.CarrierId.ToString(), CDRcarrierMapping);
+            }
+            return new TelesCarrierMapping
+            {
+                CDRMapping = CDRMappings,
+                RoutingMapping = routingMappings
+            };
         }
 
-        private List<string> BuildTrunkList(string trunk)
+        private Gateway BuildGatewayList(string trunk)
         {
-            if (string.IsNullOrEmpty(trunk))
-                return null;
+            var gatewayObject = new Gateway
+            {
+                CDRGateways = new List<string>(),
+                RoutingGateways = new List<string>()
+            };
 
-            List<string> trunkList = new List<string>();
+            if (string.IsNullOrEmpty(trunk))
+                return gatewayObject;
+
             string[] trunks = trunk.Split(';');
 
             foreach (string splittedTrunk in trunks)
@@ -140,13 +166,16 @@ namespace TOne.WhS.DBSync.Business
 
                 string mapping = result[0];
                 string process = result[resultCount - 1];
-                if (string.IsNullOrEmpty(mapping) || string.IsNullOrEmpty(process) || !process.ToUpper().Contains("RT"))
+                if (string.IsNullOrEmpty(mapping) || string.IsNullOrEmpty(process))
                     continue;
 
-                trunkList.Add(mapping);
-            }
+                if (process.ToUpper().Contains("RT"))
+                    gatewayObject.RoutingGateways.Add(mapping);
 
-            return trunkList.Count > 0 ? trunkList : null;
+                if (process.ToUpper().Contains("CDR"))
+                    gatewayObject.CDRGateways.Add(mapping);
+            }
+            return gatewayObject;
         }
 
         private int GetNumberOfOptions(XmlNode parametersNode)
@@ -215,5 +244,48 @@ namespace TOne.WhS.DBSync.Business
         {
             return parametersNode.SelectSingleNode("Parameter[@Name='" + name + "']");
         }
+
+        private List<MappingRule> BuildMapingRules(int switchId, Dictionary<string, CarrierMapping> carrierMappings, DateTime? processDate)
+        {
+            if (!carrierMappings.Any()) return null;
+
+            var mappingRules = new List<MappingRule>();
+
+            foreach (var carrierMapping in carrierMappings.Values)
+            {
+                var inTrunks = carrierMapping.CustomerMapping;
+                var outTrunks = carrierMapping.SupplierMapping;
+
+                if (inTrunks != null)
+                {
+                    StaticValues inStaticValues = new StaticValues
+                    {
+                        Values = inTrunks.Cast<Object>().ToList()
+                    };
+                    mappingRules.Add(MappingRuleGenerator.GetRule(carrierMapping.CarrierId, inStaticValues, switchId, processDate, 1));
+                }
+                if (outTrunks != null)
+                {
+                    StaticValues outStaticValues = new StaticValues
+                    {
+                        Values = outTrunks.Cast<Object>().ToList()
+                    };
+                    mappingRules.Add(MappingRuleGenerator.GetRule(carrierMapping.CarrierId, outStaticValues, switchId, processDate, 2));
+                }
+            }
+            return mappingRules;
+        }
+    }
+
+    public class TelesCarrierMapping
+    {
+        public Dictionary<string, CarrierMapping> RoutingMapping { get; set; }
+        public Dictionary<string, CarrierMapping> CDRMapping { get; set; }
+    }
+
+    public class Gateway
+    {
+        public List<string> RoutingGateways { get; set; }
+        public List<string> CDRGateways { get; set; }
     }
 }

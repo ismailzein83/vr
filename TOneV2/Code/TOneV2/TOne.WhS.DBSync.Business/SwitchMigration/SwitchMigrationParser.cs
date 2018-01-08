@@ -11,6 +11,6 @@ namespace TOne.WhS.DBSync.Business
 {
     public abstract class SwitchMigrationParser
     {
-        public abstract SwitchRouteSynchronizer GetSwitchRouteSynchronizer(MigrationContext context, Dictionary<string, CarrierAccount> allCarrierAccounts);
+        public abstract SwitchData GetSwitchData(MigrationContext context, int switchId, Dictionary<string, CarrierAccount> allCarrierAccounts);
     }
 }

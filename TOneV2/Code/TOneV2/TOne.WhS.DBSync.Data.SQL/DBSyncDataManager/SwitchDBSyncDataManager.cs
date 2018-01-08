@@ -21,8 +21,11 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public void ApplySwitchesToTemp(IEnumerable<Switch> switches)
         {
-            DataTable dt = new DataTable();
-            dt.TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables);
+            DataTable dt = new DataTable
+            {
+                TableName = MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables)
+            };
+            dt.Columns.Add("ID", typeof(int));
             dt.Columns.Add("Name", typeof(string));
             dt.Columns.Add("SourceID", typeof(string));
             dt.Columns.Add("Settings", typeof(string));
@@ -31,13 +34,14 @@ namespace TOne.WhS.DBSync.Data.SQL
             {
                 DataRow row = dt.NewRow();
                 int index = 0;
+                row[index++] = item.SwitchId;
                 row[index++] = item.Name;
                 row[index++] = item.SourceId;
                 row[index++] = item.Settings != null ? Vanrise.Common.Serializer.Serialize(item.Settings) : null;
                 dt.Rows.Add(row);
             }
             dt.EndLoadData();
-            WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
+            WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepIdentity);
         }
 
         public Dictionary<string, Switch> GetSwitches(bool useTempTables)

@@ -109,6 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\IMigrator.cs" />
+    <Compile Include="Common\MappingRuleGenerator.cs" />
     <Compile Include="Common\Migrator.cs" />
     <Compile Include="Migrators\CarrierAccountStatusHistoryMigrator.cs" />
     <Compile Include="Migrators\FinancialAccountMigrator.cs" />

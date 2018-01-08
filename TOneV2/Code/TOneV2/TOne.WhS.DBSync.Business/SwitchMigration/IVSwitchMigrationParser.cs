@@ -7,6 +7,7 @@ using System.Xml;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Entities;
 using TOne.WhS.RouteSync.IVSwitch;
+using Vanrise.GenericData.Transformation.Entities;
 
 namespace TOne.WhS.DBSync.Business.SwitchMigration
 {
@@ -18,7 +19,7 @@ namespace TOne.WhS.DBSync.Business.SwitchMigration
         {
             _configuration = configuration;
         }
-        private IVSwitchSWSync ReadXml(MigrationContext context, Dictionary<string, BusinessEntity.Entities.CarrierAccount> allCarrierAccounts)
+        private SwitchData ReadXml(MigrationContext context, Dictionary<string, BusinessEntity.Entities.CarrierAccount> allCarrierAccounts)
         {
             XmlDocument xml = new XmlDocument();
             xml.LoadXml(_configuration);
@@ -38,8 +39,13 @@ namespace TOne.WhS.DBSync.Business.SwitchMigration
                 CarrierMappings = BuildCarrierMapping(xml.DocumentElement.SelectSingleNode("CarrierMapping"), allCarrierAccounts, context)
             };
             ivSwitch.BlockedAccountMapping = _blockedAccountMapping;
-            return ivSwitch;
+
+            return new SwitchData
+            {
+                SwitchRouteSynchronizer = ivSwitch
+            };
         }
+
 
         private Dictionary<string, CarrierMapping> BuildCarrierMapping(XmlNode parentCarrierMappingNode, Dictionary<string, CarrierAccount> allCarrierAccounts, MigrationContext context)
         {
@@ -91,7 +97,7 @@ namespace TOne.WhS.DBSync.Business.SwitchMigration
             }
             return mappings;
         }
-        public override RouteSync.Entities.SwitchRouteSynchronizer GetSwitchRouteSynchronizer(Entities.MigrationContext context, Dictionary<string, BusinessEntity.Entities.CarrierAccount> allCarrierAccounts)
+        public override SwitchData GetSwitchData(Entities.MigrationContext context, int switchId, Dictionary<string, BusinessEntity.Entities.CarrierAccount> allCarrierAccounts)
         {
             return ReadXml(context, allCarrierAccounts);
         }

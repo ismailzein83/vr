@@ -10,6 +10,7 @@ using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.MVTSRadius;
 using TOne.WhS.RouteSync.MVTSRadius.SQL;
 using TOne.WhS.RouteSync.Radius;
+using Vanrise.GenericData.Transformation.Entities;
 
 namespace TOne.WhS.DBSync.Business
 {
@@ -21,12 +22,12 @@ namespace TOne.WhS.DBSync.Business
         {
             _configuration = configuration;
         }
-        public override SwitchRouteSynchronizer GetSwitchRouteSynchronizer(MigrationContext context, Dictionary<string, CarrierAccount> allCarrierAccounts)
+        public override SwitchData GetSwitchData(MigrationContext context, int switchId, Dictionary<string, CarrierAccount> allCarrierAccounts)
         {
             return ReadXml(allCarrierAccounts, context);
         }
 
-        private MVTSRadiusSWSync ReadXml(Dictionary<string, CarrierAccount> allCarrierAccounts, MigrationContext context)
+        private SwitchData ReadXml(Dictionary<string, CarrierAccount> allCarrierAccounts, MigrationContext context)
         {
             XmlDocument xml = new XmlDocument();
             xml.LoadXml(_configuration);
@@ -53,7 +54,10 @@ namespace TOne.WhS.DBSync.Business
                     RedundantConnectionStrings = !string.IsNullOrEmpty(redundantConnectionString) ? new List<RouteSync.Radius.RadiusConnectionString> { GetRadiusConnection(context, redundantConnectionString, "MVTSMaxDoP_Redundant") } : null
                 };
             }
-            return synchroniser;
+            return new SwitchData
+            {
+                SwitchRouteSynchronizer = synchroniser
+            };
         }
 
         RadiusConnectionString GetRadiusConnection(MigrationContext context, string connectionString, string maxDopKey)

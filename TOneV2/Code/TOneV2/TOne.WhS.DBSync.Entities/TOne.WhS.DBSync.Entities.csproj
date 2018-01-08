@@ -68,6 +68,10 @@
     <Reference Include="Vanrise.GenericData.MainExtensions">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.MainExtensions.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Transformation.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Rules">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Rules.dll</HintPath>
     </Reference>
@@ -123,12 +127,17 @@
     <Compile Include="SwitchMigration\InParsedMapping.cs" />
     <Compile Include="SwitchMigration\OutParsedMapping.cs" />
     <Compile Include="SwitchMigration\SwitchContext.cs" />
+    <Compile Include="SwitchMigration\SwitchData.cs" />
     <Compile Include="SwitchMigration\SwitchLogger.cs" />
     <Compile Include="SwitchMigration\SwitchMapping.cs" />
     <Compile Include="SwitchMigration\SwitchMappingRules.cs" />
     <Compile Include="SwitchMigration\SwitchRulesMigrator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Entities\TOne.WhS.RouteSync.Entities.csproj">
+      <Project>{36ea3b9c-5ae0-4fe5-8ec2-8bfd1655776b}</Project>
+      <Name>TOne.WhS.RouteSync.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Routing.Entities\TOne.WhS.Routing.Entities.csproj">
       <Project>{b645c1d2-c038-4890-85aa-588fa3c3fc7a}</Project>
       <Name>TOne.WhS.Routing.Entities</Name>
