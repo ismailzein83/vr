@@ -9,12 +9,9 @@ app.directive('vrWhsRoutingRouterulesettingsOrderByquality', ['UtilsService', 'V
                 onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
-
                 var ctrl = this;
-
                 var ctor = new orderByQualityCtor(ctrl, $scope);
                 ctor.initializeController();
-
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -28,18 +25,18 @@ app.directive('vrWhsRoutingRouterulesettingsOrderByquality', ['UtilsService', 'V
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/WhS_Routing/Directives/Extensions/RouteRuleSettings/Order/Templates/OrderByQualityDirective.html';
             }
-
         };
 
         function orderByQualityCtor(ctrl, $scope) {
+            this.initializeController = initializeController;
 
-            $scope.scopeModel = {};
-            $scope.qualityConfigurations = [];
             var qualityConfigurationSelectorAPI;
             var qualityConfigurationPromiseDeferred = UtilsService.createPromiseDeferred();
 
-
             function initializeController() {
+                $scope.scopeModel = {};
+                $scope.qualityConfigurations = [];
+
                 $scope.scopeModel.onQualityConfigurationSelectorReady = function (api) {
                     qualityConfigurationSelectorAPI = api;
                     qualityConfigurationPromiseDeferred.resolve();
@@ -53,11 +50,13 @@ app.directive('vrWhsRoutingRouterulesettingsOrderByquality', ['UtilsService', 'V
 
                 api.load = function (payload) {
                     var promises = [];
+
                     var loadQualityConfigurationSelectorPromise = loadQualityConfigurationSelector();
                     promises.push(loadQualityConfigurationSelectorPromise);
 
                     function loadQualityConfigurationSelector() {
                         var loadQualityConfigurationPromiseDeferred = UtilsService.createPromiseDeferred();
+
                         qualityConfigurationPromiseDeferred.promise.then(function () {
 
                             var qualityConfigurationPayload = undefined;
@@ -67,6 +66,7 @@ app.directive('vrWhsRoutingRouterulesettingsOrderByquality', ['UtilsService', 'V
 
                             VRUIUtilsService.callDirectiveLoad(qualityConfigurationSelectorAPI, qualityConfigurationPayload, loadQualityConfigurationPromiseDeferred);
                         });
+
                         return loadQualityConfigurationPromiseDeferred.promise;
                     }
 
@@ -83,8 +83,6 @@ app.directive('vrWhsRoutingRouterulesettingsOrderByquality', ['UtilsService', 'V
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
-            this.initializeController = initializeController;
         }
         return directiveDefinitionObject;
     }]);
