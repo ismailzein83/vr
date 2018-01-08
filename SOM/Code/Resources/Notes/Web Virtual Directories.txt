@@ -1,0 +1,16 @@
+﻿- Open IIS > Create a new web site called SOM.Web > Make the physical direcotry point to TOne.WebProject > Change
+ the port to 8082 for example
+- Make sure the Application Pool of the newely created site is set to .Net FWK 4.0
+- Expand the IIS web site of TOne.Web project:
+ - Add the following virtual directory under the root site:
+	Client			C:\TFS\Vanrise\Code\Vanrise.Web\Client
+
+ - Add the following virtual directories under "Client > Modules" folder:
+	Common					C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common
+	Security				C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security
+	BusinessProcess			C:\TFS\BusinessProcess\Code\Vanrise.BusinessProcess.Web\BusinessProcess
+	Runtime					C:\TFS\Vanrise\Code\Vanrise.Runtime.Web\Runtime
+	VR_Rules				C:\TFS\Vanrise\Code\Vanrise.Rules.Web\VR_Rules
+	VR_GenericData			C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData
+	Analytic				C:\TFS\Vanrise\Code\Vanrise.Analytic.Web\Analytic
+	VR_Notification			C:\TFS\Vanrise\Code\Vanrise.Notification.Web\VR_Notification
