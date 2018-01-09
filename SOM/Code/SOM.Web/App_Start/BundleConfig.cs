@@ -18,7 +18,8 @@ namespace SOM.Web
                  "~/Client/Modules/Analytic", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/VR_Rules", "*.js", true).IncludeDirectory(
                 "~/Client/Modules/BusinessProcess", "*.js", true).IncludeDirectory(
-                "~/Client/Modules/VR_Notification", "*.js", true);
+                "~/Client/Modules/VR_Notification", "*.js", true).IncludeDirectory(
+                "~/Client/Modules/SOM_Main", "*.js", true);
             bundles.Add(modulesJSBundle);
         }
     }

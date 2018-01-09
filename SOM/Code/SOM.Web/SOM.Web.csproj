@@ -380,7 +380,6 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
@@ -391,6 +390,30 @@
     <ProjectReference Include="..\..\..\Vanrise\Code\Vanrise.Web\Vanrise.Web.csproj">
       <Project>{3b35c6e1-fd21-4e32-a8bd-f11377a545a0}</Project>
       <Name>Vanrise.Web</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SOM.Main.BP.Arguments\SOM.Main.BP.Arguments.csproj">
+      <Project>{faa3c61c-6384-40ef-bf18-e1b3f85adfc8}</Project>
+      <Name>SOM.Main.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SOM.Main.Business\SOM.Main.Business.csproj">
+      <Project>{71dc8dc5-943d-432d-8af2-d73eae694d81}</Project>
+      <Name>SOM.Main.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SOM.Main.Data.SQL\SOM.Main.Data.SQL.csproj">
+      <Project>{f25b32f6-a498-4903-bfd0-002db2e99b19}</Project>
+      <Name>SOM.Main.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SOM.Main.Data\SOM.Main.Data.csproj">
+      <Project>{faf39112-1aec-4dcd-9e3a-d0c66524ea65}</Project>
+      <Name>SOM.Main.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SOM.Main.Entities\SOM.Main.Entities.csproj">
+      <Project>{cdd52ad1-64a7-4255-b9b4-783959756de9}</Project>
+      <Name>SOM.Main.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SOM.Main.Web\SOM.Main.Web.csproj">
+      <Project>{fecb0310-aacf-45a0-bf44-569569d2406e}</Project>
+      <Name>SOM.Main.Web</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

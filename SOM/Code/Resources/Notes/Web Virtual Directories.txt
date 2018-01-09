@@ -14,3 +14,4 @@
 	VR_GenericData			C:\TFS\Vanrise\Code\Vanrise.GenericData.Web\VR_GenericData
 	Analytic				C:\TFS\Vanrise\Code\Vanrise.Analytic.Web\Analytic
 	VR_Notification			C:\TFS\Vanrise\Code\Vanrise.Notification.Web\VR_Notification
+	SOM_Main				C:\TFS\SOM\Code\SOM.Main.Web\SOM_Main

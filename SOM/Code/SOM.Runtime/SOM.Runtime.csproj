@@ -35,6 +35,26 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=4.1.0.0, Culture=neutral, PublicKeyToken=e44a2bc38ed2c13c, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -224,6 +244,28 @@
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SOM.Main.BP.Activities\SOM.Main.BP.Activities.csproj">
+      <Project>{058a1a33-0c22-4cc8-998f-d60d373a5a13}</Project>
+      <Name>SOM.Main.BP.Activities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SOM.Main.BP.Arguments\SOM.Main.BP.Arguments.csproj">
+      <Project>{faa3c61c-6384-40ef-bf18-e1b3f85adfc8}</Project>
+      <Name>SOM.Main.BP.Arguments</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SOM.Main.BP\SOM.Main.BP.csproj">
+      <Project>{5ae5cba4-98f8-4ca3-b0a9-830fd66d96af}</Project>
+      <Name>SOM.Main.BP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SOM.Main.Business\SOM.Main.Business.csproj">
+      <Project>{71dc8dc5-943d-432d-8af2-d73eae694d81}</Project>
+      <Name>SOM.Main.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SOM.Main.Entities\SOM.Main.Entities.csproj">
+      <Project>{cdd52ad1-64a7-4255-b9b4-783959756de9}</Project>
+      <Name>SOM.Main.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
