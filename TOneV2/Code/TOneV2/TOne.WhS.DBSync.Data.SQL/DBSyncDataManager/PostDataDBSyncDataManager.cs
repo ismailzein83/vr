@@ -89,6 +89,25 @@ update	TOneWhS_BE.SaleEntityRoutingProduct
 set		BED= isnull(dateadd(year,-1,@BEDSaleZone),'2000-01-01')
 where	(OwnerType = 0) AND (OwnerID = @SellingProductID) 
 		AND (ZoneID IS NULL)
+
+Declare @BEDSupplierZone datetime
+
+Select top 1 @BEDSupplierZone=[BED] from [TOneWhS_BE].[SupplierZone] 
+order by [BED]
+
+declare @ExchDateToInsert datetime = Case When @BEDSaleZone < @BEDSupplierZone 
+               Then @BEDSaleZone Else @BEDSupplierZone End
+
+;With CTEMinDate (CurrencyID, ExDate)
+AS (select CurrencyID, MIN(ExchangeDate) ExDate from common.CurrencyExchangeRate group by CurrencyID),
+
+CTEFirstRate as (SELECT exRate.CurrencyID, ExDate as MinExchangeDate, exRate.Rate
+FROM CTEMinDate JOIN common.CurrencyExchangeRate exRate ON CTEMinDate.CurrencyID = exRate.CurrencyID AND CTEMinDate.ExDate = exRate.ExchangeDate)
+
+Insert into common.CurrencyExchangeRate (CurrencyID, Rate, ExchangeDate)
+select CurrencyID, Rate, @ExchDateToInsert from CTEFirstRate
+WHERE @ExchDateToInsert < MinExchangeDate
+
 ";
     }
 }
