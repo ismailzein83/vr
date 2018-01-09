@@ -22,9 +22,9 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public long ZoneId { get; set; }
         public int ChangedRoutingProductId { get; set; }
-        public int CurrentZoneRoutingProductId { get; set; }
         public DateTime BED { get; set; }
-        public int CustomerId { get; set; }
+        public int OwnerId { get; set; }
+        public SalePriceListOwnerType OwnerType { get; set; }
     }
 
     public class ZoneRoutingProductToChange

@@ -27,7 +27,8 @@ function (utilsService, vrNotificationService, whSBeZoneRoutingProductApiService
         var gridApi;
         var gridQuery;
         var gridDrillDownTabs;
-        var customerId;
+        var ownerId;
+        var ownerType;
         var sellingNumberPlanId;
 
         function initializeController() {
@@ -41,7 +42,8 @@ function (utilsService, vrNotificationService, whSBeZoneRoutingProductApiService
             };
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
 
-                customerId = dataRetrievalInput.Query.OwnerId;
+                ownerId = dataRetrievalInput.Query.OwnerId;
+                ownerType = dataRetrievalInput.Query.OwnerType;
                 sellingNumberPlanId = dataRetrievalInput.Query.SellingNumberPlanId;
                 var promises = [];
 
@@ -96,7 +98,7 @@ function (utilsService, vrNotificationService, whSBeZoneRoutingProductApiService
                 setRateIconProperties(updatedObj);
                 setService(updatedObj);
             };
-            WhS_BE_SaleEntityZoneRoutingProductService.editSaleEntityZoneRouting(customerId,sellingNumberPlanId, routingProductObj.Entity.ZoneId,
+            WhS_BE_SaleEntityZoneRoutingProductService.editSaleEntityZoneRouting(ownerId, ownerType, sellingNumberPlanId, routingProductObj.Entity.ZoneId,
              routingProductObj.ZoneName, routingProductObj.Entity.RoutingProductId, onZoneRoutingProductUpdated);
         }
 

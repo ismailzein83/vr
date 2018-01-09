@@ -140,13 +140,13 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleEntityRoutingProduct_GetAllZoneRPsByOwnersOfType", SaleZoneRoutingProductMapper, ownerType, string.Join(",", ownerIds), string.Join(",", zoneIds));
         }
-        public bool Update(ZoneRoutingProductToEdit zoneRoutingProductToEdit, long reservedId, int ownerType, List<ZoneRoutingProductToChange> routingProductToChange)
+        public bool Update(ZoneRoutingProductToEdit zoneRoutingProductToEdit, long reservedId, List<ZoneRoutingProductToChange> routingProductToChange)
         {
             DataTable dtZoneRoutingProductToClose = BuildZoneRoutingProduct(routingProductToChange);
             int afectedRows = ExecuteNonQuerySPCmd("TOneWhS_BE.sp_ZoneRoutingProduct_Update", cmd =>
             {
-                cmd.Parameters.Add(new SqlParameter("@OwnerId", zoneRoutingProductToEdit.CustomerId));
-                cmd.Parameters.Add(new SqlParameter("@OwnerType", ownerType));
+                cmd.Parameters.Add(new SqlParameter("@OwnerId", zoneRoutingProductToEdit.OwnerId));
+                cmd.Parameters.Add(new SqlParameter("@OwnerType", (int)zoneRoutingProductToEdit.OwnerType));
                 cmd.Parameters.Add(new SqlParameter("@ZoneId", zoneRoutingProductToEdit.ZoneId));
                 cmd.Parameters.Add(new SqlParameter("@BED", zoneRoutingProductToEdit.BED));
                 cmd.Parameters.Add(new SqlParameter("@RoutingProductId", zoneRoutingProductToEdit.ChangedRoutingProductId));

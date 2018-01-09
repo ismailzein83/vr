@@ -6,10 +6,11 @@
 
     function SaleEntityZoneRoutingProductService(VRModalService) {
 
-        function editSaleEntityZoneRouting(customerId, sellingNumberPlanId, zoneId, zoneName, routingProductId, onZoneRoutingProductUpdated) {
+        function editSaleEntityZoneRouting(ownerId, ownerType, sellingNumberPlanId, zoneId, zoneName, routingProductId, onZoneRoutingProductUpdated) {
 
             var parameters = {
-                CustomerId: customerId,
+                OwnerId: ownerId,
+                OwnerType: ownerType,
                 SellingNumberPlanId: sellingNumberPlanId,
                 ZoneId: zoneId,
                 ZoneName: zoneName,

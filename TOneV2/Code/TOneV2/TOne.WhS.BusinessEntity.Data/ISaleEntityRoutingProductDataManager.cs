@@ -46,7 +46,7 @@ namespace TOne.WhS.BusinessEntity.Data
         IEnumerable<DefaultRoutingProduct> GetAllDefaultRoutingProductsByOwners(SalePriceListOwnerType ownerType, IEnumerable<int> ownerIds);
         IEnumerable<SaleZoneRoutingProduct> GetAllZoneRoutingProductsByOwners(SalePriceListOwnerType ownerType, IEnumerable<int> ownerIds, IEnumerable<long> zoneIds);
 
-        bool Update(ZoneRoutingProductToEdit zoneRoutingProductToEdit, long reservedId, int ownerType, List<ZoneRoutingProductToChange> routingProductToChange);
+        bool Update(ZoneRoutingProductToEdit zoneRoutingProductToEdit, long reservedId, List<ZoneRoutingProductToChange> routingProductToChange);
 
     }
 }

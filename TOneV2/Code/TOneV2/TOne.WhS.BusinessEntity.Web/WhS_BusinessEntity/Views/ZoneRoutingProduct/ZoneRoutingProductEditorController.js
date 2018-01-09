@@ -6,7 +6,8 @@
 
     function zoneRoutingProductEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_BE_ZoneRoutingProductAPIService) {
 
-        var customerId;
+        var ownerId;
+        var ownerType;
         var zoneId;
         var zoneName;
         var sellingNumberPlanId;
@@ -22,7 +23,8 @@
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
-                customerId = parameters.CustomerId;
+                ownerId = parameters.OwnerId;
+                ownerType = parameters.OwnerType;
                 zoneId = parameters.ZoneId;
                 zoneName = parameters.ZoneName;
                 sellingNumberPlanId = parameters.SellingNumberPlanId;
@@ -73,6 +75,7 @@
             zoneRoutingProductSelectorReadyDeferred.promise.then(function () {
                 VRUIUtilsService.callDirectiveLoad(zoneRoutingProductSelectorAPI, selectorPayload, loadRoutingProductPromiseDeferred);
             });
+            return loadRoutingProductPromiseDeferred.promise;
         }
 
         function setTitle() {
@@ -85,7 +88,7 @@
             var routingProductObject = buildZoneRoutingProductObject();
             WhS_BE_ZoneRoutingProductAPIService.UpdateZoneRoutingProduct(routingProductObject)
             .then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated("ZoneRoutingProduct", response, "Name")) {
+                if (VRNotificationService.notifyOnItemUpdated("Routing product for zone", response, "zoneName")) {
                     if ($scope.onZoneRoutingProductUpdated != undefined) {
                         $scope.onZoneRoutingProductUpdated(response.UpdatedObject);
                         console.log(response.UpdatedObject);
@@ -104,13 +107,14 @@
             var obj = {
                 ChangedRoutingProductId: zoneRoutingProductSelectorAPI.getSelectedIds(),
                 CurrentZoneRoutingProductId: currentRoutingProductId,
-                CustomerId: customerId,
+                OwnerId: ownerId,
+                OwnerType:ownerType,
                 BED: $scope.scopeModel.bed,
                 ZoneId: zoneId
-            };
-            return obj;
-        }
+        };
+        return obj;
     }
+}
 
     appControllers.controller('WhS_BE_ZoneRoutingProductEditorController', zoneRoutingProductEditorController);
 })(appControllers);
