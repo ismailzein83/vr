@@ -8,6 +8,7 @@ using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
 using Vanrise.BusinessProcess;
+using Vanrise.Common;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
@@ -69,6 +70,8 @@ namespace TOne.WhS.Sales.BP.Activities
 
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
+            IRatePlanContext ratePlanContext = context.GetRatePlanContext();
+            handle.CustomData.Add("RatePlanContext", ratePlanContext);
             base.OnBeforeExecute(context, handle);
         }
 
@@ -81,8 +84,12 @@ namespace TOne.WhS.Sales.BP.Activities
             IEnumerable<NewSaleZoneService> newSaleZoneServices = inputArgument.NewSaleZoneServices;
 			IEnumerable<NewCustomerCountry> newCustomerCountries = inputArgument.NewCustomerCountries;
 
+            IRatePlanContext ratePlanContext = handle.CustomData.GetRecord("RatePlanContext") as IRatePlanContext;
+
             ReserveNewDefaultRoutingProductId(newDefaultRoutingProduct);
             ReserveNewRateIds(newRates);
+            if (newRates.Count() > 0)
+                ReservePricelistId(newRates, ratePlanContext);
             ReserveNewSaleZoneRoutingProductIds(newSaleZoneRoutingProducts);
             ReserveNewDefaultServiceId(newDefaultService);
             ReserveNewSaleZoneServiceIds(newSaleZoneServices);
@@ -125,6 +132,18 @@ namespace TOne.WhS.Sales.BP.Activities
 
             foreach (NewRate newRate in newRates)
                 newRate.RateId = startingId++;
+        }
+
+        private void ReservePricelistId(IEnumerable<NewRate> newRates, IRatePlanContext ratePlanContext)
+        {
+            int ownerPriceListId = (int)new SalePriceListManager().ReserveIdRange(1);
+            ratePlanContext.OwnerPricelistId = ownerPriceListId;
+
+            foreach (NewRate newRate in newRates)
+            {
+                if (newRate.PriceListId == 0)
+                    newRate.PriceListId = ownerPriceListId;
+            }
         }
 
         private void ReserveNewDefaultServiceId(NewDefaultService newDefaultService)

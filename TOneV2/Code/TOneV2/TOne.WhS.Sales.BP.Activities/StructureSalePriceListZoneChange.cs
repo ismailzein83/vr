@@ -58,7 +58,6 @@ namespace TOne.WhS.Sales.BP.Activities
             SalePriceListOwnerType ownerType = this.OwnerType.Get(context);
             Changes draft = this.Draft.Get(context);
             DateTime effectiveOn = this.EffectiveOn.Get(context);
-            int? priceListId = RerservedSalePriceListId.Get(context);
             int currencyId = CurrencyId.Get(context);
             Dictionary<int, List<NewPriceList>> customerPriceListsByCurrencyId = CustomerPriceListsByCurrencyId.Get(context);
 
@@ -250,7 +249,7 @@ namespace TOne.WhS.Sales.BP.Activities
             long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
             int userId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId;
 
-            var pricelistByCurrencyId = CreatePriceList(ownerId, ownerType, priceListId, currencyId, processInstanceId, userId, ratePlanContext.PriceListCreationDate, customerPriceListsByCurrencyId);
+            var pricelistByCurrencyId = CreatePriceList(ownerId, ownerType, ratePlanContext.OwnerPricelistId, currencyId, processInstanceId, userId, ratePlanContext.PriceListCreationDate, customerPriceListsByCurrencyId);
             var structuredCustomers = salePriceListManager.StructureCustomerPricelistChange(customerPriceListChanges);
             var changes = salePriceListManager.CreateCustomerChanges(structuredCustomers, lastRateNoCachelocator, pricelistByCurrencyId, effectiveOn, processInstanceId, userId);
 

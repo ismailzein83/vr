@@ -27,7 +27,6 @@ namespace TOne.WhS.Sales.Business
                 PriceListCreationDate = context.PriceListCreationDate,
                 CurrencyId = context.CurrencyId,
                 LongPrecisionValue = context.LongPrecisionValue,
-                ReservedPriceListId = context.ReservedPriceListId,
                 RatesToChange = context.RatesToChange,
                 RatesToClose = context.RatesToClose,
                 ExistingRates = context.ExistingRates,
@@ -60,7 +59,7 @@ namespace TOne.WhS.Sales.Business
 
             #region Process Rates To Change
             if (input.OwnerType == SalePriceListOwnerType.Customer)
-                ProcessCustomerRatesToChange(input.OwnerId, input.RatesToChange, existingZonesByName, existingRatesByZoneName, input.ReservedPriceListId);
+                ProcessCustomerRatesToChange(input.OwnerId, input.RatesToChange, existingZonesByName, existingRatesByZoneName);
             else
             {
                 ProcessProductRatesToChange(new ProcessProductRatesToChangeContext()
@@ -72,7 +71,6 @@ namespace TOne.WhS.Sales.Business
                     RatesToChange = input.RatesToChange,
                     CurrencyId = input.CurrencyId,
                     LongPrecisionValue = input.LongPrecisionValue,
-                    ReservedPriceListId = input.ReservedPriceListId,
                     ExistingZonesByZoneId = existingZonesByZoneId,
                     ExistingZonesByName = existingZonesByName,
                     ExistingRatesByZoneName = existingRatesByZoneName,
@@ -189,9 +187,15 @@ namespace TOne.WhS.Sales.Business
             var saleZoneManager = new SaleZoneManager();
             var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocatorV2(new CustomerZoneRateHistoryReaderV2(customerIds, sellingProductIds, zoneIds, true, false));
 
+            int startingReservedPriceListId = (int)new SalePriceListManager().ReserveIdRange(customerIds.Count());
+
+            Dictionary<int, int> reservedPricelistIdsPerCustomerId = new Dictionary<int, int>();
+            foreach (int customerId in customerIds)
+                reservedPricelistIdsPerCustomerId.Add(customerId, startingReservedPriceListId++);
+
             foreach (RateToChange rateToChange in context.RatesToChange)
             {
-                ProcessOwnerRateToChange(rateToChange, context.ExistingZonesByName, context.ExistingRatesByZoneName, context.ReservedPriceListId);
+                ProcessOwnerRateToChange(rateToChange, context.ExistingZonesByName, context.ExistingRatesByZoneName);
 
                 int? countryId = saleZoneManager.GetSaleZoneCountryId(rateToChange.ZoneId);
                 if (!countryId.HasValue)
@@ -214,12 +218,12 @@ namespace TOne.WhS.Sales.Business
                     CustomerZoneRateHistoryLocator = customerZoneRateHistoryLocator,
                     NewRates = context.NewRates,
                     CustomerPriceListsByCurrencyId = context.CustomerPriceListsByCurrencyId,
+                    ReservedPricelistIdsPerCustomerId = reservedPricelistIdsPerCustomerId
                 });
             }
         }
         private void ProcessProductRateToChange(ProcessProductRateToChangeContext context)
         {
-            int reservedCustomerPriceListId = (int)new SalePriceListManager().ReserveIdRange(context.CustomerIds.Count());
             var productRateDateConfig = new ProductRateDateConfig() { BED = context.RateToChange.BED, EED = context.ExistingZone.EED };
 
             foreach (int customerId in context.CustomerIds)
@@ -250,7 +254,7 @@ namespace TOne.WhS.Sales.Business
                         doSameRatesExist = true;
                         context.NewRates.Add(new NewRate()
                         {
-                            PriceListId = reservedCustomerPriceListId,
+                            PriceListId = context.ReservedPricelistIdsPerCustomerId.GetRecord(customerId),
                             RateId = currentRate.SaleRateId,
                             Zone = context.ExistingZone,
                             RateTypeId = null,
@@ -273,7 +277,7 @@ namespace TOne.WhS.Sales.Business
                         {
                             ProcessInstanceId = context.ProcessInstanceId,
                             UserId = context.UserId,
-                            PriceListId = reservedCustomerPriceListId,
+                            PriceListId = context.ReservedPricelistIdsPerCustomerId.GetRecord(customerId),
                             PriceListType = SalePriceListType.None,
                             OwnerType = SalePriceListOwnerType.Customer,
                             OwnerId = customerId,
@@ -282,8 +286,6 @@ namespace TOne.WhS.Sales.Business
                         });
                     }
                 }
-
-                reservedCustomerPriceListId++;
             }
         }
         private class ProcessProductRatesToChangeContext
@@ -296,7 +298,6 @@ namespace TOne.WhS.Sales.Business
             public IEnumerable<RateToChange> RatesToChange { get; set; }
             public int CurrencyId { get; set; }
             public int LongPrecisionValue { get; set; }
-            public int ReservedPriceListId { get; set; }
             public Dictionary<long, ExistingZone> ExistingZonesByZoneId { get; set; }
             public ExistingZonesByName ExistingZonesByName { get; set; }
             public ExistingRatesByZoneName ExistingRatesByZoneName { get; set; }
@@ -321,6 +322,7 @@ namespace TOne.WhS.Sales.Business
             public int CurrencyId { get; set; }
             public int LongPrecisionValue { get; set; }
             public CustomerZoneRateHistoryLocatorV2 CustomerZoneRateHistoryLocator { get; set; }
+            public Dictionary<int, int> ReservedPricelistIdsPerCustomerId { get; set; }
             #endregion
 
             #region Output Properties
@@ -348,14 +350,14 @@ namespace TOne.WhS.Sales.Business
         };
         #endregion
 
-        private void ProcessCustomerRatesToChange(int customerId, IEnumerable<RateToChange> ratesToChange, ExistingZonesByName existingZonesByName, ExistingRatesByZoneName existingRatesByZoneName, int reservedPriceListId)
+        private void ProcessCustomerRatesToChange(int customerId, IEnumerable<RateToChange> ratesToChange, ExistingZonesByName existingZonesByName, ExistingRatesByZoneName existingRatesByZoneName)
         {
             foreach (RateToChange rateToChange in ratesToChange)
-                ProcessOwnerRateToChange(rateToChange, existingZonesByName, existingRatesByZoneName, reservedPriceListId);
+                ProcessOwnerRateToChange(rateToChange, existingZonesByName, existingRatesByZoneName);
         }
 
         #region Common Methods
-        private void ProcessOwnerRateToChange(RateToChange rateToChange, ExistingZonesByName existingZonesByName, ExistingRatesByZoneName existingRatesByZoneName, int reservedPriceListId)
+        private void ProcessOwnerRateToChange(RateToChange rateToChange, ExistingZonesByName existingZonesByName, ExistingRatesByZoneName existingRatesByZoneName)
         {
             IEnumerable<ExistingRate> matchedExistingRates = GetMatchedExistingRates(existingRatesByZoneName, rateToChange.ZoneName, rateToChange.RateTypeId);
             if (matchedExistingRates != null)
@@ -377,13 +379,13 @@ namespace TOne.WhS.Sales.Business
                         rateToChange.RecentExistingRate = recentExistingRate;
                     }
 
-                    ProcessRateToChange(rateToChange, existingZonesByName, reservedPriceListId);
+                    ProcessRateToChange(rateToChange, existingZonesByName);
                 }
             }
             else
             {
                 rateToChange.ChangeType = RateChangeType.New;
-                ProcessRateToChange(rateToChange, existingZonesByName, reservedPriceListId);
+                ProcessRateToChange(rateToChange, existingZonesByName);
             }
         }
         private void CloseExistingOverlappedRates(RateToChange rateToChange, IEnumerable<ExistingRate> matchExistingRates, out bool shouldNotAddRate, out ExistingRate recentExistingRate)
@@ -407,7 +409,7 @@ namespace TOne.WhS.Sales.Business
             }
 
         }
-        private void ProcessRateToChange(RateToChange rateToChange, ExistingZonesByName existingZones, int reservedPriceListId)
+        private void ProcessRateToChange(RateToChange rateToChange, ExistingZonesByName existingZones)
         {
             List<ExistingZone> matchExistingZones;
             existingZones.TryGetValue(rateToChange.ZoneName, out matchExistingZones);
@@ -419,18 +421,17 @@ namespace TOne.WhS.Sales.Business
             {
                 if (zone.EED.VRGreaterThan(zone.BED) && zone.EED.VRGreaterThan(currentRateBED) && rateToChange.EED.VRGreaterThan(zone.BED))
                 {
-                    AddNewRate(rateToChange, ref currentRateBED, zone, out shouldAddMoreRates, reservedPriceListId);
+                    AddNewRate(rateToChange, ref currentRateBED, zone, out shouldAddMoreRates);
                     if (!shouldAddMoreRates)
                         break;
                 }
             }
         }
-        private void AddNewRate(RateToChange rateToChange, ref DateTime currentRateBED, ExistingZone zone, out bool shouldAddMoreRates, int reservedPriceListId)
+        private void AddNewRate(RateToChange rateToChange, ref DateTime currentRateBED, ExistingZone zone, out bool shouldAddMoreRates)
         {
             shouldAddMoreRates = false;
             var newRate = new NewRate
             {
-                PriceListId = reservedPriceListId,
                 RateTypeId = rateToChange.RateTypeId,
                 Rate = rateToChange.NormalRate,
                 Zone = zone,
@@ -629,7 +630,6 @@ namespace TOne.WhS.Sales.Business
             public DateTime PriceListCreationDate { get; set; }
             public int CurrencyId { get; set; }
             public int LongPrecisionValue { get; set; }
-            public int ReservedPriceListId { get; set; }
             public IEnumerable<RateToChange> RatesToChange { get; set; }
             public IEnumerable<RateToClose> RatesToClose { get; set; }
             public IEnumerable<ExistingRate> ExistingRates { get; set; }

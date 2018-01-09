@@ -25,15 +25,15 @@ namespace TOne.WhS.Sales.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            int ratesToChangeCount = RatesToChangeCount.Get(context);
-            int ratesToCloseCount = RatesToCloseCount.Get(context);
+            //int ratesToChangeCount = RatesToChangeCount.Get(context);
+            //int ratesToCloseCount = RatesToCloseCount.Get(context);
 
-            int? ownerPriceListId = null;
+            //int? ownerPriceListId = null;
 
-            if (ratesToChangeCount > 0 || ratesToCloseCount > 0)
-                ownerPriceListId = (int)new SalePriceListManager().ReserveIdRange(1);
+            //if (ratesToChangeCount > 0 || ratesToCloseCount > 0)
+            //    ownerPriceListId = (int)new SalePriceListManager().ReserveIdRange(1);
 
-            ReservedOwnerPriceListId.Set(context, ownerPriceListId);
+            //ReservedOwnerPriceListId.Set(context, ownerPriceListId);
         }
     }
 }
