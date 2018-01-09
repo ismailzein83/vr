@@ -97,7 +97,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                     MeasureValue costRate;
                     analyticRecord.MeasureValues.TryGetValue("CostRate_DurAvg", out costRate);
-                    decimal costRateValue = Convert.ToDecimal(saleRate.Value ?? 0.0);
+                    decimal costRateValue = Convert.ToDecimal(costRate.Value ?? 0.0);
                     customerFormatted.CostRate = ReportHelpers.FormatLongNumberDigit(costRateValue);
 
                     MeasureValue saleDuration;
