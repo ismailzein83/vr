@@ -1,6 +1,7 @@
 ﻿(function (appControllers) {
 
     "use strict";
+
     qualityConfigurationService.$inject = ['UtilsService', 'VRModalService'];
 
     function qualityConfigurationService(UtilsService, VRModalService) {
@@ -11,10 +12,12 @@
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onQualityConfigurationAdded = onQualityConfigurationAdded;
             };
+
             VRModalService.showModal('/Client/Modules/WhS_Routing/Directives/RouteSettings/Templates/QualityConfigurationEditor.html', undefined, modalSettings);
         }
 
         function editQualityConfiguration(qualityConfigurationEntity, onQualityConfigurationUpdated) {
+
             var modalParameters = {
                 qualityConfigurationEntity: qualityConfigurationEntity
             };

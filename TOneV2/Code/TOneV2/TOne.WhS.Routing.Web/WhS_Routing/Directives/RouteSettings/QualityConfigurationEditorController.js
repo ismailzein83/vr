@@ -18,12 +18,13 @@
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
+
             if (parameters != undefined) {
-               qualityConfigurationEntity = parameters.qualityConfigurationEntity;
+                qualityConfigurationEntity = parameters.qualityConfigurationEntity;
             }
+
             isEditMode = (qualityConfigurationEntity != undefined);
         }
-
         function defineScope() {
 
             $scope.scopeModel = {};
@@ -79,9 +80,7 @@
                 else
                     $scope.scopeModel.expression += " " + measure.Expression;
             };
-
         }
-
         function load() {
             $scope.scopeModel.isLoading = true;
             loadAllControls();
@@ -137,23 +136,13 @@
             }
 
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTimeperiod, loadQualityConfigurationFields])
-               .catch(function (error) {
-                   VRNotificationService.notifyExceptionWithClose(error, $scope);
-               })
-               .finally(function () {
-                   $scope.scopeModel.isLoading = false;
-               });
+                        .catch(function (error) {
+                            VRNotificationService.notifyExceptionWithClose(error, $scope);
+                        })
+                        .finally(function () {
+                            $scope.scopeModel.isLoading = false;
+                        });
 
-        }
-
-        function buildQualityConfigurationObjectFromScope(qualityConfigurationId) {
-            var obj = {
-                Name: $scope.scopeModel.qualityConfigurationyName,
-                TimePeriod: timePeriodApi.getData(),
-                Expression: $scope.scopeModel.expression,
-                QualityConfigurationId: qualityConfigurationId
-            };
-            return obj;
         }
 
         function insertQualityConfiguration() {
@@ -163,7 +152,6 @@
                 $scope.onQualityConfigurationAdded(qualityConfigurationObject);
             $scope.modalContext.closeModal();
         }
-
         function updateQualityConfiguration() {
             var qualityConfigurationObject = buildQualityConfigurationObjectFromScope($scope.scopeModel.qualityConfigurationId);
 
@@ -172,6 +160,16 @@
             $scope.modalContext.closeModal();
         }
 
+        function buildQualityConfigurationObjectFromScope(qualityConfigurationId) {
+            var obj = {
+                Name: $scope.scopeModel.qualityConfigurationyName,
+                TimePeriod: timePeriodApi.getData(),
+                Expression: $scope.scopeModel.expression,
+                QualityConfigurationId: qualityConfigurationId
+            };
+
+            return obj;
+        }
     }
 
     appControllers.controller('WhS_Routing_QualityConfigurationEditorController', qualityConfigurationEditorController);

@@ -1,12 +1,16 @@
 ﻿<vr-button type="Add" data-onclick="scopeModel.addQualityConfiguration" standalone></vr-button>
 <vr-validator validate="scopeModel.isValid()">
-    <vr-datagrid datasource="scopeModel.datasource" norowhighlightonclick="true" menuactions="scopeModel.gridMenuActions" maxheight="300px"
-                 on-ready="scopeModel.onGridReady" hidegridmenu >
+    <vr-datagrid on-ready="scopeModel.onGridReady"
+                 datasource="scopeModel.datasource"
+                 menuactions="scopeModel.gridMenuActions"
+                 norowhighlightonclick="true" 
+                 maxheight="300px" hidegridmenu>
+
         <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" widthfactor="15" disablesorting></vr-datagridcolumn>
-        <vr-datagridcolumn isfielddynamic="true" headertext="'Active'"  widthfactor="10" disablesorting">
+        <vr-datagridcolumn isfielddynamic="true" headertext="'Active'" widthfactor="10" disablesorting">
             <vr-icon icontype="dataItem.Entity.IsActive"></vr-icon>
         </vr-datagridcolumn>
-        <vr-datagridcolumn isfielddynamic="true" headertext="'Default'"  widthfactor="10" disablesorting>
+        <vr-datagridcolumn isfielddynamic="true" headertext="'Default'" widthfactor="10" disablesorting>
             <vr-icon icontype="dataItem.Entity.IsDefault"></vr-icon>
         </vr-datagridcolumn>
     </vr-datagrid>
