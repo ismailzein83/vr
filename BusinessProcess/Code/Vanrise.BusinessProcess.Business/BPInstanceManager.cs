@@ -33,6 +33,15 @@ namespace Vanrise.BusinessProcess.Business
             return BigDataManager.Instance.RetrieveData(input, new BPInstanceRequestHandler());
         }
 
+        public List<BPInstance> GetAllFilteredBPInstances(BPInstanceQuery query)
+        {
+            var requiredPermissionSetManager = new RequiredPermissionSetManager();
+            List<int> grantedPermissionSetIds;
+            bool isUserGrantedAllModulePermissionSets = requiredPermissionSetManager.IsCurrentUserGrantedAllModulePermissionSets(BPInstance.REQUIREDPERMISSIONSET_MODULENAME, out grantedPermissionSetIds);
+            IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
+            return dataManager.GetAllBPInstances(query, grantedPermissionSetIds);
+        }
+
         public BPInstanceUpdateOutput GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds)
         {
             BPInstanceUpdateOutput bpInstanceUpdateOutput = new BPInstanceUpdateOutput();
@@ -138,19 +147,15 @@ namespace Vanrise.BusinessProcess.Business
 
         private class BPInstanceRequestHandler : BigDataRequestHandler<BPInstanceQuery, BPInstance, BPInstanceDetail>
         {
+            static BPInstanceManager s_instanceManager = new BPInstanceManager();
             public override BPInstanceDetail EntityDetailMapper(BPInstance entity)
             {
-                BPInstanceManager manager = new BPInstanceManager();
-                return manager.BPInstanceDetailMapper(entity);
+                return s_instanceManager.BPInstanceDetailMapper(entity);
             }
 
             public override IEnumerable<BPInstance> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<BPInstanceQuery> input)
             {
-                var requiredPermissionSetManager = new RequiredPermissionSetManager();
-                List<int> grantedPermissionSetIds;
-                bool isUserGrantedAllModulePermissionSets = requiredPermissionSetManager.IsCurrentUserGrantedAllModulePermissionSets(BPInstance.REQUIREDPERMISSIONSET_MODULENAME, out grantedPermissionSetIds);
-                IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
-                return dataManager.GetAllBPInstances(input.Query, grantedPermissionSetIds);
+                return s_instanceManager.GetAllFilteredBPInstances(input.Query);
             }
 
             protected override ResultProcessingHandler<BPInstanceDetail> GetResultProcessingHandler(DataRetrievalInput<BPInstanceQuery> input, BigResult<BPInstanceDetail> bigResult)
