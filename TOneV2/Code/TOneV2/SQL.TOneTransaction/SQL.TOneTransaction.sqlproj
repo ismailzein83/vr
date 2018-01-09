@@ -100,6 +100,9 @@
     <Folder Include="VRNotification\Stored Procedures\" />
     <Folder Include="VRNotification\Functions\" />
     <Folder Include="queue\Functions\" />
+    <Folder Include="SOM\" />
+    <Folder Include="SOM\Tables\" />
+    <Folder Include="SOM\Stored Procedures\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="runtime\Tables\RunningProcess.sql" />
@@ -223,6 +226,10 @@
     <Build Include="integration\Stored Procedures\sp_DataSourceRuntimeInstance_Delete.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_UpdateServiceInstanceIDAndAssignmentStatus.sql" />
     <Build Include="bp\Stored Procedures\sp_BPInstance_UpdateAssignmentStatus.sql" />
+    <Build Include="SOM\Tables\SOMRequest.sql" />
+    <Build Include="SOM\Stored Procedures\sp_SOMRequest_UpdateProcessInstanceID.sql" />
+    <Build Include="SOM\Stored Procedures\sp_SOMRequest_Insert.sql" />
+    <Build Include="Security\SOM.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />
