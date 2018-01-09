@@ -21,7 +21,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
 
                 listGrouping.Add("Supplier");
                 listMeasures.Add("CostDuration");
-                listMeasures.Add("CostNet");
+                listMeasures.Add("CostNetNotNULL");
 
             }
 
@@ -29,7 +29,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
             {
                 listGrouping.Add("Customer");
                 listMeasures.Add("SaleDuration");
-                listMeasures.Add("SaleNet");
+                listMeasures.Add("SaleNetNotNULL");
 
             }
 
@@ -95,7 +95,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                     carrierSummary.DurationFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.Duration);
 
                     MeasureValue net;
-                    analyticRecord.MeasureValues.TryGetValue(parameters.IsCost ? "CostNet" : "SaleNet", out net);
+                    analyticRecord.MeasureValues.TryGetValue(parameters.IsCost ? "CostNetNotNULL" : "SaleNetNotNULL", out net);
                     carrierSummary.Net = Convert.ToDouble(net.Value ?? 0.0);
                     carrierSummary.NetFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.Net);
 
