@@ -594,8 +594,7 @@
                         left: ddleft
                     };
                 };
-                function hideAllOtherDropDown(currentId) {
-                    $rootScope.$broadcast("hide-all-menu");
+                function hideAllOtherDropDown(currentId) {                   
                     var dropdowns = $('.dropdown-menu');
                     var len = dropdowns.length;
                     var i;
@@ -627,7 +626,8 @@
                         if ($('div[name=' + $attrs.id + ']').hasClass('changing-state'))
                             return;
                         $('div[name=' + $attrs.id + ']').addClass("changing-state");
-                        if (!$('div[name=' + $attrs.id + ']').hasClass('open-select')) {
+                        if (!$('div[name=' +$attrs.id + ']').hasClass('open-select')) {
+                             $rootScope.$broadcast("hide-all-menu");
                             $('div[name=' + $attrs.id + ']').addClass("open-select");
                             vrSelectSharedObject.onOpenDropDown($attrs.id);
                             afterShowDropdown($attrs.id);

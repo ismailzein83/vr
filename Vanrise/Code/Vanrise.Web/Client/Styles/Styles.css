@@ -616,7 +616,7 @@ a.mark-select-selected {
     text-decoration: none;
 }
 
-a.mark-select:hover, a.mark-select:active {
+a.mark-select:hover, a.mark-select:active , a.mark-select:focus {
     background-color: #D0D0D0 !important;
     border-color: #D0D0D0 !important;
     color: #fff !important;
@@ -1994,23 +1994,35 @@ loader .outer-loader {
     font-size: 10px;
 }
 
-    .vr-grid-menu > li > a {
-        display: block;
-        padding: 3px 5px;
-        clear: both;
-        font-weight: normal;
-        line-height: 1.42857;
-        color: #333;
-        white-space: nowrap;
-        text-decoration: none;
-    }
+.vr-grid-menu > li > a {
+    display: block;
+    padding: 3px 5px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857;
+    color: #333;
+    white-space: nowrap;
+    text-decoration: none;
+}
 
-    .vr-grid-menu .divider {
-        height: 1px;
-        margin: 9px 0;
-        overflow: hidden;
-        background-color: #e5e5e5;
-    }
+.vr-grid-menu .divider {
+    height: 1px;
+    margin: 9px 0;
+    overflow: hidden;
+    background-color: #e5e5e5;
+}
+.grid-expand-collapse-icon{
+    top: calc(50% - 6px);
+    left: 4px
+}
+.vr-remove-row{
+    top: 50%;
+    position: absolute;
+    transform: translate(0%,-50%);
+}
+.action-item{
+    padding-left: 2px;
+}
 
 .pagination > li > a, .pagination > li > span {
     color: #FFF;
@@ -2253,12 +2265,29 @@ vr-switch[class*="divDisabled"] .switch {
 
 .pagination {
     margin: 0px !important;
+    display:flex;
+    
 }
-
-    .pagination > li > a, .pagination > li > span {
-        background-color: transparent;
-        border: none;
-    }
+.vr-pagination-info{
+    display:inline;
+    position:absolute;
+    right: 1px;
+    top: 3px;
+}
+.vr-scroll-pager-info{
+    float: right !important;
+    font-size: 10px;
+    margin-right: 5px;
+    margin-top: 5px; 
+}
+.vr-pagination-pagesize{
+    float: left;
+     margin-top: 2px
+}
+.pagination > li > a, .pagination > li > span {
+    background-color: transparent;
+    border: none;
+}
 
 /**************END Pagination*********/
 

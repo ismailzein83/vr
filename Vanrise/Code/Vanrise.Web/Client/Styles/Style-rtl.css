@@ -7,7 +7,7 @@
     width:100%;
 }
 
-.rtl vr-columns > div[class^="col"] {
+.rtl vr-columns  div[class^="col"] {
     float: right;
 }
 
@@ -153,13 +153,14 @@
 
 .rtl .inner-sub-menu {
     padding-right: 15px;
-    margin-left: unset !important;
+    padding-left: unset !important;
 }
 
 .rtl .inner-list-item {
-    margin-right: -25px;
+    margin-right: -25px !important;
     padding-right: 25px;
-    padding-left: unset !important;
+    padding-left: unset;
+    margin-left: unset;
 }
 
 .rtl .dropdown-menu-custom-serf {
@@ -355,7 +356,99 @@
    right:unset;
    left: 17px;
 }
+.rtl .vr-datagrid-celltext .vr-dropdown-select.btn{
+    text-align : right;
+}
 /* end vr-select*/
+
+/*start vr-datagrid*/
+.rtl .vr-grid-menu-box {
+    position: absolute;
+    left:unset;
+    right: -14px;
+    top: -9px;
+    display: inline-block;
+}
+
+.rtl .vr-grid-menu-h-circle {    
+    transform: rotate(180deg);
+}
+
+.rtl .vr-grid-menu-h-dote {
+    display: inline-block;
+    left:unset;
+    right: 1px;
+    font-size: 11px;
+    transform: scaleX(-1);
+}
+.rtl .vr-grid-menu { 
+    text-align: right;
+}
+.rtl .vr-gridmenu-checkitem{
+    float: left !important;
+}
+.rtl .grid-expand-collapse-icon{
+    top: calc(50% - 6px);
+    left: unset;
+    right:4px;
+    transform:scaleX(-1)
+}
+.rtl .vr-datagrid-cell{
+    padding: 3px 4px 0px 0px !important;
+}
+.rtl .vr-datagrid-cell, .vr-datagrid-header-cell {
+    padding: 3px 4px 0px 0px !important;
+}
+.rtl .vr-datagrid-body .glyphicon-th-list{
+    left:unset !important;
+    right: 3px !important;
+}
+.rtl .vr-remove-row{
+    top: 50%;
+    position: absolute;
+    transform: translate(-2px,-50%);
+}
+.rtl .action-item{
+    padding-left: unset;
+    padding-right: 2px;
+}
+.rtl .vr-pagination-info{    
+    right: unset;
+    left:1px;
+}
+.rtl .vr-pagination-pagesize{
+    float: right;
+     margin-top: 2px;
+}
+ .rtl .vr-scroll-pager-info{
+    float: left !important;
+    margin-left: 5px;
+}
+/*end  vr-datagrid*/
+/*start  handsontable*/
+.rtl .ht_clone_top{
+    right: 0px !important;
+    left: unset !important;
+}
+.rtl .ht_clone_left{
+    right: 0px !important;
+    left: unset !important;
+}
+
+.rtl .ht_clone_top_left_corner{
+    right: 0px !important;
+    left: unset !important;
+}
+
+.rtl .handsontable th:last-child {
+    border-right: 0px solid rgb(204, 204, 204);
+    border-left: 1px solid rgb(204, 204, 204);
+}
+.rtl .handsontable th,.rtl .handsontable td {
+    border-right-width: 0;
+    border-left: 1px solid #CCC;
+}
+/*end  handsontable*/
 
 
 .rtl .bootstrap-datetimepicker-widget ul{

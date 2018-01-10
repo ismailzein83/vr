@@ -1,7 +1,7 @@
 ﻿<vr-form name="formNavigation">
     <div class="vr-pager-container" style="overflow:hidden;height:25px;position:relative" ng-init="pagerCtrl.setDefaultSetting()">
         <div style="display:inline-block;width:80px">
-            <vr-label style="float: left; margin-top: 2px">
+            <vr-label class="vr-pagination-pagesize">
                 <span style=" ">Page Size: </span>
             </vr-label>
             <div style="float: left; ">
@@ -15,7 +15,7 @@
                             previous-text="&lt;" next-text="&gt;" first-text="&lt;&lt;" last-text="&gt;&gt;"></pagination>
             </div>
         </div>
-        <div style="display:inline;position:absolute;right: 1px;top: 3px; ">
+        <div class="vr-pagination-info">
             <vr-label>
                 <span>Page {{pagerCtrl.pagersettings.currentPage}} of {{pagerCtrl.pagersettings.numberOfPages}}, </span>
             </vr-label>

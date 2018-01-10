@@ -1,10 +1,11 @@
 ﻿'use strict';
 
-app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalResultTypeEnum', '$compile', 'VRModalService', 'DataGridRetrieveDataEventType', 'UISettingsService',
-    function (UtilsService, SecurityService, DataRetrievalResultTypeEnum, $compile, VRModalService, DataGridRetrieveDataEventType, UISettingsService) {
+app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalResultTypeEnum', '$compile', 'VRModalService', 'DataGridRetrieveDataEventType', 'UISettingsService', 'VRLocalizationService',
+    function (UtilsService, SecurityService, DataRetrievalResultTypeEnum, $compile, VRModalService, DataGridRetrieveDataEventType, UISettingsService, VRLocalizationService) {
 
-
-
+        var paddingDirection = VRLocalizationService.isLocalizationRTL() ? "'padding-left'" : "'padding-right'";
+        var normaltextDirection = VRLocalizationService.isLocalizationRTL() ? "right" : "left";
+        var numbertextDirection = "right";
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
@@ -31,7 +32,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     $element.remove();
                 });
                 var ctrl = this;
-                ctrl.itemsSortable = { handle: '.handeldrag', animation: 150 };              
+                ctrl.itemsSortable = { handle: '.handeldrag', animation: 150 };
                 if (ctrl.dragdropsetting != undefined && typeof (ctrl.dragdropsetting) == 'object') {
                     ctrl.itemsSortable.group = {
                         name: ctrl.dragdropsetting.groupCorrelation.getGroupName(),
@@ -311,9 +312,9 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                         if (i == columnIndex || (iColDef != undefined && iColDef.columnIndex != undefined && iColDef.columnIndex >= columnIndex)) {
                             break;
                         }
-                        
+
                     }
-                    
+
                     ctrl.columnDefs.splice(columnIndexToInsert, 0, colDef);
                 }
 
@@ -346,7 +347,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                         else if (Number.isInteger(colDef.numberPrecision))
                             numberPrecision = parseInt(colDef.numberPrecision);
                     }
-                    template = template.replace("#TEXTALIGN#", "right;padding-right:2px");
+                    template = template.replace("#TEXTALIGN#", numbertextDirection + ";" + paddingDirection + ":2px");
                     template = UtilsService.replaceAll(template, "#CELLFILTER#", "| vrtextOrNumber:" + numberPrecision);
                     template = UtilsService.replaceAll(template, "#PERCENTAGE#", "");
                 }
@@ -357,7 +358,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 }
                 else {
                     template = UtilsService.replaceAll(template, "#PERCENTAGE#", "");
-                    template = template.replace("#TEXTALIGN#", "left");
+                    template = template.replace("#TEXTALIGN#", normaltextDirection);
                     if (colDef.type == "LongDatetime")
                         template = UtilsService.replaceAll(template, "#CELLFILTER#", " | date:'yyyy-MM-dd HH:mm:ss'");
                     else if (colDef.type == "Datetime")
@@ -501,7 +502,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 ctrl.showColumn = showColumn;
                 ctrl.updateColumnHeader = updateColumnHeader;
 
-                ctrl.onColumnClicked = function (colDef, dataItem , event) {
+                ctrl.onColumnClicked = function (colDef, dataItem, event) {
                     if (colDef.onClickedAttr != undefined)
                         colDef.onClickedAttr(dataItem, colDef, event);
                 };
@@ -538,7 +539,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                             lastSelectedRow.removeClass('vr-datagrid-datacells-click');
                         $(evnt.target).closest('.vr-datagrid-row').addClass('vr-datagrid-datacells-click');
                     }
-                    ctrl.menuLeft = evnt.clientX;// evnt.offsetX == undefined ? evnt.originalEvent.layerX : evnt.offsetX;
+                    ctrl.menuLeft = (VRLocalizationService.isLocalizationRTL()) ? evnt.clientX - 90 : evnt.clientX;// evnt.offsetX == undefined ? evnt.originalEvent.layerX : evnt.offsetX;
                     ctrl.menuTop = evnt.clientY;// evnt.offsetY == undefined ? evnt.originalEvent.layerY : evnt.offsetY;
 
                 };
@@ -579,6 +580,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
                 ctrl.viewSelectionChanged = function () {
                     calculateDataColumnsSectionWidth();
+                    fixHeaderLayout();
                 };
 
                 ctrl.getCellValue = function (dataItem, colDef) {
@@ -657,23 +659,33 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     return colDef && colDef.cssClass;
                 };
 
-                ctrl.fixHeaderLayout = function () {
-                    // to rigth padding in old data loading methode in bi
+                function fixHeaderLayout() {
                     var div = $(elem).find("#gridBodyContainer")[0];// need real DOM Node, not jQuery wrapper
                     var mh = $(div).css('max-height');
+                    var dataSourceLength = ctrl.isMainItemsShown ? ctrl.datasource.length : ctrl.updateItems.length;
                     mh = mh && parseInt(mh.substring(0, mh.length - 1)) || 0;
-                    if (ctrl.datasource.length * 25 < mh) {
+                    if (dataSourceLength * 25 < mh || dataSourceLength == 0) {
                         $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' });
-                        ctrl.headerStyle = {
-                            "padding-right": "0px"
-                        };
-                    }
 
+                        if (VRLocalizationService.isLocalizationRTL())
+                            ctrl.headerStyle = {
+                                "padding-left": "0px"
+                            };
+                        else
+                            ctrl.headerStyle = {
+                                "padding-right": "0px"
+                            };
+                    }
                     else {
                         $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' });
-                        ctrl.headerStyle = {
-                            "padding-right": getScrollbarWidth() + "px"
-                        };
+                        if (VRLocalizationService.isLocalizationRTL())
+                            ctrl.headerStyle = {
+                                "padding-left": getScrollbarWidth() + "px"
+                            };
+                        else
+                            ctrl.headerStyle = {
+                                "padding-right": getScrollbarWidth() + "px"
+                            };
                     }
                 };
 
@@ -706,8 +718,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                             dataItem.isColumnValuesFilled = true;
                         }
                     }
-
-                    ctrl.fixHeaderLayout();
+                    if (newDataSource.length != oldNames.length)
+                        fixHeaderLayout();
                 }
 
             }
@@ -850,7 +862,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 };
 
                 gridApi.itemAdded = function (item) {
-                    itemChanged(item, "Added");                   
+                    itemChanged(item, "Added");
                     setUpdatedItemsViewVisible();
                     ctrl.expandRow(item);
                 };
@@ -949,29 +961,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                             });
                         }, 10);
                     }
-                    if (pagingOnScrollEnabled) {
-                        // to rigth padding in old data loading methode in bi
-                        var div = $(elem).find("#gridBodyContainer")[0];// need real DOM Node, not jQuery wrapper
-                        var mh = $(div).css('max-height');
-                        mh = mh && parseInt(mh.substring(0, mh.length - 1)) || 0;
-                        if (ctrl.datasource.length * 25 < mh) {
-                            $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' });
-                            ctrl.headerStyle = {
-                                "padding-right": "0px"
-                            };
-                        }
-
-                        else {
-
-                            $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' });
-                            ctrl.headerStyle = {
-                                "padding-right": getScrollbarWidth() + "px"
-                            };
-                        }
-
-                    }
                 }
-
                 gridApi.setSummary = function (dataItem) {
                     ctrl.summaryDataItem = dataItem;
 
@@ -1113,22 +1103,6 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                                 if (ctrl.datasource.length - initialLength < getPageSize())
                                     stopPagingOnScroll = true;
                                 ctrl.isLoadingMoreData = false;
-                                var div = $(elem).find("#gridBodyContainer")[0];// need real DOM Node, not jQuery wrapper
-                                var hasVerticalScrollbar = div.scrollHeight > div.clientHeight;
-                                if (hasVerticalScrollbar) {
-                                    $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' });
-                                    ctrl.headerStyle = {
-                                        "padding-right": getScrollbarWidth() + "px"
-                                    };
-
-                                }
-
-                                else {
-                                    $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' });
-                                    ctrl.headerStyle = {
-                                        "padding-right": "0px"
-                                    };
-                                }
                             });
                         }
                     });
@@ -1170,7 +1144,6 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
                 // remove divs
                 outer.parentNode.removeChild(outer);
-
                 return widthNoScroll - widthWithScroll;
             }
 
@@ -1396,7 +1369,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 else {
                     retrieveDataInput.DataRetrievalResultType = DataRetrievalResultTypeEnum.Normal.value;
                     var pageInfo;
-                    if (ctrl.showPager &&  ctrl.pagerSettings!=undefined)
+                    if (ctrl.showPager && ctrl.pagerSettings != undefined)
                         pageInfo = ctrl.pagerSettings.getPageInfo();
                     else if (pagingOnScrollEnabled)
                         pageInfo = getPageInfo(clearBeforeRetrieve || isSorting);

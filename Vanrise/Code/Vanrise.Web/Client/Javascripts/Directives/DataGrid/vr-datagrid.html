@@ -13,16 +13,16 @@
         <ul class="vr-grid-menu out-div" ng-show="ctrl.showgmenu==true && ctrl.hideGridMenu == false " click-outside="ctrl.toggelGridMenu($event, false)" outside-if-not="out-div">
             <li role="presentation" vr-disabled="ctrl.isExporting" ng-if="ctrl.showExportAction() && ctrl.exportIsClickable">
                 <span style="padding-left:4px;color:black;text-align:center" class="hand-cursor" aria-hidden="true" ng-click="ctrl.onExportClicked()">Export</span>
-                <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin-left:3px" ng-show="ctrl.isExporting" />
+                <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin:0px 3px" ng-show="ctrl.isExporting" />
             </li>
             <li role="presentation" ng-repeat="menuAction in ctrl.getGridMenuActions()">
-                    <span style="padding-left:4px;color:black;text-align:center" class="hand-cursor" aria-hidden="true" ng-click="ctrl.executeGridAction(menuAction)">{{menuAction.name}}</span>
-                    <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin-left:3px" ng-show="menuAction.isExecuting" />
-             </li>
+                <span style="padding-left:4px;color:black;text-align:center" class="hand-cursor" aria-hidden="true" ng-click="ctrl.executeGridAction(menuAction)">{{menuAction.name}}</span>
+                <img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:14px;margin:0px 3px" ng-show="menuAction.isExecuting" />
+            </li>
             <li role="separator" class="divider"></li>
             <li style="color:#000" role="presentation" ng-repeat="colDef in ctrl.columnDefs" ng-if="!colDef.nonHiddable">
                 <a ng-click="ctrl.switchColumnVisibility(colDef)">
-                    <span style="float: right; color: #000;" ng-show="!colDef.isHidden">✔</span>
+                    <span style="float: right; color: #000;" class="vr-gridmenu-checkitem" ng-show="!colDef.isHidden">✔</span>
                     <span style="color:black;text-align:center" aria-hidden="true">{{colDef.name}}</span>
                 </a>
             </li>
@@ -72,7 +72,7 @@
     <vr-pagination pagersettings="ctrl.pagerSettings"></vr-pagination>
 </div>
 <div ng-show="!ctrl.hidePagingInfo && !ctrl.showPager &&  ctrl.datasource.length > 0 && ctrl.pagerSettings.totalDataCount > 0 " ng-class="ctrl.ngClassLevel" class="vr-remote-footer">
-    <div class="pull-right" style="font-size: 10px; margin-right: 5px; margin-top: 5px; "> Total count ({{ctrl.pagerSettings.totalDataCount}})</div>
+    <div class="vr-scroll-pager-info" > Total count ({{ctrl.pagerSettings.totalDataCount}})</div>
 </div>
 <div id="rowTemplate">
     <div style="white-space:nowrap" ng-style="{'background-color': dataItem.isRowExpanded ? '#F5F5F5' : 'Transparent', 'font-weight' :dataItem.isRowExpanded ? 'bolder' : 'normal', 'border-right': '1px solid #D0D0D0', 'border-left': '1px solid #D0D0D0', 'display': 'flex'}">
@@ -81,8 +81,8 @@
         </div>
         <div style="margin: -2px; height: 24px" ng-style="{'width': $parent.ctrl.expandableColumnWidth, 'display':'inline-block'}" ng-if="$parent.ctrl.expandableColumnWidth != undefined " ng-class="">
             <div ng-show="ctrl.showExpandCollapseIcon(dataItem)" style="height:24px">
-                <span class="glyphicon glyphicon-menu-right hand-cursor" style="top: calc(50% - 6px); left: 4px" ng-click="$parent.ctrl.expandRow(dataItem)" ng-show="!dataItem.isRowExpanded"></span>
-                <span class="glyphicon glyphicon-menu-down hand-cursor" style="top: calc(50% - 6px); left: 4px" ng-click="$parent.ctrl.collapseRow(dataItem)" ng-show="dataItem.isRowExpanded"></span>
+                <span class="glyphicon glyphicon-menu-right hand-cursor grid-expand-collapse-icon" ng-click="$parent.ctrl.expandRow(dataItem)" ng-show="!dataItem.isRowExpanded"></span>
+                <span class="glyphicon glyphicon-menu-down hand-cursor  grid-expand-collapse-icon" ng-click="$parent.ctrl.collapseRow(dataItem)" ng-show="dataItem.isRowExpanded"></span>
             </div>
         </div>
         <div ng-style="{'display':'inline-block', 'width': $parent.ctrl.dataColumnsSectionWidth}" class="vr-datagrid-row" ng-click="$parent.ctrl.onRowClicked($event);showMenu=$parent.ctrl.isActionMenuVisible(dataItem) ; " ng-mouseleave="showMenu = false" ng-class="$parent.ctrl.getRowCSSClass(dataItem)">
@@ -90,7 +90,7 @@
             <ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show=" showMenu == true"
                 ng-style="{'position': 'fixed', 'left': ctrl.menuLeft,'top': ctrl.menuTop}">
                 <li role="presentation" ng-if="showMenu==true">
-                    <div ng-repeat="action in $parent.ctrl.getMenuActions(dataItem)" class="mark-select " style="padding-left: 2px; ">
+                    <div ng-repeat="action in $parent.ctrl.getMenuActions(dataItem)" class="mark-select action-item" style=" ">
                         <div ng-hide="action.disable" class=" hand-cursor" ng-click="$parent.ctrl.menuActionClicked(action, dataItem)"><span style="font-size:11px">{{action.name}}</span></div>
                     </div>
                 </li>
@@ -100,7 +100,7 @@
             <span ng-style="::$parent.ctrl.cellLayoutStyle" class="span-summary" style="top: 50%; position: absolute; transform: translate(0%,-50%);">  {{ dataItem.actionType}}</span>
         </div>
         <div ng-if="ctrl.showDeleteRowSection &&  !ctrl.readOnly" ng-style="{'width': $parent.ctrl.deleteRowColumnWidth, 'display':'inline-block', 'position':'relative'}">
-            <span class="hand-cursor glyphicon glyphicon-remove" ng-click="ctrl.deleteRowClicked(dataItem)" style=" top: 50%; position: absolute; transform: translate(0%,-50%); }"></span>
+            <span class="hand-cursor glyphicon glyphicon-remove vr-remove-row" ng-click="ctrl.deleteRowClicked(dataItem)" ></span>
         </div>
     </div>
     <div id="divExpandableRowContent_{{$index}}" ng-show="dataItem.isRowExpanded" style="border-top: 1px solid #D0D0D0; border-right:1px solid #D0D0D0;white-space:nowrap">
