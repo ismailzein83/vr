@@ -56,7 +56,7 @@
 
             $scope.scopeModel.onReportTypeSelectionChanged = function () {
                 if (reportDirectiveAPI != undefined && reportTypeSelectorAPI != undefined) {
-                    var setLoader = function (value) { $scope.scopeModel.isLoadingReportDirective = value };
+                    var setLoader = function (value) { $scope.scopeModel.isLoadingReportDirective = value; };
                     var payload = {
                         filter: {
                             TypeId: reportTypeSelectorAPI.getSelectedIds()
@@ -76,7 +76,7 @@
             };
 
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
             $scope.scopeModel.onTreeReady = function (api) {
@@ -179,7 +179,7 @@
                     if (viewEntity != undefined && viewEntity.Settings != undefined) {
                         payLoad = {
                             selectedIds: viewEntity.Settings.TypeId
-                        }
+                        };
                     }
                     VRUIUtilsService.callDirectiveLoad(reportTypeSelectorAPI, payLoad, loadReportTypeSelectorPromiseDeferred);
                 });
@@ -200,7 +200,7 @@
                                     TypeId: viewEntity.Settings.TypeId
                                 },
                                 selectedIds: viewEntity.Settings.AnalyticReportId
-                            }
+                            };
                         }
                         VRUIUtilsService.callDirectiveLoad(reportDirectiveAPI, payLoad, loadReportPromiseDeferred);
                     });

@@ -48,14 +48,14 @@ app.directive("vrGenericdataTabscontainereditorRuntime", ["UtilsService", "VRNot
                     {
                         if(definitionSettings.TabContainers != undefined)
                         {
-                            for(var i=0;i< definitionSettings.TabContainers.length;i++)
+                            for(var i=0; i< definitionSettings.TabContainers.length; i++)
                             {
                                 var tabContainer = definitionSettings.TabContainers[i];
                                 var tabContainerDef = {
                                     payload: tabContainer,
                                     directiveReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
                                     directiveLoadPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                }
+                                };
                                 addTabContainer(tabContainerDef);
                                 promises.push(tabContainerDef.directiveLoadPromiseDeferred.promise);
                             }
@@ -69,7 +69,7 @@ app.directive("vrGenericdataTabscontainereditorRuntime", ["UtilsService", "VRNot
                             runtimeEditor: tabContainerDef.payload.TabSettings.RuntimeEditor,
                         };
                         tabContainer.onEditorRuntimeDirectiveReady = function (api) {
-                            tabContainer.editorRuntimeAPI = api
+                            tabContainer.editorRuntimeAPI = api;
                             tabContainerDef.directiveReadyPromiseDeferred.resolve();
                         };
                         tabContainerDef.directiveReadyPromiseDeferred.promise.then(function () {

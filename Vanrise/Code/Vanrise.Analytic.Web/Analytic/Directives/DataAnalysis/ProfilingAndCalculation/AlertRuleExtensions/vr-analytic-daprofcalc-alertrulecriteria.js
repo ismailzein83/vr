@@ -89,7 +89,7 @@
                                     $scope.scopeModel.isOutputFieldsSelectorLoading = value;
                                 };
                                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, groupingOutputFiledsAPI, groupingOutputFieldsPayload, setLoader, undefined);
-                            };
+                            }
                         }
                     }
                 };
@@ -129,7 +129,7 @@
                     }
 
                     return;
-                };
+                }
 
                 UtilsService.waitMultiplePromises(promises).then(function () {
                     defineAPI();
@@ -200,7 +200,7 @@
                         });
 
                         return dataAnalysisPeriodDirectiveLoadDeferred.promise;
-                    };
+                    }
 
                     function getDataAnalysisRecordFilterDirectiveLoadPromise() {
                         var dataAnalysisRecordFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -215,13 +215,13 @@
                         });
 
                         return dataAnalysisRecordFilterDirectiveLoadDeferred.promise;
-                    };
+                    }
 
                     function getDataAnalysisDefinitionLoadPromise() {
                         return VR_Analytic_DataAnalysisDefinitionAPIService.GetDataAnalysisDefinition(dataAnalysisDefinitionId).then(function (response) {
                             $scope.scopeModel.hideActionRuleRecordFilter = response.Settings.HideActionRuleRecordFilter;
                         });
-                    };
+                    }
 
                     function getDataAnalysisItemDefinitionSelectorLoadPromise() {
                         if (daProfCalcOutputItemDefinitionId != undefined)
@@ -237,7 +237,7 @@
                         VRUIUtilsService.callDirectiveLoad(dataAnalysisItemDefinitionSelectorAPI, dataAnalysisItemDefinitionSelectorPayload, dataAnalysisItemDefinitionSelectorLoadDeferred);
 
                         return dataAnalysisItemDefinitionSelectorLoadDeferred.promise;
-                    };
+                    }
                     function getGroupingOutputFieldsPromise() {
                         var groupingOutputFieldsLoadDeferred = UtilsService.createPromiseDeferred();
 
@@ -254,7 +254,7 @@
                         });
 
                         return groupingOutputFieldsLoadDeferred.promise;
-                    };
+                    }
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -281,13 +281,13 @@
                         var fields = [];
 
                         if (outputFields) {
-                            for (var i = 0 ; i < outputFields.length; i++) {
+                            for (var i = 0; i < outputFields.length; i++) {
                                 var field = outputFields[i];
                                 fields.push({
                                     FieldName: field.Name,
                                     FieldTitle: field.Title,
                                     Type: field.Type
-                                })
+                                });
                             }
                         }
                         return fields;

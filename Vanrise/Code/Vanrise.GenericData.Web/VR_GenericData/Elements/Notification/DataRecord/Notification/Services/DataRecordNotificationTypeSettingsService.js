@@ -17,7 +17,7 @@
             if (status === VR_Notification_NotificationStatusEnum.Rollback.value) return LabelColorsEnum.Info.color;
 
             return LabelColorsEnum.Info.color;
-        };
+        }
 
         return {
             getStatusColor: getStatusColor

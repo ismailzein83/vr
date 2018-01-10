@@ -186,7 +186,7 @@ app.directive("vrAnalyticDaprofcalcGeneratealertprocesstask", ['UtilsService', '
                         });
 
                         return dataAnalysisPeriodDirectiveLoadDeferred.promise;
-                    };
+                    }
 
                     function getMaxDataAnalysisPeriodLoadPromise() {
                         var dataAnalysisPeriodDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -200,7 +200,7 @@ app.directive("vrAnalyticDaprofcalcGeneratealertprocesstask", ['UtilsService', '
                         });
 
                         return dataAnalysisPeriodDirectiveLoadDeferred.promise;
-                    };
+                    }
 
                     return UtilsService.waitMultiplePromises(promises);
                 };

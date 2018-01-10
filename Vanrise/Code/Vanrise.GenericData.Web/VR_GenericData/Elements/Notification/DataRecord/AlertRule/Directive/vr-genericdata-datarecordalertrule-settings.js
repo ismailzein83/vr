@@ -51,7 +51,7 @@ app.directive('vrGenericdataDatarecordalertruleSettings', ['UtilsService', 'VRUI
                 };
 
                 defineAPI();
-            };
+            }
 
             function defineAPI() {
                 var api = {};
@@ -93,7 +93,7 @@ app.directive('vrGenericdataDatarecordalertruleSettings', ['UtilsService', 'VRUI
                         });
 
                         return dataRecordAlertRuleConfigSelectorLoadPromiseDeferred.promise;
-                    };
+                    }
                     function getDirectiveLoadPromise() {
                         directiveReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -110,7 +110,7 @@ app.directive('vrGenericdataDatarecordalertruleSettings', ['UtilsService', 'VRUI
                         });
 
                         return directiveLoadPromiseDeferred.promise;
-                    };
+                    }
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -130,6 +130,6 @@ app.directive('vrGenericdataDatarecordalertruleSettings', ['UtilsService', 'VRUI
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
-            };
-        };
+            }
+        }
     }]);
