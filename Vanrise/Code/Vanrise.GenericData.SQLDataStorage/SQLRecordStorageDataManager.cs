@@ -604,7 +604,7 @@ namespace Vanrise.GenericData.SQLDataStorage
                     valuesQuery.AppendFormat(@" {0} = {1}  ", sqlDataRecordStorageColumn.ColumnName, parameter);
                 }
             }
-            queryBuilder.Append(string.Format(@" {0} {1}  ",valuesQuery.ToString(), whereQuery.ToString()));
+            queryBuilder.Append(string.Format(@" {0} where {1}  ",valuesQuery.ToString(), whereQuery.ToString()));
             return queryBuilder.ToString();
         }
 

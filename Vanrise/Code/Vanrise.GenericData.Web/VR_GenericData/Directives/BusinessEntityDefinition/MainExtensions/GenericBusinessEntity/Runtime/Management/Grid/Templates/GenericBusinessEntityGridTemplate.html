@@ -3,6 +3,7 @@
              dataretrievalfunction="scopeModel.dataRetrievalFunction"
              menuactions="scopeModel.menuActions"
              pagingtype="'Pager'"
+             idfield="{{scopeModel.idFieldName}}"
              enableautoexport="true">
     <vr-datagridcolumn ng-repeat="column in scopeModel.columns" columnattributes="column"></vr-datagridcolumn>
     <!--<vr-datagridexpandablerow>

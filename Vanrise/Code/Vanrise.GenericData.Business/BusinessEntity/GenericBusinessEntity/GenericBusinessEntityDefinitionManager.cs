@@ -9,29 +9,46 @@ namespace Vanrise.GenericData.Business
 {
     public class GenericBusinessEntityDefinitionManager
     {
+        DataRecordTypeManager _dataRecordTypeManager;
+        public GenericBusinessEntityDefinitionManager()
+        {
+            _dataRecordTypeManager = new DataRecordTypeManager();
+        }
         public BusinessEntityDefinition GetGenericBEDefinition(Guid businessEntityDefinitionId)
         {
             BusinessEntityDefinitionManager manager = new BusinessEntityDefinitionManager();
-            return manager.GetBusinessEntityDefinition(businessEntityDefinitionId);
+            var genericBEDefinition = manager.GetBusinessEntityDefinition(businessEntityDefinitionId);
+            genericBEDefinition.ThrowIfNull("genericBEDefinition", businessEntityDefinitionId);
+            return genericBEDefinition;
         }
         public string GetGenericBEDefinitionName(Guid businessEntityDefinitionId)
         {
-            var genericBEDefinition = GetGenericBEDefinition(businessEntityDefinitionId);
-            genericBEDefinition.ThrowIfNull("genericBEDefinition", businessEntityDefinitionId);
-            return genericBEDefinition.Name;
+            return GetGenericBEDefinition(businessEntityDefinitionId).Name;
+        }
+        public string GetGenericBEDefinitionTitleFieldName(Guid businessEntityDefinitionId)
+        {
+            return GetGenericBEDefinitionSettings(businessEntityDefinitionId).TitleFieldName;
+        }
+        public string GetGenericBEDefinitionTitle(Guid businessEntityDefinitionId)
+        {
+            return GetGenericBEDefinition(businessEntityDefinitionId).Title;
         }
         public GenericBEDefinitionSettings GetGenericBEDefinitionSettings(Guid businessEntityDefinitionId)
         {
             var genericBEDefinition = GetGenericBEDefinition(businessEntityDefinitionId);
-            genericBEDefinition.ThrowIfNull("genericBEDefinition", businessEntityDefinitionId);
             genericBEDefinition.Settings.ThrowIfNull("genericBEDefinition.Settings");
             return genericBEDefinition.Settings.CastWithValidate<GenericBEDefinitionSettings>("genericBEDefinition.Settings");
         }
-        public GenericBEDefinitionGridDefinition GetGenericBEDefinitionGridDefinition(Guid businessEntityDefinitionId)
+        public DataRecordType GetGenericBEDataRecordType(Guid businessEntityDefinitionId)
         {
             var genericBEDefinitionSettings = GetGenericBEDefinitionSettings(businessEntityDefinitionId);
-            genericBEDefinitionSettings.ThrowIfNull("genericBEDefinitionSettings", businessEntityDefinitionId);
-            return genericBEDefinitionSettings.GridDefinition;
+            var dataRecordType = _dataRecordTypeManager.GetDataRecordType(genericBEDefinitionSettings.DataRecordTypeId);
+            dataRecordType.ThrowIfNull("dataRecordType", genericBEDefinitionSettings.DataRecordTypeId);
+            return dataRecordType;
+        }
+        public GenericBEGridDefinition GetGenericBEDefinitionGridDefinition(Guid businessEntityDefinitionId)
+        {
+            return GetGenericBEDefinitionSettings(businessEntityDefinitionId).GridDefinition;
         }
         public List<GenericBEDefinitionGridColumnAttribute> GetGenericBEDefinitionGridColumnAttributes(Guid businessEntityDefinitionId)
         {
@@ -63,6 +80,27 @@ namespace Vanrise.GenericData.Business
                 gridColumns.Add(vrCaseGridColumnAttribute);
             }
             return gridColumns;
+        }
+        public DataRecordField GetIdFieldTypeForGenericBE(Guid businessEntityDefinitionId)
+        {
+            var dataRecordType = GetGenericBEDataRecordType(businessEntityDefinitionId);
+            var dataRecordTypeFields = GetDataRecordTypeFields(dataRecordType.DataRecordTypeId);
+            if (dataRecordType.Settings.IdField == null)
+                return null;
+            var idDataRecordField = dataRecordTypeFields.FindRecord(x => x.Name == dataRecordType.Settings.IdField);
+            idDataRecordField.ThrowIfNull("idDataRecordField");
+            return idDataRecordField;
+        }
+        public Dictionary<string, DataRecordField> GetDataRecordTypeFieldsByBEDefinitionId(Guid businessEntityDefinitionId)
+        {
+            var genericBEDefinitionSettings = GetGenericBEDefinitionSettings(businessEntityDefinitionId);
+            return GetDataRecordTypeFields(genericBEDefinitionSettings.DataRecordTypeId);
+        }
+        public Dictionary<string, DataRecordField> GetDataRecordTypeFields(Guid dataRecordTypeId)
+        {
+            var dataRecordTypeFields = _dataRecordTypeManager.GetDataRecordTypeFields(dataRecordTypeId);
+            dataRecordTypeFields.ThrowIfNull("dataRecordTypeFields", dataRecordTypeId);
+            return dataRecordTypeFields;
         }
     }
 }

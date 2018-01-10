@@ -58,7 +58,7 @@
     <Compile Include="BusinessEntity\Definition\BusinessEntityDefinitionManager.cs" />
     <Compile Include="BusinessEntity\BusinessEntityGroupContext.cs" />
     <Compile Include="BusinessEntity\BaseBEManager.cs" />
-    <Compile Include="BusinessEntity\Definition\GenericBusinessEntityDefinitionFilter.cs" />
+    <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBusinessEntityDefinitionFilter.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBEDefinitionViewFilter.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBEViewSettings.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBusinessEntityDefinitionManager.cs" />

@@ -76,7 +76,7 @@
 
             $scope.addBusinessEntity = function () {
                 var onGenericBusinessEntityAdded = function (addedGenericBusinessEntity) {
-                    gridDirectiveAPI.onGenericBusinessEntityAdded(addedGenericBusinessEntity);
+                    gridDirectiveAPI.onGenericBEAdded(addedGenericBusinessEntity);
                 };
                 VR_GenericData_GenericBusinessEntityService.addGenericBusinessEntity(onGenericBusinessEntityAdded, businessEntityDefinitionAPI.getSelectedIds());
             };

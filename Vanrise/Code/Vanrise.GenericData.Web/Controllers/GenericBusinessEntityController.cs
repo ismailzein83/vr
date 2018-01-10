@@ -24,12 +24,12 @@ namespace Vanrise.GenericData.Web.Controllers
             return GetWebResponse(input, _manager.GetFilteredGenericBusinessEntities(input));
         }
 
-        //[HttpGet]
-        //[Route("GetGenericBusinessEntity")]
-        //public GenericBusinessEntity GetGenericBusinessEntity(long genericBusinessEntityId, Guid businessEntityDefinitionId)
-        //{
-        //    return _manager.GetGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId, true);
-        //}
+        [HttpGet]
+        [Route("GetGenericBusinessEntityEditorRuntime")]
+        public GenericBusinessEntityRuntimeEditor GetGenericBusinessEntityEditorRuntime(Guid businessEntityDefinitionId,long? genericBusinessEntityId = null)
+        {
+            return _manager.GetGenericBusinessEntityEditorRuntime(businessEntityDefinitionId, genericBusinessEntityId);
+        }
         ////[HttpGet]
         ////[Route("DoesUserHaveAddAccess")]
         ////public bool DoesUserHaveAddAccess(Guid businessEntityDefinitionId)
@@ -39,7 +39,7 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpPost]
         [Route("AddGenericBusinessEntity")]
-        public object AddGenericBusinessEntity(GenericBusinessEntity genericBusinessEntity)
+        public object AddGenericBusinessEntity(GenericBusinessEntityToAdd genericBusinessEntity)
         {
             //if (!DoesUserHaveAddAccess(genericBusinessEntity.BusinessEntityDefinitionId))
             //    return GetUnauthorizedResponse();
@@ -48,7 +48,7 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpPost]
         [Route("UpdateGenericBusinessEntity")]
-        public object UpdateGenericBusinessEntity(GenericBusinessEntity genericBusinessEntity)
+        public object UpdateGenericBusinessEntity(GenericBusinessEntityToUpdate genericBusinessEntity)
         {
             //if (!DoesUserHaveEditAccess(genericBusinessEntity.BusinessEntityDefinitionId))
             //    return GetUnauthorizedResponse();
@@ -73,22 +73,7 @@ namespace Vanrise.GenericData.Web.Controllers
         //    GenericBusinessEntityFilter filter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<GenericBusinessEntityFilter>(serializedFilter) : null;
         //    return manager.GetGenericBusinessEntityInfo(businessEntityDefinitionId,filter);
         //} 
-        
-        //[HttpGet]
-        //[Route("GetBusinessEntityTitle")]
-        //public GenericBusinessEntityTitle GetBusinessEntityTitle(Guid businessEntityDefinitionId, long? genericBussinessEntityId = null)
-        //{
-        //    GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
-        //    return manager.GetBusinessEntityTitle(businessEntityDefinitionId, genericBussinessEntityId);
-        //}
-        
-        //[HttpGet]
-        //[Route("DeleteGenericBusinessEntity")]
-        //public Vanrise.Entities.DeleteOperationOutput<object> DeleteGenericBusinessEntity(long genericBusinessEntityId, Guid businessEntityDefinitionId)
-        //{
-        //    GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
-        //    return manager.DeleteGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId);
-        //}
+
          
     }
 }

@@ -40,24 +40,60 @@ namespace Vanrise.GenericData.Entities
 
         public Guid DataRecordTypeId { get; set; }
         public Guid DataRecordStorageId { get; set; }
-        public GenericBEDefinitionGridDefinition GridDefinition { get; set; }
-        public GenericBEDefinitionEditorDefinition EditorDefinition { get; set; }
+        public string TitleFieldName { get; set; }
+        public List<GenericBEAction> GenericBEActions{get;set;}
+        public GenericBEGridDefinition GridDefinition { get; set; }
+        public GenericBEEditorDefinition EditorDefinition { get; set; }
     }
 
-    public class GenericBEDefinitionEditorDefinition
+    public class GenericBEEditorDefinition
     {
         public VRGenericEditorDefinitionSetting Settings { get; set; }
     }
-
-
-    public class GenericBEDefinitionGridDefinition
+    public class GenericBEGridDefinition
     {
-        public List<GenericBEDefinitionGridColumn> ColumnDefinitions { get; set; }
+        public List<GenericBEGridColumn> ColumnDefinitions { get; set; }
+        public List<GenericBEGridAction> GenericBEGridActions { get; set; }
     }
-    public class GenericBEDefinitionGridColumn
+    public class GenericBEGridColumn
     {
         public string FieldName { get; set; }
         public string FieldTitle { get; set; }
         public GridColumnSettings GridColumnSettings { get; set; }
+    }
+    public class GenericBEGridAction
+    {
+        public Guid GenericBEGridActionId { get; set; }
+        public Guid GenericBEActionId { get; set; }
+        public string Title { get; set; }
+        public bool ReloadGridItem { get; set; }
+        public GenericBEGridActionFilterCondition FilterCondition { get; set; }
+
+    }
+    public abstract class GenericBEGridActionFilterCondition
+    {
+        public abstract Guid ConfigId { get; }
+        public abstract bool IsFilterMatch(IGenericBEGridActionFilterConditionContext context);
+    }
+    public interface IGenericBEGridActionFilterConditionContext
+    {
+        GenericBusinessEntity Entity { get;  }
+        GenericBEDefinitionSettings DefinitionSettings { get; }
+    }
+    public class GenericBEGridActionFilterConditionContext : IGenericBEGridActionFilterConditionContext
+    {
+        public GenericBusinessEntity Entity { get; set; }
+        public GenericBEDefinitionSettings DefinitionSettings { get; set; }
+    }
+    public class GenericBEAction
+    {
+        public Guid GenericBEActionId { get; set; }
+        public string Name { get; set; }
+        public GenericBEActionSettings Settings { get; set; }
+    }
+    public abstract class GenericBEActionSettings
+    {
+        public virtual string ActionTypeName { get; set; }
+        public abstract Guid ConfigId { get; }
     }
 }

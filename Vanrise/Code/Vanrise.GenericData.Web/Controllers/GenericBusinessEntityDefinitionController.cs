@@ -16,7 +16,7 @@ namespace Vanrise.GenericData.Web.Controllers
         GenericBusinessEntityDefinitionManager _manager = new GenericBusinessEntityDefinitionManager();
         [HttpGet]
         [Route("GetGenericBEGridDefinition")]
-        public GenericBEDefinitionGridDefinition GetGenericBEGridDefinition(Guid businessEntityDefinitionId)
+        public GenericBEGridDefinition GetGenericBEGridDefinition(Guid businessEntityDefinitionId)
         {
             return _manager.GetGenericBEDefinitionGridDefinition(businessEntityDefinitionId);
         }
@@ -31,6 +31,12 @@ namespace Vanrise.GenericData.Web.Controllers
         public GenericBEDefinitionSettings GetGenericBEDefinitionSettings(Guid businessEntityDefinitionId)
         {
             return _manager.GetGenericBEDefinitionSettings(businessEntityDefinitionId);
+        }
+        [HttpGet]
+        [Route("GetIdFieldTypeForGenericBE")]
+        public DataRecordField GetIdFieldTypeForGenericBE(Guid businessEntityDefinitionId)
+        {
+            return _manager.GetIdFieldTypeForGenericBE(businessEntityDefinitionId);
         }
     }
 }

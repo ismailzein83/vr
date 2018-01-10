@@ -566,6 +566,7 @@
     <Content Include="VR_GenericData\Services\BusinessEntityDefinitionService.js" />
     <Content Include="VR_GenericData\Services\DataRecordSourceService.js" />
     <Content Include="VR_GenericData\Services\DataRecordFieldChoiceService.js" />
+    <Content Include="VR_GenericData\Services\GenericBusinessEntityActionService.js" />
     <Content Include="VR_GenericData\Services\GenericUIService.js" />
     <Content Include="VR_GenericData\Services\KeyFieldMappingService.js" />
     <Content Include="VR_GenericData\Services\DataRecordStorageService.js" />

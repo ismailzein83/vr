@@ -8,58 +8,43 @@
         var drillDownDefinitions = [];
         return ({
             addGenericBusinessEntity: addGenericBusinessEntity,
-          //  editGenericBusinessEntity: editGenericBusinessEntity,
-          //  deleteGenericBusinessEntity: deleteGenericBusinessEntity,
+            editGenericBusinessEntity: editGenericBusinessEntity,
            // registerObjectTrackingDrillDownToGenericBusinessEntity: registerObjectTrackingDrillDownToGenericBusinessEntity,
          //   getDrillDownDefinition: getDrillDownDefinition
 
         });
 
-        function addGenericBusinessEntity(onGenericBusinessEntityAdded,businessEntityDefinitionId) {
+        function addGenericBusinessEntity(onGenericBEAdded, businessEntityDefinitionId) {
             var parameters = {
                 businessEntityDefinitionId: businessEntityDefinitionId
             };
 
-            var settings = {};
+            var settings = { };
 
             settings.onScopeReady = function (modalScope) {
-                modalScope.onGenericBusinessEntityAdded = onGenericBusinessEntityAdded;
+                modalScope.onGenericBEAdded = onGenericBEAdded;
             };
 
             VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditor.html', parameters, settings);
         }
 
-        //function editGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId, onGenericBusinessEntityUpdated) {
-        //    var parameters = {
-        //        genericBusinessEntityId: genericBusinessEntityId,
-        //        businessEntityDefinitionId: businessEntityDefinitionId
-        //    };
+        function editGenericBusinessEntity(onGenericBEUpdated, businessEntityDefinitionId, genericBusinessEntityId) {
+            var parameters = {
+                businessEntityDefinitionId: businessEntityDefinitionId,
+                genericBusinessEntityId: genericBusinessEntityId
+            };
 
-        //    var settings = {};
+            var settings = {
+            };
 
-        //    settings.onScopeReady = function (modalScope) {
-        //        modalScope.onGenericBusinessEntityUpdated = onGenericBusinessEntityUpdated;
-        //    };
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onGenericBEUpdated = onGenericBEUpdated;
+            };
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditor.html', parameters, settings);
+        }
 
-        //    VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericBusinessEntity/Runtime/GenericBusinessEntityEditor.html', parameters, settings);
-        //}
 
-        //function deleteGenericBusinessEntity(scope, genericBusinessEntity, onGenericBusinessEntityDeleted) {
-        //    VRNotificationService.showConfirmation().then(function (confirmed) {
-        //        if (confirmed) {
-        //            var entityId = genericBusinessEntity.Entity.GenericBusinessEntityId;
-        //            var definitionId = genericBusinessEntity.Entity.BusinessEntityDefinitionId;
-        //            return VR_GenericData_GenericBusinessEntityAPIService.DeleteGenericBusinessEntity(entityId, definitionId).then(function (deletionResponse) {
-        //                var deleted = VRNotificationService.notifyOnItemDeleted("Generic Business Entity", deletionResponse);
-        //                if (deleted && onGenericBusinessEntityDeleted != undefined) {
-        //                    onGenericBusinessEntityDeleted();
-        //                }
-        //            }).catch(function (error) {
-        //                VRNotificationService.notifyException(error, scope);
-        //            });
-        //        }
-        //    });
-        //}
+  
         //function getEntityUniqueName(businessEntityDefinitionId) {
         //    return "VR_GenericData_GenericBusinessEntity_"+businessEntityDefinitionId;
         //}

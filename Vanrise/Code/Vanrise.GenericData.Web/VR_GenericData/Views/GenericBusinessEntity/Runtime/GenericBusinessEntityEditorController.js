@@ -10,8 +10,9 @@
         var businessEntityDefinitionId;
         var businessEntityDefinitionSettings;
 
-        //var runtimeEditor;
-        //var businessEntityTitle;
+        var genericBusinessEntityEditorRuntime;
+        var definitionTitle;
+        var titleFieldName;
 
         var genericBusinessEntityId;
         var genericBusinessEntity;
@@ -53,74 +54,58 @@
         function load() {
             $scope.scopeModel.isLoading = true;
 
-            getBusinessEntityDefinitionSettings().then(function () {
-                if (isEditMode) {
-                    getGenericBusinessEntity().then(function () {
-                        loadAllControls().finally(function () {
-                            genericBusinessEntity = undefined;
-                            });
-                    }).catch(function () {
-                        VRNotificationService.notifyExceptionWithClose(error, $scope);
-                        $scope.scopeModel.isLoading = false;
-                    });
-                }
-                else {
-                    loadAllControls();
-                }
+            getGenericBusinessEntityEditorRuntime().then(function () {
+                loadAllControls().finally(function () {
+                    genericBusinessEntity = undefined;
+                });
+               
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
                 $scope.scopeModel.isLoading = false;
             });
         }
 
-        function getBusinessEntityDefinitionSettings() {
-            return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEDefinitionSettings(businessEntityDefinitionId).then(function (response) {
-                businessEntityDefinitionSettings = response;
-                if (businessEntityDefinitionSettings != undefined && businessEntityDefinitionSettings.EditorDefinition != undefined && businessEntityDefinitionSettings.EditorDefinition.Settings != undefined)
-                    $scope.scopeModel.runtimeEditor = businessEntityDefinitionSettings.EditorDefinition.Settings.RuntimeEditor;
-            });
-        }
-
-        function getGenericBusinessEntity() {
-            return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId).then(function (response) {
-                genericBusinessEntity = response;
+        function getGenericBusinessEntityEditorRuntime() {
+            return VR_GenericData_GenericBusinessEntityAPIService.GetGenericBusinessEntityEditorRuntime(businessEntityDefinitionId, genericBusinessEntityId).then(function (response) {
+                genericBusinessEntityEditorRuntime = response;
+                if(genericBusinessEntityEditorRuntime != undefined)
+                {
+                    definitionTitle = response.DefinitionTitle;
+                    titleFieldName = response.TitleFieldName;
+                    genericBusinessEntity = response.GenericBusinessEntity;
+                    businessEntityDefinitionSettings = response.GenericBEDefinitionSettings;
+                    if (businessEntityDefinitionSettings != undefined && businessEntityDefinitionSettings.EditorDefinition != undefined && businessEntityDefinitionSettings.EditorDefinition.Settings != undefined)
+                        $scope.scopeModel.runtimeEditor = businessEntityDefinitionSettings.EditorDefinition.Settings.RuntimeEditor;
+                }
             });
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadEditorRuntimeDirective]).catch(function (error) {
+
+            function setTitle() {
+                $scope.title = genericBusinessEntity != undefined && genericBusinessEntity.FieldValues != undefined ? UtilsService.buildTitleForUpdateEditor(genericBusinessEntity.FieldValues[titleFieldName], definitionTitle) : UtilsService.buildTitleForAddEditor(definitionTitle);
+            }
+
+            function loadEditorRuntimeDirective() {
+                var runtimeEditorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                runtimeEditorReadyDeferred.promise.then(function () {
+                    var runtimeEditorPayload = {
+                        selectedValues: (isEditMode) ? genericBusinessEntity.FieldValues : undefined,
+                        dataRecordTypeId: businessEntityDefinitionSettings.DataRecordTypeId,
+                        definitionSettings: businessEntityDefinitionSettings.EditorDefinition.Settings
+                    };
+                    VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadDeferred);
+                });
+
+                return runtimeEditorLoadDeferred.promise;
+            }
+
+            return UtilsService.waitMultipleAsyncOperations([loadEditorRuntimeDirective, setTitle]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
-        }
-
-        //function setTitle() {
-        //    if (businessEntityTitle != undefined)
-        //        $scope.title = (isEditMode) ? UtilsService.buildTitleForUpdateEditor(businessEntityTitle.EntityName,businessEntityTitle.Title) : UtilsService.buildTitleForAddEditor(businessEntityTitle.Title);
-        //}
-
-        //function loadBusinessEntityTitle()
-        //{
-        //    return VR_GenericData_GenericBusinessEntityAPIService.GetBusinessEntityTitle(businessEntityDefinitionId, genericBusinessEntityId).then(function (response) {
-        //        businessEntityTitle = response;
-        //        setTitle();
-        //    });
-        //}
-
-        function loadEditorRuntimeDirective() {
-            var runtimeEditorLoadDeferred = UtilsService.createPromiseDeferred();
-
-            runtimeEditorReadyDeferred.promise.then(function () {
-                var runtimeEditorPayload = {
-                    selectedValues: (isEditMode) ? genericBusinessEntity.FieldValues : undefined,
-                    dataRecordTypeId: businessEntityDefinitionSettings.DataRecordTypeId,
-                    definitionSettings: businessEntityDefinitionSettings.EditorDefinition.Settings
-                };
-                VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadDeferred);
-            });
-
-            return runtimeEditorLoadDeferred.promise;
         }
 
         function buildGenericBusinessEntityObjFromScope() {
@@ -141,9 +126,9 @@
             $scope.scopeModel.isLoading = true;
 
             return VR_GenericData_GenericBusinessEntityAPIService.AddGenericBusinessEntity(buildGenericBusinessEntityObjFromScope()).then(function (response) {
-                if (VRNotificationService.notifyOnItemAdded(businessEntityTitle.Title, response, 'Title')) {
-                    if ($scope.onGenericBusinessEntityAdded != undefined)
-                        $scope.onGenericBusinessEntityAdded(response.InsertedObject);
+                if (VRNotificationService.notifyOnItemAdded(titleFieldName, response, 'Title')) {
+                    if ($scope.onGenericBEAdded != undefined)
+                        $scope.onGenericBEAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
@@ -157,9 +142,9 @@
             $scope.scopeModel.isLoading = true;
 
             return VR_GenericData_GenericBusinessEntityAPIService.UpdateGenericBusinessEntity(buildGenericBusinessEntityObjFromScope()).then(function (response) {
-                if (VRNotificationService.notifyOnItemUpdated(businessEntityTitle.Title, response, 'Title')) {
-                    if ($scope.onGenericBusinessEntityUpdated != undefined)
-                        $scope.onGenericBusinessEntityUpdated(response.UpdatedObject);
+                if (VRNotificationService.notifyOnItemUpdated(titleFieldName, response, 'Title')) {
+                    if ($scope.onGenericBEUpdated != undefined)
+                        $scope.onGenericBEUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
                 }
             }).catch(function (error) {
