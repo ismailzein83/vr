@@ -47,11 +47,6 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_GenericData_ModuleConfig.moduleName, controllerName, ['UpdateBusinessEntityDefinition']));
         }
 
-        function GetGenericBEDefinitionView(businessEntityDefinitionId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetGenericBEDefinitionView'), {
-                businessEntityDefinitionId: businessEntityDefinitionId
-            });
-        }
 
         function GetBEDefinitionSettingConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetBEDefinitionSettingConfigs'));
@@ -73,7 +68,6 @@
             HasAddBusinessEntityDefinition: HasAddBusinessEntityDefinition,
             UpdateBusinessEntityDefinition: UpdateBusinessEntityDefinition,
             HasUpdateBusinessEntityDefinition: HasUpdateBusinessEntityDefinition,
-            GetGenericBEDefinitionView: GetGenericBEDefinitionView,
             GetBEDefinitionSettingConfigs: GetBEDefinitionSettingConfigs,
             GetBEDataRecordTypeIdIfGeneric: GetBEDataRecordTypeIdIfGeneric
         };

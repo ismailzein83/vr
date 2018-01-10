@@ -2,15 +2,16 @@
 
     'use strict';
 
-    GenericBusinessEntityEditorController.$inject = ['$scope', 'VR_GenericData_GenericUIRuntimeAPIService', 'VR_GenericData_GenericBusinessEntityAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    GenericBusinessEntityEditorController.$inject = ['$scope', 'VR_GenericData_GenericBEDefinitionAPIService', 'VR_GenericData_GenericBusinessEntityAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
 
-    function GenericBusinessEntityEditorController($scope, VR_GenericData_GenericUIRuntimeAPIService, VR_GenericData_GenericBusinessEntityAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
+    function GenericBusinessEntityEditorController($scope, VR_GenericData_GenericBEDefinitionAPIService, VR_GenericData_GenericBusinessEntityAPIService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
 
         var isEditMode;
-
         var businessEntityDefinitionId;
-        var runtimeEditor;
-        var businessEntityTitle;
+        var businessEntityDefinitionSettings;
+
+        //var runtimeEditor;
+        //var businessEntityTitle;
 
         var genericBusinessEntityId;
         var genericBusinessEntity;
@@ -36,7 +37,7 @@
         function defineScope() {
             $scope.scopeModel = {};
 
-            $scope.scopeModel.onRuntimeEditorReady = function (api) {
+            $scope.scopeModel.onEditorRuntimeDirectiveReady = function (api) {
                 runtimeEditorAPI = api;
                 runtimeEditorReadyDeferred.resolve();
             };
@@ -52,7 +53,7 @@
         function load() {
             $scope.scopeModel.isLoading = true;
 
-            getRuntimeEditor().then(function () {
+            getBusinessEntityDefinitionSettings().then(function () {
                 if (isEditMode) {
                     getGenericBusinessEntity().then(function () {
                         loadAllControls().finally(function () {
@@ -72,9 +73,11 @@
             });
         }
 
-        function getRuntimeEditor() {
-            return VR_GenericData_GenericUIRuntimeAPIService.GetGenericEditorRuntime(businessEntityDefinitionId).then(function (response) {
-                runtimeEditor = response;
+        function getBusinessEntityDefinitionSettings() {
+            return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEDefinitionSettings(businessEntityDefinitionId).then(function (response) {
+                businessEntityDefinitionSettings = response;
+                if (businessEntityDefinitionSettings != undefined && businessEntityDefinitionSettings.EditorDefinition != undefined && businessEntityDefinitionSettings.EditorDefinition.Settings != undefined)
+                    $scope.scopeModel.runtimeEditor = businessEntityDefinitionSettings.EditorDefinition.Settings.RuntimeEditor;
             });
         }
 
@@ -85,33 +88,34 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadRuntimeEditor, loadBusinessEntityTitle]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadEditorRuntimeDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
         }
 
-        function setTitle() {
-            if (businessEntityTitle != undefined)
-                $scope.title = (isEditMode) ? UtilsService.buildTitleForUpdateEditor(businessEntityTitle.EntityName,businessEntityTitle.Title) : UtilsService.buildTitleForAddEditor(businessEntityTitle.Title);
-        }
+        //function setTitle() {
+        //    if (businessEntityTitle != undefined)
+        //        $scope.title = (isEditMode) ? UtilsService.buildTitleForUpdateEditor(businessEntityTitle.EntityName,businessEntityTitle.Title) : UtilsService.buildTitleForAddEditor(businessEntityTitle.Title);
+        //}
 
-        function loadBusinessEntityTitle()
-        {
-            return VR_GenericData_GenericBusinessEntityAPIService.GetBusinessEntityTitle(businessEntityDefinitionId, genericBusinessEntityId).then(function (response) {
-                businessEntityTitle = response;
-                setTitle();
-            });
-        }
+        //function loadBusinessEntityTitle()
+        //{
+        //    return VR_GenericData_GenericBusinessEntityAPIService.GetBusinessEntityTitle(businessEntityDefinitionId, genericBusinessEntityId).then(function (response) {
+        //        businessEntityTitle = response;
+        //        setTitle();
+        //    });
+        //}
 
-        function loadRuntimeEditor() {
+        function loadEditorRuntimeDirective() {
             var runtimeEditorLoadDeferred = UtilsService.createPromiseDeferred();
 
             runtimeEditorReadyDeferred.promise.then(function () {
                 var runtimeEditorPayload = {
-                    sections: runtimeEditor.Sections,
-                    selectedValues: (isEditMode) ? genericBusinessEntity.Details : undefined
+                    selectedValues: (isEditMode) ? genericBusinessEntity.FieldValues : undefined,
+                    dataRecordTypeId: businessEntityDefinitionSettings.DataRecordTypeId,
+                    definitionSettings: businessEntityDefinitionSettings.EditorDefinition.Settings
                 };
                 VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadDeferred);
             });
@@ -124,7 +128,11 @@
 
             genericBusinessEntity.GenericBusinessEntityId = genericBusinessEntityId;
             genericBusinessEntity.BusinessEntityDefinitionId = businessEntityDefinitionId;
-            genericBusinessEntity.Details = runtimeEditorAPI.getData();
+
+            var fieldValues = {};
+            runtimeEditorAPI.setData(fieldValues);
+          
+            genericBusinessEntity.FieldValues = fieldValues;
 
             return genericBusinessEntity;
         }

@@ -58,13 +58,6 @@ namespace Vanrise.GenericData.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetGenericBEDefinitionView")]
-        public Vanrise.Security.Entities.View GetGenericBEDefinitionView(Guid businessEntityDefinitionId)
-        {
-            return _manager.GetGenericBEDefinitionView(businessEntityDefinitionId);
-        }
-
-        [HttpGet]
         [Route("GetBEDefinitionSettingConfigs")]
         public IEnumerable<BusinessEntityDefinitionSettingsConfig> GetBEDefinitionSettingConfigs()
         {

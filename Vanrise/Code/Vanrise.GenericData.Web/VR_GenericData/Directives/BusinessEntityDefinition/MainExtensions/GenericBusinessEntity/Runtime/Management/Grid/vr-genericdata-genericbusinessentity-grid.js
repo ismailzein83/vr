@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericBusinessEntityGridDirective.$inject = ['VR_GenericData_GenericBusinessEntityAPIService', 'VRNotificationService', 'VR_GenericData_GenericBusinessEntityService', 'VRUIUtilsService'];
+    GenericBusinessEntityGridDirective.$inject = ['VR_GenericData_GenericBEDefinitionAPIService', 'VRNotificationService', 'VR_GenericData_GenericBusinessEntityAPIService', 'VRUIUtilsService', 'UtilsService'];
 
-    function GenericBusinessEntityGridDirective(VR_GenericData_GenericBusinessEntityAPIService, VRNotificationService, VR_GenericData_GenericBusinessEntityService, VRUIUtilsService) {
+    function GenericBusinessEntityGridDirective(VR_GenericData_GenericBEDefinitionAPIService, VRNotificationService, VR_GenericData_GenericBusinessEntityAPIService, VRUIUtilsService, UtilsService) {
         return {
             restrict: 'E',
             scope: {
@@ -13,8 +13,8 @@
 
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var genericBusinessEntityGrid = new GenericBusinessEntityGrid($scope, ctrl, $attrs);
-                genericBusinessEntityGrid.initializeController();
+                var ctor = new GenericBusinessEntityGrid($scope, ctrl, $attrs);
+                ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -23,78 +23,157 @@
 
         function GenericBusinessEntityGrid($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-            
+            var businessEntityDefinitionId;
+            var gridColumnFieldNames = [];
+
             var gridAPI;
             var gridDrillDownTabsObj;
+
             function initializeController() {
-                ctrl.dataSource = [];
-                ctrl.columns = [];
-                $scope.isValueBool = function (colDef, dataItem) {
-                    if (colDef.tag.Attribute.Type.indexOf("Boolean") > -1) {
+                $scope.scopeModel = {};
+                $scope.scopeModel.columns = [];
+                $scope.scopeModel.menuActions = [];
+                $scope.scopeModel.businessEntities = [];
 
-                        return true;
-                    } else {
-                        return false;
-                    }
-                };
-                $scope.getFieldValue = function (result, colDef, dataItem) {
-                    if (result) {
-                        return dataItem.Entity.Details[colDef.tag.FieldPath];
-                    } else {
-                        return dataItem.FieldValueDescriptions[ctrl.columns.indexOf(colDef.tag)];
-                    }
-                };
-
-                ctrl.onGridReady = function (api) {
+                $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
-                    var drillDownDefinitions = VR_GenericData_GenericBusinessEntityService.getDrillDownDefinition();
-                    gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
-
-                    if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
-                        ctrl.onReady(getDirectiveAPI());
-                    }
+                    defineAPI();
                 };
 
-                ctrl.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+                $scope.scopeModel.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
+
                     return VR_GenericData_GenericBusinessEntityAPIService.GetFilteredGenericBusinessEntities(dataRetrievalInput).then(function (response) {
-                        if (response.Data != undefined) {
+                        console.log(response);
+                        if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
-                                gridDrillDownTabsObj.setDrillDownExtensionObject(response.Data[i]);
+                                //  var vrCase = response.Data[i];
+                                //Retail_BE_AccountBEService.defineAccountViewTabs(vrCaseDefinitionId, vrCase, gridAPI, vrCaseViewDefinitions);
+                                // Retail_BE_AccountActionService.defineAccountMenuActions(vrCaseDefinitionId, vrCase, gridAPI, vrCaseViewDefinitions, vrCaseActionDefinitions);
                             }
                         }
                         onResponseReady(response);
+
                     }).catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     });
                 };
 
-                setMenuActions();
+               
             }
 
-            function setMenuActions() {
-                ctrl.menuActions = [{
-                    name: 'Edit',
-                    clicked: editGenericBusinessEntity,
-                    haspermission: hasEditGenericBEPermission
-                }];
-            }
+            //function hasEditGenericBEPermission(genericBusinessEntity) {
+            //    return VR_GenericData_GenericBusinessEntityAPIService.DoesUserHaveEditAccess(genericBusinessEntity.Entity.BusinessEntityDefinitionId);
+            //}
+            //function editGenericBusinessEntity(genericBusinessEntity) {
+            //    var onGenericBusinessEntityUpdated = function (updatedGenericBusinessEntity) {
+            //        gridDrillDownTabsObj.setDrillDownExtensionObject(updatedGenericBusinessEntity);
+            //        gridAPI.itemUpdated(updatedGenericBusinessEntity);
+            //    };
+            //    VR_GenericData_GenericBusinessEntityService.editGenericBusinessEntity(genericBusinessEntity.Entity.GenericBusinessEntityId, genericBusinessEntity.Entity.BusinessEntityDefinitionId, onGenericBusinessEntityUpdated);
+            //}
 
-            function hasEditGenericBEPermission(genericBusinessEntity) {
-                return VR_GenericData_GenericBusinessEntityAPIService.DoesUserHaveEditAccess(genericBusinessEntity.Entity.BusinessEntityDefinitionId);
-            }
-            function editGenericBusinessEntity(genericBusinessEntity) {
-                var onGenericBusinessEntityUpdated = function (updatedGenericBusinessEntity) {
-                    gridDrillDownTabsObj.setDrillDownExtensionObject(updatedGenericBusinessEntity);
-                    gridAPI.itemUpdated(updatedGenericBusinessEntity);
+            //function deleteGenericBusinessEntity(genericBusinessEntity) {
+            //    var onGenericBusinessEntityDeleted = function () {
+            //        gridAPI.itemDeleted(genericBusinessEntity);
+            //    };
+            //    VR_GenericData_GenericBusinessEntityService.deleteGenericBusinessEntity($scope, genericBusinessEntity, onGenericBusinessEntityDeleted);
+            //}
+
+            function defineAPI() {
+                var api = {};
+
+                api.load = function (payload) {
+                    var promises = [];
+
+                    var gridQuery;
+
+                    if (payload != undefined) {
+                        businessEntityDefinitionId = payload.businessEntityDefinitionId;
+                        gridQuery = payload.query;
+                    }
+
+                    if ($scope.scopeModel.columns.length == 0) {
+
+                        //Loading VRCaseGridColumns
+                        var businessEntityGridColumnsLoadPromise = getBusinessEntityGridColumnsLoadPromise();
+                        promises.push(businessEntityGridColumnsLoadPromise);
+
+                        ////Loading AccountViewDefinitions
+                        //var vrCaseViewDefinitionsLoadPromise = getAccountViewDefinitionsLoadPromise();
+                        //promises.push(vrCaseViewDefinitionsLoadPromise);
+
+                        ////Loading AccountViewDefinitions
+                        //var vrCaseActionDefinitionsLoadPromise = getAccountActionDefinitionsLoadPromise();
+                        //promises.push(vrCaseActionDefinitionsLoadPromise);
+                    }
+
+                    var gridLoadDeferred = UtilsService.createPromiseDeferred();
+
+                    //Retrieving Data
+                    UtilsService.waitMultiplePromises(promises).then(function () {
+                        gridQuery = buildGridQuery(gridQuery);
+                        gridAPI.retrieveData(gridQuery);
+                        gridLoadDeferred.resolve();
+                    }).catch(function (error) {
+                        gridLoadDeferred.reject(error);
+                    });
+
+                    function getBusinessEntityGridColumnsLoadPromise() {
+                        return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEGridColumnAttributes(businessEntityDefinitionId).then(function (response) {
+                            var businessEntityGridColumnAttributes = response;
+                            if (businessEntityGridColumnAttributes != undefined) {
+                                for (var index = 0; index < businessEntityGridColumnAttributes.length; index++) {
+                                    var businessEntityGridColumnAttribute = businessEntityGridColumnAttributes[index];
+                                    gridColumnFieldNames.push(businessEntityGridColumnAttribute.Name);
+                                    $scope.scopeModel.columns.push(businessEntityGridColumnAttribute.Attribute);
+                                }
+                            }
+                        });
+                    }
+
+                    //function getAccountViewDefinitionsLoadPromise() {
+                    //    var vrCaseViewDefinitionsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    //    Retail_BE_AccountBEDefinitionAPIService.GetAccountViewDefinitions(vrCaseDefinitionId).then(function (response) {
+                    //        vrCaseViewDefinitions = response;
+                    //        vrCaseViewDefinitionsLoadPromiseDeferred.resolve();
+                    //    }).catch(function (error) {
+                    //        vrCaseViewRuntimeEditorsLoadPromiseDeferred.reject(error);
+                    //    });
+
+                    //    return vrCaseViewDefinitionsLoadPromiseDeferred.promise;
+                    //}
+                    //function getAccountActionDefinitionsLoadPromise() {
+                    //    var vrCaseActionDefinitionsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                    //    Retail_BE_AccountBEDefinitionAPIService.GetAccountActionDefinitions(vrCaseDefinitionId).then(function (response) {
+                    //        vrCaseActionDefinitions = response;
+                    //        vrCaseActionDefinitionsLoadPromiseDeferred.resolve();
+                    //    }).catch(function (error) {
+                    //        vrCaseViewRuntimeEditorsLoadPromiseDeferred.reject(error);
+                    //    });
+
+                    //    return vrCaseActionDefinitionsLoadPromiseDeferred.promise;
+                    //}
+
+                    function buildGridQuery(gridQuery) {
+                        return {
+                            BusinessEntityDefinitionId: businessEntityDefinitionId,
+                           // Columns: gridColumnFieldNames,
+                        };
+                    }
+
+                    return gridLoadDeferred.promise;
                 };
-                VR_GenericData_GenericBusinessEntityService.editGenericBusinessEntity(genericBusinessEntity.Entity.GenericBusinessEntityId, genericBusinessEntity.Entity.BusinessEntityDefinitionId, onGenericBusinessEntityUpdated);
-            }
 
-            function deleteGenericBusinessEntity(genericBusinessEntity) {
-                var onGenericBusinessEntityDeleted = function () {
-                    gridAPI.itemDeleted(genericBusinessEntity);
+                api.onBusinessEntityAdded = function (addedBusinessEntity) {
+                    //Retail_BE_AccountBEService.defineAccountViewTabs(vrCaseDefinitionId, addedAccount, gridAPI, vrCaseViewDefinitions);
+                    //Retail_BE_AccountActionService.defineAccountMenuActions(vrCaseDefinitionId, addedAccount, gridAPI, vrCaseViewDefinitions, vrCaseActionDefinitions);
+                    gridAPI.itemAdded(addedBusinessEntity);
                 };
-                VR_GenericData_GenericBusinessEntityService.deleteGenericBusinessEntity($scope, genericBusinessEntity, onGenericBusinessEntityDeleted);
+
+                if (ctrl.onReady != null)
+                    ctrl.onReady(api);
             }
 
             function getDirectiveAPI() {
@@ -109,15 +188,7 @@
                         gridQuery = payload.gridQuery;
                     }
 
-                    setGridColumns();
-                    function setGridColumns() {
-                        if (runtimeGrid != undefined && runtimeGrid.Columns != undefined) {
-                            ctrl.columns.length = 0;
-                            for (var i = 0; i < runtimeGrid.Columns.length; i++) {
-                                ctrl.columns.push(runtimeGrid.Columns[i]);
-                            }
-                        }
-                    }
+                  
                     return gridAPI.retrieveData(gridQuery);
                 };
 

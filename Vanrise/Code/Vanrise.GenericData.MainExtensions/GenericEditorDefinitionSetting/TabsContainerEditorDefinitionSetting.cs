@@ -14,7 +14,13 @@ namespace Vanrise.GenericData.MainExtensions
             get { return new Guid("AD2D93E0-0C06-4EBE-B7A9-BF380C256EEE"); }
         }
         public List<VRTabContainer> TabContainers { get; set; }
-
+        public override string RuntimeEditor
+        {
+            get
+            {
+                return "vr-genericdata-tabscontainereditor-runtime";
+            }
+        }
     }
     public class VRTabContainer
     {

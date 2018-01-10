@@ -79,8 +79,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="Controllers\VRCaseController.cs" />
-    <Compile Include="Controllers\VRCaseDefinitionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -92,24 +90,27 @@
       <Project>{d4a27cda-8984-448b-8177-a9e3f26bf56b}</Project>
       <Name>Vanrise.CaseManagement.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
+      <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
+      <Name>Vanrise.GenericData.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="VR_CaseManagement\Elements\CaseManagement\Directives\Templates\" />
+    <Folder Include="VR_CaseManagement\Elements\CaseManagement\Services\APIServices\" />
+    <Folder Include="VR_CaseManagement\Elements\CaseManagement\Views\" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="VR_CaseManagement\Constant\ModuleConfig.js" />
-    <Content Include="VR_CaseManagement\Elements\CaseManagement\Directives\Templates\CaseViewEditor.html" />
-    <Content Include="VR_CaseManagement\Elements\CaseManagement\Directives\vr-casemanagement-casedefinition-vieweditor.js" />
-    <Content Include="VR_CaseManagement\Elements\CaseManagement\Directives\vr-casemanagement-casebedefinition-selector.js" />
-    <Content Include="VR_CaseManagement\Elements\CaseManagement\Services\APIServices\VRCaseAPIService.js" />
-    <Content Include="VR_CaseManagement\Elements\CaseManagement\Services\APIServices\VRCaseDefinitionAPIService.js" />
-    <Content Include="VR_CaseManagement\Elements\CaseManagement\Services\VRCaseService.js" />
-    <Content Include="VR_CaseManagement\Elements\CaseManagement\Views\VRCaseManagement.html" />
-    <Content Include="VR_CaseManagement\Elements\CaseManagement\Views\VRCaseManagementController.js" />
-    <Content Include="VR_CaseManagement\Elements\CaseManagement\Views\VRCaseEditor.html" />
-    <Content Include="VR_CaseManagement\Elements\CaseManagement\Views\VRCaseEditorController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

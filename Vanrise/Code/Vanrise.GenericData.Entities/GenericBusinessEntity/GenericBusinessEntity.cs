@@ -10,6 +10,6 @@ namespace Vanrise.GenericData.Entities
     {
         public long GenericBusinessEntityId { get; set; }
         public Guid BusinessEntityDefinitionId { get; set; }
-        public dynamic Details { get; set; }
+        public Dictionary<string, Object> FieldValues { get; set; }
     }
 }

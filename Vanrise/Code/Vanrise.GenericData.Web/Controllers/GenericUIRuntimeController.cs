@@ -20,19 +20,26 @@ namespace Vanrise.GenericData.Web.Controllers
             var manager = GetManager(businessEntityDefinitionId);
             return manager.GetExtensibleBEItemRuntime(dataRecordTypeId, businessEntityDefinitionId);
         }
-        [HttpGet]
-        [Route("GetGenericManagementRuntime")]
-        public GenericManagementRuntime GetGenericManagementRuntime(Guid businessEntityDefinitionId)
+        //[HttpGet]
+        //[Route("GetGenericManagementRuntime")]
+        //public GenericManagementRuntime GetGenericManagementRuntime(Guid businessEntityDefinitionId)
+        //{
+        //    GenericUIRuntimeManager manager = new GenericUIRuntimeManager();
+        //    return manager.GetManagementRuntime(businessEntityDefinitionId);
+        //}
+      //  [HttpGet]
+        //[Route("GetGenericEditorRuntime")]
+        //public GenericEditorRuntime GetGenericEditorRuntime(Guid businessEntityDefinitionId)
+        //{
+        //    GenericUIRuntimeManager manager = new GenericUIRuntimeManager();
+        //    return manager.GetGenericEditorRuntime(businessEntityDefinitionId);
+        //}
+        [HttpPost]
+        [Route("GetGenericEditorRuntimeRows")]
+        public List<GenericEditorRuntimeRow> GetGenericEditorRuntimeRows(GenericEditorRuntimeRowsInput input)
         {
             GenericUIRuntimeManager manager = new GenericUIRuntimeManager();
-            return manager.GetManagementRuntime(businessEntityDefinitionId);
-        }
-        [HttpGet]
-        [Route("GetGenericEditorRuntime")]
-        public GenericEditorRuntime GetGenericEditorRuntime(Guid businessEntityDefinitionId)
-        {
-            GenericUIRuntimeManager manager = new GenericUIRuntimeManager();
-            return manager.GetGenericEditorRuntime(businessEntityDefinitionId);
+            return manager.GetGenericEditorRuntimeRows(input.Rows, input.DataRecordTypeId);
         }
         [HttpPost]
         [Route("GetGenericEditorRuntimeSections")]
@@ -62,5 +69,10 @@ namespace Vanrise.GenericData.Web.Controllers
     {
         public Guid DataRecordTypeId { get; set; }
         public List<GenericEditorSection> Sections { get; set; }
+    }
+    public class GenericEditorRuntimeRowsInput
+    {
+        public Guid DataRecordTypeId { get; set; }
+        public List<GenericEditorRow> Rows { get; set; }
     }
 }

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    caseManagementCaseBEDefinitionSelectorDirective.$inject = ['UtilsService', 'VRUIUtilsService'];
+    genericBEDefinitionSelectorDirective.$inject = ['UtilsService', 'VRUIUtilsService'];
 
-    function caseManagementCaseBEDefinitionSelectorDirective(UtilsService, VRUIUtilsService) {
+    function genericBEDefinitionSelectorDirective(UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -23,7 +23,7 @@
                 ctrl.selectedvalues;
                 if ($attrs.ismultipleselection != undefined && $attrs.ismultipleselection != null)
                     ctrl.selectedvalues = [];
-                var ctor = new CaseManagementCaseBEDefinitionSelector(ctrl, $scope, $attrs);
+                var ctor = new GenericBEDefinitionSelector(ctrl, $scope, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
@@ -40,7 +40,7 @@
             }
         };
 
-        function CaseManagementCaseBEDefinitionSelector(ctrl, $scope, attrs) {
+        function GenericBEDefinitionSelector(ctrl, $scope, attrs) {
             this.initializeController = initializeController;
 
             var beDefinitionSelectorApi;
@@ -83,7 +83,7 @@
                         if (filter.Filters == undefined)
                             filter.Filters = [];
                         filter.Filters.push({
-                            $type: "Vanrise.CaseManagement.Business.VRCaseBEDefinitionFilter, Vanrise.CaseManagement.Business",
+                            $type: "Vanrise.GenericData.Business.GenericBusinessEntityDefinitionFilter, Vanrise.GenericData.Business",
                         });
                         var payloadSelector = {
                             selectedIds: selectedIds,
@@ -108,10 +108,10 @@
 
         function getDirectiveTemplate(attrs) {
             var ismultipleselection = '';
-            var label = 'Case Definition';
+            var label = 'Business Entity Definition';
             if (attrs.ismultipleselection != undefined && attrs.ismultipleselection != null) {
                 ismultipleselection = ' ismultipleselection';
-                label = 'Case Definitions';
+                label = 'Business Entity Definitions';
             }
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
@@ -129,6 +129,6 @@
         return directiveDefinitionObject;
     }
 
-    app.directive('vrCasemanagementCasebedefinitionSelector',caseManagementCaseBEDefinitionSelectorDirective);
+    app.directive('vrGenericdataGenericbedefinitionSelector', genericBEDefinitionSelectorDirective);
 
 })(app);

@@ -84,7 +84,10 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
                     }
 
                     var obj = {
-                        Settings: { DateTimeField: ctrl.dateTimeField },
+                        Settings: {
+                            DateTimeField: ctrl.dateTimeField,
+                            IdField: ctrl.idField
+                        },
                         Fields: fields,
                         HasExtraFields: ctrl.hasExtraFields,
                         ExtraFieldsEvaluator: ctrl.hasExtraFields ? dataRecordTypeExtraFieldsApi.getData() : undefined
@@ -116,6 +119,8 @@ app.directive("vrGenericdataDatarecordfieldManagement", ["UtilsService", "VRNoti
 
                     if (settings != undefined) {
                         ctrl.dateTimeField = settings.DateTimeField;
+                        ctrl.idField = settings.IdField;
+
                     }
 
                     var dataRecorddFieldTypePromise = VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldTypeConfigs().then(function (response) {

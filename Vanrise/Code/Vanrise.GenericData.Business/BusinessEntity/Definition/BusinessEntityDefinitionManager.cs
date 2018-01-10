@@ -159,12 +159,6 @@ namespace Vanrise.GenericData.Business
             return insertOperationOutput;
         }
 
-        public Vanrise.Security.Entities.View GetGenericBEDefinitionView(Guid businessEntityDefinitionId)
-        {
-            var viewManager = new Vanrise.Security.Business.ViewManager();
-            var allViews = viewManager.GetViews();
-            return allViews.FirstOrDefault(v => (v.Settings as GenericBEViewSettings) != null && (v.Settings as GenericBEViewSettings).BusinessEntityDefinitionId == businessEntityDefinitionId);
-        }
 
         public IEnumerable<BusinessEntityDefinitionSettingsConfig> GetBEDefinitionSettingConfigs()
         {

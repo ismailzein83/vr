@@ -1,9 +1,7 @@
 ﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericBusinessEntityEditorController" width="'50%'" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formGenericBusinessEntityEditor">
-            <vr-tabs>
-                <vr-genericdata-genericbusinessentity-runtime-editor on-ready="scopeModel.onRuntimeEditorReady"></vr-genericdata-genericbusinessentity-runtime-editor>
-            </vr-tabs>
+            <vr-directivewrapper ng-if="scopeModel.runtimeEditor != undefined" directive="scopeModel.runtimeEditor" on-ready="scopeModel.onEditorRuntimeDirectiveReady"></vr-directivewrapper>
         </vr-form>
     </vr-modalbody>
     <div>

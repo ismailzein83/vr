@@ -193,11 +193,13 @@
                     function getColumns() {
                         var columns = [];
                         for (var i = 0; i < ctrl.columns.length; i++) {
+                            var column = ctrl.columns[i];
                             columns.push({
                                 $type: 'Vanrise.GenericData.SQLDataStorage.SQLDataRecordStorageColumn, Vanrise.GenericData.SQLDataStorage',
-                                ColumnName: ctrl.columns[i].columnName,
-                                SQLDataType: ctrl.columns[i].sqlDataType,
-                                ValueExpression: ctrl.columns[i].selectedDataRecordTypeField.Name
+                                ColumnName: column.columnName,
+                                SQLDataType: column.sqlDataType,
+                                ValueExpression: column.selectedDataRecordTypeField.Name,
+                                IsUnique: column.isUnique,
                             });
                         }
                         return columns;
@@ -227,6 +229,7 @@
                     gridItem.columnName = data.ColumnName,
                     gridItem.sqlDataType = data.SQLDataType,
                     gridItem.selectedDataRecordTypeFieldName = data.ValueExpression,
+                    gridItem.isUnique = data.IsUnique,
                     gridItem.isDisabled = true
                 }
 

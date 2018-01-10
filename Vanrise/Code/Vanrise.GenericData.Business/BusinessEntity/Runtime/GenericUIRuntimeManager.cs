@@ -33,17 +33,17 @@ namespace Vanrise.GenericData.Business
             return extensibleBEItemRuntime;
         }
 
-        public GenericEditorRuntime GetGenericEditorRuntime(Guid businessEntityDefinitionId)
-        {
-            BusinessEntityDefinitionManager businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
-            var businessEntityDefinition = businessEntityDefinitionManager.GetBusinessEntityDefinition(businessEntityDefinitionId);
-            if (businessEntityDefinition == null)
-                return null;
-            var businessEntityDefinitionSettings = businessEntityDefinition.Settings as GenericBEDefinitionSettings;
-            GenericEditorRuntime editorRuntime = new GenericEditorRuntime();
-            BuildEditorRuntime(businessEntityDefinitionSettings.EditorDesign, editorRuntime, businessEntityDefinitionSettings.DataRecordTypeId);
-            return editorRuntime;
-        }
+        //public GenericEditorRuntime GetGenericEditorRuntime(Guid businessEntityDefinitionId)
+        //{
+        //    BusinessEntityDefinitionManager businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
+        //    var businessEntityDefinition = businessEntityDefinitionManager.GetBusinessEntityDefinition(businessEntityDefinitionId);
+        //    if (businessEntityDefinition == null)
+        //        return null;
+        //    var businessEntityDefinitionSettings = businessEntityDefinition.Settings as GenericBEDefinitionSettings;
+        //    GenericEditorRuntime editorRuntime = new GenericEditorRuntime();
+        //    BuildEditorRuntime(businessEntityDefinitionSettings.EditorDesign, editorRuntime, businessEntityDefinitionSettings.DataRecordTypeId);
+        //    return editorRuntime;
+        //}
 
         public List<GenericEditorRuntimeSection> GetGenericEditorRuntimeSections(List<GenericEditorSection> sections, Guid dataRecordTypeId)
         {
@@ -58,6 +58,10 @@ namespace Vanrise.GenericData.Business
             return runtimeSections;
         }
 
+        public List<GenericEditorRuntimeRow> GetGenericEditorRuntimeRows(List<GenericEditorRow> rows, Guid dataRecordTypeId)
+        {
+            return BuildEditorRuntimeRows(rows, dataRecordTypeId);
+        }
         public IEnumerable<DataRecordTypeInfo> GetDataRecordTypesInfo(Guid businessEntityId)
         {
             ExtensibleBEItemManager manager = new ExtensibleBEItemManager();
@@ -72,18 +76,18 @@ namespace Vanrise.GenericData.Business
              return dataRecordTypeManager.GetDataRecordTypeInfo(new DataRecordTypeInfoFilter { RecordTypeIds = recordTypeIds }).OrderBy(x => x.Name);
         }
 
-        public GenericManagementRuntime GetManagementRuntime(Guid businessEntityDefinitionId)
-        {
-            BusinessEntityDefinitionManager businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
-            var businessEntityDefinition = businessEntityDefinitionManager.GetBusinessEntityDefinition(businessEntityDefinitionId);
-            if (businessEntityDefinition == null)
-                return null;
+        //public GenericManagementRuntime GetManagementRuntime(Guid businessEntityDefinitionId)
+        //{
+        //    BusinessEntityDefinitionManager businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
+        //    var businessEntityDefinition = businessEntityDefinitionManager.GetBusinessEntityDefinition(businessEntityDefinitionId);
+        //    if (businessEntityDefinition == null)
+        //        return null;
 
-            var businessEntityDefinitionSettings = businessEntityDefinition.Settings as GenericBEDefinitionSettings;
-            GenericManagementRuntime genericManagementRuntime = new GenericManagementRuntime();
-            BuildManagementRuntime(businessEntityDefinitionSettings.ManagementDesign, genericManagementRuntime, businessEntityDefinitionSettings.DataRecordTypeId);
-            return genericManagementRuntime;
-        }
+        //    var businessEntityDefinitionSettings = businessEntityDefinition.Settings as GenericBEDefinitionSettings;
+        //    GenericManagementRuntime genericManagementRuntime = new GenericManagementRuntime();
+        //    BuildManagementRuntime(businessEntityDefinitionSettings.ManagementDesign, genericManagementRuntime, businessEntityDefinitionSettings.DataRecordTypeId);
+        //    return genericManagementRuntime;
+        //}
 
         public T BuildRuntimeField<T>(GenericUIField field, Dictionary<string, DataRecordField> dataRecordTypeFieldsByName, Guid dataRecordTypeId) where T : GenericUIRuntimeField
         {
@@ -216,6 +220,24 @@ namespace Vanrise.GenericData.Business
             }
         }
 
+        private List<GenericEditorRuntimeRow> BuildEditorRuntimeRows(List<GenericEditorRow> rows, Guid dataRecordTypeId)
+        {
+            var runtimeRows = new List<GenericEditorRuntimeRow>();
+            if (rows != null)
+            {
+                var dataRecordTypeManager = new DataRecordTypeManager();
+                var fields = dataRecordTypeManager.GetDataRecordTypeFields(dataRecordTypeId);
+                if (fields == null)
+                    throw new NullReferenceException(String.Format("fields of DataRecordType '{0}'", dataRecordTypeId));
+                foreach (var row in rows)
+                {
+                    var runtimeRow = new GenericEditorRuntimeRow();
+                    runtimeRows.Add(runtimeRow);
+                    BuildEditorRuntimeFields(row, runtimeRow, fields, dataRecordTypeId);
+                }
+            }
+            return runtimeRows;
+        }
         private void BuildEditorRuntimeRows(GenericEditorSection section, GenericEditorRuntimeSection runtimeSection, Guid dataRecordTypeId)
         {
             if (section.Rows != null)

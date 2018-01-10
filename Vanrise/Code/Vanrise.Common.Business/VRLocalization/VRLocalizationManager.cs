@@ -104,9 +104,8 @@ namespace Vanrise.Common.Business
                     if (Guid.TryParse(languageIdAsString, out languageId))
                         return true;
                 }
-
-                string languageCookieName = "VR_Common_LocalizationLangauge";
-                if (HttpContext.Current.Request.Cookies[languageCookieName] != null)
+               string languageCookieName = string.Format("VR_Common_LocalizationLangauge_{0}", HttpContext.Current.Server.UrlEncode(string.Format("{0}://{1}:{2}",HttpContext.Current.Request.Url.Scheme,HttpContext.Current.Request.Url.Host,HttpContext.Current.Request.Url.Port)));
+                if (HttpContext.Current.Request.Cookies != null  && HttpContext.Current.Request.Cookies[languageCookieName] != null)
                     languageIdAsString = HttpContext.Current.Request.Cookies[languageCookieName].Value;
                 if (!string.IsNullOrEmpty(languageIdAsString))
                 {

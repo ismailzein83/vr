@@ -138,6 +138,7 @@
     <Compile Include="Controllers\ExpressionBuilderConfigController.cs" />
     <Compile Include="Controllers\ExtensibleBEItemController.cs" />
     <Compile Include="Controllers\GenericBusinessEntityController.cs" />
+    <Compile Include="Controllers\GenericBusinessEntityDefinitionController.cs" />
     <Compile Include="Controllers\GenericUIRuntimeController.cs" />
     <Compile Include="Controllers\GenericRuleController.cs" />
     <Compile Include="Controllers\GenericRuleDefinitionController.cs" />
@@ -212,8 +213,17 @@
     <Content Include="VR_GenericData\Directives\BEParentChildRelation\BEParentChildRelationRuntime\vr-genericdata-beparentchildrelation-grid.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Templates\GenericBusinessEntityDefinitionEditor.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Templates\GenericBusinessEntityViewEditor.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\vr-genericdata-genericbedefinition-selector.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\vr-genericdata-genericbusinessentity-editor.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\vr-genericdata-genericbusinessentity-vieweditor.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\Templates\StaticEditorRuntimeSettingTemplate.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\Templates\TabsContainerRuntimeSettingTemplate.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\Templates\GenericEditorRuntimeSettingTemplate.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\Templates\GenericEditorDefinitionSettingTemplate.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\vr-genericdata-staticeditor-runtime.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\vr-genericdata-tabscontainereditor-runtime.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\vr-genericdata-genericeditorsetting-runtime.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\vr-genericdata-genericeditorsetting-definition.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\VRRestAPIBusinessEntityDefinition\Templates\VRRestAPIBEDefinitionsEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\VRRestAPIBusinessEntityDefinition\vr-genericdata-restapibedefinitions-editor.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\Templates\BEDefinitionRuntimeSelectorSettings.html" />
@@ -542,6 +552,7 @@
     <Content Include="VR_GenericData\Services\APIServices\ExpressionBuilderConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\ExtensibleBEItemAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericBusinessEntityAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\GenericBusinessEntityDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericUIRuntimeAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\GenericRuleDefinitionAPIService.js" />

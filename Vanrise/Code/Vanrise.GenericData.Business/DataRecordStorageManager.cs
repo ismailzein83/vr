@@ -26,8 +26,9 @@ namespace Vanrise.GenericData.Business
         {
             input.Query.DataRecordStorageIds.ThrowIfNull("input.Query.DataRecordStorageIds");
 
-            var dataRecordStorage = GetDataRecordStorage(input.Query.DataRecordStorageIds.First());
-            dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorage.DataRecordStorageId);
+            var dataRecordStorageId = input.Query.DataRecordStorageIds.First();
+            var dataRecordStorage = GetDataRecordStorage(dataRecordStorageId);
+            dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorageId);
 
             DataStore dataStore = new DataStoreManager().GetDataStore(dataRecordStorage.DataStoreId);
             dataStore.ThrowIfNull("dataStore", dataRecordStorage.DataStoreId);

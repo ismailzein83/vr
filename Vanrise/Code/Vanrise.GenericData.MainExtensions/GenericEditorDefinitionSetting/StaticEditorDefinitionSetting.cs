@@ -14,5 +14,12 @@ namespace Vanrise.GenericData.MainExtensions
             get { return new Guid("EC8B54D7-28AC-474F-B40A-D7AC02D89630"); }
         }
         public string DirectiveName { get; set; }
+        public override string RuntimeEditor
+        {
+            get
+            {
+                return "vr-genericdata-staticeditor-runtime";
+            }
+        }
     }
 }

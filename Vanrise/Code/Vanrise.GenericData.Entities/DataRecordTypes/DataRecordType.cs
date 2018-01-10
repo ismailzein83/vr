@@ -24,6 +24,7 @@ namespace Vanrise.GenericData.Entities
     public class DataRecordTypeSettings
     {
         public string DateTimeField { get; set; }
+        public string IdField { get; set; }
     }
 
     public abstract class DataRecordTypeExtraField

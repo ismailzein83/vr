@@ -24,7 +24,7 @@ namespace Vanrise.AccountManager.Business
         }
         public override string ManagerFQTN
         {
-            get { return "Vanrise.AccountManager.Business.AccountManagerBEDefinitionSettings, Vanrise.AccountManager.Business"; }
+            get { return "Vanrise.AccountManager.Business.AccountManagerDefinitionManager, Vanrise.AccountManager.Business"; }
         }
        
         public List<AccountManagerAssignmentDefinition> AssignmentDefinitions { get; set; }

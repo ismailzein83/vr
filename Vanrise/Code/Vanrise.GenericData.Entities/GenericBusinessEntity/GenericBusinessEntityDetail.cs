@@ -8,8 +8,16 @@ namespace Vanrise.GenericData.Entities
 {
     public class GenericBusinessEntityDetail
     {
-        public GenericBusinessEntity Entity { get; set; }
-
-        public List<string> FieldValueDescriptions { get; set; }
+        public GenericBusinessEntityValues FieldValues { get; set; }
     }
+    public class GenericBusinessEntityValues : Dictionary<string, GenericBusinessEntityValue>
+    {
+
+    }
+    public class GenericBusinessEntityValue
+    {
+        public object Value { get; set; }
+        public string Description { get; set; }
+    }
+
 }

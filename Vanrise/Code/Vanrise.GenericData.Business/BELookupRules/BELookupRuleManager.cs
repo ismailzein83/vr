@@ -77,19 +77,10 @@ namespace Vanrise.GenericData.Business
             GenericBusinessEntity genericBE = rule.BusinessEntityObject as GenericBusinessEntity;
             if (genericBE == null)
                 throw new NullReferenceException("genericBE");
-            var dataRecord = genericBE.Details;
-            if (dataRecord == null)
-                throw new NullReferenceException("dataRecord");
-            Type beType = dataRecord.GetType();
-            string[] propertyParts = fieldPath.Split('.');
-            Object value = dataRecord;
-            foreach (var propPart in propertyParts)
-            {
-                value = value.GetType().GetProperty(propPart).GetValue(value);
-                if (value == null)
-                    break;
-            }
-            return value;
+            var dataRecord = genericBE.FieldValues;
+            dataRecord.ThrowIfNull("dataRecord");
+
+            return dataRecord.GetRecord(fieldPath);
         }
 
         #region Private Classes

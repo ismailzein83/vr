@@ -1,21 +1,12 @@
-﻿<vr-datagrid on-ready="ctrl.onGridReady"
-             datasource="ctrl.dataSource"
-             dataretrievalfunction="ctrl.dataRetrievalFunction"
-             menuactions="ctrl.menuActions"
-             pagingtype="'PagingOnScroll'"
-             idfield="Entity.GenericBusinessEntityId"
-             defaultsortbyfieldname="'Entity.GenericBusinessEntityId'" enableautoexport="true">
-    <vr-datagridcolumn headertext="'ID'" field="'Entity.GenericBusinessEntityId'"></vr-datagridcolumn>
-    <vr-datagridcolumn ng-repeat="column in ctrl.columns" headertext="column.FieldTitle" field="'FieldValueDescriptions[' + $index + ']'" tag="column" isfielddynamic="true" disablesorting>
-        <span ng-init="result = viewScope.isValueBool(colDef,dataItem)">
-            <vr-icon ng-if="result" icontype="viewScope.getFieldValue(result,colDef,dataItem)"></vr-icon>
-            <span ng-if="!result">
-                {{viewScope.getFieldValue(result,colDef,dataItem)}}
-            </span>
-        </span>
-    </vr-datagridcolumn>
-    <vr-datagridexpandablerow>
+﻿<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.businessEntities"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             menuactions="scopeModel.menuActions"
+             pagingtype="'Pager'"
+             enableautoexport="true">
+    <vr-datagridcolumn ng-repeat="column in scopeModel.columns" columnattributes="column"></vr-datagridcolumn>
+    <!--<vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
-    </vr-datagridexpandablerow>
+    </vr-datagridexpandablerow>-->
 </vr-datagrid>
 

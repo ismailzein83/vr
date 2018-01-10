@@ -80,7 +80,6 @@
     <Compile Include="BusinessManagers\IBusinessEntityDefinitionManager.cs" />
     <Compile Include="BusinessManagers\IGenericRuleDefinitionManager.cs" />
     <Compile Include="BusinessManagers\IDataRecordTypeManager.cs" />
-    <Compile Include="BusinessManagers\IGenericBusinessEntityManager.cs" />
     <Compile Include="DataRecordCondition.cs" />
     <Compile Include="DataRecordFieldChoice\DataRecordFieldChoice.cs" />
     <Compile Include="DataRecordFieldChoice\DataRecordFieldChoiceDetail.cs" />
@@ -99,6 +98,7 @@
     <Compile Include="DataStorage\IGetRemoteRecordStorageDataManagerContext.cs" />
     <Compile Include="DataStorage\TempStorageInformation.cs" />
     <Compile Include="DataStorage\IGetStorageRowCountContext.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBEDefinitionGridColumnAttribute.cs" />
     <Compile Include="GenericEditorDefinitionSetting\VRGenericEditorDefinitionSetting.cs" />
     <Compile Include="RecordFilter\FilterParameter.cs" />
     <Compile Include="RecordFilter\Filters.cs" />
@@ -114,7 +114,6 @@
     <Compile Include="GenericManagement\GenericFilter\Definition\GenericFilterField.cs" />
     <Compile Include="GenericManagement\GenericGrid\Definition\GenericGrid.cs" />
     <Compile Include="GenericManagement\GenericGrid\Definition\GenericGridField.cs" />
-    <Compile Include="BusinessEntities\GenericBEViewSettings.cs" />
     <Compile Include="GenericManagement\GenericFilter\Runtime\GenericFilterRuntime.cs" />
     <Compile Include="GenericManagement\GenericFilter\Runtime\GenericFilterRuntimeField.cs" />
     <Compile Include="GenericManagement\GenericGrid\Runtime\GenericGridRuntime.cs" />

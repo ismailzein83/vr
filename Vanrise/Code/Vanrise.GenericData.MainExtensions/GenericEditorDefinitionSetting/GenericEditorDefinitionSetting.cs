@@ -14,5 +14,12 @@ namespace Vanrise.GenericData.MainExtensions
             get { return new Guid("5BE30B11-8EE3-47EB-8269-41BDAFE077E1"); }
         }
         public List<GenericEditorRow> Rows { get; set; }
+        public override string RuntimeEditor
+        {
+            get
+            {
+                return "vr-genericdata-genericeditorsetting-runtime";
+            }
+        }
     }
 }

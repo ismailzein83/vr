@@ -1,19 +1,25 @@
 ﻿<vr-panel ng-controller="VR_GenericData_GenericBusinessEntityManagementController">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
-            <vr-genericdata-genericbusinessentity-filter on-ready="onFilterDirectiveReady"></vr-genericdata-genericbusinessentity-filter>
+            <vr-row removeline>
+                <vr-genericdata-genericbedefinition-selector ng-hide="scopeModel.hideBusinessEntityDefinitionSelector" normal-col-num="2" on-ready="scopeModel.onBusinessEntityDefinitionSelectorReady" selectedvalues="scopeModel.caseDefinition"
+                                                             onselectionchanged="scopeModel.onBusinessEntityDefinitionSelectionChange"
+                                                             isrequired="true" hideremoveicon></vr-genericdata-genericbedefinition-selector>
+            </vr-row>
+
+            <!--<vr-genericdata-genericbusinessentity-filter on-ready="onFilterDirectiveReady"></vr-genericdata-genericbusinessentity-filter>-->
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
                     <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
-                    <vr-button type="Add" data-onclick="add" haspermission="hasAddBusinessEntityPermission"></vr-button>
+                    <vr-button type="Add" data-onclick="addBusinessEntity" haspermission="hasAddBusinessEntityPermission"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>
         <vr-row>
             <vr-columns width="fullrow" simplecol>
-                <vr-genericdata-genericbusinessentity-grid on-ready="onGridDirectiveReady"></vr-genericdata-genericbusinessentity-grid>
+                <vr-genericdata-genericbusinessentity-grid on-ready="scopeModel.onGridDirectiveReady"></vr-genericdata-genericbusinessentity-grid>
             </vr-columns>
         </vr-row>
     </vr-form>

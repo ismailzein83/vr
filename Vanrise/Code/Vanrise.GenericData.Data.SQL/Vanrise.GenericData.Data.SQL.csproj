@@ -54,7 +54,6 @@
     <Compile Include="DataStoreDataManager.cs" />
     <Compile Include="ExpressionBuilderConfigDataManager.cs" />
     <Compile Include="ExtensibleBEItemDataManager.cs" />
-    <Compile Include="GenericBusinessEntityDataManager.cs" />
     <Compile Include="GenericEditorDataManager.cs" />
     <Compile Include="GenericRuleDefinitionDataManager.cs" />
     <Compile Include="DataStoreConfigDataManager.cs" />

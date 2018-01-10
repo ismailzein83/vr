@@ -50,7 +50,7 @@ app.directive("vrGenericdataGenericbusinessentityVieweditor", ["UtilsService", "
 
                         beDefinitionSelectorPromiseDeferred.promise.then(function () {
                             var payloadSelector = {
-                                selectedIds: payload != undefined ? payload.BusinessEntityDefinitionId : undefined,
+                                selectedIds: payload != undefined ? getGenericBEDefinitionIdsFromSettings(payload.Settings) : undefined,
                                 filter: {
                                     Filters: [{
                                         $type: "Vanrise.GenericData.Business.GenericBusinessEntityDefinitionFilter, Vanrise.GenericData.Business"
@@ -67,13 +67,30 @@ app.directive("vrGenericdataGenericbusinessentityVieweditor", ["UtilsService", "
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.GenericData.Entities.GenericBEViewSettings, Vanrise.GenericData.Entities",
-                        BusinessEntityDefinitionId: beDefinitionSelectorApi.getSelectedIds()
+                        $type: "Vanrise.GenericData.Business.GenericBEViewSettings, Vanrise.GenericData.Business",
+                        Settings: buildGenericBEDefinitionViewSettings()
                     };
                 };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+            function buildGenericBEDefinitionViewSettings() {
+                var settings = [];
+                var selectedGenericBEDefinitions = beDefinitionSelectorApi.getSelectedIds();
+                if (selectedGenericBEDefinitions != undefined) {
+                    for (var i = 0 ; i < selectedGenericBEDefinitions.length; i++) {
+                        settings.push({ BusinessEntityDefinitionId: selectedGenericBEDefinitions[i] });
+                    }
+                }
+                return settings;
+            }
+            function getGenericBEDefinitionIdsFromSettings(items) {
+                var settings = [];
+                for (var i = 0 ; i < items.length; i++) {
+                    settings.push(items[i].BusinessEntityDefinitionId);
+                }
+                return settings;
             }
         }
 
