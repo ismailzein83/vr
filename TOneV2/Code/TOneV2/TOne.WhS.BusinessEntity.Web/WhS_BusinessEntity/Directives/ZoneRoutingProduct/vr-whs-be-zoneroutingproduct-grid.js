@@ -85,10 +85,19 @@ function (utilsService, vrNotificationService, whSBeZoneRoutingProductApiService
         }
 
         function defineMenuActions() {
-            $scope.gridMenuActions = [{
-                name: "Edit",
-                clicked: editRoutingProduct
-            }];
+            $scope.gridMenuActions = function (dataItem) {
+                var menuActions = [];
+                var zoneEED = dataItem.ZoneEED;
+                if (typeof zoneEED == 'undefined' || zoneEED == null) {
+
+                    var routingPRoductEdit = {
+                        name: "Edit",
+                        clicked: editRoutingProduct
+                    };
+                    menuActions.push(routingPRoductEdit);
+                }
+                return menuActions;
+            };
         }
 
         function editRoutingProduct(routingProductObj) {
@@ -99,7 +108,7 @@ function (utilsService, vrNotificationService, whSBeZoneRoutingProductApiService
                 setService(updatedObj);
             };
             WhS_BE_SaleEntityZoneRoutingProductService.editSaleEntityZoneRouting(ownerId, ownerType, sellingNumberPlanId, routingProductObj.Entity.ZoneId,
-             routingProductObj.ZoneName, routingProductObj.Entity.RoutingProductId, onZoneRoutingProductUpdated);
+             routingProductObj.ZoneName, routingProductObj.ZoneBED, routingProductObj.ZoneEED, routingProductObj.Entity.RoutingProductId, onZoneRoutingProductUpdated);
         }
 
         function defineAPI() {

@@ -11,5 +11,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public ZoneRoutingProduct Entity { get; set; }
         public string ZoneName { get; set; }
         public string RoutingProductName { get; set; }
+        public DateTime ZoneBED { get; set; }
+        public DateTime? ZoneEED { get; set; }
     }
 }

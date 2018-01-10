@@ -25,9 +25,20 @@ namespace TOne.WhS.BusinessEntity.Business
             UpdateOperationOutput<ZoneRoutingProductDetail> updateOperationOutput = new UpdateOperationOutput<ZoneRoutingProductDetail>
             {
                 Result = UpdateOperationResult.Failed,
+                ShowExactMessage = true,
                 UpdatedObject = null
             };
 
+            if (zoneRoutingProductToEdit.ZoneEED.HasValue)
+            {
+                updateOperationOutput.Message = string.Format("Cannot change zone routing product on ended zone with ID :{0}", zoneRoutingProductToEdit.ZoneId);
+                return updateOperationOutput;
+            }
+            if (zoneRoutingProductToEdit.BED < zoneRoutingProductToEdit.ZoneBED)
+            {
+                updateOperationOutput.Message = string.Format("Zone routing product cannot have BED less than zone BED, {0} < {1}", zoneRoutingProductToEdit.BED, zoneRoutingProductToEdit.ZoneBED);
+                return updateOperationOutput;
+            }
             var saleZoneRoutingProductToCloseList = new List<ZoneRoutingProductToChange>();
 
             IEnumerable<SaleZoneRoutingProduct> existingZoneRoutingProducts = GetZoneRoutingProduct(zoneRoutingProductToEdit.OwnerId,
@@ -80,7 +91,6 @@ namespace TOne.WhS.BusinessEntity.Business
                     ZoneName = zoneName
                 };
                 updateOperationOutput.UpdatedObject = zoneRoutingProductDetail;
-                updateOperationOutput.ShowExactMessage = true;
                 updateOperationOutput.Message = string.Format("Routing product for zone {0} updated successfully", zoneName);
             }
 
@@ -91,12 +101,6 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region private Methods
-
-
-        private Type GetSaleEntityZoneRoutingProductType()
-        {
-            return this.GetType();
-        }
 
         private IEnumerable<SaleZoneRoutingProduct> GetZoneRoutingProduct(int ownerId, SalePriceListOwnerType ownerType, long zoneId, DateTime effectiveDate)
         {
@@ -127,11 +131,14 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             public override ZoneRoutingProductDetail EntityDetailMapper(ZoneRoutingProduct entity)
             {
+                SaleZone zone = _saleZoneManager.GetSaleZone(entity.ZoneId);
                 return new ZoneRoutingProductDetail
                 {
                     Entity = entity,
                     RoutingProductName = _routingProductManager.GetRoutingProductName(entity.RoutingProductId),
-                    ZoneName = _saleZoneManager.GetSaleZoneName(entity.ZoneId)
+                    ZoneName = zone.Name,
+                    ZoneBED = zone.BED,
+                    ZoneEED = zone.EED
                 };
             }
 

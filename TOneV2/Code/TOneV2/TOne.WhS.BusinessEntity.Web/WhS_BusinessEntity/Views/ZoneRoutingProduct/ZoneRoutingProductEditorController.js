@@ -2,14 +2,16 @@
 
     "use strict";
 
-    zoneRoutingProductEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'WhS_BE_ZoneRoutingProductAPIService'];
+    zoneRoutingProductEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'WhS_BE_ZoneRoutingProductAPIService', 'VRValidationService'];
 
-    function zoneRoutingProductEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_BE_ZoneRoutingProductAPIService) {
+    function zoneRoutingProductEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_BE_ZoneRoutingProductAPIService, VRValidationService) {
 
         var ownerId;
         var ownerType;
         var zoneId;
         var zoneName;
+        var zoneBED;
+        var zoneEED;
         var sellingNumberPlanId;
         var currentRoutingProductId;
 
@@ -26,6 +28,8 @@
                 ownerId = parameters.OwnerId;
                 ownerType = parameters.OwnerType;
                 zoneId = parameters.ZoneId;
+                zoneBED = parameters.ZoneBED;
+                zoneEED = parameters.ZoneEED;
                 zoneName = parameters.ZoneName;
                 sellingNumberPlanId = parameters.SellingNumberPlanId;
                 currentRoutingProductId = parameters.CurrentRoutingProductId;
@@ -46,6 +50,12 @@
             $scope.close = function () {
                 $scope.modalContext.closeModal();
             };
+            $scope.scopeModel.validateRange = function () {
+                var errorMessage = VRValidationService.validateTimeRange(zoneBED, $scope.scopeModel.bed);
+                if (errorMessage != null)
+                    return 'Zone routing product BED cannot be less than zone BED';
+                return null;
+            }
         }
 
         function load() {
@@ -108,13 +118,15 @@
                 ChangedRoutingProductId: zoneRoutingProductSelectorAPI.getSelectedIds(),
                 CurrentZoneRoutingProductId: currentRoutingProductId,
                 OwnerId: ownerId,
-                OwnerType:ownerType,
+                OwnerType: ownerType,
                 BED: $scope.scopeModel.bed,
-                ZoneId: zoneId
-        };
-        return obj;
+                ZoneId: zoneId,
+                ZoneBED: zoneBED,
+                ZoneEED: zoneEED
+            };
+            return obj;
+        }
     }
-}
 
     appControllers.controller('WhS_BE_ZoneRoutingProductEditorController', zoneRoutingProductEditorController);
 })(appControllers);

@@ -7,7 +7,8 @@
                     </vr-whs-be-routingproduct-selector>
                 </vr-columns>
                 <vr-columns width="1/2row">
-                    <vr-datetimepicker type="dateTime" label="BED" value="scopeModel.bed" isrequired onvaluechanged="scopeModel.bedChangedValue"></vr-datetimepicker>
+                    <vr-datetimepicker type="dateTime" label="BED" value="scopeModel.bed" isrequired onvaluechanged="scopeModel.bedChangedValue"
+                                       customvalidate="scopeModel.validateRange()"></vr-datetimepicker>
                 </vr-columns>
             </vr-row>
         </vr-form>
@@ -16,7 +17,8 @@
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
                 <span>
-                    <vr-button type="Save" formname="formZoneRoutingProductEditor" data-onclick="scopeModel.saveZoneRoutingProduct" vr-disabled="scopeModel.isSaveButtonDisabled"></vr-button>
+                    <vr-button type="Save" formname="formZoneRoutingProductEditor" data-onclick="scopeModel.saveZoneRoutingProduct" vr-disabled="scopeModel.isSaveButtonDisabled"
+                              ></vr-button>
                 </span>
                 <vr-button type="Close" data-onclick="close"></vr-button>
             </div>

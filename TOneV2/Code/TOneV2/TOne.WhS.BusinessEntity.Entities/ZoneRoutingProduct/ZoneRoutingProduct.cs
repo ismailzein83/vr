@@ -25,6 +25,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         public DateTime BED { get; set; }
         public int OwnerId { get; set; }
         public SalePriceListOwnerType OwnerType { get; set; }
+        public DateTime ZoneBED { get; set; }
+        public DateTime? ZoneEED { get; set; }
     }
 
     public class ZoneRoutingProductToChange
