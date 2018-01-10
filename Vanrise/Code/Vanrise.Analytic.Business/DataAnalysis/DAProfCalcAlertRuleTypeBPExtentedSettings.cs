@@ -12,6 +12,33 @@ namespace Vanrise.Analytic.Business
 {
     public class DAProfCalcAlertRuleTypeBPExtentedSettings : BPDefinitionExtendedSettings
     {
+        public override bool CanRunBPInstance(IBPDefinitionCanRunBPInstanceContext context)
+        {
+            context.IntanceToRun.ThrowIfNull("context.IntanceToRun");
+            DAProfCalcGenerateAlertInput daProfCalcGenerateAlertInput = context.IntanceToRun.InputArgument.CastWithValidate<DAProfCalcGenerateAlertInput>("context.IntanceToRun.InputArgument");
+            daProfCalcGenerateAlertInput.MaxDAProfCalcAnalysisPeriod.ThrowIfNull("daProfCalcGenerateAlertInput.MaxDAProfCalcAnalysisPeriod");
+
+            int maxDAProfCalcAnalysisPeriod = daProfCalcGenerateAlertInput.MaxDAProfCalcAnalysisPeriod.GetPeriodInMinutes();
+            int minDAProfCalcAnalysisPeriod = daProfCalcGenerateAlertInput.MinDAProfCalcAnalysisPeriod != null ? daProfCalcGenerateAlertInput.MinDAProfCalcAnalysisPeriod.GetPeriodInMinutes() : 0;
+
+            foreach (var startedBPInstance in context.GetStartedBPInstances())
+            {
+                DAProfCalcGenerateAlertInput startedBPInstanceDAProfCalcGenerateAlertInputArg = startedBPInstance.InputArgument as DAProfCalcGenerateAlertInput;
+                if (startedBPInstanceDAProfCalcGenerateAlertInputArg != null && daProfCalcGenerateAlertInput.AlertRuleTypeId == startedBPInstanceDAProfCalcGenerateAlertInputArg.AlertRuleTypeId)
+                {
+                    int maxDAProfCalcAnalysisPeriodStartedInstance = startedBPInstanceDAProfCalcGenerateAlertInputArg.MaxDAProfCalcAnalysisPeriod.GetPeriodInMinutes();
+                    int minDAProfCalcAnalysisPeriodStartedInstance = startedBPInstanceDAProfCalcGenerateAlertInputArg.MinDAProfCalcAnalysisPeriod != null ? startedBPInstanceDAProfCalcGenerateAlertInputArg.MinDAProfCalcAnalysisPeriod.GetPeriodInMinutes() : 0;
+
+                    if (maxDAProfCalcAnalysisPeriod > minDAProfCalcAnalysisPeriodStartedInstance && maxDAProfCalcAnalysisPeriodStartedInstance > minDAProfCalcAnalysisPeriod)
+                    {
+                        context.Reason = "Another Data Analysis Profiling and Calculation Generate Alert instance of the same rule type is running during an overlaped analysis period";
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
         public override RequiredPermissionSettings GetViewInstanceRequiredPermissions(IBPDefinitionGetViewInstanceRequiredPermissionsContext context)
         {
             var daprofCalcGenerateAlertInput = context.InputArg.CastWithValidate<DAProfCalcGenerateAlertInput>("context.InputArg");

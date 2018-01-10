@@ -79,6 +79,7 @@
     <Compile Include="Config\Aggregate\AnalyticAggregateConfigInfoFilter.cs" />
     <Compile Include="AnalyticDataProvider\AnalyticDataProvider.cs" />
     <Compile Include="AnalyticDataProvider\AnalyticDataProviderConfig.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcAnalysisPeriod.cs" />
     <Compile Include="VRRestAPIAnalyticQueryInterceptor\VRRestAPIAnalyticQueryInterceptorConfig.cs" />
     <Compile Include="Config\AnalyticItemConfigDetail.cs" />
     <Compile Include="Config\AnalyticItemConfigInput.cs" />
@@ -137,7 +138,7 @@
     <Compile Include="DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\DAProfCalcAlertRuleTypeSettings.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcAggregationField.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcCalculationField.cs" />
-    <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcChunkTime.cs" />
+    <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\Enums.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\DAProfCalcGroupingField.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Common\IDAProfCalcOutputRecordProcessor.cs" />
     <Compile Include="DataAnalysis\ProfilingAndCalculation\Filter\DAProfCalcDataAnalysisItemDefinitionFilter.cs" />

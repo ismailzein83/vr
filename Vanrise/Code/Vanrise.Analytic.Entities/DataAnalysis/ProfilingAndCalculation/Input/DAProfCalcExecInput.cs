@@ -15,6 +15,8 @@ namespace Vanrise.Analytic.Entities
         public RecordFilterGroup DataAnalysisRecordFilter { get; set; }
 
         public List<string> GroupingFieldNames { get; set; }
+
+        public DAProfCalcAnalysisPeriod DAProfCalcAnalysisPeriod { get; set; }
     }
 
     public abstract class DAProfCalcExecPayload

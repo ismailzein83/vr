@@ -83,6 +83,9 @@ namespace Vanrise.Notification.Data.SQL
             if (context.Query != null && context.Query.AlertLevelIds != null && context.Query.AlertLevelIds.Count > 0)
                 alerttLevelIds = string.Join<Guid>(",", context.Query.AlertLevelIds);
 
+            DateTime from = context.Query != null && context.Query.From.HasValue ? context.Query.From.Value : default(DateTime);
+            DateTime to = context.Query != null && context.Query.To.HasValue ? context.Query.To.Value : default(DateTime);
+
             ExecuteReaderSP("[VRNotification].[sp_VRNotifications_GetFirstPage]", (reader) =>
             {
                 while (reader.Read() && !isFinalRow)
@@ -92,7 +95,7 @@ namespace Vanrise.Notification.Data.SQL
                     while (reader.Read())
                         context.MaxTimeStamp = GetReaderValue<byte[]>(reader, "MaxTimestamp");
 
-            }, context.NotificationTypeId, context.NbOfRows, description, statusIds, alerttLevelIds);
+            }, context.NotificationTypeId, context.NbOfRows, description, statusIds, alerttLevelIds, ToDBNullIfDefault(from), ToDBNullIfDefault(to));
         }
 
         public List<VRNotification> GetUpdateVRNotifications(IVRNotificationUpdateContext context)
@@ -105,6 +108,9 @@ namespace Vanrise.Notification.Data.SQL
             if (context.Query != null && context.Query.AlertLevelIds != null && context.Query.AlertLevelIds.Count > 0)
                 alerttLevelIds = string.Join<Guid>(",", context.Query.AlertLevelIds);
 
+            DateTime from = context.Query != null && context.Query.From.HasValue ? context.Query.From.Value : default(DateTime);
+            DateTime to = context.Query != null && context.Query.To.HasValue ? context.Query.To.Value : default(DateTime);
+
             List<VRNotification> notifications = new List<VRNotification>();
             ExecuteReaderSP("[VRNotification].[sp_VRNotifications_GetUpdated]", (reader) =>
             {
@@ -115,7 +121,7 @@ namespace Vanrise.Notification.Data.SQL
                     while (reader.Read())
                         context.MaxTimeStamp = GetReaderValue<byte[]>(reader, "MaxTimestamp");
 
-            }, context.NotificationTypeId, context.NbOfRows, context.MaxTimeStamp, description, alerttLevelIds);
+            }, context.NotificationTypeId, context.NbOfRows, context.MaxTimeStamp, description, alerttLevelIds, ToDBNullIfDefault(from), ToDBNullIfDefault(to));
 
             return notifications;
         }
@@ -136,12 +142,15 @@ namespace Vanrise.Notification.Data.SQL
             if (context.Query != null && context.Query.AlertLevelIds != null && context.Query.AlertLevelIds.Count > 0)
                 alerttLevelIds = string.Join<Guid>(",", context.Query.AlertLevelIds);
 
+            DateTime from = context.Query != null && context.Query.From.HasValue ? context.Query.From.Value : default(DateTime);
+            DateTime to = context.Query != null && context.Query.To.HasValue ? context.Query.To.Value : default(DateTime);
+
             ExecuteReaderSP("[VRNotification].[sp_VRNotifications_GetBeforeID]", (reader) =>
             {
                 while (reader.Read() && !isFinalRow)
                     isFinalRow = context.onItemReady(VRNotificationMapper(reader));
 
-            }, context.NotificationTypeId, context.NbOfRows, context.LessThanID, description, statusIds, alerttLevelIds);
+            }, context.NotificationTypeId, context.NbOfRows, context.LessThanID, description, statusIds, alerttLevelIds, ToDBNullIfDefault(from), ToDBNullIfDefault(to));
         }
         #endregion
 

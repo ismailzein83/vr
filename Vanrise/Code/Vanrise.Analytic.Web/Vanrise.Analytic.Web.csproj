@@ -158,6 +158,8 @@
     <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-itemconfig-measure-editor.js" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\Templates\DAProfCalcAlertRuleSettingsTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\vr-analytic-daprofcalc-alertrulesettings.js" />
+    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\Common\Templates\DAProfCalcAnalysisPeriod.html" />
+    <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\Common\vr-analytic-daprofcalc-analysisperiod.js" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\vr-analytic-daprofcalc-chunktime-selector.js" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\OutputDefinitions\vr-analytic-daprofcalc-outputfields-selector.js" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\ProcessInput\Templates\DAProfCalcGenerateAlertProcessInputTemplate.html" />

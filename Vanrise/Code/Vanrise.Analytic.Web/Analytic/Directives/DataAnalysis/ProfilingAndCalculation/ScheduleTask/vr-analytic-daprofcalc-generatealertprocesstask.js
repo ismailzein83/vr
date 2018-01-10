@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrAnalyticDaprofcalcGeneratealertprocesstask", ['UtilsService', 'VRUIUtilsService', 'VRValidationService', 'VR_Notification_VRAlertRuleTypeAPIService', 'VR_Analytic_DataAnalysisDefinitionAPIService', 'VRNotificationService','VR_Analytic_DAProfCalcTimeUnitEnum',
+app.directive("vrAnalyticDaprofcalcGeneratealertprocesstask", ['UtilsService', 'VRUIUtilsService', 'VRValidationService', 'VR_Notification_VRAlertRuleTypeAPIService', 'VR_Analytic_DataAnalysisDefinitionAPIService', 'VRNotificationService', 'VR_Analytic_DAProfCalcTimeUnitEnum',
     function (UtilsService, VRUIUtilsService, VRValidationService, VR_Notification_VRAlertRuleTypeAPIService, VR_Analytic_DataAnalysisDefinitionAPIService, VRNotificationService, VR_Analytic_DAProfCalcTimeUnitEnum) {
         var directiveDefinitionObject = {
             restrict: "E",
@@ -34,6 +34,12 @@ app.directive("vrAnalyticDaprofcalcGeneratealertprocesstask", ['UtilsService', '
 
             var chunkTimeSelectorAPI;
             var chunkTimeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var minDataAnalysisPeriodAPI;
+            var minDataAnalysisPeriodReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var maxDataAnalysisPeriodAPI;
+            var maxDataAnalysisPeriodReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
                 $scope.showChunkTimeSelector = false;
@@ -79,6 +85,39 @@ app.directive("vrAnalyticDaprofcalcGeneratealertprocesstask", ['UtilsService', '
                     chunkTimeSelectorReadyDeferred.resolve();
                 };
 
+                $scope.onMinDataAnalysisPeriodDirectiveReady = function (api) {
+                    minDataAnalysisPeriodAPI = api;
+                    minDataAnalysisPeriodReadyDeferred.resolve();
+                };
+
+                $scope.onMaxDataAnalysisPeriodDirectiveReady = function (api) {
+                    maxDataAnalysisPeriodAPI = api;
+                    maxDataAnalysisPeriodReadyDeferred.resolve();
+                };
+
+                $scope.validateDataAnalysisPeriod = function () {
+                    $scope.timeUnits = UtilsService.getArrayEnum(VR_Analytic_DAProfCalcTimeUnitEnum);
+
+                    var maxAnalysisPeriod = maxDataAnalysisPeriodAPI.getData();
+                    var minAnalysisPeriod = minDataAnalysisPeriodAPI.getData();
+
+                    if (maxAnalysisPeriod == undefined || minAnalysisPeriod == undefined)
+                        return null;
+
+                    var maxAnalysisPeriodTimeBack = maxAnalysisPeriod.AnalysisPeriodTimeBack;
+                    var maxAnalysisPeriodTimeUnit = UtilsService.getItemByVal($scope.timeUnits, maxAnalysisPeriod.AnalysisPeriodTimeUnit, 'value');
+                    var maxPeriodInMinutes = maxAnalysisPeriodTimeBack * maxAnalysisPeriodTimeUnit.ValueInMinutes;
+
+                    var minAnalysisPeriodTimeBack = minAnalysisPeriod.AnalysisPeriodTimeBack;
+                    var minAnalysisPeriodTimeUnit = UtilsService.getItemByVal($scope.timeUnits, minAnalysisPeriod.AnalysisPeriodTimeUnit, 'value');
+                    var minPeriodInMinutes = minAnalysisPeriodTimeBack * minAnalysisPeriodTimeUnit.ValueInMinutes;
+
+                    if (maxPeriodInMinutes > minPeriodInMinutes)
+                        return null;
+
+                    return 'Min Analysis Period should be less than Max Analysis Period';
+                };
+
                 defineAPI();
             }
 
@@ -91,15 +130,7 @@ app.directive("vrAnalyticDaprofcalcGeneratealertprocesstask", ['UtilsService', '
                     var alertRuleTypeId;
                     var chunkTime;
 
-                    $scope.timeUnits = UtilsService.getArrayEnum(VR_Analytic_DAProfCalcTimeUnitEnum);
-
                     if (payload != undefined) {
-                        if (payload.rawExpressions != undefined) {
-                            $scope.timeBack = payload.rawExpressions.TimeBack;
-                            $scope.timeBackTimeUnit = UtilsService.getItemByVal($scope.timeUnits, payload.rawExpressions.TimeBackTimeUnit, 'value');
-                            $scope.period = payload.rawExpressions.Period;
-                            $scope.periodTimeUnit = UtilsService.getItemByVal($scope.timeUnits, payload.rawExpressions.PeriodTimeUnit, 'value');
-                        }
 
                         if (payload.data != undefined) {
                             alertRuleTypeId = payload.data.AlertRuleTypeId;
@@ -136,11 +167,46 @@ app.directive("vrAnalyticDaprofcalcGeneratealertprocesstask", ['UtilsService', '
                     });
                     promises.push(alertRuleTypeSelectorLoadDeferred.promise);
 
+
+                    var minDataAnalysisPeriodLoadPromise = getMinDataAnalysisPeriodLoadPromise();
+                    promises.push(minDataAnalysisPeriodLoadPromise);
+
+                    var maxDataAnalysisPeriodLoadPromise = getMaxDataAnalysisPeriodLoadPromise();
+                    promises.push(maxDataAnalysisPeriodLoadPromise);
+
+                    function getMinDataAnalysisPeriodLoadPromise() {
+                        var dataAnalysisPeriodDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        minDataAnalysisPeriodReadyDeferred.promise.then(function () {
+                            var minDataAnalysisPeriodPayload;
+                            if (payload != undefined && payload.data != undefined)
+                                minDataAnalysisPeriodPayload = { DAProfCalcAnalysisPeriod: payload.data.MinDAProfCalcAnalysisPeriod };
+
+                            VRUIUtilsService.callDirectiveLoad(minDataAnalysisPeriodAPI, minDataAnalysisPeriodPayload, dataAnalysisPeriodDirectiveLoadDeferred);
+                        });
+
+                        return dataAnalysisPeriodDirectiveLoadDeferred.promise;
+                    };
+
+                    function getMaxDataAnalysisPeriodLoadPromise() {
+                        var dataAnalysisPeriodDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        maxDataAnalysisPeriodReadyDeferred.promise.then(function () {
+                            var maxDataAnalysisPeriodPayload;
+                            if (payload != undefined && payload.data != undefined)
+                                maxDataAnalysisPeriodPayload = { DAProfCalcAnalysisPeriod: payload.data.MaxDAProfCalcAnalysisPeriod };
+
+                            VRUIUtilsService.callDirectiveLoad(maxDataAnalysisPeriodAPI, maxDataAnalysisPeriodPayload, dataAnalysisPeriodDirectiveLoadDeferred);
+                        });
+
+                        return dataAnalysisPeriodDirectiveLoadDeferred.promise;
+                    };
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getExpressionsData = function () {
-                    return { "ScheduleTime": "ScheduleTime", "TimeBack": $scope.timeBack, "TimeBackTimeUnit": $scope.timeBackTimeUnit.value, "Period": $scope.period, "PeriodTimeUnit": $scope.periodTimeUnit.value };
+                    return null;
                 };
 
                 api.getData = function () {
@@ -148,6 +214,8 @@ app.directive("vrAnalyticDaprofcalcGeneratealertprocesstask", ['UtilsService', '
                     return {
                         $type: "Vanrise.Analytic.BP.Arguments.DAProfCalcGenerateAlertInput, Vanrise.Analytic.BP.Arguments",
                         AlertRuleTypeId: alertRuleTypeSelectorAPI.getSelectedIds(),
+                        MinDAProfCalcAnalysisPeriod: minDataAnalysisPeriodAPI.getData(),
+                        MaxDAProfCalcAnalysisPeriod: maxDataAnalysisPeriodAPI.getData(),
                         ChunkTime: chunkTimeSelectorAPI != undefined ? chunkTimeSelectorAPI.getSelectedIds() : undefined
                     };
                 };

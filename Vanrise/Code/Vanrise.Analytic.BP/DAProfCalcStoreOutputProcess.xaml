@@ -72,6 +72,11 @@
     <Sequence.Variables>
       <Variable x:TypeArguments="scg:List(vae:DAProfCalcExecInput)" Name="DAProfCalcExecInputs" />
       <Variable x:TypeArguments="scg:List(s:Guid)" Name="DataAnalysisDefinitionItemIds" />
+      <Variable x:TypeArguments="s:DateTime" Name="EffectiveDate">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="s:DateTime">DateTime.Now</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
     </Sequence.Variables>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="Starting Profiling and Calculation Process.">
       <vbw:WriteTrackingMessage.Severity>
@@ -120,6 +125,11 @@
           <mca:CSharpValue x:TypeArguments="scg:List(vae:DAProfCalcExecInput)">DAProfCalcExecInputs</mca:CSharpValue>
         </InArgument>
       </local:DAProfCalcSubProcess.DAProfCalcExecInputs>
+      <local:DAProfCalcSubProcess.EffectiveDate>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveDate</mca:CSharpValue>
+        </InArgument>
+      </local:DAProfCalcSubProcess.EffectiveDate>
       <local:DAProfCalcSubProcess.FromTime>
         <InArgument x:TypeArguments="s:DateTime">
           <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromTime</mca:CSharpValue>
@@ -156,12 +166,12 @@
           <sap2010:ViewStateData Id="Assign_7" sap2010:WorkflowViewState.IdRef="ViewStateData_12" />
           <sap2010:ViewStateData Id="If_2" sap2010:WorkflowViewState.IdRef="ViewStateData_13" />
           <sap2010:ViewStateData Id="Sequence_5" sap2010:WorkflowViewState.IdRef="ViewStateData_14" />
-          <sap2010:ViewStateData Id="ViewStateData_43" sap2010:WorkflowViewState.IdRef="ViewStateData_15" />
-          <sap2010:ViewStateData Id="ViewStateData_44" sap2010:WorkflowViewState.IdRef="ViewStateData_16" />
-          <sap2010:ViewStateData Id="ViewStateData_45" sap2010:WorkflowViewState.IdRef="ViewStateData_17" />
-          <sap2010:ViewStateData Id="ViewStateData_46" sap2010:WorkflowViewState.IdRef="ViewStateData_18" />
-          <sap2010:ViewStateData Id="ViewStateData_47" sap2010:WorkflowViewState.IdRef="ViewStateData_19" />
-          <sap2010:ViewStateData Id="ViewStateData_48" sap2010:WorkflowViewState.IdRef="ViewStateData_20" />
+          <sap2010:ViewStateData Id="ViewStateData_1" sap2010:WorkflowViewState.IdRef="ViewStateData_15" />
+          <sap2010:ViewStateData Id="ViewStateData_2" sap2010:WorkflowViewState.IdRef="ViewStateData_16" />
+          <sap2010:ViewStateData Id="ViewStateData_3" sap2010:WorkflowViewState.IdRef="ViewStateData_17" />
+          <sap2010:ViewStateData Id="ViewStateData_4" sap2010:WorkflowViewState.IdRef="ViewStateData_18" />
+          <sap2010:ViewStateData Id="ViewStateData_5" sap2010:WorkflowViewState.IdRef="ViewStateData_19" />
+          <sap2010:ViewStateData Id="ViewStateData_6" sap2010:WorkflowViewState.IdRef="ViewStateData_20" />
           <sap2010:ViewStateData Id="Vanrise.Analytic.BP.DAProfCalcForRangeProcess_1" sap2010:WorkflowViewState.IdRef="ViewStateData_21" />
           <sap2010:ViewStateData Id="If_4" sap2010:WorkflowViewState.IdRef="ViewStateData_22" />
           <sap2010:ViewStateData Id="Assign_1" sap2010:WorkflowViewState.IdRef="ViewStateData_23" />
@@ -184,7 +194,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0lDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY1N0b3JlT3V0cHV0UHJvY2Vzcy54YW1sFUcDvAEOAgEBTAVSIAIBN1MFXiwCAS5fBWolAgElawWzASICAQi0AQW6ASACAQJPC0+FAQIBOUxgTI0BAgE4WwtbdgIBM1YLVmMCAS9nC2duAgEqYgtifgIBJm4LbncCASFzC3NjAgEdggELggGpAQIBGYcBC4cBaQIBFXgLeHYCARF9C31ZAgENjAELjAFXAgEJtwELtwGFAQIBBLQBYLQBjQECAQM=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0lDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY1N0b3JlT3V0cHV0UHJvY2Vzcy54YW1sF0cDxgEOAgEBTQtNVwIBAlEFVyACAU1YBWMsAgFCZAVvJQIBN3AFvQEiAgEOvgEFxAEgAgEHVAtUhQECAU9RYFGNAQIBTmALYHYCAUhbC1tjAgFDbAtsbgIBPWcLZ34CAThzC3N3AgEyeAt4YwIBLYwBC4wBqQECASiRAQuRAWkCASN9C312AgEeggELggFYAgEZhwELhwFZAgEUlgELlgFXAgEPwQELwQGFAQIBCb4BYL4BjQECAQg=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

@@ -26,6 +26,7 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
         public List<BaseQueue<DAProfCalcOutputRecordBatch>> OutputQueues { get; set; }
         public IDAProfCalcOutputRecordProcessor OutputRecordProcessor { get; set; }
         public bool UseRemoteDataGrouper { get; set; }
+        public DateTime EffectiveDate { get; set; }
     }
 
     public class ExecuteRecordProfilingOutput
@@ -52,6 +53,9 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
         public InArgument<IDAProfCalcOutputRecordProcessor> OutputRecordProcessor { get; set; }
 
         [RequiredArgument]
+        public InArgument<DateTime> EffectiveDate { get; set; }
+
+        [RequiredArgument]
         public InArgument<bool> UseRemoteDataGrouper { get; set; }
 
         protected override ExecuteRecordProfilingOutput DoWorkWithResult(ExecuteRecordProfilingInput inputArgument, AsyncActivityStatus previousActivityStatus, AsyncActivityHandle handle)
@@ -62,6 +66,8 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
             DAProfCalcSettings daProfCalcSettings = dataAnalysisDefinitionManager.GetDataAnalysisDefinitionSettings<DAProfCalcSettings>(inputArgument.DAProfCalcDefinitionId);
 
             Guid daDataRecordTypeId = daProfCalcSettings.DataRecordTypeId;
+            DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
+            string dateTimeFieldName = dataRecordTypeManager.GetDataRecordType(daDataRecordTypeId).Settings.DateTimeField;
 
             Dictionary<string, DataAnalysisInfo> dataAnalysisInfos = new Dictionary<string, DataAnalysisInfo>();
             Dictionary<Guid, RecordProfilingOutputSettings> daRecordProfilingOutputSettings = new Dictionary<Guid, RecordProfilingOutputSettings>();
@@ -85,7 +91,8 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                     DARecordFilterGroup = BuildDataAnalysisRecordFilter(daProfCalcPayload != null ? dAProfCalcExecInputItem.DAProfCalcExecInput.DataAnalysisRecordFilter : null, recordProfilingOutputSettings.RecordFilter),
                     DataAnalysisItemDefinition = dataAnalysisItemDefinition,
                     DistributedDataGrouper = new DistributedDataGrouper(dataAnalysisUniqueName, new ProfilingDGHandler { DAProfCalcExecInput = dAProfCalcExecInputItem.DAProfCalcExecInput, OutputRecordProcessor = inputArgument.OutputRecordProcessor }, inputArgument.UseRemoteDataGrouper),
-                    GroupingFieldNames = dAProfCalcExecInputItem.DAProfCalcExecInput.GroupingFieldNames
+                    GroupingFieldNames = dAProfCalcExecInputItem.DAProfCalcExecInput.GroupingFieldNames,
+                    AnalysisStartDate = inputArgument.EffectiveDate.AddMinutes(-1 * dAProfCalcExecInputItem.DAProfCalcExecInput.DAProfCalcAnalysisPeriod.GetPeriodInMinutes())
                 });
             }
             RecordFilterManager recordFilterManager = new RecordFilterManager();
@@ -107,6 +114,10 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
 
                             foreach (dynamic cdr in recordBatch.Records)
                             {
+                                DateTime attemptDateTime = cdr.GetFieldValue(dateTimeFieldName);
+                                if (dataAnalysisInfo.Value.AnalysisStartDate > attemptDateTime)
+                                    continue;
+
                                 DataRecordFilterGenericFieldMatchContext filterContext = new DataRecordFilterGenericFieldMatchContext(cdr, daDataRecordTypeId);
                                 if (dataAnalysisInfo.Value.DARecordFilterGroup != null && !recordFilterManager.IsFilterGroupMatch(dataAnalysisInfo.Value.DARecordFilterGroup, filterContext))
                                     continue;
@@ -174,7 +185,8 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                 InputQueue = InputQueue.Get(context),
                 OutputQueues = OutputQueues.Get(context),
                 OutputRecordProcessor = OutputRecordProcessor.Get(context),
-                UseRemoteDataGrouper = UseRemoteDataGrouper.Get(context)
+                UseRemoteDataGrouper = UseRemoteDataGrouper.Get(context),
+                EffectiveDate = EffectiveDate.Get(context)
             };
         }
 
@@ -259,6 +271,7 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
             public Dictionary<string, ProfilingDGItem> ProfilingDGItems { get; set; }
             public RecordFilterGroup DARecordFilterGroup { get; set; }
             public List<string> GroupingFieldNames { get; set; }
+            public DateTime AnalysisStartDate { get; set; }
         }
     }
 }

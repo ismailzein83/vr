@@ -1,26 +1,17 @@
 ﻿<vr-row>
-    <vr-columns colnum="4">
+    <vr-columns colnum="3">
         <vr-notification-alertruletype-selector on-ready="onAlertRuleTypeSelectorReady" isrequired="true" onselectionchanged="onAlertRuleTypeSelectionChanged"></vr-notification-alertruletype-selector>
     </vr-columns>
-    <vr-columns colnum="4" haschildcolumns>
-        <vr-columns colnum="6" right-medium-spacing>
-            <vr-textbox value="timeBack" type="number" label="Time Back" isrequired minvalue="1" decimalprecision="0"></vr-textbox>
-        </vr-columns>
-        <vr-columns colnum="6" withemptyline left-medium-spacing>
-            <vr-select datatextfield="description" datavaluefield="value" datasource="timeUnits"
-                       selectedvalues="timeBackTimeUnit" hideremoveicon isrequired="true" />
-        </vr-columns>
+
+    <vr-columns colnum="6" haschildcolumns>
+        <vr-validator validate="validateDataAnalysisPeriod()">
+            <vr-analytic-daprofcalc-analysisperiod on-ready="onMinDataAnalysisPeriodDirectiveReady" normal-col-num="6" label="Min Analysis Period" isrequired="false"></vr-analytic-daprofcalc-analysisperiod>
+
+            <vr-analytic-daprofcalc-analysisperiod on-ready="onMaxDataAnalysisPeriodDirectiveReady" normal-col-num="6" label="Max Analysis Period" isrequired="true"></vr-analytic-daprofcalc-analysisperiod>
+        </vr-validator>
     </vr-columns>
-    <vr-columns colnum="4" haschildcolumns>
-        <vr-columns colnum="6" right-medium-spacing>
-            <vr-textbox value="period" type="number" label="Period" isrequired minvalue="1" decimalprecision="0"></vr-textbox>
-        </vr-columns>
-        <vr-columns colnum="6" withemptyline left-medium-spacing>
-            <vr-select datatextfield="description" datavaluefield="value" datasource="timeUnits"
-                       selectedvalues="periodTimeUnit" hideremoveicon isrequired="true" />
-        </vr-columns>
-    </vr-columns>
-</vr-row>
-<vr-row ng-if="showChunkTimeSelector" vr-loader="isLoading">
-    <vr-analytic-daprofcalc-chunktime-selector on-ready="onChunkTimeSelectorReady" normal-col-num="4" isrequired="true"></vr-analytic-daprofcalc-chunktime-selector>
+
+    <span ng-if="showChunkTimeSelector" vr-loader="isLoading">
+        <vr-analytic-daprofcalc-chunktime-selector on-ready="onChunkTimeSelectorReady" normal-col-num="3" isrequired="true"></vr-analytic-daprofcalc-chunktime-selector>
+    </span>
 </vr-row>

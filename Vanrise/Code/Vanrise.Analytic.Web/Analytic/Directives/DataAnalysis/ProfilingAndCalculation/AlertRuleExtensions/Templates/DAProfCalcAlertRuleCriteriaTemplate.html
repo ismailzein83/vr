@@ -8,15 +8,15 @@
 
 <vr-row>
     <vr-columns width="1/3row">
-        <vr-timespan label="Min Notification Interval" isrequired="true" value="scopeModel.minNotificationInterval"></vr-timespan>
-    </vr-columns>
-    <vr-columns width="1/3row">
         <vr-analytic-dataanalysisitemdefinition-selector on-ready="scopeModel.onDataAnalysisItemDefinitionSelectorReady"
                                                          onselectionchanged="scopeModel.onDataAnalysisItemDefinitionSelectionChanged"
                                                          onbeforeselectionchanged="scopeModel.onBeforeDataAnalysisItemDefinitionSelectionChanged"
                                                          customlabel="Analysis Type" isrequired="true">
         </vr-analytic-dataanalysisitemdefinition-selector>
     </vr-columns>
+
+    <vr-analytic-daprofcalc-analysisperiod on-ready="scopeModel.onDataAnalysisPeriodDirectiveReady" normal-col-num="4" isrequired="true"></vr-analytic-daprofcalc-analysisperiod>
+
     <vr-columns width="1/3row" ng-show="scopeModel.isDataAnalysisItemDefinitionSelected">
         <span vr-loader="scopeModel.isOutputFieldsSelectorLoading">
             <vr-analytic-daprofcalc-outputfields-selector on-ready="scopeModel.onDataAnalysisItemOutputFieldsSelectorReady" customlabel="Grouping Fields"
@@ -24,5 +24,10 @@
                                                           onselectitem="scopeModel.onSelectDataAnalysisItemOutputFields" ondeselectitem="scopeModel.onDeselectDataAnalysisItemOutputFields">
             </vr-analytic-daprofcalc-outputfields-selector>
         </span>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="1/3row">
+        <vr-timespan label="Min Notification Interval" isrequired="true" value="scopeModel.minNotificationInterval"></vr-timespan>
     </vr-columns>
 </vr-row>

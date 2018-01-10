@@ -10,5 +10,9 @@ namespace Vanrise.Notification.Entities
         public string Description { get; set; }
 
         public List<int> StatusIds { get; set; }
+
+        public DateTime? From { get; set; }
+
+        public DateTime? To { get; set; }
     }
 }

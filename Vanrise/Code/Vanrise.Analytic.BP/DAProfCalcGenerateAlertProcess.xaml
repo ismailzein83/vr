@@ -72,6 +72,13 @@
       <Variable x:TypeArguments="scg:List(vae:DAProfCalcExecInput)" Name="DAProfCalcExecInputs" />
       <Variable x:TypeArguments="s:Guid" Name="DataAnalysisDefinitionId" />
       <Variable x:TypeArguments="scg:List(s:Guid)" Name="RecordStorageIds" />
+      <Variable x:TypeArguments="s:DateTime" Name="EffectiveDate">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="s:DateTime">DateTime.Now</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
+      <Variable x:TypeArguments="s:DateTime" Name="FromTime" />
+      <Variable x:TypeArguments="s:DateTime" Name="ToTime" />
     </Sequence.Variables>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="Starting Profiling and Calculation Process.">
       <vbw:WriteTrackingMessage.Severity>
@@ -96,11 +103,36 @@
           <mca:CSharpReference x:TypeArguments="s:Guid">DataAnalysisDefinitionId</mca:CSharpReference>
         </OutArgument>
       </vabad:GenerateDADataFromAlertRule.DataAnalysisDefinitionId>
+      <vabad:GenerateDADataFromAlertRule.EffectiveDate>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveDate</mca:CSharpValue>
+        </InArgument>
+      </vabad:GenerateDADataFromAlertRule.EffectiveDate>
+      <vabad:GenerateDADataFromAlertRule.FromTime>
+        <OutArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpReference x:TypeArguments="s:DateTime">FromTime</mca:CSharpReference>
+        </OutArgument>
+      </vabad:GenerateDADataFromAlertRule.FromTime>
+      <vabad:GenerateDADataFromAlertRule.MaxDAProfCalcAnalysisPeriod>
+        <InArgument x:TypeArguments="vae:DAProfCalcAnalysisPeriod">
+          <mca:CSharpValue x:TypeArguments="vae:DAProfCalcAnalysisPeriod">Input.MaxDAProfCalcAnalysisPeriod</mca:CSharpValue>
+        </InArgument>
+      </vabad:GenerateDADataFromAlertRule.MaxDAProfCalcAnalysisPeriod>
+      <vabad:GenerateDADataFromAlertRule.MinDAProfCalcAnalysisPeriod>
+        <InArgument x:TypeArguments="vae:DAProfCalcAnalysisPeriod">
+          <mca:CSharpValue x:TypeArguments="vae:DAProfCalcAnalysisPeriod">Input.MinDAProfCalcAnalysisPeriod</mca:CSharpValue>
+        </InArgument>
+      </vabad:GenerateDADataFromAlertRule.MinDAProfCalcAnalysisPeriod>
       <vabad:GenerateDADataFromAlertRule.SourceRecordStorageIds>
         <OutArgument x:TypeArguments="scg:List(s:Guid)">
           <mca:CSharpReference x:TypeArguments="scg:List(s:Guid)">RecordStorageIds</mca:CSharpReference>
         </OutArgument>
       </vabad:GenerateDADataFromAlertRule.SourceRecordStorageIds>
+      <vabad:GenerateDADataFromAlertRule.ToTime>
+        <OutArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpReference x:TypeArguments="s:DateTime">ToTime</mca:CSharpReference>
+        </OutArgument>
+      </vabad:GenerateDADataFromAlertRule.ToTime>
     </vabad:GenerateDADataFromAlertRule>
     <local:DAProfCalcSubProcess OutputRecordsQueue="{x:Null}" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="Vanrise.Analytic.BP.DAProfCalcSubProcess_1">
       <local:DAProfCalcSubProcess.ChunkTime>
@@ -118,9 +150,14 @@
           <mca:CSharpValue x:TypeArguments="scg:List(vae:DAProfCalcExecInput)">DAProfCalcExecInputs</mca:CSharpValue>
         </InArgument>
       </local:DAProfCalcSubProcess.DAProfCalcExecInputs>
+      <local:DAProfCalcSubProcess.EffectiveDate>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveDate</mca:CSharpValue>
+        </InArgument>
+      </local:DAProfCalcSubProcess.EffectiveDate>
       <local:DAProfCalcSubProcess.FromTime>
         <InArgument x:TypeArguments="s:DateTime">
-          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromTime</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="s:DateTime">FromTime</mca:CSharpValue>
         </InArgument>
       </local:DAProfCalcSubProcess.FromTime>
       <local:DAProfCalcSubProcess.OutputRecordProcessor>
@@ -135,7 +172,7 @@
       </local:DAProfCalcSubProcess.RecordStorageIds>
       <local:DAProfCalcSubProcess.ToTime>
         <InArgument x:TypeArguments="s:DateTime">
-          <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToTime</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="s:DateTime">ToTime</mca:CSharpValue>
         </InArgument>
       </local:DAProfCalcSubProcess.ToTime>
       <sap2010:WorkflowViewState.ViewStateManager>
@@ -154,12 +191,12 @@
           <sap2010:ViewStateData Id="Assign_7" sap2010:WorkflowViewState.IdRef="ViewStateData_12" />
           <sap2010:ViewStateData Id="If_2" sap2010:WorkflowViewState.IdRef="ViewStateData_13" />
           <sap2010:ViewStateData Id="Sequence_5" sap2010:WorkflowViewState.IdRef="ViewStateData_14" />
-          <sap2010:ViewStateData Id="ViewStateData_43" sap2010:WorkflowViewState.IdRef="ViewStateData_15" />
-          <sap2010:ViewStateData Id="ViewStateData_44" sap2010:WorkflowViewState.IdRef="ViewStateData_16" />
-          <sap2010:ViewStateData Id="ViewStateData_45" sap2010:WorkflowViewState.IdRef="ViewStateData_17" />
-          <sap2010:ViewStateData Id="ViewStateData_46" sap2010:WorkflowViewState.IdRef="ViewStateData_18" />
-          <sap2010:ViewStateData Id="ViewStateData_47" sap2010:WorkflowViewState.IdRef="ViewStateData_19" />
-          <sap2010:ViewStateData Id="ViewStateData_48" sap2010:WorkflowViewState.IdRef="ViewStateData_20" />
+          <sap2010:ViewStateData Id="ViewStateData_1" sap2010:WorkflowViewState.IdRef="ViewStateData_15" />
+          <sap2010:ViewStateData Id="ViewStateData_2" sap2010:WorkflowViewState.IdRef="ViewStateData_16" />
+          <sap2010:ViewStateData Id="ViewStateData_3" sap2010:WorkflowViewState.IdRef="ViewStateData_17" />
+          <sap2010:ViewStateData Id="ViewStateData_4" sap2010:WorkflowViewState.IdRef="ViewStateData_18" />
+          <sap2010:ViewStateData Id="ViewStateData_5" sap2010:WorkflowViewState.IdRef="ViewStateData_19" />
+          <sap2010:ViewStateData Id="ViewStateData_6" sap2010:WorkflowViewState.IdRef="ViewStateData_20" />
           <sap2010:ViewStateData Id="Vanrise.Analytic.BP.DAProfCalcForRangeProcess_1" sap2010:WorkflowViewState.IdRef="ViewStateData_21" />
           <sap2010:ViewStateData Id="If_4" sap2010:WorkflowViewState.IdRef="ViewStateData_22" />
           <sap2010:ViewStateData Id="Assign_1" sap2010:WorkflowViewState.IdRef="ViewStateData_23" />
@@ -182,7 +219,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0tDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY0dlbmVyYXRlQWxlcnRQcm9jZXNzLnhhbWwURgO6AQ4CAQFMBVIgAgFCUwVoKQIBLWkFsQEiAgEJsgEFuAEgAgECTwtPhQECAURMYEyNAQIBQ2ALYGcCAT1lC2VpAgE4WwtbfgIBM1YLVlwCAS5sC2x3AgEocQtxXwIBI4ABC4ABswECAR6FAQuFAWECARl2C3Z2AgEUewt7WQIBD4oBC4oBVwIBCrUBC7UBhQECAQSyAWCyAY0BAgED</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0tDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY0dlbmVyYXRlQWxlcnRQcm9jZXNzLnhhbWwbRgPfAQ4CAQFNC01XAgECUwVZIAMBngFaBYgBKQIBVYkBBdYBIgIBFNcBBd0BIAIBClYLVoUBAwGgAVNgU40BAwGfAWcLZ2cDAZYBdgt2fgMBjgGAAQuAAWkDAYYBewt7fgIBfmILYn4CAXZdC11cAgFubAtsWAIBZnELcVsCAV6FAQuFAVkCAVaMAQuMAXcCAU2RAQuRAV8CAUWlAQulAbMBAgE9qgELqgFhAgE1lgELlgF2AgEtmwELmwFYAgEloAELoAFTAgEdrwELrwFRAgEV2gEL2gGFAQIBDNcBYNcBjQECAQs=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

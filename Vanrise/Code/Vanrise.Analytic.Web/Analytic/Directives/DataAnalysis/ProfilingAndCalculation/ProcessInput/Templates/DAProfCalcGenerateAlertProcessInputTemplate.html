@@ -2,14 +2,15 @@
     <vr-columns colnum="3">
         <vr-notification-alertruletype-selector on-ready="onAlertRuleTypeSelectorReady" isrequired="true" onselectionchanged="onAlertRuleTypeSelectionChanged"></vr-notification-alertruletype-selector>
     </vr-columns>
-    <vr-columns colnum="3">
-        <vr-datetimepicker label="From" isrequired="true" value="fromDate" type="longDateTime" customvalidate="validateTimeRange()"></vr-datetimepicker>
-    </vr-columns>
 
-    <vr-columns colnum="3">
-        <vr-datetimepicker label="To" isrequired="true" value="toDate" type="longDateTime" customvalidate="validateTimeRange()"></vr-datetimepicker>
-    </vr-columns>
+    <vr-columns colnum="6" haschildcolumns>
+        <vr-validator validate="validateDataAnalysisPeriod()">
+            <vr-analytic-daprofcalc-analysisperiod on-ready="onMinDataAnalysisPeriodDirectiveReady" normal-col-num="6" label="Min Analysis Period" isrequired="false"></vr-analytic-daprofcalc-analysisperiod>
 
+            <vr-analytic-daprofcalc-analysisperiod on-ready="onMaxDataAnalysisPeriodDirectiveReady" normal-col-num="6" label="Max Analysis Period" isrequired="true"></vr-analytic-daprofcalc-analysisperiod>
+        </vr-validator>
+    </vr-columns>
+   
     <vr-columns colnum="3" ng-if="showChunkTimeSelector" vr-loader="isLoading">
         <vr-select label="Chunk Time" datatextfield="description" datavaluefield="value" isrequired="true"
                    datasource="chunkTimes" selectedvalues="scopeModel.selectedChunkTime"></vr-select>

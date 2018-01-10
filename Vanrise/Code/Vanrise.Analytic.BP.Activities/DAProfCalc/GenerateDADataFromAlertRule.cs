@@ -15,6 +15,15 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
         public InArgument<Guid> AlertRuleTypeId { get; set; }
 
         [RequiredArgument]
+        public InArgument<DateTime> EffectiveDate { get; set; }
+
+        [RequiredArgument]
+        public InArgument<DAProfCalcAnalysisPeriod> MinDAProfCalcAnalysisPeriod { get; set; }
+
+        [RequiredArgument]
+        public InArgument<DAProfCalcAnalysisPeriod> MaxDAProfCalcAnalysisPeriod { get; set; }
+
+        [RequiredArgument]
         public OutArgument<Guid> DataAnalysisDefinitionId { get; set; }
 
         [RequiredArgument]
@@ -23,8 +32,24 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
         [RequiredArgument]
         public OutArgument<List<Guid>> SourceRecordStorageIds { get; set; }
 
+        [RequiredArgument]
+        public OutArgument<DateTime> FromTime { get; set; }
+
+        [RequiredArgument]
+        public OutArgument<DateTime> ToTime { get; set; }
+
         protected override void Execute(CodeActivityContext context)
         {
+            DateTime effectiveDate = EffectiveDate.Get(context);
+
+            DAProfCalcAnalysisPeriod maxDAProfCalcAnalysisPeriod = this.MaxDAProfCalcAnalysisPeriod.Get(context);
+            DAProfCalcAnalysisPeriod minDAProfCalcAnalysisPeriod = this.MinDAProfCalcAnalysisPeriod.Get(context);
+            if (maxDAProfCalcAnalysisPeriod == null)
+                throw new NullReferenceException("maxDAProfCalcAnalysisPeriod");
+
+            int maxPeriodInMinutes = maxDAProfCalcAnalysisPeriod.GetPeriodInMinutes();
+            int minPeriodInMinutes = minDAProfCalcAnalysisPeriod != null ? minDAProfCalcAnalysisPeriod.GetPeriodInMinutes() : 0;
+
             Guid alertRuleTypeId = this.AlertRuleTypeId.Get(context);
 
             VRAlertRuleTypeManager alertRuleTypeManager = new VRAlertRuleTypeManager();
@@ -47,6 +72,8 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
 
             VRAlertRuleManager alertRuleManager = new VRAlertRuleManager();
             List<VRAlertRule> alertRules = alertRuleManager.GetActiveRules(alertRuleTypeId);
+
+            int maxAlertRulePeriodInMinutes = 0;
             if (alertRules != null && alertRules.Count > 0)
             {
                 foreach (VRAlertRule alertRule in alertRules)
@@ -61,7 +88,11 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                     if (daProfCalcAlertRuleSettings == null)
                         throw new Exception(String.Format("alertRule.Settings.ExtendedSettings is not of type DAProfCalcAlertRuleSettings. it is of type '0'", alertRule.Settings.ExtendedSettings.GetType()));
 
+                    int alertRulePeriodInMinutes = daProfCalcAlertRuleSettings.DAProfCalcAnalysisPeriod.GetPeriodInMinutes();
+                    if (alertRulePeriodInMinutes > maxPeriodInMinutes || alertRulePeriodInMinutes <= minPeriodInMinutes)
+                        continue;
 
+                    maxAlertRulePeriodInMinutes = Math.Max(maxAlertRulePeriodInMinutes, alertRulePeriodInMinutes);
                     DAProfCalcExecInput daProfCalcExecInput = new DAProfCalcExecInput()
                         {
                             OutputItemDefinitionId = daProfCalcAlertRuleSettings.OutputItemDefinitionId,
@@ -71,7 +102,8 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                                 AlertRuleTypeId = alertRuleTypeId
                             },
                             DataAnalysisRecordFilter = daProfCalcAlertRuleSettings.DataAnalysisFilterGroup,
-                            GroupingFieldNames = daProfCalcAlertRuleSettings.GroupingFieldNames
+                            GroupingFieldNames = daProfCalcAlertRuleSettings.GroupingFieldNames,
+                            DAProfCalcAnalysisPeriod = daProfCalcAlertRuleSettings.DAProfCalcAnalysisPeriod
                         };
 
                     bool hasMatching = false;
@@ -89,9 +121,14 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                 }
             }
 
+            DateTime fromDate = effectiveDate.AddMinutes(-1 * maxAlertRulePeriodInMinutes);
+            FromTime.Set(context, fromDate);
+            ToTime.Set(context, effectiveDate);
+
             DataAnalysisDefinitionId.Set(context, dataAnalysisDefinitionId);
             DAProfCalcExecInputs.Set(context, daProfCalcExecInputs);
             SourceRecordStorageIds.Set(context, sourceRecordStorageIds);
+
             context.GetSharedInstanceData().WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Data Analysis Profiling and Calculation Execution Inputs loaded.", null);
         }
 
@@ -107,6 +144,9 @@ namespace Vanrise.Analytic.BP.Activities.DAProfCalc
                 return false;
 
             if (firstDAProfCalcExexInput.GroupingFieldNames == null && secondDAProfCalcExexInput.GroupingFieldNames != null)
+                return false;
+
+            if (firstDAProfCalcExexInput.DAProfCalcAnalysisPeriod.GetPeriodInMinutes() != secondDAProfCalcExexInput.DAProfCalcAnalysisPeriod.GetPeriodInMinutes())
                 return false;
 
             var inFirstOnly = firstDAProfCalcExexInput.GroupingFieldNames.Except(secondDAProfCalcExexInput.GroupingFieldNames);

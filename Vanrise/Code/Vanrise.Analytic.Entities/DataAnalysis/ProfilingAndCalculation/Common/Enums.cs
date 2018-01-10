@@ -32,4 +32,23 @@ namespace Vanrise.Analytic.Entities
         }
         public int Value { get; set; }
     }
+
+    public enum DAProfCalcTimeUnit
+    {
+        [DAProfCalcTimeUnitAttribute(1440)]
+        Days = 0,
+        [DAProfCalcTimeUnitAttribute(60)]
+        Hours = 1,
+        [DAProfCalcTimeUnitAttribute(1)]
+        Minutes = 2
+    }
+
+    public class DAProfCalcTimeUnitAttribute : Attribute
+    {
+        public DAProfCalcTimeUnitAttribute(int value)
+        {
+            this.Value = value;
+        }
+        public int Value { get; set; }
+    }
 }

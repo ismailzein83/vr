@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DAProfCalcAlertRuleCriteriaDirective.$inject = ["VR_Analytic_DAProfCalcOutputSettingsAPIService", "UtilsService", 'VRUIUtilsService', 'VRNotificationService', 'VR_Analytic_DAProfCalcOutputFieldTypeEnum', 'VR_Analytic_DataAnalysisDefinitionAPIService'];
+    DAProfCalcAlertRuleCriteriaDirective.$inject = ["VR_Analytic_DAProfCalcOutputSettingsAPIService", "UtilsService", 'VRUIUtilsService', 'VRNotificationService', 'VR_Analytic_DAProfCalcOutputFieldTypeEnum', 'VR_Analytic_DataAnalysisDefinitionAPIService', 'VR_Analytic_DAProfCalcTimeUnitEnum'];
 
-    function DAProfCalcAlertRuleCriteriaDirective(VR_Analytic_DAProfCalcOutputSettingsAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VR_Analytic_DAProfCalcOutputFieldTypeEnum, VR_Analytic_DataAnalysisDefinitionAPIService) {
+    function DAProfCalcAlertRuleCriteriaDirective(VR_Analytic_DAProfCalcOutputSettingsAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VR_Analytic_DAProfCalcOutputFieldTypeEnum, VR_Analytic_DataAnalysisDefinitionAPIService, VR_Analytic_DAProfCalcTimeUnitEnum) {
         return {
             restrict: "E",
             scope: {
@@ -37,6 +37,9 @@
             var groupingOutputFiledsAPI;
             var groupingOutputFiledsReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var dataAnalysisPeriodDirectiveAPI;
+            var dataAnalysisPeriodDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
             var dataAnalysisItemObj;
 
             function initializeController() {
@@ -55,6 +58,11 @@
                 $scope.scopeModel.onDataAnalysisItemOutputFieldsSelectorReady = function (api) {
                     groupingOutputFiledsAPI = api;
                     groupingOutputFiledsReadyDeferred.resolve();
+                };
+
+                $scope.scopeModel.onDataAnalysisPeriodDirectiveReady = function (api) {
+                    dataAnalysisPeriodDirectiveAPI = api;
+                    dataAnalysisPeriodDirectiveReadyDeferred.resolve();
                 };
 
                 $scope.scopeModel.onDataAnalysisItemDefinitionSelectionChanged = function (selectedItem) {
@@ -156,6 +164,9 @@
                             $scope.scopeModel.minNotificationInterval = '0.01:00:00';
                         }
                     }
+                    //Loading Data Analysis Period Directive
+                    var dataAnalysisPeriodDirectiveLoadPromise = getDataAnalysisPeriodDirectiveLoadPromise();
+                    promises.push(dataAnalysisPeriodDirectiveLoadPromise);
 
                     //Loading Data Analysis Record Filter Directive
                     var dataAnalysisRecordFilterDirectiveLoadPromise = getDataAnalysisRecordFilterDirectiveLoadPromise();
@@ -174,6 +185,22 @@
                         var groupingOutputFieldsLoadPromise = getGroupingOutputFieldsPromise();
                         promises.push(groupingOutputFieldsLoadPromise);
                     }
+
+                    function getDataAnalysisPeriodDirectiveLoadPromise() {
+                        var dataAnalysisPeriodDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        dataAnalysisPeriodDirectiveReadyDeferred.promise.then(function (response) {
+
+                            var dataAnalysisPeriodDirectivePayload = { selectDefault: true };
+
+                            if (payload != undefined && payload.criteria != undefined)
+                                dataAnalysisPeriodDirectivePayload.DAProfCalcAnalysisPeriod = payload.criteria.DAProfCalcAnalysisPeriod;
+
+                            VRUIUtilsService.callDirectiveLoad(dataAnalysisPeriodDirectiveAPI, dataAnalysisPeriodDirectivePayload, dataAnalysisPeriodDirectiveLoadDeferred);
+                        });
+
+                        return dataAnalysisPeriodDirectiveLoadDeferred.promise;
+                    };
 
                     function getDataAnalysisRecordFilterDirectiveLoadPromise() {
                         var dataAnalysisRecordFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -237,7 +264,8 @@
                         DAProfCalcOutputItemDefinitionId: dataAnalysisItemDefinitionSelectorAPI.getSelectedIds(),
                         DataAnalysisFilterGroup: dataAnalysisRecordFilterDirectiveAPI.getData().filterObj,
                         GroupingFieldNames: groupingOutputFiledsAPI.getSelectedIds(),
-                        MinNotificationInterval: $scope.scopeModel.minNotificationInterval
+                        MinNotificationInterval: $scope.scopeModel.minNotificationInterval,
+                        DAProfCalcAnalysisPeriod: dataAnalysisPeriodDirectiveAPI.getData()
                     };
                     return data;
                 };

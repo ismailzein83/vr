@@ -27,6 +27,7 @@
     <x:Property Name="OutputRecordProcessor" Type="InArgument(vae:IDAProfCalcOutputRecordProcessor)" />
     <x:Property Name="DAProfCalcExecInputs" Type="InArgument(scg:List(vae:DAProfCalcExecInput))" />
     <x:Property Name="ChunkTime" Type="InArgument(s:Nullable(vae:DAProfCalcChunkTimeEnum))" />
+    <x:Property Name="EffectiveDate" Type="InArgument(s:DateTime)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>Vanrise.Analytic.BP.DAProfCalcSubProcess_1</sap2010:WorkflowViewState.IdRef>
@@ -244,7 +245,8 @@
                 ToTime = timeRange.To,
                 RecordStorageIds = RecordStorageIds,
                 OutputRecordProcessor = OutputRecordProcessor,
-                UseRemoteDataGrouper = true
+                UseRemoteDataGrouper = true,
+                EffectiveDate = EffectiveDate
             }</mca:CSharpValue>
                     </InArgument>
                   </vbw:RunProcess.Input>
@@ -298,7 +300,8 @@
     ToTime = timeRange.To,
     RecordStorageIds = RecordStorageIds,
     OutputRecordProcessor = OutputRecordProcessor,
-    UseRemoteDataGrouper = false
+    UseRemoteDataGrouper = false,
+    EffectiveDate = EffectiveDate
 }</mca:CSharpValue>
                   </InArgument>
                 </local:DAProfCalcForRangeProcess.Input>
@@ -395,7 +398,7 @@
         </vabad:FinaliseRecordProfiling>
       </ActivityAction>
     </ParallelForEach>
-    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY1N1YlByb2Nlc3MueGFtbEdUA48DDgIBAVgLWLYBAgEVXQtdvAECAQViM2I2AgEEYzNjNgIBA2QzZDYCAQJmBW8XAwHZBXAFggEKAwGnBYMBBa8BCgMBtASwAQW7AQ4DAZMEvAEFxwEwAwHyA8gBBfACFwIBavECBY0DFwIBJW0JbZgBAwHqBWkLaYkBAwHaBXMLc2QDAagFdwmAARsDAbgFhgELhgFcAwG1BIoBCZ8BJgMB5gSiAQmtARIDAcUEuAELuAFkAwGkBLMBC7MBYAMBlATEAQvEAXYDAYMEvwELvwGKAQMB8wPLAQvLAYABAwHiA9IBCe4CFAIBa/QCC/QCiQECAVr7AgmLAykCASZ+DX6cAQMByQV6D3qEAQMBuQWcAQ+cAVUDAZcFkgEPkgFXAwGHBY0BD40BggEDAfcElwEPlwHgAQMB5wSqAQ+qAdkBAwHWBKUBD6UBggEDAcYE1QE51QE8AgFs2AEL4wEmAwG5A+QBC8ICEAMB/QHDAgvOAhQDAdQBzwIL2gIUAwGrAdsCC+YCFAMBggHnAgvtAiYCAW3+Ag/+AnsCAUmDAw+DA34CATiIAw+IA3ACASfgARHgAYsBAwHOA9sBEdsB3QEDAboD5wER5wFiAwH+AesBD58CGgMBuwKiAg/AAjEDAZICywIRywJmAwHpAcYCEcYCagMB1QHXAhHXAnMDAcAB0gIR0gJlAwGsAeMCEeMCbwMBlwHeAhHeAmUDAYMB6gIR6gLxAgIBbuwBEYACIgMBjwOBAhGeAhYDAbwCswIVswKMAQMBpwKlAhWuAhQDAZMC7wEX+AEgAwGlA/0BF/0BigEDAZED7AG9AewBwwEDAZADhAIXhAK5AQMBvQKIAhWOAikDAfoCkQIVnAIeAwHRAosCG4sC7QEDAfsCmQIbmQKwAQMB5gKUAhuUApIBAwHSAg==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0FDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY1N1YlByb2Nlc3MueGFtbEdVA5IDDgIBAVkLWbYBAgEWXgtevAECAQVjM2M2AgEEZDNkNgIBA2UzZTYCAQJnBXAXAwGABnEFgwEKAwHLBYQBBbABCgMB0QSxAQW8AQ4DAa4EvQEFyAEwAwGLBMkBBfMCFwIBcPQCBZADFwIBJ24JbpgBAwGSBmoLaokBAwGBBnQLdGQDAcwFeAmBARsDAd0FhwELhwFcAwHSBIsBCaABJgMBhgWjAQmuARIDAeMEuQELuQFkAwHABLQBC7QBYAMBrwTFAQvFAXYDAZ0EwAELwAGKAQMBjATMAQvMAYABAwH6A9MBCfECFAIBcfcCC/cCiQECAV/+AgmOAykCASh/DX+cAQMB7wV7D3uEAQMB3gWdAQ+dAVUDAboFkwEPkwFXAwGpBY4BD44BggEDAZgFmAEPmAHgAQMBhwWrAQ+rAdkBAwH1BKYBD6YBggEDAeQE1gE51gE8AgFy2QEL5AEmAwHPA+UBC8UCEAMBigLGAgvRAhQDAd8B0gIL3QIUAwG0Ad4CC+kCFAMBiQHqAgvwAiYCAXOBAw+BA3sCAU2GAw+GA34CATuLAw+LA3ACASnhARHhAYsBAwHlA9wBEdwB3QEDAdAD6AER6AFiAwGLAuwBD6ECGgMBywKkAg/DAjEDAaACzgIRzgJmAwH1AckCEckCagMB4AHaAhHaAnMDAcoB1QIR1QJlAwG1AeYCEeYCbwMBnwHhAhHhAmUDAYoB7QIR7QLxAgIBdO0BEYICIgMBowODAhGgAhYDAcwCtgIVtgKMAQMBtgKnAhWxAhQDAaEC8AEX+gEgAwG6A/8BF/8BigEDAaUD7QG9Ae0BwwEDAaQDhgIXhgK5AQMBzQKKAhWQAikDAY0DkwIVngIeAwHiAo0CG40C7QEDAY4DmwIbmwKwAQMB+AKWAhuWApIBAwHjAg==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

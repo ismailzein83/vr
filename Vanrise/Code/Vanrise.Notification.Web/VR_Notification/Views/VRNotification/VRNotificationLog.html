@@ -24,6 +24,15 @@
                     </vr-columns>-->
                     <vr-notification-notificationstatus-selector on-ready="scopeModel.onNotificationStatusSelectorReady" normal-col-num="2" ismultipleselection></vr-notification-notificationstatus-selector>
                 </span>
+
+                <vr-columns colnum="2">
+                    <vr-datetimepicker value="scopeModel.from" type="longDateTime" label="From" customvalidate="scopeModel.validateDates()"></vr-datetimepicker>
+                </vr-columns>
+
+                <vr-columns colnum="2">
+                    <vr-datetimepicker value="scopeModel.to" type="longDateTime" label="To" customvalidate="scopeModel.validateDates()"></vr-datetimepicker>
+                </vr-columns>
+
                 <vr-directivewrapper directive="scopeModel.selectedNotificationType.SearchDirective" on-ready="scopeModel.onSearchDirectiveReady"></vr-directivewrapper>
             </vr-row>
         </div>

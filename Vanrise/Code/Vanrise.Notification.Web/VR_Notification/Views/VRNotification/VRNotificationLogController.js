@@ -2,9 +2,9 @@
 
     "use strict";
 
-    VRNotificationLogController.$inject = ['$scope', 'VRCommon_MasterLogAPIService', 'UtilsService', 'VRNavigationService', 'VRUIUtilsService', 'VRNotificationService'];
+    VRNotificationLogController.$inject = ['$scope', 'VRCommon_MasterLogAPIService', 'UtilsService', 'VRNavigationService', 'VRUIUtilsService', 'VRNotificationService', 'VRValidationService'];
 
-    function VRNotificationLogController($scope, VRCommon_MasterLogAPIService, UtilsService, VRNavigationService, VRUIUtilsService, VRNotificationService) {
+    function VRNotificationLogController($scope, VRCommon_MasterLogAPIService, UtilsService, VRNavigationService, VRUIUtilsService, VRNotificationService, VRValidationService) {
 
         var viewId;
         var notificationTypeId;
@@ -105,6 +105,10 @@
                 }
             };
 
+            $scope.scopeModel.validateDates = function () {
+                return VRValidationService.validateTimeRange($scope.scopeModel.from, $scope.scopeModel.to);
+            };
+
             $scope.scopeModel.searchClicked = function () {
                 var bodyDirectivePayload = {
                     notificationTypeId: notificationTypeId,
@@ -175,7 +179,9 @@
             return {
                 AlertLevelIds: notificationAlertlevelSelectorAPI.getSelectedIds(),
                 //Description: $scope.scopeModel.description,
-                StatusIds: notificationStatusSelectorAPI.getSelectedIds()
+                StatusIds: notificationStatusSelectorAPI.getSelectedIds(),
+                From: $scope.scopeModel.from,
+                To: $scope.scopeModel.to
             };
         }
     }

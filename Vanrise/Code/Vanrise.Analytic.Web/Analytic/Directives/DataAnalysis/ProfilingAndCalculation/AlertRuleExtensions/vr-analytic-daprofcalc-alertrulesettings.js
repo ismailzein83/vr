@@ -106,7 +106,6 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
 
                 api.getData = function () {
                     var criteria = criteriaDirectiveAPI.getData();
-
                     return {
                         $type: "Vanrise.Analytic.Entities.DAProfCalcAlertRuleSettings,Vanrise.Analytic.Entities",
                         FilterGroup: criteria.FilterGroup,
@@ -114,7 +113,8 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                         OutputItemDefinitionId: criteria.DAProfCalcOutputItemDefinitionId,
                         GroupingFieldNames: criteria.GroupingFieldNames,
                         Settings: dataRecordAlertRuleSettingsAPI.getData(),
-                        MinNotificationInterval: criteria.MinNotificationInterval
+                        MinNotificationInterval: criteria.MinNotificationInterval,
+                        DAProfCalcAnalysisPeriod: criteria.DAProfCalcAnalysisPeriod
                     };
                 };
 
@@ -133,7 +133,8 @@ app.directive('vrAnalyticDaprofcalcAlertrulesettings', ['UtilsService', 'VRUIUti
                             DAProfCalcOutputItemDefinitionId: alertExtendedSettings.OutputItemDefinitionId,
                             MinNotificationInterval: alertExtendedSettings.MinNotificationInterval,
                             DataAnalysisFilterGroup: alertExtendedSettings.DataAnalysisFilterGroup,
-                            GroupingFieldNames: alertExtendedSettings.GroupingFieldNames
+                            GroupingFieldNames: alertExtendedSettings.GroupingFieldNames,
+                            DAProfCalcAnalysisPeriod: alertExtendedSettings.DAProfCalcAnalysisPeriod
                         };
                         $scope.scopeModel.selectedAnalysisTypeId = alertExtendedSettings.OutputItemDefinitionId;
                     }
