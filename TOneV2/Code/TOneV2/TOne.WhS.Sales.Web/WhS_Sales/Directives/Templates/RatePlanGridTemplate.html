@@ -15,9 +15,9 @@
         padding-top: 3px;
     }
 
-        .rate-plan-grid .vr-datagrid-header .vr-datagrid-celltext {
-            text-transform: uppercase !important;
-        }
+    .rate-plan-grid .vr-datagrid-header .vr-datagrid-celltext {
+        text-transform: uppercase !important;
+    }
 
     .rate-plan-grid .vr-datagrid-celltext vr-select[smallselect] .vr-dropdown-select.btn {
         padding: 4px 2px !important;
@@ -69,7 +69,48 @@
     .rate-plan-grid .vr-dash:before {
         content: "—";
     }
+
+    .rate-plan-grid .filter-toggle {
+        display: inline-block;
+        width: 20px;
+        position: relative;
+        left: 4px;
+        top: 3px;
+    }    
+    .row-toggle {
+        height: 24px;
+    }
+
+    .row-toggle .toggle-icon {
+        top: calc(50% - 6px);
+        left: 4px;
+    }
+    .column-filter{
+        font-size: 6px;
+        float: right;
+    }
     /*end of rate-plan-grid */
+
+    /* start  rtl class*/
+
+
+    .rtl .rate-plan-grid .filter-toggle {
+        left: unset;
+        right: 4px;
+    }
+
+    .rtl .row-toggle .toggle-icon {
+        left: unset;
+        right: 4px;
+    }
+
+    .rtl .row-toggle .toggle-icon.expand {
+        transform: scaleX(-1);
+    }
+    .rtl .column-filter{
+        float: left;
+    }
+    /* end  rtl class*/
 </style>
 
 <div vr-loader="isLoading" ng-show="showDirective">
@@ -89,7 +130,7 @@
                     <div class="vr-datagrid drill-down-level-0 rate-plan-grid">
                         <div class="vr-datagrid-header  drill-down-level-0" style="display: flex" ng-style="headerStyle">
                             <div style="display:inline-flex; width: 100%">
-                                <div style="display:inline-block;width:20px;position: relative;left: 4px;top: 3px;" ng-init="addColumnFixedAndRecalculate('expanddrilldown', 20)">
+                                <div ng-init="addColumnFixedAndRecalculate('expanddrilldown', 20)" class="filter-toggle">
                                     <div style="height:20px;font-size: 12px;" ng-init="showfilter =  false">
                                         <i class="glyphicon glyphicon-filter hand-cursor" ng-show="!showfilter" ng-click="showfilter =  true ;" title="show filter"></i>
                                         <span ng-show="showfilter" style="color:#e85f5e" ng-click="showfilter =  false;resetGridFilter()" title="clear filter">
@@ -105,7 +146,7 @@
                                                 <span ng-show="columnsConfig.zone.sortDirection=='ASC'">&uarr;</span>
                                                 <span ng-show="columnsConfig.zone.sortDirection=='DESC'">&darr;</span>
                                                 <span>Zone</span>
-                                                <i style="font-size: 6px;float: right;" ng-show="zoneNameFilterValue != undefined " class="glyphicon glyphicon-filter hand-cursor " ng-click="$event.stopPropagation(); zoneNameFilterValue = undefined ; filterZones()"></i>
+                                                <i ng-show="zoneNameFilterValue != undefined " class="glyphicon glyphicon-filter hand-cursor column-filter " ng-click="$event.stopPropagation(); zoneNameFilterValue = undefined ; filterZones()"></i>
                                             </div>
                                             <div ng-show="showfilter">
                                                 <div style="display: inline-block; width: 90px;">
@@ -133,7 +174,7 @@
                                                 <span ng-show="columnsConfig.product.sortDirection=='ASC'">&uarr;</span>
                                                 <span ng-show="columnsConfig.product.sortDirection=='DESC'">&darr;</span>
                                                 <span>Product</span>
-                                                <i style="font-size: 6px;float: right;" ng-show="filterRoutingProducts.length > 0  " class="glyphicon glyphicon-filter hand-cursor " ng-click="$event.stopPropagation(); filterRoutingProducts = [] ; "></i>
+                                                <i  ng-show="filterRoutingProducts.length > 0  " class="glyphicon glyphicon-filter hand-cursor column-filter" ng-click="$event.stopPropagation(); filterRoutingProducts = [] ; "></i>
 
                                             </div>
                                             <div ng-show="showfilter">
@@ -165,7 +206,7 @@
                                                 <span ng-show="columnsConfig.currentRate.sortDirection=='ASC'">&uarr;</span>
                                                 <span ng-show="columnsConfig.currentRate.sortDirection=='DESC'">&darr;</span>
                                                 <span>C.Rate</span>
-                                                <i style="font-size: 6px;float: left;" ng-show="currentRateFilterValue != undefined " class="glyphicon glyphicon-filter hand-cursor " ng-click="$event.stopPropagation(); currentRateFilterValue = undefined ; filterZones()"></i>
+                                                <i  ng-show="currentRateFilterValue != undefined " class="glyphicon glyphicon-filter hand-cursor column-filter" ng-click="$event.stopPropagation(); currentRateFilterValue = undefined ; filterZones()"></i>
 
                                             </div>
                                             <div ng-show="showfilter">
@@ -197,7 +238,7 @@
                                                 <span ng-show="columnsConfig.inherIcontype.sortDirection=='ASC'">&uarr;</span>
                                                 <span ng-show="columnsConfig.inherIcontype.sortDirection=='DESC'">&darr;</span>
                                                 <span style="display: inline-block;height: 6px"></span>
-                                                <i style="font-size: 6px;float: right;" ng-show="selectedRateSourceOptions.length > 0 " class="glyphicon glyphicon-filter hand-cursor " ng-click="$event.stopPropagation(); selectedRateSourceOptions = [] ; "></i>
+                                                <i  ng-show="selectedRateSourceOptions.length > 0 " class="glyphicon glyphicon-filter hand-cursor column-filter" ng-click="$event.stopPropagation(); selectedRateSourceOptions = [] ; "></i>
                                             </div>
                                             <div ng-hide="isCurrentRateSourceFilterHidden">
                                                 <vr-select ng-show="showfilter" smallselect datasource="rateSourceOptions"
@@ -222,7 +263,7 @@
                                                 <span ng-show="columnsConfig.routeOptions.sortDirection=='ASC'">&uarr;</span>
                                                 <span ng-show="columnsConfig.routeOptions.sortDirection=='DESC'">&darr;</span>
                                                 <span>Route Options</span>
-                                                <i style="font-size: 6px;float: right;" ng-show="routeOptionFilterValue != undefined " class="glyphicon glyphicon-filter hand-cursor " ng-click="$event.stopPropagation(); routeOptionFilterValue = undefined ; filterZones()"></i>
+                                                <i ng-show="routeOptionFilterValue != undefined " class="glyphicon glyphicon-filter hand-cursor column-filter" ng-click="$event.stopPropagation(); routeOptionFilterValue = undefined ; filterZones()"></i>
 
                                             </div>
                                             <div ng-show="showfilter">
@@ -276,7 +317,7 @@
                                                 <span ng-show="columnsConfig.costColumn_{{$index}}.sortDirection=='ASC'">&uarr;</span>
                                                 <span ng-show="columnsConfig.costColumn_{{$index}}.sortDirection=='DESC'">&darr;</span>
                                                 <span>{{method.Title}}</span>
-                                                <i style="font-size: 6px;float: left;" ng-show="costFilterValues[$index] != undefined " class="glyphicon glyphicon-filter hand-cursor " ng-click="$event.stopPropagation(); costFilterValues[$index] = undefined ; filterZones()"></i>
+                                                <i  ng-show="costFilterValues[$index] != undefined " class="glyphicon glyphicon-filter hand-cursor column-filter " ng-click="$event.stopPropagation(); costFilterValues[$index] = undefined ; filterZones()"></i>
 
                                             </div>
                                             <div ng-show="showfilter">
@@ -308,7 +349,7 @@
                                                 <span ng-show="columnsConfig.margin.sortDirection=='ASC'">&uarr;</span>
                                                 <span ng-show="columnsConfig.margin.sortDirection=='DESC'">&darr;</span>
                                                 <span>Margin</span>
-                                                <i style="font-size: 6px;float: right;" ng-show="marginFilterValue != undefined " class="glyphicon glyphicon-filter hand-cursor " ng-click="$event.stopPropagation(); marginFilterValue = undefined ; filterZones()"></i>
+                                                <i ng-show="marginFilterValue != undefined " class="glyphicon glyphicon-filter hand-cursor column-filter " ng-click="$event.stopPropagation(); marginFilterValue = undefined ; filterZones()"></i>
 
                                             </div>
                                             <div ng-show="showfilter">
@@ -340,7 +381,7 @@
                                                 <span ng-show="columnsConfig.marginPerc.sortDirection=='ASC'">&uarr;</span>
                                                 <span ng-show="columnsConfig.marginPerc.sortDirection=='DESC'">&darr;</span>
                                                 <span>%Margin</span>
-                                                <i style="font-size: 6px;float: right;" ng-show="marginPercentageFilterValue != undefined " class="glyphicon glyphicon-filter hand-cursor " ng-click="$event.stopPropagation(); marginPercentageFilterValue = undefined ; filterZones()"></i>
+                                                <i  ng-show="marginPercentageFilterValue != undefined " class="glyphicon glyphicon-filter hand-cursor column-filter " ng-click="$event.stopPropagation(); marginPercentageFilterValue = undefined ; filterZones()"></i>
 
                                             </div>
                                             <div ng-show="showfilter">
@@ -382,7 +423,7 @@
                                                 <span ng-show="columnsConfig.newRate.sortDirection=='ASC'">&uarr;</span>
                                                 <span ng-show="columnsConfig.newRate.sortDirection=='DESC'">&darr;</span>
                                                 <span>N.Rate</span>
-                                                <i style="font-size: 6px;float: right;" ng-show="newRateFilterValue != undefined " class="glyphicon glyphicon-filter hand-cursor " ng-click="$event.stopPropagation(); newRateFilterValue = undefined ; filterZones()"></i>
+                                                <i  ng-show="newRateFilterValue != undefined " class="glyphicon glyphicon-filter hand-cursor column-filter" ng-click="$event.stopPropagation(); newRateFilterValue = undefined ; filterZones()"></i>
 
                                             </div>
                                             <div ng-show="showfilter">
@@ -413,7 +454,7 @@
                                                 <span ng-show="columnsConfig.rateChangeIcon.sortDirection=='ASC'">&uarr;</span>
                                                 <span ng-show="columnsConfig.rateChangeIcon.sortDirection=='DESC'">&darr;</span>
                                                 <span style="display: inline-block;height: 6px"></span>
-                                                <i style="font-size: 6px;float: right;" ng-show="selectedRateComparisonOptions.length > 0 " class="glyphicon glyphicon-filter hand-cursor " ng-click="$event.stopPropagation();selectedRateComparisonOptions = [] ;"></i>
+                                                <i ng-show="selectedRateComparisonOptions.length > 0 " class="glyphicon glyphicon-filter hand-cursor column-filter" ng-click="$event.stopPropagation();selectedRateComparisonOptions = [] ;"></i>
                                             </div>
                                             <div ng-show="showfilter">
                                                 <vr-select smallselect datasource="rateComparisonOptions"
@@ -466,9 +507,9 @@
                                                 <div ng-class="getRowStyle(dataItem).CssClass" style="min-height: 24px;border-right:1px solid #D0D0D0;border-left:1px solid #D0D0D0">
                                                     <div ng-if="!dataItem.displayRow" style="width:100%;position:relative">
                                                         <div style=" margin: -2px; height :24px;display:inline-block;width:20px">
-                                                            <div style="height:24px">
-                                                                <span class="glyphicon glyphicon-menu-right hand-cursor" style="top: calc(50% - 6px); left: 4px" ng-click="::expandRow(dataItem)" ng-show="!dataItem.isRowExpanded"></span>
-                                                                <span class="glyphicon glyphicon-menu-down hand-cursor" style="top: calc(50% - 6px); left: 4px" ng-click="::collapseRow(dataItem)" ng-show="dataItem.isRowExpanded"></span>
+                                                            <div class="row-toggle">
+                                                                <span class="glyphicon glyphicon-menu-right hand-cursor toggle-icon expand" ng-click="::expandRow(dataItem)" ng-show="!dataItem.isRowExpanded"></span>
+                                                                <span class="glyphicon glyphicon-menu-down hand-cursor  toggle-icon" style="top: calc(50% - 6px); left: 4px" ng-click="::collapseRow(dataItem)" ng-show="dataItem.isRowExpanded"></span>
                                                             </div>
                                                         </div>
                                                         <span class="span-summary">{{::dataItem.ZoneName}}</span>
@@ -480,9 +521,9 @@
                                                             <div style="display:inline-flex;width:100%" class="vr-datagrid-row" ng-click="onRowClicked($event);">
 
                                                                 <div style=" margin: -2px; height :24px;display:inline-block;width:20px">
-                                                                    <div style="height:24px">
-                                                                        <span class="glyphicon glyphicon-menu-right hand-cursor" style="top: calc(50% - 6px); left: 4px" ng-click="::expandRow(dataItem)" ng-show="!dataItem.isRowExpanded"></span>
-                                                                        <span class="glyphicon glyphicon-menu-down hand-cursor" style="top: calc(50% - 6px); left: 4px" ng-click="::collapseRow(dataItem)" ng-show="dataItem.isRowExpanded"></span>
+                                                                    <div class="row-toggle">
+                                                                        <span class="glyphicon glyphicon-menu-right hand-cursor toggle-icon expand" ng-click="::expandRow(dataItem)" ng-show="!dataItem.isRowExpanded"></span>
+                                                                        <span class="glyphicon glyphicon-menu-down hand-cursor toggle-icon " ng-click="::collapseRow(dataItem)" ng-show="dataItem.isRowExpanded"></span>
                                                                     </div>
                                                                 </div>
 

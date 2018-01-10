@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsService", "VRUIUtilsService", "VRNotificationService", "VRValidationService", "VRCommon_RateTypeAPIService", "WhS_Sales_RatePlanUtilsService", "WhS_Sales_RatePlanService", "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_BE_PrimarySaleEntityEnum", "UISettingsService", "VRDateTimeService", 'VRCommon_TextFilterTypeEnum',
-    function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VRValidationService, VRCommon_RateTypeAPIService, WhS_Sales_RatePlanUtilsService, WhS_Sales_RatePlanService, WhS_BE_SalePriceListOwnerTypeEnum, WhS_BE_PrimarySaleEntityEnum, UISettingsService, VRDateTimeService, VRCommon_TextFilterTypeEnum) {
+app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsService", "VRUIUtilsService", "VRNotificationService", "VRValidationService", "VRCommon_RateTypeAPIService", "WhS_Sales_RatePlanUtilsService", "WhS_Sales_RatePlanService", "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_BE_PrimarySaleEntityEnum", "UISettingsService", "VRDateTimeService", 'VRCommon_TextFilterTypeEnum', 'VRLocalizationService',
+    function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VRValidationService, VRCommon_RateTypeAPIService, WhS_Sales_RatePlanUtilsService, WhS_Sales_RatePlanService, WhS_BE_SalePriceListOwnerTypeEnum, WhS_BE_PrimarySaleEntityEnum, UISettingsService, VRDateTimeService, VRCommon_TextFilterTypeEnum, VRLocalizationService) {
         return {
             restrict: "E",
             scope: {
@@ -678,8 +678,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         $scope.isLoading = true;
                         return gridQuery.context.saveDraft()
                             .then(function () {
-                            $scope.isLoading = false;
-                    });
+                                $scope.isLoading = false;
+                            });
                     }
 
                     function getZoneItemInput() {
@@ -1075,17 +1075,33 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 var hasVerticalScrollbar = div.scrollHeight > div.clientHeight;
                 if (hasVerticalScrollbar) {
                     $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' });
-                    $scope.headerStyle = {
-                        "padding-right": getScrollbarWidth() + "px"
-                    };
+                    if (VRLocalizationService.isLocalizationRTL()) {
+                        $scope.headerStyle = {
+                            "padding-left": getScrollbarWidth() + "px"
+                        };
+                    }
+                    else {
+                        $scope.headerStyle = {
+                            "padding-right": getScrollbarWidth() + "px"
+                        };
+                    }
+
 
                 }
 
                 else {
                     $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' });
-                    $scope.headerStyle = {
-                        "padding-right": "0px"
-                    };
+
+                    if (VRLocalizationService.isLocalizationRTL()) {
+                        $scope.headerStyle = {
+                            "padding-left": "0px"
+                        };
+                    }
+                    else {
+                        $scope.headerStyle = {
+                            "padding-right": "0px"
+                        };
+                    }
                 }
                 for (var colName in columnsConfig) {
                     var column = columnsConfig[colName];
