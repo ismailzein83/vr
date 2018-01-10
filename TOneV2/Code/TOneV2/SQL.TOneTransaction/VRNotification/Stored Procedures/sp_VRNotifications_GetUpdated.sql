@@ -3,7 +3,9 @@
 	@NbOfRows BIGINT,
     @TimestampAfter timestamp,
     @Description varchar(max),
-    @AlertLevelIds varchar(max)
+    @AlertLevelIds varchar(max),
+	@From datetime,
+	@To datetime
 AS
 BEGIN
 	DECLARE @NotificationAlertLevelIDsTable TABLE (AlertLevelId uniqueidentifier)
@@ -31,6 +33,8 @@ BEGIN
 	WHERE  TypeID = @NotificationTypeID 
 		   AND (@Description is null or [Description] like '%' + @Description + '%')
 		   AND (@AlertLevelIds is null or [AlertLevelId] in (SELECT AlertLevelId FROM @NotificationAlertLevelIDsTable)) 
+		   AND (@From is null or CreationTime >= @From)
+		   AND (@To is null or CreationTime < @To)
 		   AND ([timestamp] > @TimestampAfter) 
 	ORDER BY [timestamp]
 	
