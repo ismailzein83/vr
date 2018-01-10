@@ -23,7 +23,6 @@ namespace Vanrise.Common.Business
 
         public VRMailMessageTemplate GetMailMessageTemplate(Guid vrMailMessageTemplateId)
         {
-
             return GetMailMessageTemplate(vrMailMessageTemplateId, false);
         }
 
@@ -37,16 +36,15 @@ namespace Vanrise.Common.Business
 
         public string GetMAilMessageTemplateName(VRMailMessageTemplate vrMailMessageTemplateId)
         {
-
             return vrMailMessageTemplateId != null ? vrMailMessageTemplateId.Name : null;
         }
 
         public Vanrise.Entities.InsertOperationOutput<VRMailMessageTemplateDetail> AddMailMessageTemplate(VRMailMessageTemplate vrMailMessageTemplateItem)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<VRMailMessageTemplateDetail>();
-
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
+
             if (!IsMailTemplateValid(vrMailMessageTemplateItem))
             {
                 insertOperationOutput.ShowExactMessage = true;
@@ -76,9 +74,9 @@ namespace Vanrise.Common.Business
         public Vanrise.Entities.UpdateOperationOutput<VRMailMessageTemplateDetail> UpdateMailMessageTemplate(VRMailMessageTemplate vrMailMessageTemplateItem)
         {
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<VRMailMessageTemplateDetail>();
-
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
+
             if (!IsMailTemplateValid(vrMailMessageTemplateItem))
             {
                 updateOperationOutput.ShowExactMessage = true;
@@ -115,8 +113,6 @@ namespace Vanrise.Common.Business
 
                 return true;
             };
-
-
 
             return this.GetCachedVRMailMessageTemplates().MapRecords(VRMailMessageTemplateInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
