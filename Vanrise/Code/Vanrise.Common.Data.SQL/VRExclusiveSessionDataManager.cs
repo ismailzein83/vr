@@ -29,11 +29,12 @@ namespace Vanrise.Common.Data.SQL
             takenByUserId = (int)takenByUserIdObject;
         }
 
-        public void TryKeepSession(Guid sessionTypeId, string targetId, int userId, int timeoutInSeconds, out int takenByUserId)
+        public void TryKeepSession(Guid sessionTypeId, string targetId, int userId, int timeoutInSeconds, out int? takenByUserId)
         {
             var takenByUserIdObject = ExecuteScalarSP("[common].[sp_VRExclusiveSession_TryKeep]", sessionTypeId, targetId, userId, timeoutInSeconds);
-            takenByUserIdObject.ThrowIfNull("takenByUserIdObject");
-            takenByUserId = (int)takenByUserIdObject;
+            if (takenByUserIdObject == DBNull.Value)
+                takenByUserId = null;
+            else takenByUserId = (int)takenByUserIdObject;
         }
 
         public void ReleaseSession(Guid sessionTypeId, string targetId, int userId)

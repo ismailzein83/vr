@@ -124,16 +124,21 @@ namespace Vanrise.Common.Business
         private bool TryKeepSession(Guid sessionTypeId, string targetId, out string failureMessage)
         {
             int currentUserId = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
-            int takenByUserId;
+            int? takenByUserId;
             s_dataManager.TryKeepSession(sessionTypeId, targetId, currentUserId, GetTimeOutInSeconds(), out takenByUserId);
-            if (currentUserId == takenByUserId)
+            if (takenByUserId.HasValue && currentUserId == takenByUserId.Value)
             {
                 failureMessage = null;
                 return true;
             }
+            else if (takenByUserId.HasValue)
+            {
+                failureMessage = String.Format("Session is locked by '{0}'", s_userManager.GetUserName(takenByUserId.Value));
+                return false;
+            }
             else
             {
-                failureMessage = String.Format("Session is locked by '{0}'", s_userManager.GetUserName(takenByUserId));
+                failureMessage = String.Format("Session has been terminated. Please try again.");
                 return false;
             }
         }
