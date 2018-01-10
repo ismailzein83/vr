@@ -160,7 +160,6 @@
     <Compile Include="FinancialAccount\WHSFinancialAccountStaticBEManager.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="PricingRules\PricingRuleRateTypeItemContext.cs" />
-    <Compile Include="ReleaseCodeManager.cs" />
     <Compile Include="RoutingProducts\SaleEntityRoutingProductReadByRateBED.cs" />
     <Compile Include="RoutingProducts\SaleEntityRoutingProductReadLastRoutingProduct.cs" />
     <Compile Include="SalePriceListTemplate\Context\MappedCellContext.cs" />
