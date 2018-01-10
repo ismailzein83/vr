@@ -29,16 +29,20 @@ namespace TOne.WhS.BusinessEntity.Business
                 UpdatedObject = null
             };
 
+            var zoneManager = new SaleZoneManager();
+            var zoneName = zoneManager.GetSaleZoneName(zoneRoutingProductToEdit.ZoneId);
+
             if (zoneRoutingProductToEdit.ZoneEED.HasValue)
             {
-                updateOperationOutput.Message = string.Format("Cannot change zone routing product on ended zone with ID :{0}", zoneRoutingProductToEdit.ZoneId);
+                updateOperationOutput.Message = string.Format("Cannot change zone routing product on closed zone {0}", zoneName);
                 return updateOperationOutput;
             }
             if (zoneRoutingProductToEdit.BED < zoneRoutingProductToEdit.ZoneBED)
             {
-                updateOperationOutput.Message = string.Format("Zone routing product cannot have BED less than zone BED, {0} < {1}", zoneRoutingProductToEdit.BED, zoneRoutingProductToEdit.ZoneBED);
+                updateOperationOutput.Message = string.Format("Cannot edit routing product with a date less thatn zone BED {0}", zoneRoutingProductToEdit.ZoneBED);
                 return updateOperationOutput;
             }
+
             var saleZoneRoutingProductToCloseList = new List<ZoneRoutingProductToChange>();
 
             IEnumerable<SaleZoneRoutingProduct> existingZoneRoutingProducts = GetZoneRoutingProduct(zoneRoutingProductToEdit.OwnerId,
@@ -54,16 +58,13 @@ namespace TOne.WhS.BusinessEntity.Business
                     EED = closeDate
                 });
             }
-            var saleEntityRoutingPRoductManager = new SaleEntityRoutingProductManager();
-            long zoneRoutingProductReservedId = saleEntityRoutingPRoductManager.ReserveIdRange(1);
+            var saleEntityRoutingProductManager = new SaleEntityRoutingProductManager();
+            long zoneRoutingProductReservedId = saleEntityRoutingProductManager.ReserveIdRange(1);
 
             var dataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
             bool updateActionSucc = dataManager.Update(zoneRoutingProductToEdit, zoneRoutingProductReservedId, saleZoneRoutingProductToCloseList);
             if (updateActionSucc)
             {
-                var zoneManager = new SaleZoneManager();
-                var zoneName = zoneManager.GetSaleZoneName(zoneRoutingProductToEdit.ZoneId);
-
                 var routingProductManager = new RoutingProductManager();
                 var routingProductName = routingProductManager.GetRoutingProductName(zoneRoutingProductToEdit.ChangedRoutingProductId);
                 var servicesIds = routingProductManager.GetZoneServiceIds(zoneRoutingProductToEdit.ChangedRoutingProductId, zoneRoutingProductToEdit.ZoneId);
