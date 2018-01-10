@@ -10,6 +10,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         public long SupplierZoneId { get; set; }
         public int SupplierId { get; set; }
         public DateTime BED { get; set; }
+        public DateTime ZoneBED { get; set; }
+        public DateTime? ZoneEED { get; set; }
         public List<ZoneService> Services { get; set; }
     }
 }

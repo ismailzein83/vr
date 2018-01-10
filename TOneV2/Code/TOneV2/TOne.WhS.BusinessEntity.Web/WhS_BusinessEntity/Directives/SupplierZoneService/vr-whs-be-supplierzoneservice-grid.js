@@ -74,11 +74,20 @@ function (UtilsService, VRNotificationService, WhS_BE_SupplierZoneServiceAPIServ
             defineMenuActions();
         }
         function defineMenuActions() {
-            $scope.gridMenuActions = [{
-                name: "Edit",
-                clicked: editSupplierService,
-                haspermission: hasEditSupplierZoneServicePermission
-            }];
+            $scope.gridMenuActions = function (dataItem)
+            {
+                var menuActions;
+                if (dataItem.ZoneEED == undefined)
+                {
+                    menuActions = [{
+                        name: "Edit",
+                        clicked: editSupplierService,
+                        haspermission: hasEditSupplierZoneServicePermission
+                    }];
+                }
+                return menuActions;
+            };
+            
         }
 
         function editSupplierService(supplierServiceObj) {

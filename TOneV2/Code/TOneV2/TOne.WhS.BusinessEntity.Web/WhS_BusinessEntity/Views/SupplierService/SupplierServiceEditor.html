@@ -15,7 +15,7 @@
                     </span>
                 </vr-columns>
                 <vr-columns width="1/2row">
-                    <vr-datetimepicker type="dateTime" label="BED" value="scopeModel.bed" isrequired onvaluechanged="scopeModel.bedChangedValue"></vr-datetimepicker>
+                    <vr-datetimepicker type="dateTime" label="BED" value="scopeModel.bed" isrequired onvaluechanged="scopeModel.bedChangedValue" customvalidate="scopeModel.DateValid()"></vr-datetimepicker>
                 </vr-columns>
             </vr-row>
         </vr-form>

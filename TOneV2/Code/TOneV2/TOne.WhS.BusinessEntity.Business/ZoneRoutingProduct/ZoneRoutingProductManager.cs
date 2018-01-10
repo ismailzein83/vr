@@ -25,7 +25,6 @@ namespace TOne.WhS.BusinessEntity.Business
             UpdateOperationOutput<ZoneRoutingProductDetail> updateOperationOutput = new UpdateOperationOutput<ZoneRoutingProductDetail>
             {
                 Result = UpdateOperationResult.Failed,
-                ShowExactMessage = true,
                 UpdatedObject = null
             };
 
@@ -34,12 +33,14 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (zoneRoutingProductToEdit.ZoneEED.HasValue)
             {
+                updateOperationOutput.ShowExactMessage = true;
                 updateOperationOutput.Message = string.Format("Cannot change zone routing product on closed zone {0}", zoneName);
                 return updateOperationOutput;
             }
             if (zoneRoutingProductToEdit.BED < zoneRoutingProductToEdit.ZoneBED)
             {
-                updateOperationOutput.Message = string.Format("Cannot edit routing product with a date less thatn zone BED {0}", zoneRoutingProductToEdit.ZoneBED);
+                updateOperationOutput.ShowExactMessage = true;
+                updateOperationOutput.Message = string.Format("Cannot edit routing product with a date less than zone BED {0}", zoneRoutingProductToEdit.ZoneBED);
                 return updateOperationOutput;
             }
 
@@ -85,14 +86,12 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (countryId.HasValue)
                     zoneRoutingProduct.CountryId = countryId.Value;
 
-                var zoneRoutingProductDetail = new ZoneRoutingProductDetail
+                updateOperationOutput.UpdatedObject = new ZoneRoutingProductDetail
                 {
                     Entity = zoneRoutingProduct,
                     RoutingProductName = routingProductName,
                     ZoneName = zoneName
                 };
-                updateOperationOutput.UpdatedObject = zoneRoutingProductDetail;
-                updateOperationOutput.Message = string.Format("Routing product for zone {0} updated successfully", zoneName);
             }
 
             return updateOperationOutput;

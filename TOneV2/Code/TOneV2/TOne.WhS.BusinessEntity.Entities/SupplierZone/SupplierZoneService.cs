@@ -43,6 +43,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         public String ZoneName { get; set; }
         public long SupplierZoneId { get; set; }
         public List<int> Services { get; set; }
+        public DateTime ZoneBED { get; set; }
+        public DateTime? ZoneEED { get; set; }
     }
 
 

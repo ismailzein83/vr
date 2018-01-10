@@ -28,46 +28,47 @@ namespace TOne.WhS.BusinessEntity.Business
             return dataManager.GetSupplierDefaultServicesEffectiveAfter(supplierId, minimumDate);
         }
 
-        private IEnumerable<SupplierZoneService> GetSupplierZonesServicesEffectiveAfterByZoneName(string ZoneName, int supplierId, DateTime effectiveDate, out SupplierZone effectiveSupplierZone)
+        private IEnumerable<SupplierZoneService> GetSupplierZonesServicesEffectiveAfterByZoneId(long zoneId, int supplierId, DateTime effectiveDate)
         {
-            ISupplierZoneServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneServiceDataManager>();
-            SupplierZoneManager zoneManager = new SupplierZoneManager();
-            IEnumerable<long> zoneIds = zoneManager.GetSupplierZoneIdsEffectiveByZoneName(ZoneName, effectiveDate, supplierId);
+            List<long> zoneIds = new List<long>();
+            zoneIds.Add(zoneId);
             string strZoneIds = null;
             if (zoneIds != null && zoneIds.Count() > 0)
             {
                 strZoneIds = string.Join(",", zoneIds);
             }
-            IEnumerable<SupplierZoneService> supplierZoneServiceList = dataManager.GetSupplierZonesServicesEffectiveAfterByZoneIds(supplierId, effectiveDate, strZoneIds);
-            effectiveSupplierZone = zoneManager.GetEffectiveSupplierZoneByZoneIds(zoneIds, effectiveDate);
-            return supplierZoneServiceList;
-        }
 
+            ISupplierZoneServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneServiceDataManager>();
+            return dataManager.GetSupplierZonesServicesEffectiveAfterByZoneIds(supplierId, effectiveDate, strZoneIds);
+        }
         public Vanrise.Entities.UpdateOperationOutput<SupplierEntityServiceDetail> UpdateSupplierZoneService(SupplierZoneServiceToEdit serviceObject)
         {
-            ISupplierZoneServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneServiceDataManager>();
-
-            SupplierZone effectiveSupplierZone;
-
-            IEnumerable<SupplierZoneService> listSupplierZoneService = GetSupplierZonesServicesEffectiveAfterByZoneName(serviceObject.ZoneName, serviceObject.SupplierId,
-                serviceObject.BED, out effectiveSupplierZone);
-
             Vanrise.Entities.UpdateOperationOutput<SupplierEntityServiceDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<SupplierEntityServiceDetail>();
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
-
-            if (effectiveSupplierZone == null)
+            
+            if (serviceObject.BED < serviceObject.ZoneBED)
             {
-                updateOperationOutput.Message = String.Format("Zone {0} is not effective at date {1}", serviceObject.ZoneName, serviceObject.BED);
+                updateOperationOutput.ShowExactMessage = true;
+                updateOperationOutput.Message = String.Format("Cannot edit supplier zone services with a date less than zone BED {0}", serviceObject.ZoneBED);
+                return updateOperationOutput;
+            }
+            if (serviceObject.ZoneEED.HasValue)
+            {
+                updateOperationOutput.ShowExactMessage = true;
+                updateOperationOutput.Message = String.Format("Cannot change supplier zone services on closed zone {0}", serviceObject.ZoneName);
                 return updateOperationOutput;
             }
 
             SupplierZoneManager zoneManager = new SupplierZoneManager();
-            List<SupplierZoneServiceToClose> listOfZoneServiceToClose = new List<SupplierZoneServiceToClose>();
+            List<SupplierZoneServiceToClose> listOfZoneServicesToClose = new List<SupplierZoneServiceToClose>();
             SupplierZoneServiceToClose supplierZoneServiceToClose;
 
+            IEnumerable<SupplierZoneService> listSupplierZoneServices = GetSupplierZonesServicesEffectiveAfterByZoneId(serviceObject.SupplierZoneId, serviceObject.SupplierId,
+               serviceObject.BED);
+
             DateTime closeDate;
-            foreach (SupplierZoneService supplierZoneService in listSupplierZoneService)
+            foreach (SupplierZoneService supplierZoneService in listSupplierZoneServices)
             {
                 closeDate = Utilities.Max(serviceObject.BED, supplierZoneService.BED);
 
@@ -77,10 +78,11 @@ namespace TOne.WhS.BusinessEntity.Business
                     CloseDate = closeDate
                 };
 
-                listOfZoneServiceToClose.Add(supplierZoneServiceToClose);
+                listOfZoneServicesToClose.Add(supplierZoneServiceToClose);
             }
 
-            bool updateActionSucc = dataManager.Update(listOfZoneServiceToClose, effectiveSupplierZone.SupplierZoneId, this.ReserveIDRange(1), serviceObject);
+            ISupplierZoneServiceDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierZoneServiceDataManager>();
+            bool updateActionSucc = dataManager.Update(listOfZoneServicesToClose, serviceObject.SupplierZoneId, this.ReserveIDRange(1), serviceObject);
             if (updateActionSucc)
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
@@ -193,7 +195,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 if (input.Query.ServiceIds != null)
                     supplierZones = GetSupplierZoneServicesByServiceId(input.Query.ServiceIds, supplierZones, zoneServiceLocator, input.Query.EffectiveOn);
-
                 foreach (SupplierZone supplierZone in supplierZones)
                 {
                     var entity = zoneServiceLocator.GetSupplierZoneServices(supplierZone.SupplierId, supplierZone.SupplierZoneId, input.Query.EffectiveOn);
@@ -206,7 +207,9 @@ namespace TOne.WhS.BusinessEntity.Business
                         EED = entity.EED,
                         ZoneName = supplierZone.Name,
                         SupplierZoneId = supplierZone.SupplierZoneId,
-                        Services = entity.Services.Select(x => x.ServiceId).ToList()
+                        Services = entity.Services.Select(x => x.ServiceId).ToList(),
+                        ZoneBED = supplierZone.BED,
+                        ZoneEED = supplierZone.EED
                     });
                 }
 

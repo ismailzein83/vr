@@ -75,7 +75,6 @@
 
         function loadRoutingProductSelector() {
             var loadRoutingProductPromiseDeferred = UtilsService.createPromiseDeferred();
-
             var selectorPayload = {
             };
             selectorPayload.filter = {
@@ -101,7 +100,6 @@
                 if (VRNotificationService.notifyOnItemUpdated("Routing product for zone", response, "zoneName")) {
                     if ($scope.onZoneRoutingProductUpdated != undefined) {
                         $scope.onZoneRoutingProductUpdated(response.UpdatedObject);
-                        console.log(response.UpdatedObject);
                     }
                     $scope.modalContext.closeModal();
                 }

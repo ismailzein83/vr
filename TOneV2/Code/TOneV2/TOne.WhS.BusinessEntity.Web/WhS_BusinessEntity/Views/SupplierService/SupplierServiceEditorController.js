@@ -2,9 +2,9 @@
 
     "use strict";
 
-    supplierServiceEditorController.$inject = ['$scope', 'WhS_BE_SupplierZoneServiceAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'WhS_BE_SupplierEntityServiceSourceEnum'];
+    supplierServiceEditorController.$inject = ['$scope', 'WhS_BE_SupplierZoneServiceAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService', 'WhS_BE_SupplierEntityServiceSourceEnum', 'VRValidationService'];
 
-    function supplierServiceEditorController($scope, WhS_BE_SupplierZoneServiceAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_BE_SupplierEntityServiceSourceEnum) {
+    function supplierServiceEditorController($scope, WhS_BE_SupplierZoneServiceAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_BE_SupplierEntityServiceSourceEnum, VRValidationService) {
 
         var supplierId;
         var editMode;
@@ -55,7 +55,13 @@
             $scope.close = function () {
                 $scope.modalContext.closeModal()
             };
-
+            $scope.scopeModel.DateValid = function () {
+                var errorMessage = VRValidationService.validateTimeRange(supplierServiceEntity.ZoneBED, $scope.scopeModel.bed);
+                if (errorMessage !=null) {
+                    return 'BED must be greater than or equal to zone BED :' + supplierServiceEntity.ZoneBED;
+                }
+                return null;
+            };
 
         }
 
@@ -102,7 +108,6 @@
 
         function loadZoneServiceConfigSelector() {
             var zoneServiceConfigSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-
             zoneServiceConfigSelectorReadyDeferred.promise.then(function () {
                 zoneServiceConfigSelectorReadyDeferred = undefined;
                 var zoneServiceConfigSelectorPayload = {
@@ -132,7 +137,9 @@
                 ZoneName: (supplierServiceEntity != undefined) ? supplierServiceEntity.ZoneName : null,
                 SupplierId: supplierId,
                 BED: $scope.scopeModel.bed,
-                Services: zoneServiceConfigSelectorAPI != undefined ? getSelectedServices() : null
+                Services: zoneServiceConfigSelectorAPI != undefined ? getSelectedServices() : null,
+                ZoneBED:supplierServiceEntity.ZoneBED,
+                ZoneEED: (supplierServiceEntity != undefined) ? supplierServiceEntity.ZoneEED : null
             };
             return obj;
         }
