@@ -25,7 +25,7 @@
 
         function getResourceValue(resourceKey, defaultValue, variables) {
             var resourceValue;
-            if (localizationEnabled && resourceKey != undefined)
+            if (localizationEnabled && resourceKey != undefined && resourceKey != '')
                 resourceValue = resourceKey;
             else
                 resourceValue = defaultValue;
@@ -38,7 +38,8 @@
         }
 
         function getLanguageCookieName() {
-            return "VR_Common_LocalizationLangauge";
+            
+            return "VR_Common_LocalizationLangauge_" + location.origin;
         }
 
         function createOrUpdateLanguageCookie(languageId) {
