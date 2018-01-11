@@ -39,16 +39,17 @@
             };
 
             $scope.scopeModal.validateObjectVariables = function () {
-
-                if (objectVariableEntity != undefined && $scope.scopeModal.objectName == objectVariableEntity.ObjectName)
+                if ($scope.scopeModal.objectName == undefined || objectVariables == undefined)
                     return null;
 
-                for (var i = 0; i < objectVariables.length; i++)
-                {
+                //for EditMode
+                if (objectVariableEntity != undefined && objectVariableEntity.ObjectName == $scope.scopeModal.objectName)
+                    return null;
+
+                for (var i = 0; i < objectVariables.length; i++) {
                     var object = objectVariables[i];
-                    if ($scope.scopeModal.objectName.toLowerCase() == object.ObjectName.toLowerCase()) {
+                    if ($scope.scopeModal.objectName.toLowerCase() == object.ObjectName.toLowerCase())
                         return 'Same Objet Name Exists';
-                    }
                 }
                 return null;
             };
@@ -104,7 +105,7 @@
 
         function insert() {
             var objectVariable = buildObjectVariableFromScope();
-            if ($scope.onObjectVariableAdded != undefined && typeof($scope.onObjectVariableAdded) == 'function') {
+            if ($scope.onObjectVariableAdded != undefined && typeof ($scope.onObjectVariableAdded) == 'function') {
                 $scope.onObjectVariableAdded(objectVariable);
             }
             $scope.modalContext.closeModal();
