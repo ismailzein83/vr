@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using TOne.Data.SQL;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Caching;
 using Vanrise.Data.SQL;
@@ -14,10 +11,29 @@ namespace TOne.WhS.Routing.Data.SQL
 {
     public class SupplierZoneDetailsDataManager : RoutingDataManager, ISupplierZoneDetailsDataManager
     {
+        readonly string[] columns = { "SupplierId", "SupplierZoneId", "EffectiveRateValue", "SupplierServiceIds", "ExactSupplierServiceIds", "SupplierServiceWeight", "SupplierRateId", "SupplierRateEED", "VersionNumber" };
         public DateTime? EffectiveDate { get; set; }
         public bool? IsFuture { get; set; }
 
-        readonly string[] columns = { "SupplierId", "SupplierZoneId", "EffectiveRateValue", "SupplierServiceIds", "ExactSupplierServiceIds", "SupplierServiceWeight", "SupplierRateId", "SupplierRateEED", "VersionNumber" };
+
+        #region Public Methods
+
+        public object InitialiazeStreamForDBApply()
+        {
+            return base.InitializeStreamForBulkInsert();
+        }
+
+        public void WriteRecordToStream(SupplierZoneDetail record, object dbApplyStream)
+        {
+            string supplierServiceIds = record.SupplierServiceIds != null ? string.Join(",", record.SupplierServiceIds) : null;
+            string exactSupplierServiceIds = record.ExactSupplierServiceIds != null ? string.Join(",", record.ExactSupplierServiceIds) : null;
+
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", record.SupplierId, record.SupplierZoneId,
+                decimal.Round(record.EffectiveRateValue, 8), supplierServiceIds, exactSupplierServiceIds, record.SupplierServiceWeight, record.SupplierRateId,
+                record.SupplierRateEED.HasValue ? GetDateTimeForBCP(record.SupplierRateEED) : "", record.VersionNumber);
+        }
+
         public object FinishDBApplyStream(object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
@@ -32,20 +48,12 @@ namespace TOne.WhS.Routing.Data.SQL
                 ColumnNames = columns
             };
         }
-        public object InitialiazeStreamForDBApply()
-        {
-            return base.InitializeStreamForBulkInsert();
-        }
-        public void WriteRecordToStream(SupplierZoneDetail record, object dbApplyStream)
-        {
-            string supplierServiceIds = record.SupplierServiceIds != null ? string.Join(",", record.SupplierServiceIds) : null;
-            string exactSupplierServiceIds = record.ExactSupplierServiceIds != null ? string.Join(",", record.ExactSupplierServiceIds) : null;
 
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", record.SupplierId, record.SupplierZoneId,
-                decimal.Round(record.EffectiveRateValue, 8), supplierServiceIds, exactSupplierServiceIds, record.SupplierServiceWeight, record.SupplierRateId,
-                record.SupplierRateEED.HasValue ? GetDateTimeForBCP(record.SupplierRateEED) : "", record.VersionNumber);
+        public void ApplySupplierZoneDetailsForDB(object preparedSupplierZoneDetails)
+        {
+            InsertBulkToTable(preparedSupplierZoneDetails as BaseBulkInsertInfo);
         }
+
         public void SaveSupplierZoneDetailsForDB(List<SupplierZoneDetail> supplierZoneDetails)
         {
             Object dbApplyStream = InitialiazeStreamForDBApply();
@@ -54,10 +62,7 @@ namespace TOne.WhS.Routing.Data.SQL
             Object preparedSupplierZoneDetails = FinishDBApplyStream(dbApplyStream);
             ApplySupplierZoneDetailsForDB(preparedSupplierZoneDetails);
         }
-        public void ApplySupplierZoneDetailsForDB(object preparedSupplierZoneDetails)
-        {
-            InsertBulkToTable(preparedSupplierZoneDetails as BaseBulkInsertInfo);
-        }
+
         public Dictionary<long, SupplierZoneDetail> GetCachedSupplierZoneDetails()
         {
             var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierZoneDetailsCacheManager>();
@@ -105,7 +110,11 @@ namespace TOne.WhS.Routing.Data.SQL
             });
         }
 
-        DataTable BuildSupplierZoneDetailsTable(List<SupplierZoneDetail> supplierZoneDetails)
+        #endregion 
+
+        #region Private Methods
+
+        private DataTable BuildSupplierZoneDetailsTable(List<SupplierZoneDetail> supplierZoneDetails)
         {
             DataTable dtSupplierZoneDetailsInfo = new DataTable();
             dtSupplierZoneDetailsInfo.Columns.Add("SupplierId", typeof(Int32));
@@ -132,7 +141,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 dr["ExactSupplierServiceIds"] = exactSupplierZoneServiceIds;
                 dr["SupplierServiceWeight"] = supplierZoneDetail.SupplierServiceWeight;
                 dr["SupplierRateId"] = supplierZoneDetail.SupplierRateId;
-                
+
                 if (supplierZoneDetail.SupplierRateEED.HasValue)
                     dr["SupplierRateEED"] = supplierZoneDetail.SupplierRateEED.Value;
                 else
@@ -144,8 +153,8 @@ namespace TOne.WhS.Routing.Data.SQL
             dtSupplierZoneDetailsInfo.EndLoadData();
             return dtSupplierZoneDetailsInfo;
         }
-        #region Private Methods
-        SupplierZoneDetail SupplierZoneDetailMapper(IDataReader reader)
+
+        private SupplierZoneDetail SupplierZoneDetailMapper(IDataReader reader)
         {
             string supplierServiceIds = reader["SupplierServiceIds"] as string;
             string exactSupplierServiceIds = reader["ExactSupplierServiceIds"] as string;
@@ -164,7 +173,7 @@ namespace TOne.WhS.Routing.Data.SQL
             };
         }
 
-        DataTable BuildZoneIdsTable(HashSet<long> zoneIds)
+        private DataTable BuildZoneIdsTable(HashSet<long> zoneIds)
         {
             DataTable dtZoneInfo = new DataTable();
             dtZoneInfo.Columns.Add("ZoneID", typeof(Int64));
@@ -178,6 +187,35 @@ namespace TOne.WhS.Routing.Data.SQL
             dtZoneInfo.EndLoadData();
             return dtZoneInfo;
         }
+
+        #endregion
+
+        #region Private Classes
+
+        private class SupplierZoneDetailsCacheManager : BaseCacheManager
+        {
+
+        }
+
+        private class SupplierZoneDetailsCacheExpirationChecker : CacheExpirationChecker
+        {
+            static SupplierZoneDetailsCacheExpirationChecker s_instance = new SupplierZoneDetailsCacheExpirationChecker();
+            public static SupplierZoneDetailsCacheExpirationChecker Instance
+            {
+                get
+                {
+                    return s_instance;
+                }
+            }
+
+            public override bool IsCacheExpired(Vanrise.Caching.ICacheExpirationCheckerContext context)
+            {
+                TimeSpan entitiesTimeSpan = TimeSpan.FromMinutes(5);
+                SlidingWindowCacheExpirationChecker slidingWindowCacheExpirationChecker = new SlidingWindowCacheExpirationChecker(entitiesTimeSpan);
+                return slidingWindowCacheExpirationChecker.IsCacheExpired(context);
+            }
+        }
+
         #endregion
 
         #region Queries
@@ -218,28 +256,7 @@ namespace TOne.WhS.Routing.Data.SQL
                                                     supplierZoneDetails.VersionNumber = szd.VersionNumber
                                             FROM [dbo].[SupplierZoneDetail] supplierZoneDetails
                                             JOIN @SupplierZoneDetails szd on szd.SupplierZoneId = supplierZoneDetails.SupplierZoneId";
+
         #endregion
-        private class SupplierZoneDetailsCacheManager : BaseCacheManager
-        {
-
-        }
-        private class SupplierZoneDetailsCacheExpirationChecker : CacheExpirationChecker
-        {
-            static SupplierZoneDetailsCacheExpirationChecker s_instance = new SupplierZoneDetailsCacheExpirationChecker();
-            public static SupplierZoneDetailsCacheExpirationChecker Instance
-            {
-                get
-                {
-                    return s_instance;
-                }
-            }
-
-            public override bool IsCacheExpired(Vanrise.Caching.ICacheExpirationCheckerContext context)
-            {
-                TimeSpan entitiesTimeSpan = TimeSpan.FromMinutes(5);
-                SlidingWindowCacheExpirationChecker slidingWindowCacheExpirationChecker = new SlidingWindowCacheExpirationChecker(entitiesTimeSpan);
-                return slidingWindowCacheExpirationChecker.IsCacheExpired(context);
-            }
-        }
     }
 }

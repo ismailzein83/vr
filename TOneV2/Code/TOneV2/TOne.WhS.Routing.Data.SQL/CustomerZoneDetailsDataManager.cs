@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Data.SQL;
@@ -13,27 +11,27 @@ namespace TOne.WhS.Routing.Data.SQL
 {
     public class CustomerZoneDetailsDataManager : RoutingDataManager, ICustomerZoneDetailsDataManager
     {
+        readonly string[] columns = { "CustomerId", "SaleZoneId", "RoutingProductId", "RoutingProductSource", "SellingProductId", "EffectiveRateValue", "RateSource", "SaleZoneServiceIds", "VersionNumber" };
         public DateTime? EffectiveDate { get; set; }
         public bool? IsFuture { get; set; }
 
-        readonly string[] columns = { "CustomerId", "SaleZoneId", "RoutingProductId", "RoutingProductSource", "SellingProductId", "EffectiveRateValue", "RateSource", "SaleZoneServiceIds", "VersionNumber" };
-        public void SaveCustomerZoneDetailsToDB(List<CustomerZoneDetail> customerZoneDetails)
+
+        #region Public Methods
+
+        public object InitialiazeStreamForDBApply()
         {
-            Object dbApplyStream = InitialiazeStreamForDBApply();
-            foreach (CustomerZoneDetail customerZoneDetail in customerZoneDetails)
-                WriteRecordToStream(customerZoneDetail, dbApplyStream);
-            Object preparedCustomerZoneDetails = FinishDBApplyStream(dbApplyStream);
-            ApplyCustomerZoneDetailsToDB(preparedCustomerZoneDetails);
+            return base.InitializeStreamForBulkInsert();
         }
-        public void ApplyCustomerZoneDetailsToDB(object preparedCustomerZoneDetails)
+
+        public void WriteRecordToStream(Entities.CustomerZoneDetail record, object dbApplyStream)
         {
-            InsertBulkToTable(preparedCustomerZoneDetails as BaseBulkInsertInfo);
+            string saleZoneServiceIds = record.SaleZoneServiceIds != null ? string.Join(",", record.SaleZoneServiceIds) : null;
+
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", record.CustomerId, record.SaleZoneId, record.RoutingProductId, (int)record.RoutingProductSource,
+                record.SellingProductId, decimal.Round(record.EffectiveRateValue, 8), (int)record.RateSource, saleZoneServiceIds, record.VersionNumber);
         }
-        public IEnumerable<Entities.CustomerZoneDetail> GetCustomerZoneDetails()
-        {
-            string query = query_GetCustomerZoneDetails.Replace("#FILTER#", string.Empty);
-            return GetItemsText(query, CustomerZoneDetailMapper, null);
-        }
+
         public object FinishDBApplyStream(object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
@@ -48,32 +46,25 @@ namespace TOne.WhS.Routing.Data.SQL
                 ColumnNames = columns
             };
         }
-        public object InitialiazeStreamForDBApply()
-        {
-            return base.InitializeStreamForBulkInsert();
-        }
-        public void WriteRecordToStream(Entities.CustomerZoneDetail record, object dbApplyStream)
-        {
-            string saleZoneServiceIds = record.SaleZoneServiceIds != null ? string.Join(",", record.SaleZoneServiceIds) : null;
 
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}", record.CustomerId, record.SaleZoneId, record.RoutingProductId, (int)record.RoutingProductSource,
-                record.SellingProductId, decimal.Round(record.EffectiveRateValue, 8), (int)record.RateSource, saleZoneServiceIds, record.VersionNumber);
-        }
-        CustomerZoneDetail CustomerZoneDetailMapper(IDataReader reader)
+        public void ApplyCustomerZoneDetailsToDB(object preparedCustomerZoneDetails)
         {
-            return new CustomerZoneDetail()
-            {
-                CustomerId = (int)reader["CustomerId"],
-                EffectiveRateValue = GetReaderValue<decimal>(reader, "EffectiveRateValue"),
-                RateSource = GetReaderValue<SalePriceListOwnerType>(reader, "RateSource"),
-                RoutingProductId = GetReaderValue<int>(reader, "RoutingProductId"),
-                RoutingProductSource = GetReaderValue<SaleEntityZoneRoutingProductSource>(reader, "RoutingProductSource"),
-                SaleZoneId = (Int64)reader["SaleZoneId"],
-                SellingProductId = GetReaderValue<int>(reader, "SellingProductId"),
-                SaleZoneServiceIds = new HashSet<int>((reader["SaleZoneServiceIds"] as string).Split(',').Select(itm => int.Parse(itm))),
-                VersionNumber = (int)reader["VersionNumber"]
-            };
+            InsertBulkToTable(preparedCustomerZoneDetails as BaseBulkInsertInfo);
+        }
+
+        public void SaveCustomerZoneDetailsToDB(List<CustomerZoneDetail> customerZoneDetails)
+        {
+            Object dbApplyStream = InitialiazeStreamForDBApply();
+            foreach (CustomerZoneDetail customerZoneDetail in customerZoneDetails)
+                WriteRecordToStream(customerZoneDetail, dbApplyStream);
+            Object preparedCustomerZoneDetails = FinishDBApplyStream(dbApplyStream);
+            ApplyCustomerZoneDetailsToDB(preparedCustomerZoneDetails);
+        }
+
+        public IEnumerable<Entities.CustomerZoneDetail> GetCustomerZoneDetails()
+        {
+            string query = query_GetCustomerZoneDetails.Replace("#FILTER#", string.Empty);
+            return GetItemsText(query, CustomerZoneDetailMapper, null);
         }
 
         public IEnumerable<CustomerZoneDetail> GetFilteredCustomerZoneDetailsByZone(IEnumerable<long> saleZoneIds)
@@ -99,6 +90,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 cmd.Parameters.Add(dtPrm);
             });
         }
+
         public List<CustomerZoneDetail> GetCustomerZoneDetailsAfterVersionNumber(int versionNumber)
         {
             string query = query_GetCustomerZoneDetails.Replace("#FILTER#", string.Format("WHERE VersionNumber > {0}", versionNumber));
@@ -117,7 +109,27 @@ namespace TOne.WhS.Routing.Data.SQL
             });
         }
 
-        DataTable BuildCustomerZoneDetailsTable(List<CustomerZoneDetail> customerZoneDetails)
+        #endregion
+
+        #region Private Methods
+
+        private CustomerZoneDetail CustomerZoneDetailMapper(IDataReader reader)
+        {
+            return new CustomerZoneDetail()
+            {
+                CustomerId = (int)reader["CustomerId"],
+                EffectiveRateValue = GetReaderValue<decimal>(reader, "EffectiveRateValue"),
+                RateSource = GetReaderValue<SalePriceListOwnerType>(reader, "RateSource"),
+                RoutingProductId = GetReaderValue<int>(reader, "RoutingProductId"),
+                RoutingProductSource = GetReaderValue<SaleEntityZoneRoutingProductSource>(reader, "RoutingProductSource"),
+                SaleZoneId = (Int64)reader["SaleZoneId"],
+                SellingProductId = GetReaderValue<int>(reader, "SellingProductId"),
+                SaleZoneServiceIds = new HashSet<int>((reader["SaleZoneServiceIds"] as string).Split(',').Select(itm => int.Parse(itm))),
+                VersionNumber = (int)reader["VersionNumber"]
+            };
+        }
+
+        private DataTable BuildCustomerZoneDetailsTable(List<CustomerZoneDetail> customerZoneDetails)
         {
             DataTable dtCustomerZoneDetailsInfo = new DataTable();
             dtCustomerZoneDetailsInfo.Columns.Add("CustomerId", typeof(Int32));
@@ -151,8 +163,7 @@ namespace TOne.WhS.Routing.Data.SQL
             return dtCustomerZoneDetailsInfo;
         }
 
-
-        DataTable BuildZoneIdsTable(HashSet<long> zoneIds)
+        private DataTable BuildZoneIdsTable(HashSet<long> zoneIds)
         {
             DataTable dtZoneInfo = new DataTable();
             dtZoneInfo.Columns.Add("ZoneID", typeof(Int64));
@@ -167,7 +178,7 @@ namespace TOne.WhS.Routing.Data.SQL
             return dtZoneInfo;
         }
 
-        DataTable BuildCustomerZonesTable(HashSet<CustomerSaleZone> customerSaleZones)
+        private DataTable BuildCustomerZonesTable(HashSet<CustomerSaleZone> customerSaleZones)
         {
             DataTable dtCustomerZones = new DataTable();
             dtCustomerZones.Columns.Add("CustomerId", typeof(Int32));
@@ -183,6 +194,8 @@ namespace TOne.WhS.Routing.Data.SQL
             dtCustomerZones.EndLoadData();
             return dtCustomerZones;
         }
+
+        #endregion
 
         #region Queries
 
