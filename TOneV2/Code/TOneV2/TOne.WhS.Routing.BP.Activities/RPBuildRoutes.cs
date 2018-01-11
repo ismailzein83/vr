@@ -16,36 +16,11 @@ namespace TOne.WhS.Routing.BP.Activities
     public class RPBuildRoutesInput
     {
         public IEnumerable<SupplierZoneToRPOptionPolicy> SupplierZoneRPOptionPolicies { get; set; }
-
         public BaseQueue<RPCodeMatchesByZone> InputQueue { get; set; }
-
         public BaseQueue<RPRouteBatch> OutputQueue { get; set; }
-
         public DateTime? EffectiveDate { get; set; }
-
         public bool IsFuture { get; set; }
-
         public bool IncludeBlockedSupplierZones { get; set; }
-    }
-
-    public class BuildRoutingProductRoutesContext : IBuildRoutingProductRoutesContext
-    {
-        public BuildRoutingProductRoutesContext(RPCodeMatchesByZone codeMatch, IEnumerable<RoutingProduct> routingProducts, IEnumerable<SupplierZoneToRPOptionPolicy> policies, DateTime? effectiveDate, bool isFuture)
-        {
-            this.RoutingProducts = routingProducts;
-            this.SupplierCodeMatches = codeMatch.SupplierCodeMatches.ToList();
-            this.SupplierCodeMatchesBySupplier = codeMatch.SupplierCodeMatchesBySupplier;
-            this.SupplierZoneToRPOptionPolicies = policies;
-            this.EntitiesEffectiveOn = effectiveDate;
-            this.EntitiesEffectiveInFuture = isFuture;
-        }
-
-        public IEnumerable<RoutingProduct> RoutingProducts { get; set; }
-        public List<SupplierCodeMatchWithRate> SupplierCodeMatches { get; set; }
-        public SupplierCodeMatchesWithRateBySupplier SupplierCodeMatchesBySupplier { get; set; }
-        public IEnumerable<SupplierZoneToRPOptionPolicy> SupplierZoneToRPOptionPolicies { get; set; }
-        public DateTime? EntitiesEffectiveOn { get; set; }
-        public bool EntitiesEffectiveInFuture { get; set; }
     }
 
     public sealed class RPBuildRoutes : DependentAsyncActivity<RPBuildRoutesInput>
@@ -111,12 +86,33 @@ namespace TOne.WhS.Routing.BP.Activities
                 IncludeBlockedSupplierZones = this.IncludeBlockedSupplierZones.Get(context),
             };
         }
+
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
             if (this.OutputQueue.Get(context) == null)
                 this.OutputQueue.Set(context, new MemoryQueue<RPRouteBatch>());
 
             base.OnBeforeExecute(context, handle);
+        }
+    }
+
+    public class BuildRoutingProductRoutesContext : IBuildRoutingProductRoutesContext
+    {
+        public IEnumerable<RoutingProduct> RoutingProducts { get; set; }
+        public List<SupplierCodeMatchWithRate> SupplierCodeMatches { get; set; }
+        public SupplierCodeMatchesWithRateBySupplier SupplierCodeMatchesBySupplier { get; set; }
+        public IEnumerable<SupplierZoneToRPOptionPolicy> SupplierZoneToRPOptionPolicies { get; set; }
+        public DateTime? EntitiesEffectiveOn { get; set; }
+        public bool EntitiesEffectiveInFuture { get; set; }
+
+        public BuildRoutingProductRoutesContext(RPCodeMatchesByZone codeMatch, IEnumerable<RoutingProduct> routingProducts, IEnumerable<SupplierZoneToRPOptionPolicy> policies, DateTime? effectiveDate, bool isFuture)
+        {
+            this.RoutingProducts = routingProducts;
+            this.SupplierCodeMatches = codeMatch.SupplierCodeMatches.ToList();
+            this.SupplierCodeMatchesBySupplier = codeMatch.SupplierCodeMatchesBySupplier;
+            this.SupplierZoneToRPOptionPolicies = policies;
+            this.EntitiesEffectiveOn = effectiveDate;
+            this.EntitiesEffectiveInFuture = isFuture;
         }
     }
 }
