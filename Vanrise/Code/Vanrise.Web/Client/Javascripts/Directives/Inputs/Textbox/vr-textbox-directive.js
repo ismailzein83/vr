@@ -265,7 +265,7 @@
                 //    format = 'format="number"'; '+format+'
                 var textboxTemplate = '<div ng-mouseenter="::(showtd=true)" ng-mouseleave="::(showtd=false)">'
                             + '<vr-validator validate="ctrl.validate()" vr-input>'
-                            + '<input  tabindex="{{ctrl.tabindex}}" ng-readonly="::ctrl.readOnly"  placeholder="{{::ctrl.placelHolder}}"  ng-model="ctrl.value" ng-change="::ctrl.notifyUserChange()" size="10" class="form-control vanrise-inpute main-input' + keypressclass + ' " data-autoclose="1" type="' + type + '" ng-keyup="::ctrl.onKeyUp($event)" ng-blur="::ctrl.onBlurDirective($event)">'
+                            + '<input  tabindex="{{ctrl.tabindex}}" ng-readonly="::ctrl.readOnly"  placeholder="{{::ctrl.placelHolder}}"  ng-model="ctrl.value" ng-change="::ctrl.notifyUserChange()" size="10" class="form-control vanrise-inpute main-input ' + keypressclass + ' " data-autoclose="1" type="' + type + '" ng-keyup="::ctrl.onKeyUp($event)" ng-blur="::ctrl.onBlurDirective($event)">'
                             + '</vr-validator>'
                             + '<span ng-if="(ctrl.hint!=undefined)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" html="true"  placement="bottom"  trigger="hover" ng-mouseenter="::ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>'
                         + '</div>';
