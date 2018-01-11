@@ -239,7 +239,8 @@
             sellingNumberPlanReadyPromiseDeferred.promise
                 .then(function () {
                     var directivePayload = {
-                        selectedIds: routingProductEntity != undefined ? routingProductEntity.SellingNumberPlanId : undefined
+                        selectedIds: routingProductEntity != undefined ? routingProductEntity.SellingNumberPlanId : undefined,
+                        selectifsingleitem:true
                     };
 
                     VRUIUtilsService.callDirectiveLoad(sellingNumberPlanDirectiveAPI, directivePayload, sellingNumberPlanLoadPromiseDeferred);
