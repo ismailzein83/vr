@@ -520,14 +520,14 @@
                                                         <div style="white-space:nowrap;display:flex;" ng-style="{'background-color': dataItem.isRowExpanded ? '#F5F5F5' : 'Transparent', 'font-weight' :dataItem.isRowExpanded ? 'bolder' : 'normal'}">
                                                             <div style="display:inline-flex;width:100%" class="vr-datagrid-row" ng-click="onRowClicked($event);">
 
-                                                                <div style=" margin: -2px; height :24px;display:inline-block;width:20px">
+                                                                <div style=" margin: -2px; height :24px;display:inline-flex;width:20px">
                                                                     <div class="row-toggle">
                                                                         <span class="glyphicon glyphicon-menu-right hand-cursor toggle-icon expand" ng-click="::expandRow(dataItem)" ng-show="!dataItem.isRowExpanded"></span>
                                                                         <span class="glyphicon glyphicon-menu-down hand-cursor toggle-icon " ng-click="::collapseRow(dataItem)" ng-show="dataItem.isRowExpanded"></span>
                                                                     </div>
                                                                 </div>
 
-                                                                <div style="display:inline-block;vertical-align:top;" ng-style="{'width': columnsConfig.zone.width}" class="vr-datagrid-cell-container rpcolumn_zone">
+                                                                <div style="display:inline-flex;vertical-align:top;" ng-style="{'width': columnsConfig.zone.width}" class="vr-datagrid-cell-container rpcolumn_zone">
                                                                     <div class="vr-datagrid-cell">
                                                                         <div class="vr-datagrid-celltext ">
                                                                             <vr-label isvalue="true">
@@ -537,7 +537,7 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <div style="display:inline-block;vertical-align:top" ng-style="{'width': columnsConfig.product.width}" class="vr-datagrid-cell-container rpcolumn_product">
+                                                                <div style="display:inline-flex;vertical-align:top" ng-style="{'width': columnsConfig.product.width}" class="vr-datagrid-cell-container rpcolumn_product">
                                                                     <div class="vr-datagrid-cell">
                                                                         <div class="vr-datagrid-celltext ">
                                                                             <span ng-click="::onEffectiveRPClicked(dataItem)">
@@ -546,7 +546,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div style="display:inline-block;vertical-align:top;width:50px" class="vr-datagrid-cell-container">
+                                                                <div style="display:inline-flex;vertical-align:top;width:50px" class="vr-datagrid-cell-container">
                                                                     <div class="vr-datagrid-cell">
                                                                         <div class="vr-datagrid-celltext ">
                                                                             <span ng-click="::onEffectiveRPClicked(dataItem)">
@@ -555,7 +555,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div style="display:inline-block;vertical-align:top;width:50px" class="vr-datagrid-cell-container">
+                                                                <div style="display:inline-flex;vertical-align:top;width:50px" class="vr-datagrid-cell-container">
                                                                     <div class="vr-datagrid-cell">
                                                                         <div class="vr-datagrid-celltext ">
                                                                             <div style="text-align: right">
@@ -567,7 +567,7 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                                <div style="display:inline-block;vertical-align:top;width:25px" class="vr-datagrid-cell-container">
+                                                                <div style="display:inline-flex;vertical-align:top;width:25px" class="vr-datagrid-cell-container">
                                                                     <div class="vr-datagrid-cell">
                                                                         <div class="vr-datagrid-celltext ">
                                                                             <vr-icon icontype="dataItem.iconType" tooltip="dataItem.iconTooltip"></vr-icon>
@@ -575,7 +575,7 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <div style="display:inline-block;vertical-align:top" ng-style="{'width': columnsConfig.routeOptions.width}" class="vr-datagrid-cell-container rpcolumn_routeOptions">
+                                                                <div style="display:inline-flex;vertical-align:top" ng-style="{'width': columnsConfig.routeOptions.width}" class="vr-datagrid-cell-container rpcolumn_routeOptions">
                                                                     <div class="vr-datagrid-cell">
                                                                         <div class="vr-datagrid-celltext ">
                                                                             <div vr-loader="dataItem.isLoadingRouteOptions">
@@ -585,7 +585,7 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <div style="display:inline-block;vertical-align:top;width:21px" class="vr-datagrid-cell-container">
+                                                                <div style="display:inline-flex;vertical-align:top;width:21px" class="vr-datagrid-cell-container">
                                                                     <div class="vr-datagrid-cell">
                                                                         <div class="vr-datagrid-celltext ">
                                                                             <span vr-disabled="scopeModel.isPreview">
@@ -595,7 +595,7 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <div ng-repeat="method in costCalculationMethods" style="display:inline-block;vertical-align:top;width:50px" class="vr-datagrid-cell-container">
+                                                                <div ng-repeat="method in costCalculationMethods" style="display:inline-flex;vertical-align:top;width:50px" class="vr-datagrid-cell-container">
                                                                     <div class="vr-datagrid-cell">
                                                                         <div class="vr-datagrid-celltext ">
                                                                             <div style="text-align: right;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
@@ -605,7 +605,7 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <div style="display:inline-block;vertical-align:top;width:50px" class="vr-datagrid-cell-container">
+                                                                <div style="display:inline-flex;vertical-align:top;width:50px" class="vr-datagrid-cell-container">
                                                                     <div class="vr-datagrid-cell">
                                                                         <div class="vr-datagrid-celltext ">
                                                                             <div style="text-align: right;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
@@ -615,7 +615,7 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <div style="display:inline-block;vertical-align:top;width:50px" class="vr-datagrid-cell-container">
+                                                                <div style="display:inline-flex;vertical-align:top;width:50px" class="vr-datagrid-cell-container">
                                                                     <div class="vr-datagrid-cell">
                                                                         <div class="vr-datagrid-celltext ">
                                                                             <div style="text-align: right;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
@@ -635,7 +635,7 @@
                                                                     </div>
                                                                 </div>-->
 
-                                                                <div style="display:inline-block;vertical-align:top;width:65px" class="vr-datagrid-cell-container">
+                                                                <div style="display:inline-flex;vertical-align:top;width:65px" class="vr-datagrid-cell-container">
                                                                     <div class="vr-datagrid-cell">
                                                                         <div class="vr-datagrid-celltext ">
                                                                             <span vr-disabled="{{::(dataItem.IsCountryEnded || dataItem.IsZonePendingClosed)}}">
@@ -652,7 +652,7 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <div style="display:inline-block;vertical-align:top;width:18px" class="vr-datagrid-cell-container">
+                                                                <div style="display:inline-flex;vertical-align:top;width:18px" class="vr-datagrid-cell-container">
                                                                     <div class="vr-datagrid-cell">
                                                                         <div class="vr-datagrid-celltext ">
                                                                             <div style="text-align: left">
@@ -662,7 +662,7 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <div style="display:inline-block;vertical-align:top;width:100px" class="vr-datagrid-cell-container">
+                                                                <div style="display:inline-flex;vertical-align:top;width:100px" class="vr-datagrid-cell-container">
                                                                     <div class="vr-datagrid-cell">
                                                                         <div class="vr-datagrid-celltext ">
                                                                             <span ng-show="dataItem.NewRate != null" vr-disabled="{{::(dataItem.IsCountryEnded || dataItem.IsZonePendingClosed || dataItem.IsCountryNew)}}">
@@ -675,7 +675,7 @@
                                                                     </div>
                                                                 </div>
 
-                                                                <div style="display:inline-block;vertical-align:top;width:100px" class="vr-datagrid-cell-container">
+                                                                <div style="display:inline-flex;vertical-align:top;width:100px" class="vr-datagrid-cell-container">
                                                                     <div class="vr-datagrid-cell">
                                                                         <div class="vr-datagrid-celltext ">
                                                                             <span ng-hide="dataItem.NewRate != null" vr-disabled="{{::(dataItem.isSellingProductZone || dataItem.IsCountryEnded || dataItem.IsZonePendingClosed || !dataItem.IsCurrentRateEditable || (dataItem.currentRateEED != undefined))}}">
