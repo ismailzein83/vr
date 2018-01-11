@@ -9,16 +9,16 @@
                  idfield="CustomerRouteDetailId" enableautoexport="true" normalcell>
 
         <vr-datagridcolumn headertext="'Code'" field="'Entity.Code'" fixedwidth="100"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Customer'" field="'Entity.CustomerName'" fixedwidth="200"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Sale Zone'" field="'Entity.SaleZoneName'" fixedwidth="200"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Customer'" field="'Entity.CustomerName'" fixedwidth="120"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Sale Zone'" field="'Entity.SaleZoneName'" fixedwidth="120"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Rate'" field="'Entity.Rate'" fixedwidth="60" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Services'" widthfactor="1" disablesorting="true" fixedwidth="60">
             <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
         </vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Blocked'" field="'Entity.IsBlocked'" fixedwidth="50"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Linked Rules'" field="'LinkedRouteRuleCount'" fixedwidth="100" disablesorting="true"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Rule Type'" field="'ExecutedRouteRuleSettingsTypeName'" fixedwidth="100"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Rule Name'" field="'ExecutedRouteRuleName'" fixedwidth="200"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Linked Rules'" field="'LinkedRouteRuleCount'" fixedwidth="75" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Rule Type'" field="'ExecutedRouteRuleSettingsTypeName'" fixedwidth="90"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Rule Name'" field="'ExecutedRouteRuleName'" fixedwidth="100"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Route Options'" disablesorting>
             <div class="responsive-container" style="white-space: normal;">
                 <span ng-repeat="details in dataItem.RouteOptionDetails" ng-class="{'text-danger bold-label':details.IsBlocked}"
