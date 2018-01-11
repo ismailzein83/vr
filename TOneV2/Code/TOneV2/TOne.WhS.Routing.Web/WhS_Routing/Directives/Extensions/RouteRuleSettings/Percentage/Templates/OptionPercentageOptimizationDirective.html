@@ -1,8 +1,8 @@
-﻿<vr-columns width="1/2row">
+﻿<vr-columns width="1/2row" medium-spacing>
     <vr-select on-ready="ctrl.onSelectorReady" label="Analysis Types" datasource="ctrl.routingOptimizers"
                datatextfield="Title" datavaluefield="ExtensionConfigurationId" onselectitem="ctrl.onSelectedRoutingOptimizer" ondeselectitem="ctrl.onDeSelectedRoutingOptimizer" isrequired="true" selectedvalues="ctrl.selectedRoutingOptimizers" ismultipleselection></vr-select>
 </vr-columns>
-<vr-columns width="1/2row">
+<vr-columns width="1/2row" medium-spacing>
     <vr-datagrid datasource="ctrl.dataSource" norowhighlightonclick="true" maxheight="300px"
                  on-ready="ctrl.onGridReady" hidegridmenu ondeleterow="ctrl.removeRoutingOptimizer">
         <vr-datagridcolumn headertext="'Analysis Type'" field="'Title'" widthfactor="10" disablesorting></vr-datagridcolumn>

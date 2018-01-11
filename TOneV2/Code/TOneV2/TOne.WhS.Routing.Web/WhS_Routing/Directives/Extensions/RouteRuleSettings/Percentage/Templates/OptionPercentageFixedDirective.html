@@ -1,11 +1,10 @@
-﻿<vr-row removeline>
-    <vr-columns width="1/4row">
+﻿<vr-columns width="1/4row" medium-spacing>
         <vr-textbox label="Percentage Value" value="ctrl.percentageValue" type="number" decimalprecision="0" onvaluechanged="ctrl.onvaluechanged" minvalue="0" maxvalue="100"></vr-textbox>
     </vr-columns>
-    <vr-columns withemptyline width="1/4row">
+    <vr-columns withemptyline colnum="1" medium-spacing>
         <vr-button type="Add" data-onclick="ctrl.addPercentageOption" vr-disabled="ctrl.disableButton" standalone></vr-button>
     </vr-columns>
-    <vr-columns width="1/2row">
+    <vr-columns colnum="8" medium-spacing>
         <div>
             <vr-validator validate="ctrl.validatePercentages()">
                 <vr-datagrid datasource="ctrl.percentages"
@@ -20,4 +19,3 @@
             </vr-validator>
         </div>
     </vr-columns>
-</vr-row>
