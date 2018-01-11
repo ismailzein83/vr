@@ -7,16 +7,13 @@ namespace Vanrise.Common.MainExtensions
     public enum StartingFrom { ExecutionTime = 0, Midnight = 1 }
     public class LastTimePeriod : VRTimePeriod
     {
+        public override Guid ConfigId { get { return new Guid("6C4A3B8D-0E1E-4141-9A21-7F7A68DC25BE"); } }
+
         public TimeUnit TimeUnit { get; set; }
 
         public StartingFrom StartingFrom { get; set; }
 
         public int TimeValue { get; set; }
-
-        public override Guid ConfigId
-        {
-            get { return new Guid("6C4A3B8D-0E1E-4141-9A21-7F7A68DC25BE"); }
-        }
 
         public override void GetTimePeriod(IVRTimePeriodContext context)
         {
@@ -30,7 +27,7 @@ namespace Vanrise.Common.MainExtensions
 
             switch (this.TimeUnit)
             {
-                case TimeUnit.Day: context.FromTime = effectiveDate.Subtract(new TimeSpan(TimeValue,0, 0, 0)); break;
+                case TimeUnit.Day: context.FromTime = effectiveDate.Subtract(new TimeSpan(TimeValue, 0, 0, 0)); break;
                 case TimeUnit.Hour: context.FromTime = effectiveDate.Subtract(new TimeSpan(TimeValue, 0, 0)); break;
                 case TimeUnit.Minute: context.FromTime = effectiveDate.Subtract(new TimeSpan(0, TimeValue, 0)); break;
             }
