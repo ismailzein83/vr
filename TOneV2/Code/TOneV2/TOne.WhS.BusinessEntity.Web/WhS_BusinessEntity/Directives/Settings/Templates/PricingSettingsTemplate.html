@@ -7,8 +7,8 @@
                     isrequired="ctrl.isDefaultRateRequired"></vr-textbox>
     </vr-columns>
     <vr-columns width="1/2row">
-        <vr-textbox label="Max Sale Rate ({{ctrl.systemCurrencySymbol}})"
-                    value="ctrl.maximumRate" minvalue="0" type="number"
+        <vr-label>Max Sale Rate ({{ctrl.systemCurrencySymbol}})</vr-label>
+        <vr-textbox value="ctrl.maximumRate" minvalue="0" type="number"
                     ng-if="ctrl.showMaxSaleRate"
                     isrequired="ctrl.isMaxSaleRateRequired"></vr-textbox>
     </vr-columns>
