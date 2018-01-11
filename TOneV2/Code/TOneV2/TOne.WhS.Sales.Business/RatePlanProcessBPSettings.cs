@@ -63,7 +63,7 @@ namespace TOne.WhS.Sales.Business
 
                 if (startedBPInstanceInputArg.OwnerType == SalePriceListOwnerType.SellingProduct && startedBPInstanceInputArg.OwnerId == sellingProductId)
                 {
-                    reason = "Another process is running for the same sellingProduct";
+                    reason = "Another process is running for the same selling product";
                     return false;
                 }
 
@@ -71,7 +71,7 @@ namespace TOne.WhS.Sales.Business
                 {
                     if (startedBPInstanceInputArg.OwnerType == SalePriceListOwnerType.Customer && carrierAccountId == startedBPInstanceInputArg.OwnerId)
                     {
-                        reason = "A process is running of type customer for the same sellingProduct";
+                        reason = "A process is running of type customer for the same selling product";
                         return false;
                     }
                 }
@@ -92,13 +92,13 @@ namespace TOne.WhS.Sales.Business
 
                 if (startedBPInstanceInputArg.OwnerType == SalePriceListOwnerType.Customer && startedBPInstanceInputArg.OwnerId == customerId)
                 {
-                    reason = "Another process is running for the same Customer";
+                    reason = "Another process is running for the same customer";
                     return false;
                 }
 
                 if (startedBPInstanceInputArg.OwnerType == SalePriceListOwnerType.SellingProduct && sellingProductId == startedBPInstanceInputArg.OwnerId)
                 {
-                    reason = "Another process is running for customer's sellingProuct";
+                    reason = "Another process is running for customer's selling product";
                     return false;
                 }
             }
