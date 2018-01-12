@@ -14,7 +14,8 @@
         var zoneEED;
         var sellingNumberPlanId;
         var currentRoutingProductId;
-
+        var countryBED;
+        var countryEED;
         var zoneRoutingProductSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         var zoneRoutingProductSelectorAPI;
 
@@ -33,6 +34,8 @@
                 zoneName = parameters.ZoneName;
                 sellingNumberPlanId = parameters.SellingNumberPlanId;
                 currentRoutingProductId = parameters.CurrentRoutingProductId;
+                countryBED = parameters.CountryBED,
+                countryEED = parameters.CountryEED
             }
         }
 
@@ -51,9 +54,12 @@
                 $scope.modalContext.closeModal();
             };
             $scope.scopeModel.validateRange = function () {
-                var errorMessage = VRValidationService.validateTimeRange(zoneBED, $scope.scopeModel.bed);
-                if (errorMessage != null)
+                var errorMessageZoneBED = VRValidationService.validateTimeRange(zoneBED, $scope.scopeModel.bed);
+                var errorMessageCountryBED = VRValidationService.validateTimeRange(countryBED, $scope.scopeModel.bed);
+                if (errorMessageZoneBED != null)
                     return 'Zone routing product BED cannot be less than zone BED';
+                if (errorMessageCountryBED != null)
+                    return 'Zone routing product BED cannot be less than country BED';
                 return null;
             }
         }
@@ -120,7 +126,9 @@
                 BED: $scope.scopeModel.bed,
                 ZoneId: zoneId,
                 ZoneBED: zoneBED,
-                ZoneEED: zoneEED
+                ZoneEED: zoneEED,
+                CountryBED: countryBED,
+                CountryEED: countryEED
             };
             return obj;
         }

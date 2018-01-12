@@ -88,7 +88,8 @@ function (utilsService, vrNotificationService, whSBeZoneRoutingProductApiService
             $scope.gridMenuActions = function (dataItem) {
                 var menuActions = [];
                 var zoneEED = dataItem.ZoneEED;
-                if (typeof zoneEED == 'undefined' || zoneEED == null) {
+                var countryEED = dataItem.Entity.CountryEED;
+                if ((typeof zoneEED == 'undefined' || zoneEED == null) && (typeof countryEED == 'undefined' || countryEED == null)) {
 
                     var routingPRoductEdit = {
                         name: "Edit",
@@ -108,7 +109,7 @@ function (utilsService, vrNotificationService, whSBeZoneRoutingProductApiService
                 setService(updatedObj);
             };
             WhS_BE_SaleEntityZoneRoutingProductService.editSaleEntityZoneRouting(ownerId, ownerType, sellingNumberPlanId, routingProductObj.Entity.ZoneId,
-             routingProductObj.ZoneName, routingProductObj.ZoneBED, routingProductObj.ZoneEED, routingProductObj.Entity.RoutingProductId, onZoneRoutingProductUpdated);
+             routingProductObj.ZoneName, routingProductObj.ZoneBED, routingProductObj.ZoneEED, routingProductObj.Entity.RoutingProductId, routingProductObj.Entity.CountryBED, routingProductObj.Entity.CountryEED, onZoneRoutingProductUpdated);
         }
 
         function defineAPI() {

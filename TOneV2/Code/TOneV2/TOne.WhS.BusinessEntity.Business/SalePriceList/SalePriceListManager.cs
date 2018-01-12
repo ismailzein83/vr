@@ -1151,20 +1151,20 @@ namespace TOne.WhS.BusinessEntity.Business
         private NewPriceList GetOrCreateNewPricelist(int customerId, int currencyId, int userId, long processInstanceId, DateTime effectiveDate, Dictionary<int, List<NewPriceList>> newPricelistsByCurrencyId)
         {
             List<NewPriceList> newPriceLists;
-            NewPriceList customerPricelist = null;
             if (!newPricelistsByCurrencyId.TryGetValue(currencyId, out newPriceLists))
             {
                 newPriceLists = new List<NewPriceList>();
                 newPricelistsByCurrencyId.Add(currencyId, newPriceLists);
             }
-            foreach (var newPriceList in newPriceLists)
-            {
-                if (newPriceList.OwnerId == customerId && newPriceList.OwnerType == SalePriceListOwnerType.Customer)
-                {
-                    customerPricelist = newPriceList;
-                    break;
-                }
-            }
+            NewPriceList customerPricelist = newPriceLists.FindRecord(x => x.OwnerId == customerId && x.OwnerType == SalePriceListOwnerType.Customer);
+            //foreach (var newPriceList in newPriceLists)
+            //{
+            //    if (newPriceList.OwnerId == customerId && newPriceList.OwnerType == SalePriceListOwnerType.Customer)
+            //    {
+            //        customerPricelist = newPriceList;
+            //        break;
+            //    }
+            //}
             if (customerPricelist == null)
             {
                 customerPricelist = new NewPriceList

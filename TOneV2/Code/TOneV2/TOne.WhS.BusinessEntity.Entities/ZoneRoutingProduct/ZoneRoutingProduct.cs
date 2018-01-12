@@ -16,6 +16,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         public bool IsInherited { get; set; }
         public DateTime BED { get; set; }
         public DateTime? EED { get; set; }
+        public DateTime CountryBED { get; set; }
+        public DateTime? CountryEED { get; set; }
     }
 
     public class ZoneRoutingProductToEdit
@@ -27,6 +29,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         public SalePriceListOwnerType OwnerType { get; set; }
         public DateTime ZoneBED { get; set; }
         public DateTime? ZoneEED { get; set; }
+        public DateTime CountryBED { get; set; }
+        public DateTime? CountryEED { get; set; }
     }
 
     public class ZoneRoutingProductToChange

@@ -25,24 +25,16 @@ namespace TOne.WhS.BusinessEntity.Business
             UpdateOperationOutput<ZoneRoutingProductDetail> updateOperationOutput = new UpdateOperationOutput<ZoneRoutingProductDetail>
             {
                 Result = UpdateOperationResult.Failed,
-                UpdatedObject = null
+                UpdatedObject = null,
+                ShowExactMessage = true
             };
 
             var zoneManager = new SaleZoneManager();
             var zoneName = zoneManager.GetSaleZoneName(zoneRoutingProductToEdit.ZoneId);
 
-            if (zoneRoutingProductToEdit.ZoneEED.HasValue)
-            {
-                updateOperationOutput.ShowExactMessage = true;
-                updateOperationOutput.Message = string.Format("Cannot change zone routing product on closed zone {0}", zoneName);
-                return updateOperationOutput;
-            }
-            if (zoneRoutingProductToEdit.BED < zoneRoutingProductToEdit.ZoneBED)
-            {
-                updateOperationOutput.ShowExactMessage = true;
-                updateOperationOutput.Message = string.Format("Cannot edit routing product with a date less than zone BED {0}", zoneRoutingProductToEdit.ZoneBED);
-                return updateOperationOutput;
-            }
+            string warningMessageOnDate = CheckDateCondition(zoneRoutingProductToEdit.ZoneEED, zoneRoutingProductToEdit.CountryEED, zoneRoutingProductToEdit.ZoneBED, zoneRoutingProductToEdit.CountryBED, zoneRoutingProductToEdit.BED, zoneName);
+
+            if (zoneRoutingProductToEdit != null) return updateOperationOutput;
 
             var saleZoneRoutingProductToCloseList = new List<ZoneRoutingProductToChange>();
 
@@ -102,6 +94,22 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region private Methods
 
+        private string CheckDateCondition(DateTime? zoneEED, DateTime? countryEED, DateTime zoneBED, DateTime countryBED, DateTime zoneRoutingProductBED, string zoneName)
+        {
+            if (zoneEED.HasValue)
+                return string.Format("Cannot change zone routing product on closed zone {0}", zoneName);
+
+            if (countryEED.HasValue)
+                return string.Format("Cannot change zone routing product on closed country");
+
+            if (zoneRoutingProductBED < zoneBED)
+                return string.Format("Cannot edit routing product with a date less than zone BED {0}", zoneBED);
+
+            if (zoneRoutingProductBED < countryBED)
+                return string.Format("Cannot edit routing product with a date less than country BED {0}", countryBED);
+
+            return null;
+        }
         private IEnumerable<SaleZoneRoutingProduct> GetZoneRoutingProduct(int ownerId, SalePriceListOwnerType ownerType, long zoneId, DateTime effectiveDate)
         {
             SaleEntityRoutingProductManager saleEntityRoutingProductManager = new SaleEntityRoutingProductManager();
@@ -114,7 +122,7 @@ namespace TOne.WhS.BusinessEntity.Business
             SaleZoneManager _saleZoneManager = new SaleZoneManager();
 
             #region mapper
-            private ZoneRoutingProduct ZoneRoutingProductMapper(SaleEntityZoneRoutingProduct saleEntityZoneRoutingProduct, long zoneId, DateTime zoneBED, int countryId, IEnumerable<int> serviceIds, bool IsInherited, DateTime countrySellDate)
+            private ZoneRoutingProduct ZoneRoutingProductMapper(SaleEntityZoneRoutingProduct saleEntityZoneRoutingProduct, long zoneId, DateTime zoneBED, int countryId, IEnumerable<int> serviceIds, bool IsInherited, DateTime countrySellDate, DateTime? countryEED)
             {
                 List<DateTime> dates = new List<DateTime> { saleEntityZoneRoutingProduct.BED, zoneBED, countrySellDate };
                 return new ZoneRoutingProduct
@@ -126,7 +134,9 @@ namespace TOne.WhS.BusinessEntity.Business
                     ZoneId = zoneId,
                     CountryId = countryId,
                     ServiceIds = serviceIds.ToList(),
-                    IsInherited = IsInherited
+                    IsInherited = IsInherited,
+                    CountryBED = countrySellDate,
+                    CountryEED = countryEED
                 };
             }
             public override ZoneRoutingProductDetail EntityDetailMapper(ZoneRoutingProduct entity)
@@ -165,7 +175,7 @@ namespace TOne.WhS.BusinessEntity.Business
                         {
                             var serviceIds = _routingProductManager.GetZoneServiceIds(
                                 saleEntityZoneRoutingProduct.RoutingProductId, saleZone.SaleZoneId);
-                            ZoneRoutingProduct routingProduct = ZoneRoutingProductMapper(saleEntityZoneRoutingProduct, saleZone.SaleZoneId, saleZone.BED, saleZone.CountryId, serviceIds, false, DateTime.MinValue);
+                            ZoneRoutingProduct routingProduct = ZoneRoutingProductMapper(saleEntityZoneRoutingProduct, saleZone.SaleZoneId, saleZone.BED, saleZone.CountryId, serviceIds, false, DateTime.MinValue, null);
                             zoneRoutingProducts.Add(routingProduct);
                         }
                     }
@@ -175,14 +185,15 @@ namespace TOne.WhS.BusinessEntity.Business
                     CustomerCountryManager customerCountryManager = new CustomerCountryManager();
                     IEnumerable<CustomerCountry2> customerCountries = customerCountryManager.GetCustomerCountries(input.Query.OwnerId, input.Query.EffectiveOn, false);
                     Dictionary<int, DateTime> customerCountriesDatesById = new Dictionary<int, DateTime>();
+                    Dictionary<int, DateTime?> customerCountriesEEDsById = new Dictionary<int, DateTime?>();
                     foreach (var customerCountrie in customerCountries)
                     {
                         customerCountriesDatesById.Add(customerCountrie.CountryId, customerCountrie.BED);
+                        customerCountriesEEDsById.Add(customerCountrie.CountryId, customerCountrie.EED);
                     }
 
                     var customerSellingProductManager = new CustomerSellingProductManager();
-                    var sellingProductId =
-                        customerSellingProductManager.GetEffectiveSellingProductId(input.Query.OwnerId,
+                    var sellingProductId = customerSellingProductManager.GetEffectiveSellingProductId(input.Query.OwnerId,
                             input.Query.EffectiveOn, false);
                     if (!sellingProductId.HasValue)
                         return zoneRoutingProducts;
@@ -190,20 +201,17 @@ namespace TOne.WhS.BusinessEntity.Business
                     foreach (SaleZone saleZone in filteredSaleZone)
                     {
                         DateTime countrySellDate = customerCountriesDatesById.GetRecord(saleZone.CountryId);
+                        DateTime? countryEED = customerCountriesEEDsById.GetRecord(saleZone.CountryId);
 
-                        if (countrySellDate == null)
-                            throw new Exception(string.Format("The Country of Zone {} is not sold for the customer with Id {1}", saleZone.Name, input.Query.OwnerId));
-
-                        SaleEntityZoneRoutingProduct zoneRoutingProduct =
-                            routingProductLocator.GetCustomerZoneRoutingProduct(input.Query.OwnerId,
+                        SaleEntityZoneRoutingProduct zoneRoutingProduct = routingProductLocator.GetCustomerZoneRoutingProduct(input.Query.OwnerId,
                                 sellingProductId.Value, saleZone.SaleZoneId);
+
                         if (zoneRoutingProduct != null)
                         {
-                            var serviceIds = _routingProductManager.GetZoneServiceIds(
-                                zoneRoutingProduct.RoutingProductId, saleZone.SaleZoneId);
+                            var serviceIds = _routingProductManager.GetZoneServiceIds(zoneRoutingProduct.RoutingProductId, saleZone.SaleZoneId);
                             ZoneRoutingProduct routingProduct = ZoneRoutingProductMapper(zoneRoutingProduct,
                                 saleZone.SaleZoneId, saleZone.BED, saleZone.CountryId, serviceIds,
-                                zoneRoutingProduct.Source != SaleEntityZoneRoutingProductSource.CustomerZone, countrySellDate);
+                                zoneRoutingProduct.Source != SaleEntityZoneRoutingProductSource.CustomerZone, countrySellDate, countryEED);
                             zoneRoutingProducts.Add(routingProduct);
                         }
                     }
