@@ -148,7 +148,6 @@ namespace TOne.WhS.BusinessEntity.Business
         public Dictionary<int, DateTime> GetSoldCountryDatesByCountryId(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             var datesByCountry = new Dictionary<int, DateTime>();
-            var customerCountryManager = new CustomerCountryManager();
             IEnumerable<CustomerCountry2> customerCountries;
 
             if (isEffectiveInFuture)
@@ -156,11 +155,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (!effectiveOn.HasValue)
                     throw new ArgumentException("Cannot find effective and future countries without an effective date");
 
-                customerCountries = customerCountryManager.GetCustomerCountriesEffectiveAfter(customerId, effectiveOn.Value);
+                customerCountries = GetCustomerCountriesEffectiveAfter(customerId, effectiveOn.Value);
             }
             else
             {
-                customerCountries = customerCountryManager.GetCustomerCountries(customerId, effectiveOn, false);
+                customerCountries = GetCustomerCountries(customerId, effectiveOn, false);
             }
             if (customerCountries != null)
             {
