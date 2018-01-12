@@ -735,7 +735,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 var opennedCodes = salePlZoneNotification.Codes.Where(c => !c.EED.HasValue);
                 var notChangedClosedCodes = salePlZoneNotification.Codes.Where(c => c.EED.HasValue && c.EED.Value > DateTime.Today && c.CodeChange == CodeChange.NotChanged);
-                var changedClosedCodes = salePlZoneNotification.Codes.Where(c => c.CodeChange != CodeChange.NotChanged);
+                var changedClosedCodes = salePlZoneNotification.Codes.Where(c => c.CodeChange == CodeChange.Closed);
                 if (opennedCodes.Any() || notChangedClosedCodes.Any())
                 {
                     onlyClosedChanges = false;
