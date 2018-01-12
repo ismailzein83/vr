@@ -254,6 +254,10 @@
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-customer-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-activationstatus-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-supplier-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\CaseManagement\CustomerCase\Templates\CutomerCaseStaticEditorDefinitionTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\CaseManagement\CustomerCase\whs-be-casemanagement-cutomercase-staticeditor.js" />
+    <Content Include="WhS_BusinessEntity\Directives\CaseManagement\SupplierCase\Templates\SupplierCaseStaticEditorDefinitionTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\CaseManagement\SupplierCase\whs-be-casemanagement-suppliercase-staticeditor.js" />
     <Content Include="WhS_BusinessEntity\Directives\CDRImportSettings\Templates\CDRImportSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CDRImportSettings\Templates\SwitchCDRMappingConfigurationTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CDRImportSettings\vr-whs-be-cdpn-selector.js" />

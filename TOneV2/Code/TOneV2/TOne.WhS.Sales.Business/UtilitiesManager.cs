@@ -106,29 +106,10 @@ namespace TOne.WhS.Sales.Business
 
         public static Dictionary<int, DateTime> GetDatesByCountry(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
-            var datesByCountry = new Dictionary<int, DateTime>();
+            Dictionary<int, DateTime> datesByCountry = new CustomerCountryManager().GetSoldCountryDatesByCountryId(customerId, effectiveOn, isEffectiveInFuture);
 
-            var customerCountryManager = new CustomerCountryManager();
-            IEnumerable<CustomerCountry2> customerCountries;
-
-            if (isEffectiveInFuture)
-            {
-                if (!effectiveOn.HasValue)
-                    throw new ArgumentException("Cannot find effective and future countries without an effective date");
-
-                customerCountries = customerCountryManager.GetCustomerCountriesEffectiveAfter(customerId, effectiveOn.Value);
-            }
-            else
-            {
-                customerCountries = customerCountryManager.GetCustomerCountries(customerId, effectiveOn, false);
-            }
-
-            if (customerCountries != null)
-            {
-                foreach (CustomerCountry2 customerCountry in customerCountries)
-                    if (!datesByCountry.ContainsKey(customerCountry.CountryId))
-                        datesByCountry.Add(customerCountry.CountryId, customerCountry.BED);
-            }
+            if (datesByCountry == null)
+                datesByCountry = new Dictionary<int, DateTime>();
 
             Changes draft = new RatePlanDraftManager().GetDraft(SalePriceListOwnerType.Customer, customerId);
             if (draft != null && draft.CountryChanges != null && draft.CountryChanges.NewCountries != null)
@@ -139,7 +120,6 @@ namespace TOne.WhS.Sales.Business
                         datesByCountry.Add(newCountry.CountryId, newCountry.BED);
                 }
             }
-
             return datesByCountry;
         }
 

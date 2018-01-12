@@ -145,6 +145,31 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         #region Public Methods
 
+        public Dictionary<int, DateTime> GetSoldCountryDatesByCountryId(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture)
+        {
+            var datesByCountry = new Dictionary<int, DateTime>();
+            var customerCountryManager = new CustomerCountryManager();
+            IEnumerable<CustomerCountry2> customerCountries;
+
+            if (isEffectiveInFuture)
+            {
+                if (!effectiveOn.HasValue)
+                    throw new ArgumentException("Cannot find effective and future countries without an effective date");
+
+                customerCountries = customerCountryManager.GetCustomerCountriesEffectiveAfter(customerId, effectiveOn.Value);
+            }
+            else
+            {
+                customerCountries = customerCountryManager.GetCustomerCountries(customerId, effectiveOn, false);
+            }
+            if (customerCountries != null)
+            {
+                foreach (CustomerCountry2 customerCountry in customerCountries)
+                    if (!datesByCountry.ContainsKey(customerCountry.CountryId))
+                        datesByCountry.Add(customerCountry.CountryId, customerCountry.BED);
+            }
+            return datesByCountry;
+        }
         public CustomerCountry2 GetCustomerCountry(int customerId, int countryId, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             var cachedCustomerCountriesByCustomerCountry = GetAllCachedCustomerCountriesByCustomerCountry();

@@ -1,0 +1,26 @@
+﻿<vr-row>
+    <vr-whs-be-customer-selector on-ready="scopeModel.onCustomerSelectorReady" normal-col-num="4" isrequired="true"></vr-whs-be-customer-selector>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.carrierReference" label="Carrier Reference"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-datetimepicker value="scopeModel.fromDate" type="date" label="From Date" customvalidate="scopeModel.validateEEDDate()" isrequired="true"></vr-datetimepicker>
+    </vr-columns>
+
+    <vr-columns width="1/3row">
+        <vr-datetimepicker value="scopeModel.toDate" type="date" label="To Date" customvalidate="scopeModel.validateEEDDate()" isrequired="true"></vr-datetimepicker>
+    </vr-columns>
+
+    <vr-columns width="1/3row">
+        <vr-textbox type="number" value="scopeModel.attempts" label="Attempts"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox type="number" value="scopeModel.asr" label="ASR"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox type="number" value="scopeModel.acd" label="ACD"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="fullrow">
+        <vr-textarea value="scopeModel.description" label="Description"></vr-textarea>
+    </vr-columns>
+</vr-row>
