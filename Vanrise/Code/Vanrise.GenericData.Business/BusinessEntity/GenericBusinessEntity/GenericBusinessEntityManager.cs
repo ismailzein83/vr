@@ -50,68 +50,24 @@ namespace Vanrise.GenericData.Business
       
         //public Vanrise.Entities.UpdateOperationOutput<GenericBusinessEntityDetail> UpdateGenericBusinessEntity(GenericBusinessEntity genericBusinessEntity)
         //{
-        //    ConvertDetailsToDataRecord(genericBusinessEntity);
-        //    var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<GenericBusinessEntityDetail>();
-        //    updateOperationOutput.UpdatedObject = null;
 
         //    if (IsEntityTitleValid(genericBusinessEntity))
         //    {
-        //        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
-
-        //        IGenericBusinessEntityDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericBusinessEntityDataManager>();
-        //        bool updated = dataManager.UpdateGenericBusinessEntity(genericBusinessEntity);
-
         //        if (updated)
         //        {
         //            VRActionLogger.Current.TrackAndLogObjectUpdated(new GenericBusinessEntityLoggableEntity(genericBusinessEntity.BusinessEntityDefinitionId), genericBusinessEntity);
-        //            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-        //            CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(genericBusinessEntity.BusinessEntityDefinitionId);
-        //            updateOperationOutput.UpdatedObject = GenericBusinessEntityDetailMapper(genericBusinessEntity);
         //        }
         //    }
-        //    else
-        //    {
-        //        updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
-        //    }
-
-        //    return updateOperationOutput;
         //}        
         //public Vanrise.Entities.InsertOperationOutput<GenericBusinessEntityDetail> AddGenericBusinessEntity(GenericBusinessEntity genericBusinessEntity)
-        //{
-        //    ConvertDetailsToDataRecord(genericBusinessEntity);
-        //    var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<GenericBusinessEntityDetail>();
-        //    insertOperationOutput.InsertedObject = null;
-            
+        //{            
         //    if (IsEntityTitleValid(genericBusinessEntity))
         //    {
-        //        insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
-        //        long genericBusinessEntityId = -1;
-
-        //        IGenericBusinessEntityDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericBusinessEntityDataManager>();
-        //        bool inserted = dataManager.AddGenericBusinessEntity(genericBusinessEntity, out genericBusinessEntityId);
-
-        //        if (inserted)
-        //        {
         //            CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(genericBusinessEntity.BusinessEntityDefinitionId);
-        //            genericBusinessEntity.GenericBusinessEntityId = genericBusinessEntityId;
         //            VRActionLogger.Current.TrackAndLogObjectAdded(new GenericBusinessEntityLoggableEntity(genericBusinessEntity.BusinessEntityDefinitionId), genericBusinessEntity);
-        //            insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-        //            insertOperationOutput.InsertedObject = GenericBusinessEntityDetailMapper(genericBusinessEntity);
-                   
-        //        }
-        //    }
-        //    else
-        //    {
-        //        insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
-        //    }
-
-        //    return insertOperationOutput;
+            
         //}
-        //public IEnumerable<GenericBusinessEntity> GetGenericBusinessEntities(Guid businessEntityDefinitionId)
-        //{
-        //    var cachedGenericBusinessEntities = GetCachedGenericBusinessEntities(businessEntityDefinitionId);
-        //    return cachedGenericBusinessEntities.Values;
-        //}
+     
         //public IEnumerable<GenericBusinessEntityInfo> GetGenericBusinessEntityInfo(Guid businessEntityDefinitionId, GenericBusinessEntityFilter filter)
         //{
         //    var cachedGenericBusinessEntities = GetCachedGenericBusinessEntities(businessEntityDefinitionId);
@@ -120,25 +76,6 @@ namespace Vanrise.GenericData.Business
                 
         //    }
         //    return cachedGenericBusinessEntities.MapRecords(GenericBusinessEntityInfoMapper);
-        //}
-        //public GenericBusinessEntityTitle GetBusinessEntityTitle(Guid businessEntityDefinitionId, long? genericBussinessEntityId = null)
-        //{
-           
-        //    var businessEntityDefinition = GetBusinessEntityDefinition(businessEntityDefinitionId);
-          
-        //    GenericBusinessEntityTitle entityTitle = new GenericBusinessEntityTitle();
-        //    entityTitle.Title = businessEntityDefinition.Title;
-           
-        //    if(genericBussinessEntityId !=null)
-        //    {
-        //        GenericBEDefinitionSettings definitionSettings = businessEntityDefinition.Settings as GenericBEDefinitionSettings;
-        //        if (definitionSettings == null)
-        //            throw new NullReferenceException("definitionSettings");          
-               
-        //        var genericBusinessEntity = GetGenericBusinessEntity((long)genericBussinessEntityId, businessEntityDefinitionId);
-        //        entityTitle.EntityName = GetFieldDescription(genericBusinessEntity, definitionSettings.FieldPath, definitionSettings.DataRecordTypeId);
-        //    }
-        //    return entityTitle;
         //}
 
         //public bool DoesUserHaveViewAccess(Guid genericBEDefinitionId)
@@ -203,7 +140,14 @@ namespace Vanrise.GenericData.Business
            
             List<string> columns = new List<string>();
             List<string> columnTitles = new List<string>();
-            GetGridColumnNamesAndTitles(businessEntityDefinitionId, out columns, out columnTitles);
+            var dataRecordFields = _genericBEDefinitionManager.GetDataRecordTypeFieldsByBEDefinitionId(businessEntityDefinitionId);
+            foreach (var field in dataRecordFields)
+            {
+                columns.Add(field.Key);
+                columnTitles.Add(field.Value.Title);
+            }
+
+          //  GetGridColumnNamesAndTitles(businessEntityDefinitionId, out columns, out columnTitles);
             var storageRecords = _dataRecordStorageManager.GetFilteredDataRecords(new DataRetrievalInput<DataRecordQuery>
             {
                 FromRow = 0,
@@ -317,6 +261,14 @@ namespace Vanrise.GenericData.Business
                             foreach (var genericBEGridAction in genericBEDefinitionSetting.GridDefinition.GenericBEGridActions)
                             {
                                 genericBusinessEntityDetail.AvailableGridActionIds.Add(genericBEGridAction.GenericBEGridActionId);
+                            }
+                        }
+                        if (genericBEDefinitionSetting.GridDefinition.GenericBEGridViews != null)
+                        {
+                            genericBusinessEntityDetail.AvailableGridViewIds = new List<Guid>();
+                            foreach (var genericBEGridView in genericBEDefinitionSetting.GridDefinition.GenericBEGridViews)
+                            {
+                                genericBusinessEntityDetail.AvailableGridViewIds.Add(genericBEGridView.GenericBEViewDefinitionId);
                             }
                         }
 
@@ -608,12 +560,23 @@ namespace Vanrise.GenericData.Business
             }
 
             var gridDefinition = _genericBEDefinitionManager.GetGenericBEDefinitionGridDefinition(businessEntityDefinitionId);
-            if (gridDefinition != null && gridDefinition.GenericBEGridActions != null)
+            if (gridDefinition != null)
             {
-                genericBusinessEntityDetail.AvailableGridActionIds = new List<Guid>();
-                foreach(var genericBEGridAction in gridDefinition.GenericBEGridActions)
+                if (gridDefinition.GenericBEGridActions != null)
                 {
-                    genericBusinessEntityDetail.AvailableGridActionIds.Add(genericBEGridAction.GenericBEGridActionId);
+                    genericBusinessEntityDetail.AvailableGridActionIds = new List<Guid>();
+                    foreach (var genericBEGridAction in gridDefinition.GenericBEGridActions)
+                    {
+                        genericBusinessEntityDetail.AvailableGridActionIds.Add(genericBEGridAction.GenericBEGridActionId);
+                    }
+                }
+                if (gridDefinition.GenericBEGridViews != null)
+                {
+                    genericBusinessEntityDetail.AvailableGridViewIds = new List<Guid>();
+                    foreach (var genericBEGridView in gridDefinition.GenericBEGridViews)
+                    {
+                        genericBusinessEntityDetail.AvailableGridViewIds.Add(genericBEGridView.GenericBEViewDefinitionId);
+                    }
                 }
             }
 

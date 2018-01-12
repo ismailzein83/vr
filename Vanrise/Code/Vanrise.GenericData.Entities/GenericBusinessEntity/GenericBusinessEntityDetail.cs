@@ -10,6 +10,7 @@ namespace Vanrise.GenericData.Entities
     {
         public GenericBusinessEntityValues FieldValues { get; set; }
         public List<Guid> AvailableGridActionIds { get; set; }
+        public List<Guid> AvailableGridViewIds { get; set; }
     }
     public class GenericBusinessEntityValues : Dictionary<string, GenericBusinessEntityValue>
     {

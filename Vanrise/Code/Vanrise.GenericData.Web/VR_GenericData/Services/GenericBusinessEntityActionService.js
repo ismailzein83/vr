@@ -1,12 +1,12 @@
 ﻿'use strict';
 
 app.service('VR_GenericData_GenericBEActionService',
-    ['VRModalService', 'UtilsService', 'VRNotificationService', 'SecurityService', 'VR_GenericData_GenericBusinessEntityService', 'VR_GenericData_GenericBusinessEntityAPIService',
-    function (VRModalService, UtilsService, VRNotificationService, SecurityService, VR_GenericData_GenericBusinessEntityService, VR_GenericData_GenericBusinessEntityAPIService) {
+    ['VRModalService', 'UtilsService', 'VRNotificationService', 'SecurityService', 'VR_GenericData_GenericBusinessEntityService', 'VR_GenericData_GenericBusinessEntityAPIService','VR_GenericData_GenericBEService',
+    function (VRModalService, UtilsService, VRNotificationService, SecurityService, VR_GenericData_GenericBusinessEntityService, VR_GenericData_GenericBusinessEntityAPIService, VR_GenericData_GenericBEService) {
 
         var actionTypes = [];
 
-        function defineGenericBEMenuActions(businessEntityDefinitionId, genericBusinessEntity, gridAPI, genericBEActions, genericBEGridActions, idFieldType) {
+        function defineGenericBEMenuActions(businessEntityDefinitionId, genericBusinessEntity, gridAPI, genericBEActions, genericBEGridActions,genericBEGridViews, idFieldType) {
 
             genericBusinessEntity.menuActions = [];
 
@@ -44,6 +44,7 @@ app.service('VR_GenericData_GenericBEActionService',
                             genericBusinessEntityId: genericBusinessEntityId,
                             genericBEAction: genericBEAction,
                             onItemUpdated: function (updatedItem) {
+                                VR_GenericData_GenericBEService.defineGenericBEViewTabs(businessEntityDefinitionId, updatedItem, gridAPI, genericBEGridViews, idFieldType);
                                 defineGenericBEMenuActions(businessEntityDefinitionId, updatedItem, gridAPI, genericBEActions, genericBEGridActions, idFieldType);
                                 gridAPI.itemUpdated(updatedItem);
                             }

@@ -46,6 +46,19 @@ namespace Vanrise.GenericData.Entities
         public GenericBEEditorDefinition EditorDefinition { get; set; }
     }
 
+    public class GenericBEViewDefinition
+    {
+        public Guid GenericBEViewDefinitionId { get; set; }
+        public string Name { get; set; }
+        public GenericBEViewDefinitionSettings Settings { get; set; }
+    }
+    public abstract class GenericBEViewDefinitionSettings
+    {
+        public abstract Guid ConfigId { get; }
+        public abstract string RuntimeDirective { get; }
+    }
+
+
     public class GenericBEEditorDefinition
     {
         public VRGenericEditorDefinitionSetting Settings { get; set; }
@@ -54,6 +67,8 @@ namespace Vanrise.GenericData.Entities
     {
         public List<GenericBEGridColumn> ColumnDefinitions { get; set; }
         public List<GenericBEGridAction> GenericBEGridActions { get; set; }
+        public List<GenericBEViewDefinition> GenericBEGridViews { get; set; }
+
     }
     public class GenericBEGridColumn
     {

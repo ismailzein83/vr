@@ -568,7 +568,7 @@ namespace Vanrise.GenericData.SQLDataStorage
                     {
                         foreach (var prm in parameterValues)
                         {
-                            cmd.Parameters.Add(new SqlParameter(String.Format("{0}", prm.Key), prm.Value));
+                            cmd.Parameters.Add(new SqlParameter(String.Format("{0}", prm.Key), prm.Value != null ? prm.Value : DBNull.Value));
                         }
 
                     }) > 0;
@@ -582,10 +582,10 @@ namespace Vanrise.GenericData.SQLDataStorage
 
             int parameterIndex = 0;
             string tableName = GetTableNameWithSchema();
-            queryBuilder.Append(string.Format(@" update  {0} set   ", tableName));
             StringBuilder whereQuery = new StringBuilder();
             StringBuilder valuesQuery = new StringBuilder();
-
+            StringBuilder ifNotExistsQueryBuilder = new StringBuilder();
+            var idColumn = GetIdColumn();
             foreach (var fieldValue in fieldValues)
             {
                 var sqlDataRecordStorageColumn = GetColumnFromFieldName(fieldValue.Key);
@@ -593,18 +593,40 @@ namespace Vanrise.GenericData.SQLDataStorage
                 parameterValues.Add(parameter, fieldValue.Value);
                 if (sqlDataRecordStorageColumn.IsUnique)
                 {
-                    if (whereQuery.Length != 0)
-                        whereQuery.Append(" AND ");
-                    whereQuery.AppendFormat(@" {0} = {1}  ", sqlDataRecordStorageColumn.ColumnName, parameter);
+                    if (ifNotExistsQueryBuilder.Length > 0)
+                    {
+                        ifNotExistsQueryBuilder.Append(" AND ");
+                    }
+                    if (idColumn.Name == fieldValue.Key)
+                    {
+                        ifNotExistsQueryBuilder.AppendFormat("{0} != {1}", sqlDataRecordStorageColumn.ColumnName, parameter);
+                        if (whereQuery.Length != 0)
+                            whereQuery.Append(" AND ");
+                        whereQuery.AppendFormat(@" {0} = {1}  ", sqlDataRecordStorageColumn.ColumnName, parameter);
+                    }else
+                    {
+                        ifNotExistsQueryBuilder.AppendFormat("{0} = {1}", sqlDataRecordStorageColumn.ColumnName, parameter);
+                    }
+
+                    
                 }
-                else
+                if (idColumn.Name != fieldValue.Key)
                 {
                     if (valuesQuery.Length != 0)
                         valuesQuery.Append(",");
                     valuesQuery.AppendFormat(@" {0} = {1}  ", sqlDataRecordStorageColumn.ColumnName, parameter);
                 }
             }
-            queryBuilder.Append(string.Format(@" {0} where {1}  ",valuesQuery.ToString(), whereQuery.ToString()));
+
+            if (ifNotExistsQueryBuilder.Length > 0)
+            {
+                queryBuilder.Append(@" IF NOT EXISTS(SELECT 1 FROM #TABLENAME# WHERE #IFNOTEXISTSQUERY#) ");
+                queryBuilder.Replace("#IFNOTEXISTSQUERY#", ifNotExistsQueryBuilder.ToString());
+            }
+            queryBuilder.Append(@"BEGIN  UPDATE #TABLENAME# SET #VALUESQUERY# WHERE #WHEREQUERY#  END");
+            queryBuilder.Replace("#VALUESQUERY#", valuesQuery.ToString());
+            queryBuilder.Replace("#WHEREQUERY#", whereQuery.ToString());
+            queryBuilder.Replace("#TABLENAME#", tableName);
             return queryBuilder.ToString();
         }
 
@@ -618,7 +640,7 @@ namespace Vanrise.GenericData.SQLDataStorage
             {
                 foreach (var prm in parameterValues)
                 {
-                    cmd.Parameters.Add(new SqlParameter(String.Format("{0}", prm.Key), prm.Value));
+                    cmd.Parameters.Add(new SqlParameter(String.Format("{0}", prm.Key), prm.Value != null ? prm.Value : DBNull.Value));
                 }
                 if (withOutParameter)
                 {
@@ -635,35 +657,53 @@ namespace Vanrise.GenericData.SQLDataStorage
         private string BuildInsertQuery(Dictionary<string, Object> fieldValues, Dictionary<string, Object> parameterValues,ref bool withOutParameter)
         {
             StringBuilder queryBuilder = new StringBuilder();
+
             if (fieldValues == null || fieldValues.Count == 0)
                 throw new Exception("fieldValues should not be null or empty.");
 
             int parameterIndex = 0;
             string tableName = GetTableNameWithSchema();
-            queryBuilder.Append(string.Format(@" insert into {0} ( ", tableName));
+
+            StringBuilder ifNotExistsQueryBuilder = new StringBuilder();
+            StringBuilder columnNamesBuilder = new StringBuilder();
             StringBuilder valuesQuery = new StringBuilder();
             foreach (var fieldValue in fieldValues)
             {
                 var sqlDataRecordStorageColumn = GetColumnFromFieldName(fieldValue.Key);
                 var parameter = GenerateParameterName(ref parameterIndex);
                 parameterValues.Add(parameter, fieldValue.Value);
+                if (sqlDataRecordStorageColumn.IsUnique)
+                {
+                    if (ifNotExistsQueryBuilder.Length > 0)
+                    {
+                        ifNotExistsQueryBuilder.Append(" AND ");
+                    }
+                    ifNotExistsQueryBuilder.AppendFormat("{0} = {1}", sqlDataRecordStorageColumn.ColumnName, parameter);
+                }
                 if (parameterIndex != 1)
                 {
-                    queryBuilder.Append(",");
+                    columnNamesBuilder.Append(",");
                     valuesQuery.Append(",");
                 }
-                queryBuilder.AppendFormat(@" {0} ", sqlDataRecordStorageColumn.ColumnName);
+                columnNamesBuilder.AppendFormat(@" {0} ", sqlDataRecordStorageColumn.ColumnName);
                 valuesQuery.AppendFormat(@" {0} ", parameter);
             }
-           
-            queryBuilder.Append(") ");
-            queryBuilder.Append(string.Format(@" values ({0}) ", valuesQuery.ToString()));
             var idColumn = GetIdColumn();
             if (idColumn != null)
             {
                 withOutParameter = true;
-                queryBuilder.Append(" Set @Id = SCOPE_IDENTITY() ");
             }
+            if (ifNotExistsQueryBuilder.Length > 0)
+            {
+                queryBuilder.Append(@" IF NOT EXISTS(SELECT 1 FROM #TABLENAME# WHERE #IFNOTEXISTSQUERY#) ");
+                queryBuilder.Replace("#IFNOTEXISTSQUERY#", ifNotExistsQueryBuilder.ToString());
+            }
+            queryBuilder.Append(@"BEGIN  INSERT INTO #TABLENAME# (#INSERTCOLUMNNAMES#) VALUES (#INSERTPARAMETERS#) #SETIDENTITY#  END");
+            queryBuilder.Replace("#SETIDENTITY#", idColumn != null ? " Set @Id = SCOPE_IDENTITY() " : " ");
+            queryBuilder.Replace("#INSERTCOLUMNNAMES#", columnNamesBuilder.ToString());
+            queryBuilder.Replace("#INSERTPARAMETERS#", valuesQuery.ToString());
+            queryBuilder.Replace("#TABLENAME#", tableName);
+
             return queryBuilder.ToString();
         }
         private DataRecord DataRecordMapper(IDataReader reader)

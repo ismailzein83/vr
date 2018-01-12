@@ -211,6 +211,8 @@
     <Content Include="VR_GenericData\Directives\BEParentChildRelation\BEParentChildRelationDefinition\vr-genericdata-beparentchildrelationdefinition-settings.js" />
     <Content Include="VR_GenericData\Directives\BEParentChildRelation\BEParentChildRelationRuntime\Templates\BEParentChildRelationGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\BEParentChildRelation\BEParentChildRelationRuntime\vr-genericdata-beparentchildrelation-grid.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\GenericBEViewDefinition\Templates\HistoryGenericBEDefinitionViewTemplate.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\GenericBEViewDefinition\vr-genericdata-genericbe-historygridview-runtime.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Templates\GenericBusinessEntityDefinitionEditor.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Templates\GenericBusinessEntityViewEditor.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\vr-genericdata-genericbedefinition-selector.js" />

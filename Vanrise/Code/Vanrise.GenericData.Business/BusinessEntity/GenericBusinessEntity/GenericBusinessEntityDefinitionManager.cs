@@ -85,8 +85,7 @@ namespace Vanrise.GenericData.Business
         {
             var dataRecordType = GetGenericBEDataRecordType(businessEntityDefinitionId);
             var dataRecordTypeFields = GetDataRecordTypeFields(dataRecordType.DataRecordTypeId);
-            if (dataRecordType.Settings.IdField == null)
-                return null;
+            dataRecordType.Settings.IdField.ThrowIfNull("dataRecordType.Settings.IdField");
             var idDataRecordField = dataRecordTypeFields.FindRecord(x => x.Name == dataRecordType.Settings.IdField);
             idDataRecordField.ThrowIfNull("idDataRecordField");
             return idDataRecordField;

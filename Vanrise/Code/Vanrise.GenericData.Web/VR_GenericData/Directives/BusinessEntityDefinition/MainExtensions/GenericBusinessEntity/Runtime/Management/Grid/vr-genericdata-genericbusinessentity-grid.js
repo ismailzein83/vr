@@ -27,6 +27,8 @@
             var gridColumnFieldNames = [];
             var genericBEActions = [];
             var genericBEGridActions = [];
+            var genericBEGridViews = [];
+
             var idFieldType;
 
             var gridAPI;
@@ -60,8 +62,8 @@
                         if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
                                 var genericBusinessEntity = response.Data[i];
-                                //VR_GenericData_GenericBEService.defineGenericBEViewTabs(vrCaseDefinitionId, vrCase, gridAPI, vrCaseViewDefinitions);
-                                VR_GenericData_GenericBEActionService.defineGenericBEMenuActions(businessEntityDefinitionId, genericBusinessEntity, gridAPI, genericBEActions, genericBEGridActions, idFieldType);
+                                VR_GenericData_GenericBEService.defineGenericBEViewTabs(businessEntityDefinitionId, genericBusinessEntity, gridAPI, genericBEGridViews, idFieldType);
+                                VR_GenericData_GenericBEActionService.defineGenericBEMenuActions(businessEntityDefinitionId, genericBusinessEntity, gridAPI, genericBEActions, genericBEGridActions,genericBEGridViews, idFieldType);
                             }
                         }
                         onResponseReady(response);
@@ -85,6 +87,8 @@
                     var gridQuery;
 
                     if (payload != undefined) {
+                        if (businessEntityDefinitionId != undefined && businessEntityDefinitionId != payload.businessEntityDefinitionId)
+                            $scope.scopeModel.columns.length = 0;
                         businessEntityDefinitionId = payload.businessEntityDefinitionId;
                         gridQuery = payload.query;
                     }
@@ -134,7 +138,10 @@
                             if (response != undefined) {
                                 genericBEActions = response.GenericBEActions;
                                 if (response.GridDefinition != undefined)
+                                {
                                     genericBEGridActions = response.GridDefinition.GenericBEGridActions;
+                                    genericBEGridViews = response.GridDefinition.GenericBEGridViews;
+                                }
                             }
                         });
                     }
@@ -159,8 +166,8 @@
                 };
 
                 api.onGenericBEAdded = function (addedBusinessEntity) {
-                    //VR_GenericData_GenericBEService.defineGenericBEViewTabs(vrCaseDefinitionId, addedAccount, gridAPI, vrCaseViewDefinitions);
-                    VR_GenericData_GenericBEActionService.defineGenericBEMenuActions(businessEntityDefinitionId, addedBusinessEntity, gridAPI, genericBEActions, genericBEGridActions, idFieldType);
+                    VR_GenericData_GenericBEService.defineGenericBEViewTabs(businessEntityDefinitionId, addedBusinessEntity, gridAPI, genericBEGridViews, idFieldType);
+                    VR_GenericData_GenericBEActionService.defineGenericBEMenuActions(businessEntityDefinitionId, addedBusinessEntity, gridAPI, genericBEActions, genericBEGridActions,genericBEGridViews, idFieldType);
                     gridAPI.itemAdded(addedBusinessEntity);
                 };
 
