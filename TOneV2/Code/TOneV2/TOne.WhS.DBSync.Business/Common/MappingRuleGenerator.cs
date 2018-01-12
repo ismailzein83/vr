@@ -26,7 +26,7 @@ namespace TOne.WhS.DBSync.Business
                 },
                 RuleId = 0,
                 Description = "Switch Migration",
-                BeginEffectiveTime = date ?? DateTime.MinValue
+                BeginEffectiveTime = date ?? RuleMigrator.s_defaultRuleBED
             };
 
             rule.Criteria.FieldsValues["Type"] = new StaticValues
