@@ -59,9 +59,13 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
     };
     $scope.validateBusinessCaseStatus = function () {
         var numberOfDays;
+        if (($scope.reporttype && $scope.reporttype.ParameterSettings && $scope.reporttype.ParameterSettings.CustomerIdNotOptional == false) || $scope.toDate == null)
+            return null;
+
         if ($scope.fromDate.getMonth() == $scope.toDate.getMonth()) {
             numberOfDays = daysInMonth($scope.fromDate.getMonth() + 1, $scope.fromDate.getFullYear());
-        } else {
+        }
+        else {
             var diffDate = new Date($scope.fromDate);
             diffDate.setMonth($scope.fromDate.getMonth() + 1);
             numberOfDays = UtilsService.diffDays($scope.fromDate, diffDate) - 1;
@@ -139,7 +143,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
             var paramsurl = "";
             paramsurl += "reportId=" + $scope.reporttype.ReportDefinitionId;
             paramsurl += "&fromDate=" + UtilsService.dateToServerFormat($scope.fromDate);
-            paramsurl += "&toDate=" + ($scope.toDate ? UtilsService.dateToServerFormat($scope.toDate): "");
+            paramsurl += "&toDate=" + ($scope.toDate ? UtilsService.dateToServerFormat($scope.toDate) : "");
             paramsurl += "&groupByCustomer=" + $scope.params.groupByCustomer;
             paramsurl += "&groupByProfile=" + $scope.params.groupByProfile;
             paramsurl += "&isCost=" + typeSelectorAPI.getSelectedIds();
@@ -161,7 +165,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
             var left = ((screenWidth / 2) - (1000 / 2));
 
             if (!$scope.reporttype.ParameterSettings.CustomerIdNotOptional)
-                window.open("Client/Modules/WhS_Analytics/Reports/Analytics/BillingReports.aspx?" + paramsurl, "_blank", "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no,width=1000, height=600,scrollbars=1 , top = 40, left = "+ left+"");
+                window.open("Client/Modules/WhS_Analytics/Reports/Analytics/BillingReports.aspx?" + paramsurl, "_blank", "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no,width=1000, height=600,scrollbars=1 , top = 40, left = " + left + "");
             else
                 return $scope.export();
         };
