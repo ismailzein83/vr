@@ -149,14 +149,17 @@ namespace Retail.Teles.Business
             }
             return false;
         }
-        public string GetUsereName(Guid vrConnectionId, dynamic telesUserId)
+        public string GetUsereName(Guid vrConnectionId, dynamic telesUserId) // to be removed later
+        {
+            return GetUserName(vrConnectionId, telesUserId);
+        }
+        public string GetUserName(Guid vrConnectionId, dynamic telesUserId)
         {
             var user = GetUser(vrConnectionId, telesUserId);
             if (user == null)
                 return null;
             return user.name;
         }
-
         public string CreateNumberRanges(Guid vrConnectionId, string telesUserId, List<NumberRange> numberRangs)
         {
             TelesRestConnection telesRestConnection = GetTelesRestConnection(vrConnectionId);

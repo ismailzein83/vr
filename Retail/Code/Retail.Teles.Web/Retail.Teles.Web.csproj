@@ -132,6 +132,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\TelesAccountController.cs" />
     <Compile Include="Controllers\TelesGatewayController.cs" />
     <Compile Include="Controllers\TelesUserController.cs" />
     <Compile Include="Controllers\TelesEnterpriseController.cs" />
@@ -213,6 +214,10 @@
     <Content Include="Retail_Teles\Directives\AccountAction\RoutingGroupCondition\Templates\RoutingGroupConditionTemplate.html" />
     <Content Include="Retail_Teles\Directives\AccountCondition\retail-teles-accountcondition-telesaccount.js" />
     <Content Include="Retail_Teles\Directives\AccountCondition\Templates\TelesAccountConditionTemplate.html" />
+    <Content Include="Retail_Teles\Directives\AccountViews\retail-teles-accounttelesinfo-view.js" />
+    <Content Include="Retail_Teles\Directives\AccountViews\retail-teles-accountviewdefinitionsettings-accounttelesinfo.js" />
+    <Content Include="Retail_Teles\Directives\AccountViews\Templates\AccountTelesInfoView.html" />
+    <Content Include="Retail_Teles\Directives\AccountViews\Templates\AccountTelesInfoViewSettingsTemplate.html" />
     <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-accounttelesdidsandbusinesstrunks-view.js" />
     <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-accountviewdefinitionsettings-telesdidsandbusinesstrunks.js" />
     <Content Include="Retail_Teles\Directives\TelesEnterprises\retail-teles-enterprisesdids-grid.js" />
@@ -242,6 +247,7 @@
     <Content Include="Retail_Teles\ModuleInitialization.js" />
     <Content Include="Retail_Teles\Services\APIServices\DomainAPIService.js" />
     <Content Include="Retail_Teles\Services\APIServices\GatewayAPIService.js" />
+    <Content Include="Retail_Teles\Services\APIServices\TelesAccountAPIService.js" />
     <Content Include="Retail_Teles\Services\APIServices\UserAPIService.js" />
     <Content Include="Retail_Teles\Services\APIServices\SiteAPIService.js" />
     <Content Include="Retail_Teles\Services\APIServices\EnterpriseAPIService.js" />
