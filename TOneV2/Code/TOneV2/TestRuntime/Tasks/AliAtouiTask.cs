@@ -27,18 +27,8 @@ namespace TOne.WhS.Runtime.Tasks
         public void Execute()
         {
             #region NormalizationRule RemoveAction
-
-            NormalizeNumberTarget target = new NormalizeNumberTarget() { PhoneNumber = "abc123acc145abc" }; //"abc123abc145"
-
-            var removeActionSettings = new Vanrise.Rules.Normalization.MainExtensions.RemoveActionSettings();
-            removeActionSettings.TextToRemove = "abc";
-            removeActionSettings.IncludingText = false;
-            removeActionSettings.TextOccurrence = Vanrise.Rules.Normalization.MainExtensions.TextOccurrence.FirstOccurrence;
-            removeActionSettings.RemoveDirection = Vanrise.Rules.Normalization.MainExtensions.RemoveDirection.Before;
-            removeActionSettings.Execute(null, target);
-
-            string normalizedPhoneNB = target.PhoneNumber;
-
+            //NormalizationRuleRemoveActionTask normalizationRuleRemoveActionTask = new NormalizationRuleRemoveActionTask();
+            //normalizationRuleRemoveActionTask.NormalizationRuleRemoveActionTask_Main();
             #endregion
 
             #region TelesIdbSWSyncTask
@@ -47,8 +37,8 @@ namespace TOne.WhS.Runtime.Tasks
             #endregion
 
             #region DeserializeTask
-            //DeserializeTask deserializeTask = new DeserializeTask();
-            //deserializeTask.DeserializeTask_Main();
+            DeserializeTask deserializeTask = new DeserializeTask();
+            deserializeTask.DeserializeTask_Main();
             #endregion
 
             #region VRMailMessageTemplateTask
@@ -164,6 +154,23 @@ namespace TOne.WhS.Runtime.Tasks
         #endregion
     }
 
+    public class NormalizationRuleRemoveActionTask
+    {
+        public void NormalizationRuleRemoveActionTask_Main()
+        {
+            NormalizeNumberTarget target = new NormalizeNumberTarget() { PhoneNumber = "abc123acc145abc" }; //"abc123abc145"
+
+            var removeActionSettings = new Vanrise.Rules.Normalization.MainExtensions.RemoveActionSettings();
+            removeActionSettings.TextToRemove = "abc";
+            removeActionSettings.IncludingText = false;
+            removeActionSettings.TextOccurrence = Vanrise.Rules.Normalization.MainExtensions.TextOccurrence.FirstOccurrence;
+            removeActionSettings.RemoveDirection = Vanrise.Rules.Normalization.MainExtensions.RemoveDirection.Before;
+            removeActionSettings.Execute(null, target);
+
+            string normalizedPhoneNB = target.PhoneNumber;
+        }
+    }
+
     public class TelesIdbSWSyncTask
     {
         public void TelesIdbSWSync_Main()
@@ -200,6 +207,7 @@ namespace TOne.WhS.Runtime.Tasks
 
     public class DeserializeTask
     {
+        CustomerRouteDataManager customerRouteDataManager = new CustomerRouteDataManager();
         RPRouteDataManager rpRouteDataManager = new RPRouteDataManager();
         CodeMatchesDataManager codeMatchesDataManager = new CodeMatchesDataManager();
 
@@ -207,18 +215,30 @@ namespace TOne.WhS.Runtime.Tasks
 
         public void DeserializeTask_Main()
         {
-            string serializedOptionsDetailsBySupplier = "75~970$22468$0.13000000$1@2$$False$296543~0~1~30~4";
-            string serializedOptionsByPolicy = "6d584c11-ce52-4385-a871-3b59505d0f57~75$0.13000000$100$0$11451$0$4$False|cb8cc5ed-afda-4ed7-882d-1377666c141e~75$0.13000000$100$0$11451$0$4$False|e85f9e2f-1ce6-4cc3-9df9-b664e63826f5~75$0.13000000$100$0$11451$0$4$False";
-            string serializedSupplierZodeMatchesWithRate = "88$31089$48$~0.01690000~7#4#8#3~7#4~79~396015~|66$10765$48$~0.01230000~7#4#8#3~7#4~79~130519~|68$12438$48$~0.01230000~7#4#8#3~7#4~79~151274~|57$5292$48$~0.01050000~1#6#7#5#4#8#3#2#9~1#2#5~20~63520~|60$9110$48$~0.01050000~7#4#8#3~7#4~79~110510~|69$14923$48$~0.01050000~7#4#8#3~7#4~79~182340~|70$16037$48$~0.00980000~7#4#8#3~7#4~79~204973~|75$22505$48$~0.00950000~1#6#7#5#4#8#3#2#9~1#2~4~299772~";
+            //CustomerRoutes
+            //string serializedCustomerRouteOptions = "88011~~~9664~~|8801~~~11457~~|88011~~~13620~~|88011~~~15414~~|88011~~~21776~~";
+            //string customerRouteOptionsAsJSON = this.DeserializeCustomerRouteOptions(serializedCustomerRouteOptions);
 
-            string optionsDetailsBySupplierAsJSON = this.DeserializeOptionsDetailsBySupplier(serializedOptionsDetailsBySupplier);
-            string OptionsByPolicyAsJSON = this.DeserializeOptionsByPolicy(serializedOptionsByPolicy);
-            //string supplierZodeMatchesWithRateAsJSON = this.DeserializeSupplierZodeMatchesWithRate(serializedSupplierZodeMatchesWithRate);
+            //RoutingProductRoutes
+            //string serializedRPOptionsDetailsBySupplier = "240~315094$0.01540000$1$$False$2515165#315095$0.01540000$1$$False$2515166#315096$0.01540000$1$$False$2515167#315091$0.01540000$1$$False$2515162#315092$0.01540000$1$$False$2515163#315090$0.01540000$1$$False$2515161~0~6~~1|564~322849$0.02250000$1$$False$2522986#322852$0.02250000$1$$False$2522989~0~2~~1|57~2712$0.03390000$1@2@5$$False$29107#2717$0.03390000$1@2@5$$False$29112#2718$0.03390000$1@2@5$$False$29113#2713$0.03390000$1@2@5$$False$29108#2714$0.03390000$1@2@5$$False$29109#2715$0.03390000$1@2@5$$False$29110~0~6~~20|66~9660$0.02600000$7@4$$False$115805#9664$0.03000000$7@4$$False$115803#9665$0.03000000$7@4$$False$115804~0~3~~79|559~315422$0.02250000$1$$False$2515559#315425$0.02250000$1$$False$2515562~0~2~~1|88~30370$0.02700000$7@4$$False$395295~0~1~~79|527~329529$0.01970000$4$$False$2529781#329528$0.02240000$4$$False$2529780~0~2~~15|60~7255$0.03390000$7@4$$False$86520#7261$0.03390000$7@4$$False$86526#7256$0.03390000$7@4$$False$86521#7260$0.03390000$7@4$$False$86525#7258$0.03390000$7@4$$False$86523#7257$0.03390000$7@4$$False$86522~0~6~~79|65~9536$0.38350000$7@4$$False$114463#9531$0.38350000$7@4$$False$114458#9533$0.38350000$7@4$$False$114460#9534$0.38350000$7@4$$False$114461#9535$0.38350000$7@4$$False$114462#9530$0.38350000$7@4$$False$114457~0~6~~79|70~15411$0.02700000$7@4$$False$187067#15414$0.04130000$7@4$$False$187074~0~2~~79|561~319138$0.02250000$1$$False$2519275#319141$0.02250000$1$$False$2519278~0~2~~1|69~13620$0.03390000$7@4$$False$164003#13622$0.03390000$7@4$$False$164005#13617$0.03390000$7@4$$False$164000#13623$0.03390000$7@4$$False$164006#13618$0.03390000$7@4$$False$164001#13619$0.03390000$7@4$$False$164002~0~6~~79|563~321615$0.02250000$1$$False$2521752#321612$0.02250000$1$$False$2521749~0~2~~1|145~331901$0.01680000$7@4$$False$2532162~0~1~~79|562~320378$0.02250000$1$$False$2520515#320375$0.02250000$1$$False$2520512~0~2~~1|558~316664$0.02250000$1$$False$2516801#316667$0.02250000$1$$False$2516804~0~2~~1|75~21776$0.01950000$1@2$$False$280981#21775$0.02150000$1@2$$False$280982~0~2~~4|560~317904$0.02250000$1$$False$2518041#317901$0.02250000$1$$False$2518038~0~2~~1|67~11457$0.03000000$7@4$$False$137632#11458$0.03000000$7@4$$False$137633#11459$0.03000000$7@4$$False$137634~0~3~~79";
+            //string rpOptionsDetailsBySupplierAsJSON = this.DeserializeOptionsDetailsBySupplier(serializedRPOptionsDetailsBySupplier);
+
+            //string serializedRPOptionsByPolicy = "6d584c11-ce52-4385-a871-3b59505d0f57~57$0.03390000$$111.00000000$10813$0$20$False#65$0.38350000$$111.00000000$10813$0$79$False#66$0.0286666666666666666666666667$$111.00000000$10813$0$79$False#67$0.03000000$$111.00000000$10813$0$79$False#69$0.03390000$$111.00000000$10813$0$79$False#70$0.03415000$$111.00000000$10813$0$79$False#75$0.02050000$$111.00000000$10813$0$4$False#88$0.02700000$$111.00000000$10813$0$79$False#145$0.01680000$$111.00000000$10813$0$79$False#240$0.01540000$$111.00000000$10813$0$1$False#527$0.02105000$$111.00000000$10813$0$15$False#558$0.02250000$$111.00000000$10813$0$1$False#559$0.02250000$$111.00000000$10813$0$1$False#560$0.02250000$$111.00000000$10813$0$1$False#562$0.02250000$$111.00000000$10813$0$1$False#563$0.02250000$$111.00000000$10813$0$1$False#564$0.02250000$$111.00000000$10813$0$1$False#60$0.03390000$$45.00000000$10813$0$79$False#561$0.02250000$$6.00000000$10813$0$1$False|cb8cc5ed-afda-4ed7-882d-1377666c141e~57$0.03390000$$111.00000000$10813$0$20$False#65$0.38350000$$111.00000000$10813$0$79$False#66$0.03000000$$111.00000000$10813$0$79$False#67$0.03000000$$111.00000000$10813$0$79$False#69$0.03390000$$111.00000000$10813$0$79$False#70$0.04130000$$111.00000000$10813$0$79$False#75$0.02150000$$111.00000000$10813$0$4$False#88$0.02700000$$111.00000000$10813$0$79$False#145$0.01680000$$111.00000000$10813$0$79$False#240$0.01540000$$111.00000000$10813$0$1$False#527$0.02240000$$111.00000000$10813$0$15$False#558$0.02250000$$111.00000000$10813$0$1$False#559$0.02250000$$111.00000000$10813$0$1$False#560$0.02250000$$111.00000000$10813$0$1$False#562$0.02250000$$111.00000000$10813$0$1$False#563$0.02250000$$111.00000000$10813$0$1$False#564$0.02250000$$111.00000000$10813$0$1$False#60$0.03390000$$45.00000000$10813$0$79$False#561$0.02250000$$6.00000000$10813$0$1$False|e85f9e2f-1ce6-4cc3-9df9-b664e63826f5~57$0.03390000$$111.00000000$10813$0$20$False#65$0.38350000$$111.00000000$10813$0$79$False#66$0.02600000$$111.00000000$10813$0$79$False#67$0.03000000$$111.00000000$10813$0$79$False#69$0.03390000$$111.00000000$10813$0$79$False#70$0.02700000$$111.00000000$10813$0$79$False#75$0.01950000$$111.00000000$10813$0$4$False#88$0.02700000$$111.00000000$10813$0$79$False#145$0.01680000$$111.00000000$10813$0$79$False#240$0.01540000$$111.00000000$10813$0$1$False#527$0.01970000$$111.00000000$10813$0$15$False#558$0.02250000$$111.00000000$10813$0$1$False#559$0.02250000$$111.00000000$10813$0$1$False#560$0.02250000$$111.00000000$10813$0$1$False#562$0.02250000$$111.00000000$10813$0$1$False#563$0.02250000$$111.00000000$10813$0$1$False#564$0.02250000$$111.00000000$10813$0$1$False#60$0.03390000$$45.00000000$10813$0$79$False#561$0.02250000$$6.00000000$10813$0$1$False";
+            //string rpOptionsByPolicyAsJSON = this.DeserializeOptionsByPolicy(serializedRPOptionsByPolicy);
+
+            //string serializedSupplierCodeMatchesWithRate = "88$31089$48$~0.01690000~7#4#8#3~7#4~79~396015~|66$10765$48$~0.01230000~7#4#8#3~7#4~79~130519~|68$12438$48$~0.01230000~7#4#8#3~7#4~79~151274~|57$5292$48$~0.01050000~1#6#7#5#4#8#3#2#9~1#2#5~20~63520~|60$9110$48$~0.01050000~7#4#8#3~7#4~79~110510~|69$14923$48$~0.01050000~7#4#8#3~7#4~79~182340~|70$16037$48$~0.00980000~7#4#8#3~7#4~79~204973~|75$22505$48$~0.00950000~1#6#7#5#4#8#3#2#9~1#2~4~299772~";
+            //string supplierodCodeMatchesWithRateAsJSON = this.DeserializeSupplierZodeMatchesWithRate(serializedSupplierCodeMatchesWithRate); 
         }
 
         #endregion
 
         #region Private Methods
+
+        //private string DeserializeCustomerRouteOptions(string serializedOptions)
+        //{
+        //    List<TOne.WhS.Routing.Entities.RouteOption> routeOptions = customerRouteDataManager.DeserializeOptions(serializedOptions);
+        //    return Vanrise.Common.Serializer.Serialize(routeOptions, true);
+        //}
 
         private string DeserializeOptionsDetailsBySupplier(string serializedOptionsDetailsBySupplier)
         {
