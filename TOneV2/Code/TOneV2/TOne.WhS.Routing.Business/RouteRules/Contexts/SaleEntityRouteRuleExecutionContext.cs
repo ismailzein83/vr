@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
@@ -19,29 +15,19 @@ namespace TOne.WhS.Routing.Business
         List<SupplierCodeMatchWithRate> _validSupplierCodeMatches;
         bool _addBlockedOptions;
 
-        public RouteRule RouteRule
-        {
-            get
-            {
-                return _routeRule;
-            }
-        }
+        public RouteRule RouteRule { get { return _routeRule; } }
         public int? NumberOfOptions { get; internal set; }
         public HashSet<int> SaleZoneServiceList { get; internal set; }
         public string SaleZoneServiceIds { get; internal set; }
-
+        public RoutingDatabase RoutingDatabase { get; internal set; }
         internal List<SupplierCodeMatchWithRate> SupplierCodeMatches { private get; set; }
         internal SupplierCodeMatchWithRateBySupplier SupplierCodeMatchBySupplier { private get; set; }
-
 
         public SaleEntityRouteRuleExecutionContext(RouteRule routeRule, Vanrise.Rules.RuleTree[] ruleTreesForRouteOptions, bool addBlockedOptions)
         {
             _ruleTreesForRouteOptions = ruleTreesForRouteOptions;
             _routeRule = routeRule;
-            SupplierFilterSettings supplierFilterSettings = new SupplierFilterSettings
-            {
-                RoutingProductId = routeRule.Criteria.GetRoutingProductId()
-            };
+            SupplierFilterSettings supplierFilterSettings = new SupplierFilterSettings { RoutingProductId = routeRule.Criteria.GetRoutingProductId() };
             _filteredSupplierIds = SupplierGroupContext.GetFilteredSupplierIds(supplierFilterSettings);
             _addBlockedOptions = addBlockedOptions;
         }
@@ -109,7 +95,6 @@ namespace TOne.WhS.Routing.Business
             }
             return _validSupplierCodeMatches;
         }
-
 
         internal RouteOption CreateOptionFromTarget(RouteOptionRuleTarget targetOption, RouteRule routeRule)
         {

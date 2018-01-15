@@ -1,15 +1,26 @@
-﻿using TOne.WhS.BusinessEntity.Entities;
-using Vanrise.Data.SQL;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
 using TOne.WhS.Routing.Entities;
+using Vanrise.Data.SQL;
 
 namespace TOne.WhS.Routing.Data.SQL
 {
     public class RPQualityConfigurationDataManager : RoutingDataManager, IRPQualityConfigurationDataManager
     {
-        string[] columns = { "ID", "Supplier", "Salezone", "Quality" };
-        public void ApplyQualityConfigurationsToDB(object qualityConfigurations)
+        string[] columns = { "QualityConfigurationId", "SaleZoneId", "SupplierId", "Quality" };
+
+        #region Public Methods
+
+        public object InitialiazeStreamForDBApply()
         {
-            InsertBulkToTable(qualityConfigurations as StreamBulkInsertInfo);
+            return base.InitializeStreamForBulkInsert();
+        }
+
+        public void WriteRecordToStream(RPQualityConfigurationData record, object dbApplyStream)
+        {
+            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}", record.QualityConfigurationId, record.SaleZoneId, record.SupplierId, decimal.Round(record.QualityData, 8));
         }
 
         public object FinishDBApplyStream(object dbApplyStream)
@@ -27,15 +38,41 @@ namespace TOne.WhS.Routing.Data.SQL
             };
         }
 
-        public object InitialiazeStreamForDBApply()
+        public void ApplyQualityConfigurationsToDB(object qualityConfigurations)
         {
-            return base.InitializeStreamForBulkInsert();
+            InsertBulkToTable(qualityConfigurations as StreamBulkInsertInfo);
         }
 
-        public void WriteRecordToStream(RPQualityConfigurationData record, object dbApplyStream)
+        public IEnumerable<RPQualityConfigurationData> GetRPQualityConfigurationData()
         {
-            StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}", record.QualityConfigurationId, record.SupplierId, record.SaleZoneId, record.QualityData);
+            string query = query_GetRPQualityConfigurationData.Replace("#FILTER#", string.Empty);
+            return GetItemsText(query, RPQualityConfigurationDataMapper, null);
         }
+
+        #endregion
+
+        #region Mappers
+
+        RPQualityConfigurationData RPQualityConfigurationDataMapper(IDataReader reader)
+        {
+            return new RPQualityConfigurationData()
+            {
+                QualityConfigurationId = GetReaderValue<Guid>(reader, "QualityConfigurationId"),
+                SaleZoneId = GetReaderValue<long>(reader, "SaleZoneId"),
+                SupplierId = GetReaderValue<int>(reader, "SupplierId"),
+                QualityData = GetReaderValue<decimal>(reader, "Quality")
+            };
+        }
+
+        #endregion
+
+        #region Queries
+
+        const string query_GetRPQualityConfigurationData = @"                                                       
+                                                SELECT  [QualityConfigurationId], [SaleZoneId], [SupplierId], [Quality]
+                                                  FROM [dbo].[QualityConfigurationData] with(nolock)
+                                                  #FILTER#";
+
+        #endregion
     }
 }

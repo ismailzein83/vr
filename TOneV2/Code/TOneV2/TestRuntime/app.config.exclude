@@ -162,7 +162,6 @@
     <add key="BCPDonotDeleteFiles" value="false"/><!--BCPDonotDeleteFiles should be always false at production. could be only set to true for troubleshooting-->
     <add key="RebuildZoneRates" value="true"/>
     <add key="StatisticManagement_LockRetryInterval" value="00:00:05"/>
-    <add key="TrafficStatsQualityMeasurementInterval" value="5000:00:00"/>
     <add key="VanriseCache_CleanMemoryThreshold" value="999999999999999"/>
     <add key="BCPCommandName" value="bcp"/>
     <add key="Queue_NbOfMaxConcurrentActivators_Default" value="10"/>

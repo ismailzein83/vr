@@ -83,7 +83,6 @@
     <Compile Include="RoutingDatabaseDataManager.cs" />
     <Compile Include="RoutingDataManager.cs" />
     <Compile Include="SupplierZoneDetailsDataManager.cs" />
-    <Compile Include="TrafficStatsMeasureDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.Data.SQL\TOne.Data.SQL.csproj">

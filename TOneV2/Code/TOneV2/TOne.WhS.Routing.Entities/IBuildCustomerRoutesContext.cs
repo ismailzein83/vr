@@ -28,6 +28,8 @@ namespace TOne.WhS.Routing.Entities
         int VersionNumber { get; }
 
         bool IsFullRouteBuild { get; }
+
+        RoutingDatabase RoutingDatabase { get; }
     }
 
     public class BuildCustomerRoutesContext : IBuildCustomerRoutesContext
@@ -52,8 +54,11 @@ namespace TOne.WhS.Routing.Entities
 
         public bool IsFullRouteBuild { get; set; }
 
+        public RoutingDatabase RoutingDatabase { get; set; }
+
+
         public BuildCustomerRoutesContext(RoutingCodeMatches routingCodeMatches, CustomerZoneDetailByZone customerZoneDetails, DateTime? effectiveDate, bool isFuture,
-            IEnumerable<RoutingCustomerInfo> activeRoutingCustomerInfos, Dictionary<int, HashSet<int>> customerCountries, int versionNumber, bool isFullRouteBuild)
+            IEnumerable<RoutingCustomerInfo> activeRoutingCustomerInfos, Dictionary<int, HashSet<int>> customerCountries, int versionNumber, bool isFullRouteBuild, RoutingDatabase routingDatabase)
         {
             this.SaleZoneDefintions = routingCodeMatches.SaleZoneDefintions;
             this.SupplierCodeMatches = routingCodeMatches.SupplierCodeMatches;
@@ -65,6 +70,7 @@ namespace TOne.WhS.Routing.Entities
             this.CustomerCountries = customerCountries;
             this.VersionNumber = versionNumber;
             this.IsFullRouteBuild = isFullRouteBuild;
+            this.RoutingDatabase = routingDatabase;
         }
     }
 }

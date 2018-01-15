@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
@@ -18,14 +16,11 @@ namespace TOne.WhS.Routing.Business
         bool _addBlockedOptions;
         List<SupplierCodeMatchWithRate> _validSupplierCodeMatches;
 
-        public RouteRule RouteRule
-        {
-            get { throw new NotImplementedException(); }
-        }
+        public RouteRule RouteRule { get { throw new NotImplementedException(); } }
+        public HashSet<int> SaleZoneServiceIds { get; set; }
+        public RoutingDatabase RoutingDatabase { get; set; }
         internal List<SupplierCodeMatchWithRate> SupplierCodeMatches { private get; set; }
         internal SupplierCodeMatchesWithRateBySupplier SupplierCodeMatchesBySupplier { private get; set; }
-        public HashSet<int> SaleZoneServiceIds { get; set; }
-
 
         public RPRouteRuleExecutionContext(RouteRule routeRule, Vanrise.Rules.RuleTree[] ruleTreesForRouteOptions)
         {

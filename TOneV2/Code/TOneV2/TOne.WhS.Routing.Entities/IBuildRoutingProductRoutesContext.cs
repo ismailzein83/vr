@@ -20,5 +20,7 @@ namespace TOne.WhS.Routing.Entities
         DateTime? EntitiesEffectiveOn { get; }
 
         bool EntitiesEffectiveInFuture { get; }
+
+        RoutingDatabase RoutingDatabase { get; }
     }
 }

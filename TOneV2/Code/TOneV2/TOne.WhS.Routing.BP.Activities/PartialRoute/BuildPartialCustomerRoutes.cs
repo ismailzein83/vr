@@ -1,38 +1,39 @@
 ﻿using System;
 using System.Activities;
 using System.Collections.Generic;
+using TOne.WhS.Routing.Business;
+using TOne.WhS.Routing.Entities;
+using Vanrise.BusinessProcess;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Queueing;
-using Vanrise.BusinessProcess;
-using TOne.WhS.Routing.Entities;
-using TOne.WhS.Routing.Business;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
     public class BuildPartialCustomerRoutesInput
     {
         public CustomerZoneDetailByZone CustomerZoneDetails { get; set; }
-
         public List<RoutingCodeMatches> RoutingCodeMatchesList { get; set; }
-
         public BaseQueue<PartialCustomerRoutesBatch> OutputQueue { get; set; }
-
         public int VersionNumber { get; set; }
-
         public List<CustomerRouteData> AffectedCustomerRoutes { get; set; }
-
         public DateTime EffectiveDate { get; set; }
+        public RoutingDatabase RoutingDatabase { get; set; }
     }
 
     public sealed class BuildPartialCustomerRoutes : BaseAsyncActivity<BuildPartialCustomerRoutesInput>
     {
-
         [RequiredArgument]
         public InArgument<CustomerZoneDetailByZone> CustomerZoneDetails { get; set; }
 
         [RequiredArgument]
         public InArgument<List<RoutingCodeMatches>> RoutingCodeMatchesList { get; set; }
+
+        [RequiredArgument]
+        public InOutArgument<BaseQueue<PartialCustomerRoutesBatch>> OutputQueue { get; set; }
+
+        [RequiredArgument]
+        public InArgument<int> VersionNumber { get; set; }
 
         [RequiredArgument]
         public InArgument<DateTime> EffectiveDate { get; set; }
@@ -41,10 +42,8 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<List<CustomerRouteData>> AffectedCustomerRoutes { get; set; }
 
         [RequiredArgument]
-        public InArgument<int> VersionNumber { get; set; }
+        public InArgument<RoutingDatabase> RoutingDatabase { get; set; }
 
-        [RequiredArgument]
-        public InOutArgument<BaseQueue<PartialCustomerRoutesBatch>> OutputQueue { get; set; }
 
         protected override void DoWork(BuildPartialCustomerRoutesInput inputArgument, AsyncActivityHandle handle)
         {
@@ -93,7 +92,7 @@ namespace TOne.WhS.Routing.BP.Activities
                     if (customerZoneDetailByZone != null)
                     {
                         BuildCustomerRoutesContext customerRoutesContext = new BuildCustomerRoutesContext(routingCodeMatches, customerZoneDetailByZone, inputArgument.EffectiveDate,
-                            false, null, null, inputArgument.VersionNumber, false);
+                            false, null, null, inputArgument.VersionNumber, false, inputArgument.RoutingDatabase);
 
                         IEnumerable<CustomerRoute> customerRoutes = builder.BuildRoutes(customerRoutesContext, routingCodeMatches.Code);
 
@@ -121,7 +120,8 @@ namespace TOne.WhS.Routing.BP.Activities
                 OutputQueue = this.OutputQueue.Get(context),
                 VersionNumber = this.VersionNumber.Get(context),
                 AffectedCustomerRoutes = this.AffectedCustomerRoutes.Get(context),
-                EffectiveDate = this.EffectiveDate.Get(context)
+                EffectiveDate = this.EffectiveDate.Get(context),
+                RoutingDatabase = this.RoutingDatabase.Get(context)
             };
         }
 

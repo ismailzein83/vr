@@ -35,8 +35,7 @@ namespace TOne.WhS.Routing.Business
 
         public IEnumerable<CustomerRoute> BuildRoutes(IBuildCustomerRoutesContext context, string routeCode)
         {
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            _carrierAccounts = carrierAccountManager.GetCachedCarrierAccounts();
+            _carrierAccounts = new CarrierAccountManager().GetCachedCarrierAccounts();
 
             CodeGroupManager codeGroupeManager = new CodeGroupManager();
             CodeGroup codeGroup = codeGroupeManager.GetMatchCodeGroup(routeCode);
@@ -52,15 +51,18 @@ namespace TOne.WhS.Routing.Business
             {
                 Dictionary<RouteRule, List<RouteOptionRuleTarget>> optionsByRules = new Dictionary<RouteRule, List<RouteOptionRuleTarget>>();
                 RouteRuleManager routeRuleManager = new RouteRuleManager();
+
                 foreach (var saleZoneDefintion in context.SaleZoneDefintions)
                 {
                     HashSet<int> soldCustomers = new HashSet<int>();
                     List<CustomerZoneDetail> matchCustomerZoneDetails = null;
+
                     if (context.CustomerZoneDetails != null && context.CustomerZoneDetails.TryGetValue(saleZoneDefintion.SaleZoneId, out matchCustomerZoneDetails))
                     {
                         foreach (var customerZoneDetail in matchCustomerZoneDetails)
                         {
                             soldCustomers.Add(customerZoneDetail.CustomerId);
+
                             var routeRuleTarget = new RouteRuleTarget
                             {
                                 CustomerId = customerZoneDetail.CustomerId,
@@ -71,22 +73,27 @@ namespace TOne.WhS.Routing.Business
                                 EffectiveOn = context.EntitiesEffectiveOn,
                                 IsEffectiveInFuture = context.EntitiesEffectiveInFuture
                             };
-                            var routeRule = GetRouteRule(routeRuleTarget, null);
 
+                            var routeRule = GetRouteRule(routeRuleTarget, null);
                             if (routeRule != null)
                             {
                                 bool createCustomerRoute = true;
 
                                 if (createCustomerRoute)
                                 {
-                                    CustomerRoute route = ExecuteRule<CustomerRoute>(optionsByRules, routeCode, saleZoneDefintion, customerZoneDetail, context.SupplierCodeMatches, context.SupplierCodeMatchesBySupplier, routeRuleTarget, routeRule);
+                                    CustomerRoute route = ExecuteRule<CustomerRoute>(optionsByRules, routeCode, saleZoneDefintion, customerZoneDetail, context.SupplierCodeMatches, context.SupplierCodeMatchesBySupplier, 
+                                        routeRuleTarget, routeRule, context.RoutingDatabase);
+                                    
                                     route.CustomerId = customerZoneDetail.CustomerId;
                                     route.VersionNumber = context.VersionNumber;
                                     customerRoutes.Add(route);
                                 }
                             }
                             else
-                                throw new NullReferenceException(string.Format("Missing Default Route Rule. Route Code: {0}. Customer Id: {1}. Sale Zone Id: {2}. Effective On:{3}.", routeCode, customerZoneDetail.CustomerId, saleZoneDefintion.SaleZoneId, context.EntitiesEffectiveInFuture ? "Future" : context.EntitiesEffectiveOn.Value.ToString()));
+                            {
+                                throw new NullReferenceException(string.Format("Missing Default Route Rule. Route Code: {0}. Customer Id: {1}. Sale Zone Id: {2}. Effective On:{3}.", routeCode, customerZoneDetail.CustomerId, 
+                                    saleZoneDefintion.SaleZoneId, context.EntitiesEffectiveInFuture ? "Future" : context.EntitiesEffectiveOn.Value.ToString()));
+                            }
                         }
                     }
 
@@ -99,7 +106,8 @@ namespace TOne.WhS.Routing.Business
                                 if (saleZoneDefintion.SellingNumberPlanId != routingCustomerInfo.SellingNumberPlanId || soldCustomers.Contains(routingCustomerInfo.CustomerId))
                                     continue;
 
-                                CheckAndAddRouteToUnratedZone(context, routingCustomerInfo.CustomerId, customerCountryManager, customerRoutes, countryIdsHavingParentCode, routeCode, saleZoneDefintion, codeGroup.CountryId, isCountryIdsHavingParentCodeNotEmpty, context.VersionNumber);
+                                CheckAndAddRouteToUnratedZone(context, routingCustomerInfo.CustomerId, customerCountryManager, customerRoutes, countryIdsHavingParentCode, routeCode, saleZoneDefintion, codeGroup.CountryId, 
+                                    isCountryIdsHavingParentCodeNotEmpty, context.VersionNumber);
                             }
                         }
                     }
@@ -109,9 +117,8 @@ namespace TOne.WhS.Routing.Business
             return customerRoutes;
         }
 
-        private void CheckAndAddRouteToUnratedZone(IBuildCustomerRoutesContext context, int customerId, CustomerCountryManager customerCountryManager,
-            List<CustomerRoute> customerRoutes, HashSet<int> countryIdsHavingParentCode, string routeCode, SaleZoneDefintion saleZoneDefintion, int routeCodeCountryId, bool isCountryIdsHavingParentCodeNotEmpty,
-            int versionNumber)
+        private void CheckAndAddRouteToUnratedZone(IBuildCustomerRoutesContext context, int customerId, CustomerCountryManager customerCountryManager, List<CustomerRoute> customerRoutes, 
+            HashSet<int> countryIdsHavingParentCode, string routeCode, SaleZoneDefintion saleZoneDefintion, int routeCodeCountryId, bool isCountryIdsHavingParentCodeNotEmpty, int versionNumber)
         {
             HashSet<int> soldCountries = context.CustomerCountries.GetOrCreateItem(customerId, () =>
             {
@@ -135,6 +142,7 @@ namespace TOne.WhS.Routing.Business
             if (context.RoutingProducts != null)
             {
                 RouteRuleManager routeRuleManager = new RouteRuleManager();
+
                 foreach (var routingProduct in context.RoutingProducts)
                 {
                     RouteRuleTarget routeRuleTarget = new RouteRuleTarget
@@ -152,7 +160,7 @@ namespace TOne.WhS.Routing.Business
                     var routeRule = GetRouteRule(routeRuleTarget, routingProduct.RoutingProductId);
                     if (routeRule != null)
                     {
-                        RPRoute route = ExecuteRule(routingProduct.RoutingProductId, saleZoneId, saleZoneServiceIds, context, routeRuleTarget, routeRule, includeBlockedSupplierZones);
+                        RPRoute route = ExecuteRule(routingProduct.RoutingProductId, saleZoneId, saleZoneServiceIds, context, routeRuleTarget, routeRule, includeBlockedSupplierZones, context.RoutingDatabase);
                         routes.Add(route);
                     }
                     //Removed after discussion with Sari
@@ -199,8 +207,8 @@ namespace TOne.WhS.Routing.Business
             return null;
         }
 
-        private T ExecuteRule<T>(Dictionary<RouteRule, List<RouteOptionRuleTarget>> optionsByRules, string routeCode, SaleZoneDefintion saleZoneDefintion, CustomerZoneDetail customerZoneDetail, List<SupplierCodeMatchWithRate> supplierCodeMatches, SupplierCodeMatchWithRateBySupplier supplierCodeMatchBySupplier, RouteRuleTarget routeRuleTarget, RouteRule routeRule)
-            where T : BaseRoute
+        private T ExecuteRule<T>(Dictionary<RouteRule, List<RouteOptionRuleTarget>> optionsByRules, string routeCode, SaleZoneDefintion saleZoneDefintion, CustomerZoneDetail customerZoneDetail, List<SupplierCodeMatchWithRate> supplierCodeMatches, 
+            SupplierCodeMatchWithRateBySupplier supplierCodeMatchBySupplier, RouteRuleTarget routeRuleTarget, RouteRule routeRule, RoutingDatabase routingDatabase) where T : BaseRoute
         {
             ConfigManager configManager = new ConfigManager();
             bool addBlockedOptions = configManager.GetCustomerRouteBuildAddBlockedOptions();
@@ -212,6 +220,7 @@ namespace TOne.WhS.Routing.Business
             routeRuleExecutionContext.SupplierCodeMatchBySupplier = supplierCodeMatchBySupplier;
             routeRuleExecutionContext.SaleZoneServiceList = customerZoneDetail.SaleZoneServiceIds;//used for service matching
             routeRuleExecutionContext.SaleZoneServiceIds = customerZoneDetail.SaleZoneServiceIds != null ? string.Join(",", customerZoneDetail.SaleZoneServiceIds) : null;// used for market price
+            routeRuleExecutionContext.RoutingDatabase = routingDatabase;
 
             T route = Activator.CreateInstance<T>();
             route.Code = routeCode;
@@ -229,6 +238,7 @@ namespace TOne.WhS.Routing.Business
                     {
                         return routeRule.Settings.GetOrderedOptions(routeRuleExecutionContext, routeRuleTarget);
                     });
+
                 if (routeOptionRuleTargets != null)
                 {
                     int optionsAdded = 0;
@@ -300,6 +310,7 @@ namespace TOne.WhS.Routing.Business
             route.IsBlocked = routeRuleTarget.BlockRoute;
             return route;
         }
+
         private bool HasSameCarrierProfile(int supplierId, int customerId)
         {
             CarrierAccount supplierCarrierAccount = _carrierAccounts.GetRecord(supplierId);
@@ -311,12 +322,14 @@ namespace TOne.WhS.Routing.Business
             return false;
         }
 
-        private RPRoute ExecuteRule(int routingProductId, long saleZoneId, HashSet<int> saleZoneServiceIds, IBuildRoutingProductRoutesContext context, RouteRuleTarget routeRuleTarget, RouteRule routeRule, bool includeBlockedSupplierZones)
+        private RPRoute ExecuteRule(int routingProductId, long saleZoneId, HashSet<int> saleZoneServiceIds, IBuildRoutingProductRoutesContext context, RouteRuleTarget routeRuleTarget, RouteRule routeRule,
+            bool includeBlockedSupplierZones, RoutingDatabase routingDatabase)
         {
             RPRouteRuleExecutionContext routeRuleExecutionContext = new RPRouteRuleExecutionContext(routeRule, _ruleTreesForRouteOptions);
             routeRuleExecutionContext.SupplierCodeMatches = context.SupplierCodeMatches;
             routeRuleExecutionContext.SupplierCodeMatchesBySupplier = context.SupplierCodeMatchesBySupplier;
             routeRuleExecutionContext.SaleZoneServiceIds = saleZoneServiceIds;
+            routeRuleExecutionContext.RoutingDatabase = routingDatabase;
 
             routeRule.Settings.CreateSupplierZoneOptionsForRP(routeRuleExecutionContext, routeRuleTarget);
             RPRoute route = new RPRoute
@@ -329,6 +342,7 @@ namespace TOne.WhS.Routing.Business
                 OptionsDetailsBySupplier = new Dictionary<int, RPRouteOptionSupplier>(),
                 RPOptionsByPolicy = new Dictionary<Guid, IEnumerable<RPRouteOption>>()
             };
+
             var routeOptionRuleTargets = routeRuleExecutionContext.GetSupplierZoneOptions();
             if (routeOptionRuleTargets != null)
             {
@@ -400,6 +414,7 @@ namespace TOne.WhS.Routing.Business
                                 SupplierZoneMatchHasClosedRate = supplierZoneMatchHasClosedRate
                             });
                     }
+
                     IEnumerable<RPRouteOption> rpRouteOptionsAsEnumerable = rpRouteOptions;
                     routeRule.Settings.ApplyRuleToRPOptions(routeRuleExecutionContext, ref rpRouteOptionsAsEnumerable);
                     if (rpRouteOptionsAsEnumerable != null && rpRouteOptionsAsEnumerable.ToList().Count > 0)

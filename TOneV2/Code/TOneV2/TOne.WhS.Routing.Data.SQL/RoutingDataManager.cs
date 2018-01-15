@@ -168,15 +168,15 @@ namespace TOne.WhS.Routing.Data.SQL
         #region Constants
 
         const string query_CustomerQualityConfigurationTable = @"CREATE TABLE [dbo].[QualityConfigurationData](
-                                                        [ID] [uniqueidentifier] NOT NULL,
-                                                        [SupplierZoneId] [bigint] NULL,
+                                                        [QualityConfigurationId] [uniqueidentifier] NOT NULL,
+                                                        [SupplierZoneId] [bigint] NOT NULL,
                                                         [Quality] [decimal](20, 8) NOT NULL
                                                         )ON [PRIMARY]";
 
         const string query_RPQualityConfigurationTable = @"CREATE TABLE [dbo].[QualityConfigurationData](
-                                                        [ID] [uniqueidentifier] NOT NULL,
-                                                        [SupplierId] [int] NULL,
-                                                        [SalezoneId] [bigint] NULL,
+                                                        [QualityConfigurationId] [uniqueidentifier] NOT NULL,
+                                                        [SaleZoneId] [bigint] NOT NULL,
+                                                        [SupplierId] [int] NOT NULL,
                                                         [Quality] [decimal](20, 8) NOT NULL
                                                         )ON [PRIMARY]";
 

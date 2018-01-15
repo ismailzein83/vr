@@ -8,8 +8,9 @@
 
         var isEditMode;
         var qualityConfigurationEntity;
+        var qualityConfigurationNames; //for validation
 
-        var timePeriodApi;
+        var timePeriodAPI;
         var timePeriodReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
@@ -21,41 +22,53 @@
 
             if (parameters != undefined) {
                 qualityConfigurationEntity = parameters.qualityConfigurationEntity;
+                qualityConfigurationNames = parameters.qualityConfigurationNames;
             }
 
             isEditMode = (qualityConfigurationEntity != undefined);
         }
         function defineScope() {
-
             $scope.scopeModel = {};
-
             $scope.scopeModel.qualityConfigurationFields = [];
+            $scope.scopeModel.qualityConfigurationSignsFields = buildQualityConfigurationSignsFields();
 
-            $scope.scopeModel.qualityConfigurationSignsFields = [{
-                Name: '(',
-                Title: '(',
-                Expression: '(',
-            }, {
-                Name: ')',
-                Title: ')',
-                Expression: ')',
-            }, {
-                Name: '+',
-                Title: '+',
-                Expression: '+',
-            }, {
-                Name: '-',
-                Title: '-',
-                Expression: '-',
-            }, {
-                Name: '*',
-                Title: '*',
-                Expression: '*',
-            }, {
-                Name: '/',
-                Title: '/',
-                Expression: '/',
-            }];
+            $scope.scopeModel.onTimeperiodReady = function (api) {
+                timePeriodAPI = api;
+                timePeriodReadyPromiseDeferred.resolve();
+            };
+
+            $scope.scopeModel.qualityConfigurationFieldClicked = function (measure) {
+                if ($scope.scopeModel.expression == undefined)
+                    $scope.scopeModel.expression = measure.Expression;
+                else
+                    $scope.scopeModel.expression += " " + measure.Expression;
+            };
+
+            $scope.scopeModel.validateQualityConfigurationName = function () {
+                if ($scope.scopeModel.qualityConfigurationyName == undefined || qualityConfigurationNames == undefined)
+                    return null;
+
+                //for EditMode
+                if (qualityConfigurationEntity != undefined && qualityConfigurationEntity.Name == $scope.scopeModel.qualityConfigurationyName)
+                    return null;
+
+                for (var i = 0; i < qualityConfigurationNames.length; i++) {
+                    var qualityConfigurationName = qualityConfigurationNames[i];
+                    if ($scope.scopeModel.qualityConfigurationyName.toLowerCase() == qualityConfigurationName.toLowerCase())
+                        return 'Same Quality Configuration Name Exists';
+                }
+                return null;
+            };
+
+            $scope.scopeModel.validateExpression = function () {
+                if ($scope.scopeModel.expression == undefined)
+                    return null;
+
+                if ($scope.scopeModel.expression.indexOf("context.GetMeasureValue(") == -1)
+                    return "Expression should contain at least one Measure!!"
+
+                return null;
+            };
 
             $scope.scopeModel.saveQualityConfiguration = function () {
                 if (isEditMode) {
@@ -67,18 +80,6 @@
 
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
-            };
-
-            $scope.scopeModel.onTimeperiodReady = function (api) {
-                timePeriodApi = api;
-                timePeriodReadyPromiseDeferred.resolve();
-            };
-
-            $scope.scopeModel.qualityConfigurationFieldClicked = function (measure) {
-                if ($scope.scopeModel.expression == undefined)
-                    $scope.scopeModel.expression = measure.Expression;
-                else
-                    $scope.scopeModel.expression += " " + measure.Expression;
             };
         }
         function load() {
@@ -113,26 +114,24 @@
                                 timePeriod: qualityConfigurationEntity.TimePeriod
                             };
                         }
-                        VRUIUtilsService.callDirectiveLoad(timePeriodApi, directivePayload, loadTimeperiodPromiseDeferred);
+                        VRUIUtilsService.callDirectiveLoad(timePeriodAPI, directivePayload, loadTimeperiodPromiseDeferred);
                     });
                 return loadTimeperiodPromiseDeferred.promise;
             }
 
             function loadQualityConfigurationFields() {
-                return WhS_Routing_QualityConfigurationAPIService.GetQualityConfigurationFields()
-                    .then(function (response) {
-                        if (response != undefined) {
-                            for (var i = 0, length = response.length ; i < length ; i++) {
-                                var responseItem = response[i];
-                                $scope.scopeModel.qualityConfigurationFields.push({
-                                    Name: responseItem.Name,
-                                    Title: responseItem.Title,
-                                    Expression: 'context.GetMeasureValue("' + responseItem.Name + '")'
-                                });
-                            };
-                        }
-                    });
-
+                return WhS_Routing_QualityConfigurationAPIService.GetQualityConfigurationFields().then(function (response) {
+                    if (response != undefined) {
+                        for (var i = 0, length = response.length ; i < length ; i++) {
+                            var responseItem = response[i];
+                            $scope.scopeModel.qualityConfigurationFields.push({
+                                Name: responseItem.Name,
+                                Title: responseItem.Title,
+                                Expression: 'context.GetMeasureValue("' + responseItem.Name + '")'
+                            });
+                        };
+                    }
+                });
             }
 
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTimeperiod, loadQualityConfigurationFields])
@@ -142,28 +141,66 @@
                         .finally(function () {
                             $scope.scopeModel.isLoading = false;
                         });
-
         }
 
         function insertQualityConfiguration() {
             var qualityConfigurationObject = buildQualityConfigurationObjectFromScope(UtilsService.guid());
 
-            if ($scope.onQualityConfigurationAdded != undefined)
-                $scope.onQualityConfigurationAdded(qualityConfigurationObject);
-            $scope.modalContext.closeModal();
+            return WhS_Routing_QualityConfigurationAPIService.TryCompileQualityConfigurationExpression(qualityConfigurationObject.Expression).then(function (response) {
+                if (response) {
+                    if ($scope.onQualityConfigurationAdded != undefined)
+                        $scope.onQualityConfigurationAdded(qualityConfigurationObject);
+                    $scope.modalContext.closeModal();
+                } else {
+                    VRNotificationService.showError("Expression Validation Error. Check Log");
+                }
+            });
         }
         function updateQualityConfiguration() {
             var qualityConfigurationObject = buildQualityConfigurationObjectFromScope($scope.scopeModel.qualityConfigurationId);
 
-            if ($scope.onQualityConfigurationUpdated != undefined)
-                $scope.onQualityConfigurationUpdated(qualityConfigurationObject);
-            $scope.modalContext.closeModal();
+            return WhS_Routing_QualityConfigurationAPIService.TryCompileQualityConfigurationExpression(qualityConfigurationObject.Expression).then(function (response) {
+                if (response) {
+                    if ($scope.onQualityConfigurationUpdated != undefined)
+                        $scope.onQualityConfigurationUpdated(qualityConfigurationObject);
+                    $scope.modalContext.closeModal();
+                } else {
+                    VRNotificationService.showError("Expression Validation Error. Check Log");
+                }
+            });
         }
 
+        function buildQualityConfigurationSignsFields() {
+            return [{
+                Name: '(',
+                Title: '(',
+                Expression: '(',
+            }, {
+                Name: ')',
+                Title: ')',
+                Expression: ')',
+            }, {
+                Name: '+',
+                Title: '+',
+                Expression: '+',
+            }, {
+                Name: '-',
+                Title: '-',
+                Expression: '-',
+            }, {
+                Name: '*',
+                Title: '*',
+                Expression: '*',
+            }, {
+                Name: '/',
+                Title: '/',
+                Expression: '/',
+            }];
+        }
         function buildQualityConfigurationObjectFromScope(qualityConfigurationId) {
             var obj = {
                 Name: $scope.scopeModel.qualityConfigurationyName,
-                TimePeriod: timePeriodApi.getData(),
+                TimePeriod: timePeriodAPI.getData(),
                 Expression: $scope.scopeModel.expression,
                 QualityConfigurationId: qualityConfigurationId
             };

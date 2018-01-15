@@ -76,6 +76,7 @@
     <Compile Include="IRPRouteRuleExecutionContext.cs" />
     <Compile Include="IRouteRuleQualityContext.cs" />
     <Compile Include="ISupplierZoneToRPOptionPolicyExecutionContext.cs" />
+    <Compile Include="QualityConfiguration\IRouteRuleQualityConfigurationEvaluator.cs" />
     <Compile Include="QualityConfiguration\QualityAnalyticRecord.cs" />
     <Compile Include="QualityConfiguration\CustomerQualityConfigurationData.cs" />
     <Compile Include="QualityConfiguration\QualityConfigurationInfoFilter.cs" />
@@ -115,7 +116,6 @@
     <Compile Include="RPRouteOptionPolicyFilter.cs" />
     <Compile Include="RPRouteOptionPolicySetting.cs" />
     <Compile Include="Settings\SubProcessSettings.cs" />
-    <Compile Include="TrafficStatsMeasure\TrafficStatsMeasure.cs" />
     <Compile Include="RouteOptionRules\RouteOptionRuleDetail.cs" />
     <Compile Include="RouteOptionRules\RouteOptionRuleQuery.cs" />
     <Compile Include="RouteRuleSettings\IRouteOptionFilterExecutionContext.cs" />

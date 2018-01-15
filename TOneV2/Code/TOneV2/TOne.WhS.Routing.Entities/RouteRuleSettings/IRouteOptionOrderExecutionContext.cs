@@ -26,5 +26,6 @@ namespace TOne.WhS.Routing.Entities
     {
         OrderDirection OrderDitection { get; set; }
         IEnumerable<IRouteOptionOrderTarget> Options { get; set; }
+        RoutingDatabase RoutingDatabase { get; set; }
     }
 }

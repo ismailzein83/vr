@@ -11,5 +11,7 @@ namespace TOne.WhS.Routing.Data
     public interface ICustomerQualityConfigurationDataManager : IDataManager, IBulkApplyDataManager<CustomerRouteQualityConfigurationData>, IRoutingDataManager
     {
         void ApplyQualityConfigurationsToDB(object qualityConfigurations);
+
+        IEnumerable<CustomerRouteQualityConfigurationData> GetCustomerRouteQualityConfigurationsData(); 
     }
 }

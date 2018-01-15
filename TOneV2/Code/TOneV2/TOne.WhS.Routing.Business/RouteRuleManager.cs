@@ -76,7 +76,7 @@ namespace TOne.WhS.Routing.Business
         }
 
 
-        public List<RouteRule> GetEffectiveRPRouteRules(DateTime effectiveDate)
+        public List<RouteRule> GetEffectiveAndFutureRPRouteRules(DateTime effectiveDate) 
         {
             var routeRules = base.GetAllRules();
             List<RouteRule> rpRouteRules = new List<RouteRule>();
@@ -85,7 +85,7 @@ namespace TOne.WhS.Routing.Business
             {
                 RouteRule routeRule = routeRuleKvp.Value;
 
-                if (routeRule.IsEffective(effectiveDate))
+                if (routeRule.IsEffective(effectiveDate) || (routeRule.BED >= effectiveDate && (!routeRule.EED.HasValue || routeRule.EED.Value != routeRule.BED)))
                 {
                     int? routingProductId = routeRule.Criteria.GetRoutingProductId();
                     if (routingProductId.HasValue)
@@ -95,18 +95,18 @@ namespace TOne.WhS.Routing.Business
             return rpRouteRules;
         }
 
-        public List<RouteRule> GetEffectiveCustomerRouteRules(DateTime effectiveDate)
+        public List<RouteRule> GetEffectiveAndFutureCustomerRouteRules(DateTime effectiveDate)
         {
-            var routeRules = base.GetAllRules();
             List<RouteRule> customerRouteRules = new List<RouteRule>();
+            var routeRules = base.GetAllRules();
 
             foreach (var routeRuleKvp in routeRules)
             {
                 RouteRule routeRule = routeRuleKvp.Value;
-                if (routeRule.IsEffective(effectiveDate))
+                if (routeRule.IsEffective(effectiveDate) || (routeRule.BED >= effectiveDate && (!routeRule.EED.HasValue || routeRule.EED.Value != routeRule.BED)))
                     customerRouteRules.Add(routeRule);
-
             }
+
             return customerRouteRules;
         }
 

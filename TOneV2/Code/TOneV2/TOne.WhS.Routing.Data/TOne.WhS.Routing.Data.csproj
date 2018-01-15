@@ -67,7 +67,6 @@
     <Compile Include="ICustomerZoneDetailsDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="ISwitchSyncDataDataManager.cs" />
-    <Compile Include="ITrafficStatsMeasureDataManager.cs" />
     <Compile Include="IRPRouteDataManager.cs" />
     <Compile Include="IRoutingDatabaseDataManager.cs" />
     <Compile Include="IRoutingDataManager.cs" />

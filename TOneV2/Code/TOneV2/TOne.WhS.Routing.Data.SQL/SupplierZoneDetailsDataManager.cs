@@ -67,7 +67,7 @@ namespace TOne.WhS.Routing.Data.SQL
         {
             var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierZoneDetailsCacheManager>();
 
-            return cacheManager.GetOrCreateObject("SupplierZoneDetails", SupplierZoneDetailsCacheExpirationChecker.Instance, () =>
+            return cacheManager.GetOrCreateObject("SupplierZoneDetails", this.RoutingDatabase.ID, SupplierZoneDetailsCacheExpirationChecker.Instance, () =>
            {
                IEnumerable<SupplierZoneDetail> supplierZoneDetails = GetItemsText(query_GetSupplierZoneDetails, SupplierZoneDetailMapper, null);
                return supplierZoneDetails.ToDictionary(itm => itm.SupplierZoneId, itm => itm);
@@ -192,7 +192,7 @@ namespace TOne.WhS.Routing.Data.SQL
 
         #region Private Classes
 
-        private class SupplierZoneDetailsCacheManager : BaseCacheManager
+        private class SupplierZoneDetailsCacheManager : BaseCacheManager<int>
         {
 
         }

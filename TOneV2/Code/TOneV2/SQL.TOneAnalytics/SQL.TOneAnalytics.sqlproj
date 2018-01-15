@@ -92,8 +92,6 @@
     <Build Include="dbo\Functions\ZeroToMax.sql" />
     <Build Include="TOneWhS_Analytics\User Defined Types\VariationReportTimePeriodType.sql" />
     <Build Include="dbo\Tables\CurrencyExchangeRate.sql" />
-    <Build Include="TOneWhS_Analytics\Stored Procedures\sp_TrafficStatsMeasure_GroupBySupplierZone.sql" />
-    <Build Include="TOneWhS_Analytics\Stored Procedures\sp_TrafficStatsMeasure_GroupBySaleZone_Supplier.sql" />
     <Build Include="TOneWhS_Analytics\Tables\BillingStats30Min.sql" />
     <Build Include="TOneWhS_Analytics\User Defined Types\BillingStats30MinType.sql" />
     <Build Include="TOneWhS_Deal\Tables\DealProgress.sql" />

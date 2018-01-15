@@ -10,82 +10,108 @@ using Vanrise.Analytic.Entities;
 using Vanrise.Entities;
 using Vanrise.Common;
 using TOne.WhS.Routing.Data;
+using Vanrise.Queueing;
+using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
-    public sealed class CalculateRPQualityData : CodeActivity
+    public class CalculateRPQualityDataInput
+    {
+        public DateTime EffectiveDate { get; set; }
+        public BaseQueue<RPQualityConfigurationDataBatch> OutputQueue { get; set; }
+    }
+
+    public sealed class CalculateRPQualityData : BaseAsyncActivity<CalculateRPQualityDataInput>
     {
         [RequiredArgument]
         public InArgument<DateTime> EffectiveDate { get; set; }
 
         [RequiredArgument]
-        public InArgument<int> Routingdatabaseid { get; set; }
+        public InOutArgument<BaseQueue<RPQualityConfigurationDataBatch>> OutputQueue { get; set; }
 
-        protected override void Execute(CodeActivityContext context)
+
+        protected override void DoWork(CalculateRPQualityDataInput inputArgument, AsyncActivityHandle handle)
         {
-            RouteRuleManager routeRuleManager = new RouteRuleManager();
-            RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
-            QualityConfigurationManager qualityConfigurationManager = new QualityConfigurationManager();
-            IRPQualityConfigurationDataManager rpQualityConfigurationDataManager = RoutingDataManagerFactory.GetDataManager<IRPQualityConfigurationDataManager>();
+            DateTime effectiveDate = inputArgument.EffectiveDate;
 
-            DateTime effectiveDate = this.EffectiveDate.Get(context);
-            int routingdatabaseid = this.Routingdatabaseid.Get(context);
-            List<string> dimensionFields = new List<string>() { "Supplier", "SaleZone" };
-            List<string> measureFields = new List<string>() { "ASR" };
-
-            rpQualityConfigurationDataManager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(routingdatabaseid);
-
-            List<RouteRule> rpRouteRules = routeRuleManager.GetEffectiveRPRouteRules(effectiveDate);
+            List<RouteRule> rpRouteRules = new RouteRuleManager().GetEffectiveAndFutureRPRouteRules(effectiveDate);
             if (rpRouteRules == null)
                 return;
 
-            var dbApplyStream = rpQualityConfigurationDataManager.InitialiazeStreamForDBApply();
+            QualityConfigurationManager qualityDataManager = new QualityConfigurationManager();
 
-            List<RouteRuleQualityConfiguration> routeRuleQualityConfigurationList = qualityConfigurationManager.GetRouteRuleQualityConfigurationList(rpRouteRules);
-
+            List<RouteRuleQualityConfiguration> routeRuleQualityConfigurationList = qualityDataManager.GetRouteRuleQualityConfigurationList(rpRouteRules);
             if (routeRuleQualityConfigurationList == null)
                 return;
 
-            int? supplierId = null;
-            long? salezoneId = null;
+            List<string> dimensionFields = new List<string>() { "SaleZone", "Supplier" };
+            Dictionary<Guid, List<string>> measureFieldsByQualityConfigurationId = qualityDataManager.GetQualityConfigurationExpressionsMeasureFields(routeRuleQualityConfigurationList);
 
             Guid analyticTableId = new ConfigManager().GetQualityAnalyticTableId();
+            var routeRuleQualityConfigurationDataList = qualityDataManager.GetRouteRuleQualityConfigurationDataList(routeRuleQualityConfigurationList);
 
-            List<QualityAnalyticRecord> qualityAnalyticRecordList;
+            RPQualityConfigurationDataBatch batch = new RPQualityConfigurationDataBatch();
+            batch.RPQualityConfigurationDataList = new List<RPQualityConfigurationData>();
 
-            foreach (var routeRuleQualityConfiguration in routeRuleQualityConfigurationList)
+            foreach (var routeRuleQualityConfigurationData in routeRuleQualityConfigurationDataList)
             {
-                qualityAnalyticRecordList = qualityConfigurationManager.GetQualityAnalyticRecords(routeRuleQualityConfiguration, dimensionFields, measureFields, analyticTableId, effectiveDate);
+                List<string> measureFields = null;
+                if (measureFieldsByQualityConfigurationId != null)
+                    measureFieldsByQualityConfigurationId.TryGetValue(routeRuleQualityConfigurationData.Entity.QualityConfigurationId, out measureFields);
+
+                var qualityAnalyticRecordList = qualityDataManager.GetQualityAnalyticRecords(routeRuleQualityConfigurationData, analyticTableId, dimensionFields, measureFields, effectiveDate);
+                if (qualityAnalyticRecordList == null)
+                    continue;
 
                 foreach (var qualityAnalyticRecord in qualityAnalyticRecordList)
                 {
-                    foreach (var dimensionValue in qualityAnalyticRecord.AnalyticRecord.DimensionValues)
-                    {
-                        if (dimensionValue.Value == null)
-                            continue;
+                    DimensionValue currentSaleZone = qualityAnalyticRecord.AnalyticRecord.DimensionValues[0];
+                    DimensionValue currentSupplier = qualityAnalyticRecord.AnalyticRecord.DimensionValues[1];
 
-                        switch (dimensionValue.Name)
-                        {
-                            case "Supplier": supplierId = (int)dimensionValue.Value; break;
-                            case "SaleZone": salezoneId = (long)dimensionValue.Value; break;
-                            default: break;
-                        }
-                    }
+                    if (currentSaleZone.Value == null || currentSupplier.Value == null)
+                        continue;
 
-                    RPQualityConfigurationData rpQualityConfigurationData = new RPQualityConfigurationData()
+                    long saleZoneId = (long)currentSaleZone.Value;
+                    int supplierId = (int)currentSupplier.Value;
+
+                    batch.RPQualityConfigurationDataList.Add(new RPQualityConfigurationData()
                     {
-                        QualityConfigurationId = routeRuleQualityConfiguration.QualityConfigurationId,
+                        QualityConfigurationId = routeRuleQualityConfigurationData.Entity.QualityConfigurationId,
+                        SaleZoneId = saleZoneId,
                         SupplierId = supplierId,
-                        SaleZoneId = salezoneId,
                         QualityData = qualityAnalyticRecord.Quality
-                    };
-                    rpQualityConfigurationDataManager.WriteRecordToStream(rpQualityConfigurationData, dbApplyStream);
+                    });
+
+                    //TODO: Batch Count Should be configuration parameter
+                    if (batch.RPQualityConfigurationDataList.Count >= 10000)
+                    {
+                        inputArgument.OutputQueue.Enqueue(batch);
+                        batch = new RPQualityConfigurationDataBatch();
+                        batch.RPQualityConfigurationDataList = new List<RPQualityConfigurationData>();
+                    }
                 }
-
-                var streamReadyToApply = rpQualityConfigurationDataManager.FinishDBApplyStream(dbApplyStream);
-                rpQualityConfigurationDataManager.ApplyQualityConfigurationsToDB(streamReadyToApply);
-
             }
+
+            if (batch.RPQualityConfigurationDataList.Count > 0)
+                inputArgument.OutputQueue.Enqueue(batch);
+
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Calculate Routing Product Quality Data is done", null);
+        }
+
+        protected override CalculateRPQualityDataInput GetInputArgument(AsyncCodeActivityContext context)
+        {
+            return new CalculateRPQualityDataInput
+            {
+                EffectiveDate = this.EffectiveDate.Get(context),
+                OutputQueue = this.OutputQueue.Get(context)
+            };
+        }
+
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            if (this.OutputQueue.Get(context) == null)
+                this.OutputQueue.Set(context, new MemoryQueue<RPQualityConfigurationDataBatch>());
+            base.OnBeforeExecute(context, handle);
         }
     }
 }

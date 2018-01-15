@@ -1,86 +1,107 @@
 ﻿using System;
+using System.Activities;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Activities;
 using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Entities;
-using Vanrise.Analytic.Business;
-using Vanrise.Analytic.Entities;
+using Vanrise.BusinessProcess;
 using Vanrise.Entities;
-using Vanrise.Common;
-using TOne.WhS.Routing.Data;
+using Vanrise.Queueing;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
-    public sealed class CalculateCustomerQualityData : CodeActivity
+    public class CalculateCustomerRouteQualityDataInput
+    {
+        public DateTime EffectiveDate { get; set; }
+        public BaseQueue<CustomerRouteQualityConfigurationDataBatch> OutputQueue { get; set; }
+    }
+
+    public sealed class CalculateCustomerRouteQualityData : BaseAsyncActivity<CalculateCustomerRouteQualityDataInput>
     {
         [RequiredArgument]
         public InArgument<DateTime> EffectiveDate { get; set; }
 
         [RequiredArgument]
-        public InArgument<int> Routingdatabaseid { get; set; }
+        public InOutArgument<BaseQueue<CustomerRouteQualityConfigurationDataBatch>> OutputQueue { get; set; }
 
-        protected override void Execute(CodeActivityContext context)
+        protected override void DoWork(CalculateCustomerRouteQualityDataInput inputArgument, AsyncActivityHandle handle)
         {
-            int routingdatabaseid = this.Routingdatabaseid.Get(context);
-            DateTime effectiveDate = this.EffectiveDate.Get(context);
+            DateTime effectiveDate = inputArgument.EffectiveDate;
 
-            QualityConfigurationManager qualityDataManager = new QualityConfigurationManager();
-            ICustomerQualityConfigurationDataManager customerQualityConfigurationDataManager = RoutingDataManagerFactory.GetDataManager<ICustomerQualityConfigurationDataManager>();
-            customerQualityConfigurationDataManager.RoutingDatabase = new RoutingDatabaseManager().GetRoutingDatabase(routingdatabaseid);
-
-            List<string> dimensionFields = new List<string>() { "SupplierZone" };
-            List<string> measureFields = new List<string>() { "ASR" };
-
-            List<RouteRule> customerRouteRules = new RouteRuleManager().GetEffectiveCustomerRouteRules(effectiveDate);
+            List<RouteRule> customerRouteRules = new RouteRuleManager().GetEffectiveAndFutureCustomerRouteRules(effectiveDate);
             if (customerRouteRules == null)
                 return;
 
-            var dbApplyStream = customerQualityConfigurationDataManager.InitialiazeStreamForDBApply();
+            QualityConfigurationManager qualityDataManager = new QualityConfigurationManager();
 
             List<RouteRuleQualityConfiguration> routeRuleQualityConfigurationList = qualityDataManager.GetRouteRuleQualityConfigurationList(customerRouteRules);
             if (routeRuleQualityConfigurationList == null)
                 return;
 
-            long? supplierZoneId = null;
-            Decimal qualityDataResult;
+            List<string> dimensionFields = new List<string>() { "SupplierZone" };
+            Dictionary<Guid, List<string>> measureFieldsByQualityConfigurationId = qualityDataManager.GetQualityConfigurationExpressionsMeasureFields(routeRuleQualityConfigurationList);
 
             Guid analyticTableId = new ConfigManager().GetQualityAnalyticTableId();
+            var routeRuleQualityConfigurationDataList = qualityDataManager.GetRouteRuleQualityConfigurationDataList(routeRuleQualityConfigurationList);
 
-            List<QualityAnalyticRecord> qualityAnalyticRecordList;
+            CustomerRouteQualityConfigurationDataBatch batch = new CustomerRouteQualityConfigurationDataBatch();
+            batch.CustomerRouteQualityConfigurationDataList = new List<CustomerRouteQualityConfigurationData>();
 
-            foreach (var routeRuleQualityConfiguration in routeRuleQualityConfigurationList)
+            foreach (var routeRuleQualityConfigurationData in routeRuleQualityConfigurationDataList)
             {
-                qualityAnalyticRecordList = qualityDataManager.GetQualityAnalyticRecords(routeRuleQualityConfiguration, dimensionFields, measureFields, analyticTableId, effectiveDate);
+                List<string> measureFields = null;
+                if (measureFieldsByQualityConfigurationId != null)
+                    measureFieldsByQualityConfigurationId.TryGetValue(routeRuleQualityConfigurationData.Entity.QualityConfigurationId, out measureFields);
+
+                var qualityAnalyticRecordList = qualityDataManager.GetQualityAnalyticRecords(routeRuleQualityConfigurationData, analyticTableId, dimensionFields, measureFields, effectiveDate);
+                if (qualityAnalyticRecordList == null)
+                    continue;
 
                 foreach (var qualityAnalyticRecord in qualityAnalyticRecordList)
                 {
-                    foreach (var dimensionValue in qualityAnalyticRecord.AnalyticRecord.DimensionValues)
-                    {
-                        if (dimensionValue.Value == null)
-                            continue;
+                    var dimensionValue = qualityAnalyticRecord.AnalyticRecord.DimensionValues.First();
+                    if (dimensionValue.Value == null)
+                        continue;
 
-                        switch (dimensionValue.Name)
-                        {
-                            case "SupplierZone": supplierZoneId = (long)dimensionValue.Value; break;
-                            default: break;
-                        }
-                    }
+                    long supplierZoneId = (long)dimensionValue.Value;
 
-                    qualityDataResult = qualityAnalyticRecord.Quality;
-                    CustomerRouteQualityConfigurationData customerQualityConfigurationDataInfo = new CustomerRouteQualityConfigurationData()
+                    batch.CustomerRouteQualityConfigurationDataList.Add(new CustomerRouteQualityConfigurationData()
                     {
-                        QualityConfigurationId = routeRuleQualityConfiguration.QualityConfigurationId,
+                        QualityConfigurationId = routeRuleQualityConfigurationData.Entity.QualityConfigurationId,
                         SupplierZoneId = supplierZoneId,
-                        QualityData = qualityDataResult
-                    };
-                    customerQualityConfigurationDataManager.WriteRecordToStream(customerQualityConfigurationDataInfo, dbApplyStream);
+                        QualityData = qualityAnalyticRecord.Quality
+                    });
+
+                    //TODO: Batch Count Should be configuration parameter
+                    if (batch.CustomerRouteQualityConfigurationDataList.Count >= 10000)
+                    {
+                        inputArgument.OutputQueue.Enqueue(batch);
+                        batch = new CustomerRouteQualityConfigurationDataBatch();
+                        batch.CustomerRouteQualityConfigurationDataList = new List<CustomerRouteQualityConfigurationData>();
+                    }
                 }
             }
 
-            var streamReadyToApply = customerQualityConfigurationDataManager.FinishDBApplyStream(dbApplyStream);
-            customerQualityConfigurationDataManager.ApplyQualityConfigurationsToDB(streamReadyToApply);
+            if (batch.CustomerRouteQualityConfigurationDataList.Count > 0)
+                inputArgument.OutputQueue.Enqueue(batch);
+
+            handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Calculate Customer Route Quality Data is done", null);
+        }
+
+        protected override CalculateCustomerRouteQualityDataInput GetInputArgument(AsyncCodeActivityContext context)
+        {
+            return new CalculateCustomerRouteQualityDataInput
+            {
+                EffectiveDate = this.EffectiveDate.Get(context),
+                OutputQueue = this.OutputQueue.Get(context)
+            };
+        }
+
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
+        {
+            if (this.OutputQueue.Get(context) == null)
+                this.OutputQueue.Set(context, new MemoryQueue<CustomerRouteQualityConfigurationDataBatch>());
+            base.OnBeforeExecute(context, handle);
         }
     }
 }

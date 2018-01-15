@@ -130,6 +130,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CustomerRouteController.cs" />
+    <Compile Include="Controllers\QualityConfigurationController.cs" />
     <Compile Include="Controllers\RouteOptionRuleController.cs" />
     <Compile Include="Controllers\RPRouteController.cs" />
     <Compile Include="Controllers\RouteRuleController.cs" />

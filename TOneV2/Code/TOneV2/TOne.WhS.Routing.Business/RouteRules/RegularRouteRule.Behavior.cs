@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Business.RouteRules.OptionSettingsGroups;
+using TOne.WhS.Routing.Business.RouteRules.Orders;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
-using TOne.WhS.Routing.Business.RouteRules.Orders;
+
 namespace TOne.WhS.Routing.Business
 {
     public partial class RegularRouteRule : RouteRuleSettings
@@ -17,6 +18,7 @@ namespace TOne.WhS.Routing.Business
         #endregion
 
         #region SaleEntity Execution
+
         public override RouteRuleSettings BuildLinkedRouteRuleSettings(ILinkedRouteRuleContext context)
         {
             RegularRouteRule regularRouteRule = new RegularRouteRule()
@@ -48,7 +50,7 @@ namespace TOne.WhS.Routing.Business
         {
             var options = CreateOptions(context, target);
             if (options != null)
-                return ApplyOptionsOrder(options);
+                return ApplyOptionsOrder(options, context.RoutingDatabase);
             else
                 return null;
         }
@@ -149,7 +151,7 @@ namespace TOne.WhS.Routing.Business
 
         public override void ApplyRuleToRPOptions(IRPRouteRuleExecutionContext context, ref IEnumerable<RPRouteOption> options)
         {
-            options = ApplyOptionsOrder(options);
+            options = ApplyOptionsOrder(options, context.RoutingDatabase);
 
             if (this.OptionPercentageSettings != null && options != null)
             {
@@ -234,14 +236,14 @@ namespace TOne.WhS.Routing.Business
             return option;
         }
 
-        private List<T> ApplyOptionsOrder<T>(IEnumerable<T> options) where T : IRouteOptionOrderTarget
+        private List<T> ApplyOptionsOrder<T>(IEnumerable<T> options, RoutingDatabase routingDatabase) where T : IRouteOptionOrderTarget
         {
             if (this.OptionOrderSettings != null && OptionOrderSettings.Count > 0)
             {
                 if (OptionOrderSettings.Count == 1)
                 {
                     RouteOptionOrderSettings optionOrderSettings = OptionOrderSettings[0];
-                    var optionOrderContext = ExecuteOptionOrderSettings<T>(options, optionOrderSettings);
+                    var optionOrderContext = ExecuteOptionOrderSettings<T>(options, routingDatabase, optionOrderSettings);
                     switch (optionOrderContext.OrderDitection)
                     {
                         case OrderDirection.Ascending: options = optionOrderContext.Options.OrderBy(itm => itm.OptionWeight).ThenBy(itm => itm.SupplierId).VRCast<T>(); break;
@@ -252,15 +254,15 @@ namespace TOne.WhS.Routing.Business
                 {
                     switch (OrderType)
                     {
-                        case Business.OrderType.Percentage: options = OrderOptionsByPercentage<T>(options); break;
-                        case Business.OrderType.Sequential: options = OrderOptionsBySequential<T>(options); break;
+                        case Business.OrderType.Sequential: options = OrderOptionsBySequential<T>(options, routingDatabase); break;
+                        case Business.OrderType.Percentage: options = OrderOptionsByPercentage<T>(options, routingDatabase); break;
                     }
                 }
             }
             return options != null ? options.ToList() : null;
         }
 
-        private IEnumerable<T> OrderOptionsBySequential<T>(IEnumerable<T> options) where T : IRouteOptionOrderTarget
+        private IEnumerable<T> OrderOptionsBySequential<T>(IEnumerable<T> options, RoutingDatabase routingDatabase) where T : IRouteOptionOrderTarget
         {
             Dictionary<IRouteOptionOrderTarget, List<decimal>> orderValues = new Dictionary<IRouteOptionOrderTarget, List<decimal>>();
 
@@ -268,7 +270,7 @@ namespace TOne.WhS.Routing.Business
 
             foreach (RouteOptionOrderSettings optionOrderSettings in OptionOrderSettings)
             {
-                var optionOrderContext = ExecuteOptionOrderSettings<T>(options, optionOrderSettings);
+                var optionOrderContext = ExecuteOptionOrderSettings<T>(options, routingDatabase, optionOrderSettings);
 
                 switch (optionOrderContext.OrderDitection)
                 {
@@ -308,14 +310,14 @@ namespace TOne.WhS.Routing.Business
             return options;
         }
 
-        private IEnumerable<T> OrderOptionsByPercentage<T>(IEnumerable<T> options) where T : IRouteOptionOrderTarget
+        private IEnumerable<T> OrderOptionsByPercentage<T>(IEnumerable<T> options, RoutingDatabase routingDatabase) where T : IRouteOptionOrderTarget
         {
             Dictionary<int, WeightResult> orderValues = new Dictionary<int, WeightResult>();
             Func<IRouteOptionOrderTarget, bool> predicate = (itm) => itm.OptionWeight != 0;
 
             foreach (RouteOptionOrderSettings optionOrderSettings in OptionOrderSettings)
             {
-                var optionOrderContext = ExecuteOptionOrderSettings<T>(options, optionOrderSettings);
+                var optionOrderContext = ExecuteOptionOrderSettings<T>(options, routingDatabase, optionOrderSettings);
 
                 IEnumerable<IRouteOptionOrderTarget> data = optionOrderContext.Options.FindAllRecords<IRouteOptionOrderTarget>(predicate);
                 if (data == null || data.Count() == 0)
@@ -353,11 +355,13 @@ namespace TOne.WhS.Routing.Business
             return options;
         }
 
-        private RouteOptionOrderExecutionContext ExecuteOptionOrderSettings<T>(IEnumerable<T> options, RouteOptionOrderSettings optionOrderSettings) where T : IRouteOptionOrderTarget
+        private RouteOptionOrderExecutionContext ExecuteOptionOrderSettings<T>(IEnumerable<T> options, RoutingDatabase routingDatabase, RouteOptionOrderSettings optionOrderSettings) 
+            where T : IRouteOptionOrderTarget
         {
             var optionOrderContext = new RouteOptionOrderExecutionContext
             {
                 Options = options.VRCast<IRouteOptionOrderTarget>(),
+                RoutingDatabase = routingDatabase
             };
             optionOrderSettings.Execute(optionOrderContext);
             return optionOrderContext;

@@ -6,20 +6,25 @@
 
     function qualityConfigurationService(UtilsService, VRModalService) {
 
-        function addQualityConfiguration(onQualityConfigurationAdded) {
+        function addQualityConfiguration(onQualityConfigurationAdded, qualityConfigurationNames) {
+
+            var modalParameters = {
+                qualityConfigurationNames: qualityConfigurationNames
+            };
 
             var modalSettings = {};
             modalSettings.onScopeReady = function (modalScope) {
                 modalScope.onQualityConfigurationAdded = onQualityConfigurationAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/WhS_Routing/Directives/RouteSettings/Templates/QualityConfigurationEditor.html', undefined, modalSettings);
+            VRModalService.showModal('/Client/Modules/WhS_Routing/Directives/RouteSettings/Templates/QualityConfigurationEditor.html', modalParameters, modalSettings);
         }
 
-        function editQualityConfiguration(qualityConfigurationEntity, onQualityConfigurationUpdated) {
+        function editQualityConfiguration(onQualityConfigurationUpdated, qualityConfigurationEntity, qualityConfigurationNames) {
 
             var modalParameters = {
-                qualityConfigurationEntity: qualityConfigurationEntity
+                qualityConfigurationEntity: qualityConfigurationEntity,
+                qualityConfigurationNames: qualityConfigurationNames
             };
 
             var modalSettings = {};

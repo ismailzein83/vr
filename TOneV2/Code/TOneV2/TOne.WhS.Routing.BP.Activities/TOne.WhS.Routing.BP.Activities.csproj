@@ -104,9 +104,11 @@
   <ItemGroup>
     <Compile Include="ApplyCodeMatchesToDB.cs" />
     <Compile Include="ApplyCodesToCodeSaleZoneTable.cs" />
+    <Compile Include="ApplyCustomerRouteQualityDataToDB.cs" />
     <Compile Include="ApplyCustomerRoutesToDB.cs" />
     <Compile Include="ApplyCustomerZoneDetailsToDB.cs" />
     <Compile Include="ApplyProductRoutesToDB.cs" />
+    <Compile Include="ApplyRPQualityDataToDB.cs" />
     <Compile Include="ApplySupplierZoneDetailsToDB.cs" />
     <Compile Include="BuildCodeMatches.cs" />
     <Compile Include="CalculateCustomerRouteQualityData.cs" />
@@ -152,9 +154,11 @@
     <Compile Include="PrepareCodeMatchesForApply.cs" />
     <Compile Include="PrepareCodePrefixes.cs" />
     <Compile Include="PrepareCodeSaleZoneForApply.cs" />
+    <Compile Include="PrepareCustomerRouteQualityDataForDBApply.cs" />
     <Compile Include="PrepareCustomerRoutesForApply.cs" />
     <Compile Include="PrepareCustomerZoneDetailForDBApply.cs" />
     <Compile Include="PrepareProductRoutesForApply.cs" />
+    <Compile Include="PrepareRPQualityDataForDBApply.cs" />
     <Compile Include="PrepareSupplierZoneDetailForDBApply.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RPBuildRoutes.cs" />

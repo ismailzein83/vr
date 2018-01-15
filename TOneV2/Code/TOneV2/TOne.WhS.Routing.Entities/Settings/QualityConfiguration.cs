@@ -23,4 +23,11 @@ namespace TOne.WhS.Routing.Entities
 
         public string Expression { get; set; }
     }
+
+    public class RouteRuleQualityConfigurationData
+    {
+        public RouteRuleQualityConfiguration Entity { get; set; }
+
+        public IRouteRuleQualityConfigurationEvaluator Evaluator { get; set; }
+    }
 }

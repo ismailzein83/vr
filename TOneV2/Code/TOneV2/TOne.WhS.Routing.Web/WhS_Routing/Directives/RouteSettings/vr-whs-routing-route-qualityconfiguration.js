@@ -59,7 +59,7 @@ app.directive('vrWhsRoutingRouteQualityconfiguration', ['UtilsService', 'VRModal
                         $scope.scopeModel.datasource.push({ Entity: qualityConfiguration });
                     };
 
-                    WhS_Routing_QualityConfigurationService.addQualityConfiguration(onQualityConfigurationAdded);
+                    WhS_Routing_QualityConfigurationService.addQualityConfiguration(onQualityConfigurationAdded, getQualityConfigurationNames());
                 };
 
                 defineMenuActions();
@@ -138,7 +138,7 @@ app.directive('vrWhsRoutingRouteQualityconfiguration', ['UtilsService', 'VRModal
                     $scope.scopeModel.datasource[index] = { Entity: newQualityConfiguration };
                 };
 
-                WhS_Routing_QualityConfigurationService.editQualityConfiguration(editQualityConfigurationObject.Entity, onQualityConfigurationUpdated);
+                WhS_Routing_QualityConfigurationService.editQualityConfiguration(onQualityConfigurationUpdated, editQualityConfigurationObject.Entity, getQualityConfigurationNames());
             }
 
             function removeQualityConfiguration(removedQualityConfigurationObject) {
@@ -172,6 +172,21 @@ app.directive('vrWhsRoutingRouteQualityconfiguration', ['UtilsService', 'VRModal
                 var index = $scope.scopeModel.datasource.indexOf(activeQualityConfigurationObject);
                 activeQualityConfigurationObject.Entity.IsActive = false;
                 $scope.scopeModel.datasource[index] = { Entity: activeQualityConfigurationObject.Entity };
+            }
+
+            function getQualityConfigurationNames() {
+                if ($scope.scopeModel.datasource == undefined)
+                    return;
+
+                var qualityConfigurationNames = [];
+
+                for (var index = 0; index < $scope.scopeModel.datasource.length; index++) {
+                    var qualityConfigurationEntity = $scope.scopeModel.datasource[index].Entity;
+                    if (qualityConfigurationEntity && qualityConfigurationEntity.Name)
+                        qualityConfigurationNames.push(qualityConfigurationEntity.Name)
+                }
+
+                return qualityConfigurationNames;
             }
         }
 

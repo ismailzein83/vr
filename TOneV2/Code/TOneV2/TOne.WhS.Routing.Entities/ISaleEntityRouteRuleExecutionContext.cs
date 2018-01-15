@@ -18,6 +18,8 @@ namespace TOne.WhS.Routing.Entities
 
         string SaleZoneServiceIds { get; }
 
+        RoutingDatabase RoutingDatabase { get; }
+
         bool TryAddOption(RouteOptionRuleTarget optionTarget);
 
         ReadOnlyCollection<RouteOptionRuleTarget> GetOptions();

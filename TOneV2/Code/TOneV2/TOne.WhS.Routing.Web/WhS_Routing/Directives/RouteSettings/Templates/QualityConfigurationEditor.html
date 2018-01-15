@@ -5,7 +5,7 @@
                 <vr-tab header="'Definition'">
                     <vr-row>
                         <vr-columns width="1/4row">
-                            <vr-textbox value="scopeModel.qualityConfigurationyName" label="Name" isrequired="true"></vr-textbox>
+                            <vr-textbox value="scopeModel.qualityConfigurationyName" label="Name" customvalidate="scopeModel.validateQualityConfigurationName()" isrequired="true"></vr-textbox>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
@@ -21,15 +21,15 @@
                         </vr-columns>
                     </vr-row>
                     <vr-row>
-                        <vr-columns width="1/3row" >
+                        <vr-columns width="1/3row">
                             <vr-datalist maxitemsperrow="6" datasource="scopeModel.qualityConfigurationSignsFields" onitemclicked="scopeModel.qualityConfigurationFieldClicked">
-                                <vr-label largesize prespace>{{dataItem.Title}}</vr-label> 
+                                <vr-label largesize prespace>{{dataItem.Title}}</vr-label>
                             </vr-datalist>
                         </vr-columns>
                     </vr-row>
                     <vr-row>
                         <vr-columns width="fullrow">
-                            <vr-textarea label="Expression" value="scopeModel.expression" isrequired rows="6"></vr-textarea>
+                            <vr-textarea label="Expression" value="scopeModel.expression" customvalidate="scopeModel.validateExpression()" rows="6" isrequired></vr-textarea>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>

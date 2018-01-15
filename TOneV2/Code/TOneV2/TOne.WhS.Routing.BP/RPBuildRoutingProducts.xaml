@@ -59,6 +59,7 @@
       <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
       <AssemblyReference>WindowsBase</AssemblyReference>
       <AssemblyReference>TOne.LCRProcess.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.BusinessEntity.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.BusinessEntity.Entities</AssemblyReference>
       <AssemblyReference>TOne.WhS.RouteSync.BP.Activities</AssemblyReference>
       <AssemblyReference>TOne.WhS.RouteSync.BP</AssemblyReference>
@@ -142,6 +143,11 @@
             <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">getCodeMatchesStatus</mca:CSharpValue>
           </InArgument>
         </twrba1:RPBuildRoutes.PreviousActivityStatus>
+        <twrba1:RPBuildRoutes.RoutingDatabaseId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">Input.RoutingDatabaseId</mca:CSharpValue>
+          </InArgument>
+        </twrba1:RPBuildRoutes.RoutingDatabaseId>
         <twrba1:RPBuildRoutes.Status>
           <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">buildProductRoutesStatus</mca:CSharpReference>
@@ -193,7 +199,7 @@
         </twrba1:ApplyProductRoutesToDB.RoutingDatabaseId>
       </twrba1:ApplyProductRoutesToDB>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0lDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBCdWlsZFJvdXRpbmdQcm9kdWN0cy54YW1sG0kDxQEOAgEBSgXDARACAQJODU6vAQIBA1cHcSEDAYYBcgebAR4CAUWcAQexAS0CASSyAQfCAScCAQtkDWRhAwGnAWkNaXUDAZ8BXw1fhwEDAZcBWg1aWgMBjwFuDW5YAwGHAY4BDY4BbQIBfn8Nf38CAXZ1DXVrAgFukwENkwF5AgFmeg16bQIBXokBDYkBgAECAVaYAQ2YAZEBAgFOhAENhAFaAgFGqQENqQFxAgE9nwENnwF4AgE1rgENrgF/AgEtpAENpAGAAQIBJboBDboBdwIBHLUBDbUBeAIBFL8BDb8BYQIBDA==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0lDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBCdWlsZFJvdXRpbmdQcm9kdWN0cy54YW1sHEoDywEOAgEBSwXJARACAQJPDU+vAQIBA1gHciEDAY4BcwehAR4CAUWiAQe3AS0CASS4AQfIAScCAQtlDWVhAwGvAWoNanUDAacBYA1ghwEDAZ8BWw1bWgMBlwFvDW9YAwGPAY8BDY8BbQMBhgGAAQ2AAX8CAX6UAQ2UAWECAXZ2DXZrAgFumQENmQF5AgFmew17bQIBXooBDYoBgAECAVaeAQ2eAZEBAgFOhQENhQFaAgFGrwENrwFxAgE9pQENpQF4AgE1tAENtAF/AgEtqgENqgGAAQIBJcABDcABdwIBHLsBDbsBeAIBFMUBDcUBYQIBDA==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

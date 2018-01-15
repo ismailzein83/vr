@@ -1,21 +1,32 @@
 ﻿(function (appControllers) {
 
     "use strict";
+
     qualityConfigurationAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_Routing_ModuleConfig'];
 
     function qualityConfigurationAPIService(BaseAPIService, UtilsService, WhS_Routing_ModuleConfig) {
-        var controllerName = "RouteRuleSettings";
 
-        function GetQualityConfigurationFields(input) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetQualityConfigurationFields"), input);
+        var controllerName = "QualityConfiguration";
+
+        function GetQualityConfigurationFields() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetQualityConfigurationFields"));
         }
-        function GetQualityConfigurationInfo(input) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetQualityConfigurationInfo"), input);
+
+        function GetQualityConfigurationInfo(serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetQualityConfigurationInfo"), { filter: serializedFilter });
         }
+
+        function TryCompileQualityConfigurationExpression(expression) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "TryCompileQualityConfigurationExpression"), {
+                qualityConfigurationExpression: expression
+            });
+        }
+
 
         return ({
             GetQualityConfigurationFields: GetQualityConfigurationFields,
-            GetQualityConfigurationInfo: GetQualityConfigurationInfo
+            GetQualityConfigurationInfo: GetQualityConfigurationInfo,
+            TryCompileQualityConfigurationExpression: TryCompileQualityConfigurationExpression
         });
     }
 
