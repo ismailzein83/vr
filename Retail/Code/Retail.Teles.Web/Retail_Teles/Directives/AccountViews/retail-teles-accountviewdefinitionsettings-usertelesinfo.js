@@ -1,7 +1,7 @@
 ﻿
 'use strict';
 
-app.directive('retailTelesAccountviewdefinitionsettingsAccounttelesinfo', ['UtilsService', 'VRUIUtilsService',
+app.directive('retailTelesAccountviewdefinitionsettingsUsertelesinfo', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
@@ -11,15 +11,15 @@ app.directive('retailTelesAccountviewdefinitionsettingsAccounttelesinfo', ['Util
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new AccountTelesDIDsAndBusinessTrunksViewSettingsCtor($scope, ctrl, $attrs);
+                var ctor = new UserTelesInfoViewSettings($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Retail_Teles/Directives/AccountViews/Templates/AccountTelesInfoViewSettingsTemplate.html'
+            templateUrl: '/Client/Modules/Retail_Teles/Directives/AccountViews/Templates/UserTelesInfoViewSettingsTemplate.html'
         };
 
-        function AccountTelesDIDsAndBusinessTrunksViewSettingsCtor($scope, ctrl, $attrs) {
+        function UserTelesInfoViewSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
             var conectionTypeAPI;
             var conectionTypeReadyDeferred = UtilsService.createPromiseDeferred();
@@ -58,7 +58,7 @@ app.directive('retailTelesAccountviewdefinitionsettingsAccounttelesinfo', ['Util
                 api.getData = function () {
                    
                     return {
-                        $type: 'Retail.Teles.Business.AccountTelesInfoView, Retail.Teles.Business',
+                        $type: 'Retail.Teles.Business.UserTelesInfoView, Retail.Teles.Business',
                         VRConnectionId: conectionTypeAPI.getSelectedIds(),
                     };
                 };

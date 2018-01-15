@@ -23,10 +23,18 @@
                 accountId: accountId
             });
         }
+        function GetUserTelesInfo(accountBEDefinitionId, accountId, vrConnectionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_Teles_ModuleConfig.moduleName, controllerName, "GetUserTelesInfo"), {
+                accountBEDefinitionId: accountBEDefinitionId,
+                accountId: accountId,
+                vrConnectionId: vrConnectionId,
+            });
+        }
         return ({
             GetUsersInfo: GetUsersInfo,
             MapUserToAccount: MapUserToAccount,
-            GetAccountDIDsCount: GetAccountDIDsCount
+            GetAccountDIDsCount: GetAccountDIDsCount,
+            GetUserTelesInfo: GetUserTelesInfo
         });
     }
 

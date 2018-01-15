@@ -79,11 +79,10 @@
     <Compile Include="AccountBEActionTypes\MappingTelesSiteActionSettings.cs" />
     <Compile Include="AccountBEActionTypes\MappingTelesAccountActionSettings.cs" />
     <Compile Include="AccountBEActionTypes\MappingTelesUserActionSettings.cs" />
-    <Compile Include="AccountViews\AccountTelesInfoView.cs" />
+    <Compile Include="AccountViews\UserTelesInfoView.cs" />
     <Compile Include="AccountViews\AccountTelesDIDsAndBusinessTrunksView.cs" />
     <Compile Include="AccountMappedToTelesFieldDefinition.cs" />
     <Compile Include="AccountMappedToTelesGenericField.cs" />
-    <Compile Include="TelesAccountManager.cs" />
     <Compile Include="TelesTemplateEntityDefinitionFilter.cs" />
     <Compile Include="EnterpriseBEDefinitionFilter.cs" />
     <Compile Include="EnterpriseNotMappedToAccountFilter.cs" />

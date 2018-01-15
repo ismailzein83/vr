@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Retail.Teles.Entities
 {
-    public class TelesAccountInfo
+    public class TelesUserMappingInfo
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

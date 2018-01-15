@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Retail.Teles.Business
 {
-    public class AccountTelesInfoView : AccountViewDefinitionSettings
+    public class UserTelesInfoView : AccountViewDefinitionSettings
     {
         public override Guid ConfigId
         {
@@ -19,7 +19,7 @@ namespace Retail.Teles.Business
         {
             get
             {
-                return "retail-teles-accounttelesinfo-view";
+                return "retail-teles-usertelesinfo-view";
             }
             set
             {
@@ -30,7 +30,7 @@ namespace Retail.Teles.Business
         public override bool DoesUserHaveAccess(IAccountViewDefinitionCheckAccessContext context)
         {
             var securityManager = new Vanrise.Security.Business.SecurityManager();
-            return securityManager.HasPermissionToActions("Retail_Teles/TelesAccount/GetAccountTelesInfo", context.UserId);
+            return securityManager.HasPermissionToActions("Retail_Teles/TelesUser/GetUserTelesInfo", context.UserId);
         }
         public Guid VRConnectionId { get; set; }
     }

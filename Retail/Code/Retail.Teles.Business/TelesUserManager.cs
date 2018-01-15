@@ -222,6 +222,44 @@ namespace Retail.Teles.Business
             });
         }
 
+        public TelesUserMappingInfo GetUserTelesInfo(Guid accountBEDefinitionId, long accountId, Guid vrConnectionId)
+        {
+            var userAccountInfo = _accountBEManager.GetExtendedSettings<UserAccountMappingInfo>(accountBEDefinitionId, accountId);
+            if (userAccountInfo != null)
+            {
+                TelesUserMappingInfo telesUserMappingInfo = new TelesUserMappingInfo();
+                if (userAccountInfo.TelesUserId != null)
+                {
+                    TelesUserManager telesUserManager = new Business.TelesUserManager();
+                    var user = telesUserManager.GetUser(vrConnectionId, userAccountInfo.TelesUserId);
+                    if (user != null)
+                    {
+                        telesUserMappingInfo.FirstName = user.firstName;
+                        telesUserMappingInfo.LastName = user.lastName;
+                        telesUserMappingInfo.LoginName = user.loginName;
+                        TelesSiteManager telesSiteManager = new TelesSiteManager();
+                        telesUserMappingInfo.EnterpriseName = new TelesEnterpriseManager().GetEnterpriseName(vrConnectionId, userAccountInfo.TelesEnterpriseId.ToString(), user.serviceProviderId.ToString());
+                        telesUserMappingInfo.SiteName = telesSiteManager.GetSiteName(vrConnectionId, user.domainId);
+
+                        var siteRoutinrGroups = telesSiteManager.GetSiteRoutingGroups(vrConnectionId, user.domainId);
+                        if (siteRoutinrGroups != null)
+                        {
+                            foreach(var siteRoutinrGroup in siteRoutinrGroups)
+                            {
+                                if(siteRoutinrGroup.Value.id == user.routingGroupId)
+                                {
+                                    telesUserMappingInfo.RoutingGroupName = siteRoutinrGroup.Value.name;
+                                    break;
+                                }
+                            }
+                         
+                        }
+                    }
+                    return telesUserMappingInfo;
+                }
+            }
+            return null;
+        }
         #endregion
 
         #region Private Classes

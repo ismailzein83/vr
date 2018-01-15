@@ -36,5 +36,11 @@ namespace Retail.Teles.Web.Controllers
         {
             return _manager.GetAccountDIDsCount(accountBEDefinitionId, accountId);
         }
+        [HttpGet]
+        [Route("GetUserTelesInfo")]
+        public TelesUserMappingInfo GetUserTelesInfo(Guid accountBEDefinitionId, long accountId, Guid vrConnectionId)
+        {
+            return _manager.GetUserTelesInfo(accountBEDefinitionId, accountId, vrConnectionId);
+        }
     }
 }
