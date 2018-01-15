@@ -288,6 +288,8 @@ namespace TOne.WhS.BusinessEntity.Business
         private SalePricelistCodeChange SalePricelistCodeChangeDetailMapper(SalePricelistCodeChange salePricelistCodeChange)
         {
             var salePriceListManager = new SalePriceListManager();
+            //TODO: the below line is not needed anymore. We need to check why we need pricelist id in detail, if we need it we need to check if we can 
+            //create a detail class having it. it is wrong to keep it in the object and it is not saved in the database
             SalePriceList pricelist = salePriceListManager.GetPriceList((int)salePricelistCodeChange.PricelistId);
             SalePricelistCodeChange codeChange = new SalePricelistCodeChange
             {

@@ -996,12 +996,14 @@ namespace TOne.WhS.BusinessEntity.Business
                             countryCodeChange.AddRange(countryChange.ZoneChanges.SelectMany(c => c.CodeChanges));
                             codeChangeByCountryId.Add(countryChange.CountryId, countryCodeChange);
                         }
+                        //TODO: remove this loop, batch id can be set on structuring activity in the workflow and pricelistid is not needed and it is overriden on each pricelist
                         foreach (var code in countryCodeChange)
                         {
                             code.BatchId = processInstanceId;
                             code.PricelistId = priceList.PriceList.PriceListId;
                         }
 
+                        //TODO: check if we can add pricelist id on structuring activity, we want to avoid looping again here
                         foreach (var zoneChange in countryChange.ZoneChanges)
                         {
                             if (zoneChange.RPChange != null)
