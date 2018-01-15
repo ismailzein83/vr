@@ -17,10 +17,10 @@
         function UpdateSwitchReleaseCause(switchReleaseCause) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "UpdateSwitchReleaseCause"), switchReleaseCause);
         }
-        function GetReleaseCausesByCode(code, switchId) {
+        function GetReleaseCausesByCode(code, switchIds) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetReleaseCausesByCode"), {
                 code: code,
-                switchId: switchId
+                switchIds: switchIds
             });
         }
         function DownloadSwitchReleaseCausesTemplate() {
