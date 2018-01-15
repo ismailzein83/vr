@@ -42,6 +42,10 @@ namespace Retail.BusinessEntity.Business
             {
                 if (input.Query.ParentAccountId.HasValue && (!account.ParentAccountId.HasValue || (account.ParentAccountId.HasValue && input.Query.ParentAccountId.Value != account.ParentAccountId.Value)))
                     return false;
+                if (input.Query.StatusIds != null && !input.Query.StatusIds.Contains(account.StatusId))
+                {
+                    return false;
+                }
                 return true;
             };
             if (input.SortByColumnName != null && input.SortByColumnName.Contains("FieldValues"))
@@ -107,7 +111,10 @@ namespace Retail.BusinessEntity.Business
 
                 if (!recordFilterManager.IsFilterGroupMatch(input.Query.FilterGroup, new AccountRecordFilterGenericFieldMatchContext(input.Query.AccountBEDefinitionId, account)))
                     return false;
-
+                if (input.Query.StatusIds != null && !input.Query.StatusIds.Contains(account.StatusId))
+                {
+                    return false;
+                }
                 return true;
             };
 

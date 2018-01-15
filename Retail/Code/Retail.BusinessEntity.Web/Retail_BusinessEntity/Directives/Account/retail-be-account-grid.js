@@ -171,7 +171,8 @@ function (VRNotificationService, UtilsService, Retail_BE_AccountBEService, Retai
                         Name: gridQuery != undefined ? gridQuery.Name : undefined,
                         OnlyRootAccount: gridQuery != undefined ? gridQuery.OnlyRootAccount : undefined,
                         AccountTypeIds: gridQuery != undefined ? gridQuery.AccountTypeIds : undefined,
-                        FilterGroup: gridQuery != undefined ? gridQuery.FilterGroup : undefined
+                        FilterGroup: gridQuery != undefined ? gridQuery.FilterGroup : undefined,
+                        StatusIds: gridQuery != undefined ? gridQuery.StatusIds : undefined,
                     };
                 }
 

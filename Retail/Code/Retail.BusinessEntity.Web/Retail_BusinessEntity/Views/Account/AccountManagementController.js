@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AccountManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService', 'Retail_BE_AccountBEService', 'Retail_BE_AccountBEAPIService', 'Retail_BE_AccountTypeAPIService', 'VR_Sec_ViewAPIService'];
+    AccountManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService', 'Retail_BE_AccountBEService', 'Retail_BE_AccountBEAPIService', 'Retail_BE_AccountTypeAPIService', 'VR_Sec_ViewAPIService','Retail_BE_AccountBEDefinitionAPIService'];
 
-    function AccountManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService, Retail_BE_AccountBEService, Retail_BE_AccountBEAPIService, Retail_BE_AccountTypeAPIService, VR_Sec_ViewAPIService) {
+    function AccountManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService, Retail_BE_AccountBEService, Retail_BE_AccountBEAPIService, Retail_BE_AccountTypeAPIService, VR_Sec_ViewAPIService, Retail_BE_AccountBEDefinitionAPIService) {
 
         var viewId;
         var accountBEDefinitionId;
@@ -21,6 +21,10 @@
 
         var recordFilterDirectiveAPI;
         var recordFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var statusSelectorAPI;
+        var statusSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
 
         var gridAPI;
 
@@ -42,7 +46,10 @@
             $scope.scopeModel.showBusinessEntityDefinitionSelector = false;
             $scope.scopeModel.showAddAccount = false;
             $scope.scopeModel.onlyRootAccount = true;
-
+            $scope.scopeModel.onStatusSelectorReady = function (api) {
+                statusSelectorAPI = api;
+                statusSelectorReadyPromiseDeferred.resolve();
+            };
             $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
                 businessEntityDefinitionSelectorAPI = api;
                 businessEntityDefinitionSelectorReadyDeferred.resolve();
@@ -66,7 +73,8 @@
                 var gridPayload = {
                     accountBEDefinitionId: accountBEDefinitionId,
                     query: {
-                        OnlyRootAccount: $scope.scopeModel.onlyRootAccount
+                        OnlyRootAccount: $scope.scopeModel.onlyRootAccount,
+                        StatusIds: statusSelectorAPI.getSelectedIds()
                     }
                 };
                 gridAPI.load(gridPayload);
@@ -168,7 +176,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadRootAccountTypeSelector, loadRecordFilterDirective]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadRootAccountTypeSelector, loadRecordFilterDirective, loadStatusSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -183,6 +191,22 @@
             });
 
             return rootAccountTypeSelectorLoadDeferred.promise;
+        }
+        function loadStatusSelector() {
+            var statusSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+            Retail_BE_AccountBEDefinitionAPIService.GetAccountBEStatusDefinitionId(accountBEDefinitionId).then(function (response) {
+                statusSelectorReadyPromiseDeferred.promise.then(function () {
+                    var selectorPayload = {
+                        businessEntityDefinitionId: response
+                    }
+                    VRUIUtilsService.callDirectiveLoad(statusSelectorAPI, selectorPayload, statusSelectorLoadDeferred);
+                });
+            }).catch(function (error) {
+                 statusSelectorLoadDeferred.reject(error);
+            });
+
+            return statusSelectorLoadDeferred.promise;
         }
         function loadRecordFilterDirective() {
             var recordFilterDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -232,6 +256,7 @@
                 OnlyRootAccount: accountRootTypeSelectorAPI.getSelectedIds(),
                 AccountTypeIds: accountTypeSelectorAPI.getSelectedIds(),
                 FilterGroup: recordFilterDirectiveAPI.getData().filterObj,
+                StatusIds: statusSelectorAPI.getSelectedIds()
             };
         }
     }

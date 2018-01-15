@@ -71,6 +71,11 @@
         function GetFinancialAccountLocatorConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetFinancialAccountLocatorConfigs"));
         }
+        function GetAccountBEStatusDefinitionId(accountBEDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountBEStatusDefinitionId"), {
+                accountBEDefinitionId: accountBEDefinitionId,
+            });
+        }
         return {
             GetAccountBEDefinitionSettingsWithHidden: GetAccountBEDefinitionSettingsWithHidden,
             GetAccountViewDefinitionSettingsConfigs: GetAccountViewDefinitionSettingsConfigs,
@@ -83,7 +88,8 @@
             GetAccountActionDefinition: GetAccountActionDefinition,
             GetAccountExtraFieldDefinitionSettingsConfigs: GetAccountExtraFieldDefinitionSettingsConfigs,
             CheckUseRemoteSelector: CheckUseRemoteSelector,
-            GetFinancialAccountLocatorConfigs: GetFinancialAccountLocatorConfigs
+            GetFinancialAccountLocatorConfigs: GetFinancialAccountLocatorConfigs,
+            GetAccountBEStatusDefinitionId: GetAccountBEStatusDefinitionId
         };
     }
 

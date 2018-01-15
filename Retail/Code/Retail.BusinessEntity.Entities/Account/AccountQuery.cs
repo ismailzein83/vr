@@ -13,6 +13,7 @@ namespace Retail.BusinessEntity.Entities
         public string Name { get; set; }
         public IEnumerable<Guid> AccountTypeIds { get; set; }
         public bool OnlyRootAccount { get; set; }
+        public List<Guid> StatusIds { get; set; }
         public long? ParentAccountId { get; set; } 
         public List<string> Columns { get; set; }
         public RecordFilterGroup FilterGroup { get; set; }

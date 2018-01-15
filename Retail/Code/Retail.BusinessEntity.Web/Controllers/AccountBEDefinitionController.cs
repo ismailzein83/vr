@@ -88,7 +88,12 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.GetAccountActionDefinition(accountBEDefinitionId, actionDefinitionId);
         }
-
+        [HttpGet]
+        [Route("GetAccountBEStatusDefinitionId")]
+        public Guid GetAccountBEStatusDefinitionId(Guid accountBEDefinitionId)
+        {
+            return _manager.GetAccountBEStatusDefinitionId(accountBEDefinitionId);
+        }
         [HttpGet]
         [Route("GetAccountExtraFieldDefinitionSettingsConfigs")]
         public IEnumerable<AccountExtraFieldDefinitionConfig> GetAccountExtraFieldDefinitionSettingsConfigs()

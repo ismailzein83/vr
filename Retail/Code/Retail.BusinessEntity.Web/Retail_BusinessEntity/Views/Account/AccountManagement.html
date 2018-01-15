@@ -19,6 +19,8 @@
                 <vr-columns ng-show="scopeModel.isAccountBEDefinitionSelected" width="normal">
                     <vr-textbox label="Name" value="scopeModel.name"></vr-textbox>
                 </vr-columns>
+                <vr-common-statusdefinition-selector on-ready="scopeModel.onStatusSelectorReady" ismultipleselection customlabel="Status" normal-col-num="2"></vr-common-statusdefinition-selector>
+
                 <vr-columns ng-show="scopeModel.isAccountBEDefinitionSelected" width="normal">
                     <retail-be-account-roottype-selector on-ready="scopeModel.onAccountRootTypeSelectorReady" onselectionchanged="scopeModel.onlyRootAccountValueChanged"></retail-be-account-roottype-selector>
                 </vr-columns>
