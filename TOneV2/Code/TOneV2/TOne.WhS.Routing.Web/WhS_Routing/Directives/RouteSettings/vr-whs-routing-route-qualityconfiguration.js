@@ -110,20 +110,20 @@ app.directive('vrWhsRoutingRouteQualityconfiguration', ['UtilsService', 'VRModal
                         {
                             name: "Delete",
                             clicked: removeQualityConfiguration
-                        })
+                        });
                     }
 
                     if (!dataItem.Entity.IsActive) {
                         actions.push({
-                            name: "Enable",
-                            clicked: setActive
-                        })
+                                name: "Enable",
+                                clicked: setActive
+                        });
                     }
                     else if (!dataItem.Entity.IsDefault) {
                         actions.push({
-                            name: "Disable",
-                            clicked: setDisable
-                        })
+                                name: "Disable",
+                                clicked: setDisable
+                        });
                     }
 
                     return actions;
@@ -144,7 +144,7 @@ app.directive('vrWhsRoutingRouteQualityconfiguration', ['UtilsService', 'VRModal
             function removeQualityConfiguration(removedQualityConfigurationObject) {
                 var index = $scope.scopeModel.datasource.indexOf(removedQualityConfigurationObject);
                 $scope.scopeModel.datasource.splice(index, 1);
-            };
+            }
 
             function setDefault(defaultQualityConfigurationObject) {
                 for (var i = 0, length = $scope.scopeModel.datasource.length; i < length; i++) {
@@ -166,7 +166,7 @@ app.directive('vrWhsRoutingRouteQualityconfiguration', ['UtilsService', 'VRModal
                 var index = $scope.scopeModel.datasource.indexOf(activeQualityConfigurationObject);
                 activeQualityConfigurationObject.Entity.IsActive = true;
                 $scope.scopeModel.datasource[index] = { Entity: activeQualityConfigurationObject.Entity };
-            };
+            }
 
             function setDisable(activeQualityConfigurationObject) {
                 var index = $scope.scopeModel.datasource.indexOf(activeQualityConfigurationObject);
@@ -183,7 +183,7 @@ app.directive('vrWhsRoutingRouteQualityconfiguration', ['UtilsService', 'VRModal
                 for (var index = 0; index < $scope.scopeModel.datasource.length; index++) {
                     var qualityConfigurationEntity = $scope.scopeModel.datasource[index].Entity;
                     if (qualityConfigurationEntity && qualityConfigurationEntity.Name)
-                        qualityConfigurationNames.push(qualityConfigurationEntity.Name)
+                        qualityConfigurationNames.push(qualityConfigurationEntity.Name);
                 }
 
                 return qualityConfigurationNames;

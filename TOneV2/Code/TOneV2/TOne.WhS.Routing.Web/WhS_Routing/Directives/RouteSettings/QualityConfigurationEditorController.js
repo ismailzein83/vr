@@ -65,7 +65,7 @@
                     return null;
 
                 if ($scope.scopeModel.expression.indexOf("context.GetMeasureValue(") == -1)
-                    return "Expression should contain at least one Measure!!"
+                    return "Expression should contain at least one Measure!!";
 
                 return null;
             };
@@ -129,7 +129,7 @@
                                 Title: responseItem.Title,
                                 Expression: 'context.GetMeasureValue("' + responseItem.Name + '")'
                             });
-                        };
+                        }
                     }
                 });
             }
