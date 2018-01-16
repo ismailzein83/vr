@@ -127,9 +127,48 @@ app.service('Retail_Teles_TelesAccountActionService', ['VRModalService', 'UtilsS
             VRModalService.showModal('/Client/Modules/Retail_Teles/Directives/AccountAction/MappingTelesAccountAction/Templates/MappingTelesUserEditor.html', parameters, modalSettings);
         }
 
+        function registerChangeUserRoutingGroup() {
+
+            var actionType = {
+                ActionTypeName: "ChangeUserRoutingGroup",
+                ExecuteAction: function (payload) {
+                    if (payload == undefined)
+                        return;
+
+                    var accountBEDefinitionId = payload.accountBEDefinitionId;
+                    var accountActionId = payload.accountActionDefinition.AccountActionDefinitionId;
+                    var onItemUpdated = payload.onItemUpdated;
+                    var account = payload.account;
+                    var userAccountMappingInfo = account.ExtendedSettings != undefined ? account.ExtendedSettings["Retail.Teles.Entities.UserAccountMappingInfo"] : undefined;
+
+                    var onAccountUpdated = function (updatedAccount) {
+                        if (onItemUpdated != undefined)
+                            onItemUpdated(updatedAccount);
+                    };
+                    ChangeUserRoutingGroupEditor(accountBEDefinitionId, accountActionId, account.AccountId, userAccountMappingInfo, onAccountUpdated);
+                }
+            };
+            Retail_BE_AccountActionService.registerActionType(actionType);
+        }
+        function ChangeUserRoutingGroupEditor(accountBEDefinitionId, accountActionId, accountId, telesInfoEntity, onChangeUserRoutingGroup) {
+            var parameters = {
+                accountBEDefinitionId: accountBEDefinitionId,
+                actionDefinitionId: accountActionId,
+                accountId: accountId,
+                telesInfoEntity: telesInfoEntity
+            };
+
+            var modalSettings = {};
+
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onChangeUserRoutingGroup = onChangeUserRoutingGroup;
+            };
+            VRModalService.showModal('/Client/Modules/Retail_Teles/Directives/AccountAction/MappingTelesAccountAction/Templates/ChangeUserRoutingGroupEditor.html', parameters, modalSettings);
+        }
         return ({
             registerMappingTelesAccount: registerMappingTelesAccount,
             registerMappingTelesSite: registerMappingTelesSite,
-            registerMappingTelesUser: registerMappingTelesUser
+            registerMappingTelesUser: registerMappingTelesUser,
+            registerChangeUserRoutingGroup: registerChangeUserRoutingGroup
         });
     }]);

@@ -167,12 +167,16 @@
     <Content Include="Retail_Teles\Constant\RoutingGroupFilterOperatorEnum.js" />
     <Content Include="Retail_Teles\Constant\EnterpriseTypeEnum.js" />
     <Content Include="Retail_Teles\Constant\UserTypeEnum.js" />
+    <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\ChangeUserRoutingGroupEditorController.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\MappingTelesUserEditorController.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\MappingTelesSiteEditorController.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\MappingTelesAccountEditorController.js" />
+    <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\retail-teles-accountactiondefinitionsettings-changeuserroutinggroup.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\retail-teles-accountactiondefinitionsettings-mappingtelesuser.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\retail-teles-accountactiondefinitionsettings-mappingtelessite.js" />
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\retail-teles-accountactiondefinitionsettings-mappingtelesaccount.js" />
+    <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\Templates\ChangeUserRoutingGroupActionSettingsTemplate.html" />
+    <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\Templates\ChangeUserRoutingGroupEditor.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\Templates\MappingTelesUserEditor.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\Templates\MappingTelesUserActionSettingsTemplate.html" />
     <Content Include="Retail_Teles\Directives\AccountAction\MappingTelesAccountAction\Templates\MappingTelesSiteEditor.html" />

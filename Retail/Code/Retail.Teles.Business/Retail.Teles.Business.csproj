@@ -76,6 +76,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountBEActionTypes\ChangeUserRoutingGroupActionSettings.cs" />
     <Compile Include="AccountBEActionTypes\MappingTelesSiteActionSettings.cs" />
     <Compile Include="AccountBEActionTypes\MappingTelesAccountActionSettings.cs" />
     <Compile Include="AccountBEActionTypes\MappingTelesUserActionSettings.cs" />

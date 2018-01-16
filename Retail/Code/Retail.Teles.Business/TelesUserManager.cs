@@ -260,6 +260,94 @@ namespace Retail.Teles.Business
             }
             return null;
         }
+        public string GetUserTelesSiteId(Guid accountBEDefinitionId, long accountId, Guid vrConnectionId)
+        {
+            var userAccountInfo = _accountBEManager.GetExtendedSettings<UserAccountMappingInfo>(accountBEDefinitionId, accountId);
+            if (userAccountInfo != null)
+            {
+                TelesUserMappingInfo telesUserMappingInfo = new TelesUserMappingInfo();
+                if (userAccountInfo.TelesUserId != null)
+                {
+                    TelesUserManager telesUserManager = new Business.TelesUserManager();
+                    var user = telesUserManager.GetUser(vrConnectionId, userAccountInfo.TelesUserId);
+                    if (user != null)
+                    {
+                        return user.domainId;
+                    }
+                }
+            }
+            return null;
+        }
+        public string GetCurrentUserRoutingGroupId(Guid accountBEDefinitionId, long accountId, Guid vrConnectionId)
+        {
+            var userAccountInfo = _accountBEManager.GetExtendedSettings<UserAccountMappingInfo>(accountBEDefinitionId, accountId);
+            if (userAccountInfo != null)
+            {
+                TelesUserMappingInfo telesUserMappingInfo = new TelesUserMappingInfo();
+                if (userAccountInfo.TelesUserId != null)
+                {
+                    TelesUserManager telesUserManager = new Business.TelesUserManager();
+                    var user = telesUserManager.GetUser(vrConnectionId, userAccountInfo.TelesUserId);
+                    if (user != null)
+                    {
+                        return user.routingGroupId.ToString();
+                    }
+                }
+            }
+            return null;
+        }
+        public UpdateOperationOutput<AccountDetail> ChangeUserRoutingGroup(Guid accountBEDefinitionId, long accountId, Guid vrConnectionId, string routingGroupId)
+        {
+            UpdateOperationOutput<AccountDetail> updateOperationOutput = new UpdateOperationOutput<AccountDetail>();
+            updateOperationOutput.Result = UpdateOperationResult.Failed;
+            var userAccountInfo = _accountBEManager.GetExtendedSettings<UserAccountMappingInfo>(accountBEDefinitionId, accountId);
+            if (userAccountInfo != null)
+            {
+                TelesUserMappingInfo telesUserMappingInfo = new TelesUserMappingInfo();
+                if (userAccountInfo.TelesUserId != null)
+                {
+                    TelesUserManager telesUserManager = new Business.TelesUserManager();
+                    var user = telesUserManager.GetUser(vrConnectionId, userAccountInfo.TelesUserId);
+                    if (user != null)
+                    {
+                        if(user.routingGroupId == routingGroupId)
+                        {
+                            updateOperationOutput.Result = UpdateOperationResult.SameExists;
+                        }else
+                        {
+                            var currentRoutingGroupId = user.routingGroupId;
+                            
+                            user.routingGroupId = routingGroupId;
+                            telesUserManager.UpdateUser(vrConnectionId, user);
+                            TelesSiteManager telesSiteManager = new TelesSiteManager();
+                            var routingGroups = telesSiteManager.GetSiteRoutingGroups(vrConnectionId, user.domainId);
+                            string newRoutingGroupName = null;
+                            string currentRoutingGroupName = null;
+                            if (routingGroups != null)
+                            {
+                                foreach( var routingGroup in routingGroups)
+                                {
+                                    if(routingGroup.Value.id == routingGroupId)
+                                    {
+                                        newRoutingGroupName = routingGroup.Value.name;
+                                    }
+                                    else if (routingGroup.Value.id == currentRoutingGroupId)
+                                    {
+                                        currentRoutingGroupName = routingGroup.Value.name;
+                                    }
+                                }
+                            }
+                            string customAction = newRoutingGroupName != null && currentRoutingGroupName != null ? string.Format("User routing group changed from '{0}' to '{1}'", currentRoutingGroupName, newRoutingGroupName) : null;
+                            _accountBEManager.TrackAndLogObjectCustomAction(accountBEDefinitionId, accountId, "Change User Routing Group", customAction, null);
+                            updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                            updateOperationOutput.UpdatedObject = _accountBEManager.GetAccountDetail(accountBEDefinitionId,accountId);
+                        }
+                        
+                    }
+                }
+            }
+            return updateOperationOutput;
+        }
         #endregion
 
         #region Private Classes

@@ -1,10 +1,12 @@
-﻿using Retail.Teles.Business;
+﻿using Retail.BusinessEntity.Entities;
+using Retail.Teles.Business;
 using Retail.Teles.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
+using Vanrise.Entities;
 using Vanrise.Web.Base;
 
 namespace Retail.Teles.Web.Controllers
@@ -41,6 +43,24 @@ namespace Retail.Teles.Web.Controllers
         public TelesUserMappingInfo GetUserTelesInfo(Guid accountBEDefinitionId, long accountId, Guid vrConnectionId)
         {
             return _manager.GetUserTelesInfo(accountBEDefinitionId, accountId, vrConnectionId);
+        }
+        [HttpGet]
+        [Route("GetUserTelesSiteId")]
+        public string GetUserTelesSiteId(Guid accountBEDefinitionId, long accountId, Guid vrConnectionId)
+        {
+            return _manager.GetUserTelesSiteId(accountBEDefinitionId, accountId, vrConnectionId);
+        }
+        [HttpGet]
+        [Route("GetCurrentUserRoutingGroupId")]
+        public string GetCurrentUserRoutingGroupId(Guid accountBEDefinitionId, long accountId, Guid vrConnectionId)
+        {
+            return _manager.GetCurrentUserRoutingGroupId(accountBEDefinitionId, accountId, vrConnectionId);
+        }
+        [HttpGet]
+        [Route("ChangeUserRoutingGroup")]
+        public UpdateOperationOutput<AccountDetail> ChangeUserRoutingGroup(Guid accountBEDefinitionId, long accountId, Guid vrConnectionId, string routingGroupId)
+        {
+            return _manager.ChangeUserRoutingGroup(accountBEDefinitionId, accountId, vrConnectionId, routingGroupId);
         }
     }
 }

@@ -2,5 +2,6 @@
     Retail_Teles_TelesAccountActionService.registerMappingTelesAccount();
     Retail_Teles_TelesAccountActionService.registerMappingTelesSite();
     Retail_Teles_TelesAccountActionService.registerMappingTelesUser();
+    Retail_Teles_TelesAccountActionService.registerChangeUserRoutingGroup();
 }]);
 
