@@ -84,7 +84,7 @@ namespace Retail.BusinessEntity.Business
                     {
                         if (accountData.AccountId.HasValue && accountData.BED.HasValue)
                         {
-                            if (existingRelatedAccount.ParentBEId == accountIdAsString && existingRelatedAccount.BED == accountData.BED.Value)
+                            if (existingRelatedAccount.ParentBEId == accountIdAsString && existingRelatedAccount.BED == accountData.BED.Value && !existingRelatedAccount.EED.HasValue)
                             {
                                 isSameRelatedAccountExists = true;
                                 continue;
