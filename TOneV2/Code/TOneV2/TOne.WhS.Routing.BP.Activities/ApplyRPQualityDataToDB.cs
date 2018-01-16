@@ -33,9 +33,9 @@ namespace TOne.WhS.Routing.BP.Activities
                 bool hasItem = false;
                 do
                 {
-                    hasItem = inputArgument.InputQueue.TryDequeue((preparedCustomerRouteQualityData) =>
+                    hasItem = inputArgument.InputQueue.TryDequeue((preparedRPQualityData) =>
                     {
-                        dataManager.ApplyQualityConfigurationsToDB(preparedCustomerRouteQualityData);
+                        dataManager.ApplyQualityConfigurationsToDB(preparedRPQualityData);
                     });
                 } while (!ShouldStop(handle) && hasItem);
             });

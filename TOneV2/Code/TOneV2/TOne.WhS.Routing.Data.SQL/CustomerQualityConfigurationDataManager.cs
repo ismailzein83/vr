@@ -38,9 +38,9 @@ namespace TOne.WhS.Routing.Data.SQL
             };
         }
 
-        public void ApplyQualityConfigurationsToDB(object qualityConfigurations)
+        public void ApplyQualityConfigurationsToDB(object preparedQualityConfigurations)
         {
-            InsertBulkToTable(qualityConfigurations as BaseBulkInsertInfo);
+            InsertBulkToTable(preparedQualityConfigurations as BaseBulkInsertInfo);
         }
 
         public IEnumerable<CustomerRouteQualityConfigurationData> GetCustomerRouteQualityConfigurationsData()
