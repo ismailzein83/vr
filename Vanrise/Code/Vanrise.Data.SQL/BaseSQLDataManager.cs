@@ -68,7 +68,7 @@ namespace Vanrise.Data.SQL
                 From = new DateTime(1753, 1, 1, 0, 0, 0),
                 To = new DateTime(9999, 12, 31, 23, 59, 59)
             };
-        } 
+        }
 
         #endregion
 
@@ -405,8 +405,12 @@ namespace Vanrise.Data.SQL
         {
             if (bulkInsertInfo.ColumnNames == null)
                 return "";
+
+            SqlConnectionStringBuilder connStringBuilder = new SqlConnectionStringBuilder(GetConnectionString());
+            string tableUniqueIndentifierName = string.Concat(connStringBuilder.InitialCatalog, ".", bulkInsertInfo.TableName);
+
             string formatFileName;
-            if (s_bcpFormatFileNamesByTable.TryGetValue(bulkInsertInfo.TableName, out formatFileName) && File.Exists(formatFileName))
+            if (s_bcpFormatFileNamesByTable.TryGetValue(tableUniqueIndentifierName, out formatFileName) && File.Exists(formatFileName))
                 return string.Format("-f {0}", formatFileName);
 
             formatFileName = System.IO.Path.GetTempFileName();
@@ -416,7 +420,7 @@ namespace Vanrise.Data.SQL
 
             ExecuteBCPCommand(String.Format("{0} -f {1}", baseBCPArgs, formatFileName), sqlPassword);
             ApplyColumnsToBCPFormatFile(formatFileName, bulkInsertInfo);
-            s_bcpFormatFileNamesByTable.AddOrUpdate(bulkInsertInfo.TableName, formatFileName, (k, v) => formatFileName);
+            s_bcpFormatFileNamesByTable.AddOrUpdate(tableUniqueIndentifierName, formatFileName, (k, v) => formatFileName);
             return string.Format("-f {0}", formatFileName);
         }
 
