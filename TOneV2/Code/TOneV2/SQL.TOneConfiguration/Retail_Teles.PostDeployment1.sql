@@ -34,7 +34,8 @@ as (select * from (values
 ('74384112-0d3e-4677-8df3-2c16c32a84d4'	,'MappingTelesUser'	,'Mapping Teles User',	'Retail_BE_AccountActionDefinitionConfig',	'{"Editor":"retail-teles-accountactiondefinitionsettings-mappingtelesuser"}'),
 ('9a63b2ed-a0b9-4364-ad6c-0977f410c1c4'	,'Provisioning User Screened Numbers'	,'Provisioning User Screened Numbers',	'Retail_BE_ProvisionerDefinition',	'{"DefinitionEditor":"retail-teles-provisioner-definitionsettings-provisionuser", "RuntimeEditor":"retail-teles-provisioner-runtimesettings-provisionuser"}'),
 ('f11db886-8893-441f-b5a4-3261d43e8c0f','RetailBE_AccountView_AccountTelesDIDsAndBusinessTrunks',	'Teles DIDs And Business Trunks',	'Retail_BE_AccountViewDefinitionConfig',	'{"Editor":"retail-teles-accountviewdefinitionsettings-telesdidsandbusinesstrunks"}'),
-('7fc4e765-6e0c-4fd9-94f7-35cd4e7f98bf','RetailTeles_AccountView_UserTelesInfo','User Teles Info','Retail_BE_AccountViewDefinitionConfig','{"Editor":"retail-teles-accountviewdefinitionsettings-usertelesinfo"}')
+('7fc4e765-6e0c-4fd9-94f7-35cd4e7f98bf','RetailTeles_AccountView_UserTelesInfo','User Teles Info','Retail_BE_AccountViewDefinitionConfig','{"Editor":"retail-teles-accountviewdefinitionsettings-usertelesinfo"}'),
+('51ECBE3E-CD99-4627-966E-E5D9A43E54EC','ChangeUserRoutingGroup','Change User Routing Group','Retail_BE_AccountActionDefinitionConfig','{"Editor":"retail-teles-accountactiondefinitionsettings-changeuserroutinggroup"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
