@@ -1,19 +1,23 @@
-﻿CREATE VIEW Retail_CDR.vw_BillingCDR
+﻿
+CREATE VIEW [Retail_CDR].[vw_BillingCDR]
 AS
-SELECT        [CDRID], [Call_Id], [AttemptDateTime], [ConnectDateTime], [DisconnectDateTime], [DurationInSeconds], [DisconnectReason], [CallProgressState], [SubscriberAccountTypeId], [SubscriberAccountId], 
-                         [FinancialAccountId], [ServiceTypeId], [TrafficDirection], [InitiationCallType], [TerminationCallType], [Calling], [Called], [InterconnectOperatorId], [SubscriberZoneId], [Zone], [NationalCallType], [QueueItemId], 
-                         [SaleRateValueRuleId], [SaleRateTypeRuleId], [SaleTariffRuleId], [SaleExtraChargeRuleId], [Extension]
-FROM            Retail_CDR.BillingCDR_Main WITH (NOLOCK)
+SELECT  [CDRID], [Call_Id], [AttemptDateTime], [ConnectDateTime], [DisconnectDateTime], [DurationInSeconds], [DisconnectReason], [CallProgressState], 
+		[SubscriberAccountTypeId], [SubscriberAccountId], [FinancialAccountId], [ServiceTypeId], [TrafficDirection], [InitiationCallType], [TerminationCallType], 
+		[Calling], [Called], [InterconnectOperatorId], [SubscriberZoneId], [Zone], [NationalCallType], [QueueItemId], [SaleRateValueRuleId], [SaleRateTypeRuleId], 
+		[SaleTariffRuleId], [SaleExtraChargeRuleId], [Extension], Case When [DurationInSeconds] > 0 Then 1 Else 0 END As SuccessfulCall
+FROM    [Retail_CDR].[BillingCDR_Main] WITH (NOLOCK)
 UNION ALL
-SELECT        [CDRID], [Call_Id], [AttemptDateTime], [ConnectDateTime], [DisconnectDateTime], [DurationInSeconds], [DisconnectReason], [CallProgressState], [SubscriberAccountTypeId], [SubscriberAccountId], 
-                         [FinancialAccountId], [ServiceTypeId], [TrafficDirection], [InitiationCallType], [TerminationCallType], [Calling], [Called], [InterconnectOperatorId], [SubscriberZoneId], [Zone], [NationalCallType], [QueueItemId], 
-                         [SaleRateValueRuleId], [SaleRateTypeRuleId], [SaleTariffRuleId], [SaleExtraChargeRuleId], [Extension]
-FROM            Retail_CDR.BillingCDR_Invalid WITH (NOLOCK)
+SELECT  [CDRID], [Call_Id], [AttemptDateTime], [ConnectDateTime], [DisconnectDateTime], [DurationInSeconds], [DisconnectReason], [CallProgressState], 
+		[SubscriberAccountTypeId], [SubscriberAccountId], [FinancialAccountId], [ServiceTypeId], [TrafficDirection], [InitiationCallType], [TerminationCallType], 
+		[Calling], [Called], [InterconnectOperatorId], [SubscriberZoneId], [Zone], [NationalCallType], [QueueItemId], [SaleRateValueRuleId], [SaleRateTypeRuleId], 
+		[SaleTariffRuleId], [SaleExtraChargeRuleId], [Extension], Case When [DurationInSeconds] > 0 Then 1 Else 0 END As SuccessfulCall
+FROM    [Retail_CDR].[BillingCDR_Invalid] WITH (NOLOCK)
 UNION ALL
-SELECT        [CDRID], [Call_Id], [AttemptDateTime], [ConnectDateTime], [DisconnectDateTime], [DurationInSeconds], [DisconnectReason], [CallProgressState], [SubscriberAccountTypeId], [SubscriberAccountId], 
-                         [FinancialAccountId], [ServiceTypeId], [TrafficDirection], [InitiationCallType], [TerminationCallType], [Calling], [Called], [InterconnectOperatorId], [SubscriberZoneId], [Zone], [NationalCallType], [QueueItemId], 
-                         [SaleRateValueRuleId], [SaleRateTypeRuleId], [SaleTariffRuleId], [SaleExtraChargeRuleId], [Extension]
-FROM            Retail_CDR.BillingCDR_Failed WITH (NOLOCK)
+SELECT  [CDRID], [Call_Id], [AttemptDateTime], [ConnectDateTime], [DisconnectDateTime], [DurationInSeconds], [DisconnectReason], [CallProgressState], 
+		[SubscriberAccountTypeId], [SubscriberAccountId], [FinancialAccountId], [ServiceTypeId], [TrafficDirection], [InitiationCallType], [TerminationCallType], 
+		[Calling], [Called], [InterconnectOperatorId], [SubscriberZoneId], [Zone], [NationalCallType], [QueueItemId], [SaleRateValueRuleId], [SaleRateTypeRuleId], 
+		[SaleTariffRuleId], [SaleExtraChargeRuleId], [Extension], Case When [DurationInSeconds] > 0 Then 1 Else 0 END As SuccessfulCall
+FROM    [Retail_CDR].[BillingCDR_Failed] WITH (NOLOCK)
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 1, @level0type = N'SCHEMA', @level0name = N'Retail_CDR', @level1type = N'VIEW', @level1name = N'vw_BillingCDR';
 
