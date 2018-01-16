@@ -510,7 +510,7 @@ namespace Vanrise.Common
                         Tindex++;
                 }
 
-                while (Qindex < QlistCount && Qitem.EED.VRLessThanOrEqual(Titem.BED))
+                while (Qindex < QlistCount && Qitem != null && Qitem.EED.VRLessThanOrEqual(Titem.BED))
                 {
                     Qindex++;
                     Qitem = Qindex < QlistCount ? Qlist[Qindex] : null;
