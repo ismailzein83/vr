@@ -510,13 +510,13 @@ namespace Vanrise.Common
                         Tindex++;
                 }
 
-                while (Qindex < QlistCount && Qitem != null && Qitem.EED.VRLessThanOrEqual(Titem.BED))
+                while (Qindex < QlistCount && Qitem.EED.VRLessThanOrEqual(Titem.BED))
                 {
                     Qindex++;
                     Qitem = Qindex < QlistCount ? Qlist[Qindex] : null;
                 }
 
-                while (Tindex < TlistCount && Titem.EED.VRLessThanOrEqual(Qitem.BED))
+                while (Tindex < TlistCount && Qitem != null && Titem.EED.VRLessThanOrEqual(Qitem.BED))
                 {
                     Tindex++;
                     Titem = Tindex < TlistCount ? Tlist[Tindex] : null;
@@ -647,7 +647,7 @@ namespace Vanrise.Common
             string weekOfYearAsString = weekOfYear.ToString();
             if (weekOfYearAsString.Length == 1)
                 weekOfYearAsString = String.Format("0{0}", weekOfYearAsString);
-            
+
             int year = dateTime.Year;
             if (weekOfYear == 1 && dateTime.Month == 12)//Input -> Monday 12/31/2007; Output -> 1 of 2008
                 year++;
