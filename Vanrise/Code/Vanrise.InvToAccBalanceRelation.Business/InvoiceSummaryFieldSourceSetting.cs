@@ -51,21 +51,22 @@ namespace Vanrise.InvToAccBalanceRelation.Business
         {
             List<AccountBalanceInvoiceInfo> accountBalanceInvoicesInfo;
 
-            Dictionary<InvoiceByPartnerInvoiceType, List<Invoice.Entities.Invoice>> invoices = GetUnPaidInvoices(context.AccountBalances, context.AccountTypeId, context.AccountTypeSettings, out accountBalanceInvoicesInfo);
+            IEnumerable<InvoiceByPartnerInfo> invoices = GetLastInvoicesByPartners(context.AccountBalances, context.AccountTypeId, context.AccountTypeSettings, out accountBalanceInvoicesInfo);
 
             Dictionary<string, InvoiceFieldsData> invoiceFieldsByAccountId = new Dictionary<string, InvoiceFieldsData>();
             if (invoices != null && invoices.Count() > 0)
             {
                 List<BillingTransactionByTime> billingTransactionsByTime = new List<BillingTransactionByTime>();
+                List<AccountUsageByTime> accountUsagesByTime = new List<AccountUsageByTime>();
                 foreach (var accountBalanceInvoiceInfo in accountBalanceInvoicesInfo)
                 {
-                    List<Invoice.Entities.Invoice> accountInvoices = new List<Invoice.Entities.Invoice>();
+                    List<InvoiceByPartnerInfo> accountInvoices = new List<InvoiceByPartnerInfo>();
                     foreach (var item in accountBalanceInvoiceInfo.InvoiceByPartnerInvoiceTypes)
                     {
-                        List<Invoice.Entities.Invoice> invoicesPerType;
-                        if (invoices.TryGetValue(item, out invoicesPerType))
+                        InvoiceByPartnerInfo invoicePerType = invoices.FindRecord(x => x.PartnerId == item.PartnerId && x.InvoiceTypeId == item.InvoiceTypeId);
+                        if (invoicePerType != null)
                         {
-                            accountInvoices.AddRange(invoicesPerType);
+                            accountInvoices.Add(invoicePerType);
                         }
                     }
                     if (accountInvoices.Count > 0)
@@ -73,10 +74,16 @@ namespace Vanrise.InvToAccBalanceRelation.Business
                         var invoice = accountInvoices.OrderBy(x => x.ToDate).Last();
                         if (this.CalculateDueAmount)
                         {
+                            var datePeriod = invoice.ToDate.AddDays(1).Date;
                             billingTransactionsByTime.Add(new BillingTransactionByTime
                             {
                                 AccountId = accountBalanceInvoiceInfo.AccountBalance.AccountId,
-                                TransactionTime = invoice.DueDate
+                                TransactionTime = datePeriod
+                            });
+                            accountUsagesByTime.Add(new AccountUsageByTime
+                            {
+                                AccountId = accountBalanceInvoiceInfo.AccountBalance.AccountId,
+                                EndPeriod = datePeriod
                             });
                         }
                         invoiceFieldsByAccountId.Add(accountBalanceInvoiceInfo.AccountBalance.AccountId, new InvoiceFieldsData
@@ -99,9 +106,19 @@ namespace Vanrise.InvToAccBalanceRelation.Business
                     {
                         foreach (var item in billingTransactions)
                         {
-                            UpdatBillingTransactionValues(context.AccountTypeId, amountsByAccount, item);
+                            UpdatBillingTransactionValues(context.AccountTypeId, amountsByAccount, item.TransactionTypeId, item.AccountId, item.TransactionTime, item.Amount, item.CurrencyId);
                         }
-
+                    }
+                    var accountUsages = GetAccountUsagesByTransactionTypes(context.AccountTypeId, accountUsagesByTime);
+                    if (accountUsages != null)
+                    {
+                        foreach (var item in accountUsages)
+                        {
+                            UpdatBillingTransactionValues(context.AccountTypeId, amountsByAccount, item.TransactionTypeId, item.AccountId, item.PeriodEnd, item.UsageBalance, item.CurrencyId);
+                        }
+                    }
+                    if(amountsByAccount != null)
+                    {
                         foreach (var amountByAccount in amountsByAccount)
                         {
                             InvoiceFieldsData invoiceFieldsData;
@@ -133,24 +150,24 @@ namespace Vanrise.InvToAccBalanceRelation.Business
             return null;
         }
 
-        private void UpdatBillingTransactionValues(Guid accountTypeId, Dictionary<string, decimal> existingRecords, BillingTransactionMetaData billingTransaction)
+        private void UpdatBillingTransactionValues(Guid accountTypeId, Dictionary<string, decimal> existingRecords, Guid transactionTypeId, string accountId, DateTime transactionTime, decimal transactionAmount, int transactionCurrencyId)
         {
-            var transactionType = billingTransactionTypeManager.GetBillingTransactionType(billingTransaction.TransactionTypeId);
-            var accountInfo = accountManager.GetAccountInfo(accountTypeId, billingTransaction.AccountId);
-            decimal amount = billingTransaction.Amount;
-            if (billingTransaction.CurrencyId != accountInfo.CurrencyId)
-                amount = ConvertValueToCurrency(billingTransaction.Amount, billingTransaction.CurrencyId, accountInfo.CurrencyId, billingTransaction.TransactionTime);
+            var transactionType = billingTransactionTypeManager.GetBillingTransactionType(transactionTypeId);
+            var accountInfo = accountManager.GetAccountInfo(accountTypeId, accountId);
+            decimal amount = transactionAmount;
+            if (transactionCurrencyId != accountInfo.CurrencyId)
+                amount = ConvertValueToCurrency(transactionAmount, transactionCurrencyId, accountInfo.CurrencyId, transactionTime);
 
             decimal finalAmountValue;
-            if(existingRecords.TryGetValue(billingTransaction.AccountId, out finalAmountValue))
+            if (existingRecords.TryGetValue(accountId, out finalAmountValue))
             {
                 finalAmountValue += transactionType != null && transactionType.IsCredit ? amount : -amount;
-                existingRecords[billingTransaction.AccountId] = finalAmountValue;
+                existingRecords[accountId] = finalAmountValue;
             }
             else
             {
                 finalAmountValue = transactionType != null && transactionType.IsCredit ? amount : -amount;
-                existingRecords.Add(billingTransaction.AccountId, finalAmountValue);
+                existingRecords.Add(accountId, finalAmountValue);
             }
       
         }
@@ -158,7 +175,7 @@ namespace Vanrise.InvToAccBalanceRelation.Business
         {
             return currencyExchangeRateManager.ConvertValueToCurrency(amount, fromCurrencyId, currencyId, effectiveOn);
         }
-        private Dictionary<InvoiceByPartnerInvoiceType, List<Invoice.Entities.Invoice>> GetUnPaidInvoices(IEnumerable<AccountBalance.Entities.AccountBalance> accountBalances, Guid accountTypeId, AccountTypeSettings accountTypeSettings, out  List<AccountBalanceInvoiceInfo> accountBalanceInvoicesInfo)
+        private IEnumerable<InvoiceByPartnerInfo> GetLastInvoicesByPartners(IEnumerable<AccountBalance.Entities.AccountBalance> accountBalances, Guid accountTypeId, AccountTypeSettings accountTypeSettings, out  List<AccountBalanceInvoiceInfo> accountBalanceInvoicesInfo)
         {
             InvoiceManager invoiceManager = new InvoiceManager();
             InvToAccBalanceRelationDefinitionManager invToAccBalanceRelationDefinitionManager = new InvToAccBalanceRelationDefinitionManager();
@@ -189,13 +206,18 @@ namespace Vanrise.InvToAccBalanceRelation.Business
                     }
                 }
             }
-            return invoiceManager.GetUnPaidPartnerInvoicesDic(partnerInvoiceTypes);
+            return invoiceManager.GetLastInvoicesByPartners(partnerInvoiceTypes);
 
         }
         private IEnumerable<BillingTransactionMetaData> GetBillingTransactionPaidData(Guid accountTypeId, List<BillingTransactionByTime> billingTransactionsByTime)
         {
             BillingTransactionManager billingTransactionManager = new BillingTransactionManager();
             return billingTransactionManager.GetBillingTransactionsByTransactionTypes(accountTypeId, billingTransactionsByTime, this.TransactionTypeIds);
+        }
+        private IEnumerable<AccountUsage> GetAccountUsagesByTransactionTypes(Guid accountTypeId, List<AccountUsageByTime> accountUsagesByTime)
+        {
+            AccountUsageManager accountUsageManager = new AccountUsageManager();
+            return accountUsageManager.GetAccountUsagesByTransactionTypes(accountTypeId, accountUsagesByTime, this.TransactionTypeIds);
         }
         private class InvoiceFieldsData
         {
