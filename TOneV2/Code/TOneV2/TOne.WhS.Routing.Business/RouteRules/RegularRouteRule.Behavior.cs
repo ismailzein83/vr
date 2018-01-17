@@ -57,27 +57,30 @@ namespace TOne.WhS.Routing.Business
 
         public override void GetQualityConfigurationIds(IRouteRuleQualityContext context)
         {
-            OptionOrderByQuality optionOrderByQuality;
             List<Guid> qualityConfigurationIds = new List<Guid>();
 
-            foreach (var optionOrderSetting in OptionOrderSettings)
+            if (OptionOrderSettings != null)
             {
-                if (optionOrderSetting.ConfigId == OptionOrderByQuality.s_ConfigId)
+                foreach (var optionOrderSetting in OptionOrderSettings)
                 {
-                    optionOrderByQuality = optionOrderSetting.CastWithValidate<OptionOrderByQuality>("optionOrderSetting");
-                    if (optionOrderByQuality.QualityConfigurationIds == null || optionOrderByQuality.QualityConfigurationIds.Count == 0)
+                    if (optionOrderSetting.ConfigId == OptionOrderByQuality.s_ConfigId)
                     {
-                        context.IsDefault = true;
-                    }
-                    else
-                    {
-                        foreach (var qualityConfigurationId in optionOrderByQuality.QualityConfigurationIds)
+                        OptionOrderByQuality optionOrderByQuality = optionOrderSetting.CastWithValidate<OptionOrderByQuality>("optionOrderSetting");
+                        if (optionOrderByQuality.QualityConfigurationIds == null || optionOrderByQuality.QualityConfigurationIds.Count == 0)
                         {
-                            qualityConfigurationIds.Add(qualityConfigurationId);
+                            context.IsDefault = true;
+                        }
+                        else
+                        {
+                            foreach (var qualityConfigurationId in optionOrderByQuality.QualityConfigurationIds)
+                            {
+                                qualityConfigurationIds.Add(qualityConfigurationId);
+                            }
                         }
                     }
                 }
             }
+
             context.QualityConfigurationIds = qualityConfigurationIds.Count > 0 ? qualityConfigurationIds : null;
         }
 
@@ -355,7 +358,7 @@ namespace TOne.WhS.Routing.Business
             return options;
         }
 
-        private RouteOptionOrderExecutionContext ExecuteOptionOrderSettings<T>(IEnumerable<T> options, RoutingDatabase routingDatabase, RouteOptionOrderSettings optionOrderSettings) 
+        private RouteOptionOrderExecutionContext ExecuteOptionOrderSettings<T>(IEnumerable<T> options, RoutingDatabase routingDatabase, RouteOptionOrderSettings optionOrderSettings)
             where T : IRouteOptionOrderTarget
         {
             var optionOrderContext = new RouteOptionOrderExecutionContext
