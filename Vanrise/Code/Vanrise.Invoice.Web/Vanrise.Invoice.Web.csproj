@@ -235,6 +235,7 @@
     <Content Include="VR_Invoice\Directives\Extensions\VRObjectTypes\vr-invoice-invoicefieldpropertyevaluator.js" />
     <Content Include="VR_Invoice\Directives\Extensions\VRObjectTypes\vr-invoice-invoiceobjecttype.js" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\Templates\AutomaticInvoiceActionsPartTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\Templates\MinAmountPartTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\Templates\InitialSequenceValuePartTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\Templates\FileNamePatternInvoiceSettingPartTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\Templates\SerialNumberPatternInvoiceSettingPartTemplate.html" />
@@ -242,6 +243,7 @@
     <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\Templates\AutomaticInvoiceSettingPartTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\Templates\DuePeriodPartTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\vr-invoice-invoicesetting-runtime-automaticinvoiceactionspart.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\vr-invoice-invoicesetting-runtime-minamountinvoicesettingpart.js" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\vr-invoice-invoicesetting-runtime-initialsequencevaluepart.js" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\vr-invoice-invoicesetting-runtime-filenamepatterninvoicesettingpart.js" />
     <Content Include="VR_Invoice\Directives\InvoiceSetting\MainExtensions\vr-invoice-invoicesetting-runtime-serialnumberpatterninvoicesettingpart.js" />

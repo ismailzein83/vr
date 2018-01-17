@@ -81,6 +81,21 @@ namespace Vanrise.Invoice.Business
                 return duePeriod.DuePeriod;
             return default(int);
         }
+        public decimal? GetPartnerMinAmount(Guid invoiceTypeId, string partnerId)
+        {
+            var invoicePartnerManager = GetPartnerManager(invoiceTypeId);
+            var partnerSettings = GetInvoicePartnerSetting(invoiceTypeId, partnerId);
+            InvoicePartnerSettingPartContext invoicePartnerSettingPartContext = new InvoicePartnerSettingPartContext
+            {
+                InvoiceTypeId = invoiceTypeId,
+                PartnerId = partnerId,
+                InvoiceSettingId = partnerSettings.InvoiceSetting.InvoiceSettingId
+            };
+            var minAmount = invoicePartnerManager.GetInvoicePartnerSettingPart<MinAmountInvoiceSettingPart>(invoicePartnerSettingPartContext);
+            if (minAmount != null)
+                return minAmount.MinAmount;
+            return default(int?);
+        }
         public string GetPartnerSerialNumberPattern(Guid invoiceTypeId, string partnerId)
         {
             var invoicePartnerManager = GetPartnerManager(invoiceTypeId);

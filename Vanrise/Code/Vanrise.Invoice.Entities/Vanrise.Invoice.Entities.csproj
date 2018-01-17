@@ -77,6 +77,7 @@
     <Compile Include="InvoicePartner\InvoiceAccountData.cs" />
     <Compile Include="InvoiceSetting\InvoiceSettingPartsInfoFilter.cs" />
     <Compile Include="InvoiceSetting\InvoiceSettingPartDefinitionInfo.cs" />
+    <Compile Include="InvoiceType\InvoiceSettingParts\MinAmountInvoiceSettingPart.cs" />
     <Compile Include="Invoice\InvoiceByPartnerInfo.cs" />
     <Compile Include="Invoice\InvoiceGenerationDraft.cs" />
     <Compile Include="Invoice\InvoiceGenerationDraftQuery.cs" />
