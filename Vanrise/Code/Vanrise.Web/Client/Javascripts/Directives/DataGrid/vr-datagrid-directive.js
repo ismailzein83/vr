@@ -664,7 +664,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     var mh = $(div).css('max-height');
                     var dataSourceLength = ctrl.isMainItemsShown ? ctrl.datasource.length : ctrl.updateItems.length;
                     mh = mh && parseInt(mh.substring(0, mh.length - 1)) || 0;
-                    if (dataSourceLength * 25 < mh || dataSourceLength == 0) {
+                    if (dataSourceLength * 25 < mh || dataSourceLength == 0 || mh == 0) {
                         $(div).css({ "overflow-y": 'auto', "overflow-x": 'hidden' });
 
                         if (VRLocalizationService.isLocalizationRTL())
