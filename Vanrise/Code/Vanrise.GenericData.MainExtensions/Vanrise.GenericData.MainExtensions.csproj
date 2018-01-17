@@ -68,6 +68,7 @@
     <Compile Include="DataStorages\SQLDataRecordStorageSettings.cs" />
     <Compile Include="DataStorages\SQLDataRecordStorageState.cs" />
     <Compile Include="DataStorages\StaticSQLDataStoreSettings.cs" />
+    <Compile Include="DataRecordFields\FieldGuidType.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEActions\EditGenericBEAction.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEViewDefinition\HistoryGenericBEDefinitionView.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\GenericEditorDefinitionSetting.cs" />

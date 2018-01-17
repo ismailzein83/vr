@@ -314,6 +314,12 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Dictionary\vr-genericdata-fieldtype-dictionary-rulefiltereditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Dictionary\vr-genericdata-fieldtype-dictionary-runtimeeditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Dictionary\vr-genericdata-fieldtype-dictionary.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Guid\Templates\GuidFieldTypeRuleFilterEditor.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Guid\Templates\GuidFieldTypeTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Guid\vr-genericdata-fieldtype-guid-filtereditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Guid\vr-genericdata-fieldtype-guid-rulefiltereditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Guid\vr-genericdata-fieldtype-guid-runtimeeditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Guid\vr-genericdata-fieldtype-guid.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Common\Templates\EmptyDefinitionSettingsTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Common\vr-genericdata-genericruledefinitionsettings-tax.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Common\vr-genericdata-genericruledefinitionsettings-extracharge.js" />

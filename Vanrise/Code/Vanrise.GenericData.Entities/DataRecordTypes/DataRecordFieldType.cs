@@ -27,6 +27,11 @@ namespace Vanrise.GenericData.Entities
 
         public abstract RecordFilter ConvertToRecordFilter(string fieldName, List<Object> filterValues);
 
+        public virtual bool TryGenerateUniqueIdentifier(out Guid? uniqueIdentifier)
+        {
+            uniqueIdentifier = null;
+            return false;
+        }
         public virtual void SetExcelCellType(IDataRecordFieldTypeSetExcelCellTypeContext context)
         {
 
