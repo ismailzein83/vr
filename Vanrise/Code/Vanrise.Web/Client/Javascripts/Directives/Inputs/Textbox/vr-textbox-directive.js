@@ -252,14 +252,17 @@
 
                 var labelTemplate = '';
 
-                var label = "";
+                //var label = "";
 
-                if (attrs.label != undefined) {
-                    label = VRLocalizationService.getResourceValue(attrs.localizedlabel, attrs.label);
-                }
+                //if (attrs.label != undefined) {
+                //    label = VRLocalizationService.getResourceValue(attrs.localizedlabel, attrs.label);
+                //}
+
+                //if (attrs.label != undefined)
+                //    labelTemplate = '<vr-label>' + label + '</vr-label>';
 
                 if (attrs.label != undefined)
-                    labelTemplate = '<vr-label>' + label + '</vr-label>';
+                    labelTemplate = '<vr-label>{{ctrl.label}}</vr-label>';
                 var type = 'text';
                 if (attrs.type != undefined && attrs.type === TextboxTypeEnum.Password.name)
                     type = 'password';
