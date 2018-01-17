@@ -30,6 +30,12 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public void SavePriceList(ISalePricelistFileContext context)
         {
+            List<NewPriceList> newPriceLists = new List<NewPriceList>();
+            if (context.SalePriceLists != null)
+            {
+                var sellingProductPricelists = context.SalePriceLists.FindAllRecords(x => x.OwnerType == SalePriceListOwnerType.SellingProduct);
+                if (sellingProductPricelists != null) newPriceLists.AddRange(sellingProductPricelists);
+            }
             if (context.CustomerPriceListChanges != null && context.CustomerPriceListChanges.Any())
             {
                 var customerSellingProductManager = new CustomerSellingProductManager();
@@ -82,6 +88,7 @@ namespace TOne.WhS.BusinessEntity.Business
                             long fileId = AddPriceListFile(customerId, customerZoneNotifications, context.EffectiveDate, customerPriceList.PriceList.PriceListType.Value, salePricelistTemplateId, customerPriceList.CurrencyId, customerPriceList.PriceList.PriceListId);
                             customerPriceList.PriceList.FileId = fileId;
                             pricelistIds.Add(customerPriceList.PriceList.PriceListId);
+                            newPriceLists.Add(customerPriceList.PriceList);
                         }
                     }
 
@@ -92,7 +99,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 SaveChangesToDB(context.CustomerPriceListChanges, context.ProcessInstanceId);
                 BulkInsertSalePriceListSnapshot(saleCodes.Select(item => item.SaleCodeId).ToList(), pricelistIds);
             }
-            if (context.SalePriceLists != null) BulkInsertPriceList(context.SalePriceLists);
+            if (newPriceLists.Any()) BulkInsertPriceList(newPriceLists);
         }
 
         public List<StructuredCustomerPricelistChange> StructureCustomerPricelistChange(List<CustomerPriceListChange> customerPriceListChanges)
