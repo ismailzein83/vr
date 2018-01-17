@@ -12,6 +12,7 @@ using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Invoice.Entities;
 using Vanrise.Common;
+using Vanrise.Invoice.Business;
 namespace TOne.WhS.Invoice.Business.Extensions
 {
     public class CustomerInvoiceGenerator : InvoiceGenerator
@@ -22,7 +23,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
             List<string> listDimensions = new List<string> { "Customer", "SaleZone", "SaleCurrency", "SaleRate", "SaleRateType", "Supplier", "Country", "SupplierZone" };
             WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
             var financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(context.PartnerId));
-
+            PartnerManager partnerManager = new PartnerManager();
+            decimal? minAmount = partnerManager.GetPartnerMinAmount(context.InvoiceTypeId, context.PartnerId);
             var customerGenerationCustomSectionPayload = context.CustomSectionPayload as CustomerGenerationCustomSectionPayload;
             int? timeZoneId = null;
             decimal? commission = null;
@@ -84,8 +86,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic, taxItemDetails);
             #region BuildCustomerInvoiceDetails
-            CustomerInvoiceDetails customerInvoiceDetails = BuilCustomerInvoiceDetails(itemSetNamesDic, partnerType, context.FromDate, context.ToDate, commission, commissionType);
-            if (customerInvoiceDetails != null && customerInvoiceDetails.SaleAmount != 0)
+            CustomerInvoiceDetails customerInvoiceDetails = BuilCustomerInvoiceDetails(itemSetNamesDic, partnerType, context.FromDate, context.ToDate, commission, commissionType, minAmount);
+
+
+
+            if (customerInvoiceDetails != null && ((minAmount.HasValue && customerInvoiceDetails.SaleAmount >= minAmount.Value) || (!minAmount.HasValue && customerInvoiceDetails.SaleAmount != 0)))
             {
                 customerInvoiceDetails.TimeZoneId = timeZoneId;
                 customerInvoiceDetails.Commission = commission;
@@ -153,7 +158,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
 
         }
-        private CustomerInvoiceDetails BuilCustomerInvoiceDetails(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, string partnerType, DateTime fromDate, DateTime toDate,decimal? commission, CommissionType? commissionType)
+        private CustomerInvoiceDetails BuilCustomerInvoiceDetails(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, string partnerType, DateTime fromDate, DateTime toDate, decimal? commission, CommissionType? commissionType, decimal? minAmount)
         {
             CurrencyManager currencyManager = new CurrencyManager();
             CustomerInvoiceDetails customerInvoiceDetails = null;
@@ -198,7 +203,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     };
                 }
             }
-            if (customerInvoiceDetails != null && customerInvoiceDetails.SaleAmount > 0)
+            if (customerInvoiceDetails != null && ((minAmount.HasValue && customerInvoiceDetails.SaleAmount >= minAmount.Value) || (!minAmount.HasValue && customerInvoiceDetails.SaleAmount != 0)))
             {
                 customerInvoiceDetails.OriginalSaleCurrency = currencyManager.GetCurrencySymbol(customerInvoiceDetails.OriginalSaleCurrencyId);
                 customerInvoiceDetails.SaleCurrency = currencyManager.GetCurrencySymbol(customerInvoiceDetails.SaleCurrencyId);
@@ -337,7 +342,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     MeasureValue billingPeriodFrom = GetMeasureValue(analyticRecord, "BillingPeriodFrom");
                     #endregion
                     var saleNetValue = Convert.ToDecimal(saleNet == null ? 0.0 : saleNet.Value ?? 0.0);
-                    if(saleNetValue != 0)
+                    if (saleNetValue != 0)
                     {
                         InvoiceBillingRecord invoiceBillingRecord = new InvoiceBillingRecord
                         {
