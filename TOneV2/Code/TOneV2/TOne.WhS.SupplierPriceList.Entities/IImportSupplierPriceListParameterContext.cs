@@ -13,13 +13,12 @@ namespace TOne.WhS.SupplierPriceList.Entities
         DateTime CodeEffectiveDate { get; }
 
         bool ProcessHasChanges { get; }
-
+        int GetPriceListCurrencyId();
         void SetToTrueProcessHasChangesWithLock();
         int GetImportedRateCurrencyId(ImportedRate importedRate);
         decimal GetMaximumRateConverted(int currencyId);
-
         decimal MaximumRate { get; }
-
+        
         DateTime RetroactiveDate { get; }
         string DateFormat { get; }
     }

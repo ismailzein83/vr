@@ -140,6 +140,10 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         {
             return _priceListCurrencyId;
         }
+        public int GetPriceListCurrencyId()
+        {
+            return PriceListCurrencyId;
+        }
         public void SetDateMembers(int supplierId, DateTime priceListDate)
         {
             int effectiveDateDayOffset = new TOne.WhS.BusinessEntity.Business.CarrierAccountManager().GetSupplierEffectiveDateDayOffset(supplierId);

@@ -49,7 +49,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             if (invalidCountryNames.Count > 0)
             {
                 currencyManager.GetCurrencySymbol(rateToChangeCurrencyId);
-                context.Message = string.Format("New rates of following sold country(ies) are greater than maximum rate '{0} {1}': {2}", convertedMaximumRate, currencyManager.GetCurrencySymbol(rateToChangeCurrencyId), string.Join(", ", invalidCountryNames));
+                context.Message = string.Format("New rates of following sold country(ies) are greater than maximum rate '{0} ({1})': {2}", convertedMaximumRate, currencyManager.GetCurrencySymbol(rateToChangeCurrencyId), string.Join(", ", invalidCountryNames));
                 return false;
             }
 
