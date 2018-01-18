@@ -16,8 +16,10 @@ BEGIN
 
 		SELECT ID, AccountBEDefinitionID, AccountID, StatusId, PreviousStatusID, StatusChangedDate 
 		FROM [Retail_BE].AccountStatusHistory 
-		WHERE StatusChangedDate > @StatusChangedDate 
+		WHERE 
+		AccountBEDefinitionID = @AccountBEDefinitionID 
 		AND AccountID IN (SELECT AccountId FROM @AccountIdsTable)
+		AND StatusChangedDate > @StatusChangedDate
 		AND ISNULL(IsDeleted,0) = 0
 	END
 END
