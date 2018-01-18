@@ -44,8 +44,8 @@ app.service('VR_GenericData_GenericBEActionService',
                             genericBusinessEntityId: genericBusinessEntityId,
                             genericBEAction: genericBEAction,
                             onItemUpdated: function (updatedItem) {
-                             //   VR_GenericData_GenericBEService.defineGenericBEViewTabs(businessEntityDefinitionId, updatedItem, gridAPI, genericBEGridViews, idFieldType);
-                                defineGenericBEMenuActions(businessEntityDefinitionId, updatedItem, gridAPI, genericBEActions, genericBEGridActions, idFieldType);
+                                VR_GenericData_GenericBusinessEntityService.defineGenericBEViewTabs(businessEntityDefinitionId, updatedItem, gridAPI, genericBEGridViews, idFieldType);
+                                defineGenericBEMenuActions(businessEntityDefinitionId, updatedItem, gridAPI, genericBEActions, genericBEGridActions, genericBEGridViews, idFieldType);
                                 gridAPI.itemUpdated(updatedItem);
                             }
                         };

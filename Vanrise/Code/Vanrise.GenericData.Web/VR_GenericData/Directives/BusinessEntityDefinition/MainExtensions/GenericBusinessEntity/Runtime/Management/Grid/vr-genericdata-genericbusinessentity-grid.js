@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericBusinessEntityGridDirective.$inject = ['VR_GenericData_GenericBEDefinitionAPIService', 'VRNotificationService', 'VR_GenericData_GenericBusinessEntityAPIService', 'VRUIUtilsService', 'UtilsService','VR_GenericData_GenericBEActionService'];
+    GenericBusinessEntityGridDirective.$inject = ['VR_GenericData_GenericBEDefinitionAPIService', 'VRNotificationService', 'VR_GenericData_GenericBusinessEntityAPIService', 'VRUIUtilsService', 'UtilsService', 'VR_GenericData_GenericBEActionService', 'VR_GenericData_GenericBusinessEntityService'];
 
-    function GenericBusinessEntityGridDirective(VR_GenericData_GenericBEDefinitionAPIService, VRNotificationService, VR_GenericData_GenericBusinessEntityAPIService, VRUIUtilsService, UtilsService, VR_GenericData_GenericBEActionService) {
+    function GenericBusinessEntityGridDirective(VR_GenericData_GenericBEDefinitionAPIService, VRNotificationService, VR_GenericData_GenericBusinessEntityAPIService, VRUIUtilsService, UtilsService, VR_GenericData_GenericBEActionService, VR_GenericData_GenericBusinessEntityService) {
         return {
             restrict: 'E',
             scope: {
@@ -38,13 +38,19 @@
                 $scope.scopeModel = {};
                 $scope.scopeModel.columns = [];
                 //$scope.scopeModel.menuActions = [];
-
-                $scope.scopeModel.menuActions = function (genericBusinessEntity) {
-                    var menuActions = [];
+                $scope.scopeModel.showDrillDown = function() {
+                    if(genericBEGridViews == undefined || genericBEGridViews.length == 0)
+                     {
+                        return false;
+                }
+                    return true;
+                };
+               $scope.scopeModel.menuActions = function (genericBusinessEntity) {
+                    var menuActions =[];
                     if (genericBusinessEntity.menuActions != undefined) {
                         for (var i = 0; i < genericBusinessEntity.menuActions.length; i++)
                             menuActions.push(genericBusinessEntity.menuActions[i]);
-                    }
+               }
 
                     return menuActions;
                 };
@@ -62,7 +68,7 @@
                         if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {
                                 var genericBusinessEntity = response.Data[i];
-                                VR_GenericData_GenericBEService.defineGenericBEViewTabs(businessEntityDefinitionId, genericBusinessEntity, gridAPI, genericBEGridViews, idFieldType);
+                                VR_GenericData_GenericBusinessEntityService.defineGenericBEViewTabs(businessEntityDefinitionId, genericBusinessEntity, gridAPI, genericBEGridViews, idFieldType);
                                 VR_GenericData_GenericBEActionService.defineGenericBEMenuActions(businessEntityDefinitionId, genericBusinessEntity, gridAPI, genericBEActions, genericBEGridActions,genericBEGridViews, idFieldType);
                             }
                         }
@@ -166,7 +172,7 @@
                 };
 
                 api.onGenericBEAdded = function (addedBusinessEntity) {
-                    VR_GenericData_GenericBEService.defineGenericBEViewTabs(businessEntityDefinitionId, addedBusinessEntity, gridAPI, genericBEGridViews, idFieldType);
+                    VR_GenericData_GenericBusinessEntityService.defineGenericBEViewTabs(businessEntityDefinitionId, addedBusinessEntity, gridAPI, genericBEGridViews, idFieldType);
                     VR_GenericData_GenericBEActionService.defineGenericBEMenuActions(businessEntityDefinitionId, addedBusinessEntity, gridAPI, genericBEActions, genericBEGridActions,genericBEGridViews, idFieldType);
                     gridAPI.itemAdded(addedBusinessEntity);
                 };

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    GenericBusinessEntityService.$inject = ['VR_GenericData_GenericBusinessEntityAPIService', 'VRModalService', 'VRNotificationService', 'VRCommon_ObjectTrackingService'];
+    GenericBusinessEntityService.$inject = ['VR_GenericData_GenericBusinessEntityAPIService', 'VRModalService', 'VRNotificationService', 'VRCommon_ObjectTrackingService', 'UtilsService', 'VRUIUtilsService'];
 
-    function GenericBusinessEntityService(VR_GenericData_GenericBusinessEntityAPIService, VRModalService, VRNotificationService, VRCommon_ObjectTrackingService) {
+    function GenericBusinessEntityService(VR_GenericData_GenericBusinessEntityAPIService, VRModalService, VRNotificationService, VRCommon_ObjectTrackingService, UtilsService, VRUIUtilsService) {
         var drillDownDefinitions = [];
         return ({
             addGenericBusinessEntity: addGenericBusinessEntity,
@@ -91,7 +91,7 @@
             }
             function setDrillDownTabs() {
                 var drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI);
-                drillDownManager.setDrillDownExtensionObject(account);
+                drillDownManager.setDrillDownExtensionObject(genericBusinessEntity);
             }
         }
 

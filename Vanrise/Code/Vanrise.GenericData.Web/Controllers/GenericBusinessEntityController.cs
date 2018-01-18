@@ -26,8 +26,9 @@ namespace Vanrise.GenericData.Web.Controllers
 
         [HttpGet]
         [Route("GetGenericBusinessEntityEditorRuntime")]
-        public GenericBusinessEntityRuntimeEditor GetGenericBusinessEntityEditorRuntime(Guid businessEntityDefinitionId,long? genericBusinessEntityId = null)
+        public GenericBusinessEntityRuntimeEditor GetGenericBusinessEntityEditorRuntime(Guid businessEntityDefinitionId,[FromUri] Object genericBusinessEntityId)
         {
+            genericBusinessEntityId = genericBusinessEntityId as System.IConvertible != null ? genericBusinessEntityId : null;
             return _manager.GetGenericBusinessEntityEditorRuntime(businessEntityDefinitionId, genericBusinessEntityId);
         }
         ////[HttpGet]

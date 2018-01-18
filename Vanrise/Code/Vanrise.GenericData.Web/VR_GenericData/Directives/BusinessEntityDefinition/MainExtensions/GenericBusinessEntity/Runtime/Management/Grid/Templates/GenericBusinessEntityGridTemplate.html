@@ -4,7 +4,7 @@
              menuactions="scopeModel.menuActions"
              pagingtype="'Pager'"
              idfield="{{scopeModel.idFieldName}}"
-             enableautoexport="true">
+             showexpand="scopeModel.showDrillDown">
     <vr-datagridcolumn ng-repeat="column in scopeModel.columns" columnattributes="column"></vr-datagridcolumn>
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>

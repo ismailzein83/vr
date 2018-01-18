@@ -17,7 +17,7 @@ namespace Vanrise.GenericData.Entities
     }
     public class GenericBusinessEntityToUpdate : GenericBusinessEntity
     {
-        public long GenericBusinessEntityId { get; set; }
+        public Object GenericBusinessEntityId { get; set; }
         public Guid BusinessEntityDefinitionId { get; set; }
 
     }

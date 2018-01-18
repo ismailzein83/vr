@@ -239,27 +239,27 @@ namespace Vanrise.GenericData.Entities
             }
         }
     }
-    public class GuidRecordFilter : RecordFilter
-    {
-        public Guid GuidValue { get; set; }
+    //public class GuidRecordFilter : RecordFilter
+    //{
+    //    public Guid GuidValue { get; set; }
 
-        public Guid? ValueParameterId { get; set; }
+    //    public Guid? ValueParameterId { get; set; }
 
-        public override string GetDescription(IRecordFilterGetDescriptionContext context)
-        {
-            return string.Format(" {0} {1} ", context.GetFieldTitle(FieldName), context.GetFieldValueDescription(FieldName, GuidValue));
-        }
+    //    public override string GetDescription(IRecordFilterGetDescriptionContext context)
+    //    {
+    //        return string.Format(" {0} {1} ", context.GetFieldTitle(FieldName), context.GetFieldValueDescription(FieldName, GuidValue));
+    //    }
 
-        public override void SetValueFromParameters(IRecordFilterSetValueFromParametersContext context)
-        {
-            if (this.ValueParameterId.HasValue)
-            {
-                dynamic parameterValue;
-                if (context.TryGetParameterValue(this.ValueParameterId.Value, out parameterValue))
-                    this.GuidValue = Guid.Parse(parameterValue.ToString());
-            }
-        }
-    }
+    //    public override void SetValueFromParameters(IRecordFilterSetValueFromParametersContext context)
+    //    {
+    //        if (this.ValueParameterId.HasValue)
+    //        {
+    //            dynamic parameterValue;
+    //            if (context.TryGetParameterValue(this.ValueParameterId.Value, out parameterValue))
+    //                this.GuidValue = Guid.Parse(parameterValue.ToString());
+    //        }
+    //    }
+    //}
     public enum ListRecordFilterOperator
     {
         [Description("Specific")]
