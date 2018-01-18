@@ -352,10 +352,10 @@ namespace Vanrise.Security.Business
             else
             {
                 User currentUser = GetUserbyId(userObject.UserId);
-                UserSetting setting = currentUser.Settings;
-                 if (setting == null)
+                UserSetting settings = currentUser.Settings;
+                 if (settings == null)
                       settings = new UserSetting();
-                setting.PhotoFileId = userObject.PhotoFileId;               
+                settings.PhotoFileId = userObject.PhotoFileId;               
                 updatedUser = new User()
                 {
                     UserId = userObject.UserId,
