@@ -20,7 +20,7 @@ namespace TOne.WhS.Sales.Business.Reader
 
         #endregion
 
-        public SaleRatesByZone GetZoneRates(SalePriceListOwnerType ownerType,int sellingProductId)
+        public SaleRatesByZone GetZoneRates(SalePriceListOwnerType ownerType, int sellingProductId)
         {
             return (ownerType == SalePriceListOwnerType.SellingProduct && _allSaleRatesByOwner != null && _allSaleRatesByOwner.SaleRatesByProduct != null) ? _allSaleRatesByOwner.SaleRatesByProduct.GetRecord(sellingProductId) : null;
         }
@@ -40,21 +40,35 @@ namespace TOne.WhS.Sales.Business.Reader
 
             IEnumerable<SaleRate> productRates = new SaleRateManager().GetExistingRatesByZoneIds(SalePriceListOwnerType.SellingProduct, sellingProductId, zoneIds, minimumDate);
 
-            foreach (var productRate in productRates)
+            if (productRates != null)
             {
-                DateTime zoneEffectiveDate;
-                if (!zoneEffectiveDatesByZoneId.TryGetValue(productRate.ZoneId, out zoneEffectiveDate))
-                    continue;
-                if (productRate.IsInTimeRange(zoneEffectiveDate) && productRate.RateTypeId == null)
+                foreach (var productRate in productRates)
                 {
-                    VRDictionary<int, SaleRatesByZone> saleRatesByOwnerTemp = saleRatesByOwner.SaleRatesByProduct;
-                    saleRateByZone = saleRatesByOwnerTemp.GetOrCreateItem(sellingProductId);
-                    saleRatePriceList = saleRateByZone.GetOrCreateItem(productRate.ZoneId);
-                    saleRatePriceList.Rate = productRate;
+                    DateTime zoneEffectiveDate;
+                    if (!zoneEffectiveDatesByZoneId.TryGetValue(productRate.ZoneId, out zoneEffectiveDate))
+                        continue;
+                    if (productRate.IsInTimeRange(zoneEffectiveDate))
+                    {
+                        VRDictionary<int, SaleRatesByZone> saleRatesByOwnerTemp = saleRatesByOwner.SaleRatesByProduct;
+                        saleRateByZone = saleRatesByOwnerTemp.GetOrCreateItem(sellingProductId);
+                        saleRatePriceList = saleRateByZone.GetOrCreateItem(productRate.ZoneId, () => { return new SaleRatePriceList() { RatesByRateType = new Dictionary<int, SaleRate>() }; });
+                        AddOwnerZoneRate(saleRatePriceList, productRate);
+                    }
                 }
             }
 
             return saleRatesByOwner;
+        }
+
+        private void AddOwnerZoneRate(SaleRatePriceList ownerZoneRates, SaleRate rate)
+        {
+            if (!rate.RateTypeId.HasValue)
+                ownerZoneRates.Rate = rate;
+            else
+            {
+                if (!ownerZoneRates.RatesByRateType.ContainsKey(rate.RateTypeId.Value))
+                    ownerZoneRates.RatesByRateType.Add(rate.RateTypeId.Value, rate);
+            }
         }
 
         #endregion
