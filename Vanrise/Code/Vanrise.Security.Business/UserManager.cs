@@ -315,6 +315,12 @@ namespace Vanrise.Security.Business
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
+            if (!Utilities.IsEmailValid(userObject.Email))
+            {
+                updateOperationOutput.Message = "Invalid Email Address.";
+                return updateOperationOutput;
+            }
+
             bool updateActionSucc;
             var cloudServiceProxy = GetCloudServiceProxy();
             User updatedUser = null;
