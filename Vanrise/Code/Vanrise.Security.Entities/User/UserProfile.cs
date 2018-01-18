@@ -10,5 +10,6 @@ namespace Vanrise.Security.Entities
     {
        public int UserId { get; set; }
        public string Name { get; set; }
+       public long? PhotoFileId { get; set; }
     }
 }

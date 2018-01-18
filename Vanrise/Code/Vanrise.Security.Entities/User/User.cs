@@ -40,5 +40,7 @@ namespace Vanrise.Security.Entities
     public class UserSetting
     {
         public Guid? LanguageId { get; set; }
+
+        public long? PhotoFileId { get; set; }
     }
 }

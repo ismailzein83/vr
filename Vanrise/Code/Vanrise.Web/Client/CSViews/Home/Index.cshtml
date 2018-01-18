@@ -36,7 +36,9 @@
 
                         <div class="dropdown" ng-mouseenter="showMenu($event)" ng-mouseleave="hideMenu($event)">
                             <div class="dropdown-toggle " id="dropdownMenuCu-test" aria-expanded="true" data-toggle="dropdown">
-                                <img src="Client/Images/member.png" class="vr-user-icon" />
+                                <div class="vr-user-icon">
+                                    <vr-preview-image height="26px" width="26px" value="userPhotoFileId" usericon="userPhotoFileId!=null"> </vr-preview-image>
+                                </div>
                                 <label class="vr-user-label">{{userDisplayName}}</label>
                                 <label class="vr-user-separator">|</label>
                             </div>

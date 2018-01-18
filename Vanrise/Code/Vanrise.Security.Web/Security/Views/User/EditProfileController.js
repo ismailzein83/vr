@@ -17,7 +17,8 @@
             $scope.save = function () {
                 var userProfileObject = {
                     UserId: $scope.userObject.UserId,
-                    Name: $scope.name
+                    Name: $scope.name,
+                    PhotoFileId: $scope.userPhoto != null ? $scope.userPhoto.fileId : null
                 };
 
                 return VR_Sec_UserAPIService.EditUserProfile(userProfileObject).then(function (response) {
@@ -51,6 +52,12 @@
         function fillScopeFromUserObj(userObject) {
             $scope.name = userObject.Name;
             $scope.userObject = userObject;
+            if (userObject.PhotoFileId != null)
+                $scope.userPhoto = {
+                    fileId: userObject.PhotoFileId
+                };
+            else
+                $scope.userPhoto = null;
         }
     }
 

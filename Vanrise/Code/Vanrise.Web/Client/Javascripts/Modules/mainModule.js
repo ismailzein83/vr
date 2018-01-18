@@ -6,8 +6,8 @@ var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCooki
 function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, BaseAPIService, VR_Sec_PermissionAPIService, notify, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService, VRNavigationService, UISettingsService, $location, $window, VRLocalizationService) {
     Waves.displayEffect();
 
-    $rootScope.$on("$destroy", function () {
-        $(window).off("resize.Viewport");
+      $rootScope.$on("$destroy", function () {
+          $(window).off("resize.Viewport");
     });
     $scope.$on("$destroy", function () {
         $(window).off("resize.Viewport");
@@ -23,6 +23,8 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
             return;
         }
         $scope.userDisplayName = userInfo.UserDisplayName;
+        $scope.userPhotoFileId = userInfo.PhotoFileId;
+
     };
     $rootScope.setLocalizationEnabled = function (isLocalizationEnabled) {
         if (isLocalizationEnabled != undefined) {
@@ -168,6 +170,7 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
             modalScope.title = "Edit my profile";
             modalScope.onProfileUpdated = function (response) {
                 $scope.userDisplayName = response.Name;
+                $scope.userPhotoFileId = response.PhotoFileId;
             };
         };
         VRModalService.showModal('/Client/Modules/Security/Views/User/EditProfile.html', null, modalSettings);
@@ -449,7 +452,7 @@ app.run(function ($rootScope, $window, UISettingsService) {
     else {
         registerToGoogleAccount();
     }
-    function registerToGoogleAccount() {
+        function registerToGoogleAccount() {
         var account = UISettingsService.getGoogleTrackingAccount();
         if (account != undefined && account != null)
             $window.ga('create', account, 'auto');

@@ -261,7 +261,12 @@ namespace Vanrise.Security.Business
                     EnabledTill = userObject.EnabledTill,
                     Description = userObject.Description,
                     TenantId = userObject.TenantId,
-                    ExtendedSettings = userObject.ExtendedSettings
+                    ExtendedSettings = userObject.ExtendedSettings,
+                    Settings = new UserSetting()
+                    {
+                        PhotoFileId = userObject.PhotoFileId
+                    }
+
                 };
                 insertActionSucc = dataManager.AddUser(addedUser, encryptedPassword, out userId);
 
@@ -346,6 +351,11 @@ namespace Vanrise.Security.Business
             }
             else
             {
+                User currentUser = GetUserbyId(userObject.UserId);
+                UserSetting setting = currentUser.Settings;
+                 if (setting == null)
+                      settings = new UserSetting();
+                setting.PhotoFileId = userObject.PhotoFileId;               
                 updatedUser = new User()
                 {
                     UserId = userObject.UserId,
@@ -354,7 +364,8 @@ namespace Vanrise.Security.Business
                     EnabledTill = userObject.EnabledTill,
                     Description = userObject.Description,
                     TenantId = userObject.TenantId,
-                    ExtendedSettings = userObject.ExtendedSettings
+                    ExtendedSettings = userObject.ExtendedSettings,
+                    Settings = settings 
                 };
                 IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
                 updateActionSucc = dataManager.UpdateUser(updatedUser);
@@ -792,8 +803,14 @@ namespace Vanrise.Security.Business
         }
         public Vanrise.Entities.UpdateOperationOutput<UserProfile> EditUserProfile(UserProfile userProfileObject)
         {
-            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-            bool updateActionSucc = dataManager.EditUserProfile(userProfileObject.Name, userProfileObject.UserId);
+            User currentUser = GetUserbyId(userProfileObject.UserId);
+            UserSetting setting = currentUser.Settings;
+            if (setting == null)
+                setting = new UserSetting();
+            setting.PhotoFileId = userProfileObject.PhotoFileId;
+
+            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();           
+            bool updateActionSucc = dataManager.EditUserProfile(userProfileObject.Name, userProfileObject.UserId, setting);
             UpdateOperationOutput<UserProfile> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<UserProfile>();
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             if (updateActionSucc)
@@ -808,7 +825,11 @@ namespace Vanrise.Security.Business
         public UserProfile LoadLoggedInUserProfile()
         {
             UserManager manager = new UserManager();
-            return new UserProfile { UserId = SecurityContext.Current.GetLoggedInUserId(), Name = manager.GetUserbyId(SecurityContext.Current.GetLoggedInUserId()).Name };
+            User currentUser = manager.GetUserbyId(SecurityContext.Current.GetLoggedInUserId());
+            long? photoFileId  = null;
+            if(currentUser.Settings!=null)
+                photoFileId = currentUser.Settings.PhotoFileId;
+            return new UserProfile { UserId = SecurityContext.Current.GetLoggedInUserId(), Name = currentUser.Name, PhotoFileId = photoFileId };
 
         }
 

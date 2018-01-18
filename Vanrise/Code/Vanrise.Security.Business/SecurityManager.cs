@@ -45,6 +45,7 @@ namespace Vanrise.Security.Business
                 authToken.Token = null;
                 authToken.UserName = user.Email;
                 authToken.UserDisplayName = user.Name;
+                authToken.PhotoFileId = user.Settings != null ? user.Settings.PhotoFileId : null;
                 authToken.ExpirationIntervalInMinutes = (int)Math.Ceiling(s_tokenExpirationInterval.TotalMinutes);
 
                 ConfigManager cManager = new ConfigManager();

@@ -76,7 +76,7 @@
                     return 'Passwords do not match';
                 return null;
             };
-            $scope.hideTenantSelectorIfNotNeeded = function () {
+            $scope.hideTenantSelectorIfNotNeeded = function () {                
                 $scope.showTenantSelector = false;
             };
         }
@@ -200,6 +200,13 @@
             $scope.scopemodel.email = userEntity.Email;
             $scope.scopemodel.description = userEntity.Description;
             $scope.scopemodel.enabledTill = userEntity.EnabledTill;
+
+            if (userEntity.Settings!= undefined && userEntity.Settings.PhotoFileId != null)
+                $scope.scopemodel.userPhoto = {
+                    fileId: userEntity.Settings.PhotoFileId
+                };
+            else
+                $scope.scopemodel.userPhoto = null;
         }
 
         function buildUserObjFromScope() {
@@ -210,7 +217,8 @@
                 Description: $scope.scopemodel.description,
                 EnabledTill: $scope.scopemodel.enabledTill,
                 TenantId: tenantSelectorAPI.getSelectedIds(),
-                GroupIds: groupSelectorAPI.getSelectedIds()
+                GroupIds: groupSelectorAPI.getSelectedIds(),
+                PhotoFileId: $scope.scopemodel.userPhoto != null ? $scope.scopemodel.userPhoto.fileId : null
             };
             if (!isEditMode)
                 userObject.Password = $scope.password;

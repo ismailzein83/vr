@@ -47,7 +47,7 @@ namespace Vanrise.Security.Data.SQL
         {
             object userID;
 
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Insert", out userID, userObject.Name, tempPassword, userObject.Email, userObject.Description, userObject.TenantId, userObject.EnabledTill, userObject.ExtendedSettings != null ? Vanrise.Common.Serializer.Serialize(userObject.ExtendedSettings) : null);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Insert", out userID, userObject.Name, tempPassword, userObject.Email, userObject.Description, userObject.TenantId, userObject.EnabledTill, userObject.ExtendedSettings != null ? Vanrise.Common.Serializer.Serialize(userObject.ExtendedSettings) : null, userObject.Settings != null ? Vanrise.Common.Serializer.Serialize(userObject.Settings) : null);
             insertedId = (recordesEffected > 0) ? (int)userID : -1;
 
             return (recordesEffected > 0);
@@ -55,7 +55,7 @@ namespace Vanrise.Security.Data.SQL
 
         public bool UpdateUser(User userObject)
         {
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Update", userObject.UserId, userObject.Name, userObject.Email, userObject.Description, userObject.TenantId, userObject.EnabledTill);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Update", userObject.UserId, userObject.Name, userObject.Email, userObject.Description, userObject.TenantId, userObject.EnabledTill, userObject.Settings != null ? Vanrise.Common.Serializer.Serialize(userObject.Settings) : null);
             return (recordesEffected > 0);
         }
 
@@ -113,9 +113,9 @@ namespace Vanrise.Security.Data.SQL
             return (recordsAffected > 0);
         }
 
-        public bool EditUserProfile(string name, int userId)
+        public bool EditUserProfile(string name, int userId ,UserSetting settings)
         {
-            return ExecuteNonQuerySP("sec.sp_User_UpdateName", userId, name) > 0;
+            return ExecuteNonQuerySP("sec.sp_User_UpdateProfile", userId, name, settings != null ? Vanrise.Common.Serializer.Serialize(settings) : null) > 0;
         }
 
         public bool AreUsersUpdated(ref object updateHandle)
@@ -139,7 +139,7 @@ namespace Vanrise.Security.Data.SQL
                 DisabledTill = GetReaderValue<DateTime?>(reader, "DisabledTill"),
                 Description = reader["Description"] as string,
                 TenantId = Convert.ToInt32(reader["TenantId"]),
-                Settings =  Vanrise.Common.Serializer.Deserialize<UserSetting>(reader["Settings"] as string),
+                Settings = Vanrise.Common.Serializer.Deserialize<UserSetting>(reader["Settings"] as string),
                 ExtendedSettings = reader["ExtendedSettings"] != DBNull.Value ? Vanrise.Common.Serializer.Deserialize<Dictionary<string, object>>(reader["ExtendedSettings"] as string) : null
             };
         }

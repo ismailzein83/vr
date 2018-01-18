@@ -23,6 +23,8 @@ namespace Vanrise.Security.Entities
 
         public Dictionary<string, Object> ExtendedSettings { get; set; }
 
+        public long? PhotoFileId { get; set; }
+
 
     }
 }

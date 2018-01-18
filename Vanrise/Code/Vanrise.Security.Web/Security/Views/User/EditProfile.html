@@ -5,6 +5,12 @@
                 <vr-columns width="1/2row">
                     <vr-textbox label="Name" localizedlabel="VRRes.Name.VREnd" value="name" isrequired></vr-textbox>
                 </vr-columns>
+                <vr-columns width="1/2row">
+                    <vr-fileupload tempfile="true" extension="images" value="userPhoto" label="User Photo"> </vr-fileupload>
+                </vr-columns>
+                <vr-columns width="1/2row">
+                    <vr-preview-image height="80px" width="80px" value="userPhoto.fileId"> </vr-preview-image>
+                </vr-columns>
             </vr-row>
         </vr-form>
     </vr-modalbody>

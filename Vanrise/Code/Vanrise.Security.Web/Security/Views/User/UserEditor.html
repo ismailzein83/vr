@@ -27,10 +27,15 @@
                 <vr-columns width="1/2row" ng-show="showTenantSelector">
                     <vr-sec-tenant-selector on-ready="onTenantSelectorReady" hideifnotneeded="hideTenantSelectorIfNotNeeded" isrequired="true" hideremoveicon vr-disabled="isInEditMode" customlabel="Tenant" localizedcustomlabel="VRRes.Tenant.VREnd"></vr-sec-tenant-selector>
                 </vr-columns>
-                <vr-columns width="1/2row" >
-                    <vr-sec-group-selector on-ready="onGroupSelectorReady" ismultipleselection ></vr-sec-group-selector>
+                <vr-columns width="1/2row">
+                    <vr-sec-group-selector on-ready="onGroupSelectorReady" ismultipleselection></vr-sec-group-selector>
+                </vr-columns>                
+                <vr-columns width="1/2row">
+                    <vr-fileupload tempfile="true" extension="images" value="scopemodel.userPhoto" label="User Photo"> </vr-fileupload>
                 </vr-columns>
-
+                <vr-columns width="1/2row">
+                    <vr-preview-image height="80px" width="80px" value="scopemodel.userPhoto.fileId"> </vr-preview-image>
+                </vr-columns>
             </vr-row>
         </vr-form>
     </vr-modalbody>
