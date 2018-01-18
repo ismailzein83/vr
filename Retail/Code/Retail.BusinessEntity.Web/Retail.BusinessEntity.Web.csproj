@@ -287,8 +287,10 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountExtraFieldDefinition\AccountExtraFieldDefinitionEditorController.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountExtraFieldDefinition\retail-be-accountextrafielddefinitions-management.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountExtraFieldDefinition\retail-be-accountextrafielddefinitionsettings.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountExtraFieldDefinition\retail-be-accountextrafield-portalaccount.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountExtraFieldDefinition\Templates\AccountExtraFieldDefinitionEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountExtraFieldDefinition\Templates\AccountExtraFieldDefinitionsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountExtraFieldDefinition\Templates\PortalAccountExtraFieldTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountGridDefinition\GridColumnDefinitionExportExcelEditorController.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountGridDefinition\retail-be-accountgriddefinitionexportexcel-management.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountGridDefinition\Templates\AccountGridDefinitionExportExcelManagementTemplate.html" />

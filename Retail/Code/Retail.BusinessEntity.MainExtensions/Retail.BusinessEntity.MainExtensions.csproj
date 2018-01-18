@@ -168,6 +168,7 @@
     <Compile Include="PackageDefinitionExtendedSettings\PricingPackageDefinitionSettings.cs" />
     <Compile Include="PackageTypes\RecurChargePackageDefinitionSettings.cs" />
     <Compile Include="PackageTypes\RecurChargePackageSettings.cs" />
+    <Compile Include="PortalAccountExtraFieldDefinition.cs" />
     <Compile Include="PortalAccount\PortalAccount.cs" />
     <Compile Include="AccountViews\AccountServices.cs" />
     <Compile Include="AccountViews\Actions.cs" />
@@ -196,6 +197,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="PortalAccount\PortalAccountController.cs" />
     <Compile Include="PortalAccount\PortalAccountManager.cs" />
+    <Compile Include="PrimaryPortalAccountGenericField.cs" />
     <Compile Include="ProductTypes\PostPaid\PostPaidDefinitionSettings.cs" />
     <Compile Include="ProductTypes\PostPaid\PostPaidSettings.cs" />
     <Compile Include="ProductTypes\PrePaid\PrePaidDefinitionSettings.cs" />
@@ -219,6 +221,7 @@
     <Compile Include="RecurringPeriods\WeeklyRecurringPeriodSettings.cs" />
     <Compile Include="RetailClientAccount\RetailClientAccountController.cs" />
     <Compile Include="RetailClientAccount\RetailClientAccountManager.cs" />
+    <Compile Include="SecondaryPortalAccountGenericField.cs" />
     <Compile Include="ServicePackageItem\ServicePackageChargingPolicyItem.cs" />
     <Compile Include="ServicePackageItem\ServicePackageVolumeItem.cs" />
     <Compile Include="AccountParts\AccountPartActivation.cs" />
