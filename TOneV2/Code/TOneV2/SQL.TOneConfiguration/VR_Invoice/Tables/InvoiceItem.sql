@@ -4,8 +4,11 @@
     [ItemSetName] NVARCHAR (255) NULL,
     [Name]        NVARCHAR (900) NOT NULL,
     [Details]     NVARCHAR (MAX) NULL,
+    [CreatedTime] DATETIME       CONSTRAINT [DF_InvoiceItem_CreatedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_InvoiceDetails] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 
