@@ -18,7 +18,6 @@ namespace TOne.WhS.Sales.Business.Reader
 
         public SaleRateReadRPChanges(IEnumerable<SaleRate> customerSaleRates, RoutingCustomerInfoDetails routingCustomerInfo, List<long> zoneIds, DateTime minimumDate, Dictionary<long, DateTime> zonesEffectiveDateTimes)
         {
-            //TODO: consider for this type of readers that selling product may be different in past
             _allSaleRatesByOwner = GetAllSaleRates(customerSaleRates, routingCustomerInfo.SellingProductId, routingCustomerInfo.CustomerId, zoneIds, minimumDate, zonesEffectiveDateTimes);
         }
         public SaleRateReadRPChanges(int customerId, int sellingProductId, IEnumerable<long> saleZoneIds, DateTime minimumDate, Dictionary<long, DateTime> zoneEffectiveDatesByZoneIds)
@@ -28,9 +27,6 @@ namespace TOne.WhS.Sales.Business.Reader
             var validCustomerZoneRates = new List<SaleRate>();
             foreach (SaleRate customerZoneRate in customerZoneRates)
             {
-                if (customerZoneRate.RateTypeId.HasValue)
-                    continue;
-
                 DateTime zoneEffectiveDate;
                 if (!zoneEffectiveDatesByZoneIds.TryGetValue(customerZoneRate.ZoneId, out zoneEffectiveDate))
                     throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("The action date of zone '{0}' was not found", customerZoneRate.ZoneId));
@@ -71,8 +67,8 @@ namespace TOne.WhS.Sales.Business.Reader
             {
                 VRDictionary<int, SaleRatesByZone> saleRatesByOwnerTemp = saleRatesByOwner.SaleRatesByCustomer;
                 saleRateByZone = saleRatesByOwnerTemp.GetOrCreateItem(customerId);
-                saleRatePriceList = saleRateByZone.GetOrCreateItem(saleRate.ZoneId);
-                saleRatePriceList.Rate = saleRate;
+                saleRatePriceList = saleRateByZone.GetOrCreateItem(saleRate.ZoneId, () => { return new SaleRatePriceList() { RatesByRateType = new Dictionary<int, SaleRate>() }; });
+                AddOwnerZoneRate(saleRatePriceList, saleRate);
             }
 
             SaleRateManager saleRateManager = new SaleRateManager();
@@ -84,15 +80,25 @@ namespace TOne.WhS.Sales.Business.Reader
                 DateTime zoneEffectiveDateTime;
                 if (!zonesEffectiveDateTimes.TryGetValue(sellingProductSaleRate.ZoneId, out zoneEffectiveDateTime))
                     continue;
-                if (sellingProductSaleRate.IsInTimeRange(zoneEffectiveDateTime) && sellingProductSaleRate.RateTypeId == null)
+                if (sellingProductSaleRate.IsInTimeRange(zoneEffectiveDateTime))
                 {
                     VRDictionary<int, SaleRatesByZone> saleRatesByOwnerTemp = saleRatesByOwner.SaleRatesByProduct;
                     saleRateByZone = saleRatesByOwnerTemp.GetOrCreateItem(sellingProductId);
-                    saleRatePriceList = saleRateByZone.GetOrCreateItem(sellingProductSaleRate.ZoneId);
-                    saleRatePriceList.Rate = sellingProductSaleRate;
+                    saleRatePriceList = saleRateByZone.GetOrCreateItem(sellingProductSaleRate.ZoneId, () => { return new SaleRatePriceList() { RatesByRateType = new Dictionary<int, SaleRate>() }; });
+                    AddOwnerZoneRate(saleRatePriceList, sellingProductSaleRate);
                 }
             }
             return saleRatesByOwner;
+        }
+        private void AddOwnerZoneRate(SaleRatePriceList ownerZoneRates, SaleRate rate)
+        {
+            if (!rate.RateTypeId.HasValue)
+                ownerZoneRates.Rate = rate;
+            else
+            {
+                if (!ownerZoneRates.RatesByRateType.ContainsKey(rate.RateTypeId.Value))
+                    ownerZoneRates.RatesByRateType.Add(rate.RateTypeId.Value, rate);
+            }
         }
 
         #endregion
