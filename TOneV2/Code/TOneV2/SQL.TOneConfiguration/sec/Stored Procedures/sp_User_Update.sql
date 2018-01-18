@@ -4,7 +4,8 @@
 	@Email Nvarchar(255),
 	@Description Nvarchar(1000),
 	@TenantId int,
-	@EnabledTill datetime
+	@EnabledTill datetime,
+	@Settings nvarchar(max)
 AS
 BEGIN
 	IF NOT EXISTS(SELECT 1 FROM sec.[User] WHERE ID != @ID AND Email = @Email)
@@ -14,7 +15,8 @@ BEGIN
 			Email = @Email,
 			[Description] = @Description,
 			TenantId = @TenantId,
-			EnabledTill = @EnabledTill
+			EnabledTill = @EnabledTill,
+			Settings = @Settings
 		WHERE ID = @ID
 	end
 END

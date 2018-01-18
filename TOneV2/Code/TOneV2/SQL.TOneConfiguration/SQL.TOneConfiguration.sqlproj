@@ -203,7 +203,6 @@
     <Build Include="sec\Stored Procedures\sp_User_CheckUserPassword.sql" />
     <Build Include="sec\Stored Procedures\sp_Widget_CreateTempByFiltered.sql" />
     <Build Include="sec\Stored Procedures\sp_User_UpdatePassword.sql" />
-    <Build Include="sec\Stored Procedures\sp_User_UpdateName.sql" />
     <Build Include="sec\Stored Procedures\sp_User_CreateTempByFiltered.sql" />
     <Build Include="sec\Stored Procedures\sp_User_UpdateLastLogin.sql" />
     <Build Include="rules\Tables\Rule.sql" />
@@ -726,6 +725,8 @@
     <Build Include="common\Stored Procedures\sp_VRExclusiveSession_ForceRelease.sql" />
     <Build Include="VR_AccountBalance\Stored Procedures\sp_AccountUsage_GetByTime.sql" />
     <Build Include="VR_AccountBalance\User Defined Types\AccountUsagesByTimeTable.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_GetLastByPartners.sql" />
+    <Build Include="sec\Stored Procedures\sp_User_UpdateProfile.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

@@ -6,14 +6,15 @@
 	@Description Nvarchar(1000),
 	@TenantId int,
 	@EnabledTill datetime,
-	@ExtendedSettings nvarchar(max),
+	@ExtendedSettings nvarchar(max),	
+	@Settings nvarchar(max),
 	@Id int out
 AS
 BEGIN
 IF NOT EXISTS(select null from sec.[User] where Email = @Email)
 	BEGIN
-		Insert into sec.[User] ([Name],[TempPassword],[Email], [Description], [TenantId], [EnabledTill], [ExtendedSettings]) 
-		values(@Name, @TempPassword, @Email, @Description, @TenantId, @EnabledTill, @ExtendedSettings)
+		Insert into sec.[User] ([Name],[TempPassword],[Email], [Description], [TenantId], [EnabledTill], [ExtendedSettings],[Settings]) 
+		values(@Name, @TempPassword, @Email, @Description, @TenantId, @EnabledTill, @ExtendedSettings,@Settings)
 		
 		SET @Id = SCOPE_IDENTITY()
 	END
