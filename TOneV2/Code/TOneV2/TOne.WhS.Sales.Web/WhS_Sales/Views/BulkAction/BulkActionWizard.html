@@ -46,23 +46,25 @@
                 </vr-columns>
             </vr-row>
             <div style="min-height: 335px;">
-                <vr-tabs ng-show="scopeModel.showTabs" on-ready="scopeModel.onTabsAPIReady">
-                    <vr-tab header="'Applicable Zones'" >
-                        <vr-row>
-                            <vr-columns width="fullrow">
-                                <vr-whs-sales-rateplan-grid on-ready="scopeModel.onGridReady" ispreview></vr-whs-sales-rateplan-grid>
-                            </vr-columns>
-                        </vr-row>
-                    </vr-tab>
-                    <vr-tab header="'Invalid Zones'" ng-if="scopeModel.showInvalidTab">
-                        <vr-row>
-                            <vr-directivewrapper directive="scopeModel.validationDirectiveName"
-                                                 on-ready="scopeModel.onValidationDirectiveReady"
-                                                 normal-col-num="4">
-                            </vr-directivewrapper>
-                        </vr-row>
-                    </vr-tab>
-                </vr-tabs>
+                <div ng-show="scopeModel.applicableZonesTabObject.showTab || scopeModel.showInvalidTab">
+                    <vr-tabs on-ready="scopeModel.onTabsAPIReady">
+                        <vr-tab header="'Applicable Zones'" tabobject="scopeModel.applicableZonesTabObject">
+                            <vr-row>
+                                <vr-columns width="fullrow">
+                                    <vr-whs-sales-rateplan-grid on-ready="scopeModel.onGridReady" ispreview></vr-whs-sales-rateplan-grid>
+                                </vr-columns>
+                            </vr-row>
+                        </vr-tab>
+                        <vr-tab header="'Invalid Zones'" ng-if="scopeModel.showInvalidTab">
+                            <vr-row>
+                                <vr-directivewrapper directive="scopeModel.validationDirectiveName"
+                                                     on-ready="scopeModel.onValidationDirectiveReady"
+                                                     normal-col-num="4">
+                                </vr-directivewrapper>
+                            </vr-row>
+                        </vr-tab>
+                    </vr-tabs>
+                </div>
             </div>
         </vr-form>
     </vr-modalbody>

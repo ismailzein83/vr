@@ -368,7 +368,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         if ($scope.zoneLetters.length > 0) {
                             $scope.showDirective = true;
                             gridQuery.context.onZoneLettersLoaded();
-                            showBulkActionTabs(true);
+                            showApplicableZonesTab(true);
 
                             allZoneItems.length = 0;
                             filteredZoneItems.length = 0;
@@ -386,7 +386,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                             if (gridQuery.BulkAction != undefined) {
                                 VRNotificationService.showInformation('No applicable zones exist');
-                                showBulkActionTabs(false);
+                                showApplicableZonesTab(false);
                             }
                             else {
                                 gridQuery.context.showRatePlan(false);
@@ -1065,9 +1065,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         item.directiveAPI.applyChanges();
                 }
             }
-            function showBulkActionTabs(value) {
-                if (gridQuery.context != undefined && gridQuery.context.showBulkActionTabs != undefined)
-                    gridQuery.context.showBulkActionTabs(value);
+            function showApplicableZonesTab(value) {
+                if (gridQuery.context != undefined && gridQuery.context.showApplicableZonesTab != undefined)
+                    gridQuery.context.showApplicableZonesTab(value);
             }
 
             function refreshHeaderWidth() {

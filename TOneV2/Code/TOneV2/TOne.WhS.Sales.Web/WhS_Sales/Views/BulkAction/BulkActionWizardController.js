@@ -60,6 +60,8 @@
             $scope.title = "Bulk Action";
 
             $scope.scopeModel = {};
+
+            $scope.scopeModel.applicableZonesTabObject = { showTab: false };
             $scope.scopeModel.showInvalidTab = false;
 
             $scope.scopeModel.onDropdownSectionReady = function (api) {
@@ -164,7 +166,6 @@
 
         function evaluate() {
 
-            tabsApi.setTabSelected(0);
             $scope.scopeModel.isLoading = true;
 
             var promises = [];
@@ -176,6 +177,7 @@
             var validationDirectiveName;
             setBulkActionVariables();
 
+            $scope.scopeModel.applicableZonesTabObject.showTab = false;
             $scope.scopeModel.showInvalidTab = false;
 
             var validateBulkActionZonesPromise = validateBulkActionZones();
@@ -281,11 +283,9 @@
                     if (gridQuery.context == undefined) {
                         gridQuery.context = {};
                     }
-                    gridQuery.context.showBulkActionTabs = function (value) {
-                        $scope.scopeModel.showTabs = value;
+                    gridQuery.context.showApplicableZonesTab = function (value) {
+                        $scope.scopeModel.applicableZonesTabObject.showTab = value;
                         $scope.scopeModel.isApplyButtonDisabled = !value;
-                        if (value === true && invalidDataExists === true)
-                            VRNotificationService.showWarning("Invalid data exists. Please check the 'Invalid Zones' tab");
                     };
                 }
 
@@ -293,8 +293,25 @@
             }
 
             return UtilsService.waitMultiplePromises(promises).finally(function () {
-                dropdownSectionAPI.collapse();
+
                 $scope.scopeModel.isLoading = false;
+                dropdownSectionAPI.collapse();
+
+                var selectedTabIndex;
+
+                if ($scope.scopeModel.applicableZonesTabObject.showTab == true) {
+                    selectedTabIndex = 0;
+                }
+                else if ($scope.scopeModel.showInvalidTab == true) {
+                    selectedTabIndex = 1;
+                }
+
+                if (selectedTabIndex != undefined) {
+                    tabsApi.setTabSelected(selectedTabIndex);
+
+                    if (invalidDataExists && selectedTabIndex != 1)
+                        VRNotificationService.showWarning("Invalid data exists. Please check the 'Invalid Zones' tab");
+                }
             });
         }
         function apply() {
