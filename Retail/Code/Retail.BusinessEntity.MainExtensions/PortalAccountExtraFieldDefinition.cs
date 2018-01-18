@@ -13,7 +13,6 @@ namespace Retail.BusinessEntity.MainExtensions
         {
             get { return new Guid("95183B89-056A-410A-B920-91EC6A134F82"); }
         }
-        public Guid EnterpriseBEDefinitionId { get; set; }
         public override IEnumerable<AccountGenericField> GetFields(IAccountExtraFieldSettingsContext context)
         {
             List<AccountGenericField> accountGenericFields = new List<AccountGenericField>();
