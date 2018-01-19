@@ -17,11 +17,11 @@ namespace Vanrise.GenericData.Business
         #region Constructors/Fields
 
         DataStoreManager _dataStoreManager = new DataStoreManager();
+        DataRecordTypeManager _recordTypeManager = new DataRecordTypeManager();
 
         #endregion
 
-        #region Public Methods
-
+        #region Public Methods Data Record
         public Vanrise.Entities.IDataRetrievalResult<DataRecordDetail> GetFilteredDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
         {
             input.Query.DataRecordStorageIds.ThrowIfNull("input.Query.DataRecordStorageIds");
@@ -66,10 +66,108 @@ namespace Vanrise.GenericData.Business
                     input.SortByColumnName = string.Format(@"{0}[""{1}""].{2}", fieldValueproperty[0], fieldValueproperty[1], fieldValueproperty[2]);
                 }
 
-                return BigDataManager.Instance.RetrieveData(input, new DataRecordRequestHandler() { DataRecordTypeId = dataRecordStorage.DataRecordTypeId });
+                if (dataRecordStorage.Settings.EnableUseCaching)
+                {
+                    var orderedData = GetDataRecordsFinalResult(recordType, input, (id, cloneInput) =>
+                    {
+                        return GetCachedDataRecords(id);
+                    });
+
+                    var dataRecordBigResult = AllRecordsToBigResult(input, orderedData, recordType);
+
+                    var handler = new ResultProcessingHandler<DataRecordDetail>()
+                    {
+                        ExportExcelHandler = new DataRecordStorageExcelExportHandler(input.Query)
+                    };
+                    return DataRetrievalManager.Instance.ProcessResult(input, dataRecordBigResult, handler);
+                }
+                else
+                {
+                    return BigDataManager.Instance.RetrieveData(input, new DataRecordRequestHandler() { DataRecordTypeId = recordType.DataRecordTypeId });
+                }
             }
         }
 
+        public IEnumerable<DataRecord> GetDataRecordsFinalResult(DataRecordType recordType, DataRetrievalInput<DataRecordQuery> input, Func<Guid,  DataRetrievalInput<DataRecordQuery>,IEnumerable<DataRecord>> retrieveDataRecordFunction)
+        {
+            Vanrise.Entities.DataRetrievalInput<DataRecordQuery> clonedInput = Vanrise.Common.Utilities.CloneObject(input);
+            HashSet<string> dependentDataRecordStorageFields;
+            Dictionary<string, List<string>> formulaFieldDirectDependencies;
+            Dictionary<string, DataRecordField> formulaDataRecordFieldsDict;
+
+            var dataRecordFieldDict = recordType.Fields.ToDictionary(itm => itm.Name, itm => itm);
+            var dataRecordFieldTypeDict = recordType.Fields.ToDictionary(itm => itm.Name, itm => itm.Type);
+
+            PrepareDependentAndFormulaFields(clonedInput, dataRecordFieldDict, out  formulaFieldDirectDependencies, out dependentDataRecordStorageFields, out  formulaDataRecordFieldsDict);
+         
+            List<DataRecord> records = new List<DataRecord>();
+
+            foreach (Guid item in input.Query.DataRecordStorageIds)
+            {
+                var result = retrieveDataRecordFunction(item, clonedInput);
+                if (result != null)
+                    records.AddRange(result);
+            }
+
+            return GetOrderedDataRecordResults(clonedInput, records, formulaFieldDirectDependencies, dependentDataRecordStorageFields, dataRecordFieldTypeDict, formulaDataRecordFieldsDict);
+        }
+     
+        public bool AddDataRecord(Guid dataRecordStorageId, Dictionary<string, Object> fieldValues, out Object insertedId, out bool hasInsertedId)
+        {
+            var dataRecordStorage = GetDataRecordStorage(dataRecordStorageId);
+            dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorageId);
+
+            var storageDataManager = GetStorageDataManager(dataRecordStorageId);
+            storageDataManager.ThrowIfNull("storageDataManager");
+
+            var dataRecordType = _recordTypeManager.GetDataRecordType(dataRecordStorage.DataRecordTypeId);
+            dataRecordType.ThrowIfNull("dataRecordType", dataRecordStorage.DataRecordTypeId);
+
+            var idFieldType = dataRecordType.Fields.FindRecord(x => x.Name == dataRecordType.Settings.IdField);
+            dataRecordType.ThrowIfNull("idFieldType");
+
+            hasInsertedId = true;
+            Guid? idField;
+            if (idFieldType.Type.TryGenerateUniqueIdentifier(out idField))
+            {
+                hasInsertedId = false;
+                fieldValues.Add(idFieldType.Name, idField);
+            }
+
+            bool insertActionSucc = storageDataManager.Insert(fieldValues, out insertedId);
+            
+            if (insertActionSucc && dataRecordStorage.Settings.EnableUseCaching)
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(dataRecordStorageId);
+          
+            return insertActionSucc;
+        }
+      
+        public bool UpdateDataRecord(Guid dataRecordStorageId, Object recordFieldId, Dictionary<string, Object> fieldValues)
+        {
+            var storageDataManager = GetStorageDataManager(dataRecordStorageId);
+            storageDataManager.ThrowIfNull("storageDataManager");
+
+            var dataRecordStorage = GetDataRecordStorage(dataRecordStorageId);
+            dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorageId);
+
+            if (fieldValues != null)
+            {
+                var dataRecordType = _recordTypeManager.GetDataRecordType(dataRecordStorage.DataRecordTypeId);
+                var idFieldType = dataRecordType.Fields.FindRecord(x => x.Name == dataRecordType.Settings.IdField);
+                fieldValues.Add(idFieldType.Name, recordFieldId);
+            }
+
+            bool updateActionSucc = storageDataManager.Update(fieldValues);
+           
+            if (updateActionSucc && dataRecordStorage.Settings.EnableUseCaching)
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(dataRecordStorageId);
+          
+            return updateActionSucc;
+        }
+      
+        #endregion
+
+        #region Public Methods
         private RecordFilterGroup ConvertFilterGroup(RecordFilterGroup filterGroup, DataRecordType recordType)
         {
             List<RecordFilter> convertedFilters = new List<RecordFilter>();
@@ -375,6 +473,7 @@ namespace Vanrise.GenericData.Business
             };
             return dataStore.Settings.GetStorageRowCount(getStorageRowCountContext);
         }
+
         #endregion
 
         #region Private Methods
@@ -437,6 +536,269 @@ namespace Vanrise.GenericData.Business
             return dataStore.Settings.GetDataRecordDataManager(getRecordStorageDataManagerContext);
         }
 
+
+        #endregion
+
+        #region Private Methods Data Record
+        private IEnumerable<DataRecord> GetCachedDataRecords(Guid dataRecordStorageId)
+        {
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedDataRecords", dataRecordStorageId,
+                () =>
+                {
+                    var dataManager = GetStorageDataManager(dataRecordStorageId);
+                    dataManager.ThrowIfNull("dataManager", dataRecordStorageId);
+
+                    var dataRecordStorage = GetDataRecordStorage(dataRecordStorageId);
+                    dataRecordStorage.ThrowIfNull("dataRecordStorage", dataRecordStorageId);
+
+                    var dataRecordTypeFields = _recordTypeManager.GetDataRecordTypeFields(dataRecordStorage.DataRecordTypeId);
+                    dataRecordTypeFields.ThrowIfNull("dataRecordTypeFields", dataRecordStorage.DataRecordTypeId);
+
+                    var columns = dataRecordTypeFields.FindAllRecords(itm => itm.Formula == null).Select(x => x.Name).ToList();
+                    return dataManager.GetAllDataRecords(columns);
+                });
+        }
+     
+        private Dictionary<string, DataRecordField> GetFormulaDataRecordFields(Dictionary<string, DataRecordField> dataRecordFieldsDict, DataRetrievalInput<DataRecordQuery> input)
+        {
+            IEnumerable<DataRecordField> formulaDataRecordFields = dataRecordFieldsDict.Values.FindAllRecords(itm => itm.Formula != null && input.Query.Columns.Contains(itm.Name));
+            return (formulaDataRecordFields != null && formulaDataRecordFields.Count() > 0) ? formulaDataRecordFields.ToDictionary(itm => itm.Name, itm => itm) : null;
+        }
+
+        private IOrderedEnumerable<DataRecordDetail> GetOrderedByFields(List<SortColumn> sortColumns, IOrderedEnumerable<DataRecordDetail> orderedRecords, DataRecordType recordType)
+        {
+            foreach (SortColumn sortColumn in sortColumns)
+            {
+                DataRecordField field = recordType.Fields.FirstOrDefault(itm => itm.Name == sortColumn.FieldName);
+                if (field == null)
+                    continue;
+
+                switch (field.Type.OrderType)
+                {
+                    case DataRecordFieldOrderType.ByFieldDescription: orderedRecords = sortColumn.IsDescending ? orderedRecords.ThenByDescending(itm => itm.FieldValues[sortColumn.FieldName].Description) : orderedRecords.ThenBy(itm => itm.FieldValues[sortColumn.FieldName].Description); break;
+                    case DataRecordFieldOrderType.ByFieldValue: orderedRecords = sortColumn.IsDescending ? orderedRecords.ThenByDescending(itm => itm.FieldValues[sortColumn.FieldName].Value) : orderedRecords.ThenBy(itm => itm.FieldValues[sortColumn.FieldName].Value); break;
+                    default: break;
+                }
+            }
+            return orderedRecords;
+        }
+
+        private void PrepareDependentAndFormulaFields(DataRetrievalInput<DataRecordQuery> input, Dictionary<string, DataRecordField> dataRecordFieldDict, out Dictionary<string, List<string>> formulaFieldDirectDependencies, out HashSet<string> dependentDataRecordStorageFields, out Dictionary<string, DataRecordField> formulaDataRecordFieldsDict)
+        {
+            dependentDataRecordStorageFields = new HashSet<string>();
+            formulaFieldDirectDependencies = new Dictionary<string, List<string>>();
+         
+            formulaDataRecordFieldsDict = GetFormulaDataRecordFields(dataRecordFieldDict, input);
+         
+            if (formulaDataRecordFieldsDict != null)
+            {
+                Dictionary<string, DataRecordField> clonedFormulaDataRecordFieldsDict = Vanrise.Common.Utilities.CloneObject(formulaDataRecordFieldsDict);
+                foreach (var formulaField in clonedFormulaDataRecordFieldsDict.Values)
+                {
+                    var currentDependentFields = formulaField.Formula.GetDependentFields(new DataRecordFieldFormulaGetDependentFieldsContext());
+                    dependentDataRecordStorageFields.UnionWith(GetDependentDataRecordStorageFieldNames(currentDependentFields, formulaDataRecordFieldsDict, formulaFieldDirectDependencies, dataRecordFieldDict));
+
+                    if (!formulaFieldDirectDependencies.ContainsKey(formulaField.Name))
+                        formulaFieldDirectDependencies.Add(formulaField.Name, currentDependentFields);
+                }
+            }
+
+            if (input.Query.Columns != null && input.Query.Columns.Count > 0)
+            {
+
+                input.Query.Columns.RemoveAll(itm => dataRecordFieldDict.GetRecord(itm).Formula != null);
+
+                if (dependentDataRecordStorageFields.Count > 0)
+                {
+                    input.Query.Columns.AddRange(dependentDataRecordStorageFields);
+                    input.Query.Columns = input.Query.Columns.Distinct().ToList();
+                }
+            }
+        }
+       
+        public BigResult<DataRecordDetail> AllRecordsToBigResult(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, IEnumerable<DataRecord> allRecords, DataRecordType recordType)
+        {
+            if (allRecords == null)
+                return new Vanrise.Entities.BigResult<DataRecordDetail>()
+                {
+                    ResultKey = input.ResultKey,
+                    Data = null,
+                    TotalCount = 0
+                };
+            IEnumerable<DataRecordDetail> allRecordsDetails = DataRecordDetailMapperList(allRecords, recordType);
+
+            IOrderedEnumerable<DataRecordDetail> orderedRecords;
+            if (!string.IsNullOrEmpty(input.SortByColumnName))
+                orderedRecords = allRecordsDetails.VROrderList(input);
+            else
+                orderedRecords = input.Query.Direction == OrderDirection.Ascending ? allRecordsDetails.OrderBy(itm => itm.RecordTime) : allRecordsDetails.OrderByDescending(itm => itm.RecordTime);
+
+            if (input.Query.SortColumns != null && input.Query.SortColumns.Count > 0)
+                orderedRecords = GetOrderedByFields(input.Query.SortColumns, orderedRecords, recordType);
+
+            IEnumerable<DataRecordDetail> pagedRecords = orderedRecords.VRGetPage(input);
+
+            var dataRecordBigResult = new Vanrise.Entities.BigResult<DataRecordDetail>()
+            {
+                ResultKey = input.ResultKey,
+                Data = pagedRecords,
+                TotalCount = allRecordsDetails.Count()
+            };
+
+            return dataRecordBigResult;
+        }
+     
+        public List<DataRecordDetail> DataRecordDetailMapperList(IEnumerable<DataRecord> dataRecords, DataRecordType recordType)
+        {
+            if (dataRecords == null)
+                return null;
+
+            List<DataRecordDetail> result = new List<DataRecordDetail>();
+            foreach (DataRecord dataRecord in dataRecords)
+                result.Add(DataRecordDetail(dataRecord, recordType));
+
+            return result;
+        }
+    
+        private DataRecordDetail DataRecordDetail(DataRecord entity, DataRecordType recordType)
+        {
+            var dataRecordDetail = new DataRecordDetail() { RecordTime = entity.RecordTime, FieldValues = new Dictionary<string, DataRecordFieldValue>() };
+            foreach (var fld in recordType.Fields)
+            {
+                Object value;
+                DataRecordFieldValue fldValueDetail = new DataRecordFieldValue();
+
+                if (entity.FieldValues.TryGetValue(fld.Name, out value))
+                {
+                    fldValueDetail.Value = value;
+                    fldValueDetail.Description = fld.Type.GetDescription(value);
+                    dataRecordDetail.FieldValues.Add(fld.Name, fldValueDetail);
+                }
+            }
+            return dataRecordDetail;
+        }
+      
+        private Queue<string> GetFormulaDataRecordFieldNames(Dictionary<string, List<string>> dependentFieldsByFieldName, List<string> retrievedDataRecordFields)
+        {
+            Queue<string> formulaDataRecordFieldNames = GetFormulaDataRecordFieldNamesQueue(dependentFieldsByFieldName, retrievedDataRecordFields);
+            return formulaDataRecordFieldNames.Count > 0 ? formulaDataRecordFieldNames : null;
+        }
+     
+        private List<DataRecord> GetTopOrderedResults(List<DataRecord> records, DataRetrievalInput<DataRecordQuery> input)
+        {
+            if (records.Count > 0)
+            {
+                if (input.Query.Direction == OrderDirection.Ascending)
+                    return records.OrderBy(itm => itm.RecordTime).Take(input.Query.LimitResult).ToList();
+                else
+                    return records.OrderByDescending(itm => itm.RecordTime).Take(input.Query.LimitResult).ToList();
+            }
+            else
+            {
+                return null;
+            }
+        }
+      
+        private Queue<string> GetFormulaDataRecordFieldNamesQueue(Dictionary<string, List<string>> remainingDependentFieldsByFieldName, List<string> availableDataRecordFieldsValue, Queue<string> formulaDataRecordFieldNames = null)
+        {
+            if (formulaDataRecordFieldNames == null)
+                formulaDataRecordFieldNames = new Queue<string>();
+
+            if (remainingDependentFieldsByFieldName.Count == 0)
+                return formulaDataRecordFieldNames;
+
+            Dictionary<string, List<string>> clonedDependentFieldsByFieldName = Vanrise.Common.Utilities.CloneObject(remainingDependentFieldsByFieldName);
+
+            foreach (var dependentFieldsKvp in remainingDependentFieldsByFieldName)
+            {
+                List<string> dependentFieldNames = dependentFieldsKvp.Value;
+                if (dependentFieldNames.All(itm => availableDataRecordFieldsValue.Contains(itm)))
+                {
+                    formulaDataRecordFieldNames.Enqueue(dependentFieldsKvp.Key);
+                    availableDataRecordFieldsValue.Add(dependentFieldsKvp.Key);
+                    clonedDependentFieldsByFieldName.Remove(dependentFieldsKvp.Key);
+                }
+            }
+
+            return GetFormulaDataRecordFieldNamesQueue(clonedDependentFieldsByFieldName, availableDataRecordFieldsValue, formulaDataRecordFieldNames);
+        }
+      
+        private HashSet<string> GetDependentDataRecordStorageFieldNames(List<string> directDependentFields, Dictionary<string, DataRecordField> formulaDataRecordFieldsDict, Dictionary<string, List<string>> formulaFieldDirectDependencies, Dictionary<string, DataRecordField> dataRecordFieldDict)
+        {
+            HashSet<string> results = new HashSet<string>();
+
+            foreach (var directDependentField in directDependentFields)
+            {
+                DataRecordField currentDataRecordField;
+                if (dataRecordFieldDict.TryGetValue(directDependentField, out currentDataRecordField))
+                {
+                    if (currentDataRecordField.Formula == null)
+                    {
+                        results.Add(directDependentField);
+                    }
+                    else
+                    {
+                        var currentFieldDirectDependentFields = currentDataRecordField.Formula.GetDependentFields(new DataRecordFieldFormulaGetDependentFieldsContext());
+
+                        if (!formulaFieldDirectDependencies.ContainsKey(directDependentField))
+                            formulaFieldDirectDependencies.Add(directDependentField, currentFieldDirectDependentFields);
+
+                        if (!formulaDataRecordFieldsDict.ContainsKey(directDependentField))
+                            formulaDataRecordFieldsDict.Add(directDependentField, dataRecordFieldDict.Values.FindRecord(itm => string.Compare(itm.Name, directDependentField, true) == 0));
+
+                        results.UnionWith(GetDependentDataRecordStorageFieldNames(currentFieldDirectDependentFields, formulaDataRecordFieldsDict, formulaFieldDirectDependencies, dataRecordFieldDict));
+                    }
+                }
+            }
+
+            return results;
+        }
+      
+        private IEnumerable<DataRecord> GetOrderedDataRecordResults(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, List<DataRecord> records, Dictionary<string, List<string>> formulaFieldDirectDependencies, HashSet<string> dependentDataRecordStorageFields, Dictionary<string, DataRecordFieldType> dataRecordFieldTypeDict, Dictionary<string, DataRecordField> formulaDataRecordFieldsDict)
+        {
+            if (records == null || records.Count == 0)
+                return null;
+
+            List<DataRecord> orderedDataRecordResults = GetTopOrderedResults(records, input);
+
+            List<string> retrievedDataRecordFields = new List<string>(input.Query.Columns);
+            Queue<string> formulaDataRecordFieldNames = GetFormulaDataRecordFieldNames(formulaFieldDirectDependencies, retrievedDataRecordFields);
+
+            if (formulaDataRecordFieldNames != null && formulaDataRecordFieldNames.Count > 0)
+            {
+                DataRecordField tempDataRecordField;
+
+                foreach (var dataRecordResult in orderedDataRecordResults)
+                {
+                    foreach (string formulaFieldName in formulaDataRecordFieldNames)
+                    {
+                        if (formulaDataRecordFieldsDict.TryGetValue(formulaFieldName, out tempDataRecordField) && !dataRecordResult.FieldValues.ContainsKey(formulaFieldName))
+                        {
+                            Object value = tempDataRecordField.Formula.CalculateValue(new DataRecordFieldFormulaCalculateValueContext(dataRecordFieldTypeDict, dataRecordResult.FieldValues, tempDataRecordField.Type));
+                            dataRecordResult.FieldValues.Add(formulaFieldName, value);
+                        }
+                    }
+                }
+            }
+
+            return orderedDataRecordResults;
+        }
+       
+        #endregion
+
+        #region Private Classes Data Record
+        public class RecordCacheManager : Vanrise.Caching.BaseCacheManager<Guid>
+        {
+
+            DataRecordStorageManager dataRecordStorageManager = new DataRecordStorageManager();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(Guid dataRecordStorageId)
+            {
+                var _dataManager = dataRecordStorageManager.GetStorageDataManager(dataRecordStorageId);
+                return _dataManager.AreDataRecordsUpdated(ref _updateHandle);
+            }
+        }
         #endregion
 
         #region Private Classes
@@ -505,7 +867,7 @@ namespace Vanrise.GenericData.Business
             public Guid DataRecordTypeId { get; set; }
 
             private DataRecordType _recordType;
-            private DataRecordType RecordType
+            private DataRecordType DataRecordType
             {
                 get
                 {
@@ -518,151 +880,20 @@ namespace Vanrise.GenericData.Business
                 }
             }
 
-            private Dictionary<string, DataRecordField> _dataRecordFieldDict;
-            private Dictionary<string, DataRecordField> DataRecordFieldDict
-            {
-                get
-                {
-                    if (_dataRecordFieldDict == null)
-                    {
-                        _dataRecordFieldDict = RecordType.Fields.ToDictionary(itm => itm.Name, itm => itm);
-                    }
-                    return _dataRecordFieldDict;
-                }
-            }
-
-            private Dictionary<string, DataRecordFieldType> _dataRecordFieldTypeDict;
-            private Dictionary<string, DataRecordFieldType> DataRecordFieldTypeDict
-            {
-                get
-                {
-                    if (_dataRecordFieldTypeDict == null)
-                    {
-                        _dataRecordFieldTypeDict = RecordType.Fields.ToDictionary(itm => itm.Name, itm => itm.Type);
-                    }
-                    return _dataRecordFieldTypeDict;
-                }
-            }
-
             #region Public and Protected Methods
 
             public override IEnumerable<DataRecord> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
             {
-                Vanrise.Entities.DataRetrievalInput<DataRecordQuery> clonedInput = Vanrise.Common.Utilities.CloneObject(input);
-                List<DataRecord> records = new List<DataRecord>();
-
-                HashSet<string> dependentDataRecordStorageFields = new HashSet<string>();
-                Dictionary<string, List<string>> formulaFieldDirectDependencies = new Dictionary<string, List<string>>();
-
-                Dictionary<string, DataRecordField> formulaDataRecordFieldsDict = GetFormulaDataRecordFields(RecordType, clonedInput);
-                if (formulaDataRecordFieldsDict != null)
+                DataRecordStorageManager dataRecordStorageManager = new DataRecordStorageManager();
+                return dataRecordStorageManager.GetDataRecordsFinalResult(DataRecordType, input, (dataRecordStorageId, cloneInput) =>
                 {
-                    Dictionary<string, DataRecordField> clonedFormulaDataRecordFieldsDict = Vanrise.Common.Utilities.CloneObject(formulaDataRecordFieldsDict);
-                    foreach (var formulaField in clonedFormulaDataRecordFieldsDict.Values)
-                    {
-                        var currentDependentFields = formulaField.Formula.GetDependentFields(new DataRecordFieldFormulaGetDependentFieldsContext());
-                        dependentDataRecordStorageFields.UnionWith(GetDependentDataRecordStorageFieldNames(currentDependentFields, formulaDataRecordFieldsDict, formulaFieldDirectDependencies));
-
-                        if (!formulaFieldDirectDependencies.ContainsKey(formulaField.Name))
-                            formulaFieldDirectDependencies.Add(formulaField.Name, currentDependentFields);
-                    }
-                }
-
-                if (clonedInput.Query.Columns != null && clonedInput.Query.Columns.Count > 0)
-                {
-                    clonedInput.Query.Columns.RemoveAll(itm => DataRecordFieldDict.GetRecord(itm).Formula != null);
-
-                    if (dependentDataRecordStorageFields.Count > 0)
-                    {
-                        clonedInput.Query.Columns.AddRange(dependentDataRecordStorageFields);
-                        clonedInput.Query.Columns = clonedInput.Query.Columns.Distinct().ToList();
-                    }
-                }
-
-                foreach (Guid dataRecordStorageId in input.Query.DataRecordStorageIds)
-                {
-                    var result = GetDataRecords(clonedInput, dataRecordStorageId);
-                    if (result != null)
-                        records.AddRange(result);
-                }
-
-                if (records.Count == 0)
-                    return null;
-
-                List<DataRecord> orderedDataRecordResults = GetTopOrderedResults(records, input);
-
-                List<string> retrievedDataRecordFields = new List<string>(clonedInput.Query.Columns);
-                Queue<string> formulaDataRecordFieldNames = GetFormulaDataRecordFieldNames(formulaFieldDirectDependencies, retrievedDataRecordFields);
-
-                if (formulaDataRecordFieldNames != null && formulaDataRecordFieldNames.Count > 0)
-                {
-                    DataRecordField tempDataRecordField;
-
-                    foreach (var dataRecordResult in orderedDataRecordResults)
-                    {
-                        foreach (string formulaFieldName in formulaDataRecordFieldNames)
-                        {
-                            if (formulaDataRecordFieldsDict.TryGetValue(formulaFieldName, out tempDataRecordField) && !dataRecordResult.FieldValues.ContainsKey(formulaFieldName))
-                            {
-                                Object value = tempDataRecordField.Formula.CalculateValue(new DataRecordFieldFormulaCalculateValueContext(DataRecordFieldTypeDict, dataRecordResult.FieldValues, tempDataRecordField.Type));
-                                dataRecordResult.FieldValues.Add(formulaFieldName, value);
-                            }
-                        }
-                    }
-                }
-
-                return orderedDataRecordResults;
-            }
-
-            public override DataRecordDetail EntityDetailMapper(DataRecord entity)
-            {
-                var dataRecordDetail = new DataRecordDetail() { RecordTime = entity.RecordTime, FieldValues = new Dictionary<string, DataRecordFieldValue>() };
-                foreach (var fld in RecordType.Fields)
-                {
-                    Object value;
-                    DataRecordFieldValue fldValueDetail = new DataRecordFieldValue();
-
-                    if (entity.FieldValues.TryGetValue(fld.Name, out value))
-                    {
-                        fldValueDetail.Value = value;
-                        fldValueDetail.Description = fld.Type.GetDescription(value);
-                        dataRecordDetail.FieldValues.Add(fld.Name, fldValueDetail);
-                    }
-                }
-                return dataRecordDetail;
+                    return GetDataRecords(cloneInput, dataRecordStorageId);
+                });
             }
 
             protected override Vanrise.Entities.BigResult<DataRecordDetail> AllRecordsToBigResult(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, IEnumerable<DataRecord> allRecords)
             {
-                if (allRecords == null)
-                    return new Vanrise.Entities.BigResult<DataRecordDetail>()
-                    {
-                        ResultKey = input.ResultKey,
-                        Data = null,
-                        TotalCount = 0
-                    };
-
-                IEnumerable<DataRecordDetail> allRecordsDetails = DataRecordDetailMapperList(allRecords);
-
-                IOrderedEnumerable<DataRecordDetail> orderedRecords;
-                if (!string.IsNullOrEmpty(input.SortByColumnName))
-                    orderedRecords = allRecordsDetails.VROrderList(input);
-                else
-                    orderedRecords = input.Query.Direction == OrderDirection.Ascending ? allRecordsDetails.OrderBy(itm => itm.RecordTime) : allRecordsDetails.OrderByDescending(itm => itm.RecordTime);
-
-                if (input.Query.SortColumns != null && input.Query.SortColumns.Count > 0)
-                    orderedRecords = GetOrderedByFields(input.Query.SortColumns, orderedRecords);
-
-                IEnumerable<DataRecordDetail> pagedRecords = orderedRecords.VRGetPage(input);
-
-                var dataRecordBigResult = new Vanrise.Entities.BigResult<DataRecordDetail>()
-                {
-                    ResultKey = input.ResultKey,
-                    Data = pagedRecords,
-                    TotalCount = allRecordsDetails.Count()
-                };
-
-                return dataRecordBigResult;
+                return new DataRecordStorageManager().AllRecordsToBigResult(input, allRecords, DataRecordType);
             }
 
             protected override ResultProcessingHandler<DataRecordDetail> GetResultProcessingHandler(DataRetrievalInput<DataRecordQuery> input, BigResult<DataRecordDetail> bigResult)
@@ -672,93 +903,13 @@ namespace Vanrise.GenericData.Business
                     ExportExcelHandler = new DataRecordStorageExcelExportHandler(input.Query)
                 };
             }
-
+            public override DataRecordDetail EntityDetailMapper(DataRecord entity)
+            {
+                throw new NotImplementedException();
+            }
             #endregion
 
             #region Private Methods
-
-            private Dictionary<string, DataRecordField> GetFormulaDataRecordFields(DataRecordType recordType, DataRetrievalInput<DataRecordQuery> input)
-            {
-                List<DataRecordField> formulaDataRecordFields = RecordType.Fields.FindAll(itm => itm.Formula != null && input.Query.Columns.Contains(itm.Name));
-                return (formulaDataRecordFields != null && formulaDataRecordFields.Count > 0) ? formulaDataRecordFields.ToDictionary(itm => itm.Name, itm => itm) : null;
-            }
-
-            private HashSet<string> GetDependentDataRecordStorageFieldNames(List<string> directDependentFields, Dictionary<string, DataRecordField> formulaDataRecordFieldsDict, Dictionary<string, List<string>> formulaFieldDirectDependencies)
-            {
-                HashSet<string> results = new HashSet<string>();
-
-                foreach (var directDependentField in directDependentFields)
-                {
-                    DataRecordField currentDataRecordField;
-                    if (DataRecordFieldDict.TryGetValue(directDependentField, out currentDataRecordField))
-                    {
-                        if (currentDataRecordField.Formula == null)
-                        {
-                            results.Add(directDependentField);
-                        }
-                        else
-                        {
-                            var currentFieldDirectDependentFields = currentDataRecordField.Formula.GetDependentFields(new DataRecordFieldFormulaGetDependentFieldsContext());
-
-                            if (!formulaFieldDirectDependencies.ContainsKey(directDependentField))
-                                formulaFieldDirectDependencies.Add(directDependentField, currentFieldDirectDependentFields);
-
-                            if (!formulaDataRecordFieldsDict.ContainsKey(directDependentField))
-                                formulaDataRecordFieldsDict.Add(directDependentField, RecordType.Fields.FindRecord(itm => string.Compare(itm.Name, directDependentField, true) == 0));
-
-                            results.UnionWith(GetDependentDataRecordStorageFieldNames(currentFieldDirectDependentFields, formulaDataRecordFieldsDict, formulaFieldDirectDependencies));
-                        }
-                    }
-                }
-
-                return results;
-            }
-
-            private List<DataRecord> GetTopOrderedResults(List<DataRecord> records, DataRetrievalInput<DataRecordQuery> input)
-            {
-                if (records.Count > 0)
-                {
-                    if (input.Query.Direction == OrderDirection.Ascending)
-                        return records.OrderBy(itm => itm.RecordTime).Take(input.Query.LimitResult).ToList();
-                    else
-                        return records.OrderByDescending(itm => itm.RecordTime).Take(input.Query.LimitResult).ToList();
-                }
-                else
-                {
-                    return null;
-                }
-            }
-
-            private Queue<string> GetFormulaDataRecordFieldNames(Dictionary<string, List<string>> dependentFieldsByFieldName, List<string> retrievedDataRecordFields)
-            {
-                Queue<string> formulaDataRecordFieldNames = GetFormulaDataRecordFieldNamesQueue(dependentFieldsByFieldName, retrievedDataRecordFields);
-                return formulaDataRecordFieldNames.Count > 0 ? formulaDataRecordFieldNames : null;
-            }
-
-            private Queue<string> GetFormulaDataRecordFieldNamesQueue(Dictionary<string, List<string>> remainingDependentFieldsByFieldName, List<string> availableDataRecordFieldsValue, Queue<string> formulaDataRecordFieldNames = null)
-            {
-                if (formulaDataRecordFieldNames == null)
-                    formulaDataRecordFieldNames = new Queue<string>();
-
-                if (remainingDependentFieldsByFieldName.Count == 0)
-                    return formulaDataRecordFieldNames;
-
-                Dictionary<string, List<string>> clonedDependentFieldsByFieldName = Vanrise.Common.Utilities.CloneObject(remainingDependentFieldsByFieldName);
-
-                foreach (var dependentFieldsKvp in remainingDependentFieldsByFieldName)
-                {
-                    List<string> dependentFieldNames = dependentFieldsKvp.Value;
-                    if (dependentFieldNames.All(itm => availableDataRecordFieldsValue.Contains(itm)))
-                    {
-                        formulaDataRecordFieldNames.Enqueue(dependentFieldsKvp.Key);
-                        availableDataRecordFieldsValue.Add(dependentFieldsKvp.Key);
-                        clonedDependentFieldsByFieldName.Remove(dependentFieldsKvp.Key);
-                    }
-                }
-
-                return GetFormulaDataRecordFieldNamesQueue(clonedDependentFieldsByFieldName, availableDataRecordFieldsValue, formulaDataRecordFieldNames);
-            }
-
             private List<DataRecord> GetDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, Guid dataRecordStorageId)
             {
                 DataRecordStorageManager manager = new DataRecordStorageManager();
@@ -772,37 +923,9 @@ namespace Vanrise.GenericData.Business
                 return dataManager.GetFilteredDataRecords(input);
             }
 
-            private List<DataRecordDetail> DataRecordDetailMapperList(IEnumerable<DataRecord> dataRecords)
-            {
-                if (dataRecords == null)
-                    return null;
-
-                List<DataRecordDetail> result = new List<DataRecordDetail>();
-                foreach (DataRecord dataRecord in dataRecords)
-                    result.Add(EntityDetailMapper(dataRecord));
-
-                return result;
-            }
-
-            private IOrderedEnumerable<DataRecordDetail> GetOrderedByFields(List<SortColumn> sortColumns, IOrderedEnumerable<DataRecordDetail> orderedRecords)
-            {
-                foreach (SortColumn sortColumn in sortColumns)
-                {
-                    DataRecordField field = RecordType.Fields.FirstOrDefault(itm => itm.Name == sortColumn.FieldName);
-                    if (field == null)
-                        continue;
-
-                    switch (field.Type.OrderType)
-                    {
-                        case DataRecordFieldOrderType.ByFieldDescription: orderedRecords = sortColumn.IsDescending ? orderedRecords.ThenByDescending(itm => itm.FieldValues[sortColumn.FieldName].Description) : orderedRecords.ThenBy(itm => itm.FieldValues[sortColumn.FieldName].Description); break;
-                        case DataRecordFieldOrderType.ByFieldValue: orderedRecords = sortColumn.IsDescending ? orderedRecords.ThenByDescending(itm => itm.FieldValues[sortColumn.FieldName].Value) : orderedRecords.ThenBy(itm => itm.FieldValues[sortColumn.FieldName].Value); break;
-                        default: break;
-                    }
-                }
-                return orderedRecords;
-            }
-
             #endregion
+
+
         }
 
         private class DataRecordStorageExcelExportHandler : ExcelExportHandler<DataRecordDetail>
@@ -831,7 +954,7 @@ namespace Vanrise.GenericData.Business
                 {
                     sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = dimName });
                 }
-                
+
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
                 {

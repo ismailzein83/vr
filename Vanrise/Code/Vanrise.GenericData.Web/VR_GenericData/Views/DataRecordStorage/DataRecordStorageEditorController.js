@@ -144,6 +144,8 @@
                 return;
             }
             $scope.scopeModel.name = dataRecordStorageEntity.Name;
+            if (dataRecordStorageEntity.Settings != undefined)
+                 $scope.scopeModel.enableUseCaching = dataRecordStorageEntity.Settings.EnableUseCaching;
         }
         function loadDataRecordTypeSelector() {
             var dataRecordTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -350,6 +352,7 @@
             };
             obj.Settings.DateTimeField = $scope.scopeModel.selectedDataRecordTypeField.Entity.Name;
             obj.Settings.RequiredPermission = requiredPermissionAPI.getData();
+            obj.Settings.EnableUseCaching = $scope.scopeModel.enableUseCaching;
             return obj;
         }
     }

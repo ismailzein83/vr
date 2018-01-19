@@ -277,21 +277,17 @@ namespace Vanrise.GenericData.Business
             InsertOperationOutput<GenericBusinessEntityDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<GenericBusinessEntityDetail>();
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            Object insertedId;
-            var caseDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(genericBusinessEntityToAdd.BusinessEntityDefinitionId);
-            var storageDataManager = _dataRecordStorageManager.GetStorageDataManager(caseDefinitionSetting.DataRecordStorageId);
+
+            var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(genericBusinessEntityToAdd.BusinessEntityDefinitionId);
             var idFieldType = _genericBEDefinitionManager.GetIdFieldTypeForGenericBE(genericBusinessEntityToAdd.BusinessEntityDefinitionId);
 
-            Guid? idField;
-            if(idFieldType.Type.TryGenerateUniqueIdentifier(out idField))
-            {
-                genericBusinessEntityToAdd.FieldValues.Add(idFieldType.Name, idField);
-            }
-
-            bool insertActionSucc = storageDataManager.Insert(genericBusinessEntityToAdd.FieldValues, out insertedId);
+            Object insertedId;
+            bool hasInsertedId;
+            bool insertActionSucc = _dataRecordStorageManager.AddDataRecord(genericBEDefinitionSetting.DataRecordStorageId, genericBusinessEntityToAdd.FieldValues, out insertedId, out hasInsertedId);
+          
             if (insertActionSucc)
             {
-                if (!idField.HasValue)
+                if (hasInsertedId)
                 {
                     genericBusinessEntityToAdd.FieldValues.Add(idFieldType.Name, insertedId);
                 }
@@ -301,6 +297,7 @@ namespace Vanrise.GenericData.Business
             }
             else
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+          
             return insertOperationOutput;
         }
         public UpdateOperationOutput<GenericBusinessEntityDetail> UpdateGenericBusinessEntity(GenericBusinessEntityToUpdate genericBusinessEntityToUpdate)
@@ -309,14 +306,10 @@ namespace Vanrise.GenericData.Business
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
-            var caseDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(genericBusinessEntityToUpdate.BusinessEntityDefinitionId);
-            var storageDataManager = _dataRecordStorageManager.GetStorageDataManager(caseDefinitionSetting.DataRecordStorageId);
-            if (genericBusinessEntityToUpdate.FieldValues != null)
-            {
-                var idFieldType = _genericBEDefinitionManager.GetIdFieldTypeForGenericBE(genericBusinessEntityToUpdate.BusinessEntityDefinitionId);
-                genericBusinessEntityToUpdate.FieldValues.Add(idFieldType.Name, genericBusinessEntityToUpdate.GenericBusinessEntityId);
-            }
-            bool updateActionSucc = storageDataManager.Update(genericBusinessEntityToUpdate.FieldValues);
+            var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(genericBusinessEntityToUpdate.BusinessEntityDefinitionId);
+
+            bool updateActionSucc = _dataRecordStorageManager.UpdateDataRecord(genericBEDefinitionSetting.DataRecordStorageId, genericBusinessEntityToUpdate.GenericBusinessEntityId, genericBusinessEntityToUpdate.FieldValues);
+          
             if (updateActionSucc)
             {
                 VRActionLogger.Current.TrackAndLogObjectAdded(new GenericBusinessEntityLoggableEntity(genericBusinessEntityToUpdate.BusinessEntityDefinitionId), genericBusinessEntityToUpdate);
@@ -327,7 +320,7 @@ namespace Vanrise.GenericData.Business
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             }
-
+           
             return updateOperationOutput;
         }
       

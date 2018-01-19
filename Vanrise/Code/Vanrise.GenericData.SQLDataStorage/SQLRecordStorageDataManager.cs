@@ -461,7 +461,20 @@ namespace Vanrise.GenericData.SQLDataStorage
 
         }
 
-    
+
+        public List<DataRecord> GetAllDataRecords(List<string> columns)
+        {
+            Columns = GetColumnNamesFromFieldNames(columns);
+            string query = BuildGetAllQuery();
+            return GetItemsText(query, DataRecordMapper, (cmd) =>
+            {
+            });
+        }
+
+        public bool AreDataRecordsUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated(GetTableNameWithSchema(),ref updateHandle);
+        }
 
         public void GetDataRecords(DateTime from, DateTime to, Action<dynamic> onItemReady)
         {
@@ -555,6 +568,14 @@ namespace Vanrise.GenericData.SQLDataStorage
             //input.SortByColumnName = dateTimeColumn;
             return str.ToString();
         }
+        private string BuildGetAllQuery()
+        {
+            string tableName = GetTableNameWithSchema();
+            StringBuilder str = new StringBuilder(string.Format(@"  select {0} from {1} WITH (NOLOCK) ",
+                                                                     string.Join<string>(",", Columns),
+                                                                    tableName));
+            return str.ToString();
+        }
         string GenerateParameterName(ref int parameterIndex)
         {
             return String.Format("@Prm_{0}", parameterIndex++);
@@ -586,6 +607,8 @@ namespace Vanrise.GenericData.SQLDataStorage
             StringBuilder valuesQuery = new StringBuilder();
             StringBuilder ifNotExistsQueryBuilder = new StringBuilder();
             var idColumn = GetIdColumn();
+            var shouldAddIfExist = false;
+
             foreach (var fieldValue in fieldValues)
             {
                 var sqlDataRecordStorageColumn = GetColumnFromFieldName(fieldValue.Key);
@@ -605,6 +628,7 @@ namespace Vanrise.GenericData.SQLDataStorage
                         whereQuery.AppendFormat(@" {0} = {1}  ", sqlDataRecordStorageColumn.ColumnName, parameter);
                     }else
                     {
+                        shouldAddIfExist = true;
                         ifNotExistsQueryBuilder.AppendFormat("{0} = {1}", sqlDataRecordStorageColumn.ColumnName, parameter);
                     }
 
@@ -618,7 +642,7 @@ namespace Vanrise.GenericData.SQLDataStorage
                 }
             }
 
-            if (ifNotExistsQueryBuilder.Length > 0)
+            if (shouldAddIfExist)
             {
                 queryBuilder.Append(@" IF NOT EXISTS(SELECT 1 FROM #TABLENAME# WHERE #IFNOTEXISTSQUERY#) ");
                 queryBuilder.Replace("#IFNOTEXISTSQUERY#", ifNotExistsQueryBuilder.ToString());

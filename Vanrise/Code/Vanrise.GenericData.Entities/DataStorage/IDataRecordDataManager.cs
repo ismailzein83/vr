@@ -19,6 +19,8 @@ namespace Vanrise.GenericData.Entities
         void DeleteRecords(DateTime dateTime);
         bool Update(Dictionary<string, Object> fieldValues);
         bool Insert(Dictionary<string, Object> fieldValues, out object insertedId);
+        List<DataRecord> GetAllDataRecords(List<string> columns);
+        bool AreDataRecordsUpdated(ref object updateHandle);
     }
 
     public interface ISummaryRecordDataManager

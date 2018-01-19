@@ -10,6 +10,7 @@ namespace Vanrise.GenericData.Entities
     public class DataRecordStorageSettings
     {
         public string DateTimeField { get; set; }
+        public bool EnableUseCaching { get; set; }
         public RequiredPermissionSettings RequiredPermission { get; set; }
 
     }
