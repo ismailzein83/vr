@@ -80,27 +80,30 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                 };
                 $scope.scopeModel.onAccountSelectionChanged = function (value) {
                     var selectedIds = accountSelectorAPI.getSelectedIds();
-                    if (selectedIds != undefined && selectedIds.length > 0) {
+                    if (selectedIds != undefined) {
                         var accountIds = [selectedIds];
                         if (attrs.ismultipleselection != undefined) {
                             accountIds = selectedIds
                         }
-
-                        var selectorPayload = {
-                            accountBEDefinitionId: accountBEDefinitionId,
-                            filter: {
-                                AccountIds: accountIds,
-                                Status: status,
-                                EffectiveDate: effectiveDate,
-                                IsEffectiveInFuture: isEffectiveInFuture,
-                                Filters: partnerInvoiceFilters
-                            },
-                            setItemsSelected: true
-                        };
-                        var setLoader = function (value) {
-                            $scope.scopeModel.isAccountTypeSelectorLoading = value;
-                        };
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, financialAccountSelectorAPI, selectorPayload, setLoader, financialAccountSelectorPromiseDeferred);
+                        if (accountIds.length > 0)
+                        {
+                            var selectorPayload = {
+                                accountBEDefinitionId: accountBEDefinitionId,
+                                filter: {
+                                    AccountIds: accountIds,
+                                    Status: status,
+                                    EffectiveDate: effectiveDate,
+                                    IsEffectiveInFuture: isEffectiveInFuture,
+                                    Filters: partnerInvoiceFilters
+                                },
+                                setItemsSelected: true
+                            };
+                            var setLoader = function (value) {
+                                $scope.scopeModel.isAccountTypeSelectorLoading = value;
+                            };
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, financialAccountSelectorAPI, selectorPayload, setLoader, financialAccountSelectorPromiseDeferred);
+                        }
+                       
                     } else {
                         financialAccountSelectorAPI.clearDataSource();
                     }
