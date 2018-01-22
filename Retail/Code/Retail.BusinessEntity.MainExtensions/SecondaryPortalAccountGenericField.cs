@@ -17,7 +17,7 @@ namespace Retail.BusinessEntity.MainExtensions
 
         public override string Title
         {
-            get { return "All Portal Emails"; }
+            get { return "Portal Emails (All)"; }
         }
 
         public override Vanrise.GenericData.Entities.DataRecordFieldType FieldType

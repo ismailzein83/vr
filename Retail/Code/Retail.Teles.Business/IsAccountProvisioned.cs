@@ -18,7 +18,7 @@ namespace Retail.Teles.Business
 
         public override string Title
         {
-            get { return "Is Provisioned"; }
+            get { return "Provisioned"; }
         }
 
         public override Vanrise.GenericData.Entities.DataRecordFieldType FieldType
