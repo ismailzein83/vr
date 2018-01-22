@@ -70,6 +70,11 @@
     <Compile Include="DataStorages\StaticSQLDataStoreSettings.cs" />
     <Compile Include="DataRecordFields\FieldGuidType.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEActions\EditGenericBEAction.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBEFilterDefinition\BasicAdvancedFilterDefinitionSettings.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBEFilterDefinition\FilterGroupFilterDefinitionSettings.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBEFilterDefinition\GenericFilterDefinitionSettings.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBEFilterDefinition\StaticFilterDefinitionSettings.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBEFilterDefinition\TimeFilterDefinitionSettings.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEViewDefinition\HistoryGenericBEDefinitionView.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\GenericEditorDefinitionSetting.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\StaticEditorDefinitionSetting.cs" />

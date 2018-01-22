@@ -6,9 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class GenericBusinessEntityInfo
+    public class GenericBusinessEntityFilter
     {
-        public Object GenericBusinessEntityId { get; set; }
-        public string Name { get; set; }
     }
 }

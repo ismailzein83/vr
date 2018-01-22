@@ -1,0 +1,13 @@
+﻿<vr-row removeline>
+    <vr-columns width="fullrow">
+        <vr-choices-filter selectedindex="selectedFilternIndex">
+            <vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
+            <vr-choice-filter isselected="advancedSelected">Advanced</vr-choice-filter>
+        </vr-choices-filter>
+    </vr-columns>
+</vr-row>
+<vr-row removeline>
+    <span ng-repeat="filter in scopeModel.filters">
+        <vr-directivewrapper directive="filter.editor" on-ready="filter.onFilterReady" isrequired="filter.isRequired" normal-col-num="2" ng-show="filter.showInBasic || advancedSelected"></vr-directivewrapper>
+    </span>
+</vr-row>

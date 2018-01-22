@@ -44,6 +44,8 @@ namespace Vanrise.GenericData.Entities
         public List<GenericBEAction> GenericBEActions{get;set;}
         public GenericBEGridDefinition GridDefinition { get; set; }
         public GenericBEEditorDefinition EditorDefinition { get; set; }
+        public GenericBEFilterDefinition FilterDefinition { get; set; }
+
     }
 
     public class GenericBEViewDefinition
@@ -58,6 +60,15 @@ namespace Vanrise.GenericData.Entities
         public abstract string RuntimeDirective { get; }
     }
 
+    public class GenericBEFilterDefinition
+    {
+        public GenericBEFilterDefinitionSettings Settings { get; set; }
+    }
+    public abstract class GenericBEFilterDefinitionSettings
+    {
+        public abstract Guid ConfigId { get;  }
+        public abstract string RuntimeEditor { get; }
+    }
 
     public class GenericBEEditorDefinition
     {
@@ -100,6 +111,7 @@ namespace Vanrise.GenericData.Entities
         public GenericBusinessEntity Entity { get; set; }
         public GenericBEDefinitionSettings DefinitionSettings { get; set; }
     }
+  
     public class GenericBEAction
     {
         public Guid GenericBEActionId { get; set; }

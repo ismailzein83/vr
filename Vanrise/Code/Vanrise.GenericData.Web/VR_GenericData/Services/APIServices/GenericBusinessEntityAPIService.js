@@ -15,7 +15,7 @@
           //  DoesUserHaveAddAccess:DoesUserHaveAddAccess,
             UpdateGenericBusinessEntity: UpdateGenericBusinessEntity,
            // DoesUserHaveEditAccess: DoesUserHaveEditAccess,
-           // GetGenericBusinessEntityInfo: GetGenericBusinessEntityInfo,
+           GetGenericBusinessEntityInfo: GetGenericBusinessEntityInfo,
         };
 
         function GetFilteredGenericBusinessEntities(input) {
@@ -34,12 +34,12 @@
                 genericBusinessEntityId: genericBusinessEntityId
             });
         }
-        //function GetGenericBusinessEntityInfo(businessEntityDefinitionId,serializedFilter) {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetGenericBusinessEntityInfo'), {
-        //        businessEntityDefinitionId:businessEntityDefinitionId,
-        //        serializedFilter: serializedFilter
-        //    });
-        //}
+        function GetGenericBusinessEntityInfo(businessEntityDefinitionId,serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetGenericBusinessEntityInfo'), {
+                businessEntityDefinitionId:businessEntityDefinitionId,
+                serializedFilter: serializedFilter
+            });
+        }
         function AddGenericBusinessEntity(genericBusinessEntity) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'AddGenericBusinessEntity'), genericBusinessEntity);
         }
