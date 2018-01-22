@@ -62,7 +62,7 @@ app.directive('retailTelesSiteroutinggroupSelector', ['Retail_Teles_SiteAPIServi
                 if (payload != undefined) {
                     selectedIds = payload.selectedIds;
                     vrConnectionId = payload.vrConnectionId;
-                    siteId = payload.siteId
+                    siteId = payload.siteId;
                     if (payload.filter != undefined)
                         filter = payload.filter;
 

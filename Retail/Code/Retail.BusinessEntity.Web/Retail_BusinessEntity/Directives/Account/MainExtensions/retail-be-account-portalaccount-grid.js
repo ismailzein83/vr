@@ -63,7 +63,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, Retail_BE_Porta
                             email = payload.email;
 
                             if (payload.accountViewDefinition != undefined)
-                                accountViewDefinitionId = payload.accountViewDefinition.AccountViewDefinitionId
+                                accountViewDefinitionId = payload.accountViewDefinition.AccountViewDefinitionId;
 
                             return Retail_BE_PortalAccountAPIService.GetPortalAccountDetails(accountBEDefinitionId, parentAccountId, accountViewDefinitionId).then(function (response) {
                                 $scope.portalAccounts = response;

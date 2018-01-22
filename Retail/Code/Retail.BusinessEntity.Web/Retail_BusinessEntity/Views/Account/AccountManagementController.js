@@ -199,7 +199,7 @@
                 statusSelectorReadyPromiseDeferred.promise.then(function () {
                     var selectorPayload = {
                         businessEntityDefinitionId: response
-                    }
+                    };
                     VRUIUtilsService.callDirectiveLoad(statusSelectorAPI, selectorPayload, statusSelectorLoadDeferred);
                 });
             }).catch(function (error) {

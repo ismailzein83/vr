@@ -27,7 +27,7 @@
                 accountViewDefinitionId: accountViewDefinitionId,
                 userId: userId,
                 context: context
-            }
+            };
             var settings = {};
             settings.onScopeReady = function (modalScope) {
                 modalScope.onPortalAccountUpdated = onPortalAccountUpdated
