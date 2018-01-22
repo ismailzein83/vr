@@ -46,8 +46,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="LineSubscriptionProcessInput.cs" />
+    <Compile Include="LineSubscription\MoveLineProcessInput.cs" />
+    <Compile Include="LineSubscription\LineSubscriptionProcessInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="LineSubscription\LineSubscriptionTerminationProcessInput.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SOM.Main.Entities\SOM.Main.Entities.csproj">
@@ -56,6 +58,9 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
