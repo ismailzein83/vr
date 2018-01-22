@@ -96,10 +96,11 @@
                 var api = {};
 
                 api.loadGrid = function (query) {
+                    ctrl.dataRecordStorageLogs.length = 0;
 
-                    if (query) {
-                        dataRecordTypeId = query.DataRecordTypeId;
-                    }
+                    dataRecordTypeId = query.DataRecordTypeId;
+                    sortColumns = query.SortColumns;
+                    itemDetails = buildItemDetails(query.ItemDetails);
 
                     ctrl.showDetails = false;
                     if (query.ItemDetails && query.ItemDetails.length > 0)
@@ -108,10 +109,9 @@
                     if (query.SubviewDefinitions && query.SubviewDefinitions.length > 0) {
                         subviewDefinitions = query.SubviewDefinitions;
                         ctrl.showDetails = true;
+                    } else {
+                        subviewDefinitions = undefined;
                     }
-
-                    itemDetails = buildItemDetails(query.ItemDetails);
-                    sortColumns = query.SortColumns;
 
                     var promiseDeffer = UtilsService.createPromiseDeferred();
                     getDataRecordAttributes(query).then(function () {
@@ -146,6 +146,7 @@
                             promiseDeffer.reject(error);
                         });
                     });
+
                     return promiseDeffer.promise;
                 };
 
@@ -288,9 +289,6 @@
                 }
 
                 function setDrillDownTabs() {
-                    if (drillDownTabs.length == 0)
-                        return;
-
                     var drillDownManager = VRUIUtilsService.defineGridDrillDownTabs(drillDownTabs, gridAPI);
                     drillDownManager.setDrillDownExtensionObject(dataRecordStorageLog);
                 }
