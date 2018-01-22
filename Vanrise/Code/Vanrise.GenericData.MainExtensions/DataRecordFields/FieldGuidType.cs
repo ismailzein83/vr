@@ -91,7 +91,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             StringRecordFilter stringRecordFilter = recordFilter as StringRecordFilter;
             if (stringRecordFilter == null)
                 throw new NullReferenceException("stringRecordFilter");
-            string valueAsString = fieldValue as string;
+            string valueAsString = fieldValue != null?fieldValue.ToString():null;
             if (valueAsString == null)
                 throw new NullReferenceException("valueAsString");
             string filterValue = stringRecordFilter.Value;
