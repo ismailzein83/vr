@@ -19,8 +19,21 @@
                     
                 };
                 var ctrl = this;
+                var getInputeStyle = function () {
+                    var div = $element.find('div[validator-section]')[0];
+                    if ($attrs.hint != undefined) {
+                        var styleObj = {
+                            "display": "inline-block", "width": "calc(100% - 15px)"
+                        };
+                        if (VRLocalizationService.isLocalizationRTL())
+                            styleObj.marginLeft = "1px";
+                        else
+                            styleObj.marginRight = "1px";
 
-                
+                        $(div).css(styleObj);
+
+                    }
+                }();
                 $scope.editorConfig = {
                     sanitize: false,
                     toolbar: [
@@ -82,17 +95,11 @@
                         };
 
                         ctrl.placelHolder = (attrs.placeholder != undefined) ? ctrl.placeholder : '';
-
+                     
                         if (attrs.hint != undefined) {
                             ctrl.hint = attrs.hint;
                         }
-                        var getInputeStyle = function () {
-                            var div = element.find('div[validator-section]')[0];
-                            if (attrs.hint != undefined) {
-                                $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" });
-                            };
-                        };
-                        getInputeStyle();
+                      
 
                         ctrl.adjustTooltipPosition = function (e) {
                             setTimeout(function () {
@@ -148,7 +155,7 @@
                                + ' <wysiwyg-edit content="ctrl.value" config="editorConfig"></wysiwyg-edit>'
 
                            + '</vr-validator>'
-                            + '<span ng-if="ctrl.hint!=undefined" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" html="true"   placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>';
+                            + '<span ng-if="ctrl.hint!=undefined"  bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" html="true"   placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>';
                     + '</div>';
                 
 

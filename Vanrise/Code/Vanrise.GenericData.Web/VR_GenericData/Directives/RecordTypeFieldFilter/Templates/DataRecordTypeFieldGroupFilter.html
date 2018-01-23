@@ -6,13 +6,13 @@
                     <vr-choice ng-repeat="condition in conditions">{{condition.description}}</vr-choice>
                 </vr-choices>
             </vr-columns>
-            <vr-columns width="1/4row" class="pull-right">
+            <vr-columns width="1/4row" class="vr-groupfilter-button">
                 <button type="button" class="btn btn-xs" data-add="group" ng-click="ctrl.addGroup()" style="background-color:#6DA279;color:white;">
                     <i class="glyphicon glyphicon-plus-sign"></i> Add Group
                 </button>
             </vr-columns>
 
-            <vr-columns width="1/4row" class="pull-right">
+            <vr-columns width="1/4row" class="vr-groupfilter-button">
                 <button type="button" class="btn btn-xs" data-add="rule" ng-click="ctrl.addRule()" style="background-color:#6DA279;color:white;">
                     <i class="glyphicon glyphicon-plus"></i> Add Condition
                 </button>

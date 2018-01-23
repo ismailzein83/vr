@@ -47,7 +47,7 @@ app.directive('vrListitem', ['UtilsService', function (UtilsService) {
                 itemContentWidth = 'calc(100% - 14px)';
             }
 
-            var template = '<vr-columns colnum="{{listItemCtrl.colNumber}}" > <div class="list-group-item list-custom" >'
+            var template = '<vr-columns colnum="{{listItemCtrl.colNumber}}" datalistitem> <div class="list-group-item list-custom" >'
                                  + '<div style="width:100%">'
                                  + '    <div style="display: inline-block;  width: ' + itemContentWidth + ';" ng-transclude></div>'
                                    + removeItemTemplate

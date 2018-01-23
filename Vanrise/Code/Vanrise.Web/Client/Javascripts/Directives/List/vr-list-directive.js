@@ -25,7 +25,7 @@ app.directive('vrList', [ 'MultiTranscludeService', function ( MultiTranscludeSe
         },
         template: function () {
             
-            var template = '<vr-row removeline ng-transclude>'
+            var template = '<vr-row removeline ng-transclude style="white-space: initial;">'
                             + '<vr-row>';
             return template;
         }

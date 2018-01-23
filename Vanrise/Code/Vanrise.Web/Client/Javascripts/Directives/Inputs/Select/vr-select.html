@@ -118,7 +118,7 @@
                 </ul>
             </div>
         </vr-validator>
-        <span ng-if="ctrl.hint!=undefined" ng-show="ctrl.hint!=undefined && ctrl.hint!=''" ng-mouseenter="ctrl.adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" html="true" style="top:-10px" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>
+        <span ng-if="ctrl.hint!=undefined" ng-show="ctrl.hint!=undefined && ctrl.hint!=''" ng-mouseenter="ctrl.adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" html="true"  placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>
     </div>
     <span ng-if="ctrl.includeOnAddHandler() && ctrl.isDropDownOpened()" ng-click="ctrl.onAddhandler()" class="glyphicon glyphicon-plus-sign hand-cursor vr-select-add"  ng-hide="ctrl.hideAddButton || ctrl.readOnly"></span>
 </div>

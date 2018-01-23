@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrModalcontent', [function () {
+app.directive('vrModalcontent', ['VRLocalizationService', function (VRLocalizationService) {
 
     var directiveDefinitionObject = {
         restrict: 'A',
@@ -41,9 +41,10 @@ app.directive('vrModalcontent', [function () {
 
                 }
             }
-            var style= "";
+            var style = "";
+            var direction = VRLocalizationService.isLocalizationRTL() && 'right' || 'left';
              if ($('.modal-dialog').length > 0) {
-                style = "top:" + ($('.modal-dialog').length) * 10 + "px; left:" + ($('.modal-dialog').length) * 10 + "px;";
+                 style = "top:" + ($('.modal-dialog').length) * 10 + "px;" + direction + ":" + ($('.modal-dialog').length) * 10 + "px;";
                 if ($('.modal-header').eq($('.modal-dialog').length - 1).attr('readonly') == undefined) {
                     $('.modal-header').eq($('.modal-dialog').length - 1).removeClass('vr-modal-header');
                     $('.modal-header').eq($('.modal-dialog').length - 1).addClass('vr-modal-header-inback');

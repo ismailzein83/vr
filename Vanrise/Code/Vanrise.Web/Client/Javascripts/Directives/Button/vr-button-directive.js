@@ -28,7 +28,7 @@ app.directive('vrButton', ['ButtonDirService', 'UtilsService', 'VRLocalizationSe
                     var basetop = selfOffset.top - $(window).scrollTop() + $(self).height();
                     var eltop = selfOffset.top - $(window).scrollTop();
                     var elleft = selfOffset.left - $(window).scrollLeft();
-                    if ($(self).parents('.section-menu').length > 0 || VRLocalizationService.isLocalizationRTL())
+                    if ($(self).parents('.section-menu').length > 0 && !VRLocalizationService.isLocalizationRTL())
                         elleft -= $(self).width();
                     if ($(self).parents('.vr-datagrid-celltext').length > 0)
                         basetop -= 10;

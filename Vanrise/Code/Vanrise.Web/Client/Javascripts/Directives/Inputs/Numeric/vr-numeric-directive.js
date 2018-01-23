@@ -33,6 +33,13 @@
                     }
                     return VRValidationService.validate(ctrl.value, $scope, $attrs);
                 };
+
+                var getInputeStyle = function () {
+                    var div = $element.find('div[validator-section]')[0];
+                    if ($attrs.hint != undefined) {
+                        $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" });
+                    }
+                }();
             },
             compile: function (element, attrs) {
 
@@ -165,14 +172,7 @@
                         };
                         if (attrs.hint != undefined) {
                             ctrl.hint = attrs.hint;
-                        }
-                        var getInputeStyle = function () {
-                            var div = element.find('div[validator-section]')[0];
-                            if (attrs.hint != undefined) {
-                                $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" });
-                            }
-                        };
-                        getInputeStyle();
+                        }                     
 
                         ctrl.adjustTooltipPosition = function (e) {
                             setTimeout(function () {
@@ -190,14 +190,6 @@
                             }, 1);
                         };
 
-                        ctrl.getNumericControlClass = function () {
-                            var classes = '';
-                            if (attrs.hint != undefined)
-                                classes += ' with-hint ';
-                            if (attrs.label != undefined)
-                                classes += ' with-label ';
-                            return classes;
-                        };
                         ctrl.tabindex = "";
                         setTimeout(function () {
                             if ($(element).hasClass('divDisabled') || $(element).parents('.divDisabled').length > 0) {
@@ -224,19 +216,21 @@
                 }
                 var numericTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
                                             + '<div  class="vr-numeric" >'
-                                            + '<vr-validator validate="ctrl.validate()" vr-input>'
-                                                   + '<input ng-readonly="ctrl.readOnly" tabindex="{{ctrl.tabindex}}" class="form-control  border-radius input-box" type="text" placeholder="{{ctrl.placelHolder}}" ng-change="ctrl.notifyUserChange()" id="mainInput" ng-model="ctrl.value" >'
-                                                       + '</vr-validator>'
-                                                + '<span ng-if="ctrl.hint!=undefined"  bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" style="top:0px" html="true"  placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>'
-                                                + '<div class="vr-numeric-control" ng-class="ctrl.getNumericControlClass()" ng-if="!ctrl.readOnly">'
-                                                + '<span class="unit" ng-bind="ctrl.unitValue"></span>'
-                                                + '<div class="hand-cursor arrow-box" ng-click="ctrl.increment()" ng-style="{\'color\':ctrl.upColor}">'
-                                                + '<div class="caret-up" ></div>'
+                                                + '<vr-validator validate="ctrl.validate()" vr-input>'
+                                                        +'<div style="position: relative;">'
+                                                            + '<input ng-readonly="ctrl.readOnly" tabindex="{{ctrl.tabindex}}" class="form-control  border-radius input-box" type="text" placeholder="{{ctrl.placelHolder}}" ng-change="ctrl.notifyUserChange()" id="mainInput" ng-model="ctrl.value" />'
+                                                            + '<div class="vr-numeric-control" ng-if="!ctrl.readOnly">'
+                                                            + '<span class="unit" ng-bind="ctrl.unitValue"></span>'
+                                                            + '<div class="hand-cursor arrow-box" ng-click="ctrl.increment()" ng-style="{\'color\':ctrl.upColor}">'
+                                                                + '<div class="caret-up" ></div>'
+                                                            + '</div>'
+                                                            + '<div class="hand-cursor arrow-box " ng-click="ctrl.decrement()" ng-style="{\'color\':ctrl.downColor}">'
+                                                                + '<div class="caret-down"></div>'
+                                                            + '</div>'
+                                                        + '</div>'
                                                 + '</div>'
-                                                + '<div class="hand-cursor arrow-box " ng-click="ctrl.decrement()" ng-style="{\'color\':ctrl.downColor}">'
-                                                + '<div class="caret-down"></div>'
-                                                + '</div>'
-                                                    + '</div>'
+                                               + '</vr-validator>'
+                                                + '<span ng-if="ctrl.hint!=undefined"  bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" style="right: 1px;left: 1px;" html="true"  placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>'
                                              + '</div>'
                                     + '</div>';  
                      //var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined, true);

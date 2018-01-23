@@ -75,7 +75,7 @@ app.directive('vrDatalist', ['UtilsService', function (UtilsService) {
             var contentWidth = 0;
             if (attrs.isitemdraggable != undefined) {
                 draggableIconTemplate = '<div ng-if="!ctrl.readOnly" style="width: 14px; display:inline-block;height:25px">'
-                                            + '<i class="glyphicon glyphicon-th-list handeldrag hand-cursor" style="top: 5px;left: 3px;position: absolute;"></i>'
+                                            + '<i class="glyphicon glyphicon-th-list handeldrag hand-cursor drag-icon"></i>'
                                         + '</div>';
                 contentWidth += 14;
             }
@@ -99,8 +99,8 @@ app.directive('vrDatalist', ['UtilsService', function (UtilsService) {
             var template = '<vr-list maxitemsperrow="{{VRDatalistCtrl.maxitemsperrow}}" hideremoveicon="VRDatalistCtrl.hideremoveicon"  iscollapsible="{{VRDatalistCtrl.collapsible}}">'
                             + '<div style="white-space: pre-line;" ng-sortable="VRDatalistCtrl.itemsSortable" ng-class="VRDatalistCtrl.dragdropsetting &&  VRDatalistCtrl.datasource.length == 0 ?\'empty-vr-datalist-drop\':\'\'">'
                              + '<vr-listitem ' + itemCssClass + ' ng-repeat="dataItem in VRDatalistCtrl.datasource" ' + onRemoveAttr + '>'
-                             + '<span style="left: 22px;top: 6px;position:absolute;z-index:200" class="hand-cursor glyphicon" ng-show="VRDatalistCtrl.collapsible" ng-init="expande=true" ng-click="expande=!expande" ng-class="expande?\'glyphicon-collapse-up\':\'glyphicon-collapse-down\'"></span>'
-                             + '<span style="left: 40px;top: 3px;position:absolute" ng-show="!expande" ng-if="VRDatalistCtrl.collapsible && dataItem.title"><vr-label>{{dataItem.title}}</vr-label></span>'
+                             + '<span class="hand-cursor collapse-icon glyphicon" ng-show="VRDatalistCtrl.collapsible" ng-init="expande=true" ng-click="expande=!expande" ng-class="expande?\'glyphicon-collapse-up\':\'glyphicon-collapse-down\'"></span>'
+                             + '<span class="listitem-title" ng-show="!expande" ng-if="VRDatalistCtrl.collapsible && dataItem.title"><vr-label>{{dataItem.title}}</vr-label></span>'
                              + draggableIconTemplate
                              + '<div ' + onItemClickedAttr + '  style="width: calc( 100% - ' + contentWidth + 'px); display:inline-block;text-overflow: ellipsis; overflow: hidden; padding:0px 0px;white-space: nowrap;"' + title + ' ng-show="expande==true">' + element.html() + '</div>'
                              + '</vr-listitem>'

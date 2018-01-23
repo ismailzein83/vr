@@ -18,6 +18,21 @@
                 ctrl.validate = function () {
                     return VRValidationService.validate(ctrl.value, $scope, $attrs);
                 };
+                var getInputeStyle = function () {
+                    var div = $element.find('div[validator-section]')[0];
+                    if ($attrs.hint != undefined) {
+                        var styleObj = {
+                            "display": "inline-block", "width": "calc(100% - 15px)"
+                        };
+                        if (VRLocalizationService.isLocalizationRTL())
+                            styleObj.marginLeft = "1px";
+                        else
+                            styleObj.marginRight = "1px";
+
+                        $(div).css(styleObj);
+
+                    }
+                }();
                 ctrl.tabindex = "";
                 setTimeout(function () {
                     if ($($element).hasClass('divDisabled') || $($element).parents('.divDisabled').length > 0) {
@@ -70,14 +85,6 @@
                         if (attrs.hint != undefined) {
                             ctrl.hint = attrs.hint;
                         }
-                        var getInputeStyle = function () {
-                            var div = element.find('div[validator-section]')[0];
-                            if (attrs.hint != undefined) {
-                                $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" });
-                            };
-                        };
-                        getInputeStyle();
-
                         ctrl.adjustTooltipPosition = function (e) {
                             setTimeout(function () {
                                 var self = angular.element(e.currentTarget);

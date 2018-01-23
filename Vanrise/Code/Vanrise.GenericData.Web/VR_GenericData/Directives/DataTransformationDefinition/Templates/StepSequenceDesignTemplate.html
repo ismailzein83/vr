@@ -3,7 +3,7 @@
 
     </vr-columns>
     <vr-columns width="1/4row">
-        <div style="position:absolute;right:15px;top:-5px;z-index:1">
+        <div class="stepSequence-check-icon">
             <vr-check value="ctrl.checkedSequence" ng-click="viewScope.editStep(dataItem)" onvaluechanged="onCheckedChanged"></vr-check>
         </div>
     </vr-columns>
@@ -15,7 +15,7 @@
             <vr-datalist maxitemsperrow="1" datasource="ctrl.childSteps" isitemdraggable onremoveitem="onRemoveStep" collapsible>
                 <vr-row removeline>
                     <vr-columns width="fullrow">
-                        <span style="position:absolute;left:19px;top:0px">
+                        <span class="stepSequence-title" >
                             <vr-label>{{dataItem.title}}</vr-label>
                         </span>
                     </vr-columns>

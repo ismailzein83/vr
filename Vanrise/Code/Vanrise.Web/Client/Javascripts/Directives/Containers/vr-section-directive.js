@@ -22,7 +22,7 @@ app.directive('vrSection', ['UtilsService','VRLocalizationService', function (Ut
               classlevel = "panel-vr-child light";
             var expandname = 'expanded_' + UtilsService.replaceAll(UtilsService.guid(), '-', '');
             var newElement = '<div class="panel-primary panel-vr ' + classlevel + '" >'
-                            + '<div class="panel-heading" ng-init="' + expandname + '=' + expanded + '" expanded="{{' + expandname + '}}"><label><span style="padding-right: 3px;" class="hand-cursor glyphicon " ng-show="' + collapsible + '" ng-click="' + expandname + '=!' + expandname + '" ng-class="' + expandname + '?\'glyphicon-collapse-up\':\'glyphicon-collapse-down\'" ></span>' + title + '</label></div>'
+                            + '<div class="panel-heading" ng-init="' + expandname + '=' + expanded + '" expanded="{{' + expandname + '}}"><label><span  class="hand-cursor collapsible-icon glyphicon " ng-show="' + collapsible + '" ng-click="' + expandname + '=!' + expandname + '" ng-class="' + expandname + '?\'glyphicon-collapse-up\':\'glyphicon-collapse-down\'" ></span>' + title + '</label></div>'
                             + '<div class="panel-body" ng-show="' + expandname + '">' + tElement.context.innerHTML + '</div></div>';
             tElement.html(newElement);
         }

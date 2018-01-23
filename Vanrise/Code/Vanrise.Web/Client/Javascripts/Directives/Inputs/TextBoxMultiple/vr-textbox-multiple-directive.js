@@ -2,7 +2,7 @@
 
     "use strict";
 
-    vrTextboxMultiple.$inject = ['BaseDirService', 'TextboxTypeEnum', 'VRValidationService', 'UtilsService','VRLocalizationService'];
+    vrTextboxMultiple.$inject = ['BaseDirService', 'TextboxTypeEnum', 'VRValidationService', 'UtilsService', 'VRLocalizationService'];
 
     function vrTextboxMultiple(BaseDirService, TextboxTypeEnum, VRValidationService, UtilsService, VRLocalizationService) {
 
@@ -11,10 +11,10 @@
             scope: {
                 value: '=',
                 hint: '@',
-                minvalue:'@',
+                minvalue: '@',
                 maxvalue: '@',
                 decimalprecision: '@',
-                maxlength:'@',
+                maxlength: '@',
                 placeholder: '@',
                 datatype: '@',
                 label: '@'
@@ -23,19 +23,31 @@
                 var ctrl = this;
 
                 var validationOptions = {};
-                if ($attrs.isrequired !=undefined)
+                if ($attrs.isrequired != undefined)
                     validationOptions.arrayValidation = true;
-                
 
-                
+                var getInputeStyle = function () {
+                    var div = $element.find('div[validator-section]')[0];
+                    if ($attrs.hint != undefined) {
+                        var styleObj = {
+                            "display": "inline-block", "width": "calc(100% - 15px)"
+                        };
+                        if (VRLocalizationService.isLocalizationRTL())
+                            styleObj.marginLeft = "1px";
+                        else
+                            styleObj.marginRight = "1px";
 
+                        $(div).css(styleObj);
+
+                    }
+                }();
                 ctrl.tabindex = "";
                 setTimeout(function () {
                     if ($($element).hasClass('divDisabled') || $($element).parents('.divDisabled').length > 0) {
                         ctrl.tabindex = "-1"
                     }
                 }, 10);
-               
+
                 var $quan = $('.next-input');
                 $quan.on('keyup', function (e) {
                     if (e.which === 40) {
@@ -44,15 +56,15 @@
                     }
                     if (e.which === 38) {
                         var ind = $quan.index(this);
-                        var  el = $quan.eq(ind - 1);
-                        if(el)
-                          $quan.eq(ind - 1).focus();
+                        var el = $quan.eq(ind - 1);
+                        if (el)
+                            $quan.eq(ind - 1).focus();
                     }
                 });
-                ctrl.validate = function () {                    
+                ctrl.validate = function () {
                     return VRValidationService.validate(ctrl.value, $scope, $attrs, validationOptions);
                 };
-               
+
                 $scope.ctrl.onBlurDirective = function (e) {
                     if ($attrs.onblurtextbox != undefined) {
                         var onblurtextboxMethod = $scope.$parent.$eval($attrs.onblurtextbox);
@@ -62,7 +74,7 @@
                     }
                 };
             },
-            compile: function (element, attrs) {              
+            compile: function (element, attrs) {
                 return {
                     pre: function ($scope, iElem, iAttrs) {
                         $scope.$on("$destroy", function () {
@@ -79,7 +91,7 @@
                             $('#' + ctrl.id).parents('div').unbind('scroll', fixMultipleTextDropdownPosition);
                         });
 
-                       
+
                         var ctrl = $scope.ctrl;
 
                         if (ctrl.value == undefined)
@@ -88,18 +100,18 @@
                         var valueWatch = $scope.$watch('ctrl.value', function (newValue, oldValue) {
                             if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
                                 return;
-                          
+
                             var retrunedValue;
                             isUserChange = false;//reset the flag
-                          
-                     
+
+
                             if (iAttrs.onvaluechanged != undefined) {
                                 var onvaluechangedMethod = $scope.$parent.$eval(iAttrs.onvaluechanged);
                                 if (onvaluechangedMethod != undefined && typeof (onvaluechangedMethod) == 'function') {
                                     onvaluechangedMethod(retrunedValue);
                                 }
                             }
-                           
+
                         });
                         ctrl.id = BaseDirService.generateHTMLElementName();
                         ctrl.notifyUserChange = function () {
@@ -110,13 +122,7 @@
                         if (attrs.hint != undefined) {
                             ctrl.hint = attrs.hint;
                         }
-                        var getInputeStyle = function () {
-                            var div = element.find('div[validator-section]')[0];
-                            if (attrs.hint != undefined) {
-                                $(div).css({ "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px" });
-                            }
-                        };
-                        getInputeStyle();
+
                         ctrl.muteAction = function (e) {
                             BaseDirService.muteAction(e);
                         };
@@ -133,9 +139,9 @@
                         }
                         function IsInvalide(value) {
                             if (value == "" || value == undefined || value == null || VRValidationService.validate(value, $scope, { isrequired: false }, validationOptionsInput) != null || ctrl.value.indexOf(ctrl.valuetext) > -1
-                                || ( !isNaN(ctrl.valuetext) && ctrl.value.indexOf(parseInt(ctrl.valuetext)) > -1))
+                                || (!isNaN(ctrl.valuetext) && ctrl.value.indexOf(parseInt(ctrl.valuetext)) > -1))
                                 return true;
-                            
+
                             return false;
                         }
                         ctrl.validateInpute = function () {
@@ -160,7 +166,7 @@
                         ctrl.disabledAdd = function () {
                             return IsInvalide(ctrl.valuetext);
                         };
-                       
+
                         ctrl.getLabelText = function () {
                             if (ctrl.value == 0) return "Select";
                             else if (ctrl.value != undefined) return ctrl.value.join(";");
@@ -220,7 +226,7 @@
                                     $(this).find('.dropdown-menu').first().stop(true, true).slideDown();
                             });
 
-                            $('#' + ctrl.id).on('hide.bs.dropdown', function () {                               
+                            $('#' + ctrl.id).on('hide.bs.dropdown', function () {
                                 $(this).find('.dropdown-menu').first().stop(true, true).slideUp();
                             });
                         }, 100);
@@ -241,6 +247,11 @@
                                     top = basetop - (heigth + (selfHeight * 2.7));
                                 else
                                     top = selfOffset.top - $(window).scrollTop() + selfHeight;
+
+                                if (VRLocalizationService.isLocalizationRTL()) {
+                                    baseleft += (self.parent().find('.dropdown-toggle').outerWidth() - self.width());
+                                }
+
                                 $scope.$root.$broadcast("hideallselect");
                                 $(dropDown).css({ position: 'fixed', top: top, left: baseleft, width: self.width() });
                             });
@@ -271,7 +282,7 @@
                         };
 
                     },
-                  
+
                 }
             },
 
@@ -283,8 +294,7 @@
 
                 var labelTemplate = '';
                 var label = '';
-                if (attrs.label != undefined)
-                {
+                if (attrs.label != undefined) {
                     label = VRLocalizationService.getResourceValue(attrs.localizedlabel, attrs.label);
                     labelTemplate = '<vr-label>' + label + '</vr-label>';
                 }
@@ -294,9 +304,9 @@
                 var keypress = '';
                 var keypressclass = '';
                 if (attrs.tonextinput != undefined) {
-                    keypressclass = 'next-input';             
+                    keypressclass = 'next-input';
                 }
-               
+
                 var textboxTemplate = '<div ng-mouseenter="showtd=true" ng-mouseleave="showtd=false">'
                             + '<vr-validator validate="ctrl.validate()" vr-input >'
                             + '<div class="dropdown vr-multiple vanrise-inpute" id="{{ctrl.id}}" >'
@@ -314,7 +324,7 @@
                                         + '<div style="display:inline-block;width:30px" ><vr-button vr-disabled="ctrl.disabledAdd()" type="Add"  standalone data-onclick="ctrl.addNewValue" ></vr-button></div>'
                                          + '</div>'
                                         + '<div style="width : 100%" > '
-                                        + '<div  style="border-left:1px solid #f0f0f0;display: inline-block;overflow: auto; white-space:normal" >'
+                                        + '<div  calss="items-container" >'
                                             + '<div style="padding:5px ;height:29px">'
                                                 + 'Values:'
                                                 + '<a href="" class="link" style="position: absolute; right: 5px;" ng-click="ctrl.clearAllSelected($event); "  ng-if="!ctrl.readOnly">'
@@ -331,11 +341,12 @@
                                        + '</div>'
                                     + '</li>'
                                 + '</ul>'
+                            + '</div>'
                             + '</vr-validator>'
-                        + '</div>';
+                            + '<span ng-if="ctrl.hint!=undefined"  bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" style="right: 1px;left: 1px;" html="true"  placement="bottom"  trigger="hover" ng-mouseenter="ctrl.adjustTooltipPosition($event)"  data-type="info" data-title="{{ctrl.hint}}"></span>';
 
                 ;
-                
+
                 return startTemplate + labelTemplate + textboxTemplate + endTemplate;
             }
 

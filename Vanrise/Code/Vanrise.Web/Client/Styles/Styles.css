@@ -849,6 +849,9 @@ add padding .left-addon input {
 vr-section[contentbox] .panel-body {
     padding: 5px 5px !important;
 }
+vr-section .collapsible-icon ,vr-section-v2 .collapsible-icon{
+    padding-right: 3px;
+}
 
 .modal-body .fieldset-vr .panel-body {
     padding: 5px 15px;
@@ -2188,6 +2191,7 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     .vr-pager-container .dropdown {
         top: 2px;
         left: 2px;
+        margin-right:2px;
     }
 
     .vr-pager-container .dropdown-menu {
@@ -2955,8 +2959,8 @@ vr-pagination .dropdown-menu {
 .vr-numeric .vr-numeric-control {
     display: inline-block;
     position: absolute;
-    right: 5px;
-    top: 5px;
+    left: calc(100% - 15px);
+    top: 3px;
 }
 
 .with-hint {
@@ -2970,6 +2974,8 @@ vr-pagination .dropdown-menu {
 .vr-hint-input {
     top: -7px;
     color: #337AB7;
+    right: 1px;
+    left: 1px;
 }
 
 .large-hint {
@@ -3056,7 +3062,20 @@ vr-tab vr-columns[tabs="true"] > div[class^="col"] {
     border-radius: 0px 0px 4px 4px;
     padding: 5px 9px;
 }
+vr-tab-header-link .tab-remove-icon{
+    width:10px;
+    cursor:default ;
+    position:absolute;
+    right: 7px;
+    top :7px;
+    z-index: 1;
+}
 
+vr-tabs .tab-validation-sign{
+    color:#D44A47;
+    position:relative;
+    right: calc(100% + 11px);
+}
 vr-columns[grouped] > div[class^="col"] {
     padding: 0px 3px;
 }
@@ -3235,7 +3254,12 @@ div[validationcontainer] {
     height: 100%;
     margin: 0px 1px;
 }
-
+.vr-multiple .items-container {
+    border-left:1px solid #f0f0f0;
+    display: inline-block;
+    overflow: auto;
+    white-space:normal
+}
 .vr-multiple .glyphicon-plus-sign {
     top: 0px;
 }
@@ -3341,7 +3365,7 @@ vr-validator[vr-input] > div:nth-child(1) {
     width: 100%;
     text-align: left;
     position: static;
-    height: 20px !important;
+    height: 21px !important;
     padding: 0px 12px !important;
 }
 
@@ -3424,7 +3448,7 @@ vr-validator[vr-input] > div:nth-child(1) {
 }
 
 .vr-datagrid-celltext button.btn {
-    height: 22px !important;
+    height: 21px !important;
     padding: 0px 12px !important;
 }
 
@@ -3923,7 +3947,22 @@ vr-toolbox[large] .item {
 .empty-vr-datalist-drop {
     min-height: 29px;
 }
-
+vr-datalist .collapse-icon{
+    left: 22px;
+    top: 6px;
+    position:absolute;
+    z-index:200
+}
+vr-datalist .listitem-title{
+    left: 40px;
+    top: 3px;
+    position:absolute;
+}
+vr-datalist .drag-icon{
+    top: 5px;
+    left: 3px;
+    position: absolute;
+}
 .empty-vrdatagrid-drop {
     min-height: 25px;
     border: 1px solid #ccc;
@@ -4040,3 +4079,9 @@ vr-toolbox[large] .item {
     z-index:1;
 }
 /*vr-quick msg*/
+
+/*start vr-generic-filter*/
+.vr-groupfilter-button{
+    float:right !important;
+}
+/*end vr-generic-filter*/

@@ -23,7 +23,7 @@ app.directive('vrValidationDatetime', function () {
 });
 
 
-app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'UtilsService', 'VRDateTimeService', function (BaseDirService, VRValidationService, UtilsService, VRDateTimeService) {
+app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'UtilsService', 'VRDateTimeService', 'VRLocalizationService', function (BaseDirService, VRValidationService, UtilsService, VRDateTimeService, VRLocalizationService) {
 
     var directiveDefinitionObject = {
         restrict: 'E',
@@ -94,7 +94,8 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                 format: format,
                 showClose: true,
                 useCurrent: false,
-                allowInputToggle: $attrs.disablefocus == undefined
+                allowInputToggle: $attrs.disablefocus == undefined,
+                // locale:"ar"
             });
             divDatePicker
                 .on('dp.show', function (e) {
@@ -106,14 +107,26 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     var dropDown = self.parent().find('.bootstrap-datetimepicker-widget')[0];
                     var basetop = selfOffset.top - $(window).scrollTop() + $(this).height();
                     var eltop = selfOffset.top - $(window).scrollTop();
-                    var elleft = selfOffset.left - $(window).scrollLeft();
+                    var baseleft = selfOffset.left - $(window).scrollLeft()
+                    var elleft = baseleft;
                     $(dropDown).removeClass('pull-right');
                     $(dropDown).removeClass('dropdown-menu.top');
-                    if (innerWidth - elleft < 228) {
+                    var rtl = VRLocalizationService.isLocalizationRTL();
+                    if (rtl) {
                         elleft = elleft - (228 - $(this).width());
                         $(dropDown).addClass('vr-datetime-pull-right');
-                    }
+                        if (baseleft + $(this).width() < 228) {
+                            elleft = baseleft;
+                            $(dropDown).removeClass('vr-datetime-pull-right');
+                        }
 
+                    }
+                    else {
+                        if (innerWidth - elleft < 228) {
+                            elleft = elleft - (228 - $(this).width());
+                            $(dropDown).addClass('vr-datetime-pull-right');
+                        }
+                    }
                     if (innerHeight - eltop < 284) {
                         basetop = eltop - (284 + $(this).height() / 2);
                         $(dropDown).addClass('vr-datetime-top');
@@ -251,9 +264,16 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
             var getInputeStyle = function () {
                 var div = $element.find('div[validator-section]')[0];
                 if ($attrs.hint != undefined) {
-                    $(div).css({
-                        "display": "inline-block", "width": "calc(100% - 15px)", "margin-right": "1px"
-                    });
+                    var styleObj = {
+                        "display": "inline-block", "width": "calc(100% - 15px)"
+                    };
+                    if (VRLocalizationService.isLocalizationRTL())
+                        styleObj.marginLeft = "1px";
+                    else
+                        styleObj.marginRight = "1px";
+
+                    $(div).css(styleObj);
+
                 }
             };
             getInputeStyle();
@@ -407,16 +427,16 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
 
             }
 
-
+            var iconposition = VRLocalizationService.isLocalizationRTL() ? 'left:' : 'right:-';
             var dateTemplate =
                  '<div   >'
                   + '<vr-validator validate="ctrl.validate()" vr-input>'
                   + '<div id="divDatePicker" ng-mouseenter="::(showtd=true)" ng-mouseleave="::(showtd=false)"  ng-model="ctrl.value" class="input-group form-control vr-datetime-container vanrise-inpute" >'
                             + '<input tabindex="{{ctrl.tabindex}}" ng-readonly="::ctrl.readOnly" class="vr-date-input vanrise-inpute" placeholder="{{::ctrl.placelHolder}}" ng-keyup="::ctrl.updateModelOnKeyUp($event)" ng-blur="::ctrl.onBlurDirective($event)" ng-class="showtd==true? \'fix-border-radius\':\'border-radius\'" data-autoclose="1" placeholder="Date" type="text" ctrltype="' + attrs.type + '">'
-                            + '<div  ng-show="showtd && !ctrl.readOnly"  class="hand-cursor datetime-icon-container" style="max-width:' + 20 * n + 'px;right:-' + n * 10 + 'px;" >' + icontemplate + '</div>'
+                            + '<div  ng-show="showtd && !ctrl.readOnly"  class="hand-cursor datetime-icon-container" style="max-width:' + 20 * n + 'px;' + iconposition + n * 10 + 'px;" >' + icontemplate + '</div>'
                       + '</div>'
                   + '</vr-validator>'
-                      + '<span ng-if="(ctrl.hint!=undefined)"  ng-mouseenter="::ctrl.adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" style="top:-10px" html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>'
+                      + '<span ng-if="(ctrl.hint!=undefined)"  ng-mouseenter="::ctrl.adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input"  html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>'
                 + '</div>';
 
             //var validationTemplate = BaseDirService.getValidationMessageTemplate(true, false, true, true, true, true, attrs.label != undefined);

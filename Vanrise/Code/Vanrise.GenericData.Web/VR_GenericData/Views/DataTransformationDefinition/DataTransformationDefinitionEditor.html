@@ -1,4 +1,28 @@
 ﻿<div vr-modalcontent ng-controller="VR_GenericData_DataTransformationDefinitionEditorController" vr-loader="scopeModal.isLoading" width="'99%'">
+    <style type="text/css">
+        .stepSequence-check-icon {
+            position: absolute;
+            right: 15px;
+            top: -5px;
+            z-index: 1;
+        }
+
+        .stepSequence-title {
+            position: absolute;
+            left: 19px;
+            top: 0px;
+        }
+
+        .rtl .stepSequence-check-icon {
+            right: unset;
+            left: 15px;
+        }
+
+        .rtl .stepSequence-title {
+            left: unset;
+            right: 19px;
+        }
+    </style>
     <vr-modalbody>
         <vr-form validationcontext="dataTransformationDefinitionEditorGroup">
             <vr-tabs>
@@ -34,7 +58,7 @@
                         <vr-columns colnum="7">
                             <vr-section title="Steps">
                                 <div style="max-height:500px;overflow-y:auto;overflow-x:hidden">
-                                        <vr-genericdata-datatransformationdefinition-stepsequencedesign on-ready="scopeModal.onSequenceDirectiveReady"></vr-genericdata-datatransformationdefinition-stepsequencedesign>
+                                    <vr-genericdata-datatransformationdefinition-stepsequencedesign on-ready="scopeModal.onSequenceDirectiveReady"></vr-genericdata-datatransformationdefinition-stepsequencedesign>
                                 </div>
                             </vr-section>
                         </vr-columns>
