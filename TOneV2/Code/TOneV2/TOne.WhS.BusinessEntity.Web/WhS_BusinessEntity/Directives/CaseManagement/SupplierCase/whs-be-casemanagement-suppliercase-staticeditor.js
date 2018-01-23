@@ -31,6 +31,8 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
             var supplierZoneSelectorApi;
             var supplierZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
             
+            var statusSelectorAPI;
+            var statusSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             this.initializeController = initializeController;
             function initializeController() {
@@ -38,6 +40,10 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                 $scope.scopeModel.onSupplierSelectorReady = function (api) {
                     supplierSelectorAPI = api;
                     supplierSelectorReadyPromiseDeferred.resolve();
+                };
+                $scope.scopeModel.onStatusSelectorReady = function (api) {
+                    statusSelectorAPI = api;
+                    statusSelectorReadyPromiseDeferred.resolve();
                 };
                 $scope.scopeModel.isEditMode = false;
                 $scope.scopeModel.onSupplierZoneSelectorReady = function (api) {
@@ -59,7 +65,7 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                         }
                     }
                 };
-                UtilsService.waitMultiplePromises([supplierSelectorReadyPromiseDeferred.promise]).then(function () {
+                UtilsService.waitMultiplePromises([supplierSelectorReadyPromiseDeferred.promise, statusSelectorReadyPromiseDeferred.promise]).then(function () {
                     defineApi();
                 });
             }
@@ -86,6 +92,8 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                     }
                     var promises = [];
                     promises.push(loadSupplierSelector());
+                    promises.push(loadStatusSelector());
+
                     if (selectedValues != undefined && selectedValues.SupplierId != undefined && selectedValues.SupplierZoneId != undefined)
                     {
                         promises.push(loadSupplierZoneSelector());
@@ -103,12 +111,23 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                     caseManagementObject.CarrierReference = $scope.scopeModel.carrierReference;
                     caseManagementObject.Description = $scope.scopeModel.description;
                     caseManagementObject.Notes = $scope.scopeModel.notes;
+                    caseManagementObject.StatusId = statusSelectorAPI.getSelectedIds();
+
                 };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
+            function loadStatusSelector() {
+                var selectorPayload;
+                if (selectedValues != undefined) {
+                    selectorPayload = {
+                        selectedIds: selectedValues.StatusId,
+                        businessEntityDefinitionId: "81289b9a-0a4d-4eef-9a2a-2c5547d97317"
+                    }
+                }
+                return statusSelectorAPI.load(selectorPayload);
+            }
             function loadSupplierSelector() {
                 var selectorPayload;
                 if (selectedValues != undefined) {

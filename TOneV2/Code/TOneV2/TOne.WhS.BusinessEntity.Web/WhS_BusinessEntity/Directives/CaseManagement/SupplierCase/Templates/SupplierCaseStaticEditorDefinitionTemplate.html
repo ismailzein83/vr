@@ -1,9 +1,9 @@
 ﻿<vr-row>
     <span vr-disabled="scopeModel.isEditMode">
-        <vr-whs-be-supplier-selector on-ready="scopeModel.onSupplierSelectorReady" normal-col-num="4" isrequired="true" onselectionchanged="    scopeModel.onSupplierSelectionChanged"></vr-whs-be-supplier-selector>
-        <vr-whs-be-supplierzone-selector vr-loader="scopeModel.isLoadingSupplierZoneDirective" on-ready="scopeModel.onSupplierZoneSelectorReady" normal-col-num="4" isrequired="true"></vr-whs-be-supplierzone-selector>
+        <vr-whs-be-supplier-selector on-ready="scopeModel.onSupplierSelectorReady" normal-col-num="4" isrequired="true" onselectionchanged="    scopeModel.onSupplierSelectionChanged" ></vr-whs-be-supplier-selector>
+        <vr-whs-be-supplierzone-selector vr-loader="scopeModel.isLoadingSupplierZoneDirective" on-ready="scopeModel.onSupplierZoneSelectorReady" normal-col-num="4" isrequired="true" ></vr-whs-be-supplierzone-selector>
     </span>
-  
+    <vr-common-statusdefinition-selector on-ready="scopeModel.onStatusSelectorReady" customlabel="Status" normal-col-num="4" isrequired="true"></vr-common-statusdefinition-selector>
     <vr-columns width="1/3row" >
         <vr-textbox value="scopeModel.carrierReference" label="Carrier Reference" vr-disabled="!scopeModel.isEditMode"></vr-textbox>
     </vr-columns>
