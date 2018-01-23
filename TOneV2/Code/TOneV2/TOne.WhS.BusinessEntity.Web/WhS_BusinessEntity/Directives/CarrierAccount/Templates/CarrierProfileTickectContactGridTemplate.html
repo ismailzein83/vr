@@ -1,0 +1,17 @@
+﻿<vr-datagrid datasource="ticketContacts"
+             ondeleterow="removeTicketContact"
+             hidegridmenu="true"
+             norowhighlightonclick="true"
+             on-ready="onGridReady">
+    <vr-datagridcolumn headertext="'Id'" disablesorting="true" filed="'CarrierProfileTicketContactId'">
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" disablesorting="true">
+        <vr-textbox value="dataItem.Name" isrequired="true"></vr-textbox>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Phone Numbers'" disablesorting="true">
+        <vr-textbox-multiple value="dataItem.PhoneNumber"  datatype="number"></vr-textbox-multiple>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Emails'" disablesorting="true" >
+        <vr-textbox-multiple value="dataItem.Emails" isrequired="true" datatype="email" ></vr-textbox-multiple>
+    </vr-datagridcolumn> 
+</vr-datagrid>

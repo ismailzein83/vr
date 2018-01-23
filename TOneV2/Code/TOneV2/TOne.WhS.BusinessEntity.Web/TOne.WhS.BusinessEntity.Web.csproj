@@ -246,8 +246,11 @@
     <Content Include="WhS_BusinessEntity\Directives\AccountManager\vr-whs-be-assignedcarrier-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierAccountGridPanelTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierAccountGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierProfileTickectContactGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\Templates\CarrierProfileGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-carrieraccount-gridpanel.js" />
+    <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-carrieraprofile-ticketcontact-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-carrierprofile-ticketcontact-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-pricelistextensionformat-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-routingstatus-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-carrieraccountall-selector.js" />

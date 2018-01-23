@@ -67,5 +67,14 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             CarrierProfileManager manager = new CarrierProfileManager();
             return manager.UpdateCarrierProfile(carrierProfile);
         }
+
+        [HttpGet]
+        [Route("GetCarrierProfileTicketContactsInfo")]
+        public List<CarrierProfileTicketContactInfo> GetCarrierProfileTicketContactsInfo(string serializedTicketContactInfoFilter)
+        {
+            TicketContactInfoFilter ticketContactInfoFilter = serializedTicketContactInfoFilter != null ? Vanrise.Common.Serializer.Deserialize<TicketContactInfoFilter>(serializedTicketContactInfoFilter) : null;
+            CarrierProfileManager manager = new CarrierProfileManager();
+            return manager.GetCarrierProfileTicketContactsInfo(ticketContactInfoFilter);
+        }
     }
 }

@@ -96,6 +96,17 @@
                         </vr-columns>
                     </vr-row>
                 </vr-tab>
+                <vr-tab header="'Ticket Contacts'">
+                    <vr-row>
+                        <vr-columns width="normal">
+                            <vr-button type="Add" data-onclick="scopeModal.addTicketContact" standalone></vr-button>
+                        </vr-columns>
+                        <vr-columns width="fullrow">
+                            <vr-whs-be-carrierprofile-ticketcontact-grid on-ready="scopeModal.onTicketContactGridReady">
+                            </vr-whs-be-carrierprofile-ticketcontact-grid>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
                 <vr-tab header="'Financial'">
                     <vr-row removeline>
                         <vr-common-currency-selector on-ready="scopeModal.onCurrencySelectorReady" isrequired="true" normal-col-num="6" showaddbutton></vr-common-currency-selector>

@@ -401,6 +401,34 @@ namespace TOne.WhS.BusinessEntity.Business
                 throw new NullReferenceException("setting.TaxesDefinition");
             return setting.TaxesDefinition.ItemDefinitions;
         }
+
+        public List<CarrierProfileTicketContactInfo> GetCarrierProfileTicketContactsInfo(TicketContactInfoFilter filter)
+        {
+            List<CarrierProfileTicketContactInfo> ticketContactInfos = null;
+
+            if (filter != null)
+            {
+                int? carrierProfileId = new CarrierAccountManager().GetCarrierProfileId(filter.CarrierAccountId);
+
+                if (carrierProfileId.HasValue)
+                {
+                    CarrierProfile carrierProfile = GetCarrierProfile(carrierProfileId.Value);
+
+                    if (carrierProfile.Settings != null && carrierProfile.Settings.TicketContacts != null)
+                    {
+                        ticketContactInfos = new List<CarrierProfileTicketContactInfo>();
+                        for (int i = 0; i < carrierProfile.Settings.TicketContacts.Count; i++)
+                        {
+                            ticketContactInfos.Add(CarrierProfileTicketContactInfoMapper(carrierProfile.Settings.TicketContacts[i], i));
+
+                        }
+                    }
+                }
+
+            }
+            
+            return ticketContactInfos;
+        }
         #endregion
 
         #endregion
@@ -571,6 +599,15 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
             }
             return carrierProfileDetail;
+        }
+
+        private CarrierProfileTicketContactInfo CarrierProfileTicketContactInfoMapper(CarrierProfileTicketContact carrierProfileTicketContact, int index)
+        {
+            return new CarrierProfileTicketContactInfo()
+            {
+                CarrierProfileTicketContactId = carrierProfileTicketContact.CarrierProfileTicketContactId,
+                Name = string.Format("{0} - {1}", index + 1, carrierProfileTicketContact.Name)
+            };
         }
         #endregion
         public class CarrierProfileLoggableEntity : VRLoggableEntityBase

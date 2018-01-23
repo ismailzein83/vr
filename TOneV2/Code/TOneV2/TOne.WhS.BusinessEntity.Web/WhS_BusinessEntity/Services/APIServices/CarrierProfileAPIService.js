@@ -47,6 +47,11 @@
                 carrierProfileHistoryId: carrierProfileHistoryId
             });
         }
+        function GetCarrierProfileTicketContactsInfo(serializedTicketContactInfoFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetCarrierProfileTicketContactsInfo"), {
+                serializedTicketContactInfoFilter: serializedTicketContactInfoFilter
+            });
+        }
         return ({
             GetCarrierProfilesInfo: GetCarrierProfilesInfo,
             GetFilteredCarrierProfiles: GetFilteredCarrierProfiles,
@@ -56,7 +61,8 @@
             HasUpdateCarrierProfilePermission: HasUpdateCarrierProfilePermission,
             HasAddCarrierProfilePermission: HasAddCarrierProfilePermission,
             GetTaxesDefinition: GetTaxesDefinition,
-            GetCarrierProfileHistoryDetailbyHistoryId: GetCarrierProfileHistoryDetailbyHistoryId
+            GetCarrierProfileHistoryDetailbyHistoryId: GetCarrierProfileHistoryDetailbyHistoryId,
+            GetCarrierProfileTicketContactsInfo: GetCarrierProfileTicketContactsInfo
         });
     }
 

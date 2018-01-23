@@ -79,6 +79,17 @@ namespace TOne.WhS.BusinessEntity.Entities
         public List<string> Emails { get; set; }
     }
 
+    public class CarrierProfileTicketContactInfo
+    {
+        public Guid CarrierProfileTicketContactId { get; set; }
+
+        public string Name { get; set; }
+    }
+
+    public class TicketContactInfoFilter
+    {
+        public int CarrierAccountId { get; set; }
+    }
     public class CarrierProfileToEdit : BaseCarrierProfile
     {
 

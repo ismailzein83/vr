@@ -26,6 +26,9 @@
         var documentsGridAPI;
         var documentsGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var ticketContactsGridAPI;
+        var ticketContactsGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var countrySelectedPromiseDeferred;
 
         var defaultCustomerTimeZoneDirectiveAPI;
@@ -57,7 +60,7 @@
                 else
                     return WhS_BE_CarrierProfileAPIService.HasAddCarrierProfilePermission();
             };
-           
+
             $scope.scopeModal = {
                 contacts: [],
                 taxes: [],
@@ -156,9 +159,18 @@
                 documentsGridAPI.addDocument();
             };
 
+            $scope.scopeModal.addTicketContact = function () {
+                ticketContactsGridAPI.addTicketContact();
+            };
+
             $scope.scopeModal.onDocumentGridReady = function (api) {
                 documentsGridAPI = api;
                 documentsGridReadyPromiseDeferred.resolve();
+            };
+
+            $scope.scopeModal.onTicketContactGridReady = function (api) {
+                ticketContactsGridAPI = api;                
+                ticketContactsGridReadyPromiseDeferred.resolve();
             };
         }
 
@@ -205,7 +217,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountryCitySection, loadStaticSection, loadContacts, loadCurrencySelector, loadTaxes, loadDefaultCustomerTimeZoneSelector,loadDefaultSupplierTimeZoneSelector, loadDocuments, loadCompanySettingSelector])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadCountryCitySection, loadStaticSection, loadContacts, loadCurrencySelector, loadTaxes, loadDefaultCustomerTimeZoneSelector, loadDefaultSupplierTimeZoneSelector, loadDocuments, loadCompanySettingSelector, loadTicketContacts])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -218,11 +230,11 @@
 
 
             if (isEditMode && carrierProfileEntity != undefined)
-                
+
                 $scope.title = UtilsService.buildTitleForUpdateEditor(carrierProfileEntity.Name, 'Carrier Profile', $scope);
-              
+
             else if (isViewHistoryMode && carrierProfileEntity != undefined)
-            $scope.title = "View Carrier Profile: " + carrierProfileEntity.Name;
+                $scope.title = "View Carrier Profile: " + carrierProfileEntity.Name;
             else
                 $scope.title = UtilsService.buildTitleForAddEditor('Carrier Profile');
 
@@ -366,20 +378,33 @@
                     if (response != undefined) {
                         for (var i = 0; i < response.length; i++)
                             documentCategories.push(response[i]);
-                }
-                            var payload = {
-                                    documentCategories: documentCategories
-                };
-                            if (carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined && carrierProfileEntity.Settings.Documents != undefined) {
-                                payload.documents = carrierProfileEntity.Settings.Documents;
-                }
-                            VRUIUtilsService.callDirectiveLoad(documentsGridAPI, payload, loadDocumentsPromiseDeferred);
+                    }
+                    var payload = {
+                        documentCategories: documentCategories
+                    };
+                    if (carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined && carrierProfileEntity.Settings.Documents != undefined) {
+                        payload.documents = carrierProfileEntity.Settings.Documents;
+                    }
+                    VRUIUtilsService.callDirectiveLoad(documentsGridAPI, payload, loadDocumentsPromiseDeferred);
                 });
-              
+
             });
             return loadDocumentsPromiseDeferred.promise;
         }
-         
+
+        function loadTicketContacts() {
+            var loadTicketContactsPromiseDeferred = UtilsService.createPromiseDeferred();
+            ticketContactsGridReadyPromiseDeferred.promise.then(function () {
+                var payload = {};
+                if (carrierProfileEntity != undefined && carrierProfileEntity.Settings != undefined && carrierProfileEntity.Settings.TicketContacts != undefined) {
+                    payload.ticketContacts = carrierProfileEntity.Settings.TicketContacts;
+                }
+                VRUIUtilsService.callDirectiveLoad(ticketContactsGridAPI, payload, loadTicketContactsPromiseDeferred);
+
+            });
+            return loadTicketContactsPromiseDeferred.promise;
+        }
+
         function loadContacts() {
             for (var x in WhS_BE_ContactTypeEnum) {
                 $scope.scopeModal.contacts.push(addcontactObj(x));
@@ -422,7 +447,7 @@
                     $scope.scopeModal.address = carrierProfileEntity.Settings.Address;
                     $scope.scopeModal.postalCode = carrierProfileEntity.Settings.PostalCode;
                     $scope.scopeModal.town = carrierProfileEntity.Settings.Town;
-                    if (carrierProfileEntity.Settings.CompanyLogo !=null)
+                    if (carrierProfileEntity.Settings.CompanyLogo != null)
                         $scope.scopeModal.companyLogo = {
                             fileId: carrierProfileEntity.Settings.CompanyLogo
                         };
@@ -507,6 +532,7 @@
                     Documents: documentsGridAPI.getData(),
                     DefaultCusotmerTimeZoneId: defaultCustomerTimeZoneDirectiveAPI.getSelectedIds(),
                     DefaultSupplierTimeZoneId: defaultSupplierTimeZoneDirectiveAPI.getSelectedIds(),
+                    TicketContacts:ticketContactsGridAPI.getData()
                 }
             };
 
