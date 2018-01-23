@@ -53,6 +53,9 @@ namespace TOne.WhS.BusinessEntity.Entities
         public Guid? InvoiceSettingId { get; set; }
         public Guid? CompanySettingId { get; set; }
         public List<CarrierContact> Contacts { get; set; }
+
+        public List<CarrierProfileTicketContact> TicketContacts { get; set; }
+
         public VRTaxSetting TaxSetting { get; set; }
         public List<VRDocumentSetting> Documents { get; set; }
     }
@@ -63,6 +66,17 @@ namespace TOne.WhS.BusinessEntity.Entities
         public Dictionary<string, Object> ExtendedSettings { get; set; }
 
         public bool IsDeleted { get; set; }
+    }
+
+    public class CarrierProfileTicketContact
+    {
+        public Guid CarrierProfileTicketContactId { get; set; }
+
+        public string Name { get; set; }
+
+        public List<string> PhoneNumber { get; set; }
+
+        public List<string> Emails { get; set; }
     }
 
     public class CarrierProfileToEdit : BaseCarrierProfile
