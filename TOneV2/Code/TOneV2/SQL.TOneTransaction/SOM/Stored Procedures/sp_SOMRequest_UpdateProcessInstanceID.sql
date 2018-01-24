@@ -4,7 +4,7 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [SOM].[sp_SOMRequest_UpdateProcessInstanceID] 
-	@ID BIGINT,
+	@ID uniqueidentifier,
 	@ProcessInstanceID bigint
 AS
 BEGIN

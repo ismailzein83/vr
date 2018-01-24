@@ -230,6 +230,8 @@
     <Build Include="SOM\Stored Procedures\sp_SOMRequest_UpdateProcessInstanceID.sql" />
     <Build Include="SOM\Stored Procedures\sp_SOMRequest_Insert.sql" />
     <Build Include="Security\SOM.sql" />
+    <Build Include="SOM\Stored Procedures\sp_SOMRequest_GetRecentHeadersByEntityID.sql" />
+    <Build Include="SOM\Stored Procedures\sp_SOMRequest_GetProcessInstanceId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />
