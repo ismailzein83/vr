@@ -2,6 +2,7 @@
 using Vanrise.BusinessProcess.Data;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace Vanrise.BusinessProcess.Business
 {
@@ -44,6 +45,13 @@ namespace Vanrise.BusinessProcess.Business
             bpTrackingUpdateOutput.ListBPInstanceTrackingDetails = bpTrackingMessageDetails;
             return bpTrackingUpdateOutput;
         }
+
+        public List<BPTrackingMessage> GetRecentBPInstanceTrackings(long processInstanceId, int nbOfRecords, long? lessThanId, List<LogEntryType> severities)
+        {
+            IBPTrackingDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTrackingDataManager>();
+            return dataManager.GetRecentBPInstanceTrackings(processInstanceId, nbOfRecords, lessThanId, severities);
+        }
+
         #endregion
 
         #region mapper

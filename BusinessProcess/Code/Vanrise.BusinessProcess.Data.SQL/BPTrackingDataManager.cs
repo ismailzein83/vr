@@ -124,6 +124,17 @@ namespace Vanrise.BusinessProcess.Data.SQL
 
             return GetItemsSP("[bp].[sp_BPTrackings_GetBeforeID]", BPTrackingMapper, input.LessThanID, input.NbOfRows, input.BPInstanceID, severityIdsAsString);
         }
+
+
+
+        public List<BPTrackingMessage> GetRecentBPInstanceTrackings(long bpInstanceId, int nbOfRecords, long? lessThanId, List<LogEntryType> severities)
+        {
+            string severityIdsAsString = null;
+            if (severities != null && severities.Count() > 0)
+                severityIdsAsString = string.Join<int>(",", severities.Select(n => ((int)n)));
+            return GetItemsSP("[bp].[sp_BPTrackings_GetBPInstanceRecent]", BPTrackingMapper, bpInstanceId, nbOfRecords, lessThanId, severityIdsAsString);
+        }
+
         #endregion
 
         #region Private Methods
@@ -150,5 +161,6 @@ namespace Vanrise.BusinessProcess.Data.SQL
         }
 
         #endregion
+
     }
 }

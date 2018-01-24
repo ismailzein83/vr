@@ -19,5 +19,7 @@ namespace Vanrise.BusinessProcess.Data
         List<BPTrackingMessage> GetBeforeId(BPTrackingBeforeIdInput input);
 
         List<BPTrackingMessage> GetUpdated(BPTrackingUpdateInput input);
+
+        List<BPTrackingMessage> GetRecentBPInstanceTrackings(long processInstanceId, int nbOfRecords, long? lessThanId, List<LogEntryType> severities);
     }
 }
