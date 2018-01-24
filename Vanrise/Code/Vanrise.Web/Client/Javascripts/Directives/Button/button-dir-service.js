@@ -44,7 +44,7 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
             return '<div style="position:relative;display:inline-block" ng-if="ctrl.isExculdedOnreadOnly()" ng-mouseleave="ctrl.showMenuActions = false" ng-hide="ctrl.hideTemplate">'
                 + '<button style="border-radius: 0px; border-color: transparent;  background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom"'
             + 'aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()">' + buttonAttributes.text
-                + '<span  class="' + buttonAttributes.class +' btn-label"  aria-hidden="true" ng-show="ctrl.showIcon()"></span>'
+                + '<span  class="' + buttonAttributes.class + ' btn-label"  aria-hidden="true" ng-show="ctrl.showIcon()"></span>'
                 + '<img src="Client/Javascripts/Directives/Button/images/loader-mask.gif" class="img-loader" style="width:14px;" ng-show="ctrl.showLoader()" />'
 
                 + '</button>'
@@ -363,16 +363,16 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: "Skip",
                     class: "glyphicon glyphicon-step-forward"
                 };
-        	case "BulkActions":
-        		return {
-        			text: "Bulk Actions",
-        			class: "glyphicon glyphicon-tasks"
-        		};
-        	case "Evaluate":
-        		return {
-        			text: "Evaluate",
-        			class: "glyphicon glyphicon-play"
-        		};
+            case "BulkActions":
+                return {
+                    text: "Bulk Actions",
+                    class: "glyphicon glyphicon-tasks"
+                };
+            case "Evaluate":
+                return {
+                    text: "Evaluate",
+                    class: "glyphicon glyphicon-play"
+                };
             case "CreateUser":
                 return {
                     text: "Create User",
@@ -404,11 +404,16 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     class: "glyphicon glyphicon-retweet"
                 };
 
-          case "ReleaseAll":
-            return {
-                text: "Release All",
-                class: "glyphicon  glyphicon-play"
-            };
+            case "ReleaseAll":
+                return {
+                    text: "Release All",
+                    class: "glyphicon  glyphicon-play"
+                };
+            case "Delete":
+                return {
+                    text: "Delete",
+                    class: "glyphicon glyphicon-trash"
+                };
         }
     }
 }]);
