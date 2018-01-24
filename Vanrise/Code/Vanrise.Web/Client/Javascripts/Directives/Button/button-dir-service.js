@@ -13,7 +13,7 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
        + ' <li role="presentation">'
        + '     <div ng-repeat="action in ctrl.menuActions"  ng-hide="action.disable" class="btn-menu-item mark-select ">'
          + '       <div class=" hand-cursor" ng-click="ctrl.menuActionClicked(action)"><span style="font-size:11px">{{action.name}}</span>'
-                    + '<img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" class="img-loader"  ng-show="action.isSubmitting" /></div>'
+                    + '<img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" class="img-loader" style="width:14px;" ng-show="action.isSubmitting" /></div>'
         + '    </div>'
        + ' </li>'
  + '   </ul>';
