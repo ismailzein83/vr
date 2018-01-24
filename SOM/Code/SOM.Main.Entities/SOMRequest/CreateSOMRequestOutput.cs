@@ -8,6 +8,8 @@ namespace SOM.Main.Entities
 {
     public class CreateSOMRequestOutput
     {
-        public long SOMRequestId { get; set; }
+        public Guid SOMRequestId { get; set; }
+
+        public long SOMProcessInstanceId { get; set; }
     }
 }

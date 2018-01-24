@@ -28,5 +28,19 @@ namespace SOM.Main.Web.Controllers
         {
             return GetWebResponse(input, s_manager.GetFilteredSOMRequests(input)); 
         }
+
+        [HttpGet]
+        [Route("GetRecentSOMRequestHeaders")]
+        public List<SOMRequestHeader> GetRecentSOMRequestHeaders(string entityId, int nbOfRecords, long? lessThanSequenceNb)
+        {
+            return s_manager.GetRecentSOMRequestHeaders(entityId, nbOfRecords, lessThanSequenceNb);
+        }
+
+        [HttpGet]
+        [Route("GetSOMRequestLogs")]
+        public List<SOMRequestLog> GetSOMRequestLogs(Guid somRequestId, int nbOfRecords, long? lessThanId)
+        {
+            return s_manager.GetSOMRequestLogs(somRequestId, nbOfRecords, lessThanId);
+        }
     }
 }

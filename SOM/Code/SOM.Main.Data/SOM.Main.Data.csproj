@@ -51,6 +51,12 @@
     <Compile Include="MainDataManagerFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SOM.Main.Entities\SOM.Main.Entities.csproj">
+      <Project>{cdd52ad1-64a7-4255-b9b4-783959756de9}</Project>
+      <Name>SOM.Main.Entities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

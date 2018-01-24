@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SOM.Main.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,12 @@ namespace SOM.Main.Data
 {
     public interface ISOMRequestDataManager : IDataManager
     {
-        void AddRequest(Guid requestTypeId, string entityId, string serializedSettings, out long requestId);
+        void AddRequest(Guid requestId, Guid requestTypeId, string entityId, string title, string serializedSettings);
 
-        void UpdateRequestProcessInstanceId(long requestId, long processInstanceId);
+        void UpdateRequestProcessInstanceId(Guid requestId, long processInstanceId);
+
+        long? GetRequestProcessInstanceId(Guid somRequestId);
+
+        List<SOMRequestHeader> GetRecentSOMRequestHeaders(string entityId, int nbOfRecords, long? lessThanSequenceNb);
     }
 }

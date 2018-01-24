@@ -1,0 +1,173 @@
+﻿using BPMExtended.Main.Entities;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Vanrise.Common;
+using SOM.Main.BP.Arguments;
+using SOM.Main.Entities;
+using BPMExtended.Main.Data;
+
+namespace BPMExtended.Main.Business
+{
+    public class CustomerRequestManager
+    {
+        #region Fields
+
+        //ICustomerRequestDataManager s_dataManager = BPMExtendedDataManagerFactory.GetDataManager<ICustomerRequestDataManager>();
+
+        #endregion
+
+        #region Public Methods
+
+        public List<CustomerRequestHeaderDetail> GetRecentRequestHeaders(int nbOfRecords, CustomerObjectType customerObjectType, Guid accountOrContactId, long? lessThanSequenceNb)
+        {
+            List<SOMRequestHeader> somRequests = null;
+            using(SOMClient client = new SOMClient())
+            {
+                string entityId = BuildSOMEntityIdFromCustomer(customerObjectType, accountOrContactId);
+                somRequests = client.Get<List<SOMRequestHeader>>(String.Format("api/SOM_Main/SOMRequest/GetRecentSOMRequestHeaders?entityId={0}&nbOfRecords={1}&lessThanSequenceNb={2}", entityId, nbOfRecords, lessThanSequenceNb));
+            }
+            List<CustomerRequestHeaderDetail> customerRequests = new List<CustomerRequestHeaderDetail>();
+            if(somRequests != null)
+            {
+                foreach(var req in somRequests)
+                {
+                    var customerReq = new CustomerRequestHeaderDetail
+                    {
+                        CustomerRequestId = req.SOMRequestId,
+                        CustomerObjectType = customerObjectType,
+                        AccountOrContactId = accountOrContactId,
+                        SequenceNumber = req.SequenceNumber,
+                        Title = req.Title,
+                        RequestTypeId = req.RequestTypeId,
+                        Status = MapRequestStatus(req.Status),
+                        CreatedTime = req.CreatedTime,
+                        LastModifiedTime = req.LastModifiedTime
+                    };
+                    customerRequests.Add(customerReq);
+                }
+            }
+            return customerRequests;
+        }
+
+        public List<CustomerRequestLogDetail> GetRequestLogs(Guid requestId, int nbOfRecords, long? lessThanId)
+        {
+            List<SOMRequestLog> somLogs = null;
+            using(SOMClient client = new SOMClient())
+            {
+                somLogs = client.Get<List<SOMRequestLog>>(string.Format("api/SOM_Main/SOMRequest/GetSOMRequestLogs?somRequestId={0}&nbOfRecords={1}&lessThanId={2}", requestId, nbOfRecords, lessThanId));
+            }
+            List<CustomerRequestLogDetail> logs = new List<CustomerRequestLogDetail>();
+            foreach(var somLog in somLogs)
+            {
+                var log = new CustomerRequestLogDetail
+                {
+                    RequestLogId = somLog.SOMRequestLogId,
+                    Severity = somLog.Severity,
+                    Message = somLog.Message,
+                    ExceptionDetail = somLog.ExceptionDetail,
+                    EventTime = somLog.EventTime
+                };
+                logs.Add(log);
+            }
+            return logs;
+        }
+
+        public CreateCustomerRequestOutput CreateLineSubscriptionRequest(CustomerObjectType customerObjectType, Guid accountOrContactId, LineSubscriptionRequest lineSubscriptionRequest)
+        {
+            string title = string.Format("Line Subscription '{0}'", lineSubscriptionRequest.PhoneNumber);
+            return CreateSOMRequest(customerObjectType, accountOrContactId, title, lineSubscriptionRequest);
+        }
+
+        public CreateCustomerRequestOutput CreateMoveLineRequest(CustomerObjectType customerObjectType, Guid accountOrContactId, MoveLineRequest moveLineRequest)
+        {
+            string title = string.Format("Move Line '{0}'", moveLineRequest.PhoneNumber);
+            return CreateSOMRequest(customerObjectType, accountOrContactId, title, moveLineRequest);
+        }
+
+        public CreateCustomerRequestOutput CreateLineSubscriptionTerminationRequest(CustomerObjectType customerObjectType, Guid accountOrContactId, LineSubscriptionTerminationProcessRequest lineSubscriptionTerminationRequest)
+        {
+            string title = string.Format("Line Subscription Termination '{0}'", lineSubscriptionTerminationRequest.PhoneNumber);
+            return CreateSOMRequest(customerObjectType, accountOrContactId, title, lineSubscriptionTerminationRequest);
+        }
+
+        //public void UpdateRequestStatus(Guid requestId, CustomerRequestStatus status)
+        //{
+        //    s_dataManager.UpdateRequestStatus(requestId, status);
+        //}
+
+        #endregion
+
+        #region Private Methods
+
+        private CreateCustomerRequestOutput CreateSOMRequest(CustomerObjectType customerObjectType, Guid accountOrContactId, string requestTitle, SOMRequestExtendedSettings requestSettings)
+        {
+            Guid requestId = Guid.NewGuid();
+            CreateSOMRequestInput somRequestInput = new CreateSOMRequestInput
+             {
+                 SOMRequestId = requestId,
+                 EntityId = BuildSOMEntityIdFromCustomer(customerObjectType, accountOrContactId),
+                 RequestTitle = requestTitle,
+                 Settings = new SOMRequestSettings { ExtendedSettings = requestSettings }
+             };
+
+            CreateSOMRequestOutput output = null;
+
+            using (var client = new SOMClient())
+            {
+                //s_dataManager.Insert(requestId, requestSettings.ConfigId, customerObjectType, accountOrContactId, requestTitle, CustomerRequestStatus.New);//insert request in BPM after making sure connection to SOM succeeds
+                //try
+                //{
+                    output = client.Post<CreateSOMRequestInput, CreateSOMRequestOutput>("api/SOM_Main/SOMRequest/CreateSOMRequest", somRequestInput);
+                //}
+                //catch
+                //{
+                //    s_dataManager.UpdateRequestStatus(requestId, CustomerRequestStatus.Aborted);
+                //    throw;
+                //}
+            }
+            return new CreateCustomerRequestOutput
+            {
+            };
+        }
+
+        private static string BuildSOMEntityIdFromCustomer(CustomerObjectType customerObjectType, Guid accountOrContactId)
+        {
+            return String.Concat(customerObjectType.ToString(), "_", accountOrContactId.ToString());
+        }
+
+        //private CustomerRequestDetail CustomerRequestDetailMapper(CustomerRequest request)
+        //{
+        //    var requestDetail = new CustomerRequestDetail
+        //    {
+        //        CustomerRequestId = request.CustomerRequestId,
+        //        CustomerObjectType = request.CustomerObjectType,
+        //        AccountOrContactId = request.AccountOrContactId,
+        //        RequestTypeId = request.RequestTypeId,
+        //        Title = request.Title,
+        //        Status = request.Status,
+        //        SequenceNumber = request.SequenceNumber,
+        //        CreatedTime = request.CreatedTime,
+        //        LastModifiedTime = request.LastModifiedTime
+        //    };
+        //    return requestDetail;
+        //}
+
+        private CustomerRequestStatus MapRequestStatus(SOMRequestStatus somRequestStatus)
+        {
+            switch (somRequestStatus)
+            {
+                case SOMRequestStatus.New: return CustomerRequestStatus.New;
+                case SOMRequestStatus.Running: return CustomerRequestStatus.Running;
+                case SOMRequestStatus.Waiting: return CustomerRequestStatus.Waiting;
+                case SOMRequestStatus.Completed: return CustomerRequestStatus.Completed;
+                case SOMRequestStatus.Aborted: return CustomerRequestStatus.Aborted;
+                default: throw new NotSupportedException(String.Format("somRequestStatus '{0}'", somRequestStatus.ToString()));
+            }
+        }
+
+        #endregion
+    }
+}

@@ -16,6 +16,7 @@ namespace SOM.Main.Business
     public class SOMRequestManager
     {
         static Vanrise.BusinessProcess.Business.BPInstanceManager s_bpInstanceManager = new Vanrise.BusinessProcess.Business.BPInstanceManager();
+        static Vanrise.BusinessProcess.Business.BPInstanceTrackingManager s_bpInstanceTrackingManager = new BPInstanceTrackingManager();
         static ISOMRequestDataManager s_dataManager = MainDataManagerFactory.GetDataManager<ISOMRequestDataManager>();
 
         #region Public Methods
@@ -27,8 +28,8 @@ namespace SOM.Main.Business
             input.Settings.ExtendedSettings.ThrowIfNull("input.Settings.ExtendedSettings");
             Guid requestTypeId = input.Settings.ExtendedSettings.ConfigId;
             string serializedSettings = Serializer.Serialize(input.Settings);
-            long requestId;
-            s_dataManager.AddRequest(requestTypeId, input.EntityId, serializedSettings, out requestId);
+            Guid requestId = input.SOMRequestId.HasValue && input.SOMRequestId.Value != default(Guid) ? input.SOMRequestId.Value : Guid.NewGuid();
+            s_dataManager.AddRequest(requestId, requestTypeId, input.EntityId, input.RequestTitle, serializedSettings);
             var createBPInputArgContext = new SOMRequestConvertToBPInputArgumentContext();
             BaseSOMRequestBPInputArg bpInputArg = input.Settings.ExtendedSettings.ConvertToBPInputArgument(createBPInputArgContext);
             bpInputArg.ThrowIfNull("bpInputArg");
@@ -36,6 +37,7 @@ namespace SOM.Main.Business
             bpInputArg.UserId = Vanrise.Security.Entities.ContextFactory.GetContext().GetLoggedInUserId();
             bpInputArg.SOMRequestId = requestId;
             bpInputArg.SOMRequestTypeId = requestTypeId;
+            bpInputArg.SOMRequestTitle = input.RequestTitle;
             var createProcessInput = new Vanrise.BusinessProcess.Entities.CreateProcessInput
             {
                 InputArguments = bpInputArg
@@ -44,13 +46,48 @@ namespace SOM.Main.Business
             s_dataManager.UpdateRequestProcessInstanceId(requestId, createProcessOutput.ProcessInstanceId);
             return new CreateSOMRequestOutput
             {
-                SOMRequestId = createProcessOutput.ProcessInstanceId
+                SOMRequestId = requestId,
+                SOMProcessInstanceId = createProcessOutput.ProcessInstanceId
             };
         }
 
         public Vanrise.Entities.IDataRetrievalResult<SOMRequestDetail> GetFilteredSOMRequests(Vanrise.Entities.DataRetrievalInput<SOMRequestQuery> input)
         {
             return BigDataManager.Instance.RetrieveData(input, new SOMRequestRequestHandler());
+        }
+
+        public List<SOMRequestLog> GetSOMRequestLogs(Guid somRequestId, int nbOfRecords, long? lessThanId)
+        {
+            long? requestProcessInstanceId = s_dataManager.GetRequestProcessInstanceId(somRequestId);
+            if (requestProcessInstanceId.HasValue)
+            {
+                List<BPTrackingMessage> bpTrackingMessages = s_bpInstanceTrackingManager.GetRecentBPInstanceTrackings(requestProcessInstanceId.Value, nbOfRecords, lessThanId, new List<LogEntryType> { LogEntryType.Information, LogEntryType.Warning, LogEntryType.Error });
+                List<SOMRequestLog> requestLogs = new List<SOMRequestLog>();
+                if (bpTrackingMessages != null)
+                {
+                    foreach (var trackingMsg in bpTrackingMessages)
+                    {
+                        requestLogs.Add(new SOMRequestLog
+                        {
+                            SOMRequestLogId = trackingMsg.Id,
+                            Severity = trackingMsg.Severity,
+                            Message = trackingMsg.TrackingMessage,
+                            ExceptionDetail = trackingMsg.ExceptionDetail,
+                            EventTime = trackingMsg.EventTime
+                        });
+                    }
+                }
+                return requestLogs;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        public List<SOMRequestHeader> GetRecentSOMRequestHeaders(string entityId, int nbOfRecords, long? lessThanSequenceNb)
+        {
+            return s_dataManager.GetRecentSOMRequestHeaders(entityId, nbOfRecords, lessThanSequenceNb);
         }
 
         #endregion

@@ -8,7 +8,11 @@ namespace SOM.Main.Entities
 {
     public class CreateSOMRequestInput
     {
+        public Guid? SOMRequestId { get; set; }
+
         public string EntityId { get; set; }
+
+        public string RequestTitle { get; set; }
 
         public SOMRequestSettings Settings { get; set; }
     }

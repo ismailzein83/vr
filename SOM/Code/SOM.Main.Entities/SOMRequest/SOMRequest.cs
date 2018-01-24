@@ -8,9 +8,13 @@ namespace SOM.Main.Entities
 {
     public enum SOMRequestStatus { New = 0, Running = 20, Waiting = 30, Completed = 50, Aborted = 60 }
 
-    public class SOMRequest
+    public class SOMRequestHeader
     {
-        public long SOMRequestId { get; set; }
+        public Guid SOMRequestId { get; set; }
+
+        public long SequenceNumber { get; set; }
+
+        public Guid RequestTypeId { get; set; }
 
         public string EntityId { get; set; }
 
@@ -20,11 +24,9 @@ namespace SOM.Main.Entities
 
         public SOMRequestStatus Status { get; set; }
 
-        public string WaitingInfo { get; set; }
-
-        public SOMRequestSettings Settings { get; set; }
-
         public DateTime CreatedTime { get; set; }
+
+        public DateTime LastModifiedTime { get; set; }
     }
 
     public class SOMRequestSettings
@@ -43,7 +45,14 @@ namespace SOM.Main.Entities
     {
         public Guid SOMRequestTypeId { get; set; }
 
-        public long SOMRequestId { get; set; }
+        public Guid SOMRequestId { get; set; }
+
+        public string SOMRequestTitle { get; set; }
+
+        public override string GetTitle()
+        {
+            return this.SOMRequestTitle;
+        }
     }
 
     public interface ISOMRequestConvertToBPInputArgumentContext
