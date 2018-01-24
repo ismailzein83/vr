@@ -34,6 +34,7 @@ namespace TOne.WhS.Routing.BP.Activities
         [RequiredArgument]
         public OutArgument<bool> ShouldTriggerFullRouteProcess { get; set; }
 
+
         protected override void Execute(CodeActivityContext context)
         {
             var routingDatabase = this.RoutingDatabase.Get(context);
@@ -135,6 +136,30 @@ namespace TOne.WhS.Routing.BP.Activities
             this.ShouldTriggerFullRouteProcess.Set(context, shouldTriggerFullRouteProcess);
         }
 
+        private void UpdateAffectedRouteList(List<AffectedRoutes> affectedRoutesList, List<CustomerZoneDetail> customerZoneDetails)
+        {
+            if (customerZoneDetails == null || customerZoneDetails.Count == 0)
+                return;
+
+            Dictionary<int, List<long>> customerZoneDetailsDcit = new Dictionary<int, List<long>>();
+            foreach (CustomerZoneDetail customerZoneDetail in customerZoneDetails)
+            {
+                List<long> zones = customerZoneDetailsDcit.GetOrCreateItem(customerZoneDetail.CustomerId);
+                zones.Add(customerZoneDetail.SaleZoneId);
+            }
+
+            foreach (var kvp in customerZoneDetailsDcit)
+            {
+                AffectedRoutes affectedRoutes = new AffectedRoutes()
+                {
+                    CustomerIds = new List<int>() { kvp.Key },
+                    ZoneIds = kvp.Value
+
+                };
+                affectedRoutesList.Add(affectedRoutes);
+            }
+        }
+
         private void UpdateAffectedRouteList(List<AffectedRouteOptions> affectedRouteOptionsList, List<SupplierZoneDetail> supplierZoneDetails)
         {
             if (supplierZoneDetails == null || supplierZoneDetails.Count == 0)
@@ -159,27 +184,39 @@ namespace TOne.WhS.Routing.BP.Activities
             }
         }
 
-        private void UpdateAffectedRouteList(List<AffectedRoutes> affectedRoutesList, List<CustomerZoneDetail> customerZoneDetails)
+        private void BuildAffectedRoutes(List<RouteRule> routeRules, List<AffectedRoutes> affectedRoutesList, out bool shouldTriggerFullRouteProcess)
         {
-            if (customerZoneDetails == null || customerZoneDetails.Count == 0)
-                return;
-
-            Dictionary<int, List<long>> customerZoneDetailsDcit = new Dictionary<int, List<long>>();
-            foreach (CustomerZoneDetail customerZoneDetail in customerZoneDetails)
+            shouldTriggerFullRouteProcess = false;
+            if (routeRules != null)
             {
-                List<long> zones = customerZoneDetailsDcit.GetOrCreateItem(customerZoneDetail.CustomerId);
-                zones.Add(customerZoneDetail.SaleZoneId);
-            }
-
-            foreach (var kvp in customerZoneDetailsDcit)
-            {
-                AffectedRoutes affectedRoutes = new AffectedRoutes()
+                foreach (RouteRule routeRule in routeRules)
                 {
-                    CustomerIds = new List<int>() { kvp.Key },
-                    ZoneIds = kvp.Value
+                    RouteRuleCriteria criteria = routeRule.Criteria as RouteRuleCriteria;
+                    bool isCustomerGeneric;
+                    IEnumerable<int> affectedCustomers = GetAffectedCustomers(criteria, out isCustomerGeneric);
 
-                };
-                affectedRoutesList.Add(affectedRoutes);
+                    IEnumerable<CodeCriteria> affectedCodes;
+                    IEnumerable<long> affectedZones;
+
+                    bool areCodesAndZonesGeneric;
+                    GetAffectedCodesAndZones(criteria, out affectedCodes, out affectedZones, out areCodesAndZonesGeneric);
+
+                    if (isCustomerGeneric && areCodesAndZonesGeneric)
+                    {
+                        shouldTriggerFullRouteProcess = true;
+                        return;
+                    }
+
+                    var routingExcludedDestinationData = (criteria != null && criteria.ExcludedDestinations != null) ? criteria.ExcludedDestinations.GetRoutingExcludedDestinationData() : null;
+
+                    affectedRoutesList.Add(new Entities.AffectedRoutes()
+                    {
+                        Codes = affectedCodes,
+                        CustomerIds = affectedCustomers,
+                        RoutingExcludedDestinationData = routingExcludedDestinationData,
+                        ZoneIds = affectedZones
+                    });
+                }
             }
         }
 
@@ -218,42 +255,6 @@ namespace TOne.WhS.Routing.BP.Activities
                         RoutingExcludedDestinationData = routingExcludedDestinationData,
                         ZoneIds = affectedZones,
                         SupplierWithZones = supplierWithZones
-                    });
-                }
-            }
-        }
-
-        private void BuildAffectedRoutes(List<RouteRule> routeRules, List<AffectedRoutes> affectedRoutesList, out bool shouldTriggerFullRouteProcess)
-        {
-            shouldTriggerFullRouteProcess = false;
-            if (routeRules != null)
-            {
-                foreach (RouteRule routeRule in routeRules)
-                {
-                    RouteRuleCriteria criteria = routeRule.Criteria as RouteRuleCriteria;
-                    bool isCustomerGeneric;
-                    IEnumerable<int> affectedCustomers = GetAffectedCustomers(criteria, out isCustomerGeneric);
-
-                    IEnumerable<CodeCriteria> affectedCodes;
-                    IEnumerable<long> affectedZones;
-
-                    bool areCodesAndZonesGeneric;
-                    GetAffectedCodesAndZones(criteria, out affectedCodes, out affectedZones, out areCodesAndZonesGeneric);
-
-                    if (isCustomerGeneric && areCodesAndZonesGeneric)
-                    {
-                        shouldTriggerFullRouteProcess = true;
-                        return;
-                    }
-
-                    var routingExcludedDestinationData = (criteria != null && criteria.ExcludedDestinations != null) ? criteria.ExcludedDestinations.GetRoutingExcludedDestinationData() : null;
-
-                    affectedRoutesList.Add(new Entities.AffectedRoutes()
-                    {
-                        Codes = affectedCodes,
-                        CustomerIds = affectedCustomers,
-                        RoutingExcludedDestinationData = routingExcludedDestinationData,
-                        ZoneIds = affectedZones
                     });
                 }
             }

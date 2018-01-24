@@ -251,6 +251,72 @@ namespace TOne.WhS.Routing.Data.SQL
             return addedItems;
         }
 
+        private List<string> BuildAffectedRoutes(List<AffectedRoutes> affectedRoutesList)
+        {
+            if (affectedRoutesList == null || affectedRoutesList.Count == 0)
+                return null;
+
+            List<string> conditions = new List<string>();
+            foreach (AffectedRoutes affectedRoutes in affectedRoutesList)
+            {
+                List<string> subConditions = new List<string>();
+
+                if (affectedRoutes.CustomerIds != null && affectedRoutes.CustomerIds.Count() > 0)
+                {
+                    subConditions.Add(string.Format("cr.CustomerID in ({0})", string.Join<int>(",", affectedRoutes.CustomerIds)));
+                }
+
+                if (affectedRoutes.ZoneIds != null && affectedRoutes.ZoneIds.Count() > 0)
+                {
+                    subConditions.Add(string.Format("cr.SaleZoneID in ({0})", string.Join<long>(",", affectedRoutes.ZoneIds)));
+                }
+
+                if (affectedRoutes.Codes != null && affectedRoutes.Codes.Count() > 0)
+                {
+                    List<string> codesConditions = new List<string>();
+
+                    List<string> codesWithoutSubCodes = new List<string>();
+                    List<string> codesWithSubCodes = new List<string>();
+                    foreach (CodeCriteria codeCriteria in affectedRoutes.Codes)
+                    {
+                        if (codeCriteria.WithSubCodes)
+                            codesWithSubCodes.Add(codeCriteria.Code);
+                        else
+                            codesWithoutSubCodes.Add(codeCriteria.Code);
+                    }
+
+                    if (codesWithoutSubCodes.Count > 0)
+                        codesConditions.Add(string.Format("cr.Code in ('{0}')", string.Join<string>("','", codesWithoutSubCodes)));
+
+                    if (codesWithSubCodes.Count > 0)
+                    {
+                        foreach (string code in codesWithSubCodes)
+                        {
+                            codesConditions.Add(string.Format("cr.Code like ('{0}%')", code));
+                        }
+                    }
+
+                    subConditions.Add(string.Format("({0})", string.Join<string>(" or ", codesConditions)));
+                }
+
+                RoutingExcludedDestinationData routingExcludedDestinationData = affectedRoutes.RoutingExcludedDestinationData;
+                if (routingExcludedDestinationData != null)
+                {
+                    if (routingExcludedDestinationData.ExcludedCodes != null && routingExcludedDestinationData.ExcludedCodes.Count > 0)
+                        subConditions.Add(string.Format("cr.Code not in ('{0}')", string.Join<string>("','", routingExcludedDestinationData.ExcludedCodes)));
+
+                    if (routingExcludedDestinationData.CodeRanges != null && routingExcludedDestinationData.CodeRanges.Count > 0)
+                    {
+                        foreach (var excludedDestinationData in routingExcludedDestinationData.CodeRanges)
+                            subConditions.Add(string.Format("(Len(cr.Code) <> Len('{0}') or Code < '{0}' or Code > '{1}')", excludedDestinationData.FromCode, excludedDestinationData.ToCode));
+                    }
+                }
+
+                conditions.Add(string.Format("({0})", string.Join<string>(" and ", subConditions)));
+            }
+            return conditions;
+        }
+
         private List<string> BuildAffectedRouteOptions(List<AffectedRouteOptions> affectedRouteOptionsList, out bool hasSupplierZoneCriteria)
         {
             hasSupplierZoneCriteria = false;
@@ -314,72 +380,6 @@ namespace TOne.WhS.Routing.Data.SQL
                 }
 
                 RoutingExcludedDestinationData routingExcludedDestinationData = affectedRouteOptions.RoutingExcludedDestinationData;
-                if (routingExcludedDestinationData != null)
-                {
-                    if (routingExcludedDestinationData.ExcludedCodes != null && routingExcludedDestinationData.ExcludedCodes.Count > 0)
-                        subConditions.Add(string.Format("cr.Code not in ('{0}')", string.Join<string>("','", routingExcludedDestinationData.ExcludedCodes)));
-
-                    if (routingExcludedDestinationData.CodeRanges != null && routingExcludedDestinationData.CodeRanges.Count > 0)
-                    {
-                        foreach (var excludedDestinationData in routingExcludedDestinationData.CodeRanges)
-                            subConditions.Add(string.Format("(Len(cr.Code) <> Len('{0}') or Code < '{0}' or Code > '{1}')", excludedDestinationData.FromCode, excludedDestinationData.ToCode));
-                    }
-                }
-
-                conditions.Add(string.Format("({0})", string.Join<string>(" and ", subConditions)));
-            }
-            return conditions;
-        }
-
-        private List<string> BuildAffectedRoutes(List<AffectedRoutes> affectedRoutesList)
-        {
-            if (affectedRoutesList == null || affectedRoutesList.Count == 0)
-                return null;
-
-            List<string> conditions = new List<string>();
-            foreach (AffectedRoutes affectedRoutes in affectedRoutesList)
-            {
-                List<string> subConditions = new List<string>();
-
-                if (affectedRoutes.CustomerIds != null && affectedRoutes.CustomerIds.Count() > 0)
-                {
-                    subConditions.Add(string.Format("cr.CustomerID in ({0})", string.Join<int>(",", affectedRoutes.CustomerIds)));
-                }
-
-                if (affectedRoutes.ZoneIds != null && affectedRoutes.ZoneIds.Count() > 0)
-                {
-                    subConditions.Add(string.Format("cr.SaleZoneID in ({0})", string.Join<long>(",", affectedRoutes.ZoneIds)));
-                }
-
-                if (affectedRoutes.Codes != null && affectedRoutes.Codes.Count() > 0)
-                {
-                    List<string> codesConditions = new List<string>();
-
-                    List<string> codesWithoutSubCodes = new List<string>();
-                    List<string> codesWithSubCodes = new List<string>();
-                    foreach (CodeCriteria codeCriteria in affectedRoutes.Codes)
-                    {
-                        if (codeCriteria.WithSubCodes)
-                            codesWithSubCodes.Add(codeCriteria.Code);
-                        else
-                            codesWithoutSubCodes.Add(codeCriteria.Code);
-                    }
-
-                    if (codesWithoutSubCodes.Count > 0)
-                        codesConditions.Add(string.Format("cr.Code in ('{0}')", string.Join<string>("','", codesWithoutSubCodes)));
-
-                    if (codesWithSubCodes.Count > 0)
-                    {
-                        foreach (string code in codesWithSubCodes)
-                        {
-                            codesConditions.Add(string.Format("cr.Code like ('{0}%')", code));
-                        }
-                    }
-
-                    subConditions.Add(string.Format("({0})", string.Join<string>(" or ", codesConditions)));
-                }
-
-                RoutingExcludedDestinationData routingExcludedDestinationData = affectedRoutes.RoutingExcludedDestinationData;
                 if (routingExcludedDestinationData != null)
                 {
                     if (routingExcludedDestinationData.ExcludedCodes != null && routingExcludedDestinationData.ExcludedCodes.Count > 0)
