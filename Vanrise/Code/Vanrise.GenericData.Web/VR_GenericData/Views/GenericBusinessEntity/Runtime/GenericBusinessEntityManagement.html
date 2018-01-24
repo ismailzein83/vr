@@ -7,7 +7,7 @@
                                                              isrequired="true" hideremoveicon></vr-genericdata-genericbedefinition-selector>
             </vr-row>
 
-            <!--<vr-genericdata-genericbusinessentity-filter on-ready="onFilterDirectiveReady"></vr-genericdata-genericbusinessentity-filter>-->
+            <vr-directivewrapper ng-if="scopeModel.filterDirective != undefined" directive="scopeModel.filterDirective" on-ready="scopeModel.onFilterDirectiveReady"></vr-directivewrapper>
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">

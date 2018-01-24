@@ -17,6 +17,7 @@ namespace Vanrise.GenericData.MainExtensions
         {
             get { return "vr-genericdata-genericbe-filterruntime-filtergroup"; }
         }
+        public List<string> AvailableFieldNames { get; set; }
     }
 
 }

@@ -119,8 +119,7 @@
 
                     //Retrieving Data
                     UtilsService.waitMultiplePromises(promises).then(function () {
-                        gridQuery = buildGridQuery(gridQuery);
-                        gridAPI.retrieveData(gridQuery);
+                        gridAPI.retrieveData(buildGridQuery());
                         gridLoadDeferred.resolve();
                     }).catch(function (error) {
                         gridLoadDeferred.reject(error);
@@ -162,10 +161,11 @@
                         });
                     }
 
-                    function buildGridQuery(gridQuery) {
-                        return {
-                            BusinessEntityDefinitionId: businessEntityDefinitionId,
-                        };
+                    function buildGridQuery() {
+                        if (gridQuery == undefined)
+                            gridQuery = {};
+                        gridQuery.BusinessEntityDefinitionId = businessEntityDefinitionId;
+                        return gridQuery;
                     }
 
                     return gridLoadDeferred.promise;

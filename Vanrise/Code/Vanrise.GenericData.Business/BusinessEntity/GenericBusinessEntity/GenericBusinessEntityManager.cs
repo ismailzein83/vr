@@ -76,7 +76,7 @@ namespace Vanrise.GenericData.Business
         //#endregion
 
         #region Public Methods
-        public IEnumerable<GenericBusinessEntityInfo> GetGenericBusinessEntityInfo(Guid businessEntityDefinitionId, GenericBusinessEntityFilter filter)
+        public IEnumerable<GenericBusinessEntityInfo> GetGenericBusinessEntityInfo(Guid businessEntityDefinitionId, GenericBusinessEntityInfoFilter filter)
         {
             var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(businessEntityDefinitionId);
             var dataRecordStorage = _dataRecordStorageManager.GetDataRecordStorage(genericBEDefinitionSetting.DataRecordStorageId);
@@ -265,9 +265,15 @@ namespace Vanrise.GenericData.Business
                 Query = new DataRecordQuery
                 {
                     Columns = columns,
-                    //FilterGroup=,
-                    //Filters=,
-                    FromTime = DateTime.MinValue,
+                    FilterGroup = input.Query.FilterGroup,
+                    Filters = input.Query.Filters != null ? input.Query.Filters.MapRecords(x =>
+                        new DataRecordFilter{
+                            FieldName = x.FieldName,
+                            FilterValues = x.FilterValues
+                        } 
+                    ).ToList() : null,
+                    FromTime = input.Query.FromTime.HasValue ? input.Query.FromTime.Value : DateTime.MinValue,
+                    ToTime = input.Query.ToTime.HasValue ? input.Query.ToTime.Value : DateTime.MaxValue,
                     ColumnTitles = columnTitles,
                     DataRecordStorageIds = new List<Guid> { genericBEDefinitionSetting.DataRecordStorageId },
                     //Direction=,

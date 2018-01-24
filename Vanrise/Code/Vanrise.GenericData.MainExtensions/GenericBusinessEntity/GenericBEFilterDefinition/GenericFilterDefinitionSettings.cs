@@ -19,5 +19,8 @@ namespace Vanrise.GenericData.MainExtensions
             get { return "vr-genericdata-genericbe-filterruntime-generic"; }
         }
         public string FieldName { get; set; }
+        public string FieldTitle { get; set; }
+        public bool IsRequired { get; set; }
+
     }
 }

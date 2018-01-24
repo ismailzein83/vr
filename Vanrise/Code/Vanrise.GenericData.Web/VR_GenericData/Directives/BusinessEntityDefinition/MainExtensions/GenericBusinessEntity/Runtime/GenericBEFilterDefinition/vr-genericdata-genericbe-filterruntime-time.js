@@ -23,6 +23,7 @@
       
         function TimeFilterRuntimeSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+            var dataRecordTypeId;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -34,14 +35,16 @@
                 api.load = function (payload) {
                     var promises = [];
                     if (payload != undefined) {
-
+                        dataRecordTypeId = payload.dataRecordTypeId;
                     }
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
-                api.setData = function (filterObject) {
-                    filterObject.FromDate = $scope.scopeModel.fromDate;
-                    filterObject.ToDate = $scope.scopeModel.toDate;
+                api.getData = function () {
+                    return {
+                        FromTime : $scope.scopeModel.fromDate,
+                        ToTime : $scope.scopeModel.toDate
+                    }
                 };
 
                 if (ctrl.onReady != null) {

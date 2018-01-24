@@ -34,9 +34,6 @@ namespace Vanrise.GenericData.Entities
 
     //    public GenericRuleDefinitionSecurity Security { get; set; }
        // public string FieldPath { get; set; }
-      //  public GenericEditor EditorDesign { get; set; }
-    //    public GenericManagement ManagementDesign { get; set; }
-
 
         public Guid DataRecordTypeId { get; set; }
         public Guid DataRecordStorageId { get; set; }
@@ -45,8 +42,34 @@ namespace Vanrise.GenericData.Entities
         public GenericBEGridDefinition GridDefinition { get; set; }
         public GenericBEEditorDefinition EditorDefinition { get; set; }
         public GenericBEFilterDefinition FilterDefinition { get; set; }
-
+        public GenericBEOnBeforeInsertHandler OnBeforeInsertHandler { get; set; }
+        public GenericBEExtendedSettings ExtendedSettings { get; set; }
+ 
     }
+    public abstract class GenericBEExtendedSettings
+    {
+        public abstract Guid ConfigId { get; }
+        public virtual Object GetInfoByType(IGenericBEExtendedSettingsContext context)
+        {
+            return null;
+        }
+    }
+    public interface IGenericBEExtendedSettingsContext
+    {
+        string InfoType { get; }
+    }
+  
+    public abstract class GenericBEOnBeforeInsertHandler
+    {
+        public abstract Guid ConfigId { get;  }
+        public abstract void Execute(IGenericBEOnBeforeInsertHandlerContext context);
+    }
+    public interface IGenericBEOnBeforeInsertHandlerContext
+    {
+        GenericBusinessEntity GenericBusinessEntity { get; set; }
+        GenericBEDefinitionSettings DefinitionSettings { get; }
+    }
+
 
     public class GenericBEViewDefinition
     {
@@ -69,7 +92,6 @@ namespace Vanrise.GenericData.Entities
         public abstract Guid ConfigId { get;  }
         public abstract string RuntimeEditor { get; }
     }
-
     public class GenericBEEditorDefinition
     {
         public VRGenericEditorDefinitionSetting Settings { get; set; }

@@ -75,6 +75,7 @@
     <Compile Include="GenericBusinessEntity\GenericBEFilterDefinition\GenericFilterDefinitionSettings.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEFilterDefinition\StaticFilterDefinitionSettings.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEFilterDefinition\TimeFilterDefinitionSettings.cs" />
+    <Compile Include="GenericBusinessEntity\GenericBEOnBeforeInsertHandler\SerialNumberOnBeforeInsertHandler.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEViewDefinition\HistoryGenericBEDefinitionView.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\GenericEditorDefinitionSetting.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\StaticEditorDefinitionSetting.cs" />
