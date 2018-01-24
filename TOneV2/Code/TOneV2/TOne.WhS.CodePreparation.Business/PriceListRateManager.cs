@@ -34,7 +34,7 @@ namespace TOne.WhS.CodePreparation.Business
         private void ProcessImportedData(IEnumerable<ZoneToProcess> zonesToProcess, IEnumerable<ExistingZone> existingZones, IEnumerable<ExistingRate> existingRates,
             ExistingRateGroupByZoneName existingRateGroupByZoneName, SalePriceListsByOwner salePriceListsByOwner, DateTime effectiveDate, int sellingNumberPlanId)
         {
-            //If no existing zones exist, no need to perform the whole process
+            //If no existing zones , no need to perform the whole process
             if (!existingZones.Any())
                 return;
 
@@ -70,55 +70,50 @@ namespace TOne.WhS.CodePreparation.Business
 
             IEnumerable<NewZoneRateEntity> rates;
 
-            if (saleZoneType == SaleZoneTypeEnum.Mobile && !mobileZones.Any() && fixedZones.Any())
+            if (!string.IsNullOrEmpty(zoneToProcess.SplitFromZoneName))
             {
-                rates = CreateRatesWithDefaultValue(fixedZones.Select(z => z.Name), effectiveExistingRatesByZoneName);
+                rates = GetHighestRatesFromZoneMatchesSaleEntities(new List<string> { zoneToProcess.SplitFromZoneName }, effectiveExistingRatesByZoneName);
             }
-            else if (saleZoneType == SaleZoneTypeEnum.Fixed && !fixedZones.Any() && mobileZones.Any())
+            else if (zoneToProcess.SourceZoneNames != null && zoneToProcess.SourceZoneNames.Any())
             {
-                rates = CreateRatesWithDefaultValue(mobileZones.Select(z => z.Name), effectiveExistingRatesByZoneName);
+                // this zone is the result of merged zones so matching zones = source zone names.
+                rates = GetHighestRatesFromZoneMatchesSaleEntities(zoneToProcess.SourceZoneNames, effectiveExistingRatesByZoneName);
             }
             else
             {
-                IEnumerable<string> matchedZoneNames;
-                if (zoneToProcess.SourceZoneNames != null && zoneToProcess.SourceZoneNames.Any())
-                    matchedZoneNames = zoneToProcess.SourceZoneNames;
+                if (saleZoneType == SaleZoneTypeEnum.Mobile && !mobileZones.Any() && fixedZones.Any())
+                {
+                    rates = CreateRatesWithDefaultValue(fixedZones.Select(z => z.Name), effectiveExistingRatesByZoneName);
+                }
+                else if (saleZoneType == SaleZoneTypeEnum.Fixed && !fixedZones.Any() && mobileZones.Any())
+                {
+                    rates = CreateRatesWithDefaultValue(mobileZones.Select(z => z.Name), effectiveExistingRatesByZoneName);
+                }
                 else
-                    matchedZoneNames = GetMatchedZones(zoneToProcess, saleZoneType, zonesByType);
-
-                rates = GetHighestRatesFromZoneMatchesSaleEntities(matchedZoneNames, effectiveExistingRatesByZoneName);
+                {
+                    IEnumerable<string> matchedZoneNames = GetMatchedZones(zoneToProcess, saleZoneType, zonesByType);
+                    rates = GetHighestRatesFromZoneMatchesSaleEntities(matchedZoneNames, effectiveExistingRatesByZoneName);
+                }
             }
             AddRateToAddToZoneToProcess(zoneToProcess, effectiveDate, salePriceListsByOwner, rates);
         }
 
-        private List<string> GetMatchedZones(ZoneToProcess zoneToProcess, SaleZoneTypeEnum saleZoneType, Dictionary<SaleZoneTypeEnum, IEnumerable<ExistingZone>> zonesByType)
+        private IEnumerable<string> GetMatchedZones(ZoneToProcess zoneToProcess, SaleZoneTypeEnum saleZoneType, Dictionary<SaleZoneTypeEnum, IEnumerable<ExistingZone>> zonesByType)
         {
-            List<string> matchedZoneNames = new List<string>();
-            string recentZoneName = zoneToProcess.ChangeType == ZoneChangeType.Renamed
-                ? zoneToProcess.RecentZoneName
-                : zoneToProcess.SplitFromZoneName;
+            List<ExistingZone> matchingZones = new List<ExistingZone>();
+            List<string> codes = GetCodes(zoneToProcess.CodesToMove, zoneToProcess.CodesToAdd);
 
-            if (!string.IsNullOrEmpty(recentZoneName))
-                matchedZoneNames.Add(recentZoneName);
+            if (!codes.Any()) throw new Exception(string.Format("A new zone '{0}' does not have any new codes", zoneToProcess.ZoneName));
 
-            else
-            {
-                List<ExistingZone> matchingZones = new List<ExistingZone>();
-                List<string> codes = GetCodes(zoneToProcess.CodesToMove, zoneToProcess.CodesToAdd);
+            IEnumerable<ExistingZone> fixedZones = zonesByType[SaleZoneTypeEnum.Fixed];
+            IEnumerable<ExistingZone> mobileZones = zonesByType[SaleZoneTypeEnum.Mobile];
 
-                if (!codes.Any()) throw new Exception(string.Format("A new zone '{0}' does not have any new codes", zoneToProcess.ZoneName));
+            if (fixedZones.Any() && saleZoneType == SaleZoneTypeEnum.Fixed)
+                matchingZones = GetMatchedExistingZones(codes, fixedZones);
+            if (mobileZones.Any() && saleZoneType == SaleZoneTypeEnum.Mobile)
+                matchingZones = GetMatchedExistingZones(codes, mobileZones);
 
-                IEnumerable<ExistingZone> fixedZones = zonesByType[SaleZoneTypeEnum.Fixed];
-                IEnumerable<ExistingZone> mobileZones = zonesByType[SaleZoneTypeEnum.Mobile];
-
-                if (fixedZones.Any() && saleZoneType == SaleZoneTypeEnum.Fixed)
-                    matchingZones = GetMatchedExistingZones(codes, fixedZones);
-                if (mobileZones.Any() && saleZoneType == SaleZoneTypeEnum.Mobile)
-                    matchingZones = GetMatchedExistingZones(codes, mobileZones);
-
-                matchedZoneNames = matchingZones.Select(z => z.Name).ToList();
-            }
-            return matchedZoneNames;
+            return matchingZones.Select(z => z.Name);
         }
 
         private List<string> GetCodes(IEnumerable<CodeToMove> codesToMove, IEnumerable<CodeToAdd> codesToAdd)
@@ -287,57 +282,98 @@ namespace TOne.WhS.CodePreparation.Business
             return matchedExistingZones.Any() ? matchedExistingZones : existingZonesByType.ToList();
         }
 
-        private List<NewZoneRateEntity> GetHighestRatesFromZoneMatchesSaleEntities(IEnumerable<string> matchedZones, ExistingRatesByZoneName existingRatesByZoneName)
+        private Dictionary<int, NewZoneRateEntity> FilterRatesByHighest(SalePriceListOwnerType ownerType, Dictionary<int, List<ExistingRate>> existingRateByOwnerId)
         {
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            SalePriceListManager salePriceListManager = new SalePriceListManager();
-            ExistingRatesByOwner existingRatesByOwner = new ExistingRatesByOwner();
-
-            List<ExistingRate> effectiveExistingRates;
-            foreach (string matchedzone in matchedZones)
+            var highestRatesByOwnerId = new Dictionary<int, NewZoneRateEntity>();
+            foreach (var existingRateEntity in existingRateByOwnerId)
             {
-                if (existingRatesByZoneName.TryGetValue(matchedzone, out effectiveExistingRates))
-                {
-                    foreach (ExistingRate existingRate in effectiveExistingRates)
-                    {
-                        if (existingRate.RateEntity.RateTypeId != null)
-                            continue;
-
-                        SalePriceList salePriceList = salePriceListManager.GetPriceList(existingRate.RateEntity.PriceListId);
-                        if (salePriceList.OwnerType == SalePriceListOwnerType.Customer)
-                        {
-                            CarrierAccount customer = carrierAccountManager.GetCarrierAccount(salePriceList.OwnerId);
-                            if (customer.CarrierAccountSettings.ActivationStatus == ActivationStatus.Inactive)
-                                continue;
-                        }
-                        existingRatesByOwner.TryAddValue((int)salePriceList.OwnerType, salePriceList.OwnerId, existingRate);
-                    }
-                }
-            }
-
-            List<NewZoneRateEntity> ratesEntities = new List<NewZoneRateEntity>();
-
-            var e = existingRatesByOwner.GetEnumerator();
-            while (e.MoveNext())
-            {
-                Owner owner = existingRatesByOwner.GetOwner(e.Current.Key);
-
-                HighestRate highestRate = GetHighestRate(e.Current.Value);
+                HighestRate highestRate = GetHighestRate(existingRateEntity.Value);
 
                 if (highestRate == null) continue;
 
                 NewZoneRateEntity zoneRate = new NewZoneRateEntity
                 {
-                    OwnerId = owner.OwnerId,
-                    OwnerType = owner.OwnerType,
+                    OwnerId = existingRateEntity.Key,
+                    OwnerType = ownerType,
                     CurrencyId = highestRate.CurrencyId,
                     Rate = highestRate.Value,
                     RateBED = highestRate.BED,
                     HighesRateZoneId = highestRate.ZoneId
                 };
-                ratesEntities.Add(zoneRate);
+                highestRatesByOwnerId.Add(existingRateEntity.Key, zoneRate);
             }
-            return ratesEntities;
+            return highestRatesByOwnerId;
+        }
+        private List<NewZoneRateEntity> GetHighestRatesFromZoneMatchesSaleEntities(IEnumerable<string> matchedZones, ExistingRatesByZoneName existingRatesByZoneName)
+        {
+            var carrierAccountManager = new CarrierAccountManager();
+            var salePriceListManager = new SalePriceListManager();
+            var currencyExchangeRateManager = new CurrencyExchangeRateManager();
+            var existingRateByCustomerId = new Dictionary<int, List<ExistingRate>>();
+            var existingRateBySellingProductId = new Dictionary<int, List<ExistingRate>>();
+
+            List<ExistingRate> effectiveExistingRates;
+            foreach (string matchedzone in matchedZones)
+            {
+                if (!existingRatesByZoneName.TryGetValue(matchedzone, out effectiveExistingRates))
+                    continue;
+
+                foreach (ExistingRate existingRate in effectiveExistingRates)
+                {
+                    if (existingRate.RateEntity.RateTypeId != null)
+                        continue;
+
+                    SalePriceList salePriceList = salePriceListManager.GetPriceList(existingRate.RateEntity.PriceListId);
+                    if (salePriceList.OwnerType == SalePriceListOwnerType.Customer)
+                    {
+                        CarrierAccount customer = carrierAccountManager.GetCarrierAccount(salePriceList.OwnerId);
+                        if (customer.CarrierAccountSettings.ActivationStatus == ActivationStatus.Inactive)
+                            continue;
+                        List<ExistingRate> customerExistingRates;
+                        if (!existingRateByCustomerId.TryGetValue(salePriceList.OwnerId, out customerExistingRates))
+                        {
+                            customerExistingRates = new List<ExistingRate>();
+                            existingRateByCustomerId.Add(salePriceList.OwnerId, customerExistingRates);
+                        }
+                        customerExistingRates.Add(existingRate);
+                    }
+                    else
+                    {
+                        List<ExistingRate> sellingProductExistingRates;
+                        if (!existingRateBySellingProductId.TryGetValue(salePriceList.OwnerId, out sellingProductExistingRates))
+                        {
+                            sellingProductExistingRates = new List<ExistingRate>();
+                            existingRateBySellingProductId.Add(salePriceList.OwnerId, sellingProductExistingRates);
+                        }
+                        sellingProductExistingRates.Add(existingRate);
+                    }
+                }
+            }
+            Dictionary<int, NewZoneRateEntity> customerZoneRateEntities = FilterRatesByHighest(SalePriceListOwnerType.Customer, existingRateByCustomerId);
+            Dictionary<int, NewZoneRateEntity> sellingProductZoneRateEntities = FilterRatesByHighest(SalePriceListOwnerType.SellingProduct, existingRateBySellingProductId);
+
+            List<NewZoneRateEntity> rateEntities = new List<NewZoneRateEntity>();
+
+            //Add selling product rates
+            if (sellingProductZoneRateEntities.Any())
+                rateEntities.AddRange(sellingProductZoneRateEntities.Values);
+
+            //Add customer Rate.
+            foreach (var customerRateEntity in customerZoneRateEntities.Values)
+            {
+                int sellingProductId = carrierAccountManager.GetSellingProductId(customerRateEntity.OwnerId);
+
+                NewZoneRateEntity sellingProductRateEntity;
+                if (sellingProductZoneRateEntities.TryGetValue(sellingProductId, out sellingProductRateEntity))
+                {
+                    var convertedRate = currencyExchangeRateManager.ConvertValueToCurrency(customerRateEntity.Rate, customerRateEntity.CurrencyId.Value, sellingProductRateEntity.CurrencyId.Value,
+                        customerRateEntity.RateBED);
+
+                    if (convertedRate > sellingProductRateEntity.Rate)
+                        rateEntities.Add(customerRateEntity);
+                }
+            }
+            return rateEntities;
         }
 
         private HighestRate GetHighestRate(IEnumerable<ExistingRate> existingRates)
