@@ -122,29 +122,30 @@ namespace TOne.WhS.DBSync.Business
 
             if (!_allCarrierAccounts.TryGetValue(defaultRule.CustomerId, out customer))
                 throw new NullReferenceException(string.Format("customer not found. Customer Source Id {0}.", defaultRule.CustomerId));
+
             RouteRule routeRule = new RouteRule
-              {
-                  BeginEffectiveTime = bed,
-                  EndEffectiveTime = eed,
-                  Description = defaultRule.Reason,
-                  Name = string.Format("Migrated Special Request Rule {0}", Context.Counter++),
-                  Criteria = new RouteRuleCriteria
-                  {
-                      CodeCriteriaGroupSettings = new SelectiveCodeCriteriaGroup
-                      {
-                          Codes = GetCodeCriteria(defaultRule)
-                      },
-                      CustomerGroupSettings = new SelectiveCustomerGroup
+            {
+                BeginEffectiveTime = bed,
+                EndEffectiveTime = eed,
+                Description = defaultRule.Reason,
+                Name = string.Format("Migrated Special Request Rule {0}", Context.Counter++),
+                Criteria = new RouteRuleCriteria
+                {
+                    CodeCriteriaGroupSettings = new SelectiveCodeCriteriaGroup
+                    {
+                        Codes = GetCodeCriteria(defaultRule)
+                    },
+                    CustomerGroupSettings = new SelectiveCustomerGroup
                     {
                         CustomerIds = new List<int>() { customer.CarrierAccountId },
                     },
-                      ExcludedCodes = defaultRule.ExcludedCodesList == null ? null : defaultRule.ExcludedCodesList.ToList()
-                  },
-                  Settings = new SpecialRequestRouteRule
-                  {
-                      Options = GetSupplierOptions(specialRequestRules.Select(s => s.SupplierOption))
-                  }
-              };
+                    ExcludedDestinations = defaultRule.ExcludedCodesList != null ? new ExcludedCodes() { Codes = defaultRule.ExcludedCodesList.ToList() } : null
+                },
+                Settings = new SpecialRequestRouteRule
+                {
+                    Options = GetSupplierOptions(specialRequestRules.Select(s => s.SupplierOption))
+                }
+            };
 
             return routeRule;
         }

@@ -55,7 +55,15 @@
                             </vr-section>
                         </vr-columns>
                     </vr-row>
+
                     <vr-row ng-show="scopeModel.showExcludedCodeSection">
+                        <vr-columns width="fullrow">
+                            <vr-section title="Excluded Codes">
+                                <vr-whs-routing-excludeddestinations on-ready="scopeModel.onExcludedDestinationsDirectiveReady" normal-col-num="3"></vr-whs-routing-excludeddestinations>
+                            </vr-section>
+                        </vr-columns>
+                    </vr-row>
+                    <!--<vr-row ng-show="scopeModel.showExcludedCodeSection">
                         <vr-columns width="fullrow">
                             <vr-section title="Excluded Codes">
                                 <vr-row haschildcolumns>
@@ -83,7 +91,8 @@
                                 </vr-validator>
                             </vr-section>
                         </vr-columns>
-                    </vr-row>
+                    </vr-row>-->
+
                     <vr-row ng-show="scopeModel.showCustomerSection">
                         <vr-columns width="fullrow">
                             <vr-section title="Customers">

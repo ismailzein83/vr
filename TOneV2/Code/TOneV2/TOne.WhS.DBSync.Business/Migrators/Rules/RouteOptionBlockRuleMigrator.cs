@@ -176,7 +176,7 @@ namespace TOne.WhS.DBSync.Business
                     },
                 };
                 if (sourceRule.ExcludedCodesList != null)
-                    settings.Criteria.ExcludedCodes = new List<string>(sourceRule.ExcludedCodesList);
+                    settings.Criteria.ExcludedDestinations = new ExcludedCodes() { Codes = sourceRule.ExcludedCodesList.ToList() }; 
             }
             return settings;
         }

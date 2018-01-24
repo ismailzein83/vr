@@ -76,7 +76,7 @@ namespace TOne.WhS.Routing.Business
         }
 
 
-        public List<RouteRule> GetEffectiveAndFutureRPRouteRules(DateTime effectiveDate) 
+        public List<RouteRule> GetEffectiveAndFutureRPRouteRules(DateTime effectiveDate)
         {
             var routeRules = base.GetAllRules();
             List<RouteRule> rpRouteRules = new List<RouteRule>();
@@ -339,11 +339,16 @@ namespace TOne.WhS.Routing.Business
 
             if (selectiveCodeCriteriaGroup.Codes == null || selectiveCodeCriteriaGroup.Codes.Count != 1)
                 return null;
+
             string code = selectiveCodeCriteriaGroup.Codes.First().Code;
 
-            List<string> excludedCodes = criteria.GetExcludedCodes();
-            if (excludedCodes != null && excludedCodes.Contains(code))
-                return null;
+            RoutingExcludedDestinations routingExcludedDestinations = criteria.GetExcludedDestinations();
+            if (routingExcludedDestinations != null)
+            {
+                RoutingExcludedDestinationContext context = new RoutingExcludedDestinationContext() { Code = code };
+                if (routingExcludedDestinations.IsExcludedDestination(context))
+                    return null;
+            }
 
             return code;
         }

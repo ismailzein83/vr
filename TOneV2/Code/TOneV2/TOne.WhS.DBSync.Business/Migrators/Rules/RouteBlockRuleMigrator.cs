@@ -253,16 +253,16 @@ namespace TOne.WhS.DBSync.Business
                     CodeCriteriaGroupSettings = new SelectiveCodeCriteriaGroup
                     {
                         Codes = codeCriterias,
-
                     },
-
                     CustomerGroupSettings = new SelectiveCustomerGroup
                     {
                         CustomerIds = new List<int>() { customer.CarrierAccountId },
                     }
                 };
+
                 if (sourceRule.ExcludedCodesList != null)
-                    routeRuleCriteria.ExcludedCodes = new List<string>(sourceRule.ExcludedCodesList);
+                    routeRuleCriteria.ExcludedDestinations = new ExcludedCodes() { Codes = sourceRule.ExcludedCodesList.ToList() };
+
                 return routeRuleCriteria;
             }
         }

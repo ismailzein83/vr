@@ -1,0 +1,19 @@
+﻿<vr-columns colnum="3">
+    <vr-textbox type="number" value="scopeModel.excludedCode" label="Enter code to exclude" minvalue="0" decimalprecision="0"></vr-textbox>
+</vr-columns>
+<vr-columns colnum="1" withemptyline>
+    <div>
+        <vr-button type="Add" data-onclick="scopeModel.addExcludedCode" standalone></vr-button>
+    </div>
+</vr-columns>
+
+<vr-columns colnum="12">
+    <vr-validator validate="scopeModel.validateExcludedCodes()">
+        <div>
+            <vr-label>Excluded Codes</vr-label>
+        </div>
+        <vr-datalist datasource="scopeModel.excludedCodes" autoremoveitem="true" maxitemsperrow="4" enabletitle>
+            {{dataItem}}
+        </vr-datalist>
+    </vr-validator>
+</vr-columns>

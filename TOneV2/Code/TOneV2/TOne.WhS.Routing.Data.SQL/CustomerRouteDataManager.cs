@@ -184,7 +184,8 @@ namespace TOne.WhS.Routing.Data.SQL
                 });
         }
 
-        public List<CustomerRouteData> GetAffectedCustomerRoutes(List<AffectedRoutes> affectedRoutesList, List<AffectedRouteOptions> affectedRouteOptionsList, long partialRoutesNumberLimit, out bool maximumExceeded)
+        public List<CustomerRouteData> GetAffectedCustomerRoutes(List<AffectedRoutes> affectedRoutesList, List<AffectedRouteOptions> affectedRouteOptionsList, long partialRoutesNumberLimit,
+            out bool maximumExceeded)
         {
             HashSet<string> addedCustomerRouteDefinitions = new HashSet<string>();
             List<CustomerRouteData> customerRouteDataList = new List<CustomerRouteData>();
@@ -312,10 +313,19 @@ namespace TOne.WhS.Routing.Data.SQL
                     subConditions.Add(string.Format("({0})", string.Join<string>(" or ", codesConditions)));
                 }
 
-                if (affectedRouteOptions.ExcludedCodes != null && affectedRouteOptions.ExcludedCodes.Count > 0)
+                RoutingExcludedDestinationData routingExcludedDestinationData = affectedRouteOptions.RoutingExcludedDestinationData;
+                if (routingExcludedDestinationData != null)
                 {
-                    subConditions.Add(string.Format("cr.Code not in ('{0}')", string.Join<string>("','", affectedRouteOptions.ExcludedCodes)));
+                    if (routingExcludedDestinationData.ExcludedCodes != null && routingExcludedDestinationData.ExcludedCodes.Count > 0)
+                        subConditions.Add(string.Format("cr.Code not in ('{0}')", string.Join<string>("','", routingExcludedDestinationData.ExcludedCodes)));
+
+                    if (routingExcludedDestinationData.CodeRanges != null && routingExcludedDestinationData.CodeRanges.Count > 0)
+                    {
+                        foreach (var excludedDestinationData in routingExcludedDestinationData.CodeRanges)
+                            subConditions.Add(string.Format("(Len(cr.Code) <> Len('{0}') or Code < '{0}' or Code > '{1}')", excludedDestinationData.FromCode, excludedDestinationData.ToCode));
+                    }
                 }
+
                 conditions.Add(string.Format("({0})", string.Join<string>(" and ", subConditions)));
             }
             return conditions;
@@ -369,10 +379,19 @@ namespace TOne.WhS.Routing.Data.SQL
                     subConditions.Add(string.Format("({0})", string.Join<string>(" or ", codesConditions)));
                 }
 
-                if (affectedRoutes.ExcludedCodes != null && affectedRoutes.ExcludedCodes.Count > 0)
+                RoutingExcludedDestinationData routingExcludedDestinationData = affectedRoutes.RoutingExcludedDestinationData;
+                if (routingExcludedDestinationData != null)
                 {
-                    subConditions.Add(string.Format("cr.Code not in ('{0}')", string.Join<string>("','", affectedRoutes.ExcludedCodes)));
+                    if (routingExcludedDestinationData.ExcludedCodes != null && routingExcludedDestinationData.ExcludedCodes.Count > 0)
+                        subConditions.Add(string.Format("cr.Code not in ('{0}')", string.Join<string>("','", routingExcludedDestinationData.ExcludedCodes)));
+
+                    if (routingExcludedDestinationData.CodeRanges != null && routingExcludedDestinationData.CodeRanges.Count > 0)
+                    {
+                        foreach (var excludedDestinationData in routingExcludedDestinationData.CodeRanges)
+                            subConditions.Add(string.Format("(Len(cr.Code) <> Len('{0}') or Code < '{0}' or Code > '{1}')", excludedDestinationData.FromCode, excludedDestinationData.ToCode));
+                    }
                 }
+
                 conditions.Add(string.Format("({0})", string.Join<string>(" and ", subConditions)));
             }
             return conditions;
@@ -641,6 +660,7 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                                    [CustomerId] ASC,
 	                                                                    [Code] ASC
                                                                     )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]";
+
         #endregion
     }
 }

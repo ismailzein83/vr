@@ -42,9 +42,13 @@ namespace TOne.WhS.Routing.Entities
 
             if (this.Criteria != null)
             {
-                List<string> excludedCodes = this.Criteria.GetExcludedCodes();
-                if (excludedCodes != null && excludedCodes.Contains(routeRuleTarget.Code))
-                    return true;
+                RoutingExcludedDestinations routingExcludedDestinations = this.Criteria.GetExcludedDestinations();
+                if(routingExcludedDestinations != null)
+                {
+                    RoutingExcludedDestinationContext context = new RoutingExcludedDestinationContext() { Code = routeRuleTarget.Code };
+                    if (routingExcludedDestinations.IsExcludedDestination(context))
+                        return true;
+                }
             }
 
             if (routeRuleTarget.IsEffectiveInFuture)
@@ -61,6 +65,7 @@ namespace TOne.WhS.Routing.Entities
                 if (saleZone.EED.HasValue && this.BeginEffectiveTime > saleZone.EED.Value)
                     return true;
             }
+
             return base.IsAnyCriteriaExcluded(target);
         }
 

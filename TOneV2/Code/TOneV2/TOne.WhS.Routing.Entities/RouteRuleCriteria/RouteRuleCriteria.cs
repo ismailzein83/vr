@@ -13,16 +13,20 @@ namespace TOne.WhS.Routing.Entities
 
         public CodeCriteriaGroupSettings CodeCriteriaGroupSettings { get; set; }
 
-        public List<string> ExcludedCodes { get; set; }
-
         public SaleZoneGroupSettings SaleZoneGroupSettings { get; set; }
 
         public CustomerGroupSettings CustomerGroupSettings { get; set; }
 
+        public RoutingExcludedDestinations ExcludedDestinations { get; set; }
+
+        public override RoutingExcludedDestinations GetExcludedDestinations() { return ExcludedDestinations; }
+
         public override int? GetRoutingProductId() { return RoutingProductId; }
+
         public override CodeCriteriaGroupSettings GetCodeCriteriaGroupSettings() { return CodeCriteriaGroupSettings; }
-        public override List<string> GetExcludedCodes() { return ExcludedCodes; }
+
         public override SaleZoneGroupSettings GetSaleZoneGroupSettings() { return SaleZoneGroupSettings; }
+
         public override CustomerGroupSettings GetCustomerGroupSettings() { return CustomerGroupSettings; }
     }
 }

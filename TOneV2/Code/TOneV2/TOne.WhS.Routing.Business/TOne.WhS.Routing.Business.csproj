@@ -104,6 +104,7 @@
     <Compile Include="Extensions\StateBackupRoutingCleanupManager.cs" />
     <Compile Include="Extensions\RouteSyncReader.cs" />
     <Compile Include="Helper.cs" />
+    <Compile Include="RoutingConfigurationManager.cs" />
     <Compile Include="RoutingEntitiesUpdaterBPDefinitionSettings.cs" />
     <Compile Include="PartialRoutingBPDefinitionSettings.cs" />
     <Compile Include="RouteOptionRules\MarketPriceRouteOptionRule.cs" />
@@ -114,6 +115,8 @@
     <Compile Include="RouteRules\LCRRouteRule.cs" />
     <Compile Include="RouteRules\OptionSettingsGroups\ExcludedOptions.cs" />
     <Compile Include="RouteRules\Orders\OptionOrderByService.cs" />
+    <Compile Include="RoutingExcludedDestinations\ExcludedCodes.cs" />
+    <Compile Include="RoutingExcludedDestinations\ExcludedRanges.cs" />
     <Compile Include="RPRoutingBPDefinitionSettings.cs" />
     <Compile Include="RoutingBPDefinitionSettings.cs" />
     <Compile Include="RoutingOptimizationManager.cs" />

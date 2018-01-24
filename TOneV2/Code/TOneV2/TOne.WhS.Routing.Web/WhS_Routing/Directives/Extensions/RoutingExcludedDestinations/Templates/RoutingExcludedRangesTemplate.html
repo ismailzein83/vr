@@ -1,0 +1,27 @@
+﻿<vr-columns colnum="6">
+    <vr-validator validate="scopeModel.validateExcludedRange()">
+        <vr-columns colnum="6">
+            <vr-textbox type="number" value="scopeModel.fromCode" label="From Code" minvalue="0" decimalprecision="0"></vr-textbox>
+        </vr-columns>
+        <vr-columns colnum="6">
+            <vr-textbox type="number" value="scopeModel.toCode" label="To Code" minvalue="0" decimalprecision="0"></vr-textbox>
+        </vr-columns>
+    </vr-validator>
+</vr-columns>
+
+<vr-columns colnum="1" withemptyline>
+    <div>
+        <vr-button type="Add" vr-disabled="scopeModel.disableButton()" data-onclick="scopeModel.addExcludedCode" standalone></vr-button>
+    </div>
+</vr-columns>
+
+<vr-columns colnum="12">
+    <vr-validator validate="scopeModel.validateExcludedRanges()">
+        <div>
+            <vr-label>Excluded Codes</vr-label>
+        </div>
+        <vr-datalist datasource="scopeModel.excludedRanges" autoremoveitem="true" maxitemsperrow="4" enabletitle>
+            {{dataItem.FromCode}} &#8594; {{dataItem.ToCode}}
+        </vr-datalist>
+    </vr-validator>
+</vr-columns>

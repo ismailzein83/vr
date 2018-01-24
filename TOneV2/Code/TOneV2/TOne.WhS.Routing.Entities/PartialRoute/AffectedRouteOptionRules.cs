@@ -30,6 +30,6 @@ namespace TOne.WhS.Routing.Entities
 
         public IEnumerable<CodeCriteria> Codes { get; set; }
 
-        public List<string> ExcludedCodes { get; set; }
+        public RoutingExcludedDestinationData RoutingExcludedDestinationData { get; set; }  
     }
 }

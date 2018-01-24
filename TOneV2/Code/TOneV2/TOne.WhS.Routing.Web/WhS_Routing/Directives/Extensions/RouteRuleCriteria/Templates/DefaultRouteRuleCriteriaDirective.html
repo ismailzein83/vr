@@ -32,29 +32,7 @@
 <vr-row ng-show="scopeModel.showExcludedCodeSection">
     <vr-columns width="fullrow">
         <vr-section title="Excluded Codes">
-            <vr-row haschildcolumns>
-                <vr-columns colnum="3">
-                    <vr-textbox value="scopeModel.excludedCode" type="number" onvaluechanged="ctrl.onvaluechanged" label="Enter code to exclude" minvalue="0" decimalprecision="0"></vr-textbox>
-                </vr-columns>
-                <vr-columns colnum="1" withemptyline>
-                    <div>
-                        <vr-button type="Add" vr-disabled="ctrl.disableButton" data-onclick="scopeModel.addExcludedCode" standalone></vr-button>
-                    </div>
-                </vr-columns>
-            </vr-row>
-            <vr-validator validate="scopeModel.validateExcludedCodes()">
-                <vr-row haschildcolumns>
-                    <vr-columns width="fullrow">
-                        <div>
-                            <vr-label>Excluded Codes</vr-label>
-                        </div>
-
-                        <vr-datalist maxitemsperrow="4" enabletitle datasource="scopeModel.excludedCodes" autoremoveitem="true">
-                            {{dataItem}}
-                        </vr-datalist>
-                    </vr-columns>
-                </vr-row>
-            </vr-validator>
+            <vr-whs-routing-excludeddestinations on-ready="scopeModel.onExcludedDestinationsDirectiveReady" normal-col-num="3"></vr-whs-routing-excludeddestinations>
         </vr-section>
     </vr-columns>
 </vr-row>

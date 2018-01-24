@@ -23,11 +23,9 @@ namespace TOne.WhS.Routing.Entities
     public class AffectedRoutes
     {
         public IEnumerable<int> CustomerIds { get; set; }
-
         public IEnumerable<long> ZoneIds { get; set; }
-
         public IEnumerable<CodeCriteria> Codes { get; set; }
-
-        public List<string> ExcludedCodes { get; set; }
+        
+        public RoutingExcludedDestinationData RoutingExcludedDestinationData { get; set; }  
     }
 }

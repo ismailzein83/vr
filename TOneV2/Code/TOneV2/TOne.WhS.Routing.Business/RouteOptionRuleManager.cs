@@ -461,10 +461,15 @@ namespace TOne.WhS.Routing.Business
 
             if (selectiveCodeCriteriaGroup.Codes == null || selectiveCodeCriteriaGroup.Codes.Count != 1)
                 return null;
+
             string code = selectiveCodeCriteriaGroup.Codes.First().Code;
 
-            if (criteria.ExcludedCodes != null && criteria.ExcludedCodes.Contains(code))
-                return null;
+            if (criteria.ExcludedDestinations != null)
+            {
+                RoutingExcludedDestinationContext context = new RoutingExcludedDestinationContext() { Code = code };
+                if (criteria.ExcludedDestinations.IsExcludedDestination(context))
+                    return null;
+            }
 
             return code;
         }

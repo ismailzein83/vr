@@ -70,8 +70,12 @@ namespace TOne.WhS.Routing.Entities
             if (routeOptionRuleTarget == null)
                 throw new Exception(String.Format("target is not of type RouteOptionRuleTarget. it is of type '{0}'", target.GetType()));
 
-            if (this.Criteria.ExcludedCodes != null && this.Criteria.ExcludedCodes.Contains(routeOptionRuleTarget.RouteTarget.Code))
-                return true;
+            if (this.Criteria != null && this.Criteria.ExcludedDestinations != null)
+            {
+                RoutingExcludedDestinationContext context = new RoutingExcludedDestinationContext() { Code = routeOptionRuleTarget.RouteTarget.Code };
+                if (this.Criteria.ExcludedDestinations.IsExcludedDestination(context))
+                    return true;
+            }
 
             if (routeOptionRuleTarget.IsEffectiveInFuture)
             {

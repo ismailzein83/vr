@@ -45,12 +45,15 @@ app.directive('vrWhsRoutingRouterulecriteriaDefault', ['UtilsService', 'VRUIUtil
             var customerGroupSettingsAPI;
             var customerGroupSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var excludedDestinationsDirectiveAPI;
+            var excludedDestinationsDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.saleZoneGroupTemplates = [];
                 $scope.scopeModel.codeCriteriaGroupTemplates = [];
                 $scope.scopeModel.customerGroupTemplates = [];
-                $scope.scopeModel.excludedCodes = [];
 
                 $scope.scopeModel.onSaleZoneGroupSettingsDirectiveReady = function (api) {
                     saleZoneGroupSettingsAPI = api;
@@ -58,17 +61,23 @@ app.directive('vrWhsRoutingRouterulecriteriaDefault', ['UtilsService', 'VRUIUtil
                         sellingNumberPlanId: sellingNumberPlanId != undefined ? sellingNumberPlanId : undefined,
                         saleZoneFilterSettings: { RoutingProductId: routingProductId },
                     };
-                    var setLoader = function (value) { setTimeout(function () { $scope.scopeModel.isLoadingSaleZoneGroup = value; UtilsService.safeApply($scope); }) };
+                    var setLoader = function (value) {
+                        setTimeout(function () { $scope.scopeModel.isLoadingSaleZoneGroup = value; UtilsService.safeApply($scope); });
+                    };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneGroupSettingsAPI, saleZoneGroupPayload, setLoader, saleZoneGroupSettingsReadyPromiseDeferred);
                 };
                 $scope.scopeModel.onCodeCriteriaGroupSettingsDirectiveReady = function (api) {
                     codeCriteriaGroupSettingsAPI = api;
-                    var setLoader = function (value) { $scope.scopeModel.isLoadingCustomersSection = value };
+                    var setLoader = function (value) { $scope.scopeModel.isLoadingCustomersSection = value; };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, codeCriteriaGroupSettingsAPI, undefined, setLoader, codeCriteriaGroupSettingsReadyPromiseDeferred);
                 };
                 $scope.scopeModel.onCustomerGroupSettingsDirectiveReady = function (api) {
                     customerGroupSettingsAPI = api;
                     customerGroupSettingsReadyPromiseDeferred.resolve();
+                };
+                $scope.scopeModel.onExcludedDestinationsDirectiveReady = function (api) {
+                    excludedDestinationsDirectiveAPI = api;
+                    excludedDestinationsDirectiveReadyPromiseDeferred.resolve();
                 };
 
                 $scope.scopeModel.onRouteRuleCriteriaTypeSelectionChanged = function () {
@@ -88,40 +97,6 @@ app.directive('vrWhsRoutingRouterulecriteriaDefault', ['UtilsService', 'VRUIUtil
                     }
                 };
 
-                $scope.scopeModel.addExcludedCode = function () {
-                    var codeIsValid = true;
-
-                    if ($scope.scopeModel.excludedCode == undefined || $scope.scopeModel.excludedCode.length == 0) {
-                        codeIsValid = false;
-                    }
-                    else {
-                        angular.forEach($scope.scopeModel.excludedCodes, function (item) {
-                            if ($scope.scopeModel.excludedCode === item) {
-                                codeIsValid = false;
-                            }
-                        });
-                    }
-
-                    if (codeIsValid)
-                        $scope.scopeModel.excludedCodes.push($scope.scopeModel.excludedCode);
-                };
-                $scope.scopeModel.removeExcludedCode = function (codeToRemove) {
-                    $scope.scopeModel.excludedCodes.splice($scope.scopeModel.excludedCodes.indexOf(codeToRemove), 1);
-                };
-                $scope.scopeModel.validateExcludedCodes = function () {
-                    if (isLinkedRouteRule) {
-                        if ($scope.scopeModel.excludedCodes != null && $scope.scopeModel.excludedCodes.length > 0) {
-                            for (var x = 0; x < $scope.scopeModel.excludedCodes.length; x++) {
-                                var currentExcludedCode = $scope.scopeModel.excludedCodes[x];
-                                if (linkedCode == currentExcludedCode) {
-                                    return linkedCode + ' cannot be excluded.';
-                                }
-                            }
-                        }
-                    }
-                    return null;
-                };
-
                 defineAPI();
             }
 
@@ -130,15 +105,17 @@ app.directive('vrWhsRoutingRouterulecriteriaDefault', ['UtilsService', 'VRUIUtil
 
                 api.load = function (payload) {
                     var promises = [];
-                    $scope.scopeModel.disableCriteria = isLinkedRouteRule = payload.isLinkedRouteRule;
+
                     routingProductId = payload.routingProductId;
                     sellingNumberPlanId = payload.sellingNumberPlanId;
                     routeRuleCriteria = payload.routeRuleCriteria;
                     linkedCode = payload.linkedCode;
+                    isLinkedRouteRule = payload.isLinkedRouteRule;
+
+                    $scope.scopeModel.disableCriteria = isLinkedRouteRule;
 
                     displaySectionsBasedOnParameters();
                     loadFilterBySection();
-                    loadStaticSection();
 
                     var loadSaleZoneGroupSectionPromise = loadSaleZoneGroupSection();
                     if (loadSaleZoneGroupSectionPromise != undefined)
@@ -150,14 +127,18 @@ app.directive('vrWhsRoutingRouterulecriteriaDefault', ['UtilsService', 'VRUIUtil
                     var loadCustomerGroupSectionPromise = loadCustomerGroupSection();
                     promises.push(loadCustomerGroupSectionPromise);
 
+                    var loadExcludedDestinationsDirectivePromise = loadExcludedDestinationsDirective();
+                    promises.push(loadExcludedDestinationsDirectivePromise);
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
+
                     return {
                         $type: "TOne.WhS.Routing.Entities.RouteRuleCriteria, TOne.WhS.Routing.Entities",
                         RoutingProductId: routingProductId,
-                        ExcludedCodes: $scope.scopeModel.excludedCodes,
+                        ExcludedDestinations: excludedDestinationsDirectiveAPI.getData(),
                         SaleZoneGroupSettings: $scope.scopeModel.showSaleZoneSection ? saleZoneGroupSettingsAPI.getData() : undefined, //VRUIUtilsService.getSettingsFromDirective($scope, saleZoneGroupSettingsAPI, 'selectedSaleZoneGroupTemplate'),
                         CustomerGroupSettings: customerGroupSettingsAPI.getData(),
                         CodeCriteriaGroupSettings: $scope.scopeModel.showIncludedCodeSection ? VRUIUtilsService.getSettingsFromDirective($scope.scopeModel, codeCriteriaGroupSettingsAPI, 'selectedCodeCriteriaGroupTemplate') : undefined
@@ -171,7 +152,7 @@ app.directive('vrWhsRoutingRouterulecriteriaDefault', ['UtilsService', 'VRUIUtil
             function displaySectionsBasedOnParameters() {
                 $scope.scopeModel.showSaleZoneSection = routingProductId != undefined;
                 $scope.scopeModel.showRouteRuleTypeFilterSection = $scope.scopeModel.showCustomerSection = $scope.scopeModel.showExcludedCodeSection = $scope.scopeModel.showIncludedCodeSection = !$scope.scopeModel.showSaleZoneSection;
-            };
+            }
 
             function loadFilterBySection() {
                 if (!$scope.scopeModel.showRouteRuleTypeFilterSection)
@@ -182,16 +163,7 @@ app.directive('vrWhsRoutingRouterulecriteriaDefault', ['UtilsService', 'VRUIUtil
                     $scope.scopeModel.selectedRouteRuleCriteriaType = UtilsService.getEnum(WhS_Routing_RouteRuleCriteriaTypeEnum, 'value', WhS_Routing_RouteRuleCriteriaTypeEnum.Code.value);
                 else
                     $scope.scopeModel.selectedRouteRuleCriteriaType = UtilsService.getEnum(WhS_Routing_RouteRuleCriteriaTypeEnum, 'value', WhS_Routing_RouteRuleCriteriaTypeEnum.SaleZone.value);
-            };
-
-            function loadStaticSection() {
-                if (routeRuleCriteria != undefined) {
-
-                    angular.forEach(routeRuleCriteria.ExcludedCodes, function (item) {
-                        $scope.scopeModel.excludedCodes.push(item);
-                    });
-                }
-            };
+            }
 
             function loadSaleZoneGroupSection() {
 
@@ -216,7 +188,7 @@ app.directive('vrWhsRoutingRouterulecriteriaDefault', ['UtilsService', 'VRUIUtil
 
                     if (routeRuleCriteria != undefined) {
                         saleZoneGroupPayload.sellingNumberPlanId = sellingNumberPlanId != undefined ? sellingNumberPlanId : routeRuleCriteria.SaleZoneGroupSettings != undefined ? routeRuleCriteria.SaleZoneGroupSettings.SellingNumberPlanId : undefined;
-                        saleZoneGroupPayload.saleZoneGroupSettings = routeRuleCriteria.SaleZoneGroupSettings
+                        saleZoneGroupPayload.saleZoneGroupSettings = routeRuleCriteria.SaleZoneGroupSettings;
                     }
                     saleZoneGroupSettingsReadyPromiseDeferred = undefined;
 
@@ -224,7 +196,7 @@ app.directive('vrWhsRoutingRouterulecriteriaDefault', ['UtilsService', 'VRUIUtil
                 });
 
                 return UtilsService.waitMultiplePromises(promises);
-            };
+            }
 
             function loadCodeCriteriaGroupSection() {
                 var promises = [];
@@ -257,7 +229,7 @@ app.directive('vrWhsRoutingRouterulecriteriaDefault', ['UtilsService', 'VRUIUtil
                 }
 
                 return UtilsService.waitMultiplePromises(promises);
-            };
+            }
 
             function loadCustomerGroupSection() {
                 var promises = [];
@@ -276,9 +248,24 @@ app.directive('vrWhsRoutingRouterulecriteriaDefault', ['UtilsService', 'VRUIUtil
                     VRUIUtilsService.callDirectiveLoad(customerGroupSettingsAPI, customerGroupPayload, customerGroupSettingsLoadPromiseDeferred);
                 });
 
-
                 return UtilsService.waitMultiplePromises(promises);
-            };
+            }
+
+            function loadExcludedDestinationsDirective() {
+                var loadExcludedDestinationsDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+
+                excludedDestinationsDirectiveReadyPromiseDeferred.promise.then(function () {
+
+                    var excludedDestinationsDirectivePayload = {
+                        excludedDestinations: routeRuleCriteria != undefined ? routeRuleCriteria.ExcludedDestinations : undefined,
+                        isLinkedRouteRule: isLinkedRouteRule,
+                        linkedCode: linkedCode
+                    };
+                    VRUIUtilsService.callDirectiveLoad(excludedDestinationsDirectiveAPI, excludedDestinationsDirectivePayload, loadExcludedDestinationsDirectivePromiseDeferred);
+                });
+
+                return loadExcludedDestinationsDirectivePromiseDeferred.promise;
+            }
         }
 
         return directiveDefinitionObject;

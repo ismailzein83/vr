@@ -13,7 +13,7 @@ namespace TOne.WhS.Routing.Entities
 
         public CodeCriteriaGroupSettings CodeCriteriaGroupSettings { get; set; }
 
-        public List<string> ExcludedCodes { get; set; }
+        public RoutingExcludedDestinations ExcludedDestinations { get; set; } 
 
         public SaleZoneGroupSettings SaleZoneGroupSettings { get; set; }
 

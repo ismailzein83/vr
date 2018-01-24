@@ -15,16 +15,22 @@ namespace TOne.WhS.Routing.BP.Activities
     {
         [RequiredArgument]
         public InArgument<BERouteInfo> BERouteInfo { get; set; }
+
         [RequiredArgument]
         public InArgument<PartialRouteInfo> PartialRouteInfo { get; set; }
+
         [RequiredArgument]
         public InArgument<RoutingDatabase> RoutingDatabase { get; set; }
+
         [RequiredArgument]
         public InArgument<AffectedRouteRules> AffectedRouteRules { get; set; }
+
         [RequiredArgument]
         public InArgument<AffectedRouteOptionRules> AffectedRouteOptionRules { get; set; }
+
         [RequiredArgument]
         public OutArgument<List<CustomerRouteData>> AffectedCustomerRoutes { get; set; }
+
         [RequiredArgument]
         public OutArgument<bool> ShouldTriggerFullRouteProcess { get; set; }
 
@@ -203,8 +209,16 @@ namespace TOne.WhS.Routing.BP.Activities
                         return;
                     }
 
-                    AffectedRouteOptions affectedRouteOptions = new Entities.AffectedRouteOptions() { Codes = affectedCodes, CustomerIds = affectedCustomers, ExcludedCodes = criteria.ExcludedCodes, ZoneIds = affectedZones, SupplierWithZones = supplierWithZones };
-                    affectedRouteOptionsList.Add(affectedRouteOptions);
+                    var routingExcludedDestinationData = (criteria != null && criteria.ExcludedDestinations != null) ? criteria.ExcludedDestinations.GetRoutingExcludedDestinationData() : null;
+
+                    affectedRouteOptionsList.Add(new Entities.AffectedRouteOptions()
+                    {
+                        Codes = affectedCodes,
+                        CustomerIds = affectedCustomers,
+                        RoutingExcludedDestinationData = routingExcludedDestinationData,
+                        ZoneIds = affectedZones,
+                        SupplierWithZones = supplierWithZones
+                    });
                 }
             }
         }
@@ -231,12 +245,20 @@ namespace TOne.WhS.Routing.BP.Activities
                         shouldTriggerFullRouteProcess = true;
                         return;
                     }
-                    AffectedRoutes affectedRoutes = new Entities.AffectedRoutes() { Codes = affectedCodes, CustomerIds = affectedCustomers, ExcludedCodes = criteria.ExcludedCodes, ZoneIds = affectedZones };
-                    affectedRoutesList.Add(affectedRoutes);
+
+                    var routingExcludedDestinationData = (criteria != null && criteria.ExcludedDestinations != null) ? criteria.ExcludedDestinations.GetRoutingExcludedDestinationData() : null;
+
+                    affectedRoutesList.Add(new Entities.AffectedRoutes()
+                    {
+                        Codes = affectedCodes,
+                        CustomerIds = affectedCustomers,
+                        RoutingExcludedDestinationData = routingExcludedDestinationData,
+                        ZoneIds = affectedZones
+                    });
                 }
             }
         }
-
+        
         private IEnumerable<int> GetAffectedCustomers(RouteRuleCriteria criteria, out bool isCustomerGeneric)
         {
             isCustomerGeneric = false;
@@ -315,7 +337,6 @@ namespace TOne.WhS.Routing.BP.Activities
             }
         }
 
-
         private IEnumerable<SupplierWithZones> GetAffectedSupplierZones(RouteOptionRuleCriteria criteria, out bool areSupplierWithZonesGeneric)
         {
             areSupplierWithZonesGeneric = false;
@@ -327,7 +348,6 @@ namespace TOne.WhS.Routing.BP.Activities
             }
             return suppliersWithZonesGroupSettings.GetSuppliersWithZones(GetSuppliersWithZonesGroupContext());
         }
-
 
         ISaleZoneGroupContext GetSaleZoneGroupContext()
         {

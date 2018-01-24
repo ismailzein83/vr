@@ -132,6 +132,7 @@
     <Compile Include="Controllers\CustomerRouteController.cs" />
     <Compile Include="Controllers\QualityConfigurationController.cs" />
     <Compile Include="Controllers\RouteOptionRuleController.cs" />
+    <Compile Include="Controllers\RoutingConfigurationController.cs" />
     <Compile Include="Controllers\RPRouteController.cs" />
     <Compile Include="Controllers\RouteRuleController.cs" />
     <Compile Include="Controllers\RoutingDatabaseController.cs" />
@@ -213,6 +214,10 @@
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\Templates\RouteRuleOrderTypeSelector.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order-byquality.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order-byservice.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\RoutingExcludedDestinations\Templates\RoutingExcludedCodesTemplate.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\RoutingExcludedDestinations\Templates\RoutingExcludedRangesTemplate.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\RoutingExcludedDestinations\vr-whs-routing-excludedranges.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\RoutingExcludedDestinations\vr-whs-routing-excludedcodes.js" />
     <Content Include="WhS_Routing\Directives\QualityConfiguration\vr-whs-routing-qualityconfiguration-selector.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-ordertype-selector.js" />
@@ -247,6 +252,8 @@
     <Content Include="WhS_Routing\Directives\RouteSettings\vr-whs-routing-route-qualityconfiguration.js" />
     <Content Include="WhS_Routing\Directives\RouteSettings\vr-whs-routing-route-routeoptionruleconfiguration-grid.js" />
     <Content Include="WhS_Routing\Directives\RouteSettings\vr-whs-routing-route-routeoptionruleconfiguration.js" />
+    <Content Include="WhS_Routing\Directives\RoutingExcludedDestinations\Templates\RoutingExcludedDestinationsTemplate.html" />
+    <Content Include="WhS_Routing\Directives\RoutingExcludedDestinations\vr-whs-routing-excludeddestinations.js" />
     <Content Include="WhS_Routing\Directives\Routing\Templates\RouteStatusSelectorTemplate.html" />
     <Content Include="WhS_Routing\Directives\Routing\vr-whs-routing-routestatus-selector.js" />
     <Content Include="WhS_Routing\Directives\RPRoute\Templates\RPRouteOptionGridTemplate.html" />
@@ -315,6 +322,7 @@
     <Content Include="WhS_Routing\Services\APIServices\CustomerRouteAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\QualityConfigurationAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RouteOptionRuleAPIService.js" />
+    <Content Include="WhS_Routing\Services\APIServices\RoutingConfigurationAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RPRouteAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RouteRuleAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RouteRuleSettingsAPIService.js" />
