@@ -131,8 +131,8 @@ namespace CDRComparison.Data.SQL
                 record.PartnerCDPN,
                 record.SystemCGPN,
                 record.PartnerCGPN,
-                record.SystemTime,
-                record.PartnerTime,
+                GetDateTimeForBCP(record.SystemTime),
+                GetDateTimeForBCP(record.PartnerTime),
                 record.SystemDurationInSec,
                 record.PartnerDurationInSec
             );

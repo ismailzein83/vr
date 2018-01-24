@@ -123,9 +123,8 @@ namespace CDRComparison.Data.SQL
                 record.CDPN,
                 record.CGPN,
                 record.IsPartnerCDR ? "1" : "0",
-                record.Time,
+                GetDateTimeForBCP(record.Time),
                 record.DurationInSec
-
             );
         }
 
