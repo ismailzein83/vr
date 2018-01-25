@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Collections.Generic;
-using TOne.WhS.AccountBalance.Business;
-using TOne.WhS.AccountBalance.Entities;
 using Vanrise.AccountBalance.Business;
 using Vanrise.AccountBalance.Entities;
-using Vanrise.Common;
-using Vanrise.Entities;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.BusinessEntity.Business;
 
@@ -19,19 +14,27 @@ namespace TOne.WhS.AccountBalance.MainExtensions.QueueActivators
         public Guid SupplierUsageTransactionTypeId { get; set; }
         public UpdateAccountBalanceSettings UpdateAccountBalanceSettings { get; set; }
 
+        const string BillingCdrRecordTypeId = "6cf5f7ad-5123-45d2-b47f-eca613d454f7";
+        const string BillingStatsRecordTypeId = "7df45dea-6052-4f99-88e3-93f0562f2ffa";
         protected override void ConvertToBalanceUpdate(IConvertToBalanceUpdateContext context)
         {
-            dynamic mainCDR = context.Record;
+            dynamic cdrRecord = context.Record;
 
-            DateTime attemptTime = mainCDR.AttemptDateTime;
+            DateTime attemptTime;
+            switch (context.DataRecordTypeId.ToString().ToLower())
+            {
+                case BillingCdrRecordTypeId: attemptTime = cdrRecord.AttemptDateTime; break;
+                case BillingStatsRecordTypeId: attemptTime = cdrRecord.BatchStart; break;
+                default: throw new NotSupportedException(string.Format("Data Record Type: {0} is not supported", context.DataRecordTypeId));
+            }
 
-            int? saleFinancialAccountId = mainCDR.SaleFinancialAccount;
+            int? saleFinancialAccountId = cdrRecord.SaleFinancialAccount;
             if (saleFinancialAccountId.HasValue)
             {
-                Decimal? saleAmount = mainCDR.SaleNet;
+                Decimal? saleAmount = cdrRecord.SaleNet;
                 if (saleAmount.HasValue && saleAmount.Value > 0)
                 {
-                    int? saleCurrencyId = mainCDR.SaleCurrencyId;
+                    int? saleCurrencyId = cdrRecord.SaleCurrencyId;
                     WHSCarrierFinancialAccountData saleFinancialAccountData = s_financialAccountManager.GetCustCarrierFinancialByFinAccId(saleFinancialAccountId.Value);
 
                     if (saleCurrencyId.HasValue && saleFinancialAccountData.AccountBalanceData != null)
@@ -49,13 +52,13 @@ namespace TOne.WhS.AccountBalance.MainExtensions.QueueActivators
                 }
             }
 
-            int? costFinancialAccountId = mainCDR.CostFinancialAccount;
+            int? costFinancialAccountId = cdrRecord.CostFinancialAccount;
             if (costFinancialAccountId.HasValue)
             {
-                Decimal? costAmount = mainCDR.CostNet;
+                Decimal? costAmount = cdrRecord.CostNet;
                 if (costAmount.HasValue && costAmount.Value > 0)
                 {
-                    int? costCurrencyId = mainCDR.CostCurrencyId;
+                    int? costCurrencyId = cdrRecord.CostCurrencyId;
                     WHSCarrierFinancialAccountData costFinancialAccountData = s_financialAccountManager.GetSuppCarrierFinancialByFinAccId(costFinancialAccountId.Value);
 
                     if (costCurrencyId.HasValue && costFinancialAccountData.AccountBalanceData != null)
