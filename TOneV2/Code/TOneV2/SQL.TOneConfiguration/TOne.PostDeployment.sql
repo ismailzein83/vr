@@ -218,7 +218,10 @@ as (select * from (values
 ('48ab58c0-8d37-4f6a-a5ec-5eafe9aaa586','Pricelist Settings','Pricelist Settings','VR_Common_CompanyDefinition'							,'{"Editor":"whs-be-companypricelistsettings-definition"}'),
 
 ('7A2C8C43-7242-4FB0-9F05-43D8395D0276','WhS_BE_SaleAreaExclusiveSession','Sale Process','ExclusiveSessionTypeSettings'					,'{"Editor":"whs-be-saleareaexclusivesessiontype-editor"}'),
-('80453ECA-C1B1-431D-8C56-9BB92EE0551C','WhS_BE_SupplierExclusiveSession','Purchase Process','ExclusiveSessionTypeSettings'				,'{"Editor":"whs-be-supplierexclusivesessiontype-editor"}')
+('80453ECA-C1B1-431D-8C56-9BB92EE0551C','WhS_BE_SupplierExclusiveSession','Purchase Process','ExclusiveSessionTypeSettings'				,'{"Editor":"whs-be-supplierexclusivesessiontype-editor"}'),
+
+('BBBD7994-68C5-423D-8A51-3B29D3C3A43A','Excluded Ranges','Ranges','WhS_Routing_RoutingExcludedDestinations'		,'{"Editor":"vr-whs-routing-excludedranges"}'),
+('BA55C956-D395-4776-88E0-CFA0B8565F50','Excluded Codes','Codes','WhS_Routing_RoutingExcludedDestinations'			,'{"Editor":"vr-whs-routing-excludedcodes"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
