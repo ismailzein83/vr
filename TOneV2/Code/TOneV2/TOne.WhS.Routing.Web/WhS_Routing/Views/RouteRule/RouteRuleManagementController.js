@@ -52,7 +52,7 @@
             $scope.setRouteRulesDeleted = function () {
                 var ids = gridAPI.getSelectedRouteRules();
                 var onSetRouteRulesDeleted = function () {
-                    gridAPI.onRouteRulesDeleted();
+                    gridAPI.onRouteRulesDeleted(ids);
                 };
                 WhS_Routing_RouteRuleService.setRouteRulesDeleted(ids, onSetRouteRulesDeleted);
             };

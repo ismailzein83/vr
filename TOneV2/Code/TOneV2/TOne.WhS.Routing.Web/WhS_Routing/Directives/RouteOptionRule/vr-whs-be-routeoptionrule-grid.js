@@ -69,7 +69,7 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
                         gridAPI.itemUpdated(routeOptionRuleObject);
                     };
 
-                    directiveAPI.getSelectedRouteOptionsRules = function () {                        
+                    directiveAPI.getSelectedRouteOptionsRules = function () {
                         var ids = [];
                         for (var i = 0; i < $scope.routeOptionRules.length; i++) {
                             if ($scope.routeOptionRules[i].isSelected == true)
@@ -78,12 +78,13 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
                         return ids;
                     };
 
-                  
-                    directiveAPI.onRouteOptionsRulesDeleted = function () { 
+
+                    directiveAPI.onRouteOptionsRulesDeleted = function (ids) {
                         for (var i = 0; i < $scope.routeOptionRules.length; i++) {
-                            if ($scope.routeOptionRules[i].isSelected == true) {
-                                $scope.routeOptionRules[i].isSelected = false;
-                                gridAPI.itemDeleted($scope.routeOptionRules[i]);
+                            for (var j = 0; j < ids.length; j++) {
+                                if ($scope.routeOptionRules[i].Entity.RuleId == ids[j]) {
+                                    deleteRuleCallBack($scope.routeOptionRules[i])
+                                }
                             }
                         }
                     };
@@ -94,6 +95,10 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
 
             };
 
+            function deleteRuleCallBack(rule) {
+                rule.isSelected = false;
+                gridAPI.itemDeleted(rule);
+            }
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return WhS_Routing_RouteOptionRuleAPIService.GetFilteredRouteOptionRules(dataRetrievalInput)
                    .then(function (response) {
@@ -137,7 +142,7 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
         function hasUpdateRulePermission() {
             return WhS_Routing_RouteOptionRuleAPIService.HasUpdateRulePermission();
         }
-        
+
         function editRouteOptionRule(routeOptionRule) {
             var onRouteOptionRuleUpdated = function (updatedItem) {
                 gridDrillDownTabsObj.setDrillDownExtensionObject(updatedItem);
