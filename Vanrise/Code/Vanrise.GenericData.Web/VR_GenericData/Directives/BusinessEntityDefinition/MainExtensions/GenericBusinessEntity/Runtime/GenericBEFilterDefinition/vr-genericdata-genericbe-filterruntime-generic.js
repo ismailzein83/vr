@@ -99,10 +99,16 @@
                 };
 
                 api.getData = function () {
+                    var values;
+                    if ($scope.scopeModel.filter.directiveAPI != undefined) {
+                        values = $scope.scopeModel.filter.directiveAPI.getValuesAsArray();
+                        }
+                    if (values == undefined || values.length == 0)
+                        return;
                     return {
                         Filters: [{
                             FieldName: $scope.scopeModel.filter.fieldName,
-                            FilterValues: $scope.scopeModel.filter.directiveAPI != undefined ? $scope.scopeModel.filter.directiveAPI.getValuesAsArray() : undefined
+                            FilterValues: values
                         }]
                     };
                 };

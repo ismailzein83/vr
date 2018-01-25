@@ -73,7 +73,21 @@ namespace Vanrise.GenericData.Business
                         return GetCachedDataRecords(id);
                     });
 
-                    var dataRecordBigResult = AllRecordsToBigResult(input, orderedData, recordType);
+                    RecordFilterManager recordFilterManager = new RecordFilterManager();
+
+                    Func<DataRecord, bool> filterExpression = (dataRecord) =>
+                    {
+                        if (input.Query.FilterGroup != null)
+                        {
+                            var context = new DataRecordDictFilterGenericFieldMatchContext(dataRecord.FieldValues, recordType.DataRecordTypeId);
+                            if (!recordFilterManager.IsFilterGroupMatch(input.Query.FilterGroup, context))
+                                return false;
+
+                        }
+                        return true;
+                    };
+
+                    var dataRecordBigResult = AllRecordsToBigResult(input, orderedData.FindAllRecords(filterExpression), recordType);
 
                     var handler = new ResultProcessingHandler<DataRecordDetail>()
                     {

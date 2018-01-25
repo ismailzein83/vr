@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttachmentFieldTypeEntity.cs" />
     <Compile Include="BEParentChildRelation\BEParentChildRelation.cs" />
     <Compile Include="BEParentChildRelation\BEParentChildRelationDefinition\BEParentChildRelationDefinition.cs" />
     <Compile Include="BEParentChildRelation\BEParentChildRelationDefinition\BEParentChildRelationDefinitionFilter.cs" />

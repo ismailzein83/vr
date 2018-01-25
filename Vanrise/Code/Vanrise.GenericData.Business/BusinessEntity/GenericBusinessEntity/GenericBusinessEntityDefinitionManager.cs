@@ -101,5 +101,15 @@ namespace Vanrise.GenericData.Business
             dataRecordTypeFields.ThrowIfNull("dataRecordTypeFields", dataRecordTypeId);
             return dataRecordTypeFields;
         }
+        
+        public Object GetExtendedSettingsInfoByType(GenericBEDefinitionSettings definitionSettings, string infoType)
+        {
+            definitionSettings.ThrowIfNull("context.DefinitionSettings");
+            definitionSettings.ExtendedSettings.ThrowIfNull("context.DefinitionSettings.ExtendedSettings");
+           return definitionSettings.ExtendedSettings.GetInfoByType(new GenericBEExtendedSettingsContext
+            {
+                InfoType = infoType
+            }) ;
+        }
     }
 }

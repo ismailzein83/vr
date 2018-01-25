@@ -25,31 +25,30 @@ namespace Vanrise.GenericData.MainExtensions
                 context.DefinitionSettings.ThrowIfNull("context.DefinitionSettings");
                 context.DefinitionSettings.ExtendedSettings.ThrowIfNull("context.DefinitionSettings.ExtendedSettings");
                 context.GenericBusinessEntity.ThrowIfNull("context.GenericBusinessEntity");
-                
-                string serialNumberPattern = context.DefinitionSettings.ExtendedSettings.GetInfoByType(new GenericBEExtendedSettingsContext
-                {
-                    InfoType = InfoType
-                }) as string;
-
+                string serialNumberPattern = new GenericBusinessEntityDefinitionManager().GetExtendedSettingsInfoByType(context.DefinitionSettings, InfoType) as string; 
                 if (serialNumberPattern != null)
                 {
+                    var serialNumberPartContext = new GenericBESerialNumberPartSettingsContext
+                    {
+                        DefinitionSettings = context.DefinitionSettings,
+                        GenericBusinessEntity = context.GenericBusinessEntity
+                    };
+
                     foreach (var part in PartDefinitions)
                     {
-
-                        serialNumberPattern = serialNumberPattern.Replace(string.Format("#{0}#", part.Name), part.Settings.Execute(new GenericBESerialNumberPartSettingsContext
-                          {
-                              DefinitionSettings = context.DefinitionSettings,
-                              GenericBusinessEntity = context.GenericBusinessEntity
-                          }));
+                        if (serialNumberPattern != null && serialNumberPattern.Contains(string.Format("#{0}#", part.VariableName)))
+                        {
+                            serialNumberPattern = serialNumberPattern.Replace(string.Format("#{0}#", part.VariableName), part.Settings.GetPartText(serialNumberPartContext));
+                        }
                     }
+
                     if (context.GenericBusinessEntity.FieldValues == null)
                         context.GenericBusinessEntity.FieldValues = new Dictionary<string, object>();
-                    var serialNumber = context.GenericBusinessEntity.FieldValues.GetOrCreateItem(this.FieldName);
 
                     Object serialNumberField = null;
                     if (context.GenericBusinessEntity.FieldValues.TryGetValue(this.FieldName, out serialNumberField))
                     {
-                        context.GenericBusinessEntity.FieldValues[this.FieldName] = serialNumber;
+                        context.GenericBusinessEntity.FieldValues[this.FieldName] = serialNumberPattern;
                     }
                     else
                     {
@@ -63,14 +62,16 @@ namespace Vanrise.GenericData.MainExtensions
     public class GenericBESerialNumberPart
     {
         public Guid GenericBESerialNumberPartId { get; set; }
-        public string Name { get; set; }
+        public string VariableName { get; set; }
+        public string VariableDescription { get; set; }
+
         public GenericBESerialNumberPartSettings Settings { get; set; }
     }
     public abstract class GenericBESerialNumberPartSettings
     {
         public abstract Guid ConfigId { get; }
         public abstract string RuntimeEditor { get; }
-        public abstract string Execute(IGenericBESerialNumberPartSettingsContext context);
+        public abstract string GetPartText(IGenericBESerialNumberPartSettingsContext context);
     }
     public interface IGenericBESerialNumberPartSettingsContext
     {
@@ -89,7 +90,7 @@ namespace Vanrise.GenericData.MainExtensions
             get { return new Guid("E1C87C72-9481-4707-A73A-C511E0F35AEA"); }
         }
         public string FieldName { get; set; }
-        public override string Execute(IGenericBESerialNumberPartSettingsContext context)
+        public override string GetPartText(IGenericBESerialNumberPartSettingsContext context)
         {
             context.DefinitionSettings.ThrowIfNull("context.DefinitionSettings");
             context.GenericBusinessEntity.ThrowIfNull("context.GenericBusinessEntity");
@@ -105,7 +106,7 @@ namespace Vanrise.GenericData.MainExtensions
 
         public override string RuntimeEditor
         {
-            get { throw new NotImplementedException(); }
+            get { return ""; }
         }
     }
 

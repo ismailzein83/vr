@@ -343,6 +343,15 @@ namespace Vanrise.GenericData.Business
             var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(genericBusinessEntityToAdd.BusinessEntityDefinitionId);
             var idFieldType = _genericBEDefinitionManager.GetIdFieldTypeForGenericBE(genericBusinessEntityToAdd.BusinessEntityDefinitionId);
 
+            if(genericBEDefinitionSetting.OnBeforeInsertHandler != null)
+            {
+                genericBEDefinitionSetting.OnBeforeInsertHandler.Execute(new GenericBEOnBeforeInsertHandlerContext
+                {
+                    DefinitionSettings = genericBEDefinitionSetting,
+                    GenericBusinessEntity = genericBusinessEntityToAdd
+                });
+            }
+
             Object insertedId;
             bool hasInsertedId;
             bool insertActionSucc = _dataRecordStorageManager.AddDataRecord(genericBEDefinitionSetting.DataRecordStorageId, genericBusinessEntityToAdd.FieldValues, out insertedId, out hasInsertedId);
@@ -374,9 +383,9 @@ namespace Vanrise.GenericData.Business
           
             if (updateActionSucc)
             {
-                VRActionLogger.Current.TrackAndLogObjectAdded(new GenericBusinessEntityLoggableEntity(genericBusinessEntityToUpdate.BusinessEntityDefinitionId), genericBusinessEntityToUpdate);
+                VRActionLogger.Current.TrackAndLogObjectUpdated(new GenericBusinessEntityLoggableEntity(genericBusinessEntityToUpdate.BusinessEntityDefinitionId), genericBusinessEntityToUpdate);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = GenericBusinessEntityDetailMapper(genericBusinessEntityToUpdate.BusinessEntityDefinitionId, genericBusinessEntityToUpdate); 
+                updateOperationOutput.UpdatedObject = GenericBusinessEntityDetailMapper(genericBusinessEntityToUpdate.BusinessEntityDefinitionId, GetGenericBusinessEntity(genericBusinessEntityToUpdate.GenericBusinessEntityId,genericBusinessEntityToUpdate.BusinessEntityDefinitionId)); 
             }
             else
             {

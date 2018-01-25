@@ -316,6 +316,10 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\vr-genericdata-datarecordstoragesettings-restapi.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\Templates\RestAPITemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\vr-genericdata-datastoresetting-restapi.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Attachment\Templates\AttachmentFieldTypeTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Attachment\vr-genericdata-fieldtype-attachment.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\CustomObject\Templates\CustomObjectFieldTypeTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\CustomObject\vr-genericdata-fieldtype-customobject.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Dictionary\Templates\DictionaryFieldTypeRuleFilterEditor.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Dictionary\Templates\DictionaryFieldTypeTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Dictionary\vr-genericdata-fieldtype-dictionary-filtereditor.js" />
@@ -670,6 +674,7 @@
     <Content Include="VR_GenericData\Views\GenericRule\GenericRuleManagementController.js" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\MainExtensions\OnBeforeInsertHandler\Templates\" />
     <Folder Include="VR_GenericData\Directives\BusinessEntity\Templates\" />
   </ItemGroup>
   <ItemGroup>
