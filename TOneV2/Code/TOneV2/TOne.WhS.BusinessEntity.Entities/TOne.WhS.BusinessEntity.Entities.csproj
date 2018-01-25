@@ -123,6 +123,7 @@
     <Compile Include="CompanyDefinition\CompanyDefinitionPricelistSettings.cs" />
     <Compile Include="CompanyDefinition\CompanyPricelistSettings.cs" />
     <Compile Include="CustomerInvoiceSettingInfo.cs" />
+    <Compile Include="FaultTickets\FaultTicketsSettingData.cs" />
     <Compile Include="FinancialAccount\WHSFinancialAccountDefinitionInfoFilter.cs" />
     <Compile Include="FinancialAccount\WHSCarrierFinancialAccountData.cs" />
     <Compile Include="FinancialAccount\Enums.cs" />

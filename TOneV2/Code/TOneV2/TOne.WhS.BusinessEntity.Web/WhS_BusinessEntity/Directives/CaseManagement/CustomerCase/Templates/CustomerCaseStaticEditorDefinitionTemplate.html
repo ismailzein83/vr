@@ -1,32 +1,63 @@
 ﻿<vr-row>
     <vr-columns width="1/3row">
-        <vr-textbox  value="scopeModel.name" label="Name" isrequired></vr-textbox>
+        <vr-textbox value="scopeModel.ownerReference" label="Owner Reference" vr-disabled="true"></vr-textbox>
     </vr-columns>
-    <vr-genericdata-genericbusinessentity-selector isrequired="true" on-ready="scopeModel.onReasonSelectorReady" normal-col-num="4" customlabel="Reason"></vr-genericdata-genericbusinessentity-selector>
-    <vr-whs-be-customer-selector on-ready="scopeModel.onCustomerSelectorReady" normal-col-num="4" isrequired="true" onselectionchanged="scopeModel.onCustomerSelectionChanged" selectedvalues="scopeModel.selectedCustomer"></vr-whs-be-customer-selector>
-    <vr-whs-be-salezone-selector on-ready="scopeModel.onSaleZoneSelectorReady" normal-col-num="4" isrequired="true"></vr-whs-be-salezone-selector>
+    <span vr-disabled="scopeModel.isEditMode">
+        <vr-genericdata-genericbusinessentity-selector isrequired="true" on-ready="scopeModel.onWorkGroupSelectorReady" normal-col-num="4" customlabel="Work Group"></vr-genericdata-genericbusinessentity-selector>
+    </span>
     <vr-common-statusdefinition-selector on-ready="scopeModel.onStatusSelectorReady" customlabel="Status" normal-col-num="4" isrequired="true"></vr-common-statusdefinition-selector>
     <vr-columns width="1/3row">
         <vr-textbox value="scopeModel.carrierReference" label="Carrier Reference"></vr-textbox>
     </vr-columns>
+</vr-row>
+<vr-row>
+    <span vr-disabled="scopeModel.isEditMode">
+        <vr-whs-be-customer-selector on-ready="scopeModel.onCustomerSelectorReady" normal-col-num="4" isrequired="true" onselectionchanged="scopeModel.onCustomerSelectionChanged" selectedvalues="scopeModel.selectedCustomer"></vr-whs-be-customer-selector>
+    </span>
     <vr-columns width="1/3row">
-        <vr-datetimepicker value="scopeModel.fromDate" type="date" label="From Date" customvalidate="scopeModel.validateEEDDate()" isrequired="true"></vr-datetimepicker>
+        <vr-datetimepicker vr-disabled="scopeModel.isEditMode" value="scopeModel.fromDate" type="date" label="From Date" customvalidate="scopeModel.validateEEDDate()" isrequired="true"></vr-datetimepicker>
     </vr-columns>
 
     <vr-columns width="1/3row">
-        <vr-datetimepicker value="scopeModel.toDate" type="date" label="To Date" customvalidate="scopeModel.validateEEDDate()" isrequired="true"></vr-datetimepicker>
+        <vr-datetimepicker vr-disabled="scopeModel.isEditMode" value="scopeModel.toDate" type="date" label="To Date" customvalidate="scopeModel.validateEEDDate()" isrequired="true"></vr-datetimepicker>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-columns width="1/3row">
+        <vr-textbox type="number" value="scopeModel.codeNumber" label="Code + Number" vr-disabled="scopeModel.fromDate == undefined || scopeModel.toDate == undefined"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row" withemptyline>
+        <vr-label >Zone Name</vr-label>
+        <vr-label isvalue></vr-label>
     </vr-columns>
 
-    <vr-columns width="1/3row">
-        <vr-textbox type="number" value="scopeModel.attempts" label="Attempts"></vr-textbox>
-    </vr-columns>
-    <vr-columns width="1/3row">
-        <vr-textbox type="number" value="scopeModel.asr" label="ASR"></vr-textbox>
-    </vr-columns>
-    <vr-columns width="1/3row">
-        <vr-textbox type="number" value="scopeModel.acd" label="ACD"></vr-textbox>
+</vr-row>
+
+<vr-row>
+    <span vr-disabled="scopeModel.isEditMode">
+        <vr-genericdata-genericbusinessentity-selector isrequired="true" on-ready="scopeModel.onReasonSelectorReady" normal-col-num="4" customlabel="Reason"></vr-genericdata-genericbusinessentity-selector>
+    </span>
+    <vr-columns width="1/3row" withemptyline>
+        <vr-button type="Add" value="scopeModel.add" standalone></vr-button>
     </vr-columns>
     <vr-columns width="fullrow">
+
         <vr-textarea value="scopeModel.description" label="Description"></vr-textarea>
+    </vr-columns>
+</vr-row>
+
+<vr-row>
+    <vr-columns width="1/3row">
+        <vr-textbox type="number" vr-disabled="scopeModel.isEditMode" value="scopeModel.attempts" label="Attempts"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox type="number" vr-disabled="scopeModel.isEditMode" value="scopeModel.asr" label="ASR"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox type="number" vr-disabled="scopeModel.isEditMode" value="scopeModel.acd" label="ACD"></vr-textbox>
+    </vr-columns>
+
+    <vr-columns width="fullrow">
+        <vr-textarea value="scopeModel.notes" label="Notes"></vr-textarea>
     </vr-columns>
 </vr-row>

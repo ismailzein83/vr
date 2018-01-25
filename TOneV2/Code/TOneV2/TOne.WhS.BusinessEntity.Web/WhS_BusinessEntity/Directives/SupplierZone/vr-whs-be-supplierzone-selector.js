@@ -93,6 +93,7 @@ app.directive('vrWhsBeSupplierzoneSelector', ['WhS_BE_SupplierZoneAPIService', '
                 };
 
                 ctrl.onSupplierSelectionchanged = function () {
+                    if (selectorApi != undefined)
                     selectorApi.clearDataSource();
                     if (supplierDirectiveApi.getSelectedIds() != undefined)
                         supplierId = supplierDirectiveApi.getSelectedIds();
