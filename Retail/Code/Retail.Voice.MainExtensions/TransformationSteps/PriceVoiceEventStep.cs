@@ -11,7 +11,6 @@ namespace Retail.Voice.MainExtensions.TransformationSteps
         public string AccountBEDefinitionID { get; set; }
         public string AccountId { get; set; }
         public string ServiceTypeId { get; set; }
-        public string RawCDR { get; set; }
         public string MappedCDR { get; set; }
         public string Duration { get; set; }
         public string EventTime { get; set; }
@@ -36,8 +35,8 @@ namespace Retail.Voice.MainExtensions.TransformationSteps
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new Retail.Voice.Business.VoiceChargingManager();", voiceChargingManagerVariableName);
 
             var voiceEventPriceVariableName = context.GenerateUniqueMemberName("voiceEventPrice");
-            context.AddCodeToCurrentInstanceExecutionBlock("Retail.Voice.Entities.VoiceEventPrice {0} = {1}.PriceVoiceEvent({2},{3},{4},{5},{6},{7},{8});", voiceEventPriceVariableName,
-                voiceChargingManagerVariableName, this.AccountBEDefinitionID, this.AccountId, this.ServiceTypeId, this.RawCDR, this.MappedCDR, this.Duration, this.EventTime);
+            context.AddCodeToCurrentInstanceExecutionBlock("Retail.Voice.Entities.VoiceEventPrice {0} = {1}.PriceVoiceEvent({2},{3},{4},{5},{6},{7});", voiceEventPriceVariableName,
+                voiceChargingManagerVariableName, this.AccountBEDefinitionID, this.AccountId, this.ServiceTypeId, this.MappedCDR, this.Duration, this.EventTime);
 
             context.AddCodeToCurrentInstanceExecutionBlock("if({0} != null)", voiceEventPriceVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{");

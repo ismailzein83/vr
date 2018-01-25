@@ -24,7 +24,6 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
 
             var output = s_transformer.ExecuteDataTransformation(this.DataTransformationId, (dtContext) =>
             {
-                dtContext.SetRecordValue("RawCDR", context.RawCDR);
                 dtContext.SetRecordValue("MappedCDR", context.MappedCDR);
                 dtContext.SetRecordValue("Duration", context.Duration);
                 dtContext.SetRecordValue("EventTime", context.EventTime);

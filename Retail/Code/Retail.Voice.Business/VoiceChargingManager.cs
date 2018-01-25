@@ -20,7 +20,7 @@ namespace Retail.Voice.Business
 
         #region Public Methods
 
-        public VoiceEventPrice PriceVoiceEvent(Guid accountBEDefinitionId, long accountId, Guid serviceTypeId, dynamic rawCDR, dynamic mappedCDR, decimal duration, DateTime eventTime)
+        public VoiceEventPrice PriceVoiceEvent(Guid accountBEDefinitionId, long accountId, Guid serviceTypeId, dynamic mappedCDR, decimal duration, DateTime eventTime)
         {
             VoiceEventPrice voiceEventPrice = new VoiceEventPrice();
             voiceEventPrice.VoiceEventPricedParts = new List<VoiceEventPricedPart>();
@@ -39,7 +39,6 @@ namespace Retail.Voice.Business
                     AccountId = accountId,
                     PackageAccountId = voiceUsageCharger.ParentPackageAccountId,
                     ServiceTypeId = serviceTypeId,
-                    RawCDR = rawCDR,
                     MappedCDR = mappedCDR,
                     Duration = remainingDurationToPrice,
                     EventTime = eventTime
@@ -103,14 +102,13 @@ namespace Retail.Voice.Business
             return voiceEventPrice;
         }
 
-        public VoiceEventPricingInfo ApplyChargingPolicyToVoiceEvent(int chargingPolicyId, Guid serviceTypeId, dynamic rawCDR, dynamic mappedCDR, decimal duration, DateTime eventTime, Guid accountBEDefinitionId, long packageAccountId)
+        public VoiceEventPricingInfo ApplyChargingPolicyToVoiceEvent(int chargingPolicyId, Guid serviceTypeId, dynamic mappedCDR, decimal duration, DateTime eventTime, Guid accountBEDefinitionId, long packageAccountId)
         {
             VoiceChargingPolicyEvaluator chargingPolicyEvaluator = GetVoiceChargingPolicyEvaluator(serviceTypeId);
             var context = new VoiceChargingPolicyEvaluatorContext
             {
                 ServiceTypeId = serviceTypeId,
                 ChargingPolicyId = chargingPolicyId,
-                RawCDR = rawCDR,
                 MappedCDR = mappedCDR,
                 Duration = duration,
                 EventTime = eventTime,
@@ -269,8 +267,6 @@ namespace Retail.Voice.Business
 
         public Guid ServiceTypeId { get; set; }
 
-        public dynamic RawCDR { get; set; }
-
         public dynamic MappedCDR { get; set; }
 
         public decimal Duration { get; set; }
@@ -308,8 +304,6 @@ namespace Retail.Voice.Business
         public Guid ServiceTypeId { get; set; }
 
         public int ChargingPolicyId { get; set; }
-
-        public dynamic RawCDR { get; set; }
 
         public dynamic MappedCDR { get; set; }
 

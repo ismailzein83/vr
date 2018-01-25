@@ -28,8 +28,6 @@ namespace Retail.Voice.Entities
 
         Guid ServiceTypeId { get; }
 
-        dynamic RawCDR { get; }
-
         dynamic MappedCDR { get; }
 
         Decimal Duration { get; }

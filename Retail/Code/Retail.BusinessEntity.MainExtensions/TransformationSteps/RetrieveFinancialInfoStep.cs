@@ -21,6 +21,7 @@ namespace Retail.BusinessEntity.MainExtensions.TransformationSteps
 
         //Output
         public string FinancialAccountId { get; set; }
+        public string BalanceAccountId { get; set; } 
 
 
         public override void GenerateExecutionCode(IDataTransformationCodeGenerationContext context)
@@ -58,6 +59,9 @@ namespace Retail.BusinessEntity.MainExtensions.TransformationSteps
 
             if (this.FinancialAccountId != null)
                 context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.FinancialAccountId;", this.FinancialAccountId, financialAccountRuntimeDataVariableName);
+
+            if (this.BalanceAccountId != null)
+                context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.BalanceAccountId;", this.BalanceAccountId, financialAccountRuntimeDataVariableName);
 
             context.AddCodeToCurrentInstanceExecutionBlock("}");
         }

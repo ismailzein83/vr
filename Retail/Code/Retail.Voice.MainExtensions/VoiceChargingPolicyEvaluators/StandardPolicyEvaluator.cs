@@ -218,7 +218,6 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
             genericRuleTarget.TargetFieldValues = new Dictionary<string, object>();
             genericRuleTarget.TargetFieldValues.Add("ChargingPolicy", context.ChargingPolicyId);
             genericRuleTarget.Objects = new Dictionary<string, dynamic>();
-            genericRuleTarget.Objects.Add("RawCDR", context.RawCDR);
             genericRuleTarget.Objects.Add("MappedCDR", context.MappedCDR);
             genericRuleTarget.Objects.Add("Account", packageAccount);
 

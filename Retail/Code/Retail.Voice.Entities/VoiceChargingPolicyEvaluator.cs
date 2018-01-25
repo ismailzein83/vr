@@ -60,8 +60,6 @@ namespace Retail.Voice.Entities
 
         int ChargingPolicyId { get; }
 
-        dynamic RawCDR { get; }
-
         dynamic MappedCDR { get; }
 
         Decimal Duration { get; }

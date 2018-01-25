@@ -9,9 +9,7 @@ app.directive('retailBeRetrievefinancialinfostepPreview', ['UtilsService', 'VRUI
                 onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
-
                 var ctrl = this;
-
                 var ctor = new RetrieveFinancialInfoStepPreviewCtor(ctrl, $scope);
                 ctor.initializeController();
             },
@@ -30,6 +28,8 @@ app.directive('retailBeRetrievefinancialinfostepPreview', ['UtilsService', 'VRUI
         };
 
         function RetrieveFinancialInfoStepPreviewCtor(ctrl, $scope) {
+            this.initializeController = initializeController;
+
             var stepObj = {};
 
             function initializeController() {
@@ -68,7 +68,6 @@ app.directive('retailBeRetrievefinancialinfostepPreview', ['UtilsService', 'VRUI
                 };
 
                 api.checkValidation = function () {
-
                     return checkValidation();
                 };
 
@@ -139,9 +138,13 @@ app.directive('retailBeRetrievefinancialinfostepPreview', ['UtilsService', 'VRUI
                         Value: "FinancialAccountId"
                     });
                 }
+                if (data.BalanceAccountId != undefined) {
+                    array.push({
+                        FieldName: data.BalanceAccountId,
+                        Value: "BalanceAccountId"
+                    });
+                }
             }
-
-            this.initializeController = initializeController;
         }
 
         return directiveDefinitionObject;

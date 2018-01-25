@@ -117,10 +117,6 @@ app.directive('retailVoicePricevoiceeventstepPreview', ['UtilsService', 'VRUIUti
                     Value: data.ServiceTypeId
                 });
                 array.push({
-                    FieldName: "RawCDR",
-                    Value: data.RawCDR
-                });
-                array.push({
                     FieldName: "MappedCDR",
                     Value: data.MappedCDR
                 });

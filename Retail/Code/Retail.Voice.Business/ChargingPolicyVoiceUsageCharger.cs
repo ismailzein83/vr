@@ -19,7 +19,7 @@ namespace Retail.Voice.Business
 
         public void TryChargeVoiceEvent(IVoiceUsageChargerContext context)
         {
-            VoiceEventPricingInfo pricingInfo = s_voiceChargingManager.ApplyChargingPolicyToVoiceEvent(this._chargingPolicyId, context.ServiceTypeId, context.RawCDR, context.MappedCDR, context.Duration, context.EventTime, context.AccountBEDefinitionId, context.PackageAccountId);
+            VoiceEventPricingInfo pricingInfo = s_voiceChargingManager.ApplyChargingPolicyToVoiceEvent(this._chargingPolicyId, context.ServiceTypeId, context.MappedCDR, context.Duration, context.EventTime, context.AccountBEDefinitionId, context.PackageAccountId);
             if (pricingInfo != null)
             {
                 context.PricedPartInfos = new List<VoiceEventPricedPart>
@@ -44,7 +44,7 @@ namespace Retail.Voice.Business
 
         public void DeductFromBalances(IVoiceUsageChargerDeductFromBalanceContext context)
         {
-            
+
         }
     }
 }

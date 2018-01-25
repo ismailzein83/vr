@@ -45,9 +45,6 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
             var serviceTypeIdDirectiveReadyAPI;
             var serviceTypeIdDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            var rawCDRDirectiveReadyAPI;
-            var rawCDRDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
             var mappedCDRDirectiveReadyAPI;
             var mappedCDRDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -109,10 +106,6 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
                 $scope.scopeModel.onServiceTypeIdReady = function (api) {
                     serviceTypeIdDirectiveReadyAPI = api;
                     serviceTypeIdDirectiveReadyPromiseDeferred.resolve();
-                };
-                $scope.scopeModel.onRawCDRReady = function (api) {
-                    rawCDRDirectiveReadyAPI = api;
-                    rawCDRDirectiveReadyPromiseDeferred.resolve();
                 };
                 $scope.scopeModel.onMappedCDRReady = function (api) {
                     mappedCDRDirectiveReadyAPI = api;
@@ -199,10 +192,6 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
                     //Loading ServiceTypeId Directive
                     var serviceTypeIdDirectiveLoadPromiseDeferred = getServiceTypeIdDirectiveLoadPromiseDeferred();
                     promises.push(serviceTypeIdDirectiveLoadPromiseDeferred.promise);
-
-                    //Loading RawCDR Directive
-                    var rawCDRDirectivePromiseDeferred = getRawCDRDirectiveLoadPromiseDeferred();
-                    promises.push(rawCDRDirectivePromiseDeferred.promise);
 
                     //Loading MappedCDR Directive
                     var mappedCDRDirectivePromiseDeferred = getMappedCDRDirectiveLoadPromiseDeferred();
@@ -306,20 +295,6 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
                         });
 
                         return serviceTypeIdDirectiveLoadPromiseDeferred;
-                    }
-                    function getRawCDRDirectiveLoadPromiseDeferred() {
-                        var rawCDRDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                        rawCDRDirectiveReadyPromiseDeferred.promise.then(function () {
-
-                            var rawCDRPayload = { context: payload.context };
-                            if (payload.stepDetails != undefined)
-                                rawCDRPayload.selectedRecords = payload.stepDetails.RawCDR;
-
-                            VRUIUtilsService.callDirectiveLoad(rawCDRDirectiveReadyAPI, rawCDRPayload, rawCDRDirectiveLoadPromiseDeferred);
-                        });
-
-                        return rawCDRDirectiveLoadPromiseDeferred;
                     }
                     function getMappedCDRDirectiveLoadPromiseDeferred() {
                         var mappedCDRDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -542,7 +517,6 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
                         AccountBEDefinitionID: accountBEDefinitionIdDirectiveReadyAPI.getData(),
                         AccountId: accountIdDirectiveReadyAPI.getData(),
                         ServiceTypeId: serviceTypeIdDirectiveReadyAPI.getData(),
-                        RawCDR: rawCDRDirectiveReadyAPI.getData(),
                         MappedCDR: mappedCDRDirectiveReadyAPI.getData(),
                         Duration: durationDirectiveReadyAPI.getData(),
                         EventTime: eventTimeDirectiveReadyAPI.getData(),
@@ -557,7 +531,7 @@ app.directive('retailVoicePricevoiceeventstep', ['UtilsService', 'VRUIUtilsServi
                         SaleRateValueRuleId: saleRateValueRuleIdDirectiveReadyAPI.getData(),
                         SaleRateTypeRuleId: saleRateTypeRuleIdDirectiveReadyAPI.getData(),
                         SaleTariffRuleId: saleTariffRuleIdDirectiveReadyAPI.getData(),
-                        SaleExtraChargeRuleId:  saleExtraChargeRuleIdDirectiveReadyAPI.getData(),
+                        SaleExtraChargeRuleId: saleExtraChargeRuleIdDirectiveReadyAPI.getData(),
                         VoiceEventPricedParts: voiceEventPricedPartsDirectiveReadyAPI.getData()
                     };
                 };

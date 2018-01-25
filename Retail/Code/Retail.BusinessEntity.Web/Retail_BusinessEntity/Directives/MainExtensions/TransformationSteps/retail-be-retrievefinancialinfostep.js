@@ -57,6 +57,9 @@ app.directive('retailBeRetrievefinancialinfostep', ['UtilsService', 'VRUIUtilsSe
             var financialAccountIdDirectiveReadyAPI;
             var financialAccountIdDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var balanceAccountIdDirectiveReadyAPI;
+            var balanceAccountIdDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -91,6 +94,10 @@ app.directive('retailBeRetrievefinancialinfostep', ['UtilsService', 'VRUIUtilsSe
                 $scope.scopeModel.onFinancialAccountIdReady = function (api) {
                     financialAccountIdDirectiveReadyAPI = api;
                     financialAccountIdDirectiveReadyPromiseDeferred.resolve();
+                };
+                $scope.scopeModel.onBalanceAccountIdReady = function (api) {
+                    balanceAccountIdDirectiveReadyAPI = api;
+                    balanceAccountIdDirectiveReadyPromiseDeferred.resolve();
                 };
 
                 defineAPI();
@@ -132,6 +139,10 @@ app.directive('retailBeRetrievefinancialinfostep', ['UtilsService', 'VRUIUtilsSe
                     //Loading FinancialAccountId Directive
                     var financialAccountIdDirectivePromiseDeferred = getFinancialAccountIdDirectivePromiseDeferred();
                     promises.push(financialAccountIdDirectivePromiseDeferred.promise);
+
+                    //Loading BalanceAccountId Directive
+                    var balanceAccountIdDirectivePromiseDeferred = getBalanceAccountIdDirectivePromiseDeferred();
+                    promises.push(balanceAccountIdDirectivePromiseDeferred.promise);
 
 
                     function getAccountBEDefinitionIdDirectiveLoadPromiseDeferred() {
@@ -233,6 +244,20 @@ app.directive('retailBeRetrievefinancialinfostep', ['UtilsService', 'VRUIUtilsSe
 
                         return financialAccountIdDirectiveLoadPromiseDeferred;
                     }
+                    function getBalanceAccountIdDirectivePromiseDeferred() {
+                        var balanceAccountIdDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        balanceAccountIdDirectiveReadyPromiseDeferred.promise.then(function () {
+
+                            var balanceAccountIdPayload = { context: payload.context };
+                            if (payload.stepDetails != undefined)
+                                balanceAccountIdPayload.selectedRecords = payload.stepDetails.BalanceAccountId;
+
+                            VRUIUtilsService.callDirectiveLoad(balanceAccountIdDirectiveReadyAPI, balanceAccountIdPayload, balanceAccountIdDirectiveLoadPromiseDeferred);
+                        });
+
+                        return balanceAccountIdDirectiveLoadPromiseDeferred;
+                    }
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -247,7 +272,8 @@ app.directive('retailBeRetrievefinancialinfostep', ['UtilsService', 'VRUIUtilsSe
                         CurrencyId: currencyIdDirectiveReadyAPI.getData(),
                         UpdateBalanceRecordList: updateBalanceRecordListDirectiveReadyAPI.getData(),
 
-                        FinancialAccountId: financialAccountIdDirectiveReadyAPI.getData()
+                        FinancialAccountId: financialAccountIdDirectiveReadyAPI.getData(),
+                        BalanceAccountId: balanceAccountIdDirectiveReadyAPI.getData()
                     };
                 };
 
