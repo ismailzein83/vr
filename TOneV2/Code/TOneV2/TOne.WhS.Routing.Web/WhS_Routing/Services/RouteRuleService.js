@@ -70,7 +70,7 @@
 
 
         function setRouteRulesDeleted(routeRulesIds, onSetRouteRulesDeleted) {
-            VRNotificationService.showConfirmation('Are you sure you want to delete these route rules ?')
+            VRNotificationService.showConfirmation('Are you sure you want to delete selected items?')
                 .then(function (response) {
                     if (response) {
                         return WhS_Routing_RouteRuleAPIService.SetRouteRulesDeleted({
