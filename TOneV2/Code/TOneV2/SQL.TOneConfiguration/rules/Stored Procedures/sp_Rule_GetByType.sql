@@ -9,6 +9,6 @@ AS
 BEGIN
 	SELECT	r.ID,r.TypeID,r.RuleDetails,r.BED,r.EED
 	FROM	[rules].[Rule] r  WITH(NOLOCK) 
-	WHERE	r.TypeID=@TypeID
+	WHERE	r.TypeID=@TypeID and ISNULL(IsDeleted, 0) = 0
 
 END

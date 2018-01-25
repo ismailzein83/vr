@@ -49,9 +49,24 @@
 
             $scope.addNewRouteRule = addNewRouteRule;
 
+            $scope.setRouteRulesDeleted = function () {
+                var ids = gridAPI.getSelectedRouteRules();
+                var onSetRouteRulesDeleted = function () {
+                    gridAPI.onRouteRulesDeleted();
+                };
+                WhS_Routing_RouteRuleService.setRouteRulesDeleted(ids, onSetRouteRulesDeleted);
+            };
+            $scope.disabledDeletedRouteRules = function () {
+                if (gridAPI == undefined) return true;
+                return gridAPI.getSelectedRouteRules().length < 1;
+            };
             $scope.hasAddRulePermission = function () {
                 return WhS_Routing_RouteRuleAPIService.HasAddRulePermission();
             };
+            $scope.hasDeleteRulePermission = function () {
+                return WhS_Routing_RouteRuleAPIService.HasUpdateRulePermission();
+            };
+            
 
             function getFilterObject() {
 
@@ -62,7 +77,8 @@
                     SaleZoneIds: saleZoneDirectiveAPI.getSelectedIds(),
                     EffectiveOn: $scope.effectiveOn,
                     RouteRuleSettingsConfigIds: routeRuleTypeSelectorAPI.getSelectedIds(),
-                    IsManagementScreen: true
+                    IsManagementScreen: true,
+                    includecheckicon: true
                 };
                 return query;
             }

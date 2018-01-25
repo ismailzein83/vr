@@ -43,6 +43,14 @@ namespace Vanrise.Rules.Web.Controllers
             return manager.DeleteRule(ruleId);
         }
 
+        [HttpPost]
+        [Route("SetRuleDeleted")]
+        public Vanrise.Entities.DeleteOperationOutput<Q> SetRuleDeleted(List<int> ruleIds)
+        {
+            R manager = Activator.CreateInstance<R>();
+            return manager.SetDeleted(ruleIds);
+        }
+
         [HttpGet]
         [Route("GetRule")]
         public T GetRule(int ruleId)

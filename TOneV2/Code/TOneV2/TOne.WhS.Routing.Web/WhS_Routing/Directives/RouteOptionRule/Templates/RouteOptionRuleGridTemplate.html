@@ -4,9 +4,13 @@
              pagingtype="'PagingOnScroll'"
              menuactions="gridMenuActions"
              idfield="Entity.RuleId"
+             defaultsortbyfieldname="'Entity.Name'"
              getrowstyle="getRowStyle" enableautoexport="true">
 
     <vr-datagridcolumn headertext="'Id'" field="'Entity.RuleId'" fixedwidth="'50'"></vr-datagridcolumn>
+    <vr-datagridcolumn fixedwidth="'30'" disablesorting="true" headertext="'Selected'" columnindex="1" invisibleheader ng-if="includeCheckIcon">{{includeCheckIcon}}
+        <vr-check value="dataItem.isSelected"></vr-check>
+    </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" fixedwidth="'200'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Included Codes'" field="'IncludedCodes'" ng-show="hideIncludedCodesColumn"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Customers'" field="'Customers'" ng-show="hideCustomerColumn"></vr-datagridcolumn>

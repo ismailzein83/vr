@@ -91,6 +91,13 @@ namespace TOne.WhS.Routing.Web.Controllers
         {
             return base.DeleteRule(ruleId);
         }
+
+        [HttpPost]
+        [Route("SetRouteRulesDeleted")]
+        public new DeleteOperationOutput<RouteRuleDetail> SetRouteRulesDeleted(RouteRuleDeleteInpute input)
+        {
+            return base.SetRuleDeleted(input.RuleIds);
+        }
     }
 
     public class LinkedRouteRuleInput
@@ -102,5 +109,10 @@ namespace TOne.WhS.Routing.Web.Controllers
         public int? CustomerId { get; set; }
 
         public List<RouteOption> RouteOptions { get; set; }
+    }
+
+    public class RouteRuleDeleteInpute
+    {
+        public List<int> RuleIds { get; set; }
     }
 }

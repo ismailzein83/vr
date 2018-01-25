@@ -35,6 +35,10 @@
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "DeleteRule"), { ruleId: ruleId });
         };
 
+        function SetRouteOptionsRulesDeleted(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "SetRouteOptionsRulesDeleted"), input);
+        };
+
 
         function GetRouteOptionRuleSettingsTemplates() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetRouteOptionRuleSettingsTemplates"));
@@ -81,7 +85,8 @@
             HasUpdateRulePermission: HasUpdateRulePermission,
             HasDeleteRulePermission: HasDeleteRulePermission,
             BuildLinkedRouteOptionRule: BuildLinkedRouteOptionRule,
-            GetRouteOptionRuleHistoryDetailbyHistoryId:GetRouteOptionRuleHistoryDetailbyHistoryId
+            GetRouteOptionRuleHistoryDetailbyHistoryId: GetRouteOptionRuleHistoryDetailbyHistoryId,
+            SetRouteOptionsRulesDeleted: SetRouteOptionsRulesDeleted
         });
 
     }

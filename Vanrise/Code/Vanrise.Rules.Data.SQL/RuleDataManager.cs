@@ -51,12 +51,11 @@ namespace Vanrise.Rules.Data.SQL
             return (recordesEffected > 0);
         }
 
-        public bool DeleteRule(int ruleId)
+        public bool SetDeleted(List<int> rulesIds)
         {
-            int recordesEffected = ExecuteNonQuerySP("rules.sp_Rule_Delete", ruleId);
-            return (recordesEffected > 0);
+            int affectedRecords = ExecuteNonQuerySP("[rules].[sp_Rule_SetDeleted]", string.Join<int>(",", rulesIds));
+            return (affectedRecords > 0);
         }
-
         public IEnumerable<Entities.Rule> GetRulesByType(int ruleTypeId)
         {
             return GetItemsSP("rules.sp_Rule_GetByType", RuleMapper, ruleTypeId);

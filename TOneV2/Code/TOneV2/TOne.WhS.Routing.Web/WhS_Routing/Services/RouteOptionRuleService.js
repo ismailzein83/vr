@@ -16,7 +16,8 @@
             editLinkedRouteOptionRule: editLinkedRouteOptionRule,
             registerObjectTrackingDrillDownToRouteOptionRules: registerObjectTrackingDrillDownToRouteOptionRules,
             getDrillDownDefinition: getDrillDownDefinition,
-            registerHistoryViewAction: registerHistoryViewAction
+            registerHistoryViewAction: registerHistoryViewAction,
+            setRouteOptionsRulesDeleted: setRouteOptionsRulesDeleted
         });
         function viewRouteOptionRules(context) {
             var modalParameters = {
@@ -88,6 +89,20 @@
                             .catch(function (error) {
                                 VRNotificationService.notifyException(error, scope);
                             });
+                    }
+                });
+        };
+
+        function setRouteOptionsRulesDeleted(routeOptionsIds, onSetRouteOptionsRulesDeleted) {
+            VRNotificationService.showConfirmation('Are you sure you want to delete these route options rules ?')
+                .then(function (response) {
+                    if (response) {
+                        return WhS_Routing_RouteOptionRuleAPIService.SetRouteOptionsRulesDeleted({
+                            RouteOptionsIds: routeOptionsIds
+                        }).then(function (deletionResponse) {
+                            VRNotificationService.notifyOnItemDeleted("Route Option Rule", deletionResponse);
+                            onSetRouteOptionsRulesDeleted();
+                        });
                     }
                 });
         };

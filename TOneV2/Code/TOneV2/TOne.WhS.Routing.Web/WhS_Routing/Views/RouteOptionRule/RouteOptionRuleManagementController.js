@@ -62,11 +62,26 @@
                 if (gridAPI != undefined)
                     return gridAPI.loadGrid(getFilterObject());
             };
+            $scope.setRouteOptionsRulesDeleted = function () {
+                var ids = gridAPI.getSelectedRouteOptionsRules();
+                var onSetRouteOptionsRulesDeleted = function () {
+                    gridAPI.onRouteOptionsRulesDeleted();
+                };
+                WhS_Routing_RouteOptionRuleService.setRouteOptionsRulesDeleted(ids, onSetRouteOptionsRulesDeleted);
+            };
+            $scope.disabledDeletedRouteOptionsRules = function () {
+                if (gridAPI == undefined) return true;
+                return gridAPI.getSelectedRouteOptionsRules().length < 1;
+            };
 
             $scope.addNewRouteOptionRule = addNewRouteOptionRule;
 
             $scope.hasAddRulePermission = function () {
                 return WhS_Routing_RouteOptionRuleAPIService.HasAddRulePermission();
+            };
+
+            $scope.hasDeleteRulePermission = function () {
+                return WhS_Routing_RouteOptionRuleAPIService.HasUpdateRulePermission();
             };
 
             $scope.onSelectSupplier = function (selectedItem) {
@@ -89,7 +104,8 @@
                     SupplierId: supplierAccountDirectiveAPI.getSelectedIds(),
                     SupplierZoneIds: supplierZoneDirectiveAPI.getSelectedIds(),
                     EffectiveOn: $scope.effectiveOn,
-                    RouteOptionRuleSettingsConfigIds: routeOptionRuleTypeSelectorAPI.getSelectedIds()
+                    RouteOptionRuleSettingsConfigIds: routeOptionRuleTypeSelectorAPI.getSelectedIds(),
+                    includecheckicon: true
                 };
                 return query;
             }

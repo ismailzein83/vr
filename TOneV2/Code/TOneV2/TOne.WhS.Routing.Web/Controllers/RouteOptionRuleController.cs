@@ -93,6 +93,12 @@ namespace TOne.WhS.Routing.Web.Controllers
         {
             return base.DeleteRule(ruleId);
         }
+        [HttpPost]
+        [Route("SetRouteOptionsRulesDeleted")]
+        public new DeleteOperationOutput<RouteOptionRuleDetail> SetRouteOptionsRulesDeleted(RouteOptionsRulesDeleteInpute input)
+        {
+            return base.SetRuleDeleted(input.RouteOptionsIds);
+        }
     }
 
     public class LinkedRouteOptionRuleInput
@@ -107,4 +113,9 @@ namespace TOne.WhS.Routing.Web.Controllers
 
         public long? SupplierZoneId { get; set; }
     }
+    public class RouteOptionsRulesDeleteInpute
+    {
+        public List<int> RouteOptionsIds { get; set; }
+    }
+
 }

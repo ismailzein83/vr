@@ -268,9 +268,10 @@ namespace Vanrise.Rules
         {
             DeleteOperationOutput<Q> deleteOperationOutput = new DeleteOperationOutput<Q>();
             IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
+            List<int> ids = new List<int>() { ruleId };
             T rule = GetRule(ruleId);
 
-            if (ruleDataManager.DeleteRule(ruleId))
+            if (ruleDataManager.SetDeleted(ids))
             {
                 deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
                 int ruleTypeId = GetRuleTypeId();
@@ -278,6 +279,19 @@ namespace Vanrise.Rules
                 if (rule != null)
                     TrackAndLogRuleDeleted(rule);
 
+            }
+
+            return deleteOperationOutput;
+        }
+
+        public Vanrise.Entities.DeleteOperationOutput<Q> SetDeleted(List<int> rulesIds)
+        {
+            DeleteOperationOutput<Q> deleteOperationOutput = new DeleteOperationOutput<Q>();
+            IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
+            if (ruleDataManager.SetDeleted(rulesIds))
+            {
+                deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
+                GetCacheManager().SetCacheExpired(GetRuleTypeId());
             }
 
             return deleteOperationOutput;

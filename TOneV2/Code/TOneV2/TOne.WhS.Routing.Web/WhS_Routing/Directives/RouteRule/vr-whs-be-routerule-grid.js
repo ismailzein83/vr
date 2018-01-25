@@ -36,6 +36,8 @@ function (VRNotificationService, WhS_Routing_RouteRuleAPIService, WhS_Routing_Ro
             $scope.showCustomerColumn = true;
             $scope.showIncludedCodesColumn = true;
 
+            $scope.includeCheckIcon = false;
+
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 var drillDownDefinitions = WhS_Routing_RouteRuleService.getDrillDownDefinition();
@@ -49,6 +51,7 @@ function (VRNotificationService, WhS_Routing_RouteRuleAPIService, WhS_Routing_Ro
                         var query = payload;
                         areRulesLinked = payload.areRulesLinked;
                         linkedCode = payload.linkedCode;
+                        $scope.includeCheckIcon = payload.includecheckicon;
                         onLinkedRouteRuleUpdated = payload.onRouteRuleUpdated;
                         if (query.loadedFromRoutingProduct) {
                             $scope.showCustomerColumn = false;
@@ -64,7 +67,6 @@ function (VRNotificationService, WhS_Routing_RouteRuleAPIService, WhS_Routing_Ro
                         if (query != undefined && query.hideIncludedCodesColumn) {
                             $scope.showIncludedCodesColumn = false;
                         }
-
                         return gridAPI.retrieveData(query);
                     };
 
@@ -73,8 +75,27 @@ function (VRNotificationService, WhS_Routing_RouteRuleAPIService, WhS_Routing_Ro
                         gridAPI.itemAdded(routeRuleObject);
                     };
 
+                    directiveAPI.getSelectedRouteRules = function () {
+                        var ids = [];
+                        for (var i = 0; i < $scope.routeRules.length; i++) {
+                            if ($scope.routeRules[i].isSelected == true)
+                                ids.push($scope.routeRules[i].Entity.RuleId)
+                        }
+                        return ids;
+                    };
+
                     directiveAPI.onRouteRuleUpdated = function (routeRuleObject) {
                         gridAPI.itemUpdated(routeRuleObject);
+                    };
+
+                    directiveAPI.onRouteRulesDeleted = function () {
+                        for (var i = 0; i < $scope.routeRules.length; i++) {
+                            if ($scope.routeRules[i].isSelected == true) {
+                                $scope.routeRules[i].isSelected = false;
+                                gridAPI.itemDeleted($scope.routeRules[i]);
+
+                            }
+                        }
                     };
 
                     return directiveAPI;
@@ -113,23 +134,18 @@ function (VRNotificationService, WhS_Routing_RouteRuleAPIService, WhS_Routing_Ro
                 name: "Edit",
                 clicked: editRouteRule,
                 haspermission: hasUpdateRulePermission
-            }//,
-            //{
-            //    name: "Delete",
-            //    clicked: deleteRouteRule,
-            //    haspermission: hasDeleteRulePermission
-            //}
+            },
+            {
+                name: "Delete",
+                clicked: deleteRouteRule,
+                haspermission: hasUpdateRulePermission
+            }
             ];
         }
 
         function hasUpdateRulePermission() {
             return WhS_Routing_RouteRuleAPIService.HasUpdateRulePermission();
         }
-
-        function hasDeleteRulePermission() {
-            return WhS_Routing_RouteRuleAPIService.HasDeleteRulePermission();
-        }
-
 
         function editRouteRule(routeRule) {
             var onRouteRuleUpdated = function (updatedItem) {

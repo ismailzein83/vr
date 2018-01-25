@@ -16,7 +16,8 @@
             editLinkedRouteRule: editLinkedRouteRule,
             registerObjectTrackingDrillDownToRouteRules: registerObjectTrackingDrillDownToRouteRules,
             getDrillDownDefinition: getDrillDownDefinition,
-            registerHistoryViewAction: registerHistoryViewAction
+            registerHistoryViewAction: registerHistoryViewAction,
+            setRouteRulesDeleted: setRouteRulesDeleted
         });
 
         function addRouteRule(onRouteRuleAdded, context) {
@@ -63,6 +64,21 @@
                             .catch(function (error) {
                                 VRNotificationService.notifyException(error, scope);
                             });
+                    }
+                });
+        };
+
+
+        function setRouteRulesDeleted(routeRulesIds, onSetRouteRulesDeleted) {
+            VRNotificationService.showConfirmation('Are you sure you want to delete these route rules ?')
+                .then(function (response) {
+                    if (response) {
+                        return WhS_Routing_RouteRuleAPIService.SetRouteRulesDeleted({
+                            RuleIds: routeRulesIds
+                        }).then(function (deletionResponse) {
+                            VRNotificationService.notifyOnItemDeleted("Route Rule", deletionResponse);
+                            onSetRouteRulesDeleted();
+                        });
                     }
                 });
         };

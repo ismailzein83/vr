@@ -208,7 +208,6 @@
     <Build Include="rules\Tables\Rule.sql" />
     <Build Include="rules\Tables\RuleType.sql" />
     <Build Include="rules\Stored Procedures\sp_Rule_Update.sql" />
-    <Build Include="rules\Stored Procedures\sp_Rule_Delete.sql" />
     <Build Include="rules\Stored Procedures\sp_Rule_GetByType.sql" />
     <Build Include="rules\Stored Procedures\sp_Rule_Insert.sql" />
     <Build Include="rules\Stored Procedures\sp_RuleType_InsertIfNotExistsAndGetID.sql" />
@@ -727,6 +726,7 @@
     <Build Include="VR_AccountBalance\User Defined Types\AccountUsagesByTimeTable.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_GetLastByPartners.sql" />
     <Build Include="sec\Stored Procedures\sp_User_UpdateProfile.sql" />
+    <Build Include="rules\Stored Procedures\sp_Rule_SetDeleted.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

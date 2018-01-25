@@ -5,10 +5,13 @@
     [BED]         DATETIME       NOT NULL,
     [EED]         DATETIME       NULL,
     [SourceID]    VARCHAR (255)  NULL,
+    [IsDeleted]   BIT            NULL,
     [timestamp]   ROWVERSION     NULL,
     CONSTRAINT [PK_Rule] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [FK_Rule_RuleType] FOREIGN KEY ([TypeID]) REFERENCES [rules].[RuleType] ([ID])
 );
+
+
 
 
 

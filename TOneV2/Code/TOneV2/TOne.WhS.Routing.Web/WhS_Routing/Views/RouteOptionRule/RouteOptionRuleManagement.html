@@ -36,8 +36,10 @@
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
                 <div transclude-to="buttons">
-                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
                     <vr-button type="Add" data-onclick="addNewRouteOptionRule" haspermission="hasAddRulePermission"></vr-button>
+                    <vr-button type="Delete" data-onclick="setRouteOptionsRulesDeleted" vr-disabled="disabledDeletedRouteOptionsRules()"></vr-button>
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked" haspermission="hasDeleteRulePermission"></vr-button>
+
                 </div>
             </vr-actionbar>
         </vr-row>

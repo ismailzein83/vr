@@ -35,6 +35,7 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
             $scope.hideCustomerColumn = true;
             $scope.hideSupplierColumn = true;
             $scope.hideIncludedCodesColumn = true;
+            $scope.includeCheckIcon = false;
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -48,6 +49,7 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
                     directiveAPI.loadGrid = function (payload) {
                         var query = payload;
                         areRulesLinked = payload.areRulesLinked;
+                        $scope.includeCheckIcon = payload.includecheckicon;
                         linkedCode = payload.linkedCode;
                         if (query.loadedFromRoutingProduct) {
                             $scope.hideCustomerColumn = false;
@@ -66,6 +68,26 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
                     directiveAPI.onRouteOptionRuleUpdated = function (routeOptionRuleObject) {
                         gridAPI.itemUpdated(routeOptionRuleObject);
                     };
+
+                    directiveAPI.getSelectedRouteOptionsRules = function () {                        
+                        var ids = [];
+                        for (var i = 0; i < $scope.routeOptionRules.length; i++) {
+                            if ($scope.routeOptionRules[i].isSelected == true)
+                                ids.push($scope.routeOptionRules[i].Entity.RuleId)
+                        }
+                        return ids;
+                    };
+
+                  
+                    directiveAPI.onRouteOptionsRulesDeleted = function () { 
+                        for (var i = 0; i < $scope.routeOptionRules.length; i++) {
+                            if ($scope.routeOptionRules[i].isSelected == true) {
+                                $scope.routeOptionRules[i].isSelected = false;
+                                gridAPI.itemDeleted($scope.routeOptionRules[i]);
+                            }
+                        }
+                    };
+
 
                     return directiveAPI;
                 }
@@ -103,24 +125,19 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
                 name: "Edit",
                 clicked: editRouteOptionRule,
                 haspermission: hasUpdateRulePermission
-            }//,
-            //{
-            //    name: "Delete",
-            //    clicked: deleteRouteOptionRule,
-            //    haspermission: hasDeleteRulePermission
-            //}
+            },
+            {
+                name: "Delete",
+                clicked: deleteRouteOptionRule,
+                haspermission: hasUpdateRulePermission
+            }
             ];
         }
 
         function hasUpdateRulePermission() {
             return WhS_Routing_RouteOptionRuleAPIService.HasUpdateRulePermission();
         }
-
-        //function hasDeleteRulePermission() {
-        //    return WhS_Routing_RouteOptionRuleAPIService.HasDeleteRulePermission();
-        //}
-
-
+        
         function editRouteOptionRule(routeOptionRule) {
             var onRouteOptionRuleUpdated = function (updatedItem) {
                 gridDrillDownTabsObj.setDrillDownExtensionObject(updatedItem);
@@ -133,14 +150,14 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
                 WhS_Routing_RouteOptionRuleService.editRouteOptionRule(routeOptionRule.Entity.RuleId, onRouteOptionRuleUpdated);
         }
 
-        //function deleteRouteOptionRule(routeOptionRule) {
+        function deleteRouteOptionRule(routeOptionRule) {
 
-        //    var onRouteOptionRuleDeleted = function (deletedItem) {
-        //        gridAPI.itemDeleted(deletedItem);
-        //    }
+            var onRouteOptionRuleDeleted = function (deletedItem) {
+                gridAPI.itemDeleted(deletedItem);
+            };
 
-        //    WhS_Routing_RouteOptionRuleService.deleteRouteOptionRule($scope, routeOptionRule, onRouteOptionRuleDeleted);
-        //}
+            WhS_Routing_RouteOptionRuleService.deleteRouteOptionRule($scope, routeOptionRule, onRouteOptionRuleDeleted);
+        }
 
         this.initializeController = initializeController;
     }
