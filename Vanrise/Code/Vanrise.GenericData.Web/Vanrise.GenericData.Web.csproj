@@ -221,6 +221,7 @@
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\GenericBEFilterDefinition\vr-genericdata-genericbe-filterruntime-time.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\GenericBEViewDefinition\Templates\HistoryGenericBEDefinitionViewTemplate.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\GenericBEViewDefinition\vr-genericdata-genericbe-historygridview-runtime.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\MainExtensions\OnBeforeInsertHandler\GenericBESerialNumber\SerialNumberPatternHelperEditorEditorController.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Templates\GenericBusinessEntityDefinitionEditor.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Templates\GenericBusinessEntityViewEditor.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\vr-genericdata-genericbedefinition-selector.js" />
@@ -332,6 +333,9 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Guid\vr-genericdata-fieldtype-guid-rulefiltereditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Guid\vr-genericdata-fieldtype-guid-runtimeeditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Guid\vr-genericdata-fieldtype-guid.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\MainExtensions\OnBeforeInsertHandler\GenericBESerialNumber\Templates\SerialNumberPatternHelperEditor.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\MainExtensions\OnBeforeInsertHandler\GenericBESerialNumber\Templates\SerialNumberEditorTemplate.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\MainExtensions\OnBeforeInsertHandler\GenericBESerialNumber\vr-genricdata-be-serialnumber-editor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Common\Templates\EmptyDefinitionSettingsTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Common\vr-genericdata-genericruledefinitionsettings-tax.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Common\vr-genericdata-genericruledefinitionsettings-extracharge.js" />
@@ -567,6 +571,7 @@
     <Content Include="VR_GenericData\Services\APIServices\DataRecordStorageLogAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordStorageAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataStoreAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\GenericBESerialNumberAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataTransformationDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataTransformationStepConfigAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\ExpressionBuilderConfigAPIService.js" />
@@ -586,6 +591,7 @@
     <Content Include="VR_GenericData\Services\BusinessEntityDefinitionService.js" />
     <Content Include="VR_GenericData\Services\DataRecordSourceService.js" />
     <Content Include="VR_GenericData\Services\DataRecordFieldChoiceService.js" />
+    <Content Include="VR_GenericData\Services\GenericBESerialNumberService.js" />
     <Content Include="VR_GenericData\Services\GenericBusinessEntityActionService.js" />
     <Content Include="VR_GenericData\Services\GenericUIService.js" />
     <Content Include="VR_GenericData\Services\KeyFieldMappingService.js" />
