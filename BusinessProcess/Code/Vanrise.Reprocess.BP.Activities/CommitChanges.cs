@@ -5,6 +5,7 @@ using Vanrise.BusinessProcess;
 using Vanrise.Reprocess.Entities;
 using Vanrise.Common;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Reprocess.BP.Activities
 {
@@ -19,6 +20,10 @@ namespace Vanrise.Reprocess.BP.Activities
         public DateTime To { get; set; }
 
         public int RecordCountPerTransaction { get; set; }
+
+        public ReprocessDefinition ReprocessDefinition { get; set; }
+
+        public ReprocessFilter ReprocessFilter { get; set; }
     }
 
     public class CommitChangesOutput
@@ -42,6 +47,11 @@ namespace Vanrise.Reprocess.BP.Activities
         [RequiredArgument]
         public InArgument<int> RecordCountPerTransaction { get; set; }
 
+        [RequiredArgument]
+        public InArgument<ReprocessDefinition> ReprocessDefinition { get; set; }
+
+        [RequiredArgument]
+        public InArgument<ReprocessFilter> ReprocessFilter { get; set; }
 
         protected override CommitChangesInput GetInputArgument(AsyncCodeActivityContext context)
         {
@@ -51,7 +61,9 @@ namespace Vanrise.Reprocess.BP.Activities
                 InitializationOutputByStage = this.InitializationOutputByStage.Get(context),
                 From = this.From.Get(context),
                 To = this.To.Get(context),
-                RecordCountPerTransaction = this.RecordCountPerTransaction.Get(context)
+                RecordCountPerTransaction = this.RecordCountPerTransaction.Get(context),
+                ReprocessFilter = this.ReprocessFilter.Get(context),
+                ReprocessDefinition = this.ReprocessDefinition.Get(context)
             };
         }
 
@@ -80,7 +92,7 @@ namespace Vanrise.Reprocess.BP.Activities
                     //handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Starting Commit Changes for stage {0} Batch Start: {1}, Batch End : {2}",
                     //    inputArgument.Stage.StageName, dateTimeRange.From.ToString("yyyy-MM-dd HH:mm:ss"), dateTimeRange.To.ToString("yyyy-MM-dd HH:mm:ss"));
 
-                    var commitChangesContext = new ReprocessStageActivatorCommitChangesContext(initializationStageOutput, dateTimeRange.From, dateTimeRange.To);
+                    var commitChangesContext = new ReprocessStageActivatorCommitChangesContext(initializationStageOutput, dateTimeRange.From, dateTimeRange.To, inputArgument.ReprocessFilter, inputArgument.ReprocessDefinition);
                     inputArgument.Stage.Activator.CommitChanges(commitChangesContext);
 
                     //handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finishing Commit Changes for stage {0} Batch Start: {1}, Batch End : {2}",
@@ -117,13 +129,19 @@ namespace Vanrise.Reprocess.BP.Activities
         private class ReprocessStageActivatorCommitChangesContext : IReprocessStageActivatorCommitChangesContext
         {
             object _initializationStageOutput;
-            DateTime _from, _to;
+            DateTime _from;
+            DateTime _to;
 
-            public ReprocessStageActivatorCommitChangesContext(object initializationStageOutput, DateTime from, DateTime to)
+            ReprocessFilter _reprocessFilter;
+            ReprocessDefinition _reprocessDefinition;
+
+            public ReprocessStageActivatorCommitChangesContext(object initializationStageOutput, DateTime from, DateTime to, ReprocessFilter reprocessFilter, ReprocessDefinition reprocessDefinition)
             {
                 _initializationStageOutput = initializationStageOutput;
                 _from = from;
                 _to = to;
+                _reprocessFilter = reprocessFilter;
+                _reprocessDefinition = reprocessDefinition;
             }
 
             public object InitializationStageOutput { get { return _initializationStageOutput; } }
@@ -131,6 +149,15 @@ namespace Vanrise.Reprocess.BP.Activities
             public DateTime From { get { return _from; } }
 
             public DateTime To { get { return _to; } }
+
+            public RecordFilterGroup GetRecordFilterGroup(Guid? dataRecordTypeId)
+            {
+                RecordFilterGroup recordFilterGroup = null;
+                if (_reprocessFilter != null && _reprocessDefinition.Settings.FilterDefinition != null)
+                    recordFilterGroup = _reprocessDefinition.Settings.FilterDefinition.GetFilterGroup(new ReprocessFilterGetFilterGroupContext() { ReprocessFilter = _reprocessFilter, TargetDataRecordTypeId = dataRecordTypeId });
+
+                return recordFilterGroup;
+            }
         }
 
         private class ReprocessStageActivatorDropStorageContext : IReprocessStageActivatorDropStorageContext

@@ -15,6 +15,8 @@ namespace Vanrise.Reprocess.BP.Arguments
 
         public BatchRecord BatchRecord { get; set; }
 
+        public ReprocessFilter ReprocessFilter { get; set; }
+
         public Dictionary<string, object> InitializationOutputByStage { get; set; }
 
         public override string GetTitle()

@@ -19,40 +19,44 @@ namespace Vanrise.Reprocess.Business
         {
             context.IntanceToRun.ThrowIfNull("context.IntanceToRun");
             ReProcessingProcessInput reprocessInputArg = context.IntanceToRun.InputArgument.CastWithValidate<ReProcessingProcessInput>("context.IntanceToRun.InputArgument");
-            Dictionary<Guid, Guid> execFlowDefIdsByReprocessDefId = new Dictionary<Guid, Guid>();
-            Guid executionFlowDefinitionId = GetExecFlowDefByReprocessDefId(reprocessInputArg.ReprocessDefinitionId, execFlowDefIdsByReprocessDefId);
-            foreach (var startedBPInstance in context.GetStartedBPInstances())
+
+            if (!reprocessInputArg.IgnoreSynchronisation)
             {
-                ReProcessingProcessInput startedBPInstanceReprocessArg = startedBPInstance.InputArgument as ReProcessingProcessInput;
-                if (startedBPInstanceReprocessArg != null)
+                Dictionary<Guid, Guid> execFlowDefIdsByReprocessDefId = new Dictionary<Guid, Guid>();
+                Guid executionFlowDefinitionId = GetExecFlowDefByReprocessDefId(reprocessInputArg.ReprocessDefinitionId, execFlowDefIdsByReprocessDefId);
+                foreach (var startedBPInstance in context.GetStartedBPInstances())
                 {
-                    Guid startedBPInstanceExecFlowDefId = GetExecFlowDefByReprocessDefId(startedBPInstanceReprocessArg.ReprocessDefinitionId, execFlowDefIdsByReprocessDefId);
-                    if (startedBPInstanceExecFlowDefId == executionFlowDefinitionId
-                        && Utilities.AreTimePeriodsOverlapped(reprocessInputArg.FromTime, reprocessInputArg.ToTime, startedBPInstanceReprocessArg.FromTime, startedBPInstanceReprocessArg.ToTime))
+                    ReProcessingProcessInput startedBPInstanceReprocessArg = startedBPInstance.InputArgument as ReProcessingProcessInput;
+                    if (startedBPInstanceReprocessArg != null)
                     {
-                        context.Reason = String.Format("Another reprocess instance is running from {0:yyyy-MM-dd} to {1:yyyy-MM-dd}", startedBPInstanceReprocessArg.FromTime, startedBPInstanceReprocessArg.ToTime);
-                        return false;
+                        Guid startedBPInstanceExecFlowDefId = GetExecFlowDefByReprocessDefId(startedBPInstanceReprocessArg.ReprocessDefinitionId, execFlowDefIdsByReprocessDefId);
+                        if (startedBPInstanceExecFlowDefId == executionFlowDefinitionId
+                            && Utilities.AreTimePeriodsOverlapped(reprocessInputArg.FromTime, reprocessInputArg.ToTime, startedBPInstanceReprocessArg.FromTime, startedBPInstanceReprocessArg.ToTime))
+                        {
+                            context.Reason = String.Format("Another reprocess instance is running from {0:yyyy-MM-dd} to {1:yyyy-MM-dd}", startedBPInstanceReprocessArg.FromTime, startedBPInstanceReprocessArg.ToTime);
+                            return false;
+                        }
                     }
                 }
-            }
 
-            HoldRequestManager holdRequestManager = new HoldRequestManager();
-            HoldRequest existingHoldRequest = holdRequestManager.GetHoldRequest(context.IntanceToRun.ProcessInstanceID);
-            if (existingHoldRequest == null)
-            {
-                ReprocessDefinitionManager reprocessDefinitionManager = new ReprocessDefinitionManager();
-                ReprocessDefinition reprocessDefinition = reprocessDefinitionManager.GetReprocessDefinition(reprocessInputArg.ReprocessDefinitionId);
+                HoldRequestManager holdRequestManager = new HoldRequestManager();
+                HoldRequest existingHoldRequest = holdRequestManager.GetHoldRequest(context.IntanceToRun.ProcessInstanceID);
+                if (existingHoldRequest == null)
+                {
+                    ReprocessDefinitionManager reprocessDefinitionManager = new ReprocessDefinitionManager();
+                    ReprocessDefinition reprocessDefinition = reprocessDefinitionManager.GetReprocessDefinition(reprocessInputArg.ReprocessDefinitionId);
 
-                holdRequestManager.InsertHoldRequest(context.IntanceToRun.ProcessInstanceID, reprocessDefinition.Settings.ExecutionFlowDefinitionId, reprocessInputArg.FromTime, reprocessInputArg.ToTime,
-                    reprocessDefinition.Settings.StagesToHoldNames, reprocessDefinition.Settings.StagesToProcessNames, HoldRequestStatus.Pending);
+                    holdRequestManager.InsertHoldRequest(context.IntanceToRun.ProcessInstanceID, reprocessDefinition.Settings.ExecutionFlowDefinitionId, reprocessInputArg.FromTime, reprocessInputArg.ToTime,
+                        reprocessDefinition.Settings.StagesToHoldNames, reprocessDefinition.Settings.StagesToProcessNames, HoldRequestStatus.Pending);
 
-                context.Reason = "Waiting CDR Import";
-                return false;
-            }
-            else if (existingHoldRequest.Status != HoldRequestStatus.CanBeStarted)
-            {
-                context.Reason = "Waiting CDR Import";
-                return false;
+                    context.Reason = "Waiting CDR Import";
+                    return false;
+                }
+                else if (existingHoldRequest.Status != HoldRequestStatus.CanBeStarted)
+                {
+                    context.Reason = "Waiting CDR Import";
+                    return false;
+                }
             }
 
             return true;

@@ -1,9 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Activities;
+using System.Collections.Generic;
 using Vanrise.BusinessProcess;
 using Vanrise.Reprocess.Entities;
 using Vanrise.GenericData.Business;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Reprocess.BP.Activities
 {
@@ -11,6 +13,10 @@ namespace Vanrise.Reprocess.BP.Activities
 
     public class LoadDataToReprocessInput
     {
+        public ReprocessDefinition ReprocessDefinition { get; set; }
+
+        public ReprocessFilter ReprocessFilter { get; set; }
+
         public List<Guid> RecordStorageIds { get; set; }
 
         public DateTime FromTime { get; set; }
@@ -31,6 +37,12 @@ namespace Vanrise.Reprocess.BP.Activities
 
     public sealed class LoadDataToReprocess : BaseAsyncActivity<LoadDataToReprocessInput, LoadDataToReprocessOutput>
     {
+        [RequiredArgument]
+        public InArgument<ReprocessDefinition> ReprocessDefinition { get; set; }
+
+        [RequiredArgument]
+        public InArgument<ReprocessFilter> ReprocessFilter { get; set; }
+
         [RequiredArgument]
         public InArgument<List<Guid>> RecordStorageIds { get; set; }
 
@@ -53,27 +65,41 @@ namespace Vanrise.Reprocess.BP.Activities
         {
             return new LoadDataToReprocessInput
             {
+                ReprocessDefinition = this.ReprocessDefinition.Get(context),
                 RecordStorageIds = this.RecordStorageIds.Get(context),
                 FromTime = this.FromTime.Get(context),
                 ToTime = this.ToTime.Get(context),
                 StageManager = this.StageManager.Get(context),
-                OutputStageNames = this.OutputStageNames.Get(context)
+                OutputStageNames = this.OutputStageNames.Get(context),
+                ReprocessFilter = this.ReprocessFilter.Get(context)
             };
         }
 
         protected override LoadDataToReprocessOutput DoWorkWithResult(LoadDataToReprocessInput inputArgument, AsyncActivityHandle handle)
         {
+            DataRecordStorageManager manager = new DataRecordStorageManager();
+            DataRecordStorage dataRecordStorage = manager.GetDataRecordStorage(inputArgument.RecordStorageIds.First());
+
+            RecordFilterGroup recordFilterGroup = null;
+            if (inputArgument.ReprocessFilter != null)
+            {
+                ReprocessFilterDefinition filterDefinition = inputArgument.ReprocessDefinition.Settings.FilterDefinition;
+                if (filterDefinition != null && filterDefinition.ApplyFilterToSourceData)
+                    recordFilterGroup = filterDefinition.GetFilterGroup(new ReprocessFilterGetFilterGroupContext() { ReprocessFilter = inputArgument.ReprocessFilter, TargetDataRecordTypeId = dataRecordStorage.DataRecordTypeId });
+            }
+
             LoadDataToReprocessOutput output = new LoadDataToReprocessOutput() { EventCount = 0 };
 
             if (inputArgument.OutputStageNames == null || inputArgument.OutputStageNames.Count == 0)
                 throw new Exception("No output stages!");
 
-            DataRecordStorageManager manager = new DataRecordStorageManager();
+
             GenericDataRecordBatch batch = new GenericDataRecordBatch() { Records = new List<dynamic>() };
 
+            RecordFilterManager recordFilterManager = new RecordFilterManager();
             foreach (var recordStorageId in inputArgument.RecordStorageIds)
             {
-                manager.GetDataRecords(recordStorageId, inputArgument.FromTime, inputArgument.ToTime, ((itm) =>
+                manager.GetDataRecords(recordStorageId, inputArgument.FromTime, inputArgument.ToTime, recordFilterGroup, ((itm) =>
                 {
                     output.EventCount++;
 

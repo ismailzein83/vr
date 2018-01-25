@@ -1,0 +1,5 @@
+﻿<span vr-loader="scopeModel.isLoadingDirective">
+    <span ng-repeat="field in scopeModel.fields">
+        <vr-directivewrapper directive="field.runtimeEditor" on-ready="field.onDirectiveReady" normal-col-num="{{filterCtrl.normalColNum}}" selectionmode="multiple"></vr-directivewrapper>
+    </span>
+</span>

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsService', 'VRValidationService', 'ReprocessChunkTimeEnum',
-    function (UtilsService, VRUIUtilsService, VRValidationService, ReprocessChunkTimeEnum) {
+app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsService', 'VRValidationService', 'ReprocessChunkTimeEnum', 'Reprocess_ReprocessDefinitionAPIService', 'VRNotificationService',
+    function (UtilsService, VRUIUtilsService, VRValidationService, ReprocessChunkTimeEnum, Reprocess_ReprocessDefinitionAPIService, VRNotificationService) {
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
@@ -30,9 +30,15 @@ app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsServic
 
             var reprocessDefinitionSelectorAPI;
             var reprocessDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+            //var onReprocessDefinitionSelectionChangedDeferred;
 
             var chunkTimeSelectorAPI;
             var chunkTimeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var filterDefinitionDirectiveAPI;
+            var filterDefinitionDirectiveReadyDeferred;
+
+            var filterDefinition;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -55,6 +61,35 @@ app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsServic
                     return null;
                 };
 
+                $scope.scopeModel.onReprocessDefinitionSelectionChanged = function (selectedValue) {
+                    if (selectedValue != undefined) {
+                        $scope.scopeModel.isLoadingDirective = true;
+
+                        Reprocess_ReprocessDefinitionAPIService.GetReprocessDefinition(selectedValue.ReprocessDefinitionId).then(function (response) {
+                            filterDefinition = response.Settings.FilterDefinition;
+                            $scope.scopeModel.filterDefinitionEditor = filterDefinition != undefined ? filterDefinition.RuntimeEditor : undefined;
+                        }).catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                        }).finally(function () {
+                            $scope.scopeModel.isLoadingDirective = false;
+                        });
+                    }
+                    else {
+                        filterDefinition = undefined;
+                        $scope.scopeModel.filterDefinitionEditor = undefined;
+                    }
+                };
+
+                $scope.scopeModel.onFilterDefinitionDirectiveReady = function (api) {
+                    filterDefinitionDirectiveAPI = api;
+
+                    var setLoader = function (value) {
+                        $scope.scopeModel.isLoadingDirective = value;
+                    };
+                    var payload = { filterDefinition: filterDefinition };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, filterDefinitionDirectiveAPI, payload, setLoader, filterDefinitionDirectiveReadyDeferred);
+                };
+
                 defineAPI();
             }
 
@@ -63,6 +98,7 @@ app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsServic
                 var api = {};
 
                 api.load = function (payload) {
+                    var filter;
 
                     if (payload != undefined) {
                         if (payload.rawExpressions != undefined) {
@@ -72,9 +108,9 @@ app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsServic
 
                         if (payload.data != undefined) {
                             $scope.scopeModel.useTempStorage = payload.data.UseTempStorage;
+                            filter = payload.data.Filter;
                         }
                     }
-
 
                     var promises = [];
 
@@ -102,6 +138,28 @@ app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsServic
                     });
                     promises.push(chunkTimeSelectorLoadDeferred.promise);
 
+
+                    if (filter != undefined) {
+                        filterDefinitionDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
+                        var filterLoadPromise = getFilterLoadPromise();
+                        promises.push(filterLoadPromise);
+                    }
+
+
+                    function getFilterLoadPromise() {
+                        var loadFilterPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        filterDefinitionDirectiveReadyDeferred.promise.then(function () {
+                            filterDefinitionDirectiveReadyDeferred = undefined;
+
+                            var payload = { filterDefinition: filterDefinition, filter: filter };
+                            VRUIUtilsService.callDirectiveLoad(filterDefinitionDirectiveAPI, payload, loadFilterPromiseDeferred);
+                        });
+
+                        return loadFilterPromiseDeferred.promise;
+                    }
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -115,7 +173,8 @@ app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsServic
                         $type: "Vanrise.Reprocess.BP.Arguments.ReProcessingProcessInput, Vanrise.Reprocess.BP.Arguments",
                         ReprocessDefinitionId: reprocessDefinitionSelectorAPI.getSelectedIds(),
                         ChunkTime: chunkTimeSelectorAPI.getSelectedIds(),
-                        UseTempStorage: $scope.scopeModel.selectedReprocessDefinition.ForceUseTempStorage ? true : $scope.scopeModel.useTempStorage
+                        UseTempStorage: $scope.scopeModel.selectedReprocessDefinition.ForceUseTempStorage ? true : $scope.scopeModel.useTempStorage,
+                        Filter: filterDefinitionDirectiveAPI != undefined ? filterDefinitionDirectiveAPI.getData() : undefined
                     };
                 };
 

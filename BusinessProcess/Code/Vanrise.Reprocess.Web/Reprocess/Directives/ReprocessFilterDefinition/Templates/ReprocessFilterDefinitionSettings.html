@@ -1,0 +1,48 @@
+﻿<vr-section header="Filter Definition">
+    <vr-columns colnum="{{ctrl.normalColNum}}">
+        <vr-select on-ready="scopeModel.onSelectorReady"
+                   datasource="scopeModel.templateConfigs"
+                   selectedvalues="scopeModel.selectedTemplateConfig"
+                   datavaluefield="ExtensionConfigurationId"
+                   datatextfield="Title"
+                   label="Filter Definition"
+                   isrequired="ctrl.isrequired"
+                   onselectionchanged="scopeModel.onSelectorSelectionChanged">
+        </vr-select>
+    </vr-columns>
+    <vr-columns colnum="{{ctrl.normalColNum}}">
+        <vr-switch value="scopeModel.applyFilterToSourceData" label="Apply To Source"></vr-switch>
+    </vr-columns>
+    <vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor" vr-loader="scopeModel.isLoadingDirective"
+                         on-ready="scopeModel.onDirectiveReady" customvalidate="ctrl.customvalidate" normal-col-num="{{ctrl.normalColNum}}" isrequired="true">
+    </vr-directivewrapper>
+</vr-section>
+
+<vr-section header="Mappings">
+    <vr-row>
+        <vr-columns width="1/3row">
+            <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onDataRecordTypeSelectorReady"
+                                                    selectedvalues="scopeModel.selectedDataRecordTypes"
+                                                    onselectitem="scopeModel.onselectDataRecordType" ondeselectitem="scopeModel.ondeselectRecordType"
+                                                    ismultipleselection hideremoveicon>
+            </vr-genericdata-datarecordtype-selector>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-validator validate="scopeModel.isMappingFieldsGridValid()">
+                <vr-datagrid on-ready="scopeModel.onGridReady"
+                             datasource="scopeModel.mappingFields"
+                             hidegridmenu vr-loader="scopeModel.loadingMappingFields">
+                    <vr-datagridcolumn headertext="'Name'" type="'Text'" field="'Name'" disablesorting columnindex="$index - 1" isfielddynamic="true"></vr-datagridcolumn>
+                    <vr-datagridcolumn ng-repeat="column in scopeModel.fields" headertext="column.columnName" tag="column">
+                        <span ng-init="tagObject = colDef.tag">
+                            <vr-directivewrapper directive="'vr-genericdata-datarecordtypefields-selector'" on-ready="{{tagObject.onDataRecordFieldSelectorReadyPath}}"
+                                                 onselectionchanged="viewScope.onSelectionChanged(dataItem, tagObject.columnName)" hidelabel></vr-directivewrapper>
+                        </span>
+                    </vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-validator>
+        </vr-columns>
+    </vr-row>
+</vr-section>

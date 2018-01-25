@@ -8,6 +8,7 @@ using Vanrise.Reprocess.Entities;
 using Vanrise.Entities;
 using Vanrise.Common;
 using Vanrise.Queueing.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Reprocess.BP.Activities
 {
@@ -28,6 +29,10 @@ namespace Vanrise.Reprocess.BP.Activities
         public Dictionary<string, object> InitializationOutputByStage { get; set; }
 
         public QueueExecutionFlowDefinition ExecutionFlowDefinition { get; set; }
+
+        public ReprocessDefinition ReprocessDefinition { get; set; }
+
+        public ReprocessFilter ReprocessFilter { get; set; }
     }
 
     public class ExecuteStageOutput
@@ -57,6 +62,12 @@ namespace Vanrise.Reprocess.BP.Activities
         [RequiredArgument]
         public InArgument<QueueExecutionFlowDefinition> ExecutionFlowDefinition { get; set; }
 
+        [RequiredArgument]
+        public InArgument<ReprocessDefinition> ReprocessDefinition { get; set; }
+
+        [RequiredArgument]
+        public InArgument<ReprocessFilter> ReprocessFilter { get; set; }
+
         protected override ExecuteStageInput GetInputArgument2(AsyncCodeActivityContext context)
         {
             return new ExecuteStageInput()
@@ -68,7 +79,9 @@ namespace Vanrise.Reprocess.BP.Activities
                 StageNames = this.StageNames.Get(context),
                 CurrentProcessId = context.GetSharedInstanceData().InstanceInfo.ParentProcessID.HasValue ? context.GetSharedInstanceData().InstanceInfo.ParentProcessID.Value : context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID,
                 InitializationOutputByStage = this.InitializationOutputByStage.Get(context),
-                ExecutionFlowDefinition = this.ExecutionFlowDefinition.Get(context)
+                ExecutionFlowDefinition = this.ExecutionFlowDefinition.Get(context),
+                ReprocessFilter = this.ReprocessFilter.Get(context),
+                ReprocessDefinition = this.ReprocessDefinition.Get(context)
             };
         }
 
@@ -83,7 +96,8 @@ namespace Vanrise.Reprocess.BP.Activities
                 (actionToDo) => base.DoWhilePreviousRunning(previousActivityStatus, handle, actionToDo),
                 (previousActivityStatus_Internal, actionToDo) => base.DoWhilePreviousRunning(previousActivityStatus_Internal, handle, actionToDo),
                 () => base.ShouldStop(handle), inputArgument.StageManager.EnqueueBatch, inputArgument.From, inputArgument.To, inputArgument.StageNames,
-                inputArgument.Stage.StageName, inputArgument.CurrentProcessId, (logEntryType, message) => handle.SharedInstanceData.WriteTrackingMessage(logEntryType, message, null), initializationStageOutput, queueExecutionFlowStage);
+                inputArgument.Stage.StageName, inputArgument.CurrentProcessId, (logEntryType, message) => handle.SharedInstanceData.WriteTrackingMessage(logEntryType, message, null), initializationStageOutput, queueExecutionFlowStage,
+                inputArgument.ReprocessFilter, inputArgument.ReprocessDefinition);
 
             inputArgument.Stage.Activator.ExecuteStage(executionContext);
             return new ExecuteStageOutput();
@@ -100,6 +114,8 @@ namespace Vanrise.Reprocess.BP.Activities
             Action<Action> _doWhilePreviousRunningAction;
             Action<AsyncActivityStatus, Action> _doWhilePreviousRunningAction2;
             Func<bool> _shouldStopFunc;
+            ReprocessFilter _reprocessFilter;
+            ReprocessDefinition _reprocessDefinition;
             Action<string, IReprocessBatch> _enqueueItem;
             DateTime _from;
             DateTime _to;
@@ -112,7 +128,8 @@ namespace Vanrise.Reprocess.BP.Activities
 
             public ReprocessStageActivatorExecutionContext(Queueing.BaseQueue<IReprocessBatch> inputQueue, Action<Action> doWhilePreviousRunningAction, Action<AsyncActivityStatus,
                 Action> doWhilePreviousRunningAction2, Func<bool> shouldStopFunc, Action<string, IReprocessBatch> enqueueItem, DateTime from, DateTime to, List<string> stageNames,
-                string currentStageName, long processInstanceId, Action<LogEntryType, string> writeTrackingMessage, object initializationStageOutput, QueueExecutionFlowStage queueExecutionFlowStage)
+                string currentStageName, long processInstanceId, Action<LogEntryType, string> writeTrackingMessage, object initializationStageOutput, QueueExecutionFlowStage queueExecutionFlowStage,
+                 ReprocessFilter reprocessFilter, ReprocessDefinition reprocessDefinition)
             {
                 _inputQueue = inputQueue;
                 _doWhilePreviousRunningAction = doWhilePreviousRunningAction;
@@ -127,6 +144,8 @@ namespace Vanrise.Reprocess.BP.Activities
                 _writeTrackingMessage = writeTrackingMessage;
                 _initializationStageOutput = initializationStageOutput;
                 _queueExecutionFlowStage = queueExecutionFlowStage;
+                _reprocessFilter = reprocessFilter;
+                _reprocessDefinition = reprocessDefinition;
             }
 
             public Queueing.BaseQueue<IReprocessBatch> InputQueue
@@ -193,6 +212,15 @@ namespace Vanrise.Reprocess.BP.Activities
             public QueueExecutionFlowStage QueueExecutionFlowStage
             {
                 get { return _queueExecutionFlowStage; }
+            }
+
+            public RecordFilterGroup GetRecordFilterGroup(Guid? dataRecordTypeId)
+            {
+                RecordFilterGroup recordFilterGroup = null;
+                if (_reprocessFilter != null && _reprocessDefinition.Settings.FilterDefinition != null)
+                    recordFilterGroup = _reprocessDefinition.Settings.FilterDefinition.GetFilterGroup(new ReprocessFilterGetFilterGroupContext() { ReprocessFilter = _reprocessFilter, TargetDataRecordTypeId = dataRecordTypeId });
+
+                return recordFilterGroup;
             }
         }
     }

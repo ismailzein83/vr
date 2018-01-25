@@ -127,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\ReprocessFilterDefinitionController.cs" />
     <Compile Include="Controllers\ReprocessDefinitionController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -144,21 +145,31 @@
   <ItemGroup>
     <Content Include="Reprocess\Constants\ReprocessChunkTimeEnum.js" />
     <Content Include="Reprocess\Constants\ModuleConfig.js" />
+    <Content Include="Reprocess\Directives\MainExtensions\Definition\ReprocessFilterDefinition\Templates\ReprocessFilterDefinitionGenericFilter.html" />
+    <Content Include="Reprocess\Directives\MainExtensions\Runtime\ReprocessFilterDefinition\reprocess-reprocessfilterdefinition-runtime-genericfilter.js" />
+    <Content Include="Reprocess\Directives\MainExtensions\Runtime\ReprocessFilterDefinition\Templates\ReprocessFilterDefinitionGenericFilter.html" />
     <Content Include="Reprocess\Directives\ReprocessDefinition\reprocess-reprocessdefinition-selector.js" />
     <Content Include="Reprocess\Directives\ReprocessDefinition\reprocess-reprocessdefinition-grid.js" />
     <Content Include="Reprocess\Directives\ReprocessDefinition\Templates\ReprocessDefinitionGridTemplate.html" />
+    <Content Include="Reprocess\Directives\MainExtensions\Definition\ReprocessFilterDefinition\reprocess-reprocessfilterdefinition-definition-genericfilter.js" />
+    <Content Include="Reprocess\Directives\ReprocessFilterDefinition\reprocess-reprocessfilterdefinition-settings.js" />
+    <Content Include="Reprocess\Directives\ReprocessFilterDefinition\Templates\ReprocessFilterDefinitionSettings.html" />
     <Content Include="Reprocess\Directives\ReprocessInput\reprocess-reprocessprocess.js" />
     <Content Include="Reprocess\Directives\ReprocessInput\Templates\ReprocessProcessTemplate.html" />
     <Content Include="Reprocess\Directives\ScheduleTask\reprocess-chunktime-selector.js" />
     <Content Include="Reprocess\Directives\ScheduleTask\reprocess-reprocessprocesstask.js" />
     <Content Include="Reprocess\Directives\ScheduleTask\Templates\ReprocessProcessTaskTemplate.html" />
     <Content Include="Reprocess\ModuleInitialization.js" />
+    <Content Include="Reprocess\Services\APIServices\ReprocessFilterDefinitionAPIService.js" />
     <Content Include="Reprocess\Services\APIServices\ReprocessDefinitionAPIService.js" />
+    <Content Include="Reprocess\Services\ReprocessFilterFieldDefinitionService.js" />
     <Content Include="Reprocess\Services\ReprocessDefinitionService.js" />
     <Content Include="Reprocess\Views\ReprocessDefinition\ReprocessDefinitionEditor.html" />
     <Content Include="Reprocess\Views\ReprocessDefinition\ReprocessDefinitionEditorController.js" />
     <Content Include="Reprocess\Views\ReprocessDefinition\ReprocessDefinitionManagement.html" />
     <Content Include="Reprocess\Views\ReprocessDefinition\ReprocessDefinitionManagementController.js" />
+    <Content Include="Reprocess\Views\ReprocessFilterFieldDefinition\ReprocessFilterFieldDefinitionEditor.html" />
+    <Content Include="Reprocess\Views\ReprocessFilterFieldDefinition\ReprocessFilterFieldDefinitionEditorController.js" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

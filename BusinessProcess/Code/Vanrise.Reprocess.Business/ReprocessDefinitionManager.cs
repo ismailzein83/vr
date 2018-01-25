@@ -89,8 +89,13 @@ namespace Vanrise.Reprocess.Business
 
             if (filter != null)
             {
-                Func<ReprocessDefinition, bool> filterExpression = (x) =>
+                Func<ReprocessDefinition, bool> filterExpression = (reprocessDefinition) =>
                 {
+                    if (filter != null)
+                    {
+                        if (filter.ExcludedReprocessDefinitionIds != null && filter.ExcludedReprocessDefinitionIds.Contains(reprocessDefinition.ReprocessDefinitionId))
+                            return false;
+                    }
                     return true;
                 };
                 return allReprocessDefinitions.FindAllRecords(filterExpression).MapRecords(ReprocessDefinitionMapper);

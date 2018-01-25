@@ -18,7 +18,9 @@ namespace Vanrise.Reprocess.BP.Arguments
 
         public bool UseTempStorage { get; set; }
 
-        //public ReprocessFilter Filter { get; set; }
+        public bool IgnoreSynchronisation { get; set; }
+        
+        public ReprocessFilter Filter { get; set; }
 
         public override string GetTitle()
         {

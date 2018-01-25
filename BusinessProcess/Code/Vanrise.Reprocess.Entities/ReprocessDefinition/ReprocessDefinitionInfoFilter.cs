@@ -8,5 +8,6 @@ namespace Vanrise.Reprocess.Entities
 {
     public class ReprocessDefinitionInfoFilter
     {
+        public List<Guid> ExcludedReprocessDefinitionIds { get; set; }
     }
 }

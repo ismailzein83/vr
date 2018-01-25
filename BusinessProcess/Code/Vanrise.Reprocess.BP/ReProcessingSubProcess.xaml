@@ -54,14 +54,14 @@
       <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
       <AssemblyReference>WindowsBase</AssemblyReference>
-      <AssemblyReference>ActivityLibrary1</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing.BP.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.Queueing.Entities</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.BP</AssemblyReference>
     </sco:Collection>
@@ -146,6 +146,16 @@
               <mca:CSharpValue x:TypeArguments="scg:List(s:Guid)">reprocessDefinition.Settings.SourceRecordStorageIds</mca:CSharpValue>
             </InArgument>
           </vrba1:LoadDataToReprocess.RecordStorageIds>
+          <vrba1:LoadDataToReprocess.ReprocessDefinition>
+            <InArgument x:TypeArguments="vre:ReprocessDefinition">
+              <mca:CSharpValue x:TypeArguments="vre:ReprocessDefinition">reprocessDefinition</mca:CSharpValue>
+            </InArgument>
+          </vrba1:LoadDataToReprocess.ReprocessDefinition>
+          <vrba1:LoadDataToReprocess.ReprocessFilter>
+            <InArgument x:TypeArguments="vre:ReprocessFilter">
+              <mca:CSharpValue x:TypeArguments="vre:ReprocessFilter">Input.ReprocessFilter</mca:CSharpValue>
+            </InArgument>
+          </vrba1:LoadDataToReprocess.ReprocessFilter>
           <vrba1:LoadDataToReprocess.StageManager>
             <InArgument x:TypeArguments="vrba1:StageManager">
               <mca:CSharpValue x:TypeArguments="vrba1:StageManager">stageManager</mca:CSharpValue>
@@ -207,6 +217,16 @@
                   <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">stage.PreviousStatus</mca:CSharpValue>
                 </InArgument>
               </vrba1:ExecuteStage.PreviousActivityStatus>
+              <vrba1:ExecuteStage.ReprocessDefinition>
+                <InArgument x:TypeArguments="vre:ReprocessDefinition">
+                  <mca:CSharpValue x:TypeArguments="vre:ReprocessDefinition">reprocessDefinition</mca:CSharpValue>
+                </InArgument>
+              </vrba1:ExecuteStage.ReprocessDefinition>
+              <vrba1:ExecuteStage.ReprocessFilter>
+                <InArgument x:TypeArguments="vre:ReprocessFilter">
+                  <mca:CSharpValue x:TypeArguments="vre:ReprocessFilter">Input.ReprocessFilter</mca:CSharpValue>
+                </InArgument>
+              </vrba1:ExecuteStage.ReprocessFilter>
               <vrba1:ExecuteStage.Stage>
                 <InArgument x:TypeArguments="vrba1:ReprocessStage">
                   <mca:CSharpValue x:TypeArguments="vrba1:ReprocessStage">stage</mca:CSharpValue>
@@ -249,7 +269,7 @@
         </ActivityAction>
       </ParallelForEach>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0xDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nU3ViUHJvY2Vzcy54YW1sKkUD/QEOAgEBSwVWDgMBzwFXBWIkAwHCAWMFbg4DAbUBbwV6JwMBqAF7BfsBEAIBAlMLU4QBAwHWAU4LTnADAdABXwtfYgMByQFaC1pzAwHDAWsLa3gDAbwBZgtmZwMBtgF3C3d9AwGvAXILcoABAwGpAX8HsQESAgFmsgEH+gEZAgEDgAEJpAElAgF2pQEJsAEmAgFntQENtQGMAQIBX7wBC/gBFgIBBIMBD4MBZQMBoQGNAQ+NAYgBAwGaAZIBD5IBiAEDAZMBnAEPnAF8AwGMAYgBD4gBXQMBhQGXAQ+XAWMCAX6hAQ+hAVsCAXeoAQ+oAXQCAW+tAQ+tAWMCAWi9AQ3rASICARbsAQ33ASoCAQXKARPKAYwBAgFX6AET6AFfAgFPzwETzwFzAgFH1AET1AFiAgE/xQETxQFhAgE3wAETwAGAAQIBL94BE94BggECASfjARPjAXMCAR/ZARPZAWcCARfvARPvAXgCAQ70ARP0AWcCAQY=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0xDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nU3ViUHJvY2Vzcy54YW1sLkUDkQIOAgEBSwVWDgMB7QFXBWIkAwHgAWMFbg4DAdMBbwV6JwMBxgF7BY8CEAIBAlMLU4QBAwH0AU4LTnADAe4BXwtfYgMB5wFaC1pzAwHhAWsLa3gDAdoBZgtmZwMB1AF3C3d9AwHNAXILcoABAwHHAX8HuwESAgF2vAEHjgIZAgEDgAEJrgElAwGGAa8BCboBJgIBd78BDb8BjAECAW/GAQuMAhYCAQSDAQ+DAWUDAb8BnAEPnAFtAwG4AY0BD40BiAEDAbEBkgEPkgGIAQMBqgGmAQ+mAXwDAaMBiAEPiAFdAwGcAaEBD6EBYwMBlQGXAQ+XAW8DAY4BqwEPqwFbAwGHAbIBD7IBdAIBf7cBD7cBYwIBeMcBDf8BIgIBFoACDYsCKgIBBdQBE9QBjAECAWf8ARP8AV8CAV/jARPjAXECAVfZARPZAXMCAU/oARPoAWICAUfPARPPAWECAT/KARPKAYABAgE38gET8gGCAQIBL/cBE/cBcwIBJ+0BE+0BZwIBH94BE94BcwIBF4MCE4MCeAIBDogCE4gCZwIBBg==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

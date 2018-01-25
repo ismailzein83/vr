@@ -7,6 +7,7 @@ using Vanrise.BusinessProcess;
 using Vanrise.Reprocess.Entities;
 using Vanrise.Entities;
 using Vanrise.Common;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Reprocess.BP.Activities
 {
@@ -21,6 +22,10 @@ namespace Vanrise.Reprocess.BP.Activities
         public long CurrentProcessId { get; set; }
 
         public Dictionary<string, object> InitializationOutputByStage { get; set; }
+
+        public ReprocessDefinition ReprocessDefinition { get; set; }
+
+        public ReprocessFilter ReprocessFilter { get; set; }
     }
 
     public class FinalizeStageOutput
@@ -41,6 +46,12 @@ namespace Vanrise.Reprocess.BP.Activities
         [RequiredArgument]
         public InArgument<Dictionary<string, object>> InitializationOutputByStage { get; set; }
 
+        [RequiredArgument]
+        public InArgument<ReprocessDefinition> ReprocessDefinition { get; set; }
+
+        [RequiredArgument]
+        public InArgument<ReprocessFilter> ReprocessFilter { get; set; }
+
         protected override FinalizeStageInput GetInputArgument2(AsyncCodeActivityContext context)
         {
             return new FinalizeStageInput()
@@ -49,7 +60,9 @@ namespace Vanrise.Reprocess.BP.Activities
                 StageName = this.StageName.Get(context),
                 BatchRecord = this.BatchRecord.Get(context),
                 CurrentProcessId = context.GetSharedInstanceData().InstanceInfo.ParentProcessID.HasValue ? context.GetSharedInstanceData().InstanceInfo.ParentProcessID.Value : context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID,
-                InitializationOutputByStage = this.InitializationOutputByStage.Get(context)
+                InitializationOutputByStage = this.InitializationOutputByStage.Get(context),
+                ReprocessFilter = this.ReprocessFilter.Get(context),
+                ReprocessDefinition = this.ReprocessDefinition.Get(context)
             };
         }
 
@@ -60,10 +73,8 @@ namespace Vanrise.Reprocess.BP.Activities
             object initializationStageOutput = initializationOutputByStage.GetRecord(inputArgument.StageName);
 
             var executionContext = new ReprocessStageActivatorFinalizingContext(inputArgument.StageName, inputArgument.CurrentProcessId, inputArgument.BatchRecord,
-                (logEntryType, message) =>
-                {
-                    handle.SharedInstanceData.WriteTrackingMessage(logEntryType, message, null);
-                }, (previousActivityStatus_Internal, actionToDo) => base.DoWhilePreviousRunning(previousActivityStatus_Internal, handle, actionToDo), initializationStageOutput);
+                (logEntryType, message) => { handle.SharedInstanceData.WriteTrackingMessage(logEntryType, message, null); }, (previousActivityStatus_Internal, actionToDo) => base.DoWhilePreviousRunning(previousActivityStatus_Internal, handle, actionToDo), initializationStageOutput,
+                inputArgument.ReprocessFilter, inputArgument.ReprocessDefinition);
 
             inputArgument.StageActivator.FinalizeStage(executionContext);
             return new FinalizeStageOutput();
@@ -81,10 +92,12 @@ namespace Vanrise.Reprocess.BP.Activities
             BatchRecord _batchRecord;
             Action<LogEntryType, string> _writeTrackingMessage;
             Action<AsyncActivityStatus, Action> _doWhilePreviousRunningAction;
+            ReprocessFilter _reprocessFilter;
+            ReprocessDefinition _reprocessDefinition;
             object _initializationStageOutput;
 
             public ReprocessStageActivatorFinalizingContext(string currentStageName, long processInstanceId, BatchRecord batchRecord, Action<LogEntryType, string> writeTrackingMessage,
-                Action<AsyncActivityStatus, Action> doWhilePreviousRunningAction, object initializationStageOutput)
+                Action<AsyncActivityStatus, Action> doWhilePreviousRunningAction, object initializationStageOutput, ReprocessFilter reprocessFilter, ReprocessDefinition reprocessDefinition)
             {
                 _currentStageName = currentStageName;
                 _processInstanceId = processInstanceId;
@@ -92,6 +105,8 @@ namespace Vanrise.Reprocess.BP.Activities
                 _writeTrackingMessage = writeTrackingMessage;
                 _doWhilePreviousRunningAction = doWhilePreviousRunningAction;
                 _initializationStageOutput = initializationStageOutput;
+                _reprocessFilter = reprocessFilter;
+                _reprocessDefinition = reprocessDefinition;
             }
 
             public long ProcessInstanceId
@@ -122,6 +137,15 @@ namespace Vanrise.Reprocess.BP.Activities
             public object InitializationStageOutput
             {
                 get { return _initializationStageOutput; }
+            }
+
+            public RecordFilterGroup GetRecordFilterGroup(Guid? dataRecordTypeId)
+            {
+                RecordFilterGroup recordFilterGroup = null;
+                if (_reprocessFilter != null && _reprocessDefinition.Settings.FilterDefinition != null)
+                    recordFilterGroup = _reprocessDefinition.Settings.FilterDefinition.GetFilterGroup(new ReprocessFilterGetFilterGroupContext() { ReprocessFilter = _reprocessFilter, TargetDataRecordTypeId = dataRecordTypeId });
+
+                return recordFilterGroup;
             }
         }
     }

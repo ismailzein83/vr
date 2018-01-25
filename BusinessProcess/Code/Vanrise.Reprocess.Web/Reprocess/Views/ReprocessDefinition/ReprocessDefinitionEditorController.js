@@ -22,6 +22,12 @@
         var executionFlowStageAPI;
         var executionFlowStageSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+        var reprocessDefinitionSelectorAPI;
+        var reprocessDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var reprocessFilterDefinitionSettingsAPI;
+        var reprocessFilterDefinitionSettingsReadyDeferred = UtilsService.createPromiseDeferred();
+
         var stageAPI;
         var stageSelectorReadyDeferred;
 
@@ -86,6 +92,16 @@
                 executionFlowStageSelectorReadyDeferred.resolve();
             };
 
+            $scope.scopeModel.onReprocessDefinitionSelectorReady = function (api) {
+                reprocessDefinitionSelectorAPI = api;
+                reprocessDefinitionSelectorReadyDeferred.resolve();
+            };
+
+            $scope.scopeModel.onReprocessFilterDefinitionSettingsReady = function (api) {
+                reprocessFilterDefinitionSettingsAPI = api;
+                reprocessFilterDefinitionSettingsReadyDeferred.resolve();
+            };
+
             $scope.scopeModel.save = function () {
                 if (isEditMode) {
                     return update();
@@ -96,7 +112,7 @@
             };
 
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
             $scope.scopeModel.validateDataRecordStorageSelector = function () {
@@ -121,7 +137,7 @@
                 };
                 if (reprocessDefinitionEntity != undefined && reprocessDefinitionEntity.Settings != undefined)
                     payload.selectedIds = reprocessDefinitionEntity.Settings.StageNames;
-                var setLoader = function (value) { $scope.scopeModel.isLoadingSatge = value };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingSatge = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, stageAPI, payload, setLoader);
             };
 
@@ -131,7 +147,7 @@
                 };
                 if (reprocessDefinitionEntity != undefined && reprocessDefinitionEntity.Settings != undefined)
                     stagesToHoldPayload.selectedIds = reprocessDefinitionEntity.Settings.StagesToHoldNames;
-                var setLoader = function (value) { $scope.scopeModel.isLoadingSatgesToHold = value };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingSatgesToHold = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, stagesToHoldAPI, stagesToHoldPayload, setLoader);
             };
 
@@ -141,7 +157,7 @@
                 };
                 if (reprocessDefinitionEntity != undefined && reprocessDefinitionEntity.Settings != undefined)
                     stagesToProcessPayload.selectedIds = reprocessDefinitionEntity.Settings.StagesToProcessNames;
-                var setLoader = function (value) { $scope.scopeModel.isLoadingSatgesToProcess = value };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingSatgesToProcess = value; };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, stagesToProcessAPI, stagesToProcessPayload, setLoader);
             };
 
@@ -195,20 +211,20 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordStorageSelector, loadExecutionFlowDefinitionSelector, loadExecutionFlowStageSelector]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordStorageSelector, loadExecutionFlowDefinitionSelector, loadExecutionFlowStageSelector, loadReprocessDefinitionSelector, loadReprocessFilterDefinitionSettings]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
-                reprocessDefinitionEntity = undefined
+                reprocessDefinitionEntity = undefined;
             });
 
             function setTitle() {
                 if (isEditMode) {
                     var reprocessDefinitionName = (reprocessDefinitionEntity != undefined) ? reprocessDefinitionEntity.Name : null;
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(reprocessDefinitionName, 'ReprocessDefinition');
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(reprocessDefinitionName, 'Reprocess Definition');
                 }
                 else {
-                    $scope.title = UtilsService.buildTitleForAddEditor('ReprocessDefinition');
+                    $scope.title = UtilsService.buildTitleForAddEditor('Reprocess Definition');
                 }
             };
 
@@ -225,6 +241,42 @@
                         $scope.scopeModel.recordCountPerTransaction = reprocessDefinitionSettings.RecordCountPerTransaction;
                     }
                 }
+            };
+
+            function loadReprocessFilterDefinitionSettings() {
+                var reprocessFilterDefinitionSettingsLoadDeferred = UtilsService.createPromiseDeferred();
+                reprocessFilterDefinitionSettingsReadyDeferred.promise.then(function () {
+                    var reprocessFilterDefinitionSettingsPayload;
+                    if (isEditMode) {
+                        var selectedIds;
+                        if (reprocessDefinitionEntity != undefined && reprocessDefinitionEntity.Settings != undefined && reprocessDefinitionEntity.Settings.FilterDefinition != undefined) {
+                            reprocessFilterDefinitionSettingsPayload = { filterDefinition: reprocessDefinitionEntity.Settings.FilterDefinition };
+                        }
+                    }
+
+                    VRUIUtilsService.callDirectiveLoad(reprocessFilterDefinitionSettingsAPI, reprocessFilterDefinitionSettingsPayload, reprocessFilterDefinitionSettingsLoadDeferred);
+                });
+                return reprocessFilterDefinitionSettingsLoadDeferred.promise;
+            };
+
+            function loadReprocessDefinitionSelector() {
+                var reprocessDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                reprocessDefinitionSelectorReadyDeferred.promise.then(function () {
+                    var reprocessDefinitionSelectorPayload;
+                    if (isEditMode) {
+                        var selectedIds;
+                        if (reprocessDefinitionEntity != undefined && reprocessDefinitionEntity.Settings != undefined && reprocessDefinitionEntity.Settings.PostExecution != undefined && reprocessDefinitionEntity.Settings.PostExecution.ReprocessDefinitionIds != undefined) {
+                            selectedIds = reprocessDefinitionEntity.Settings.PostExecution.ReprocessDefinitionIds;
+                        }
+
+                        reprocessDefinitionSelectorPayload = {
+                            filter: { ExcludedReprocessDefinitionIds: [reprocessDefinitionId] },
+                            selectedIds: selectedIds
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(reprocessDefinitionSelectorAPI, reprocessDefinitionSelectorPayload, reprocessDefinitionSelectorLoadDeferred);
+                });
+                return reprocessDefinitionSelectorLoadDeferred.promise;
             };
 
             function loadDataRecordStorageSelector() {
@@ -346,7 +398,9 @@
                 StagesToHoldNames: stagesToHoldAPI.getSelectedIds(),
                 StagesToProcessNames: stagesToProcessAPI.getSelectedIds(),
                 RecordCountPerTransaction: $scope.scopeModel.recordCountPerTransaction,
-                ForceUseTempStorage: $scope.scopeModel.forceUseTempStorage
+                ForceUseTempStorage: $scope.scopeModel.forceUseTempStorage,
+                PostExecution: { ReprocessDefinitionIds: reprocessDefinitionSelectorAPI.getSelectedIds() },
+                FilterDefinition: reprocessFilterDefinitionSettingsAPI != undefined ? reprocessFilterDefinitionSettingsAPI.getData() : undefined
             };
 
             return {

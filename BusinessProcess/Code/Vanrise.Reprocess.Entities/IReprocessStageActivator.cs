@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 using Vanrise.Queueing;
 using Vanrise.Queueing.Entities;
 
@@ -46,6 +47,8 @@ namespace Vanrise.Reprocess.Entities
 
         void WriteTrackingMessage(LogEntryType severity, string messageFormat);
 
+        RecordFilterGroup GetRecordFilterGroup(Guid? dataRecordTypeId);
+
         bool ShouldStop();
 
         void EnqueueBatch(string stageName, IReprocessBatch batch);
@@ -78,6 +81,8 @@ namespace Vanrise.Reprocess.Entities
         void DoWhilePreviousRunning(AsyncActivityStatus previousActivityStatus, Action actionToDo);
 
         object InitializationStageOutput { get; }
+
+        RecordFilterGroup GetRecordFilterGroup(Guid? dataRecordTypeId);
     }
 
     public interface IReprocessStageActivatorGetStorageRowCountContext
@@ -87,6 +92,8 @@ namespace Vanrise.Reprocess.Entities
 
     public interface IReprocessStageActivatorCommitChangesContext
     {
+        RecordFilterGroup GetRecordFilterGroup(Guid? dataRecordTypeId);
+
         object InitializationStageOutput { get; }
 
         DateTime From { get; }

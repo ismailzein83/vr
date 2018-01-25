@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Reprocess.Entities;
 
 namespace Vanrise.Reprocess.BP.Arguments
 {
@@ -13,6 +14,8 @@ namespace Vanrise.Reprocess.BP.Arguments
         public DateTime FromTime { get; set; }
 
         public DateTime ToTime { get; set; }
+        
+        public ReprocessFilter ReprocessFilter { get; set; }
 
         public Dictionary<string, object> InitializationOutputByStage { get; set; }
 

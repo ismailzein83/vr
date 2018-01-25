@@ -1,0 +1,16 @@
+﻿<div>
+    <vr-columns width="fullrow" simplecol>
+        <vr-button type="Add" data-onclick="ctrl.onAddReprocessFilterFieldDefinition" standalone></vr-button>
+    </vr-columns>
+    <vr-columns width="fullrow">
+        <vr-validator validate="ctrl.isValid()">
+            <vr-datagrid on-ready="ctrl.onGridReady"
+                         datasource="ctrl.reprocessFilterFieldDefinitionFields"
+                         menuactions="ctrl.menuActions"
+                         ondeleterow="ctrl.onDeleteReprocessFilterFieldDefinition"
+                         hidegridmenu>
+                <vr-datagridcolumn headertext="'Name'" type="'Text'" field="'FieldName'" widthfactor="1" disablesorting></vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-validator>
+    </vr-columns>
+</div>

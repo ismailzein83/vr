@@ -51,6 +51,8 @@
       <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing.BP.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.BP.Activities</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.BP.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.Reprocess.Entities</AssemblyReference>
@@ -115,6 +117,16 @@
           <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:String, x:Object)">Input.InitializationOutputByStage</mca:CSharpValue>
         </InArgument>
       </vrba1:FinalizeStage.InitializationOutputByStage>
+      <vrba1:FinalizeStage.ReprocessDefinition>
+        <InArgument x:TypeArguments="vre:ReprocessDefinition">
+          <mca:CSharpValue x:TypeArguments="vre:ReprocessDefinition">reprocessDefinition</mca:CSharpValue>
+        </InArgument>
+      </vrba1:FinalizeStage.ReprocessDefinition>
+      <vrba1:FinalizeStage.ReprocessFilter>
+        <InArgument x:TypeArguments="vre:ReprocessFilter">
+          <mca:CSharpValue x:TypeArguments="vre:ReprocessFilter">Input.ReprocessFilter</mca:CSharpValue>
+        </InArgument>
+      </vrba1:FinalizeStage.ReprocessFilter>
       <vrba1:FinalizeStage.StageActivator>
         <InArgument x:TypeArguments="vre:IReprocessStageActivator">
           <mca:CSharpValue x:TypeArguments="vre:IReprocessStageActivator">StageActivator</mca:CSharpValue>
@@ -126,7 +138,7 @@
         </InArgument>
       </vrba1:FinalizeStage.StageName>
     </vrba1:FinalizeStage>
-    <sads:DebugSymbol.Symbol>d1FDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nRmluYWxpemVQcm9jZXNzLnhhbWwQPQOCAQ4CAQFCBU0OAgEyTgVZJAIBJ1oFah8CARdrBYABGwIBAkoLSo4BAgE4RQtFdQIBM1YLVmICAS1RC1FzAgEoZwtnWAIBImILYnMCAR1dC11rAgEYcwtzhAECARJ9C31YAgENbgtuYQIBCHgLeGsCAQM=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1FDOlxURlNcQnVzaW5lc3NQcm9jZXNzXENvZGVcVmFucmlzZS5SZXByb2Nlc3MuQlBcUmVQcm9jZXNzaW5nRmluYWxpemVQcm9jZXNzLnhhbWwSPwOOAQ4CAQFEBU8OAgE8UAVbJAIBMVwFbB8CASFtBYwBGwIBAkwLTI4BAgFCRwtHdQIBPVgLWGICATdTC1NzAgEyaQtpWAIBLGQLZHMCASdfC19rAgEidQt1hAECARx/C39pAgEXiQELiQFYAgEScAtwYQIBDYQBC4QBawIBCHoLemsCAQM=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

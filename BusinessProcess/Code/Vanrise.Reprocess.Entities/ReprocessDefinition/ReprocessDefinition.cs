@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Reprocess.Entities
 {
@@ -14,6 +16,11 @@ namespace Vanrise.Reprocess.Entities
         public string Name { get; set; }
 
         public ReprocessDefinitionSettings Settings { get; set; }
+    }
+
+    public class PostExecution
+    {
+        public List<Guid> ReprocessDefinitionIds { get; set; }
     }
 
     public class ReprocessDefinitionSettings
@@ -34,40 +41,43 @@ namespace Vanrise.Reprocess.Entities
 
         public bool ForceUseTempStorage { get; set; }
 
+        public PostExecution PostExecution { get; set; }
+
         //public List<ReprocessDefinitionStage> Stages { get; set; }
 
-        //public ReprocessFilterDefinition FilterDefinition { get; set; }
-
-        //public bool ApplyFilterToSourceData { get; set; }
-
-        //public List<ReprocessFilterFieldMapping> SourceDataFilterFieldMappings { get; set; }
+        public ReprocessFilterDefinition FilterDefinition { get; set; }
     }
 
-    //public abstract class ReprocessFilterDefinition
-    //{
-    //    public abstract Guid ConfigId { get; }
+    public abstract class ReprocessFilterDefinition
+    {
+        public abstract Guid ConfigId { get; }
 
-    //    public virtual string RuntimeEditor { get; set; }
+        public bool ApplyFilterToSourceData { get; set; }
 
-    //    public abstract Vanrise.GenericData.Entities.RecordFilterGroup GetFilterGroup(IReprocessFilterGetFilterGroupContext context);
-    //}
+        public virtual string RuntimeEditor { get; set; }
 
-    //public abstract class ReprocessFilter
-    //{
+        public Dictionary<Guid, Dictionary<string, string>> MappingFields { get; set; }
 
-    //}
+        public abstract Vanrise.GenericData.Entities.RecordFilterGroup GetFilterGroup(IReprocessFilterGetFilterGroupContext context);
+    }
 
-    //public interface IReprocessFilterGetFilterGroupContext
-    //{
-    //    ReprocessFilter ReprocessFilter { get; }
-    //}
+    public abstract class ReprocessFilter
+    {
 
-    //public class ReprocessFilterFieldMapping
-    //{
-    //    public string FilterFieldName { get; set; }
+    }
 
-    //    public string MappedFieldName { get; set; }
-    //}
+    public interface IReprocessFilterGetFilterGroupContext
+    {
+        Guid? TargetDataRecordTypeId { get; }
+
+        ReprocessFilter ReprocessFilter { get; }
+    }
+
+    public class ReprocessFilterGetFilterGroupContext : IReprocessFilterGetFilterGroupContext
+    {
+        public Guid? TargetDataRecordTypeId { get; set; }
+        public ReprocessFilter ReprocessFilter { get; set; }
+    }
 
     //public class ReprocessDefinitionStage
     //{
@@ -83,33 +93,26 @@ namespace Vanrise.Reprocess.Entities
     //{
     //}
 
-    //public class FilterGroupReprocessFilterDefinition : ReprocessFilterDefinition
-    //{
-    //    public override Guid ConfigId
-    //    {
-    //        get { throw new NotImplementedException(); }
-    //    }
+    
 
-    //    public List<FilterGroupReprocessFilterFieldDefinition> Fields { get; set; }
+    public class GenericReprocessFilter : ReprocessFilter
+    {
+        public Dictionary<string, List<object>> Fields { get; set; }
+    }
 
-    //    public override GenericData.Entities.RecordFilterGroup GetFilterGroup(IReprocessFilterGetFilterGroupContext context)
-    //    {
-    //        FilterGroupReprocessFilter recordFilterReprocessFilter = context.ReprocessFilter.CastWithValidate<FilterGroupReprocessFilter>("context.ReprocessFilter");
-    //        return recordFilterReprocessFilter.FilterGroup;
-    //    }
-    //}
+    public class GenericReprocessFilterFieldDefinition
+    {
+        public string FieldName { get; set; }
 
-    //public class FilterGroupReprocessFilter : ReprocessFilter
-    //{
-    //    public GenericData.Entities.RecordFilterGroup FilterGroup { get; set; }
-    //}
+        public string FieldTitle { get; set; }
 
-    //public class FilterGroupReprocessFilterFieldDefinition
-    //{
-    //    public string Name { get; set; }
+        public Vanrise.GenericData.Entities.DataRecordFieldType FieldType { get; set; }
+    }
 
-    //    public string Title { get; set; }
+    public class ReprocessFilterDefinitionConfig : ExtensionConfiguration
+    {
+        public const string EXTENSION_TYPE = "Reprocess_ReprocessFilterDefinitionConfig";
 
-    //    public Vanrise.GenericData.Entities.DataRecordFieldType Type { get; set; }
-    //}
+        public string Editor { get; set; }
+    }
 }
