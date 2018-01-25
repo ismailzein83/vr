@@ -138,7 +138,7 @@ namespace TOne.WhS.Routing.Business
 
                 RouteRuleSettingsConfig RouteRuleSettingsConfig;
                 if (_routeRuleSettingsConfigDict.TryGetValue(routeRule.Settings.ConfigId, out RouteRuleSettingsConfig))
-                    executedRouteRuleSettingsTypeName = RouteRuleSettingsConfig.Name;
+                    executedRouteRuleSettingsTypeName = RouteRuleSettingsConfig.Title;
             }
 
             return new CustomerRouteDetail()
