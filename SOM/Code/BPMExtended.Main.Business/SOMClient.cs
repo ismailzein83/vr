@@ -5,21 +5,21 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Security.Entities;
-using Terrasoft.Core.Configuration;
+//using Terrasoft.Core.Configuration;
 using System.Web;
-using Terrasoft.Core;
+//using Terrasoft.Core;
 
 namespace BPMExtended.Main.Business
 {
     public class SOMClient : IDisposable
     {
-        public UserConnection BPM_UserConnection
-        {
-            get
-            {
-                return (UserConnection)HttpContext.Current.Session["UserConnection"];
-            }
-        }
+        //public UserConnection BPM_UserConnection
+        //{
+        //    get
+        //    {
+        //        return (UserConnection)HttpContext.Current.Session["UserConnection"];
+        //    }
+        //}
 
         AuthenticationToken _authToken;
         public SOMClient()
@@ -62,9 +62,10 @@ namespace BPMExtended.Main.Business
 
         private string GetSOMBaseURL()
         {
-            object somBaseURL;
-            SysSettings.TryGetValue(this.BPM_UserConnection, "SOM_Base_Address", out somBaseURL);
-            return somBaseURL as string;//"http://localhost:5559";
+            //object somBaseURL;
+            //SysSettings.TryGetValue(this.BPM_UserConnection, "SOM_Base_Address", out somBaseURL);
+            //return somBaseURL as string;
+            return "http://localhost:5559";
         }
 
         private void AddAuthenticationTokenToHeader(Dictionary<string, string> headers)

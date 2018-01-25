@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="BPMExtendedDataManagerFactory.cs" />
     <Compile Include="ICustomerRequestDataManager.cs" />
+    <Compile Include="ICustomerRequestTypeDataManager.cs" />
     <Compile Include="IDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
