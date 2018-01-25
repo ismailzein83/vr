@@ -17,6 +17,29 @@ namespace Vanrise.GenericData.MainExtensions
         public List<GenericBESerialNumberPart> PartDefinitions { get; set; }
         public string InfoType { get; set; }
         public string FieldName { get; set; }
+
+        public override object TryGetInfoByType(IGenericBEOnBeforeInsertHandlerInfoByTypeContext context)
+        {
+            if (context.InfoType == null)
+                return null;
+            switch (context.InfoType)
+            {
+                case "SerialNumberPartDefinitions":
+                    if (PartDefinitions != null)
+                    {
+                        return PartDefinitions.MapRecords(x =>
+                        {
+                            return new GenericBESerialNumberPartInfo
+                            {
+                                VariableDescription = x.VariableDescription,
+                                VariableName = x.VariableName
+                            };
+                        });
+                    }
+                    return null;
+                default: return null;
+            }
+        }
         public override void Execute(IGenericBEOnBeforeInsertHandlerContext context)
         {
 
@@ -59,6 +82,11 @@ namespace Vanrise.GenericData.MainExtensions
         }
     }
  
+    public class GenericBESerialNumberPartInfo
+    {
+        public string VariableName { get; set; }
+        public string VariableDescription { get; set; }
+    }
     public class GenericBESerialNumberPart
     {
         public Guid GenericBESerialNumberPartId { get; set; }

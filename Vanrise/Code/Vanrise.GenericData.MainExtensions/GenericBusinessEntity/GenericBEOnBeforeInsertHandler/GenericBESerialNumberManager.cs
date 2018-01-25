@@ -3,14 +3,23 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Vanrise.GenericData.Business;
+using Vanrise.Common;
 namespace Vanrise.GenericData.MainExtensions
 {
     public class GenericBESerialNumberManager
     {
-        public List<GenericBESerialNumberPart> GetSerialNumberPartDefinitions(Guid businessEntityDefinitionId)
+        public IEnumerable<GenericBESerialNumberPartInfo> GetSerialNumberPartDefinitionsInfo(Guid businessEntityDefinitionId)
         {
-            throw new NotImplementedException();
+            var genericBEDefinitionSetting = new GenericBusinessEntityDefinitionManager().GetGenericBEDefinitionSettings(businessEntityDefinitionId);
+            genericBEDefinitionSetting.ThrowIfNull("genericBEDefinitionSetting", businessEntityDefinitionId);
+            genericBEDefinitionSetting.OnBeforeInsertHandler.ThrowIfNull("genericBEDefinitionSetting.OnBeforeInsertHandler");
+
+            return genericBEDefinitionSetting.OnBeforeInsertHandler.TryGetInfoByType(new GenericBEOnBeforeInsertHandlerInfoByTypeContext
+            {
+                InfoType = "SerialNumberPartDefinitions",
+                DefinitionSettings = genericBEDefinitionSetting
+            }) as IEnumerable<GenericBESerialNumberPartInfo>;
         }
     }
 }

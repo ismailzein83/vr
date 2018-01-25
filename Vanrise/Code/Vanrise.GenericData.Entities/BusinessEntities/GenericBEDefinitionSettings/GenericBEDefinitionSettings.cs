@@ -62,7 +62,16 @@ namespace Vanrise.GenericData.Entities
     public abstract class GenericBEOnBeforeInsertHandler
     {
         public abstract Guid ConfigId { get;  }
+        public virtual object TryGetInfoByType(IGenericBEOnBeforeInsertHandlerInfoByTypeContext context)
+        {
+            return null;
+        }
         public abstract void Execute(IGenericBEOnBeforeInsertHandlerContext context);
+    }
+    public interface IGenericBEOnBeforeInsertHandlerInfoByTypeContext
+    {
+        string InfoType { get; }
+        GenericBEDefinitionSettings DefinitionSettings { get; }
     }
     public interface IGenericBEOnBeforeInsertHandlerContext
     {
