@@ -106,6 +106,8 @@
     <Compile Include="StatusDefinition\IStatusDefinitionFilter.cs" />
     <Compile Include="UISettingData.cs" />
     <Compile Include="VRAccountStatus.cs" />
+    <Compile Include="VRActionAudit\VRActionAuditChangeInfo.cs" />
+    <Compile Include="VRActionAudit\VRActionAuditChangeInfoDefinition.cs" />
     <Compile Include="VRActionAudit\VRActionAuditDetail.cs" />
     <Compile Include="VRActionAudit\VRActionAuditQuery.cs" />
     <Compile Include="VRActionAudit\VRLoggableEntity.cs" />

@@ -18,5 +18,8 @@ namespace Vanrise.Entities
     public class VRLoggableEntitySettings
     {
         public string ViewHistoryItemClientActionName { get; set; }
+
+        public VRActionAuditChangeInfoDefinition ChangeInfoDefinition { get; set; }
+
     }
 }

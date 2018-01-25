@@ -19,6 +19,11 @@ namespace Vanrise.Entities
         public abstract Object GetObjectId(IVRLoggableEntityGetObjectIdContext context);
 
         public abstract string GetObjectName(IVRLoggableEntityGetObjectNameContext context);
+
+        public virtual VRActionAuditChangeInfoDefinition GetChangeInfoDefinition(IVRLoggableEntityGetChangeInfoDefinitionContext context)
+        {
+            return null;
+        }
     }
 
     public interface IVRLoggableEntityGetObjectIdContext
@@ -29,5 +34,9 @@ namespace Vanrise.Entities
     public interface IVRLoggableEntityGetObjectNameContext
     {
         Object Object { get; }
+    }
+
+    public interface IVRLoggableEntityGetChangeInfoDefinitionContext
+    {
     }
 }

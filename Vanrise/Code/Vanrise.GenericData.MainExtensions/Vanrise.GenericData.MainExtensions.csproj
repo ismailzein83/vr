@@ -98,6 +98,7 @@
     <Compile Include="MappingSteps\LoadBEByIDMappingStep.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SummaryTransformationBatchRangeRetrievals\SummaryBatchTimeIntervalRange.cs" />
+    <Compile Include="VRActionAuditChangeInfos\GenericFieldsActionAuditChangeInfoDefinition.cs" />
     <Compile Include="VRActions\DataRecordAlertRuleSendEmailAction.cs" />
     <Compile Include="VRObjectTypes\VRDataRecordFieldComparisonPropertyEvaluator.cs" />
     <Compile Include="VRObjectTypes\VRDataRecordFieldPropertyEvaluator.cs" />

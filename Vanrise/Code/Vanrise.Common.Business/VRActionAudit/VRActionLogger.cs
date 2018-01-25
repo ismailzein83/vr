@@ -60,6 +60,11 @@ namespace Vanrise.Common.Business
             TrackAndLogObjectAction(loggableEntity, "Update", obj,null, null, true);
         }
 
+        public void TrackAndLogObjectUpdated(VRLoggableEntityBase loggableEntity, Object newObjectValue, Object oldObjectValue)
+        {
+            throw new NotImplementedException();
+        }
+
         public void TrackAndLogObjectDeleted(VRLoggableEntityBase loggableEntity, Object obj)
         {
             TrackAndLogObjectAction(loggableEntity, "Delete", obj,null, null, true);
