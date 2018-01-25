@@ -12,7 +12,9 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
     public class FieldGuidType : DataRecordFieldType
     {
         public override Guid ConfigId { get { return new Guid("EBD22F77-6275-4194-8710-7BF3063DCB68"); } }
-      
+
+        public override string RuntimeEditor { get { return "vr-genericdata-fieldtype-guid-runtimeeditor"; } }
+
         public override DataRecordFieldOrderType OrderType
         {
             get

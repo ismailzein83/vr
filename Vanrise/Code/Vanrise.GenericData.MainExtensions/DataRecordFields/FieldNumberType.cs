@@ -17,6 +17,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
     {
         public override Guid ConfigId { get { return new Guid("75aef329-27bd-4108-b617-f5cc05ff2aa3"); } }
 
+        public override string RuntimeEditor { get { return "vr-genericdata-fieldtype-number-runtimeeditor"; } }
+
         public FieldNumberPrecision DataPrecision { get; set; }
 
         public FieldNumberDataType DataType { get; set; }

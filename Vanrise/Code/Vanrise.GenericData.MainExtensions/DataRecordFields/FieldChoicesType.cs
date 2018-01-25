@@ -15,6 +15,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
     {
         
         public override Guid ConfigId { get { return new Guid("eabc41a9-e332-4120-ac85-f0b7e53c0d0d"); } }
+        
+        public override string RuntimeEditor { get { return "vr-genericdata-fieldtype-choices-runtimeeditor"; } }
 
         List<Choice> _choices;
         public List<Choice> Choices

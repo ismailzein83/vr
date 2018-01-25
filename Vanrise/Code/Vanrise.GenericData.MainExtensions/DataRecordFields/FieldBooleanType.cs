@@ -13,6 +13,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
     {
         public override Guid ConfigId { get { return new Guid("a77fad19-d044-40d8-9d04-6362b79b177b"); } }
 
+        public override string RuntimeEditor { get { return "vr-genericdata-fieldtype-boolean-runtimeeditor"; } }
+
         public bool IsNullable { get; set; }
 
         public override Type GetRuntimeType()
