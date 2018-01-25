@@ -83,7 +83,7 @@ namespace Vanrise.AccountBalance.Business
 
             foreach (var record in batchRecords)
             {
-                var convertToAccountBalanceContext = new ConvertToBalanceUpdateContext(submitBalanceUpdate) { Record = record };
+                var convertToAccountBalanceContext = new ConvertToBalanceUpdateContext(submitBalanceUpdate) { Record = record, DataRecordTypeId = recordTypeId };
                 ConvertToBalanceUpdate(convertToAccountBalanceContext);
             }
 
@@ -104,6 +104,11 @@ namespace Vanrise.AccountBalance.Business
 
         public void ExecuteStage(Reprocess.Entities.IReprocessStageActivatorExecutionContext context)
         {
+            var queueItemType = context.QueueExecutionFlowStage.QueueItemType as DataRecordBatchQueueItemType;
+            if (queueItemType == null)
+                throw new Exception("current stage QueueItemType is not of type DataRecordBatchQueueItemType");
+            var recordTypeId = queueItemType.DataRecordTypeId;
+
             CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
             int systemCurrencyId = new ConfigManager().GetSystemCurrencyId();
 
@@ -155,7 +160,7 @@ namespace Vanrise.AccountBalance.Business
 
                         foreach (var record in genericDataRecordBatch.Records)
                         {
-                            var convertToBalanceUpdateContext = new ConvertToBalanceUpdateContext(submitBalanceUpdate) { Record = record };
+                            var convertToBalanceUpdateContext = new ConvertToBalanceUpdateContext(submitBalanceUpdate) { Record = record, DataRecordTypeId = recordTypeId };
                             ConvertToBalanceUpdate(convertToBalanceUpdateContext);
                         }
                     });

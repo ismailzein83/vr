@@ -80,7 +80,9 @@ namespace Vanrise.GenericData.QueueActivators
             StartPrepareBatchForDBApplyTask(context, recordStorageDataManager, queuePreparedBatchesForDBApply, prepareBatchForDBApplyStatus);
             if (tempStorageInformation == null)
             {
-                DeleteFromDB(context, recordStorageDataManager);
+                var dataRecordStorage = _dataRecordStorageManager.GetDataRecordStorage(DataRecordStorageId);
+                var recordFilterGroup = context.GetRecordFilterGroup(dataRecordStorage.DataRecordTypeId);
+                DeleteFromDB(context, recordStorageDataManager, recordFilterGroup);
             }
             ApplyBatchesToDB(context, recordStorageDataManager, queuePreparedBatchesForDBApply, prepareBatchForDBApplyStatus);
         }
@@ -102,7 +104,10 @@ namespace Vanrise.GenericData.QueueActivators
         public void CommitChanges(Reprocess.Entities.IReprocessStageActivatorCommitChangesContext context)
         {
             TempStorageInformation tempStorageInformation = context.InitializationStageOutput.CastWithValidate<TempStorageInformation>("context.InitializationStageOutput");
-            new DataRecordStorageManager().FillDataRecordStorageFromTempStorage(this.DataRecordStorageId, tempStorageInformation, context.From, context.To);
+            var dataRecordStorage = _dataRecordStorageManager.GetDataRecordStorage(DataRecordStorageId);
+            var recordFilterGroup = context.GetRecordFilterGroup(dataRecordStorage.DataRecordTypeId);
+
+            new DataRecordStorageManager().FillDataRecordStorageFromTempStorage(this.DataRecordStorageId, tempStorageInformation, context.From, context.To, recordFilterGroup);
         }
 
         public void DropStorage(Reprocess.Entities.IReprocessStageActivatorDropStorageContext context)
@@ -165,10 +170,12 @@ namespace Vanrise.GenericData.QueueActivators
             });
             prepareDataTask.Start();
         }
-        private void DeleteFromDB(Reprocess.Entities.IReprocessStageActivatorExecutionContext context, IDataRecordDataManager recordStorageDataManager)
+
+        private void DeleteFromDB(Reprocess.Entities.IReprocessStageActivatorExecutionContext context, IDataRecordDataManager recordStorageDataManager, RecordFilterGroup recordFilterGroup)
         {
-            recordStorageDataManager.DeleteRecords(context.From, context.To);
+            recordStorageDataManager.DeleteRecords(context.From, context.To, recordFilterGroup);
         }
+
         private void ApplyBatchesToDB(Reprocess.Entities.IReprocessStageActivatorExecutionContext context, IDataRecordDataManager recordStorageDataManager, Queueing.MemoryQueue<object> queuePreparedBatchesForDBApply, AsyncActivityStatus prepareBatchForDBApplyStatus)
         {
             context.DoWhilePreviousRunning(prepareBatchForDBApplyStatus, () =>

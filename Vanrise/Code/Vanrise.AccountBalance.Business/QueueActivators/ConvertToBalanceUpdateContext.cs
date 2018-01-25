@@ -10,6 +10,8 @@ namespace Vanrise.AccountBalance.Business
     {
         public dynamic Record { get; set; }
 
+        public Guid DataRecordTypeId { get; set; }
+
         Action<BalanceUpdatePayload> _submitAccountBalanceAction;
 
         public ConvertToBalanceUpdateContext(Action<BalanceUpdatePayload> submitAccountBalanceAction)

@@ -88,7 +88,7 @@ namespace Vanrise.GenericData.Business
             }
         }
 
-        public IEnumerable<DataRecord> GetDataRecordsFinalResult(DataRecordType recordType, DataRetrievalInput<DataRecordQuery> input, Func<Guid,  DataRetrievalInput<DataRecordQuery>,IEnumerable<DataRecord>> retrieveDataRecordFunction)
+        public IEnumerable<DataRecord> GetDataRecordsFinalResult(DataRecordType recordType, DataRetrievalInput<DataRecordQuery> input, Func<Guid, DataRetrievalInput<DataRecordQuery>, IEnumerable<DataRecord>> retrieveDataRecordFunction)
         {
             Vanrise.Entities.DataRetrievalInput<DataRecordQuery> clonedInput = Vanrise.Common.Utilities.CloneObject(input);
             HashSet<string> dependentDataRecordStorageFields;
@@ -99,7 +99,7 @@ namespace Vanrise.GenericData.Business
             var dataRecordFieldTypeDict = recordType.Fields.ToDictionary(itm => itm.Name, itm => itm.Type);
 
             PrepareDependentAndFormulaFields(clonedInput, dataRecordFieldDict, out  formulaFieldDirectDependencies, out dependentDataRecordStorageFields, out  formulaDataRecordFieldsDict);
-         
+
             List<DataRecord> records = new List<DataRecord>();
 
             foreach (Guid item in input.Query.DataRecordStorageIds)
@@ -111,7 +111,7 @@ namespace Vanrise.GenericData.Business
 
             return GetOrderedDataRecordResults(clonedInput, records, formulaFieldDirectDependencies, dependentDataRecordStorageFields, dataRecordFieldTypeDict, formulaDataRecordFieldsDict);
         }
-     
+
         public bool AddDataRecord(Guid dataRecordStorageId, Dictionary<string, Object> fieldValues, out Object insertedId, out bool hasInsertedId)
         {
             var dataRecordStorage = GetDataRecordStorage(dataRecordStorageId);
@@ -135,13 +135,13 @@ namespace Vanrise.GenericData.Business
             }
 
             bool insertActionSucc = storageDataManager.Insert(fieldValues, out insertedId);
-            
+
             if (insertActionSucc && dataRecordStorage.Settings.EnableUseCaching)
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(dataRecordStorageId);
-          
+
             return insertActionSucc;
         }
-      
+
         public bool UpdateDataRecord(Guid dataRecordStorageId, Object recordFieldId, Dictionary<string, Object> fieldValues)
         {
             var storageDataManager = GetStorageDataManager(dataRecordStorageId);
@@ -158,17 +158,23 @@ namespace Vanrise.GenericData.Business
             }
 
             bool updateActionSucc = storageDataManager.Update(fieldValues);
-           
+
             if (updateActionSucc && dataRecordStorage.Settings.EnableUseCaching)
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(dataRecordStorageId);
-          
+
             return updateActionSucc;
         }
-      
+
         #endregion
 
         #region Public Methods
-        private RecordFilterGroup ConvertFilterGroup(RecordFilterGroup filterGroup, DataRecordType recordType)
+        public RecordFilterGroup ConvertFilterGroup(RecordFilterGroup filterGroup, Guid recordTypeId)
+        {
+            DataRecordType dataRecordType = new DataRecordTypeManager().GetDataRecordType(recordTypeId);
+            return ConvertFilterGroup(filterGroup, dataRecordType);
+        }
+
+        public RecordFilterGroup ConvertFilterGroup(RecordFilterGroup filterGroup, DataRecordType recordType)
         {
             List<RecordFilter> convertedFilters = new List<RecordFilter>();
 
@@ -268,6 +274,7 @@ namespace Vanrise.GenericData.Business
                 return dataRecordStorage.Name;
             return null;
         }
+
         public IEnumerable<DataRecordStorageInfo> GetDataRecordsStorageInfo(DataRecordStorageFilter filter)
         {
             Func<DataRecordStorage, bool> filterExpression = (dataRecordStorage) =>
@@ -335,6 +342,7 @@ namespace Vanrise.GenericData.Business
 
             return insertOperationOutput;
         }
+
         public Vanrise.Entities.UpdateOperationOutput<DataRecordStorageDetail> UpdateDataRecordStorage(DataRecordStorage dataRecordStorage)
         {
             Vanrise.Entities.UpdateOperationOutput<DataRecordStorageDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<DataRecordStorageDetail>();
@@ -360,20 +368,19 @@ namespace Vanrise.GenericData.Business
             return updateOperationOutput;
         }
 
-        public void GetDataRecords(Guid dataRecordStorageId, DateTime from, DateTime to, Action<dynamic> onItemReady)
+        public void GetDataRecords(Guid dataRecordStorageId, DateTime from, DateTime to, RecordFilterGroup recordFilterGroup, Action<dynamic> onItemReady)
         {
-            DataRecordStorageManager manager = new DataRecordStorageManager();
-            var dataRecordStorage = manager.GetDataRecordStorage(dataRecordStorageId);
+            var dataRecordStorage = GetDataRecordStorage(dataRecordStorageId);
             if (dataRecordStorage == null)
                 throw new NullReferenceException(String.Format("dataRecordStorage Id '{0}'", dataRecordStorageId));
             if (dataRecordStorage.Settings == null)
                 throw new NullReferenceException(String.Format("dataRecordStorage.Settings Id '{0}'", dataRecordStorageId));
 
-            var dataManager = manager.GetStorageDataManager(dataRecordStorage);
+            var dataManager = GetStorageDataManager(dataRecordStorage);
             if (dataManager == null)
                 throw new NullReferenceException(String.Format("dataManager. ID '{0}'", dataRecordStorageId));
 
-            dataManager.GetDataRecords(from, to, onItemReady);
+            dataManager.GetDataRecords(from, to, recordFilterGroup, onItemReady);
         }
 
         public List<Guid> CheckRecordStoragesAccess(List<Guid> dataRecordStorages)
@@ -388,11 +395,12 @@ namespace Vanrise.GenericData.Business
             }
             return filterdRecrodsIds;
         }
+
         public bool DoesUserHaveAccess(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
         {
-
             return this.DoesUserHaveAccess(SecurityContext.Current.GetLoggedInUserId(), input.Query.DataRecordStorageIds);
         }
+
         public bool DoesUserHaveAccess(int userId, List<Guid> dataRecordStorages)
         {
             var allRecordStorages = GetCachedDataRecordStorages().Where(k => dataRecordStorages.Contains(k.Key)).Select(v => v.Value).ToList();
@@ -427,7 +435,7 @@ namespace Vanrise.GenericData.Business
             return createTempStorageContext.TempStorageInformation;
         }
 
-        public void FillDataRecordStorageFromTempStorage(Guid dataRecordStorageId, TempStorageInformation tempStorageInformation, DateTime from, DateTime to)
+        public void FillDataRecordStorageFromTempStorage(Guid dataRecordStorageId, TempStorageInformation tempStorageInformation, DateTime from, DateTime to, RecordFilterGroup recordFilterGroup)
         {
             DataRecordStorage dataRecordStorage;
             DataStore dataStore;
@@ -439,7 +447,8 @@ namespace Vanrise.GenericData.Business
                 DataRecordStorage = dataRecordStorage,
                 TempStorageInformation = tempStorageInformation,
                 From = from,
-                To = to
+                To = to,
+                RecordFilterGroup = recordFilterGroup
             };
             dataStore.Settings.FillDataRecordStorageFromTempStorage(fillDataRecordStorageFromTempStorage);
         }
@@ -494,6 +503,7 @@ namespace Vanrise.GenericData.Business
                 return false;
             return true;
         }
+
         Dictionary<Guid, DataRecordStorage> GetCachedDataRecordStorages()
         {
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDataRecordStorages",
@@ -558,7 +568,7 @@ namespace Vanrise.GenericData.Business
                     return dataManager.GetAllDataRecords(columns);
                 });
         }
-     
+
         private Dictionary<string, DataRecordField> GetFormulaDataRecordFields(Dictionary<string, DataRecordField> dataRecordFieldsDict, DataRetrievalInput<DataRecordQuery> input)
         {
             IEnumerable<DataRecordField> formulaDataRecordFields = dataRecordFieldsDict.Values.FindAllRecords(itm => itm.Formula != null && input.Query.Columns.Contains(itm.Name));
@@ -587,9 +597,9 @@ namespace Vanrise.GenericData.Business
         {
             dependentDataRecordStorageFields = new HashSet<string>();
             formulaFieldDirectDependencies = new Dictionary<string, List<string>>();
-         
+
             formulaDataRecordFieldsDict = GetFormulaDataRecordFields(dataRecordFieldDict, input);
-         
+
             if (formulaDataRecordFieldsDict != null)
             {
                 Dictionary<string, DataRecordField> clonedFormulaDataRecordFieldsDict = Vanrise.Common.Utilities.CloneObject(formulaDataRecordFieldsDict);
@@ -615,7 +625,7 @@ namespace Vanrise.GenericData.Business
                 }
             }
         }
-       
+
         public BigResult<DataRecordDetail> AllRecordsToBigResult(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, IEnumerable<DataRecord> allRecords, DataRecordType recordType)
         {
             if (allRecords == null)
@@ -647,7 +657,7 @@ namespace Vanrise.GenericData.Business
 
             return dataRecordBigResult;
         }
-     
+
         public List<DataRecordDetail> DataRecordDetailMapperList(IEnumerable<DataRecord> dataRecords, DataRecordType recordType)
         {
             if (dataRecords == null)
@@ -659,7 +669,7 @@ namespace Vanrise.GenericData.Business
 
             return result;
         }
-    
+
         private DataRecordDetail DataRecordDetail(DataRecord entity, DataRecordType recordType)
         {
             var dataRecordDetail = new DataRecordDetail() { RecordTime = entity.RecordTime, FieldValues = new Dictionary<string, DataRecordFieldValue>() };
@@ -677,13 +687,13 @@ namespace Vanrise.GenericData.Business
             }
             return dataRecordDetail;
         }
-      
+
         private Queue<string> GetFormulaDataRecordFieldNames(Dictionary<string, List<string>> dependentFieldsByFieldName, List<string> retrievedDataRecordFields)
         {
             Queue<string> formulaDataRecordFieldNames = GetFormulaDataRecordFieldNamesQueue(dependentFieldsByFieldName, retrievedDataRecordFields);
             return formulaDataRecordFieldNames.Count > 0 ? formulaDataRecordFieldNames : null;
         }
-     
+
         private List<DataRecord> GetTopOrderedResults(List<DataRecord> records, DataRetrievalInput<DataRecordQuery> input)
         {
             if (records.Count > 0)
@@ -698,7 +708,7 @@ namespace Vanrise.GenericData.Business
                 return null;
             }
         }
-      
+
         private Queue<string> GetFormulaDataRecordFieldNamesQueue(Dictionary<string, List<string>> remainingDependentFieldsByFieldName, List<string> availableDataRecordFieldsValue, Queue<string> formulaDataRecordFieldNames = null)
         {
             if (formulaDataRecordFieldNames == null)
@@ -722,7 +732,7 @@ namespace Vanrise.GenericData.Business
 
             return GetFormulaDataRecordFieldNamesQueue(clonedDependentFieldsByFieldName, availableDataRecordFieldsValue, formulaDataRecordFieldNames);
         }
-      
+
         private HashSet<string> GetDependentDataRecordStorageFieldNames(List<string> directDependentFields, Dictionary<string, DataRecordField> formulaDataRecordFieldsDict, Dictionary<string, List<string>> formulaFieldDirectDependencies, Dictionary<string, DataRecordField> dataRecordFieldDict)
         {
             HashSet<string> results = new HashSet<string>();
@@ -753,7 +763,7 @@ namespace Vanrise.GenericData.Business
 
             return results;
         }
-      
+
         private IEnumerable<DataRecord> GetOrderedDataRecordResults(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input, List<DataRecord> records, Dictionary<string, List<string>> formulaFieldDirectDependencies, HashSet<string> dependentDataRecordStorageFields, Dictionary<string, DataRecordFieldType> dataRecordFieldTypeDict, Dictionary<string, DataRecordField> formulaDataRecordFieldsDict)
         {
             if (records == null || records.Count == 0)
@@ -783,7 +793,7 @@ namespace Vanrise.GenericData.Business
 
             return orderedDataRecordResults;
         }
-       
+
         #endregion
 
         #region Private Classes Data Record
@@ -924,8 +934,6 @@ namespace Vanrise.GenericData.Business
             }
 
             #endregion
-
-
         }
 
         private class DataRecordStorageExcelExportHandler : ExcelExportHandler<DataRecordDetail>

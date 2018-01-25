@@ -18,5 +18,7 @@ namespace Vanrise.GenericData.Business
         public DateTime From { get; set; }
 
         public DateTime To { get; set; }
+
+        public RecordFilterGroup RecordFilterGroup { get; set; }
     }
 }

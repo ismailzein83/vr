@@ -142,9 +142,20 @@ namespace Vanrise.GenericData.SQLDataStorage
                 ExecuteNonQueryText(query, null);
         }
 
-        public void FillDataRecordStorageFromTempStorage(DateTime from, DateTime to)
+        public void FillDataRecordStorageFromTempStorage(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup)
         {
             _sqlTempStorageInformation.ThrowIfNull("_sqlTempStorageInformation");
+
+            Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
+            int parameterIndex = 0;
+
+            string recordFilterResult = string.Empty;
+            if (recordFilterGroup != null)
+            {
+                Data.SQL.RecordFilterSQLBuilder recordFilterSQLBuilder = new Data.SQL.RecordFilterSQLBuilder(GetColumnNameFromFieldName);
+                string recordFilter = recordFilterSQLBuilder.BuildRecordFilter(recordFilterGroup, ref parameterIndex, parameterValues);
+                recordFilterResult = !string.IsNullOrEmpty(recordFilter) ? string.Format(" AND {0} ", recordFilter) : string.Empty;
+            }
 
             StringBuilder queryBuilder = new StringBuilder
             (
@@ -153,11 +164,11 @@ namespace Vanrise.GenericData.SQLDataStorage
 	                        Begin Try
 		                        Begin Transaction
 			                        Delete from #destinationTableName#
-			                        Where #dateTimeColumn# >= @FromTime and #dateTimeColumn# < @ToTime
+			                        Where #dateTimeColumn# >= @FromTime and #dateTimeColumn# < @ToTime #RecordFilterResult#
 
 			                        Insert into #destinationTableName# (#columns#)
 			                        Select #columns# from #sourceTableName# WITH(NOLOCK) 
-			                        Where #dateTimeColumn# >= @FromTime and #dateTimeColumn# < @ToTime
+			                        Where #dateTimeColumn# >= @FromTime and #dateTimeColumn# < @ToTime #RecordFilterResult#
 		                        Commit Transaction
 	                        End Try
 	                        Begin CATCH
@@ -181,11 +192,16 @@ namespace Vanrise.GenericData.SQLDataStorage
             queryBuilder.Replace("#sourceTableName#", _sqlTempStorageInformation.TableNameWithSchema);
             queryBuilder.Replace("#columns#", columns);
             queryBuilder.Replace("#dateTimeColumn#", dateTimeColumn.ToString());
+            queryBuilder.Replace("#RecordFilterResult#", recordFilterResult);
 
             ExecuteNonQueryText(queryBuilder.ToString(), (cmd) =>
             {
                 cmd.Parameters.Add(new SqlParameter("@FromTime", from));
                 cmd.Parameters.Add(new SqlParameter("@ToTime", to));
+                foreach (var prm in parameterValues)
+                {
+                    cmd.Parameters.Add(new SqlParameter(prm.Key, prm.Value));
+                }
             });
         }
 
@@ -400,14 +416,14 @@ namespace Vanrise.GenericData.SQLDataStorage
             queryBuilder.Replace("#COLUMNSUPDATE#", columnsUpdateBuilder.ToString());
 
             DataTable dt = this.DynamicManager.ConvertDataRecordsToTable(records);
-                ExecuteNonQueryText(queryBuilder.ToString(),
-                    (cmd) =>
-                    {
-                        SqlParameter prm = new SqlParameter("@UpdatedRecords", System.Data.SqlDbType.Structured);
-                        prm.TypeName = String.Format("{0}Type", GetTableNameWithSchema());
-                        prm.Value = dt;
-                        cmd.Parameters.Add(prm);
-                    });
+            ExecuteNonQueryText(queryBuilder.ToString(),
+                (cmd) =>
+                {
+                    SqlParameter prm = new SqlParameter("@UpdatedRecords", System.Data.SqlDbType.Structured);
+                    prm.TypeName = String.Format("{0}Type", GetTableNameWithSchema());
+                    prm.Value = dt;
+                    cmd.Parameters.Add(prm);
+                });
         }
 
         public IEnumerable<dynamic> GetExistingSummaryRecords(DateTime batchStart)
@@ -473,10 +489,10 @@ namespace Vanrise.GenericData.SQLDataStorage
 
         public bool AreDataRecordsUpdated(ref object updateHandle)
         {
-            return base.IsDataUpdated(GetTableNameWithSchema(),ref updateHandle);
+            return base.IsDataUpdated(GetTableNameWithSchema(), ref updateHandle);
         }
 
-        public void GetDataRecords(DateTime from, DateTime to, Action<dynamic> onItemReady)
+        public void GetDataRecords(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup, Action<dynamic> onItemReady)
         {
             var recortTypeManager = new DataRecordTypeManager();
             var recordRuntimeType = recortTypeManager.GetDataRecordRuntimeType(_dataRecordStorage.DataRecordTypeId);
@@ -487,11 +503,19 @@ namespace Vanrise.GenericData.SQLDataStorage
             string tableName = GetTableNameWithSchema();
 
             Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
+            int parameterIndex = 0;
 
+            string recordFilterResult = string.Empty;
+            if (recordFilterGroup != null)
+            {
+                Data.SQL.RecordFilterSQLBuilder recordFilterSQLBuilder = new Data.SQL.RecordFilterSQLBuilder(GetColumnNameFromFieldName);
+                string recordFilter = recordFilterSQLBuilder.BuildRecordFilter(recordFilterGroup, ref parameterIndex, parameterValues);
+                recordFilterResult = !string.IsNullOrEmpty(recordFilter) ? string.Format(" AND {0} ", recordFilter) : string.Empty;
+            }
 
             string query = string.Format(@"select  * from {0} WITH (NOLOCK)
                                            where ({1} >= @FromTime) 
-                                           and ({1} < @ToTime)", tableName, dateTimeColumn);
+                                           and ({1} < @ToTime) {2}", tableName, dateTimeColumn, recordFilterResult);
             ExecuteReaderText(query, (reader) =>
             {
                 while (reader.Read())
@@ -511,16 +535,24 @@ namespace Vanrise.GenericData.SQLDataStorage
             });
         }
 
-        public void DeleteRecords(DateTime from, DateTime to)
+        public void DeleteRecords(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup)
         {
             string dateTimeColumn = GetColumnNameFromFieldName(_dataRecordStorageSettings.DateTimeField);
             string tableName = GetTableNameWithSchema();
             Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
+            int parameterIndex = 0;
 
-            string query = string.Format(@"delete {0} from {0} WITH (NOLOCK)
-                                           where ({1} >= @FromTime) 
-                                           and ({1} < @ToTime)", tableName, dateTimeColumn);
+            string recordFilterResult = string.Empty;
+            if (recordFilterGroup != null)
+            {
+                Data.SQL.RecordFilterSQLBuilder recordFilterSQLBuilder = new Data.SQL.RecordFilterSQLBuilder(GetColumnNameFromFieldName);
+                string recordFilter = recordFilterSQLBuilder.BuildRecordFilter(recordFilterGroup, ref parameterIndex, parameterValues);
+                recordFilterResult = !string.IsNullOrEmpty(recordFilter) ? string.Format(" AND {0} ", recordFilter) : string.Empty;
+            }
 
+            string query = string.Format(@"DELETE {0} from {0} WITH (NOLOCK)
+                                           WHERE ({1} >= @FromTime) 
+                                           AND ({1} < @ToTime) {2}", tableName, dateTimeColumn, recordFilterResult);
 
             ExecuteNonQueryText(query, (cmd) =>
             {
@@ -533,14 +565,23 @@ namespace Vanrise.GenericData.SQLDataStorage
             });
         }
 
-        public void DeleteRecords(DateTime dateTime)
+        public void DeleteRecords(DateTime dateTime, RecordFilterGroup recordFilterGroup)
         {
             string dateTimeColumn = GetColumnNameFromFieldName(_dataRecordStorageSettings.DateTimeField);
             string tableName = GetTableNameWithSchema();
             Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
+            int parameterIndex = 0;
 
-            string query = string.Format(@"delete {0} from {0} WITH (NOLOCK)
-                                           where ({1} = @dateTime)", tableName, dateTimeColumn);
+            string recordFilterResult = string.Empty;
+            if (recordFilterGroup != null)
+            {
+                Data.SQL.RecordFilterSQLBuilder recordFilterSQLBuilder = new Data.SQL.RecordFilterSQLBuilder(GetColumnNameFromFieldName);
+                string recordFilter = recordFilterSQLBuilder.BuildRecordFilter(recordFilterGroup, ref parameterIndex, parameterValues);
+                recordFilterResult = !string.IsNullOrEmpty(recordFilter) ? string.Format(" AND {0} ", recordFilter) : string.Empty;
+            }
+
+            string query = string.Format(@"DELETE {0} from {0} WITH (NOLOCK)
+                                           WHERE ({1} = @dateTime) {2}", tableName, dateTimeColumn, recordFilterResult);
 
 
             ExecuteNonQueryText(query, (cmd) =>
@@ -626,13 +667,14 @@ namespace Vanrise.GenericData.SQLDataStorage
                         if (whereQuery.Length != 0)
                             whereQuery.Append(" AND ");
                         whereQuery.AppendFormat(@" {0} = {1}  ", sqlDataRecordStorageColumn.ColumnName, parameter);
-                    }else
+                    }
+                    else
                     {
                         shouldAddIfExist = true;
                         ifNotExistsQueryBuilder.AppendFormat("{0} = {1}", sqlDataRecordStorageColumn.ColumnName, parameter);
                     }
 
-                    
+
                 }
                 if (idColumn.Name != fieldValue.Key)
                 {
@@ -674,11 +716,12 @@ namespace Vanrise.GenericData.SQLDataStorage
                 }
 
             });
-            if(withOutParameter)
+            if (withOutParameter)
                 insertedId = sqlParameter.Value;
             return effectedRows > 0;
         }
-        private string BuildInsertQuery(Dictionary<string, Object> fieldValues, Dictionary<string, Object> parameterValues,ref bool withOutParameter)
+
+        private string BuildInsertQuery(Dictionary<string, Object> fieldValues, Dictionary<string, Object> parameterValues, ref bool withOutParameter)
         {
             StringBuilder queryBuilder = new StringBuilder();
 

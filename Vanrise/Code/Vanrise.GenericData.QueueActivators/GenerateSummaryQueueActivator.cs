@@ -176,9 +176,10 @@ namespace Vanrise.GenericData.QueueActivators
             if (recordStorageDataManager == null)
                 throw new NullReferenceException(String.Format("recordStorageDataManager. ID '{0}'", transformationManager.SummaryTransformationDefinition.DataRecordStorageId));
 
+            var recordFilterGroup = context.GetRecordFilterGroup(transformationManager.SummaryTransformationDefinition.SummaryItemRecordTypeId);
             if (tempStorageInformation == null && stageBatchRecord.IsEmptyBatch)
             {
-                recordStorageDataManager.DeleteRecords(stageBatchRecord.BatchStart, stageBatchRecord.BatchEnd);
+                recordStorageDataManager.DeleteRecords(stageBatchRecord.BatchStart, stageBatchRecord.BatchEnd, recordFilterGroup);
             }
             else
             {
@@ -191,7 +192,7 @@ namespace Vanrise.GenericData.QueueActivators
                 loadDataTask.Start();
 
                 PrepareAndInsertBatches(context.WriteTrackingMessage, context.DoWhilePreviousRunning, transformationManager, recordStorageDataManager, queueLoadedBatches, loadBatchStatus, context.CurrentStageName,
-                    stageBatchRecord.BatchStart, tempStorageInformation);
+                    stageBatchRecord.BatchStart, tempStorageInformation, recordFilterGroup);
                 loadDataTask.Wait();
             }
         }
@@ -217,7 +218,8 @@ namespace Vanrise.GenericData.QueueActivators
             SummaryTransformationDefinition summaryTransformationDefinition = new SummaryTransformationDefinitionManager().GetSummaryTransformationDefinition(this.SummaryTransformationDefinitionId);
             summaryTransformationDefinition.ThrowIfNull("summaryTransformationDefinition", this.SummaryTransformationDefinitionId);
 
-            new DataRecordStorageManager().FillDataRecordStorageFromTempStorage(summaryTransformationDefinition.DataRecordStorageId, tempStorageInformation, context.From, context.To);
+            var recordFilterGroup = context.GetRecordFilterGroup(summaryTransformationDefinition.SummaryItemRecordTypeId);
+            new DataRecordStorageManager().FillDataRecordStorageFromTempStorage(summaryTransformationDefinition.DataRecordStorageId, tempStorageInformation, context.From, context.To, recordFilterGroup);
         }
 
         public void DropStorage(Reprocess.Entities.IReprocessStageActivatorDropStorageContext context)
@@ -298,10 +300,11 @@ namespace Vanrise.GenericData.QueueActivators
             if (recordStorageDataManager == null)
                 throw new NullReferenceException(String.Format("recordStorageDataManager. ID '{0}'", transformationManager.SummaryTransformationDefinition.DataRecordStorageId));
 
+            var recordFilterGroup = context.GetRecordFilterGroup(transformationManager.SummaryTransformationDefinition.SummaryItemRecordTypeId);
             foreach (var genericSummaryRecordBatch in genericSummaryRecordBatchesDict)
             {
                 InsertBatches(context.WriteTrackingMessage, transformationManager, recordStorageDataManager, new List<GenericSummaryRecordBatch>() { genericSummaryRecordBatch.Value },
-                    context.CurrentStageName, genericSummaryRecordBatch.Key, tempStorageInformation);
+                    context.CurrentStageName, genericSummaryRecordBatch.Key, tempStorageInformation, recordFilterGroup);
             }
         }
 
@@ -329,13 +332,11 @@ namespace Vanrise.GenericData.QueueActivators
 
         private static void PrepareAndInsertBatches(Action<LogEntryType, string> writeTrackingMessage, Action<AsyncActivityStatus, Action> doWhilePreviousRunning,
             GenericSummaryTransformationManager transformationManager, IDataRecordDataManager recordStorageDataManager, Queueing.MemoryQueue<GenericSummaryRecordBatch> queueLoadedBatches,
-            AsyncActivityStatus loadBatchStatus, string currentStageName, DateTime batchStart, TempStorageInformation tempStorageInformation)
+            AsyncActivityStatus loadBatchStatus, string currentStageName, DateTime batchStart, TempStorageInformation tempStorageInformation, RecordFilterGroup recordFilterGroup)
         {
             List<GenericSummaryRecordBatch> preparedBatches = PrepareBatches(writeTrackingMessage, doWhilePreviousRunning, queueLoadedBatches, loadBatchStatus, currentStageName);
-            InsertBatches(writeTrackingMessage, transformationManager, recordStorageDataManager, preparedBatches, currentStageName, batchStart, tempStorageInformation);
+            InsertBatches(writeTrackingMessage, transformationManager, recordStorageDataManager, preparedBatches, currentStageName, batchStart, tempStorageInformation, recordFilterGroup);
         }
-
-
 
         private static List<GenericSummaryRecordBatch> PrepareBatches(Action<LogEntryType, string> writeTrackingMessage, Action<AsyncActivityStatus, Action> doWhilePreviousRunning,
             Queueing.MemoryQueue<GenericSummaryRecordBatch> queueLoadedBatches, AsyncActivityStatus loadBatchStatus, string currentStageName)
@@ -368,12 +369,12 @@ namespace Vanrise.GenericData.QueueActivators
         }
 
         private static void InsertBatches(Action<LogEntryType, string> writeTrackingMessage, GenericSummaryTransformationManager transformationManager, IDataRecordDataManager recordStorageDataManager,
-            List<GenericSummaryRecordBatch> queuePreparedBatches, string currentStageName, DateTime batchStart, TempStorageInformation tempStorageInformation)
+            List<GenericSummaryRecordBatch> queuePreparedBatches, string currentStageName, DateTime batchStart, TempStorageInformation tempStorageInformation, RecordFilterGroup recordFilterGroup)
         {
             VRDictionary<string, SummaryItemInProcess<GenericSummaryItem>> _existingSummaryBatches = new VRDictionary<string, SummaryItemInProcess<GenericSummaryItem>>();
 
             if (tempStorageInformation == null)
-                recordStorageDataManager.DeleteRecords(batchStart);
+                recordStorageDataManager.DeleteRecords(batchStart, recordFilterGroup);
 
             foreach (GenericSummaryRecordBatch genericSummaryRecordBatch in queuePreparedBatches)
                 transformationManager.UpdateExistingFromNew(_existingSummaryBatches, genericSummaryRecordBatch);

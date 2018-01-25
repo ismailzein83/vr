@@ -10,6 +10,8 @@ namespace Vanrise.AccountBalance.Business
     {
         dynamic Record { get; }
 
+        Guid DataRecordTypeId { get; }
+
         void SubmitBalanceUpdate(BalanceUpdatePayload accountBalanceInfo);
     }
 }

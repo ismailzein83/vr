@@ -61,7 +61,7 @@ namespace Vanrise.GenericData.BP.Activities
 
             foreach (Guid recordStorageId in inputArgument.RecordStorageIds)
             {
-                manager.GetDataRecords(recordStorageId, inputArgument.FromTime, inputArgument.ToTime, ((itm) =>
+                manager.GetDataRecords(recordStorageId, inputArgument.FromTime, inputArgument.ToTime, null, ((itm) =>
                 {
                     eventCount++;
                     recordBatch.Records.Add(itm);
@@ -73,7 +73,7 @@ namespace Vanrise.GenericData.BP.Activities
                     }
                 }));
 
-                
+
             }
             if (recordBatch.Records.Count > 0)
             {

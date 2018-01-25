@@ -12,11 +12,11 @@ namespace Vanrise.GenericData.Entities
 
         List<DataRecord> GetFilteredDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input);
 
-        void GetDataRecords(DateTime from, DateTime to, Action<dynamic> onItemReady);
+        void GetDataRecords(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup, Action<dynamic> onItemReady);
 
-        void DeleteRecords(DateTime from, DateTime to);
+        void DeleteRecords(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup);
 
-        void DeleteRecords(DateTime dateTime);
+        void DeleteRecords(DateTime dateTime, RecordFilterGroup recordFilterGroup);
         bool Update(Dictionary<string, Object> fieldValues);
         bool Insert(Dictionary<string, Object> fieldValues, out object insertedId);
         List<DataRecord> GetAllDataRecords(List<string> columns);

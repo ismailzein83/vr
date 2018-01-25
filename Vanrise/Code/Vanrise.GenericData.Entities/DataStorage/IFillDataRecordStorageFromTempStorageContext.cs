@@ -17,5 +17,7 @@ namespace Vanrise.GenericData.Entities
         DateTime From { get; }
 
         DateTime To { get; }
+
+        RecordFilterGroup RecordFilterGroup { get; }
     }
 }

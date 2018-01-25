@@ -74,7 +74,7 @@ namespace Vanrise.GenericData.SQLDataStorage
             var sqlTempStorageInformation = context.TempStorageInformation as SQLTempStorageInformation;
 
             SQLRecordStorageDataManager dataManager = new SQLRecordStorageDataManager(sqlDataStoreSettings, sqlDataRecordStorageSettings, context.DataRecordStorage, sqlTempStorageInformation);
-            dataManager.FillDataRecordStorageFromTempStorage(context.From, context.To);
+            dataManager.FillDataRecordStorageFromTempStorage(context.From, context.To, context.RecordFilterGroup);
         }
 
         public override void DropStorage(IDropStorageContext context)
