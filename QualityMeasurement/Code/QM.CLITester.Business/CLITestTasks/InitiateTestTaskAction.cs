@@ -15,27 +15,26 @@ namespace QM.CLITester.Business
         public override SchedulerTaskExecuteOutput Execute(SchedulerTask task, BaseTaskActionArgument taskActionArgument,
             Dictionary<string, object> evaluatedExpressions)
         {
-            InitiateTestTaskActionArgument initiateTestTaskActionArgument =
-                taskActionArgument as InitiateTestTaskActionArgument;
+            InitiateTestTaskActionArgument initiateTestTaskActionArgument = taskActionArgument as InitiateTestTaskActionArgument;
 
             if (initiateTestTaskActionArgument == null)
-                throw new Exception(
-                    String.Format("taskActionArgument '{0}' is not of type InitiateTestTaskActionArgument",
-                        initiateTestTaskActionArgument));
+                throw new Exception(String.Format("taskActionArgument '{0}' is not of type InitiateTestTaskActionArgument", initiateTestTaskActionArgument));
+
             if (initiateTestTaskActionArgument.CLITestConnector == null)
                 throw new ArgumentNullException("initiateTestTaskActionArgument.CLITestConnector");
 
             TestCallManager manager = new TestCallManager();
+            SupplierManager supplierManager = new SupplierManager();
+            ProfileManager profileManager = new ProfileManager();
+            var countryManager = new Vanrise.Common.Business.CountryManager();
+            ZoneManager zoneManager = new ZoneManager();
 
             List<CallTestStatus> listCallTestStatus = new List<CallTestStatus>()
             {
                 CallTestStatus.New,
                 CallTestStatus.InitiationFailedWithRetry
             };
-            SupplierManager supplierManager = new SupplierManager();
-            ProfileManager profileManager = new ProfileManager();
-            Vanrise.Common.Business.CountryManager countryManager = new Vanrise.Common.Business.CountryManager();
-            ZoneManager zoneManager = new ZoneManager();
+
             foreach (TestCall testCall in manager.GetTestCalls(listCallTestStatus))
             {
                 var initiateTestContext = new InitiateTestContext()
@@ -50,8 +49,7 @@ namespace QM.CLITester.Business
                 InitiateTestOutput initiateTestOutput = new InitiateTestOutput();
                 try
                 {
-                    initiateTestOutput =
-                        initiateTestTaskActionArgument.CLITestConnector.InitiateTest(initiateTestContext);
+                    initiateTestOutput = initiateTestTaskActionArgument.CLITestConnector.InitiateTest(initiateTestContext);
                 }
                 catch (Exception ex)
                 {
@@ -66,31 +64,32 @@ namespace QM.CLITester.Business
                     case InitiateTestResult.Created:
                         callTestStatus = CallTestStatus.Initiated;
                         break;
+
                     case InitiateTestResult.FailedWithRetry:
-                    {
-                        callTestStatus = CallTestStatus.InitiationFailedWithRetry;
-                        if (testCall.InitiationRetryCount < initiateTestTaskActionArgument.MaximumRetryCount)
-                            testCall.InitiationRetryCount = testCall.InitiationRetryCount + 1;
-                        else
-                            callTestStatus = CallTestStatus.InitiationFailedWithNoRetry;
-                        break;
-                    }
+                            callTestStatus = CallTestStatus.InitiationFailedWithRetry;
+                            if (testCall.InitiationRetryCount < initiateTestTaskActionArgument.MaximumRetryCount)
+                                testCall.InitiationRetryCount = testCall.InitiationRetryCount + 1;
+                            else
+                                callTestStatus = CallTestStatus.InitiationFailedWithNoRetry;
+                            break;
+
                     case InitiateTestResult.FailedWithNoRetry:
                         callTestStatus = CallTestStatus.InitiationFailedWithNoRetry;
                         break;
+
                     default:
                         callTestStatus = CallTestStatus.InitiationFailedWithRetry;
                         break;
                 }
 
-                manager.UpdateInitiateTest(testCall.ID, initiateTestOutput.InitiateTestInformation, callTestStatus,
-                    testCall.InitiationRetryCount, initiateTestOutput.FailureMessage);
+                manager.UpdateInitiateTest(testCall.ID, initiateTestOutput.InitiateTestInformation, callTestStatus, testCall.InitiationRetryCount, initiateTestOutput.FailureMessage);
             }
 
             SchedulerTaskExecuteOutput output = new SchedulerTaskExecuteOutput()
             {
                 Result = ExecuteOutputResult.Completed
             };
+
             return output;
         }
     }
