@@ -23,7 +23,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override Type GetNonNullableRuntimeType()
         {
-            return typeof(string);
+            return typeof(List<AttachmentFieldTypeEntity>);
         }
         public override bool StoreValueSerialized { get { return true; } }
 

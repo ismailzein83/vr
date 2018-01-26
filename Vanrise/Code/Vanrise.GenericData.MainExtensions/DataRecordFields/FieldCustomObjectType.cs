@@ -23,13 +23,13 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override Type GetNonNullableRuntimeType()
         {
-            return typeof(string);
+            return typeof(Object);
         }
         public override bool StoreValueSerialized { get { return true; } }
 
         public override string GetDescription(object value)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public override bool IsMatched(object fieldValue, object filterValue)
