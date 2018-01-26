@@ -3,5 +3,6 @@
 			 pagingtype="'PagingOnScroll'"
 			 on-ready="scopeModel.onGridReady">
 	<vr-datagridcolumn headertext="'Country'" field="'CountryName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Customer'" field="'CustomerName'" ng-show="scopeModel.showCustomerName" type="'Text'"></vr-datagridcolumn>
 	<vr-datagridcolumn headertext="'Effective On'" field="'Entity.EED'" type="'Date'"></vr-datagridcolumn>
 </vr-datagrid>

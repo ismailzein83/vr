@@ -18,13 +18,15 @@ namespace TOne.WhS.Sales.BP.Arguments
 
         public int OwnerId { get; set; }
 
-        public bool IsAdditionaOwner { get; set; }
+        public bool IsAdditionalOwner { get; set; }
 
         public int CurrencyId { get; set; }
 
         public DateTime EffectiveDate { get; set; }
 
         public Changes Changes { get; set; }
+
+        public string OwnerName { get; set; }
 
         public override string EntityId
         {
@@ -36,24 +38,10 @@ namespace TOne.WhS.Sales.BP.Arguments
 
         public override string GetTitle()
         {
-            string ownerTypeDescription = Vanrise.Common.Utilities.GetEnumDescription(this.OwnerType);
-            string ownerName;
-
-            switch (OwnerType)
-            {
-                case SalePriceListOwnerType.SellingProduct:
-                    var sellingProductManager = new SellingProductManager();
-                    ownerName = sellingProductManager.GetSellingProductName(OwnerId);
-                    break;
-                case SalePriceListOwnerType.Customer:
-                    var carrierAccountManager = new CarrierAccountManager();
-                    ownerName = carrierAccountManager.GetCarrierAccountName(OwnerId);
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }
-
-            return String.Format("Started the #BPDefinitionTitle# process for {0} '{1}'", ownerTypeDescription, ownerName);
+            var ratePlanInputManager = new RatePlanInputManager();
+            return ratePlanInputManager.GetTitle(this.OwnerType, this.OwnerId);
         }
+
+        public bool FollowMasterRatesBED { get; set; }
     }
 }

@@ -144,6 +144,30 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
            }, ProcessInstanceId);
             return lstAffectedCustomerIds;
         }
+        public IEnumerable<int> GetAffectedCustomerIdsNewCountryChangesByProcessInstanceId(long ProcessInstanceId)
+        {
+            List<int> listAffectedCustomerIds = new List<int>();
+            ExecuteReaderSP("TOneWhS_BE.SP_SalePricelistNewCountryChanges_GetAffectedCustomerIds", (reader) =>
+            {
+                while (reader.Read())
+                {
+                    listAffectedCustomerIds.Add(GetReaderValue<int>(reader, "CustomerId"));
+                }
+            }, ProcessInstanceId);
+            return listAffectedCustomerIds;
+        }
+        public IEnumerable<int> GetAffectedCustomerIdsChangedCountryChangesByProcessInstanceId(long ProcessInstanceId)
+        {
+            List<int> listAffectedCustomerIds = new List<int>();
+            ExecuteReaderSP("TOneWhS_BE.SP_SalePricelistChangedCountryChanges_GetAffectedCustomerIds", (reader) =>
+            {
+                while (reader.Read())
+                {
+                    listAffectedCustomerIds.Add(GetReaderValue<int>(reader, "CustomerId"));
+                }
+            }, ProcessInstanceId);
+            return listAffectedCustomerIds;
+        }
         public IEnumerable<int> GetAffectedCustomerIdsRateChangesByProcessInstanceId(long ProcessInstanceId)
         {
             List<int> lstAffectedCustomerIds = new List<int>();

@@ -13,6 +13,7 @@ namespace TOne.WhS.Sales.BP.Activities
     public class ApplyNewDefaultRoutingProductToDBInput
     {
         public NewDefaultRoutingProduct NewDefaultRoutingProduct { get; set; }
+        public long RootProcessInstanceId { get; set; }
     }
 
     public class ApplyNewDefaultRoutingProductToDBOutput
@@ -33,7 +34,8 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             return new ApplyNewDefaultRoutingProductToDBInput()
             {
-                NewDefaultRoutingProduct = this.NewDefaultRoutingProduct.Get(context)
+                NewDefaultRoutingProduct = this.NewDefaultRoutingProduct.Get(context),
+                RootProcessInstanceId = context.GetRatePlanContext().RootProcessInstanceId,
             };
         }
 
@@ -49,7 +51,8 @@ namespace TOne.WhS.Sales.BP.Activities
             if (newDefaultRoutingProduct != null)
             {
                 var dataManager = SalesDataManagerFactory.GetDataManager<INewDefaultRoutingProductDataManager>();
-                dataManager.ProcessInstanceId = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
+                long rootProcessInstanceId = inputArgument.RootProcessInstanceId;
+                dataManager.ProcessInstanceId = rootProcessInstanceId;
                 dataManager.Insert(newDefaultRoutingProduct);
             }
 

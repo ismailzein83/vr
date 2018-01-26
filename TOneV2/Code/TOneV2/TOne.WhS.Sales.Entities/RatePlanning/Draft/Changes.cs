@@ -15,5 +15,14 @@ namespace TOne.WhS.Sales.Entities
         public List<ZoneChanges> ZoneChanges { get; set; }
 
 		public CountryChanges CountryChanges { get; set; }
+
+        public List<AdditionalOwnerEntity> AdditionalOwnerEntities { get; set; }
+    }
+
+    public class AdditionalOwnerEntity
+    {
+        public int Id { get; set; }
+        public int EntityId { get; set; }
+        public string EntityName { get; set; }
     }
 }

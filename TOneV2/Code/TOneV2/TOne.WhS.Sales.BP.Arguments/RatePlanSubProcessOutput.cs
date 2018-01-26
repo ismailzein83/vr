@@ -9,5 +9,7 @@ namespace TOne.WhS.Sales.BP.Arguments
     public class RatePlanSubProcessOutput
     {
         public bool ContinueRatePlanProcess { get; set; }
+        public List<long> PricelistFileIds { get; set; }
+        public bool TerminatedDueBusinessRulesViolation { get; set; }
     }
 }

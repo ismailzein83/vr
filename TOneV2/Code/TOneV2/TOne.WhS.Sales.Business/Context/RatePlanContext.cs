@@ -121,8 +121,8 @@ namespace TOne.WhS.Sales.Business
 
         #endregion
 
-
-        public int OwnerPricelistId { get; set; }
+        public bool IsAdditionalOwner { get; set; }
+        public long RootProcessInstanceId { get; set; }
     }
 
     public interface IRatePlanContext
@@ -152,8 +152,8 @@ namespace TOne.WhS.Sales.Business
         IEnumerable<DataByZone> DataByZoneList { get; }
         string DateFormat { get; }
         DateTime PriceListCreationDate { get; }
-
-        int OwnerPricelistId { get; set; }
+        bool IsAdditionalOwner { get; }
+        long RootProcessInstanceId { get; }
 
         #endregion
 

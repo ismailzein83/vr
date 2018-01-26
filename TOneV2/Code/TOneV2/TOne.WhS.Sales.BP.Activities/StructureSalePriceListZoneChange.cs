@@ -19,7 +19,7 @@ namespace TOne.WhS.Sales.BP.Activities
     public class StructureSalePriceListZoneChange : CodeActivity
     {
         #region Input Arguments
-        public InArgument<int?> RerservedSalePriceListId { get; set; }
+        public InArgument<int?> ReservedOwnerPriceListId { get; set; }
         public InArgument<int> CurrencyId { get; set; }
         public InArgument<IEnumerable<SaleZone>> SaleZones { get; set; }
         public InArgument<IEnumerable<SaleRate>> SaleRates { get; set; }
@@ -35,6 +35,8 @@ namespace TOne.WhS.Sales.BP.Activities
         public InArgument<DateTime> EffectiveOn { get; set; }
         [RequiredArgument]
         public InArgument<Dictionary<int, List<NewPriceList>>> CustomerPriceListsByCurrencyId { get; set; }
+
+        public InArgument<bool> IsAdditional { get; set; }
         #endregion
 
         #region Output Arguments
@@ -60,7 +62,8 @@ namespace TOne.WhS.Sales.BP.Activities
             DateTime effectiveOn = this.EffectiveOn.Get(context);
             int currencyId = CurrencyId.Get(context);
             Dictionary<int, List<NewPriceList>> customerPriceListsByCurrencyId = CustomerPriceListsByCurrencyId.Get(context);
-
+            int? reservedOwnerPriceListId = ReservedOwnerPriceListId.Get(context);
+            bool isAdditional = IsAdditional.Get(context);
             #endregion
 
             Dictionary<int, List<DataByZone>> importedZonesByCountryId = this.StructureImportedZonesByCountryId(dataByZones);
@@ -162,7 +165,8 @@ namespace TOne.WhS.Sales.BP.Activities
                             RatesToAddForNewCountriesbyCountryId = structuredZoneActions.RatesToAddForNewCountriesbyCountryId,
                             SaleCodesByZoneId = saleCodesByZoneId,
                             CurrencyId = ratePlanContext.CurrencyId,
-                            RoutingProductEffectiveLocator = effectiveRoutingProductLocator
+                            RoutingProductEffectiveLocator = effectiveRoutingProductLocator,
+                            IsAdditional = isAdditional
                         };
 
                         this.GetChangesForNewCountries(customerNewCountriesContext);
@@ -187,7 +191,8 @@ namespace TOne.WhS.Sales.BP.Activities
                             RateChangeLocator = rateChangeLocator,
                             SaleCodesByZoneId = saleCodesByZoneId,
                             CurrencyId = ratePlanContext.CurrencyId,
-                            ActionDatesByZoneId = existingDataInfo.ActionDatesByZoneId
+                            ActionDatesByZoneId = existingDataInfo.ActionDatesByZoneId,
+                            IsAdditional = isAdditional
                         };
 
                         this.GetChangesForCountriesToClose(customerCountriesToCloseContext);
@@ -246,10 +251,10 @@ namespace TOne.WhS.Sales.BP.Activities
             }
 
             var salePriceListManager = new SalePriceListManager();
-            long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
+            long processInstanceId = context.GetRatePlanContext().RootProcessInstanceId;
             int userId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId;
 
-            var pricelistByCurrencyId = CreatePriceList(ownerId, ownerType, ratePlanContext.OwnerPricelistId, currencyId, processInstanceId, userId, ratePlanContext.PriceListCreationDate, customerPriceListsByCurrencyId);
+            var pricelistByCurrencyId = CreatePriceList(ownerId, ownerType, reservedOwnerPriceListId, currencyId, processInstanceId, userId, ratePlanContext.PriceListCreationDate, customerPriceListsByCurrencyId);
             var structuredCustomers = salePriceListManager.StructureCustomerPricelistChange(customerPriceListChanges);
             var changes = salePriceListManager.CreateCustomerChanges(structuredCustomers, lastRateNoCachelocator, pricelistByCurrencyId, effectiveOn, processInstanceId, userId);
 
@@ -504,22 +509,26 @@ namespace TOne.WhS.Sales.BP.Activities
 
                     }
 
-                    IEnumerable<SaleCode> zoneCodes = context.SaleCodesByZoneId.GetRecord(zoneId);
-                    if (zoneCodes == null)
-                        throw new DataIntegrityValidationException(string.Format("Zone {0} has no existing codes.", zoneName));
-
-                    foreach (var existingCode in zoneCodes)
+                    if (!context.IsAdditional)
                     {
-                        context.CodeChangesOutArgument.Add(new SalePricelistCodeChange
+                        IEnumerable<SaleCode> zoneCodes = context.SaleCodesByZoneId.GetRecord(zoneId);
+                        if (zoneCodes == null)
+                            throw new DataIntegrityValidationException(string.Format("Zone {0} has no existing codes.", zoneName));
+
+                        foreach (var existingCode in zoneCodes)
                         {
-                            CountryId = countryToAdd.CountryId,
-                            ZoneName = zoneName,
-                            ZoneId = existingCode.ZoneId,
-                            Code = existingCode.Code,
-                            ChangeType = CodeChange.New,
-                            BED = existingCode.BED > countryToAdd.BED ? existingCode.BED : countryToAdd.BED
-                        });
+                            context.CodeChangesOutArgument.Add(new SalePricelistCodeChange
+                            {
+                                CountryId = countryToAdd.CountryId,
+                                ZoneName = zoneName,
+                                ZoneId = existingCode.ZoneId,
+                                Code = existingCode.Code,
+                                ChangeType = CodeChange.New,
+                                BED = existingCode.BED > countryToAdd.BED ? existingCode.BED : countryToAdd.BED
+                            });
+                        }
                     }
+
                     SaleEntityZoneRoutingProduct effectiveRoutingProduct = context.RoutingProductEffectiveLocator.GetCustomerZoneRoutingProduct(context.CustomerInfo.CustomerId, context.CustomerInfo.SellingProductId, zoneId);
 
                     if (effectiveRoutingProduct == null)
@@ -604,22 +613,25 @@ namespace TOne.WhS.Sales.BP.Activities
 
                     #region Get Code Changes
 
-                    IEnumerable<SaleCode> zoneCodes = context.SaleCodesByZoneId.GetRecord(zoneId);
-                    if (zoneCodes == null)
-                        throw new DataIntegrityValidationException(string.Format("Zone {0} has no existing codes.", zone.Name));
-
-                    foreach (var existingCode in zoneCodes)
+                    if (!context.IsAdditional)
                     {
-                        context.CodeChangesOutArgument.Add(new SalePricelistCodeChange
+                        IEnumerable<SaleCode> zoneCodes = context.SaleCodesByZoneId.GetRecord(zoneId);
+                        if (zoneCodes == null)
+                            throw new DataIntegrityValidationException(string.Format("Zone {0} has no existing codes.", zone.Name));
+
+                        foreach (var existingCode in zoneCodes)
                         {
-                            CountryId = countryToClose.CountryId,
-                            ZoneName = zone.Name,
-                            ZoneId = existingCode.ZoneId,
-                            Code = existingCode.Code,
-                            ChangeType = CodeChange.Closed,
-                            BED = existingCode.BED > soldCountry.BED ? existingCode.BED : soldCountry.BED,
-                            EED = countryToClose.CloseEffectiveDate
-                        });
+                            context.CodeChangesOutArgument.Add(new SalePricelistCodeChange
+                            {
+                                CountryId = countryToClose.CountryId,
+                                ZoneName = zone.Name,
+                                ZoneId = existingCode.ZoneId,
+                                Code = existingCode.Code,
+                                ChangeType = CodeChange.Closed,
+                                BED = existingCode.BED > soldCountry.BED ? existingCode.BED : soldCountry.BED,
+                                EED = countryToClose.CloseEffectiveDate
+                            });
+                        }
                     }
 
                     #endregion
@@ -1228,6 +1240,7 @@ namespace TOne.WhS.Sales.BP.Activities
             public DateTime MinimumDate { get; set; }
             public int CurrencyId { get; set; }
             public SaleEntityZoneRoutingProductLocator RoutingProductEffectiveLocator { get; set; }
+            public bool IsAdditional { get; set; }
             #endregion
 
             #region Output Arguments
@@ -1257,6 +1270,7 @@ namespace TOne.WhS.Sales.BP.Activities
             public DateTime ProcessEffectiveDate { get; set; }
             public int CurrencyId { get; set; }
 
+            public bool IsAdditional { get; set; }
             #endregion
 
             #region Output Arguments

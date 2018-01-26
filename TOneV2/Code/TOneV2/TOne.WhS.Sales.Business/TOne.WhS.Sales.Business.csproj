@@ -126,6 +126,8 @@
     <Compile Include="BusinessRules\Conditions\SPDefaultRPDoesNotExistCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ZoneCountryIsEndedAndZoneIsChangedCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ZoneIsPendingClosedAndChangedCondition.cs" />
+    <Compile Include="CarrierAccount\AffectedCarrierAccountFilterInChangedCountryChanges.cs" />
+    <Compile Include="CarrierAccount\AffectedCarrierAccountFilterInNewCountryChanges.cs" />
     <Compile Include="CarrierAccount\AffectedCarrierAccountFilterInRateChanges.cs" />
     <Compile Include="CarrierAccount\AffectedCarrierAccountFilterInRPChanges.cs" />
     <Compile Include="CodeCompareManager.cs" />

@@ -15,7 +15,8 @@
             openBulkActionWizard: openBulkActionWizard,
             openTQIEditor: openTQIEditor,
             importRatePlan: importRatePlan,
-            areDatesTheSame: areDatesTheSame
+            areDatesTheSame: areDatesTheSame,
+            applyDraftOnMultipleCustomers: applyDraftOnMultipleCustomers
         };
 
         function manageCountries(input) {
@@ -174,6 +175,18 @@
                 return false;
         }
 
+        function applyDraftOnMultipleCustomers(executeApplyDraftOnMultipleCustomersProcess, ownerId)
+        {
+            var parameters = {
+                ownerId: ownerId,
+            };
+            var modalSettings = {
+                onScopeReady: function (modalScope) {
+                    modalScope.executeApplyDraftOnMultipleCustomersProcess = executeApplyDraftOnMultipleCustomersProcess;
+                }
+            };
+            VRModalService.showModal("/Client/Modules/WhS_Sales/Views/applyDraftOnMultipleCustomers.html", parameters, modalSettings);
+        }
     }
 
     appControllers.service('WhS_Sales_RatePlanService', RatePlanService);

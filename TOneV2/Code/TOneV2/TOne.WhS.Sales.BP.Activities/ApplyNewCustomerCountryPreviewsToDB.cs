@@ -10,65 +10,68 @@ using TOne.WhS.Sales.Entities;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-	#region Classes
+    #region Classes
 
-	public class ApplyNewCustomerCountryPreviewsToDBInput
-	{
-		public SalePriceListOwnerType OwnerType { get; set; }
-		public IEnumerable<NewCustomerCountryPreview> NewCustomerCountryPreviews { get; set; }
-	}
+    public class ApplyNewCustomerCountryPreviewsToDBInput
+    {
+        public SalePriceListOwnerType OwnerType { get; set; }
+        public IEnumerable<NewCustomerCountryPreview> NewCustomerCountryPreviews { get; set; }
+        public long RootProcessInstanceId { get; set; }
+    }
 
-	public class ApplyNewCustomerCountryPreviewsToDBOutput
-	{
+    public class ApplyNewCustomerCountryPreviewsToDBOutput
+    {
 
-	}
+    }
 
-	#endregion
+    #endregion
 
-	public class ApplyNewCustomerCountryPreviewsToDB : Vanrise.BusinessProcess.BaseAsyncActivity<ApplyNewCustomerCountryPreviewsToDBInput, ApplyNewCustomerCountryPreviewsToDBOutput>
-	{
-		#region Input Arguments
+    public class ApplyNewCustomerCountryPreviewsToDB : Vanrise.BusinessProcess.BaseAsyncActivity<ApplyNewCustomerCountryPreviewsToDBInput, ApplyNewCustomerCountryPreviewsToDBOutput>
+    {
+        #region Input Arguments
 
-		[RequiredArgument]
-		public InArgument<SalePriceListOwnerType> OwnerType { get; set; }
+        [RequiredArgument]
+        public InArgument<SalePriceListOwnerType> OwnerType { get; set; }
 
-		[RequiredArgument]
-		public InArgument<IEnumerable<NewCustomerCountryPreview>> NewCustomerCountryPreviews { get; set; }
+        [RequiredArgument]
+        public InArgument<IEnumerable<NewCustomerCountryPreview>> NewCustomerCountryPreviews { get; set; }
 
-		#endregion
+        #endregion
 
-		protected override ApplyNewCustomerCountryPreviewsToDBInput GetInputArgument(AsyncCodeActivityContext context)
-		{
-			return new ApplyNewCustomerCountryPreviewsToDBInput()
-			{
-				OwnerType = OwnerType.Get(context),
-				NewCustomerCountryPreviews = NewCustomerCountryPreviews.Get(context)
-			};
-		}
+        protected override ApplyNewCustomerCountryPreviewsToDBInput GetInputArgument(AsyncCodeActivityContext context)
+        {
+            return new ApplyNewCustomerCountryPreviewsToDBInput()
+            {
+                OwnerType = OwnerType.Get(context),
+                NewCustomerCountryPreviews = NewCustomerCountryPreviews.Get(context),
+                RootProcessInstanceId = context.GetRatePlanContext().RootProcessInstanceId,
+            };
+        }
 
-		protected override void OnBeforeExecute(AsyncCodeActivityContext context, Vanrise.BusinessProcess.AsyncActivityHandle handle)
-		{
-			base.OnBeforeExecute(context, handle);
-		}
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, Vanrise.BusinessProcess.AsyncActivityHandle handle)
+        {
+            base.OnBeforeExecute(context, handle);
+        }
 
-		protected override ApplyNewCustomerCountryPreviewsToDBOutput DoWorkWithResult(ApplyNewCustomerCountryPreviewsToDBInput inputArgument, Vanrise.BusinessProcess.AsyncActivityHandle handle)
-		{
-			SalePriceListOwnerType ownerType = inputArgument.OwnerType;
-			IEnumerable<NewCustomerCountryPreview> newCustomerCountryPreviews = inputArgument.NewCustomerCountryPreviews;
+        protected override ApplyNewCustomerCountryPreviewsToDBOutput DoWorkWithResult(ApplyNewCustomerCountryPreviewsToDBInput inputArgument, Vanrise.BusinessProcess.AsyncActivityHandle handle)
+        {
+            SalePriceListOwnerType ownerType = inputArgument.OwnerType;
+            IEnumerable<NewCustomerCountryPreview> newCustomerCountryPreviews = inputArgument.NewCustomerCountryPreviews;
 
-			if (ownerType == SalePriceListOwnerType.Customer)
-			{
-				var dataManager = SalesDataManagerFactory.GetDataManager<INewCustomerCountryPreviewDataManager>();
-				dataManager.ProcessInstanceId = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
-				dataManager.ApplyNewCustomerCountryPreviewsToDB(newCustomerCountryPreviews);
-			}
+            if (ownerType == SalePriceListOwnerType.Customer)
+            {
+                var dataManager = SalesDataManagerFactory.GetDataManager<INewCustomerCountryPreviewDataManager>();
+                long rootProcessInstanceId = inputArgument.RootProcessInstanceId;
+                dataManager.ProcessInstanceId = rootProcessInstanceId;
+                dataManager.ApplyNewCustomerCountryPreviewsToDB(newCustomerCountryPreviews);
+            }
 
-			return new ApplyNewCustomerCountryPreviewsToDBOutput() { };
-		}
+            return new ApplyNewCustomerCountryPreviewsToDBOutput() { };
+        }
 
-		protected override void OnWorkComplete(AsyncCodeActivityContext context, ApplyNewCustomerCountryPreviewsToDBOutput result)
-		{
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, ApplyNewCustomerCountryPreviewsToDBOutput result)
+        {
 
-		}
-	}
+        }
+    }
 }

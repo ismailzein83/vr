@@ -13,6 +13,7 @@ namespace TOne.WhS.Sales.BP.Activities
     public class ApplyChangedRatesToDBInput
     {
         public IEnumerable<ChangedRate> ChangedRates { get; set; }
+        public long RootProcessInstanceId { get; set; }
     }
 
     public class ApplyChangedRatesToDBOutput
@@ -33,7 +34,8 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             return new ApplyChangedRatesToDBInput()
             {
-                ChangedRates = this.ChangedRates.Get(context)
+                ChangedRates = this.ChangedRates.Get(context),
+                RootProcessInstanceId = context.GetRatePlanContext().RootProcessInstanceId,
             };
         }
 
@@ -45,9 +47,9 @@ namespace TOne.WhS.Sales.BP.Activities
         protected override ApplyChangedRatesToDBOutput DoWorkWithResult(ApplyChangedRatesToDBInput inputArgument, AsyncActivityHandle handle)
         {
             IEnumerable<ChangedRate> changedRates = inputArgument.ChangedRates;
-
+            long rootProcessInstanceId = inputArgument.RootProcessInstanceId;
             IChangedSaleRateDataManager dataManager = SalesDataManagerFactory.GetDataManager<IChangedSaleRateDataManager>();
-            dataManager.ProcessInstanceId = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
+            dataManager.ProcessInstanceId = rootProcessInstanceId;
             dataManager.ApplyChangedRatesToDB(changedRates);
 
             return new ApplyChangedRatesToDBOutput() { };

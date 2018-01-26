@@ -12,7 +12,7 @@ namespace TOne.WhS.Sales.Data.SQL
 	{
 		#region Fields / Properties
 
-		readonly string[] columns = { "ID", "ProcessInstanceID", "EED" };
+		readonly string[] columns = { "ID", "CustomerID" ,"ProcessInstanceID", "EED" };
 
 		private long _processInstanceId;
 
@@ -49,7 +49,10 @@ namespace TOne.WhS.Sales.Data.SQL
 
 		public IEnumerable<ChangedCustomerCountryPreview> GetChangedCustomerCountryPreviews(RatePlanPreviewQuery query)
 		{
-			return GetItemsSP("TOneWhS_Sales.sp_CustomerCountry_GetChangedPreviews", ChangedCustomerCountryPreviewMapper, query.ProcessInstanceId);
+            string strcustomerIds = null;
+            if (query.CustomerIds != null && query.CustomerIds.Any())
+                strcustomerIds = string.Join(",", query.CustomerIds);
+            return GetItemsSP("TOneWhS_Sales.sp_CustomerCountry_GetChangedPreviews", ChangedCustomerCountryPreviewMapper, query.ProcessInstanceId, strcustomerIds);
 		}
 
 		#region Bulk Apply Methods
@@ -64,8 +67,9 @@ namespace TOne.WhS.Sales.Data.SQL
 			var streamForBulkInsert = dbApplyStream as Vanrise.Data.SQL.StreamForBulkInsert;
 			streamForBulkInsert.WriteRecord
 			(
-				"{0}^{1}^{2}",
+				"{0}^{1}^{2}^{3}",
 				record.CountryId,
+                record.CustomerId,
 				_processInstanceId,
 				GetDateTimeForBCP(record.EED)
 			);
@@ -95,6 +99,7 @@ namespace TOne.WhS.Sales.Data.SQL
 			return new ChangedCustomerCountryPreview()
 			{
 				CountryId = (int)reader["ID"],
+                CustomerId=(int)reader["CustomerID"],
 				EED = (DateTime)reader["EED"]
 			};
 		}

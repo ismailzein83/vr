@@ -4,7 +4,7 @@
              on-ready="scopeModel.onGridReady"
              menuactions="scopeModel.menuActions">
     <vr-datagridcolumn headertext="'Zone'" field="'ZoneName'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Customer'" field="'CustomerName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Customer'" field="'CustomerName'" ng-show="scopeModel.showCustomerName" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Current Routing Product'" field="'RecentRoutingProductName'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Current Services'" field="'RecentRouringProductServicesId'" disablesorting>
         <vr-whs-be-services-viewer on-ready="dataItem.onCurrentServiceReady"></vr-whs-be-services-viewer>

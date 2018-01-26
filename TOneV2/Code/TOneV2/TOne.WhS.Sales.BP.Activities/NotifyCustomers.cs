@@ -26,7 +26,7 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             IEnumerable<int> customerIds = CustomerIds.Get(context);
             int initiatorId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId;
-            long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
+            long processInstanceId = context.GetRatePlanContext().RootProcessInstanceId;
 
             NotificationManager notificationManager = new NotificationManager();
             IEnumerable<int> failedCustomerIdsToSendEmailFor = notificationManager.SendNotification(initiatorId, customerIds, processInstanceId);

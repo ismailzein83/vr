@@ -13,6 +13,7 @@ namespace TOne.WhS.Sales.BP.Activities
     public class ApplyRatePreviewsToDBInput
     {
         public IEnumerable<RatePreview> RatePreviews { get; set; }
+        public long RootProcessInstanceId { get; set; }
     }
 
     public class ApplyRatePreviewsToDBOutput
@@ -33,7 +34,8 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             return new ApplyRatePreviewsToDBInput()
             {
-                RatePreviews = this.RatePreviews.Get(context)
+                RatePreviews = this.RatePreviews.Get(context),
+                RootProcessInstanceId = context.GetRatePlanContext().RootProcessInstanceId,
             };
         }
 
@@ -45,11 +47,12 @@ namespace TOne.WhS.Sales.BP.Activities
         protected override ApplyRatePreviewsToDBOutput DoWorkWithResult(ApplyRatePreviewsToDBInput inputArgument, AsyncActivityHandle handle)
         {
             IEnumerable<RatePreview> ratePreviews = inputArgument.RatePreviews;
+            long rootProcessInstanceId = inputArgument.RootProcessInstanceId;
 
             if (ratePreviews != null)
             {
                 var dataManager = SalesDataManagerFactory.GetDataManager<IRatePreviewDataManager>();
-                dataManager.ProcessInstanceId = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
+                dataManager.ProcessInstanceId = rootProcessInstanceId;
                 dataManager.ApplyRatePreviewsToDB(ratePreviews);
             }
 

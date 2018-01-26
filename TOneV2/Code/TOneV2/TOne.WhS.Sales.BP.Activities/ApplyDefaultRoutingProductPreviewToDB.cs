@@ -15,13 +15,14 @@ namespace TOne.WhS.Sales.BP.Activities
     public class ApplyDefaultRoutingProductPreviewToDBInput
     {
         public DefaultRoutingProductPreview DefaultRoutingProductPreview { get; set; }
+        public long RootProcessInstanceId { get; set; }
     }
 
     public class ApplyDefaultRoutingProductPreviewToDBOutput
     {
 
     }
-    
+
     #endregion
 
     public class ApplyDefaultRoutingProductPreviewToDB : BaseAsyncActivity<ApplyDefaultRoutingProductPreviewToDBInput, ApplyDefaultRoutingProductPreviewToDBOutput>
@@ -29,14 +30,15 @@ namespace TOne.WhS.Sales.BP.Activities
         #region Input Arguments
 
         public InArgument<DefaultRoutingProductPreview> DefaultRoutingProductPreview { get; set; }
-        
+
         #endregion
 
         protected override ApplyDefaultRoutingProductPreviewToDBInput GetInputArgument(AsyncCodeActivityContext context)
         {
             return new ApplyDefaultRoutingProductPreviewToDBInput()
             {
-                DefaultRoutingProductPreview = this.DefaultRoutingProductPreview.Get(context)
+                DefaultRoutingProductPreview = this.DefaultRoutingProductPreview.Get(context),
+                RootProcessInstanceId = context.GetRatePlanContext().RootProcessInstanceId,
             };
         }
 
@@ -48,11 +50,12 @@ namespace TOne.WhS.Sales.BP.Activities
         protected override ApplyDefaultRoutingProductPreviewToDBOutput DoWorkWithResult(ApplyDefaultRoutingProductPreviewToDBInput inputArgument, AsyncActivityHandle handle)
         {
             DefaultRoutingProductPreview defaultRoutingProductPreview = inputArgument.DefaultRoutingProductPreview;
+            long rootProcessInstanceId = inputArgument.RootProcessInstanceId;
 
             if (defaultRoutingProductPreview != null)
             {
                 var dataManager = SalesDataManagerFactory.GetDataManager<IDefaultRoutingProductPreviewDataManager>();
-                dataManager.ProcessInstanceId = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
+                dataManager.ProcessInstanceId = rootProcessInstanceId;
                 dataManager.Insert(defaultRoutingProductPreview);
             }
 
@@ -61,7 +64,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, ApplyDefaultRoutingProductPreviewToDBOutput result)
         {
-            
+
         }
     }
 }

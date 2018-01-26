@@ -29,6 +29,7 @@ app.directive('vrWhsSalesRateplanSettingsEditor', ['UtilsService', 'VRUIUtilsSer
         function initializeController() {
 
             $scope.scopeModel = {};
+            $scope.scopeModel.hintText = "Rate's BED of the slave customers can either follow the same BED of their master, or can be calculated according to the system parameters for increased and decreased rates.";
 
             $scope.scopeModel.onCostColumnDirectiveReady = function (api) {
                 costColumnDirectiveAPI = api;
@@ -57,6 +58,7 @@ app.directive('vrWhsSalesRateplanSettingsEditor', ['UtilsService', 'VRUIUtilsSer
                     costCalculationMethods = payload.data.CostCalculationsMethods;
                     tqiPeriodValue = payload.data.TQIPeriodValue;
                     tqiPeriodType = payload.data.TQIPeriodType;
+                    $scope.scopeModel.followMasterRatesBED = payload.data.FollowMasterRatesBED;
                 }
 
                 var promises = [];
@@ -104,6 +106,7 @@ app.directive('vrWhsSalesRateplanSettingsEditor', ['UtilsService', 'VRUIUtilsSer
                     data.TQIPeriodValue = period.periodValue;
                     data.TQIPeriodType = period.periodType;
                 }
+                data.FollowMasterRatesBED = $scope.scopeModel.followMasterRatesBED;
                 return data;
             };
 

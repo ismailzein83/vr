@@ -13,7 +13,7 @@ namespace TOne.WhS.Sales.Data.SQL
     {
         #region Fields / Properties
 
-        readonly string[] columns = { "ID", "ProcessInstanceID", "RoutingProductID", "ZoneID", "BED", "EED" };
+        readonly string[] columns = { "ID", "OwnerType", "OwnerID", "ProcessInstanceID", "RoutingProductID", "ZoneID", "BED", "EED" };
 
         private long _processInstanceId;
 
@@ -62,8 +62,10 @@ namespace TOne.WhS.Sales.Data.SQL
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             streamForBulkInsert.WriteRecord
             (
-                "{0}^{1}^{2}^{3}^{4}^{5}",
+                "{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}",
                 record.SaleEntityRoutingProductId,
+                (int)record.OwnerType,
+                record.OwnerId,
                 _processInstanceId,
                 record.RoutingProductId,
                 record.SaleZoneId,

@@ -19,7 +19,7 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             IEnumerable<SalePricelistRPChange> allRoutingProductChanges = AllSalePricelistRPChanges.Get(context);
             var dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
-            var processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
+            var processInstanceId = context.GetRatePlanContext().RootProcessInstanceId;
             dataManager.SaveCustomerRoutingProductChangesToDb(allRoutingProductChanges, processInstanceId);
         }
     }

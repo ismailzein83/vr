@@ -92,6 +92,10 @@
         function GetRatePlanSettingsData() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetRatePlanSettingsData"));
         }
+        
+        function GetFollowMasterRatesBED() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetFollowMasterRatesBED"));
+        }
 
         function GetPricingSettings(ownerType, ownerId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetPricingSettings"), {
@@ -106,6 +110,13 @@
 
         function GetDraftCurrencyId(ownerType, ownerId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetDraftCurrencyId"), {
+                ownerType: ownerType,
+                ownerId: ownerId
+            });
+        }
+
+        function GetDraftAdditionalOwnerEntities(ownerType, ownerId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetDraftAdditionalOwnerEntities"), {
                 ownerType: ownerType,
                 ownerId: ownerId
             });
@@ -179,6 +190,10 @@
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetSystemDateFormat"));
         }
 
+        function GetAdditionalOwners(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetAdditionalOwners"), input);
+        }
+
         return {
             ValidateCustomer: ValidateCustomer,
             GetZoneLetters: GetZoneLetters,
@@ -199,6 +214,7 @@
             GetRatePlanSettingsData: GetRatePlanSettingsData,
             GetSaleAreaSettingsData: GetSaleAreaSettingsData,
             GetDraftCurrencyId: GetDraftCurrencyId,
+            GetDraftAdditionalOwnerEntities: GetDraftAdditionalOwnerEntities,
             DefineNewRatesConvertedToCurrency: DefineNewRatesConvertedToCurrency,
             GetCustomerDefaultInheritedService: GetCustomerDefaultInheritedService,
             GetZoneInheritedService: GetZoneInheritedService,
@@ -213,7 +229,9 @@
             ValidateImportedData: ValidateImportedData,
             GetOwnerInfo: GetOwnerInfo,
             GetPricingSettings: GetPricingSettings,
-            GetSystemDateFormat:GetSystemDateFormat
+            GetSystemDateFormat: GetSystemDateFormat,
+            GetAdditionalOwners: GetAdditionalOwners,
+            GetFollowMasterRatesBED:GetFollowMasterRatesBED,
 
         };
 

@@ -29,6 +29,9 @@ namespace TOne.WhS.Sales.BP.Activities
         [RequiredArgument]
         public InArgument<IEnumerable<CustomerCountryToChange>> CustomerCountriesToChange { get; set; }
 
+        [RequiredArgument]
+        public OutArgument<List<long>> PricelistFileIds { get; set; }
+
         #endregion
 
 
@@ -44,7 +47,7 @@ namespace TOne.WhS.Sales.BP.Activities
             SalePLChangeType plChangeType;
 
             int userId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId;
-
+            
             if (countriesToChange != null && countriesToChange.Any())
             {
                 plChangeType = SalePLChangeType.CountryAndRate;
@@ -56,7 +59,7 @@ namespace TOne.WhS.Sales.BP.Activities
             var salePricelistFileContext = new SalePricelistFileContext(context)
             {
                 SellingNumberPlanId = ratePlanContext.OwnerSellingNumberPlanId,
-                ProcessInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID,
+                ProcessInstanceId =context.GetRatePlanContext().RootProcessInstanceId,
                 CustomerPriceListChanges = customerPriceListChanges,
                 EffectiveDate = ratePlanContext.EffectiveDate,
                 ChangeType = plChangeType,
@@ -66,6 +69,14 @@ namespace TOne.WhS.Sales.BP.Activities
             };
             var salePricelistManager = new SalePriceListManager();
             salePricelistManager.SavePriceList(salePricelistFileContext);
+
+            List<long> pricelistFileIds = new List<long>();
+            foreach (var customerPriceListChange in customerPriceListChanges)
+            {
+                if (customerPriceListChange != null && customerPriceListChange.PriceLists!=null)
+                pricelistFileIds.AddRange(customerPriceListChange.PriceLists.Select(item => item.PriceList.FileId).ToList<long>());
+            }
+            PricelistFileIds.Set(context, pricelistFileIds);
         }
 
         #region Private Methods

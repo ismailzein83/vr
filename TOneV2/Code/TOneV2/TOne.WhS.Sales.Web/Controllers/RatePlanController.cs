@@ -179,6 +179,14 @@ namespace TOne.WhS.Sales.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetFollowMasterRatesBED")]
+        public bool GetFollowMasterRatesBED()
+        {
+            var manager = new RatePlanManager();
+            return manager.GetFollowMasterRatesBED();
+        }
+
+        [HttpGet]
         [Route("GetSaleAreaSettingsData")]
         public SaleAreaSettingsData GetSaleAreaSettingsData()
         {
@@ -199,6 +207,14 @@ namespace TOne.WhS.Sales.Web.Controllers
         {
             var manager = new RatePlanDraftManager();
             return manager.GetDraftCurrencyId(ownerType, ownerId);
+        }
+
+        [HttpGet]
+        [Route("GetDraftAdditionalOwnerEntities")]
+        public List<AdditionalOwnerEntity> GetDraftAdditionalOwnerEntities(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            var manager = new RatePlanDraftManager();
+            return manager.GetDraftAdditionalOwnerEntities(ownerType, ownerId);
         }
 
         [HttpPost]
@@ -288,5 +304,13 @@ namespace TOne.WhS.Sales.Web.Controllers
         {
             return new RatePlanManager().GetSystemDateTimeFormat(Vanrise.Entities.DateTimeType.Date);
         }
+
+        [HttpPost]
+        [Route("GetAdditionalOwners")]
+        public IEnumerable<CarrierAccountInfo> GetAdditionalOwners(GetAdditionalOwnersInput getAdditionalOwnersInput)
+        {
+            return new RatePlanManager().GetAdditionalOwners(getAdditionalOwnersInput);
+        }
+        
     }
 }

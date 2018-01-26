@@ -16,14 +16,20 @@ namespace TOne.WhS.BusinessEntity.Business
 
             string restoreText = base.GetDescription(context);
 
-            if(restoreText != null)
+            if (restoreText != null)
                 return restoreText;
 
             StateBackupSaleEntity backupData = context.Data as StateBackupSaleEntity;
             if (backupData.OwnerType == SalePriceListOwnerType.Customer)
             {
                 CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-                return String.Format("Backup for customer {0}", carrierAccountManager.GetCarrierAccountName(backupData.OwnerId));
+                var description = String.Format("Backup for customer {0}", carrierAccountManager.GetCarrierAccountName(backupData.OwnerId));
+                if (backupData.MasterOwnerId.HasValue)
+                {
+                    string test = String.Format(" copy from master customer {0}", carrierAccountManager.GetCarrierAccountName(backupData.MasterOwnerId.Value));
+                    description = string.Concat(description, test);
+                }
+                return description;
             }
             else
             {

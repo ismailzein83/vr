@@ -27,11 +27,16 @@ namespace TOne.WhS.Sales.BP.Activities
         public IEnumerable<ExistingRate> ExistingRates { get; set; }
 
         public IEnumerable<ExistingCustomerCountry> ExplicitlyChangedExistingCustomerCountries { get; set; }
+        public long RootProcessInstanceId { get; set; }
     }
 
     public class ProcessRatesOutput
     {
-        public IEnumerable<NewRate> NewRates { get; set; }
+        public IEnumerable<NewRate> OwnerNewRates { get; set; }
+
+        public IEnumerable<NewRate> NewRatesToFillGapsDueToClosingCountry { get; set; }
+
+        public IEnumerable<NewRate> NewRatesToFillGapsDueToChangeSellingProductRates { get; set; }
 
         public IEnumerable<ChangedRate> ChangedRates { get; set; }
 
@@ -67,7 +72,13 @@ namespace TOne.WhS.Sales.BP.Activities
         #region Output Arguments
 
         [RequiredArgument]
-        public OutArgument<IEnumerable<NewRate>> NewRates { get; set; }
+        public OutArgument<IEnumerable<NewRate>> OwnerNewRates { get; set; }
+
+        [RequiredArgument]
+        public OutArgument<IEnumerable<NewRate>> NewRatesToFillGapsDueToChangeSellingProductRates { get; set; }
+
+        [RequiredArgument]
+        public OutArgument<IEnumerable<NewRate>> NewRatesToFillGapsDueToClosingCountry { get; set; }
 
         [RequiredArgument]
         public OutArgument<IEnumerable<ChangedRate>> ChangedRates { get; set; }
@@ -86,7 +97,8 @@ namespace TOne.WhS.Sales.BP.Activities
                 RatesToClose = this.RatesToClose.Get(context),
                 ExistingZones = this.ExistingZones.Get(context),
                 ExistingRates = this.ExistingRates.Get(context),
-                ExplicitlyChangedExistingCustomerCountries = ExplicitlyChangedExistingCustomerCountries.Get(context)
+                ExplicitlyChangedExistingCustomerCountries = ExplicitlyChangedExistingCustomerCountries.Get(context),
+                RootProcessInstanceId = context.GetRatePlanContext().RootProcessInstanceId,
             };
         }
 
@@ -95,8 +107,14 @@ namespace TOne.WhS.Sales.BP.Activities
             IRatePlanContext ratePlanContext = context.GetRatePlanContext();
             handle.CustomData.Add("RatePlanContext", ratePlanContext);
 
-            if (this.NewRates.Get(context) == null)
-                this.NewRates.Set(context, new List<NewRate>());
+            if (this.OwnerNewRates.Get(context) == null)
+                this.OwnerNewRates.Set(context, new List<NewRate>());
+
+            if (this.NewRatesToFillGapsDueToChangeSellingProductRates.Get(context) == null)
+                this.NewRatesToFillGapsDueToChangeSellingProductRates.Set(context, new List<NewRate>());
+
+            if (this.NewRatesToFillGapsDueToClosingCountry.Get(context) == null)
+                this.NewRatesToFillGapsDueToClosingCountry.Set(context, new List<NewRate>());
 
             if (this.ChangedRates.Get(context) == null)
                 this.ChangedRates.Set(context, new List<ChangedRate>());
@@ -120,9 +138,11 @@ namespace TOne.WhS.Sales.BP.Activities
 
             var priceListRateManager = new PriceListRateManager();
 
+            long rootProcessInstanceId = inputArgument.RootProcessInstanceId;
             var processRatesContext = new ProcessRatesContext()
             {
-                ProcessInstanceId = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID,
+
+                ProcessInstanceId = rootProcessInstanceId,
                 UserId = handle.SharedInstanceData.InstanceInfo.InitiatorUserId,
                 OwnerType = ratePlanContext.OwnerType,
                 OwnerId = ratePlanContext.OwnerId,
@@ -147,7 +167,9 @@ namespace TOne.WhS.Sales.BP.Activities
 
             return new ProcessRatesOutput()
             {
-                NewRates = processRatesContext.NewRates,
+                OwnerNewRates = processRatesContext.OwnerNewRates,
+                NewRatesToFillGapsDueToClosingCountry = processRatesContext.NewRatesToFillGapsDueToClosingCountry,
+                NewRatesToFillGapsDueToChangeSellingProductRates = processRatesContext.NewRatesToFillGapsDueToChangeSellingProductRates,
                 ChangedRates = processRatesContext.ChangedRates,
                 CustomerPriceListsByCurrencyId = processRatesContext.CustomerPriceListsByCurrencyId
             };
@@ -155,7 +177,9 @@ namespace TOne.WhS.Sales.BP.Activities
 
         protected override void OnWorkComplete(AsyncCodeActivityContext context, ProcessRatesOutput result)
         {
-            this.NewRates.Set(context, result.NewRates);
+            this.OwnerNewRates.Set(context, result.OwnerNewRates);
+            this.NewRatesToFillGapsDueToChangeSellingProductRates.Set(context, result.NewRatesToFillGapsDueToChangeSellingProductRates);
+            this.NewRatesToFillGapsDueToClosingCountry.Set(context, result.NewRatesToFillGapsDueToClosingCountry);
             this.ChangedRates.Set(context, result.ChangedRates);
             CustomerPriceListsByCurrencyId.Set(context, result.CustomerPriceListsByCurrencyId);
         }
@@ -164,7 +188,13 @@ namespace TOne.WhS.Sales.BP.Activities
 
         private bool DoRateChangesExist(ProcessRatesContext context)
         {
-            if (context.NewRates != null && context.NewRates.Count() > 0)
+            if (context.OwnerNewRates != null && context.OwnerNewRates.Count() > 0)
+                return true;
+
+            if (context.NewRatesToFillGapsDueToClosingCountry != null && context.NewRatesToFillGapsDueToClosingCountry.Count() > 0)
+                return true;
+
+            if (context.NewRatesToFillGapsDueToChangeSellingProductRates != null && context.NewRatesToFillGapsDueToChangeSellingProductRates.Count() > 0)
                 return true;
 
             if (context.ChangedRates != null && context.ChangedRates.Count() > 0)

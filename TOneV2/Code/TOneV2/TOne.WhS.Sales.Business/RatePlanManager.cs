@@ -355,6 +355,11 @@ namespace TOne.WhS.Sales.Business
             return ratePlanSettings;
         }
 
+        public bool GetFollowMasterRatesBED()
+        {
+            return GetRatePlanSettingsData().FollowMasterRatesBED;
+        }
+
         public SaleAreaSettingsData GetSaleAreaSettingsData()
         {
             object saleAreaSettingData = GetSettingData(BusinessEntity.Business.Constants.SaleAreaSettings);
@@ -481,6 +486,28 @@ namespace TOne.WhS.Sales.Business
             return array;
         }
 
+        public IEnumerable<CarrierAccountInfo> GetAdditionalOwners(GetAdditionalOwnersInput getAdditionalOwnersInput)
+        {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            var sellingProductId = carrierAccountManager.GetSellingProductId(getAdditionalOwnersInput.OwnerId);
+
+            Func<CarrierAccountInfo, bool> filterFunc = (carrierAccountInfo) =>
+            {
+                if (getAdditionalOwnersInput.ExecludedOwnerIds != null && getAdditionalOwnersInput.ExecludedOwnerIds.Contains(carrierAccountInfo.CarrierAccountId))
+                    return false;
+                else if (getAdditionalOwnersInput.OwnerId == carrierAccountInfo.CarrierAccountId)
+                    return false;
+                return true;
+            };
+
+            return carrierAccountManager.GetCarrierAccountsAssignedToSellingProduct(sellingProductId).FindAllRecords(filterFunc);
+        }
+
+        public void SetStateBackupIdForOwnerPricelists(long processInstanceId, SalePriceListOwnerType ownerType, int ownerId, long stateBackupId)
+        {
+            var ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();
+            ratePlanDataManager.SetStateBackupIdForOwnerPricelists(processInstanceId, ownerType, ownerId, stateBackupId);
+        }
         #endregion
 
         #region Private Methods
@@ -1211,7 +1238,7 @@ namespace TOne.WhS.Sales.Business
             int sellingProductIdValue;
             Dictionary<int, DateTime> countryBEDsByCountryIdValue;
             IEnumerable<long> zoneIds = saleZones.MapRecords(x => x.SaleZoneId);
-            
+
             if (ownerType == SalePriceListOwnerType.SellingProduct)
             {
                 sellingProductIdValue = ownerId;
@@ -1432,7 +1459,7 @@ namespace TOne.WhS.Sales.Business
                 Name = "CountryLog",
                 Content = memoryStream.ToArray(),
                 Extension = ".xlsx",
-                IsTemp=true,
+                IsTemp = true,
             });
         }
 
@@ -1639,5 +1666,10 @@ namespace TOne.WhS.Sales.Business
                 CountryIdsToClose = countryIdsToClose;
             }
         }
+    }
+    public class GetAdditionalOwnersInput
+    {
+        public int OwnerId { get; set; }
+        public List<int> ExecludedOwnerIds { get; set; }
     }
 }

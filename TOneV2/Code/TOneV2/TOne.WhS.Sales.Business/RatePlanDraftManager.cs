@@ -73,7 +73,7 @@ namespace TOne.WhS.Sales.Business
                 IEnumerable<DraftNewCountry> newCountries = (newChanges.CountryChanges != null) ? newChanges.CountryChanges.NewCountries : null;
                 IEnumerable<int> removedCountryIds = GetRemovedCountryIds(existingCountries, newCountries);
                 allChanges.CountryChanges = newChanges.CountryChanges;
-
+                allChanges.AdditionalOwnerEntities = newChanges.AdditionalOwnerEntities;
                 allChanges.ZoneChanges = MergeZoneChanges(existingChanges.ZoneChanges, newChanges.ZoneChanges, removedCountryIds);
 
                 return allChanges;
@@ -127,6 +127,15 @@ namespace TOne.WhS.Sales.Business
                 return draft.CurrencyId;
             return null;
         }
+
+        public List<AdditionalOwnerEntity> GetDraftAdditionalOwnerEntities(SalePriceListOwnerType ownerType, int ownerId)
+        {
+            Changes draft = GetDraft(ownerType, ownerId);
+            if (draft != null)
+                return draft.AdditionalOwnerEntities;
+            return null;
+        }
+
         public SellingZonesWithDefaultRatesTaskData GetSellingZonesWithDefaultRatesTaskData(SalePriceListOwnerType ownerType, int ownerId)
         {
             IRatePlanDataManager ratePlanDataManager = SalesDataManagerFactory.GetDataManager<IRatePlanDataManager>();

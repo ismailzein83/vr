@@ -9,6 +9,7 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Business;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.BusinessProcess;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
@@ -28,6 +29,9 @@ namespace TOne.WhS.Sales.BP.Activities
         [RequiredArgument]
         public InArgument<DateTime> EffectiveDate { get; set; }
 
+        [RequiredArgument]
+        public InArgument<bool> IsAdditionalOwner { get; set; }
+
         #endregion
 
         protected override void CacheMetadata(CodeActivityMetadata metadata)
@@ -40,7 +44,7 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             SalePriceListOwnerType ownerType = OwnerType.Get(context);
             int ownerId = OwnerId.Get(context);
-
+            bool isAdditionalOwner = IsAdditionalOwner.Get(context);
             PricingSettings pricingSettings = UtilitiesManager.GetPricingSettings(ownerType, ownerId);
 
             int currencyId = CurrencyId.Get(context);
@@ -53,6 +57,7 @@ namespace TOne.WhS.Sales.BP.Activities
             RatePlanContext ratePlanContext = context.GetRatePlanContext() as RatePlanContext;
             ratePlanContext.OwnerType = ownerType;
             ratePlanContext.OwnerId = ownerId;
+            ratePlanContext.IsAdditionalOwner = isAdditionalOwner;
             ratePlanContext.OwnerSellingNumberPlanId = GetOwnerSellingNumberPlanId(ownerType, ownerId);
             ratePlanContext.CurrencyId = currencyId;
             ratePlanContext.setRatePlanContextPricingSettings(pricingSettings);
@@ -68,7 +73,16 @@ namespace TOne.WhS.Sales.BP.Activities
             {
                 ratePlanContext.MinimumZoneBED = new SaleZoneManager().GetSaleZonesBySellingNumberPlan(ratePlanContext.OwnerSellingNumberPlanId).OrderBy(x => x.BED).First().BED;
                 ratePlanContext.IsFirstSellingProductOffer = !new SalePriceListManager().CheckIfAnyPriceListExists(SalePriceListOwnerType.SellingProduct, ownerId);
-            }   
+            }
+
+            if (isAdditionalOwner)
+            {
+                if (context.GetSharedInstanceData().InstanceInfo.ParentProcessID.HasValue)
+                    ratePlanContext.RootProcessInstanceId = context.GetSharedInstanceData().InstanceInfo.ParentProcessID.Value;
+                else throw new InvalidWorkflowException("ParentProcessID Not Found");
+            }
+            else
+                ratePlanContext.RootProcessInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
         }
 
         #region Private Methods

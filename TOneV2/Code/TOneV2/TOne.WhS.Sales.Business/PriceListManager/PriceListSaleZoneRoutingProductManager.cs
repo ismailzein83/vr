@@ -16,7 +16,7 @@ namespace TOne.WhS.Sales.Business
 		public void ProcessZoneRoutingProducts(IProcessSaleZoneRoutingProductsContext context)
 		{
             var newSaleZoneRoutingProducts = new List<NewSaleZoneRoutingProduct>();
-            Process(context.SaleZoneRoutingProductsToAdd, context.SaleZoneRoutingProductsToClose, context.ExistingSaleZoneRoutingProducts, context.ExistingZones, context.ExplicitlyChangedExistingCustomerCountries, newSaleZoneRoutingProducts, context.OwnerId);
+            Process(context.SaleZoneRoutingProductsToAdd, context.SaleZoneRoutingProductsToClose, context.ExistingSaleZoneRoutingProducts, context.ExistingZones, context.ExplicitlyChangedExistingCustomerCountries, newSaleZoneRoutingProducts, context.OwnerType,context.OwnerId);
 
             List<NewSaleZoneRoutingProduct> newRoutingProducts = new List<NewSaleZoneRoutingProduct>();
             newRoutingProducts.AddRange(context.SaleZoneRoutingProductsToAdd.SelectMany(x => x.NewSaleZoneRoutingProducts));
@@ -27,7 +27,7 @@ namespace TOne.WhS.Sales.Business
 
 		#region Private Methods
 
-        private void Process(IEnumerable<SaleZoneRoutingProductToAdd> routingProductsToAdd, IEnumerable<SaleZoneRoutingProductToClose> routingProductsToClose, IEnumerable<ExistingSaleZoneRoutingProduct> existingRoutingProducts, IEnumerable<ExistingZone> existingZones, IEnumerable<ExistingCustomerCountry> explicitlyChangedExistingCustomerCountries, List<NewSaleZoneRoutingProduct> newSaleZoneRoutingProducts,int ownerId)
+        private void Process(IEnumerable<SaleZoneRoutingProductToAdd> routingProductsToAdd, IEnumerable<SaleZoneRoutingProductToClose> routingProductsToClose, IEnumerable<ExistingSaleZoneRoutingProduct> existingRoutingProducts, IEnumerable<ExistingZone> existingZones, IEnumerable<ExistingCustomerCountry> explicitlyChangedExistingCustomerCountries, List<NewSaleZoneRoutingProduct> newSaleZoneRoutingProducts, SalePriceListOwnerType ownerType, int ownerId)
 		{
 			Dictionary<int, List<ExistingZone>> existingZonesByCountry;
 			ExistingZonesByName existingZonesByName;
@@ -81,7 +81,7 @@ namespace TOne.WhS.Sales.Business
                     if (countryRange == null)
                         throw new DataIntegrityValidationException(string.Format("The BED of country '{0}' was not found", countryName));
 
-                    ProcessChangedExistingCountry(changedExistingCountry, matchedExistingZones, countryRange, customerZoneRoutingProductHistoryLocator, newSaleZoneRoutingProducts,ownerId,sellingProductId);
+                    ProcessChangedExistingCountry(changedExistingCountry, matchedExistingZones, countryRange, customerZoneRoutingProductHistoryLocator, newSaleZoneRoutingProducts,ownerType,ownerId,sellingProductId);
                 }
             }
 		}
@@ -212,7 +212,7 @@ namespace TOne.WhS.Sales.Business
 			}
 		}
 
-        private void ProcessChangedExistingCountry(ExistingCustomerCountry changedExistingCountry, IEnumerable<ExistingZone> matchedExistingZones, CountryRange countryRange, CustomerZoneRoutingProductHistoryLocator customerZoneRoutingProductHistoryLocator, List<NewSaleZoneRoutingProduct> newSaleZoneRoutingProducts,int ownerId,int sellingproductId)
+        private void ProcessChangedExistingCountry(ExistingCustomerCountry changedExistingCountry, IEnumerable<ExistingZone> matchedExistingZones, CountryRange countryRange, CustomerZoneRoutingProductHistoryLocator customerZoneRoutingProductHistoryLocator, List<NewSaleZoneRoutingProduct> newSaleZoneRoutingProducts, SalePriceListOwnerType ownerType, int ownerId, int sellingproductId)
 		{
 			foreach (ExistingZone existingZone in matchedExistingZones)
 			{
@@ -229,11 +229,11 @@ namespace TOne.WhS.Sales.Business
 
 				}
                 if (countryRange.EED.VRGreaterThan(countryRange.BED) && existingZone.BED < changedExistingCountry.EED.Value)
-                    AddZoneRoutingProducts(existingZone, customerZoneRoutingProductHistoryLocator, countryRange, newSaleZoneRoutingProducts, ownerId, sellingproductId);
+                    AddZoneRoutingProducts(existingZone, customerZoneRoutingProductHistoryLocator, countryRange, newSaleZoneRoutingProducts,ownerType, ownerId, sellingproductId);
 			}
 		}
 
-        private void AddZoneRoutingProducts(ExistingZone existingZone, CustomerZoneRoutingProductHistoryLocator customerZoneRoutingProductHistoryLocator, CountryRange countryRange, List<NewSaleZoneRoutingProduct> newSaleZoneRoutingProducts,int ownerId, int sellingProductId)
+        private void AddZoneRoutingProducts(ExistingZone existingZone, CustomerZoneRoutingProductHistoryLocator customerZoneRoutingProductHistoryLocator, CountryRange countryRange, List<NewSaleZoneRoutingProduct> newSaleZoneRoutingProducts, SalePriceListOwnerType ownerType, int ownerId, int sellingProductId)
         {
             List<SaleEntityZoneRoutingProductHistoryRecord> customerZoneRoutingProductHistory = customerZoneRoutingProductHistoryLocator.GetCustomerZoneRoutingProductHistory(ownerId, sellingProductId, existingZone.Name, existingZone.CountryId).ToList();
             Action<SaleEntityZoneRoutingProductHistoryRecord, ZoneRoutingProduct> mapSaleZoneroutingProduct = (saleEntityZoneRoutingProductHistoryRecord, zoneRoutingProduct) =>
@@ -254,6 +254,8 @@ namespace TOne.WhS.Sales.Business
                 {
                     newSaleZoneRoutingProducts.Add(new NewSaleZoneRoutingProduct()
                     {
+                        OwnerId = ownerId,
+                        OwnerType = ownerType,
                         RoutingProductId = zoneRoutingProduct.RoutingProductId,
                         SaleZoneId = zoneRoutingProduct.SaleZoneId,
                         BED = zoneRoutingProduct.BED,

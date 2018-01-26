@@ -15,13 +15,14 @@ namespace TOne.WhS.Sales.BP.Activities
     public class ApplySaleZoneServicePreviewsToDBInput
     {
         public IEnumerable<SaleZoneServicePreview> SaleZoneServicePreviews { get; set; }
+        public long RootProcessInstanceId { get; set; }
     }
 
     public class ApplySaleZoneServicePreviewsToDBOutput
     {
 
     }
-    
+
     #endregion
 
     public class ApplySaleZoneServicePreviewsToDB : BaseAsyncActivity<ApplySaleZoneServicePreviewsToDBInput, ApplySaleZoneServicePreviewsToDBOutput>
@@ -37,7 +38,8 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             return new ApplySaleZoneServicePreviewsToDBInput()
             {
-                SaleZoneServicePreviews = this.SaleZoneServicePreviews.Get(context)
+                SaleZoneServicePreviews = this.SaleZoneServicePreviews.Get(context),
+                RootProcessInstanceId = context.GetRatePlanContext().RootProcessInstanceId,
             };
         }
 
@@ -49,11 +51,12 @@ namespace TOne.WhS.Sales.BP.Activities
         protected override ApplySaleZoneServicePreviewsToDBOutput DoWorkWithResult(ApplySaleZoneServicePreviewsToDBInput inputArgument, AsyncActivityHandle handle)
         {
             IEnumerable<SaleZoneServicePreview> saleZoneServicePreviews = inputArgument.SaleZoneServicePreviews;
+            long rootProcessInstanceId = inputArgument.RootProcessInstanceId;
 
             if (saleZoneServicePreviews != null)
             {
                 var dataManager = SalesDataManagerFactory.GetDataManager<ISaleZoneServicePreviewDataManager>();
-                dataManager.ProcessInstanceId = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
+                dataManager.ProcessInstanceId = rootProcessInstanceId;
                 dataManager.ApplySaleZoneServicePreviewsToDB(saleZoneServicePreviews);
             }
 

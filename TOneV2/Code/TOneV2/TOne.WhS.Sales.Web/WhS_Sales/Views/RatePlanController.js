@@ -46,6 +46,9 @@
         var ratePlanSettingsData;
         var saleAreaSettingsData;
 
+        var additionalOwnerEntities;
+        var additionalOwnerIds;
+
         var exclusiveSessionObject = null;
         defineScope();
         load();
@@ -80,9 +83,13 @@
 
                 if (selectedId == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) {
                     $scope.selectedCustomer = undefined;
+                    $scope.showSaveButtonForCustomer = false;
+                    $scope.showSaveButtonForSellingProduct = true;
                 }
                 else if (selectedId == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
                     $scope.selectedSellingProduct = undefined;
+                    $scope.showSaveButtonForCustomer = true;
+                    $scope.showSaveButtonForSellingProduct = false;
                 }
             };
 
@@ -130,7 +137,7 @@
                                 getSellingProductCurrencyIdDeferred.resolve();
                                 loadOwnerInfoDeferred.resolve();
                                 loadOwnerPricingSettingsDeferred.resolve();
-                                onTryTakeFailure(response).then(function () {$scope.isLoadingFilterSection = false;});
+                                onTryTakeFailure(response).then(function () { $scope.isLoadingFilterSection = false; });
                             }
                         });
                     }).catch(function (error) {
@@ -184,7 +191,7 @@
                                 onCustomerChanged(selectedCustomerId).then(function () { onCustomerChangedDeferred.resolve(); }).catch(function (error) { onCustomerChangedDeferred.reject(error); });
                             }
                             else
-                                onTryTakeFailure(response).then(function () {$scope.isLoadingFilterSection = false;});
+                                onTryTakeFailure(response).then(function () { $scope.isLoadingFilterSection = false; });
                         });
                     }).catch(function (error) {
                         doRunningProcessesExistDeferred.reject(error);
@@ -663,7 +670,8 @@
             $window.onbeforeunload = function () {
                 releaseSession();
             };
-            defineApplyButtonMenuActions();
+            defineCustomerApplyButtonMenuActions();
+            defineSellingProductApplyButtonMenuActions();
         }
         function load() {
             $scope.isLoadingFilterSection = true;
@@ -932,7 +940,8 @@
                     CurrencyId: getCurrencyId(),
                     DefaultChanges: defaultDraft,
                     ZoneChanges: zoneDrafts,
-                    CountryChanges: countryChanges
+                    CountryChanges: countryChanges,
+                    AdditionalOwnerEntities: additionalOwnerEntities
                 };
             }
             return newDraft;
@@ -1046,19 +1055,40 @@
             $scope.showApplyButton = show;
         }
 
-        function defineApplyButtonMenuActions() {
-            $scope.applyButtonMenuActions = [{
+        function defineSellingProductApplyButtonMenuActions() {
+            $scope.sellingProductApplyButtonMenuActions = [{
                 name: "Draft",
                 clicked: function () {
                     return saveDraft(false).then(function () {
                         VRNotificationService.showSuccess("Draft saved");
                     });
                 }
-            }, {
-                name: "Offer",
-                clicked: applyDraft
+            },
+             {
+                 name: "Offer",
+                 clicked: applyDraft
+             }];
+        }
+
+        function defineCustomerApplyButtonMenuActions() {
+            $scope.customerApplyButtonMenuActions = [{
+                name: "Draft",
+                clicked: function () {
+                    return saveDraft(false).then(function () {
+                        VRNotificationService.showSuccess("Draft saved");
+                    });
+                }
+            },
+             {
+                 name: "Offer",
+                 clicked: applyDraft
+             },
+            {
+                name: "Offer for customers",
+                clicked: applyDraftOnMultipleCustomers
             }];
         }
+
         function applyDraft() {
             var promises = [];
 
@@ -1167,6 +1197,133 @@
             });
 
             return UtilsService.waitMultiplePromises(promises);
+        }
+
+        function applyDraftOnMultipleCustomers() {
+            var promises = [];
+
+            var ownerId = getOwnerId();
+            var ownerTypeValue = ownerTypeSelectorAPI.getSelectedIds();
+
+            var getEntityIdsPromise = getEntityIds(ownerTypeSelectorAPI.getSelectedIds(), ownerId);
+            promises.push(getEntityIdsPromise);
+
+            var hasRunningProcessesDeferred = UtilsService.createPromiseDeferred();
+            promises.push(hasRunningProcessesDeferred.promise);
+
+            var applyOfferDeferred = UtilsService.createPromiseDeferred();
+            promises.push(applyOfferDeferred.promise);
+
+            getEntityIdsPromise.then(function (entityIds) {
+
+                hasRunningProcessesForCustomerOrSellingProduct(entityIds, ownerId, ownerTypeValue).then(function (response) {
+
+                    hasRunningProcessesDeferred.resolve();
+
+                    if (response.hasRunningProcesses) {
+                        applyOfferDeferred.resolve();
+                        VRNotificationService.showWarning("Cannot start process because another instance is still running");
+                    }
+                    else {
+                        var ownerId = getOwnerId();
+                        WhS_Sales_RatePlanService.applyDraftOnMultipleCustomers(executeApplyDraftOnMultipleCustomersProcess, ownerId);
+                        applyOfferDeferred.resolve();
+                    }
+                });
+            });
+
+            return UtilsService.waitMultiplePromises(promises);
+        }
+        function executeApplyDraftOnMultipleCustomersProcess(additionalOwners, followMasterRatesBED) {
+            additionalOwnerEntities = [];
+            additionalOwnerIds = [];
+            if (additionalOwners != null) {
+                for (var i = 0; i < additionalOwners.length; i++) {
+                    additionalOwnerEntities.push(additionalOwners[i].Entity);
+                    additionalOwnerIds.push(additionalOwners[i].Entity.EntityId);
+                }
+            }
+            var applyOfferDeferred = UtilsService.createPromiseDeferred();
+            var applyOfferPromises = [];
+
+            var saveChangesPromise = saveDraft(false);
+            applyOfferPromises.push(saveChangesPromise);
+
+            var createProcessDeferred = UtilsService.createPromiseDeferred();
+            applyOfferPromises.push(createProcessDeferred.promise);
+
+            saveChangesPromise.then(function () {
+
+                var ownerTypeValue = ownerTypeSelectorAPI.getSelectedIds();
+                var ownerId = getOwnerId();
+
+                var inputArguments = {
+                    $type: 'TOne.WhS.Sales.BP.Arguments.RatePlanInput, TOne.WhS.Sales.BP.Arguments',
+                    OwnerType: ownerTypeValue,
+                    OwnerId: ownerId,
+                    CurrencyId: getCurrencyId(),
+                    EffectiveDate: UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime()),
+                    AdditionalOwnerIds: additionalOwnerIds,
+                    FollowMasterRatesBED: followMasterRatesBED,
+                };
+
+                var input = {
+                    InputArguments: inputArguments
+                };
+
+                BusinessProcess_BPInstanceAPIService.CreateNewProcess(input).then(function (response) {
+                    createProcessDeferred.resolve();
+                    if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
+
+                        var processTrackingContext = {
+                            onClose: function (bpInstanceClosureContext) {
+                                if (bpInstanceClosureContext != undefined && bpInstanceClosureContext.bpInstanceStatusValue === BPInstanceStatusEnum.Completed.value) {
+
+                                    resetRatePlan();
+
+                                    $scope.isLoading = true;
+                                    var promises = [];
+
+                                    var loadOwnerInfoPromise = loadOwnerInfo();
+                                    promises.push(loadOwnerInfoPromise);
+
+                                    if (ownerTypeValue == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value) {
+
+                                        var doesOwnerDraftExistDeferred = UtilsService.createPromiseDeferred();
+                                        promises.push(doesOwnerDraftExistDeferred.promise);
+
+                                        var getCountryChangesPromise = getCountryChanges(ownerId);
+                                        promises.push(getCountryChangesPromise);
+
+                                        getCountryChangesPromise.then(function () {
+                                            doesOwnerDraftExist().then(function () {
+                                                doesOwnerDraftExistDeferred.resolve();
+                                            }).catch(function (error) {
+                                                doesOwnerDraftExistDeferred.reject(error);
+                                            });
+                                        });
+                                    }
+
+                                    UtilsService.waitMultiplePromises(promises).finally(function () {
+                                        $scope.isLoading = false;
+                                    });
+                                }
+                            }
+                        };
+
+                        BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, processTrackingContext);
+                    }
+                }).catch(function (error) {
+                    createProcessDeferred.reject(error);
+                });
+            });
+
+            UtilsService.waitMultiplePromises(applyOfferPromises).then(function () {
+                applyOfferDeferred.resolve();
+            }).catch(function (error) {
+                applyOfferDeferred.reject(error);
+            });
+            return applyOfferDeferred.promise;
         }
 
         function getOwnerId() {

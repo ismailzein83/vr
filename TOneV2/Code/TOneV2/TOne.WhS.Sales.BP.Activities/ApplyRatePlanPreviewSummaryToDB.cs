@@ -13,6 +13,7 @@ namespace TOne.WhS.Sales.BP.Activities
     public class ApplyRatePlanPreviewSummaryToDBInput
     {
         public RatePlanPreviewSummary RatePlanPreviewSummary { get; set; }
+        public long RootProcessInstanceId { get; set; }
     }
 
     public class ApplyRatePlanPreviewSummaryToDBOutput
@@ -33,7 +34,8 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             return new ApplyRatePlanPreviewSummaryToDBInput()
             {
-                RatePlanPreviewSummary = this.RatePlanPreviewSummary.Get(context)
+                RatePlanPreviewSummary = this.RatePlanPreviewSummary.Get(context),
+                RootProcessInstanceId = context.GetRatePlanContext().RootProcessInstanceId,
             };
         }
 
@@ -50,7 +52,8 @@ namespace TOne.WhS.Sales.BP.Activities
                 throw new NullReferenceException("summary");
 
             var dataManager = SalesDataManagerFactory.GetDataManager<IRatePlanPreviewSummaryDataManager>();
-            dataManager.ProcessInstanceId = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
+            long rootProcessInstanceId = inputArgument.RootProcessInstanceId;
+            dataManager.ProcessInstanceId = rootProcessInstanceId;
             dataManager.ApplyRatePlanPreviewSummaryToDB(summary);
 
             return new ApplyRatePlanPreviewSummaryToDBOutput() { };

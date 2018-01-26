@@ -62,6 +62,8 @@ app.directive('vrWhsBeRoutingproductpreviewGrid', ['WhS_BE_SalePriceListChangeAP
             var api = {};
 
             api.load = function (query) {
+                if (query != null)
+                    $scope.scopeModel.showCustomerName = query.ShowCustomerName;
                 return gridAPI.retrieveData(query);
             };
             api.gridHasData = function () {

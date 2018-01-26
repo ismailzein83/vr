@@ -24,6 +24,8 @@ namespace TOne.WhS.Sales.BP.Activities
         [RequiredArgument]
         public InArgument<int> UserId { get; set; }
 
+        public InArgument<int?> MasterOwnerId { get; set; }
+
         [RequiredArgument]
         public OutArgument<long> StateBackupId { get; set; }
 
@@ -31,6 +33,7 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             int ownerId = this.OwnerId.Get(context);
             int userId = this.UserId.Get(context);
+            int? masterOwnerId = this.MasterOwnerId.Get(context);
 
             SalePriceListOwnerType ownerType = this.OwnerType.Get(context);
 
@@ -38,7 +41,8 @@ namespace TOne.WhS.Sales.BP.Activities
             {
                 OwnerId = ownerId,
                 OwnerType = ownerType,
-                UserId = userId
+                UserId = userId,
+                MasterOwnerId = masterOwnerId,
             };
             if (ownerType == SalePriceListOwnerType.SellingProduct)
             {

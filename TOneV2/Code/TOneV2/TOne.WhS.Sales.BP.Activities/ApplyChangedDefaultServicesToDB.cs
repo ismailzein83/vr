@@ -15,6 +15,7 @@ namespace TOne.WhS.Sales.BP.Activities
     public class ApplyChangedDefaultServicesToDBInput
     {
         public IEnumerable<ChangedDefaultService> ChangedDefaultServices { get; set; }
+        public long RootProcessInstanceId { get; set; }
     }
 
     public class ApplyChangedDefaultServicesToDBOutput
@@ -37,7 +38,8 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             return new ApplyChangedDefaultServicesToDBInput()
             {
-                ChangedDefaultServices = this.ChangedDefaultServices.Get(context)
+                ChangedDefaultServices = this.ChangedDefaultServices.Get(context),
+                RootProcessInstanceId = context.GetRatePlanContext().RootProcessInstanceId,
             };
         }
 
@@ -49,9 +51,9 @@ namespace TOne.WhS.Sales.BP.Activities
         protected override ApplyChangedDefaultServicesToDBOutput DoWorkWithResult(ApplyChangedDefaultServicesToDBInput inputArgument, AsyncActivityHandle handle)
         {
             IEnumerable<ChangedDefaultService> changedDefaultServices = inputArgument.ChangedDefaultServices;
-
+            long rootProcessInstanceId = inputArgument.RootProcessInstanceId;
             var dataManager = SalesDataManagerFactory.GetDataManager<IChangedDefaultServiceDataManager>();
-            dataManager.ProcessInstanceId = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
+            dataManager.ProcessInstanceId = rootProcessInstanceId;
             dataManager.ApplyChangedDefaultServicesToDB(changedDefaultServices);
 
             return new ApplyChangedDefaultServicesToDBOutput() { };

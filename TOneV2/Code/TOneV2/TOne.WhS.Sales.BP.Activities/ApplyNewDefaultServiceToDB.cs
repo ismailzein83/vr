@@ -15,13 +15,14 @@ namespace TOne.WhS.Sales.BP.Activities
     public class ApplyNewDefaultServiceToDBInput
     {
         public NewDefaultService NewDefaultService { get; set; }
+        public long RootProcessInstanceId { get; set; }
     }
 
     public class ApplyNewDefaultServiceToDBOutput
     {
 
     }
-    
+
     #endregion
 
     public class ApplyNewDefaultServiceToDB : BaseAsyncActivity<ApplyNewDefaultServiceToDBInput, ApplyNewDefaultServiceToDBOutput>
@@ -37,7 +38,8 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             return new ApplyNewDefaultServiceToDBInput()
             {
-                NewDefaultService = this.NewDefaultService.Get(context)
+                NewDefaultService = this.NewDefaultService.Get(context),
+                RootProcessInstanceId = context.GetRatePlanContext().RootProcessInstanceId,
             };
         }
 
@@ -53,7 +55,8 @@ namespace TOne.WhS.Sales.BP.Activities
             if (newDefaultService != null)
             {
                 var dataManager = SalesDataManagerFactory.GetDataManager<INewDefaultServiceDataManager>();
-                dataManager.ProcessInstanceId = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
+                long rootProcessInstanceId = inputArgument.RootProcessInstanceId;
+                dataManager.ProcessInstanceId = rootProcessInstanceId;
                 dataManager.Insert(newDefaultService);
             }
 

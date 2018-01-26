@@ -72,6 +72,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppendPricelistFileIds.cs" />
     <Compile Include="ApplyChangedCustomerCountriesToDB.cs" />
     <Compile Include="ApplyChangedCustomerCountryPreviewsToDB.cs" />
     <Compile Include="ApplyChangedDefaultServicesToDB.cs" />
@@ -89,11 +90,13 @@
     <Compile Include="BackupData.cs" />
     <Compile Include="CleanTemporaryTables.cs" />
     <Compile Include="DeleteRatePlanDraft.cs" />
+    <Compile Include="FilterChanges.cs" />
     <Compile Include="GetExistingCustomerCountries.cs" />
     <Compile Include="FillArgumentFromContext.cs" />
     <Compile Include="GetZonesWithMissingRates.cs" />
     <Compile Include="LogEmailedCustomers.cs" />
     <Compile Include="NotificationContext.cs" />
+    <Compile Include="GetOwnerName.cs" />
     <Compile Include="ReserveOwnerPriceListId.cs" />
     <Compile Include="SaveRoutingProductChanges.cs" />
     <Compile Include="SetContextActionRateLocator.cs" />
@@ -113,6 +116,7 @@
     <Compile Include="SetContextInheritedRatesByZoneId.cs" />
     <Compile Include="SetDefaultRates.cs" />
     <Compile Include="SetRatePlanContext.cs" />
+    <Compile Include="SetStateBackupIdForOwnerPricelists.cs" />
     <Compile Include="StructureDataByCountry.cs" />
     <Compile Include="StructureDefaultData.cs" />
     <Compile Include="PrepareDefaultRoutingProductPreview.cs" />

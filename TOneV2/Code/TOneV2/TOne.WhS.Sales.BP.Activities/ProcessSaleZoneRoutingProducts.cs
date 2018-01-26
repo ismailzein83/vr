@@ -98,6 +98,7 @@ namespace TOne.WhS.Sales.BP.Activities
             RatePlanContext ratePlanContext = handle.CustomData.GetRecord("RatePlanContext") as RatePlanContext;
             var processSaleZoneRoutingProductsContext = new ProcessSaleZoneRoutingProductsContext()
             {
+                OwnerType = ratePlanContext.OwnerType,
                 OwnerId = ratePlanContext.OwnerId,
                 SaleZoneRoutingProductsToAdd = saleZoneRoutingProductsToAdd,
                 SaleZoneRoutingProductsToClose = saleZoneRoutingProductsToClose,

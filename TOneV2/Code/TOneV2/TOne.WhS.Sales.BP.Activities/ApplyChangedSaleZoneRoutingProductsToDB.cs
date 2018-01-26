@@ -13,6 +13,7 @@ namespace TOne.WhS.Sales.BP.Activities
     public class ApplyChangedSaleZoneRoutingProductsToDBInput
     {
         public IEnumerable<ChangedSaleZoneRoutingProduct> ChangedSaleZoneRoutingProducts { get; set; }
+        public long RootProcessInstanceId { get; set; }
     }
 
     public class ApplyChangedSaleZoneRoutingProductsToDBOutput
@@ -33,7 +34,8 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             return new ApplyChangedSaleZoneRoutingProductsToDBInput()
             {
-                ChangedSaleZoneRoutingProducts = this.ChangedSaleZoneRoutingProducts.Get(context)
+                ChangedSaleZoneRoutingProducts = this.ChangedSaleZoneRoutingProducts.Get(context),
+                RootProcessInstanceId = context.GetRatePlanContext().RootProcessInstanceId,
             };
         }
 
@@ -45,9 +47,9 @@ namespace TOne.WhS.Sales.BP.Activities
         protected override ApplyChangedSaleZoneRoutingProductsToDBOutput DoWorkWithResult(ApplyChangedSaleZoneRoutingProductsToDBInput inputArgument, AsyncActivityHandle handle)
         {
             IEnumerable<ChangedSaleZoneRoutingProduct> changedSaleZoneRoutingProducts = inputArgument.ChangedSaleZoneRoutingProducts;
-
+            long rootProcessInstanceId = inputArgument.RootProcessInstanceId;
             var dataManager = SalesDataManagerFactory.GetDataManager<IChangedSaleZoneRoutingProductDataManager>();
-            dataManager.ProcessInstanceId = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
+            dataManager.ProcessInstanceId = rootProcessInstanceId;
             dataManager.ApplyChangedSaleZoneRoutingProductsToDB(changedSaleZoneRoutingProducts);
 
             return new ApplyChangedSaleZoneRoutingProductsToDBOutput() { };

@@ -313,6 +313,8 @@
     <Content Include="WhS_Sales\Services\RatePlanService.js" />
     <Content Include="WhS_Sales\Services\SellingRuleService.js" />
     <Content Include="WhS_Sales\Services\CountryWithDefaultRateService.js" />
+    <Content Include="WhS_Sales\Views\ApplyDraftOnMultipleCustomers.html" />
+    <Content Include="WhS_Sales\Views\ApplyDraftOnMultipleCustomers.js" />
     <Content Include="WhS_Sales\Views\BulkAction\BulkActionWizard.html" />
     <Content Include="WhS_Sales\Views\BulkAction\BulkActionWizardController.js" />
     <Content Include="WhS_Sales\Views\CodeComparison\CodeComparisonManagement.html" />

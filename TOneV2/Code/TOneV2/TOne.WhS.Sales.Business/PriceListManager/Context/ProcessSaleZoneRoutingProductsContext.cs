@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 
 namespace TOne.WhS.Sales.Business
 {
     public class ProcessSaleZoneRoutingProductsContext : IProcessSaleZoneRoutingProductsContext
     {
+        public SalePriceListOwnerType OwnerType { get; set; }
+
         public int OwnerId { get; set; }
 
         public IEnumerable<SaleZoneRoutingProductToAdd> SaleZoneRoutingProductsToAdd { get; set; }

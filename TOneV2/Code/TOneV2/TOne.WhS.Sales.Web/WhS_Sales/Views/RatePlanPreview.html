@@ -6,17 +6,17 @@
                 <vr-tab header="'Customer Rates'">
                     <span ng-show="scopeModel.tabCustomerRateObject.showTab">
                         <vr-row>
-                                <span ng-show="scopeModel.showCarrierAccountSelector">
-                                    <vr-whs-be-carrieraccount-selector on-ready="scopeModel.onRateCarrierAccountSelectorReady"
-                                                                       getcustomers
-                                                                       ismultipleselection
-                                                                       selectedvalues="selectedCustomers"
-                                                                       normal-col-num="2"
-                                                                       hideremoveicon>
-                                    </vr-whs-be-carrieraccount-selector>
-                                </span>
-                            <vr-columns normal-col-num="1" ng-show="scopeModel.showCarrierAccountSelector" withemptyline>
-                                <vr-button type="Load" data-onclick="scopeModel.loadRatePrview" standalone ></vr-button>
+                            <span ng-show="scopeModel.showRateCarrierAccountSelector">
+                                <vr-whs-be-carrieraccount-selector on-ready="scopeModel.onRateCarrierAccountSelectorReady"
+                                                                   getcustomers
+                                                                   ismultipleselection
+                                                                   selectedvalues="selectedCustomers"
+                                                                   normal-col-num="2"
+                                                                   hideremoveicon>
+                                </vr-whs-be-carrieraccount-selector>
+                            </span>
+                            <vr-columns normal-col-num="1" ng-show="scopeModel.showRateCarrierAccountSelector" withemptyline>
+                                <vr-button type="Load" data-onclick="scopeModel.loadRatePrview" standalone></vr-button>
 
                             </vr-columns>
                         </vr-row>
@@ -53,17 +53,17 @@
                     <span ng-show="scopeModel.tabCustomerRPObject.showTab ">
                         <vr-row>
                             <vr-row>
-                                    <span ng-show="scopeModel.showCarrierAccountSelector">
-                                        <vr-whs-be-carrieraccount-selector on-ready="scopeModel.onRoutingProductCarrierAccountSelectorReady"
-                                                                           getcustomers
-                                                                           ismultipleselection
-                                                                           selectedvalues="selectedCustomers"
-                                                                           normal-col-num="2"
-                                                                           hideremoveicon>
-                                        </vr-whs-be-carrieraccount-selector>
-                                    </span>
-                                <vr-columns colnumn="1" ng-show="scopeModel.showCarrierAccountSelector" withemptyline>
-                                    <vr-button type="Load" data-onclick="scopeModel.loadCustomerRoutingProductPrview" standalone ></vr-button>
+                                <span ng-show="scopeModel.showCustomerRoutingProductCarrierAccountSelector">
+                                    <vr-whs-be-carrieraccount-selector on-ready="scopeModel.onRoutingProductCarrierAccountSelectorReady"
+                                                                       getcustomers
+                                                                       ismultipleselection
+                                                                       selectedvalues="selectedCustomers"
+                                                                       normal-col-num="2"
+                                                                       hideremoveicon>
+                                    </vr-whs-be-carrieraccount-selector>
+                                </span>
+                                <vr-columns colnumn="1" ng-show="scopeModel.showCustomerRoutingProductCarrierAccountSelector" withemptyline>
+                                    <vr-button type="Load" data-onclick="scopeModel.loadCustomerRoutingProductPrview" standalone></vr-button>
                                 </vr-columns>
                             </vr-row>
                         </vr-row>
@@ -145,12 +145,41 @@
                             <vr-tabs>
                                 <vr-tab header="'New Countries'">
                                     <vr-row>
+                                        <span ng-show="scopeModel.showNewCountriesCarrierAccountSelector">
+                                            <vr-whs-be-carrieraccount-selector on-ready="scopeModel.onNewCountryCarrierAccountSelectorReady"
+                                                                               getcustomers
+                                                                               ismultipleselection
+                                                                               selectedvalues="selectedCustomers"
+                                                                               normal-col-num="2"
+                                                                               hideremoveicon>
+                                            </vr-whs-be-carrieraccount-selector>
+                                        </span>
+                                        <vr-columns normal-col-num="1" ng-show="scopeModel.showNewCountriesCarrierAccountSelector" withemptyline>
+                                            <vr-button type="Load" data-onclick="scopeModel.loadNewCountryPreview" standalone></vr-button>
+                                        </vr-columns>
+                                    </vr-row>
+                                    <vr-row>
                                         <vr-columns width="fullrow">
                                             <vr-whs-sales-newcountrypreview-grid on-ready="scopeModel.onNewCountryPreviewGridReady"></vr-whs-sales-newcountrypreview-grid>
                                         </vr-columns>
                                     </vr-row>
                                 </vr-tab>
                                 <vr-tab header="'Ended Countries'">
+                                    <vr-row>
+                                        <span ng-show="scopeModel.showChangedCountriesCarrierAccountSelector">
+                                            <vr-whs-be-carrieraccount-selector on-ready="scopeModel.onChangedCountryCarrierAccountSelectorReady"
+                                                                               getcustomers
+                                                                               ismultipleselection
+                                                                               selectedvalues="selectedCustomers"
+                                                                               normal-col-num="2"
+                                                                               hideremoveicon>
+                                            </vr-whs-be-carrieraccount-selector>
+                                        </span>
+                                        <vr-columns normal-col-num="1" ng-show="scopeModel.showChangedCountriesCarrierAccountSelector" withemptyline>
+                                            <vr-button type="Load" data-onclick="scopeModel.loadChangedCountryPreview" standalone></vr-button>
+
+                                        </vr-columns>
+                                    </vr-row>
                                     <vr-row>
                                         <vr-columns width="fullrow">
                                             <vr-whs-sales-changedcountrypreview-grid on-ready="scopeModel.onChangedCountryPreviewGridReady"></vr-whs-sales-changedcountrypreview-grid>

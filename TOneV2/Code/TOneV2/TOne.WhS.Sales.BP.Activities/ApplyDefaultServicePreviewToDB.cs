@@ -15,6 +15,7 @@ namespace TOne.WhS.Sales.BP.Activities
     public class ApplyDefaultServicePreviewToDBInput
     {
         public DefaultServicePreview DefaultServicePreview { get; set; }
+        public long RootProcessInstanceId { get; set; }
     }
 
     public class ApplyDefaultServicePreviewToDBOutput
@@ -36,7 +37,8 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             return new ApplyDefaultServicePreviewToDBInput()
             {
-                DefaultServicePreview = this.DefaultServicePreview.Get(context)
+                DefaultServicePreview = this.DefaultServicePreview.Get(context),
+                RootProcessInstanceId = context.GetRatePlanContext().RootProcessInstanceId,
             };
         }
 
@@ -52,7 +54,8 @@ namespace TOne.WhS.Sales.BP.Activities
             if (defaultServicePreview != null)
             {
                 var dataManager = SalesDataManagerFactory.GetDataManager<IDefaultServicePreviewDataManager>();
-                dataManager.ProcessInstanceId = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
+                long rootProcessInstanceId = inputArgument.RootProcessInstanceId;
+                dataManager.ProcessInstanceId = rootProcessInstanceId;
                 dataManager.Insert(defaultServicePreview);
             }
 

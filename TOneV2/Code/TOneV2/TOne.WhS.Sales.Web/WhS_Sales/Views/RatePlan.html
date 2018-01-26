@@ -45,7 +45,7 @@
                         </span>
                     </vr-validation-group>
 
-                    <span ng-show="isSettingsSelected" >
+                    <span ng-show="isSettingsSelected">
                         <vr-common-currency-selector on-ready="onCurrencySelectorReady"
                                                      normal-col-num="2"
                                                      onselectitem="onCurrencyChanged"
@@ -115,7 +115,8 @@
                     <vr-button type="Settings" data-onclick="editSettings" ng-show="showSettingsButton"></vr-button>
                     <vr-button type="BulkActions" validationcontext="LoadGroup" data-onclick="openBulkActionWizard" ng-show="showBulkActionButton"></vr-button>
                     <vr-button type="ManageCountries" validationcontext="OwnerGroup" ng-show="showCarrierAccountSelector" data-onclick="manageCountries"></vr-button>
-                    <vr-button type="Apply" validationcontext="OwnerGroup" formname="FilterGroup" menuactions="applyButtonMenuActions" ng-show="showSaveButton"></vr-button>
+                    <vr-button type="Apply" validationcontext="OwnerGroup" formname="FilterGroup" menuactions="sellingProductApplyButtonMenuActions" ng-show="showSaveButton&&showSaveButtonForSellingProduct"></vr-button>
+                    <vr-button type="Apply" validationcontext="OwnerGroup" formname="FilterGroup" menuactions="customerApplyButtonMenuActions" ng-show="showSaveButton&&showSaveButtonForCustomer"></vr-button>
                     <vr-button type="CancelChanges" ng-show="showCancelButton" data-onclick="deleteDraft"></vr-button>
                 </div>
             </vr-actionbar>

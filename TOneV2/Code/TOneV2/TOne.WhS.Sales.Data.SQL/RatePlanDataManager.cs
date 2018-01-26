@@ -104,5 +104,9 @@ namespace TOne.WhS.Sales.Data.SQL
             return (recordesEffected > 0);
         }
 
+        public void SetStateBackupIdForOwnerPricelists(long processInstanceId, SalePriceListOwnerType ownerType, int ownerId, long stateBackupId)
+        {
+            int affectedRows = ExecuteNonQuerySP("TOneWhS_Sales.sp_SalePriceList_SetStateBackupIdForOwnerPricelists", processInstanceId, ownerType, ownerId, stateBackupId);
+        }
     }
 }

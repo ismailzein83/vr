@@ -26,7 +26,16 @@ namespace TOne.WhS.BusinessEntity.Business
             ISalePriceListChangeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
             return dataManager.GetAffectedCustomerIdsRPChangesByProcessInstanceId(ProcessInstanceId);
         }
-
+        public IEnumerable<int> GetAffectedCustomerIdsNewCountryChangesByProcessInstanceId(long ProcessInstanceId)
+        {
+            ISalePriceListChangeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
+            return dataManager.GetAffectedCustomerIdsNewCountryChangesByProcessInstanceId(ProcessInstanceId);
+        }
+        public IEnumerable<int> GetAffectedCustomerIdsChangedCountryChangesByProcessInstanceId(long ProcessInstanceId)
+        {
+            ISalePriceListChangeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
+            return dataManager.GetAffectedCustomerIdsNewCountryChangesByProcessInstanceId(ProcessInstanceId);
+        }
         public IEnumerable<int> GetAffectedCustomerIdsRateChangesByProcessInstanceId(long ProcessInstanceId)
         {
             ISalePriceListChangeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();

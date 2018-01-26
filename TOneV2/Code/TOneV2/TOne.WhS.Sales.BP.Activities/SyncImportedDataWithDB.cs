@@ -35,7 +35,7 @@ namespace TOne.WhS.Sales.BP.Activities
         public InArgument<long> StateBackupId { get; set; }
 
         [RequiredArgument]
-        public InArgument<IEnumerable<NewCustomerPriceListChange>> CustomerPriceListChanges { get; set; }
+        public InArgument<List<long>> PricelistFileIds { get; set; }
 
         #endregion
 
@@ -47,20 +47,17 @@ namespace TOne.WhS.Sales.BP.Activities
             int currencyId = CurrencyId.Get(context);
             DateTime effectiveOn = EffectiveOn.Get(context);
             long stateBackupId = StateBackupId.Get(context);
-            IEnumerable<NewCustomerPriceListChange> customerPriceListChanges = this.CustomerPriceListChanges.Get(context);
+            List<long> pricelistFileIds = PricelistFileIds.Get(context);
+
             VRFileManager fileManager = new VRFileManager();
             var ratePlanManager = new RatePlanManager();
-            if (customerPriceListChanges != null)
+
+            foreach (var pricelistFileId in pricelistFileIds)
             {
-                foreach (var customerPricelistChange in customerPriceListChanges)
-                {
-                    foreach (var pricelistChange in customerPricelistChange.PriceLists)
-                    {
-                        if (!fileManager.SetFileUsed(pricelistChange.PriceList.FileId))
-                            throw new VRBusinessException("Pricelist files have been removed, Process must be restarted.");
-                    }
-                }
+                if (!fileManager.SetFileUsed(pricelistFileId))
+                    throw new VRBusinessException("Pricelist files have been removed, Process must be restarted.");
             }
+
             long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
             ratePlanManager.SyncImportedDataWithDB(processInstanceId, reservedSalePriceListId, ownerType, ownerId, currencyId, effectiveOn, stateBackupId);
         }

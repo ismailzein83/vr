@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.Sales.Data;
 using TOne.WhS.Sales.Entities;
 
@@ -24,10 +25,12 @@ namespace TOne.WhS.Sales.Business
 
 			public override NewCustomerCountryPreviewDetail EntityDetailMapper(NewCustomerCountryPreview entity)
 			{
+                var carrierAccountManager = new CarrierAccountManager();
 				return new NewCustomerCountryPreviewDetail()
 				{
 					Entity = entity,
-					CountryName = _countryManager.GetCountryName(entity.CountryId)
+					CountryName = _countryManager.GetCountryName(entity.CountryId),
+                    CustomerName = carrierAccountManager.GetCarrierAccountName(entity.CustomerId)
 				};
 			}
 

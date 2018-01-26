@@ -10,64 +10,67 @@ using TOne.WhS.Sales.Entities;
 
 namespace TOne.WhS.Sales.BP.Activities
 {
-	#region Classes
+    #region Classes
 
-	public class ApplyChangedCustomerCountriesToDBInput
-	{
-		public SalePriceListOwnerType OwnerType { get; set; }
-		public IEnumerable<ChangedCustomerCountry> ChangedCustomerCountries { get; set; }
-	}
+    public class ApplyChangedCustomerCountriesToDBInput
+    {
+        public SalePriceListOwnerType OwnerType { get; set; }
+        public IEnumerable<ChangedCustomerCountry> ChangedCustomerCountries { get; set; }
+        public long RootProcessInstanceId { get; set; }
+    }
 
-	public class ApplyChangedCustomerCountriesToDBOutput
-	{
+    public class ApplyChangedCustomerCountriesToDBOutput
+    {
 
-	}
+    }
 
-	#endregion
+    #endregion
 
-	public class ApplyChangedCustomerCountriesToDB : Vanrise.BusinessProcess.BaseAsyncActivity<ApplyChangedCustomerCountriesToDBInput, ApplyChangedCustomerCountriesToDBOutput>
-	{
-		#region Input Arguments
+    public class ApplyChangedCustomerCountriesToDB : Vanrise.BusinessProcess.BaseAsyncActivity<ApplyChangedCustomerCountriesToDBInput, ApplyChangedCustomerCountriesToDBOutput>
+    {
+        #region Input Arguments
 
-		[RequiredArgument]
-		public InArgument<SalePriceListOwnerType> OwnerType { get; set; }
-		[RequiredArgument]
-		public InArgument<IEnumerable<ChangedCustomerCountry>> ChangedCustomerCountries { get; set; }
+        [RequiredArgument]
+        public InArgument<SalePriceListOwnerType> OwnerType { get; set; }
+        [RequiredArgument]
+        public InArgument<IEnumerable<ChangedCustomerCountry>> ChangedCustomerCountries { get; set; }
 
-		#endregion
+        #endregion
 
-		protected override ApplyChangedCustomerCountriesToDBInput GetInputArgument(AsyncCodeActivityContext context)
-		{
-			return new ApplyChangedCustomerCountriesToDBInput()
-			{
-				OwnerType = OwnerType.Get(context),
-				ChangedCustomerCountries = ChangedCustomerCountries.Get(context)
-			};
-		}
+        protected override ApplyChangedCustomerCountriesToDBInput GetInputArgument(AsyncCodeActivityContext context)
+        {
+            return new ApplyChangedCustomerCountriesToDBInput()
+            {
+                OwnerType = OwnerType.Get(context),
+                ChangedCustomerCountries = ChangedCustomerCountries.Get(context),
+                RootProcessInstanceId = context.GetRatePlanContext().RootProcessInstanceId,
+            };
+        }
 
-		protected override void OnBeforeExecute(AsyncCodeActivityContext context, Vanrise.BusinessProcess.AsyncActivityHandle handle)
-		{
-			base.OnBeforeExecute(context, handle);
-		}
+        protected override void OnBeforeExecute(AsyncCodeActivityContext context, Vanrise.BusinessProcess.AsyncActivityHandle handle)
+        {
+            base.OnBeforeExecute(context, handle);
+        }
 
-		protected override ApplyChangedCustomerCountriesToDBOutput DoWorkWithResult(ApplyChangedCustomerCountriesToDBInput inputArgument, Vanrise.BusinessProcess.AsyncActivityHandle handle)
-		{
-			SalePriceListOwnerType ownerType = inputArgument.OwnerType;
-			IEnumerable<ChangedCustomerCountry> changedCustomerCountries = inputArgument.ChangedCustomerCountries;
+        protected override ApplyChangedCustomerCountriesToDBOutput DoWorkWithResult(ApplyChangedCustomerCountriesToDBInput inputArgument, Vanrise.BusinessProcess.AsyncActivityHandle handle)
+        {
+            SalePriceListOwnerType ownerType = inputArgument.OwnerType;
+            IEnumerable<ChangedCustomerCountry> changedCustomerCountries = inputArgument.ChangedCustomerCountries;
+            long rootProcessInstanceId = inputArgument.RootProcessInstanceId;
+            
+            if (ownerType == SalePriceListOwnerType.Customer)
+            {
+                var dataManager = SalesDataManagerFactory.GetDataManager<IChangedCustomerCountryDataManager>();
+                dataManager.ProcessInstanceId =rootProcessInstanceId;
+                dataManager.ApplyChangedCustomerCountriesToDB(changedCustomerCountries);
+            }
 
-			if (ownerType == SalePriceListOwnerType.Customer)
-			{
-				var dataManager = SalesDataManagerFactory.GetDataManager<IChangedCustomerCountryDataManager>();
-				dataManager.ProcessInstanceId = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
-				dataManager.ApplyChangedCustomerCountriesToDB(changedCustomerCountries);
-			}
+            return new ApplyChangedCustomerCountriesToDBOutput() { };
+        }
 
-			return new ApplyChangedCustomerCountriesToDBOutput() { };
-		}
+        protected override void OnWorkComplete(AsyncCodeActivityContext context, ApplyChangedCustomerCountriesToDBOutput result)
+        {
 
-		protected override void OnWorkComplete(AsyncCodeActivityContext context, ApplyChangedCustomerCountriesToDBOutput result)
-		{
-
-		}
-	}
+        }
+    }
 }

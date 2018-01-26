@@ -13,7 +13,8 @@ namespace TOne.WhS.Sales.BP.Activities
 
 	public class PrepareCustomerCountryPreviewsInput
 	{
-		public SalePriceListOwnerType OwnerType { get; set; }
+        public SalePriceListOwnerType OwnerType { get; set; }
+        public int OwnerId { get; set; }
 		public IEnumerable<CustomerCountryToAdd> CustomerCountriesToAdd { get; set; }
 		public IEnumerable<CustomerCountryToChange> CustomerCountriesToChange { get; set; }
 	}
@@ -32,6 +33,9 @@ namespace TOne.WhS.Sales.BP.Activities
 
 		[RequiredArgument]
 		public InArgument<SalePriceListOwnerType> OwnerType { get; set; }
+
+        [RequiredArgument]
+        public InArgument<int> OwnerId { get; set; }
 
 		[RequiredArgument]
 		public InArgument<IEnumerable<CustomerCountryToAdd>> CustomerCountriesToAdd { get; set; }
@@ -56,6 +60,7 @@ namespace TOne.WhS.Sales.BP.Activities
 			return new PrepareCustomerCountryPreviewsInput()
 			{
 				OwnerType = OwnerType.Get(context),
+                OwnerId = OwnerId.Get(context),
 				CustomerCountriesToAdd = CustomerCountriesToAdd.Get(context),
 				CustomerCountriesToChange = CustomerCountriesToChange.Get(context)
 			};
@@ -75,7 +80,7 @@ namespace TOne.WhS.Sales.BP.Activities
 			SalePriceListOwnerType ownerType = inputArgument.OwnerType;
 			IEnumerable<CustomerCountryToAdd> customerCountriesToAdd = inputArgument.CustomerCountriesToAdd;
 			IEnumerable<CustomerCountryToChange> customerCountriesToChange = inputArgument.CustomerCountriesToChange;
-
+            int ownerId = inputArgument.OwnerId;
 			var newCustomerCountryPreviews = new List<NewCustomerCountryPreview>();
 			var changedCustomerCountryPreviews = new List<ChangedCustomerCountryPreview>();
 
@@ -86,6 +91,7 @@ namespace TOne.WhS.Sales.BP.Activities
 					newCustomerCountryPreviews.Add(new NewCustomerCountryPreview()
 					{
 						CountryId = countryToAdd.CountryId,
+                        CustomerId = ownerId,
 						BED = countryToAdd.BED,
 						EED = countryToAdd.EED
 					});
@@ -95,6 +101,7 @@ namespace TOne.WhS.Sales.BP.Activities
 					changedCustomerCountryPreviews.Add(new ChangedCustomerCountryPreview()
 					{
 						CountryId = countryToChange.CountryId,
+                        CustomerId = ownerId,
 						EED = countryToChange.CloseEffectiveDate
 					});
 				}

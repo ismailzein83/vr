@@ -9,6 +9,7 @@ namespace TOne.WhS.Sales.Entities
 	public class ChangedCustomerCountryPreview
 	{
 		public int CountryId { get; set; }
+        public int CustomerId { get; set; }
 		public DateTime EED { get; set; }
 	}
 
@@ -16,5 +17,6 @@ namespace TOne.WhS.Sales.Entities
 	{
 		public ChangedCustomerCountryPreview Entity { get; set; }
 		public string CountryName { get; set; }
+        public string CustomerName { get; set; }
 	}
 }

@@ -12,7 +12,11 @@ namespace TOne.WhS.Sales.BP.Activities
 {
     public class ApplyNewRatesToDBInput
     {
-        public IEnumerable<NewRate> NewRates { get; set; }
+        public IEnumerable<NewRate> OwnerNewRates { get; set; }
+        public IEnumerable<NewRate> NewRatesToFillGapsDueToClosingCountry { get; set; }
+        public IEnumerable<NewRate> NewRatesToFillGapsDueToChangeSellingProductRates { get; set; }
+
+        public long RootProcessInstanceId { get; set; }
     }
 
     public class ApplyNewRatesToDBOutput
@@ -25,7 +29,13 @@ namespace TOne.WhS.Sales.BP.Activities
         #region Input Arguments
 
         [RequiredArgument]
-        public InArgument<IEnumerable<NewRate>> NewRates { get; set; }
+        public InArgument<IEnumerable<NewRate>> OwnerNewRates { get; set; }
+
+        [RequiredArgument]
+        public InArgument<IEnumerable<NewRate>> NewRatesToFillGapsDueToClosingCountry { get; set; }
+
+        [RequiredArgument]
+        public InArgument<IEnumerable<NewRate>> NewRatesToFillGapsDueToChangeSellingProductRates { get; set; }
 
         #endregion
 
@@ -33,7 +43,10 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             return new ApplyNewRatesToDBInput()
             {
-                NewRates = this.NewRates.Get(context)
+                OwnerNewRates = this.OwnerNewRates.Get(context),
+                NewRatesToFillGapsDueToClosingCountry = this.NewRatesToFillGapsDueToClosingCountry.Get(context),
+                NewRatesToFillGapsDueToChangeSellingProductRates = this.NewRatesToFillGapsDueToChangeSellingProductRates.Get(context),
+                RootProcessInstanceId = context.GetRatePlanContext().RootProcessInstanceId,
             };
         }
 
@@ -44,10 +57,18 @@ namespace TOne.WhS.Sales.BP.Activities
 
         protected override ApplyNewRatesToDBOutput DoWorkWithResult(ApplyNewRatesToDBInput inputArgument, AsyncActivityHandle handle)
         {
-            IEnumerable<NewRate> newRates = inputArgument.NewRates;
+            IEnumerable<NewRate> ownerNewRates = inputArgument.OwnerNewRates;
+            IEnumerable<NewRate> newRatesToFillGapsDueToClosingCountry = inputArgument.NewRatesToFillGapsDueToClosingCountry;
+            IEnumerable<NewRate> newRatesToFillGapsDueToChangeSellingProductRates = inputArgument.NewRatesToFillGapsDueToChangeSellingProductRates;
+
+            List<NewRate> newRates = new List<NewRate>();
+            newRates.AddRange(ownerNewRates);
+            newRates.AddRange(newRatesToFillGapsDueToClosingCountry);
+            newRates.AddRange(newRatesToFillGapsDueToChangeSellingProductRates);
 
             INewSaleRateDataManager dataManager = SalesDataManagerFactory.GetDataManager<INewSaleRateDataManager>();
-            dataManager.ProcessInstanceId = handle.SharedInstanceData.InstanceInfo.ProcessInstanceID;
+            long rootProcessInstanceId = inputArgument.RootProcessInstanceId;
+            dataManager.ProcessInstanceId = rootProcessInstanceId;
             dataManager.ApplyNewRatesToDB(newRates);
 
             return new ApplyNewRatesToDBOutput() { };

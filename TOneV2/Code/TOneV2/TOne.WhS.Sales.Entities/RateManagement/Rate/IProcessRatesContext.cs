@@ -27,7 +27,9 @@ namespace TOne.WhS.Sales.Entities
         #endregion
 
         #region Output Properties
-        IEnumerable<NewRate> NewRates { set; }
+        IEnumerable<NewRate> OwnerNewRates { set; }
+        IEnumerable<NewRate> NewRatesToFillGapsDueToClosingCountry { set; }
+        IEnumerable<NewRate> NewRatesToFillGapsDueToChangeSellingProductRates { set; }
         IEnumerable<ChangedRate> ChangedRates { set; }
         Dictionary<int, List<NewPriceList>> CustomerPriceListsByCurrencyId { set; }
         #endregion

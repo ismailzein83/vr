@@ -35,6 +35,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 var sellingProductPricelists = context.SalePriceLists.FindAllRecords(x => x.OwnerType == SalePriceListOwnerType.SellingProduct);
                 if (sellingProductPricelists != null && sellingProductPricelists.Any()) newPriceLists.AddRange(sellingProductPricelists);
+                newPriceLists.AddRange(context.SalePriceLists.FindAllRecords(item => item.PriceListType == SalePriceListType.None));
             }
             if (context.CustomerPriceListChanges != null && context.CustomerPriceListChanges.Any())
             {

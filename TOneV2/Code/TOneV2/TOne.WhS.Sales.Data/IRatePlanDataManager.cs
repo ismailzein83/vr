@@ -18,5 +18,6 @@ namespace TOne.WhS.Sales.Data
         DraftTaskData GetDraftTaskData(SalePriceListOwnerType ownerType, int ownerId, RatePlanStatus status);
         bool InsertOrUpdateDraftTaskData(SalePriceListOwnerType ownerType, int ownerId, DraftTaskData draftTaskData, RatePlanStatus status);
         bool CleanTemporaryTables(long processInstanceId);
+        void SetStateBackupIdForOwnerPricelists(long processInstanceId, SalePriceListOwnerType ownerType, int ownerId, long stateBackupId);
     }
 }

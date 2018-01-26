@@ -20,6 +20,8 @@ namespace TOne.WhS.BusinessEntity.Data
         IEnumerable<CustomerRatePreview> GetCustomerRatePreviews(CustomerRatePreviewQuery query);
         IEnumerable<RoutingProductPreview> GetRoutingProductPreviews(RoutingProductPreviewQuery query);
         IEnumerable<int> GetAffectedCustomerIdsRPChangesByProcessInstanceId(long ProcessInstanceId);
+        IEnumerable<int> GetAffectedCustomerIdsNewCountryChangesByProcessInstanceId(long ProcessInstanceId);
+        IEnumerable<int> GetAffectedCustomerIdsChangedCountryChangesByProcessInstanceId(long ProcessInstanceId);
         IEnumerable<int> GetAffectedCustomerIdsRateChangesByProcessInstanceId(long ProcessInstanceId);
         bool AreSalePriceListCodeSnapShotUpdated(ref object updateHandle);
         
