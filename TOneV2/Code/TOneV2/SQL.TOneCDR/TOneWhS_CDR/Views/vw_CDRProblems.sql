@@ -1,10 +1,10 @@
 ﻿CREATE VIEW TOneWhS_CDR.vw_CDRProblems
 AS
-SELECT        CDRId, AttemptDateTime, DurationInSeconds, CustomerID, SaleZoneID, SupplierID, CDPN, CDPNOut, SupplierZoneID, CostRateId, SaleRateId, SaleFinancialAccountId
+SELECT        CDRId, AttemptDateTime, DurationInSeconds, CustomerID, SaleZoneID, SupplierID, CDPN, OrigCDPNOut, SupplierZoneID, CostRateId, SaleRateId, SaleFinancialAccountId
       ,CostFinancialAccountId
 FROM            TOneWhS_CDR.BillingCDR_Invalid WITH (NOLOCK)
 UNION ALL
-SELECT        CDRId, AttemptDateTime, DurationInSeconds, CustomerID, SaleZoneID, SupplierID, CDPN, CDPNOut, SupplierZoneID, CostRateID, SaleRateID, SaleFinancialAccountId
+SELECT        CDRId, AttemptDateTime, DurationInSeconds, CustomerID, SaleZoneID, SupplierID, CDPN, OrigCDPNOut, SupplierZoneID, CostRateID, SaleRateID, SaleFinancialAccountId
       ,CostFinancialAccountId
 FROM            TOneWhS_CDR.BillingCDR_PartialPriced WITH (NOLOCK)
 GO

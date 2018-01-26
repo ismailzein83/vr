@@ -1,6 +1,6 @@
 ﻿CREATE VIEW TOneWhS_CDR.vw_CDRInvalidAndRaw
 AS
-SELECT        invalidCDR.CDRId, invalidCDR.AttemptDateTime, invalidCDR.DurationInSeconds, invalidCDR.CustomerID, invalidCDR.SaleZoneID, invalidCDR.SupplierID, invalidCDR.CDPN, invalidCDR.CDPNOut, 
+SELECT        invalidCDR.CDRId, invalidCDR.AttemptDateTime, invalidCDR.DurationInSeconds, invalidCDR.CustomerID, invalidCDR.SaleZoneID, invalidCDR.SupplierID, invalidCDR.CDPN, invalidCDR.OrigCDPNOut, 
                          invalidCDR.SupplierZoneID, invalidCDR.CostRateId, invalidCDR.SaleRateId, invalidCDR.SaleFinancialAccountId, invalidCDR.CostFinancialAccountId, cdr.IN_CARRIER, cdr.OUT_CARRIER
 FROM            TOneWhS_CDR.BillingCDR_Invalid AS invalidCDR WITH (NOLOCK) INNER JOIN
                          TOneWhS_CDR.CDR AS cdr WITH (NOLOCK) ON invalidCDR.CDRId = cdr.Id
