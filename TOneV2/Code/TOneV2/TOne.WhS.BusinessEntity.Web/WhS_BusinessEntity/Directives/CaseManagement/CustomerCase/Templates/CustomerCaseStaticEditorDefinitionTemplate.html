@@ -27,9 +27,10 @@
         <vr-textbox type="number" value="scopeModel.codeNumber" onblurtextbox="scopeModel.onCodeChanged" label="Code + Number"></vr-textbox>
     </vr-columns>
     <vr-columns width="1/3row" withemptyline>
-        <vr-label >Zone Name: </vr-label>
+        <vr-label>Zone Name: </vr-label>
         <vr-label isvalue>{{ scopeModel.zoneName}}</vr-label>
     </vr-columns>
+
 </vr-row>
 
 <vr-row>
@@ -60,3 +61,10 @@
         <vr-textarea value="scopeModel.notes" label="Notes"></vr-textarea>
     </vr-columns>
 </vr-row>
+<vr-section header="Attachments">
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-genericdata-attachmentfieldtype-management on-ready="onAttachmentGridReady"></vr-genericdata-attachmentfieldtype-management>
+        </vr-columns>
+    </vr-row>
+    </vr-section>

@@ -38,6 +38,9 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
             var workGroupSelectorAPI;
             var workGroupSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var attachmentGridAPI;
+            var attachmentGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
 
             this.initializeController = initializeController;
             function initializeController() {
@@ -46,6 +49,10 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                 $scope.scopeModel.onReasonSelectorReady = function (api) {
                     reasonSelectorAPI = api;
                     reasonSelectorReadyPromiseDeferred.resolve();
+                };
+                $scope.onAttachmentGridReady = function (api) {
+                    attachmentGridAPI = api;
+                    attachmentGridReadyPromiseDeferred.resolve();
                 };
                 $scope.scopeModel.onWorkGroupSelectorReady = function (api) {
                     workGroupSelectorAPI = api;
@@ -68,7 +75,7 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                         getCustomerSaleZoneByCode();
                     }
                 };
-                UtilsService.waitMultiplePromises([customerSelectorReadyPromiseDeferred.promise, statusSelectorReadyPromiseDeferred.promise, reasonSelectorReadyPromiseDeferred.promise, workGroupSelectorReadyPromiseDeferred.promise]).then(function () {
+                UtilsService.waitMultiplePromises([customerSelectorReadyPromiseDeferred.promise, statusSelectorReadyPromiseDeferred.promise, reasonSelectorReadyPromiseDeferred.promise, workGroupSelectorReadyPromiseDeferred.promise,attachmentGridReadyPromiseDeferred.promise]).then(function () {
                     defineApi();
 
                 });
@@ -97,12 +104,12 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                     promises.push(loadStatusSelector());
                     promises.push(loadReasonSelector());
                     promises.push(loadWorkGroupSelector());
+                    promises.push(loadAttachmentGrid());
                     return UtilsService.waitMultiplePromises(promises);
                 };
                 api.setData = function (caseManagementObject) {
                     if (!$scope.scopeModel.isEditMode) {
                         caseManagementObject.CustomerId = customerSelectorAPI.getSelectedIds();
-                        caseManagementObject.SaleZoneId = saleZoneSelectorApi.getSelectedIds();
                         caseManagementObject.FromDate = $scope.scopeModel.fromDate;
                         caseManagementObject.ToDate = $scope.scopeModel.toDate;
                         caseManagementObject.Attempts = $scope.scopeModel.attempts;
@@ -110,10 +117,12 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                         caseManagementObject.ACD = $scope.scopeModel.acd;
                         caseManagementObject.ReasonId = reasonSelectorAPI.getSelectedIds();
                         caseManagementObject.WorkGroupId = workGroupSelectorAPI.getSelectedIds();
+                        caseManagementObject.Attachments = attachmentGridAPI.getData();
                     }
                     caseManagementObject.CarrierReference = $scope.scopeModel.carrierReference;
                     caseManagementObject.Description = $scope.scopeModel.description;
                     caseManagementObject.StatusId = statusSelectorAPI.getSelectedIds();
+                    caseManagementObject.Attachments = attachmentGridAPI.getData();
                 };
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -135,6 +144,13 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                     selectorPayload.selectedIds = selectedValues.ReasonId;
                 }
                 return reasonSelectorAPI.load(selectorPayload);
+            }
+            function loadAttachmentGrid() {
+                var payload = {};
+                if (selectedValues != undefined) {
+                    payload.attachementFieldTypes= selectedValues.Attachments
+                }
+                return attachmentGridAPI.loadGrid(payload);
             }
             function loadWorkGroupSelector() {
                 var selectorPayload = {
