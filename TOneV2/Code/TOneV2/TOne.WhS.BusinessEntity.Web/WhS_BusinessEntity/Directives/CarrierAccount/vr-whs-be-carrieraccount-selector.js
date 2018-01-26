@@ -40,7 +40,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getTemplate(attrs);
@@ -157,8 +157,8 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
                 };
 
                 api.hasSingleItem = function () {
-                    return ctrl.datasource.length==1;
-                }
+                    return ctrl.datasource.length == 1;
+                };
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }

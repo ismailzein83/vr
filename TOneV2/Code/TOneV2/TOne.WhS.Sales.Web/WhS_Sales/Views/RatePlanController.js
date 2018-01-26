@@ -1493,7 +1493,7 @@
         function onTryTakeFailure(failureObject) {
             return VRNotificationService.showPromptWarning(failureObject.FailureMessage).then(function () {
                 $scope.selectedSellingProduct = null;
-                $scope.selectedCustomer = null
+                $scope.selectedCustomer = null;
             });
         }
 

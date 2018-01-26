@@ -59,7 +59,7 @@ app.directive('vrWhsSalesSalezoneroutingproductpreviewGrid', ['WhS_Sales_RatePla
                 return ($scope.scopeModel.saleZoneRoutingProductPreviews.length != 0) ? true : false;
             };
             api.cleanGrid = function () {
-                $scope.scopeModel.saleZoneRoutingProductPreviews.length = 0
+                $scope.scopeModel.saleZoneRoutingProductPreviews.length = 0;
             };
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

@@ -342,7 +342,7 @@
                 loadRatePreviewGrid().then(function (response) {
                     loadRatePreviewPromiseDeffered.resolve();
                 });
-            })
+            });
             return loadRatePreviewPromiseDeffered.promise;
         }
         // #endregion
@@ -405,7 +405,7 @@
                 loadCustomerSaleZoneRoutingProductPreviewGrid().then(function (response) {
                     loadCustomerRoutingProductPreviewPromiseDeffered.resolve();
                 });
-            })
+            });
             return loadCustomerRoutingProductPreviewPromiseDeffered.promise;
         }
         // #endregion
@@ -453,7 +453,7 @@
                 loadNewCountryPreviewGrid().then(function (response) {
                     loadNewCountryPreviewPromiseDeffered.resolve();
                 });
-            })
+            });
             return loadNewCountryPreviewPromiseDeffered.promise;
         }
         // #endregion
@@ -500,7 +500,7 @@
                 loadChangedCountryPreviewGrid().then(function (response) {
                     loadChangedCountryPreviewPromiseDeffered.resolve();
                 });
-            })
+            });
             return loadChangedCountryPreviewPromiseDeffered.promise;
         }
         // #endregion

@@ -70,7 +70,7 @@ app.directive('vrWhsBeRoutingproductpreviewGrid', ['WhS_BE_SalePriceListChangeAP
                 return ($scope.scopeModel.saleZoneRoutingProductPreviews.length != 0) ? true : false;
             };
             api.cleanGrid = function () {
-                $scope.scopeModel.saleZoneRoutingProductPreviews.length = 0
+                $scope.scopeModel.saleZoneRoutingProductPreviews.length = 0;
             };
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
