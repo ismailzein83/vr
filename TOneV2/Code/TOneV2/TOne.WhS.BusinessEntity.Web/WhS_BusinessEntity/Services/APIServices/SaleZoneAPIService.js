@@ -60,6 +60,13 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['UpdateSaleZoneName']));
         }
 
+        function GetCustomerSaleZoneByCode(customerId, codeNumber) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetCustomerSaleZoneByCode"), {
+                customerId: customerId,
+                codeNumber: codeNumber
+            });
+        }
+
         return ({
             GetFilteredSaleZones: GetFilteredSaleZones,
             GetSaleZonesInfo: GetSaleZonesInfo,
@@ -70,7 +77,8 @@
             GetSaleZone: GetSaleZone,
             GetSaleZoneInfoByCountryId: GetSaleZoneInfoByCountryId,
             UpdateSaleZoneName: UpdateSaleZoneName,
-            HasEditSaleZoneNamePermission:HasEditSaleZoneNamePermission
+            HasEditSaleZoneNamePermission: HasEditSaleZoneNamePermission,
+            GetCustomerSaleZoneByCode: GetCustomerSaleZoneByCode
         });
     }
 

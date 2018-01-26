@@ -24,13 +24,12 @@
 </vr-row>
 <vr-row>
     <vr-columns width="1/3row">
-        <vr-textbox type="number" value="scopeModel.codeNumber" label="Code + Number" vr-disabled="scopeModel.fromDate == undefined || scopeModel.toDate == undefined"></vr-textbox>
+        <vr-textbox type="number" value="scopeModel.codeNumber" onblurtextbox="scopeModel.onCodeChanged" label="Code + Number"></vr-textbox>
     </vr-columns>
     <vr-columns width="1/3row" withemptyline>
-        <vr-label >Zone Name</vr-label>
-        <vr-label isvalue></vr-label>
+        <vr-label >Zone Name: </vr-label>
+        <vr-label isvalue>{{ scopeModel.zoneName}}</vr-label>
     </vr-columns>
-
 </vr-row>
 
 <vr-row>

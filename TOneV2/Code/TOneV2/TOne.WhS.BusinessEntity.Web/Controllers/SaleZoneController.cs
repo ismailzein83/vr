@@ -79,6 +79,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             SaleZoneManager manager = new SaleZoneManager();
             return manager.UpdateSaleZoneName(zoneId, zoneName, sellingNumberPlanId);
         }
+        [HttpGet]
+        [Route("GetCustomerSaleZoneByCode")]
+        public SaleZone GetCustomerSaleZoneByCode(int customerId, string codeNumber)
+        {
+            SaleZoneManager manager = new SaleZoneManager();
+            return manager.GetCustomerSaleZoneByCode(customerId, codeNumber);
+        }
     }
 
     public class SaleZoneInput

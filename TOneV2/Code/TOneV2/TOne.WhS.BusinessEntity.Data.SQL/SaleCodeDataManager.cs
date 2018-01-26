@@ -30,6 +30,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetFiltered", SaleCodeMapper, query.SellingNumberPlanId, zoneIdsAsString, query.Code, query.EffectiveOn, query.GetEffectiveAfter);
         }
 
+        public IEnumerable<SaleCode> GetSaleCodesByCode(string codeNumber)
+        {
+            return GetItemsSP("TOneWhS_BE.[sp_SaleCode_GetByCode]", SaleCodeMapper, codeNumber);
+        }
         public IEnumerable<SaleCode> GetSaleCodesByZone(SaleCodeQueryByZone query)
         {
             return GetItemsSP("TOneWhS_BE.sp_SaleCode_GetFilteredByZone", SaleCodeMapper, query.ZoneId, query.EffectiveOn);

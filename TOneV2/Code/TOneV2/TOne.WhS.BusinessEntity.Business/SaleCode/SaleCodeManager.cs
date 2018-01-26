@@ -32,6 +32,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return dataManager.GetSaleCodesByCodeGroups(codeGroupsIds);
         }
 
+        public IEnumerable<SaleCode> GetEffectiveSaleCodesByCode(int customerId, string codeNumber)
+        {
+            ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();
+            return  dataManager.GetSaleCodesByCode(codeNumber);
+        }
+
         public List<SaleCode> GetSaleCodesByCodeId(IEnumerable<long> codeIds)
         {
             ISaleCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleCodeDataManager>();

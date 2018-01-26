@@ -195,7 +195,30 @@ namespace TOne.WhS.BusinessEntity.Business
                 return GetSaleZonesBySellingNumberPlan(sellingNumberPlanId).FindAllRecords(filterFunc);
             }
         }
+        public SaleZone GetCustomerSaleZoneByCode(int customerId, string codeNumber)
+        {
+            SaleCodeManager saleCodeManager = new SaleCodeManager();
+            var saleCodes = saleCodeManager.GetEffectiveSaleCodesByCode(customerId, codeNumber);
+            if (saleCodes == null || saleCodes.Count() == 0)
+                return null;
 
+            var carrierAccountManager = new CarrierAccountManager();
+            int sellingNumberPlanId = carrierAccountManager.GetSellingNumberPlanId(customerId, CarrierAccountType.Customer);
+
+
+            var customerSaleZones = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
+            if (customerSaleZones == null || customerSaleZones.Count() == 0)
+                return null;
+
+            var saleCodesOfEffectiveZones = saleCodes.FindAllRecords(x => customerSaleZones.Any(y => y.SaleZoneId == x.ZoneId));
+            if (saleCodesOfEffectiveZones == null || saleCodesOfEffectiveZones.Count() == 0)
+                return null;
+            var saleCode = saleCodesOfEffectiveZones.FirstOrDefault();
+            if (saleCode == null)
+                return null;
+
+            return GetSaleZone(saleCode.ZoneId);
+        }
         public IEnumerable<SaleZone> GetSaleZonesByCountryId(int sellingNumberPlanId, int countryId, DateTime effectiveOn)
         {
             IEnumerable<SaleZone> saleZonesBySellingNumberPlan = GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);

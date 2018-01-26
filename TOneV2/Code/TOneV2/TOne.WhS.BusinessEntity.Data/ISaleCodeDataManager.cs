@@ -9,6 +9,7 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface ISaleCodeDataManager : IDataManager
     {
+        IEnumerable<SaleCode> GetSaleCodesByCode(string codeNumber);
         IEnumerable<SaleCode> GetAllSaleCodes();
 
         IEnumerable<SaleCode> GetFilteredSaleCodes(SaleCodeQuery query);

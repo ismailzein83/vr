@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'VRUIUtilsService','VRDateTimeService',
-    function (UtilsService, VRUIUtilsService, VRDateTimeService) {
+app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'VRUIUtilsService','VRDateTimeService','WhS_BE_SaleZoneAPIService',
+    function (UtilsService, VRUIUtilsService, VRDateTimeService, WhS_BE_SaleZoneAPIService) {
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
@@ -59,11 +59,13 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                     statusSelectorAPI = api;
                     statusSelectorReadyPromiseDeferred.resolve();
                 };
-
+                $scope.scopeModel.onCodeChanged = function () {
+                    getCustomerSaleZoneByCode();
+                };
                 $scope.scopeModel.onCustomerSelectionChanged = function (value) {
 
                     if (value != undefined) {
-
+                        getCustomerSaleZoneByCode();
                     }
                 };
                 UtilsService.waitMultiplePromises([customerSelectorReadyPromiseDeferred.promise, statusSelectorReadyPromiseDeferred.promise, reasonSelectorReadyPromiseDeferred.promise, workGroupSelectorReadyPromiseDeferred.promise]).then(function () {
@@ -151,6 +153,20 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                     }
                 }
                 return customerSelectorAPI.load(selectorPayload);
+            }
+
+
+            function getCustomerSaleZoneByCode() {
+                var codeNumber = $scope.scopeModel.codeNumber;
+                var customerId = customerSelectorAPI.getSelectedIds();
+                if (codeNumber != undefined && customerId != undefined) {
+                    return WhS_BE_SaleZoneAPIService.GetCustomerSaleZoneByCode(customerId, codeNumber).then(function (response) {
+                        if (response != undefined) {
+                            $scope.scopeModel.zoneName = response.Name;
+                        }
+
+                    });
+                }
             }
 
         }
