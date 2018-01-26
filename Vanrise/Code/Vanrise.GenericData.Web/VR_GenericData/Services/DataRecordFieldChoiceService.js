@@ -69,7 +69,7 @@
             addDataRecordFieldChoice: addDataRecordFieldChoice,
             registerObjectTrackingDrillDownToDataRecordFieldChoice: registerObjectTrackingDrillDownToDataRecordFieldChoice,
             getDrillDownDefinition: getDrillDownDefinition
-        })
+        });
     }
 
     appControllers.service('VR_GenericData_DataRecordFieldChoiceService', DataRecordFieldChoiceService);

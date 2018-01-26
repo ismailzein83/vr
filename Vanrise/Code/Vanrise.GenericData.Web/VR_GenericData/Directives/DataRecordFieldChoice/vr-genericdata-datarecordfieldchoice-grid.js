@@ -88,7 +88,7 @@ app.directive("vrGenericdataDatarecordfieldchoiceGrid", ["UtilsService", "VRNoti
 
             function hasEditDataRecordFieldChoicePermission() {
                 return VR_GenericData_DataRecordFieldChoiceAPIService.HasUpdateDataRecordFieldChoice();
-            };
+            }
             function editDataRecordFieldChoice(dataItem) {
                 var onDataRecordFieldChoiceUpdated = function (dataRecordFieldChoiceObj) {
                     gridDrillDownTabsObj.setDrillDownExtensionObject(dataRecordFieldChoiceObj);
