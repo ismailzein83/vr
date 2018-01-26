@@ -1,26 +1,28 @@
-﻿(function (appControllers) {
+﻿(function (app) {
 
     'use strict';
 
-    DataStoreConfigAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_GenericData_ModuleConfig'];
+    GenericBESerialNumberService.$inject = ['VRModalService'];
 
-    function DataStoreConfigAPIService(BaseAPIService, UtilsService, VR_GenericData_ModuleConfig) {
-        //function GetDataStoreConfigs() {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, "DataStoreConfig", "GetDataStoreConfigs"));
-        //}
+    function GenericBESerialNumberService(VRModalService) {
+        return ({
+            openSerialNumberPatternHelper: openSerialNumberPatternHelper
+        });
 
-        //function GetDataStoreConfig(dataStoreConfigId) {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, "DataStoreConfig", "GetDataStoreConfig"), {
-        //        dataStoreConfigId: dataStoreConfigId
-        //    });
-        //}
+        function openSerialNumberPatternHelper(onSetSerialNumberPattern, context) {
+            var modalSettings = {};
 
-        //return ({
-        //    GetDataStoreConfigs: GetDataStoreConfigs,
-        //    GetDataStoreConfig: GetDataStoreConfig
-        //});
-    }
+            modalSettings.onScopeReady = function (modalScope) {
+                modalScope.onSetSerialNumberPattern = onSetSerialNumberPattern;
+            };
+            var parameter = {
+                context: context
+            };
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Runtime/MainExtensions/OnBeforeInsertHandler/GenericBESerialNumber/Templates/SerialNumberPatternHelperEditor.html', parameter, modalSettings);
+        }
 
-    appControllers.service('VR_GenericData_DataStoreConfigAPIService', DataStoreConfigAPIService);
+    };
 
-})(appControllers);
+    app.service('VR_GenericData_GenericBESerialNumberService', GenericBESerialNumberService);
+
+})(app);

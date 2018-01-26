@@ -12,5 +12,8 @@
         public const string CdrImportTechnicalSettings = "Whs_BE_CDRImport_TechnicalSettings";
 
         public const string BusinessEntitySettingsData = "WhS_BE_Settings";
+
+        public const string FaultTicketsSettingsData = "WhS_BE_FaultTickets_Settings";
+
     }
 }

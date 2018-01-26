@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
-    public class FaultTicketsSettingData
+    public class FaultTicketsSettingsData : Vanrise.Entities.SettingData
     {
         public CustomerFaultTicketSetting CustomerSetting { get; set; }
     }

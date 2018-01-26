@@ -123,7 +123,7 @@
     <Compile Include="CompanyDefinition\CompanyDefinitionPricelistSettings.cs" />
     <Compile Include="CompanyDefinition\CompanyPricelistSettings.cs" />
     <Compile Include="CustomerInvoiceSettingInfo.cs" />
-    <Compile Include="FaultTickets\FaultTicketsSettingData.cs" />
+    <Compile Include="Settings\FaultTicketsSettingsData.cs" />
     <Compile Include="FinancialAccount\WHSFinancialAccountDefinitionInfoFilter.cs" />
     <Compile Include="FinancialAccount\WHSCarrierFinancialAccountData.cs" />
     <Compile Include="FinancialAccount\Enums.cs" />
@@ -352,7 +352,9 @@
       <Name>TOne.WhS.RouteSync.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="FaultTickets\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

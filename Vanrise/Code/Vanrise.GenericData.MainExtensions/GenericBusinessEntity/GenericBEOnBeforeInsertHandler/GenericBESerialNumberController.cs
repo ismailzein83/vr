@@ -12,5 +12,14 @@ namespace Vanrise.GenericData.MainExtensions
     [RoutePrefix(Constants.ROUTE_PREFIX + "GenericBESerialNumber")]
     public class GenericBESerialNumberController:BaseAPIController
     {
+
+        [HttpGet]
+        [Route("GetSerialNumberPartDefinitionsInfo")]
+        public IEnumerable<GenericBESerialNumberPartInfo> GetSerialNumberPartDefinitionsInfo(Guid businessEntityDefinitionId)
+        {
+            GenericBESerialNumberManager manager = new GenericBESerialNumberManager();
+            return manager.GetSerialNumberPartDefinitionsInfo(businessEntityDefinitionId);
+        }
+
     }
 }

@@ -1,26 +1,21 @@
-﻿(function (appControllers) {
+﻿(function (app) {
 
     'use strict';
 
-    DataStoreConfigAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_GenericData_ModuleConfig'];
+    GenericBESerialNumberAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_GenericData_ModuleConfig'];
 
-    function DataStoreConfigAPIService(BaseAPIService, UtilsService, VR_GenericData_ModuleConfig) {
-        //function GetDataStoreConfigs() {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, "DataStoreConfig", "GetDataStoreConfigs"));
-        //}
+    function GenericBESerialNumberAPIService(BaseAPIService, UtilsService, VR_GenericData_ModuleConfig) {
+        var controllerName = "GenericBESerialNumber";
 
-        //function GetDataStoreConfig(dataStoreConfigId) {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, "DataStoreConfig", "GetDataStoreConfig"), {
-        //        dataStoreConfigId: dataStoreConfigId
-        //    });
-        //}
+        function GetSerialNumberPartDefinitionsInfo(businessEntityDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetSerialNumberPartDefinitionsInfo"), { businessEntityDefinitionId: businessEntityDefinitionId });
+        }
 
-        //return ({
-        //    GetDataStoreConfigs: GetDataStoreConfigs,
-        //    GetDataStoreConfig: GetDataStoreConfig
-        //});
+        return ({
+            GetSerialNumberPartDefinitionsInfo: GetSerialNumberPartDefinitionsInfo
+        });
     }
 
-    appControllers.service('VR_GenericData_DataStoreConfigAPIService', DataStoreConfigAPIService);
+    app.service('VR_GenericData_GenericBESerialNumberAPIService', GenericBESerialNumberAPIService);
 
-})(appControllers);
+})(app);
