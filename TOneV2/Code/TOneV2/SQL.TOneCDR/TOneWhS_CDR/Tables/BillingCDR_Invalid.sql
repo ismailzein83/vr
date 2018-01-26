@@ -19,8 +19,10 @@
     [SupplierZoneID]              BIGINT          NULL,
     [CGPN]                        VARCHAR (50)    NULL,
     [CDPN]                        VARCHAR (50)    NULL,
-    [CDPNIn]                      VARCHAR (50)    NULL,
-    [CDPNOut]                     VARCHAR (50)    NULL,
+    [OrigCGPN]                    VARCHAR (50)    NULL,
+    [OrigCDPN]                    VARCHAR (50)    NULL,
+    [OrigCDPNIn]                  VARCHAR (50)    NULL,
+    [OrigCDPNOut]                 VARCHAR (50)    NULL,
     [SupplierCode]                VARCHAR (20)    NULL,
     [IDonSwitch]                  BIGINT          NULL,
     [Tag]                         VARCHAR (100)   NULL,
@@ -41,6 +43,8 @@
     [Type]                        INT             NULL,
     [QueueItemId]                 BIGINT          NULL
 );
+
+
 
 
 
