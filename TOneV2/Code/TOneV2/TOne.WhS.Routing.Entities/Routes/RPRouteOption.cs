@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
@@ -28,16 +24,10 @@ namespace TOne.WhS.Routing.Entities
 
         public int SupplierServiceWeight { get; set; }
 
-        long? IRouteOptionOrderTarget.SaleZoneId
-        {
-            get { return this.SaleZoneId; }
-        }
-
-        long? IRouteOptionOrderTarget.SupplierZoneId
-        {
-            get { return null; }
-        }
-
         public bool SupplierZoneMatchHasClosedRate { get; set; }
+
+        long? IRouteOptionOrderTarget.SaleZoneId { get { return this.SaleZoneId; } }
+
+        long? IRouteOptionOrderTarget.SupplierZoneId { get { return null; } }
     }
 }
