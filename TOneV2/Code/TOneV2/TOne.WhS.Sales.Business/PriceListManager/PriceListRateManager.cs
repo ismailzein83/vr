@@ -17,6 +17,7 @@ namespace TOne.WhS.Sales.Business
         {
             var newExplicitRates = new List<NewRate>();
             var customerPriceListsByCurrencyId = new Dictionary<int, List<NewPriceList>>();
+            var productCustomersNewExplicitRates = new List<NewRate>();
 
             ProcessRates(new ProcessRatesInput()
             {
@@ -34,14 +35,19 @@ namespace TOne.WhS.Sales.Business
                 ExplicitlyChangedExistingCustomerCountries = context.ExplicitlyChangedExistingCustomerCountries,
                 InheritedRatesByZoneId = context.InheritedRatesByZoneId,
                 NewExplicitRates = newExplicitRates,
+                ProductCustomersNewExplicitRates = productCustomersNewExplicitRates,
                 CustomerPriceListsByCurrencyId = customerPriceListsByCurrencyId
             });
 
             List<NewRate> newRates = new List<NewRate>();
-            newRates.AddRange(context.RatesToChange.SelectMany(x => x.NewRates));
-            newRates.AddRange(newExplicitRates);
+            List<NewRate> newRatesToFillGapsDueToClosingCountry = new List<NewRate>();
 
-            context.NewRates = newRates;
+            newRates.AddRange(context.RatesToChange.SelectMany(x => x.NewRates));
+            newRatesToFillGapsDueToClosingCountry.AddRange(newExplicitRates);
+
+            context.OwnerNewRates = newRates;
+            context.NewRatesToFillGapsDueToClosingCountry = newRatesToFillGapsDueToClosingCountry;
+            context.NewRatesToFillGapsDueToChangeSellingProductRates = productCustomersNewExplicitRates;
             context.ChangedRates = context.ExistingRates.Where(x => x.ChangedRate != null).Select(x => x.ChangedRate);
             context.CustomerPriceListsByCurrencyId = customerPriceListsByCurrencyId;
         }
@@ -74,7 +80,7 @@ namespace TOne.WhS.Sales.Business
                     ExistingZonesByZoneId = existingZonesByZoneId,
                     ExistingZonesByName = existingZonesByName,
                     ExistingRatesByZoneName = existingRatesByZoneName,
-                    NewRates = input.NewExplicitRates,
+                    NewRates = input.ProductCustomersNewExplicitRates,//add to product customer ExplicitRates
                     CustomerPriceListsByCurrencyId = input.CustomerPriceListsByCurrencyId
                 });
             }
@@ -621,6 +627,7 @@ namespace TOne.WhS.Sales.Business
         #endregion
 
         #region Private Classes
+
         public class ProcessRatesInput
         {
             public long ProcessInstanceId { get; set; }
@@ -638,6 +645,8 @@ namespace TOne.WhS.Sales.Business
             public InheritedRatesByZoneId InheritedRatesByZoneId { get; set; }
             public List<NewRate> NewExplicitRates { get; set; }
             public Dictionary<int, List<NewPriceList>> CustomerPriceListsByCurrencyId { get; set; }
+
+            public List<NewRate> ProductCustomersNewExplicitRates { get; set; }
         }
         #endregion
     }
