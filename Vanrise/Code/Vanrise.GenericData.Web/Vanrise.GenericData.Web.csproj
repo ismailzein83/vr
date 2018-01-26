@@ -317,7 +317,9 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\vr-genericdata-datarecordstoragesettings-restapi.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\Templates\RestAPITemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\vr-genericdata-datastoresetting-restapi.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Attachment\Templates\AttachmentFieldTypeEntitManagementTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Attachment\Templates\AttachmentFieldTypeTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Attachment\vr-genericdata-attachmentfieldtype-management.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Attachment\vr-genericdata-fieldtype-attachment.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\CustomObject\Templates\CustomObjectFieldTypeTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\CustomObject\vr-genericdata-fieldtype-customobject.js" />

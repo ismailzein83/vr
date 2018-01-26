@@ -1,0 +1,15 @@
+﻿<vr-button type="Add" data-onclick="scopeModel.addNewAttachementFieldType" standalone></vr-button>
+<vr-button type="Save" data-onclick="scopeModel.save" standalone></vr-button>
+<vr-datagrid datasource="scopeModel.attachementFieldTypes"
+             ondeleterow="removerow"
+             on-ready="onGridReady"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             enableautoexport="true">
+    <vr-datagridcolumn headertext="'File'" widthfactor="5"><vr-fileupload tempfile="true" extension="xls,xlsx" value="dataItem.Entity.FileId" isrequired> </vr-fileupload></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Note'" widthfactor="5">
+        <vr-textbox value="dataItem.Entity.Notes" isrequired="true"></vr-textbox>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Date'" typeof="'Date'" widthfactor="5"><vr-datetimepicker value="dataItem.Entity.CreatedTime" type="date" customvalidate="validateTimeRange()"></vr-datetimepicker></vr-datagridcolumn>
+</vr-datagrid>
+
