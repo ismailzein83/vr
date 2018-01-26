@@ -217,6 +217,18 @@ namespace TOne.WhS.BusinessEntity.Business
             return saleAreaSettings.PricelistSettings;
         }
 
+        public string GetFaultTicketsCustomerSerialNumberPattern()
+        {
+            FaultTicketsSettingsData faultTicketsSettingsData = GetFaultTicketsSettingsData();
+            if (faultTicketsSettingsData.CustomerSetting == null)
+                throw new NullReferenceException("faultTicketsSettingsData.CustomerSetting");
+
+            if (faultTicketsSettingsData.CustomerSetting.SerialNumberPattern==null)
+                throw new NullReferenceException("faultTicketsSettingsData.CustomerSetting.SerialNumberPattern");
+
+            return faultTicketsSettingsData.CustomerSetting.SerialNumberPattern;
+        }
+
         public PricingSettings MergePricingSettings(PricingSettings pricingSettingsParent, PricingSettings pricingSettingsChild)
         {
             PricingSettings result = new PricingSettings();
@@ -463,6 +475,16 @@ namespace TOne.WhS.BusinessEntity.Business
         private PurchaseAreaSettingsData GetPurchaseAreaSettings()
         {
             return GetSettings<PurchaseAreaSettingsData>(Constants.PurchaseAreaSettings);
+        }
+
+        private FaultTicketsSettingsData GetFaultTicketsSettingsData()
+        {
+            SettingManager manager = new SettingManager();
+            FaultTicketsSettingsData faultTicketsSettingsData =
+                manager.GetSetting<FaultTicketsSettingsData>(Constants.FaultTicketsSettingsData);
+            if (faultTicketsSettingsData == null)
+                throw new NullReferenceException("FaultTicketsSettings");
+            return faultTicketsSettingsData;
         }
 
         #endregion
