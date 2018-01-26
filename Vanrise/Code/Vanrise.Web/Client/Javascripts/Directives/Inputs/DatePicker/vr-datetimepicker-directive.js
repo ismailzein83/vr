@@ -107,7 +107,7 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     var dropDown = self.parent().find('.bootstrap-datetimepicker-widget')[0];
                     var basetop = selfOffset.top - $(window).scrollTop() + $(this).height();
                     var eltop = selfOffset.top - $(window).scrollTop();
-                    var baseleft = selfOffset.left - $(window).scrollLeft()
+                    var baseleft = selfOffset.left - $(window).scrollLeft();
                     var elleft = baseleft;
                     $(dropDown).removeClass('pull-right');
                     $(dropDown).removeClass('dropdown-menu.top');
