@@ -29,7 +29,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override string GetDescription(object value)
         {
-            throw new NotImplementedException();
+            return null;
         }
 
         public override bool IsMatched(object fieldValue, object filterValue)

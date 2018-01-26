@@ -654,7 +654,18 @@ namespace Vanrise.GenericData.SQLDataStorage
             {
                 var sqlDataRecordStorageColumn = GetColumnFromFieldName(fieldValue.Key);
                 var parameter = GenerateParameterName(ref parameterIndex);
-                parameterValues.Add(parameter, fieldValue.Value);
+
+                DataRecordField matchingField = DataRecordType.Fields.FindRecord(itm => itm.Name == fieldValue.Key);
+                if (matchingField.Type.StoreValueSerialized)
+                {
+                    parameterValues.Add(parameter, matchingField.Type.SerializeValue(new SerializeDataRecordFieldValueContext
+                    {
+                        Object = fieldValue.Value
+                    }));
+                }
+                else
+                    parameterValues.Add(parameter, fieldValue.Value);
+
                 if (sqlDataRecordStorageColumn.IsUnique)
                 {
                     if (ifNotExistsQueryBuilder.Length > 0)
@@ -737,8 +748,19 @@ namespace Vanrise.GenericData.SQLDataStorage
             foreach (var fieldValue in fieldValues)
             {
                 var sqlDataRecordStorageColumn = GetColumnFromFieldName(fieldValue.Key);
+
                 var parameter = GenerateParameterName(ref parameterIndex);
-                parameterValues.Add(parameter, fieldValue.Value);
+                DataRecordField matchingField = DataRecordType.Fields.FindRecord(itm => itm.Name == fieldValue.Key);
+                if (matchingField.Type.StoreValueSerialized)
+                {
+                    parameterValues.Add(parameter, matchingField.Type.SerializeValue(new SerializeDataRecordFieldValueContext
+                    {
+                        Object = fieldValue.Value
+                    }));
+                }
+                else
+                    parameterValues.Add(parameter, fieldValue.Value);
+
                 if (sqlDataRecordStorageColumn.IsUnique)
                 {
                     if (ifNotExistsQueryBuilder.Length > 0)
