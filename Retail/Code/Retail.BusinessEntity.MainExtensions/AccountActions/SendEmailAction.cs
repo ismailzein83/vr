@@ -34,7 +34,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountActions
             objects.Add("Subscriber", account);
             objects.Add("SubscriberBalance", eventPayload.CurrentBalance);
             objects.Add("Threshold", eventPayload.Threshold);
-
+            objects.Add("CreditLimit", GetAccountCreditLimit(eventPayload, out accountDefinitionId));
             VRMailManager mailManager = new VRMailManager();
             mailManager.SendMail(this.MailMessageTemplateId, objects);
 

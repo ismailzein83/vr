@@ -52,5 +52,32 @@ namespace Retail.BusinessEntity.Business
                 return s_accountBEManager.GetAccount(accountBEDefinitionId, accountId);
             }
         }
+
+        protected Decimal? GetAccountCreditLimit(VRBalanceAlertEventPayload balanceAlertEventPayload, out Guid accountBEDefinitionId)
+        {
+            accountBEDefinitionId = GetAccountBEDefinitionId(balanceAlertEventPayload);
+            var financialAccountData = s_financialAccountManager.GetFinancialAccountData(accountBEDefinitionId, balanceAlertEventPayload.EntityId);
+            if (financialAccountData != null)
+            {
+                return financialAccountData.CreditLimit;
+            }
+            else
+            {
+                long accountId = ParseAccountId(balanceAlertEventPayload.EntityId);
+                IAccountPayment accountPayment;
+                if (s_accountBEManager.HasAccountPayment(accountBEDefinitionId, accountId, true, out accountPayment))
+                {
+                    var product = new ProductManager().GetProduct(accountPayment.ProductId);
+                    product.ThrowIfNull("product", accountPayment.ProductId);
+                    if(product.Settings != null)
+                    {
+                        IPostpaidProductSettings productSettingsAsPostpaid = product.Settings.ExtendedSettings as IPostpaidProductSettings;
+                        if (productSettingsAsPostpaid != null)
+                            return productSettingsAsPostpaid.CreditLimit;
+                    }
+                }
+                return null;
+            }
+        }
     }
 }
