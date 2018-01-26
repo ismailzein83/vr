@@ -23,29 +23,24 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
     function Attachmentfieldtype($scope, ctrl, $attrs) {
         this.initializeController = initializeController;
-        var gridAPI;
-        var context;
+
         function initializeController() {
+
             $scope.scopeModel = {};
             $scope.scopeModel.attachementFieldTypes = [];
-            var attachementFieldTypeArray;
             $scope.scopeModel.addNewAttachementFieldType = function () {
                 var attachementFieldType =
                     {
-                        FileId: '',
-                        Notes: '',
-                        CreatedTime: ''
+                        file:undefined,
+                        notes: '',
+                        createdTime: new Date()
                     };
                 $scope.scopeModel.attachementFieldTypes.push({ Entity: attachementFieldType });
-                attachementFieldTypeArray = $scope.scopeModel.attachementFieldTypes;
+              
             };
             $scope.scopeModel.save = function () {
                 console.log(getAttachementFieldTypeData());
-                console.log("fileId");
-                console.log($scope.scopeModel.attachementFieldTypes[0]);
-                console.log($scope.scopeModel.file);
-                console.log($scope.scopeModel.note);
-            }
+            };
             $scope.onGridReady = function (api) {
                 gridAPI = api;
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {
@@ -77,8 +72,15 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
             var attachementFieldTypes = [];
             if ($scope.scopeModel.attachementFieldTypes != undefined) {
                 for (var i = 0; i < $scope.scopeModel.attachementFieldTypes.length; i++) {
-                    var attachementFieldType = $scope.scopeModel.attachementFieldTypes[i];
-                    attachementFieldTypes.push(attachementFieldType.Entity);
+                    if ($scope.scopeModel.attachementFieldTypes.Entity != undefined) {
+                        var attachementFieldType =
+                            {
+                                FileId: $scope.scopeModel.attachementFieldTypes[i].Entity.file.fileId,
+                                Notes: $scope.scopeModel.attachementFieldTypes[i].Entity.notes,
+                                CreatedTime: $scope.scopeModel.attachementFieldTypes[i].Entity.createdTime
+                            };
+                        attachementFieldTypes.push(attachementFieldType);
+                    }
                 }
             }
             return attachementFieldTypes;
