@@ -1,0 +1,105 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{2D7A8E74-A563-4752-866B-40E8FE14C7BC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Vanrise.Data.RDB</RootNamespace>
+    <AssemblyName>Vanrise.Data.RDB</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <SccProjectName>SAK</SccProjectName>
+    <SccLocalPath>SAK</SccLocalPath>
+    <SccAuxPath>SAK</SccAuxPath>
+    <SccProvider>SAK</SccProvider>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Conditions\BaseRDBCondition.cs" />
+    <Compile Include="DataProvider\BaseRDBDataProvider.cs" />
+    <Compile Include="Expressions\BaseRDBExpression.cs" />
+    <Compile Include="BaseAndDefs\BaseRDBQuery.cs" />
+    <Compile Include="BaseAndDefs\IRDBDataReader.cs" />
+    <Compile Include="Select\IRDBSelectContextReady.cs" />
+    <Compile Include="BaseAndDefs\IRDBTableQuerySource.cs" />
+    <Compile Include="OLDCode.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Conditions\RDBAndConditionContext.cs" />
+    <Compile Include="ExecuteNonQuery\RDBBatchQuery.cs" />
+    <Compile Include="Conditions\RDBConditionContext.cs" />
+    <Compile Include="Conditions\RDBConditions.cs" />
+    <Compile Include="DataProvider\RDBDataProviderResolveQueryContext.cs" />
+    <Compile Include="DataProvider\RDBDataProviderType.cs" />
+    <Compile Include="BaseAndDefs\RDBDataType.cs" />
+    <Compile Include="Expressions\RDBExpressions.cs" />
+    <Compile Include="ExecuteNonQuery\RDBInsertQuery.cs" />
+    <Compile Include="Join\RDBJoin.cs" />
+    <Compile Include="Join\RDBJoinContext.cs" />
+    <Compile Include="Join\RDBJoinType.cs" />
+    <Compile Include="ExecuteNonQuery\RDBNoDataQuery.cs" />
+    <Compile Include="Conditions\RDBOrConditionContext.cs" />
+    <Compile Include="Select\RDBSelectContext.cs" />
+    <Compile Include="Select\RDBSelectQuery.cs" />
+    <Compile Include="BaseAndDefs\RDBTableColumnDefinition.cs" />
+    <Compile Include="BaseAndDefs\RDBTableDefinition.cs" />
+    <Compile Include="ExecuteNonQuery\RDBUpdateQuery.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
+      <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
+      <Name>Vanrise.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Data.SQL\Vanrise.Data.SQL.csproj">
+      <Project>{4ab70e59-2c65-4167-8d5f-897702cf161b}</Project>
+      <Name>Vanrise.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Data\Vanrise.Data.csproj">
+      <Project>{107dc891-2169-409f-9617-6d52723d05ce}</Project>
+      <Name>Vanrise.Data</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>
+  </PropertyGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
