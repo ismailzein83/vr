@@ -10,10 +10,13 @@
     [SubscriberAccountTypeId] UNIQUEIDENTIFIER NULL,
     [SubscriberAccountId]     BIGINT           NULL,
     [FinancialAccountId]      BIGINT           NULL,
+    [BillingAccountId]        VARCHAR (50)     NULL,
     [ServiceTypeId]           UNIQUEIDENTIFIER NULL,
     [TrafficDirection]        INT              NULL,
     [InitiationCallType]      INT              NULL,
     [TerminationCallType]     INT              NULL,
+    [OrigCalling]             VARCHAR (500)    NULL,
+    [OrigCalled]              VARCHAR (500)    NULL,
     [Calling]                 VARCHAR (500)    NULL,
     [Called]                  VARCHAR (500)    NULL,
     [InterconnectOperatorId]  BIGINT           NULL,
@@ -26,6 +29,8 @@
     [Extension]               VARCHAR (20)     NULL,
     [NationalCallType]        INT              NULL,
     [QueueItemId]             BIGINT           NULL);
+
+
 
 
 
