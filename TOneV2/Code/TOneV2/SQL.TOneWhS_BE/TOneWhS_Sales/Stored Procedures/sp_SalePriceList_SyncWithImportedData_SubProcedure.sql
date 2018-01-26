@@ -17,7 +17,7 @@ BEGIN
 	begin try
 		begin tran
 			Insert into TOneWhS_BE.SalePriceList (ID, OwnerType, OwnerID, CurrencyID, EffectiveOn, ProcessInstanceID,FileID, PriceListType,UserID,[Description],PricelistStateBackupID,PricelistSource)
-				Select	splnew.ID, splnew.OwnerType, splnew.OwnerID, splnew.CurrencyID, splnew.EffectiveOn, @ProcessInstanceID,splnew.FileID, splnew.PriceListType, UserID,splnew.[Description],@PricelistStateBackupID,0
+				Select	splnew.ID, splnew.OwnerType, splnew.OwnerID, splnew.CurrencyID, splnew.EffectiveOn, @ProcessInstanceID,splnew.FileID, splnew.PriceListType, UserID,splnew.[Description],PricelistStateBackupID,0
 				from TOneWhS_BE.SalePriceList_New splnew WITH(NOLOCK) Where splnew.ProcessInstanceID = @ProcessInstanceID 
 	
 				-- Sync rates
@@ -82,7 +82,7 @@ BEGIN
 			-- Sync default routing product
 			
 			insert into TOneWhS_BE.SaleEntityRoutingProduct (ID, OwnerType, OwnerID, RoutingProductID, BED, EED)
-			select ID, @OwnerType, @OwnerID, RoutingProductID, BED, EED
+			select ID,  @OwnerType, @OwnerID, RoutingProductID, BED, EED
 			from TOneWhS_Sales.RP_DefaultRoutingProduct_New newDRP with(nolock)
 			where newDRP.ProcessInstanceID = @ProcessInstanceID
 			
@@ -94,7 +94,7 @@ BEGIN
 			-- Sync zone routing products
 			
 			insert into TOneWhS_BE.SaleEntityRoutingProduct (ID, OwnerType, OwnerID, RoutingProductID, ZoneID, BED, EED)
-			select ID, @OwnerType, @OwnerID, RoutingProductID, ZoneID, BED, EED
+			select ID,OwnerType , OwnerID, RoutingProductID, ZoneID, BED, EED
 			from TOneWhS_Sales.RP_SaleZoneRoutingProduct_New newSZRP with(nolock)
 			where newSZRP.ProcessInstanceID = @ProcessInstanceID
 			

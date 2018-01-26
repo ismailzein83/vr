@@ -2,8 +2,11 @@
     [ID]                INT      NOT NULL,
     [ProcessInstanceID] BIGINT   NOT NULL,
     [BED]               DATETIME NOT NULL,
-    [EED]               DATETIME NULL
+    [EED]               DATETIME NULL,
+    [CustomerID]        INT      NULL
 );
+
+
 
 
 

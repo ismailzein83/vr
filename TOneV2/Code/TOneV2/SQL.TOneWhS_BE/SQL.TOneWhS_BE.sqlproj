@@ -109,6 +109,9 @@
     <Folder Include="TOneWhS_Invoice\" />
     <Folder Include="TOneWhS_Invoice\Tables\" />
     <Folder Include="TOneWhS_Invoice\Stored Procedures\" />
+    <Folder Include="TOneWhS_Case\" />
+    <Folder Include="TOneWhS_Case\Tables\" />
+    <Folder Include="TOneWhS_Case\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TOneWhS_BE\Tables\CarrierAccount.sql" />
@@ -548,5 +551,19 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetAllByOwnerType.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetSaleZoneRoutingProducts.sql" />
     <Build Include="TOneWhS_BE\User Defined Types\RoutingProductToClose.sql" />
+    <Build Include="TOneWhS_Case\Tables\CustomerCaseWorkGroup.sql" />
+    <Build Include="TOneWhS_Case\Tables\CustomerCase.sql" />
+    <Build Include="TOneWhS_Case\Tables\CustomerCaseReason.sql" />
+    <Build Include="TOneWhS_Case\Tables\SupplierCase.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\SP_SalePricelistNewCountryChanges_GetAffectedCustomerIds.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\SP_SalePricelistChangedCountryChanges_GetAffectedCustomerIds.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetByCode.sql" />
+    <Build Include="TOneWhS_Case\User Defined Types\CustomerCaseWorkGroupType.sql" />
+    <Build Include="TOneWhS_Case\User Defined Types\CustomerCaseType.sql" />
+    <Build Include="TOneWhS_Case\User Defined Types\CustomerCaseReasonType.sql" />
+    <Build Include="TOneWhS_Case\User Defined Types\CutomerCaseType.sql" />
+    <Build Include="TOneWhS_Case\User Defined Types\SupplierCaseType.sql" />
+    <Build Include="TOneWhS_Case\User Defined Types\VRCaseType.sql" />
+    <Build Include="Security\TOneWhS_Case.sql" />
   </ItemGroup>
 </Project>
