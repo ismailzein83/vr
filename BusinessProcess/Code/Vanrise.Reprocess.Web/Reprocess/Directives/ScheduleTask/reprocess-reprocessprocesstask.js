@@ -54,8 +54,8 @@ app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsServic
 
                 $scope.scopeModel.isValid = function () {
                     if ($scope.scopeModel.daysBack != undefined && $scope.scopeModel.numberOfDays != undefined) {
-                        if (parseFloat($scope.scopeModel.numberOfDays) > parseFloat($scope.scopeModel.daysBack)) {
-                            return 'Number Of Days should be less than or equal to Days Back.';
+                        if (parseFloat($scope.scopeModel.numberOfDays) > (parseFloat($scope.scopeModel.daysBack) + 1)) {
+                            return 'Reprocess End Date should not exceed Today Date';
                         }
                     }
                     return null;
