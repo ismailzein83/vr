@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class GenericBusinessEntity
+    public class GenericBusinessEntity : IGenericObject
     {
         public Dictionary<string, Object> FieldValues { get; set; }
     }

@@ -65,6 +65,7 @@
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBEDefinitionViewFilter.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBEViewSettings.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBusinessEntityDefinitionManager.cs" />
+    <Compile Include="BusinessEntity\GenericBusinessEntity\GenericFieldsActionAuditChangeInfoDefinition.cs" />
     <Compile Include="BusinessEntity\VRRestAPIBEDefinitionSettings\VRRestAPIBEDefinitionSettings.cs" />
     <Compile Include="BusinessEntity\VRRestAPIBusinessEntityManager.cs" />
     <Compile Include="BusinessEntity\IExtensibleBEManager.cs" />

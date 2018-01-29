@@ -379,11 +379,13 @@ namespace Vanrise.GenericData.Business
 
             var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(genericBusinessEntityToUpdate.BusinessEntityDefinitionId);
 
+            var oldGenericBE = GetGenericBusinessEntity(genericBusinessEntityToUpdate.GenericBusinessEntityId, genericBusinessEntityToUpdate.BusinessEntityDefinitionId);
+
             bool updateActionSucc = _dataRecordStorageManager.UpdateDataRecord(genericBEDefinitionSetting.DataRecordStorageId, genericBusinessEntityToUpdate.GenericBusinessEntityId, genericBusinessEntityToUpdate.FieldValues);
           
             if (updateActionSucc)
             {
-                VRActionLogger.Current.TrackAndLogObjectUpdated(new GenericBusinessEntityLoggableEntity(genericBusinessEntityToUpdate.BusinessEntityDefinitionId), genericBusinessEntityToUpdate);
+                VRActionLogger.Current.TrackAndLogObjectUpdated(new GenericBusinessEntityLoggableEntity(genericBusinessEntityToUpdate.BusinessEntityDefinitionId), genericBusinessEntityToUpdate, oldGenericBE);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = GenericBusinessEntityDetailMapper(genericBusinessEntityToUpdate.BusinessEntityDefinitionId, GetGenericBusinessEntity(genericBusinessEntityToUpdate.GenericBusinessEntityId,genericBusinessEntityToUpdate.BusinessEntityDefinitionId)); 
             }
@@ -528,11 +530,15 @@ namespace Vanrise.GenericData.Business
             Guid _businessEntityDefinitionId;
             static GenericBusinessEntityDefinitionManager s_genericBusinessEntityDefinitionManager = new GenericBusinessEntityDefinitionManager();
             static GenericBusinessEntityManager s_genericBusinessEntityManager = new GenericBusinessEntityManager();
-            DataRecordField dataRecordField;
+            DataRecordField idDataRecordField;
+            Dictionary<string, DataRecordField> dataRecordFields;
+
             public GenericBusinessEntityLoggableEntity(Guid businessEntityDefinitionId)
             {
                 _businessEntityDefinitionId = businessEntityDefinitionId;
-                dataRecordField = s_genericBusinessEntityDefinitionManager.GetIdFieldTypeForGenericBE(_businessEntityDefinitionId);
+                idDataRecordField = s_genericBusinessEntityDefinitionManager.GetIdFieldTypeForGenericBE(_businessEntityDefinitionId);
+                dataRecordFields = s_genericBusinessEntityDefinitionManager.GetDataRecordTypeFieldsByBEDefinitionId(_businessEntityDefinitionId);
+                
             }
 
             public override string EntityUniqueName
@@ -555,20 +561,28 @@ namespace Vanrise.GenericData.Business
             {
                 GenericBusinessEntity genericBusinessEntity = context.Object.CastWithValidate<GenericBusinessEntity>("context.Object");
                 genericBusinessEntity.FieldValues.ThrowIfNull("genericBusinessEntity.FieldValues");
-                return genericBusinessEntity.FieldValues[dataRecordField.Name];
+                return genericBusinessEntity.FieldValues[idDataRecordField.Name];
             }
 
             public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
             {
-
-                //GenericBusinessEntity genericBusinessEntity = context.Object.CastWithValidate<GenericBusinessEntity>("context.Object");
-                //var businessEntityTitle = s_genericBusinessEntityManager.GetBusinessEntityTitle(genericBusinessEntity.BusinessEntityDefinitionId, genericBusinessEntity.GenericBusinessEntityId);
-                return null;// (businessEntityTitle != null) ? businessEntityTitle.EntityName : null;
+                GenericBusinessEntity genericBusinessEntity = context.Object.CastWithValidate<GenericBusinessEntity>("context.Object");
+                genericBusinessEntity.FieldValues.ThrowIfNull("genericBusinessEntity.FieldValues");
+                var objectId = genericBusinessEntity.FieldValues[idDataRecordField.Name];
+                return s_genericBusinessEntityManager.GetGenericBusinessEntityName(objectId,_businessEntityDefinitionId);
             }
 
             public override string ModuleName
             {
                 get { return "Generic Data"; }
+            }
+
+            public override VRActionAuditChangeInfoDefinition GetChangeInfoDefinition(IVRLoggableEntityGetChangeInfoDefinitionContext context)
+            {
+                return new GenericFieldsActionAuditChangeInfoDefinition
+                {
+                    FieldTypes = dataRecordFields
+                };
             }
         }
         #endregion

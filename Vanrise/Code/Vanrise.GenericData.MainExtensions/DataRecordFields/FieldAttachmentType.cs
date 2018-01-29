@@ -20,7 +20,29 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             var type = GetNonNullableRuntimeType();
             return (IsNullable) ? GetNullableType(type) : type;
         }
+        public override bool AreEqual(Object newValue, Object oldValue)
+        {
+            if (newValue == null && oldValue == null)
+                return true;
 
+            if (newValue == null || oldValue == null)
+                return false;
+
+            var newValueObject = newValue as List<AttachmentFieldTypeEntity>;
+            var oldValueObject = oldValue as List<AttachmentFieldTypeEntity>;
+
+            if (newValueObject != null && oldValue != null)
+            {
+                foreach (var newAttachmentField in newValueObject)
+                {
+                    if (!oldValueObject.Any(x => x.FileId == newAttachmentField.FileId && x.Notes == newAttachmentField.Notes && x.CreatedTime == newAttachmentField.CreatedTime))
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
         public override Type GetNonNullableRuntimeType()
         {
             return typeof(List<AttachmentFieldTypeEntity>);

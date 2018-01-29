@@ -28,6 +28,22 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             uniqueIdentifier = Guid.NewGuid();
             return true;
         }
+        public override bool AreEqual(Object newValue, Object oldValue)
+        {
+            if (newValue == null && oldValue == null)
+                return true;
+
+            if (newValue == null || oldValue == null)
+                return false;
+
+
+            Guid newGuidValue = Guid.Parse(newValue.ToString());
+            
+            Guid oldGuidValue = Guid.Parse(oldValue.ToString());
+
+            return newGuidValue.Equals(oldGuidValue);
+        }
+
         public override Type GetRuntimeType()
         {
             var type = GetNonNullableRuntimeType();

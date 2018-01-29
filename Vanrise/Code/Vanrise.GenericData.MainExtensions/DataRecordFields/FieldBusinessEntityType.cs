@@ -38,7 +38,29 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             var type = GetNonNullableRuntimeType();
             return (IsNullable) ? GetNullableType(type) : type;
         }
+        public override bool AreEqual(Object newValue, Object oldValue)
+        {
+            if (newValue == null && oldValue == null)
+                return true;
 
+            if (newValue == null || oldValue == null)
+                return false;
+
+            var type = GetNonNullableRuntimeType();
+            if (type.FullName == "System.Guid")
+            {
+                var newGuidValue = Guid.Parse(newValue.ToString());
+                var oldGuidValue = Guid.Parse(oldValue.ToString());
+                return newGuidValue.Equals(oldValue);
+
+            }
+            else
+            {
+                var newTypeValue = Convert.ChangeType(newValue, type);
+                var oldTypeValue = Convert.ChangeType(oldValue, type);
+                return newTypeValue.Equals(oldTypeValue);
+            }
+        }
         public override Type GetNonNullableRuntimeType()
         {
             BusinessEntityDefinition beDefinition = GetBusinessEntityDefinition();

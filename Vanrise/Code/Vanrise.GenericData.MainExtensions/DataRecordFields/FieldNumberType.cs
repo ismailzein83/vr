@@ -17,6 +17,35 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
     {
         public override Guid ConfigId { get { return new Guid("75aef329-27bd-4108-b617-f5cc05ff2aa3"); } }
 
+        public override bool AreEqual(Object newValue, Object oldValue)
+        {
+            if (newValue == null && oldValue == null)
+                return true;
+         
+            if (newValue == null || oldValue == null)
+                return false;
+
+            switch (DataType)
+            {
+                case FieldNumberDataType.BigInt:
+                    long newLongValue = (long)newValue;
+                    long oldLongValue = (long)oldValue;
+                    return newLongValue.Equals(oldLongValue);
+
+                case FieldNumberDataType.Decimal:
+                    decimal newDecimalValue = (decimal)newValue;
+                    decimal oldDecimalValue = (decimal)oldValue;
+                    return newDecimalValue.Equals(oldDecimalValue);
+
+                case FieldNumberDataType.Int:
+                    int newIntValue = (int)newValue;
+                    int oldIntValue = (int)oldValue;
+                    return newIntValue.Equals(oldIntValue);
+                default: return false;
+            }
+        }
+        public override string ViewerEditor { get { return "vr-genericdata-fieldtype-number-viewereditor"; } }
+
         public override string RuntimeEditor { get { return "vr-genericdata-fieldtype-number-runtimeeditor"; } }
 
         public FieldNumberPrecision DataPrecision { get; set; }

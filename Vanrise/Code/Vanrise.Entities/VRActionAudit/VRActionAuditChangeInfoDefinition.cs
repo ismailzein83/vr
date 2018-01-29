@@ -8,7 +8,7 @@ namespace Vanrise.Entities
 {
     public abstract class VRActionAuditChangeInfoDefinition
     {
-        public abstract string RuntimeEditor { get; set; }
+        public abstract string RuntimeEditor { get; }
 
         public abstract VRActionAuditChangeInfo ResolveChangeInfo(IVRActionAuditChangeInfoResolveChangeInfoContext context);
     }
@@ -16,9 +16,8 @@ namespace Vanrise.Entities
     public interface IVRActionAuditChangeInfoResolveChangeInfoContext
     {
         Object OldObjectValue { get; }
-
         Object NewObjectValue { get; }
-
         string ChangeSummary { set; }
+        bool NothingChanged { set; }
     }
 }

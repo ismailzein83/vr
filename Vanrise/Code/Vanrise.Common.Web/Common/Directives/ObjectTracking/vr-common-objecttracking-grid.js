@@ -28,6 +28,8 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
         var gridAPI;
         var actionHistoryName;
         var viewHistoryAction;
+        var uniqueName;
+        var vrLoggableEntitySettings;
         this.initializeController = initializeController;
 
         function initializeController() {
@@ -45,13 +47,22 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
                     directiveAPI.load = function (query) {
                         var promiseDeferred = UtilsService.createPromiseDeferred();
                         if (actionHistoryName == null) {
-                            var uniqueName = query.EntityUniqueName;
-                            VRCommon_ObjectTrackingAPIService.GetViewHistoryItemClientActionName(uniqueName).then(function (response) {
-                                actionHistoryName = response;
-                                viewHistoryAction = VRCommon_ObjectTrackingService.getActionTrackIfExist(actionHistoryName);
-                                return gridAPI.retrieveData(query).finally(function () {
-                                    promiseDeferred.resolve();
-                                });
+                            uniqueName = query.EntityUniqueName;
+                            getVRLoggableEntitySettings().then(function () {
+                                if (vrLoggableEntitySettings != null)
+                                {
+                                    actionHistoryName = vrLoggableEntitySettings.ViewHistoryItemClientActionName;
+                                    viewHistoryAction = VRCommon_ObjectTrackingService.getActionTrackIfExist(actionHistoryName);
+                                    if (vrLoggableEntitySettings.ChangeInfoDefinition != undefined)
+                                    {
+                                        AddDrillDownDefinition(vrLoggableEntitySettings.ChangeInfoDefinition);
+                                    }
+
+                                    return gridAPI.retrieveData(query).finally(function () {
+                                        promiseDeferred.resolve();
+                                    });
+                                }
+                              
                             }).catch(function (error) {
                                 promiseDeferred.reject(error);
                                 VRNotificationService.notifyException(error, $scope);
@@ -67,6 +78,20 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
                     return directiveAPI;
                 }
             };
+
+            function AddDrillDownDefinition(changeInfoDefinition)
+            {
+                if(changeInfoDefinition != undefined)
+                {
+                }
+            }
+
+            function getVRLoggableEntitySettings() {
+                return VRCommon_ObjectTrackingAPIService.GetVRLoggableEntitySettings(uniqueName).then(function (response) {
+                    vrLoggableEntitySettings = response;
+                });
+            }
+
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return VRCommon_ObjectTrackingAPIService.GetFilteredObjectTracking(dataRetrievalInput)
                     .then(function (response) {
@@ -81,6 +106,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
                 name: "View",
                 clicked: viewHistory,
             }];
+
             $scope.gridMenuActions = function (dataItem) {
                 if (dataItem.Entity.HasDetail && viewHistoryAction != undefined) {
                     return defaultMenuActions;

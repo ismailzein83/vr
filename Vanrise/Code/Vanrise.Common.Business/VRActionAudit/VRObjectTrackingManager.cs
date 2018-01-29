@@ -16,12 +16,12 @@ namespace Vanrise.Common.Business
         static VRLoggableEntityManager s_loggableEntityManager = new VRLoggableEntityManager();
         static VRActionAuditLKUPManager s_actionAuditLKUPManager = new VRActionAuditLKUPManager();
 
-        internal long TrackObjectAction(VRLoggableEntityBase loggableEntity, string objectId, Object obj, string action, string actionDescription,Object technicalInformation)
+        internal long TrackObjectAction(VRLoggableEntityBase loggableEntity, string objectId, Object obj, string action, string actionDescription, Object technicalInformation, VRActionAuditChangeInfo vrActionAuditChangeInfo)
         {
             int userId = ContextFactory.GetContext().GetLoggedInUserId();
             Guid loggableEntityId = s_loggableEntityManager.GetLoggableEntityId(loggableEntity);
             int actionId = s_actionAuditLKUPManager.GetLKUPId(VRActionAuditLKUPType.Action, action);
-            return s_dataManager.Insert(userId, loggableEntityId, objectId, obj, actionId, actionDescription, technicalInformation);
+            return s_dataManager.Insert(userId, loggableEntityId, objectId, obj, actionId, actionDescription, technicalInformation, vrActionAuditChangeInfo);
         }
 
         public IDataRetrievalResult<VRObjectTrackingMetaDataDetail> GetFilteredObjectTracking(Vanrise.Entities.DataRetrievalInput<VRLoggableEntityQuery> input)
@@ -30,10 +30,10 @@ namespace Vanrise.Common.Business
 
         }
 
-        public string GetViewHistoryItemClientActionName(string uniqueName)
+        public VRLoggableEntitySettings GetVRLoggableEntitySettings(string uniqueName)
         {
             var logEntity = s_loggableEntityManager.GetLoggableEntity(uniqueName);
-            return (logEntity != null) ? logEntity.Settings.ViewHistoryItemClientActionName : null;
+            return (logEntity != null) ? logEntity.Settings : null;
         }
 
         public object GetObjectDetailById(int VRObjectTrackingId)

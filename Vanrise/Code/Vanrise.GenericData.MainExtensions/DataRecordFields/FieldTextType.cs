@@ -26,12 +26,24 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return GetNonNullableRuntimeType();
         }
+        public override bool AreEqual(Object newValue, Object oldValue)
+        {
+            if (newValue == null && oldValue == null)
+                return true;
 
+            if (newValue == null || oldValue == null)
+                return false;
+
+            string newLongValue = (string)newValue;
+            string oldLongValue = (string)oldValue;
+
+            return newLongValue.Equals(oldLongValue);
+        }
         public override Type GetNonNullableRuntimeType()
         {
             return typeof(string);
         }
-
+        public override string ViewerEditor { get { return "vr-genericdata-fieldtype-text-viewereditor"; } }
         public override string GetDescription(Object value)
         {
             if (value == null)

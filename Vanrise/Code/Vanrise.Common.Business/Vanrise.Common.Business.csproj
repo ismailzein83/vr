@@ -90,6 +90,8 @@
     <Compile Include="Region\RegionManager.cs" />
     <Compile Include="Setting\SettingOverriddenConfiguration.cs" />
     <Compile Include="StatusDefinition\StatusDefinitionFilterContext.cs" />
+    <Compile Include="VRActionAudit\Context\VRActionAuditChangeInfoResolveChangeInfoContext.cs" />
+    <Compile Include="VRActionAudit\Context\VRLoggableEntityGetChangeInfoDefinitionContext.cs" />
     <Compile Include="VRActionAudit\VRActionAuditLKUPManager.cs" />
     <Compile Include="VRActionAudit\VRActionAuditManager.cs" />
     <Compile Include="VRActionAudit\VRActionLogger.cs" />

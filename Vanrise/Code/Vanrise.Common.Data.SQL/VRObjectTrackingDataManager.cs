@@ -16,10 +16,23 @@ namespace Vanrise.Common.Data.SQL
 
         }
 
-        public long Insert(int userId, Guid loggableEntityId, string objectId, object obj, int actionId, string actionDescription,Object technicalInformation)
+        public long Insert(int userId, Guid loggableEntityId, string objectId, object obj, int actionId, string actionDescription,Object technicalInformation, VRActionAuditChangeInfo vrActionAuditChangeInfo)
         {
             object objectTrackingId;
-            ExecuteNonQuerySP("logging.sp_ObjectTracking_Insert", out objectTrackingId, userId, loggableEntityId, objectId, obj != null ? Vanrise.Common.Serializer.Serialize(obj) : null, actionId, actionDescription, technicalInformation != null ? Vanrise.Common.Serializer.Serialize(technicalInformation) : null);
+           
+            string serializedVRActionAuditChangeInfo = null;
+            if (vrActionAuditChangeInfo != null)
+                serializedVRActionAuditChangeInfo = Vanrise.Common.Serializer.Serialize(vrActionAuditChangeInfo);
+
+            string serializedTechnicalInformation = null;
+            if (technicalInformation != null)
+                serializedTechnicalInformation = Vanrise.Common.Serializer.Serialize(technicalInformation);
+
+            string serializedObj = null;
+            if (obj != null)
+                serializedObj = Vanrise.Common.Serializer.Serialize(obj);
+
+            ExecuteNonQuerySP("logging.sp_ObjectTracking_Insert", out objectTrackingId, userId, loggableEntityId, objectId, serializedObj, actionId, actionDescription, technicalInformation, serializedVRActionAuditChangeInfo);
             return (long)objectTrackingId;
         }
 
@@ -36,7 +49,10 @@ namespace Vanrise.Common.Data.SQL
         {
             return GetItemSP("[logging].[sp_ObjectTracking_GetObjectDetailsById]", ObjectDetailMapper, VRObjectTrackingId);
         }
-
+        public object GetVRActionAuditChangeInfoDetailById(int vrObjectTrackingId)
+        {
+            return GetItemSP("[logging].[sp_ObjectTracking_GetChangeInfoById]", VRActionAuditChangeInfoDetailMapper, vrObjectTrackingId);
+        }
         private VRObjectTrackingMetaData ObjectTrackingMapper(IDataReader reader)
         {
             VRObjectTrackingMetaData ObjectTracking = new VRObjectTrackingMetaData
@@ -46,7 +62,7 @@ namespace Vanrise.Common.Data.SQL
                 UserId = GetReaderValue<int>(reader, "UserID"),
                 ActionId = GetReaderValue<int>(reader, "ActionID"),
                 HasDetail = GetReaderValue<bool>(reader, "HasDetail"),
-                ActionDescription = reader["ActionDescription"] as string
+                ActionDescription = reader["ActionDescription"] as string,
             };
 
             return ObjectTracking;
@@ -56,7 +72,10 @@ namespace Vanrise.Common.Data.SQL
         {
             return Vanrise.Common.Serializer.Deserialize<object>(reader["ObjectDetails"] as string);
         }
-
+        private VRActionAuditChangeInfo VRActionAuditChangeInfoDetailMapper(IDataReader reader)
+        {
+            return Vanrise.Common.Serializer.Deserialize<VRActionAuditChangeInfo>(reader["ChangeInfo"] as string);
+        }
 
     }
 }

@@ -19,6 +19,11 @@ namespace Vanrise.GenericData.Entities
 
         public abstract Type GetNonNullableRuntimeType();
 
+        public virtual bool AreEqual(Object newValue, Object oldValue)
+        {
+            return newValue == oldValue;
+        }
+        public virtual string ViewerEditor { get; set; }
         public abstract string GetDescription(Object value);
 
         public abstract bool IsMatched(Object fieldValue, Object filterValue);

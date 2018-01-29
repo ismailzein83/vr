@@ -221,7 +221,7 @@
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\GenericBEFilterDefinition\vr-genericdata-genericbe-filterruntime-time.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\GenericBEViewDefinition\Templates\HistoryGenericBEDefinitionViewTemplate.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\GenericBEViewDefinition\vr-genericdata-genericbe-historygridview-runtime.js" />
-    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\MainExtensions\OnBeforeInsertHandler\GenericBESerialNumber\SerialNumberPatternHelperEditorEditorController.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\MainExtensions\OnBeforeInsertHandler\GenericBESN\SNPatternHelperEditorController.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Templates\GenericBusinessEntityDefinitionEditor.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Templates\GenericBusinessEntityViewEditor.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\vr-genericdata-genericbedefinition-selector.js" />
@@ -297,6 +297,8 @@
     <Content Include="VR_GenericData\Directives\GenericRule\Templates\GenericRuleManagementTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericRule\vr-genericdata-genericrule-criteria.js" />
     <Content Include="VR_GenericData\Directives\GenericRule\vr-genericdata-genericrule-management.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\ActionAuditChangeInfo\Templates\GenericFieldsActionAuditChangeInfoRuntime.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\ActionAuditChangeInfo\vr-genericdata-genericfields-actionauditchange-runtime.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\Templates\CompareToConstantFieldFormulaTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\Templates\DateTimeRoundFieldFormulaTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\Templates\NullToBooleanFieldFormulaTemplate.html" />
@@ -335,9 +337,13 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Guid\vr-genericdata-fieldtype-guid-rulefiltereditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Guid\vr-genericdata-fieldtype-guid-runtimeeditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Guid\vr-genericdata-fieldtype-guid.js" />
-    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\MainExtensions\OnBeforeInsertHandler\GenericBESerialNumber\Templates\SerialNumberPatternHelperEditor.html" />
-    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\MainExtensions\OnBeforeInsertHandler\GenericBESerialNumber\Templates\SerialNumberEditorTemplate.html" />
-    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\MainExtensions\OnBeforeInsertHandler\GenericBESerialNumber\vr-genricdata-be-serialnumber-editor.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\MainExtensions\OnBeforeInsertHandler\GenericBESN\Templates\SNPatternHelperEditor.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\MainExtensions\OnBeforeInsertHandler\GenericBESN\Templates\SNEditorTemplate.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\MainExtensions\OnBeforeInsertHandler\GenericBESN\vr-genricdata-be-sn-editor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Number\Templates\NumberFieldTypeViewerEditorTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Number\vr-genericdata-fieldtype-number-viewereditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Text\Templates\TextFieldTypeViewerEditorTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Text\vr-genericdata-fieldtype-text-viewereditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Common\Templates\EmptyDefinitionSettingsTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Common\vr-genericdata-genericruledefinitionsettings-tax.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\GenericRule\Common\vr-genericdata-genericruledefinitionsettings-extracharge.js" />

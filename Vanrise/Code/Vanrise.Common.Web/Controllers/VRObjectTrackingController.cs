@@ -22,11 +22,11 @@ namespace Vanrise.Common.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetViewHistoryItemClientActionName")]
-        public string GetViewHistoryItemClientActionName(string uniqueName)
+        [Route("GetVRLoggableEntitySettings")]
+        public VRLoggableEntitySettings GetVRLoggableEntitySettings(string uniqueName)
         {
             VRObjectTrackingManager manager = new VRObjectTrackingManager();
-            return manager.GetViewHistoryItemClientActionName(uniqueName);
+            return manager.GetVRLoggableEntitySettings(uniqueName);
         }
     }
 }

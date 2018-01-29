@@ -27,7 +27,18 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             return typeof(bool);
         }
+        public override bool AreEqual(Object newValue, Object oldValue)
+        {
+            if (newValue == null && oldValue == null)
+                return true;
 
+            if (newValue == null || oldValue == null)
+                return false;
+
+            bool newLongValue = (bool)newValue;
+            bool oldLongValue = (bool)oldValue;
+            return newLongValue.Equals(oldLongValue);
+        }
         public override string GetDescription(Object value)
         {
             if (value == null)
