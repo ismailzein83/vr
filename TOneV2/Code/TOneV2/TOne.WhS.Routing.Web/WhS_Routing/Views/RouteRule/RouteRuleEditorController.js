@@ -2,11 +2,10 @@
 
     "use strict";
 
-    routeRuleEditorController.$inject = ['$scope', 'WhS_Routing_RouteRuleAPIService', 'WhS_BE_RoutingProductAPIService',
-        'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VRDateTimeService'];
+    routeRuleEditorController.$inject = ['$scope', 'WhS_Routing_RouteRuleAPIService', 'WhS_BE_RoutingProductAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VRDateTimeService'];
 
-    function routeRuleEditorController($scope, WhS_Routing_RouteRuleAPIService, WhS_BE_RoutingProductAPIService,
-        UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VRDateTimeService) {
+    function routeRuleEditorController($scope, WhS_Routing_RouteRuleAPIService, WhS_BE_RoutingProductAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VRDateTimeService) {
+
         var isLinkedRouteRule;
         var linkedCode;
         var linkedRouteRuleInput;
@@ -16,6 +15,9 @@
         var routingProductId;
         var sellingNumberPlanId;
         var defaultRouteRuleValues;
+        var context;
+        var minBED;
+        var maxEED;
 
         var routeRuleEntity;
         var productRouteEntity;
@@ -32,26 +34,10 @@
         var routeRuleCriteriaAPI;
         var routeRuleCriteriaReadyPromiseDeferred;
 
-        var context;
-        var minBED;
-        var maxEED;
+
         loadParameters();
         defineScope();
         load();
-
-        function buildRouteRuleCriteriaContext() {
-            var routeRuleCriteriaContext = {
-                setTimeSettings: function (bed, eed) {
-                    if (bed != undefined)
-                        $scope.scopeModel.beginEffectiveDate = minBED = UtilsService.createDateFromString(bed);
-
-                    if (eed != undefined)
-                        $scope.scopeModel.endEffectiveDate = maxEED = UtilsService.createDateFromString(eed);
-                }
-            };
-
-            return routeRuleCriteriaContext;
-        }
 
         function loadParameters() {
             var parameters = VRNavigationService.getParameters($scope);
@@ -66,11 +52,12 @@
                 linkedCode = parameters.linkedCode;
                 defaultRouteRuleValues = parameters.defaultRouteRuleValues;
             }
+
             isEditMode = routeRuleId != undefined && (linkedRouteRuleInput == undefined);
             isViewHistoryMode = (context != undefined && context.historyId != undefined);
         }
-        function defineScope() {
 
+        function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.disableCriteria = isLinkedRouteRule;
             $scope.scopeModel.showCriteriaSection = false;
@@ -90,11 +77,9 @@
                 routeRuleCriteriaSelectorReadyPromiseDeferred.resolve();
             };
 
-
-
             $scope.scopeModel.onRouteRuleSettingsDirectiveReady = function (api) {
                 routeRuleSettingsAPI = api;
-                var setLoader = function (value) { $scope.scopeModel.isLoadingRouteRuleSettings = value };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingRouteRuleSettings = value; };
 
                 var routeRuleSettingsPayload = {
                     SupplierFilterSettings: { RoutingProductId: routingProductId }
@@ -105,7 +90,7 @@
 
             $scope.scopeModel.onRouteRuleCriteriaDirectiveReady = function (api) {
                 routeRuleCriteriaAPI = api;
-                var setLoader = function (value) { $scope.scopeModel.isLoadingRouteRuleCriteria = value };
+                var setLoader = function (value) { $scope.scopeModel.isLoadingRouteRuleCriteria = value; };
                 var routeRuleCriteriaPayload = {
                     isLinkedRouteRule: isLinkedRouteRule,
                     routingProductId: routingProductId,
@@ -150,17 +135,12 @@
                     return WhS_Routing_RouteRuleAPIService.HasAddRulePermission();
             };
 
-
             //$scope.scopeModel.validateDates = function (date) {
             //    if ($scope.scopeModel.beginEffectiveDate != undefined && $scope.scopeModel.endEffectiveDate != undefined) {
             //        var validationResult = UtilsService.validateDates($scope.scopeModel.beginEffectiveDate, $scope.scopeModel.endEffectiveDate);
             //        if (validationResult != null)
             //            return validationResult;
             //    }
-
-
-
-
             //}
 
             $scope.scopeModel.validateBED = function () {
@@ -198,9 +178,10 @@
             };
 
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
         }
+
         function load() {
             $scope.scopeModel.isLoading = true;
 
@@ -244,32 +225,20 @@
                 loadAllControls();
             }
         }
+
         function getRouteRuleHistory() {
             return WhS_Routing_RouteRuleAPIService.GetRouteRuleHistoryDetailbyHistoryId(context.historyId).then(function (response) {
                 routeRuleEntity = response;
 
             });
         }
+
         function getRouteRule() {
             return WhS_Routing_RouteRuleAPIService.GetRule(routeRuleId).then(function (routeRule) {
                 $scope.scopeModel.routeRuleName = routeRule != null ? routeRule.Name : '';
                 routeRuleEntity = routeRule;
                 routingProductId = routeRuleEntity.Criteria != null ? routeRuleEntity.Criteria.RoutingProductId : undefined;
             });
-        }
-
-        function buildLinkedRouteRule() {
-            return WhS_Routing_RouteRuleAPIService.BuildLinkedRouteRule(linkedRouteRuleInput).then(function (routeRule) {
-                routeRuleEntity = routeRule;
-            });
-        }
-
-        function getProductRoute() {
-            if (routingProductId != undefined)
-                return WhS_BE_RoutingProductAPIService.GetRoutingProduct(routingProductId).then(function (response) {
-                    productRouteEntity = response;
-                    sellingNumberPlanId = productRouteEntity.SellingNumberPlanId;
-                });
         }
 
         function loadAllControls() {
@@ -293,6 +262,14 @@
             }
 
             return UtilsService.waitMultiplePromises(promises);
+        }
+
+        function getProductRoute() {
+            if (routingProductId != undefined)
+                return WhS_BE_RoutingProductAPIService.GetRoutingProduct(routingProductId).then(function (response) {
+                    productRouteEntity = response;
+                    sellingNumberPlanId = productRouteEntity.SellingNumberPlanId;
+                });
         }
 
         function loadData() {
@@ -327,7 +304,7 @@
                 routeRuleSettingsPayload = {
                     SupplierFilterSettings: { RoutingProductId: routingProductId },
                     RouteRuleSettings: routeRuleEntity.Settings
-                }
+                };
             }
 
             //loading RouteRuleSettingsTypeSelector
@@ -337,7 +314,7 @@
             var routeRuleSettingsTypePayload = {};
             if (routeRuleEntity != undefined && routeRuleEntity.Settings != undefined) {
                 routeRuleSettingsTypePayload.selectedIds = routeRuleEntity.Settings.ConfigId;
-            };
+            }
             routeRuleSettingsTypeSelectorReadyPromiseDeferred.promise.then(function () {
                 VRUIUtilsService.callDirectiveLoad(routeRuleSettingsTypeSelectorAPI, routeRuleSettingsTypePayload, loadRouteRuleSettingsTemplatesPromise);
             });
@@ -370,7 +347,7 @@
                     routeRuleCriteria: routeRuleEntity.Criteria,
                     linkedCode: linkedCode,
                     routeRuleCriteriaContext: buildRouteRuleCriteriaContext()
-                }
+                };
             }
 
             var loadRouteRuleCriteriaTemplatesPromise = UtilsService.createPromiseDeferred();
@@ -407,7 +384,7 @@
                 return;
 
             $scope.title += " of " + productRouteEntity.Name;
-        };
+        }
 
         function loadStaticSection() {
             if (routeRuleEntity == undefined)
@@ -415,7 +392,7 @@
 
             $scope.scopeModel.beginEffectiveDate = routeRuleEntity.BeginEffectiveTime;
             $scope.scopeModel.endEffectiveDate = routeRuleEntity.EndEffectiveTime;
-        };
+        }
 
         function insertRouteRule() {
             var routeRuleObject = buildRouteRuleObjFromScope();
@@ -429,7 +406,7 @@
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             });
-        };
+        }
 
         function updateRouteRule() {
             var routeRuleObject = buildRouteRuleObjFromScope();
@@ -443,7 +420,27 @@
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             });
-        };
+        }
+
+        function buildLinkedRouteRule() {
+            return WhS_Routing_RouteRuleAPIService.BuildLinkedRouteRule(linkedRouteRuleInput).then(function (routeRule) {
+                routeRuleEntity = routeRule;
+            });
+        }
+
+        function buildRouteRuleCriteriaContext() {
+            var routeRuleCriteriaContext = {
+                setTimeSettings: function (bed, eed) {
+                    if (bed != undefined)
+                        $scope.scopeModel.beginEffectiveDate = minBED = UtilsService.createDateFromString(bed);
+
+                    if (eed != undefined)
+                        $scope.scopeModel.endEffectiveDate = maxEED = UtilsService.createDateFromString(eed);
+                }
+            };
+
+            return routeRuleCriteriaContext;
+        }
 
         function buildRouteRuleObjFromScope() {
             var routeRule = {
@@ -455,7 +452,7 @@
                 EndEffectiveTime: $scope.scopeModel.endEffectiveDate
             };
             return routeRule;
-        };
+        }
     }
 
     appControllers.controller('WhS_Routing_RouteRuleEditorController', routeRuleEditorController);
