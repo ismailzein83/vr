@@ -8,10 +8,13 @@
     [ActionDescription]    NVARCHAR (MAX)   NULL,
     [TechnicalInformation] NVARCHAR (MAX)   NULL,
     [LogTime]              DATETIME         NOT NULL,
+    [ChangeInfo]           NVARCHAR (MAX)   NULL,
     [CreatedTime]          DATETIME         CONSTRAINT [DF_ObjectChangeTracking_CreatedTime] DEFAULT (getdate()) NULL,
     [timestamp]            ROWVERSION       NULL,
     CONSTRAINT [PK_ObjectChangeTracking] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

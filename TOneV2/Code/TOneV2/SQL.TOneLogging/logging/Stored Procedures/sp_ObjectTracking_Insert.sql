@@ -11,6 +11,7 @@ CREATE PROCEDURE [logging].[sp_ObjectTracking_Insert]
 	@ActionID int,
 	@ActionDescription nvarchar(max),
 	@TechnicalInformation nvarchar(max),
+	@ChangeInfo nvarchar(max),
 	@id BIGINT OUT
 AS
 BEGIN
@@ -22,6 +23,7 @@ BEGIN
            ,[ActionID]
            ,[ActionDescription]
 		   ,[TechnicalInformation]
+		   ,ChangeInfo
            ,[LogTime])
      VALUES
            (@UserID
@@ -31,6 +33,7 @@ BEGIN
            ,@ActionID
            ,@ActionDescription
 		   ,@TechnicalInformation
+		  , @ChangeInfo
            ,GETDATE())
 
 	SET @id = SCOPE_IDENTITY()
