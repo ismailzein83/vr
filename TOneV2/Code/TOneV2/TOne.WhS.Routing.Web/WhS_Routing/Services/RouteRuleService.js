@@ -53,7 +53,7 @@
         };
 
         function deleteRouteRule(scope, routeRuleObj, onRouteRuleDeleted) {
-            VRNotificationService.showConfirmation('Are you sure you want to delete the route rule ' + routeRuleObj.Entity.Name + '?')
+            VRNotificationService.showConfirmation('Are you sure you want to delete this route rule?')
                 .then(function (response) {
                     if (response) {
                         return WhS_Routing_RouteRuleAPIService.DeleteRule(routeRuleObj.Entity.RuleId)

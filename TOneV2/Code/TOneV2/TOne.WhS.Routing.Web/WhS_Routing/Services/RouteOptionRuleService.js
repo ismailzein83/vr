@@ -78,7 +78,7 @@
         };
 
         function deleteRouteOptionRule(scope, routeRuleObj, onRouteOptionRuleDeleted) {
-            VRNotificationService.showConfirmation()
+            VRNotificationService.showConfirmation('Are you sure you want to delete this route option rule?')
                 .then(function (response) {
                     if (response) {
                         return WhS_Routing_RouteOptionRuleAPIService.DeleteRule(routeRuleObj.Entity.RuleId)
