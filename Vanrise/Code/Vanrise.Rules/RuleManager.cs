@@ -23,7 +23,14 @@ namespace Vanrise.Rules
         where T : BaseRule
         where Q : class
     {
-        #region Public Methods
+        #region Ctor/Properties
+
+        static VRDictionary<string, int> s_ruleTypesIds = new VRDictionary<string, int>(true);
+        static VRDictionary<Type, string> s_ruleTypes = new VRDictionary<Type, string>(true);
+
+        #endregion
+
+        #region Public Rule Methods
 
         public Vanrise.Entities.InsertOperationOutput<Q> AddRule(T rule)
         {
@@ -153,7 +160,6 @@ namespace Vanrise.Rules
                         if (ruleDataManager.UpdateRuleAndRuleChanged(ruleEntity, ActionType.UpdatedRule, serializedRule, serializedAdditionalInformation))
                             return true;
                     }
-
                 }
                 else if (ruleDataManager.UpdateRule(ruleEntity))
                 {
@@ -162,6 +168,145 @@ namespace Vanrise.Rules
             }
             return false;
         }
+
+        public virtual bool ValidateBeforeUpdate(T rule)
+        {
+            return true;
+        }
+
+        protected virtual void TrackAndLogRuleUpdated(T rule)
+        {
+            Vanrise.Common.BusinessManagerFactory.GetManager<IVRActionLogger>().TrackAndLogObjectUpdated(GetLoggableEntity(rule), rule);
+        }
+
+        public Vanrise.Entities.DeleteOperationOutput<Q> DeleteRule(int ruleId)
+        {
+            DeleteOperationOutput<Q> deleteOperationOutput = new DeleteOperationOutput<Q>();
+            IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
+            List<int> ids = new List<int>() { ruleId };
+            T rule = GetRule(ruleId);
+
+            if (ruleDataManager.SetDeleted(ids))
+            {
+                deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
+                int ruleTypeId = GetRuleTypeId();
+                GetCacheManager().SetCacheExpired(ruleTypeId);
+                if (rule != null)
+                    TrackAndLogRuleDeleted(rule);
+            }
+
+            return deleteOperationOutput;
+        }
+
+        public Vanrise.Entities.DeleteOperationOutput<Q> SetDeleted(List<int> rulesIds)
+        {
+            DeleteOperationOutput<Q> deleteOperationOutput = new DeleteOperationOutput<Q>();
+            IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
+            if (ruleDataManager.SetDeleted(rulesIds))
+            {
+                deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
+                GetCacheManager().SetCacheExpired(GetRuleTypeId());
+            }
+
+            return deleteOperationOutput;
+        }
+
+        protected virtual void TrackAndLogRuleDeleted(T rule)
+        {
+            Vanrise.Common.BusinessManagerFactory.GetManager<IVRActionLogger>().TrackAndLogObjectDeleted(GetLoggableEntity(rule), rule);
+        }
+
+        public IEnumerable<T> GetFilteredRules(Func<T, bool> filter)
+        {
+            var allRules = GetAllRules();
+            if (allRules == null)
+                return null;
+            else
+                return allRules.Values.FindAllRecords(filter);
+        }
+
+        public Dictionary<int, T> GetAllRules()
+        {
+            return GetCachedOrCreate("GetCachedRules",
+               () =>
+               {
+
+                   IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
+                   IEnumerable<Entities.Rule> ruleEntities = ruleDataManager.GetRulesByType(GetRuleTypeId());
+                   Dictionary<int, T> rules = new Dictionary<int, T>();
+                   if (ruleEntities != null)
+                   {
+                       foreach (var ruleEntity in ruleEntities)
+                       {
+                           T rule = Serializer.Deserialize<T>(ruleEntity.RuleDetails);
+                           rule.RuleId = ruleEntity.RuleId;
+                           rules.Add(rule.RuleId, rule);
+                       }
+                   }
+                   return rules;
+               });
+        }
+
+        public T GetRule(int ruleId, bool isViewedFromUI)
+        {
+            var allRules = GetAllRules();
+            T rule;
+            if (allRules != null && allRules.TryGetValue(ruleId, out rule))
+            {
+                if (isViewedFromUI)
+                    LogRuleViewed(rule);
+                return rule;
+            }
+            else
+                return null;
+        }
+
+        public T GetRule(int ruleId)
+        {
+            return GetRule(ruleId, false);
+        }
+
+        public Q GetRuleDetail(int ruleId)
+        {
+            var rule = GetRule(ruleId);
+            if (rule != null)
+                return MapToDetails(rule);
+            else
+                return null;
+        }
+
+        public abstract Q MapToDetails(T rule);
+
+        protected virtual void LogRuleViewed(T rule)
+        {
+            Vanrise.Common.BusinessManagerFactory.GetManager<IVRActionLogger>().LogObjectViewed(GetLoggableEntity(rule), rule);
+        }
+
+        public abstract RuleLoggableEntity GetLoggableEntity(T rule);
+
+        public int GetRuleTypeId()
+        {
+            string ruleType;
+            if (!s_ruleTypes.TryGetValue(typeof(T), out ruleType))
+            {
+                s_ruleTypes.TryAdd(typeof(T), typeof(T).FullName);
+                ruleType = s_ruleTypes[typeof(T)];
+            }
+            int ruleTypeId;
+            if (!s_ruleTypesIds.TryGetValue(ruleType, out ruleTypeId))
+            {
+                IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
+                ruleTypeId = ruleDataManager.GetRuleTypeId(ruleType);
+                s_ruleTypesIds.TryAdd(ruleType, ruleTypeId);
+            }
+
+            return ruleTypeId;
+        }
+
+        #endregion
+
+        #region Public RuleChanged Methods
+
         public RuleChangedData<T> GetRuleChanged(int ruleId)
         {
             IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
@@ -237,6 +382,10 @@ namespace Vanrise.Rules
             ruleDataManager.DeleteRulesChangedForProcessing(GetRuleTypeId());
         }
 
+        #endregion
+
+        #region Private Methods
+
         private RuleChangedData<T> RuleChangedDataMapper(RuleChanged ruleChanged)
         {
             if (ruleChanged == null)
@@ -252,148 +401,6 @@ namespace Vanrise.Rules
                 RuleId = ruleChanged.RuleId,
                 RuleTypeId = ruleChanged.RuleTypeId
             };
-        }
-
-        public virtual bool ValidateBeforeUpdate(T rule)
-        {
-            return true;
-        }
-
-        protected virtual void TrackAndLogRuleUpdated(T rule)
-        {
-            Vanrise.Common.BusinessManagerFactory.GetManager<IVRActionLogger>().TrackAndLogObjectUpdated(GetLoggableEntity(rule), rule);
-        }
-
-        public Vanrise.Entities.DeleteOperationOutput<Q> DeleteRule(int ruleId)
-        {
-            DeleteOperationOutput<Q> deleteOperationOutput = new DeleteOperationOutput<Q>();
-            IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
-            List<int> ids = new List<int>() { ruleId };
-            T rule = GetRule(ruleId);
-
-            if (ruleDataManager.SetDeleted(ids))
-            {
-                deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
-                int ruleTypeId = GetRuleTypeId();
-                GetCacheManager().SetCacheExpired(ruleTypeId);
-                if (rule != null)
-                    TrackAndLogRuleDeleted(rule);
-
-            }
-
-            return deleteOperationOutput;
-        }
-
-        public Vanrise.Entities.DeleteOperationOutput<Q> SetDeleted(List<int> rulesIds)
-        {
-            DeleteOperationOutput<Q> deleteOperationOutput = new DeleteOperationOutput<Q>();
-            IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
-            if (ruleDataManager.SetDeleted(rulesIds))
-            {
-                deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
-                GetCacheManager().SetCacheExpired(GetRuleTypeId());
-            }
-
-            return deleteOperationOutput;
-        }
-
-        protected virtual void TrackAndLogRuleDeleted(T rule)
-        {
-            Vanrise.Common.BusinessManagerFactory.GetManager<IVRActionLogger>().TrackAndLogObjectDeleted(GetLoggableEntity(rule), rule);
-        }
-
-        public IEnumerable<T> GetFilteredRules(Func<T, bool> filter)
-        {
-            var allRules = GetAllRules();
-            if (allRules == null)
-                return null;
-            else
-                return allRules.Values.FindAllRecords(filter);
-        }
-
-        public Dictionary<int, T> GetAllRules()
-        {
-            return GetCachedOrCreate("GetCachedRules",
-               () =>
-               {
-
-                   IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
-                   IEnumerable<Entities.Rule> ruleEntities = ruleDataManager.GetRulesByType(GetRuleTypeId());
-                   Dictionary<int, T> rules = new Dictionary<int, T>();
-                   if (ruleEntities != null)
-                   {
-                       foreach (var ruleEntity in ruleEntities)
-                       {
-                           T rule = Serializer.Deserialize<T>(ruleEntity.RuleDetails);
-                           rule.RuleId = ruleEntity.RuleId;
-                           rules.Add(rule.RuleId, rule);
-                       }
-                   }
-                   return rules;
-               });
-        }
-
-        public T GetRule(int ruleId, bool isViewedFromUI)
-        {
-            var allRules = GetAllRules();
-            T rule;
-            if (allRules != null && allRules.TryGetValue(ruleId, out rule))
-            {
-                if (isViewedFromUI)
-                    LogRuleViewed(rule);
-                return rule;
-            }
-            else
-                return null;
-        }
-
-        protected virtual void LogRuleViewed(T rule)
-        {
-            Vanrise.Common.BusinessManagerFactory.GetManager<IVRActionLogger>().LogObjectViewed(GetLoggableEntity(rule), rule);
-        }
-
-        public T GetRule(int ruleId)
-        {
-            return GetRule(ruleId, false);
-        }
-
-        public Q GetRuleDetail(int ruleId)
-        {
-            var rule = GetRule(ruleId);
-            if (rule != null)
-                return MapToDetails(rule);
-            else
-                return null;
-        }
-
-        public abstract Q MapToDetails(T rule);
-
-        public abstract RuleLoggableEntity GetLoggableEntity(T rule);
-
-        #endregion
-
-        #region Private Methods
-
-        static VRDictionary<string, int> s_ruleTypesIds = new VRDictionary<string, int>(true);
-        static VRDictionary<Type, string> s_ruleTypes = new VRDictionary<Type, string>(true);
-
-        public int GetRuleTypeId()
-        {
-            string ruleType;
-            if (!s_ruleTypes.TryGetValue(typeof(T), out ruleType))
-            {
-                s_ruleTypes.TryAdd(typeof(T), typeof(T).FullName);
-                ruleType = s_ruleTypes[typeof(T)];
-            }
-            int ruleTypeId;
-            if (!s_ruleTypesIds.TryGetValue(ruleType, out ruleTypeId))
-            {
-                IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
-                ruleTypeId = ruleDataManager.GetRuleTypeId(ruleType);
-                s_ruleTypesIds.TryAdd(ruleType, ruleTypeId);
-            }
-
-            return ruleTypeId;
         }
 
         #endregion
