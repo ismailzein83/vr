@@ -311,12 +311,6 @@
             });
         }
 
-        function buildLinkedRouteOptionRule() {
-            return WhS_Routing_RouteOptionRuleAPIService.BuildLinkedRouteOptionRule(linkedRouteOptionRuleInput).then(function (routeOptionRule) {
-                routeOptionRuleEntity = routeOptionRule;
-            });
-        }
-
         function loadAllControls() {
             var loadAllControlsPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -542,8 +536,8 @@
 
         function insertRouteOptionRule() {
             var routeRuleObject = buildRouteOptionRuleObjFromScope();
-            return WhS_Routing_RouteOptionRuleAPIService.AddRule(routeRuleObject)
-            .then(function (response) {
+
+            return WhS_Routing_RouteOptionRuleAPIService.AddRule(routeRuleObject).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Route Option Rule", response, "Name")) {
                     if ($scope.onRouteOptionRuleAdded != undefined)
                         $scope.onRouteOptionRuleAdded(response.InsertedObject);
@@ -552,12 +546,11 @@
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             });
-
         }
         function updateRouteOptionRule() {
             var routeRuleObject = buildRouteOptionRuleObjFromScope();
-            WhS_Routing_RouteOptionRuleAPIService.UpdateRule(routeRuleObject)
-            .then(function (response) {
+
+            WhS_Routing_RouteOptionRuleAPIService.UpdateRule(routeRuleObject).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Route Option Rule", response, "Name")) {
                     if ($scope.onRouteOptionRuleUpdated != undefined)
                         $scope.onRouteOptionRuleUpdated(response.UpdatedObject);
@@ -568,6 +561,11 @@
             });
         }
 
+        function buildLinkedRouteOptionRule() {
+            return WhS_Routing_RouteOptionRuleAPIService.BuildLinkedRouteOptionRule(linkedRouteOptionRuleInput).then(function (routeOptionRule) {
+                routeOptionRuleEntity = routeOptionRule;
+            });
+        }
         function buildRouteOptionRuleObjFromScope() {
 
             var routeOptionRule = {
@@ -577,7 +575,7 @@
                     RoutingProductId: routingProductId,
                     //ExcludedCodes: $scope.scopeModel.excludedCodes,
                     ExcludedDestinations: excludedDestinationsDirectiveAPI.getData(),
-                    SaleZoneGroupSettings: $scope.scopeModel.showSaleZoneSection ? saleZoneGroupSettingsAPI.getData() : undefined,//VRUIUtilsService.getSettingsFromDirective($scope, saleZoneGroupSettingsAPI, 'selectedSaleZoneGroupTemplate'),
+                    SaleZoneGroupSettings: $scope.scopeModel.showSaleZoneSection ? saleZoneGroupSettingsAPI.getData() : undefined, //VRUIUtilsService.getSettingsFromDirective($scope, saleZoneGroupSettingsAPI, 'selectedSaleZoneGroupTemplate'),
                     CustomerGroupSettings: customerGroupSettingsAPI.getData(),
                     CodeCriteriaGroupSettings: $scope.scopeModel.showIncludedCodeSection ? VRUIUtilsService.getSettingsFromDirective($scope.scopeModel, codeCriteriaGroupSettingsAPI, 'selectedCodeCriteriaGroupTemplate') : undefined,
                     SuppliersWithZonesGroupSettings: suppliersWithZonesGroupSettingsAPI.getData()
