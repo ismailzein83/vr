@@ -124,6 +124,7 @@
     <Compile Include="CompanyDefinition\CompanyPricelistSettings.cs" />
     <Compile Include="CustomerInvoiceSettingInfo.cs" />
     <Compile Include="FaultTickets\CustomerFaultTicketSettings.cs" />
+    <Compile Include="IStateBackupCanRestoreContext.cs" />
     <Compile Include="Settings\FaultTicketsSettingsData.cs" />
     <Compile Include="FinancialAccount\WHSFinancialAccountDefinitionInfoFilter.cs" />
     <Compile Include="FinancialAccount\WHSCarrierFinancialAccountData.cs" />
