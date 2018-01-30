@@ -7,8 +7,8 @@
              enableautoexport="true">
     <vr-datagridcolumn headertext="'File'" widthfactor="5"><vr-fileupload tempfile="true"  value="dataItem.Entity.file" isrequired> </vr-fileupload></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Note'" widthfactor="5">
-        <vr-textbox value="dataItem.Entity.notes" isrequired="true"></vr-textbox>
+        <vr-textbox value="dataItem.Entity.notes" ></vr-textbox>
     </vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Date'" typeof="'Date'" widthfactor="5"><vr-datetimepicker value="dataItem.Entity.createdTime" type="date" customvalidate="validateTimeRange()"></vr-datetimepicker></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'CreatedTime'" typeof="'Date'" widthfactor="5"><vr-textbox value="dataItem.Entity.createdTime" type="date" ></vr-textbox></vr-datagridcolumn>
 </vr-datagrid>
 

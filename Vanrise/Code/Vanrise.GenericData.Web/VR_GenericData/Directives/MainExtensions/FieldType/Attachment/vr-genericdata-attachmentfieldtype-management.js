@@ -38,6 +38,10 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                 $scope.scopeModel.attachementFieldTypes.push({ Entity: attachementFieldType });
               
             };
+            $scope.scopeModel.removerow = function (dataItem) {
+                var index = $scope.scopeModel.attachementFieldTypes.indexOf(dataItem);
+                $scope.scopeModel.attachementFieldTypes.splice(index, 1);
+            };
             $scope.onGridReady = function (api) {
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function") {
                     ctrl.onReady(getDirectiveAPI());
@@ -64,7 +68,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                     };
                     directiveAPI.getData = function () {
                         var obj = {
-                            $type: "System.Collections.Generic.List`1[[Vanrise.GenericData.Entities.AttachmentFieldTypeEntity, Vanrise.GenericData.Entities]], mscorlib",
+                            $type: "Vanrise.GenericData.Entities.AttachmentFieldTypeEntityCollection,Vanrise.GenericData.Entities",
                             $values: getAttachementFieldTypeData()
                         };
                         return obj;
