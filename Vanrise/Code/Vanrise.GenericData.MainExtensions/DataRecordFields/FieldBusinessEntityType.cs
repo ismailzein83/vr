@@ -20,7 +20,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public Guid BusinessEntityDefinitionId { get; set; }
         
         public bool IsNullable { get; set; }
-        
+        public override string ViewerEditor { get { return "vr-genericdata-fieldtype-businessentity-viewereditor"; } }
+
         public BERuntimeSelectorFilter BERuntimeSelectorFilter { get; set; }
         
         public override DataRecordFieldOrderType OrderType

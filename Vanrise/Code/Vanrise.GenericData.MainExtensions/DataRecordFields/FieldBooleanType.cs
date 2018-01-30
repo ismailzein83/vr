@@ -16,6 +16,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public override string RuntimeEditor { get { return "vr-genericdata-fieldtype-boolean-runtimeeditor"; } }
 
         public bool IsNullable { get; set; }
+        public override string ViewerEditor { get { return "vr-genericdata-fieldtype-boolean-viewereditor"; } }
 
         public override Type GetRuntimeType()
         {

@@ -36,6 +36,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public FieldDateTimeDataType DataType { get; set; }
 
         public bool IsNullable { get; set; }
+        public override string ViewerEditor { get { return "vr-genericdata-fieldtype-datetime-viewereditor"; } }
 
 
         #region Public Methods

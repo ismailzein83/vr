@@ -12,4 +12,13 @@ namespace Vanrise.GenericData.Entities
         public string Notes { get; set; }
         public DateTime CreatedTime { get; set; }
     }
+    public class AttachmentFieldTypeEntityChangeInfo
+    {
+        public long FileId { get; set; }
+        public string Description { get; set; }
+    }
+    public class AttachmentFieldTypeEntityCollection : List<AttachmentFieldTypeEntity>
+    {
+
+    }
 }

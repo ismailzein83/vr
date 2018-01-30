@@ -22,6 +22,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 return DataRecordFieldOrderType.ByFieldDescription;
             }
         }
+        public override string ViewerEditor { get { return "vr-genericdata-fieldtype-guid-viewereditor"; } }
+
         public bool IsNullable { get; set; }
         public override bool TryGenerateUniqueIdentifier(out Guid? uniqueIdentifier)
         {

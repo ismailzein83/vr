@@ -23,6 +23,11 @@ namespace Vanrise.GenericData.Entities
         {
             return newValue == oldValue;
         }
+        public virtual bool TryResolveDifferences(IDataRecordFieldTypeTryResolveDifferencesContext context)
+        {
+            return false;
+        }
+        public virtual string DifferenceEditor { get; set; }
         public virtual string ViewerEditor { get; set; }
         public abstract string GetDescription(Object value);
 
@@ -134,5 +139,13 @@ namespace Vanrise.GenericData.Entities
     {
         public string ValueFieldPath { get; set; }
         public string DescriptionFieldPath { get; set; }
+    }
+
+
+    public interface IDataRecordFieldTypeTryResolveDifferencesContext
+    {
+        Object OldValue { get; }
+        Object NewValue { get;  }
+        Object Changes { set; }
     }
 }
