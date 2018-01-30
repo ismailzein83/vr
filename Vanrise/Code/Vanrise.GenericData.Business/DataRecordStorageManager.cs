@@ -566,7 +566,7 @@ namespace Vanrise.GenericData.Business
         #region Private Methods Data Record
         private IEnumerable<DataRecord> GetCachedDataRecords(Guid dataRecordStorageId)
         {
-            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedDataRecords", dataRecordStorageId,
+            return CacheManagerFactory.GetCacheManager<RecordCacheManager>().GetOrCreateObject("GetCachedDataRecords", dataRecordStorageId,
                 () =>
                 {
                     var dataManager = GetStorageDataManager(dataRecordStorageId);
