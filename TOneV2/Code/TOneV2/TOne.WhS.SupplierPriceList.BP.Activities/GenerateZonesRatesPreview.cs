@@ -21,6 +21,9 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
         public InArgument<IEnumerable<ImportedZone>> ImportedZones { get; set; }
 
         [RequiredArgument]
+        public InArgument<int> CountryId { get; set; }
+
+        [RequiredArgument]
         public InArgument<IEnumerable<NotImportedZone>> NotImportedZones { get; set; }
 
         [RequiredArgument]
@@ -31,8 +34,8 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             BaseQueue<IEnumerable<ZoneRatePreview>> previewZonesRatesQueue = this.PreviewZonesRatesQueue.Get(context);
             IEnumerable<ImportedZone> importedZones = this.ImportedZones.Get(context);
             IEnumerable<NotImportedZone> notImportedZones = this.NotImportedZones.Get(context);
-            PriceListCodeManager priceListCodeManager = new PriceListCodeManager();
             List<ZoneRatePreview> zonesRatesPreview = new List<ZoneRatePreview>();
+            int countryId = CountryId.Get(context);
 
             if (importedZones != null)
             {
@@ -42,7 +45,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
 
                     ZoneRatePreview zoneRatePreview = new ZoneRatePreview
                     {
-                        CountryId = priceListCodeManager.GetCountryId(importedZone.ImportedCodes),
+                        CountryId = countryId,
                         ZoneName = importedZone.ZoneName,
                         RecentZoneName = importedZone.RecentZoneName,
                         ChangeTypeZone = importedZone.ChangeType,

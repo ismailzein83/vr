@@ -39,7 +39,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             {
                 if (!zone.ImportedCodes.Any()) continue;
 
-                int countryId = priceListCodeManager.GetCountryId(zone.ImportedCodes);
+                int countryId = priceListCodeManager.GetCountryId(zone.ZoneName, zone.ImportedCodes);
 
                 if (!importedCountriesByCountryId.TryGetValue(countryId, out importedCountry))
                 {

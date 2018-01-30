@@ -8,6 +8,7 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.SupplierPriceList.Entities;
 using TOne.WhS.SupplierPriceList.Entities.SPL;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.SupplierPriceList.Business
 {
@@ -31,11 +32,127 @@ namespace TOne.WhS.SupplierPriceList.Business
 
             context.NotImportedCodes = PrepareNotImportedCodes(existingCodesByCodeValue, importedCodesHashSet);
         }
-        public int GetCountryId(List<ImportedCode> importedCodes)
+
+        public int GetCountryId(string zoneName, List<ImportedCode> importedCodes)
         {
-            var orderedCodes = importedCodes.OrderBy(c=>c.Code).ToList();
-            ImportedCode firstCode = orderedCodes.First();
-            return firstCode.CodeGroup.CountryId;
+            Dictionary<string, ImportedCodeInfo> importedCodeByCodeGroup = StructureCodeByCodeGroup(importedCodes);
+
+            if (importedCodeByCodeGroup.Count == 1)
+            {
+                return importedCodeByCodeGroup.First().Value.CountryId;
+            }
+
+            //Get matched country according to the zone name
+            var countryIds = importedCodeByCodeGroup.Values.Select(c => c.CountryId);
+            IEnumerable<int> countryMatches = GetCountryMatch(zoneName, countryIds);
+
+            if (countryMatches.Count() == 1)
+                return countryMatches.First();
+
+            List<CodeGroupInfo> codeGroupInfos = GetCodeGroupInfo(importedCodeByCodeGroup);
+
+            if (codeGroupInfos.Count == 1)
+                return codeGroupInfos.First().CountryId;
+
+            int maxCodeCount = codeGroupInfos.Max(r => r.RelatedCodesCount);
+            IEnumerable<CodeGroupInfo> codeGroupWithMaxCodeNumber = codeGroupInfos.Where(c => c.RelatedCodesCount == maxCodeCount);
+
+            if (codeGroupWithMaxCodeNumber.Count() == 1)
+                return codeGroupWithMaxCodeNumber.First().CountryId;
+
+            int countryId = 0;
+            int maxLength = 0;
+            var orderedCodes = codeGroupWithMaxCodeNumber.OrderBy(c => c.CodeGroup).ToList();
+            foreach (var codeGroupInfo in orderedCodes)
+            {
+                int codeGroupLenght = codeGroupInfo.CodeGroup.Length;
+                if (codeGroupLenght > maxLength)
+                {
+                    countryId = codeGroupInfo.CountryId;
+                    maxLength = codeGroupLenght;
+                }
+            }
+            return countryId;
+        }
+
+        public List<CodeGroupInfo> GetCodeGroupInfo(Dictionary<string, ImportedCodeInfo> importedCodeByCodeGroup)
+        {
+            var codeGroupInfos = new List<CodeGroupInfo>();
+            foreach (var code in importedCodeByCodeGroup)
+            {
+                var codeValue = code.Value;
+                CodeGroupInfo codeGroupInfo = new CodeGroupInfo
+                {
+                    CountryId = codeValue.CountryId,
+                    CodeGroup = codeValue.CodeGroup,
+                    RelatedCodesCount = codeValue.ImportedCodes.Count
+                };
+                var exactMatchCode = codeValue.ImportedCodes.FirstOrDefault(c => c.Code.Equals(code.Key));
+
+                codeGroupInfo.IsExactMatch = exactMatchCode != null;
+                codeGroupInfos.Add(codeGroupInfo);
+            }
+            return codeGroupInfos;
+        }
+        private Dictionary<string, ImportedCodeInfo> StructureCodeByCodeGroup(IEnumerable<ImportedCode> importedCodes)
+        {
+            var importedCodeByCodeGroup = new Dictionary<string, ImportedCodeInfo>();
+            foreach (var importedCode in importedCodes)
+            {
+                string codeGroup = importedCode.CodeGroup.Code;
+                ImportedCodeInfo code;
+                if (!importedCodeByCodeGroup.TryGetValue(codeGroup, out code))
+                {
+                    code = new ImportedCodeInfo
+                    {
+                        ImportedCodes = new List<ImportedCode>(),
+                        CodeGroup = codeGroup,
+                        CountryId = importedCode.CodeGroup.CountryId
+                    };
+                    importedCodeByCodeGroup.Add(codeGroup, code);
+                }
+                code.ImportedCodes.Add(importedCode);
+            }
+            return importedCodeByCodeGroup;
+        }
+        private IEnumerable<int> GetCountryMatch(string zoneName, IEnumerable<int> countryIds)
+        {
+            CountryManager countryManager = new CountryManager();
+            Dictionary<int, int> matchesCountByCountryName = new Dictionary<int, int>();
+            foreach (var countryId in countryIds)
+            {
+                string countryName = countryManager.GetCountryName(countryId);
+                int? bestMatchCount = GetBestMatch(countryName, zoneName);
+
+                if (bestMatchCount == null)
+                    continue;
+                if (!matchesCountByCountryName.ContainsKey(countryId))
+                    matchesCountByCountryName.Add(countryId, bestMatchCount.Value);
+            }
+            var maxMatchCount = matchesCountByCountryName.Values.Max(c => c);
+            var matches = matchesCountByCountryName.Where(r => r.Value == maxMatchCount).Select(z => z.Key);
+
+            return matches;
+        }
+        private int? GetBestMatch(string countryName, string zoneName)
+        {
+            for (int i = 0; i < countryName.Length - 1; i++)
+            {
+                for (int j = 0; j < zoneName.Length - 1; j++)
+                {
+                    if (i == countryName.Length)
+                        return j;
+
+                    string countryChar = countryName[i].ToString().ToLower();
+                    string zoneChar = zoneName[j].ToString().ToLower();
+
+                    if (countryChar.Equals(zoneChar))
+                        i++;
+                    else
+                        return j;
+                }
+            }
+            return null;
         }
         private ExistingZonesByName StructureExistingZonesByName(IEnumerable<ExistingZone> existingZones)
         {
@@ -101,13 +218,13 @@ namespace TOne.WhS.SupplierPriceList.Business
                             importedCode.ChangeType = CodeChangeType.New;
                         }
 
-                        AddImportedCode(importedCode,countryId, newAndExistingZones, existingZonesByName);
+                        AddImportedCode(importedCode, countryId, newAndExistingZones, existingZonesByName);
                     }
                 }
                 else
                 {
                     importedCode.ChangeType = CodeChangeType.New;
-                    AddImportedCode(importedCode,countryId, newAndExistingZones, existingZonesByName);
+                    AddImportedCode(importedCode, countryId, newAndExistingZones, existingZonesByName);
                 }
             }
 
@@ -189,7 +306,7 @@ namespace TOne.WhS.SupplierPriceList.Business
             }
         }
 
-        private void AddImportedCode(ImportedCode importedCode,int countryId, ZonesByName newAndExistingZones, ExistingZonesByName allExistingZones)
+        private void AddImportedCode(ImportedCode importedCode, int countryId, ZonesByName newAndExistingZones, ExistingZonesByName allExistingZones)
         {
             List<IZone> zones;
             if (!newAndExistingZones.TryGetValue(importedCode.ZoneName, out zones))
@@ -395,4 +512,21 @@ namespace TOne.WhS.SupplierPriceList.Business
             }
         }
     }
+    #region public class
+
+    public class ImportedCodeInfo
+    {
+        public string CodeGroup { get; set; }
+        public int CountryId { get; set; }
+        public List<ImportedCode> ImportedCodes { get; set; }
+    }
+
+    public class CodeGroupInfo
+    {
+        public string CodeGroup { get; set; }
+        public int RelatedCodesCount { get; set; }
+        public bool IsExactMatch { get; set; }
+        public int CountryId { get; set; }
+    }
+    #endregion
 }
