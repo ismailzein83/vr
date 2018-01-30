@@ -1,1 +1,32 @@
-﻿
+﻿<vr-row>
+    <vr-columns width="1/2row" ng-show="scopeModel.simpleViewers.length > 0">
+        <vr-datagrid datasource="scopeModel.simpleViewers"
+                     on-ready="onGridReady"
+                     pagingtype="'PagingOnScroll'"
+                     menuactions="gridMenuActions">
+
+            <vr-datagridcolumn headertext="'Field'" field="'fieldName'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Old Value'">
+                <span vr-loader="dataItem.loadChangeInfoDirective">
+                    <vr-directivewrapper ng-if="dataItem.oldDirective != undefined" directive="dataItem.oldDirective" on-ready="dataItem.onOldDirectiveReady" normal-col-num="12"></vr-directivewrapper>
+                </span>
+            </vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'New Value'">
+                <span vr-loader="dataItem.loadChangeInfoDirective">
+                    <vr-directivewrapper ng-if="dataItem.newDirective != undefined" directive="dataItem.newDirective" on-ready="dataItem.onNewDirectiveReady" normal-col-num="12"></vr-directivewrapper>
+                </span>
+            </vr-datagridcolumn>
+        </vr-datagrid>
+
+    </vr-columns>
+</vr-row>
+<vr-row ng-repeat="differenceViewer in scopeModel.differenceViewers">
+    <vr-columns colnum="3">
+        {{differenceViewer.fieldName}}
+    </vr-columns>
+    <vr-columns colnum="9">
+        <span vr-loader="dataItem.loadDifferenceInfoDirective">
+            <vr-directivewrapper ng-if="dataItem.directive != undefined" directive="dataItem.directive" on-ready="dataItem.onDirectiveReady" normal-col-num="12"></vr-directivewrapper>
+        </span>
+    </vr-columns>
+</vr-row>

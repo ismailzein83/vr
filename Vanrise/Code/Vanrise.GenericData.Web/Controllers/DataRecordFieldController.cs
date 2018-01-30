@@ -42,5 +42,17 @@ namespace Vanrise.GenericData.Web.Controllers
             DataRecordFieldManager manager = new DataRecordFieldManager();
             return manager.GetDataRecordFieldFormulaExtensionConfigs();
         }
+        [HttpPost]
+        [Route("TryResolveDifferences")]
+        public GenericFieldDifferencesResolver TryResolveDifferences(TryResolveDifferencesInput input)
+        {
+            DataRecordFieldManager manager = new DataRecordFieldManager();
+            return manager.TryResolveDifferences(input.LoggableEntityUniqueName, input.FieldValues);
+        }
+    }
+    public class TryResolveDifferencesInput
+    {
+        public string LoggableEntityUniqueName { get; set; }
+        public List<GenericFieldChangeInfo> FieldValues { get; set; }
     }
 }

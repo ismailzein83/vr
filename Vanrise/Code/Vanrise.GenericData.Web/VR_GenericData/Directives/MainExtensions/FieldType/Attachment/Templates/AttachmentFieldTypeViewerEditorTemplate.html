@@ -1,0 +1,11 @@
+﻿
+<vr-datagrid datasource="scopeModel.changes"
+             on-ready="onGridReady"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions">
+    <vr-datagridcolumn headertext="'Attachment'" type="'Text'">
+        {{dataItem.attachmentName}}
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Description'" field="descrition" />
+</vr-datagrid>
+

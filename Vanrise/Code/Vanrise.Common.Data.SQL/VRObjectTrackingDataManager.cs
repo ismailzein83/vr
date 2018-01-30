@@ -49,7 +49,7 @@ namespace Vanrise.Common.Data.SQL
         {
             return GetItemSP("[logging].[sp_ObjectTracking_GetObjectDetailsById]", ObjectDetailMapper, VRObjectTrackingId);
         }
-        public object GetVRActionAuditChangeInfoDetailById(int vrObjectTrackingId)
+        public VRActionAuditChangeInfo GetVRActionAuditChangeInfoDetailById(int vrObjectTrackingId)
         {
             return GetItemSP("[logging].[sp_ObjectTracking_GetChangeInfoById]", VRActionAuditChangeInfoDetailMapper, vrObjectTrackingId);
         }

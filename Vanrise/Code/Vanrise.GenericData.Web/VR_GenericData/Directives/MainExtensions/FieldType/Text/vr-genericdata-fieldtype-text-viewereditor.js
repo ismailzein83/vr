@@ -40,14 +40,11 @@ app.directive('vrGenericdataFieldtypeTextViewereditor', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
-                    var changeInfo;
+                    var promises = [];
                     if (payload != undefined) {
-                        changeInfo = payload.changeInfo;
-                        if (changeInfo != undefined) {
-                            $scope.scopeModel.oldValue = changeInfo.OldValue;
-                            $scope.scopeModel.newValue = changeInfo.NewValue;
-                        }
+                        $scope.scopeModel.fieldValueDescription = payload.fieldValueDescription;
                     }
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {

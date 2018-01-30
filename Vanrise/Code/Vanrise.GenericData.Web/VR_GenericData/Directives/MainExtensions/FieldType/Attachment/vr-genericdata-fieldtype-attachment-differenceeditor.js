@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataFieldtypeNumberViewereditor', ['UtilsService',
+app.directive('vrGenericdataFieldtypeBooleanViewereditor', ['UtilsService',
     function (UtilsService) {
     return {
         restrict: 'E',
@@ -11,7 +11,7 @@ app.directive('vrGenericdataFieldtypeNumberViewereditor', ['UtilsService',
 
             var ctrl = this;
 
-            var ctor = new numberTypeViewerEditorCtor(ctrl, $scope);
+            var ctor = new booleanTypeViewerEditorCtor(ctrl, $scope);
             ctor.initializeController();
 
         },
@@ -25,14 +25,15 @@ app.directive('vrGenericdataFieldtypeNumberViewereditor', ['UtilsService',
             };
         },
         templateUrl: function (element, attrs) {
-            return '/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/Number/Templates/NumberFieldTypeViewerEditorTemplate.html';
+            return '/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/Boolean/Templates/BooleanFieldTypeViewerEditorTemplate.html';
         }
     };
 
-    function numberTypeViewerEditorCtor(ctrl, $scope) {
+    function booleanTypeViewerEditorCtor(ctrl, $scope) {
 
         function initializeController() {
             $scope.scopeModel = {};
+            $scope.scopeModel.changes = [];
             defineAPI();
         }
 
@@ -40,13 +41,19 @@ app.directive('vrGenericdataFieldtypeNumberViewereditor', ['UtilsService',
             var api = {};
 
             api.load = function (payload) {
-                var changeInfo;
+                var changes;
                 if (payload != undefined) {
-                    changeInfo = payload.changeInfo;
-                    if(changeInfo != undefined)
+                    changes = payload.changes;
+                    if (changes != undefined)
                     {
-                        $scope.scopeModel.fieldValueDescription = payload.fieldValueDescription;
-
+                        for (var i = 0; i < changes.length; i++)
+                        {
+                            var change = changes[i];
+                            $scope.scopeModel.changes.push({
+                                fileId: change.FileId,
+                                description: change.Description
+                            });
+                        }
                     }
                 }
             };

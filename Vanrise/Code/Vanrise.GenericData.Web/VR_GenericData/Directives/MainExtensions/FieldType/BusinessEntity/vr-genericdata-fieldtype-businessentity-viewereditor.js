@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataFieldtypeNumberViewereditor', ['UtilsService',
+app.directive('vrGenericdataFieldtypeBusinessentityViewereditor', ['UtilsService',
     function (UtilsService) {
     return {
         restrict: 'E',
@@ -11,7 +11,7 @@ app.directive('vrGenericdataFieldtypeNumberViewereditor', ['UtilsService',
 
             var ctrl = this;
 
-            var ctor = new numberTypeViewerEditorCtor(ctrl, $scope);
+            var ctor = new businessentityTypeViewerEditorCtor(ctrl, $scope);
             ctor.initializeController();
 
         },
@@ -25,11 +25,11 @@ app.directive('vrGenericdataFieldtypeNumberViewereditor', ['UtilsService',
             };
         },
         templateUrl: function (element, attrs) {
-            return '/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/Number/Templates/NumberFieldTypeViewerEditorTemplate.html';
+            return '/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/BusinessEntity/Templates/BusinessEntityFieldTypeViewerEditorTemplate.html';
         }
     };
 
-    function numberTypeViewerEditorCtor(ctrl, $scope) {
+    function businessentityTypeViewerEditorCtor(ctrl, $scope) {
 
         function initializeController() {
             $scope.scopeModel = {};

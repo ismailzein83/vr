@@ -30,11 +30,21 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
         var viewHistoryAction;
         var uniqueName;
         var vrLoggableEntitySettings;
+
+        var gridDrillDownTabsObj;
+        var drillDownDefinitions = [];
+
         this.initializeController = initializeController;
 
         function initializeController() {
-
+            $scope.isExpandable = function (dataItem) {
+                 if (vrLoggableEntitySettings.ChangeInfoDefinition != undefined) {
+                                       return true;
+            }
+                 return false;
+        };
             $scope.objects = [];
+
             $scope.onGridReady = function (api) {
 
                 gridAPI = api;
@@ -49,20 +59,15 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
                         if (actionHistoryName == null) {
                             uniqueName = query.EntityUniqueName;
                             getVRLoggableEntitySettings().then(function () {
-                                if (vrLoggableEntitySettings != null)
-                                {
+                                if (vrLoggableEntitySettings != null) {
                                     actionHistoryName = vrLoggableEntitySettings.ViewHistoryItemClientActionName;
                                     viewHistoryAction = VRCommon_ObjectTrackingService.getActionTrackIfExist(actionHistoryName);
-                                    if (vrLoggableEntitySettings.ChangeInfoDefinition != undefined)
-                                    {
-                                        AddDrillDownDefinition(vrLoggableEntitySettings.ChangeInfoDefinition);
-                                    }
-
+                                   
                                     return gridAPI.retrieveData(query).finally(function () {
                                         promiseDeferred.resolve();
                                     });
                                 }
-                              
+
                             }).catch(function (error) {
                                 promiseDeferred.reject(error);
                                 VRNotificationService.notifyException(error, $scope);
@@ -72,19 +77,14 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
                                 promiseDeferred.resolve();
                             });
                         }
-                        
+
                         return promiseDeferred.promise;
                     };
                     return directiveAPI;
                 }
             };
 
-            function AddDrillDownDefinition(changeInfoDefinition)
-            {
-                if(changeInfoDefinition != undefined)
-                {
-                }
-            }
+
 
             function getVRLoggableEntitySettings() {
                 return VRCommon_ObjectTrackingAPIService.GetVRLoggableEntitySettings(uniqueName).then(function (response) {
@@ -95,12 +95,38 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 return VRCommon_ObjectTrackingAPIService.GetFilteredObjectTracking(dataRetrievalInput)
                     .then(function (response) {
+                        if (response && response.Data) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                AddChangeInfoDrillDown(response.Data[i]);
+                            }
+                        }
                         onResponseReady(response);
                     })
                     .catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
                     });
             };
+
+            function AddChangeInfoDrillDown(dataItem) {
+                if (vrLoggableEntitySettings != undefined && vrLoggableEntitySettings.ChangeInfoDefinition != undefined) {
+                   
+                    dataItem.changeInfoDirective = vrLoggableEntitySettings.ChangeInfoDefinition.RuntimeEditor;
+                    dataItem.onChangeInfoDirectiveReady = function (api) {
+                        dataItem.changeInfoDirectiveAPI = api;
+                        dataItem.loadChangeInfoDirective = true;
+                        VRCommon_ObjectTrackingAPIService.GetObjectTrackingChangeInfo(dataItem.Entity.VRObjectTrackingId).then(function (response) {
+                            var query = {
+                                changeInfoDefinition: vrLoggableEntitySettings.ChangeInfoDefinition,
+                                changeInfo: response,
+                                loggableEntityUniqueName: uniqueName
+                            };
+                            dataItem.changeInfoDirectiveAPI.load(query).then(function () {
+                                dataItem.loadChangeInfoDirective = false;
+                            });
+                        });
+                    };
+                }
+            }
 
             var defaultMenuActions = [{
                 name: "View",

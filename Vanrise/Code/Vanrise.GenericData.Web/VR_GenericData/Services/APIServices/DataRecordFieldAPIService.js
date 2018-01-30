@@ -29,11 +29,16 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetDataRecordFieldTypeConfigs"));
         }
 
+        function TryResolveDifferences(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "TryResolveDifferences"), input);
+        }
+
         return ({
             GetDataRecordFieldsInfo: GetDataRecordFieldsInfo,
             GetDataRecordAttributes: GetDataRecordAttributes,
             GetDataRecordFieldFormulaExtensionConfigs: GetDataRecordFieldFormulaExtensionConfigs,
-            GetDataRecordFieldTypeConfigs: GetDataRecordFieldTypeConfigs
+            GetDataRecordFieldTypeConfigs: GetDataRecordFieldTypeConfigs,
+            TryResolveDifferences: TryResolveDifferences
         });
 
     }

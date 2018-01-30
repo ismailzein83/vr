@@ -29,13 +29,21 @@ namespace Vanrise.Common.Business
             return BigDataManager.Instance.RetrieveData(input, new VRObjectTrackingHandler());
 
         }
-
+        public VRActionAuditChangeInfo GetObjectTrackingChangeInfo(int objectTrackingId) 
+        {
+            IVRObjectTrackingDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRObjectTrackingDataManager>();
+            return dataManager.GetVRActionAuditChangeInfoDetailById(objectTrackingId);
+        }
+        public T GetVRLoggableEntityChangeInfoDefinition<T>(string uniqueName) where T : VRActionAuditChangeInfoDefinition
+        {
+            var loggableEntitySettings = GetVRLoggableEntitySettings(uniqueName);
+            return (loggableEntitySettings != null) ? loggableEntitySettings.ChangeInfoDefinition as T : default(T);
+        }
         public VRLoggableEntitySettings GetVRLoggableEntitySettings(string uniqueName)
         {
             var logEntity = s_loggableEntityManager.GetLoggableEntity(uniqueName);
             return (logEntity != null) ? logEntity.Settings : null;
         }
-
         public object GetObjectDetailById(int VRObjectTrackingId)
         {
             IVRObjectTrackingDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRObjectTrackingDataManager>();

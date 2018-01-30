@@ -16,9 +16,15 @@
                 uniqueName: uniqueName
             });
         }
+        function GetObjectTrackingChangeInfo(objectTrackingId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetObjectTrackingChangeInfo"), {
+                objectTrackingId: objectTrackingId,
+            });
+}
         return ({
             GetFilteredObjectTracking: GetFilteredObjectTracking,
-            GetVRLoggableEntitySettings: GetVRLoggableEntitySettings
+            GetVRLoggableEntitySettings: GetVRLoggableEntitySettings,
+            GetObjectTrackingChangeInfo:GetObjectTrackingChangeInfo
         });
     }
 

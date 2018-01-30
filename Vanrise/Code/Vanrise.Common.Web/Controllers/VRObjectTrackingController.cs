@@ -10,6 +10,7 @@ using Vanrise.Common.Business;
 
 namespace Vanrise.Common.Web.Controllers
 {
+    [JSONWithTypeAttribute]
     [RoutePrefix(Constants.ROUTE_PREFIX + "VRObjectTracking")]
     public class VRObjectTrackingController : BaseAPIController
     {
@@ -27,6 +28,13 @@ namespace Vanrise.Common.Web.Controllers
         {
             VRObjectTrackingManager manager = new VRObjectTrackingManager();
             return manager.GetVRLoggableEntitySettings(uniqueName);
+        }
+        [HttpGet]
+        [Route("GetObjectTrackingChangeInfo")]
+        public VRActionAuditChangeInfo GetObjectTrackingChangeInfo(int objectTrackingId)
+        {
+            VRObjectTrackingManager manager = new VRObjectTrackingManager();
+            return manager.GetObjectTrackingChangeInfo(objectTrackingId);
         }
     }
 }
