@@ -727,6 +727,7 @@
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_GetLastByPartners.sql" />
     <Build Include="sec\Stored Procedures\sp_User_UpdateProfile.sql" />
     <Build Include="rules\Stored Procedures\sp_Rule_SetDeleted.sql" />
+    <Build Include="rules\Stored Procedures\sp_Rule_DeleteRuleAndRuleChanged.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
