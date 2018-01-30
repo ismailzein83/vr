@@ -146,6 +146,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\CustomerCountryController.cs" />
+    <Compile Include="Controllers\FaultTicketController.cs" />
     <Compile Include="Controllers\SwitchReleaseCauseController.cs" />
     <Compile Include="Controllers\WHSFinancialAccountController.cs" />
     <Compile Include="Controllers\WHSFinancialAccountDefinitionController.cs" />
@@ -526,6 +527,7 @@
     <Content Include="WhS_BusinessEntity\Images\Zone.png" />
     <Content Include="WhS_BusinessEntity\ModuleInitialization.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CustomerCountryAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\FaultTicketAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\FinancialAccountAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\FinancialAccountDefinitionAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\OtherSaleRateAPIService.js" />

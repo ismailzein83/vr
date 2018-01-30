@@ -30,22 +30,33 @@
         <vr-label>Zone Name: </vr-label>
         <vr-label isvalue>{{ scopeModel.zoneName}}</vr-label>
     </vr-columns>
-
+    <vr-columns width="1/3row" ng-if="scopeModel.errorMessage != undefined">
+        <label class="alert alert-danger" vr-alert>{{scopeModel.errorMessage}}</label>
+    </vr-columns>
 </vr-row>
 
 <vr-row>
     <span vr-disabled="scopeModel.isEditMode">
-        <vr-genericdata-genericbusinessentity-selector isrequired="true" on-ready="scopeModel.onReasonSelectorReady" normal-col-num="4" customlabel="Reason"></vr-genericdata-genericbusinessentity-selector>
+        <vr-genericdata-genericbusinessentity-selector isrequired="true" on-ready="scopeModel.onReasonSelectorReady" normal-col-num="4" customlabel="Reason" selectedvalues="scopeModel.reason" onselectionchanged="scopeModel.onReasonSelectionChanged"></vr-genericdata-genericbusinessentity-selector>
     </span>
-    <vr-columns width="1/3row" withemptyline>
-        <vr-button type="Add" value="scopeModel.add" standalone></vr-button>
-    </vr-columns>
-    <vr-columns width="fullrow">
-
-        <vr-textarea value="scopeModel.description" label="Description"></vr-textarea>
-    </vr-columns>
+    <vr-genericdata-genericbusinessentity-selector  on-ready="scopeModel.InternationalReleaseCodeSelectorReady" normal-col-num="4" customlabel="InternationalReleaseCode" selectedvalues="scopeModel.internationalReleaseCode" onselectionchanged="scopeModel.onInternationalReleaseCodeSelectionChanged"></vr-genericdata-genericbusinessentity-selector>
 </vr-row>
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-button type="Add" data-onclick="scopeModel.addCodeNumber" standalone vr-disabled ="scopeModel.disableAddCodeNumber"></vr-button>
+        <vr-datagrid datasource="scopeModel.codeNumberList"
+                     ondeleterow="removerow"
+                     on-ready="onGridReady"
+                     pagingtype="'PagingOnScroll'"
+                     menuactions="gridMenuActions"
+                     enableautoexport="true">
+            <vr-datagridcolumn headertext="'Code Number'" field="'CodeNumber'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Reason'" field="'Reason.Name'" type="'Text'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'International Release Code Reason'" field="'InternationalReleaseCode.Name'" type="'Text'"></vr-datagridcolumn>
 
+        </vr-datagrid>
+    </vr-columns>
+    </vr-row>
 <vr-row>
     <vr-columns width="1/3row">
         <vr-textbox type="number" vr-disabled="scopeModel.isEditMode" value="scopeModel.attempts" label="Attempts"></vr-textbox>

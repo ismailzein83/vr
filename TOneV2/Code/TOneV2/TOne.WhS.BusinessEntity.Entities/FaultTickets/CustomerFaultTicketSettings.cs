@@ -10,6 +10,7 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public List<CustomerFaultTicketDescriptionSetting> DescriptionSettings { get; set; }
         public Guid ReasonBEDefinitionId { get; set; }
+        public Guid ReleaseCodeBEDefinitionId { get; set; }
     }
     public class CustomerFaultTicketSettingsDetails
     {

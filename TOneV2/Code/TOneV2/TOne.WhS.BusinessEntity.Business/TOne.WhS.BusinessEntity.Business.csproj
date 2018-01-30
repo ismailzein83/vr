@@ -149,6 +149,7 @@
     <Compile Include="Country\CustomerZoneManager.cs" />
     <Compile Include="CarrierAccounts\ReevaluateCarrierProfileStatusChangedHandler.cs" />
     <Compile Include="ExtensionMethods.cs" />
+    <Compile Include="FaultTicketManager.cs" />
     <Compile Include="FaultTickets\CustomerFaultTicketsSettings.cs" />
     <Compile Include="FinancialAccount\EventHandlers\FinancialAccountCarrierAccountStatusChangedHandler.cs" />
     <Compile Include="FinancialAccount\EventHandlers\FinancialAccountCarrierProfileStatusChangedHandler.cs" />
