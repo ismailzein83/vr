@@ -49,6 +49,8 @@ namespace TOne.WhS.Routing.BP.Activities
 
             Guid analyticTableId = new ConfigManager().GetQualityAnalyticTableId();
             var routeRuleQualityConfigurationDataList = qualityDataManager.GetRouteRuleQualityConfigurationDataList(routeRuleQualityConfigurationList);
+            if (routeRuleQualityConfigurationDataList == null)
+                return;
 
             RPQualityConfigurationDataBatch batch = new RPQualityConfigurationDataBatch();
             batch.RPQualityConfigurationDataList = new List<RPQualityConfigurationData>();
