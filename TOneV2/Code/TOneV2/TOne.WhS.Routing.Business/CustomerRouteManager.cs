@@ -135,11 +135,13 @@ namespace TOne.WhS.Routing.Business
             if (customerRoute.ExecutedRuleId.HasValue)
             {
                 routeRule = routeRuleManager.GetRule(customerRoute.ExecutedRuleId.Value);
-
-                RouteRuleSettingsConfig RouteRuleSettingsConfig;
-                if (_routeRuleSettingsConfigDict.TryGetValue(routeRule.Settings.ConfigId, out RouteRuleSettingsConfig))
-                    executedRouteRuleSettingsTypeName = RouteRuleSettingsConfig.Title;
-            }
+                if(routeRule != null)
+                {
+                    RouteRuleSettingsConfig RouteRuleSettingsConfig;
+                    if (_routeRuleSettingsConfigDict.TryGetValue(routeRule.Settings.ConfigId, out RouteRuleSettingsConfig))
+                        executedRouteRuleSettingsTypeName = RouteRuleSettingsConfig.Title;
+                }
+            } 
 
             return new CustomerRouteDetail()
             {
