@@ -189,7 +189,8 @@ GO
 --delete useless views from TOne product such 'My Scheduler Service', 'Organizational Charts'
 delete from [sec].[View] where [Id] in ('C65ED28A-36D0-4047-BEC5-030D35B02308',--'My Scheduler Service'
 										'DCF8CA21-852C-41B9-9101-6990E545509D',--'Organizational Charts'
-										'2D39B12D-8FBF-4D4E-B2A5-5E3FE57580DF'--,'Locked Sessions'
+										'2D39B12D-8FBF-4D4E-B2A5-5E3FE57580DF',--'Locked Sessions'
+										'0F111ADC-B7F6-46A4-81BC-72FFDEB305EB'--,'Time Zone'
 										)
 --[sec].[View]--------------------------------------------------------------------------------------
 BEGIN
