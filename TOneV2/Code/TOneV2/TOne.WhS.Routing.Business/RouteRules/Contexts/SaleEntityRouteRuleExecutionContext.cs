@@ -98,6 +98,8 @@ namespace TOne.WhS.Routing.Business
 
         internal RouteOption CreateOptionFromTarget(RouteOptionRuleTarget targetOption, RouteRule routeRule)
         {
+            //if (applyRouteOptionRule)
+            //{
             var routeOptionRule = GetRouteOptionRule(targetOption);
 
             if (routeOptionRule != null)
@@ -106,6 +108,7 @@ namespace TOne.WhS.Routing.Business
                 RouteOptionRuleExecutionContext routeOptionRuleExecutionContext = new RouteOptionRuleExecutionContext() { SaleZoneServiceIds = SaleZoneServiceIds, RouteRule = routeRule };
                 routeOptionRule.Settings.Execute(routeOptionRuleExecutionContext, targetOption);
             }
+            //}
 
             RouteOption routeOption = new RouteOption
             {
@@ -120,6 +123,9 @@ namespace TOne.WhS.Routing.Business
                 IsFiltered = targetOption.FilterOption,
                 NumberOfTries = targetOption.NumberOfTries
             };
+
+            //These values are set to default because route options are cached based on route rule; 
+            //so each time we reset these values to default because they are related to the execution of route option rule and not to route rule
             targetOption.ExecutedRuleId = null;
             targetOption.BlockOption = false;
             targetOption.FilterOption = false;

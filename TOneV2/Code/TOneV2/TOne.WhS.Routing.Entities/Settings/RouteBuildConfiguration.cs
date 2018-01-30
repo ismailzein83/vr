@@ -15,6 +15,8 @@ namespace TOne.WhS.Routing.Entities
     {
         public bool AddBlockedOptions { get; set; }
 
+        public bool KeepBackUpsForRemovedOptions { get; set; }
+
         public int NumberOfOptions { get; set; }
 
         public int IndexesCommandTimeoutInMinutes { get; set; }
@@ -25,6 +27,8 @@ namespace TOne.WhS.Routing.Entities
     public class ProductRouteBuildConfiguration
     {
         public bool AddBlockedOptions { get; set; }
+
+        public bool KeepBackUpsForRemovedOptions { get; set; }
 
         public int IndexesCommandTimeoutInMinutes { get; set; }
 
