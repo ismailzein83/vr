@@ -37,6 +37,12 @@ namespace Vanrise.Rules.Data.SQL
             return (recordesEffected > 0);
         }
 
+        public bool SetDeleted(List<int> rulesIds)
+        {
+            int affectedRecords = ExecuteNonQuerySP("rules.sp_Rule_SetDeleted", string.Join<int>(",", rulesIds));
+            return (affectedRecords > 0);
+        }
+
         public bool AddRuleAndRuleChanged(Entities.Rule rule, ActionType actionType, out int ruleId)
         {
             object insertedId;
@@ -51,11 +57,12 @@ namespace Vanrise.Rules.Data.SQL
             return (recordesEffected > 0);
         }
 
-        public bool SetDeleted(List<int> rulesIds)
+        public bool DeleteRuleAndRuleChanged(int ruleId, int ruleTypeId, ActionType actionType, string initialRule)
         {
-            int affectedRecords = ExecuteNonQuerySP("[rules].[sp_Rule_SetDeleted]", string.Join<int>(",", rulesIds));
-            return (affectedRecords > 0);
+            int recordesEffected = ExecuteNonQuerySP("rules.sp_Rule_DeleteRuleAndRuleChanged", ruleId, ruleTypeId, actionType, initialRule);
+            return (recordesEffected > 0);
         }
+       
         public IEnumerable<Entities.Rule> GetRulesByType(int ruleTypeId)
         {
             return GetItemsSP("rules.sp_Rule_GetByType", RuleMapper, ruleTypeId);
@@ -110,6 +117,7 @@ namespace Vanrise.Rules.Data.SQL
         {
             ExecuteNonQuerySP("rules.sp_RuleChangedForProcessing_DeleteByType", ruleTypeId);
         }
+
         #endregion
 
         #region Private Methods
@@ -123,6 +131,7 @@ namespace Vanrise.Rules.Data.SQL
                 RuleDetails = reader["RuleDetails"] as string,
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
+                IsDeleted = GetReaderValue<bool>(reader, "IsDeleted")
             };
             return instance;
         }

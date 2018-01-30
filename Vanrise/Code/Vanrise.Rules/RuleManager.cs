@@ -179,33 +179,60 @@ namespace Vanrise.Rules
             Vanrise.Common.BusinessManagerFactory.GetManager<IVRActionLogger>().TrackAndLogObjectUpdated(GetLoggableEntity(rule), rule);
         }
 
-        public Vanrise.Entities.DeleteOperationOutput<Q> DeleteRule(int ruleId)
+        public Vanrise.Entities.DeleteOperationOutput<Q> SetRuleDeleted(int ruleId)
         {
-            DeleteOperationOutput<Q> deleteOperationOutput = new DeleteOperationOutput<Q>();
-            IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
-            List<int> ids = new List<int>() { ruleId };
-            T rule = GetRule(ruleId);
-
-            if (ruleDataManager.SetDeleted(ids))
-            {
-                deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
-                int ruleTypeId = GetRuleTypeId();
-                GetCacheManager().SetCacheExpired(ruleTypeId);
-                if (rule != null)
-                    TrackAndLogRuleDeleted(rule);
-            }
-
-            return deleteOperationOutput;
+            List<int> rulesIds = new List<int>() { ruleId };
+            return this.SetRulesDeleted(rulesIds);
         }
 
-        public Vanrise.Entities.DeleteOperationOutput<Q> SetDeleted(List<int> rulesIds)
+        public Vanrise.Entities.DeleteOperationOutput<Q> SetRulesDeleted(List<int> ruleIds)
         {
             DeleteOperationOutput<Q> deleteOperationOutput = new DeleteOperationOutput<Q>();
             IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
-            if (ruleDataManager.SetDeleted(rulesIds))
+
+            int ruleTypeID = GetRuleTypeId();
+            T firstRule = GetRule(ruleIds.First());
+
+            if (firstRule.HasAdditionalInformation)
             {
+                foreach (var ruleId in ruleIds)
+                {
+                    T rule = GetRule(ruleId);
+                    rule.ThrowIfNull(string.Format("rule {0} of ruleType {1}", ruleId, ruleTypeID));
+
+                    RuleChangedData<T> ruleChanged = this.GetRuleChanged(ruleId);
+                    string initialRule = null;
+
+                    if (ruleChanged == null)
+                    {
+                        initialRule = Vanrise.Common.Serializer.Serialize(rule);
+                    }
+                    else if (ruleChanged.ActionType == ActionType.UpdatedRule)
+                    {
+                        initialRule = Vanrise.Common.Serializer.Serialize(ruleChanged.InitialRule);
+                    }
+
+                    if (ruleDataManager.DeleteRuleAndRuleChanged(ruleId, ruleTypeID, ActionType.DeletedRule, initialRule))
+                        TrackAndLogRuleDeleted(rule);
+                }
+
                 deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
-                GetCacheManager().SetCacheExpired(GetRuleTypeId());
+                GetCacheManager().SetCacheExpired(ruleTypeID);
+            }
+            else
+            {
+                if (ruleDataManager.SetDeleted(ruleIds))
+                {
+                    deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
+                    GetCacheManager().SetCacheExpired(ruleTypeID);
+
+                    foreach (var ruleId in ruleIds)
+                    {
+                        T rule = GetRuleWithDeleted(ruleId);
+                        rule.ThrowIfNull(string.Format("rule {0} of ruleType {1}", ruleId, ruleTypeID));
+                        TrackAndLogRuleDeleted(rule);
+                    }
+                }
             }
 
             return deleteOperationOutput;
@@ -225,31 +252,15 @@ namespace Vanrise.Rules
                 return allRules.Values.FindAllRecords(filter);
         }
 
-        public Dictionary<int, T> GetAllRules()
+        public T GetRule(int ruleId)
         {
-            return GetCachedOrCreate("GetCachedRules",
-               () =>
-               {
-
-                   IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
-                   IEnumerable<Entities.Rule> ruleEntities = ruleDataManager.GetRulesByType(GetRuleTypeId());
-                   Dictionary<int, T> rules = new Dictionary<int, T>();
-                   if (ruleEntities != null)
-                   {
-                       foreach (var ruleEntity in ruleEntities)
-                       {
-                           T rule = Serializer.Deserialize<T>(ruleEntity.RuleDetails);
-                           rule.RuleId = ruleEntity.RuleId;
-                           rules.Add(rule.RuleId, rule);
-                       }
-                   }
-                   return rules;
-               });
+            return GetRule(ruleId, false);
         }
 
         public T GetRule(int ruleId, bool isViewedFromUI)
         {
             var allRules = GetAllRules();
+
             T rule;
             if (allRules != null && allRules.TryGetValue(ruleId, out rule))
             {
@@ -258,12 +269,20 @@ namespace Vanrise.Rules
                 return rule;
             }
             else
+            {
                 return null;
+            }
         }
 
-        public T GetRule(int ruleId)
+        public T GetRuleWithDeleted(int ruleId)
         {
-            return GetRule(ruleId, false);
+            var allRulesWithDeleted = GetAllRulesWithDeleted();
+
+            T rule;
+            if (allRulesWithDeleted != null && allRulesWithDeleted.TryGetValue(ruleId, out rule))
+                return rule;
+            else
+                return null;
         }
 
         public Q GetRuleDetail(int ruleId)
@@ -273,6 +292,40 @@ namespace Vanrise.Rules
                 return MapToDetails(rule);
             else
                 return null;
+        }
+
+        public Dictionary<int, T> GetAllRules()
+        {
+            return GetCachedOrCreate("GetCachedRules",
+               () =>
+               {
+                   Dictionary<int, T> rulesWithDeleted = this.GetAllRulesWithDeleted();
+                   return rulesWithDeleted != null ? rulesWithDeleted.FindAllRecords(itm => !itm.IsDeleted).ToDictionary(itm => itm.RuleId, itm => itm) : null;
+               });
+        }
+
+        public Dictionary<int, T> GetAllRulesWithDeleted()
+        {
+            return GetCachedOrCreate("GetCachedRulesWithDeleted",
+               () =>
+               {
+                   IRuleDataManager ruleDataManager = RuleDataManagerFactory.GetDataManager<IRuleDataManager>();
+                   IEnumerable<Entities.Rule> ruleEntities = ruleDataManager.GetRulesByType(GetRuleTypeId());
+                   Dictionary<int, T> rules = new Dictionary<int, T>();
+
+                   if (ruleEntities != null)
+                   {
+                       foreach (var ruleEntity in ruleEntities)
+                       {
+                           T rule = Serializer.Deserialize<T>(ruleEntity.RuleDetails);
+                           rule.RuleId = ruleEntity.RuleId;
+                           rule.IsDeleted = ruleEntity.IsDeleted;
+                           rules.Add(rule.RuleId, rule);
+                       }
+                   }
+
+                   return rules;
+               });
         }
 
         public abstract Q MapToDetails(T rule);
@@ -436,10 +489,7 @@ namespace Vanrise.Rules
 
     public abstract class RuleLoggableEntity : VRLoggableEntityBase
     {
-        public override string ModuleName
-        {
-            get { return "Rules"; }
-        }
+        public override string ModuleName { get { return "Rules"; } }
 
         public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
         {

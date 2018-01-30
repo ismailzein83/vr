@@ -253,7 +253,7 @@ namespace Vanrise.GenericData.Business
 
         public DeleteOperationOutput<GenericRuleDetail> DeleteGenericRule(int ruleId)
         {
-            return this.DeleteRule(ruleId) as Vanrise.Entities.DeleteOperationOutput<GenericRuleDetail>;
+            return this.SetRuleDeleted(ruleId) as Vanrise.Entities.DeleteOperationOutput<GenericRuleDetail>;
         }
 
         public override RuleLoggableEntity GetLoggableEntity(T rule)

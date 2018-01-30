@@ -15,5 +15,7 @@ namespace Vanrise.Rules.Entities
         public DateTime? EED { get; set; }
 
         public string SourceId { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

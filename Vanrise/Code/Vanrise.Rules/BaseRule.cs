@@ -18,6 +18,8 @@ namespace Vanrise.Rules
 
         public virtual bool HasAdditionalInformation { get { return false; } }
 
+        public bool IsDeleted { get; set; }
+
         public virtual void RefreshRuleState(IRefreshRuleStateContext context)
         {
         }

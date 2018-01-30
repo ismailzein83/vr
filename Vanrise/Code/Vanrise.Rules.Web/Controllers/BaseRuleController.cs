@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Http;
 using Vanrise.Entities;
 
@@ -36,19 +34,19 @@ namespace Vanrise.Rules.Web.Controllers
         }
 
         [HttpPost]
-        [Route("DeleteRule")]
-        public Vanrise.Entities.DeleteOperationOutput<Q> DeleteRule(int ruleId)
+        [Route("SetRuleDeleted")]
+        public Vanrise.Entities.DeleteOperationOutput<Q> SetRuleDeleted(int ruleId)
         {
             R manager = Activator.CreateInstance<R>();
-            return manager.DeleteRule(ruleId);
+            return manager.SetRuleDeleted(ruleId);
         }
 
         [HttpPost]
-        [Route("SetRuleDeleted")]
-        public Vanrise.Entities.DeleteOperationOutput<Q> SetRuleDeleted(List<int> ruleIds)
+        [Route("SetRulesDeleted")]
+        public Vanrise.Entities.DeleteOperationOutput<Q> SetRulesDeleted(List<int> ruleIds)
         {
             R manager = Activator.CreateInstance<R>();
-            return manager.SetDeleted(ruleIds);
+            return manager.SetRulesDeleted(ruleIds);
         }
 
         [HttpGet]

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Rules.Entities
 {
-    public enum ActionType { AddedRule = 0, UpdatedRule = 1 }
+    public enum ActionType { AddedRule = 0, UpdatedRule = 1, DeletedRule = 2 }
 
     public class RuleChanged
     {
@@ -16,9 +16,9 @@ namespace Vanrise.Rules.Entities
 
         public int RuleTypeId { get; set; }
 
-        public ActionType ActionType { get; set; } 
+        public ActionType ActionType { get; set; }
 
-        public string InitialRule { get; set; } 
+        public string InitialRule { get; set; }
 
         public string AdditionalInformation { get; set; }
 
