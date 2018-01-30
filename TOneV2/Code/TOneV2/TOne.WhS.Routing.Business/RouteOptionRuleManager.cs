@@ -26,6 +26,7 @@ namespace TOne.WhS.Routing.Business
         #endregion
 
         #region Public Methods
+
         public IEnumerable<RouteOptionRule> GetEffectiveLinkedRouteOptionRules(int customerId, string code, int supplierId, long supplierZoneId, DateTime effectiveDate)
         {
             RouteOptionRuleIdentifier routeOptionRuleIdentifier = new Entities.RouteOptionRuleIdentifier() { Code = code, CustomerId = customerId, SupplierId = supplierId, SupplierZoneId = supplierZoneId };
@@ -39,18 +40,18 @@ namespace TOne.WhS.Routing.Business
             return linkedRouteOptionRules.FindAllRecords(itm => itm.IsEffectiveOrFuture(effectiveDate));
         }
 
-
         public RouteOptionRule GetRouteOptionRuleHistoryDetailbyHistoryId(int routeOptionRuleHistoryId)
         {
             VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
             var routeOptionRule = s_vrObjectTrackingManager.GetObjectDetailById(routeOptionRuleHistoryId);
             return routeOptionRule.CastWithValidate<RouteOptionRule>("RouteOptionRule : historyId ", routeOptionRuleHistoryId);
         }
+
         public RouteOptionRule BuildLinkedRouteOptionRule(int? ruleId, int? customerId, string code, int? supplierId, long? supplierZoneId)
         {
             RouteOptionRule relatedRouteOptionRule;
             if (ruleId.HasValue)
-                relatedRouteOptionRule = base.GetRule(ruleId.Value);
+                relatedRouteOptionRule = base.GetRuleWithDeleted(ruleId.Value);
             else
                 relatedRouteOptionRule = new RouteOptionRule() { Settings = new BlockRouteOptionRule() };
 
@@ -148,9 +149,8 @@ namespace TOne.WhS.Routing.Business
         {
             RouteOptionRuleEditorRuntime routeOptionRuleEditorRuntime = new RouteOptionRuleEditorRuntime();
             routeOptionRuleEditorRuntime.Entity = base.GetRule(ruleId);
-
             if (routeOptionRuleEditorRuntime.Entity == null)
-                throw new NullReferenceException(string.Format("routeOptionRuleEditorRuntime.Entity for Rule ID: {0} is null", ruleId));
+                return null;
 
             if (routeOptionRuleEditorRuntime.Entity.Settings == null)
                 throw new NullReferenceException(string.Format("routeOptionRuleEditorRuntime.Entity.Settings for Rule ID: {0} is null", ruleId));

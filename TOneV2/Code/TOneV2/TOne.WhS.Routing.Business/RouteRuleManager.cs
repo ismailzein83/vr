@@ -43,7 +43,7 @@ namespace TOne.WhS.Routing.Business
 
         public RouteRule BuildLinkedRouteRule(int ruleId, int? customerId, string code, List<RouteOption> routeOptions)
         {
-            RouteRule relatedRouteRule = base.GetRule(ruleId);
+            RouteRule relatedRouteRule = base.GetRuleWithDeleted(ruleId);
             if (relatedRouteRule == null)
                 throw new NullReferenceException(string.Format("relatedRouteRule. RuleId: {0}", ruleId));
 
@@ -74,7 +74,6 @@ namespace TOne.WhS.Routing.Business
 
             return linkedRouteRule;
         }
-
 
         public List<RouteRule> GetEffectiveAndFutureRPRouteRules(DateTime effectiveDate)
         {

@@ -161,7 +161,7 @@ function (VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, WhS_Rout
                 gridAPI.itemDeleted(deletedItem);
             };
 
-            WhS_Routing_RouteOptionRuleService.deleteRouteOptionRule($scope, routeOptionRule, onRouteOptionRuleDeleted);
+            WhS_Routing_RouteOptionRuleService.setRouteOptionRuleDeleted($scope, routeOptionRule, onRouteOptionRuleDeleted);
         }
 
         this.initializeController = initializeController;

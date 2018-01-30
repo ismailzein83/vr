@@ -235,9 +235,15 @@
 
         function getRouteRule() {
             return WhS_Routing_RouteRuleAPIService.GetRule(routeRuleId).then(function (routeRule) {
-                $scope.scopeModel.routeRuleName = routeRule != null ? routeRule.Name : '';
-                routeRuleEntity = routeRule;
-                routingProductId = routeRuleEntity.Criteria != null ? routeRuleEntity.Criteria.RoutingProductId : undefined;
+                if (routeRule != undefined) {
+                    $scope.scopeModel.routeRuleName = routeRule != null ? routeRule.Name : '';
+                    routeRuleEntity = routeRule;
+                    routingProductId = routeRuleEntity.Criteria != null ? routeRuleEntity.Criteria.RoutingProductId : undefined;
+                }
+                else {
+                    VRNotificationService.showWarning("Matching Rule has been deleted!!");
+                    $scope.modalContext.closeModal();
+                }
             });
         }
 
@@ -396,8 +402,8 @@
 
         function insertRouteRule() {
             var routeRuleObject = buildRouteRuleObjFromScope();
-            return WhS_Routing_RouteRuleAPIService.AddRule(routeRuleObject)
-            .then(function (response) {
+
+            return WhS_Routing_RouteRuleAPIService.AddRule(routeRuleObject).then(function (response) {
                 if (VRNotificationService.notifyOnItemAdded("Route Rule", response, "Name")) {
                     if ($scope.onRouteRuleAdded != undefined)
                         $scope.onRouteRuleAdded(response.InsertedObject);
@@ -410,8 +416,8 @@
 
         function updateRouteRule() {
             var routeRuleObject = buildRouteRuleObjFromScope();
-            WhS_Routing_RouteRuleAPIService.UpdateRule(routeRuleObject)
-            .then(function (response) {
+
+            WhS_Routing_RouteRuleAPIService.UpdateRule(routeRuleObject).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Route Rule", response, "Name")) {
                     if ($scope.onRouteRuleUpdated != undefined)
                         $scope.onRouteRuleUpdated(response.UpdatedObject);

@@ -56,9 +56,9 @@ namespace TOne.WhS.Sales.Web.Controllers
 
         [HttpGet]
         [Route("DeleteRule")]
-        public new DeleteOperationOutput<SellingRuleDetail> DeleteRule(int ruleId)
+        public DeleteOperationOutput<SellingRuleDetail> DeleteRule(int ruleId)
         {
-            return base.DeleteRule(ruleId);
+            return base.SetRuleDeleted(ruleId);
         }
     }
 }

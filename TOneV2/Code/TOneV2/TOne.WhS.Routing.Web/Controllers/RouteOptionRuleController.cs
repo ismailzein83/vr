@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Web;
+﻿using System.Collections.Generic;
 using System.Web.Http;
-using Vanrise.Entities;
-using Vanrise.Web.Base;
-using Vanrise.Rules.Web.Controllers;
 using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Entities;
-using TOne.WhS.BusinessEntity.Business;
+using Vanrise.Entities;
+using Vanrise.Rules.Web.Controllers;
+using Vanrise.Web.Base;
 
 namespace TOne.WhS.Routing.Web.Controllers
 {
@@ -42,7 +37,6 @@ namespace TOne.WhS.Routing.Web.Controllers
             return manager.GetRouteOptionRuleSettingsTemplatesByProcessType(routingProcessType);
         }
        
-            
         [Route("GetRouteOptionRuleHistoryDetailbyHistoryId")]
         public RouteOptionRule GetRouteOptionRuleHistoryDetailbyHistoryId(int routeOPtionRuleHistoryId)
         {
@@ -88,16 +82,17 @@ namespace TOne.WhS.Routing.Web.Controllers
         }
 
         [HttpGet]
-        [Route("DeleteRule")]
-        public new DeleteOperationOutput<RouteOptionRuleDetail> DeleteRule(int ruleId)
+        [Route("SetRouteOptionRuleDeleted")]
+        public DeleteOperationOutput<RouteOptionRuleDetail> SetRouteOptionRuleDeleted(int ruleId)
         {
-            return base.DeleteRule(ruleId);
+            return base.SetRuleDeleted(ruleId);
         }
+
         [HttpPost]
-        [Route("SetRouteOptionsRulesDeleted")]
-        public new DeleteOperationOutput<RouteOptionRuleDetail> SetRouteOptionsRulesDeleted(RouteOptionsRulesDeleteInpute input)
+        [Route("SetRouteOptionRulesDeleted")]
+        public DeleteOperationOutput<RouteOptionRuleDetail> SetRouteOptionRulesDeleted(RouteOptionsRulesDeleteInpute input)
         {
-            return base.SetRuleDeleted(input.RouteOptionsIds);
+            return base.SetRulesDeleted(input.RouteOptionsIds);
         }
     }
 
@@ -113,9 +108,9 @@ namespace TOne.WhS.Routing.Web.Controllers
 
         public long? SupplierZoneId { get; set; }
     }
+
     public class RouteOptionsRulesDeleteInpute
     {
         public List<int> RouteOptionsIds { get; set; }
     }
-
 }

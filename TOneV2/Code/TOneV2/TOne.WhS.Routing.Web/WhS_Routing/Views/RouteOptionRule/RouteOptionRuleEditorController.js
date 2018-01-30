@@ -303,11 +303,16 @@
         }
         function getRouteOptionRule() {
             return WhS_Routing_RouteOptionRuleAPIService.GetRuleEditorRuntime(routeRuleId).then(function (routeOptionRule) {
-                routeOptionRuleEntity = routeOptionRule.Entity;
-                settingsEditorRuntime = routeOptionRule.SettingsEditorRuntime;
+                if (routeOptionRule != undefined) {
+                    routeOptionRuleEntity = routeOptionRule.Entity;
+                    settingsEditorRuntime = routeOptionRule.SettingsEditorRuntime;
 
-                $scope.scopeModel.routeOptionRuleName = routeOptionRuleEntity != null ? routeOptionRuleEntity.Name : '';
-                routingProductId = routeOptionRuleEntity.Criteria != null ? routeOptionRuleEntity.Criteria.RoutingProductId : undefined;
+                    $scope.scopeModel.routeOptionRuleName = routeOptionRuleEntity != null ? routeOptionRuleEntity.Name : '';
+                    routingProductId = routeOptionRuleEntity.Criteria != null ? routeOptionRuleEntity.Criteria.RoutingProductId : undefined;
+                } else {
+                    VRNotificationService.showWarning("Matching Rule has been deleted!!");
+                    $scope.modalContext.closeModal();
+                }
             });
         }
 

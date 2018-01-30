@@ -61,7 +61,6 @@ namespace TOne.WhS.Routing.BP.Activities
             HashSet<int> affectedRouteOptionRuleIds = new HashSet<int>();
             BuildAddedUpdatedRouteOptionRules(routeOptionRuleChangedList, affectedRouteOptionRules, affectedRouteOptionRuleIds, effectiveDate);
 
-
             if (!routeRuleId.HasValue && effectiveDate > partialRouteInfo.LatestRoutingDate)
             {
                 BuildOpenedClosedRouteRules(affectedRouteRules, affectedRouteRuleIds, effectiveDate, partialRouteInfo, ref nextOpenOrCloseRuleTime);
@@ -78,14 +77,15 @@ namespace TOne.WhS.Routing.BP.Activities
             if (routeRuleChangedList != null)
             {
                 RouteRuleManager routeRuleManager = new RouteRuleManager();
+
                 foreach (var routeRuleChanged in routeRuleChangedList)
                 {
+                    affectedRouteRuleIds.Add(routeRuleChanged.RuleId);
+
                     switch (routeRuleChanged.ActionType)
                     {
                         case ActionType.AddedRule:
-                            affectedRouteRuleIds.Add(routeRuleChanged.RuleId);
                             RouteRule addedRouteRule = routeRuleManager.GetRule(routeRuleChanged.RuleId);
-
                             if (addedRouteRule.IsEffective(effectiveDate))
                                 affectedRouteRules.AddedRouteRules.Add(addedRouteRule);
                             break;
@@ -96,10 +96,14 @@ namespace TOne.WhS.Routing.BP.Activities
                             RouteRuleAdditionalInformation routeRuleAdditionalInformation = routeRuleChanged.AdditionalInformation.CastWithValidate<RouteRuleAdditionalInformation>("routeRuleChanged.AdditionalInformation", routeRuleChanged.RuleId);
                             if (routeRuleAdditionalInformation.CriteriaHasChanged)
                             {
-                                affectedRouteRuleIds.Add(routeRuleChanged.RuleId);
                                 RouteRule routeRule = routeRuleManager.GetRule(routeRuleChanged.RuleId);
                                 affectedRouteRules.UpdatedRouteRules.Add(routeRule);
                             }
+                            break;
+
+                        case ActionType.DeletedRule:
+                            if (routeRuleChanged.InitialRule != null)
+                                affectedRouteRules.UpdatedRouteRules.Add(routeRuleChanged.InitialRule);
                             break;
 
                         default: throw new NotSupportedException(string.Format("ActionType {0} not supported.", routeRuleChanged.ActionType));
@@ -115,10 +119,11 @@ namespace TOne.WhS.Routing.BP.Activities
                 RouteOptionRuleManager routeOptionRuleManager = new RouteOptionRuleManager();
                 foreach (var routeOptionRuleChanged in routeOptionRuleChangedList)
                 {
+                    affectedRouteOptionRuleIds.Add(routeOptionRuleChanged.RuleId);
+
                     switch (routeOptionRuleChanged.ActionType)
                     {
                         case ActionType.AddedRule:
-                            affectedRouteOptionRuleIds.Add(routeOptionRuleChanged.RuleId);
                             RouteOptionRule addedRouteOptionRule = routeOptionRuleManager.GetRule(routeOptionRuleChanged.RuleId);
 
                             if (addedRouteOptionRule.IsEffective(effectiveDate))
@@ -131,10 +136,14 @@ namespace TOne.WhS.Routing.BP.Activities
                             RouteOptionRuleAdditionalInformation routeOptionRuleAdditionalInformation = routeOptionRuleChanged.AdditionalInformation.CastWithValidate<RouteOptionRuleAdditionalInformation>("routeOptionRuleChanged.AdditionalInformation", routeOptionRuleChanged.RuleId);
                             if (routeOptionRuleAdditionalInformation.CriteriaHasChanged)
                             {
-                                affectedRouteOptionRuleIds.Add(routeOptionRuleChanged.RuleId);
                                 RouteOptionRule routeOptionRule = routeOptionRuleManager.GetRule(routeOptionRuleChanged.RuleId);
                                 affectedRouteOptionRules.UpdatedRouteOptionRules.Add(routeOptionRule);
                             }
+                            break;
+
+                        case ActionType.DeletedRule:
+                            if (routeOptionRuleChanged.InitialRule != null)
+                                affectedRouteOptionRules.UpdatedRouteOptionRules.Add(routeOptionRuleChanged.InitialRule);
                             break;
 
                         default: throw new NotSupportedException(string.Format("ActionType {0} not supported.", routeOptionRuleChanged.ActionType));
@@ -158,7 +167,6 @@ namespace TOne.WhS.Routing.BP.Activities
 
                     if (routeRule.EED.HasValue && routeRule.EED > effectiveDate && (!nextOpenOrCloseRuleTime.HasValue || routeRule.EED < nextOpenOrCloseRuleTime.Value))
                         nextOpenOrCloseRuleTime = routeRule.EED;
-
 
                     if (affectedRouteRuleIds.Contains(ruleId))
                         continue;

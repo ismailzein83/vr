@@ -62,13 +62,16 @@
                 if (gridAPI != undefined)
                     return gridAPI.loadGrid(getFilterObject());
             };
+
             $scope.setRouteOptionsRulesDeleted = function () {
                 var ids = gridAPI.getSelectedRouteOptionsRules();
                 var onSetRouteOptionsRulesDeleted = function () {
                     gridAPI.onRouteOptionsRulesDeleted(ids);
                 };
-                WhS_Routing_RouteOptionRuleService.setRouteOptionsRulesDeleted(ids, onSetRouteOptionsRulesDeleted);
+
+                WhS_Routing_RouteOptionRuleService.setRouteOptionRulesDeleted(ids, onSetRouteOptionsRulesDeleted);
             };
+
             $scope.disabledDeletedRouteOptionsRules = function () {
                 if (gridAPI == undefined) return true;
                 return gridAPI.getSelectedRouteOptionsRules().length < 1;

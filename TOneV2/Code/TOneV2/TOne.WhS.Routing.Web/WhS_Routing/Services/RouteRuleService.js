@@ -5,20 +5,8 @@
     RouteRuleService.$inject = ['WhS_Routing_RouteRuleAPIService', 'VRModalService', 'VRNotificationService', 'UtilsService', 'VRCommon_ObjectTrackingService'];
 
     function RouteRuleService(WhS_Routing_RouteRuleAPIService, VRModalService, VRNotificationService, UtilsService, VRCommon_ObjectTrackingService) {
+
         var drillDownDefinitions = [];
-        return ({
-            addRouteRule: addRouteRule,
-            editRouteRule: editRouteRule,
-            deleteRouteRule: deleteRouteRule,
-            viewRouteRule: viewRouteRule,
-            addLinkedRouteRule: addLinkedRouteRule,
-            viewLinkedRouteRules: viewLinkedRouteRules,
-            editLinkedRouteRule: editLinkedRouteRule,
-            registerObjectTrackingDrillDownToRouteRules: registerObjectTrackingDrillDownToRouteRules,
-            getDrillDownDefinition: getDrillDownDefinition,
-            registerHistoryViewAction: registerHistoryViewAction,
-            setRouteRulesDeleted: setRouteRulesDeleted
-        });
 
         function addRouteRule(onRouteRuleAdded, context) {
             var settings = {
@@ -36,7 +24,7 @@
             };
 
             VRModalService.showModal('/Client/Modules/WhS_Routing/Views/RouteRule/RouteRuleEditor.html', parameters, settings);
-        };
+        }
 
         function editRouteRule(routeRuleId, onRouteRuleUpdated) {
             var modalSettings = {
@@ -50,38 +38,31 @@
                 modalScope.onRouteRuleUpdated = onRouteRuleUpdated;
             };
             VRModalService.showModal('/Client/Modules/WhS_Routing/Views/RouteRule/RouteRuleEditor.html', parameters, modalSettings);
-        };
+        }
 
-        function deleteRouteRule(scope, routeRuleObj, onRouteRuleDeleted) {
-            VRNotificationService.showConfirmation('Are you sure you want to delete this route rule?')
-                .then(function (response) {
-                    if (response) {
-                        return WhS_Routing_RouteRuleAPIService.DeleteRule(routeRuleObj.Entity.RuleId)
-                            .then(function (deletionResponse) {
-                                VRNotificationService.notifyOnItemDeleted("Route Rule", deletionResponse);
-                                onRouteRuleDeleted(routeRuleObj);
-                            })
-                            .catch(function (error) {
-                                VRNotificationService.notifyException(error, scope);
-                            });
-                    }
-                });
-        };
-
+        function setRouteRuleDeleted(scope, routeRuleObj, onRouteRuleDeleted) {
+            VRNotificationService.showConfirmation('Are you sure you want to delete this route rule?').then(function (response) {
+                if (response) {
+                    return WhS_Routing_RouteRuleAPIService.SetRouteRuleDeleted(routeRuleObj.Entity.RuleId).then(function (deletionResponse) {
+                        VRNotificationService.notifyOnItemDeleted("Route Rule", deletionResponse);
+                        onRouteRuleDeleted(routeRuleObj);
+                    }).catch(function (error) {
+                        VRNotificationService.notifyException(error, scope);
+                    });
+                }
+            });
+        }
 
         function setRouteRulesDeleted(routeRulesIds, onSetRouteRulesDeleted) {
-            VRNotificationService.showConfirmation('Are you sure you want to delete selected items?')
-                .then(function (response) {
-                    if (response) {
-                        return WhS_Routing_RouteRuleAPIService.SetRouteRulesDeleted({
-                            RuleIds: routeRulesIds
-                        }).then(function (deletionResponse) {
-                            VRNotificationService.notifyOnItemDeleted("Route Rule", deletionResponse);
-                            onSetRouteRulesDeleted();
-                        });
-                    }
-                });
-        };
+            VRNotificationService.showConfirmation('Are you sure you want to delete selected items?').then(function (response) {
+                if (response) {
+                    return WhS_Routing_RouteRuleAPIService.SetRouteRulesDeleted({ RuleIds: routeRulesIds }).then(function (deletionResponse) {
+                        VRNotificationService.notifyOnItemDeleted("Route Rule", deletionResponse);
+                        onSetRouteRulesDeleted();
+                    });
+                }
+            });
+        }
 
         function viewRouteRule(routeRuleId) {
             var modalSettings = {
@@ -95,7 +76,7 @@
                 UtilsService.setContextReadOnly(modalScope);
             };
             VRModalService.showModal('/Client/Modules/WhS_Routing/Views/RouteRule/RouteRuleEditor.html', parameters, modalSettings);
-        };
+        }
 
         function addLinkedRouteRule(linkedRouteRuleInput, linkedCode, onRouteRuleAdded) {
             var modalSettings = {
@@ -111,7 +92,7 @@
             };
 
             VRModalService.showModal('/Client/Modules/WhS_Routing/Views/RouteRule/RouteRuleEditor.html', parameters, modalSettings);
-        };
+        }
 
         function viewLinkedRouteRules(linkedRouteRuleIds, linkedCode, onRouteRuleUpdated) {
             var settings = {
@@ -124,7 +105,7 @@
             };
 
             VRModalService.showModal('/Client/Modules/WhS_Routing/Views/RouteRule/LinkedRouteRuleEditor.html', parameters, settings);
-        };
+        }
 
         function editLinkedRouteRule(routeRuleId, linkedCode, onRouteRuleUpdated) {
             var modalSettings = {
@@ -140,7 +121,8 @@
             };
 
             VRModalService.showModal('/Client/Modules/WhS_Routing/Views/RouteRule/RouteRuleEditor.html', parameters, modalSettings);
-        };
+        }
+
         function viewRouteRules(context) {
             var modalParameters = {
                 context: context
@@ -168,6 +150,7 @@
             };
             VRCommon_ObjectTrackingService.registerActionHistory(actionHistory);
         }
+
         function getEntityUniqueName() {
             return "WhS_Routing_RouteRules";
         }
@@ -193,6 +176,7 @@
             addDrillDownDefinition(drillDownDefinition);
 
         }
+
         function addDrillDownDefinition(drillDownDefinition) {
             drillDownDefinitions.push(drillDownDefinition);
         }
@@ -202,7 +186,20 @@
         }
 
 
-    };
+        return ({
+            addRouteRule: addRouteRule,
+            editRouteRule: editRouteRule,
+            setRouteRuleDeleted: setRouteRuleDeleted,
+            setRouteRulesDeleted: setRouteRulesDeleted,
+            viewRouteRule: viewRouteRule,
+            addLinkedRouteRule: addLinkedRouteRule,
+            viewLinkedRouteRules: viewLinkedRouteRules,
+            editLinkedRouteRule: editLinkedRouteRule,
+            registerObjectTrackingDrillDownToRouteRules: registerObjectTrackingDrillDownToRouteRules,
+            getDrillDownDefinition: getDrillDownDefinition,
+            registerHistoryViewAction: registerHistoryViewAction
+        });
+    }
 
     appControllers.service('WhS_Routing_RouteRuleService', RouteRuleService);
 

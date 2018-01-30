@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Web;
+﻿using System.Collections.Generic;
 using System.Web.Http;
-using Vanrise.Entities;
-using Vanrise.Web.Base;
-using Vanrise.Rules.Web.Controllers;
-using TOne.WhS.Routing.Business;
-using TOne.WhS.Routing.Entities;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Routing.Business;
+using TOne.WhS.Routing.Entities;
+using Vanrise.Entities;
+using Vanrise.Rules.Web.Controllers;
+using Vanrise.Web.Base;
 
 namespace TOne.WhS.Routing.Web.Controllers
 {
@@ -56,6 +52,7 @@ namespace TOne.WhS.Routing.Web.Controllers
             RouteRuleManager manager = new RouteRuleManager();
             return manager.GetRouteRuleHistoryDetailbyHistoryId(routeRuleHistoryId);
         }
+
         [HttpGet]
         [Route("GetRule")]
         public new RouteRule GetRule(int ruleId)
@@ -86,17 +83,17 @@ namespace TOne.WhS.Routing.Web.Controllers
         }
 
         [HttpGet]
-        [Route("DeleteRule")]
-        public new DeleteOperationOutput<RouteRuleDetail> DeleteRule(int ruleId)
+        [Route("SetRouteRuleDeleted")]
+        public DeleteOperationOutput<RouteRuleDetail> SetRouteRuleDeleted(int ruleId)
         {
-            return base.DeleteRule(ruleId);
+            return base.SetRuleDeleted(ruleId);
         }
 
         [HttpPost]
         [Route("SetRouteRulesDeleted")]
-        public new DeleteOperationOutput<RouteRuleDetail> SetRouteRulesDeleted(RouteRuleDeleteInpute input)
+        public DeleteOperationOutput<RouteRuleDetail> SetRouteRulesDeleted(RouteRuleDeleteInpute input)
         {
-            return base.SetRuleDeleted(input.RuleIds);
+            return base.SetRulesDeleted(input.RuleIds);
         }
     }
 

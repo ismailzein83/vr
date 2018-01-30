@@ -1,6 +1,7 @@
 ﻿(function (appControllers) {
 
     "use strict";
+
     routeOptionRuleAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_Routing_ModuleConfig', 'SecurityService'];
 
     function routeOptionRuleAPIService(BaseAPIService, UtilsService, WhS_Routing_ModuleConfig, SecurityService) {
@@ -31,14 +32,13 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "UpdateRule"), routeRuleObject);
         };
 
-        function DeleteRule(ruleId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "DeleteRule"), { ruleId: ruleId });
+        function SetRouteOptionRuleDeleted(ruleId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "SetRouteOptionRuleDeleted"), { ruleId: ruleId });
         };
 
-        function SetRouteOptionsRulesDeleted(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "SetRouteOptionsRulesDeleted"), input);
+        function SetRouteOptionRulesDeleted(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "SetRouteOptionRulesDeleted"), input);
         };
-
 
         function GetRouteOptionRuleSettingsTemplates() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetRouteOptionRuleSettingsTemplates"));
@@ -48,6 +48,17 @@
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetRouteOptionRuleSettingsTemplatesByProcessType"), {
                 routingProcessType: routingProcessType
             });
+        };
+
+        function GetRouteOptionRuleHistoryDetailbyHistoryId(routeOPtionRuleHistoryId) {
+
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, 'GetRouteOptionRuleHistoryDetailbyHistoryId'), {
+                routeOPtionRuleHistoryId: routeOPtionRuleHistoryId
+            });
+        }
+
+        function BuildLinkedRouteOptionRule(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "BuildLinkedRouteOptionRule "), input);
         };
 
         function HasAddRulePermission() {
@@ -62,33 +73,23 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_Routing_ModuleConfig.moduleName, controllerName, ['DeleteRule']));
         };
 
-        function BuildLinkedRouteOptionRule(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "BuildLinkedRouteOptionRule "), input);
-        };
-       
-        function GetRouteOptionRuleHistoryDetailbyHistoryId(routeOPtionRuleHistoryId) {
 
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, 'GetRouteOptionRuleHistoryDetailbyHistoryId'), {
-                routeOPtionRuleHistoryId: routeOPtionRuleHistoryId
-            });
-        }
         return ({
             GetFilteredRouteOptionRules: GetFilteredRouteOptionRules,
             GetRuleEditorRuntime: GetRuleEditorRuntime,
             GetRule: GetRule,
             AddRule: AddRule,
             UpdateRule: UpdateRule,
-            DeleteRule: DeleteRule,
+            SetRouteOptionRuleDeleted: SetRouteOptionRuleDeleted,
+            SetRouteOptionRulesDeleted: SetRouteOptionRulesDeleted,
             GetRouteOptionRuleSettingsTemplates: GetRouteOptionRuleSettingsTemplates,
             GetRouteOptionRuleSettingsTemplatesByProcessType: GetRouteOptionRuleSettingsTemplatesByProcessType,
+            GetRouteOptionRuleHistoryDetailbyHistoryId: GetRouteOptionRuleHistoryDetailbyHistoryId,
+            BuildLinkedRouteOptionRule: BuildLinkedRouteOptionRule,
             HasAddRulePermission: HasAddRulePermission,
             HasUpdateRulePermission: HasUpdateRulePermission,
-            HasDeleteRulePermission: HasDeleteRulePermission,
-            BuildLinkedRouteOptionRule: BuildLinkedRouteOptionRule,
-            GetRouteOptionRuleHistoryDetailbyHistoryId: GetRouteOptionRuleHistoryDetailbyHistoryId,
-            SetRouteOptionsRulesDeleted: SetRouteOptionsRulesDeleted
+            HasDeleteRulePermission: HasDeleteRulePermission
         });
-
     }
 
     appControllers.service('WhS_Routing_RouteOptionRuleAPIService', routeOptionRuleAPIService);
