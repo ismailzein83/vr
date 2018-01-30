@@ -1,0 +1,9 @@
+﻿<vr-button type="Add" data-onclick="ctrl.addGridColumn" standalone vr-disabled="ctrl.disableAddGridColumn()"></vr-button>
+
+<vr-validator validate="ctrl.isValid()">
+    <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                 on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeColumn" hidegridmenu>
+        <vr-datagridcolumn headertext="'Name'" field="'FieldName'" disablesorting></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Title'" field="'FieldTitle'" disablesorting></vr-datagridcolumn>
+    </vr-datagrid>
+</vr-validator>

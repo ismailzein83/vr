@@ -7,10 +7,21 @@ app.directive('vrCommonGridcolumnwidthEditor', ['UtilsService', 'VRUIUtilsServic
             restrict: 'E',
             scope: {
                 onReady: '=',
+                selectorColNum: '@',
+                textboxColNum: '@'
 
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
+                $scope.selectorColNum = 8;
+                $scope.textboxColNum = 4;
+
+                if (ctrl.selectorColNum != undefined)
+                    $scope.selectorColNum = ctrl.selectorColNum;
+
+                if (ctrl.textboxColNum != undefined)
+                    $scope.textboxColNum = ctrl.textboxColNum;
+
                 var ctor = new GridColumnWidthEditor(ctrl, $scope, $attrs);
                 ctor.initializeController();
             },
@@ -19,7 +30,7 @@ app.directive('vrCommonGridcolumnwidthEditor', ['UtilsService', 'VRUIUtilsServic
             compile: function (element, attrs) {
 
             },
-            template:  function (element, attrs) {
+            template: function (element, attrs) {
                 return getDirectiveTemplate(attrs);
             }
         };
@@ -36,12 +47,12 @@ app.directive('vrCommonGridcolumnwidthEditor', ['UtilsService', 'VRUIUtilsServic
                 $scope.scopeModel.onGridWidthFactorSelectorReady = function (api) {
                     widthFactorSelectorAPI = api;
                     widthFactorSelectorReadyPromiseDeferred.resolve();
-                };               
+                };
                 $scope.scopeModel.onGridWidthFactorSelectionChange = function () {
                     if (widthFactorSelectorAPI.getSelectedIds() != $scope.scopeModel.fixedWidthValue)
                         $scope.scopeModel.fixedWidth = undefined;
                 };
-                
+
                 defineAPI();
             }
             function defineAPI() {
@@ -53,7 +64,7 @@ app.directive('vrCommonGridcolumnwidthEditor', ['UtilsService', 'VRUIUtilsServic
                     if (payload != undefined) {
                         data = payload.data;
                     }
-                    $scope.scopeModel.fixedWidth = data &&  data.FixedWidth ? data.FixedWidth: undefined;
+                    $scope.scopeModel.fixedWidth = data && data.FixedWidth ? data.FixedWidth : undefined;
                     var widthFactorSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
 
@@ -67,7 +78,7 @@ app.directive('vrCommonGridcolumnwidthEditor', ['UtilsService', 'VRUIUtilsServic
                     return widthFactorSelectorLoadPromiseDeferred.promise;
 
 
-                   
+
                 };
 
                 api.getData = function () {
@@ -76,7 +87,7 @@ app.directive('vrCommonGridcolumnwidthEditor', ['UtilsService', 'VRUIUtilsServic
                         Width: widthFactorSelectorAPI.getSelectedIds(),
                         FixedWidth: $scope.scopeModel.fixedWidth
                     }
-                   
+
                 };
 
                 if (ctrl.onReady != null)
@@ -84,12 +95,12 @@ app.directive('vrCommonGridcolumnwidthEditor', ['UtilsService', 'VRUIUtilsServic
 
 
             }
-            
-           
+
+
         }
         function getDirectiveTemplate(attrs) {
             var label = attrs.label ? attrs.label : 'Width';
-           
+
             var hidelabel = ' ';
             var fixedLabel = ' label ="Fixed Width"';
             if (attrs.hidelabel != undefined) {
@@ -97,13 +108,13 @@ app.directive('vrCommonGridcolumnwidthEditor', ['UtilsService', 'VRUIUtilsServic
                 fixedLabel = " ";
             }
 
-            return '<vr-common-gridwidthfactor-selector normal-col-num="8" on-ready="scopeModel.onGridWidthFactorSelectorReady" onselectionchanged="scopeModel.onGridWidthFactorSelectionChange" selectedvalues="scopeModel.widthOption" isrequired="true" '
-                   + hidelabel 
+            return '<vr-common-gridwidthfactor-selector normal-col-num="{{selectorColNum}}" on-ready="scopeModel.onGridWidthFactorSelectorReady" onselectionchanged="scopeModel.onGridWidthFactorSelectionChange" selectedvalues="scopeModel.widthOption" isrequired="true" '
+                   + hidelabel
                    + ' ></vr-common-gridwidthfactor-selector>'
-                   + '<vr-columns width="1/3row" >'
+                   + '<vr-columns colnum="{{textboxColNum}}" >'
                    + '<vr-textbox type="number" '
                     + fixedLabel +
                    ' ng-show="scopeModel.widthOption.value == scopeModel.fixedWidthValue" value="scopeModel.fixedWidth" decimalprecision="0" isrequired="scopeModel.widthOption.value == scopeModel.fixedWidthValue "></vr-textbox>'
                    + '</vr-columns>';
         }
- }]);
+    }]);

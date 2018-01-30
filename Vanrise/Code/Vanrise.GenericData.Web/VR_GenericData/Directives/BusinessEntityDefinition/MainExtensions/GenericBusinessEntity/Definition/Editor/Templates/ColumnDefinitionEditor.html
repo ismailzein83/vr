@@ -1,0 +1,27 @@
+﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericBEColumnDefintionController" vr-loader="scopeModal.isLoading" width="'40%'">
+    <vr-modalbody >
+        <vr-form validationcontext="columnEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-genericdata-datarecordtypefields-selector onselectionchanged="scopeModel.onDataRecordTypeFieldsSelectionChanged"  on-ready="scopeModel.onDataRecordTypeFieldsSelectorDirectiveReady" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.fieldTitle" label="Title" isrequired></vr-textbox>
+                        </vr-columns>
+                        <vr-common-gridcolumnwidth-editor on-ready="scopeModel.onColumnSettingDirectiveReady" selector-col-num="6" textbox-col-num="6"></vr-common-gridcolumnwidth-editor>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" validationcontext="columnEditor" data-onclick="scopeModel.saveColumnDefinition"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

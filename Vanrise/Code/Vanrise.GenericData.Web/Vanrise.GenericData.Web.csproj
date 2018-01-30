@@ -211,6 +211,10 @@
     <Content Include="VR_GenericData\Directives\BEParentChildRelation\BEParentChildRelationDefinition\vr-genericdata-beparentchildrelationdefinition-settings.js" />
     <Content Include="VR_GenericData\Directives\BEParentChildRelation\BEParentChildRelationRuntime\Templates\BEParentChildRelationGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\BEParentChildRelation\BEParentChildRelationRuntime\vr-genericdata-beparentchildrelation-grid.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\Editor\Templates\ColumnDefinitionEditor.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\Editor\Templates\ColumnDefinitionGridTemplate.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\Editor\vr-genericdata-generic-be-columndefinition-grid.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\Editor\ColumnDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\GenericBEFilterDefinition\Templates\BasicAdvancedFilterRuntimeTemplate.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\GenericBEFilterDefinition\Templates\FilterGroupFilterRuntimeTemplate.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\GenericBEFilterDefinition\Templates\GenericFilterRuntimeTemplate.html" />
@@ -222,10 +226,10 @@
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\GenericBEViewDefinition\Templates\HistoryGenericBEDefinitionViewTemplate.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\GenericBEViewDefinition\vr-genericdata-genericbe-historygridview-runtime.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\MainExtensions\OnBeforeInsertHandler\GenericBESN\SNPatternHelperEditorController.js" />
-    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Templates\GenericBusinessEntityDefinitionEditor.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\Editor\Templates\GenericBusinessEntityDefinitionEditor.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Templates\GenericBusinessEntityViewEditor.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\vr-genericdata-genericbedefinition-selector.js" />
-    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\vr-genericdata-genericbusinessentity-editor.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\Editor\vr-genericdata-genericbusinessentity-editor.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\vr-genericdata-genericbusinessentity-vieweditor.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\Templates\StaticEditorRuntimeSettingTemplate.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\Templates\TabsContainerRuntimeSettingTemplate.html" />
@@ -601,6 +605,7 @@
     <Content Include="VR_GenericData\Services\DataRecordFieldChoiceService.js" />
     <Content Include="VR_GenericData\Services\GenericBESerialNumberService.js" />
     <Content Include="VR_GenericData\Services\GenericBusinessEntityActionService.js" />
+    <Content Include="VR_GenericData\Services\GenericBEDefinitionService.js" />
     <Content Include="VR_GenericData\Services\GenericUIService.js" />
     <Content Include="VR_GenericData\Services\KeyFieldMappingService.js" />
     <Content Include="VR_GenericData\Services\DataRecordStorageService.js" />

@@ -122,7 +122,9 @@ app.directive('vrGenericdataDatarecordtypefieldsSelector', ['VR_GenericData_Data
                 api.getSelectedIds = function () {
                     return VRUIUtilsService.getIdSelectedIds('Name', $attrs, ctrl);
                 };
-
+                api.getSelectedValue = function () {
+                    return ctrl.selectedvalues;
+                };
                 api.clearDataSource = function () {
                     selectorAPI.clearDataSource();
                 };

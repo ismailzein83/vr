@@ -1,0 +1,19 @@
+﻿<vr-tab header="'Settings'">
+    <vr-row >
+        <vr-columns width="1/2row">
+            <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onDataRecordTypeSelectorDirectiveReady" isrequired="true" onselectionchanged="scopeModel.onRecordTypeSelectionChanged" selectedvalues="scopeModel.selectedDataRecordType"></vr-genericdata-datarecordtype-selector>
+        </vr-columns>
+        <vr-columns width="1/2row">
+            <vr-genericdata-datarecordstorage-selector on-ready="scopeModel.onDataRecordStorageSelectorDirectiveReady" isrequired="true" ></vr-genericdata-datarecordstorage-selector>
+        </vr-columns>
+        <vr-columns width="1/2row">
+            <vr-genericdata-datarecordtypefields-selector label="Title Field" on-ready="scopeModel.onDataRecordTypeTitleFieldsSelectorDirectiveReady" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
+        </vr-columns>
+    </vr-row>
+</vr-tab>
+
+<vr-tab header="'Grid Definition'">
+    <vr-row>
+        <vr-genericdata-generic-be-columndefinition-grid on-ready="scopeModel.onGenericBEColumnDefinitionGridReady"></vr-genericdata-generic-be-columndefinition-grid>
+    </vr-row>
+</vr-tab>
