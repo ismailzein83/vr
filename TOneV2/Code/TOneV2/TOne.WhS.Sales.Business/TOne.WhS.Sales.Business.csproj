@@ -109,6 +109,7 @@
     <Compile Include="BusinessRules\Conditions\CountryToSellRateGreaterThanMaxRate.cs" />
     <Compile Include="BusinessRules\Conditions\CountryToSellRateLessThanOrEqualToZeroCondition.cs" />
     <Compile Include="BusinessRules\Conditions\Country\ChangedCountryEEDIsLessThanToday.cs" />
+    <Compile Include="BusinessRules\Conditions\Country\CountrySoldBeforePreviousEEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\Country\CustomerZoneInheritsMultipleSellingProductZoneRatesCondition.cs" />
     <Compile Include="BusinessRules\Conditions\Country\NewCountryBEDIsLessThanRetroactiveDateCondition.cs" />
     <Compile Include="BusinessRules\Conditions\Country\NewCountryHasAPendingClosedZoneCondition.cs" />
