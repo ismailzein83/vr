@@ -8,7 +8,7 @@ using Terrasoft.Core.Configuration;
 using System.Web;
 using Terrasoft.Core;
 
-namespace BPMExtended.Main.Business
+namespace BPMExtended.Main.Common
 {
     public class SOMClient : IDisposable
     {

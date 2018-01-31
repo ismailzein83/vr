@@ -4,17 +4,18 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{71DC8DC5-943D-432D-8AF2-D73EAE694D81}</ProjectGuid>
+    <ProjectGuid>{3E3A051A-0843-4F74-B115-D3067C305C87}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SOM.Main.Business</RootNamespace>
-    <AssemblyName>SOM.Main.Business</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>BPMExtended.Main.Common</RootNamespace>
+    <AssemblyName>BPMExtended.Main.Common</AssemblyName>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -34,50 +35,36 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\BPM\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Vanrise.BusinessProcess.Business">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Business.dll</HintPath>
+    <Reference Include="Terrasoft.Core">
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\BPM\Terrasoft.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Entities">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Common">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Common.Business">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Entities">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Security.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Vanrise.Security.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Billing\BillingManager.cs" />
-    <Compile Include="Inventory\InventoryManager.cs" />
+    <Compile Include="JSONSerializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SOMRequest\SOMRequestManager.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SOM.Main.Data\SOM.Main.Data.csproj">
-      <Project>{faf39112-1aec-4dcd-9e3a-d0c66524ea65}</Project>
-      <Name>SOM.Main.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SOM.Main.Entities\SOM.Main.Entities.csproj">
-      <Project>{cdd52ad1-64a7-4255-b9b4-783959756de9}</Project>
-      <Name>SOM.Main.Entities</Name>
-    </ProjectReference>
+    <Compile Include="SOMClient.cs" />
+    <Compile Include="VRWebAPIClient.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

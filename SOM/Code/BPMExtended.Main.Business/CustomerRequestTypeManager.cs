@@ -11,7 +11,7 @@ namespace BPMExtended.Main.Business
 {
     public class CustomerRequestTypeManager
     {
-        static ICustomerRequestTypeDataManager s_dataManager = BPMExtendedDataManagerFactory.GetDataManager<ICustomerRequestTypeDataManager>();
+        //static ICustomerRequestTypeDataManager s_dataManager = new BPMExtended.Main.Data.SQL.CustomerRequestTypeDataManager();// BPMExtendedDataManagerFactory.GetDataManager<ICustomerRequestTypeDataManager>();
         public List<CustomerRequestTypeInfo> GetCustomerRequestTypeInfos(CustomerObjectType customerObjectType, Guid accountOrContactId)
         {
             return GetCustomerRequestTypes().Values.MapRecords(itm => new CustomerRequestTypeInfo
@@ -26,11 +26,31 @@ namespace BPMExtended.Main.Business
 
         public Dictionary<Guid, CustomerRequestType> GetCustomerRequestTypes()
         {
+            List<CustomerRequestType> customerRequestTypes = new List<CustomerRequestType>();
+            customerRequestTypes.Add(new CustomerRequestType
+            {
+                CustomerRequestTypeId = new Guid("31E1AFF4-D7F2-4C30-BDF1-BC7D965E8B20"),
+                Name = "List Subscription",
+                Settings = new CustomerRequestTypeSettings { PageURL = "/CustomerOrders/LineSubscription" }
+            });
+            customerRequestTypes.Add(new CustomerRequestType
+            {
+                CustomerRequestTypeId = new Guid("461B7474-9B19-4B90-AEAB-63BA37245E53"),
+                Name = "List Subscription Termination",
+                Settings = new CustomerRequestTypeSettings { PageURL = "/CustomerOrders/LineSubscriptionTermination" }
+            });
+            customerRequestTypes.Add(new CustomerRequestType
+            {
+                CustomerRequestTypeId = new Guid("900B0866-A871-4974-ACA9-1D3FB16DCB45"),
+                Name = "Move Line",
+                Settings = new CustomerRequestTypeSettings { PageURL = "/CustomerOrders/MoveLine" }
+            });
+            return customerRequestTypes.ToDictionary(cn => cn.CustomerRequestTypeId, cn => cn); ;
             //return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCustomerRequestTypes",
             //   () =>
             //   {                   
-                   List<CustomerRequestType> customerRequestTypes = s_dataManager.GetCustomerRequestTypes();
-                   return customerRequestTypes.ToDictionary(cn => cn.CustomerRequestTypeId, cn => cn);
+                   //List<CustomerRequestType> customerRequestTypes = s_dataManager.GetCustomerRequestTypes();
+                   //return customerRequestTypes.ToDictionary(cn => cn.CustomerRequestTypeId, cn => cn);
                //});
         } 
 

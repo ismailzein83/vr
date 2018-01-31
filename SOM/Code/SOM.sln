@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{DE97F650-DB52-4B6D-AEFA-209B22D7560F}"
 EndProject
@@ -49,9 +49,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPMExtended.Main.Data", "BP
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPMExtended.Main.Data.SQL", "BPMExtended.Main.Data.SQL\BPMExtended.Main.Data.SQL.csproj", "{39AD1906-895B-4A7C-88D7-D73E6C866B74}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BPMExtended.Main.Common", "BPMExtended.Main.Common\BPMExtended.Main.Common.csproj", "{3E3A051A-0843-4F74-B115-D3067C305C87}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 18
+		SccNumberOfProjects = 19
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -123,6 +125,10 @@ Global
 		SccProjectTopLevelParentUniqueName17 = SOM.sln
 		SccProjectName17 = BPMExtended.Main.Data.SQL
 		SccLocalPath17 = BPMExtended.Main.Data.SQL
+		SccProjectUniqueName18 = BPMExtended.Main.Common\\BPMExtended.Main.Common.csproj
+		SccProjectTopLevelParentUniqueName18 = SOM.sln
+		SccProjectName18 = BPMExtended.Main.Common
+		SccLocalPath18 = BPMExtended.Main.Common
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -235,6 +241,12 @@ Global
 		{39AD1906-895B-4A7C-88D7-D73E6C866B74}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39AD1906-895B-4A7C-88D7-D73E6C866B74}.Release|Any CPU.Build.0 = Release|Any CPU
 		{39AD1906-895B-4A7C-88D7-D73E6C866B74}.Release|x64.ActiveCfg = Release|Any CPU
+		{3E3A051A-0843-4F74-B115-D3067C305C87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E3A051A-0843-4F74-B115-D3067C305C87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E3A051A-0843-4F74-B115-D3067C305C87}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{3E3A051A-0843-4F74-B115-D3067C305C87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3E3A051A-0843-4F74-B115-D3067C305C87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3E3A051A-0843-4F74-B115-D3067C305C87}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -259,5 +271,6 @@ Global
 		{FE90DD05-A1EE-4B46-B3C5-08C255064742} = {8D5E6327-5AA2-4D87-A836-D17B961D84CE}
 		{0D92570D-D518-40E4-9CB6-011F772DEA87} = {8D5E6327-5AA2-4D87-A836-D17B961D84CE}
 		{39AD1906-895B-4A7C-88D7-D73E6C866B74} = {8D5E6327-5AA2-4D87-A836-D17B961D84CE}
+		{3E3A051A-0843-4F74-B115-D3067C305C87} = {8D5E6327-5AA2-4D87-A836-D17B961D84CE}
 	EndGlobalSection
 EndGlobal

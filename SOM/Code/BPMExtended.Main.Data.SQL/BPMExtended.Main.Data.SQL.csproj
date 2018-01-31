@@ -9,12 +9,13 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BPMExtended.Main.Data.SQL</RootNamespace>
     <AssemblyName>BPMExtended.Main.Data.SQL</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SccProjectName>SAK</SccProjectName>
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -58,6 +59,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BPMExtended.Main.Common\BPMExtended.Main.Common.csproj">
+      <Project>{3e3a051a-0843-4f74-b115-d3067c305c87}</Project>
+      <Name>BPMExtended.Main.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BPMExtended.Main.Data\BPMExtended.Main.Data.csproj">
       <Project>{0d92570d-d518-40e4-9cb6-011f772dea87}</Project>
       <Name>BPMExtended.Main.Data</Name>

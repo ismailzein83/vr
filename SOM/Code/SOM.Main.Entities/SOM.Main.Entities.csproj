@@ -49,7 +49,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InventoryItem.cs" />
+    <Compile Include="InventoryPhoneItem.cs" />
     <Compile Include="SOMRequestTracking\SOMRequestLog.cs" />
+    <Compile Include="SOMRequestTypes\CreateLineSubscriptionInput.cs" />
     <Compile Include="SOMRequest\CreateSOMRequestInput.cs" />
     <Compile Include="SOMRequest\CreateSOMRequestOutput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

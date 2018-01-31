@@ -140,6 +140,10 @@
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SOM.Main.BP.Arguments\SOM.Main.BP.Arguments.csproj">
+      <Project>{faa3c61c-6384-40ef-bf18-e1b3f85adfc8}</Project>
+      <Name>SOM.Main.BP.Arguments</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SOM.Main.Business\SOM.Main.Business.csproj">
       <Project>{71dc8dc5-943d-432d-8af2-d73eae694d81}</Project>
       <Name>SOM.Main.Business</Name>

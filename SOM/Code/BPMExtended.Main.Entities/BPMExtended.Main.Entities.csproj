@@ -53,6 +53,8 @@
     <Compile Include="CustomerRequestLogDetail.cs" />
     <Compile Include="CustomerRequestType.cs" />
     <Compile Include="CustomerRequestTypeInfo.cs" />
+    <Compile Include="InventoryItemDetail.cs" />
+    <Compile Include="PhoneNumberDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

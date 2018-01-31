@@ -52,4 +52,14 @@ namespace SOM.Main.BP.Arguments
         }
     }
 
+    public class CreateLineSubscriptionInput
+    {
+        public Guid? SOMRequestId { get; set; }
+
+        public string EntityId { get; set; }
+
+        public string RequestTitle { get; set; }
+
+        public LineSubscriptionRequest RequestDetails { get; set; }
+    }
 }

@@ -23,6 +23,23 @@ namespace SOM.Main.Web.Controllers
         }
 
         [HttpPost]
+        [Route("CreateLineSubscriptionRequest")]
+        public CreateSOMRequestOutput CreateLineSubscriptionRequest(SOM.Main.BP.Arguments.CreateLineSubscriptionInput input)
+        {
+            CreateSOMRequestInput createSOMRequestInput = new CreateSOMRequestInput
+            {
+                EntityId = input.EntityId,
+                RequestTitle = input.RequestTitle,
+                SOMRequestId = input.SOMRequestId,
+                Settings = new SOMRequestSettings
+                {
+                    ExtendedSettings = input.RequestDetails
+                }
+            };
+            return s_manager.CreateSOMRequest(createSOMRequestInput);
+        }
+
+        [HttpPost]
         [Route("GetFilteredSOMRequests")]
         public object GetFilteredSOMRequests(Vanrise.Entities.DataRetrievalInput<SOMRequestQuery> input)
         {

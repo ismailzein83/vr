@@ -5,8 +5,8 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Vanrise.Common;
 using Vanrise.Data.SQL;
+using BPMExtended.Main.Common;
 
 namespace BPMExtended.Main.Data.SQL
 {
@@ -52,7 +52,7 @@ namespace BPMExtended.Main.Data.SQL
             };
             string serializedSettings = reader["Settings"] as string;
             if (serializedSettings != null)
-                customerRequestType.Settings = Serializer.Deserialize<CustomerRequestTypeSettings>(serializedSettings);
+                customerRequestType.Settings = JSONSerializer.Deserialize<CustomerRequestTypeSettings>(serializedSettings);
             return customerRequestType;
         }
 

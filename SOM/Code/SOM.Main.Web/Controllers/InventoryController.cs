@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using SOM.Main.Business;
+using SOM.Main.Entities;
 using Vanrise.Web.Base;
 
 namespace SOM.Main.Web.Controllers
@@ -13,11 +14,19 @@ namespace SOM.Main.Web.Controllers
     public class InventoryController : BaseAPIController
     {
         [HttpGet]
-        [Route("GetInventoryDetail")]
-        public InventoryItem GetInventoryDetail(string phoneNumber)
+        [Route("GetInventoryPhoneItem")]
+        public InventoryPhoneItem GetInventoryPhoneItem(string phoneNumber)
         {
             InventoryManager manager = new InventoryManager();
-            return manager.GetInventoryItem(phoneNumber);
+            return manager.GetInventoryPhoneItem(phoneNumber);
+        }
+
+        [HttpGet]
+        [Route("GetAvailableNumbers")]
+        public List<PhoneNumber> GetAvailableNumbers(string cabinetPort, string dpPort, bool isGold, bool isISDN, string startsWith)
+        {
+            InventoryManager manager = new InventoryManager();
+            return manager.GetAvailableNumbers(cabinetPort, dpPort, isGold, isISDN, startsWith);
         }
     }
 }

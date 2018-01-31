@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Vanrise.Common;
 using SOM.Main.BP.Arguments;
 using SOM.Main.Entities;
 using BPMExtended.Main.Data;
+using BPMExtended.Main.Common;
 
 namespace BPMExtended.Main.Business
 {
@@ -78,7 +78,33 @@ namespace BPMExtended.Main.Business
         public CreateCustomerRequestOutput CreateLineSubscriptionRequest(CustomerObjectType customerObjectType, Guid accountOrContactId, LineSubscriptionRequest lineSubscriptionRequest)
         {
             string title = string.Format("Line Subscription '{0}'", lineSubscriptionRequest.PhoneNumber);
+
             return CreateSOMRequest(customerObjectType, accountOrContactId, title, lineSubscriptionRequest);
+            //Guid requestId = Guid.NewGuid();
+            //CreateLineSubscriptionInput somRequestInput = new CreateLineSubscriptionInput
+            //{
+            //    SOMRequestId = requestId,
+            //    EntityId = BuildSOMEntityIdFromCustomer(customerObjectType, accountOrContactId),
+            //    RequestTitle = title,
+            //    RequestDetails = lineSubscriptionRequest
+            //};
+
+            //CreateSOMRequestOutput output = null;
+
+            //using (var client = new SOMClient())
+            //{
+            //    //s_dataManager.Insert(requestId, requestSettings.ConfigId, customerObjectType, accountOrContactId, requestTitle, CustomerRequestStatus.New);//insert request in BPM after making sure connection to SOM succeeds
+            //    //try
+            //    //{
+            //    output = client.Post<CreateLineSubscriptionInput, CreateSOMRequestOutput>("api/SOM_Main/SOMRequest/CreateLineSubscriptionRequest", somRequestInput);
+            //    //}
+            //    //catch
+            //    //{
+            //    //    s_dataManager.UpdateRequestStatus(requestId, CustomerRequestStatus.Aborted);
+            //    //    throw;
+            //    //}
+            //}
+            //return new CreateCustomerRequestOutput { };
         }
 
         public CreateCustomerRequestOutput CreateMoveLineRequest(CustomerObjectType customerObjectType, Guid accountOrContactId, MoveLineRequest moveLineRequest)
