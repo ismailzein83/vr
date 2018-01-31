@@ -14,11 +14,18 @@ namespace SOM.Main.Web.Controllers
     public class BillingController : BaseAPIController
     {
         [HttpGet]
-        [Route("GetInventoryPhoneItem")]
-        public InventoryPhoneItem GetInventoryPhoneItem(string phoneNumber)
+        [Route("GetServices")]
+        public List<TelephoneService> GetServices()
         {
-            InventoryManager manager = new InventoryManager();
-            return manager.GetInventoryPhoneItem(phoneNumber);
+            BillingManager manager = new BillingManager();
+            return manager.GetServices();
+        }
+        [HttpGet]
+        [Route("GetRatePlans")]
+        public List<RatePlan> GetRatePlans()
+        {
+            BillingManager manager = new BillingManager();
+            return manager.GetRatePlans();
         }
     }
 }

@@ -74,6 +74,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BillingRequestManager.cs" />
     <Compile Include="CustomerRequestManager.cs" />
     <Compile Include="CustomerRequestTypeManager.cs" />
     <Compile Include="InventoryRequestManager.cs" />

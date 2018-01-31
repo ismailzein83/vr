@@ -56,6 +56,8 @@
     <Compile Include="InventoryItemDetail.cs" />
     <Compile Include="PhoneNumberDetail.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RatePlanDetail.cs" />
+    <Compile Include="TelephoneServiceDetail.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

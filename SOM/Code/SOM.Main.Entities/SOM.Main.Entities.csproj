@@ -49,6 +49,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Billing\RatePlan.cs" />
+    <Compile Include="Billing\TelephoneService.cs" />
     <Compile Include="Inventory\InventoryItem.cs" />
     <Compile Include="Inventory\InventoryPhoneItem.cs" />
     <Compile Include="SOMRequestTracking\SOMRequestLog.cs" />
@@ -60,9 +62,7 @@
     <Compile Include="SOMRequest\SOMRequestDetail.cs" />
     <Compile Include="SOMRequest\SOMRequestQuery.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Billing\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

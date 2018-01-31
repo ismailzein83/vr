@@ -11,9 +11,9 @@ namespace SOM.Main.BP.Arguments
     {
         public string PhoneNumber { get; set; }
 
-        public string SwitchId { get; set; }
+        public string PrimaryPort { get; set; }
 
-        public string CabinetId { get; set; }
+        public string SecondaryPort { get; set; }
 
         public string DPId { get; set; }
 
@@ -34,9 +34,9 @@ namespace SOM.Main.BP.Arguments
 
         public string PhoneNumber { get; set; }
 
-        public string SwitchId { get; set; }
+        public string PrimaryPort { get; set; }
 
-        public string CabinetId { get; set; }
+        public string SecondaryPort { get; set; }
 
         public string DPId { get; set; }
 
@@ -45,8 +45,8 @@ namespace SOM.Main.BP.Arguments
             return new LineSubscriptionProcessInput
             {
                 PhoneNumber = this.PhoneNumber,
-                SwitchId = this.SwitchId,
-                CabinetId = this.CabinetId,
+                PrimaryPort = this.PrimaryPort,
+                SecondaryPort = this.SecondaryPort,
                 DPId = this.DPId
             };
         }
