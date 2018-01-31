@@ -36,6 +36,9 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
             var columnDefinitionGridAPI;
             var columnDefinitionGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var viewDefinitionGridAPI;
+            var viewDefinitionGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             var recordTypeSelectedPromiseDeferred;
             var recordTypeEntity;
 
@@ -62,6 +65,11 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                     columnDefinitionGridReadyPromiseDeferred.resolve();
                 };
 
+                $scope.scopeModel.onGenericBEViewDefinitionGridReady = function (api) {
+                    viewDefinitionGridAPI = api;
+                    viewDefinitionGridReadyPromiseDeferred.resolve();
+                };
+
                 $scope.scopeModel.onRecordTypeSelectionChanged = function () {
                     var selectedRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
                     if (selectedRecordTypeId != undefined) {
@@ -70,11 +78,14 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                             dataRecordTypeId: selectedRecordTypeId
                         };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeTitleFieldsSelectorAPI, payload, setLoader, recordTypeSelectedPromiseDeferred);
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, columnDefinitionGridAPI, { context: getContext() }, setLoader, recordTypeSelectedPromiseDeferred);
+
                     }
                     else if (dataRecordTypeTitleFieldsSelectorAPI != undefined) {
                         dataRecordTypeTitleFieldsSelectorAPI.clearDataSource();
                     }
-
+                    if (selectedRecordTypeId == undefined && columnDefinitionGridAPI != undefined)
+                        columnDefinitionGridAPI.clearDataSource();
                 };
                 defineAPI();
             }
@@ -87,7 +98,12 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         $type: "Vanrise.GenericData.Entities.GenericBEDefinitionSettings, Vanrise.GenericData.Entities",
                         DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
                         DataRecordStorageId: dataRecordStorageSelectorAPI.getSelectedIds(),
-                        TitleFieldName: dataRecordTypeFieldsSelectorAPI.getSelectedIds()
+                        TitleFieldName: dataRecordTypeTitleFieldsSelectorAPI.getSelectedIds(),
+                        GridDefinition: {
+                            ColumnDefinitions: columnDefinitionGridAPI.getData(),
+                            GenericBEGridActions: [],
+                            GenericBEGridViews: viewDefinitionGridAPI.getData()
+                        }
                     };
                 };
 
@@ -104,6 +120,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                     promises.push(loadDataRecordTypeSelector());
                     promises.push(loadDataRecordStorageSelector());
                     promises.push(loadColumnDefinitionGrid());
+                    promises.push(loadViewDefinitionGrid());
 
                     if (businessEntityDefinitionSettings != undefined) {
                         promises.push(loadDataRecordTitleFieldsSelector());
@@ -167,24 +184,34 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         return loadColumnDefinitionGridPromiseDeferred.promise;
                     }
 
+                    function loadViewDefinitionGrid() {
+                        var loadViewDefinitionGridPromiseDeferred = UtilsService.createPromiseDeferred();
+                        viewDefinitionGridReadyPromiseDeferred.promise.then(function () {
+                            var payload = {
+                                genericBEGridViews: businessEntityDefinitionSettings != undefined && businessEntityDefinitionSettings.GridDefinition != undefined && businessEntityDefinitionSettings.GridDefinition.GenericBEGridViews || undefined
+                            };
+
+                            VRUIUtilsService.callDirectiveLoad(viewDefinitionGridAPI, payload, loadViewDefinitionGridPromiseDeferred);
+                        });
+                        return loadViewDefinitionGridPromiseDeferred.promise;
+                    }
+
                     return UtilsService.waitMultiplePromises(promises).then(function () {
                         recordTypeSelectedPromiseDeferred = undefined;
                     });
                 };
 
-
-
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
 
+            }
 
-                function getContext() {
-                    return {
-                        getDataRecordTypeId: function () {
-                            return dataRecordTypeSelectorAPI.getSelectedIds();
-                        }
-                    };
-                }
+            function getContext() {
+                return {
+                    getDataRecordTypeId: function () {
+                        return dataRecordTypeSelectorAPI.getSelectedIds();
+                    }
+                };
             }
 
         }

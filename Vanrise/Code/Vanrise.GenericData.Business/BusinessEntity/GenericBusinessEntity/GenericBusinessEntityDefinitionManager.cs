@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 namespace Vanrise.GenericData.Business
 {
     public class GenericBusinessEntityDefinitionManager
@@ -111,5 +112,16 @@ namespace Vanrise.GenericData.Business
                 InfoType = infoType
             }) ;
         }
+
+
+        #region Config region
+
+        public IEnumerable<GenericBEViewDefinitionSettingsConfig> GetGenericBEViewDefinitionSettingsConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<GenericBEViewDefinitionSettingsConfig>(GenericBEViewDefinitionSettingsConfig.EXTENSION_TYPE);
+        }
+
+        #endregion
     }
 }

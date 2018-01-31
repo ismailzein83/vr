@@ -1,10 +1,10 @@
 ﻿<vr-tab header="'Settings'">
-    <vr-row >
+    <vr-row>
         <vr-columns width="1/2row">
             <vr-genericdata-datarecordtype-selector on-ready="scopeModel.onDataRecordTypeSelectorDirectiveReady" isrequired="true" onselectionchanged="scopeModel.onRecordTypeSelectionChanged" selectedvalues="scopeModel.selectedDataRecordType"></vr-genericdata-datarecordtype-selector>
         </vr-columns>
         <vr-columns width="1/2row">
-            <vr-genericdata-datarecordstorage-selector on-ready="scopeModel.onDataRecordStorageSelectorDirectiveReady" isrequired="true" ></vr-genericdata-datarecordstorage-selector>
+            <vr-genericdata-datarecordstorage-selector on-ready="scopeModel.onDataRecordStorageSelectorDirectiveReady" isrequired="true"></vr-genericdata-datarecordstorage-selector>
         </vr-columns>
         <vr-columns width="1/2row">
             <vr-genericdata-datarecordtypefields-selector label="Title Field" on-ready="scopeModel.onDataRecordTypeTitleFieldsSelectorDirectiveReady" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
@@ -14,6 +14,19 @@
 
 <vr-tab header="'Grid Definition'">
     <vr-row>
-        <vr-genericdata-generic-be-columndefinition-grid on-ready="scopeModel.onGenericBEColumnDefinitionGridReady"></vr-genericdata-generic-be-columndefinition-grid>
+        <vr-columns width="1/2row">
+            <vr-section header="Columns Definition" collapsible>
+                <vr-genericdata-generic-be-columndefinition-grid on-ready="scopeModel.onGenericBEColumnDefinitionGridReady"></vr-genericdata-generic-be-columndefinition-grid>
+            </vr-section>
+        </vr-columns>
+        <vr-columns width="1/2row">
+            <vr-section header="Grid Actions" collapsible>
+            </vr-section>
+        </vr-columns>
+        <vr-columns width="fullrow">
+            <vr-section header="Grid Views" collapsible>
+                <vr-genericdata-generic-be-viewdefinition-grid on-ready="scopeModel.onGenericBEViewDefinitionGridReady"></vr-genericdata-generic-be-viewdefinition-grid>
+            </vr-section>
+        </vr-columns>
     </vr-row>
 </vr-tab>

@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataGenericBeColumndefinitionGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_GenericBEDefinitionService",
+app.directive("vrGenericdataGenericBeViewdefinitionGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_GenericBEDefinitionService",
     function (UtilsService, VRNotificationService, VR_GenericData_GenericBEDefinitionService) {
 
         var directiveDefinitionObject = {
@@ -12,24 +12,18 @@ app.directive("vrGenericdataGenericBeColumndefinitionGrid", ["UtilsService", "VR
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-
-                var ctor = new ColumnDefinitionGrid($scope, ctrl, $attrs);
+                var ctor = new ViewDefinitionGrid($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
             bindToController: true,
-            compile: function (element, attrs) {
-
-            },
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/Editor/Templates/ColumnDefinitionGridTemplate.html"
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/Editor/Templates/ViewDefinitionGridTemplate.html"
 
         };
 
-        function ColumnDefinitionGrid($scope, ctrl, $attrs) {
+        function ViewDefinitionGrid($scope, ctrl, $attrs) {
 
             var gridAPI;
-            var context;
-
             this.initializeController = initializeController;
             function initializeController() {
                 ctrl.datasource = [];
@@ -42,23 +36,18 @@ app.directive("vrGenericdataGenericBeColumndefinitionGrid", ["UtilsService", "VR
                      return null;
                 };
 
-                ctrl.addGridColumn = function () {
-                    var onGridColumnAdded = function (addedItem) {
+                ctrl.addGridView = function () {
+                    var onGridViewAdded = function (addedItem) {
                         ctrl.datasource.push(addedItem);
                     };
 
-                    VR_GenericData_GenericBEDefinitionService.addGenericBEColumnDefinition(onGridColumnAdded, getContext());
+                    VR_GenericData_GenericBEDefinitionService.addGenericBEViewDefinition(onGridViewAdded);
                 };
-                ctrl.disableAddGridColumn = function () {
-                    if (context == undefined) return true;
-                    return context.getDataRecordTypeId() == undefined;
-                };
-                ctrl.removeColumn = function (dataItem) {
+                
+                ctrl.removeView = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
                 };
-
-
 
                 defineMenuActions();
                 defineAPI();
@@ -68,28 +57,27 @@ app.directive("vrGenericdataGenericBeColumndefinitionGrid", ["UtilsService", "VR
                 var api = {};
 
                 api.getData = function () {
-                    var columns;
+                    var views;
                     if (ctrl.datasource != undefined && ctrl.datasource != undefined) {
-                        columns = [];
+                        views = [];
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
-                            columns.push({
-                                FieldName: currentItem.FieldName,
-                                FieldTitle: currentItem.FieldTitle,
-                                GridColumnSettings: currentItem.GridColumnSettings
+                            views.push({
+                                GenericBEViewDefinitionId: currentItem.GenericBEViewDefinitionId,
+                                Name: currentItem.Name,
+                                Settings: currentItem.Settings
                             });
                         }
                     }
-                    return columns;
+                    return views;
                 };
 
                 api.load = function (payload) {
                     if (payload != undefined) {
-                        context = payload.context;
                         api.clearDataSource();
-                        if (payload.columnDefinitions != undefined) {
-                            for (var i = 0; i < payload.columnDefinitions.length; i++) {
-                                var item = payload.columnDefinitions[i];
+                        if (payload.genericBEGridViews != undefined) {
+                            for (var i = 0; i < payload.genericBEGridViews.length; i++) {
+                                var item = payload.genericBEGridViews[i];
                                 ctrl.datasource.push(item);
                             }
                         }
@@ -111,7 +99,7 @@ app.directive("vrGenericdataGenericBeColumndefinitionGrid", ["UtilsService", "VR
                 var defaultMenuActions = [
                 {
                     name: "Edit",
-                    clicked: editColumn,
+                    clicked: editView,
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
@@ -119,23 +107,19 @@ app.directive("vrGenericdataGenericBeColumndefinitionGrid", ["UtilsService", "VR
                 };
             }
 
-            function editColumn(columnObj) {
-                var onGridColumnUpdated = function (column) {
-                    var index = ctrl.datasource.indexOf(columnObj);
-                    ctrl.datasource[index] = column;
+            function editView(viewObj) {
+                var onGridViewUpdated = function (view) {
+                    var index = ctrl.datasource.indexOf(viewObj);
+                    ctrl.datasource[index] = view;
                 };
-
-                VR_GenericData_GenericBEDefinitionService.editGenericBEColumnDefinition(onGridColumnUpdated, columnObj, getContext());
-            }
-            function getContext() {
-                return context;
+                VR_GenericData_GenericBEDefinitionService.editGenericBEViewDefinition(onGridViewUpdated, viewObj);
             }
 
             function checkDuplicateName() {
                 for (var i = 0; i < ctrl.datasource.length; i++) {
                     var currentItem = ctrl.datasource[i];
                     for (var j = 0; j < ctrl.datasource.length; j++) {
-                        if (i != j && ctrl.datasource[j].FieldName == currentItem.FieldName)
+                        if (i != j && ctrl.datasource[j].Name == currentItem.Name)
                             return true;
                     }
                 }
