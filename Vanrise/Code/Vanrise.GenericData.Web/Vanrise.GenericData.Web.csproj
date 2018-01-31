@@ -220,6 +220,8 @@
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\Editor\vr-genericdata-generic-be-columndefinition-grid.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\Editor\ColumnDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\Editor\vr-genericdata-viewdefinition-settings.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\Templates\GenericBEStaticEditorDefiitionTemplate.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\vr-genericdata-genericbe-staticeditor-definition.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\GenericBEViewDefinition\Templates\HistoryGenericBEDefinitionViewTemplate.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\GenericBEViewDefinition\vr-genericdata-genericbe-historygridview-definition.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Runtime\GenericBEFilterDefinition\Templates\BasicAdvancedFilterRuntimeTemplate.html" />
