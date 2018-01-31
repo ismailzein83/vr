@@ -43,11 +43,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseAndDefs\IBaseRDBResolveQueryContext.cs" />
     <Compile Include="Conditions\BaseRDBCondition.cs" />
     <Compile Include="DataProvider\BaseRDBDataProvider.cs" />
+    <Compile Include="DataProvider\Providers\MSSQLRDBDataProvider.cs" />
+    <Compile Include="ExecuteNonQuery\RDBIfQuery.cs" />
     <Compile Include="Expressions\BaseRDBExpression.cs" />
     <Compile Include="BaseAndDefs\BaseRDBQuery.cs" />
     <Compile Include="BaseAndDefs\IRDBDataReader.cs" />
+    <Compile Include="GroupBy\RDBGroupBy.cs" />
+    <Compile Include="GroupBy\RDBGroupByContext.cs" />
+    <Compile Include="GroupBy\RDBGroupByHavingAndConditionContext.cs" />
+    <Compile Include="GroupBy\RDBGroupByHavingContext.cs" />
+    <Compile Include="GroupBy\RDBGroupByHavingOrConditionContext.cs" />
+    <Compile Include="RDBSchemaManager.cs" />
+    <Compile Include="SelectAggregate\RDBSelectAggregateContext.cs" />
     <Compile Include="Select\IRDBSelectContextReady.cs" />
     <Compile Include="BaseAndDefs\IRDBTableQuerySource.cs" />
     <Compile Include="OLDCode.cs" />
@@ -57,20 +67,21 @@
     <Compile Include="Conditions\RDBConditionContext.cs" />
     <Compile Include="Conditions\RDBConditions.cs" />
     <Compile Include="DataProvider\RDBDataProviderResolveQueryContext.cs" />
-    <Compile Include="DataProvider\RDBDataProviderType.cs" />
     <Compile Include="BaseAndDefs\RDBDataType.cs" />
     <Compile Include="Expressions\RDBExpressions.cs" />
     <Compile Include="ExecuteNonQuery\RDBInsertQuery.cs" />
     <Compile Include="Join\RDBJoin.cs" />
     <Compile Include="Join\RDBJoinContext.cs" />
     <Compile Include="Join\RDBJoinType.cs" />
-    <Compile Include="ExecuteNonQuery\RDBNoDataQuery.cs" />
+    <Compile Include="ExecuteNonQuery\BaseRDBNoDataQuery.cs" />
     <Compile Include="Conditions\RDBOrConditionContext.cs" />
     <Compile Include="Select\RDBSelectContext.cs" />
     <Compile Include="Select\RDBSelectQuery.cs" />
     <Compile Include="BaseAndDefs\RDBTableColumnDefinition.cs" />
     <Compile Include="BaseAndDefs\RDBTableDefinition.cs" />
     <Compile Include="ExecuteNonQuery\RDBUpdateQuery.cs" />
+    <Compile Include="Sorting\RDBSortContext.cs" />
+    <Compile Include="TempTable\RDBTempTableQuery.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">

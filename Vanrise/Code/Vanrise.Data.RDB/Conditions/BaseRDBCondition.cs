@@ -11,12 +11,23 @@ namespace Vanrise.Data.RDB
         public abstract string ToDBQuery(IRDBConditionToDBQueryContext context);
     }
 
-    public interface IRDBConditionToDBQueryContext
+    public interface IRDBConditionToDBQueryContext : IBaseRDBResolveQueryContext
     {
-        RDBDataProviderType DataProviderType { get; }
-
-        string GetTableAlias(IRDBTableQuerySource table);
-
-        IRDBExpressionToDBQueryContext ExpressionContext { get; }
     }
+
+
+    public class RDBConditionToDBQueryContext : BaseRDBResolveQueryContext, IRDBConditionToDBQueryContext
+    {
+        public RDBConditionToDBQueryContext(BaseRDBDataProvider dataProvider, Dictionary<string, Object> parameterValues)
+            : base(dataProvider, parameterValues)
+        {   
+        }
+
+        public RDBConditionToDBQueryContext(IBaseRDBResolveQueryContext parentContext, bool newQueryScope)
+            : base(parentContext, newQueryScope)
+        {
+
+        }
+    }
+
 }

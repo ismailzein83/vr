@@ -8,7 +8,7 @@ namespace Vanrise.Data.RDB
 {
     public abstract class BaseRDBQuery
     {
-        BaseRDBDataProvider _dataProvider = new MSSQLRDBDataProvider();
+        BaseRDBDataProvider _dataProvider = new Vanrise.Data.RDB.DataProvider.Providers.MSSQLRDBDataProvider();
 
         protected BaseRDBDataProvider DataProvider
         {

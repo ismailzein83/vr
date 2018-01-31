@@ -28,7 +28,7 @@ namespace Vanrise.Data.RDB
             return this;
         }
 
-        public IRDBSelectContextReady<T> Column(RDBColumnExpression expression, string alias)
+        public IRDBSelectContextReady<T> Column(BaseRDBExpression expression, string alias)
         {
             _columns.Add(new RDBSelectColumn
             {
@@ -46,6 +46,11 @@ namespace Vanrise.Data.RDB
                 ColumnName = columnName
             },
                      alias);
+        }
+
+        public IRDBSelectContextReady<T> Column(string tableName, string columnName, string alias)
+        {
+            return Column(new RDBTableDefinitionQuerySource(tableName), columnName, alias);
         }
 
         public IRDBSelectContextReady<T> Column(string columnName, string alias)

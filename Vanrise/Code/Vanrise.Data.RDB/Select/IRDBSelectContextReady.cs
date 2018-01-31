@@ -10,9 +10,11 @@ namespace Vanrise.Data.RDB
     {
         IRDBSelectContextReady<T> Columns(params string[] columnNames);
 
-        IRDBSelectContextReady<T> Column(RDBColumnExpression expression, string alias);
+        IRDBSelectContextReady<T> Column(BaseRDBExpression expression, string alias);
 
         IRDBSelectContextReady<T> Column(IRDBTableQuerySource table, string columnName, string alias);
+
+        IRDBSelectContextReady<T> Column(string tableName, string columnName, string alias);
 
         IRDBSelectContextReady<T> Column(string columnName, string alias);
 

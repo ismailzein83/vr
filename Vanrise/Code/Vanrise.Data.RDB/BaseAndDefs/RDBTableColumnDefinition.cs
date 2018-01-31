@@ -13,5 +13,7 @@ namespace Vanrise.Data.RDB
         public RDBDataType DataType { get; set; }
 
         public int? Size { get; set; }
+
+        public int? Precision { get; set; }
     }
 }

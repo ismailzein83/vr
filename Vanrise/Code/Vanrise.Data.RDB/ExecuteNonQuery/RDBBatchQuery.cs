@@ -6,29 +6,30 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Data.RDB
 {
-    public class RDBBatchQuery : RDBNoDataQuery
+    public class RDBBatchQuery : BaseRDBNoDataQuery
     {
-        List<RDBNoDataQuery> _queries = new List<RDBNoDataQuery>();
-        public override RDBResolvedNoDataQuery GetResolvedQuery()
+        List<BaseRDBNoDataQuery> _queries = new List<BaseRDBNoDataQuery>();
+        public override RDBResolvedNoDataQuery GetResolvedQuery(IRDBNoDataQueryGetResolvedQueryContext context)
         {
-            RDBResolvedNoDataQuery resolvedQuery = new RDBResolvedNoDataQuery();
             StringBuilder queryBuilder = new StringBuilder();
             foreach (var subQuery in _queries)
             {
-                RDBResolvedNoDataQuery resolvedSubQuery = subQuery.GetResolvedQuery();
+                var subQueryContext = new RDBNoDataQueryGetResolvedQueryContext(context, true);
+                RDBResolvedNoDataQuery resolvedSubQuery = subQuery.GetResolvedQuery(subQueryContext);
                 queryBuilder.AppendLine(resolvedSubQuery.QueryText);
                 queryBuilder.AppendLine();
-                if (resolvedSubQuery.ParameterValues != null)
-                {
-                    foreach (var prmEntry in resolvedSubQuery.ParameterValues)
-                    {
-                        if (resolvedQuery.ParameterValues.ContainsKey(prmEntry.Key))
-                            throw new Exception(String.Format("Parameter '{0}' already added by another subquery", prmEntry.Key));
-                        resolvedQuery.ParameterValues.Add(prmEntry.Key, prmEntry.Value);
-                    }
-                }
             }
-            return resolvedQuery;
+
+            return new RDBResolvedNoDataQuery
+                {
+                    QueryText = queryBuilder.ToString()
+                };
+        }
+
+        public RDBBatchQuery AddQuery(BaseRDBNoDataQuery query)
+        {
+            this._queries.Add(query);
+            return this;
         }
     }
 }

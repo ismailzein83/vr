@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 
 namespace Vanrise.Data.RDB
 {
-    public class RDBTableDefinition : IRDBTableQuerySource
+    public class RDBTableDefinition
     {
         public string DBSchemaName { get; set; }
 
@@ -17,21 +18,38 @@ namespace Vanrise.Data.RDB
         public string ModifiedTimeColumnName { get; set; }
 
         public Dictionary<string, RDBTableColumnDefinition> Columns { get; set; }
+    }
 
-        public string ToDBQuery(IRDBTableQuerySourceToDBQueryContext context)
+    public class RDBTableDefinitionQuerySource : IRDBTableQuerySource
+    {
+        public RDBTableDefinitionQuerySource(string tableName)
         {
-            if (!String.IsNullOrEmpty(this.DBSchemaName))
-                return String.Concat(this.DBSchemaName, ".", this.DBTableName);
-            else
-                return this.DBTableName;
+            this.TableName = tableName;
         }
+
+        public string TableName { get; private set; }
 
         public string GetDescription()
         {
-            if (!String.IsNullOrEmpty(this.DBSchemaName))
-                return String.Concat(this.DBSchemaName, ".", this.DBTableName);
-            else
-                return this.DBTableName;
+            return this.TableName;
+        }
+
+        public string ToDBQuery(IRDBTableQuerySourceToDBQueryContext context)
+        {
+            return RDBSchemaManager.Current.GetTableDBName(context.DataProvider, this.TableName);
+        }
+
+
+        public string GetDBColumnName(IRDBTableQuerySourceGetDBColumnNameContext context)
+        {
+            return RDBSchemaManager.Current.GetColumnDBName(context.DataProvider, this.TableName, context.ColumnName);
+        }
+
+        public string GetUniqueName()
+        {
+            return this.TableName;
         }
     }
+
+
 }

@@ -8,15 +8,56 @@ namespace Vanrise.Data.RDB
 {
     public interface IRDBTableQuerySource
     {
+        string GetUniqueName();
+
         string GetDescription();
 
         string ToDBQuery(IRDBTableQuerySourceToDBQueryContext context);
+
+        string GetDBColumnName(IRDBTableQuerySourceGetDBColumnNameContext context);
     }
 
-    public interface IRDBTableQuerySourceToDBQueryContext
-    {
-        RDBDataProviderType DataProviderType { get; }
+    public interface IRDBTableQuerySourceToDBQueryContext : IBaseRDBResolveQueryContext
+    {        
+    }
 
-        Dictionary<string, Object> ParameterValues { get; }
+    public class RDBTableQuerySourceToDBQueryContext : BaseRDBResolveQueryContext, IRDBTableQuerySourceToDBQueryContext
+    {
+        public RDBTableQuerySourceToDBQueryContext(BaseRDBDataProvider dataProvider, Dictionary<string, Object> parameterValues)
+            : base(dataProvider, parameterValues)
+        {            
+        }
+
+        public RDBTableQuerySourceToDBQueryContext(IBaseRDBResolveQueryContext parentContext, bool newQueryScope)
+            : base(parentContext, newQueryScope)
+        {
+
+        }
+    }
+
+    public interface IRDBTableQuerySourceGetDBColumnNameContext : IBaseRDBResolveQueryContext
+    {
+        string ColumnName { get; }
+    }
+
+    public class RDBTableQuerySourceGetDBColumnNameContext : BaseRDBResolveQueryContext, IRDBTableQuerySourceGetDBColumnNameContext
+    {
+        public RDBTableQuerySourceGetDBColumnNameContext(string columnName, BaseRDBDataProvider dataProvider, Dictionary<string, Object> parameterValues)
+            : base(dataProvider, parameterValues)
+        {
+            this.ColumnName = columnName;
+        }
+
+        public RDBTableQuerySourceGetDBColumnNameContext(string columnName, IBaseRDBResolveQueryContext parentContext, bool newQueryScope)
+            : base(parentContext, newQueryScope)
+        {
+            this.ColumnName = columnName;
+        }
+
+        public string ColumnName
+        {
+            get;
+            private set;
+        }
     }
 }

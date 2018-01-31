@@ -28,6 +28,11 @@ namespace Vanrise.Data.RDB
             return this;
         }
 
+        public IRDBJoinContextReady<T> Join(string tableName, RDBJoinType joinType, BaseRDBCondition condition)
+        {
+            return Join(new RDBTableDefinitionQuerySource(tableName), joinType, condition);
+        }
+
         public IRDBJoinContextReady<T> JoinOnEqualOtherTableColumn(RDBJoinType joinType, IRDBTableQuerySource table, string columnName, IRDBTableQuerySource otherTable, string otherTableColumnName)
         {
             return Join(table, joinType,
@@ -47,9 +52,29 @@ namespace Vanrise.Data.RDB
                 });
         }
 
+        public IRDBJoinContextReady<T> JoinOnEqualOtherTableColumn(RDBJoinType joinType, string tableName, string columnName, IRDBTableQuerySource otherTable, string otherTableColumnName)
+        {
+            return JoinOnEqualOtherTableColumn(joinType, new RDBTableDefinitionQuerySource(tableName), columnName, otherTable, otherTableColumnName);
+        }
+
+        public IRDBJoinContextReady<T> JoinOnEqualOtherTableColumn(RDBJoinType joinType, string tableName, string columnName, string otherTableName, string otherTableColumnName)
+        {
+            return JoinOnEqualOtherTableColumn(joinType, new RDBTableDefinitionQuerySource(tableName), columnName, new RDBTableDefinitionQuerySource(otherTableName), otherTableColumnName);
+        }
+
         public IRDBJoinContextReady<T> JoinOnEqualOtherTableColumn(IRDBTableQuerySource table, string columnName, IRDBTableQuerySource otherTable, string otherTableColumnName)
         {
             return JoinOnEqualOtherTableColumn(RDBJoinType.Inner, table, columnName, otherTable, otherTableColumnName);
+        }
+
+        public IRDBJoinContextReady<T> JoinOnEqualOtherTableColumn(string tableName, string columnName, IRDBTableQuerySource otherTable, string otherTableColumnName)
+        {
+            return JoinOnEqualOtherTableColumn(new RDBTableDefinitionQuerySource(tableName), columnName, otherTable, otherTableColumnName);
+        }
+
+        public IRDBJoinContextReady<T> JoinOnEqualOtherTableColumn(string tableName, string columnName, string otherTableName, string otherTableColumnName)
+        {
+            return JoinOnEqualOtherTableColumn(new RDBTableDefinitionQuerySource(tableName), columnName, new RDBTableDefinitionQuerySource(otherTableName), otherTableColumnName);
         }
 
         T IRDBJoinContextReady<T>.EndJoin()
@@ -62,9 +87,19 @@ namespace Vanrise.Data.RDB
     {
         IRDBJoinContextReady<T> Join(IRDBTableQuerySource table, RDBJoinType joinType, BaseRDBCondition condition);
 
+        IRDBJoinContextReady<T> Join(string tableName, RDBJoinType joinType, BaseRDBCondition condition);
+
         IRDBJoinContextReady<T> JoinOnEqualOtherTableColumn(RDBJoinType joinType, IRDBTableQuerySource table, string columnName, IRDBTableQuerySource otherTable, string otherTableColumnName);
 
+        IRDBJoinContextReady<T> JoinOnEqualOtherTableColumn(RDBJoinType joinType, string tableName, string columnName, IRDBTableQuerySource otherTable, string otherTableColumnName);
+
+        IRDBJoinContextReady<T> JoinOnEqualOtherTableColumn(RDBJoinType joinType, string tableName, string columnName, string otherTableName, string otherTableColumnName);
+
         IRDBJoinContextReady<T> JoinOnEqualOtherTableColumn(IRDBTableQuerySource table, string columnName, IRDBTableQuerySource otherTable, string otherTableColumnName);
+
+        IRDBJoinContextReady<T> JoinOnEqualOtherTableColumn(string tableName, string columnName, IRDBTableQuerySource otherTable, string otherTableColumnName);
+
+        IRDBJoinContextReady<T> JoinOnEqualOtherTableColumn(string tableName, string columnName, string otherTableName, string otherTableColumnName);
 
         T EndJoin();
     }

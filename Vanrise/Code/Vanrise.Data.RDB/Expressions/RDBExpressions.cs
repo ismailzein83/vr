@@ -14,7 +14,13 @@ namespace Vanrise.Data.RDB
 
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
         {
-            return String.Concat(context.GetTableAlias(this.Table), ".", this.ColumnName);
+            var getColumnDBNameContext = new RDBTableQuerySourceGetDBColumnNameContext(this.ColumnName, context, false);
+            string dbColumnName = this.Table.GetDBColumnName(getColumnDBNameContext);
+            string tableAlias = context.GetTableAlias(this.Table);
+            if (tableAlias != null)
+                return String.Concat(tableAlias, ".", dbColumnName);
+            else
+                return dbColumnName;
         }
     }
 
@@ -86,11 +92,7 @@ namespace Vanrise.Data.RDB
     {
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
         {
-            switch (context.DataProviderType)
-            {
-                case RDBDataProviderType.MSSQL: return "GETDATE()";
-                default: throw new NotSupportedException(String.Format("context.DataProviderType '{0}'", context.DataProviderType.ToString()));
-            }
+            return context.DataProvider.NowDateTimeFunction;
         }
     }
 
@@ -104,12 +106,13 @@ namespace Vanrise.Data.RDB
         {
             StringBuilder builder = new StringBuilder();
             int whenIndex = 0;
+            var conditionContext = new RDBConditionToDBQueryContext(context, false);
             foreach (var when in this.Whens)
             {
                 if (whenIndex == 0)
                     builder.Append(" CASE ");
                 builder.Append(" WHEN ");
-                builder.Append(when.Condition.ToDBQuery(context.ConditionContext));
+                builder.Append(when.Condition.ToDBQuery(conditionContext));
                 builder.Append(" THEN ");
                 builder.Append(when.ValueExpression.ToDBQuery(context));
             }
@@ -154,6 +157,62 @@ namespace Vanrise.Data.RDB
             }
             builder.Append(this.Expression2.ToDBQuery(context));
             return builder.ToString();
+        }
+    }
+
+    public class RDBNullExpression : BaseRDBExpression
+    {
+        public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
+        {
+            return " NULL ";
+        }
+    }
+
+    public class RDBCountExpression : BaseRDBExpression
+    {
+        public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
+        {
+            return "COUNT(*)";
+        }
+    }
+
+    public class RDBSumExpression : BaseRDBExpression
+    {
+        public BaseRDBExpression Expression { get; set; }
+
+        public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
+        {
+            return String.Concat("SUM(", this.Expression.ToDBQuery(context), ")");
+        }
+    }
+
+    public class RDBAvgExpression : BaseRDBExpression
+    {
+        public BaseRDBExpression Expression { get; set; }
+
+        public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
+        {
+            return String.Concat("AVG(", this.Expression.ToDBQuery(context), ")");
+        }
+    }
+
+    public class RDBMaxExpression : BaseRDBExpression
+    {
+        public BaseRDBExpression Expression { get; set; }
+
+        public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
+        {
+            return String.Concat("MAX(", this.Expression.ToDBQuery(context), ")");
+        }
+    }
+
+    public class RDBMinExpression : BaseRDBExpression
+    {
+        public BaseRDBExpression Expression { get; set; }
+
+        public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
+        {
+            return String.Concat("MIN(", this.Expression.ToDBQuery(context), ")");
         }
     }
 }

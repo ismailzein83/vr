@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Data.RDB
 {
-    public class RDBOrConditionContext<T> : RDBConditionContext<RDBOrConditionContext<T>>
+    public class RDBGroupByHavingOrConditionContext<T> : RDBGroupByHavingContext<RDBGroupByHavingOrConditionContext<T>>
     {
         T _parent;
         Action<BaseRDBCondition> _setCondition;
         List<BaseRDBCondition> _conditions;
 
-        public RDBOrConditionContext(T parent, Action<BaseRDBCondition> setCondition, IRDBTableQuerySource table)
+        public RDBGroupByHavingOrConditionContext(T parent, Action<BaseRDBCondition> setCondition, IRDBTableQuerySource table)
         {
             _parent = parent;
             _setCondition = setCondition;
@@ -22,9 +22,9 @@ namespace Vanrise.Data.RDB
             base.Table = table;
         }
 
-        public T EndOr()
+        public T EndAnd()
         {
-            _setCondition(new RDBOrCondition { Conditions = _conditions });
+            _setCondition(new RDBAndCondition { Conditions = _conditions });
             return _parent;
         }
     }
