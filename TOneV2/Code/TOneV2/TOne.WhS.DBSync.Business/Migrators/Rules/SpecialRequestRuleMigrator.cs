@@ -149,9 +149,9 @@ namespace TOne.WhS.DBSync.Business
 
             return routeRule;
         }
-        List<SpecialRequestRouteOptionSettings> GetSupplierOptions(IEnumerable<SpecialRequestSupplierOption> suppliers)
+        Dictionary<int, SpecialRequestRouteOptionSettings> GetSupplierOptions(IEnumerable<SpecialRequestSupplierOption> suppliers)
         {
-            List<SpecialRequestRouteOptionSettings> options = new List<SpecialRequestRouteOptionSettings>();
+            Dictionary<int, SpecialRequestRouteOptionSettings> options = new Dictionary<int, SpecialRequestRouteOptionSettings>();
             int position = 0;
             Dictionary<int, List<SpecialRequestSupplierOption>> groupedOptionsByPriority = new Dictionary<int, List<SpecialRequestSupplierOption>>();
             suppliers = suppliers.OrderByDescending(s => s.Priority).ThenByDescending(s => s.SourceId);
@@ -182,7 +182,7 @@ namespace TOne.WhS.DBSync.Business
             return options;
         }
 
-        private int AddSpecialRequestRouteOptionSettings(List<SpecialRequestRouteOptionSettings> options, int position, SpecialRequestSupplierOption option)
+        private int AddSpecialRequestRouteOptionSettings(Dictionary<int, SpecialRequestRouteOptionSettings> options, int position, SpecialRequestSupplierOption option)
         {
             CarrierAccount supplier;
             if (!_allCarrierAccounts.TryGetValue(option.SupplierId, out supplier))
@@ -195,8 +195,8 @@ namespace TOne.WhS.DBSync.Business
                 Position = ++position,
                 SupplierId = supplier.CarrierAccountId
             };
-
-            options.Add(specialRequestOptionSettings);
+            if (!options.ContainsKey(supplier.CarrierAccountId))
+                options.Add(supplier.CarrierAccountId, specialRequestOptionSettings);
             return position;
         }
         List<CodeCriteria> GetCodeCriteria(SourceSpecialRequest groupedRule)

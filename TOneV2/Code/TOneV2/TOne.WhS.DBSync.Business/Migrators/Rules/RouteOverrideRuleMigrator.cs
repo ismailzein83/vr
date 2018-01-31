@@ -100,14 +100,17 @@ namespace TOne.WhS.DBSync.Business
         {
             var rule = new FixedRouteRule()
             {
-                Options = GetOptions(sourceRule)
+                Filters = GetSuppliersFilters(sourceRule),
+                Options = GetOptions(sourceRule),
             };
             return rule;
         }
 
-        List<FixedRuleOptionSettings> GetOptions(SourceRouteOverrideRule sourceRule)
+        Dictionary<int, List<RouteOptionFilterSettings>> GetSuppliersFilters(SourceRouteOverrideRule sourceRule)
         {
-            List<FixedRuleOptionSettings> result = new List<FixedRuleOptionSettings>();
+            Dictionary<int, List<RouteOptionFilterSettings>> filters = new Dictionary<int, List<RouteOptionFilterSettings>>();
+            List<RouteOptionFilterSettings> supplierFilters;
+
             foreach (var option in sourceRule.SupplierOptions)
             {
                 CarrierAccount supplier;
@@ -116,24 +119,42 @@ namespace TOne.WhS.DBSync.Business
                     Context.MigrationContext.WriteWarning(string.Format("Failed adding Supplier Option for Supplier Source Id {0}, Supplier is not imported", option.SupplierId));
                     continue;
                 }
-                FixedRuleOptionSettings fixedOption = new FixedRuleOptionSettings
-                {
-                    SupplierId = supplier.CarrierAccountId,
-                    Percentage = option.Percentage
-                };
 
                 if (!option.IsLoss)
                 {
-                    fixedOption.Filters = new List<RouteOptionFilterSettings>();
-                    fixedOption.Filters.Add(new RateOptionFilter
+                    if (!filters.TryGetValue(supplier.CarrierAccountId, out supplierFilters))
+                    {
+                        supplierFilters = new List<RouteOptionFilterSettings>();
+                        filters.Add(supplier.CarrierAccountId, supplierFilters);
+                    }
+                    supplierFilters.Add(new RateOptionFilter
                     {
                         RateOption = RateOption.MaximumLoss,
                         RateOptionType = RateOptionType.Fixed,
                         RateOptionValue = 0
                     });
                 }
+            }
 
-                result.Add(fixedOption);
+            return filters;
+
+        }
+        List<RouteOptionSettings> GetOptions(SourceRouteOverrideRule sourceRule)
+        {
+            List<RouteOptionSettings> result = new List<RouteOptionSettings>();
+            foreach (var option in sourceRule.SupplierOptions)
+            {
+                CarrierAccount supplier;
+                if (!_allCarrierAccounts.TryGetValue(option.SupplierId, out supplier))
+                {
+                    Context.MigrationContext.WriteWarning(string.Format("Failed adding Supplier Option for Supplier Source Id {0}, Supplier is not imported", option.SupplierId));
+                    continue;
+                }
+                result.Add(new RouteOptionSettings
+                {
+                    SupplierId = supplier.CarrierAccountId,
+                    Percentage = option.Percentage
+                });
             }
             return result;
         }

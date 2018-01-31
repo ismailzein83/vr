@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsService', 'WhS_Routing_RateOptionEnum', 'WhS_Routing_RateOptionTypeEnum', 'WhS_BE_CarrierAccountAPIService',
-    function (UtilsService, VRUIUtilsService, WhS_Routing_RateOptionEnum, WhS_Routing_RateOptionTypeEnum, WhS_BE_CarrierAccountAPIService) {
+app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsService', 'WhS_Routing_RateOptionEnum', 'WhS_Routing_RateOptionTypeEnum',
+    function (UtilsService, VRUIUtilsService, WhS_Routing_RateOptionEnum, WhS_Routing_RateOptionTypeEnum) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -39,6 +39,7 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
 
                 $scope.scopeModel = {};
                 $scope.scopeModel.fixedSuppliers = [];
+                //$scope.scopeModel.isrequired = false;
 
                 $scope.scopeModel.onCarrierAccountDirectiveReady = function (api) {
                     carrierAccountSelectorAPI = api;
@@ -46,14 +47,17 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                 };
 
                 $scope.scopeModel.isValid = function () {
+                    //$scope.scopeModel.isrequired = false;
+
                     var suppliers = $scope.scopeModel.fixedSuppliers;
-                    if (suppliers == undefined || suppliers.length == 0)
-                        return "At least one supplier should be selected";
+                    if (suppliers == undefined)
+                        return null;
 
                     var total = undefined;
                     for (var x = 0; x < suppliers.length; x++) {
                         var currentSupplier = suppliers[x];
                         if (currentSupplier.PercentageValue != undefined) {
+                            //$scope.scopeModel.isrequired = true;
                             if (total == undefined) {
                                 total = 0;
                             }
@@ -64,6 +68,9 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                     if (total == undefined)
                         return null;
 
+                    //if (!$scope.scopeModel.isrequired)
+                    //    return null;
+
                     if (total != 100)
                         return "Sum of all Percentages must be equal to 100";
 
@@ -71,17 +78,22 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                 };
 
                 $scope.scopeModel.onSelectSupplier = function (selectedItem) {
+
                     $scope.scopeModel.fixedSuppliers.push({
-                        tempId: UtilsService.guid(),
                         CarrierAccountId: selectedItem.CarrierAccountId,
                         Name: selectedItem.Name
                     });
-                    $scope.scopeModel.selectedSuppliers = [];
+                };
+
+                $scope.scopeModel.onDeselectSupplier = function (deselectedItem) {
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.fixedSuppliers, deselectedItem.CarrierAccountId, 'CarrierAccountId');
+                    $scope.scopeModel.fixedSuppliers.splice(index, 1);
                 };
 
                 $scope.scopeModel.onDeleteRow = function (deletedItem) {
-                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.fixedSuppliers, deletedItem.tempId, 'tempId');
-                    $scope.scopeModel.fixedSuppliers.splice(index, 1);
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedSuppliers, deletedItem.CarrierAccountId, 'CarrierAccountId');
+                    $scope.scopeModel.selectedSuppliers.splice(index, 1);
+                    $scope.scopeModel.onDeselectSupplier(deletedItem);
                 };
 
                 defineAPI();
@@ -94,13 +106,14 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
 
                     var supplierFilterSettings;
                     var options;
-                    var selectedSupplierIds = [];
+                    var filters;
 
                     if (payload != undefined) {
                         supplierFilterSettings = payload.SupplierFilterSettings;
 
                         if (payload.RouteRuleSettings != undefined) {
                             options = payload.RouteRuleSettings.Options;
+                            filters = payload.RouteRuleSettings.Filters;
                         }
                     }
 
@@ -108,46 +121,19 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                     var loadCarrierAccountSelectorPromise = getLoadCarrierAccountSelectorPromise(supplierFilterSettings, options);
                     promises.push(loadCarrierAccountSelectorPromise);
 
+                    loadCarrierAccountSelectorPromise.then(function () {
+                        for (var i = 0; i < $scope.scopeModel.selectedSuppliers.length; i++) {
+                            var currentSupplier = $scope.scopeModel.selectedSuppliers[i];
+                            var currentOption = options[i];
 
-                    var loadSuppliersPromise = getLoadSuppliersPromise();
-                    promises.push(loadSuppliersPromise);
-
-                    function getLoadSuppliersPromise() {
-                        var loadSupplierPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                        loadCarrierAccountSelectorPromise.then(function () {
-                            if (selectedSupplierIds.length > 0) {
-                                var serializedCarrierAccountIds = UtilsService.serializetoJson(selectedSupplierIds);
-                                WhS_BE_CarrierAccountAPIService.GetCarrierAccountInfos(serializedCarrierAccountIds).then(function (response) {
-                                    var suppliers = response;
-
-                                    for (var i = 0; i < options.length; i++) {
-                                        var currentOption = options[i];
-
-                                        var isRemoveLoss = false;
-                                        if (currentOption.Filters != undefined && currentOption.Filters.length > 0) {
-                                            isRemoveLoss = true;
-                                        }
-
-                                        $scope.scopeModel.fixedSuppliers.push({
-                                            tempId: UtilsService.guid(),
-                                            CarrierAccountId: currentOption.SupplierId,
-                                            Name: UtilsService.getItemByVal(suppliers, currentOption.SupplierId, 'CarrierAccountId').Name,
-                                            PercentageValue: currentOption.Percentage,
-                                            IsRemoveLoss: isRemoveLoss
-                                        });
-                                    }
-                                    loadSupplierPromiseDeferred.resolve();
-                                }).catch(function (error) {
-                                    loadSupplierPromiseDeferred.reject(error);
-                                });
-                            }
-                            else {
-                                loadSupplierPromiseDeferred.resolve();
-                            }
-                        });
-                        return loadSupplierPromiseDeferred.promise;
-                    };
+                            $scope.scopeModel.fixedSuppliers.push({
+                                CarrierAccountId: currentSupplier.CarrierAccountId,
+                                Name: currentSupplier.Name,
+                                PercentageValue: currentOption.Percentage,
+                                IsRemoveLoss: filters[currentOption.SupplierId] ? true : false
+                            });
+                        }
+                    });
 
                     function getLoadCarrierAccountSelectorPromise(supplierFilterSettings, options) {
                         var loadCarrierAccountSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -160,9 +146,8 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                             };
                             if (options != undefined) {
                                 for (var i = 0; i < options.length; i++) {
-                                    var currentOption = options[i];
-                                    //carrierAccountPayload.selectedIds.push(currentOption.SupplierId);
-                                    selectedSupplierIds.push(currentOption.SupplierId);
+                                    carrierAccountPayload.selectedIds.push(options[i].SupplierId);
+                                    //$scope.scopeModel.fixedSuppliers.push(options[i]);
                                 }
                             }
 
@@ -178,7 +163,8 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.Routing.Business.FixedRouteRule, TOne.WhS.Routing.Business",
-                        Options: getOptions()
+                        Options: getOptions(),
+                        Filters: getFilters()
                     };
 
                     function getOptions() {
@@ -186,22 +172,28 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                         for (var i = 0; i < $scope.scopeModel.fixedSuppliers.length; i++) {
 
                             var supplier = $scope.scopeModel.fixedSuppliers[i];
-                            var filters = undefined;
+                            options.push({
+                                SupplierId: supplier.CarrierAccountId,
+                                Percentage: supplier.PercentageValue,
+                            });
+                        }
+                        return options;
+                    }
+                    function getFilters() {
+                        var filters = {};
+                        for (var i = 0; i < $scope.scopeModel.fixedSuppliers.length; i++) {
+
+                            var supplier = $scope.scopeModel.fixedSuppliers[i];
                             if (supplier.IsRemoveLoss) {
-                                filters = [{
+                                filters[supplier.CarrierAccountId] = [{
                                     $type: "TOne.WhS.Routing.Business.RouteRules.Filters.RateOptionFilter, TOne.WhS.Routing.Business",
                                     RateOption: WhS_Routing_RateOptionEnum.MaximumLoss.value,
                                     RateOptionType: WhS_Routing_RateOptionTypeEnum.Fixed.value,
                                     RateOptionValue: 0
-                                }];
+                                }]
                             }
-                            options.push({
-                                SupplierId: supplier.CarrierAccountId,
-                                Percentage: supplier.PercentageValue,
-                                Filters: filters
-                            });
                         }
-                        return options;
+                        return filters;
                     }
                 };
 

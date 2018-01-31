@@ -26,7 +26,7 @@ namespace TOne.WhS.Routing.Business
             SpecialRequestRouteRule specialRequestRouteRule = new SpecialRequestRouteRule();
             if (context.RouteOptions != null && context.RouteOptions.Count > 0)
             {
-                specialRequestRouteRule.Options = new List<SpecialRequestRouteOptionSettings>();
+                specialRequestRouteRule.Options = new Dictionary<int, SpecialRequestRouteOptionSettings>();
                 int counter = 0;
                 foreach (RouteOption routeOption in context.RouteOptions)
                 {
@@ -39,7 +39,7 @@ namespace TOne.WhS.Routing.Business
                         Position = counter,
                         SupplierId = routeOption.SupplierId
                     };
-                    specialRequestRouteRule.Options.Add(optionSettings);
+                    specialRequestRouteRule.Options.Add(routeOption.SupplierId, optionSettings);
                 }
             }
             return specialRequestRouteRule;
