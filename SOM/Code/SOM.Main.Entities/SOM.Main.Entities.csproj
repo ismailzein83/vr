@@ -53,6 +53,7 @@
     <Compile Include="Billing\TelephoneService.cs" />
     <Compile Include="Inventory\InventoryItem.cs" />
     <Compile Include="Inventory\InventoryPhoneItem.cs" />
+    <Compile Include="Inventory\ReserveLineRequest.cs" />
     <Compile Include="SOMRequestTracking\SOMRequestLog.cs" />
     <Compile Include="SOMRequestTypes\CreateLineSubscriptionInput.cs" />
     <Compile Include="SOMRequest\CreateSOMRequestInput.cs" />

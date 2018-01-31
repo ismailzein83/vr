@@ -24,6 +24,14 @@ namespace SOM.Main.Business
             GenerateInvtoryMockData.GetMockPhoneNumbers().TryGetValue(string.Format("{0}_{1}", cabinetPort, dpPort), out phoneNumbers);
             return phoneNumbers == null ? null : phoneNumbers.Where(p => p.IsGold == isGold && p.IsISDN == isISDN && (string.IsNullOrEmpty(startsWith) || p.Number.StartsWith(startsWith))).ToList();
         }
+
+        public ReserveLineRequestOutput ReservePhoneNumber(ReserveLineRequestInput input)
+        {
+            return new ReserveLineRequestOutput
+            {
+                Message = string.Format("Phone Number {0} is Reserved", input.PhoneNumber)
+            };
+        }
     }
 
 }

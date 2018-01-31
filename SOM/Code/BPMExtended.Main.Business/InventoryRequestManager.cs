@@ -72,5 +72,15 @@ namespace BPMExtended.Main.Business
             return result;
         }
 
+        public ReserveLineRequestOutput ReservePhoneNumber(CustomerObjectType customerObjectType, Guid accountOrContactId, ReserveLineRequestInput reserveLineInput)
+        {
+            ReserveLineRequestOutput output = null;
+
+            using (var client = new SOMClient())
+            {
+                output = client.Post<ReserveLineRequestInput, ReserveLineRequestOutput>("api/SOM_Main/Inventory/ReservePhoneNumber", reserveLineInput);
+            }
+            return output;
+        }
     }
 }

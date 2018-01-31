@@ -28,5 +28,13 @@ namespace SOM.Main.Web.Controllers
             InventoryManager manager = new InventoryManager();
             return manager.GetAvailableNumbers(cabinetPort, dpPort, isGold, isISDN, startsWith);
         }
+
+        [HttpPost]
+        [Route("ReservePhoneNumber")]
+        public ReserveLineRequestOutput ReservePhoneNumber(ReserveLineRequestInput input)
+        {
+            InventoryManager manager = new InventoryManager();
+            return manager.ReservePhoneNumber(input);
+        }
     }
 }

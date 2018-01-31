@@ -30,13 +30,13 @@ namespace BPMExtended.Main.Business
             customerRequestTypes.Add(new CustomerRequestType
             {
                 CustomerRequestTypeId = new Guid("31E1AFF4-D7F2-4C30-BDF1-BC7D965E8B20"),
-                Name = "List Subscription",
+                Name = "Line Subscription",
                 Settings = new CustomerRequestTypeSettings { PageURL = "/CustomerOrders/LineSubscription" }
             });
             customerRequestTypes.Add(new CustomerRequestType
             {
                 CustomerRequestTypeId = new Guid("461B7474-9B19-4B90-AEAB-63BA37245E53"),
-                Name = "List Subscription Termination",
+                Name = "Line Subscription Termination",
                 Settings = new CustomerRequestTypeSettings { PageURL = "/CustomerOrders/LineSubscriptionTermination" }
             });
             customerRequestTypes.Add(new CustomerRequestType
@@ -49,10 +49,10 @@ namespace BPMExtended.Main.Business
             //return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCustomerRequestTypes",
             //   () =>
             //   {                   
-                   //List<CustomerRequestType> customerRequestTypes = s_dataManager.GetCustomerRequestTypes();
-                   //return customerRequestTypes.ToDictionary(cn => cn.CustomerRequestTypeId, cn => cn);
-               //});
-        } 
+            //List<CustomerRequestType> customerRequestTypes = s_dataManager.GetCustomerRequestTypes();
+            //return customerRequestTypes.ToDictionary(cn => cn.CustomerRequestTypeId, cn => cn);
+            //});
+        }
 
         #endregion
 
