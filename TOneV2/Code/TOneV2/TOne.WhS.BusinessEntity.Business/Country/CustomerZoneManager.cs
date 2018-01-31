@@ -299,6 +299,12 @@ namespace TOne.WhS.BusinessEntity.Business
             return null;
         }
 
+        public IEnumerable<CustomerCountry2> GetAllCustomerCountriesByCountryIds(int customerId, IEnumerable<int> countryIds)
+        {
+            IEnumerable<CustomerCountry2> allCustomerCountries = GetAllCachedCustomerCountriesByCustomer().GetRecord(customerId);
+            return (allCustomerCountries != null) ? allCustomerCountries.FindAllRecords(x => countryIds.Contains(x.CountryId)) : null;
+        }
+
         #endregion
 
         #region Private Classes
