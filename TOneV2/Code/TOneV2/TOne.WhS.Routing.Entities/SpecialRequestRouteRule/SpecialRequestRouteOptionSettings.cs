@@ -25,6 +25,8 @@ namespace TOne.WhS.Routing.Entities
     {
         public int SupplierId { get; set; }
 
+        public int Position { get; set; }
+
         public bool ForceOption { get; set; }
     }
 }

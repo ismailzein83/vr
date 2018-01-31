@@ -21,6 +21,8 @@ namespace TOne.WhS.Routing.Entities
     {
         public int SupplierId { get; set; }
 
+        public int Position { get; set; }
+
         public List<RouteOptionFilterSettings> Filters { get; set; }
     }
 }
