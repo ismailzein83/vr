@@ -49,8 +49,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InventoryItem.cs" />
-    <Compile Include="InventoryPhoneItem.cs" />
+    <Compile Include="Inventory\InventoryItem.cs" />
+    <Compile Include="Inventory\InventoryPhoneItem.cs" />
     <Compile Include="SOMRequestTracking\SOMRequestLog.cs" />
     <Compile Include="SOMRequestTypes\CreateLineSubscriptionInput.cs" />
     <Compile Include="SOMRequest\CreateSOMRequestInput.cs" />
@@ -59,6 +59,9 @@
     <Compile Include="SOMRequest\SOMRequest.cs" />
     <Compile Include="SOMRequest\SOMRequestDetail.cs" />
     <Compile Include="SOMRequest\SOMRequestQuery.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Billing\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

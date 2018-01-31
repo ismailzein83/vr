@@ -22,7 +22,7 @@ namespace SOM.Main.Business
         {
             List<PhoneNumber> phoneNumbers = new List<PhoneNumber>();
             GenerateInvtoryMockData.GetMockPhoneNumbers().TryGetValue(string.Format("{0}_{1}", cabinetPort, dpPort), out phoneNumbers);
-            return phoneNumbers.Where(p => p.IsGold == isGold && p.IsISDN == isISDN && (string.IsNullOrEmpty(startsWith) || p.Number.StartsWith(startsWith))).ToList();
+            return phoneNumbers == null ? null : phoneNumbers.Where(p => p.IsGold == isGold && p.IsISDN == isISDN && (string.IsNullOrEmpty(startsWith) || p.Number.StartsWith(startsWith))).ToList();
         }
     }
 

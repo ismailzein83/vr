@@ -19,7 +19,8 @@ namespace SOM.Main.Entities
         public string CabinetPrimaryPort { get; set; }
         public string CabinetSecondaryPort { get; set; }
         public string DP { get; set; }
-        public List<string> DPPort { get; set; }
+        public List<string> DPPorts { get; set; }
+        public List<string> DPSecondaryPorts { get; set; }
         public string Switch { get; set; }
         public string SwitchId { get; set; }
         public string SwitchOMC { get; set; }
