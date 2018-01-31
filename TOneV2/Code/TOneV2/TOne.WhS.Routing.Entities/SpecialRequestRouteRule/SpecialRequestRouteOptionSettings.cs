@@ -17,5 +17,14 @@ namespace TOne.WhS.Routing.Entities
         public int NumberOfTries { get; set; }
 
         public int? Percentage { get; set; }
+
+        public List<SpecialRequestRouteBackupOptionSettings> Backups { get; set; }
+    }
+
+    public class SpecialRequestRouteBackupOptionSettings
+    {
+        public int SupplierId { get; set; }
+
+        public bool ForceOption { get; set; }
     }
 }

@@ -100,16 +100,14 @@ namespace TOne.WhS.DBSync.Business
         {
             var rule = new FixedRouteRule()
             {
-                Filters = GetSuppliersFilters(sourceRule),
-                Options = GetOptions(sourceRule),
+                Options = GetOptions(sourceRule)
             };
             return rule;
         }
 
-        Dictionary<int, List<RouteOptionFilterSettings>> GetSuppliersFilters(SourceRouteOverrideRule sourceRule)
+        Dictionary<int, FixedRouteOptionSettings> GetOptions(SourceRouteOverrideRule sourceRule)
         {
-            Dictionary<int, List<RouteOptionFilterSettings>> filters = new Dictionary<int, List<RouteOptionFilterSettings>>();
-            List<RouteOptionFilterSettings> supplierFilters;
+            Dictionary<int, FixedRouteOptionSettings> result = new  Dictionary<int,FixedRouteOptionSettings>();
 
             foreach (var option in sourceRule.SupplierOptions)
             {
@@ -120,13 +118,10 @@ namespace TOne.WhS.DBSync.Business
                     continue;
                 }
 
+                List<RouteOptionFilterSettings> supplierFilters = null;
                 if (!option.IsLoss)
                 {
-                    if (!filters.TryGetValue(supplier.CarrierAccountId, out supplierFilters))
-                    {
-                        supplierFilters = new List<RouteOptionFilterSettings>();
-                        filters.Add(supplier.CarrierAccountId, supplierFilters);
-                    }
+                    supplierFilters = new List<RouteOptionFilterSettings>();
                     supplierFilters.Add(new RateOptionFilter
                     {
                         RateOption = RateOption.MaximumLoss,
@@ -134,28 +129,18 @@ namespace TOne.WhS.DBSync.Business
                         RateOptionValue = 0
                     });
                 }
-            }
 
-            return filters;
-
-        }
-        List<RouteOptionSettings> GetOptions(SourceRouteOverrideRule sourceRule)
-        {
-            List<RouteOptionSettings> result = new List<RouteOptionSettings>();
-            foreach (var option in sourceRule.SupplierOptions)
-            {
-                CarrierAccount supplier;
-                if (!_allCarrierAccounts.TryGetValue(option.SupplierId, out supplier))
+                if (!result.ContainsKey(supplier.CarrierAccountId))
                 {
-                    Context.MigrationContext.WriteWarning(string.Format("Failed adding Supplier Option for Supplier Source Id {0}, Supplier is not imported", option.SupplierId));
-                    continue;
+                    result.Add(supplier.CarrierAccountId, new FixedRouteOptionSettings()
+                    {
+                        SupplierId = supplier.CarrierAccountId,
+                        Percentage = option.Percentage,
+                        Filters = supplierFilters
+                    });
                 }
-                result.Add(new RouteOptionSettings
-                {
-                    SupplierId = supplier.CarrierAccountId,
-                    Percentage = option.Percentage
-                });
             }
+
             return result;
         }
 

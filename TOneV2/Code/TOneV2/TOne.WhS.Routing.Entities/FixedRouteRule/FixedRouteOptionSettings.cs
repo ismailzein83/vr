@@ -6,17 +6,21 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class RouteOptionSettings
+    public class FixedRouteOptionSettings
     {
         public int SupplierId { get; set; }
+
+        public List<RouteOptionFilterSettings> Filters { get; set; }
 
         public int? Percentage { get; set; }
 
-        public List<RouteBackupOptionSettings> Backups { get; set; }
+        public List<FixedRouteBackupOptionSettings> Backups { get; set; }
     }
 
-    public class RouteBackupOptionSettings
+    public class FixedRouteBackupOptionSettings
     {
         public int SupplierId { get; set; }
+
+        public List<RouteOptionFilterSettings> Filters { get; set; }
     }
 }
