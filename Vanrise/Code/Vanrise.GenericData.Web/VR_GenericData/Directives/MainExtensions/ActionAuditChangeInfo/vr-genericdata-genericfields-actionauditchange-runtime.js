@@ -105,7 +105,6 @@ app.directive('vrGenericdataGenericfieldsActionauditchangeRuntime', ['UtilsServi
                         fieldName: fieldItem.payload.FieldName,
                         directive: fieldItem.fieldType.Type.DifferenceEditor,
                     };
-
                     viewer.onDirectiveReady = function (api) {
                         viewer.directiveAPI = api;
                         fieldItem.readyPromiseDeferred.resolve();

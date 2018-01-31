@@ -334,7 +334,7 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\vr-genericdata-datastoresetting-restapi.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Attachment\Templates\AttachmentFieldTypeEntitManagementTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Attachment\Templates\AttachmentFieldTypeTemplate.html" />
-    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Attachment\Templates\AttachmentFieldTypeViewerEditorTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Attachment\Templates\AttachmentFieldTypeDifferenceEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Attachment\vr-genericdata-attachmentfieldtype-management.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Attachment\vr-genericdata-fieldtype-attachment.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Attachment\vr-genericdata-fieldtype-attachment-differenceeditor.js" />

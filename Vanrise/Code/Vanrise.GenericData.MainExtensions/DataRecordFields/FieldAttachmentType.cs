@@ -23,10 +23,34 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         }
         public override bool TryResolveDifferences(IDataRecordFieldTypeTryResolveDifferencesContext context)
         {
-            var oldAttachmentFieldTypeEntities = context.OldValue as AttachmentFieldTypeEntityCollection;
-            var copyOldAttachmentFieldTypeEntities = oldAttachmentFieldTypeEntities.VRDeepCopy();
+            var oldAttachmentFieldTypeEntities = new AttachmentFieldTypeEntityCollection();
+            var newAttachmentFieldTypeEntities = new AttachmentFieldTypeEntityCollection();
 
-            var newAttachmentFieldTypeEntities = context.NewValue as AttachmentFieldTypeEntityCollection;
+            var oldEnumerator = (context.OldValue as System.Collections.IEnumerable).GetEnumerator();
+            if (oldEnumerator != null)
+            {
+                while (oldEnumerator.MoveNext())
+                {
+                    if (oldEnumerator.Current != null)
+                    {
+                        var oldEnumeratorEntity = Vanrise.Common.Serializer.Deserialize<AttachmentFieldTypeEntity>(oldEnumerator.Current.ToString());
+                        oldAttachmentFieldTypeEntities.Add(oldEnumeratorEntity);
+                    }
+                }
+            }
+
+            var newEnumerator = (context.NewValue as System.Collections.IEnumerable).GetEnumerator();
+            if (newEnumerator != null)
+            {
+                while (newEnumerator.MoveNext())
+                {
+                    if (newEnumerator.Current != null)
+                    {
+                        var newEnumeratorEntity = Vanrise.Common.Serializer.Deserialize<AttachmentFieldTypeEntity>(newEnumerator.Current.ToString());
+                        newAttachmentFieldTypeEntities.Add(newEnumeratorEntity);
+                    }
+                }
+            }
 
             var changesFieldTypeEntities = new List<AttachmentFieldTypeEntityChangeInfo>();
 
@@ -34,7 +58,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             {
                 foreach (var newAttachmentFieldTypeEntity in newAttachmentFieldTypeEntities)
                 {
-                    var itemFound = copyOldAttachmentFieldTypeEntities.FindRecord(x => x.FileId == newAttachmentFieldTypeEntity.FileId);
+                    var itemFound = oldAttachmentFieldTypeEntities.FindRecord(x => x.FileId == newAttachmentFieldTypeEntity.FileId);
                     if (itemFound != null)
                     {
                         if (!itemFound.Notes.Equals(newAttachmentFieldTypeEntity.Notes))
@@ -45,7 +69,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                                 Description = string.Format("Notes changed from {0} to {1}", itemFound.Notes, newAttachmentFieldTypeEntity.Notes)
                             });
                         }
-                        copyOldAttachmentFieldTypeEntities.Remove(itemFound);
+                        oldAttachmentFieldTypeEntities.Remove(itemFound);
                     }
                     else
                     {
@@ -56,15 +80,18 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                         });
                     }
                 }
-
-                foreach (var copyOldAttachmentFieldTypeEntity in copyOldAttachmentFieldTypeEntities)
+                if (oldAttachmentFieldTypeEntities != null)
                 {
-                    changesFieldTypeEntities.Add(new AttachmentFieldTypeEntityChangeInfo
+                    foreach (var copyOldAttachmentFieldTypeEntity in oldAttachmentFieldTypeEntities)
                     {
-                        FileId = copyOldAttachmentFieldTypeEntity.FileId,
-                        Description = string.Format("Deleted")
-                    });
+                        changesFieldTypeEntities.Add(new AttachmentFieldTypeEntityChangeInfo
+                        {
+                            FileId = copyOldAttachmentFieldTypeEntity.FileId,
+                            Description = string.Format("Deleted")
+                        });
+                    }
                 }
+
             }
             context.Changes = changesFieldTypeEntities;
             return true;

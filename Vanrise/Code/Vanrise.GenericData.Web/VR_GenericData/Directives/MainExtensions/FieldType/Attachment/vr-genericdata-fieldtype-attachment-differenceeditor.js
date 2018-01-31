@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataFieldtypeBooleanViewereditor', ['UtilsService',
+app.directive('vrGenericdataFieldtypeAttachmentDifferenceeditor', ['UtilsService',
     function (UtilsService) {
     return {
         restrict: 'E',
@@ -25,7 +25,7 @@ app.directive('vrGenericdataFieldtypeBooleanViewereditor', ['UtilsService',
             };
         },
         templateUrl: function (element, attrs) {
-            return '/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/Boolean/Templates/BooleanFieldTypeViewerEditorTemplate.html';
+            return '/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/Attachment/Templates/AttachmentFieldTypeDifferenceEditorTemplate.html';
         }
     };
 
