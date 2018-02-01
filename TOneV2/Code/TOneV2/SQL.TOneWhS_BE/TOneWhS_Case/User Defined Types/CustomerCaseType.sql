@@ -15,5 +15,11 @@
     [ReasonId]         UNIQUEIDENTIFIER NULL,
     [OwnerReference]   NVARCHAR (1000)  NULL,
     [Attachments]      NVARCHAR (MAX)   NULL,
-    [WorkGroupId]      UNIQUEIDENTIFIER NULL);
+    [WorkGroupId]      UNIQUEIDENTIFIER NULL,
+    [Settings]         NVARCHAR (MAX)   NULL,
+    [ContactName]      NVARCHAR (255)   NULL,
+    [PhoneNumber]      NVARCHAR (255)   NULL,
+    [ContactEmails]    NVARCHAR (1000)  NULL);
+
+
 

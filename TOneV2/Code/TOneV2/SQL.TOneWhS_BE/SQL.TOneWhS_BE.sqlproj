@@ -565,5 +565,11 @@
     <Build Include="TOneWhS_Case\User Defined Types\SupplierCaseType.sql" />
     <Build Include="TOneWhS_Case\User Defined Types\VRCaseType.sql" />
     <Build Include="Security\TOneWhS_Case.sql" />
+    <Build Include="TOneWhS_Sales\Tables\RP_Subscriber_Preview.sql" />
+    <Build Include="TOneWhS_Case\Tables\InternationalReleaseCode.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_SubscriberPreview_Insert.sql" />
+    <Build Include="TOneWhS_Sales\Stored Procedures\sp_SubscriberPreview_Get.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_StateBackup_GetStateBackupsAfterId.sql" />
+    <Build Include="TOneWhS_Case\User Defined Types\InternationalReleaseCodeType.sql" />
   </ItemGroup>
 </Project>

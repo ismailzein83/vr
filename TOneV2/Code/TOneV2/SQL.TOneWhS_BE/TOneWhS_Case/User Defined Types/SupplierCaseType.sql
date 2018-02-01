@@ -12,5 +12,12 @@
     [CarrierReference] NVARCHAR (255)   NULL,
     [Description]      NVARCHAR (1000)  NULL,
     [Notes]            NVARCHAR (1000)  NULL,
-    [StatusId]         UNIQUEIDENTIFIER NULL);
+    [StatusId]         UNIQUEIDENTIFIER NULL,
+    [Attachments]      NVARCHAR (MAX)   NULL,
+    [Settings]         NVARCHAR (MAX)   NULL,
+    [ContactName]      NVARCHAR (255)   NULL,
+    [PhoneNumber]      NVARCHAR (255)   NULL,
+    [ContactEmails]    NVARCHAR (1000)  NULL);
+
+
 

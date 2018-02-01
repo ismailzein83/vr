@@ -16,6 +16,12 @@
     [ReasonId]         UNIQUEIDENTIFIER NULL,
     [Attachments]      NVARCHAR (MAX)   NULL,
     [WorkGroupId]      UNIQUEIDENTIFIER NULL,
+    [Settings]         NVARCHAR (MAX)   NULL,
+    [ContactName]      NVARCHAR (255)   NULL,
+    [PhoneNumber]      NVARCHAR (255)   NULL,
+    [ContactEmails]    NVARCHAR (1000)  NULL,
     CONSTRAINT [PK_CustomerCase] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
