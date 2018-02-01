@@ -531,14 +531,10 @@ namespace Vanrise.GenericData.Business
             static GenericBusinessEntityDefinitionManager s_genericBusinessEntityDefinitionManager = new GenericBusinessEntityDefinitionManager();
             static GenericBusinessEntityManager s_genericBusinessEntityManager = new GenericBusinessEntityManager();
             DataRecordField idDataRecordField;
-            Dictionary<string, DataRecordField> dataRecordFields;
-
             public GenericBusinessEntityLoggableEntity(Guid businessEntityDefinitionId)
             {
                 _businessEntityDefinitionId = businessEntityDefinitionId;
                 idDataRecordField = s_genericBusinessEntityDefinitionManager.GetIdFieldTypeForGenericBE(_businessEntityDefinitionId);
-                dataRecordFields = s_genericBusinessEntityDefinitionManager.GetDataRecordTypeFieldsByBEDefinitionId(_businessEntityDefinitionId);
-                
             }
 
             public override string EntityUniqueName
@@ -581,7 +577,7 @@ namespace Vanrise.GenericData.Business
             {
                 return new GenericFieldsActionAuditChangeInfoDefinition
                 {
-                    FieldTypes = dataRecordFields
+                    BusinessEntityDefinitionId = _businessEntityDefinitionId
                 };
             }
         }
@@ -690,5 +686,13 @@ namespace Vanrise.GenericData.Business
     //    public string Title { get; set; }
     //    public string EntityName { get; set; }
     //}
+
+    public class GenericBusinessEntityRuntimeEditor
+    {
+        public GenericBEDefinitionSettings GenericBEDefinitionSettings { get; set; }
+        public GenericBusinessEntity GenericBusinessEntity { get; set; }
+        public string DefinitionTitle { get; set; }
+        public string TitleFieldName { get; set; }
+    }
 }
  

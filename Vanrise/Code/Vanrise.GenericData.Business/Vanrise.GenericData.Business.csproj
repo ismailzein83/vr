@@ -58,10 +58,12 @@
     <Compile Include="BusinessEntity\Definition\BusinessEntityDefinitionManager.cs" />
     <Compile Include="BusinessEntity\BusinessEntityGroupContext.cs" />
     <Compile Include="BusinessEntity\BaseBEManager.cs" />
+    <Compile Include="BusinessEntity\Definition\BEDefinitionSettingsTryGetRecordTypeFieldsContext.cs" />
     <Compile Include="BusinessEntity\FieldCustomObjectTypeSettingsContext.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\Contexts\GenericBEExtendedSettingsContext.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\Contexts\GenericBEOnBeforeInsertHandlerContext.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\Contexts\GenericBEOnBeforeInsertHandlerInfoByTypeContext.cs" />
+    <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBEDefinitionSettings.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBusinessEntityDefinitionFilter.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBEDefinitionViewFilter.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBEViewSettings.cs" />

@@ -17,13 +17,19 @@ namespace Vanrise.GenericData.Entities
         public virtual string IdType { get; set; }
         public virtual string SelectorFilterEditor { get; set; }
         public virtual string NullDisplayText { get; set; }
-
+        public virtual Dictionary<string, DataRecordField> TryGetRecordTypeFields(IBEDefinitionSettingsTryGetRecordTypeFieldsContext context)
+        {
+            return null;
+        }
         public virtual VRLoggableEntityBase GetLoggableEntity(IBusinessEntityDefinitionSettingsGetLoggableEntityContext context)
         {
             return null;
         }
     }
-
+    public interface IBEDefinitionSettingsTryGetRecordTypeFieldsContext
+    {
+        BusinessEntityDefinition BEDefinition { get; }
+    }
     public interface IBusinessEntityDefinitionSettingsGetLoggableEntityContext
     {
         BusinessEntityDefinition BEDefinition { get; }

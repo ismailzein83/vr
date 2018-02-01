@@ -156,6 +156,8 @@ app.directive('vrGenericdataGenericfieldsActionauditchangeRuntime', ['UtilsServi
                     $scope.scopeModel.simpleViewers.push(viewer);
                     
                 }
+
+
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }

@@ -11,7 +11,25 @@ namespace Vanrise.GenericData.Business
 {
     public class GenericFieldsActionAuditChangeInfoDefinition : VRActionAuditChangeInfoDefinition
     {
-        public Dictionary<string, DataRecordField> FieldTypes { get; set; }
+        public Guid? BusinessEntityDefinitionId { get; set; }
+        private Dictionary<string, DataRecordField> _fieldTypes { get; set; }
+        public Dictionary<string, DataRecordField> FieldTypes
+        {
+            get
+            {
+                if (_fieldTypes != null)
+                    return _fieldTypes;
+                else if (BusinessEntityDefinitionId.HasValue)
+                {
+                    var businessEntityDefinition = new BusinessEntityDefinitionManager().GetBusinessEntityDefinition(BusinessEntityDefinitionId.Value);
+                    if (businessEntityDefinition != null && businessEntityDefinition.Settings != null)
+                    {
+                        return businessEntityDefinition.Settings.TryGetRecordTypeFields(new BEDefinitionSettingsTryGetRecordTypeFieldsContext { BEDefinition = businessEntityDefinition });
+                    }
+                }
+                return null;
+            }
+        }
 
         public override string RuntimeEditor
         {
