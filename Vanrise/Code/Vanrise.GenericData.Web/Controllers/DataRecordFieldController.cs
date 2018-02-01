@@ -49,6 +49,14 @@ namespace Vanrise.GenericData.Web.Controllers
             DataRecordFieldManager manager = new DataRecordFieldManager();
             return manager.TryResolveDifferences(input.LoggableEntityUniqueName, input.FieldValues);
         }
+
+        [HttpGet]
+        [Route("GetFieldCustomObjectTypeSettingsConfig")]
+        public IEnumerable<FieldCustomObjectTypeSettingsConfig> GetFieldCustomObjectTypeSettingsConfig()
+        {
+            DataRecordFieldManager manager = new DataRecordFieldManager();
+            return manager.GetFieldCustomObjectTypeSettingsConfig();
+        }
     }
     public class TryResolveDifferencesInput
     {

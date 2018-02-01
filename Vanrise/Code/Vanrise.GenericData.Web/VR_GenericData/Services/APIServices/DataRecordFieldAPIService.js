@@ -33,12 +33,18 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "TryResolveDifferences"), input);
         }
 
+        function GetFieldCustomObjectTypeSettingsConfig() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetFieldCustomObjectTypeSettingsConfig"));
+        }
+
+
         return ({
             GetDataRecordFieldsInfo: GetDataRecordFieldsInfo,
             GetDataRecordAttributes: GetDataRecordAttributes,
             GetDataRecordFieldFormulaExtensionConfigs: GetDataRecordFieldFormulaExtensionConfigs,
             GetDataRecordFieldTypeConfigs: GetDataRecordFieldTypeConfigs,
-            TryResolveDifferences: TryResolveDifferences
+            TryResolveDifferences: TryResolveDifferences,
+            GetFieldCustomObjectTypeSettingsConfig: GetFieldCustomObjectTypeSettingsConfig
         });
 
     }

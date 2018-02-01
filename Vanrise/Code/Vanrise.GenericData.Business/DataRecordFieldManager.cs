@@ -97,6 +97,14 @@ namespace Vanrise.GenericData.Business
 
         #endregion
 
+        #region Config
+        public IEnumerable<FieldCustomObjectTypeSettingsConfig> GetFieldCustomObjectTypeSettingsConfig()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<FieldCustomObjectTypeSettingsConfig>(FieldCustomObjectTypeSettingsConfig.EXTENSION_TYPE);
+        }
+        #endregion
+
         #region Mappers
 
         private DataRecordFieldInfo DataRecordFieldInfoMapper(DataRecordField dataRecordField)
