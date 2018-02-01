@@ -23,12 +23,17 @@
         function GetGenericBEViewDefinitionSettingsConfigs(businessEntityDefinitionId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetGenericBEViewDefinitionSettingsConfigs"));
         }
+        function GetGenericBEEditorDefinitionSettingsConfigs(businessEntityDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetGenericBEEditorDefinitionSettingsConfigs"));
+        }
+
         return ({
             GetGenericBEDefinitionSettings: GetGenericBEDefinitionSettings,
             GetGenericBEGridDefinition: GetGenericBEGridDefinition,
             GetGenericBEGridColumnAttributes: GetGenericBEGridColumnAttributes,
             GetIdFieldTypeForGenericBE: GetIdFieldTypeForGenericBE,
-            GetGenericBEViewDefinitionSettingsConfigs: GetGenericBEViewDefinitionSettingsConfigs
+            GetGenericBEViewDefinitionSettingsConfigs: GetGenericBEViewDefinitionSettingsConfigs,
+            GetGenericBEEditorDefinitionSettingsConfigs: GetGenericBEEditorDefinitionSettingsConfigs
         });
     }
     appControllers.service("VR_GenericData_GenericBEDefinitionAPIService", genericBusinessEntityDefinitionAPIService);

@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
-    function (UtilsService, VRNotificationService, VRUIUtilsService) {
+app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "VRNotificationService", "VRUIUtilsService","VR_GenericData_ExtensibleBEItemService",
+    function (UtilsService, VRNotificationService, VRUIUtilsService, VR_GenericData_ExtensibleBEItemService) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -28,8 +28,11 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
             var sectionDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
 
             var context;
-
+            var rows;
             function initializeController() {
+
+             
+
                 $scope.scopeModel = {};
 
                 $scope.scopeModel.onSectionDirectiveReady = function (api) {
@@ -42,10 +45,20 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
             function defineAPI() {
                 var api = {};
 
-                api.load = function (payload) {
-                    if (payload != undefined)
-                       context = payload.context;
+                ctrl.addRowSection = function () {
+                    var onRowAdded = function (rowObj) {
+                        sectionDirectiveApi.onAddRow(rowObj);
+                    };
+                    VR_GenericData_ExtensibleBEItemService.addRow(onRowAdded, getFilteredFields());
+                };
 
+                api.load = function (payload) {
+                    console.log(payload)
+                    if (payload != undefined)
+                    {
+                        context = payload.context;
+                        rows = payload.Rows
+                    }
                     var promises = [];
 
                     promises.push(loadBusinessEntityDefinitionSelector());
@@ -87,23 +100,20 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
                             filteredFields.push({ FieldPath: recordTypeFields[i].Name });
                         }
                         for (var i = 0; i < recordTypeFields.length; i++) {
-                            filterSections(ctrl.sections, filteredFields, exceptedFields);
-
+                            filterSections(filteredFields, exceptedFields);
                         }
                     }
-                    
+                    console.log(filteredFields);
                     return filteredFields;
                 }
 
-                function filterSections(sections, filteredFields, exceptedFields) {
-                    for (var j = 0; j < sections.length; j++) {
-                        var section = sections[j];
-                        if (section.rowsGridAPI != undefined) {
-                            var rows = section.rowsGridAPI.getData();
-                            filterRows(rows.Rows, filteredFields, exceptedFields);
-                        } else if (section.Rows != undefined) {
-                            filterRows(section.Rows, filteredFields, exceptedFields);
-                        }
+                function filterSections(filteredFields, exceptedFields) {
+
+                    if (sectionDirectiveApi != undefined) {
+                        var section = sectionDirectiveApi.getData();
+                        filterRows(section.Rows, filteredFields, exceptedFields);
+                    } else if (rows != undefined) {
+                        filterRows(rows, filteredFields, exceptedFields);
                     }
                 }
 
@@ -111,7 +121,6 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
                     for (var i = 0; i < rows.length; i++) {
                         var row = rows[i];
                         filterFields(row.Fields, filteredFields, exceptedFields);
-
                     }
                 }
 

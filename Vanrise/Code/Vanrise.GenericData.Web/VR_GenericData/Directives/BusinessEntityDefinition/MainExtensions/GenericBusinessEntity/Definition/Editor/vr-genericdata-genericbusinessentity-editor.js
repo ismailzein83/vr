@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNotificationService", "VR_GenericData_DataRecordTypeAPIService", "VRUIUtilsService",
-    function (UtilsService, VRNotificationService, VR_GenericData_DataRecordTypeAPIService, VRUIUtilsService) {
+app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNotificationService", "VR_GenericData_DataRecordTypeAPIService", "VR_GenericData_DataRecordFieldAPIService", "VRUIUtilsService",
+    function (UtilsService, VRNotificationService, VR_GenericData_DataRecordTypeAPIService, VR_GenericData_DataRecordFieldAPIService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
 
@@ -24,6 +24,8 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
         function GenericBusinessEntityDefinitionEditor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
+            var recordTypeFields = [];
+
             var dataRecordTypeSelectorAPI;
             var dataRecordTypeSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -38,6 +40,9 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
 
             var viewDefinitionGridAPI;
             var viewDefinitionGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var editorDefinitionAPI;
+            var editorDefinitionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var recordTypeSelectedPromiseDeferred;
             var recordTypeEntity;
@@ -70,22 +75,51 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                     viewDefinitionGridReadyPromiseDeferred.resolve();
                 };
 
+                $scope.scopeModel.onGenericBEEditorDefinitionDirectiveReady = function (api) {
+                    editorDefinitionAPI = api;
+                    editorDefinitionReadyPromiseDeferred.resolve();
+                };
+
                 $scope.scopeModel.onRecordTypeSelectionChanged = function () {
                     var selectedRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
+                    recordTypeFields.length = 0;
                     if (selectedRecordTypeId != undefined) {
-                        var setLoader = function (value) { $scope.isLoadingRegions = value };
-                        var payload = {
+                        var setDataRecordTypeTitleLoader = function (value) { $scope.scopeModel.isLoadingTitle = value };
+                        var recordTypeTitlePayload = {
                             dataRecordTypeId: selectedRecordTypeId
                         };
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeTitleFieldsSelectorAPI, payload, setLoader, recordTypeSelectedPromiseDeferred);
-                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, columnDefinitionGridAPI, { context: getContext() }, setLoader, recordTypeSelectedPromiseDeferred);
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataRecordTypeTitleFieldsSelectorAPI, recordTypeTitlePayload, setDataRecordTypeTitleLoader, recordTypeSelectedPromiseDeferred);
 
+                        var setGridColumnLoader = function (value) {
+                            setTimeout(function () {
+                                $scope.scopeModel.isLoadingColumns = value;
+                                $scope.$apply();
+                            },1);
+                        };
+                        var columnDefnitionPayload = {
+                            context: getContext()
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, columnDefinitionGridAPI, columnDefnitionPayload, setGridColumnLoader, recordTypeSelectedPromiseDeferred);
+
+                        $scope.scopeModel.isLoadingEditor = true;
+                        getDataRecordFieldsInfo(selectedRecordTypeId).then(function () {
+                            $scope.scopeModel.isLoadingEditor = false;
+                            var editorPayload = {
+                                context: getContext()
+                            }
+                            var setEditorLoader = function (value) { $scope.scopeModel.isLoadingEditor = value };
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, editorDefinitionAPI, editorPayload, setEditorLoader, recordTypeSelectedPromiseDeferred);
+                        });
                     }
-                    else if (dataRecordTypeTitleFieldsSelectorAPI != undefined) {
-                        dataRecordTypeTitleFieldsSelectorAPI.clearDataSource();
+                    else {
+                        if (dataRecordTypeTitleFieldsSelectorAPI != undefined)
+                            dataRecordTypeTitleFieldsSelectorAPI.clearDataSource();
+                        if (selectedRecordTypeId == undefined && columnDefinitionGridAPI != undefined)
+                            columnDefinitionGridAPI.clearDataSource();
+                        if (selectedRecordTypeId == undefined && editorDefinitionAPI != undefined)
+                            editorDefinitionAPI.load();
                     }
-                    if (selectedRecordTypeId == undefined && columnDefinitionGridAPI != undefined)
-                        columnDefinitionGridAPI.clearDataSource();
+
                 };
                 defineAPI();
             }
@@ -103,6 +137,9 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                             ColumnDefinitions: columnDefinitionGridAPI.getData(),
                             GenericBEGridActions: [],
                             GenericBEGridViews: viewDefinitionGridAPI.getData()
+                        },
+                        EditorDefinition: {
+                            Settings: editorDefinitionAPI.getData()
                         }
                     };
                 };
@@ -121,9 +158,12 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                     promises.push(loadDataRecordStorageSelector());
                     promises.push(loadColumnDefinitionGrid());
                     promises.push(loadViewDefinitionGrid());
+                    promises.push(loadEditorDefinitionDirective());
+
 
                     if (businessEntityDefinitionSettings != undefined) {
                         promises.push(loadDataRecordTitleFieldsSelector());
+                        promises.push(getDataRecordFieldsInfo(businessEntityDefinitionSettings.DataRecordTypeId));
                     }
 
 
@@ -196,6 +236,19 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         return loadViewDefinitionGridPromiseDeferred.promise;
                     }
 
+                    function loadEditorDefinitionDirective() {
+                        var loadEditorDefinitionDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                        editorDefinitionReadyPromiseDeferred.promise.then(function () {
+                            var payload = {
+                                settings: businessEntityDefinitionSettings != undefined && businessEntityDefinitionSettings.EditorDefinition && businessEntityDefinitionSettings.EditorDefinition.Settings || undefined,
+                                context: getContext()
+                            };
+
+                            VRUIUtilsService.callDirectiveLoad(editorDefinitionAPI, payload, loadEditorDefinitionDirectivePromiseDeferred);
+                        });
+                        return loadEditorDefinitionDirectivePromiseDeferred.promise;
+                    }
+
                     return UtilsService.waitMultiplePromises(promises).then(function () {
                         recordTypeSelectedPromiseDeferred = undefined;
                     });
@@ -210,8 +263,26 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                 return {
                     getDataRecordTypeId: function () {
                         return dataRecordTypeSelectorAPI.getSelectedIds();
+                    },
+                    getRecordTypeFields: function () {
+                        var data = [];
+                        for (var i = 0; i < recordTypeFields.length; i++) {
+                            data.push(recordTypeFields[i]);
+                        }
+                        return data;
                     }
                 };
+            }
+
+
+            function getDataRecordFieldsInfo(recordTypeId) {
+                return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(recordTypeId, null).then(function (response) {
+                    if (response != undefined)
+                        for (var i = 0; i < response.length; i++) {
+                            var currentField = response[i];
+                            recordTypeFields.push(currentField.Entity);
+                        }
+                });
             }
 
         }

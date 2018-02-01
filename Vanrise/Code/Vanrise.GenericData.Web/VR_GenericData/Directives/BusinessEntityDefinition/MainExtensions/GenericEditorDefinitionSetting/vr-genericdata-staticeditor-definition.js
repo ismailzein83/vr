@@ -9,7 +9,7 @@
             restrict: 'E',
             scope: {
                 onReady: '=',
-                normalColNum:'@'
+                normalColNum: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -32,6 +32,12 @@
                 var api = {};
 
                 api.load = function (payload) {
+                    var settings;
+                    if (payload != undefined)
+                        settings = payload.settings;
+
+                    if (settings != undefined)
+                        $scope.scopeModel.directiveName = settings.DirectiveName;
 
                 };
 
@@ -49,6 +55,6 @@
         }
     }
 
-    app.directive('vrGenericdataGenericbeHistorygridviewDefinition', HistoryGenericBEDefinitionViewDirective);
+    app.directive('vrGenericdataStaticeditorDefinition', HistoryGenericBEDefinitionViewDirective);
 
 })(app);
