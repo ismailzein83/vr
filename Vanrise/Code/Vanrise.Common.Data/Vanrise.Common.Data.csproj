@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ICacheRefreshDataManager.cs" />
+    <Compile Include="IEnumerationDataManager.cs" />
     <Compile Include="IRegionDataManager.cs" />
     <Compile Include="IGenericLKUPItemDataManager.cs" />
     <Compile Include="IOverriddenConfigurationDataManager.cs" />

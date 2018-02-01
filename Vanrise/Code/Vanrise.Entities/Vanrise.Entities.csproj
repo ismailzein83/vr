@@ -74,6 +74,7 @@
     <Compile Include="Country\CountryFilter.cs" />
     <Compile Include="DataRetrieval\RemoteExcelResult.cs" />
     <Compile Include="EntityFilterEffectiveMode.cs" />
+    <Compile Include="Enumeration.cs" />
     <Compile Include="IBusinessManager.cs" />
     <Compile Include="ICompanySettingsManager.cs" />
     <Compile Include="LabelColor.cs" />
