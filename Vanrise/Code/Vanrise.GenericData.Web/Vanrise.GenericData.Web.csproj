@@ -345,7 +345,9 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Boolean\vr-genericdata-fieldtype-boolean-viewereditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\BusinessEntity\Templates\BusinessEntityTypeViewerEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\BusinessEntity\vr-genericdata-fieldtype-businessentity-viewereditor.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\CustomObject\Templates\CustomObjectTypeViewerEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\CustomObject\Templates\CustomObjectFieldTypeTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\CustomObject\vr-genericdata-fieldtype-customobject-viewereditor.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\CustomObject\vr-genericdata-fieldtype-customobject.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DateTime\Templates\DatetimeFieldTypeViewerEditorTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\DateTime\vr-genericdata-fieldtype-datetime-viewereditor.js" />

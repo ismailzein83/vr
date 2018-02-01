@@ -40,14 +40,8 @@ app.directive('vrGenericdataFieldtypeBooleanViewereditor', ['UtilsService',
             var api = {};
 
             api.load = function (payload) {
-                var changeInfo;
                 if (payload != undefined) {
-                    changeInfo = payload.changeInfo;
-                    if(changeInfo != undefined)
-                    {
-                        $scope.scopeModel.fieldValueDescription = payload.fieldValueDescription;
-
-                    }
+                    $scope.scopeModel.fieldValueDescription = payload.fieldValueDescription;
                 }
             };
 

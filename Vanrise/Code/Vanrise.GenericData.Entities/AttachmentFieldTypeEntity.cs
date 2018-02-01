@@ -14,6 +14,7 @@ namespace Vanrise.GenericData.Entities
     }
     public class AttachmentFieldTypeEntityChangeInfo
     {
+        public string FileName { get; set; }
         public long FileId { get; set; }
         public string Description { get; set; }
     }

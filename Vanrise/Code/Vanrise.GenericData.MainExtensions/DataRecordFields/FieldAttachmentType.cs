@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
    
@@ -53,6 +54,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
 
             var changesFieldTypeEntities = new List<AttachmentFieldTypeEntityChangeInfo>();
+            VRFileManager vrFileManager = new VRFileManager();
 
             if (newAttachmentFieldTypeEntities != null)
             {
@@ -61,22 +63,28 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                     var itemFound = oldAttachmentFieldTypeEntities.FindRecord(x => x.FileId == newAttachmentFieldTypeEntity.FileId);
                     if (itemFound != null)
                     {
+
                         if (!itemFound.Notes.Equals(newAttachmentFieldTypeEntity.Notes))
                         {
+                            var fileInfo = vrFileManager.GetFileInfo(newAttachmentFieldTypeEntity.FileId);
+
                             changesFieldTypeEntities.Add(new AttachmentFieldTypeEntityChangeInfo
                             {
+                                FileName = fileInfo != null ? fileInfo.Name : null,
                                 FileId = newAttachmentFieldTypeEntity.FileId,
-                                Description = string.Format("Notes changed from {0} to {1}", itemFound.Notes, newAttachmentFieldTypeEntity.Notes)
+                                Description = string.Format("Notes changed from '{0}' to '{1}'", itemFound.Notes, newAttachmentFieldTypeEntity.Notes)
                             });
                         }
                         oldAttachmentFieldTypeEntities.Remove(itemFound);
                     }
                     else
                     {
+                        var fileInfo = vrFileManager.GetFileInfo(newAttachmentFieldTypeEntity.FileId);
                         changesFieldTypeEntities.Add(new AttachmentFieldTypeEntityChangeInfo
                         {
+                            FileName = fileInfo != null ? fileInfo.Name : null,
                             FileId = newAttachmentFieldTypeEntity.FileId,
-                            Description = string.Format("Added ( Notes: {0} )", newAttachmentFieldTypeEntity.Notes)
+                            Description = string.Format("Added (Notes: {0})", newAttachmentFieldTypeEntity.Notes)
                         });
                     }
                 }
@@ -84,8 +92,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 {
                     foreach (var copyOldAttachmentFieldTypeEntity in oldAttachmentFieldTypeEntities)
                     {
+                        var fileInfo = vrFileManager.GetFileInfo(copyOldAttachmentFieldTypeEntity.FileId);
                         changesFieldTypeEntities.Add(new AttachmentFieldTypeEntityChangeInfo
                         {
+                            FileName = fileInfo != null? fileInfo.Name:null,
                             FileId = copyOldAttachmentFieldTypeEntity.FileId,
                             Description = string.Format("Deleted")
                         });

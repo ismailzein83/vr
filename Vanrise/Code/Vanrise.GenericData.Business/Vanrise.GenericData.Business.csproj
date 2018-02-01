@@ -58,6 +58,7 @@
     <Compile Include="BusinessEntity\Definition\BusinessEntityDefinitionManager.cs" />
     <Compile Include="BusinessEntity\BusinessEntityGroupContext.cs" />
     <Compile Include="BusinessEntity\BaseBEManager.cs" />
+    <Compile Include="BusinessEntity\FieldCustomObjectTypeSettingsContext.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\Contexts\GenericBEExtendedSettingsContext.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\Contexts\GenericBEOnBeforeInsertHandlerContext.cs" />
     <Compile Include="BusinessEntity\GenericBusinessEntity\Contexts\GenericBEOnBeforeInsertHandlerInfoByTypeContext.cs" />

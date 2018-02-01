@@ -25,7 +25,7 @@ app.directive('vrGenericdataFieldtypeBusinessentityViewereditor', ['UtilsService
             };
         },
         templateUrl: function (element, attrs) {
-            return '/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/BusinessEntity/Templates/BusinessEntityFieldTypeViewerEditorTemplate.html';
+            return '/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/BusinessEntity/Templates/BusinessEntityTypeViewerEditorTemplate.html';
         }
     };
 
@@ -40,14 +40,8 @@ app.directive('vrGenericdataFieldtypeBusinessentityViewereditor', ['UtilsService
             var api = {};
 
             api.load = function (payload) {
-                var changeInfo;
                 if (payload != undefined) {
-                    changeInfo = payload.changeInfo;
-                    if(changeInfo != undefined)
-                    {
-                        $scope.scopeModel.fieldValueDescription = payload.fieldValueDescription;
-
-                    }
+                    $scope.scopeModel.fieldValueDescription = payload.fieldValueDescription;
                 }
             };
 

@@ -1,5 +1,5 @@
 ﻿'use strict';
-app.directive('vrGenericdataFieldtypeDatetimeViewereditor', ['UtilsService',
+app.directive('vrGenericdataFieldtypeCustomobjectViewereditor', ['UtilsService',
     function (UtilsService) {
     return {
         restrict: 'E',
@@ -11,7 +11,7 @@ app.directive('vrGenericdataFieldtypeDatetimeViewereditor', ['UtilsService',
 
             var ctrl = this;
 
-            var ctor = new datetimeTypeViewerEditorCtor(ctrl, $scope);
+            var ctor = new customObjectTypeViewerEditorCtor(ctrl, $scope);
             ctor.initializeController();
 
         },
@@ -25,11 +25,11 @@ app.directive('vrGenericdataFieldtypeDatetimeViewereditor', ['UtilsService',
             };
         },
         templateUrl: function (element, attrs) {
-            return '/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/Datetime/Templates/DatetimeFieldTypeViewerEditorTemplate.html';
+            return '/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/CustomObject/Templates/CustomObjectTypeViewerEditorTemplate.html';
         }
     };
 
-    function datetimeTypeViewerEditorCtor(ctrl, $scope) {
+    function customObjectTypeViewerEditorCtor(ctrl, $scope) {
 
         function initializeController() {
             $scope.scopeModel = {};

@@ -123,7 +123,7 @@ app.directive('vrGenericdataGenericfieldsActionauditchangeRuntime', ['UtilsServi
                 function AddSimpleViewerAPI(fieldItem)
                 {
                     var viewer = {
-                        fieldName: fieldItem.payload.FieldName,
+                        fieldName: fieldItem.fieldType.Title,
                         oldDirective:fieldItem.fieldType.Type.ViewerEditor,
                         newDirective: fieldItem.fieldType.Type.ViewerEditor,
                     };

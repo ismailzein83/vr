@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
@@ -29,9 +30,14 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override string GetDescription(object value)
         {
+            if (this.Settings != null)
+                return this.Settings.GetDescription(new FieldCustomObjectTypeSettingsContext
+                {
+                    FieldValue = value
+                });
             return null;
         }
-
+        public override string ViewerEditor { get { return "vr-genericdata-fieldtype-customobject-viewereditor"; } }
         public override bool IsMatched(object fieldValue, object filterValue)
         {
             throw new NotImplementedException();
@@ -57,5 +63,9 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         {
             get { return null; }
         }
+
+        public FieldCustomObjectTypeSettings Settings { get; set; }
     }
+  
+    
 }

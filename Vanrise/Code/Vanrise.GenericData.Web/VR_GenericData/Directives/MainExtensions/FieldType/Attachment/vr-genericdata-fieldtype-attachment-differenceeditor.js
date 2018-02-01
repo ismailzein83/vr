@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrGenericdataFieldtypeAttachmentDifferenceeditor', ['UtilsService',
-    function (UtilsService) {
+app.directive('vrGenericdataFieldtypeAttachmentDifferenceeditor', ['UtilsService', 'FileAPIService',
+    function (UtilsService, FileAPIService) {
     return {
         restrict: 'E',
         scope: {
@@ -34,6 +34,14 @@ app.directive('vrGenericdataFieldtypeAttachmentDifferenceeditor', ['UtilsService
         function initializeController() {
             $scope.scopeModel = {};
             $scope.scopeModel.changes = [];
+             $scope.scopeModel.downloadAttachement = function (attachedfileId) {
+                $scope.scopeModel.isLoading = true;
+                return FileAPIService.DownloadFile(attachedfileId).then(function(response) {
+                    $scope.scopeModel.isLoading = false;
+                    if (response != undefined)
+                    UtilsService.downloadFile(response.data, response.headers);
+                    });
+            };
             defineAPI();
         }
 
@@ -44,15 +52,14 @@ app.directive('vrGenericdataFieldtypeAttachmentDifferenceeditor', ['UtilsService
                 var changes;
                 if (payload != undefined) {
                     changes = payload.changes;
-                    if (changes != undefined)
-                    {
-                        for (var i = 0; i < changes.length; i++)
-                        {
+                    if (changes != undefined) {
+                        for (var i = 0; i < changes.length; i++) {
                             var change = changes[i];
                             $scope.scopeModel.changes.push({
-                                fileId: change.FileId,
-                                description: change.Description
-                            });
+                                fileName: change.FileName,
+                                    fileId: change.FileId,
+                            description: change.Description
+            });
                         }
                     }
                 }

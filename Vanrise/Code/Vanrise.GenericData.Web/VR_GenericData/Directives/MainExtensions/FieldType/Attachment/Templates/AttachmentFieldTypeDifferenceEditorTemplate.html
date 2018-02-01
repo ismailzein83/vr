@@ -2,10 +2,10 @@
 <vr-datagrid datasource="scopeModel.changes"
              on-ready="onGridReady"
              pagingtype="'PagingOnScroll'"
-             menuactions="gridMenuActions" hideheader="true">
+             hidegridmenu="true">
     <vr-datagridcolumn headertext="'Attachment'" type="'Text'">
-        {{dataItem.attachmentName}}
+        <a href="" ng-click="viewScope.scopeModel.downloadAttachement(dataItem.fileId)">{{dataItem.fileName}}</a>
     </vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Description'" field="'description'" />
+    <vr-datagridcolumn headertext="'Change Info'" field="'description'" />
 </vr-datagrid>
 
