@@ -151,6 +151,7 @@
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="FaultTicketManager.cs" />
     <Compile Include="FaultTickets\CustomerFaultTicketsSettings.cs" />
+    <Compile Include="FaultTickets\CustomerFaultTicketCustomObjectTypeSettings.cs" />
     <Compile Include="FinancialAccount\EventHandlers\FinancialAccountCarrierAccountStatusChangedHandler.cs" />
     <Compile Include="FinancialAccount\EventHandlers\FinancialAccountCarrierProfileStatusChangedHandler.cs" />
     <Compile Include="FinancialAccount\FinancialAccountDefinitionFilter.cs" />

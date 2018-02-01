@@ -20,7 +20,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             switch (context.InfoType)
             {
-                case "SerialNumberPattern": return "#CarrierName#";
+                case "SerialNumberPattern": return new ConfigManager().GetFaultTicketsCustomerSerialNumberPattern();
                 default: return null;
             }
         }
