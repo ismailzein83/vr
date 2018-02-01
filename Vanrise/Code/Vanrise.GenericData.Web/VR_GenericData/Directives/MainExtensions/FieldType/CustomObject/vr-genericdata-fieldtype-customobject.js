@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrGenericdataFieldtypeCustomobject', ['UtilsService',
-    function (UtilsService) {
+app.directive('vrGenericdataFieldtypeCustomobject', ['UtilsService','VRUIUtilsService',
+    function (UtilsService, VRUIUtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -34,7 +34,18 @@ app.directive('vrGenericdataFieldtypeCustomobject', ['UtilsService',
 
         function customObjectTypeCtor(ctrl, $scope) {
 
+            var fieldTypeCustomObjectAPI;
+            var fieldTypeCustomObjectReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
+                $scope.scopeModel = {};
+
+                $scope.scopeModel.onFieldTypeCustomObjectDirectiveReady = function (api) {
+                    fieldTypeCustomObjectAPI = api;
+                    fieldTypeCustomObjectReadyPromiseDeferred.resolve();
+                };
+
+
                 defineAPI();
             }
 
@@ -42,15 +53,34 @@ app.directive('vrGenericdataFieldtypeCustomobject', ['UtilsService',
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
 
                     if (payload != undefined)
                         ctrl.isNullable = payload.IsNullable;
+                  
+                    promises.push(loadFieldTypeCustomObject());
+
+                    function loadFieldTypeCustomObject() {
+                        var loadFieldTypeCustomObjectPromiseDeferred = UtilsService.createPromiseDeferred();
+                        fieldTypeCustomObjectReadyPromiseDeferred.promise.then(function () {
+                            var datapPayload = {
+                                settings: payload != undefined && payload.Settings || undefined
+                            };
+                            VRUIUtilsService.callDirectiveLoad(fieldTypeCustomObjectAPI, datapPayload, loadFieldTypeCustomObjectPromiseDeferred);
+                        });
+
+                        return loadFieldTypeCustomObjectPromiseDeferred.promise;
+                    }
+
+
+                    return UtilsService.waitMultiplePromises(promises)
                 };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.GenericData.MainExtensions.DataRecordFields.FieldCustomObjectType,Vanrise.GenericData.MainExtensions",
-                        IsNullable: ctrl.isNullable
+                        IsNullable: ctrl.isNullable,
+                        Settings: fieldTypeCustomObjectAPI.getData()
                     };
                 };
 

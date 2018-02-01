@@ -2,9 +2,9 @@
 
     'use strict';
 
-    customObjectSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBEDefinitionAPIService'];
+    customObjectSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordFieldAPIService'];
 
-    function customObjectSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_GenericBEDefinitionAPIService) {
+    function customObjectSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_DataRecordFieldAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -77,7 +77,7 @@
                     promises.push(getParameterSettingsConfigsPromise);
 
                     function getGenericBEViewDefinitionSettingsConfigs() {
-                        return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEEditorDefinitionSettingsConfigs().then(function (response) {
+                        return VR_GenericData_DataRecordFieldAPIService.GetFieldCustomObjectTypeSettingsConfig().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
@@ -157,6 +157,6 @@
         }
     }
 
-    app.directive('vrGenericdataEditordefinitionSettings', editorDefinitionSettingsDirective);
+    app.directive('vrGenericdataFieldtypeCustomobjectSettings', customObjectSettingsDirective);
 
 })(app);
