@@ -258,7 +258,7 @@ namespace TOne.WhS.Routing.Data.SQL
 			
 			with CodeCTE as (select Code from dbo.CodeSaleZoneMatch where SaleZoneID in (select SaleZoneId from @SaleZoneIdTable))
 			
-			select Code, SupplierId, SupplierZoneId
+			select Code, SupplierId, SupplierZoneId, CodeMatch
 			from dbo.CodeSupplierZoneMatch
 			where Code in (select Code from CodeCTE) and (@SupplierIds is null or SupplierID in (select SupplierId from @SupplierIdTable))
 		";
