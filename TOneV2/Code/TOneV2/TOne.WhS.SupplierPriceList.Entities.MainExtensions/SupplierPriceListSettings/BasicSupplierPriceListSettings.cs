@@ -163,7 +163,7 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                                         IEnumerable<char> firstPrefix = rangeCode.FirstOrDefault().TakeWhile(item => item == '0');
                                         IEnumerable<char> secondPrefix = rangeCode.LastOrDefault().TakeWhile(item => item == '0');
                                         if (firstPrefix.Count() != secondPrefix.Count())
-                                            throw new Exception(String.Format("Invalid code {0} due to a wrong range separator.", codeValueTrimmed));
+                                            throw new Exception(String.Format("Invalid range {0}", codeValueTrimmed));
 
                                         long firstCode;
                                         long lastCode;
@@ -171,7 +171,11 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                                         {
                                             long codeRange = lastCode - firstCode;
                                             if (codeRange > maximumCodeRange)
-                                                throw new VRBusinessException(String.Format("The number of codes({0}) in  range ({0},{1}) exceeded the maximum allowed code range: '{2}'.", firstCode, lastCode, maximumCodeRange));
+                                                throw new VRBusinessException(String.Format("The number of codes({0}) in  range ({0},{1}) exceeded the maximum allowed code range: '{2}'", firstCode, lastCode, maximumCodeRange));
+
+                                            if (firstCode > lastCode)
+                                                throw new VRBusinessException(string.Format("First part in range must be less than second one: {0}-{1}", firstCode, lastCode));
+
                                             while (firstCode <= lastCode)
                                             {
                                                 string increasedCode = (firstCode++).ToString().Trim();
@@ -186,9 +190,8 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                                         else
                                         {
                                             if (zone != null)
-                                                throw new Exception(String.Format("Invalid code found in zone {0} due to a wrong range separator.", zone));
-                                            else
-                                                throw new Exception(String.Format("Invalid code {0} due to a wrong range separator.", rangeCode));
+                                                throw new Exception(String.Format("One or both part of range are not integer in zone {0}", zone));
+                                            throw new Exception(String.Format("One or both part of range are not integer: {0}", rangeCode));
                                         }
 
                                     }
