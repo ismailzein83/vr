@@ -11,10 +11,11 @@ namespace TOne.WhS.BusinessEntity.Data
     {
         object BackupData(StateBackupType backupType);
 
-        bool RestoreData(long stateBackupId, int userId);
+        bool RestoreData(long stateBackupId, StateBackupType stateBackupType, int userId);
 
         IEnumerable<StateBackup> GetFilteredStateBackups(StateBackupQuery input);
 
         StateBackup GetStateBackup(long stateBackupId);
+        IEnumerable<StateBackup> GetStateBackupsAfterId(long stateBackupId);
     }
 }

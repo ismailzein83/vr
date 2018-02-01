@@ -177,6 +177,7 @@
     <Compile Include="SaleRate\OtherSaleRateManager.cs" />
     <Compile Include="SaleRate\SaleRateReadLastRateNoCache.cs" />
     <Compile Include="SaleZone\SaleZoneSoldCountryToCustomerFilter.cs" />
+    <Compile Include="StateBackup\StateBackupCanRestoreContext.cs" />
     <Compile Include="SupplierRate\QueryHandlers\SupplierRateForZoneQueryHandler.cs" />
     <Compile Include="SwitchReleaseCause\SwitchReleaseCauseManager.cs" />
     <Compile Include="ZoneRoutingProduct\History\CustomerZoneRoutingProductHistoryLocator.cs" />

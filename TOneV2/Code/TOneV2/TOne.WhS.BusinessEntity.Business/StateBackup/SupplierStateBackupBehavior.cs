@@ -32,11 +32,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
             StateBackupSupplier backupData = context.Data as StateBackupSupplier;
             SupplierStateBackupFilter filterData = filter as SupplierStateBackupFilter;
-           
+
             if (filterData.SupplierIds == null)
                 return true;
 
             return filterData.SupplierIds.Contains(backupData.SupplierId);
+        }
+
+        public override bool CanRestore(IStateBackupCanRestoreContext context)
+        {
+            return true;
         }
     }
 }

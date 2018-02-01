@@ -32,11 +32,16 @@ namespace TOne.WhS.BusinessEntity.Business
 
             StateBackupAllSaleEntities backupData = context.Data as StateBackupAllSaleEntities;
             AllSaleEntitiesStateBackupFilter filterData = filter as AllSaleEntitiesStateBackupFilter;
-            
+
             if (filterData.SellingNumberPlanIds == null)
                 return true;
 
             return filterData.SellingNumberPlanIds.Contains(backupData.SellingNumberPlanId);
+        }
+
+        public override bool CanRestore(IStateBackupCanRestoreContext context)
+        {
+            return true;
         }
     }
 }

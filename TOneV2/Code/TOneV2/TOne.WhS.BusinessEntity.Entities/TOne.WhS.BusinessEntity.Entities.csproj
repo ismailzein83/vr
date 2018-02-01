@@ -124,7 +124,6 @@
     <Compile Include="CompanyDefinition\CompanyPricelistSettings.cs" />
     <Compile Include="CustomerInvoiceSettingInfo.cs" />
     <Compile Include="FaultTickets\CustomerFaultTicketSettings.cs" />
-    <Compile Include="IStateBackupCanRestoreContext.cs" />
     <Compile Include="Settings\FaultTicketsSettingsData.cs" />
     <Compile Include="FinancialAccount\WHSFinancialAccountDefinitionInfoFilter.cs" />
     <Compile Include="FinancialAccount\WHSCarrierFinancialAccountData.cs" />
@@ -182,6 +181,7 @@
     <Compile Include="Settings\PricelistSettings.cs" />
     <Compile Include="Settings\PricingSettings.cs" />
     <Compile Include="Settings\RateChangeTypeDescriptions.cs" />
+    <Compile Include="StateBackup\IStateBackupCanRestoreContext.cs" />
     <Compile Include="SupplierRate\Query\SupplierRateForZoneQuery.cs" />
     <Compile Include="SupplierZone\SupplierZoneServiceToClose.cs" />
     <Compile Include="SupplierZone\SupplierZoneServiceToEdit.cs" />

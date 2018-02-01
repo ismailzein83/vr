@@ -32,6 +32,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 );
         }
 
+        public IEnumerable<StateBackup> GetStateBackupsAfterId(long stateBackupId)
+        {
+            IStateBackupDataManager manager = BEDataManagerFactory.GetDataManager<IStateBackupDataManager>();
+            return manager.GetStateBackupsAfterId(stateBackupId);
+        }
         public IEnumerable<StateBackupTypeConfig> GetStateBackupTypes()
         {
             var extensionConfigurationManager = new ExtensionConfigurationManager();
@@ -52,18 +57,35 @@ namespace TOne.WhS.BusinessEntity.Business
                 UpdatedObject = null
             };
             IStateBackupDataManager dataManager = BEDataManagerFactory.GetDataManager<IStateBackupDataManager>();
-            StateBackup recentStateBackup = dataManager.GetStateBackup(stateBackupId);
+            StateBackup currentStateBackup = dataManager.GetStateBackup(stateBackupId);
 
+            ExtensionConfigurationManager extensionConfigurationManager = new ExtensionConfigurationManager();
+            Dictionary<Guid, StateBackupTypeConfig> backupTypeConfigurations = extensionConfigurationManager.GetExtensionConfigurationsByType<StateBackupTypeConfig>(StateBackupTypeConfig.EXTENSION_TYPE);
+
+            StateBackupTypeConfig config = backupTypeConfigurations[currentStateBackup.Info.ConfigId];
+
+            StateBackupCanRestoreContext stateBackupCanRestorecontext = new StateBackupCanRestoreContext
+            {
+                StateBackupId = stateBackupId,
+                StateBackupType = currentStateBackup.Info
+
+            };
+            if (!config.Behavior.CanRestore(stateBackupCanRestorecontext))
+            {
+                updateOperationOutput.ShowExactMessage = true;
+                updateOperationOutput.Message = stateBackupCanRestorecontext.ErrorMessage;
+                return updateOperationOutput;
+            }
             // on each restore we have to backup the data (to handle failure cases)
             //in case this backup is a backup from restore, we don't back it up again
-            if (recentStateBackup.Info.OnRestoreStateBackupId == null)
+            if (currentStateBackup.Info.OnRestoreStateBackupId == null)
             {
-                recentStateBackup.Info.OnRestoreStateBackupId = stateBackupId;
-                BackupData(recentStateBackup.Info);
+                currentStateBackup.Info.OnRestoreStateBackupId = stateBackupId;
+                BackupData(currentStateBackup.Info);
             }
 
             SecurityContext securityContext = new SecurityContext();
-            bool updateActionSucc = dataManager.RestoreData(stateBackupId, securityContext.GetLoggedInUserId());
+            bool updateActionSucc = dataManager.RestoreData(stateBackupId, currentStateBackup.Info, securityContext.GetLoggedInUserId());
             if (updateActionSucc)
             {
                 StateBackup stateBackup = dataManager.GetStateBackup(stateBackupId);

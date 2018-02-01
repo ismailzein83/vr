@@ -20,5 +20,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         }
 
         public abstract bool IsMatch(IStateBackupContext context, object filter);
+        public abstract bool CanRestore(IStateBackupCanRestoreContext context);
     }
 }

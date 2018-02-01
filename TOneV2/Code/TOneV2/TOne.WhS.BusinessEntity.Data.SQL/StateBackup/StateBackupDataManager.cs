@@ -58,11 +58,14 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return stateBackupId;
         }
 
-        public bool RestoreData(long stateBackupId, int userId)
+        public IEnumerable<StateBackup> GetStateBackupsAfterId(long stateBackupId)
         {
+            return GetItemsSP("[TOneWhS_BE].[sp_StateBackup_GetStateBackupsAfterId]", StateBackupMapper, stateBackupId);
+        }
 
-            StateBackup stateBackup = GetItemSP("TOneWhS_BE.sp_StateBackup_GetById", StateBackupMapper, stateBackupId);
-            this.PrepareData(stateBackup.Info);
+        public bool RestoreData(long stateBackupId, StateBackupType info, int userId)
+        {
+            this.PrepareData(info);
             bool result = false;
             var options = new TransactionOptions
             {
@@ -72,7 +75,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
             using (TransactionScope scope = new TransactionScope(TransactionScopeOption.Required, options))
             {
-                string restoreCommand = _stateBackupBehavior.GetRestoreCommands(stateBackup.StateBackupId);
+                string restoreCommand = _stateBackupBehavior.GetRestoreCommands(stateBackupId);
                 ExecuteNonQueryText(restoreCommand, null);
 
                 ExecuteNonQuerySP("TOneWhS_BE.sp_StateBackup_Update", stateBackupId, DateTime.Now, userId);
@@ -81,7 +84,6 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 result = true;
 
             }
-
             return result;
         }
 

@@ -8,7 +8,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 {
     public interface IStateBackupCanRestoreContext
     {
-        int StateBackupId { get; set; }
-        string Description { get; set; }
+        long StateBackupId { get; }
+        string ErrorMessage { get; set; }
+        StateBackupType StateBackupType { get; }
     }
 }
