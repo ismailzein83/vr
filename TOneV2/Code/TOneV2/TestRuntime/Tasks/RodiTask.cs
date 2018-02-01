@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using TestRuntime;
@@ -32,6 +34,18 @@ namespace TOne.WhS.Runtime.Tasks
             runtimeServices.Add(queueActivationRuntimeService);
             runtimeServices.Add(bpRegulatorService);
             runtimeServices.Add(queueRegulatorService);
+
+            var assemblies = new List<Assembly>();
+
+            var tOneFiles = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "TOne*Entities.dll");
+            var vanriseFiles = Directory.GetFiles(AppDomain.CurrentDomain.BaseDirectory, "Vanrise*Entities.dll");
+
+            foreach (var file in tOneFiles)
+                assemblies.Add(Assembly.LoadFile(file));
+            foreach (var file in vanriseFiles)
+                assemblies.Add(Assembly.LoadFile(file));
+
+            Vanrise.Common.Business.UtilityManager.GenerateDocumentationForEnums(assemblies);
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();
