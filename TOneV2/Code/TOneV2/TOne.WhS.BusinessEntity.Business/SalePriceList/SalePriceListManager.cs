@@ -899,15 +899,18 @@ namespace TOne.WhS.BusinessEntity.Business
                 pricelist.PriceListId = startingReservedId++;
             }
         }
-        public string GetPriceListName(int carrierAccountId, DateTime priceListDate, SalePriceListType salePriceListType, string extension)
+        public string GetPriceListName(int carrierAccountId, DateTime priceListDate, SalePriceListType salePriceListType, string extension, int currencyId)
         {
+            var currencyManager = new CurrencyManager();
             var customerName = _carrierAccountManager.GetCarrierAccountName(carrierAccountId);
             var carrierProfileManager = new CarrierProfileManager();
             var carrierProfileId = _carrierAccountManager.GetCarrierProfileId(carrierAccountId).Value;
             var profileName = carrierProfileManager.GetCarrierProfileName(carrierProfileId);
+            var currencySymbol = currencyManager.GetCurrencySymbol(currencyId);
 
             var priceListName = new StringBuilder(_carrierAccountManager.GetCustomerPricelistFileNamePattern(carrierAccountId));
             priceListName.Replace("#CustomerName#", customerName);
+            priceListName.Replace("#Currency#", currencySymbol);
             priceListName.Replace("#ProfileName#", profileName);
             priceListName.Replace("#PricelistDate#", priceListDate.ToString("yyyy-MM-dd"));
             priceListName.Replace("#PriclistType#", salePriceListType.ToString());
@@ -941,7 +944,7 @@ namespace TOne.WhS.BusinessEntity.Business
             byte[] salePlTemplateBytes = template.Settings.Execute(salePlTemplateSettingsContext);
 
             string extension = GetExtensionString(priceListExtensionFormat);
-            string fileName = GetPriceListName(carrierAccountId, effectiveDate, salePriceListType, extension);
+            string fileName = GetPriceListName(carrierAccountId, effectiveDate, salePriceListType, extension, pricelistCurrencyId);
 
             return new VRFile
             {
