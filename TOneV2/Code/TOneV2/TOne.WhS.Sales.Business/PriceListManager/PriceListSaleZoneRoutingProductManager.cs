@@ -42,7 +42,7 @@ namespace TOne.WhS.Sales.Business
 				{
 					CloseOverlappedExistingRoutingProducts(routingProductToAdd, matchedExistingRoutingProducts);
 				}
-				ProcessRoutingProductToAdd(routingProductToAdd, existingZonesByName);
+                ProcessRoutingProductToAdd(routingProductToAdd, existingZonesByName, ownerType, ownerId);
 			}
 
 			foreach (SaleZoneRoutingProductToClose routingProductToClose in routingProductsToClose)
@@ -155,7 +155,7 @@ namespace TOne.WhS.Sales.Business
 				}
 			}
 		}
-		private void ProcessRoutingProductToAdd(SaleZoneRoutingProductToAdd routingProductToAdd, ExistingZonesByName existingZonesByName)
+        private void ProcessRoutingProductToAdd(SaleZoneRoutingProductToAdd routingProductToAdd, ExistingZonesByName existingZonesByName, SalePriceListOwnerType ownerType, int ownerId)
 		{
 			List<ExistingZone> matchedExistingZones;
 			existingZonesByName.TryGetValue(routingProductToAdd.ZoneName, out matchedExistingZones);
@@ -167,18 +167,20 @@ namespace TOne.WhS.Sales.Business
 			{
 				if (existingZone.EED.VRGreaterThan(existingZone.BED) && existingZone.EED.VRGreaterThan(newSaleZoneRoutingProductBED) && routingProductToAdd.EED.VRGreaterThan(existingZone.BED))
 				{
-					AddNewSaleZoneRoutingProduct(routingProductToAdd, ref newSaleZoneRoutingProductBED, existingZone, out shouldAddNewSaleZoneRoutingProducts);
+					AddNewSaleZoneRoutingProduct(routingProductToAdd, ref newSaleZoneRoutingProductBED, existingZone, out shouldAddNewSaleZoneRoutingProducts,ownerType,ownerId);
 					if (!shouldAddNewSaleZoneRoutingProducts)
 						break;
 				}
 			}
 		}
-		private void AddNewSaleZoneRoutingProduct(SaleZoneRoutingProductToAdd saleZoneRoutingProductToAdd, ref DateTime newSaleZoneRoutingProductBED, ExistingZone existingZone, out bool shouldAddNewSaleZoneRoutingProducts)
+		private void AddNewSaleZoneRoutingProduct(SaleZoneRoutingProductToAdd saleZoneRoutingProductToAdd, ref DateTime newSaleZoneRoutingProductBED, ExistingZone existingZone, out bool shouldAddNewSaleZoneRoutingProducts,SalePriceListOwnerType ownerType, int ownerId)
 		{
 			shouldAddNewSaleZoneRoutingProducts = false;
 
 			var newSaleZoneRoutingProduct = new NewSaleZoneRoutingProduct
 			{
+                OwnerId = ownerId,
+                OwnerType = ownerType,
 				RoutingProductId = saleZoneRoutingProductToAdd.ZoneRoutingProductId,
 				SaleZoneId = saleZoneRoutingProductToAdd.ZoneId,
 				BED = Utilities.Max(existingZone.BED, newSaleZoneRoutingProductBED),
