@@ -32,6 +32,8 @@ xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\TOneV1Transition.PostDepl
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\TOne.DefaultData.PostDeployment.sql" /y /v /z /i /Q /R		"\\192.168.110.185\Fixes\WebSite\TOneV2\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 ::xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Sama.FlaggedService.sql" /y /v /z /i /Q /R					"\\192.168.110.185\Fixes\WebSite\TOneV2\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 
+start /b /w /D"C:\TFS\Vanrise\Code\Vanrise.HelperTools\bin\Release" Vanrise.HelperTools.exe "Enumerations" "TOneV2"
+
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Configuration.txt" /y /v /z /i /Q /R							"\\192.168.110.185\Fixes\WebSite\TOneV2\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneTransaction\BusinessProcess.PostDeployment.sql" /y /v /z /i /Q /R			"\\192.168.110.185\Fixes\WebSite\TOneV2\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Transaction\"
