@@ -15,6 +15,7 @@ VR_AccountBalance.PostDeployment.sql
 VR_Notification.PostDeployment.sql
 User_Guides.PostDeployment.sql
 DataAnalysis.PostDeployment.sql
+Enumerations.sql
 
 TOne
 TOne.PostDeployment.sql
