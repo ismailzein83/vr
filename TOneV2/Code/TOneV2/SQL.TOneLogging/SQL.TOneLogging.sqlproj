@@ -115,6 +115,7 @@
     <Build Include="logging\Stored Procedures\sp_ObjectTracking_GetFiltered.sql" />
     <Build Include="logging\Stored Procedures\sp_ObjectTracking_GetObjectDetailsById.sql" />
     <Build Include="logging\Stored Procedures\sp_ObjectTracking_GetChangeInfoById.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPTrackings_GetBPInstanceTrackingMessages.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.PostDeployment.sql" />
