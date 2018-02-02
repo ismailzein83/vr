@@ -33,12 +33,12 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                     {
                         file:undefined,
                         notes: '',
-                        createdTime: new Date()
+                        createdTime:UtilsService.parseDateToString (new Date())
                     };
                 $scope.scopeModel.attachementFieldTypes.push({ Entity: attachementFieldType });
               
             };
-            $scope.scopeModel.removerow = function (dataItem) {
+            $scope.removerow = function (dataItem) {
                 var index = $scope.scopeModel.attachementFieldTypes.indexOf(dataItem);
                 $scope.scopeModel.attachementFieldTypes.splice(index, 1);
             };
@@ -53,11 +53,12 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                         if (payload != undefined) {
                             if (payload.attachementFieldTypes != undefined) {
                                 for (var i = 0; i < payload.attachementFieldTypes.length; i++) {
+                                    var attachmentFieldType = payload.attachementFieldTypes[i];
                                     var attachementFieldType = {
                                         Entity: {
-                                            file: {fileId:payload.attachementFieldTypes[i].FileId},
-                                            notes: payload.attachementFieldTypes[i].Notes,
-                                            createdTime: payload.attachementFieldTypes[i].CreatedTime
+                                            file: { fileId: attachmentFieldType.FileId },
+                                            notes: attachmentFieldType.Notes,
+                                            createdTime: attachmentFieldType.CreatedTime
                                         }
                                     };
                                     $scope.scopeModel.attachementFieldTypes.push(attachementFieldType);
@@ -83,12 +84,13 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
             var attachementFieldTypes = [];
             if ($scope.scopeModel.attachementFieldTypes != undefined) {
                 for (var i = 0; i < $scope.scopeModel.attachementFieldTypes.length; i++) {
+                    var attachmentFieldType = $scope.scopeModel.attachementFieldTypes[i];
                         var attachementFieldType =
                             {
                                 $type: "Vanrise.GenericData.Entities.AttachmentFieldTypeEntity, Vanrise.GenericData.Entities",
-                                FileId: $scope.scopeModel.attachementFieldTypes[i].Entity.file.fileId,
-                                Notes: $scope.scopeModel.attachementFieldTypes[i].Entity.notes,
-                                CreatedTime: $scope.scopeModel.attachementFieldTypes[i].Entity.createdTime
+                                FileId: attachmentFieldType.Entity.file.fileId,
+                                Notes: attachmentFieldType.Entity.notes,
+                                CreatedTime: attachmentFieldType.Entity.createdTime
                             };
                         attachementFieldTypes.push(attachementFieldType);
                 }
