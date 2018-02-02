@@ -78,6 +78,7 @@
     <Compile Include="CustomerRequestManager.cs" />
     <Compile Include="CustomerRequestTypeManager.cs" />
     <Compile Include="InventoryRequestManager.cs" />
+    <Compile Include="LineTypeManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
