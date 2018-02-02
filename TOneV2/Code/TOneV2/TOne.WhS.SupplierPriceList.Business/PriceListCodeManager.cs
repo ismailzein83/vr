@@ -46,13 +46,17 @@ namespace TOne.WhS.SupplierPriceList.Business
             var countryIds = importedCodeByCodeGroup.Values.Select(c => c.CountryId);
             IEnumerable<int> countryMatches = GetCountryMatch(zoneName, countryIds);
 
-            if (countryMatches.Count() == 1)
+            if (countryMatches != null && countryMatches.Count() == 1)
                 return countryMatches.First();
 
             List<CodeGroupInfo> codeGroupInfos = GetCodeGroupInfo(importedCodeByCodeGroup);
 
-            if (codeGroupInfos.Count == 1)
-                return codeGroupInfos.First().CountryId;
+            var exactMatchCodeGroups = codeGroupInfos.Where(c => c.IsExactMatch);
+            if (exactMatchCodeGroups!= null)
+            {
+                if(!exactMatchCodeGroups.Any(item => item.CountryId != exactMatchCodeGroups.First().CountryId))
+                return exactMatchCodeGroups.First().CountryId;
+            }
 
             int maxCodeCount = codeGroupInfos.Max(r => r.RelatedCodesCount);
             IEnumerable<CodeGroupInfo> codeGroupWithMaxCodeNumber = codeGroupInfos.Where(c => c.RelatedCodesCount == maxCodeCount);
@@ -78,16 +82,17 @@ namespace TOne.WhS.SupplierPriceList.Business
         public List<CodeGroupInfo> GetCodeGroupInfo(Dictionary<string, ImportedCodeInfo> importedCodeByCodeGroup)
         {
             var codeGroupInfos = new List<CodeGroupInfo>();
-            foreach (var code in importedCodeByCodeGroup)
+            foreach (var codeGroupInfoElt in importedCodeByCodeGroup)
             {
-                var codeValue = code.Value;
+                var codeValue = codeGroupInfoElt.Value;
                 CodeGroupInfo codeGroupInfo = new CodeGroupInfo
                 {
                     CountryId = codeValue.CountryId,
                     CodeGroup = codeValue.CodeGroup,
                     RelatedCodesCount = codeValue.ImportedCodes.Count
                 };
-                var exactMatchCode = codeValue.ImportedCodes.FirstOrDefault(c => c.Code.Equals(code.Key));
+                string codeGroup = codeGroupInfoElt.Key;
+                var exactMatchCode = codeValue.ImportedCodes.FirstOrDefault(c => c.Code.Equals(codeGroup));
 
                 codeGroupInfo.IsExactMatch = exactMatchCode != null;
                 codeGroupInfos.Add(codeGroupInfo);
@@ -122,38 +127,35 @@ namespace TOne.WhS.SupplierPriceList.Business
             foreach (var countryId in countryIds)
             {
                 string countryName = countryManager.GetCountryName(countryId);
-                int? bestMatchCount = GetBestMatch(countryName, zoneName);
+                int bestMatchCount = GetBestMatch(countryName, zoneName);
 
-                if (bestMatchCount == null)
+                if (bestMatchCount < 3)
                     continue;
                 if (!matchesCountByCountryName.ContainsKey(countryId))
-                    matchesCountByCountryName.Add(countryId, bestMatchCount.Value);
+                    matchesCountByCountryName.Add(countryId, bestMatchCount);
             }
-            var maxMatchCount = matchesCountByCountryName.Values.Max(c => c);
-            var matches = matchesCountByCountryName.Where(r => r.Value == maxMatchCount).Select(z => z.Key);
-
-            return matches;
-        }
-        private int? GetBestMatch(string countryName, string zoneName)
-        {
-            for (int i = 0; i < countryName.Length - 1; i++)
+            if (matchesCountByCountryName.Count > 0)
             {
-                for (int j = 0; j < zoneName.Length - 1; j++)
-                {
-                    if (i == countryName.Length)
-                        return j;
-
-                    string countryChar = countryName[i].ToString().ToLower();
-                    string zoneChar = zoneName[j].ToString().ToLower();
-
-                    if (countryChar.Equals(zoneChar))
-                        i++;
-                    else
-                        return j;
-                }
+                var maxMatchCount = matchesCountByCountryName.Values.Max(c => c);
+                return matchesCountByCountryName.Where(r => r.Value == maxMatchCount).Select(z => z.Key);
             }
             return null;
         }
+
+
+
+        private int GetBestMatch(string countryName, string zoneName)
+        {
+            var length = Math.Min(countryName.Length, zoneName.Length);
+            for (int i = 0; i < length; i++)
+            {
+                if (countryName[i].ToString().ToLower() != zoneName[i].ToString().ToLower())
+                    return i;
+            }
+            return length;
+        }
+
+
         private ExistingZonesByName StructureExistingZonesByName(IEnumerable<ExistingZone> existingZones)
         {
             ExistingZonesByName existingZonesByName = new ExistingZonesByName();
