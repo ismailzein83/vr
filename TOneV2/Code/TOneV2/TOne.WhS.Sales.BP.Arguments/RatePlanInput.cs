@@ -18,7 +18,7 @@ namespace TOne.WhS.Sales.BP.Arguments
 
         public DateTime EffectiveDate { get; set; }
 
-        public IEnumerable<int> AdditionalOwnerIds { get; set; }
+        public IEnumerable<int> SubscriberOwnerIds { get; set; }
 
         public override string EntityId
         {
@@ -33,6 +33,6 @@ namespace TOne.WhS.Sales.BP.Arguments
             return ratePlanInputManager.GetTitle(this.OwnerType, this.OwnerId);
         }
 
-        public bool FollowMasterRatesBED { get; set; }
+        public bool FollowPublisherRatesBED { get; set; }
     }
 }

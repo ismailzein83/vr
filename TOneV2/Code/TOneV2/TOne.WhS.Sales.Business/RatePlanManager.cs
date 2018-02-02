@@ -355,9 +355,9 @@ namespace TOne.WhS.Sales.Business
             return ratePlanSettings;
         }
 
-        public bool GetFollowMasterRatesBED()
+        public bool GetFollowPublisherRatesBED()
         {
-            return GetRatePlanSettingsData().FollowMasterRatesBED;
+            return GetRatePlanSettingsData().FollowPublisherRatesBED;
         }
 
         public SaleAreaSettingsData GetSaleAreaSettingsData()
@@ -486,16 +486,16 @@ namespace TOne.WhS.Sales.Business
             return array;
         }
 
-        public IEnumerable<CarrierAccountInfo> GetAdditionalOwners(GetAdditionalOwnersInput getAdditionalOwnersInput)
+        public IEnumerable<CarrierAccountInfo> GetSubscriberOwners(GetSubscriberOwnersInput getSubscriberOwnersInput)
         {
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            var sellingProductId = carrierAccountManager.GetSellingProductId(getAdditionalOwnersInput.OwnerId);
+            var sellingProductId = carrierAccountManager.GetSellingProductId(getSubscriberOwnersInput.OwnerId);
 
             Func<CarrierAccountInfo, bool> filterFunc = (carrierAccountInfo) =>
             {
-                if (getAdditionalOwnersInput.ExecludedOwnerIds != null && getAdditionalOwnersInput.ExecludedOwnerIds.Contains(carrierAccountInfo.CarrierAccountId))
+                if (getSubscriberOwnersInput.ExecludedOwnerIds != null && getSubscriberOwnersInput.ExecludedOwnerIds.Contains(carrierAccountInfo.CarrierAccountId))
                     return false;
-                else if (getAdditionalOwnersInput.OwnerId == carrierAccountInfo.CarrierAccountId)
+                else if (getSubscriberOwnersInput.OwnerId == carrierAccountInfo.CarrierAccountId)
                     return false;
                 return true;
             };
@@ -1667,7 +1667,7 @@ namespace TOne.WhS.Sales.Business
             }
         }
     }
-    public class GetAdditionalOwnersInput
+    public class GetSubscriberOwnersInput
     {
         public int OwnerId { get; set; }
         public List<int> ExecludedOwnerIds { get; set; }

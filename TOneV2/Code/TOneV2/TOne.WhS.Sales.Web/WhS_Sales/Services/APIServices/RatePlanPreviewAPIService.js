@@ -18,6 +18,9 @@
         function GetFilteredRatePreviews(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetFilteredRatePreviews"), input);
         }
+        function GetSubscriberPreviews(processInstanceId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetSubscriberPreviews"), { processInstanceId: processInstanceId });
+        }
         function GetFilteredCustomerRatePreviews(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetFilteredCustomerRatePreviews"), input);
         }
@@ -55,7 +58,8 @@
             GetDefaultServicePreview: GetDefaultServicePreview,
             GetFilteredChangedCustomerCountryPreviews: GetFilteredChangedCustomerCountryPreviews,
             GetFilteredNewCustomerCountryPreviews: GetFilteredNewCustomerCountryPreviews,
-            GetFilteredCustomerRatePreviews: GetFilteredCustomerRatePreviews
+            GetFilteredCustomerRatePreviews: GetFilteredCustomerRatePreviews,
+            GetSubscriberPreviews: GetSubscriberPreviews,
         };
     }
 

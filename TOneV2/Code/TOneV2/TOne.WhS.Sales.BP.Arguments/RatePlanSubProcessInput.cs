@@ -18,7 +18,7 @@ namespace TOne.WhS.Sales.BP.Arguments
 
         public int OwnerId { get; set; }
 
-        public bool IsAdditionalOwner { get; set; }
+        public bool IsSubscriberOwner { get; set; }
 
         public int CurrencyId { get; set; }
 
@@ -42,6 +42,6 @@ namespace TOne.WhS.Sales.BP.Arguments
             return ratePlanInputManager.GetTitle(this.OwnerType, this.OwnerId);
         }
 
-        public bool FollowMasterRatesBED { get; set; }
+        public bool FollowPublisherRatesBED { get; set; }
     }
 }

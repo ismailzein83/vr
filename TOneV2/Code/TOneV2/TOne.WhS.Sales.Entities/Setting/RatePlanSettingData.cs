@@ -16,6 +16,6 @@ namespace TOne.WhS.Sales.Entities
 
         public PeriodTypeEnum TQIPeriodType { get; set; }
 
-        public bool FollowMasterRatesBED { get; set; }
+        public bool FollowPublisherRatesBED { get; set; }
     }
 }

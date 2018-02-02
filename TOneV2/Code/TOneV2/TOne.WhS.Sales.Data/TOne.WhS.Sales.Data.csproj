@@ -79,6 +79,7 @@
     <Compile Include="ISaleEntityRoutingProductDataManager.cs" />
     <Compile Include="ISaleZoneRoutingProductPreviewDataManager.cs" />
     <Compile Include="ISaleZoneServicePreviewDataManager.cs" />
+    <Compile Include="ISubscriberPreviewDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SalesDataManagerFactory.cs" />
   </ItemGroup>

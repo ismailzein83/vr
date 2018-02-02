@@ -10,6 +10,10 @@
         var processInstanceId;
         var ownerType;
         var ownerId;
+
+        var subscriberPreviewDirectiveAPI;
+        var subscriberPreviewDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+
         var ratePreviewGridAPI;
         var ratePreviewGridReadyDeferred = UtilsService.createPromiseDeferred();
         var customeRatePreviewGridReadyDeferred = UtilsService.createPromiseDeferred();
@@ -41,6 +45,8 @@
 
         var customerSaleZoneRoutingProductPreviewGridAPI;
         var customerSaleZoneRoutingProductGridReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var tabsAPI;
         loadParameters();
         defineScope();
         load();
@@ -60,6 +66,7 @@
             $scope.scopeModel.countryTab = { showTab: false };
             $scope.scopeModel.tabCustomerRPObject = { showTab: false };
             $scope.scopeModel.tabCustomerRateObject = { showTab: false };
+            $scope.scopeModel.tabSubscriberPreview = { showTab: false };
             $scope.scopeModel.showCustomerRateMsg = false;
             $scope.scopeModel.showCustomerRPMsg = false;
             $scope.scopeModel.showProductRateMsg = false;
@@ -81,6 +88,10 @@
             $scope.scopeModel.onCustomerRatePreviewGridReady = function (api) {
                 ratePreviewGridAPI = api;
                 customeRatePreviewGridReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onSubscriberPreviewDirectiveReady = function (api) {
+                subscriberPreviewDirectiveAPI = api;
+                subscriberPreviewDirectiveReadyDeferred.resolve();
             };
             $scope.scopeModel.onRatePreviewGridReady = function (api) {
                 productRatePreviewGridAPI = api;
@@ -109,6 +120,13 @@
                     }
                 });
                 VRUIUtilsService.callDirectiveLoad(ratePreviewGridAPI, ratePreviewGridPayload, undefined);
+            };
+
+            $scope.scopeModel.loadSubscriberPreview = function () {
+                var subscriberPreviewPayload = {
+                    ProcessInstanceId: processInstanceId,
+                };
+                VRUIUtilsService.callDirectiveLoad(subscriberPreviewDirectiveAPI, subscriberPreviewPayload, undefined);
             };
 
             $scope.scopeModel.loadNewCountryPreview = function () {
@@ -190,6 +208,10 @@
 
             };
 
+            $scope.scopeModel.onTabsReady = function (api) {
+                tabsAPI = api;
+            };
+
             $scope.scopeModel.onSummaryServiceViewerReady = function (api) {
                 summaryServiceViewerAPI = api;
                 summaryServiceViewerReadyDeferred.resolve();
@@ -245,11 +267,16 @@
                 loadCustomerRoutingProductPreview,
                 loadNewCountryPreview,
                 loadChangedCountryPreviewGrid,
-
+                loadSubscriberPreviewDirective,
                 loadSaleZoneRoutingProductPreviewGrid,
                 loadProductRatePreviewGrid,
             ])
                 .then(function () {
+                    if (subscriberPreviewDirectiveAPI.hasData())
+                        $scope.scopeModel.tabSubscriberPreview.showTab = true;
+                    else {
+                        tabsAPI.setTabSelected(1);
+                    }
                     if (customerSaleZoneRoutingProductPreviewGridAPI.gridHasData())
                         $scope.scopeModel.tabCustomerRPObject.showTab = true;
                     else {
@@ -503,6 +530,22 @@
             });
             return loadChangedCountryPreviewPromiseDeffered.promise;
         }
+        // #endregion
+
+        // #region SubscriberPreview
+        function loadSubscriberPreviewDirective() {
+            var loadSubscriberPreviewPromiseDeffered = UtilsService.createPromiseDeferred();
+            var ownerIds = [ownerId];
+            subscriberPreviewDirectiveReadyDeferred.promise.then(function () {
+                var subscriberPreviewPayload = {
+                    ProcessInstanceId: processInstanceId,
+                };
+                VRUIUtilsService.callDirectiveLoad(subscriberPreviewDirectiveAPI, subscriberPreviewPayload, loadSubscriberPreviewPromiseDeffered);
+            });
+
+            return loadSubscriberPreviewPromiseDeffered.promise;
+        }
+
         // #endregion
 
 

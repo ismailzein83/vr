@@ -36,6 +36,14 @@ namespace TOne.WhS.Sales.Web.Controllers
             return GetWebResponse(input, manager.GetFilteredRatePreviews(input));
         }
 
+        [HttpGet]
+        [Route("GetSubscriberPreviews")]
+        public SubscriberPreviewObject GetSubscriberPreviews(long processInstanceId)
+        {
+            var manager = new SubscriberPreviewManager();
+            return manager.GetSubscriberPreview(processInstanceId);
+        }
+
         [HttpPost]
         [Route("GetFilteredSaleZoneRoutingProductPreviews")]
         public object GetFilteredSaleZoneRoutingProductPreviews(Vanrise.Entities.DataRetrievalInput<RatePlanPreviewQuery> input)

@@ -162,7 +162,7 @@
       <Variable x:TypeArguments="twse:AllDataByZone" Name="AllDataByZone" />
       <Variable x:TypeArguments="scg:Dictionary(x:Int32, scg:List(twbe:NewPriceList))" Name="CustomerPriceListsByCurrencyId" />
       <Variable x:TypeArguments="s:Nullable(x:Int32)" Name="ReservedOwnerPriceListId" />
-      <Variable x:TypeArguments="scg:Dictionary(x:Int32, x:Boolean)" Name="AdditionalOwnerHasChangesByOwnerId">
+      <Variable x:TypeArguments="scg:Dictionary(x:Int32, x:Boolean)" Name="SubscriberOwnerHasChangesByOwnerId">
         <Variable.Default>
           <mca:CSharpValue x:TypeArguments="scg:Dictionary(x:Int32, x:Boolean)">new Dictionary&lt;int, bool&gt;()</mca:CSharpValue>
         </Variable.Default>
@@ -175,7 +175,7 @@
         </Variable.Default>
       </Variable>
       <Variable x:TypeArguments="x:Int32" Name="RemainingCustomerCount" />
-      <Variable x:TypeArguments="x:String" Name="MasterOwnerName" />
+      <Variable x:TypeArguments="x:String" Name="PublisherOwnerName" />
     </Sequence.Variables>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_22" Message="Read rate plan changes.">
       <vbw:WriteTrackingMessage.Severity>
@@ -201,12 +201,12 @@
         </InArgument>
       </twsba1:GetChanges.OwnerType>
     </twsba1:GetChanges>
-    <twsba1:GetOwnerName sap2010:WorkflowViewState.IdRef="GetOwnerName_1" IsAdditional="False">
-      <twsba1:GetOwnerName.AdditionalOwnerIds>
+    <twsba1:GetOwnerName sap2010:WorkflowViewState.IdRef="GetOwnerName_1" IsSubscriber="False">
+      <twsba1:GetOwnerName.SubscriberOwnerIds>
         <InArgument x:TypeArguments="scg:IEnumerable(x:Int32)">
-          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:Int32)">Input.AdditionalOwnerIds</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:Int32)">Input.SubscriberOwnerIds</mca:CSharpValue>
         </InArgument>
-      </twsba1:GetOwnerName.AdditionalOwnerIds>
+      </twsba1:GetOwnerName.SubscriberOwnerIds>
       <twsba1:GetOwnerName.OwnerId>
         <InArgument x:TypeArguments="x:Int32">
           <mca:CSharpValue x:TypeArguments="x:Int32">Input.OwnerId</mca:CSharpValue>
@@ -214,7 +214,7 @@
       </twsba1:GetOwnerName.OwnerId>
       <twsba1:GetOwnerName.OwnerName>
         <OutArgument x:TypeArguments="x:String">
-          <mca:CSharpReference x:TypeArguments="x:String">MasterOwnerName</mca:CSharpReference>
+          <mca:CSharpReference x:TypeArguments="x:String">PublisherOwnerName</mca:CSharpReference>
         </OutArgument>
       </twsba1:GetOwnerName.OwnerName>
       <twsba1:GetOwnerName.OwnerType>
@@ -222,11 +222,12 @@
           <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
         </InArgument>
       </twsba1:GetOwnerName.OwnerType>
-    </twsba1:GetOwnerName>
+    
+  </twsba1:GetOwnerName>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_28">
       <vbw:WriteTrackingMessage.Message>
         <InArgument x:TypeArguments="x:String">
-          <mca:CSharpValue x:TypeArguments="x:String">string.Format("Started rate planning process for {0}.", MasterOwnerName)</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="x:String">string.Format("Started rate planning process for {0}.", PublisherOwnerName)</mca:CSharpValue>
         </InArgument>
       </vbw:WriteTrackingMessage.Message>
       <vbw:WriteTrackingMessage.Severity>
@@ -242,12 +243,12 @@
             {
                 OwnerId=Input.OwnerId,
                 OwnerType=Input.OwnerType,
-                IsAdditionalOwner = false,
+                IsSubscriberOwner = false,
                 CurrencyId=Input.CurrencyId,
                 EffectiveDate=Input.EffectiveDate,
                 Changes=Changes,
                 UserId=Input.UserId,
-                FollowMasterRatesBED = Input.FollowMasterRatesBED,
+                FollowPublisherRatesBED = Input.FollowPublisherRatesBED,
             }</mca:CSharpValue>
         </InArgument>
       </local:RatePlanSubProcess.Input>
@@ -260,7 +261,7 @@
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_30">
       <vbw:WriteTrackingMessage.Message>
         <InArgument x:TypeArguments="x:String">
-          <mca:CSharpValue x:TypeArguments="x:String">string.Format("Finished rate planning process for {0}.", MasterOwnerName)</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="x:String">string.Format("Finished rate planning process for {0}.", PublisherOwnerName)</mca:CSharpValue>
         </InArgument>
       </vbw:WriteTrackingMessage.Message>
       <vbw:WriteTrackingMessage.Severity>
@@ -292,7 +293,7 @@
           <If sap2010:WorkflowViewState.IdRef="If_16">
             <If.Condition>
               <InArgument x:TypeArguments="x:Boolean">
-                <mca:CSharpValue x:TypeArguments="x:Boolean">Input.AdditionalOwnerIds != null</mca:CSharpValue>
+                <mca:CSharpValue x:TypeArguments="x:Boolean">Input.SubscriberOwnerIds != null</mca:CSharpValue>
               </InArgument>
             </If.Condition>
             <If.Then>
@@ -305,33 +306,33 @@
                   </Assign.To>
                   <Assign.Value>
                     <InArgument x:TypeArguments="x:Int32">
-                      <mca:CSharpValue x:TypeArguments="x:Int32">Input.AdditionalOwnerIds.Count()</mca:CSharpValue>
+                      <mca:CSharpValue x:TypeArguments="x:Int32">Input.SubscriberOwnerIds.Count()</mca:CSharpValue>
                     </InArgument>
                   </Assign.Value>
                 </Assign>
                 <ParallelForEach x:TypeArguments="x:Int32" DisplayName="ParallelForEach&lt;Int32&gt;" sap2010:WorkflowViewState.IdRef="ParallelForEach`1_1">
                   <ParallelForEach.Values>
                     <InArgument x:TypeArguments="scg:IEnumerable(x:Int32)">
-                      <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:Int32)">Input.AdditionalOwnerIds</mca:CSharpValue>
+                      <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:Int32)">Input.SubscriberOwnerIds</mca:CSharpValue>
                     </InArgument>
                   </ParallelForEach.Values>
                   <ActivityAction x:TypeArguments="x:Int32">
                     <ActivityAction.Argument>
-                      <DelegateInArgument x:TypeArguments="x:Int32" Name="additionalOwnerId" />
+                      <DelegateInArgument x:TypeArguments="x:Int32" Name="subscriberOwnerId" />
                     </ActivityAction.Argument>
-                    <Sequence DisplayName="AdditionalCustomersProcessing" sap2010:WorkflowViewState.IdRef="Sequence_17">
+                    <Sequence DisplayName="SubscriberCustomersProcessing" sap2010:WorkflowViewState.IdRef="Sequence_17">
                       <Sequence.Variables>
                         <Variable x:TypeArguments="x:String" Name="ProcessingCustomerName" />
                       </Sequence.Variables>
-                      <twsba1:GetOwnerName sap2010:WorkflowViewState.IdRef="GetOwnerName_2" IsAdditional="True">
-                        <twsba1:GetOwnerName.AdditionalOwnerIds>
+                      <twsba1:GetOwnerName sap2010:WorkflowViewState.IdRef="GetOwnerName_2" IsSubscriber="True">
+                        <twsba1:GetOwnerName.SubscriberOwnerIds>
                           <InArgument x:TypeArguments="scg:IEnumerable(x:Int32)">
-                            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:Int32)">Input.AdditionalOwnerIds</mca:CSharpValue>
+                            <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:Int32)">Input.SubscriberOwnerIds</mca:CSharpValue>
                           </InArgument>
-                        </twsba1:GetOwnerName.AdditionalOwnerIds>
+                        </twsba1:GetOwnerName.SubscriberOwnerIds>
                         <twsba1:GetOwnerName.OwnerId>
                           <InArgument x:TypeArguments="x:Int32">
-                            <mca:CSharpValue x:TypeArguments="x:Int32">additionalOwnerId</mca:CSharpValue>
+                            <mca:CSharpValue x:TypeArguments="x:Int32">subscriberOwnerId</mca:CSharpValue>
                           </InArgument>
                         </twsba1:GetOwnerName.OwnerId>
                         <twsba1:GetOwnerName.OwnerName>
@@ -344,7 +345,8 @@
                             <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
                           </InArgument>
                         </twsba1:GetOwnerName.OwnerType>
-                      </twsba1:GetOwnerName>
+                      
+                    </twsba1:GetOwnerName>
                       <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_23">
                         <vbw:WriteTrackingMessage.Message>
                           <InArgument x:TypeArguments="x:String">
@@ -362,15 +364,15 @@
                           <InArgument x:TypeArguments="vbe:BaseProcessInputArgument">
                             <mca:CSharpValue x:TypeArguments="vbe:BaseProcessInputArgument" xml:space="preserve">new RatePlanSubProcessInput
             {
-                OwnerId = additionalOwnerId,
+                OwnerId = subscriberOwnerId,
                 OwnerType = TOne.WhS.BusinessEntity.Entities.SalePriceListOwnerType.Customer,
-                IsAdditionalOwner = true,
+                IsSubscriberOwner = true,
                 CurrencyId = Input.CurrencyId,
                 EffectiveDate = Input.EffectiveDate,
                 Changes = Changes,
                 UserId = Input.UserId,
                 OwnerName = ProcessingCustomerName,
-                FollowMasterRatesBED = Input.FollowMasterRatesBED,
+                FollowPublisherRatesBED = Input.FollowPublisherRatesBED,
             }</mca:CSharpValue>
                           </InArgument>
                         </vbw:RunProcess.Input>
@@ -398,11 +400,11 @@
                                 <AddToCollection x:TypeArguments="scg:KeyValuePair(x:Int32, x:Boolean)" DisplayName="AddToCollection&lt;KeyValuePair&lt;Int32,Boolean&gt;&gt;" sap2010:WorkflowViewState.IdRef="AddToCollection`1_9">
                                   <AddToCollection.Item>
                                     <InArgument x:TypeArguments="scg:KeyValuePair(x:Int32, x:Boolean)">
-                                      <mca:CSharpValue x:TypeArguments="scg:KeyValuePair(x:Int32, x:Boolean)">new KeyValuePair&lt;int,bool&gt;(additionalOwnerId,(SubProcessEventPayload.ProcessOutput as RatePlanSubProcessOutput).ContinueRatePlanProcess)</mca:CSharpValue>
+                                      <mca:CSharpValue x:TypeArguments="scg:KeyValuePair(x:Int32, x:Boolean)">new KeyValuePair&lt;int,bool&gt;(subscriberOwnerId,(SubProcessEventPayload.ProcessOutput as RatePlanSubProcessOutput).ContinueRatePlanProcess)</mca:CSharpValue>
                                     </InArgument>
                                   </AddToCollection.Item>
                                   <InArgument x:TypeArguments="scg:ICollection(scg:KeyValuePair(x:Int32, x:Boolean))">
-                                    <mca:CSharpValue x:TypeArguments="scg:ICollection(scg:KeyValuePair(x:Int32, x:Boolean))">AdditionalOwnerHasChangesByOwnerId</mca:CSharpValue>
+                                    <mca:CSharpValue x:TypeArguments="scg:ICollection(scg:KeyValuePair(x:Int32, x:Boolean))">SubscriberOwnerHasChangesByOwnerId</mca:CSharpValue>
                                   </InArgument>
                                 </AddToCollection>
                                 <twsba1:AppendPricelistFileIds sap2010:WorkflowViewState.IdRef="AppendPricelistFileIds_3">
@@ -499,7 +501,7 @@
                   <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_25">
                     <vbw:WriteTrackingMessage.Message>
                       <InArgument x:TypeArguments="x:String">
-                        <mca:CSharpValue x:TypeArguments="x:String">string.Format("Creating Backup for {0}.", MasterOwnerName)</mca:CSharpValue>
+                        <mca:CSharpValue x:TypeArguments="x:String">string.Format("Creating Backup for {0}.", PublisherOwnerName)</mca:CSharpValue>
                       </InArgument>
                     </vbw:WriteTrackingMessage.Message>
                     <vbw:WriteTrackingMessage.Severity>
@@ -508,7 +510,7 @@
                       </InArgument>
                     </vbw:WriteTrackingMessage.Severity>
                   </vbw:WriteTrackingMessage>
-                  <twsba1:BackupData MasterOwnerId="{x:Null}" sap2010:WorkflowViewState.IdRef="BackupData_2">
+                  <twsba1:BackupData PublisherOwnerId="{x:Null}" sap2010:WorkflowViewState.IdRef="BackupData_2">
                     <twsba1:BackupData.OwnerId>
                       <InArgument x:TypeArguments="x:Int32">
                         <mca:CSharpValue x:TypeArguments="x:Int32">Input.OwnerId</mca:CSharpValue>
@@ -550,7 +552,7 @@
                   <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_19">
                     <vbw:WriteTrackingMessage.Message>
                       <InArgument x:TypeArguments="x:String">
-                        <mca:CSharpValue x:TypeArguments="x:String">string.Format("Finished Backup for {0}.", MasterOwnerName)</mca:CSharpValue>
+                        <mca:CSharpValue x:TypeArguments="x:String">string.Format("Finished Backup for {0}.", PublisherOwnerName)</mca:CSharpValue>
                       </InArgument>
                     </vbw:WriteTrackingMessage.Message>
                     <vbw:WriteTrackingMessage.Severity>
@@ -562,7 +564,7 @@
                   <If sap2010:WorkflowViewState.IdRef="If_17">
                     <If.Condition>
                       <InArgument x:TypeArguments="x:Boolean">
-                        <mca:CSharpValue x:TypeArguments="x:Boolean">Input.AdditionalOwnerIds != null</mca:CSharpValue>
+                        <mca:CSharpValue x:TypeArguments="x:Boolean">Input.SubscriberOwnerIds != null</mca:CSharpValue>
                       </InArgument>
                     </If.Condition>
                     <If.Then>
@@ -575,21 +577,21 @@
                           </Assign.To>
                           <Assign.Value>
                             <InArgument x:TypeArguments="x:Int32">
-                              <mca:CSharpValue x:TypeArguments="x:Int32">AdditionalOwnerHasChangesByOwnerId.Count(item =&gt; item.Value == true)</mca:CSharpValue>
+                              <mca:CSharpValue x:TypeArguments="x:Int32">SubscriberOwnerHasChangesByOwnerId.Count(item =&gt; item.Value == true)</mca:CSharpValue>
                             </InArgument>
                           </Assign.Value>
                         </Assign>
                         <ForEach x:TypeArguments="x:Int32" DisplayName="ForEach&lt;Int32&gt;" sap2010:WorkflowViewState.IdRef="ForEach`1_3">
                           <ForEach.Values>
                             <InArgument x:TypeArguments="scg:IEnumerable(x:Int32)">
-                              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:Int32)">Input.AdditionalOwnerIds</mca:CSharpValue>
+                              <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:Int32)">Input.SubscriberOwnerIds</mca:CSharpValue>
                             </InArgument>
                           </ForEach.Values>
                           <ActivityAction x:TypeArguments="x:Int32">
                             <ActivityAction.Argument>
-                              <DelegateInArgument x:TypeArguments="x:Int32" Name="additionalOwnerId" />
+                              <DelegateInArgument x:TypeArguments="x:Int32" Name="subscriberOwnerId" />
                             </ActivityAction.Argument>
-                            <Sequence DisplayName="AdditionalOwnersBackup" sap2010:WorkflowViewState.IdRef="Sequence_21">
+                            <Sequence DisplayName="SubscriberOwnersBackup" sap2010:WorkflowViewState.IdRef="Sequence_21">
                               <Sequence.Variables>
                                 <Variable x:TypeArguments="x:Boolean" Default="False" Name="ownerHasChanges" />
                                 <Variable x:TypeArguments="x:String" Name="BackupCustomerName" />
@@ -597,20 +599,20 @@
                               <If sap2010:WorkflowViewState.IdRef="If_19">
                                 <If.Condition>
                                   <InArgument x:TypeArguments="x:Boolean">
-                                    <mca:CSharpValue x:TypeArguments="x:Boolean">AdditionalOwnerHasChangesByOwnerId.TryGetValue(additionalOwnerId,out ownerHasChanges) &amp;&amp; ownerHasChanges</mca:CSharpValue>
+                                    <mca:CSharpValue x:TypeArguments="x:Boolean">SubscriberOwnerHasChangesByOwnerId.TryGetValue(subscriberOwnerId,out ownerHasChanges) &amp;&amp; ownerHasChanges</mca:CSharpValue>
                                   </InArgument>
                                 </If.Condition>
                                 <If.Then>
                                   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_20">
-                                    <twsba1:GetOwnerName sap2010:WorkflowViewState.IdRef="GetOwnerName_3" IsAdditional="True">
-                                      <twsba1:GetOwnerName.AdditionalOwnerIds>
+                                    <twsba1:GetOwnerName sap2010:WorkflowViewState.IdRef="GetOwnerName_3" IsSubscriber="True">
+                                      <twsba1:GetOwnerName.SubscriberOwnerIds>
                                         <InArgument x:TypeArguments="scg:IEnumerable(x:Int32)">
-                                          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:Int32)">Input.AdditionalOwnerIds</mca:CSharpValue>
+                                          <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:Int32)">Input.SubscriberOwnerIds</mca:CSharpValue>
                                         </InArgument>
-                                      </twsba1:GetOwnerName.AdditionalOwnerIds>
+                                      </twsba1:GetOwnerName.SubscriberOwnerIds>
                                       <twsba1:GetOwnerName.OwnerId>
                                         <InArgument x:TypeArguments="x:Int32">
-                                          <mca:CSharpValue x:TypeArguments="x:Int32">additionalOwnerId</mca:CSharpValue>
+                                          <mca:CSharpValue x:TypeArguments="x:Int32">subscriberOwnerId</mca:CSharpValue>
                                         </InArgument>
                                       </twsba1:GetOwnerName.OwnerId>
                                       <twsba1:GetOwnerName.OwnerName>
@@ -623,7 +625,8 @@
                                           <mca:CSharpValue x:TypeArguments="twbe:SalePriceListOwnerType">Input.OwnerType</mca:CSharpValue>
                                         </InArgument>
                                       </twsba1:GetOwnerName.OwnerType>
-                                    </twsba1:GetOwnerName>
+                                    
+                                  </twsba1:GetOwnerName>
                                     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_18">
                                       <vbw:WriteTrackingMessage.Message>
                                         <InArgument x:TypeArguments="x:String">
@@ -637,14 +640,14 @@
                                       </vbw:WriteTrackingMessage.Severity>
                                     </vbw:WriteTrackingMessage>
                                     <twsba1:BackupData sap2010:WorkflowViewState.IdRef="BackupData_3">
-                                      <twsba1:BackupData.MasterOwnerId>
+                                      <twsba1:BackupData.PublisherOwnerId>
                                         <InArgument x:TypeArguments="s:Nullable(x:Int32)">
                                           <mca:CSharpValue x:TypeArguments="s:Nullable(x:Int32)">Input.OwnerId</mca:CSharpValue>
                                         </InArgument>
-                                      </twsba1:BackupData.MasterOwnerId>
+                                      </twsba1:BackupData.PublisherOwnerId>
                                       <twsba1:BackupData.OwnerId>
                                         <InArgument x:TypeArguments="x:Int32">
-                                          <mca:CSharpValue x:TypeArguments="x:Int32">additionalOwnerId</mca:CSharpValue>
+                                          <mca:CSharpValue x:TypeArguments="x:Int32">subscriberOwnerId</mca:CSharpValue>
                                         </InArgument>
                                       </twsba1:BackupData.OwnerId>
                                       <twsba1:BackupData.OwnerType>
@@ -666,7 +669,7 @@
                                     <twsba1:SetStateBackupIdForOwnerPricelists sap2010:WorkflowViewState.IdRef="SetStateBackupIdForOwnerPricelists_2">
                                       <twsba1:SetStateBackupIdForOwnerPricelists.OwnerId>
                                         <InArgument x:TypeArguments="x:Int32">
-                                          <mca:CSharpValue x:TypeArguments="x:Int32">additionalOwnerId</mca:CSharpValue>
+                                          <mca:CSharpValue x:TypeArguments="x:Int32">subscriberOwnerId</mca:CSharpValue>
                                         </InArgument>
                                       </twsba1:SetStateBackupIdForOwnerPricelists.OwnerId>
                                       <twsba1:SetStateBackupIdForOwnerPricelists.OwnerType>

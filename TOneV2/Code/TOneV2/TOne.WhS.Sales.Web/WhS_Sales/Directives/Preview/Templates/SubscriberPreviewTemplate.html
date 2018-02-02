@@ -1,0 +1,24 @@
+﻿<vr-row>
+    <vr-columns width="1/4row">
+        <vr-label>Success: </vr-label>
+        <vr-label isvalue>{{scopeModel.numberOfSubscriberWithSuccessStatus}}</vr-label>
+    </vr-columns>
+    <vr-columns width="1/4row">
+        <vr-label>No Change: </vr-label>
+        <vr-label isvalue>{{scopeModel.numberOfSubscriberWithNoChangeStatus}}</vr-label>
+    </vr-columns>
+    <vr-columns width="1/4row">
+        <vr-label>Failed: </vr-label>
+        <vr-label isvalue>{{scopeModel.numberOfSubscriberWithFailedStatus}}</vr-label>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-datagrid datasource="scopeModel.subscriberPreviews"
+                 pagingtype="'PagingOnScroll'"
+                 on-ready="scopeModel.onGridReady">
+        <vr-datagridcolumn headertext="'Subscriber'" field="'SubscriberName'" widthfactor="3" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Status'" field="'SubscriberStatusDescription'" widthfactor="2" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Description'" field="'Entity.Description'" type="'Text'" widthfactor="7" expendablecolumn expendablecolumndescription="'Entity.Description'"></vr-datagridcolumn>
+
+    </vr-datagrid>
+</vr-row>

@@ -25,9 +25,9 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
                 var description = String.Format("Backup for customer {0}", carrierAccountManager.GetCarrierAccountName(backupData.OwnerId));
-                if (backupData.MasterOwnerId.HasValue)
+                if (backupData.PublisherOwnerId.HasValue)
                 {
-                    string test = String.Format(" copy from master customer {0}", carrierAccountManager.GetCarrierAccountName(backupData.MasterOwnerId.Value));
+                    string test = String.Format(" copy from publisher customer {0}", carrierAccountManager.GetCarrierAccountName(backupData.PublisherOwnerId.Value));
                     description = string.Concat(description, test);
                 }
                 return description;

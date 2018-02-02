@@ -36,7 +36,7 @@ namespace TOne.WhS.Sales.BP.Activities
         [RequiredArgument]
         public InArgument<Dictionary<int, List<NewPriceList>>> CustomerPriceListsByCurrencyId { get; set; }
 
-        public InArgument<bool> IsAdditional { get; set; }
+        public InArgument<bool> IsSubscriber { get; set; }
         #endregion
 
         #region Output Arguments
@@ -63,7 +63,7 @@ namespace TOne.WhS.Sales.BP.Activities
             int currencyId = CurrencyId.Get(context);
             Dictionary<int, List<NewPriceList>> customerPriceListsByCurrencyId = CustomerPriceListsByCurrencyId.Get(context);
             int? reservedOwnerPriceListId = ReservedOwnerPriceListId.Get(context);
-            bool isAdditional = IsAdditional.Get(context);
+            bool isSubscriber = IsSubscriber.Get(context);
             #endregion
 
             Dictionary<int, List<DataByZone>> importedZonesByCountryId = this.StructureImportedZonesByCountryId(dataByZones);
@@ -166,7 +166,7 @@ namespace TOne.WhS.Sales.BP.Activities
                             SaleCodesByZoneId = saleCodesByZoneId,
                             CurrencyId = ratePlanContext.CurrencyId,
                             RoutingProductEffectiveLocator = effectiveRoutingProductLocator,
-                            IsAdditional = isAdditional
+                            IsSubscriber = isSubscriber
                         };
 
                         this.GetChangesForNewCountries(customerNewCountriesContext);
@@ -192,7 +192,7 @@ namespace TOne.WhS.Sales.BP.Activities
                             SaleCodesByZoneId = saleCodesByZoneId,
                             CurrencyId = ratePlanContext.CurrencyId,
                             ActionDatesByZoneId = existingDataInfo.ActionDatesByZoneId,
-                            IsAdditional = isAdditional
+                            IsSubscriber = isSubscriber
                         };
 
                         this.GetChangesForCountriesToClose(customerCountriesToCloseContext);
@@ -509,7 +509,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
                     }
 
-                    if (!context.IsAdditional)
+                    if (!context.IsSubscriber)
                     {
                         IEnumerable<SaleCode> zoneCodes = context.SaleCodesByZoneId.GetRecord(zoneId);
                         if (zoneCodes == null)
@@ -613,7 +613,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
                     #region Get Code Changes
 
-                    if (!context.IsAdditional)
+                    if (!context.IsSubscriber)
                     {
                         IEnumerable<SaleCode> zoneCodes = context.SaleCodesByZoneId.GetRecord(zoneId);
                         if (zoneCodes == null)
@@ -1240,7 +1240,7 @@ namespace TOne.WhS.Sales.BP.Activities
             public DateTime MinimumDate { get; set; }
             public int CurrencyId { get; set; }
             public SaleEntityZoneRoutingProductLocator RoutingProductEffectiveLocator { get; set; }
-            public bool IsAdditional { get; set; }
+            public bool IsSubscriber { get; set; }
             #endregion
 
             #region Output Arguments
@@ -1270,7 +1270,7 @@ namespace TOne.WhS.Sales.BP.Activities
             public DateTime ProcessEffectiveDate { get; set; }
             public int CurrencyId { get; set; }
 
-            public bool IsAdditional { get; set; }
+            public bool IsSubscriber { get; set; }
             #endregion
 
             #region Output Arguments

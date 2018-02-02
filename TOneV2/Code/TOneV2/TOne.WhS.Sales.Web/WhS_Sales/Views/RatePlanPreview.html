@@ -1,8 +1,15 @@
 ﻿<div vr-modalcontent ng-controller="WhS_Sales_RatePlanPreviewController" width="'65%'" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formRatePlanPreview">
-            <vr-tabs>
+            <vr-tabs on-ready="scopeModel.onTabsReady">
 
+                <vr-tab header="'Summary'" tabobject="scopeModel.tabSubscriberPreview">
+                    <span ng-show="scopeModel.tabSubscriberPreview.showTab">
+                        <row>
+                            <vr-whs-sales-subscriberpreview-directive on-ready="scopeModel.onSubscriberPreviewDirectiveReady"></vr-whs-sales-subscriberpreview-directive>
+                        </row>
+                    </span>
+                </vr-tab>
                 <vr-tab header="'Customer Rates'">
                     <span ng-show="scopeModel.tabCustomerRateObject.showTab">
                         <vr-row>
@@ -35,7 +42,7 @@
                                     <vr-label isvalue>{{scopeModel.numberOfDecreasedRates}}</vr-label>
                                 </vr-columns>
                             </vr-columns>
-                            
+
                         </vr-row>
                         <vr-row>
                             <vr-columns width="fullrow">

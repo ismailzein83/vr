@@ -82,6 +82,7 @@
     <Compile Include="SaleEntityRoutingProductDataManager.cs" />
     <Compile Include="SaleZoneRoutingProductPreviewDataManager.cs" />
     <Compile Include="SaleZoneServicePreviewDataManager.cs" />
+    <Compile Include="SubscriberPreviewDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.Data.SQL\TOne.Data.SQL.csproj">

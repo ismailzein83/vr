@@ -179,11 +179,11 @@ namespace TOne.WhS.Sales.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetFollowMasterRatesBED")]
-        public bool GetFollowMasterRatesBED()
+        [Route("GetFollowPublisherRatesBED")]
+        public bool GetFollowPublisherRatesBED()
         {
             var manager = new RatePlanManager();
-            return manager.GetFollowMasterRatesBED();
+            return manager.GetFollowPublisherRatesBED();
         }
 
         [HttpGet]
@@ -210,11 +210,11 @@ namespace TOne.WhS.Sales.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetDraftAdditionalOwnerEntities")]
-        public List<AdditionalOwnerEntity> GetDraftAdditionalOwnerEntities(SalePriceListOwnerType ownerType, int ownerId)
+        [Route("GetDraftSubscriberOwnerEntities")]
+        public List<SubscriberOwnerEntity> GetDraftSubscriberOwnerEntities(SalePriceListOwnerType ownerType, int ownerId)
         {
             var manager = new RatePlanDraftManager();
-            return manager.GetDraftAdditionalOwnerEntities(ownerType, ownerId);
+            return manager.GetDraftSubscriberOwnerEntities(ownerType, ownerId);
         }
 
         [HttpPost]
@@ -306,10 +306,10 @@ namespace TOne.WhS.Sales.Web.Controllers
         }
 
         [HttpPost]
-        [Route("GetAdditionalOwners")]
-        public IEnumerable<CarrierAccountInfo> GetAdditionalOwners(GetAdditionalOwnersInput getAdditionalOwnersInput)
+        [Route("GetSubscriberOwners")]
+        public IEnumerable<CarrierAccountInfo> GetSubscriberOwners(GetSubscriberOwnersInput getSubscriberOwnersInput)
         {
-            return new RatePlanManager().GetAdditionalOwners(getAdditionalOwnersInput);
+            return new RatePlanManager().GetSubscriberOwners(getSubscriberOwnersInput);
         }
         
     }

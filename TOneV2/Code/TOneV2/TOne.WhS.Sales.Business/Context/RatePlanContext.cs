@@ -121,7 +121,7 @@ namespace TOne.WhS.Sales.Business
 
         #endregion
 
-        public bool IsAdditionalOwner { get; set; }
+        public bool IsSubscriberOwner { get; set; }
         public long RootProcessInstanceId { get; set; }
     }
 
@@ -152,7 +152,7 @@ namespace TOne.WhS.Sales.Business
         IEnumerable<DataByZone> DataByZoneList { get; }
         string DateFormat { get; }
         DateTime PriceListCreationDate { get; }
-        bool IsAdditionalOwner { get; }
+        bool IsSubscriberOwner { get; }
         long RootProcessInstanceId { get; }
 
         #endregion

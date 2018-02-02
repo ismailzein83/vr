@@ -46,6 +46,9 @@
     <Reference Include="Vanrise.BusinessProcess">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.BusinessProcess.Business">
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.BusinessProcess.Entities">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
     </Reference>
@@ -94,6 +97,7 @@
     <Compile Include="GetExistingCustomerCountries.cs" />
     <Compile Include="FillArgumentFromContext.cs" />
     <Compile Include="GetZonesWithMissingRates.cs" />
+    <Compile Include="InsertSubscriberPreview.cs" />
     <Compile Include="LogEmailedCustomers.cs" />
     <Compile Include="NotificationContext.cs" />
     <Compile Include="GetOwnerName.cs" />

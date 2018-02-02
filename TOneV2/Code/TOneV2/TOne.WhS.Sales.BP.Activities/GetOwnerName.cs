@@ -18,10 +18,10 @@ namespace TOne.WhS.Sales.BP.Activities
         public InArgument<SalePriceListOwnerType> OwnerType { get; set; }
 
         [RequiredArgument]
-        public InArgument<IEnumerable<int>> AdditionalOwnerIds { get; set; }
+        public InArgument<IEnumerable<int>> SubscriberOwnerIds { get; set; }
 
         [RequiredArgument]
-        public InArgument<bool> IsAdditional { get; set; }
+        public InArgument<bool> IsSubscriber { get; set; }
 
         [RequiredArgument]
         public OutArgument<string> OwnerName { get; set; }
@@ -30,18 +30,18 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             int ownerId = OwnerId.Get(context);
             SalePriceListOwnerType ownerType = OwnerType.Get(context);
-            bool isAdditional = IsAdditional.Get(context);
-            IEnumerable<int> additionalOwnerIds = AdditionalOwnerIds.Get(context);
+            bool isSubscriber = IsSubscriber.Get(context);
+            IEnumerable<int> subscriberOwnerIds = SubscriberOwnerIds.Get(context);
             string ownerName = "";
 
             if (ownerType == SalePriceListOwnerType.Customer)
             {
                 var carrierAccountManager = new CarrierAccountManager();
                 var carrierAccountName = carrierAccountManager.GetCarrierAccountName(ownerId);
-                if (isAdditional || additionalOwnerIds == null || additionalOwnerIds.Count()==0)
+                if (isSubscriber || subscriberOwnerIds == null || subscriberOwnerIds.Count() == 0)
                     ownerName = string.Format("customer '{0}'", carrierAccountName);
                 else
-                    ownerName = string.Format("master customer '{0}'", carrierAccountName);
+                    ownerName = string.Format("publisher customer '{0}'", carrierAccountName);
             }
             else if (ownerType == SalePriceListOwnerType.SellingProduct)
             {

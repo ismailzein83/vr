@@ -21,7 +21,7 @@ namespace TOne.WhS.Sales.BP.Activities
         public InArgument<Changes> Changes { get; set; }
 
         [RequiredArgument]
-        public InArgument<bool> FollowMasterRatesBED { get; set; }
+        public InArgument<bool> FollowPublisherRatesBED { get; set; }
 
         [RequiredArgument]
         public InArgument<DateTime> EffectiveDate { get; set; }
@@ -34,17 +34,17 @@ namespace TOne.WhS.Sales.BP.Activities
             int customerId = this.CustomerId.Get(context);
             Changes changes = this.Changes.Get(context);
             DateTime effectiveDate = this.EffectiveDate.Get(context);
-            bool followMasterRatesBED = this.FollowMasterRatesBED.Get(context);
+            bool followPublisherRatesBED = this.FollowPublisherRatesBED.Get(context);
 
             Changes filteredChanges = new Changes();
             if (changes.ZoneChanges != null && changes.ZoneChanges.Any())
-                filteredChanges.ZoneChanges = FilterZoneChanges(customerId, changes.CountryChanges, changes.ZoneChanges, changes.CurrencyId.Value, effectiveDate, followMasterRatesBED);
+                filteredChanges.ZoneChanges = FilterZoneChanges(customerId, changes.CountryChanges, changes.ZoneChanges, changes.CurrencyId.Value, effectiveDate, followPublisherRatesBED);
             filteredChanges.CurrencyId = changes.CurrencyId;
 
             this.FilteredChanges.Set(context, filteredChanges);
         }
 
-        private List<ZoneChanges> FilterZoneChanges(int customerId, CountryChanges countryChanges, IEnumerable<ZoneChanges> zoneChanges, int currencyId, DateTime effectiveDate, bool followMasterRatesBED)
+        private List<ZoneChanges> FilterZoneChanges(int customerId, CountryChanges countryChanges, IEnumerable<ZoneChanges> zoneChanges, int currencyId, DateTime effectiveDate, bool followPublisherRatesBED)
         {
             List<ZoneChanges> filteredZoneChanges = new List<ZoneChanges>();
 
@@ -68,7 +68,7 @@ namespace TOne.WhS.Sales.BP.Activities
             ConfigManager configManager = new ConfigManager();
 
             SaleEntityZoneRateLocator cuurentRateLocator = null;
-            if (!followMasterRatesBED)
+            if (!followPublisherRatesBED)
                 cuurentRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadWithCache(effectiveDate));
 
             var effectiveRateLocator = GetNewRateLocator(customerId, zoneChanges, sellingProductId); ;
@@ -92,7 +92,7 @@ namespace TOne.WhS.Sales.BP.Activities
                 };
 
                 if (zoneChange.NewRates != null && zoneChange.NewRates.Any())
-                    filteredZoneChange.NewRates = FilterZoneNewRates(customerId, sellingProductId, zoneChange.NewRates, customerCountry.BED, effectiveDate, pricingSettings.IncreasedRateDayOffset.Value, pricingSettings.DecreasedRateDayOffset.Value, effectiveRateLocator, cuurentRateLocator, currencyId, zoneChange.ZoneId, followMasterRatesBED);
+                    filteredZoneChange.NewRates = FilterZoneNewRates(customerId, sellingProductId, zoneChange.NewRates, customerCountry.BED, effectiveDate, pricingSettings.IncreasedRateDayOffset.Value, pricingSettings.DecreasedRateDayOffset.Value, effectiveRateLocator, cuurentRateLocator, currencyId, zoneChange.ZoneId, followPublisherRatesBED);
 
                 if (zoneChange.ClosedRates != null && zoneChange.ClosedRates.Any())
                     filteredZoneChange.ClosedRates = FilterZoneClosedRates(customerId, zoneChange.ClosedRates, customerCountry.BED, closedRateLocator, sellingProductId, currencyId);
@@ -113,12 +113,12 @@ namespace TOne.WhS.Sales.BP.Activities
             return filteredZoneChanges;
         }
 
-        private IEnumerable<DraftRateToChange> FilterZoneNewRates(int customerId, int sellingProductId, IEnumerable<DraftRateToChange> newRates, DateTime countrySellDate, DateTime effectiveDate, int increasedRateDayOffset, int decreasedRateDayOffset, SaleEntityZoneRateLocator effectiveRateLocator, SaleEntityZoneRateLocator cuurentRateLocator, int currencyId, long zoneId, bool followMasterRatesBED)
+        private IEnumerable<DraftRateToChange> FilterZoneNewRates(int customerId, int sellingProductId, IEnumerable<DraftRateToChange> newRates, DateTime countrySellDate, DateTime effectiveDate, int increasedRateDayOffset, int decreasedRateDayOffset, SaleEntityZoneRateLocator effectiveRateLocator, SaleEntityZoneRateLocator cuurentRateLocator, int currencyId, long zoneId, bool followPublisherRatesBED)
         {
             var filteredNewRates = new List<DraftRateToChange>();
             var rateAtActionDate = effectiveRateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
             var currentRate = new SaleEntityZoneRate();
-            if (!followMasterRatesBED)
+            if (!followPublisherRatesBED)
                 currentRate = cuurentRateLocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
 
             foreach (var newRate in newRates)
@@ -129,7 +129,7 @@ namespace TOne.WhS.Sales.BP.Activities
                 if (rateAtActionDate == null || rateAtActionDate.EffectiveCurrencyId != currencyId)
                     continue;
 
-                if (!followMasterRatesBED)
+                if (!followPublisherRatesBED)
                 {
                     SaleRate matchedRate;
                     if (!newRate.RateTypeId.HasValue)

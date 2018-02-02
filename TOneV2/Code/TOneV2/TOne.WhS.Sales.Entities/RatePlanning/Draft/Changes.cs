@@ -16,10 +16,10 @@ namespace TOne.WhS.Sales.Entities
 
 		public CountryChanges CountryChanges { get; set; }
 
-        public List<AdditionalOwnerEntity> AdditionalOwnerEntities { get; set; }
+        public List<SubscriberOwnerEntity> SubscriberOwnerEntities { get; set; }
     }
 
-    public class AdditionalOwnerEntity
+    public class SubscriberOwnerEntity
     {
         public int Id { get; set; }
         public int EntityId { get; set; }

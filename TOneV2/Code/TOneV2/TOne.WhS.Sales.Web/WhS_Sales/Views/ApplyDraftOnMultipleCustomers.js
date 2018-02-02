@@ -20,8 +20,8 @@
         }
 
         function defineScope() {
-            $scope.title = "Apply on multiple customers";
-            $scope.hintText = "Rate's BED of the slave customers can either follow the same BED of their master, or can be calculated according to the system parameters for increased and decreased rates.";
+            $scope.title = "Apply on multiple subscribers";
+            $scope.hintText = "Rate's BED of the subscribers can either follow the same BED of their publisher, or can be calculated according to the system parameters for increased and decreased rates.";
             $scope.datasource = [];
             $scope.selectedvalues = [];
             $scope.gridDataSource = [];
@@ -70,7 +70,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadDraftAdditionalOwnerIds, loadFollowMasterRatesBED])
+            return UtilsService.waitMultipleAsyncOperations([loadDraftSubscriberOwnerIds, loadFollowPublisherRatesBED])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -79,20 +79,20 @@
               });
         }
         
-        function loadFollowMasterRatesBED() {
-            return WhS_Sales_RatePlanAPIService.GetFollowMasterRatesBED().then(function (response) {
-                $scope.followMasterRatesBED = response;
+        function loadFollowPublisherRatesBED() {
+            return WhS_Sales_RatePlanAPIService.GetFollowPublisherRatesBED().then(function (response) {
+                $scope.followPublisherRatesBED = response;
             });
         }
 
         function loadCustomersSelector() {
             $scope.datasource = [];
             $scope.selectedvalues = [];
-            var GetAdditionalOwnersInput = {
+            var GetSubscriberOwnersInput = {
                 OwnerId: ownerId,
                 ExecludedOwnerIds: getAddedOwnerIds(),
             };
-            return WhS_Sales_RatePlanAPIService.GetAdditionalOwners(GetAdditionalOwnersInput).then(function (response) {
+            return WhS_Sales_RatePlanAPIService.GetSubscriberOwners(GetSubscriberOwnersInput).then(function (response) {
                 if (response != null) {
                     for (var i = 0; i < response.length; i++) {
                         $scope.datasource.push(response[i]);
@@ -101,9 +101,9 @@
             });
         }
 
-        function loadDraftAdditionalOwnerIds() {
-            var loadDraftAdditionalOwnerIdsPromiseDeferred = UtilsService.createPromiseDeferred();
-            WhS_Sales_RatePlanAPIService.GetDraftAdditionalOwnerEntities(WhS_BE_SalePriceListOwnerTypeEnum.Customer.value, ownerId).
+        function loadDraftSubscriberOwnerIds() {
+            var loadDraftSubscriberOwnerIdsPromiseDeferred = UtilsService.createPromiseDeferred();
+            WhS_Sales_RatePlanAPIService.GetDraftSubscriberOwnerEntities(WhS_BE_SalePriceListOwnerTypeEnum.Customer.value, ownerId).
             then(function (response) {
                 if (response != null) {
                     for (var i = 0; i < response.length; i++) {
@@ -113,15 +113,15 @@
                 }
 
                 loadCustomersSelector().finally(function (response) {
-                    loadDraftAdditionalOwnerIdsPromiseDeferred.resolve();
+                    loadDraftSubscriberOwnerIdsPromiseDeferred.resolve();
                 });
             });
-            return loadDraftAdditionalOwnerIdsPromiseDeferred.promise;
+            return loadDraftSubscriberOwnerIdsPromiseDeferred.promise;
         }
 
         function applyDraftOnMultipleCustomers() {
             if ($scope.executeApplyDraftOnMultipleCustomersProcess != undefined) {
-                $scope.executeApplyDraftOnMultipleCustomersProcess($scope.gridDataSource, $scope.followMasterRatesBED);
+                $scope.executeApplyDraftOnMultipleCustomersProcess($scope.gridDataSource, $scope.followPublisherRatesBED);
             }
             $scope.modalContext.closeModal();
         }
@@ -156,5 +156,5 @@
         }
     }
 
-    appControllers.controller('VRCommon_AddAdditionalOwnerTsoApplyDraftController', applyDraftOnMultipleCustomersController);
+    appControllers.controller('VRCommon_ApplyDraftOnMultipleCustomersController', applyDraftOnMultipleCustomersController);
 })(appControllers);

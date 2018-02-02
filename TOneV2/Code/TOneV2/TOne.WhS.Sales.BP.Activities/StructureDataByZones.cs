@@ -19,7 +19,7 @@ namespace TOne.WhS.Sales.BP.Activities
         #region Input Arguments
 
         [RequiredArgument]
-        public InArgument<bool> IsAdditionalOwner { get; set; }
+        public InArgument<bool> IsSubscriberOwner { get; set; }
 
         [RequiredArgument]
         public InArgument<int> CurrencyId { get; set; }
@@ -62,7 +62,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
-            bool isAdditionalOwner = IsAdditionalOwner.Get(context);
+            bool isSubscriberOwner = IsSubscriberOwner.Get(context);
             IRatePlanContext ratePlanContext = context.GetRatePlanContext();
             SalePriceListOwnerType ownerType = ratePlanContext.OwnerType;
             int ownerId = ratePlanContext.OwnerId;
@@ -93,7 +93,7 @@ namespace TOne.WhS.Sales.BP.Activities
             Dictionary<int, RatePlanCustomerCountry> customerCountriesByCountryId =
                 (ownerType == SalePriceListOwnerType.Customer) ? GetCustomerCountriesByCountryId(ownerId, DateTime.Now.Date, countriesToAdd) : null;
 
-            if (ownerType == SalePriceListOwnerType.Customer && customerCountriesByCountryId == null && !isAdditionalOwner)
+            if (ownerType == SalePriceListOwnerType.Customer && customerCountriesByCountryId == null && !isSubscriberOwner)
                 throw new DataIntegrityValidationException(string.Format("No countries are sold to Customer '{0}'", ownerId));
 
             Dictionary<string, DataByZone> dataByZoneName = new Dictionary<string, DataByZone>();

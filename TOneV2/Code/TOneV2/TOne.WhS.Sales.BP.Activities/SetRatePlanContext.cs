@@ -30,7 +30,7 @@ namespace TOne.WhS.Sales.BP.Activities
         public InArgument<DateTime> EffectiveDate { get; set; }
 
         [RequiredArgument]
-        public InArgument<bool> IsAdditionalOwner { get; set; }
+        public InArgument<bool> IsSubscriberOwner { get; set; }
 
         #endregion
 
@@ -44,7 +44,7 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             SalePriceListOwnerType ownerType = OwnerType.Get(context);
             int ownerId = OwnerId.Get(context);
-            bool isAdditionalOwner = IsAdditionalOwner.Get(context);
+            bool isSubscriberOwner = IsSubscriberOwner.Get(context);
             PricingSettings pricingSettings = UtilitiesManager.GetPricingSettings(ownerType, ownerId);
 
             int currencyId = CurrencyId.Get(context);
@@ -57,7 +57,7 @@ namespace TOne.WhS.Sales.BP.Activities
             RatePlanContext ratePlanContext = context.GetRatePlanContext() as RatePlanContext;
             ratePlanContext.OwnerType = ownerType;
             ratePlanContext.OwnerId = ownerId;
-            ratePlanContext.IsAdditionalOwner = isAdditionalOwner;
+            ratePlanContext.IsSubscriberOwner = isSubscriberOwner;
             ratePlanContext.OwnerSellingNumberPlanId = GetOwnerSellingNumberPlanId(ownerType, ownerId);
             ratePlanContext.CurrencyId = currencyId;
             ratePlanContext.setRatePlanContextPricingSettings(pricingSettings);
@@ -75,7 +75,7 @@ namespace TOne.WhS.Sales.BP.Activities
                 ratePlanContext.IsFirstSellingProductOffer = !new SalePriceListManager().CheckIfAnyPriceListExists(SalePriceListOwnerType.SellingProduct, ownerId);
             }
 
-            if (isAdditionalOwner)
+            if (isSubscriberOwner)
             {
                 if (context.GetSharedInstanceData().InstanceInfo.ParentProcessID.HasValue)
                     ratePlanContext.RootProcessInstanceId = context.GetSharedInstanceData().InstanceInfo.ParentProcessID.Value;

@@ -18,6 +18,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         public SalePriceListOwnerType OwnerType { get; set; }
         public IEnumerable<int> SellingProductCustomerIds { get; set; }
 
-        public int? MasterOwnerId { get; set; }
+        public int? PublisherOwnerId { get; set; }
     }
 }

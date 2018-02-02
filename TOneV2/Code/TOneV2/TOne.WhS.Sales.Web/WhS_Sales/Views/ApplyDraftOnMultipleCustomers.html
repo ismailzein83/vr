@@ -1,9 +1,9 @@
-﻿<div vr-modalcontent ng-controller="VRCommon_AddAdditionalOwnerTsoApplyDraftController" vr-loader="isLoading" width="1/2row">
+﻿<div vr-modalcontent ng-controller="VRCommon_ApplyDraftOnMultipleCustomersController" vr-loader="isLoading" width="1/2row">
     <vr-modalbody>
         <vr-form name="formApplyDraftOnMultipleCustomersEditor">
             <vr-row removeline>
                 <vr-columns colnum="6">
-                    <vr-select label="Customers"
+                    <vr-select label="Subscribers"
                                on-ready="onCustomersSelectorReady"
                                datasource="datasource"
                                selectedvalues="selectedvalues"
@@ -15,8 +15,8 @@
                     <vr-button type="Add" data-onclick="add" vr-disabled="isAddButtonDisabled()" standalone></vr-button>
                 </vr-columns>
                 <vr-columns colnum="4">
-                    <vr-label>Follow Master Rate's BED <vr-hint value={{hintText}}></vr-hint></vr-label>
-                    <vr-switch colnum="6" value="followMasterRatesBED"></vr-switch>
+                    <vr-label>Follow Publisher Rate's BED <vr-hint value={{hintText}}></vr-hint></vr-label>
+                    <vr-switch colnum="6" value="followPublisherRatesBED"></vr-switch>
                 </vr-columns>
             </vr-row>
             <vr-row>

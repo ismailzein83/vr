@@ -247,6 +247,7 @@
     <Content Include="WhS_Sales\Directives\Preview\Templates\RatePreviewGridTemplate.html" />
     <Content Include="WhS_Sales\Directives\Preview\Templates\SaleZoneRoutingProductPreviewGridTemplate.html" />
     <Content Include="WhS_Sales\Directives\Preview\Templates\SaleZoneServicePreviewGridTemplate.html" />
+    <Content Include="WhS_Sales\Directives\Preview\Templates\SubscriberPreviewTemplate.html" />
     <Content Include="WhS_Sales\Directives\Preview\vr-whs-sales-changedcountrypreview-grid.js" />
     <Content Include="WhS_Sales\Directives\Preview\vr-whs-sales-newcountrypreview-grid.js" />
     <Content Include="WhS_Sales\Directives\Preview\vr-whs-sales-ratepreview-grid.js" />
@@ -254,6 +255,7 @@
     <Content Include="WhS_Sales\Directives\OtherRate\Templates\OtherRateGridTemplate.html" />
     <Content Include="WhS_Sales\Directives\OtherRate\vr-whs-sales-otherrate-grid.js" />
     <Content Include="WhS_Sales\Directives\Preview\vr-whs-sales-salezoneservicepreview-grid.js" />
+    <Content Include="WhS_Sales\Directives\Preview\vr-whs-sales-subscriberpreview-directive.js" />
     <Content Include="WhS_Sales\Directives\PricingTemplate\Templates\MarginRateCalculationTemplate.html" />
     <Content Include="WhS_Sales\Directives\PricingTemplate\Templates\PricingTemplateGridTemplate.html" />
     <Content Include="WhS_Sales\Directives\PricingTemplate\Templates\PricingTemplateRatesTemplate.html" />

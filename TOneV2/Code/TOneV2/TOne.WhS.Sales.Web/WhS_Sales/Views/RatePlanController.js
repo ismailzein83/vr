@@ -46,8 +46,8 @@
         var ratePlanSettingsData;
         var saleAreaSettingsData;
 
-        var additionalOwnerEntities;
-        var additionalOwnerIds;
+        var subscriberOwnerEntities;
+        var subscriberOwnerIds;
 
         var exclusiveSessionObject = null;
         defineScope();
@@ -941,7 +941,7 @@
                     DefaultChanges: defaultDraft,
                     ZoneChanges: zoneDrafts,
                     CountryChanges: countryChanges,
-                    AdditionalOwnerEntities: additionalOwnerEntities
+                    SubscriberOwnerEntities: subscriberOwnerEntities
                 };
             }
             return newDraft;
@@ -1084,7 +1084,7 @@
                  clicked: applyDraft
              },
             {
-                name: "Offer for customers",
+                name: "Offer for subscribers",
                 clicked: applyDraftOnMultipleCustomers
             }];
         }
@@ -1234,13 +1234,13 @@
 
             return UtilsService.waitMultiplePromises(promises);
         }
-        function executeApplyDraftOnMultipleCustomersProcess(additionalOwners, followMasterRatesBED) {
-            additionalOwnerEntities = [];
-            additionalOwnerIds = [];
-            if (additionalOwners != null) {
-                for (var i = 0; i < additionalOwners.length; i++) {
-                    additionalOwnerEntities.push(additionalOwners[i].Entity);
-                    additionalOwnerIds.push(additionalOwners[i].Entity.EntityId);
+        function executeApplyDraftOnMultipleCustomersProcess(subscriberOwners, followPublisherRatesBED) {
+            subscriberOwnerEntities = [];
+            subscriberOwnerIds = [];
+            if (subscriberOwners != null) {
+                for (var i = 0; i < subscriberOwners.length; i++) {
+                    subscriberOwnerEntities.push(subscriberOwners[i].Entity);
+                    subscriberOwnerIds.push(subscriberOwners[i].Entity.EntityId);
                 }
             }
             var applyOfferDeferred = UtilsService.createPromiseDeferred();
@@ -1263,8 +1263,8 @@
                     OwnerId: ownerId,
                     CurrencyId: getCurrencyId(),
                     EffectiveDate: UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime()),
-                    AdditionalOwnerIds: additionalOwnerIds,
-                    FollowMasterRatesBED: followMasterRatesBED,
+                    SubscriberOwnerIds: subscriberOwnerIds,
+                    FollowPublisherRatesBED: followPublisherRatesBED,
                 };
 
                 var input = {

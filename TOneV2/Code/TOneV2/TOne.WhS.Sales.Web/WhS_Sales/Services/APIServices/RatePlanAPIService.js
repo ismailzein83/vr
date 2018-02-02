@@ -92,9 +92,10 @@
         function GetRatePlanSettingsData() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetRatePlanSettingsData"));
         }
-        
-        function GetFollowMasterRatesBED() {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetFollowMasterRatesBED"));
+
+
+        function GetFollowPublisherRatesBED() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetFollowPublisherRatesBED"));
         }
 
         function GetPricingSettings(ownerType, ownerId) {
@@ -115,8 +116,8 @@
             });
         }
 
-        function GetDraftAdditionalOwnerEntities(ownerType, ownerId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetDraftAdditionalOwnerEntities"), {
+        function GetDraftSubscriberOwnerEntities(ownerType, ownerId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetDraftSubscriberOwnerEntities"), {
                 ownerType: ownerType,
                 ownerId: ownerId
             });
@@ -190,8 +191,8 @@
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetSystemDateFormat"));
         }
 
-        function GetAdditionalOwners(input) {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetAdditionalOwners"), input);
+        function GetSubscriberOwners(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetSubscriberOwners"), input);
         }
 
         return {
@@ -214,7 +215,7 @@
             GetRatePlanSettingsData: GetRatePlanSettingsData,
             GetSaleAreaSettingsData: GetSaleAreaSettingsData,
             GetDraftCurrencyId: GetDraftCurrencyId,
-            GetDraftAdditionalOwnerEntities: GetDraftAdditionalOwnerEntities,
+            GetDraftSubscriberOwnerEntities: GetDraftSubscriberOwnerEntities,
             DefineNewRatesConvertedToCurrency: DefineNewRatesConvertedToCurrency,
             GetCustomerDefaultInheritedService: GetCustomerDefaultInheritedService,
             GetZoneInheritedService: GetZoneInheritedService,
@@ -230,8 +231,8 @@
             GetOwnerInfo: GetOwnerInfo,
             GetPricingSettings: GetPricingSettings,
             GetSystemDateFormat: GetSystemDateFormat,
-            GetAdditionalOwners: GetAdditionalOwners,
-            GetFollowMasterRatesBED:GetFollowMasterRatesBED,
+            GetSubscriberOwners: GetSubscriberOwners,
+            GetFollowPublisherRatesBED: GetFollowPublisherRatesBED,
 
         };
 

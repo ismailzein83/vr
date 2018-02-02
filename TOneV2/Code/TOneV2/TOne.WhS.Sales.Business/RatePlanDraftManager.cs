@@ -73,7 +73,7 @@ namespace TOne.WhS.Sales.Business
                 IEnumerable<DraftNewCountry> newCountries = (newChanges.CountryChanges != null) ? newChanges.CountryChanges.NewCountries : null;
                 IEnumerable<int> removedCountryIds = GetRemovedCountryIds(existingCountries, newCountries);
                 allChanges.CountryChanges = newChanges.CountryChanges;
-                allChanges.AdditionalOwnerEntities = newChanges.AdditionalOwnerEntities;
+                allChanges.SubscriberOwnerEntities = newChanges.SubscriberOwnerEntities;
                 allChanges.ZoneChanges = MergeZoneChanges(existingChanges.ZoneChanges, newChanges.ZoneChanges, removedCountryIds);
 
                 return allChanges;
@@ -128,11 +128,11 @@ namespace TOne.WhS.Sales.Business
             return null;
         }
 
-        public List<AdditionalOwnerEntity> GetDraftAdditionalOwnerEntities(SalePriceListOwnerType ownerType, int ownerId)
+        public List<SubscriberOwnerEntity> GetDraftSubscriberOwnerEntities(SalePriceListOwnerType ownerType, int ownerId)
         {
             Changes draft = GetDraft(ownerType, ownerId);
             if (draft != null)
-                return draft.AdditionalOwnerEntities;
+                return draft.SubscriberOwnerEntities;
             return null;
         }
 
