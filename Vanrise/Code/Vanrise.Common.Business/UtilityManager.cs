@@ -56,7 +56,7 @@ namespace Vanrise.Common.Business
                         string enumerationValueName = enumValue.ToString();
                         enumerationValues.Add(string.Format("{0}:{1}", enumerationValueName, enumerationValueInteger));
                     }
-                    enumeration.Values = string.Join(", ", enumerationValues);
+                    enumeration.Description = string.Join(", ", enumerationValues);
                     result.Add(enumeration);
                 }
             }

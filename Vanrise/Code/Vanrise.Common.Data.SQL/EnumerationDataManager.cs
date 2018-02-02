@@ -17,7 +17,7 @@ namespace Vanrise.Common.Data.SQL
 
         private readonly string[] _enumerationsColumns =
         {
-            "ID", "NameSpace", "Name", "Values"
+            "ID", "NameSpace", "Name", "Description"
         };
 
 
@@ -48,7 +48,7 @@ namespace Vanrise.Common.Data.SQL
                     record.ID,
                     record.NameSpace,
                     record.Name,
-                    record.Values);
+                    record.Description);
         }
 
         private object FinishDBApplyStream(object dbApplyStream, string tableName)

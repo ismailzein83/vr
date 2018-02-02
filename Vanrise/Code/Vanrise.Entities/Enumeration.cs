@@ -11,6 +11,6 @@ namespace Vanrise.Entities
         public int ID { get; set; }
         public string NameSpace { get; set; }
         public string Name { get; set; }
-        public string Values { get; set; }
+        public string Description { get; set; }
     }
 }
