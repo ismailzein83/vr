@@ -1,10 +1,12 @@
-﻿(function (app) {
+﻿
+
+(function (app) {
 
     'use strict';
 
-    CustomerObjectType.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
+    customerFaultTicketType.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
 
-    function CustomerObjectType(UtilsService, VRUIUtilsService, VRNotificationService) {
+    function customerFaultTicketType(UtilsService, VRUIUtilsService, VRNotificationService) {
         return {
             restrict: "E",
             scope: {
@@ -12,16 +14,16 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var customerObjectType = new CustomerDierctiveObjectType($scope, ctrl, $attrs);
-                customerObjectType.initializeController();
+                var ctor = new CustomerFaultCtor($scope, ctrl, $attrs);
+                ctor.initializeController();
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            templateUrl: '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/VRObjectTypes/Templates/CustomerObjectTypeTemplate.html'
-
-
+            template: function (element, attrs) {
+                return "";
+            }
         };
-        function CustomerDierctiveObjectType($scope, ctrl, $attrs) {
+        function CustomerFaultCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -37,7 +39,7 @@
 
                 api.getData = function () {
                     var data = {
-                        $type: "TOne.WhS.BusinessEntity.MainExtensions.CustomerObjectType, TOne.WhS.BusinessEntity.MainExtensions"
+                        $type: "TOne.WhS.BusinessEntity.Business.CustomerFaultTicketCustomObjectTypeSettings, TOne.WhS.BusinessEntity.Business"
                     };
                     return data;
                 };
@@ -49,10 +51,6 @@
         }
     }
 
-    app.directive('vrWhsBeCustomerobjecttype', CustomerObjectType);
+    app.directive('vrWhsBeCustomerfaulttickettypeSettings', customerFaultTicketType);
 
 })(app);
-
-
-
-
