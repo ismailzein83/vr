@@ -6,20 +6,20 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Data.RDB
 {
-    public class RDBSelectContext<T> : IRDBSelectContextReady<T>
+    public class RDBSelectColumnsContext<T> : IRDBSelectColumnsContextReady<T>
     {
         T _parent;
         List<RDBSelectColumn> _columns;
         IRDBTableQuerySource _table;
 
-        public RDBSelectContext(T parent, List<RDBSelectColumn> columns, IRDBTableQuerySource table)
+        public RDBSelectColumnsContext(T parent, List<RDBSelectColumn> columns, IRDBTableQuerySource table)
         {
             _parent = parent;
             _columns = columns;
             _table = table;
         }
 
-        public IRDBSelectContextReady<T> Columns(params string[] columnNames)
+        public IRDBSelectColumnsContextReady<T> Columns(params string[] columnNames)
         {
             foreach (var colName in columnNames)
             {
@@ -28,7 +28,7 @@ namespace Vanrise.Data.RDB
             return this;
         }
 
-        public IRDBSelectContextReady<T> Column(BaseRDBExpression expression, string alias)
+        public IRDBSelectColumnsContextReady<T> Column(BaseRDBExpression expression, string alias)
         {
             _columns.Add(new RDBSelectColumn
             {
@@ -38,7 +38,7 @@ namespace Vanrise.Data.RDB
             return this;
         }
 
-        public IRDBSelectContextReady<T> Column(IRDBTableQuerySource table, string columnName, string alias)
+        public IRDBSelectColumnsContextReady<T> Column(IRDBTableQuerySource table, string columnName, string alias)
         {
             return Column(new RDBColumnExpression
             {
@@ -48,22 +48,22 @@ namespace Vanrise.Data.RDB
                      alias);
         }
 
-        public IRDBSelectContextReady<T> Column(string tableName, string columnName, string alias)
+        public IRDBSelectColumnsContextReady<T> Column(string tableName, string columnName, string alias)
         {
             return Column(new RDBTableDefinitionQuerySource(tableName), columnName, alias);
         }
 
-        public IRDBSelectContextReady<T> Column(string columnName, string alias)
+        public IRDBSelectColumnsContextReady<T> Column(string columnName, string alias)
         {
             return Column(_table, columnName, alias);
         }
 
-        public IRDBSelectContextReady<T> Column(string columnName)
+        public IRDBSelectColumnsContextReady<T> Column(string columnName)
         {
             return Column(columnName, columnName);
         }
 
-        T IRDBSelectContextReady<T>.EndSelect()
+        T IRDBSelectColumnsContextReady<T>.EndColumns()
         {
             return _parent;
         }

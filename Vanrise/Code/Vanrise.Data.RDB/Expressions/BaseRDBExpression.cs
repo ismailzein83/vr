@@ -17,8 +17,8 @@ namespace Vanrise.Data.RDB
 
     public class RDBExpressionToDBQueryContext : BaseRDBResolveQueryContext, IRDBExpressionToDBQueryContext
     {
-        public RDBExpressionToDBQueryContext(BaseRDBDataProvider dataProvider, Dictionary<string, Object> parameterValues)
-            : base(dataProvider, parameterValues)
+        public RDBExpressionToDBQueryContext(BaseRDBQueryContext queryContext, BaseRDBDataProvider dataProvider, Dictionary<string, Object> parameterValues)
+            : base(queryContext, dataProvider, parameterValues)
         {   
         }
 

@@ -92,11 +92,17 @@ namespace Vanrise.Data.RDB
 
         internal string GetColumnDBName(BaseRDBDataProvider provider, string tableName, string columnName)
         {
+            RDBTableColumnDefinition columnDefinition = GetColumnDefinitionWithValidate(provider, tableName, columnName);
+            return columnDefinition.DBColumnName;
+        }
+
+        internal RDBTableColumnDefinition GetColumnDefinitionWithValidate(BaseRDBDataProvider provider, string tableName, string columnName)
+        {
             RDBTableDefinition tableDefinition = GetTableDefinitionWithValidate(provider, tableName);
             RDBTableColumnDefinition columnDefinition;
             if (!tableDefinition.Columns.TryGetValue(columnName, out columnDefinition))
                 throw new Exception(String.Format(" Column '{0}' not found in table '{1}'", columnName, tableName));
-            return columnDefinition.DBColumnName;
+            return columnDefinition;
         }
 
         #endregion

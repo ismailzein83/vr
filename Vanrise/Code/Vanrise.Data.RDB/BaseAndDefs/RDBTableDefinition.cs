@@ -13,6 +13,8 @@ namespace Vanrise.Data.RDB
 
         public string DBTableName { get; set; }
 
+        public string IdColumnName { get; set; }
+
         public string CreatedTimeColumnName { get; set; }
 
         public string ModifiedTimeColumnName { get; set; }

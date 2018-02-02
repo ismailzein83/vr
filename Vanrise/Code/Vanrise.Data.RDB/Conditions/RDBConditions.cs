@@ -124,9 +124,9 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBExistsCondition : BaseRDBCondition
+    public class RDBExistsCondition<T> : BaseRDBCondition
     {
-        public RDBSelectQuery SelectQuery { get; set; }
+        public RDBSelectQuery<T> SelectQuery { get; set; }
 
         public override string ToDBQuery(IRDBConditionToDBQueryContext context)
         {
@@ -135,9 +135,9 @@ namespace Vanrise.Data.RDB
         }
     }
 
-    public class RDBNotExistsCondition : BaseRDBCondition
+    public class RDBNotExistsCondition<T> : BaseRDBCondition
     {
-        public RDBSelectQuery SelectQuery { get; set; }
+        public RDBSelectQuery<T> SelectQuery { get; set; }
 
         public override string ToDBQuery(IRDBConditionToDBQueryContext context)
         {

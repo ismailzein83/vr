@@ -18,8 +18,8 @@ namespace Vanrise.Data.RDB
 
     public class RDBConditionToDBQueryContext : BaseRDBResolveQueryContext, IRDBConditionToDBQueryContext
     {
-        public RDBConditionToDBQueryContext(BaseRDBDataProvider dataProvider, Dictionary<string, Object> parameterValues)
-            : base(dataProvider, parameterValues)
+        public RDBConditionToDBQueryContext(BaseRDBQueryContext queryContext, BaseRDBDataProvider dataProvider, Dictionary<string, Object> parameterValues)
+            : base(queryContext, dataProvider, parameterValues)
         {   
         }
 

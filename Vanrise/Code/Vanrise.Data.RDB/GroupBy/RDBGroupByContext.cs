@@ -18,20 +18,23 @@ namespace Vanrise.Data.RDB
             _table = table;
         }
 
-        public RDBSelectContext<IRDBGroupByColumnsSelected<T>> Select()
-        {
-            return new RDBSelectContext<IRDBGroupByColumnsSelected<T>>(this, _groupBy.Columns, _table);
-        }
+        public RDBSelectColumnsContext<IRDBGroupByColumnsSelected<T>> Select()
+            {
+                return new RDBSelectColumnsContext<IRDBGroupByColumnsSelected<T>>(this, _groupBy.Columns, _table);
+            }
+        
 
         RDBSelectAggregateContext<IRDBGroupByAggregateColumnsSelected<T>> IRDBGroupByCanSelectAggregateColumns<T>.SelectAggregates()
-        {
-            return new RDBSelectAggregateContext<IRDBGroupByAggregateColumnsSelected<T>>(this, _groupBy.AggregateColumns, _table);
-        }
+            {
+                return new RDBSelectAggregateContext<IRDBGroupByAggregateColumnsSelected<T>>(this, _groupBy.AggregateColumns, _table);
+            }
+        
 
         RDBGroupByHavingContext<IRDBGroupByHavingDefined<T>> IRDBGroupByCanDefineHaving<T>.Having()
-        {
-            return new RDBGroupByHavingContext<IRDBGroupByHavingDefined<T>>(this, (condition) => _groupBy.HavingCondition = condition, _table);
-        }
+            {
+                return new RDBGroupByHavingContext<IRDBGroupByHavingDefined<T>>(this, (condition) => _groupBy.HavingCondition = condition, _table);
+            }
+        
 
         T IRDBGroupByContextReady<T>.EndGroupBy()
         {
@@ -63,7 +66,7 @@ namespace Vanrise.Data.RDB
 
     public interface IRDBGroupByCanSelectGroupByColumns<T>
     {
-        RDBSelectContext<IRDBGroupByColumnsSelected<T>> Select();
+        RDBSelectColumnsContext<IRDBGroupByColumnsSelected<T>> Select();
     }
 
     public interface IRDBGroupByCanSelectAggregateColumns<T>

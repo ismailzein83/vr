@@ -3,43 +3,45 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 
 namespace Vanrise.Data.RDB
 {
-    public class RDBTempTableQuery : BaseRDBNoDataQuery, IRDBTableQuerySource
+    public class RDBTempTableQuery : BaseRDBQuery, IRDBTableQuerySource
     {
         Dictionary<string, RDBTableColumnDefinition> _columns;
         string _tempTableName;
-        RDBResolvedNoDataQuery _resolvedQuery;
 
         public RDBTempTableQuery(Dictionary<string, RDBTableColumnDefinition> columns)
         {
             this._columns = columns;
-            Dictionary<string, object> parameterValues = new Dictionary<string,object>();
-            var resolveQueryContext = new RDBDataProviderResolveTempTableCreationQueryContext(columns, this.DataProvider, parameterValues);
-            _resolvedQuery = this.DataProvider.ResolveTempTableCreationQuery(resolveQueryContext);
-            _tempTableName = resolveQueryContext.TempTableName;
         }
-        
-        public override RDBResolvedNoDataQuery GetResolvedQuery(IRDBNoDataQueryGetResolvedQueryContext context)
+
+        protected override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
         {
-            return _resolvedQuery;
+            Dictionary<string, object> parameterValues = new Dictionary<string, object>();
+            var resolveQueryContext = new RDBDataProviderResolveTempTableCreationQueryContext(_columns, context, true);
+            var resolvedQuery = context.DataProvider.ResolveTempTableCreationQuery(resolveQueryContext);
+            _tempTableName = resolveQueryContext.TempTableName;
+            return resolvedQuery;
         }
 
         
 
         public string GetUniqueName()
         {
+            _tempTableName.ThrowIfNull("_tempTableName");
             return _tempTableName;
         }
 
         public string GetDescription()
         {
-            return String.Format("Temp Table '{0}'", GetUniqueName());
+            return "Temp Table";
         }
 
         public string ToDBQuery(IRDBTableQuerySourceToDBQueryContext context)
         {
+            _tempTableName.ThrowIfNull("_tempTableName");
             return _tempTableName;
         }
 

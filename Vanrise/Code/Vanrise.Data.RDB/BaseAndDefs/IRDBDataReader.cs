@@ -12,6 +12,18 @@ namespace Vanrise.Data.RDB
 
         bool Read();
 
-        object this[string name] { get; }
+        string GetString(string fieldName);
+
+        int GetInt(string fieldName);
+
+        int? GetNullableInt(string fieldName);
+
+        long GetLong(string fieldName);
+
+        long? GetNullableLong(string fieldName);
+
+        DateTime GetDateTime(string fieldName);
+
+        DateTime? GetNullableDateTime(string fieldName);
     }
 }

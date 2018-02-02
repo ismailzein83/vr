@@ -8,11 +8,15 @@ namespace Vanrise.Data.RDB
 {
     public interface IBaseRDBResolveQueryContext
     {
+        BaseRDBQueryContext QueryContext { get; }
+
         BaseRDBDataProvider DataProvider { get; }
 
         Dictionary<string, string> TableAliases { get; }
 
         Dictionary<string, Object> ParameterValues { get; }
+
+        Dictionary<string, RDBDataType> OutputParameters { get; }
 
         int PrmIndex { get; set; }
 
@@ -25,6 +29,8 @@ namespace Vanrise.Data.RDB
         void AddParameterValue(string parameterName, Object value);
 
         string GenerateParameterName();
+
+        void AddOutputParameter(string parameterName, RDBDataType dataType);
     }
 
     public abstract class BaseRDBResolveQueryContext : IBaseRDBResolveQueryContext
@@ -33,18 +39,22 @@ namespace Vanrise.Data.RDB
         Dictionary<string, string> _tableAliases;
         Dictionary<string, Object> _parameterValues;
         IBaseRDBResolveQueryContext _parentContext;
+        Dictionary<string, RDBDataType> _outputParameters;
 
-        public BaseRDBResolveQueryContext(BaseRDBDataProvider dataProvider, Dictionary<string, Object> parameterValues)
+        public BaseRDBResolveQueryContext(BaseRDBQueryContext queryContext, BaseRDBDataProvider dataProvider, Dictionary<string, Object> parameterValues)
         {
+            this.QueryContext = queryContext;
             _dataProvider = dataProvider;
             _tableAliases = new Dictionary<string,string>();
+            _outputParameters = new Dictionary<string, RDBDataType>();
             _parameterValues = parameterValues;
         }
 
         public BaseRDBResolveQueryContext(IBaseRDBResolveQueryContext parentContext, bool newQueryScope)
-            : this(parentContext.DataProvider, parentContext.ParameterValues)
+            : this(parentContext.QueryContext, parentContext.DataProvider, parentContext.ParameterValues)
         {
             _parentContext = parentContext;
+            this._outputParameters = parentContext.OutputParameters;
             if (newQueryScope)
                 this._tableAliases = new Dictionary<string, string>();
             else
@@ -90,6 +100,11 @@ namespace Vanrise.Data.RDB
             }
         }
 
+        public Dictionary<string, RDBDataType> OutputParameters
+        {
+            get { return _outputParameters; }
+        }
+
         public string GetTableAlias(IRDBTableQuerySource table)
         {
             string tableAlias;
@@ -122,6 +137,18 @@ namespace Vanrise.Data.RDB
                 _tableAliases.Add(tableQuerySourceUniqueName, tableAlias);
             }
             return tableAlias;
+        }
+
+        public BaseRDBQueryContext QueryContext
+        {
+            get;
+            private set;
+        }
+
+
+        public void AddOutputParameter(string parameterName, RDBDataType dataType)
+        {
+            _outputParameters.Add(String.Concat(this.DataProvider.ParameterNamePrefix, parameterName), dataType);
         }
     }
 }
