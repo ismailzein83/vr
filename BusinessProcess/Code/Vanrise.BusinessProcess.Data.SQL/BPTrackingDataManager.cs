@@ -97,6 +97,11 @@ namespace Vanrise.BusinessProcess.Data.SQL
         {
             return GetItemsSP("bp.sp_BPTrackings_GetFromInstanceId", BPTrackingMapper, input.ProcessInstanceId, input.FromTrackingId);
         }
+        public List<BPTrackingMessage> GetBPInstanceTrackingMessages(long processInstanceId, List<LogEntryType> severities)
+        {
+            string severitiesString = (severities == null) ? string.Empty : string.Join(",", severities.Select(n => ((int)n).ToString()).ToArray());
+            return GetItemsSP("bp.sp_BPTrackings_GetBPInstanceTrackingMessages", BPTrackingMapper, processInstanceId, severitiesString);
+        }
 
         public List<BPTrackingMessage> GetUpdated(BPTrackingUpdateInput input)
         {

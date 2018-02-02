@@ -14,6 +14,8 @@ namespace Vanrise.BusinessProcess.Data
         BigResult<BPTrackingMessageDetail> GetFilteredBPInstanceTracking(Vanrise.Entities.DataRetrievalInput<BPTrackingQuery> input);
         BigResult<BPTrackingMessage> GetFilteredTrackings(Vanrise.Entities.DataRetrievalInput<TrackingQuery> input);
 
+        List<BPTrackingMessage> GetBPInstanceTrackingMessages(long processInstanceId, List<LogEntryType> severities);
+        
         List<BPTrackingMessage> GetTrackingsFrom(TrackingQuery input);
 
         List<BPTrackingMessage> GetBeforeId(BPTrackingBeforeIdInput input);
