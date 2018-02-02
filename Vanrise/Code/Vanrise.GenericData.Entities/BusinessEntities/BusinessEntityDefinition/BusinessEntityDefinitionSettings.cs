@@ -14,6 +14,7 @@ namespace Vanrise.GenericData.Entities
         public virtual string GroupSelectorUIControl { get; set; }
         public virtual string ManagerFQTN { get; set; }
         public virtual string DefinitionEditor { get; set; }
+        public virtual string ViewerEditor { get; set; }
         public virtual string IdType { get; set; }
         public virtual string SelectorFilterEditor { get; set; }
         public virtual string NullDisplayText { get; set; }

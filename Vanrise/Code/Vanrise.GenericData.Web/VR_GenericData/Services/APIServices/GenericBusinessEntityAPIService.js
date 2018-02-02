@@ -22,10 +22,11 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetFilteredGenericBusinessEntities'), input);
         }
 
-        function GetGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId) {
+        function GetGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId, historyId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetGenericBusinessEntity'), {
                 genericBusinessEntityId: genericBusinessEntityId,
-                businessEntityDefinitionId: businessEntityDefinitionId
+                businessEntityDefinitionId: businessEntityDefinitionId,
+                historyId: historyId
             });
         }
         function GetGenericBusinessEntityEditorRuntime(businessEntityDefinitionId, genericBusinessEntityId) {

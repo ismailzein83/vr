@@ -38,11 +38,15 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
 
         function initializeController() {
             $scope.isExpandable = function (dataItem) {
-                 if (vrLoggableEntitySettings.ChangeInfoDefinition != undefined) {
-                                       return true;
-            }
-                 return false;
-        };
+                if (vrLoggableEntitySettings.ChangeInfoDefinition != undefined) {
+                    if (vrLoggableEntitySettings.ChangeInfoDefinition.RuntimeEditor != undefined && dataItem.Entity.HasChangeInfo)
+                        return true;
+
+                    if (vrLoggableEntitySettings.ChangeInfoDefinition.ObjectRuntimeEditor != undefined && dataItem.Entity.HasDetail)
+                        return true;
+                }
+                return false;
+            };
             $scope.objects = [];
 
             $scope.onGridReady = function (api) {
@@ -62,7 +66,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
                                 if (vrLoggableEntitySettings != null) {
                                     actionHistoryName = vrLoggableEntitySettings.ViewHistoryItemClientActionName;
                                     viewHistoryAction = VRCommon_ObjectTrackingService.getActionTrackIfExist(actionHistoryName);
-                                   
+
                                     return gridAPI.retrieveData(query).finally(function () {
                                         promiseDeferred.resolve();
                                     });
@@ -109,35 +113,57 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRCommon_Object
 
             function AddChangeInfoDrillDown(dataItem) {
                 if (vrLoggableEntitySettings != undefined && vrLoggableEntitySettings.ChangeInfoDefinition != undefined) {
-                   
-                    dataItem.changeInfoDirective = vrLoggableEntitySettings.ChangeInfoDefinition.RuntimeEditor;
-                    dataItem.onChangeInfoDirectiveReady = function (api) {
-                        dataItem.changeInfoDirectiveAPI = api;
-                        dataItem.loadChangeInfoDirective = true;
-                        VRCommon_ObjectTrackingAPIService.GetObjectTrackingChangeInfo(dataItem.Entity.VRObjectTrackingId).then(function (response) {
+
+
+                    if (vrLoggableEntitySettings.ChangeInfoDefinition.RuntimeEditor != undefined && dataItem.Entity.HasChangeInfo) {
+                        dataItem.changeInfoDirective = vrLoggableEntitySettings.ChangeInfoDefinition.RuntimeEditor;
+                        dataItem.onChangeInfoDirectiveReady = function (api) {
+                            dataItem.changeInfoDirectiveAPI = api;
+                            dataItem.loadChangeInfoDirective = true;
+                            VRCommon_ObjectTrackingAPIService.GetObjectTrackingChangeInfo(dataItem.Entity.VRObjectTrackingId).then(function (response) {
+                                var query = {
+                                    changeInfoDefinition: vrLoggableEntitySettings.ChangeInfoDefinition,
+                                    changeInfo: response,
+                                    loggableEntityUniqueName: uniqueName
+                                };
+                                dataItem.changeInfoDirectiveAPI.load(query).then(function () {
+                                    dataItem.loadChangeInfoDirective = false;
+                                });
+                            });
+                        };
+
+                    }
+
+                    if (vrLoggableEntitySettings.ChangeInfoDefinition.ObjectRuntimeEditor != undefined && dataItem.Entity.HasDetail) {
+                        dataItem.changeInfoDirective = vrLoggableEntitySettings.ChangeInfoDefinition.ObjectRuntimeEditor;
+                        dataItem.onChangeInfoDirectiveReady = function (api) {
+                            dataItem.changeInfoDirectiveAPI = api;
+                            dataItem.loadChangeInfoDirective = true;
+
                             var query = {
                                 changeInfoDefinition: vrLoggableEntitySettings.ChangeInfoDefinition,
-                                changeInfo: response,
+                                historyId: dataItem.Entity.VRObjectTrackingId,
                                 loggableEntityUniqueName: uniqueName
                             };
                             dataItem.changeInfoDirectiveAPI.load(query).then(function () {
                                 dataItem.loadChangeInfoDirective = false;
                             });
-                        });
-                    };
-                }
-            }
 
-            var defaultMenuActions = [{
+                        };
+                    }
+            }
+        }
+
+            var defaultMenuActions =[{
                 name: "View",
-                clicked: viewHistory,
-            }];
+                    clicked: viewHistory,
+        }];
 
             $scope.gridMenuActions = function (dataItem) {
                 if (dataItem.Entity.HasDetail && viewHistoryAction != undefined) {
                     return defaultMenuActions;
-                }
-            };
+            }
+        };
 
         }
         function viewHistory(dataItem) {

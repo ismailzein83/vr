@@ -153,11 +153,11 @@ namespace Vanrise.GenericData.Business
                 return GenericBusinessEntityInfoMapper(businessEntityDefinitionId, record);
             });
         }
-        public GenericBusinessEntityRuntimeEditor GetGenericBusinessEntityEditorRuntime(Guid businessEntityDefinitionId, Object genericBusinessEntityId)
+        public GenericBusinessEntityRuntimeEditor GetGenericBusinessEntityEditorRuntime(Guid businessEntityDefinitionId, Object genericBusinessEntityId, int? historyId)
         {
             return new GenericBusinessEntityRuntimeEditor
             {
-                GenericBusinessEntity = genericBusinessEntityId != null ?GetGenericBusinessEntity( genericBusinessEntityId,  businessEntityDefinitionId):null ,
+                GenericBusinessEntity = genericBusinessEntityId != null ? GetGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId) : historyId.HasValue ? new VRObjectTrackingManager().GetObjectDetailById(historyId.Value) as GenericBusinessEntity : null,
                 DefinitionTitle = _genericBEDefinitionManager.GetGenericBEDefinitionTitle(businessEntityDefinitionId),
                 GenericBEDefinitionSettings = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(businessEntityDefinitionId),
                 TitleFieldName = _genericBEDefinitionManager.GetGenericBEDefinitionTitleFieldName(businessEntityDefinitionId)

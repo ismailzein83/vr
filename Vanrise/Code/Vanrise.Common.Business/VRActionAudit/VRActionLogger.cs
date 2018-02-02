@@ -52,7 +52,7 @@ namespace Vanrise.Common.Business
 
         public void TrackAndLogObjectAdded(VRLoggableEntityBase loggableEntity, Object obj)
         {
-            TrackAndLogObjectAction(loggableEntity, "Add", obj,null, null, true,null);
+            TrackAndLogObjectAction(loggableEntity, "Add", obj, null, null, true, null);
         }
 
         public void TrackAndLogObjectUpdated(VRLoggableEntityBase loggableEntity, Object obj)
@@ -76,7 +76,7 @@ namespace Vanrise.Common.Business
             if (vrActionAuditChangeInfoResolveChangeInfoContext.NothingChanged)
                 return;
               
-            TrackAndLogObjectAction(loggableEntity, "Update", oldObjectValue, null, vrActionAuditChangeInfoResolveChangeInfoContext.ChangeSummary, true, vrActionAuditChangeInfo);
+            TrackAndLogObjectAction(loggableEntity, "Update", oldObjectValue, null, vrActionAuditChangeInfoResolveChangeInfoContext.ChangeSummary, false, vrActionAuditChangeInfo);
         
         }
 

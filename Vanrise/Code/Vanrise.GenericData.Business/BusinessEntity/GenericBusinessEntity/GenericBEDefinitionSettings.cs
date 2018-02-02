@@ -17,6 +17,10 @@ namespace Vanrise.GenericData.Business
         { 
             get { return "vr-genericdata-genericbusinessentity-editor"; } 
         }
+        public override string ViewerEditor
+        {
+            get { return "vr-genericdata-genericbusinessentity-runtimeeditor"; }
+        }
         public override string IdType
         {
             get { return "System.Int64"; }
@@ -31,7 +35,7 @@ namespace Vanrise.GenericData.Business
         }
         public override Dictionary<string, DataRecordField> TryGetRecordTypeFields(IBEDefinitionSettingsTryGetRecordTypeFieldsContext context)
         {
-            return null;
+            return new DataRecordTypeManager().GetDataRecordTypeFields(this.DataRecordTypeId);
         }
         public override string GroupSelectorUIControl { get; set; }
 

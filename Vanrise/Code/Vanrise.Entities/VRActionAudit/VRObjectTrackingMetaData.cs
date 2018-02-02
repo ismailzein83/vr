@@ -13,6 +13,7 @@ namespace Vanrise.Entities
       public int UserId { get; set; }
       public int ActionId { get; set; }
       public bool HasDetail { get; set; }
+      public bool HasChangeInfo { get; set; }
       public string ActionDescription { get; set; }
  
     }

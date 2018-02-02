@@ -58,6 +58,11 @@
                 businessEntityDefinitionId: businessEntityDefinitionId
             });
         }
+        function GetBusinessEntityDefinitionViewEditor(businessEntityDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetBusinessEntityDefinitionViewEditor'), {
+                businessEntityDefinitionId: businessEntityDefinitionId
+            });
+        }
 
         return {
             GetFilteredBusinessEntityDefinitions: GetFilteredBusinessEntityDefinitions,
@@ -69,7 +74,8 @@
             UpdateBusinessEntityDefinition: UpdateBusinessEntityDefinition,
             HasUpdateBusinessEntityDefinition: HasUpdateBusinessEntityDefinition,
             GetBEDefinitionSettingConfigs: GetBEDefinitionSettingConfigs,
-            GetBEDataRecordTypeIdIfGeneric: GetBEDataRecordTypeIdIfGeneric
+            GetBEDataRecordTypeIdIfGeneric: GetBEDataRecordTypeIdIfGeneric,
+            GetBusinessEntityDefinitionViewEditor: GetBusinessEntityDefinitionViewEditor
         };
     }
 

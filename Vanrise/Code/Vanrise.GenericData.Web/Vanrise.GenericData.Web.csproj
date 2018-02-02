@@ -221,6 +221,8 @@
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\Editor\ColumnDefinitionEditorController.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\Editor\vr-genericdata-editordefinition-settings.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\Editor\vr-genericdata-viewdefinition-settings.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Templates\GenericBusinessEntityEditor.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\vr-genericdata-genericbusinessentity-runtimeeditor.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\Templates\GenericBEStaticEditorDefiitionTemplate.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\Templates\TabsContainerDefinitionSettingTemplate.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\vr-genericdata-staticeditor-definition.js" />
@@ -313,7 +315,9 @@
     <Content Include="VR_GenericData\Directives\GenericRule\Templates\GenericRuleManagementTemplate.html" />
     <Content Include="VR_GenericData\Directives\GenericRule\vr-genericdata-genericrule-criteria.js" />
     <Content Include="VR_GenericData\Directives\GenericRule\vr-genericdata-genericrule-management.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\ActionAuditChangeInfo\Templates\GenericFieldsActionAuditChangeInfoObjectRuntime.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\ActionAuditChangeInfo\Templates\GenericFieldsActionAuditChangeInfoRuntime.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\ActionAuditChangeInfo\vr-genericdata-genericfields-actionauditchange-objectruntime.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\ActionAuditChangeInfo\vr-genericdata-genericfields-actionauditchange-runtime.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\Templates\CompareToConstantFieldFormulaTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecordFieldFormulas\Templates\DateTimeRoundFieldFormulaTemplate.html" />

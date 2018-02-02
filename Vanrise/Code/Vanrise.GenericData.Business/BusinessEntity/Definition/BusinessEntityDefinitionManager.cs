@@ -194,7 +194,13 @@ namespace Vanrise.GenericData.Business
 
             return businessEntityDefinition.Settings.IdType;
         }
-
+        public string GetBusinessEntityDefinitionViewEditor(Guid businessEntityDefinitionId)
+        {
+            var businessEntityDefinition = GetBusinessEntityDefinition(businessEntityDefinitionId);
+            businessEntityDefinition.ThrowIfNull("businessEntityDefinition", businessEntityDefinitionId);
+            businessEntityDefinition.Settings.ThrowIfNull("businessEntityDefinition.Settings",businessEntityDefinitionId);
+            return businessEntityDefinition.Settings.ViewerEditor;
+        }
         public Dictionary<Guid, BusinessEntityDefinition> GetBusinessEntityDefinitionsByConfigId(Guid beConfigId)
         {
             return GetCachedBusinessEntityDefinitionsByConfigId().GetRecord(beConfigId);

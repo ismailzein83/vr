@@ -90,13 +90,22 @@ namespace Vanrise.GenericData.Business
             }
             return summary;
         }
+
+        public override string ObjectRuntimeEditor
+        {
+            get { return "vr-genericdata-genericfields-actionauditchange-objectruntime"; }
+        }
+
+        public override VRActionAuditChangeInfo ResolveChangeInfoToView(IVRActionAuditChangeInfoResolveChangeInfoContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class GenericFieldsActionAuditChangeInfo : VRActionAuditChangeInfo
     {
         public List<GenericFieldChangeInfo> FieldChanges { get; set; }
     }
-
     public class GenericFieldChangeInfo
     {
         public string FieldName { get; set; }
