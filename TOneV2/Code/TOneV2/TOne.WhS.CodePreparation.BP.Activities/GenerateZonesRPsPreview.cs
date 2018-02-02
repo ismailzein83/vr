@@ -42,7 +42,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                         if (!carrierAccountManager.IsCarrierAccountActive(notImportedZoneRoutingProduct.OwnerId))
                             continue;
                     }
-                    zoneRoutingProductPreview.Add(NotImportedZoneRoutingProductPreviewMapper(notImportedZoneRoutingProduct));
+                    zoneRoutingProductPreview.Add(DeletedZoneRoutingProductPreviewMapper(notImportedZoneRoutingProduct));
                 }
             }
             foreach (NotImportedZone notImportedZone in notImportedZones)
@@ -78,6 +78,20 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 BED = notImportedZoneRoutingProduct.BED,
                 EED = notImportedZoneRoutingProduct.EED,
                 ChangeType = ZoneRoutingProductChangeType.NotChanged,
+            };
+        }
+
+        private ZoneRoutingProductPreview DeletedZoneRoutingProductPreviewMapper(NotImportedZoneRoutingProduct notImportedZoneRoutingProduct)
+        {
+            return new ZoneRoutingProductPreview()
+            {
+                ZoneName = notImportedZoneRoutingProduct.ZoneName,
+                OwnerType = notImportedZoneRoutingProduct.OwnerType,
+                OwnerId = notImportedZoneRoutingProduct.OwnerId,
+                RoutingProductId = notImportedZoneRoutingProduct.RoutingProductId,
+                BED = notImportedZoneRoutingProduct.BED,
+                EED = notImportedZoneRoutingProduct.EED,
+                ChangeType = ZoneRoutingProductChangeType.Deleted,
             };
         }
 
