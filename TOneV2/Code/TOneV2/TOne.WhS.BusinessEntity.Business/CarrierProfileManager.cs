@@ -606,7 +606,10 @@ namespace TOne.WhS.BusinessEntity.Business
             return new CarrierProfileTicketContactInfo()
             {
                 CarrierProfileTicketContactId = carrierProfileTicketContact.CarrierProfileTicketContactId,
-                Name = string.Format("{0} - {1}", index + 1, carrierProfileTicketContact.Name)
+                Name = string.Format("{0} - {1}", index + 1, carrierProfileTicketContact.Name),
+                PhoneNumber = carrierProfileTicketContact.PhoneNumber,
+                Emails = carrierProfileTicketContact.Emails
+
             };
         }
         #endregion

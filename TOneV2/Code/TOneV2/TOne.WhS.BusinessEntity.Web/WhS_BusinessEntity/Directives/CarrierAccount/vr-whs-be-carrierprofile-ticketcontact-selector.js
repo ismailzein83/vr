@@ -79,7 +79,6 @@ app.directive('vrWhsBeCarrierprofileTicketcontactSelector', ['WhS_BE_CarrierProf
             var api = {};
 
             api.load = function (payload) {
-
                 var filter;
                 var selectedIds;
                 if (payload != undefined) {
@@ -89,7 +88,6 @@ app.directive('vrWhsBeCarrierprofileTicketcontactSelector', ['WhS_BE_CarrierProf
                 var serializedFilter = {};
                 if (filter != undefined)
                     serializedFilter = UtilsService.serializetoJson(filter);
-
                 return WhS_BE_CarrierProfileAPIService.GetCarrierProfileTicketContactsInfo(serializedFilter).then(function (response) {
                     selectorApi.clearDataSource();
                     angular.forEach(response, function (itm) {
@@ -104,6 +102,10 @@ app.directive('vrWhsBeCarrierprofileTicketcontactSelector', ['WhS_BE_CarrierProf
 
             api.getSelectedIds = function () {
                 return VRUIUtilsService.getIdSelectedIds('CarrierProfileTicketContactId', attrs, ctrl);
+            };
+
+            api.getSelectedValues = function () {
+                return ctrl.selectedvalues;
             };
 
             

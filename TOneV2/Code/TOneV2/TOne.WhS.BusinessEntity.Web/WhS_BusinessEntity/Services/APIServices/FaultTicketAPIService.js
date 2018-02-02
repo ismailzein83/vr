@@ -5,8 +5,6 @@
         var controllerName = "FaultTicket";
        
         function GetCustomerFaultTicketDetails(customerFaultTicketInput) {
-            console.log("in api");
-            console.log(customerFaultTicketInput);
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetCustomerFaultTicketDetails"),  customerFaultTicketInput);
         }
        

@@ -84,6 +84,9 @@ namespace TOne.WhS.BusinessEntity.Entities
         public Guid CarrierProfileTicketContactId { get; set; }
 
         public string Name { get; set; }
+        public List<string> PhoneNumber { get; set; }
+
+        public List<string> Emails { get; set; }
     }
 
     public class TicketContactInfoFilter
