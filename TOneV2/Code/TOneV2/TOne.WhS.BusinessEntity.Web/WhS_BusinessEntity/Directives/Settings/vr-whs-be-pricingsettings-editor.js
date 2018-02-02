@@ -114,12 +114,12 @@ app.directive('vrWhsBePricingsettingsEditor', ['UtilsService', 'VRCommon_Currenc
 
                 ctrl.isDefaultRateRequired = (directiveContext == systemEnumValue);
                 ctrl.isMaxSaleRateRequired = (directiveContext == systemEnumValue);
-                ctrl.isEffectiveDateDayOffset = (directiveContext == systemEnumValue);
-                ctrl.isRetroactiveDayOffset = (directiveContext == systemEnumValue);
-                ctrl.isNewRateDayOffset = (directiveContext == systemEnumValue);
+                ctrl.isEffectiveDateDayOffsetRequired = (directiveContext == systemEnumValue);
+                ctrl.isRetroactiveDayOffsetRequired = (directiveContext == systemEnumValue);
+                ctrl.isNewRateDayOffsetRequired = (directiveContext == systemEnumValue);
                 ctrl.isEndCountryDayOffsetRequired = (directiveContext == systemEnumValue);
-                ctrl.isIncreasedRateDayOffset = (directiveContext == systemEnumValue);
-                ctrl.isDecreasedRateDayOffset = (directiveContext == systemEnumValue);
+                ctrl.isIncreasedRateDayOffsetRequired = (directiveContext == systemEnumValue);
+                ctrl.isDecreasedRateDayOffsetRequired = (directiveContext == systemEnumValue);
             }
         }
 
