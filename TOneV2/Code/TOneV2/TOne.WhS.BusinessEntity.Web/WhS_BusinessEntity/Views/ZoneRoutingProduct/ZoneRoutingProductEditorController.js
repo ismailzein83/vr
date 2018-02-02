@@ -34,8 +34,8 @@
                 zoneName = parameters.ZoneName;
                 sellingNumberPlanId = parameters.SellingNumberPlanId;
                 currentRoutingProductId = parameters.CurrentRoutingProductId;
-                countryBED = parameters.CountryBED,
-                countryEED = parameters.CountryEED
+                countryBED = parameters.CountryBED;
+                countryEED = parameters.CountryEED;
             }
         }
 
@@ -61,7 +61,7 @@
                 if (errorMessageCountryBED != null)
                     return 'Zone routing product BED cannot be less than country BED';
                 return null;
-            }
+            };
         }
 
         function load() {
