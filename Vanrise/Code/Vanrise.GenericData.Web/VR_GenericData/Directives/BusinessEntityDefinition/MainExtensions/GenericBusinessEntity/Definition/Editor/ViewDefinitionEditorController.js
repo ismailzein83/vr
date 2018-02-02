@@ -77,7 +77,6 @@
                 function loadSettingDirectiveSection() {
                     var loadViewSettingsPromiseDeferred = UtilsService.createPromiseDeferred();
                     viewSettingsReadyPromiseDeferred.promise.then(function () {
-                        console.log(viewDefinition)
                         var payload = {
                             parameterEntity: viewDefinition != undefined && viewDefinition.Settings != undefined ? viewDefinition.Settings : undefined
                         };
@@ -108,7 +107,6 @@
 
         function insert() {
             var viewDefinition = buildViewDefinitionFromScope();
-            console.log(viewDefinition)
             if ($scope.onGenericBEViewDefinitionAdded != undefined) {
                 $scope.onGenericBEViewDefinitionAdded(viewDefinition);
             }
