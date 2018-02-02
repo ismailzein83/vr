@@ -12,6 +12,10 @@ using Microsoft.SqlServer.Management.Smo;
 using Microsoft.SqlServer.Management.Sdk.Sfc;
 using System.Configuration;
 using Dean.Edwards;
+using System.Reflection;
+using Vanrise.Entities;
+using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace Vanrise.HelperTools
 {
@@ -22,6 +26,7 @@ namespace Vanrise.HelperTools
         public static string PreventCreateDbScript { get { return ConfigurationManager.AppSettings["PreventCreateDbScript"]; } }
         public static string SqlFilesOutputPath { get { return ConfigurationManager.AppSettings["sqlFilesOutputPath"]; } }
         public static string JavascriptsOutputPath { get { return ConfigurationManager.AppSettings["javascriptsOutputPath"]; } }
+        public static string BinPath { get { return ConfigurationManager.AppSettings["binPath"]; } }
         public static string VersionDateFormat { get { return ConfigurationManager.AppSettings["VersionDateFormat"]; } }
         public static string VersionNumber { get { return ConfigurationManager.AppSettings["VersionNumber"]; } }
         public static string SQLUsername { get { return ConfigurationManager.AppSettings["SQLUsername"]; } }
@@ -170,6 +175,85 @@ namespace Vanrise.HelperTools
         #endregion
 
         #region GenerateDBStructure
+
+        public static void GenerateEnumerationsScript(string binPath, string currentDateShort, bool overridden, string sqlFilesOutputPath, string projectName)
+        {
+            if (string.IsNullOrEmpty(sqlFilesOutputPath))
+            {
+                sqlFilesOutputPath = Common.SqlFilesOutputPath;
+            }
+
+            var assemblies = new List<Assembly>();
+            string binFullPath = string.Format(binPath, projectName, currentDateShort);
+            var tOneFiles = Directory.GetFiles(binFullPath, "TOne*Entities.dll");
+            var vanriseFiles = Directory.GetFiles(binFullPath, "Vanrise*Entities.dll");
+            var retailFiles = Directory.GetFiles(binFullPath, "Retail*Entities.dll");
+
+            foreach (var file in tOneFiles)
+                assemblies.Add(Assembly.LoadFile(file));
+            foreach (var file in vanriseFiles)
+                assemblies.Add(Assembly.LoadFile(file));
+            foreach (var file in retailFiles)
+                assemblies.Add(Assembly.LoadFile(file));
+
+            List<Enumeration> allEnumerations = new List<Enumeration>();
+            foreach (var assembly in assemblies)
+            {
+                allEnumerations.AddRange(GetEnumerations(assembly));
+            }
+
+            StringBuilder scriptBuilder = new StringBuilder();
+            foreach (Enumeration enumeration in allEnumerations)
+            {
+                if (scriptBuilder.Length > 0)
+                {
+                    scriptBuilder.Append(",");
+                    scriptBuilder.AppendLine();
+                }
+                scriptBuilder.AppendFormat(@"('{0}','{1}','{2}')", enumeration.NameSpace, enumeration.Name, enumeration.Description);
+            }
+            string script =string.Format(@"--[common].[Enumerations]-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([NameSpace],[Name],[Description])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////{0}--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([NameSpace],[Name],[Description]))merge	[common].[Enumerations] as tusing	cte_data as son		1=1 and t.[NameSpace] = s.[NameSpace] and t.[Name] = s.[Name]when matched then	update set	[Description] = s.[Description]when not matched by target then	insert([NameSpace],[Name],[Description])	values(s.[NameSpace],s.[Name],s.[Description]);", scriptBuilder.ToString());
+            
+            File.WriteAllText(string.Format(sqlFilesOutputPath, currentDateShort, "Configuration\\Enumerations.sql", projectName), script.ToString());
+        }
+
+        public static List<Enumeration> GetEnumerations(Assembly assembly)
+        {
+            List<Enumeration> result = new List<Enumeration>();
+            if (assembly == null)
+                return result;
+            try
+            {
+                var assemblyTypes = assembly.GetTypes();
+                foreach (Type type in assemblyTypes)
+                {
+                        if (type.IsEnum)
+                        {
+                            if (type.Namespace == null)
+                                continue;
+                            Enumeration enumeration = new Enumeration();
+                            enumeration.NameSpace = type.Namespace;
+                            enumeration.Name = type.Name;
+
+                            var enumerationValues = new List<string>();
+                            foreach (var enumValue in type.GetEnumValues())
+                            {
+                                int enumerationValueInteger = Convert.ToInt32(enumValue);
+                                string enumerationValueName = enumValue.ToString();
+                                enumerationValues.Add(string.Format("{0}:{1}", enumerationValueName, enumerationValueInteger));
+                            }
+                            enumeration.Description = string.Join(", ", enumerationValues);
+                            result.Add(enumeration);
+                        }
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                //Console.WriteLine("error occured:", ex.Message);
+            }
+            return result;
+        }
 
         public static void GenerateDBStructure(string currentDate, string currentDateShort, List<string> lstDBs, string sqlFilesOutputPath, string projectName)
         {

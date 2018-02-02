@@ -42,6 +42,9 @@ namespace Vanrise.HelperTools
                     case "GRPJSOverridden":
                         Common.GroupJSFiles(currentDateShort, "Modules", true, null, args[1]);
                         break;
+                    case "Enumerations":
+                        Common.GenerateEnumerationsScript(Common.BinPath, currentDateShort, false, null, args[1]);
+                        break;
                     default:
                         Console.WriteLine("Invalid argument: {0} or {1}", args[0], args[1]);
                         break;

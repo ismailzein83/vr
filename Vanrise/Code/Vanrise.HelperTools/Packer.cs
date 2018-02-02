@@ -50,6 +50,8 @@ namespace Dean.Edwards
         private CheckBox chkOverriddenNode;
         private Button bnGenerateDBScript;
         private CheckedListBox chklstDatabases;
+        private Button btnEnums;
+
         /// <summary>
         /// Required designer variable.
         /// </summary>
@@ -113,6 +115,7 @@ namespace Dean.Edwards
             this.chkOverriddenNode = new System.Windows.Forms.CheckBox();
             this.bnGenerateDBScript = new System.Windows.Forms.Button();
             this.chklstDatabases = new System.Windows.Forms.CheckedListBox();
+            this.btnEnums = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // tbSource
@@ -343,7 +346,7 @@ namespace Dean.Edwards
             this.btnGroupSQLFiles.BackColor = System.Drawing.Color.LightSkyBlue;
             this.btnGroupSQLFiles.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnGroupSQLFiles.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnGroupSQLFiles.Location = new System.Drawing.Point(296, 140);
+            this.btnGroupSQLFiles.Location = new System.Drawing.Point(238, 140);
             this.btnGroupSQLFiles.Name = "btnGroupSQLFiles";
             this.btnGroupSQLFiles.Size = new System.Drawing.Size(109, 23);
             this.btnGroupSQLFiles.TabIndex = 11;
@@ -367,7 +370,7 @@ namespace Dean.Edwards
             this.bnGenerateDBScript.BackColor = System.Drawing.Color.LightSkyBlue;
             this.bnGenerateDBScript.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.bnGenerateDBScript.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.bnGenerateDBScript.Location = new System.Drawing.Point(408, 140);
+            this.bnGenerateDBScript.Location = new System.Drawing.Point(353, 140);
             this.bnGenerateDBScript.Name = "bnGenerateDBScript";
             this.bnGenerateDBScript.Size = new System.Drawing.Size(90, 23);
             this.bnGenerateDBScript.TabIndex = 14;
@@ -383,12 +386,26 @@ namespace Dean.Edwards
             this.chklstDatabases.Size = new System.Drawing.Size(360, 94);
             this.chklstDatabases.TabIndex = 16;
             // 
+            // btnEnums
+            // 
+            this.btnEnums.BackColor = System.Drawing.Color.LightSkyBlue;
+            this.btnEnums.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnEnums.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnEnums.Location = new System.Drawing.Point(448, 140);
+            this.btnEnums.Name = "btnEnums";
+            this.btnEnums.Size = new System.Drawing.Size(90, 23);
+            this.btnEnums.TabIndex = 17;
+            this.btnEnums.Text = "Enums";
+            this.btnEnums.UseVisualStyleBackColor = false;
+            this.btnEnums.Click += new System.EventHandler(this.btnEnums_Click);
+            // 
             // Packer
             // 
             this.AcceptButton = this.pack;
             this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
             this.CancelButton = this.bClear;
             this.ClientSize = new System.Drawing.Size(774, 253);
+            this.Controls.Add(this.btnEnums);
             this.Controls.Add(this.chklstDatabases);
             this.Controls.Add(this.bnGenerateDBScript);
             this.Controls.Add(this.chkOverriddenNode);
@@ -712,6 +729,27 @@ namespace Dean.Edwards
 
             // generates script
             return transfer.ScriptTransfer();
+        }
+
+        private void btnEnums_Click(object sender, EventArgs e)
+        {
+            string sqlFilesOutputPath = txtDirectory.Text;
+
+            if (string.IsNullOrEmpty(sqlFilesOutputPath))
+            {
+                MessageBox.Show("Please select Output directory!");
+                txtDirectory.Focus();
+                return;
+            }
+
+            string currentDate = DateTime.Now.ToString("yyyMMddHHmm");
+            string currentDateShort = "20180126_test";//DateTime.Now.ToString("yyyMMdd");
+
+            DisplayProgressBar(2);
+            Thread.Sleep(1000);
+            pBar1.PerformStep();
+            Common.GenerateEnumerationsScript(Common.BinPath, currentDateShort,false, sqlFilesOutputPath, "TOneV2");
+            pBar1.PerformStep();
         }
     }
 }

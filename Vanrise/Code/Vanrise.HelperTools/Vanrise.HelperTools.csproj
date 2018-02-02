@@ -140,6 +140,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Common.Business\Vanrise.Common.Business.csproj">
+      <Project>{571a68ec-2d45-4b5c-9e75-bb6fb7c0d7b7}</Project>
+      <Name>Vanrise.Common.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
       <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
       <Name>Vanrise.Common</Name>
@@ -151,6 +155,10 @@
     <ProjectReference Include="..\Vanrise.Data\Vanrise.Data.csproj">
       <Project>{107dc891-2169-409f-9617-6d52723d05ce}</Project>
       <Name>Vanrise.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
