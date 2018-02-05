@@ -12,6 +12,7 @@ namespace Vanrise.Entities
     }
     public interface IStatusDefinitionFilterContext
     {
+        StatusDefinition StatusDefinition { get; }
         Guid BusinessEntityDefinitionId { get; }
     }
 }

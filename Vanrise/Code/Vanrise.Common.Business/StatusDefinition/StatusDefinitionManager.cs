@@ -102,7 +102,7 @@ namespace Vanrise.Common.Business
                         return false;
                     if (filter.Filters != null)
                     {
-                        var context = new StatusDefinitionFilterContext() { BusinessEntityDefinitionId = x.BusinessEntityDefinitionId };
+                        var context = new StatusDefinitionFilterContext() { BusinessEntityDefinitionId = x.BusinessEntityDefinitionId,StatusDefinition = x };
                         if (!filter.Filters.Any(y => y.IsMatched(context)))
                             return false;
                     }

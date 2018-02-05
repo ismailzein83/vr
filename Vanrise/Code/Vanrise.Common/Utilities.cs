@@ -97,15 +97,18 @@ namespace Vanrise.Common
         public static List<T> ConvertJsonToList<T>(Object value)
         {
             List<T> valueList = new List<T>();
-            var oldEnumerator = (value as System.Collections.IEnumerable).GetEnumerator();
-            if (oldEnumerator != null)
+            if(value != null)
             {
-                while (oldEnumerator.MoveNext())
+                var oldEnumerator = (value as System.Collections.IEnumerable).GetEnumerator();
+                if (oldEnumerator != null)
                 {
-                    if (oldEnumerator.Current != null)
+                    while (oldEnumerator.MoveNext())
                     {
-                        var enumeratorEntity = Vanrise.Common.Serializer.Deserialize<T>(oldEnumerator.Current.ToString());
-                        valueList.Add(enumeratorEntity);
+                        if (oldEnumerator.Current != null)
+                        {
+                            var enumeratorEntity = Vanrise.Common.Serializer.Deserialize<T>(oldEnumerator.Current.ToString());
+                            valueList.Add(enumeratorEntity);
+                        }
                     }
                 }
             }

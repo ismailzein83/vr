@@ -9,6 +9,8 @@ namespace Vanrise.Common.Business
 {
     public class StatusDefinitionFilterContext : IStatusDefinitionFilterContext
     {
+        public StatusDefinition StatusDefinition { get; set; }
+
         public  Guid BusinessEntityDefinitionId  { get; set; }
     }
 }
