@@ -99,7 +99,7 @@ namespace TOne.WhS.Routing.Entities
                 Backups = CloneBackups(this.Backups),
                 BlockOption = this.BlockOption,
                 EffectiveOn = this.EffectiveOn,
-                ExactSupplierServiceIds = CloneServices(this.ExactSupplierServiceIds),
+                ExactSupplierServiceIds = Vanrise.Common.Utilities.CloneHashSet<int>(this.ExactSupplierServiceIds),
                 ExecutedRuleId = this.ExecutedRuleId,
                 FilterOption = this.FilterOption,
                 IsEffectiveInFuture = this.IsEffectiveInFuture,
@@ -113,23 +113,11 @@ namespace TOne.WhS.Routing.Entities
                 SupplierRate = this.SupplierRate,
                 SupplierRateEED = this.SupplierRateEED,
                 SupplierRateId = this.SupplierRateId,
-                SupplierServiceIds = CloneServices(this.SupplierServiceIds),
+                SupplierServiceIds = Vanrise.Common.Utilities.CloneHashSet<int>(this.SupplierServiceIds),
                 SupplierServiceWeight = this.SupplierServiceWeight,
                 SupplierZoneId = this.SupplierZoneId
             };
             return target;
-        }
-
-        private HashSet<int> CloneServices(HashSet<int> services)
-        {
-            if (services == null)
-                return null;
-
-            HashSet<int> clonedServices = new HashSet<int>();
-            foreach (int service in services)
-                clonedServices.Add(service);
-
-            return clonedServices;
         }
 
         private List<RouteBackupOptionRuleTarget> CloneBackups(List<RouteBackupOptionRuleTarget> backups)
@@ -153,7 +141,7 @@ namespace TOne.WhS.Routing.Entities
             {
                 BlockOption = this.BlockOption,
                 EffectiveOn = this.EffectiveOn,
-                ExactSupplierServiceIds = CloneServices(this.ExactSupplierServiceIds),
+                ExactSupplierServiceIds = Vanrise.Common.Utilities.CloneHashSet<int>(this.ExactSupplierServiceIds),
                 ExecutedRuleId = this.ExecutedRuleId,
                 FilterOption = this.FilterOption,
                 IsEffectiveInFuture = this.IsEffectiveInFuture,
@@ -166,23 +154,11 @@ namespace TOne.WhS.Routing.Entities
                 SupplierRate = this.SupplierRate,
                 SupplierRateEED = this.SupplierRateEED,
                 SupplierRateId = this.SupplierRateId,
-                SupplierServiceIds = CloneServices(this.SupplierServiceIds),
+                SupplierServiceIds = Vanrise.Common.Utilities.CloneHashSet<int>(this.SupplierServiceIds),
                 SupplierServiceWeight = this.SupplierServiceWeight,
                 SupplierZoneId = this.SupplierZoneId
             };
             return target;
-        }
-
-        private HashSet<int> CloneServices(HashSet<int> services)
-        {
-            if (services == null)
-                return null;
-
-            HashSet<int> clonedServices = new HashSet<int>();
-            foreach (int service in services)
-                clonedServices.Add(service);
-
-            return clonedServices;
         }
     }
 }
