@@ -23,6 +23,8 @@ namespace Vanrise.GenericData.MainExtensions
     }
     public class BasicAdvancedFilterItem
     {
+        public Guid BasicAdvancedFilterItemId { get; set; }
+        public string Name { get; set; }
         public bool ShowInBasic { get; set; }
         public GenericBEFilterDefinitionSettings FilterSettings { get; set; }
     }
