@@ -192,34 +192,28 @@ namespace TOne.WhS.Sales.BP.Activities
             var sellingProductManager = new SellingProductManager();
             var sellingProductId = carrierAccountManager.GetSellingProductId(context.OwnerId);
             var currencyId = sellingProductManager.GetSellingProductCurrencyId(sellingProductId);
-            int priceListId;
 
-            if (currencyId != context.CurrencyId || !reservedOwnerPriceListId.HasValue)
+            List<NewPriceList> customerPriceLists = customerPriceListsByCurrencyId.GetOrCreateItem(currencyId, () => { return new List<NewPriceList>(); });
+            NewPriceList customerPriceList = customerPriceLists.FindRecord(x => x.OwnerId == context.OwnerId && x.OwnerType==SalePriceListOwnerType.Customer && x.PriceListType == SalePriceListType.None);
+            if (customerPriceList == null)
             {
-                List<NewPriceList> customerPriceLists = customerPriceListsByCurrencyId.GetOrCreateItem(currencyId, () => { return new List<NewPriceList>(); });
-                NewPriceList customerPriceList = customerPriceLists.FindRecord(x => x.OwnerId == context.OwnerId);
-                if (customerPriceList == null)
+                customerPriceList = (new NewPriceList()
                 {
-                    customerPriceList = (new NewPriceList()
-                    {
-                        ProcessInstanceId = context.RootProcessInstanceId,
-                        UserId = userId,
-                        PriceListId = (long)new SalePriceListManager().ReserveIdRange(1),
-                        PriceListType = SalePriceListType.None,
-                        OwnerType = SalePriceListOwnerType.Customer,
-                        OwnerId = context.OwnerId,
-                        CurrencyId = currencyId,
-                        EffectiveOn = context.PriceListCreationDate
-                    });
-                    customerPriceLists.Add(customerPriceList);
-                }
-                priceListId = (int)customerPriceList.PriceListId;
+                    ProcessInstanceId = context.RootProcessInstanceId,
+                    UserId = userId,
+                    PriceListId = (long)new SalePriceListManager().ReserveIdRange(1),
+                    PriceListType = SalePriceListType.None,
+                    OwnerType = SalePriceListOwnerType.Customer,
+                    OwnerId = context.OwnerId,
+                    CurrencyId = currencyId,
+                    EffectiveOn = context.PriceListCreationDate
+                });
+                customerPriceLists.Add(customerPriceList);
             }
-            else priceListId = reservedOwnerPriceListId.Value;
-            
+
             foreach (NewRate newRate in newRates)
             {
-                newRate.PriceListId = priceListId;
+                newRate.PriceListId = (int)customerPriceList.PriceListId;
             }
         }
 

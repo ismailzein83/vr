@@ -1137,7 +1137,7 @@ namespace TOne.WhS.BusinessEntity.Business
             foreach (var countryGroup in customerPricelistChange.CountryGroups)
             {
                 int countryCurrencyId = GetCurrencyIdForThisCountry(customerPricelistChange.CustomerId, sellingProductId, countryGroup.RateChanges, countryGroup.CodeChanges, countryGroup.RPChanges, lastRateNoCacheLocator, saleRateManager);
-
+    
                 IEnumerable<SalePricelistZoneChange> zoneChanges = this.GetZoneChanges(countryGroup);
 
                 PriceListChange pricelistChange;
@@ -1169,7 +1169,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 newPriceLists = new List<NewPriceList>();
                 newPricelistsByCurrencyId.Add(currencyId, newPriceLists);
             }
-            NewPriceList customerPricelist = newPriceLists.FindRecord(x => x.OwnerId == customerId && x.OwnerType == SalePriceListOwnerType.Customer);
+            NewPriceList customerPricelist = newPriceLists.FindRecord(x => x.OwnerId == customerId && x.OwnerType == SalePriceListOwnerType.Customer && x.PriceListType!=SalePriceListType.None);
             //foreach (var newPriceList in newPriceLists)
             //{
             //    if (newPriceList.OwnerId == customerId && newPriceList.OwnerType == SalePriceListOwnerType.Customer)
