@@ -24,10 +24,10 @@ namespace TOne.WhS.BusinessEntity.Entities
         public Guid? InternationalReleaseCodeId { get; set; }
         public string InternationalReleaseCodeDescription { get; set; }
     }
-    public class CustomerFaultTicketSettings
-    {
-        public List<CustomerFaultTicketDescriptionSetting> DescriptionSettings { get; set; }
-    }
+    //public class CustomerFaultTicketSettings
+    //{
+    //    public List<CustomerFaultTicketDescriptionSetting> DescriptionSettings { get; set; }
+    //}
     public class  CustomerFaultTicketDescriptionSetting
     {
         public string CodeNumber { get; set; }
