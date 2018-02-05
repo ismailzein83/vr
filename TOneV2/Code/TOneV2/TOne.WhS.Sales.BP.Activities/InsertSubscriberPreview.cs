@@ -41,12 +41,12 @@ namespace TOne.WhS.Sales.BP.Activities
             else if (ratePlanContext.ProcessHasChanges)
             {
                 status = SubscriberProcessStatus.Success;
-                description = "Success";
+                description = "The process has been successfuly completed.";
             }
             else
             {
                 status = SubscriberProcessStatus.NoChange;
-                description = "Subscriber has no changes";
+                description = "The process has been completed without any change.";
             }
             var subscriberPreview = new SubscriberPreview
             {
