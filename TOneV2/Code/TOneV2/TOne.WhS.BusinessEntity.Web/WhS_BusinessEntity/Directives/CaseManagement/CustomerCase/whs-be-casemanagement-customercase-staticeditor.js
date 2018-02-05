@@ -172,8 +172,6 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                 api.load = function (payload) {
                     if (payload != undefined) {
                         selectedValues = payload.selectedValues;
-                        console.log("cust selected values");
-                        console.log(selectedValues);
                         if (selectedValues != undefined) {
                             zoneId = selectedValues.SaleZoneId;
                             oldZoneId = selectedValues.SaleZoneId;
