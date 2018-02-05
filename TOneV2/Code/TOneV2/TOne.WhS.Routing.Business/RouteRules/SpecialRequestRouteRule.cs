@@ -18,6 +18,8 @@ namespace TOne.WhS.Routing.Business
 
         public List<SpecialRequestRouteOptionSettings> Options { get; set; }
 
+        public List<SpecialRequestRouteBackupOptionSettings> OverallBackupOptions { get; set; }
+
         HashSet<int> _optionSupplierIds;
 
         HashSet<int> OptionsSupplierIds

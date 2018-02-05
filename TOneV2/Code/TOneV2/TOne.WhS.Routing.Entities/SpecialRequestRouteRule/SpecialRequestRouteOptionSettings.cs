@@ -14,8 +14,6 @@ namespace TOne.WhS.Routing.Entities
     {
         public int SupplierId { get; set; }
 
-        public int Position { get; set; }
-
         public bool ForceOption { get; set; }
 
         public int NumberOfTries { get; set; }
@@ -28,8 +26,6 @@ namespace TOne.WhS.Routing.Entities
     public class SpecialRequestRouteBackupOptionSettings : IRouteBackupOptionSettings, ISpecialRequestRouteOptionSettings
     {
         public int SupplierId { get; set; }
-
-        public int Position { get; set; }
 
         public bool ForceOption { get; set; }
 

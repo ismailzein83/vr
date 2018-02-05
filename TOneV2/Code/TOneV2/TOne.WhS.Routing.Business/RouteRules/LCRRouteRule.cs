@@ -36,7 +36,6 @@ namespace TOne.WhS.Routing.Business
                         ForceOption = false,
                         NumberOfTries = 1,
                         Percentage = routeOption.Percentage,
-                        Position = counter,
                         SupplierId = routeOption.SupplierId
                     };
                     specialRequestRouteRule.Options.Add(optionSettings);

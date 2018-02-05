@@ -192,7 +192,6 @@ namespace TOne.WhS.DBSync.Business
                 ForceOption = option.ForcedOption,
                 NumberOfTries = option.NumberOfTries,
                 Percentage = option.Percentage == 0 ? (int?)null : option.Percentage,
-                Position = ++position,
                 SupplierId = supplier.CarrierAccountId
             };
             if (!options.ContainsKey(supplier.CarrierAccountId))

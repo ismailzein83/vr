@@ -201,12 +201,16 @@
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleCriteria\Templates\DefaultRouteRuleCriteriaDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleCriteria\vr-whs-routing-routerulecriteria-default.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleCriteria\vr-whs-routing-routerulecriteria-selector.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\BackupOption\Templates\RouteRuleFixedBackupOptionTemplate.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\BackupOption\Templates\RouteRuleSpecialRequestBackupOptionTemplate.html" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\BackupOption\vr-whs-routing-fixed-backupoption.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\FilterByRateDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\RouteRuleFilterDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\Templates\FilterByServiceDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\vr-whs-routing-routerulesettings-filter-rate.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\vr-whs-routing-routerulesettings-filter-service.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Filter\vr-whs-routing-routerulesettings-filter.js" />
+    <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\BackupOption\vr-whs-routing-specialrequest-backupoption.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Option\Templates\ExcludedOptionDirective.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Option\vr-whs-routing-routerulesettings-excluded.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\Templates\OrderByQualityDirective.html" />

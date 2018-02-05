@@ -20,6 +20,8 @@ namespace TOne.WhS.Routing.Business
 
         public List<FixedRouteOptionSettings> Options { get; set; }
 
+        public List<FixedRouteBackupOptionSettings> OverallBackupOptions { get; set; }
+
         #endregion
 
         #region SaleEntity Execution

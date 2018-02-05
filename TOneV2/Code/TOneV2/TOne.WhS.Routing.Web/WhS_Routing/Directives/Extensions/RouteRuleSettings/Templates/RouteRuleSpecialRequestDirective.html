@@ -1,32 +1,38 @@
 ﻿<vr-section header="Options">
     <vr-row>
-        <vr-columns width="1/4row">
-            <vr-whs-be-carrieraccount-selector on-ready="scopeModel.onCarrierAccountDirectiveReady" selectedvalues="scopeModel.selectedSuppliers"
-                                               onselectitem="scopeModel.onSelectSupplier" ondeselectitem="scopeModel.onDeselectSupplier"
-                                               ismultipleselection hideselectedvaluessection getsuppliers isrequired="true">
-            </vr-whs-be-carrieraccount-selector>
-        </vr-columns>
+        <vr-whs-be-carrieraccount-selector on-ready="scopeModel.onCarrierAccountDirectiveReady" selectedvalues="scopeModel.selectedSuppliers" normal-col-num="3"
+                                           onselectitem="scopeModel.onSelectSupplier" getsuppliers ismultipleselection hideselectedvaluessection>
+        </vr-whs-be-carrieraccount-selector>
         <vr-columns width="3/4row" simplecol>
-
             <vr-validator validate="scopeModel.isValid()">
-                <vr-datagrid datasource="scopeModel.suppliers"
+                <vr-datagrid on-ready="scopeModel.onGridReady"
+                             datasource="scopeModel.suppliers"
                              ondeleterow="scopeModel.onDeleteRow"
+                             showexpand="scopeModel.showExpand"
                              disablesorting="true" enabledraggablerow="true"
                              hidegridmenu disabledraggablecolumns>
 
-                    <vr-datagridcolumn headertext="'Suppliers'" field="'Name'"></vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Number Of Tries'">
+                    <vr-datagridcolumn headertext="'Supplier'" field="'Name'"></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'# Of Tries'" fixedwidth="70">
                         <vr-textbox value="dataItem.NumberOfTries" type="number" decimalprecision="0" minvalue="1" isrequired tonextinput></vr-textbox>
                     </vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Percentage'">
-                        <vr-textbox value="dataItem.Percentage" type="number" decimalprecision="0" minvalue="0" maxvalue="100" tonextinput></vr-textbox>
+                    <vr-datagridcolumn headertext="'Percentage'" fixedwidth="70">
+                        <vr-textbox value="dataItem.Percentage" type="number" decimalprecision="0" minvalue="1" maxvalue="100" tonextinput
+                                    isrequired="{{viewScope.scopeModel.showBackupTabs}}" onvaluechanged="viewScope.scopeModel.onPercentageValueChanged">
+                        </vr-textbox>
                     </vr-datagridcolumn>
-                    <vr-datagridcolumn headertext="'Force Option'">
+                    <vr-datagridcolumn headertext="'Force'" fixedwidth="50">
                         <vr-switch value="dataItem.ForceOption"></vr-switch>
                     </vr-datagridcolumn>
+
+                    <vr-datagridexpandablerow>
+                        <vr-whs-routing-specialrequest-backupoption on-ready="dataItem.onBackupOptionDirectiveReady"></vr-whs-routing-specialrequest-backupoption>
+                    </vr-datagridexpandablerow>
                 </vr-datagrid>
             </vr-validator>
-
         </vr-columns>
     </vr-row>
+</vr-section>
+<vr-section header="Overall Backups" ng-show="scopeModel.showBackupTabs">
+    <vr-whs-routing-specialrequest-backupoption on-ready="scopeModel.onOverallBackupOptionsDirectiveReady"></vr-whs-routing-specialrequest-backupoption>
 </vr-section>

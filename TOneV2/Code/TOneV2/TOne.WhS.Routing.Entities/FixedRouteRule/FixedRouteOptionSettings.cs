@@ -30,20 +30,17 @@ namespace TOne.WhS.Routing.Entities
 
         public int? Percentage { get; set; }
 
-        public List<FixedRouteBackupOptionSettings> Backups { get; set; }
-
         public int NumberOfTries { get; set; }
 
+        public List<FixedRouteBackupOptionSettings> Backups { get; set; }
     }
 
     public class FixedRouteBackupOptionSettings : IRouteBackupOptionSettings, IFixedRouteOptionSettings
     {
         public int SupplierId { get; set; }
 
-        public int NumberOfTries { get; set; }
-
-        public int Position { get; set; }
-
         public List<RouteOptionFilterSettings> Filters { get; set; }
+
+        public int NumberOfTries { get; set; }
     }
 }
