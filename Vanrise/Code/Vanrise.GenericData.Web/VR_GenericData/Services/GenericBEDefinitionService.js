@@ -7,11 +7,14 @@
     function GenericBEDefinitionService(VRModalService, VRNotificationService, UtilsService, VRUIUtilsService) {
         var columnModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/Editor/Templates/ColumnDefinitionEditor.html";
         var viewModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/Editor/Templates/ViewDefinitionEditor.html";
+        var tabModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericEditorDefinitionSetting/Templates/GenericBETabContainerEditorController.html";
         return ({
             addGenericBEColumnDefinition: addGenericBEColumnDefinition,
             editGenericBEColumnDefinition: editGenericBEColumnDefinition,
             addGenericBEViewDefinition: addGenericBEViewDefinition,
-            editGenericBEViewDefinition: editGenericBEViewDefinition
+            editGenericBEViewDefinition: editGenericBEViewDefinition,
+            addGenericBETabContainer: addGenericBETabContainer,
+            editGenericBETabContainer: editGenericBETabContainer
         });
 
         function addGenericBEColumnDefinition(onGenericBEColumnDefinitionAdded, context) {
@@ -65,6 +68,36 @@
                 modalScope.onGenericBEViewDefinitionUpdated = onGenericBEViewDefinitionUpdated;
             };
             VRModalService.showModal(viewModalPath, parameters, settings);
+        }
+
+
+        function addGenericBETabContainer(onTabContainerAdded, context) {
+            var parameters = {
+                context: context
+
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onTabContainerAdded = onTabContainerAdded;
+            };
+
+            VRModalService.showModal(tabModalPath, parameters, settings);
+        }
+
+        function editGenericBETabContainer(onTabContainerUpdated, tabDefinition, context) {
+            var parameters = {
+                tabDefinition: tabDefinition,
+                context: context
+
+            };
+
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onTabContainerUpdated = onTabContainerUpdated;
+            };
+            VRModalService.showModal(tabModalPath, parameters, settings);
         }
 
 

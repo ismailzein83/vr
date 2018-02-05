@@ -1,0 +1,27 @@
+﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericBETabContainerEditorController" vr-loader="scopeModal.isLoading" width="'40%'">
+    <vr-modalbody>
+        <vr-form validationcontext="tabEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.tabTitle" label="Title" isrequired></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-switch value="scopeModel.showTab" label="Show Tab"></vr-switch>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-genericdata-editordefinition-settings on-ready="scopeModel.onGenericBEEditorDefinitionDirectiveReady" normal-col-num="6"></vr-genericdata-editordefinition-settings>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" validationcontext="tabEditor" data-onclick="scopeModel.saveTabDefinition"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

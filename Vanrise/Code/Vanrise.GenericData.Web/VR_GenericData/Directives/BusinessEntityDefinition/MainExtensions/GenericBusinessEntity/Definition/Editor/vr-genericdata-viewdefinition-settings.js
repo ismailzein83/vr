@@ -82,7 +82,6 @@
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
-                                console.log(parameterEntity)
                                 if (parameterEntity != undefined) {
                                     $scope.scopeModel.selectedTemplateConfig =
                                         UtilsService.getItemByVal($scope.scopeModel.templateConfigs, parameterEntity.ConfigId, 'ExtensionConfigurationId');
@@ -127,7 +126,10 @@
                 }
             }
             function getContext() {
-                return context;
+                var currentContext = context;
+                if (currentContext == undefined)
+                    currentContext = {};
+                return currentContext;
             }
         }
 

@@ -223,8 +223,10 @@
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\Editor\vr-genericdata-viewdefinition-settings.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Templates\GenericBusinessEntityEditor.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\vr-genericdata-genericbusinessentity-runtimeeditor.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\Templates\GenericBETabContainerEditorController.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\Templates\GenericBEStaticEditorDefiitionTemplate.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\Templates\TabsContainerDefinitionSettingTemplate.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\GenericBETabContainerEditorController.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\vr-genericdata-staticeditor-definition.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\GenericBEViewDefinition\Templates\HistoryGenericBEDefinitionViewTemplate.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\GenericBEViewDefinition\vr-genericdata-genericbe-historygridview-definition.js" />

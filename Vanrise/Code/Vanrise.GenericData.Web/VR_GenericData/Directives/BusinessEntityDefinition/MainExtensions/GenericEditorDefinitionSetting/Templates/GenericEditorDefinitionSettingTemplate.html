@@ -1,6 +1,8 @@
 ﻿<vr-row>
     <vr-columns width="fullrow">
         <vr-button type="Add" data-onclick="ctrl.addRowSection" standalone></vr-button>
-        <vr-genericdata-genericbusinessentity-definition-section on-ready="scopeModel.onSectionDirectiveReady"></vr-genericdata-genericbusinessentity-definition-section>
+        <vr-validator validate="ctrl.isValid()">
+            <vr-genericdata-genericbusinessentity-definition-section on-ready="scopeModel.onSectionDirectiveReady"></vr-genericdata-genericbusinessentity-definition-section>
+        </vr-validator>
     </vr-columns>
 </vr-row>

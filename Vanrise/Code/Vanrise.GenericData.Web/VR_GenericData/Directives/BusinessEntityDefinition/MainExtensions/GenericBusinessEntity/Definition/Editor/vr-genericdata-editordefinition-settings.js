@@ -49,7 +49,10 @@
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
+                    var directivepPayload = {
+                        context: getContext()
+                    };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivepPayload, setLoader, directiveReadyDeferred);
                 };
             }
 
@@ -126,11 +129,13 @@
                 if (ctrl.onReady != null) {
                     ctrl.onReady(api);
                 }
-                function getContext() {
-                    return context;
-                }
             }
-            
+            function getContext() {
+                var currentContext = context;
+                if (currentContext == undefined)
+                    currentContext = {};
+                return currentContext;
+            }
         }
 
         function getTamplate(attrs) {

@@ -24,7 +24,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
         function GenericBusinessEntityDefinitionEditor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
-            var recordTypeFields = [];
+            var dataRecordTypeFields = [];
 
             var dataRecordTypeSelectorAPI;
             var dataRecordTypeSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -82,7 +82,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
 
                 $scope.scopeModel.onRecordTypeSelectionChanged = function () {
                     var selectedRecordTypeId = dataRecordTypeSelectorAPI.getSelectedIds();
-                    recordTypeFields.length = 0;
+                    dataRecordTypeFields.length = 0;
                     if (selectedRecordTypeId != undefined) {
                         var setDataRecordTypeTitleLoader = function (value) { $scope.scopeModel.isLoadingTitle = value };
                         var recordTypeTitlePayload = {
@@ -94,7 +94,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                             setTimeout(function () {
                                 $scope.scopeModel.isLoadingColumns = value;
                                 $scope.$apply();
-                            },1);
+                            }, 1);
                         };
                         var columnDefnitionPayload = {
                             context: getContext()
@@ -129,7 +129,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
 
                 api.getData = function () {
                     return {
-                        $type: "Vanrise.GenericData.Entities.GenericBEDefinitionSettings, Vanrise.GenericData.Entities",
+                        $type: "Vanrise.GenericData.Business.GenericBEDefinitionSettings, Vanrise.GenericData.Business",
                         DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
                         DataRecordStorageId: dataRecordStorageSelectorAPI.getSelectedIds(),
                         TitleFieldName: dataRecordTypeTitleFieldsSelectorAPI.getSelectedIds(),
@@ -266,8 +266,8 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                     },
                     getRecordTypeFields: function () {
                         var data = [];
-                        for (var i = 0; i < recordTypeFields.length; i++) {
-                            data.push(recordTypeFields[i]);
+                        for (var i = 0; i < dataRecordTypeFields.length; i++) {
+                            data.push(dataRecordTypeFields[i]);
                         }
                         return data;
                     }
@@ -277,10 +277,11 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
 
             function getDataRecordFieldsInfo(recordTypeId) {
                 return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldsInfo(recordTypeId, null).then(function (response) {
+                    dataRecordTypeFields.length = 0;
                     if (response != undefined)
                         for (var i = 0; i < response.length; i++) {
                             var currentField = response[i];
-                            recordTypeFields.push(currentField.Entity);
+                            dataRecordTypeFields.push(currentField.Entity);
                         }
                 });
             }

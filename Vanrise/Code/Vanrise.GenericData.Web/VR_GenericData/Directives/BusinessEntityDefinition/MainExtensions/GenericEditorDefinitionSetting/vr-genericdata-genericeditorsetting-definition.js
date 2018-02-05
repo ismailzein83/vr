@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "VRNotificationService", "VRUIUtilsService","VR_GenericData_ExtensibleBEItemService",
+app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VR_GenericData_ExtensibleBEItemService",
     function (UtilsService, VRNotificationService, VRUIUtilsService, VR_GenericData_ExtensibleBEItemService) {
 
         var directiveDefinitionObject = {
@@ -30,11 +30,7 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
             var context;
             var rows;
             function initializeController() {
-
-             
-
                 $scope.scopeModel = {};
-
                 $scope.scopeModel.onSectionDirectiveReady = function (api) {
                     sectionDirectiveApi = api;
                     sectionDirectivePromiseDeferred.resolve();
@@ -52,12 +48,18 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
                     VR_GenericData_ExtensibleBEItemService.addRow(onRowAdded, getFilteredFields());
                 };
 
+                ctrl.isValid = function () {
+                    if (sectionDirectiveApi == undefined) return null;
+                    if (sectionDirectiveApi.getData().Rows.length == 0)
+                        return "You Should add at least one row.";
+                    return null;
+                };
+
                 api.load = function (payload) {
-                    console.log(payload)
-                    if (payload != undefined)
-                    {
+                    if (payload != undefined) {
                         context = payload.context;
-                        rows = payload.Rows
+                        if (payload.settings != undefined)
+                            rows = payload.settings.Rows;
                     }
                     var promises = [];
 
@@ -68,7 +70,7 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
 
                         sectionDirectivePromiseDeferred.promise.then(function () {
                             var payloadSelector = {
-                                rows: payload != undefined ? payload.Rows : undefined,
+                                rows: payload != undefined && payload.settings != undefined ? payload.settings.Rows : undefined,
                                 context: getContext()
                             };
                             VRUIUtilsService.callDirectiveLoad(sectionDirectiveApi, payloadSelector, sectionDirectiveLoadDeferred);
@@ -80,30 +82,29 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
                 };
 
                 function getContext() {
-                    var currentContext = context;
-                    if (currentContext == undefined)
-                        currentContext = {};
-                    currentContext.getFilteredFields = getFilteredFields;
-                   
-                    return currentContext;
+                    return {
+                        getFilteredFields: function () {
+                            var data = [];
+                            var filterData = context.getRecordTypeFields();
+                            for (var i = 0; i < filterData.length; i++) {
+                                data.push({ FieldPath: filterData[i].Name });
+                            }
+                            return data;
+                        },
+                        getDataRecordTypeId: function () {
+                            return context.getDataRecordTypeId();
+                        }
+                    };
                 }
 
                 function getFilteredFields(exceptedFields) {
-
                     var filteredFields = [];
-                    if (context != undefined)
-                    {
-                        //var filteredFields = recordTypeFields;
-                        var recordTypeFields = context.getRecordTypeFields();
-
-                        for (var i = 0; i < recordTypeFields.length; i++) {
-                            filteredFields.push({ FieldPath: recordTypeFields[i].Name });
-                        }
-                        for (var i = 0; i < recordTypeFields.length; i++) {
-                            filterSections(filteredFields, exceptedFields);
+                    if (context != undefined) {
+                        var allFields = context.getRecordTypeFields();
+                        for (var i = 0; i < allFields.length; i++) {
+                            filteredFields.push({ FieldPath: allFields[i].Name });
                         }
                     }
-                    console.log(filteredFields);
                     return filteredFields;
                 }
 
@@ -137,10 +138,12 @@ app.directive("vrGenericdataGenericeditorsettingDefinition", ["UtilsService", "V
                 }
 
                 api.getData = function () {
+                    var data = sectionDirectiveApi.getData();
                     return {
                         $type: "Vanrise.GenericData.MainExtensions.GenericEditorDefinitionSetting, Vanrise.GenericData.MainExtensions",
-                        Rows: sectionDirectiveApi.getData()
-                    };
+                        Rows: sectionDirectiveApi.getData().Rows
+                    }
+                    return data;
                 };
 
                 if (ctrl.onReady != null)
