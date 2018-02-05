@@ -59,8 +59,6 @@
                 api.load = function (payload) {
                     var promises = [];
 
-                    console.log(payload);
-
                     var vrRestAPIAnalyticQueryInterceptor;
 
                     if (payload != undefined) {
