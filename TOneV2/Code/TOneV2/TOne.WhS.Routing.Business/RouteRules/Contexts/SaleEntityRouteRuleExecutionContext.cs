@@ -23,7 +23,6 @@ namespace TOne.WhS.Routing.Business
         public string SaleZoneServiceIds { get; internal set; }
         public RoutingDatabase RoutingDatabase { get; internal set; }
         public bool KeepBackupsForRemovedOptions { get; internal set; }
-
         internal List<SupplierCodeMatchWithRate> SupplierCodeMatches { private get; set; }
         internal SupplierCodeMatchWithRateBySupplier SupplierCodeMatchBySupplier { private get; set; }
 
@@ -34,7 +33,6 @@ namespace TOne.WhS.Routing.Business
             SupplierFilterSettings supplierFilterSettings = new SupplierFilterSettings { RoutingProductId = routeRule.Criteria.GetRoutingProductId() };
             _filteredSupplierIds = SupplierGroupContext.GetFilteredSupplierIds(supplierFilterSettings);
         }
-
 
         public ReadOnlyCollection<RouteOptionRuleTarget> GetOptions()
         {
@@ -58,13 +56,13 @@ namespace TOne.WhS.Routing.Business
         public RouteOptionRuleTarget BuildRouteOptionRuleTarget(RouteRuleTarget routeRuleTarget, IRouteOptionSettings option, List<IRouteBackupOptionSettings> backups)
         {
             RouteOptionRuleTarget routeOptionRuleTarget = null;
+
             var optionSupplierCodeMatchWithRate = GetSupplierCodeMatch(option.SupplierId);
             if (optionSupplierCodeMatchWithRate != null)
             {
                 routeOptionRuleTarget = Helper.CreateRouteOptionRuleTarget(routeRuleTarget, optionSupplierCodeMatchWithRate, option);
                 if (backups != null && backups.Count > 0)
                 {
-                    routeOptionRuleTarget.Backups = new List<RouteBackupOptionRuleTarget>();
                     foreach (IRouteBackupOptionSettings backup in backups)
                     {
                         SupplierCodeMatchWithRate backupOptionSupplierCodeMatch = GetSupplierCodeMatch(backup.SupplierId);
@@ -74,6 +72,7 @@ namespace TOne.WhS.Routing.Business
                         var backupOption = Helper.CreateRouteBackupOptionRuleTarget(routeRuleTarget, backupOptionSupplierCodeMatch, backup);
                         routeOptionRuleTarget.Backups.Add(backupOption);
                     }
+
                     if (routeOptionRuleTarget.Backups.Count == 0)
                         routeOptionRuleTarget.Backups.Add(Helper.CreateRouteBackupOptionRuleTargetFromOption(routeOptionRuleTarget));
                 }
@@ -90,6 +89,7 @@ namespace TOne.WhS.Routing.Business
                     var backupOption = Helper.CreateRouteBackupOptionRuleTarget(routeRuleTarget, backupOptionSupplierCodeMatch, backup);
                     routeBackupOptionRuleTargets.Add(backupOption);
                 }
+
                 if (routeBackupOptionRuleTargets.Count > 0)
                 {
                     var firstBackup = routeBackupOptionRuleTargets.First();
@@ -133,7 +133,6 @@ namespace TOne.WhS.Routing.Business
             return _validSupplierCodeMatches;
         }
 
-
         public List<SupplierCodeMatchWithRate> GetAllSuppliersCodeMatches()
         {
             return this.SupplierCodeMatches;
@@ -142,7 +141,6 @@ namespace TOne.WhS.Routing.Business
         internal void CheckRouteOptionRule(BaseRouteOptionRuleTarget targetOption, RouteRule routeRule)
         {
             var routeOptionRule = GetRouteOptionRule(targetOption);
-
             if (routeOptionRule != null)
             {
                 targetOption.ExecutedRuleId = routeOptionRule.RuleId;

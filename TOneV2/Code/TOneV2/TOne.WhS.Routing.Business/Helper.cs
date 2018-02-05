@@ -52,13 +52,6 @@ namespace TOne.WhS.Routing.Business
             return routes;
         }
 
-        public static RouteBackupOptionRuleTarget CreateRouteBackupOptionRuleTarget(RouteRuleTarget routeRuleTarget, SupplierCodeMatchWithRate supplierCodeMatchWithRate, IRouteBackupOptionSettings backup)
-        {
-            RouteBackupOptionRuleTarget routeBackupOptionRuleTarget = CreateOption<RouteBackupOptionRuleTarget>(routeRuleTarget, supplierCodeMatchWithRate, backup);
-            routeBackupOptionRuleTarget.NumberOfTries = backup.NumberOfTries;
-            return routeBackupOptionRuleTarget;
-        }
-
         public static RouteOptionRuleTarget CreateRouteOptionRuleTarget(RouteRuleTarget routeRuleTarget, SupplierCodeMatchWithRate supplierCodeMatchWithRate, IRouteOptionSettings option)
         {
             RouteOptionRuleTarget routeOptionRuleTarget = CreateOption<RouteOptionRuleTarget>(routeRuleTarget, supplierCodeMatchWithRate, option);
@@ -66,6 +59,13 @@ namespace TOne.WhS.Routing.Business
             routeOptionRuleTarget.Percentage = option.Percentage;
             routeOptionRuleTarget.Backups = new List<RouteBackupOptionRuleTarget>();
             return routeOptionRuleTarget;
+        }
+
+        public static RouteBackupOptionRuleTarget CreateRouteBackupOptionRuleTarget(RouteRuleTarget routeRuleTarget, SupplierCodeMatchWithRate supplierCodeMatchWithRate, IRouteBackupOptionSettings backup)
+        {
+            RouteBackupOptionRuleTarget routeBackupOptionRuleTarget = CreateOption<RouteBackupOptionRuleTarget>(routeRuleTarget, supplierCodeMatchWithRate, backup);
+            routeBackupOptionRuleTarget.NumberOfTries = backup.NumberOfTries;
+            return routeBackupOptionRuleTarget;
         }
 
         public static RouteOptionRuleTarget CreateRouteOptionRuleTargetFromBackup(RouteBackupOptionRuleTarget routeBackupOptionRuleTarget, IRouteOptionSettings option)

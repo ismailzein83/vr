@@ -16,6 +16,7 @@ namespace TOne.WhS.Routing.Entities
         {
             return null;
         }
+
         public virtual void GetQualityConfigurationIds(IRouteRuleQualityContext context)
         {
         }

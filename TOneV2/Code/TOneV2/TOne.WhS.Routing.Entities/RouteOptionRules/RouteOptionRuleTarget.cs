@@ -7,9 +7,8 @@ using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class BaseRouteOptionRuleTarget : Vanrise.Rules.BaseRuleTarget,
-        IRouteOptionOrderTarget, IRouteOptionFilterTarget,
-        IRuleSupplierTarget, IRuleSupplierZoneTarget, IRuleCodeTarget, IRuleSaleZoneTarget, IRuleCustomerTarget, IRuleRoutingProductTarget
+    public class BaseRouteOptionRuleTarget : Vanrise.Rules.BaseRuleTarget, IRouteOptionOrderTarget, IRouteOptionFilterTarget, IRuleSupplierTarget, IRuleSupplierZoneTarget,
+         IRuleCodeTarget, IRuleSaleZoneTarget, IRuleCustomerTarget, IRuleRoutingProductTarget
     {
         public RouteRuleTarget RouteTarget { get; set; }
 

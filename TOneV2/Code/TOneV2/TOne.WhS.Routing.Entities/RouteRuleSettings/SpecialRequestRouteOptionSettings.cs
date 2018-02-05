@@ -6,10 +6,6 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public interface ISpecialRequestRouteOptionSettings
-    {
-        bool ForceOption { get; set; }
-    }
     public class SpecialRequestRouteOptionSettings : IRouteOptionSettings, ISpecialRequestRouteOptionSettings
     {
         public int SupplierId { get; set; }
