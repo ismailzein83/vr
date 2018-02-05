@@ -106,7 +106,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                             $scope.scopeModel.isLoadingEditor = false;
                             var editorPayload = {
                                 context: getContext()
-                            }
+                            };
                             var setEditorLoader = function (value) { $scope.scopeModel.isLoadingEditor = value };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, editorDefinitionAPI, editorPayload, setEditorLoader, recordTypeSelectedPromiseDeferred);
                         });
