@@ -59,12 +59,16 @@
                     var selectedValue = UtilsService.getItemByVal(ctrl.datasource, selectedIds[i], idProperty);
                     if (selectedValue != null)
                         ctrl.selectedvalues.push(selectedValue);
+                    else
+                        console.log(idProperty + " : " + selectedIds[i] + " doses not exist in the data source.");
                 }
             }
             else {
                 var selectedValue = UtilsService.getItemByVal(ctrl.datasource, selectedIds, idProperty);
                 if (selectedValue != null)
                     ctrl.selectedvalues = selectedValue;
+                else
+                    console.log(idProperty + " : " + selectedIds + " doses not exist in the data source.");
             }
         }
 
