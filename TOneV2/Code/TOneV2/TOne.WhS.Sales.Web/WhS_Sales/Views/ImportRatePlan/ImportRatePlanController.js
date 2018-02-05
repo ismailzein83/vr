@@ -56,7 +56,6 @@
 			};
 			$scope.scopeModel.download = function () {
 				return WhS_Sales_RatePlanAPIService.DownloadImportRatePlanTemplate().then(function (response) {
-					console.log(response);
 					if (response != undefined) {
 						UtilsService.downloadFile(response.Content, response.Headers);
 					}

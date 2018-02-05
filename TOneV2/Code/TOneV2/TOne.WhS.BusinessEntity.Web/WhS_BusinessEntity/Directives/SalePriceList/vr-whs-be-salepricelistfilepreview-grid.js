@@ -32,7 +32,6 @@ function (utilsService, VRNotificationService, WhS_BE_SalePriceListChangeAPIServ
 
         var gridAPI;
         $scope.downloadPricelist = function (dataItem) {
-            console.log(dataItem);
             WhS_BE_SalePriceListChangeAPIService.DownloadSalePriceList(dataItem.FileId).then(function (bufferArrayRespone) {
                 utilsService.downloadFile(bufferArrayRespone.data, bufferArrayRespone.headers);
             });

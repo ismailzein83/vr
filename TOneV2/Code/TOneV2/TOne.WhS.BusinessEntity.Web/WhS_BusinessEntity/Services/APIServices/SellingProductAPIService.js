@@ -24,7 +24,6 @@
         }
 
         function UpdateSellingProduct(sellingProductObject) {
-            console.log();
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "UpdateSellingProduct"), sellingProductObject);
         }
         function GetSellingProductsInfo(serializedFilter) {
