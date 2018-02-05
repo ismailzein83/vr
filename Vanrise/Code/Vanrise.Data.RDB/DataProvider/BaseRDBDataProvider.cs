@@ -29,6 +29,8 @@ namespace Vanrise.Data.RDB
         public abstract Object ExecuteScalar(IRDBDataProviderExecuteScalarContext context);
 
         public abstract int ExecuteNonQuery(IRDBDataProviderExecuteNonQueryContext context);
+
+        public abstract BaseRDBStreamForBulkInsert InitializeStreamForBulkInsert(IRDBDataProviderInitializeStreamForBulkInsertContext context);
     }
 
     public interface IRDBDataProviderResolveSelectQueryContext : IBaseRDBResolveQueryContext
@@ -301,4 +303,30 @@ namespace Vanrise.Data.RDB
     {
         
     }
+
+    public interface IRDBDataProviderInitializeStreamForBulkInsertContext
+    {
+        string TableName { get; }
+     
+        char FieldSeparator { get; }
+
+        string[] ColumnNames { get; }
+    }
+
+    public class RDBDataProviderInitializeStreamForBulkInsertContext : IRDBDataProviderInitializeStreamForBulkInsertContext
+    {
+        public RDBDataProviderInitializeStreamForBulkInsertContext(string tableName, char fieldSeparator, string[] columnNames)
+        {
+            this.TableName = tableName;
+            this.FieldSeparator = fieldSeparator;
+            this.ColumnNames = columnNames;
+        }
+
+        public string TableName { get; private set; }
+
+        public char FieldSeparator { get; private set; }
+
+        public string[] ColumnNames { get; private set; }
+    }
+
 }

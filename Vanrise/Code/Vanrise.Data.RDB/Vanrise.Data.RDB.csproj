@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseAndDefs\IBaseRDBResolveQueryContext.cs" />
+    <Compile Include="BulkInsert\BaseRDBStreamForBulkInsert.cs" />
     <Compile Include="Conditions\BaseRDBCondition.cs" />
     <Compile Include="DataProvider\BaseRDBDataProvider.cs" />
     <Compile Include="DataProvider\Providers\MSSQLRDBDataProvider.cs" />
@@ -56,7 +57,7 @@
     <Compile Include="GroupBy\RDBGroupByHavingAndConditionContext.cs" />
     <Compile Include="GroupBy\RDBGroupByHavingContext.cs" />
     <Compile Include="GroupBy\RDBGroupByHavingOrConditionContext.cs" />
-    <Compile Include="RDBBulkInsertQueryContext.cs" />
+    <Compile Include="BulkInsert\RDBBulkInsertQueryContext.cs" />
     <Compile Include="RDBQueryContext.cs" />
     <Compile Include="RDBSchemaManager.cs" />
     <Compile Include="SelectAggregate\RDBSelectAggregateContext.cs" />

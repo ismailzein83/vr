@@ -231,6 +231,11 @@ namespace Vanrise.Data.RDB
             base.Query = batchQuery;
             return batchQuery;
         }
+
+        public IRDBBulkInsertQueryContext StartBulkInsert()
+        {
+            return new RDBBulkInsertQueryContext(this);
+        }
     }
 
     public interface IRDBQueryContextReady

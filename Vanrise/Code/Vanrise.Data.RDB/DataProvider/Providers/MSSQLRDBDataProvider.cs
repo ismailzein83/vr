@@ -360,6 +360,11 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             throw new NotImplementedException();
         }
 
+        public override BaseRDBStreamForBulkInsert InitializeStreamForBulkInsert(IRDBDataProviderInitializeStreamForBulkInsertContext context)
+        {
+            throw new NotImplementedException();
+        }
+
         #region Private Classes
 
         private class SQLDataManager : Vanrise.Data.SQL.BaseSQLDataManager
