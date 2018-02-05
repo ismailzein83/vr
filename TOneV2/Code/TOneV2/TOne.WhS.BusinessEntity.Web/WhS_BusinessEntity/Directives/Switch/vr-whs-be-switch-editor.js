@@ -179,9 +179,8 @@ app.directive("vrWhsBeSwitchEditor", ["UtilsService", "VRNotificationService", "
                     if (VRNotificationService.notifyOnItemUpdated("Switch", response, "Name")) {
                         if (ctrl.onswitchupdated != undefined) {
                             ctrl.onswitchupdated(response.UpdatedObject);
-
-                            updateSwitchPromiseDeferred.resolve();
                         }
+                        updateSwitchPromiseDeferred.resolve();
                     } else {
                         $scope.validationMessages = response.ValidationMessages;
                         updateSwitchPromiseDeferred.reject();
