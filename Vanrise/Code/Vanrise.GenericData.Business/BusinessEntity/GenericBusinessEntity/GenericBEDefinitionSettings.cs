@@ -42,7 +42,7 @@ namespace Vanrise.GenericData.Business
 
     //    public GenericRuleDefinitionSecurity Security { get; set; }
        // public string FieldPath { get; set; }
-
+        public string EditorSize { get; set; }
         public Guid DataRecordTypeId { get; set; }
         public Guid DataRecordStorageId { get; set; }
         public string TitleFieldName { get; set; }

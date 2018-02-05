@@ -48,8 +48,8 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
                     runtimeEditorAPI = api;
                     runtimeEditorReadyDeferred.resolve();
                 };
-              
-           
+
+
                 defineAPI();
             }
 
@@ -66,7 +66,7 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
                         context = payload.context;
                     }
 
-                    isEditMode = (genericBusinessEntityId != undefined);
+                    isEditMode = (genericBusinessEntityId != undefined || historyId != undefined);
 
                     var loadPromise = UtilsService.createPromiseDeferred();
                     promises.push(loadPromise.promise);
@@ -94,7 +94,7 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
 
                     var fieldValues = {};
                     runtimeEditorAPI.setData(fieldValues);
-          
+
                     genericBusinessEntity.FieldValues = fieldValues;
 
                     return genericBusinessEntity;
@@ -124,8 +124,7 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
             function loadAllControls() {
 
                 function setTitle() {
-                    if (context != undefined)
-                    {
+                    if (context != undefined) {
                         var title = genericBusinessEntity != undefined && genericBusinessEntity.FieldValues != undefined ? UtilsService.buildTitleForUpdateEditor(genericBusinessEntity.FieldValues[titleFieldName], definitionTitle) : UtilsService.buildTitleForAddEditor(definitionTitle);
                         context.setTitle(title);
                     }

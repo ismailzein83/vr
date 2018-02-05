@@ -16,6 +16,13 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         }
         public bool IsNullable { get; set; }
 
+        public override bool AreEqual(Object newValue, Object oldValue)
+        {
+            if (this.Settings != null)
+                return Settings.AreEqual(newValue, oldValue);
+            return base.AreEqual(newValue, oldValue);
+        }
+
         public override Type GetRuntimeType()
         {
             var type = GetNonNullableRuntimeType();

@@ -24,35 +24,9 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         }
         public override bool TryResolveDifferences(IDataRecordFieldTypeTryResolveDifferencesContext context)
         {
-            var oldAttachmentFieldTypeEntities = new AttachmentFieldTypeEntityCollection();
-            var newAttachmentFieldTypeEntities = new AttachmentFieldTypeEntityCollection();
-
-            var oldEnumerator = (context.OldValue as System.Collections.IEnumerable).GetEnumerator();
-            if (oldEnumerator != null)
-            {
-                while (oldEnumerator.MoveNext())
-                {
-                    if (oldEnumerator.Current != null)
-                    {
-                        var oldEnumeratorEntity = Vanrise.Common.Serializer.Deserialize<AttachmentFieldTypeEntity>(oldEnumerator.Current.ToString());
-                        oldAttachmentFieldTypeEntities.Add(oldEnumeratorEntity);
-                    }
-                }
-            }
-
-            var newEnumerator = (context.NewValue as System.Collections.IEnumerable).GetEnumerator();
-            if (newEnumerator != null)
-            {
-                while (newEnumerator.MoveNext())
-                {
-                    if (newEnumerator.Current != null)
-                    {
-                        var newEnumeratorEntity = Vanrise.Common.Serializer.Deserialize<AttachmentFieldTypeEntity>(newEnumerator.Current.ToString());
-                        newAttachmentFieldTypeEntities.Add(newEnumeratorEntity);
-                    }
-                }
-            }
-
+            var oldAttachmentFieldTypeEntities = Utilities.ConvertJsonToList<AttachmentFieldTypeEntity>(context.OldValue);
+            var newAttachmentFieldTypeEntities = Utilities.ConvertJsonToList<AttachmentFieldTypeEntity>(context.NewValue);
+          
             var changesFieldTypeEntities = new List<AttachmentFieldTypeEntityChangeInfo>();
             VRFileManager vrFileManager = new VRFileManager();
 

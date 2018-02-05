@@ -17,7 +17,7 @@
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Runtime/MainExtensions/OnBeforeInsertHandler/GenericBESerialNumber/Templates/SNEditorTemplate.html"
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Runtime/MainExtensions/OnBeforeInsertHandler/GenericBESN/Templates/SNEditorTemplate.html"
         };
 
         function SerialNumberCtor($scope, ctrl, $attrs) {

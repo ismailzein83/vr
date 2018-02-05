@@ -29,10 +29,11 @@
                 historyId: historyId
             });
         }
-        function GetGenericBusinessEntityEditorRuntime(businessEntityDefinitionId, genericBusinessEntityId) {
+        function GetGenericBusinessEntityEditorRuntime(businessEntityDefinitionId, genericBusinessEntityId, historyId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'GetGenericBusinessEntityEditorRuntime'), {
                 businessEntityDefinitionId: businessEntityDefinitionId,
-                genericBusinessEntityId: genericBusinessEntityId
+                    genericBusinessEntityId: genericBusinessEntityId,
+        historyId: historyId
             });
         }
         function GetGenericBusinessEntityInfo(businessEntityDefinitionId,serializedFilter) {

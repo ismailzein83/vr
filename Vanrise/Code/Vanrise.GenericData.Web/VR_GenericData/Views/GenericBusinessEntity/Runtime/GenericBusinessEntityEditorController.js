@@ -32,25 +32,26 @@
         }
 
         function defineScope() {
-            $scope.scopeModel = {};
+            $scope.scopeModel = {
+        };
 
             $scope.scopeModel.onEditorRuntimeDirectiveReady = function (api) {
                 runtimeEditorAPI = api;
                 runtimeEditorReadyDeferred.resolve();
-            };
+        };
 
             $scope.scopeModel.save = function () {
-                return (isEditMode) ? updateBusinessEntity() : insertBusinessEntity();
-            };
+                return (isEditMode) ? updateBusinessEntity(): insertBusinessEntity();
+        };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
-            };
-        }
+        };
+    }
 
         function load() {
             $scope.scopeModel.isLoading = true;
             loadAllControls();
-        }
+    }
 
         function loadAllControls() {
 
@@ -59,34 +60,34 @@
 
                 runtimeEditorReadyDeferred.promise.then(function () {
                     var runtimeEditorPayload = {
-                        businessEntityDefinitionId: businessEntityDefinitionId,
-                        genericBusinessEntityId: genericBusinessEntityId,
-                        context:getContext()
-                    };
+                            businessEntityDefinitionId: businessEntityDefinitionId,
+                            genericBusinessEntityId: genericBusinessEntityId,
+                            context: getContext()
+                };
                     VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadDeferred);
-                });
+            });
 
                 return runtimeEditorLoadDeferred.promise;
-            }
+        }
 
             return UtilsService.waitMultipleAsyncOperations([loadEditorRuntimeDirective]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
-            });
-        }
+        });
+    }
 
-        function getContext()
-        {
-            var context = {};
+        function getContext() {
+            var context = {
+        };
             context.setTitle = function (title) {
                 $scope.title = title;
-            };
+        };
             context.setTitleFieldName = function (fieldName) {
                 titleFieldName = fieldName;
-            };
+        };
             return context;
-        }
+    }
 
         function buildGenericBusinessEntityObjFromScope() {
             return runtimeEditorAPI.getData();
@@ -100,13 +101,13 @@
                     if ($scope.onGenericBEAdded != undefined)
                         $scope.onGenericBEAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
-                }
+            }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
-            });
-        }
+        });
+    }
 
         function updateBusinessEntity() {
             $scope.scopeModel.isLoading = true;
@@ -116,14 +117,14 @@
                     if ($scope.onGenericBEUpdated != undefined)
                         $scope.onGenericBEUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
-                }
+            }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
-            });
-        }
+        });
     }
+   }
 
     appControllers.controller('VR_GenericData_GenericBusinessEntityEditorController', GenericBusinessEntityEditorController);
 })(appControllers);

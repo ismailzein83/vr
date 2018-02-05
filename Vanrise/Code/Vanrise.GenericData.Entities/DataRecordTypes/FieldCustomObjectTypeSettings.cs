@@ -10,6 +10,7 @@ namespace Vanrise.GenericData.Entities
     {
         public abstract Guid ConfigId { get; }
         public abstract string GetDescription(IFieldCustomObjectTypeSettingsContext context);
+        public abstract bool AreEqual(Object newValue, Object oldValue);
     }
     public interface IFieldCustomObjectTypeSettingsContext
     {

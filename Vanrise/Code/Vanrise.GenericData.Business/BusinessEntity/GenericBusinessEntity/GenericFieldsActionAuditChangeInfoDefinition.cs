@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
+using Newtonsoft.Json;
 
 namespace Vanrise.GenericData.Business
 {
@@ -13,6 +14,8 @@ namespace Vanrise.GenericData.Business
     {
         public Guid? BusinessEntityDefinitionId { get; set; }
         private Dictionary<string, DataRecordField> _fieldTypes { get; set; }
+        
+      
         public Dictionary<string, DataRecordField> FieldTypes
         {
             get

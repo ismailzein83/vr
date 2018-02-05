@@ -90,7 +90,27 @@ namespace Vanrise.Common
         {
             return date1 > date2 ? date1 : date2;
         }
-
+        public static string NewLine()
+        {
+            return "<br/>";
+        }
+        public static List<T> ConvertJsonToList<T>(Object value)
+        {
+            List<T> valueList = new List<T>();
+            var oldEnumerator = (value as System.Collections.IEnumerable).GetEnumerator();
+            if (oldEnumerator != null)
+            {
+                while (oldEnumerator.MoveNext())
+                {
+                    if (oldEnumerator.Current != null)
+                    {
+                        var enumeratorEntity = Vanrise.Common.Serializer.Deserialize<T>(oldEnumerator.Current.ToString());
+                        valueList.Add(enumeratorEntity);
+                    }
+                }
+            }
+            return valueList;
+        }
         public static DateTime Min(DateTime date1, DateTime date2)
         {
             return date1 < date2 ? date1 : date2;
