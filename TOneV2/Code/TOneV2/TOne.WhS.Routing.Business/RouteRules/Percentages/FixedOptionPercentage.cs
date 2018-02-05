@@ -18,38 +18,14 @@ namespace TOne.WhS.Routing.Business.RouteRules.Percentages
             int percentagesCount = this.Percentages.Count;
             int optionsCount = optionsList.Count;
 
-            int assignedPercentages = 0;
             for (int j = 0; j < optionsCount; j++)
             {
+                var currentOption = optionsList[j];
                 if (j < percentagesCount)
-                    assignedPercentages += this.Percentages[j];
-            }
-
-            int unassignedPercentages = 100 - assignedPercentages;
-
-            IRouteOptionPercentageTarget routeOptionWithHighestPercentage = null;
-            int totalTakenPercentage = 0;
-            for (int i = 0; i < optionsCount; i++)
-            {
-                var currentOption = optionsList[i];
-                if (i > (percentagesCount - 1))
-                {
-                    currentOption.Percentage = 0;
-                }
+                    currentOption.Percentage = this.Percentages[j];
                 else
-                {
-                    var correspondingPercentage = this.Percentages[i];
-                    int caluclatedPercentage = correspondingPercentage + correspondingPercentage * unassignedPercentages / assignedPercentages;
-                    currentOption.Percentage = caluclatedPercentage;
-                    totalTakenPercentage += caluclatedPercentage;
-
-                    if (routeOptionWithHighestPercentage == null || routeOptionWithHighestPercentage.Percentage < currentOption.Percentage)
-                        routeOptionWithHighestPercentage = currentOption;
-                }
+                    break;
             }
-
-            if (routeOptionWithHighestPercentage != null && totalTakenPercentage != 100)
-                routeOptionWithHighestPercentage.Percentage = routeOptionWithHighestPercentage.Percentage.Value + (100 - totalTakenPercentage);
         }
     }
 }

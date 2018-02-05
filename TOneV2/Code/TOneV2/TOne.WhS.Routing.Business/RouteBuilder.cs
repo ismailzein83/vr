@@ -81,9 +81,9 @@ namespace TOne.WhS.Routing.Business
 
                                 if (createCustomerRoute)
                                 {
-                                    CustomerRoute route = ExecuteRule<CustomerRoute>(optionsByRules, routeCode, saleZoneDefintion, customerZoneDetail, context.SupplierCodeMatches, context.SupplierCodeMatchesBySupplier, 
+                                    CustomerRoute route = ExecuteRule<CustomerRoute>(optionsByRules, routeCode, saleZoneDefintion, customerZoneDetail, context.SupplierCodeMatches, context.SupplierCodeMatchesBySupplier,
                                         routeRuleTarget, routeRule, context.RoutingDatabase);
-                                    
+
                                     route.CustomerId = customerZoneDetail.CustomerId;
                                     route.VersionNumber = context.VersionNumber;
                                     customerRoutes.Add(route);
@@ -91,7 +91,7 @@ namespace TOne.WhS.Routing.Business
                             }
                             else
                             {
-                                throw new NullReferenceException(string.Format("Missing Default Route Rule. Route Code: {0}. Customer Id: {1}. Sale Zone Id: {2}. Effective On:{3}.", routeCode, customerZoneDetail.CustomerId, 
+                                throw new NullReferenceException(string.Format("Missing Default Route Rule. Route Code: {0}. Customer Id: {1}. Sale Zone Id: {2}. Effective On:{3}.", routeCode, customerZoneDetail.CustomerId,
                                     saleZoneDefintion.SaleZoneId, context.EntitiesEffectiveInFuture ? "Future" : context.EntitiesEffectiveOn.Value.ToString()));
                             }
                         }
@@ -106,7 +106,7 @@ namespace TOne.WhS.Routing.Business
                                 if (saleZoneDefintion.SellingNumberPlanId != routingCustomerInfo.SellingNumberPlanId || soldCustomers.Contains(routingCustomerInfo.CustomerId))
                                     continue;
 
-                                CheckAndAddRouteToUnratedZone(context, routingCustomerInfo.CustomerId, customerCountryManager, customerRoutes, countryIdsHavingParentCode, routeCode, saleZoneDefintion, codeGroup.CountryId, 
+                                CheckAndAddRouteToUnratedZone(context, routingCustomerInfo.CustomerId, customerCountryManager, customerRoutes, countryIdsHavingParentCode, routeCode, saleZoneDefintion, codeGroup.CountryId,
                                     isCountryIdsHavingParentCodeNotEmpty, context.VersionNumber);
                             }
                         }
@@ -117,7 +117,7 @@ namespace TOne.WhS.Routing.Business
             return customerRoutes;
         }
 
-        private void CheckAndAddRouteToUnratedZone(IBuildCustomerRoutesContext context, int customerId, CustomerCountryManager customerCountryManager, List<CustomerRoute> customerRoutes, 
+        private void CheckAndAddRouteToUnratedZone(IBuildCustomerRoutesContext context, int customerId, CustomerCountryManager customerCountryManager, List<CustomerRoute> customerRoutes,
             HashSet<int> countryIdsHavingParentCode, string routeCode, SaleZoneDefintion saleZoneDefintion, int routeCodeCountryId, bool isCountryIdsHavingParentCodeNotEmpty, int versionNumber)
         {
             HashSet<int> soldCountries = context.CustomerCountries.GetOrCreateItem(customerId, () =>
@@ -207,13 +207,13 @@ namespace TOne.WhS.Routing.Business
             return null;
         }
 
-        private T ExecuteRule<T>(Dictionary<RouteRule, List<RouteOptionRuleTarget>> optionsByRules, string routeCode, SaleZoneDefintion saleZoneDefintion, CustomerZoneDetail customerZoneDetail, List<SupplierCodeMatchWithRate> supplierCodeMatches, 
+        private T ExecuteRule<T>(Dictionary<RouteRule, List<RouteOptionRuleTarget>> optionsByRules, string routeCode, SaleZoneDefintion saleZoneDefintion, CustomerZoneDetail customerZoneDetail, List<SupplierCodeMatchWithRate> supplierCodeMatches,
             SupplierCodeMatchWithRateBySupplier supplierCodeMatchBySupplier, RouteRuleTarget routeRuleTarget, RouteRule routeRule, RoutingDatabase routingDatabase) where T : BaseRoute
         {
             ConfigManager configManager = new ConfigManager();
-            bool addBlockedOptions = configManager.GetCustomerRouteBuildAddBlockedOptions();
+            bool keepBackupsForRemovedOptions = configManager.GetCustomerRouteBuildKeepBackUpsForRemovedOptions();
 
-            SaleEntityRouteRuleExecutionContext routeRuleExecutionContext = new SaleEntityRouteRuleExecutionContext(routeRule, _ruleTreesForRouteOptions, addBlockedOptions);
+            SaleEntityRouteRuleExecutionContext routeRuleExecutionContext = new SaleEntityRouteRuleExecutionContext(routeRule, _ruleTreesForRouteOptions);
             int numberOfOptionsInSettings = configManager.GetCustomerRouteBuildNumberOfOptions();
             routeRuleExecutionContext.NumberOfOptions = numberOfOptionsInSettings;
             routeRuleExecutionContext.SupplierCodeMatches = supplierCodeMatches;
@@ -221,6 +221,7 @@ namespace TOne.WhS.Routing.Business
             routeRuleExecutionContext.SaleZoneServiceList = customerZoneDetail.SaleZoneServiceIds;//used for service matching
             routeRuleExecutionContext.SaleZoneServiceIds = customerZoneDetail.SaleZoneServiceIds != null ? string.Join(",", customerZoneDetail.SaleZoneServiceIds) : null;// used for market price
             routeRuleExecutionContext.RoutingDatabase = routingDatabase;
+            routeRuleExecutionContext.KeepBackupsForRemovedOptions = keepBackupsForRemovedOptions;
 
             T route = Activator.CreateInstance<T>();
             route.Code = routeCode;
@@ -234,55 +235,59 @@ namespace TOne.WhS.Routing.Business
 
             if (routeRule.Settings.UseOrderedExecution)
             {
-                var routeOptionRuleTargets = optionsByRules.GetOrCreateItem(routeRule, () =>
+                List<RouteOptionRuleTarget> routeOptionRuleTargets = CloneRouteOptionRuleTargets(optionsByRules.GetOrCreateItem(routeRule, () =>
                     {
                         return routeRule.Settings.GetOrderedOptions(routeRuleExecutionContext, routeRuleTarget);
-                    });
+                    }));
 
                 if (routeOptionRuleTargets != null)
                 {
                     int optionsAdded = 0;
                     route.Options = new List<RouteOption>();
+                    bool isValidOption;
+                    CarrierAccount customer = _carrierAccounts.GetRecord(customerZoneDetail.CustomerId);
                     foreach (RouteOptionRuleTarget targetOption in routeOptionRuleTargets)
                     {
-                        if (HasSameCarrierProfile(targetOption.SupplierId, customerZoneDetail.CustomerId))
+                        targetOption.RouteTarget = routeRuleTarget;
+
+                        CheckRouteOptionRuleTarget(targetOption, customerZoneDetail.CustomerId, keepBackupsForRemovedOptions, (optionTarget) =>
+                        {
+                            var supplier = _carrierAccounts.GetRecord(optionTarget.SupplierId);
+                            if (supplier.CarrierProfileId == customer.CarrierProfileId)
+                                return false;
+
+                            routeRule.Settings.CheckOptionFilter(routeRuleExecutionContext, routeRuleTarget, optionTarget);
+                            if (optionTarget.FilterOption)
+                                return false;
+
+                            routeRuleExecutionContext.CheckRouteOptionRule(optionTarget, routeRule);
+                            if (optionTarget.FilterOption)
+                                return false;
+
+                            return true;
+
+                        }, out isValidOption);
+
+                        if (!isValidOption)
                             continue;
 
-                        targetOption.RouteTarget = routeRuleTarget;
-                        if (!routeRule.Settings.IsOptionFiltered(routeRuleExecutionContext, routeRuleTarget, targetOption))
-                        {
-                            RouteOption routeOption = routeRuleExecutionContext.CreateOptionFromTarget(targetOption, routeRule);
+                        bool allItemsBlocked;
+                        RouteOption routeOption = routeRuleExecutionContext.CreateOptionFromTarget(targetOption, out allItemsBlocked);
+                        route.Options.Add(routeOption);
 
-                            if (routeOption.IsFiltered)
-                                continue;
+                        if (!allItemsBlocked)
+                            optionsAdded++;
 
-                            if (!routeOption.IsBlocked)
-                            {
-                                route.Options.Add(routeOption);
-                                optionsAdded++;
-                            }
-                            else if (addBlockedOptions)
-                            {
-                                route.Options.Add(routeOption);
-                                continue;
-                            }
+                        if (maxNumberOfOptions.HasValue && maxNumberOfOptions == optionsAdded)
+                            break;
 
-                            if (maxNumberOfOptions.HasValue && maxNumberOfOptions == optionsAdded)
-                                break;
-                        }
                     }
-                }
-                var blockedOrFilteredItems = route.Options.FindAllRecords(itm => itm.IsBlocked || itm.IsFiltered);
-                if (blockedOrFilteredItems != null && blockedOrFilteredItems.Count() > 0)
-                {
-                    foreach (var blockedOrFilteredItem in blockedOrFilteredItems)
-                        blockedOrFilteredItem.Percentage = null;
                 }
 
                 FinalizeRouteOptionContext finalizeRouteOptionContext = new FinalizeRouteOptionContext() { NumberOfOptionsInSettings = numberOfOptionsInSettings, RouteOptions = route.Options };
                 route.Options = routeRule.Settings.GetFinalOptions(finalizeRouteOptionContext);
 
-                routeRule.Settings.ApplyOptionsPercentage(route.Options.FindAllRecords(itm => !itm.IsBlocked && !itm.IsFiltered));
+                routeRule.Settings.ApplyOptionsPercentage(route.Options);
             }
             else
             {
@@ -311,15 +316,66 @@ namespace TOne.WhS.Routing.Business
             return route;
         }
 
-        private bool HasSameCarrierProfile(int supplierId, int customerId)
+        private List<RouteOptionRuleTarget> CloneRouteOptionRuleTargets(List<RouteOptionRuleTarget> routeOptionRuleTargets)
         {
-            CarrierAccount supplierCarrierAccount = _carrierAccounts.GetRecord(supplierId);
-            CarrierAccount customerCarrierAccount = _carrierAccounts.GetRecord(customerId);
+            if (routeOptionRuleTargets == null)
+                return null;
 
-            if (supplierCarrierAccount.CarrierProfileId == customerCarrierAccount.CarrierProfileId)
-                return true;
+            List<RouteOptionRuleTarget> clonedRouteOptionRuleTargets = new List<RouteOptionRuleTarget>();
+            foreach (RouteOptionRuleTarget routeOptionRuleTarget in routeOptionRuleTargets)
+                clonedRouteOptionRuleTargets.Add(routeOptionRuleTarget.CloneObject());
 
-            return false;
+            return clonedRouteOptionRuleTargets;
+        }
+
+        private void CheckRouteOptionRuleTarget(RouteOptionRuleTarget targetOption, int customerId, bool keepBackupsForRemovedOptions,
+            Func<BaseRouteOptionRuleTarget, bool> isOptionValid, out bool isValidOption)
+        {
+            isValidOption = true;
+            if (isOptionValid(targetOption))
+            {
+                if (targetOption.Backups != null && targetOption.Backups.Count > 0)
+                {
+                    if (!targetOption.BlockOption || keepBackupsForRemovedOptions)
+                    {
+                        var backups = targetOption.Backups.FindAllRecords(itm => isOptionValid(itm));
+                        if (backups != null && backups.Count() > 0)
+                            targetOption.Backups = backups.ToList();
+                        else
+                            targetOption.Backups = new List<RouteBackupOptionRuleTarget>() { Helper.CreateRouteBackupOptionRuleTargetFromOption(targetOption) };
+                    }
+                    else
+                    {
+                        targetOption.Backups = null;
+                    }
+                }
+            }
+            else
+            {
+                if (keepBackupsForRemovedOptions && targetOption.Backups != null && targetOption.Backups.Count > 0)
+                {
+                    var backups = targetOption.Backups.FindAllRecords(itm => isOptionValid(itm));
+                    if (backups != null && backups.Count() > 0)
+                    {
+                        var firstBackup = backups.First();
+                        var otherBackups = targetOption.Backups.FindAllRecords(itm => itm != firstBackup);
+                        targetOption = Helper.CreateRouteOptionRuleTargetFromBackup(firstBackup, targetOption.OptionSettings as IRouteOptionSettings);
+
+                        if (otherBackups != null && otherBackups.Count() > 0)
+                            targetOption.Backups = new List<RouteBackupOptionRuleTarget>(otherBackups);
+                        else
+                            targetOption.Backups = new List<RouteBackupOptionRuleTarget>() { firstBackup};
+                    }
+                    else
+                    {
+                        isValidOption = false;
+                    }
+                }
+                else
+                {
+                    isValidOption = false;
+                }
+            }
         }
 
         private RPRoute ExecuteRule(int routingProductId, long saleZoneId, HashSet<int> saleZoneServiceIds, IBuildRoutingProductRoutesContext context, RouteRuleTarget routeRuleTarget, RouteRule routeRule,

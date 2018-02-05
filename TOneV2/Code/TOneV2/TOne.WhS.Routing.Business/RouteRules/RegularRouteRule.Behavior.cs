@@ -84,16 +84,16 @@ namespace TOne.WhS.Routing.Business
             context.QualityConfigurationIds = qualityConfigurationIds.Count > 0 ? qualityConfigurationIds : null;
         }
 
-        public override bool IsOptionFiltered(ISaleEntityRouteRuleExecutionContext context, TOne.WhS.Routing.Entities.RouteRuleTarget target, TOne.WhS.Routing.Entities.RouteOptionRuleTarget option)
+        public override void CheckOptionFilter(ISaleEntityRouteRuleExecutionContext context, TOne.WhS.Routing.Entities.RouteRuleTarget target, BaseRouteOptionRuleTarget option)
         {
-            return FilterOption(context.GetSupplierCodeMatch(option.SupplierId), context.SaleZoneServiceList, target, option);
+            FilterOption(context.GetSupplierCodeMatch(option.SupplierId), context.SaleZoneServiceList, target, option);
         }
 
         public override void ApplyOptionsPercentage(IEnumerable<RouteOption> options)
         {
             if (this.OptionPercentageSettings != null && options != null)
             {
-                var activeOptions = options.FindAllRecords(itm => !itm.IsBlocked && !itm.IsFiltered);
+                var activeOptions = options.FindAllRecords(itm => !itm.IsBlocked);
                 if (activeOptions != null)
                     this.ApplyOptionsPercentage<RouteOption>(activeOptions);
             }
@@ -130,7 +130,8 @@ namespace TOne.WhS.Routing.Business
                             foreach (var supplierCodeMatch in optionSupplierCodeMatches)
                             {
                                 var option = CreateOption(target, supplierCodeMatch, optionSettings.Percentage);
-                                if (!FilterOption(supplierCodeMatch, context.SaleZoneServiceIds, target, option))
+                                FilterOption(supplierCodeMatch, context.SaleZoneServiceIds, target, option);
+                                if (!option.FilterOption)
                                     context.TryAddSupplierZoneOption(option);
                             }
                         }
@@ -145,7 +146,8 @@ namespace TOne.WhS.Routing.Business
                     foreach (var supplierCodeMatch in allSuppliersCodeMatches)
                     {
                         var option = CreateOption(target, supplierCodeMatch, null);
-                        if (!FilterOption(supplierCodeMatch, context.SaleZoneServiceIds, target, option))
+                        FilterOption(supplierCodeMatch, context.SaleZoneServiceIds, target, option);
+                        if (!option.FilterOption)
                             context.TryAddSupplierZoneOption(option);
                     }
                 }
@@ -203,7 +205,7 @@ namespace TOne.WhS.Routing.Business
             }
             else
             {
-                var allSuppliersCodeMatches = context.GetAllSuppliersCodeMatches();
+                var allSuppliersCodeMatches = context.GetFilteredSuppliersCodeMatches();
                 if (allSuppliersCodeMatches != null)
                 {
                     foreach (var supplierCodeMatch in allSuppliersCodeMatches)
@@ -229,6 +231,7 @@ namespace TOne.WhS.Routing.Business
                 EffectiveOn = routeRuleTarget.EffectiveOn,
                 IsEffectiveInFuture = routeRuleTarget.IsEffectiveInFuture,
                 ExactSupplierServiceIds = supplierCodeMatchWithRate.ExactSupplierServiceIds,
+                SupplierServiceIds = supplierCodeMatchWithRate.SupplierServiceIds,
                 SupplierServiceWeight = supplierCodeMatchWithRate.SupplierServiceWeight,
                 NumberOfTries = 1,
                 SupplierRateId = supplierCodeMatchWithRate.SupplierRateId,
@@ -370,7 +373,7 @@ namespace TOne.WhS.Routing.Business
             return optionOrderContext;
         }
 
-        private bool FilterOption(SupplierCodeMatchWithRate supplierCodeMatchWithRate, HashSet<int> customerServiceIds, RouteRuleTarget target, RouteOptionRuleTarget option)
+        private void FilterOption(SupplierCodeMatchWithRate supplierCodeMatchWithRate, HashSet<int> customerServiceIds, RouteRuleTarget target, BaseRouteOptionRuleTarget option)
         {
             if (this.OptionFilters != null)
             {
@@ -386,7 +389,10 @@ namespace TOne.WhS.Routing.Business
                     };
                     optionFilter.Execute(routeOptionFilterExecutionContext);
                     if (routeOptionFilterExecutionContext.FilterOption)
-                        return true;
+                    {
+                        option.FilterOption = true;
+                        return;
+                    }
                 }
             }
 
@@ -402,10 +408,11 @@ namespace TOne.WhS.Routing.Business
                     };
 
                 if (this.OptionsSettingsGroup.IsOptionFiltered(routeOptionFilterExecutionContext))
-                    return true;
+                {
+                    option.FilterOption = true;
+                    return;
+                }
             }
-
-            return false;
         }
 
         private void ApplyOptionsPercentage<T>(IEnumerable<T> options) where T : IRouteOptionPercentageTarget

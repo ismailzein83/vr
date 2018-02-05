@@ -20,9 +20,8 @@ namespace TOne.WhS.Routing.Entities
         {
         }
 
-        public virtual bool IsOptionFiltered(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target, RouteOptionRuleTarget option)
+        public virtual void CheckOptionFilter(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target, BaseRouteOptionRuleTarget option)
         {
-            return false;
         }
 
         public virtual void ApplyOptionsPercentage(IEnumerable<RouteOption> options)

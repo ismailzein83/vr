@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class SpecialRequestRouteOptionSettings
+    public interface ISpecialRequestRouteOptionSettings
+    {
+        bool ForceOption { get; set; }
+    }
+    public class SpecialRequestRouteOptionSettings : IRouteOptionSettings, ISpecialRequestRouteOptionSettings
     {
         public int SupplierId { get; set; }
 
@@ -21,12 +25,14 @@ namespace TOne.WhS.Routing.Entities
         public List<SpecialRequestRouteBackupOptionSettings> Backups { get; set; }
     }
 
-    public class SpecialRequestRouteBackupOptionSettings
+    public class SpecialRequestRouteBackupOptionSettings : IRouteBackupOptionSettings, ISpecialRequestRouteOptionSettings
     {
         public int SupplierId { get; set; }
 
         public int Position { get; set; }
 
         public bool ForceOption { get; set; }
+
+        public int NumberOfTries { get; set; }
     }
 }

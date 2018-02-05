@@ -143,7 +143,7 @@ namespace TOne.WhS.DBSync.Business
                 },
                 Settings = new SpecialRequestRouteRule
                 {
-                    Options = GetSupplierOptions(specialRequestRules.Select(s => s.SupplierOption))
+                    //Options = GetSupplierOptions(specialRequestRules.Select(s => s.SupplierOption))
                 }
             };
 

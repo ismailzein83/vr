@@ -12,6 +12,8 @@ namespace TOne.WhS.Routing.Entities
     {
         RouteRule RouteRule { get; }
 
+        bool KeepBackupsForRemovedOptions { get; }
+
         int? NumberOfOptions { get; }
 
         HashSet<int> SaleZoneServiceList { get; }
@@ -20,12 +22,14 @@ namespace TOne.WhS.Routing.Entities
 
         RoutingDatabase RoutingDatabase { get; }
 
-        bool TryAddOption(RouteOptionRuleTarget optionTarget);
-
         ReadOnlyCollection<RouteOptionRuleTarget> GetOptions();
 
         SupplierCodeMatchWithRate GetSupplierCodeMatch(int supplierId);
 
+        List<SupplierCodeMatchWithRate> GetFilteredSuppliersCodeMatches();
+
         List<SupplierCodeMatchWithRate> GetAllSuppliersCodeMatches();
+
+        RouteOptionRuleTarget BuildRouteOptionRuleTarget(RouteRuleTarget routeRuleTarget, IRouteOptionSettings option, List<IRouteBackupOptionSettings> backups);
     }
 }

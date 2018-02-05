@@ -100,7 +100,7 @@ namespace TOne.WhS.DBSync.Business
         {
             var rule = new FixedRouteRule()
             {
-                Options = GetOptions(sourceRule)
+                //Options = GetOptions(sourceRule)
             };
             return rule;
         }
