@@ -420,6 +420,18 @@ namespace Vanrise.Common
             return Vanrise.Common.Serializer.Deserialize<T>(Vanrise.Common.Serializer.Serialize(obj));
         }
 
+        public static HashSet<T> CloneHashSet<T>(HashSet<T> hashset)
+        {
+            if (hashset == null)
+                return null;
+
+            HashSet<T> clonedHashSet = new HashSet<T>();
+            foreach (T item in hashset)
+                clonedHashSet.Add(item);
+
+            return clonedHashSet;
+        }
+
         public static decimal? SumOfNullables(decimal? firstNumber, decimal? secondNumber)
         {
             if (!firstNumber.HasValue)
