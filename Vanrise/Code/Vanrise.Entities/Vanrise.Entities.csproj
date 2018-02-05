@@ -78,6 +78,7 @@
     <Compile Include="IBusinessManager.cs" />
     <Compile Include="ICompanySettingsManager.cs" />
     <Compile Include="LabelColor.cs" />
+    <Compile Include="ModalWidthEnum.cs" />
     <Compile Include="ObjectFactory.cs" />
     <Compile Include="SalutationTypeEnum.cs" />
     <Compile Include="GenderTypeEnum.cs" />

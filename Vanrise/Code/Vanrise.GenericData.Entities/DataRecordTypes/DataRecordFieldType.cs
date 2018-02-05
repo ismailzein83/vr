@@ -27,6 +27,16 @@ namespace Vanrise.GenericData.Entities
         {
             return false;
         }
+
+        public virtual void onBeforeSave(IDataRecordFieldTypeOnBeforeSaveContext context)
+        {
+
+        }
+        public virtual void onAfterSave(IDataRecordFieldTypeOnAfterSaveContext context)
+        {
+
+        }
+
         public virtual string DifferenceEditor { get; set; }
         public virtual string ViewerEditor { get; set; }
         public abstract string GetDescription(Object value);
@@ -91,6 +101,19 @@ namespace Vanrise.GenericData.Entities
         {
             throw new NotImplementedException();
         }
+    }
+
+
+    public interface IDataRecordFieldTypeOnBeforeSaveContext
+    {
+        Object FieldValue { get; }
+        Guid? BusinessEntityDefinitionId { get;}
+
+    }
+    public interface IDataRecordFieldTypeOnAfterSaveContext
+    {
+        Object FieldValue { get; }
+        Guid? BusinessEntityDefinitionId { get; }
     }
 
     public interface ISerializeDataRecordFieldValueContext

@@ -199,6 +199,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Common\Constant\ModalWidthEnum.js" />
     <Content Include="Common\Constant\ActionAuditLKUPEnum.js" />
     <Content Include="Common\Constant\CompanySettingPropertyEnum.js" />
     <Content Include="Common\Constant\EntityFilterEffectiveModeEnum.js" />
