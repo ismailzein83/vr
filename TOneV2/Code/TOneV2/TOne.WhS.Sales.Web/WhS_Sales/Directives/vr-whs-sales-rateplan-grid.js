@@ -150,6 +150,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                 $scope.onNewRateChanged = function (dataItem) {
                     dataItem.IsDirty = true;
+                    dataItem.ProfitPerc = (dataItem.NewRate != null && dataItem.NewRate > 0 && dataItem.RPRouteDetail != null && dataItem.RPRouteDetail.RouteOptionsDetails != null) ? ((dataItem.NewRate - dataItem.RPRouteDetail.RouteOptionsDetails[0].ConvertedSupplierRate) * 100 / dataItem.RPRouteDetail.RouteOptionsDetails[0].ConvertedSupplierRate) : 0;
                     WhS_Sales_RatePlanUtilsService.onNewRateChanged(dataItem);
                 };
 
@@ -897,6 +898,15 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         else
                             return -1;
                     }; break;
+                    case "profitPerc": sortFunction = function (zoneItem1, zoneItem2) {
+                        if (zoneItem1.ProfitPerc == null)
+                            return -1;
+                        if (zoneItem2.ProfitPerc == null)
+                            return 1;
+                        if (zoneItem1.ProfitPerc > zoneItem2.ProfitPerc)
+                            return 1;
+                        return -1;
+                    }; break;
                     case "newRate": sortFunction = function (zoneItem1, zoneItem2) {
                         if (zoneItem1.NewRate > zoneItem2.NewRate)
                             return 1;
@@ -980,7 +990,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     var zoneItemChanges = {
                         ZoneId: zoneItem.ZoneId,
                         ZoneName: zoneItem.ZoneName,
-                        CountryId: zoneItem.CountryId
+                        CountryId: zoneItem.CountryId,
+                        ProfitPerc: zoneItem.ProfitPerc,
                     };
 
                     setDraftRateToChange(zoneItemChanges, zoneItem);
@@ -1276,7 +1287,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     $scope.currentRateComparisonOption = defaultComparisonOption;
                     $scope.marginComparisonOption = defaultComparisonOption;
                     $scope.marginPercentageComparisonOption = defaultComparisonOption;
-
+                    $scope.profitPercentageComparisonOption = defaultComparisonOption;
                     $scope.routeOptionComparisonOption = defaultComparisonOption;
                     $scope.newRateFilterOption = getDefaultNewRateFilterOption();
                 }
@@ -1433,6 +1444,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 function marginPercentageFilter(marginPercentageValue) {
                     return comparisonOptionFilter(marginPercentageValue, $scope.marginPercentageFilterValue, $scope.marginPercentageComparisonOption);
                 }
+                function profitPercentageFilter(profitPercentageValue) {
+                    return comparisonOptionFilter(profitPercentageValue, $scope.profitPercentageFilterValue, $scope.profitPercentageComparisonOption);
+                }
                 function comparisonOptionFilter(value, filterValue, comparisonOption) {
                     if (comparisonOption == undefined || filterValue == undefined)
                         return true;
@@ -1500,6 +1514,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     return true;
                 if (!marginPercentageFilter(zoneItem.MarginPercentage))
                     return true;
+                if (!profitPercentageFilter((zoneItem.ProfitPerc != null) ? zoneItem.ProfitPerc : 0))
+                    return true;
 
                 return false;
             }
@@ -1514,6 +1530,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 resetCostFilters();
                 resetMarginFilter();
                 resetMarginPercentageFilter();
+                resetProfitPercentageFilter();
                 resetNewRateFilter();
 
                 function resetZoneFilter() {
@@ -1549,6 +1566,10 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 function resetMarginPercentageFilter() {
                     $scope.marginPercentageComparisonOption = defaultComparisonOption;
                     $scope.marginPercentageFilterValue = undefined;
+                }
+                function resetProfitPercentageFilter() {
+                    $scope.profitPercentageComparisonOption = defaultComparisonOption;
+                    $scope.profitPercentageFilterValue = undefined;
                 }
                 function resetNewRateFilter() {
                     $scope.newRateFilterOption = getDefaultNewRateFilterOption();

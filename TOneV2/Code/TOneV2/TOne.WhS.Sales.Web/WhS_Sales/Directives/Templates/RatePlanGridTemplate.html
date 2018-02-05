@@ -406,6 +406,40 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <div style="display:inline-block;width:50px" ng-init="::addColumnFixedAndRecalculate('profitPerc', 50)">
+                                    <div class="vr-datagrid-header-cell vr-datagrid-celltext">
+                                        <div col-index="renderIndex" style="width:100%">
+                                            <div class="vr-datagrid-celltext" style="overflow: hidden;" ng-click="sortZones(columnsConfig.profitPerc)">
+                                                <span ng-show="columnsConfig.profitPerc.sortDirection=='ASC'">&uarr;</span>
+                                                <span ng-show="columnsConfig.profitPerc.sortDirection=='DESC'">&darr;</span>
+                                                <span>%Profit</span>
+                                                <i ng-show="profitPercentageFilterValue != undefined " class="glyphicon glyphicon-filter hand-cursor column-filter " ng-click="$event.stopPropagation(); marginPercentageFilterValue = undefined ; filterZones()"></i>
+
+                                            </div>
+                                            <div ng-show="showfilter">
+                                                <vr-select datasource="comparisonOptions"
+                                                           datavaluefield="value"
+                                                           datatextfield="symbol"
+                                                           selectedvalues="profitPercentageComparisonOption"
+                                                           onselectionchanged="filterZones"
+                                                           hidefilterbox
+                                                           hideremoveicon
+                                                           stopreadonly>
+                                                </vr-select>
+                                            </div>
+                                            <div ng-show="showfilter">
+                                                <vr-textbox type="number"
+                                                            value="profitPercentageFilterValue"
+                                                            decimalprecision="{{::normalPrecision}}"
+                                                            onvaluechanged="filterZones"
+                                                            stopreadonly>
+                                                </vr-textbox>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <!--<div ng-show="rateCalculationMethod" style="width: 50px; display:inline-block">
                                     <div class="vr-datagrid-header-cell">
                                         <div col-index="renderIndex" style="width:100%">
@@ -625,6 +659,15 @@
                                                                     </div>
                                                                 </div>
 
+                                                                <div style="display:inline-flex;vertical-align:top;width:50px" class="vr-datagrid-cell-container">
+                                                                    <div class="vr-datagrid-cell">
+                                                                        <div class="vr-datagrid-celltext ">
+                                                                            <div style="text-align: right;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                                                                                <span class="span-summary"> {{(dataItem.ProfitPerc!=null)?dataItem.ProfitPerc:0 | number: normalPrecision}}</span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                                 <!--<div ng-show="rateCalculationMethod" style="display:inline-block;vertical-align:top;width:50px" class="vr-datagrid-cell-container">
                                                                     <div class="vr-datagrid-cell">
                                                                         <div class="vr-datagrid-celltext ">

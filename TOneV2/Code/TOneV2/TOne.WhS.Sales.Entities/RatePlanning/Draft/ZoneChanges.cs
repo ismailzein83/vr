@@ -12,6 +12,8 @@ namespace TOne.WhS.Sales.Entities
 
         public IEnumerable<DraftRateToChange> NewRates { get; set; }
 
+        public decimal? ProfitPerc { get; set; }
+
         public IEnumerable<DraftRateToClose> ClosedRates { get; set; }
 
         public DraftNewSaleZoneRoutingProduct NewRoutingProduct { get; set; }

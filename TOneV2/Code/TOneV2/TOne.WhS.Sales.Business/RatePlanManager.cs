@@ -1126,7 +1126,7 @@ namespace TOne.WhS.Sales.Business
 
                 zoneItem.IsCountryNew = newCountryIds.Contains(zoneItem.CountryId);
                 zoneItem.IsCountryEnded = closedCountryIds.Contains(zoneItem.CountryId);
-
+                zoneItem.ProfitPerc = (zoneDraft!=null)?zoneDraft.ProfitPerc:0;
                 zoneItems.Add(zoneItem);
             }
 

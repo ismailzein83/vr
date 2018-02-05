@@ -133,6 +133,8 @@ namespace TOne.WhS.Sales.Entities
         public decimal? MarginPercentage { get; set; }
         #endregion
 
+        public decimal? ProfitPerc { get; set; }
+
         #region IBaseRates Implementation
 
         public void SetNormalRateBED(DateTime beginEffectiveDate)
