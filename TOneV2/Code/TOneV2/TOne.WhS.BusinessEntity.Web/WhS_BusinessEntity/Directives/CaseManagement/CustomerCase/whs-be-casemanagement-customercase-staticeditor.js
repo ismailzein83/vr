@@ -65,13 +65,15 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                 };
                 $scope.scopeModel.isReasonSelectorRequired = true;
                 $scope.removerow = function (dataItem) {
-                    var index = $scope.scopeModel.codeNumberList.indexOf(dataItem);
-                    $scope.scopeModel.codeNumberList.splice(index, 1);
+                    if (!$scope.scopeModel.isEditMode) {
+                        var index = $scope.scopeModel.codeNumberList.indexOf(dataItem);
+                        $scope.scopeModel.codeNumberList.splice(index, 1);
+                    }
                 };
                 $scope.scopeModel.onTicketContactSelectionChanged = function () {
                     var carrierProfileTicketInfo = ticketContactSelectorAPI.getSelectedValues();
                     if (carrierProfileTicketInfo != undefined) {
-                        $scope.scopeModel.contactName = carrierProfileTicketInfo.Name;
+                        $scope.scopeModel.contactName = carrierProfileTicketInfo.NameDescription;   
                         $scope.scopeModel.email = carrierProfileTicketInfo.Emails.join(';');
                         $scope.scopeModel.phoneNumber = carrierProfileTicketInfo.PhoneNumber.join(';');
                     }
@@ -113,9 +115,12 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                     ticketContactSelectorReadyPromiseDeferred.promise.then(function () {
                         loadTicketContactSelector();
                     });
-                  
+                    $scope.scopeModel.contactName = undefined;
+                    $scope.scopeModel.email = undefined;
+                    $scope.scopeModel.phoneNumber = undefined;
                     if (value != undefined) {
                         selectedCustomer = customerSelectorAPI.getSelectedIds();
+                        $scope
                         if (value.CarrierAccountId != selectedCustomer || !$scope.scopeModel.isEditMode) {
                             $scope.scopeModel.codeNumberList = [];
                         }
@@ -143,6 +148,7 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                                 };
                                 if ((zoneId == oldZoneId || $scope.scopeModel.codeNumberList.length == 0) && $scope.scopeModel.zoneName != undefined) {
                                     $scope.scopeModel.codeNumberList.push(faultTicketDescription);
+                                    $scope.scopeModel.errorMessage = undefined;
                                 }
                                 else {
                                     if (zoneId != oldZoneId)
@@ -166,6 +172,8 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                 api.load = function (payload) {
                     if (payload != undefined) {
                         selectedValues = payload.selectedValues;
+                        console.log("cust selected values");
+                        console.log(selectedValues);
                         if (selectedValues != undefined) {
                             zoneId = selectedValues.SaleZoneId;
                             oldZoneId = selectedValues.SaleZoneId;

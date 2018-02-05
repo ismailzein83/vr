@@ -33,7 +33,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                     {
                         file:undefined,
                         notes: '',
-                        createdTime:UtilsService.parseDateToString (new Date())
+                        createdTime:new Date()
                     };
                 $scope.scopeModel.attachementFieldTypes.push({ Entity: attachementFieldType });
               

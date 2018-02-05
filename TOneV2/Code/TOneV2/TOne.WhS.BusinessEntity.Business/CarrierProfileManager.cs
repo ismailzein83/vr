@@ -607,6 +607,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 CarrierProfileTicketContactId = carrierProfileTicketContact.CarrierProfileTicketContactId,
                 Name = string.Format("{0} - {1}", index + 1, carrierProfileTicketContact.Name),
+                NameDescription = carrierProfileTicketContact.Name,
                 PhoneNumber = carrierProfileTicketContact.PhoneNumber,
                 Emails = carrierProfileTicketContact.Emails
 

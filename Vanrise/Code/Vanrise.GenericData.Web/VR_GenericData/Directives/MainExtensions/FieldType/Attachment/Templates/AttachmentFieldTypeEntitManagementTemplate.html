@@ -4,11 +4,12 @@
              on-ready="onGridReady"
              pagingtype="'PagingOnScroll'"
              menuactions="gridMenuActions"
-             enableautoexport="true">
-    <vr-datagridcolumn headertext="'File'" widthfactor="5"><vr-fileupload tempfile="true"  value="dataItem.Entity.file" isrequired> </vr-fileupload></vr-datagridcolumn>
+             enableautoexport="true"
+             hidegridmenu>
+    <vr-datagridcolumn headertext="'File'" widthfactor="5"><vr-fileupload tempfile="true" value="dataItem.Entity.file" isrequired> </vr-fileupload></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Note'" widthfactor="5">
-        <vr-textbox value="dataItem.Entity.notes" ></vr-textbox>
+        <vr-textbox value="dataItem.Entity.notes"></vr-textbox>
     </vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'CreatedTime'" typeof="'Date'" widthfactor="5"><vr-label >{{dataItem.Entity.createdTime}}</vr-label></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Created Time'" field="'Entity.createdTime'" type="'DateTime'" widthfactor="5"></vr-datagridcolumn>
 </vr-datagrid>
 
