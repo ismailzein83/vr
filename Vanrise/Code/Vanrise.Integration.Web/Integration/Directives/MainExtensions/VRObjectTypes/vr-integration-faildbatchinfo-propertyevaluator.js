@@ -51,7 +51,6 @@
                         $type: "Vanrise.Integration.MainExtensions.FailedBatchInfoPropertyEvaluator, Vanrise.Integration.MainExtensions",
                         FailedBatchInfoField: $scope.scopeModel.selectedFailedBatchInfo.value
                     };
-                    console.log(data);
                     return data;
                 };
 

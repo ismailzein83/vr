@@ -65,9 +65,6 @@ app.directive('vrAccountbalanceUpdateaccountbalancesettings', ['UtilsService', '
                 };
 
                 $scope.scopeModel.onDeleteRow = function (deletedItem) {
-
-                    console.log(deletedItem);
-
                     var index = UtilsService.getItemIndexByVal($scope.scopeModel.selectedBalanceAccountTypes, deletedItem.BalanceAccountTypeId, 'Id');
                     $scope.scopeModel.selectedBalanceAccountTypes.splice(index, 1);
 

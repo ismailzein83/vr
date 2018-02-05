@@ -39,7 +39,6 @@
                     var data = {
                         $type: "Vanrise.Integration.MainExtensions.FailedBatchInfoObjectType, Vanrise.Integration.MainExtensions"
                     };
-                    console.log(data);
                     return data;
                 };
 
