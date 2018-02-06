@@ -60,11 +60,11 @@ namespace Vanrise.AccountBalance.Business
             AccountManager accountManager = new AccountManager();
             var accountInfo = accountManager.GetAccountInfo(accountTypeId, accountId);
             accountInfo.ThrowIfNull("accountInfo", accountId);
-            if( accountInfo.Status != VRAccountStatus.Active)
-            {
-                errorMessage = "Cannot add billing transaction for inactive account.";
-                return false;
-            }
+            //if( accountInfo.Status != VRAccountStatus.Active)
+            //{
+            //    errorMessage = "Cannot add billing transaction for inactive account.";
+            //    return false;
+            //}
             return true;
         }
         private BillingTransactionDetail BillingTransactionDetailMapper(BillingTransaction billingTransaction, BillingTransactionSource billingTransactionSource)
