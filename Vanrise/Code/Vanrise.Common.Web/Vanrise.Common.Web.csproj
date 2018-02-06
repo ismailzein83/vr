@@ -239,6 +239,7 @@
     <Content Include="Common\Directives\MainExtensions\VRObjectTypes\Templates\CompanySettingPropertyEvaluatorTemplate.html" />
     <Content Include="Common\Directives\MainExtensions\VRObjectTypes\vr-common-companysettingobjecttype.js" />
     <Content Include="Common\Directives\MainExtensions\VRObjectTypes\vr-common-companysettingpropertyevaluator.js" />
+    <Content Include="Common\Directives\ModalWidth\vr-common-modalwidth-selector.js" />
     <Content Include="Common\Directives\Region\Templates\RegionGridTemplate.html" />
     <Content Include="Common\Directives\Region\vr-common-region-grid.js" />
     <Content Include="Common\Directives\Region\vr-common-region-selector.js" />
