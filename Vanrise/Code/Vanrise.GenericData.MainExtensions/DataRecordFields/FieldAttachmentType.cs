@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
    
@@ -140,6 +141,69 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public override string RuntimeEditor
         {
             get { return null; }
+        }
+
+        public override void onBeforeSave(IDataRecordFieldTypeOnBeforeSaveContext context)
+        {
+            var attachmentFieldTypeEntities = context.FieldValue as List<AttachmentFieldTypeEntity>;
+            if (attachmentFieldTypeEntities != null)
+            {
+                var fileIds = attachmentFieldTypeEntities.MapRecords(x => x.FileId);
+                if (context.BusinessEntityDefinitionId.HasValue)
+                {
+                    if (fileIds != null && fileIds.Count() > 0)
+                    {
+                        SetBusinessEntityFilesUsed(fileIds, context.BusinessEntityDefinitionId.Value, context.BusinessEntityId);
+                    }
+                }
+            }
+           
+            
+        }
+        public override void onAfterSave(IDataRecordFieldTypeOnAfterSaveContext context)
+        {
+            var attachmentFieldTypeEntities = context.FieldValue as List<AttachmentFieldTypeEntity>;
+            if (attachmentFieldTypeEntities != null)
+            {
+                var fileIds = attachmentFieldTypeEntities.MapRecords(x => x.FileId);
+                if (context.BusinessEntityDefinitionId.HasValue)
+                {
+                    if (fileIds != null && fileIds.Count() > 0)
+                    {
+                        SetBusinessEntityFilesUsed(fileIds, context.BusinessEntityDefinitionId.Value, context.BusinessEntityId);
+                    }
+                }
+            }
+
+        }
+
+        private void SetBusinessEntityFilesUsed(IEnumerable<long> fileIds, Guid businessEntityDefinitionId, Object businessEntityId)
+        {
+            if (fileIds != null && fileIds.Count() > 0)
+            {
+                VRFileManager fileManager = new VRFileManager();
+                foreach (var fileId in fileIds)
+                {
+                    var fileSettings = new VRFileSettings { ExtendedSettings = new BusinessEntityFileSettings { BusinessEntityDefinitionId = businessEntityDefinitionId, BusinessEntityId = businessEntityId } };
+                    fileManager.SetFileUsedAndUpdateSettings(fileId, fileSettings);
+                }
+            }
+        }
+    }
+
+    public class BusinessEntityFileSettings : VRFileExtendedSettings
+    {
+        public Guid BusinessEntityDefinitionId { get; set; }
+        public Object BusinessEntityId { get; set; }
+
+        public override Guid ConfigId
+        {
+            get { return new Guid("9F4D95E4-8760-4C54-8FAC-BA64ACACC476"); }
+        }
+
+        public override bool DoesUserHaveViewAccess(IVRFileDoesUserHaveViewAccessContext context)
+        {
+            return true;
         }
     }
 }

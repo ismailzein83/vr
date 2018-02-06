@@ -79,6 +79,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="DataRecordFieldFormulaCalculateValueContext.cs" />
     <Compile Include="DataRecordFieldFormulaGetDependentFieldsContext.cs" />
+    <Compile Include="DataRecordFieldTypeOnBeforeSaveContext.cs" />
     <Compile Include="DataRecordFieldTypeTryResolveDifferencesContext.cs" />
     <Compile Include="DataRecordTypeFieldFormulaCalculateValueContext.cs" />
     <Compile Include="DataStorage\CreateTempStorageContext.cs" />

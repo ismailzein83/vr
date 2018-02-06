@@ -104,17 +104,7 @@ namespace Vanrise.GenericData.Entities
     }
 
 
-    public interface IDataRecordFieldTypeOnBeforeSaveContext
-    {
-        Object FieldValue { get; }
-        Guid? BusinessEntityDefinitionId { get;}
-
-    }
-    public interface IDataRecordFieldTypeOnAfterSaveContext
-    {
-        Object FieldValue { get; }
-        Guid? BusinessEntityDefinitionId { get; }
-    }
+  
 
     public interface ISerializeDataRecordFieldValueContext
     {
