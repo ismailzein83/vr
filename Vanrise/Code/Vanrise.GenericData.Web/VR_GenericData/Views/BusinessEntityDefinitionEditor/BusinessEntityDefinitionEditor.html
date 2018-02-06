@@ -18,6 +18,9 @@
                             <vr-select datasource="scopeModel.bEDefinitionSettingConfigs" selectedvalues="scopeModel.selectedSetingsTypeConfig" datavaluefield="ExtensionConfigurationId" datatextfield="Title" label="Type" text="None" isrequired hideremoveicon>
                             </vr-select>
                         </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-common-modalwidth-selector on-ready="scopeModel.onModalWidthSelectorReady" isrequired="true"></vr-common-modalwidth-selector>
+                        </vr-columns>
                     </vr-row>
                 </vr-tab>
                 <vr-directivewrapper vr-loader="scopeModel.isLoadingDirective"

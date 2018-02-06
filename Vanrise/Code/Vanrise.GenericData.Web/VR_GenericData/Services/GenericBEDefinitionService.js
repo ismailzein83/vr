@@ -8,13 +8,18 @@
         var columnModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/Editor/Templates/ColumnDefinitionEditor.html";
         var viewModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/Editor/Templates/ViewDefinitionEditor.html";
         var tabModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericEditorDefinitionSetting/Templates/GenericBETabContainerEditorController.html";
+        var basicAdvancefilterModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/GenericBEFilterDefinition/Templates/BasicAdvancedFilterEditor.html";
+
         return ({
             addGenericBEColumnDefinition: addGenericBEColumnDefinition,
             editGenericBEColumnDefinition: editGenericBEColumnDefinition,
             addGenericBEViewDefinition: addGenericBEViewDefinition,
             editGenericBEViewDefinition: editGenericBEViewDefinition,
             addGenericBETabContainer: addGenericBETabContainer,
-            editGenericBETabContainer: editGenericBETabContainer
+            editGenericBETabContainer: editGenericBETabContainer,
+            addGenericBEBasicAdvanceFilter: addGenericBEBasicAdvanceFilter,
+            editGenericBEBasicAdvanceFilter: editGenericBEBasicAdvanceFilter
+
         });
 
         function addGenericBEColumnDefinition(onGenericBEColumnDefinitionAdded, context) {
@@ -100,6 +105,34 @@
             VRModalService.showModal(tabModalPath, parameters, settings);
         }
 
+        function addGenericBEBasicAdvanceFilter(onGenericBEFilterDefinitionAdded, context) {
+            var parameters = {
+                context: context
+
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onGenericBEFilterDefinitionAdded = onGenericBEFilterDefinitionAdded;
+            };
+
+            VRModalService.showModal(basicAdvancefilterModalPath, parameters, settings);
+        }
+
+        function editGenericBEBasicAdvanceFilter(onGenericBEFilterDefinitionUpdated, filterDefinition, context) {
+            var parameters = {
+                filterDefinition: filterDefinition,
+                context: context
+
+            };
+
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onGenericBEFilterDefinitionUpdated = onGenericBEFilterDefinitionUpdated;
+            };
+            VRModalService.showModal(basicAdvancefilterModalPath, parameters, settings);
+        }
 
     };
 

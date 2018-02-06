@@ -1,0 +1,33 @@
+﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericBEFilterDefintionController" vr-loader="scopeModal.isLoading" width="'40%'">
+    <vr-modalbody>
+        <vr-form validationcontext="filterEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-switch value="scopeModel.showInBasic" label="Show In Basic" ></vr-switch>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Settings'">
+                    <vr-row>
+                        <vr-columns width="fullrow" haschildcolumns>
+                            <vr-genericdata-filterdefinition-settings on-ready="scopeModel.onGenericBEFilterDefinitionDirectiveReady" normal-col-num="6"></vr-genericdata-filterdefinition-settings>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" validationcontext="filterEditor" data-onclick="scopeModel.saveFilterDefinition"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

@@ -128,6 +128,11 @@ namespace Vanrise.GenericData.Business
             return extensionConfiguration.GetExtensionConfigurations<GenericBEEditorDefinitionSettingsConfig>(GenericBEEditorDefinitionSettingsConfig.EXTENSION_TYPE);
         }
 
+        public IEnumerable<GenericBEFilterDefinitionSettingsConfig> GetGenericBEFilterDefinitionSettingsConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<GenericBEFilterDefinitionSettingsConfig>(GenericBEFilterDefinitionSettingsConfig.EXTENSION_TYPE);
+        }
 
         
 

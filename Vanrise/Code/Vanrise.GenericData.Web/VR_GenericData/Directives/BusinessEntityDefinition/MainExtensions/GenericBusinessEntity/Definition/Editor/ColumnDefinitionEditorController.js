@@ -2,11 +2,12 @@
 
     "use strict";
 
-    GenericBEColumnDefintionController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService'];
+    GenericBEColumnDefintionController.$inject = ["$scope", "UtilsService", "VRNotificationService", "VRNavigationService", "VRUIUtilsService"];
 
     function GenericBEColumnDefintionController($scope, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
 
         var isEditMode;
+        var firstLoad = true;
         var columnDefinition;
         var context;
 
@@ -43,6 +44,7 @@
             };
 
             $scope.scopeModel.onDataRecordTypeFieldsSelectionChanged = function () {
+                if (firstLoad) return;
                 if (dataRecordTypeFieldsSelectorAPI.getSelectedValue() != undefined) {
                     $scope.scopeModel.fieldTitle = dataRecordTypeFieldsSelectorAPI.getSelectedValue().Title;
                 }
@@ -62,21 +64,20 @@
             };
 
             $scope.scopeModel.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
         }
         function load() {
-
             loadAllControls();
 
             function loadAllControls() {
                 $scope.scopeModel.isLoading = true;
                 function setTitle() {
                     if (isEditMode && columnDefinition != undefined)
-                        $scope.title = UtilsService.buildTitleForUpdateEditor(columnDefinition.FieldName, 'Column Definition Editor');
+                        $scope.title = UtilsService.buildTitleForUpdateEditor(columnDefinition.FieldName, "Column Definition Editor");
                     else
-                        $scope.title = UtilsService.buildTitleForAddEditor('Column Definition Editor');
+                        $scope.title = UtilsService.buildTitleForAddEditor("Column Definition Editor");
                 }
 
                 function loadStaticData() {
@@ -114,6 +115,9 @@
                 return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadDataRecordTypeFieldsSelector, loadSettingDirectiveSection]).then(function () {
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
+                    setTimeout(function () {
+                        firstLoad = false;
+                    },1);
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 });
@@ -147,5 +151,5 @@
         }
     }
 
-    appControllers.controller('VR_GenericData_GenericBEColumnDefintionController', GenericBEColumnDefintionController);
+    appControllers.controller("VR_GenericData_GenericBEColumnDefintionController", GenericBEColumnDefintionController);
 })(appControllers);

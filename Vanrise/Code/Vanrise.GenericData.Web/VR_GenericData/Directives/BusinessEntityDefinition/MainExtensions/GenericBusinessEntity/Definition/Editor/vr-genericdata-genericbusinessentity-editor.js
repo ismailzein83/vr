@@ -44,6 +44,11 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
             var editorDefinitionAPI;
             var editorDefinitionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+
+            var filterDefinitionAPI;
+            var filterDefinitionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
             var recordTypeSelectedPromiseDeferred;
             var recordTypeEntity;
 
@@ -78,6 +83,11 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                 $scope.scopeModel.onGenericBEEditorDefinitionDirectiveReady = function (api) {
                     editorDefinitionAPI = api;
                     editorDefinitionReadyPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onGenericBEFilterDefinitionDirectiveReady = function (api) {
+                    filterDefinitionAPI = api;
+                    filterDefinitionReadyPromiseDeferred.resolve();
                 };
 
                 $scope.scopeModel.onRecordTypeSelectionChanged = function () {
@@ -140,6 +150,9 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         },
                         EditorDefinition: {
                             Settings: editorDefinitionAPI.getData()
+                        },
+                        FilterDefinition: {
+                            Settings: filterDefinitionAPI.getData()
                         }
                     };
                 };
@@ -159,6 +172,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                     promises.push(loadColumnDefinitionGrid());
                     promises.push(loadViewDefinitionGrid());
                     promises.push(loadEditorDefinitionDirective());
+                    promises.push(loadFilterDefinitionDirective());
 
 
                     if (businessEntityDefinitionSettings != undefined) {
@@ -239,15 +253,29 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                     function loadEditorDefinitionDirective() {
                         var loadEditorDefinitionDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
                         editorDefinitionReadyPromiseDeferred.promise.then(function () {
-                            var payload = {
+                            var editorPayload = {
                                 settings: businessEntityDefinitionSettings != undefined && businessEntityDefinitionSettings.EditorDefinition && businessEntityDefinitionSettings.EditorDefinition.Settings || undefined,
                                 context: getContext()
                             };
 
-                            VRUIUtilsService.callDirectiveLoad(editorDefinitionAPI, payload, loadEditorDefinitionDirectivePromiseDeferred);
+                            VRUIUtilsService.callDirectiveLoad(editorDefinitionAPI, editorPayload, loadEditorDefinitionDirectivePromiseDeferred);
                         });
                         return loadEditorDefinitionDirectivePromiseDeferred.promise;
                     }
+
+                    function loadFilterDefinitionDirective() {
+                        var loadFilterDefinitionDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+                        filterDefinitionReadyPromiseDeferred.promise.then(function () {
+                            var filterPayload = {
+                                settings: businessEntityDefinitionSettings != undefined && businessEntityDefinitionSettings.FilterDefinition && businessEntityDefinitionSettings.FilterDefinition.Settings || undefined,
+                                context: getContext()
+                            };
+
+                            VRUIUtilsService.callDirectiveLoad(filterDefinitionAPI, filterPayload, loadFilterDefinitionDirectivePromiseDeferred);
+                        });
+                        return loadFilterDefinitionDirectivePromiseDeferred.promise;
+                    }
+
 
                     return UtilsService.waitMultiplePromises(promises).then(function () {
                         recordTypeSelectedPromiseDeferred = undefined;

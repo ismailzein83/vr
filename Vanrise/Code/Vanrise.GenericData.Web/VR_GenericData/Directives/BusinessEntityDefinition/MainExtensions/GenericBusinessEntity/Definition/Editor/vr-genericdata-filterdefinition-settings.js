@@ -2,9 +2,9 @@
 
     'use strict';
 
-    editorDefinitionSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBEDefinitionAPIService'];
+    filterDefinitionSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBEDefinitionAPIService'];
 
-    function editorDefinitionSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_GenericBEDefinitionAPIService) {
+    function filterDefinitionSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_GenericBEDefinitionAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -76,11 +76,11 @@
                         promises.push(loadDirectivePromise);
                     }
 
-                    var getParameterSettingsConfigsPromise = getGenericBEViewDefinitionSettingsConfigs();
+                    var getParameterSettingsConfigsPromise = getGenericBEFilterDefinitionSettingsConfigs();
                     promises.push(getParameterSettingsConfigsPromise);
 
-                    function getGenericBEViewDefinitionSettingsConfigs() {
-                        return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEEditorDefinitionSettingsConfigs().then(function (response) {
+                    function getGenericBEFilterDefinitionSettingsConfigs() {
+                        return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEFilterDefinitionSettingsConfigs().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
@@ -139,7 +139,7 @@
         }
 
         function getTamplate(attrs) {
-            var label = "Editor Type";
+            var label = "Filter Type";
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
             var template =
@@ -150,7 +150,7 @@
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
-                            + ' label="' + label + '"'
+                            + 'label="' + label + '"'
                             + ' isrequired="true"'
                             + 'hideremoveicon>'
                         + '</vr-select>'
@@ -163,6 +163,6 @@
         }
     }
 
-    app.directive('vrGenericdataEditordefinitionSettings', editorDefinitionSettingsDirective);
+    app.directive('vrGenericdataFilterdefinitionSettings', filterDefinitionSettingsDirective);
 
 })(app);

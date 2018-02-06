@@ -13,6 +13,10 @@
         var settingDirectiveAPI;
         var settingReadyPromiseDeferred;
 
+        var modalWidthSelectorAPI;
+        var modalWidthReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
         loadParameters();
         defineScope();
         load();
@@ -34,6 +38,11 @@
                     $scope.scopeModel.isLoadingDirective = value;
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope.scopeModel, settingDirectiveAPI, undefined, setLoader, settingReadyPromiseDeferred);
+            };
+
+            $scope.scopeModel.onModalWidthSelectorReady = function (api) {
+                modalWidthSelectorAPI = api;
+                modalWidthReadyPromiseDeferred.resolve();
             };
             $scope.scopeModel.bEDefinitionSettingConfigs = [];
 
@@ -111,7 +120,20 @@
                     }
                 }
 
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadSettingDirectiveSection, setTitle]).then(function () {
+
+                function loadModalWidthSelector() {
+                    var loadModalWidthSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                    modalWidthReadyPromiseDeferred.promise.then(function () {
+                        var selectorPayload = {
+                            selectedIds: businessEntityDefinitionEntity.Settings != undefined && businessEntityDefinitionEntity.Settings.EditorSize != undefined ? businessEntityDefinitionEntity.Settings.EditorSize  : undefined
+                        };
+                        VRUIUtilsService.callDirectiveLoad(modalWidthSelectorAPI, selectorPayload, loadModalWidthSelectorPromiseDeferred);
+                    });
+
+                    return loadModalWidthSelectorPromiseDeferred.promise;
+                }
+
+                return UtilsService.waitMultipleAsyncOperations([loadStaticData, loadSettingDirectiveSection, loadModalWidthSelector, setTitle]).then(function () {
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
                 }).catch(function (error) {
@@ -139,6 +161,7 @@
             var settings = settingDirectiveAPI.getData();
             if (settings != undefined) {
                 settings.ConfigId = $scope.scopeModel.selectedSetingsTypeConfig.ExtensionConfigurationId;
+                settings.EditorSize = modalWidthSelectorAPI.getSelectedIds();
             }
             var bEdefinition = {
                 BusinessEntityDefinitionId: businessEntityDefinitionId,
