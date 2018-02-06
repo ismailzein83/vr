@@ -135,13 +135,13 @@ namespace TOne.WhS.Routing.Business
             if (customerRoute.ExecutedRuleId.HasValue)
             {
                 routeRule = routeRuleManager.GetRule(customerRoute.ExecutedRuleId.Value);
-                if(routeRule != null)
+                if (routeRule != null)
                 {
                     RouteRuleSettingsConfig RouteRuleSettingsConfig;
                     if (_routeRuleSettingsConfigDict.TryGetValue(routeRule.Settings.ConfigId, out RouteRuleSettingsConfig))
                         executedRouteRuleSettingsTypeName = RouteRuleSettingsConfig.Title;
                 }
-            } 
+            }
 
             return new CustomerRouteDetail()
             {
@@ -256,22 +256,22 @@ namespace TOne.WhS.Routing.Business
 
             public override IEnumerable<CustomerRoute> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<CustomerRouteQuery> input)
             {
-                ICustomerRouteDataManager manager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
                 RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
                 var routingDatabase = routingDatabaseManager.GetRoutingDatabase(input.Query.RoutingDatabaseId);
 
-                if (routingDatabase == null)//in case of deleted database
+                if (routingDatabase == null) //in case of deleted database
                     routingDatabase = routingDatabaseManager.GetRoutingDatabaseFromDB(input.Query.RoutingDatabaseId);
 
                 if (routingDatabase == null)
                     throw new NullReferenceException(string.Format("routingDatabase. RoutingDatabaseId: {0}", input.Query.RoutingDatabaseId));
 
                 var latestRoutingDatabase = routingDatabaseManager.GetLatestRoutingDatabase(routingDatabase.ProcessType, routingDatabase.Type);
-                manager.RoutingDatabase = latestRoutingDatabase;
                 if (latestRoutingDatabase == null)
                     return null;
-                return manager.GetFilteredCustomerRoutes(input);
 
+                ICustomerRouteDataManager manager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
+                manager.RoutingDatabase = latestRoutingDatabase;
+                return manager.GetFilteredCustomerRoutes(input);
             }
 
             protected override ResultProcessingHandler<CustomerRouteDetail> GetResultProcessingHandler(DataRetrievalInput<CustomerRouteQuery> input, BigResult<CustomerRouteDetail> bigResult)
