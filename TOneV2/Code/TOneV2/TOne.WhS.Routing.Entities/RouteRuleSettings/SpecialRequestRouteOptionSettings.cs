@@ -10,11 +10,11 @@ namespace TOne.WhS.Routing.Entities
     {
         public int SupplierId { get; set; }
 
-        public bool ForceOption { get; set; }
-
         public int NumberOfTries { get; set; }
 
         public int? Percentage { get; set; }
+
+        public bool ForceOption { get; set; }
 
         public List<SpecialRequestRouteBackupOptionSettings> Backups { get; set; }
     }
@@ -23,8 +23,8 @@ namespace TOne.WhS.Routing.Entities
     {
         public int SupplierId { get; set; }
 
-        public bool ForceOption { get; set; }
-
         public int NumberOfTries { get; set; }
+
+        public bool ForceOption { get; set; }
     }
 }
