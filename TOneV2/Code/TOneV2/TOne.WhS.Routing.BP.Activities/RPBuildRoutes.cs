@@ -70,7 +70,7 @@ namespace TOne.WhS.Routing.BP.Activities
                                 inputArgument.EffectiveDate, inputArgument.IsFuture, routingDatabase);
 
                             RouteBuilder builder = new RouteBuilder(RoutingProcessType.RoutingProductRoute);
-                            IEnumerable<RPRoute> productRoutes = builder.BuildRoutes(routingProductContext, preparedRPCodeMatch.SaleZoneId, inputArgument.IncludeBlockedSupplierZones);
+                            IEnumerable<RPRoute> productRoutes = builder.BuildRoutes(routingProductContext, preparedRPCodeMatch.SaleZoneId);
 
                             productRoutesBatch.RPRoutes.AddRange(productRoutes);
                             inputArgument.OutputQueue.Enqueue(productRoutesBatch);

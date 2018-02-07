@@ -135,7 +135,7 @@ namespace TOne.WhS.Routing.Business
             }
         }
 
-        public IEnumerable<RPRoute> BuildRoutes(IBuildRoutingProductRoutesContext context, long saleZoneId, bool includeBlockedSupplierZones)
+        public IEnumerable<RPRoute> BuildRoutes(IBuildRoutingProductRoutesContext context, long saleZoneId)
         {
             List<RPRoute> routes = new List<RPRoute>();
 
@@ -160,7 +160,7 @@ namespace TOne.WhS.Routing.Business
                     var routeRule = GetRouteRule(routeRuleTarget, routingProduct.RoutingProductId);
                     if (routeRule != null)
                     {
-                        RPRoute route = ExecuteRule(routingProduct.RoutingProductId, saleZoneId, saleZoneServiceIds, context, routeRuleTarget, routeRule, includeBlockedSupplierZones, context.RoutingDatabase);
+                        RPRoute route = ExecuteRule(routingProduct.RoutingProductId, saleZoneId, saleZoneServiceIds, context, routeRuleTarget, routeRule, context.RoutingDatabase);
                         routes.Add(route);
                     }
                     //Removed after discussion with Sari
@@ -380,7 +380,7 @@ namespace TOne.WhS.Routing.Business
         }
 
         private RPRoute ExecuteRule(int routingProductId, long saleZoneId, HashSet<int> saleZoneServiceIds, IBuildRoutingProductRoutesContext context, RouteRuleTarget routeRuleTarget, RouteRule routeRule,
-            bool includeBlockedSupplierZones, RoutingDatabase routingDatabase)
+            RoutingDatabase routingDatabase)
         {
             RPRouteRuleExecutionContext routeRuleExecutionContext = new RPRouteRuleExecutionContext(routeRule, _ruleTreesForRouteOptions);
             routeRuleExecutionContext.SupplierCodeMatches = context.SupplierCodeMatches;
@@ -448,8 +448,7 @@ namespace TOne.WhS.Routing.Business
 
                         SupplierZoneToRPOptionPolicyExecutionContext supplierZoneToRPOptionPolicyExecutionContext = new SupplierZoneToRPOptionPolicyExecutionContext
                         {
-                            SupplierOptionDetail = item,
-                            IncludeBlockedSupplierZones = includeBlockedSupplierZones
+                            SupplierOptionDetail = item
                         };
                         supplierZoneToRPOptionPolicy.Execute(supplierZoneToRPOptionPolicyExecutionContext);
                         rpRouteOptions.Add(new RPRouteOption

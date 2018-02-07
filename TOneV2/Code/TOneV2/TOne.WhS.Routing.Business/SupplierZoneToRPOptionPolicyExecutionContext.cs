@@ -11,8 +11,6 @@ namespace TOne.WhS.Routing.Business
     {
         public RPRouteOptionSupplier SupplierOptionDetail { get; internal set; }
 
-        public bool IncludeBlockedSupplierZones { get; internal set; }
-
         public decimal EffectiveRate { internal get; set; }
     }
 }

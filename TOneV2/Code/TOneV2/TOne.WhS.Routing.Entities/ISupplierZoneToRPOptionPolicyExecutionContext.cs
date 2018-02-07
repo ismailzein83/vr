@@ -10,8 +10,6 @@ namespace TOne.WhS.Routing.Entities
     {
         RPRouteOptionSupplier SupplierOptionDetail { get; }
 
-        bool IncludeBlockedSupplierZones { get; }
-
         Decimal EffectiveRate { set; }
     }
 }
