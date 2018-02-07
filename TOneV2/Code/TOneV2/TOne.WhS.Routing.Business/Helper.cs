@@ -52,11 +52,28 @@ namespace TOne.WhS.Routing.Business
             return routes;
         }
 
+        public static RouteOptionRuleTarget CreateRouteOptionRuleTarget(RouteRuleTarget routeRuleTarget, SupplierCodeMatchWithRate supplierCodeMatchWithRate, IRouteBackupOptionSettings backup, int? percentage)
+        {
+            RouteOptionRuleTarget routeOptionRuleTarget = CreateOption<RouteOptionRuleTarget>(routeRuleTarget, supplierCodeMatchWithRate, backup);
+            routeOptionRuleTarget.NumberOfTries = backup != null ? backup.NumberOfTries : 1;
+            routeOptionRuleTarget.Percentage = percentage;
+            routeOptionRuleTarget.Backups = new List<RouteBackupOptionRuleTarget>();
+            return routeOptionRuleTarget;
+        }
+
         public static RouteOptionRuleTarget CreateRouteOptionRuleTarget(RouteRuleTarget routeRuleTarget, SupplierCodeMatchWithRate supplierCodeMatchWithRate, IRouteOptionSettings option)
         {
             RouteOptionRuleTarget routeOptionRuleTarget = CreateOption<RouteOptionRuleTarget>(routeRuleTarget, supplierCodeMatchWithRate, option);
-            routeOptionRuleTarget.NumberOfTries = option.NumberOfTries;
-            routeOptionRuleTarget.Percentage = option.Percentage;
+            if (option != null)
+            {
+                routeOptionRuleTarget.NumberOfTries = option.NumberOfTries;
+                routeOptionRuleTarget.Percentage = option.Percentage;
+            }
+            else
+            {
+                routeOptionRuleTarget.NumberOfTries = 1;
+            }
+
             routeOptionRuleTarget.Backups = new List<RouteBackupOptionRuleTarget>();
             return routeOptionRuleTarget;
         }
@@ -64,7 +81,11 @@ namespace TOne.WhS.Routing.Business
         public static RouteBackupOptionRuleTarget CreateRouteBackupOptionRuleTarget(RouteRuleTarget routeRuleTarget, SupplierCodeMatchWithRate supplierCodeMatchWithRate, IRouteBackupOptionSettings backup)
         {
             RouteBackupOptionRuleTarget routeBackupOptionRuleTarget = CreateOption<RouteBackupOptionRuleTarget>(routeRuleTarget, supplierCodeMatchWithRate, backup);
-            routeBackupOptionRuleTarget.NumberOfTries = backup.NumberOfTries;
+            if (backup != null)
+                routeBackupOptionRuleTarget.NumberOfTries = backup.NumberOfTries;
+            else
+                routeBackupOptionRuleTarget.NumberOfTries = 1;
+
             return routeBackupOptionRuleTarget;
         }
 

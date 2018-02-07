@@ -22,6 +22,34 @@ namespace TOne.WhS.Routing.Business
 
         public List<FixedRouteBackupOptionSettings> OverallBackupOptions { get; set; }
 
+        private List<FixedRouteOptionSettings> _optionsWithBackups;
+
+        private List<FixedRouteOptionSettings> OptionsWithBackups
+        {
+            get
+            {
+                if (_optionsWithBackups == null)
+                {
+                    if (this.Options != null)
+                    {
+                        _optionsWithBackups = Vanrise.Common.Utilities.CloneObject<List<FixedRouteOptionSettings>>(this.Options);
+
+                        if (this.OverallBackupOptions != null)
+                        {
+                            foreach (FixedRouteOptionSettings option in _optionsWithBackups)
+                            {
+                                if (option.Backups != null)
+                                    option.Backups.AddRange(this.OverallBackupOptions);
+                                else
+                                    option.Backups = new List<FixedRouteBackupOptionSettings>(this.OverallBackupOptions);
+                            }
+                        }
+                    }
+                }
+                return _optionsWithBackups;
+            }
+        }
+
         #endregion
 
         #region SaleEntity Execution
@@ -76,92 +104,41 @@ namespace TOne.WhS.Routing.Business
 
         public override void CreateSupplierZoneOptionsForRP(IRPRouteRuleExecutionContext context, RouteRuleTarget target)
         {
-            //if (this.Options != null)
-            //{
-            //    SupplierFilterSettings supplierFilterSettings = new SupplierFilterSettings { RoutingProductId = target.RoutingProductId };
-
-            //    List<FixedRouteOptionSettings> fixedOptions = null;
-            //    HashSet<int> filteredSupplierIds = SupplierGroupContext.GetFilteredSupplierIds(supplierFilterSettings);
-            //    if (filteredSupplierIds != null)
-            //    {
-            //        var filteredSuppliers = this.Options.FindAllRecords(itm => filteredSupplierIds.Contains(itm.Key)); //fixedOptions.Where(option => filteredSupplierIds.Contains(option.SupplierId));
-            //        if (filteredSuppliers != null && filteredSuppliers.Count() > 0)
-            //            fixedOptions = filteredSuppliers.Select(itm => itm.Value).ToList();
-            //    }
-            //    else
-            //    {
-            //        fixedOptions = this.Options.Values != null ? this.Options.Values.ToList() : null;
-            //    }
-
-            //    if (fixedOptions != null)
-            //    {
-            //        foreach (var optionSettings in fixedOptions)
-            //        {
-            //            List<SupplierCodeMatchWithRate> optionSupplierCodeMatches = context.GetSupplierCodeMatches(optionSettings.SupplierId);
-            //            if (optionSupplierCodeMatches != null)
-            //            {
-            //                foreach (var supplierCodeMatch in optionSupplierCodeMatches)
-            //                {
-            //                    var option = CreateOption(target, supplierCodeMatch, optionSettings.Percentage);
-            //                    if (!FilterOption(supplierCodeMatch, context.SaleZoneServiceIds, target, option))
-            //                        context.TryAddSupplierZoneOption(option);
-            //                }
-            //            }
-            //        }
-            //    }
-            //}
+            if (this.OptionsWithBackups != null)
+            {
+                HashSet<int> addedSuppliers = new HashSet<int>();
+                foreach (var optionSettings in this.OptionsWithBackups)
+                {
+                    var backups = optionSettings.Backups != null && optionSettings.Backups.Any() ? optionSettings.Backups.Select(itm => itm as IRouteBackupOptionSettings).ToList() : null;
+                    context.CreateSupplierZoneOptionsForRP(target, FilterOption, optionSettings, backups, addedSuppliers);
+                }
+            }
         }
 
         public override void ApplyRuleToRPOptions(IRPRouteRuleExecutionContext context, ref IEnumerable<RPRouteOption> options)
         {
-            if (options == null)
+            if (options == null || this.OptionsWithBackups == null)
                 return;
 
-            int? totalAssignedPercentage = null;
-
-            var blockedOptions = options.FindAllRecords(itm => itm.SupplierStatus == SupplierStatus.Block);
-            if (blockedOptions != null)
+            bool isPercentage = this.OptionsWithBackups.FirstOrDefault(itm => itm.Percentage.HasValue) != null;
+            if (isPercentage)
             {
-                foreach (var blockedOption in blockedOptions)
-                    blockedOption.Percentage = null;
+                options = options.OrderByDescending(itm => itm.Percentage);
             }
-
-            var unblockedOptions = options.FindAllRecords(itm => itm.SupplierStatus != SupplierStatus.Block);
-            if (unblockedOptions != null)
+            else
             {
-                var unblockedOptionsWithPercentage = unblockedOptions.FindAllRecords(itm => itm.Percentage.HasValue);
-                if (unblockedOptionsWithPercentage != null && unblockedOptionsWithPercentage.Count() > 0)
-                    totalAssignedPercentage = unblockedOptionsWithPercentage.Sum(itm => itm.Percentage.Value);
-            }
+                List<RPRouteOption> finalOptions = new List<RPRouteOption>();
+                Dictionary<int, RPRouteOption> optionsBySupplier = options.ToDictionary(itm => itm.SupplierId, itm => itm);
 
-            if (!totalAssignedPercentage.HasValue || totalAssignedPercentage == 100 || totalAssignedPercentage == 0)
-                return;
-
-            int unassignedPercentages = 100 - totalAssignedPercentage.Value;
-
-            int newTotalAssignedPercentage = 0;
-            RPRouteOption rpRouteOptionWithHighestPercentage = null;
-
-            foreach (var option in options)
-            {
-                if (!option.Percentage.HasValue)
-                    continue;
-
-                if (option.SupplierStatus == SupplierStatus.Block)
+                foreach (FixedRouteOptionSettings optionSettings in this.OptionsWithBackups)
                 {
-                    option.Percentage = 0;
-                    continue;
+                    RPRouteOption rpRouteOption;
+                    if (optionsBySupplier.TryGetValue(optionSettings.SupplierId, out rpRouteOption))
+                        finalOptions.Add(rpRouteOption);
                 }
 
-                option.Percentage = option.Percentage.Value + option.Percentage.Value * unassignedPercentages / totalAssignedPercentage.Value;
-                newTotalAssignedPercentage += option.Percentage.Value;
-
-                if (rpRouteOptionWithHighestPercentage == null || rpRouteOptionWithHighestPercentage.Percentage < option.Percentage)
-                    rpRouteOptionWithHighestPercentage = option;
+                options = finalOptions;
             }
-
-            if (newTotalAssignedPercentage != 100)
-                rpRouteOptionWithHighestPercentage.Percentage = rpRouteOptionWithHighestPercentage.Percentage.Value + (100 - newTotalAssignedPercentage);
         }
 
         #endregion
@@ -171,9 +148,9 @@ namespace TOne.WhS.Routing.Business
         private List<RouteOptionRuleTarget> CreateOptions(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
         {
             var options = new List<RouteOptionRuleTarget>();
-            if (this.Options != null)
+            if (this.OptionsWithBackups != null)
             {
-                foreach (var optionSettings in this.Options)
+                foreach (var optionSettings in this.OptionsWithBackups)
                 {
                     var backups = optionSettings.Backups != null && optionSettings.Backups.Any() ? optionSettings.Backups.Select(itm => itm as IRouteBackupOptionSettings).ToList() : null;
                     RouteOptionRuleTarget routeOptionRuleTarget = context.BuildRouteOptionRuleTarget(target, optionSettings, backups);
@@ -184,30 +161,6 @@ namespace TOne.WhS.Routing.Business
             }
 
             return options;
-        }
-
-        private RouteOptionRuleTarget CreateOption(RouteRuleTarget routeRuleTarget, SupplierCodeMatchWithRate supplierCodeMatchWithRate, int? percentage)
-        {
-            var supplierCodeMatch = supplierCodeMatchWithRate.CodeMatch;
-            var option = new RouteOptionRuleTarget
-            {
-                RouteTarget = routeRuleTarget,
-                SupplierId = supplierCodeMatch.SupplierId,
-                SupplierCode = supplierCodeMatch.SupplierCode,
-                SupplierZoneId = supplierCodeMatch.SupplierZoneId,
-                SupplierRate = supplierCodeMatchWithRate.RateValue,
-                EffectiveOn = routeRuleTarget.EffectiveOn,
-                IsEffectiveInFuture = routeRuleTarget.IsEffectiveInFuture,
-                ExactSupplierServiceIds = supplierCodeMatchWithRate.ExactSupplierServiceIds,
-                SupplierServiceIds = supplierCodeMatchWithRate.SupplierServiceIds,
-                SupplierServiceWeight = supplierCodeMatchWithRate.SupplierServiceWeight,
-                NumberOfTries = 1,
-                SupplierRateId = supplierCodeMatchWithRate.SupplierRateId,
-                SupplierRateEED = supplierCodeMatchWithRate.SupplierRateEED
-            };
-            if (percentage.HasValue)
-                option.Percentage = percentage.Value;
-            return option;
         }
 
         private void FilterOption(HashSet<int> customerServiceIds, RouteRuleTarget target, BaseRouteOptionRuleTarget option)

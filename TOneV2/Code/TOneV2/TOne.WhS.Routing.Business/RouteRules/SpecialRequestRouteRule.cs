@@ -29,13 +29,41 @@ namespace TOne.WhS.Routing.Business
                 if (_optionSupplierIds == null)
                 {
                     _optionSupplierIds = new HashSet<int>();
-                    if (Options != null)
+                    if (this.OptionsWithBackups != null)
                     {
-                        foreach (SpecialRequestRouteOptionSettings option in Options)
+                        foreach (SpecialRequestRouteOptionSettings option in this.OptionsWithBackups)
                             _optionSupplierIds.Add(option.SupplierId);
                     }
                 }
                 return _optionSupplierIds;
+            }
+        }
+
+        private List<SpecialRequestRouteOptionSettings> _optionsWithBackups;
+
+        private List<SpecialRequestRouteOptionSettings> OptionsWithBackups
+        {
+            get
+            {
+                if (_optionsWithBackups == null)
+                {
+                    if (this.Options != null)
+                    {
+                        _optionsWithBackups = Vanrise.Common.Utilities.CloneObject<List<SpecialRequestRouteOptionSettings>>(this.Options);
+
+                        if (this.OverallBackupOptions != null)
+                        {
+                            foreach (SpecialRequestRouteOptionSettings option in _optionsWithBackups)
+                            {
+                                if (option.Backups != null)
+                                    option.Backups.AddRange(this.OverallBackupOptions);
+                                else
+                                    option.Backups = new List<SpecialRequestRouteBackupOptionSettings>(this.OverallBackupOptions);
+                            }
+                        }
+                    }
+                }
+                return _optionsWithBackups;
             }
         }
 
@@ -89,7 +117,7 @@ namespace TOne.WhS.Routing.Business
             if (!numberOfOptions.HasValue)
                 throw new NullReferenceException("numberOfOptions must have a value for Speical Request Route Rule");
 
-            return Options != null ? Math.Max(numberOfOptions.Value, Options.Count) : numberOfOptions.Value;
+            return this.OptionsWithBackups != null ? Math.Max(numberOfOptions.Value, this.OptionsWithBackups.Count) : numberOfOptions.Value;
         }
 
         public override List<RouteOptionRuleTarget> GetOrderedOptions(ISaleEntityRouteRuleExecutionContext context, RouteRuleTarget target)
@@ -126,7 +154,7 @@ namespace TOne.WhS.Routing.Business
             {
                 var currentRouteOption = context.RouteOptions[i];
                 if (!OptionsSupplierIds.Contains(currentRouteOption.SupplierId))
-                    context.RouteOptions.Remove(currentRouteOption);
+                    context.RouteOptions.RemoveAt(i);
                 else
                     break;
             }
@@ -150,68 +178,62 @@ namespace TOne.WhS.Routing.Business
             var allSuppliersCodeMatches = context.GetAllSuppliersCodeMatches();
             if (allSuppliersCodeMatches != null)
             {
+                HashSet<int> addedSuppliers = new HashSet<int>();
+                if (this.OptionsWithBackups != null)
+                {
+                    foreach (var optionSettings in this.OptionsWithBackups)
+                    {
+                        var backups = optionSettings.Backups != null && optionSettings.Backups.Any() ? optionSettings.Backups.Select(itm => itm as IRouteBackupOptionSettings).ToList() : null;
+                        context.CreateSupplierZoneOptionsForRP(target, FilterOption, optionSettings, backups, addedSuppliers);
+                    }
+                }
+
                 foreach (var supplierCodeMatch in allSuppliersCodeMatches)
                 {
-                    var option = CreateOption(target, supplierCodeMatch);
-                    FilterOption(context.SaleZoneServiceIds, target, option);
-                    if (!option.FilterOption)
-                        context.TryAddSupplierZoneOption(option);
+                    if (OptionsSupplierIds == null || !OptionsSupplierIds.Contains(supplierCodeMatch.CodeMatch.SupplierId))
+                    {
+                        SpecialRequestRouteOptionSettings optionSettings = new SpecialRequestRouteOptionSettings() { NumberOfTries = 1, SupplierId = supplierCodeMatch.CodeMatch.SupplierId };
+                        context.CreateSupplierZoneOptionsForRP(target, FilterOption, optionSettings, null, addedSuppliers);
+                    }
                 }
             }
         }
 
         public override void ApplyRuleToRPOptions(IRPRouteRuleExecutionContext context, ref IEnumerable<RPRouteOption> options)
         {
-            //if (options != null)
-            //{
-            //    options = ApplyOptionsOrder(options, null);
+            if (options == null)
+                return;
+            
+            bool isPercentage = this.OptionsWithBackups != null && this.OptionsWithBackups.FirstOrDefault(itm => itm.Percentage.HasValue) != null;
+            if (isPercentage)
+            {
+                options = options.OrderByDescending(itm => itm.Percentage.HasValue ? itm.Percentage : -1).ThenBy(itm => itm.SupplierRate).ThenByDescending(itm => itm.SupplierServiceWeight).ThenBy(itm => itm.SupplierId);
+            }
+            else
+            {
+                if (this.OptionsWithBackups != null)
+                {
+                    List<RPRouteOption> finalOptions = new List<RPRouteOption>();
+                    Dictionary<int, RPRouteOption> optionsBySupplier = options.ToDictionary(itm => itm.SupplierId, itm => itm);
+                    
+                    foreach (SpecialRequestRouteOptionSettings optionSettings in this.OptionsWithBackups)
+                    {
+                        RPRouteOption rpRouteOption;
+                        if (optionsBySupplier.TryGetValue(optionSettings.SupplierId, out rpRouteOption))
+                            finalOptions.Add(rpRouteOption);
+                    }
 
-            //    int? totalAssignedPercentage = null;
+                    var lcrOptions = options.FindAllRecords(itm => this.OptionsSupplierIds == null || !this.OptionsSupplierIds.Contains(itm.SupplierId));
+                    if (lcrOptions.Any())
+                        finalOptions.AddRange(lcrOptions.OrderBy(itm => itm.SupplierRate).ThenByDescending(itm => itm.SupplierServiceWeight).ThenBy(itm => itm.SupplierId));
 
-            //    var blockedOptions = options.FindAllRecords(itm => itm.SupplierStatus == SupplierStatus.Block);
-            //    if (blockedOptions != null)
-            //    {
-            //        foreach (var blockedOption in blockedOptions)
-            //            blockedOption.Percentage = null;
-            //    }
-
-            //    var unblockedOptions = options.FindAllRecords(itm => itm.SupplierStatus != SupplierStatus.Block);
-            //    if (unblockedOptions != null)
-            //    {
-            //        var unblockedOptionsWithPercentage = unblockedOptions.FindAllRecords(itm => itm.Percentage.HasValue);
-            //        if (unblockedOptionsWithPercentage != null && unblockedOptionsWithPercentage.Count() > 0)
-            //            totalAssignedPercentage = unblockedOptionsWithPercentage.Sum(itm => itm.Percentage.Value);
-            //    }
-
-            //    if (!totalAssignedPercentage.HasValue || totalAssignedPercentage == 100 || totalAssignedPercentage == 0)
-            //        return;
-
-            //    int unassignedPercentages = 100 - totalAssignedPercentage.Value;
-
-            //    int newTotalAssignedPercentage = 0;
-            //    RPRouteOption rpRouteOptionWithHighestPercentage = null;
-
-            //    foreach (var option in options)
-            //    {
-            //        if (!option.Percentage.HasValue)
-            //            continue;
-
-            //        if (option.SupplierStatus == SupplierStatus.Block)
-            //        {
-            //            option.Percentage = 0;
-            //            continue;
-            //        }
-
-            //        option.Percentage = option.Percentage.Value + option.Percentage.Value * unassignedPercentages / totalAssignedPercentage.Value;
-            //        newTotalAssignedPercentage += option.Percentage.Value;
-
-            //        if (rpRouteOptionWithHighestPercentage == null || rpRouteOptionWithHighestPercentage.Percentage < option.Percentage)
-            //            rpRouteOptionWithHighestPercentage = option;
-            //    }
-
-            //    if (newTotalAssignedPercentage != 100)
-            //        rpRouteOptionWithHighestPercentage.Percentage = rpRouteOptionWithHighestPercentage.Percentage.Value + (100 - newTotalAssignedPercentage);
-            //}
+                    options = finalOptions;
+                }
+                else
+                {
+                    options = options.OrderBy(itm => itm.SupplierRate).ThenByDescending(itm => itm.SupplierServiceWeight).ThenBy(itm => itm.SupplierId);
+                }
+            }
         }
 
         #endregion
@@ -225,9 +247,9 @@ namespace TOne.WhS.Routing.Business
             var allSuppliersCodeMatches = context.GetAllSuppliersCodeMatches();
             if (allSuppliersCodeMatches != null)
             {
-                if (this.Options != null)
+                if (this.OptionsWithBackups != null)
                 {
-                    foreach (var optionSettings in this.Options)
+                    foreach (var optionSettings in this.OptionsWithBackups)
                     {
                         var backups = optionSettings.Backups != null && optionSettings.Backups.Any() ? optionSettings.Backups.Select(itm => itm as IRouteBackupOptionSettings).ToList() : null;
                         RouteOptionRuleTarget routeOptionRuleTarget = context.BuildRouteOptionRuleTarget(target, optionSettings, backups);
@@ -252,41 +274,6 @@ namespace TOne.WhS.Routing.Business
             }
 
             return options;
-        }
-
-        private RouteOptionRuleTarget CreateOption(RouteRuleTarget routeRuleTarget, SupplierCodeMatchWithRate supplierCodeMatchWithRate)
-        {
-            throw new NotImplementedException();
-            //var supplierCodeMatch = supplierCodeMatchWithRate.CodeMatch;
-            //SpecialRequestRouteOptionSettings supplierSettings;
-            //int? numberOfTries = null;
-            //int? percentage = null;
-
-            //if (Options != null && Options.TryGetValue(supplierCodeMatch.SupplierId, out supplierSettings))
-            //{
-            //    numberOfTries = supplierSettings.NumberOfTries;
-            //    percentage = supplierSettings.Percentage;
-            //}
-
-            //var option = new RouteOptionRuleTarget
-            //{
-            //    RouteTarget = routeRuleTarget,
-            //    SupplierId = supplierCodeMatch.SupplierId,
-            //    SupplierCode = supplierCodeMatch.SupplierCode,
-            //    SupplierZoneId = supplierCodeMatch.SupplierZoneId,
-            //    SupplierRate = supplierCodeMatchWithRate.RateValue,
-            //    EffectiveOn = routeRuleTarget.EffectiveOn,
-            //    IsEffectiveInFuture = routeRuleTarget.IsEffectiveInFuture,
-            //    ExactSupplierServiceIds = supplierCodeMatchWithRate.ExactSupplierServiceIds,
-            //    SupplierServiceIds = supplierCodeMatchWithRate.SupplierServiceIds,
-            //    SupplierServiceWeight = supplierCodeMatchWithRate.SupplierServiceWeight,
-            //    Percentage = percentage,
-            //    NumberOfTries = numberOfTries.HasValue ? numberOfTries.Value : 1,
-            //    SupplierRateId = supplierCodeMatchWithRate.SupplierRateId,
-            //    SupplierRateEED = supplierCodeMatchWithRate.SupplierRateEED
-            //};
-
-            //return option;
         }
 
         private void FilterOption(HashSet<int> customerServiceIds, RouteRuleTarget target, BaseRouteOptionRuleTarget option)
@@ -334,37 +321,6 @@ namespace TOne.WhS.Routing.Business
 
             return (saleRate.Value - supplierRate) < 0;
         }
-
-        //private List<T> ApplyOptionsOrder<T>(IEnumerable<T> options, int? numberOfOptions) where T : IRouteOptionOrderTarget
-        //{
-        //    if (options == null)
-        //        return null;
-
-        //    IEnumerable<T> finalOptions = new List<T>(options);
-
-        //    if (Options != null)
-        //        finalOptions = finalOptions.FindAllRecords(itm => !Options.ContainsKey(itm.SupplierId));
-
-        //    finalOptions = finalOptions.OrderBy(itm => itm.SupplierRate).ThenByDescending(itm => itm.SupplierServiceWeight).ThenBy(itm => itm.SupplierId);
-
-        //    List<T> orderedOptions = finalOptions.ToList();
-
-        //    if (Options != null)
-        //    {
-        //        List<SpecialRequestRouteOptionSettings> settings = Options.Values.OrderByDescending(itm => itm.Position).ToList();
-
-        //        foreach (SpecialRequestRouteOptionSettings setting in settings)
-        //        {
-        //            var matchedSupplier = options.FindRecord(itm => itm.SupplierId == setting.SupplierId);
-        //            if (matchedSupplier != null)
-        //            {
-        //                orderedOptions.Insert(0, matchedSupplier);
-        //            }
-        //        }
-        //    }
-
-        //    return orderedOptions;
-        //}
 
         #endregion
     }

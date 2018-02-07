@@ -10,16 +10,7 @@ namespace TOne.WhS.Routing.Business
 
         public override void Execute(ISupplierZoneToRPOptionPolicyExecutionContext context)
         {
-            if (context.IncludeBlockedSupplierZones)
-            {
-                context.EffectiveRate = context.SupplierOptionDetail.SupplierZones.Min(itm => itm.SupplierRate);
-            }
-            else
-            {
-                var notBlockedSupplierZones = context.SupplierOptionDetail.SupplierZones.FindAll(itm => !itm.IsBlocked);
-                if (notBlockedSupplierZones != null && notBlockedSupplierZones.Count() > 0)
-                    context.EffectiveRate = notBlockedSupplierZones.Min(itm => itm.SupplierRate);
-            }
+            context.EffectiveRate = context.SupplierOptionDetail.SupplierZones.Min(itm => itm.SupplierRate);
         }
     }
 }

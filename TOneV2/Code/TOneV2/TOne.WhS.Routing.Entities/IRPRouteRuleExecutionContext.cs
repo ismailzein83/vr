@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace TOne.WhS.Routing.Entities
 {
@@ -15,5 +16,8 @@ namespace TOne.WhS.Routing.Entities
         List<SupplierCodeMatchWithRate> GetSupplierCodeMatches(int supplierId);
 
         List<SupplierCodeMatchWithRate> GetAllSuppliersCodeMatches();
+
+        void CreateSupplierZoneOptionsForRP(RouteRuleTarget target, Action<HashSet<int>, RouteRuleTarget, BaseRouteOptionRuleTarget> filterOption,
+            IRouteOptionSettings optionSettings, List<IRouteBackupOptionSettings> backupsSettings, HashSet<int> addedSuppliers);
     }
 }
