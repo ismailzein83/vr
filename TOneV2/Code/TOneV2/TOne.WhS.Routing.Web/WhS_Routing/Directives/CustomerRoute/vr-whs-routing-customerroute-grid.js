@@ -22,6 +22,7 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
         };
 
         function customerRouteGrid($scope, ctrl, $attrs) {
+            this.initializeController = initializeController;
 
             var isDatabaseTypeCurrent;
 
@@ -42,30 +43,28 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
                 };
 
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    return WhS_Routing_CustomerRouteAPIService.GetFilteredCustomerRoutes(dataRetrievalInput)
-                       .then(function (response) {
-                           var customerRouteLoadGridPromises = [];
+                    return WhS_Routing_CustomerRouteAPIService.GetFilteredCustomerRoutes(dataRetrievalInput).then(function (response) {
+                        var customerRouteLoadGridPromises = [];
 
-                           if (response && response.Data) {
-                               for (var i = 0; i < response.Data.length; i++) {
-                                   var customerRoute = response.Data[i];
-                                   extendCutomerRouteObject(customerRoute);
-                                   customerRouteLoadGridPromises.push(customerRoute.cutomerRouteLoadDeferred.promise);
-                                   gridDrillDownTabsObj.setDrillDownExtensionObject(customerRoute);
-                               }
-                           }
-                           onResponseReady(response);
+                        if (response && response.Data) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                var customerRoute = response.Data[i];
+                                extendCutomerRouteObject(customerRoute);
+                                customerRouteLoadGridPromises.push(customerRoute.cutomerRouteLoadDeferred.promise);
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(customerRoute);
+                            }
+                        }
+                        onResponseReady(response);
 
-                           //showGrid
-                           UtilsService.waitMultiplePromises(customerRouteLoadGridPromises).then(function () {
-                               $scope.showGrid = true;
-                           }).catch(function (error) {
-                               VRNotificationService.notifyExceptionWithClose(error, $scope);
-                           });
-                       })
-                       .catch(function (error) {
-                           VRNotificationService.notifyExceptionWithClose(error, $scope);
-                       });
+                        //showGrid
+                        UtilsService.waitMultiplePromises(customerRouteLoadGridPromises).then(function () {
+                            $scope.showGrid = true;
+                        }).catch(function (error) {
+                            VRNotificationService.notifyExceptionWithClose(error, $scope);
+                        });
+                    }).catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    });
                 };
 
                 $scope.getRowStyle = function (dataItem) {
@@ -101,7 +100,6 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
                     if (customerRoute.Entity != undefined) {
                         serviceViewerPayload = { selectedIds: customerRoute.Entity.SaleZoneServiceIds };
                     }
-
                     VRUIUtilsService.callDirectiveLoad(customerRoute.serviceViewerAPI, serviceViewerPayload, customerRoute.cutomerRouteLoadDeferred);
                 };
             };
@@ -247,7 +245,6 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
                 return [drillDownDefinition];
             };
 
-            this.initializeController = initializeController;
         }
 
         return directiveDefinitionObject;

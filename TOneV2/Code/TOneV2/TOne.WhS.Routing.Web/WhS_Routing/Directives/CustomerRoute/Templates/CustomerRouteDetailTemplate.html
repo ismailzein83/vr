@@ -1,10 +1,9 @@
-﻿
-<vr-row>
+﻿<vr-row>
     <vr-columns colnum="12" simplecol>
-        <vr-datagrid datasource="routeOptionDetails"
+        <vr-datagrid on-ready="onGridReady"
+                     datasource="routeOptionDetails"
                      menuactions="getMenuActions"
                      getrowstyle="getRowStyle"
-                     on-ready="onGridReady"
                      idfield="CustomerRouteOptionDetailId">
 
             <vr-datagridcolumn headertext="'Supplier'" field="'SupplierName'"></vr-datagridcolumn>

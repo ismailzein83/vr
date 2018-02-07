@@ -1,5 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService','WhS_Routing_RouteOptionRuleAPIService',
+
+app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_Routing_RouteOptionRuleAPIService',
     function (WhS_Routing_RouteOptionRuleService, UtilsService, VRUIUtilsService, VRNotificationService, WhS_Routing_RouteOptionRuleAPIService) {
 
         var directiveDefinitionObject = {
@@ -8,12 +9,9 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
                 onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
-
                 var ctrl = this;
-
                 var ctor = new customerRouteDetailsCtor(ctrl, $scope);
                 ctor.initializeController();
-
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -29,27 +27,19 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
 
         function customerRouteDetailsCtor(ctrl, $scope) {
             this.initializeController = initializeController;
+
             var customerRoute;
+
             var gridAPI;
+
             function initializeController() {
                 $scope.routeOptionDetails = [];
 
-                $scope.getRowStyle = function (dataItem) {
-
-                    var rowStyle;
-
-                    if (dataItem.IsBlocked) {
-                        rowStyle = { CssClass: "bg-danger" };
-                    }
-                    else if (dataItem.ExecutedRuleId) {
-                        rowStyle = { CssClass: "bg-success" };
-                    }
-
-                    return rowStyle
-                };
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
+                    defineAPI();
                 };
+
                 $scope.getMenuActions = function (dataItem) {
                     var menuActions = [];
 
@@ -86,73 +76,42 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
                     return menuActions;
                 };
 
+                $scope.getRowStyle = function (dataItem) {
 
-                function hasUpdateRulePermission() {
-                    return WhS_Routing_RouteOptionRuleAPIService.HasUpdateRulePermission();
+                    var rowStyle;
+
+                    if (dataItem.IsBlocked) {
+                        rowStyle = { CssClass: "bg-danger" };
+                    }
+                    else if (dataItem.ExecutedRuleId) {
+                        rowStyle = { CssClass: "bg-success" };
+                    }
+
+                    return rowStyle
                 };
 
-                function hasAddRulePermission() {
-                    return WhS_Routing_RouteOptionRuleAPIService.HasAddRulePermission();
-                };
-
-                function viewLinkedRouteOptionRules(dataItem) {
-                    WhS_Routing_RouteOptionRuleService.viewLinkedRouteOptionRules(dataItem.LinkedRouteOptionRuleIds, customerRoute.Entity.Code);
-                };
-
-                function editLinkedRouteOptionRule(dataItem) {
-                    WhS_Routing_RouteOptionRuleService.editLinkedRouteOptionRule(dataItem.LinkedRouteOptionRuleIds[0], customerRoute.Entity.Code);
-                };
-
-                function viewRouteOptionRuleEditor(dataItem) {
-                    WhS_Routing_RouteOptionRuleService.viewRouteOptionRule(dataItem.ExecutedRuleId);
-                }
-
-                function addRouteOptionRuleEditor(dataItem) {
-                    var onRouteOptionRuleAdded = function (addedItem) {
-                        var newDataItem =
-                            {
-                                CustomerRouteOptionDetailId: dataItem.CustomerRouteOptionDetailId,
-                                RouteOption: dataItem.RouteOption,
-                                SupplierName: dataItem.SupplierName,
-                                SupplierCode: dataItem.SupplierCode,
-                                SupplierZoneName: dataItem.SupplierZoneName,
-                                SupplierRate: dataItem.SupplierRate,
-                                Percentage: dataItem.Percentage,
-                                IsBlocked: dataItem.IsBlocked,
-                                ExactSupplierServiceIds: dataItem.ExactSupplierServiceIds,
-                                ExecutedRuleId: dataItem.ExecutedRuleId,
-                                LinkedRouteOptionRuleIds: [],
-                                LinkedRouteOptionRuleCount: 1
-                            };
-                        newDataItem.LinkedRouteOptionRuleIds.push(addedItem.Entity.RuleId);
-                        extendRouteOptionDetailObject(newDataItem);
-                        gridAPI.itemUpdated(newDataItem);
-                    };
-
-                    var linkedRouteOptionRuleInput = { RuleId: dataItem.Entity.ExecutedRuleId, CustomerId: customerRoute.Entity.CustomerId, Code: customerRoute.Entity.Code, SupplierId: dataItem.Entity.SupplierId, SupplierZoneId: dataItem.Entity.SupplierZoneId };
-                    WhS_Routing_RouteOptionRuleService.addLinkedRouteOptionRule(linkedRouteOptionRuleInput, customerRoute.Entity.Code, onRouteOptionRuleAdded);
-                };
-                defineAPI();
             }
+
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
-                    var _routeOptionDetailServiceViewerPromises = [];
+                    var promises = [];
 
-                    if (payload != undefined)
+                    if (payload != undefined) {
                         customerRoute = payload.customerRoute;
+                    }
 
                     if (customerRoute != undefined && customerRoute.RouteOptionDetails != null) {
                         for (var i = 0; i < customerRoute.RouteOptionDetails.length; i++) {
                             var routeOptionDetail = customerRoute.RouteOptionDetails[i];
                             extendRouteOptionDetailObject(routeOptionDetail);
-                            _routeOptionDetailServiceViewerPromises.push(routeOptionDetail.routeOptionDetailLoadDeferred.promise);
+                            promises.push(routeOptionDetail.routeOptionDetailLoadDeferred.promise);
                             $scope.routeOptionDetails.push(routeOptionDetail);
                         }
                     }
 
-                    return UtilsService.waitMultiplePromises(_routeOptionDetailServiceViewerPromises).catch(function (error) {
+                    return UtilsService.waitMultiplePromises(promises).catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
                     });
                 };
@@ -169,9 +128,53 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
                     var serviceViewerPayload = {
                         selectedIds: routeOptionDetail.ExactSupplierServiceIds
                     };
-
                     VRUIUtilsService.callDirectiveLoad(routeOptionDetail.serviceViewerAPI, serviceViewerPayload, routeOptionDetail.routeOptionDetailLoadDeferred);
                 };
+            }
+
+            function addRouteOptionRuleEditor(dataItem) {
+                var onRouteOptionRuleAdded = function (addedItem) {
+                    var newDataItem = {
+                        CustomerRouteOptionDetailId: dataItem.CustomerRouteOptionDetailId,
+                        RouteOption: dataItem.RouteOption,
+                        SupplierName: dataItem.SupplierName,
+                        SupplierCode: dataItem.SupplierCode,
+                        SupplierZoneName: dataItem.SupplierZoneName,
+                        SupplierRate: dataItem.SupplierRate,
+                        Percentage: dataItem.Percentage,
+                        IsBlocked: dataItem.IsBlocked,
+                        ExactSupplierServiceIds: dataItem.ExactSupplierServiceIds,
+                        ExecutedRuleId: dataItem.ExecutedRuleId,
+                        LinkedRouteOptionRuleIds: [],
+                        LinkedRouteOptionRuleCount: 1
+                    };
+                    newDataItem.LinkedRouteOptionRuleIds.push(addedItem.Entity.RuleId);
+                    extendRouteOptionDetailObject(newDataItem);
+                    gridAPI.itemUpdated(newDataItem);
+                };
+
+                var linkedRouteOptionRuleInput = { RuleId: dataItem.Entity.ExecutedRuleId, CustomerId: customerRoute.Entity.CustomerId, Code: customerRoute.Entity.Code, SupplierId: dataItem.Entity.SupplierId, SupplierZoneId: dataItem.Entity.SupplierZoneId };
+                WhS_Routing_RouteOptionRuleService.addLinkedRouteOptionRule(linkedRouteOptionRuleInput, customerRoute.Entity.Code, onRouteOptionRuleAdded);
+            }
+
+            function hasAddRulePermission() {
+                return WhS_Routing_RouteOptionRuleAPIService.HasAddRulePermission();
+            }
+
+            function hasUpdateRulePermission() {
+                return WhS_Routing_RouteOptionRuleAPIService.HasUpdateRulePermission();
+            }
+
+            function viewLinkedRouteOptionRules(dataItem) {
+                WhS_Routing_RouteOptionRuleService.viewLinkedRouteOptionRules(dataItem.LinkedRouteOptionRuleIds, customerRoute.Entity.Code);
+            }
+
+            function editLinkedRouteOptionRule(dataItem) {
+                WhS_Routing_RouteOptionRuleService.editLinkedRouteOptionRule(dataItem.LinkedRouteOptionRuleIds[0], customerRoute.Entity.Code);
+            }
+
+            function viewRouteOptionRuleEditor(dataItem) {
+                WhS_Routing_RouteOptionRuleService.viewRouteOptionRule(dataItem.ExecutedRuleId);
             }
         }
 
