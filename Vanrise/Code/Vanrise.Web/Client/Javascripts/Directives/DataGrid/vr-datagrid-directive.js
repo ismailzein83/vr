@@ -659,7 +659,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 };
                 var odd = false;
                 ctrl.getCellContainerClass = function (dataItem, colDef) {
-                    var object = ctrl.getrowstyle(dataItem);
+                    var object = ctrl.getRowCSSClass(dataItem);
                     return object == null ? colDef && colDef.cssClass : "";
                 };
 
