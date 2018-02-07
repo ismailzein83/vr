@@ -4114,7 +4114,7 @@ vr-datalist .drag-icon {
 }
 
 .vr-datagrid[alternative-color="true"] .vr-datagrid-body:nth-of-type(odd) .vr-datagrid-cell-container {
-    background-color: #f9f9f9 !important;
+    background-color: inherit !important;
 }
 
 .vr-datagrid[alternative-color="true"] .vr-datagrid-body:nth-of-type(odd) .vr-datagrid-datacells-click .vr-datagrid-cell-container {
