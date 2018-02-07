@@ -1,6 +1,7 @@
 ﻿(function (appControllers) {
 
     "use strict";
+
     customerRouteAPIService.$inject = ['BaseAPIService', 'UtilsService', 'WhS_Routing_ModuleConfig'];
 
     function customerRouteAPIService(BaseAPIService, UtilsService, WhS_Routing_ModuleConfig) {
