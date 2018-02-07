@@ -237,11 +237,16 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                     ctrl.onReady(api);
             }
             function loadStatusSelector() {
-                var selectorPayload = {
-                    businessEntityDefinitionId: "c63202a1-438f-428e-b0fb-3a9bad708e9b"
-                };
+                var selectorPayload;
                 if (selectedValues != undefined) {
-                    selectorPayload.selectedIds = selectedValues.StatusId;
+                    selectorPayload = {
+                        selectedIds: selectedValues.StatusId,
+                        businessEntityDefinitionId: "c63202a1-438f-428e-b0fb-3a9bad708e9b",
+                        filter: {
+                            Filters: []
+                        }
+                    };
+                    selectorPayload.filter.Filters.push(getStatusSelectorFiter());
                 }
                 return statusSelectorAPI.load(selectorPayload);
             }
@@ -269,6 +274,13 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                     payload.attachementFieldTypes = selectedValues.Attachments;
                 }
                 return attachmentGridAPI.loadGrid(payload);
+            }
+            function getStatusSelectorFiter() {
+                return {
+                    $type: "TOne.WhS.BusinessEntity.Business.FaultTicketStatusDefinitionFilter,TOne.WhS.BusinessEntity.Business",
+                    BusinessEntityDefinitionId: "e4053d52-8a52-438e-b353-37acf059a938",
+                    CaseId: selectedValues != undefined ? selectedValues.CaseId : undefined,
+                };
             }
             function loadWorkGroupSelector() {
                 var selectorPayload = {
