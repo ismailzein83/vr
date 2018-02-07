@@ -34,7 +34,7 @@ namespace TOne.WhS.Routing.Entities
                 return false;
 
             if (this.Backups == null || this.Backups.Count == 0)
-                return false;
+                return true;
 
             foreach (RouteBackupOption backup in this.Backups)
             {
