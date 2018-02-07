@@ -41,7 +41,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 if (input.Query.OwnerType == SalePriceListOwnerType.SellingProduct)
                 {
                     var productZoneRateHistoryLocator = new ProductZoneRateHistoryLocator(new ProductZoneRateHistoryReader(CreateListFromItem(input.Query.OwnerId), zoneIds, true, false));
-                    return productZoneRateHistoryLocator.GetProductZoneRateHistory(input.Query.OwnerId, input.Query.ZoneName, null, input.Query.CurrencyId);
+                    return productZoneRateHistoryLocator.GetProductZoneRateHistory(input.Query.OwnerId, input.Query.ZoneName, null, currencyId);
                 }
                 else
                 {
@@ -49,7 +49,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocatorV2(new CustomerZoneRateHistoryReaderV2(CreateListFromItem(input.Query.OwnerId), CreateListFromItem(sellingProductId), zoneIds, true, false));
 
                     int longPrecision = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
-                    return customerZoneRateHistoryLocator.GetCustomerZoneRateHistory(input.Query.OwnerId, sellingProductId, input.Query.ZoneName, null, input.Query.CountryId, input.Query.CurrencyId, longPrecision);
+                    return customerZoneRateHistoryLocator.GetCustomerZoneRateHistory(input.Query.OwnerId, sellingProductId, input.Query.ZoneName, null, input.Query.CountryId, currencyId, longPrecision);
                 }
             }
 
