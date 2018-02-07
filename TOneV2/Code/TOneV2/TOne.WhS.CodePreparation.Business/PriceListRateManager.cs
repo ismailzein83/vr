@@ -72,27 +72,27 @@ namespace TOne.WhS.CodePreparation.Business
 
             if (!string.IsNullOrEmpty(zoneToProcess.SplitFromZoneName))
             {
-                rates = GetHighestRatesFromZoneMatchesSaleEntities(new List<string> { zoneToProcess.SplitFromZoneName }, effectiveExistingRatesByZoneName);
+                rates = GetHighestRatesFromZoneMatchesSaleEntities(new List<string> { zoneToProcess.SplitFromZoneName }, effectiveExistingRatesByZoneName, effectiveDate);
             }
             else if (zoneToProcess.SourceZoneNames != null && zoneToProcess.SourceZoneNames.Any())
             {
                 // this zone is the result of merged zones so matching zones = source zone names.
-                rates = GetHighestRatesFromZoneMatchesSaleEntities(zoneToProcess.SourceZoneNames, effectiveExistingRatesByZoneName);
+                rates = GetHighestRatesFromZoneMatchesSaleEntities(zoneToProcess.SourceZoneNames, effectiveExistingRatesByZoneName, effectiveDate);
             }
             else
             {
                 if (saleZoneType == SaleZoneTypeEnum.Mobile && !mobileZones.Any() && fixedZones.Any())
                 {
-                    rates = CreateRatesWithDefaultValue(fixedZones.Select(z => z.Name), effectiveExistingRatesByZoneName);
+                    rates = CreateRatesWithDefaultValue(fixedZones.Select(z => z.Name), effectiveExistingRatesByZoneName, effectiveDate);
                 }
                 else if (saleZoneType == SaleZoneTypeEnum.Fixed && !fixedZones.Any() && mobileZones.Any())
                 {
-                    rates = CreateRatesWithDefaultValue(mobileZones.Select(z => z.Name), effectiveExistingRatesByZoneName);
+                    rates = CreateRatesWithDefaultValue(mobileZones.Select(z => z.Name), effectiveExistingRatesByZoneName, effectiveDate);
                 }
                 else
                 {
                     IEnumerable<string> matchedZoneNames = GetMatchedZones(zoneToProcess, saleZoneType, zonesByType);
-                    rates = GetHighestRatesFromZoneMatchesSaleEntities(matchedZoneNames, effectiveExistingRatesByZoneName);
+                    rates = GetHighestRatesFromZoneMatchesSaleEntities(matchedZoneNames, effectiveExistingRatesByZoneName, effectiveDate);
                 }
             }
             AddRateToAddToZoneToProcess(zoneToProcess, effectiveDate, salePriceListsByOwner, rates);
@@ -285,6 +285,7 @@ namespace TOne.WhS.CodePreparation.Business
         private Dictionary<int, NewZoneRateEntity> FilterRatesByHighest(SalePriceListOwnerType ownerType, Dictionary<int, List<ExistingRate>> existingRateByOwnerId)
         {
             var highestRatesByOwnerId = new Dictionary<int, NewZoneRateEntity>();
+
             foreach (var existingRateEntity in existingRateByOwnerId)
             {
                 HighestRate highestRate = GetHighestRate(existingRateEntity.Value);
@@ -304,13 +305,41 @@ namespace TOne.WhS.CodePreparation.Business
             }
             return highestRatesByOwnerId;
         }
-        private List<NewZoneRateEntity> GetHighestRatesFromZoneMatchesSaleEntities(IEnumerable<string> matchedZones, ExistingRatesByZoneName existingRatesByZoneName)
+
+        private IEnumerable<CustomerCountry2> GetOrCreateCustomerCountry(int ownerId, DateTime effectiveDate, Dictionary<int, IEnumerable<CustomerCountry2>> countriedByCustomerId)
+        {
+            var customerCountryManager = new CustomerCountryManager();
+            IEnumerable<CustomerCountry2> countries;
+            if (!countriedByCustomerId.TryGetValue(ownerId, out countries))
+            {
+                countries = customerCountryManager.GetCustomerCountriesEffectiveAfter(ownerId, effectiveDate);
+                countriedByCustomerId.Add(ownerId, countries);
+            }
+            return countries;
+        }
+
+        private bool IsCountrySold(int ownerId, int countryId, DateTime effectiveDate, Dictionary<int, IEnumerable<CustomerCountry2>> countriedByCustomerId)
+        {
+            IEnumerable<CustomerCountry2> countries = GetOrCreateCustomerCountry(ownerId, effectiveDate, countriedByCustomerId);
+
+            if (!countries.Any())
+                return false;
+
+            var customerCountry = countries.FirstOrDefault(c => c.CountryId == countryId);
+
+            if (customerCountry == null)
+                return false;
+
+            return true;
+        }
+        private List<NewZoneRateEntity> GetHighestRatesFromZoneMatchesSaleEntities(IEnumerable<string> matchedZones, ExistingRatesByZoneName existingRatesByZoneName, DateTime effectiveDate)
         {
             var carrierAccountManager = new CarrierAccountManager();
             var salePriceListManager = new SalePriceListManager();
             var currencyExchangeRateManager = new CurrencyExchangeRateManager();
             var existingRateByCustomerId = new Dictionary<int, List<ExistingRate>>();
             var existingRateBySellingProductId = new Dictionary<int, List<ExistingRate>>();
+            var countriedByCustomerId = new Dictionary<int, IEnumerable<CustomerCountry2>>();
 
             List<ExistingRate> effectiveExistingRates;
             foreach (string matchedzone in matchedZones)
@@ -329,6 +358,12 @@ namespace TOne.WhS.CodePreparation.Business
                         CarrierAccount customer = carrierAccountManager.GetCarrierAccount(salePriceList.OwnerId);
                         if (customer.CarrierAccountSettings.ActivationStatus == ActivationStatus.Inactive)
                             continue;
+
+                        bool isCountrySold = IsCountrySold(salePriceList.OwnerId, existingRate.ParentZone.CountryId, effectiveDate, countriedByCustomerId);
+
+                        if (!isCountrySold)
+                            continue;
+
                         List<ExistingRate> customerExistingRates;
                         if (!existingRateByCustomerId.TryGetValue(salePriceList.OwnerId, out customerExistingRates))
                         {
@@ -349,6 +384,7 @@ namespace TOne.WhS.CodePreparation.Business
                     }
                 }
             }
+
             Dictionary<int, NewZoneRateEntity> customerZoneRateEntities = FilterRatesByHighest(SalePriceListOwnerType.Customer, existingRateByCustomerId);
             Dictionary<int, NewZoneRateEntity> sellingProductZoneRateEntities = FilterRatesByHighest(SalePriceListOwnerType.SellingProduct, existingRateBySellingProductId);
 
@@ -366,11 +402,28 @@ namespace TOne.WhS.CodePreparation.Business
                 NewZoneRateEntity sellingProductRateEntity;
                 if (sellingProductZoneRateEntities.TryGetValue(sellingProductId, out sellingProductRateEntity))
                 {
-                    var convertedRate = currencyExchangeRateManager.ConvertValueToCurrency(customerRateEntity.Rate, customerRateEntity.CurrencyId.Value, sellingProductRateEntity.CurrencyId.Value,
-                        customerRateEntity.RateBED);
+                    var sellingProductRateInCustomerCurrency = currencyExchangeRateManager.ConvertValueToCurrency(sellingProductRateEntity.Rate, sellingProductRateEntity.CurrencyId.Value
+                        , customerRateEntity.CurrencyId.Value, sellingProductRateEntity.RateBED);
 
-                    if (convertedRate > sellingProductRateEntity.Rate)
+                    if (sellingProductRateInCustomerCurrency > customerRateEntity.Rate)
+                    {
+                        if (sellingProductRateEntity.CurrencyId.Value != customerRateEntity.CurrencyId.Value)
+                        {
+                            rateEntities.Add(new NewZoneRateEntity
+                            {
+                                CurrencyId = customerRateEntity.CurrencyId,
+                                OwnerId = customerRateEntity.OwnerId,
+                                OwnerType = customerRateEntity.OwnerType,
+                                Rate = sellingProductRateInCustomerCurrency,
+                                RateBED = customerRateEntity.RateBED,
+                                HighesRateZoneId = customerRateEntity.HighesRateZoneId
+                            });
+                        }
+                    }
+                    else
+                    {
                         rateEntities.Add(customerRateEntity);
+                    }
                 }
             }
             return rateEntities;
@@ -396,15 +449,15 @@ namespace TOne.WhS.CodePreparation.Business
             return highestRate;
         }
 
-        private List<NewZoneRateEntity> CreateRatesWithDefaultValue(IEnumerable<string> zoneNames, ExistingRatesByZoneName existingRatesByZoneName)
+        private List<NewZoneRateEntity> CreateRatesWithDefaultValue(IEnumerable<string> zoneNames, ExistingRatesByZoneName existingRatesByZoneName, DateTime effectiveDate)
         {
-            Dictionary<int, NewZoneRateEntity> defaultRates = new Dictionary<int, NewZoneRateEntity>();
-
-            SalePriceListManager priceListManager = new SalePriceListManager();
-            CurrencyExchangeRateManager currencyExchangeRateManager = new CurrencyExchangeRateManager();
-            SellingProductManager sellingProductManager = new SellingProductManager();
-            Vanrise.Common.Business.ConfigManager configManager = new Vanrise.Common.Business.ConfigManager();
+            var defaultRates = new Dictionary<int, NewZoneRateEntity>();
+            var countriedByCustomerId = new Dictionary<int, IEnumerable<CustomerCountry2>>();
+            var priceListManager = new SalePriceListManager();
+            var sellingProductManager = new SellingProductManager();
+            var configManager = new Vanrise.Common.Business.ConfigManager();
             var saleRateManager = new SaleRateManager();
+            var carrierAccountManager = new CarrierAccountManager();
 
             int systemCurrencyId = configManager.GetSystemCurrencyId();
 
@@ -416,22 +469,34 @@ namespace TOne.WhS.CodePreparation.Business
                     foreach (ExistingRate effectiveRate in effectiveExistingRates)
                     {
                         SalePriceList pricelist = priceListManager.GetPriceList(effectiveRate.RateEntity.PriceListId);
+
+                        if (defaultRates.ContainsKey(pricelist.OwnerId))
+                            continue;
+
                         decimal defaultRate = getRoundedDefaultRateForPriceListOwner(pricelist.OwnerType, pricelist.OwnerId);
 
-                        if (!defaultRates.ContainsKey(pricelist.OwnerId))
+                        if (pricelist.OwnerType == SalePriceListOwnerType.Customer)
                         {
-                            int newRateCurrencyId = (pricelist.OwnerType == SalePriceListOwnerType.SellingProduct)
-                                ? sellingProductManager.GetSellingProductCurrencyId(pricelist.OwnerId)
-                                : saleRateManager.GetCurrencyId(effectiveRate.RateEntity);
+                            bool isCountrySold = IsCountrySold(pricelist.OwnerId, effectiveRate.ParentZone.CountryId,
+                                effectiveDate, countriedByCustomerId);
 
-                            var defaultRateConverted = currencyExchangeRateManager.ConvertValueToCurrency(defaultRate, systemCurrencyId, newRateCurrencyId, DateTime.Now);
-                            NewZoneRateEntity rate = new NewZoneRateEntity
+                            if (!isCountrySold)
+                                continue;
+
+                            int sellingProductId = carrierAccountManager.GetSellingProductId(pricelist.OwnerId);
+                            int sellingProductCurrencyId = sellingProductManager.GetSellingProductCurrencyId(sellingProductId);
+
+                            int newRateCurrencyId = saleRateManager.GetCurrencyId(effectiveRate.RateEntity);
+                            if (newRateCurrencyId != sellingProductCurrencyId)
                             {
-                                OwnerId = pricelist.OwnerId,
-                                OwnerType = pricelist.OwnerType,
-                                CurrencyId = newRateCurrencyId,
-                                Rate = defaultRateConverted
-                            };
+                                NewZoneRateEntity rate = GetNewZoneRateEntity(pricelist.OwnerId, SalePriceListOwnerType.Customer, defaultRate, systemCurrencyId, newRateCurrencyId);
+                                defaultRates.Add(pricelist.OwnerId, rate);
+                            }
+                        }
+                        else
+                        {
+                            int sellingProductCurrencyId = sellingProductManager.GetSellingProductCurrencyId(pricelist.OwnerId);
+                            NewZoneRateEntity rate = GetNewZoneRateEntity(pricelist.OwnerId, SalePriceListOwnerType.SellingProduct, defaultRate, systemCurrencyId, sellingProductCurrencyId);
                             defaultRates.Add(pricelist.OwnerId, rate);
                         }
                     }
@@ -440,6 +505,19 @@ namespace TOne.WhS.CodePreparation.Business
             return defaultRates.Values.ToList();
         }
 
+        private NewZoneRateEntity GetNewZoneRateEntity(int ownerId, SalePriceListOwnerType ownerType, decimal defaultRate, int systemCurrencyId, int newRateCurrencyId)
+        {
+            var currencyExchangeRateManager = new CurrencyExchangeRateManager();
+            var defaultRateConverted = currencyExchangeRateManager.ConvertValueToCurrency(defaultRate, systemCurrencyId, newRateCurrencyId, DateTime.Now);
+            NewZoneRateEntity rate = new NewZoneRateEntity
+            {
+                OwnerId = ownerId,
+                OwnerType = ownerType,
+                CurrencyId = newRateCurrencyId,
+                Rate = defaultRateConverted
+            };
+            return rate;
+        }
         private decimal getRoundedDefaultRateForPriceListOwner(SalePriceListOwnerType ownerType, int ownerId)
         {
             CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
