@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using TOne.WhS.BusinessEntity.Entities;
-
+using Vanrise.Common;
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class ConfigManager
@@ -220,15 +220,17 @@ namespace TOne.WhS.BusinessEntity.Business
         public string GetFaultTicketsCustomerSerialNumberPattern()
         {
             FaultTicketsSettingsData faultTicketsSettingsData = GetFaultTicketsSettingsData();
-            if (faultTicketsSettingsData.CustomerSetting == null)
-                throw new NullReferenceException("faultTicketsSettingsData.CustomerSetting");
-
-            if (faultTicketsSettingsData.CustomerSetting.SerialNumberPattern==null)
-                throw new NullReferenceException("faultTicketsSettingsData.CustomerSetting.SerialNumberPattern");
-
+            faultTicketsSettingsData.CustomerSetting.ThrowIfNull("faultTicketsSettingsData.CustomerSetting");
+            faultTicketsSettingsData.CustomerSetting.SerialNumberPattern.ThrowIfNull("faultTicketsSettingsData.CustomerSetting.SerialNumberPattern");
             return faultTicketsSettingsData.CustomerSetting.SerialNumberPattern;
         }
-
+        public long GetFaultTicketsCustomerSerialNumberInitialSequence()
+        {
+            FaultTicketsSettingsData faultTicketsSettingsData = GetFaultTicketsSettingsData();
+            faultTicketsSettingsData.CustomerSetting.ThrowIfNull("faultTicketsSettingsData.CustomerSetting");
+            faultTicketsSettingsData.CustomerSetting.ThrowIfNull("faultTicketsSettingsData.CustomerSetting");
+            return faultTicketsSettingsData.CustomerSetting.InitialSequence;
+        }
         public PricingSettings MergePricingSettings(PricingSettings pricingSettingsParent, PricingSettings pricingSettingsChild)
         {
             PricingSettings result = new PricingSettings();

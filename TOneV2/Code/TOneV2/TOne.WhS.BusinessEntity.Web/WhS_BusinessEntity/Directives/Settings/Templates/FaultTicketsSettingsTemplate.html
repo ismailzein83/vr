@@ -1,5 +1,11 @@
 ﻿<vr-tabs>
     <vr-tab header="'Customer'">
         <vr-genricdata-be-sn-editor on-ready="scopeModel.onSerialNumberEditorReady"></vr-genricdata-be-sn-editor>
+        <vr-row>
+            <vr-columns width="1/3row">
+                <vr-textbox type="number" value="scopeModel.initialSequence" minvalue="0" label="Initial Sequence" isrequired></vr-textbox>
+            </vr-columns>
+        </vr-row>
+      
     </vr-tab>
 </vr-tabs>

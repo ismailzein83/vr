@@ -204,10 +204,15 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                     var promises = [];
                     promises.push(loadCustomerSelector());
                     promises.push(loadStatusSelector());
-                    promises.push(loadReasonSelector());
                     promises.push(loadWorkGroupSelector());
                     promises.push(loadAttachmentGrid());
-                    promises.push(loadReleaseCodeSelector());
+
+                    if (!$scope.scopeModel.isEditMode)
+                    {
+                         promises.push(loadReleaseCodeSelector());
+                    promises.push(loadReasonSelector());
+                }
+                   
                    
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -255,18 +260,12 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                 var selectorPayload = {
                     businessEntityDefinitionId: "b8daa0fa-d381-4bb0-b772-2e6b24d199e4"
                 };
-                if (selectedValues != undefined) {
-                    selectorPayload.selectedIds = selectedValues.ReasonId;
-                }
                 return reasonSelectorAPI.load(selectorPayload);
             }
             function loadReleaseCodeSelector() {
                 var selectorPayload = {
                     businessEntityDefinitionId: "6e7c2b68-3e8e-49a1-8922-796b2ce9cc1c"
                 };
-                if (selectedValues != undefined) {
-                    selectorPayload.selectedIds = selectedValues.InternationalReleaseCodeId;
-                }
                 return releaseCodeSelectorAPI.load(selectorPayload);
             }
             function loadAttachmentGrid() {

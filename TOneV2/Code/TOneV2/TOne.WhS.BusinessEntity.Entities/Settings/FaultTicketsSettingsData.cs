@@ -13,5 +13,6 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class CustomerFaultTicketSetting
     {
         public string SerialNumberPattern { get; set; }
+        public long InitialSequence { get; set; }
     }
 }

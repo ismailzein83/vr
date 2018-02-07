@@ -1,16 +1,13 @@
 ﻿<vr-tab header="'Ticket Info'">
     <vr-row>
         <vr-columns width="1/3row">
-            <vr-row>
+            <!--<vr-row>
                 <vr-columns width="fullrow">
                     <vr-textbox value="scopeModel.ownerReference" label="Owner Reference" vr-disabled="true"></vr-textbox>
                 </vr-columns>
-            </vr-row>
+            </vr-row>-->
             <vr-row>
                 <vr-genericdata-genericbusinessentity-selector isrequired="true" on-ready="scopeModel.onWorkGroupSelectorReady" normal-col-num="12" customlabel="Work Group"></vr-genericdata-genericbusinessentity-selector>
-            </vr-row>
-            <vr-row>
-                <vr-common-statusdefinition-selector on-ready="scopeModel.onStatusSelectorReady" customlabel="Status" normal-col-num="12" isrequired="true"></vr-common-statusdefinition-selector>
             </vr-row>
             <vr-row>
                 <vr-columns width="fullrow">
@@ -18,82 +15,73 @@
                 </vr-columns>
             </vr-row>
             <vr-row>
+                <vr-whs-be-carrierprofile-ticketcontact-selector on-ready="scopeModel.onTicketContactSelectorReady" normal-col-num="12" onselectionchanged="scopeModel.onTicketContactSelectionChanged" selectedvalues="scopeModel.selectedTicketContact" customlabel="Escalation Level"></vr-whs-be-carrierprofile-ticketcontact-selector>
+            </vr-row>
+            <vr-row>
                 <vr-columns width="fullrow">
-                    <vr-datetimepicker vr-disabled="scopeModel.isEditMode" value="scopeModel.fromDate" type="date" label="From Date" customvalidate="scopeModel.validateEEDDate()" isrequired="true"></vr-datetimepicker>
+                    <vr-textbox type="text" value="scopeModel.contactName" label="Name"></vr-textbox>
                 </vr-columns>
             </vr-row>
             <vr-row>
                 <vr-columns width="fullrow">
-                    <vr-datetimepicker vr-disabled="scopeModel.isEditMode" value="scopeModel.toDate" type="date" label="To Date" customvalidate="scopeModel.validateEEDDate()" isrequired="true"></vr-datetimepicker>
+                    <vr-textbox type="text" value="scopeModel.email" label="Emails"></vr-textbox>
                 </vr-columns>
             </vr-row>
             <vr-row>
                 <vr-columns width="fullrow">
+                    <vr-textbox type="text" value="scopeModel.phoneNumber" label="Phone Numbers"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+            <vr-row>
+                <vr-columns width="1/3row">
                     <vr-textbox type="number" vr-disabled="scopeModel.isEditMode" value="scopeModel.attempts" label="Attempts"></vr-textbox>
                 </vr-columns>
-            </vr-row>
-            <vr-row>
-                <vr-columns width="fullrow">
+                <vr-columns width="1/3row">
                     <vr-textbox type="number" vr-disabled="scopeModel.isEditMode" value="scopeModel.asr" label="ASR"></vr-textbox>
                 </vr-columns>
-            </vr-row>
-            <vr-row>
-                <vr-columns width="fullrow ">
+
+                <vr-columns width="1/3row ">
                     <vr-textbox type="number" vr-disabled="scopeModel.isEditMode" value="scopeModel.acd" label="ACD"></vr-textbox>
                 </vr-columns>
             </vr-row>
-
         </vr-columns>
         <vr-columns width="2/3row">
             <vr-row>
-                <vr-columns width="fullrow">
-                    <span vr-disabled="scopeModel.isEditMode">
-                        <vr-whs-be-customer-selector on-ready="scopeModel.onCustomerSelectorReady" normal-col-num="6" isrequired="true" onselectionchanged="scopeModel.onCustomerSelectionChanged" selectedvalues="scopeModel.selectedCustomer"></vr-whs-be-customer-selector>
-                    </span>
-                </vr-columns>
+                <span vr-disabled="scopeModel.isEditMode">
+                    <vr-whs-be-customer-selector on-ready="scopeModel.onCustomerSelectorReady" normal-col-num="6" isrequired="true" onselectionchanged="scopeModel.onCustomerSelectionChanged" selectedvalues="scopeModel.selectedCustomer"></vr-whs-be-customer-selector>
+                </span>
+                <vr-common-statusdefinition-selector on-ready="scopeModel.onStatusSelectorReady" customlabel="Status" normal-col-num="6" isrequired="true"></vr-common-statusdefinition-selector>
             </vr-row>
             <vr-row>
-                <vr-columns width="fullrow">
-                        <vr-whs-be-carrierprofile-ticketcontact-selector on-ready="scopeModel.onTicketContactSelectorReady" normal-col-num="6" onselectionchanged="scopeModel.onTicketContactSelectionChanged" selectedvalues="scopeModel.selectedTicketContact"></vr-whs-be-carrierprofile-ticketcontact-selector>
-                    <vr-columns width="1/2row">
-                        <vr-textbox type="text"  value="scopeModel.contactName" label="Name"></vr-textbox>
-                    </vr-columns>
+                <vr-columns width="1/2row">
+                    <vr-datetimepicker vr-disabled="scopeModel.isEditMode" value="scopeModel.fromDate" type="date" label="From Date" customvalidate="scopeModel.validateEEDDate()" isrequired="true"></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns width="1/2row">
+                    <vr-datetimepicker vr-disabled="scopeModel.isEditMode" value="scopeModel.toDate" type="date" label="To Date" customvalidate="scopeModel.validateEEDDate()" isrequired="true"></vr-datetimepicker>
                 </vr-columns>
             </vr-row>
+
             <vr-row>
-                <vr-columns width="fullrow">
-                    <vr-columns width="1/2row">
-                        <vr-textbox type="text"  value="scopeModel.email" label="Emails"></vr-textbox>
-                    </vr-columns>
-                    <vr-columns width="1/2row">
-                        <vr-textbox type="text" value="scopeModel.phoneNumber" label="Phone Numbers"></vr-textbox>
-                    </vr-columns>
+                <vr-columns width="1/2row" ng-if="!scopeModel.isEditMode">
+                    <vr-textbox type="number" value="scopeModel.codeNumber" onblurtextbox="scopeModel.onCodeChanged" label="Code + Number"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="1/2row">
+                    <vr-textbox type="number" value="scopeModel.zoneName" label="Zone Name" vr-disabled="true"></vr-textbox>
                 </vr-columns>
             </vr-row>
-            <vr-row>
-                <vr-columns width="fullrow">
-                    <vr-columns width="1/2row">
-                        <vr-textbox type="number" value="scopeModel.codeNumber" onblurtextbox="scopeModel.onCodeChanged" label="Code + Number" ng-show="!scopeModel.isEditMode"></vr-textbox>
-                    </vr-columns>
-                    <vr-columns width="1/2row">
-                        <vr-textbox type="number" value="scopeModel.zoneName" label="Zone Name" vr-disabled="true"></vr-textbox>
-                    </vr-columns>
-                </vr-columns>
-            </vr-row>
-            <vr-row>
-                <vr-columns width="fullrow">
-                    <span vr-disabled="scopeModel.isEditMode" ng-show="!scopeModel.isEditMode">
-                        <vr-genericdata-genericbusinessentity-selector isrequired="scopeModel.isReasonSelectorRequired" on-ready="scopeModel.onReasonSelectorReady" normal-col-num="6" customlabel="Reason" selectedvalues="scopeModel.reason" onselectionchanged="scopeModel.onReasonSelectionChanged"></vr-genericdata-genericbusinessentity-selector>
-                    </span>
-                    <span vr-disabled="scopeModel.isEditMode" ng-show="!scopeModel.isEditMode">
-                        <vr-genericdata-genericbusinessentity-selector on-ready="scopeModel.InternationalReleaseCodeSelectorReady" normal-col-num="6" customlabel="InternationalReleaseCode" selectedvalues="scopeModel.internationalReleaseCode" onselectionchanged="scopeModel.onInternationalReleaseCodeSelectionChanged"></vr-genericdata-genericbusinessentity-selector>
-                    </span>
-                </vr-columns>
+            <vr-row ng-if="!scopeModel.isEditMode">
+                <span vr-disabled="scopeModel.isEditMode">
+                    <vr-genericdata-genericbusinessentity-selector isrequired="scopeModel.isReasonSelectorRequired && scopeModel.codeNumber != undefined" on-ready="scopeModel.onReasonSelectorReady" normal-col-num="6" customlabel="Reason" selectedvalues="scopeModel.reason" onselectionchanged="scopeModel.onReasonSelectionChanged"></vr-genericdata-genericbusinessentity-selector>
+                </span>
+                <span vr-disabled="scopeModel.isEditMode">
+                    <vr-genericdata-genericbusinessentity-selector on-ready="scopeModel.InternationalReleaseCodeSelectorReady" normal-col-num="6" customlabel="InternationalReleaseCode" selectedvalues="scopeModel.internationalReleaseCode" onselectionchanged="scopeModel.onInternationalReleaseCodeSelectionChanged"></vr-genericdata-genericbusinessentity-selector>
+                </span>
+
             </vr-row>
             <vr-row>
 
-                <span vr-disabled="scopeModel.isEditMode">
-                    <vr-columns width="fullrow">
+                <vr-columns width="fullrow">
+                    <span vr-disabled="scopeModel.isEditMode">
                         <vr-button type="Add" data-onclick="scopeModel.addCodeNumber" standalone vr-disabled="scopeModel.disableAddCodeNumber()" ng-show="!scopeModel.isEditMode"></vr-button>
 
                         <vr-row>
@@ -114,10 +102,12 @@
                                 <label class="alert alert-danger" vr-alert>{{scopeModel.errorMessage}}</label>
                             </span>
                         </vr-row>
-                    </vr-columns>
 
-                </span>
+                    </span>
+                </vr-columns>
+
             </vr-row>
+
         </vr-columns>
     </vr-row>
 </vr-tab>
