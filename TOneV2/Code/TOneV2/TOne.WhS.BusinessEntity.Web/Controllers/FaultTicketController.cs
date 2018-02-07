@@ -20,5 +20,12 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             FaultTicketManager faultTicketManager = new FaultTicketManager();
             return faultTicketManager.GetCustomerFaultTicketDetails(customerFaultTicketInput);
         }
+        [HttpPost]
+        [Route("GetSupplierFaultTicketDetails")]
+        public SupplierFaultTicketSettingsDetails GetSupplierFaultTicketDetails(SupplierFaultTicketSettingsInput supplierFaultTicketInput)
+        {
+            FaultTicketManager faultTicketManager = new FaultTicketManager();
+            return faultTicketManager.GetSupplierFaultTicketDetails(supplierFaultTicketInput);
+        }
     }
 }

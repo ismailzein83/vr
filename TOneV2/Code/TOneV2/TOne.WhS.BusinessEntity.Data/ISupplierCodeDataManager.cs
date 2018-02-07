@@ -6,6 +6,7 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface ISupplierCodeDataManager : IDataManager
     {
+        IEnumerable<SupplierCode> GetSupplierCodesByCode(string codeNumber);
         IEnumerable<SupplierCode> GetFilteredSupplierCodes(SupplierCodeQuery query);
 
         List<SupplierCode> GetSupplierCodesEffectiveAfter(int supplierId, DateTime minimumDate);

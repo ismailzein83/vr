@@ -75,6 +75,31 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return supplierZones.MapRecords(SupplierZoneInfoMapper, filterExpression).OrderBy(item => item.Name);
         }
+        public IEnumerable<SupplierZone> GetSupplierZonesBySupplierId(int supplierId)
+        {
+            IEnumerable<SupplierZone> allSupplierZones = GetCachedSupplierZones().Values;
+            return allSupplierZones.FindAllRecords(x => x.SupplierId == supplierId);
+        }
+        public SupplierZone GetSupplierZoneByCode(int supplierId, string codeNumber)
+        {
+            SupplierCodeManager supplierCodeManager = new SupplierCodeManager();
+            var supplierCodes = supplierCodeManager.GetEffectiveSupplierCodesByCode(supplierId, codeNumber);
+            if (supplierCodes == null || supplierCodes.Count() == 0)
+                return null;
+
+            var supplierZones = GetSupplierZonesBySupplierId(supplierId);
+            if (supplierZones == null || supplierZones.Count() == 0)
+                return null;
+
+            var supplierCodesOfEffectiveZones = supplierCodes.FindAllRecords(x => supplierZones.Any(y => y.SupplierZoneId == x.ZoneId));
+            if (supplierCodesOfEffectiveZones == null || supplierCodesOfEffectiveZones.Count() == 0)
+                return null;
+            var supplierCode = supplierCodesOfEffectiveZones.FirstOrDefault();
+            if (supplierCode == null)
+                return null;
+
+            return GetSupplierZone(supplierCode.ZoneId);
+        }
 
         public IEnumerable<SupplierZoneInfo> GetSupplierZonesInfo(int supplierId)
         {

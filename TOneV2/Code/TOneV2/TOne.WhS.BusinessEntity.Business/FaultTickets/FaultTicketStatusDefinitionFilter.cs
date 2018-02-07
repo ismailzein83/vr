@@ -18,7 +18,10 @@ namespace TOne.WhS.BusinessEntity.Business
             var closedStatusId = new Guid("f299eb6d-b50c-4338-812f-142d4d8515ca");
             var pendingStatusId = new Guid("05a87955-dc2a-4e22-a879-6bea3c31690e");
             if (CaseId == null)
-                return true;
+            {
+                if (context.StatusDefinition.StatusDefinitionId == openStatusId )
+                    return true;
+            }
             else
             {
                 GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
@@ -31,6 +34,8 @@ namespace TOne.WhS.BusinessEntity.Business
                         Guid oldStatusId = (Guid)fieldValues;
                         if (oldStatusId != null)
                         {
+                            if (oldStatusId == context.StatusDefinition.StatusDefinitionId)
+                                return true;
                             if (oldStatusId == openStatusId)
                             {
                                 if (context.StatusDefinition.StatusDefinitionId == closedStatusId || context.StatusDefinition.StatusDefinitionId == pendingStatusId)

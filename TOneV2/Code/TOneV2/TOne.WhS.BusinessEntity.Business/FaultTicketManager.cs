@@ -42,17 +42,17 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return customerFaultTicketDetail;
         }
-        public CustomerFaultTicketSettingsDetails GetSupplierFaultTicketDetails(CustomerFaultTicketSettingsInput customerFaultTicketInput)
+        public SupplierFaultTicketSettingsDetails GetSupplierFaultTicketDetails(SupplierFaultTicketSettingsInput supplierFaultTicketInput)
         {
-            List<CustomerFaultTicketDescriptionSettingDetails> descriptionSettingDetails = new List<CustomerFaultTicketDescriptionSettingDetails>();
-            CustomerFaultTicketSettingsDetails customerFaultTicketDetail = new CustomerFaultTicketSettingsDetails();
+            List<SupplierFaultTicketDescriptionSettingDetails> descriptionSettingDetails = new List<SupplierFaultTicketDescriptionSettingDetails>();
+            SupplierFaultTicketSettingsDetails supplierFaultTicketDetail = new SupplierFaultTicketSettingsDetails();
             GenericBusinessEntityManager genericBusinessEntityManager = new GenericBusinessEntityManager();
-            if (customerFaultTicketInput != null)
+            if (supplierFaultTicketInput != null)
             {
-                foreach (var descriptionSetting in customerFaultTicketInput.DescriptionSettings)
+                foreach (var descriptionSetting in supplierFaultTicketInput.DescriptionSettings)
                 {
-                    var reasonDescription = genericBusinessEntityManager.GetGenericBusinessEntityName(descriptionSetting.ReasonId, customerFaultTicketInput.ReasonBEDefinitionId);
-                    var descriptionSettingDetail = new CustomerFaultTicketDescriptionSettingDetails()
+                    var reasonDescription = genericBusinessEntityManager.GetGenericBusinessEntityName(descriptionSetting.ReasonId, supplierFaultTicketInput.ReasonBEDefinitionId);
+                    var descriptionSettingDetail = new SupplierFaultTicketDescriptionSettingDetails()
                     {
                         CodeNumber = descriptionSetting.CodeNumber,
                         ReasonId = descriptionSetting.ReasonId,
@@ -61,15 +61,15 @@ namespace TOne.WhS.BusinessEntity.Business
                     };
                     if (descriptionSetting.InternationalReleaseCodeId != null)
                     {
-                        var internationalReleaseCodeDescription = genericBusinessEntityManager.GetGenericBusinessEntityName(descriptionSetting.InternationalReleaseCodeId, customerFaultTicketInput.ReleaseCodeBEDefinitionId);
+                        var internationalReleaseCodeDescription = genericBusinessEntityManager.GetGenericBusinessEntityName(descriptionSetting.InternationalReleaseCodeId, supplierFaultTicketInput.ReleaseCodeBEDefinitionId);
                         descriptionSettingDetail.InternationalReleaseCodeDescription = internationalReleaseCodeDescription;
                     }
 
                     descriptionSettingDetails.Add(descriptionSettingDetail);
                 }
-                customerFaultTicketDetail.DescriptionSettings = descriptionSettingDetails;
+                supplierFaultTicketDetail.DescriptionSettings = descriptionSettingDetails;
             }
-            return customerFaultTicketDetail;
+            return supplierFaultTicketDetail;
         }
 
     }

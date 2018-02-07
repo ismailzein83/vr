@@ -238,16 +238,17 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
             }
             function loadStatusSelector() {
                 var selectorPayload;
-                if (selectedValues != undefined) {
-                    selectorPayload = {
-                        selectedIds: selectedValues.StatusId,
-                        businessEntityDefinitionId: "c63202a1-438f-428e-b0fb-3a9bad708e9b",
-                        filter: {
-                            Filters: []
-                        }
-                    };
-                    selectorPayload.filter.Filters.push(getStatusSelectorFiter());
-                }
+
+                selectorPayload = {
+                    businessEntityDefinitionId: "c63202a1-438f-428e-b0fb-3a9bad708e9b",
+                    filter: {
+                        Filters: []
+                    }
+                };
+                selectorPayload.filter.Filters.push(getStatusSelectorFiter());
+                if (selectedValues != undefined)
+                    selectorPayload.selectedIds = selectedValues.StatusId;
+
                 return statusSelectorAPI.load(selectorPayload);
             }
             function loadReasonSelector() {
