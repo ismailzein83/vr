@@ -1,4 +1,4 @@
-﻿<div class="vr-datagrid" vr-loader="ctrl.isLoadingMoreData" level="{{ctrl.ngClassLevel}}">
+﻿<div class="vr-datagrid" vr-loader="ctrl.isLoadingMoreData" level="{{ctrl.ngClassLevel}}" alternative-color="{{ctrl.layoutOption.alternativeColor}}" vertical-line="{{ctrl.layoutOption.verticalLine}}" horizontal-line="{{ctrl.layoutOption.horizontalLine}}">
     <vr-choices ng-show="ctrl.updateItems.length > 0" onselectionchanged="ctrl.viewSelectionChanged()" selectedindex="ctrl.selectedView">
         <vr-choice isselected="ctrl.isMainItemsShown">Main View</vr-choice>
         <vr-choice>Updated Items ({{ctrl.updateItems.length}})</vr-choice>

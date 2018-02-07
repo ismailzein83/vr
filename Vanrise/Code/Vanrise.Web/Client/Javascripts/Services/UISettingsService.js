@@ -69,6 +69,23 @@
             return longPrecision;
         }
 
+        function getGridLayoutOptions() {
+            var layoutOption = {};
+            if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
+
+                var horizontalLine = UtilsService.getItemByVal(uiSettings.Parameters, "HorizontalLine", "Name");
+                    layoutOption.horizontalLine = horizontalLine.Value;
+
+                var alternativeColor = UtilsService.getItemByVal(uiSettings.Parameters, "AlternativeColor", "Name");
+                layoutOption.alternativeColor = alternativeColor.Value;
+
+
+                var verticalLine = UtilsService.getItemByVal(uiSettings.Parameters, "VerticalLine", "Name");
+                layoutOption.verticalLine = verticalLine.Value;
+            }
+            return layoutOption;
+        }
+
         function getMaxSearchRecordCount() {
             var recordCount;
             if (uiSettings != undefined && uiSettings.Parameters.length > 0) {
@@ -110,7 +127,8 @@
             getGoogleTrackingStatus: getGoogleTrackingStatus,
             getGoogleTrackingAccount: getGoogleTrackingAccount,
             getMaxSearchRecordCount: getMaxSearchRecordCount,
-            getServerUtcOffsetInMinutes: getServerUtcOffsetInMinutes
+            getServerUtcOffsetInMinutes: getServerUtcOffsetInMinutes,
+            getGridLayoutOptions: getGridLayoutOptions
 
         });
     }

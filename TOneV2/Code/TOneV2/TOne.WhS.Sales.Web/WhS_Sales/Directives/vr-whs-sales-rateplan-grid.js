@@ -67,6 +67,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                 $scope.normalPrecision = UISettingsService.getNormalPrecision();
                 $scope.longPrecision = UISettingsService.getLongPrecision();
+                $scope.layoutOption = UISettingsService.getGridLayoutOptions();
+
                 $scope.onZoneLetterSelectionChanged = function () {
                     var promises = [];
                     $scope.isLoading = true;

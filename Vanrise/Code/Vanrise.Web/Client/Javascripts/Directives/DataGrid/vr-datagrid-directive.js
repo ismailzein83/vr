@@ -48,6 +48,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     };
                 }
 
+                ctrl.layoutOption = UISettingsService.getGridLayoutOptions();
+
                 ctrl.readOnly = UtilsService.isContextReadOnly($scope) || $attrs.readonly != undefined;
 
                 var loadMoreDataFunction;
@@ -655,8 +657,10 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     else
                         return dataItem.CssClass;
                 };
+                var odd = false;
                 ctrl.getCellContainerClass = function (dataItem, colDef) {
-                    return colDef && colDef.cssClass;
+                    var object = ctrl.getrowstyle(dataItem);
+                    return object == null ? colDef && colDef.cssClass : "";
                 };
 
                 function fixHeaderLayout() {

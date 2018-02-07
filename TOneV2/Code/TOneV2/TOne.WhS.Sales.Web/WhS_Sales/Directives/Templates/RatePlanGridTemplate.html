@@ -15,9 +15,9 @@
         padding-top: 3px;
     }
 
-    .rate-plan-grid .vr-datagrid-header .vr-datagrid-celltext {
-        text-transform: uppercase !important;
-    }
+        .rate-plan-grid .vr-datagrid-header .vr-datagrid-celltext {
+            text-transform: uppercase !important;
+        }
 
     .rate-plan-grid .vr-datagrid-celltext vr-select[smallselect] .vr-dropdown-select.btn {
         padding: 4px 2px !important;
@@ -76,16 +76,18 @@
         position: relative;
         left: 4px;
         top: 3px;
-    }    
+    }
+
     .row-toggle {
         height: 24px;
     }
 
-    .row-toggle .toggle-icon {
-        top: calc(50% - 6px);
-        left: 4px;
-    }
-    .column-filter{
+        .row-toggle .toggle-icon {
+            top: calc(50% - 6px);
+            left: 4px;
+        }
+
+    .column-filter {
         font-size: 6px;
         float: right;
     }
@@ -104,13 +106,57 @@
         right: 4px;
     }
 
-    .rtl .row-toggle .toggle-icon.expand {
-        transform: scaleX(-1);
-    }
-    .rtl .column-filter{
+        .rtl .row-toggle .toggle-icon.expand {
+            transform: scaleX(-1);
+        }
+
+    .rtl .column-filter {
         float: left;
     }
     /* end  rtl class*/
+    
+    .rate-plan-grid {
+        border-bottom: 1px solid #D0D0D0;
+    }
+   .rate-plan-grid[alternative-color="true"] .vr-datagrid-body:nth-of-type(odd) {
+        background-color: #fff  !important;
+    }
+
+   .rate-plan-grid[alternative-color="true"] .vr-datagrid-body:nth-of-type(odd) .vr-datagrid-cell-container {
+        background-color: inherit  !important;
+    }
+    
+    .rate-plan-grid[horizontal-line="true"] .vr-datagrid-body {
+        border-bottom: 1px solid #D0D0D0;
+    }
+
+    .rate-plan-grid[alternative-color="true"] .vr-datagrid-body.odd{
+        background-color: #f9f9f9;
+    }
+    
+    .rate-plan-grid[alternative-color="true"] .vr-datagrid-body.odd .vr-datagrid-cell-container {
+        background-color: #f9f9f9 !important;
+    }
+
+    .rate-plan-grid[alternative-color="true"] .vr-datagrid-body.odd .vr-datagrid-datacells-click .vr-datagrid-cell-container {
+        background-color: #ddd !important;
+    }
+
+    .rate-plan-grid[alternative-color="true"] .vr-datagrid-body.odd .vr-datagrid-datacells:hover .vr-datagrid-cell-container {
+        background-color: #ddd !important;
+    }
+
+    .rate-plan-grid[alternative-color="true"] .vr-datagrid-datacells-click .vr-datagrid-cell-container {
+        background-color: #ddd !important;
+    }
+
+    .rate-plan-grid[vertical-line="true"] .vr-datagrid-cell-container {
+        border-right: 1px solid rgb(208, 208, 208);
+    }
+   
+    .rate-plan-grid[vertical-line="true"] .vr-datagrid-cell-container:last-child {
+        border-right: unset;
+    }
 </style>
 
 <div vr-loader="isLoading" ng-show="showDirective">
@@ -127,7 +173,7 @@
         <vr-columns width="fullrow">
             <div>
                 <vr-validation-group validationcontext="allZonesValidationContext">
-                    <div class="vr-datagrid drill-down-level-0 rate-plan-grid">
+                    <div class="vr-datagrid drill-down-level-0 rate-plan-grid" alternative-color="{{layoutOption.alternativeColor}}" vertical-line="{{layoutOption.verticalLine}}" horizontal-line="{{layoutOption.horizontalLine}}">
                         <div class="vr-datagrid-header  drill-down-level-0" style="display: flex" ng-style="headerStyle">
                             <div style="display:inline-flex; width: 100%">
                                 <div ng-init="addColumnFixedAndRecalculate('expanddrilldown', 20)" class="filter-toggle">
@@ -174,7 +220,7 @@
                                                 <span ng-show="columnsConfig.product.sortDirection=='ASC'">&uarr;</span>
                                                 <span ng-show="columnsConfig.product.sortDirection=='DESC'">&darr;</span>
                                                 <span>Product</span>
-                                                <i  ng-show="filterRoutingProducts.length > 0  " class="glyphicon glyphicon-filter hand-cursor column-filter" ng-click="$event.stopPropagation(); filterRoutingProducts = [] ; "></i>
+                                                <i ng-show="filterRoutingProducts.length > 0  " class="glyphicon glyphicon-filter hand-cursor column-filter" ng-click="$event.stopPropagation(); filterRoutingProducts = [] ; "></i>
 
                                             </div>
                                             <div ng-show="showfilter">
@@ -206,7 +252,7 @@
                                                 <span ng-show="columnsConfig.currentRate.sortDirection=='ASC'">&uarr;</span>
                                                 <span ng-show="columnsConfig.currentRate.sortDirection=='DESC'">&darr;</span>
                                                 <span>C.Rate</span>
-                                                <i  ng-show="currentRateFilterValue != undefined " class="glyphicon glyphicon-filter hand-cursor column-filter" ng-click="$event.stopPropagation(); currentRateFilterValue = undefined ; filterZones()"></i>
+                                                <i ng-show="currentRateFilterValue != undefined " class="glyphicon glyphicon-filter hand-cursor column-filter" ng-click="$event.stopPropagation(); currentRateFilterValue = undefined ; filterZones()"></i>
 
                                             </div>
                                             <div ng-show="showfilter">
@@ -238,7 +284,7 @@
                                                 <span ng-show="columnsConfig.inherIcontype.sortDirection=='ASC'">&uarr;</span>
                                                 <span ng-show="columnsConfig.inherIcontype.sortDirection=='DESC'">&darr;</span>
                                                 <span style="display: inline-block;height: 6px"></span>
-                                                <i  ng-show="selectedRateSourceOptions.length > 0 " class="glyphicon glyphicon-filter hand-cursor column-filter" ng-click="$event.stopPropagation(); selectedRateSourceOptions = [] ; "></i>
+                                                <i ng-show="selectedRateSourceOptions.length > 0 " class="glyphicon glyphicon-filter hand-cursor column-filter" ng-click="$event.stopPropagation(); selectedRateSourceOptions = [] ; "></i>
                                             </div>
                                             <div ng-hide="isCurrentRateSourceFilterHidden">
                                                 <vr-select ng-show="showfilter" smallselect datasource="rateSourceOptions"
@@ -317,7 +363,7 @@
                                                 <span ng-show="columnsConfig.costColumn_{{$index}}.sortDirection=='ASC'">&uarr;</span>
                                                 <span ng-show="columnsConfig.costColumn_{{$index}}.sortDirection=='DESC'">&darr;</span>
                                                 <span>{{method.Title}}</span>
-                                                <i  ng-show="costFilterValues[$index] != undefined " class="glyphicon glyphicon-filter hand-cursor column-filter " ng-click="$event.stopPropagation(); costFilterValues[$index] = undefined ; filterZones()"></i>
+                                                <i ng-show="costFilterValues[$index] != undefined " class="glyphicon glyphicon-filter hand-cursor column-filter " ng-click="$event.stopPropagation(); costFilterValues[$index] = undefined ; filterZones()"></i>
 
                                             </div>
                                             <div ng-show="showfilter">
@@ -381,7 +427,7 @@
                                                 <span ng-show="columnsConfig.marginPerc.sortDirection=='ASC'">&uarr;</span>
                                                 <span ng-show="columnsConfig.marginPerc.sortDirection=='DESC'">&darr;</span>
                                                 <span>%Margin</span>
-                                                <i  ng-show="marginPercentageFilterValue != undefined " class="glyphicon glyphicon-filter hand-cursor column-filter " ng-click="$event.stopPropagation(); marginPercentageFilterValue = undefined ; filterZones()"></i>
+                                                <i ng-show="marginPercentageFilterValue != undefined " class="glyphicon glyphicon-filter hand-cursor column-filter " ng-click="$event.stopPropagation(); marginPercentageFilterValue = undefined ; filterZones()"></i>
 
                                             </div>
                                             <div ng-show="showfilter">
@@ -441,15 +487,15 @@
                                 </div>
 
                                 <!--<div ng-show="rateCalculationMethod" style="width: 50px; display:inline-block">
-                                    <div class="vr-datagrid-header-cell">
-                                        <div col-index="renderIndex" style="width:100%">
-                                            <div class="vr-datagrid-celltext" style="overflow: hidden;text-align:right">
-                                                <span>Calculated Rate</span>
-                                            </div>
+                    <div class="vr-datagrid-header-cell">
+                        <div col-index="renderIndex" style="width:100%">
+                            <div class="vr-datagrid-celltext" style="overflow: hidden;text-align:right">
+                                <span>Calculated Rate</span>
+                            </div>
 
-                                        </div>
-                                    </div>
-                                </div>-->
+                        </div>
+                    </div>
+                </div>-->
                                 <div style="display:inline-block;width:65px" ng-init="::addColumnFixedAndRecalculate('newRate', 65)">
                                     <div class="vr-datagrid-header-cell vr-datagrid-celltext">
                                         <div col-index="renderIndex" style="width:100%">
@@ -457,7 +503,7 @@
                                                 <span ng-show="columnsConfig.newRate.sortDirection=='ASC'">&uarr;</span>
                                                 <span ng-show="columnsConfig.newRate.sortDirection=='DESC'">&darr;</span>
                                                 <span>N.Rate</span>
-                                                <i  ng-show="newRateFilterValue != undefined " class="glyphicon glyphicon-filter hand-cursor column-filter" ng-click="$event.stopPropagation(); newRateFilterValue = undefined ; filterZones()"></i>
+                                                <i ng-show="newRateFilterValue != undefined " class="glyphicon glyphicon-filter hand-cursor column-filter" ng-click="$event.stopPropagation(); newRateFilterValue = undefined ; filterZones()"></i>
 
                                             </div>
                                             <div ng-show="showfilter">
@@ -537,7 +583,7 @@
                                 <div>
                                     <div id="rowSection1" ng-repeat="dataItem in zoneItems">
                                         <vr-validation-group validationcontext="dataItem.validationContext">
-                                            <div class="vr-datagrid-body">
+                                            <div class="vr-datagrid-body" ng-class="$index%2==0 && !getRowStyle(dataItem).CssClass ? 'odd' : '' ">
                                                 <div ng-class="getRowStyle(dataItem).CssClass" style="min-height: 24px;border-right:1px solid #D0D0D0;border-left:1px solid #D0D0D0">
                                                     <div ng-if="!dataItem.displayRow" style="width:100%;position:relative">
                                                         <div style=" margin: -2px; height :24px;display:inline-block;width:20px">
@@ -669,14 +715,14 @@
                                                                     </div>
                                                                 </div>
                                                                 <!--<div ng-show="rateCalculationMethod" style="display:inline-block;vertical-align:top;width:50px" class="vr-datagrid-cell-container">
-                                                                    <div class="vr-datagrid-cell">
-                                                                        <div class="vr-datagrid-celltext ">
-                                                                            <div style="text-align: right;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
-                                                                                <span class="span-summary"> {{CalculatedRate| number: longPrecision}}</span>
-                                                                            </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>-->
+                                                    <div class="vr-datagrid-cell">
+                                                        <div class="vr-datagrid-celltext ">
+                                                            <div style="text-align: right;width: 100%;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;">
+                                                                <span class="span-summary"> {{CalculatedRate| number: longPrecision}}</span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>-->
 
                                                                 <div style="display:inline-flex;vertical-align:top;width:65px" class="vr-datagrid-cell-container">
                                                                     <div class="vr-datagrid-cell">

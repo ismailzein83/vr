@@ -112,6 +112,25 @@ namespace Vanrise.Common.Business
                     Value = generalSettingData.UIData.MaxSearchRecordCount > 0 ? generalSettingData.UIData.MaxSearchRecordCount : 1000
                 });
 
+
+                uiSettings.Parameters.Add(new UIParameter()
+                {
+                    Name = "HorizontalLine",
+                    Value = generalSettingData.UIData.HorizontalLine
+                });
+
+                uiSettings.Parameters.Add(new UIParameter()
+                {
+                    Name = "AlternativeColor",
+                    Value = generalSettingData.UIData.AlternativeColor
+                });
+
+                uiSettings.Parameters.Add(new UIParameter()
+                {
+                    Name = "VerticalLine",
+                    Value = generalSettingData.UIData.VerticalLine
+                });
+
             }
 
             if (gATechnicalSettingData != null)

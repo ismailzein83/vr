@@ -23,7 +23,15 @@ namespace Vanrise.Entities
         public int? GridPageSize { get; set; }
 
         public long MaxSearchRecordCount { get; set; }
+
         public Guid? DefaultLanguageId { get; set; }
+
+        public bool HorizontalLine { get; set; }
+
+        public bool AlternativeColor { get; set; }
+
+        public bool VerticalLine { get; set; }
+
     }
 
     public class CacheSettingData

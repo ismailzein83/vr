@@ -616,7 +616,7 @@ a.mark-select-selected {
     text-decoration: none;
 }
 
-a.mark-select:hover, a.mark-select:active , a.mark-select:focus {
+a.mark-select:hover, a.mark-select:active, a.mark-select:focus {
     background-color: #D0D0D0 !important;
     border-color: #D0D0D0 !important;
     color: #fff !important;
@@ -849,7 +849,8 @@ add padding .left-addon input {
 vr-section[contentbox] .panel-body {
     padding: 5px 5px !important;
 }
-vr-section .collapsible-icon ,vr-section-v2 .collapsible-icon{
+
+vr-section .collapsible-icon, vr-section-v2 .collapsible-icon {
     padding-right: 3px;
 }
 
@@ -1997,33 +1998,36 @@ loader .outer-loader {
     font-size: 10px;
 }
 
-.vr-grid-menu > li > a {
-    display: block;
-    padding: 3px 5px;
-    clear: both;
-    font-weight: normal;
-    line-height: 1.42857;
-    color: #333;
-    white-space: nowrap;
-    text-decoration: none;
+    .vr-grid-menu > li > a {
+        display: block;
+        padding: 3px 5px;
+        clear: both;
+        font-weight: normal;
+        line-height: 1.42857;
+        color: #333;
+        white-space: nowrap;
+        text-decoration: none;
+    }
+
+    .vr-grid-menu .divider {
+        height: 1px;
+        margin: 9px 0;
+        overflow: hidden;
+        background-color: #e5e5e5;
+    }
+
+.grid-expand-collapse-icon {
+    top: calc(50% - 6px);
+    left: 4px;
 }
 
-.vr-grid-menu .divider {
-    height: 1px;
-    margin: 9px 0;
-    overflow: hidden;
-    background-color: #e5e5e5;
-}
-.grid-expand-collapse-icon{
-    top: calc(50% - 6px);
-    left: 4px
-}
-.vr-remove-row{
+.vr-remove-row {
     top: 50%;
     position: absolute;
     transform: translate(0%,-50%);
 }
-.action-item{
+
+.action-item {
     padding-left: 2px;
 }
 
@@ -2136,8 +2140,8 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
 
 .vr-datagrid-body {
     background-color: #fff;
-    border-bottom: 1px solid #D0D0D0;
     color: #616F77;
+    border-bottom: 1px solid #fff;
 }
 
 .vr-datagrid-datacells:hover {
@@ -2145,9 +2149,10 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     cursor: pointer !important;
 }
 
-.vr-datagrid-datacells:hover .vr-datagrid-cell-container {
-    background-color: inherit !important;
-}
+    .vr-datagrid-datacells:hover .vr-datagrid-cell-container {
+        background-color: inherit !important;
+    }
+
 .vr-datagrid-datacells-click {
     background-color: #ddd !important;
 }
@@ -2191,7 +2196,7 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     .vr-pager-container .dropdown {
         top: 2px;
         left: 2px;
-        margin-right:2px;
+        margin-right: 2px;
     }
 
     .vr-pager-container .dropdown-menu {
@@ -2269,25 +2274,28 @@ vr-switch[class*="divDisabled"] .switch {
 
 .pagination {
     margin: 0px !important;
-    display:flex;
-    
+    display: flex;
 }
-.vr-pagination-info{
-    display:inline;
-    position:absolute;
+
+.vr-pagination-info {
+    display: inline;
+    position: absolute;
     right: 1px;
     top: 3px;
 }
-.vr-scroll-pager-info{
+
+.vr-scroll-pager-info {
     float: right !important;
     font-size: 10px;
     margin-right: 5px;
-    margin-top: 5px; 
+    margin-top: 5px;
 }
-.vr-pagination-pagesize{
+
+.vr-pagination-pagesize {
     float: left;
-     margin-top: 2px
+    margin-top: 2px;
 }
+
 .pagination > li > a, .pagination > li > span {
     background-color: transparent;
     border: none;
@@ -2689,9 +2697,9 @@ label[vr-alert].alert {
     margin-left: -226px;
 }
 
-.double-col-checklist.dropdown-top-right.top-max {
-    margin-left: 0px !important;
-}
+    .double-col-checklist.dropdown-top-right.top-max {
+        margin-left: 0px !important;
+    }
 
 .single-col-checklist.dropdown-top-right.top-max {
     margin-left: 226px !important;
@@ -2762,17 +2770,17 @@ vr-pagination .dropdown-menu {
     background-color: #f5e4e4;
 }
 
-.item-warning a.mark-select {
-    color: #f53f3f;
-}
+    .item-warning a.mark-select {
+        color: #f53f3f;
+    }
 
 .item-future {
     background-color: #e6e6e6;
 }
 
-.item-future a.mark-select {
-    color: #969e97;
-}
+    .item-future a.mark-select {
+        color: #969e97;
+    }
 
 .vr-disabled {
     pointer-events: none;
@@ -3062,20 +3070,22 @@ vr-tab vr-columns[tabs="true"] > div[class^="col"] {
     border-radius: 0px 0px 4px 4px;
     padding: 5px 9px;
 }
-vr-tab-header-link .tab-remove-icon{
-    width:10px;
-    cursor:default ;
-    position:absolute;
+
+vr-tab-header-link .tab-remove-icon {
+    width: 10px;
+    cursor: default;
+    position: absolute;
     right: 7px;
-    top :7px;
+    top: 7px;
     z-index: 1;
 }
 
-vr-tabs .tab-validation-sign{
-    color:#D44A47;
-    position:relative;
+vr-tabs .tab-validation-sign {
+    color: #D44A47;
+    position: relative;
     right: calc(100% + 11px);
 }
+
 vr-columns[grouped] > div[class^="col"] {
     padding: 0px 3px;
 }
@@ -3254,12 +3264,14 @@ div[validationcontainer] {
     height: 100%;
     margin: 0px 1px;
 }
+
 .vr-multiple .items-container {
-    border-left:1px solid #f0f0f0;
+    border-left: 1px solid #f0f0f0;
     display: inline-block;
     overflow: auto;
-    white-space:normal
+    white-space: normal;
 }
+
 .vr-multiple .glyphicon-plus-sign {
     top: 0px;
 }
@@ -3947,22 +3959,26 @@ vr-toolbox[large] .item {
 .empty-vr-datalist-drop {
     min-height: 29px;
 }
-vr-datalist .collapse-icon{
+
+vr-datalist .collapse-icon {
     left: 22px;
     top: 6px;
-    position:absolute;
-    z-index:200
+    position: absolute;
+    z-index: 200;
 }
-vr-datalist .listitem-title{
+
+vr-datalist .listitem-title {
     left: 40px;
     top: 3px;
-    position:absolute;
+    position: absolute;
 }
-vr-datalist .drag-icon{
+
+vr-datalist .drag-icon {
     top: 5px;
     left: 3px;
     position: absolute;
 }
+
 .empty-vrdatagrid-drop {
     min-height: 25px;
     border: 1px solid #ccc;
@@ -4067,21 +4083,58 @@ vr-datalist .drag-icon{
 /*end of vr-legend*/
 
 /*vr-quick msg*/
-.vr-quickmsg{
+.vr-quickmsg {
     position: fixed;
     top: auto;
     left: auto;
     padding: 2px;
     border-radius: 4px;
     margin: 4px;
-    font-size: 11px;    
+    font-size: 11px;
     display: none;
-    z-index:1;
+    z-index: 1;
 }
 /*vr-quick msg*/
 
 /*start vr-generic-filter*/
-.vr-groupfilter-button{
-    float:right !important;
+.vr-groupfilter-button {
+    float: right !important;
 }
 /*end vr-generic-filter*/
+
+
+/* start vr-datagrid custom layout */
+
+.vr-datagrid[horizontal-line="true"] .vr-datagrid-body {
+    border-bottom: 1px solid #D0D0D0;
+}
+
+.vr-datagrid[alternative-color="true"] .vr-datagrid-body:nth-of-type(odd) {
+    background-color: #f9f9f9;
+}
+
+.vr-datagrid[alternative-color="true"] .vr-datagrid-body:nth-of-type(odd) .vr-datagrid-cell-container {
+    background-color: #f9f9f9 !important;
+}
+
+.vr-datagrid[alternative-color="true"] .vr-datagrid-body:nth-of-type(odd) .vr-datagrid-datacells-click .vr-datagrid-cell-container {
+    background-color: #ddd !important;
+}
+
+.vr-datagrid[alternative-color="true"] .vr-datagrid-body:nth-of-type(odd) .vr-datagrid-datacells:hover .vr-datagrid-cell-container {
+    background-color: #ddd !important;
+}
+
+.vr-datagrid[alternative-color="true"] .vr-datagrid-datacells-click .vr-datagrid-cell-container {
+    background-color: #ddd !important;
+}
+
+.vr-datagrid[vertical-line="true"] .vr-datagrid-cell-container {
+    border-right: 1px solid rgb(208, 208, 208);
+}
+
+.vr-datagrid[vertical-line="true" ] .vr-datagrid-cell-container:last-child {
+    border-right: unset;
+}
+
+/* end vr-datagrid custom layout */

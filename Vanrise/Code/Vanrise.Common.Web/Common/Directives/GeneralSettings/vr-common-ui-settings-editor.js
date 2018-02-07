@@ -55,6 +55,10 @@ app.directive('vrCommonUiSettingsEditor', ['UtilsService', 'VRUIUtilsService','V
                         $scope.scopeModel.maxSearchRecordCount = payload.data.MaxSearchRecordCount;
                         languageId = payload.data.DefaultLanguageId;
 
+                        $scope.scopeModel.horizontalLine = payload.data.HorizontalLine;
+                        $scope.scopeModel.alternativeColor = payload.data.AlternativeColor;
+                        $scope.scopeModel.verticalLine = payload.data.VerticalLine;
+
                     }
 
                     var promises = [];
@@ -98,7 +102,10 @@ app.directive('vrCommonUiSettingsEditor', ['UtilsService', 'VRUIUtilsService','V
                         LongPrecision: $scope.scopeModel.longPrecision,
                         GridPageSize: pagesizeSelectorAPI.getSelectedIds(),
                         MaxSearchRecordCount: $scope.scopeModel.maxSearchRecordCount,
-                        DefaultLanguageId: languageSelectorAPI != undefined ? languageSelectorAPI.getSelectedIds() : undefined
+                        DefaultLanguageId: languageSelectorAPI != undefined ? languageSelectorAPI.getSelectedIds() : undefined,
+                        HorizontalLine: $scope.scopeModel.horizontalLine,
+                        AlternativeColor: $scope.scopeModel.alternativeColor,
+                        VerticalLine: $scope.scopeModel.verticalLine
                     };
                 };
               
