@@ -44,13 +44,5 @@ namespace TOne.WhS.Routing.Web.Controllers
             RPRouteManager manager = new RPRouteManager();
             return GetWebResponse(input, manager.GetFilteredRPRouteOptions(input));
         }
-
-        [HttpPost]
-        [Route("GetRPSettingsAddBlockedOptions")]
-        public bool GetRPSettingsAddBlockedOptions()
-        {
-            ConfigManager configManager = new ConfigManager();
-            return configManager.GetProductRouteBuildAddBlockedOptions();
-        }
     }
 }

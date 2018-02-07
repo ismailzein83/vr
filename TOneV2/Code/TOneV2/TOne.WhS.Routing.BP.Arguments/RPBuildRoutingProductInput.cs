@@ -15,7 +15,6 @@ namespace TOne.WhS.Routing.BP.Arguments
         public List<SupplierZoneToRPOptionPolicy> SupplierOptionPolicies { get; set; }
         public DateTime? EffetiveDate { get; set; }
         public bool IsFuture { get; set; }
-        public bool IncludeBlockedSupplierZones { get; set; }
 
         public override string GetTitle()
         {

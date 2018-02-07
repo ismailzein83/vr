@@ -19,7 +19,6 @@ namespace TOne.WhS.Routing.BP.Activities
         public BaseQueue<RPRouteBatch> OutputQueue { get; set; }
         public DateTime? EffectiveDate { get; set; }
         public bool IsFuture { get; set; }
-        public bool IncludeBlockedSupplierZones { get; set; }
         public int RoutingDatabaseId { get; set; }
     }
 
@@ -39,9 +38,6 @@ namespace TOne.WhS.Routing.BP.Activities
 
         [RequiredArgument]
         public InArgument<bool> IsFuture { get; set; }
-
-        [RequiredArgument]
-        public InArgument<bool> IncludeBlockedSupplierZones { get; set; }
 
         [RequiredArgument]
         public InArgument<int> RoutingDatabaseId { get; set; }
@@ -92,7 +88,6 @@ namespace TOne.WhS.Routing.BP.Activities
                 OutputQueue = this.OutputQueue.Get(context),
                 EffectiveDate = this.EffectiveDate.Get(context),
                 IsFuture = this.IsFuture.Get(context),
-                IncludeBlockedSupplierZones = this.IncludeBlockedSupplierZones.Get(context),
                 RoutingDatabaseId = this.RoutingDatabaseId.Get(context)
             };
         }

@@ -25,11 +25,11 @@ namespace TOne.WhS.Routing.Entities
     public abstract class RoutingDatabaseInformation
     {
     }
+
     public class RPRoutingDatabaseInformation : RoutingDatabaseInformation
     {
         public Guid DefaultPolicyId { get; set; }
         public Guid[] SelectedPoliciesIds { get; set; }
-        public bool IncludeBlockedSupplierZones { get; set; }
     }
 
     public class RoutingDatabaseSettings

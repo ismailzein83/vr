@@ -122,7 +122,7 @@
         <mca:CSharpValue x:TypeArguments="x:String">String.Format("{0}: process started", DateTime.Now);</mca:CSharpValue>
       </InArgument>
     </WriteLine>
-    <twrba2:CreateRoutingDatabase IncludeBlockedSupplierZones="{x:Null}" sap2010:WorkflowViewState.IdRef="CreateRoutingDatabase_3">
+    <twrba2:CreateRoutingDatabase sap2010:WorkflowViewState.IdRef="CreateRoutingDatabase_3">
       <twrba2:CreateRoutingDatabase.DatabaseId>
         <OutArgument x:TypeArguments="x:Int32">
           <mca:CSharpReference x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpReference>

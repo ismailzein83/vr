@@ -112,9 +112,6 @@ app.directive("vrWhsRoutingRpbuildproducttask", ['WhS_Routing_RPRouteAPIService'
                         $scope.selectedSaleZoneRange = WhS_Routing_SaleZoneRangeOptions[5];
                     }
 
-                    var getRPSettingsAddBlockedOptionsPromise = getRPSettingsAddBlockedOptionsPromise();
-                    promises.push(getRPSettingsAddBlockedOptionsPromise);
-
                     var getPoliciesPromise = WhS_Routing_RPRouteAPIService.GetPoliciesOptionTemplates();
                     promises.push(getPoliciesPromise);
 
@@ -143,7 +140,6 @@ app.directive("vrWhsRoutingRpbuildproducttask", ['WhS_Routing_RPRouteAPIService'
                         });
                     });
 
-
                     function extendPolicy(policy) {
                         policy.directiveReadyDeferred = UtilsService.createPromiseDeferred();
                         policy.directiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -156,21 +152,6 @@ app.directive("vrWhsRoutingRpbuildproducttask", ['WhS_Routing_RPRouteAPIService'
                         policy.directiveReadyDeferred.promise.then(function () {
                             VRUIUtilsService.callDirectiveLoad(policy.directiveAPI, undefined, policy.directiveLoadDeferred);
                         });
-                    };
-
-                    function getRPSettingsAddBlockedOptionsPromise() {
-                        var promiseDeferred = UtilsService.createPromiseDeferred();
-
-                        WhS_Routing_RPRouteAPIService.GetRPSettingsAddBlockedOptions().then(function (response) {
-
-                            $scope.showIncludeBlockedSupplierZones = response;
-                            promiseDeferred.resolve();
-
-                        }).catch(function (error) {
-                            promiseDeferred.reject(error);
-                        });
-
-                        return promiseDeferred.promise;
                     };
 
                     function fillPolicy(policy, supplierZoneRPOptionPolicies) {

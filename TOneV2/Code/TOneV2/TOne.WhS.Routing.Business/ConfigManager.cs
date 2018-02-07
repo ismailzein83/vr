@@ -47,19 +47,9 @@ namespace TOne.WhS.Routing.Business
             return GetCustomerRouteBuildConfiguration().NumberOfOptions;
         }
 
-        public bool GetCustomerRouteBuildAddBlockedOptions()
-        {
-            return GetCustomerRouteBuildConfiguration().AddBlockedOptions;
-        }
-
         public bool GetCustomerRouteBuildKeepBackUpsForRemovedOptions()
         {
             return GetCustomerRouteBuildConfiguration().KeepBackUpsForRemovedOptions;
-        }
-
-        public bool GetProductRouteBuildAddBlockedOptions()
-        {
-            return GetProductRouteBuildConfiguration().AddBlockedOptions;
         }
 
         public bool GetProductRouteBuildKeepBackUpsForRemovedOptions()

@@ -106,8 +106,6 @@ app.directive("vrWhsRoutingRpbuildproduct", ['WhS_Routing_RPRouteAPIService', 'V
                 if (!$scope.isFuture)
                     $scope.effectiveOn = VRDateTimeService.getNowDateTime();
 
-                var getRPSettingsAddBlockedOptionsPromise = getRPSettingsAddBlockedOptionsPromise();
-                promises.push(getRPSettingsAddBlockedOptionsPromise);
 
                 var getPoliciesPromise = WhS_Routing_RPRouteAPIService.GetPoliciesOptionTemplates();
                 promises.push(getPoliciesPromise);
@@ -147,20 +145,6 @@ app.directive("vrWhsRoutingRpbuildproduct", ['WhS_Routing_RPRouteAPIService', 'V
                     policy.directiveReadyDeferred.promise.then(function () {
                         VRUIUtilsService.callDirectiveLoad(policy.directiveAPI, undefined, policy.directiveLoadDeferred);
                     });
-                }
-                function getRPSettingsAddBlockedOptionsPromise() {
-                    var promiseDeferred = UtilsService.createPromiseDeferred();
-
-                    WhS_Routing_RPRouteAPIService.GetRPSettingsAddBlockedOptions().then(function (response) {
-
-                        $scope.showIncludeBlockedSupplierZones = response;
-                        promiseDeferred.resolve();
-
-                    }).catch(function (error) {
-                        promiseDeferred.reject(error);
-                    });
-
-                    return promiseDeferred.promise;
                 }
 
                 return UtilsService.waitMultiplePromises(promises);

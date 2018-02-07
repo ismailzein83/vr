@@ -27,15 +27,13 @@ namespace TOne.WhS.Routing.BP.Activities
         [RequiredArgument]
         public InArgument<List<SupplierZoneToRPOptionPolicy>> Policies { get; set; }
 
-        public InArgument<bool> IncludeBlockedSupplierZones { get; set; }
-
         [RequiredArgument]
         public OutArgument<int> DatabaseId { get; set; }
 
         protected override void Execute(CodeActivityContext context)
         {
             RoutingProcessType processType = this.ProcessType.Get(context);
-            RoutingDatabaseInformation information = GetDatabaseInformation(processType, this.Policies.Get(context), this.IncludeBlockedSupplierZones.Get(context));
+            RoutingDatabaseInformation information = GetDatabaseInformation(processType, this.Policies.Get(context));
             RoutingDatabaseSettings settings = BuildRoutingDatabaseSettings();
 
             RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
@@ -64,7 +62,7 @@ namespace TOne.WhS.Routing.BP.Activities
             this.DatabaseId.Set(context, databaseId);
         }
 
-        private RoutingDatabaseInformation GetDatabaseInformation(RoutingProcessType processType, List<SupplierZoneToRPOptionPolicy> policies, bool includeBlockedSupplierZones)
+        private RoutingDatabaseInformation GetDatabaseInformation(RoutingProcessType processType, List<SupplierZoneToRPOptionPolicy> policies)
         {
             RoutingDatabaseInformation information = null;
             switch (processType)
@@ -73,13 +71,14 @@ namespace TOne.WhS.Routing.BP.Activities
                     information = new RPRoutingDatabaseInformation()
                     {
                         DefaultPolicyId = policies.Where(p => p.IsDefault).First().ConfigId,
-                        SelectedPoliciesIds = policies.Select(p => p.ConfigId).ToArray(),
-                        IncludeBlockedSupplierZones = includeBlockedSupplierZones
+                        SelectedPoliciesIds = policies.Select(p => p.ConfigId).ToArray()
                     };
                     break;
+
                 case RoutingProcessType.CustomerRoute:
                     information = null;
                     break;
+
                 default:
                     information = null;
                     break;

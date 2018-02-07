@@ -1,4 +1,5 @@
-﻿
+﻿using System;
+
 namespace TOne.WhS.Routing.Entities
 {
     public class RouteBuildConfiguration
@@ -10,11 +11,8 @@ namespace TOne.WhS.Routing.Entities
         public IncludedRulesConfiguration IncludedRules { get; set; }
     }
 
-
     public class CustomerRouteBuildConfiguration
     {
-        public bool AddBlockedOptions { get; set; }
-
         public bool KeepBackUpsForRemovedOptions { get; set; }
 
         public int NumberOfOptions { get; set; }
@@ -26,8 +24,6 @@ namespace TOne.WhS.Routing.Entities
 
     public class ProductRouteBuildConfiguration
     {
-        public bool AddBlockedOptions { get; set; }
-
         public bool KeepBackUpsForRemovedOptions { get; set; }
 
         public int IndexesCommandTimeoutInMinutes { get; set; }

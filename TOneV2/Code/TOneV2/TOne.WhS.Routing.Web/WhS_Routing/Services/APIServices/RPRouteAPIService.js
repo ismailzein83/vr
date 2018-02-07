@@ -1,6 +1,7 @@
 ﻿(function (appControllers) {
 
     "use strict";
+
     rpRouteAPIService.$inject = ["BaseAPIService", "UtilsService", "WhS_Routing_ModuleConfig"];
 
     function rpRouteAPIService(BaseAPIService, UtilsService, WhS_Routing_ModuleConfig) {
@@ -31,16 +32,11 @@
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetFilteredRPRouteOptions"), input);
         }
 
-        function GetRPSettingsAddBlockedOptions() {
-            return BaseAPIService.post(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetRPSettingsAddBlockedOptions"));
-        }
-
         return ({
             GetFilteredRPRoutes: GetFilteredRPRoutes,
             GetRPRouteOptionSupplier: GetRPRouteOptionSupplier,
             GetPoliciesOptionTemplates: GetPoliciesOptionTemplates,
-            GetFilteredRPRouteOptions: GetFilteredRPRouteOptions,
-            GetRPSettingsAddBlockedOptions: GetRPSettingsAddBlockedOptions
+            GetFilteredRPRouteOptions: GetFilteredRPRouteOptions
         });
     }
 
