@@ -69,6 +69,7 @@
     <Compile Include="VRObjectTrackingDataManager.cs" />
     <Compile Include="VRReceivedMailMessageDataManager.cs" />
     <Compile Include="VRRuleDataManager.cs" />
+    <Compile Include="VRSequenceDataManager.cs" />
     <Compile Include="VRZoneTimeDataManager.cs" />
     <Compile Include="DataGroupingAnalysisInfoDataManager.cs" />
     <Compile Include="StyleDefinitionDataManager.cs" />

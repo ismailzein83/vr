@@ -21,5 +21,17 @@ namespace Vanrise.GenericData.MainExtensions
                 DefinitionSettings = genericBEDefinitionSetting
             }) as IEnumerable<GenericBESerialNumberPartInfo>;
         }
+        public long GetSerialNumberPartInitialSequence(Guid businessEntityDefinitionId, string infoType)
+        {
+            var genericBEDefinitionSetting = new GenericBusinessEntityDefinitionManager().GetGenericBEDefinitionSettings(businessEntityDefinitionId);
+            genericBEDefinitionSetting.ThrowIfNull("genericBEDefinitionSetting", businessEntityDefinitionId);
+            genericBEDefinitionSetting.OnBeforeInsertHandler.ThrowIfNull("genericBEDefinitionSetting.OnBeforeInsertHandler");
+
+            return (long) genericBEDefinitionSetting.OnBeforeInsertHandler.TryGetInfoByType(new GenericBEOnBeforeInsertHandlerInfoByTypeContext
+            {
+                InfoType = infoType,
+                DefinitionSettings = genericBEDefinitionSetting
+            });
+        }
     }
 }

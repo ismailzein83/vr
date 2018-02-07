@@ -68,6 +68,7 @@
     <Compile Include="IVRObjectTrackingDataManager.cs" />
     <Compile Include="IVRReceivedMailMessageDataManager.cs" />
     <Compile Include="IVRRuleDataManager.cs" />
+    <Compile Include="IVRSequenceDataManager.cs" />
     <Compile Include="IZoneTimeDataManager.cs" />
     <Compile Include="IDataGroupingAnalysisInfoDataManager.cs" />
     <Compile Include="IStyleDefinitionDataManager.cs" />

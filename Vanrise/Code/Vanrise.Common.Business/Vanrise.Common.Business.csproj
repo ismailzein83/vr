@@ -167,6 +167,7 @@
     <Compile Include="VRFileManager.cs" />
     <Compile Include="VRRule\VRRuleDefinitionManager.cs" />
     <Compile Include="VRRule\VRRuleManager.cs" />
+    <Compile Include="VRSequence\VRSequenceManager.cs" />
     <Compile Include="VRTile\VRTileManager.cs" />
     <Compile Include="VRTile\VRTileViewSettings.cs" />
     <Compile Include="VRTimePeriod\VRTimePeriodManager.cs" />

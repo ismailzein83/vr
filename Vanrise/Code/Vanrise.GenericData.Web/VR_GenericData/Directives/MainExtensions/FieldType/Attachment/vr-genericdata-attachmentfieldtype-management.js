@@ -18,7 +18,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
         compile: function (element, attrs) {
 
         },
-        templateUrl: '/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/Attachment/Templates/AttachmentFieldTypeEntitManagementTemplate.html'
+        templateUrl: '/Client/Modules/VR_GenericData/Directives/MainExtensions/FieldType/Attachment/Templates/AttachmentFieldTypeEntityManagementTemplate.html'
     };
 
     function Attachmentfieldtype($scope, ctrl, $attrs) {
@@ -33,7 +33,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                     {
                         file:undefined,
                         notes: '',
-                        createdTime:new Date()
+                       // createdTime:new Date()
                     };
                 $scope.scopeModel.attachementFieldTypes.push({ Entity: attachementFieldType });
               

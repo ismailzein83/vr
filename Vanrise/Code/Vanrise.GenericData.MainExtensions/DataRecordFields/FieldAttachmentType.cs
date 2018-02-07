@@ -55,12 +55,17 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                     else
                     {
                         var fileInfo = vrFileManager.GetFileInfo(newAttachmentFieldTypeEntity.FileId);
-                        changesFieldTypeEntities.Add(new AttachmentFieldTypeEntityChangeInfo
+                        var attachmentFieldTypeEntityChangeInfo = new AttachmentFieldTypeEntityChangeInfo
                         {
                             FileName = fileInfo != null ? fileInfo.Name : null,
                             FileId = newAttachmentFieldTypeEntity.FileId,
-                            Description = string.Format("Added (Notes: {0})", newAttachmentFieldTypeEntity.Notes)
-                        });
+                            Description = "Added"
+                        };
+                        if (newAttachmentFieldTypeEntity.Notes != null)
+                        {
+                            attachmentFieldTypeEntityChangeInfo.Description += string.Format(" (Notes: {0})", newAttachmentFieldTypeEntity.Notes);
+                        }
+                        changesFieldTypeEntities.Add(attachmentFieldTypeEntityChangeInfo);
                     }
                 }
                 if (oldAttachmentFieldTypeEntities != null)
@@ -148,7 +153,14 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             var attachmentFieldTypeEntities = context.FieldValue as List<AttachmentFieldTypeEntity>;
             if (attachmentFieldTypeEntities != null)
             {
-                var fileIds = attachmentFieldTypeEntities.MapRecords(x => x.FileId);
+                List<long> fileIds = new List<long>();
+
+                foreach (var attachmentFieldTypeEntity in attachmentFieldTypeEntities)
+                {
+                    attachmentFieldTypeEntity.CreatedTime = DateTime.Now;
+                    fileIds.Add(attachmentFieldTypeEntity.FileId);
+                }
+
                 if (context.BusinessEntityDefinitionId.HasValue)
                 {
                     if (fileIds != null && fileIds.Count() > 0)

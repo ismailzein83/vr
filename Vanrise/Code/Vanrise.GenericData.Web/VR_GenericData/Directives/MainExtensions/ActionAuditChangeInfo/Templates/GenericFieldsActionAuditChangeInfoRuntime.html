@@ -6,13 +6,13 @@
                          pagingtype="'PagingOnScroll'"
                          hidegridmenu="true">
 
-                <vr-datagridcolumn headertext="'Field'" field="'fieldName'" type="'Text'"></vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'Old Value'">
+                <vr-datagridcolumn headertext="'Field'" field="'fieldName'" type="'Text'" widthfactor="5"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Old Value'" widthfactor="10">
                     <span vr-loader="dataItem.loadChangeInfoDirective">
                         <vr-directivewrapper ng-if="dataItem.oldDirective != undefined" directive="dataItem.oldDirective" on-ready="dataItem.onOldDirectiveReady" normal-col-num="12"></vr-directivewrapper>
                     </span>
                 </vr-datagridcolumn>
-                <vr-datagridcolumn headertext="'New Value'">
+                <vr-datagridcolumn headertext="'New Value'" widthfactor="10">
                     <span vr-loader="dataItem.loadChangeInfoDirective">
                         <vr-directivewrapper ng-if="dataItem.newDirective != undefined" directive="dataItem.newDirective" on-ready="dataItem.onNewDirectiveReady" normal-col-num="12"></vr-directivewrapper>
                     </span>

@@ -86,6 +86,7 @@ namespace Vanrise.GenericData.Business
     {
         GenericBusinessEntity GenericBusinessEntity { get; set; }
         GenericBEDefinitionSettings DefinitionSettings { get; }
+        Guid BusinessEntityDefinitionId { get; }
     }
 
 

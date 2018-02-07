@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 namespace Vanrise.GenericData.MainExtensions
 {
     public class SerialNumberOnBeforeInsertHandler : GenericBEOnBeforeInsertHandler
@@ -54,7 +55,8 @@ namespace Vanrise.GenericData.MainExtensions
                     var serialNumberPartContext = new GenericBESerialNumberPartSettingsContext
                     {
                         DefinitionSettings = context.DefinitionSettings,
-                        GenericBusinessEntity = context.GenericBusinessEntity
+                        GenericBusinessEntity = context.GenericBusinessEntity,
+                        BusinessEntityDefinitionId = context.BusinessEntityDefinitionId
                     };
 
                     foreach (var part in PartDefinitions)
@@ -105,11 +107,13 @@ namespace Vanrise.GenericData.MainExtensions
     {
         GenericBusinessEntity GenericBusinessEntity { get; set; }
         GenericBEDefinitionSettings DefinitionSettings { get; }
+        Guid BusinessEntityDefinitionId { get; }
     }
     public class GenericBESerialNumberPartSettingsContext : IGenericBESerialNumberPartSettingsContext
     {
         public GenericBusinessEntity GenericBusinessEntity { get; set; }
         public GenericBEDefinitionSettings DefinitionSettings { get; set; }
+        public Guid BusinessEntityDefinitionId { get; set; }
     }
     public class GenericFieldSerialNumberPart : GenericBESerialNumberPartSettings
     {
@@ -137,5 +141,62 @@ namespace Vanrise.GenericData.MainExtensions
             get { return ""; }
         }
     }
+    public enum DateCounterType { Yearly = 0 }
+    public class SequenceSerialNumberPart : GenericBESerialNumberPartSettings
+    {
+        public override Guid ConfigId
+        {
+            get { return new Guid("16197ED3-F3EF-4C50-9106-61A576789726"); }
+        }
+        public string InfoType { get; set; }
+        public bool IncludePartnerId { get; set; }
+        public DateCounterType? DateCounterType { get; set; }
+        public int PaddingLeft { get; set; }
+        public string SequenceKeyFieldName { get; set; }
+        public override string GetPartText(IGenericBESerialNumberPartSettingsContext context)
+        {
+            context.DefinitionSettings.ThrowIfNull("context.DefinitionSettings");
+            context.GenericBusinessEntity.ThrowIfNull("context.GenericBusinessEntity");
+            context.GenericBusinessEntity.FieldValues.ThrowIfNull("context.GenericBusinessEntity.FieldValues");
+
+
+
+            StringBuilder sequenceKey = new StringBuilder();
+            StringBuilder sequenceGroup = new StringBuilder();
+            sequenceGroup.Append("OVERALL");
+            var sequenceKeyValue = context.GenericBusinessEntity.FieldValues.GetRecord(this.SequenceKeyFieldName);
+
+            long initialSequenceValue = new GenericBESerialNumberManager().GetSerialNumberPartInitialSequence(context.BusinessEntityDefinitionId, InfoType);
+
+            if (this.IncludePartnerId)
+            {
+                sequenceKey.Append(sequenceKeyValue);
+                sequenceGroup.Append("_");
+                sequenceGroup.Append(sequenceKeyValue);
+            }
+            if (this.DateCounterType.HasValue)
+            {
+                if (sequenceKey.Length > 0)
+                    sequenceKey.Append("_");
+                sequenceGroup.Append("_");
+                sequenceGroup.Append(Common.Utilities.GetEnumDescription(this.DateCounterType.Value));
+                switch (this.DateCounterType)
+                {
+                    case Vanrise.GenericData.MainExtensions.DateCounterType.Yearly:
+                        sequenceKey.Append(string.Format("{0}_{1}", DateTime.Today.Year, DateTime.Today.Year + 1));
+                        break;
+                }
+            }
+            VRSequenceManager manager = new VRSequenceManager();
+            var sequenceNumber = manager.GetNextSequenceValue(sequenceGroup.ToString(), context.BusinessEntityDefinitionId, sequenceKey.ToString(), initialSequenceValue);
+            return sequenceNumber.ToString().PadLeft(this.PaddingLeft, '0');
+        }
+
+        public override string RuntimeEditor
+        {
+            get { return ""; }
+        }
+    }
+
 
 }

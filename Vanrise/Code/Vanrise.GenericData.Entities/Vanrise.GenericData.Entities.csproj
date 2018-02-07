@@ -107,7 +107,6 @@
     <Compile Include="DataStorage\IGetStorageRowCountContext.cs" />
     <Compile Include="GenericBusinessEntity\GenericBEDefinitionGridColumnAttribute.cs" />
     <Compile Include="GenericBusinessEntity\GenericBusinessEntityFilter.cs" />
-    <Compile Include="GenericBusinessEntity\GenericBusinessEntityRuntimeEditor.cs" />
     <Compile Include="GenericEditorDefinitionSetting\VRGenericEditorDefinitionSetting.cs" />
     <Compile Include="IGenericObject.cs" />
     <Compile Include="RecordFilter\FilterParameter.cs" />
@@ -165,7 +164,6 @@
     <Compile Include="DataStorage\IGetRecordStorageDataManagerContext.cs" />
     <Compile Include="DataStorage\IUpdateRecordStorageSettingsContext.cs" />
     <Compile Include="ExpressionBuilder\ExpressionBuilderConfig.cs" />
-    <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBEDefinitionSettings.cs" />
     <Compile Include="GenericBusinessEntity\GenericBusinessEntity.cs" />
     <Compile Include="GenericBusinessEntity\GenericBusinessEntityDetail.cs" />
     <Compile Include="GenericBusinessEntity\GenericBusinessEntityInfo.cs" />

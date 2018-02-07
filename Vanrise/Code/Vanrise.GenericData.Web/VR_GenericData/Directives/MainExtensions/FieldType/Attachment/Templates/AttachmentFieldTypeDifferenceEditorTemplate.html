@@ -3,9 +3,9 @@
              on-ready="onGridReady"
              pagingtype="'PagingOnScroll'"
              hidegridmenu="true">
-    <vr-datagridcolumn headertext="'Attachment'" type="'Text'">
+    <vr-datagridcolumn headertext="'Attachment'" type="'Text'" widthfactor="5">
         <a href="" ng-click="viewScope.scopeModel.downloadAttachement(dataItem.fileId)">{{dataItem.fileName}}</a>
     </vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Change Info'" field="'description'" />
+    <vr-datagridcolumn headertext="'Change Info'" field="'description'" widthfactor="10" />
 </vr-datagrid>
 

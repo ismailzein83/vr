@@ -9,9 +9,9 @@
              defaultsortdirection="'DESC'" enableautoexport="true">
     <vr-datagridcolumn headertext="'ID'" localizedheadertext="'VRRes.ID.VREnd'" field="'Entity.VRObjectTrackingId'" fixedwidth="60"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Time'" localizedheadertext="'VRRes.Time.VREnd'" field="'Entity.Time'" type="'LongDatetime'" fixedwidth="120"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'User Name'" localizedheadertext="'VRRes.User Name.VREnd'" field="'UserName'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Action Name'" localizedheadertext="'VRRes.ActionName.VREnd'" field="'ActionName'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Action Description'" localizedheadertext="'VRRes.ActionDescription.VREnd'" field="'Entity.ActionDescription'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'User Name'" localizedheadertext="'VRRes.User Name.VREnd'" field="'UserName'" type="'Text'" widthfactor="10"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Action Name'" localizedheadertext="'VRRes.ActionName.VREnd'" field="'ActionName'" type="'Text'" widthfactor="5"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Action Description'" localizedheadertext="'VRRes.ActionDescription.VREnd'" field="'Entity.ActionDescription'" type="'Text'" widthfactor="30"></vr-datagridcolumn>
     <vr-datagridexpandablerow>
         <span vr-loader="dataItem.loadChangeInfoDirective">
             <vr-directivewrapper ng-if="dataItem.changeInfoDirective != undefined" directive="dataItem.changeInfoDirective" on-ready="dataItem.onChangeInfoDirectiveReady" normal-col-num="6"></vr-directivewrapper>
