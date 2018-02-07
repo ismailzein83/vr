@@ -98,45 +98,6 @@ namespace TOne.WhS.Routing.Data.SQL
             return customerRoutes;
         }
 
-        private void CompleteSupplierData(IEnumerable<CustomerRoute> customerRoutes)
-        {
-            if (customerRoutes == null || customerRoutes.Count() == 0)
-                return;
-
-            HashSet<long> supplierZoneIds = new HashSet<long>();
-            foreach (CustomerRoute customerRoute in customerRoutes)
-            {
-                if (customerRoute.Options == null || customerRoute.Options.Count == 0)
-                    continue;
-
-                foreach (RouteOption routeOption in customerRoute.Options)
-                {
-                    supplierZoneIds.Add(routeOption.SupplierZoneId);
-                }
-            }
-            if (supplierZoneIds.Count > 0)
-            {
-                SupplierZoneDetailsDataManager supplierZoneDetailsDataManager = new SupplierZoneDetailsDataManager();
-                supplierZoneDetailsDataManager.RoutingDatabase = this.RoutingDatabase;
-
-                Dictionary<long, SupplierZoneDetail> supplierZoneDetails = supplierZoneDetailsDataManager.GetFilteredSupplierZoneDetailsBySupplierZone(supplierZoneIds).ToDictionary(itm => itm.SupplierZoneId, itm => itm);
-
-                foreach (CustomerRoute customerRoute in customerRoutes)
-                {
-                    if (customerRoute.Options == null || customerRoute.Options.Count == 0)
-                        continue;
-
-                    foreach (RouteOption routeOption in customerRoute.Options)
-                    {
-                        SupplierZoneDetail supplierZoneDetail = supplierZoneDetails.GetRecord(routeOption.SupplierZoneId);
-                        routeOption.SupplierId = supplierZoneDetail.SupplierId;
-                        routeOption.SupplierRate = supplierZoneDetail.EffectiveRateValue;
-                        routeOption.ExactSupplierServiceIds = supplierZoneDetail.ExactSupplierServiceIds;
-                    }
-                }
-            }
-        }
-
         public void LoadRoutes(int? customerId, string codePrefix, Action<CustomerRoute> onRouteLoaded)
         {
             StringBuilder queryBuilder = new StringBuilder(query_GetCustomerRoutes);
@@ -184,8 +145,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 });
         }
 
-        public List<CustomerRouteData> GetAffectedCustomerRoutes(List<AffectedRoutes> affectedRoutesList, List<AffectedRouteOptions> affectedRouteOptionsList, long partialRoutesNumberLimit,
-            out bool maximumExceeded)
+        public List<CustomerRouteData> GetAffectedCustomerRoutes(List<AffectedRoutes> affectedRoutesList, List<AffectedRouteOptions> affectedRouteOptionsList, long partialRoutesNumberLimit, out bool maximumExceeded)
         {
             HashSet<string> addedCustomerRouteDefinitions = new HashSet<string>();
             List<CustomerRouteData> customerRouteDataList = new List<CustomerRouteData>();
@@ -223,8 +183,115 @@ namespace TOne.WhS.Routing.Data.SQL
             return customerRouteDataList.Count > 0 ? customerRouteDataList : null;
         }
 
-        long ExecuteGetAffectedCustomerRoutesQuery(string query, HashSet<string> addedCustomerRouteDefinitions, List<CustomerRouteData> customerRouteDataList, long partialRoutesNumberLimit,
-            long addedItems, out bool maximumExceeded)
+        public long GetTotalCount()
+        {
+            return (long)ExecuteScalarText(@"IF OBJECT_ID('[dbo].[CustomerRoute]', N'U') IS NOT NULL 
+                                Begin
+                                    SELECT CAST(p.rows AS bigint)
+                                    FROM sys.tables AS tbl
+                                    INNER JOIN sys.indexes AS idx ON idx.object_id = tbl.object_id and idx.index_id < 2
+                                    INNER JOIN sys.partitions AS p ON p.object_id = CAST(tbl.object_id AS int) and p.index_id = idx.index_id
+                                    WHERE ((tbl.name=N'CustomerRoute' AND SCHEMA_NAME(tbl.schema_id)=N'dbo'))
+                                End", (cmd) => { });
+        }
+
+        public void UpdateCustomerRoutes(List<CustomerRouteData> customerRouteDataList)
+        {
+            DataTable dtCustomerRoutes = BuildCustomerRouteTable(customerRouteDataList);
+            ExecuteNonQueryText(query_UpdateCustomerRoutes, (cmd) =>
+            {
+                var dtPrm = new SqlParameter("@Routes", SqlDbType.Structured);
+                dtPrm.TypeName = "CustomerRouteType";
+                dtPrm.Value = dtCustomerRoutes;
+                cmd.Parameters.Add(dtPrm);
+            });
+        }
+
+        public void FinalizeCurstomerRoute(Action<string> trackStep, int commandTimeoutInSeconds, int? maxDOP)
+        {
+            string maxDOPSyntax = maxDOP.HasValue ? string.Format(",MAXDOP={0}", maxDOP.Value) : "";
+            string query;
+
+            //trackStep("Starting create Index on CustomerRoute table (CustomerId).");
+            //query = string.Format(query_CreateIX_CustomerRoute_CustomerId, maxDOPSyntax);
+            //ExecuteNonQueryText(query, null, commandTimeoutInSeconds);
+            //trackStep("Finished create Index on CustomerRoute table (CustomerId).");
+
+            trackStep("Starting create Index on CustomerRoute table (Code).");
+            query = string.Format(query_CreateIX_CustomerRoute_Code, maxDOPSyntax);
+            ExecuteNonQueryText(query, null, commandTimeoutInSeconds);
+            trackStep("Finished create Index on CustomerRoute table (Code).");
+
+            trackStep("Starting create Index on CustomerRoute table (SaleZoneId).");
+            query = string.Format(query_CreateIX_CustomerRoute_SaleZone, maxDOPSyntax);
+            ExecuteNonQueryText(query, null, commandTimeoutInSeconds);
+            trackStep("Finished create Index on CustomerRoute table (SaleZoneId).");
+
+            trackStep("Starting create Index on CustomerRoute table (VersionNumber).");
+            query = string.Format(query_CreateIX_CustomerRoute_VersionNumber, maxDOPSyntax);
+            ExecuteNonQueryText(query, null, commandTimeoutInSeconds);
+            trackStep("Finished create Index on CustomerRoute table (VersionNumber).");
+
+            trackStep("Starting create CLUSTERED Index on CustomerRoute table (CustomerId and Code).");
+            query = string.Format(query_CreateIX_CustomerRoute_CustomerId_Code, maxDOPSyntax);
+            ExecuteNonQueryText(query, null, commandTimeoutInSeconds);
+            trackStep("Finished create CLUSTERED on CustomerRoute table (CustomerId and Code).");
+        }
+
+        public List<CustomerRoute> GetCustomerRoutesAfterVersionNb(int versionNb)
+        {
+            StringBuilder queryBuilder = new StringBuilder(query_GetCustomerRoutes);
+            queryBuilder.Replace("#LimitResult#", string.Empty);
+            queryBuilder.Replace("#FILTER#", string.Format("Where cr.VersionNumber > {0}", versionNb));
+
+            List<CustomerRoute> customerRoutes = GetItemsText(queryBuilder.ToString(), CustomerRouteMapper, (cmd) => { });
+            CompleteSupplierData(customerRoutes);
+            return customerRoutes;
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void CompleteSupplierData(IEnumerable<CustomerRoute> customerRoutes)
+        {
+            if (customerRoutes == null || customerRoutes.Count() == 0)
+                return;
+
+            HashSet<long> supplierZoneIds = new HashSet<long>();
+            foreach (CustomerRoute customerRoute in customerRoutes)
+            {
+                if (customerRoute.Options == null || customerRoute.Options.Count == 0)
+                    continue;
+
+                foreach (RouteOption routeOption in customerRoute.Options)
+                    supplierZoneIds.Add(routeOption.SupplierZoneId);
+            }
+
+            if (supplierZoneIds.Count > 0)
+            {
+                SupplierZoneDetailsDataManager supplierZoneDetailsDataManager = new SupplierZoneDetailsDataManager();
+                supplierZoneDetailsDataManager.RoutingDatabase = this.RoutingDatabase;
+
+                Dictionary<long, SupplierZoneDetail> supplierZoneDetails = supplierZoneDetailsDataManager.GetFilteredSupplierZoneDetailsBySupplierZone(supplierZoneIds).ToDictionary(itm => itm.SupplierZoneId, itm => itm);
+
+                foreach (CustomerRoute customerRoute in customerRoutes)
+                {
+                    if (customerRoute.Options == null || customerRoute.Options.Count == 0)
+                        continue;
+
+                    foreach (RouteOption routeOption in customerRoute.Options)
+                    {
+                        SupplierZoneDetail supplierZoneDetail = supplierZoneDetails.GetRecord(routeOption.SupplierZoneId);
+                        routeOption.SupplierId = supplierZoneDetail.SupplierId;
+                        routeOption.SupplierRate = supplierZoneDetail.EffectiveRateValue;
+                        routeOption.ExactSupplierServiceIds = supplierZoneDetail.ExactSupplierServiceIds;
+                    }
+                }
+            }
+        }
+
+        private long ExecuteGetAffectedCustomerRoutesQuery(string query, HashSet<string> addedCustomerRouteDefinitions, List<CustomerRouteData> customerRouteDataList, long partialRoutesNumberLimit, long addedItems, out bool maximumExceeded)
         {
             maximumExceeded = false;
             ExecuteReaderText(query, (reader) =>
@@ -250,7 +317,7 @@ namespace TOne.WhS.Routing.Data.SQL
 
             return addedItems;
         }
-
+        
         private List<string> BuildAffectedRoutes(List<AffectedRoutes> affectedRoutesList)
         {
             if (affectedRoutesList == null || affectedRoutesList.Count == 0)
@@ -397,146 +464,6 @@ namespace TOne.WhS.Routing.Data.SQL
             return conditions;
         }
 
-        public long GetTotalCount()
-        {
-            return (long)ExecuteScalarText(@"IF OBJECT_ID('[dbo].[CustomerRoute]', N'U') IS NOT NULL 
-                                Begin
-                                    SELECT CAST(p.rows AS bigint)
-                                    FROM sys.tables AS tbl
-                                    INNER JOIN sys.indexes AS idx ON idx.object_id = tbl.object_id and idx.index_id < 2
-                                    INNER JOIN sys.partitions AS p ON p.object_id = CAST(tbl.object_id AS int) and p.index_id = idx.index_id
-                                    WHERE ((tbl.name=N'CustomerRoute' AND SCHEMA_NAME(tbl.schema_id)=N'dbo'))
-                                End", (cmd) => { });
-        }
-
-        public void UpdateCustomerRoutes(List<CustomerRouteData> customerRouteDataList)
-        {
-            DataTable dtCustomerRoutes = BuildCustomerRouteTable(customerRouteDataList);
-            ExecuteNonQueryText(query_UpdateCustomerRoutes, (cmd) =>
-            {
-                var dtPrm = new SqlParameter("@Routes", SqlDbType.Structured);
-                dtPrm.TypeName = "CustomerRouteType";
-                dtPrm.Value = dtCustomerRoutes;
-                cmd.Parameters.Add(dtPrm);
-            });
-        }
-
-        DataTable BuildCustomerRouteTable(List<CustomerRouteData> customerRouteDataList)
-        {
-            DataTable dtCustomerRoutes = new DataTable();
-            dtCustomerRoutes.Columns.Add("CustomerId", typeof(int));
-            dtCustomerRoutes.Columns.Add("Code", typeof(string));
-            dtCustomerRoutes.Columns.Add("SaleZoneId", typeof(long));
-            dtCustomerRoutes.Columns.Add("IsBlocked", typeof(int));
-            dtCustomerRoutes.Columns.Add("ExecutedRuleId", typeof(int));
-            dtCustomerRoutes.Columns.Add("RouteOptions", typeof(string));
-            dtCustomerRoutes.Columns.Add("VersionNumber", typeof(int));
-            dtCustomerRoutes.BeginLoadData();
-            foreach (var customerRoute in customerRouteDataList)
-            {
-                DataRow dr = dtCustomerRoutes.NewRow();
-                dr["CustomerId"] = customerRoute.CustomerId;
-                dr["Code"] = customerRoute.Code;
-                dr["SaleZoneId"] = customerRoute.SaleZoneId;
-                dr["IsBlocked"] = customerRoute.IsBlocked;
-
-                if (customerRoute.ExecutedRuleId.HasValue)
-                    dr["ExecutedRuleId"] = customerRoute.ExecutedRuleId;
-                else
-                    dr["ExecutedRuleId"] = DBNull.Value;
-
-                if (!string.IsNullOrEmpty(customerRoute.Options))
-                    dr["RouteOptions"] = customerRoute.Options;
-                else
-                    dr["RouteOptions"] = DBNull.Value;
-
-                dr["VersionNumber"] = customerRoute.VersionNumber;
-                dtCustomerRoutes.Rows.Add(dr);
-            }
-            dtCustomerRoutes.EndLoadData();
-            return dtCustomerRoutes;
-        }
-
-        public void FinalizeCurstomerRoute(Action<string> trackStep, int commandTimeoutInSeconds, int? maxDOP)
-        {
-            string maxDOPSyntax = maxDOP.HasValue ? string.Format(",MAXDOP={0}", maxDOP.Value) : "";
-            string query;
-
-            //trackStep("Starting create Index on CustomerRoute table (CustomerId).");
-            //query = string.Format(query_CreateIX_CustomerRoute_CustomerId, maxDOPSyntax);
-            //ExecuteNonQueryText(query, null, commandTimeoutInSeconds);
-            //trackStep("Finished create Index on CustomerRoute table (CustomerId).");
-
-            trackStep("Starting create Index on CustomerRoute table (Code).");
-            query = string.Format(query_CreateIX_CustomerRoute_Code, maxDOPSyntax);
-            ExecuteNonQueryText(query, null, commandTimeoutInSeconds);
-            trackStep("Finished create Index on CustomerRoute table (Code).");
-
-            trackStep("Starting create Index on CustomerRoute table (SaleZoneId).");
-            query = string.Format(query_CreateIX_CustomerRoute_SaleZone, maxDOPSyntax);
-            ExecuteNonQueryText(query, null, commandTimeoutInSeconds);
-            trackStep("Finished create Index on CustomerRoute table (SaleZoneId).");
-
-            trackStep("Starting create Index on CustomerRoute table (VersionNumber).");
-            query = string.Format(query_CreateIX_CustomerRoute_VersionNumber, maxDOPSyntax);
-            ExecuteNonQueryText(query, null, commandTimeoutInSeconds);
-            trackStep("Finished create Index on CustomerRoute table (VersionNumber).");
-
-            trackStep("Starting create CLUSTERED Index on CustomerRoute table (CustomerId and Code).");
-            query = string.Format(query_CreateIX_CustomerRoute_CustomerId_Code, maxDOPSyntax);
-            ExecuteNonQueryText(query, null, commandTimeoutInSeconds);
-            trackStep("Finished create CLUSTERED on CustomerRoute table (CustomerId and Code).");
-        }
-
-        public List<CustomerRoute> GetCustomerRoutesAfterVersionNb(int versionNb)
-        {
-            StringBuilder queryBuilder = new StringBuilder(query_GetCustomerRoutes);
-            queryBuilder.Replace("#LimitResult#", string.Empty);
-            queryBuilder.Replace("#FILTER#", string.Format("Where cr.VersionNumber > {0}", versionNb));
-
-            List<CustomerRoute> customerRoutes = GetItemsText(queryBuilder.ToString(), CustomerRouteMapper, (cmd) => { });
-            CompleteSupplierData(customerRoutes);
-            return customerRoutes;
-        }
-
-        #endregion
-
-        #region Private Methods
-
-        private CustomerRoute CustomerRouteMapper(IDataReader reader)
-        {
-            string saleZoneServiceIds = (reader["SaleZoneServiceIds"] as string);
-
-            return new CustomerRoute()
-            {
-                CustomerId = (int)reader["CustomerID"],
-                CustomerName = reader["CustomerName"] as string,
-                Code = reader["Code"] as string,
-                SaleZoneId = (long)reader["SaleZoneID"],
-                SaleZoneName = reader["SaleZoneName"] as string,
-                Rate = GetReaderValue<decimal?>(reader, "Rate"),
-                SaleZoneServiceIds = !string.IsNullOrEmpty(saleZoneServiceIds) ? new HashSet<int>(saleZoneServiceIds.Split(',').Select(itm => int.Parse(itm))) : null,
-                IsBlocked = (bool)reader["IsBlocked"],
-                ExecutedRuleId = GetReaderValue<int?>(reader, "ExecutedRuleId"),
-                Options = reader["RouteOptions"] != DBNull.Value ? DeserializeOptions(reader["RouteOptions"] as string) : null,
-                VersionNumber = GetReaderValue<int>(reader, "VersionNumber")
-            };
-        }
-
-        private CustomerRouteData CustomerRouteDataMapper(IDataReader reader)
-        {
-            return new CustomerRouteData()
-            {
-                CustomerId = (int)reader["CustomerID"],
-                Code = reader["Code"] as string,
-                SaleZoneId = (long)reader["SaleZoneID"],
-                IsBlocked = (bool)reader["IsBlocked"],
-                ExecutedRuleId = GetReaderValue<int?>(reader, "ExecutedRuleId"),
-                Options = reader["RouteOptions"] as string,
-                VersionNumber = GetReaderValue<int>(reader, "VersionNumber")
-            };
-        }
-
         private string SerializeOptions(List<RouteOption> options)
         {
             StringBuilder str = new StringBuilder();
@@ -598,11 +525,85 @@ namespace TOne.WhS.Routing.Data.SQL
             return options;
         }
 
+        private DataTable BuildCustomerRouteTable(List<CustomerRouteData> customerRouteDataList)
+        {
+            DataTable dtCustomerRoutes = new DataTable();
+            dtCustomerRoutes.Columns.Add("CustomerId", typeof(int));
+            dtCustomerRoutes.Columns.Add("Code", typeof(string));
+            dtCustomerRoutes.Columns.Add("SaleZoneId", typeof(long));
+            dtCustomerRoutes.Columns.Add("IsBlocked", typeof(int));
+            dtCustomerRoutes.Columns.Add("ExecutedRuleId", typeof(int));
+            dtCustomerRoutes.Columns.Add("RouteOptions", typeof(string));
+            dtCustomerRoutes.Columns.Add("VersionNumber", typeof(int));
+            dtCustomerRoutes.BeginLoadData();
+            foreach (var customerRoute in customerRouteDataList)
+            {
+                DataRow dr = dtCustomerRoutes.NewRow();
+                dr["CustomerId"] = customerRoute.CustomerId;
+                dr["Code"] = customerRoute.Code;
+                dr["SaleZoneId"] = customerRoute.SaleZoneId;
+                dr["IsBlocked"] = customerRoute.IsBlocked;
+
+                if (customerRoute.ExecutedRuleId.HasValue)
+                    dr["ExecutedRuleId"] = customerRoute.ExecutedRuleId;
+                else
+                    dr["ExecutedRuleId"] = DBNull.Value;
+
+                if (!string.IsNullOrEmpty(customerRoute.Options))
+                    dr["RouteOptions"] = customerRoute.Options;
+                else
+                    dr["RouteOptions"] = DBNull.Value;
+
+                dr["VersionNumber"] = customerRoute.VersionNumber;
+                dtCustomerRoutes.Rows.Add(dr);
+            }
+            dtCustomerRoutes.EndLoadData();
+            return dtCustomerRoutes;
+        }
+
+        #endregion
+
+        #region Mappers
+
+        private CustomerRoute CustomerRouteMapper(IDataReader reader)
+        {
+            string saleZoneServiceIds = (reader["SaleZoneServiceIds"] as string);
+
+            return new CustomerRoute()
+            {
+                CustomerId = (int)reader["CustomerID"],
+                CustomerName = reader["CustomerName"] as string,
+                Code = reader["Code"] as string,
+                SaleZoneId = (long)reader["SaleZoneID"],
+                SaleZoneName = reader["SaleZoneName"] as string,
+                Rate = GetReaderValue<decimal?>(reader, "Rate"),
+                SaleZoneServiceIds = !string.IsNullOrEmpty(saleZoneServiceIds) ? new HashSet<int>(saleZoneServiceIds.Split(',').Select(itm => int.Parse(itm))) : null,
+                IsBlocked = (bool)reader["IsBlocked"],
+                ExecutedRuleId = GetReaderValue<int?>(reader, "ExecutedRuleId"),
+                Options = reader["RouteOptions"] != DBNull.Value ? DeserializeOptions(reader["RouteOptions"] as string) : null,
+                VersionNumber = GetReaderValue<int>(reader, "VersionNumber")
+            };
+        }
+
+        private CustomerRouteData CustomerRouteDataMapper(IDataReader reader)
+        {
+            return new CustomerRouteData()
+            {
+                CustomerId = (int)reader["CustomerID"],
+                Code = reader["Code"] as string,
+                SaleZoneId = (long)reader["SaleZoneID"],
+                IsBlocked = (bool)reader["IsBlocked"],
+                ExecutedRuleId = GetReaderValue<int?>(reader, "ExecutedRuleId"),
+                Options = reader["RouteOptions"] as string,
+                VersionNumber = GetReaderValue<int>(reader, "VersionNumber")
+            };
+        }
+
         #endregion
 
         #region Queries
 
-        private string query_GetAffectedCustomerRoutes = @" SELECT cr.[CustomerId]
+        const string query_GetAffectedCustomerRoutes = @" SELECT cr.[CustomerId]
                                                                   ,cr.[Code]
                                                                   ,cr.[SaleZoneId]
                                                                   ,cr.[IsBlocked]
