@@ -13,9 +13,7 @@ namespace TOne.WhS.DBSync.Entities
         public string CustomerId { get; set; }
         public IEnumerable<SupplierOption> SupplierOptions { get; set; }
         public string SupplierOptionsString { get; set; }
-
         public IEnumerable<BlockedOption> BlockedOptions { get; set; }
         public string BlockedOptionsString { get; set; }
-
     }
 }
