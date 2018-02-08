@@ -138,7 +138,7 @@ app.directive("vrGenericdataTabscontainereditorDefinition", ["UtilsService", "VR
                     getDataRecordTypeId: function () {
                         return context.getDataRecordTypeId();
                     }
-                }
+                };
                 return currentContext;
             }
 
