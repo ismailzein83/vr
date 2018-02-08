@@ -110,7 +110,8 @@ namespace Vanrise.Common
                         {
                             try
                             {
-                                handler.WriteEntry(eventType, viewRequiredPermissionSetId, exceptionDetail, entryType, String.Format(messageFormat, args), type.Assembly.GetName().Name, type.FullName, method.Name);
+                                string message = args != null && args.Length > 0 ? String.Format(messageFormat, args) : messageFormat;
+                                handler.WriteEntry(eventType, viewRequiredPermissionSetId, exceptionDetail, entryType, message, type.Assembly.GetName().Name, type.FullName, method.Name);
                             }
                             catch(Exception ex)
                             {
