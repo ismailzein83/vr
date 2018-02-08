@@ -347,7 +347,9 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                 return obj;
             }
             function getCodeNumberListData() {
-                var codeList = [];
+                var codeList;
+                if ($scope.scopeModel.codeNumberList.length > 0)
+                    codeList =[];
                 for (var i = 0; i < $scope.scopeModel.codeNumberList.length; i++) {
                     var codeNumberObject = $scope.scopeModel.codeNumberList[i];
                     var faultTicketDescriptionSetting =

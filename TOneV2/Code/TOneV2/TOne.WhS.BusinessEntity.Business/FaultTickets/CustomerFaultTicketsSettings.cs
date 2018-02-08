@@ -23,6 +23,9 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 case "SerialNumberPattern": return new ConfigManager().GetFaultTicketsCustomerSerialNumberPattern();
                 case "SerialNumberInitialSequence": return new ConfigManager().GetFaultTicketsCustomerSerialNumberInitialSequence();
+                case "OpenTicketMailTemplate": return new ConfigManager().GetFaultTicketsCustomerOpenMailTemplateId();
+                case "PendingTicketMailTemplate": return new ConfigManager().GetFaultTicketsCustomerPendingMailTemplateId();
+                case "ClosedTicketMailTemplate": return new ConfigManager().GetFaultTicketsCustomerClosedMailTemplateId();
                 default: return null;
             }
         }
