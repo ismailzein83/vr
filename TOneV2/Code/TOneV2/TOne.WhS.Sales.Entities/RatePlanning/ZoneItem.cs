@@ -110,6 +110,7 @@ namespace TOne.WhS.Sales.Entities
         #endregion
 
         #region Route Options
+        public IEnumerable<RPRouteOptionDetail> RouteOptionsDetailsForView { get; set; }
         public RPRouteDetail RPRouteDetail { get; set; }
         public List<decimal?> Costs { get; set; }
         #endregion

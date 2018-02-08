@@ -9,11 +9,19 @@
             <vr-whs-be-period-selector on-ready="scopeModel.onPeriodSelectorReady" label="Last" normal-col-num="6" isrequired="true"></vr-whs-be-period-selector>
         </vr-row>
     </vr-tab>
-    <vr-tab header="'Copy To Other Customers'">
+    <vr-tab header="'Copy To Subscribers'">
         <vr-row>
             <vr-columns>
                 <vr-label>Follow Publisher Rate's BED <vr-hint value={{scopeModel.hintText}}></vr-hint></vr-label>
                 <vr-switch value="scopeModel.followPublisherRatesBED"></vr-switch>
+            </vr-columns>
+        </vr-row>
+    </vr-tab>
+    <vr-tab header="'Show Blocked Suppliers'">
+        <vr-row>
+            <vr-columns>
+                <vr-label>Show Blocked Suppliers</vr-label>
+                <vr-switch value="scopeModel.includeBlockedSuppliers"></vr-switch>
             </vr-columns>
         </vr-row>
     </vr-tab>

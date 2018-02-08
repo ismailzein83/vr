@@ -59,6 +59,7 @@ app.directive('vrWhsSalesRateplanSettingsEditor', ['UtilsService', 'VRUIUtilsSer
                     tqiPeriodValue = payload.data.TQIPeriodValue;
                     tqiPeriodType = payload.data.TQIPeriodType;
                     $scope.scopeModel.followPublisherRatesBED = payload.data.FollowPublisherRatesBED;
+                    $scope.scopeModel.includeBlockedSuppliers = payload.data.IncludeBlockedSuppliers;
                 }
 
                 var promises = [];
@@ -107,6 +108,7 @@ app.directive('vrWhsSalesRateplanSettingsEditor', ['UtilsService', 'VRUIUtilsSer
                     data.TQIPeriodType = period.periodType;
                 }
                 data.FollowPublisherRatesBED = $scope.scopeModel.followPublisherRatesBED;
+                data.IncludeBlockedSuppliers = $scope.scopeModel.includeBlockedSuppliers;
                 return data;
             };
 

@@ -28,6 +28,8 @@ namespace TOne.WhS.Sales.Entities
         public BulkActionType BulkAction { get; set; }
 
         public DateTime EffectiveOn { get; set; }
+
+        public bool IncludeBlockedSuppliers { get; set; }
     }
 
     public class ZoneItemsFilter

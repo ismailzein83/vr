@@ -13,6 +13,8 @@ namespace TOne.WhS.Sales.Entities
 
         RPRouteDetail Route { get; }
 
+        int? NumberOfOptions { get; }
+
         Decimal Cost { set; }
 
         object CustomObject { get; set; }

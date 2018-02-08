@@ -17,12 +17,19 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
             if (context.Route.RouteOptionsDetails != null)
             {
                 Decimal cost = 0;
+                int totalPercentage = 0;
+
                 foreach (var option in context.Route.RouteOptionsDetails)
                 {
                     if (option.Percentage.HasValue)
+                    { 
+                        totalPercentage += option.Percentage.Value;
                         cost += (option.ConvertedSupplierRate * option.Percentage.Value);
+                    }
                 }
-                context.Cost = cost / 100;
+                if (totalPercentage > 0)
+                    context.Cost = cost / totalPercentage;
+                else context.Cost = 0;
             }
         }
     }

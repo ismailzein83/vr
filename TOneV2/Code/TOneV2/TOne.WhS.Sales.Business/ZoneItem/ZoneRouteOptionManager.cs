@@ -25,14 +25,16 @@ namespace TOne.WhS.Sales.Business
 
         private Dictionary<long, RPRouteDetail> _rpRoutesByZoneId = new Dictionary<long, RPRouteDetail>();
 
-        public ZoneRouteOptionManager(SalePriceListOwnerType ownerType, int ownerId, int routingDatabaseId, Guid policyConfigId, int? numberOfOptions, IEnumerable<RPZone> rpZones, List<CostCalculationMethod> costCalculationMethods, Guid? rateCalculationCostColumnConfigId, RateCalculationMethod rateCalculationMethod, int currencyId, int longPrecisionValue, int normalPrecisionValue)
+        private int? _numberOfOptions;
+        private bool _includeBlockedSuppliers;
+        public ZoneRouteOptionManager(SalePriceListOwnerType ownerType, int ownerId, int routingDatabaseId, Guid policyConfigId, int? numberOfOptions, IEnumerable<RPZone> rpZones, List<CostCalculationMethod> costCalculationMethods, Guid? rateCalculationCostColumnConfigId, RateCalculationMethod rateCalculationMethod, int currencyId, int longPrecisionValue, int normalPrecisionValue, bool includeBlockedSuppliers)
         {
             if (rpZones != null && rpZones.Count() > 0)
             {
                 int? customerId = null;
                 if (ownerType == SalePriceListOwnerType.Customer)
-                    customerId = ownerId; 
-                IEnumerable<RPRouteDetail> routes = new RPRouteManager().GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, rpZones, currencyId, customerId, true);
+                    customerId = ownerId;
+                IEnumerable<RPRouteDetail> routes = new RPRouteManager().GetRPRoutes(routingDatabaseId, policyConfigId, null, rpZones, currencyId, customerId, includeBlockedSuppliers);
                 StructureRPRoutesByZoneId(routes);
             }
 
@@ -42,6 +44,8 @@ namespace TOne.WhS.Sales.Business
 
             _longPrecisionValue = longPrecisionValue;
             _normalPrecisionValue = normalPrecisionValue;
+            _numberOfOptions = numberOfOptions;
+            _includeBlockedSuppliers = includeBlockedSuppliers;
         }
 
         #endregion
@@ -69,6 +73,9 @@ namespace TOne.WhS.Sales.Business
             foreach (ZoneItem zoneItem in zoneItems)
             {
                 RPRouteDetail route = _rpRoutesByZoneId.GetRecord(zoneItem.ZoneId);
+                zoneItem.RouteOptionsDetailsForView = getRouteOptionDetailsForView(route, _numberOfOptions);
+                if (_includeBlockedSuppliers && route != null && route.RouteOptionsDetails != null)
+                    route.RouteOptionsDetails = route.RouteOptionsDetails.FindAllRecords(item => item.SupplierStatus != SupplierStatus.Block);
                 zoneItem.RPRouteDetail = route;
 
                 if (route != null && route.RouteOptionsDetails != null && route.RouteOptionsDetails.Count() > 0)
@@ -78,6 +85,8 @@ namespace TOne.WhS.Sales.Business
                 }
                 else if (_costCalculationMethods != null)
                     zoneItem.Costs = emptyCosts;
+                if (_numberOfOptions.HasValue && route != null && route.RouteOptionsDetails != null && _numberOfOptions < route.RouteOptionsDetails.Count())
+                    zoneItem.RPRouteDetail.RouteOptionsDetails = route.RouteOptionsDetails.Take(_numberOfOptions.Value);
             }
         }
 
@@ -92,7 +101,7 @@ namespace TOne.WhS.Sales.Business
 
             for (int i = 0; i < _costCalculationMethods.Count; i++)
             {
-                var context = new CostCalculationMethodContext() { ZoneIds = zoneIds, Route = route, CustomObject = customObjects[i] };
+                var context = new CostCalculationMethodContext() { ZoneIds = zoneIds, Route = route, CustomObject = customObjects[i], NumberOfOptions = _numberOfOptions.Value };
                 _costCalculationMethods[i].CalculateCost(context);
                 customObjects[i] = context.CustomObject;
                 zoneItem.Costs.Add(decimal.Round(context.Cost, _longPrecisionValue));
@@ -126,5 +135,26 @@ namespace TOne.WhS.Sales.Business
         }
 
         #endregion
+
+        private IEnumerable<RPRouteOptionDetail> getRouteOptionDetailsForView(RPRouteDetail route, int? numberOfOptions)
+        {
+            int nbOfActiveRouteOptionDetails = 0;
+            List<RPRouteOptionDetail> routeOptionDetailsResult = new List<RPRouteOptionDetail>();
+            if (route != null && route.RouteOptionsDetails != null && route.RouteOptionsDetails.Count() > 0)
+            {
+                if (!numberOfOptions.HasValue)
+                    return route.RouteOptionsDetails;
+                int index = 0;
+                while (index < route.RouteOptionsDetails.Count() && nbOfActiveRouteOptionDetails < numberOfOptions)
+                {
+                    var routeOptionsDetail = route.RouteOptionsDetails.ElementAt(index);
+                    routeOptionDetailsResult.Add(routeOptionsDetail);
+                    if (routeOptionsDetail.SupplierStatus != SupplierStatus.Block)
+                        nbOfActiveRouteOptionDetails++;
+                    index++;
+                }
+            }
+            return routeOptionDetailsResult;
+        }
     }
 }

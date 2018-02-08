@@ -28,9 +28,14 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
 
             DurationByZone durationByZone = context.CustomObject as DurationByZone;
 
-            decimal sumOfDuration = 0; 
+            decimal sumOfDuration = 0;
             decimal sumOfRatesMultipliedByDuration = 0;
-            foreach (RPRouteOptionDetail option in context.Route.RouteOptionsDetails)
+            IEnumerable<RPRouteOptionDetail> routeOptionsDetails = new List<RPRouteOptionDetail>();
+            if (context.NumberOfOptions.HasValue && context.Route.RouteOptionsDetails.Count() >= context.NumberOfOptions.Value)
+                routeOptionsDetails = context.Route.RouteOptionsDetails.Take(context.NumberOfOptions.Value);
+            else routeOptionsDetails = context.Route.RouteOptionsDetails;
+
+            foreach (RPRouteOptionDetail option in routeOptionsDetails)
             {
                 DurationBySupplier durationBySupplier = null;
                 if (durationByZone.TryGetValue(option.SaleZoneId, out durationBySupplier))

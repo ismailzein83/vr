@@ -19,8 +19,12 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
                 throw new ArgumentNullException("context.Route");
             if (context.Route.RouteOptionsDetails != null)
             {
+                IEnumerable<RPRouteOptionDetail>routeOptionsDetails = new List<RPRouteOptionDetail>();
+                if (context.NumberOfOptions.HasValue && context.Route.RouteOptionsDetails.Count() >= context.NumberOfOptions.Value)
+                    routeOptionsDetails = context.Route.RouteOptionsDetails.Take(context.NumberOfOptions.Value);
+                else routeOptionsDetails = context.Route.RouteOptionsDetails;
                 List<RouteOptionPercentageTarget> percentageOptions = new List<RouteOptionPercentageTarget>();
-                foreach(var percentageOption in context.Route.RouteOptionsDetails)
+                foreach(var percentageOption in routeOptionsDetails)
                 {
                     percentageOptions.Add(new RouteOptionPercentageTarget());
                 }
@@ -28,7 +32,7 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
                 this.PercentageSettings.Execute(percentageExecutionContext);
                 Decimal cost = 0;
                 int currentIndex = 0;
-                foreach (var option in context.Route.RouteOptionsDetails)
+                foreach (var option in routeOptionsDetails)
                 {
                     var percentageOption = percentageOptions[currentIndex];
                     if(percentageOption.Percentage.HasValue)

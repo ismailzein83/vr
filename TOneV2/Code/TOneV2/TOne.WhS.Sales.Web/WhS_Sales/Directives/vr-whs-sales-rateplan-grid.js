@@ -186,30 +186,30 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         rate = dataItem.CurrentRate;
 
                     var routeOptions = getRouteOptions(dataItem.RPRouteDetail);
-
+                    var routeOptionsForView = dataItem.RouteOptionsDetailsForView;
                     if (rate == undefined) {
                         setColorOfRouteOptions(routeOptions, null);
                         rowStyle = { CssClass: 'bg-success' };
                     }
                     else { // Validate the rate
-                        if (routeOptions != null) {
+                        if (routeOptionsForView != null && routeOptionsForView.length>0) {
                             var array = []; // Stores the indexes of route options having a greater rate than the rate to validate
 
-                            for (var i = 0; i < routeOptions.length; i++) {
-                                if (routeOptions[i].ConvertedSupplierRate > rate)
+                            for (var i = 0; i < routeOptionsForView.length; i++) {
+                                if (routeOptionsForView[i].ConvertedSupplierRate > rate)
                                     array.push(i);
                             }
 
                             if (array.length == routeOptions.length) {
-                                setColorOfRouteOptions(routeOptions, null);
+                                setColorOfRouteOptions(routeOptionsForView, null);
                                 rowStyle = { CssClass: "bg-danger" };
                             }
                             else if (array.length > 0) {
-                                for (var i = 0; i < routeOptions.length; i++)
-                                    routeOptions[i].Color = (UtilsService.contains(array, i)) ? 'orange' : null;
+                                for (var i = 0; i < routeOptionsForView.length; i++)
+                                    routeOptionsForView[i].Color = (UtilsService.contains(array, i)) ? 'orange': null;
                             }
                             else {
-                                setColorOfRouteOptions(routeOptions, null);
+                                setColorOfRouteOptions(routeOptionsForView, null);
                             }
                         }
                     }
@@ -544,6 +544,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 });
 
                 function setGridQueryProperties() {
+                    gridQuery.IncludeBlockedSuppliers = gridQuery.Settings.IncludeBlockedSuppliers;
                     //var pageInfo = gridAPI.getPageInfo();
                     if (gridQuery.Filter == undefined)
                         gridQuery.Filter = {};
@@ -827,7 +828,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     RoutingDatabaseId: gridQuery.RoutingDatabaseId,
                     RoutingProductId: dataItem.EffectiveRoutingProductId,
                     SaleZoneId: dataItem.ZoneId,
-                    RouteOptions: getRouteOptions(dataItem.RPRouteDetail),
+                    RouteOptions: dataItem.RouteOptionsDetailsForView,
                     CurrencyId: gridQuery.CurrencyId
                 };
             }

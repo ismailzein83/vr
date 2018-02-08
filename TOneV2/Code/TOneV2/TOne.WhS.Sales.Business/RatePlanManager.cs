@@ -321,8 +321,8 @@ namespace TOne.WhS.Sales.Business
                     SaleZoneId = zoneItem.ZoneId
                 });
             }
-
-            var routeOptionManager = new ZoneRouteOptionManager(input.OwnerType, input.OwnerId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, rpZones, input.CostCalculationMethods, input.RateCalculationCostColumnConfigId, input.RateCalculationMethod, input.CurrencyId, longPrecisionValue, normalPrecisionValue);
+            bool includeBlockedSuppliers = GetIncludeBlockedSuppliers();
+            var routeOptionManager = new ZoneRouteOptionManager(input.OwnerType, input.OwnerId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, rpZones, input.CostCalculationMethods, input.RateCalculationCostColumnConfigId, input.RateCalculationMethod, input.CurrencyId, longPrecisionValue, normalPrecisionValue, includeBlockedSuppliers);
             routeOptionManager.SetZoneRouteOptionProperties(new List<ZoneItem>() { zoneItem });
 
             return zoneItem;
@@ -358,6 +358,11 @@ namespace TOne.WhS.Sales.Business
         public bool GetFollowPublisherRatesBED()
         {
             return GetRatePlanSettingsData().FollowPublisherRatesBED;
+        }
+
+        public bool GetIncludeBlockedSuppliers()
+        {
+            return GetRatePlanSettingsData().IncludeBlockedSuppliers;
         }
 
         public SaleAreaSettingsData GetSaleAreaSettingsData()
@@ -642,7 +647,8 @@ namespace TOne.WhS.Sales.Business
                 Draft = draft,
                 CountryBEDsByCountryId = countryBEDsByCountryId,
                 RoutingProductLocator = routingProductLocator,
-                CurrentRateLocator = currentRateLocator
+                CurrentRateLocator = currentRateLocator,
+                IncludeBlockedSuppliers = input.IncludeBlockedSuppliers,
             };
 
             return BuildZoneItems(ratePlanZoneCreationInput);
@@ -1138,7 +1144,7 @@ namespace TOne.WhS.Sales.Business
             }
 
             IEnumerable<RPZone> rpZones = zoneItems.MapRecords(x => new RPZone() { SaleZoneId = x.ZoneId, RoutingProductId = x.EffectiveRoutingProductId.Value }, x => x.EffectiveRoutingProductId.HasValue);
-            routeOptionManager = new ZoneRouteOptionManager(input.OwnerType, input.OwnerId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, rpZones, input.CostCalculationMethods, null, null, input.CurrencyId, longPrecisionValue, normalPrecisionValue);
+            routeOptionManager = new ZoneRouteOptionManager(input.OwnerType, input.OwnerId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, rpZones, input.CostCalculationMethods, null, null, input.CurrencyId, longPrecisionValue, normalPrecisionValue,input.IncludeBlockedSuppliers);
             routeOptionManager.SetZoneRouteOptionProperties(zoneItems);
 
             return zoneItems;
@@ -1194,7 +1200,8 @@ namespace TOne.WhS.Sales.Business
             }
 
             IEnumerable<RPZone> contextRPZones = contextZoneItems.MapRecords(x => new RPZone() { SaleZoneId = x.ZoneId, RoutingProductId = x.EffectiveRoutingProductId.Value }, x => x.EffectiveRoutingProductId.HasValue);
-            ZoneRouteOptionManager routeOptionManager = new ZoneRouteOptionManager(input.OwnerType, input.OwnerId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, contextRPZones, input.CostCalculationMethods, null, null, input.CurrencyId, input.LongPrecisionValue, input.NormalPrecisionValue);
+            bool includeBlockedSuppliers = GetIncludeBlockedSuppliers();
+            ZoneRouteOptionManager routeOptionManager = new ZoneRouteOptionManager(input.OwnerType, input.OwnerId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, contextRPZones, input.CostCalculationMethods, null, null, input.CurrencyId, input.LongPrecisionValue, input.NormalPrecisionValue, includeBlockedSuppliers);
             routeOptionManager.SetZoneRouteOptionProperties(contextZoneItems.Values);
         }
         private void SetDraftVariables(SalePriceListOwnerType ownerType, int ownerId, out Changes draft, out Dictionary<long, ZoneChanges> zoneDraftsByZoneId, out IEnumerable<int> newCountryIds, out IEnumerable<int> changedCountryIds)
@@ -1276,6 +1283,7 @@ namespace TOne.WhS.Sales.Business
             public Dictionary<int, DateTime> CountryBEDsByCountryId { get; set; }
             public SaleEntityZoneRoutingProductLocator RoutingProductLocator { get; set; }
             public SaleEntityZoneRateLocator CurrentRateLocator { get; set; }
+            public bool IncludeBlockedSuppliers { get; set; }
         }
 
         private void SetNumberPrecisionValues(out int normalPrecisionValue, out int longPrecisionValue)
