@@ -22,11 +22,34 @@ app.directive('vrWhsBeFaultticketsSettingsEditor', ['UtilsService', 'VRUIUtilsSe
 
             this.initializeController = initializeController;
 
+            var customerSetting;
+            var supplierSetting;
+
             var customerSerialNumberEditorAPI;
             var customerSerialNumberEditorReadyDeferred = UtilsService.createPromiseDeferred();
 
             var supplierSerialNumberEditorAPI;
             var supplierSerialNumberEditorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var customerOpenMailTemplateSelectorAPI;
+            var customerOpenMailTemplateSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var customerPendingMailTemplateSelectorAPI;
+            var customerPendingMailTemplateSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var customerClosedMailTemplateSelectorAPI;
+            var customerClosedMailTemplateSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var supplierOpenMailTemplateSelectorAPI;
+            var supplierOpenMailTemplateSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var supplierPendingMailTemplateSelectorAPI;
+            var supplierPendingMailTemplateSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var supplierClosedMailTemplateSelectorAPI;
+            var supplierClosedMailTemplateSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+
 
             $scope.scopeModel = {};
             $scope.scopeModel.customerInitialSequence = 0;
@@ -34,6 +57,30 @@ app.directive('vrWhsBeFaultticketsSettingsEditor', ['UtilsService', 'VRUIUtilsSe
             $scope.scopeModel.onCustomerSerialNumberEditorReady = function (api) {
                 customerSerialNumberEditorAPI = api;
                 customerSerialNumberEditorReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onCustomerOpenMailTemplateSelectorReady = function (api) {
+                customerOpenMailTemplateSelectorAPI = api;
+                customerOpenMailTemplateSelectorReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onCustomerPendingMailTemplateSelectorReady = function (api) {
+                customerPendingMailTemplateSelectorAPI = api;
+                customerPendingMailTemplateSelectorReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onCustomerClosedMailTemplateSelectorReady = function (api) {
+                customerClosedMailTemplateSelectorAPI = api;
+                customerClosedMailTemplateSelectorReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onSupplierOpenMailTemplateSelectorReady = function (api) {
+                supplierOpenMailTemplateSelectorAPI = api;
+                supplierOpenMailTemplateSelectorReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onSupplierPendingMailTemplateSelectorReady = function (api) {
+                supplierPendingMailTemplateSelectorAPI = api;
+                supplierPendingMailTemplateSelectorReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onSupplierClosedMailTemplateSelectorReady = function (api) {
+                supplierClosedMailTemplateSelectorAPI = api;
+                supplierClosedMailTemplateSelectorReadyDeferred.resolve();
             };
             $scope.scopeModel.onSupplierSerialNumberEditorReady = function (api) {
                 supplierSerialNumberEditorAPI = api;
@@ -50,8 +97,7 @@ app.directive('vrWhsBeFaultticketsSettingsEditor', ['UtilsService', 'VRUIUtilsSe
                 api.load = function (payload) {
                     var promises = [];
                     var data;
-                    var customerSetting;
-                    var supplierSetting;
+                   
                     if (payload != undefined) {
                         data = payload.data;
                     }
@@ -67,8 +113,21 @@ app.directive('vrWhsBeFaultticketsSettingsEditor', ['UtilsService', 'VRUIUtilsSe
 
                     var loadCustomerSerialNumberEditorPromise = loadCustomerSerialNumberEditor(customerSetting);
                     var loadSupplierSerialNumberEditorPromise = loadSupplierSerialNumberEditor(supplierSetting);
+                    var loadCustomerOpenMailTemplateSelectorPromise = loadCustomerOpenMailTemplateSelector();
+                    var loadCustomerPendingMailTemplateSelectorPromise = loadCustomerPendingMailTemplateSelector();
+                    var loadCustomerClosedMailTemplateSelectorPromise = loadCustomerClosedMailTemplateSelector();
+                    var loadSupplierOpenMailTemplateSelectorPromise = loadSupplierOpenMailTemplateSelector();
+                    var loadSupplierPendingMailTemplateSelectorPromise = loadSupplierPendingMailTemplateSelector();
+                    var loadSupplierClosedMailTemplateSelectorPromise = loadSupplierClosedMailTemplateSelector();
+
                     promises.push(loadCustomerSerialNumberEditorPromise);
                     promises.push(loadSupplierSerialNumberEditorPromise);
+                    promises.push(loadCustomerOpenMailTemplateSelectorPromise);
+                    promises.push(loadCustomerPendingMailTemplateSelectorPromise);
+                    promises.push(loadCustomerClosedMailTemplateSelectorPromise);
+                    promises.push(loadSupplierOpenMailTemplateSelectorPromise);
+                    promises.push(loadSupplierPendingMailTemplateSelectorPromise);
+                    promises.push(loadSupplierClosedMailTemplateSelectorPromise);
 
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -79,11 +138,17 @@ app.directive('vrWhsBeFaultticketsSettingsEditor', ['UtilsService', 'VRUIUtilsSe
                         $type: "TOne.WhS.BusinessEntity.Entities.FaultTicketsSettingsData, TOne.WhS.BusinessEntity.Entities",
                         CustomerSetting: {
                             SerialNumberPattern: customerSerialNumberEditorAPI.getData().serialNumberPattern,
-                            InitialSequence: $scope.scopeModel.customerInitialSequence
+                            InitialSequence: $scope.scopeModel.customerInitialSequence,
+                            OpenMailTemplateId :customerOpenMailTemplateSelectorAPI.getSelectedIds(),
+                            PendingMailTemplateId:customerPendingMailTemplateSelectorAPI.getSelectedIds(),
+                            ClosedMailTemplateId: customerClosedMailTemplateSelectorAPI.getSelectedIds(),
                         },
                         SupplierSetting : {
                             SerialNumberPattern: supplierSerialNumberEditorAPI.getData().serialNumberPattern,
-                            InitialSequence: $scope.scopeModel.supplierInitialSequence
+                            InitialSequence: $scope.scopeModel.supplierInitialSequence,
+                            OpenMailTemplateId: supplierOpenMailTemplateSelectorAPI.getSelectedIds(),
+                            PendingMailTemplateId: supplierPendingMailTemplateSelectorAPI.getSelectedIds(),
+                            ClosedMailTemplateId: supplierClosedMailTemplateSelectorAPI.getSelectedIds(),
                 }
                     };
                 };
@@ -115,6 +180,91 @@ app.directive('vrWhsBeFaultticketsSettingsEditor', ['UtilsService', 'VRUIUtilsSe
                     VRUIUtilsService.callDirectiveLoad(supplierSerialNumberEditorAPI, payload, serialNumberEditorEditorLoadDeferred);
                 });
                 return serialNumberEditorEditorLoadDeferred.promise;
+            }
+            function loadCustomerOpenMailTemplateSelector() {
+
+                var customerOpenMailTemplateSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                customerOpenMailTemplateSelectorReadyDeferred.promise.then(function () {
+                    var payload = {
+                        filter: {
+                            VRMailMessageTypeId: "293e09ce-4238-4eef-9c60-c069dddc588d",
+                        },
+                        selectedIds:customerSetting!=undefined?customerSetting.OpenMailTemplateId:undefined
+
+                    };
+                    VRUIUtilsService.callDirectiveLoad(customerOpenMailTemplateSelectorAPI, payload, customerOpenMailTemplateSelectorLoadDeferred);
+                });
+                return customerOpenMailTemplateSelectorLoadDeferred.promise;
+            }
+            function loadCustomerPendingMailTemplateSelector() {
+
+                var customerPendingMailTemplateSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                customerPendingMailTemplateSelectorReadyDeferred.promise.then(function () {
+                    var payload = {
+                        filter: {
+                            VRMailMessageTypeId: "293e09ce-4238-4eef-9c60-c069dddc588d"
+                        },
+                        selectedIds: customerSetting != undefined ? customerSetting.PendingMailTemplateId : undefined
+                    };
+                    VRUIUtilsService.callDirectiveLoad(customerPendingMailTemplateSelectorAPI, payload, customerPendingMailTemplateSelectorLoadDeferred);
+                });
+                return customerPendingMailTemplateSelectorLoadDeferred.promise;
+            }
+            function loadCustomerClosedMailTemplateSelector() {
+
+                var customerClosedMailTemplateSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                customerClosedMailTemplateSelectorReadyDeferred.promise.then(function () {
+                    var payload = {
+                        filter: {
+                            VRMailMessageTypeId: "293e09ce-4238-4eef-9c60-c069dddc588d"
+                        },
+                        selectedIds: customerSetting != undefined ? customerSetting.ClosedMailTemplateId : undefined
+                    };
+                    VRUIUtilsService.callDirectiveLoad(customerClosedMailTemplateSelectorAPI, payload, customerClosedMailTemplateSelectorLoadDeferred);
+                });
+                return customerClosedMailTemplateSelectorLoadDeferred.promise;
+            }
+            function loadSupplierOpenMailTemplateSelector() {
+
+                var supplierOpenMailTemplateSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                supplierOpenMailTemplateSelectorReadyDeferred.promise.then(function () {
+                    var payload = {
+                        filter: {
+                            VRMailMessageTypeId: "041c536c-8a83-40bc-9941-315a032c74f8"
+                        },
+                        selectedIds: supplierSetting != undefined ? supplierSetting.OpenMailTemplateId : undefined
+                    };
+                    VRUIUtilsService.callDirectiveLoad(supplierOpenMailTemplateSelectorAPI, payload, supplierOpenMailTemplateSelectorLoadDeferred);
+                });
+                return supplierOpenMailTemplateSelectorLoadDeferred.promise;
+            }
+            function loadSupplierPendingMailTemplateSelector() {
+
+                var supplierPendingMailTemplateSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                supplierPendingMailTemplateSelectorReadyDeferred.promise.then(function () {
+                    var payload = {
+                        filter: {
+                            VRMailMessageTypeId: "041c536c-8a83-40bc-9941-315a032c74f8"
+                        },
+                        selectedIds: supplierSetting != undefined ? supplierSetting.PendingMailTemplateId : undefined
+                    };
+                    VRUIUtilsService.callDirectiveLoad(supplierPendingMailTemplateSelectorAPI, payload, supplierPendingMailTemplateSelectorLoadDeferred);
+                });
+                return supplierPendingMailTemplateSelectorLoadDeferred.promise;
+            }
+            function loadSupplierClosedMailTemplateSelector() {
+
+                var supplierClosedMailTemplateSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                supplierClosedMailTemplateSelectorReadyDeferred.promise.then(function () {
+                    var payload = {
+                        filter: {
+                            VRMailMessageTypeId: "041c536c-8a83-40bc-9941-315a032c74f8"
+                        },
+                        selectedIds: supplierSetting != undefined ? supplierSetting.ClosedMailTemplateId : undefined
+                    };
+                    VRUIUtilsService.callDirectiveLoad(supplierClosedMailTemplateSelectorAPI, payload, supplierClosedMailTemplateSelectorLoadDeferred);
+                });
+                return supplierClosedMailTemplateSelectorLoadDeferred.promise;
             }
 
 
