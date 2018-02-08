@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
@@ -26,12 +23,14 @@ namespace TOne.WhS.Routing.Entities
 
         public Dictionary<Guid, IEnumerable<RPRouteOption>> RPOptionsByPolicy { get; set; }
     }
+
     public class RPRouteBatch
     {
         public RPRouteBatch()
         {
             this.RPRoutes = new List<RPRoute>();
         }
+
         public List<RPRoute> RPRoutes { get; set; }
     }
 }
