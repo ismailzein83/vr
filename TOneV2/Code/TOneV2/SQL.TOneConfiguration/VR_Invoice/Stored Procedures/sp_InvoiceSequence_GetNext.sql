@@ -30,7 +30,7 @@ BEGIN
 		UPDATE [VR_Invoice].[InvoiceSequence]
 		SET @NextSequence = LastValue + 1,
 			LastValue =  LastValue + 1	
-		WHERE InvoiceTypeID = @InvoiceTypeID AND SequenceKey = @SequenceKey
+		WHERE InvoiceTypeID = @InvoiceTypeID AND SequenceKey = @SequenceKey AND SequenceGroup = @SequenceGroup
 	END
 
 	SELECT @NextSequence

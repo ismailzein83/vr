@@ -730,6 +730,8 @@
     <Build Include="rules\Stored Procedures\sp_Rule_DeleteRuleAndRuleChanged.sql" />
     <Build Include="common\Tables\Enumerations.sql" />
     <Build Include="common\Stored Procedures\sp_Enumerations_Delete.sql" />
+    <Build Include="common\Tables\VRSequence.sql" />
+    <Build Include="common\Stored Procedures\sp_VRSequence_GetNext.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
