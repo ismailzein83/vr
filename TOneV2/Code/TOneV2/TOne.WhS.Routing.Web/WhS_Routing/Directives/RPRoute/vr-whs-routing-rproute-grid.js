@@ -20,7 +20,6 @@ app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService
 
             },
             templateUrl: "/Client/Modules/WhS_Routing/Directives/RPRoute/Templates/RPRouteGridTemplate.html"
-
         };
 
         function customerRouteGrid($scope, ctrl, $attrs) {
@@ -54,28 +53,28 @@ app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     var loadGridPromiseDeffered = UtilsService.createPromiseDeferred();
 
-                    WhS_Routing_RPRouteAPIService.GetFilteredRPRoutes(dataRetrievalInput)
-                       .then(function (response) {
-                           var promises = [];
-                           if (response && response.Data) {
-                               for (var i = 0; i < response.Data.length; i++) {
-                                   var rpRouteDetail = response.Data[i];
-                                   gridDrillDownTabsObj.setDrillDownExtensionObject(rpRouteDetail);
-                                   promises.push(setRouteOptionDetailsDirectiveonEachItem(rpRouteDetail));
-                               }
-                           }
-                           $scope.showGrid = true;
-                           onResponseReady(response);
+                    WhS_Routing_RPRouteAPIService.GetFilteredRPRoutes(dataRetrievalInput).then(function (response) {
+                        var promises = [];
+                        if (response && response.Data) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                var rpRouteDetail = response.Data[i];
+                                gridDrillDownTabsObj.setDrillDownExtensionObject(rpRouteDetail);
+                                promises.push(setRouteOptionDetailsDirectiveonEachItem(rpRouteDetail));
+                            }
+                        }
+                        onResponseReady(response);
 
-                           UtilsService.waitMultiplePromises(promises).then(function () {
-                               loadGridPromiseDeffered.resolve();
-                           }).catch(function (error) {
-                               loadGridPromiseDeffered.reject();
-                           });
-                       })
-                       .catch(function (error) {
-                           VRNotificationService.notifyException(error, $scope);
-                       });
+                        UtilsService.waitMultiplePromises(promises).then(function () {
+                            $scope.showGrid = true;
+                            loadGridPromiseDeffered.resolve();
+                        }).catch(function (error) {
+                            VRNotificationService.notifyException(error, $scope);
+                            loadGridPromiseDeffered.reject();
+                        });
+                    }).catch(function (error) {
+                        VRNotificationService.notifyException(error, $scope);
+                        loadGridPromiseDeffered.reject();
+                    });
 
                     return loadGridPromiseDeffered.promise;
                 };

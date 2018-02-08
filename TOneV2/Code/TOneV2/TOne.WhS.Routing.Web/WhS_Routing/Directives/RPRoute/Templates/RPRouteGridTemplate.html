@@ -1,9 +1,8 @@
 ﻿<div ng-show="showGrid">
-
-    <vr-datagrid datasource="rpRoutes"
+    <vr-datagrid on-ready="onGridReady"
+                 datasource="rpRoutes"
                  dataretrievalfunction="dataRetrievalFunction"
                  pagingtype="'PagingOnScroll'"
-                 on-ready="onGridReady"
                  menuactions="gridMenuActions"
                  defaultsortbyfieldname="'SaleZoneName'"
                  getrowstyle="getRowStyle" enableautoexport="true">
@@ -25,5 +24,4 @@
             <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
         </vr-datagridexpandablerow>
     </vr-datagrid>
-
 </div>
