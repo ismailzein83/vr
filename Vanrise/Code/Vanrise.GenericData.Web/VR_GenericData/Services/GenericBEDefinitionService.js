@@ -9,6 +9,8 @@
         var viewModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/Editor/Templates/ViewDefinitionEditor.html";
         var tabModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericEditorDefinitionSetting/Templates/GenericBETabContainerEditorController.html";
         var basicAdvancefilterModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/GenericBEFilterDefinition/Templates/BasicAdvancedFilterEditor.html";
+        var actionModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/Editor/Templates/ActionDefinitionEditor.html";
+        var gridActionModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/Editor/Templates/GridActionDefinitionEditor.html";
 
         return ({
             addGenericBEColumnDefinition: addGenericBEColumnDefinition,
@@ -18,7 +20,11 @@
             addGenericBETabContainer: addGenericBETabContainer,
             editGenericBETabContainer: editGenericBETabContainer,
             addGenericBEBasicAdvanceFilter: addGenericBEBasicAdvanceFilter,
-            editGenericBEBasicAdvanceFilter: editGenericBEBasicAdvanceFilter
+            editGenericBEBasicAdvanceFilter: editGenericBEBasicAdvanceFilter,
+            addGenericBEActionDefinition: addGenericBEActionDefinition,
+            editGenericBEActionDefinition: editGenericBEActionDefinition,
+            addGenericBEGridActionDefinition: addGenericBEGridActionDefinition,
+            editGenericBEGridActionDefinition: editGenericBEGridActionDefinition
 
         });
 
@@ -132,6 +138,64 @@
                 modalScope.onGenericBEFilterDefinitionUpdated = onGenericBEFilterDefinitionUpdated;
             };
             VRModalService.showModal(basicAdvancefilterModalPath, parameters, settings);
+        }
+
+        function addGenericBEActionDefinition(onGenericBEActionDefinitionAdded, context) {
+            var parameters = {
+                context: context
+
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onGenericBEActionDefinitionAdded = onGenericBEActionDefinitionAdded;
+            };
+
+            VRModalService.showModal(actionModalPath, parameters, settings);
+        }
+
+        function editGenericBEActionDefinition(onGenericBEActionDefinitionUpdated, actionDefinition, context) {
+            var parameters = {
+                actionDefinition: actionDefinition,
+                context: context
+            };
+
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onGenericBEActionDefinitionUpdated = onGenericBEActionDefinitionUpdated;
+            };
+            VRModalService.showModal(actionModalPath, parameters, settings);
+        }
+
+
+        
+        function addGenericBEGridActionDefinition(onGenericBEGridActionDefinitionAdded, context) {
+            var parameters = {
+                context: context
+
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onGenericBEGridActionDefinitionAdded = onGenericBEGridActionDefinitionAdded;
+            };
+
+            VRModalService.showModal(gridActionModalPath, parameters, settings);
+        }
+
+        function editGenericBEGridActionDefinition(onGenericBEGridActionDefinitionUpdated, gridActionDefinition, context) {
+            var parameters = {
+                gridActionDefinition: gridActionDefinition,
+                context: context
+            };
+
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onGenericBEGridActionDefinitionUpdated = onGenericBEGridActionDefinitionUpdated;
+            };
+            VRModalService.showModal(gridActionModalPath, parameters, settings);
         }
 
     };

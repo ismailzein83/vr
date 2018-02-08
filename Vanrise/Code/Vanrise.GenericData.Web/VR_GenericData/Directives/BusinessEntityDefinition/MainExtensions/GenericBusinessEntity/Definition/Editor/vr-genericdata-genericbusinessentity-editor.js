@@ -48,6 +48,14 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
             var filterDefinitionAPI;
             var filterDefinitionReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var modalWidthSelectorAPI;
+            var modalWidthReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var actionDefinitionGridAPI;
+            var actionDefinitionGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var gridActionDefinitionGridAPI;
+            var gridActionDefinitionGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var recordTypeSelectedPromiseDeferred;
             var recordTypeEntity;
@@ -88,6 +96,21 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                 $scope.scopeModel.onGenericBEFilterDefinitionDirectiveReady = function (api) {
                     filterDefinitionAPI = api;
                     filterDefinitionReadyPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onModalWidthSelectorReady = function (api) {
+                    modalWidthSelectorAPI = api;
+                    modalWidthReadyPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onGenericBEActionDefinitionDirectiveReady = function (api) {
+                    actionDefinitionGridAPI = api;
+                    actionDefinitionGridReadyPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onGenericBEGridActionDefinitionDirectiveReady = function (api) {
+                    gridActionDefinitionGridAPI = api;
+                    gridActionDefinitionGridReadyPromiseDeferred.resolve();
                 };
 
                 $scope.scopeModel.onRecordTypeSelectionChanged = function () {
@@ -143,9 +166,10 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         DataRecordTypeId: dataRecordTypeSelectorAPI.getSelectedIds(),
                         DataRecordStorageId: dataRecordStorageSelectorAPI.getSelectedIds(),
                         TitleFieldName: dataRecordTypeTitleFieldsSelectorAPI.getSelectedIds(),
+                        EditorSize: modalWidthSelectorAPI.getSelectedIds(),
                         GridDefinition: {
                             ColumnDefinitions: columnDefinitionGridAPI.getData(),
-                            GenericBEGridActions: [],
+                            GenericBEGridActions: gridActionDefinitionGridAPI.getData(),
                             GenericBEGridViews: viewDefinitionGridAPI.getData()
                         },
                         EditorDefinition: {
@@ -153,7 +177,8 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         },
                         FilterDefinition: {
                             Settings: filterDefinitionAPI.getData()
-                        }
+                        },
+                        GenericBEActions: actionDefinitionGridAPI.getData()
                     };
                 };
 
@@ -170,10 +195,13 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                     promises.push(loadDataRecordTypeSelector());
                     promises.push(loadDataRecordStorageSelector());
                     promises.push(loadColumnDefinitionGrid());
+                    promises.push(loadGridActionDefinitionGrid());
+
                     promises.push(loadViewDefinitionGrid());
                     promises.push(loadEditorDefinitionDirective());
                     promises.push(loadFilterDefinitionDirective());
-
+                    promises.push(loadModalWidthSelector());
+                    promises.push(loadActionDefinitionGrid());
 
                     if (businessEntityDefinitionSettings != undefined) {
                         promises.push(loadDataRecordTitleFieldsSelector());
@@ -238,6 +266,20 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         return loadColumnDefinitionGridPromiseDeferred.promise;
                     }
 
+                    function loadGridActionDefinitionGrid() {
+                        var loadGridActionDefinitionGridPromiseDeferred = UtilsService.createPromiseDeferred();
+                        gridActionDefinitionGridReadyPromiseDeferred.promise.then(function () {
+                            var gActionpayload = {
+                                context: getContext()
+                            };
+                            if (businessEntityDefinitionSettings != undefined && businessEntityDefinitionSettings.GridDefinition != undefined && businessEntityDefinitionSettings.GridDefinition.GenericBEGridActions != undefined)
+                                gActionpayload.genericBEGridActions = businessEntityDefinitionSettings.GridDefinition.GenericBEGridActions;
+
+                            VRUIUtilsService.callDirectiveLoad(gridActionDefinitionGridAPI, gActionpayload, loadGridActionDefinitionGridPromiseDeferred);
+                        });
+                        return loadGridActionDefinitionGridPromiseDeferred.promise;
+                    }
+
                     function loadViewDefinitionGrid() {
                         var loadViewDefinitionGridPromiseDeferred = UtilsService.createPromiseDeferred();
                         viewDefinitionGridReadyPromiseDeferred.promise.then(function () {
@@ -277,6 +319,33 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                     }
 
 
+                    function loadModalWidthSelector() {
+                        var loadModalWidthSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+                        modalWidthReadyPromiseDeferred.promise.then(function () {
+                            var selectorPayload = {
+                                selectedIds: businessEntityDefinitionSettings != undefined && businessEntityDefinitionSettings.EditorSize != undefined ? businessEntityDefinitionSettings.EditorSize : undefined
+                            };
+                            VRUIUtilsService.callDirectiveLoad(modalWidthSelectorAPI, selectorPayload, loadModalWidthSelectorPromiseDeferred);
+                        });
+
+                        return loadModalWidthSelectorPromiseDeferred.promise;
+                    }
+
+
+                    function loadActionDefinitionGrid() {
+                        var loadActionDefinitionGridPromiseDeferred = UtilsService.createPromiseDeferred();
+                        actionDefinitionGridReadyPromiseDeferred.promise.then(function () {
+                            var payload = {
+                                context: getContext(),
+                                genericBEActions: businessEntityDefinitionSettings != undefined && businessEntityDefinitionSettings.GenericBEActions || undefined
+                            };
+
+                            VRUIUtilsService.callDirectiveLoad(actionDefinitionGridAPI, payload, loadActionDefinitionGridPromiseDeferred);
+                        });
+                        return loadActionDefinitionGridPromiseDeferred.promise;
+                    }
+
+
                     return UtilsService.waitMultiplePromises(promises).then(function () {
                         recordTypeSelectedPromiseDeferred = undefined;
                     });
@@ -296,6 +365,19 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         var data = [];
                         for (var i = 0; i < dataRecordTypeFields.length; i++) {
                             data.push(dataRecordTypeFields[i]);
+                        }
+                        return data;
+                    },
+                    getActionInfos: function () {
+                        var data = [];
+                        if (actionDefinitionGridAPI == undefined)
+                            return data;
+                        var actionDefinitions = actionDefinitionGridAPI.getData();
+                        for (var i = 0; i < actionDefinitions.length; i++) {
+                            data.push({
+                                GenericBEActionId: actionDefinitions[i].GenericBEActionId,
+                                Name: actionDefinitions[i].Name,
+                            });
                         }
                         return data;
                     }

@@ -9,6 +9,17 @@
         <vr-columns width="1/2row" vr-loader="scopeModel.isLoadingTitle">
             <vr-genericdata-datarecordtypefields-selector label="Title Field" on-ready="scopeModel.onDataRecordTypeTitleFieldsSelectorDirectiveReady" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
         </vr-columns>
+        <vr-columns width="1/2row">
+            <vr-common-modalwidth-selector on-ready="scopeModel.onModalWidthSelectorReady" isrequired="true"></vr-common-modalwidth-selector>
+        </vr-columns>
+    </vr-row>
+</vr-tab>
+
+<vr-tab header="'Action Defnition'">
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-genericdata-be-actiondefinition-grid on-ready="scopeModel.onGenericBEActionDefinitionDirectiveReady"></vr-genericdata-be-actiondefinition-grid>
+        </vr-columns>
     </vr-row>
 </vr-tab>
 
@@ -21,6 +32,7 @@
         </vr-columns>
         <vr-columns width="1/2row">
             <vr-section header="Grid Actions" collapsible>
+                <vr-genericdata-be-gridactiondefinition-grid on-ready="scopeModel.onGenericBEGridActionDefinitionDirectiveReady"></vr-genericdata-be-gridactiondefinition-grid>
             </vr-section>
         </vr-columns>
         <vr-columns width="fullrow">
@@ -31,7 +43,6 @@
     </vr-row>
 </vr-tab>
 
-
 <vr-tab header="'Editor Defnition'">
     <vr-row>
         <vr-columns width="fullrow" haschildcolumns>
@@ -39,6 +50,7 @@
         </vr-columns>        
     </vr-row>
 </vr-tab>
+
 <vr-tab header="'Filter Defnition'">
     <vr-row>
         <vr-columns width="fullrow" haschildcolumns>

@@ -59,5 +59,14 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             return _manager.GetGenericBEFilterDefinitionSettingsConfigs();
         }
+
+
+        [HttpGet]
+        [Route("GetGenericBEActionDefinitionSettingsConfigs")]
+        public IEnumerable<GenericBEActionDefinitionSettingsConfig> GetGenericBEActionDefinitionSettingsConfigs()
+        {
+            return _manager.GetGenericBEActionDefinitionSettingsConfigs();
+        }
+        
     }
 }
