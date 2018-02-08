@@ -16,10 +16,16 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public string SerialNumberPattern { get; set; }
         public long InitialSequence { get; set; }
+        public Guid? OpenMailTemplateId { get; set; }
+        public Guid? PendingMailTemplateId { get; set; }
+        public Guid? ClosedMailTemplateId { get; set; }
     }
     public class SupplierFaultTicketSetting
     {
         public string SerialNumberPattern { get; set; }
         public long InitialSequence { get; set; }
+        public Guid? OpenMailTemplateId { get; set; }
+        public Guid? PendingMailTemplateId { get; set; }
+        public Guid? ClosedMailTemplateId { get; set; }
     }
 }
