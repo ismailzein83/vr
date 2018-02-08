@@ -41,7 +41,7 @@ namespace TOne.WhS.Sales.Business
             {
                 RPRouteManager rpRouteManager = new RPRouteManager();
                 List<RPZone> rpZones = GetRPZones(input);
-                var rpRouteDetails = rpRouteManager.GetRPRoutes(input.Query.Filter.RoutingDataBaseId, input.Query.Filter.PolicyId, input.Query.Filter.NumberOfOptions, rpZones);
+                var rpRouteDetails = rpRouteManager.GetRPRoutes(input.Query.Filter.RoutingDataBaseId, input.Query.Filter.PolicyId, input.Query.Filter.NumberOfOptions, rpZones, true); 
 
                 List<SupplierTargetMatch> result = new List<SupplierTargetMatch>();
 
@@ -77,7 +77,7 @@ namespace TOne.WhS.Sales.Business
                             {
                                 SupplierTargetMatchAnalyticOption supplierAnalyticInfo;
 
-                                if (supplierAnalyticDetail.TryGetValue(supplierOption.Entity.SupplierId, out supplierAnalyticInfo))
+                                if (supplierAnalyticDetail.TryGetValue(supplierOption.SupplierId, out supplierAnalyticInfo))
                                 {
                                     supplierOption.ASR = supplierAnalyticInfo.ASR;
                                     supplierOption.ACD = supplierAnalyticInfo.ACD;

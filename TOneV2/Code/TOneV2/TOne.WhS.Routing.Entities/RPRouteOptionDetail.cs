@@ -8,7 +8,12 @@ namespace TOne.WhS.Routing.Entities
 {
     public class RPRouteOptionDetail
     {
-        public RPRouteOption Entity { get; set; }
+        public int SupplierId { get; set; }
+        public long SaleZoneId { get; set; }
+        public Decimal SupplierRate { get; set; }
+        public int? Percentage { get; set; }
+        public SupplierStatus SupplierStatus { get; set; }
+        public bool SupplierZoneMatchHasClosedRate { get; set; }
         public string SupplierName { get; set; }
         public decimal ConvertedSupplierRate { get; set; }
         public string CurrencySymbol { get; set; }

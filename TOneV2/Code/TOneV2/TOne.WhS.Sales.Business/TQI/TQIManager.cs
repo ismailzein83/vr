@@ -61,7 +61,7 @@ namespace TOne.WhS.Sales.Business
 
             DateTime toDate = DateTime.Today;
 
-            IEnumerable<int> supplierIds = input.RPRouteDetail.RouteOptionsDetails.Select(item => item.Entity.SupplierId);
+            IEnumerable<int> supplierIds = input.RPRouteDetail.RouteOptionsDetails.Select(item => item.SupplierId);
 
             var analyticResult = GetFilteredRecords(listDimensions, listMeasures, supplierDimensionFilterName, supplierIds, saleZoneDimensionFilterName, input.RPRouteDetail.SaleZoneId, fromDate, toDate);
             if (analyticResult == null || analyticResult.Data == null)
@@ -93,8 +93,8 @@ namespace TOne.WhS.Sales.Business
             {
                 foreach (RPRouteOptionDetail route in rpRouteDetail.RouteOptionsDetails)
                 {
-                    if (!_ratesBySupplier.ContainsKey(route.Entity.SupplierId))
-                        _ratesBySupplier.Add(route.Entity.SupplierId, route.ConvertedSupplierRate);
+                    if (!_ratesBySupplier.ContainsKey(route.SupplierId))
+                        _ratesBySupplier.Add(route.SupplierId, route.ConvertedSupplierRate);
                 }
             }
         }

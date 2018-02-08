@@ -14,7 +14,7 @@ namespace TOne.WhS.Sales.MainExtensions.SupplierTargetMatchCalculation
         {
             get { return new Guid("2CB834AD-16BE-46C7-8B26-E65927C2388B"); }
         }
-
+          
         public override void Evaluate(ITargetMatchCalculationMethodContext context)
         {
             var options = new List<SupplierTargetMatchAnalyticOption>();
@@ -24,7 +24,7 @@ namespace TOne.WhS.Sales.MainExtensions.SupplierTargetMatchCalculation
             decimal totalDuration = 0;
             foreach (var routeOption in context.RPRouteDetail.RouteOptionsDetails)
             {
-                var supplierAnalyticInfo = context.GetSupplierAnalyticInfo(routeOption.Entity.SupplierId);
+                var supplierAnalyticInfo = context.GetSupplierAnalyticInfo(routeOption.SupplierId);
                 if (supplierAnalyticInfo != null)
                 {
                     totalACD += supplierAnalyticInfo.ACD;

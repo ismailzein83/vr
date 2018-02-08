@@ -5,6 +5,9 @@
     rpRouteManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
 
     function rpRouteManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService) {
+
+        var currencyId;
+
         var gridAPI;
 
         var routingDatabaseSelectorAPI;
@@ -24,14 +27,16 @@
         var customerSelectorAPI;
         var customerSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var currencyId;
 
         defineScope();
         load();
 
         function defineScope() {
-
             $scope.numberOfOptions = 3;
+
+            $scope.onGridReady = function (api) {
+                gridAPI = api;
+            };
 
             $scope.onRoutingDatabaseSelectorReady = function (api) {
                 routingDatabaseSelectorAPI = api;
@@ -56,11 +61,11 @@
                 routeStatusSelectorAPI = api;
                 routeStatusSelectorReadyPromiseDeferred.resolve();
             };
+
             $scope.onCustomerSelectorReady = function (api) {
                 customerSelectorAPI = api;
                 customerSelectorReadyPromiseDeferred.resolve();
             };
-
 
             $scope.onRoutingDatabaseSelectorChange = function () {
                 var selectedId = routingDatabaseSelectorAPI.getSelectedIds();
@@ -81,17 +86,12 @@
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, rpRoutePolicyAPI, policySelectorPayload, setLoader, undefined);
             };
 
-            $scope.onGridReady = function (api) {
-                gridAPI = api;
-            };
-
             $scope.searchClicked = function () {
                 if (gridAPI != undefined)
                     return gridAPI.loadGrid(getFilterObject());
             };
 
             function getFilterObject() {
-
                 currencyId = null;
 
                 if (!$scope.showInSystemCurrency && $scope.selectedCustomer != undefined)
@@ -109,7 +109,8 @@
                     LimitResult: $scope.limit,
                     CustomerId: customerSelectorAPI.getSelectedIds(),
                     ShowInSystemCurrency: $scope.showInSystemCurrency,
-                    CurrencyId: currencyId
+                    CurrencyId: currencyId,
+                    IncludeBlockedSuppliers: $scope.includeBlockedSuppliers
                 };
                 return query;
             }
@@ -117,6 +118,7 @@
         function load() {
             $scope.isLoadingFilterData = true;
             $scope.limit = 1000;
+
             return UtilsService.waitMultipleAsyncOperations([loadRoutingDatabaseSelector, loadRoutingProductSelector, loadSaleZoneSection, loadRouteStatusSelector, loadCustomerSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {

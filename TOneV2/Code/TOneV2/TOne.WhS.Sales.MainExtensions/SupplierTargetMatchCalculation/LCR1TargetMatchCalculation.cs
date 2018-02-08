@@ -22,9 +22,9 @@ namespace TOne.WhS.Sales.MainExtensions.SupplierTargetMatchCalculation
             {
                 SupplierTargetMatchAnalyticOption option = new SupplierTargetMatchAnalyticOption
                 {
-                    Rate = context.EvaluateRate(lcr.Entity.SupplierRate)
+                    Rate = context.EvaluateRate(lcr.SupplierRate)
                 };
-                var supplierAnalyticInfo = context.GetSupplierAnalyticInfo(lcr.Entity.SupplierId);
+                var supplierAnalyticInfo = context.GetSupplierAnalyticInfo(lcr.SupplierId);
                 if (supplierAnalyticInfo != null)
                 {
                     option.ACD = supplierAnalyticInfo.ACD;

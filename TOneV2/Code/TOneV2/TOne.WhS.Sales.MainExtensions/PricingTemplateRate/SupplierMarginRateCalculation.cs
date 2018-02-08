@@ -15,7 +15,7 @@ namespace TOne.WhS.Sales.MainExtensions.PricingTemplateRate
         {
             if (context.ZoneItem.RPRouteDetail != null && context.ZoneItem.RPRouteDetail.RouteOptionsDetails != null)
             {
-                RPRouteOptionDetail rpRouteOption = context.ZoneItem.RPRouteDetail.RouteOptionsDetails.FindRecord(x => x.Entity.SupplierId == SupplierId);
+                RPRouteOptionDetail rpRouteOption = context.ZoneItem.RPRouteDetail.RouteOptionsDetails.FindRecord(x => x.SupplierId == SupplierId);
                 if (rpRouteOption != null)
                     return rpRouteOption.ConvertedSupplierRate;
             }

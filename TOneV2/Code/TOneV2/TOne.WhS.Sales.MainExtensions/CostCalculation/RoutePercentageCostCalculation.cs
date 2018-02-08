@@ -19,8 +19,8 @@ namespace TOne.WhS.Sales.MainExtensions.CostCalculation
                 Decimal cost = 0;
                 foreach (var option in context.Route.RouteOptionsDetails)
                 {
-                    if (option.Entity.Percentage.HasValue)
-                        cost += (option.ConvertedSupplierRate * option.Entity.Percentage.Value);
+                    if (option.Percentage.HasValue)
+                        cost += (option.ConvertedSupplierRate * option.Percentage.Value);
                 }
                 context.Cost = cost / 100;
             }

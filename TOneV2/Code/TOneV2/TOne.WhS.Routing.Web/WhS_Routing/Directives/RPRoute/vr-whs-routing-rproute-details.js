@@ -20,7 +20,7 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: "/Client/Modules/WhS_Routing/Directives/RPRoute/Templates/RPRouteDetailTemplate.html"
         };
@@ -78,17 +78,17 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
                 $scope.getRowStyle = function (dataItem) {
                     var rowStyle;
 
-                    //if (dataItem.Entity.SupplierStatus == WhS_Routing_SupplierStatusEnum.PartialActive.value)
+                    //if (dataItem.SupplierStatus == WhS_Routing_SupplierStatusEnum.PartialActive.value)
                     //    rowStyle = { CssClass: "bg-warning" }
 
-                    if (dataItem.Entity.SupplierStatus == WhS_Routing_SupplierStatusEnum.Block.value)
+                    if (dataItem.SupplierStatus == WhS_Routing_SupplierStatusEnum.Block.value)
                         rowStyle = { CssClass: "bg-danger" };
 
                     return rowStyle;
                 };
 
                 $scope.openRouteOptionSupplier = function (dataItem) {
-                    WhS_Routing_RPRouteService.viewRPRouteOptionSupplier(routingDatabaseId, rpRouteDetail.RoutingProductId, rpRouteDetail.SaleZoneId, dataItem.Entity.SupplierId, currencyId);
+                    WhS_Routing_RPRouteService.viewRPRouteOptionSupplier(routingDatabaseId, rpRouteDetail.RoutingProductId, rpRouteDetail.SaleZoneId, dataItem.SupplierId, currencyId);
                 };
 
                 UtilsService.waitMultiplePromises([rpRoutePolicyReadyPromiseDeffered.promise, gridReadyDeferred.promise]).then(function () {
@@ -136,13 +136,11 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
                         var loadPolicySelectorDeferred = UtilsService.createPromiseDeferred();
 
                         var policySelectorPayload = {
-                            filter: {
-                                RoutingDatabaseId: routingDatabaseId
-                            },
+                            filter: { RoutingDatabaseId: routingDatabaseId },
                             selectedIds: defaultPolicyId
                         };
-
                         VRUIUtilsService.callDirectiveLoad(rpRoutePolicyAPI, policySelectorPayload, loadPolicySelectorDeferred);
+
                         return loadPolicySelectorDeferred.promise;
                     }
 
@@ -174,7 +172,7 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
                 if (rpRouteOption.ConvertedSupplierRate == 0) {
                     rpRouteOption.ConvertedSupplierRate = 'N/A';
                 }
-                rpRouteOption.SupplierStatus = UtilsService.getEnumDescription(WhS_Routing_SupplierStatusEnum, rpRouteOption.Entity.SupplierStatus);
+                rpRouteOption.SupplierStatusDescription = UtilsService.getEnumDescription(WhS_Routing_SupplierStatusEnum, rpRouteOption.SupplierStatus);
             }
         }
 
