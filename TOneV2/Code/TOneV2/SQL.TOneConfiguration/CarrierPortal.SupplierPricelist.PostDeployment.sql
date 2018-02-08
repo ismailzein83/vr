@@ -36,7 +36,7 @@ set nocount on;
 ;with cte_data([Id],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('ade187cf-146c-45db-882a-2c943d38dd70','Customers','Customers Management','#/view/CP_SupplierPricelist/Views/Customer/CustomerManagement','50624672-cd25-44fd-8580-0e3ac8e34c71','CP_SupPriceList/Customer/GetFilteredCustomers',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',15),
+('ade187cf-146c-45db-882a-2c943d38dd70','Customers','Customers','#/view/CP_SupplierPricelist/Views/Customer/CustomerManagement','50624672-cd25-44fd-8580-0e3ac8e34c71','CP_SupPriceList/Customer/GetFilteredCustomers',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',15),
 ('e2ed2857-dea3-42fe-8041-b2b06eb1e20e','Upload Pricelist','Upload Pricelist','#/view/CP_SupplierPricelist/Views/SupplierPriceList/SupplierPriceListManagement','0d24e501-99c1-47ce-a002-282a86826107','CP_SupPriceList/PriceList/GetUpdated',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10),
 ('ea38345e-2354-4e67-9fac-d5612fae62c3','Supplier Mapping','Supplier Mapping','#/view/CP_SupplierPricelist/Views/SupplierMapping/SupplierMappingManagement','0d24e501-99c1-47ce-a002-282a86826107','CP_SupPriceList/SupplierMapping/GetFilteredCustomerSupplierMappings',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',11),
 ('a33a27e2-16e9-4475-b75c-e4e1320ce31f','Pricelists History','Pricelists History','#/view/CP_SupplierPricelist/Views/SupplierPriceList/PriceLists','0d24e501-99c1-47ce-a002-282a86826107','CP_SupPriceList/PriceList/GetFilteredPriceLists',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',12)
