@@ -409,7 +409,7 @@ namespace TOne.WhS.BusinessEntity.Business
                   zoneOverlappedRates.GetLastOverlappedOtherRateEED(rateTypeId.Value, inheritedRateBED, inheritedRateEED) :
                   zoneOverlappedRates.GetLastOverlappedNormalRateEED(inheritedRateBED, inheritedRateEED);
             }
-            return (lastOverlappedRateEED.HasValue) ? Vanrise.Common.Utilities.Max(inheritedRateBED, lastOverlappedRateEED.Value) : Vanrise.Common.Utilities.Max(inheritedRateBED, soldOn);
+            return (lastOverlappedRateEED.HasValue) ? Vanrise.Common.Utilities.Max(soldOn, Vanrise.Common.Utilities.Max(inheritedRateBED, lastOverlappedRateEED.Value)) : Vanrise.Common.Utilities.Max(inheritedRateBED, soldOn);
         }
 
         public IEnumerable<long> GetSaleZoneIdsBySaleZoneName(int sellingNumberPlanId, int countryId, string saleZoneName)
