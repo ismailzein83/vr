@@ -55,9 +55,11 @@ app.directive('vrCommonStatusdefinitionSelector', ['VR_Common_StatusDefinitionAP
 
                 api.load = function (payload) {
                     var selectedIds;
+                    var selectfirstitem;
                     var filter;
                     if (payload != undefined) {
                         selectedIds = payload.selectedIds;
+                        selectfirstitem = payload.selectfirstitem != undefined && payload.selectfirstitem == true;
                         filter = payload.filter;
                         var businessEntityDefinitionId = payload.businessEntityDefinitionId;
                         if(businessEntityDefinitionId != undefined)
@@ -78,6 +80,10 @@ app.directive('vrCommonStatusdefinitionSelector', ['VR_Common_StatusDefinitionAP
 
                             if (selectedIds != undefined) {
                                 VRUIUtilsService.setSelectedValues(selectedIds, 'StatusDefinitionId', attrs, ctrl);
+                            }
+                            else if (selectfirstitem) {
+                                var defaultValue = attrs.ismultipleselection != undefined ? [ctrl.datasource[0].StatusDefinitionId] : ctrl.datasource[0].StatusDefinitionId;
+                                VRUIUtilsService.setSelectedValues(defaultValue, 'StatusDefinitionId', attrs, ctrl);
                             }
                         }
                     });
