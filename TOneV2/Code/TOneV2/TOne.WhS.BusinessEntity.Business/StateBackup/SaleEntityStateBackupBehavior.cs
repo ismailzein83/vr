@@ -63,26 +63,32 @@ namespace TOne.WhS.BusinessEntity.Business
             if (backupData == null)
                 throw new ArgumentException("StateBackupType must be of type StateBackupSaleEntity");
 
-            if (backupData.OwnerType == SalePriceListOwnerType.Customer)
-                return true;
-
-            string errorMessage = "Cannot restore this selling product, data might be lost";
-
             StateBackupManager manager = new StateBackupManager();
             IEnumerable<StateBackup> stateBackups = manager.GetStateBackupsAfterId(context.StateBackupId);
 
-            var sellingProductManager = new SellingProductManager();
-            var sellingProduct = sellingProductManager.GetSellingProduct(backupData.OwnerId);
+            int sellingNumberPlanId;
+            string errorMessage = "Cannot restore this checkpoint, data might be lost";
+
+            if (backupData.OwnerType == SalePriceListOwnerType.Customer)
+            {
+                var carrierAccountManager = new CarrierAccountManager();
+                sellingNumberPlanId = carrierAccountManager.GetSellingNumberPlanId(backupData.OwnerId);
+            }
+            else
+            {
+                var sellingProductManager = new SellingProductManager();
+                sellingNumberPlanId = sellingProductManager.GetSellingProduct(backupData.OwnerId).SellingNumberPlanId;
+            }
 
             foreach (var stateBackup in stateBackups)
             {
                 if (stateBackup.Info.OnRestoreStateBackupId.HasValue || stateBackup.RestoreDate.HasValue)
                     continue;
 
-                if (stateBackup.Info is StateBackupSaleEntity)
+                if (stateBackup.Info is StateBackupSaleEntity && backupData.OwnerType == SalePriceListOwnerType.SellingProduct)
                 {
                     var backupType = stateBackup.Info as StateBackupSaleEntity;
-                    
+
                     if (backupData.SellingProductCustomerIds.Contains(backupType.OwnerId))
                     {
                         context.ErrorMessage = errorMessage;
@@ -93,7 +99,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 {
                     var backupType = stateBackup.Info as StateBackupAllSaleEntities;
 
-                    if (backupType.SellingNumberPlanId == sellingProduct.SellingNumberPlanId)
+                    if (backupType.SellingNumberPlanId == sellingNumberPlanId)
                     {
                         context.ErrorMessage = errorMessage;
                         return false;
