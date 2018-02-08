@@ -466,10 +466,20 @@ namespace Vanrise.GenericData.Business
                 globalMembersDefinitionBuilder.AppendLine(GetGlobalMemberDefinitionScript(fieldRuntimeTypeAsString, field));
                 getFieldValueBuilder.AppendFormat(@"case ""{0}"" : return {0};", field.Name);
 
+
                 if (field.Formula == null)
                 {
+                   
                     propertiesToSetSerializedBuilder.AppendFormat(", \"{0}\"", field.Name);
-                    setFieldValueBuilder.AppendFormat(@"case ""{0}"" : if(fieldValue != null) {0} = ({1})Convert.ChangeType(fieldValue, typeof({1})); else {0} = default({2}); break;", field.Name, CSharpCompiler.TypeToString(field.Type.GetNonNullableRuntimeType()), fieldRuntimeTypeAsString);
+                    if (fieldRuntimeTypeAsString == "System.Guid")
+                    {
+                        setFieldValueBuilder.AppendFormat(@"case ""{0}"" : if(fieldValue != null) {0} = new Guid(fieldValue); else {0} = default({1}); break;", field.Name, fieldRuntimeTypeAsString);
+                    }
+                    else
+                    {
+                        setFieldValueBuilder.AppendFormat(@"case ""{0}"" : if(fieldValue != null) {0} = ({1})Convert.ChangeType(fieldValue, typeof({1})); else {0} = default({2}); break;", field.Name, CSharpCompiler.TypeToString(field.Type.GetNonNullableRuntimeType()), fieldRuntimeTypeAsString);
+                    }
+                    
                     cloneRecordMembersBuilder.AppendFormat("record.{0} = this.{0};", field.Name);
                 }
 
