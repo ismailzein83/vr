@@ -172,7 +172,7 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                             var setLoader = function (value) { $scope.scopeModel.isLoadingSupplierZoneDirective = value; };
                             var payload = {
                                 supplierId: supplierSelectorAPI.getSelectedIds()
-                            }
+                            };
                             VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierZoneSelectorApi, payload, setLoader);
                         }
                         if (value.CarrierAccountId != selectedSupplier || !$scope.scopeModel.isEditMode) {
