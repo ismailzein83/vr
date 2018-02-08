@@ -224,12 +224,48 @@ namespace TOne.WhS.BusinessEntity.Business
             faultTicketsSettingsData.CustomerSetting.SerialNumberPattern.ThrowIfNull("faultTicketsSettingsData.CustomerSetting.SerialNumberPattern");
             return faultTicketsSettingsData.CustomerSetting.SerialNumberPattern;
         }
+        public Guid? GetFaultTicketsCustomerOpenMailTemplateId()
+        {
+            FaultTicketsSettingsData faultTicketsSettingsData = GetFaultTicketsSettingsData();
+            faultTicketsSettingsData.CustomerSetting.ThrowIfNull("faultTicketsSettingsData.CustomerSetting");
+            return faultTicketsSettingsData.CustomerSetting.OpenMailTemplateId;
+        }
+        public Guid? GetFaultTicketsCustomerPendingMailTemplateId()
+        {
+            FaultTicketsSettingsData faultTicketsSettingsData = GetFaultTicketsSettingsData();
+            faultTicketsSettingsData.CustomerSetting.ThrowIfNull("faultTicketsSettingsData.CustomerSetting");
+            return faultTicketsSettingsData.CustomerSetting.PendingMailTemplateId;
+        }
+        public Guid? GetFaultTicketsCustomerClosedMailTemplateId()
+        {
+            FaultTicketsSettingsData faultTicketsSettingsData = GetFaultTicketsSettingsData();
+            faultTicketsSettingsData.CustomerSetting.ThrowIfNull("faultTicketsSettingsData.CustomerSetting");
+            return faultTicketsSettingsData.CustomerSetting.ClosedMailTemplateId;
+        }
         public string GetFaultTicketsSupplierSerialNumberPattern()
         {
             FaultTicketsSettingsData faultTicketsSettingsData = GetFaultTicketsSettingsData();
             faultTicketsSettingsData.SupplierSetting.ThrowIfNull("faultTicketsSettingsData.SupplierSetting");
             faultTicketsSettingsData.SupplierSetting.SerialNumberPattern.ThrowIfNull("faultTicketsSettingsData.SupplierSetting.SerialNumberPattern");
             return faultTicketsSettingsData.SupplierSetting.SerialNumberPattern;
+        }
+        public Guid? GetFaultTicketsSupplierOpenMailTemplateId()
+        {
+            FaultTicketsSettingsData faultTicketsSettingsData = GetFaultTicketsSettingsData();
+            faultTicketsSettingsData.SupplierSetting.ThrowIfNull("faultTicketsSettingsData.SupplierSetting");
+            return faultTicketsSettingsData.SupplierSetting.OpenMailTemplateId;
+        }
+        public Guid? GetFaultTicketsSupplierPendingMailTemplateId()
+        {
+            FaultTicketsSettingsData faultTicketsSettingsData = GetFaultTicketsSettingsData();
+            faultTicketsSettingsData.SupplierSetting.ThrowIfNull("faultTicketsSettingsData.SupplierSetting");
+            return faultTicketsSettingsData.SupplierSetting.PendingMailTemplateId;
+        }
+        public Guid? GetFaultTicketsSupplierClosedMailTemplateId()
+        {
+            FaultTicketsSettingsData faultTicketsSettingsData = GetFaultTicketsSettingsData();
+            faultTicketsSettingsData.SupplierSetting.ThrowIfNull("faultTicketsSettingsData.SupplierSetting");
+            return faultTicketsSettingsData.SupplierSetting.ClosedMailTemplateId;
         }
         public long GetFaultTicketsCustomerSerialNumberInitialSequence()
         {
