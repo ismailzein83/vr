@@ -81,8 +81,9 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
         }
      
         function getAttachementFieldTypeData() {
-            var attachementFieldTypes = [];
+            var attachementFieldTypes;
             if ($scope.scopeModel.attachementFieldTypes != undefined) {
+                attachementFieldTypes = [];
                 for (var i = 0; i < $scope.scopeModel.attachementFieldTypes.length; i++) {
                     var attachmentFieldType = $scope.scopeModel.attachementFieldTypes[i];
                         var attachementFieldType =

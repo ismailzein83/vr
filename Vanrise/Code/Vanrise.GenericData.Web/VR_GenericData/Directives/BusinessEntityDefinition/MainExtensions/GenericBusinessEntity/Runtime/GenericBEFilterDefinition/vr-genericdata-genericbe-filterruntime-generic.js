@@ -74,22 +74,20 @@
                             }).catch(function (error) {
                                 promise.reject(error);
                             });
-                           
+
                             $scope.scopeModel.filter = filter;
 
                         }).catch(function (error) {
                             promise.reject(error);
                         });
 
-                        function loadDataRecordType()
-                        {
+                        function loadDataRecordType() {
                             return VR_GenericData_DataRecordTypeAPIService.GetDataRecordType(dataRecordTypeId).then(function (response) {
                                 dataRecordType = response;
                             });
                         }
 
-                        function loadDataRecordTypeFieldConfigs()
-                        {
+                        function loadDataRecordTypeFieldConfigs() {
                             return VR_GenericData_DataRecordFieldAPIService.GetDataRecordFieldTypeConfigs().then(function (response) {
                                 fieldTypeConfigs = response;
                             });
@@ -102,20 +100,32 @@
                     var values;
                     if ($scope.scopeModel.filter.directiveAPI != undefined) {
                         values = $scope.scopeModel.filter.directiveAPI.getValuesAsArray();
+                    }
+
+                    if (values != undefined) {
+                        var finalArray = [];
+
+                        for (var i = 0; i < values.length; i++) {
+                            var value = values[i];
+                            if (value != undefined) {
+                                finalArray.push(value);
+                            }
                         }
-                    if (values == undefined || values.length == 0)
+                    }
+
+                    if (finalArray == undefined || finalArray.length == 0)
                         return;
                     return {
                         Filters: [{
                             FieldName: $scope.scopeModel.filter.fieldName,
-                            FilterValues: values
+                            FilterValues: finalArray
                         }]
                     };
                 };
 
                 if (ctrl.onReady != null) {
                     ctrl.onReady(api);
-                }
+            }
             }
         }
     }

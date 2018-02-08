@@ -6,8 +6,9 @@
                                                              onselectionchanged="scopeModel.onBusinessEntityDefinitionSelectionChange"
                                                              isrequired="true" hideremoveicon></vr-genericdata-genericbedefinition-selector>
             </vr-row>
-
-            <vr-directivewrapper ng-if="scopeModel.filterDirective != undefined" directive="scopeModel.filterDirective" on-ready="scopeModel.onFilterDirectiveReady"></vr-directivewrapper>
+            <vr-row>
+                <vr-directivewrapper ng-if="scopeModel.filterDirective != undefined" directive="scopeModel.filterDirective" on-ready="scopeModel.onFilterDirectiveReady"></vr-directivewrapper>
+            </vr-row>
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
