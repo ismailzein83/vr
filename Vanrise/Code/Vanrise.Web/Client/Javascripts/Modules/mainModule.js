@@ -103,7 +103,7 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
     };
     $scope.getPageName = function () {
         if ($scope.currentPage != null)
-            return $scope.currentPage.Name;
+            return $scope.currentPage.Title;
         else
             return "Home Page";
     };
