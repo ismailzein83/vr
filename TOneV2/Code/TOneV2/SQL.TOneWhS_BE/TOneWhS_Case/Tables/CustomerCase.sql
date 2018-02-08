@@ -8,7 +8,6 @@
     [ASR]               DECIMAL (20, 8)  NULL,
     [ACD]               DECIMAL (20, 8)  NULL,
     [CarrierReference]  NVARCHAR (255)   NULL,
-    [Description]       NVARCHAR (1000)  NULL,
     [SaleZoneId]        BIGINT           NULL,
     [CustomerId]        INT              NULL,
     [StatusId]          UNIQUEIDENTIFIER NULL,
@@ -22,6 +21,8 @@
     [EscalationLevelId] UNIQUEIDENTIFIER NULL,
     CONSTRAINT [PK_CustomerCase] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

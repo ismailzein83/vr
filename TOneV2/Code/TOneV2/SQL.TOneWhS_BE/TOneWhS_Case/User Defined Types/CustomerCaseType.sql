@@ -9,7 +9,6 @@
     [ASR]               DECIMAL (20, 8)  NULL,
     [ACD]               DECIMAL (20, 8)  NULL,
     [CarrierReference]  NVARCHAR (255)   NULL,
-    [Description]       NVARCHAR (1000)  NULL,
     [StatusId]          UNIQUEIDENTIFIER NULL,
     [Notes]             NVARCHAR (1000)  NULL,
     [OwnerReference]    NVARCHAR (1000)  NULL,
@@ -20,6 +19,8 @@
     [PhoneNumber]       NVARCHAR (255)   NULL,
     [ContactEmails]     NVARCHAR (1000)  NULL,
     [EscalationLevelId] UNIQUEIDENTIFIER NULL);
+
+
 
 
 

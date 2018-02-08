@@ -571,5 +571,6 @@
     <Build Include="TOneWhS_Sales\Stored Procedures\sp_SubscriberPreview_Get.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_StateBackup_GetStateBackupsAfterId.sql" />
     <Build Include="TOneWhS_Case\User Defined Types\InternationalReleaseCodeType.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierCode_GetByCode.sql" />
   </ItemGroup>
 </Project>
