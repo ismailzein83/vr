@@ -560,8 +560,8 @@ namespace TOne.WhS.BusinessEntity.Business
             var salePlZoneNotificationsByCurrencyId = new Dictionary<int, List<SalePLZoneNotification>>();
             //Add all missing sold countries to notification from exiting data
             var customerCountryManager = new CustomerCountryManager();
-            var soldCountries = customerCountryManager.GetNotClosedCustomerCountries(customerId);
-
+            //var soldCountries = customerCountryManager.GetNotClosedCustomerCountries(customerId);
+            var soldCountries = customerCountryManager.GetCustomerCountriesEffectiveAfter(customerId, DateTime.Now);
             if (soldCountries == null)
                 return salePlZoneNotificationsByCurrencyId;
 
@@ -744,17 +744,18 @@ namespace TOne.WhS.BusinessEntity.Business
                 var opennedCodes = salePlZoneNotification.Codes.Where(c => !c.EED.HasValue);
                 var notChangedClosedCodes = salePlZoneNotification.Codes.Where(c => c.EED.HasValue && c.EED.Value > DateTime.Today && c.CodeChange == CodeChange.NotChanged);
                 var changedClosedCodes = salePlZoneNotification.Codes.Where(c => c.CodeChange == CodeChange.Closed);
-                if (opennedCodes.Any() || notChangedClosedCodes.Any())
+                if (opennedCodes.Any() || (notChangedClosedCodes.Any() && closedCodeOption == IncludeClosedEntitiesEnum.UntilClosureDate))
                 {
                     onlyClosedChanges = false;
                 }
+
                 filteredCodeNotifications.AddRange(opennedCodes);
 
-                filteredCodeNotifications.AddRange(notChangedClosedCodes.Where(codeNotification =>
-                    closedCodeOption == IncludeClosedEntitiesEnum.UntilClosureDate));
+                if (closedCodeOption == IncludeClosedEntitiesEnum.UntilClosureDate)
+                    filteredCodeNotifications.AddRange(notChangedClosedCodes);
 
-                filteredCodeNotifications.AddRange(changedClosedCodes.Where(codeNotification =>
-                    closedCodeOption != IncludeClosedEntitiesEnum.Never));
+                if (closedCodeOption != IncludeClosedEntitiesEnum.Never)
+                    filteredCodeNotifications.AddRange(changedClosedCodes);
 
                 //if all codes are filtered we will not add the related zone.
                 if (filteredCodeNotifications.Any())
@@ -771,7 +772,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
             }
             if (closedCodeOption == IncludeClosedEntitiesEnum.Never && onlyClosedChanges)
-                return salePlZoneNotifications;
+                return salePlZoneNotifications.FindAllRecords(item => item.Rate.RateChangeType == RateChangeType.Deleted).ToList();
             return filteredZoneNotifications;
         }
 
@@ -1137,7 +1138,7 @@ namespace TOne.WhS.BusinessEntity.Business
             foreach (var countryGroup in customerPricelistChange.CountryGroups)
             {
                 int countryCurrencyId = GetCurrencyIdForThisCountry(customerPricelistChange.CustomerId, sellingProductId, countryGroup.RateChanges, countryGroup.CodeChanges, countryGroup.RPChanges, lastRateNoCacheLocator, saleRateManager);
-    
+
                 IEnumerable<SalePricelistZoneChange> zoneChanges = this.GetZoneChanges(countryGroup);
 
                 PriceListChange pricelistChange;
@@ -1169,7 +1170,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 newPriceLists = new List<NewPriceList>();
                 newPricelistsByCurrencyId.Add(currencyId, newPriceLists);
             }
-            NewPriceList customerPricelist = newPriceLists.FindRecord(x => x.OwnerId == customerId && x.OwnerType == SalePriceListOwnerType.Customer && x.PriceListType!=SalePriceListType.None);
+            NewPriceList customerPricelist = newPriceLists.FindRecord(x => x.OwnerId == customerId && x.OwnerType == SalePriceListOwnerType.Customer && x.PriceListType != SalePriceListType.None);
             //foreach (var newPriceList in newPriceLists)
             //{
             //    if (newPriceList.OwnerId == customerId && newPriceList.OwnerType == SalePriceListOwnerType.Customer)
@@ -1837,5 +1838,6 @@ namespace TOne.WhS.BusinessEntity.Business
             return countryChanges.Values.ToList();
         }
         #endregion*/
+
     }
 }
