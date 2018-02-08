@@ -120,7 +120,6 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                     $scope.scopeModel.phoneNumber = undefined;
                     if (value != undefined) {
                         selectedCustomer = customerSelectorAPI.getSelectedIds();
-                        $scope
                         if (value.CarrierAccountId != selectedCustomer || !$scope.scopeModel.isEditMode) {
                             $scope.scopeModel.codeNumberList = [];
                         }
