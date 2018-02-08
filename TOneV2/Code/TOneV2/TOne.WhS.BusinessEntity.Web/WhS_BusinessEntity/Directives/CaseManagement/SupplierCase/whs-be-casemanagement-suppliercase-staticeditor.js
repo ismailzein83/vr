@@ -144,10 +144,6 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                     ticketContactSelectorAPI = api;
                     ticketContactSelectorReadyPromiseDeferred.resolve();
                 };
-                $scope.scopeModel.onCustomerSelectorReady = function (api) {
-                    customerSelectorAPI = api;
-                    customerSelectorReadyPromiseDeferred.resolve();
-                };
                 $scope.scopeModel.onStatusSelectorReady = function (api) {
                     statusSelectorAPI = api;
                     statusSelectorReadyPromiseDeferred.resolve();
@@ -160,23 +156,6 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                 $scope.scopeModel.onSupplierZoneSelectorReady = function (api) {
                     supplierZoneSelectorApi = api;
                     supplierZoneReadyPromiseDeferred.resolve();
-                };
-                $scope.scopeModel.onCustomerSelectionChanged = function (value) {
-
-                    ticketContactSelectorReadyPromiseDeferred.promise.then(function () {
-                        loadTicketContactSelector();
-                    });
-                    $scope.scopeModel.contactName = undefined;
-                    $scope.scopeModel.email = undefined;
-                    $scope.scopeModel.phoneNumber = undefined;
-                    if (value != undefined) {
-                        selectedCustomer = customerSelectorAPI.getSelectedIds();
-                        $scope
-                        if (value.CarrierAccountId != selectedCustomer || !$scope.scopeModel.isEditMode) {
-                            $scope.scopeModel.codeNumberList = [];
-                        }
-                       
-                    }
                 };
                 $scope.scopeModel.onSupplierSelectionChanged = function (value) {
                     ticketContactSelectorReadyPromiseDeferred.promise.then(function () {
@@ -202,7 +181,7 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                         getSupplierZoneByCode();
                     }
                 };
-                UtilsService.waitMultiplePromises([customerSelectorReadyPromiseDeferred.promise, supplierSelectorReadyPromiseDeferred.promise, reasonSelectorReadyPromiseDeferred.promise, statusSelectorReadyPromiseDeferred.promise, workGroupSelectorReadyPromiseDeferred.promise, releaseCodeSelectorReadyPromiseDeferred.promise, ticketContactSelectorReadyPromiseDeferred.promise, attachmentGridReadyPromiseDeferred.promise]).then(function () {
+                UtilsService.waitMultiplePromises([ supplierSelectorReadyPromiseDeferred.promise, reasonSelectorReadyPromiseDeferred.promise, statusSelectorReadyPromiseDeferred.promise, workGroupSelectorReadyPromiseDeferred.promise, releaseCodeSelectorReadyPromiseDeferred.promise, ticketContactSelectorReadyPromiseDeferred.promise, attachmentGridReadyPromiseDeferred.promise]).then(function () {
                     defineApi();
                 });
             }
@@ -226,6 +205,7 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                             $scope.scopeModel.notes = selectedValues.Notes;
                         }
                         if ($scope.scopeModel.isEditMode) {
+                            getZoneName();
                             $scope.scopeModel.isReasonSelectorRequired = false;
                             WhS_BE_FaultTicketAPIService.GetSupplierFaultTicketDetails(getSupplierFaultTicketInput()).then(function (response) {
                                 if (response != undefined) {
@@ -241,7 +221,6 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                     promises.push(loadStatusSelector());
                     promises.push(loadWorkGroupSelector());
                     promises.push(loadReasonSelector());
-                    promises.push(loadCustomerSelector());
                     promises.push(loadReleaseCodeSelector());
                     promises.push(loadTicketContactSelector());
                     promises.push(loadAttachmentGrid());
@@ -288,6 +267,7 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                 selectorPayload.filter.Filters.push(getStatusSelectorFiter());
                 if (selectedValues != undefined)
                     selectorPayload.selectedIds = selectedValues.StatusId;
+                selectorPayload.selectfirstitem = !$scope.scopeModel.isEditMode;
 
                 return statusSelectorAPI.load(selectorPayload);
             }
@@ -310,15 +290,6 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                     selectorPayload.selectedIds = selectedValues.EscalationLevelId;
                 }
                 return ticketContactSelectorAPI.load(selectorPayload);
-            }
-            function loadCustomerSelector() {
-                var selectorPayload;
-                if (selectedValues != undefined) {
-                    selectorPayload = {
-                        selectedIds: selectedValues.CustomerId
-                    };
-                }
-                return customerSelectorAPI.load(selectorPayload);
             }
             function loadAttachmentGrid() {
                 var payload = {};
@@ -400,6 +371,18 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                             $scope.scopeModel.zoneName = undefined;
                         }
 
+                    });
+                }
+            }
+            function getZoneName() {
+                if (selectedValues != undefined && selectedValues.SupplierZoneId != undefined)
+                {
+                    var supplierZoneId = selectedValues.SupplierZoneId;
+                    return WhS_BE_SupplierZoneAPIService.GetSupplierZoneName(supplierZoneId).then(function (response) {
+                        if (response != undefined) {
+                            $scope.scopeModel.zoneName = response;
+                        }
+                    
                     });
                 }
             }

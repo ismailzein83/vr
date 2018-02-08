@@ -22,13 +22,22 @@ app.directive('vrWhsBeFaultticketsSettingsEditor', ['UtilsService', 'VRUIUtilsSe
 
             this.initializeController = initializeController;
 
-            var serialNumberEditorAPI;
-            var serialNumberEditorReadyDeferred = UtilsService.createPromiseDeferred();
+            var customerSerialNumberEditorAPI;
+            var customerSerialNumberEditorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var supplierSerialNumberEditorAPI;
+            var supplierSerialNumberEditorReadyDeferred = UtilsService.createPromiseDeferred();
+
             $scope.scopeModel = {};
-            $scope.scopeModel.initialSequence = 0;
-            $scope.scopeModel.onSerialNumberEditorReady = function (api) {
-                serialNumberEditorAPI = api;
-                serialNumberEditorReadyDeferred.resolve();
+            $scope.scopeModel.customerInitialSequence = 0;
+            $scope.scopeModel.supplierInitialSequence = 0;
+            $scope.scopeModel.onCustomerSerialNumberEditorReady = function (api) {
+                customerSerialNumberEditorAPI = api;
+                customerSerialNumberEditorReadyDeferred.resolve();
+            };
+            $scope.scopeModel.onSupplierSerialNumberEditorReady = function (api) {
+                supplierSerialNumberEditorAPI = api;
+                supplierSerialNumberEditorReadyDeferred.resolve();
             };
 
             function initializeController() {
@@ -42,6 +51,7 @@ app.directive('vrWhsBeFaultticketsSettingsEditor', ['UtilsService', 'VRUIUtilsSe
                     var promises = [];
                     var data;
                     var customerSetting;
+                    var supplierSetting;
                     if (payload != undefined) {
                         data = payload.data;
                     }
@@ -49,11 +59,17 @@ app.directive('vrWhsBeFaultticketsSettingsEditor', ['UtilsService', 'VRUIUtilsSe
                     {
                         customerSetting = data.CustomerSetting;
                         if (customerSetting != undefined)
-                            $scope.scopeModel.initialSequence = customerSetting.InitialSequence;
+                            $scope.scopeModel.customerInitialSequence = customerSetting.InitialSequence;
+                        supplierSetting = data.SupplierSetting;
+                        if (supplierSetting != undefined)
+                            $scope.scopeModel.supplierInitialSequence = supplierSetting.InitialSequence;
                     }
 
-                    var loadSerialNumberEditorPromise = loadSerialNumberEditor(customerSetting);
-                    promises.push(loadSerialNumberEditorPromise);
+                    var loadCustomerSerialNumberEditorPromise = loadCustomerSerialNumberEditor(customerSetting);
+                    var loadSupplierSerialNumberEditorPromise = loadSupplierSerialNumberEditor(supplierSetting);
+                    promises.push(loadCustomerSerialNumberEditorPromise);
+                    promises.push(loadSupplierSerialNumberEditorPromise);
+
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -62,9 +78,13 @@ app.directive('vrWhsBeFaultticketsSettingsEditor', ['UtilsService', 'VRUIUtilsSe
                     return {
                         $type: "TOne.WhS.BusinessEntity.Entities.FaultTicketsSettingsData, TOne.WhS.BusinessEntity.Entities",
                         CustomerSetting: {
-                            SerialNumberPattern: serialNumberEditorAPI.getData().serialNumberPattern,
-                            InitialSequence: $scope.scopeModel.initialSequence
-                        }
+                            SerialNumberPattern: customerSerialNumberEditorAPI.getData().serialNumberPattern,
+                            InitialSequence: $scope.scopeModel.customerInitialSequence
+                        },
+                        SupplierSetting : {
+                            SerialNumberPattern: supplierSerialNumberEditorAPI.getData().serialNumberPattern,
+                            InitialSequence: $scope.scopeModel.supplierInitialSequence
+                }
                     };
                 };
 
@@ -74,14 +94,25 @@ app.directive('vrWhsBeFaultticketsSettingsEditor', ['UtilsService', 'VRUIUtilsSe
 
 
 
-            function loadSerialNumberEditor(customerSetting) {
+            function loadCustomerSerialNumberEditor(customerSetting) {
                 var serialNumberEditorEditorLoadDeferred = UtilsService.createPromiseDeferred();
-                serialNumberEditorReadyDeferred.promise.then(function () {
+                customerSerialNumberEditorReadyDeferred.promise.then(function () {
                     var payload = {
                         data: customerSetting,
                         businessEntityDefinitionId: "e4053d52-8a52-438e-b353-37acf059a938"
                     };
-                    VRUIUtilsService.callDirectiveLoad(serialNumberEditorAPI, payload, serialNumberEditorEditorLoadDeferred);
+                    VRUIUtilsService.callDirectiveLoad(customerSerialNumberEditorAPI, payload, serialNumberEditorEditorLoadDeferred);
+                });
+                return serialNumberEditorEditorLoadDeferred.promise;
+            }
+            function loadSupplierSerialNumberEditor(supplierSetting) {
+                var serialNumberEditorEditorLoadDeferred = UtilsService.createPromiseDeferred();
+                supplierSerialNumberEditorReadyDeferred.promise.then(function () {
+                    var payload = {
+                        data: supplierSetting,
+                        businessEntityDefinitionId: "551d5b27-a4fb-44e8-82cc-e19fdc1e97ca"
+                    };
+                    VRUIUtilsService.callDirectiveLoad(supplierSerialNumberEditorAPI, payload, serialNumberEditorEditorLoadDeferred);
                 });
                 return serialNumberEditorEditorLoadDeferred.promise;
             }

@@ -224,12 +224,24 @@ namespace TOne.WhS.BusinessEntity.Business
             faultTicketsSettingsData.CustomerSetting.SerialNumberPattern.ThrowIfNull("faultTicketsSettingsData.CustomerSetting.SerialNumberPattern");
             return faultTicketsSettingsData.CustomerSetting.SerialNumberPattern;
         }
+        public string GetFaultTicketsSupplierSerialNumberPattern()
+        {
+            FaultTicketsSettingsData faultTicketsSettingsData = GetFaultTicketsSettingsData();
+            faultTicketsSettingsData.SupplierSetting.ThrowIfNull("faultTicketsSettingsData.SupplierSetting");
+            faultTicketsSettingsData.SupplierSetting.SerialNumberPattern.ThrowIfNull("faultTicketsSettingsData.SupplierSetting.SerialNumberPattern");
+            return faultTicketsSettingsData.SupplierSetting.SerialNumberPattern;
+        }
         public long GetFaultTicketsCustomerSerialNumberInitialSequence()
         {
             FaultTicketsSettingsData faultTicketsSettingsData = GetFaultTicketsSettingsData();
             faultTicketsSettingsData.CustomerSetting.ThrowIfNull("faultTicketsSettingsData.CustomerSetting");
-            faultTicketsSettingsData.CustomerSetting.ThrowIfNull("faultTicketsSettingsData.CustomerSetting");
             return faultTicketsSettingsData.CustomerSetting.InitialSequence;
+        }
+        public long GetFaultTicketsSupplierSerialNumberInitialSequence()
+        {
+            FaultTicketsSettingsData faultTicketsSettingsData = GetFaultTicketsSettingsData();
+            faultTicketsSettingsData.SupplierSetting.ThrowIfNull("faultTicketsSettingsData.SupplierSetting");
+            return faultTicketsSettingsData.SupplierSetting.InitialSequence;
         }
         public PricingSettings MergePricingSettings(PricingSettings pricingSettingsParent, PricingSettings pricingSettingsChild)
         {

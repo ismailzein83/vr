@@ -100,6 +100,12 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return GetSupplierZone(supplierCode.ZoneId);
         }
+        public string GetSupplierZoneNameBySupplierId(int supplierId, string codeNumber)
+        {
+           var supplierZone = GetSupplierZoneByCode(supplierId, codeNumber);
+            supplierZone.ThrowIfNull("supplierZone",supplierZone);
+            return supplierZone.Name;
+        }
 
         public IEnumerable<SupplierZoneInfo> GetSupplierZonesInfo(int supplierId)
         {

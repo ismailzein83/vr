@@ -191,6 +191,7 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
 
                         }
                         if ($scope.scopeModel.isEditMode) {
+                            getZoneName();
                             $scope.scopeModel.isReasonSelectorRequired = false;
                             WhS_BE_FaultTicketAPIService.GetCustomerFaultTicketDetails(getCustomerFaultTicketInput()).then(function (response) {
                                 if (response != undefined) {
@@ -253,6 +254,7 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                 selectorPayload.filter.Filters.push(getStatusSelectorFiter());
                 if (selectedValues != undefined)
                     selectorPayload.selectedIds = selectedValues.StatusId;
+                selectorPayload.selectfirstitem = !$scope.scopeModel.isEditMode;
 
                 return statusSelectorAPI.load(selectorPayload);
             }
@@ -299,6 +301,17 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                     };
                 }
                 return customerSelectorAPI.load(selectorPayload);
+            }
+            function getZoneName() {
+                if (selectedValues != undefined && selectedValues.SaleZoneId != undefined) {
+                    var customerZoneId = selectedValues.SaleZoneId;
+                    return WhS_BE_SaleZoneAPIService.GetSaleZoneName(customerZoneId).then(function (response) {
+                        if (response != undefined) {
+                            $scope.scopeModel.zoneName = response;
+                        }
+
+                    });
+                }
             }
             function loadTicketContactSelector() {
                 var selectorPayload = {

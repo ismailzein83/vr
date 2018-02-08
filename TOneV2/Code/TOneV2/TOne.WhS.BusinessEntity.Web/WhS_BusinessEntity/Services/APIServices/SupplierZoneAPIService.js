@@ -46,6 +46,12 @@
                 codeNumber: codeNumber
             });
         }
+        function GetSupplierZoneName(supplierZoneId)
+        {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetSupplierZoneName"), {
+                supplierZoneId: supplierZoneId,
+            });
+        }
 
         return ({
             GetFilteredSupplierZones: GetFilteredSupplierZones,
@@ -54,7 +60,8 @@
             GetSupplierZoneGroupTemplates: GetSupplierZoneGroupTemplates,
             GetDistinctSupplierIdsBySupplierZoneIds: GetDistinctSupplierIdsBySupplierZoneIds,
             GetSupplierZonesInfo: GetSupplierZonesInfo,
-            GetSupplierZoneByCode: GetSupplierZoneByCode
+            GetSupplierZoneByCode: GetSupplierZoneByCode,
+            GetSupplierZoneName: GetSupplierZoneName
         });
     }
 

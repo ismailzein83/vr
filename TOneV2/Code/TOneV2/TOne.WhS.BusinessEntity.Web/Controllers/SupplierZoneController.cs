@@ -53,6 +53,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
            SupplierZoneManager manager = new SupplierZoneManager();
            return manager.GetSupplierZoneByCode(supplierId, codeNumber);
        }
+       [HttpGet]
+       [Route("GetSupplierZoneName")]
+       public string GetSupplierZoneName(long supplierZoneId)
+       {
+           SupplierZoneManager manager = new SupplierZoneManager();
+           return manager.GetSupplierZoneName(supplierZoneId);
+       }
 
        [HttpGet]
        [Route("GetSupplierZoneInfoByIds")]
