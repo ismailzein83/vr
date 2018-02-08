@@ -106,10 +106,18 @@ namespace Vanrise.GenericData.Business
     }
     public interface IGenericBEOnAfterSaveHandlerContext
     {
-        GenericBusinessEntity GenericBusinessEntity { get; set; }
+        GenericBusinessEntity NewEntity { get;  }
+        GenericBusinessEntity OldEntity { get;  }
         GenericBEDefinitionSettings DefinitionSettings { get; }
+        Guid BusinessEntityDefinitionId { get; }
     }
-
+    public class GenericBEOnAfterSaveHandlerContext : IGenericBEOnAfterSaveHandlerContext
+    {
+        public GenericBusinessEntity NewEntity { get; set; }
+        public GenericBusinessEntity OldEntity { get; set; }
+        public GenericBEDefinitionSettings DefinitionSettings { get; set; }
+        public Guid BusinessEntityDefinitionId { get; set; }
+    }
 
     public class GenericBEViewDefinition
     {
@@ -132,10 +140,12 @@ namespace Vanrise.GenericData.Business
         public abstract Guid ConfigId { get;  }
         public abstract string RuntimeEditor { get; }
     }
+   
     public class GenericBEEditorDefinition
     {
         public VRGenericEditorDefinitionSetting Settings { get; set; }
     }
+  
     public class GenericBEGridDefinition
     {
         public List<GenericBEGridColumn> ColumnDefinitions { get; set; }
@@ -155,25 +165,45 @@ namespace Vanrise.GenericData.Business
         public Guid GenericBEActionId { get; set; }
         public string Title { get; set; }
         public bool ReloadGridItem { get; set; }
-        public GenericBEGridActionFilterCondition FilterCondition { get; set; }
 
     }
-    public abstract class GenericBEGridActionFilterCondition
+    
+   
+    public abstract class GenericBECondition
     {
         public abstract Guid ConfigId { get; }
-        public abstract bool IsFilterMatch(IGenericBEGridActionFilterConditionContext context);
+        public abstract bool IsMatch(IGenericBEConditionContext context);
     }
-    public interface IGenericBEGridActionFilterConditionContext
+    public interface IGenericBEConditionContext
     {
         GenericBusinessEntity Entity { get;  }
         GenericBEDefinitionSettings DefinitionSettings { get; }
     }
-    public class GenericBEGridActionFilterConditionContext : IGenericBEGridActionFilterConditionContext
+    public class GenericBEConditionContext : IGenericBEConditionContext
     {
         public GenericBusinessEntity Entity { get; set; }
         public GenericBEDefinitionSettings DefinitionSettings { get; set; }
     }
-  
+
+    public abstract class GenericBESaveCondition
+    {
+        public abstract Guid ConfigId { get; }
+        public abstract bool IsMatch(IGenericBESaveConditionContext context);
+    }
+    public interface IGenericBESaveConditionContext
+    {
+        GenericBusinessEntity NewEntity { get; }
+        GenericBusinessEntity OldEntity { get; }
+        GenericBEDefinitionSettings DefinitionSettings { get; }
+    }
+    public class GenericBESaveConditionContext : IGenericBESaveConditionContext
+    {
+        public GenericBusinessEntity NewEntity { get; set; }
+        public GenericBusinessEntity OldEntity { get; set; }
+        public GenericBEDefinitionSettings DefinitionSettings { get; set; }
+    }
+
+
     public class GenericBEAction
     {
         public Guid GenericBEActionId { get; set; }
@@ -185,4 +215,5 @@ namespace Vanrise.GenericData.Business
         public virtual string ActionTypeName { get; set; }
         public abstract Guid ConfigId { get; }
     }
+
 }

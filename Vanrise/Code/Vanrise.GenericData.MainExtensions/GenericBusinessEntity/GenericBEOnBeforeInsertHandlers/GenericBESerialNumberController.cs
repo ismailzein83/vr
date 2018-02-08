@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Vanrise.Web.Base;
 
-namespace Vanrise.GenericData.MainExtensions
+namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEOnBeforeInsertHandlers
 {
     [JSONWithTypeAttribute]
     [RoutePrefix(Constants.ROUTE_PREFIX + "GenericBESerialNumber")]

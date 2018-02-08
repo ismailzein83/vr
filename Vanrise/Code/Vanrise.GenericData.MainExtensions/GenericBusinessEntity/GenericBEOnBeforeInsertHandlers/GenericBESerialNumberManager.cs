@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
 using Vanrise.Common;
-namespace Vanrise.GenericData.MainExtensions
+namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEOnBeforeInsertHandlers
 {
     public class GenericBESerialNumberManager
     {
@@ -21,17 +21,9 @@ namespace Vanrise.GenericData.MainExtensions
                 DefinitionSettings = genericBEDefinitionSetting
             }) as IEnumerable<GenericBESerialNumberPartInfo>;
         }
-        public long GetSerialNumberPartInitialSequence(Guid businessEntityDefinitionId, string infoType)
+        public long GetSerialNumberPartInitialSequence(GenericBEDefinitionSettings definitionSettings, string infoType)
         {
-            var genericBEDefinitionSetting = new GenericBusinessEntityDefinitionManager().GetGenericBEDefinitionSettings(businessEntityDefinitionId);
-            genericBEDefinitionSetting.ThrowIfNull("genericBEDefinitionSetting", businessEntityDefinitionId);
-            genericBEDefinitionSetting.OnBeforeInsertHandler.ThrowIfNull("genericBEDefinitionSetting.OnBeforeInsertHandler");
-
-            return (long) genericBEDefinitionSetting.OnBeforeInsertHandler.TryGetInfoByType(new GenericBEOnBeforeInsertHandlerInfoByTypeContext
-            {
-                InfoType = infoType,
-                DefinitionSettings = genericBEDefinitionSetting
-            });
+            return (long)new GenericBusinessEntityDefinitionManager().GetExtendedSettingsInfoByType(definitionSettings, infoType);
         }
     }
 }

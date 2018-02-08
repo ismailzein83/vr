@@ -343,15 +343,7 @@ namespace Vanrise.GenericData.Business
             var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(genericBusinessEntityToAdd.BusinessEntityDefinitionId);
             var idFieldType = _genericBEDefinitionManager.GetIdFieldTypeForGenericBE(genericBusinessEntityToAdd.BusinessEntityDefinitionId);
 
-            if(genericBEDefinitionSetting.OnBeforeInsertHandler != null)
-            {
-                genericBEDefinitionSetting.OnBeforeInsertHandler.Execute(new GenericBEOnBeforeInsertHandlerContext
-                {
-                    DefinitionSettings = genericBEDefinitionSetting,
-                    GenericBusinessEntity = genericBusinessEntityToAdd,
-                    BusinessEntityDefinitionId = genericBusinessEntityToAdd.BusinessEntityDefinitionId,
-                });
-            }
+            OnBeforeSaveHandler(genericBEDefinitionSetting, genericBusinessEntityToAdd.BusinessEntityDefinitionId, null, genericBusinessEntityToAdd);
             var fieldTypes = _genericBEDefinitionManager.GetDataRecordTypeFields(genericBEDefinitionSetting.DataRecordTypeId);
             OnBeforeSaveMethod(fieldTypes,genericBusinessEntityToAdd.BusinessEntityDefinitionId, genericBusinessEntityToAdd, null);
 
@@ -364,6 +356,8 @@ namespace Vanrise.GenericData.Business
             if (insertActionSucc)
             {
                 Object genericBusinessEntityId = hasInsertedId ? insertedId : genericBusinessEntityToAdd.FieldValues.GetRecord(idFieldType.Name);
+
+                OnAfterSaveHandler(genericBEDefinitionSetting, genericBusinessEntityToAdd.BusinessEntityDefinitionId,null, genericBusinessEntityToAdd);
                 OnAfterSaveMethod(fieldTypes, genericBusinessEntityToAdd.BusinessEntityDefinitionId, genericBusinessEntityToAdd, genericBusinessEntityId);
                 if (hasInsertedId)
                 {
@@ -386,27 +380,28 @@ namespace Vanrise.GenericData.Business
 
             var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(genericBusinessEntityToUpdate.BusinessEntityDefinitionId);
 
-              var fieldTypes = _genericBEDefinitionManager.GetDataRecordTypeFields(genericBEDefinitionSetting.DataRecordTypeId);
-              OnBeforeSaveMethod(fieldTypes, genericBusinessEntityToUpdate.BusinessEntityDefinitionId, genericBusinessEntityToUpdate, genericBusinessEntityToUpdate.GenericBusinessEntityId);
+            var fieldTypes = _genericBEDefinitionManager.GetDataRecordTypeFields(genericBEDefinitionSetting.DataRecordTypeId);
+            OnBeforeSaveMethod(fieldTypes, genericBusinessEntityToUpdate.BusinessEntityDefinitionId, genericBusinessEntityToUpdate, genericBusinessEntityToUpdate.GenericBusinessEntityId);
 
 
             var oldGenericBE = GetGenericBusinessEntity(genericBusinessEntityToUpdate.GenericBusinessEntityId, genericBusinessEntityToUpdate.BusinessEntityDefinitionId);
 
             bool updateActionSucc = _dataRecordStorageManager.UpdateDataRecord(genericBEDefinitionSetting.DataRecordStorageId, genericBusinessEntityToUpdate.GenericBusinessEntityId, genericBusinessEntityToUpdate.FieldValues);
-          
+
             if (updateActionSucc)
             {
+                OnAfterSaveHandler(genericBEDefinitionSetting, genericBusinessEntityToUpdate.BusinessEntityDefinitionId, oldGenericBE, genericBusinessEntityToUpdate);
                 OnAfterSaveMethod(fieldTypes, genericBusinessEntityToUpdate.BusinessEntityDefinitionId, genericBusinessEntityToUpdate, genericBusinessEntityToUpdate.GenericBusinessEntityId);
 
                 VRActionLogger.Current.TrackAndLogObjectUpdated(new GenericBusinessEntityLoggableEntity(genericBusinessEntityToUpdate.BusinessEntityDefinitionId), genericBusinessEntityToUpdate, oldGenericBE);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = GenericBusinessEntityDetailMapper(genericBusinessEntityToUpdate.BusinessEntityDefinitionId, GetGenericBusinessEntity(genericBusinessEntityToUpdate.GenericBusinessEntityId,genericBusinessEntityToUpdate.BusinessEntityDefinitionId)); 
+                updateOperationOutput.UpdatedObject = GenericBusinessEntityDetailMapper(genericBusinessEntityToUpdate.BusinessEntityDefinitionId, GetGenericBusinessEntity(genericBusinessEntityToUpdate.GenericBusinessEntityId, genericBusinessEntityToUpdate.BusinessEntityDefinitionId));
             }
             else
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             }
-           
+
             return updateOperationOutput;
         }
       
@@ -434,6 +429,18 @@ namespace Vanrise.GenericData.Business
             }
 
         }
+        private void OnBeforeSaveHandler(GenericBEDefinitionSettings genericBEDefinitionSetting, Guid businessEntityDefinitionId, GenericBusinessEntity oldEntity, GenericBusinessEntity newEntity)
+        {
+            if (genericBEDefinitionSetting.OnBeforeInsertHandler != null)
+            {
+                genericBEDefinitionSetting.OnBeforeInsertHandler.Execute(new GenericBEOnBeforeInsertHandlerContext
+                {
+                    DefinitionSettings = genericBEDefinitionSetting,
+                    GenericBusinessEntity = newEntity,
+                    BusinessEntityDefinitionId = businessEntityDefinitionId,
+                });
+            }
+        }
         private void OnAfterSaveMethod(Dictionary<string, DataRecordField> fieldTypes, Guid businessEntityDefinitionId, GenericBusinessEntity genericBusinessEntity, Object genericBusinessEntityId)
         {
             if (fieldTypes != null)
@@ -452,6 +459,19 @@ namespace Vanrise.GenericData.Business
                     }
 
                 }
+            }
+        }
+        private void OnAfterSaveHandler(GenericBEDefinitionSettings genericBEDefinitionSetting, Guid businessEntityDefinitionId, GenericBusinessEntity oldEntity, GenericBusinessEntity newEntity)
+        {
+            if (genericBEDefinitionSetting.OnAfterSaveHandler != null)
+            {
+                genericBEDefinitionSetting.OnAfterSaveHandler.Execute(new GenericBEOnAfterSaveHandlerContext
+                {
+                    DefinitionSettings = genericBEDefinitionSetting,
+                    NewEntity = newEntity,
+                    BusinessEntityDefinitionId = businessEntityDefinitionId,
+                    OldEntity = oldEntity
+                });
             }
         }
         private void GetGridColumnNamesAndTitles(Guid businessEntityDefinitionId, out List<string> columnNames, out List<string> columnTitles)

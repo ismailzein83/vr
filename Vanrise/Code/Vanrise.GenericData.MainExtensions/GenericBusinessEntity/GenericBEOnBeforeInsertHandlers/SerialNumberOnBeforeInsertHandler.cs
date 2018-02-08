@@ -7,7 +7,7 @@ using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
-namespace Vanrise.GenericData.MainExtensions
+namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEOnBeforeInsertHandlers
 {
     public class SerialNumberOnBeforeInsertHandler : GenericBEOnBeforeInsertHandler
     {
@@ -105,13 +105,13 @@ namespace Vanrise.GenericData.MainExtensions
     }
     public interface IGenericBESerialNumberPartSettingsContext
     {
-        GenericBusinessEntity GenericBusinessEntity { get; set; }
+        Entities.GenericBusinessEntity GenericBusinessEntity { get; set; }
         GenericBEDefinitionSettings DefinitionSettings { get; }
         Guid BusinessEntityDefinitionId { get; }
     }
     public class GenericBESerialNumberPartSettingsContext : IGenericBESerialNumberPartSettingsContext
     {
-        public GenericBusinessEntity GenericBusinessEntity { get; set; }
+        public Entities.GenericBusinessEntity GenericBusinessEntity { get; set; }
         public GenericBEDefinitionSettings DefinitionSettings { get; set; }
         public Guid BusinessEntityDefinitionId { get; set; }
     }
@@ -166,7 +166,7 @@ namespace Vanrise.GenericData.MainExtensions
             sequenceGroup.Append("OVERALL");
             var sequenceKeyValue = context.GenericBusinessEntity.FieldValues.GetRecord(this.SequenceKeyFieldName);
 
-            long initialSequenceValue = new GenericBESerialNumberManager().GetSerialNumberPartInitialSequence(context.BusinessEntityDefinitionId, InfoType);
+            long initialSequenceValue = new GenericBESerialNumberManager().GetSerialNumberPartInitialSequence(context.DefinitionSettings, InfoType);
 
             if (this.IncludePartnerId)
             {
@@ -182,7 +182,7 @@ namespace Vanrise.GenericData.MainExtensions
                 sequenceGroup.Append(Common.Utilities.GetEnumDescription(this.DateCounterType.Value));
                 switch (this.DateCounterType)
                 {
-                    case Vanrise.GenericData.MainExtensions.DateCounterType.Yearly:
+                    case Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEOnBeforeInsertHandlers.DateCounterType.Yearly:
                         sequenceKey.Append(string.Format("{0}_{1}", DateTime.Today.Year, DateTime.Today.Year + 1));
                         break;
                 }
