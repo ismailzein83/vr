@@ -188,16 +188,16 @@ namespace TOne.WhS.Sales.BP.Activities
 
         private bool DoRateChangesExist(ProcessRatesContext context)
         {
-            if (context.OwnerNewRates != null && context.OwnerNewRates.Count() > 0)
+            if (context.OwnerNewRates != null && context.OwnerNewRates.Any() && context.OwnerNewRates.Any(r => r.RateTypeId == null))
                 return true;
 
-            if (context.NewRatesToFillGapsDueToClosingCountry != null && context.NewRatesToFillGapsDueToClosingCountry.Count() > 0)
+            if (context.NewRatesToFillGapsDueToClosingCountry != null && context.NewRatesToFillGapsDueToClosingCountry.Any())
                 return true;
 
-            if (context.NewRatesToFillGapsDueToChangeSellingProductRates != null && context.NewRatesToFillGapsDueToChangeSellingProductRates.Count() > 0)
+            if (context.NewRatesToFillGapsDueToChangeSellingProductRates != null && context.NewRatesToFillGapsDueToChangeSellingProductRates.Any())
                 return true;
 
-            if (context.ChangedRates != null && context.ChangedRates.Count() > 0)
+            if (context.ChangedRates != null && context.ChangedRates.Any())
                 return true;
 
             return false;
