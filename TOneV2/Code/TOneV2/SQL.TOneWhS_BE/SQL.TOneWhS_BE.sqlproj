@@ -551,9 +551,7 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetAllByOwnerType.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetSaleZoneRoutingProducts.sql" />
     <Build Include="TOneWhS_BE\User Defined Types\RoutingProductToClose.sql" />
-    <Build Include="TOneWhS_Case\Tables\CustomerCaseWorkGroup.sql" />
     <Build Include="TOneWhS_Case\Tables\CustomerCase.sql" />
-    <Build Include="TOneWhS_Case\Tables\CustomerCaseReason.sql" />
     <Build Include="TOneWhS_Case\Tables\SupplierCase.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\SP_SalePricelistNewCountryChanges_GetAffectedCustomerIds.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\SP_SalePricelistChangedCountryChanges_GetAffectedCustomerIds.sql" />
@@ -572,5 +570,9 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_StateBackup_GetStateBackupsAfterId.sql" />
     <Build Include="TOneWhS_Case\User Defined Types\InternationalReleaseCodeType.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierCode_GetByCode.sql" />
+    <Build Include="TOneWhS_Case\Tables\CaseWorkGroup.sql" />
+    <Build Include="TOneWhS_Case\Tables\CaseReason.sql" />
+    <Build Include="TOneWhS_Case\User Defined Types\CaseWorkGroupType.sql" />
+    <Build Include="TOneWhS_Case\User Defined Types\CaseReasonType.sql" />
   </ItemGroup>
 </Project>
