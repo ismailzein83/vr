@@ -82,9 +82,9 @@
         function loadRoutingProductSelector() {
             var loadRoutingProductPromiseDeferred = UtilsService.createPromiseDeferred();
             var selectorPayload = {
+                selectedIds: currentRoutingProductId
             };
             selectorPayload.filter = {
-                ExcludedRoutingProductId: currentRoutingProductId,
                 AssignableToZoneId: zoneId
             };
             zoneRoutingProductSelectorReadyDeferred.promise.then(function () {

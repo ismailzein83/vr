@@ -1,68 +1,73 @@
 ﻿<vr-row>
-	<vr-columns width="3/4row">
-		<vr-datagrid datasource="otherRates"
-					 on-ready="onGridReady"
-					 norowhighlightonclick="'true'"
-					 idfield="RateTypeId">
-			<vr-datagridcolumn headertext="'Rate Type'" field="'Name'" type="'Text'" widthfactor="8"></vr-datagridcolumn>
+    <vr-columns width="3/4row">
+        <vr-datagrid datasource="otherRates"
+                     on-ready="onGridReady"
+                     norowhighlightonclick="'true'"
+                     idfield="RateTypeId">
+            <vr-datagridcolumn headertext="'Rate Type'" field="'Name'" type="'Text'" widthfactor="8"></vr-datagridcolumn>
 
-			<vr-datagridcolumn headertext="'Current Rate'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="10">
-				<div style="text-align: right">
-					<vr-label isvalue="true">{{dataItem.CurrentRate | number: 4}}</vr-label>
-					<span ng-if="dataItem.FutureRate != null"
-						  style="cursor: pointer; text-decoration: underline"
-						  ng-click="viewScope.onCurrentRateClicked(dataItem)">*</span>
-				</div>
-			</vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Current Rate'" type="'Number'" numberprecision="'LongPrecision'" widthfactor="10">
+                <div style="text-align: right">
+                    <vr-label isvalue="true">{{dataItem.CurrentRate | number: 4}}</vr-label>
+                    <span ng-if="dataItem.FutureRate != null"
+                          style="cursor: pointer; text-decoration: underline"
+                          ng-click="viewScope.onCurrentRateClicked(dataItem)">*</span>
+                </div>
+            </vr-datagridcolumn>
 
-			<vr-datagridcolumn headertext="'New Rate'" widthfactor="10" disablesorting>
-				<span vr-disabled="viewScope.isCountryEnded || viewScope.isZonePendingClosed">
-					<span vr-disabled="!viewScope.areOtherRatesEditable()">
-						<vr-textbox type="number"
-									value="dataItem.NewRate"
-									onvaluechanged="viewScope.onNewRateChanged(dataItem)"
-									onblurtextbox="viewScope.onNewRateBlurred(dataItem)"
-									customvalidate="viewScope.validateNewRate(dataItem)"
-									tonextinput>
-						</vr-textbox>
-					</span>
-				</span>
-			</vr-datagridcolumn>
+            <vr-datagridcolumn widthfactor="5" headertext="'Rate Inherited'" invisibleheader>
+                <vr-icon icontype="dataItem.iconType" tooltip="dataItem.iconTooltip">
+                </vr-icon>
+            </vr-datagridcolumn>
 
-			<vr-datagridcolumn widthfactor="2">
-				<div style="text-align: left">
-					<span class="{{'glyphicon ' + dataItem.RateChangeTypeIcon}}" title="{{dataItem.RateChangeTypeIconTooltip}}" />
-				</div>
-			</vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'New Rate'" widthfactor="10" disablesorting>
+                <span vr-disabled="viewScope.isCountryEnded || viewScope.isZonePendingClosed">
+                    <span vr-disabled="!viewScope.areOtherRatesEditable()">
+                        <vr-textbox type="number"
+                                    value="dataItem.NewRate"
+                                    onvaluechanged="viewScope.onNewRateChanged(dataItem)"
+                                    onblurtextbox="viewScope.onNewRateBlurred(dataItem)"
+                                    customvalidate="viewScope.validateNewRate(dataItem)"
+                                    tonextinput>
+                        </vr-textbox>
+                    </span>
+                </span>
+            </vr-datagridcolumn>
 
-			<vr-datagridcolumn headertext="'BED'" widthfactor="10">
-				<span vr-disabled="viewScope.isCountryEnded || viewScope.isZonePendingClosed || viewScope.isCountryNew">
-					<span vr-disabled="!viewScope.areOtherRatesEditable()">
-						<span vr-disabled="dataItem.CurrentRate != null">
-							<vr-datetimepicker type="date" value="dataItem.CurrentRateBED" ng-hide="dataItem.NewRate != null"></vr-datetimepicker>
-						</span>
-						<vr-datetimepicker type="date" value="dataItem.NewRateBED" customvalidate="viewScope.validateNewRateDates(dataItem)" ng-show="dataItem.NewRate != null" isrequired="dataItem.NewRate != null">
-					</span>
-				</span>
-			</vr-datagridcolumn>
-			<vr-datagridcolumn headertext="'EED'" widthfactor="10">
-				<span vr-disabled="viewScope.isCountryEnded || viewScope.isZonePendingClosed">
-					<span vr-disabled="viewScope.isSellingProductZone || !viewScope.areOtherRatesEditable()">
-						<vr-span vr-disabled="!dataItem.IsCurrentRateEditable">
-							<vr-datetimepicker type="date"
-											   value="dataItem.CurrentRateNewEED"
-											   onvaluechanged="viewScope.onCurrentRateNewEEDChanged()"
-											   ng-hide="dataItem.NewRate != null">
-							</vr-datetimepicker>
-						</vr-span>
-						<vr-datetimepicker type="date"
-										   value="dataItem.NewRateEED"
-										   customvalidate="viewScope.validateNewRateDates(dataItem)"
-										   ng-show="dataItem.NewRate != null">
-						</vr-datetimepicker>
-					</span>
-				</span>
-			</vr-datagridcolumn>
-		</vr-datagrid>
-	</vr-columns>
+            <vr-datagridcolumn widthfactor="2">
+                <div style="text-align: left">
+                    <span class="{{'glyphicon ' + dataItem.RateChangeTypeIcon}}" title="{{dataItem.RateChangeTypeIconTooltip}}" />
+                </div>
+            </vr-datagridcolumn>
+
+            <vr-datagridcolumn headertext="'BED'" widthfactor="10">
+                <span vr-disabled="viewScope.isCountryEnded || viewScope.isZonePendingClosed || viewScope.isCountryNew">
+                    <span vr-disabled="!viewScope.areOtherRatesEditable()">
+                        <span vr-disabled="dataItem.CurrentRate != null">
+                            <vr-datetimepicker type="date" value="dataItem.CurrentRateBED" ng-hide="dataItem.NewRate != null"></vr-datetimepicker>
+                        </span>
+                        <vr-datetimepicker type="date" value="dataItem.NewRateBED" customvalidate="viewScope.validateNewRateDates(dataItem)" ng-show="dataItem.NewRate != null" isrequired="dataItem.NewRate != null">
+                    </span>
+                </span>
+            </vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'EED'" widthfactor="10">
+                <span vr-disabled="viewScope.isCountryEnded || viewScope.isZonePendingClosed">
+                    <span vr-disabled="viewScope.isSellingProductZone || !viewScope.areOtherRatesEditable()">
+                        <vr-span vr-disabled="!dataItem.IsCurrentRateEditable">
+                            <vr-datetimepicker type="date"
+                                               value="dataItem.CurrentRateNewEED"
+                                               onvaluechanged="viewScope.onCurrentRateNewEEDChanged()"
+                                               ng-hide="dataItem.NewRate != null">
+                            </vr-datetimepicker>
+                        </vr-span>
+                        <vr-datetimepicker type="date"
+                                           value="dataItem.NewRateEED"
+                                           customvalidate="viewScope.validateNewRateDates(dataItem)"
+                                           ng-show="dataItem.NewRate != null">
+                        </vr-datetimepicker>
+                    </span>
+                </span>
+            </vr-datagridcolumn>
+        </vr-datagrid>
+    </vr-columns>
 </vr-row>

@@ -34,7 +34,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
             string warningMessageOnDate = CheckDateCondition(zoneRoutingProductToEdit.ZoneEED, zoneRoutingProductToEdit.CountryEED, zoneRoutingProductToEdit.ZoneBED, zoneRoutingProductToEdit.CountryBED, zoneRoutingProductToEdit.BED, zoneName);
 
-            if (zoneRoutingProductToEdit != null) return updateOperationOutput;
+            if (warningMessageOnDate != null)
+            {
+                updateOperationOutput.Message = warningMessageOnDate;
+                return updateOperationOutput;
+            }
 
             var saleZoneRoutingProductToCloseList = new List<ZoneRoutingProductToChange>();
 
@@ -63,6 +67,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 var servicesIds = routingProductManager.GetZoneServiceIds(zoneRoutingProductToEdit.ChangedRoutingProductId, zoneRoutingProductToEdit.ZoneId);
 
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                updateOperationOutput.Message = string.Format("Routing product for zone {0} updated successfully", zoneName);
 
 
                 ZoneRoutingProduct zoneRoutingProduct = new ZoneRoutingProduct
@@ -85,9 +90,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     ZoneName = zoneName
                 };
             }
-
             return updateOperationOutput;
-
         }
 
         #endregion
