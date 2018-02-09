@@ -44,13 +44,13 @@ namespace TOne.WhS.Routing.BP.Activities
             if (routeRuleQualityConfigurationList == null)
                 return;
 
-            List<string> dimensionFields = new List<string>() { "SaleZone", "Supplier" };
-            Dictionary<Guid, List<string>> measureFieldsByQualityConfigurationId = qualityDataManager.GetQualityConfigurationExpressionsMeasureFields(routeRuleQualityConfigurationList);
-
-            Guid analyticTableId = new ConfigManager().GetQualityAnalyticTableId();
             var routeRuleQualityConfigurationDataList = qualityDataManager.GetRouteRuleQualityConfigurationDataList(routeRuleQualityConfigurationList);
             if (routeRuleQualityConfigurationDataList == null)
                 return;
+
+            Guid analyticTableId = new ConfigManager().GetQualityAnalyticTableId();
+            List<string> dimensionFields = new List<string>() { "SaleZone", "Supplier" };
+            Dictionary<Guid, List<string>> measureFieldsByQualityConfigurationId = qualityDataManager.GetQualityConfigurationExpressionsMeasureFields(routeRuleQualityConfigurationList);
 
             RPQualityConfigurationDataBatch batch = new RPQualityConfigurationDataBatch();
             batch.RPQualityConfigurationDataList = new List<RPQualityConfigurationData>();
