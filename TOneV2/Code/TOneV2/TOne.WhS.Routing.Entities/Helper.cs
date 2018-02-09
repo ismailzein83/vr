@@ -3,16 +3,126 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TOne.WhS.RouteSync.Entities;
-using TOne.WhS.Routing.Entities;
 
-namespace TOne.WhS.Routing.Business
+namespace TOne.WhS.Routing.Entities
 {
     public static class Helper
     {
-        public static Route BuildRouteFromCustomerRoute(CustomerRoute customerRoute)
+        public static string SerializeOptions(List<RouteOption> options)
         {
-            Route route = new Route
+            StringBuilder str = new StringBuilder();
+            foreach (var option in options)
+            {
+                if (str.Length > 0)
+                    str.Append("|");
+
+                string concatenatedBackups = string.Empty;
+                if (option.Backups != null && option.Backups.Count > 0)
+                {
+                    List<string> serializedBackups = new List<string>();
+                    foreach (RouteBackupOption backup in option.Backups)
+                    {
+                        string serializedBackup = string.Format("{0}${1}${2}${3}${4}", backup.SupplierCode, backup.ExecutedRuleId, backup.SupplierZoneId, !backup.IsBlocked ? string.Empty : "1", backup.NumberOfTries == 1 ? string.Empty : backup.NumberOfTries.ToString());
+                        serializedBackups.Add(serializedBackup);
+                    }
+                    concatenatedBackups = string.Join<string>("@", serializedBackups);
+                }
+                str.AppendFormat("{0}~{1}~{2}~{3}~{4}~{5}~{6}", option.SupplierCode, option.ExecutedRuleId, option.Percentage, option.SupplierZoneId, !option.IsBlocked ? string.Empty : "1", option.NumberOfTries == 1 ? string.Empty : option.NumberOfTries.ToString(), concatenatedBackups);
+            }
+            return str.ToString();
+        }
+
+        public static List<RouteOption> DeserializeOptions(string serializedOptions)
+        {
+            List<RouteOption> options = new List<RouteOption>();
+
+            string[] lines = serializedOptions.Split('|');
+            foreach (var line in lines)
+            {
+                string[] parts = line.Split('~');
+                var option = new RouteOption
+                {
+                    SupplierCode = parts[0],
+                    SupplierZoneId = long.Parse(parts[3]),
+                };
+                int ruleId;
+                if (int.TryParse(parts[1], out ruleId))
+                    option.ExecutedRuleId = ruleId;
+                int percentage;
+                if (int.TryParse(parts[2], out percentage))
+                    option.Percentage = percentage;
+
+                string isBlockedAsString = parts[4];
+                if (!string.IsNullOrEmpty(isBlockedAsString))
+                {
+                    int isBlocked;
+                    if (int.TryParse(isBlockedAsString, out isBlocked))
+                        option.IsBlocked = isBlocked > 0;
+                }
+
+                string numberOfTriesAsString = parts[5];
+                if (!string.IsNullOrEmpty(numberOfTriesAsString))
+                {
+                    int numberOfTries;
+                    if (int.TryParse(numberOfTriesAsString, out numberOfTries))
+                        option.NumberOfTries = numberOfTries;
+                }
+                else
+                {
+                    option.NumberOfTries = 1;
+                }
+
+                string backupsAsString = parts[6];
+                if (!string.IsNullOrEmpty(backupsAsString))
+                {
+                    option.Backups = new List<RouteBackupOption>();
+                    string[] serializedBackups = backupsAsString.Split('@');
+
+                    foreach (string serializedBackup in serializedBackups)
+                    {
+                        string[] serializedBackupParts = serializedBackup.Split('$');
+                        RouteBackupOption backup = new RouteBackupOption()
+                        {
+                            SupplierCode = serializedBackupParts[0],
+                            SupplierZoneId = long.Parse(serializedBackupParts[2]),
+                        };
+                        int backupRuleId;
+                        if (int.TryParse(serializedBackupParts[1], out backupRuleId))
+                            backup.ExecutedRuleId = backupRuleId;
+
+                        string isBackupBlockedAsString = serializedBackupParts[3];
+                        if (!string.IsNullOrEmpty(isBackupBlockedAsString))
+                        {
+                            int isBlocked;
+                            if (int.TryParse(isBackupBlockedAsString, out isBlocked))
+                                backup.IsBlocked = isBlocked > 0;
+                        }
+
+                        string backupNumberOfTriesAsString = serializedBackupParts[4];
+                        if (!string.IsNullOrEmpty(backupNumberOfTriesAsString))
+                        {
+                            int backupNumberOfTries;
+                            if (int.TryParse(backupNumberOfTriesAsString, out backupNumberOfTries))
+                                backup.NumberOfTries = backupNumberOfTries;
+                        }
+                        else
+                        {
+                            backup.NumberOfTries = 1;
+                        }
+                        option.Backups.Add(backup);
+                    }
+                }
+
+                options.Add(option);
+
+            }
+
+            return options;
+        }
+
+        public static TOne.WhS.RouteSync.Entities.Route BuildRouteFromCustomerRoute(CustomerRoute customerRoute)
+        {
+            TOne.WhS.RouteSync.Entities.Route route = new TOne.WhS.RouteSync.Entities.Route
             {
                 CustomerId = customerRoute.CustomerId.ToString(),
                 SaleZoneId = customerRoute.SaleZoneId,
@@ -27,25 +137,43 @@ namespace TOne.WhS.Routing.Business
                     if (customerRouteOption.IsBlocked)
                         continue;
 
-                    route.Options.Add(new RouteSync.Entities.RouteOption
+
+                    RouteSync.Entities.RouteOption routeSyncOption = new RouteSync.Entities.RouteOption
                     {
                         SupplierId = customerRouteOption.SupplierId.ToString(),
                         SupplierRate = customerRouteOption.SupplierRate,
                         Percentage = customerRouteOption.Percentage,
                         IsBlocked = customerRouteOption.IsBlocked,
                         NumberOfTries = customerRouteOption.NumberOfTries
-                    });
+                    };
+
+                    if (customerRouteOption.Backups != null && customerRouteOption.Backups.Count > 0)
+                    {
+                        routeSyncOption.Backups = new List<RouteSync.Entities.BackupRouteOption>();
+                        foreach (RouteBackupOption backup in customerRouteOption.Backups)
+                        {
+                            RouteSync.Entities.BackupRouteOption backupRouteSyncOption = new RouteSync.Entities.BackupRouteOption()
+                            {
+                                IsBlocked = backup.IsBlocked,
+                                NumberOfTries = backup.NumberOfTries,
+                                SupplierId = backup.SupplierId.ToString(),
+                                SupplierRate = backup.SupplierRate
+                            };
+                            routeSyncOption.Backups.Add(backupRouteSyncOption);
+                        }
+                    }
+                    route.Options.Add(routeSyncOption);
                 }
             }
             return route;
         }
 
-        public static List<Route> BuildRoutesFromCustomerRoutes(IEnumerable<CustomerRoute> customerRoutes)
+        public static List<TOne.WhS.RouteSync.Entities.Route> BuildRoutesFromCustomerRoutes(IEnumerable<CustomerRoute> customerRoutes)
         {
             if (customerRoutes == null)
                 return null;
 
-            List<Route> routes = new List<Route>();
+            List<TOne.WhS.RouteSync.Entities.Route> routes = new List<TOne.WhS.RouteSync.Entities.Route>();
             foreach (CustomerRoute customerRoute in customerRoutes)
                 routes.Add(BuildRouteFromCustomerRoute(customerRoute));
 
@@ -89,7 +217,7 @@ namespace TOne.WhS.Routing.Business
             return routeBackupOptionRuleTarget;
         }
 
-        public static RouteOptionRuleTarget CreateRouteOptionRuleTargetFromBackup(RouteBackupOptionRuleTarget routeBackupOptionRuleTarget, IRouteOptionSettings option)
+        public static RouteOptionRuleTarget CreateRouteOptionRuleTargetFromBackup(RouteBackupOptionRuleTarget routeBackupOptionRuleTarget, int? percentage)
         {
             return new RouteOptionRuleTarget()
             {
@@ -107,7 +235,7 @@ namespace TOne.WhS.Routing.Business
                 SupplierRateEED = routeBackupOptionRuleTarget.SupplierRateEED,
                 OptionSettings = routeBackupOptionRuleTarget.OptionSettings,
                 NumberOfTries = routeBackupOptionRuleTarget.NumberOfTries,
-                Percentage = option.Percentage,
+                Percentage = percentage,
                 Backups = new List<RouteBackupOptionRuleTarget>()
             };
         }

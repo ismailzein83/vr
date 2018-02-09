@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using TOne.WhS.BusinessEntity.Business;
+//using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
@@ -31,7 +31,7 @@ namespace TOne.WhS.Routing.Business
             _ruleTreesForRouteOptions = ruleTreesForRouteOptions;
             _routeRule = routeRule;
             SupplierFilterSettings supplierFilterSettings = new SupplierFilterSettings { RoutingProductId = routeRule.Criteria.GetRoutingProductId() };
-            _filteredSupplierIds = SupplierGroupContext.GetFilteredSupplierIds(supplierFilterSettings);
+            _filteredSupplierIds = TOne.WhS.BusinessEntity.Business.SupplierGroupContext.GetFilteredSupplierIds(supplierFilterSettings);
         }
 
         public ReadOnlyCollection<RouteOptionRuleTarget> GetOptions()
@@ -94,7 +94,7 @@ namespace TOne.WhS.Routing.Business
                 {
                     var firstBackup = routeBackupOptionRuleTargets.First();
 
-                    routeOptionRuleTarget = Helper.CreateRouteOptionRuleTargetFromBackup(firstBackup, option);
+                    routeOptionRuleTarget = Helper.CreateRouteOptionRuleTargetFromBackup(firstBackup, option.Percentage);
                     var otherBackups = routeBackupOptionRuleTargets.FindAllRecords(itm => itm != firstBackup);
                     if (otherBackups != null && otherBackups.Count() > 0)
                         routeOptionRuleTarget.Backups.AddRange(otherBackups);
@@ -192,11 +192,6 @@ namespace TOne.WhS.Routing.Business
                 }
             }
 
-            ////These values are set to default because route options are cached based on route rule; 
-            ////so each time we reset these values to default because they are related to the execution of route option rule and not to route rule
-            //targetOption.ExecutedRuleId = null;
-            //targetOption.BlockOption = false;
-            //targetOption.FilterOption = false;
             return routeOption;
         }
 

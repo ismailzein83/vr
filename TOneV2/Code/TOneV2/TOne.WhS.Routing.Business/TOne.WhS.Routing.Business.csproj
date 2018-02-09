@@ -103,7 +103,6 @@
     <Compile Include="Extensions\RouteRuleCleanupTask.cs" />
     <Compile Include="Extensions\StateBackupRoutingCleanupManager.cs" />
     <Compile Include="Extensions\RouteSyncReader.cs" />
-    <Compile Include="Helper.cs" />
     <Compile Include="RoutingConfigurationManager.cs" />
     <Compile Include="RoutingEntitiesUpdaterBPDefinitionSettings.cs" />
     <Compile Include="PartialRoutingBPDefinitionSettings.cs" />

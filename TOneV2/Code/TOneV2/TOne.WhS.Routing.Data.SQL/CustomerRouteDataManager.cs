@@ -35,7 +35,7 @@ namespace TOne.WhS.Routing.Data.SQL
 
         public void WriteRecordToStream(Entities.CustomerRoute record, object dbApplyStream)
         {
-            string serializedOptions = record.Options != null ? SerializeOptions(record.Options) : null;
+            string serializedOptions = record.Options != null ? Helper.SerializeOptions(record.Options) : null;
 
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
 
@@ -265,7 +265,14 @@ namespace TOne.WhS.Routing.Data.SQL
                     continue;
 
                 foreach (RouteOption routeOption in customerRoute.Options)
+                {
                     supplierZoneIds.Add(routeOption.SupplierZoneId);
+                    if (routeOption.Backups == null || routeOption.Backups.Count == 0)
+                        continue;
+
+                    foreach (RouteBackupOption backup in routeOption.Backups)
+                        supplierZoneIds.Add(backup.SupplierId);
+                }
             }
 
             if (supplierZoneIds.Count > 0)
@@ -286,6 +293,17 @@ namespace TOne.WhS.Routing.Data.SQL
                         routeOption.SupplierId = supplierZoneDetail.SupplierId;
                         routeOption.SupplierRate = supplierZoneDetail.EffectiveRateValue;
                         routeOption.ExactSupplierServiceIds = supplierZoneDetail.ExactSupplierServiceIds;
+
+                        if (routeOption.Backups == null || routeOption.Backups.Count == 0)
+                            continue;
+
+                        foreach (RouteBackupOption backup in routeOption.Backups)
+                        {
+                            SupplierZoneDetail backupSupplierZoneDetail = supplierZoneDetails.GetRecord(backup.SupplierZoneId);
+                            backup.SupplierId = backupSupplierZoneDetail.SupplierId;
+                            backup.SupplierRate = backupSupplierZoneDetail.EffectiveRateValue;
+                            backup.ExactSupplierServiceIds = backupSupplierZoneDetail.ExactSupplierServiceIds;
+                        }
                     }
                 }
             }
@@ -317,7 +335,7 @@ namespace TOne.WhS.Routing.Data.SQL
 
             return addedItems;
         }
-        
+
         private List<string> BuildAffectedRoutes(List<AffectedRoutes> affectedRoutesList)
         {
             if (affectedRoutesList == null || affectedRoutesList.Count == 0)
@@ -464,67 +482,6 @@ namespace TOne.WhS.Routing.Data.SQL
             return conditions;
         }
 
-        private string SerializeOptions(List<RouteOption> options)
-        {
-            StringBuilder str = new StringBuilder();
-            foreach (var op in options)
-            {
-                if (str.Length > 0)
-                    str.Append("|");
-
-                string supplierServiceIds = op.ExactSupplierServiceIds != null ? string.Join(",", op.ExactSupplierServiceIds) : null;
-                str.AppendFormat("{0}~{1}~{2}~{3}~{4}~{5}", op.SupplierCode, op.ExecutedRuleId, op.Percentage, op.SupplierZoneId, !op.IsBlocked ? string.Empty : "1", op.NumberOfTries == 1 ? string.Empty : op.NumberOfTries.ToString());
-            }
-            return str.ToString();
-        }
-
-        private List<RouteOption> DeserializeOptions(string serializedOptions)
-        {
-            List<RouteOption> options = new List<RouteOption>();
-
-            string[] lines = serializedOptions.Split('|');
-            foreach (var line in lines)
-            {
-                string[] parts = line.Split('~');
-                var option = new RouteOption
-                {
-                    SupplierCode = parts[0],
-                    SupplierZoneId = long.Parse(parts[3]),
-                };
-                int ruleId;
-                if (int.TryParse(parts[1], out ruleId))
-                    option.ExecutedRuleId = ruleId;
-                int percentage;
-                if (int.TryParse(parts[2], out percentage))
-                    option.Percentage = percentage;
-
-                string isBlockedAsString = parts[4];
-                if (!string.IsNullOrEmpty(isBlockedAsString))
-                {
-                    int isBlocked;
-                    if (int.TryParse(isBlockedAsString, out isBlocked))
-                        option.IsBlocked = isBlocked > 0;
-                }
-
-                string numberOfTriesAsString = parts[5];
-                if (!string.IsNullOrEmpty(numberOfTriesAsString))
-                {
-                    int numberOfTries;
-                    if (int.TryParse(parts[5], out numberOfTries))
-                        option.NumberOfTries = numberOfTries;
-                }
-                else
-                {
-                    option.NumberOfTries = 1;
-                }
-
-                options.Add(option);
-
-            }
-
-            return options;
-        }
-
         private DataTable BuildCustomerRouteTable(List<CustomerRouteData> customerRouteDataList)
         {
             DataTable dtCustomerRoutes = new DataTable();
@@ -580,7 +537,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 SaleZoneServiceIds = !string.IsNullOrEmpty(saleZoneServiceIds) ? new HashSet<int>(saleZoneServiceIds.Split(',').Select(itm => int.Parse(itm))) : null,
                 IsBlocked = (bool)reader["IsBlocked"],
                 ExecutedRuleId = GetReaderValue<int?>(reader, "ExecutedRuleId"),
-                Options = reader["RouteOptions"] != DBNull.Value ? DeserializeOptions(reader["RouteOptions"] as string) : null,
+                Options = reader["RouteOptions"] != DBNull.Value ? Helper.DeserializeOptions(reader["RouteOptions"] as string) : null,
                 VersionNumber = GetReaderValue<int>(reader, "VersionNumber")
             };
         }

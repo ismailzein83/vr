@@ -96,7 +96,7 @@ namespace TOne.WhS.Routing.BP.Activities
                 CustomerId = customerRoute.CustomerId,
                 ExecutedRuleId = customerRoute.ExecutedRuleId,
                 IsBlocked = customerRoute.IsBlocked,
-                Options = customerRoute.Options != null ? customerRouteManager.SerializeOptions(customerRoute.Options) : null,
+                Options = customerRoute.Options != null ? Helper.SerializeOptions(customerRoute.Options) : null,
                 SaleZoneId = customerRoute.SaleZoneId,
                 VersionNumber = customerRoute.VersionNumber
             };

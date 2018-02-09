@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Collections.Generic;
 using Vanrise.Common;
-using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
 
@@ -31,7 +30,7 @@ namespace TOne.WhS.Routing.Business
             {
                 RoutingProductId = routeRule.Criteria.GetRoutingProductId()
             };
-            _filteredSupplierIds = SupplierGroupContext.GetFilteredSupplierIds(supplierFilterSettings);
+            _filteredSupplierIds = TOne.WhS.BusinessEntity.Business.SupplierGroupContext.GetFilteredSupplierIds(supplierFilterSettings);
         }
 
         public bool TryAddSupplierZoneOption(RouteOptionRuleTarget optionTarget)

@@ -71,6 +71,7 @@
     <Compile Include="CodeSaleZone.cs" />
     <Compile Include="CodeZoneMatch\CodeSaleZoneMatch.cs" />
     <Compile Include="CodeZoneMatch\CodeSupplierZoneMatch.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="RouteRuleSettings\FixedRouteOptionSettings.cs" />
     <Compile Include="RouteRuleSettings\IRouteOptionSettings.cs" />
     <Compile Include="RoutingExcludedDestinations\CodeRange.cs" />
@@ -183,6 +184,10 @@
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Entities\TOne.WhS.RouteSync.Entities.csproj">
+      <Project>{36ea3b9c-5ae0-4fe5-8ec2-8bfd1655776b}</Project>
+      <Name>TOne.WhS.RouteSync.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
