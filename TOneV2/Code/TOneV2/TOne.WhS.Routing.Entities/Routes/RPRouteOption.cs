@@ -12,13 +12,13 @@ namespace TOne.WhS.Routing.Entities
 
         public int SupplierId { get; set; }
 
+        public long SaleZoneId { get; set; }
+
         public Decimal SupplierRate { get; set; }
 
         public int? Percentage { get; set; }
 
         public decimal OptionWeight { get; set; }
-
-        public long SaleZoneId { get; set; }
 
         public SupplierStatus SupplierStatus { get; set; }
 
