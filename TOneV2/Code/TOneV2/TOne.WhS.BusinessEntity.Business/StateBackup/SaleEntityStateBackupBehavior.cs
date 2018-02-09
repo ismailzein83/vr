@@ -58,38 +58,33 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public override bool CanRestore(IStateBackupCanRestoreContext context)
         {
-            StateBackupSaleEntity backupData = context.StateBackupType as StateBackupSaleEntity;
+            StateBackupSaleEntity currentBackupEntity = context.StateBackupType as StateBackupSaleEntity;
 
-            if (backupData == null)
+            if (currentBackupEntity == null)
                 throw new ArgumentException("StateBackupType must be of type StateBackupSaleEntity");
 
-            StateBackupManager manager = new StateBackupManager();
+            var carrierAccountManager = new CarrierAccountManager();
+            var sellingProductManager = new SellingProductManager();
+
+            var manager = new StateBackupManager();
             IEnumerable<StateBackup> stateBackups = manager.GetStateBackupsAfterId(context.StateBackupId);
 
-            int sellingNumberPlanId;
             string errorMessage = "Cannot restore this checkpoint, data might be lost";
 
-            if (backupData.OwnerType == SalePriceListOwnerType.Customer)
-            {
-                var carrierAccountManager = new CarrierAccountManager();
-                sellingNumberPlanId = carrierAccountManager.GetSellingNumberPlanId(backupData.OwnerId);
-            }
-            else
-            {
-                var sellingProductManager = new SellingProductManager();
-                sellingNumberPlanId = sellingProductManager.GetSellingProduct(backupData.OwnerId).SellingNumberPlanId;
-            }
+            int sellingNumberPlanId = currentBackupEntity.OwnerType == SalePriceListOwnerType.Customer
+                ? carrierAccountManager.GetSellingNumberPlanId(currentBackupEntity.OwnerId)
+                : sellingProductManager.GetSellingProduct(currentBackupEntity.OwnerId).SellingNumberPlanId;
 
             foreach (var stateBackup in stateBackups)
             {
                 if (stateBackup.Info.OnRestoreStateBackupId.HasValue || stateBackup.RestoreDate.HasValue)
                     continue;
 
-                if (stateBackup.Info is StateBackupSaleEntity && backupData.OwnerType == SalePriceListOwnerType.SellingProduct)
+                if (stateBackup.Info is StateBackupSaleEntity && currentBackupEntity.OwnerType == SalePriceListOwnerType.SellingProduct)
                 {
-                    var backupType = stateBackup.Info as StateBackupSaleEntity;
+                    var backupEntity = stateBackup.Info as StateBackupSaleEntity;
 
-                    if (backupData.SellingProductCustomerIds.Contains(backupType.OwnerId))
+                    if (backupEntity.OwnerType == SalePriceListOwnerType.Customer && currentBackupEntity.SellingProductCustomerIds.Contains(backupEntity.OwnerId))
                     {
                         context.ErrorMessage = errorMessage;
                         return false;
