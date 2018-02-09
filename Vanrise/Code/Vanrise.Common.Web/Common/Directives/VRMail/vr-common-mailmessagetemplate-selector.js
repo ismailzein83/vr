@@ -13,7 +13,6 @@ app.directive('vrCommonMailmessagetemplateSelector', ['VRCommon_VRMailMessageTem
                 onselectitem: '=',
                 ondeselectitem: '=',
                 isrequired: '=',
-                hideremoveicon: '@',
                 normalColNum: '@',
                 customvalidate: '=',
                 customlabel: '@'
@@ -129,7 +128,7 @@ app.directive('vrCommonMailmessagetemplateSelector', ['VRCommon_VRMailMessageTem
 
             return '<vr-select ' + multipleselection + ' ' + addCliked + ' datatextfield="Name" datavaluefield="VRMailMessageTemplateId" isrequired="ctrl.isrequired" ' + label +
                        '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" ' +
-                       '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate" haspermission="ctrl.haspermission">' +
+                       '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" customvalidate="ctrl.customvalidate" haspermission="ctrl.haspermission">' +
                    '</vr-select>';
         }
 
