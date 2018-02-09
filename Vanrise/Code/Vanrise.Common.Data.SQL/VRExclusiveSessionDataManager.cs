@@ -32,7 +32,7 @@ namespace Vanrise.Common.Data.SQL
         public void TryKeepSession(Guid sessionTypeId, string targetId, int userId, int timeoutInSeconds, out int? takenByUserId)
         {
             var takenByUserIdObject = ExecuteScalarSP("[common].[sp_VRExclusiveSession_TryKeep]", sessionTypeId, targetId, userId, timeoutInSeconds);
-            if (takenByUserIdObject == DBNull.Value)
+            if (takenByUserIdObject == null || takenByUserIdObject == DBNull.Value)
                 takenByUserId = null;
             else takenByUserId = (int)takenByUserIdObject;
         }
