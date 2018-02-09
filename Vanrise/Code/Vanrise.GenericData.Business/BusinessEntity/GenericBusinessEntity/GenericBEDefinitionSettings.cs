@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
-
+using Vanrise.Common;
 namespace Vanrise.GenericData.Business
 {
     public class GenericBEDefinitionSettings : BusinessEntityDefinitionSettings
@@ -23,7 +23,10 @@ namespace Vanrise.GenericData.Business
         }
         public override string IdType
         {
-            get { return "System.Int64"; }
+            get
+            {
+               return new DataRecordTypeManager().GetIdFieldRuntimeTypeAsString(DataRecordTypeId);
+            }
         }
         public override string SelectorUIControl
         {

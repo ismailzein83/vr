@@ -104,16 +104,15 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
 
                     var headertextWatch;
                     var ngshowWatch;
-                    if (iAttrs.headertext != undefined && (iAttrs.localizedheadertext == undefined || !VRLocalizationService.isLocalizationEnabled())) {
+
+                    if (col.headerText != undefined && (iAttrs.localizedheadertext == undefined || !VRLocalizationService.isLocalizationEnabled())) {
                         headertextWatch = $scope.$watch(iAttrs.headertext, function (val) {
                             if (colDef != undefined && val != undefined)
                                 dataGridCtrl.updateColumnHeader(colDef, val);
                         });
-
-                        if (col.headerText!=undefined &&  col.headerText.toUpperCase() === 'ID') {
+                        if (col.headerText !=undefined &&  col.headerText.toUpperCase() === 'ID') {
                             dataGridCtrl.hideColumn(colDef);
                         }
-
                     }
 
                     if (!show)

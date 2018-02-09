@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
-
+using Vanrise.Common;
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
     public class FieldCustomObjectType : DataRecordFieldType
@@ -31,7 +31,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override Type GetNonNullableRuntimeType()
         {
-            return typeof(Object);
+            this.Settings.ThrowIfNull("Settings");
+            return this.Settings.GetNonNullableRuntimeType();
         }
         public override bool StoreValueSerialized { get { return true; } }
 

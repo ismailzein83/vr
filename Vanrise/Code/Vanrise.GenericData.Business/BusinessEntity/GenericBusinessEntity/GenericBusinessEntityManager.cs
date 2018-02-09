@@ -212,7 +212,8 @@ namespace Vanrise.GenericData.Business
                     Dictionary<string, Object> fieldValues = new Dictionary<string, Object>();
                     foreach (var fieldValue in item.FieldValues)
                     {
-                        fieldValues.Add(fieldValue.Key, fieldValue.Value.Value);
+                        if (fieldValue.Value.Value != null)
+                          fieldValues.Add(fieldValue.Key, fieldValue.Value.Value);
                     }
                     return new GenericBusinessEntity
                     {
@@ -357,15 +358,18 @@ namespace Vanrise.GenericData.Business
             {
                 Object genericBusinessEntityId = hasInsertedId ? insertedId : genericBusinessEntityToAdd.FieldValues.GetRecord(idFieldType.Name);
 
-                OnAfterSaveHandler(genericBEDefinitionSetting, genericBusinessEntityToAdd.BusinessEntityDefinitionId,null, genericBusinessEntityToAdd);
-                OnAfterSaveMethod(fieldTypes, genericBusinessEntityToAdd.BusinessEntityDefinitionId, genericBusinessEntityToAdd, genericBusinessEntityId);
+                var genericBusinessEntity = GetGenericBusinessEntity(genericBusinessEntityId, genericBusinessEntityToAdd.BusinessEntityDefinitionId);
+
+
+                OnAfterSaveHandler(genericBEDefinitionSetting, genericBusinessEntityToAdd.BusinessEntityDefinitionId, null, genericBusinessEntity);
+                OnAfterSaveMethod(fieldTypes, genericBusinessEntityToAdd.BusinessEntityDefinitionId, genericBusinessEntity, genericBusinessEntityId);
                 if (hasInsertedId)
                 {
                     genericBusinessEntityToAdd.FieldValues.Add(idFieldType.Name, insertedId);
                 }
                 VRActionLogger.Current.TrackAndLogObjectAdded(new GenericBusinessEntityLoggableEntity(genericBusinessEntityToAdd.BusinessEntityDefinitionId), genericBusinessEntityToAdd);
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                insertOperationOutput.InsertedObject = GenericBusinessEntityDetailMapper(genericBusinessEntityToAdd.BusinessEntityDefinitionId, genericBusinessEntityToAdd);
+                insertOperationOutput.InsertedObject = GenericBusinessEntityDetailMapper(genericBusinessEntityToAdd.BusinessEntityDefinitionId, genericBusinessEntity);
             }
             else
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
@@ -390,12 +394,15 @@ namespace Vanrise.GenericData.Business
 
             if (updateActionSucc)
             {
-                OnAfterSaveHandler(genericBEDefinitionSetting, genericBusinessEntityToUpdate.BusinessEntityDefinitionId, oldGenericBE, genericBusinessEntityToUpdate);
-                OnAfterSaveMethod(fieldTypes, genericBusinessEntityToUpdate.BusinessEntityDefinitionId, genericBusinessEntityToUpdate, genericBusinessEntityToUpdate.GenericBusinessEntityId);
+
+                var genericBusinessEntity = GetGenericBusinessEntity(genericBusinessEntityToUpdate.GenericBusinessEntityId, genericBusinessEntityToUpdate.BusinessEntityDefinitionId);
+
+                OnAfterSaveHandler(genericBEDefinitionSetting, genericBusinessEntityToUpdate.BusinessEntityDefinitionId, oldGenericBE, genericBusinessEntity);
+                OnAfterSaveMethod(fieldTypes, genericBusinessEntityToUpdate.BusinessEntityDefinitionId, genericBusinessEntity, genericBusinessEntityToUpdate.GenericBusinessEntityId);
 
                 VRActionLogger.Current.TrackAndLogObjectUpdated(new GenericBusinessEntityLoggableEntity(genericBusinessEntityToUpdate.BusinessEntityDefinitionId), genericBusinessEntityToUpdate, oldGenericBE);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                updateOperationOutput.UpdatedObject = GenericBusinessEntityDetailMapper(genericBusinessEntityToUpdate.BusinessEntityDefinitionId, GetGenericBusinessEntity(genericBusinessEntityToUpdate.GenericBusinessEntityId, genericBusinessEntityToUpdate.BusinessEntityDefinitionId));
+                updateOperationOutput.UpdatedObject = GenericBusinessEntityDetailMapper(genericBusinessEntityToUpdate.BusinessEntityDefinitionId, genericBusinessEntity);
             }
             else
             {
@@ -505,98 +512,9 @@ namespace Vanrise.GenericData.Business
         //    return true;
 
         //}
-        //private string GetFieldDescription(GenericBusinessEntity genericBusinessEntity, string fieldPath, Guid dataRecordTypeId)
-        //{
-        //    var recordTypeFields = GetDataRecordTypeFields(dataRecordTypeId);
-        //    var columnValue = GetFieldPathValue(genericBusinessEntity, fieldPath);
-        //    if (columnValue != null)
-        //    {
-        //        var uiRuntimeField = _uiRuntimeManager.GetFieldType(fieldPath, recordTypeFields, dataRecordTypeId);
-        //        return uiRuntimeField.GetDescription(columnValue);
-        //    }
-        //    return null;
-        //}
-        //private string GetFieldDescription<T>(GenericUIField field, GenericBusinessEntity genericBusinessEntity, string fieldPath, Guid dataRecordTypeId) where T : GenericUIRuntimeField
-        //{
-        //    var recordTypeFields = GetDataRecordTypeFields(dataRecordTypeId);
-        //    var columnValue = GetFieldPathValue(genericBusinessEntity, fieldPath);
-        //    if (columnValue != null)
-        //    {
-        //        var uiRuntimeField = _uiRuntimeManager.BuildRuntimeField<T>(field, recordTypeFields, dataRecordTypeId);
-        //        //var value = (columnValue.Value != null) ? columnValue.Value : columnValue;
-        //        return uiRuntimeField.FieldType.GetDescription(columnValue);
-        //    }
-        //    return null;
-        //}
-        //public Dictionary<long, GenericBusinessEntity> GetCachedGenericBusinessEntities(Guid businessDefinitionId)
-        //{
-        //    return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(String.Format("GetGenericBusinessEntities_{0}", businessDefinitionId), businessDefinitionId,
-        //       () =>
-        //       {
-        //           IGenericBusinessEntityDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IGenericBusinessEntityDataManager>();
-        //           IEnumerable<GenericBusinessEntity> genericBusinessEntities = dataManager.GetGenericBusinessEntitiesByDefinition(businessDefinitionId);
-        //           return genericBusinessEntities.ToDictionary(kvp => kvp.GenericBusinessEntityId, kvp => kvp);
-        //       });
-        //}
-        //IEnumerable<GenericFilterRuntimeField> GetGenericFilterRuntimeFields(Guid businessEntityDefinitionId)
-        //{
-        //    GenericManagementRuntime managementRuntime = new GenericUIRuntimeManager().GetManagementRuntime(businessEntityDefinitionId);
-        //    if (managementRuntime == null)
-        //        throw new NullReferenceException("managementRuntime");
-        //    if (managementRuntime.Filter == null)
-        //        throw new NullReferenceException("managementRuntime.Filter");
-        //    if (managementRuntime.Filter.Fields == null || managementRuntime.Filter.Fields.Count == 0)
-        //        throw new NullReferenceException("managementRuntime.Filter.Fields");
-        //    return managementRuntime.Filter.Fields;
-        //}
-        //bool MatchGenericBusinessEntity(IEnumerable<GenericFilterRuntimeField> runtimeFilters, Dictionary<string, object> filterValuesByFieldPath, GenericBusinessEntity genericBusinessEntity)
-        //{
-        //    foreach (var runtimeFilter in runtimeFilters)
-        //    {
-        //        object filterValue;
-        //        filterValuesByFieldPath.TryGetValue(runtimeFilter.FieldPath, out filterValue);
-
-        //        if (filterValue == null)
-        //            continue;
-
-        //        dynamic fieldValue = GetFieldPathValue(genericBusinessEntity, runtimeFilter.FieldPath);
-        //        if (fieldValue == null)
-        //            continue;
-
-        //        if (!runtimeFilter.FieldType.IsMatched(fieldValue, filterValue))
-        //            return false;
-        //    }
-
-        //    return true;
-        //}
-        //bool IsEntityTitleValid(GenericBusinessEntity entity)
-        //{
-        //    BusinessEntityDefinition beDefinition = new BusinessEntityDefinitionManager().GetBusinessEntityDefinition(entity.BusinessEntityDefinitionId);
-        //    if (beDefinition == null)
-        //        throw new NullReferenceException("beDefinition");
-
-        //    var genericBEDefinitionSettings = beDefinition.Settings as GenericBEDefinitionSettings;
-        //    if (genericBEDefinitionSettings == null)
-        //        throw new NullReferenceException("genericBEDefinitionSettings");
-
-        //    string fieldPath = genericBEDefinitionSettings.FieldPath;
-        //    if (fieldPath == null)
-        //        throw new NullReferenceException("genericBEDefinitionSettings.FieldPath");
-
-        //    dynamic entityTitle = GetFieldPathValue(entity, fieldPath);
-        //    if (entityTitle == null)
-        //        throw new NullReferenceException("entityTitle");
-
-        //    string entityTitleString = entityTitle.ToString().ToLower();
-
-        //    Dictionary<long, GenericBusinessEntity> cachedEntites = GetCachedGenericBusinessEntities(entity.BusinessEntityDefinitionId);
-        //    GenericBusinessEntity entityMatch = cachedEntites.FindRecord(itm => (entity.GenericBusinessEntityId == 0 || itm.GenericBusinessEntityId != entity.GenericBusinessEntityId) && GetFieldPathValue(itm, fieldPath).ToString().ToLower() == entityTitleString);
-
-        //    return (entityMatch == null);
-        //}
         #endregion
 
-        #region Private Classes Old
+        #region Private Classes
 
         public class GenericBusinessEntityLoggableEntity : VRLoggableEntityBase
         {
@@ -754,12 +672,6 @@ namespace Vanrise.GenericData.Business
             throw new NotImplementedException();
         }
     }
-    //public class GenericBusinessEntityTitle
-    //{
-    //    public string Title { get; set; }
-    //    public string EntityName { get; set; }
-    //}
-
     public class GenericBusinessEntityRuntimeEditor
     {
         public GenericBEDefinitionSettings GenericBEDefinitionSettings { get; set; }

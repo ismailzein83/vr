@@ -16,12 +16,16 @@ namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBECond
         public Vanrise.GenericData.Entities.RecordFilterGroup FilterGroup { get; set; }
         public override bool IsMatch(IGenericBEConditionContext context)
         {
+            if (context.Entity == null)
+                return false;
+            
             RecordFilterManager recordFilterManager = new RecordFilterManager();
 
             var genericBusinessEntityDefinitionManager = new GenericBusinessEntityDefinitionManager();
             var fieldTyes = genericBusinessEntityDefinitionManager.GetDataRecordTypeFields(context.DefinitionSettings.DataRecordTypeId);
             var dataRecordDictFilterGenericFieldMatchContext = new DataRecordDictFilterGenericFieldMatchContext(context.Entity.FieldValues, fieldTyes);
             return recordFilterManager.IsFilterGroupMatch(this.FilterGroup, dataRecordDictFilterGenericFieldMatchContext);
+           
         }
     }
 }
