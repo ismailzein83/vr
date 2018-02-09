@@ -66,9 +66,9 @@ namespace TOne.WhS.Routing.Entities
             if (target == null)
                 throw new ArgumentNullException("target");
 
-            RouteOptionRuleTarget routeOptionRuleTarget = target as RouteOptionRuleTarget;
+            BaseRouteOptionRuleTarget routeOptionRuleTarget = target as BaseRouteOptionRuleTarget;
             if (routeOptionRuleTarget == null)
-                throw new Exception(String.Format("target is not of type RouteOptionRuleTarget. it is of type '{0}'", target.GetType()));
+                throw new Exception(String.Format("target is not of type BaseRouteOptionRuleTarget. it is of type '{0}'", target.GetType()));
 
             if (this.Criteria != null && this.Criteria.ExcludedDestinations != null)
             {
