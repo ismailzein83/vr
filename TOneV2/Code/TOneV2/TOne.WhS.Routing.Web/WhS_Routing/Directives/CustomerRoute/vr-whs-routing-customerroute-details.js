@@ -89,7 +89,6 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
 
                     return rowStyle
                 };
-
             }
 
             function defineAPI() {
@@ -108,6 +107,15 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
                             extendRouteOptionDetailObject(routeOptionDetail);
                             promises.push(routeOptionDetail.routeOptionDetailLoadDeferred.promise);
                             $scope.routeOptionDetails.push(routeOptionDetail);
+
+                            if (routeOptionDetail.Backups != undefined) {
+                                for (var j = 0; j < routeOptionDetail.Backups.length; j++) {
+                                    var routeBackupOptionDetail = routeOptionDetail.Backups[j];
+                                    extendRouteBackupOptionDetailObject(routeBackupOptionDetail);
+                                    promises.push(routeBackupOptionDetail.routeOptionDetailLoadDeferred.promise);
+                                    $scope.routeOptionDetails.push(routeBackupOptionDetail);
+                                }
+                            }
                         }
                     }
 
@@ -130,31 +138,49 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
                     };
                     VRUIUtilsService.callDirectiveLoad(routeOptionDetail.serviceViewerAPI, serviceViewerPayload, routeOptionDetail.routeOptionDetailLoadDeferred);
                 };
+
+                routeOptionDetail.IsBackup = false;
+            }
+            function extendRouteBackupOptionDetailObject(routeBackupOptionDetail) {
+                routeBackupOptionDetail.routeOptionDetailLoadDeferred = UtilsService.createPromiseDeferred();
+                routeBackupOptionDetail.onServiceViewerReady = function (api) {
+                    routeBackupOptionDetail.serviceViewerAPI = api;
+
+                    var serviceViewerPayload = {
+                        selectedIds: routeBackupOptionDetail.ExactSupplierServiceIds
+                    };
+                    VRUIUtilsService.callDirectiveLoad(routeBackupOptionDetail.serviceViewerAPI, serviceViewerPayload, routeBackupOptionDetail.routeOptionDetailLoadDeferred);
+                };
+
+                routeBackupOptionDetail.IsBackup = true;
             }
 
             function addRouteOptionRuleEditor(dataItem) {
                 var onRouteOptionRuleAdded = function (addedItem) {
                     var newDataItem = {
                         CustomerRouteOptionDetailId: dataItem.CustomerRouteOptionDetailId,
-                        RouteOption: dataItem.RouteOption,
+                        SupplierId: dataItem.SupplierId,
                         SupplierName: dataItem.SupplierName,
-                        SupplierCode: dataItem.SupplierCode,
+                        SupplierZoneId: dataItem.SupplierZoneId,
                         SupplierZoneName: dataItem.SupplierZoneName,
+                        SupplierCode: dataItem.SupplierCode,
                         SupplierRate: dataItem.SupplierRate,
                         Percentage: dataItem.Percentage,
                         IsBlocked: dataItem.IsBlocked,
+                        IsBackup: dataItem.IsBackup,
                         ExactSupplierServiceIds: dataItem.ExactSupplierServiceIds,
                         ExecutedRuleId: dataItem.ExecutedRuleId,
-                        LinkedRouteOptionRuleIds: [],
-                        LinkedRouteOptionRuleCount: 1
+                        LinkedRouteOptionRuleCount: 1,
+                        LinkedRouteOptionRuleIds: []
                     };
                     newDataItem.LinkedRouteOptionRuleIds.push(addedItem.Entity.RuleId);
+
                     extendRouteOptionDetailObject(newDataItem);
                     gridAPI.itemUpdated(newDataItem);
                 };
 
-                var linkedRouteOptionRuleInput = { RuleId: dataItem.Entity.ExecutedRuleId, CustomerId: customerRoute.Entity.CustomerId, Code: customerRoute.Entity.Code, SupplierId: dataItem.Entity.SupplierId, SupplierZoneId: dataItem.Entity.SupplierZoneId };
-                WhS_Routing_RouteOptionRuleService.addLinkedRouteOptionRule(linkedRouteOptionRuleInput, customerRoute.Entity.Code, onRouteOptionRuleAdded);
+                var linkedRouteOptionRuleInput = { RuleId: dataItem.ExecutedRuleId, CustomerId: customerRoute.CustomerId, Code: customerRoute.Code, SupplierId: dataItem.SupplierId, SupplierZoneId: dataItem.SupplierZoneId };
+                WhS_Routing_RouteOptionRuleService.addLinkedRouteOptionRule(linkedRouteOptionRuleInput, customerRoute.Code, onRouteOptionRuleAdded);
             }
 
             function hasAddRulePermission() {
@@ -166,11 +192,11 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
             }
 
             function viewLinkedRouteOptionRules(dataItem) {
-                WhS_Routing_RouteOptionRuleService.viewLinkedRouteOptionRules(dataItem.LinkedRouteOptionRuleIds, customerRoute.Entity.Code);
+                WhS_Routing_RouteOptionRuleService.viewLinkedRouteOptionRules(dataItem.LinkedRouteOptionRuleIds, customerRoute.Code);
             }
 
             function editLinkedRouteOptionRule(dataItem) {
-                WhS_Routing_RouteOptionRuleService.editLinkedRouteOptionRule(dataItem.LinkedRouteOptionRuleIds[0], customerRoute.Entity.Code);
+                WhS_Routing_RouteOptionRuleService.editLinkedRouteOptionRule(dataItem.LinkedRouteOptionRuleIds[0], customerRoute.Code);
             }
 
             function viewRouteOptionRuleEditor(dataItem) {

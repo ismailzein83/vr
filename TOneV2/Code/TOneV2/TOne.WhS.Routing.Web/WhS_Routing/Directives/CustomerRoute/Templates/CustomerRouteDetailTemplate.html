@@ -14,8 +14,12 @@
             <vr-datagridcolumn headertext="'Services'" disablesorting="true">
                 <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
             </vr-datagridcolumn>
-
-            <vr-datagridcolumn headertext="'Blocked'" field="'IsBlocked'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Backup'" field="'IsBackup'">
+                <vr-icon icontype="dataItem.IsBackup"></vr-icon>
+            </vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Blocked'" field="'IsBlocked'">
+                <vr-icon icontype="dataItem.IsBlocked"></vr-icon>
+            </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Linked Rules'" type="'Number'" numberprecision="'NoDecimal'" field="'LinkedRouteOptionRuleCount'"></vr-datagridcolumn>
         </vr-datagrid>
     </vr-columns>

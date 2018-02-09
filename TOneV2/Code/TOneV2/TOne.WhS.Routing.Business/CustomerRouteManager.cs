@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
-using Vanrise.Common;
-using TOne.WhS.BusinessEntity.Entities;
-using TOne.WhS.BusinessEntity.MainExtensions.CodeCriteriaGroups;
-using System.Text;
 
 namespace TOne.WhS.Routing.Business
 {
@@ -145,7 +142,15 @@ namespace TOne.WhS.Routing.Business
 
             return new CustomerRouteDetail()
             {
-                Entity = customerRoute,
+                CustomerId = customerRoute.CustomerId,
+                CustomerName = customerRoute.CustomerName,
+                SaleZoneName = customerRoute.SaleZoneName,
+                Code = customerRoute.Code,
+                Rate = customerRoute.Rate,
+                IsBlocked = customerRoute.IsBlocked,
+                SaleZoneServiceIds = customerRoute.SaleZoneServiceIds,
+                ExecutedRuleId = customerRoute.ExecutedRuleId,
+                Options = customerRoute.Options,
                 RouteOptionDetails = optionDetails,
                 LinkedRouteRuleIds = linkedRouteRules != null ? linkedRouteRules.Select(itm => itm.RuleId).ToList() : null,
                 ExecutedRouteRuleName = routeRule != null ? routeRule.Name : null,
@@ -158,30 +163,75 @@ namespace TOne.WhS.Routing.Business
             if (customerRoute.Options == null)
                 return null;
 
-            DateTime now = DateTime.Now;
+            DateTime effectiveDate = DateTime.Now;
             RouteOptionRuleManager routeOptionRuleManager = new RouteOptionRuleManager();
 
             List<CustomerRouteOptionDetail> optionDetails = new List<CustomerRouteOptionDetail>();
 
-            foreach (RouteOption item in customerRoute.Options)
+            foreach (RouteOption routeOption in customerRoute.Options)
             {
-                var linkedRouteOptionRules = routeOptionRuleManager.GetEffectiveLinkedRouteOptionRules(customerRoute.CustomerId, customerRoute.Code, item.SupplierId, item.SupplierZoneId, now);
-                optionDetails.Add(new CustomerRouteOptionDetail()
+                List<CustomerRouteBackupOptionDetail> backups = null;
+                if (routeOption.Backups != null && routeOption.Backups.Count > 0)
                 {
-                    Entity = item,
-                    IsBlocked = item.IsBlocked,
-                    Percentage = item.Percentage,
-                    SupplierCode = item.SupplierCode,
-                    SupplierName = _carrierAccountManager.GetCarrierAccountName(item.SupplierId),
-                    SupplierRate = item.SupplierRate,
-                    SupplierZoneName = _supplierZoneManager.GetSupplierZoneName(item.SupplierZoneId),
-                    ExactSupplierServiceIds = item.ExactSupplierServiceIds.ToList(),
-                    ExecutedRuleId = item.ExecutedRuleId,
-                    LinkedRouteOptionRuleIds = linkedRouteOptionRules != null ? linkedRouteOptionRules.Select(itm => itm.RuleId).ToList() : null
-                });
+                    backups = new List<CustomerRouteBackupOptionDetail>();
+
+                    foreach (var routeBackupOption in routeOption.Backups)
+                    {
+                        string routeBackupOptionSupplierName = _carrierAccountManager.GetCarrierAccountName(routeBackupOption.SupplierId);
+                        string routeBackupOptionSupplierZoneName = _supplierZoneManager.GetSupplierZoneName(routeBackupOption.SupplierZoneId);
+                        var linkedRouteBackupOptionRules = routeOptionRuleManager.GetEffectiveLinkedRouteOptionRules(customerRoute.CustomerId, customerRoute.Code, routeBackupOption.SupplierId, routeBackupOption.SupplierZoneId, effectiveDate);
+                        List<int> linkedRouteBackupOptionRuleIds = linkedRouteBackupOptionRules != null ? linkedRouteBackupOptionRules.Select(itm => itm.RuleId).ToList() : null;
+
+                        backups.Add(BuildCustomerRouteBackupOptionDetail(routeBackupOption, routeBackupOptionSupplierName, routeBackupOptionSupplierZoneName, linkedRouteBackupOptionRuleIds));
+                    }
+                }
+
+                string routeOptionSupplierName = _carrierAccountManager.GetCarrierAccountName(routeOption.SupplierId);
+                string routeOptionSupplierZoneName = _supplierZoneManager.GetSupplierZoneName(routeOption.SupplierZoneId);
+
+                var linkedRouteOptionRules = routeOptionRuleManager.GetEffectiveLinkedRouteOptionRules(customerRoute.CustomerId, customerRoute.Code, routeOption.SupplierId, routeOption.SupplierZoneId, effectiveDate);
+                List<int> linkedRouteOptionRuleIds = linkedRouteOptionRules != null ? linkedRouteOptionRules.Select(itm => itm.RuleId).ToList() : null;
+
+                optionDetails.Add(BuildCustomerRouteOptionDetail(routeOption, routeOptionSupplierName, routeOptionSupplierZoneName, linkedRouteOptionRuleIds, backups));
             }
 
             return optionDetails;
+        }
+
+        private CustomerRouteOptionDetail BuildCustomerRouteOptionDetail(RouteOption routeOption, string supplierName, string supplierZoneName, List<int> linkedRouteOptionRuleIds, List<CustomerRouteBackupOptionDetail> backups)
+        {
+            return new CustomerRouteOptionDetail()
+            {
+                SupplierId = routeOption.SupplierId,
+                SupplierName = supplierName,
+                SupplierZoneId = routeOption.SupplierZoneId,
+                SupplierZoneName = supplierZoneName,
+                SupplierCode = routeOption.SupplierCode,
+                SupplierRate = routeOption.SupplierRate,
+                IsBlocked = routeOption.IsBlocked,
+                ExactSupplierServiceIds = routeOption.ExactSupplierServiceIds.ToList(),
+                ExecutedRuleId = routeOption.ExecutedRuleId,
+                LinkedRouteOptionRuleIds = linkedRouteOptionRuleIds,
+                Percentage = routeOption.Percentage,
+                Backups = backups
+            };
+        }
+
+        private CustomerRouteBackupOptionDetail BuildCustomerRouteBackupOptionDetail(RouteBackupOption routeBackupOption, string supplierName, string supplierZoneName, List<int> linkedRouteOptionRuleIds)
+        {
+            return new CustomerRouteBackupOptionDetail()
+            {
+                SupplierId = routeBackupOption.SupplierId,
+                SupplierName = supplierName,
+                SupplierZoneId = routeBackupOption.SupplierZoneId,
+                SupplierZoneName = supplierZoneName,
+                SupplierCode = routeBackupOption.SupplierCode,
+                SupplierRate = routeBackupOption.SupplierRate,
+                IsBlocked = routeBackupOption.IsBlocked,
+                ExactSupplierServiceIds = routeBackupOption.ExactSupplierServiceIds.ToList(),
+                ExecutedRuleId = routeBackupOption.ExecutedRuleId,
+                LinkedRouteOptionRuleIds = linkedRouteOptionRuleIds
+            };
         }
 
         #endregion
@@ -214,30 +264,29 @@ namespace TOne.WhS.Routing.Business
                 {
                     foreach (var record in context.BigResult.Data)
                     {
-                        if (record.Entity != null)
+                        var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                        sheet.Rows.Add(row);
+                        row.Cells.Add(new ExportExcelCell { Value = record.Code });
+                        row.Cells.Add(new ExportExcelCell { Value = record.CustomerName });
+                        row.Cells.Add(new ExportExcelCell { Value = record.SaleZoneName });
+                        row.Cells.Add(new ExportExcelCell { Value = record.Rate });
+                        row.Cells.Add(new ExportExcelCell { Value = record.SaleZoneServiceIds == null ? "" : zoneServiceConfigManager.GetZoneServicesNames(record.SaleZoneServiceIds.ToList()) });
+                        row.Cells.Add(new ExportExcelCell { Value = record.IsBlocked });
+                        row.Cells.Add(new ExportExcelCell { Value = record.LinkedRouteRuleCount });
+                        if (record.RouteOptionDetails != null)
                         {
-                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
-                            sheet.Rows.Add(row);
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Code });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.CustomerName });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.SaleZoneName });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Rate });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.SaleZoneServiceIds == null ? "" : zoneServiceConfigManager.GetZoneServicesNames(record.Entity.SaleZoneServiceIds.ToList()) });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.IsBlocked });
-                            row.Cells.Add(new ExportExcelCell { Value = record.LinkedRouteRuleCount });
-                            if (record.RouteOptionDetails != null)
+                            string routeOptionsDetails = "";
+                            foreach (var customerRouteOptionDetail in record.RouteOptionDetails)
                             {
-                                string routeOptionsDetails = "";
-                                foreach (var customerRouteOptionDetail in record.RouteOptionDetails)
-                                {
-                                    routeOptionsDetails = routeOptionsDetails + customerRouteOptionDetail.SupplierName + " ";
-                                    if (customerRouteOptionDetail.Percentage != null)
-                                        routeOptionsDetails = routeOptionsDetails + customerRouteOptionDetail.Percentage + "% ";
-                                }
-                                row.Cells.Add(new ExportExcelCell { Value = routeOptionsDetails });
+                                routeOptionsDetails = routeOptionsDetails + customerRouteOptionDetail.SupplierName + " ";
+                                if (customerRouteOptionDetail.Percentage != null)
+                                    routeOptionsDetails = routeOptionsDetails + customerRouteOptionDetail.Percentage + "% ";
                             }
-                            else
-                                row.Cells.Add(new ExportExcelCell { Value = "" });
+                            row.Cells.Add(new ExportExcelCell { Value = routeOptionsDetails });
+                        }
+                        else
+                        {
+                            row.Cells.Add(new ExportExcelCell { Value = "" });
                         }
                     }
                 }
@@ -271,7 +320,10 @@ namespace TOne.WhS.Routing.Business
 
                 ICustomerRouteDataManager manager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
                 manager.RoutingDatabase = latestRoutingDatabase;
-                return manager.GetFilteredCustomerRoutes(input);
+
+                IEnumerable<CustomerRoute> customerRoutes = manager.GetFilteredCustomerRoutes(input);
+                FilterCustomerRoutes(customerRoutes, input);
+                return customerRoutes;
             }
 
             protected override ResultProcessingHandler<CustomerRouteDetail> GetResultProcessingHandler(DataRetrievalInput<CustomerRouteQuery> input, BigResult<CustomerRouteDetail> bigResult)
@@ -283,6 +335,33 @@ namespace TOne.WhS.Routing.Business
                 return resultProcessingHandler;
             }
 
+            private void FilterCustomerRoutes(IEnumerable<Entities.CustomerRoute> customerRoutes, Vanrise.Entities.DataRetrievalInput<CustomerRouteQuery> input)
+            {
+                if (input == null || input.Query == null || input.Query.IncludeBlockedSuppliers)
+                    return;
+
+                foreach (var customerRoute in customerRoutes)
+                {
+                    for (var index = customerRoute.Options.Count - 1; index >= 0; index--)
+                    {
+                        var routeOption = customerRoute.Options[index];
+                        if (routeOption.IsFullyBlocked())
+                        {
+                            customerRoute.Options.RemoveAt(index);
+                            continue;
+                        }
+
+                        if (routeOption.Backups != null && routeOption.Backups.Count > 0)
+                        {
+                            List<RouteBackupOption> unblockedRouteBackupOptions = routeOption.Backups.Where(itm => !itm.IsBlocked).ToList();
+                            if (unblockedRouteBackupOptions != null && unblockedRouteBackupOptions.Count > 0)
+                                routeOption.Backups = unblockedRouteBackupOptions;
+                            else
+                                routeOption.Backups = null;
+                        }
+                    }
+                }
+            }
         }
 
         #endregion

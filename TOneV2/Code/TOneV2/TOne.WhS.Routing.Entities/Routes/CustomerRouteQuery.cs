@@ -19,5 +19,7 @@ namespace TOne.WhS.Routing.Entities
         public RouteStatus? RouteStatus { get; set; }
 
         public int LimitResult { get; set; }
+
+        public bool IncludeBlockedSuppliers { get; set; }  
     }
 }

@@ -25,6 +25,10 @@
 
         function defineScope() {
 
+            $scope.onGridReady = function (api) {
+                gridAPI = api;
+            };
+
             $scope.onRoutingDatabaseSelectorReady = function (api) {
                 routingDatabaseSelectorAPI = api;
                 routingDatabaseReadyPromiseDeferred.resolve();
@@ -45,10 +49,6 @@
                 routeStatusSelectorReadyPromiseDeferred.resolve();
             };
 
-            $scope.onGridReady = function (api) {
-                gridAPI = api;
-            };
-
             $scope.searchClicked = function () {
                 if (gridAPI != undefined)
                     return gridAPI.loadGrid(getFilterObject());
@@ -63,7 +63,8 @@
                     Code: $scope.code,
                     CustomerIds: carrierAccountDirectiveAPI.getSelectedIds(),
                     RouteStatus: routeStatusSelectorAPI.getSelectedIds(),
-                    LimitResult: $scope.limit
+                    LimitResult: $scope.limit,
+                    IncludeBlockedSuppliers: $scope.includeBlockedSuppliers
                 };
                 return query;
             }

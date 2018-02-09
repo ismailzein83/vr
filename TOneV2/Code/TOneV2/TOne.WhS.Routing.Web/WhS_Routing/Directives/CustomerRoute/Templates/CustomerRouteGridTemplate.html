@@ -1,29 +1,38 @@
 ﻿<div ng-show="showGrid" vr-loader="isLoading">
-    <vr-datagrid datasource="customerRoutes"
+    <vr-datagrid on-ready="onGridReady"
+                 datasource="customerRoutes"
                  dataretrievalfunction="dataRetrievalFunction"
                  pagingtype="'Pager'"
-                 on-ready="onGridReady"
                  menuactions="gridMenuActions"
                  getrowstyle="getRowStyle"
-                 defaultsortbyfieldname="'Entity.CustomerName'"
+                 defaultsortbyfieldname="'CustomerName'"
                  idfield="CustomerRouteDetailId" enableautoexport="true" normalcell>
 
-        <vr-datagridcolumn headertext="'Code'" field="'Entity.Code'" fixedwidth="100"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Customer'" field="'Entity.CustomerName'" fixedwidth="120"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Sale Zone'" field="'Entity.SaleZoneName'" fixedwidth="120"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Rate'" field="'Entity.Rate'" fixedwidth="60" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Code'" field="'Code'" fixedwidth="100"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Customer'" field="'CustomerName'" fixedwidth="120"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Sale Zone'" field="'SaleZoneName'" fixedwidth="120"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Rate'" field="'Rate'" fixedwidth="60" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Services'" widthfactor="1" disablesorting="true" fixedwidth="60">
             <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
         </vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Blocked'" field="'Entity.IsBlocked'" fixedwidth="50"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Linked Rules'" field="'LinkedRouteRuleCount'" fixedwidth="75" disablesorting="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Blocked'" field="'IsBlocked'" fixedwidth="50"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Linked Rules'" field="'LinkedRouteRuleCount'" fixedwidth="75" disablesorting="true" isfielddynamic="true"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Rule Type'" field="'ExecutedRouteRuleSettingsTypeName'" fixedwidth="90"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Rule Name'" field="'ExecutedRouteRuleName'" fixedwidth="100"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Route Options'" disablesorting>
             <div class="responsive-container" style="white-space: normal;">
-                <span ng-repeat="details in dataItem.RouteOptionDetails" ng-class="{'text-danger bold-label':details.IsBlocked}"
-                      style="font-size: 11px; cursor: pointer; display: inline-block; text-align: center; padding: 0px 10px 0px 0px;">
-                    {{details.SupplierName}} <span ng-if="details.Percentage!=null">{{details.Percentage}}%</span>
+                <span ng-repeat="details in dataItem.RouteOptionDetails" style="padding: 0px 10px 0px 0px;">
+                    <span ng-class="{'text-danger':details.IsBlocked, 'bold-label':true}" 
+                          style="font-size: 11px; cursor: pointer; display: inline-block; text-align: center;">
+                        {{details.SupplierName}}<span ng-if="details.Percentage!=null">{{details.Percentage}}%</span>
+                    </span>
+                    <span ng-if="details.Backups != null && details.Backups.length > 0">
+                        &lt;
+                        <span style="font-style:italic" ng-repeat="backupDetails in details.Backups" ng-class="{'text-danger bold-label':backupDetails.IsBlocked}">
+                            {{backupDetails.SupplierName}}<span ng-if="!$last">,</span>
+                        </span>
+                        &gt;
+                    </span>
                 </span>
             </div>
         </vr-datagridcolumn>
