@@ -68,5 +68,10 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             return true;
         }
+
+        public override Type GetNonNullableRuntimeType()
+        {
+            return typeof(List<CustomerFaultTicketDescriptionSetting>);
+        }
     }
 }

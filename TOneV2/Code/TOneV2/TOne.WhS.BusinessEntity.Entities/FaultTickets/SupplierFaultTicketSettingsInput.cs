@@ -21,7 +21,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string CodeNumber { get; set; }
         public Guid ReasonId { get; set; }
         public string ReasonDescription { get; set; }
-        public Guid? InternationalReleaseCodeId { get; set; }
+        public long? InternationalReleaseCodeId { get; set; }
         public string InternationalReleaseCodeDescription { get; set; }
     }
     //public class CustomerFaultTicketSettings
@@ -32,6 +32,6 @@ namespace TOne.WhS.BusinessEntity.Entities
     {
         public string CodeNumber { get; set; }
         public Guid ReasonId { get; set; }
-        public Guid? InternationalReleaseCodeId { get; set; }
+        public long? InternationalReleaseCodeId { get; set; }
     }
 }
