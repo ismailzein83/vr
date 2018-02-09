@@ -263,14 +263,12 @@ namespace TOne.WhS.RouteSync.TelesIdb
                     if (numberOfAddedOptions == NumberOfOptions)
                         break;
 
-                    if (routeOption.IsBlocked)
+                    if (routeOption.IsBlocked || !routeOption.Percentage.HasValue)
                         continue;
 
-                    bool hasBackup = false;
                     BackupRouteOption validBackup = null;
                     if (routeOption.Backups != null && routeOption.Backups.Count > 0)
                     {
-                        hasBackup = true;
                         foreach (BackupRouteOption backup in routeOption.Backups)
                         {
                             if (backup.IsBlocked)
@@ -284,29 +282,29 @@ namespace TOne.WhS.RouteSync.TelesIdb
                     CarrierMapping routeOptionMapping = CarrierMappings.GetRecord(routeOption.SupplierId);
                     CarrierMapping backUpRouteOptionMapping = validBackup != null ? CarrierMappings.GetRecord(validBackup.SupplierId) : null;
 
-                    if (routeOptionMapping == null && backUpRouteOptionMapping == null)
+                    bool routeOptionIsValid = routeOptionMapping != null && routeOptionMapping.SupplierMapping != null && routeOptionMapping.SupplierMapping.Count > 0;
+                    bool backupRouteOptionIsValid = backUpRouteOptionMapping != null && backUpRouteOptionMapping.SupplierMapping != null && backUpRouteOptionMapping.SupplierMapping.Count > 0;
+
+                    if (!routeOptionIsValid && !backupRouteOptionIsValid)
                         continue;
 
                     string concatSupplierMapping;
                     string concatBackUpSupplierMapping = string.Empty;
 
-                    if (routeOptionMapping != null)
+                    if (routeOptionIsValid)
                     {
                         concatSupplierMapping = this.ConcatenateSupplierMappings(routeOptionMapping.SupplierMapping);
                         concatSupplierMapping = GetPercentage(routeOption.Percentage) + concatSupplierMapping;
 
-                        if (hasBackup)
+                        if (backupRouteOptionIsValid)
                         {
-                            if (backUpRouteOptionMapping != null)
-                            {
-                                concatBackUpSupplierMapping = this.ConcatenateSupplierMappings(backUpRouteOptionMapping.SupplierMapping);
-                                concatBackUpSupplierMapping = GetPercentage(null) + concatBackUpSupplierMapping;
-                            }
-                            else
-                            {
-                                concatBackUpSupplierMapping = this.ConcatenateSupplierMappings(routeOptionMapping.SupplierMapping);
-                                concatBackUpSupplierMapping = GetPercentage(null) + concatBackUpSupplierMapping;
-                            }
+                            concatBackUpSupplierMapping = this.ConcatenateSupplierMappings(backUpRouteOptionMapping.SupplierMapping);
+                            concatBackUpSupplierMapping = GetPercentage(null) + concatBackUpSupplierMapping;
+                        }
+                        else
+                        {
+                            concatBackUpSupplierMapping = this.ConcatenateSupplierMappings(routeOptionMapping.SupplierMapping);
+                            concatBackUpSupplierMapping = GetPercentage(null) + concatBackUpSupplierMapping;
                         }
                     }
                     else
@@ -318,8 +316,14 @@ namespace TOne.WhS.RouteSync.TelesIdb
                         concatBackUpSupplierMapping = GetPercentage(null) + concatBackUpSupplierMapping;
                     }
 
+                    strBuilder.AppendFormat("{0}{1}", strBuilder.Length > 0 ? supplierOptionsSeparator : string.Empty, concatSupplierMapping);
                     numberOfAddedOptions++;
-                    strBuilder.AppendFormat("{0}{1}{2}", strBuilder.Length > 0 ? supplierOptionsSeparator : string.Empty, concatSupplierMapping, concatBackUpSupplierMapping);
+
+                    if (numberOfAddedOptions == NumberOfOptions)
+                        break;
+
+                    strBuilder.Append(concatBackUpSupplierMapping);
+                    numberOfAddedOptions++;
                 }
             }
             return strBuilder.Length > 0 ? strBuilder.ToString() : "BLK";
