@@ -103,7 +103,7 @@
             <span class="hand-cursor glyphicon glyphicon-remove vr-remove-row" ng-click="ctrl.deleteRowClicked(dataItem)" ></span>
         </div>
     </div>
-    <div id="divExpandableRowContent_{{$index}}" ng-show="dataItem.isRowExpanded" style="border-top: 1px solid #D0D0D0; border-right:1px solid #D0D0D0;white-space:nowrap">
+    <div id="divExpandableRowContent_{{$index}}" ng-show="dataItem.isRowExpanded" style="border-top: 1px solid #D0D0D0; border-right:1px solid #D0D0D0;white-space:nowrap;background-color: #fff;">
         <div style="margin:-2px" ng-style="{'width': $parent.ctrl.expandableColumnWidth, 'display':'inline-block' }"></div>
         <div vr-htmlcompiler="dataItem.expandableRowTemplate" ng-style="{'width': $parent.ctrl.expandableSectionWidth, 'display':'inline-block', 'padding': '5px', 'background-color': '#F5F5F5', 'border-left':'1px solid #D0D0D0'}"></div>
     </div>
