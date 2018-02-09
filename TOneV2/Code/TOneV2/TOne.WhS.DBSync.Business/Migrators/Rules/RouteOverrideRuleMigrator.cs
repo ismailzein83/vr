@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.BusinessEntity.MainExtensions.CodeCriteriaGroups;
@@ -9,9 +8,6 @@ using TOne.WhS.DBSync.Data.SQL.SourceDataManger;
 using TOne.WhS.DBSync.Entities;
 using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Business.RouteRules.Filters;
-using TOne.WhS.Routing.Business.RouteRules.OptionSettingsGroups;
-using TOne.WhS.Routing.Business.RouteRules.Orders;
-using TOne.WhS.Routing.Business.RouteRules.Percentages;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
 using Vanrise.Rules.Entities;
@@ -20,14 +16,12 @@ namespace TOne.WhS.DBSync.Business
 {
     public class RouteOverrideRuleMigrator : RuleBaseMigrator
     {
-        public override string EntityName
-        {
-            get { return "Route Override"; }
-        }
-
         readonly Dictionary<string, CarrierAccount> _allCarrierAccounts;
         readonly Dictionary<string, SaleZone> _allSaleZones;
         readonly int _routeRuleTypeId;
+
+        public override string EntityName { get { return "Route Override"; } }
+
         public RouteOverrideRuleMigrator(RuleMigrationContext context)
             : base(context)
         {
@@ -40,6 +34,7 @@ namespace TOne.WhS.DBSync.Business
             RouteRuleManager manager = new RouteRuleManager();
             _routeRuleTypeId = manager.GetRuleTypeId();
         }
+
         public override IEnumerable<SourceRule> GetSourceRules()
         {
             List<SourceRule> routeRules = new List<SourceRule>();
@@ -55,6 +50,7 @@ namespace TOne.WhS.DBSync.Business
         }
 
         #region Private Methods
+
         SourceRule GetDefaultRule()
         {
             RouteRule rule = new RouteRule
@@ -78,6 +74,7 @@ namespace TOne.WhS.DBSync.Business
             };
             return defaultRouteRule;
         }
+
         Dictionary<string, List<SourceRouteOverrideRule>> GetRulesDictionary(IEnumerable<SourceRouteOverrideRule> overrideRules)
         {
             Dictionary<string, List<SourceRouteOverrideRule>> dicRules = new Dictionary<string, List<SourceRouteOverrideRule>>();
@@ -96,18 +93,26 @@ namespace TOne.WhS.DBSync.Business
             }
             return dicRules;
         }
+
         FixedRouteRule GetRuleSettings(SourceRouteOverrideRule sourceRule)
         {
             var rule = new FixedRouteRule()
             {
-                //Options = GetOptions(sourceRule)
+                Options = GetOptions(sourceRule)
             };
             return rule;
         }
 
-        Dictionary<int, FixedRouteOptionSettings> GetOptions(SourceRouteOverrideRule sourceRule)
+        List<FixedRouteOptionSettings> GetOptions(SourceRouteOverrideRule sourceRule)
         {
-            Dictionary<int, FixedRouteOptionSettings> result = new  Dictionary<int,FixedRouteOptionSettings>();
+            List<FixedRouteOptionSettings> results = new List<FixedRouteOptionSettings>();
+
+            decimal totalPercentage = sourceRule.SupplierOptions.Sum(itm => itm.Percentage.HasValue ? itm.Percentage.Value : 0);
+            bool supplierOptionsWithBackup = totalPercentage > 0;
+            if (supplierOptionsWithBackup && totalPercentage != 100)
+                Context.MigrationContext.WriteWarning(string.Format("Total percentage for supplier options is not equal 100 for CustomerId {0} and SaleZoneId {1}", sourceRule.CustomerId, sourceRule.SaleZoneId));
+
+            FixedRouteOptionSettings previousFixedRouteOptionSettings = null;
 
             foreach (var option in sourceRule.SupplierOptions)
             {
@@ -130,21 +135,84 @@ namespace TOne.WhS.DBSync.Business
                     });
                 }
 
-                if (!result.ContainsKey(supplier.CarrierAccountId))
+                if (!supplierOptionsWithBackup || option.Percentage.HasValue)
                 {
-                    result.Add(supplier.CarrierAccountId, new FixedRouteOptionSettings()
+                    FixedRouteOptionSettings fixedRouteOptionSettings = new FixedRouteOptionSettings()
                     {
                         SupplierId = supplier.CarrierAccountId,
+                        NumberOfTries = 1,
                         Percentage = option.Percentage,
+                        Filters = supplierFilters,
+                        Backups = null
+                    };
+
+                    results.Add(fixedRouteOptionSettings);
+                    previousFixedRouteOptionSettings = fixedRouteOptionSettings;
+                }
+                else
+                {
+                    if (previousFixedRouteOptionSettings == null)
+                    {
+                        Context.MigrationContext.WriteWarning(string.Format("Backup option of supplier Id {0} has been ignored.", option.SupplierId));
+                        continue;
+                    }
+
+                    if (previousFixedRouteOptionSettings.Backups == null)
+                        previousFixedRouteOptionSettings.Backups = new List<FixedRouteBackupOptionSettings>();
+
+                    previousFixedRouteOptionSettings.Backups.Add(new FixedRouteBackupOptionSettings()
+                    {
+                        SupplierId = supplier.CarrierAccountId,
+                        NumberOfTries = 1,
                         Filters = supplierFilters
                     });
                 }
             }
 
-            return result;
+            return results;
         }
 
+        //Dictionary<int, FixedRouteOptionSettings> GetOptions2(SourceRouteOverrideRule sourceRule)
+        //{
+        //    Dictionary<int, FixedRouteOptionSettings> result = new Dictionary<int, FixedRouteOptionSettings>();
+
+        //    foreach (var option in sourceRule.SupplierOptions)
+        //    {
+        //        CarrierAccount supplier;
+        //        if (!_allCarrierAccounts.TryGetValue(option.SupplierId, out supplier))
+        //        {
+        //            Context.MigrationContext.WriteWarning(string.Format("Failed adding Supplier Option for Supplier Source Id {0}, Supplier is not imported", option.SupplierId));
+        //            continue;
+        //        }
+
+        //        List<RouteOptionFilterSettings> supplierFilters = null;
+        //        if (!option.IsLoss)
+        //        {
+        //            supplierFilters = new List<RouteOptionFilterSettings>();
+        //            supplierFilters.Add(new RateOptionFilter
+        //            {
+        //                RateOption = RateOption.MaximumLoss,
+        //                RateOptionType = RateOptionType.Fixed,
+        //                RateOptionValue = 0
+        //            });
+        //        }
+
+        //        if (!result.ContainsKey(supplier.CarrierAccountId))
+        //        {
+        //            result.Add(supplier.CarrierAccountId, new FixedRouteOptionSettings()
+        //            {
+        //                SupplierId = supplier.CarrierAccountId,
+        //                Percentage = option.Percentage,
+        //                Filters = supplierFilters
+        //            });
+        //        }
+        //    }
+
+        //    return result;
+        //}
+
         #region ZonePart
+
         IEnumerable<SourceRule> GetRulesWithZone(IEnumerable<SourceRouteOverrideRule> overrideRules)
         {
             List<SourceRule> routeRules = new List<SourceRule>();
@@ -163,6 +231,7 @@ namespace TOne.WhS.DBSync.Business
             return routeRules;
 
         }
+
         SourceRule GetSourceRuleFromZones(IEnumerable<SourceRouteOverrideRule> rules)
         {
             SourceRouteOverrideRule sourceRule = rules.First();
@@ -195,6 +264,7 @@ namespace TOne.WhS.DBSync.Business
                 };
             }
         }
+
         RouteRule GetRuleDetailsFromZone(IEnumerable<SourceRouteOverrideRule> rules, SourceRouteOverrideRule sourceRule, List<long> lstZoneIds)
         {
             var criteria = GetRuleZoneCriteria(lstZoneIds, sourceRule);
@@ -239,6 +309,7 @@ namespace TOne.WhS.DBSync.Business
         #endregion
 
         #region CodePart
+
         IEnumerable<SourceRule> GetRulesWithCode(IEnumerable<SourceRouteOverrideRule> overrideRules)
         {
             List<SourceRule> routeRules = new List<SourceRule>();
@@ -342,7 +413,7 @@ namespace TOne.WhS.DBSync.Business
         }
 
         #endregion
-        #endregion
 
+        #endregion
     }
 }

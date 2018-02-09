@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.BusinessEntity.MainExtensions.CodeCriteriaGroups;
 using TOne.WhS.BusinessEntity.MainExtensions.CustomerGroups;
@@ -17,15 +15,11 @@ namespace TOne.WhS.DBSync.Business
 {
     public class SpecialRequestRuleMigrator : RuleBaseMigrator
     {
-        public override string EntityName
-        {
-            get
-            {
-                return "Special Request";
-            }
-        }
         readonly Dictionary<string, CarrierAccount> _allCarrierAccounts;
         readonly int _routeRuleTypeId;
+
+        public override string EntityName { get { return "Special Request"; } }
+
         public SpecialRequestRuleMigrator(RuleMigrationContext context)
             : base(context)
         {
@@ -36,6 +30,7 @@ namespace TOne.WhS.DBSync.Business
             RouteRuleManager manager = new RouteRuleManager();
             _routeRuleTypeId = manager.GetRuleTypeId();
         }
+
         public override IEnumerable<SourceRule> GetSourceRules()
         {
             List<SourceRule> rules = new List<SourceRule>();
@@ -73,6 +68,7 @@ namespace TOne.WhS.DBSync.Business
         }
 
         #region Private Methods
+
         static List<SpecialRequestOutput> StructureSpecialRequestRulesByDate(List<SourceSpecialRequest> specialRequestRules)
         {
             List<SpecialRequestOutput> outputRules = new List<SpecialRequestOutput>();
@@ -115,6 +111,7 @@ namespace TOne.WhS.DBSync.Business
 
             return outputRules;
         }
+
         RouteRule GetRouteRuleDetails(IEnumerable<SourceSpecialRequest> specialRequestRules, DateTime bed, DateTime? eed)
         {
             CarrierAccount customer;
@@ -143,18 +140,20 @@ namespace TOne.WhS.DBSync.Business
                 },
                 Settings = new SpecialRequestRouteRule
                 {
-                    //Options = GetSupplierOptions(specialRequestRules.Select(s => s.SupplierOption))
+                    Options = GetSupplierOptions(specialRequestRules.Select(s => s.SupplierOption))
                 }
             };
 
             return routeRule;
         }
-        Dictionary<int, SpecialRequestRouteOptionSettings> GetSupplierOptions(IEnumerable<SpecialRequestSupplierOption> suppliers)
+
+        List<SpecialRequestRouteOptionSettings> GetSupplierOptions(IEnumerable<SpecialRequestSupplierOption> suppliers)
         {
-            Dictionary<int, SpecialRequestRouteOptionSettings> options = new Dictionary<int, SpecialRequestRouteOptionSettings>();
-            int position = 0;
+            List<SpecialRequestRouteOptionSettings> results = new List<SpecialRequestRouteOptionSettings>();
+
             Dictionary<int, List<SpecialRequestSupplierOption>> groupedOptionsByPriority = new Dictionary<int, List<SpecialRequestSupplierOption>>();
             suppliers = suppliers.OrderByDescending(s => s.Priority).ThenByDescending(s => s.SourceId);
+
             foreach (var item in suppliers)
             {
                 List<SpecialRequestSupplierOption> supplierOptions = groupedOptionsByPriority.GetOrCreateItem(item.Priority);
@@ -167,37 +166,39 @@ namespace TOne.WhS.DBSync.Business
                 if (priority != 0)
                 {
                     SpecialRequestSupplierOption option = item.Value[0];
-
-                    position = AddSpecialRequestRouteOptionSettings(options, position, option);
+                    AddSpecialRequestRouteOptionSettings(results, option);
                 }
                 else
                 {
                     foreach (var option in item.Value)
                     {
-                        position = AddSpecialRequestRouteOptionSettings(options, position, option);
+                        AddSpecialRequestRouteOptionSettings(results, option);
                     }
                 }
             }
 
-            return options;
+            return results;
         }
 
-        private int AddSpecialRequestRouteOptionSettings(Dictionary<int, SpecialRequestRouteOptionSettings> options, int position, SpecialRequestSupplierOption option)
+        void AddSpecialRequestRouteOptionSettings(List<SpecialRequestRouteOptionSettings> options, SpecialRequestSupplierOption option)
         {
             CarrierAccount supplier;
             if (!_allCarrierAccounts.TryGetValue(option.SupplierId, out supplier))
                 throw new NullReferenceException(string.Format("supplier not found. Supplier Source Id {0}.", option.SupplierId));
+
             SpecialRequestRouteOptionSettings specialRequestOptionSettings = new SpecialRequestRouteOptionSettings
             {
-                ForceOption = option.ForcedOption,
+                SupplierId = supplier.CarrierAccountId,
                 NumberOfTries = option.NumberOfTries,
-                Percentage = option.Percentage == 0 ? (int?)null : option.Percentage,
-                SupplierId = supplier.CarrierAccountId
+                Percentage = option.Percentage == 0 ? default(int?) : option.Percentage,
+                ForceOption = option.ForcedOption,
+                Backups = null
             };
-            if (!options.ContainsKey(supplier.CarrierAccountId))
-                options.Add(supplier.CarrierAccountId, specialRequestOptionSettings);
-            return position;
+
+            if (!options.Any(itm => itm.SupplierId == supplier.CarrierAccountId))
+                options.Add(specialRequestOptionSettings);
         }
+
         List<CodeCriteria> GetCodeCriteria(SourceSpecialRequest groupedRule)
         {
             return new List<CodeCriteria> { 
@@ -207,6 +208,7 @@ namespace TOne.WhS.DBSync.Business
              }
             };
         }
+
         Dictionary<string, List<SourceSpecialRequest>> GroupSpecialRequests(IEnumerable<SourceSpecialRequest> sourceRules)
         {
             Dictionary<string, List<SourceSpecialRequest>> groupedRules = new Dictionary<string, List<SourceSpecialRequest>>();
@@ -224,6 +226,7 @@ namespace TOne.WhS.DBSync.Business
             }
             return groupedRules;
         }
+
         string GetKey(SourceSpecialRequest specialRequest)
         {
             return string.Format("{0}-{1}-{2}-{3}", specialRequest.CustomerId, specialRequest.Code, specialRequest.IncludeSubCode, specialRequest.ExcludedCodesList == null ? "" : specialRequest.ExcludedCodesList.Aggregate((i, j) => i + j));
@@ -237,6 +240,5 @@ namespace TOne.WhS.DBSync.Business
         public IEnumerable<SourceSpecialRequest> SpecialRequests { get; set; }
         public DateTime BED { get; set; }
         public DateTime? EED { get; set; }
-
     }
 }
