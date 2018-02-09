@@ -147,8 +147,11 @@ namespace Vanrise.GenericData.Business
                 hasInsertedId = false;
                 fieldValues.Add(idFieldType.Name, idField);
             }
+          
+            int? userId;
+            SecurityContext.Current.TryGetLoggedInUserId(out userId);
 
-            bool insertActionSucc = storageDataManager.Insert(fieldValues, out insertedId);
+            bool insertActionSucc = storageDataManager.Insert(fieldValues, userId,userId, out insertedId);
 
             if (insertActionSucc && dataRecordStorage.Settings.EnableUseCaching)
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(dataRecordStorageId);
@@ -171,7 +174,9 @@ namespace Vanrise.GenericData.Business
                 fieldValues.Add(idFieldType.Name, recordFieldId);
             }
 
-            bool updateActionSucc = storageDataManager.Update(fieldValues);
+            int? userId;
+            SecurityContext.Current.TryGetLoggedInUserId(out userId);
+            bool updateActionSucc = storageDataManager.Update(fieldValues, userId);
 
             if (updateActionSucc && dataRecordStorage.Settings.EnableUseCaching)
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(dataRecordStorageId);

@@ -35,6 +35,7 @@ namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEOnAf
                 emailTemplateEvaluator.ThrowIfNull("emailTemplateEvaluator");
 
                 vrMailManager.SendMail(emailTemplateEvaluator.From, emailTemplateEvaluator.To, emailTemplateEvaluator.CC, emailTemplateEvaluator.BCC, emailTemplateEvaluator.Subject, emailTemplateEvaluator.Body);
+                new GenericBusinessEntityManager().LogObjectCustomAction(context.BusinessEntityDefinitionId,context.NewEntity, "Send Email",true, null);
             }
         }
         public string EntityObjectName { get; set; }

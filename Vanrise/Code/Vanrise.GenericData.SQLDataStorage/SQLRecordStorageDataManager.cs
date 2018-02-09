@@ -623,10 +623,10 @@ namespace Vanrise.GenericData.SQLDataStorage
         }
 
 
-        public bool Update(Dictionary<string, Object> fieldValues)
+        public bool Update(Dictionary<string, Object> fieldValues, int? modifiedUserId)
         {
             Dictionary<string, Object> parameterValues = new Dictionary<string, Object>();
-            return ExecuteNonQueryText(BuildUpdateQuery(fieldValues, parameterValues), (cmd) =>
+            return ExecuteNonQueryText(BuildUpdateQuery(fieldValues, parameterValues, modifiedUserId), (cmd) =>
                     {
                         foreach (var prm in parameterValues)
                         {
@@ -636,7 +636,7 @@ namespace Vanrise.GenericData.SQLDataStorage
                     }) > 0;
 
         }
-        private string BuildUpdateQuery(Dictionary<string, Object> fieldValues, Dictionary<string, Object> parameterValues)
+        private string BuildUpdateQuery(Dictionary<string, Object> fieldValues, Dictionary<string, Object> parameterValues,int? modifiedUserId)
         {
             if (fieldValues == null || fieldValues.Count == 0)
                 throw new Exception("fieldValues should not be null or empty.");
@@ -695,6 +695,33 @@ namespace Vanrise.GenericData.SQLDataStorage
                 }
             }
 
+            if (modifiedUserId.HasValue && _dataRecordStorage.Settings.LastModifiedByField != null)
+            {
+                var modifiedByColumn = GetColumnFromFieldName(_dataRecordStorage.Settings.LastModifiedByField);
+                if (modifiedByColumn !=  null)
+                {
+                    var parameter = GenerateParameterName(ref parameterIndex);
+                    parameterValues.Add(parameter, modifiedUserId.Value);
+
+                    if (valuesQuery.Length != 0)
+                        valuesQuery.Append(",");
+                    valuesQuery.AppendFormat(@" {0} = {1}  ", modifiedByColumn.ColumnName, parameter);
+                }
+               
+            }
+
+            if (_dataRecordStorage.Settings.LastModifiedTimeField != null)
+            {
+                var modifiedTimeColumn = GetColumnFromFieldName(_dataRecordStorage.Settings.LastModifiedTimeField);
+                if (modifiedTimeColumn != null)
+                {
+                    if (valuesQuery.Length != 0)
+                        valuesQuery.Append(",");
+                    valuesQuery.AppendFormat(@" {0} = getdate()  ", modifiedTimeColumn.ColumnName);
+                }
+              
+            }
+
             if (shouldAddIfExist)
             {
                 queryBuilder.Append(@" IF NOT EXISTS(SELECT 1 FROM #TABLENAME# WHERE #IFNOTEXISTSQUERY#) ");
@@ -707,13 +734,13 @@ namespace Vanrise.GenericData.SQLDataStorage
             return queryBuilder.ToString();
         }
 
-        public bool Insert(Dictionary<string, Object> fieldValues, out object insertedId)
+        public bool Insert(Dictionary<string, Object> fieldValues, int? createdUserId, int? modifiedUserId, out object insertedId)
         {
             Dictionary<string, Object> parameterValues = new Dictionary<string, Object>();
             bool withOutParameter = false;
             insertedId = null;
             SqlParameter sqlParameter = null;
-            var effectedRows = ExecuteNonQueryText(BuildInsertQuery(fieldValues, parameterValues, ref withOutParameter), (cmd) =>
+            var effectedRows = ExecuteNonQueryText(BuildInsertQuery(fieldValues, parameterValues,createdUserId,modifiedUserId, ref withOutParameter), (cmd) =>
             {
                 foreach (var prm in parameterValues)
                 {
@@ -732,7 +759,7 @@ namespace Vanrise.GenericData.SQLDataStorage
             return effectedRows > 0;
         }
 
-        private string BuildInsertQuery(Dictionary<string, Object> fieldValues, Dictionary<string, Object> parameterValues, ref bool withOutParameter)
+        private string BuildInsertQuery(Dictionary<string, Object> fieldValues, Dictionary<string, Object> parameterValues, int? createdUserId, int? modifiedUserId, ref bool withOutParameter)
         {
             StringBuilder queryBuilder = new StringBuilder();
 
@@ -782,6 +809,81 @@ namespace Vanrise.GenericData.SQLDataStorage
             {
                 withOutParameter = true;
             }
+
+            if (createdUserId.HasValue && _dataRecordStorage.Settings.CreatedByField != null)
+            {
+                var createdByColumn = GetColumnFromFieldName(_dataRecordStorage.Settings.CreatedByField);
+                if (createdByColumn != null)
+                {
+                    var parameter = GenerateParameterName(ref parameterIndex);
+                    parameterValues.Add(parameter, createdUserId.Value);
+
+                    if (parameterIndex != 1)
+                    {
+                        columnNamesBuilder.Append(",");
+                        valuesQuery.Append(",");
+                    }
+
+                    columnNamesBuilder.AppendFormat(@" {0} ", createdByColumn.ColumnName);
+                    valuesQuery.AppendFormat(@" {0} ", parameter);
+                }
+            }
+           
+            if (_dataRecordStorage.Settings.CreatedTimeField != null)
+            {
+                var createdTimeColumn = GetColumnFromFieldName(_dataRecordStorage.Settings.CreatedTimeField);
+                if (createdTimeColumn != null)
+                {
+                    if (parameterIndex != 1)
+                    {
+                        columnNamesBuilder.Append(",");
+                        valuesQuery.Append(",");
+                    }
+
+                    columnNamesBuilder.AppendFormat(@" {0} ", createdTimeColumn.ColumnName);
+                    valuesQuery.AppendFormat(@"  getdate()  ");
+                }
+               
+            }
+
+            if (modifiedUserId.HasValue && _dataRecordStorage.Settings.LastModifiedByField != null)
+            {
+                var modifiedByColumn = GetColumnFromFieldName(_dataRecordStorage.Settings.LastModifiedByField);
+                if (modifiedByColumn != null)
+                {
+                    var parameter = GenerateParameterName(ref parameterIndex);
+                    parameterValues.Add(parameter, modifiedUserId.Value);
+
+                    if (parameterIndex != 1)
+                    {
+                        columnNamesBuilder.Append(",");
+                        valuesQuery.Append(",");
+                    }
+
+                    columnNamesBuilder.AppendFormat(@" {0} ", modifiedByColumn.ColumnName);
+                    valuesQuery.AppendFormat(@" {0} ", parameter);
+                }
+            }
+
+            if (_dataRecordStorage.Settings.LastModifiedTimeField != null)
+            {
+                var modifiedTimeColumn = GetColumnFromFieldName(_dataRecordStorage.Settings.LastModifiedTimeField);
+                if (modifiedTimeColumn != null)
+                {
+                    if (parameterIndex != 1)
+                    {
+                        columnNamesBuilder.Append(",");
+                        valuesQuery.Append(",");
+                    }
+
+                    columnNamesBuilder.AppendFormat(@" {0} ", modifiedTimeColumn.ColumnName);
+                    valuesQuery.AppendFormat(@" getdate() ");
+                }
+                
+            }
+
+
+
             if (ifNotExistsQueryBuilder.Length > 0)
             {
                 queryBuilder.Append(@" IF NOT EXISTS(SELECT 1 FROM #TABLENAME# WHERE #IFNOTEXISTSQUERY#) ");
@@ -795,6 +897,7 @@ namespace Vanrise.GenericData.SQLDataStorage
 
             return queryBuilder.ToString();
         }
+       
         private DataRecord DataRecordMapper(IDataReader reader)
         {
 

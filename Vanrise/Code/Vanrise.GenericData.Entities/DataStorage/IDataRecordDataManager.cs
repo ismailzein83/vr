@@ -17,8 +17,8 @@ namespace Vanrise.GenericData.Entities
         void DeleteRecords(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup);
 
         void DeleteRecords(DateTime dateTime, RecordFilterGroup recordFilterGroup);
-        bool Update(Dictionary<string, Object> fieldValues);
-        bool Insert(Dictionary<string, Object> fieldValues, out object insertedId);
+        bool Update(Dictionary<string, Object> fieldValues, int? modifiedUserId);
+        bool Insert(Dictionary<string, Object> fieldValues, int? createdUserId, int? modifiedUserId, out object insertedId);
         List<DataRecord> GetAllDataRecords(List<string> columns);
         bool AreDataRecordsUpdated(ref object updateHandle);
     }
