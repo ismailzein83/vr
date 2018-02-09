@@ -1,8 +1,5 @@
-﻿using System;
+﻿using System.Linq;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
@@ -19,6 +16,10 @@ namespace TOne.WhS.Routing.Entities
 
         public List<RPRouteOptionSupplierZone> SupplierZones { get; set; }
 
+        public int NumberOfBlockedZones { get; set; }
+
+        public int NumberOfUnblockedZones { get; set; }
+
         public SupplierStatus SupplierStatus
         {
             get
@@ -30,10 +31,6 @@ namespace TOne.WhS.Routing.Entities
                 return Entities.SupplierStatus.PartialActive;
             }
         }
-
-        public int NumberOfBlockedZones { get; set; }
-
-        public int NumberOfUnblockedZones { get; set; }
 
         public int? Percentage { get; set; }
 
