@@ -49,6 +49,8 @@ namespace TOne.WhS.Routing.Business.RouteRules.Orders
         private decimal? GetCustomerRouteQualityValue(long supplierZoneId, QualityConfigurationManager manager, RoutingDatabase routingDatabase)
         {
             Dictionary<long, List<CustomerRouteQualityConfigurationData>> customerRouteQualityConfigurationData = manager.GetCachedCustomerRouteQualityConfigurationData(routingDatabase);
+            if (customerRouteQualityConfigurationData == null)
+                return null;
 
             List<CustomerRouteQualityConfigurationData> customerRouteQualityConfigurationsData;
             if (!customerRouteQualityConfigurationData.TryGetValue(supplierZoneId, out customerRouteQualityConfigurationsData) || customerRouteQualityConfigurationsData.Count == 0)
@@ -68,6 +70,8 @@ namespace TOne.WhS.Routing.Business.RouteRules.Orders
         private decimal? GetRoutingProductQualityValue(long saleZoneId, int supplierId, QualityConfigurationManager manager, RoutingDatabase routingDatabase)
         {
             Dictionary<SaleZoneSupplier, List<RPQualityConfigurationData>> rpQualityConfigurationData = manager.GetCachedRPQualityConfigurationData(routingDatabase);
+            if (rpQualityConfigurationData == null)
+                return null;
 
             SaleZoneSupplier saleZoneSupplier = new SaleZoneSupplier() { SaleZoneId = saleZoneId, SupplierId = supplierId };
 
