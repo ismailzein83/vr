@@ -4144,3 +4144,21 @@ vr-datalist .drag-icon {
 }
 
 /* end vr-datagrid custom layout */
+
+/* start vr-datagrid custom cell */
+
+span[blocked="true"]{
+    text-decoration:line-through;
+}
+span[marketprice="true"]{
+    color:#5cb85c;
+}
+span[lossy="true"]{
+      color:#f0ad4e;
+}
+
+span[forced="true"]{
+    color:#337ab7;
+}
+
+/* end vr-datagrid custom cell */
