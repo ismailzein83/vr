@@ -44,6 +44,10 @@
     <Reference Include="Vanrise.Common.Data">
       <HintPath>..\Vanrise.Common.Data\bin\Debug\Vanrise.Common.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
