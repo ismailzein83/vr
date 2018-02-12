@@ -1541,7 +1541,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
-            return GetCarrierAccount(context.EntityId);
+            return GetCarrierAccount(Convert.ToInt32(context.EntityId));
         }
 
         public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
