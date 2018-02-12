@@ -115,20 +115,28 @@ namespace TOne.WhS.Routing.Business
             if (allOptions == null || !allOptions.ContainsKey(input.Query.PolicyOptionConfigId))
                 return null;
 
-            IEnumerable<RPRouteOption> routeOptionsByPolicy = allOptions[input.Query.PolicyOptionConfigId];
-            int counter = 0;
-
             int? systemCurrencyId = null;
             int? toCurrencyId = null;
 
             if (!input.Query.ShowInSystemCurrency && input.Query.CustomerId.HasValue)
             {
-                toCurrencyId = new CarrierAccountManager().GetCarrierAccountCurrencyId(input.Query.CustomerId.Value);
                 systemCurrencyId = new Vanrise.Common.Business.ConfigManager().GetSystemCurrencyId();
+                toCurrencyId = new CarrierAccountManager().GetCarrierAccountCurrencyId(input.Query.CustomerId.Value);
             }
 
-            DateTime now = DateTime.Now;
-            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult<RPRouteOptionDetail>(input, routeOptionsByPolicy.ToBigResult(input, null, x => RPRouteOptionMapper(x, systemCurrencyId, toCurrencyId, counter++, now)));
+            IEnumerable<RPRouteOption> routeOptionsByPolicy = allOptions[input.Query.PolicyOptionConfigId];
+
+            Func<RPRouteOption, bool> filterFunc = (rpRouteOption) =>
+            {
+                if (input.Query != null && !input.Query.IncludeBlockedSuppliers && rpRouteOption.SupplierStatus == SupplierStatus.Block)
+                    return false;
+
+                return true;
+            };
+
+            int counter = 0;
+            DateTime effectiveDate = DateTime.Now;
+            return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult<RPRouteOptionDetail>(input, routeOptionsByPolicy.ToBigResult(input, filterFunc, x => RPRouteOptionMapper(x, systemCurrencyId, toCurrencyId, counter++, effectiveDate)));
         }
 
         public IEnumerable<RPRouteOptionPolicySetting> GetPoliciesOptionTemplates(RPRouteOptionPolicyFilter filter)
@@ -284,7 +292,7 @@ namespace TOne.WhS.Routing.Business
                 }
 
                 DateTime effectiveDate = DateTime.Now;
-                
+
                 return allRecords.ToBigResult(input, null, (entity) => _manager.RPRouteDetailMapper(entity, input.Query.PolicyConfigId, input.Query.NumberOfOptions, systemCurrencyId,
                     toCurrencyId, null, effectiveDate, input.Query.IncludeBlockedSuppliers));
             }

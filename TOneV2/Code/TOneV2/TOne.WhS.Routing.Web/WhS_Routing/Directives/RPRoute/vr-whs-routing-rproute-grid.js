@@ -6,7 +6,7 @@ app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService
         var directiveDefinitionObject = {
             restrict: "E",
             scope: {
-                onReady: "=",
+                onReady: "="
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -32,6 +32,7 @@ app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService
             var customerId;
             var showInSystemCurrency;
             var currencyId;
+            var includeBlockedSuppliers;
 
             var gridAPI;
             var gridDrillDownTabsObj;
@@ -43,10 +44,8 @@ app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService
 
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
-
                     var drillDownDefinitions = initDrillDownDefinitions();
                     gridDrillDownTabsObj = VRUIUtilsService.defineGridDrillDownTabs(drillDownDefinitions, gridAPI, $scope.gridMenuActions);
-
                     defineAPI();
                 };
 
@@ -80,7 +79,6 @@ app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService
                 };
 
                 $scope.getRowStyle = function (dataItem) {
-
                     var rowStyle;
 
                     if (dataItem.IsBlocked)
@@ -103,6 +101,7 @@ app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService
                     customerId = query.CustomerId;
                     showInSystemCurrency = query.ShowInSystemCurrency;
                     currencyId = query.CurrencyId;
+                    includeBlockedSuppliers = query.IncludeBlockedSuppliers;
 
                     if (query.CustomerId != undefined)
                         $scope.isCustomerSelected = true;
@@ -177,7 +176,8 @@ app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService
                         defaultPolicyId: selectedPolicyConfigId,
                         customerId: customerId,
                         showInSystemCurrency: showInSystemCurrency,
-                        currencyId: currencyId
+                        currencyId: currencyId,
+                        includeBlockedSuppliers: includeBlockedSuppliers
                     };
 
                     return directiveAPI.load(payload);

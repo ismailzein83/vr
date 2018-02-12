@@ -35,6 +35,7 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
             var customerId;
             var showInSystemCurrency;
             var currencyId;
+            var includeBlockedSuppliers;
 
             var gridAPI;
             var gridReadyDeferred = UtilsService.createPromiseDeferred();
@@ -75,21 +76,18 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
                     });
                 };
 
-                $scope.getRowStyle = function (dataItem) {
-                    var rowStyle;
-
-                    //if (dataItem.SupplierStatus == WhS_Routing_SupplierStatusEnum.PartialActive.value)
-                    //    rowStyle = { CssClass: "bg-warning" }
-
-                    if (dataItem.SupplierStatus == WhS_Routing_SupplierStatusEnum.Block.value)
-                        rowStyle = { CssClass: "bg-danger" };
-
-                    return rowStyle;
-                };
-
                 $scope.openRouteOptionSupplier = function (dataItem) {
                     WhS_Routing_RPRouteService.viewRPRouteOptionSupplier(routingDatabaseId, rpRouteDetail.RoutingProductId, rpRouteDetail.SaleZoneId, dataItem.SupplierId, currencyId);
                 };
+
+                //$scope.getRowStyle = function (dataItem) {
+                //    var rowStyle;
+                //    //if (dataItem.SupplierStatus == WhS_Routing_SupplierStatusEnum.PartialActive.value)
+                //    //    rowStyle = { CssClass: "bg-warning" }
+                //    if (dataItem.SupplierStatus == WhS_Routing_SupplierStatusEnum.Block.value)
+                //        rowStyle = { CssClass: "bg-danger" };
+                //    return rowStyle;
+                //};
 
                 UtilsService.waitMultiplePromises([rpRoutePolicyReadyPromiseDeffered.promise, gridReadyDeferred.promise]).then(function () {
                     defineAPI();
@@ -100,9 +98,18 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
                 var api = {};
 
                 api.load = function (payload) {
-                    setGlobalVairables(payload);
-
                     var promises = [];
+
+                    if (payload != undefined) {
+                        rpRouteDetail = payload.rpRouteDetail;
+                        routingDatabaseId = payload.routingDatabaseId;
+                        policies = payload.filteredPolicies;
+                        defaultPolicyId = payload.defaultPolicyId;
+                        customerId = payload.customerId;
+                        showInSystemCurrency = payload.showInSystemCurrency;
+                        currencyId = payload.currencyId;
+                        includeBlockedSuppliers = payload.includeBlockedSuppliers;
+                    }
 
                     var loadPolicySelectorPromise = loadPolicySelector();
                     promises.push(loadPolicySelectorPromise);
@@ -119,18 +126,6 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
                             loadGridDeferred.reject();
                         });
                     });
-
-                    function setGlobalVairables(payload) {
-                        if (payload != undefined) {
-                            rpRouteDetail = payload.rpRouteDetail;
-                            routingDatabaseId = payload.routingDatabaseId;
-                            policies = payload.filteredPolicies;
-                            defaultPolicyId = payload.defaultPolicyId;
-                            customerId = payload.customerId;
-                            showInSystemCurrency = payload.showInSystemCurrency;
-                            currencyId = payload.currencyId;
-                        }
-                    }
 
                     function loadPolicySelector() {
                         var loadPolicySelectorDeferred = UtilsService.createPromiseDeferred();
@@ -161,7 +156,8 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
                         RoutingProductId: rpRouteDetail.RoutingProductId,
                         SaleZoneId: rpRouteDetail.SaleZoneId,
                         CustomerId: customerId,
-                        ShowInSystemCurrency: showInSystemCurrency
+                        ShowInSystemCurrency: showInSystemCurrency,
+                        includeBlockedSuppliers: includeBlockedSuppliers
                     };
                 }
 
@@ -173,6 +169,7 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
                     rpRouteOption.ConvertedSupplierRate = 'N/A';
                 }
                 rpRouteOption.SupplierStatusDescription = UtilsService.getEnumDescription(WhS_Routing_SupplierStatusEnum, rpRouteOption.SupplierStatus);
+                rpRouteOption.IsBlocked = rpRouteOption.SupplierStatus == WhS_Routing_SupplierStatusEnum.Block.value;
             }
         }
 

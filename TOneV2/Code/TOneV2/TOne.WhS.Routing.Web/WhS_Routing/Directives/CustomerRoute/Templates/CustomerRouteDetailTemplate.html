@@ -6,21 +6,27 @@
                      getrowstyle="getRowStyle"
                      idfield="CustomerRouteOptionDetailId">
 
-            <vr-datagridcolumn headertext="'Supplier'" field="'SupplierName'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Supplier Code'" field="'SupplierCode'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Supplier Zone'" field="'SupplierZoneName'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Supplier Rate'" field="'SupplierRate'" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Percentage'" type="'Number'" numberprecision="'NoDecimal'" field="'Percentage'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Services'" disablesorting="true">
+            <vr-datagridcolumn headertext="'Supplier'" field="'SupplierName'">
+                <span blocked="{{dataItem.IsBlocked}}" style="font-size: 11px;">{{dataItem.SupplierName}}</span>
+            </vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Backup'" field="'IsBackup'" fixedwidth="60">
+                <span ng-show="dataItem.IsBackup">
+                    <vr-icon icontype="dataItem.IsBackup"></vr-icon>
+                </span>
+            </vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Code'" field="'SupplierCode'" fixedwidth="100"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Zone'" field="'SupplierZoneName'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Rate'" field="'SupplierRate'" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="80"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Services'" disablesorting="true" fixedwidth="60">
                 <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
             </vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Backup'" field="'IsBackup'">
-                <vr-icon icontype="dataItem.IsBackup"></vr-icon>
+            <vr-datagridcolumn headertext="'Blocked'" field="'IsBlocked'" fixedwidth="60">
+                <span ng-show="dataItem.IsBlocked"> 
+                    <vr-icon icontype="'2'"></vr-icon>
+                </span>
             </vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Blocked'" field="'IsBlocked'">
-                <vr-icon icontype="dataItem.IsBlocked"></vr-icon>
-            </vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Linked Rules'" type="'Number'" numberprecision="'NoDecimal'" field="'LinkedRouteOptionRuleCount'"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Percentage'" field="'Percentage'" type="'Number'" numberprecision="'NoDecimal'" fixedwidth="80"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Linked Rules'" type="'Number'" numberprecision="'NoDecimal'" field="'LinkedRouteOptionRuleCount'" fixedwidth="80"></vr-datagridcolumn>
         </vr-datagrid>
     </vr-columns>
 </vr-row>

@@ -76,19 +76,16 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
                     return menuActions;
                 };
 
-                $scope.getRowStyle = function (dataItem) {
-
-                    var rowStyle;
-
-                    if (dataItem.IsBlocked) {
-                        rowStyle = { CssClass: "bg-danger" };
-                    }
-                    else if (dataItem.ExecutedRuleId) {
-                        rowStyle = { CssClass: "bg-success" };
-                    }
-
-                    return rowStyle
-                };
+                //$scope.getRowStyle = function (dataItem) {
+                //    var rowStyle;
+                //    if (dataItem.IsBlocked) {
+                //        rowStyle = { CssClass: "bg-danger" };
+                //    }
+                //    else if (dataItem.ExecutedRuleId) {
+                //        rowStyle = { CssClass: "bg-success" };
+                //    }
+                //    return rowStyle
+                //};
             }
 
             function defineAPI() {

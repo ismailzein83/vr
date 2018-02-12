@@ -16,15 +16,16 @@
                      defaultsortbyfieldname="'OptionOrder'"
                      getrowstyle="getRowStyle">
 
-            <vr-datagridcolumn headertext="'Supplier'" type="'Text'" widthfactor="3">
-                <a style="font-size: 11px; cursor: pointer; display: inline-block; text-align: right; padding: 0 10px 0 0;" ng-click="viewScope.openRouteOptionSupplier(dataItem)">
-                    {{dataItem.SupplierName}}<span style="color:#FFA500; font-weight:bold;" ng-if="dataItem.SupplierZoneMatchHasClosedRate">*</span>
+            <vr-datagridcolumn headertext="'Supplier'" type="'Text'">
+                <a ng-click="viewScope.openRouteOptionSupplier(dataItem)" style="color:#616F77; font-size: 11px; cursor: pointer; display: inline-block; text-align: right; padding: 0 10px 0 0;"> 
+                    <span blocked="{{dataItem.IsBlocked}}">{{dataItem.SupplierName}}</span>
+                    <span style="color:#FFA500; font-weight:bold;" ng-if="dataItem.SupplierZoneMatchHasClosedRate">*</span>
                 </a>
             </vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Status'" type="'Text'" field="'SupplierStatusDescription'" widthfactor="1"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Supplier Rate'" type="'Number'" field="'ConvertedSupplierRate'" numberprecision="'LongPrecision'" widthfactor="3"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Currency'" type="'Text'" field="'CurrencySymbol'" fixedwidth="60"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Percentage'" type="'Number'" numberprecision="'NoDecimal'" field="'Percentage'" widthfactor="3"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Status'" field="'SupplierStatusDescription'" type="'Text'" fixedwidth="60"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Rate'" field="'ConvertedSupplierRate'" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="100"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Currency'" field="'CurrencySymbol'" type="'Text'" fixedwidth="60"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Percentage'" field="'Percentage'" type="'Number'" numberprecision="'NoDecimal'" fixedwidth="80"></vr-datagridcolumn>
         </vr-datagrid>
     </vr-columns>
 </vr-row>

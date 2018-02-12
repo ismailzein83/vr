@@ -10,8 +10,8 @@
 
         <vr-datagridcolumn headertext="'Code'" field="'Code'" fixedwidth="100"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Customer'" field="'CustomerName'" fixedwidth="120"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Sale Zone'" field="'SaleZoneName'" fixedwidth="120"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Rate'" field="'Rate'" fixedwidth="60" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Zone'" field="'SaleZoneName'" fixedwidth="120"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Rate'" field="'Rate'" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="60"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Services'" widthfactor="1" disablesorting="true" fixedwidth="60">
             <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
         </vr-datagridcolumn>
@@ -19,17 +19,19 @@
         <vr-datagridcolumn headertext="'Linked Rules'" field="'LinkedRouteRuleCount'" fixedwidth="75" disablesorting="true" isfielddynamic="true"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Rule Type'" field="'ExecutedRouteRuleSettingsTypeName'" fixedwidth="90"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Rule Name'" field="'ExecutedRouteRuleName'" fixedwidth="100"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Route Options'" disablesorting>
+        <vr-datagridcolumn headertext="'Route Options'" disablesorting> 
             <div class="responsive-container" style="white-space: normal;">
-                <span ng-repeat="details in dataItem.RouteOptionDetails" style="padding: 0px 10px 0px 0px;">
-                    <span ng-class="{'text-danger':details.IsBlocked, 'bold-label':true}" 
-                          style="font-size: 11px; cursor: pointer; display: inline-block; text-align: center;">
+                <span ng-repeat="details in dataItem.RouteOptionDetails" style="font-size: 11px; cursor: pointer; display: inline-block; text-align: center; padding: 0 10px 0 0;">
+                    <span ng-class="{'bold-label':true}" blocked="{{details.IsBlocked}}">
                         {{details.SupplierName}}<span ng-if="details.Percentage!=null">{{details.Percentage}}%</span>
                     </span>
                     <span ng-if="details.Backups != null && details.Backups.length > 0">
                         &lt;
-                        <span style="font-style:italic" ng-repeat="backupDetails in details.Backups" ng-class="{'text-danger bold-label':backupDetails.IsBlocked}">
-                            {{backupDetails.SupplierName}}<span ng-if="!$last">,</span>
+                        <span ng-repeat="backupDetails in details.Backups" >
+                            <span blocked="{{backupDetails.IsBlocked}}" style="font-style:italic">
+                                {{backupDetails.SupplierName}}
+                            </span>
+                            <span ng-if="!$last">,</span>
                         </span>
                         &gt;
                     </span>

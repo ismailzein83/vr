@@ -19,5 +19,7 @@ namespace TOne.WhS.Routing.Entities
         public int? CustomerId { get; set; }
 
         public bool ShowInSystemCurrency { get; set; }
+
+        public bool IncludeBlockedSuppliers { get; set; }
     }
 }
