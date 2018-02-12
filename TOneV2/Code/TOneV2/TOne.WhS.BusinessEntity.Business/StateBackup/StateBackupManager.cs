@@ -89,7 +89,6 @@ namespace TOne.WhS.BusinessEntity.Business
             if (updateActionSucc)
             {
                 StateBackup stateBackup = dataManager.GetStateBackup(stateBackupId);
-                updateOperationOutput.Message = "Backup Restored Successfully";
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = stateBackup;
             }
