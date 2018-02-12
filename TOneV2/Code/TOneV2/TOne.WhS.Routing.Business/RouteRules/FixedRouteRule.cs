@@ -67,7 +67,7 @@ namespace TOne.WhS.Routing.Business
                     FixedRouteOptionSettings optionSettings = new FixedRouteOptionSettings() { Percentage = routeOption.Percentage, SupplierId = routeOption.SupplierId, NumberOfTries = routeOption.NumberOfTries };
                     fixedRouteRule.Options.Add(optionSettings);
 
-                    if (routeOption.IsLossy)
+                    if (!routeOption.IsLossy)
                     {
                         RouteRules.Filters.RateOptionFilter rateOptionFilter = new RouteRules.Filters.RateOptionFilter()
                         {
