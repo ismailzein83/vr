@@ -25,7 +25,13 @@
                 modalScope.$destroy();
             };
 
-           
+            var sizeOptions = {
+                small: "vr-modal-sm",
+                medium: "vr-modal-md",
+                large: "vr-modal-lg",
+                xlarge: "vr-modal-xl"
+            };
+
             VRNavigationService.setParameters(modalScope, parameters);
             if (settings != undefined && settings != null) {
                 if (settings.useModalTemplate === true) {
@@ -34,12 +40,7 @@
                     var num = 50;
                     if (settings.width != undefined)
                         num = parseFloat(settings.width.substring(0, settings.width.length));
-                    var sizeOptions = {
-                        small: "vr-modal-sm",
-                        medium: "vr-modal-md",
-                        large: "vr-modal-lg",
-                        xlarge: "vr-modal-xl"
-                    };
+
                     if (settings.size != undefined) {
                         classmodal = sizeOptions[settings.size];
                     }
@@ -51,6 +52,12 @@
                             classmodal = "vr-modal-lg";
                         if (num > 90)
                             classmodal = "vr-modal-xl";
+                    }
+                    modalScope.resClass = classmodal;
+                } else {
+                    var classmodal;
+                    if (settings.size != undefined) {
+                        classmodal = sizeOptions[settings.size];
                     }
                     modalScope.resClass = classmodal;
                 }
