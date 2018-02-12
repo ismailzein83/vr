@@ -14,6 +14,7 @@
         var dataRecordTypeSelectorAPI;
         var dataRecordTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         var typeSelectorChangeCount = 0;
+        var selectedDataRecordTypeDeferred = UtilsService.createPromiseDeferred();
 
         var dataStoreSelectorAPI;
         var dataStoreSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -24,6 +25,18 @@
 
         var requiredPermissionAPI;
         var requiredPermissionReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var modifiedByFieldSelectorAPI;
+        var modifiedByFieldSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var createdByFieldSelectorAPI;
+        var createdByFieldSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var modifiedTimeFieldSelectorAPI;
+        var modifiedTimeFieldSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+        var createdTimeFieldSelectorAPI;
+        var createdTimeFieldSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
         defineScope();
@@ -44,15 +57,60 @@
             $scope.scopeModel.datasources = [];
             $scope.scopeModel.settingsEditor;
 
+            $scope.scopeModel.createdByFieldSelectorReady = function (api) {
+                createdByFieldSelectorAPI = api;
+                createdByFieldSelectorReadyDeferred.resolve();
+            };
+            $scope.scopeModel.modifiedTimeFieldSelectorReady = function (api) {
+                modifiedTimeFieldSelectorAPI = api;
+                modifiedTimeFieldSelectorReadyDeferred.resolve();
+            };
+            $scope.scopeModel.createdTimeFieldSelectorReady = function (api) {
+                createdTimeFieldSelectorAPI = api;
+                createdTimeFieldSelectorReadyDeferred.resolve();
+            };
             $scope.scopeModel.onDataRecordTypeSelectorReady = function (api) {
                 dataRecordTypeSelectorAPI = api;
                 dataRecordTypeSelectorReadyDeferred.resolve();
+            };
+            $scope.scopeModel.modifiedByFieldSelectorReady = function (api) {
+                modifiedByFieldSelectorAPI = api;
+                modifiedByFieldSelectorReadyDeferred.resolve();
             };
             $scope.scopeModel.onDataRecordTypeSelectionChanged = function (option) {
                 $scope.scopeModel.selectedDataRecordType = option;
                 typeSelectorChangeCount++;
                 loadDataRecordFields();
+                if (option != undefined) {
+                    if (selectedDataRecordTypeDeferred != undefined)
+                        selectedDataRecordTypeDeferred.resolve();
+                    else {
+                        var modifiedByFieldPayload = {
+                            dataRecordTypeId: option.DataRecordTypeId,
+                        };
+                        var modifiedByFieldSetLoader = function (value) { $scope.scopeModel.isModifiedBySelectorLoading = value; };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, modifiedByFieldSelectorAPI, modifiedByFieldPayload, modifiedByFieldSetLoader);
 
+                        var createdByFieldPayload = {
+                            dataRecordTypeId: option.DataRecordTypeId,
+                        };
+                        var createdByFieldSetLoader = function (value) { $scope.scopeModel.isCreatedBySelectorLoading = value; };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, createdByFieldSelectorAPI, createdByFieldPayload, createdByFieldSetLoader);
+
+                        var modifiedTimeFieldPayload = {
+                            dataRecordTypeId: option.DataRecordTypeId,
+                        };
+                        var modifiedTimeFieldSetLoader = function (value) { $scope.scopeModel.isModifiedTimeSelectorLoading = value; };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, modifiedTimeFieldSelectorAPI, modifiedTimeFieldPayload, modifiedTimeFieldSetLoader);
+
+                        var createdTimeFieldPayload = {
+                            dataRecordTypeId: option.DataRecordTypeId,
+                        };
+                        var createdTimeFieldSetLoader = function (value) { $scope.scopeModel.isCreatedTimeSelectorLoading = value; };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, createdTimeFieldSelectorAPI, createdTimeFieldPayload, createdTimeFieldSetLoader);
+                    }
+                }
+             
                 if ((isEditMode && typeSelectorChangeCount <= 2) || (!isEditMode && typeSelectorChangeCount <= 1)) {
                     return;
                 }
@@ -122,7 +180,8 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadDataRecordTypeSelector, loadDataStoreSelector, loadDataRecordFields, loadRequiredPermission, loadDataStoreConfigs]).then(function () {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData,loadCreatedTimeFieldSelector,loadModifiedTimeFieldSelector, loadCreatedByFieldSelector,loadDataRecordTypeSelector, loadDataStoreSelector, loadDataRecordFields, loadRequiredPermission, loadDataStoreConfigs, loadModifiedByFieldSelector]).then(function () {
+                selectedDataRecordTypeDeferred = undefined;
                 loadSettingsDirectiveOnPageLoad().then(function () {
                     dataRecordStorageEntity = undefined;
                 }).catch(function (error) {
@@ -134,6 +193,64 @@
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             });
         }
+        function loadModifiedByFieldSelector() {
+            if (isEditMode) {
+                var modifiedByFieldSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                UtilsService.waitMultiplePromises([modifiedByFieldSelectorReadyDeferred.promise, selectedDataRecordTypeDeferred.promise]).then(function () {
+                    var modifiedByFieldSelectorPayload = {
+                    };
+                    if (dataRecordStorageEntity != undefined) {
+                        modifiedByFieldSelectorPayload.dataRecordTypeId = dataRecordStorageEntity.DataRecordTypeId
+                    }
+                    VRUIUtilsService.callDirectiveLoad(modifiedByFieldSelectorAPI, modifiedByFieldSelectorPayload, modifiedByFieldSelectorLoadDeferred);
+                });
+                return modifiedByFieldSelectorLoadDeferred.promise;
+            }
+        }
+
+        function loadCreatedByFieldSelector() {
+            if (isEditMode) {
+                var createdByFieldSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                UtilsService.waitMultiplePromises([createdByFieldSelectorReadyDeferred.promise, selectedDataRecordTypeDeferred.promise]).then(function () {
+                    var createdByFieldSelectorPayload = {
+                    };
+                    if (dataRecordStorageEntity != undefined) {
+                        createdByFieldSelectorPayload.dataRecordTypeId = dataRecordStorageEntity.DataRecordTypeId
+                    }
+                    VRUIUtilsService.callDirectiveLoad(createdByFieldSelectorAPI, createdByFieldSelectorPayload, createdByFieldSelectorLoadDeferred);
+                });
+                return createdByFieldSelectorLoadDeferred.promise;
+            }
+        }
+        function loadModifiedTimeFieldSelector() {
+            if (isEditMode) {
+                var modifiedTimeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                UtilsService.waitMultiplePromises([modifiedTimeFieldSelectorReadyDeferred.promise, selectedDataRecordTypeDeferred.promise]).then(function () {
+                    var modifiedTimeSelectorPayload = {
+                    };
+                    if (dataRecordStorageEntity != undefined) {
+                        modifiedTimeSelectorPayload.dataRecordTypeId = dataRecordStorageEntity.DataRecordTypeId
+                    }
+                    VRUIUtilsService.callDirectiveLoad(modifiedTimeFieldSelectorAPI, modifiedTimeSelectorPayload, modifiedTimeSelectorLoadDeferred);
+                });
+                return modifiedTimeSelectorLoadDeferred.promise;
+            }
+        }
+        function loadCreatedTimeFieldSelector() {
+            if (isEditMode) {
+                var createdTimeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                UtilsService.waitMultiplePromises([createdTimeFieldSelectorReadyDeferred.promise, selectedDataRecordTypeDeferred.promise]).then(function () {
+                    var createdTimeSelectorPayload = {
+                    };
+                    if (dataRecordStorageEntity != undefined) {
+                        createdTimeSelectorPayload.dataRecordTypeId = dataRecordStorageEntity.DataRecordTypeId
+                    }
+                    VRUIUtilsService.callDirectiveLoad(createdTimeFieldSelectorAPI, createdTimeSelectorPayload, createdTimeSelectorLoadDeferred);
+                });
+                return createdTimeSelectorLoadDeferred.promise;
+            }
+        }
+
         function setTitle() {
             $scope.title = (isEditMode) ?
                 UtilsService.buildTitleForUpdateEditor((dataRecordStorageEntity != undefined) ? dataRecordStorageEntity.Name : null, 'Data Record Storage') :

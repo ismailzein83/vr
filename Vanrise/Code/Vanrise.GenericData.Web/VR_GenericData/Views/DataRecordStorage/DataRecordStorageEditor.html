@@ -31,6 +31,18 @@
                         <vr-columns width="1/3row">
                             <vr-switch value="scopeModel.enableUseCaching" label="Enable Use Caching" isrequired="true"></vr-switch>
                         </vr-columns>
+                        <vr-columns width="1/3row" vr-loader="scopeModel.isModifiedBySelectorLoading">
+                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.modifiedByFieldSelectorReady" label="Modified By Field" selectedvalues="scopeModel.modifiedByField"></vr-genericdata-datarecordtypefields-selector>
+                        </vr-columns>
+                        <vr-columns width="1/3row" vr-loader="scopeModel.isCreatedBySelectorLoading">
+                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.createdByFieldSelectorReady" label="Created By Field" selectedvalues="scopeModel.createdByField"></vr-genericdata-datarecordtypefields-selector>
+                        </vr-columns>
+                        <vr-columns width="1/3row" vr-loader="scopeModel.isModifiedTimeSelectorLoading" >
+                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.modifiedTimeFieldSelectorReady" label="Modified Time Field" selectedvalues="scopeModel.modifiedTimeField"></vr-genericdata-datarecordtypefields-selector>
+                        </vr-columns>
+                        <vr-columns width="1/3row" vr-loader="scopeModel.isCreatedTimeSelectorLoading">
+                            <vr-genericdata-datarecordtypefields-selector on-ready="scopeModel.createdTimeFieldSelectorReady" label="Created Time Field" selectedvalues="scopeModel.createdTimeField"></vr-genericdata-datarecordtypefields-selector>
+                        </vr-columns>
                     </vr-row>
                 </vr-tab>
                 <vr-tab header="'Setting'">
