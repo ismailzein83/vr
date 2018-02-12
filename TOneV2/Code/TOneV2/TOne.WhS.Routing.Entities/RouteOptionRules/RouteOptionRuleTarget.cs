@@ -18,11 +18,9 @@ namespace TOne.WhS.Routing.Entities
 
         public long SupplierZoneId { get; set; }
 
+        public long SupplierRateId { get; set; }
+
         public Decimal SupplierRate { get; set; }
-
-        public bool BlockOption { get; set; }
-
-        public bool FilterOption { get; set; }
 
         public int? ExecutedRuleId { get; set; }
 
@@ -36,52 +34,32 @@ namespace TOne.WhS.Routing.Entities
 
         public decimal OptionWeight { get; set; }
 
-        public long SupplierRateId { get; set; }
-
         public Object OptionSettings { get; set; }
 
         public int NumberOfTries { get; set; }
 
+        public bool BlockOption { get; set; }
+
+        public bool FilterOption { get; set; }
+
         #region Interfaces
 
-        string IRuleCodeTarget.Code
-        {
-            get { return this.RouteTarget.Code; }
-        }
+        string IRuleCodeTarget.Code { get { return this.RouteTarget.Code; } }
 
-        long? IRuleSaleZoneTarget.SaleZoneId
-        {
-            get { return this.RouteTarget.SaleZoneId; }
-        }
+        long? IRuleSaleZoneTarget.SaleZoneId { get { return this.RouteTarget.SaleZoneId; } }
 
-        int? IRuleCustomerTarget.CustomerId
-        {
-            get { return this.RouteTarget.CustomerId; }
-        }
-        int? IRuleRoutingProductTarget.RoutingProductId
-        {
-            get { return this.RouteTarget.RoutingProductId; }
-        }
+        int? IRuleCustomerTarget.CustomerId { get { return this.RouteTarget.CustomerId; } }
 
-        int? IRuleSupplierTarget.SupplierId
-        {
-            get { return this.SupplierId; }
-        }
+        int? IRuleRoutingProductTarget.RoutingProductId { get { return this.RouteTarget.RoutingProductId; } }
 
-        long? IRuleSupplierZoneTarget.SupplierZoneId
-        {
-            get { return this.SupplierZoneId; }
-        }
+        int? IRuleSupplierTarget.SupplierId { get { return this.SupplierId; } }
 
-        long? IRouteOptionOrderTarget.SaleZoneId
-        {
-            get { return this.RouteTarget.SaleZoneId; }
-        }
+        long? IRuleSupplierZoneTarget.SupplierZoneId { get { return this.SupplierZoneId; } }
 
-        long? IRouteOptionOrderTarget.SupplierZoneId
-        {
-            get { return this.SupplierZoneId; }
-        }
+        long? IRouteOptionOrderTarget.SaleZoneId { get { return this.RouteTarget.SaleZoneId; } }
+
+        long? IRouteOptionOrderTarget.SupplierZoneId { get { return this.SupplierZoneId; } }
+
         #endregion
     }
 
