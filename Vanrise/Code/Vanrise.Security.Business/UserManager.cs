@@ -11,10 +11,11 @@ using Vanrise.Common;
 using System.Configuration;
 using RazorEngine.Templating;
 using Vanrise.Common.Business;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Security.Business
 {
-    public class UserManager : IUserManager
+    public class UserManager : IUserManager, IBusinessEntityManager
     {
         static TimeSpan s_tempPasswordValidity;
 
@@ -1183,6 +1184,49 @@ namespace Vanrise.Security.Business
             return string.Join(",", names);
         }
 
+        #endregion
+
+        #region IBusinessEntityManager
+        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            return GetUsers().Select(itm => itm as dynamic).ToList();
+        }
+
+        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            return GetUserbyId(context.EntityId);
+        }
+
+        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            var user = context.Entity as User;
+            return user.UserId;
+        }
+
+        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            return GetUserName(Convert.ToInt32(context.EntityId));
+        }
+
+        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
+        }
+
+        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }
