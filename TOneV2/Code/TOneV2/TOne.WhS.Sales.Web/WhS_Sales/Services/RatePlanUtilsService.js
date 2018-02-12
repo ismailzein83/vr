@@ -153,7 +153,7 @@
             dates.push(zoneBED);
             dates.push(countryBED);
 
-            var calculatedRateBED = (isCountryNew) ? countryBED :
+            var calculatedRateBED = (isCountryNew === true) ? countryBED :
                 getCalculatedRateBED(currentRateValue, newRateValue, isCountryNew, newRateDayOffset, increasedRateDayOffset, decreasedRateDayOffset);
 
             dates.push(calculatedRateBED);
@@ -161,14 +161,12 @@
         }
         function getCalculatedRateBED(currentRateValue, newRateValue, isCountryNew, newRateDayOffset, increasedRateDayOffset, decreasedRateDayOffset) {
             var dayOffset = 0;
-            if (!isCountryNew) {
-                if (currentRateValue == undefined)
-                    dayOffset = newRateDayOffset;
-                else if (newRateValue > currentRateValue)
-                    dayOffset = increasedRateDayOffset;
-                else if (newRateValue < currentRateValue)
-                    dayOffset = decreasedRateDayOffset;
-            }
+            if (currentRateValue == undefined)
+                dayOffset = newRateDayOffset;
+            else if (newRateValue > currentRateValue)
+                dayOffset = increasedRateDayOffset;
+            else if (newRateValue < currentRateValue)
+                dayOffset = decreasedRateDayOffset;
             return getNowPlusDays(dayOffset);
         }
         function getMaxDate(dates) {
