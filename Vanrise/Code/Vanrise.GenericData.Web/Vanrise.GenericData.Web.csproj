@@ -249,9 +249,11 @@
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\GenericBEActionDefinition\Templates\EditGenericBEDefinitionActionTemplate.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\GenericBEActionDefinition\vr-genericdata-be-editgenericaction-definition.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\OnAfterSaveHandler\AfterSaveHandlerConditionalEditorController.js" />
-    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\OnAfterSaveHandler\Template\AfterSaveHandlerConditionalEditor.html" />
-    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\OnAfterSaveHandler\Template\ConditionalHandlersGridTemplate.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\OnAfterSaveHandler\Templates\AfterSaveHandlerConditionalEditor.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\OnAfterSaveHandler\Templates\ConditionalHandlersGridTemplate.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\OnAfterSaveHandler\Templates\SendEmailHandlerTemplate.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\OnAfterSaveHandler\vr-genericdata-be-aftersavehandler-conditional.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\OnAfterSaveHandler\vr-genericdata-be-aftersavehandler-sendemail.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Templates\GenericBusinessEntityEditor.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\vr-genericdata-genericbusinessentity-runtimeeditor.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\Templates\GenericBETabContainerEditorController.html" />
