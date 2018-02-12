@@ -1,6 +1,5 @@
 ﻿CREATE TYPE [TOneWhS_Case].[CustomerCaseType] AS TABLE (
     [ID]                BIGINT           NULL,
-    [CaseTime]          DATETIME         NULL,
     [CustomerId]        INT              NULL,
     [SaleZoneId]        BIGINT           NULL,
     [FromDate]          DATETIME         NULL,
@@ -14,11 +13,18 @@
     [OwnerReference]    NVARCHAR (1000)  NULL,
     [Attachments]       NVARCHAR (MAX)   NULL,
     [WorkGroupId]       UNIQUEIDENTIFIER NULL,
-    [Settings]          NVARCHAR (MAX)   NULL,
     [ContactName]       NVARCHAR (255)   NULL,
     [PhoneNumber]       NVARCHAR (255)   NULL,
     [ContactEmails]     NVARCHAR (1000)  NULL,
-    [EscalationLevelId] UNIQUEIDENTIFIER NULL);
+    [EscalationLevelId] UNIQUEIDENTIFIER NULL,
+    [CreatedBy]         INT              NULL,
+    [CreatedTime]       DATETIME         NULL,
+    [LastModifiedBy]    INT              NULL,
+    [LastModifiedTime]  DATETIME         NULL,
+    [TicketDetails]     NVARCHAR (MAX)   NULL,
+    [SendEmail]         BIT              NULL);
+
+
 
 
 
