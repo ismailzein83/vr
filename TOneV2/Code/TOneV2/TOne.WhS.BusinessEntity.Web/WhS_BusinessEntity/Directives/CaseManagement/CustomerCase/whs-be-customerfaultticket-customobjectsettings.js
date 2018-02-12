@@ -19,9 +19,8 @@
             },
             controllerAs: "Ctrl",
             bindToController: true,
-            template: function (element, attrs) {
-                return "";
-            }
+            templateUrl: "/Client/Modules/WhS_BusinessEntity/Directives/CaseManagement/CustomerCase/Templates/CustomerFaultTicketCustomObjectSettingsTemplate.html"
+
         };
         function CustomerFaultCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;

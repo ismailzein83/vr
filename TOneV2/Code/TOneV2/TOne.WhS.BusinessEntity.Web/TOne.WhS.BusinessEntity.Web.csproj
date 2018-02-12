@@ -258,8 +258,11 @@
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-customer-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-activationstatus-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\CarrierAccount\vr-whs-be-supplier-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\CaseManagement\CustomerCase\Templates\CustomerFaultTicketCustomObjectSettingsTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\CaseManagement\CustomerCase\Templates\CustomerFaultTicketSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\CustomerCase\Templates\CustomerCaseStaticEditorDefinitionTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\CustomerCase\whs-be-casemanagement-customercase-staticeditor.js" />
+    <Content Include="WhS_BusinessEntity\Directives\CaseManagement\SupplierCase\Templates\SupplierFaultTicketSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\SupplierCase\Templates\SupplierCaseStaticEditorDefinitionTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\SupplierCase\whs-be-casemanagement-suppliercase-staticeditor.js" />
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\SupplierCase\whs-be-supplierfaultticket-customobjectsettings.js" />
