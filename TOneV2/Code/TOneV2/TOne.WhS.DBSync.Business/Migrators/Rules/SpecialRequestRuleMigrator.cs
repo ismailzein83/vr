@@ -150,7 +150,6 @@ namespace TOne.WhS.DBSync.Business
         List<SpecialRequestRouteOptionSettings> GetSupplierOptions(IEnumerable<SpecialRequestSupplierOption> suppliers)
         {
             List<SpecialRequestRouteOptionSettings> results = new List<SpecialRequestRouteOptionSettings>();
-            List<int> routeOptionIds = new List<int>();
 
             Dictionary<int, List<SpecialRequestSupplierOption>> groupedOptionsByPriority = new Dictionary<int, List<SpecialRequestSupplierOption>>();
             suppliers = suppliers.OrderByDescending(s => s.Priority).ThenByDescending(s => s.SourceId);
@@ -167,19 +166,19 @@ namespace TOne.WhS.DBSync.Business
                 if (priority != 0)
                 {
                     SpecialRequestSupplierOption option = item.Value[0];
-                    AddSpecialRequestRouteOptionSettings(results, routeOptionIds, option);
+                    AddSpecialRequestRouteOptionSettings(results, option);
                 }
                 else
                 {
                     foreach (var option in item.Value)
-                        AddSpecialRequestRouteOptionSettings(results, routeOptionIds, option);
+                        AddSpecialRequestRouteOptionSettings(results, option);
                 }
             }
 
             return results;
         }
 
-        void AddSpecialRequestRouteOptionSettings(List<SpecialRequestRouteOptionSettings> options, List<int> routeOptionIds, SpecialRequestSupplierOption option)
+        void AddSpecialRequestRouteOptionSettings(List<SpecialRequestRouteOptionSettings> options, SpecialRequestSupplierOption option)
         {
             CarrierAccount supplier;
             if (!_allCarrierAccounts.TryGetValue(option.SupplierId, out supplier))
@@ -194,11 +193,7 @@ namespace TOne.WhS.DBSync.Business
                 Backups = null
             };
 
-            if (!routeOptionIds.Contains(specialRequestOptionSettings.SupplierId))
-            {
-                options.Add(specialRequestOptionSettings);
-                routeOptionIds.Add(specialRequestOptionSettings.SupplierId);
-            }
+            options.Add(specialRequestOptionSettings);
         }
 
         List<CodeCriteria> GetCodeCriteria(SourceSpecialRequest groupedRule)
