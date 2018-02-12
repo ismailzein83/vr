@@ -19,13 +19,34 @@ namespace TOne.WhS.CodePreparation.Business
 
         public override bool Validate(IBusinessRuleConditionValidateContext context)
         {
+            /* 
+             * This rule is to check action status on codes:
+             * 1- if we have same action more than once 
+             * 2- or we have different action on same code
+            */
+
             ZoneToProcess zoneToProcess = context.Target as ZoneToProcess;
             var invalidCodes = new HashSet<string>();
+            var sameCodeDifferentStatus = new HashSet<string>();
 
             foreach (CodeToAdd codeToAdd in zoneToProcess.CodesToAdd)
             {
                 if (zoneToProcess.CodesToAdd.FindAllRecords(item => item.Code == codeToAdd.Code).Count() > 1)
                     invalidCodes.Add(codeToAdd.Code);
+                foreach (var codeToClose in zoneToProcess.CodesToClose)
+                {
+                    if (codeToClose.Code == codeToAdd.Code && codeToClose.ZoneName.Equals(codeToAdd.ZoneName, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        sameCodeDifferentStatus.Add(codeToAdd.Code);
+                    }
+                }
+                foreach (var codeToMove in zoneToProcess.CodesToMove)
+                {
+                    if (codeToMove.Code == codeToAdd.Code && codeToMove.ZoneName.Equals(codeToAdd.ZoneName, StringComparison.InvariantCultureIgnoreCase))
+                    {
+                        sameCodeDifferentStatus.Add(codeToAdd.Code);
+                    }
+                }
             }
 
             foreach (CodeToClose codeToClose in zoneToProcess.CodesToClose)
@@ -42,10 +63,15 @@ namespace TOne.WhS.CodePreparation.Business
             }
             if (invalidCodes.Count > 0)
             {
-                context.Message += string.Format("Performing same action more than one time on code(s) ({0}) of zone '{1}'.", string.Join(", ", invalidCodes),zoneToProcess.ZoneName);
+                context.Message += string.Format("Performing same action more than one time on code(s) ({0}) of zone '{1}'.", string.Join(", ", invalidCodes), zoneToProcess.ZoneName);
                 return false;
             }
-            return true; 
+            if (sameCodeDifferentStatus.Count > 0)
+            {
+                context.Message += string.Format("Performing different action on same code(s) ({0}) of zone '{1}'.", string.Join(", ", sameCodeDifferentStatus), zoneToProcess.ZoneName);
+                return false;
+            }
+            return true;
         }
 
         public override string GetMessage(IRuleTarget target)
