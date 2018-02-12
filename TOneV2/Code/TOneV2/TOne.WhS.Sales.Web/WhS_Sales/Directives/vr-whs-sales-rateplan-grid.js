@@ -196,7 +196,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             var array = []; // Stores the indexes of route options having a greater rate than the rate to validate
 
                             for (var i = 0; i < routeOptionsForView.length; i++) {
-                                if (routeOptionsForView[i].ConvertedSupplierRate > rate && routeOptionsForView[i].SupplierStatus == WhS_Sales_SupplierStatusEnum.Block.value)
+                                if (routeOptionsForView[i].ConvertedSupplierRate > rate && routeOptionsForView[i].SupplierStatus != WhS_Sales_SupplierStatusEnum.Block.value)
                                     array.push(i);
                         }
 
