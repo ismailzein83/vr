@@ -172,45 +172,6 @@ namespace TOne.WhS.DBSync.Business
             return results;
         }
 
-        //Dictionary<int, FixedRouteOptionSettings> GetOptions2(SourceRouteOverrideRule sourceRule)
-        //{
-        //    Dictionary<int, FixedRouteOptionSettings> result = new Dictionary<int, FixedRouteOptionSettings>();
-
-        //    foreach (var option in sourceRule.SupplierOptions)
-        //    {
-        //        CarrierAccount supplier;
-        //        if (!_allCarrierAccounts.TryGetValue(option.SupplierId, out supplier))
-        //        {
-        //            Context.MigrationContext.WriteWarning(string.Format("Failed adding Supplier Option for Supplier Source Id {0}, Supplier is not imported", option.SupplierId));
-        //            continue;
-        //        }
-
-        //        List<RouteOptionFilterSettings> supplierFilters = null;
-        //        if (!option.IsLoss)
-        //        {
-        //            supplierFilters = new List<RouteOptionFilterSettings>();
-        //            supplierFilters.Add(new RateOptionFilter
-        //            {
-        //                RateOption = RateOption.MaximumLoss,
-        //                RateOptionType = RateOptionType.Fixed,
-        //                RateOptionValue = 0
-        //            });
-        //        }
-
-        //        if (!result.ContainsKey(supplier.CarrierAccountId))
-        //        {
-        //            result.Add(supplier.CarrierAccountId, new FixedRouteOptionSettings()
-        //            {
-        //                SupplierId = supplier.CarrierAccountId,
-        //                Percentage = option.Percentage,
-        //                Filters = supplierFilters
-        //            });
-        //        }
-        //    }
-
-        //    return result;
-        //}
-
         #region ZonePart
 
         IEnumerable<SourceRule> GetRulesWithZone(IEnumerable<SourceRouteOverrideRule> overrideRules)
