@@ -13,13 +13,17 @@ namespace TOne.WhS.Routing.Entities
 
         public Decimal SupplierRate { get; set; }
 
-        public bool IsBlocked { get; set; }
-
         public int? ExecutedRuleId { get; set; }
 
         public HashSet<int> ExactSupplierServiceIds { get; set; }
 
         public int NumberOfTries { get; set; }
+
+        public bool IsBlocked { get; set; }
+
+        public bool IsForced { get; set; }
+
+        public bool IsLossy { get; set; }
     }
 
     public class RouteOption : BaseRouteOption, IRouteOptionPercentageTarget

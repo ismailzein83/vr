@@ -74,40 +74,35 @@ namespace TOne.WhS.Routing.Business
         public override RouteRuleSettings BuildLinkedRouteRuleSettings(ILinkedRouteRuleContext context)
         {
             SpecialRequestRouteRule specialRequestRouteRule = new SpecialRequestRouteRule();
-            //if (context.RouteOptions != null && context.RouteOptions.Count > 0)
-            //{
-            //    specialRequestRouteRule.Options = new List<SpecialRequestRouteOptionSettings>();
-            //    int counter = 0;
-            //    foreach (RouteOption routeOption in context.RouteOptions)
-            //    {
-            //        counter++;
-            //        SpecialRequestRouteOptionSettings optionSettings;
-            //        SpecialRequestRouteOptionSettings relatedOption;
-            //        if (Options != null && Options.TryGetValue(routeOption.SupplierId, out relatedOption))
-            //        {
-            //            optionSettings = new SpecialRequestRouteOptionSettings()
-            //            {
-            //                ForceOption = relatedOption.ForceOption,
-            //                NumberOfTries = relatedOption.NumberOfTries,
-            //                Percentage = routeOption.Percentage,
-            //                Position = counter,
-            //                SupplierId = routeOption.SupplierId
-            //            };
-            //        }
-            //        else
-            //        {
-            //            optionSettings = new SpecialRequestRouteOptionSettings()
-            //            {
-            //                ForceOption = false,
-            //                NumberOfTries = 1,
-            //                Percentage = routeOption.Percentage,
-            //                Position = counter,
-            //                SupplierId = routeOption.SupplierId
-            //            };
-            //        }
-            //        specialRequestRouteRule.Options.Add(optionSettings);
-            //    }
-            //}
+            if (context.RouteOptions != null && context.RouteOptions.Count > 0)
+            {
+                specialRequestRouteRule.Options = new List<SpecialRequestRouteOptionSettings>();
+                foreach (RouteOption routeOption in context.RouteOptions)
+                {
+                    SpecialRequestRouteOptionSettings optionSettings;
+                    if (_optionSupplierIds != null && _optionSupplierIds.Contains(routeOption.SupplierId))
+                    {
+                        optionSettings = new SpecialRequestRouteOptionSettings()
+                        {
+                            ForceOption = routeOption.IsForced,
+                            NumberOfTries = routeOption.NumberOfTries,
+                            Percentage = routeOption.Percentage,
+                            SupplierId = routeOption.SupplierId
+                        };
+                    }
+                    else
+                    {
+                        optionSettings = new SpecialRequestRouteOptionSettings()
+                        {
+                            ForceOption = false,
+                            NumberOfTries = 1,
+                            Percentage = routeOption.Percentage,
+                            SupplierId = routeOption.SupplierId
+                        };
+                    }
+                    specialRequestRouteRule.Options.Add(optionSettings);
+                }
+            }
             return specialRequestRouteRule;
         }
 
@@ -203,7 +198,7 @@ namespace TOne.WhS.Routing.Business
         {
             if (options == null)
                 return;
-            
+
             bool isPercentage = this.OptionsWithBackups != null && this.OptionsWithBackups.FirstOrDefault(itm => itm.Percentage.HasValue) != null;
             if (isPercentage)
             {
@@ -215,7 +210,7 @@ namespace TOne.WhS.Routing.Business
                 {
                     List<RPRouteOption> finalOptions = new List<RPRouteOption>();
                     Dictionary<int, RPRouteOption> optionsBySupplier = options.ToDictionary(itm => itm.SupplierId, itm => itm);
-                    
+
                     foreach (SpecialRequestRouteOptionSettings optionSettings in this.OptionsWithBackups)
                     {
                         RPRouteOption rpRouteOption;

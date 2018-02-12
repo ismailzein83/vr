@@ -58,22 +58,27 @@ namespace TOne.WhS.Routing.Business
         {
             FixedRouteRule fixedRouteRule = new FixedRouteRule();
 
-            //if (context.RouteOptions != null && context.RouteOptions.Count > 0)
-            //{
-            //    fixedRouteRule.Options = new List<FixedRouteOptionSettings>();
+            if (context.RouteOptions != null && context.RouteOptions.Count > 0)
+            {
+                fixedRouteRule.Options = new List<FixedRouteOptionSettings>();
 
-            //    foreach (RouteOption routeOption in context.RouteOptions)
-            //    {
-            //        FixedRouteOptionSettings optionSettings = new FixedRouteOptionSettings() { Percentage = routeOption.Percentage, SupplierId = routeOption.SupplierId, NumberOfTries = routeOption.NumberOfTries };
-            //        fixedRouteRule.Options.Add(optionSettings);
+                foreach (RouteOption routeOption in context.RouteOptions)
+                {
+                    FixedRouteOptionSettings optionSettings = new FixedRouteOptionSettings() { Percentage = routeOption.Percentage, SupplierId = routeOption.SupplierId, NumberOfTries = routeOption.NumberOfTries };
+                    fixedRouteRule.Options.Add(optionSettings);
 
-            //        FixedRouteOptionSettings matchedFixedRouteOptionSettings;
-            //        if (Options != null && Options.TryGetValue(routeOption.SupplierId, out matchedFixedRouteOptionSettings) && matchedFixedRouteOptionSettings.Filters != null)
-            //        {
-            //            optionSettings.Filters = Vanrise.Common.Utilities.CloneObject<List<RouteOptionFilterSettings>>(matchedFixedRouteOptionSettings.Filters);
-            //        }
-            //    }
-            //}
+                    if (routeOption.IsLossy)
+                    {
+                        RouteRules.Filters.RateOptionFilter rateOptionFilter = new RouteRules.Filters.RateOptionFilter()
+                        {
+                            RateOption = RouteRules.Filters.RateOption.MaximumLoss,
+                            RateOptionType = RouteRules.Filters.RateOptionType.Fixed,
+                            RateOptionValue = 0
+                        };
+                        optionSettings.Filters = new List<RouteOptionFilterSettings>() { rateOptionFilter };
+                    }
+                }
+            }
 
             return fixedRouteRule;
         }
