@@ -224,4 +224,23 @@ set nocount on;;with cte_data([ID],[Name],[Type],[Category],[Settings],[Data],[
 ----------------------------------------------------------------------------------------------------
 end
 
---[logging].[LoggableEntity]------------------------------------------------------------------------beginset nocount on;;with cte_data([ID],[UniqueName],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('79860CB9-49F5-4492-A7E2-DE2B47997CB4','VR_Security_OrgChart','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Security_OrgChart_ViewHistoryItem"}'),('ED80ECDC-D751-4E48-B728-5069A78DB7DA','VR_Security_View','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Security_View_ViewHistoryItem"}'),('DFF05265-22BD-49D5-BE5F-6A97F6624284','VR_Security_User','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Security_User_ViewHistoryItem"}'),('11CC2EF2-6874-40A9-A6A1-C9D86798EEBA','VR_Security_Group','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Security_Group_ViewHistoryItem"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[UniqueName],[Settings]))merge	[logging].[LoggableEntity] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[UniqueName] = s.[UniqueName],[Settings] = s.[Settings]when not matched by target then	insert([ID],[UniqueName],[Settings])	values(s.[ID],s.[UniqueName],s.[Settings]);----------------------------------------------------------------------------------------------------end
+--[logging].[LoggableEntity]------------------------------------------------------------------------beginset nocount on;;with cte_data([ID],[UniqueName],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('79860CB9-49F5-4492-A7E2-DE2B47997CB4','VR_Security_OrgChart','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Security_OrgChart_ViewHistoryItem"}'),('ED80ECDC-D751-4E48-B728-5069A78DB7DA','VR_Security_View','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Security_View_ViewHistoryItem"}'),('DFF05265-22BD-49D5-BE5F-6A97F6624284','VR_Security_User','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Security_User_ViewHistoryItem"}'),('11CC2EF2-6874-40A9-A6A1-C9D86798EEBA','VR_Security_Group','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Security_Group_ViewHistoryItem"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[UniqueName],[Settings]))merge	[logging].[LoggableEntity] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[UniqueName] = s.[UniqueName],[Settings] = s.[Settings]when not matched by target then	insert([ID],[UniqueName],[Settings])	values(s.[ID],s.[UniqueName],s.[Settings]);----------------------------------------------------------------------------------------------------end--[genericdata].[BusinessEntityDefinition]------------------------------------------------------------
+begin
+set nocount on;
+;with cte_data([ID],[Name],[Title],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('217a8f71-1dd6-4613-8ae2-540a510f5ff5','VR_Security_User','User'	,'{"$type":"Vanrise.GenericData.Entities.StaticBEDefinitionSettings, Vanrise.GenericData.Entities","SelectorUIControl":"vr-sec-user-selector","ManagerFQTN":"Vanrise.Security.Business.UserManager,Vanrise.Security.Business", "IdType": "System.Int32"}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Title],[Settings]))
+merge	[genericdata].[BusinessEntityDefinition] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Title],[Settings])
+	values(s.[ID],s.[Name],s.[Title],s.[Settings]);
+----------------------------------------------------------------------------------------------------
+end
