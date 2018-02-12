@@ -8,11 +8,11 @@
                     </vr-columns>
                 </vr-row>-->
                 <vr-row>
-                    <vr-genericdata-genericbusinessentity-selector isrequired="true" on-ready="scopeModel.onWorkGroupSelectorReady" normal-col-num="12" customlabel="Work Group"></vr-genericdata-genericbusinessentity-selector>
+                    <vr-genericdata-genericbusinessentity-selector on-ready="scopeModel.onWorkGroupSelectorReady" normal-col-num="12" customlabel="Work Group"></vr-genericdata-genericbusinessentity-selector>
                 </vr-row>
                 <vr-row>
                     <vr-columns width="fullrow">
-                        <vr-textbox value="scopeModel.carrierReference" label="Carrier Reference"></vr-textbox>
+                        <vr-textbox value="scopeModel.carrierReference" label="Carrier Reference" vr-disabled="scopeModel.carrierReferenceHasValue"></vr-textbox>
                     </vr-columns>
                 </vr-row>
                 <vr-row>
@@ -28,7 +28,7 @@
                         <vr-switch value="scopeModel.sendEmail" label="Send Email" isrequired="true"></vr-switch>
                     </vr-columns>
                     <vr-columns width="fullrow">
-                        <vr-textbox type="text" value="scopeModel.email" label="Emails" isrequired="scopeModel.sendEmail"></vr-textbox>
+                        <vr-textbox type="text" value="scopeModel.email" label="Emails" isrequired="scopeModel.sendEmail" vr-disabled="!scopeModel.sendEmail"></vr-textbox>
                     </vr-columns>
                 </vr-row>
                 <vr-row>
@@ -89,18 +89,20 @@
                             <vr-button type="Add" data-onclick="scopeModel.addCodeNumber" standalone vr-disabled="scopeModel.disableAddCodeNumber()" ng-show="!scopeModel.isEditMode"></vr-button>
 
                             <vr-row>
-                                <vr-datagrid datasource="scopeModel.codeNumberList"
-                                             ondeleterow="removerow"
-                                             on-ready="onGridReady"
-                                             pagingtype="'PagingOnScroll'"
-                                             menuactions="gridMenuActions"
-                                             enableautoexport="true"
-                                             hidegridmenu>
-                                    <vr-datagridcolumn headertext="'Code Number'" field="'CodeNumber'" type="'Text'"></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'Reason'" field="'ReasonDescription'" type="'Text'"></vr-datagridcolumn>
-                                    <vr-datagridcolumn headertext="'International Release Code'" field="'InternationalReleaseCodeDescription'" type="'Text'"></vr-datagridcolumn>
-                                </vr-datagrid>
-                            </vr-row>
+                                <vr-validator validate="scopeModel.codeNumberListHasItem()">
+                                    <vr-datagrid datasource="scopeModel.codeNumberList"
+                                                 ondeleterow="removerow"
+                                                 on-ready="onGridReady"
+                                                 pagingtype="'PagingOnScroll'"
+                                                 menuactions="gridMenuActions"
+                                                 enableautoexport="true"
+                                                 hidegridmenu>
+                                        <vr-datagridcolumn headertext="'Code Number'" field="'CodeNumber'" type="'Text'"></vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'Reason'" field="'ReasonDescription'" type="'Text'"></vr-datagridcolumn>
+                                        <vr-datagridcolumn headertext="'International Release Code'" field="'InternationalReleaseCodeDescription'" type="'Text'"></vr-datagridcolumn>
+                                    </vr-datagrid>
+                                    </vr-validator>
+</vr-row>
                             <vr-row>
                                 <span ng-if="scopeModel.errorMessage != undefined">
                                     <label class="alert alert-danger" vr-alert>{{scopeModel.errorMessage}}</label>

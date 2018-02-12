@@ -84,6 +84,11 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                         $scope.scopeModel.phoneNumber = carrierProfileTicketInfo.PhoneNumber.join(';');
                     }
                 };
+                $scope.scopeModel.codeNumberListHasItem = function () {
+                    if ($scope.scopeModel.codeNumberList.length != 0)
+                        return null;
+                    return "You must add at least one description";
+                };
                 $scope.removerow = function (dataItem) {
                     if (!$scope.scopeModel.isEditMode) {
                         var index = $scope.scopeModel.codeNumberList.indexOf(dataItem);

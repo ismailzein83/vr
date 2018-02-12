@@ -78,6 +78,11 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                         $scope.scopeModel.phoneNumber = carrierProfileTicketInfo.PhoneNumber.join(';');
                     }
                 };
+                $scope.scopeModel.codeNumberListHasItem = function () {
+                    if ($scope.scopeModel.codeNumberList.length != 0)
+                        return null;
+                    return "You must add at least one description";
+                };
                 $scope.scopeModel.InternationalReleaseCodeSelectorReady = function (api) {
                     releaseCodeSelectorAPI = api;
                     releaseCodeSelectorReadyPromiseDeferred.resolve();
@@ -187,6 +192,9 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                             $scope.scopeModel.contactName = selectedValues.ContactName;
                             $scope.scopeModel.email = selectedValues.ContactEmails;
                             $scope.scopeModel.phoneNumber = selectedValues.PhoneNumber;
+                            if ($scope.scopeModel.carrierReference != undefined) {
+                                $scope.scopeModel.carrierReferenceHasValue = true;
+                            }
 
                         }
                         if ($scope.scopeModel.isEditMode) {
