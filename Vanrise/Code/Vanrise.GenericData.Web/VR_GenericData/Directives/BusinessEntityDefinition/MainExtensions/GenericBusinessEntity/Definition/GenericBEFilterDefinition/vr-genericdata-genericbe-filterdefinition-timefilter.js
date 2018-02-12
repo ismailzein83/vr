@@ -46,6 +46,6 @@
         }
     }
 
-    app.directive('vrGenericdataFilterdefinitionTimefilter', GenericBETimeFilterDirective);
+    app.directive('vrGenericdataGenericbeFilterdefinitionTimefilter', GenericBETimeFilterDirective);
 
 })(app);

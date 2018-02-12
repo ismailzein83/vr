@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataBeAftersavehandlerConditional", ["UtilsService", "VRNotificationService", "VR_GenericData_GenericBEDefinitionService",
+app.directive("vrGenericdataGenericbeViewdefinitionGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_GenericBEDefinitionService",
     function (UtilsService, VRNotificationService, VR_GenericData_GenericBEDefinitionService) {
 
         var directiveDefinitionObject = {
@@ -12,48 +12,44 @@ app.directive("vrGenericdataBeAftersavehandlerConditional", ["UtilsService", "VR
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-
-                var ctor = new ConditionalHandlersGrid($scope, ctrl, $attrs);
+                var ctor = new ViewDefinitionGrid($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/OnAfterSaveHandler/Templates/ConditionalHandlersGridTemplate.html"
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/Editor/Templates/ViewDefinitionGridTemplate.html"
+
         };
 
-        function ConditionalHandlersGrid($scope, ctrl, $attrs) {
+        function ViewDefinitionGrid($scope, ctrl, $attrs) {
 
             var gridAPI;
-            var context;
-
             this.initializeController = initializeController;
             function initializeController() {
                 ctrl.datasource = [];
                 ctrl.isValid = function () {
                     if (ctrl.datasource == undefined || ctrl.datasource.length == 0)
-                        return "You Should add at least one handler.";
+                        return "You Should add at least one column.";
                     if (ctrl.datasource.length > 0 && checkDuplicateName())
-                        return "Title in each handler should be unique.";
+                        return "Name in each should be unique.";
 
-                    return null;
+                     return null;
                 };
 
-                ctrl.addConditionalHandler = function () {
-                    var onConditionalHandlerAdded = function (addedItem) {
+                ctrl.addGridView = function () {
+                    var onGridViewAdded = function (addedItem) {
                         ctrl.datasource.push(addedItem);
                     };
 
-                    VR_GenericData_GenericBEDefinitionService.addGenericBEConditionalHandler(onConditionalHandlerAdded, getContext());
+                    VR_GenericData_GenericBEDefinitionService.addGenericBEViewDefinition(onGridViewAdded);
                 };
-              
-                ctrl.removeConditionalHandler = function (dataItem) {
+                
+                ctrl.removeView = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
                 };
 
-
                 defineMenuActions();
-
                 defineAPI();
             }
 
@@ -61,34 +57,28 @@ app.directive("vrGenericdataBeAftersavehandlerConditional", ["UtilsService", "VR
                 var api = {};
 
                 api.getData = function () {
-                    var handlers;
+                    var views;
                     if (ctrl.datasource != undefined && ctrl.datasource != undefined) {
-                        handlers = [];
+                        views = [];
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
-                            handlers.push({
-                                ConditionalAfterSaveHandlerItemId: currentItem.ConditionalAfterSaveHandlerItemId,
+                            views.push({
+                                GenericBEViewDefinitionId: currentItem.GenericBEViewDefinitionId,
                                 Name: currentItem.Name,
-                                Handler: currentItem.Handler,
-                                Condition: currentItem.Condition
+                                Settings: currentItem.Settings
                             });
                         }
                     }
-
-                    return {
-                        $type: "Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEOnAfterSaveHandlers.ConditionalAfterSaveHandler, Vanrise.GenericData.MainExtensions",
-                        Handlers: handlers
-                    };
+                    return views;
                 };
 
                 api.load = function (payload) {
                     if (payload != undefined) {
-                        context = payload.context;
                         api.clearDataSource();
-                        if (payload.settings != undefined && payload.settings.Handlers != undefined) {
-                            var data = payload.settings.Handlers;
-                            for (var i = 0; i < data.length; i++) {
-                                ctrl.datasource.push(data[i]);
+                        if (payload.genericBEGridViews != undefined) {
+                            for (var i = 0; i < payload.genericBEGridViews.length; i++) {
+                                var item = payload.genericBEGridViews[i];
+                                ctrl.datasource.push(item);
                             }
                         }
                     }
@@ -109,7 +99,7 @@ app.directive("vrGenericdataBeAftersavehandlerConditional", ["UtilsService", "VR
                 var defaultMenuActions = [
                 {
                     name: "Edit",
-                    clicked: editConditionalHandler
+                    clicked: editView,
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
@@ -117,18 +107,12 @@ app.directive("vrGenericdataBeAftersavehandlerConditional", ["UtilsService", "VR
                 };
             }
 
-            function editConditionalHandler(conditionalHandlerObj) {
-                var onConditionalHandlerUpdated = function (conditionalHandler) {
-                    var index = ctrl.datasource.indexOf(conditionalHandlerObj);
-                    ctrl.datasource[index] = conditionalHandler;
+            function editView(viewObj) {
+                var onGridViewUpdated = function (view) {
+                    var index = ctrl.datasource.indexOf(viewObj);
+                    ctrl.datasource[index] = view;
                 };
-                VR_GenericData_GenericBEDefinitionService.editGenericBEConditionalHandler(onConditionalHandlerUpdated, conditionalHandlerObj, getContext());
-            }
-            function getContext() {
-                var currentContext = context;
-                if (currentContext == undefined)
-                    currentContext = {};
-                return currentContext;
+                VR_GenericData_GenericBEDefinitionService.editGenericBEViewDefinition(onGridViewUpdated, viewObj);
             }
 
             function checkDuplicateName() {

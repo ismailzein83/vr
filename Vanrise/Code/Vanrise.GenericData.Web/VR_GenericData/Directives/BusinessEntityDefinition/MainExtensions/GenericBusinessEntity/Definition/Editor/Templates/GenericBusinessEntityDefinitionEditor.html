@@ -13,7 +13,7 @@
             <vr-common-modalwidth-selector on-ready="scopeModel.onModalWidthSelectorReady" isrequired="true"></vr-common-modalwidth-selector>
         </vr-columns>
         <vr-columns width="fullrow" haschildcolumns>
-            <vr-genericdata-be-extendedsettings on-ready="scopeModel.onGenericBEEditorExtendedSettingsReady" normal-col-num="6"></vr-genericdata-be-extendedsettings>
+            <vr-genericdata-genericbe-extendedsettings on-ready="scopeModel.onGenericBEEditorExtendedSettingsReady" normal-col-num="6"></vr-genericdata-genericbe-extendedsettings>
         </vr-columns>
     </vr-row>
 
@@ -22,7 +22,7 @@
 <vr-tab header="'Action Defnition'">
     <vr-row>
         <vr-columns width="fullrow">
-            <vr-genericdata-be-actiondefinition-grid on-ready="scopeModel.onGenericBEActionDefinitionDirectiveReady"></vr-genericdata-be-actiondefinition-grid>
+            <vr-genericdata-genericbe-actiondefinition-grid on-ready="scopeModel.onGenericBEActionDefinitionDirectiveReady"></vr-genericdata-genericbe-actiondefinition-grid>
         </vr-columns>
     </vr-row>
 </vr-tab>
@@ -31,17 +31,17 @@
     <vr-row>
         <vr-columns width="1/2row">
             <vr-section header="Columns Definition" collapsible vr-loader="scopeModel.isLoadingColumns">
-                <vr-genericdata-generic-be-columndefinition-grid on-ready="scopeModel.onGenericBEColumnDefinitionGridReady"></vr-genericdata-generic-be-columndefinition-grid>
+                <vr-genericdata-genericbe-columndefinition-grid on-ready="scopeModel.onGenericBEColumnDefinitionGridReady"></vr-genericdata-genericbe-columndefinition-grid>
             </vr-section>
         </vr-columns>
         <vr-columns width="1/2row">
             <vr-section header="Grid Actions" collapsible>
-                <vr-genericdata-be-gridactiondefinition-grid on-ready="scopeModel.onGenericBEGridActionDefinitionDirectiveReady"></vr-genericdata-be-gridactiondefinition-grid>
+                <vr-genericdata-genericbe-gridactiondefinition-grid on-ready="scopeModel.onGenericBEGridActionDefinitionDirectiveReady"></vr-genericdata-genericbe-gridactiondefinition-grid>
             </vr-section>
         </vr-columns>
         <vr-columns width="fullrow">
             <vr-section header="Grid Views" collapsible>
-                <vr-genericdata-generic-be-viewdefinition-grid on-ready="scopeModel.onGenericBEViewDefinitionGridReady"></vr-genericdata-generic-be-viewdefinition-grid>
+                <vr-genericdata-genericbe-viewdefinition-grid on-ready="scopeModel.onGenericBEViewDefinitionGridReady"></vr-genericdata-genericbe-viewdefinition-grid>
             </vr-section>
         </vr-columns>
     </vr-row>
@@ -50,7 +50,7 @@
 <vr-tab header="'Editor Defnition'">
     <vr-row>
         <vr-columns width="fullrow" haschildcolumns>
-            <vr-genericdata-editordefinition-settings on-ready="scopeModel.onGenericBEEditorDefinitionDirectiveReady" normal-col-num="6"></vr-genericdata-editordefinition-settings>
+            <vr-genericdata-genericbe-editordefinition-settings on-ready="scopeModel.onGenericBEEditorDefinitionDirectiveReady" normal-col-num="6"></vr-genericdata-genericbe-editordefinition-settings>
         </vr-columns>
     </vr-row>
 </vr-tab>
@@ -58,7 +58,7 @@
 <vr-tab header="'Filter Defnition'">
     <vr-row>
         <vr-columns width="fullrow" haschildcolumns>
-            <vr-genericdata-filterdefinition-settings on-ready="scopeModel.onGenericBEFilterDefinitionDirectiveReady" normal-col-num="6"></vr-genericdata-filterdefinition-settings>
+            <vr-genericdata-genericbe-filterdefinition-settings on-ready="scopeModel.onGenericBEFilterDefinitionDirectiveReady" normal-col-num="6"></vr-genericdata-genericbe-filterdefinition-settings>
         </vr-columns>
     </vr-row>
 </vr-tab>
@@ -67,12 +67,12 @@
     <vr-row>
         <vr-columns width="fullrow">
             <vr-section header="Before Insert Handler" collapsible>
-                <vr-genericdata-be-beforeinserthandler-settings on-ready="scopeModel.onGenericBEBeforeInsertHandlerSettingsReady" normal-col-num="6"></vr-genericdata-be-beforeinserthandler-settings>
+                <vr-genericdata-genericbe-beforeinserthandler-settings on-ready="scopeModel.onGenericBEBeforeInsertHandlerSettingsReady" normal-col-num="6"></vr-genericdata-genericbe-beforeinserthandler-settings>
             </vr-section>
         </vr-columns>
         <vr-columns width="fullrow">
             <vr-section header="After Save Handler" collapsible>
-                <vr-genericdata-be-aftersavehandler-settings on-ready="scopeModel.onGenericBEAfterSaveHandlerSettingsReady" normal-col-num="6"></vr-genericdata-be-aftersavehandler-settings>
+                <vr-genericdata-genericbe-aftersavehandler-settings on-ready="scopeModel.onGenericBEAfterSaveHandlerSettingsReady" normal-col-num="6"></vr-genericdata-genericbe-aftersavehandler-settings>
             </vr-section>
         </vr-columns>
     </vr-row>

@@ -2,30 +2,31 @@
 
     'use strict';
 
-    editorDefinitionSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBEDefinitionAPIService'];
+    beforeInsertSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBEDefinitionAPIService'];
 
-    function editorDefinitionSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_GenericBEDefinitionAPIService) {
+    function beforeInsertSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_GenericBEDefinitionAPIService) {
         return {
             restrict: "E",
             scope: {
                 onReady: "=",
                 normalColNum: '@',
                 label: '@',
-                customvalidate: '='
+                customvalidate: '=',
+                isrequired:'='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new EditorSettings($scope, ctrl, $attrs);
+                var ctor = new SettingsCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
-            controllerAs: "editorDefinitionCtrl",
+            controllerAs: "beforInsertSettingsCtrl",
             bindToController: true,
             template: function (element, attrs) {
                 return getTamplate(attrs);
             }
         };
 
-        function EditorSettings($scope, ctrl, $attrs) {
+        function SettingsCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var selectorAPI;
@@ -76,11 +77,11 @@
                         promises.push(loadDirectivePromise);
                     }
 
-                    var getParameterSettingsConfigsPromise = getGenericBEViewDefinitionSettingsConfigs();
-                    promises.push(getParameterSettingsConfigsPromise);
+                    var getSettingsConfigsPromise = getSettingsConfigs();
+                    promises.push(getSettingsConfigsPromise);
 
-                    function getGenericBEViewDefinitionSettingsConfigs() {
-                        return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEEditorDefinitionSettingsConfigs().then(function (response) {
+                    function getSettingsConfigs() {
+                        return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEOnBeforeInsertHandlerSettingsConfigs().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
@@ -139,30 +140,33 @@
         }
 
         function getTamplate(attrs) {
-            var label = "Editor Type";
+            var label = "Handler Type";
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
+            var hideremoveicon = "";
+            if (attrs.hideremoveicon != undefined)
+                hideremoveicon = "hideremoveicon";
             var template =
                 '<vr-row>'
-                    + '<vr-columns colnum="{{editorDefinitionCtrl.normalColNum}}">'
+                    + '<vr-columns colnum="{{beforInsertSettingsCtrl.normalColNum}}">'
                         + ' <vr-select on-ready="scopeModel.onSelectorReady"'
                             + ' datasource="scopeModel.templateConfigs"'
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
                             + ' label="' + label + '"'
-                            + ' isrequired="true"'
-                            + 'hideremoveicon>'
+                            + ' isrequired="beforInsertSettingsCtrl.isrequired"'
+                            + ' '+ hideremoveicon + ' >'
                         + '</vr-select>'
                     + ' </vr-columns>'
                 + '</vr-row>'
                 + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"'
-                        + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{editorDefinitionCtrl.normalColNum}}" isrequired="editorDefinitionCtrl.isrequired" customvalidate="editorDefinitionCtrl.customvalidate">'
+                        + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{beforInsertSettingsCtrl.normalColNum}}" isrequired="beforInsertSettingsCtrl.isrequired" customvalidate="beforInsertSettingsCtrl.customvalidate">'
                 + '</vr-directivewrapper>';
             return template;
         }
     }
 
-    app.directive('vrGenericdataEditordefinitionSettings', editorDefinitionSettingsDirective);
+    app.directive('vrGenericdataGenericbeBeforeinserthandlerSettings', beforeInsertSettingsDirective);
 
 })(app);

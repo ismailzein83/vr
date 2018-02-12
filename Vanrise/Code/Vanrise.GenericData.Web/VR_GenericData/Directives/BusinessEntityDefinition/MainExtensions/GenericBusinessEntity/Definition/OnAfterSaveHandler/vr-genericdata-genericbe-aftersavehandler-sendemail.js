@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataBeAftersavehandlerSendemail", ["UtilsService", "VRNotificationService",
+app.directive("vrGenericdataGenericbeAftersavehandlerSendemail", ["UtilsService", "VRNotificationService",
     function (UtilsService, VRNotificationService) {
 
         var directiveDefinitionObject = {

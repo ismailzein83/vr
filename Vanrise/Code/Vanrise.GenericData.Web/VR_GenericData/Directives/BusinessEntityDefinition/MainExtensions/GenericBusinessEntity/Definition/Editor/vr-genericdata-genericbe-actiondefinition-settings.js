@@ -2,31 +2,30 @@
 
     'use strict';
 
-    afterSaveSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBEDefinitionAPIService'];
+    actionDefinitionSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBEDefinitionAPIService'];
 
-    function afterSaveSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_GenericBEDefinitionAPIService) {
+    function actionDefinitionSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_GenericBEDefinitionAPIService) {
         return {
             restrict: "E",
             scope: {
                 onReady: "=",
                 normalColNum: '@',
                 label: '@',
-                customvalidate: '=',
-                isrequired:'='
+                customvalidate: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new SettingsCtor($scope, ctrl, $attrs);
+                var ctor = new ActionSettings($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
-            controllerAs: "afterSaveSettingsCtrl",
+            controllerAs: "actionDefinitionCtrl",
             bindToController: true,
             template: function (element, attrs) {
                 return getTamplate(attrs);
             }
         };
 
-        function SettingsCtor($scope, ctrl, $attrs) {
+        function ActionSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var selectorAPI;
@@ -77,11 +76,11 @@
                         promises.push(loadDirectivePromise);
                     }
 
-                    var getSettingsConfigsPromise = getSettingsConfigs();
-                    promises.push(getSettingsConfigsPromise);
+                    var getParameterSettingsConfigsPromise = getGenericBEFilterDefinitionSettingsConfigs();
+                    promises.push(getParameterSettingsConfigsPromise);
 
-                    function getSettingsConfigs() {
-                        return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEOnAfterSaveHandlerSettingsConfigs().then(function (response) {
+                    function getGenericBEFilterDefinitionSettingsConfigs() {
+                        return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEActionDefinitionSettingsConfigs().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
@@ -140,33 +139,30 @@
         }
 
         function getTamplate(attrs) {
-            var label = "Handler Type";
+            var label = "Action Type";
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
-            var hideremoveicon = "";
-            if (attrs.hideremoveicon != undefined)
-                hideremoveicon = "hideremoveicon";
             var template =
                 '<vr-row>'
-                    + '<vr-columns colnum="{{afterSaveSettingsCtrl.normalColNum}}">'
+                    + '<vr-columns colnum="{{actionDefinitionCtrl.normalColNum}}">'
                         + ' <vr-select on-ready="scopeModel.onSelectorReady"'
                             + ' datasource="scopeModel.templateConfigs"'
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
-                            + ' label="' + label + '"'
-                            + ' isrequired="afterSaveSettingsCtrl.isrequired"'
-                            + ' '+ hideremoveicon + ' >'
+                            + 'label="' + label + '"'
+                            + ' isrequired="true"'
+                            + 'hideremoveicon>'
                         + '</vr-select>'
                     + ' </vr-columns>'
                 + '</vr-row>'
                 + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"'
-                        + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{afterSaveSettingsCtrl.normalColNum}}" isrequired="afterSaveSettingsCtrl.isrequired" customvalidate="afterSaveSettingsCtrl.customvalidate">'
+                        + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{actionDefinitionCtrl.normalColNum}}" isrequired="actionDefinitionCtrl.isrequired" customvalidate="actionDefinitionCtrl.customvalidate">'
                 + '</vr-directivewrapper>';
             return template;
         }
     }
 
-    app.directive('vrGenericdataBeAftersavehandlerSettings', afterSaveSettingsDirective);
+    app.directive('vrGenericdataGenericbeActiondefinitionSettings', actionDefinitionSettingsDirective);
 
 })(app);

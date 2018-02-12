@@ -2,31 +2,30 @@
 
     'use strict';
 
-    beforeInsertSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBEDefinitionAPIService'];
+    ParameterSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBEDefinitionAPIService'];
 
-    function beforeInsertSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_GenericBEDefinitionAPIService) {
+    function ParameterSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_GenericBEDefinitionAPIService) {
         return {
             restrict: "E",
             scope: {
                 onReady: "=",
                 normalColNum: '@',
                 label: '@',
-                customvalidate: '=',
-                isrequired:'='
+                customvalidate: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new SettingsCtor($scope, ctrl, $attrs);
+                var ctor = new ViewSettings($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
-            controllerAs: "beforInsertSettingsCtrl",
+            controllerAs: "ctrl",
             bindToController: true,
             template: function (element, attrs) {
                 return getTamplate(attrs);
             }
         };
 
-        function SettingsCtor($scope, ctrl, $attrs) {
+        function ViewSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var selectorAPI;
@@ -50,10 +49,7 @@
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
-                    var directivepPayload = {
-                        context: getContext()
-                    };
-                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, directivepPayload, setLoader, directiveReadyDeferred);
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
                 };
             }
 
@@ -65,30 +61,30 @@
                     selectorAPI.clearDataSource();
 
                     var promises = [];
-                    var settings;
+                    var parameterEntity;
 
                     if (payload != undefined) {
-                        settings = payload.settings;
+                        parameterEntity = payload.parameterEntity;
                         context = payload.context;
                     }
 
-                    if (settings != undefined) {
+                    if (parameterEntity != undefined) {
                         var loadDirectivePromise = loadDirective();
                         promises.push(loadDirectivePromise);
                     }
 
-                    var getSettingsConfigsPromise = getSettingsConfigs();
-                    promises.push(getSettingsConfigsPromise);
+                    var getParameterSettingsConfigsPromise = getGenericBEViewDefinitionSettingsConfigs();
+                    promises.push(getParameterSettingsConfigsPromise);
 
-                    function getSettingsConfigs() {
-                        return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEOnBeforeInsertHandlerSettingsConfigs().then(function (response) {
+                    function getGenericBEViewDefinitionSettingsConfigs() {
+                        return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEViewDefinitionSettingsConfigs().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
                                 }
-                                if (settings != undefined) {
+                                if (parameterEntity != undefined) {
                                     $scope.scopeModel.selectedTemplateConfig =
-                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, settings.ConfigId, 'ExtensionConfigurationId');
+                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, parameterEntity.ConfigId, 'ExtensionConfigurationId');
                                 }
                             }
                         });
@@ -100,11 +96,9 @@
 
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
-                            var directivePayload = {
-                                context: getContext()
-                            };
-                            if (settings != undefined) {
-                                directivePayload.settings = settings;
+                            var directivePayload = { };
+                            if (parameterEntity != undefined) {
+                                directivePayload.parameterEntity = parameterEntity;
                             };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
@@ -140,33 +134,30 @@
         }
 
         function getTamplate(attrs) {
-            var label = "Handler Type";
+            var label = "View Type";
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
-            var hideremoveicon = "";
-            if (attrs.hideremoveicon != undefined)
-                hideremoveicon = "hideremoveicon";
             var template =
                 '<vr-row>'
-                    + '<vr-columns colnum="{{beforInsertSettingsCtrl.normalColNum}}">'
+                    + '<vr-columns colnum="{{ctrl.normalColNum}}">'
                         + ' <vr-select on-ready="scopeModel.onSelectorReady"'
                             + ' datasource="scopeModel.templateConfigs"'
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
-                            + ' label="' + label + '"'
-                            + ' isrequired="beforInsertSettingsCtrl.isrequired"'
-                            + ' '+ hideremoveicon + ' >'
+                            + 'label="' + label + '"'
+                            + ' isrequired="true"'
+                            + 'hideremoveicon>'
                         + '</vr-select>'
                     + ' </vr-columns>'
                 + '</vr-row>'
                 + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"'
-                        + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{beforInsertSettingsCtrl.normalColNum}}" isrequired="beforInsertSettingsCtrl.isrequired" customvalidate="beforInsertSettingsCtrl.customvalidate">'
+                        + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{ctrl.normalColNum}}" isrequired="ctrl.isrequired" customvalidate="ctrl.customvalidate">'
                 + '</vr-directivewrapper>';
             return template;
         }
     }
 
-    app.directive('vrGenericdataBeBeforeinserthandlerSettings', beforeInsertSettingsDirective);
+    app.directive('vrGenericdataGenericbeViewdefinitionSettings', ParameterSettingsDirective);
 
 })(app);

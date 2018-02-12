@@ -55,6 +55,6 @@
         }
     }
 
-    app.directive('vrGenericdataFilterdefinitionStaticfilter', GenericBEStaticFilterDirective);
+    app.directive('vrGenericdataGenericbeFilterdefinitionStaticfilter', GenericBEStaticFilterDirective);
 
 })(app);

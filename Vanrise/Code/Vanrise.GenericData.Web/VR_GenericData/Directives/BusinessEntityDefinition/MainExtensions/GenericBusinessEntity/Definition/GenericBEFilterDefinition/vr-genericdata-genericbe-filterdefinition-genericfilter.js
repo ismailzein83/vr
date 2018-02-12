@@ -111,6 +111,6 @@
         }
     }
 
-    app.directive('vrGenericdataBeFilterdefinitionGenericfilter', FilterDefinitionGenericFilterDirective);
+    app.directive('vrGenericdataGenericbeFilterdefinitionGenericfilter', FilterDefinitionGenericFilterDirective);
 
 })(app);

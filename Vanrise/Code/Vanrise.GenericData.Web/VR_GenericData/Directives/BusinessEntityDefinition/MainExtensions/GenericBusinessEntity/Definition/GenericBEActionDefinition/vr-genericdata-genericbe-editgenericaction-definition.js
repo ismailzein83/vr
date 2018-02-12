@@ -46,6 +46,6 @@
         }
     }
 
-    app.directive('vrGenericdataBeEditgenericactionDefinition', EditGenericBEDefinitionActionDirective);
+    app.directive('vrGenericdataGenericbeEditgenericactionDefinition', EditGenericBEDefinitionActionDirective);
 
 })(app);

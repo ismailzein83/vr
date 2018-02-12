@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataBeGridactiondefinitionGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_GenericBEDefinitionService",
+app.directive("vrGenericdataGenericbeActiondefinitionGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_GenericBEDefinitionService",
     function (UtilsService, VRNotificationService, VR_GenericData_GenericBEDefinitionService) {
 
         var directiveDefinitionObject = {
@@ -13,15 +13,19 @@ app.directive("vrGenericdataBeGridactiondefinitionGrid", ["UtilsService", "VRNot
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new GridActionDefinitionGrid($scope, ctrl, $attrs);
+                var ctor = new ActionDefinitionGrid($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
             bindToController: true,
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/Editor/Templates/GridActionDefinitionGridTemplate.html"
+            compile: function (element, attrs) {
+
+            },
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/Editor/Templates/ActionDefinitionGridTemplate.html"
+
         };
 
-        function GridActionDefinitionGrid($scope, ctrl, $attrs) {
+        function ActionDefinitionGrid($scope, ctrl, $attrs) {
 
             var gridAPI;
             var context;
@@ -33,23 +37,23 @@ app.directive("vrGenericdataBeGridactiondefinitionGrid", ["UtilsService", "VRNot
                     //if (ctrl.datasource == undefined || ctrl.datasource.length == 0)
                     //    return "You Should add at least one column.";
                     if (ctrl.datasource.length > 0 && checkDuplicateName())
-                        return "Title in each action should be unique.";
+                        return "Name in each action should be unique.";
 
                      return null;
                 };
 
-                ctrl.addGridAction= function () {
-                    var onGridActionAdded = function (addedItem) {
+                ctrl.addAction= function () {
+                    var onActionAdded = function (addedItem) {
                         ctrl.datasource.push(addedItem);
                     };
 
-                    VR_GenericData_GenericBEDefinitionService.addGenericBEGridActionDefinition(onGridActionAdded, getContext());
+                    VR_GenericData_GenericBEDefinitionService.addGenericBEActionDefinition(onActionAdded, getContext());
                 };
-                ctrl.disableAddGridAction = function () {
+                ctrl.disableAddAction = function () {
                     if (context == undefined) return true;
-                    return context.getActionInfos().length == 0;
+                    return context.getDataRecordTypeId() == undefined;
                 };
-                ctrl.removeGridAction = function (dataItem) {
+                ctrl.removeAction = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
                 };
@@ -64,30 +68,28 @@ app.directive("vrGenericdataBeGridactiondefinitionGrid", ["UtilsService", "VRNot
                 var api = {};
 
                 api.getData = function () {
-                    var gridActions;
+                    var actions;
                     if (ctrl.datasource != undefined && ctrl.datasource != undefined) {
-                        gridActions = [];
+                        actions = [];
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
-                            gridActions.push({
-                                GenericBEGridActionId: currentItem.GenericBEGridActionId,
+                            actions.push({
                                 GenericBEActionId: currentItem.GenericBEActionId,
-                                Title: currentItem.Title,
-                                ReloadGridItem:currentItem.ReloadGridItem,
-                                FilterCondition: currentItem.FilterCondition
+                                Name: currentItem.Name,
+                                Settings: currentItem.Settings
                             });
                         }
                     }
-                    return gridActions;
+                    return actions;
                 };
 
                 api.load = function (payload) {
                     if (payload != undefined) {
                         context = payload.context;
                         api.clearDataSource();
-                        if (payload.genericBEGridActions != undefined) {
-                            for (var i = 0; i < payload.genericBEGridActions.length; i++) {
-                                var item = payload.genericBEGridActions[i];
+                        if (payload.genericBEActions != undefined) {
+                            for (var i = 0; i < payload.genericBEActions.length; i++) {
+                                var item = payload.genericBEActions[i];
                                 ctrl.datasource.push(item);
                             }
                         }
@@ -109,7 +111,7 @@ app.directive("vrGenericdataBeGridactiondefinitionGrid", ["UtilsService", "VRNot
                 var defaultMenuActions = [
                 {
                     name: "Edit",
-                    clicked: editGridAction
+                    clicked: editAction
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
@@ -117,12 +119,12 @@ app.directive("vrGenericdataBeGridactiondefinitionGrid", ["UtilsService", "VRNot
                 };
             }
 
-            function editGridAction(gridActionObj) {
-                var onGridActionUpdated = function (gridAction) {
-                    var index = ctrl.datasource.indexOf(gridActionObj);
-                    ctrl.datasource[index] = gridAction;
+            function editAction(actionObj) {
+                var onActionUpdated = function (action) {
+                    var index = ctrl.datasource.indexOf(actionObj);
+                    ctrl.datasource[index] = action;
                 };
-                VR_GenericData_GenericBEDefinitionService.editGenericBEGridActionDefinition(onGridActionUpdated, gridActionObj, getContext());
+                VR_GenericData_GenericBEDefinitionService.editGenericBEActionDefinition(onActionUpdated, actionObj, getContext());
             }
             function getContext() {
                 var currentContext = context;
@@ -135,7 +137,7 @@ app.directive("vrGenericdataBeGridactiondefinitionGrid", ["UtilsService", "VRNot
                 for (var i = 0; i < ctrl.datasource.length; i++) {
                     var currentItem = ctrl.datasource[i];
                     for (var j = 0; j < ctrl.datasource.length; j++) {
-                        if (i != j && ctrl.datasource[j].Title == currentItem.Title)
+                        if (i != j && ctrl.datasource[j].Name == currentItem.Name)
                             return true;
                     }
                 }

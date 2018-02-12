@@ -90,6 +90,6 @@
         }
     }
 
-    app.directive('vrGenericdataBeFilterdefinitionFiltergroup', FilterDefinitionFilterGroupDirective);
+    app.directive('vrGenericdataGenericbeFilterdefinitionFiltergroup', FilterDefinitionFilterGroupDirective);
 
 })(app);

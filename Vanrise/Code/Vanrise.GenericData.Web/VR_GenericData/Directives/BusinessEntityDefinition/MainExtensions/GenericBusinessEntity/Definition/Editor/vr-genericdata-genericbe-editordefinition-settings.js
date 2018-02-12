@@ -2,17 +2,16 @@
 
     'use strict';
 
-    filterDefinitionSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBEDefinitionAPIService'];
+    editorDefinitionSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBEDefinitionAPIService'];
 
-    function filterDefinitionSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_GenericBEDefinitionAPIService) {
+    function editorDefinitionSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_GenericBEDefinitionAPIService) {
         return {
             restrict: "E",
             scope: {
                 onReady: "=",
                 normalColNum: '@',
                 label: '@',
-                customvalidate: '=',
-                isrequired:'='
+                customvalidate: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -77,11 +76,11 @@
                         promises.push(loadDirectivePromise);
                     }
 
-                    var getParameterSettingsConfigsPromise = getGenericBEFilterDefinitionSettingsConfigs();
+                    var getParameterSettingsConfigsPromise = getGenericBEViewDefinitionSettingsConfigs();
                     promises.push(getParameterSettingsConfigsPromise);
 
-                    function getGenericBEFilterDefinitionSettingsConfigs() {
-                        return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEFilterDefinitionSettingsConfigs().then(function (response) {
+                    function getGenericBEViewDefinitionSettingsConfigs() {
+                        return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEEditorDefinitionSettingsConfigs().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
@@ -140,12 +139,9 @@
         }
 
         function getTamplate(attrs) {
-            var label = "Filter Type";
+            var label = "Editor Type";
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
-            var hideremoveicon = "";
-            if (attrs.hideremoveicon != undefined)
-                hideremoveicon = "hideremoveicon";
             var template =
                 '<vr-row>'
                     + '<vr-columns colnum="{{editorDefinitionCtrl.normalColNum}}">'
@@ -155,9 +151,9 @@
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
                             + ' label="' + label + '"'
-                            + ' isrequired="editorDefinitionCtrl.isrequired"'
-                            + ' ' + hideremoveicon + ' >'
-                            + '</vr-select>'
+                            + ' isrequired="true"'
+                            + 'hideremoveicon>'
+                        + '</vr-select>'
                     + ' </vr-columns>'
                 + '</vr-row>'
                 + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"'
@@ -167,6 +163,6 @@
         }
     }
 
-    app.directive('vrGenericdataFilterdefinitionSettings', filterDefinitionSettingsDirective);
+    app.directive('vrGenericdataGenericbeEditordefinitionSettings', editorDefinitionSettingsDirective);
 
 })(app);

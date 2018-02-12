@@ -167,6 +167,6 @@
         }
     }
 
-    app.directive('vrGenericdataBeExtendedsettings', extendedSettingsDirective);
+    app.directive('vrGenericdataGenericbeExtendedsettings', extendedSettingsDirective);
 
 })(app);

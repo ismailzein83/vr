@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrGenericdataBeActiondefinitionGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_GenericBEDefinitionService",
+app.directive("vrGenericdataGenericbeAftersavehandlerConditional", ["UtilsService", "VRNotificationService", "VR_GenericData_GenericBEDefinitionService",
     function (UtilsService, VRNotificationService, VR_GenericData_GenericBEDefinitionService) {
 
         var directiveDefinitionObject = {
@@ -13,19 +13,15 @@ app.directive("vrGenericdataBeActiondefinitionGrid", ["UtilsService", "VRNotific
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
 
-                var ctor = new ActionDefinitionGrid($scope, ctrl, $attrs);
+                var ctor = new ConditionalHandlersGrid($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: "ctrl",
             bindToController: true,
-            compile: function (element, attrs) {
-
-            },
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/Editor/Templates/ActionDefinitionGridTemplate.html"
-
+            templateUrl: "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/OnAfterSaveHandler/Templates/ConditionalHandlersGridTemplate.html"
         };
 
-        function ActionDefinitionGrid($scope, ctrl, $attrs) {
+        function ConditionalHandlersGrid($scope, ctrl, $attrs) {
 
             var gridAPI;
             var context;
@@ -34,26 +30,23 @@ app.directive("vrGenericdataBeActiondefinitionGrid", ["UtilsService", "VRNotific
             function initializeController() {
                 ctrl.datasource = [];
                 ctrl.isValid = function () {
-                    //if (ctrl.datasource == undefined || ctrl.datasource.length == 0)
-                    //    return "You Should add at least one column.";
+                    if (ctrl.datasource == undefined || ctrl.datasource.length == 0)
+                        return "You Should add at least one handler.";
                     if (ctrl.datasource.length > 0 && checkDuplicateName())
-                        return "Name in each action should be unique.";
+                        return "Title in each handler should be unique.";
 
-                     return null;
+                    return null;
                 };
 
-                ctrl.addAction= function () {
-                    var onActionAdded = function (addedItem) {
+                ctrl.addConditionalHandler = function () {
+                    var onConditionalHandlerAdded = function (addedItem) {
                         ctrl.datasource.push(addedItem);
                     };
 
-                    VR_GenericData_GenericBEDefinitionService.addGenericBEActionDefinition(onActionAdded, getContext());
+                    VR_GenericData_GenericBEDefinitionService.addGenericBEConditionalHandler(onConditionalHandlerAdded, getContext());
                 };
-                ctrl.disableAddAction = function () {
-                    if (context == undefined) return true;
-                    return context.getDataRecordTypeId() == undefined;
-                };
-                ctrl.removeAction = function (dataItem) {
+              
+                ctrl.removeConditionalHandler = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
                 };
@@ -68,29 +61,34 @@ app.directive("vrGenericdataBeActiondefinitionGrid", ["UtilsService", "VRNotific
                 var api = {};
 
                 api.getData = function () {
-                    var actions;
+                    var handlers;
                     if (ctrl.datasource != undefined && ctrl.datasource != undefined) {
-                        actions = [];
+                        handlers = [];
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
-                            actions.push({
-                                GenericBEActionId: currentItem.GenericBEActionId,
+                            handlers.push({
+                                ConditionalAfterSaveHandlerItemId: currentItem.ConditionalAfterSaveHandlerItemId,
                                 Name: currentItem.Name,
-                                Settings: currentItem.Settings
+                                Handler: currentItem.Handler,
+                                Condition: currentItem.Condition
                             });
                         }
                     }
-                    return actions;
+
+                    return {
+                        $type: "Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEOnAfterSaveHandlers.ConditionalAfterSaveHandler, Vanrise.GenericData.MainExtensions",
+                        Handlers: handlers
+                    };
                 };
 
                 api.load = function (payload) {
                     if (payload != undefined) {
                         context = payload.context;
                         api.clearDataSource();
-                        if (payload.genericBEActions != undefined) {
-                            for (var i = 0; i < payload.genericBEActions.length; i++) {
-                                var item = payload.genericBEActions[i];
-                                ctrl.datasource.push(item);
+                        if (payload.settings != undefined && payload.settings.Handlers != undefined) {
+                            var data = payload.settings.Handlers;
+                            for (var i = 0; i < data.length; i++) {
+                                ctrl.datasource.push(data[i]);
                             }
                         }
                     }
@@ -111,7 +109,7 @@ app.directive("vrGenericdataBeActiondefinitionGrid", ["UtilsService", "VRNotific
                 var defaultMenuActions = [
                 {
                     name: "Edit",
-                    clicked: editAction
+                    clicked: editConditionalHandler
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
@@ -119,12 +117,12 @@ app.directive("vrGenericdataBeActiondefinitionGrid", ["UtilsService", "VRNotific
                 };
             }
 
-            function editAction(actionObj) {
-                var onActionUpdated = function (action) {
-                    var index = ctrl.datasource.indexOf(actionObj);
-                    ctrl.datasource[index] = action;
+            function editConditionalHandler(conditionalHandlerObj) {
+                var onConditionalHandlerUpdated = function (conditionalHandler) {
+                    var index = ctrl.datasource.indexOf(conditionalHandlerObj);
+                    ctrl.datasource[index] = conditionalHandler;
                 };
-                VR_GenericData_GenericBEDefinitionService.editGenericBEActionDefinition(onActionUpdated, actionObj, getContext());
+                VR_GenericData_GenericBEDefinitionService.editGenericBEConditionalHandler(onConditionalHandlerUpdated, conditionalHandlerObj, getContext());
             }
             function getContext() {
                 var currentContext = context;

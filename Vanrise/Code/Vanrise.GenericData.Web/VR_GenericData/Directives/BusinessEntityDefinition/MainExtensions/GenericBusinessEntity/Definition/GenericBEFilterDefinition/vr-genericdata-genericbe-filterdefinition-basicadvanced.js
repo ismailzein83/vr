@@ -1,31 +1,26 @@
-﻿"use strict";
+﻿(function (app) {
 
-app.directive("vrGenericdataGenericBeColumndefinitionGrid", ["UtilsService", "VRNotificationService", "VR_GenericData_GenericBEDefinitionService",
-    function (UtilsService, VRNotificationService, VR_GenericData_GenericBEDefinitionService) {
+    'use strict';
 
-        var directiveDefinitionObject = {
+    FilterDefinitionBasicAdvancedDirective.$inject = ['UtilsService', 'VRNotificationService', 'VR_GenericData_GenericBEDefinitionService'];
 
-            restrict: "E",
-            scope:
-            {
-                onReady: "=",
+    function FilterDefinitionBasicAdvancedDirective(UtilsService, VRNotificationService, VR_GenericData_GenericBEDefinitionService) {
+        return {
+            restrict: 'E',
+            scope: {
+                onReady: '=',
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-
-                var ctor = new ColumnDefinitionGrid($scope, ctrl, $attrs);
+                var ctor = new BasicAdvanceFilterCtor($scope, ctrl);
                 ctor.initializeController();
             },
-            controllerAs: "ctrl",
+            controllerAs: 'ctrl',
             bindToController: true,
-            compile: function (element, attrs) {
-
-            },
-            templateUrl: "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/Editor/Templates/ColumnDefinitionGridTemplate.html"
-
+            templateUrl: '/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/GenericBEFilterDefinition/Templates/BasicAdvancedFilterDefinitionTemplate.html'
         };
 
-        function ColumnDefinitionGrid($scope, ctrl, $attrs) {
+        function BasicAdvanceFilterCtor($scope, ctrl) {
 
             var gridAPI;
             var context;
@@ -35,25 +30,25 @@ app.directive("vrGenericdataGenericBeColumndefinitionGrid", ["UtilsService", "VR
                 ctrl.datasource = [];
                 ctrl.isValid = function () {
                     if (ctrl.datasource == undefined || ctrl.datasource.length == 0)
-                        return "You Should add at least one column.";
+                        return "You Should add at least one filter.";
                     if (ctrl.datasource.length > 0 && checkDuplicateName())
                         return "Name in each should be unique.";
 
-                     return null;
+                    return null;
                 };
 
-                ctrl.addGridColumn = function () {
-                    var onGridColumnAdded = function (addedItem) {
+                ctrl.addFilter = function () {
+                    var onFilterAdded = function (addedItem) {
                         ctrl.datasource.push(addedItem);
                     };
 
-                    VR_GenericData_GenericBEDefinitionService.addGenericBEColumnDefinition(onGridColumnAdded, getContext());
+                    VR_GenericData_GenericBEDefinitionService.addGenericBEBasicAdvanceFilter(onFilterAdded, getContext());
                 };
                 ctrl.disableAddGridColumn = function () {
                     if (context == undefined) return true;
                     return context.getDataRecordTypeId() == undefined;
                 };
-                ctrl.removeColumn = function (dataItem) {
+                ctrl.removeFilter = function (dataItem) {
                     var index = ctrl.datasource.indexOf(dataItem);
                     ctrl.datasource.splice(index, 1);
                 };
@@ -68,28 +63,33 @@ app.directive("vrGenericdataGenericBeColumndefinitionGrid", ["UtilsService", "VR
                 var api = {};
 
                 api.getData = function () {
-                    var columns;
+                    var filters;
                     if (ctrl.datasource != undefined && ctrl.datasource != undefined) {
-                        columns = [];
+                        filters = [];
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
-                            columns.push({
-                                FieldName: currentItem.FieldName,
-                                FieldTitle: currentItem.FieldTitle,
-                                GridColumnSettings: currentItem.GridColumnSettings
+                            filters.push({
+                                BasicAdvancedFilterItemId:currentItem.BasicAdvancedFilterItemId,
+                                Name: currentItem.Name,
+                                ShowInBasic: currentItem.ShowInBasic,
+                                FilterSettings: currentItem.FilterSettings
                             });
                         }
                     }
-                    return columns;
+                    return {
+                        $type: "Vanrise.GenericData.MainExtensions.BasicAdvancedFilterDefinitionSettings, Vanrise.GenericData.MainExtensions",
+                        Filters: filters
+                    };
                 };
 
                 api.load = function (payload) {
                     if (payload != undefined) {
                         context = payload.context;
                         api.clearDataSource();
-                        if (payload.columnDefinitions != undefined) {
-                            for (var i = 0; i < payload.columnDefinitions.length; i++) {
-                                var item = payload.columnDefinitions[i];
+                        if (payload.settings != undefined && payload.settings.Filters != undefined) {
+                            var dataFilters = payload.settings.Filters;
+                            for (var i = 0; i < dataFilters.length; i++) {
+                                var item = dataFilters[i];
                                 ctrl.datasource.push(item);
                             }
                         }
@@ -111,7 +111,7 @@ app.directive("vrGenericdataGenericBeColumndefinitionGrid", ["UtilsService", "VR
                 var defaultMenuActions = [
                 {
                     name: "Edit",
-                    clicked: editColumn,
+                    clicked: editFilter,
                 }];
 
                 $scope.gridMenuActions = function (dataItem) {
@@ -119,13 +119,13 @@ app.directive("vrGenericdataGenericBeColumndefinitionGrid", ["UtilsService", "VR
                 };
             }
 
-            function editColumn(columnObj) {
-                var onGridColumnUpdated = function (column) {
-                    var index = ctrl.datasource.indexOf(columnObj);
-                    ctrl.datasource[index] = column;
+            function editFilter(filterObj) {
+                var onFilterUpdated = function (filter) {
+                    var index = ctrl.datasource.indexOf(filterObj);
+                    ctrl.datasource[index] = filter;
                 };
 
-                VR_GenericData_GenericBEDefinitionService.editGenericBEColumnDefinition(onGridColumnUpdated, columnObj, getContext());
+                VR_GenericData_GenericBEDefinitionService.editGenericBEBasicAdvanceFilter(onFilterUpdated, filterObj, getContext());
             }
             function getContext() {
                 return context;
@@ -142,8 +142,8 @@ app.directive("vrGenericdataGenericBeColumndefinitionGrid", ["UtilsService", "VR
                 return false;
             }
         }
-
-        return directiveDefinitionObject;
-
     }
-]);
+
+    app.directive('vrGenericdataGenericbeFilterdefinitionBasicadvanced', FilterDefinitionBasicAdvancedDirective);
+
+})(app);
