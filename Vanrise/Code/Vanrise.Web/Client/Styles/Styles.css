@@ -4150,9 +4150,15 @@ vr-datalist .drag-icon {
 span[blocked="true"]{
     text-decoration:line-through;
 }
-span[marketprice="true"]{
-    color:#5cb85c;
+
+span[clickable-blocked="true"]{
+    text-decoration:line-through underline;
 }
+
+span[marketprice="true"]{
+    color:#5cb85c; 
+}
+
 span[lossy="true"]{
       color:#f0ad4e;
 }
