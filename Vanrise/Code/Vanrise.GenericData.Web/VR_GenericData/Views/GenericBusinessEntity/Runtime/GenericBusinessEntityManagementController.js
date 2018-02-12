@@ -86,7 +86,8 @@
                 var onGenericBusinessEntityAdded = function (addedGenericBusinessEntity) {
                     gridDirectiveAPI.onGenericBEAdded(addedGenericBusinessEntity);
                 };
-                VR_GenericData_GenericBusinessEntityService.addGenericBusinessEntity(onGenericBusinessEntityAdded, businessEntityDefinitionAPI.getSelectedIds());
+                var editorSize = undefined;//genericBEDefinitionSettings != undefined ? genericBEDefinitionSettings.editorSize : undefined;
+                VR_GenericData_GenericBusinessEntityService.addGenericBusinessEntity(onGenericBusinessEntityAdded, businessEntityDefinitionAPI.getSelectedIds(), editorSize);
             };
 
             UtilsService.waitMultiplePromises([businessEntityDefinitionReadyDeferred.promise]).then(function () {
@@ -97,9 +98,7 @@
 
         function load() {
             $scope.isLoading = true;
-            loadBEDefinitionsSelectorAndSubsections().finally(function () {
-                $scope.scopeModel.isLoading = false;
-            }).catch(function (error) {
+            loadBEDefinitionsSelectorAndSubsections().catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
@@ -179,7 +178,7 @@
         }
 
         function getGridFilter() {
-            var filterData = filterDirectiveAPI!= undefined? filterDirectiveAPI.getData():undefined;
+            var filterData = filterDirectiveAPI != undefined ? filterDirectiveAPI.getData() : undefined;
             var filterGroup;
             var filters;
 
@@ -203,7 +202,7 @@
                     }
                 }
             }
-     
+
 
             var gridPayload = {
                 query: {

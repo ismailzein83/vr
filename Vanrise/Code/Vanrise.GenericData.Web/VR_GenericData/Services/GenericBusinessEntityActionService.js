@@ -79,12 +79,12 @@ app.service('VR_GenericData_GenericBEActionService',
                     var businessEntityDefinitionId = payload.businessEntityDefinitionId;
                     var genericBusinessEntityId = payload.genericBusinessEntityId;
                     var onItemUpdated = payload.onItemUpdated;
-
+                    var editorSize = undefined;//payload.editorSize;
                     var onGenericBEUpdated = function (updatedGenericBE) {
                         if (onItemUpdated != undefined)
                             onItemUpdated(updatedGenericBE);
                     };
-                    VR_GenericData_GenericBusinessEntityService.editGenericBusinessEntity(onGenericBEUpdated, businessEntityDefinitionId, genericBusinessEntityId);
+                    VR_GenericData_GenericBusinessEntityService.editGenericBusinessEntity(onGenericBEUpdated, businessEntityDefinitionId, genericBusinessEntityId, editorSize);
                 }
             };
             registerActionType(actionType);

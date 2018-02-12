@@ -127,11 +127,23 @@ namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEOnBe
             context.DefinitionSettings.ThrowIfNull("context.DefinitionSettings");
             context.GenericBusinessEntity.ThrowIfNull("context.GenericBusinessEntity");
             context.GenericBusinessEntity.FieldValues.ThrowIfNull("context.GenericBusinessEntity.FieldValues");
-
-            var dataRecordField = new DataRecordTypeManager().GetDataRecordField(context.DefinitionSettings.DataRecordTypeId, FieldName);
+           
+            var dataRecordType = new DataRecordTypeManager().GetDataRecordType(context.DefinitionSettings.DataRecordTypeId);
+            dataRecordType.ThrowIfNull("dataRecordType", context.DefinitionSettings.DataRecordTypeId);
+            dataRecordType.Fields.ThrowIfNull("dataRecordType.Fields", context.DefinitionSettings.DataRecordTypeId);
+            
+            var dataRecordField = dataRecordType.Fields.FindRecord(x => x.Name == FieldName);
             if (dataRecordField == null)
                 return null;
-            var fieldValue = context.GenericBusinessEntity.FieldValues[FieldName];
+
+            Object fieldValue;
+            if(dataRecordField.Formula == null)
+                fieldValue = context.GenericBusinessEntity.FieldValues[FieldName];
+            else
+            {
+                var dataRecordFieldTypeDict = dataRecordType.Fields.ToDictionary(itm => itm.Name, itm => itm.Type);
+                fieldValue = dataRecordField.Formula.CalculateValue(new DataRecordFieldFormulaCalculateValueContext(dataRecordFieldTypeDict, context.GenericBusinessEntity.FieldValues, dataRecordField.Type));
+            }
 
             return dataRecordField.Type.GetDescription(fieldValue);
         }
