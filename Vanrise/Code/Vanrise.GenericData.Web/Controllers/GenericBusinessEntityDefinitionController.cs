@@ -67,6 +67,29 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             return _manager.GetGenericBEActionDefinitionSettingsConfigs();
         }
-        
+
+        [HttpGet]
+        [Route("GetGenericBEExtendedSettingsConfigs")]
+        public IEnumerable<GenericBEExtendedSettingsConfig> GetGenericBEExtendedSettingsConfigs()
+        {
+            return _manager.GetGenericBEExtendedSettingsConfigs();
+        }
+
+
+        [HttpGet]
+        [Route("GetGenericBEOnAfterSaveHandlerSettingsConfigs")]
+        public IEnumerable<GenericBEOnAfterSaveHandlerSettingsConfig> GetGenericBEOnAfterSaveHandlerSettingsConfigs()
+        {
+            return _manager.GetGenericBEOnAfterSaveHandlerSettingsConfigs();
+        }
+
+
+        [HttpGet]
+        [Route("GetGenericBEOnBeforeInsertHandlerSettingsConfigs")]
+        public IEnumerable<GenericBEOnBeforeInsertHandlerSettingsConfig> GetGenericBEOnBeforeInsertHandlerSettingsConfigs()
+        {
+            return _manager.GetGenericBEOnBeforeInsertHandlerSettingsConfigs();
+        }
+
     }
 }

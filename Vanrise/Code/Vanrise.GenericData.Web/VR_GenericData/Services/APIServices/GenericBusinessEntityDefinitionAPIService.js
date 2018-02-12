@@ -20,19 +20,27 @@
         function GetIdFieldTypeForGenericBE(businessEntityDefinitionId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetIdFieldTypeForGenericBE"), { businessEntityDefinitionId: businessEntityDefinitionId });
         }
-        function GetGenericBEViewDefinitionSettingsConfigs(businessEntityDefinitionId) {
+        function GetGenericBEViewDefinitionSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetGenericBEViewDefinitionSettingsConfigs"));
         }
-        function GetGenericBEEditorDefinitionSettingsConfigs(businessEntityDefinitionId) {
+        function GetGenericBEEditorDefinitionSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetGenericBEEditorDefinitionSettingsConfigs"));
         }
-        function GetGenericBEFilterDefinitionSettingsConfigs(businessEntityDefinitionId) {
+        function GetGenericBEFilterDefinitionSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetGenericBEFilterDefinitionSettingsConfigs"));
         }
-        function GetGenericBEActionDefinitionSettingsConfigs(businessEntityDefinitionId) {
+        function GetGenericBEActionDefinitionSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetGenericBEActionDefinitionSettingsConfigs"));
         }
-
+        function GetGenericBEExtendedSettingsConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetGenericBEExtendedSettingsConfigs"));
+        }
+        function GetGenericBEOnAfterSaveHandlerSettingsConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetGenericBEOnAfterSaveHandlerSettingsConfigs"));
+        }
+        function GetGenericBEOnBeforeInsertHandlerSettingsConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetGenericBEOnBeforeInsertHandlerSettingsConfigs"));
+        }
         return ({
             GetGenericBEDefinitionSettings: GetGenericBEDefinitionSettings,
             GetGenericBEGridDefinition: GetGenericBEGridDefinition,
@@ -41,7 +49,10 @@
             GetGenericBEViewDefinitionSettingsConfigs: GetGenericBEViewDefinitionSettingsConfigs,
             GetGenericBEEditorDefinitionSettingsConfigs: GetGenericBEEditorDefinitionSettingsConfigs,
             GetGenericBEFilterDefinitionSettingsConfigs: GetGenericBEFilterDefinitionSettingsConfigs,
-            GetGenericBEActionDefinitionSettingsConfigs: GetGenericBEActionDefinitionSettingsConfigs
+            GetGenericBEActionDefinitionSettingsConfigs: GetGenericBEActionDefinitionSettingsConfigs,
+            GetGenericBEExtendedSettingsConfigs: GetGenericBEExtendedSettingsConfigs,
+            GetGenericBEOnAfterSaveHandlerSettingsConfigs: GetGenericBEOnAfterSaveHandlerSettingsConfigs,
+            GetGenericBEOnBeforeInsertHandlerSettingsConfigs: GetGenericBEOnBeforeInsertHandlerSettingsConfigs,
         });
     }
     appControllers.service("VR_GenericData_GenericBEDefinitionAPIService", genericBusinessEntityDefinitionAPIService);

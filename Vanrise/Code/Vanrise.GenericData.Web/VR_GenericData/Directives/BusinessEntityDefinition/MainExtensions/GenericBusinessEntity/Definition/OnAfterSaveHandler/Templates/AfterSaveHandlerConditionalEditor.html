@@ -1,0 +1,29 @@
+﻿<div vr-modalcontent ng-controller="VR_GenericData_AfterSaveHandlerConditionalEditorController" vr-loader="scopeModal.isLoading" width="'40%'">
+    <vr-modalbody>
+        <vr-form validationcontext="conditionalEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Handler'">
+                    <vr-genericdata-be-aftersavehandler-settings on-ready="scopeModel.onGenericBEAfterSaveHandlerSettingsReady" normal-col-num="6"></vr-genericdata-be-aftersavehandler-settings>
+                </vr-tab>
+                <vr-tab header="'Condition'">
+                    <!--<vr-genericdata-actiondefinition-settings on-ready="scopeModel.onActionDefinitionSettingDirectiveReady" normal-col-num="6"></vr-genericdata-actiondefinition-settings>-->
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" validationcontext="conditionalEditor" data-onclick="scopeModel.saveConditionalHandler"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

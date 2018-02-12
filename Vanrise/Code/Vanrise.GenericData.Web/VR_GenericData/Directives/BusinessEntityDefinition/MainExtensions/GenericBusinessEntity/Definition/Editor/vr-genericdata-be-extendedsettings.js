@@ -2,9 +2,9 @@
 
     'use strict';
 
-    filterDefinitionSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBEDefinitionAPIService'];
+    extendedSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBEDefinitionAPIService'];
 
-    function filterDefinitionSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_GenericBEDefinitionAPIService) {
+    function extendedSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_GenericBEDefinitionAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -16,17 +16,17 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new EditorSettings($scope, ctrl, $attrs);
+                var ctor = new SettingsCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
-            controllerAs: "editorDefinitionCtrl",
+            controllerAs: "extendedSettingsCtrl",
             bindToController: true,
             template: function (element, attrs) {
                 return getTamplate(attrs);
             }
         };
 
-        function EditorSettings($scope, ctrl, $attrs) {
+        function SettingsCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var selectorAPI;
@@ -77,11 +77,11 @@
                         promises.push(loadDirectivePromise);
                     }
 
-                    var getParameterSettingsConfigsPromise = getGenericBEFilterDefinitionSettingsConfigs();
+                    var getParameterSettingsConfigsPromise = getGenericBEFilterExtendedSettingsConfigs();
                     promises.push(getParameterSettingsConfigsPromise);
 
-                    function getGenericBEFilterDefinitionSettingsConfigs() {
-                        return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEFilterDefinitionSettingsConfigs().then(function (response) {
+                    function getGenericBEFilterExtendedSettingsConfigs() {
+                        return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEExtendedSettingsConfigs().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
@@ -140,7 +140,7 @@
         }
 
         function getTamplate(attrs) {
-            var label = "Filter Type";
+            var label = "Settings Type";
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
             var hideremoveicon = "";
@@ -148,25 +148,25 @@
                 hideremoveicon = "hideremoveicon";
             var template =
                 '<vr-row>'
-                    + '<vr-columns colnum="{{editorDefinitionCtrl.normalColNum}}">'
+                    + '<vr-columns colnum="{{extendedSettingsCtrl.normalColNum}}">'
                         + ' <vr-select on-ready="scopeModel.onSelectorReady"'
                             + ' datasource="scopeModel.templateConfigs"'
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
                             + ' label="' + label + '"'
-                            + ' isrequired="editorDefinitionCtrl.isrequired"'
-                            + ' ' + hideremoveicon + ' >'
-                            + '</vr-select>'
+                            + ' isrequired="extendedSettingsCtrl.isrequired"'
+                            + ' '+ hideremoveicon + ' >'
+                        + '</vr-select>'
                     + ' </vr-columns>'
                 + '</vr-row>'
                 + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"'
-                        + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{editorDefinitionCtrl.normalColNum}}" isrequired="editorDefinitionCtrl.isrequired" customvalidate="editorDefinitionCtrl.customvalidate">'
+                        + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{extendedSettingsCtrl.normalColNum}}" isrequired="extendedSettingsCtrl.isrequired" customvalidate="extendedSettingsCtrl.customvalidate">'
                 + '</vr-directivewrapper>';
             return template;
         }
     }
 
-    app.directive('vrGenericdataFilterdefinitionSettings', filterDefinitionSettingsDirective);
+    app.directive('vrGenericdataBeExtendedsettings', extendedSettingsDirective);
 
 })(app);

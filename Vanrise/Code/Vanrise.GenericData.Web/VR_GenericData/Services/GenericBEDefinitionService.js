@@ -11,6 +11,7 @@
         var basicAdvancefilterModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/GenericBEFilterDefinition/Templates/BasicAdvancedFilterEditor.html";
         var actionModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/Editor/Templates/ActionDefinitionEditor.html";
         var gridActionModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/Editor/Templates/GridActionDefinitionEditor.html";
+        var conditionalHandlerPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/OnAfterSaveHandler/Templates/AfterSaveHandlerConditionalEditor.html";
 
         return ({
             addGenericBEColumnDefinition: addGenericBEColumnDefinition,
@@ -24,7 +25,9 @@
             addGenericBEActionDefinition: addGenericBEActionDefinition,
             editGenericBEActionDefinition: editGenericBEActionDefinition,
             addGenericBEGridActionDefinition: addGenericBEGridActionDefinition,
-            editGenericBEGridActionDefinition: editGenericBEGridActionDefinition
+            editGenericBEGridActionDefinition: editGenericBEGridActionDefinition,
+            addGenericBEConditionalHandler: addGenericBEConditionalHandler,
+            editGenericBEConditionalHandler: editGenericBEConditionalHandler
 
         });
 
@@ -197,6 +200,35 @@
             };
             VRModalService.showModal(gridActionModalPath, parameters, settings);
         }
+
+        function addGenericBEConditionalHandler(onConditionalHandlerAdded, context) {
+            var parameters = {
+                context: context
+
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onConditionalHandlerAdded = onConditionalHandlerAdded;
+            };
+
+            VRModalService.showModal(conditionalHandlerPath, parameters, settings);
+        }
+
+        function editGenericBEConditionalHandler(onConditionalHandlerUpdated, conditionalHandler, context) {
+            var parameters = {
+                conditionalHandler: conditionalHandler,
+                context: context
+            };
+
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onConditionalHandlerUpdated = onConditionalHandlerUpdated;
+            };
+            VRModalService.showModal(conditionalHandlerPath, parameters, settings);
+        }
+
 
     };
 

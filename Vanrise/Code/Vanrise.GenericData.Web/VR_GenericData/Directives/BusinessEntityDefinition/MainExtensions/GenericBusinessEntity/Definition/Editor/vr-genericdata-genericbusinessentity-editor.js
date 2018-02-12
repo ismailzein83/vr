@@ -57,6 +57,17 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
             var gridActionDefinitionGridAPI;
             var gridActionDefinitionGridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var extendedSettingsAPI;
+            var extendedSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
+            var afterSaveHandlerAPI;
+            var afterSaveHandlerReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
+            var beforeInsertHandlerAPI;
+            var beforeInsertHandlerReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             var recordTypeSelectedPromiseDeferred;
             var recordTypeEntity;
 
@@ -111,6 +122,21 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                 $scope.scopeModel.onGenericBEGridActionDefinitionDirectiveReady = function (api) {
                     gridActionDefinitionGridAPI = api;
                     gridActionDefinitionGridReadyPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onGenericBEEditorExtendedSettingsReady = function (api) {
+                    extendedSettingsAPI = api;
+                    extendedSettingsReadyPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onGenericBEBeforeInsertHandlerSettingsReady = function (api) {
+                    beforeInsertHandlerAPI = api;
+                    beforeInsertHandlerReadyPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onGenericBEAfterSaveHandlerSettingsReady = function (api) {
+                    afterSaveHandlerAPI = api;
+                    afterSaveHandlerReadyPromiseDeferred.resolve();
                 };
 
                 $scope.scopeModel.onRecordTypeSelectionChanged = function () {
@@ -178,7 +204,10 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         FilterDefinition: {
                             Settings: filterDefinitionAPI.getData()
                         },
-                        GenericBEActions: actionDefinitionGridAPI.getData()
+                        GenericBEActions: actionDefinitionGridAPI.getData(),
+                        ExtendedSettings: extendedSettingsAPI.getData(),
+                        OnBeforeInsertHandler: beforeInsertHandlerAPI.getData(),
+                        OnAfterSaveHandler: afterSaveHandlerAPI.getData()
                     };
                 };
 
@@ -194,6 +223,9 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                     }
                     promises.push(loadDataRecordTypeSelector());
                     promises.push(loadDataRecordStorageSelector());
+                    promises.push(loadActionDefinitionGrid());
+                    promises.push(loadExtendedSettingsEditor());
+
                     promises.push(loadColumnDefinitionGrid());
                     promises.push(loadGridActionDefinitionGrid());
 
@@ -201,7 +233,11 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                     promises.push(loadEditorDefinitionDirective());
                     promises.push(loadFilterDefinitionDirective());
                     promises.push(loadModalWidthSelector());
-                    promises.push(loadActionDefinitionGrid());
+
+
+                    promises.push(loadAfterSaveHandlerSettings());
+                    promises.push(loadBeforeInsertHandlerSettings());
+
 
                     if (businessEntityDefinitionSettings != undefined) {
                         promises.push(loadDataRecordTitleFieldsSelector());
@@ -345,6 +381,44 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                         return loadActionDefinitionGridPromiseDeferred.promise;
                     }
 
+                    function loadExtendedSettingsEditor() {
+                        var loadExtendedSettingsEditorPromiseDeferred = UtilsService.createPromiseDeferred();
+                        extendedSettingsReadyPromiseDeferred.promise.then(function () {
+                            var settingPayload = {
+                                context: getContext(),
+                                settings: businessEntityDefinitionSettings != undefined && businessEntityDefinitionSettings.ExtendedSettings || undefined
+                            };
+
+                            VRUIUtilsService.callDirectiveLoad(extendedSettingsAPI, settingPayload, loadExtendedSettingsEditorPromiseDeferred);
+                        });
+                        return loadExtendedSettingsEditorPromiseDeferred.promise;
+                    }
+
+                    function loadAfterSaveHandlerSettings() {
+                        var loadAfterSaveHandlerSettingsPromiseDeferred = UtilsService.createPromiseDeferred();
+                        afterSaveHandlerReadyPromiseDeferred.promise.then(function () {
+                            var settingPayload = {
+                                context: getContext(),
+                                settings: businessEntityDefinitionSettings != undefined && businessEntityDefinitionSettings.OnAfterSaveHandler || undefined
+                            };
+
+                            VRUIUtilsService.callDirectiveLoad(afterSaveHandlerAPI, settingPayload, loadAfterSaveHandlerSettingsPromiseDeferred);
+                        });
+                        return loadAfterSaveHandlerSettingsPromiseDeferred.promise;
+                    }
+
+                    function loadBeforeInsertHandlerSettings() {
+                        var loadBeforeInsertHandlerSettingsPromiseDeferred = UtilsService.createPromiseDeferred();
+                        beforeInsertHandlerReadyPromiseDeferred.promise.then(function () {
+                            var settingPayload = {
+                                context: getContext(),
+                                settings: businessEntityDefinitionSettings != undefined && businessEntityDefinitionSettings.OnBeforeInsertHandler || undefined
+                            };
+
+                            VRUIUtilsService.callDirectiveLoad(beforeInsertHandlerAPI, settingPayload, loadBeforeInsertHandlerSettingsPromiseDeferred);
+                        });
+                        return loadBeforeInsertHandlerSettingsPromiseDeferred.promise;
+                    }
 
                     return UtilsService.waitMultiplePromises(promises).then(function () {
                         recordTypeSelectedPromiseDeferred = undefined;
