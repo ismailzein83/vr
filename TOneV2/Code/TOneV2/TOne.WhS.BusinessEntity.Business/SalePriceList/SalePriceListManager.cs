@@ -560,7 +560,6 @@ namespace TOne.WhS.BusinessEntity.Business
             var salePlZoneNotificationsByCurrencyId = new Dictionary<int, List<SalePLZoneNotification>>();
             //Add all missing sold countries to notification from exiting data
             var customerCountryManager = new CustomerCountryManager();
-            //var soldCountries = customerCountryManager.GetNotClosedCustomerCountries(customerId);
             var soldCountries = customerCountryManager.GetCustomerCountriesEffectiveAfter(customerId, DateTime.Now);
             if (soldCountries == null)
                 return salePlZoneNotificationsByCurrencyId;
@@ -736,7 +735,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             List<SalePLZoneNotification> filteredZoneNotifications = new List<SalePLZoneNotification>();
             var closedCodeOption = _carrierAccountManager.GetCustomerIncludeClosedEntitiesStatus(customerId);
-            bool onlyClosedChanges = true;
             foreach (var salePlZoneNotification in salePlZoneNotifications)
             {
                 List<SalePLCodeNotification> filteredCodeNotifications = new List<SalePLCodeNotification>();
@@ -744,20 +742,18 @@ namespace TOne.WhS.BusinessEntity.Business
                 var opennedCodes = salePlZoneNotification.Codes.Where(c => !c.EED.HasValue);
                 var notChangedClosedCodes = salePlZoneNotification.Codes.Where(c => c.EED.HasValue && c.EED.Value > DateTime.Today && c.CodeChange == CodeChange.NotChanged);
                 var changedClosedCodes = salePlZoneNotification.Codes.Where(c => c.CodeChange == CodeChange.Closed);
-                if (opennedCodes.Any() || (notChangedClosedCodes.Any() && closedCodeOption == IncludeClosedEntitiesEnum.UntilClosureDate))
-                {
-                    onlyClosedChanges = false;
-                }
 
                 filteredCodeNotifications.AddRange(opennedCodes);
 
-                if (closedCodeOption == IncludeClosedEntitiesEnum.UntilClosureDate)
-                    filteredCodeNotifications.AddRange(notChangedClosedCodes);
-
-                if (closedCodeOption != IncludeClosedEntitiesEnum.Never)
+                if (closedCodeOption == IncludeClosedEntitiesEnum.OnlyFirstTime)
                     filteredCodeNotifications.AddRange(changedClosedCodes);
 
-                //if all codes are filtered we will not add the related zone.
+                if (closedCodeOption == IncludeClosedEntitiesEnum.UntilClosureDate)
+                {
+                    filteredCodeNotifications.AddRange(changedClosedCodes);
+                    filteredCodeNotifications.AddRange(notChangedClosedCodes);
+                }
+
                 if (filteredCodeNotifications.Any())
                 {
                     SalePLZoneNotification filteredZoneNotification = new SalePLZoneNotification
@@ -771,9 +767,10 @@ namespace TOne.WhS.BusinessEntity.Business
                     filteredZoneNotifications.Add(filteredZoneNotification);
                 }
             }
-            if (closedCodeOption == IncludeClosedEntitiesEnum.Never && onlyClosedChanges)
-                return salePlZoneNotifications.FindAllRecords(item => item.Rate.RateChangeType == RateChangeType.Deleted).ToList();
-            return filteredZoneNotifications;
+
+            if (filteredZoneNotifications.Any())
+                return filteredZoneNotifications;
+            return salePlZoneNotifications.FindAllRecords(item => item.Rate.RateChangeType == RateChangeType.Deleted).ToList();
         }
 
         private SalePLZoneNotification GetSalePlNotification(long zoneId, string zoneName, Dictionary<long, SalePLZoneNotification> salePLZoneNotificationByZoneId)
