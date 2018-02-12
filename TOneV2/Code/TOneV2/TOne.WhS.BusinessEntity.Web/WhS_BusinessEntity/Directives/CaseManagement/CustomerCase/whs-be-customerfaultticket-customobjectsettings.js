@@ -51,6 +51,6 @@
         }
     }
 
-    app.directive('whsBeCustomerfaulttickettypeSettings', customerFaultTicketType);
+    app.directive('whsBeCustomerfaultticketCustomobjectsettings', customerFaultTicketType);
 
 })(app);
