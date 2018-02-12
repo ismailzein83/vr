@@ -271,7 +271,7 @@ namespace TOne.WhS.Routing.Data.SQL
                         continue;
 
                     foreach (RouteBackupOption backup in routeOption.Backups)
-                        supplierZoneIds.Add(backup.SupplierId);
+                        supplierZoneIds.Add(backup.SupplierZoneId);
                 }
             }
 
