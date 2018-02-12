@@ -36,9 +36,6 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
             var supplierSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
             var selectedSupplierPromiseDeferred;
 
-            var supplierZoneSelectorApi;
-            var supplierZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
             var ticketContactSelectorAPI;
             var ticketContactSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -153,10 +150,6 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                     workGroupSelectorReadyPromiseDeferred.resolve();
                 };
                 $scope.scopeModel.isEditMode = false;
-                $scope.scopeModel.onSupplierZoneSelectorReady = function (api) {
-                    supplierZoneSelectorApi = api;
-                    supplierZoneReadyPromiseDeferred.resolve();
-                };
                 $scope.scopeModel.onSupplierSelectionChanged = function (value) {
                     ticketContactSelectorReadyPromiseDeferred.promise.then(function () {
                         loadTicketContactSelector();
@@ -168,13 +161,6 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                         selectedSupplier = supplierSelectorAPI.getSelectedIds();
                         if (selectedSupplierPromiseDeferred != undefined)
                             selectedSupplierPromiseDeferred.resolve();
-                        else {
-                            var setLoader = function (value) { $scope.scopeModel.isLoadingSupplierZoneDirective = value; };
-                            var payload = {
-                                supplierId: supplierSelectorAPI.getSelectedIds()
-                            };
-                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierZoneSelectorApi, payload, setLoader);
-                        }
                         if (value.CarrierAccountId != selectedSupplier || !$scope.scopeModel.isEditMode) {
                             $scope.scopeModel.codeNumberList = [];
                         }
@@ -203,6 +189,7 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                             $scope.scopeModel.carrierReference = selectedValues.CarrierReference;
                             $scope.scopeModel.description = selectedValues.Description;
                             $scope.scopeModel.notes = selectedValues.Notes;
+                            $scope.scopeModel.zoneName = selectedValues.SupplierZoneName;
                         }
                         if ($scope.scopeModel.isEditMode) {
                             getZoneName();
@@ -225,23 +212,19 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                     promises.push(loadTicketContactSelector());
                     promises.push(loadAttachmentGrid());
 
-                    if (selectedValues != undefined && selectedValues.SupplierId != undefined && selectedValues.SupplierZoneId != undefined) {
-                        promises.push(loadSupplierZoneSelector());
-                    }
                     return UtilsService.waitMultiplePromises(promises);
                 };
                 api.setData = function (caseManagementObject) {
                     if (!$scope.scopeModel.isEditMode) {
                         caseManagementObject.WorkGroupId = workGroupSelectorAPI.getSelectedIds();
-                        caseManagementObject.CustomerId = customerSelectorAPI.getSelectedIds();
                     }
                     caseManagementObject.SupplierId = supplierSelectorAPI.getSelectedIds();
-                    caseManagementObject.SupplierZoneId = supplierZoneSelectorApi.getSelectedIds();
+                    caseManagementObject.SupplierZoneId = zoneId;
                     caseManagementObject.FromDate = $scope.scopeModel.fromDate;
                     caseManagementObject.ToDate = $scope.scopeModel.toDate;
                     caseManagementObject.Attempts = $scope.scopeModel.attempts;
                     caseManagementObject.ASR = $scope.scopeModel.asr;
-                    caseManagementObject.Settings = getCodeNumberListData();
+                    caseManagementObject.TicketDetails = getCodeNumberListData();
                     caseManagementObject.Attachments = attachmentGridAPI.getData();
                     caseManagementObject.ACD = $scope.scopeModel.acd;
                     caseManagementObject.CarrierReference = $scope.scopeModel.carrierReference;
@@ -249,6 +232,7 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                     caseManagementObject.Notes = $scope.scopeModel.notes;
                     caseManagementObject.StatusId = statusSelectorAPI.getSelectedIds();
                     caseManagementObject.EscalationLevelId = ticketContactSelectorAPI.getSelectedIds();
+                    caseManagementObject.SendEmail = $scope.scopeModel.sendEmail;
 
                 };
 
@@ -276,7 +260,7 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                 if (selectedValues != undefined) {
                     selectorPayload = {
                         selectedIds: selectedValues.SupplierId
-                    }
+                    };
                 }
                 return supplierSelectorAPI.load(selectorPayload);
             }
@@ -335,9 +319,9 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
             function getSupplierFaultTicketInput() {
 
                 var codeList = [];
-                if (selectedValues.Settings != null) {
-                    for (var i = 0 ; i < selectedValues.Settings.length; i++) {
-                        var descriptionSettings = selectedValues.Settings[i];
+                if (selectedValues.TicketDetails != null) {
+                    for (var i = 0 ; i < selectedValues.TicketDetails.length; i++) {
+                        var descriptionSettings = selectedValues.TicketDetails[i];
                         var supplierCaseDescription = {
                             CodeNumber: descriptionSettings.CodeNumber,
                             ReasonId: descriptionSettings.ReasonId,
@@ -361,9 +345,9 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                 if (codeNumber != undefined && supplierId != undefined) {
                     return WhS_BE_SupplierZoneAPIService.GetSupplierZoneByCode(supplierId, codeNumber).then(function (response) {
                         if (response != undefined) {
-                            zoneId = response.SaleZoneId;
+                            zoneId = response.SupplierZoneId;
                             if ($scope.scopeModel.codeNumberList.length == 0 || oldZoneId == undefined)
-                                oldZoneId = response.SaleZoneId;
+                                oldZoneId = response.SupplierZoneId;
                             $scope.scopeModel.zoneName = response.Name;
                         }
                         else {
@@ -421,19 +405,6 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                     }
                     return codeList;
                 }
-            function loadSupplierZoneSelector() {
-                var supplierZoneSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-
-                UtilsService.waitMultiplePromises([supplierZoneReadyPromiseDeferred.promise, selectedSupplierPromiseDeferred.promise]).then(function () {
-                    selectedSupplierPromiseDeferred = undefined;
-                    var supplierZonePayload = {
-                        selectedIds: selectedValues.SupplierZoneId,
-                        supplierId: selectedValues.SupplierId,
-                    };
-                    VRUIUtilsService.callDirectiveLoad(supplierZoneSelectorApi, supplierZonePayload, supplierZoneSelectorLoadPromiseDeferred);
-                });
-                return supplierZoneSelectorLoadPromiseDeferred.promise;
-            }
             function doesReasonAlreadyExist() {
                 if ($scope.scopeModel.codeNumberList != undefined) {
                     for (var i = 0; i < $scope.scopeModel.codeNumberList.length; i++) {

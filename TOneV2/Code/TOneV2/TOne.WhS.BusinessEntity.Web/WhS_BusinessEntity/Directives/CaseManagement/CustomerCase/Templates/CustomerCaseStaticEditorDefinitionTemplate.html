@@ -24,8 +24,11 @@
                     </vr-columns>
                 </vr-row>
                 <vr-row>
+                    <vr-columns width="1/3row">
+                        <vr-switch value="scopeModel.sendEmail" label="Send Email" isrequired="true"></vr-switch>
+                    </vr-columns>
                     <vr-columns width="fullrow">
-                        <vr-textbox type="text" value="scopeModel.email" label="Emails" isrequired="true"></vr-textbox>
+                        <vr-textbox type="text" value="scopeModel.email" label="Emails" isrequired="scopeModel.sendEmail"></vr-textbox>
                     </vr-columns>
                 </vr-row>
                 <vr-row>

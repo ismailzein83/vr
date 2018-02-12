@@ -231,12 +231,13 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                     caseManagementObject.Description = $scope.scopeModel.description;
                     caseManagementObject.StatusId = statusSelectorAPI.getSelectedIds();
                     caseManagementObject.Attachments = attachmentGridAPI.getData();
-                    caseManagementObject.Settings = getCodeNumberListData();
+                    caseManagementObject.TicketDetails = getCodeNumberListData();
                     caseManagementObject.SaleZoneId = zoneId;
                     caseManagementObject.ContactName = $scope.scopeModel.contactName;
                     caseManagementObject.ContactEmails = $scope.scopeModel.email;
                     caseManagementObject.PhoneNumber = $scope.scopeModel.phoneNumber;
                     caseManagementObject.EscalationLevelId = ticketContactSelectorAPI.getSelectedIds();
+                    caseManagementObject.SendEmail = $scope.scopeModel.sendEmail;
                 };
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
@@ -326,9 +327,9 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
             function getCustomerFaultTicketInput() {
 
                 var codeList = [];
-                if (selectedValues.Settings != null) {
-                    for (var i = 0 ; i < selectedValues.Settings.length; i++) {
-                        var descriptionSettings = selectedValues.Settings[i];
+                if (selectedValues.TicketDetails != null) {
+                    for (var i = 0 ; i < selectedValues.TicketDetails.length; i++) {
+                        var descriptionSettings = selectedValues.TicketDetails[i];
                         var customerCaseDescription = {
                             CodeNumber: descriptionSettings.CodeNumber,
                             ReasonId: descriptionSettings.ReasonId,

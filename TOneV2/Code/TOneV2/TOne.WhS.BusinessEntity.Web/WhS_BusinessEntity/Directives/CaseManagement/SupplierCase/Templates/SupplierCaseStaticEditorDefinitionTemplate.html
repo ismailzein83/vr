@@ -24,8 +24,11 @@
                     </vr-columns>
                 </vr-row>
                 <vr-row>
+                    <vr-columns width="1/3row">
+                        <vr-switch value="scopeModel.sendEmail" label="Send Email" isrequired="true"></vr-switch>
+                    </vr-columns>
                     <vr-columns width="fullrow">
-                        <vr-textbox type="text" value="scopeModel.email" label="Emails" isrequired="true"></vr-textbox>
+                        <vr-textbox type="text" value="scopeModel.email" label="Emails" isrequired="scopeModel.sendEmail" vr-disabled="!scopeModel.sendEmail"></vr-textbox>
                     </vr-columns>
                 </vr-row>
                 <vr-row>
@@ -50,7 +53,6 @@
                 <vr-row>
                     <span vr-disabled="scopeModel.isEditMode">
                         <vr-whs-be-supplier-selector on-ready="scopeModel.onSupplierSelectorReady" normal-col-num="6" isrequired="true" onselectionchanged="scopeModel.onSupplierSelectionChanged"></vr-whs-be-supplier-selector>
-                        <vr-whs-be-supplierzone-selector vr-loader="scopeModel.isLoadingSupplierZoneDirective" on-ready="scopeModel.onSupplierZoneSelectorReady" normal-col-num="6" isrequired="true"></vr-whs-be-supplierzone-selector>
                     </span>
                     <vr-common-statusdefinition-selector on-ready="scopeModel.onStatusSelectorReady" customlabel="Status" normal-col-num="6" isrequired="true"></vr-common-statusdefinition-selector>
                 </vr-row>
