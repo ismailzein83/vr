@@ -20,9 +20,9 @@ app.directive("vrWhsRoutingZonerouteoptions", ["WhS_Routing_RPRouteService", "Wh
         function ZoneRouteOptions(ctrl, $scope) {
             this.initCtrl = initCtrl;
 
+            var routingDatabaseId;
             var routingProductId;
             var saleZoneId;
-            var routingDatabaseId;
             var currencyId;
             var display;
 
@@ -46,21 +46,25 @@ app.directive("vrWhsRoutingZonerouteoptions", ["WhS_Routing_RPRouteService", "Wh
                         routingDatabaseId = payload.RoutingDatabaseId;
                         routingProductId = payload.RoutingProductId;
                         saleZoneId = payload.SaleZoneId;
+                        display = payload.display;
+
                         currencyId = payload.CurrencyId;
                         if (currencyId == undefined)
                             currencyId = payload.currencyId;
 
-                        display = payload.display;
-
-                        ctrl.routeOptions = [];
                         if (payload.RouteOptions) {
                             for (var i = 0; i < payload.RouteOptions.length; i++) {
                                 var currentItem = payload.RouteOptions[i];
                                 currentItem.title = buildTitle(currentItem.SupplierName, currentItem.Percentage, currentItem.ACD, currentItem.ASR);
                                 currentItem.titleToDisplay = buildTitleToDisplay(currentItem, display);
 
-                                if (currentItem.SupplierStatus == WhS_Routing_SupplierStatusEnum.Block.value)
-                                    currentItem.Color = 'Red';
+                                if (currentItem.SupplierStatus == WhS_Routing_SupplierStatusEnum.Block.value) {
+                                    currentItem.IsBlocked = true;
+                                    //currentItem.Color = 'Red';
+                                }
+
+                                if (currentItem.Color == undefined)
+                                    currentItem.Color = '#616F77';
 
                                 ctrl.routeOptions.push(currentItem);
                             }

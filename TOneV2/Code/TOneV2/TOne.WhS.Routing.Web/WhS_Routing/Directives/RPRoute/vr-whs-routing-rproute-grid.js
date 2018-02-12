@@ -89,6 +89,7 @@ app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService
 
                 defineMenuActions();
             }
+
             function defineAPI() {
                 var api = {};
 
