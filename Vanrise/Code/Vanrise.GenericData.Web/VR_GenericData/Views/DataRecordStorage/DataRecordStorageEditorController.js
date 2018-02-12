@@ -200,7 +200,9 @@
                     var modifiedByFieldSelectorPayload = {
                     };
                     if (dataRecordStorageEntity != undefined) {
-                        modifiedByFieldSelectorPayload.dataRecordTypeId = dataRecordStorageEntity.DataRecordTypeId
+                        modifiedByFieldSelectorPayload.dataRecordTypeId = dataRecordStorageEntity.DataRecordTypeId;
+                        if (dataRecordStorageEntity.Settings != undefined)
+                            modifiedByFieldSelectorPayload.selectedIds = dataRecordStorageEntity.Settings.LastModifiedByField;
                     }
                     VRUIUtilsService.callDirectiveLoad(modifiedByFieldSelectorAPI, modifiedByFieldSelectorPayload, modifiedByFieldSelectorLoadDeferred);
                 });
@@ -215,7 +217,9 @@
                     var createdByFieldSelectorPayload = {
                     };
                     if (dataRecordStorageEntity != undefined) {
-                        createdByFieldSelectorPayload.dataRecordTypeId = dataRecordStorageEntity.DataRecordTypeId
+                        createdByFieldSelectorPayload.dataRecordTypeId = dataRecordStorageEntity.DataRecordTypeId;
+                        if (dataRecordStorageEntity.Settings != undefined)
+                            createdByFieldSelectorPayload.selectedIds = dataRecordStorageEntity.Settings.CreatedByField;
                     }
                     VRUIUtilsService.callDirectiveLoad(createdByFieldSelectorAPI, createdByFieldSelectorPayload, createdByFieldSelectorLoadDeferred);
                 });
@@ -229,7 +233,9 @@
                     var modifiedTimeSelectorPayload = {
                     };
                     if (dataRecordStorageEntity != undefined) {
-                        modifiedTimeSelectorPayload.dataRecordTypeId = dataRecordStorageEntity.DataRecordTypeId
+                        modifiedTimeSelectorPayload.dataRecordTypeId = dataRecordStorageEntity.DataRecordTypeId;
+                        if (dataRecordStorageEntity.Settings != undefined)
+                            modifiedTimeSelectorPayload.selectedIds = dataRecordStorageEntity.Settings.LastModifiedTimeField;
                     }
                     VRUIUtilsService.callDirectiveLoad(modifiedTimeFieldSelectorAPI, modifiedTimeSelectorPayload, modifiedTimeSelectorLoadDeferred);
                 });
@@ -243,7 +249,9 @@
                     var createdTimeSelectorPayload = {
                     };
                     if (dataRecordStorageEntity != undefined) {
-                        createdTimeSelectorPayload.dataRecordTypeId = dataRecordStorageEntity.DataRecordTypeId
+                        createdTimeSelectorPayload.dataRecordTypeId = dataRecordStorageEntity.DataRecordTypeId;
+                        if (dataRecordStorageEntity.Settings != undefined)
+                            createdTimeSelectorPayload.selectedIds = dataRecordStorageEntity.Settings.CreatedTimeField;
                     }
                     VRUIUtilsService.callDirectiveLoad(createdTimeFieldSelectorAPI, createdTimeSelectorPayload, createdTimeSelectorLoadDeferred);
                 });
@@ -470,6 +478,10 @@
             obj.Settings.DateTimeField = $scope.scopeModel.selectedDataRecordTypeField.Entity.Name;
             obj.Settings.RequiredPermission = requiredPermissionAPI.getData();
             obj.Settings.EnableUseCaching = $scope.scopeModel.enableUseCaching;
+            obj.Settings.CreatedByField = createdByFieldSelectorAPI.getSelectedIds();
+            obj.Settings.CreatedTimeField = createdTimeFieldSelectorAPI.getSelectedIds();
+            obj.Settings.LastModifiedByField = modifiedByFieldSelectorAPI.getSelectedIds();
+            obj.Settings.LastModifiedTimeField = modifiedTimeFieldSelectorAPI.getSelectedIds();
             return obj;
         }
     }
