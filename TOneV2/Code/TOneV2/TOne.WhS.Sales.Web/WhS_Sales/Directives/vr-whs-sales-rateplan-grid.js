@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsService", "VRUIUtilsService", "VRNotificationService", "VRValidationService", "VRCommon_RateTypeAPIService", "WhS_Sales_RatePlanUtilsService", "WhS_Sales_RatePlanService", "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_BE_PrimarySaleEntityEnum", "UISettingsService", "VRDateTimeService", 'VRCommon_TextFilterTypeEnum', 'VRLocalizationService',
-    function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VRValidationService, VRCommon_RateTypeAPIService, WhS_Sales_RatePlanUtilsService, WhS_Sales_RatePlanService, WhS_BE_SalePriceListOwnerTypeEnum, WhS_BE_PrimarySaleEntityEnum, UISettingsService, VRDateTimeService, VRCommon_TextFilterTypeEnum, VRLocalizationService) {
+app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsService", "VRUIUtilsService", "VRNotificationService", "VRValidationService", "VRCommon_RateTypeAPIService", "WhS_Sales_RatePlanUtilsService", "WhS_Sales_RatePlanService", "WhS_BE_SalePriceListOwnerTypeEnum", "WhS_BE_PrimarySaleEntityEnum", "UISettingsService", "VRDateTimeService", 'VRCommon_TextFilterTypeEnum', 'VRLocalizationService', 'WhS_Sales_SupplierStatusEnum',
+    function (WhS_Sales_RatePlanAPIService, UtilsService, VRUIUtilsService, VRNotificationService, VRValidationService, VRCommon_RateTypeAPIService, WhS_Sales_RatePlanUtilsService, WhS_Sales_RatePlanService, WhS_BE_SalePriceListOwnerTypeEnum, WhS_BE_PrimarySaleEntityEnum, UISettingsService, VRDateTimeService, VRCommon_TextFilterTypeEnum, VRLocalizationService, WhS_Sales_SupplierStatusEnum) {
         return {
             restrict: "E",
             scope: {
@@ -192,13 +192,13 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         rowStyle = { CssClass: 'bg-success' };
                     }
                     else { // Validate the rate
-                        if (routeOptionsForView != null && routeOptionsForView.length>0) {
+                        if (routeOptionsForView != null && routeOptionsForView.length > 0) {
                             var array = []; // Stores the indexes of route options having a greater rate than the rate to validate
 
                             for (var i = 0; i < routeOptionsForView.length; i++) {
-                                if (routeOptionsForView[i].ConvertedSupplierRate > rate)
+                                if (routeOptionsForView[i].ConvertedSupplierRate > rate && routeOptionsForView[i].SupplierStatus == WhS_Sales_SupplierStatusEnum.Block.value)
                                     array.push(i);
-                            }
+                        }
 
                             if (array.length == routeOptions.length) {
                                 setColorOfRouteOptions(routeOptionsForView, null);
@@ -206,7 +206,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             }
                             else if (array.length > 0) {
                                 for (var i = 0; i < routeOptionsForView.length; i++)
-                                    routeOptionsForView[i].Color = (UtilsService.contains(array, i)) ? 'orange': null;
+                                    routeOptionsForView[i].Color = (UtilsService.contains(array, i)) ? 'orange' : null;
                             }
                             else {
                                 setColorOfRouteOptions(routeOptionsForView, null);
