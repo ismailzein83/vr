@@ -361,6 +361,8 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\CustomerObjectTypeTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\SalePriceListPropertyEvaluatorTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\Templates\CustomerPropertyEvaluatorTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\vr-whs-be-supplierfaultticket-settings.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\vr-whs-be-customerfaultticket-settings.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\vr-whs-be-customerfaulttickettype-settings.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\vr-whs-be-profilepropertyevaluator.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\vr-whs-be-profileobjecttype.js" />
