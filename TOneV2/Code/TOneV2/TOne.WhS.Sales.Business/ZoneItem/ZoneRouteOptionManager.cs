@@ -85,7 +85,7 @@ namespace TOne.WhS.Sales.Business
                 }
                 else if (_costCalculationMethods != null)
                     zoneItem.Costs = emptyCosts;
-                if (_numberOfOptions.HasValue && route != null && route.RouteOptionsDetails != null && _numberOfOptions < route.RouteOptionsDetails.Count())
+                if (_includeBlockedSuppliers && _numberOfOptions.HasValue && route != null && route.RouteOptionsDetails != null && _numberOfOptions < route.RouteOptionsDetails.Count())
                     zoneItem.RPRouteDetail.RouteOptionsDetails = route.RouteOptionsDetails.Take(_numberOfOptions.Value);
             }
         }
@@ -101,7 +101,7 @@ namespace TOne.WhS.Sales.Business
 
             for (int i = 0; i < _costCalculationMethods.Count; i++)
             {
-                var context = new CostCalculationMethodContext() { ZoneIds = zoneIds, Route = route, CustomObject = customObjects[i], NumberOfOptions = _numberOfOptions.Value };
+                var context = new CostCalculationMethodContext() { ZoneIds = zoneIds, Route = route, CustomObject = customObjects[i], NumberOfOptions = _numberOfOptions };
                 _costCalculationMethods[i].CalculateCost(context);
                 customObjects[i] = context.CustomObject;
                 zoneItem.Costs.Add(decimal.Round(context.Cost, _longPrecisionValue));
