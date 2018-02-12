@@ -171,10 +171,10 @@ namespace TOne.WhS.SupplierPriceList.MainExtensions.SupplierPriceListSettings
                                         {
                                             long codeRange = lastCode - firstCode;
                                             if (codeRange > maximumCodeRange)
-                                                throw new VRBusinessException(String.Format("The number of codes({0}) in  range ({0},{1}) exceeded the maximum allowed code range: '{2}'", firstCode, lastCode, maximumCodeRange));
+                                                throw new VRBusinessException(String.Format("The number of codes in  range ({0}-{1}) exceeded the maximum allowed code range: '{2}'", firstCode, lastCode, maximumCodeRange));
 
                                             if (firstCode > lastCode)
-                                                throw new VRBusinessException(string.Format("First part in range must be less than second one: {0}-{1}", firstCode, lastCode));
+                                                throw new VRBusinessException(string.Format("First part in range must be less than second one: ({0}-{1})", firstCode, lastCode));
 
                                             while (firstCode <= lastCode)
                                             {
