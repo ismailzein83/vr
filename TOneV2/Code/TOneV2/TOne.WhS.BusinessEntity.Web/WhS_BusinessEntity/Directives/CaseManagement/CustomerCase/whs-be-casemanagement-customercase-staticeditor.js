@@ -72,7 +72,7 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                 };
                 $scope.scopeModel.onTicketContactSelectionChanged = function () {
                     var carrierProfileTicketInfo = ticketContactSelectorAPI.getSelectedValues();
-                    if (carrierProfileTicketInfo != undefined) {
+                    if (carrierProfileTicketInfo != undefined && !$scope.scopeModel.isEditMode) {
                         $scope.scopeModel.contactName = carrierProfileTicketInfo.NameDescription;   
                         $scope.scopeModel.email = carrierProfileTicketInfo.Emails.join(';');
                         $scope.scopeModel.phoneNumber = carrierProfileTicketInfo.PhoneNumber.join(';');
@@ -82,6 +82,9 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                     if ($scope.scopeModel.codeNumberList.length != 0)
                         return null;
                     return "You must add at least one description";
+                };
+                $scope.scopeModel.validateDate = function (date) {
+                    return UtilsService.validateDates($scope.scopeModel.fromDate, $scope.scopeModel.toDate);
                 };
                 $scope.scopeModel.InternationalReleaseCodeSelectorReady = function (api) {
                     releaseCodeSelectorAPI = api;
@@ -192,6 +195,7 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                             $scope.scopeModel.contactName = selectedValues.ContactName;
                             $scope.scopeModel.email = selectedValues.ContactEmails;
                             $scope.scopeModel.phoneNumber = selectedValues.PhoneNumber;
+                            $scope.scopeModel.notes = selectedValues.Notes;
                             if ($scope.scopeModel.carrierReference != undefined) {
                                 $scope.scopeModel.carrierReferenceHasValue = true;
                             }
@@ -232,7 +236,7 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                         caseManagementObject.Attempts = $scope.scopeModel.attempts;
                         caseManagementObject.ASR = $scope.scopeModel.asr;
                         caseManagementObject.ACD = $scope.scopeModel.acd;
-                      //  caseManagementObject.ReasonId = reasonSelectorAPI.getSelectedIds();
+                        //  caseManagementObject.ReasonId = reasonSelectorAPI.getSelectedIds();
                         caseManagementObject.WorkGroupId = workGroupSelectorAPI.getSelectedIds();
                     }
                     caseManagementObject.CarrierReference = $scope.scopeModel.carrierReference;
@@ -246,6 +250,7 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                     caseManagementObject.PhoneNumber = $scope.scopeModel.phoneNumber;
                     caseManagementObject.EscalationLevelId = ticketContactSelectorAPI.getSelectedIds();
                     caseManagementObject.SendEmail = $scope.scopeModel.sendEmail;
+                    caseManagementObject.Notes = $scope.scopeModel.notes;
                 };
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

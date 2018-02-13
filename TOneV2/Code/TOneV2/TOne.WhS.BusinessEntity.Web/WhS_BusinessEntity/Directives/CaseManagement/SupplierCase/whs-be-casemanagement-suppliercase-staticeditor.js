@@ -76,9 +76,12 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                     attachmentGridAPI = api;
                     attachmentGridReadyPromiseDeferred.resolve();
                 };
+                $scope.scopeModel.validateDate = function (date) {
+                    return UtilsService.validateDates($scope.scopeModel.fromDate, $scope.scopeModel.toDate);
+                };
                 $scope.scopeModel.onTicketContactSelectionChanged = function () {
                     var carrierProfileTicketInfo = ticketContactSelectorAPI.getSelectedValues();
-                    if (carrierProfileTicketInfo != undefined) {
+                    if (carrierProfileTicketInfo != undefined && !$scope.scopeModel.isEditMode) {
                         $scope.scopeModel.contactName = carrierProfileTicketInfo.NameDescription;
                         $scope.scopeModel.email = carrierProfileTicketInfo.Emails.join(';');
                         $scope.scopeModel.phoneNumber = carrierProfileTicketInfo.PhoneNumber.join(';');
@@ -195,6 +198,7 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                             $scope.scopeModel.description = selectedValues.Description;
                             $scope.scopeModel.notes = selectedValues.Notes;
                             $scope.scopeModel.zoneName = selectedValues.SupplierZoneName;
+                            $scope.scopeModel.notes = selectedValues.Notes;
                         }
                         if ($scope.scopeModel.isEditMode) {
                             getZoneName();
@@ -238,6 +242,7 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                     caseManagementObject.StatusId = statusSelectorAPI.getSelectedIds();
                     caseManagementObject.EscalationLevelId = ticketContactSelectorAPI.getSelectedIds();
                     caseManagementObject.SendEmail = $scope.scopeModel.sendEmail;
+                    caseManagementObject.Notes = $scope.scopeModel.notes;
 
                 };
 
