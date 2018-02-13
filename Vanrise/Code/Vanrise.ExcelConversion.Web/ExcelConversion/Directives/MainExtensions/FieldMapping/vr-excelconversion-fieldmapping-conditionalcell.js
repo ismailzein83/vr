@@ -31,6 +31,7 @@
             var selectorAPI;
             var gridAPI;
             var gridReadyDeferred = UtilsService.createPromiseDeferred();
+            var rowFieldSelectionDeferred;
 
             var cellFieldMappingAPI;
             var cellFieldMappingReadyDeferred;
@@ -59,12 +60,12 @@
                     var index = $scope.scopeModel.datasourcemapping.indexOf(dataItem);
                     $scope.scopeModel.datasourcemapping.splice(index, 1);
                 };
-               
+
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
                     gridReadyDeferred.resolve();
                 };
-            
+
                 $scope.scopeModel.addConditionalCell = function () {
                     var dataItem = {
                         readyPromiseDeferred: UtilsService.createPromiseDeferred(),
@@ -80,18 +81,21 @@
                         $scope.scopeModel.datasourcemapping.length = 0;
                 };
                 $scope.scopeModel.onRowFieldSelectionChanged = function () {
-                    if ($scope.scopeModel.selectedvalues != undefined)
-                    {
-                        var cellFieldMapping = context.getFilterCellFieldMapping($scope.scopeModel.selectedvalues.FieldName);
-                        if (cellFieldMapping != undefined) {
-                            getDefaultConditions(cellFieldMapping);
-                        } 
+                    if (rowFieldSelectionDeferred != undefined)
+                        rowFieldSelectionDeferred.resolve();
+                    else {
+                        if ($scope.scopeModel.selectedvalues != undefined) {
+                            var cellFieldMapping = context.getFilterCellFieldMapping($scope.scopeModel.selectedvalues.FieldName);
+                            if (cellFieldMapping != undefined) {
+                                getDefaultConditions(cellFieldMapping);
+                            }
+                        }
+                        else
+                            $scope.scopeModel.datasourcemapping.length = 0;
                     }
-                    else
-                        $scope.scopeModel.datasourcemapping.length = 0;
                 };
                 defineAPI();
-                
+
             }
             function addConditionalCellFieldMapping(dataItem) {
                 var payload = {
@@ -123,22 +127,32 @@
                         if(payload.fieldMapping != undefined)
                         {
                             if(payload.fieldMapping.RowFieldName != undefined)
-                            {
+                                {
                                 $scope.scopeModel.selectedConditionalType = $scope.scopeModel.conditionalTypes[1];
                                 $scope.scopeModel.selectedvalues = UtilsService.getItemByVal($scope.scopeModel.datasource, payload.fieldMapping.RowFieldName, 'FieldName');
                             }
+
+                            if (payload.fieldMapping.Choices != undefined) {
+                                rowFieldSelectionDeferred = UtilsService.createPromiseDeferred();
+                                var loadGridFieldMappingDeferred = UtilsService.createPromiseDeferred();
+                                promises.push(loadGridFieldMappingDeferred.promise);
+                                rowFieldSelectionDeferred.promise.then(function () {
+                                    loadGridFieldMapping(payload).then(function () {
+                                        loadGridFieldMappingDeferred.resolve();
+                                        rowFieldSelectionDeferred = undefined;
+                                    });
+                                });
+                            }
                         }
                     }
-                   
+
                     if ($scope.scopeModel.selectedConditionalType == undefined)
-                    {
+                   {
                         $scope.scopeModel.selectedConditionalType = $scope.scopeModel.conditionalTypes[0];
                         cellFieldMappingReadyDeferred = UtilsService.createPromiseDeferred();
                         promises.push(loadCellFieldMappingSelector(payload));
                     }
-
-                    var loadGrid = loadGridFieldMapping(payload);
-                    promises.push(loadGrid);
+       
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -151,7 +165,7 @@
             };
 
             function loadCellFieldMappingSelector(payload)
-            {
+{
                 var cellFieldMappingLoadDeferred = UtilsService.createPromiseDeferred();
                 cellFieldMappingReadyDeferred.promise.then(function () {
                     cellFieldMappingReadyDeferred = undefined;
@@ -166,16 +180,13 @@
             function loadGridFieldMapping(payload) {
                 var promises = [];
 
-                if (payload != undefined && payload.fieldMapping != undefined && payload.fieldMapping.Choices != undefined) {
-
                     for (var i = 0; i < payload.fieldMapping.Choices.length; i++) {
-                        
+
                         var dataItem = payload.fieldMapping.Choices[i];
                         extendDataItem(dataItem);
                         promises.push(dataItem.selectiveLoadDeferred.promise);
                         $scope.scopeModel.datasourcemapping.push(dataItem);
                     }
-                }
 
                 return UtilsService.waitMultiplePromises(promises);
             }
@@ -221,24 +232,24 @@
                 }
                 if (currentContext == undefined)
                     currentContext = {};
-                
+
                 return currentContext;
             }
 
             function getDefaultConditions(cellField)
-            {
+                {
                 $scope.scopeModel.datasourcemapping.length = 0;
                 if(context != undefined)
                 {
                     if(context.getFileId != undefined)
-                    {
+                {
                         var fileId = context.getFileId();
                         if (fileId != undefined) {
                             var firstRowIndex = context.getFirstRowIndex();
                             var lastRowIndex = context.getLastRowIndex();
 
                             if (cellField != undefined && firstRowIndex.row == cellField.RowIndex)
-                            {
+                                {
                                 cellField.FieldName = "Condition";
                                 var input = {
                                     FileId: fileId,
@@ -266,7 +277,7 @@
                                     }
                                 });
                             }
-                                
+
                         }
                     }
                 }
