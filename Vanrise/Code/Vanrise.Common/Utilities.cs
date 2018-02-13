@@ -598,7 +598,7 @@ namespace Vanrise.Common
             return businessException != null ? businessException.Message : TECHNICAL_EXCEPTION_MESSAGE;
         }
 
-        private const string TECHNICAL_EXCEPTION_MESSAGE = "Unexpected error occured. Please consult technical support. Click to see technical details";
+        private const string TECHNICAL_EXCEPTION_MESSAGE = "Unexpected error occurred. Please consult technical support. Click to see technical details";
 
         public static IEnumerable<DateTimeRange> GenerateDateTimeRanges(DateTime from, DateTime to, TimeSpan timeSpan)
         {

@@ -34,7 +34,7 @@ app.directive('vrCommonReceivedmailmessageconvertorEditor', ['VRUIUtilsService',
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Common.MainExtensions.ReceivedMailMessageConvertor, Vanrise.Common.MainExtensions",
-                        Name: "Received Mail Message Convertor",
+                        Name: "Received Mail Message Converter",
                     };
                 };
                 if (ctrl.onReady != null)

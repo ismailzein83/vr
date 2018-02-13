@@ -57,7 +57,7 @@
 
                     if ($scope.scopeModel.dimensions.length > 0 || $scope.scopeModel.rootDimensionsFromSearch)
                         return null;
-                    return "At least one dimention should be selected.";
+                    return "At least one dimension should be selected.";
                 };
 
                 $scope.scopeModel.onSelectDimensionItem = function (dimension) {

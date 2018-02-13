@@ -45,7 +45,7 @@
         }
         function load() {
             loadAllControls();
-            $scope.title = "Connenction";
+            $scope.title = "Connection";
 
         }
         function loadAllControls() {

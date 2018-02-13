@@ -167,7 +167,7 @@ namespace Vanrise.Security.Business
             if (userGroup == null)
             {
                 updateOperationOutput.Result = UpdateOperationResult.Failed;
-                updateOperationOutput.Message = "No data receieved for user and group";
+                updateOperationOutput.Message = "No data received for user and group";
                 return updateOperationOutput;
             }
 
@@ -205,7 +205,7 @@ namespace Vanrise.Security.Business
             if (userGroup == null)
             {
                 updateOperationOutput.Result = UpdateOperationResult.Failed;
-                updateOperationOutput.Message = "No data receieved for user and group";
+                updateOperationOutput.Message = "No data received for user and group";
                 return updateOperationOutput;
             }
 

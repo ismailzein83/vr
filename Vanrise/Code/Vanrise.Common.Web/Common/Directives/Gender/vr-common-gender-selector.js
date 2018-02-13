@@ -94,7 +94,7 @@ app.directive('vrCommonGenderSelector', ['UtilsService', 'VRUIUtilsService', 'VR
             var label = "Gender";
 
             if (attrs.ismultipleselection != undefined) {
-                label = "Genderes";
+                label = "Genders";
                 multipleselection = "ismultipleselection";
             }
             if (attrs.customlabel != undefined)

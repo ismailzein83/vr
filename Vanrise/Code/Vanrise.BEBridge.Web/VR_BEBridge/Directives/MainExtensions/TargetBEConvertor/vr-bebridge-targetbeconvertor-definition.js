@@ -105,10 +105,10 @@
             }
         }
         function getTemplate(attrs) {
-            var label = "label='Target Convertor'";
+            var label = "label='Target Converter'";
 
             if (attrs.hidelabel != undefined) {
-                label = "label='Target Convertors'";
+                label = "label='Target Converters'";
             }
 
             return '<vr-row><vr-columns colnum="{{targetBeConvertorCtrl.normalColNum}}">'

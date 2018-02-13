@@ -53,9 +53,9 @@ app.directive('vrCommonOverriddenconfiggroupSelector', ['VRCommon_OverriddenConf
     function getOverriddenConfigGroupTemplate(attrs) {
 
         var multipleselection = "";
-        var label = "Overriden Configuration Group";
+        var label = "Overridden Configuration Group";
         if (attrs.ismultipleselection != undefined) {
-            label = "Overriden Configuration Groups";
+            label = "Overridden Configuration Groups";
             multipleselection = "ismultipleselection";
         }
 

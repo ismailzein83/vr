@@ -122,7 +122,7 @@ namespace Vanrise.Common.Business
             }
             else
             {
-                updateOperationOutput.Message = "Validation Errors occured.";
+                updateOperationOutput.Message = "Validation Errors occurred.";
                 updateOperationOutput.ShowExactMessage = true;
             }
             return updateOperationOutput;

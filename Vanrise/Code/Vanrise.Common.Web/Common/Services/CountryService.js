@@ -54,7 +54,7 @@ app.service('VRCommon_CountryService', ['VRModalService', 'VRNotificationService
         function uploadCountrires() {
             var settings = {};
             settings.onScopeReady = function (modalScope) {
-                modalScope.title = "Upload Countrires";
+                modalScope.title = "Upload Countries";
             };
             var parameters = {};
 

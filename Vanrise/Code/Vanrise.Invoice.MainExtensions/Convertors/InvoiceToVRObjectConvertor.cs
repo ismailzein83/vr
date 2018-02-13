@@ -17,7 +17,7 @@ namespace Vanrise.Invoice.MainExtensions.Convertors
         {
             get
             {
-                return "Invoice To VR Object Convertor";
+                return "Invoice To VR Object Converter";
             }
         }
 

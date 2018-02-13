@@ -33,7 +33,7 @@ namespace Vanrise.Invoice.MainExtensions
                 foreach (var attachementId in sendEmailAction.AttachmentsIds)
                 {
                     var attachement = invoiceType.Settings.InvoiceAttachments.FindRecord(x => x.InvoiceAttachmentId == attachementId);
-                    attachement.ThrowIfNull("attachement");
+                    attachement.ThrowIfNull("attachment");
                     InvoiceRDLCFileConverterContext context = new InvoiceRDLCFileConverterContext
                     {
                         InvoiceId = input.InvoiceId

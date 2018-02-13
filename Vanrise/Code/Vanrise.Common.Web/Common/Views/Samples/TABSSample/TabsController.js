@@ -33,7 +33,7 @@
 
 
             $scope.isValid2 = function () {
-                return "Invlaid ";
+                return "Invalid ";
             };
 
             $scope.testModel = "Common_TABSSample TabsController";

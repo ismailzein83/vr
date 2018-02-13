@@ -130,7 +130,7 @@ namespace Vanrise.Invoice.Business
 
                 InsertOperationOutput<InvoiceGenerationDraft> insertedInvoiceGenerationDraft = InsertInvoiceGenerationDraft(invoiceGenerationDraft);
                 if (insertedInvoiceGenerationDraft.Result != InsertOperationResult.Succeeded)
-                    return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Failed, Message = "Technical Error occured while trying to Add Records" };
+                    return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Failed, Message = "Technical Error occurred while trying to Add Records" };
 
                 count++;
             }

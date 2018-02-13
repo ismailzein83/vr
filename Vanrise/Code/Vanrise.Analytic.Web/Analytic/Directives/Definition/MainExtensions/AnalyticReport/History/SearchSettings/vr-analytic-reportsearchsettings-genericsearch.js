@@ -92,7 +92,7 @@
 
                     if ($scope.scopeModel.groupingDimensions.length > 0 || !$scope.scopeModel.isRequiredGroupingDimensions)
                         return null;
-                    return "At least one dimention should be selected.";
+                    return "At least one dimension should be selected.";
                 };
 
                 defineAPI();

@@ -31,7 +31,7 @@ namespace Vanrise.Analytic.Business
 
                     if (maxDAProfCalcAnalysisPeriod > minDAProfCalcAnalysisPeriodStartedInstance && maxDAProfCalcAnalysisPeriodStartedInstance > minDAProfCalcAnalysisPeriod)
                     {
-                        context.Reason = "Another Data Analysis Profiling and Calculation Generate Alert instance of the same rule type is running during an overlaped analysis period";
+                        context.Reason = "Another Data Analysis Profiling and Calculation Generate Alert instance of the same rule type is running during an overlapped analysis period";
                         return false;
                     }
                 }

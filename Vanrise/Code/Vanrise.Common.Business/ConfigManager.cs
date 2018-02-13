@@ -161,7 +161,7 @@ namespace Vanrise.Common.Business
             {
                 insertOperationOutput.InsertedObject = null;
                 insertOperationOutput.Result = InsertOperationResult.Failed;
-                insertOperationOutput.Message = "Only one company can be setted as default.";
+                insertOperationOutput.Message = "Only one company can be set as default.";
                 return insertOperationOutput;
             }
 
