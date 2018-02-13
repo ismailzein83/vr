@@ -7,7 +7,7 @@
     function linkedRouteRuleEditorController($scope, VRNavigationService) {
 
         var linkedRouteRuleIds;
-        var linkedCode;
+        var customerRouteData;
         var onRouteRuleUpdated;
 
         loadParameters();
@@ -19,7 +19,7 @@
 
             if (parameters != undefined && parameters != null) {
                 linkedRouteRuleIds = parameters.linkedRouteRuleIds;
-                linkedCode = parameters.linkedCode;
+                customerRouteData = parameters.customerRouteData;
                 onRouteRuleUpdated = parameters.onRouteRuleUpdated;
             }
         }
@@ -43,7 +43,7 @@
             var query = {
                 LinkedRouteRuleIds: linkedRouteRuleIds,
                 areRulesLinked: true,
-                linkedCode: linkedCode,
+                customerRouteData: customerRouteData,
                 onRouteRuleUpdated: onRouteRuleUpdated
             };
             return query;

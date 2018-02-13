@@ -250,5 +250,11 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         {
             throw new NotImplementedException();
         }
+
+
+        public IEnumerable<SupplierZoneDetail> GetSupplierZoneDetailsByCode(string code)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

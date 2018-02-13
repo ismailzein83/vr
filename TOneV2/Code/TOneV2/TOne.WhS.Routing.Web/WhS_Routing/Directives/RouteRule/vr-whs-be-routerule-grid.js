@@ -25,7 +25,7 @@ app.directive('vrWhsRoutingRouteruleGrid', ['VRNotificationService', 'WhS_Routin
             var gridAPI;
             var gridDrillDownTabsObj;
             var areRulesLinked = false;
-            var linkedCode = undefined;
+            var customerRouteData = undefined;
             var onLinkedRouteRuleUpdated;
 
             function initializeController() {
@@ -47,7 +47,7 @@ app.directive('vrWhsRoutingRouteruleGrid', ['VRNotificationService', 'WhS_Routin
                         directiveAPI.loadGrid = function (payload) {
                             var query = payload;
                             areRulesLinked = payload.areRulesLinked;
-                            linkedCode = payload.linkedCode;
+                            customerRouteData = payload.customerRouteData;
                             $scope.includeCheckIcon = payload.includecheckicon;
                             onLinkedRouteRuleUpdated = payload.onRouteRuleUpdated;
                             if (query.loadedFromRoutingProduct) {
@@ -158,7 +158,7 @@ app.directive('vrWhsRoutingRouteruleGrid', ['VRNotificationService', 'WhS_Routin
                         onLinkedRouteRuleUpdated(updatedItem);
                 };
                 if (areRulesLinked)
-                    WhS_Routing_RouteRuleService.editLinkedRouteRule(routeRule.Entity.RuleId, linkedCode, onRouteRuleUpdated);
+                    WhS_Routing_RouteRuleService.editLinkedRouteRule(routeRule.Entity.RuleId, customerRouteData, onRouteRuleUpdated);
                 else
                     WhS_Routing_RouteRuleService.editRouteRule(routeRule.Entity.RuleId, onRouteRuleUpdated);
             }

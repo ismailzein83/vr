@@ -1,4 +1,4 @@
-﻿<vr-row removeline>
+﻿<vr-row removeline ng-show="!ctrl.disableadding">
     <vr-columns colnum="6">
         <vr-textbox value="addedCode" type="number" label="Add a code" minvalue="0" decimalprecision="0" vr-disabled="ctrl.disableadding"></vr-textbox>
     </vr-columns>
@@ -6,7 +6,7 @@
         <vr-button type="Add" data-onclick="addCode" standalone vr-disabled="ctrl.disableadding"></vr-button>
     </vr-columns>
 </vr-row>
-<vr-row>
+<vr-row removeline>
     <vr-columns width="fullrow">
         <div>
             <vr-label>Code Criteria</vr-label>

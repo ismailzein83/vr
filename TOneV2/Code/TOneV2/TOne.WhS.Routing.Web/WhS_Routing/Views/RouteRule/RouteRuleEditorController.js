@@ -2,12 +2,12 @@
 
     "use strict";
 
-    routeRuleEditorController.$inject = ['$scope', 'WhS_Routing_RouteRuleAPIService', 'WhS_BE_RoutingProductAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VRDateTimeService'];
+    routeRuleEditorController.$inject = ['$scope', 'WhS_Routing_RouteRuleAPIService', 'WhS_BE_RoutingProductAPIService', 'UtilsService', 'VRNotificationService', 'VRNavigationService', 'VRUIUtilsService', 'VRDateTimeService', 'WhS_Routing_SupplierZoneDetailsAPIService'];
 
-    function routeRuleEditorController($scope, WhS_Routing_RouteRuleAPIService, WhS_BE_RoutingProductAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VRDateTimeService) {
+    function routeRuleEditorController($scope, WhS_Routing_RouteRuleAPIService, WhS_BE_RoutingProductAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService, VRDateTimeService, WhS_Routing_SupplierZoneDetailsAPIService) {
 
         var isLinkedRouteRule;
-        var linkedCode;
+        var customerRouteData;
         var linkedRouteRuleInput;
         var isEditMode;
         var isViewHistoryMode;
@@ -20,6 +20,7 @@
         var maxEED;
 
         var routeRuleEntity;
+        var supplierZoneDetails;
         var productRouteEntity;
 
         var routeRuleSettingsTypeSelectorAPI;
@@ -49,7 +50,7 @@
                 sellingNumberPlanId = parameters.sellingNumberPlanId;
                 linkedRouteRuleInput = parameters.linkedRouteRuleInput;
                 isLinkedRouteRule = parameters.isLinkedRouteRule;
-                linkedCode = parameters.linkedCode;
+                customerRouteData = parameters.customerRouteData;
                 defaultRouteRuleValues = parameters.defaultRouteRuleValues;
             }
 
@@ -82,7 +83,7 @@
                 var setLoader = function (value) { $scope.scopeModel.isLoadingRouteRuleSettings = value; };
 
                 var routeRuleSettingsPayload = {
-                    SupplierFilterSettings: { RoutingProductId: routingProductId }
+                    SupplierFilterSettings: { RoutingProductId: routingProductId, supplierZoneDetails: supplierZoneDetails, customerRouteData: customerRouteData }
                 };
 
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, routeRuleSettingsAPI, routeRuleSettingsPayload, setLoader, routeRuleSettingsReadyPromiseDeferred);
@@ -95,7 +96,7 @@
                     isLinkedRouteRule: isLinkedRouteRule,
                     routingProductId: routingProductId,
                     sellingNumberPlanId: sellingNumberPlanId,
-                    linkedCode: linkedCode,
+                    linkedCode: customerRouteData != undefined ? customerRouteData.code : undefined,
                     defaultCriteriaValues: defaultRouteRuleValues != undefined ? defaultRouteRuleValues.criteria : undefined,
                     routeRuleCriteriaContext: buildRouteRuleCriteriaContext()
                 };
@@ -281,25 +282,44 @@
         function loadData() {
             var loadDataPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            var loadRouteRuleSettingsSectionPromise = loadRouteRuleSettingsSection();
-            var loadRouteRuleCriteriaSectionPromise = loadRouteRuleCriteriaSection();
+            var loadSupplierZoneDetailsPromise = loadSupplierZoneDetails();
 
-            UtilsService.waitMultiplePromises([loadRouteRuleSettingsSectionPromise, loadRouteRuleCriteriaSectionPromise]).then(function () {
-                UtilsService.waitMultipleAsyncOperations([editScopeTitle, loadStaticSection])
-                    .catch(function (error) {
-                        loadDataPromiseDeferred.reject(error);
-                        VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    })
-                    .finally(function () {
-                        loadDataPromiseDeferred.resolve();
-                        $scope.scopeModel.isLoading = false;
-                    });
+            loadSupplierZoneDetailsPromise.then(function () {
+                var loadRouteRuleSettingsSectionPromise = loadRouteRuleSettingsSection();
+                var loadRouteRuleCriteriaSectionPromise = loadRouteRuleCriteriaSection();
+
+                UtilsService.waitMultiplePromises([loadRouteRuleSettingsSectionPromise, loadRouteRuleCriteriaSectionPromise]).then(function () {
+                    UtilsService.waitMultipleAsyncOperations([editScopeTitle, loadStaticSection])
+                        .catch(function (error) {
+                            loadDataPromiseDeferred.reject(error);
+                            VRNotificationService.notifyExceptionWithClose(error, $scope);
+                        })
+                        .finally(function () {
+                            loadDataPromiseDeferred.resolve();
+                            $scope.scopeModel.isLoading = false;
+                        });
+                }).catch(function (error) {
+                    loadDataPromiseDeferred.reject(error);
+                    VRNotificationService.notifyExceptionWithClose(error, $scope);
+                });
             }).catch(function (error) {
                 loadDataPromiseDeferred.reject(error);
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             });
 
             return loadDataPromiseDeferred.promise;
+        }
+
+        function loadSupplierZoneDetails() {
+            var promises = [];
+            if (customerRouteData != undefined) {
+                var loadSupplierZoneDetailsPromise = WhS_Routing_SupplierZoneDetailsAPIService.GetSupplierZoneDetailsByCode(customerRouteData.code).then(function (response) {
+                    supplierZoneDetails = response;
+                });
+                promises.push(loadSupplierZoneDetailsPromise);
+            }
+
+            return UtilsService.waitMultiplePromises(promises);
         }
 
         function loadRouteRuleSettingsSection() {
@@ -326,6 +346,9 @@
             });
 
             if (routeRuleSettingsPayload != undefined) {
+                routeRuleSettingsPayload.supplierZoneDetails = supplierZoneDetails;
+                routeRuleSettingsPayload.customerRouteData = customerRouteData;
+
                 routeRuleSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
                 var routeRuleSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -351,7 +374,7 @@
                     routingProductId: routingProductId,
                     sellingNumberPlanId: sellingNumberPlanId,
                     routeRuleCriteria: routeRuleEntity.Criteria,
-                    linkedCode: linkedCode,
+                    linkedCode: customerRouteData != undefined ? customerRouteData.code : undefined,
                     routeRuleCriteriaContext: buildRouteRuleCriteriaContext()
                 };
             }

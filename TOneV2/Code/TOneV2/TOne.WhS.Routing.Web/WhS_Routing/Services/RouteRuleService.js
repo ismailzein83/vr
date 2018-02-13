@@ -64,12 +64,13 @@
             });
         }
 
-        function viewRouteRule(routeRuleId) {
+        function viewRouteRule(routeRuleId, customerRouteData) {
             var modalSettings = {
             };
             var parameters = {
                 routeRuleId: routeRuleId,
-                isLinkedRouteRule: false
+                isLinkedRouteRule: false,
+                customerRouteData: customerRouteData
             };
 
             modalSettings.onScopeReady = function (modalScope) {
@@ -78,12 +79,12 @@
             VRModalService.showModal('/Client/Modules/WhS_Routing/Views/RouteRule/RouteRuleEditor.html', parameters, modalSettings);
         }
 
-        function addLinkedRouteRule(linkedRouteRuleInput, linkedCode, onRouteRuleAdded) {
+        function addLinkedRouteRule(linkedRouteRuleInput, customerRouteData, onRouteRuleAdded) {
             var modalSettings = {
             };
             var parameters = {
                 linkedRouteRuleInput: linkedRouteRuleInput,
-                linkedCode: linkedCode,
+                customerRouteData: customerRouteData,
                 isLinkedRouteRule: true
             };
 
@@ -94,25 +95,25 @@
             VRModalService.showModal('/Client/Modules/WhS_Routing/Views/RouteRule/RouteRuleEditor.html', parameters, modalSettings);
         }
 
-        function viewLinkedRouteRules(linkedRouteRuleIds, linkedCode, onRouteRuleUpdated) {
+        function viewLinkedRouteRules(linkedRouteRuleIds, customerRouteData, onRouteRuleUpdated) {
             var settings = {
             };
 
             var parameters = {
                 linkedRouteRuleIds: linkedRouteRuleIds,
-                linkedCode: linkedCode,
+                customerRouteData: customerRouteData,
                 onRouteRuleUpdated: onRouteRuleUpdated
             };
 
             VRModalService.showModal('/Client/Modules/WhS_Routing/Views/RouteRule/LinkedRouteRuleEditor.html', parameters, settings);
         }
 
-        function editLinkedRouteRule(routeRuleId, linkedCode, onRouteRuleUpdated) {
+        function editLinkedRouteRule(routeRuleId, customerRouteData, onRouteRuleUpdated) {
             var modalSettings = {
             };
             var parameters = {
                 routeRuleId: routeRuleId,
-                linkedCode: linkedCode,
+                customerRouteData: customerRouteData,
                 isLinkedRouteRule: true
             };
 

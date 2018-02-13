@@ -44,6 +44,9 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
             var overallBackupOptionsDirectiveAPI;
             var overallBackupOptionsDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var supplierZoneDetails;
+            var saleServiceViewerAPI;
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.suppliers = [];
@@ -65,7 +68,12 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                 };
 
                 $scope.scopeModel.onSelectSupplier = function (selectedItem) {
-                    extendAndAddOptionToGrid(selectedItem, undefined, undefined);
+                    $scope.scopeModel.isLoadingSelectedSupplier = true;
+                    extendAndAddOptionToGrid(selectedItem, undefined, undefined).then(function () {
+                        setTimeout(function () {
+                            $scope.scopeModel.isLoadingSelectedSupplier = false;
+                        });
+                    });
                     $scope.scopeModel.selectedSuppliers = [];
                 };
 
@@ -144,17 +152,35 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
 
                 api.load = function (payload) {
                     var promises = [];
-
+                    $scope.scopeModel.showRateServices = false;
                     var options;
                     var overallBackupOptions;
+                    var customerRouteData;
 
                     if (payload != undefined) {
+                        customerRouteData = payload.customerRouteData;
+                        supplierZoneDetails = payload.supplierZoneDetails;
+                        if (supplierZoneDetails != undefined)
+                            $scope.scopeModel.showRateServices = true;
+
                         supplierFilterSettings = payload.SupplierFilterSettings;
 
                         if (payload.RouteRuleSettings != undefined) {
                             options = payload.RouteRuleSettings.Options;
                             overallBackupOptions = payload.RouteRuleSettings.OverallBackupOptions;
                         }
+                    }
+
+                    if (customerRouteData != undefined) {
+                        $scope.scopeModel.Rate = customerRouteData.Rate;
+
+                        var saleServiceViewerLoadDeferred = UtilsService.createPromiseDeferred();
+                        $scope.scopeModel.onSaleServiceViewerReady = function (api) {
+                            saleServiceViewerAPI = api;
+                            var saleServiceViewerPayload = { selectedIds: customerRouteData.SaleZoneServiceIds };
+                            VRUIUtilsService.callDirectiveLoad(saleServiceViewerAPI, saleServiceViewerPayload, saleServiceViewerLoadDeferred);
+                        };
+                        promises.push(saleServiceViewerLoadDeferred.promise);
                     }
 
                     //Loading OptionsSection Directives
@@ -192,7 +218,7 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                                     backupOptionDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
                                     _promises.push(backupOptionDirectiveLoadPromiseDeferred.promise);
                                 }
-                                extendAndAddOptionToGrid(selectedSupplier, currentOption, backupOptionDirectiveLoadPromiseDeferred);
+                                _promises.push(extendAndAddOptionToGrid(selectedSupplier, currentOption, backupOptionDirectiveLoadPromiseDeferred));
                             }
 
                             UtilsService.waitMultiplePromises(_promises).then(function () {
@@ -266,19 +292,44 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
             }
 
             function extendAndAddOptionToGrid(selectedSupplier, currentOption, backupOptionDirectiveLoadPromiseDeferred) {
+
+                var extendOptionPromises = [];
                 var option = {
                     tempId: UtilsService.guid(),
                     SupplierId: selectedSupplier.CarrierAccountId,
                     Name: selectedSupplier.Name,
                     IsRemoveLoss: currentOption != undefined && currentOption.Filters != undefined ? true : false,
-                    NumberOfTries: currentOption != undefined ? currentOption.NumberOfTries : undefined,
+                    NumberOfTries: currentOption != undefined ? currentOption.NumberOfTries : 1,
                     Percentage: currentOption != undefined ? currentOption.Percentage : undefined,
                     Backups: currentOption != undefined ? currentOption.Backups : undefined
                 };
+
+                if ($scope.scopeModel.showRateServices) {
+                    var services;
+                    if (supplierZoneDetails != undefined) {
+                        for (var index = 0; index < supplierZoneDetails.length; index++) {
+                            var currentItem = supplierZoneDetails[index];
+                            if (currentItem.SupplierId == option.SupplierId) {
+                                option.Rate = currentItem.EffectiveRateValue;
+                                services = currentItem.ExactSupplierServiceIds;
+                                break;
+                            }
+                        }
+                    }
+
+                    option.serviceViewerLoadDeferred = UtilsService.createPromiseDeferred();
+                    option.onServiceViewerReady = function (api) {
+                        option.serviceViewerAPI = api;
+                        var serviceViewerPayload = services != undefined ? { selectedIds: services } : undefined;
+                        VRUIUtilsService.callDirectiveLoad(option.serviceViewerAPI, serviceViewerPayload, option.serviceViewerLoadDeferred);
+                    };
+                    extendOptionPromises.push(option.serviceViewerLoadDeferred.promise);
+                }
+
                 option.onBackupOptionDirectiveReady = function (api) {
                     option.backupOptionGridAPI = api;
 
-                    var backupOptionGridAPIPayload = { supplierFilterSettings: supplierFilterSettings };
+                    var backupOptionGridAPIPayload = { supplierFilterSettings: supplierFilterSettings, supplierZoneDetails: supplierZoneDetails };
                     if (option != undefined && option.Backups != undefined) {
                         backupOptionGridAPIPayload.backups = option.Backups;
                     }
@@ -287,7 +338,10 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
 
                 expandRow(option);
                 $scope.scopeModel.suppliers.push(option);
+
+                return UtilsService.waitMultiplePromises(extendOptionPromises);
             }
+
             function expandRow(option) {
                 if ($scope.scopeModel.showBackupTabs) {
                     gridAPI.expandRow(option);

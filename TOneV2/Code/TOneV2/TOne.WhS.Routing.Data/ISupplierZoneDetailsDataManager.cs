@@ -15,5 +15,6 @@ namespace TOne.WhS.Routing.Data
         void UpdateSupplierZoneDetails(List<SupplierZoneDetail> supplierZoneDetails);
 
         List<SupplierZoneDetail> GetSupplierZoneDetailsAfterVersionNumber(int versionNumber);
+        IEnumerable<SupplierZoneDetail> GetSupplierZoneDetailsByCode(string code);
     }
 }

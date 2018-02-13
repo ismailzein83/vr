@@ -9,7 +9,9 @@
 <vr-row ng-if="scopeModel.showSaleZoneSection">
     <vr-columns width="fullrow">
         <vr-section title="Sale Zone" vr-loader="scopeModel.isLoadingSaleZoneGroup">
-            <vr-whs-be-salezonegroup on-ready="scopeModel.onSaleZoneGroupSettingsDirectiveReady"></vr-whs-be-salezonegroup>
+            <span vr-disabled="scopeModel.disableCriteria">
+                <vr-whs-be-salezonegroup on-ready="scopeModel.onSaleZoneGroupSettingsDirectiveReady"></vr-whs-be-salezonegroup>
+            </span>
         </vr-section>
     </vr-columns>
 </vr-row>
