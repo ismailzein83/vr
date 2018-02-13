@@ -801,6 +801,7 @@
     <None Include="CarrierPortal.RetailPortal_Centrex.PostDeployment.sql" />
     <None Include="Sama.FlaggedService.sql" />
     <None Include="TOne.NG.PostDeployment.sql" />
+    <None Include="Mediation.Ericsson_WHS.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
