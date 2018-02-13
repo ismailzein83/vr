@@ -73,13 +73,14 @@ namespace TOne.WhS.Routing.Business
                 }
             }
 
-            return new CustomerRouteDetail()
+            CustomerRouteDetail customerRouteDetail = new CustomerRouteDetail()
             {
                 CustomerId = customerRoute.CustomerId,
                 CustomerName = customerRoute.CustomerName,
                 SaleZoneName = customerRoute.SaleZoneName,
                 Code = customerRoute.Code,
                 Rate = customerRoute.Rate,
+                SaleZoneId = customerRoute.SaleZoneId,
                 IsBlocked = customerRoute.IsBlocked,
                 SaleZoneServiceIds = customerRoute.SaleZoneServiceIds,
                 ExecutedRuleId = customerRoute.ExecutedRuleId,
@@ -89,6 +90,22 @@ namespace TOne.WhS.Routing.Business
                 ExecutedRouteRuleName = routeRule != null ? routeRule.Name : null,
                 ExecutedRouteRuleSettingsTypeName = executedRouteRuleSettingsTypeName
             };
+
+            if (customerRouteDetail.LinkedRouteRuleCount > 0)
+            {
+                customerRouteDetail.CanEditMatchingRule = true;
+            }
+            else if (routeRule != null)
+            {
+                bool hasSelectiveCustomerCriteria = routeRuleManager.HasSelectiveCustomerCriteria(routeRule.Criteria);
+                bool hasSelectiveCodeCriteria = routeRuleManager.HasSelectiveCodeCriteria(routeRule.Criteria);
+                bool hasSelectiveSaleZoneCriteria = routeRuleManager.HasSelectiveSaleZoneCriteria(routeRule.Criteria);
+
+                if (hasSelectiveCustomerCriteria && (hasSelectiveCodeCriteria || hasSelectiveSaleZoneCriteria))
+                    customerRouteDetail.CanEditMatchingRule = true;
+            }
+
+            return customerRouteDetail;
         }
 
         private List<CustomerRouteOptionDetail> GetRouteOptionDetails(CustomerRoute customerRoute)

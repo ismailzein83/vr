@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.BusinessEntity.MainExtensions.CodeCriteriaGroups;
 using TOne.WhS.BusinessEntity.MainExtensions.CustomerGroups;
+using TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups;
+using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
@@ -41,7 +44,7 @@ namespace TOne.WhS.Routing.Business
             return routeRule.CastWithValidate<RouteRule>("RouteRule : historyId ", routeRuleHistoryId);
         }
 
-        public RouteRule BuildLinkedRouteRule(int ruleId, int? customerId, string code, List<RouteOption> routeOptions)
+        public RouteRule BuildLinkedRouteRule(int ruleId, int? customerId, string code, long? saleZoneId, List<RouteOption> routeOptions)
         {
             RouteRule relatedRouteRule = base.GetRuleWithDeleted(ruleId);
             if (relatedRouteRule == null)
@@ -58,8 +61,15 @@ namespace TOne.WhS.Routing.Business
             if (customerId.HasValue && customerId.Value > 0)
                 routeRuleCriteria.CustomerGroupSettings = new SelectiveCustomerGroup() { CustomerIds = new List<int>() { customerId.Value } };
 
+            if (string.IsNullOrEmpty(code))
+                throw new NullReferenceException("code must have a value");
 
-            if (!string.IsNullOrEmpty(code))
+            if (saleZoneId.HasValue)
+            {
+                SaleZone saleZone = new SaleZoneManager().GetSaleZone(saleZoneId.Value);
+                routeRuleCriteria.SaleZoneGroupSettings = new SelectiveSaleZoneGroup() { SellingNumberPlanId = saleZone.SellingNumberPlanId, ZoneIds = new List<long>() { saleZoneId.Value } };
+            }
+            else
             {
                 CodeCriteria codeCriteria = new BusinessEntity.Entities.CodeCriteria() { Code = code };
                 routeRuleCriteria.CodeCriteriaGroupSettings = new SelectiveCodeCriteriaGroup() { Codes = new List<CodeCriteria>() { codeCriteria } };
@@ -253,6 +263,45 @@ namespace TOne.WhS.Routing.Business
             return RouteRuleLoggableEntity.Instance;
         }
 
+
+        public bool HasSelectiveCustomerCriteria(BaseRouteRuleCriteria criteria)
+        {
+            CustomerGroupSettings customerGroupSettings = criteria.GetCustomerGroupSettings();
+            if (customerGroupSettings == null)
+                return false;
+
+            SelectiveCustomerGroup selectiveCustomerGroup = customerGroupSettings as SelectiveCustomerGroup;
+            if (selectiveCustomerGroup == null)
+                return false;
+
+            return selectiveCustomerGroup.CustomerIds != null && selectiveCustomerGroup.CustomerIds.Count > 0;
+        }
+
+        public bool HasSelectiveCodeCriteria(BaseRouteRuleCriteria criteria)
+        {
+            CodeCriteriaGroupSettings codeCriteriaGroupSettings = criteria.GetCodeCriteriaGroupSettings();
+            if (codeCriteriaGroupSettings == null)
+                return false;
+
+            SelectiveCodeCriteriaGroup selectiveCodeCriteriaGroup = codeCriteriaGroupSettings as SelectiveCodeCriteriaGroup;
+            if (selectiveCodeCriteriaGroup == null)
+                return false;
+
+            return selectiveCodeCriteriaGroup.Codes != null && selectiveCodeCriteriaGroup.Codes.Count > 0;
+        }
+
+        public bool HasSelectiveSaleZoneCriteria(BaseRouteRuleCriteria criteria)
+        {
+            SaleZoneGroupSettings saleZoneGroupSettings = criteria.GetSaleZoneGroupSettings();
+            if (saleZoneGroupSettings == null)
+                return false;
+
+            SelectiveSaleZoneGroup selectiveSaleZoneGroup = saleZoneGroupSettings as SelectiveSaleZoneGroup;
+            if (selectiveSaleZoneGroup == null)
+                return false;
+
+            return selectiveSaleZoneGroup.ZoneIds != null && selectiveSaleZoneGroup.ZoneIds.Count > 0;
+        }
         #endregion
 
         #region Private Methods
@@ -310,7 +359,7 @@ namespace TOne.WhS.Routing.Business
                 });
         }
 
-        public int? CheckAndReturnValidCustomer(BaseRouteRuleCriteria criteria)
+        int? CheckAndReturnValidCustomer(BaseRouteRuleCriteria criteria)
         {
             CustomerGroupSettings customerGroupSettings = criteria.GetCustomerGroupSettings();
             if (customerGroupSettings == null)
@@ -326,7 +375,7 @@ namespace TOne.WhS.Routing.Business
             return selectiveCustomerGroup.CustomerIds.First();
         }
 
-        public string CheckAndReturnValidCode(BaseRouteRuleCriteria criteria)
+        string CheckAndReturnValidCode(BaseRouteRuleCriteria criteria)
         {
             CodeCriteriaGroupSettings codeCriteriaGroupSettings = criteria.GetCodeCriteriaGroupSettings();
             if (codeCriteriaGroupSettings == null)
