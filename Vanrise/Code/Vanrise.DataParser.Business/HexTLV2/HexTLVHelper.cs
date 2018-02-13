@@ -138,16 +138,17 @@ namespace Vanrise.DataParser.Business
 
         public static void ReadBlockFromStream(Stream stream, int blockSize, Action<RecordValue> onBlockRead)
         {
-            int position = 0;
-
-            while (position < stream.Length)
+            long position = 0;
+            long remainingBytes = stream.Length;
+            while (position < stream.Length && blockSize <= remainingBytes)
             {
+
                 byte[] bytes = null;
                 bytes = new byte[blockSize];
                 stream.Read(bytes, 0, blockSize);
 
                 position += blockSize;
-
+                remainingBytes -= blockSize;
                 RecordValue recordValue = new RecordValue
                 {
                     Length = blockSize,

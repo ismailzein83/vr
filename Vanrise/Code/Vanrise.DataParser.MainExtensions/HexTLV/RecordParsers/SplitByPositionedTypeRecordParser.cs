@@ -6,9 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.DataParser.Business;
 using Vanrise.DataParser.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers
 {
+    public enum RecordTypeFieldType { Int, String }
     public class SplitByPositionedTypeRecordParser : HexTLVRecordParserSettings
     {
         public override Guid ConfigId
@@ -19,6 +21,7 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers
         public int RecordTypePosition { get; set; }
 
         public int RecordTypeLength { get; set; }
+        public RecordTypeFieldType RecordTypeFieldType { get; set; }
 
         public Dictionary<string, HexTLVRecordParser> SubRecordsParsersByRecordType { get; set; }
 
@@ -28,8 +31,19 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers
             byte[] data = ((MemoryStream)context.RecordStream).ToArray();
 
             Array.Copy(data, RecordTypePosition, typeData, 0, RecordTypeLength);
-
-            string recordType = ParserHelper.GetInt(typeData, 0, RecordTypeLength).ToString();
+            string recordType = "";
+            switch (RecordTypeFieldType)
+            {
+                case RecordTypeFieldType.Int:
+                    recordType = ParserHelper.GetInt(typeData, 0, RecordTypeLength).ToString();
+                    break;
+                case RecordTypeFieldType.String:
+                    recordType = typeData.ConvertByteToString();
+                    break;
+                default:
+                    recordType = ParserHelper.GetInt(typeData, 0, RecordTypeLength).ToString();
+                    break;
+            }
 
             context.RecordStream.Seek(0, SeekOrigin.Begin);
 

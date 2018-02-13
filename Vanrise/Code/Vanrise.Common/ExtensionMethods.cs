@@ -547,6 +547,10 @@ namespace Vanrise.Common
             return source.MaxBy(selector, Comparer<TKey>.Default);
         }
 
+        public static string ConvertByteToString(this byte[] source)
+        {
+            return source != null ? System.Text.Encoding.UTF8.GetString(source) : null;
+        }
         #endregion
 
         #region Object Extensions

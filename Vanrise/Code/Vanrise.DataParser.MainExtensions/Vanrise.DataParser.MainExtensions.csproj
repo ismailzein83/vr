@@ -50,18 +50,22 @@
     <Compile Include="HexTLV\FieldParsers\BoolFieldParser.cs" />
     <Compile Include="HexTLV\FieldParsers\CallLocationInformationParser.cs" />
     <Compile Include="HexTLV\FieldParsers\CoordinatesParser.cs" />
+    <Compile Include="HexTLV\FieldParsers\DateFromTextParser.cs" />
     <Compile Include="HexTLV\FieldParsers\DateTimeParser.cs" />
     <Compile Include="HexTLV\FieldParsers\HexaParser.cs" />
     <Compile Include="HexTLV\FieldParsers\NumberFieldParser.cs" />
     <Compile Include="HexTLV\FieldParsers\IPv4Parser.cs" />
+    <Compile Include="HexTLV\FieldParsers\NumberFromTextParser.cs" />
     <Compile Include="HexTLV\FieldParsers\SequenceFieldParser.cs" />
     <Compile Include="HexTLV\FieldParsers\StringParser.cs" />
     <Compile Include="HexTLV\FieldParsers\BCDNumberParser.cs" />
     <Compile Include="HexTLV\FieldParsers\TBCDNumberParser.cs" />
+    <Compile Include="HexTLV\FieldParsers\TimeFromTextParser.cs" />
     <Compile Include="HexTLV\FieldParsers\TimeParser.cs" />
     <Compile Include="HexTLV\RecordParsers\CreateRecordRecordParser.cs" />
     <Compile Include="HexTLV\RecordParsers\ExecuteTemplateRecordParser.cs" />
     <Compile Include="HexTLV\RecordParsers\PositionedFieldsRecordParser.cs" />
+    <Compile Include="HexTLV\RecordParsers\PositionedBlockRecordParser.cs" />
     <Compile Include="HexTLV\RecordParsers\SplitByBlockRecordParser.cs" />
     <Compile Include="HexTLV\RecordParsers\SplitByOffSetRecordParser.cs" />
     <Compile Include="HexTLV\RecordParsers\SplitByPositionedTypeRecordParser.cs" />
@@ -80,6 +84,10 @@
     <ProjectReference Include="..\Vanrise.DataParser.Entities\Vanrise.DataParser.Entities.csproj">
       <Project>{91d049e3-d276-4ac0-8ac1-3bf0bbe84751}</Project>
       <Name>Vanrise.DataParser.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
