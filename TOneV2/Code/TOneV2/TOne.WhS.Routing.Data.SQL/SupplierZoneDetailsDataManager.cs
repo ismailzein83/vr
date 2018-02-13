@@ -69,10 +69,19 @@ namespace TOne.WhS.Routing.Data.SQL
 
             return cacheManager.GetOrCreateObject("SupplierZoneDetails", this.RoutingDatabase.ID, SupplierZoneDetailsCacheExpirationChecker.Instance, () =>
            {
-               IEnumerable<SupplierZoneDetail> supplierZoneDetails = GetItemsText(query_GetSupplierZoneDetails, SupplierZoneDetailMapper, null);
+               string query = query_GetSupplierZoneDetails.Replace("#FILTER#", string.Empty);
+               IEnumerable<SupplierZoneDetail> supplierZoneDetails = GetItemsText(query, SupplierZoneDetailMapper, null);
                return supplierZoneDetails.ToDictionary(itm => itm.SupplierZoneId, itm => itm);
            });
         }
+
+        public IEnumerable<SupplierZoneDetail> GetSupplierZoneDetailsByCode(string code)
+        {
+            string query = string.Format(query_GetSupplierZoneDetails.Replace("#FILTER#", @"Join [dbo].CodeSupplierZoneMatch cszm on zd.SupplierZoneId = cszm.SupplierZoneID
+  where cszm.code = '{0}'"), code);
+            return GetItemsText(query, SupplierZoneDetailMapper, null);
+        }
+
 
         public IEnumerable<SupplierZoneDetail> GetSupplierZoneDetails()
         {
@@ -110,7 +119,7 @@ namespace TOne.WhS.Routing.Data.SQL
             });
         }
 
-        #endregion 
+        #endregion
 
         #region Private Methods
 
@@ -230,7 +239,8 @@ namespace TOne.WhS.Routing.Data.SQL
                                                   ,zd.[SupplierRateId]
                                                   ,zd.[SupplierRateEED]
                                                   ,zd.[VersionNumber]
-                                           FROM [dbo].[SupplierZoneDetail] zd with(nolock)";
+                                           FROM [dbo].[SupplierZoneDetail] zd with(nolock)
+                                           #FILTER#";
 
         const string query_GetFilteredSupplierZoneDetailsBySupplierZones = @"                                                       
                                            SELECT  zd.[SupplierId]
