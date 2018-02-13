@@ -911,7 +911,7 @@ namespace TOne.WhS.BusinessEntity.Business
             priceListName.Replace("#Currency#", currencySymbol);
             priceListName.Replace("#ProfileName#", profileName);
             priceListName.Replace("#PricelistDate#", priceListDate.ToString("yyyy-MM-dd"));
-            priceListName.Replace("#PriclistType#", salePriceListType.ToString());
+            priceListName.Replace("#PricelistType#", salePriceListType.ToString());
 
             priceListName = priceListName.Append(extension);
             return priceListName.ToString();
