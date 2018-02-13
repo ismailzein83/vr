@@ -25,6 +25,7 @@ namespace Mediation.Runtime.DataParser
                 CreateMediationSettingsFile(GetEricssonIraqParserSettings(), "Ericsson_Iraq");
                 CreateMediationSettingsFile(GetNokiaParserSettings(), "Nokia_Iraq");
                 CreateMediationSettingsFile(GetEricssonParserSettings_GPRS(), "Ericsson_GPRS");
+                CreateMediationSettingsFile(GetEricssonOgeroParserSettings(), "Ericsson_Ogero");
             }
             catch (Exception ex)
             {
@@ -2875,7 +2876,7 @@ namespace Mediation.Runtime.DataParser
                     FieldName = "IntermediateRecordNumber"
                 }
             });
-            
+
             parsers.Add("99", new HexTLVFieldParser
             {
                 Settings = new StringParser
@@ -8511,6 +8512,3043 @@ namespace Mediation.Runtime.DataParser
                 Position = 105
             });
 
+
+            return fieldParsers;
+        }
+        #endregion
+
+        #region Ericsson Ogero
+
+        public string GetEricssonOgeroParserSettings()
+        {
+
+            //HexTLVParserType hexParser = new HexTLVParserType
+            //{
+            //    RecordParser = new PositionedBlockRecordParser
+            //    {
+            //        RecordParser = new PositionedBlockRecordParser//HexTLVRecordParser
+            //        {
+            //            RecordParser = new HexTLVRecordParser
+            //            {
+            //                Settings = new SplitByPositionedTypeRecordParser
+            //                {
+            //                    RecordTypeLength = 2,
+            //                    RecordTypePosition = 0,
+            //                    SubRecordsParsersByRecordType = GetEricssonOgeroSubRecordsParsers(),
+            //                    RecordTypeFieldType = RecordTypeFieldType.String
+            //                }
+            //            }
+            //        },
+            //        BlockSize = 115
+            //    }
+            //};
+            HexTLVParserType hexParser = new HexTLVParserType
+            {
+                RecordParser = new PositionedBlockRecordParser
+                {
+                    RecordParser = new HexTLVRecordParser//HexTLVRecordParser
+                    {
+                        Settings = new PositionedBlockRecordParser// SplitByPositionedTypeRecordParser
+                        {
+                            BlockSize = 115,
+                            RecordParser = new HexTLVRecordParser
+                            {
+                                Settings = new SplitByPositionedTypeRecordParser
+                                {
+                                    RecordTypeLength = 2,
+                                    RecordTypePosition = 0,
+                                    SubRecordsParsersByRecordType = GetEricssonOgeroSubRecordsParsers(),
+                                    RecordTypeFieldType = RecordTypeFieldType.String
+                                }
+                            }
+                        }
+                    },
+                    BlockSize = 2048
+                }
+            };
+
+            ParserType parserType = new ParserType
+            {
+                ParserTypeId = new Guid("6F27B54C-90F3-4332-8437-1ADFFDB8ED2D"),
+                Settings = new ParserTypeSettings
+                {
+                    ExtendedSettings = hexParser
+                }
+            };
+
+            string val = Serializer.Serialize(parserType.Settings);
+            var result = Serializer.Deserialize<ParserTypeSettings>(val);
+            return val;
+        }
+
+        private Dictionary<string, HexTLVRecordParser> GetEricssonOgeroSubRecordsParsers()
+        {
+            Dictionary<string, HexTLVRecordParser> recordParsers = new Dictionary<string, HexTLVRecordParser>();
+
+
+            recordParsers.Add("00", new HexTLVRecordParser
+            {
+                Settings = new PositionedFieldsRecordParser
+                {
+                    FieldParsers = Get_PositionedFieldParsers_00_Ogero_Call(),
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                     new ParsedRecordFieldConstantValue{
+                      FieldName = "RecordType",
+                      Value = "00"
+                     },
+                        new ParsedRecordFieldConstantValue
+                        {
+                            FieldName = "SwitchId",
+                            Value = 3
+                        }
+                    },
+                    RecordType = "Ericsson_WHS_CDR"
+                    //CompositeFieldsParsers = GetOgeroCompositeFields()
+                }
+            });
+            recordParsers.Add("01", new HexTLVRecordParser
+            {
+                Settings = new PositionedFieldsRecordParser
+                {
+                    FieldParsers = Get_PositionedFieldParsers_01_Ogero_Call(),
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                     new ParsedRecordFieldConstantValue{
+                      FieldName = "RecordType",
+                      Value = "01"
+                     },
+                        new ParsedRecordFieldConstantValue
+                        {
+                            FieldName = "SwitchId",
+                            Value = 3
+                        }
+                    },
+                    RecordType = "Ericsson_WHS_CDR"
+                    //CompositeFieldsParsers = GetOgeroCompositeFields()
+                }
+            });
+
+            recordParsers.Add("02", new HexTLVRecordParser
+            {
+                Settings = new PositionedFieldsRecordParser
+                {
+                    FieldParsers = Get_PositionedFieldParsers_02_Ogero_Call(),
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                     new ParsedRecordFieldConstantValue{
+                      FieldName = "RecordType",
+                      Value = "02"
+                     },
+                        new ParsedRecordFieldConstantValue
+                        {
+                            FieldName = "SwitchId",
+                            Value = 3
+                        }
+                    },
+                    RecordType = "Ericsson_WHS_CDR"
+                    //CompositeFieldsParsers = GetOgeroCompositeFields()
+                }
+            });
+            recordParsers.Add("03", new HexTLVRecordParser
+            {
+                Settings = new PositionedFieldsRecordParser
+                {
+                    FieldParsers = Get_PositionedFieldParsers_04_Ogero_Call(),
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                     new ParsedRecordFieldConstantValue{
+                      FieldName = "RecordType",
+                      Value = "03"
+                     },
+                        new ParsedRecordFieldConstantValue
+                        {
+                            FieldName = "SwitchId",
+                            Value = 3
+                        }
+                    },
+                    RecordType = "Ericsson_WHS_CDR"
+                    //CompositeFieldsParsers = GetOgeroCompositeFields()
+                }
+            });
+
+            recordParsers.Add("04", new HexTLVRecordParser
+            {
+                Settings = new PositionedFieldsRecordParser
+                {
+                    FieldParsers = Get_PositionedFieldParsers_04_Ogero_Call(),
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                     new ParsedRecordFieldConstantValue{
+                      FieldName = "RecordType",
+                      Value = "04"
+                     },
+                        new ParsedRecordFieldConstantValue
+                        {
+                            FieldName = "SwitchId",
+                            Value = 3
+                        }
+                    },
+                    RecordType = "Ericsson_WHS_CDR"
+                    //CompositeFieldsParsers = GetOgeroCompositeFields()
+                }
+            });
+
+            recordParsers.Add("05", new HexTLVRecordParser
+            {
+                Settings = new PositionedFieldsRecordParser
+                {
+                    FieldParsers = Get_PositionedFieldParsers_04_Ogero_Call(),
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                     new ParsedRecordFieldConstantValue{
+                      FieldName = "RecordType",
+                      Value = "05"
+                     },
+                        new ParsedRecordFieldConstantValue
+                        {
+                            FieldName = "SwitchId",
+                            Value = 3
+                        }
+                    },
+                    RecordType = "Ericsson_WHS_CDR"
+                    //CompositeFieldsParsers = GetOgeroCompositeFields()
+                }
+            });
+
+            recordParsers.Add("06", new HexTLVRecordParser
+            {
+                Settings = new PositionedFieldsRecordParser
+                {
+                    FieldParsers = Get_PositionedFieldParsers_04_Ogero_Call(),
+                    FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+                     new ParsedRecordFieldConstantValue{
+                      FieldName = "RecordType",
+                      Value = "06"
+                     },
+                        new ParsedRecordFieldConstantValue
+                        {
+                            FieldName = "SwitchId",
+                            Value = 3
+                        }
+                    },
+                    RecordType = "Ericsson_WHS_CDR"
+                    //CompositeFieldsParsers = GetOgeroCompositeFields()
+                }
+            });
+
+            //recordParsers.Add("07", new HexTLVRecordParser
+            //{
+            //    Settings = new PositionedFieldsRecordParser
+            //    {
+            //        FieldParsers = Get_PositionedFieldParsers_04_Ogero_Call(),
+            //        FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+            //         new ParsedRecordFieldConstantValue{
+            //          FieldName = "RecordType",
+            //          Value = "07"
+            //         },
+            //            new ParsedRecordFieldConstantValue
+            //            {
+            //                FieldName = "SwitchId",
+            //                Value = 3
+            //            }
+            //        },
+            //        RecordType = "Ericsson_WHS_CDR"
+            //        //CompositeFieldsParsers = GetOgeroCompositeFields()
+            //    }
+            //});
+
+            //recordParsers.Add("08", new HexTLVRecordParser
+            //{
+            //    Settings = new PositionedFieldsRecordParser
+            //    {
+            //        FieldParsers = Get_PositionedFieldParsers_04_Ogero_Call(),
+            //        FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+            //         new ParsedRecordFieldConstantValue{
+            //          FieldName = "RecordType",
+            //          Value = "08"
+            //         },
+            //            new ParsedRecordFieldConstantValue
+            //            {
+            //                FieldName = "SwitchId",
+            //                Value = 3
+            //            }
+            //        },
+            //        RecordType = "Ericsson_WHS_CDR"
+            //        //CompositeFieldsParsers = GetOgeroCompositeFields()
+            //    }
+            //});
+
+            //recordParsers.Add("09", new HexTLVRecordParser
+            //{
+            //    Settings = new PositionedFieldsRecordParser
+            //    {
+            //        FieldParsers = Get_PositionedFieldParsers_04_Ogero_Call(),
+            //        FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
+            //         new ParsedRecordFieldConstantValue{
+            //          FieldName = "RecordType",
+            //          Value = "09"
+            //         },
+            //            new ParsedRecordFieldConstantValue
+            //            {
+            //                FieldName = "SwitchId",
+            //                Value = 3
+            //            }
+            //        },
+            //        RecordType = "Ericsson_WHS_CDR"
+            //        //CompositeFieldsParsers = GetOgeroCompositeFields()
+            //    }
+            //});
+
+
+            return recordParsers;
+        }
+
+        private List<CompositeFieldsParser> GetOgeroCompositeFields()
+        {
+            List<CompositeFieldsParser> result = new List<CompositeFieldsParser>();
+
+            result.Add(new DateTimeCompositeParser
+            {
+                DateFieldName = "DateForStartCharging",
+                TimeFieldName = "TimeForStartCharging",
+                FieldName = "AttemptDateTime"
+            });
+
+            return result;
+        }
+        private List<PositionedFieldParser> Get_PositionedFieldParsers_00_Ogero_Call()
+        {
+            List<PositionedFieldParser> fieldParsers = new List<PositionedFieldParser>();
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ANumber"
+                    }
+                },
+                Length = 20,
+                Position = 4
+            });
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "BNumber"
+                    }
+                },
+                Length = 20,
+                Position = 24
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "CallStatus"
+                    }
+                },
+                Length = 1,
+                Position = 2
+
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "CauseForOutput"
+                    }
+                },
+                Length = 1,
+                Position = 3
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ACategory"
+                    }
+                },
+                Length = 2,
+                Position = 44
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "BCategory"
+                    }
+                },
+                Length = 2,
+                Position = 46
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ChargedParty"
+                    }
+                },
+                Length = 1,
+                Position = 48
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "DateForStartCharging",
+                        Parser = new DateFromTextParser
+                        {
+                            FieldName = "DateForStartCharging",
+                            DateFormat = "yyMMdd"
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 49
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TimeForStartCharging",
+                        Parser = new TimeFromTextParser
+                        {
+                            FieldName = "TimeForStartCharging",
+                            Format = "hhmmss"
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 55
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ChargeableDuration",
+                        Parser = new NumberFromTextParser
+                        {
+                            FieldName = "ChargeableDuration",
+                            NumberType = NumberType.Int
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 61
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "FaultCode"
+                    }
+                },
+                Length = 5,
+                Position = 67
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ExchangeIdentity"
+                    }
+                },
+                Length = 15,
+                Position = 72
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "RecordNumber",
+                        Parser = new NumberFromTextParser
+                        {
+                            NumberType = NumberType.Int,
+                            FieldName = "RecordNumber"
+                        }
+                    }
+                },
+                Length = 2,
+                Position = 87
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TariffClass"
+                    }
+                },
+                Length = 3,
+                Position = 89
+            });
+
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TariffSwitchingIndicator"
+                    }
+                },
+                Length = 1,
+                Position = 92
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "OriginForCharging"
+                    }
+                },
+                Length = 4,
+                Position = 93
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "OutgoingRoute"
+                    }
+                },
+                Length = 7,
+                Position = 97
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "IncomingRoute"
+                    }
+                },
+                Length = 7,
+                Position = 104
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "Reserved"
+                    }
+                },
+                Length = 4,
+                Position = 111
+            });
+
+            return fieldParsers;
+        }
+
+        private List<PositionedFieldParser> Get_PositionedFieldParsers_01_Ogero_Call()
+        {
+            List<PositionedFieldParser> fieldParsers = new List<PositionedFieldParser>();
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ANumber"
+                    }
+                },
+                Length = 20,
+                Position = 4
+            });
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "BNumber"
+                    }
+                },
+                Length = 20,
+                Position = 24
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "CallStatus"
+                    }
+                },
+                Length = 1,
+                Position = 2
+
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "CauseForOutput"
+                    }
+                },
+                Length = 1,
+                Position = 3
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ACategory"
+                    }
+                },
+                Length = 2,
+                Position = 44
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "BCategory"
+                    }
+                },
+                Length = 2,
+                Position = 46
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ChargedParty"
+                    }
+                },
+                Length = 1,
+                Position = 48
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "DateForStartCharging",
+                        Parser = new DateFromTextParser
+                        {
+                            FieldName = "DateForStartCharging",
+                            DateFormat = "yyMMdd"
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 49
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TimeForStartCharging",
+                        Parser = new TimeFromTextParser
+                        {
+                            FieldName = "TimeForStartCharging",
+                            Format = "hhmmss"
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 55
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ChargeableDuration",
+                        Parser = new NumberFromTextParser
+                        {
+                            FieldName = "ChargeableDuration",
+                            NumberType = NumberType.Int
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 61
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "FaultCode"
+                    }
+                },
+                Length = 5,
+                Position = 67
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ExchangeIdentity"
+                    }
+                },
+                Length = 15,
+                Position = 72
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "RecordNumber",
+                        Parser = new NumberFromTextParser
+                        {
+                            NumberType = NumberType.Int,
+                            FieldName = "RecordNumber"
+                        }
+                    }
+                },
+                Length = 2,
+                Position = 87
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TariffClass"
+                    }
+                },
+                Length = 3,
+                Position = 89
+            });
+
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TariffSwitchingIndicator"
+                    }
+                },
+                Length = 1,
+                Position = 92
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "OriginForCharging"
+                    }
+                },
+                Length = 4,
+                Position = 93
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "OutgoingRoute"
+                    }
+                },
+                Length = 7,
+                Position = 97
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "IncomingRoute"
+                    }
+                },
+                Length = 7,
+                Position = 104
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "Reserved"
+                    }
+                },
+                Length = 4,
+                Position = 111
+            });
+
+            return fieldParsers;
+        }
+        private List<PositionedFieldParser> Get_PositionedFieldParsers_02_Ogero_Call()
+        {
+            List<PositionedFieldParser> fieldParsers = new List<PositionedFieldParser>();
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ANumber"
+                    }
+                },
+                Length = 20,
+                Position = 4
+            });
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "BNumber"
+                    }
+                },
+                Length = 20,
+                Position = 24
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "CallStatus"
+                    }
+                },
+                Length = 1,
+                Position = 2
+
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "CauseForOutput"
+                    }
+                },
+                Length = 1,
+                Position = 3
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ACategory"
+                    }
+                },
+                Length = 2,
+                Position = 44
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "BCategory"
+                    }
+                },
+                Length = 2,
+                Position = 46
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ChargedParty"
+                    }
+                },
+                Length = 1,
+                Position = 48
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "DateForStartCharging",
+                        Parser = new DateFromTextParser
+                        {
+                            FieldName = "DateForStartCharging",
+                            DateFormat = "yyMMdd"
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 49
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TimeForStartCharging",
+                        Parser = new TimeFromTextParser
+                        {
+                            FieldName = "TimeForStartCharging",
+                            Format = "hhmmss"
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 55
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ChargeableDuration",
+                        Parser = new NumberFromTextParser
+                        {
+                            FieldName = "ChargeableDuration",
+                            NumberType = NumberType.Int
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 61
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "FaultCode"
+                    }
+                },
+                Length = 5,
+                Position = 67
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ExchangeIdentity"
+                    }
+                },
+                Length = 15,
+                Position = 72
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "RecordNumber",
+                        Parser = new NumberFromTextParser
+                        {
+                            NumberType = NumberType.Int,
+                            FieldName = "RecordNumber"
+                        }
+                    }
+                },
+                Length = 2,
+                Position = 87
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TariffClass"
+                    }
+                },
+                Length = 3,
+                Position = 89
+            });
+
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TariffSwitchingIndicator"
+                    }
+                },
+                Length = 1,
+                Position = 92
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "OriginForCharging"
+                    }
+                },
+                Length = 4,
+                Position = 93
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "OutgoingRoute"
+                    }
+                },
+                Length = 7,
+                Position = 97
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "IncomingRoute"
+                    }
+                },
+                Length = 7,
+                Position = 104
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "Reserved"
+                    }
+                },
+                Length = 4,
+                Position = 111
+            });
+
+            return fieldParsers;
+        }
+        private List<PositionedFieldParser> Get_PositionedFieldParsers_03_Ogero_Call()
+        {
+            List<PositionedFieldParser> fieldParsers = new List<PositionedFieldParser>();
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ANumber"
+                    }
+                },
+                Length = 20,
+                Position = 4
+            });
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "BNumber"
+                    }
+                },
+                Length = 20,
+                Position = 24
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "CallStatus"
+                    }
+                },
+                Length = 1,
+                Position = 2
+
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "CauseForOutput"
+                    }
+                },
+                Length = 1,
+                Position = 3
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ACategory"
+                    }
+                },
+                Length = 2,
+                Position = 44
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "BCategory"
+                    }
+                },
+                Length = 2,
+                Position = 46
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ChargedParty"
+                    }
+                },
+                Length = 1,
+                Position = 48
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "DateForStartCharging",
+                        Parser = new DateFromTextParser
+                        {
+                            FieldName = "DateForStartCharging",
+                            DateFormat = "yyMMdd"
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 49
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TimeForStartCharging",
+                        Parser = new TimeFromTextParser
+                        {
+                            FieldName = "TimeForStartCharging",
+                            Format = "hhmmss"
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 55
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ChargeableDuration",
+                        Parser = new NumberFromTextParser
+                        {
+                            FieldName = "ChargeableDuration",
+                            NumberType = NumberType.Int
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 61
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "FaultCode"
+                    }
+                },
+                Length = 5,
+                Position = 67
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ExchangeIdentity"
+                    }
+                },
+                Length = 15,
+                Position = 72
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "RecordNumber",
+                        Parser = new NumberFromTextParser
+                        {
+                            NumberType = NumberType.Int,
+                            FieldName = "RecordNumber"
+                        }
+                    }
+                },
+                Length = 2,
+                Position = 87
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TariffClass"
+                    }
+                },
+                Length = 3,
+                Position = 89
+            });
+
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TariffSwitchingIndicator"
+                    }
+                },
+                Length = 1,
+                Position = 92
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "OriginForCharging"
+                    }
+                },
+                Length = 4,
+                Position = 93
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "OutgoingRoute"
+                    }
+                },
+                Length = 7,
+                Position = 97
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "IncomingRoute"
+                    }
+                },
+                Length = 7,
+                Position = 104
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "Reserved"
+                    }
+                },
+                Length = 4,
+                Position = 111
+            });
+
+            return fieldParsers;
+        }
+        private List<PositionedFieldParser> Get_PositionedFieldParsers_04_Ogero_Call()
+        {
+            List<PositionedFieldParser> fieldParsers = new List<PositionedFieldParser>();
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ANumber"
+                    }
+                },
+                Length = 20,
+                Position = 4
+            });
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "BNumber"
+                    }
+                },
+                Length = 20,
+                Position = 24
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "CallStatus"
+                    }
+                },
+                Length = 1,
+                Position = 2
+
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "CauseForOutput"
+                    }
+                },
+                Length = 1,
+                Position = 3
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ACategory"
+                    }
+                },
+                Length = 2,
+                Position = 44
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "BCategory"
+                    }
+                },
+                Length = 2,
+                Position = 46
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ChargedParty"
+                    }
+                },
+                Length = 1,
+                Position = 48
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "DateForStartCharging",
+                        Parser = new DateFromTextParser
+                        {
+                            FieldName = "DateForStartCharging",
+                            DateFormat = "yyMMdd"
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 49
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TimeForStartCharging",
+                        Parser = new TimeFromTextParser
+                        {
+                            FieldName = "TimeForStartCharging",
+                            Format = "hhmmss"
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 55
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ChargeableDuration",
+                        Parser = new NumberFromTextParser
+                        {
+                            FieldName = "ChargeableDuration",
+                            NumberType = NumberType.Int
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 61
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "FaultCode"
+                    }
+                },
+                Length = 5,
+                Position = 67
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ExchangeIdentity"
+                    }
+                },
+                Length = 15,
+                Position = 72
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "RecordNumber",
+                        Parser = new NumberFromTextParser
+                        {
+                            NumberType = NumberType.Int,
+                            FieldName = "RecordNumber"
+                        }
+                    }
+                },
+                Length = 2,
+                Position = 87
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TariffClass"
+                    }
+                },
+                Length = 3,
+                Position = 89
+            });
+
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TariffSwitchingIndicator"
+                    }
+                },
+                Length = 1,
+                Position = 92
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "OriginForCharging"
+                    }
+                },
+                Length = 4,
+                Position = 93
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "OutgoingRoute"
+                    }
+                },
+                Length = 7,
+                Position = 97
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "IncomingRoute"
+                    }
+                },
+                Length = 7,
+                Position = 104
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "Reserved"
+                    }
+                },
+                Length = 4,
+                Position = 111
+            });
+
+            return fieldParsers;
+        }
+        private List<PositionedFieldParser> Get_PositionedFieldParsers_05_Ogero_Call()
+        {
+            List<PositionedFieldParser> fieldParsers = new List<PositionedFieldParser>();
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ANumber"
+                    }
+                },
+                Length = 20,
+                Position = 4
+            });
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "BNumber"
+                    }
+                },
+                Length = 20,
+                Position = 24
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "CallStatus"
+                    }
+                },
+                Length = 1,
+                Position = 2
+
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "CauseForOutput"
+                    }
+                },
+                Length = 1,
+                Position = 3
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ACategory"
+                    }
+                },
+                Length = 2,
+                Position = 44
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "BCategory"
+                    }
+                },
+                Length = 2,
+                Position = 46
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ChargedParty"
+                    }
+                },
+                Length = 1,
+                Position = 48
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "DateForStartCharging",
+                        Parser = new DateFromTextParser
+                        {
+                            FieldName = "DateForStartCharging",
+                            DateFormat = "yyMMdd"
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 49
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TimeForStartCharging",
+                        Parser = new TimeFromTextParser
+                        {
+                            FieldName = "TimeForStartCharging",
+                            Format = "hhmmss"
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 55
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ChargeableDuration",
+                        Parser = new NumberFromTextParser
+                        {
+                            FieldName = "ChargeableDuration",
+                            NumberType = NumberType.Int
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 61
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "FaultCode"
+                    }
+                },
+                Length = 5,
+                Position = 67
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ExchangeIdentity"
+                    }
+                },
+                Length = 15,
+                Position = 72
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "RecordNumber",
+                        Parser = new NumberFromTextParser
+                        {
+                            NumberType = NumberType.Int,
+                            FieldName = "RecordNumber"
+                        }
+                    }
+                },
+                Length = 2,
+                Position = 87
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TariffClass"
+                    }
+                },
+                Length = 3,
+                Position = 89
+            });
+
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TariffSwitchingIndicator"
+                    }
+                },
+                Length = 1,
+                Position = 92
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "OriginForCharging"
+                    }
+                },
+                Length = 4,
+                Position = 93
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "OutgoingRoute"
+                    }
+                },
+                Length = 7,
+                Position = 97
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "IncomingRoute"
+                    }
+                },
+                Length = 7,
+                Position = 104
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "Reserved"
+                    }
+                },
+                Length = 4,
+                Position = 111
+            });
+
+            return fieldParsers;
+        }
+        private List<PositionedFieldParser> Get_PositionedFieldParsers_06_Ogero_Call()
+        {
+            List<PositionedFieldParser> fieldParsers = new List<PositionedFieldParser>();
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ANumber"
+                    }
+                },
+                Length = 20,
+                Position = 4
+            });
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "BNumber"
+                    }
+                },
+                Length = 20,
+                Position = 24
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "CallStatus"
+                    }
+                },
+                Length = 1,
+                Position = 2
+
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "CauseForOutput"
+                    }
+                },
+                Length = 1,
+                Position = 3
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ACategory"
+                    }
+                },
+                Length = 2,
+                Position = 44
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "BCategory"
+                    }
+                },
+                Length = 2,
+                Position = 46
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ChargedParty"
+                    }
+                },
+                Length = 1,
+                Position = 48
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "DateForStartCharging",
+                        Parser = new DateFromTextParser
+                        {
+                            FieldName = "DateForStartCharging",
+                            DateFormat = "yyMMdd"
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 49
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TimeForStartCharging",
+                        Parser = new TimeFromTextParser
+                        {
+                            FieldName = "TimeForStartCharging",
+                            Format = "hhmmss"
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 55
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ChargeableDuration",
+                        Parser = new NumberFromTextParser
+                        {
+                            FieldName = "ChargeableDuration",
+                            NumberType = NumberType.Int
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 61
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "FaultCode"
+                    }
+                },
+                Length = 5,
+                Position = 67
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ExchangeIdentity"
+                    }
+                },
+                Length = 15,
+                Position = 72
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "RecordNumber",
+                        Parser = new NumberFromTextParser
+                        {
+                            NumberType = NumberType.Int,
+                            FieldName = "RecordNumber"
+                        }
+                    }
+                },
+                Length = 2,
+                Position = 87
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TariffClass"
+                    }
+                },
+                Length = 3,
+                Position = 89
+            });
+
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TariffSwitchingIndicator"
+                    }
+                },
+                Length = 1,
+                Position = 92
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "OriginForCharging"
+                    }
+                },
+                Length = 4,
+                Position = 93
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "OutgoingRoute"
+                    }
+                },
+                Length = 7,
+                Position = 97
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "IncomingRoute"
+                    }
+                },
+                Length = 7,
+                Position = 104
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "Reserved"
+                    }
+                },
+                Length = 4,
+                Position = 111
+            });
+
+            return fieldParsers;
+        }
+        private List<PositionedFieldParser> Get_PositionedFieldParsers_07_Ogero_Call()
+        {
+            List<PositionedFieldParser> fieldParsers = new List<PositionedFieldParser>();
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ANumber"
+                    }
+                },
+                Length = 20,
+                Position = 4
+            });
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "BNumber"
+                    }
+                },
+                Length = 20,
+                Position = 24
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "CallStatus"
+                    }
+                },
+                Length = 1,
+                Position = 2
+
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "CauseForOutput"
+                    }
+                },
+                Length = 1,
+                Position = 3
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ACategory"
+                    }
+                },
+                Length = 2,
+                Position = 44
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "BCategory"
+                    }
+                },
+                Length = 2,
+                Position = 46
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ChargedParty"
+                    }
+                },
+                Length = 1,
+                Position = 48
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "DateForStartCharging",
+                        Parser = new DateFromTextParser
+                        {
+                            FieldName = "DateForStartCharging",
+                            DateFormat = "yyMMdd"
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 49
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TimeForStartCharging",
+                        Parser = new TimeFromTextParser
+                        {
+                            FieldName = "TimeForStartCharging",
+                            Format = "hhmmss"
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 55
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ChargeableDuration",
+                        Parser = new NumberFromTextParser
+                        {
+                            FieldName = "ChargeableDuration",
+                            NumberType = NumberType.Int
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 61
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "FaultCode"
+                    }
+                },
+                Length = 5,
+                Position = 67
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ExchangeIdentity"
+                    }
+                },
+                Length = 15,
+                Position = 72
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "RecordNumber",
+                        Parser = new NumberFromTextParser
+                        {
+                            NumberType = NumberType.Int,
+                            FieldName = "RecordNumber"
+                        }
+                    }
+                },
+                Length = 2,
+                Position = 87
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TariffClass"
+                    }
+                },
+                Length = 3,
+                Position = 89
+            });
+
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TariffSwitchingIndicator"
+                    }
+                },
+                Length = 1,
+                Position = 92
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "OriginForCharging"
+                    }
+                },
+                Length = 4,
+                Position = 93
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "OutgoingRoute"
+                    }
+                },
+                Length = 7,
+                Position = 97
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "IncomingRoute"
+                    }
+                },
+                Length = 7,
+                Position = 104
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "Reserved"
+                    }
+                },
+                Length = 4,
+                Position = 111
+            });
+
+            return fieldParsers;
+        }
+        private List<PositionedFieldParser> Get_PositionedFieldParsers_08_Ogero_Call()
+        {
+            List<PositionedFieldParser> fieldParsers = new List<PositionedFieldParser>();
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ANumber"
+                    }
+                },
+                Length = 20,
+                Position = 4
+            });
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "BNumber"
+                    }
+                },
+                Length = 20,
+                Position = 24
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "CallStatus"
+                    }
+                },
+                Length = 1,
+                Position = 2
+
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "CauseForOutput"
+                    }
+                },
+                Length = 1,
+                Position = 3
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ACategory"
+                    }
+                },
+                Length = 2,
+                Position = 44
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "BCategory"
+                    }
+                },
+                Length = 2,
+                Position = 46
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ChargedParty"
+                    }
+                },
+                Length = 1,
+                Position = 48
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "DateForStartCharging",
+                        Parser = new DateFromTextParser
+                        {
+                            FieldName = "DateForStartCharging",
+                            DateFormat = "yyMMdd"
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 49
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TimeForStartCharging",
+                        Parser = new TimeFromTextParser
+                        {
+                            FieldName = "TimeForStartCharging",
+                            Format = "hhmmss"
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 55
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ChargeableDuration",
+                        Parser = new NumberFromTextParser
+                        {
+                            FieldName = "ChargeableDuration",
+                            NumberType = NumberType.Int
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 61
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "FaultCode"
+                    }
+                },
+                Length = 5,
+                Position = 67
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ExchangeIdentity"
+                    }
+                },
+                Length = 15,
+                Position = 72
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "RecordNumber",
+                        Parser = new NumberFromTextParser
+                        {
+                            NumberType = NumberType.Int,
+                            FieldName = "RecordNumber"
+                        }
+                    }
+                },
+                Length = 2,
+                Position = 87
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TariffClass"
+                    }
+                },
+                Length = 3,
+                Position = 89
+            });
+
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TariffSwitchingIndicator"
+                    }
+                },
+                Length = 1,
+                Position = 92
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "OriginForCharging"
+                    }
+                },
+                Length = 4,
+                Position = 93
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "OutgoingRoute"
+                    }
+                },
+                Length = 7,
+                Position = 97
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "IncomingRoute"
+                    }
+                },
+                Length = 7,
+                Position = 104
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "Reserved"
+                    }
+                },
+                Length = 4,
+                Position = 111
+            });
+
+            return fieldParsers;
+        }
+        private List<PositionedFieldParser> Get_PositionedFieldParsers_09_Ogero_Call()
+        {
+            List<PositionedFieldParser> fieldParsers = new List<PositionedFieldParser>();
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ANumber"
+                    }
+                },
+                Length = 20,
+                Position = 4
+            });
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "BNumber"
+                    }
+                },
+                Length = 20,
+                Position = 24
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "CallStatus"
+                    }
+                },
+                Length = 1,
+                Position = 2
+
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "CauseForOutput"
+                    }
+                },
+                Length = 1,
+                Position = 3
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ACategory"
+                    }
+                },
+                Length = 2,
+                Position = 44
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "BCategory"
+                    }
+                },
+                Length = 2,
+                Position = 46
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ChargedParty"
+                    }
+                },
+                Length = 1,
+                Position = 48
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "DateForStartCharging",
+                        Parser = new DateFromTextParser
+                        {
+                            FieldName = "DateForStartCharging",
+                            DateFormat = "yyMMdd"
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 49
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TimeForStartCharging",
+                        Parser = new TimeFromTextParser
+                        {
+                            FieldName = "TimeForStartCharging",
+                            Format = "hhmmss"
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 55
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ChargeableDuration",
+                        Parser = new NumberFromTextParser
+                        {
+                            FieldName = "ChargeableDuration",
+                            NumberType = NumberType.Int
+                        }
+                    }
+                },
+                Length = 6,
+                Position = 61
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "FaultCode"
+                    }
+                },
+                Length = 5,
+                Position = 67
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "ExchangeIdentity"
+                    }
+                },
+                Length = 15,
+                Position = 72
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "RecordNumber",
+                        Parser = new NumberFromTextParser
+                        {
+                            NumberType = NumberType.Int,
+                            FieldName = "RecordNumber"
+                        }
+                    }
+                },
+                Length = 2,
+                Position = 87
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TariffClass"
+                    }
+                },
+                Length = 3,
+                Position = 89
+            });
+
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "TariffSwitchingIndicator"
+                    }
+                },
+                Length = 1,
+                Position = 92
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "OriginForCharging"
+                    }
+                },
+                Length = 4,
+                Position = 93
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "OutgoingRoute"
+                    }
+                },
+                Length = 7,
+                Position = 97
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "IncomingRoute"
+                    }
+                },
+                Length = 7,
+                Position = 104
+            });
+
+            fieldParsers.Add(new PositionedFieldParser
+            {
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new StringParser
+                    {
+                        FieldName = "Reserved"
+                    }
+                },
+                Length = 4,
+                Position = 111
+            });
 
             return fieldParsers;
         }
