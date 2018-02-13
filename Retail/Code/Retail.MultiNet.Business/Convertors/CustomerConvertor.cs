@@ -229,7 +229,7 @@ namespace Retail.MultiNet.Business.Convertors
                 CNICExpiryDate = row[CNICExpiryDateColumnName] == DBNull.Value ? default(DateTime?) : (DateTime)row[CNICExpiryDateColumnName],
                 NTN = GetStringRowValue(row, NTNColumnName),
                 BillingPeriod = row[BillingPeriodColumnName] == DBNull.Value ? 0 : (int)row[BillingPeriodColumnName],
-                DueDate = row[DueDateColumnName] == DBNull.Value ? default(DateTime?) : (DateTime)row[BillingPeriodColumnName],
+                DueDate = row[DueDateColumnName] == DBNull.Value ? default(DateTime?) : (DateTime)row[DueDateColumnName],
                 GPSiteID = sourceId
             };
 
