@@ -26,10 +26,7 @@ namespace TOne.WhS.Routing.Business
             _routeRule = routeRule;
             _ruleTreesForRouteOptions = ruleTreesForRouteOptions;
 
-            SupplierFilterSettings supplierFilterSettings = new SupplierFilterSettings
-            {
-                RoutingProductId = routeRule.Criteria.GetRoutingProductId()
-            };
+            SupplierFilterSettings supplierFilterSettings = new SupplierFilterSettings { RoutingProductId = routeRule.Criteria.GetRoutingProductId() };
             _filteredSupplierIds = TOne.WhS.BusinessEntity.Business.SupplierGroupContext.GetFilteredSupplierIds(supplierFilterSettings);
         }
 
