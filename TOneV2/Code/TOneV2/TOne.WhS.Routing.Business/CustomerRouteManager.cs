@@ -270,11 +270,14 @@ namespace TOne.WhS.Routing.Business
 
             private void FilterCustomerRoutes(IEnumerable<Entities.CustomerRoute> customerRoutes, Vanrise.Entities.DataRetrievalInput<CustomerRouteQuery> input)
             {
-                if (input == null || input.Query == null || input.Query.IncludeBlockedSuppliers)
+                if (input == null || input.Query == null || input.Query.IncludeBlockedSuppliers || customerRoutes == null)
                     return;
 
                 foreach (var customerRoute in customerRoutes)
                 {
+                    if (customerRoute.Options == null)
+                        continue;
+
                     for (var index = customerRoute.Options.Count - 1; index >= 0; index--)
                     {
                         var routeOption = customerRoute.Options[index];
