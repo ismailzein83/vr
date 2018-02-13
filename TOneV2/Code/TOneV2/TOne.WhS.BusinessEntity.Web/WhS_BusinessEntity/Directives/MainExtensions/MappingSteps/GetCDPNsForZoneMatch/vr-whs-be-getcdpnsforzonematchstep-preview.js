@@ -106,7 +106,7 @@ app.directive('vrWhsBeGetcdpnsforzonematchstepPreview', ['UtilsService', 'VRUIUt
             function fillInputFieldsArray(data, array) {
 
                 array.push({
-                    FieldName: "Efective Time",
+                    FieldName: "Effective Time",
                     Value: data.EffectiveTime
                 });
                 array.push({

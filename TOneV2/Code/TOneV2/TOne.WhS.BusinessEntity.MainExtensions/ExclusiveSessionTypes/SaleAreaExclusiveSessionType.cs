@@ -48,11 +48,11 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             int targetIdValue;
 
             if (!Int32.TryParse(id, out targetIdValue))
-                throw new DataIntegrityValidationException(string.Format("Traget ID is in wrong Format : {0}", context.TargetId));
+                throw new DataIntegrityValidationException(string.Format("Target ID is in wrong Format : {0}", context.TargetId));
 
             ExclusiveSessionTargetIdPrefixEnum prefixConstant;
             if (!Enum.TryParse(targetPrefix, out prefixConstant))
-                throw new DataIntegrityValidationException(string.Format("Traget ID is in wrong Format : {0}", context.TargetId));
+                throw new DataIntegrityValidationException(string.Format("Target ID is in wrong Format : {0}", context.TargetId));
 
             switch (prefixConstant)
             {

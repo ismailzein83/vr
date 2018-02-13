@@ -105,7 +105,7 @@ app.directive('vrWhsRoutingRouterulecriteriaSelector', ['WhS_Routing_RouteRuleAP
 
             if (attrs.ismultipleselection != undefined) {
                 multipleselection = "ismultipleselection";
-                label = "Rule Criterias";
+                label = "Rule Criteria";
             }
 
             var hideremoveicon;

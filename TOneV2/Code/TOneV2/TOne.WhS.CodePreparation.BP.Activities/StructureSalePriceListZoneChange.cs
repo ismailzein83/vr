@@ -336,7 +336,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     {
                         CountryManager countryManager = new CountryManager();
                         string countryName = countryManager.GetCountryName(countryAction.CountryId);
-                        throw new DataIntegrityValidationException(string.Format("Country {0} is sold to customer {1} but dont have a record in the database", countryName, customer.Name));
+                        throw new DataIntegrityValidationException(string.Format("Country {0} is sold to customer {1} but don't have a record in the database", countryName, customer.Name));
                     }
                     DateTime countrySellDate = customerCountry.BED;
 

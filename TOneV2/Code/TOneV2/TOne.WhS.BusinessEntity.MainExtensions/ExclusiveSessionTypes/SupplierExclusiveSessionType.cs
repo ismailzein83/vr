@@ -41,7 +41,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                 return "Supplier Pricelist: "+carrierAccountManager.GetCarrierAccountName(carrierAccountId);
             }
             else
-                throw new DataIntegrityValidationException(string.Format("Traget ID is in wrong Format : {0}", context.TargetId));
+                throw new DataIntegrityValidationException(string.Format("Target ID is in wrong Format : {0}", context.TargetId));
         }
     }
 }

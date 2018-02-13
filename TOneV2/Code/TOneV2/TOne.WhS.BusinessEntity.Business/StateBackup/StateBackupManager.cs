@@ -94,7 +94,7 @@ namespace TOne.WhS.BusinessEntity.Business
             }
             else
             {
-                updateOperationOutput.Message = "An Error Occured";
+                updateOperationOutput.Message = "An Error Occurred";
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             }
             return updateOperationOutput;
