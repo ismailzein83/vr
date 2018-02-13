@@ -239,10 +239,11 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                         //  caseManagementObject.ReasonId = reasonSelectorAPI.getSelectedIds();
                         caseManagementObject.WorkGroupId = workGroupSelectorAPI.getSelectedIds();
                     }
+                    var attachments = attachmentGridAPI.getData();
                     caseManagementObject.CarrierReference = $scope.scopeModel.carrierReference;
                     caseManagementObject.Description = $scope.scopeModel.description;
                     caseManagementObject.StatusId = statusSelectorAPI.getSelectedIds();
-                    caseManagementObject.Attachments = attachmentGridAPI.getData();
+                    caseManagementObject.Attachments = attachments == undefined ? null : attachments;
                     caseManagementObject.TicketDetails = getCodeNumberListData();
                     caseManagementObject.SaleZoneId = zoneId;
                     caseManagementObject.ContactName = $scope.scopeModel.contactName;

@@ -227,6 +227,7 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                     if (!$scope.scopeModel.isEditMode) {
                         caseManagementObject.WorkGroupId = workGroupSelectorAPI.getSelectedIds();
                     }
+                    var attachments = attachmentGridAPI.getData();
                     caseManagementObject.SupplierId = supplierSelectorAPI.getSelectedIds();
                     caseManagementObject.SupplierZoneId = zoneId;
                     caseManagementObject.FromDate = $scope.scopeModel.fromDate;
@@ -234,7 +235,7 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                     caseManagementObject.Attempts = $scope.scopeModel.attempts;
                     caseManagementObject.ASR = $scope.scopeModel.asr;
                     caseManagementObject.TicketDetails = getCodeNumberListData();
-                    caseManagementObject.Attachments = attachmentGridAPI.getData();
+                    caseManagementObject.Attachments = attachments == undefined ? null : attachments;
                     caseManagementObject.ACD = $scope.scopeModel.acd;
                     caseManagementObject.CarrierReference = $scope.scopeModel.carrierReference;
                     caseManagementObject.Description = $scope.scopeModel.description;
