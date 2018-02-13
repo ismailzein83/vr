@@ -24,6 +24,8 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
         var zoneItem;
         var settings;
         var ownerCurrencyId;
+        var saleAreaSetting;
+        var ownerType;
 
         function initializeController() {
 
@@ -76,6 +78,8 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
                 zoneItem = query.zoneItem;
                 settings = query.settings;
                 ownerCurrencyId = query.ownerCurrencyId;
+                saleAreaSetting = query.saleAreaSetting;
+                ownerType = query.ownerType;
 
                 $scope.isCountryEnded = query.zoneItem.IsCountryEnded;
                 $scope.isZonePendingClosed = query.zoneItem.IsZonePendingClosed;
@@ -116,6 +120,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
                             otherRate.CurrentRateBED = currentOtherRate.BED;
                             otherRate.CurrentRateEED = currentOtherRate.EED;
                             otherRate.CurrentRateNewEED = currentOtherRate.EED;
+                            WhS_Sales_RatePlanUtilsService.setNormalRateIconProperties(otherRate, ownerType, saleAreaSetting);
                         }
                     }
 

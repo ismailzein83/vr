@@ -2,9 +2,9 @@
 
     'use strict';
 
-    RatePlanUtilsService.$inject = ['UtilsService', 'VRValidationService', 'VRDateTimeService'];
+    RatePlanUtilsService.$inject = ['UtilsService', 'VRValidationService', 'VRDateTimeService', 'WhS_BE_SalePriceListOwnerTypeEnum', 'WhS_BE_PrimarySaleEntityEnum'];
 
-    function RatePlanUtilsService(UtilsService, VRValidationService, VRDateTimeService) {
+    function RatePlanUtilsService(UtilsService, VRValidationService, VRDateTimeService, WhS_BE_SalePriceListOwnerTypeEnum, WhS_BE_PrimarySaleEntityEnum) {
         return {
             onNewRateBlurred: onNewRateBlurred,
             onNewRateChanged: onNewRateChanged,
@@ -15,9 +15,27 @@
             isSameNewService: isSameNewService,
             isStringEmpty: isStringEmpty,
             getNewRateBED: getNewRateBED,
-            getMaxDate: getMaxDate
+            getMaxDate: getMaxDate,
+            setNormalRateIconProperties: setNormalRateIconProperties
         };
-
+        function setNormalRateIconProperties(dataItem, ownerType, saleAreaSetting) {
+            if (ownerType === WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value)
+                return;
+            if (dataItem.CurrentRate == null)
+                return;
+            if (saleAreaSetting == undefined || saleAreaSetting.PrimarySaleEntity == null)
+                return;
+            if (saleAreaSetting.PrimarySaleEntity === WhS_BE_PrimarySaleEntityEnum.SellingProduct.value) {
+                if (dataItem.IsCurrentRateEditable === true) {
+                    dataItem.iconType = 'explicit';
+                    dataItem.iconTooltip = 'Explicit';
+                }
+            }
+            else if (dataItem.IsCurrentRateEditable === false) {
+                dataItem.iconType = 'inherited';
+                dataItem.iconTooltip = 'Inherited';
+            }
+        }
         function onNewRateChanged(dataItem) {
             setRateChangeTypeIcon(dataItem);
         }

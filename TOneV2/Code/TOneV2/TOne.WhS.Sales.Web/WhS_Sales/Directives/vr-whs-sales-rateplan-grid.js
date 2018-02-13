@@ -198,7 +198,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             for (var i = 0; i < routeOptionsForView.length; i++) {
                                 if (routeOptionsForView[i].ConvertedSupplierRate > rate && routeOptionsForView[i].SupplierStatus != WhS_Sales_SupplierStatusEnum.Block.value)
                                     array.push(i);
-                        }
+                            }
 
                             if (array.length == routeOptions.length) {
                                 setColorOfRouteOptions(routeOptionsForView, null);
@@ -326,7 +326,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                                 increasedRateDayOffset: increasedRateDayOffset,
                                 decreasedRateDayOffset: decreasedRateDayOffset
                             },
-                            ownerCurrencyId: gridQuery.CurrencyId
+                            ownerType: gridQuery.OwnerType,
+                            ownerCurrencyId: gridQuery.CurrencyId,
+                            saleAreaSetting: gridQuery.SaleAreaSettings
                         };
                         return rateTypeGridAPI.loadGrid(query);
                     }
@@ -583,7 +585,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 zoneItem.currentRateEED = zoneItem.CurrentRateEED; // Maintains the original value of zoneItem.CurrentRateEED in case the user deletes the new rate
                 setRouteOptionProperties(zoneItem);
                 setServiceViewerLoad(zoneItem);
-                setNormalRateIconProperties(zoneItem);
+                WhS_Sales_RatePlanUtilsService.setNormalRateIconProperties(zoneItem, gridQuery.OwnerType, gridQuery.SaleAreaSettings);
                 setCurrencyIconProperties(zoneItem);
 
 
@@ -772,24 +774,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         VRUIUtilsService.callDirectiveLoad(zoneItem.serviceViewerAPI, serviceViewerPayload, zoneItem.serviceViewerLoadDeferred);
                     };
                 }
-                function setNormalRateIconProperties(dataItem) {
-                    if (gridQuery.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value)
-                        return;
-                    if (dataItem.CurrentRate == null)
-                        return;
-                    if (gridQuery.SaleAreaSettings == undefined || gridQuery.SaleAreaSettings.PrimarySaleEntity == null)
-                        return;
-                    if (gridQuery.SaleAreaSettings.PrimarySaleEntity == WhS_BE_PrimarySaleEntityEnum.SellingProduct.value) {
-                        if (dataItem.IsCurrentRateEditable === true) {
-                            dataItem.iconType = 'explicit';
-                            dataItem.iconTooltip = 'Explicit';
-                        }
-                    }
-                    else if (dataItem.IsCurrentRateEditable === false) {
-                        dataItem.iconType = 'inherited';
-                        dataItem.iconTooltip = 'Inherited';
-                    }
-                }
+              
                 function setCurrencyIconProperties(dataItem) {
                     if (gridQuery.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value)
                         return;
