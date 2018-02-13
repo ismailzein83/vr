@@ -91,5 +91,19 @@ namespace Vanrise.GenericData.Web.Controllers
             return _manager.GetGenericBEOnBeforeInsertHandlerSettingsConfigs();
         }
 
+        [HttpGet]
+        [Route("GetGenericBESaveConditionSettingsConfigs")]
+        public IEnumerable<GenericBESaveConditionSettingsConfig> GetGenericBESaveConditionSettingsConfigs()
+        {
+            return _manager.GetGenericBESaveConditionSettingsConfigs();
+        }
+
+        [HttpGet]
+        [Route("GetGenericBEConditionSettingsConfigs")]
+        public IEnumerable<GenericBEConditionSettingsConfig> GetGenericBEConditionSettingsConfigs()
+        {
+            return _manager.GetGenericBEConditionSettingsConfigs();
+        }
+
     }
 }

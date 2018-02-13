@@ -15,6 +15,9 @@
         var afterSaveHandlerEditorAPI;
         var afterSaveHandlerEditorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var saveConditionEditorAPI;
+        var saveConditionEditorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         loadParameters();
         defineScope();
         load();
@@ -34,6 +37,11 @@
             $scope.scopeModel.onGenericBEAfterSaveHandlerSettingsReady = function (api) {
                 afterSaveHandlerEditorAPI = api;
                 afterSaveHandlerEditorReadyPromiseDeferred.resolve();
+            };
+
+            $scope.scopeModel.onGenericBESaveConditionSettingsReady = function (api) {
+                saveConditionEditorAPI = api;
+                saveConditionEditorReadyPromiseDeferred.resolve();
             };
 
 
@@ -86,7 +94,20 @@
                 }
 
 
-                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadAfterSaveHandlerEditorSettings]).then(function () {
+                function loadSaveConditionHandlerEditorSettings() {
+                    var loadSaveConditionSettingsPromiseDeferred = UtilsService.createPromiseDeferred();
+                    saveConditionEditorReadyPromiseDeferred.promise.then(function () {
+                        var saveConditionPayload = {
+                            settings: conditionalHandler != undefined && conditionalHandler.Condition || undefined,
+                            context: getContext()
+                        };
+
+                        VRUIUtilsService.callDirectiveLoad(saveConditionEditorAPI, saveConditionPayload, loadSaveConditionSettingsPromiseDeferred);
+                    });
+                    return loadSaveConditionSettingsPromiseDeferred.promise;
+                }
+
+                return UtilsService.waitMultipleAsyncOperations([loadStaticData, setTitle, loadAfterSaveHandlerEditorSettings, loadSaveConditionHandlerEditorSettings]).then(function () {
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
                 }).catch(function (error) {
@@ -102,7 +123,7 @@
                 ConditionalAfterSaveHandlerItemId: conditionalHandler != undefined ? conditionalHandler.ConditionalAfterSaveHandlerItemId : UtilsService.guid(),
                 Name: $scope.scopeModel.name,
                 Handler: afterSaveHandlerEditorAPI.getData(),
-                Condition: null
+                Condition: saveConditionEditorAPI.getData()
             };
         }
 

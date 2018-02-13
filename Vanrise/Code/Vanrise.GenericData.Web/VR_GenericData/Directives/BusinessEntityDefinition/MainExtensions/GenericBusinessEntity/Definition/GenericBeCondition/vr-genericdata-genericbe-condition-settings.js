@@ -2,30 +2,31 @@
 
     'use strict';
 
-    editorDefinitionSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBEDefinitionAPIService'];
+    genericConditionSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_GenericBEDefinitionAPIService'];
 
-    function editorDefinitionSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_GenericBEDefinitionAPIService) {
+    function genericConditionSettingsDirective(UtilsService, VRUIUtilsService, VR_GenericData_GenericBEDefinitionAPIService) {
         return {
             restrict: "E",
             scope: {
                 onReady: "=",
                 normalColNum: '@',
                 label: '@',
-                customvalidate: '='
+                customvalidate: '=',
+                isrequired: '='
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new EditorSettings($scope, ctrl, $attrs);
+                var ctor = new ConditionSettings($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
-            controllerAs: "editorDefinitionCtrl",
+            controllerAs: "genericConditionCtrl",
             bindToController: true,
             template: function (element, attrs) {
                 return getTamplate(attrs);
             }
         };
 
-        function EditorSettings($scope, ctrl, $attrs) {
+        function ConditionSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var selectorAPI;
@@ -67,6 +68,7 @@
                     var settings;
 
                     if (payload != undefined) {
+                        console.log(payload)
                         settings = payload.settings;
                         context = payload.context;
                     }
@@ -76,11 +78,11 @@
                         promises.push(loadDirectivePromise);
                     }
 
-                    var getSettingsConfigsPromise = getGenericBEEditorDefinitionSettingsConfigs();
+                    var getSettingsConfigsPromise = getGenericBEConditionSettingsConfigs();
                     promises.push(getSettingsConfigsPromise);
 
-                    function getGenericBEEditorDefinitionSettingsConfigs() {
-                        return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEEditorDefinitionSettingsConfigs().then(function (response) {
+                    function getGenericBEConditionSettingsConfigs() {
+                        return VR_GenericData_GenericBEDefinitionAPIService.GetGenericBEConditionSettingsConfigs().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {
                                     $scope.scopeModel.templateConfigs.push(response[i]);
@@ -102,8 +104,8 @@
                             var directivePayload = {
                                 context: getContext()
                             };
-                            if (settings != undefined) {
-                                directivePayload.settings = settings;
+                            if (settings != undefined && settings.FilterGroup != undefined) {
+                                directivePayload.filterGroup = settings.FilterGroup;
                             };
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
@@ -139,30 +141,33 @@
         }
 
         function getTamplate(attrs) {
-            var label = "Editor Type";
+            var label = "Condition";
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
+            var hideremoveicon = "";
+            if (attrs.hideremoveicon != undefined)
+                hideremoveicon = "hideremoveicon";
             var template =
                 '<vr-row>'
-                    + '<vr-columns colnum="{{editorDefinitionCtrl.normalColNum}}">'
+                    + '<vr-columns colnum="{{genericConditionCtrl.normalColNum}}">'
                         + ' <vr-select on-ready="scopeModel.onSelectorReady"'
                             + ' datasource="scopeModel.templateConfigs"'
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'
                             + ' datavaluefield="ExtensionConfigurationId"'
                             + ' datatextfield="Title"'
                             + ' label="' + label + '"'
-                            + ' isrequired="true"'
-                            + 'hideremoveicon>'
+                            + ' isrequired="genericConditionCtrl.isrequired"'
+                            + ' ' + hideremoveicon + ' >'
                         + '</vr-select>'
                     + ' </vr-columns>'
                 + '</vr-row>'
                 + '<vr-directivewrapper ng-if="scopeModel.selectedTemplateConfig != undefined" directive="scopeModel.selectedTemplateConfig.Editor"'
-                        + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{editorDefinitionCtrl.normalColNum}}" isrequired="editorDefinitionCtrl.isrequired" customvalidate="editorDefinitionCtrl.customvalidate">'
+                        + 'on-ready="scopeModel.onDirectiveReady" normal-col-num="{{genericConditionCtrl.normalColNum}}" isrequired="genericConditionCtrl.isrequired" customvalidate="genericConditionCtrl.customvalidate">'
                 + '</vr-directivewrapper>';
             return template;
         }
     }
 
-    app.directive('vrGenericdataGenericbeEditordefinitionSettings', editorDefinitionSettingsDirective);
+    app.directive('vrGenericdataGenericbeConditionSettings', genericConditionSettingsDirective);
 
 })(app);

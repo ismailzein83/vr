@@ -79,6 +79,8 @@
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBEOnAfterSaveHandlerSettingsConfig.cs" />
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBEOnBeforeInsertHandlerSettingsConfig.cs" />
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBEExtendedSettingsConfig.cs" />
+    <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBEConditionSettingsConfig.cs" />
+    <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBESaveConditionSettingsConfig.cs" />
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBEViewDefinitionSettingsConfig.cs" />
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\StaticBEDefinitionSettings.cs" />
     <Compile Include="BusinessEntities\GenericBEDefinitionSettings\GenericBEFilterDefinitionSettingsConfig.cs" />

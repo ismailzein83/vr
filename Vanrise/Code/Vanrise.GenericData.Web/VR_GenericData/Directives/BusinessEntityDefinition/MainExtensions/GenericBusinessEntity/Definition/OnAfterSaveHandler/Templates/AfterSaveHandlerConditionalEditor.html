@@ -1,4 +1,4 @@
-﻿<div vr-modalcontent ng-controller="VR_GenericData_AfterSaveHandlerConditionalEditorController" vr-loader="scopeModal.isLoading" width="'40%'">
+﻿<div vr-modalcontent ng-controller="VR_GenericData_AfterSaveHandlerConditionalEditorController" vr-loader="scopeModel.isLoading" width="'40%'">
     <vr-modalbody>
         <vr-form validationcontext="conditionalEditor">
             <vr-tabs>
@@ -13,6 +13,7 @@
                     <vr-genericdata-genericbe-aftersavehandler-settings on-ready="scopeModel.onGenericBEAfterSaveHandlerSettingsReady" normal-col-num="6"></vr-genericdata-genericbe-aftersavehandler-settings>
                 </vr-tab>
                 <vr-tab header="'Condition'">
+                    <vr-genericdata-genericbe-savecondition-settings on-ready="scopeModel.onGenericBESaveConditionSettingsReady" normal-col-num="6"></vr-genericdata-genericbe-savecondition-settings>
                 </vr-tab>
             </vr-tabs>
         </vr-form>

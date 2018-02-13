@@ -236,7 +236,7 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
 
 
                     promises.push(loadAfterSaveHandlerSettings());
-                    promises.push(loadBeforeInsertHandlerSettings());
+                    //promises.push(loadBeforeInsertHandlerSettings());
 
 
                     if (businessEntityDefinitionSettings != undefined) {
@@ -441,6 +441,17 @@ app.directive("vrGenericdataGenericbusinessentityEditor", ["UtilsService", "VRNo
                             data.push(dataRecordTypeFields[i]);
                         }
                         return data;
+                    },
+                    getFields: function () {
+                        var dataFields = [];
+                        for (var i = 0; i < dataRecordTypeFields.length; i++) {
+                            dataFields.push({
+                                FieldName: dataRecordTypeFields[i].Name,
+                                FieldTitle: dataRecordTypeFields[i].Title,
+                                Type: dataRecordTypeFields[i].Type
+                            });
+                        }
+                        return dataFields;
                     },
                     getActionInfos: function () {
                         var data = [];

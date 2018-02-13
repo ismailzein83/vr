@@ -12,6 +12,7 @@
         var actionModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/Editor/Templates/ActionDefinitionEditor.html";
         var gridActionModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/Editor/Templates/GridActionDefinitionEditor.html";
         var conditionalHandlerPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/OnAfterSaveHandler/Templates/AfterSaveHandlerConditionalEditor.html";
+        var conditionGroupPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/GenericBESaveCondition/MainExtensions/Templates/GenericBEConditionGroupEditor.html";
 
         return ({
             addGenericBEColumnDefinition: addGenericBEColumnDefinition,
@@ -27,7 +28,9 @@
             addGenericBEGridActionDefinition: addGenericBEGridActionDefinition,
             editGenericBEGridActionDefinition: editGenericBEGridActionDefinition,
             addGenericBEConditionalHandler: addGenericBEConditionalHandler,
-            editGenericBEConditionalHandler: editGenericBEConditionalHandler
+            editGenericBEConditionalHandler: editGenericBEConditionalHandler,
+            addGenericBEConditionGroup: addGenericBEConditionGroup,
+            editGenericBEConditionGroup:editGenericBEConditionGroup
 
         });
 
@@ -229,6 +232,33 @@
             VRModalService.showModal(conditionalHandlerPath, parameters, settings);
         }
 
+        function addGenericBEConditionGroup(onGenericBEConditionGroupAdded, context) {
+            var parameters = {
+                context: context
+
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onGenericBEConditionGroupAdded = onGenericBEConditionGroupAdded;
+            };
+
+            VRModalService.showModal(conditionGroupPath, parameters, settings);
+        }
+
+        function editGenericBEConditionGroup(onGenericBEConditionGroupUpdated, conditionGroup, context) {
+            var parameters = {
+                conditionGroup: conditionGroup,
+                context: context
+            };
+
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onGenericBEConditionGroupUpdated = onGenericBEConditionGroupUpdated;
+            };
+            VRModalService.showModal(conditionGroupPath, parameters, settings);
+        }
 
     };
 

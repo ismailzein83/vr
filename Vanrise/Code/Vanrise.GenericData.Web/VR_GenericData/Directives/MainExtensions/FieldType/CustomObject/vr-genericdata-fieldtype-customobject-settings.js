@@ -73,10 +73,10 @@
                         promises.push(loadDirectivePromise);
                     }
 
-                    var getParameterSettingsConfigsPromise = getGenericBEViewDefinitionSettingsConfigs();
+                    var getParameterSettingsConfigsPromise = getFieldCustomObjectTypeSettingsConfigs();
                     promises.push(getParameterSettingsConfigsPromise);
 
-                    function getGenericBEViewDefinitionSettingsConfigs() {
+                    function getFieldCustomObjectTypeSettingsConfigs() {
                         return VR_GenericData_DataRecordFieldAPIService.GetFieldCustomObjectTypeSettingsConfig().then(function (response) {
                             if (response != null) {
                                 for (var i = 0; i < response.length; i++) {

@@ -32,7 +32,7 @@
                     if (ctrl.datasource == undefined || ctrl.datasource.length == 0)
                         return "You Should add at least one filter.";
                     if (ctrl.datasource.length > 0 && checkDuplicateName())
-                        return "Name in each should be unique.";
+                        return "Name in each filter should be unique.";
 
                     return null;
                 };
@@ -135,7 +135,7 @@
                 for (var i = 0; i < ctrl.datasource.length; i++) {
                     var currentItem = ctrl.datasource[i];
                     for (var j = 0; j < ctrl.datasource.length; j++) {
-                        if (i != j && ctrl.datasource[j].FieldName == currentItem.FieldName)
+                        if (i != j && ctrl.datasource[j].Name == currentItem.Name)
                             return true;
                     }
                 }

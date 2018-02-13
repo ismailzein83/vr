@@ -1,0 +1,27 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-label>Operator</vr-label>
+        <vr-choices isradio selectedindex="scopeModel.operator">
+            <vr-choice>AND</vr-choice>
+            <vr-choice>OR</vr-choice>
+        </vr-choices>
+    </vr-columns>
+</vr-row>
+
+<vr-row>
+    <vr-columns width="fullrow">
+        <vr-button type="Add" data-onclick="ctrl.addConditionGroup" standalone></vr-button>
+
+        <vr-validator validate="ctrl.isValid()">
+            <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                         on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeFilter" hidegridmenu>
+                <vr-datagridcolumn headertext="'Name'" field="'Name'" disablesorting></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Applicable On Old Entity'" field="'ApplicableOnOldEntity'" disablesorting>
+                    <span ng-if="dataItem.ApplicableOnOldEntity == true "><vr-icon icontype="'true'"></vr-icon></span>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-validator>
+    </vr-columns>
+</vr-row>
+
+
