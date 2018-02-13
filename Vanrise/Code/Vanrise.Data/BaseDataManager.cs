@@ -52,6 +52,24 @@ namespace Vanrise.Data
             return value.ToString("yyyy-MM-dd HH:mm:ss.fff");
         }
 
+        public static object GetDateForBCP(DateTime? value)
+        {
+            if (!value.HasValue)
+                return null;
+
+            return GetDateForBCP(value.Value);
+        }
+
+        public static object GetDateForBCP(DateTime value)
+        {
+            return value.ToString("yyyy-MM-dd");
+        }
+
+        public static object GetTimeForBCP(Vanrise.Entities.Time value)
+        {
+            return String.Format("{0:00}:{1:00}:{2:00}.{3:000}", value.Hour, value.Minute, value.Second, value.MilliSecond);
+        }
+
         public BaseDataManager()
             : this("MainDBConnString")
         {

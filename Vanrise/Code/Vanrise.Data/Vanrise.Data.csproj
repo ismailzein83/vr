@@ -63,6 +63,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Security.Entities\Vanrise.Security.Entities.csproj">
       <Project>{04de17c7-70b4-40a1-84dd-26c91ca228ac}</Project>
       <Name>Vanrise.Security.Entities</Name>

@@ -118,7 +118,7 @@ namespace Vanrise.GenericData.SQLDataStorage
                         }
                         else
                         {
-                            string sqlDataType = columnSettings.SQLDataType.ToLower();
+                            string sqlDataType = columnSettings.SQLDataType.Trim().ToLower();
                             if (sqlDataType.Contains("decimal"))
                             {
                                 int precision = 0;
@@ -137,6 +137,10 @@ namespace Vanrise.GenericData.SQLDataStorage
                                 columnsValuesBuilder.AppendLine(String.Format("valuesBuilder.Append(record.{0} != null ? record.{0} == true ? \"1\" : \"0\" : String.Empty);", columnSettings.ValueExpression));
                             else if (sqlDataType == "datetime")
                                 columnsValuesBuilder.AppendLine(String.Format("valuesBuilder.Append(record.{0} != null && record.{0} != default(DateTime) ? Vanrise.Data.BaseDataManager.GetDateTimeForBCP(record.{0}) : String.Empty);", columnSettings.ValueExpression));
+                            else if (sqlDataType == "date")
+                                columnsValuesBuilder.AppendLine(String.Format("valuesBuilder.Append(record.{0} != null && record.{0} != default(DateTime) ? Vanrise.Data.BaseDataManager.GetDateForBCP(record.{0}) : String.Empty);", columnSettings.ValueExpression));
+                            else if (sqlDataType.StartsWith("time"))
+                                columnsValuesBuilder.AppendLine(String.Format("valuesBuilder.Append(record.{0} != null && record.{0} != default(Vanrise.Entities.Time) ? Vanrise.Data.BaseDataManager.GetTimeForBCP(record.{0}) : String.Empty);", columnSettings.ValueExpression));
                             else
                                 columnsValuesBuilder.AppendLine(String.Format("valuesBuilder.Append(record.{0} != null ? record.{0} : String.Empty);", columnSettings.ValueExpression));
                         }
