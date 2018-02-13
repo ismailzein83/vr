@@ -68,11 +68,14 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                         return UtilsService.waitMultiplePromises(promises);
                     };
                     directiveAPI.getData = function () {
-                        var obj = {
-                            $type: "Vanrise.GenericData.Entities.AttachmentFieldTypeEntityCollection,Vanrise.GenericData.Entities",
-                            $values: getAttachementFieldTypeData()
-                        };
-                        return obj;
+                        var attachments = getAttachementFieldTypeData();
+                        if (attachments != undefined) {
+                            var obj = {
+                                $type: "Vanrise.GenericData.Entities.AttachmentFieldTypeEntityCollection,Vanrise.GenericData.Entities",
+                                $values: getAttachementFieldTypeData()
+                            };
+                            return obj;
+                        }
                     };
                     return directiveAPI;
                 };
