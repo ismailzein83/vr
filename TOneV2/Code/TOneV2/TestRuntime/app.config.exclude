@@ -177,7 +177,7 @@
     <!--USE THIS KEY ONLY IF THE ROUTING PROCESS IS USED TO GENERATE CUSTOMER ROUTE FOR CURRENT TONE (TONE V1). Enable this option to link customer to sale zone services directly since there is no routing product in current TOne.-->
     <add key="TOneWhS_Routing_ZoneServicesExplicitOnCustomer" value="false"/>
     
-    <add key="ExposedConnectionStringNames" value="TOneCDRDBConnString,TOneAnalyticsDBConnString"/>
+    <add key="ExposedConnectionStringNames" value="TOneCDRDBConnString,TOneAnalyticsDBConnString,ConfigurationDBConnString"/>
   </appSettings>
   <system.codedom>
     <compilers>

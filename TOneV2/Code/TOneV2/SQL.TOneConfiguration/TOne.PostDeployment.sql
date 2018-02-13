@@ -1055,7 +1055,7 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('30EF7BEB-7F47-4171-8925-74211756FED8','CDR Store','{"$type":"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage","ConnectionStringName":"TOneCDRDBConnString","ConfigId":1}'),
 ('765BD2DA-69AA-4906-9FD8-ED088B36E76D','Analytics Store','{"$type":"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage","ConnectionStringName":"TOneAnalyticsDBConnString","ConfigId":1}'),
-('ff21ae78-f1d2-44b5-b12d-8b380f8d4f42','ToneV2Store','{"$type":"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage","ConfigId":"2aeec2de-ec44-4698-aaef-8e9dbf669d1e","ConnectionString":"Server=192.168.110.185;Database=TOneV2_Dev;User ID=Development;Password=dev!123","IsRemoteDataStore":false}')
+('ff21ae78-f1d2-44b5-b12d-8b380f8d4f42','ToneV2Store','{"$type":"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage","ConfigId":"2aeec2de-ec44-4698-aaef-8e9dbf669d1e","ConnectionStringName":"ConfigurationDBConnString","IsRemoteDataStore":false}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Settings]))
 merge	[genericdata].[DataStore] as t

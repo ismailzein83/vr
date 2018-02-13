@@ -92,7 +92,7 @@
     <add key="ImportCodePreparationTemplatePath" value="/Client/Modules/WhS_CodePreparation/Template/Code preperation sample.xls"/>
     <add key="DownloadCodeGroupTemplatePath" value="/Client/Modules/WhS_BusinessEntity/Templates/CodeGroupTemplate.xlsx"/>    
     
-    <add key="ExposedConnectionStringNames" value="TOneCDRDBConnString,TOneAnalyticsDBConnString"/>
+    <add key="ExposedConnectionStringNames" value="TOneCDRDBConnString,TOneAnalyticsDBConnString,ConfigurationDBConnString"/>
   </appSettings>
   <system.web>
     <httpHandlers>
