@@ -243,6 +243,9 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                     caseManagementObject.EscalationLevelId = ticketContactSelectorAPI.getSelectedIds();
                     caseManagementObject.SendEmail = $scope.scopeModel.sendEmail;
                     caseManagementObject.Notes = $scope.scopeModel.notes;
+                    caseManagementObject.ContactName = $scope.scopeModel.contactName;
+                    caseManagementObject.ContactEmails = $scope.scopeModel.email;
+                    caseManagementObject.PhoneNumber = $scope.scopeModel.phoneNumber;
 
                 };
 
