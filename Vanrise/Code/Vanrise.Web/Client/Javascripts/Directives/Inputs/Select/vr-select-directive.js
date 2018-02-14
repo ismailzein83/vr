@@ -38,6 +38,7 @@
                 datavaluefield: '@',
                 datatextfield: '@',
                 datadisabledfield: '@',
+                datalockfield: '@',
                 datatooltipfield: '@',
                 datastylefield: '@',
                 hidefilterbox: '@',
@@ -340,6 +341,10 @@
                     if (controller.datadisabledfield) return getObjectProperty(item, controller.datadisabledfield);
                     return false;
                 };
+                function itemLocked(item) {
+                    if (controller.datalockfield) return getObjectProperty(item, controller.datalockfield);
+                    return false;
+                };
                 function getObjectStyle(item) {
                     if (controller.datastylefield)
                         return getObjectProperty(item, controller.datastylefield);
@@ -441,6 +446,7 @@
                     getObjectStyle: getObjectStyle,
                     getTooltipValue: getTooltipValue,
                     findExsite: findExsite,
+                    itemLocked: itemLocked,
                     clearFilter: clearFilter,
                     selectFirstItem: selectFirstItem,
                     getLabel: getLabel,
@@ -860,20 +866,27 @@
                         //baseDirService.addScopeValidationMethods(ctrl, iAttrs.id, formCtrl);
 
                         ctrl.clearAllSelected = function (e, isSingle) {
-                            ctrl.selectedvalues = [];
-                            ctrl.selectedvalues.length = 0;
+                           
                             if (isSingle != undefined) {
                                 //$('.dropdown-menu').hide();
                                 ctrl.selectedvalues = undefined;
                             }
 
-                            else {
+                            else {                            
+                                ctrl.selectedvalues = ctrl.selectedvalues.filter(function (obj) {
+                                    return ctrl.itemLocked(obj);
+                                });
                                 if (ctrl.ondeselectallitems && typeof (ctrl.ondeselectallitems) == 'function') {
                                     ctrl.ondeselectallitems();
                                 }
                             }
 
                         };
+
+                        function removeItem(item) {
+                            var index = baseDirService.findExsite(ctrl.selectedvalues, ctrl.getObjectValue(item), ctrl.datavaluefield);
+                            ctrl.selectedvalues.splice(index, 1);
+                        }
 
                         function selectItem(e, item, removeselection) {
                             if (!ctrl.isMultiple()) {
@@ -901,6 +914,8 @@
                                 catch (ex) {
 
                                 }
+                                if (ctrl.itemLocked(item) == true)
+                                    return;
                                 if (index >= 0) {
                                     if (ctrl.ondeselectitem && typeof (ctrl.ondeselectitem) == 'function') {
                                         ctrl.ondeselectitem(item);
