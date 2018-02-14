@@ -352,10 +352,10 @@
         function getUsedZonesIds() {
             var zonesIds;
             var items = volumeCommitmenetItemsAPI.getData();
-            if (items.length > 0) {
+            if (items.volumeCommitmentItems.length > 0) {
                 zonesIds = [];
-                for (var i = 0; i < items.length; i++) {
-                    zonesIds = zonesIds.concat(items[i].ZoneIds);
+                for (var i = 0; i < items.volumeCommitmentItems.length; i++) {
+                    zonesIds = zonesIds.concat(items.volumeCommitmentItems[i].ZoneIds);
                 }
             }
             return zonesIds;
