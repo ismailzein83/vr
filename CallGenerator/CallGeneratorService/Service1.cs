@@ -12,6 +12,7 @@ using CallGeneratorLibrary;
 using CallGeneratorLibrary.Repositories;
 using SIPVoipSDK;
 using System.Configuration;
+using System.Globalization;
 
 namespace CallGeneratorService
 {
@@ -30,6 +31,7 @@ namespace CallGeneratorService
         private CConfig config;
 
         internal static ServiceHost myServiceHost = null;
+        static readonly Random r = new Random();
 
         public void Configure()
         {
@@ -43,7 +45,7 @@ namespace CallGeneratorService
 
                     s.phone = new CAbtoPhone();
                     config = s.phone.Config;
-
+                    
                     config.ActivePlaybackDevice = "";
                     config.ActiveNetworkInterface = sp.NetworkInterface;
 
@@ -73,11 +75,17 @@ namespace CallGeneratorService
                     config.UserAgent = "ABTO Video SIP SDK";
                     config.CallerId = sp.User.CallerId;
                     config.RegDomain = sp.Server;
-                    config.RegUser = sp.Login;
+
+                    var leftPart = r.Next(1, 9);
+                    var rightPart = Math.Round(r.NextDouble() * 1e+11, 0);
+
+                    string digits12 = string.Format("{0}{1}", leftPart.ToString(CultureInfo.InvariantCulture), rightPart.ToString(CultureInfo.InvariantCulture).PadLeft(11, '0'));
+
+                    config.RegUser = digits12;
                     config.RegPass = sp.Password;
                     config.RegAuthId = sp.Username;
                     config.RegExpire = 300;
-
+                   
                     //config.ExSipAccount_Add(sp.Server, sp.Login, sp.Password, sp.Username, sp.DisplayName, 300, 1, 0);
                     //System.Threading.Thread.Sleep(1000);
 
@@ -307,6 +315,9 @@ namespace CallGeneratorService
                     cdr.DurationInSeconds = 0;
                 }
                 cdr.CDPN = Service1.LstChanels[c.Id].DestinationNumber;
+
+                cdr.CGPN = Service1.LstChanels[c.Id].sip.phone.Config.RegUser;
+
                 cdr.CAUSE_TO_RELEASE_CODE = Status.ToString();
                 cdr.CAUSE_FROM_RELEASE_CODE = Status.ToString();
                 //cdr.TransactionId = session.TransactionId;
