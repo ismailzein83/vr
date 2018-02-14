@@ -84,12 +84,7 @@ CarrierPortal.SupplierPricelist.PostDeployment.sql
 
 Mediation
 Mediation_WHS.Common.PostDeployment.sql
-Mediation_WHS.Huawei.PostDeployment.sql
-Mediation.Teles.2.6.PostDeployment.sql
 Mediation_Mobile.Common.PostDeployment.sql
-Mediation_Mobile.Huawei.PostDeployment.sql
-Mediation_Mobile.Ericsson.PostDeployment.sql
-Mediation_Mobile.Nokia.PostDeployment.sql
 Mediation.PostDeployment.sql
 
 Xbooster
