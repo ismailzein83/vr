@@ -20,7 +20,7 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             templateUrl: "/Client/Modules/WhS_Routing/Directives/CustomerRoute/Templates/CustomerRouteDetailTemplate.html"
         };
@@ -47,7 +47,7 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
                         menuActions.push({
                             name: "Matching Rule",
                             clicked: viewRouteOptionRuleEditor,
-                        })
+                        });
                     }
 
                     if (dataItem.LinkedRouteOptionRuleIds != null && dataItem.LinkedRouteOptionRuleIds.length > 0) {
@@ -93,6 +93,8 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
 
                 api.load = function (payload) {
                     var promises = [];
+
+                    console.log(payload);
 
                     if (payload != undefined) {
                         customerRoute = payload.customerRoute;
@@ -154,26 +156,26 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
 
             function addRouteOptionRuleEditor(dataItem) {
                 var onRouteOptionRuleAdded = function (addedItem) {
-                    var newDataItem = {
-                        CustomerRouteOptionDetailId: dataItem.CustomerRouteOptionDetailId,
-                        SupplierId: dataItem.SupplierId,
-                        SupplierName: dataItem.SupplierName,
-                        SupplierZoneId: dataItem.SupplierZoneId,
-                        SupplierZoneName: dataItem.SupplierZoneName,
-                        SupplierCode: dataItem.SupplierCode,
-                        SupplierRate: dataItem.SupplierRate,
-                        Percentage: dataItem.Percentage,
-                        IsBlocked: dataItem.IsBlocked,
-                        IsBackup: dataItem.IsBackup,
-                        ExactSupplierServiceIds: dataItem.ExactSupplierServiceIds,
-                        ExecutedRuleId: dataItem.ExecutedRuleId,
-                        LinkedRouteOptionRuleCount: 1,
-                        LinkedRouteOptionRuleIds: []
-                    };
-                    newDataItem.LinkedRouteOptionRuleIds.push(addedItem.Entity.RuleId);
+                    //var newDataItem = {
+                    //    CustomerRouteOptionDetailId: dataItem.CustomerRouteOptionDetailId,
+                    //    SupplierId: dataItem.SupplierId,
+                    //    SupplierName: dataItem.SupplierName,
+                    //    SupplierZoneId: dataItem.SupplierZoneId,
+                    //    SupplierZoneName: dataItem.SupplierZoneName,
+                    //    SupplierCode: dataItem.SupplierCode,
+                    //    SupplierRate: dataItem.SupplierRate,
+                    //    Percentage: dataItem.Percentage,
+                    //    IsBlocked: dataItem.IsBlocked,
+                    //    IsBackup: dataItem.IsBackup,
+                    //    ExactSupplierServiceIds: dataItem.ExactSupplierServiceIds,
+                    //    ExecutedRuleId: dataItem.ExecutedRuleId,
+                    //    LinkedRouteOptionRuleCount: 1,
+                    //    LinkedRouteOptionRuleIds: []
+                    //};
+                    //newDataItem.LinkedRouteOptionRuleIds.push(addedItem.Entity.RuleId);
 
-                    extendRouteOptionDetailObject(newDataItem);
-                    gridAPI.itemUpdated(newDataItem);
+                    //extendRouteOptionDetailObject(newDataItem);
+                    //gridAPI.itemUpdated(newDataItem);
                 };
 
                 var linkedRouteOptionRuleInput = { RuleId: dataItem.ExecutedRuleId, CustomerId: customerRoute.CustomerId, Code: customerRoute.Code, SupplierId: dataItem.SupplierId, SupplierZoneId: dataItem.SupplierZoneId };

@@ -151,11 +151,8 @@ app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService
 
                     var serviceViewerPayload;
                     if (rpRouteDetail != undefined) {
-                        serviceViewerPayload = {
-                            selectedIds: rpRouteDetail.SaleZoneServiceIds
-                        };
+                        serviceViewerPayload = { selectedIds: rpRouteDetail.SaleZoneServiceIds };
                     }
-
                     VRUIUtilsService.callDirectiveLoad(rpRouteDetail.serviceViewerAPI, serviceViewerPayload, rpRouteDetail.saleZoneServiceLoadDeferred);
                 };
                 promises.push(rpRouteDetail.saleZoneServiceLoadDeferred.promise);

@@ -41,6 +41,8 @@ namespace TOne.WhS.Routing.Entities
         public bool BlockOption { get; set; }
 
         public bool FilterOption { get; set; }
+        
+        public bool IsForced { get; set; }
 
         #region Interfaces
 

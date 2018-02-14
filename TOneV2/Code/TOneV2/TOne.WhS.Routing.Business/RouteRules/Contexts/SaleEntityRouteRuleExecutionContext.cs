@@ -152,6 +152,9 @@ namespace TOne.WhS.Routing.Business
         internal RouteOption CreateOptionFromTarget(RouteOptionRuleTarget targetOption, out bool allItemsBlocked)
         {
             allItemsBlocked = true;
+
+            decimal? saleRate = targetOption.RouteTarget.SaleRate;
+
             RouteOption routeOption = new RouteOption
             {
                 SupplierId = targetOption.SupplierId,
@@ -159,10 +162,12 @@ namespace TOne.WhS.Routing.Business
                 SupplierZoneId = targetOption.SupplierZoneId,
                 SupplierRate = targetOption.SupplierRate,
                 Percentage = targetOption.Percentage,
-                IsBlocked = targetOption.BlockOption,
                 ExecutedRuleId = targetOption.ExecutedRuleId,
                 ExactSupplierServiceIds = targetOption.ExactSupplierServiceIds,
-                NumberOfTries = targetOption.NumberOfTries
+                NumberOfTries = targetOption.NumberOfTries,
+                IsBlocked = targetOption.BlockOption,
+                IsForced = targetOption.IsForced,
+                IsLossy = saleRate.HasValue ? (saleRate - targetOption.SupplierRate) < 0 : false
             };
 
             if (!routeOption.IsBlocked)
@@ -179,10 +184,12 @@ namespace TOne.WhS.Routing.Business
                         SupplierCode = backup.SupplierCode,
                         SupplierZoneId = backup.SupplierZoneId,
                         SupplierRate = backup.SupplierRate,
-                        IsBlocked = backup.BlockOption,
                         ExecutedRuleId = backup.ExecutedRuleId,
                         ExactSupplierServiceIds = backup.ExactSupplierServiceIds,
-                        NumberOfTries = backup.NumberOfTries
+                        NumberOfTries = backup.NumberOfTries,
+                        IsBlocked = backup.BlockOption,
+                        IsForced = backup.IsForced,
+                        IsLossy = saleRate.HasValue ? (saleRate - backup.SupplierRate) < 0 : false
                     };
 
                     routeOption.Backups.Add(backupOption);

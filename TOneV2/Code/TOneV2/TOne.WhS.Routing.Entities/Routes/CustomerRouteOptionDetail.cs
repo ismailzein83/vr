@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
+    public enum RouteOptionEvaluatedStatus { Blocked = 0, Lossy = 1, Forced = 2, MarketPrice = 3 }
+
     public class BaseCustomerRouteOptionDetail
     {
         public int CustomerRouteOptionDetailId { get { return this.SupplierId; } }
@@ -16,13 +18,15 @@ namespace TOne.WhS.Routing.Entities
         public string SupplierCode { get; set; }
         public Decimal SupplierRate { get; set; }
         public List<int> ExactSupplierServiceIds { get; set; }
+
+        public string ExactSupplierServiceSymbols { get; set; } 
+
         public int? ExecutedRuleId { get; set; }
         public List<int> LinkedRouteOptionRuleIds { get; set; }
         public bool IsBlocked { get; set; }
-
-        //public bool IsForced { get; set; }
-        //public bool IsLossy { get; set; }
-
+        public bool IsForced { get; set; }
+        public bool IsLossy { get; set; }
+        public RouteOptionEvaluatedStatus? EvaluatedStatus { get; set; }
         public int LinkedRouteOptionRuleCount { get { return LinkedRouteOptionRuleIds != null ? LinkedRouteOptionRuleIds.Count : 0; } }
     }
 

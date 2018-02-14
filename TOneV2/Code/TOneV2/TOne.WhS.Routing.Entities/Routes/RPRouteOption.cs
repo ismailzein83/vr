@@ -20,11 +20,13 @@ namespace TOne.WhS.Routing.Entities
 
         public decimal OptionWeight { get; set; }
 
-        public SupplierStatus SupplierStatus { get; set; }
-
         public int SupplierServiceWeight { get; set; }
 
         public bool SupplierZoneMatchHasClosedRate { get; set; }
+
+        public SupplierStatus SupplierStatus { get; set; }
+
+        public bool IsForced { get; set; }
 
         long? IRouteOptionOrderTarget.SaleZoneId { get { return this.SaleZoneId; } }
 

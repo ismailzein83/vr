@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
@@ -22,12 +20,20 @@ namespace TOne.WhS.Routing.Entities
                     List<string> serializedBackups = new List<string>();
                     foreach (RouteBackupOption backup in option.Backups)
                     {
-                        string serializedBackup = string.Format("{0}${1}${2}${3}${4}", backup.SupplierCode, backup.ExecutedRuleId, backup.SupplierZoneId, !backup.IsBlocked ? string.Empty : "1", backup.NumberOfTries == 1 ? string.Empty : backup.NumberOfTries.ToString());
+                        string backupNumberOfTries = backup.NumberOfTries == 1 ? string.Empty : backup.NumberOfTries.ToString();
+                        string isBackupBlocked = !backup.IsBlocked ? string.Empty : "1";
+                        string isBackupForced = !backup.IsForced ? string.Empty : "1";
+                        string isBackupLossy = !backup.IsLossy ? string.Empty : "1";
+                        string serializedBackup = string.Format("{0}${1}${2}${3}${4}${5}${6}", backup.SupplierCode, backup.ExecutedRuleId, backup.SupplierZoneId, backupNumberOfTries, isBackupBlocked, isBackupForced, isBackupLossy);
                         serializedBackups.Add(serializedBackup);
                     }
                     concatenatedBackups = string.Join<string>("@", serializedBackups);
                 }
-                str.AppendFormat("{0}~{1}~{2}~{3}~{4}~{5}~{6}", option.SupplierCode, option.ExecutedRuleId, option.Percentage, option.SupplierZoneId, !option.IsBlocked ? string.Empty : "1", option.NumberOfTries == 1 ? string.Empty : option.NumberOfTries.ToString(), concatenatedBackups);
+                string numberOfTries = option.NumberOfTries == 1 ? string.Empty : option.NumberOfTries.ToString();
+                string isBlocked = !option.IsBlocked ? string.Empty : "1";
+                string isForced = !option.IsForced ? string.Empty : "1";
+                string isLossy = !option.IsLossy ? string.Empty : "1";
+                str.AppendFormat("{0}~{1}~{2}~{3}~{4}~{5}~{6}~{7}~{8}", option.SupplierCode, option.ExecutedRuleId, option.Percentage, option.SupplierZoneId, numberOfTries, isBlocked, isForced, isLossy, concatenatedBackups);
             }
             return str.ToString();
         }
@@ -45,22 +51,16 @@ namespace TOne.WhS.Routing.Entities
                     SupplierCode = parts[0],
                     SupplierZoneId = long.Parse(parts[3]),
                 };
+
                 int ruleId;
                 if (int.TryParse(parts[1], out ruleId))
                     option.ExecutedRuleId = ruleId;
+
                 int percentage;
                 if (int.TryParse(parts[2], out percentage))
                     option.Percentage = percentage;
 
-                string isBlockedAsString = parts[4];
-                if (!string.IsNullOrEmpty(isBlockedAsString))
-                {
-                    int isBlocked;
-                    if (int.TryParse(isBlockedAsString, out isBlocked))
-                        option.IsBlocked = isBlocked > 0;
-                }
-
-                string numberOfTriesAsString = parts[5];
+                string numberOfTriesAsString = parts[4];
                 if (!string.IsNullOrEmpty(numberOfTriesAsString))
                 {
                     int numberOfTries;
@@ -72,7 +72,31 @@ namespace TOne.WhS.Routing.Entities
                     option.NumberOfTries = 1;
                 }
 
-                string backupsAsString = parts[6];
+                string isBlockedAsString = parts[5];
+                if (!string.IsNullOrEmpty(isBlockedAsString))
+                {
+                    int isBlocked;
+                    if (int.TryParse(isBlockedAsString, out isBlocked))
+                        option.IsBlocked = isBlocked > 0;
+                }
+
+                string isForcedAsString = parts[6];
+                if (!string.IsNullOrEmpty(isForcedAsString))
+                {
+                    int isForced;
+                    if (int.TryParse(isForcedAsString, out isForced))
+                        option.IsForced = isForced > 0;
+                }
+
+                string isLossyAsString = parts[7];
+                if (!string.IsNullOrEmpty(isLossyAsString))
+                {
+                    int isLossy;
+                    if (int.TryParse(isLossyAsString, out isLossy))
+                        option.IsLossy = isLossy > 0;
+                }
+
+                string backupsAsString = parts[8];
                 if (!string.IsNullOrEmpty(backupsAsString))
                 {
                     option.Backups = new List<RouteBackupOption>();
@@ -86,19 +110,12 @@ namespace TOne.WhS.Routing.Entities
                             SupplierCode = serializedBackupParts[0],
                             SupplierZoneId = long.Parse(serializedBackupParts[2]),
                         };
+
                         int backupRuleId;
                         if (int.TryParse(serializedBackupParts[1], out backupRuleId))
                             backup.ExecutedRuleId = backupRuleId;
 
-                        string isBackupBlockedAsString = serializedBackupParts[3];
-                        if (!string.IsNullOrEmpty(isBackupBlockedAsString))
-                        {
-                            int isBlocked;
-                            if (int.TryParse(isBackupBlockedAsString, out isBlocked))
-                                backup.IsBlocked = isBlocked > 0;
-                        }
-
-                        string backupNumberOfTriesAsString = serializedBackupParts[4];
+                        string backupNumberOfTriesAsString = serializedBackupParts[3];
                         if (!string.IsNullOrEmpty(backupNumberOfTriesAsString))
                         {
                             int backupNumberOfTries;
@@ -109,6 +126,31 @@ namespace TOne.WhS.Routing.Entities
                         {
                             backup.NumberOfTries = 1;
                         }
+
+                        string isBackupBlockedAsString = serializedBackupParts[4];
+                        if (!string.IsNullOrEmpty(isBackupBlockedAsString))
+                        {
+                            int isBlocked;
+                            if (int.TryParse(isBackupBlockedAsString, out isBlocked))
+                                backup.IsBlocked = isBlocked > 0;
+                        }
+
+                        string isBackupForcedAsString = serializedBackupParts[5];
+                        if (!string.IsNullOrEmpty(isBackupForcedAsString))
+                        {
+                            int isForced;
+                            if (int.TryParse(isBackupForcedAsString, out isForced))
+                                backup.IsForced = isForced > 0;
+                        }
+
+                        string isBackupLossyAsString = serializedBackupParts[6];
+                        if (!string.IsNullOrEmpty(isBackupLossyAsString))
+                        {
+                            int isLossy;
+                            if (int.TryParse(isBackupLossyAsString, out isLossy))
+                                backup.IsLossy = isLossy > 0;
+                        }
+
                         option.Backups.Add(backup);
                     }
                 }
@@ -235,6 +277,8 @@ namespace TOne.WhS.Routing.Entities
                 SupplierRateEED = routeBackupOptionRuleTarget.SupplierRateEED,
                 OptionSettings = routeBackupOptionRuleTarget.OptionSettings,
                 NumberOfTries = routeBackupOptionRuleTarget.NumberOfTries,
+                BlockOption = routeBackupOptionRuleTarget.BlockOption,
+                IsForced = routeBackupOptionRuleTarget.IsForced,
                 Percentage = percentage,
                 Backups = new List<RouteBackupOptionRuleTarget>()
             };
@@ -257,11 +301,30 @@ namespace TOne.WhS.Routing.Entities
                 SupplierRateId = routeOptionRuleTarget.SupplierRateId,
                 SupplierRateEED = routeOptionRuleTarget.SupplierRateEED,
                 OptionSettings = routeOptionRuleTarget.OptionSettings,
-                NumberOfTries = routeOptionRuleTarget.NumberOfTries
+                NumberOfTries = routeOptionRuleTarget.NumberOfTries,
+                BlockOption = routeOptionRuleTarget.BlockOption,
+                IsForced = routeOptionRuleTarget.IsForced
             };
         }
 
-        static T CreateOption<T>(RouteRuleTarget routeRuleTarget, SupplierCodeMatchWithRate supplierCodeMatchWithRate, object optionSettings) where T : BaseRouteOptionRuleTarget
+        public static RouteOptionEvaluatedStatus? GetEvaluatedStatus(bool isBlocked, bool isLossy, bool isForced, int? ExecutedRuleId)
+        {
+            if (isBlocked)
+                return RouteOptionEvaluatedStatus.Blocked;
+
+            if (isLossy)
+                return RouteOptionEvaluatedStatus.Lossy;
+
+            if (isForced)
+                return RouteOptionEvaluatedStatus.Forced;
+
+            if (ExecutedRuleId.HasValue)
+                return RouteOptionEvaluatedStatus.MarketPrice;
+
+            return null;
+        }
+
+        private static T CreateOption<T>(RouteRuleTarget routeRuleTarget, SupplierCodeMatchWithRate supplierCodeMatchWithRate, object optionSettings) where T : BaseRouteOptionRuleTarget
         {
             var supplierCodeMatch = supplierCodeMatchWithRate.CodeMatch;
 

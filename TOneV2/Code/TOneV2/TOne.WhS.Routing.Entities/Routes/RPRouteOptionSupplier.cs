@@ -16,6 +16,10 @@ namespace TOne.WhS.Routing.Entities
 
         public List<RPRouteOptionSupplierZone> SupplierZones { get; set; }
 
+        public int? Percentage { get; set; }
+
+        public int SupplierServiceWeight { get; set; }
+
         public int NumberOfBlockedZones { get; set; }
 
         public int NumberOfUnblockedZones { get; set; }
@@ -32,8 +36,14 @@ namespace TOne.WhS.Routing.Entities
             }
         }
 
-        public int? Percentage { get; set; }
-
-        public int SupplierServiceWeight { get; set; }
+        public bool IsForced
+        {
+            get
+            {
+                if (this.SupplierZones != null)
+                    return !this.SupplierZones.Any(itm => !itm.IsForced);
+                return false;
+            }
+        }
     }
 }

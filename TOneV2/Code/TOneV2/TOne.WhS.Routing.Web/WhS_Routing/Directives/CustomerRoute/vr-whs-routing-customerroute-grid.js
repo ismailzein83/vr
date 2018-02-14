@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUtilsService', 'UtilsService', 'WhS_Routing_CustomerRouteAPIService', 'WhS_Routing_RouteRuleService', 'WhS_Routing_RouteRuleAPIService', 'BusinessProcess_BPInstanceAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'BPInstanceStatusEnum',
-    function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_CustomerRouteAPIService, WhS_Routing_RouteRuleService, WhS_Routing_RouteRuleAPIService, BusinessProcess_BPInstanceAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, BPInstanceStatusEnum) {
+app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUtilsService', 'UtilsService', 'WhS_Routing_CustomerRouteAPIService', 'WhS_Routing_RouteRuleService', 'WhS_Routing_RouteRuleAPIService', 'BusinessProcess_BPInstanceAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'BPInstanceStatusEnum', 'WhS_Routing_RouteOptionEvaluatedStatusEnum',
+    function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_Routing_CustomerRouteAPIService, WhS_Routing_RouteRuleService, WhS_Routing_RouteRuleAPIService, BusinessProcess_BPInstanceAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, BPInstanceStatusEnum, WhS_Routing_RouteOptionEvaluatedStatusEnum) {
 
         var directiveDefinitionObject = {
             restrict: "E",
@@ -25,6 +25,7 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
             this.initializeController = initializeController;
 
             var isDatabaseTypeCurrent;
+            var routeOptionEvaluatedStatusEnum = UtilsService.getArrayEnum(WhS_Routing_RouteOptionEvaluatedStatusEnum);
 
             var gridAPI;
             var gridDrillDownTabsObj;
@@ -72,14 +73,12 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
                     return loadGridPromiseDeffered.promise;
                 };
 
-                $scope.getRowStyle = function (dataItem) {
-                    var rowStyle;
-
-                    if (dataItem.IsBlocked)
-                        rowStyle = { CssClass: "bg-danger" };
-
-                    return rowStyle;
-                };
+                //$scope.getRowStyle = function (dataItem) {
+                //    var rowStyle;
+                //    if (dataItem.IsBlocked)
+                //        rowStyle = { CssClass: "bg-danger" };
+                //    return rowStyle;
+                //};
 
                 defineMenuActions();
             }
@@ -97,6 +96,29 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
             }
 
             function extendCutomerRouteObject(customerRoute) {
+
+                if (customerRoute != undefined && customerRoute.RouteOptionDetails != undefined) {
+                    for (var i = 0; i < customerRoute.RouteOptionDetails.length; i++) {
+                        var currentRouteOptionDetail = customerRoute.RouteOptionDetails[i];
+
+                        var evaluatedStatus = UtilsService.getItemByVal(routeOptionEvaluatedStatusEnum, currentRouteOptionDetail.EvaluatedStatus, "value");
+                        if (evaluatedStatus != undefined) {
+                            currentRouteOptionDetail.EvaluatedStatusCssClass = evaluatedStatus.cssclass;
+                        }
+
+                        if (currentRouteOptionDetail.Backups) {
+                            for (var j = 0; j < currentRouteOptionDetail.Backups.length; j++) {
+                                var currentRouteBackupOptionDetail = currentRouteOptionDetail.Backups[j];
+
+                                var backupEvaluatedStatus = UtilsService.getItemByVal(routeOptionEvaluatedStatusEnum, currentRouteBackupOptionDetail.EvaluatedStatus, "value");
+                                if (backupEvaluatedStatus != undefined) {
+                                    currentRouteBackupOptionDetail.EvaluatedStatusCssClass = backupEvaluatedStatus.cssclass;
+                                }
+                            }
+                        }
+                    }
+                }
+
                 customerRoute.cutomerRouteLoadDeferred = UtilsService.createPromiseDeferred();
                 customerRoute.onServiceViewerReady = function (api) {
                     customerRoute.serviceViewerAPI = api;
@@ -149,7 +171,7 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
                         }
                     }
                     return menu;
-                }
+                };
             }
 
             function hasUpdateRulePermission() {
@@ -225,7 +247,7 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
                 };
                 var customerRouteData = { code: dataItem.Code, SaleZoneServiceIds: dataItem.SaleZoneServiceIds, Rate: dataItem.Rate, CustomerId: dataItem.CustomerId };
                 WhS_Routing_RouteRuleService.addLinkedRouteRule(linkedRouteRuleInput, customerRouteData, onRouteRuleAdded);
-            };
+            }
 
             function triggerPartialRoute(ruleId) {
                 if (isDatabaseTypeCurrent) {

@@ -158,10 +158,14 @@ namespace TOne.WhS.Routing.Business
                 SupplierZoneName = supplierZoneName,
                 SupplierCode = routeOption.SupplierCode,
                 SupplierRate = routeOption.SupplierRate,
-                IsBlocked = routeOption.IsBlocked,
                 ExactSupplierServiceIds = routeOption.ExactSupplierServiceIds.ToList(),
+                ExactSupplierServiceSymbols = routeOption != null ? this.GetSupplierServiceSymbols(routeOption.ExactSupplierServiceIds) : string.Empty,
                 ExecutedRuleId = routeOption.ExecutedRuleId,
                 LinkedRouteOptionRuleIds = linkedRouteOptionRuleIds,
+                IsBlocked = routeOption.IsBlocked,
+                IsForced = routeOption.IsForced,
+                IsLossy = routeOption.IsLossy,
+                EvaluatedStatus = Routing.Entities.Helper.GetEvaluatedStatus(routeOption.IsBlocked, routeOption.IsLossy, routeOption.IsForced, routeOption.ExecutedRuleId),
                 Percentage = routeOption.Percentage,
                 Backups = backups
             };
@@ -177,11 +181,29 @@ namespace TOne.WhS.Routing.Business
                 SupplierZoneName = supplierZoneName,
                 SupplierCode = routeBackupOption.SupplierCode,
                 SupplierRate = routeBackupOption.SupplierRate,
-                IsBlocked = routeBackupOption.IsBlocked,
                 ExactSupplierServiceIds = routeBackupOption.ExactSupplierServiceIds.ToList(),
+                ExactSupplierServiceSymbols = routeBackupOption != null ? this.GetSupplierServiceSymbols(routeBackupOption.ExactSupplierServiceIds) : string.Empty,
                 ExecutedRuleId = routeBackupOption.ExecutedRuleId,
+                IsBlocked = routeBackupOption.IsBlocked,
+                IsForced = routeBackupOption.IsForced,
+                IsLossy = routeBackupOption.IsLossy,
+                EvaluatedStatus = Routing.Entities.Helper.GetEvaluatedStatus(routeBackupOption.IsBlocked, routeBackupOption.IsLossy, routeBackupOption.IsForced, routeBackupOption.ExecutedRuleId),
                 LinkedRouteOptionRuleIds = linkedRouteOptionRuleIds
             };
+        }
+
+        private string GetSupplierServiceSymbols(IEnumerable<int> supplierServiceSymbols)
+        {
+            if (supplierServiceSymbols == null || !supplierServiceSymbols.Any())
+                return string.Empty;
+
+            List<string> serviceSymbols = new List<string>();
+            ZoneServiceConfigManager zoneServiceConfigManager = new ZoneServiceConfigManager();
+
+            foreach (var serviceId in supplierServiceSymbols)
+                serviceSymbols.Add(zoneServiceConfigManager.GetServiceSymbol(serviceId));
+
+            return string.Join(", ", serviceSymbols);
         }
 
         #endregion

@@ -236,9 +236,9 @@ namespace TOne.WhS.Routing.Business
             if (routeRule.Settings.UseOrderedExecution)
             {
                 List<RouteOptionRuleTarget> routeOptionRuleTargets = CloneRouteOptionRuleTargets(optionsByRules.GetOrCreateItem(routeRule, () =>
-                    {
-                        return routeRule.Settings.GetOrderedOptions(routeRuleExecutionContext, routeRuleTarget);
-                    }));
+                {
+                    return routeRule.Settings.GetOrderedOptions(routeRuleExecutionContext, routeRuleTarget);
+                }));
 
                 if (routeOptionRuleTargets != null)
                 {
@@ -251,22 +251,21 @@ namespace TOne.WhS.Routing.Business
                         targetOption.RouteTarget = routeRuleTarget;
 
                         List<RouteOptionRuleTarget> processedTargetOptions = ProcessRouteOptionRuleTarget(targetOption, keepBackupsForRemovedOptions, (optionTarget) =>
-                         {
-                             var supplier = _carrierAccounts.GetRecord(optionTarget.SupplierId);
-                             if (supplier.CarrierProfileId == customer.CarrierProfileId)
-                                 return false;
+                        {
+                            var supplier = _carrierAccounts.GetRecord(optionTarget.SupplierId);
+                            if (supplier.CarrierProfileId == customer.CarrierProfileId)
+                                return false;
 
-                             routeRule.Settings.CheckOptionFilter(routeRuleExecutionContext, routeRuleTarget, optionTarget);
-                             if (optionTarget.FilterOption)
-                                 return false;
+                            routeRule.Settings.CheckOptionFilter(routeRuleExecutionContext, routeRuleTarget, optionTarget);
+                            if (optionTarget.FilterOption)
+                                return false;
 
-                             routeRuleExecutionContext.CheckRouteOptionRule(optionTarget, routeRule);
-                             if (optionTarget.FilterOption)
-                                 return false;
+                            routeRuleExecutionContext.CheckRouteOptionRule(optionTarget, routeRule);
+                            if (optionTarget.FilterOption)
+                                return false;
 
-                             return true;
-
-                         });
+                            return true;
+                        });
 
                         if (processedTargetOptions == null || processedTargetOptions.Count == 0)
                             continue;
@@ -314,6 +313,7 @@ namespace TOne.WhS.Routing.Business
                     }
                 }
             }
+
             route.IsBlocked = routeRuleTarget.BlockRoute;
             return route;
         }
@@ -420,8 +420,7 @@ namespace TOne.WhS.Routing.Business
             return results;
         }
 
-        private RPRoute ExecuteRule(int routingProductId, long saleZoneId, HashSet<int> saleZoneServiceIds, IBuildRoutingProductRoutesContext context, RouteRuleTarget routeRuleTarget, RouteRule routeRule,
-            RoutingDatabase routingDatabase)
+        private RPRoute ExecuteRule(int routingProductId, long saleZoneId, HashSet<int> saleZoneServiceIds, IBuildRoutingProductRoutesContext context, RouteRuleTarget routeRuleTarget, RouteRule routeRule, RoutingDatabase routingDatabase)
         {
             RPRouteRuleExecutionContext routeRuleExecutionContext = new RPRouteRuleExecutionContext(routeRule, _ruleTreesForRouteOptions);
             routeRuleExecutionContext.SupplierCodeMatches = context.SupplierCodeMatches;
@@ -487,21 +486,20 @@ namespace TOne.WhS.Routing.Business
                     {
                         bool supplierZoneMatchHasClosedRate = supplierHavingZonesWithEED.Contains(item.SupplierId);
 
-                        SupplierZoneToRPOptionPolicyExecutionContext supplierZoneToRPOptionPolicyExecutionContext = new SupplierZoneToRPOptionPolicyExecutionContext
-                        {
-                            SupplierOptionDetail = item
-                        };
+                        SupplierZoneToRPOptionPolicyExecutionContext supplierZoneToRPOptionPolicyExecutionContext = new SupplierZoneToRPOptionPolicyExecutionContext { SupplierOptionDetail = item };
                         supplierZoneToRPOptionPolicy.Execute(supplierZoneToRPOptionPolicyExecutionContext);
+
                         rpRouteOptions.Add(new RPRouteOption
-                            {
-                                SupplierId = item.SupplierId,
-                                SupplierRate = supplierZoneToRPOptionPolicyExecutionContext.EffectiveRate,
-                                SaleZoneId = saleZoneId,
-                                SupplierStatus = item.SupplierStatus,
-                                Percentage = item.Percentage,
-                                SupplierServiceWeight = item.SupplierServiceWeight,
-                                SupplierZoneMatchHasClosedRate = supplierZoneMatchHasClosedRate
-                            });
+                        {
+                            SupplierId = item.SupplierId,
+                            SaleZoneId = saleZoneId,
+                            SupplierRate = supplierZoneToRPOptionPolicyExecutionContext.EffectiveRate,
+                            Percentage = item.Percentage,
+                            SupplierServiceWeight = item.SupplierServiceWeight,
+                            SupplierZoneMatchHasClosedRate = supplierZoneMatchHasClosedRate,
+                            SupplierStatus = item.SupplierStatus,
+                            IsForced = item.IsForced
+                        });
                     }
 
                     IEnumerable<RPRouteOption> rpRouteOptionsAsEnumerable = rpRouteOptions;
@@ -510,9 +508,9 @@ namespace TOne.WhS.Routing.Business
                         route.RPOptionsByPolicy.Add(supplierZoneToRPOptionPolicy.ConfigId, rpRouteOptionsAsEnumerable);
                 }
             }
+
             return route;
         }
-
 
         private void AddSupplierZone(RPRouteOptionSupplier optionSupplierDetails, RouteOptionRuleTarget currentRouteOptionRuleTarget)
         {
@@ -524,11 +522,12 @@ namespace TOne.WhS.Routing.Business
             var optionSupplierZone = new RPRouteOptionSupplierZone
             {
                 SupplierZoneId = currentRouteOptionRuleTarget.SupplierZoneId,
+                SupplierRateId = currentRouteOptionRuleTarget.SupplierRateId,
                 SupplierRate = currentRouteOptionRuleTarget.SupplierRate,
-                IsBlocked = currentRouteOptionRuleTarget.BlockOption,
                 ExecutedRuleId = currentRouteOptionRuleTarget.ExecutedRuleId,
                 ExactSupplierServiceIds = currentRouteOptionRuleTarget.ExactSupplierServiceIds,
-                SupplierRateId = currentRouteOptionRuleTarget.SupplierRateId
+                IsBlocked = currentRouteOptionRuleTarget.BlockOption,
+                IsForced = currentRouteOptionRuleTarget.IsForced
             };
 
             optionSupplierDetails.SupplierZones.Add(optionSupplierZone);

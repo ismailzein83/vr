@@ -4,12 +4,14 @@
                  dataretrievalfunction="dataRetrievalFunction"
                  pagingtype="'Pager'"
                  menuactions="gridMenuActions"
-                 getrowstyle="getRowStyle"
                  defaultsortbyfieldname="'CustomerName'"
-                 idfield="CustomerRouteDetailId" enableautoexport="true" normalcell>
+                 idfield="CustomerRouteDetailId"
+                 enableautoexport="true" normalcell>
 
+        <vr-datagridcolumn headertext="'Customer'" fixedwidth="120">
+            <span style="font-size: 11px" class="bold-label" blocked="{{dataItem.IsBlocked}}">{{dataItem.CustomerName}}</span>
+        </vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Code'" field="'Code'" fixedwidth="100"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Customer'" field="'CustomerName'" fixedwidth="120"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Zone'" field="'SaleZoneName'" fixedwidth="120"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Rate'" field="'Rate'" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="60"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Services'" widthfactor="1" disablesorting="true" fixedwidth="60">
@@ -19,16 +21,17 @@
         <vr-datagridcolumn headertext="'Linked Rules'" field="'LinkedRouteRuleCount'" fixedwidth="75" disablesorting="true" isfielddynamic="true"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Rule Type'" field="'ExecutedRouteRuleSettingsTypeName'" fixedwidth="90"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Rule Name'" field="'ExecutedRouteRuleName'" fixedwidth="100"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Route Options'" disablesorting> 
+        <vr-datagridcolumn headertext="'Route Options'" disablesorting>
             <div class="responsive-container" style="white-space: normal;">
                 <span ng-repeat="details in dataItem.RouteOptionDetails" style="font-size: 11px; cursor: pointer; display: inline-block; text-align: center; padding: 0 10px 0 0;">
-                    <span ng-class="{'bold-label':true}" blocked="{{details.IsBlocked}}">
-                        {{details.SupplierName}}<span ng-if="details.Percentage!=null">{{details.Percentage}}%</span>
+                    <span class="option bold-label" ng-class="details.EvaluatedStatusCssClass" title="Rate: {{details.SupplierRate}}, Services: {{details.ExactSupplierServiceSymbols}}">
+                        <span ng-if="details.Percentage!=null">{{details.Percentage}}% </span> {{details.SupplierName}}
                     </span>
                     <span ng-if="details.Backups != null && details.Backups.length > 0">
                         &lt;
-                        <span ng-repeat="backupDetails in details.Backups" >
-                            <span blocked="{{backupDetails.IsBlocked}}" style="font-style:italic">
+                        <span ng-repeat="backupDetails in details.Backups">
+                            <span style="font-style:italic" class="option" ng-class="backupDetails.EvaluatedStatusCssClass" 
+                                  title="Rate: {{backupDetails.SupplierRate}} Services: {{backupDetails.ExactSupplierServiceSymbols}}">
                                 {{backupDetails.SupplierName}}
                             </span>
                             <span ng-if="!$last">,</span>

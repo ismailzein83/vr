@@ -20,9 +20,8 @@ namespace TOne.WhS.Routing.Business
 
         public List<SpecialRequestRouteBackupOptionSettings> OverallBackupOptions { get; set; }
 
-        HashSet<int> _optionSupplierIds;
-
-        HashSet<int> OptionsSupplierIds
+        private HashSet<int> _optionSupplierIds;
+        private HashSet<int> OptionsSupplierIds
         {
             get
             {
@@ -40,7 +39,6 @@ namespace TOne.WhS.Routing.Business
         }
 
         private List<SpecialRequestRouteOptionSettings> _optionsWithBackups;
-
         private List<SpecialRequestRouteOptionSettings> OptionsWithBackups
         {
             get
@@ -110,7 +108,7 @@ namespace TOne.WhS.Routing.Business
         {
             int? numberOfOptions = base.GetMaxNumberOfOptions(context);
             if (!numberOfOptions.HasValue)
-                throw new NullReferenceException("numberOfOptions must have a value for Speical Request Route Rule");
+                throw new NullReferenceException("numberOfOptions must have a value for Special Request Route Rule");
 
             return this.OptionsWithBackups != null ? Math.Max(numberOfOptions.Value, this.OptionsWithBackups.Count) : numberOfOptions.Value;
         }
@@ -264,6 +262,7 @@ namespace TOne.WhS.Routing.Business
                             lcrOptions.Add(routeOptionRuleTarget);
                     }
                 }
+
                 if (lcrOptions.Any())
                     options.AddRange(lcrOptions.OrderBy(itm => itm.SupplierRate).ThenByDescending(itm => itm.SupplierServiceWeight).ThenBy(itm => itm.SupplierId));
             }
@@ -274,26 +273,29 @@ namespace TOne.WhS.Routing.Business
         private void FilterOption(HashSet<int> customerServiceIds, RouteRuleTarget target, BaseRouteOptionRuleTarget option)
         {
             ISpecialRequestRouteOptionSettings specialRequestOption = option.OptionSettings as ISpecialRequestRouteOptionSettings;
-
             if (specialRequestOption == null)
                 throw new NullReferenceException("option.OptionSettings should be of type ISpecialRequestRouteOptionSettings");
 
-            if (specialRequestOption.ForceOption)
-                return;
-
             if (ExecuteRateOptionFilter(target.SaleRate, option.SupplierRate))
             {
-                option.FilterOption = true;
+                if (specialRequestOption.ForceOption)
+                    option.IsForced = true;
+                else
+                    option.FilterOption = true;
+
                 return;
             }
 
             if (ExecuteServiceOptionFilter(customerServiceIds, option.SupplierServiceIds))
             {
-                option.FilterOption = true;
+                if (specialRequestOption.ForceOption)
+                    option.IsForced = true;
+                else
+                    option.FilterOption = true;
+
                 return;
             }
         }
-
 
         private bool ExecuteServiceOptionFilter(HashSet<int> customerServices, HashSet<int> supplierServices)
         {
