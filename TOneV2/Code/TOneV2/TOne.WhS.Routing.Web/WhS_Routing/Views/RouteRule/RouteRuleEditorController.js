@@ -98,7 +98,8 @@
                     sellingNumberPlanId: sellingNumberPlanId,
                     linkedCode: customerRouteData != undefined ? customerRouteData.code : undefined,
                     defaultCriteriaValues: defaultRouteRuleValues != undefined ? defaultRouteRuleValues.criteria : undefined,
-                    routeRuleCriteriaContext: buildRouteRuleCriteriaContext()
+                    routeRuleCriteriaContext: buildRouteRuleCriteriaContext(),
+                    linkedCustomerId: customerRouteData != undefined ? customerRouteData.CustomerId : undefined
                 };
 
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, routeRuleCriteriaAPI, routeRuleCriteriaPayload, setLoader, routeRuleCriteriaReadyPromiseDeferred);
@@ -375,7 +376,8 @@
                     sellingNumberPlanId: sellingNumberPlanId,
                     routeRuleCriteria: routeRuleEntity.Criteria,
                     linkedCode: customerRouteData != undefined ? customerRouteData.code : undefined,
-                    routeRuleCriteriaContext: buildRouteRuleCriteriaContext()
+                    routeRuleCriteriaContext: buildRouteRuleCriteriaContext(),
+                    linkedCustomerId: customerRouteData != undefined ? customerRouteData.CustomerId : undefined
                 };
             }
 

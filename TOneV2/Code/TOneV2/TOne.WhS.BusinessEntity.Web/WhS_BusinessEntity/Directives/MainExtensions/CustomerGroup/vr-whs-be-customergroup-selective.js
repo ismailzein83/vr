@@ -47,12 +47,23 @@ app.directive('vrWhsBeCustomergroupSelective', ['UtilsService', 'VRUIUtilsServic
                 var api = {};
 
                 api.load = function (payload) {
+                    var customerIds;
+                    var linkedCustomerId;
+
+                    if (payload != undefined) {
+                        if (payload.customerGroupSettings != undefined) {
+                            customerIds = payload.customerGroupSettings.CustomerIds;
+                        }
+                        linkedCustomerId = payload.linkedCustomerId;
+                    }
+
                     var loadCarrierAccountPromiseDeferred = UtilsService.createPromiseDeferred();
 
                     carrierAccountReadyPromiseDeferred.promise.then(function () {
                         var carrierAccountPayload = {
                             filter: {},
-                            selectedIds: payload != undefined ? payload.CustomerIds : undefined
+                            selectedIds: customerIds,
+                            lockedIds: linkedCustomerId != undefined ? [linkedCustomerId] : undefined
                         };
                         VRUIUtilsService.callDirectiveLoad(carrierAccountDirectiveAPI, carrierAccountPayload, loadCarrierAccountPromiseDeferred);
                     });

@@ -1,8 +1,10 @@
 ﻿<vr-row removeline>
-    <vr-columns width="1/4row">
-        <vr-select datatextfield="Title" datavaluefield="ExtensionConfigurationId" label="Filter Type" datasource="customerGroupTemplates" text="None"
-                   selectedvalues="selectedCustomerGroupTemplate" on-ready="onCustomerSelectorReady">
-        </vr-select>
+    <vr-columns width="1/4row" >
+        <span vr-disabled="disableCriteria">
+            <vr-select datatextfield="Title" datavaluefield="ExtensionConfigurationId" label="Filter Type" datasource="customerGroupTemplates" text="None"
+                       selectedvalues="selectedCustomerGroupTemplate" on-ready="onCustomerSelectorReady">
+            </vr-select>
+        </span>
     </vr-columns>
     <span ng-show="selectedCustomerGroupTemplate" vr-loader="isLoadingCustomerGroupDirective">
         <vr-directivewrapper directive="selectedCustomerGroupTemplate.Editor" on-ready="onCustomerGroupDirectiveReady" normal-col-num="8"></vr-directivewrapper>

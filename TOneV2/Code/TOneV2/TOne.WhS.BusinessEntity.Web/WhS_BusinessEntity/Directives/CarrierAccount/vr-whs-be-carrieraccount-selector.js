@@ -91,7 +91,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
             if (attrs.ismultipleselection != undefined)
                 ismultipleselection = "ismultipleselection";
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}"> <vr-select hasviewpermission="ctrl.hasviewpermission"  isrequired="ctrl.isrequired" on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" onblurdropdown="ctrl.onblurdropdown" onselectitem="ctrl.onselectitem"  ondeselectitem="ctrl.ondeselectitem" datatextfield="Name" datavaluefield="CarrierAccountId" label="'
+            return '<vr-columns colnum="{{ctrl.normalColNum}}"> <vr-select hasviewpermission="ctrl.hasviewpermission"  isrequired="ctrl.isrequired" on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" onblurdropdown="ctrl.onblurdropdown" onselectitem="ctrl.onselectitem"  ondeselectitem="ctrl.ondeselectitem" datalockfield="Locked" datatextfield="Name" datavaluefield="CarrierAccountId" label="'
                 + label + '" ' + hideselectedvaluessection + '  ' + hideremoveicon + ' ' + ismultipleselection + ' ' + viewCliked + ' ></vr-select></vr-columns>';
         }
 
@@ -121,9 +121,12 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
 
                     var filter;
                     var selectedIds;
+                    var lockedIds;
+
                     if (payload != undefined) {
                         filter = payload.filter;
                         selectedIds = payload.selectedIds;
+                        lockedIds = payload.lockedIds;
                     }
 
                     if (filter == undefined)
@@ -139,6 +142,9 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
                     return WhS_BE_CarrierAccountAPIService.GetCarrierAccountInfo(serializedFilter).then(function (response) {
                         ctrl.datasource.length = 0;
                         angular.forEach(response, function (itm) {
+                            if (lockedIds != undefined && lockedIds.indexOf(itm.CarrierAccountId) > -1) {
+                                itm.Locked = true;
+                            }
                             ctrl.datasource.push(itm);
                         });
 

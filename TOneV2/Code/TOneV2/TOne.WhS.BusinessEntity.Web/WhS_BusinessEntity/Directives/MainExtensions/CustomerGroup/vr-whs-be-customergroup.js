@@ -28,6 +28,7 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccou
         var customerSelectorAPI;
         var customerGroupDirectiveAPI;
         var customerGroupDirectiveReadyPromiseDeferred;
+        var linkedCustomerId;
 
         function initializeController() {
             $scope.customerGroupTemplates = [];
@@ -40,7 +41,8 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccou
             $scope.onCustomerGroupDirectiveReady = function (api) {
                 customerGroupDirectiveAPI = api;
                 var setLoader = function (value) { $scope.isLoadingCustomerGroupDirective = value; };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, customerGroupDirectiveAPI, undefined, setLoader, customerGroupDirectiveReadyPromiseDeferred);
+                var customerGroupDirectivePayload = { linkedCustomerId: linkedCustomerId };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, customerGroupDirectiveAPI, customerGroupDirectivePayload, setLoader, customerGroupDirectiveReadyPromiseDeferred);
 
             };
         }
@@ -66,11 +68,16 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccou
                 var customerConfigId;
                 var customerGroupSettings;
 
-
                 if (payload != undefined) {
-                    customerConfigId = payload.ConfigId;
-                    customerGroupSettings = payload;
+                    $scope.disableCriteria = payload.disableCriteria;
+                    linkedCustomerId = payload.linkedCustomerId;
+
+                    customerGroupSettings = payload.customerGroupSettings;
+                    if (customerGroupSettings != undefined) {
+                        customerConfigId = customerGroupSettings.ConfigId;
+                    }
                 }
+
                 var promises = [];
                 var loadCustomerGroupTemplatesPromise = WhS_BE_CarrierAccountAPIService.GetCustomerGroupTemplates().then(function (response) {
                     angular.forEach(response, function (item) {
@@ -82,6 +89,7 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccou
                 });
                 promises.push(loadCustomerGroupTemplatesPromise);
                 if (customerGroupSettings != undefined) {
+                    var customerGroupDirectivePayload = { linkedCustomerId: linkedCustomerId, customerGroupSettings: customerGroupSettings };
                     customerGroupDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
                     var customerGroupDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -89,7 +97,7 @@ function (UtilsService, $compile, WhS_BE_SaleZoneAPIService, WhS_BE_CarrierAccou
 
                     customerGroupDirectiveReadyPromiseDeferred.promise.then(function () {
                         customerGroupDirectiveReadyPromiseDeferred = undefined;
-                        VRUIUtilsService.callDirectiveLoad(customerGroupDirectiveAPI, customerGroupSettings, customerGroupDirectiveLoadPromiseDeferred);
+                        VRUIUtilsService.callDirectiveLoad(customerGroupDirectiveAPI, customerGroupDirectivePayload, customerGroupDirectiveLoadPromiseDeferred);
                     });
                 }
                 return UtilsService.waitMultiplePromises(promises);

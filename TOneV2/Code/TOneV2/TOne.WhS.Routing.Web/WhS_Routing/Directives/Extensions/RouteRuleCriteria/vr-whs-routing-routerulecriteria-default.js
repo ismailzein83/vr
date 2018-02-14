@@ -35,6 +35,7 @@ app.directive('vrWhsRoutingRouterulecriteriaDefault', ['UtilsService', 'VRUIUtil
             var sellingNumberPlanId;
             var linkedCode;
             var isLinkedRouteRule;
+            var linkedCustomerId;
 
             var saleZoneGroupSettingsAPI;
             var saleZoneGroupSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -105,12 +106,12 @@ app.directive('vrWhsRoutingRouterulecriteriaDefault', ['UtilsService', 'VRUIUtil
 
                 api.load = function (payload) {
                     var promises = [];
-
                     routingProductId = payload.routingProductId;
                     sellingNumberPlanId = payload.sellingNumberPlanId;
                     routeRuleCriteria = payload.routeRuleCriteria;
                     linkedCode = payload.linkedCode;
                     isLinkedRouteRule = payload.isLinkedRouteRule;
+                    linkedCustomerId = payload.linkedCustomerId;
 
                     $scope.scopeModel.disableCriteria = isLinkedRouteRule;
 
@@ -240,9 +241,10 @@ app.directive('vrWhsRoutingRouterulecriteriaDefault', ['UtilsService', 'VRUIUtil
                 promises.push(customerGroupSettingsLoadPromiseDeferred.promise);
 
                 customerGroupSettingsReadyPromiseDeferred.promise.then(function () {
-                    var customerGroupPayload;
+                    var customerGroupPayload = { disableCriteria: $scope.scopeModel.disableCriteria, linkedCustomerId: linkedCustomerId };
+
                     if (routeRuleCriteria != undefined && routeRuleCriteria.CustomerGroupSettings != null)
-                        customerGroupPayload = routeRuleCriteria.CustomerGroupSettings;
+                        customerGroupPayload.customerGroupSettings = routeRuleCriteria.CustomerGroupSettings;
 
                     customerGroupSettingsReadyPromiseDeferred = undefined;
                     VRUIUtilsService.callDirectiveLoad(customerGroupSettingsAPI, customerGroupPayload, customerGroupSettingsLoadPromiseDeferred);

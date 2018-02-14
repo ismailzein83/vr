@@ -183,9 +183,9 @@
             promises.push(customerGroupSettingsLoadPromiseDeferred.promise);
 
             customerGroupSettingsReadyPromiseDeferred.promise.then(function () {
-                var customerGroupPayload;
+                var customerGroupPayload = {};
                 if (sellingRuleEntity != undefined && sellingRuleEntity.Criteria.CustomerGroupSettings != null)
-                    customerGroupPayload = sellingRuleEntity.Criteria.CustomerGroupSettings;
+                    customerGroupPayload.customerGroupSettings = sellingRuleEntity.Criteria.CustomerGroupSettings;
 
                 customerGroupSettingsReadyPromiseDeferred = undefined;
                 VRUIUtilsService.callDirectiveLoad(customerGroupSettingsAPI, customerGroupPayload, customerGroupSettingsLoadPromiseDeferred);

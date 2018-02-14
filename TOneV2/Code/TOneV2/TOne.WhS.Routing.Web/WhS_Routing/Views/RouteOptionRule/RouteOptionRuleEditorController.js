@@ -148,55 +148,55 @@
                     //reloadCustomerGroupSection();
                 }
 
-                function reloadSuppliersWithZonesGroupSection() {
-                    if (suppliersWithZonesGroupSettingsAPI == undefined)
-                        return;
+                //function reloadSuppliersWithZonesGroupSection() {
+                //    if (suppliersWithZonesGroupSettingsAPI == undefined)
+                //        return;
 
-                    var suppliersWithZonesGroupSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                //    var suppliersWithZonesGroupSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                    var payload = {
-                        sellingNumberPlanId: sellingNumberPlanId != undefined ? sellingNumberPlanId : undefined,
-                        saleZoneFilterSettings: { RoutingProductId: routingProductId },
-                    };
-                    VRUIUtilsService.callDirectiveLoad(suppliersWithZonesGroupSettingsAPI, payload, suppliersWithZonesGroupSettingsLoadPromiseDeferred);
+                //    var payload = {
+                //        sellingNumberPlanId: sellingNumberPlanId != undefined ? sellingNumberPlanId : undefined,
+                //        saleZoneFilterSettings: { RoutingProductId: routingProductId },
+                //    };
+                //    VRUIUtilsService.callDirectiveLoad(suppliersWithZonesGroupSettingsAPI, payload, suppliersWithZonesGroupSettingsLoadPromiseDeferred);
 
-                    return suppliersWithZonesGroupSettingsLoadPromiseDeferred.promise;
-                }
-                function reloadFilterBySection() {
-                    if (!$scope.scopeModel.showRouteOptionRuleTypeFilterSection)
-                        return;
+                //    return suppliersWithZonesGroupSettingsLoadPromiseDeferred.promise;
+                //}
+                //function reloadFilterBySection() {
+                //    if (!$scope.scopeModel.showRouteOptionRuleTypeFilterSection)
+                //        return;
 
-                    $scope.scopeModel.routeOptionRuleCriteriaTypes = UtilsService.getArrayEnum(WhS_Routing_RouteRuleCriteriaTypeEnum);
-                    if (routeOptionRuleEntity != undefined && routeOptionRuleEntity.Criteria.CodeCriteriaGroupSettings != undefined)
-                        $scope.scopeModel.selectedRouteOptionRuleCriteriaType = UtilsService.getEnum(WhS_Routing_RouteRuleCriteriaTypeEnum, 'value', WhS_Routing_RouteRuleCriteriaTypeEnum.Code.value);
-                    else
-                        $scope.scopeModel.selectedRouteOptionRuleCriteriaType = UtilsService.getEnum(WhS_Routing_RouteRuleCriteriaTypeEnum, 'value', WhS_Routing_RouteRuleCriteriaTypeEnum.SaleZone.value);
-                }
-                function reloadSaleZoneGroupSection() {
-                    if (saleZoneGroupSettingsAPI == undefined)
-                        return;
+                //    $scope.scopeModel.routeOptionRuleCriteriaTypes = UtilsService.getArrayEnum(WhS_Routing_RouteRuleCriteriaTypeEnum);
+                //    if (routeOptionRuleEntity != undefined && routeOptionRuleEntity.Criteria.CodeCriteriaGroupSettings != undefined)
+                //        $scope.scopeModel.selectedRouteOptionRuleCriteriaType = UtilsService.getEnum(WhS_Routing_RouteRuleCriteriaTypeEnum, 'value', WhS_Routing_RouteRuleCriteriaTypeEnum.Code.value);
+                //    else
+                //        $scope.scopeModel.selectedRouteOptionRuleCriteriaType = UtilsService.getEnum(WhS_Routing_RouteRuleCriteriaTypeEnum, 'value', WhS_Routing_RouteRuleCriteriaTypeEnum.SaleZone.value);
+                //}
+                //function reloadSaleZoneGroupSection() {
+                //    if (saleZoneGroupSettingsAPI == undefined)
+                //        return;
 
-                    var saleZoneGroupSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                //    var saleZoneGroupSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                    var saleZoneGroupPayload = {
-                        sellingNumberPlanId: sellingNumberPlanId != undefined ? sellingNumberPlanId : undefined,
-                        saleZoneFilterSettings: { RoutingProductId: routingProductId }
-                    };
-                    VRUIUtilsService.callDirectiveLoad(saleZoneGroupSettingsAPI, saleZoneGroupPayload, saleZoneGroupSettingsLoadPromiseDeferred);
+                //    var saleZoneGroupPayload = {
+                //        sellingNumberPlanId: sellingNumberPlanId != undefined ? sellingNumberPlanId : undefined,
+                //        saleZoneFilterSettings: { RoutingProductId: routingProductId }
+                //    };
+                //    VRUIUtilsService.callDirectiveLoad(saleZoneGroupSettingsAPI, saleZoneGroupPayload, saleZoneGroupSettingsLoadPromiseDeferred);
 
-                    return saleZoneGroupSettingsLoadPromiseDeferred.promise;
-                }
-                function reloadCustomerGroupSection() {
-                    if (customerGroupSettingsAPI == undefined)
-                        return;
+                //    return saleZoneGroupSettingsLoadPromiseDeferred.promise;
+                //}
+                //function reloadCustomerGroupSection() {
+                //    if (customerGroupSettingsAPI == undefined)
+                //        return;
 
-                    var customerGroupSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                //    var customerGroupSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                    var customerGroupPayload;
-                    VRUIUtilsService.callDirectiveLoad(customerGroupSettingsAPI, customerGroupPayload, customerGroupSettingsLoadPromiseDeferred);
+                //    var customerGroupPayload;
+                //    VRUIUtilsService.callDirectiveLoad(customerGroupSettingsAPI, customerGroupPayload, customerGroupSettingsLoadPromiseDeferred);
 
-                    return customerGroupSettingsLoadPromiseDeferred.promise;
-                }
+                //    return customerGroupSettingsLoadPromiseDeferred.promise;
+                //}
             };
 
             //TODO: make the validation below a custom validation
@@ -441,17 +441,17 @@
             promises.push(customerGroupSettingsLoadPromiseDeferred.promise);
 
             customerGroupSettingsReadyPromiseDeferred.promise.then(function () {
-                var customerGroupPayload;
+                var customerGroupPayload = {};
                 if (routeOptionRuleEntity != undefined && routeOptionRuleEntity.Criteria.CustomerGroupSettings != null)
-                    customerGroupPayload = routeOptionRuleEntity.Criteria.CustomerGroupSettings;
+                    customerGroupPayload.customerGroupSettings = routeOptionRuleEntity.Criteria.CustomerGroupSettings;
 
                 customerGroupSettingsReadyPromiseDeferred = undefined;
                 VRUIUtilsService.callDirectiveLoad(customerGroupSettingsAPI, customerGroupPayload, customerGroupSettingsLoadPromiseDeferred);
             });
 
-
             return UtilsService.waitMultiplePromises(promises);
         }
+
         function loadSuppliersWithZonesGroupSection() {
             var promises = [];
 
