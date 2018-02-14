@@ -6,12 +6,12 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Deal.Entities
 {
-    public abstract class DealRateEvaluator
+    public abstract class DealSaleRateEvaluator : BaseDealRateEvaluator
     {
-        public abstract void EvaluateRate(IDealRateEvaluatorContext context);
+        public abstract void EvaluateRate(IDealSaleRateEvaluatorContext context);
     }
 
-    public interface IDealRateEvaluatorContext
+    public interface IDealSaleRateEvaluatorContext
     {
         List<long> ZoneIds { get; }
 
@@ -19,11 +19,11 @@ namespace TOne.WhS.Deal.Entities
 
         DateTime DealEED { get; }
 
-        Dictionary<long, List<EvaluatedDealRate>> EvaluatedRatesByZoneId { get; }
+        Dictionary<long, List<EvaluatedDealSaleRate>> EvaluatedSaleRatesByZoneId { get; }
 
     }
 
-    public class EvaluatedDealRate
+    public class EvaluatedDealSaleRate
     {
         public Decimal Rate { get; set; }
 

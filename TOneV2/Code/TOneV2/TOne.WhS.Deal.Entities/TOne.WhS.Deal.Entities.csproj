@@ -56,6 +56,8 @@
     <Compile Include="DealEvaluatorProcessState.cs" />
     <Compile Include="DealProgress\DealDetailedProgress.cs" />
     <Compile Include="DealProgress\DealProgress.cs" />
+    <Compile Include="DealRateEvaluator\DealSaleRateEvaluator.cs" />
+    <Compile Include="DealRateEvaluator\DealSupplierRateEvaluator.cs" />
     <Compile Include="DealSaleZoneGroup.cs" />
     <Compile Include="DealSupplierZoneGroup.cs" />
     <Compile Include="Settings\DealTechnicalSettingData.cs" />
@@ -85,7 +87,7 @@
     <Compile Include="SwapDeal\SwapDealOutbound.cs" />
     <Compile Include="SwapDeal\SwapDealInbound.cs" />
     <Compile Include="SwapDeal\SwapDealSettingsDetail.cs" />
-    <Compile Include="DealRateEvaluator.cs" />
+    <Compile Include="DealRateEvaluator\BaseDealRateEvaluator.cs" />
     <Compile Include="VolumeCommitment\VolCommitmentDealQuery.cs" />
     <Compile Include="VolumeCommitment\VolCommitmentDealItem.cs" />
     <Compile Include="VolumeCommitment\VolCommitmentDealItemTier.cs" />

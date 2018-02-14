@@ -47,13 +47,13 @@
 
             $scope.scopeModel.isValid = function () {
                 if ($scope.scopeModel.tiers.length == 0)
-                    return "You Should add at least one tier.";
+                    return "You should add at least one tier.";
 
                 if (!hasNotLastTierRecord() && $scope.scopeModel.tiers.length == 1)
-                    return "invalide data first tier can not have unknown up to volume.";
+                    return "invalid data first tier can not have unknown up to volume.";
 
                 if (hasNotLastTierRecord())
-                    return "At least one record  should be marked as last tier.";
+                    return "At least one record should be marked as last tier.";
 
                 var tiersLength = $scope.scopeModel.tiers.length;
                 for (var x = 0; x < tiersLength; x++) {
