@@ -153,6 +153,19 @@ namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEOnBe
             get { return ""; }
         }
     }
+    public class DateTimeSerialNumberPart : GenericBESerialNumberPartSettings
+    {
+        public override Guid ConfigId
+        {
+            get { return new Guid("277816C4-DE23-48E2-971F-46BD0436C1C6"); }
+        }
+        public string DateTimeFormat { get; set; }
+        public override string GetPartText(IGenericBESerialNumberPartSettingsContext context)
+        {
+            return DateTime.Now.ToString(DateTimeFormat);
+        }
+
+    }
     public enum DateCounterType { Yearly = 0 }
     public class SequenceSerialNumberPart : GenericBESerialNumberPartSettings
     {
