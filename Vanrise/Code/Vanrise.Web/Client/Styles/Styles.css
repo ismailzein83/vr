@@ -2162,7 +2162,7 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     white-space: nowrap;
     text-overflow: ellipsis;
     overflow: hidden;
-    padding: 3px 0px 0px 4px;
+    padding: 3px 2px 0px 2px;
     position: relative;
     width: 100%;
     min-height: 24px;
@@ -4115,9 +4115,9 @@ vr-datalist .drag-icon {
     background-color: #e9e9e9;
 }
 
-.vr-datagrid[alternative-color="true"] .vr-datagrid-body:nth-of-type(odd) .vr-datagrid-cell-container {
-    background-color: inherit !important;
-}
+    .vr-datagrid[alternative-color="true"] .vr-datagrid-body:nth-of-type(odd) .vr-datagrid-cell-container {
+        background-color: inherit !important;
+    }
 
 .vr-datagrid[alternative-color="true"] .vr-datagrid-body:hover {
     background-color: #ddd !important;
@@ -4139,32 +4139,52 @@ vr-datalist .drag-icon {
     border-right: 1px solid rgb(208, 208, 208);
 }
 
-.vr-datagrid[vertical-line="true" ] .vr-datagrid-cell-container:last-child {
-    border-right: unset;
-}
+    .vr-datagrid[vertical-line="true" ] .vr-datagrid-cell-container:last-child {
+        border-right: unset;
+    }
 
 /* end vr-datagrid custom layout */
 
 /* start vr-datagrid custom cell */
 
-span[blocked="true"]{
-    text-decoration:line-through;
+span[blocked="true"] {
+    color: #FF0000;
 }
 
-span[clickable-blocked="true"]{
-    text-decoration:line-through underline;
+span[clickable-blocked="true"] {
+    color: #FF0000;
+    text-decoration: underline;
 }
 
-span[marketprice="true"]{
-    color:#5cb85c; 
+/*span[lossy="true"] {
+    color: #f0ad4e;
 }
 
-span[lossy="true"]{
-      color:#f0ad4e;
+span[forced="true"] {
+    color: #0f6dbd;
 }
 
-span[forced="true"]{
-    color:#337ab7;
+span[marketprice="true"] {
+    color: #5cb85c;
+}*/
+
+span .option {
+}
+
+span.option-blocked {
+    color: #FF0000;
+}
+
+span.option-lossy {
+    color: #FFA500;
+}
+
+span.option-forced {
+    color: #0000FF;
+}
+
+span.option-marketprice {
+    color: #28A744;
 }
 
 /* end vr-datagrid custom cell */

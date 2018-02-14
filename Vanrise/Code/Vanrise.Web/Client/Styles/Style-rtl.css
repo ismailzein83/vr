@@ -429,7 +429,7 @@
 }
 
 .rtl .vr-datagrid-cell,.rtl .vr-datagrid-header-cell {
-    padding: 3px 4px 0px 0px !important;
+    padding: 3px 2px 0px 2px !important;
 }
 
 .rtl .vr-datagrid-body .glyphicon-th-list {
