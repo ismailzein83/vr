@@ -17,7 +17,7 @@ app.directive('vrIcon', ['$compile', function ($compile) {
         'below': { value: "glyphicon-arrow-down arrow-below", isimage: false, tooltip: 'Below' },//#ff1111
         'increase': { value: "glyphicon-arrow-up arrow-below", isimage: false, tooltip: 'Increase' },
         'decrease': { value: "glyphicon-arrow-down arrow-above", isimage: false, tooltip: 'Decrease' }, //#37c737
-        'explicit': { value: 'Client/Images/explicit.png', isimage: true, tooltip: 'Explicit', width: "15px", height: "15px" },
+        'explicit': { value: 'Client/Images/explicit.png', isimage: true, tooltip: 'Explicit', width: 15, height: 15 },
         'inherited': { value: 'Client/Images/inherited.png', isimage: true, tooltip: 'Inherited' }
     };
 
@@ -63,18 +63,26 @@ app.directive('vrIcon', ['$compile', function ($compile) {
             text = ctrl.text;
         var containerstyle = "";
         if (attr.inline != undefined)
-            containerstyle = "display:inline-block";
+            containerstyle = "display:inline-block;";
         var tooltip = ctrl.tooltip != undefined ? ctrl.tooltip : ctrl.icon.tooltip;
 
         var template = '';
-        if (ctrl.icon.isimage) {
-            var width = ctrl.icon.width || "20px";
-            var height = ctrl.icon.height || "20px";
 
-            template += '<div style="text-align: left;' + containerstyle + '"><img style="width:' + width + ';height:' + height + '" title="' + tooltip + '"  src="' + ctrl.icon.value + '"  /><span>' + text + '</span></div>';
+        var widthAsInt = ctrl.icon.width || 20;
+        var heightAsInt = ctrl.icon.height || 20;
+
+        var width = widthAsInt + 'px';
+        var height = heightAsInt + 'px';
+
+        var style = 'text-align: left;';
+        if (attr.centered != undefined)
+            style += "position:relative; left:calc(50% - " + widthAsInt / 2 + "px);";
+
+        if (ctrl.icon.isimage) {
+            template += '<div style="' + style + containerstyle + '"><img style="width:' + width + ';height:' + height + '" title="' + tooltip + '"  src="' + ctrl.icon.value + '"  /><span>' + text + '</span></div>';
         }
         else
-            template += '<div style="text-align: left;' + containerstyle + '"><span class="glyphicon ' + ctrl.icon.value + '" title="' + tooltip + '" /></div>';
+            template += '<div style="' + style + containerstyle + '"><span class="glyphicon ' + ctrl.icon.value + '" title="' + tooltip + '" /></div>';
 
         return template;
     }
