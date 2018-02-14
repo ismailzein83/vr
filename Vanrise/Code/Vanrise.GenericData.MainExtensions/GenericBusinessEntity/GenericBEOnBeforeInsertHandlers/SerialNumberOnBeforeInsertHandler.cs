@@ -164,7 +164,10 @@ namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEOnBe
         {
             return DateTime.Now.ToString(DateTimeFormat);
         }
-
+        public override string RuntimeEditor
+        {
+            get { return ""; }
+        }
     }
     public enum DateCounterType { Yearly = 0 }
     public class SequenceSerialNumberPart : GenericBESerialNumberPartSettings
