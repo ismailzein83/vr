@@ -85,6 +85,7 @@
     <Compile Include="SwapDeal\SwapDealOutbound.cs" />
     <Compile Include="SwapDeal\SwapDealInbound.cs" />
     <Compile Include="SwapDeal\SwapDealSettingsDetail.cs" />
+    <Compile Include="DealRateEvaluator.cs" />
     <Compile Include="VolumeCommitment\VolCommitmentDealQuery.cs" />
     <Compile Include="VolumeCommitment\VolCommitmentDealItem.cs" />
     <Compile Include="VolumeCommitment\VolCommitmentDealItemTier.cs" />
