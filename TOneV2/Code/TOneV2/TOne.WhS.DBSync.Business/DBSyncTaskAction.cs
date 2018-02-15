@@ -115,6 +115,12 @@ namespace TOne.WhS.DBSync.Business
             Setting systemCurrencySetting = settingManager.GetSettingByType("VR_Common_BaseCurrency");
             CurrencySettingData currencySettingData = (CurrencySettingData)systemCurrencySetting.Data;
 
+            if (_context.DBTables != null && _context.DBTables.ContainsKey(DBTableName.Rule))
+            {
+                RuleDBSyncDataManager ruleDBSyncDataManager = new RuleDBSyncDataManager();
+                ruleDBSyncDataManager.DeleteRuleChangedTables();
+            }
+
             PostDataDBSyncDataManager postDataDBSyncDataManager = new PostDataDBSyncDataManager();
 
             postDataDBSyncDataManager.FixSellingProductRates(_context.DefaultSellingNumberPlanId, _context.SellingProductId, currencySettingData.CurrencyId, _context.DefaultRate);

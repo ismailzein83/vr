@@ -83,6 +83,7 @@
     <Compile Include="Common\IDBSyncDataManager.cs" />
     <Compile Include="Common\Constants.cs" />
     <Compile Include="Common\MigrationUtils.cs" />
+    <Compile Include="DBSyncDataManager\RuleDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\CarrierAccountStatusHistoryDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\ClearTempTablesDBSyncDataManager.cs" />
     <Compile Include="DBSyncDataManager\FinancialAccountDBSyncDataManager.cs" />
