@@ -22,17 +22,22 @@ namespace TOne.WhS.SupplierPriceList.Business
         {
             AllImportedCodes allImportedCodes = context.Target as AllImportedCodes;
             var invalidCodes = new HashSet<string>();
+            int invalidRecordsCounter = 0;
             foreach (var importedCode in allImportedCodes.ImportedCodes)
             {
                 if (string.IsNullOrEmpty(importedCode.ZoneName))
-                    invalidCodes.Add(importedCode.Code);
+                {
+                    if (string.IsNullOrEmpty(importedCode.Code))
+                        invalidRecordsCounter++;
+                    else invalidCodes.Add(importedCode.Code);
+                }
             }
             if (invalidCodes.Count > 0)
-            {
                 context.Message = string.Format("Zone is missing for the following code(s): ({0}).", string.Join(", ", invalidCodes));
-                return false;
-            }
-            return true;
+            if(invalidRecordsCounter>0)
+                context.Message += string.Format(" {0} record(s) have missing zone and code.", string.Join(", ", invalidRecordsCounter));
+            return (invalidRecordsCounter == 0 && invalidCodes.Count == 0);
+
         }
 
         public override string GetMessage(IRuleTarget target)
