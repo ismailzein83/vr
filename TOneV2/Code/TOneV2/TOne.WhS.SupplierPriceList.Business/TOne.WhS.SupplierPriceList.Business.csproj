@@ -94,6 +94,7 @@
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\CodeBEDLessThanRetroactiveDateCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\NormalRateBEDLessThanRetroactiveDateCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateAfterProcessing\OtherRateBEDLessThanRetroactiveDateCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\ValidateZones\OtherRateNegativeOrZero.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\RateGreaterThanZero.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\ZoneServicesWithDifferentBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ValidateZones\ZoneHasNoCodesCondition.cs" />
