@@ -72,7 +72,7 @@ namespace TOne.WhS.Routing.Entities
 
             if (this.Criteria != null && this.Criteria.ExcludedDestinations != null)
             {
-                RoutingExcludedDestinationContext context = new RoutingExcludedDestinationContext() { Code = routeOptionRuleTarget.RouteTarget.Code };
+                RoutingExcludedDestinationContext context = new RoutingExcludedDestinationContext(routeOptionRuleTarget.RouteTarget.Code, base.RuleId);
                 if (this.Criteria.ExcludedDestinations.IsExcludedDestination(context))
                     return true;
             }

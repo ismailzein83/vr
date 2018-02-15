@@ -18,8 +18,12 @@ namespace TOne.WhS.Routing.Business
             if (string.IsNullOrEmpty(context.Code))
                 throw new NullReferenceException("context.Code");
 
+            this.CodeRanges.ThrowIfNull("CodeRanges", context.RuleId);
+
             foreach (var codeRange in CodeRanges)
             {
+                codeRange.ThrowIfNull("codeRange", context.RuleId);
+
                 if (codeRange.FromCode.Length != codeRange.ToCode.Length)
                     throw new Vanrise.Entities.VRBusinessException(string.Format("Range bounds (From: '{0}', To: '{1}') have different length.", codeRange.FromCode, codeRange.ToCode));
 

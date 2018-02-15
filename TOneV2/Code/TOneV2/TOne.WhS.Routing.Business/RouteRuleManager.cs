@@ -340,7 +340,7 @@ namespace TOne.WhS.Routing.Business
                                 if (criteria == null)
                                     continue;
 
-                                string code = CheckAndReturnValidCode(criteria);
+                                string code = CheckAndReturnValidCode(criteria, routeRule.Value.RuleId);
                                 if (string.IsNullOrEmpty(code))
                                     continue;
 
@@ -375,7 +375,7 @@ namespace TOne.WhS.Routing.Business
             return selectiveCustomerGroup.CustomerIds.First();
         }
 
-        string CheckAndReturnValidCode(BaseRouteRuleCriteria criteria)
+        string CheckAndReturnValidCode(BaseRouteRuleCriteria criteria, int ruleId)
         {
             CodeCriteriaGroupSettings codeCriteriaGroupSettings = criteria.GetCodeCriteriaGroupSettings();
             if (codeCriteriaGroupSettings == null)
@@ -393,7 +393,7 @@ namespace TOne.WhS.Routing.Business
             RoutingExcludedDestinations routingExcludedDestinations = criteria.GetExcludedDestinations();
             if (routingExcludedDestinations != null)
             {
-                RoutingExcludedDestinationContext context = new RoutingExcludedDestinationContext() { Code = code };
+                RoutingExcludedDestinationContext context = new RoutingExcludedDestinationContext(code, ruleId);
                 if (routingExcludedDestinations.IsExcludedDestination(context))
                     return null;
             }

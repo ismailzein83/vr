@@ -18,6 +18,8 @@ namespace TOne.WhS.Routing.Business
             if (string.IsNullOrEmpty(context.Code))
                 throw new NullReferenceException("context.Code");
 
+            this.Codes.ThrowIfNull("Codes", context.RuleId);
+
             if (this.Codes.Contains(context.Code))
                 return true;
 

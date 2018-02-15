@@ -45,7 +45,7 @@ namespace TOne.WhS.Routing.Entities
                 RoutingExcludedDestinations routingExcludedDestinations = this.Criteria.GetExcludedDestinations();
                 if(routingExcludedDestinations != null)
                 {
-                    RoutingExcludedDestinationContext context = new RoutingExcludedDestinationContext() { Code = routeRuleTarget.Code };
+                    RoutingExcludedDestinationContext context = new RoutingExcludedDestinationContext(routeRuleTarget.Code, base.RuleId);
                     if (routingExcludedDestinations.IsExcludedDestination(context))
                         return true;
                 }
