@@ -91,7 +91,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DealRateEvaluator\SaleRateEvaluator\DiscountSaleRateEvaluator.cs" />
     <Compile Include="DealRateEvaluator\SaleRateEvaluator\FixedSaleRateEvaluator.cs" />
+    <Compile Include="DealRateEvaluator\SupplierRateEvaluator\DiscountSupplierRateEvaluator.cs" />
     <Compile Include="DealRateEvaluator\SupplierRateEvaluator\FixedSupplierRateEvaluator.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
