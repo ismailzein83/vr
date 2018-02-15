@@ -72,7 +72,7 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                 };
                 $scope.scopeModel.onTicketContactSelectionChanged = function () {
                     var carrierProfileTicketInfo = ticketContactSelectorAPI.getSelectedValues();
-                    if (carrierProfileTicketInfo != undefined && !$scope.scopeModel.isEditMode) {
+                    if (carrierProfileTicketInfo != undefined) {
                         $scope.scopeModel.contactName = carrierProfileTicketInfo.NameDescription;   
                         $scope.scopeModel.email = carrierProfileTicketInfo.Emails.join(';');
                         $scope.scopeModel.phoneNumber = carrierProfileTicketInfo.PhoneNumber.join(';');
