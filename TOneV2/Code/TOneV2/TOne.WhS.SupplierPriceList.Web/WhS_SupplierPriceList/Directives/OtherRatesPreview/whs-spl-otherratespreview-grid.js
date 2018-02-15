@@ -75,21 +75,25 @@ function (WhS_SupPL_SupplierPriceListPreviewPIService, WhS_SupPL_RateChangeTypeE
                 case WhS_SupPL_RateChangeTypeEnum.New.value:
                     dataItem.RateStatusIconUrl = WhS_SupPL_RateChangeTypeEnum.New.icon;
                     dataItem.RateStatusIconTooltip = WhS_SupPL_RateChangeTypeEnum.New.description;
+                    dataItem.RateChangeTypeIconType = WhS_SupPL_RateChangeTypeEnum.New.iconType;
                     break;
 
                 case WhS_SupPL_RateChangeTypeEnum.Deleted.value:
                     dataItem.RateStatusIconUrl = WhS_SupPL_RateChangeTypeEnum.Deleted.icon;
                     dataItem.RateStatusIconTooltip = WhS_SupPL_RateChangeTypeEnum.Deleted.description;
+                    dataItem.RateChangeTypeIconType = WhS_SupPL_RateChangeTypeEnum.Deleted.iconType;
                     break;
 
                 case WhS_SupPL_RateChangeTypeEnum.Increase.value:
                     dataItem.RateStatusIconUrl = WhS_SupPL_RateChangeTypeEnum.Increase.icon;
                     dataItem.RateStatusIconTooltip = WhS_SupPL_RateChangeTypeEnum.Increase.description;
+                    dataItem.RateChangeTypeIconType = WhS_SupPL_RateChangeTypeEnum.Increase.iconType;
                     break;
 
                 case WhS_SupPL_RateChangeTypeEnum.Decrease.value:
                     dataItem.RateStatusIconUrl = WhS_SupPL_RateChangeTypeEnum.Decrease.icon;
                     dataItem.RateStatusIconTooltip = WhS_SupPL_RateChangeTypeEnum.Decrease.description;
+                    dataItem.RateChangeTypeIconType = WhS_SupPL_RateChangeTypeEnum.Decrease.iconType;
                     break;
 
             }
