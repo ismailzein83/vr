@@ -159,7 +159,7 @@ namespace TOne.WhS.DBSync.Business.Migrators
                         } 
                     },
                 };
-                if (sourceRule.ExcludedCodesList != null)
+                if (sourceRule.ExcludedCodesList != null && sourceRule.ExcludedCodesList.Count > 0)
                     settings.Criteria.ExcludedDestinations = new ExcludedCodes() { Codes = sourceRule.ExcludedCodesList.ToList() };
             }
             if (lstZoneIds.Count > 0)

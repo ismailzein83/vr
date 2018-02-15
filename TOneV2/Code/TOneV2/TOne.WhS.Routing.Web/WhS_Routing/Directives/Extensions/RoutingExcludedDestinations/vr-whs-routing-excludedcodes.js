@@ -67,6 +67,10 @@ app.directive('vrWhsRoutingExcludedcodes', ['UtilsService', 'VRUIUtilsService',
                             }
                         }
                     }
+
+                    if ($scope.scopeModel.excludedCodes == undefined || $scope.scopeModel.excludedCodes.length == 0)
+                        return 'At least one Excluded Code should be added';
+
                     return null;
                 };
 
@@ -92,7 +96,7 @@ app.directive('vrWhsRoutingExcludedcodes', ['UtilsService', 'VRUIUtilsService',
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.Routing.Business.ExcludedCodes, TOne.WhS.Routing.Business",
-                        Codes: $scope.scopeModel.excludedCodes.length > 0 ? $scope.scopeModel.excludedCodes : undefined
+                        Codes: $scope.scopeModel.excludedCodes
                     };
                 };
 

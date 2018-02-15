@@ -136,7 +136,7 @@ namespace TOne.WhS.DBSync.Business
                     {
                         CustomerIds = new List<int>() { customer.CarrierAccountId },
                     },
-                    ExcludedDestinations = defaultRule.ExcludedCodesList != null ? new ExcludedCodes() { Codes = defaultRule.ExcludedCodesList.ToList() } : null
+                    ExcludedDestinations = defaultRule.ExcludedCodesList != null && defaultRule.ExcludedCodesList.Count > 0 ? new ExcludedCodes() { Codes = defaultRule.ExcludedCodesList.ToList() } : null
                 },
                 Settings = new SpecialRequestRouteRule
                 {
