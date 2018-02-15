@@ -16,10 +16,10 @@ namespace Vanrise.BusinessProcess.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, dataManager.GetFilteredBPInstanceTracking(input));
         }
 
-        public IEnumerable<BPTrackingMessage> GetBPInstanceTrackingMessages(long processInstanceId, List<LogEntryType> Severities)
+        public IEnumerable<BPTrackingMessage> GetBPInstanceTrackingMessages(long processInstanceId, List<LogEntryType> severities)
         {
             IBPTrackingDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPTrackingDataManager>();
-            return dataManager.GetBPInstanceTrackingMessages(processInstanceId, Severities);
+            return dataManager.GetBPInstanceTrackingMessages(processInstanceId, severities);
         }
 
         public List<BPTrackingMessageDetail> GetBeforeId(BPTrackingBeforeIdInput input)
