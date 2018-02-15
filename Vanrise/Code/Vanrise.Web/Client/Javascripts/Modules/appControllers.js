@@ -10,7 +10,8 @@ var appControllers = angular.module('appControllers', [
     'ivh.treeview',
     'angularTreeview',
     'ui.codemirror',
-    'ngWYSIWYG'
+    'ngWYSIWYG',
+    'ngWebSocket'
 ]);
 appControllers.directive('draggable', ['$document', function ($document) {
     "use strict";

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
+using Vanrise.Common;
 using Vanrise.Security.Entities;
 
 namespace Vanrise.Security.Business
@@ -127,30 +128,54 @@ namespace Vanrise.Security.Business
             return securityToken;
         }
 
-        private bool TryGetSecurityToken(out SecurityToken securityToken)
+        public static bool TryGetSecurityToken(out SecurityToken securityToken)
         {
             //TODO: handle the exception Key Not found in case the auth-toekn was null
-            
-            securityToken = null;
-            if(HttpContext.Current == null)
-                return false;           
-            string token = null;
-            if (HttpContext.Current.Request.Headers[SecurityContext.SECURITY_TOKEN_NAME] != null)
-                token = HttpContext.Current.Request.Headers[SecurityContext.SECURITY_TOKEN_NAME];
-            else if (HttpContext.Current.Request.Params[SECURITY_TOKEN_NAME] != null) 
-                token =  HttpUtility.HtmlDecode(HttpContext.Current.Request.Params[SECURITY_TOKEN_NAME]);
-            if (!string.IsNullOrEmpty(token))
-            {
-                string decryptionKey = (new SecurityManager()).GetTokenDecryptionKey();
-                string decryptedToken = Common.Cryptography.Decrypt(token, decryptionKey);
-
-                securityToken = Common.Serializer.Deserialize<SecurityToken>(decryptedToken);
-                return true;
-            }
-            else
+            try
             {
                 securityToken = null;
-                return false;
+                if (HttpContext.Current == null)
+                    return false;
+                string token = null;
+                if (HttpContext.Current.Request.Headers[SecurityContext.SECURITY_TOKEN_NAME] != null)
+                    token = HttpContext.Current.Request.Headers[SecurityContext.SECURITY_TOKEN_NAME];
+                else if (HttpContext.Current.Request.Params[SECURITY_TOKEN_NAME] != null)
+                    token = HttpUtility.HtmlDecode(HttpContext.Current.Request.Params[SECURITY_TOKEN_NAME]);
+                else
+                {
+                    if (HttpContext.Current.Request.Cookies != null)
+                    {
+                        var cookies = HttpContext.Current.Request.Cookies;
+                        foreach (var cookieKey in cookies.AllKeys)
+                        {
+                            if (cookieKey.StartsWith("Vanrise_AccessCookie"))
+                            {
+                                var cookieValue = System.Web.HttpUtility.UrlDecode(cookies[cookieKey].Value);
+                                AuthenticationToken authenticationToken = Serializer.Deserialize<AuthenticationToken>(cookieValue);
+                                token = authenticationToken.Token;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (!string.IsNullOrEmpty(token))
+                {
+                    string decryptionKey = (new SecurityManager()).GetTokenDecryptionKey();
+                    string decryptedToken = Common.Cryptography.Decrypt(token, decryptionKey);
+
+                    securityToken = Common.Serializer.Deserialize<SecurityToken>(decryptedToken);
+                    return true;
+                }
+                else
+                {
+                    securityToken = null;
+                    return false;
+                }
+            }
+            catch(Exception ex)
+            {
+                LoggerFactory.GetExceptionLogger().WriteException(ex);
+                throw;
             }
         }
 

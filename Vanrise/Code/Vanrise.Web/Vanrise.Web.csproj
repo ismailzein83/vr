@@ -367,6 +367,7 @@
     <Content Include="Client\Javascripts\Services\UIUtilsService.js" />
     <Content Include="Client\Javascripts\Services\utils-service.js" />
     <Content Include="Client\Javascripts\Services\ValidationService.js" />
+    <Content Include="Client\Javascripts\Services\vr-pushnotification-service.js" />
     <Content Include="Client\Javascripts\Services\VRDateTimeService.js" />
     <Content Include="Client\Javascripts\Services\VRLocalization\VRLocalizationService.js" />
     <Content Include="Client\Libraries\AngularExtensions\BsDateTimePicker\bootstrap-datetimepicker.js" />
@@ -425,6 +426,7 @@
     <Content Include="Client\Libraries\Angular\angular-strap.js" />
     <Content Include="Client\Libraries\Angular\angular-strap.tpl.js" />
     <Content Include="Client\Libraries\Angular\angular-ui-switch.js" />
+    <Content Include="Client\Libraries\Angular\angular-websocket.js" />
     <Content Include="Client\Libraries\Angular\angular.js" />
     <Content Include="Client\Libraries\Angular\ivh-treeview.js" />
     <Content Include="Client\Libraries\Angular\meteor\example\client\define-object-type.css" />

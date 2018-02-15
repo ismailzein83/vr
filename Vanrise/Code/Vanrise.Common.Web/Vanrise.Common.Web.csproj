@@ -144,6 +144,7 @@
     <Compile Include="Controllers\VRComponentTypeController.cs" />
     <Compile Include="Controllers\VRConnectionController.cs" />
     <Compile Include="Controllers\VRPop3MessageFilterController.cs" />
+    <Compile Include="Controllers\VRPushNotificationController.cs" />
     <Compile Include="Controllers\VRRuleDefinitionController.cs" />
     <Compile Include="Controllers\VRTileController.cs" />
     <Compile Include="Controllers\VRTimePeriodController.cs" />

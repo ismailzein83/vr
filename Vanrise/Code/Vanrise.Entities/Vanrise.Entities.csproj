@@ -80,6 +80,11 @@
     <Compile Include="LabelColor.cs" />
     <Compile Include="ModalWidthEnum.cs" />
     <Compile Include="ObjectFactory.cs" />
+    <Compile Include="VRPushNotification\VRPushNotificationClientMessage.cs" />
+    <Compile Include="VRPushNotification\VRPushNotificationClientSubscription.cs" />
+    <Compile Include="VRPushNotification\VRPushNotificationClientUnsubscribe.cs" />
+    <Compile Include="VRPushNotification\VRPushNotificationHandler.cs" />
+    <Compile Include="VRPushNotification\VRPushNotificationHandlerSettings.cs" />
     <Compile Include="SalutationTypeEnum.cs" />
     <Compile Include="GenderTypeEnum.cs" />
     <Compile Include="GenericLKUP\GenericLKUPDefinitionConfig.cs" />
@@ -204,6 +209,8 @@
     <Compile Include="VRMail\VRReceivedMailMessage.cs" />
     <Compile Include="VRObject\VRObjectTypeCreateObjectContext.cs" />
     <Compile Include="VRObject\VRRazorCompilationOutput.cs" />
+    <Compile Include="VRPushNotification\IVRPushNotificationSubscription.cs" />
+    <Compile Include="VRPushNotification\VRPushNotificationMessage.cs" />
     <Compile Include="VRRule\VRRule.cs" />
     <Compile Include="VRRule\VRRuleDefinition\VRRuleDefinitionExtendedSettings.cs" />
     <Compile Include="VRRule\VRRuleDefinition\VRRuleDefinition.cs" />

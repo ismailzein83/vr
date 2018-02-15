@@ -17,52 +17,29 @@ namespace Vanrise.Web.App_Start
             {
                 if (NeedsAuthentication(actionContext))
                 {
-                    string encryptedToken = HttpContext.Current.Request.Headers[Vanrise.Security.Business.SecurityContext.SECURITY_TOKEN_NAME];
-
-                    if (encryptedToken == null)
+                    SecurityToken securityToken;
+                    if(!SecurityContext.TryGetSecurityToken(out securityToken))
                     {
                         actionContext.Response = Utils.CreateResponseMessage(System.Net.HttpStatusCode.Unauthorized, "Could not find a token to authorize this request");
                     }
                     else
                     {
-                        try
+                        InvalidAccess invalidAccess;
+                        string errorMessage;
+                        if (!(new SecurityManager()).CheckTokenAccess(securityToken, out errorMessage, out invalidAccess))
                         {
-                            InvalidAccess invalidAccess;
-                            string decryptionKey = (new SecurityManager()).GetTokenDecryptionKey();
-                            string decryptedToken = Common.Cryptography.Decrypt(encryptedToken, decryptionKey);
-                            string errorMessage;
-                            if (decryptedToken != String.Empty)
+                            System.Net.HttpStatusCode httpStatusCode;
+                            switch (invalidAccess)
                             {
-                                SecurityToken securityToken = Serializer.Deserialize<SecurityToken>(decryptedToken);
-                                if (securityToken == null)
-                                {
-                                    actionContext.Response = Utils.CreateResponseMessage(System.Net.HttpStatusCode.Unauthorized, "Invalid Token");
-                                }
-                                else if (!(new SecurityManager()).CheckTokenAccess(securityToken, out errorMessage, out invalidAccess))
-                                {
-                                    System.Net.HttpStatusCode httpStatusCode;
-                                    switch (invalidAccess)
-                                    {
-                                        case InvalidAccess.LicenseExpired: httpStatusCode = System.Net.HttpStatusCode.PaymentRequired; break;
-                                        case InvalidAccess.TokenExpired:
-                                        case InvalidAccess.UnauthorizeAccess:
-                                        default: httpStatusCode = System.Net.HttpStatusCode.Unauthorized; break;
+                                case InvalidAccess.LicenseExpired: httpStatusCode = System.Net.HttpStatusCode.PaymentRequired; break;
+                                case InvalidAccess.TokenExpired:
+                                case InvalidAccess.UnauthorizeAccess:
+                                default: httpStatusCode = System.Net.HttpStatusCode.Unauthorized; break;
 
-                                    }
-                                    actionContext.Response = Utils.CreateResponseMessage(httpStatusCode, errorMessage);
-                                }
                             }
-                            else
-                            {
-                                actionContext.Response = Utils.CreateResponseMessage(System.Net.HttpStatusCode.Unauthorized, "Invalid Token");
-                            }
+                            actionContext.Response = Utils.CreateResponseMessage(httpStatusCode, errorMessage);
                         }
-                        catch (Exception ex)
-                        {
-                            LoggerFactory.GetExceptionLogger().WriteException(ex);
-                            actionContext.Response = Utils.CreateResponseMessage(System.Net.HttpStatusCode.Unauthorized, "Invalid Token");
-                        }
-                    }
+                    }                    
                 }
             }
             catch (Exception ex)
