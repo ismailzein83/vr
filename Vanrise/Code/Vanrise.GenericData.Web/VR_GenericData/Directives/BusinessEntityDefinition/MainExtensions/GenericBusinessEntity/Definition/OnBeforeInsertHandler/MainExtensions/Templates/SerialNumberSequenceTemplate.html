@@ -1,0 +1,34 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-genericdata-datarecordtypefields-selector label="Key Field Name" on-ready="scopeModel.onDataRecordTypeFieldsSelectorDirectiveReady" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-select datasource="scopeModel.dateCounterTypes"
+                   datavaluefield="value"
+                   datatextfield="description"
+                   selectedvalues="scopeModel.selectedDateCounterType"
+                   label="Date Counter Type">
+        </vr-select>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-textbox label="Info Type"
+                   value="scopeModel.infoType"
+                   isrequired>
+        </vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-textbox label="Padding Left"
+                    value="scopeModel.paddingLeft"
+                    type="number"
+                    decimalprecision="0"
+                    minvalue="0"
+                    isrequired >
+        </vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-switch label="Include Partner Id"
+                   value="scopeModel.includePartnerId">
+        </vr-switch>
+    </vr-columns>
+
+</vr-row>

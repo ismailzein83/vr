@@ -47,6 +47,9 @@
         function GetGenericBEConditionSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetGenericBEConditionSettingsConfigs"));
         }
+        function GetGenericBESerialNumberPartSettingsConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetGenericBESerialNumberPartSettingsConfigs"));
+        }
         return ({
             GetGenericBEDefinitionSettings: GetGenericBEDefinitionSettings,
             GetGenericBEGridDefinition: GetGenericBEGridDefinition,
@@ -60,7 +63,8 @@
             GetGenericBEOnAfterSaveHandlerSettingsConfigs: GetGenericBEOnAfterSaveHandlerSettingsConfigs,
             GetGenericBEOnBeforeInsertHandlerSettingsConfigs: GetGenericBEOnBeforeInsertHandlerSettingsConfigs,
             GetGenericBESaveConditionSettingsConfigs: GetGenericBESaveConditionSettingsConfigs,
-            GetGenericBEConditionSettingsConfigs: GetGenericBEConditionSettingsConfigs
+            GetGenericBEConditionSettingsConfigs: GetGenericBEConditionSettingsConfigs,
+            GetGenericBESerialNumberPartSettingsConfigs: GetGenericBESerialNumberPartSettingsConfigs
         });
     }
     appControllers.service("VR_GenericData_GenericBEDefinitionAPIService", genericBusinessEntityDefinitionAPIService);

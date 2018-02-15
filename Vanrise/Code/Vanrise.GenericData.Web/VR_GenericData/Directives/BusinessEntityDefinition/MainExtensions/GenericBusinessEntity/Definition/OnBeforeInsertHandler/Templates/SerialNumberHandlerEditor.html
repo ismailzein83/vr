@@ -1,0 +1,27 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-genericdata-datarecordtypefields-selector  on-ready="scopeModel.onDataRecordTypeFieldsSelectorDirectiveReady" isrequired="true"></vr-genericdata-datarecordtypefields-selector>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-textbox value="scopeModel.infoType" label="Info Type" isrequired></vr-textbox>
+    </vr-columns>
+</vr-row>
+<vr-section level="2" header="Serial Number Parts">
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-button type="Add" data-onclick="ctrl.addSerialNumberPart" standalone></vr-button>
+
+            <vr-validator validate="ctrl.isValid()">
+                <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                             on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeSerialNumberPart" hidegridmenu>
+                    <vr-datagridcolumn headertext="'Name'" field="'VariableName'" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Description'" field="'VariableDescription'" disablesorting>
+                    </vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-validator>
+        </vr-columns>
+    </vr-row>
+</vr-section>
+
+
+

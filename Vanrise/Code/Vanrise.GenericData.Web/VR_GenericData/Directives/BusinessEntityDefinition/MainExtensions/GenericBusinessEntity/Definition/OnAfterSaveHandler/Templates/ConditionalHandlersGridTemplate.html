@@ -1,11 +1,13 @@
-﻿<vr-row>
-    <vr-columns colnum="12">
-        <vr-button type="Add" data-onclick="ctrl.addConditionalHandler" standalone ></vr-button>
-        <vr-validator validate="ctrl.isValid()">
-            <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
-                         on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeConditionalHandler" hidegridmenu>
-                <vr-datagridcolumn headertext="'Name'" field="'Name'" disablesorting></vr-datagridcolumn>
-            </vr-datagrid>
-        </vr-validator>
-    </vr-columns>
-</vr-row>
+﻿<vr-section level="2" header="Conditional Handlers">
+    <vr-row>
+        <vr-columns colnum="12">
+            <vr-button type="Add" data-onclick="ctrl.addConditionalHandler" standalone></vr-button>
+            <vr-validator validate="ctrl.isValid()">
+                <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                             on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeConditionalHandler" hidegridmenu>
+                    <vr-datagridcolumn headertext="'Name'" field="'Name'" disablesorting></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-validator>
+        </vr-columns>
+    </vr-row>
+</vr-section>

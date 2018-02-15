@@ -192,6 +192,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_GenericData\Constants\CompareToConstantOperatorEnum.js" />
+    <Content Include="VR_GenericData\Constants\DateCounterTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\FieldNumberDataPrecisionEnum.js" />
     <Content Include="VR_GenericData\Constants\MappingDataTypeEnum.js" />
     <Content Include="VR_GenericData\Constants\RecordFilterOperatorEnum.js" />
@@ -256,6 +257,17 @@
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\GenericBESaveCondition\MainExtensions\Templates\SaveConditionConditionGroupTemplate.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\GenericBESaveCondition\MainExtensions\vr-genericdata-genericbe-savecondition-conditiongroup.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\GenericBESaveCondition\vr-genericdata-genericbe-savecondition-settings.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\OnBeforeInsertHandler\MainExtensions\Templates\SerialNumberDateTimeTemplate.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\OnBeforeInsertHandler\MainExtensions\Templates\SerialNumberSequenceTemplate.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\OnBeforeInsertHandler\MainExtensions\Templates\SerialNumberGenericFieldTemplate.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\OnBeforeInsertHandler\MainExtensions\vr-genericdata-genericbe-serialnumber-sequence.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\OnBeforeInsertHandler\MainExtensions\vr-genericdata-genericbe-serialnumber-datetime.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\OnBeforeInsertHandler\MainExtensions\vr-genericdata-genericbe-serialnumber-genericfield.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\OnBeforeInsertHandler\MainExtensions\vr-genericdata-genericbe-serialnumberpart-settings.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\OnBeforeInsertHandler\SerialNumberPartDefinitionEditorController.js" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\OnBeforeInsertHandler\Templates\SerialNumberPartDefinitionEditor.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\OnBeforeInsertHandler\Templates\SerialNumberHandlerEditor.html" />
+    <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\OnBeforeInsertHandler\vr-genericdata-genericbe-beforeinserthandler-serialnumber.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\OnAfterSaveHandler\AfterSaveHandlerConditionalEditorController.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\OnAfterSaveHandler\Templates\AfterSaveHandlerConditionalEditor.html" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericBusinessEntity\Definition\OnAfterSaveHandler\Templates\ConditionalHandlersGridTemplate.html" />

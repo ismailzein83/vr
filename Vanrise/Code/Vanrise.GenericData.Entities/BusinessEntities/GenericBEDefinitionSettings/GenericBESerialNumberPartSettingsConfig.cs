@@ -7,9 +7,9 @@ using Vanrise.Entities;
 
 namespace Vanrise.GenericData.Entities
 {
-    public class GenericBEOnAfterSaveHandlerSettingsConfig : ExtensionConfiguration
+    public class GenericBESerialNumberPartSettingsConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "VR_GenericData_GenericBEOnAfterSaveHandlerSettings";
+        public const string EXTENSION_TYPE = "VR_GenericData_GenericBESerialNumberPartSettings";
         public string Editor { get; set; }
     }
 }

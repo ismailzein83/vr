@@ -97,7 +97,6 @@
         }
 
         function buildConditionGroupFromScope() {
-            //console.log(conditionsDirectiveAPI.getData())
             return {
                 Name: $scope.scopeModel.name,
                 ApplicableOnOldEntity: $scope.scopeModel.applicableOnOldEntity,

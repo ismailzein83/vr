@@ -105,5 +105,11 @@ namespace Vanrise.GenericData.Web.Controllers
             return _manager.GetGenericBEConditionSettingsConfigs();
         }
 
+        [HttpGet]
+        [Route("GetGenericBESerialNumberPartSettingsConfigs")]
+        public IEnumerable<GenericBESerialNumberPartSettingsConfig> GetGenericBESerialNumberPartSettingsConfigs()
+        {
+            return _manager.GetGenericBESerialNumberPartSettingsConfigs();
+        }
     }
 }

@@ -13,6 +13,7 @@
         var gridActionModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/Editor/Templates/GridActionDefinitionEditor.html";
         var conditionalHandlerPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/OnAfterSaveHandler/Templates/AfterSaveHandlerConditionalEditor.html";
         var conditionGroupPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/GenericBESaveCondition/MainExtensions/Templates/GenericBEConditionGroupEditor.html";
+        var partDefinitionPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/OnBeforeInsertHandler/Templates/SerialNumberPartDefinitionEditor.html";
 
         return ({
             addGenericBEColumnDefinition: addGenericBEColumnDefinition,
@@ -30,7 +31,9 @@
             addGenericBEConditionalHandler: addGenericBEConditionalHandler,
             editGenericBEConditionalHandler: editGenericBEConditionalHandler,
             addGenericBEConditionGroup: addGenericBEConditionGroup,
-            editGenericBEConditionGroup:editGenericBEConditionGroup
+            editGenericBEConditionGroup: editGenericBEConditionGroup,
+            addGenericBESerialNumberPart: addGenericBESerialNumberPart,
+            editGenericBESerialNumberPart:editGenericBESerialNumberPart
 
         });
 
@@ -258,6 +261,35 @@
                 modalScope.onGenericBEConditionGroupUpdated = onGenericBEConditionGroupUpdated;
             };
             VRModalService.showModal(conditionGroupPath, parameters, settings);
+        }
+
+
+        function addGenericBESerialNumberPart(onGenericBESerialNumberPartAdded, context) {
+            var parameters = {
+                context: context
+
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onGenericBESerialNumberPartAdded = onGenericBESerialNumberPartAdded;
+            };
+
+            VRModalService.showModal(partDefinitionPath, parameters, settings);
+        }
+
+        function editGenericBESerialNumberPart(onGenericBESerialNumberPartUpdated, partDefinition, context) {
+            var parameters = {
+                partDefinition: partDefinition,
+                context: context
+            };
+
+            var settings = {};
+            settings.onScopeReady = function (modalScope) {
+                modalScope.onGenericBESerialNumberPartUpdated = onGenericBESerialNumberPartUpdated;
+            };
+            VRModalService.showModal(partDefinitionPath, parameters, settings);
         }
 
     };
