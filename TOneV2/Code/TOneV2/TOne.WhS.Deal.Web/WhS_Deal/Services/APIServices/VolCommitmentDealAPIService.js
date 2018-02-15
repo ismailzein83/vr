@@ -34,15 +34,22 @@
                 volumeCommitmentHistoryId: volumeCommitmentHistoryId
             });
         }
-
+        function GetDealSaleRateEvaluator() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, "GetDealSaleRateEvaluator"));
+        }
+        function GetDealSupplierRateEvaluator() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, "GetDealSupplierRateEvaluator"));
+        }
         return ({
-            GetFilteredVolCommitmentDeals:GetFilteredVolCommitmentDeals,
+            GetFilteredVolCommitmentDeals: GetFilteredVolCommitmentDeals,
             GetDeal: GetDeal,
             AddDeal: AddDeal,
             UpdateDeal: UpdateDeal,
             HasAddDealPermission: HasAddDealPermission,
             HasEditDealPermission: HasEditDealPermission,
-            GetVolumeCommitmentHistoryDetailbyHistoryId: GetVolumeCommitmentHistoryDetailbyHistoryId
+            GetVolumeCommitmentHistoryDetailbyHistoryId: GetVolumeCommitmentHistoryDetailbyHistoryId,
+            GetDealSaleRateEvaluator: GetDealSaleRateEvaluator,
+            GetDealSupplierRateEvaluator: GetDealSupplierRateEvaluator
         });
     }
 

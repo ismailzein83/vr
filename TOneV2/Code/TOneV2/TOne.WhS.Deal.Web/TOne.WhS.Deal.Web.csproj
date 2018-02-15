@@ -170,8 +170,14 @@
     <Content Include="WhS_Deal\Directives\DealDefinition\vr-whs-deal-dealdefinition-selector.js" />
     <Content Include="WhS_Deal\Directives\DealRateEvaluator\Templates\DealSaleRateEvaluatorTemplate.html" />
     <Content Include="WhS_Deal\Directives\DealRateEvaluator\vr-whs-deal-salerateevaluator-selective.js" />
+    <Content Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SaleRateEvaluator\Templates\DealSaleRateEvaluatorDiccount.html" />
     <Content Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SaleRateEvaluator\Templates\DealSaleRateEvaluatorFixed.html" />
     <Content Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SaleRateEvaluator\vr-whs-deal-salerateevaluator-fixed.js" />
+    <Content Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SaleRateEvaluator\vr-whs-deal-salerateevaluator-discount.js" />
+    <Content Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SupplierRateEvaluator\Templates\DealSupplierRateEvaluatorDiccount.html" />
+    <Content Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SupplierRateEvaluator\Templates\DealSupplierRateEvaluatorFixed.html" />
+    <Content Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SupplierRateEvaluator\vr-whs-deal-supplierrateevaluator-discount.js" />
+    <Content Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SupplierRateEvaluator\vr-whs-deal-supplierrateevaluator-fixed.js" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDeal\RouteRuleCriteria\Templates\SwapDealRouteRuleCriteriaDirective.html" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDeal\RouteRuleCriteria\vr-whs-deal-swapdealanalysis-routerulecriteria.js" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Inbound\RateCalcMethod\Templates\FixedInboundRateCalcMethodItemEditorTemplate.html" />
@@ -293,9 +299,7 @@
     <Content Include="WhS_Deal\Views\VolumeCommitment\VolumeCommitmentManagement.html" />
     <Content Include="WhS_Deal\Views\VolumeCommitment\VolumeCommitmentManagementController.js" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SupplierRateEvaluator\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

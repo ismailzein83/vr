@@ -2,13 +2,15 @@
 using TOne.WhS.Deal.Entities;
 using Vanrise.Common.Business;
 using Vanrise.Common;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace TOne.WhS.Deal.Business
 {
     public class ConfigManager
     {
         #region Public Methods
-        
+
         public Guid GetSwapDealBuyRouteRuleDefinitionId()
         {
             SwapDealTechnicalSettingData swapDealTechnicalSettingData = GetSwapDealTechnicalSettingData();
@@ -29,6 +31,17 @@ namespace TOne.WhS.Deal.Business
             DealTechnicalSettingData dealTechnicalSettingData = GetDealTechnicalSettingData();
             return dealTechnicalSettingData.IntervalOffsetInMinutes;
         }
+        public IEnumerable<DealSaleRateEvaluatorConfig> GetDealSaleRateEvaluator()
+        {
+            var extensionConfigManager = new ExtensionConfigurationManager();
+            return extensionConfigManager.GetExtensionConfigurations<DealSaleRateEvaluatorConfig>(DealSaleRateEvaluatorConfig.EXTENSION_TYPE).OrderBy(x => x.Title);
+        }
+        public IEnumerable<DealSupplierRateEvaluatorConfig> GetDealSupplierRateEvaluator()
+        {
+            var extensionConfigManager = new ExtensionConfigurationManager();
+            return extensionConfigManager.GetExtensionConfigurations<DealSupplierRateEvaluatorConfig>(DealSaleRateEvaluatorConfig.EXTENSION_TYPE).OrderBy(x => x.Title);
+        }
+
 
         #endregion
 

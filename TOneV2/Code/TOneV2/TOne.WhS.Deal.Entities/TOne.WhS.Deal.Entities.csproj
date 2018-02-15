@@ -57,7 +57,9 @@
     <Compile Include="DealProgress\DealDetailedProgress.cs" />
     <Compile Include="DealProgress\DealProgress.cs" />
     <Compile Include="DealRateEvaluator\DealSaleRateEvaluator.cs" />
+    <Compile Include="DealRateEvaluator\DealSaleRateEvaluatorConfig.cs" />
     <Compile Include="DealRateEvaluator\DealSupplierRateEvaluator.cs" />
+    <Compile Include="DealRateEvaluator\DealSupplierRateEvaluatorConfig.cs" />
     <Compile Include="DealSaleZoneGroup.cs" />
     <Compile Include="DealSupplierZoneGroup.cs" />
     <Compile Include="Settings\DealTechnicalSettingData.cs" />
