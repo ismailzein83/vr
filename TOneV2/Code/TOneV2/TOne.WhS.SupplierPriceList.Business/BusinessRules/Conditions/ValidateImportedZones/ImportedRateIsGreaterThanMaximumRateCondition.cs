@@ -35,10 +35,12 @@ namespace TOne.WhS.SupplierPriceList.Business.BusinessRules
                     }
                 }
             }
-
+            
             if (invalidZones.Count > 0)
             {
-                context.Message = string.Format("Can not have rates greater than maximum rate '{0} ({1})'. Violated zone(s): '{2}'.", convertedMaximumRate, currencyManager.GetCurrencySymbol(priceListCurrencyId), string.Join(", ", invalidZones));
+                var generalSettingsManager = new Vanrise.Common.Business.GeneralSettingsManager();
+                var longPrecisionValue = generalSettingsManager.GetLongPrecisionValue();
+                context.Message = string.Format("Can not have rates greater than maximum rate '{0} ({1})'. Violated zone(s): '{2}'.", decimal.Round(convertedMaximumRate, longPrecisionValue), currencyManager.GetCurrencySymbol(priceListCurrencyId), string.Join(", ", invalidZones));
                 return false;
             }
 
