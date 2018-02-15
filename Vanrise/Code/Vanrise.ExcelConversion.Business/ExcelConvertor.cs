@@ -175,7 +175,7 @@ namespace Vanrise.ExcelConversion.Business
                 FieldValueByFieldName = fieldValueByFieldName
             };
             Object fldValue = fldMapping.GetFieldValue(getFieldValueContext);
-            if (fldValue == null)
+            if (fldValue == null || string.IsNullOrWhiteSpace(fldValue.ToString()))
                 return null;
             if (fldMapping.FieldType == FieldType.DateTime)
             {
@@ -245,7 +245,7 @@ namespace Vanrise.ExcelConversion.Business
             for(var i=0; i<=maxdatacol; i++)
             {
                 var cell = row.GetCellOrNull(i);
-                if(cell !=null && cell.Value !=null)
+                if(cell !=null && cell.Value !=null && !string.IsNullOrWhiteSpace(cell.Value.ToString()))
                 {
                     return false;
                 }
