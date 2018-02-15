@@ -163,6 +163,7 @@
     <Content Include="WhS_Routing\Constant\OrderTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\RouteOptionEvaluatedStatusEnum.js" />
     <Content Include="WhS_Routing\Constant\RouteOptionRuleSettingsTypeEnum.js" />
+    <Content Include="WhS_Routing\Constant\RoutingProductFilterEnum.js" />
     <Content Include="WhS_Routing\Constant\RouteRuleCriteriaTypeEnum.js" />
     <Content Include="WhS_Routing\Constant\RouteStatusEnum.js" />
     <Content Include="WhS_Routing\Constant\RoutingDatabaseTypeEnum.js" />

@@ -2,9 +2,9 @@
 
     "use strict";
 
-    rpRouteManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService'];
+    rpRouteManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_Routing_RoutingProductFilterEnum'];
 
-    function rpRouteManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService) {
+    function rpRouteManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, WhS_Routing_RoutingProductFilterEnum) {
 
         var currencyId;
 
@@ -18,14 +18,18 @@
         var saleZoneSelectorAPI;
         var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var routingProductSelectorAPI;
-        var routingProductReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var singleRoutingProductSelectorAPI;
+        var singleRoutingProductReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var multipleRoutingProductSelectorAPI;
+        var multipleRoutingProductReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var routeStatusSelectorAPI;
         var routeStatusSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var customerSelectorAPI;
         var customerSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
 
 
         defineScope();
@@ -52,9 +56,14 @@
                 saleZoneReadyPromiseDeferred.resolve();
             };
 
-            $scope.onRoutingProductSelectorReady = function (api) {
-                routingProductSelectorAPI = api;
-                routingProductReadyPromiseDeferred.resolve();
+            $scope.onMultipleRoutingProductSelectorReady = function (api) {
+                multipleRoutingProductSelectorAPI = api;
+                multipleRoutingProductReadyPromiseDeferred.resolve();
+            };
+
+            $scope.onSingleRoutingProductSelectorReady = function (api) {
+                singleRoutingProductSelectorAPI = api;
+                singleRoutingProductReadyPromiseDeferred.resolve();
             };
 
             $scope.onRouteStatusDirectiveReady = function (api) {
@@ -65,6 +74,9 @@
             $scope.onCustomerSelectorReady = function (api) {
                 customerSelectorAPI = api;
                 customerSelectorReadyPromiseDeferred.resolve();
+            };
+
+            $scope.onRoutingProductFilterSelectorReady = function (api) {
             };
 
             $scope.onRoutingDatabaseSelectorChange = function () {
@@ -101,7 +113,8 @@
                     RoutingDatabaseId: routingDatabaseSelectorAPI.getSelectedIds(),
                     PolicyConfigId: rpRoutePolicyAPI.getSelectedIds(),
                     NumberOfOptions: $scope.numberOfOptions,
-                    RoutingProductIds: routingProductSelectorAPI.getSelectedIds(),
+                    RoutingProductIds: $scope.selectedRoutingProductFilter.value == 0 || $scope.selectedCustomer == undefined ? multipleRoutingProductSelectorAPI.getSelectedIds() : undefined,
+                    SimulatedRoutingProductId: $scope.selectedRoutingProductFilter.value == 1 && $scope.selectedCustomer != undefined ? singleRoutingProductSelectorAPI.getSelectedIds() : undefined,
                     SaleZoneIds: saleZoneSelectorAPI.getSelectedIds(),
                     FilteredPolicies: rpRoutePolicyAPI.getFilteredPoliciesIds(),
                     DefaultPolicyId: rpRoutePolicyAPI.getDefaultPolicyId(),
@@ -119,7 +132,10 @@
             $scope.isLoadingFilterData = true;
             $scope.limit = 1000;
 
-            return UtilsService.waitMultipleAsyncOperations([loadRoutingDatabaseSelector, loadRoutingProductSelector, loadSaleZoneSection, loadRouteStatusSelector, loadCustomerSelector]).catch(function (error) {
+            $scope.routingProductFilters = UtilsService.getArrayEnum(WhS_Routing_RoutingProductFilterEnum);
+            $scope.selectedRoutingProductFilter = $scope.routingProductFilters[0];
+
+            return UtilsService.waitMultipleAsyncOperations([loadRoutingDatabaseSelector, loadSingleRoutingProductSelector, loadMultipleRoutingProductSelector, loadSaleZoneSection, loadRouteStatusSelector, loadCustomerSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.isLoadingFilterData = false;
@@ -135,15 +151,26 @@
 
             return loadRoutingDatabasePromiseDeferred.promise;
         }
-        function loadRoutingProductSelector() {
+        function loadSingleRoutingProductSelector() {
             var loadRoutingProductPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            routingProductReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(routingProductSelectorAPI, undefined, loadRoutingProductPromiseDeferred);
+            singleRoutingProductReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(singleRoutingProductSelectorAPI, undefined, loadRoutingProductPromiseDeferred);
             });
 
             return loadRoutingProductPromiseDeferred.promise;
         }
+
+        function loadMultipleRoutingProductSelector() {
+            var loadRoutingProductPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            multipleRoutingProductReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(multipleRoutingProductSelectorAPI, undefined, loadRoutingProductPromiseDeferred);
+            });
+
+            return loadRoutingProductPromiseDeferred.promise;
+        }
+
         function loadSaleZoneSection() {
             var loadSaleZonePromiseDeferred = UtilsService.createPromiseDeferred();
 

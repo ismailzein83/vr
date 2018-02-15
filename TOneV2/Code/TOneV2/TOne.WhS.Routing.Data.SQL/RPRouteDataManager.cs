@@ -87,8 +87,17 @@ namespace TOne.WhS.Routing.Data.SQL
             if (input.Query.CustomerId.HasValue)
             {
                 customerIdFilter = string.Format(" AND CustomerId = {0} ", input.Query.CustomerId);
-                joinCustomerZoneDetail = " JOIN [dbo].[CustomerZoneDetail] as czd ON pr.SaleZoneId = czd.SaleZoneId and pr.RoutingProductId = czd.RoutingProductId ";
                 effectiveRateValue = " ,czd.[EffectiveRateValue] ";
+
+                if (input.Query.SimulatedRoutingProductId.HasValue)
+                {
+                    joinCustomerZoneDetail = " JOIN [dbo].[CustomerZoneDetail] as czd ON pr.SaleZoneId = czd.SaleZoneId ";
+                    customerIdFilter = string.Concat(customerIdFilter, string.Format(" AND pr.RoutingProductId = {0} ", input.Query.SimulatedRoutingProductId.Value));
+                }
+                else
+                {
+                    joinCustomerZoneDetail = " JOIN [dbo].[CustomerZoneDetail] as czd ON pr.SaleZoneId = czd.SaleZoneId and pr.RoutingProductId = czd.RoutingProductId ";
+                }
             }
             else
             {

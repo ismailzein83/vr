@@ -16,6 +16,8 @@ namespace TOne.WhS.Routing.Entities
 
         public List<int> RoutingProductIds { get; set; }
 
+        public int? SimulatedRoutingProductId { get; set; }
+
         public List<int> SaleZoneIds { get; set; }
 
         public RouteStatus? RouteStatus { get; set; }

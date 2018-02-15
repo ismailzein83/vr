@@ -19,20 +19,32 @@
                 <vr-columns colnum="2">
                     <vr-textbox label="Number of Options" value="numberOfOptions" isrequired type="number" minvalue="1" decimalprecision="0"></vr-textbox>
                 </vr-columns>
-                <vr-whs-be-salezone-selector ng-show="advancedSelected" ismultipleselection on-ready="onSaleZoneSelectorReady" normal-col-num="2"></vr-whs-be-salezone-selector>
-                <vr-columns colnum="2" ng-show="advancedSelected">
-                    <vr-whs-be-routingproduct-selector ismultipleselection on-ready="onRoutingProductSelectorReady" hideselectedvaluessection />
-                </vr-columns>
-                <vr-whs-routing-routestatus-selector ng-show="advancedSelected" on-ready="onRouteStatusDirectiveReady" normal-col-num="2"></vr-whs-routing-routestatus-selector>
                 <vr-columns colnum="2">
                     <vr-textbox label="Limit Result To" value="limit" type="number" decimalprecision="0" minvalue="1" isrequired="true"></vr-textbox>
                 </vr-columns>
+
+                <vr-whs-be-salezone-selector ng-show="advancedSelected" ismultipleselection on-ready="onSaleZoneSelectorReady" normal-col-num="2"></vr-whs-be-salezone-selector>
+                <vr-whs-routing-routestatus-selector ng-show="advancedSelected" on-ready="onRouteStatusDirectiveReady" normal-col-num="2"></vr-whs-routing-routestatus-selector>
+
                 <vr-whs-be-customer-selector ng-show="advancedSelected" on-ready="onCustomerSelectorReady" normal-col-num="2" selectedvalues="selectedCustomer"></vr-whs-be-customer-selector>
-                <span ng-show="selectedCustomer!=undefined && advancedSelected">
-                    <vr-columns colnum="2">
-                        <vr-switch label="Show In System Currency" value="showInSystemCurrency"></vr-switch>
-                    </vr-columns>
-                </span>
+
+                <vr-columns colnum="2" ng-show="selectedCustomer!=undefined && advancedSelected">
+                    <vr-switch label="Show In System Currency" value="showInSystemCurrency"></vr-switch>
+                </vr-columns>
+
+                <vr-columns colnum="2" ng-show="selectedCustomer!=undefined && advancedSelected" withemptyline>
+                    <vr-select datatextfield="description" datavaluefield="value" label="filter" datasource="routingProductFilters" hideremoveicon isrequired="true"
+                               selectedvalues="selectedRoutingProductFilter" on-ready="onRoutingProductFilterSelectorReady" hidelabel></vr-select>
+                </vr-columns>
+
+                <vr-columns colnum="2" ng-show="advancedSelected && (selectedRoutingProductFilter.value == 0 || selectedCustomer == undefined)">
+                    <vr-whs-be-routingproduct-selector ismultipleselection on-ready="onMultipleRoutingProductSelectorReady"/>
+                </vr-columns>
+
+                <vr-columns colnum="2" ng-show="advancedSelected && selectedRoutingProductFilter.value == 1 && selectedCustomer != undefined">
+                    <vr-whs-be-routingproduct-selector on-ready="onSingleRoutingProductSelectorReady"/>
+                </vr-columns>
+
                 <vr-columns colnum="2">
                     <vr-switch value="includeBlockedSuppliers" label="Include Blocked Suppliers"></vr-switch>
                 </vr-columns>
