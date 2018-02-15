@@ -13,9 +13,7 @@ namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers
         }
 
         public string RecordType { get; set; }
-
         public HexTLVFieldParserCollection FieldParsers { get; set; }
-
         public List<ParsedRecordFieldConstantValue> FieldConstantValues { get; set; }
         public List<CompositeFieldsParser> CompositeFieldsParsers { get; set; }
         public HashSet<string> TempFieldsNames { get; set; }

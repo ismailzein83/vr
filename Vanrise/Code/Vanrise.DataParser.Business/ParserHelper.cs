@@ -5,12 +5,49 @@ using System.Text;
 using Vanrise.Common;
 using Vanrise.DataParser.Entities;
 using System.Linq;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.DataParser.Business
 {
     public class ParserHelper
     {
         public static void ExecuteParser(Stream stream, string fileName, Guid parserTypeId, Action<ParsedBatch> onParsedBatch)
+        {
+            ParserType parserType = new ParserTypeManager().GetParserType(parserTypeId);
+            Action<ParsedRecord> onRecordParsed = (parsedRecord) =>
+            {
+
+            };
+            ParserTypeExecuteContext context = new ParserTypeExecuteContext(onRecordParsed)
+            {
+                Input = new StreamDataParserInput
+                {
+                    Stream = stream,
+                    FileName = fileName
+                }
+            };
+            parserType.Settings.ExtendedSettings.Execute(context);
+
+            foreach (var parsedRecords in context.ParsedRecords)
+            {
+                Vanrise.GenericData.Business.DataRecordTypeManager dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+                Type dataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(parsedRecords.Key);
+                List<dynamic> records = new List<dynamic>();
+
+                foreach (Vanrise.DataParser.Entities.FldDictParsedRecord item in parsedRecords.Value)
+                {
+                    dynamic record = Activator.CreateInstance(dataRecordRuntimeType) as dynamic;
+                    record.FillDataRecordTypeFromDictionary(item.FieldValues);
+                    records.Add(record);
+                }
+                onParsedBatch(new ParsedBatch
+                {
+                    Records = records,
+                    RecordType = parsedRecords.Key
+                });
+            }
+        }
+        public static void ExecuteParser(Stream stream, string fileName, Guid parserTypeId, ExecuteParserOptions options, Action<ParsedBatch> onParsedBatch)
         {
             ParserType parserType = new ParserTypeManager().GetParserType(parserTypeId);
             Action<ParsedRecord> onRecordParsed = (parsedRecord) =>
@@ -32,12 +69,21 @@ namespace Vanrise.DataParser.Business
             {
                 Vanrise.GenericData.Business.DataRecordTypeManager dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
                 Type dataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(parsedRecords.Key);
+                DataRecordType recordType = dataRecordTypeManager.GetDataRecordType(parsedRecords.Key);
 
+                long startingId;
+                var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType(parsedRecords.Key);
+
+                Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, parsedRecords.Value.Count, out startingId);
                 List<dynamic> records = new List<dynamic>();
+                long currentId = startingId;
                 foreach (Vanrise.DataParser.Entities.FldDictParsedRecord item in parsedRecords.Value)
                 {
                     dynamic record = Activator.CreateInstance(dataRecordRuntimeType) as dynamic;
+                    if (options.GenerateIds && !string.IsNullOrEmpty(recordType.Settings.IdField))
+                        item.SetFieldValue(recordType.Settings.IdField, currentId);
                     record.FillDataRecordTypeFromDictionary(item.FieldValues);
+                    currentId++;
                     records.Add(record);
                 }
                 onParsedBatch(new ParsedBatch
@@ -106,7 +152,6 @@ namespace Vanrise.DataParser.Business
             string hex = BitConverter.ToString(reverse ? ba.Reverse().ToArray() : ba);
             return hex.Replace("-", "");
         }
-
         public static string GetBCDNumber(byte[] data, bool removeHexa, bool aIsZero)
         {
             StringBuilder number = new StringBuilder();
@@ -121,7 +166,6 @@ namespace Vanrise.DataParser.Business
             }
             return number.ToString();
         }
-
         public static string GetTBCDNumber(byte[] data, bool removeHexa, bool aIsZero)
         {
             StringBuilder number = new StringBuilder();
@@ -136,7 +180,6 @@ namespace Vanrise.DataParser.Business
             }
             return number.ToString();
         }
-
         static string GetNumberValue(int val, bool removeHexa, bool aIsZero)
         {
             if (aIsZero && val == 10)
@@ -170,8 +213,6 @@ namespace Vanrise.DataParser.Business
 
             _OnRecordParsed(parsedRecord);
         }
-
-
         public ParsedRecord CreateRecord(string recordType, HashSet<string> tempFieldNames)
         {
             FldDictParsedRecord parsedRecord = new FldDictParsedRecord
@@ -181,5 +222,9 @@ namespace Vanrise.DataParser.Business
             };
             return parsedRecord;
         }
+    }
+    public class ExecuteParserOptions
+    {
+        public bool GenerateIds { get; set; }
     }
 }
