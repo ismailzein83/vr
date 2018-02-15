@@ -3,11 +3,11 @@
        style="font-size: 11px; cursor: pointer; display: inline-block; text-align: right; padding: 0 10px 0 0; text-decoration: underline; color: {{routeOption.Color}};">
 
         <span ng-if="!routeOption.isNumber">
-            <span clickable-blocked="{{routeOption.IsBlocked}}">{{::routeOption.titleToDisplay}}</span>
+            <span class="clickableoption" ng-class="routeOption.EvaluatedStatusCssClass">{{::routeOption.titleToDisplay}}</span> 
             <span style="color:#FFA500; font-weight:bold;" ng-if="::routeOption.SupplierZoneMatchHasClosedRate">*</span>
         </span>
         <span ng-if="routeOption.isNumber">
-            <span clickable-blocked="{{routeOption.IsBlocked}}">{{::routeOption.titleToDisplay | vrtextOrNumber:4 }}</span>
+            <span clickable-blocked="{{routeOption.IsBlocked}}">{{::routeOption.titleToDisplay | vrtextOrNumber:ctrl.longPrecision }}</span>
             <span style="color:#FFA500; font-weight:bold;" ng-if="::routeOption.SupplierZoneMatchHasClosedRate">*</span>
         </span>
     </a>

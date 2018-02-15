@@ -21,5 +21,9 @@ namespace TOne.WhS.Routing.Entities
         public bool ShowInSystemCurrency { get; set; }
 
         public bool IncludeBlockedSuppliers { get; set; }
+
+        public decimal? EffectiveSaleRateValue { get; set; }
+
+        public decimal? MaxSupplierRate { get; set; }
     }
 }

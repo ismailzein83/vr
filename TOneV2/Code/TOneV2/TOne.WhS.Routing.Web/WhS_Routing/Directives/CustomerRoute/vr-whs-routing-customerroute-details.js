@@ -94,8 +94,6 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
                 api.load = function (payload) {
                     var promises = [];
 
-                    console.log(payload);
-
                     if (payload != undefined) {
                         customerRoute = payload.customerRoute;
                     }

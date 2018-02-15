@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsRoutingRprouteoptionGrid', ['WhS_Routing_RPRouteAPIService', 'WhS_Routing_RouteOptionRuleService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService',
-    function (WhS_Routing_RPRouteAPIService, WhS_Routing_RouteOptionRuleService, UtilsService, VRNotificationService, VRUIUtilsService) {
+app.directive('vrWhsRoutingRprouteoptionGrid', ['WhS_Routing_RPRouteAPIService', 'WhS_Routing_RouteOptionRuleService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_Routing_RouteOptionEvaluatedStatusEnum',
+    function (WhS_Routing_RPRouteAPIService, WhS_Routing_RouteOptionRuleService, UtilsService, VRNotificationService, VRUIUtilsService, WhS_Routing_RouteOptionEvaluatedStatusEnum) {
         return {
             restrict: 'E',
             scope: {
@@ -26,6 +26,8 @@ app.directive('vrWhsRoutingRprouteoptionGrid', ['WhS_Routing_RPRouteAPIService',
             var supplierId;
             var routingDatabaseId;
             var currencyId;
+            var saleRate;
+            var routeOptionEvaluatedStatusEnum = UtilsService.getArrayEnum(WhS_Routing_RouteOptionEvaluatedStatusEnum);
 
             var gridAPI;
 
@@ -54,19 +56,16 @@ app.directive('vrWhsRoutingRprouteoptionGrid', ['WhS_Routing_RPRouteAPIService',
                     return menuActions;
                 };
 
-                $scope.getRowStyle = function (dataItem) {
-
-                    var rowStyle;
-
-                    if (dataItem.Entity.IsBlocked) {
-                        rowStyle = { CssClass: "bg-danger" };
-                    }
-                    else if (dataItem.Entity.ExecutedRuleId) {
-                        rowStyle = { CssClass: "bg-success" };
-                    }
-
-                    return rowStyle;
-                };
+                //$scope.getRowStyle = function (dataItem) {
+                //    var rowStyle;
+                //    if (dataItem.Entity.IsBlocked) {
+                //        rowStyle = { CssClass: "bg-danger" };
+                //    }
+                //    else if (dataItem.Entity.ExecutedRuleId) {
+                //        rowStyle = { CssClass: "bg-success" };
+                //    }
+                //    return rowStyle;
+                //};
             }
 
             function defineAPI() {
@@ -80,9 +79,10 @@ app.directive('vrWhsRoutingRprouteoptionGrid', ['WhS_Routing_RPRouteAPIService',
                         saleZoneId = payload.saleZoneId;
                         supplierId = payload.supplierId;
                         currencyId = payload.currencyId;
+                        saleRate = payload.saleRate;
                     }
 
-                    return WhS_Routing_RPRouteAPIService.GetRPRouteOptionSupplier(routingDatabaseId, routingProductId, saleZoneId, supplierId, currencyId).then(function (response) {
+                    return WhS_Routing_RPRouteAPIService.GetRPRouteOptionSupplier(routingDatabaseId, routingProductId, saleZoneId, supplierId, currencyId, saleRate).then(function (response) {
                         if (response) {
                             var _supplierZoneServiceViewerPromises = [];
 
@@ -118,6 +118,11 @@ app.directive('vrWhsRoutingRprouteoptionGrid', ['WhS_Routing_RPRouteAPIService',
                     }
                     VRUIUtilsService.callDirectiveLoad(supplierZone.serviceViewerAPI, serviceViewerPayload, supplierZone.supplierZoneLoadDeferred);
                 };
+
+                var evaluatedStatus = UtilsService.getItemByVal(routeOptionEvaluatedStatusEnum, supplierZone.EvaluatedStatus, "value");
+                if (evaluatedStatus != undefined) {
+                    supplierZone.EvaluatedStatusCssClass = evaluatedStatus.cssclass;
+                }
             }
         }
     }]);

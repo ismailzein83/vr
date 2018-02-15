@@ -12,13 +12,13 @@ namespace TOne.WhS.Routing.Entities
 
         public long SaleZoneId { get; set; }
 
+        public string SaleZoneName { get; set; }
+
         public HashSet<int> SaleZoneServiceIds { get; set; }
 
         public string RoutingProductName { get; set; }
 
         public string SellingNumberPlan { get; set; }
-
-        public string SaleZoneName { get; set; }
 
         public bool IsBlocked { get; set; }
 
@@ -26,8 +26,8 @@ namespace TOne.WhS.Routing.Entities
 
         public decimal? EffectiveRateValue { get; set; }
 
-        public IEnumerable<RPRouteOptionDetail> RouteOptionsDetails { get; set; }
-
         public string CurrencySymbol { get; set; }
+
+        public IEnumerable<RPRouteOptionDetail> RouteOptionsDetails { get; set; }
     }
 }

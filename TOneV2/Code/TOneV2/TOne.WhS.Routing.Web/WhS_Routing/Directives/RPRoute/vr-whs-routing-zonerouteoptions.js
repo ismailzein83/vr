@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrWhsRoutingZonerouteoptions", ["WhS_Routing_RPRouteService", "WhS_Routing_SupplierStatusEnum", "WhS_BE_ZoneRouteOptionsEnum", "UtilsService",
-    function (WhS_Routing_RPRouteService, WhS_Routing_SupplierStatusEnum, WhS_BE_ZoneRouteOptionsEnum, UtilsService) {
+app.directive("vrWhsRoutingZonerouteoptions", ["UtilsService", "UISettingsService", "WhS_Routing_RPRouteService", "WhS_Routing_SupplierStatusEnum", "WhS_BE_ZoneRouteOptionsEnum", "WhS_Routing_RouteOptionEvaluatedStatusEnum",
+    function (UtilsService, UISettingsService, WhS_Routing_RPRouteService, WhS_Routing_SupplierStatusEnum, WhS_BE_ZoneRouteOptionsEnum, WhS_Routing_RouteOptionEvaluatedStatusEnum) {
         return {
             restrict: "E",
             scope: {
@@ -25,12 +25,17 @@ app.directive("vrWhsRoutingZonerouteoptions", ["WhS_Routing_RPRouteService", "Wh
             var saleZoneId;
             var currencyId;
             var display;
+            var saleRate;
+            var routeOptionEvaluatedStatusEnum = UtilsService.getArrayEnum(WhS_Routing_RouteOptionEvaluatedStatusEnum);
+            
 
             function initCtrl() {
                 ctrl.routeOptions = [];
 
+                ctrl.longPrecision = UISettingsService.getUIParameterValue('LongPrecision');
+
                 ctrl.viewSupplier = function (routeOption) {
-                    WhS_Routing_RPRouteService.viewRPRouteOptionSupplier(routingDatabaseId, routingProductId, saleZoneId, routeOption.SupplierId, currencyId);
+                    WhS_Routing_RPRouteService.viewRPRouteOptionSupplier(routingDatabaseId, routingProductId, saleZoneId, routeOption.SupplierId, currencyId, saleRate);
                 };
 
                 defineAPI();
@@ -47,6 +52,7 @@ app.directive("vrWhsRoutingZonerouteoptions", ["WhS_Routing_RPRouteService", "Wh
                         routingProductId = payload.RoutingProductId;
                         saleZoneId = payload.SaleZoneId;
                         display = payload.display;
+                        saleRate = payload.saleRate;
 
                         currencyId = payload.CurrencyId;
                         if (currencyId == undefined)
@@ -54,19 +60,24 @@ app.directive("vrWhsRoutingZonerouteoptions", ["WhS_Routing_RPRouteService", "Wh
 
                         if (payload.RouteOptions) {
                             for (var i = 0; i < payload.RouteOptions.length; i++) {
-                                var currentItem = payload.RouteOptions[i];
-                                currentItem.title = buildTitle(currentItem.SupplierName, currentItem.Percentage, currentItem.ACD, currentItem.ASR);
-                                currentItem.titleToDisplay = buildTitleToDisplay(currentItem, display);
+                                var currentRouteOption = payload.RouteOptions[i];
+                                currentRouteOption.title = buildTitle(currentRouteOption.SupplierName, currentRouteOption.Percentage, currentRouteOption.ACD, currentRouteOption.ASR);
+                                currentRouteOption.titleToDisplay = buildTitleToDisplay(currentRouteOption, display);
 
-                                if (currentItem.SupplierStatus == WhS_Routing_SupplierStatusEnum.Block.value) {
-                                    currentItem.IsBlocked = true;
-                                    //currentItem.Color = 'Red';
+                                var evaluatedStatus = UtilsService.getItemByVal(routeOptionEvaluatedStatusEnum, currentRouteOption.EvaluatedStatus, "value");
+                                if (evaluatedStatus != undefined) {
+                                    currentRouteOption.EvaluatedStatusCssClass = evaluatedStatus.cssclass;
                                 }
 
-                                if (currentItem.Color == undefined)
-                                    currentItem.Color = '#616F77';
+                                //if (currentItem.SupplierStatus == WhS_Routing_SupplierStatusEnum.Block.value) {
+                                //    currentItem.IsBlocked = true;
+                                //    currentItem.Color = 'Red';
+                                //}
 
-                                ctrl.routeOptions.push(currentItem);
+                                if (currentRouteOption.Color == undefined)
+                                    currentRouteOption.Color = '#616F77';
+
+                                ctrl.routeOptions.push(currentRouteOption);
                             }
                         }
                     }
@@ -79,7 +90,7 @@ app.directive("vrWhsRoutingZonerouteoptions", ["WhS_Routing_RPRouteService", "Wh
             function buildTitle(supplierName, percentage, acd, asr) {
                 var result = supplierName;
                 if (percentage) {
-                    result = result + ' ' + percentage + '%';
+                    result = percentage + '%' + ' ' + result;
                 }
                 if (asr) {
                     result = result + ', ASR:' + asr;
@@ -91,22 +102,29 @@ app.directive("vrWhsRoutingZonerouteoptions", ["WhS_Routing_RPRouteService", "Wh
             }
 
             function buildTitleToDisplay(currentItem, display) {
-
                 switch (display) {
+                    case WhS_BE_ZoneRouteOptionsEnum.SupplierRate.value:
+                        currentItem.isNumber = true;
+                        return currentItem.ConvertedSupplierRate;
 
-                    case WhS_BE_ZoneRouteOptionsEnum.SupplierRateWithNameAndPercentage.value: currentItem.isNumber = false; return currentItem.title;
+                    case WhS_BE_ZoneRouteOptionsEnum.SupplierRateWithNameAndPercentage.value:
+                        currentItem.isNumber = false;
+                        return currentItem.title + ' (' + roundNumber(currentItem.ConvertedSupplierRate) + ')';
 
-                    case WhS_BE_ZoneRouteOptionsEnum.SupplierRate.value: currentItem.isNumber = true; return currentItem.ConvertedSupplierRate;
-
-                    default: currentItem.isNumber = true; return currentItem.ConvertedSupplierRate;
+                    default:
+                        currentItem.isNumber = true;
+                        return currentItem.ConvertedSupplierRate;
                 }
             }
 
-            //function getRowStyle(optionStatus) {
+            function roundNumber(number) {
+                var precisionNumber = Math.pow(10, ctrl.longPrecision);
+                return Math.round(number * precisionNumber) / precisionNumber;
+            }
 
+            //function getRowStyle(optionStatus) {
             //    if (optionStatus == WhS_Routing_SupplierStatusEnum.PartialActive.value)
             //        return '#d0c89e'; //'BurlyWood';
-
             //    if (optionStatus == WhS_Routing_SupplierStatusEnum.Block.value)
             //        return '#efa2a2'; //'Red';
             //}

@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRouteAPIService', 'WhS_Routing_RPRouteService', 'WhS_Routing_SupplierStatusEnum', 'VRUIUtilsService', 'VRNotificationService',
-    function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteService, WhS_Routing_SupplierStatusEnum, VRUIUtilsService, VRNotificationService) {
+app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRouteAPIService', 'WhS_Routing_RPRouteService', 'WhS_Routing_SupplierStatusEnum', 'VRUIUtilsService', 'VRNotificationService', 'WhS_Routing_RouteOptionEvaluatedStatusEnum',
+    function (UtilsService, WhS_Routing_RPRouteAPIService, WhS_Routing_RPRouteService, WhS_Routing_SupplierStatusEnum, VRUIUtilsService, VRNotificationService, WhS_Routing_RouteOptionEvaluatedStatusEnum) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -36,6 +36,9 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
             var showInSystemCurrency;
             var currencyId;
             var includeBlockedSuppliers;
+            var saleRate;
+            var maxSupplierRate;
+            var routeOptionEvaluatedStatusEnum = UtilsService.getArrayEnum(WhS_Routing_RouteOptionEvaluatedStatusEnum);
 
             var gridAPI;
             var gridReadyDeferred = UtilsService.createPromiseDeferred();
@@ -77,7 +80,7 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
                 };
 
                 $scope.openRouteOptionSupplier = function (dataItem) {
-                    WhS_Routing_RPRouteService.viewRPRouteOptionSupplier(routingDatabaseId, rpRouteDetail.RoutingProductId, rpRouteDetail.SaleZoneId, dataItem.SupplierId, currencyId);
+                    WhS_Routing_RPRouteService.viewRPRouteOptionSupplier(routingDatabaseId, rpRouteDetail.RoutingProductId, rpRouteDetail.SaleZoneId, dataItem.SupplierId, currencyId, saleRate);
                 };
 
                 //$scope.getRowStyle = function (dataItem) {
@@ -109,6 +112,8 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
                         showInSystemCurrency = payload.showInSystemCurrency;
                         currencyId = payload.currencyId;
                         includeBlockedSuppliers = payload.includeBlockedSuppliers;
+                        saleRate = payload.saleRate;
+                        maxSupplierRate = payload.maxSupplierRate;
                     }
 
                     var loadPolicySelectorPromise = loadPolicySelector();
@@ -152,12 +157,14 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
                 if (rpRouteDetail) {
                     query = {
                         RoutingDatabaseId: routingDatabaseId,
-                        PolicyOptionConfigId: policyOptionConfigId, // $scope.selectedPolicy is != undefined since the policy selector is loaded before the grid
+                        PolicyOptionConfigId: policyOptionConfigId, //$scope.selectedPolicy is != undefined since the policy selector is loaded before the grid
                         RoutingProductId: rpRouteDetail.RoutingProductId,
                         SaleZoneId: rpRouteDetail.SaleZoneId,
                         CustomerId: customerId,
                         ShowInSystemCurrency: showInSystemCurrency,
-                        includeBlockedSuppliers: includeBlockedSuppliers
+                        IncludeBlockedSuppliers: includeBlockedSuppliers,
+                        EffectiveSaleRateValue: rpRouteDetail.EffectiveRateValue,
+                        MaxSupplierRate: maxSupplierRate
                     };
                 }
 
@@ -170,6 +177,11 @@ app.directive('vrWhsRoutingRprouteDetails', ['UtilsService', 'WhS_Routing_RPRout
                 }
                 rpRouteOption.SupplierStatusDescription = UtilsService.getEnumDescription(WhS_Routing_SupplierStatusEnum, rpRouteOption.SupplierStatus);
                 rpRouteOption.IsBlocked = rpRouteOption.SupplierStatus == WhS_Routing_SupplierStatusEnum.Block.value;
+
+                var evaluatedStatus = UtilsService.getItemByVal(routeOptionEvaluatedStatusEnum, rpRouteOption.EvaluatedStatus, "value");
+                if (evaluatedStatus != undefined) {
+                    rpRouteOption.EvaluatedStatusCssClass = evaluatedStatus.cssclass;
+                }
             }
         }
 

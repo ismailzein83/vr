@@ -35,6 +35,8 @@
 
         function defineScope() {
             $scope.numberOfOptions = 3;
+            $scope.legendHeader = "Legend";
+            $scope.legendContent = getLegendContent();
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -101,6 +103,15 @@
                     return gridAPI.loadGrid(getFilterObject());
             };
 
+            function getLegendContent() {
+                return '<div style="font-size:12px; margin:10px">' +
+                            '<div><div style="display: inline-block; width: 20px; height: 10px; background-color: #FF0000; margin: 0px 3px"></div> Blocked </div>' +
+                            '<div><div style="display: inline-block; width: 20px; height: 10px; background-color: #FFA500; margin: 0px 3px"></div> Lossy </div>' +
+                            '<div><div style="display: inline-block; width: 20px; height: 10px; background-color: #0000FF; margin: 0px 3px"></div> Forced </div>' +
+                            '<div><div style="display: inline-block; width: 20px; height: 10px; background-color: #28A744; margin: 0px 3px"></div> Market Price </div>' +
+                        '</div>';
+            }
+
             function getFilterObject() {
                 currencyId = null;
 
@@ -121,7 +132,8 @@
                     CustomerId: customerSelectorAPI.getSelectedIds(),
                     ShowInSystemCurrency: $scope.showInSystemCurrency,
                     CurrencyId: currencyId,
-                    IncludeBlockedSuppliers: $scope.includeBlockedSuppliers
+                    IncludeBlockedSuppliers: $scope.includeBlockedSuppliers,
+                    MaxSupplierRate: $scope.maxSupplierRate
                 };
                 return query;
             }

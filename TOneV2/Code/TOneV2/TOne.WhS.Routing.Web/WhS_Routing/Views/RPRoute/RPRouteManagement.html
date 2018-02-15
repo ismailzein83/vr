@@ -22,11 +22,13 @@
                 <vr-columns colnum="2">
                     <vr-textbox label="Limit Result To" value="limit" type="number" decimalprecision="0" minvalue="1" isrequired="true"></vr-textbox>
                 </vr-columns>
-
                 <vr-whs-be-salezone-selector ng-show="advancedSelected" ismultipleselection on-ready="onSaleZoneSelectorReady" normal-col-num="2"></vr-whs-be-salezone-selector>
-                <vr-whs-routing-routestatus-selector ng-show="advancedSelected" on-ready="onRouteStatusDirectiveReady" normal-col-num="2"></vr-whs-routing-routestatus-selector>
-                <vr-whs-be-customer-selector ng-show="advancedSelected" on-ready="onCustomerSelectorReady" normal-col-num="2" selectedvalues="selectedCustomer"></vr-whs-be-customer-selector>
 
+                <vr-whs-routing-routestatus-selector ng-show="advancedSelected" on-ready="onRouteStatusDirectiveReady" normal-col-num="2"></vr-whs-routing-routestatus-selector>
+                <vr-columns colnum="2">
+                    <vr-textbox label="Max Supplier Rate" value="maxSupplierRate" type="number"></vr-textbox>
+                </vr-columns>
+                <vr-whs-be-customer-selector ng-show="advancedSelected" on-ready="onCustomerSelectorReady" normal-col-num="2" selectedvalues="selectedCustomer"></vr-whs-be-customer-selector>
                 <vr-columns colnum="2" ng-show="selectedCustomer!=undefined && advancedSelected">
                     <vr-switch label="Show In System Currency" value="showInSystemCurrency"></vr-switch>
                 </vr-columns>
@@ -43,6 +45,9 @@
                 </vr-columns>
                 <vr-columns colnum="2">
                     <vr-switch value="includeBlockedSuppliers" label="Include Blocked Suppliers"></vr-switch>
+                </vr-columns>
+                <vr-columns colnum="2" withemptyline>
+                    <vr-legend header="{{legendHeader}}" content="{{legendContent}}"></vr-legend>
                 </vr-columns>
             </vr-row>
         </div>

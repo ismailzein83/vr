@@ -13,5 +13,6 @@ namespace TOne.WhS.Routing.Entities
         public decimal ConvertedSupplierRate { get; set; }
         public decimal? FutureRate { get; set; }
         public DateTime? RateEED { get; set; }
+        public RouteOptionEvaluatedStatus? EvaluatedStatus { get; set; } 
     }
 }

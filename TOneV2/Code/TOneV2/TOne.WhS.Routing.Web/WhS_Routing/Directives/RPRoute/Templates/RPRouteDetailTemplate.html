@@ -13,13 +13,12 @@
                      datasource="rpRouteOptions"
                      dataretrievalfunction="dataRetrievalFunction"
                      pagingtype="'PagingOnScroll'"
-                     defaultsortbyfieldname="'OptionOrder'"
-                     getrowstyle="getRowStyle">
+                     defaultsortbyfieldname="'OptionOrder'">
 
             <vr-datagridcolumn headertext="'Supplier'" type="'Text'">
                 <a ng-click="viewScope.openRouteOptionSupplier(dataItem)" 
-                   style="color:#616F77; font-size: 11px; cursor: pointer; display: inline-block; text-align: right; padding: 0 10px 0 0; text-decoration: underline"> 
-                    <span clickable-blocked="{{dataItem.IsBlocked}}">{{dataItem.SupplierName}}</span>
+                   style="color:#616F77; font-size: 11px; cursor: pointer; display: inline-block; text-align: right; padding: 0 10px 0 0;">
+                    <span class="clickableoption bold-label" ng-class="dataItem.EvaluatedStatusCssClass">{{dataItem.SupplierName}}</span>
                     <span style="color:#FFA500; font-weight:bold;" ng-if="dataItem.SupplierZoneMatchHasClosedRate">*</span>
                 </a>
             </vr-datagridcolumn>

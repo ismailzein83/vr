@@ -33,6 +33,7 @@ app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService
             var showInSystemCurrency;
             var currencyId;
             var includeBlockedSuppliers;
+            var maxSupplierRate;
 
             var gridAPI;
             var gridDrillDownTabsObj;
@@ -78,14 +79,12 @@ app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService
                     return loadGridPromiseDeffered.promise;
                 };
 
-                $scope.getRowStyle = function (dataItem) {
-                    var rowStyle;
-
-                    if (dataItem.IsBlocked)
-                        rowStyle = { CssClass: "bg-danger" };
-
-                    return rowStyle;
-                };
+                //$scope.getRowStyle = function (dataItem) {
+                //    var rowStyle;
+                //    if (dataItem.IsBlocked)
+                //        rowStyle = { CssClass: "bg-danger" };
+                //    return rowStyle;
+                //};
 
                 defineMenuActions();
             }
@@ -103,6 +102,7 @@ app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService
                     showInSystemCurrency = query.ShowInSystemCurrency;
                     currencyId = query.CurrencyId;
                     includeBlockedSuppliers = query.IncludeBlockedSuppliers;
+                    maxSupplierRate = query.MaxSupplierRate;
 
                     if (query.CustomerId != undefined)
                         $scope.isCustomerSelected = true;
@@ -139,7 +139,8 @@ app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService
                         RoutingProductId: rpRouteDetail.RoutingProductId,
                         RouteOptions: rpRouteDetail.RouteOptionsDetails,
                         display: WhS_BE_ZoneRouteOptionsEnum.SupplierRateWithNameAndPercentage.value,
-                        currencyId: currencyId
+                        currencyId: currencyId,
+                        saleRate: rpRouteDetail.EffectiveRateValue
                     };
                     VRUIUtilsService.callDirectiveLoad(rpRouteDetail.RouteOptionsAPI, payload, rpRouteDetail.RouteOptionsLoadDeferred);
                 };
@@ -175,7 +176,9 @@ app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService
                         customerId: customerId,
                         showInSystemCurrency: showInSystemCurrency,
                         currencyId: currencyId,
-                        includeBlockedSuppliers: includeBlockedSuppliers
+                        includeBlockedSuppliers: includeBlockedSuppliers,
+                        saleRate: rpRouteDetail.EffectiveRateValue,
+                        maxSupplierRate: maxSupplierRate
                     };
 
                     return directiveAPI.load(payload);

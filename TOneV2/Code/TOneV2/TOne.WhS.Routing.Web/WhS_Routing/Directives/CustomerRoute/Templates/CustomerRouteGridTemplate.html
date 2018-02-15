@@ -17,7 +17,11 @@
         <vr-datagridcolumn headertext="'Services'" widthfactor="1" disablesorting="true" fixedwidth="60">
             <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
         </vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Blocked'" field="'IsBlocked'" fixedwidth="50"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Blocked'" fixedwidth="50">
+            <span ng-show="dataItem.IsBlocked">
+                <vr-icon icontype="'2'" centered></vr-icon>
+            </span>
+        </vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Linked Rules'" field="'LinkedRouteRuleCount'" fixedwidth="75" disablesorting="true" isfielddynamic="true"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Rule Type'" field="'ExecutedRouteRuleSettingsTypeName'" fixedwidth="90"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Rule Name'" field="'ExecutedRouteRuleName'" fixedwidth="100"></vr-datagridcolumn>
@@ -31,7 +35,7 @@
                         &lt;
                         <span ng-repeat="backupDetails in details.Backups">
                             <span style="font-style:italic" class="option" ng-class="backupDetails.EvaluatedStatusCssClass" 
-                                  title="Rate: {{backupDetails.SupplierRate}} Services: {{backupDetails.ExactSupplierServiceSymbols}}">
+                                  title="Rate: {{backupDetails.SupplierRate}}, Services: {{backupDetails.ExactSupplierServiceSymbols}}">
                                 {{backupDetails.SupplierName}}
                             </span>
                             <span ng-if="!$last">,</span>

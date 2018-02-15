@@ -22,10 +22,10 @@ namespace TOne.WhS.Routing.Web.Controllers
 
         [HttpGet]
         [Route("GetRPRouteOptionSupplier")]
-        public RPRouteOptionSupplierDetail GetRPRouteOptionSupplier(int routingDatabaseId, int routingProductId, long saleZoneId, int supplierId, int? currencyId = null)
+        public RPRouteOptionSupplierDetail GetRPRouteOptionSupplier(int routingDatabaseId, int routingProductId, long saleZoneId, int supplierId, int? currencyId = null, decimal? saleRate = null)
         {
             RPRouteManager manager = new RPRouteManager();
-            return manager.GetRPRouteOptionSupplier(routingDatabaseId, routingProductId, saleZoneId, supplierId, currencyId);
+            return manager.GetRPRouteOptionSupplier(routingDatabaseId, routingProductId, saleZoneId, supplierId, currencyId, saleRate);
         }
 
         [HttpGet]

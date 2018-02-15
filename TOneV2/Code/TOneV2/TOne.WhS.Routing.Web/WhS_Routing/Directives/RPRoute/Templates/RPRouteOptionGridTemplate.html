@@ -5,14 +5,15 @@
              hidegridmenu>
 
     <vr-datagridcolumn headertext="'Zone'" disablesorting>
-        <span blocked="{{dataItem.Entity.IsBlocked}}">{{dataItem.SupplierZoneName}}</span>
+        <span style="font-size: 11px" class="option" ng-class="dataItem.EvaluatedStatusCssClass">{{dataItem.SupplierZoneName}}</span>
+        <!--<span blocked="{{dataItem.Entity.IsBlocked}}">{{dataItem.SupplierZoneName}}</span>-->
     </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Services'" widthfactor="1" disablesorting="true">
         <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
     </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Blocked'" fixedwidth="60" disablesorting>
         <span ng-show="dataItem.Entity.IsBlocked">
-            <vr-icon icontype="'2'"></vr-icon>
+            <vr-icon icontype="'2'" centered></vr-icon>
         </span>
     </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Rate'" field="'ConvertedSupplierRate'" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="80" disablesorting></vr-datagridcolumn>

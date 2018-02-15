@@ -4168,7 +4168,11 @@ span[marketprice="true"] {
     color: #5cb85c;
 }*/
 
-span .option {
+span.option {
+}
+
+span.clickableoption {
+    text-decoration: underline;
 }
 
 span.option-blocked {

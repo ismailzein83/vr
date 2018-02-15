@@ -18,9 +18,7 @@ namespace TOne.WhS.Routing.Entities
         public string SupplierCode { get; set; }
         public Decimal SupplierRate { get; set; }
         public List<int> ExactSupplierServiceIds { get; set; }
-
         public string ExactSupplierServiceSymbols { get; set; } 
-
         public int? ExecutedRuleId { get; set; }
         public List<int> LinkedRouteOptionRuleIds { get; set; }
         public bool IsBlocked { get; set; }
