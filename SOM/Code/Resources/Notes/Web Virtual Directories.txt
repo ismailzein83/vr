@@ -1,6 +1,6 @@
-﻿- Open IIS > Create a new web site called SOM.Web > Make the physical direcotry point to TOne.WebProject > Change
+﻿- Open IIS > Create a new web site called SOM.Web > Make the physical directory point to SOM.WebProject > Change
  the port to 8082 for example
-- Make sure the Application Pool of the newely created site is set to .Net FWK 4.0
+- Make sure the Application Pool of the newly created site is set to .Net FWK 4.0
 - Expand the IIS web site of TOne.Web project:
  - Add the following virtual directory under the root site:
 	Client			C:\TFS\Vanrise\Code\Vanrise.Web\Client

@@ -418,12 +418,6 @@
       <Name>SOM.Main.Web</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="appSettings.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="ConnectionStrings.config" />
-  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
