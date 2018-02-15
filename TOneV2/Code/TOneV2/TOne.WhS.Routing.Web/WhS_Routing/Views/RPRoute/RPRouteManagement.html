@@ -25,26 +25,22 @@
 
                 <vr-whs-be-salezone-selector ng-show="advancedSelected" ismultipleselection on-ready="onSaleZoneSelectorReady" normal-col-num="2"></vr-whs-be-salezone-selector>
                 <vr-whs-routing-routestatus-selector ng-show="advancedSelected" on-ready="onRouteStatusDirectiveReady" normal-col-num="2"></vr-whs-routing-routestatus-selector>
-
                 <vr-whs-be-customer-selector ng-show="advancedSelected" on-ready="onCustomerSelectorReady" normal-col-num="2" selectedvalues="selectedCustomer"></vr-whs-be-customer-selector>
 
                 <vr-columns colnum="2" ng-show="selectedCustomer!=undefined && advancedSelected">
                     <vr-switch label="Show In System Currency" value="showInSystemCurrency"></vr-switch>
                 </vr-columns>
-
                 <vr-columns colnum="2" ng-show="selectedCustomer!=undefined && advancedSelected" withemptyline>
-                    <vr-select datatextfield="description" datavaluefield="value" label="filter" datasource="routingProductFilters" hideremoveicon isrequired="true"
-                               selectedvalues="selectedRoutingProductFilter" on-ready="onRoutingProductFilterSelectorReady" hidelabel></vr-select>
+                    <vr-select on-ready="onRoutingProductFilterSelectorReady" datasource="routingProductFilters" datatextfield="description" datavaluefield="value"
+                               selectedvalues="selectedRoutingProductFilter" label="filter" isrequired="true" hidelabel hideremoveicon>
+                    </vr-select>
                 </vr-columns>
-
                 <vr-columns colnum="2" ng-show="advancedSelected && (selectedRoutingProductFilter.value == 0 || selectedCustomer == undefined)">
                     <vr-whs-be-routingproduct-selector ismultipleselection on-ready="onMultipleRoutingProductSelectorReady"/>
                 </vr-columns>
-
                 <vr-columns colnum="2" ng-show="advancedSelected && selectedRoutingProductFilter.value == 1 && selectedCustomer != undefined">
-                    <vr-whs-be-routingproduct-selector on-ready="onSingleRoutingProductSelectorReady"/>
+                    <vr-whs-be-routingproduct-selector on-ready="onSingleRoutingProductSelectorReady"></vr-whs-be-routingproduct-selector>
                 </vr-columns>
-
                 <vr-columns colnum="2">
                     <vr-switch value="includeBlockedSuppliers" label="Include Blocked Suppliers"></vr-switch>
                 </vr-columns>
@@ -63,5 +59,4 @@
             </vr-columns>
         </vr-row>
     </vr-form>
-
 </vr-panel>

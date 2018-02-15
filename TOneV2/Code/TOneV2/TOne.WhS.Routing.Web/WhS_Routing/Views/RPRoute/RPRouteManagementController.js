@@ -30,8 +30,6 @@
         var customerSelectorAPI;
         var customerSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-
-
         defineScope();
         load();
 
@@ -131,7 +129,6 @@
         function load() {
             $scope.isLoadingFilterData = true;
             $scope.limit = 1000;
-
             $scope.routingProductFilters = UtilsService.getArrayEnum(WhS_Routing_RoutingProductFilterEnum);
             $scope.selectedRoutingProductFilter = $scope.routingProductFilters[0];
 
@@ -160,7 +157,6 @@
 
             return loadRoutingProductPromiseDeferred.promise;
         }
-
         function loadMultipleRoutingProductSelector() {
             var loadRoutingProductPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -170,7 +166,6 @@
 
             return loadRoutingProductPromiseDeferred.promise;
         }
-
         function loadSaleZoneSection() {
             var loadSaleZonePromiseDeferred = UtilsService.createPromiseDeferred();
 
