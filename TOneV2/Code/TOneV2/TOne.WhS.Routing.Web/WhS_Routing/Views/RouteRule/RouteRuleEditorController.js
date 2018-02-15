@@ -83,7 +83,9 @@
                 var setLoader = function (value) { $scope.scopeModel.isLoadingRouteRuleSettings = value; };
 
                 var routeRuleSettingsPayload = {
-                    SupplierFilterSettings: { RoutingProductId: routingProductId, supplierZoneDetails: supplierZoneDetails, customerRouteData: customerRouteData }
+                    SupplierFilterSettings: { RoutingProductId: routingProductId },
+                    supplierZoneDetails: supplierZoneDetails,
+                    customerRouteData: customerRouteData
                 };
 
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, routeRuleSettingsAPI, routeRuleSettingsPayload, setLoader, routeRuleSettingsReadyPromiseDeferred);
