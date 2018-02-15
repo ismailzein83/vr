@@ -11,8 +11,7 @@ CREATE PROCEDURE [common].[sp_VRExclusiveSession_TryKeep]
 AS
 BEGIN
 	UPDATE [common].[VRExclusiveSession]
-    SET TakenByUserId = @UserId,
-		LastTakenUpdateTime = GETDATE()
+    SET LastTakenUpdateTime = GETDATE()
 	WHERE SessionTypeId = @SessionTypeId AND TargetId = @TargetId And TakenByUserId = @UserId
 	
 	SELECT TakenByUserId FROM [common].[VRExclusiveSession] with (nolock) WHERE SessionTypeId = @SessionTypeId AND TargetId = @TargetId
