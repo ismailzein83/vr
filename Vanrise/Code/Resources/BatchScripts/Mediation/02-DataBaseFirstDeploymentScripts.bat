@@ -37,4 +37,6 @@ xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneTransaction\BusinessProcess.PostDeploym
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneLogging\Script.PostDeployment.sql" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Logging\"
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneQueueing\Script.PostDeployment.sql" /y /v /z /i /Q /R  "\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Queueing\"
 
+start /b /w /D"C:\TFS\Vanrise\Code\Vanrise.HelperTools\bin\Release" Vanrise.HelperTools.exe "Enumerations" "Mediation"
+
 ::if not exist "\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\DBsStructure\" mkdir "\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\DBsStructure\"

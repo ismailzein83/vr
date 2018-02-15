@@ -360,8 +360,8 @@
     <None Include="BatchScripts\Interconnect\DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\Interconnect\Runtime.bat" />
     <None Include="BatchScripts\Interconnect\WebSite.bat" />
-    <None Include="BatchScripts\Mediation\01-DataBaseFirstDeploymentScripts.bat" />
-    <None Include="BatchScripts\Mediation\02-Runtime.bat" />
+    <None Include="BatchScripts\Mediation\02-DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\Mediation\01-Runtime.bat" />
     <None Include="BatchScripts\Mediation\03-WebSite.bat" />
     <None Include="BatchScripts\Mediation\05-CompressFiles.bat" />
     <None Include="BatchScripts\Mediation\06-GroupJSFiles.bat" />

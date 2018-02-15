@@ -81,7 +81,7 @@ namespace Vanrise.HelperTools
                     var orgDirectoryName = Path.GetFileName(directory);
                     var directoryName = overridden ? string.Format("{0}{1}", orgDirectoryName, "_Overridden") : orgDirectoryName;
 
-                    //create file if not exisit
+                    //create file if not exist
                     if (!File.Exists(string.Format("{0}\\{1}{2}", directory, directoryName, ".js")))
                     {
                         StringBuilder fileContent = new StringBuilder();
@@ -121,7 +121,7 @@ namespace Vanrise.HelperTools
                 var orgDirectoryName = Path.GetFileName(directory);
                 var directoryName = overridden ? string.Format("{0}{1}", orgDirectoryName, "_Overridden") : orgDirectoryName;
 
-                //create file if not exisit
+                //create file if not exist
                 if (!File.Exists(string.Format("{0}\\{1}{2}", directory, directoryName, ".sql")))
                 {
                     StringBuilder fileContent = new StringBuilder();
@@ -188,12 +188,15 @@ namespace Vanrise.HelperTools
             var tOneFiles = Directory.GetFiles(binFullPath, "TOne*Entities.dll");
             var vanriseFiles = Directory.GetFiles(binFullPath, "Vanrise*Entities.dll");
             var retailFiles = Directory.GetFiles(binFullPath, "Retail*Entities.dll");
+            var mediationFiles = Directory.GetFiles(binFullPath, "Mediation*Entities.dll");
 
             foreach (var file in tOneFiles)
                 assemblies.Add(Assembly.LoadFile(file));
             foreach (var file in vanriseFiles)
                 assemblies.Add(Assembly.LoadFile(file));
             foreach (var file in retailFiles)
+                assemblies.Add(Assembly.LoadFile(file));
+            foreach (var file in mediationFiles)
                 assemblies.Add(Assembly.LoadFile(file));
 
             List<Enumeration> allEnumerations = new List<Enumeration>();
@@ -212,7 +215,24 @@ namespace Vanrise.HelperTools
                 }
                 scriptBuilder.AppendFormat(@"('{0}','{1}','{2}')", enumeration.NameSpace, enumeration.Name, enumeration.Description);
             }
-            string script =string.Format(@"--[common].[Enumerations]-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([NameSpace],[Name],[Description])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////{0}--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([NameSpace],[Name],[Description]))merge	[common].[Enumerations] as tusing	cte_data as son		1=1 and t.[NameSpace] = s.[NameSpace] and t.[Name] = s.[Name]when matched then	update set	[Description] = s.[Description]when not matched by target then	insert([NameSpace],[Name],[Description])	values(s.[NameSpace],s.[Name],s.[Description]);", scriptBuilder.ToString());
+            string script =string.Format(@"--[common].[Enumerations]---------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([NameSpace],[Name],[Description])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+{0}
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([NameSpace],[Name],[Description]))
+merge	[common].[Enumerations] as t
+using	cte_data as s
+on		1=1 and t.[NameSpace] = s.[NameSpace] and t.[Name] = s.[Name]
+when matched then
+	update set
+	[Description] = s.[Description]
+when not matched by target then
+	insert([NameSpace],[Name],[Description])
+	values(s.[NameSpace],s.[Name],s.[Description]);", scriptBuilder.ToString());
             
             File.WriteAllText(string.Format(sqlFilesOutputPath, currentDateShort, "Configuration\\Enumerations.sql", projectName), script.ToString());
         }
