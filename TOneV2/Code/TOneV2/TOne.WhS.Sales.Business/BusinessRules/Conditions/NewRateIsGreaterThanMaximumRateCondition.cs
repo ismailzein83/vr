@@ -48,8 +48,9 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             if (invalidCountryNames.Count > 0)
             {
-                currencyManager.GetCurrencySymbol(rateToChangeCurrencyId);
-                context.Message = string.Format("New rates of following sold country(ies) are greater than maximum rate '{0} ({1})': {2}", convertedMaximumRate, currencyManager.GetCurrencySymbol(rateToChangeCurrencyId), string.Join(", ", invalidCountryNames));
+                var generalSettingsManager = new Vanrise.Common.Business.GeneralSettingsManager();
+                var longPrecisionValue = generalSettingsManager.GetLongPrecisionValue();
+                context.Message = string.Format("New rates of following sold country(ies) are greater than maximum rate '{0} ({1})': {2}", decimal.Round(convertedMaximumRate, longPrecisionValue), currencyManager.GetCurrencySymbol(rateToChangeCurrencyId), string.Join(", ", invalidCountryNames));
                 return false;
             }
 
