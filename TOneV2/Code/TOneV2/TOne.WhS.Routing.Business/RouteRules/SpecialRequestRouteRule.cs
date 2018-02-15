@@ -75,10 +75,15 @@ namespace TOne.WhS.Routing.Business
             if (context.RouteOptions != null && context.RouteOptions.Count > 0)
             {
                 specialRequestRouteRule.Options = new List<SpecialRequestRouteOptionSettings>();
+                specialRequestRouteRule.OverallBackupOptions = new List<SpecialRequestRouteBackupOptionSettings>();
+
+                bool hasPercentages = context.RouteOptions.Any(itm => itm.Percentage.HasValue);
+                HashSet<int> overallAddedBackups = new HashSet<int>();
+
                 foreach (RouteOption routeOption in context.RouteOptions)
                 {
                     SpecialRequestRouteOptionSettings optionSettings;
-                    if (_optionSupplierIds != null && _optionSupplierIds.Contains(routeOption.SupplierId))
+                    if (OptionsSupplierIds != null && OptionsSupplierIds.Contains(routeOption.SupplierId))
                     {
                         optionSettings = new SpecialRequestRouteOptionSettings()
                         {
@@ -90,17 +95,53 @@ namespace TOne.WhS.Routing.Business
                     }
                     else
                     {
+                        if (hasPercentages)//option to be ignored; option from lcr in special request
+                            continue;
+
                         optionSettings = new SpecialRequestRouteOptionSettings()
                         {
                             ForceOption = false,
                             NumberOfTries = 1,
-                            Percentage = routeOption.Percentage,
+                            Percentage = null,
                             SupplierId = routeOption.SupplierId
                         };
                     }
+                    if (routeOption.Backups != null && routeOption.Backups.Count > 0)
+                    {
+                        optionSettings.Backups = new List<SpecialRequestRouteBackupOptionSettings>();
+                        foreach (RouteBackupOption backup in routeOption.Backups)
+                        {
+                            if (overallAddedBackups.Contains(backup.SupplierId))
+                                continue;
+
+                            SpecialRequestRouteBackupOptionSettings backupSettings = new SpecialRequestRouteBackupOptionSettings()
+                            {
+                                ForceOption = backup.IsForced,
+                                NumberOfTries = backup.NumberOfTries,
+                                SupplierId = backup.SupplierId
+                            };
+
+                            if (this.OverallBackupOptions != null && OverallBackupOptions.FirstOrDefault(itm => itm.SupplierId == backup.SupplierId) != null)
+                            {
+                                specialRequestRouteRule.OverallBackupOptions.Add(backupSettings);
+                                overallAddedBackups.Add(backup.SupplierId);
+                            }
+                            else
+                            {
+                                optionSettings.Backups.Add(backupSettings);
+                            }
+                        }
+
+                        if (optionSettings.Backups.Count == 0)
+                            optionSettings.Backups = null;
+                    }
                     specialRequestRouteRule.Options.Add(optionSettings);
                 }
+
+                if (specialRequestRouteRule.OverallBackupOptions.Count == 0)
+                    specialRequestRouteRule.OverallBackupOptions = null;
             }
+
             return specialRequestRouteRule;
         }
 

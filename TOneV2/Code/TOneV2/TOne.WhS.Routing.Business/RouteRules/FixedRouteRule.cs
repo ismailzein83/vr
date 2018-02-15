@@ -61,6 +61,9 @@ namespace TOne.WhS.Routing.Business
             if (context.RouteOptions != null && context.RouteOptions.Count > 0)
             {
                 fixedRouteRule.Options = new List<FixedRouteOptionSettings>();
+                fixedRouteRule.OverallBackupOptions = new List<FixedRouteBackupOptionSettings>();
+
+                HashSet<int> overallAddedBackups = new HashSet<int>();
 
                 foreach (RouteOption routeOption in context.RouteOptions)
                 {
@@ -77,7 +80,50 @@ namespace TOne.WhS.Routing.Business
                         };
                         optionSettings.Filters = new List<RouteOptionFilterSettings>() { rateOptionFilter };
                     }
+
+                    if (routeOption.Backups != null && routeOption.Backups.Count > 0)
+                    {
+                        optionSettings.Backups = new List<FixedRouteBackupOptionSettings>();
+                        foreach (RouteBackupOption backup in routeOption.Backups)
+                        {
+                            if (overallAddedBackups.Contains(backup.SupplierId))
+                                continue;
+
+                            FixedRouteBackupOptionSettings backupSettings = new FixedRouteBackupOptionSettings() 
+                            {
+                                NumberOfTries = backup.NumberOfTries,
+                                SupplierId = backup.SupplierId
+                            };
+
+                            if (!backup.IsLossy)
+                            {
+                                RouteRules.Filters.RateOptionFilter rateOptionFilter = new RouteRules.Filters.RateOptionFilter()
+                                {
+                                    RateOption = RouteRules.Filters.RateOption.MaximumLoss,
+                                    RateOptionType = RouteRules.Filters.RateOptionType.Fixed,
+                                    RateOptionValue = 0
+                                };
+                                backupSettings.Filters = new List<RouteOptionFilterSettings>() { rateOptionFilter };
+                            }
+
+                            if (this.OverallBackupOptions != null && OverallBackupOptions.FirstOrDefault(itm => itm.SupplierId == backup.SupplierId) != null)
+                            {
+                                fixedRouteRule.OverallBackupOptions.Add(backupSettings);
+                                overallAddedBackups.Add(backup.SupplierId);
+                            }
+                            else
+                            {
+                                optionSettings.Backups.Add(backupSettings);
+                            }
+                        }
+
+                        if (optionSettings.Backups.Count == 0)
+                            optionSettings.Backups = null;
+                    }
                 }
+
+                if (fixedRouteRule.OverallBackupOptions.Count == 0)
+                    fixedRouteRule.OverallBackupOptions = null;
             }
 
             return fixedRouteRule;
