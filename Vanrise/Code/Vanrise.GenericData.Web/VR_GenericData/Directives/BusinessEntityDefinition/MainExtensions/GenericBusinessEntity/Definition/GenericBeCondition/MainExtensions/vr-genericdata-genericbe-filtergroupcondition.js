@@ -45,7 +45,6 @@ app.directive("vrGenericdataGenericbeFiltergroupcondition", ["UtilsService", "VR
                 var api = {};
 
                 api.getData = function () {
-                    console.log(recordFilterAPI.getData())
                     return {
                         $type: "Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEConditions.GenericFilterGroupCondition, Vanrise.GenericData.MainExtensions",
                         FilterGroup: recordFilterAPI.getData().filterObj
