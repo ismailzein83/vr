@@ -26,7 +26,7 @@ begin
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('Reprocess/ReprocessDefinition/GetFilteredReprocessDefinitions','VR_SystemConfiguration: View'),
-('Reprocess/ReprocessDefinition/GetReprocessDefinition','VR_SystemConfiguration: View'),
+('Reprocess/ReprocessDefinition/GetReprocessDefinition',null),
 ('Reprocess/ReprocessDefinition/AddReprocessDefinition','VR_SystemConfiguration: Add'),
 ('Reprocess/ReprocessDefinition/UpdateReprocessDefinition','VR_SystemConfiguration: Edit'),
 ('Reprocess/ReprocessDefinition/GetReprocessDefinitionsInfo',null)
