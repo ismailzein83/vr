@@ -18,6 +18,9 @@
     [OriginForCharging]        VARCHAR (5)  NULL,
     [OutgoingRoute]            VARCHAR (20) NULL,
     [IncomingRoute]            VARCHAR (20) NULL,
-    [Reserved]                 VARCHAR (10) NULL
+    [Reserved]                 VARCHAR (10) NULL,
+    [Id]                       BIGINT       NULL
 );
+
+
 

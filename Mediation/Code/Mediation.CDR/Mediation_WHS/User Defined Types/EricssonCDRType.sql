@@ -1,4 +1,5 @@
 ﻿CREATE TYPE [Mediation_WHS].[EricssonCDRType] AS TABLE (
+    [Id]                       BIGINT       NULL,
     [RecordType]               VARCHAR (5)  NULL,
     [CallStatus]               VARCHAR (20) NULL,
     [CauseForOutput]           VARCHAR (20) NULL,
@@ -19,4 +20,6 @@
     [OutgoingRoute]            VARCHAR (20) NULL,
     [IncomingRoute]            VARCHAR (20) NULL,
     [Reserved]                 VARCHAR (10) NULL);
+
+
 
