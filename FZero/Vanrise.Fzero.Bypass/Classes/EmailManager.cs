@@ -32,7 +32,7 @@ namespace Vanrise.Fzero.Bypass
                 {
                     Email email = new Email() { EmailTemplateID = ID };
                     email.DestinationEmail = toEmail;
-                    email.Subject = template.Subject.Replace("%ReportID%", ReportID);
+                    email.Subject = "FM_BYPASS_ALERT";
                     email.CC = string.Empty;
 
 
