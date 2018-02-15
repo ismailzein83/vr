@@ -68,7 +68,6 @@
                     var settings;
 
                     if (payload != undefined) {
-                        console.log(payload)
                         settings = payload.settings;
                         context = payload.context;
                     }
