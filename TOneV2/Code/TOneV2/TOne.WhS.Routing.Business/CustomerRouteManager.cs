@@ -91,11 +91,7 @@ namespace TOne.WhS.Routing.Business
                 ExecutedRouteRuleSettingsTypeName = executedRouteRuleSettingsTypeName
             };
 
-            if (customerRouteDetail.LinkedRouteRuleCount > 0)
-            {
-                customerRouteDetail.CanEditMatchingRule = true;
-            }
-            else if (routeRule != null)
+            if (routeRule != null)
             {
                 bool hasSelectiveCustomerCriteria = routeRuleManager.HasSelectiveCustomerCriteria(routeRule.Criteria);
                 bool hasSelectiveCodeCriteria = routeRuleManager.HasSelectiveCodeCriteria(routeRule.Criteria);
