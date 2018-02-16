@@ -1,13 +1,13 @@
 ﻿<div class="responsive-container" style="white-space: normal;">
     <a ng-repeat="routeOption in ctrl.routeOptions" ng-click="::ctrl.viewSupplier(routeOption)" title="{{::routeOption.title}}"
-       style="font-size: 11px; cursor: pointer; display: inline-block; text-align: right; padding: 0 10px 0 0; text-decoration: underline; color: {{routeOption.Color}};">
+       style="font-size: 11px; cursor: pointer; display: inline-block; padding: 0 10px 0 0; color: {{routeOption.Color}};">
 
-        <span ng-if="!routeOption.isNumber">
+        <span ng-if="!routeOption.isNumber" style="display: inline-block; width: 190px;">
             <span class="clickableoption" ng-class="routeOption.EvaluatedStatusCssClass">{{::routeOption.titleToDisplay}}</span> 
             <span style="color:#FFA500; font-weight:bold;" ng-if="::routeOption.SupplierZoneMatchHasClosedRate">*</span>
-        </span>
-        <span ng-if="routeOption.isNumber">
-            <span clickable-blocked="{{routeOption.IsBlocked}}">{{::routeOption.titleToDisplay | vrtextOrNumber:ctrl.longPrecision }}</span>
+        </span> 
+        <span ng-if="routeOption.isNumber" style="text-align: right;"> 
+            <span class="clickableoption" blocked="{{routeOption.IsBlocked}}">{{::routeOption.titleToDisplay | vrtextOrNumber:ctrl.longPrecision }}</span>
             <span style="color:#FFA500; font-weight:bold;" ng-if="::routeOption.SupplierZoneMatchHasClosedRate">*</span>
         </span>
     </a>

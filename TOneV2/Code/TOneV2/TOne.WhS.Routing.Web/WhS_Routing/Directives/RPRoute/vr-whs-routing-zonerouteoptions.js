@@ -27,7 +27,7 @@ app.directive("vrWhsRoutingZonerouteoptions", ["UtilsService", "UISettingsServic
             var display;
             var saleRate;
             var routeOptionEvaluatedStatusEnum = UtilsService.getArrayEnum(WhS_Routing_RouteOptionEvaluatedStatusEnum);
-            
+
 
             function initCtrl() {
                 ctrl.routeOptions = [];
@@ -61,18 +61,18 @@ app.directive("vrWhsRoutingZonerouteoptions", ["UtilsService", "UISettingsServic
                         if (payload.RouteOptions) {
                             for (var i = 0; i < payload.RouteOptions.length; i++) {
                                 var currentRouteOption = payload.RouteOptions[i];
-                                currentRouteOption.title = buildTitle(currentRouteOption.SupplierName, currentRouteOption.Percentage, currentRouteOption.ACD, currentRouteOption.ASR);
-                                currentRouteOption.titleToDisplay = buildTitleToDisplay(currentRouteOption, display);
+                                var roundedConvertedSupplierRate = roundNumber(currentRouteOption.ConvertedSupplierRate);
+                                currentRouteOption.title = buildTooltip(currentRouteOption, roundedConvertedSupplierRate);
+                                currentRouteOption.titleToDisplay = buildTitleToDisplay(display, currentRouteOption, roundedConvertedSupplierRate);
 
                                 var evaluatedStatus = UtilsService.getItemByVal(routeOptionEvaluatedStatusEnum, currentRouteOption.EvaluatedStatus, "value");
                                 if (evaluatedStatus != undefined) {
                                     currentRouteOption.EvaluatedStatusCssClass = evaluatedStatus.cssclass;
                                 }
 
-                                //if (currentItem.SupplierStatus == WhS_Routing_SupplierStatusEnum.Block.value) {
-                                //    currentItem.IsBlocked = true;
-                                //    currentItem.Color = 'Red';
-                                //}
+                                if (currentRouteOption.SupplierStatus == WhS_Routing_SupplierStatusEnum.Block.value) {
+                                    currentRouteOption.IsBlocked = true;
+                                }
 
                                 if (currentRouteOption.Color == undefined)
                                     currentRouteOption.Color = '#616F77';
@@ -87,33 +87,55 @@ app.directive("vrWhsRoutingZonerouteoptions", ["UtilsService", "UISettingsServic
                     ctrl.onReady(api);
             }
 
-            function buildTitle(supplierName, percentage, acd, asr) {
-                var result = supplierName;
-                if (percentage) {
-                    result = percentage + '%' + ' ' + result;
-                }
+            function buildTooltip(routeOption, roundedConvertedSupplierRate) {
+                var optionOrder = routeOption.OptionOrder + 1;
+                var result = buildTitle(routeOption, roundedConvertedSupplierRate);
+                return optionOrder + '. ' + result;
+            }
+
+            function buildTitle(routeOption, roundedConvertedSupplierRate) {
+                var supplierName = routeOption.SupplierName;
+                var percentage = routeOption.Percentage;
+                var acd = routeOption.ACD;
+                var asr = routeOption.ASR;
+
+                var result = percentage ? percentage + '% ' + supplierName : supplierName;
                 if (asr) {
                     result = result + ', ASR:' + asr;
                 }
                 if (acd) {
                     result = result + ', ACD:' + acd;
                 }
+                if (roundedConvertedSupplierRate) {
+                    result = result + ' (' + roundedConvertedSupplierRate + ')';
+                }
                 return result;
             }
 
-            function buildTitleToDisplay(currentItem, display) {
+            function buildTitleToDisplay(display, routeOption, roundedConvertedSupplierRate) {
                 switch (display) {
                     case WhS_BE_ZoneRouteOptionsEnum.SupplierRate.value:
-                        currentItem.isNumber = true;
-                        return currentItem.ConvertedSupplierRate;
+                        routeOption.isNumber = true;
+                        return routeOption.ConvertedSupplierRate;
 
                     case WhS_BE_ZoneRouteOptionsEnum.SupplierRateWithNameAndPercentage.value:
-                        currentItem.isNumber = false;
-                        return currentItem.title + ' (' + roundNumber(currentItem.ConvertedSupplierRate) + ')';
+                        routeOption.isNumber = false;
+
+                        var totalWhiteSpaceLength = 30;
+                        var roundedConvertedSupplierRateLength = roundedConvertedSupplierRate.toString().length + 2; //2 is length of " ()"
+                        var remainingWhiteSpaceLength = totalWhiteSpaceLength - roundedConvertedSupplierRateLength;
+
+                        var title = buildTitle(routeOption);
+                        if (title.length > remainingWhiteSpaceLength) {
+                            title = title.substring(0, remainingWhiteSpaceLength - 2); //2 is length of "..."
+                            title += "...";
+                        }
+
+                        return title + ' (' + roundedConvertedSupplierRate + ')';
 
                     default:
-                        currentItem.isNumber = true;
-                        return currentItem.ConvertedSupplierRate;
+                        routeOption.isNumber = true;
+                        return routeOption.ConvertedSupplierRate;
                 }
             }
 

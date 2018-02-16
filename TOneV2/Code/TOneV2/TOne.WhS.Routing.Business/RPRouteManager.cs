@@ -13,17 +13,13 @@ namespace TOne.WhS.Routing.Business
 {
     public class RPRouteManager
     {
-        #region Fields
+        #region Fields/Ctor
 
         CarrierAccountManager _carrierAccountManager;
         RoutingProductManager _routingProductManager;
         CurrencyExchangeRateManager _currencyExchangeRateManager;
         SaleZoneManager _saleZoneManager;
         SellingNumberPlanManager _sellingNumberPlanManager;
-
-        #endregion
-
-        #region Constructors
 
         public RPRouteManager()
         {
@@ -305,6 +301,7 @@ namespace TOne.WhS.Routing.Business
                 return null;
 
             int optionOrder = 0;
+            int finalOptionOrder = 0;
             int addedActiveItems = 0;
             DateTime effectiveDate = DateTime.Now;
             List<RPRouteOptionDetail> finalResult = new List<RPRouteOptionDetail>();
@@ -318,6 +315,7 @@ namespace TOne.WhS.Routing.Business
                 if (maxSupplierRate.HasValue && maxSupplierRate.Value < detail.ConvertedSupplierRate)
                     continue;
 
+                detail.OptionOrder = finalOptionOrder++;
                 finalResult.Add(detail);
 
                 if (rpRouteOption.SupplierStatus == SupplierStatus.Block)

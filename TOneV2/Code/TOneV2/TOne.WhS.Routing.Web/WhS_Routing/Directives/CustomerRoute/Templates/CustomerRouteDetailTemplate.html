@@ -14,7 +14,7 @@
             <vr-datagridcolumn headertext="'Zone'" field="'SupplierZoneName'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Backup'" field="'IsBackup'" fixedwidth="60">
                 <span ng-show="dataItem.IsBackup">
-                    <vr-icon icontype="dataItem.IsBackup" centered></vr-icon>
+                    <vr-icon icontype="dataItem.IsBackup" tooltip="'Backup'" centered></vr-icon>
                 </span>
             </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Rate'" field="'SupplierRate'" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="80"></vr-datagridcolumn>
@@ -23,7 +23,7 @@
             </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Blocked'" fixedwidth="60">
                 <span ng-show="dataItem.IsBlocked">
-                    <vr-icon icontype="'2'" centered></vr-icon>
+                    <vr-icon icontype="'2'" tooltip="'Blocked'" centered></vr-icon>
                 </span>
             </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Percentage'" field="'Percentage'" type="'Number'" numberprecision="'NoDecimal'" fixedwidth="80"></vr-datagridcolumn>
