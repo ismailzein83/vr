@@ -802,6 +802,7 @@
     <None Include="Sama.FlaggedService.sql" />
     <None Include="TOne.NG.PostDeployment.sql" />
     <None Include="Mediation.Ericsson_WHS.PostDeployment.sql" />
+    <None Include="SOM.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />

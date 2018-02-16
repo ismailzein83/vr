@@ -99,3 +99,6 @@ CDRAnalysis
 CDRAnalysis.PostDeployment.sql
 CDRAnalysisBE.PostDeployment.sql
 
+SOM
+SOM.PostDeployment.sql
+
