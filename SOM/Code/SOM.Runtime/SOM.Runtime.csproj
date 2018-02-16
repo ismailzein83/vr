@@ -243,6 +243,7 @@
     <Compile Include="Tasks\RabihTask.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config.exclude" />
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>

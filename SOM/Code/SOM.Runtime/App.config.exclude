@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <configSections>
+    <section name="vanriseRuntime" type="Vanrise.Runtime.Configuration.RuntimeConfig, Vanrise.Runtime" />
+    <section name="vanriseLogging" type="Vanrise.Common.LoggingConfiguration.LoggingConfig, Vanrise.Common" />
+  </configSections>
+    <startup> 
+        <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5" />
+    </startup>
+  <!-- Vanrise Runtime is configured as per client resources (mainly CPU \ RAM Memory) -->
+  <vanriseRuntime>
+    <runtimeServiceGroups>
+      <!-- Used for scheduling services for data sources, workflow. nbOfRuntimeInstances recommended to be equal to 1 or 2.-->
+      <runtimeServiceGroup name="group2" nbOfRuntimeInstances="1">
+        <runtimeServices>
+          <runtimeService name="Scheduler Service" type="Vanrise.Runtime.SchedulerService, Vanrise.Runtime" interval="00:00:02"></runtimeService>
+        </runtimeServices>
+      </runtimeServiceGroup>
+      <!-- Regulator service manages Business Process service. nbOfRuntimeInstances Keep it 1-->
+      <runtimeServiceGroup name="groupA" nbOfRuntimeInstances="1">
+        <runtimeServices>
+          <runtimeService name="Business Process Regulator Service" type="Vanrise.BusinessProcess.BPRegulatorRuntimeService, Vanrise.BusinessProcess" interval="00:00:01"></runtimeService>
+        </runtimeServices>
+      </runtimeServiceGroup>
+      <!-- Used for Business Process (Reprocess, Route build, Product Cost Generation, etc...). nbOfRuntimeInstances depended on available resources.-->
+      <runtimeServiceGroup name="group1" nbOfRuntimeInstances="3">
+        <runtimeServices>
+          <runtimeService name="Business Process Service" type="Vanrise.BusinessProcess.BusinessProcessService, Vanrise.BusinessProcess" interval="00:00:01"></runtimeService>
+        </runtimeServices>
+      </runtimeServiceGroup>
+    </runtimeServiceGroups>
+  </vanriseRuntime>
+
+  <vanriseLogging maxLogLevel="Information">
+    <loggers>
+      <logger name="SQLLogger" type="Vanrise.Logging.SQL.SQLLogger, Vanrise.Logging.SQL">
+        <parameters>
+          <parameter name="LoggingConnectionStringKey" value="LogDBConnString" />
+          <parameter name="ConfigurationConnectionStringKey" value="ConfigurationDBConnString" />
+        </parameters>
+      </logger>
+      <logger name="ConsoleLogger"  type="Vanrise.Common.ConsoleLogger, Vanrise.Common"></logger>
+    </loggers>
+    <exceptionLoggers>
+      <exceptionLogger name="ConsoleExceptionLogger"  type="Vanrise.Common.ConsoleExceptionLogger, Vanrise.Common"></exceptionLogger>
+      <exceptionLogger name="DefaultExceptionLogger"  type="Vanrise.Common.DefaultExceptionLogger, Vanrise.Common"></exceptionLogger>
+    </exceptionLoggers>
+  </vanriseLogging>
+
+  <connectionStrings>
+    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=SOM_Configuration;User ID=sa;Password= " />
+    <add name="MainDBConnString" connectionString=""/>
+    <add name="LogDBConnString" connectionString="Initial Catalog=SOM_Logging;Data Source=localhost;User ID=sa; Password= " />
+    <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=SOM_Transaction;User ID=sa; Password=" />
+  </connectionStrings>
+
+  <appSettings>
+    <add key="EncryptionSecretKey" value="V@nR!se-Se6r3t" />
+    <add key="IsRuntimeService" value="true"/>
+    <add key="BCPTempFilesDirectory" value="C:\BCPFiles" />
+    
+    <add key="RuntimeConnStringKey"                             value="TransactionDBConnString"/>
+    <add key="BusinessProcessDBConnStringKey"                   value="TransactionDBConnString"/>
+    <add key="BigDataServiceDBConnStringKey"                    value="TransactionDBConnString"/>
+    <add key="VRNotificationTransactionDBConnStringKey"         value="TransactionDBConnString"/>
+
+    <add key="BusinessProcessTrackingDBConnStringKey"           value="LogDBConnString" />
+    <add key="LoggingDBConnStringKey"                           value="LogDBConnString"/>
+
+    <add key="SecurityDBConnStringKey"                          value="ConfigurationDBConnString"/>
+    <add key="BusinessProcessConfigDBConnStringKey"             value="ConfigurationDBConnString"/>
+    <add key="RuntimeConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
+    <add key="ConfigurationDBConnStringKey"                     value="ConfigurationDBConnString"/>
+    <add key="RulesDBConnStringKey"                             value="ConfigurationDBConnString"/>
+    <add key="LoggingConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
+
+    <add key="SOM_DBConnStringKey"                              value="ConfigurationDBConnString"/>
+    <add key="SOMTransaction_DBConnStringKey"                   value="TransactionDBConnString"/>
+    <add key="ExposedConnectionStringNames"                     value=""/>
+  </appSettings>
+  <runtime>
+    <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
+      <dependentAssembly>
+        <assemblyIdentity name="Newtonsoft.Json" publicKeyToken="30ad4fe6b2a6aeed" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-6.0.0.0" newVersion="6.0.0.0" />
+      </dependentAssembly>
+    </assemblyBinding>
+  </runtime>
+  
+</configuration>
