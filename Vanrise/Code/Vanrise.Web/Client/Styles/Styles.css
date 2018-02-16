@@ -4137,6 +4137,8 @@ vr-datalist .drag-icon {
 
 .vr-datagrid[vertical-line="true"] .vr-datagrid-cell-container {
     border-right: 1px solid rgb(208, 208, 208);
+    margin: -1px 0px;
+    padding: 1px 0px;
 }
 
     .vr-datagrid[vertical-line="true" ] .vr-datagrid-cell-container:last-child {
@@ -4151,29 +4153,20 @@ span[blocked="true"] {
     color: #FF0000;
 }
 
-span[clickable-blocked="true"] {
-    color: #FF0000;
-    text-decoration: underline;
-}
-
-/*span[lossy="true"] {
-    color: #f0ad4e;
-}
-
-span[forced="true"] {
-    color: #0f6dbd;
-}
-
-span[marketprice="true"] {
-    color: #5cb85c;
-}*/
-
 span.option {
 }
 
 span.clickableoption {
-    text-decoration: underline;
 }
+
+    span.clickableoption:hover {
+        text-decoration: underline;
+        /*display: inline-block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 100%;*/
+    }
 
 span.option-blocked {
     color: #FF0000;
