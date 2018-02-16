@@ -169,15 +169,11 @@
     <Compile Include="RoutingProducts\SaleEntityRoutingProductReadByRateBED.cs" />
     <Compile Include="RoutingProducts\SaleEntityRoutingProductReadLastRoutingProduct.cs" />
     <Compile Include="SalePriceListTemplate\Context\MappedCellContext.cs" />
-    <Compile Include="SaleRate\History\CustomerZoneRateHistoryLocator.cs" />
     <Compile Include="SaleRate\History\CustomerZoneRateHistoryLocatorV2.cs" />
-    <Compile Include="SaleRate\History\CustomerZoneRateHistoryReader.cs" />
     <Compile Include="SaleRate\History\CustomerZoneRateHistoryReaderV2.cs" />
     <Compile Include="SaleRate\History\ProductZoneRateHistoryLocator.cs" />
     <Compile Include="SaleRate\History\ProductZoneRateHistoryReader.cs" />
     <Compile Include="SaleRate\History\RateHistoryUtilities.cs" />
-    <Compile Include="SaleRate\History\SellingProductZoneRateHistoryReader.cs" />
-    <Compile Include="SaleRate\History\SellingProductZoneRateHistoryLocator.cs" />
     <Compile Include="SaleRate\OtherSaleRateManager.cs" />
     <Compile Include="SaleRate\SaleRateReadLastRateNoCache.cs" />
     <Compile Include="SaleZone\SaleZoneSoldCountryToCustomerFilter.cs" />
