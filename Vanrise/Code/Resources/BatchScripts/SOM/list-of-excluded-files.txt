@@ -1,0 +1,14 @@
+\appSettings.config
+\ConnectionStrings.config
+
+\images\nTegra-logoonheader.png
+\images\nTegra-login.png
+\images\nTegra-iconheader.ico
+
+\images\cloudXPoint-logoonheader.png
+\images\cloudXPoint-login.png
+\images\cloudXPoint-iconheader.ico
+
+\images\INSOFT-logoonheader.png
+\images\INSOFT-login.png
+\images\INSOFT-iconheader.ico

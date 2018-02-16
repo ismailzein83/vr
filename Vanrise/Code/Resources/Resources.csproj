@@ -128,6 +128,9 @@
     <Content Include="BatchScripts\Retail\Client-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\Retail\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\Retail\runtime-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\SOM\Client-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\SOM\list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\SOM\runtime-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\TOneV2\Client-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\TOneV2\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\TOneV2\runtime-list-of-excluded-files.txt" />
@@ -469,6 +472,14 @@
     <None Include="BatchScripts\Retail\07-CreateStandardDBs.bat" />
     <None Include="BatchScripts\Retail\08-GroupSQLFiles.bat" />
     <None Include="BatchScripts\Retail\All.bat" />
+    <None Include="BatchScripts\SOM\01-Runtime.bat" />
+    <None Include="BatchScripts\SOM\02-DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\SOM\03-WebSite.bat" />
+    <None Include="BatchScripts\SOM\05-CompressFiles.bat" />
+    <None Include="BatchScripts\SOM\06-GroupJSFiles.bat" />
+    <None Include="BatchScripts\SOM\07-CreateStandardDBs.bat" />
+    <None Include="BatchScripts\SOM\08-GroupSQLFiles.bat" />
+    <None Include="BatchScripts\SOM\All.bat" />
     <None Include="BatchScripts\TOneV2\02-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\TOneV2\01-Runtime.bat" />
     <None Include="BatchScripts\TOneV2\03-WebSite.bat" />
