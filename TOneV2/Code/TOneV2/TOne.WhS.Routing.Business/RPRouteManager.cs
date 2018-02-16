@@ -43,66 +43,6 @@ namespace TOne.WhS.Routing.Business
             return BigDataManager.Instance.RetrieveData(input, new RPRouteRequestHandler());
         }
 
-        public IEnumerable<RPRouteDetail> GetRPRoutes(int routingDatabaseId, Guid policyConfigId, int? numberOfOptions, IEnumerable<RPZone> rpZones, bool includeBlockedSuppliers)
-        {
-            return GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, rpZones, null, null, includeBlockedSuppliers);
-        }
-
-        public IEnumerable<RPRouteDetail> GetRPRoutes(int routingDatabaseId, Guid policyConfigId, int? numberOfOptions, IEnumerable<RPZone> rpZones, int? toCurrencyId, int? customerId, bool includeBlockedSuppliers)
-        {
-            var latestRoutingDatabase = GetLatestRoutingDatabase(routingDatabaseId);
-            if (latestRoutingDatabase == null)
-                return null;
-
-            int? customerProfileId = null;
-            if (customerId.HasValue)
-                customerProfileId = GetCarrierProfileId(customerId.Value);
-
-            IRPRouteDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
-            dataManager.RoutingDatabase = latestRoutingDatabase;
-            IEnumerable<RPRoute> rpRoutes = dataManager.GetRPRoutes(rpZones);
-
-            int systemCurrencyId = GetSystemCurrencyId();
-            DateTime effectiveDate = DateTime.Now;
-            return rpRoutes.MapRecords(x => RPRouteDetailMapper(x, policyConfigId, numberOfOptions, systemCurrencyId, toCurrencyId, customerProfileId, effectiveDate, includeBlockedSuppliers, null));
-        }
-
-        public RPRouteOptionSupplierDetail GetRPRouteOptionSupplier(int routingDatabaseId, int routingProductId, long saleZoneId, int supplierId, int? toCurrencyId, decimal? saleRate)
-        {
-            var latestRoutingDatabase = GetLatestRoutingDatabase(routingDatabaseId);
-            if (latestRoutingDatabase == null)
-                return null;
-
-            IRPRouteDataManager routeManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
-            routeManager.RoutingDatabase = latestRoutingDatabase;
-            Dictionary<int, RPRouteOptionSupplier> dicRouteOptionSuppliers = routeManager.GetRouteOptionSuppliers(routingProductId, saleZoneId);
-
-            if (dicRouteOptionSuppliers == null || !dicRouteOptionSuppliers.ContainsKey(supplierId))
-                return null;
-
-            RPRouteOptionSupplier rpRouteOptionSupplier = dicRouteOptionSuppliers[supplierId];
-            Dictionary<long, SupplierRate> supplierRateByIds = new SupplierRateManager().GetSupplierRates(rpRouteOptionSupplier.SupplierZones.Select(itm => itm.SupplierRateId).ToHashSet());
-
-            int? systemCurrencyId = null;
-            if (toCurrencyId.HasValue)
-                systemCurrencyId = GetSystemCurrencyId();
-
-            SupplierZoneRateLocator futureSupplierZoneRateLocator = null;
-
-            if (latestRoutingDatabase.Type != RoutingDatabaseType.Future)
-            {
-                List<RoutingSupplierInfo> routingSupplierInfoList = new List<RoutingSupplierInfo>() { new RoutingSupplierInfo() { SupplierId = supplierId } };
-                futureSupplierZoneRateLocator = new SupplierZoneRateLocator(new SupplierRateReadAllNoCache(routingSupplierInfoList, null, true));
-            }
-
-            DateTime effectiveDate = DateTime.Now;
-            return new RPRouteOptionSupplierDetail()
-            {
-                SupplierName = new CarrierAccountManager().GetCarrierAccountName(supplierId),
-                SupplierZones = rpRouteOptionSupplier.SupplierZones.MapRecords(x => RPRouteOptionSupplierZoneDetailMapper(futureSupplierZoneRateLocator, supplierRateByIds, x, systemCurrencyId, toCurrencyId, effectiveDate, saleRate))
-            };
-        }
-
         public Vanrise.Entities.IDataRetrievalResult<RPRouteOptionDetail> GetFilteredRPRouteOptions(Vanrise.Entities.DataRetrievalInput<RPRouteOptionQuery> input)
         {
             var latestRoutingDatabase = GetLatestRoutingDatabase(input.Query.RoutingDatabaseId);
@@ -145,6 +85,66 @@ namespace TOne.WhS.Routing.Business
             }
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult<RPRouteOptionDetail>(input, rpRouteOptionDetails.ToBigResult(input, null));
+        }
+
+        public RPRouteOptionSupplierDetail GetRPRouteOptionSupplier(int routingDatabaseId, int routingProductId, long saleZoneId, int supplierId, int? toCurrencyId, decimal? saleRate)
+        {
+            var latestRoutingDatabase = GetLatestRoutingDatabase(routingDatabaseId);
+            if (latestRoutingDatabase == null)
+                return null;
+
+            IRPRouteDataManager routeManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
+            routeManager.RoutingDatabase = latestRoutingDatabase;
+            Dictionary<int, RPRouteOptionSupplier> dicRouteOptionSuppliers = routeManager.GetRouteOptionSuppliers(routingProductId, saleZoneId);
+
+            if (dicRouteOptionSuppliers == null || !dicRouteOptionSuppliers.ContainsKey(supplierId))
+                return null;
+
+            RPRouteOptionSupplier rpRouteOptionSupplier = dicRouteOptionSuppliers[supplierId];
+            Dictionary<long, SupplierRate> supplierRateByIds = new SupplierRateManager().GetSupplierRates(rpRouteOptionSupplier.SupplierZones.Select(itm => itm.SupplierRateId).ToHashSet());
+
+            int? systemCurrencyId = null;
+            if (toCurrencyId.HasValue)
+                systemCurrencyId = GetSystemCurrencyId();
+
+            SupplierZoneRateLocator futureSupplierZoneRateLocator = null;
+
+            if (latestRoutingDatabase.Type != RoutingDatabaseType.Future)
+            {
+                List<RoutingSupplierInfo> routingSupplierInfoList = new List<RoutingSupplierInfo>() { new RoutingSupplierInfo() { SupplierId = supplierId } };
+                futureSupplierZoneRateLocator = new SupplierZoneRateLocator(new SupplierRateReadAllNoCache(routingSupplierInfoList, null, true));
+            }
+
+            DateTime effectiveDate = DateTime.Now;
+            return new RPRouteOptionSupplierDetail()
+            {
+                SupplierName = new CarrierAccountManager().GetCarrierAccountName(supplierId),
+                SupplierZones = rpRouteOptionSupplier.SupplierZones.MapRecords(x => RPRouteOptionSupplierZoneDetailMapper(futureSupplierZoneRateLocator, supplierRateByIds, x, systemCurrencyId, toCurrencyId, effectiveDate, saleRate))
+            };
+        }
+
+        public IEnumerable<RPRouteDetail> GetRPRoutes(int routingDatabaseId, Guid policyConfigId, int? numberOfOptions, IEnumerable<RPZone> rpZones, bool includeBlockedSuppliers)
+        {
+            return GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, rpZones, null, null, includeBlockedSuppliers);
+        }
+
+        public IEnumerable<RPRouteDetail> GetRPRoutes(int routingDatabaseId, Guid policyConfigId, int? numberOfOptions, IEnumerable<RPZone> rpZones, int? toCurrencyId, int? customerId, bool includeBlockedSuppliers)
+        {
+            var latestRoutingDatabase = GetLatestRoutingDatabase(routingDatabaseId);
+            if (latestRoutingDatabase == null)
+                return null;
+
+            int? customerProfileId = null;
+            if (customerId.HasValue)
+                customerProfileId = GetCarrierProfileId(customerId.Value);
+
+            IRPRouteDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
+            dataManager.RoutingDatabase = latestRoutingDatabase;
+            IEnumerable<RPRoute> rpRoutes = dataManager.GetRPRoutes(rpZones);
+
+            int systemCurrencyId = GetSystemCurrencyId();
+            DateTime effectiveDate = DateTime.Now;
+            return rpRoutes.MapRecords(x => RPRouteDetailMapper(x, policyConfigId, numberOfOptions, systemCurrencyId, toCurrencyId, customerProfileId, effectiveDate, includeBlockedSuppliers, null));
         }
 
         public IEnumerable<RPRouteOptionPolicySetting> GetPoliciesOptionTemplates(RPRouteOptionPolicyFilter filter)
