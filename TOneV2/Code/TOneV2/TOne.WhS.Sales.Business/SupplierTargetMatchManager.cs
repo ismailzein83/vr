@@ -291,7 +291,7 @@ namespace TOne.WhS.Sales.Business
             _MinACD = minACD;
             _MinASR = minASR;
         }
-        public RPRouteDetail RPRouteDetail
+        public RPRouteDetailByZone RPRouteDetail
         {
             get;
             set;

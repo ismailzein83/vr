@@ -19,7 +19,7 @@ namespace TOne.WhS.Sales.Business
         private CarrierAccountManager _carrierAccountManager = new CarrierAccountManager();
 
         private Dictionary<int, decimal> _ratesBySupplier = new Dictionary<int, decimal>();
-        public TQIEvaluatedRate Evaluate(TQIMethod tqiMethod, RPRouteDetail rpRouteDetail)
+        public TQIEvaluatedRate Evaluate(TQIMethod tqiMethod, RPRouteDetailByZone rpRouteDetail)
         {
             var context = new TQIMethodContext()
             {
@@ -87,7 +87,7 @@ namespace TOne.WhS.Sales.Business
             return null;
         }
 
-        private void StructureRatesBySupplier(RPRouteDetail rpRouteDetail)
+        private void StructureRatesBySupplier(RPRouteDetailByZone rpRouteDetail)
         {
             if (rpRouteDetail != null && rpRouteDetail.RouteOptionsDetails != null)
             {

@@ -10,6 +10,6 @@ namespace TOne.WhS.Sales.Entities
     public class TQIEvaluatedRateInput
     {
         public TQIMethod TQIMethod { get; set; }
-        public RPRouteDetail RPRouteDetail { get; set; }
+        public RPRouteDetailByZone RPRouteDetail { get; set; }
     }
 }

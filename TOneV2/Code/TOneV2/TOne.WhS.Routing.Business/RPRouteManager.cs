@@ -34,7 +34,7 @@ namespace TOne.WhS.Routing.Business
 
         #region Public Methods
 
-        public Vanrise.Entities.IDataRetrievalResult<RPRouteDetail> GetFilteredRPRoutes(Vanrise.Entities.DataRetrievalInput<RPRouteQuery> input)
+        public Vanrise.Entities.IDataRetrievalResult<RPRouteDetailByZone> GetFilteredRPRoutes(Vanrise.Entities.DataRetrievalInput<RPRouteQueryByZone> input)
         {
             return BigDataManager.Instance.RetrieveData(input, new RPRouteRequestHandler());
         }
@@ -119,12 +119,12 @@ namespace TOne.WhS.Routing.Business
             };
         }
 
-        public IEnumerable<RPRouteDetail> GetRPRoutes(int routingDatabaseId, Guid policyConfigId, int? numberOfOptions, IEnumerable<RPZone> rpZones, bool includeBlockedSuppliers)
+        public IEnumerable<RPRouteDetailByZone> GetRPRoutes(int routingDatabaseId, Guid policyConfigId, int? numberOfOptions, IEnumerable<RPZone> rpZones, bool includeBlockedSuppliers)
         {
             return GetRPRoutes(routingDatabaseId, policyConfigId, numberOfOptions, rpZones, null, null, includeBlockedSuppliers);
         }
 
-        public IEnumerable<RPRouteDetail> GetRPRoutes(int routingDatabaseId, Guid policyConfigId, int? numberOfOptions, IEnumerable<RPZone> rpZones, int? toCurrencyId, int? customerId, bool includeBlockedSuppliers)
+        public IEnumerable<RPRouteDetailByZone> GetRPRoutes(int routingDatabaseId, Guid policyConfigId, int? numberOfOptions, IEnumerable<RPZone> rpZones, int? toCurrencyId, int? customerId, bool includeBlockedSuppliers)
         {
             var latestRoutingDatabase = GetLatestRoutingDatabase(routingDatabaseId);
             if (latestRoutingDatabase == null)
@@ -377,9 +377,9 @@ namespace TOne.WhS.Routing.Business
 
         #region Private Classes
 
-        private class RPRouteExcelExportHandler : ExcelExportHandler<RPRouteDetail>
+        private class RPRouteExcelExportHandler : ExcelExportHandler<RPRouteDetailByZone>
         {
-            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<RPRouteDetail> context)
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<RPRouteDetailByZone> context)
             {
                 ZoneServiceConfigManager zoneServiceConfigManager = new ZoneServiceConfigManager();
 
@@ -427,16 +427,16 @@ namespace TOne.WhS.Routing.Business
             }
         }
 
-        private class RPRouteRequestHandler : BigDataRequestHandler<RPRouteQuery, RPRoute, RPRouteDetail>
+        private class RPRouteRequestHandler : BigDataRequestHandler<RPRouteQueryByZone, RPRoute, RPRouteDetailByZone>
         {
             RPRouteManager _manager = new RPRouteManager();
 
-            public override RPRouteDetail EntityDetailMapper(RPRoute entity)
+            public override RPRouteDetailByZone EntityDetailMapper(RPRoute entity)
             {
                 throw new NotImplementedException();
             }
 
-            public override IEnumerable<RPRoute> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<RPRouteQuery> input)
+            public override IEnumerable<RPRoute> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<RPRouteQueryByZone> input)
             {
                 var latestRoutingDatabase = _manager.GetLatestRoutingDatabase(input.Query.RoutingDatabaseId);
                 if (latestRoutingDatabase == null)
@@ -447,7 +447,7 @@ namespace TOne.WhS.Routing.Business
                 return dataManager.GetFilteredRPRoutes(input);
             }
 
-            protected override BigResult<RPRouteDetail> AllRecordsToBigResult(DataRetrievalInput<RPRouteQuery> input, IEnumerable<RPRoute> allRecords)
+            protected override BigResult<RPRouteDetailByZone> AllRecordsToBigResult(DataRetrievalInput<RPRouteQueryByZone> input, IEnumerable<RPRoute> allRecords)
             {
                 int? systemCurrencyId = null;
                 int? toCurrencyId = null;
@@ -464,9 +464,9 @@ namespace TOne.WhS.Routing.Business
                     toCurrencyId, null, effectiveDate, input.Query.IncludeBlockedSuppliers, input.Query.MaxSupplierRate));
             }
 
-            protected override ResultProcessingHandler<RPRouteDetail> GetResultProcessingHandler(DataRetrievalInput<RPRouteQuery> input, BigResult<RPRouteDetail> bigResult)
+            protected override ResultProcessingHandler<RPRouteDetailByZone> GetResultProcessingHandler(DataRetrievalInput<RPRouteQueryByZone> input, BigResult<RPRouteDetailByZone> bigResult)
             {
-                var resultProcessingHandler = new ResultProcessingHandler<RPRouteDetail>()
+                var resultProcessingHandler = new ResultProcessingHandler<RPRouteDetailByZone>()
                 {
                     ExportExcelHandler = new RPRouteExcelExportHandler()
                 };
@@ -478,7 +478,7 @@ namespace TOne.WhS.Routing.Business
 
         #region Mappers
 
-        private RPRouteDetail RPRouteDetailMapper(RPRoute rpRoute, Guid policyConfigId, int? numberOfOptions, int? systemCurrencyId, int? toCurrencyId, int? customerProfileId, DateTime effectiveDate,
+        private RPRouteDetailByZone RPRouteDetailMapper(RPRoute rpRoute, Guid policyConfigId, int? numberOfOptions, int? systemCurrencyId, int? toCurrencyId, int? customerProfileId, DateTime effectiveDate,
             bool includeBlockedSuppliers, decimal? maxSupplierRate)
         {
             CurrencyManager currencyManager = new CurrencyManager();
@@ -501,7 +501,7 @@ namespace TOne.WhS.Routing.Business
                 currencySymbol = currencyManager.GetSystemCurrency().Symbol;
             }
 
-            return new RPRouteDetail()
+            return new RPRouteDetailByZone()
             {
                 RoutingProductId = rpRoute.RoutingProductId,
                 SaleZoneId = rpRoute.SaleZoneId,

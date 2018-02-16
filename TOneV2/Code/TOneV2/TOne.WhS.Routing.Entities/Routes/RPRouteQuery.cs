@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class RPRouteQuery
+    public abstract class BaseRPRouteQuery
     {
         public int RoutingDatabaseId { get; set; }
-
-        public Guid PolicyConfigId { get; set; }
 
         public int NumberOfOptions { get; set; }
 
@@ -31,5 +29,15 @@ namespace TOne.WhS.Routing.Entities
         public bool IncludeBlockedSuppliers { get; set; }
 
         public decimal? MaxSupplierRate { get; set; }
+    }
+
+    public class RPRouteQueryByZone : BaseRPRouteQuery
+    {
+        public Guid PolicyConfigId { get; set; }
+    }
+
+    public class RPRouteQueryByCode : BaseRPRouteQuery
+    {
+        public string CodePrefix { get; set; }
     }
 }

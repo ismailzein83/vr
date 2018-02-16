@@ -66,7 +66,7 @@ namespace TOne.WhS.Routing.Data.SQL
             };
         }
 
-        public IEnumerable<Entities.RPRoute> GetFilteredRPRoutes(Vanrise.Entities.DataRetrievalInput<Entities.RPRouteQuery> input)
+        public IEnumerable<Entities.RPRoute> GetFilteredRPRoutes(Vanrise.Entities.DataRetrievalInput<Entities.RPRouteQueryByZone> input)
         {
             query_GetFilteredRPRoutes.Replace("#LimitResult#", input.Query.LimitResult.ToString());
 

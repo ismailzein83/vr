@@ -11,7 +11,7 @@ namespace TOne.WhS.Sales.Business
     {
         public IEnumerable<long> ZoneIds { get; set; }
 
-        public Routing.Entities.RPRouteDetail Route { get; set; }
+        public Routing.Entities.RPRouteDetailByZone Route { get; set; }
 
         public int? NumberOfOptions { get; set; }
 

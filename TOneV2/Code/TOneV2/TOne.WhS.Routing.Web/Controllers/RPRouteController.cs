@@ -14,7 +14,7 @@ namespace TOne.WhS.Routing.Web.Controllers
     {
         [HttpPost]
         [Route("GetFilteredRPRoutes")]
-        public object GetFilteredRPRoutes(Vanrise.Entities.DataRetrievalInput<RPRouteQuery> input)
+        public object GetFilteredRPRoutes(Vanrise.Entities.DataRetrievalInput<RPRouteQueryByZone> input)
         {
             RPRouteManager manager = new RPRouteManager();
             return GetWebResponse(input, manager.GetFilteredRPRoutes(input));

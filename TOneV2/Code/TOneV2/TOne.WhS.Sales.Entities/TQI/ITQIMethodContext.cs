@@ -9,7 +9,7 @@ namespace TOne.WhS.Sales.Entities
 {
     public interface ITQIMethodContext
     {
-        RPRouteDetail Route { get; }
+        RPRouteDetailByZone Route { get; }
         int LongPrecision { get; }
         Decimal Rate { set; }
     }

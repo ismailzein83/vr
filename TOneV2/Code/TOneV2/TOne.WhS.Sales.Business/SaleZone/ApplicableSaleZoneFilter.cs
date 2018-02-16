@@ -65,7 +65,7 @@ namespace TOne.WhS.Sales.Business
             private DateTime _increasedRateBED;
             private DateTime _decreasedRateBED;
 
-            private IEnumerable<RPRouteDetail> _rpRouteDetails;
+            private IEnumerable<RPRouteDetailByZone> _rpRouteDetails;
 
             public Changes Draft { get; set; }
             public IEnumerable<int> ClosedCountryIds { get; set; }
@@ -126,7 +126,7 @@ namespace TOne.WhS.Sales.Business
                     throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("The current Rate '{0}' is the same as the new Rate", currentRateValue.Value));
             }
 
-            public RPRouteDetail GetRPRouteDetail(long zoneId)
+            public RPRouteDetailByZone GetRPRouteDetail(long zoneId)
             {
                 return _rpRouteDetails.FindRecord(x => x.SaleZoneId == zoneId);
             }

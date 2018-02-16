@@ -9,7 +9,7 @@ namespace TOne.WhS.Sales.Entities
 {
     public interface ITargetMatchCalculationMethodContext
     {
-        RPRouteDetail RPRouteDetail { get; }
+        RPRouteDetailByZone RPRouteDetail { get; }
         List<SupplierTargetMatchAnalyticOption> Options { set; }
         decimal MarginValue { get; }
         MarginType MarginType { get; }

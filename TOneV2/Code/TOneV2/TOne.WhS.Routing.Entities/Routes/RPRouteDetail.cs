@@ -1,22 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class RPRouteDetail
+    public abstract class BaseRPRouteDetail
     {
-        public int RoutingProductId { get; set; }
-
         public long SaleZoneId { get; set; }
 
         public string SaleZoneName { get; set; }
 
         public HashSet<int> SaleZoneServiceIds { get; set; }
-
-        public string RoutingProductName { get; set; }
 
         public string SellingNumberPlan { get; set; }
 
@@ -29,5 +22,16 @@ namespace TOne.WhS.Routing.Entities
         public string CurrencySymbol { get; set; }
 
         public IEnumerable<RPRouteOptionDetail> RouteOptionsDetails { get; set; }
+    }
+
+    public class RPRouteDetailByZone : BaseRPRouteDetail
+    {
+        public int RoutingProductId { get; set; }
+        public string RoutingProductName { get; set; }
+    }
+
+    public class RPRouteDetailByCode
+    {
+        public string Code { get; set; }
     }
 }
