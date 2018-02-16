@@ -234,7 +234,7 @@ namespace TOne.WhS.Sales.Business
                 zoneItem.RateTypes = _rateTypes.ToList();
             else
             {
-                Vanrise.GenericData.Entities.GenericRuleTarget target = GetTarget(zoneItem.ZoneId, zoneItem.CurrentRateBED);
+                Vanrise.GenericData.Entities.GenericRuleTarget target = GetTarget(zoneItem.ZoneId, DateTime.Now);
                 IEnumerable<int> rateTypeIds = _rateTypeRuleManager.GetRateTypes(_rateTypeRuleDefinitionId, target);
                 if (rateTypeIds != null)
                     zoneItem.RateTypes = _rateTypes.FindAllRecords(x => rateTypeIds.Contains(x.RateTypeId)).ToList();
