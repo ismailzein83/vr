@@ -413,7 +413,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 var saleRates = new List<SaleRateDetail>();
 
                 int sellingProductId = new CarrierAccountManager().GetSellingProductId(customerId);
-                var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocatorV2(new CustomerZoneRateHistoryReaderV2(new List<int>() { customerId }, new List<int>() { sellingProductId }, saleZoneIds, true, false));
+                var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocator(new CustomerZoneRateHistoryReader(new List<int>() { customerId }, new List<int>() { sellingProductId }, saleZoneIds, true, false));
 
                 var salePriceListManager = new SalePriceListManager();
                 int longPrecisionValue = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();

@@ -50,7 +50,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             int longPrecisionValue = new Vanrise.Common.Business.GeneralSettingsManager().GetLongPrecisionValue();
             int sellingProductId = new CarrierAccountManager().GetSellingProductId(query.OwnerId);
-            var customerZoneRateHistoryLocatorV2 = new CustomerZoneRateHistoryLocatorV2(new CustomerZoneRateHistoryReaderV2(CreateListFromItem(query.OwnerId), CreateListFromItem(sellingProductId), zoneIds, false, true));
+            var customerZoneRateHistoryLocatorV2 = new CustomerZoneRateHistoryLocator(new CustomerZoneRateHistoryReader(CreateListFromItem(query.OwnerId), CreateListFromItem(sellingProductId), zoneIds, false, true));
 
             IEnumerable<RateTypeInfo> customerZoneRateTypes = GetCustomerZoneRateTypes(query.OwnerId, zoneId, allRateTypes);
             int currencyId = query.IsSystemCurrency ? new Vanrise.Common.Business.ConfigManager().GetSystemCurrencyId() : query.CurrencyId;

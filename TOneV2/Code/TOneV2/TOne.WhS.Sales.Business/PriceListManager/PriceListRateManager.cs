@@ -191,7 +191,7 @@ namespace TOne.WhS.Sales.Business
             IEnumerable<long> zoneIds = context.RatesToChange.MapRecords(x => x.ZoneId);
 
             var saleZoneManager = new SaleZoneManager();
-            var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocatorV2(new CustomerZoneRateHistoryReaderV2(customerIds, sellingProductIds, zoneIds, true, false));
+            var customerZoneRateHistoryLocator = new CustomerZoneRateHistoryLocator(new CustomerZoneRateHistoryReader(customerIds, sellingProductIds, zoneIds, true, false));
 
             int startingReservedPriceListId = (int)new SalePriceListManager().ReserveIdRange(customerIds.Count());
 
@@ -327,7 +327,7 @@ namespace TOne.WhS.Sales.Business
             public int CountryId { get; set; }
             public int CurrencyId { get; set; }
             public int LongPrecisionValue { get; set; }
-            public CustomerZoneRateHistoryLocatorV2 CustomerZoneRateHistoryLocator { get; set; }
+            public CustomerZoneRateHistoryLocator CustomerZoneRateHistoryLocator { get; set; }
             public Dictionary<int, int> ReservedPricelistIdsPerCustomerId { get; set; }
             #endregion
 

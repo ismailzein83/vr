@@ -9,7 +9,7 @@ using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class CustomerZoneRateHistoryReaderV2
+    public class CustomerZoneRateHistoryReader
     {
         #region Fields
         private Dictionary<int, SaleEntityRates> _productRatesByProductId;
@@ -17,7 +17,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Constructors
-        public CustomerZoneRateHistoryReaderV2(IEnumerable<int> customerIds, IEnumerable<int> sellingProductIds, IEnumerable<long> zoneIds, bool getNormalRates, bool getOtherRates)
+        public CustomerZoneRateHistoryReader(IEnumerable<int> customerIds, IEnumerable<int> sellingProductIds, IEnumerable<long> zoneIds, bool getNormalRates, bool getOtherRates)
         {
             InitializeFields();
             ReadRates(customerIds, sellingProductIds, zoneIds, getNormalRates, getOtherRates);

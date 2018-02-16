@@ -5,20 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
-using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class CustomerZoneRateHistoryLocatorV2
+    public class CustomerZoneRateHistoryLocator
     {
         #region Fields
-        private CustomerZoneRateHistoryReaderV2 _reader;
+        private CustomerZoneRateHistoryReader _reader;
         private CustomerCountryManager _customerCountryManager;
         private IEnumerable<SaleEntityZoneRateSource> _orderedRateSources;
         #endregion
 
         #region Constructors
-        public CustomerZoneRateHistoryLocatorV2(CustomerZoneRateHistoryReaderV2 reader)
+        public CustomerZoneRateHistoryLocator(CustomerZoneRateHistoryReader reader)
         {
             InitializeFields(reader);
         }
@@ -44,7 +43,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         #region Private Methods
-        private void InitializeFields(CustomerZoneRateHistoryReaderV2 reader)
+        private void InitializeFields(CustomerZoneRateHistoryReader reader)
         {
             _reader = reader;
             _customerCountryManager = new CustomerCountryManager();
