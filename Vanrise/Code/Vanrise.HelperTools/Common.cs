@@ -189,6 +189,7 @@ namespace Vanrise.HelperTools
             var vanriseFiles = Directory.GetFiles(binFullPath, "Vanrise*Entities.dll");
             var retailFiles = Directory.GetFiles(binFullPath, "Retail*Entities.dll");
             var mediationFiles = Directory.GetFiles(binFullPath, "Mediation*Entities.dll");
+            var sOMFiles = Directory.GetFiles(binFullPath, "SOM*Entities.dll");
 
             foreach (var file in tOneFiles)
                 assemblies.Add(Assembly.LoadFile(file));
@@ -197,6 +198,8 @@ namespace Vanrise.HelperTools
             foreach (var file in retailFiles)
                 assemblies.Add(Assembly.LoadFile(file));
             foreach (var file in mediationFiles)
+                assemblies.Add(Assembly.LoadFile(file));
+            foreach (var file in sOMFiles)
                 assemblies.Add(Assembly.LoadFile(file));
 
             List<Enumeration> allEnumerations = new List<Enumeration>();
