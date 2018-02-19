@@ -12,6 +12,10 @@ namespace TOne.WhS.SupplierPriceList.Entities
         public int NumberOfIncreasedRates { get; set; }
         public int NumberOfDecreasedRates { get; set; }
 
+        public int NumberOfNewOtherRates { get; set; }
+        public int NumberOfIncreasedOtherRates { get; set; }
+        public int NumberOfDecreasedOtherRates { get; set; }
+
         public int NumberOfNewZones { get; set; }
 
         public int NumberOfClosedZones { get; set; }

@@ -26,6 +26,10 @@ namespace TOne.WhS.SupplierPriceList.Data.SQL
             supplierPricelistPreviewSummary.NumberOfIncreasedRates = Convert.ToInt32(ExecuteScalarSP("TOneWhS_SPL.sp_SupplierZoneRate_Preview_GetNumberOfRatesWithChangeType", processInstanceId, RateChangeType.Increase));
             supplierPricelistPreviewSummary.NumberOfDecreasedRates = Convert.ToInt32(ExecuteScalarSP("TOneWhS_SPL.sp_SupplierZoneRate_Preview_GetNumberOfRatesWithChangeType", processInstanceId, RateChangeType.Decrease));
 
+            supplierPricelistPreviewSummary.NumberOfNewOtherRates = Convert.ToInt32(ExecuteScalarSP("TOneWhS_SPL.sp_SupplierZoneRate_Preview_GetNumberOfOtherRatesWithChangeType", processInstanceId, RateChangeType.New));
+            supplierPricelistPreviewSummary.NumberOfIncreasedOtherRates = Convert.ToInt32(ExecuteScalarSP("TOneWhS_SPL.sp_SupplierZoneRate_Preview_GetNumberOfOtherRatesWithChangeType", processInstanceId, RateChangeType.Increase));
+            supplierPricelistPreviewSummary.NumberOfDecreasedOtherRates = Convert.ToInt32(ExecuteScalarSP("TOneWhS_SPL.sp_SupplierZoneRate_Preview_GetNumberOfOtherRatesWithChangeType", processInstanceId, RateChangeType.Decrease));
+
             supplierPricelistPreviewSummary.NumberOfNewZones = Convert.ToInt32(ExecuteScalarSP("TOneWhS_SPL.sp_SupplierZoneRate_Preview_GetNumberOfZonesWithChangeType", processInstanceId, ZoneChangeType.New));
             supplierPricelistPreviewSummary.NumberOfClosedZones = Convert.ToInt32(ExecuteScalarSP("TOneWhS_SPL.sp_SupplierZoneRate_Preview_GetNumberOfZonesWithChangeType", processInstanceId, ZoneChangeType.Deleted));
             supplierPricelistPreviewSummary.NumberOfRenamedZones = Convert.ToInt32(ExecuteScalarSP("TOneWhS_SPL.sp_SupplierZoneRate_Preview_GetNumberOfZonesWithChangeType", processInstanceId, ZoneChangeType.Renamed));

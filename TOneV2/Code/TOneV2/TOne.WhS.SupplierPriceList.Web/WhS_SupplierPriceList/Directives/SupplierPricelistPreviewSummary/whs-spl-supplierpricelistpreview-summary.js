@@ -55,6 +55,9 @@ function (WhS_SupPL_PreviewChangeTypeEnum, WhS_SupPL_PreviewGroupedBy, UtilsServ
                 $scope.scopeModel.numberOfNewRates = previewSummary.NumberOfNewRates;
                 $scope.scopeModel.numberOfIncreasedRates = previewSummary.NumberOfIncreasedRates;
                 $scope.scopeModel.numberOfDecreasedRates = previewSummary.NumberOfDecreasedRates;
+                $scope.scopeModel.numberOfNewOtherRates = previewSummary.NumberOfNewOtherRates;
+                $scope.scopeModel.numberOfIncreasedOtherRates = previewSummary.NumberOfIncreasedOtherRates;
+                $scope.scopeModel.numberOfDecreasedOtherRates = previewSummary.NumberOfDecreasedOtherRates;
                 $scope.scopeModel.numberOfNewZones = previewSummary.NumberOfNewZones;
                 $scope.scopeModel.numberOfRenamedZones = previewSummary.NumberOfRenamedZones;
                 $scope.scopeModel.numberOfClosedZones = previewSummary.NumberOfClosedZones;
