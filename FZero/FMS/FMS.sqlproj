@@ -166,5 +166,9 @@
     <Build Include="dbo\Functions\SplitwithValue.sql" />
     <Build Include="dbo\Stored Procedures\prGetEmails.sql" />
     <Build Include="dbo\Functions\fn_CheckIfReportedBeforeSecurity.sql" />
+    <Build Include="dbo\Tables\ReportedCleanCalls.sql" />
+    <Build Include="dbo\Functions\ParseStringList.sql" />
+    <Build Include="dbo\Stored Procedures\sp_ReportedCleanCalls_Insert.sql" />
+    <Build Include="dbo\Stored Procedures\sp_GeneratedCalls_GetNonReportedClean.sql" />
   </ItemGroup>
 </Project>
