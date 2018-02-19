@@ -9,6 +9,7 @@ using SIPVoipSDK;
 using System.Configuration;
 using System.Timers;
 using System.Diagnostics;
+using System.Globalization;
 
 namespace CallGeneratorService
 {
@@ -21,7 +22,7 @@ namespace CallGeneratorService
         // Status = 0 when the call is started without ending the call by the event in a time out = 2 minutes
 
         System.Timers.Timer timer = new System.Timers.Timer(2000);
-
+        static Random r = new Random();
         #region Initialisation of Channels
         private int id;
         public int generatedCallid;
@@ -184,8 +185,17 @@ namespace CallGeneratorService
 
         private static readonly object _syncRoot = new object();
 
+        static Object s_lockObj = new object();
+        static bool s_isRunning;
+
         private static void OnTimedEvent(Object source, ElapsedEventArgs e)
         {
+            lock(s_lockObj)
+            {
+                if (s_isRunning)
+                    return;
+                s_isRunning = true;
+            }
             try
             {
                
@@ -224,7 +234,11 @@ namespace CallGeneratorService
 
                             Service1.LstChanels[i].sip.phone.SetCurrentLine(Service1.LstChanels[i].id + 1);
 
-                            int ConnectionId = Service1.LstChanels[i].sip.phone.StartCall2(Service1.LstChanels[i].DestinationNumber);
+                            var leftPart = r.Next(1, 9);
+                            var rightPart = Math.Round(r.NextDouble() * 1e+11, 0);
+                            string newCli = string.Format("{0}{1}", leftPart.ToString(CultureInfo.InvariantCulture), rightPart.ToString(CultureInfo.InvariantCulture).PadLeft(11, '0'));
+
+                            int ConnectionId = Service1.LstChanels[i].sip.phone.StartCall3(Service1.LstChanels[i].DestinationNumber, newCli);
                             Service1.LstChanels[i].AttemptDate = DateTime.Now;
 
                             String threadId = System.Threading.Thread.CurrentThread.ManagedThreadId.ToString();
@@ -287,6 +301,13 @@ namespace CallGeneratorService
             catch (System.Exception ex)
             {
                 WriteToEventLog("EXCEPTION ChannelAll: " + ex.ToString());
+            }
+            finally
+            {
+                lock (s_lockObj)
+                {
+                    s_isRunning = false;
+                }
             }
         }
 
