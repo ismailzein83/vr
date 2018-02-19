@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('vrWhsSalesSubscriberpreviewDirective', ['WhS_Sales_RatePlanPreviewAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_BE_SubscriberStatusEnum',
-    function (WhS_Sales_RatePlanPreviewAPIService, UtilsService, VRUIUtilsService, VRNotificationService, WhS_BE_SubscriberStatusEnum) {
+app.directive('vrWhsSalesSubscriberpreviewDirective', ['WhS_Sales_RatePlanPreviewAPIService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_BE_SubscriberStatusEnum','BusinessProcess_BPInstanceService',
+    function (WhS_Sales_RatePlanPreviewAPIService, UtilsService, VRUIUtilsService, VRNotificationService, WhS_BE_SubscriberStatusEnum, BusinessProcess_BPInstanceService) {
         return {
             restrict: 'E',
             scope: {
@@ -26,6 +26,9 @@ app.directive('vrWhsSalesSubscriberpreviewDirective', ['WhS_Sales_RatePlanPrevie
                 $scope.scopeModel.subscriberPreviews = [];
                 $scope.scopeModel.onGridReady = function (api) {
                     defineAPI();
+                };
+                $scope.processInstanceClicked = function (dataItem) {
+                    BusinessProcess_BPInstanceService.openProcessTracking(dataItem.Entity.SubscriberProcessInstanceId);
                 };
             }
 
@@ -67,6 +70,6 @@ app.directive('vrWhsSalesSubscriberpreviewDirective', ['WhS_Sales_RatePlanPrevie
                 if (subscriberStatus != undefined) {
                     dataItem.SubscriberStatusDescription = subscriberStatus.description;
                 }
+                }
             }
-        }
     }]);

@@ -27,32 +27,28 @@ namespace TOne.WhS.Sales.BP.Activities
         {
             IRatePlanContext ratePlanContext = context.GetRatePlanContext();
             long rootProcessInstanceId = ratePlanContext.RootProcessInstanceId;
+            long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
             int subscriberId = SubscriberId.Get(context);
             bool terminatedDueBusinessRulesViolation = TerminatedDueBusinessRulesViolation.Get(context);
-            string description;
             SubscriberProcessStatus status;
 
             if (terminatedDueBusinessRulesViolation)
             {
                 status = SubscriberProcessStatus.Failed;
-                long processInstanceId = context.GetSharedInstanceData().InstanceInfo.ProcessInstanceID;
-                description = getTerminatedDueBusinessRulesViolationDescription(processInstanceId);
             }
             else if (ratePlanContext.ProcessHasChanges)
             {
                 status = SubscriberProcessStatus.Success;
-                description = "The process has been successfuly completed.";
             }
             else
             {
                 status = SubscriberProcessStatus.NoChange;
-                description = "The process has been completed without any change.";
             }
             var subscriberPreview = new SubscriberPreview
             {
                 SubscriberId = subscriberId,
                 Status = status,
-                Description = description
+                SubscriberProcessInstanceId = processInstanceId
             };
             var subscriberPreviewDataManager = SalesDataManagerFactory.GetDataManager<ISubscriberPreviewDataManager>();
             subscriberPreviewDataManager.ProcessInstanceId = rootProcessInstanceId;

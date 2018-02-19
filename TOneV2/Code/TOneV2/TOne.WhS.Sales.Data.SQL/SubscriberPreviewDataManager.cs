@@ -39,7 +39,7 @@ namespace TOne.WhS.Sales.Data.SQL
 
         public bool InsertSubscriberPreview(SubscriberPreview subscriberPreview)
         {
-            int affectedRows = ExecuteNonQuerySP("TOneWhS_Sales.sp_SubscriberPreview_Insert", _processInstanceId, subscriberPreview.SubscriberId, Convert.ToInt32(subscriberPreview.Status), subscriberPreview.Description);
+            int affectedRows = ExecuteNonQuerySP("TOneWhS_Sales.sp_SubscriberPreview_Insert", _processInstanceId, subscriberPreview.SubscriberId, Convert.ToInt32(subscriberPreview.Status), subscriberPreview.SubscriberProcessInstanceId);
 
             return affectedRows > 0;
         }
@@ -50,7 +50,7 @@ namespace TOne.WhS.Sales.Data.SQL
             {
                 SubscriberId = GetReaderValue<int>(reader, "SubscriberID"),
                 Status = (SubscriberProcessStatus)reader["Status"],
-                Description = GetReaderValue<string>(reader, "Description")
+                SubscriberProcessInstanceId = GetReaderValue<long>(reader, "SubscriberProcessInstanceID"),
             };
         }
     }

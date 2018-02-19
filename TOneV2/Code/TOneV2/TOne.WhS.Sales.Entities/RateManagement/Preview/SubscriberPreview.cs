@@ -16,7 +16,8 @@ namespace TOne.WhS.Sales.Entities
     {
         public int SubscriberId { get; set; }
         public SubscriberProcessStatus Status { get; set; }
-        public string Description { get; set; }
+        public long SubscriberProcessInstanceId { get; set; }
+      
     }
 
     public class SubscriberPreviewDetail

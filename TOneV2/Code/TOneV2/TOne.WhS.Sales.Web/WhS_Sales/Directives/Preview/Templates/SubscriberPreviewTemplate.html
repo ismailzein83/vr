@@ -13,12 +13,12 @@
     </vr-columns>
 </vr-row>
 <vr-row>
+    <vr-columns colnum="12">
     <vr-datagrid datasource="scopeModel.subscriberPreviews"
                  pagingtype="'PagingOnScroll'"
                  on-ready="scopeModel.onGridReady">
-        <vr-datagridcolumn headertext="'Subscriber'" field="'SubscriberName'" widthfactor="3" type="'Text'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Subscriber'" field="'SubscriberName'" isclickable="true" onclicked="processInstanceClicked" widthfactor="3" type="'Text'"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Status'" field="'SubscriberStatusDescription'" widthfactor="2" type="'Text'"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Description'" field="'Entity.Description'" type="'Text'" widthfactor="7" expendablecolumn expendablecolumndescription="'Entity.Description'"></vr-datagridcolumn>
-
     </vr-datagrid>
+        </vr-columns>
 </vr-row>
