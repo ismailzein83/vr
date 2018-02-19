@@ -29,7 +29,7 @@ namespace Vanrise.AccountBalance.Web.Controllers
             if (!_accountTypeManager.DoesUserHaveViewAccess(input.Query.AccountTypeId))
                 return GetUnauthorizedResponse();
             LiveBalanceManager manager = new LiveBalanceManager();
-            return manager.GetFilteredAccountBalances(input);
+            return GetWebResponse(input, manager.GetFilteredAccountBalances(input));
         }
 
     }

@@ -143,7 +143,74 @@ namespace Vanrise.AccountBalance.Business
                 }
                 return accountBalanceDetails;
             }
+
+
+            protected override ResultProcessingHandler<AccountBalanceDetail> GetResultProcessingHandler(DataRetrievalInput<AccountBalanceQuery> input, BigResult<AccountBalanceDetail> bigResult)
+            {
+                var resultProcessingHandler = new ResultProcessingHandler<AccountBalanceDetail>()
+                {
+                    ExportExcelHandler = new AccountBalanceExportExcelHandler(input.Query)
+                };
+                return resultProcessingHandler;
+            }
+
         }
+
+        private class AccountBalanceExportExcelHandler : ExcelExportHandler<AccountBalanceDetail>
+        {
+            AccountBalanceQuery _query;
+            public AccountBalanceExportExcelHandler(AccountBalanceQuery query)
+            {
+                query.ThrowIfNull("Account Balance Query");
+                _query = query;
+            }
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<AccountBalanceDetail> context)
+            {
+                AccountTypeSettings accountTypeSettings = new AccountTypeManager().GetAccountTypeSettings(_query.AccountTypeId);
+
+
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Account Balances",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                if (accountTypeSettings != null && accountTypeSettings.AccountBalanceGridSettings != null && accountTypeSettings.AccountBalanceGridSettings.GridColumns != null)
+                {
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "ID", Width = 40 });
+
+                    foreach (var gridColumn in accountTypeSettings.AccountBalanceGridSettings.GridColumns)
+                    {
+                        sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = gridColumn.Title, Width = 40 });
+                    }
+
+
+                }
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+
+                        var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                        if (record.Entity != null)
+                        {
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.AccountBalanceId });
+
+                            foreach (var gridColumn in accountTypeSettings.AccountBalanceGridSettings.GridColumns)
+                            {
+                                var item = record.Entity.Items.GetRecord(gridColumn.FieldName);
+                                if (item != null)
+                                    row.Cells.Add(new ExportExcelCell { Value = item.Description });
+                            }
+                        }
+                        sheet.Rows.Add(row);
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
+
 
         #endregion
     }
