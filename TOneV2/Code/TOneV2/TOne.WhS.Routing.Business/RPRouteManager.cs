@@ -36,7 +36,12 @@ namespace TOne.WhS.Routing.Business
 
         public Vanrise.Entities.IDataRetrievalResult<RPRouteDetailByZone> GetFilteredRPRoutes(Vanrise.Entities.DataRetrievalInput<RPRouteQueryByZone> input)
         {
-            return BigDataManager.Instance.RetrieveData(input, new RPRouteRequestHandler());
+            return BigDataManager.Instance.RetrieveData(input, new RPRouteByZoneRequestHandler());
+        }
+
+        public Vanrise.Entities.IDataRetrievalResult<RPRouteDetailByCode> GetFilteredRPRoutesByCode(Vanrise.Entities.DataRetrievalInput<RPRouteQueryByCode> input)
+        {
+            return BigDataManager.Instance.RetrieveData(input, new RPRouteByCodeRequestHandler());
         }
 
         public Vanrise.Entities.IDataRetrievalResult<RPRouteOptionDetail> GetFilteredRPRouteOptions(Vanrise.Entities.DataRetrievalInput<RPRouteOptionQuery> input)
@@ -53,12 +58,20 @@ namespace TOne.WhS.Routing.Business
 
             int? systemCurrencyId = null;
             int? toCurrencyId = null;
+            int? customerProfileId = null;
 
-            if (!input.Query.ShowInSystemCurrency && input.Query.CustomerId.HasValue)
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            if (input.Query.CustomerId.HasValue)
             {
-                systemCurrencyId = new Vanrise.Common.Business.ConfigManager().GetSystemCurrencyId();
-                toCurrencyId = new CarrierAccountManager().GetCarrierAccountCurrencyId(input.Query.CustomerId.Value);
+                customerProfileId = carrierAccountManager.GetCarrierProfileId(input.Query.CustomerId.Value);
+                if (!input.Query.ShowInSystemCurrency)
+                {
+                    systemCurrencyId = new Vanrise.Common.Business.ConfigManager().GetSystemCurrencyId();
+                    toCurrencyId = carrierAccountManager.GetCarrierAccountCurrencyId(input.Query.CustomerId.Value);
+                }
             }
+
+
 
             IEnumerable<RPRouteOption> routeOptionsByPolicy = allOptions[input.Query.PolicyOptionConfigId];
             if (routeOptionsByPolicy == null || !routeOptionsByPolicy.Any())
@@ -69,6 +82,13 @@ namespace TOne.WhS.Routing.Business
             List<RPRouteOptionDetail> rpRouteOptionDetails = new List<RPRouteOptionDetail>();
             foreach (var rpRouteOption in routeOptionsByPolicy)
             {
+                if (customerProfileId.HasValue)
+                {
+                    int? supplierProfileId = carrierAccountManager.GetCarrierProfileId(rpRouteOption.SupplierId);
+                    if (supplierProfileId.HasValue && supplierProfileId.Value == customerProfileId.Value)
+                        continue;
+                }
+
                 RPRouteOptionDetail rpRouteOptionDetail = RPRouteOptionMapper(rpRouteOption, systemCurrencyId, toCurrencyId, counter++, effectiveDate, input.Query.EffectiveSaleRateValue);
 
                 if (input.Query != null && !input.Query.IncludeBlockedSuppliers && rpRouteOption.SupplierStatus == SupplierStatus.Block)
@@ -377,7 +397,7 @@ namespace TOne.WhS.Routing.Business
 
         #region Private Classes
 
-        private class RPRouteExcelExportHandler : ExcelExportHandler<RPRouteDetailByZone>
+        private class RPRouteByZoneExcelExportHandler : ExcelExportHandler<RPRouteDetailByZone>
         {
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<RPRouteDetailByZone> context)
             {
@@ -427,7 +447,7 @@ namespace TOne.WhS.Routing.Business
             }
         }
 
-        private class RPRouteRequestHandler : BigDataRequestHandler<RPRouteQueryByZone, RPRoute, RPRouteDetailByZone>
+        private class RPRouteByZoneRequestHandler : BigDataRequestHandler<RPRouteQueryByZone, RPRoute, RPRouteDetailByZone>
         {
             RPRouteManager _manager = new RPRouteManager();
 
@@ -451,24 +471,66 @@ namespace TOne.WhS.Routing.Business
             {
                 int? systemCurrencyId = null;
                 int? toCurrencyId = null;
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
 
                 if (!input.Query.ShowInSystemCurrency && input.Query.CustomerId.HasValue)
                 {
                     systemCurrencyId = new Vanrise.Common.Business.ConfigManager().GetSystemCurrencyId();
-                    toCurrencyId = new CarrierAccountManager().GetCarrierAccountCurrencyId(input.Query.CustomerId.Value);
+                    toCurrencyId = carrierAccountManager.GetCarrierAccountCurrencyId(input.Query.CustomerId.Value);
                 }
+
+                int? carrierProfileId = null;
+                if (input.Query.CustomerId.HasValue)
+                    carrierProfileId = carrierAccountManager.GetCarrierProfileId(input.Query.CustomerId.Value);
 
                 DateTime effectiveDate = DateTime.Now;
 
                 return allRecords.ToBigResult(input, null, (entity) => _manager.RPRouteDetailMapper(entity, input.Query.PolicyConfigId, input.Query.NumberOfOptions, systemCurrencyId,
-                    toCurrencyId, null, effectiveDate, input.Query.IncludeBlockedSuppliers, input.Query.MaxSupplierRate));
+                    toCurrencyId, carrierProfileId, effectiveDate, input.Query.IncludeBlockedSuppliers, input.Query.MaxSupplierRate));
             }
 
             protected override ResultProcessingHandler<RPRouteDetailByZone> GetResultProcessingHandler(DataRetrievalInput<RPRouteQueryByZone> input, BigResult<RPRouteDetailByZone> bigResult)
             {
                 var resultProcessingHandler = new ResultProcessingHandler<RPRouteDetailByZone>()
                 {
-                    ExportExcelHandler = new RPRouteExcelExportHandler()
+                    ExportExcelHandler = new RPRouteByZoneExcelExportHandler()
+                };
+                return resultProcessingHandler;
+            }
+        }
+
+        private class RPRouteByCodeExcelExportHandler : ExcelExportHandler<RPRouteDetailByCode>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<RPRouteDetailByCode> context)
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        private class RPRouteByCodeRequestHandler : BigDataRequestHandler<RPRouteQueryByCode, RPRoute, RPRouteDetailByCode>
+        {
+            RPRouteManager _manager = new RPRouteManager();
+
+            public override RPRouteDetailByCode EntityDetailMapper(RPRoute entity)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override IEnumerable<RPRoute> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<RPRouteQueryByCode> input)
+            {
+                throw new NotImplementedException();
+            }
+
+            protected override BigResult<RPRouteDetailByCode> AllRecordsToBigResult(DataRetrievalInput<RPRouteQueryByCode> input, IEnumerable<RPRoute> allRecords)
+            {
+                throw new NotImplementedException();
+            }
+
+            protected override ResultProcessingHandler<RPRouteDetailByCode> GetResultProcessingHandler(DataRetrievalInput<RPRouteQueryByCode> input, BigResult<RPRouteDetailByCode> bigResult)
+            {
+                var resultProcessingHandler = new ResultProcessingHandler<RPRouteDetailByCode>()
+                {
+                    ExportExcelHandler = new RPRouteByCodeExcelExportHandler()
                 };
                 return resultProcessingHandler;
             }
@@ -541,7 +603,7 @@ namespace TOne.WhS.Routing.Business
             }
 
             bool isblocked = routeOption.SupplierStatus == SupplierStatus.Block;
-            bool isLossy = effectiveRateValue.HasValue ? (effectiveRateValue.Value - routeOption.SupplierRate) < 0 : false;
+            bool isLossy = effectiveRateValue.HasValue ? effectiveRateValue.Value < convertedSupplierRate : false;
 
             var routeOptionDetail = new RPRouteOptionDetail()
             {
