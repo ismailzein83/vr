@@ -32,7 +32,7 @@ namespace Vanrise.Common.Data.SQL
             if (obj != null)
                 serializedObj = Vanrise.Common.Serializer.Serialize(obj);
 
-            ExecuteNonQuerySP("logging.sp_ObjectTracking_Insert", out objectTrackingId, userId, loggableEntityId, objectId, serializedObj, actionId, actionDescription, technicalInformation, serializedVRActionAuditChangeInfo);
+            ExecuteNonQuerySP("logging.sp_ObjectTracking_Insert", out objectTrackingId, userId, loggableEntityId, objectId, serializedObj, actionId, actionDescription, serializedTechnicalInformation, serializedVRActionAuditChangeInfo);
             return (long)objectTrackingId;
         }
 
