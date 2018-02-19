@@ -75,20 +75,20 @@ namespace Vanrise.Fzero.Services.NonFruadReport
                                {
                                    while (reader.Read())
                                    {
-                                       var recievedCLI = reader["RecievedCLI"] as string;
-                                       if (!DistinctCLIs.Contains(recievedCLI))
+                                       var anumber = reader["a_number"] as string;
+                                       if (!DistinctCLIs.Contains(anumber))
                                        {
-                                          
-                                           DistinctCLIs.Add(recievedCLI);
+
+                                           DistinctCLIs.Add(anumber);
                                            listDistinctCleanCases.Add(new CleanCases
                                            {
-                                               GeneratedCallId = (int)reader["ID"], 
-                                               ANumber = reader["a_number"]as string ,
+                                               GeneratedCallId = (int)reader["ID"],
+                                               ANumber = anumber,
                                                AttamptDateTime =  (DateTime)reader["AttemptDateTime"],
                                                BNumber =reader["b_number"]as string ,
                                                DifferentCLI =  (int)reader["DifferentCLI"] == 0?false:true,
                                                Duration = reader["DurationInSeconds"] != DBNull.Value ? (int?)reader["DurationInSeconds"] : default(int?),
-                                               RecievedCLI = recievedCLI
+                                               RecievedCLI =  reader["RecievedCLI"] as string
                                            });
                                        }
                                    }

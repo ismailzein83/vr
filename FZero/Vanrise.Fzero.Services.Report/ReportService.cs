@@ -69,9 +69,17 @@ namespace Vanrise.Fzero.Services.Report
                             List<int> listRepeatedFraudCases = new List<int>();
                             foreach (ViewGeneratedCall v in listFraudCases)
                             {
-                                if (!DistinctCLIs.Contains(v.CLI))
+                                string cli = v.CLI;
+                                if (i.User.ClientID == (int)Enums.Clients.ITPC)
                                 {
-                                    DistinctCLIs.Add(v.CLI);
+                                    if (cli.StartsWith("0"))
+                                    {
+                                        cli = string.Format("964{0}", v.CLI.Substring(1));
+                                    }
+                                }
+                                if (!DistinctCLIs.Contains(cli))
+                                {
+                                    DistinctCLIs.Add(cli);
                                     listDistinctFraudCases.Add(v.ID);
                                 }
                                 else
@@ -107,9 +115,18 @@ namespace Vanrise.Fzero.Services.Report
                             List<int> listRepeatedFraudCases = new List<int>();
                             foreach (ViewGeneratedCall v in listFraudCases)
                             {
-                                if (!DistinctCLIs.Contains(v.CLI))
+                                string cli = v.CLI;
+                                if (i.User.ClientID == (int)Enums.Clients.ITPC)
                                 {
-                                    DistinctCLIs.Add(v.CLI);
+                                    if (cli.StartsWith("0"))
+                                    {
+                                        cli = string.Format("964{0}", v.CLI.Substring(1));
+                                    }
+                                }
+
+                                if (!DistinctCLIs.Contains(cli))
+                                {
+                                    DistinctCLIs.Add(cli);
                                     listDistinctFraudCases.Add(v.ID);
                                 }
                                 else
