@@ -41,7 +41,7 @@ namespace TOne.WhS.SupplierPriceList.Business
                 if (distinctImportedOtherRates.Count() > 1)
                 {
                     string rateTypeName = rateTypeManager.GetRateTypeName(kvp.Key);
-                    messages.Add(string.Format("{0} {1}", rateTypeName, string.Join(", ", distinctImportedOtherRates.Select(item => item.Key))));
+                    messages.Add(string.Format("{0} ({1})", rateTypeName, string.Join(", ", distinctImportedOtherRates.Select(item => item.Key))));
                 }
             }
 

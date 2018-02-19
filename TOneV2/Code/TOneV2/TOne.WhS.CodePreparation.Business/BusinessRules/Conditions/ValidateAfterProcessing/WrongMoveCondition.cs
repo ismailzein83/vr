@@ -22,9 +22,9 @@ namespace TOne.WhS.CodePreparation.Business
             CodeToAdd codeToAdd = context.Target as CodeToAdd;
             if (codeToAdd.ChangedExistingCodes != null)
             {
-                if (codeToAdd.ChangedExistingCodes.Any(item => item.IsInTimeRange(codeToAdd.BED)))
+                if (codeToAdd.ChangedExistingCodes.Any())
                 {
-                    context.Message = string.Format("Can not add codes ({0}) because they already exist in zone '{1}'.", codeToAdd.Code, codeToAdd.ZoneName);
+                    context.Message = string.Format("Can not add codes ({0}) because they already exist in zone '{1}'.", codeToAdd.Code ,codeToAdd.ChangedExistingCodes.First().ParentZone.Name);
                     return false;
                 }
             }

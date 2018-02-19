@@ -651,7 +651,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                             gridZoneItem.RPRouteDetail = response.RPRouteDetail;
                             var routeOptions = getRouteOptions(response.RPRouteDetail);
-                            UtilsService.convertToPromiseIfUndefined(gridZoneItem.RouteOptionsAPI.load(routeOptions)).then(function () {
+                            gridZoneItem.RouteOptionsDetailsForView = response.RouteOptionsDetailsForView;
+                            var routeOptionsDirectivePayload = getRouteOptionsDirectivePayload(gridZoneItem);
+                            UtilsService.convertToPromiseIfUndefined(gridZoneItem.RouteOptionsAPI.load(routeOptionsDirectivePayload)).then(function () {
                                 loadRouteOptionsDeferred.resolve();
                             }).catch(function (error) {
                                 loadRouteOptionsDeferred.reject(error);
@@ -809,12 +811,18 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             }
 
             function getRouteOptionsDirectivePayload(dataItem) {
+                var rate;
+                if (!WhS_Sales_RatePlanUtilsService.isStringEmpty(dataItem.NewRate))
+                    rate = Number(dataItem.NewRate);
+                else if (dataItem.CurrentRate != null)
+                    rate = dataItem.CurrentRate;
                 return {
                     RoutingDatabaseId: gridQuery.RoutingDatabaseId,
                     RoutingProductId: dataItem.EffectiveRoutingProductId,
                     SaleZoneId: dataItem.ZoneId,
                     RouteOptions: dataItem.RouteOptionsDetailsForView,
-                    CurrencyId: gridQuery.CurrencyId
+                    CurrencyId: gridQuery.CurrencyId,
+                    saleRate: rate
                 };
             }
 
