@@ -2145,7 +2145,6 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
 }
 
 .vr-datagrid-datacells:hover {
-    background-color: #ddd !important;
     cursor: pointer !important;
 }
 
@@ -2154,7 +2153,7 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     }
 
 .vr-datagrid-datacells-click {
-    background-color: #ddd !important;
+    background-color: #d7ebee !important;
 }
 
 .vr-datagrid-cell, .vr-datagrid-header-cell {
@@ -4115,25 +4114,12 @@ vr-datalist .drag-icon {
     background-color: #e9e9e9;
 }
 
-    .vr-datagrid[alternative-color="true"] .vr-datagrid-body:nth-of-type(odd) .vr-datagrid-cell-container {
-        background-color: inherit !important;
-    }
+
 
 .vr-datagrid[alternative-color="true"] .vr-datagrid-body:hover {
-    background-color: #ddd !important;
+    background-color: #d7ebee !important;
 }
 
-.vr-datagrid[alternative-color="true"] .vr-datagrid-body:nth-of-type(odd) .vr-datagrid-datacells-click .vr-datagrid-cell-container {
-    background-color: #ddd !important;
-}
-
-.vr-datagrid[alternative-color="true"] .vr-datagrid-body:nth-of-type(odd) .vr-datagrid-datacells:hover .vr-datagrid-cell-container {
-    background-color: #ddd !important;
-}
-
-.vr-datagrid[alternative-color="true"] .vr-datagrid-datacells-click .vr-datagrid-cell-container {
-    background-color: #ddd !important;
-}
 
 .vr-datagrid[vertical-line="true"] .vr-datagrid-cell-container {
     border-right: 1px solid rgb(208, 208, 208);
@@ -4141,9 +4127,9 @@ vr-datalist .drag-icon {
     padding: 1px 0px;
 }
 
-    .vr-datagrid[vertical-line="true" ] .vr-datagrid-cell-container:last-child {
-        border-right: unset;
-    }
+.vr-datagrid[vertical-line="true" ] .vr-datagrid-cell-container:last-child {
+    border-right: unset;
+}
 
 /* end vr-datagrid custom layout */
 
@@ -4159,14 +4145,14 @@ span.option {
 span.clickableoption {
 }
 
-    span.clickableoption:hover {
-        text-decoration: underline;
-        /*display: inline-block;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        width: 100%;*/
-    }
+span.clickableoption:hover {
+    text-decoration: underline;
+    /*display: inline-block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;*/
+}
 
 span.option-blocked {
     color: #FF0000;
