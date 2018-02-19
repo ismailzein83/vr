@@ -117,7 +117,7 @@ namespace Vanrise.Fzero.Services.NonFruadReport
        }
         private void ErrorLog(string message)
         {
-            string cs = "Report Service";
+            string cs = "Non Fruad Report Service";
             EventLog elog = new EventLog();
             if (!EventLog.SourceExists(cs))
             {
@@ -140,7 +140,7 @@ namespace Vanrise.Fzero.Services.NonFruadReport
 
                 foreach (var listDistinctCleanCase in listDistinctCleanCases)
                 {
-                    stringBuilder.Append("/n");
+                    stringBuilder.AppendLine();
                     stringBuilder.AppendFormat("{0},{1},{2},{3},{4},{5}", listDistinctCleanCase.ANumber, listDistinctCleanCase.BNumber, listDistinctCleanCase.RecievedCLI, listDistinctCleanCase.AttamptDateTime, listDistinctCleanCase.Duration, listDistinctCleanCase.DifferentCLI);
                 }
 
@@ -148,7 +148,6 @@ namespace Vanrise.Fzero.Services.NonFruadReport
 
                 MobileOperator mobileOperator = Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperatorID);
                 
-                string CCs = EmailCC.GetEmailCCs(MobileOperatorID, ClientID);
                 string profileName = ClientVariables.GetProfileName(ClientID);
 
                 if (!string.IsNullOrEmpty(mobileOperator.NonFruadReportEmail))
@@ -156,7 +155,7 @@ namespace Vanrise.Fzero.Services.NonFruadReport
                     if (listDistinctCleanCases.Count > 0)
                     {
 
-                        ClientVariables.SaveCSVClientReport(reportName, stringBuilder);
+                       string fileName = ClientVariables.SaveCSVClientReport(reportName, stringBuilder);
                         int ID = (int)Enums.EmailTemplates.ReporttoMobileOperator;
                         EmailTemplate template = EmailTemplate.Load(ID);
                         if (template.IsActive)
@@ -164,12 +163,17 @@ namespace Vanrise.Fzero.Services.NonFruadReport
                             Email email = new Email() { EmailTemplateID = ID };
                             email.DestinationEmail = mobileOperator.NonFruadReportEmail;
                             email.Subject = string.Format("Fzero CLI Delivery Report {0}", DateTime.Today.ToString("dd-MM-yyyy"));
-                            email.CC = CCs;
                             email.Body = @"Dear Sir/Madame,
                                           <br />Kindly find attached our Fzero CLI Delivery Report for your revision.
                                         
                                           <br /> <br />Best Regards,";
-                            Email.SendMailWithAttachement(email, reportName, profileName);
+                          bool sentSuccessfully = Email.SendMailWithAttachement(email, fileName, profileName);
+                          if (sentSuccessfully)
+                                ErrorLog("Email Sent Successfully.");
+                          else
+                              ErrorLog("Send email failed.");
+
+
                         }
                        
                         SqlDatabase db = new SqlDatabase(ConfigurationManager.ConnectionStrings["FMSConnectionString"].ConnectionString);

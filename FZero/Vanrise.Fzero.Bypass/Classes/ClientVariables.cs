@@ -82,10 +82,11 @@ namespace Vanrise.Fzero.Bypass
                 fs.Close();
             }
         }
-        public static void SaveCSVClientReport(string reportName, StringBuilder stringBuilder)
+        public static string SaveCSVClientReport(string reportName, StringBuilder stringBuilder)
         {
             string filename = Path.Combine(ConfigurationManager.AppSettings["ReportsPath"], reportName);
             File.WriteAllText(filename, stringBuilder.ToString());
+            return filename;
         }
     }
 }
