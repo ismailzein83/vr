@@ -89,12 +89,12 @@ app.directive("vrPstnBeNormalizationrulegrid", ["PSTN_BE_Service", "Normalizatio
                    name: "Edit",
                    clicked: editNormalizationRule,
                    haspermission: hasUpdateRulePermission
-               },
-               {
-                   name: "Delete",
-                   clicked: deleteNormalizationRule,
-                   haspermission: hasDeleteRulePermission
-               }
+               }//,
+               //{
+               //    name: "Delete",
+               //    clicked: deleteNormalizationRule,
+               //    haspermission: hasDeleteRulePermission
+               //}
             ];
 
             function hasUpdateRulePermission() {

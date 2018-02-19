@@ -41,12 +41,12 @@ namespace PSTN.BusinessEntity.Web.Controllers
             return base.UpdateRule(input);
         }
 
-        [HttpGet]
-        [Route("DeleteRule")]
-        public new DeleteOperationOutput<NormalizationRuleDetail> DeleteRule(int ruleId)
-        {
-            return base.DeleteRule(ruleId);
-        }
+        //[HttpGet]
+        //[Route("DeleteRule")]
+        //public new DeleteOperationOutput<NormalizationRuleDetail> DeleteRule(int ruleId)
+        //{
+        //    return base.DeleteRule(ruleId);
+        //}
 
         [HttpGet]
         [Route("GetNormalizationRuleAdjustNumberActionSettingsTemplates")]
