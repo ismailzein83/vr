@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.Bypass", "Vanrise.Fzero.Bypass\Vanrise.Fzero.Bypass.csproj", "{1CA1B8A4-C6AC-499D-A763-8276A68C415E}"
 EndProject
@@ -87,11 +87,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.Services.CDRI
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.Services.DailySummaryReport", "Vanrise.Fzero.Services.DailySummaryReport\Vanrise.Fzero.Services.DailySummaryReport.csproj", "{CBC8642E-FEF7-4179-A94A-8CBAEB90BABD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Fzero.Services.NonFruadReport", "Vanrise.Fzero.Services.NonFruadReport\Vanrise.Fzero.Services.NonFruadReport.csproj", "{21CE566F-B0EC-42CC-ABA0-B4E60FCB6EA5}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 18
+		SccNumberOfProjects = 19
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://development_vlan:8585/tfs/vanrise.collection
+		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
 		SccProjectUniqueName1 = Vanrise.CommonLibrary\\Vanrise.CommonLibrary.csproj
 		SccProjectName1 = Vanrise.CommonLibrary
@@ -150,6 +152,9 @@ Global
 		SccProjectUniqueName17 = Vanrise.Fzero.Services.DailySummaryReport\\Vanrise.Fzero.Services.DailySummaryReport.csproj
 		SccProjectName17 = Vanrise.Fzero.Services.DailySummaryReport
 		SccLocalPath17 = Vanrise.Fzero.Services.DailySummaryReport
+		SccProjectUniqueName18 = Vanrise.Fzero.Services.NonFruadReport\\Vanrise.Fzero.Services.NonFruadReport.csproj
+		SccProjectName18 = Vanrise.Fzero.Services.NonFruadReport
+		SccLocalPath18 = Vanrise.Fzero.Services.NonFruadReport
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -228,6 +233,10 @@ Global
 		{CBC8642E-FEF7-4179-A94A-8CBAEB90BABD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CBC8642E-FEF7-4179-A94A-8CBAEB90BABD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CBC8642E-FEF7-4179-A94A-8CBAEB90BABD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21CE566F-B0EC-42CC-ABA0-B4E60FCB6EA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21CE566F-B0EC-42CC-ABA0-B4E60FCB6EA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21CE566F-B0EC-42CC-ABA0-B4E60FCB6EA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21CE566F-B0EC-42CC-ABA0-B4E60FCB6EA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

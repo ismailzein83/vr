@@ -81,6 +81,23 @@
                                                 <asp:CheckBox ID="includeCSVFile" runat="server"></asp:CheckBox>
                                             </td>
                                         </tr>
+                                         
+                                         <tr>
+                                            <td class="caption">Enable Non-Fruad Report</td>
+                                            <td></td>
+                                            <td class="inputdata">
+                                                <asp:CheckBox ID="enableNonFruadReport" runat="server"></asp:CheckBox>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="caption">Non-Fruad Report Email</td>
+                                            <td></td>
+                                            <td class="inputdata">
+                                                <telerik:RadTextBox ID="nonFruadReportEmail" runat="server"></telerik:RadTextBox>
+                                            </td>
+                                        </tr>
+
                                     </table>
                                 </td>
                             </tr>

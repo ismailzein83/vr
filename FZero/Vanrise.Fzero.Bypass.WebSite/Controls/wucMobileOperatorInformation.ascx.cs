@@ -115,6 +115,30 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         }
     }
 
+    public bool EnableNonFruadReport
+    {
+        get
+        {
+            return enableNonFruadReport.Checked;
+        }
+        set
+        {
+            enableNonFruadReport.Checked = value;
+        }
+    }
+
+    public string NonFruadReportEmail
+    {
+        get
+        {
+            return nonFruadReportEmail.Text;
+        }
+        set
+        {
+            nonFruadReportEmail.Text = value;
+        }
+    }
+
 
     public string Mobile
     {
@@ -413,6 +437,16 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         }
 
 
+        if (string.IsNullOrWhiteSpace(NonFruadReportEmail) && EnableNonFruadReport)
+        {
+            return "Non-Fruad report email required";
+        }
+        else if (!Manager.IsValidEmail(NonFruadReportEmail) && EnableNonFruadReport)
+        {
+            return "Non-Fruad report email not valid";
+        }
+
+
         if (!txtUserNameReadOnly)
         {
             if (string.IsNullOrWhiteSpace(MobileOperatorUserName))
@@ -451,6 +485,14 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         EnableAutoReport = MobileOperator.AutoReport;
         AutoBlockEmail = MobileOperator.AutoBlockEmail;
         SecurityEmail = MobileOperator.AutoReportSecurityEmail;
+
+        NonFruadReportEmail = MobileOperator.NonFruadReportEmail;
+        if (MobileOperator.EnableNonFruadReport.HasValue)
+          EnableNonFruadReport = MobileOperator.EnableNonFruadReport.Value;
+        else
+        {
+            EnableNonFruadReport = false;
+        }
         EnableSecurity = MobileOperator.AutoReportSecurity;
         if(MobileOperator.IncludeCSVFile.HasValue)
           IncludeCSVFile = MobileOperator.IncludeCSVFile.Value;
@@ -520,6 +562,9 @@ public partial class wucMobileOperatorInformation : System.Web.UI.UserControl
         MobileOperator.EnableAutoBlock = EnableAutoBlock;
         MobileOperator.AutoReport = EnableAutoReport;
         MobileOperator.AutoBlockEmail = AutoBlockEmail;
+
+        MobileOperator.EnableNonFruadReport = EnableNonFruadReport;
+        MobileOperator.NonFruadReportEmail = NonFruadReportEmail;
 
         MobileOperator.AutoReportSecurityEmail = SecurityEmail;
         MobileOperator.AutoReportSecurity = EnableSecurity;

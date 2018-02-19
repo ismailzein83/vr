@@ -216,6 +216,8 @@
           <Property Name="FTPPort" Type="nvarchar" MaxLength="50" />
           <Property Name="FTPType" Type="int" />
           <Property Name="IncludeCSVFile" Type="bit" />
+          <Property Name="EnableNonFruadReport" Type="bit" />
+          <Property Name="NonFruadReportEmail" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="OriginationNetworks">
           <Key>
@@ -2975,6 +2977,8 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <Property Name="FTPPort" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="FTPType" Type="Int32" />
           <Property Name="IncludeCSVFile" Type="Boolean" />
+          <Property Name="EnableNonFruadReport" Type="Boolean" />
+          <Property Name="NonFruadReportEmail" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="OriginationNetwork">
           <Key>
@@ -4631,6 +4635,8 @@ FROM [dbo].[vwRepeatedCase] AS [vwRepeatedCase]</DefiningQuery>
           <EntitySetMapping Name="MobileOperators">
             <EntityTypeMapping TypeName="Model.MobileOperator">
               <MappingFragment StoreEntitySet="MobileOperators">
+                <ScalarProperty Name="NonFruadReportEmail" ColumnName="NonFruadReportEmail" />
+                <ScalarProperty Name="EnableNonFruadReport" ColumnName="EnableNonFruadReport" />
                 <ScalarProperty Name="IncludeCSVFile" ColumnName="IncludeCSVFile" />
                 <ScalarProperty Name="FTPType" ColumnName="FTPType" />
                 <ScalarProperty Name="FTPPort" ColumnName="FTPPort" />
