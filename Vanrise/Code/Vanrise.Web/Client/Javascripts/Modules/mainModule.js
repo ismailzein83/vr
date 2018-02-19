@@ -171,6 +171,15 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
             modalScope.onProfileUpdated = function (response) {
                 $scope.userDisplayName = response.Name;
                 $scope.userPhotoFileId = response.PhotoFileId;
+
+                var userInfo = SecurityService.getLoggedInUserInfo();
+
+                userInfo.PhotoFileId = response.PhotoFileId;
+                userInfo.UserDisplayName = response.Name;
+                var jsonInfo = UtilsService.serializetoJson(userInfo);
+
+
+                SecurityService.createAccessCookie(jsonInfo);
             };
         };
         VRModalService.showModal('/Client/Modules/Security/Views/User/EditProfile.html', null, modalSettings);
