@@ -23,6 +23,13 @@ namespace TOne.WhS.Invoice.Business.Extensions
             List<string> listDimensions = new List<string> { "Customer", "SaleZone", "SaleCurrency", "SaleRate", "SaleRateType", "Supplier", "Country", "SupplierZone" };
             WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
             var financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(context.PartnerId));
+
+           var definitionSettings = new WHSFinancialAccountDefinitionManager().GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccountDefinitionId);
+           definitionSettings.ThrowIfNull("definitionSettings", financialAccount.FinancialAccountDefinitionId);
+           definitionSettings.FinancialAccountInvoiceTypes.ThrowIfNull("definitionSettings.FinancialAccountInvoiceTypes", financialAccount.FinancialAccountDefinitionId);
+           var financialAccountInvoiceType = definitionSettings.FinancialAccountInvoiceTypes.FindRecord(x => x.InvoiceTypeId == context.InvoiceTypeId);
+           financialAccountInvoiceType.ThrowIfNull("financialAccountInvoiceType");
+            
             PartnerManager partnerManager = new PartnerManager();
             decimal? minAmount = partnerManager.GetPartnerMinAmount(context.InvoiceTypeId, context.PartnerId);
             var customerGenerationCustomSectionPayload = context.CustomSectionPayload as CustomerGenerationCustomSectionPayload;
@@ -109,13 +116,20 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         customerInvoiceDetails.TotalAmount += ((customerInvoiceDetails.SaleAmount * Convert.ToDecimal(tax.Value)) / 100);
                     }
                 }
-                SetInvoiceBillingTransactions(context, customerInvoiceDetails, financialAccount, fromDate, toDateForBillingTransaction);
+                if (!financialAccountInvoiceType.IgnoreFromBalance)
+                {
+                    SetInvoiceBillingTransactions(context, customerInvoiceDetails, financialAccount, fromDate, toDateForBillingTransaction);
+                }
                 context.Invoice = new GeneratedInvoice
                 {
                     InvoiceDetails = customerInvoiceDetails,
                     InvoiceItemSets = generatedInvoiceItemSets,
                 };
 
+            }else
+            {
+                context.ErrorMessage = "No billing data available.";
+                throw new InvoiceGeneratorException("No billing data available.");
             }
 
             #endregion

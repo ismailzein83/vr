@@ -49,6 +49,9 @@ namespace TOne.WhS.BusinessEntity.Business
         public Guid InvoiceTypeId { get; set; }
         public bool IsApplicableToCustomer { get; set; }
         public bool IsApplicableToSupplier { get; set; }
+        public bool IgnoreFromBalance { get; set; }
+        public bool IsSecondaryInvoiceAccount { get; set; }
+        public bool DisableCommission { get; set; }
         public string InvoiceSettingTitle { get; set; }
 
     }

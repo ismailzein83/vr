@@ -14,6 +14,15 @@
                 <vr-datagridcolumn headertext="'Supplier Applicable'" widthfactor="10" disablesorting>
                     <vr-switch value="dataItem.Entity.IsApplicableToSupplier"></vr-switch>
                 </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Ignore From Balance'" widthfactor="10" disablesorting>
+                    <vr-switch value="dataItem.Entity.IgnoreFromBalance"></vr-switch>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Secondary Invoice Account'" widthfactor="10" disablesorting>
+                    <vr-switch value="dataItem.Entity.IsSecondaryInvoiceAccount"></vr-switch>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Disable Commission'" widthfactor="10" disablesorting>
+                    <vr-switch value="dataItem.Entity.DisableCommission"></vr-switch>
+                </vr-datagridcolumn>
                 <vr-datagridcolumn headertext="'Invoice Setting Title'" widthfactor="10" disablesorting>
                     <vr-textbox value="dataItem.Entity.InvoiceSettingTitle" isrequired></vr-textbox>
                 </vr-datagridcolumn>

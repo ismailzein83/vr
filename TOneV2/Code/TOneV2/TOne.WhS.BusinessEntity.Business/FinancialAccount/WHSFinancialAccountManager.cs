@@ -943,7 +943,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
                 if (definitionSettings.FinancialAccountInvoiceTypes != null)
                 {
-                    var financialAccountInvoiceType = definitionSettings.FinancialAccountInvoiceTypes.FindRecord(x=>x.IsApplicableToCustomer ==true );
+                    var financialAccountInvoiceType = definitionSettings.FinancialAccountInvoiceTypes.FindRecord(x=>x.IsApplicableToCustomer ==true && !x.IsSecondaryInvoiceAccount);
                     if(financialAccountInvoiceType != null)
                     {
                         financialAccountData.InvoiceData = new WHSCarrierFinancialAccountInvoiceData
@@ -993,7 +993,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 }
                 if (definitionSettings.FinancialAccountInvoiceTypes != null)
                 {
-                    var financialAccountInvoiceType = definitionSettings.FinancialAccountInvoiceTypes.FindRecord(x => x.IsApplicableToSupplier == true);
+                    var financialAccountInvoiceType = definitionSettings.FinancialAccountInvoiceTypes.FindRecord(x => x.IsApplicableToSupplier == true && !x.IsSecondaryInvoiceAccount);
                     if (financialAccountInvoiceType != null)
                     {
                         financialAccountData.InvoiceData = new WHSCarrierFinancialAccountInvoiceData

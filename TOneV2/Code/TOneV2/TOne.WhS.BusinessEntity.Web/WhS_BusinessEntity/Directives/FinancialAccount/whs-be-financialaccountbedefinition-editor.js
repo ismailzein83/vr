@@ -121,6 +121,9 @@ app.directive("whsBeFinancialaccountbedefinitionEditor", ["UtilsService", "VRNot
                                 IsApplicableToSupplier: item.payload.IsApplicableToSupplier,
                                 IsApplicableToCustomer: item.payload.IsApplicableToCustomer,
                                 InvoiceSettingTitle: item.payload.InvoiceSettingTitle,
+                                IgnoreFromBalance: item.payload.IgnoreFromBalance,
+                                IsSecondaryInvoiceAccount: item.payload.IsSecondaryInvoiceAccount,
+                                DisableCommission: item.payload.DisableCommission,
                             };
                             $scope.scopeModel.datasource.push({ Entity: dataItem });
                         }
@@ -168,6 +171,9 @@ app.directive("whsBeFinancialaccountbedefinitionEditor", ["UtilsService", "VRNot
                             InvoiceTypeId: item.Entity.InvoiceTypeId,
                             IsApplicableToCustomer: item.Entity.IsApplicableToCustomer,
                             IsApplicableToSupplier: item.Entity.IsApplicableToSupplier,
+                            IgnoreFromBalance: item.Entity.IgnoreFromBalance,
+                            IsSecondaryInvoiceAccount: item.Entity.IsSecondaryInvoiceAccount,
+                            DisableCommission: item.Entity.DisableCommission,
                             InvoiceSettingTitle: item.Entity.InvoiceSettingTitle,
                         });
                     }

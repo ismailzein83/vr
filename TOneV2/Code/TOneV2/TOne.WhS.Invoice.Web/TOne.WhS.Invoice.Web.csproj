@@ -192,6 +192,8 @@
     <Content Include="WhS_Invoice\Directives\InvoiceAccount\whs-invoice-invoiceaccount-selector.js" />
     <Content Include="WhS_Invoice\Directives\MainExtensions\CarrierInvoiceSettings\Templates\CarrierInvoiceSettingsTemplate.html" />
     <Content Include="WhS_Invoice\Directives\MainExtensions\CarrierInvoiceSettings\whs-invoice-invoicetype-carrierinvoicesettings.js" />
+    <Content Include="WhS_Invoice\Directives\MainExtensions\SattlementInvoice\Templates\SattlementInvoiceInvoiceGeneratorTemplate.html" />
+    <Content Include="WhS_Invoice\Directives\MainExtensions\SattlementInvoice\whs-invoice-invoicetype-sattlementinvoiceinvoicegenerator.js" />
     <Content Include="WhS_Invoice\Directives\MainExtensions\CustomerInvoice\Templates\CustomerInvoiceGeneratorTemplate.html" />
     <Content Include="WhS_Invoice\Directives\MainExtensions\CustomerInvoice\whs-invoice-invoicetype-customerinvoicegenerator.js" />
     <Content Include="WhS_Invoice\Directives\MainExtensions\PartnerSettings\Templates\CarrierPartnerSettingsTemplate.html" />

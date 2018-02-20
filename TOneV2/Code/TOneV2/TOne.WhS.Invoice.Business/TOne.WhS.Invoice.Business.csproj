@@ -91,6 +91,8 @@
     <Compile Include="Extensions\OriginalInvoiceDataAction.cs" />
     <Compile Include="Extensions\SupplierGenerationCustomSection.cs" />
     <Compile Include="Extensions\CustomerGenerationCustomSection.cs" />
+    <Compile Include="Extensions\SattlementInvoiceGenerator.cs" />
+    <Compile Include="Extensions\SattlementInvoiceSettings.cs" />
     <Compile Include="Extensions\SupplierInvoiceSettings.cs" />
     <Compile Include="Extensions\SupplierInvoiceGenerator.cs" />
     <Compile Include="Extensions\CustomerInvoiceGenerator.cs" />

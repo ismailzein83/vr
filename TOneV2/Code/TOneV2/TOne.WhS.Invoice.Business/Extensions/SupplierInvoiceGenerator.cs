@@ -24,6 +24,12 @@ namespace TOne.WhS.Invoice.Business.Extensions
             var financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(context.PartnerId));
             var supplierGenerationCustomSectionPayload = context.CustomSectionPayload as SupplierGenerationCustomSectionPayload;
 
+            var definitionSettings = new WHSFinancialAccountDefinitionManager().GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccountDefinitionId);
+            definitionSettings.ThrowIfNull("definitionSettings", financialAccount.FinancialAccountDefinitionId);
+            definitionSettings.FinancialAccountInvoiceTypes.ThrowIfNull("definitionSettings.FinancialAccountInvoiceTypes", financialAccount.FinancialAccountDefinitionId);
+            var financialAccountInvoiceType = definitionSettings.FinancialAccountInvoiceTypes.FindRecord(x => x.InvoiceTypeId == context.InvoiceTypeId);
+            financialAccountInvoiceType.ThrowIfNull("financialAccountInvoiceType");
+
             int? timeZoneId = null;
             decimal? commission = null;
             CommissionType? commissionType = null;
@@ -104,12 +110,22 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         supplierInvoiceDetails.TotalAmount += ((supplierInvoiceDetails.CostAmount * Convert.ToDecimal(tax.Value)) / 100);
                     }
                 }
-                SetInvoiceBillingTransactions(context, supplierInvoiceDetails, financialAccount, fromDate, toDateForBillingTransaction);
+
+                if (!financialAccountInvoiceType.IgnoreFromBalance)
+                {
+                    SetInvoiceBillingTransactions(context, supplierInvoiceDetails, financialAccount, fromDate, toDateForBillingTransaction);
+                }
+
                 context.Invoice = new GeneratedInvoice
                 {
                     InvoiceDetails = supplierInvoiceDetails,
                     InvoiceItemSets = generatedInvoiceItemSets,
                 };
+            }
+            else
+            {
+                context.ErrorMessage = "No billing data available.";
+                throw new InvoiceGeneratorException("No billing data available.");
             }
             #endregion
 

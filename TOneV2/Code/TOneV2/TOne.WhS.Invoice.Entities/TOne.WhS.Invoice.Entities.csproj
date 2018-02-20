@@ -60,6 +60,7 @@
     <Compile Include="OriginalInvoiceDataFileSetting.cs" />
     <Compile Include="OriginalInvoiceDataInput.cs" />
     <Compile Include="OriginalInvoiceDataRuntime.cs" />
+    <Compile Include="SattlementInvoiceItemDetails.cs" />
     <Compile Include="SupplierGenerationCustomSectionPayload.cs" />
     <Compile Include="CustomerGenerationCustomSectionPayload.cs" />
     <Compile Include="CustomerInvoiceDetails.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RDLCSupplierInvoiceItemDetails.cs" />
     <Compile Include="RDLCCustomerInvoiceItemDetails.cs" />
+    <Compile Include="SattlementInvoiceDetails.cs" />
     <Compile Include="SupplierInvoiceDetails.cs" />
     <Compile Include="SupplierInvoiceItemDetails.cs" />
   </ItemGroup>

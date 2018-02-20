@@ -73,7 +73,8 @@
                                     var dataItem = {
                                         title: financialAccountInvoiceType.InvoiceSettingTitle,
                                         invoiceTypeId: financialAccountInvoiceType.InvoiceTypeId,
-                                        selectedCommissionType: WhS_BE_CommisssionTypeEnum.Display
+                                        selectedCommissionType: WhS_BE_CommisssionTypeEnum.Display,
+                                        disableCommission: financialAccountInvoiceType.DisableCommission
                                     };
                                     dataItem.onInvoiceSettingDirectiveReady = function (api) {
                                         dataItem.directiveAPI = api;
@@ -239,7 +240,8 @@
                                 var dataItem = {
                                     title: invoiceSettingItem.payload.InvoiceSettingTitle,
                                     invoiceTypeId: invoiceSettingItem.payload.InvoiceTypeId,
-                                    selectedCommissionType: WhS_BE_CommisssionTypeEnum.Display
+                                    selectedCommissionType: WhS_BE_CommisssionTypeEnum.Display,
+                                    disableCommission: invoiceSettingItem.payload.DisableCommission
                                 };
                                 var selectedValue;
                                 var financialAccountInvoiceSettingData;
@@ -268,7 +270,7 @@
                                         }
                                     }
                                 }
-                                
+
                                 if (financialAccountInvoiceSettingData != undefined && financialAccountInvoiceSettingData.FinancialAccountCommission != undefined)
                                 {
                                     dataItem.commission = financialAccountInvoiceSettingData.FinancialAccountCommission.Commission;
@@ -392,7 +394,7 @@
                     });
                     financialAccountInvoiceSetting.push({
                         InvoiceTypeId: invoiceSetting.invoiceTypeId,
-                        FinancialAccountCommission: {
+                        FinancialAccountCommission: invoiceSetting.disableCommission ? undefined : {
                             Commission:invoiceSetting.commission,
                             CommissionType: invoiceSetting.selectedCommissionType.value
                         }
@@ -430,7 +432,7 @@
                     });
                     financialAccountInvoiceSetting.push({
                         InvoiceTypeId: invoiceSetting.invoiceTypeId,
-                        FinancialAccountCommission: {
+                        FinancialAccountCommission: invoiceSetting.disableCommission ? undefined : {
                             Commission: invoiceSetting.commission,
                             CommissionType: invoiceSetting.selectedCommissionType.value
                         }

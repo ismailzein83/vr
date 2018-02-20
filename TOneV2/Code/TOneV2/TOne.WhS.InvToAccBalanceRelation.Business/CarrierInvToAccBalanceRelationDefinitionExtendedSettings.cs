@@ -37,11 +37,15 @@ namespace TOne.WhS.InvToAccBalanceRelation.Business
                 List<Vanrise.InvToAccBalanceRelation.Entities.InvoiceAccountInfo> invoiceAccountInfo = new List<Vanrise.InvToAccBalanceRelation.Entities.InvoiceAccountInfo>();
                 foreach (var financialAccountInvoiceType in financialAccountDefinitionSettings.FinancialAccountInvoiceTypes)
                 {
-                    invoiceAccountInfo.Add(new InvoiceAccountInfo
-                     {
-                         InvoiceTypeId = financialAccountInvoiceType.InvoiceTypeId,
-                         PartnerId = context.AccountId
-                     });
+                    if (!financialAccountInvoiceType.IgnoreFromBalance)
+                    {
+                        invoiceAccountInfo.Add(new InvoiceAccountInfo
+                        {
+                            InvoiceTypeId = financialAccountInvoiceType.InvoiceTypeId,
+                            PartnerId = context.AccountId
+                        });
+                    }
+                   
                 }
                 return invoiceAccountInfo;
 

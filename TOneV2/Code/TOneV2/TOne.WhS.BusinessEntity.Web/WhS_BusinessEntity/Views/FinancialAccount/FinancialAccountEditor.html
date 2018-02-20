@@ -27,10 +27,10 @@
                     <vr-row>
                         <vr-section title="{{invoiceSetting.title}} Invoice" ng-repeat="invoiceSetting in scopeModel.invoiceSettings" ng-if="scopeModel.showInvoiceSettingSelector">
                             <vr-invoice-invoicesetting-selector on-ready="invoiceSetting.onInvoiceSettingDirectiveReady" showviewbutton showaddbutton normal-col-num="4"></vr-invoice-invoicesetting-selector>
-                            <vr-columns colnum="4">
+                            <vr-columns colnum="4" ng-if="!invoiceSetting.disableCommission">
                                 <vr-textbox type="number" label="Commission (%)" value="invoiceSetting.commission" minvalue="-100" maxvalue="100"></vr-textbox>
                             </vr-columns>
-                            <vr-columns colnum="4">
+                            <vr-columns colnum="4" ng-if="!invoiceSetting.disableCommission">
                                 <vr-select datasource="scopeModel.commissionTypes"
                                            datatextfield="description"
                                            datavaluefield="value"
