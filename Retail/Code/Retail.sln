@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{C9D155CA-F029-4600-994D-B363EB3036AC}"
 EndProject
@@ -179,9 +179,23 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retail.Teles.Data", "Retail
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQl.RetailTeles", "SQl.RetailTeles\SQl.RetailTeles.sqlproj", "{01B9B806-7457-4A26-A6E2-0EC136E9DADB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestCallAnalysis", "TestCallAnalysis", "{FBFE042B-5035-4C2E-A37F-570B032FB7AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCallAnalysis.Web", "TestCallAnalysis.Web\TestCallAnalysis.Web.csproj", "{87394636-0184-4B71-A1F2-0B3F0DB07DC1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCallAnalysis.Entities", "TestCallAnalysis.Entities\TestCallAnalysis.Entities.csproj", "{7247A3C2-23B2-42F9-ACED-2E2884953BE3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCallAnalysis.Business", "TestCallAnalysis.Business\TestCallAnalysis.Business.csproj", "{F6FD0703-9ED3-46A8-9204-91647185A3E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCallAnalysis.BP", "TestCallAnalysis.BP\TestCallAnalysis.BP.csproj", "{4EC50608-9E41-458B-8854-00952AA1E892}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCallAnalysis.Activities", "TestCallAnalysis.Activities\TestCallAnalysis.Activities.csproj", "{A4FFB792-990D-4E29-9B88-F4EAEED2A15E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCallAnalysis.Arguments", "TestCallAnalysis.Arguments\TestCallAnalysis.Arguments.csproj", "{285E7DC7-8EC0-4324-96FD-2F477263BA98}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 73
+		SccNumberOfProjects = 79
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -473,6 +487,30 @@ Global
 		SccProjectTopLevelParentUniqueName72 = Retail.sln
 		SccProjectName72 = SQl.RetailTeles
 		SccLocalPath72 = SQl.RetailTeles
+		SccProjectUniqueName73 = TestCallAnalysis.Web\\TestCallAnalysis.Web.csproj
+		SccProjectTopLevelParentUniqueName73 = Retail.sln
+		SccProjectName73 = TestCallAnalysis.Web
+		SccLocalPath73 = TestCallAnalysis.Web
+		SccProjectUniqueName74 = TestCallAnalysis.Entities\\TestCallAnalysis.Entities.csproj
+		SccProjectTopLevelParentUniqueName74 = Retail.sln
+		SccProjectName74 = TestCallAnalysis.Entities
+		SccLocalPath74 = TestCallAnalysis.Entities
+		SccProjectUniqueName75 = TestCallAnalysis.Business\\TestCallAnalysis.Business.csproj
+		SccProjectTopLevelParentUniqueName75 = Retail.sln
+		SccProjectName75 = TestCallAnalysis.Business
+		SccLocalPath75 = TestCallAnalysis.Business
+		SccProjectUniqueName76 = TestCallAnalysis.BP\\TestCallAnalysis.BP.csproj
+		SccProjectTopLevelParentUniqueName76 = Retail.sln
+		SccProjectName76 = TestCallAnalysis.BP
+		SccLocalPath76 = TestCallAnalysis.BP
+		SccProjectUniqueName77 = TestCallAnalysis.Activities\\TestCallAnalysis.Activities.csproj
+		SccProjectTopLevelParentUniqueName77 = Retail.sln
+		SccProjectName77 = TestCallAnalysis.Activities
+		SccLocalPath77 = TestCallAnalysis.Activities
+		SccProjectUniqueName78 = TestCallAnalysis.Arguments\\TestCallAnalysis.Arguments.csproj
+		SccProjectTopLevelParentUniqueName78 = Retail.sln
+		SccProjectName78 = TestCallAnalysis.Arguments
+		SccLocalPath78 = TestCallAnalysis.Arguments
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -777,6 +815,30 @@ Global
 		{01B9B806-7457-4A26-A6E2-0EC136E9DADB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{01B9B806-7457-4A26-A6E2-0EC136E9DADB}.Release|Any CPU.Build.0 = Release|Any CPU
 		{01B9B806-7457-4A26-A6E2-0EC136E9DADB}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{87394636-0184-4B71-A1F2-0B3F0DB07DC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87394636-0184-4B71-A1F2-0B3F0DB07DC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87394636-0184-4B71-A1F2-0B3F0DB07DC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87394636-0184-4B71-A1F2-0B3F0DB07DC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7247A3C2-23B2-42F9-ACED-2E2884953BE3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7247A3C2-23B2-42F9-ACED-2E2884953BE3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7247A3C2-23B2-42F9-ACED-2E2884953BE3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7247A3C2-23B2-42F9-ACED-2E2884953BE3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6FD0703-9ED3-46A8-9204-91647185A3E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6FD0703-9ED3-46A8-9204-91647185A3E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6FD0703-9ED3-46A8-9204-91647185A3E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6FD0703-9ED3-46A8-9204-91647185A3E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4EC50608-9E41-458B-8854-00952AA1E892}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4EC50608-9E41-458B-8854-00952AA1E892}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4EC50608-9E41-458B-8854-00952AA1E892}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4EC50608-9E41-458B-8854-00952AA1E892}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4FFB792-990D-4E29-9B88-F4EAEED2A15E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4FFB792-990D-4E29-9B88-F4EAEED2A15E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4FFB792-990D-4E29-9B88-F4EAEED2A15E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4FFB792-990D-4E29-9B88-F4EAEED2A15E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{285E7DC7-8EC0-4324-96FD-2F477263BA98}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{285E7DC7-8EC0-4324-96FD-2F477263BA98}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{285E7DC7-8EC0-4324-96FD-2F477263BA98}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{285E7DC7-8EC0-4324-96FD-2F477263BA98}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -865,5 +927,12 @@ Global
 		{124351A1-965B-4D85-BFEF-E0D7DD151FEE} = {B308930C-7B05-4773-8AA9-67A1653A4F21}
 		{BDB92084-88CB-49E7-925B-6FBB58D03EEE} = {B308930C-7B05-4773-8AA9-67A1653A4F21}
 		{01B9B806-7457-4A26-A6E2-0EC136E9DADB} = {DBCF7D23-8951-4886-9024-282788E5D24F}
+		{FBFE042B-5035-4C2E-A37F-570B032FB7AF} = {34A6EFD7-FB0A-415D-9F0A-585D5D7C6671}
+		{87394636-0184-4B71-A1F2-0B3F0DB07DC1} = {FBFE042B-5035-4C2E-A37F-570B032FB7AF}
+		{7247A3C2-23B2-42F9-ACED-2E2884953BE3} = {FBFE042B-5035-4C2E-A37F-570B032FB7AF}
+		{F6FD0703-9ED3-46A8-9204-91647185A3E5} = {FBFE042B-5035-4C2E-A37F-570B032FB7AF}
+		{4EC50608-9E41-458B-8854-00952AA1E892} = {FBFE042B-5035-4C2E-A37F-570B032FB7AF}
+		{A4FFB792-990D-4E29-9B88-F4EAEED2A15E} = {FBFE042B-5035-4C2E-A37F-570B032FB7AF}
+		{285E7DC7-8EC0-4324-96FD-2F477263BA98} = {FBFE042B-5035-4C2E-A37F-570B032FB7AF}
 	EndGlobalSection
 EndGlobal
