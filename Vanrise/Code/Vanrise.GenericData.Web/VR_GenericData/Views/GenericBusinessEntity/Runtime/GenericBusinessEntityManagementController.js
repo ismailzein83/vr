@@ -2,9 +2,9 @@
     
     'use strict';
 
-    GenericBusinessEntityManagementController.$inject = ['$scope', 'VR_GenericData_GenericBusinessEntityService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VR_GenericData_GenericBEDefinitionAPIService','VR_GenericData_RecordQueryLogicalOperatorEnum'];
+    GenericBusinessEntityManagementController.$inject = ['$scope', 'VR_GenericData_GenericBusinessEntityService', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'VR_GenericData_GenericBEDefinitionAPIService', 'VR_GenericData_RecordQueryLogicalOperatorEnum', 'VR_GenericData_GenericBusinessEntityAPIService'];
 
-    function GenericBusinessEntityManagementController($scope, VR_GenericData_GenericBusinessEntityService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VR_GenericData_GenericBEDefinitionAPIService,VR_GenericData_RecordQueryLogicalOperatorEnum) {
+    function GenericBusinessEntityManagementController($scope, VR_GenericData_GenericBusinessEntityService, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, VR_GenericData_GenericBEDefinitionAPIService, VR_GenericData_RecordQueryLogicalOperatorEnum, VR_GenericData_GenericBusinessEntityAPIService) {
 
         var definitionId;
 
@@ -37,7 +37,7 @@
 
         function defineScope() {
             $scope.scopeModel = {};
-
+            $scope.scopeModel.showAddButton = false;
             $scope.scopeModel.onFilterDirectiveReady = function (api) {
                 filterDirectiveAPI = api;
                 filterDirectiveReadyDeferred.resolve();
@@ -52,13 +52,9 @@
                 businessEntityDefinitionAPI = api;
                 businessEntityDefinitionReadyDeferred.resolve();
             };
-       
-            //$scope.hasAddBusinessEntityPermission = function () {
-            //    return VR_GenericData_GenericBusinessEntityAPIService.DoesUserHaveAddAccess(definitionId);
-            //};
-
             $scope.scopeModel.onBusinessEntityDefinitionSelectionChange = function () {
                 if (businessEntityDefinitionAPI.getSelectedIds() != undefined) {
+                    checkDoesUserHaveAddAccess(businessEntityDefinitionAPI.getSelectedIds());
                     if (businessEntityDefinitionSelectedDeferred != undefined)
                         businessEntityDefinitionSelectedDeferred.resolve();
                     else {
@@ -77,6 +73,12 @@
                 }
             };
 
+            function checkDoesUserHaveAddAccess(definitionId) {
+                VR_GenericData_GenericBusinessEntityAPIService.DoesUserHaveAddAccess(definitionId).then(function (response) {
+                    $scope.scopeModel.showAddButton = response;
+                });
+
+            }
 
             $scope.search = function () {
                 return gridDirectiveAPI.load(getGridFilter());;

@@ -12,10 +12,10 @@
             GetGenericBusinessEntity: GetGenericBusinessEntity,
             AddGenericBusinessEntity: AddGenericBusinessEntity,
             GetGenericBusinessEntityEditorRuntime:GetGenericBusinessEntityEditorRuntime,
-          //  DoesUserHaveAddAccess:DoesUserHaveAddAccess,
+            DoesUserHaveAddAccess:DoesUserHaveAddAccess,
             UpdateGenericBusinessEntity: UpdateGenericBusinessEntity,
-           // DoesUserHaveEditAccess: DoesUserHaveEditAccess,
-           GetGenericBusinessEntityInfo: GetGenericBusinessEntityInfo,
+            DoesUserHaveEditAccess: DoesUserHaveEditAccess,
+            GetGenericBusinessEntityInfo: GetGenericBusinessEntityInfo,
         };
 
         function GetFilteredGenericBusinessEntities(input) {
@@ -45,21 +45,21 @@
         function AddGenericBusinessEntity(genericBusinessEntity) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'AddGenericBusinessEntity'), genericBusinessEntity);
         }
-        //function DoesUserHaveAddAccess(businessEntityDefinitionId) {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'DoesUserHaveAddAccess'), {
-        //        businessEntityDefinitionId: businessEntityDefinitionId
-        //    });
-        //}
+        function DoesUserHaveAddAccess(businessEntityDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'DoesUserHaveAddAccess'), {
+                businessEntityDefinitionId: businessEntityDefinitionId
+            });
+        }
         function UpdateGenericBusinessEntity(genericBusinessEntity) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'UpdateGenericBusinessEntity'), genericBusinessEntity);
         }
-        //function DoesUserHaveEditAccess(businessEntityDefinitionId) {
-        //    return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'DoesUserHaveEditAccess'), {
-        //        businessEntityDefinitionId: businessEntityDefinitionId
-        //    }, {
-        //        useCache: true
-        //    });
-        //}
+        function DoesUserHaveEditAccess(businessEntityDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, 'DoesUserHaveEditAccess'), {
+                businessEntityDefinitionId: businessEntityDefinitionId
+            }, {
+                useCache: true
+            });
+        }
     }
 
     appControllers.service('VR_GenericData_GenericBusinessEntityAPIService', GenericBusinessEntityAPIService);

@@ -18,7 +18,7 @@
             var parameter = {
                 context: context
             };
-            VRModalService.showModal('/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Runtime/MainExtensions/OnBeforeInsertHandler/GenericBESN/Templates/SNPatternHelperEditor.html', parameter, modalSettings);
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Runtime/MainExtensions/OnBeforeInsertHandler/GenericBESN/Templates/SNPatternHelperEditor.html', parameter, modalSettings);
         }
 
     };

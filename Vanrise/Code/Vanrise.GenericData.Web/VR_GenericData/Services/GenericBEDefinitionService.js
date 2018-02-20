@@ -5,15 +5,15 @@
     GenericBEDefinitionService.$inject = ['VRModalService', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService'];
 
     function GenericBEDefinitionService(VRModalService, VRNotificationService, UtilsService, VRUIUtilsService) {
-        var columnModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/Editor/Templates/ColumnDefinitionEditor.html";
-        var viewModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/Editor/Templates/ViewDefinitionEditor.html";
+        var columnModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/ColumnDefinitionEditor.html";
+        var viewModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/ViewDefinitionEditor.html";
         var tabModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericEditorDefinitionSetting/Templates/GenericBETabContainerEditorController.html";
-        var basicAdvancefilterModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/GenericBEFilterDefinition/Templates/BasicAdvancedFilterEditor.html";
-        var actionModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/Editor/Templates/ActionDefinitionEditor.html";
-        var gridActionModalPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/Editor/Templates/GridActionDefinitionEditor.html";
-        var conditionalHandlerPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/OnAfterSaveHandler/Templates/AfterSaveHandlerConditionalEditor.html";
-        var conditionGroupPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/GenericBESaveCondition/MainExtensions/Templates/GenericBEConditionGroupEditor.html";
-        var partDefinitionPath = "/Client/Modules/VR_GenericData/Directives/BusinessEntityDefinition/MainExtensions/GenericBusinessEntity/Definition/OnBeforeInsertHandler/Templates/SerialNumberPartDefinitionEditor.html";
+        var basicAdvancefilterModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/GenericBEFilterDefinition/Templates/BasicAdvancedFilterEditor.html";
+        var actionModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/ActionDefinitionEditor.html";
+        var gridActionModalPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/Editor/Templates/GridActionDefinitionEditor.html";
+        var conditionalHandlerPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/OnAfterSaveHandler/Templates/AfterSaveHandlerConditionalEditor.html";
+        var conditionGroupPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/GenericBESaveCondition/MainExtensions/Templates/GenericBEConditionGroupEditor.html";
+        var partDefinitionPath = "/Client/Modules/VR_GenericData/Directives/GenericBusinessEntity/Definition/OnBeforeInsertHandler/Templates/SerialNumberPartDefinitionEditor.html";
 
         return ({
             addGenericBEColumnDefinition: addGenericBEColumnDefinition,

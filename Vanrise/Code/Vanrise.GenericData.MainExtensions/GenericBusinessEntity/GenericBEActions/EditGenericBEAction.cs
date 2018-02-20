@@ -15,5 +15,10 @@ namespace Vanrise.GenericData.MainExtensions
             get { return new Guid("293B2FAB-6ABE-4BE7-AD58-7D9FA0BA9524"); }
         }
         public override string ActionTypeName { get { return "EditGenericBEAction"; } }
+
+        public override bool DoesUserHaveAccess(IGenericBEActionDefinitionCheckAccessContext context)
+        {
+            return new GenericBusinessEntityManager().DoesUserHaveEditAccess(context.UserId, context.BusinessEntityDefinitionId);
+        }
     }
 }

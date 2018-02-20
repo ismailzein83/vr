@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common;
+using Vanrise.Security.Entities;
 namespace Vanrise.GenericData.Business
 {
     public class GenericBEDefinitionSettings : BusinessEntityDefinitionSettings
@@ -43,7 +44,8 @@ namespace Vanrise.GenericData.Business
         public override string GroupSelectorUIControl { get; set; }
 
 
-    //    public GenericRuleDefinitionSecurity Security { get; set; }
+       public GenericBEDefinitionSecurity Security { get; set; }
+
        // public string FieldPath { get; set; }
         public ModalWidthEnum EditorSize { get; set; }
         public Guid DataRecordTypeId { get; set; }
@@ -132,6 +134,11 @@ namespace Vanrise.GenericData.Business
     {
         public abstract Guid ConfigId { get; }
         public abstract string RuntimeDirective { get; }
+
+        public virtual bool DoesUserHaveAccess(IGenericBEViewDefinitionCheckAccessContext context)
+        {
+            return true;
+        }
     }
 
     public class GenericBEFilterDefinition
@@ -217,6 +224,49 @@ namespace Vanrise.GenericData.Business
     {
         public virtual string ActionTypeName { get; set; }
         public abstract Guid ConfigId { get; }
+        public virtual bool DoesUserHaveAccess(IGenericBEActionDefinitionCheckAccessContext context)
+        {
+            return true;
+        }
+    }
+
+
+    public interface IGenericBEActionDefinitionCheckAccessContext
+    {
+        Guid BusinessEntityDefinitionId { get; }
+
+        int UserId { get; }
+    }
+
+    public class GenericBEActionDefinitionCheckAccessContext : IGenericBEActionDefinitionCheckAccessContext
+    {
+        public Guid BusinessEntityDefinitionId { get; set; }
+
+        public int UserId { get; set; }
+    }
+
+    public interface IGenericBEViewDefinitionCheckAccessContext
+    {
+        Guid BusinessEntityDefinitionId { get; }
+
+        int UserId { get; }
+    }
+
+    public class GenericBEViewDefinitionCheckAccessContext : IGenericBEViewDefinitionCheckAccessContext
+    {
+        public Guid BusinessEntityDefinitionId { get; set; }
+
+        public int UserId { get; set; }
+    }
+
+
+    public class GenericBEDefinitionSecurity
+    {
+        public RequiredPermissionSettings ViewRequiredPermission { get; set; }
+       
+        public RequiredPermissionSettings AddRequiredPermission { get; set; }
+       
+        public RequiredPermissionSettings EditRequiredPermission { get; set; }
     }
 
 }

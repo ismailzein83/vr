@@ -19,8 +19,8 @@ namespace Vanrise.GenericData.Web.Controllers
         [Route("GetFilteredGenericBusinessEntities")]
         public object GetFilteredGenericBusinessEntities(Vanrise.Entities.DataRetrievalInput<GenericBusinessEntityQuery> input)
         {
-            //if (!manager.DoesUserHaveViewAccess(input.Query.BusinessEntityDefinitionId))
-            //    return GetUnauthorizedResponse();
+            if (!_manager.DoesUserHaveViewAccess(input.Query.BusinessEntityDefinitionId))
+                return GetUnauthorizedResponse();
             return GetWebResponse(input, _manager.GetFilteredGenericBusinessEntities(input));
         }
 
@@ -31,19 +31,20 @@ namespace Vanrise.GenericData.Web.Controllers
             genericBusinessEntityId = genericBusinessEntityId as System.IConvertible != null ? genericBusinessEntityId : null;
             return _manager.GetGenericBusinessEntityEditorRuntime(businessEntityDefinitionId, genericBusinessEntityId, historyId);
         }
-        ////[HttpGet]
-        ////[Route("DoesUserHaveAddAccess")]
-        ////public bool DoesUserHaveAddAccess(Guid businessEntityDefinitionId)
-        ////{
-        ////    return _manager.DoesUserHaveAddAccess(businessEntityDefinitionId);
-        ////}
+
+        [HttpGet]
+        [Route("DoesUserHaveAddAccess")]
+        public bool DoesUserHaveAddAccess(Guid businessEntityDefinitionId)
+        {
+            return _manager.DoesUserHaveAddAccess(businessEntityDefinitionId);
+        }
 
         [HttpPost]
         [Route("AddGenericBusinessEntity")]
         public object AddGenericBusinessEntity(GenericBusinessEntityToAdd genericBusinessEntity)
         {
-            //if (!DoesUserHaveAddAccess(genericBusinessEntity.BusinessEntityDefinitionId))
-            //    return GetUnauthorizedResponse();
+            if (!DoesUserHaveAddAccess(genericBusinessEntity.BusinessEntityDefinitionId))
+                return GetUnauthorizedResponse();
             return _manager.AddGenericBusinessEntity(genericBusinessEntity);
         }
 
@@ -51,19 +52,19 @@ namespace Vanrise.GenericData.Web.Controllers
         [Route("UpdateGenericBusinessEntity")]
         public object UpdateGenericBusinessEntity(GenericBusinessEntityToUpdate genericBusinessEntity)
         {
-            //if (!DoesUserHaveEditAccess(genericBusinessEntity.BusinessEntityDefinitionId))
-            //    return GetUnauthorizedResponse();
+            if (!DoesUserHaveEditAccess(genericBusinessEntity.BusinessEntityDefinitionId))
+                return GetUnauthorizedResponse();
 
             return _manager.UpdateGenericBusinessEntity(genericBusinessEntity);
         }
 
-        //[HttpGet]
-        //[Route("DoesUserHaveEditAccess")]
-        //public bool DoesUserHaveEditAccess(Guid businessEntityDefinitionId)
-        //{
-        //    GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
-        //    return manager.DoesUserHaveEditAccess(businessEntityDefinitionId);
-        //}
+        [HttpGet]
+        [Route("DoesUserHaveEditAccess")]
+        public bool DoesUserHaveEditAccess(Guid businessEntityDefinitionId)
+        {
+            GenericBusinessEntityManager manager = new GenericBusinessEntityManager();
+            return manager.DoesUserHaveEditAccess(businessEntityDefinitionId);
+        }
 
 
         [HttpGet]

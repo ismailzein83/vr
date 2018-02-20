@@ -102,6 +102,17 @@ namespace Vanrise.GenericData.Business
             dataRecordTypeFields.ThrowIfNull("dataRecordTypeFields", dataRecordTypeId);
             return dataRecordTypeFields;
         }
+
+        public Dictionary<Guid, GenericBEAction> GetCachedGenericBEActionsByActionId(Guid businessEntityDefinitionId)
+        {
+            return new BusinessEntityDefinitionManager().GetCachedOrCreate(string.Format("GenericBusinessEntityDefinitionManager_GetGenericBEActionsById_{0}", businessEntityDefinitionId), () =>
+            {
+                var businessEntityDefinitionSettings = GetGenericBEDefinitionSettings(businessEntityDefinitionId);
+                businessEntityDefinitionSettings.ThrowIfNull("Business Entity Definition Settings ", businessEntityDefinitionId);
+                businessEntityDefinitionSettings.GenericBEActions.ThrowIfNull("Generic BE Actions", businessEntityDefinitionId);
+                return businessEntityDefinitionSettings.GenericBEActions.ToDictionary(itm => itm.GenericBEActionId, itm => itm);
+            });
+        }
         
         public Object GetExtendedSettingsInfoByType(GenericBEDefinitionSettings definitionSettings, string infoType)
         {

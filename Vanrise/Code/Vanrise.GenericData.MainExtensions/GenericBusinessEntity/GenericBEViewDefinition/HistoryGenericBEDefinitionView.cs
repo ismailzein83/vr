@@ -18,5 +18,10 @@ namespace Vanrise.GenericData.MainExtensions
         {
             get { return "vr-genericdata-genericbe-historygridview-runtime"; }
         }
+
+        public override bool DoesUserHaveAccess(IGenericBEViewDefinitionCheckAccessContext context)
+        {
+            return base.DoesUserHaveAccess(context);
+        }
     }
 }
