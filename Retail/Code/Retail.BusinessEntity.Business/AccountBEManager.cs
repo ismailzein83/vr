@@ -479,7 +479,7 @@ namespace Retail.BusinessEntity.Business
             foreach (var accountsByStatus in accountsByStatusId)
             {
                 string errorMessage;
-                UpdateStatuses(accountBEDefinitionId, accountsByStatus.Value, accountsByStatus.Key, DateTime.Today, false, null, out errorMessage, false, actionName);
+                UpdateStatuses(accountBEDefinitionId, accountsByStatus.Value, accountsByStatus.Key, DateTime.Now, false, null, out errorMessage, false, actionName);
             }
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountBEDefinitionId);
         }
@@ -492,7 +492,7 @@ namespace Retail.BusinessEntity.Business
                 account.ThrowIfNull("account", accountId);
                 accounts.Add(account);
             }
-            UpdateStatuses(accountBEDefinitionId, accounts, statusId, DateTime.Today, false, null, out errorMessage, true, actionName);
+            UpdateStatuses(accountBEDefinitionId, accounts, statusId, DateTime.Now, false, null, out errorMessage, true, actionName);
         }
         //public void UpdateStatuses(Guid accountBEDefinitionId, List<long> accountIds, Guid statusId, DateTime statusChangedDate, bool allowOverlapping, List<Guid> applicableOnStatuses, bool withCacheExpire = true, string actionName = null)
         //{
