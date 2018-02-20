@@ -259,13 +259,6 @@ namespace Vanrise.AccountBalance.Business
             IBillingTransactionDataManager dataManager = AccountBalanceDataManagerFactory.GetDataManager<IBillingTransactionDataManager>();
             return dataManager.GetLastBillingTransaction(accountTypeId, accountId);
         }
-        public bool CanAddBillingTransaction(string accountId, Guid accountTypeId)
-        {
-            AccountManager accountManager = new AccountManager();
-            var accountInfo = accountManager.GetAccountInfo(accountTypeId, accountId);
-            accountInfo.ThrowIfNull("accountInfo", accountId);
-            return accountInfo.Status == VRAccountStatus.Active;
-        }
         
         #region Private Classes
 

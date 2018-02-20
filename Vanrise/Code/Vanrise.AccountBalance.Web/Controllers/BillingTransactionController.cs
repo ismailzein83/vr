@@ -39,12 +39,5 @@ namespace Vanrise.AccountBalance.Web.Controllers
             BillingTransactionManager manager = new BillingTransactionManager();
             return manager.AddBillingTransaction(billingTransaction);
         }
-        [HttpGet]
-        [Route("CanAddBillingTransaction")]
-        public bool CanAddBillingTransaction(string accountId, Guid accountTypeId)
-        {
-            BillingTransactionManager manager = new BillingTransactionManager();
-            return manager.CanAddBillingTransaction(accountId, accountTypeId);
-        }
     }
 }

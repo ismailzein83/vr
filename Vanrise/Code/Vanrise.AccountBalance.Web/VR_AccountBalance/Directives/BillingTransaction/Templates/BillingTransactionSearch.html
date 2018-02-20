@@ -6,7 +6,7 @@
     </vr-columns>
     <vr-columns colnum="1" withemptyline haschildcolumns>
         <vr-button type="Search" standalone data-onclick="scopeModel.searchClicked" vr-disabled="scopeModel.fromTime==undefined || scopeModel.fromTime== null ||  scopeModel.validateDateTime()!=null"></vr-button>
-        <vr-button type="Add" standalone data-onclick="scopeModel.addTransaction" ng-show="scopeModel.hasAddTransaction" vr-disabled="scopeModel.disableAddBillingTransaction"></vr-button>
+        <vr-button type="Add" standalone data-onclick="scopeModel.addTransaction" ng-show="scopeModel.hasAddTransaction"></vr-button>
     </vr-columns>
     <vr-columns colnum="3" >
         <div class="pull-right">

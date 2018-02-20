@@ -22,18 +22,10 @@
                     accountTypeId : accountTypeId
                 });
         }
-        function CanAddBillingTransaction(accountId, accountTypeId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountBalance_ModuleConfig.moduleName, controllerName, 'CanAddBillingTransaction'),
-                {
-                    accountId: accountId,
-                    accountTypeId: accountTypeId
-                });
-        }
 
         return {
             GetFilteredBillingTransactions: GetFilteredBillingTransactions,
             AddBillingTransaction: AddBillingTransaction,
-            CanAddBillingTransaction:CanAddBillingTransaction,
             HasAddBillingTransactionPermission: HasAddBillingTransactionPermission
         };
     }
