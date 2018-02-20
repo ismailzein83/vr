@@ -114,7 +114,7 @@
                         AddRequiredPermission: addPermissionAPI.getData(),
                         EditRequiredPermission: editPermissionAPI.getData()
                     };
-                }
+                };
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
                 }
