@@ -136,6 +136,12 @@ namespace Vanrise.Invoice.Business
             return updateOperationOutput;
         }
 
+        public List<Entities.Invoice> GetPartnerInvoicesByDate(Guid invoiceTypeId, string partnerId, DateTime fromDate, DateTime toDate)
+        {
+            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
+            return dataManager.GetPartnerInvoicesByDate(invoiceTypeId,partnerId, fromDate, toDate);
+
+        }
         bool AreInvoiceDatesValid(DateTime from, DateTime to, DateTime issueDate, out string message)
         {
             message = null;
