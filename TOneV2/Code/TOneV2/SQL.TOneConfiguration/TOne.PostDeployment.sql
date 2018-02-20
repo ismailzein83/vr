@@ -223,7 +223,11 @@ as (select * from (values
 ('BBBD7994-68C5-423D-8A51-3B29D3C3A43A','Excluded Ranges','Ranges','WhS_Routing_RoutingExcludedDestinations'		,'{"Editor":"vr-whs-routing-excludedranges"}'),
 ('BA55C956-D395-4776-88E0-CFA0B8565F50','Excluded Codes','Codes','WhS_Routing_RoutingExcludedDestinations'			,'{"Editor":"vr-whs-routing-excludedcodes"}'),
 ('ead84645-e679-4fde-8076-33d64ea196f6','Customer_Fault_Ticket','Customer Fault Ticket','VR_GenericData_FieldCustomObjectTypeSettings'			,'{"Editor":"whs-be-customerfaultticket-customobjectsettings"}'),
-('aa4c29f5-0b6a-4f38-8b2e-29a78d3961fe','Supplier_Fault_Ticket','Supplier Fault Ticket','VR_GenericData_FieldCustomObjectTypeSettings'			,'{"Editor":"whs-be-supplierfaultticket-customobjectsettings"}')
+('aa4c29f5-0b6a-4f38-8b2e-29a78d3961fe','Supplier_Fault_Ticket','Supplier Fault Ticket','VR_GenericData_FieldCustomObjectTypeSettings'			,'{"Editor":"whs-be-supplierfaultticket-customobjectsettings"}'),
+
+('fcfa0193-9463-4435-9d96-54fd2b6d050b','Supplier_Fault_Tickets','Supplier Fault Tickets','VR_GenericData_GenericBEExtendedSettings','{"Editor":"whs-be-supplierfaultticket-settings"}'),
+('3705144e-4bc8-45d8-94d9-96e9af95353b','Customer_Fault_Tickets','Customer Fault Tickets','VR_GenericData_GenericBEExtendedSettings','{"Editor":"whs-be-customerfaultticket-settings"}')
+
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
