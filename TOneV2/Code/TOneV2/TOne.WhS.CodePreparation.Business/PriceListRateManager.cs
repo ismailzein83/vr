@@ -283,30 +283,6 @@ namespace TOne.WhS.CodePreparation.Business
             return matchedExistingZones.Any() ? matchedExistingZones : existingZonesByType.ToList();
         }
 
-        private Dictionary<int, NewZoneRateEntity> FilterRatesByHighest(SalePriceListOwnerType ownerType, Dictionary<int, List<ExistingRate>> existingRateByOwnerId)
-        {
-            var highestRatesByOwnerId = new Dictionary<int, NewZoneRateEntity>();
-
-            foreach (var existingRateEntity in existingRateByOwnerId)
-            {
-                HighestRate highestRate = GetHighestRate(existingRateEntity.Value);
-
-                if (highestRate == null) continue;
-
-                NewZoneRateEntity zoneRate = new NewZoneRateEntity
-                {
-                    OwnerId = existingRateEntity.Key,
-                    OwnerType = ownerType,
-                    CurrencyId = highestRate.CurrencyId,
-                    Rate = highestRate.Value,
-                    RateBED = highestRate.BED,
-                    HighesRateZoneId = highestRate.ZoneId
-                };
-                highestRatesByOwnerId.Add(existingRateEntity.Key, zoneRate);
-            }
-            return highestRatesByOwnerId;
-        }
-
         private IEnumerable<CustomerCountry2> GetOrCreateCustomerCountry(int ownerId, DateTime effectiveDate, Dictionary<int, IEnumerable<CustomerCountry2>> countriedByCustomerId)
         {
             var customerCountryManager = new CustomerCountryManager();
@@ -337,15 +313,9 @@ namespace TOne.WhS.CodePreparation.Business
         {
             var carrierAccountManager = new CarrierAccountManager();
             var salePriceListManager = new SalePriceListManager();
-            var currencyExchangeRateManager = new CurrencyExchangeRateManager();
-            var existingRateByCustomerId = new Dictionary<int, List<ExistingRate>>();
-            var existingRateBySellingProductId = new Dictionary<int, List<ExistingRate>>();
             var countriedByCustomerId = new Dictionary<int, IEnumerable<CustomerCountry2>>();
-
-
             var sellingProductExistingRatesBySellingProductId = new Dictionary<int, SellingProductExistingRatesEntity>();
             var customerExistingRatesByCustomerId = new Dictionary<int, CustomerExistingRatesEntity>();
-
 
             List<ExistingRate> effectiveExistingRates;
             foreach (string matchedzone in matchedZones)
@@ -409,8 +379,17 @@ namespace TOne.WhS.CodePreparation.Business
             }
 
             List<NewZoneRateEntity> zoneToProcessNewRates = new List<NewZoneRateEntity>();
-            zoneToProcessNewRates.AddRange(CreateSellingProductNewRates(sellingProductExistingRatesBySellingProductId.Select(x => x.Value)));
 
+            if (sellingProductExistingRatesBySellingProductId.Count > 0)
+            {
+                zoneToProcessNewRates.AddRange(CreateSellingProductNewRates(sellingProductExistingRatesBySellingProductId.Select(x => x.Value)));
+            }
+
+            if (customerExistingRatesByCustomerId.Count > 0)
+            {
+                zoneToProcessNewRates.AddRange(CreateCustomerNewRates(customerExistingRatesByCustomerId.Select(x => x.Value),
+                sellingProductExistingRatesBySellingProductId));
+            }
 
             return zoneToProcessNewRates;
         }
