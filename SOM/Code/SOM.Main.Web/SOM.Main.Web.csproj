@@ -129,6 +129,7 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BillingController.cs" />
+    <Compile Include="Controllers\ContractController.cs" />
     <Compile Include="Controllers\InventoryController.cs" />
     <Compile Include="Controllers\SOMRequestController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
