@@ -51,4 +51,37 @@ namespace SOM.Main.Entities
         public bool IsGold { get; set; }
         public bool IsISDN { get; set; }
     }
+
+    public class NewPhoneItemDetail {
+
+        public PhoneType PhoneType { get; set; }
+        public PhoneStatus PhoneStatus { get; set; }
+        public string VerticalMDF { get; set; }
+        public string MDFPort { get; set; }
+        public string Cabinet { get; set; }
+        public string CabinetPrimaryPort { get; set; }
+        public string CabinetSecondaryPort { get; set; }
+        public string DP { get; set; }
+        public List<string> DPPorts { get; set; }
+        public List<string> DPSecondaryPorts { get; set; }
+      
+
+        public string DSlam { get; set; }
+        public string DSlamPort { get; set; }
+        public string DSlamOMC { get; set; }
+
+
+        public string Transmitter { get; set; }
+        public string TransmitterPort { get; set; }
+        public string Receiver { get; set; }
+        public string ReceiverPort { get; set; }
+
+
+        public string MSAN_EID { get; set; }
+        public string MSAN_TID { get; set; }
+        public string MSANType { get; set; }
+
+
+        public bool IsMultiplexed { get; set; }
+    }
 }
