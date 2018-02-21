@@ -9,6 +9,7 @@ using TOne.WhS.CodePreparation.Entities;
 using TOne.WhS.CodePreparation.Entities.Processing;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
 
 namespace TOne.WhS.CodePreparation.Business
 {
@@ -341,9 +342,15 @@ namespace TOne.WhS.CodePreparation.Business
             var existingRateBySellingProductId = new Dictionary<int, List<ExistingRate>>();
             var countriedByCustomerId = new Dictionary<int, IEnumerable<CustomerCountry2>>();
 
+
+            var sellingProductExistingRatesBySellingProductId = new Dictionary<int, SellingProductExistingRatesEntity>();
+            var customerExistingRatesByCustomerId = new Dictionary<int, CustomerExistingRatesEntity>();
+
+
             List<ExistingRate> effectiveExistingRates;
             foreach (string matchedzone in matchedZones)
             {
+                //This check will cover the case when a new zone exist in the country with no rates and the user is trying to add another zone
                 if (!existingRatesByZoneName.TryGetValue(matchedzone, out effectiveExistingRates))
                     continue;
 
@@ -356,77 +363,124 @@ namespace TOne.WhS.CodePreparation.Business
                     if (salePriceList.OwnerType == SalePriceListOwnerType.Customer)
                     {
                         CarrierAccount customer = carrierAccountManager.GetCarrierAccount(salePriceList.OwnerId);
+                        int customerId = customer.CarrierAccountId;
+
                         if (customer.CarrierAccountSettings.ActivationStatus == ActivationStatus.Inactive)
                             continue;
 
-                        bool isCountrySold = IsCountrySold(salePriceList.OwnerId, existingRate.ParentZone.CountryId, effectiveDate, countriedByCustomerId);
+                        if (!customer.SellingProductId.HasValue)
+                            throw new DataIntegrityValidationException(string.Format("Customer with Id {0} is not assigned to any selling product", customerId));
+
+                        //This is the case when all zones are closed in numbering plan and sold countries are stopped automatically in pending date
+                        bool isCountrySold = IsCountrySold(customerId, existingRate.ParentZone.CountryId, effectiveDate, countriedByCustomerId);
 
                         if (!isCountrySold)
                             continue;
 
-                        List<ExistingRate> customerExistingRates;
-                        if (!existingRateByCustomerId.TryGetValue(salePriceList.OwnerId, out customerExistingRates))
-                        {
-                            customerExistingRates = new List<ExistingRate>();
-                            existingRateByCustomerId.Add(salePriceList.OwnerId, customerExistingRates);
-                        }
-                        customerExistingRates.Add(existingRate);
-                    }
-                    else
-                    {
-                        List<ExistingRate> sellingProductExistingRates;
-                        if (!existingRateBySellingProductId.TryGetValue(salePriceList.OwnerId, out sellingProductExistingRates))
-                        {
-                            sellingProductExistingRates = new List<ExistingRate>();
-                            existingRateBySellingProductId.Add(salePriceList.OwnerId, sellingProductExistingRates);
-                        }
-                        sellingProductExistingRates.Add(existingRate);
-                    }
-                }
-            }
-
-            Dictionary<int, NewZoneRateEntity> customerZoneRateEntities = FilterRatesByHighest(SalePriceListOwnerType.Customer, existingRateByCustomerId);
-            Dictionary<int, NewZoneRateEntity> sellingProductZoneRateEntities = FilterRatesByHighest(SalePriceListOwnerType.SellingProduct, existingRateBySellingProductId);
-
-            List<NewZoneRateEntity> rateEntities = new List<NewZoneRateEntity>();
-
-            //Add selling product rates
-            if (sellingProductZoneRateEntities.Any())
-                rateEntities.AddRange(sellingProductZoneRateEntities.Values);
-
-            //Add customer Rate.
-            foreach (var customerRateEntity in customerZoneRateEntities.Values)
-            {
-                int sellingProductId = carrierAccountManager.GetSellingProductId(customerRateEntity.OwnerId);
-
-                NewZoneRateEntity sellingProductRateEntity;
-                if (sellingProductZoneRateEntities.TryGetValue(sellingProductId, out sellingProductRateEntity))
-                {
-                    var sellingProductRateInCustomerCurrency = currencyExchangeRateManager.ConvertValueToCurrency(sellingProductRateEntity.Rate, sellingProductRateEntity.CurrencyId.Value
-                        , customerRateEntity.CurrencyId.Value, sellingProductRateEntity.RateBED);
-
-                    if (sellingProductRateInCustomerCurrency > customerRateEntity.Rate)
-                    {
-                        if (sellingProductRateEntity.CurrencyId.Value != customerRateEntity.CurrencyId.Value)
-                        {
-                            rateEntities.Add(new NewZoneRateEntity
+                        CustomerExistingRatesEntity customerExistingRatesEntity = customerExistingRatesByCustomerId.GetOrCreateItem(customerId, () =>
                             {
-                                CurrencyId = customerRateEntity.CurrencyId,
-                                OwnerId = customerRateEntity.OwnerId,
-                                OwnerType = customerRateEntity.OwnerType,
-                                Rate = sellingProductRateInCustomerCurrency,
-                                RateBED = customerRateEntity.RateBED,
-                                HighesRateZoneId = customerRateEntity.HighesRateZoneId
+                                return new CustomerExistingRatesEntity()
+                                {
+                                    CustomerId = customerId,
+                                    SellingPorductId = customer.SellingProductId.Value
+                                };
                             });
-                        }
+
+                        if (customerExistingRatesEntity.ExistingRatesByZoneName.ContainsKey(matchedzone))
+                            throw new DataIntegrityValidationException(string.Format("Multiple rates found at the same time for zone with Id {0}", existingRate.ParentZone.ZoneId));
+
+                        customerExistingRatesEntity.ExistingRatesByZoneName.Add(matchedzone, existingRate);
                     }
                     else
                     {
-                        rateEntities.Add(customerRateEntity);
+                        int sellingProductId = salePriceList.OwnerId;
+
+                        SellingProductExistingRatesEntity sellingProductExistingRatesEntity = sellingProductExistingRatesBySellingProductId.GetOrCreateItem(sellingProductId, () =>
+                            {
+                                return new SellingProductExistingRatesEntity()
+                                {
+                                    SellingProductId = sellingProductId
+                                };
+                            });
+
+                        sellingProductExistingRatesEntity.ExistingRates.Add(existingRate);
                     }
                 }
             }
-            return rateEntities;
+
+            List<NewZoneRateEntity> zoneToProcessNewRates = new List<NewZoneRateEntity>();
+            zoneToProcessNewRates.AddRange(CreateSellingProductNewRates(sellingProductExistingRatesBySellingProductId.Select(x => x.Value)));
+
+
+            return zoneToProcessNewRates;
+        }
+
+        private List<NewZoneRateEntity> CreateSellingProductNewRates(IEnumerable<SellingProductExistingRatesEntity> sellingProductExistingRatesEntities)
+        {
+            var highestRatesByOwnerId = new List<NewZoneRateEntity>();
+
+            foreach (var existingRateEntity in sellingProductExistingRatesEntities)
+            {
+                HighestRate highestRate = GetHighestRate(existingRateEntity.ExistingRates);
+                highestRate.ThrowIfNull("highestRate");
+
+                NewZoneRateEntity zoneRate = new NewZoneRateEntity
+                {
+                    OwnerId = existingRateEntity.SellingProductId,
+                    OwnerType = SalePriceListOwnerType.SellingProduct,
+                    CurrencyId = highestRate.CurrencyId,
+                    Rate = highestRate.Value,
+                    RateBED = highestRate.BED,
+                    HighesRateZoneId = highestRate.ZoneId
+                };
+                highestRatesByOwnerId.Add(zoneRate);
+            }
+
+            return highestRatesByOwnerId;
+        }
+
+        private List<NewZoneRateEntity> CreateCustomerNewRates(IEnumerable<CustomerExistingRatesEntity> customerExistingRatesEntities, Dictionary<int, SellingProductExistingRatesEntity> sellingProductExistingRatesBySellingProductId)
+        {
+            var customerNewRates = new List<NewZoneRateEntity>();
+
+            foreach (var existingRateEntity in customerExistingRatesEntities)
+            {
+                SellingProductExistingRatesEntity sellingProductExistingRatesEntity = sellingProductExistingRatesBySellingProductId.GetRecord(existingRateEntity.SellingPorductId);
+
+                HighestRate highestExplicitRate = GetHighestRate(existingRateEntity.ExistingRatesByZoneName.Select(x => x.Value));
+                highestExplicitRate.ThrowIfNull("highestExplicitRate");
+
+                HighestRate highestInheritedRate = GetHighestRate(sellingProductExistingRatesEntity.ExistingRates.FindAllRecords(item => 
+                    !existingRateEntity.ExistingRatesByZoneName.ContainsKey(item.ParentZone.Name)));
+                
+                HighestRate highestSellingProductRate = GetHighestRate(sellingProductExistingRatesEntity.ExistingRates);
+                if (highestSellingProductRate == null)
+                    throw new DataIntegrityValidationException(string.Format("Could not find highest rate between inherited rates for customer with Id {0}", existingRateEntity.CustomerId));
+
+                HighestRate highestRate;
+
+                if (highestInheritedRate == null || highestExplicitRate.Value >= highestInheritedRate.Value)
+                    highestRate = highestExplicitRate;
+                else if (highestSellingProductRate.Value >= highestInheritedRate.Value)
+                    highestRate = highestInheritedRate;
+                else 
+                    continue;
+
+                highestRate.ThrowIfNull("highestRate");
+
+                NewZoneRateEntity zoneRate = new NewZoneRateEntity
+                {
+                    OwnerId = existingRateEntity.CustomerId,
+                    OwnerType = SalePriceListOwnerType.Customer,
+                    CurrencyId = highestRate.CurrencyId,
+                    Rate = highestRate.Value,
+                    RateBED = highestRate.BED,
+                    HighesRateZoneId = highestRate.ZoneId
+                };
+                customerNewRates.Add(zoneRate);
+            }
+
+            return customerNewRates;
         }
 
         private HighestRate GetHighestRate(IEnumerable<ExistingRate> existingRates)
@@ -730,5 +784,26 @@ namespace TOne.WhS.CodePreparation.Business
 
             return connectedExistingRates.Last();
         }
+    }
+
+    internal class CustomerExistingRatesEntity
+    {
+        private Dictionary<string, ExistingRate> _existingRatesByZoneName = new Dictionary<string, ExistingRate>();
+
+        public int CustomerId { get; set; }
+
+        public int SellingPorductId { get; set; }
+
+        public Dictionary<string, ExistingRate> ExistingRatesByZoneName { get { return this._existingRatesByZoneName; } }
+
+    }
+
+    internal class SellingProductExistingRatesEntity
+    {
+        private List<ExistingRate> _existingRate = new List<ExistingRate>();
+
+        public int SellingProductId { get; set; }
+
+        public List<ExistingRate> ExistingRates { get { return this._existingRate; } }
     }
 }
