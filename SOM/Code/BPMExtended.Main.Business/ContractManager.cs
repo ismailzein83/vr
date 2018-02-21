@@ -39,7 +39,7 @@ namespace BPMExtended.Main.Business
 
         public TelephonyContract GetTelephonyContract(CustomerObjectType customerObjectType, Guid accountOrContactId, string telephonyContractId)
         {
-            var contractInfo = GetTelephonyContractInfos(customerObjectType, accountOrContactId, null).FirstOrDefault();
+            var contractInfo = GetTelephonyContractInfos(customerObjectType, accountOrContactId, null).FirstOrDefault(itm => itm.TelephonyContractId == telephonyContractId);
             if (contractInfo != null)
                 return new TelephonyContract
                 {
