@@ -16,7 +16,7 @@
                     </vr-columns>
                 </vr-row>
                 <vr-row>
-                    <vr-whs-be-carrierprofile-ticketcontact-selector on-ready="scopeModel.onTicketContactSelectorReady" normal-col-num="12" onselectionchanged="scopeModel.onTicketContactSelectionChanged" selectedvalues="scopeModel.selectedTicketContact" customlabel="Escalation Level"></vr-whs-be-carrierprofile-ticketcontact-selector>
+                    <vr-whs-be-carrierprofile-ticketcontact-selector vr-loader="scopeModel.isLoadingTicketDirective" on-ready="scopeModel.onTicketContactSelectorReady" normal-col-num="12" onselectionchanged="scopeModel.onTicketContactSelectionChanged" selectedvalues="scopeModel.selectedTicketContact" customlabel="Escalation Level"></vr-whs-be-carrierprofile-ticketcontact-selector>
                 </vr-row>
                 <vr-row>
                     <vr-columns width="fullrow">
@@ -70,7 +70,7 @@
                         <vr-textbox type="number" value="scopeModel.codeNumber" onblurtextbox="scopeModel.onCodeChanged" label="Code + Number"></vr-textbox>
                     </vr-columns>
                     <vr-columns width="1/2row">
-                        <vr-textbox type="number" value="scopeModel.zoneName" label="Zone Name" vr-disabled="true"></vr-textbox>
+                        <vr-textbox type="number" value="scopeModel.zoneName" label="Zone Name" vr-disabled="true" vr-loader="scopeModel.isLoadingSupplierZone"></vr-textbox>
                     </vr-columns>
                 </vr-row>
                 <vr-row ng-if="!scopeModel.isEditMode">

@@ -30,6 +30,8 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
             var zoneId;
             var oldZoneId;
 
+            var historyId;
+
             var faultTicketDescriptionSettingEntity;
 
             var supplierSelectorAPI;
@@ -68,17 +70,21 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                     supplierSelectorAPI = api;
                     supplierSelectorReadyPromiseDeferred.resolve();
                 };
+
                 $scope.scopeModel.onCodeChanged = function () {
                     codeNumber = $scope.scopeModel.codeNumber;
                     getSupplierZoneByCode();
                 };
+
                 $scope.onAttachmentGridReady = function (api) {
                     attachmentGridAPI = api;
                     attachmentGridReadyPromiseDeferred.resolve();
                 };
+
                 $scope.scopeModel.validateDate = function (date) {
                     return UtilsService.validateDates($scope.scopeModel.fromDate, $scope.scopeModel.toDate);
                 };
+
                 $scope.scopeModel.onTicketContactSelectionChanged = function () {
                     var carrierProfileTicketInfo = ticketContactSelectorAPI.getSelectedValues();
                     if (carrierProfileTicketInfo != undefined ) {
@@ -87,21 +93,25 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                         $scope.scopeModel.phoneNumber = carrierProfileTicketInfo.PhoneNumber.join(';');
                     }
                 };
+
                 $scope.scopeModel.codeNumberListHasItem = function () {
                     if ($scope.scopeModel.codeNumberList.length != 0)
                         return null;
                     return "You must add at least one description";
                 };
+
                 $scope.removerow = function (dataItem) {
                     if (!$scope.scopeModel.isEditMode) {
                         var index = $scope.scopeModel.codeNumberList.indexOf(dataItem);
                         $scope.scopeModel.codeNumberList.splice(index, 1);
                     }
                 };
+
                 $scope.scopeModel.InternationalReleaseCodeSelectorReady = function (api) {
                     releaseCodeSelectorAPI = api;
                     releaseCodeSelectorReadyPromiseDeferred.resolve();
                 };
+
                 $scope.scopeModel.addCodeNumber = function () {
 
                     if ($scope.scopeModel.codeNumber == undefined)
@@ -133,62 +143,89 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                         }
                     }
                 };
+
                 $scope.scopeModel.isReasonSelectorRequired = true;
+
                 $scope.scopeModel.onReasonSelectorReady = function (api) {
                     reasonSelectorAPI = api;
                     reasonSelectorReadyPromiseDeferred.resolve();
                  
                 };
+
                 $scope.scopeModel.disableAddCodeNumber = function () {
                     return !(codeNumber != undefined && selectedSupplier != undefined && selectedReason != undefined);
                 };
+
                 $scope.scopeModel.onReasonSelectionChanged = function (value) {
                     selectedReason = reasonSelectorAPI.getSelectedIds();
                 };
+
                 $scope.scopeModel.onTicketContactSelectorReady = function (api) {
                     ticketContactSelectorAPI = api;
                     ticketContactSelectorReadyPromiseDeferred.resolve();
                 };
+
                 $scope.scopeModel.onStatusSelectorReady = function (api) {
                     statusSelectorAPI = api;
                     statusSelectorReadyPromiseDeferred.resolve();
                 };
+
                 $scope.scopeModel.onWorkGroupSelectorReady = function (api) {
                     workGroupSelectorAPI = api;
                     workGroupSelectorReadyPromiseDeferred.resolve();
                 };
+
                 $scope.scopeModel.isEditMode = false;
+
                 $scope.scopeModel.onSupplierSelectionChanged = function (value) {
-                    ticketContactSelectorReadyPromiseDeferred.promise.then(function () {
-                        loadTicketContactSelector();
-                    });
+                   
                     if (value != undefined) {
-                        $scope.scopeModel.contactName = undefined;
-                        $scope.scopeModel.email = undefined;
-                        $scope.scopeModel.phoneNumber = undefined;
-                        selectedSupplier = supplierSelectorAPI.getSelectedIds();
                         if (selectedSupplierPromiseDeferred != undefined)
                             selectedSupplierPromiseDeferred.resolve();
-                        if (value.CarrierAccountId != selectedSupplier || !$scope.scopeModel.isEditMode) {
-                            $scope.scopeModel.codeNumberList = [];
+                        else
+                        {
+                            selectedSupplier = supplierSelectorAPI.getSelectedIds();
+
+                            if (value.CarrierAccountId != selectedSupplier || !$scope.scopeModel.isEditMode) {
+                                $scope.scopeModel.codeNumberList = [];
+                            }
+
+                            getSupplierZoneByCode();
+
+                            var setLoader = function (value) { $scope.scopeModel.isLoadingTicketDirective = value; };
+                            var selectorPayload = {
+                                filter: {
+                                    CarrierAccountId: supplierSelectorAPI.getSelectedIds()
+                                }
+                            };
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, ticketContactSelectorAPI, selectorPayload, setLoader);
+
+                            $scope.scopeModel.contactName = undefined;
+                            $scope.scopeModel.email = undefined;
+                            $scope.scopeModel.phoneNumber = undefined;
                         }
-                        getSupplierZoneByCode();
+                       
                     }
                 };
-                UtilsService.waitMultiplePromises([ supplierSelectorReadyPromiseDeferred.promise, reasonSelectorReadyPromiseDeferred.promise, statusSelectorReadyPromiseDeferred.promise, workGroupSelectorReadyPromiseDeferred.promise, releaseCodeSelectorReadyPromiseDeferred.promise, ticketContactSelectorReadyPromiseDeferred.promise, attachmentGridReadyPromiseDeferred.promise]).then(function () {
+
+                UtilsService.waitMultiplePromises([supplierSelectorReadyPromiseDeferred.promise, reasonSelectorReadyPromiseDeferred.promise, statusSelectorReadyPromiseDeferred.promise, workGroupSelectorReadyPromiseDeferred.promise, releaseCodeSelectorReadyPromiseDeferred.promise, ticketContactSelectorReadyPromiseDeferred.promise, attachmentGridReadyPromiseDeferred.promise]).then(function () {
                     defineApi();
                 });
             }
 
             function defineApi() {
                 var api = {};
+
                 api.load = function (payload) {
                     if (payload != undefined) {
                         selectedValues = payload.selectedValues;
+                        historyId = payload.historyId;
+
                         if (selectedValues != undefined) {
                             $scope.scopeModel.isEditMode = true;
                             if (selectedValues.SupplierId != undefined && selectedValues.SupplierZoneId != undefined)
                                 selectedSupplierPromiseDeferred = UtilsService.createPromiseDeferred();
+
                             $scope.scopeModel.fromDate = selectedValues.FromDate;
                             $scope.scopeModel.toDate = selectedValues.ToDate;
                             $scope.scopeModel.attempts = selectedValues.Attempts;
@@ -199,6 +236,9 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                             $scope.scopeModel.notes = selectedValues.Notes;
                             $scope.scopeModel.zoneName = selectedValues.SupplierZoneName;
                             $scope.scopeModel.notes = selectedValues.Notes;
+                            $scope.scopeModel.contactName = selectedValues.ContactName;
+                            $scope.scopeModel.email = selectedValues.ContactEmails;
+                            $scope.scopeModel.phoneNumber = selectedValues.PhoneNumber;
                         }
                         if ($scope.scopeModel.isEditMode) {
                             getZoneName();
@@ -213,46 +253,58 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                         }
                     }
                     var promises = [];
+
                     promises.push(loadSupplierSelector());
                     promises.push(loadStatusSelector());
                     promises.push(loadWorkGroupSelector());
-                    promises.push(loadReasonSelector());
-                    promises.push(loadReleaseCodeSelector());
-                    promises.push(loadTicketContactSelector());
                     promises.push(loadAttachmentGrid());
 
-                    return UtilsService.waitMultiplePromises(promises);
+                    if (!$scope.scopeModel.isEditMode)
+                    {
+                        promises.push(loadReasonSelector());
+                        promises.push(loadReleaseCodeSelector());
+                    }
+
+                    if ($scope.scopeModel.isEditMode)
+                    {
+                        promises.push(loadTicketContactSelector());
+                    }
+
+                    return UtilsService.waitMultiplePromises(promises).finally(function () {
+                        selectedSupplierPromiseDeferred = undefined;
+                    });
                 };
+
                 api.setData = function (caseManagementObject) {
                     if (!$scope.scopeModel.isEditMode) {
                         caseManagementObject.WorkGroupId = workGroupSelectorAPI.getSelectedIds();
+                        caseManagementObject.ASR = $scope.scopeModel.asr;
+                        caseManagementObject.ACD = $scope.scopeModel.acd;
+                       
+                        caseManagementObject.Attempts = $scope.scopeModel.attempts;
+                        caseManagementObject.SupplierId = supplierSelectorAPI.getSelectedIds();
+                        caseManagementObject.SupplierZoneId = zoneId;
+                        caseManagementObject.FromDate = $scope.scopeModel.fromDate;
+                        caseManagementObject.ToDate = $scope.scopeModel.toDate;
                     }
                     var attachments = attachmentGridAPI.getData();
-                    caseManagementObject.SupplierId = supplierSelectorAPI.getSelectedIds();
-                    caseManagementObject.SupplierZoneId = zoneId;
-                    caseManagementObject.FromDate = $scope.scopeModel.fromDate;
-                    caseManagementObject.ToDate = $scope.scopeModel.toDate;
-                    caseManagementObject.Attempts = $scope.scopeModel.attempts;
-                    caseManagementObject.ASR = $scope.scopeModel.asr;
                     caseManagementObject.TicketDetails = getCodeNumberListData();
                     caseManagementObject.Attachments = attachments == undefined ? null : attachments;
-                    caseManagementObject.ACD = $scope.scopeModel.acd;
                     caseManagementObject.CarrierReference = $scope.scopeModel.carrierReference;
                     caseManagementObject.Description = $scope.scopeModel.description;
                     caseManagementObject.Notes = $scope.scopeModel.notes;
                     caseManagementObject.StatusId = statusSelectorAPI.getSelectedIds();
                     caseManagementObject.EscalationLevelId = ticketContactSelectorAPI.getSelectedIds();
                     caseManagementObject.SendEmail = $scope.scopeModel.sendEmail;
-                    caseManagementObject.Notes = $scope.scopeModel.notes;
                     caseManagementObject.ContactName = $scope.scopeModel.contactName;
                     caseManagementObject.ContactEmails = $scope.scopeModel.email;
                     caseManagementObject.PhoneNumber = $scope.scopeModel.phoneNumber;
-
                 };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
+
             function loadStatusSelector() {
                 var selectorPayload;
 
@@ -269,6 +321,7 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
 
                 return statusSelectorAPI.load(selectorPayload);
             }
+
             function loadSupplierSelector() {
                 var selectorPayload;
                 if (selectedValues != undefined) {
@@ -278,6 +331,7 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                 }
                 return supplierSelectorAPI.load(selectorPayload);
             }
+
             function loadTicketContactSelector() {
                 var selectorPayload = {
                     filter: {
@@ -289,6 +343,7 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                 }
                 return ticketContactSelectorAPI.load(selectorPayload);
             }
+
             function loadAttachmentGrid() {
                 var payload = {};
                 if (selectedValues != undefined) {
@@ -296,13 +351,16 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                 }
                 return attachmentGridAPI.loadGrid(payload);
             }
+
             function getStatusSelectorFiter() {
                 return  {
                     $type: "TOne.WhS.BusinessEntity.Business.FaultTicketStatusDefinitionFilter,TOne.WhS.BusinessEntity.Business",
                     BusinessEntityDefinitionId : "551d5b27-a4fb-44e8-82cc-e19fdc1e97ca",
-                    CaseId :selectedValues != undefined ? selectedValues.CaseId:undefined,
+                    CaseId: selectedValues != undefined && !historyId ? selectedValues.CaseId : undefined,
+                    HistoryStatusId: historyId && selectedValues != undefined ? selectedValues.StatusId : undefined,
                 };
             }
+
             function loadReasonSelector() {
                 var selectorPayload = {
                     businessEntityDefinitionId: "b8daa0fa-d381-4bb0-b772-2e6b24d199e4"
@@ -312,6 +370,7 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                 }
                 return reasonSelectorAPI.load(selectorPayload);
             }
+
             function loadWorkGroupSelector() {
                 var selectorPayload = {
                     businessEntityDefinitionId: "ef058aa2-2043-4c3b-adfd-36567784aef7"
@@ -321,6 +380,7 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                 }
                 return workGroupSelectorAPI.load(selectorPayload);
             }
+
             function loadReleaseCodeSelector() {
                 var selectorPayload = {
                     businessEntityDefinitionId: "6e7c2b68-3e8e-49a1-8922-796b2ce9cc1c"
@@ -330,6 +390,7 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                 }
                 return releaseCodeSelectorAPI.load(selectorPayload);
             }
+
             function getSupplierFaultTicketInput() {
 
                 var codeList = [];
@@ -353,12 +414,18 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
 
                 return obj;
             }
+
             function getSupplierZoneByCode() {
                 var codeNumber = $scope.scopeModel.codeNumber;
                 var supplierId = supplierSelectorAPI.getSelectedIds();
                 if (codeNumber != undefined && supplierId != undefined) {
+                    $scope.scopeModel.isLoadingSupplierZone = true;
+
                     return WhS_BE_SupplierZoneAPIService.GetSupplierZoneByCode(supplierId, codeNumber).then(function (response) {
+                        $scope.scopeModel.isLoadingSupplierZone = false;
+
                         if (response != undefined) {
+
                             zoneId = response.SupplierZoneId;
                             if ($scope.scopeModel.codeNumberList.length == 0 || oldZoneId == undefined)
                                 oldZoneId = response.SupplierZoneId;
@@ -372,6 +439,7 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                     });
                 }
             }
+
             function getZoneName() {
                 if (selectedValues != undefined && selectedValues.SupplierZoneId != undefined)
                 {
@@ -384,7 +452,8 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                     });
                 }
             }
-                function getCodeNumberListData() {
+
+            function getCodeNumberListData() {
                     var codeList = [];
                     for (var i = 0; i < $scope.scopeModel.codeNumberList.length; i++) {
                         var codeNumberObject = $scope.scopeModel.codeNumberList[i];
@@ -400,7 +469,8 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                     }
                     return codeList;
                 }
-                function loadCodeNumberListData() {
+
+            function loadCodeNumberListData() {
                     var codeList = [];
                     if (faultTicketDescriptionSettingEntity != undefined) {
                         for (var i = 0; i < faultTicketDescriptionSettingEntity.DescriptionSettings.length; i++) {
@@ -419,6 +489,7 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                     }
                     return codeList;
                 }
+
             function doesReasonAlreadyExist() {
                 if ($scope.scopeModel.codeNumberList != undefined) {
                     for (var i = 0; i < $scope.scopeModel.codeNumberList.length; i++) {
