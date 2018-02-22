@@ -1,40 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.DataParser.Entities;
 
 namespace Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers
 {
-    public class NumberFromTextParser : HexTLVFieldParserSettings
+    public class NumberFromTextParser : BaseStringParser
     {
-        public override Guid ConfigId
-        {
-            get { return new Guid("4D2CA16E-01FA-4FFD-8DA7-0A0892AB6A65"); }
-        }
+        public override Guid ConfigId { get { return new Guid("4D2CA16E-01FA-4FFD-8DA7-0A0892AB6A65"); } }
         public string FieldName { get; set; }
         public NumberType NumberType { get; set; }
-        public override void Execute(IHexTLVFieldParserContext context)
+
+        public override void Execute(IBaseStringParserContext context)
         {
-            string recordValue = context.Record.GetFieldValue(this.FieldName) as string;
+            if (string.IsNullOrEmpty(context.FieldValue))
+                return;
 
             switch (this.NumberType)
             {
                 case NumberType.Decimal:
                     decimal val;
-                    decimal.TryParse(recordValue, out val);
-                    context.Record.SetFieldValue(this.FieldName, val);
+                    if (decimal.TryParse(context.FieldValue, out val))
+                        context.Record.SetFieldValue(this.FieldName, val);
                     break;
+
                 case NumberType.Int:
                     int intVal;
-                    int.TryParse(recordValue, out intVal);
-                    context.Record.SetFieldValue(this.FieldName, intVal);
+                    if (int.TryParse(context.FieldValue, out intVal))
+                        context.Record.SetFieldValue(this.FieldName, intVal);
                     break;
+
                 case NumberType.BigInt:
                     long longVal;
-                    long.TryParse(recordValue, out longVal);
-                    context.Record.SetFieldValue(this.FieldName, longVal);
+                    if (long.TryParse(context.FieldValue, out longVal))
+                        context.Record.SetFieldValue(this.FieldName, longVal);
                     break;
             }
         }

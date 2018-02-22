@@ -152,6 +152,14 @@ namespace Vanrise.DataParser.Business
             string hex = BitConverter.ToString(reverse ? ba.Reverse().ToArray() : ba);
             return hex.Replace("-", "");
         }
+
+        public static byte[] ExtractFromByteArray(byte[] ba, int startIndex, int length, bool reverse)
+        {
+            byte[] result = new byte[length];
+            Array.Copy(ba, startIndex, result, 0, length);
+            return !reverse ? result : result.Reverse().ToArray();
+        }
+
         public static string GetBCDNumber(byte[] data, bool removeHexa, bool aIsZero)
         {
             StringBuilder number = new StringBuilder();
@@ -187,6 +195,14 @@ namespace Vanrise.DataParser.Business
             else if (aIsZero && (val > 10 || val == 0) || (removeHexa && val > 9))
                 return "";
             return val.ToString();
+        }
+
+        public static byte[] StringToByteArray(string hex)
+        {
+            return Enumerable.Range(0, hex.Length)
+                             .Where(x => x % 2 == 0)
+                             .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
+                             .Reverse().ToArray();
         }
     }
     public class ParserTypeExecuteContext : IParserTypeExecuteContext

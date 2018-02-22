@@ -121,6 +121,15 @@ namespace Vanrise.DataParser.Business
                     }
                 });
         }
+
+        public static void ExecuteFieldParser(HexTLVFieldParserSettings fieldParser, ParsedRecord parsedRecord, byte[] fieldValue)
+        {
+            fieldParser.ThrowIfNull("fieldParsers");
+
+            var fieldParserContext = new HexTLVFieldParserContext { Record = parsedRecord, FieldValue = fieldValue };
+            fieldParser.Execute(fieldParserContext);
+        }
+
         public static void ExecutePositionedFieldParsers(List<PositionedFieldParser> positionedFieldParsers, ParsedRecord parsedRecord, Stream recordStream)
         {
             positionedFieldParsers.ThrowIfNull("positionedFieldParsers");
@@ -136,25 +145,23 @@ namespace Vanrise.DataParser.Business
             }
         }
 
-        public static void ReadBlockFromStream(Stream stream, int blockSize, Action<RecordValue> onBlockRead)
+        public static void ReadBlockFromStream(Stream stream, int blockSize, Action<RecordValue> onBlockRead, bool readOnce = false)
         {
-            long position = 0;
-            long remainingBytes = stream.Length;
-            while (position < stream.Length && blockSize <= remainingBytes)
+            while (stream.Length - stream.Position >= blockSize)
             {
-
                 byte[] bytes = null;
                 bytes = new byte[blockSize];
                 stream.Read(bytes, 0, blockSize);
 
-                position += blockSize;
-                remainingBytes -= blockSize;
                 RecordValue recordValue = new RecordValue
                 {
                     Length = blockSize,
                     Value = bytes
                 };
                 onBlockRead(recordValue);
+
+                if (readOnce)
+                    break;
             }
 
         }

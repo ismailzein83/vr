@@ -68,7 +68,11 @@ namespace Vanrise.GenericData.QueueActivators
             HashSet<DateTime> distinctDateTimeValues = new HashSet<DateTime>();
             foreach (var record in records)
             {
-                distinctDateTimeValues.Add(record.GetFieldValue(dateTimeField));
+                object dateTimeObj = record.GetFieldValue(dateTimeField);
+                if (dateTimeObj == null)
+                    continue;
+
+                distinctDateTimeValues.Add((DateTime)dateTimeObj);
             }
 
             var batch = new DataRecordBatch
