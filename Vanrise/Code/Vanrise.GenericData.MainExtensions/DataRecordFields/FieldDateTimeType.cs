@@ -40,7 +40,14 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
 
         #region Public Methods
-
+        public override bool AreEqual(Object newValue, Object oldValue)
+        {
+            if (newValue == null && oldValue == null)
+                return true;
+            if (newValue == null || oldValue == null)
+                return false;
+            return DateTime.Parse(newValue.ToString()) == DateTime.Parse(oldValue.ToString());
+        }
         public override Type GetRuntimeType()
         {
             var type = GetNonNullableRuntimeType();

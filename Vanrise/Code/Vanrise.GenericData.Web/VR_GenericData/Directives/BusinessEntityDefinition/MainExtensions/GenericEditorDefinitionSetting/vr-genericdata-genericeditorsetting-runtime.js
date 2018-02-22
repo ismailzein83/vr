@@ -30,6 +30,7 @@ app.directive("vrGenericdataGenericeditorsettingRuntime", ["UtilsService", "VRNo
             var runtimeRows;
             var definitionSettings;
             var dataRecordTypeId;
+            var historyId;
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -50,6 +51,7 @@ app.directive("vrGenericdataGenericeditorsettingRuntime", ["UtilsService", "VRNo
                         selectedValues = payload.selectedValues;
                         definitionSettings = payload.definitionSettings;
                         dataRecordTypeId = payload.dataRecordTypeId;
+                        historyId = payload.historyId;
                     }
                     var editorpromise = UtilsService.createPromiseDeferred();
                     UtilsService.waitMultipleAsyncOperations([getGenericEditorRuntimeRows, loadRunTimeFieldTypeTemplates]).then(function () {
@@ -68,7 +70,7 @@ app.directive("vrGenericdataGenericeditorsettingRuntime", ["UtilsService", "VRNo
                         sectionDirectivePromiseDeferred.promise.then(function () {
                             var payloadSelector = {
                                 rows: runtimeRows,
-                                context: getContext()
+                                context: getContext(),
                             };
                             VRUIUtilsService.callDirectiveLoad(sectionDirectiveApi, payloadSelector, sectionDirectiveLoadDeferred);
                         });

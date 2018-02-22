@@ -30,7 +30,7 @@ app.directive("vrGenericdataStaticeditorRuntime", ["UtilsService", "VRNotificati
             var selectedValues;
             var definitionSettings;
             var dataRecordTypeId;
-
+            var historyId;
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -51,6 +51,8 @@ app.directive("vrGenericdataStaticeditorRuntime", ["UtilsService", "VRNotificati
                         selectedValues = payload.selectedValues;
                         definitionSettings = payload.definitionSettings;
                         dataRecordTypeId = payload.dataRecordTypeId;
+                        historyId = payload.historyId;
+
                         if(definitionSettings != undefined)
                         {
                             $scope.scopeModel.runtimeEditor = definitionSettings.DirectiveName;
@@ -64,7 +66,8 @@ app.directive("vrGenericdataStaticeditorRuntime", ["UtilsService", "VRNotificati
                             var directivePayload = {
                                 definitionSettings : definitionSettings,
                                 selectedValues : selectedValues,
-                                dataRecordTypeId :dataRecordTypeId
+                                dataRecordTypeId: dataRecordTypeId,
+                                historyId: historyId
                             };
                             VRUIUtilsService.callDirectiveLoad(editorRuntimeDirectiveApi, directivePayload, editorRuntimeDirectiveLoadDeferred);
                         });

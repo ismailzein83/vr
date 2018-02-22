@@ -137,7 +137,8 @@ app.directive("vrGenericdataGenericbusinessentityRuntimeeditor", ["UtilsService"
                         var runtimeEditorPayload = {
                             selectedValues: (isEditMode) ? genericBusinessEntity.FieldValues : undefined,
                             dataRecordTypeId: businessEntityDefinitionSettings.DataRecordTypeId,
-                            definitionSettings: businessEntityDefinitionSettings.EditorDefinition.Settings
+                            definitionSettings: businessEntityDefinitionSettings.EditorDefinition.Settings,
+                            historyId: historyId
                         };
                         VRUIUtilsService.callDirectiveLoad(runtimeEditorAPI, runtimeEditorPayload, runtimeEditorLoadDeferred);
                     });
