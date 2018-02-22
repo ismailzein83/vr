@@ -27,6 +27,7 @@ namespace Mediation.Runtime.DataParser
                 CreateMediationSettingsFile(GetEricssonParserSettings_GPRS(), "Ericsson_GPRS");
                 CreateMediationSettingsFile(GetEricssonOgeroParserSettings(), "Ericsson_Ogero");
                 CreateMediationSettingsFile(GetHuaweiParserSettings_Ogero(), "Huawei_Ogero");
+                CreateMediationSettingsFile(GetNokiaSiemensParserSettings(), "NokiaSiemens_Ogero");
             }
             catch (Exception ex)
             {
@@ -41,7 +42,7 @@ namespace Mediation.Runtime.DataParser
             {
                 using (var tw = new StreamWriter(fileStream))
                 {
-                    tw.WriteLine(settings);
+                    tw.Write(settings);
                     tw.Close();
                 }
             }
@@ -4049,7 +4050,7 @@ namespace Mediation.Runtime.DataParser
                 Settings = new TBCDNumberParser
                 {
                     FieldName = "OriginalCalledNumber",
-                    RemoveHexa = true                       
+                    RemoveHexa = true
                 }
             });
 
@@ -8515,6 +8516,7 @@ namespace Mediation.Runtime.DataParser
 
             return fieldParsers;
         }
+
         #endregion
 
         #region Ericsson Ogero
@@ -8584,7 +8586,6 @@ namespace Mediation.Runtime.DataParser
         private Dictionary<string, HexTLVRecordParser> GetEricssonOgeroSubRecordsParsers()
         {
             Dictionary<string, HexTLVRecordParser> recordParsers = new Dictionary<string, HexTLVRecordParser>();
-
 
             recordParsers.Add("00", new HexTLVRecordParser
             {
@@ -8912,7 +8913,6 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "DateForStartCharging",
                         Parser = new DateFromTextParser
                         {
                             FieldName = "DateForStartCharging",
@@ -8930,11 +8930,10 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "TimeForStartCharging",
                         Parser = new TimeFromTextParser
                         {
                             FieldName = "TimeForStartCharging",
-                            Format = "hhmmss"
+                            TimeFormat = "hhmmss"
                         }
                     }
                 },
@@ -8948,7 +8947,6 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "ChargeableDuration",
                         Parser = new NumberFromTextParser
                         {
                             FieldName = "ChargeableDuration",
@@ -8992,11 +8990,10 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "RecordNumber",
                         Parser = new NumberFromTextParser
                         {
-                            NumberType = NumberType.Int,
-                            FieldName = "RecordNumber"
+                            FieldName = "RecordNumber",
+                            NumberType = NumberType.Int
                         }
                     }
                 },
@@ -9085,7 +9082,6 @@ namespace Mediation.Runtime.DataParser
 
             return fieldParsers;
         }
-
         private List<PositionedFieldParser> Get_PositionedFieldParsers_01_Ogero_Call()
         {
             List<PositionedFieldParser> fieldParsers = new List<PositionedFieldParser>();
@@ -9187,7 +9183,6 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "DateForStartCharging",
                         Parser = new DateFromTextParser
                         {
                             FieldName = "DateForStartCharging",
@@ -9205,11 +9200,10 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "TimeForStartCharging",
                         Parser = new TimeFromTextParser
                         {
                             FieldName = "TimeForStartCharging",
-                            Format = "hhmmss"
+                            TimeFormat = "hhmmss"
                         }
                     }
                 },
@@ -9223,7 +9217,6 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "ChargeableDuration",
                         Parser = new NumberFromTextParser
                         {
                             FieldName = "ChargeableDuration",
@@ -9267,7 +9260,6 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "RecordNumber",
                         Parser = new NumberFromTextParser
                         {
                             NumberType = NumberType.Int,
@@ -9461,7 +9453,6 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "DateForStartCharging",
                         Parser = new DateFromTextParser
                         {
                             FieldName = "DateForStartCharging",
@@ -9479,11 +9470,10 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "TimeForStartCharging",
                         Parser = new TimeFromTextParser
                         {
                             FieldName = "TimeForStartCharging",
-                            Format = "hhmmss"
+                            TimeFormat = "hhmmss"
                         }
                     }
                 },
@@ -9497,7 +9487,6 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "ChargeableDuration",
                         Parser = new NumberFromTextParser
                         {
                             FieldName = "ChargeableDuration",
@@ -9541,11 +9530,10 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "RecordNumber",
                         Parser = new NumberFromTextParser
                         {
-                            NumberType = NumberType.Int,
-                            FieldName = "RecordNumber"
+                            FieldName = "RecordNumber",
+                            NumberType = NumberType.Int
                         }
                     }
                 },
@@ -9735,7 +9723,6 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "DateForStartCharging",
                         Parser = new DateFromTextParser
                         {
                             FieldName = "DateForStartCharging",
@@ -9753,11 +9740,10 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "TimeForStartCharging",
                         Parser = new TimeFromTextParser
                         {
                             FieldName = "TimeForStartCharging",
-                            Format = "hhmmss"
+                            TimeFormat = "hhmmss"
                         }
                     }
                 },
@@ -9771,7 +9757,6 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "ChargeableDuration",
                         Parser = new NumberFromTextParser
                         {
                             FieldName = "ChargeableDuration",
@@ -9815,11 +9800,10 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "RecordNumber",
                         Parser = new NumberFromTextParser
                         {
-                            NumberType = NumberType.Int,
-                            FieldName = "RecordNumber"
+                            FieldName = "RecordNumber",
+                            NumberType = NumberType.Int
                         }
                     }
                 },
@@ -10009,7 +9993,6 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "DateForStartCharging",
                         Parser = new DateFromTextParser
                         {
                             FieldName = "DateForStartCharging",
@@ -10027,11 +10010,10 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "TimeForStartCharging",
                         Parser = new TimeFromTextParser
                         {
                             FieldName = "TimeForStartCharging",
-                            Format = "hhmmss"
+                            TimeFormat = "hhmmss"
                         }
                     }
                 },
@@ -10045,7 +10027,6 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "ChargeableDuration",
                         Parser = new NumberFromTextParser
                         {
                             FieldName = "ChargeableDuration",
@@ -10089,11 +10070,10 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "RecordNumber",
                         Parser = new NumberFromTextParser
                         {
-                            NumberType = NumberType.Int,
-                            FieldName = "RecordNumber"
+                            FieldName = "RecordNumber",
+                            NumberType = NumberType.Int
                         }
                     }
                 },
@@ -10283,7 +10263,6 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "DateForStartCharging",
                         Parser = new DateFromTextParser
                         {
                             FieldName = "DateForStartCharging",
@@ -10301,11 +10280,10 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "TimeForStartCharging",
                         Parser = new TimeFromTextParser
                         {
                             FieldName = "TimeForStartCharging",
-                            Format = "hhmmss"
+                            TimeFormat = "hhmmss"
                         }
                     }
                 },
@@ -10319,7 +10297,6 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "ChargeableDuration",
                         Parser = new NumberFromTextParser
                         {
                             FieldName = "ChargeableDuration",
@@ -10363,11 +10340,10 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "RecordNumber",
                         Parser = new NumberFromTextParser
                         {
-                            NumberType = NumberType.Int,
-                            FieldName = "RecordNumber"
+                            FieldName = "RecordNumber",
+                            NumberType = NumberType.Int
                         }
                     }
                 },
@@ -10557,7 +10533,6 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "DateForStartCharging",
                         Parser = new DateFromTextParser
                         {
                             FieldName = "DateForStartCharging",
@@ -10575,11 +10550,10 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "TimeForStartCharging",
                         Parser = new TimeFromTextParser
                         {
                             FieldName = "TimeForStartCharging",
-                            Format = "hhmmss"
+                            TimeFormat = "hhmmss"
                         }
                     }
                 },
@@ -10593,7 +10567,6 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "ChargeableDuration",
                         Parser = new NumberFromTextParser
                         {
                             FieldName = "ChargeableDuration",
@@ -10637,11 +10610,10 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "RecordNumber",
                         Parser = new NumberFromTextParser
                         {
-                            NumberType = NumberType.Int,
-                            FieldName = "RecordNumber"
+                            FieldName = "RecordNumber",
+                            NumberType = NumberType.Int
                         }
                     }
                 },
@@ -10831,7 +10803,6 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "DateForStartCharging",
                         Parser = new DateFromTextParser
                         {
                             FieldName = "DateForStartCharging",
@@ -10849,11 +10820,10 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "TimeForStartCharging",
                         Parser = new TimeFromTextParser
                         {
                             FieldName = "TimeForStartCharging",
-                            Format = "hhmmss"
+                            TimeFormat = "hhmmss"
                         }
                     }
                 },
@@ -10867,7 +10837,6 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "ChargeableDuration",
                         Parser = new NumberFromTextParser
                         {
                             FieldName = "ChargeableDuration",
@@ -10911,11 +10880,10 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "RecordNumber",
                         Parser = new NumberFromTextParser
                         {
-                            NumberType = NumberType.Int,
-                            FieldName = "RecordNumber"
+                            FieldName = "RecordNumber",
+                            NumberType = NumberType.Int
                         }
                     }
                 },
@@ -11105,7 +11073,6 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "DateForStartCharging",
                         Parser = new DateFromTextParser
                         {
                             FieldName = "DateForStartCharging",
@@ -11123,11 +11090,10 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "TimeForStartCharging",
                         Parser = new TimeFromTextParser
                         {
                             FieldName = "TimeForStartCharging",
-                            Format = "hhmmss"
+                            TimeFormat = "hhmmss"
                         }
                     }
                 },
@@ -11141,7 +11107,6 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "ChargeableDuration",
                         Parser = new NumberFromTextParser
                         {
                             FieldName = "ChargeableDuration",
@@ -11185,11 +11150,10 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "RecordNumber",
                         Parser = new NumberFromTextParser
                         {
-                            NumberType = NumberType.Int,
-                            FieldName = "RecordNumber"
+                            FieldName = "RecordNumber",
+                            NumberType = NumberType.Int
                         }
                     }
                 },
@@ -11379,7 +11343,6 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "DateForStartCharging",
                         Parser = new DateFromTextParser
                         {
                             FieldName = "DateForStartCharging",
@@ -11397,11 +11360,10 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "TimeForStartCharging",
                         Parser = new TimeFromTextParser
                         {
                             FieldName = "TimeForStartCharging",
-                            Format = "hhmmss"
+                            TimeFormat = "hhmmss"
                         }
                     }
                 },
@@ -11415,7 +11377,6 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "ChargeableDuration",
                         Parser = new NumberFromTextParser
                         {
                             FieldName = "ChargeableDuration",
@@ -11459,11 +11420,10 @@ namespace Mediation.Runtime.DataParser
                 {
                     Settings = new StringParser
                     {
-                        FieldName = "RecordNumber",
                         Parser = new NumberFromTextParser
                         {
-                            NumberType = NumberType.Int,
-                            FieldName = "RecordNumber"
+                            FieldName = "RecordNumber",
+                            NumberType = NumberType.Int
                         }
                     }
                 },
@@ -11552,6 +11512,7 @@ namespace Mediation.Runtime.DataParser
 
             return fieldParsers;
         }
+
         #endregion
 
         #region Huawei Ogero
@@ -11578,6 +11539,7 @@ namespace Mediation.Runtime.DataParser
 
             return Serializer.Serialize(parserType.Settings);
         }
+
         private Dictionary<string, HexTLVRecordParser> GetTemplateParsers_Huawei_Ogero()
         {
             Dictionary<string, HexTLVRecordParser> parsers = new Dictionary<string, HexTLVRecordParser>();
@@ -11600,7 +11562,6 @@ namespace Mediation.Runtime.DataParser
 
             return parsers;
         }
-
 
         private Dictionary<string, HexTLVFieldParser> Get_B4_FieldParsers_Huawei_Ogero()
         {
@@ -11904,5 +11865,162 @@ namespace Mediation.Runtime.DataParser
 
         #endregion
 
+        #region Nokia Siemens Ogero
+
+        public string GetNokiaSiemensParserSettings()
+        {
+            HexTLVParserType hexParser = new HexTLVParserType
+            {
+                RecordParser = new HeaderRecordParser
+                {
+                    HeaderLength = 8,
+                    RecordLengthIndex = 1,
+                    RecordLengthByteLength = 1,
+                    PackageRecordParser = new HexTLVRecordParser
+                    {
+                        Settings = new PackageRecordParser
+                        {
+                            PackageTagLength = 1,
+                            RecordType = "NokiaSiemens_WHS_CDR",
+                            PackageLengthByteLength = 1,
+                            Packages = GetNokiaSiemensPackages(),
+                            //CompositeFieldsParsers = GetNokiaSiemensCompositeParsers()
+                        }
+                    }
+                }
+            };
+
+            ParserType parserType = new ParserType
+            {
+                ParserTypeId = new Guid("202C8508-A24C-4664-B769-BE71C86FCD75"),
+                Settings = new ParserTypeSettings { ExtendedSettings = hexParser }
+            };
+
+            return Serializer.Serialize(parserType.Settings);
+        }
+
+        private Dictionary<int, PackageFieldParser> GetNokiaSiemensPackages()
+        {
+            Dictionary<int, PackageFieldParser> packages = new Dictionary<int, PackageFieldParser>();
+
+            PackageFieldParser dateTimePackage_100 = new PackageFieldParser()
+            {
+                PackageLength = 11,
+                PackageTagLength = 1,
+                FieldParser = new DateTimePackageParser()
+                {
+                    BeginDateTimeFieldName = "BeginDate",
+                    EndDateTimeFieldName = "EndDate",
+                    DurationFieldName = "DurationInSeconds",
+                    YearIndex = 0,
+                    MonthIndex = 1,
+                    DayIndex = 2,
+                    HoursIndex = 3,
+                    MinutesIndex = 4,
+                    SecondsIndex = 5,
+                    FlagsMillisecondsIndex = 6,
+                    DurationIndex = 7
+                }
+            };
+            packages.Add(100, dateTimePackage_100);
+
+            PackageFieldParser callingPartyNumberPackage_142 = new PackageFieldParser()
+            {
+                PackageTagLength = 1,
+                FieldParser = new PartyNumberPackageParser()
+                {
+                    PartyNumberFieldName = "CallingPartyNumber"
+                }
+            };
+            packages.Add(142, callingPartyNumberPackage_142);
+
+            PackageFieldParser calledPartyNumberPackage_168 = new PackageFieldParser()
+            {
+                PackageTagLength = 1,
+                FieldParser = new PartyNumberPackageParser()
+                {
+                    PartyNumberFieldName = "CalledPartyNumber"
+                }
+            };
+            packages.Add(168, calledPartyNumberPackage_168);
+
+            PackageFieldParser trunkIdIncommingPackage_105 = new PackageFieldParser()
+            {
+                PackageTagLength = 1,
+                PackageLength = 9,
+                FieldParser = new TrunkIdentificationPackageParser()
+                {
+                    TrunkGroupNumberFieldName = "IncomingTrunkGroupNumber",
+                    TrunkNumberFieldName = "IncomingTrunkNumber"
+                }
+            };
+            packages.Add(105, trunkIdIncommingPackage_105);
+
+            PackageFieldParser trunkIdOutgoingPackage_106 = new PackageFieldParser()
+            {
+                PackageTagLength = 1,
+                PackageLength = 9,
+                FieldParser = new TrunkIdentificationPackageParser()
+                {
+                    TrunkGroupNumberFieldName = "OutgoingTrunkGroupNumber",
+                    TrunkNumberFieldName = "OutgoingTrunkNumber"
+                }
+            };
+            packages.Add(106, trunkIdOutgoingPackage_106);
+
+            PackageFieldParser trafficQualityPackage_130 = new PackageFieldParser()
+            {
+                PackageTagLength = 1,
+                FieldParser = new NumberFieldParser()
+                {
+                    FieldName = "CauseValue",
+                    NumberType = NumberType.Int,
+                    FieldIndex = 0,
+                    FieldBytesLength = 2,
+                    Reverse = true
+                }
+            };
+            packages.Add(130, trafficQualityPackage_130);
+
+            PackageFieldParser serviceInfoPackage_102 = new PackageFieldParser() { PackageTagLength = 1, PackageLength = 4, FieldParser = new SkipBlockParser() };
+            packages.Add(102, serviceInfoPackage_102);
+
+            PackageFieldParser chargeUnitsForConnectionPackage_103 = new PackageFieldParser() { PackageTagLength = 1, PackageLength = 4, FieldParser = new SkipBlockParser() };
+            packages.Add(103, chargeUnitsForConnectionPackage_103);
+
+            PackageFieldParser trunkIdIncommingWithCICPackage_107 = new PackageFieldParser() { PackageTagLength = 1, PackageLength = 10, FieldParser = new SkipBlockParser() };
+            packages.Add(107, trunkIdIncommingWithCICPackage_107);
+
+            PackageFieldParser trunkIdOutgoingWithCICPackage_108 = new PackageFieldParser() { PackageTagLength = 1, PackageLength = 10, FieldParser = new SkipBlockParser() };
+            packages.Add(108, trunkIdOutgoingWithCICPackage_108);
+
+            PackageFieldParser dateTimePackage_116 = new PackageFieldParser() { PackageTagLength = 1, PackageLength = 8, FieldParser = new SkipBlockParser() };
+            packages.Add(116, dateTimePackage_116);
+
+            PackageFieldParser transmissionMediumRequirementPackage_119 = new PackageFieldParser() { PackageTagLength = 1, PackageLength = 2, FieldParser = new SkipBlockParser() };
+            packages.Add(119, transmissionMediumRequirementPackage_119);
+
+            PackageFieldParser callingPartyCategoryPackage_120 = new PackageFieldParser() { PackageTagLength = 1, PackageLength = 2, FieldParser = new SkipBlockParser() };
+            packages.Add(120, callingPartyCategoryPackage_120);
+
+            PackageFieldParser zonePackage_122 = new PackageFieldParser() { PackageTagLength = 1, PackageLength = 3, FieldParser = new SkipBlockParser() };
+            packages.Add(122, zonePackage_122);
+
+            return packages;
+        }
+
+        private List<CompositeFieldsParser> GetNokiaSiemensCompositeParsers()
+        {
+            List<CompositeFieldsParser> compositeParsers = new List<CompositeFieldsParser>();
+
+            compositeParsers.Add(new DateTimeCompositeParser() { DateFieldName = "BeginDate", FieldName = "ConnectDateTime" });
+            compositeParsers.Add(new DateTimeCompositeParser() { DateFieldName = "BeginDate", FieldName = "AttemptDateTime" });
+            compositeParsers.Add(new DateTimeCompositeParser() { DateFieldName = "BeginDate", FieldName = "AlertDateTime" });
+            compositeParsers.Add(new DateTimeCompositeParser() { DateFieldName = "EndDate", FieldName = "DisconnectDateTime" });
+
+            return compositeParsers;
+        }
+
+        #endregion
     }
 }
