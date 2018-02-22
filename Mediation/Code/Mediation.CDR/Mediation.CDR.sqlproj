@@ -118,5 +118,11 @@
     <Build Include="Mediation_Generic\Tables\BadMediationRecord.sql" />
     <Build Include="Mediation_WHS\Tables\EricssonCDR.sql" />
     <Build Include="Mediation_WHS\User Defined Types\EricssonCDRType.sql" />
+    <Build Include="Mediation_WHS\Tables\NokiaSiemensCDR.sql" />
+    <Build Include="Mediation_WHS\Tables\NokiaSiemensBadCDR.sql" />
+    <Build Include="Mediation_WHS\Tables\EricssonBadCDR.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\NokiaSiemensCDRType.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\NokiaSiemensBadCDRType.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\EricssonBadCDRType.sql" />
   </ItemGroup>
 </Project>
