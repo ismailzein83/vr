@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.BusinessEntity.Entities
 {
+    public class SupplierFaultTicketDescriptionSettingCollection : List<SupplierFaultTicketDescriptionSetting>
+    {
+
+    }
     public class SupplierFaultTicketSettingsInput
     {
         public List<SupplierFaultTicketDescriptionSetting> DescriptionSettings { get; set; }

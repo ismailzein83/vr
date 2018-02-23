@@ -19,7 +19,10 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public override string GetDescription(IFieldCustomObjectTypeSettingsContext context)
         {
-            var valueObject = Utilities.ConvertJsonToList<CustomerFaultTicketDescriptionSetting>(context.FieldValue);
+
+            var valueObject = context.FieldValue as List<CustomerFaultTicketDescriptionSetting>;
+            if (valueObject == null)
+                valueObject = Utilities.ConvertJsonToList<CustomerFaultTicketDescriptionSetting>(context.FieldValue);
             if (valueObject != null)
             {
                 StringBuilder description = new StringBuilder();
@@ -46,8 +49,13 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public override bool AreEqual(Object newValue, Object oldValue)
         {
-            var oldValueObject = Utilities.ConvertJsonToList<CustomerFaultTicketDescriptionSetting>(oldValue);
-            var newValueObject = Utilities.ConvertJsonToList<CustomerFaultTicketDescriptionSetting>(newValue);
+            var oldValueObject = oldValue as List<CustomerFaultTicketDescriptionSetting>; 
+            var newValueObject = newValue as List<CustomerFaultTicketDescriptionSetting>;
+
+            if (oldValueObject == null)
+                oldValueObject = Utilities.ConvertJsonToList<CustomerFaultTicketDescriptionSetting>(oldValue);
+            if (newValueObject == null)
+                newValueObject = Utilities.ConvertJsonToList<CustomerFaultTicketDescriptionSetting>(newValue);
 
             if ((oldValueObject == null && newValueObject == null) || (oldValueObject.Count == 0 && newValueObject.Count == 0))
                 return true;
@@ -71,7 +79,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public override Type GetNonNullableRuntimeType()
         {
-            return typeof(List<CustomerFaultTicketDescriptionSetting>);
+            return typeof(CustomerFaultTicketDescriptionSettingCollection);
         }
 
         public override dynamic ParseNonNullValueToFieldType(object originalValue)

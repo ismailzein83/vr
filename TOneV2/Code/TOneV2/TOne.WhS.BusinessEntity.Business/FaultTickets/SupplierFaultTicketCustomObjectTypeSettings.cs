@@ -19,7 +19,10 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public override string GetDescription(IFieldCustomObjectTypeSettingsContext context)
         {
-            var valueObject = Utilities.ConvertJsonToList<SupplierFaultTicketDescriptionSetting>(context.FieldValue);
+
+            var valueObject = context.FieldValue as List<SupplierFaultTicketDescriptionSetting>;
+            if (valueObject == null)
+                valueObject = Utilities.ConvertJsonToList<SupplierFaultTicketDescriptionSetting>(context.FieldValue);
             if (valueObject != null)
             {
                 StringBuilder description = new StringBuilder();
@@ -46,8 +49,14 @@ namespace TOne.WhS.BusinessEntity.Business
 
         public override bool AreEqual(Object newValue, Object oldValue)
         {
-            var oldValueObject = Utilities.ConvertJsonToList<SupplierFaultTicketDescriptionSetting>(oldValue);
-            var newValueObject = Utilities.ConvertJsonToList<SupplierFaultTicketDescriptionSetting>(newValue);
+
+            var oldValueObject = oldValue as List<SupplierFaultTicketDescriptionSetting>; ;
+            var newValueObject = newValue as List<SupplierFaultTicketDescriptionSetting>; ;
+
+            if (oldValueObject == null)
+                oldValueObject = Utilities.ConvertJsonToList<SupplierFaultTicketDescriptionSetting>(oldValue);
+            if (newValueObject == null)
+                newValueObject = Utilities.ConvertJsonToList<SupplierFaultTicketDescriptionSetting>(newValue);
 
             if ((oldValueObject == null && newValueObject == null) || (oldValueObject.Count == 0 && newValueObject.Count == 0))
                 return true;
@@ -75,7 +84,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         public override dynamic ParseNonNullValueToFieldType(object originalValue)
         {
-            var castedOriginalValue = originalValue as List<SupplierFaultTicketDescriptionSetting>;
+            var castedOriginalValue =  originalValue as List<SupplierFaultTicketDescriptionSetting>; ;
             if (castedOriginalValue != null)
                 return castedOriginalValue;
             else

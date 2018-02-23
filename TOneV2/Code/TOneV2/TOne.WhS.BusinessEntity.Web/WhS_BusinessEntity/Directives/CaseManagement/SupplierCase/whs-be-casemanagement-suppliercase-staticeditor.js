@@ -280,16 +280,21 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                         caseManagementObject.WorkGroupId = workGroupSelectorAPI.getSelectedIds();
                         caseManagementObject.ASR = $scope.scopeModel.asr;
                         caseManagementObject.ACD = $scope.scopeModel.acd;
-                       
+
                         caseManagementObject.Attempts = $scope.scopeModel.attempts;
                         caseManagementObject.SupplierId = supplierSelectorAPI.getSelectedIds();
                         caseManagementObject.SupplierZoneId = zoneId;
                         caseManagementObject.FromDate = $scope.scopeModel.fromDate;
                         caseManagementObject.ToDate = $scope.scopeModel.toDate;
-                    }
+                        caseManagementObject.TicketDetails = {
+                            $type: "TOne.WhS.BusinessEntity.Entities.SupplierFaultTicketDescriptionSettingCollection,TOne.WhS.BusinessEntity.Entities",
+                            $values: getCodeNumberListData()
+                        };
+                }
                     var attachments = attachmentGridAPI.getData();
-                    caseManagementObject.TicketDetails = getCodeNumberListData();
-                    caseManagementObject.Attachments = attachments == undefined ? null : attachments;
+
+
+                    caseManagementObject.Attachments = attachments == undefined ? null: attachments;
                     caseManagementObject.CarrierReference = $scope.scopeModel.carrierReference;
                     caseManagementObject.Description = $scope.scopeModel.description;
                     caseManagementObject.Notes = $scope.scopeModel.notes;
@@ -453,7 +458,7 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
             }
 
             function getCodeNumberListData() {
-                    var codeList = [];
+                var codeList = [];
                     for (var i = 0; i < $scope.scopeModel.codeNumberList.length; i++) {
                         var codeNumberObject = $scope.scopeModel.codeNumberList[i];
                         var faultTicketDescriptionSetting =

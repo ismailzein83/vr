@@ -270,13 +270,16 @@ app.directive('whsBeCasemanagementCustomercaseStaticeditor', ['UtilsService', 'V
                         caseManagementObject.ACD = $scope.scopeModel.acd;
                         caseManagementObject.WorkGroupId = workGroupSelectorAPI.getSelectedIds();
                         caseManagementObject.SaleZoneId = zoneId;
+                        caseManagementObject.TicketDetails = {
+                    $type: "TOne.WhS.BusinessEntity.Entities.CustomerFaultTicketDescriptionSettingCollection,TOne.WhS.BusinessEntity.Entities",
+                          $values : getCodeNumberListData()
+                    };
                     }
                     var attachments = attachmentGridAPI.getData();
                     caseManagementObject.CarrierReference = $scope.scopeModel.carrierReference;
                     caseManagementObject.Description = $scope.scopeModel.description;
                     caseManagementObject.StatusId = statusSelectorAPI.getSelectedIds();
                     caseManagementObject.Attachments = attachments == undefined ? null : attachments;
-                    caseManagementObject.TicketDetails = getCodeNumberListData();
                     caseManagementObject.ContactName = $scope.scopeModel.contactName;
                     caseManagementObject.ContactEmails = $scope.scopeModel.email;
                     caseManagementObject.PhoneNumber = $scope.scopeModel.phoneNumber;
