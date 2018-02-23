@@ -18,8 +18,8 @@ SET NOCOUNT ON;
 
 select	szs.[ID], szs.PriceListID, szs.[ZoneID], szs.[PriceListID], szs.SupplierID, szs.[ReceivedServicesFlag], szs.[EffectiveServiceFlag], szs.[BED], szs.[EED], szs.[SourceID]
 from	[TOneWhS_BE].SupplierZoneService szs with(nolock)
-		JOIN [TOneWhS_BE].SupplierPriceList spl with(nolock) ON spl.ID = szs.PriceListID
-		JOIN @SupplierZoneServicesOwners szso on szso.SupplierId = spl.SupplierId
+		--JOIN [TOneWhS_BE].SupplierPriceList spl with(nolock) ON spl.ID = szs.PriceListID
+		JOIN @SupplierZoneServicesOwners szso on szso.SupplierId = szs.SupplierId
 Where	szs.ZoneID is not null And ((@IsFuture = 0 AND szs.BED <= @EffectiveTime AND (szs.EED > @EffectiveTime OR szs.EED IS NULL))
 		OR (@IsFuture = 1 AND (szs.BED > GETDATE() OR szs.EED IS NULL)))
 		group by szs.[ID], szs.[ZoneID], szs.[PriceListID], szs.SupplierID, szs.[ReceivedServicesFlag], szs.[EffectiveServiceFlag], szs.[BED], szs.[EED], szs.[SourceID]
