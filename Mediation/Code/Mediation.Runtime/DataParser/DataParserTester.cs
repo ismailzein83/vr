@@ -25,9 +25,9 @@ namespace Mediation.Runtime.DataParser
                 CreateMediationSettingsFile(GetEricssonIraqParserSettings(), "Ericsson_Iraq");
                 CreateMediationSettingsFile(GetNokiaParserSettings(), "Nokia_Iraq");
                 CreateMediationSettingsFile(GetEricssonParserSettings_GPRS(), "Ericsson_GPRS");
-                CreateMediationSettingsFile(GetEricssonOgeroParserSettings(), "Ericsson_Ogero");
                 CreateMediationSettingsFile(GetHuaweiParserSettings_Ogero(), "Huawei_Ogero");
-                CreateMediationSettingsFile(GetNokiaSiemensParserSettings(), "NokiaSiemens_Ogero");
+                CreateMediationSettingsFile(GetWHSEricssonOgeroParserSettings(), "WHS_Ericsson");
+                CreateMediationSettingsFile(GetICXNokiaSiemensParserSettings(), "ICX_NokiaSiemens");
             }
             catch (Exception ex)
             {
@@ -3230,6 +3230,7 @@ namespace Mediation.Runtime.DataParser
 
             return Serializer.Serialize(parserType.Settings);
         }
+
         private Dictionary<string, HexTLVRecordParser> GetTemplateParsers_Ericsson_GPRS()
         {
             Dictionary<string, HexTLVRecordParser> parsers = new Dictionary<string, HexTLVRecordParser>();
@@ -3253,6 +3254,7 @@ namespace Mediation.Runtime.DataParser
 
             return parsers;
         }
+
         private List<CompositeFieldsParser> GetEricssonCompositeFieldsParser_GPRS()
         {
             List<CompositeFieldsParser> fieldParsers = new List<CompositeFieldsParser>
@@ -3562,12 +3564,12 @@ namespace Mediation.Runtime.DataParser
             return parsers;
         }
 
-
         #endregion
 
         #endregion
 
         #region Huawei Iraq
+
         DateTimeParser GetHuaweiDateTimeParser(string fieldName)
         {
             return new DateTimeParser
@@ -8521,9 +8523,8 @@ namespace Mediation.Runtime.DataParser
 
         #region Ericsson Ogero
 
-        public string GetEricssonOgeroParserSettings()
+        public string GetWHSEricssonOgeroParserSettings()
         {
-
             //HexTLVParserType hexParser = new HexTLVParserType
             //{
             //    RecordParser = new PositionedBlockRecordParser
@@ -8544,6 +8545,7 @@ namespace Mediation.Runtime.DataParser
             //        BlockSize = 115
             //    }
             //};
+
             HexTLVParserType hexParser = new HexTLVParserType
             {
                 RecordParser = new PositionedBlockRecordParser
@@ -8603,7 +8605,7 @@ namespace Mediation.Runtime.DataParser
                             Value = 3
                         }
                     },
-                    RecordType = "Ericsson_WHS_CDR"
+                    RecordType = "WHS_Ericsson_CDR"
                     //CompositeFieldsParsers = GetOgeroCompositeFields()
                 }
             });
@@ -8623,7 +8625,7 @@ namespace Mediation.Runtime.DataParser
                             Value = 3
                         }
                     },
-                    RecordType = "Ericsson_WHS_CDR"
+                    RecordType = "WHS_Ericsson_CDR"
                     //CompositeFieldsParsers = GetOgeroCompositeFields()
                 }
             });
@@ -8644,7 +8646,7 @@ namespace Mediation.Runtime.DataParser
                             Value = 3
                         }
                     },
-                    RecordType = "Ericsson_WHS_CDR"
+                    RecordType = "WHS_Ericsson_CDR"
                     //CompositeFieldsParsers = GetOgeroCompositeFields()
                 }
             });
@@ -8664,7 +8666,7 @@ namespace Mediation.Runtime.DataParser
                             Value = 3
                         }
                     },
-                    RecordType = "Ericsson_WHS_CDR"
+                    RecordType = "WHS_Ericsson_CDR"
                     //CompositeFieldsParsers = GetOgeroCompositeFields()
                 }
             });
@@ -8685,7 +8687,7 @@ namespace Mediation.Runtime.DataParser
                             Value = 3
                         }
                     },
-                    RecordType = "Ericsson_WHS_CDR"
+                    RecordType = "WHS_Ericsson_CDR"
                     //CompositeFieldsParsers = GetOgeroCompositeFields()
                 }
             });
@@ -8706,7 +8708,7 @@ namespace Mediation.Runtime.DataParser
                             Value = 3
                         }
                     },
-                    RecordType = "Ericsson_WHS_CDR"
+                    RecordType = "WHS_Ericsson_CDR"
                     //CompositeFieldsParsers = GetOgeroCompositeFields()
                 }
             });
@@ -8727,7 +8729,7 @@ namespace Mediation.Runtime.DataParser
                             Value = 3
                         }
                     },
-                    RecordType = "Ericsson_WHS_CDR"
+                    RecordType = "WHS_Ericsson_CDR"
                     //CompositeFieldsParsers = GetOgeroCompositeFields()
                 }
             });
@@ -8748,7 +8750,7 @@ namespace Mediation.Runtime.DataParser
             //                Value = 3
             //            }
             //        },
-            //        RecordType = "Ericsson_WHS_CDR"
+            //        RecordType = "WHS_Ericsson_CDR"
             //        //CompositeFieldsParsers = GetOgeroCompositeFields()
             //    }
             //});
@@ -8769,7 +8771,7 @@ namespace Mediation.Runtime.DataParser
             //                Value = 3
             //            }
             //        },
-            //        RecordType = "Ericsson_WHS_CDR"
+            //        RecordType = "WHS_Ericsson_CDR"
             //        //CompositeFieldsParsers = GetOgeroCompositeFields()
             //    }
             //});
@@ -8790,7 +8792,7 @@ namespace Mediation.Runtime.DataParser
             //                Value = 3
             //            }
             //        },
-            //        RecordType = "Ericsson_WHS_CDR"
+            //        RecordType = "WHS_Ericsson_CDR"
             //        //CompositeFieldsParsers = GetOgeroCompositeFields()
             //    }
             //});
@@ -11867,7 +11869,7 @@ namespace Mediation.Runtime.DataParser
 
         #region Nokia Siemens Ogero
 
-        public string GetNokiaSiemensParserSettings()
+        public string GetICXNokiaSiemensParserSettings()
         {
             HexTLVParserType hexParser = new HexTLVParserType
             {
@@ -11881,7 +11883,7 @@ namespace Mediation.Runtime.DataParser
                         Settings = new PackageRecordParser
                         {
                             PackageTagLength = 1,
-                            RecordType = "NokiaSiemens_WHS_CDR",
+                            RecordType = "ICX_NokiaSiemens_CDR",
                             PackageLengthByteLength = 1,
                             Packages = GetNokiaSiemensPackages(),
                             //CompositeFieldsParsers = GetNokiaSiemensCompositeParsers()
