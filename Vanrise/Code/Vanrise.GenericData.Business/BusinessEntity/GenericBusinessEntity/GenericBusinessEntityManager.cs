@@ -349,7 +349,7 @@ namespace Vanrise.GenericData.Business
 
                 var genericBusinessEntity = GetGenericBusinessEntity(genericBusinessEntityId, genericBusinessEntityToAdd.BusinessEntityDefinitionId);
 
-               // UpdateStatusHistoryIfAvailable(genericBusinessEntityToAdd.BusinessEntityDefinitionId, genericBusinessEntity, genericBusinessEntityId);
+                UpdateStatusHistoryIfAvailable(genericBusinessEntityToAdd.BusinessEntityDefinitionId, genericBusinessEntity, genericBusinessEntityId);
 
                 if (hasInsertedId)
                 {
@@ -391,7 +391,7 @@ namespace Vanrise.GenericData.Business
 
                 var genericBusinessEntity = GetGenericBusinessEntity(genericBusinessEntityToUpdate.GenericBusinessEntityId, genericBusinessEntityToUpdate.BusinessEntityDefinitionId);
 
-             //   UpdateStatusHistoryIfAvailable(genericBusinessEntityToUpdate.BusinessEntityDefinitionId, genericBusinessEntity, genericBusinessEntityToUpdate.GenericBusinessEntityId);
+                UpdateStatusHistoryIfAvailable(genericBusinessEntityToUpdate.BusinessEntityDefinitionId, genericBusinessEntity, genericBusinessEntityToUpdate.GenericBusinessEntityId);
 
 
                 VRActionLogger.Current.TrackAndLogObjectUpdated(new GenericBusinessEntityLoggableEntity(genericBusinessEntityToUpdate.BusinessEntityDefinitionId), genericBusinessEntityToUpdate, oldGenericBE);
@@ -420,25 +420,25 @@ namespace Vanrise.GenericData.Business
 
         #region Private Methods
 
-        //private bool UpdateStatusHistoryIfAvailable(Guid businessEntityDefinitionId,GenericBusinessEntity genericBusinessEntity, object genericBusinessEntityId)
-        //{
-        //    var statusFieldNames = _genericBEDefinitionManager.GetStatusFieldNames(businessEntityDefinitionId);
-        //    BusinessEntityStatusHistoryManager businessEntityStatusHistoryManager = new BusinessEntityStatusHistoryManager();
-        //    bool result = true;
-        //    if(statusFieldNames != null && statusFieldNames.Count > 0)
-        //    {
-        //        foreach(var statusFieldName in statusFieldNames)
-        //        {
-        //            var statusValue = genericBusinessEntity.FieldValues.GetRecord(statusFieldName);
-        //            if(statusValue != null)
-        //            {
-        //                if (!businessEntityStatusHistoryManager.InsertStatusHistory(businessEntityDefinitionId, genericBusinessEntityId, statusFieldName, (Guid)statusValue))
-        //                    result = false;
-        //            }
-        //        }
-        //    }
-        //    return result;
-        //}
+        private bool UpdateStatusHistoryIfAvailable(Guid businessEntityDefinitionId, GenericBusinessEntity genericBusinessEntity, object genericBusinessEntityId)
+        {
+            var statusFieldNames = _genericBEDefinitionManager.GetStatusFieldNames(businessEntityDefinitionId);
+            BusinessEntityStatusHistoryManager businessEntityStatusHistoryManager = new BusinessEntityStatusHistoryManager();
+            bool result = true;
+            if (statusFieldNames != null && statusFieldNames.Count > 0)
+            {
+                foreach (var statusFieldName in statusFieldNames)
+                {
+                    var statusValue = genericBusinessEntity.FieldValues.GetRecord(statusFieldName);
+                    if (statusValue != null)
+                    {
+                        if (!businessEntityStatusHistoryManager.InsertStatusHistory(businessEntityDefinitionId, genericBusinessEntityId.ToString(), statusFieldName, (Guid)statusValue))
+                            result = false;
+                    }
+                }
+            }
+            return result;
+        }
         private void OnBeforeSaveMethod(Dictionary<string, DataRecordField> fieldTypes, Guid businessEntityDefinitionId, GenericBusinessEntity genericBusinessEntity, Object genericBusinessEntityId)
         {
             if (fieldTypes != null)

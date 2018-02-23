@@ -17,36 +17,25 @@ namespace Vanrise.GenericData.Business
 
     public class BusinessEntityStatusHistoryManager
     {
-        public bool InsertStatusHistory(Guid businessEntityDefinitionId, Object businessEntityId, string fieldName, Guid statusId)
+        public bool InsertStatusHistory(Guid businessEntityDefinitionId, string businessEntityId, string fieldName, Guid statusId)
+        {
+
+            var lastStatusHistory = GetLastBusinessEntityStatusHistory(businessEntityDefinitionId, businessEntityId, fieldName);
+            Guid? previousStatus = null;
+            if (lastStatusHistory != null)
+            {
+                if (lastStatusHistory.StatusId == statusId)
+                    return true;
+                previousStatus = lastStatusHistory.StatusId;
+            }
+            IBusinessEntityStatusHistoryDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IBusinessEntityStatusHistoryDataManager>();
+            return dataManager.Insert(businessEntityDefinitionId, businessEntityId, fieldName, statusId, previousStatus);
+           
+        }
+        public BusinessEntityStatusHistory GetLastBusinessEntityStatusHistory(Guid businessEntityDefinitionId, string businessEntityId, string fieldName)
         {
             IBusinessEntityStatusHistoryDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IBusinessEntityStatusHistoryDataManager>();
-            return dataManager.Insert(businessEntityDefinitionId, businessEntityId, fieldName, statusId, Guid.NewGuid());
+            return dataManager.GetLastBusinessEntityStatusHistory(businessEntityDefinitionId, businessEntityId, fieldName);
         }
-        //public IEnumerable<BusinessEntityStatusHistory> GetBusinessEntityStatusHistoryAfterDate(Guid businessEntityDefinitionId, Object businessEntittId, string fieldName, DateTime statusChangedDate)
-        //{
-        //    IBusinessEntityStatusHistoryDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IBusinessEntityStatusHistoryDataManager>();
-        //    return dataManager.GetBusinessEntityStatusHistoriesAfterDate(businessEntityDefinitionId, businessEntityIds, fieldName, statusChangedDate);
-        //}
-
-        //public Dictionary<AccountDefinition, IOrderedEnumerable<AccountStatusHistory>> GetAccountStatusHistoryListByAccountDefinition(HashSet<AccountDefinition> accountDefinitions)
-        //{
-        //    IAccountStatusHistoryDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountStatusHistoryDataManager>();
-        //    List<AccountStatusHistory> accountStatusHistoryList = dataManager.GetAccountStatusHistoryList(accountDefinitions);
-        //    if (accountStatusHistoryList == null)
-        //        return null;
-
-        //    Dictionary<AccountDefinition, List<AccountStatusHistory>> accountStatusHistoryListByAccountDefinition = new Dictionary<AccountDefinition, List<AccountStatusHistory>>();
-        //    foreach (AccountStatusHistory accountStatusHistory in accountStatusHistoryList)
-        //    {
-        //        AccountDefinition accountDefinition = new AccountDefinition()
-        //        {
-        //            AccountBEDefinitionId = accountStatusHistory.AccountBEDefinitionId,
-        //            AccountId = accountStatusHistory.AccountId
-        //        };
-        //        List<AccountStatusHistory> tempAccountStatusHistoryList = accountStatusHistoryListByAccountDefinition.GetOrCreateItem(accountDefinition, () => { return new List<AccountStatusHistory>(); });
-        //        tempAccountStatusHistoryList.Add(accountStatusHistory);
-        //    }
-        //    return accountStatusHistoryListByAccountDefinition.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(historyItem => historyItem.StatusChangedDate));
-        //}
     }
 }
