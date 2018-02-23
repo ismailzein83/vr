@@ -22,6 +22,7 @@
         function defineScope() {
             $scope.title = "Apply on multiple subscribers";
             $scope.hintText = "Rate's BED of the subscribers can either follow the same BED of their publisher, or can be calculated according to the system parameters for increased and decreased rates.";
+            $scope.followPublisherHintText = "Subscribers can follow the publisher routing product in case of rate change";
             $scope.datasource = [];
             $scope.selectedvalues = [];
             $scope.gridDataSource = [];
@@ -70,7 +71,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadDraftSubscriberOwnerIds, loadFollowPublisherRatesBED])
+            return UtilsService.waitMultipleAsyncOperations([loadDraftSubscriberOwnerIds, loadFollowPublisherRatesBED, loadFollowPublisherRoutingProduct])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -84,6 +85,12 @@
                 $scope.followPublisherRatesBED = response;
             });
         }
+         function loadFollowPublisherRoutingProduct() {
+             return WhS_Sales_RatePlanAPIService.GetFollowPublisherRoutingProduct().then(function (response) {
+                 console.log(response);
+                 $scope.followPublisherRoutingProduct = response;
+            });
+            }
 
         function loadCustomersSelector() {
             $scope.datasource = [];
@@ -121,7 +128,7 @@
 
         function applyDraftOnMultipleCustomers() {
             if ($scope.executeApplyDraftOnMultipleCustomersProcess != undefined) {
-                $scope.executeApplyDraftOnMultipleCustomersProcess($scope.gridDataSource, $scope.followPublisherRatesBED);
+                $scope.executeApplyDraftOnMultipleCustomersProcess($scope.gridDataSource, $scope.followPublisherRatesBED, $scope.followPublisherRoutingProduct);
             }
             $scope.modalContext.closeModal();
         }

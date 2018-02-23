@@ -27,6 +27,7 @@ namespace TOne.WhS.Sales.BP.Arguments
         public Changes Changes { get; set; }
 
         public string OwnerName { get; set; }
+        public int PublisherId { get; set; }
 
         public override string EntityId
         {
@@ -43,5 +44,6 @@ namespace TOne.WhS.Sales.BP.Arguments
         }
 
         public bool FollowPublisherRatesBED { get; set; }
+        public bool FollowPublisherRoutingProduct { get; set; }
     }
 }

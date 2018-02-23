@@ -30,7 +30,7 @@ app.directive('vrWhsSalesRateplanSettingsEditor', ['UtilsService', 'VRUIUtilsSer
 
             $scope.scopeModel = {};
             $scope.scopeModel.hintText = "Rate's BED of the subscribers can either follow the same BED of their publisher, or can be calculated according to the system parameters for increased and decreased rates.";
-
+            $scope.scopeModel.followPublisherHintText = "Subscribers can follow the publisher routing product in case of rate change"
             $scope.scopeModel.onCostColumnDirectiveReady = function (api) {
                 costColumnDirectiveAPI = api;
                 costColumnDirectiveReadyDeferred.resolve();
@@ -49,7 +49,6 @@ app.directive('vrWhsSalesRateplanSettingsEditor', ['UtilsService', 'VRUIUtilsSer
             var api = {};
 
             api.load = function (payload) {
-
                 var costCalculationMethods;
                 var tqiPeriodValue;
                 var tqiPeriodType;
@@ -59,6 +58,7 @@ app.directive('vrWhsSalesRateplanSettingsEditor', ['UtilsService', 'VRUIUtilsSer
                     tqiPeriodValue = payload.data.TQIPeriodValue;
                     tqiPeriodType = payload.data.TQIPeriodType;
                     $scope.scopeModel.followPublisherRatesBED = payload.data.FollowPublisherRatesBED;
+                    $scope.scopeModel.followPublisherRoutingProduct = payload.data.FollowPublisherRoutingProduct;
                     $scope.scopeModel.includeBlockedSuppliers = payload.data.IncludeBlockedSuppliers;
                 }
 
@@ -108,9 +108,11 @@ app.directive('vrWhsSalesRateplanSettingsEditor', ['UtilsService', 'VRUIUtilsSer
                     data.TQIPeriodType = period.periodType;
                 }
                 data.FollowPublisherRatesBED = $scope.scopeModel.followPublisherRatesBED;
+                data.followPublisherRoutingProduct = $scope.scopeModel.followPublisherRoutingProduct;
                 data.IncludeBlockedSuppliers = $scope.scopeModel.includeBlockedSuppliers;
                 return data;
             };
+
 
             if (ctrl.onReady != null)
                 ctrl.onReady(api);

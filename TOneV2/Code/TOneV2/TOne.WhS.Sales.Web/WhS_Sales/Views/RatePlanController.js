@@ -1234,7 +1234,7 @@
 
             return UtilsService.waitMultiplePromises(promises);
         }
-        function executeApplyDraftOnMultipleCustomersProcess(subscriberOwners, followPublisherRatesBED) {
+        function executeApplyDraftOnMultipleCustomersProcess(subscriberOwners, followPublisherRatesBED, followPublisherRountingProduct) {
             subscriberOwnerEntities = [];
             subscriberOwnerIds = [];
             if (subscriberOwners != null) {
@@ -1265,6 +1265,7 @@
                     EffectiveDate: UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime()),
                     SubscriberOwnerIds: subscriberOwnerIds,
                     FollowPublisherRatesBED: followPublisherRatesBED,
+                    FollowPublisherRountingProduct: followPublisherRountingProduct
                 };
 
                 var input = {

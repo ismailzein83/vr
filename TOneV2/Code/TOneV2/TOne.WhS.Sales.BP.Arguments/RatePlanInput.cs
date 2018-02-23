@@ -34,5 +34,6 @@ namespace TOne.WhS.Sales.BP.Arguments
         }
 
         public bool FollowPublisherRatesBED { get; set; }
+        public bool FollowPublisherRountingProduct { get; set; }
     }
 }

@@ -359,6 +359,10 @@ namespace TOne.WhS.Sales.Business
         {
             return GetRatePlanSettingsData().FollowPublisherRatesBED;
         }
+        public bool GetFollowPublisherRoutingProduct()
+        {
+            return GetRatePlanSettingsData().FollowPublisherRoutingProduct;
+        }
 
         public bool GetIncludeBlockedSuppliers()
         {

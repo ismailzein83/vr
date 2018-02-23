@@ -11,9 +11,13 @@
     </vr-tab>
     <vr-tab header="'Copy To Subscribers'">
         <vr-row>
-            <vr-columns>
+            <vr-columns colnum="6">
                 <vr-label>Follow Publisher Rate's BED <vr-hint value={{scopeModel.hintText}}></vr-hint></vr-label>
                 <vr-switch value="scopeModel.followPublisherRatesBED"></vr-switch>
+            </vr-columns>
+            <vr-columns colnum="6">
+                <vr-label>Follow Publisher Routing Product<vr-hint value={{scopeModel.followPublisherHintText}}></vr-hint></vr-label>
+                <vr-switch value="scopeModel.followPublisherRoutingProduct"></vr-switch>
             </vr-columns>
         </vr-row>
     </vr-tab>

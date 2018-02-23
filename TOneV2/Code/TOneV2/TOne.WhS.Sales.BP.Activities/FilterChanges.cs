@@ -24,10 +24,16 @@ namespace TOne.WhS.Sales.BP.Activities
         public InArgument<bool> FollowPublisherRatesBED { get; set; }
 
         [RequiredArgument]
+        public InArgument<bool> FollowPublisherRoutingProduct { get; set; }
+
+        [RequiredArgument]
         public InArgument<DateTime> EffectiveDate { get; set; }
+        [RequiredArgument]
+        public InArgument<int> PublisherId { get; set; }
 
         [RequiredArgument]
         public OutArgument<Changes> FilteredChanges { get; set; }
+
 
         protected override void Execute(CodeActivityContext context)
         {
@@ -35,21 +41,24 @@ namespace TOne.WhS.Sales.BP.Activities
             Changes changes = this.Changes.Get(context);
             DateTime effectiveDate = this.EffectiveDate.Get(context);
             bool followPublisherRatesBED = this.FollowPublisherRatesBED.Get(context);
+            bool followPublisherRoutingProduct = this.FollowPublisherRoutingProduct.Get(context);
+            int publisherId = this.PublisherId.Get(context);
 
             Changes filteredChanges = new Changes();
             if (changes.ZoneChanges != null && changes.ZoneChanges.Any())
-                filteredChanges.ZoneChanges = FilterZoneChanges(customerId, changes.CountryChanges, changes.ZoneChanges, changes.CurrencyId.Value, effectiveDate, followPublisherRatesBED);
+                filteredChanges.ZoneChanges = FilterZoneChanges(customerId, changes.CountryChanges, changes.ZoneChanges, changes.CurrencyId.Value, effectiveDate, followPublisherRatesBED, followPublisherRoutingProduct,publisherId);
             filteredChanges.CurrencyId = changes.CurrencyId;
 
             this.FilteredChanges.Set(context, filteredChanges);
         }
 
-        private List<ZoneChanges> FilterZoneChanges(int customerId, CountryChanges countryChanges, IEnumerable<ZoneChanges> zoneChanges, int currencyId, DateTime effectiveDate, bool followPublisherRatesBED)
+        private List<ZoneChanges> FilterZoneChanges(int customerId, CountryChanges countryChanges, IEnumerable<ZoneChanges> zoneChanges, int currencyId, DateTime effectiveDate, bool followPublisherRatesBED, bool followPublisherRoutingProduct, int publisherId)
         {
             List<ZoneChanges> filteredZoneChanges = new List<ZoneChanges>();
 
             var carrierAccountManager = new CarrierAccountManager();
             int sellingProductId = carrierAccountManager.GetSellingProductId(customerId);
+            int publisherSellingProductId = carrierAccountManager.GetSellingProductId(publisherId);
             var pricingSettings = carrierAccountManager.GetCustomerPricingSettings(customerId);
             var excludedCountryIds = new List<int>();
 
@@ -74,7 +83,7 @@ namespace TOne.WhS.Sales.BP.Activities
             var effectiveRateLocator = GetNewRateLocator(customerId, zoneChanges, sellingProductId); ;
             var closedRateLocator = GetClosedRateLocator(customerId, zoneChanges, sellingProductId);
             var zoneRoutingProductLocator = GetZoneRoutingProductLocator(customerId, zoneChanges);
-
+            var zoneNewRateRoutingProductLocator = GetZoneNewRateRoutingProductLocator(customerId, publisherId, zoneChanges);
             foreach (var zoneChange in zoneChanges)
             {
                 if (excludedCountryIds.Contains(zoneChange.CountryId))
@@ -98,14 +107,33 @@ namespace TOne.WhS.Sales.BP.Activities
                     filteredZoneChange.ClosedRates = FilterZoneClosedRates(customerId, zoneChange.ClosedRates, customerCountry.BED, closedRateLocator, sellingProductId, currencyId);
 
                 if (zoneChange.NewRoutingProduct != null && customerCountry.BED <= zoneChange.NewRoutingProduct.BED)
+                {
                     filteredZoneChange.NewRoutingProduct = zoneChange.NewRoutingProduct;
-
-                if (zoneChange.RoutingProductChange != null)
+                }
+                else if (zoneChange.RoutingProductChange != null)
                 {
                     var currentRoutingProduct = zoneRoutingProductLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, zoneChange.ZoneId);
 
                     if (currentRoutingProduct != null && currentRoutingProduct.Source == SaleEntityZoneRoutingProductSource.CustomerZone)
                         filteredZoneChange.RoutingProductChange = zoneChange.RoutingProductChange;
+                }
+                else if (followPublisherRoutingProduct && filteredZoneChange.NewRates != null && filteredZoneChange.NewRates.Any(item => item.RateTypeId == null))
+                {
+
+                    var subscriberRoutingProduct = zoneNewRateRoutingProductLocator.GetCustomerZoneRoutingProduct(customerId, sellingProductId, zoneChange.ZoneId);
+                    var publisherRoutingProduct = zoneNewRateRoutingProductLocator.GetCustomerZoneRoutingProduct(publisherId, publisherSellingProductId, zoneChange.ZoneId);
+
+                    if (subscriberRoutingProduct.RoutingProductId != publisherRoutingProduct.RoutingProductId)
+                    {
+                        var draftNewSaleZoneRoutingProduct = new DraftNewSaleZoneRoutingProduct()
+                        {
+                            ZoneId = zoneChange.ZoneId,
+                            ZoneRoutingProductId = publisherRoutingProduct.RoutingProductId,
+                            BED = publisherRoutingProduct.BED,
+                            EED = publisherRoutingProduct.EED,
+                        };
+                        filteredZoneChange.NewRoutingProduct = draftNewSaleZoneRoutingProduct;
+                    }
                 }
 
                 filteredZoneChanges.Add(filteredZoneChange);
@@ -225,20 +253,36 @@ namespace TOne.WhS.Sales.BP.Activities
         }
         private SaleEntityZoneRoutingProductLocator GetZoneRoutingProductLocator(int customerId, IEnumerable<ZoneChanges> zoneChanges)
         {
-            var zoneIdsWitheActionDate = new Dictionary<long, DateTime>();
+            var zoneIdsWithActionDate = new Dictionary<long, DateTime>();
 
             var zonesWithRoutingProductChange = zoneChanges.FindAllRecords(item => item.RoutingProductChange != null);
             if (!zonesWithRoutingProductChange.Any())
                 return null;
             foreach (var zoneChange in zonesWithRoutingProductChange)
             {
-                zoneIdsWitheActionDate.GetOrCreateItem(zoneChange.ZoneId, () =>
+                zoneIdsWithActionDate.GetOrCreateItem(zoneChange.ZoneId, () =>
                     {
                         return zoneChange.RoutingProductChange.EED;
                     });
             }
+            return (new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadByRateBED(new List<int>() { customerId }, zoneIdsWithActionDate)));
+        }
+      
+        private SaleEntityZoneRoutingProductLocator GetZoneNewRateRoutingProductLocator(int customerId, int publisherId, IEnumerable<ZoneChanges> zoneChanges)
+        {
+            var zoneIdsWithActionDate = new Dictionary<long, DateTime>();
 
-            return (new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadByRateBED(new List<int> { customerId }, zoneIdsWitheActionDate)));
+            var zonesWithNewNormalRateChange = zoneChanges.FindAllRecords(item => item.NewRates !=null && item.NewRates.Any(x => x.RateTypeId == null));
+            if (!zonesWithNewNormalRateChange.Any())
+                return null;
+            foreach (var zoneChange in zonesWithNewNormalRateChange)
+            {
+                zoneIdsWithActionDate.GetOrCreateItem(zoneChange.ZoneId, () =>
+                {
+                    return zoneChange.NewRates.FindRecord(x => x.RateTypeId == null).BED;
+                });
+            }
+            return (new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadByRateBED(new List<int>() { customerId, publisherId }, zoneIdsWithActionDate)));
         }
 
         /* private SaleEntityZoneRateLocator GetRateLocator(int customerId, IEnumerable<ZoneChanges> zonesWithNewRates, IEnumerable<ZoneChanges> zonesWithClosedRates, int sellingProductId)

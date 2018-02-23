@@ -185,6 +185,13 @@ namespace TOne.WhS.Sales.Web.Controllers
             var manager = new RatePlanManager();
             return manager.GetFollowPublisherRatesBED();
         }
+        [HttpGet]
+        [Route("GetFollowPublisherRoutingProduct")]
+        public bool GetFollowPublisherRoutingProduct()
+        {
+            var manager = new RatePlanManager();
+            return manager.GetFollowPublisherRoutingProduct();
+        }
 
         [HttpGet]
         [Route("GetSaleAreaSettingsData")]

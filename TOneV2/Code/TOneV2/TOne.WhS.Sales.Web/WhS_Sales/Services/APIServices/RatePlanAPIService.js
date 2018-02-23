@@ -97,6 +97,9 @@
         function GetFollowPublisherRatesBED() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetFollowPublisherRatesBED"));
         }
+        function GetFollowPublisherRoutingProduct() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetFollowPublisherRoutingProduct"));
+        }
 
         function GetPricingSettings(ownerType, ownerId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Sales_ModuleConfig.moduleName, controllerName, "GetPricingSettings"), {
@@ -233,6 +236,7 @@
             GetSystemDateFormat: GetSystemDateFormat,
             GetSubscriberOwners: GetSubscriberOwners,
             GetFollowPublisherRatesBED: GetFollowPublisherRatesBED,
+            GetFollowPublisherRoutingProduct:GetFollowPublisherRoutingProduct
 
         };
 
