@@ -11886,7 +11886,7 @@ namespace Mediation.Runtime.DataParser
                             RecordType = "ICX_NokiaSiemens_CDR",
                             PackageLengthByteLength = 1,
                             Packages = GetNokiaSiemensPackages(),
-                            //CompositeFieldsParsers = GetNokiaSiemensCompositeParsers()
+                            CompositeFieldsParsers = GetNokiaSiemensCompositeParsers()
                         }
                     }
                 }
@@ -12014,12 +12014,7 @@ namespace Mediation.Runtime.DataParser
         private List<CompositeFieldsParser> GetNokiaSiemensCompositeParsers()
         {
             List<CompositeFieldsParser> compositeParsers = new List<CompositeFieldsParser>();
-
-            compositeParsers.Add(new DateTimeCompositeParser() { DateFieldName = "BeginDate", FieldName = "ConnectDateTime" });
-            compositeParsers.Add(new DateTimeCompositeParser() { DateFieldName = "BeginDate", FieldName = "AttemptDateTime" });
-            compositeParsers.Add(new DateTimeCompositeParser() { DateFieldName = "BeginDate", FieldName = "AlertDateTime" });
-            compositeParsers.Add(new DateTimeCompositeParser() { DateFieldName = "EndDate", FieldName = "DisconnectDateTime" });
-
+            compositeParsers.Add(new FileNameCompositeParser() { FieldName = "FileName" });
             return compositeParsers;
         }
 
