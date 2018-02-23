@@ -197,7 +197,7 @@ namespace TOne.WhS.Sales.BP.Activities
             if (context.NewRatesToFillGapsDueToChangeSellingProductRates != null && context.NewRatesToFillGapsDueToChangeSellingProductRates.Any())
                 return true;
 
-            if (context.ChangedRates != null && context.ChangedRates.Any())
+            if (context.ChangedRates != null && context.ChangedRates.Any(item => item.RateTypeId == null))
                 return true;
 
             return false;

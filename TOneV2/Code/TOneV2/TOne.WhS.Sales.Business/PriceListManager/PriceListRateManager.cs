@@ -408,7 +408,8 @@ namespace TOne.WhS.Sales.Business
                     existingRate.ChangedRate = new ChangedRate
                     {
                         RateId = existingRate.RateEntity.SaleRateId,
-                        EED = existingRateEED
+                        EED = existingRateEED,
+                        RateTypeId = existingRate.RateEntity != null ? existingRate.RateEntity.RateTypeId : null
                     };
                     rateToChange.ChangedExistingRates.Add(existingRate);
                 }
@@ -471,7 +472,8 @@ namespace TOne.WhS.Sales.Business
                     existingRate.ChangedRate = new ChangedRate
                     {
                         RateId = existingRate.RateEntity.SaleRateId,
-                        EED = Utilities.Max(rateToClose.CloseEffectiveDate, existingRate.BED)
+                        EED = Utilities.Max(rateToClose.CloseEffectiveDate, existingRate.BED),
+                        RateTypeId = existingRate.RateEntity != null? existingRate.RateEntity.RateTypeId:null
                     };
                     rateToClose.ChangedExistingRates.Add(existingRate);
                 }
@@ -493,7 +495,8 @@ namespace TOne.WhS.Sales.Business
                         existingRate.ChangedRate = new ChangedRate()
                         {
                             RateId = existingRate.RateEntity.SaleRateId,
-                            EED = Vanrise.Common.Utilities.Max(existingRate.BED, changedExistingCountry.ChangedCustomerCountry.EED)
+                            EED = Vanrise.Common.Utilities.Max(existingRate.BED, changedExistingCountry.ChangedCustomerCountry.EED),
+                            RateTypeId =  existingRate.RateEntity != null? existingRate.RateEntity.RateTypeId:null
                         };
                     }
                 }
