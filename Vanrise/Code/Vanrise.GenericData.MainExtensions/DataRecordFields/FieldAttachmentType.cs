@@ -25,8 +25,14 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         }
         public override bool TryResolveDifferences(IDataRecordFieldTypeTryResolveDifferencesContext context)
         {
-            var oldAttachmentFieldTypeEntities = Utilities.ConvertJsonToList<AttachmentFieldTypeEntity>(context.OldValue);
-            var newAttachmentFieldTypeEntities = Utilities.ConvertJsonToList<AttachmentFieldTypeEntity>(context.NewValue);
+
+            var oldAttachmentFieldTypeEntities = context.OldValue as List<AttachmentFieldTypeEntity>;
+            var newAttachmentFieldTypeEntities = context.NewValue as List<AttachmentFieldTypeEntity>;
+         
+            if (oldAttachmentFieldTypeEntities == null)
+                oldAttachmentFieldTypeEntities = Utilities.ConvertJsonToList<AttachmentFieldTypeEntity>(context.OldValue);
+            if (newAttachmentFieldTypeEntities == null)
+                newAttachmentFieldTypeEntities = Utilities.ConvertJsonToList<AttachmentFieldTypeEntity>(context.NewValue);
           
             var changesFieldTypeEntities = new List<AttachmentFieldTypeEntityChangeInfo>();
             VRFileManager vrFileManager = new VRFileManager();
@@ -103,7 +109,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             {
                 foreach (var newAttachmentField in newValueObject)
                 {
-                    if (!oldValueObject.Any(x => x.FileId == newAttachmentField.FileId && x.Notes == newAttachmentField.Notes && x.CreatedTime == newAttachmentField.CreatedTime))
+                    if (!oldValueObject.Any(x => x.FileId == newAttachmentField.FileId && x.Notes == newAttachmentField.Notes))
                     {
                         return false;
                     }
@@ -113,7 +119,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         }
         public override Type GetNonNullableRuntimeType()
         {
-            return typeof(List<AttachmentFieldTypeEntityChangeInfo>);
+            return typeof(AttachmentFieldTypeEntityCollection);
         }
         public override bool StoreValueSerialized { get { return true; } }
 

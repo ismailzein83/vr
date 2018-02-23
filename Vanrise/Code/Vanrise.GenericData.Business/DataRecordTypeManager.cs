@@ -104,7 +104,23 @@ namespace Vanrise.GenericData.Business
                    return dataRecordType.Fields.ToDictionary(itm => itm.Name, itm => itm);
                });
         }
-
+        public Dictionary<string, Object> ParseDicValuesToFieldType(Guid dataRecordTypeId, Dictionary<string, Object> fieldValues)
+        {
+            Dictionary<string, Object> parsedDicValues = null;
+            if (fieldValues != null)
+            {
+                var dataRecordFields = GetDataRecordTypeFields(dataRecordTypeId);
+                dataRecordFields.ThrowIfNull("dataRecordFields", dataRecordTypeId);
+                parsedDicValues = new Dictionary<string, object>();
+                foreach(var fieldValue in fieldValues)
+                {
+                    var dataRecordField = dataRecordFields.GetRecord(fieldValue.Key);
+                    dataRecordField.ThrowIfNull("dataRecordField", String.Format(" {0}: {1}", dataRecordTypeId, fieldValue.Key));
+                    parsedDicValues.Add(fieldValue.Key,dataRecordField.Type.ParseValueToFieldType(new DataRecordFieldTypeParseValueToFieldTypeContext(fieldValue.Value)));
+                }
+            }
+            return parsedDicValues;
+        }
         public DataRecordField GetDataRecordField(Guid dataRecordTypeId, string fieldName)
         {
             var dataRecordFields = GetDataRecordTypeFields(dataRecordTypeId);
