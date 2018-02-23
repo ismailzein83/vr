@@ -438,9 +438,9 @@ namespace TOne.WhS.CodePreparation.Business
 
                 HighestRate highestRate;
 
-                if (highestInheritedRate == null || highestExplicitRate.Value >= highestInheritedRate.Value)
+                if (highestInheritedRate == null || highestExplicitRate.Value > highestInheritedRate.Value)
                     highestRate = highestExplicitRate;
-                else if (highestSellingProductRate.Value >= highestInheritedRate.Value)
+                else if (highestSellingProductRate.Value > highestInheritedRate.Value)
                     highestRate = highestInheritedRate;
                 else 
                     continue;
