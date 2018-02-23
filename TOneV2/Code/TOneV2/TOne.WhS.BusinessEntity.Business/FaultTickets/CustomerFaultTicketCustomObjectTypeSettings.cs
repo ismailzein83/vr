@@ -73,5 +73,14 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return typeof(List<CustomerFaultTicketDescriptionSetting>);
         }
+
+        public override dynamic ParseNonNullValueToFieldType(object originalValue)
+        {
+            var castedOriginalValue = originalValue as List<CustomerFaultTicketDescriptionSetting>;
+            if (castedOriginalValue != null)
+                return castedOriginalValue;
+            else
+                return Utilities.ConvertJsonToList<CustomerFaultTicketDescriptionSetting>(originalValue);
+        }
     }
 }

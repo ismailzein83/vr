@@ -356,8 +356,7 @@ app.directive('whsBeCasemanagementSuppliercaseStaticeditor', ['UtilsService', 'V
                 return  {
                     $type: "TOne.WhS.BusinessEntity.Business.FaultTicketStatusDefinitionFilter,TOne.WhS.BusinessEntity.Business",
                     BusinessEntityDefinitionId : "551d5b27-a4fb-44e8-82cc-e19fdc1e97ca",
-                    CaseId: selectedValues != undefined && !historyId ? selectedValues.CaseId : undefined,
-                    HistoryStatusId: historyId && selectedValues != undefined ? selectedValues.StatusId : undefined,
+                    StatusId: selectedValues != undefined ? selectedValues.StatusId : undefined
                 };
             }
 
