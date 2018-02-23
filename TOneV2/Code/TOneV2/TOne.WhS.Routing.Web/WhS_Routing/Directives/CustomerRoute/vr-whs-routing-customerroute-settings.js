@@ -37,14 +37,12 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
                 if (payload != undefined) {
                     if (payload.CustomerRoute != undefined) {
                         ctrl.customerRouteNumberOfOptions = payload.CustomerRoute.NumberOfOptions;
-                        ctrl.customerRouteAddBlockedOptions = payload.CustomerRoute.AddBlockedOptions;
                         ctrl.customerRouteIndexCommandTimeout = payload.CustomerRoute.IndexesCommandTimeoutInMinutes;
                         ctrl.customerRouteMaxDOP = payload.CustomerRoute.MaxDOP;
                         ctrl.customerRouteKeepBackupsForRemovedOptions = payload.CustomerRoute.KeepBackUpsForRemovedOptions;
                     }
 
                     if (payload.ProductRoute != undefined) {
-                        ctrl.productRouteAddBlockedOptions = payload.ProductRoute.AddBlockedOptions;
                         ctrl.productRouteIndexCommandTimeout = payload.ProductRoute.IndexesCommandTimeoutInMinutes;
                         ctrl.productRouteMaxDOP = payload.ProductRoute.MaxDOP;
                         ctrl.productRouteKeepBackupsForRemovedOptions = payload.ProductRoute.KeepBackUpsForRemovedOptions;
@@ -64,14 +62,12 @@ function (UtilsService, WhS_Routing_TimeSettingsTypeEnum) {
                     CustomerRoute: {
                         $type: "TOne.WhS.Routing.Entities.CustomerRouteBuildConfiguration, TOne.WhS.Routing.Entities",
                         NumberOfOptions: ctrl.customerRouteNumberOfOptions,
-                        AddBlockedOptions: ctrl.customerRouteAddBlockedOptions,
                         KeepBackUpsForRemovedOptions: ctrl.customerRouteKeepBackupsForRemovedOptions,
                         IndexesCommandTimeoutInMinutes: ctrl.customerRouteIndexCommandTimeout,
                         MaxDOP: ctrl.customerRouteMaxDOP
                     },
                     ProductRoute: {
                         $type: "TOne.WhS.Routing.Entities.ProductRouteBuildConfiguration, TOne.WhS.Routing.Entities",
-                        AddBlockedOptions: ctrl.productRouteAddBlockedOptions,
                         KeepBackUpsForRemovedOptions: ctrl.productRouteKeepBackupsForRemovedOptions,
                         IndexesCommandTimeoutInMinutes: ctrl.productRouteIndexCommandTimeout,
                         MaxDOP: ctrl.productRouteMaxDOP
