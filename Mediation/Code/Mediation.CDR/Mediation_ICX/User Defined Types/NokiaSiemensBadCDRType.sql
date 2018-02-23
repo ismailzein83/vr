@@ -1,4 +1,4 @@
-﻿CREATE TYPE [Mediation_WHS].[NokiaSiemensBadCDRType] AS TABLE (
+﻿CREATE TYPE [Mediation_ICX].[NokiaSiemensBadCDRType] AS TABLE (
     [Id]                       BIGINT       NULL,
     [BeginDate]                DATETIME     NULL,
     [EndDate]                  DATETIME     NULL,

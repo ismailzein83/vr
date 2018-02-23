@@ -1,4 +1,4 @@
-﻿CREATE TABLE [Mediation_WHS].[NokiaSiemensBadCDR] (
+﻿CREATE TYPE [Mediation_ICX].[NokiaSiemensCDRType] AS TABLE (
     [Id]                       BIGINT       NULL,
     [BeginDate]                DATETIME     NULL,
     [EndDate]                  DATETIME     NULL,
@@ -10,6 +10,5 @@
     [OutgoingTrunkGroupNumber] VARCHAR (50) NULL,
     [OutgoingTrunkNumber]      INT          NULL,
     [CauseValue]               INT          NULL,
-    [Zone]                     VARCHAR (50) NULL
-);
+    [Zone]                     VARCHAR (50) NULL);
 
