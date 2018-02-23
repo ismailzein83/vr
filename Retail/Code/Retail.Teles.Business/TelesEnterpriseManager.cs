@@ -274,17 +274,42 @@ namespace Retail.Teles.Business
                             {
                                 screenNumber = numberRange.startSn.ToString();
                             }
+                            var startSn =  numberRange.startSn.ToString();
+                            accountEnterprisesDIDs.Add(new AccountEnterpriseDID()
+                            {
+                                AccountId = accountId,
+                                ScreenNumber = startSn,
+                                EnterpriseId = domainId,
+                                MaxCalls = businessTrunk.maxCalls,
+                                Type = AccountEnterpriseDIDType.BT
+                            });
+                            
+                            if (numberRange.endSn != null)
+                            {
+                                long parsedStartSn;
+                                long parsedEndSn = -1;
+                                var endSn = numberRange.endSn.ToString();
+                                if(long.TryParse(startSn, out parsedStartSn) && long.TryParse(endSn, out parsedEndSn))
+                                {
+                                    long i = parsedStartSn + 1;
+                                    while (i <= parsedEndSn)
+                                    {
+                                        accountEnterprisesDIDs.Add(new AccountEnterpriseDID()
+                                        {
+                                            AccountId = accountId,
+                                            ScreenNumber = i.ToString(),
+                                            EnterpriseId = domainId,
+                                            MaxCalls = businessTrunk.maxCalls,
+                                            Type = AccountEnterpriseDIDType.BT
+                                        });
+                                        i++;
+                                    }
+                                }
+
+                            }
+                           
                         }
                     }
-
-                    accountEnterprisesDIDs.Add(new AccountEnterpriseDID()
-                    {
-                        AccountId = accountId,
-                        ScreenNumber = screenNumber,
-                        EnterpriseId = domainId,
-                        MaxCalls = businessTrunk.maxCalls,
-                        Type = AccountEnterpriseDIDType.BT
-                    });
                 }
             }
 
