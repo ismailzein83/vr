@@ -406,6 +406,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tasks\AliAtouiTask.cs" />
     <Compile Include="Tasks\AnthonyTask.cs" />
     <Compile Include="Tasks\IsmailTask.cs" />
     <Compile Include="Tasks\RabihTask.cs" />
