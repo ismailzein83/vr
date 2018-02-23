@@ -118,5 +118,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         }
 
         public override string DetailViewerEditor { get { return "vr-genericdata-datarecordfield-dictionarydetailviewer"; } }
+
+        protected override dynamic ParseNonNullValueToFieldType(Object originalValue)
+        {
+            return originalValue;
+        }
     }
 }

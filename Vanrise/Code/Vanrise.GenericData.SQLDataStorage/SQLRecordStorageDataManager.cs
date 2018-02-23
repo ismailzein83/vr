@@ -918,9 +918,14 @@ namespace Vanrise.GenericData.SQLDataStorage
                         recordTime = value != null ? (DateTime)value : default(DateTime);
                     }
 
+
                     if (value != null && matchingField.Type.StoreValueSerialized)
                     {
                         value = matchingField.Type.DeserializeValue(new DeserializeDataRecordFieldValueContext() { Value = value as string });
+                    }
+                    else
+                    {
+                        value = matchingField.Type.ParseValueToFieldType(new DataRecordFieldTypeParseValueToFieldTypeContext(value));
                     }
 
                     fieldValues.Add(column.ValueExpression, value);

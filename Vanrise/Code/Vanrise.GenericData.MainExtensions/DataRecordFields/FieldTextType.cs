@@ -128,5 +128,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
             return recordFilters.Count > 1 ? new RecordFilterGroup { LogicalOperator = RecordQueryLogicalOperator.Or, Filters = recordFilters } : recordFilters.First();
         }
+
+        protected override dynamic ParseNonNullValueToFieldType(object originalValue)
+        {
+            return originalValue;
+        }
     }
 }

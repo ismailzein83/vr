@@ -201,6 +201,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 }
             }
         }
+        protected override dynamic ParseNonNullValueToFieldType(Object originalValue)
+        {
+            return originalValue;
+        }
     }
 
     public class BusinessEntityFileSettings : VRFileExtendedSettings

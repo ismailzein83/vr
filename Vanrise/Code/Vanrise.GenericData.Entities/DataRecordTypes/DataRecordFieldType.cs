@@ -101,8 +101,35 @@ namespace Vanrise.GenericData.Entities
         {
             throw new NotImplementedException();
         }
+
+        public dynamic ParseValueToFieldType(IDataRecordFieldTypeParseValueToFieldTypeContext context)
+        {
+            var originalValue = context.Value;
+            if (originalValue == null)
+            {
+                var fieldRuntimeType = GetRuntimeType();
+            
+                if (fieldRuntimeType.IsValueType)
+                    return Activator.CreateInstance(fieldRuntimeType);
+                else
+                    return null;
+            }
+            else
+            {
+                return ParseNonNullValueToFieldType(originalValue);
+            }
+        }
+
+        protected virtual dynamic ParseNonNullValueToFieldType(Object originalValue)
+        {
+            return Convert.ChangeType(originalValue, GetNonNullableRuntimeType());
+        }
     }
 
+    public interface IDataRecordFieldTypeParseValueToFieldTypeContext
+    {
+        Object Value { get; }
+    }
 
   
 

@@ -124,6 +124,35 @@ namespace Vanrise.GenericData.Business
             }) ;
         }
 
+        public List<string> GetStatusFieldNames(Guid businessEntityDefinitionId)
+        {
+            return new BusinessEntityDefinitionManager().GetCachedOrCreate(string.Format("GenericBusinessEntityDefinitionManager_GetStatusFieldNames_{0}", businessEntityDefinitionId), () =>
+            {
+                List<string> statusFieldNames = null;
+                var dataRecordFields = GetDataRecordTypeFieldsByBEDefinitionId(businessEntityDefinitionId);
+                var businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
+                if (dataRecordFields != null)
+                {
+                    foreach (var dataRecordField in dataRecordFields)
+                    {
+                        var fieldBusinessEntityType = dataRecordField.Value.Type as IFieldBusinessEntityType;
+                        if (fieldBusinessEntityType != null)
+                        {
+                            var businessEntityDefinition = businessEntityDefinitionManager.GetBusinessEntityDefinition(fieldBusinessEntityType.BusinessEntityDefinitionId);
+                            businessEntityDefinition.ThrowIfNull("businessEntityDefinition", fieldBusinessEntityType.BusinessEntityDefinitionId);
+                            if (businessEntityDefinition.Settings is StatusDefinitionBESettings)
+                            {
+                                if (statusFieldNames == null)
+                                    statusFieldNames = new List<string>();
+                                statusFieldNames.Add(dataRecordField.Key);
+                            }
+                        }
+                    }
+                }
+                return statusFieldNames;
+            });
+
+        }
 
         #region Config region
 

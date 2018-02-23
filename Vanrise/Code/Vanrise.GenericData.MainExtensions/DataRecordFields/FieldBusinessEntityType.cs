@@ -11,7 +11,7 @@ using Vanrise.GenericData.MainExtensions.GenericRuleCriteriaFieldValues;
 
 namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 {
-    public class FieldBusinessEntityType : DataRecordFieldType
+    public class FieldBusinessEntityType : DataRecordFieldType, IFieldBusinessEntityType
     {
         public override Guid ConfigId { get { return new Guid("2e16c3d4-837b-4433-b80e-7c02f6d71467"); } }
 
@@ -48,12 +48,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 return false;
 
             var type = GetNonNullableRuntimeType();
-            if (type.FullName == "System.Guid")
+            if (type == typeof(Guid))
             {
                 var newGuidValue = Guid.Parse(newValue.ToString());
                 var oldGuidValue = Guid.Parse(oldValue.ToString());
                 return newGuidValue.Equals(oldValue);
-
             }
             else
             {
@@ -197,6 +196,14 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return new Vanrise.Entities.GridColumnAttribute() { Type = "Text", NumberPrecision = "NoDecimal", Field = context != null ? context.DescriptionFieldPath : null };
         }
 
+        protected override dynamic ParseNonNullValueToFieldType(Object originalValue)
+        {
+            var type = GetNonNullableRuntimeType();
+            if (type.Equals(typeof(Guid)))
+                return FieldGuidType.ParseNonNullValueToGuid(originalValue);
+            else
+                return Convert.ChangeType(originalValue, type);
+        }
         #endregion
 
         #region Private Methods

@@ -57,6 +57,7 @@
     <Compile Include="BEParentChildRelationManager.cs" />
     <Compile Include="BusinessEntity\BusinessEntityManager.cs" />
     <Compile Include="BusinessEntity\BusinessEntityManagerContext.cs" />
+    <Compile Include="BusinessEntity\BusinessEntityStatusHistoryManager.cs" />
     <Compile Include="BusinessEntity\Definition\BEDefinitionOverriddenConfiguration.cs" />
     <Compile Include="BusinessEntity\Definition\BusinessEntityDefinitionFilterContext.cs" />
     <Compile Include="BusinessEntity\Definition\BusinessEntityDefinitionManager.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="DataRecordFieldFormulaCalculateValueContext.cs" />
     <Compile Include="DataRecordFieldFormulaGetDependentFieldsContext.cs" />
     <Compile Include="DataRecordFieldTypeOnBeforeSaveContext.cs" />
+    <Compile Include="DataRecordFieldTypeParseValueToFieldTypeContext.cs" />
     <Compile Include="DataRecordFieldTypeTryResolveDifferencesContext.cs" />
     <Compile Include="DataRecordTypeFieldFormulaCalculateValueContext.cs" />
     <Compile Include="DataStorage\CreateTempStorageContext.cs" />

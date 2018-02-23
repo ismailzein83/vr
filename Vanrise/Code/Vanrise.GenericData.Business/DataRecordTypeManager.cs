@@ -480,14 +480,21 @@ namespace Vanrise.GenericData.Business
 
                     propertiesToSetSerializedBuilder.AppendFormat(", \"{0}\"", field.Name);
 
-                    if (!field.Type.GetNonNullableRuntimeType().IsValueType)
-                    {
-                        setFieldValueBuilder.AppendFormat(@"case ""{0}"" : if(fieldValue != null) {0} = fieldValue as {1}; else {0} = default({2}); break;", field.Name, CSharpCompiler.TypeToString(field.Type.GetNonNullableRuntimeType()), fieldRuntimeTypeAsString);
-                    }
-                    else
-                    {
-                        setFieldValueBuilder.AppendFormat(@"case ""{0}"" : if(fieldValue != null) {0} = ({1})Convert.ChangeType(fieldValue, typeof({1})); else {0} = default({2}); break;", field.Name, CSharpCompiler.TypeToString(field.Type.GetNonNullableRuntimeType()), fieldRuntimeTypeAsString);
-                    }
+                    setFieldValueBuilder.AppendFormat(@"case ""{0}"" : {0} = DataRecordFieldTypeDict.GetRecord(""{0}"").ParseValueToFieldType(new Vanrise.GenericData.Business.DataRecordFieldTypeParseValueToFieldTypeContext(fieldValue)); break;", field.Name);
+
+                    //if (field.Type.GetNonNullableRuntimeType() == typeof(Guid))
+                    //{
+                    //    setFieldValueBuilder.AppendFormat(@"case ""{0}"" : if(fieldValue != null) {0} = Guid.Parse(fieldValue.ToString()); else {0} = default({2}); break;", field.Name, CSharpCompiler.TypeToString(field.Type.GetNonNullableRuntimeType()), fieldRuntimeTypeAsString);
+
+                    //}
+                    //else if (!field.Type.GetNonNullableRuntimeType().IsValueType)
+                    //{
+                    //    setFieldValueBuilder.AppendFormat(@"case ""{0}"" : if(fieldValue != null) {0} = fieldValue as {1}; else {0} = default({2}); break;", field.Name, CSharpCompiler.TypeToString(field.Type.GetNonNullableRuntimeType()), fieldRuntimeTypeAsString);
+                    //}
+                    //else
+                    //{
+                    //    setFieldValueBuilder.AppendFormat(@"case ""{0}"" : if(fieldValue != null) {0} = ({1})Convert.ChangeType(fieldValue, typeof({1})); else {0} = default({2}); break;", field.Name, fieldRuntimeTypeAsString, fieldRuntimeTypeAsString);
+                    //}
                    
 
                     cloneRecordMembersBuilder.AppendFormat("record.{0} = this.{0};", field.Name);

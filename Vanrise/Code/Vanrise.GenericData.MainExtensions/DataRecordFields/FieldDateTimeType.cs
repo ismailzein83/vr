@@ -431,6 +431,29 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 return fieldValueAsTime.Equals(filterValueAsTime);
             }
         }
+        protected override dynamic ParseNonNullValueToFieldType(Object originalValue)
+        {
+            switch(this.DataType)
+            {
+                case FieldDateTimeDataType.Date:
+                case FieldDateTimeDataType.DateTime:
+                case FieldDateTimeDataType.YearMonth:
+                case FieldDateTimeDataType.YearWeek:
+                    if (originalValue is DateTime)
+                        return (DateTime)originalValue;
+                    else
+                        return DateTime.Parse(originalValue.ToString());
+                case FieldDateTimeDataType.Time:
+                case FieldDateTimeDataType.Hour:
+                    Time valueAsTime = originalValue as Time;
+                    if (valueAsTime != null)
+                        return valueAsTime;
+                    else
+                        return new Time(originalValue.ToString());                        
+                default: throw new NotSupportedException(String.Format("DataType '{0}'", this.DataType.ToString()));
+            }
+            
+        }
 
         #endregion
     }

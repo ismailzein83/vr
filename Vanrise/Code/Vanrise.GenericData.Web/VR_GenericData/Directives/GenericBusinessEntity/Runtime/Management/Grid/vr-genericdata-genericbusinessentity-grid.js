@@ -119,8 +119,12 @@
 
                     //Retrieving Data
                     UtilsService.waitMultiplePromises(promises).then(function () {
-                        gridAPI.retrieveData(buildGridQuery());
-                        gridLoadDeferred.resolve();
+                        gridAPI.retrieveData(buildGridQuery()).then(function () {
+                            gridLoadDeferred.resolve();
+
+                        }).catch(function (error) {
+                            gridLoadDeferred.reject(error);
+                        });
                     }).catch(function (error) {
                         gridLoadDeferred.reject(error);
                     });

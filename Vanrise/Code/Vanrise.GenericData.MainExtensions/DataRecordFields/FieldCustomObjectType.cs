@@ -73,6 +73,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         }
 
         public FieldCustomObjectTypeSettings Settings { get; set; }
+
+        protected override dynamic ParseNonNullValueToFieldType(Object originalValue)
+        {
+            return this.Settings.ParseNonNullValueToFieldType(originalValue);
+        }
     }
   
     

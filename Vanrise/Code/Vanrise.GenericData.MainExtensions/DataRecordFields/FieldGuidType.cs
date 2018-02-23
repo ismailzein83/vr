@@ -155,5 +155,19 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
             return recordFilters.Count > 1 ? new RecordFilterGroup { LogicalOperator = RecordQueryLogicalOperator.Or, Filters = recordFilters } : recordFilters.First();
         }
+
+
+        protected override dynamic ParseNonNullValueToFieldType(Object originalValue)
+        {
+            return ParseNonNullValueToGuid(originalValue);
+        }
+
+        public static Guid ParseNonNullValueToGuid(Object originalValue)
+        {
+            if (originalValue is Guid || originalValue is Guid?)
+                return (Guid)originalValue;
+            else
+                return Guid.Parse(originalValue.ToString());
+        }
     }
 }

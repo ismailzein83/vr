@@ -46,6 +46,7 @@
     <Compile Include="BELookupRuleDefinitionDataManager.cs" />
     <Compile Include="BEParentChildRelationDataManager.cs" />
     <Compile Include="BusinessEntityDefinitionDataManager.cs" />
+    <Compile Include="BusinessEntityStatusHistoryDataManager.cs" />
     <Compile Include="DataRecordFieldChoiceDataManager.cs" />
     <Compile Include="RecordFilterSQLBuilder.cs" />
     <Compile Include="DataRecordFieldTypeConfigDataManager.cs" />

@@ -187,7 +187,7 @@ namespace Vanrise.GenericData.Business
             var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(businessEntityDefinitionId);
             var genericBusinessEntity = GetGenericBusinessEntity(genericBusinessEntityId, businessEntityDefinitionId);
             genericBEDefinitionSetting.TitleFieldName.ThrowIfNull("genericBEDefinitionSetting.TitleFieldName");
-            if (genericBusinessEntity.FieldValues != null)
+            if (genericBusinessEntity != null && genericBusinessEntity.FieldValues != null)
             {
                 var fieldValue = genericBusinessEntity.FieldValues[genericBEDefinitionSetting.TitleFieldName];
                 if (fieldValue != null)
@@ -347,6 +347,8 @@ namespace Vanrise.GenericData.Business
 
                 var genericBusinessEntity = GetGenericBusinessEntity(genericBusinessEntityId, genericBusinessEntityToAdd.BusinessEntityDefinitionId);
 
+               // UpdateStatusHistoryIfAvailable(genericBusinessEntityToAdd.BusinessEntityDefinitionId, genericBusinessEntity, genericBusinessEntityId);
+
                 if (hasInsertedId)
                 {
                     genericBusinessEntityToAdd.FieldValues.Add(idFieldType.Name, insertedId);
@@ -385,6 +387,9 @@ namespace Vanrise.GenericData.Business
 
                 var genericBusinessEntity = GetGenericBusinessEntity(genericBusinessEntityToUpdate.GenericBusinessEntityId, genericBusinessEntityToUpdate.BusinessEntityDefinitionId);
 
+             //   UpdateStatusHistoryIfAvailable(genericBusinessEntityToUpdate.BusinessEntityDefinitionId, genericBusinessEntity, genericBusinessEntityToUpdate.GenericBusinessEntityId);
+
+
                 VRActionLogger.Current.TrackAndLogObjectUpdated(new GenericBusinessEntityLoggableEntity(genericBusinessEntityToUpdate.BusinessEntityDefinitionId), genericBusinessEntityToUpdate, oldGenericBE);
 
                 OnAfterSaveHandler(genericBEDefinitionSetting, genericBusinessEntityToUpdate.BusinessEntityDefinitionId, oldGenericBE, genericBusinessEntity);
@@ -410,6 +415,26 @@ namespace Vanrise.GenericData.Business
         #endregion
 
         #region Private Methods
+
+        //private bool UpdateStatusHistoryIfAvailable(Guid businessEntityDefinitionId,GenericBusinessEntity genericBusinessEntity, object genericBusinessEntityId)
+        //{
+        //    var statusFieldNames = _genericBEDefinitionManager.GetStatusFieldNames(businessEntityDefinitionId);
+        //    BusinessEntityStatusHistoryManager businessEntityStatusHistoryManager = new BusinessEntityStatusHistoryManager();
+        //    bool result = true;
+        //    if(statusFieldNames != null && statusFieldNames.Count > 0)
+        //    {
+        //        foreach(var statusFieldName in statusFieldNames)
+        //        {
+        //            var statusValue = genericBusinessEntity.FieldValues.GetRecord(statusFieldName);
+        //            if(statusValue != null)
+        //            {
+        //                if (!businessEntityStatusHistoryManager.InsertStatusHistory(businessEntityDefinitionId, genericBusinessEntityId, statusFieldName, (Guid)statusValue))
+        //                    result = false;
+        //            }
+        //        }
+        //    }
+        //    return result;
+        //}
         private void OnBeforeSaveMethod(Dictionary<string, DataRecordField> fieldTypes, Guid businessEntityDefinitionId, GenericBusinessEntity genericBusinessEntity, Object genericBusinessEntityId)
         {
             if (fieldTypes != null)
