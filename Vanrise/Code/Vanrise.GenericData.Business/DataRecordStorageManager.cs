@@ -154,7 +154,7 @@ namespace Vanrise.GenericData.Business
             bool insertActionSucc = storageDataManager.Insert(fieldValues, userId,userId, out insertedId);
 
             if (insertActionSucc && dataRecordStorage.Settings.EnableUseCaching)
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(dataRecordStorageId);
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<RecordCacheManager>().SetCacheExpired(dataRecordStorageId);
 
             return insertActionSucc;
         }
@@ -179,7 +179,7 @@ namespace Vanrise.GenericData.Business
             bool updateActionSucc = storageDataManager.Update(fieldValues, userId);
 
             if (updateActionSucc && dataRecordStorage.Settings.EnableUseCaching)
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(dataRecordStorageId);
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<RecordCacheManager>().SetCacheExpired(dataRecordStorageId);
 
             return updateActionSucc;
         }
