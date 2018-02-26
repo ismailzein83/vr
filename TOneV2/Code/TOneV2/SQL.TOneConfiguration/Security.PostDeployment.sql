@@ -95,6 +95,7 @@ as (select * from (values
 ('VR_Sec/Users/GetUsersInfo',null),
 ('VR_Sec/Users/GetUserbyId','VR_Sec_Users: View'),
 ('VR_Sec/Users/UpdateUser','VR_Sec_Users: Edit'),
+('VR_Sec/Users/UpdateUserExpiration','VR_Sec_Users: Edit'),
 ('VR_Sec/Users/AddUser','VR_Sec_Users: Add'),
 ('VR_Sec/Users/CheckUserName',null),
 ('VR_Sec/Users/ResetPassword','VR_Sec_Users: Reset Password'),
