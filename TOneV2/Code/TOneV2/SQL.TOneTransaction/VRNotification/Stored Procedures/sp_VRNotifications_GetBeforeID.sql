@@ -32,6 +32,7 @@ BEGIN
       ,[Data]
       ,[CreationTime]
 	  ,[EventPayload]
+	  ,RollbackEventPayload
 	FROM [VRNotification].[VRNotification] WITH(NOLOCK) 
 	WHERE TypeID = @NotificationTypeID 
 		  AND (@Description is null or [Description] like '%' + @Description + '%')

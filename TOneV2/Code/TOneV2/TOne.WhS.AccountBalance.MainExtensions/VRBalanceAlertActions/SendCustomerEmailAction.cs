@@ -22,8 +22,7 @@ namespace TOne.WhS.AccountBalance.MainExtensions
 
         public override void Execute(IVRActionExecutionContext context)
         {
-            VRBalanceAlertEventPayload eventPayload = context.EventPayload as VRBalanceAlertEventPayload;
-            eventPayload.ThrowIfNull("eventPayload", "");
+            VRBalanceAlertEventPayload eventPayload = context.EventPayload.CastWithValidate<VRBalanceAlertEventPayload>("eventPayload");
 
             Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
 
@@ -36,7 +35,12 @@ namespace TOne.WhS.AccountBalance.MainExtensions
             financialAccount.ThrowIfNull("financialAccount", eventPayload.EntityId);
           
             objects.Add("User", user);
-            objects.Add("AccountBalance", eventPayload.CurrentBalance);
+            Decimal currentBalance;
+            if (context.RollbackEventPayload != null)
+                currentBalance = context.RollbackEventPayload.CastWithValidate<VRBalanceAlertRollbackEventPayload>("context.RollbackEventPayload").CurrentBalance;
+            else
+                currentBalance = eventPayload.CurrentBalance;
+            objects.Add("AccountBalance", currentBalance);
             objects.Add("Threshold", eventPayload.Threshold);
           
             VRMailManager mailManager = new VRMailManager();

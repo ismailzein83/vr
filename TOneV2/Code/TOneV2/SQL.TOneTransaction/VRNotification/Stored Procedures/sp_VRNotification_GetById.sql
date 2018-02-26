@@ -18,6 +18,7 @@ BEGIN
 			,[Data]
 			,[CreationTime]
 			,[EventPayload]
+			,RollbackEventPayload
 	FROM [VRNotification].[VRNotification] WITH(NOLOCK)
 	where ID = @NotificationID
 END

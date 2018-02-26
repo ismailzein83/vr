@@ -28,6 +28,7 @@ BEGIN
 	  ,[CreationTime]
 	  ,[timestamp]
 	  ,[EventPayload]
+	  ,RollbackEventPayload
 	INTO #temptable2_VRNotifications_GetUpdated
 	FROM [VRNotification].[VRNotification] WITH(NOLOCK) 
 	WHERE  TypeID = @NotificationTypeID 
@@ -39,7 +40,7 @@ BEGIN
 	ORDER BY [timestamp]
 	
 	SELECT [ID],[UserID],[TypeID],[ParentType1],[ParentType2],[EventKey],[ExecuteBPInstanceID]
-			,[ClearBPInstanceID],[Status],[AlertLevelID],[Description],[ErrorMessage],[Data],[CreationTime] ,[EventPayload]
+			,[ClearBPInstanceID],[Status],[AlertLevelID],[Description],[ErrorMessage],[Data],[CreationTime] ,[EventPayload],RollbackEventPayload
 	FROM #temptable2_VRNotifications_GetUpdated
 	  
 	IF((SELECT COUNT(*) FROM #temptable2_VRNotifications_GetUpdated) = 0)
