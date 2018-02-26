@@ -149,6 +149,9 @@ app.service('BaseAPIService', ['$http', '$q', 'Sec_CookieService', '$location', 
             }
         }
         else if (HttpStatusCodeEnum.Forbidden.value === status) {
+            if (typeof (data) == 'object' && window.TextEncoder) {
+                data = new TextDecoder().decode(data);
+            }           
             console.log('Error Occured: ' + data);
             notify.closeAll();
             showErrorMessage(data);
