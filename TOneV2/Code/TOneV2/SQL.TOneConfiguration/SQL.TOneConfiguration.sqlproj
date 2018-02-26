@@ -732,6 +732,10 @@
     <Build Include="common\Stored Procedures\sp_Enumerations_Delete.sql" />
     <Build Include="common\Tables\VRSequence.sql" />
     <Build Include="common\Stored Procedures\sp_VRSequence_GetNext.sql" />
+    <Build Include="genericdata\Tables\BusinessEntityStatusHistory.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_GetByDate.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_BusinessEntityStatusHistory_Insert.sql" />
+    <Build Include="genericdata\Stored Procedures\sp_BusinessEntityStatusHistory_GetLast.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
