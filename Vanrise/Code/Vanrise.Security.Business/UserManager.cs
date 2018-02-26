@@ -313,6 +313,22 @@ namespace Vanrise.Security.Business
 
             return insertOperationOutput;
         }
+        public Vanrise.Entities.UpdateOperationOutput<UserDetail> UpdateUserExpiration(int userId, DateTime? enabledTill)
+        {
+            UpdateOperationOutput<UserDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<UserDetail>();
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+            var user = GetUserbyId(userId);
+            user.EnabledTill = enabledTill;
+            bool updateActionSucc = dataManager.UpdateUser(user);
+            if (updateActionSucc)
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = UserDetailMapper(user);
+            }
+            return updateOperationOutput;
+        }
 
         public Vanrise.Entities.UpdateOperationOutput<UserDetail> UpdateUser(UserToUpdate userObject)
         {

@@ -72,6 +72,14 @@ namespace Vanrise.Security.Web.Controllers
         {
             return _manager.UpdateUser(userObject);
         }
+
+        [HttpPost]
+        [Route("UpdateUserExpiration")]
+        public Vanrise.Entities.UpdateOperationOutput<UserDetail> UpdateUserExpiration(UserExpirationInput userExpirationInput)
+        {
+            return _manager.UpdateUserExpiration(userExpirationInput.UserId, userExpirationInput.EnabledTill);
+        }
+
         [HttpPost]
         [Route("UpdateLoggedInUserLanguage")]
         public UpdateOperationOutput<Guid?> UpdateLoggedInUserLanguage(UpdateLanguageInput languageInput)
@@ -181,5 +189,13 @@ namespace Vanrise.Security.Web.Controllers
     public class UpdateLanguageInput
     {
         public Guid LanguageId { get; set; }
+    }
+
+    public class UserExpirationInput
+    {
+        public int UserId { get; set; }
+
+        public DateTime? EnabledTill { get; set; }
+
     }
 }
