@@ -69,8 +69,11 @@ namespace Vanrise.Invoice.Web.Controllers
 
         [HttpPost]
         [Route("ReGenerateInvoice")]
-        public Vanrise.Entities.UpdateOperationOutput<InvoiceDetail> ReGenerateInvoice(GenerateInvoiceInput createInvoiceInput)
+        public object ReGenerateInvoice(GenerateInvoiceInput createInvoiceInput)
         {
+            if (!_invoiceTypeManager.DosesUserHaveActionAccess(InvoiceActionType.ReCreateInvoice, createInvoiceInput.InvoiceTypeId, createInvoiceInput.InvoiceActionId))
+                return GetUnauthorizedResponse();
+
             InvoiceManager manager = new InvoiceManager();
             return manager.ReGenerateInvoice(createInvoiceInput);
         }
@@ -94,23 +97,33 @@ namespace Vanrise.Invoice.Web.Controllers
         }
         [HttpGet]
         [Route("SetInvoicePaid")]
-        public bool SetInvoicePaid(long invoiceId, bool isInvoicePaid)
+        public object SetInvoicePaid(Guid invoiceActionId, long invoiceId, bool isInvoicePaid)
         {
             InvoiceManager manager = new InvoiceManager();
+
+            if (!manager.DosesUserHaveActionAccess(InvoiceActionType.SetInvoicePaid, invoiceId, invoiceActionId))
+                return GetUnauthorizedResponse();
+
             return manager.SetInvoicePaid(invoiceId, isInvoicePaid);
         }
         [HttpGet]
         [Route("UpdateInvoiceNote")]
-        public bool UpdateInvoiceNote(long invoiceId, string invoiceNote = null)
+        public object UpdateInvoiceNote(Guid invoiceActionId, long invoiceId, string invoiceNote = null)
         {
             InvoiceManager manager = new InvoiceManager();
+
+            if (!manager.DosesUserHaveActionAccess(InvoiceActionType.UpdateInvoiceNote, invoiceId, invoiceActionId))
+                return GetUnauthorizedResponse();
             return manager.UpdateInvoiceNote(invoiceId, invoiceNote);
         }
         [HttpGet]
         [Route("SetInvoiceLocked")]
-        public bool SetInvoiceLocked(long invoiceId, bool setLocked)
+        public object SetInvoiceLocked(Guid invoiceActionId, long invoiceId, bool setLocked)
         {
             InvoiceManager manager = new InvoiceManager();
+            if (!manager.DosesUserHaveActionAccess(InvoiceActionType.SetInvoiceLocked, invoiceId, invoiceActionId))
+                return GetUnauthorizedResponse();
+           
             return manager.SetInvoiceLocked(invoiceId, setLocked);
         }
         [HttpGet]
@@ -129,9 +142,11 @@ namespace Vanrise.Invoice.Web.Controllers
         }
         [HttpGet]
         [Route("DownloadAttachment")]
-        public byte[] DownloadAttachment(Guid invoiceTypeId, Guid invoiceAttachmentId, long invoiceId)
+        public object DownloadAttachment(Guid invoiceTypeId, Guid invoiceAttachmentId, long invoiceId)
         {
             InvoiceManager manager = new InvoiceManager();
+            if (!manager.DoesUserHaveViewAccess(invoiceId))
+                return GetUnauthorizedResponse();
             return manager.DownloadAttachment(invoiceTypeId, invoiceAttachmentId, invoiceId);
         }
         [HttpGet]
@@ -177,13 +192,16 @@ namespace Vanrise.Invoice.Web.Controllers
             if (!_invoiceTypeManager.DoesUserHaveViewAccess(input.InvoiceTypeId))
                 return GetUnauthorizedResponse();
             InvoiceManager manager = new InvoiceManager();
-            return manager.GenerateInvoices(input.InvoiceTypeId, input.InvoiceGenerationIdentifier, input.IssueDate, input.ChangedItems,input.InvoiceGapAction);
+            return manager.GenerateInvoices(input.InvoiceTypeId, input.InvoiceGenerationIdentifier, input.IssueDate, input.ChangedItems, input.InvoiceGapAction);
         }
         [HttpGet]
         [Route("DeleteGeneratedInvoice")]
-        public bool DeleteGeneratedInvoice(long invoiceId)
+        public object DeleteGeneratedInvoice(Guid invoiceActionId, long invoiceId)
         {
             InvoiceManager manager = new InvoiceManager();
+            if (!manager.DosesUserHaveActionAccess(InvoiceActionType.SetInvoiceLocked, invoiceId, invoiceActionId))
+                if (!manager.DosesUserHaveActionAccess(InvoiceActionType.SetInvoiceDeleted, invoiceId, invoiceActionId))
+                return GetUnauthorizedResponse();
             return manager.DeleteGeneratedInvoice(invoiceId);
         }
 
@@ -196,10 +214,10 @@ namespace Vanrise.Invoice.Web.Controllers
             InvoiceManager manager = new InvoiceManager();
             return manager.ExecuteMenualInvoiceActions(input);
         }
-        
-        
+
+
     }
-  
+
     public class GenerateInvoicesInput
     {
         public DateTime IssueDate { get; set; }

@@ -32,6 +32,7 @@
 
         function defineScope() {
             $scope.scopeModel = {};
+            $scope.scopeModel.showSecurityGrid = true;
             $scope.scopeModel.onInvoiceActionSettingsReady = function (api) {
                 invoiceActionSettingsAPI = api;
                 invoiceActionSettingsReadyPromiseDeferred.resolve();
@@ -50,9 +51,9 @@
             function builInvoiceActionObjFromScope() {
                 return {
                     Title: $scope.scopeModel.actionTitle,
-                    InvoiceActionId:invoiceActionEntity != undefined?invoiceActionEntity.InvoiceActionId: UtilsService.guid(),
+                    InvoiceActionId: invoiceActionEntity != undefined ? invoiceActionEntity.InvoiceActionId : UtilsService.guid(),
                     Settings: invoiceActionSettingsAPI.getData(),
-                    RequiredPermission: actionPermissionAPI.getData()
+                    RequiredPermission: !$scope.scopeModel.showSecurityGrid ? null : actionPermissionAPI.getData()
                 };
             }
             function addInvoiceAction() {
@@ -123,11 +124,17 @@
             });
         }
 
-        function getContext()
-        {
+        function getContext() {
             var currentContext = context;
             if (currentContext == undefined)
                 currentContext = {};
+
+            currentContext.showSecurityGridCallBack = function (showGrid) {
+                if (actionPermissionAPI != undefined && $scope.scopeModel.showSecurityGrid != showGrid) {
+                    actionPermissionAPI.load({ data: null });
+                }
+                $scope.scopeModel.showSecurityGrid = showGrid;
+            };
             return currentContext;
         }
 

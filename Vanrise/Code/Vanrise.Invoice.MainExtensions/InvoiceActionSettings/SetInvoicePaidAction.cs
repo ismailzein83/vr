@@ -14,6 +14,11 @@ namespace Vanrise.Invoice.MainExtensions
         {
             get { return "SetInvoicePaidAction"; }
         }
+
+        public override InvoiceActionType Type
+        {
+            get { return InvoiceActionType.SetInvoicePaid; }
+        }
         public bool IsInvoicePaid { get; set; }
     }
 }

@@ -17,7 +17,7 @@ namespace Vanrise.Invoice.Business
         public Guid InvoiceTypeId { get; set; }
         public override bool DoesUserHaveViewAccess(IVRFileDoesUserHaveViewAccessContext context)
         {
-            return true;
+            return new InvoiceTypeManager().DoesUserHaveViewAccess(context.UserId, this.InvoiceTypeId);
         }
     }
 }

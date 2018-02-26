@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Invoice.Business;
 using Vanrise.Invoice.Entities;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Invoice.MainExtensions
 {
@@ -13,6 +15,16 @@ namespace Vanrise.Invoice.MainExtensions
         public override string ActionTypeName
         {
             get { return "DownloadFileInvoiceAction"; }
+        }
+        public override InvoiceActionType Type
+        {
+            get { return InvoiceActionType.Download; }
+        }
+
+        public override bool DoesUserHaveAccess(IInvoiceActionSettingsCheckAccessContext context)
+        {
+            return ContextFactory.GetContext().IsAllowed(context.InvoiceAction.RequiredPermission, context.UserId);
+
         }
     }
 }

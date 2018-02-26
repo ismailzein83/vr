@@ -77,6 +77,7 @@ function (VR_Sec_RequiredPermissionService, VR_Sec_BusinessEntityNodeAPIService,
 
             api.load = function (payload) {
                 if (payload != undefined && payload.data != undefined) {
+                    ctrl.requiredPermissions.length = 0;
                     if (payload.data && payload.data.Entries.length > 0) {
                         var ids = [];
                         var basiclist = [];

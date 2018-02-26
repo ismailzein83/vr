@@ -46,6 +46,8 @@
 
                 $scope.scopeModel.onDirectiveReady = function (api) {
                     directiveAPI = api;
+                    if (context != undefined && context.showSecurityGridCallBack != undefined && typeof (context.showSecurityGridCallBack) == 'function')
+                        context.showSecurityGridCallBack(true);
                     var setLoader = function (value) {
                         $scope.scopeModel.isLoadingDirective = value;
                     };
@@ -93,7 +95,6 @@
                     }
                     function loadDirective() {
                         directiveReadyDeferred = UtilsService.createPromiseDeferred();
-
                         var directiveLoadDeferred = UtilsService.createPromiseDeferred();
 
                         directiveReadyDeferred.promise.then(function () {

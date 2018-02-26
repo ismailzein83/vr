@@ -44,6 +44,10 @@ app.directive("vrInvoicetypeGridactionsettingsDownloadfile", ["UtilsService", "V
                         invoiceActionEntity = payload.invoiceActionEntity;
                         context = payload.context;
                     }
+
+                    if (context != undefined && context.showSecurityGridCallBack != undefined && typeof (context.showSecurityGridCallBack) == 'function')
+                        context.showSecurityGridCallBack(false);
+
                     var promises = [];
 
                     return UtilsService.waitMultiplePromises(promises);

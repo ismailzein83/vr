@@ -14,5 +14,11 @@ namespace Vanrise.Invoice.MainExtensions
         {
             get { return "RecreateInvoiceAction"; }
         }
+
+        public override InvoiceActionType Type
+        {
+            get { return InvoiceActionType.ReCreateInvoice; }
+        }
+
     }
 }

@@ -40,7 +40,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService', 'UtilsService'
                     var promiseDeffered = UtilsService.createPromiseDeferred();
                     VRNotificationService.showConfirmation().then(function (response) {
                         if (response) {
-                            VR_Invoice_InvoiceAPIService.SetInvoicePaid(payload.invoice.Entity.InvoiceId, payload.invoiceAction.Settings.IsInvoicePaid).then(function (response) {
+                            VR_Invoice_InvoiceAPIService.SetInvoicePaid(payload.invoiceAction.InvoiceActionId, payload.invoice.Entity.InvoiceId, payload.invoiceAction.Settings.IsInvoicePaid).then(function (response) {
                                 promiseDeffered.resolve(response);
                             });
                         } else {
@@ -60,7 +60,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService', 'UtilsService'
                     var promiseDeffered = UtilsService.createPromiseDeferred();
                     VRNotificationService.showConfirmation().then(function (response) {
                         if (response) {
-                            VR_Invoice_InvoiceAPIService.SetInvoiceLocked(payload.invoice.Entity.InvoiceId, payload.invoiceAction.Settings.SetLocked).then(function (response) {
+                            VR_Invoice_InvoiceAPIService.SetInvoiceLocked(payload.invoiceAction.InvoiceActionId, payload.invoice.Entity.InvoiceId, payload.invoiceAction.Settings.SetLocked).then(function (response) {
                                 promiseDeffered.resolve(response);
                             });
                         } else {
@@ -106,7 +106,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService', 'UtilsService'
                             payload.onItemDeleted(payload.invoice);
                         }
                     };
-                    reGenerateInvoice(onGenerateInvoice, payload.invoice.Entity.InvoiceTypeId, payload.invoice.Entity.InvoiceId);
+                    reGenerateInvoice(onGenerateInvoice, payload.invoiceAction.InvoiceActionId, payload.invoice.Entity.InvoiceTypeId, payload.invoice.Entity.InvoiceId);
                 }
             };
             registerActionType(actionType);
@@ -120,7 +120,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService', 'UtilsService'
                     var onNoteAdded = function (note) {
                         promiseDeffered.resolve(note);
                     };
-                    openInvoiceNote(onNoteAdded, payload.invoice.Entity.InvoiceId);
+                    openInvoiceNote(onNoteAdded, payload.invoice.Entity.InvoiceId, payload.invoiceAction.InvoiceActionId);
                     return promiseDeffered.promise;
                 }
             };
@@ -141,7 +141,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService', 'UtilsService'
             };
             registerActionType(actionType);
         }
-        function openInvoiceNote(onInvoiceNoteAdded, invoiceId) {
+        function openInvoiceNote(onInvoiceNoteAdded, invoiceId, invoiceActionId) {
             var settings = {
 
             };
@@ -149,7 +149,8 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService', 'UtilsService'
                 modalScope.onInvoiceNoteAdded = onInvoiceNoteAdded;
             };
             var parameters = {
-                invoiceId: invoiceId
+                invoiceId: invoiceId,
+                invoiceActionId: invoiceActionId
             };
             VRModalService.showModal('/Client/Modules/VR_Invoice/Views/Runtime/InvoiceNoteActionEditor.html', parameters, settings);
         }
@@ -207,7 +208,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService', 'UtilsService'
             registerActionType(actionType);
         }
 
-        function reGenerateInvoice(onGenerateInvoice, invoiceTypeId, invoiceId) {
+        function reGenerateInvoice(onGenerateInvoice, invoiceActionId, invoiceTypeId, invoiceId) {
             var settings = {
 
             };
@@ -216,6 +217,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService', 'UtilsService'
                 modalScope.onGenerateInvoice = onGenerateInvoice;
             };
             var parameters = {
+                invoiceActionId: invoiceActionId,
                 invoiceTypeId: invoiceTypeId,
                 invoiceId: invoiceId
             };
@@ -259,7 +261,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService', 'UtilsService'
                     var promiseDeffered = UtilsService.createPromiseDeferred();
                     VRNotificationService.showConfirmation().then(function (response) {
                         if (response) {
-                            VR_Invoice_InvoiceAPIService.DeleteGeneratedInvoice(payload.invoice.Entity.InvoiceId).then(function (response) {
+                            VR_Invoice_InvoiceAPIService.DeleteGeneratedInvoice(payload.invoiceAction.InvoiceActionId,payload.invoice.Entity.InvoiceId).then(function (response) {
                                 if (payload.onItemDeleted != undefined) {
                                     payload.onItemDeleted(payload.invoice);
                                 }

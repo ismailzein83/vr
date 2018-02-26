@@ -6,6 +6,7 @@
 
     function invoiceNoteActionEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VR_Invoice_InvoiceAPIService) {
         var invoiceId;
+        var invoiceActionId;
         var invoiceEntity;
         defineScope();
         loadParameters();
@@ -15,28 +16,29 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 invoiceId = parameters.invoiceId;
+                invoiceActionId = parameters.invoiceActionId;
             }
         }
         function defineScope() {
             $scope.scopeModel = {};
 
             $scope.scopeModel.save = function () {
-               return updateNote();
+                return updateNote();
             };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
-           
+
             function updateNote() {
                 $scope.scopeModel.isLoading = true;
                 var invoiceNote = null;
                 if ($scope.scopeModel.invoiceNote != undefined)
                     invoiceNote = $scope.scopeModel.invoiceNote;
-                return VR_Invoice_InvoiceAPIService.UpdateInvoiceNote(invoiceId, $scope.scopeModel.invoiceNote)
+                return VR_Invoice_InvoiceAPIService.UpdateInvoiceNote(invoiceActionId, invoiceId, $scope.scopeModel.invoiceNote)
                .then(function (response) {
-                       if ($scope.onInvoiceNoteAdded != undefined)
-                           $scope.onInvoiceNoteAdded(response);
-                       $scope.modalContext.closeModal();
+                   if ($scope.onInvoiceNoteAdded != undefined)
+                       $scope.onInvoiceNoteAdded(response);
+                   $scope.modalContext.closeModal();
                })
                .catch(function (error) {
                    VRNotificationService.notifyException(error, $scope);
@@ -47,12 +49,12 @@
         }
         function load() {
             $scope.scopeModel.isLoading = true;
-               getInvoice().then(function () {
-                    loadAllControls();
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                    $scope.scopeModel.isLoading = false;
-                });
+            getInvoice().then(function () {
+                loadAllControls();
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+                $scope.scopeModel.isLoading = false;
+            });
             function getInvoice() {
                 return VR_Invoice_InvoiceAPIService.GetInvoice(invoiceId).then(function (response) {
                     invoiceEntity = response;

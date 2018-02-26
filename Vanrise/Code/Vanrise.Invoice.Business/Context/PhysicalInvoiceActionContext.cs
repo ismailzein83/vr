@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Invoice.Entities;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Invoice.Business
 {
@@ -34,5 +35,12 @@ namespace Vanrise.Invoice.Business
             InvoiceItemManager invoiceItemManager = new InvoiceItemManager();
             return invoiceItemManager.GetInvoiceItemsByItemSetNames(this.InvoiceId, itemSetNames, compareOperator);
         }
+
+        public bool DoesUserHaveAccess(Guid invoiceActionId)
+        {
+            return new InvoiceManager().DosesUserHaveActionAccess(InvoiceActionType.Download, this.InvoiceId, invoiceActionId);
+        }
+
+
     }
 }

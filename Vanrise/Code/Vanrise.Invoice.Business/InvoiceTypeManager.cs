@@ -25,12 +25,25 @@ namespace Vanrise.Invoice.Business
 
             return invoiceTypes.GetRecord(invoiceTypeId);
         }
-       public InvoiceTypeExtendedSettings GetInvoiceTypeExtendedSettings(Guid invoiceTypeId)
-       {
-           var invoiceType = GetInvoiceType(invoiceTypeId);
-           invoiceType.ThrowIfNull("invoiceType", invoiceTypeId);
-           return invoiceType.Settings.ExtendedSettings;
-       }
+
+        public Dictionary<Guid, InvoiceAction> GetInvoiceActionsByActionId(Guid invoiceTypeId)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(string.Format("InvoiceTypeManager_GetInvoiceActionsByActionId_{0}", invoiceTypeId),
+              () =>
+              {
+                  var invoiceType = GetInvoiceType(invoiceTypeId);
+                  invoiceType.ThrowIfNull("Invoice Type", invoiceTypeId);
+                  invoiceType.Settings.ThrowIfNull("Invoice Type Settings", invoiceTypeId);
+                  invoiceType.Settings.InvoiceActions.ThrowIfNull("Invoice Type Settings Actions", invoiceTypeId);
+                  return invoiceType.Settings.InvoiceActions.ToDictionary(c => c.InvoiceActionId, c => c);
+              });
+        }
+        public InvoiceTypeExtendedSettings GetInvoiceTypeExtendedSettings(Guid invoiceTypeId)
+        {
+            var invoiceType = GetInvoiceType(invoiceTypeId);
+            invoiceType.ThrowIfNull("invoiceType", invoiceTypeId);
+            return invoiceType.Settings.ExtendedSettings;
+        }
         public string GetInvoiceTypeName(Guid invoiceTypeId)
         {
             var invoiceType = GetInvoiceType(invoiceTypeId);
@@ -48,7 +61,7 @@ namespace Vanrise.Invoice.Business
         public InvoiceTypeRuntime GetInvoiceTypeRuntime(Guid invoiceTypeId)
         {
             var invoiceTypes = GetCachedInvoiceTypes();
-            var invoiceType =  invoiceTypes.GetRecord(invoiceTypeId);
+            var invoiceType = invoiceTypes.GetRecord(invoiceTypeId);
             InvoiceTypeRuntime invoiceTypeRuntime = new InvoiceTypeRuntime();
             invoiceTypeRuntime.InvoiceType = invoiceType;
             invoiceTypeRuntime.MainGridRuntimeColumns = new List<InvoiceUIGridColumnRunTime>();
@@ -71,11 +84,11 @@ namespace Vanrise.Invoice.Business
                 }
                 int? widthFactor = null;
                 int? fixedWidth = null;
-                if(gridColumn.GridColumnSettings != null)
+                if (gridColumn.GridColumnSettings != null)
                 {
-                   widthFactor = GridColumnWidthFactorConstants.GetColumnWidthFactor(gridColumn.GridColumnSettings);
-                   if (!widthFactor.HasValue)
-                       fixedWidth = gridColumn.GridColumnSettings.FixedWidth;
+                    widthFactor = GridColumnWidthFactorConstants.GetColumnWidthFactor(gridColumn.GridColumnSettings);
+                    if (!widthFactor.HasValue)
+                        fixedWidth = gridColumn.GridColumnSettings.FixedWidth;
                 }
                 invoiceTypeRuntime.MainGridRuntimeColumns.Add(new InvoiceUIGridColumnRunTime
                 {
@@ -89,12 +102,12 @@ namespace Vanrise.Invoice.Business
                 });
             }
             invoiceTypeRuntime.InvoicePartnerManager = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
-     
+
             return invoiceTypeRuntime;
         }
         public List<InvoiceUIGridColumnRunTime> GetInvoiceTypeGridColumns(Guid invoiceTypeId)
         {
-            var invoiceType =  GetInvoiceType(invoiceTypeId);
+            var invoiceType = GetInvoiceType(invoiceTypeId);
             List<InvoiceUIGridColumnRunTime> gridColumns = new List<InvoiceUIGridColumnRunTime>();
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
             var dataRecordTypeFields = dataRecordTypeManager.GetDataRecordTypeFields(invoiceType.Settings.InvoiceDetailsRecordTypeId);
@@ -191,7 +204,7 @@ namespace Vanrise.Invoice.Business
                 {
                     CustomFieldName = dataRecordTypeField.Value.Name,
                     Attribute = attribute,
-                    Field =  InvoiceField.CustomField,
+                    Field = InvoiceField.CustomField,
                     Header = dataRecordTypeField.Value.Title
                 });
             }
@@ -217,7 +230,7 @@ namespace Vanrise.Invoice.Business
             };
 
             List<InvoiceGeneratorAction> actions = new List<InvoiceGeneratorAction>();
-            foreach(var action in invoiceType.Settings.InvoiceGeneratorActions)
+            foreach (var action in invoiceType.Settings.InvoiceGeneratorActions)
             {
                 if (action.FilterCondition == null || action.FilterCondition.IsFilterMatch(context))
                 {
@@ -284,10 +297,10 @@ namespace Vanrise.Invoice.Business
         public IEnumerable<GridColumnAttribute> ConvertToGridColumnAttribute(ConvertToGridColumnAttributeInput input)
         {
             List<GridColumnAttribute> gridColumnAttributes = null;
-            if(input.GridColumns != null)
+            if (input.GridColumns != null)
             {
                 gridColumnAttributes = new List<GridColumnAttribute>();
-                foreach(var column in input.GridColumns)
+                foreach (var column in input.GridColumns)
                 {
                     if (column.FieldType == null)
                         throw new NullReferenceException(string.Format("{0} is not mapped to field type.", column.FieldName));
@@ -353,7 +366,7 @@ namespace Vanrise.Invoice.Business
                                             Name = extensionConfigurationManager.GetExtensionConfigurationTitle<InvoiceSettingPartConfig>(part.PartConfigId, InvoiceSettingPartConfig.EXTENSION_TYPE)
                                         });
                                     }
-                                   
+
                                 }
                             }
                         }
@@ -367,10 +380,11 @@ namespace Vanrise.Invoice.Business
             int userId = SecurityContext.Current.GetLoggedInUserId();
             return DoesUserHaveViewAccess(userId, invoiceTypeId);
         }
+
         public bool DoesUserHaveViewAccess(int userId, Guid invoiceTypeId)
         {
             var invoiceType = GetInvoiceType(invoiceTypeId);
-            if (invoiceType != null &&   invoiceType.Settings !=null && invoiceType.Settings.Security != null && invoiceType.Settings.Security.ViewRequiredPermission != null)
+            if (invoiceType != null && invoiceType.Settings != null && invoiceType.Settings.Security != null && invoiceType.Settings.Security.ViewRequiredPermission != null)
                 return DoesUserHaveAccess(userId, invoiceType.Settings.Security.ViewRequiredPermission);
             return true;
         }
@@ -398,7 +412,7 @@ namespace Vanrise.Invoice.Business
             int userId = SecurityContext.Current.GetLoggedInUserId();
             return DoesUserHaveViewSettingsAccess(userId, invoiceType);
         }
-        public bool DoesUserHaveViewSettingsAccess(int userId,InvoiceType invoiceType)
+        public bool DoesUserHaveViewSettingsAccess(int userId, InvoiceType invoiceType)
         {
             if (invoiceType != null && invoiceType.Settings != null && invoiceType.Settings.Security != null && invoiceType.Settings.Security.ViewSettingsRequiredPermission != null)
                 return DoesUserHaveAccess(invoiceType.Settings.Security.ViewSettingsRequiredPermission);
@@ -418,7 +432,34 @@ namespace Vanrise.Invoice.Business
             if (invoiceType != null && invoiceType.Settings != null && invoiceType.Settings.Security != null && invoiceType.Settings.Security.EditSettingsRequiredPermission != null)
                 return DoesUserHaveAccess(invoiceType.Settings.Security.EditSettingsRequiredPermission);
             return true;
-        }       
+        }
+
+        public bool DosesUserHaveActionAccess(InvoiceActionType type, Guid invoiceTypeId, Guid ActionTypeId)
+        {
+
+            int userId = SecurityContext.Current.GetLoggedInUserId();
+            return DosesUserHaveActionAccess(type, userId, invoiceTypeId, ActionTypeId);
+        }
+
+        public bool DosesUserHaveActionAccess(InvoiceActionType type, int userId, Guid invoiceTypeId, Guid ActionTypeId)
+        {
+
+            var invoiceActions = GetInvoiceActionsByActionId(invoiceTypeId);
+            var invoiceActionType = invoiceActions.GetRecord(ActionTypeId);
+            invoiceActionType.ThrowIfNull("Invoice Action ", ActionTypeId);
+            invoiceActionType.Settings.ThrowIfNull("Invoice Action Settings", ActionTypeId);
+
+            var context = new InvoiceActionSettingsCheckAccessContext
+            {
+                UserId = userId,
+                InvoiceAction = invoiceActionType
+            };
+
+            if (invoiceActionType.Settings.Type != type || !invoiceActionType.Settings.DoesUserHaveAccess(context))
+                return false;
+
+            return true;
+        }
         public IEnumerable<InvoiceType> GetInvoiceTypes()
         {
             return GetCachedInvoiceTypes().Values;
@@ -427,13 +468,13 @@ namespace Vanrise.Invoice.Business
         public string GetInvoicePartnerSelector(Guid invoiceTypeId)
         {
             var invoiceType = GetInvoiceType(invoiceTypeId);
-             if(invoiceType != null && invoiceType.Settings != null && invoiceType.Settings.ExtendedSettings != null)
-             {
-                 var invoicePartnerManager = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
-                 if (invoicePartnerManager != null)
-                     return invoicePartnerManager.PartnerSelector;
-             }
-             return null;
+            if (invoiceType != null && invoiceType.Settings != null && invoiceType.Settings.ExtendedSettings != null)
+            {
+                var invoicePartnerManager = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
+                if (invoicePartnerManager != null)
+                    return invoicePartnerManager.PartnerSelector;
+            }
+            return null;
         }
         public InvoiceAction GetInvoiceAction(Guid invoiceTypeId, Guid invoiceActionId)
         {
@@ -516,14 +557,14 @@ namespace Vanrise.Invoice.Business
             List<string> invoiceCustomFields = new List<string>();
             if (dataRecordFields == null)
                 return null;
-            return dataRecordFields.Select(x=>x.Key);
+            return dataRecordFields.Select(x => x.Key);
         }
         public IEnumerable<InvoiceAttachmentInfo> GetRemoteInvoiceTypeAttachmentsInfo(Guid invoiceTypeId)
         {
             var invoiceTypes = GetCachedInvoiceTypes();
             var invoiceType = invoiceTypes.GetRecord(invoiceTypeId);
-            if(invoiceType == null)
-                throw new NullReferenceException(string.Format("invoiceType:{0}",invoiceTypeId));
+            if (invoiceType == null)
+                throw new NullReferenceException(string.Format("invoiceType:{0}", invoiceTypeId));
             List<InvoiceAttachmentInfo> invoiceAttachmentsInfo = new List<InvoiceAttachmentInfo>();
             if (invoiceType.Settings.InvoiceAttachments != null && invoiceType.Settings.InvoiceAttachments.Count > 0)
             {
@@ -538,7 +579,7 @@ namespace Vanrise.Invoice.Business
             }
             return invoiceAttachmentsInfo;
         }
-        public InvoiceAttachment GeInvoiceTypeAttachment(Guid invoiceTypeId,Guid invoiceAttachmentId)
+        public InvoiceAttachment GeInvoiceTypeAttachment(Guid invoiceTypeId, Guid invoiceAttachmentId)
         {
             var invoiceTypes = GetCachedInvoiceTypes();
             var invoiceType = invoiceTypes.GetRecord(invoiceTypeId);
@@ -546,7 +587,7 @@ namespace Vanrise.Invoice.Business
                 throw new NullReferenceException(string.Format("invoiceType:{0}", invoiceTypeId));
             if (invoiceType.Settings.InvoiceAttachments != null && invoiceType.Settings.InvoiceAttachments.Count > 0)
             {
-              return  invoiceType.Settings.InvoiceAttachments.FindRecord(x => x.InvoiceAttachmentId == invoiceAttachmentId);
+                return invoiceType.Settings.InvoiceAttachments.FindRecord(x => x.InvoiceAttachmentId == invoiceAttachmentId);
             }
             return null;
         }
@@ -572,10 +613,10 @@ namespace Vanrise.Invoice.Business
 
                 }
             }
-            
+
             return null;
         }
-       
+
         #endregion
 
         #region Private Classes
@@ -664,8 +705,9 @@ namespace Vanrise.Invoice.Business
             return true;
 
         }
+
         #endregion
-     
+
         #region Mappers
 
         private InvoiceTypeDetail InvoiceTypeDetailMapper(InvoiceType invoiceTypeObject)
@@ -684,5 +726,5 @@ namespace Vanrise.Invoice.Business
         }
         #endregion
 
-    } 
+    }
 }

@@ -6,6 +6,7 @@
 
     function genericInvoiceEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, VR_Invoice_InvoiceTypeAPIService, VR_Invoice_InvoiceAPIService, VRButtonTypeEnum, VR_Invoice_InvoiceActionService, VR_Invoice_InvoiceAccountStatusEnum, VRDateTimeService) {
         var invoiceTypeId;
+        var invoiceActionId;
         $scope.scopeModel = {};
         var invoiceId;
         $scope.scopeModel.invoiceTypeEntity;
@@ -32,6 +33,7 @@
             if (parameters != undefined && parameters != null) {
                 invoiceTypeId = parameters.invoiceTypeId;
                 invoiceId = parameters.invoiceId;
+                invoiceActionId = parameters.invoiceActionId;
             }
             $scope.scopeModel.isEditMode = (invoiceId != undefined);
         }
@@ -291,7 +293,8 @@
         function buildInvoiceObjFromScope() {
             var partnerObject = partnerSelectorAPI.getData();
             var obj = {
-                InvoiceId:invoiceId,
+                InvoiceId: invoiceId,
+                invoiceActionId:invoiceActionId,
                 InvoiceTypeId: invoiceTypeId,
                 PartnerId: partnerObject != undefined ? partnerObject.selectedIds:undefined,
                 FromDate: $scope.scopeModel.fromDate,

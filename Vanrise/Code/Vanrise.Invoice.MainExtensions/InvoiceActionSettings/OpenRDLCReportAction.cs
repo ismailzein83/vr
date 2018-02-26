@@ -11,6 +11,10 @@ namespace Vanrise.Invoice.MainExtensions
     {
         public override string ActionTypeName { get { return "OpenRDLCReportAction"; } }
         public override Guid ConfigId { get { return new Guid("5B4BD540-832E-46E4-8C18-49073775D002"); } }
+        public override InvoiceActionType Type
+        {
+            get { return InvoiceActionType.Download; }
+        }
         public string ReportURL { get; set; }
         public string ReportRuntimeURL { get; set; }
         public List<RDLCReportParameter> MainReportParameters { get; set; }

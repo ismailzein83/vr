@@ -14,5 +14,10 @@ namespace Vanrise.Invoice.MainExtensions
         {
             get { return "SetInvoiceDeletedAction"; }
         }
+        public override InvoiceActionType Type
+        {
+            get { return InvoiceActionType.SetInvoiceDeleted; }
+        }
+       
     }
 }

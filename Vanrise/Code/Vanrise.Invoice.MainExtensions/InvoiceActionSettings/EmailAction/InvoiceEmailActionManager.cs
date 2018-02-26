@@ -14,7 +14,7 @@ namespace Vanrise.Invoice.MainExtensions
 {
     public class InvoiceEmailActionManager
     {
-         public void SendEmail(SendEmailActionInput input)
+         public bool SendEmail(SendEmailActionInput input)
         {
             InvoiceManager invoiceManager = new InvoiceManager();
             var invoice = invoiceManager.GetInvoice(input.InvoiceId);
@@ -55,6 +55,7 @@ namespace Vanrise.Invoice.MainExtensions
             }
             vrMailManager.SendMail(input.EmailTemplate.From, input.EmailTemplate.To, input.EmailTemplate.CC, input.EmailTemplate.BCC, input.EmailTemplate.Subject, input.EmailTemplate.Body, vrMailAttachments);
             new InvoiceManager().SetInvoiceSentDate(input.InvoiceId, true);
+            return true;
         }
          public EmailTemplateRuntimeEditor GetEmailTemplate(long invoiceId, Guid invoiceMailTemplateId, Guid invoiceActionId)
          {

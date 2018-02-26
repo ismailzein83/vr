@@ -139,7 +139,7 @@ namespace Vanrise.Invoice.Business
         public List<Entities.Invoice> GetPartnerInvoicesByDate(Guid invoiceTypeId, string partnerId, DateTime fromDate, DateTime toDate)
         {
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
-            return dataManager.GetPartnerInvoicesByDate(invoiceTypeId,partnerId, fromDate, toDate);
+            return dataManager.GetPartnerInvoicesByDate(invoiceTypeId, partnerId, fromDate, toDate);
 
         }
         bool AreInvoiceDatesValid(DateTime from, DateTime to, DateTime issueDate, out string message)
@@ -528,10 +528,35 @@ namespace Vanrise.Invoice.Business
             var invoice = GetInvoice(invoiceId);
             invoice.ThrowIfNull("invoice", invoiceId);
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
-            return dataManager.DeleteGeneratedInvoice(invoice.InvoiceId, invoice.InvoiceTypeId, invoice.PartnerId, invoice.FromDate,invoice.ToDate);
+            return dataManager.DeleteGeneratedInvoice(invoice.InvoiceId, invoice.InvoiceTypeId, invoice.PartnerId, invoice.FromDate, invoice.ToDate);
         }
 
-      
+        #endregion
+
+        #region Security
+
+        public bool DoesUserHaveGenerateAccess(long invoiceId)
+        {
+            Guid invoiceTypeId = GetInvoiceTypeId(invoiceId);
+            return new InvoiceTypeManager().DoesUserHaveGenerateAccess(invoiceTypeId);
+        }
+
+        public bool DoesUserHaveViewAccess(long invoiceId)
+        {
+            Guid invoiceTypeId = GetInvoiceTypeId(invoiceId);
+            return new InvoiceTypeManager().DoesUserHaveViewAccess(invoiceTypeId);
+        }
+        public bool DosesUserHaveActionAccess(InvoiceActionType type, long invoiceId, Guid ActionTypeId)
+        {
+            Guid invoiceTypeId = GetInvoiceTypeId(invoiceId);
+            return new InvoiceTypeManager().DosesUserHaveActionAccess(type, invoiceTypeId, ActionTypeId);
+        }
+        public bool DosesUserHaveActionAccess(InvoiceActionType type, int userId, long invoiceId, Guid ActionTypeId)
+        {
+            Guid invoiceTypeId = GetInvoiceTypeId(invoiceId);
+            return new InvoiceTypeManager().DosesUserHaveActionAccess(type, userId, invoiceTypeId, ActionTypeId);
+        }
+
         #endregion
 
         #region Mappers
@@ -618,6 +643,7 @@ namespace Vanrise.Invoice.Business
         {
             DataRecordFilterGenericFieldMatchContext context = new DataRecordFilterGenericFieldMatchContext(invoiceDetail.Entity.Details, invoiceType.Settings.InvoiceDetailsRecordTypeId);
             RecordFilterManager recordFilterManager = new RecordFilterManager();
+            var actionTypes = new InvoiceTypeManager().GetInvoiceActionsByActionId(invoiceType.InvoiceTypeId);
             foreach (var section in invoiceType.Settings.SubSections)
             {
                 if (recordFilterManager.IsFilterGroupMatch(section.SubSectionFilter, context))
@@ -632,11 +658,18 @@ namespace Vanrise.Invoice.Business
             {
                 if (action.FilterCondition == null || action.FilterCondition.IsFilterMatch(invoiceFilterConditionContext))
                 {
-                    var invoiceAction = invoiceType.Settings.InvoiceActions.FirstOrDefault(x => x.InvoiceActionId == action.InvoiceGridActionId);
+                    var invoiceAction = actionTypes.GetRecord(action.InvoiceGridActionId);
+                    invoiceAction.ThrowIfNull("Invoice Action ", action.InvoiceGridActionId);
+                    invoiceAction.Settings.ThrowIfNull("Invoice Action Settings");
 
+                    var actionCheckAccessContext = new InvoiceActionSettingsCheckAccessContext
+                    {
+                        UserId = ContextFactory.GetContext().GetLoggedInUserId(),
+                        InvoiceAction = invoiceAction
+                    };
                     if (invoiceDetail.ActionTypeNames == null)
                         invoiceDetail.ActionTypeNames = new List<InvoiceGridAction>();
-                    if (DoesUserHaveAccess(invoiceAction.RequiredPermission))
+                    if (invoiceAction.Settings.DoesUserHaveAccess(actionCheckAccessContext))
                         invoiceDetail.ActionTypeNames.Add(action);
                 }
             }
@@ -906,16 +939,6 @@ namespace Vanrise.Invoice.Business
             return context.Invoice;
         }
 
-
-        private static bool DoesUserHaveAccess(RequiredPermissionSettings requiredPermission)
-        {
-            int userId = new Vanrise.Security.Business.SecurityContext().GetLoggedInUserId();
-            SecurityManager secManager = new SecurityManager();
-            if (!secManager.IsAllowed(requiredPermission, userId))
-                return false;
-            return true;
-
-        }
         private bool CheckInvoiceOverlaping(Guid invoiceTypeId, string partnerId, DateTime fromDate, DateTime toDate, long? invoiceId)
         {
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();

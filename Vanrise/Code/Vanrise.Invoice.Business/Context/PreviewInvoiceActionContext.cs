@@ -9,6 +9,7 @@ using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Entities;
 using Vanrise.Security.Business;
 using Vanrise.Common;
+using Vanrise.Security.Entities;
 namespace Vanrise.Invoice.Business
 {
     public class PreviewInvoiceActionContext : IInvoiceActionContext
@@ -147,5 +148,11 @@ namespace Vanrise.Invoice.Business
             }
             return invoiceItems;
         }
+
+        public bool DoesUserHaveAccess(Guid invoiceActionId)
+        {
+            return new InvoiceTypeManager().DosesUserHaveActionAccess(InvoiceActionType.Download,  this.InvoiceTypeId, invoiceActionId);
+        }
+
     }
 }

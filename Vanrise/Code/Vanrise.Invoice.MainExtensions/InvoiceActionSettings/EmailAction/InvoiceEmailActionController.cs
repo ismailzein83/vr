@@ -12,17 +12,23 @@ using Vanrise.Entities;
 using System.Net.Http;
 using System.Net;
 using System.Net.Http.Headers;
+using Vanrise.Invoice.Business;
 namespace Vanrise.Invoice.MainExtensions
 {
     [RoutePrefix(Constants.ROUTE_PREFIX + "InvoiceEmailAction")]
     public class InvoiceEmailActionController:BaseAPIController
     {
+        InvoiceTypeManager _invoiceTypeManager = new InvoiceTypeManager();
+        InvoiceManager _invoiceManager = new InvoiceManager();
+
         [HttpPost]
         [Route("SendEmail")]
-        public void SendEmail(SendEmailActionInput input)
+        public object SendEmail(SendEmailActionInput input)
         {
+            if (!_invoiceManager.DosesUserHaveActionAccess(InvoiceActionType.ReCreateInvoice, input.InvoiceId, input.InvoiceActionId))
+                return GetUnauthorizedResponse();
             InvoiceEmailActionManager manager = new InvoiceEmailActionManager();
-            manager.SendEmail(input);
+            return manager.SendEmail(input);
         }
         [HttpGet]
         [Route("GetEmailTemplate")]

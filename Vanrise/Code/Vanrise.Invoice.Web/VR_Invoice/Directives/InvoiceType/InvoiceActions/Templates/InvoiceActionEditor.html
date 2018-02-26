@@ -12,10 +12,10 @@
                 <vr-tab header="'Settings'">
                     <vr-invoicetype-actionsettings on-ready="scopeModel.onInvoiceActionSettingsReady" normal-col-num="4"></vr-invoicetype-actionsettings>
                 </vr-tab>
-                <vr-tab header="'Security'">
-                    <vr-row>
+                <vr-tab header="'Security'" >
+                    <vr-row ng-show="scopeModel.showSecurityGrid">
                         <vr-columns width="fullrow">
-                                <vr-sec-requiredpermission-grid on-ready="scopeModel.onActionRequiredPermissionReady"></vr-sec-requiredpermission-grid>
+                            <vr-sec-requiredpermission-grid on-ready="scopeModel.onActionRequiredPermissionReady"></vr-sec-requiredpermission-grid>
                         </vr-columns>
                     </vr-row>
                 </vr-tab>

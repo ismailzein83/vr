@@ -15,6 +15,8 @@ using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Entities;
 using Vanrise.Invoice.MainExtensions;
 using Vanrise.Invoice.Web.Controllers;
+using Vanrise.Security.Business;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Invoice.Web.VR_Invoice.Reports
 {
@@ -27,13 +29,22 @@ namespace Vanrise.Invoice.Web.VR_Invoice.Reports
             {
                 try
                 {
+                   
                     OpenRDLCReportActionManager openRDLCReportActionManager = new MainExtensions.OpenRDLCReportActionManager();
                     string actionIdString = Request.QueryString["actionId"];
                     string invoiceActionContext = Request.QueryString["invoiceActionContext"];
+
+                    Guid actionId = actionIdString != null ? new Guid(actionIdString) : Guid.Empty;
+                    var context = Vanrise.Common.Serializer.Deserialize<IInvoiceActionContext>(invoiceActionContext);
+
+                    if (!context.DoesUserHaveAccess(actionId))
+                        throw new UnauthorizedAccessException("you are not authorized to perform this request");
+
+
                     openRDLCReportActionManager.BuildRdlcReport(ReportViewer1, new ReportInput
                     {
-                        ActionId = actionIdString != null?new Guid(actionIdString):Guid.Empty,
-                        Context = Vanrise.Common.Serializer.Deserialize<IInvoiceActionContext>(invoiceActionContext)
+                        ActionId = actionId,
+                        Context = context
                     });
                 }
                 catch(Exception error)
