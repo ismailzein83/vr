@@ -51,6 +51,8 @@ namespace Vanrise.Notification.Entities
         public VRNotificationData Data { get; set; }
 
         public IVRActionEventPayload EventPayload { get; set; }
+
+        public IVRActionRollbackEventPayload RollbackEventPayload { get; set; }
     }
 
     public enum VRNotificationBPInstanceType { Execute, Clear }

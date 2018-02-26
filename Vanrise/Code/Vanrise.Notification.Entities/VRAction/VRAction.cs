@@ -26,6 +26,7 @@ namespace Vanrise.Notification.Entities
     {
         long? BPProcessInstanceId { get; }
         IVRActionEventPayload EventPayload { get; }
+        IVRActionRollbackEventPayload RollbackEventPayload { get; }
         int UserID { get; }
         int NumberOfExecutions { get; }
 
@@ -37,6 +38,7 @@ namespace Vanrise.Notification.Entities
     public interface IVRActionConvertToBPInputArgumentContext
     {
         IVRActionEventPayload EventPayload { get; }
+        IVRActionRollbackEventPayload RollbackEventPayload { get; }
 
         int NumberOfExecutions { get; }
 

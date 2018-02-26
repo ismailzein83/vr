@@ -13,6 +13,8 @@ namespace Vanrise.Notification.Entities
         public VRNotificationParentTypes ParentTypes { get; set; }
         public string EventKey { get; set; }
 
+        public IVRActionRollbackEventPayload RollbackEventPayload { get; set; }
+
         public string Description { get; set; }
 
         public string EntityId { get; set; }

@@ -74,6 +74,7 @@ namespace Vanrise.Notification.Business
             ClearNotificationInput clearNotificationInput = new ClearNotificationInput
             {
                 EventKey = input.EventKey,
+                RollbackEventPayload = input.RollbackEventPayload,
                 NotificationTypeId = input.NotificationTypeId,
                 EntityId = input.EntityId,
                 ParentTypes = input.ParentTypes,
@@ -115,10 +116,10 @@ namespace Vanrise.Notification.Business
             return notifications;
         }
 
-        public void UpdateNotificationStatus(long notificationId, VRNotificationStatus vrNotificationStatus, long? executeBPInstanceId = null, long? clearBPInstanceId = null)
+        public void UpdateNotificationStatus(long notificationId, VRNotificationStatus vrNotificationStatus, IVRActionRollbackEventPayload rollbackEventPayload = null, long? executeBPInstanceId = null, long? clearBPInstanceId = null)
         {
             IVRNotificationDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRNotificationDataManager>();
-            dataManager.UpdateNotificationStatus(notificationId, vrNotificationStatus, executeBPInstanceId, clearBPInstanceId);
+            dataManager.UpdateNotificationStatus(notificationId, vrNotificationStatus, rollbackEventPayload, executeBPInstanceId, clearBPInstanceId);
         }
 
         public T GetVRNotificationEventPayload<T>(VRNotification vrNotification) where T : class, IVRActionEventPayload

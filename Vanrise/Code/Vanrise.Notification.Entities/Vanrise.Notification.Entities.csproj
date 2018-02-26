@@ -53,6 +53,7 @@
     <Compile Include="BalanceAlertRule\VRBalanceActiveAlertThreshold.cs" />
     <Compile Include="BalanceAlertRule\VRBalanceAlertEventPayload.cs" />
     <Compile Include="BalanceAlertRule\VRBalanceAlertNotificationType.cs" />
+    <Compile Include="BalanceAlertRule\VRBalanceAlertRollbackEventPayload.cs" />
     <Compile Include="BalanceAlertRule\VRBalanceAlertRuleBehavior.cs" />
     <Compile Include="BalanceAlertRule\VRBalanceAlertRuleSettings.cs" />
     <Compile Include="BalanceAlertRule\VRBalanceAlertRuleThresholdConfig.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="BusinessManagers\BusinessManagerFactory.cs" />
     <Compile Include="BusinessManagers\IBusinessManager.cs" />
     <Compile Include="BusinessManagers\IVRNotificationTypeManager.cs" />
+    <Compile Include="VRAction\IVRActionRollbackEventPayload.cs" />
     <Compile Include="VRAlertLevel\IVRALertLevelFilter.cs" />
     <Compile Include="VRAlertLevel\VRAlertLevel.cs" />
     <Compile Include="VRAlertLevel\VRAlertLevelDetail.cs" />

@@ -18,6 +18,8 @@ namespace Vanrise.Notification.BP.Arguments
 
         public Guid NotificationTypeId {get;set;}
 
+        public IVRActionRollbackEventPayload RollbackEventPayload { get; set; }
+
         public VRNotificationParentTypes ParentTypes {get;set;}
 
         public string EventKey { get; set; }

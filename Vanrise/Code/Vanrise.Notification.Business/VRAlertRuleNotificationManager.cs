@@ -41,6 +41,7 @@ namespace Vanrise.Notification.Business
             ClearVRNotificationInput clearNotificationInput = new ClearVRNotificationInput
             {
                 EventKey = notificationInput.EventKey,
+                RollbackEventPayload = notificationInput.RollbackEventPayload,
                 NotificationTypeId = notificationInput.NotificationTypeId,
                 EntityId = notificationInput.EntityId,
                 ParentTypes = notificationParentTypes,

@@ -17,6 +17,7 @@
   <x:Members>
     <x:Property Name="VrAction" Type="InArgument(vne:VRAction)" />
     <x:Property Name="EventPayLoad" Type="InArgument(vne:IVRActionEventPayload)" />
+    <x:Property Name="RollbackEventPayload" Type="InArgument(vne:IVRActionRollbackEventPayload)" />
   </x:Members>
   <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
   <sap2010:WorkflowViewState.IdRef>Vanrise.Notification.BP.ExecuteActionProcess_1</sap2010:WorkflowViewState.IdRef>
@@ -70,8 +71,12 @@
       </vnba:TryConvertActionToBPInputArgumnet.BPInputArgument>
       <vnba:TryConvertActionToBPInputArgumnet.CreateVRActionInput>
         <InArgument x:TypeArguments="vne:CreateVRActionInput">
-          <mca:CSharpValue x:TypeArguments="vne:CreateVRActionInput" xml:space="preserve">new CreateVRActionInput {  Action = VrAction,
-             EventPayload = EventPayLoad}</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="vne:CreateVRActionInput" xml:space="preserve">new CreateVRActionInput
+            {
+                Action = VrAction,
+                EventPayload = EventPayLoad,
+                RollbackEventPayload = RollbackEventPayload
+            }</mca:CSharpValue>
         </InArgument>
       </vnba:TryConvertActionToBPInputArgumnet.CreateVRActionInput>
     </vnba:TryConvertActionToBPInputArgumnet>
@@ -101,6 +106,11 @@
                 <mca:CSharpValue x:TypeArguments="vne:IVRActionEventPayload">EventPayLoad</mca:CSharpValue>
               </InArgument>
             </vnba:ExecuteAction.EventPayload>
+            <vnba:ExecuteAction.RollbackEventPayload>
+              <InArgument x:TypeArguments="vne:IVRActionRollbackEventPayload">
+                <mca:CSharpValue x:TypeArguments="vne:IVRActionRollbackEventPayload">RollbackEventPayload</mca:CSharpValue>
+              </InArgument>
+            </vnba:ExecuteAction.RollbackEventPayload>
           </vnba:ExecuteAction>
           <vbw:WriteTrackingMessage Severity="{x:Null}" sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_2">
             <vbw:WriteTrackingMessage.Message>
@@ -139,11 +149,10 @@
               </InArgument>
             </If.Condition>
             <If.Then>
-              <Throw>
+              <Throw sap2010:WorkflowViewState.IdRef="Throw_1">
                 <InArgument x:TypeArguments="s:Exception">
                   <mca:CSharpValue x:TypeArguments="s:Exception">new Exception(string.Format("Execute Action Process is terminated due to error {0}", processCompletedPayload.LastProcessMessage))</mca:CSharpValue>
                 </InArgument>
-                <sap2010:WorkflowViewState.IdRef>Throw_1</sap2010:WorkflowViewState.IdRef>
               </Throw>
             </If.Then>
             <If.Else>
@@ -159,7 +168,7 @@
         </Sequence>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d1JDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuTm90aWZpY2F0aW9uLkJQXFN1YlByb2Nlc3Nlc1xFeGVjdXRlQWN0aW9uUHJvY2Vzcy54YW1sGzwDowEOAgEBQQVNLgIBRU4FoQEKAgECSQtKPAIBS0QLRHkCAUZRC1FmAgEDVQlwFAIBLXMJnwEUAgEIVgtcJgIBP10LaCACATRpC28mAgEudAt6JgIBJ3sLhgEcAgEbhwELngEQAgEJWRFZiAECAUBlEWVsAgE6YBFgWwIBNWwRbIIBAgEvdxF3iQECASh+EX53AgEigwERgwGFAQIBHXu3AXu9AQIBHIoBEYoBtAECAQqOAQ+TARcCARWWAQ+cASoCAQ+QAROQAdUBAgEWmQEVmQGGAQIBEA==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1JDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuTm90aWZpY2F0aW9uLkJQXFN1YlByb2Nlc3Nlc1xFeGVjdXRlQWN0aW9uUHJvY2Vzcy54YW1sHD0DrAEOAgEBQgVSLgIBVlMFqgEKAgECSgtPIAIBXUULRXkCAVdWC1ZmAgEDWgl6FAIBNH0JqAEUAgEJWwthJgIBT2ILciACATxzC3kmAgE1fguEASYCAS2FAQuQARwCAR+RAQunARACAQpeEV6IAQIBUGoRamwCAUllEWVbAgFDbxFvfAIBPXYRdoIBAgE2gQERgQGJAQIBLogBEYgBdwIBJ40BEY0BhQECASGFAbcBhQG9AQIBIJQBEZQBtAECAQuYAQ+cARcCARifAQ+lASoCARGaAROaAdUBAgEZogEVogGGAQIBEg==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

@@ -12,6 +12,8 @@ namespace Vanrise.Notification.Entities
 
         public string EventKey { get; set; }
 
+        public IVRActionRollbackEventPayload RollbackEventPayload { get; set; }
+
         public string Description { get; set; }
 
         public Guid NotificationTypeId { get; set; }

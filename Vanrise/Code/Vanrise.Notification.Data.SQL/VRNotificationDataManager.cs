@@ -46,9 +46,9 @@ namespace Vanrise.Notification.Data.SQL
             return GetItemsSP("VRNotification.sp_VRNotification_GetByNotificationType", VRNotificationMapper, notificationTypeId, parentTypes.ParentType1, parentTypes.ParentType2, eventKey, statusesString);
         }
 
-        public void UpdateNotificationStatus(long notificationId, VRNotificationStatus vrNotificationStatus, long? executeBPInstanceId, long? clearBPInstanceId)
+        public void UpdateNotificationStatus(long notificationId, VRNotificationStatus vrNotificationStatus, IVRActionRollbackEventPayload rollbackEventPayload, long? executeBPInstanceId, long? clearBPInstanceId)
         {
-            ExecuteNonQuerySP("[VRNotification].[sp_VRNotification_UpdateStatus]", notificationId, vrNotificationStatus, executeBPInstanceId, clearBPInstanceId);
+            ExecuteNonQuerySP("[VRNotification].[sp_VRNotification_UpdateStatus]", notificationId, vrNotificationStatus, rollbackEventPayload != null ? Serializer.Serialize(rollbackEventPayload) : null, executeBPInstanceId, clearBPInstanceId);
         }
 
         public List<VRNotification> GetNotClearedNotifications(Guid notificationTypeId, VRNotificationParentTypes parentTypes, List<string> eventKeys, DateTime? notificationCreatedAfter)
@@ -158,7 +158,7 @@ namespace Vanrise.Notification.Data.SQL
 
         VRNotification VRNotificationMapper(IDataReader reader)
         {
-            return new VRNotification
+            var notification = new VRNotification
             {
                 VRNotificationId = (long)reader["ID"],
                 UserId = (int)reader["UserID"],
@@ -176,9 +176,15 @@ namespace Vanrise.Notification.Data.SQL
                 ClearBPInstanceID = GetReaderValue<long?>(reader, "ClearBPInstanceID"),
                 ErrorMessage = reader["ErrorMessage"] as string,
                 CreationTime = (DateTime)reader["CreationTime"],
-                Data = reader["Data"] != DBNull.Value ? Serializer.Deserialize<VRNotificationData>(reader["Data"] as string) : null,
-                EventPayload = reader["EventPayload"] != DBNull.Value ? Serializer.Deserialize<IVRActionEventPayload>(reader["EventPayload"] as string) : null
+                Data = reader["Data"] != DBNull.Value ? Serializer.Deserialize<VRNotificationData>(reader["Data"] as string) : null
             };
+            string serializedEventPayload = reader["EventPayload"] as string;
+            if (serializedEventPayload != null)
+                notification.EventPayload = Serializer.Deserialize(serializedEventPayload) as IVRActionEventPayload;
+            string serializedRollbackEventPayload = reader["RollbackEventPayload"] as string;
+            if (serializedRollbackEventPayload != null)
+                notification.RollbackEventPayload = Serializer.Deserialize(serializedRollbackEventPayload) as IVRActionRollbackEventPayload;
+            return notification;
         }
 
         #endregion

@@ -54,6 +54,9 @@ namespace Vanrise.AccountBalance.Business
         public override VRNotificationDetailEventPayload GetNotificationDetailEventPayload(IVRNotificationTypeGetNotificationEventPayloadContext context)
         {
             var vrBalanceAlertEventPayload = new VRNotificationManager().GetVRNotificationEventPayload<VRBalanceAlertEventPayload>(context.VRNotification);
+            VRBalanceAlertRollbackEventPayload rollbackEventPayload =   null;
+            if(context.VRNotification.RollbackEventPayload != null)
+                rollbackEventPayload = context.VRNotification.RollbackEventPayload.CastWithValidate<VRBalanceAlertRollbackEventPayload>("context.VRNotification.RollbackEventPayload");
             var accountBalanceAlertRuleTypeSettings = new VRAlertRuleTypeManager().GetVRAlertRuleTypeSettings<AccountBalanceAlertRuleTypeSettings>(vrBalanceAlertEventPayload.AlertRuleTypeId);
 
             AccountBalanceAlertRuleGetEntityNameContext accountBalanceAlertRuleGetEntityNameContext = new AccountBalanceAlertRuleGetEntityNameContext()
@@ -69,6 +72,7 @@ namespace Vanrise.AccountBalance.Business
                 AccountType = accountType,
                 BusinessEntityDescription = new AccountBalanceAlertRuleBehavior().GetEntityName(accountBalanceAlertRuleGetEntityNameContext),
                 CurrentBalance = vrBalanceAlertEventPayload.CurrentBalance,
+                RollbackBalance = rollbackEventPayload != null ? rollbackEventPayload.CurrentBalance : (Decimal?)null,
                 Threshold = vrBalanceAlertEventPayload.Threshold,
                 Currency = new Vanrise.Common.Business.CurrencyManager().GetCurrencySymbol(vrBalanceAlertEventPayload.CurrencyId)
             };
@@ -82,6 +86,8 @@ namespace Vanrise.AccountBalance.Business
         public string BusinessEntityDescription { get; set; }
 
         public Decimal CurrentBalance { get; set; }
+
+        public Decimal? RollbackBalance { get; set; }
 
         public Decimal Threshold { get; set; }
 

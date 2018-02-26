@@ -19,7 +19,8 @@ namespace Vanrise.Notification.BP.Activities
 
             VRActionConvertToBPInputArgumentContext vrActionConvertContext = new VRActionConvertToBPInputArgumentContext
             {
-                EventPayload = createVRActionInput.EventPayload                
+                EventPayload = createVRActionInput.EventPayload,
+                RollbackEventPayload = createVRActionInput.RollbackEventPayload
             };
             if (createVRActionInput.Action.TryConvertToBPInputArgument(vrActionConvertContext))
                 this.BPInputArgument.Set(context, vrActionConvertContext.BPInputArgument);

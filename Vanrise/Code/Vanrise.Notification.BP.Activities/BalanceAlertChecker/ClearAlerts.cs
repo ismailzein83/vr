@@ -63,6 +63,10 @@ namespace Vanrise.Notification.BP.Activities.BalanceAlertChecker
                                         UserId = handle.SharedInstanceData.InstanceInfo.InitiatorUserId,
                                         EntityId = entityBalanceInfo.EntityId,
                                         EventKey = string.Format("{0}_{1}", entityBalanceInfo.EntityId, activeThreshold.Threshold),
+                                        RollbackEventPayload = new VRBalanceAlertRollbackEventPayload
+                                        {
+                                            CurrentBalance = entityBalanceInfo.CurrentBalance
+                                        },
                                         AlertRuleId = activeThreshold.AlertRuleId,
                                         RuleTypeId = alertRule.RuleTypeId,
                                         Description = string.Format("Rolling back balance actions for '{0}' (threshold '{1}')", entityBalanceInfo.EntityName, activeThreshold.Threshold),

@@ -13,6 +13,8 @@ namespace Vanrise.Notification.Business
 
         public IVRActionEventPayload EventPayload { get;set; }
 
+        public IVRActionRollbackEventPayload RollbackEventPayload { get; set; }
+
         public int NumberOfExecutions { get; set; }
         public int UserID { get; set; }
         public  DateTime? NextExecutionTime { get; set; }
@@ -21,6 +23,8 @@ namespace Vanrise.Notification.Business
     public class VRActionConvertToBPInputArgumentContext : IVRActionConvertToBPInputArgumentContext
     {
         public IVRActionEventPayload EventPayload { get; set; }
+
+        public IVRActionRollbackEventPayload RollbackEventPayload { get; set; }
 
         public int NumberOfExecutions { get; set; }
 

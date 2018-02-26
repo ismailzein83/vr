@@ -17,6 +17,8 @@ namespace Vanrise.Notification.BP.Activities
 
         public InArgument<VRNotificationBPInstanceType?> VRNotificationBPInstanceType { get; set; }
 
+        public InArgument<IVRActionRollbackEventPayload> RollbackEventPayload { get; set; }
+
         protected override void Execute(CodeActivityContext context)
         {
             VRNotificationBPInstanceType? vrNotificationBPInstanceType = VRNotificationBPInstanceType.Get(context);
@@ -37,7 +39,7 @@ namespace Vanrise.Notification.BP.Activities
             }
 
             VRNotificationManager manager = new VRNotificationManager();
-            manager.UpdateNotificationStatus(VRNotificationId.Get(context), Status.Get(context), executeBPInstanceId, clearBPInstanceId);
+            manager.UpdateNotificationStatus(VRNotificationId.Get(context), Status.Get(context), this.RollbackEventPayload.Get(context), executeBPInstanceId, clearBPInstanceId);
         }
     }
 }

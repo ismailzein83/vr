@@ -26,6 +26,17 @@ namespace Vanrise.Notification.Entities
                 return string.Join<string>(", ", this.Entity.Data.Actions.Select(x => x.ActionName));
             }
         }
+
+        public string RollbackActionNames
+        {
+            get
+            {
+                if (this.Entity == null || this.Entity.Data == null || this.Entity.Data.ClearanceActions == null || this.Entity.Data.ClearanceActions.Count == 0)
+                    return string.Empty;
+
+                return string.Join<string>(", ", this.Entity.Data.ClearanceActions.Select(x => x.ActionName));
+            }
+        }
     }
 
     public abstract class VRNotificationDetailEventPayload
