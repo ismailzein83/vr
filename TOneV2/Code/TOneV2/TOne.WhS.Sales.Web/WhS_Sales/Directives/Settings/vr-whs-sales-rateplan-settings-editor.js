@@ -30,7 +30,7 @@ app.directive('vrWhsSalesRateplanSettingsEditor', ['UtilsService', 'VRUIUtilsSer
 
             $scope.scopeModel = {};
             $scope.scopeModel.hintText = "Rate's BED of the subscribers can either follow the same BED of their publisher, or can be calculated according to the system parameters for increased and decreased rates.";
-            $scope.scopeModel.followPublisherHintText = "Subscribers can follow the publisher routing product in case of rate change"
+            $scope.scopeModel.followPublisherHintText = "Subscribers can follow the publisher routing product in case of rate change";
             $scope.scopeModel.onCostColumnDirectiveReady = function (api) {
                 costColumnDirectiveAPI = api;
                 costColumnDirectiveReadyDeferred.resolve();
