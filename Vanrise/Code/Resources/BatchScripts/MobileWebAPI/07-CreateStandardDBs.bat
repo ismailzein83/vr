@@ -5,7 +5,7 @@ DATE /T > %CURRDATE%
 Set PARSEARG="eol=; tokens=1,2,3,4* delims=/, "
 For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 
-if not exist "\\192.168.110.185\Fixes\WebSite\TOne.Web.Online\%YYYYMMDD%\DataBaseFirstDeploymentScripts\DBsStructure\" mkdir "\\192.168.110.185\Fixes\WebSite\TOne.Web.Online\%YYYYMMDD%\DataBaseFirstDeploymentScripts\DBsStructure\"
+::if not exist "\\192.168.110.185\Fixes\WebSite\TOne.Web.Online\%YYYYMMDD%\DataBaseFirstDeploymentScripts\DBsStructure\" mkdir "\\192.168.110.185\Fixes\WebSite\TOne.Web.Online\%YYYYMMDD%\DataBaseFirstDeploymentScripts\DBsStructure\"
 
-ECHO TOne.Web.Online Create Standard DBs Structure files
-start /b /w /D"C:\TFS\Vanrise\Code\Vanrise.HelperTools\bin\Release" Vanrise.HelperTools.exe "DBs" "TOne.Web.Online"
+::ECHO TOne.Web.Online Create Standard DBs Structure files
+::start /b /w /D"C:\TFS\Vanrise\Code\Vanrise.HelperTools\bin\Release" Vanrise.HelperTools.exe "DBs" "TOne.Web.Online"
