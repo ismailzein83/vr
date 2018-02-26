@@ -61,38 +61,31 @@ namespace Vanrise.Fzero.Services.NonFruadReport
                {
                    foreach (MobileOperator i in MobileOperator.GetMobileOperators())
                    {
-                       if (i.EnableNonFruadReport.HasValue && i.EnableNonFruadReport.Value && i.User.ClientID != null)
+                       if (i.EnableNonFruadReport.HasValue && i.EnableNonFruadReport.Value && i.User.ClientID.HasValue)
                        {
-                           HashSet<string> DistinctCLIs = new HashSet<string>();
                            List<CleanCases> listDistinctCleanCases = new List<CleanCases>();
                            SqlDatabase db = new SqlDatabase(ConfigurationManager.ConnectionStrings["FMSConnectionString"].ConnectionString);
                            var cmd = db.GetStoredProcCommand("dbo.[sp_GeneratedCalls_GetNonReportedClean]");
                            cmd.CommandTimeout = 600;
                            using (cmd)
                            {
-                               db.AssignParameters(cmd, new Object[] { i.ID, i.User.ClientID});
+                               db.AssignParameters(cmd, new Object[] { i.ID, i.User.ClientID.Value});
                                using (IDataReader reader = db.ExecuteReader(cmd))
                                {
                                    while (reader.Read())
                                    {
-                                       var anumber = reader["a_number"] as string;
-                                       if (!DistinctCLIs.Contains(anumber))
-                                       {
-
-                                           DistinctCLIs.Add(anumber);
-                                           listDistinctCleanCases.Add(new CleanCases
-                                           {
-                                               GeneratedCallId = (int)reader["ID"],
-                                               ANumber = anumber,
-                                               AttamptDateTime =  (DateTime)reader["AttemptDateTime"],
-                                               BNumber =reader["b_number"]as string ,
-                                               DifferentCLI =  (int)reader["DifferentCLI"] == 0?false:true,
-                                               Duration = reader["DurationInSeconds"] != DBNull.Value ? (int?)reader["DurationInSeconds"] : default(int?),
-                                               RecievedCLI =  reader["RecievedCLI"] as string
-                                           });
-                                       }
+                                        listDistinctCleanCases.Add(new CleanCases
+                                        {
+                                            GeneratedCallId = (int)reader["ID"],
+                                            ANumber = reader["a_number"] as string,
+                                            AttamptDateTime =  (DateTime)reader["AttemptDateTime"],
+                                            BNumber =reader["b_number"]as string ,
+                                            DifferentCLI =  (int)reader["DifferentCLI"] == 0?false:true,
+                                            Duration = reader["DurationInSeconds"] != DBNull.Value ? (int?)reader["DurationInSeconds"] : default(int?),
+                                            RecievedCLI =  reader["RecievedCLI"] as string
+                                        });
+                                       
                                    }
-                                   cmd.Cancel();
                                    reader.Close();
                                }
                            }
@@ -101,7 +94,7 @@ namespace Vanrise.Fzero.Services.NonFruadReport
                          
                            if (listDistinctCleanCases.Count > 0)
                            {
-                               SendReport(listDistinctCleanCases, i.User.FullName,  i.ID, i.User.ClientID.Value, (i.User.GMT - SysParameter.Global_GMT));
+                               SendReport(listDistinctCleanCases, i, (i.User.GMT - SysParameter.Global_GMT));
                            }
                        }
                    }
@@ -128,13 +121,13 @@ namespace Vanrise.Fzero.Services.NonFruadReport
             elog.WriteEntry(message);
         }
 
-        private void SendReport(List<CleanCases> listDistinctCleanCases, string MobileOperatorName, int MobileOperatorID, int ClientID, int DifferenceInGMT)
+        private void SendReport(List<CleanCases> listDistinctCleanCases,MobileOperator mobileOperator,  int DifferenceInGMT)
         {
             try
             {
                 StringBuilder stringBuilder = new StringBuilder();
 
-                string reportName= "FZ" + MobileOperatorName.Substring(0, 1) + DateTime.Now.Year.ToString("D2").Substring(2) + DateTime.Now.Month.ToString("D2") + DateTime.Now.Day.ToString("D2") + ".csv";
+                string reportName= "FZ" + mobileOperator.User.FullName.Substring(0, 1) + DateTime.Now.Year.ToString("D2").Substring(2) + DateTime.Now.Month.ToString("D2") + DateTime.Now.Day.ToString("D2") + ".csv";
                 
                 stringBuilder.Append("Calling Number, Called Number, Recieved CLI, Attampt Date Time, Duration, Different CLI");
 
@@ -144,11 +137,8 @@ namespace Vanrise.Fzero.Services.NonFruadReport
                     stringBuilder.AppendFormat("{0},{1},{2},{3},{4},{5}", listDistinctCleanCase.ANumber, listDistinctCleanCase.BNumber, listDistinctCleanCase.RecievedCLI, listDistinctCleanCase.AttamptDateTime, listDistinctCleanCase.Duration, listDistinctCleanCase.DifferentCLI);
                 }
 
-                ClientVariables.SaveCSVClientReport(reportName, stringBuilder);
 
-                MobileOperator mobileOperator = Vanrise.Fzero.Bypass.MobileOperator.Load(MobileOperatorID);
-                
-                string profileName = ClientVariables.GetProfileName(ClientID);
+                string profileName = ClientVariables.GetProfileName(mobileOperator.User.ClientID.Value);
 
                 if (!string.IsNullOrEmpty(mobileOperator.NonFruadReportEmail))
                 {
@@ -167,13 +157,12 @@ namespace Vanrise.Fzero.Services.NonFruadReport
                                           <br />Kindly find attached our Fzero CLI Delivery Report for your revision.
                                         
                                           <br /> <br />Best Regards,";
+                            email.CC = "";
                           bool sentSuccessfully = Email.SendMailWithAttachement(email, fileName, profileName);
                           if (sentSuccessfully)
                                 ErrorLog("Email Sent Successfully.");
                           else
                               ErrorLog("Send email failed.");
-
-
                         }
                        
                         SqlDatabase db = new SqlDatabase(ConfigurationManager.ConnectionStrings["FMSConnectionString"].ConnectionString);
@@ -184,7 +173,6 @@ namespace Vanrise.Fzero.Services.NonFruadReport
                             string reportedCallsIds = string.Join(",", listDistinctCleanCases.Select(x => x.GeneratedCallId));
                             db.AssignParameters(cmd, new Object[] { reportedCallsIds });
                             var rowsAffected = db.ExecuteNonQuery(cmd);
-                            cmd.Cancel();
                         }
                     }
                 }
