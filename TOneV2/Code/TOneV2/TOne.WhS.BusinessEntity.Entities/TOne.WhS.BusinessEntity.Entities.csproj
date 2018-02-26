@@ -72,6 +72,9 @@
     <Compile Include="AccountManager\OrgChartAccountManagerInfo.cs" />
     <Compile Include="AccountManager\SupplierGroupConfig.cs" />
     <Compile Include="AccountManager\UpdatedAccountManagerCarrier.cs" />
+    <Compile Include="ANumber\ANumberGroup.cs" />
+    <Compile Include="ANumber\ANumberSaleCode.cs" />
+    <Compile Include="ANumber\ANumberSupplierCode.cs" />
     <Compile Include="BusinessManagers\BEManagerFactory.cs" />
     <Compile Include="BusinessManagers\ContextFactory.cs" />
     <Compile Include="BusinessManagers\IBEManager.cs" />

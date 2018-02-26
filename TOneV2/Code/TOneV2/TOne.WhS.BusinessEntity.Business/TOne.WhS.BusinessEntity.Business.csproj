@@ -125,6 +125,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountManagerManager.cs" />
+    <Compile Include="ANumber\ANumberGroupManager.cs" />
+    <Compile Include="ANumber\ANumberSaleCodeManager.cs" />
+    <Compile Include="ANumber\ANumberSupplierCodeManager.cs" />
     <Compile Include="BECacheExpirationChecker.cs" />
     <Compile Include="CarrierAccountStatusHistory\CarrierAccountStatusHistoryManager.cs" />
     <Compile Include="CarrierAccounts\BaseCarrierAccountEventPayload.cs" />
