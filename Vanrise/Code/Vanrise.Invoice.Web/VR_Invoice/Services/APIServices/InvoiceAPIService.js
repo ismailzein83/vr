@@ -21,20 +21,23 @@
         function GetFilteredInvoices(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'GetFilteredInvoices'), input);
         }
-        function SetInvoicePaid(invoiceId, isInvoicePaid) {
+        function SetInvoicePaid(invoiceActionId, invoiceId, isInvoicePaid) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'SetInvoicePaid'), {
+                invoiceActionId: invoiceActionId,
                 invoiceId: invoiceId,
                 isInvoicePaid: isInvoicePaid
             });
         }
-        function SetInvoiceLocked(invoiceId, setLocked) {
+        function SetInvoiceLocked(invoiceActionId, invoiceId, setLocked) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'SetInvoiceLocked'), {
+                invoiceActionId: invoiceActionId,
                 invoiceId: invoiceId,
                 setLocked: setLocked
             });
         }
-        function UpdateInvoiceNote(invoiceId, invoiceNote) {
+        function UpdateInvoiceNote(invoiceActionId, invoiceId, invoiceNote) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'UpdateInvoiceNote'), {
+                invoiceActionId: invoiceActionId,
                 invoiceId: invoiceId,
                 invoiceNote: invoiceNote
             });
@@ -90,8 +93,9 @@
         function GenerateInvoices(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'GenerateInvoices'), input);
         }
-        function DeleteGeneratedInvoice(invoiceId) {
+        function DeleteGeneratedInvoice(invoiceActionId, invoiceId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, "DeleteGeneratedInvoice"), {
+                invoiceActionId: invoiceActionId,
                 invoiceId: invoiceId
             });
         }
