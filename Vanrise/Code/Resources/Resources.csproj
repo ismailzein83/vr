@@ -658,8 +658,8 @@
     <None Include="BatchScripts\WHSCDRAnalysis\DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\WHSCDRAnalysis\Runtime.bat" />
     <None Include="BatchScripts\WHSCDRAnalysis\WebSite.bat" />
-    <None Include="BatchScripts\XBooster\01-DataBaseFirstDeploymentScripts.bat" />
-    <None Include="BatchScripts\XBooster\02-Runtime.bat" />
+    <None Include="BatchScripts\XBooster\02-DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\XBooster\01-Runtime.bat" />
     <None Include="BatchScripts\XBooster\03-WebSite.bat" />
     <None Include="BatchScripts\XBooster\05-CompressFiles.bat" />
     <None Include="BatchScripts\XBooster\06-GroupJSFiles.bat" />
