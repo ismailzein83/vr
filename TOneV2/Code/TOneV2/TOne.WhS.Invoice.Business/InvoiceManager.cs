@@ -11,6 +11,7 @@ using Vanrise.Entities;
 using Vanrise.Invoice.Business;
 using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Entities;
+using Vanrise.Security.Business;
 using Vanrise.Common;
 using Vanrise.ExcelConversion.Business;
 using Vanrise.ExcelConversion.Entities;
@@ -135,6 +136,17 @@ namespace TOne.WhS.Invoice.Business
             return originalInvoiceDataRuntime;
         }
 
+
+        public bool DoesUserUserHaveCompareInvoiceAccess(Guid invoiceTypeId)
+        {
+            return new InvoiceTypeManager().DoesUserHaveViewAccess(invoiceTypeId);
+        }
+
+        public bool DoesUserHaveUpdateOriginalInvoiceDataAccess(long invoiceId)
+        {
+            return new Vanrise.Invoice.Business.InvoiceManager().DoesUserHaveGenerateAccess(invoiceId);
+
+        }
 
         private void ValidateCompareInvoices(InvoiceComparisonInput input)
         {

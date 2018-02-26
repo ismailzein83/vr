@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Invoice.Entities;
+using Vanrise.Security.Business;
 
 namespace TOne.WhS.Invoice.Business.Extensions
 {
@@ -11,6 +12,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
     {
         public override string ActionTypeName { get { return "CompareInvoiceAction"; } }
         public override Guid ConfigId { get { return new Guid("CA8088B9-2887-4B85-B263-49C895088E66"); } }
+
+        public override bool DoesUserHaveAccess(IInvoiceActionSettingsCheckAccessContext context)
+        {
+            return SecurityContext.Current.IsAllowed(context.InvoiceAction.RequiredPermission, context.UserId);
+        }
         public Guid ItemGroupingId { get; set; }
         public Guid ZoneDimensionId { get; set; }
         public Guid FromDateDimensionId { get; set; }

@@ -23,6 +23,8 @@ namespace TOne.WhS.Invoice.Web.Controllers
             try
             {
                 InvoiceManager manager = new InvoiceManager();
+                if (!manager.DoesUserUserHaveCompareInvoiceAccess(input.Query.InvoiceTypeId))
+                    return GetUnauthorizedResponse();
                 return GetWebResponse(input, manager.CompareInvoices(input));
             }
             catch (Exception ex)
@@ -38,9 +40,11 @@ namespace TOne.WhS.Invoice.Web.Controllers
 
         [HttpPost]
         [Route("UpdateOriginalInvoiceData")]
-        public bool UpdateOriginalInvoiceData(OriginalInvoiceDataInput input)
+        public object UpdateOriginalInvoiceData(OriginalInvoiceDataInput input)
         {
             InvoiceManager manager = new InvoiceManager();
+            if (!manager.DoesUserHaveUpdateOriginalInvoiceDataAccess(input.InvoiceId))
+                return GetUnauthorizedResponse();
             return manager.UpdateOriginalInvoiceData(input);
         }
 
