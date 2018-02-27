@@ -134,7 +134,12 @@ namespace TOne.WhS.DBSync.Business
                 FillTimeZoneAndDefaultServicesForCarrierAccount(sourceItem, carrierAccountCustomerSettings, carrierAccountSupplierSettings);
 
                 if (sourceItem.AccountType == SourceAccountType.Client || sourceItem.AccountType == SourceAccountType.Exchange)
-                    carrierAccountCustomerSettings.PricelistSettings.PriceListType = sourceItem.IsAToZ ? SalePriceListType.Full : SalePriceListType.RateChange;
+                {
+                    if (sourceItem.IsAToZ)
+                    {
+                        carrierAccountCustomerSettings.PricelistSettings.PriceListType = SalePriceListType.Full;
+                    }
+                }
 
                 if (sourceItem.NominalCapacityInE1s.HasValue)
                     carrierAccountSettings.NominalCapacity = sourceItem.NominalCapacityInE1s.Value;
