@@ -69,6 +69,27 @@ when matched then
 	[Name] = s.[Name],[Settings] = s.[Settings]
 when not matched by target then
 	insert([ID],[Name],[Settings])
-	values(s.[ID],s.[Name],s.[Settings]);
+	values(s.[ID],s.[Name],s.[Settings]);
 
---[rules].[RuleType]------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;set identity_insert [rules].[RuleType] on;;with cte_data([ID],[Type])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////(2,'Vanrise.GenericData.Entities.GenericRule'),(1,'Vanrise.GenericData.Normalization.NormalizationRule')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Type]))merge	[rules].[RuleType] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Type] = s.[Type]when not matched by target then	insert([ID],[Type])	values(s.[ID],s.[Type]);set identity_insert [rules].[RuleType] off;
+
+--[rules].[RuleType]--------------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+set identity_insert [rules].[RuleType] on;
+;with cte_data([ID],[Type])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+(2,'Vanrise.GenericData.Entities.GenericRule'),
+(1,'Vanrise.GenericData.Normalization.NormalizationRule')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Type]))
+merge	[rules].[RuleType] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Type] = s.[Type]
+when not matched by target then
+	insert([ID],[Type])
+	values(s.[ID],s.[Type]);
+set identity_insert [rules].[RuleType] off;

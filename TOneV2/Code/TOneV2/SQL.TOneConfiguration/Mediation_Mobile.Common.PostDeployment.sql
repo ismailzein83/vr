@@ -57,7 +57,25 @@ when not matched by target then
 	values(s.[ID],s.[Name],s.[DataRecordTypeID],s.[DataStoreID],s.[Settings],s.[State]);
 
 
---[queue].[ExecutionFlow]-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([Id],[Name],[ExecutionFlowDefinitionID])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('89AFFE5B-7E04-415B-87B5-3308C4CD582C','Mobile Execution Flow','6E57F3E7-44A3-4C22-B506-35FD52E10686')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Id],[Name],[ExecutionFlowDefinitionID]))merge	[queue].[ExecutionFlow] as tusing	cte_data as son		1=1 and t.[Id] = s.[Id]when matched then	update set	[Name] = s.[Name],[ExecutionFlowDefinitionID] = s.[ExecutionFlowDefinitionID]when not matched by target then	insert([Id],[Name],[ExecutionFlowDefinitionID])	values(s.[Id],s.[Name],s.[ExecutionFlowDefinitionID]);
+--[queue].[ExecutionFlow]---------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([Id],[Name],[ExecutionFlowDefinitionID])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('89AFFE5B-7E04-415B-87B5-3308C4CD582C','Mobile Execution Flow','6E57F3E7-44A3-4C22-B506-35FD52E10686')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[ExecutionFlowDefinitionID]))
+merge	[queue].[ExecutionFlow] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	update set
+	[Name] = s.[Name],[ExecutionFlowDefinitionID] = s.[ExecutionFlowDefinitionID]
+when not matched by target then
+	insert([Id],[Name],[ExecutionFlowDefinitionID])
+	values(s.[Id],s.[Name],s.[ExecutionFlowDefinitionID]);
+
 
 --[queue].[ExecutionFlowDefinition]-----------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -78,7 +96,8 @@ when not matched by target then
 	insert([Id],[Name],[Title],[ExecutionTree],[Stages])
 	values(s.[Id],s.[Name],s.[Title],s.[ExecutionTree],s.[Stages]);
 
-	--[genericdata].[DataRecordFieldChoice]-------------------------------------------------------------
+	
+--[genericdata].[DataRecordFieldChoice]-------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
 ;with cte_data([ID],[Name],[Settings])
@@ -96,7 +115,10 @@ when matched then
 	[Name] = s.[Name],[Settings] = s.[Settings]
 when not matched by target then
 	insert([ID],[Name],[Settings])
-	values(s.[ID],s.[Name],s.[Settings]);--[genericdata].[DataTransformationDefinition]------------------------------------------------------
+	values(s.[ID],s.[Name],s.[Settings]);
+
+
+--[genericdata].[DataTransformationDefinition]------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
 ;with cte_data([ID],[Name],[Title],[Details])

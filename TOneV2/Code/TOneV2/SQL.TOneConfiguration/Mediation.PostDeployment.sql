@@ -10,7 +10,25 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
---[common].[ExtensionConfiguration]---------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('F1D57186-49CE-4BF9-B4B6-46DDCE93E9EC','Mediation_MediationOutputHandler_OtherMediation','Other Mediation Handler','Mediation_MediationOutputHandler','{"Editor":"mediation-outputhandler-othermediation-editor"}'),('14F0A218-77B5-4417-AB80-6A9386A7BB49','Mediation_MediationOutputHandler_StoreRecords','Store Records Handler','Mediation_MediationOutputHandler','{"Editor":"mediation-outputhandler-storerecords-editor"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Title],[ConfigType],[Settings]))merge	[common].[ExtensionConfiguration] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Title],[ConfigType],[Settings])	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);
+--[common].[ExtensionConfiguration]-----------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[Title],[ConfigType],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('F1D57186-49CE-4BF9-B4B6-46DDCE93E9EC','Mediation_MediationOutputHandler_OtherMediation','Other Mediation Handler','Mediation_MediationOutputHandler','{"Editor":"mediation-outputhandler-othermediation-editor"}'),
+('14F0A218-77B5-4417-AB80-6A9386A7BB49','Mediation_MediationOutputHandler_StoreRecords','Store Records Handler','Mediation_MediationOutputHandler','{"Editor":"mediation-outputhandler-storerecords-editor"}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Title],[ConfigType],[Settings]))
+merge	[common].[ExtensionConfiguration] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[ConfigType] = s.[ConfigType],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Title],[ConfigType],[Settings])
+	values(s.[ID],s.[Name],s.[Title],s.[ConfigType],s.[Settings]);
 
 
 GO--delete useless views from ClearVoice product such 'My Scheduler Service', 'Style Definitions', 'Organizational Charts', Lookups, etc...
