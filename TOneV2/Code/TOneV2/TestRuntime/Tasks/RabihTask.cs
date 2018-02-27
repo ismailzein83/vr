@@ -224,9 +224,11 @@ namespace TestRuntime
                 HolidayRateTypeId = -1,
                 OffPeakRateTypeId = -2,
                 WeekendRateTypeId = -3,
+                DefaultRate=1,                
                 UseTempTables = true,
                 MigrationRequestedTables = migrationTables,
-                OnlyEffective = true
+                OnlyEffective = true,
+                MigratePriceListData=false
             };
             DBSyncTaskAction dbSyncTaskAction = new DBSyncTaskAction();
             dbSyncTaskAction.Execute(new SchedulerTask(), taskActionArgument, null);
