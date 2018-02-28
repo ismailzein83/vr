@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Vanrise.Common;
 using Vanrise.DataParser.Business;
 using Vanrise.DataParser.Entities;
-using Vanrise.DataParser.Entities.HexTLV;
 using Vanrise.DataParser.MainExtensions.CompositeFieldParsers;
 using Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers;
 using Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers;
 using Vanrise.DataParser.MainExtensions.HexTLV2.FieldParsers;
-using System.Linq;
+using Vanrise.DataParser.MainExtensions.NokiaSiemensParsers.FieldParsers;
+using Vanrise.DataParser.MainExtensions.NokiaSiemensParsers.RecordParsers;
 
 namespace Mediation.Runtime.DataParser
 {
@@ -28,6 +29,7 @@ namespace Mediation.Runtime.DataParser
                 CreateMediationSettingsFile(GetHuaweiParserSettings_Ogero(), "Huawei_Ogero");
                 CreateMediationSettingsFile(GetWHSEricssonOgeroParserSettings(), "WHS_Ericsson");
                 CreateMediationSettingsFile(GetICXNokiaSiemensParserSettings(), "ICX_NokiaSiemens");
+                CreateMediationSettingsFile(GetICXAlcatelParserSettings(), "ICX_Alcatel");
             }
             catch (Exception ex)
             {
@@ -11873,7 +11875,7 @@ namespace Mediation.Runtime.DataParser
         {
             HexTLVParserType hexParser = new HexTLVParserType
             {
-                RecordParser = new HeaderRecordParser
+                RecordParser = new Vanrise.DataParser.MainExtensions.NokiaSiemensParsers.RecordParsers.HeaderRecordParser
                 {
                     HeaderLength = 8,
                     RecordLengthIndex = 1,
@@ -12015,6 +12017,152 @@ namespace Mediation.Runtime.DataParser
         {
             List<CompositeFieldsParser> compositeParsers = new List<CompositeFieldsParser>();
             compositeParsers.Add(new FileNameCompositeParser() { FieldName = "FileName" });
+            return compositeParsers;
+        }
+
+        #endregion
+
+        #region Alcatel Ogero
+
+        public string GetICXAlcatelParserSettings()
+        {
+            HexTLVParserType hexParser = new HexTLVParserType
+            {
+                RecordParser = new SkipRecordParser()
+                {
+                    RecordStartingTag = "c6c4",
+                    RecordParser = new HexTLVRecordParser()
+                    {
+                        Settings = new PositionedBlockRecordParser()
+                        {
+                            BlockSize = 2064,
+                            RecordParser = new HexTLVRecordParser()
+                            {
+                                Settings = new Vanrise.DataParser.MainExtensions.AlcatelParsers.RecordParsers.HeaderRecordParser()
+                                {
+                                    HeaderByteLength = 32,
+                                    RecordStartingTag = "c6c4",
+                                    TagsToIgnore = new List<string>() { "a5110002", "a5010002" },
+                                    RecordParser = new HexTLVRecordParser()
+                                    {
+                                        Settings = new PositionedBlockRecordParser()
+                                        {
+                                            BlockSize = 42,
+                                            RecordParser = new HexTLVRecordParser()
+                                            {
+                                                Settings = new PositionedFieldsRecordParser()
+                                                {
+                                                    RecordType = "ICX_Alcatel_CDR",
+                                                    FieldParsers = GetPositionedFieldParsers(),
+                                                    CompositeFieldsParsers = GetAlcatelCompositeParsers(),
+                                                    ZeroBytesBlockAction = ZeroBytesBlockAction.Skip
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+
+            ParserType parserType = new ParserType
+            {
+                ParserTypeId = new Guid("30553F01-CE03-4D29-9BF5-80D0D06DFA34"),
+                Settings = new ParserTypeSettings { ExtendedSettings = hexParser }
+            };
+
+            return Serializer.Serialize(parserType.Settings);
+        }
+
+        private List<PositionedFieldParser> GetPositionedFieldParsers()
+        {
+            List<PositionedFieldParser> positionedFieldParsers = new List<PositionedFieldParser>();
+
+            PositionedFieldParser dateOfCallParser = new PositionedFieldParser()
+            {
+                Length = 2,
+                Position = 3,
+                FieldParser = new HexTLVFieldParser()
+                {
+                    Settings = new BCDNumberParser()
+                    {
+                        FieldName = "DayNumber"
+                    }
+                }
+            };
+            positionedFieldParsers.Add(dateOfCallParser);
+
+            PositionedFieldParser timeOfCallParser = new PositionedFieldParser
+            {
+                Length = 3,
+                Position = 5,
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new TimeFieldParser
+                    {
+                        FieldName = "TimeOfCall"
+                    }
+                }
+            };
+            positionedFieldParsers.Add(timeOfCallParser);
+
+            PositionedFieldParser aNumberParser = new PositionedFieldParser
+            {
+                Length = 4,
+                Position = 8,
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new BCDNumberParser
+                    {
+                        FieldName = "ANumber",
+                        RemoveHexa = true
+                    }
+                }
+            };
+            positionedFieldParsers.Add(aNumberParser);
+
+            PositionedFieldParser bNumberParser = new PositionedFieldParser
+            {
+                Length = 4,
+                Position = 18,
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new BCDNumberParser
+                    {
+                        FieldName = "BNumber",
+                        RemoveHexa = true
+                    }
+                }
+            };
+            positionedFieldParsers.Add(bNumberParser);
+
+            PositionedFieldParser durationInSecondsParser = new PositionedFieldParser
+            {
+                Length = 2,
+                Position = 30,
+                FieldParser = new HexTLVFieldParser
+                {
+                    Settings = new NumberFieldParser
+                    {
+                        FieldName = "DurationInSeconds",
+                        FieldBytesLength = 2,
+                        FieldIndex = 0,
+                        NumberType = NumberType.Int
+                    }
+                }
+            };
+            positionedFieldParsers.Add(durationInSecondsParser);
+
+            return positionedFieldParsers;
+        }
+
+        private List<CompositeFieldsParser> GetAlcatelCompositeParsers()
+        {
+            List<CompositeFieldsParser> compositeParsers = new List<CompositeFieldsParser>();
+            compositeParsers.Add(new FileNameCompositeParser() { FieldName = "FileName" });
+            compositeParsers.Add(new DateFromDayNumberCompositeParser() { FieldName = "DateOfCall", YearFieldName = "Year", DayNumberFieldName = "DayNumber" });
             return compositeParsers;
         }
 
