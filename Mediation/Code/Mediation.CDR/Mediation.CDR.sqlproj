@@ -128,5 +128,9 @@
     <Build Include="Mediation_ICX\User Defined Types\NokiaSiemensBadCDRType.sql" />
     <Build Include="Mediation_ICX\User Defined Types\NokiaSiemensCDRType.sql" />
     <Build Include="Security\Mediation_ICX.sql" />
+    <Build Include="Mediation_ICX\Tables\AlcatelCDR.sql" />
+    <Build Include="Mediation_ICX\Tables\AlcatelBadCDR.sql" />
+    <Build Include="Mediation_ICX\User Defined Types\AlcatelCDRType.sql" />
+    <Build Include="Mediation_ICX\User Defined Types\AlcatelBadCDRType.sql" />
   </ItemGroup>
 </Project>
