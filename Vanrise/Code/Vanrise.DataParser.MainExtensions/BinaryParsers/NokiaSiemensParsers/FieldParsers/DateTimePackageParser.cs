@@ -33,7 +33,7 @@ namespace Vanrise.DataParser.MainExtensions.BinaryParsers.NokiaSiemensParsers.Fi
             int secondsValue = ParserHelper.HexToInt32(ParserHelper.GetHexFromByte(context.FieldValue[SecondsIndex]));
 
             char[] chars = Convert.ToString(context.FieldValue[FlagsMillisecondsIndex], 2).PadLeft(8, '0').ToCharArray();
-            int millisecondsValue = Convert.ToInt32(string.Concat(chars[3], chars[4], chars[5], chars[6]), 2);
+            int millisecondsValue = 100 * Convert.ToInt32(string.Concat(chars[3], chars[4], chars[5], chars[6]), 2);
 
             byte[] durationBytes = new byte[3];
             Array.Copy(context.FieldValue, DurationIndex, durationBytes, 0, 3);
