@@ -808,6 +808,7 @@
     <None Include="Mediation.Ericsson_WHS.PostDeployment.sql" />
     <None Include="SOM.PostDeployment.sql" />
     <None Include="Mediation.NokiaSiemens_ICX.PostDeployment.sql" />
+    <None Include="Mediation.Alcatel_ICX.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />
