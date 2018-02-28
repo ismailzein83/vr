@@ -5,12 +5,15 @@ using System.Linq;
 using Vanrise.Common;
 using Vanrise.DataParser.Business;
 using Vanrise.DataParser.Entities;
+using Vanrise.DataParser.MainExtensions.BinaryParsers.Common.FieldParsers;
+using Vanrise.DataParser.MainExtensions.BinaryParsers.Common.RecordParsers;
+using Vanrise.DataParser.MainExtensions.BinaryParsers.HexTLV.FieldParsers;
+using Vanrise.DataParser.MainExtensions.BinaryParsers.HexTLV.RecordParsers;
+using Vanrise.DataParser.MainExtensions.BinaryParsers.NokiaSiemensParsers.FieldParsers;
+using Vanrise.DataParser.MainExtensions.BinaryParsers.NokiaSiemensParsers.RecordParsers;
 using Vanrise.DataParser.MainExtensions.CompositeFieldParsers;
-using Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers;
-using Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers;
 using Vanrise.DataParser.MainExtensions.HexTLV2.FieldParsers;
-using Vanrise.DataParser.MainExtensions.NokiaSiemensParsers.FieldParsers;
-using Vanrise.DataParser.MainExtensions.NokiaSiemensParsers.RecordParsers;
+using Vanrise.DataParser.MainExtensions.StringFieldParsers;
 
 namespace Mediation.Runtime.DataParser
 {
@@ -54,7 +57,7 @@ namespace Mediation.Runtime.DataParser
 
         private string GetHuaweiNamibiaParserSettings()
         {
-            HexTLVParserType hexParser = new HexTLVParserType
+            BinaryParserType hexParser = new BinaryParserType
             {
                 RecordParser = new SplitByTagRecordParser
                 {
@@ -78,10 +81,10 @@ namespace Mediation.Runtime.DataParser
 
         }
 
-        private Dictionary<Guid, HexTLVRecordParser> GetTemplates_Huawei()
+        private Dictionary<Guid, BinaryRecordParser> GetTemplates_Huawei()
         {
-            Dictionary<Guid, HexTLVRecordParser> templates = new Dictionary<Guid, HexTLVRecordParser>();
-            templates.Add(new Guid("9AB5792A-BB25-412C-BFCD-791515F7C893"), new HexTLVRecordParser
+            Dictionary<Guid, BinaryRecordParser> templates = new Dictionary<Guid, BinaryRecordParser>();
+            templates.Add(new Guid("9AB5792A-BB25-412C-BFCD-791515F7C893"), new BinaryRecordParser
             {
                 Settings = new SplitByTagRecordParser
                 {
@@ -92,15 +95,15 @@ namespace Mediation.Runtime.DataParser
             return templates;
         }
 
-        private Dictionary<string, HexTLVRecordParser> GetTemplateParsers_Huawei()
+        private Dictionary<string, BinaryRecordParser> GetTemplateParsers_Huawei()
         {
-            Dictionary<string, HexTLVRecordParser> parsers = new Dictionary<string, HexTLVRecordParser>();
+            Dictionary<string, BinaryRecordParser> parsers = new Dictionary<string, BinaryRecordParser>();
 
-            parsers.Add("A3", new HexTLVRecordParser
+            parsers.Add("A3", new BinaryRecordParser
             {
                 Settings = new CreateRecordRecordParser
                 {
-                    FieldParsers = new HexTLVFieldParserCollection
+                    FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = Get_A3_FieldParsers_Huawei()
                     },
@@ -112,11 +115,11 @@ namespace Mediation.Runtime.DataParser
                 }
 
             });
-            parsers.Add("A4", new HexTLVRecordParser
+            parsers.Add("A4", new BinaryRecordParser
             {
                 Settings = new CreateRecordRecordParser
                 {
-                    FieldParsers = new HexTLVFieldParserCollection
+                    FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = Get_A4_FieldParsers_Huawei()
                     },
@@ -128,11 +131,11 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("A6", new HexTLVRecordParser
+            parsers.Add("A6", new BinaryRecordParser
             {
                 Settings = new CreateRecordRecordParser
                 {
-                    FieldParsers = new HexTLVFieldParserCollection
+                    FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = Get_A6_SMSMO_FieldParsers_Huawei()
                     },
@@ -145,11 +148,11 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("A7", new HexTLVRecordParser
+            parsers.Add("A7", new BinaryRecordParser
             {
                 Settings = new CreateRecordRecordParser
                 {
-                    FieldParsers = new HexTLVFieldParserCollection
+                    FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = Get_A7_SMSMT_FieldParsers_Huawei()
                     },
@@ -174,11 +177,11 @@ namespace Mediation.Runtime.DataParser
             return fieldParsers;
         }
 
-        private Dictionary<string, HexTLVFieldParser> Get_A3_FieldParsers_Huawei()
+        private Dictionary<string, BinaryFieldParser> Get_A3_FieldParsers_Huawei()
         {
-            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
 
-            parsers.Add("80", new HexTLVFieldParser
+            parsers.Add("80", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -187,7 +190,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("81", new HexTLVFieldParser
+            parsers.Add("81", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -197,7 +200,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("82", new HexTLVFieldParser
+            parsers.Add("82", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -207,7 +210,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("83", new HexTLVFieldParser
+            parsers.Add("83", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -217,15 +220,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("A4", new HexTLVFieldParser
+            parsers.Add("A4", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new StringParser
                                      {
@@ -237,15 +240,15 @@ namespace Mediation.Runtime.DataParser
                     }
                 }
             });
-            parsers.Add("A5", new HexTLVFieldParser
+            parsers.Add("A5", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new StringParser
                                      {
@@ -258,18 +261,18 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("87", new HexTLVFieldParser
+            parsers.Add("87", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("ConnectDateTime")
             });
 
 
-            parsers.Add("88", new HexTLVFieldParser
+            parsers.Add("88", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("DisconnectDateTime")
             });
 
-            parsers.Add("89", new HexTLVFieldParser
+            parsers.Add("89", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -278,7 +281,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8B", new HexTLVFieldParser
+            parsers.Add("8B", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -287,15 +290,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("AC", new HexTLVFieldParser
+            parsers.Add("AC", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"80", new HexTLVFieldParser
+                            {"80", new BinaryFieldParser
                                 {
                                      Settings = new HexaParser
                                      {
@@ -308,7 +311,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8D", new HexTLVFieldParser
+            parsers.Add("8D", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -317,7 +320,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("99", new HexTLVFieldParser
+            parsers.Add("99", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -325,15 +328,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("BF8102", new HexTLVFieldParser
+            parsers.Add("BF8102", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"83", new HexTLVFieldParser
+                            {"83", new BinaryFieldParser
                                 {
                                      Settings = new HexaParser
                                      {
@@ -346,15 +349,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("BF8105", new HexTLVFieldParser
+            parsers.Add("BF8105", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"80", new HexTLVFieldParser
+                            {"80", new BinaryFieldParser
                                 {
                                      Settings = new HexaParser
                                      {
@@ -367,7 +370,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8111", new HexTLVFieldParser
+            parsers.Add("9F8111", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -376,7 +379,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8120", new HexTLVFieldParser
+            parsers.Add("9F8120", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -386,7 +389,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8127", new HexTLVFieldParser
+            parsers.Add("9F8127", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -394,7 +397,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8128", new HexTLVFieldParser
+            parsers.Add("9F8128", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -402,7 +405,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F812A", new HexTLVFieldParser
+            parsers.Add("9F812A", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -410,7 +413,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8143", new HexTLVFieldParser
+            parsers.Add("9F8143", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -418,7 +421,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8146", new HexTLVFieldParser
+            parsers.Add("9F8146", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -426,7 +429,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8148", new HexTLVFieldParser
+            parsers.Add("9F8148", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -435,7 +438,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F815A", new HexTLVFieldParser
+            parsers.Add("9F815A", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -443,7 +446,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8161", new HexTLVFieldParser
+            parsers.Add("9F8161", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -452,7 +455,7 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("9F8168", new HexTLVFieldParser
+            parsers.Add("9F8168", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -461,7 +464,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8175", new HexTLVFieldParser
+            parsers.Add("9F8175", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -471,15 +474,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("BF8177", new HexTLVFieldParser
+            parsers.Add("BF8177", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"80", new HexTLVFieldParser
+                            {"80", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -488,7 +491,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -502,7 +505,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8179", new HexTLVFieldParser
+            parsers.Add("9F8179", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -510,7 +513,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F817A", new HexTLVFieldParser
+            parsers.Add("9F817A", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -521,11 +524,11 @@ namespace Mediation.Runtime.DataParser
             return parsers;
         }
 
-        private Dictionary<string, HexTLVFieldParser> Get_A4_FieldParsers_Huawei()
+        private Dictionary<string, BinaryFieldParser> Get_A4_FieldParsers_Huawei()
         {
-            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
 
-            parsers.Add("80", new HexTLVFieldParser
+            parsers.Add("80", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -535,7 +538,7 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("81", new HexTLVFieldParser
+            parsers.Add("81", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -545,7 +548,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("82", new HexTLVFieldParser
+            parsers.Add("82", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -555,7 +558,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("83", new HexTLVFieldParser
+            parsers.Add("83", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -565,15 +568,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("A4", new HexTLVFieldParser
+            parsers.Add("A4", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new StringParser
                                      {
@@ -585,15 +588,15 @@ namespace Mediation.Runtime.DataParser
                     }
                 }
             });
-            parsers.Add("A5", new HexTLVFieldParser
+            parsers.Add("A5", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new StringParser
                                      {
@@ -607,17 +610,17 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("87", new HexTLVFieldParser
+            parsers.Add("87", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("ConnectDateTime")
             });
 
-            parsers.Add("88", new HexTLVFieldParser
+            parsers.Add("88", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("DisconnectDateTime")
             });
 
-            parsers.Add("89", new HexTLVFieldParser
+            parsers.Add("89", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -626,7 +629,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8B", new HexTLVFieldParser
+            parsers.Add("8B", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -635,15 +638,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("AC", new HexTLVFieldParser
+            parsers.Add("AC", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"80", new HexTLVFieldParser
+                            {"80", new BinaryFieldParser
                                 {
                                      Settings = new HexaParser
                                      {
@@ -656,7 +659,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8D", new HexTLVFieldParser
+            parsers.Add("8D", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -665,7 +668,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("99", new HexTLVFieldParser
+            parsers.Add("99", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -673,15 +676,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("BF8102", new HexTLVFieldParser
+            parsers.Add("BF8102", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"83", new HexTLVFieldParser
+                            {"83", new BinaryFieldParser
                                 {
                                      Settings = new HexaParser
                                      {
@@ -694,15 +697,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("BF8105", new HexTLVFieldParser
+            parsers.Add("BF8105", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"80", new HexTLVFieldParser
+                            {"80", new BinaryFieldParser
                                 {
                                      Settings = new HexaParser
                                      {
@@ -715,7 +718,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8111", new HexTLVFieldParser
+            parsers.Add("9F8111", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -724,7 +727,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8120", new HexTLVFieldParser
+            parsers.Add("9F8120", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -734,7 +737,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8127", new HexTLVFieldParser
+            parsers.Add("9F8127", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -742,7 +745,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8128", new HexTLVFieldParser
+            parsers.Add("9F8128", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -750,7 +753,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F812A", new HexTLVFieldParser
+            parsers.Add("9F812A", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -758,7 +761,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8143", new HexTLVFieldParser
+            parsers.Add("9F8143", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -766,7 +769,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8146", new HexTLVFieldParser
+            parsers.Add("9F8146", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -774,7 +777,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8148", new HexTLVFieldParser
+            parsers.Add("9F8148", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -783,7 +786,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F815A", new HexTLVFieldParser
+            parsers.Add("9F815A", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -791,7 +794,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8161", new HexTLVFieldParser
+            parsers.Add("9F8161", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -800,7 +803,7 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("9F8168", new HexTLVFieldParser
+            parsers.Add("9F8168", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -810,7 +813,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8175", new HexTLVFieldParser
+            parsers.Add("9F8175", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -820,15 +823,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("BF8177", new HexTLVFieldParser
+            parsers.Add("BF8177", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"80", new HexTLVFieldParser
+                            {"80", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -837,7 +840,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -851,7 +854,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8179", new HexTLVFieldParser
+            parsers.Add("9F8179", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -859,7 +862,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F817A", new HexTLVFieldParser
+            parsers.Add("9F817A", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -870,11 +873,11 @@ namespace Mediation.Runtime.DataParser
             return parsers;
         }
 
-        private Dictionary<string, HexTLVFieldParser> Get_A6_SMSMO_FieldParsers_Huawei()
+        private Dictionary<string, BinaryFieldParser> Get_A6_SMSMO_FieldParsers_Huawei()
         {
-            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
 
-            parsers.Add("80", new HexTLVFieldParser
+            parsers.Add("80", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -883,7 +886,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("81", new HexTLVFieldParser
+            parsers.Add("81", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -893,7 +896,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("82", new HexTLVFieldParser
+            parsers.Add("82", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -903,7 +906,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("83", new HexTLVFieldParser
+            parsers.Add("83", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -913,7 +916,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("84", new HexTLVFieldParser
+            parsers.Add("84", new BinaryFieldParser
             {
                 Settings = new BCDNumberParser
                 {
@@ -923,7 +926,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("85", new HexTLVFieldParser
+            parsers.Add("85", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -933,7 +936,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("86", new HexTLVFieldParser
+            parsers.Add("86", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -943,15 +946,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("A7", new HexTLVFieldParser
+            parsers.Add("A7", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -960,7 +963,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"80", new HexTLVFieldParser
+                            {"80", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -974,7 +977,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("88", new HexTLVFieldParser
+            parsers.Add("88", new BinaryFieldParser
             {
                 Settings = new BCDNumberParser
                 {
@@ -984,12 +987,12 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("89", new HexTLVFieldParser
+            parsers.Add("89", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("MessageTime")
             });
 
-            parsers.Add("AA", new HexTLVFieldParser
+            parsers.Add("AA", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -998,7 +1001,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("AB", new HexTLVFieldParser
+            parsers.Add("AB", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1006,7 +1009,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8C", new HexTLVFieldParser
+            parsers.Add("8C", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -1016,15 +1019,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("AD", new HexTLVFieldParser
+            parsers.Add("AD", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new BCDNumberParser
                                      {
@@ -1034,7 +1037,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"82", new HexTLVFieldParser
+                            {"82", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -1043,7 +1046,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"83", new HexTLVFieldParser
+                            {"83", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -1052,7 +1055,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"84", new HexTLVFieldParser
+                            {"84", new BinaryFieldParser
                                 {
                                      Settings = new HexaParser
                                      {
@@ -1060,7 +1063,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"85", new HexTLVFieldParser
+                            {"85", new BinaryFieldParser
                                 {
                                      Settings = new BCDNumberParser
                                      {
@@ -1076,7 +1079,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8E", new HexTLVFieldParser
+            parsers.Add("8E", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1085,7 +1088,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8F", new HexTLVFieldParser
+            parsers.Add("8F", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1093,7 +1096,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8F8102", new HexTLVFieldParser
+            parsers.Add("8F8102", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1102,15 +1105,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("BF8105", new HexTLVFieldParser
+            parsers.Add("BF8105", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"80", new HexTLVFieldParser
+                            {"80", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -1119,7 +1122,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new HexaParser
                                      {
@@ -1132,7 +1135,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F810C", new HexTLVFieldParser
+            parsers.Add("9F810C", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1140,7 +1143,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F810D", new HexTLVFieldParser
+            parsers.Add("9F810D", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1149,7 +1152,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8111", new HexTLVFieldParser
+            parsers.Add("9F8111", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1157,7 +1160,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8127", new HexTLVFieldParser
+            parsers.Add("9F8127", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1165,7 +1168,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8128", new HexTLVFieldParser
+            parsers.Add("9F8128", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1173,7 +1176,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F813C", new HexTLVFieldParser
+            parsers.Add("9F813C", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1181,7 +1184,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F813E", new HexTLVFieldParser
+            parsers.Add("9F813E", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1189,7 +1192,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8140", new HexTLVFieldParser
+            parsers.Add("9F8140", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1197,7 +1200,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8143", new HexTLVFieldParser
+            parsers.Add("9F8143", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1205,7 +1208,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8144", new HexTLVFieldParser
+            parsers.Add("9F8144", new BinaryFieldParser
             {
                 Settings = new StringParser
                 {
@@ -1213,7 +1216,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8145", new HexTLVFieldParser
+            parsers.Add("9F8145", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1222,7 +1225,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8146", new HexTLVFieldParser
+            parsers.Add("9F8146", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1231,7 +1234,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8147", new HexTLVFieldParser
+            parsers.Add("9F8147", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1240,7 +1243,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8148", new HexTLVFieldParser
+            parsers.Add("9F8148", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1249,7 +1252,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8149", new HexTLVFieldParser
+            parsers.Add("9F8149", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1258,7 +1261,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F814A", new HexTLVFieldParser
+            parsers.Add("9F814A", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1267,7 +1270,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F815F", new HexTLVFieldParser
+            parsers.Add("9F815F", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1275,7 +1278,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8160", new HexTLVFieldParser
+            parsers.Add("9F8160", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1284,7 +1287,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8163", new HexTLVFieldParser
+            parsers.Add("9F8163", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1293,7 +1296,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8168", new HexTLVFieldParser
+            parsers.Add("9F8168", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1302,7 +1305,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F816B", new HexTLVFieldParser
+            parsers.Add("9F816B", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1310,7 +1313,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F816D", new HexTLVFieldParser
+            parsers.Add("9F816D", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1319,7 +1322,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8170", new HexTLVFieldParser
+            parsers.Add("9F8170", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1327,7 +1330,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8201", new HexTLVFieldParser
+            parsers.Add("9F8201", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1335,7 +1338,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8116", new HexTLVFieldParser
+            parsers.Add("9F8116", new BinaryFieldParser
             {
                 Settings = new BoolFieldParser
                 {
@@ -1343,7 +1346,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F821D", new HexTLVFieldParser
+            parsers.Add("9F821D", new BinaryFieldParser
             {
                 Settings = new StringParser
                 {
@@ -1351,7 +1354,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F821E", new HexTLVFieldParser
+            parsers.Add("9F821E", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1360,7 +1363,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F821F", new HexTLVFieldParser
+            parsers.Add("9F821F", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1369,7 +1372,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8221", new HexTLVFieldParser
+            parsers.Add("9F8221", new BinaryFieldParser
             {
                 Settings = new StringParser
                 {
@@ -1377,7 +1380,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8222", new HexTLVFieldParser
+            parsers.Add("9F8222", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1386,7 +1389,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F823D", new HexTLVFieldParser
+            parsers.Add("9F823D", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1398,11 +1401,11 @@ namespace Mediation.Runtime.DataParser
             return parsers;
         }
 
-        private Dictionary<string, HexTLVFieldParser> Get_A7_SMSMT_FieldParsers_Huawei()
+        private Dictionary<string, BinaryFieldParser> Get_A7_SMSMT_FieldParsers_Huawei()
         {
-            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
 
-            parsers.Add("80", new HexTLVFieldParser
+            parsers.Add("80", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1412,7 +1415,7 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("81", new HexTLVFieldParser
+            parsers.Add("81", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -1422,7 +1425,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("82", new HexTLVFieldParser
+            parsers.Add("82", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -1432,7 +1435,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("83", new HexTLVFieldParser
+            parsers.Add("83", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -1442,7 +1445,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("84", new HexTLVFieldParser
+            parsers.Add("84", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -1452,7 +1455,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8149", new HexTLVFieldParser
+            parsers.Add("9F8149", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -1462,7 +1465,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("85", new HexTLVFieldParser
+            parsers.Add("85", new BinaryFieldParser
             {
                 Settings = new BCDNumberParser
                 {
@@ -1472,7 +1475,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("86", new HexTLVFieldParser
+            parsers.Add("86", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -1482,15 +1485,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("A7", new HexTLVFieldParser
+            parsers.Add("A7", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -1499,7 +1502,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"80", new HexTLVFieldParser
+                            {"80", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -1513,12 +1516,12 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("88", new HexTLVFieldParser
+            parsers.Add("88", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("MessageTime")
             });
 
-            parsers.Add("A9", new HexTLVFieldParser
+            parsers.Add("A9", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1527,7 +1530,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("AA", new HexTLVFieldParser
+            parsers.Add("AA", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1535,7 +1538,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8B", new HexTLVFieldParser
+            parsers.Add("8B", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1544,7 +1547,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8D", new HexTLVFieldParser
+            parsers.Add("8D", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1552,15 +1555,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("AC", new HexTLVFieldParser
+            parsers.Add("AC", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new BCDNumberParser
                                      {
@@ -1570,7 +1573,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"82", new HexTLVFieldParser
+                            {"82", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -1579,7 +1582,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"83", new HexTLVFieldParser
+                            {"83", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -1588,7 +1591,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"84", new HexTLVFieldParser
+                            {"84", new BinaryFieldParser
                                 {
                                      Settings = new HexaParser
                                      {
@@ -1596,7 +1599,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"85", new HexTLVFieldParser
+                            {"85", new BinaryFieldParser
                                 {
                                      Settings = new BCDNumberParser
                                      {
@@ -1612,7 +1615,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("BF8102", new HexTLVFieldParser
+            parsers.Add("BF8102", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1621,15 +1624,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("BF8105", new HexTLVFieldParser
+            parsers.Add("BF8105", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"80", new HexTLVFieldParser
+                            {"80", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -1638,7 +1641,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new HexaParser
                                      {
@@ -1651,7 +1654,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F810C", new HexTLVFieldParser
+            parsers.Add("9F810C", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1659,7 +1662,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F810D", new HexTLVFieldParser
+            parsers.Add("9F810D", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1668,7 +1671,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8111", new HexTLVFieldParser
+            parsers.Add("9F8111", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1676,7 +1679,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8127", new HexTLVFieldParser
+            parsers.Add("9F8127", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1684,7 +1687,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8128", new HexTLVFieldParser
+            parsers.Add("9F8128", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1692,7 +1695,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F813C", new HexTLVFieldParser
+            parsers.Add("9F813C", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1700,7 +1703,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F813E", new HexTLVFieldParser
+            parsers.Add("9F813E", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1708,7 +1711,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8140", new HexTLVFieldParser
+            parsers.Add("9F8140", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1716,7 +1719,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8143", new HexTLVFieldParser
+            parsers.Add("9F8143", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1724,7 +1727,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8144", new HexTLVFieldParser
+            parsers.Add("9F8144", new BinaryFieldParser
             {
                 Settings = new StringParser
                 {
@@ -1732,7 +1735,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8145", new HexTLVFieldParser
+            parsers.Add("9F8145", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1741,7 +1744,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8146", new HexTLVFieldParser
+            parsers.Add("9F8146", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1750,7 +1753,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8147", new HexTLVFieldParser
+            parsers.Add("9F8147", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1759,7 +1762,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8148", new HexTLVFieldParser
+            parsers.Add("9F8148", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1778,7 +1781,7 @@ namespace Mediation.Runtime.DataParser
             //    }
             //});
 
-            parsers.Add("9F814A", new HexTLVFieldParser
+            parsers.Add("9F814A", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1787,7 +1790,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F814B", new HexTLVFieldParser
+            parsers.Add("9F814B", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1796,7 +1799,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F815F", new HexTLVFieldParser
+            parsers.Add("9F815F", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1804,7 +1807,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8160", new HexTLVFieldParser
+            parsers.Add("9F8160", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1813,7 +1816,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8168", new HexTLVFieldParser
+            parsers.Add("9F8168", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1822,7 +1825,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F816D", new HexTLVFieldParser
+            parsers.Add("9F816D", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1831,7 +1834,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8170", new HexTLVFieldParser
+            parsers.Add("9F8170", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1839,7 +1842,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8201", new HexTLVFieldParser
+            parsers.Add("9F8201", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -1847,7 +1850,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F821D", new HexTLVFieldParser
+            parsers.Add("9F821D", new BinaryFieldParser
             {
                 Settings = new StringParser
                 {
@@ -1855,7 +1858,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F821E", new HexTLVFieldParser
+            parsers.Add("9F821E", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1864,7 +1867,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F821F", new HexTLVFieldParser
+            parsers.Add("9F821F", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1873,7 +1876,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8222", new HexTLVFieldParser
+            parsers.Add("9F8222", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1882,7 +1885,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F823D", new HexTLVFieldParser
+            parsers.Add("9F823D", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -1895,11 +1898,11 @@ namespace Mediation.Runtime.DataParser
             return parsers;
         }
 
-        private Dictionary<string, HexTLVRecordParser> Get_30_SubRecordsParsersByTag()
+        private Dictionary<string, BinaryRecordParser> Get_30_SubRecordsParsersByTag()
         {
-            Dictionary<string, HexTLVRecordParser> subParser = new Dictionary<string, HexTLVRecordParser>();
+            Dictionary<string, BinaryRecordParser> subParser = new Dictionary<string, BinaryRecordParser>();
 
-            subParser.Add("30", new HexTLVRecordParser
+            subParser.Add("30", new BinaryRecordParser
             {
                 Settings = new SplitByTagRecordParser
                 {
@@ -1910,10 +1913,10 @@ namespace Mediation.Runtime.DataParser
             return subParser;
         }
 
-        private Dictionary<string, HexTLVRecordParser> Get_30_SplitRecordsParsersByTag()
+        private Dictionary<string, BinaryRecordParser> Get_30_SplitRecordsParsersByTag()
         {
-            Dictionary<string, HexTLVRecordParser> subParser = new Dictionary<string, HexTLVRecordParser>();
-            subParser.Add("A1", new HexTLVRecordParser
+            Dictionary<string, BinaryRecordParser> subParser = new Dictionary<string, BinaryRecordParser>();
+            subParser.Add("A1", new BinaryRecordParser
             {
                 Settings = new ExecuteTemplateRecordParser
                 {
@@ -1930,7 +1933,7 @@ namespace Mediation.Runtime.DataParser
 
         public string GetEricssonIraqParserSettings()
         {
-            HexTLVParserType hexParser = new HexTLVParserType
+            BinaryParserType hexParser = new BinaryParserType
             {
                 RecordParser = new SplitByTagRecordParser
                 {
@@ -1951,10 +1954,10 @@ namespace Mediation.Runtime.DataParser
             return Serializer.Serialize(parserType.Settings);
         }
 
-        private Dictionary<Guid, HexTLVRecordParser> GetTemplates()
+        private Dictionary<Guid, BinaryRecordParser> GetTemplates()
         {
-            Dictionary<Guid, HexTLVRecordParser> templates = new Dictionary<Guid, HexTLVRecordParser>();
-            templates.Add(new Guid("8861E765-B865-43AB-AAF7-39DFB1079E04"), new HexTLVRecordParser
+            Dictionary<Guid, BinaryRecordParser> templates = new Dictionary<Guid, BinaryRecordParser>();
+            templates.Add(new Guid("8861E765-B865-43AB-AAF7-39DFB1079E04"), new BinaryRecordParser
             {
                 Settings = new SplitByTagRecordParser
                 {
@@ -1965,11 +1968,11 @@ namespace Mediation.Runtime.DataParser
             return templates;
         }
 
-        private Dictionary<string, HexTLVRecordParser> GetTemplateParsers()
+        private Dictionary<string, BinaryRecordParser> GetTemplateParsers()
         {
-            Dictionary<string, HexTLVRecordParser> parsers = new Dictionary<string, HexTLVRecordParser>();
+            Dictionary<string, BinaryRecordParser> parsers = new Dictionary<string, BinaryRecordParser>();
 
-            parsers.Add("A0", new HexTLVRecordParser
+            parsers.Add("A0", new BinaryRecordParser
             {
                 Settings = new SplitByTagRecordParser
                 {
@@ -1979,11 +1982,11 @@ namespace Mediation.Runtime.DataParser
             return parsers;
         }
 
-        private Dictionary<string, HexTLVRecordParser> Get_A0_SubRecordsParsersByTag()
+        private Dictionary<string, BinaryRecordParser> Get_A0_SubRecordsParsersByTag()
         {
-            Dictionary<string, HexTLVRecordParser> subParser = new Dictionary<string, HexTLVRecordParser>();
+            Dictionary<string, BinaryRecordParser> subParser = new Dictionary<string, BinaryRecordParser>();
 
-            subParser.Add("A0", new HexTLVRecordParser
+            subParser.Add("A0", new BinaryRecordParser
             {
                 Settings = new SplitByTagRecordParser
                 {
@@ -1991,7 +1994,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            subParser.Add("A1", new HexTLVRecordParser
+            subParser.Add("A1", new BinaryRecordParser
             {
                 Settings = new ExecuteTemplateRecordParser
                 {
@@ -2001,15 +2004,15 @@ namespace Mediation.Runtime.DataParser
             return subParser;
         }
 
-        private Dictionary<string, HexTLVRecordParser> Get_Template_CreateRecordsParsersByTag()
+        private Dictionary<string, BinaryRecordParser> Get_Template_CreateRecordsParsersByTag()
         {
-            Dictionary<string, HexTLVRecordParser> subParser = new Dictionary<string, HexTLVRecordParser>();
+            Dictionary<string, BinaryRecordParser> subParser = new Dictionary<string, BinaryRecordParser>();
 
-            subParser.Add("A0", new HexTLVRecordParser
+            subParser.Add("A0", new BinaryRecordParser
             {
                 Settings = new CreateRecordRecordParser
                 {
-                    FieldParsers = new HexTLVFieldParserCollection
+                    FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = Get_A0_Transit_FieldParsers()
                     },
@@ -2037,11 +2040,11 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            subParser.Add("A1", new HexTLVRecordParser
+            subParser.Add("A1", new BinaryRecordParser
             {
                 Settings = new CreateRecordRecordParser
                 {
-                    FieldParsers = new HexTLVFieldParserCollection
+                    FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = Get_A1_MSOriginating_FieldParsers()
                     },
@@ -2069,11 +2072,11 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            subParser.Add("A2", new HexTLVRecordParser
+            subParser.Add("A2", new BinaryRecordParser
             {
                 Settings = new CreateRecordRecordParser
                 {
-                    FieldParsers = new HexTLVFieldParserCollection
+                    FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = Get_A2_Roaming_FieldParsers()
                     },
@@ -2101,11 +2104,11 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            subParser.Add("A3", new HexTLVRecordParser
+            subParser.Add("A3", new BinaryRecordParser
             {
                 Settings = new CreateRecordRecordParser
                 {
-                    FieldParsers = new HexTLVFieldParserCollection
+                    FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = Get_A3_CallForwarding_FieldParsers()
                     },
@@ -2133,11 +2136,11 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            subParser.Add("A4", new HexTLVRecordParser
+            subParser.Add("A4", new BinaryRecordParser
             {
                 Settings = new CreateRecordRecordParser
                 {
-                    FieldParsers = new HexTLVFieldParserCollection
+                    FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = Get_A4_MSTerminating_FieldParsers()
                     },
@@ -2165,11 +2168,11 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            subParser.Add("A5", new HexTLVRecordParser
+            subParser.Add("A5", new BinaryRecordParser
             {
                 Settings = new CreateRecordRecordParser
                 {
-                    FieldParsers = new HexTLVFieldParserCollection
+                    FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = Get_A5_MSOriginatingSMS_FieldParsers()
                     },
@@ -2196,11 +2199,11 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            subParser.Add("A7", new HexTLVRecordParser
+            subParser.Add("A7", new BinaryRecordParser
             {
                 Settings = new CreateRecordRecordParser
                 {
-                    FieldParsers = new HexTLVFieldParserCollection
+                    FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = Get_A7_MSTerminatingSMS_FieldParsers()
                     },
@@ -2288,11 +2291,11 @@ namespace Mediation.Runtime.DataParser
                     };
         }
 
-        private Dictionary<string, HexTLVFieldParser> Get_A0_Transit_FieldParsers()
+        private Dictionary<string, BinaryFieldParser> Get_A0_Transit_FieldParsers()
         {
-            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
 
-            parsers.Add("88", new HexTLVFieldParser
+            parsers.Add("88", new BinaryFieldParser
             {
                 Settings = new DateTimeParser
                 {
@@ -2305,7 +2308,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("89", new HexTLVFieldParser
+            parsers.Add("89", new BinaryFieldParser
             {
                 Settings = new TimeParser
                 {
@@ -2313,7 +2316,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8A", new HexTLVFieldParser
+            parsers.Add("8A", new BinaryFieldParser
             {
                 Settings = new TimeParser
                 {
@@ -2321,7 +2324,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8B", new HexTLVFieldParser
+            parsers.Add("8B", new BinaryFieldParser
             {
                 Settings = new TimeParser
                 {
@@ -2329,7 +2332,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8D", new HexTLVFieldParser
+            parsers.Add("8D", new BinaryFieldParser
             {
                 Settings = new TimeParser
                 {
@@ -2337,7 +2340,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("84", new HexTLVFieldParser
+            parsers.Add("84", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2346,7 +2349,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("85", new HexTLVFieldParser
+            parsers.Add("85", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2355,7 +2358,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9D", new HexTLVFieldParser
+            parsers.Add("9D", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2364,7 +2367,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F50", new HexTLVFieldParser
+            parsers.Add("9F50", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2373,7 +2376,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F54", new HexTLVFieldParser
+            parsers.Add("9F54", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2382,7 +2385,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F2E", new HexTLVFieldParser
+            parsers.Add("9F2E", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -2391,26 +2394,26 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F26", new HexTLVFieldParser
+            parsers.Add("9F26", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
                 {
-                    Settings = new NumberFieldParser
-                    {
-                        NumberType = NumberType.Int,
-                        FieldName = "IntermediateChargingIndicator"
-                    }
-                });
+                    NumberType = NumberType.Int,
+                    FieldName = "IntermediateChargingIndicator"
+                }
+            });
 
 
-            parsers.Add("9F27", new HexTLVFieldParser
+            parsers.Add("9F27", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
                 {
-                    Settings = new NumberFieldParser
-                    {
-                        NumberType = NumberType.Int,
-                        FieldName = "IntermediateRecordNumber"
-                    }
-                });
+                    NumberType = NumberType.Int,
+                    FieldName = "IntermediateRecordNumber"
+                }
+            });
 
-            parsers.Add("95", new HexTLVFieldParser
+            parsers.Add("95", new BinaryFieldParser
             {
                 Settings = new StringParser
                 {
@@ -2418,7 +2421,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("96", new HexTLVFieldParser
+            parsers.Add("96", new BinaryFieldParser
             {
                 Settings = new StringParser
                 {
@@ -2429,11 +2432,11 @@ namespace Mediation.Runtime.DataParser
             return parsers;
         }
 
-        private Dictionary<string, HexTLVFieldParser> Get_A1_MSOriginating_FieldParsers()
+        private Dictionary<string, BinaryFieldParser> Get_A1_MSOriginating_FieldParsers()
         {
-            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
 
-            parsers.Add("89", new HexTLVFieldParser
+            parsers.Add("89", new BinaryFieldParser
             {
                 Settings = new DateTimeParser
                 {
@@ -2445,7 +2448,7 @@ namespace Mediation.Runtime.DataParser
                     DayIndex = 2
                 }
             });
-            parsers.Add("8A", new HexTLVFieldParser
+            parsers.Add("8A", new BinaryFieldParser
             {
                 Settings = new TimeParser
                 {
@@ -2453,7 +2456,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F44", new HexTLVFieldParser
+            parsers.Add("9F44", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -2462,7 +2465,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8B", new HexTLVFieldParser
+            parsers.Add("8B", new BinaryFieldParser
             {
                 Settings = new TimeParser
                 {
@@ -2470,7 +2473,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8C", new HexTLVFieldParser
+            parsers.Add("8C", new BinaryFieldParser
             {
                 Settings = new TimeParser
                 {
@@ -2478,14 +2481,14 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8E", new HexTLVFieldParser
+            parsers.Add("8E", new BinaryFieldParser
             {
                 Settings = new TimeParser
                 {
                     FieldName = "TimeFromRegisterSeizureToStartOfCharging"
                 }
             });
-            parsers.Add("85", new HexTLVFieldParser
+            parsers.Add("85", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2494,7 +2497,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("86", new HexTLVFieldParser
+            parsers.Add("86", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2503,7 +2506,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("84", new HexTLVFieldParser
+            parsers.Add("84", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2512,7 +2515,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("87", new HexTLVFieldParser
+            parsers.Add("87", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2522,7 +2525,7 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("9F7E", new HexTLVFieldParser
+            parsers.Add("9F7E", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2531,7 +2534,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8102", new HexTLVFieldParser
+            parsers.Add("9F8102", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2540,7 +2543,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9B", new HexTLVFieldParser
+            parsers.Add("9B", new BinaryFieldParser
             {
                 Settings = new CallLocationInformationParser
                 {
@@ -2548,7 +2551,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9C", new HexTLVFieldParser
+            parsers.Add("9C", new BinaryFieldParser
             {
                 Settings = new CallLocationInformationParser
                 {
@@ -2556,7 +2559,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("99", new HexTLVFieldParser
+            parsers.Add("99", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2565,7 +2568,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F30", new HexTLVFieldParser
+            parsers.Add("9F30", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -2575,7 +2578,7 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("9F31", new HexTLVFieldParser
+            parsers.Add("9F31", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -2585,7 +2588,7 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("96", new HexTLVFieldParser
+            parsers.Add("96", new BinaryFieldParser
             {
                 Settings = new StringParser
                 {
@@ -2593,7 +2596,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("97", new HexTLVFieldParser
+            parsers.Add("97", new BinaryFieldParser
             {
                 Settings = new StringParser
                 {
@@ -2604,11 +2607,11 @@ namespace Mediation.Runtime.DataParser
             return parsers;
         }
 
-        private Dictionary<string, HexTLVFieldParser> Get_A2_Roaming_FieldParsers()
+        private Dictionary<string, BinaryFieldParser> Get_A2_Roaming_FieldParsers()
         {
-            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
 
-            parsers.Add("89", new HexTLVFieldParser
+            parsers.Add("89", new BinaryFieldParser
             {
                 Settings = new DateTimeParser
                 {
@@ -2620,7 +2623,7 @@ namespace Mediation.Runtime.DataParser
                     DayIndex = 2
                 }
             });
-            parsers.Add("8A", new HexTLVFieldParser
+            parsers.Add("8A", new BinaryFieldParser
             {
                 Settings = new TimeParser
                 {
@@ -2628,28 +2631,28 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8B", new HexTLVFieldParser
+            parsers.Add("8B", new BinaryFieldParser
             {
                 Settings = new TimeParser
                 {
                     FieldName = "StopTime"
                 }
             });
-            parsers.Add("8C", new HexTLVFieldParser
+            parsers.Add("8C", new BinaryFieldParser
             {
                 Settings = new TimeParser
                 {
                     FieldName = "CallDuration"
                 }
             });
-            parsers.Add("8E", new HexTLVFieldParser
+            parsers.Add("8E", new BinaryFieldParser
             {
                 Settings = new TimeParser
                 {
                     FieldName = "TimeFromRegisterSeizureToStartOfCharging"
                 }
             });
-            parsers.Add("84", new HexTLVFieldParser
+            parsers.Add("84", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2658,7 +2661,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("85", new HexTLVFieldParser
+            parsers.Add("85", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2667,7 +2670,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9C", new HexTLVFieldParser
+            parsers.Add("9C", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2676,7 +2679,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F3A", new HexTLVFieldParser
+            parsers.Add("9F3A", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2685,7 +2688,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F3D", new HexTLVFieldParser
+            parsers.Add("9F3D", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2694,7 +2697,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("86", new HexTLVFieldParser
+            parsers.Add("86", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2703,7 +2706,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F31", new HexTLVFieldParser
+            parsers.Add("9F31", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -2712,7 +2715,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F27", new HexTLVFieldParser
+            parsers.Add("9F27", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -2722,7 +2725,7 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("9F28", new HexTLVFieldParser
+            parsers.Add("9F28", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -2732,7 +2735,7 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("95", new HexTLVFieldParser
+            parsers.Add("95", new BinaryFieldParser
             {
                 Settings = new StringParser
                 {
@@ -2740,7 +2743,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("96", new HexTLVFieldParser
+            parsers.Add("96", new BinaryFieldParser
             {
                 Settings = new StringParser
                 {
@@ -2751,11 +2754,11 @@ namespace Mediation.Runtime.DataParser
             return parsers;
         }
 
-        private Dictionary<string, HexTLVFieldParser> Get_A3_CallForwarding_FieldParsers()
+        private Dictionary<string, BinaryFieldParser> Get_A3_CallForwarding_FieldParsers()
         {
-            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
 
-            parsers.Add("8D", new HexTLVFieldParser
+            parsers.Add("8D", new BinaryFieldParser
             {
                 Settings = new DateTimeParser
                 {
@@ -2768,7 +2771,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8E", new HexTLVFieldParser
+            parsers.Add("8E", new BinaryFieldParser
             {
                 Settings = new TimeParser
                 {
@@ -2776,14 +2779,14 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8F", new HexTLVFieldParser
+            parsers.Add("8F", new BinaryFieldParser
             {
                 Settings = new TimeParser
                 {
                     FieldName = "StopTime"
                 }
             });
-            parsers.Add("90", new HexTLVFieldParser
+            parsers.Add("90", new BinaryFieldParser
             {
                 Settings = new TimeParser
                 {
@@ -2791,7 +2794,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("92", new HexTLVFieldParser
+            parsers.Add("92", new BinaryFieldParser
             {
                 Settings = new TimeParser
                 {
@@ -2799,7 +2802,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("84", new HexTLVFieldParser
+            parsers.Add("84", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2808,7 +2811,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("85", new HexTLVFieldParser
+            parsers.Add("85", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2817,7 +2820,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("86", new HexTLVFieldParser
+            parsers.Add("86", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2826,7 +2829,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F53", new HexTLVFieldParser
+            parsers.Add("9F53", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2835,7 +2838,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F56", new HexTLVFieldParser
+            parsers.Add("9F56", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2844,7 +2847,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9C", new HexTLVFieldParser
+            parsers.Add("9C", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2853,7 +2856,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F39", new HexTLVFieldParser
+            parsers.Add("9F39", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -2862,7 +2865,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F29", new HexTLVFieldParser
+            parsers.Add("9F29", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -2872,7 +2875,7 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("9F2A", new HexTLVFieldParser
+            parsers.Add("9F2A", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -2881,7 +2884,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("99", new HexTLVFieldParser
+            parsers.Add("99", new BinaryFieldParser
             {
                 Settings = new StringParser
                 {
@@ -2889,7 +2892,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9A", new HexTLVFieldParser
+            parsers.Add("9A", new BinaryFieldParser
             {
                 Settings = new StringParser
                 {
@@ -2900,11 +2903,11 @@ namespace Mediation.Runtime.DataParser
             return parsers;
         }
 
-        private Dictionary<string, HexTLVFieldParser> Get_A4_MSTerminating_FieldParsers()
+        private Dictionary<string, BinaryFieldParser> Get_A4_MSTerminating_FieldParsers()
         {
-            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
 
-            parsers.Add("8A", new HexTLVFieldParser
+            parsers.Add("8A", new BinaryFieldParser
             {
                 Settings = new DateTimeParser
                 {
@@ -2917,7 +2920,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8B", new HexTLVFieldParser
+            parsers.Add("8B", new BinaryFieldParser
             {
                 Settings = new TimeParser
                 {
@@ -2925,7 +2928,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8C", new HexTLVFieldParser
+            parsers.Add("8C", new BinaryFieldParser
             {
                 Settings = new TimeParser
                 {
@@ -2933,7 +2936,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8D", new HexTLVFieldParser
+            parsers.Add("8D", new BinaryFieldParser
             {
                 Settings = new TimeParser
                 {
@@ -2941,7 +2944,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8F", new HexTLVFieldParser
+            parsers.Add("8F", new BinaryFieldParser
             {
                 Settings = new TimeParser
                 {
@@ -2949,7 +2952,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("86", new HexTLVFieldParser
+            parsers.Add("86", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2958,7 +2961,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("87", new HexTLVFieldParser
+            parsers.Add("87", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2967,7 +2970,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("84", new HexTLVFieldParser
+            parsers.Add("84", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2976,7 +2979,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("85", new HexTLVFieldParser
+            parsers.Add("85", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2986,7 +2989,7 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("9F70", new HexTLVFieldParser
+            parsers.Add("9F70", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -2995,7 +2998,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F72", new HexTLVFieldParser
+            parsers.Add("9F72", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -3004,7 +3007,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F24", new HexTLVFieldParser
+            parsers.Add("9F24", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -3013,7 +3016,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9B", new HexTLVFieldParser
+            parsers.Add("9B", new BinaryFieldParser
             {
                 Settings = new CallLocationInformationParser
                 {
@@ -3021,7 +3024,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9C", new HexTLVFieldParser
+            parsers.Add("9C", new BinaryFieldParser
             {
                 Settings = new CallLocationInformationParser
                 {
@@ -3029,7 +3032,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("99", new HexTLVFieldParser
+            parsers.Add("99", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -3038,7 +3041,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F43", new HexTLVFieldParser
+            parsers.Add("9F43", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -3047,7 +3050,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F2E", new HexTLVFieldParser
+            parsers.Add("9F2E", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -3057,7 +3060,7 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("9F2F", new HexTLVFieldParser
+            parsers.Add("9F2F", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -3067,7 +3070,7 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("96", new HexTLVFieldParser
+            parsers.Add("96", new BinaryFieldParser
             {
                 Settings = new StringParser
                 {
@@ -3075,7 +3078,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("97", new HexTLVFieldParser
+            parsers.Add("97", new BinaryFieldParser
             {
                 Settings = new StringParser
                 {
@@ -3086,11 +3089,11 @@ namespace Mediation.Runtime.DataParser
             return parsers;
         }
 
-        private Dictionary<string, HexTLVFieldParser> Get_A5_MSOriginatingSMS_FieldParsers()
+        private Dictionary<string, BinaryFieldParser> Get_A5_MSOriginatingSMS_FieldParsers()
         {
-            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
 
-            parsers.Add("87", new HexTLVFieldParser
+            parsers.Add("87", new BinaryFieldParser
             {
                 Settings = new DateTimeParser
                 {
@@ -3103,7 +3106,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("88", new HexTLVFieldParser
+            parsers.Add("88", new BinaryFieldParser
             {
                 Settings = new DateTimeParser
                 {
@@ -3117,7 +3120,7 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("85", new HexTLVFieldParser
+            parsers.Add("85", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -3126,7 +3129,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("86", new HexTLVFieldParser
+            parsers.Add("86", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -3135,7 +3138,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("84", new HexTLVFieldParser
+            parsers.Add("84", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -3147,11 +3150,11 @@ namespace Mediation.Runtime.DataParser
             return parsers;
         }
 
-        private Dictionary<string, HexTLVFieldParser> Get_A7_MSTerminatingSMS_FieldParsers()
+        private Dictionary<string, BinaryFieldParser> Get_A7_MSTerminatingSMS_FieldParsers()
         {
-            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
 
-            parsers.Add("86", new HexTLVFieldParser
+            parsers.Add("86", new BinaryFieldParser
             {
                 Settings = new DateTimeParser
                 {
@@ -3164,7 +3167,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("87", new HexTLVFieldParser
+            parsers.Add("87", new BinaryFieldParser
             {
                 Settings = new DateTimeParser
                 {
@@ -3178,7 +3181,7 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("84", new HexTLVFieldParser
+            parsers.Add("84", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -3187,7 +3190,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("85", new HexTLVFieldParser
+            parsers.Add("85", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -3196,7 +3199,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("83", new HexTLVFieldParser
+            parsers.Add("83", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -3212,7 +3215,7 @@ namespace Mediation.Runtime.DataParser
 
         private string GetEricssonParserSettings_GPRS()
         {
-            HexTLVParserType hexParser = new HexTLVParserType
+            BinaryParserType hexParser = new BinaryParserType
             {
                 RecordParser = new SplitByTagRecordParser
                 {
@@ -3233,15 +3236,15 @@ namespace Mediation.Runtime.DataParser
             return Serializer.Serialize(parserType.Settings);
         }
 
-        private Dictionary<string, HexTLVRecordParser> GetTemplateParsers_Ericsson_GPRS()
+        private Dictionary<string, BinaryRecordParser> GetTemplateParsers_Ericsson_GPRS()
         {
-            Dictionary<string, HexTLVRecordParser> parsers = new Dictionary<string, HexTLVRecordParser>();
+            Dictionary<string, BinaryRecordParser> parsers = new Dictionary<string, BinaryRecordParser>();
 
-            parsers.Add("BF4F", new HexTLVRecordParser
+            parsers.Add("BF4F", new BinaryRecordParser
             {
                 Settings = new CreateRecordRecordParser
                 {
-                    FieldParsers = new HexTLVFieldParserCollection
+                    FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = Get_B4_FieldParsers_Ericsson()
                     },
@@ -3267,11 +3270,11 @@ namespace Mediation.Runtime.DataParser
             return fieldParsers;
         }
 
-        private Dictionary<string, HexTLVFieldParser> Get_B4_FieldParsers_Ericsson()
+        private Dictionary<string, BinaryFieldParser> Get_B4_FieldParsers_Ericsson()
         {
-            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
 
-            parsers.Add("80", new HexTLVFieldParser
+            parsers.Add("80", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -3281,7 +3284,7 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("83", new HexTLVFieldParser
+            parsers.Add("83", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -3290,7 +3293,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9D", new HexTLVFieldParser
+            parsers.Add("9D", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -3299,7 +3302,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("85", new HexTLVFieldParser
+            parsers.Add("85", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -3308,7 +3311,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("96", new HexTLVFieldParser
+            parsers.Add("96", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -3317,7 +3320,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("87", new HexTLVFieldParser
+            parsers.Add("87", new BinaryFieldParser
             {
                 Settings = new StringParser
                 {
@@ -3325,7 +3328,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("88", new HexTLVFieldParser
+            parsers.Add("88", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -3333,16 +3336,16 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("89", new HexTLVFieldParser
-               {
-                   Settings = new NumberFieldParser
-                   {
-                       FieldName = "ServedPDPAddress",
-                       NumberType = NumberType.Int
-                   }
-               });
+            parsers.Add("89", new BinaryFieldParser
+            {
+                Settings = new NumberFieldParser
+                {
+                    FieldName = "ServedPDPAddress",
+                    NumberType = NumberType.Int
+                }
+            });
 
-            parsers.Add("8B", new HexTLVFieldParser
+            parsers.Add("8B", new BinaryFieldParser
             {
                 Settings = new BoolFieldParser
                 {
@@ -3350,22 +3353,22 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8D", new HexTLVFieldParser
+            parsers.Add("8D", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("RecordOpeningTime")
             });
 
-            parsers.Add("9F26", new HexTLVFieldParser
+            parsers.Add("9F26", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("StartTime")
             });
 
-            parsers.Add("9F27", new HexTLVFieldParser
+            parsers.Add("9F27", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("StopTime")
             });
 
-            parsers.Add("8E", new HexTLVFieldParser
+            parsers.Add("8E", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -3374,7 +3377,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8F", new HexTLVFieldParser
+            parsers.Add("8F", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -3383,7 +3386,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("91", new HexTLVFieldParser
+            parsers.Add("91", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -3393,7 +3396,7 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("92", new HexTLVFieldParser
+            parsers.Add("92", new BinaryFieldParser
             {
                 Settings = new StringParser
                 {
@@ -3401,7 +3404,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("94", new HexTLVFieldParser
+            parsers.Add("94", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -3410,7 +3413,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("95", new HexTLVFieldParser
+            parsers.Add("95", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -3419,7 +3422,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("97", new HexTLVFieldParser
+            parsers.Add("97", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -3428,7 +3431,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("98", new HexTLVFieldParser
+            parsers.Add("98", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -3437,7 +3440,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9E", new HexTLVFieldParser
+            parsers.Add("9E", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -3445,7 +3448,7 @@ namespace Mediation.Runtime.DataParser
                     NumberType = NumberType.Int
                 }
             });
-            parsers.Add("9F2D", new HexTLVFieldParser
+            parsers.Add("9F2D", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -3454,7 +3457,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F25", new HexTLVFieldParser
+            parsers.Add("9F25", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -3462,7 +3465,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F20", new HexTLVFieldParser
+            parsers.Add("9F20", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -3470,15 +3473,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("84", new HexTLVFieldParser
+            parsers.Add("84", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"80", new HexTLVFieldParser
+                            {"80", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
@@ -3486,7 +3489,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"82", new HexTLVFieldParser
+                            {"82", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
@@ -3494,7 +3497,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
@@ -3502,7 +3505,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"83", new HexTLVFieldParser
+                            {"83", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
@@ -3516,15 +3519,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("86", new HexTLVFieldParser
+            parsers.Add("86", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"80", new HexTLVFieldParser
+                            {"80", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
@@ -3532,7 +3535,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"82", new HexTLVFieldParser
+                            {"82", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
@@ -3540,7 +3543,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
@@ -3548,7 +3551,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"83", new HexTLVFieldParser
+                            {"83", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
@@ -3575,25 +3578,25 @@ namespace Mediation.Runtime.DataParser
         DateTimeParser GetHuaweiDateTimeParser(string fieldName)
         {
             return new DateTimeParser
-                    {
-                        FieldName = fieldName,
-                        WithOffset = true,
-                        DateTimeParsingType = DateTimeParsingType.DateTime,
-                        YearIndex = 0,
-                        MonthIndex = 1,
-                        DayIndex = 2,
-                        HoursIndex = 3,
-                        MinutesIndex = 4,
-                        SecondsIndex = 5,
-                        TimeShiftIndicatorIndex = 6,
-                        HoursTimeShiftIndex = 7,
-                        MinutesTimeShiftIndex = 8,
-                        IsBCD = true
-                    };
+            {
+                FieldName = fieldName,
+                WithOffset = true,
+                DateTimeParsingType = DateTimeParsingType.DateTime,
+                YearIndex = 0,
+                MonthIndex = 1,
+                DayIndex = 2,
+                HoursIndex = 3,
+                MinutesIndex = 4,
+                SecondsIndex = 5,
+                TimeShiftIndicatorIndex = 6,
+                HoursTimeShiftIndex = 7,
+                MinutesTimeShiftIndex = 8,
+                IsBCD = true
+            };
         }
         private string GetHuaweiIraqParserSettings()
         {
-            HexTLVParserType hexParser = new HexTLVParserType
+            BinaryParserType hexParser = new BinaryParserType
             {
                 RecordParser = new SplitByTagRecordParser
                 {
@@ -3614,11 +3617,11 @@ namespace Mediation.Runtime.DataParser
 
             return Serializer.Serialize(parserType.Settings);
         }
-        private Dictionary<string, HexTLVRecordParser> Get_30_SubRecordsParsersByTag_Iraq()
+        private Dictionary<string, BinaryRecordParser> Get_30_SubRecordsParsersByTag_Iraq()
         {
-            Dictionary<string, HexTLVRecordParser> subParser = new Dictionary<string, HexTLVRecordParser>();
+            Dictionary<string, BinaryRecordParser> subParser = new Dictionary<string, BinaryRecordParser>();
 
-            subParser.Add("30", new HexTLVRecordParser
+            subParser.Add("30", new BinaryRecordParser
             {
                 Settings = new SplitByTagRecordParser
                 {
@@ -3628,10 +3631,10 @@ namespace Mediation.Runtime.DataParser
 
             return subParser;
         }
-        private Dictionary<string, HexTLVRecordParser> Get_30_SplitRecordsParsersByTag_Iraq()
+        private Dictionary<string, BinaryRecordParser> Get_30_SplitRecordsParsersByTag_Iraq()
         {
-            Dictionary<string, HexTLVRecordParser> subParser = new Dictionary<string, HexTLVRecordParser>();
-            subParser.Add("A1", new HexTLVRecordParser
+            Dictionary<string, BinaryRecordParser> subParser = new Dictionary<string, BinaryRecordParser>();
+            subParser.Add("A1", new BinaryRecordParser
             {
                 Settings = new ExecuteTemplateRecordParser
                 {
@@ -3641,10 +3644,10 @@ namespace Mediation.Runtime.DataParser
             });
             return subParser;
         }
-        private Dictionary<Guid, HexTLVRecordParser> GetTemplates_Huawei_Iraq()
+        private Dictionary<Guid, BinaryRecordParser> GetTemplates_Huawei_Iraq()
         {
-            Dictionary<Guid, HexTLVRecordParser> templates = new Dictionary<Guid, HexTLVRecordParser>();
-            templates.Add(new Guid("E9FD1F21-4D0A-467B-8DC9-885543BE1E76"), new HexTLVRecordParser
+            Dictionary<Guid, BinaryRecordParser> templates = new Dictionary<Guid, BinaryRecordParser>();
+            templates.Add(new Guid("E9FD1F21-4D0A-467B-8DC9-885543BE1E76"), new BinaryRecordParser
             {
                 Settings = new SplitByTagRecordParser
                 {
@@ -3654,15 +3657,15 @@ namespace Mediation.Runtime.DataParser
 
             return templates;
         }
-        private Dictionary<string, HexTLVRecordParser> GetTemplateParsers_Huawei_Iraq()
+        private Dictionary<string, BinaryRecordParser> GetTemplateParsers_Huawei_Iraq()
         {
-            Dictionary<string, HexTLVRecordParser> parsers = new Dictionary<string, HexTLVRecordParser>();
+            Dictionary<string, BinaryRecordParser> parsers = new Dictionary<string, BinaryRecordParser>();
 
-            parsers.Add("A0", new HexTLVRecordParser
+            parsers.Add("A0", new BinaryRecordParser
             {
                 Settings = new CreateRecordRecordParser
                 {
-                    FieldParsers = new HexTLVFieldParserCollection
+                    FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = Get_A0_FieldParsers_Huawei_Iraq()
                     },
@@ -3682,11 +3685,11 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("A1", new HexTLVRecordParser
+            parsers.Add("A1", new BinaryRecordParser
             {
                 Settings = new CreateRecordRecordParser
                 {
-                    FieldParsers = new HexTLVFieldParserCollection
+                    FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = Get_A1_FieldParsers_Huawei_Iraq()
                     },
@@ -3749,11 +3752,11 @@ namespace Mediation.Runtime.DataParser
             //    }
             //});
 
-            parsers.Add("A5", new HexTLVRecordParser
+            parsers.Add("A5", new BinaryRecordParser
             {
                 Settings = new CreateRecordRecordParser
                 {
-                    FieldParsers = new HexTLVFieldParserCollection
+                    FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = Get_A5_FieldParsers_Huawei_Iraq()
                     },
@@ -3771,11 +3774,11 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("BF64", new HexTLVRecordParser
+            parsers.Add("BF64", new BinaryRecordParser
             {
                 Settings = new CreateRecordRecordParser
                 {
-                    FieldParsers = new HexTLVFieldParserCollection
+                    FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = Get_A100_FieldParsers_Huawei_Iraq()
                     },
@@ -3793,11 +3796,11 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("A6", new HexTLVRecordParser
+            parsers.Add("A6", new BinaryRecordParser
             {
                 Settings = new CreateRecordRecordParser
                 {
-                    FieldParsers = new HexTLVFieldParserCollection
+                    FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = Get_A6_FieldParsers_Huawei_Iraq()
                     },
@@ -3815,11 +3818,11 @@ namespace Mediation.Runtime.DataParser
 
             });
 
-            parsers.Add("A7", new HexTLVRecordParser
+            parsers.Add("A7", new BinaryRecordParser
             {
                 Settings = new CreateRecordRecordParser
                 {
-                    FieldParsers = new HexTLVFieldParserCollection
+                    FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = Get_A7_FieldParsers_Huawei_Iraq()
                     },
@@ -3912,11 +3915,11 @@ namespace Mediation.Runtime.DataParser
 
             return fieldParsers;
         }
-        private Dictionary<string, HexTLVFieldParser> Get_A0_FieldParsers_Huawei_Iraq()
+        private Dictionary<string, BinaryFieldParser> Get_A0_FieldParsers_Huawei_Iraq()
         {
-            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
 
-            parsers.Add("80", new HexTLVFieldParser
+            parsers.Add("80", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -3925,7 +3928,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("81", new HexTLVFieldParser
+            parsers.Add("81", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -3934,7 +3937,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("82", new HexTLVFieldParser
+            parsers.Add("82", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -3942,7 +3945,7 @@ namespace Mediation.Runtime.DataParser
                     RemoveHexa = true
                 }
             });
-            parsers.Add("83", new HexTLVFieldParser
+            parsers.Add("83", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -3951,7 +3954,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("84", new HexTLVFieldParser
+            parsers.Add("84", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -3960,7 +3963,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("85", new HexTLVFieldParser
+            parsers.Add("85", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -3969,15 +3972,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("AC", new HexTLVFieldParser
+            parsers.Add("AC", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -3986,7 +3989,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"80", new HexTLVFieldParser
+                            {"80", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -4000,15 +4003,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("AD", new HexTLVFieldParser
+            parsers.Add("AD", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -4022,7 +4025,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("99", new HexTLVFieldParser
+            parsers.Add("99", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4031,7 +4034,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F21", new HexTLVFieldParser
+            parsers.Add("9F21", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4040,7 +4043,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F45", new HexTLVFieldParser
+            parsers.Add("9F45", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4049,7 +4052,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F810E", new HexTLVFieldParser
+            parsers.Add("9F810E", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -4058,7 +4061,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8111", new HexTLVFieldParser
+            parsers.Add("9F8111", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -4066,7 +4069,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8112", new HexTLVFieldParser
+            parsers.Add("9F8112", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -4074,7 +4077,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F813C", new HexTLVFieldParser
+            parsers.Add("9F813C", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -4082,12 +4085,12 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("97", new HexTLVFieldParser
+            parsers.Add("97", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("ConnectDateTime")
             });
 
-            parsers.Add("98", new HexTLVFieldParser
+            parsers.Add("98", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("DisconnectDateTime")
             });
@@ -4102,7 +4105,7 @@ namespace Mediation.Runtime.DataParser
             //    }
             //});
 
-            parsers.Add("9F814D", new HexTLVFieldParser
+            parsers.Add("9F814D", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4111,7 +4114,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F816E", new HexTLVFieldParser
+            parsers.Add("9F816E", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -4121,7 +4124,7 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("9F8170", new HexTLVFieldParser
+            parsers.Add("9F8170", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -4129,7 +4132,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8171", new HexTLVFieldParser
+            parsers.Add("9F8171", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4138,7 +4141,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F817D", new HexTLVFieldParser
+            parsers.Add("9F817D", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -4146,7 +4149,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F817E", new HexTLVFieldParser
+            parsers.Add("9F817E", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -4154,7 +4157,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8168", new HexTLVFieldParser
+            parsers.Add("9F8168", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4163,7 +4166,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8135", new HexTLVFieldParser
+            parsers.Add("9F8135", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -4172,7 +4175,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8104", new HexTLVFieldParser
+            parsers.Add("9F8104", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -4181,7 +4184,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F26", new HexTLVFieldParser
+            parsers.Add("9F26", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4190,7 +4193,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F20", new HexTLVFieldParser
+            parsers.Add("9F20", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4199,7 +4202,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9E", new HexTLVFieldParser
+            parsers.Add("9E", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4210,11 +4213,11 @@ namespace Mediation.Runtime.DataParser
 
             return parsers;
         }
-        private Dictionary<string, HexTLVFieldParser> Get_A1_FieldParsers_Huawei_Iraq()
+        private Dictionary<string, BinaryFieldParser> Get_A1_FieldParsers_Huawei_Iraq()
         {
-            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
 
-            parsers.Add("80", new HexTLVFieldParser
+            parsers.Add("80", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4223,7 +4226,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("81", new HexTLVFieldParser
+            parsers.Add("81", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -4232,7 +4235,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("82", new HexTLVFieldParser
+            parsers.Add("82", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -4241,7 +4244,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("84", new HexTLVFieldParser
+            parsers.Add("84", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -4250,7 +4253,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F814D", new HexTLVFieldParser
+            parsers.Add("9F814D", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -4259,15 +4262,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("A9", new HexTLVFieldParser
+            parsers.Add("A9", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -4276,7 +4279,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"80", new HexTLVFieldParser
+                            {"80", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -4290,15 +4293,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("AA", new HexTLVFieldParser
+            parsers.Add("AA", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -4312,7 +4315,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("96", new HexTLVFieldParser
+            parsers.Add("96", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4321,7 +4324,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9E", new HexTLVFieldParser
+            parsers.Add("9E", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4330,7 +4333,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F36", new HexTLVFieldParser
+            parsers.Add("9F36", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4339,7 +4342,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8111", new HexTLVFieldParser
+            parsers.Add("9F8111", new BinaryFieldParser
             {
                 Settings = new BCDNumberParser
                 {
@@ -4348,7 +4351,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8112", new HexTLVFieldParser
+            parsers.Add("9F8112", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -4356,7 +4359,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F813C", new HexTLVFieldParser
+            parsers.Add("9F813C", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -4365,17 +4368,17 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("94", new HexTLVFieldParser
+            parsers.Add("94", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("ConnectDateTime")
             });
 
-            parsers.Add("95", new HexTLVFieldParser
+            parsers.Add("95", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("DisconnectDateTime")
             });
 
-            parsers.Add("9F8150", new HexTLVFieldParser
+            parsers.Add("9F8150", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4384,7 +4387,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F816E", new HexTLVFieldParser
+            parsers.Add("9F816E", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -4394,7 +4397,7 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("9F8170", new HexTLVFieldParser
+            parsers.Add("9F8170", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -4402,7 +4405,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8171", new HexTLVFieldParser
+            parsers.Add("9F8171", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4411,7 +4414,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F817D", new HexTLVFieldParser
+            parsers.Add("9F817D", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -4419,7 +4422,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F817E", new HexTLVFieldParser
+            parsers.Add("9F817E", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -4427,7 +4430,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F814E", new HexTLVFieldParser
+            parsers.Add("9F814E", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4436,7 +4439,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("83", new HexTLVFieldParser
+            parsers.Add("83", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -4445,7 +4448,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F21", new HexTLVFieldParser
+            parsers.Add("9F21", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4454,7 +4457,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9D", new HexTLVFieldParser
+            parsers.Add("9D", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4463,7 +4466,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9B", new HexTLVFieldParser
+            parsers.Add("9B", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4474,11 +4477,11 @@ namespace Mediation.Runtime.DataParser
 
             return parsers;
         }
-        private Dictionary<string, HexTLVFieldParser> Get_A3_FieldParsers_Huawei_Iraq()
+        private Dictionary<string, BinaryFieldParser> Get_A3_FieldParsers_Huawei_Iraq()
         {
-            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
 
-            parsers.Add("80", new HexTLVFieldParser
+            parsers.Add("80", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4487,7 +4490,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("81", new HexTLVFieldParser
+            parsers.Add("81", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -4496,7 +4499,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("84", new HexTLVFieldParser
+            parsers.Add("84", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -4505,7 +4508,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("85", new HexTLVFieldParser
+            parsers.Add("85", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -4514,7 +4517,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("89", new HexTLVFieldParser
+            parsers.Add("89", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4523,7 +4526,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8E", new HexTLVFieldParser
+            parsers.Add("8E", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4532,7 +4535,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("96", new HexTLVFieldParser
+            parsers.Add("96", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4541,7 +4544,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8111", new HexTLVFieldParser
+            parsers.Add("9F8111", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -4549,7 +4552,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8112", new HexTLVFieldParser
+            parsers.Add("9F8112", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -4557,7 +4560,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F813C", new HexTLVFieldParser
+            parsers.Add("9F813C", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -4565,17 +4568,17 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("87", new HexTLVFieldParser
+            parsers.Add("87", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("ConnectDateTime")
             });
 
-            parsers.Add("88", new HexTLVFieldParser
+            parsers.Add("88", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("DisconnectDateTime")
             });
 
-            parsers.Add("9F814D", new HexTLVFieldParser
+            parsers.Add("9F814D", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4584,7 +4587,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8168", new HexTLVFieldParser
+            parsers.Add("9F8168", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4593,7 +4596,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F816E", new HexTLVFieldParser
+            parsers.Add("9F816E", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -4602,7 +4605,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8171", new HexTLVFieldParser
+            parsers.Add("9F8171", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4611,7 +4614,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F817D", new HexTLVFieldParser
+            parsers.Add("9F817D", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -4619,7 +4622,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F817C", new HexTLVFieldParser
+            parsers.Add("9F817C", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -4628,7 +4631,7 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("9F816F", new HexTLVFieldParser
+            parsers.Add("9F816F", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -4639,11 +4642,11 @@ namespace Mediation.Runtime.DataParser
 
             return parsers;
         }
-        private Dictionary<string, HexTLVFieldParser> Get_A4_FieldParsers_Huawei_Iraq()
+        private Dictionary<string, BinaryFieldParser> Get_A4_FieldParsers_Huawei_Iraq()
         {
-            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
 
-            parsers.Add("80", new HexTLVFieldParser
+            parsers.Add("80", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4652,7 +4655,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("81", new HexTLVFieldParser
+            parsers.Add("81", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -4661,7 +4664,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("84", new HexTLVFieldParser
+            parsers.Add("84", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -4670,7 +4673,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("85", new HexTLVFieldParser
+            parsers.Add("85", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -4679,7 +4682,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("89", new HexTLVFieldParser
+            parsers.Add("89", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4688,7 +4691,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8E", new HexTLVFieldParser
+            parsers.Add("8E", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4697,7 +4700,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("96", new HexTLVFieldParser
+            parsers.Add("96", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4706,7 +4709,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8111", new HexTLVFieldParser
+            parsers.Add("9F8111", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -4714,7 +4717,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8112", new HexTLVFieldParser
+            parsers.Add("9F8112", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -4722,7 +4725,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F813C", new HexTLVFieldParser
+            parsers.Add("9F813C", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -4730,17 +4733,17 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("87", new HexTLVFieldParser
+            parsers.Add("87", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("ConnectDateTime")
             });
 
-            parsers.Add("88", new HexTLVFieldParser
+            parsers.Add("88", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("DisconnectDateTime")
             });
 
-            parsers.Add("9F814D", new HexTLVFieldParser
+            parsers.Add("9F814D", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4749,7 +4752,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8168", new HexTLVFieldParser
+            parsers.Add("9F8168", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4758,7 +4761,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F816E", new HexTLVFieldParser
+            parsers.Add("9F816E", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -4767,7 +4770,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8171", new HexTLVFieldParser
+            parsers.Add("9F8171", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4776,7 +4779,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F817D", new HexTLVFieldParser
+            parsers.Add("9F817D", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -4784,7 +4787,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F817C", new HexTLVFieldParser
+            parsers.Add("9F817C", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -4792,7 +4795,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F815B", new HexTLVFieldParser
+            parsers.Add("9F815B", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -4803,11 +4806,11 @@ namespace Mediation.Runtime.DataParser
 
             return parsers;
         }
-        private Dictionary<string, HexTLVFieldParser> Get_A5_FieldParsers_Huawei_Iraq()
+        private Dictionary<string, BinaryFieldParser> Get_A5_FieldParsers_Huawei_Iraq()
         {
-            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
 
-            parsers.Add("80", new HexTLVFieldParser
+            parsers.Add("80", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4816,7 +4819,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("84", new HexTLVFieldParser
+            parsers.Add("84", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -4825,7 +4828,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("85", new HexTLVFieldParser
+            parsers.Add("85", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -4834,7 +4837,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8A", new HexTLVFieldParser
+            parsers.Add("8A", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4843,7 +4846,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8F", new HexTLVFieldParser
+            parsers.Add("8F", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4852,7 +4855,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("97", new HexTLVFieldParser
+            parsers.Add("97", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4861,7 +4864,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F810E", new HexTLVFieldParser
+            parsers.Add("9F810E", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -4870,7 +4873,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8111", new HexTLVFieldParser
+            parsers.Add("9F8111", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -4878,17 +4881,17 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("88", new HexTLVFieldParser
+            parsers.Add("88", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("ConnectDateTime")
             });
 
-            parsers.Add("89", new HexTLVFieldParser
+            parsers.Add("89", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("DisconnectDateTime")
             });
 
-            parsers.Add("9F814D", new HexTLVFieldParser
+            parsers.Add("9F814D", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4897,7 +4900,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8168", new HexTLVFieldParser
+            parsers.Add("9F8168", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4906,7 +4909,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F816E", new HexTLVFieldParser
+            parsers.Add("9F816E", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -4915,7 +4918,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8171", new HexTLVFieldParser
+            parsers.Add("9F8171", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4924,7 +4927,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F817D", new HexTLVFieldParser
+            parsers.Add("9F817D", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -4932,7 +4935,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F817C", new HexTLVFieldParser
+            parsers.Add("9F817C", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -4940,7 +4943,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F827A", new HexTLVFieldParser
+            parsers.Add("9F827A", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -4949,7 +4952,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8148", new HexTLVFieldParser
+            parsers.Add("9F8148", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4958,7 +4961,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8E", new HexTLVFieldParser
+            parsers.Add("8E", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4967,7 +4970,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8C", new HexTLVFieldParser
+            parsers.Add("8C", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4978,11 +4981,11 @@ namespace Mediation.Runtime.DataParser
 
             return parsers;
         }
-        private Dictionary<string, HexTLVFieldParser> Get_A6_FieldParsers_Huawei_Iraq()
+        private Dictionary<string, BinaryFieldParser> Get_A6_FieldParsers_Huawei_Iraq()
         {
-            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
 
-            parsers.Add("80", new HexTLVFieldParser
+            parsers.Add("80", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -4991,7 +4994,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("81", new HexTLVFieldParser
+            parsers.Add("81", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -5000,7 +5003,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("82", new HexTLVFieldParser
+            parsers.Add("82", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -5009,7 +5012,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("83", new HexTLVFieldParser
+            parsers.Add("83", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -5018,15 +5021,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("A7", new HexTLVFieldParser
+            parsers.Add("A7", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -5035,7 +5038,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"80", new HexTLVFieldParser
+                            {"80", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -5049,7 +5052,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F821F", new HexTLVFieldParser
+            parsers.Add("9F821F", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5058,7 +5061,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8168", new HexTLVFieldParser
+            parsers.Add("9F8168", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5067,7 +5070,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8111", new HexTLVFieldParser
+            parsers.Add("9F8111", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -5075,7 +5078,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8160", new HexTLVFieldParser
+            parsers.Add("9F8160", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5084,7 +5087,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F813C", new HexTLVFieldParser
+            parsers.Add("9F813C", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -5092,7 +5095,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F815F", new HexTLVFieldParser
+            parsers.Add("9F815F", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -5100,7 +5103,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8241", new HexTLVFieldParser
+            parsers.Add("9F8241", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5109,7 +5112,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("88", new HexTLVFieldParser
+            parsers.Add("88", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -5117,12 +5120,12 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("89", new HexTLVFieldParser
+            parsers.Add("89", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("MessageTime")
             });
 
-            parsers.Add("8C", new HexTLVFieldParser
+            parsers.Add("8C", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -5131,7 +5134,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8F", new HexTLVFieldParser
+            parsers.Add("8F", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -5139,7 +5142,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8135", new HexTLVFieldParser
+            parsers.Add("9F8135", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -5148,7 +5151,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8163", new HexTLVFieldParser
+            parsers.Add("9F8163", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5159,11 +5162,11 @@ namespace Mediation.Runtime.DataParser
 
             return parsers;
         }
-        private Dictionary<string, HexTLVFieldParser> Get_A7_FieldParsers_Huawei_Iraq()
+        private Dictionary<string, BinaryFieldParser> Get_A7_FieldParsers_Huawei_Iraq()
         {
-            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
 
-            parsers.Add("80", new HexTLVFieldParser
+            parsers.Add("80", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5172,7 +5175,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("82", new HexTLVFieldParser
+            parsers.Add("82", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -5181,7 +5184,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("83", new HexTLVFieldParser
+            parsers.Add("83", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -5190,7 +5193,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("84", new HexTLVFieldParser
+            parsers.Add("84", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -5199,15 +5202,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("A7", new HexTLVFieldParser
+            parsers.Add("A7", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -5216,7 +5219,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"80", new HexTLVFieldParser
+                            {"80", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -5230,7 +5233,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F821F", new HexTLVFieldParser
+            parsers.Add("9F821F", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5239,7 +5242,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8168", new HexTLVFieldParser
+            parsers.Add("9F8168", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5248,7 +5251,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8111", new HexTLVFieldParser
+            parsers.Add("9F8111", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -5256,7 +5259,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8160", new HexTLVFieldParser
+            parsers.Add("9F8160", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5265,7 +5268,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F813C", new HexTLVFieldParser
+            parsers.Add("9F813C", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -5273,7 +5276,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F815F", new HexTLVFieldParser
+            parsers.Add("9F815F", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -5281,7 +5284,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8241", new HexTLVFieldParser
+            parsers.Add("9F8241", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5291,12 +5294,12 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("88", new HexTLVFieldParser
+            parsers.Add("88", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("MessageTime")
             });
 
-            parsers.Add("9F8127", new HexTLVFieldParser
+            parsers.Add("9F8127", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -5304,7 +5307,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8128", new HexTLVFieldParser
+            parsers.Add("9F8128", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -5312,7 +5315,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8149", new HexTLVFieldParser
+            parsers.Add("9F8149", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -5321,7 +5324,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F814A", new HexTLVFieldParser
+            parsers.Add("9F814A", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5330,7 +5333,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F814B", new HexTLVFieldParser
+            parsers.Add("9F814B", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5338,7 +5341,7 @@ namespace Mediation.Runtime.DataParser
                     NumberType = NumberType.Int
                 }
             });
-            parsers.Add("9F816D", new HexTLVFieldParser
+            parsers.Add("9F816D", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5348,11 +5351,11 @@ namespace Mediation.Runtime.DataParser
             });
             return parsers;
         }
-        private Dictionary<string, HexTLVFieldParser> Get_A100_FieldParsers_Huawei_Iraq()
+        private Dictionary<string, BinaryFieldParser> Get_A100_FieldParsers_Huawei_Iraq()
         {
-            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
 
-            parsers.Add("80", new HexTLVFieldParser
+            parsers.Add("80", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5361,7 +5364,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("81", new HexTLVFieldParser
+            parsers.Add("81", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -5370,7 +5373,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("82", new HexTLVFieldParser
+            parsers.Add("82", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -5379,7 +5382,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("84", new HexTLVFieldParser
+            parsers.Add("84", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -5388,7 +5391,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("85", new HexTLVFieldParser
+            parsers.Add("85", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -5399,15 +5402,15 @@ namespace Mediation.Runtime.DataParser
 
 
 
-            parsers.Add("AC", new HexTLVFieldParser
+            parsers.Add("AC", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -5416,7 +5419,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"80", new HexTLVFieldParser
+                            {"80", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -5430,15 +5433,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("AD", new HexTLVFieldParser
+            parsers.Add("AD", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -5452,7 +5455,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("99", new HexTLVFieldParser
+            parsers.Add("99", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5461,7 +5464,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F21", new HexTLVFieldParser
+            parsers.Add("9F21", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5470,7 +5473,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8111", new HexTLVFieldParser
+            parsers.Add("9F8111", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -5478,7 +5481,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8112", new HexTLVFieldParser
+            parsers.Add("9F8112", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -5486,7 +5489,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8135", new HexTLVFieldParser
+            parsers.Add("9F8135", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -5495,7 +5498,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8104", new HexTLVFieldParser
+            parsers.Add("9F8104", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -5504,7 +5507,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F813C", new HexTLVFieldParser
+            parsers.Add("9F813C", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -5512,17 +5515,17 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("97", new HexTLVFieldParser
+            parsers.Add("97", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("ConnectDateTime")
             });
 
-            parsers.Add("98", new HexTLVFieldParser
+            parsers.Add("98", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("DisconnectDateTime")
             });
 
-            parsers.Add("9F814D", new HexTLVFieldParser
+            parsers.Add("9F814D", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5531,7 +5534,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8168", new HexTLVFieldParser
+            parsers.Add("9F8168", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5540,7 +5543,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F816E", new HexTLVFieldParser
+            parsers.Add("9F816E", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -5550,7 +5553,7 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("9F8170", new HexTLVFieldParser
+            parsers.Add("9F8170", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -5558,7 +5561,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F8171", new HexTLVFieldParser
+            parsers.Add("9F8171", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5567,7 +5570,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F817D", new HexTLVFieldParser
+            parsers.Add("9F817D", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -5575,7 +5578,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F817E", new HexTLVFieldParser
+            parsers.Add("9F817E", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -5583,7 +5586,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F827A", new HexTLVFieldParser
+            parsers.Add("9F827A", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -5592,7 +5595,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("83", new HexTLVFieldParser
+            parsers.Add("83", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -5601,7 +5604,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F810E", new HexTLVFieldParser
+            parsers.Add("9F810E", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -5610,7 +5613,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F26", new HexTLVFieldParser
+            parsers.Add("9F26", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5619,7 +5622,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F20", new HexTLVFieldParser
+            parsers.Add("9F20", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5628,7 +5631,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9E", new HexTLVFieldParser
+            parsers.Add("9E", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5641,7 +5644,7 @@ namespace Mediation.Runtime.DataParser
         }
         private string GetHuaweiIraqParserSettings_GPRS()
         {
-            HexTLVParserType hexParser = new HexTLVParserType
+            BinaryParserType hexParser = new BinaryParserType
             {
                 RecordParser = new SplitByTagRecordParser
                 {
@@ -5661,15 +5664,15 @@ namespace Mediation.Runtime.DataParser
 
             return Serializer.Serialize(parserType.Settings);
         }
-        private Dictionary<string, HexTLVRecordParser> GetTemplateParsers_Huawei_Iraq_GPRS()
+        private Dictionary<string, BinaryRecordParser> GetTemplateParsers_Huawei_Iraq_GPRS()
         {
-            Dictionary<string, HexTLVRecordParser> parsers = new Dictionary<string, HexTLVRecordParser>();
+            Dictionary<string, BinaryRecordParser> parsers = new Dictionary<string, BinaryRecordParser>();
 
-            parsers.Add("B4", new HexTLVRecordParser
+            parsers.Add("B4", new BinaryRecordParser
             {
                 Settings = new CreateRecordRecordParser
                 {
-                    FieldParsers = new HexTLVFieldParserCollection
+                    FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = Get_B4_FieldParsers_Huawei_Iraq()
                     },
@@ -5684,11 +5687,11 @@ namespace Mediation.Runtime.DataParser
 
             return parsers;
         }
-        private Dictionary<string, HexTLVFieldParser> Get_B4_FieldParsers_Huawei_Iraq()
+        private Dictionary<string, BinaryFieldParser> Get_B4_FieldParsers_Huawei_Iraq()
         {
-            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
 
-            parsers.Add("80", new HexTLVFieldParser
+            parsers.Add("80", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5697,7 +5700,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("81", new HexTLVFieldParser
+            parsers.Add("81", new BinaryFieldParser
             {
                 Settings = new BoolFieldParser
                 {
@@ -5705,7 +5708,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("83", new HexTLVFieldParser
+            parsers.Add("83", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -5714,7 +5717,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("84", new HexTLVFieldParser
+            parsers.Add("84", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -5723,15 +5726,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("A5", new HexTLVFieldParser
+            parsers.Add("A5", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"80", new HexTLVFieldParser
+                            {"80", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
@@ -5739,7 +5742,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"82", new HexTLVFieldParser
+                            {"82", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
@@ -5747,7 +5750,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
@@ -5755,7 +5758,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"83", new HexTLVFieldParser
+                            {"83", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
@@ -5769,7 +5772,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("86", new HexTLVFieldParser
+            parsers.Add("86", new BinaryFieldParser
             {
                 Settings = new BCDNumberParser
                 {
@@ -5778,7 +5781,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("87", new HexTLVFieldParser
+            parsers.Add("87", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5787,7 +5790,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("88", new HexTLVFieldParser
+            parsers.Add("88", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5796,7 +5799,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("89", new HexTLVFieldParser
+            parsers.Add("89", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5805,7 +5808,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8A", new HexTLVFieldParser
+            parsers.Add("8A", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5814,15 +5817,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("AB", new HexTLVFieldParser
+            parsers.Add("AB", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"80", new HexTLVFieldParser
+                            {"80", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
@@ -5830,7 +5833,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"82", new HexTLVFieldParser
+                            {"82", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
@@ -5838,7 +5841,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
@@ -5846,7 +5849,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"83", new HexTLVFieldParser
+                            {"83", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
@@ -5860,7 +5863,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8C", new HexTLVFieldParser
+            parsers.Add("8C", new BinaryFieldParser
             {
                 Settings = new StringParser
                 {
@@ -5868,7 +5871,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8D", new HexTLVFieldParser
+            parsers.Add("8D", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -5876,12 +5879,12 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("90", new HexTLVFieldParser
+            parsers.Add("90", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("RecordOpeningTime")
             });
 
-            parsers.Add("91", new HexTLVFieldParser
+            parsers.Add("91", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5890,7 +5893,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("92", new HexTLVFieldParser
+            parsers.Add("92", new BinaryFieldParser
             {
                 Settings = new BoolFieldParser
                 {
@@ -5898,7 +5901,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("93", new HexTLVFieldParser
+            parsers.Add("93", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5907,15 +5910,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("B4", new HexTLVFieldParser
+            parsers.Add("B4", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"84", new HexTLVFieldParser
+                            {"84", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -5929,7 +5932,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("95", new HexTLVFieldParser
+            parsers.Add("95", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5938,7 +5941,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("96", new HexTLVFieldParser
+            parsers.Add("96", new BinaryFieldParser
             {
                 Settings = new StringParser
                 {
@@ -5946,7 +5949,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("98", new HexTLVFieldParser
+            parsers.Add("98", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5955,7 +5958,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("99", new HexTLVFieldParser
+            parsers.Add("99", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5965,7 +5968,7 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("9A", new HexTLVFieldParser
+            parsers.Add("9A", new BinaryFieldParser
             {
                 Settings = new StringParser
                 {
@@ -5973,7 +5976,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9B", new HexTLVFieldParser
+            parsers.Add("9B", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -5982,7 +5985,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9C", new HexTLVFieldParser
+            parsers.Add("9C", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -5991,7 +5994,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9D", new HexTLVFieldParser
+            parsers.Add("9D", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -6000,7 +6003,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F1F", new HexTLVFieldParser
+            parsers.Add("9F1F", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -6009,7 +6012,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F20", new HexTLVFieldParser
+            parsers.Add("9F20", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -6018,7 +6021,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F21", new HexTLVFieldParser
+            parsers.Add("9F21", new BinaryFieldParser
             {
                 Settings = new BoolFieldParser
                 {
@@ -6026,23 +6029,23 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("AF", new HexTLVFieldParser
+            parsers.Add("AF", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"30", new HexTLVFieldParser
+                            {"30", new BinaryFieldParser
                                 {
                                       Settings = new SequenceFieldParser
                                         {
-                                            FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                                            FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                                             {
-                                                FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                                                FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                                                 {
-                                                    {"81", new HexTLVFieldParser
+                                                    {"81", new BinaryFieldParser
                                                         {
                                                              Settings = new HexaParser
                                                              {
@@ -6050,7 +6053,7 @@ namespace Mediation.Runtime.DataParser
                                                              }                            
                                                         }
                                                     },
-                                                    {"82", new HexTLVFieldParser
+                                                    {"82", new BinaryFieldParser
                                                         {
                                                              Settings = new HexaParser
                                                              {
@@ -6058,7 +6061,7 @@ namespace Mediation.Runtime.DataParser
                                                              }                            
                                                         }
                                                     },
-                                                     {"83", new HexTLVFieldParser
+                                                     {"83", new BinaryFieldParser
                                                         {
                                                              Settings = new NumberFieldParser
                                                              {
@@ -6067,7 +6070,7 @@ namespace Mediation.Runtime.DataParser
                                                              }                            
                                                         }
                                                     },
-                                                    {"84", new HexTLVFieldParser
+                                                    {"84", new BinaryFieldParser
                                                         {
                                                              Settings = new NumberFieldParser
                                                              {
@@ -6076,7 +6079,7 @@ namespace Mediation.Runtime.DataParser
                                                              }                            
                                                         }
                                                     },
-                                                    {"85", new HexTLVFieldParser
+                                                    {"85", new BinaryFieldParser
                                                         {
                                                              Settings = new NumberFieldParser
                                                              {
@@ -6085,7 +6088,7 @@ namespace Mediation.Runtime.DataParser
                                                              }                            
                                                         }
                                                     },
-                                                    {"86", new HexTLVFieldParser
+                                                    {"86", new BinaryFieldParser
                                                         {
                                                              Settings = new DateTimeParser
                                                              {
@@ -6106,15 +6109,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("BE", new HexTLVFieldParser
+            parsers.Add("BE", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new HexaParser
                                      {
@@ -6122,7 +6125,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"82", new HexTLVFieldParser
+                            {"82", new BinaryFieldParser
                                 {
                                      Settings = new HexaParser
                                      {
@@ -6130,7 +6133,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"83", new HexTLVFieldParser
+                            {"83", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -6139,7 +6142,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"84", new HexTLVFieldParser
+                            {"84", new BinaryFieldParser
                                 {
                                      Settings = new StringParser
                                      {
@@ -6147,7 +6150,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"85", new HexTLVFieldParser
+                            {"85", new BinaryFieldParser
                                 {
                                      Settings = new StringParser
                                      {
@@ -6155,7 +6158,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"86", new HexTLVFieldParser
+                            {"86", new BinaryFieldParser
                                 {
                                      Settings = new NumberFieldParser
                                      {
@@ -6164,7 +6167,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"87", new HexTLVFieldParser
+                            {"87", new BinaryFieldParser
                                 {
                                      Settings = new StringParser
                                      {
@@ -6172,7 +6175,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"88", new HexTLVFieldParser
+                            {"88", new BinaryFieldParser
                                 {
                                      Settings = new HexaParser
                                      {
@@ -6180,7 +6183,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"89", new HexTLVFieldParser
+                            {"89", new BinaryFieldParser
                                 {
                                      Settings = new BoolFieldParser
                                      {
@@ -6203,16 +6206,16 @@ namespace Mediation.Runtime.DataParser
 
         public string GetNokiaParserSettings()
         {
-            HexTLVParserType hexParser = new HexTLVParserType
+            BinaryParserType hexParser = new BinaryParserType
             {
                 RecordParser = new SplitByBlockRecordParser
                 {
-                    RecordParser = new HexTLVRecordParser
+                    RecordParser = new BinaryRecordParser
                     {
                         Settings = new SplitByOffSetRecordParser
                         {
                             LengthNbOfBytes = 2,
-                            RecordParser = new HexTLVRecordParser
+                            RecordParser = new BinaryRecordParser
                             {
                                 Settings = new SplitByPositionedTypeRecordParser
                                 {
@@ -6243,11 +6246,11 @@ namespace Mediation.Runtime.DataParser
 
             return Serializer.Serialize(parserType.Settings);
         }
-        private Dictionary<string, HexTLVRecordParser> GetNokiaSubRecordsParsers()
+        private Dictionary<string, BinaryRecordParser> GetNokiaSubRecordsParsers()
         {
-            Dictionary<string, HexTLVRecordParser> recordParsers = new Dictionary<string, HexTLVRecordParser>();
+            Dictionary<string, BinaryRecordParser> recordParsers = new Dictionary<string, BinaryRecordParser>();
 
-            recordParsers.Add("1", new HexTLVRecordParser
+            recordParsers.Add("1", new BinaryRecordParser
             {
                 Settings = new PositionedFieldsRecordParser
                 {
@@ -6275,7 +6278,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            recordParsers.Add("2", new HexTLVRecordParser
+            recordParsers.Add("2", new BinaryRecordParser
             {
                 Settings = new PositionedFieldsRecordParser
                 {
@@ -6303,7 +6306,7 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            recordParsers.Add("3", new HexTLVRecordParser
+            recordParsers.Add("3", new BinaryRecordParser
             {
                 Settings = new PositionedFieldsRecordParser
                 {
@@ -6330,7 +6333,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            recordParsers.Add("4", new HexTLVRecordParser
+            recordParsers.Add("4", new BinaryRecordParser
             {
                 Settings = new PositionedFieldsRecordParser
                 {
@@ -6357,7 +6360,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            recordParsers.Add("17", new HexTLVRecordParser
+            recordParsers.Add("17", new BinaryRecordParser
             {
                 Settings = new PositionedFieldsRecordParser
                 {
@@ -6384,7 +6387,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            recordParsers.Add("18", new HexTLVRecordParser
+            recordParsers.Add("18", new BinaryRecordParser
             {
                 Settings = new PositionedFieldsRecordParser
                 {
@@ -6411,7 +6414,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            recordParsers.Add("19", new HexTLVRecordParser
+            recordParsers.Add("19", new BinaryRecordParser
             {
                 Settings = new PositionedFieldsRecordParser
                 {
@@ -6439,7 +6442,7 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            recordParsers.Add("20", new HexTLVRecordParser
+            recordParsers.Add("20", new BinaryRecordParser
             {
                 Settings = new PositionedFieldsRecordParser
                 {
@@ -6466,7 +6469,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            recordParsers.Add("8", new HexTLVRecordParser
+            recordParsers.Add("8", new BinaryRecordParser
             {
                 Settings = new PositionedFieldsRecordParser
                 {
@@ -6492,7 +6495,7 @@ namespace Mediation.Runtime.DataParser
 
                 }
             });
-            recordParsers.Add("9", new HexTLVRecordParser
+            recordParsers.Add("9", new BinaryRecordParser
             {
                 Settings = new PositionedFieldsRecordParser
                 {
@@ -6575,7 +6578,7 @@ namespace Mediation.Runtime.DataParser
             fieldParsers.Sum(s => (decimal)s.Position);
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -6590,7 +6593,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -6604,7 +6607,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -6618,7 +6621,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -6632,7 +6635,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -6646,7 +6649,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -6660,7 +6663,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new DateTimeParser
                     {
@@ -6682,7 +6685,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new DateTimeParser
                     {
@@ -6705,7 +6708,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new DateTimeParser
                     {
@@ -6727,7 +6730,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new BCDNumberParser
                     {
@@ -6742,7 +6745,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -6756,7 +6759,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -6771,7 +6774,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -6786,7 +6789,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -6801,7 +6804,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -6816,7 +6819,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -6830,7 +6833,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -6844,7 +6847,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -6858,7 +6861,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -6872,7 +6875,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new HexaParser
                     {
@@ -6891,7 +6894,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -6906,7 +6909,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -6920,7 +6923,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -6934,7 +6937,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -6948,7 +6951,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new DateTimeParser
                     {
@@ -6970,7 +6973,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new DateTimeParser
                     {
@@ -6993,7 +6996,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new DateTimeParser
                     {
@@ -7015,7 +7018,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new BCDNumberParser
                     {
@@ -7030,7 +7033,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -7044,7 +7047,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -7059,7 +7062,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -7074,7 +7077,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -7089,7 +7092,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -7104,7 +7107,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -7118,7 +7121,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -7132,7 +7135,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -7146,7 +7149,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -7160,7 +7163,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new HexaParser
                     {
@@ -7179,7 +7182,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -7194,7 +7197,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -7208,7 +7211,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -7222,7 +7225,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -7250,7 +7253,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new DateTimeParser
                     {
@@ -7272,7 +7275,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new DateTimeParser
                     {
@@ -7295,7 +7298,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new DateTimeParser
                     {
@@ -7318,7 +7321,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new BCDNumberParser
                     {
@@ -7333,7 +7336,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -7347,7 +7350,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -7361,7 +7364,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -7375,7 +7378,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -7389,7 +7392,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new HexaParser
                     {
@@ -7408,7 +7411,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -7423,7 +7426,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -7438,7 +7441,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -7452,7 +7455,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new DateTimeParser
                     {
@@ -7475,7 +7478,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new DateTimeParser
                     {
@@ -7498,7 +7501,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new DateTimeParser
                     {
@@ -7520,7 +7523,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new BCDNumberParser
                     {
@@ -7535,7 +7538,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -7549,7 +7552,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -7563,7 +7566,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -7577,7 +7580,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -7591,7 +7594,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new HexaParser
                     {
@@ -7610,7 +7613,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -7625,7 +7628,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -7639,7 +7642,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new DateTimeParser
                     {
@@ -7661,7 +7664,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new DateTimeParser
                     {
@@ -7682,7 +7685,7 @@ namespace Mediation.Runtime.DataParser
             });
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new DateTimeParser
                     {
@@ -7703,7 +7706,7 @@ namespace Mediation.Runtime.DataParser
             });
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new BCDNumberParser
                     {
@@ -7718,7 +7721,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -7732,7 +7735,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -7746,7 +7749,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -7760,7 +7763,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -7774,7 +7777,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new HexaParser
                     {
@@ -7793,7 +7796,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -7808,7 +7811,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -7822,7 +7825,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new DateTimeParser
                     {
@@ -7845,7 +7848,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new DateTimeParser
                     {
@@ -7868,7 +7871,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new DateTimeParser
                     {
@@ -7890,7 +7893,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new BCDNumberParser
                     {
@@ -7905,7 +7908,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -7919,7 +7922,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -7933,7 +7936,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -7947,7 +7950,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -7961,7 +7964,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new HexaParser
                     {
@@ -7980,7 +7983,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -7995,7 +7998,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -8009,7 +8012,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new DateTimeParser
                     {
@@ -8031,7 +8034,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new DateTimeParser
                     {
@@ -8054,7 +8057,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new DateTimeParser
                     {
@@ -8076,7 +8079,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new BCDNumberParser
                     {
@@ -8091,7 +8094,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -8105,7 +8108,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -8119,7 +8122,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -8133,7 +8136,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -8147,7 +8150,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new HexaParser
                     {
@@ -8166,7 +8169,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -8181,7 +8184,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -8196,7 +8199,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new DateTimeParser
                     {
@@ -8218,7 +8221,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new DateTimeParser
                     {
@@ -8241,7 +8244,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new DateTimeParser
                     {
@@ -8263,7 +8266,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new BCDNumberParser
                     {
@@ -8278,7 +8281,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -8292,7 +8295,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -8306,7 +8309,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -8320,7 +8323,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
@@ -8334,7 +8337,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new HexaParser
                     {
@@ -8353,7 +8356,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -8368,7 +8371,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -8383,7 +8386,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -8397,7 +8400,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -8411,7 +8414,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new DateTimeParser
                     {
@@ -8440,7 +8443,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -8455,7 +8458,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -8469,7 +8472,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -8483,7 +8486,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TBCDNumberParser
                     {
@@ -8497,7 +8500,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new DateTimeParser
                     {
@@ -8548,16 +8551,16 @@ namespace Mediation.Runtime.DataParser
             //    }
             //};
 
-            HexTLVParserType hexParser = new HexTLVParserType
+            BinaryParserType hexParser = new BinaryParserType
             {
                 RecordParser = new PositionedBlockRecordParser
                 {
-                    RecordParser = new HexTLVRecordParser//HexTLVRecordParser
+                    RecordParser = new BinaryRecordParser//HexTLVRecordParser
                     {
                         Settings = new PositionedBlockRecordParser// SplitByPositionedTypeRecordParser
                         {
                             BlockSize = 115,
-                            RecordParser = new HexTLVRecordParser
+                            RecordParser = new BinaryRecordParser
                             {
                                 Settings = new SplitByPositionedTypeRecordParser
                                 {
@@ -8587,11 +8590,11 @@ namespace Mediation.Runtime.DataParser
             return val;
         }
 
-        private Dictionary<string, HexTLVRecordParser> GetEricssonOgeroSubRecordsParsers()
+        private Dictionary<string, BinaryRecordParser> GetEricssonOgeroSubRecordsParsers()
         {
-            Dictionary<string, HexTLVRecordParser> recordParsers = new Dictionary<string, HexTLVRecordParser>();
+            Dictionary<string, BinaryRecordParser> recordParsers = new Dictionary<string, BinaryRecordParser>();
 
-            recordParsers.Add("00", new HexTLVRecordParser
+            recordParsers.Add("00", new BinaryRecordParser
             {
                 Settings = new PositionedFieldsRecordParser
                 {
@@ -8611,7 +8614,7 @@ namespace Mediation.Runtime.DataParser
                     //CompositeFieldsParsers = GetOgeroCompositeFields()
                 }
             });
-            recordParsers.Add("01", new HexTLVRecordParser
+            recordParsers.Add("01", new BinaryRecordParser
             {
                 Settings = new PositionedFieldsRecordParser
                 {
@@ -8632,7 +8635,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            recordParsers.Add("02", new HexTLVRecordParser
+            recordParsers.Add("02", new BinaryRecordParser
             {
                 Settings = new PositionedFieldsRecordParser
                 {
@@ -8652,7 +8655,7 @@ namespace Mediation.Runtime.DataParser
                     //CompositeFieldsParsers = GetOgeroCompositeFields()
                 }
             });
-            recordParsers.Add("03", new HexTLVRecordParser
+            recordParsers.Add("03", new BinaryRecordParser
             {
                 Settings = new PositionedFieldsRecordParser
                 {
@@ -8673,7 +8676,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            recordParsers.Add("04", new HexTLVRecordParser
+            recordParsers.Add("04", new BinaryRecordParser
             {
                 Settings = new PositionedFieldsRecordParser
                 {
@@ -8694,7 +8697,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            recordParsers.Add("05", new HexTLVRecordParser
+            recordParsers.Add("05", new BinaryRecordParser
             {
                 Settings = new PositionedFieldsRecordParser
                 {
@@ -8715,7 +8718,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            recordParsers.Add("06", new HexTLVRecordParser
+            recordParsers.Add("06", new BinaryRecordParser
             {
                 Settings = new PositionedFieldsRecordParser
                 {
@@ -8822,7 +8825,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -8834,7 +8837,7 @@ namespace Mediation.Runtime.DataParser
             });
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -8847,7 +8850,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -8861,7 +8864,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -8874,7 +8877,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -8887,7 +8890,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -8900,7 +8903,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -8913,7 +8916,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -8930,7 +8933,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -8947,7 +8950,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -8964,7 +8967,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -8977,7 +8980,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -8990,7 +8993,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9007,7 +9010,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9021,7 +9024,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9034,7 +9037,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9047,7 +9050,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9060,7 +9063,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9073,7 +9076,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9092,7 +9095,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9104,7 +9107,7 @@ namespace Mediation.Runtime.DataParser
             });
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9117,7 +9120,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9131,7 +9134,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9144,7 +9147,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9157,7 +9160,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9170,7 +9173,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9183,7 +9186,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9200,7 +9203,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9217,7 +9220,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9234,7 +9237,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9247,7 +9250,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9260,7 +9263,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9277,7 +9280,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9291,7 +9294,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9304,7 +9307,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9317,7 +9320,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9330,7 +9333,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9343,7 +9346,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9362,7 +9365,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9374,7 +9377,7 @@ namespace Mediation.Runtime.DataParser
             });
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9387,7 +9390,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9401,7 +9404,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9414,7 +9417,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9427,7 +9430,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9440,7 +9443,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9453,7 +9456,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9470,7 +9473,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9487,7 +9490,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9504,7 +9507,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9517,7 +9520,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9530,7 +9533,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9547,7 +9550,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9561,7 +9564,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9574,7 +9577,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9587,7 +9590,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9600,7 +9603,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9613,7 +9616,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9632,7 +9635,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9644,7 +9647,7 @@ namespace Mediation.Runtime.DataParser
             });
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9657,7 +9660,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9671,7 +9674,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9684,7 +9687,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9697,7 +9700,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9710,7 +9713,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9723,7 +9726,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9740,7 +9743,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9757,7 +9760,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9774,7 +9777,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9787,7 +9790,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9800,7 +9803,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9817,7 +9820,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9831,7 +9834,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9844,7 +9847,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9857,7 +9860,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9870,7 +9873,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9883,7 +9886,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9902,7 +9905,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9914,7 +9917,7 @@ namespace Mediation.Runtime.DataParser
             });
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9927,7 +9930,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9941,7 +9944,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9954,7 +9957,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9967,7 +9970,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9980,7 +9983,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -9993,7 +9996,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10010,7 +10013,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10027,7 +10030,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10044,7 +10047,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10057,7 +10060,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10070,7 +10073,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10087,7 +10090,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10101,7 +10104,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10114,7 +10117,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10127,7 +10130,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10140,7 +10143,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10153,7 +10156,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10172,7 +10175,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10184,7 +10187,7 @@ namespace Mediation.Runtime.DataParser
             });
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10197,7 +10200,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10211,7 +10214,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10224,7 +10227,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10237,7 +10240,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10250,7 +10253,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10263,7 +10266,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10280,7 +10283,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10297,7 +10300,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10314,7 +10317,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10327,7 +10330,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10340,7 +10343,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10357,7 +10360,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10371,7 +10374,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10384,7 +10387,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10397,7 +10400,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10410,7 +10413,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10423,7 +10426,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10442,7 +10445,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10454,7 +10457,7 @@ namespace Mediation.Runtime.DataParser
             });
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10467,7 +10470,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10481,7 +10484,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10494,7 +10497,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10507,7 +10510,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10520,7 +10523,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10533,7 +10536,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10550,7 +10553,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10567,7 +10570,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10584,7 +10587,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10597,7 +10600,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10610,7 +10613,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10627,7 +10630,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10641,7 +10644,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10654,7 +10657,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10667,7 +10670,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10680,7 +10683,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10693,7 +10696,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10712,7 +10715,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10724,7 +10727,7 @@ namespace Mediation.Runtime.DataParser
             });
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10737,7 +10740,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10751,7 +10754,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10764,7 +10767,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10777,7 +10780,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10790,7 +10793,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10803,7 +10806,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10820,7 +10823,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10837,7 +10840,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10854,7 +10857,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10867,7 +10870,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10880,7 +10883,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10897,7 +10900,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10911,7 +10914,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10924,7 +10927,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10937,7 +10940,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10950,7 +10953,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10963,7 +10966,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10982,7 +10985,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -10994,7 +10997,7 @@ namespace Mediation.Runtime.DataParser
             });
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11007,7 +11010,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11021,7 +11024,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11034,7 +11037,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11047,7 +11050,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11060,7 +11063,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11073,7 +11076,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11090,7 +11093,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11107,7 +11110,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11124,7 +11127,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11137,7 +11140,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11150,7 +11153,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11167,7 +11170,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11181,7 +11184,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11194,7 +11197,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11207,7 +11210,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11220,7 +11223,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11233,7 +11236,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11252,7 +11255,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11264,7 +11267,7 @@ namespace Mediation.Runtime.DataParser
             });
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11277,7 +11280,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11291,7 +11294,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11304,7 +11307,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11317,7 +11320,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11330,7 +11333,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11343,7 +11346,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11360,7 +11363,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11377,7 +11380,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11394,7 +11397,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11407,7 +11410,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11420,7 +11423,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11437,7 +11440,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11451,7 +11454,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11464,7 +11467,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11477,7 +11480,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11490,7 +11493,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11503,7 +11506,7 @@ namespace Mediation.Runtime.DataParser
 
             fieldParsers.Add(new PositionedFieldParser
             {
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new StringParser
                     {
@@ -11523,7 +11526,7 @@ namespace Mediation.Runtime.DataParser
 
         private string GetHuaweiParserSettings_Ogero()
         {
-            HexTLVParserType hexParser = new HexTLVParserType
+            BinaryParserType hexParser = new BinaryParserType
             {
                 RecordParser = new SplitByTagRecordParser
                 {
@@ -11544,15 +11547,15 @@ namespace Mediation.Runtime.DataParser
             return Serializer.Serialize(parserType.Settings);
         }
 
-        private Dictionary<string, HexTLVRecordParser> GetTemplateParsers_Huawei_Ogero()
+        private Dictionary<string, BinaryRecordParser> GetTemplateParsers_Huawei_Ogero()
         {
-            Dictionary<string, HexTLVRecordParser> parsers = new Dictionary<string, HexTLVRecordParser>();
+            Dictionary<string, BinaryRecordParser> parsers = new Dictionary<string, BinaryRecordParser>();
 
-            parsers.Add("BF4F", new HexTLVRecordParser
+            parsers.Add("BF4F", new BinaryRecordParser
             {
                 Settings = new CreateRecordRecordParser
                 {
-                    FieldParsers = new HexTLVFieldParserCollection
+                    FieldParsers = new BinaryFieldParserCollection
                     {
                         FieldParsersByTag = Get_B4_FieldParsers_Huawei_Ogero()
                     },
@@ -11567,11 +11570,11 @@ namespace Mediation.Runtime.DataParser
             return parsers;
         }
 
-        private Dictionary<string, HexTLVFieldParser> Get_B4_FieldParsers_Huawei_Ogero()
+        private Dictionary<string, BinaryFieldParser> Get_B4_FieldParsers_Huawei_Ogero()
         {
-            Dictionary<string, HexTLVFieldParser> parsers = new Dictionary<string, HexTLVFieldParser>();
+            Dictionary<string, BinaryFieldParser> parsers = new Dictionary<string, BinaryFieldParser>();
 
-            parsers.Add("80", new HexTLVFieldParser
+            parsers.Add("80", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -11581,7 +11584,7 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("83", new HexTLVFieldParser
+            parsers.Add("83", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -11590,7 +11593,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9D", new HexTLVFieldParser
+            parsers.Add("9D", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -11599,7 +11602,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("85", new HexTLVFieldParser
+            parsers.Add("85", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -11608,7 +11611,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("96", new HexTLVFieldParser
+            parsers.Add("96", new BinaryFieldParser
             {
                 Settings = new TBCDNumberParser
                 {
@@ -11617,7 +11620,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("87", new HexTLVFieldParser
+            parsers.Add("87", new BinaryFieldParser
             {
                 Settings = new StringParser
                 {
@@ -11625,7 +11628,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("88", new HexTLVFieldParser
+            parsers.Add("88", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -11633,7 +11636,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("89", new HexTLVFieldParser
+            parsers.Add("89", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -11642,7 +11645,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8B", new HexTLVFieldParser
+            parsers.Add("8B", new BinaryFieldParser
             {
                 Settings = new BoolFieldParser
                 {
@@ -11650,22 +11653,22 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8D", new HexTLVFieldParser
+            parsers.Add("8D", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("RecordOpeningTime")
             });
 
-            parsers.Add("9F26", new HexTLVFieldParser
+            parsers.Add("9F26", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("StartTime")
             });
 
-            parsers.Add("9F27", new HexTLVFieldParser
+            parsers.Add("9F27", new BinaryFieldParser
             {
                 Settings = GetHuaweiDateTimeParser("StopTime")
             });
 
-            parsers.Add("8E", new HexTLVFieldParser
+            parsers.Add("8E", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -11674,7 +11677,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("8F", new HexTLVFieldParser
+            parsers.Add("8F", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -11683,7 +11686,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("91", new HexTLVFieldParser
+            parsers.Add("91", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -11693,7 +11696,7 @@ namespace Mediation.Runtime.DataParser
             });
 
 
-            parsers.Add("92", new HexTLVFieldParser
+            parsers.Add("92", new BinaryFieldParser
             {
                 Settings = new StringParser
                 {
@@ -11701,7 +11704,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("94", new HexTLVFieldParser
+            parsers.Add("94", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -11710,7 +11713,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("95", new HexTLVFieldParser
+            parsers.Add("95", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -11719,7 +11722,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("97", new HexTLVFieldParser
+            parsers.Add("97", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -11728,7 +11731,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("98", new HexTLVFieldParser
+            parsers.Add("98", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -11737,7 +11740,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9E", new HexTLVFieldParser
+            parsers.Add("9E", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -11745,7 +11748,7 @@ namespace Mediation.Runtime.DataParser
                     NumberType = NumberType.Int
                 }
             });
-            parsers.Add("9F2D", new HexTLVFieldParser
+            parsers.Add("9F2D", new BinaryFieldParser
             {
                 Settings = new NumberFieldParser
                 {
@@ -11754,7 +11757,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F25", new HexTLVFieldParser
+            parsers.Add("9F25", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -11762,7 +11765,7 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("9F20", new HexTLVFieldParser
+            parsers.Add("9F20", new BinaryFieldParser
             {
                 Settings = new HexaParser
                 {
@@ -11770,15 +11773,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("84", new HexTLVFieldParser
+            parsers.Add("84", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"80", new HexTLVFieldParser
+                            {"80", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
@@ -11786,7 +11789,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"82", new HexTLVFieldParser
+                            {"82", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
@@ -11794,7 +11797,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
@@ -11802,7 +11805,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"83", new HexTLVFieldParser
+                            {"83", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
@@ -11816,15 +11819,15 @@ namespace Mediation.Runtime.DataParser
                 }
             });
 
-            parsers.Add("86", new HexTLVFieldParser
+            parsers.Add("86", new BinaryFieldParser
             {
                 Settings = new SequenceFieldParser
                 {
-                    FieldParsers = new Vanrise.DataParser.Entities.HexTLVFieldParserCollection
+                    FieldParsers = new Vanrise.DataParser.Entities.BinaryFieldParserCollection
                     {
-                        FieldParsersByTag = new Dictionary<string, HexTLVFieldParser>
+                        FieldParsersByTag = new Dictionary<string, BinaryFieldParser>
                         {
-                            {"80", new HexTLVFieldParser
+                            {"80", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
@@ -11832,7 +11835,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"82", new HexTLVFieldParser
+                            {"82", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
@@ -11840,7 +11843,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"81", new HexTLVFieldParser
+                            {"81", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
@@ -11848,7 +11851,7 @@ namespace Mediation.Runtime.DataParser
                                      }                            
                                 }
                             },
-                            {"83", new HexTLVFieldParser
+                            {"83", new BinaryFieldParser
                                 {
                                      Settings = new IPv4Parser
                                      {
@@ -11873,14 +11876,14 @@ namespace Mediation.Runtime.DataParser
 
         public string GetICXNokiaSiemensParserSettings()
         {
-            HexTLVParserType hexParser = new HexTLVParserType
+            BinaryParserType hexParser = new BinaryParserType
             {
-                RecordParser = new Vanrise.DataParser.MainExtensions.NokiaSiemensParsers.RecordParsers.HeaderRecordParser
+                RecordParser = new Vanrise.DataParser.MainExtensions.BinaryParsers.NokiaSiemensParsers.RecordParsers.HeaderRecordParser
                 {
                     HeaderLength = 8,
                     RecordLengthIndex = 1,
                     RecordLengthByteLength = 1,
-                    PackageRecordParser = new HexTLVRecordParser
+                    PackageRecordParser = new BinaryRecordParser
                     {
                         Settings = new PackageRecordParser
                         {
@@ -12026,29 +12029,29 @@ namespace Mediation.Runtime.DataParser
 
         public string GetICXAlcatelParserSettings()
         {
-            HexTLVParserType hexParser = new HexTLVParserType
+            BinaryParserType hexParser = new BinaryParserType
             {
                 RecordParser = new SkipRecordParser()
                 {
                     RecordStartingTag = "c6c4",
-                    RecordParser = new HexTLVRecordParser()
+                    RecordParser = new BinaryRecordParser()
                     {
                         Settings = new PositionedBlockRecordParser()
                         {
                             BlockSize = 2064,
-                            RecordParser = new HexTLVRecordParser()
+                            RecordParser = new BinaryRecordParser()
                             {
-                                Settings = new Vanrise.DataParser.MainExtensions.AlcatelParsers.RecordParsers.HeaderRecordParser()
+                                Settings = new Vanrise.DataParser.MainExtensions.BinaryParsers.AlcatelParsers.RecordParsers.HeaderRecordParser()
                                 {
                                     HeaderByteLength = 32,
                                     RecordStartingTag = "c6c4",
                                     TagsToIgnore = new List<string>() { "a5110002", "a5010002" },
-                                    RecordParser = new HexTLVRecordParser()
+                                    RecordParser = new BinaryRecordParser()
                                     {
                                         Settings = new PositionedBlockRecordParser()
                                         {
                                             BlockSize = 42,
-                                            RecordParser = new HexTLVRecordParser()
+                                            RecordParser = new BinaryRecordParser()
                                             {
                                                 Settings = new PositionedFieldsRecordParser()
                                                 {
@@ -12084,7 +12087,7 @@ namespace Mediation.Runtime.DataParser
             {
                 Length = 2,
                 Position = 3,
-                FieldParser = new HexTLVFieldParser()
+                FieldParser = new BinaryFieldParser()
                 {
                     Settings = new BCDNumberParser()
                     {
@@ -12098,7 +12101,7 @@ namespace Mediation.Runtime.DataParser
             {
                 Length = 3,
                 Position = 5,
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new TimeFieldParser
                     {
@@ -12112,7 +12115,7 @@ namespace Mediation.Runtime.DataParser
             {
                 Length = 4,
                 Position = 8,
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new BCDNumberParser
                     {
@@ -12127,7 +12130,7 @@ namespace Mediation.Runtime.DataParser
             {
                 Length = 4,
                 Position = 18,
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new BCDNumberParser
                     {
@@ -12142,7 +12145,7 @@ namespace Mediation.Runtime.DataParser
             {
                 Length = 2,
                 Position = 30,
-                FieldParser = new HexTLVFieldParser
+                FieldParser = new BinaryFieldParser
                 {
                     Settings = new NumberFieldParser
                     {
