@@ -59,24 +59,32 @@ namespace TOne.WhS.Deal.Business
 
         public Vanrise.Entities.UpdateOperationOutput<DealDefinitionDetail> UpdateDeal(DealDefinition deal)
         {
+
             var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<DealDefinitionDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
             IDealDataManager dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
-
-            if (dataManager.Update(deal))
+            if (deal.Settings.ValidateDataBeforeSave())
             {
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                var dealEntity = this.GetDeal(deal.DealId);
-                VRActionLogger.Current.TrackAndLogObjectUpdated(GetLoggableEntity(), dealEntity);
-                updateOperationOutput.UpdatedObject = DealDeinitionDetailMapper(dealEntity);
+                if (dataManager.Update(deal))
+                {
+                    CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                    var dealEntity = this.GetDeal(deal.DealId);
+                    VRActionLogger.Current.TrackAndLogObjectUpdated(GetLoggableEntity(), dealEntity);
+                    updateOperationOutput.UpdatedObject = DealDeinitionDetailMapper(dealEntity);
+                }
+                else
+                {
+                    updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+                }
             }
             else
             {
-                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+                updateOperationOutput.ShowExactMessage = true;
+                updateOperationOutput.Message = "Grace Period should be less than difference between BED and EED";
             }
 
             return updateOperationOutput;

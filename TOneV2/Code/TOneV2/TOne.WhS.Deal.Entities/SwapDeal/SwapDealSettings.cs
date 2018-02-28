@@ -53,6 +53,11 @@ namespace TOne.WhS.Deal.Entities
 
         public int CurrencyId { get; set; }
 
+        public override bool ValidateDataBeforeSave()
+        {
+            return (GracePeriod > (EndDate.Value - BeginDate).Days);
+        }
+
         public override void GetZoneGroups(IDealGetZoneGroupsContext context)
         {
             context.SaleZoneGroups = BuildSaleZoneGroups(context.DealId);

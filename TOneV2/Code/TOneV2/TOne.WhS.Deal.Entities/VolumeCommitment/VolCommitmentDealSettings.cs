@@ -30,6 +30,11 @@ namespace TOne.WhS.Deal.Entities
 
         public int CurrencyId { get; set; }
 
+        public override bool ValidateDataBeforeSave()
+        {
+            return true;
+        }
+
         public override void GetZoneGroups(IDealGetZoneGroupsContext context)
         {
             switch (DealType)

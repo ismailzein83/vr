@@ -111,9 +111,14 @@
                 dealOutboundAPI = api;
                 dealOutboundReadyPromiseDeferred.resolve();
             };
+            $scope.scopeModel.validateGracePeriod = function () {
+                if (!isGraceValid())
+                    return "Grace period should be less than difference between BED and EED";
+                return null;
+            }
 
             $scope.scopeModel.save = function () {
-                return (isEditMode) ? updateSwapDeal() : insertSwapDeal();
+                    return (isEditMode) ? updateSwapDeal() : insertSwapDeal();
             };
 
             $scope.scopeModel.close = function () {
@@ -194,6 +199,11 @@
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
+        }
+        function isGraceValid() {
+            var beginDate = new Date($scope.scopeModel.beginDate);
+            var endDate = new Date($scope.scopeModel.endDate);
+            return ($scope.scopeModel.gracePeriod > UtilsService.diffDays(beginDate, endDate));
         }
         function setTitle() {
             if (isEditMode) {

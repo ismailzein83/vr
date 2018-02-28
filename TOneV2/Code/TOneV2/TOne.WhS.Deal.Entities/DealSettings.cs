@@ -12,6 +12,8 @@ namespace TOne.WhS.Deal.Entities
         public DateTime? EndDate { get; set; }
 
         public abstract void GetZoneGroups(IDealGetZoneGroupsContext context);
+        
+        public abstract bool ValidateDataBeforeSave();
     }
 
     public interface IDealGetZoneGroupsContext

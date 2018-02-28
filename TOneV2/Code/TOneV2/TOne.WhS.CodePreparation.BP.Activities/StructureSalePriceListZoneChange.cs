@@ -472,7 +472,7 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                 });
                 zoneIdsWithRateBED.Add(zoneToClose.ZoneId, closedRate.Rate.BED);
             }
-            //assing routing product id
+            //assign routing product id
             SetRoutingProductIdOnRateChange(customerId, sellingProductId, rateChanges, zoneIdsWithRateBED, routingProductLocator);
             return rateChanges;
         }
