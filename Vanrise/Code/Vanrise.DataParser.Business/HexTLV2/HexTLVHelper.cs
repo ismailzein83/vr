@@ -216,6 +216,17 @@ namespace Vanrise.DataParser.Business
                 get;
                 set;
             }
+
+
+            public Dictionary<string, dynamic> GetGlobalVariables()
+            {
+                return _parentContext.GetGlobalVariables();
+            }
+
+            public void SetGlobalVariable(string variableName, dynamic value)
+            {
+                _parentContext.SetGlobalVariable(variableName, value);
+            }
         }
 
         private class HexTLVFieldParserContext : IHexTLVFieldParserContext

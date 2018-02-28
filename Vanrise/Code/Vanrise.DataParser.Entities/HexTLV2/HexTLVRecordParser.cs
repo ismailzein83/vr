@@ -22,6 +22,7 @@ namespace Vanrise.DataParser.Entities
     public interface IHexTLVRecordParserContext
     {
         string FileName { get; }
+
         Stream RecordStream { get; }
 
         ParsedRecord CreateRecord(string recordType, HashSet<string> tempFieldNames);
@@ -29,5 +30,9 @@ namespace Vanrise.DataParser.Entities
         void OnRecordParsed(ParsedRecord parsedRecord);
 
         HexTLVRecordParser GetParserTemplate(Guid templateId);
+
+        Dictionary<string, dynamic> GetGlobalVariables();
+
+        void SetGlobalVariable(string variableName, dynamic value);
     }
 }

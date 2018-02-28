@@ -97,7 +97,7 @@ namespace Vanrise.Common
         public static List<T> ConvertJsonToList<T>(Object value)
         {
             List<T> valueList = new List<T>();
-            if(value != null)
+            if (value != null)
             {
                 var oldEnumerator = (value as System.Collections.IEnumerable).GetEnumerator();
                 if (oldEnumerator != null)
@@ -690,6 +690,21 @@ namespace Vanrise.Common
                 year--;
 
             return string.Format("Week {0} {1}", weekOfYearAsString, year.ToString());
+        }
+
+        public static bool AreEquals(byte[] a1, byte[] a2)
+        {
+            if (a1 == null || a2 == null)
+                return false;
+
+            if (a1.Length != a2.Length)
+                return false;
+
+            for (int i = 0; i < a1.Length; i++)
+                if (a1[i] != a2[i])
+                    return false;
+
+            return true;
         }
     }
 

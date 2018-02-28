@@ -2,7 +2,7 @@
 using Vanrise.DataParser.Business;
 using Vanrise.DataParser.Entities;
 
-namespace Vanrise.DataParser.MainExtensions.HexTLV.FieldParsers
+namespace Vanrise.DataParser.MainExtensions.NokiaSiemensParsers.FieldParsers
 {
     public class PartyNumberPackageParser : HexTLVFieldParserSettings
     {

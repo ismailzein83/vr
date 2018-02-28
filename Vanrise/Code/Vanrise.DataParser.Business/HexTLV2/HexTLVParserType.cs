@@ -8,10 +8,7 @@ namespace Vanrise.DataParser.Business
 {
     public class HexTLVParserType : ParserTypeExtendedSettings
     {
-        public override Guid ConfigId
-        {
-            get { return new Guid("92CA6F6F-8901-4C86-9540-EFA2941D25E2"); }
-        }
+        public override Guid ConfigId { get { return new Guid("92CA6F6F-8901-4C86-9540-EFA2941D25E2"); } }
 
         public HexTLVRecordParserSettings RecordParser { get; set; }
 
@@ -35,6 +32,10 @@ namespace Vanrise.DataParser.Business
             IParserTypeExecuteContext _parserTypeContext;
             Dictionary<Guid, HexTLVRecordParser> _recordParserTemplates;
 
+            public string FileName { get { return _fileName; } }
+
+            public Stream RecordStream { get { return _recordStream; } }
+
             public HexTLVRecordParserContext(Stream recordStream, string fileName, IParserTypeExecuteContext parserTypeContext, Dictionary<Guid, HexTLVRecordParser> recordParserTemplates)
             {
                 recordStream.ThrowIfNull("recordData");
@@ -45,17 +46,10 @@ namespace Vanrise.DataParser.Business
                 _fileName = fileName;
             }
 
-            public Stream RecordStream
-            {
-                get { return _recordStream; }
-            }
-
-
             public void OnRecordParsed(ParsedRecord parsedRecord)
             {
                 _parserTypeContext.OnRecordParsed(parsedRecord);
             }
-
 
             public HexTLVRecordParser GetParserTemplate(Guid templateId)
             {
@@ -65,17 +59,20 @@ namespace Vanrise.DataParser.Business
                 return recordParser;
             }
 
-
             public ParsedRecord CreateRecord(string recordType, HashSet<string> tempFieldNames)
             {
                 return _parserTypeContext.CreateRecord(recordType, tempFieldNames);
             }
 
-            public string FileName
+            public void SetGlobalVariable(string variableName, dynamic value)
             {
-                get { return _fileName; }
+                _parserTypeContext.SetGlobalVariable(variableName, value);
             }
 
+            public Dictionary<string, dynamic> GetGlobalVariables()
+            {
+                return _parserTypeContext.GetGlobalVariables();
+            }
         }
 
         #endregion

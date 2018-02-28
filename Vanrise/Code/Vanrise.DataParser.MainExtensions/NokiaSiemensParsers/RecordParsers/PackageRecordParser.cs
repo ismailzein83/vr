@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using Vanrise.DataParser.Business;
 using Vanrise.DataParser.Entities;
+using Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers;
 
-namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers
+namespace Vanrise.DataParser.MainExtensions.NokiaSiemensParsers.RecordParsers
 {
     public class PackageRecordParser : HexTLVRecordParserSettings
     {

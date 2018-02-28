@@ -25,5 +25,9 @@ namespace Vanrise.DataParser.Entities
         ParsedRecord CreateRecord(string recordType, HashSet<string> tempFieldNames);
 
         void OnRecordParsed(ParsedRecord parsedRecord);
+
+        Dictionary<string, dynamic> GetGlobalVariables();
+
+        void SetGlobalVariable(string variableName, dynamic value);
     }
 }

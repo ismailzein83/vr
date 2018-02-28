@@ -192,7 +192,7 @@ namespace Vanrise.DataParser.Business
         {
             if (aIsZero && val == 10)
                 return "0";
-            else if (aIsZero && (val > 10 || val == 0) || (removeHexa && val > 9))
+            else if ((aIsZero && (val > 10 || val == 0)) || (removeHexa && val > 9))
                 return "";
             return val.ToString();
         }
@@ -202,12 +202,14 @@ namespace Vanrise.DataParser.Business
             return Enumerable.Range(0, hex.Length)
                              .Where(x => x % 2 == 0)
                              .Select(x => Convert.ToByte(hex.Substring(x, 2), 16))
-                             .Reverse().ToArray();
+                             .ToArray();
         }
     }
     public class ParserTypeExecuteContext : IParserTypeExecuteContext
     {
         Dictionary<string, List<FldDictParsedRecord>> _parsedRecords;
+
+        Dictionary<string, dynamic> _globalVariables;
 
         Action<ParsedRecord> _OnRecordParsed;
         public Dictionary<string, List<FldDictParsedRecord>> ParsedRecords { get { return _parsedRecords; } }
@@ -215,6 +217,7 @@ namespace Vanrise.DataParser.Business
         {
             _OnRecordParsed = onRecordParsed;
             _parsedRecords = new Dictionary<string, List<FldDictParsedRecord>>();
+            _globalVariables = new Dictionary<string, dynamic>();
         }
         public IDataParserInput Input
         {
@@ -237,6 +240,20 @@ namespace Vanrise.DataParser.Business
                 TempFieldNames = tempFieldNames
             };
             return parsedRecord;
+        }
+
+
+        public Dictionary<string, dynamic> GetGlobalVariables() 
+        {
+            return _globalVariables;
+        } 
+
+        public void SetGlobalVariable(string variableName, dynamic value)
+        {
+            if (!_globalVariables.ContainsKey(variableName))
+                _globalVariables.Add(variableName, value);
+            else
+                _globalVariables[variableName] = value;
         }
     }
     public class ExecuteParserOptions

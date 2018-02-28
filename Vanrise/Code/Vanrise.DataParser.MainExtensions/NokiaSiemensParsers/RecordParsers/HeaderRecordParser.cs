@@ -3,7 +3,7 @@ using System.IO;
 using Vanrise.DataParser.Business;
 using Vanrise.DataParser.Entities;
 
-namespace Vanrise.DataParser.MainExtensions.HexTLV.RecordParsers
+namespace Vanrise.DataParser.MainExtensions.NokiaSiemensParsers.RecordParsers
 {
     public class HeaderRecordParser : HexTLVRecordParserSettings
     {
