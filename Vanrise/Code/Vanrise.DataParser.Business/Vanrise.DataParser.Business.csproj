@@ -64,8 +64,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="HexTLV2\HexTLVHelper.cs" />
-    <Compile Include="HexTLV2\HexTLVParserType.cs" />
+    <Compile Include="BinaryParser\BinaryParserHelper.cs" />
+    <Compile Include="BinaryParser\BinaryParserType.cs" />
+    <Compile Include="HexTLVParser\HexTLVParserHelper.cs" />
     <Compile Include="ParserHelper.cs" />
     <Compile Include="ParserTypeConfigsManager.cs" />
     <Compile Include="ParserTypeManager.cs" />

@@ -44,16 +44,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompositeFieldsParser.cs" />
-    <Compile Include="HexTLV2\HexTLVFieldParser.cs" />
-    <Compile Include="HexTLV2\HexTLVFieldParserCollection.cs" />
-    <Compile Include="HexTLV2\HexTLVRecordParser.cs" />
-    <Compile Include="HexTLV2\ParsedRecordFieldConstantValue.cs" />
+    <Compile Include="BinaryParser\BinaryFieldParser.cs" />
+    <Compile Include="BinaryParser\BinaryFieldParserCollection.cs" />
+    <Compile Include="BinaryParser\BinaryRecordParser.cs" />
+    <Compile Include="BinaryParser\ParsedRecordFieldConstantValue.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="HexTLV\HexTLVRecordReadersConfig.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="HexTLV\HexTLVTagType.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="HexTLV\HexTLVTagValue.cs" />
     <Compile Include="HexTLV\HexTLVTagValueParserConfig.cs">
       <SubType>Code</SubType>
     </Compile>

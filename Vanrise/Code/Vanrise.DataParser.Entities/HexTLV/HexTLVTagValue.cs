@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Vanrise.DataParser.Entities
 {
-    public class PositionedFieldParser
+    public class HexTLVTagValue
     {
-        public int Position { get; set; }
+        public string Tag { get; set; }
         public int Length { get; set; }
-        public BinaryFieldParser FieldParser { get; set; }
+        public byte[] Value { get; set; }
     }
 }
