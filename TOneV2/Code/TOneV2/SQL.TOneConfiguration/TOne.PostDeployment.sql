@@ -394,6 +394,7 @@ as (select * from (values
 ('2B913255-F217-4975-ABB7-765EE7FC733F','Sale Pricelists','Sale Pricelists','#/view/Whs_BusinessEntity/views/SalePriceList/SalePriceListManagement'									,'1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','WhS_BE/SalePricelist/GetFilteredSalePriceLists',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',35),
 ('A309D744-7798-4D62-9C85-29E5EFCF6352','Pricelist Template','Pricelist Template','#/view/WhS_BusinessEntity/Views/SalePriceListTemplate/SalePriceListTemplateManagement','BAAF681E-AB1C-4A64-9A35-3F3951398881','WhS_BE/SalePriceListTemplate/GetFilteredSalePriceListTemplates',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',25),
 ('2D8901D2-4BF2-48E5-ABDD-353E572B7236','Zone Routing Product','Sale Zone Routing Product','#/view/WhS_BusinessEntity/Views/ZoneRoutingProduct/ZoneRoutingProductManagement'		,'1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','WhS_BE/ZoneRoutingProduct/GetFilteredZoneRoutingProducts',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',45),
+('3e7dae54-e02b-45aa-80b2-e41dca98727b','Sold Zones','Sold Zones','#/view/WhS_BusinessEntity/Views/CustomerSoldZones/CustomerSoldZonesManagement'									,'1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','WhS_BE/CustomerSoldZones/GetFilteredCustomerSoldZones',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',50),
 --('31F69E85-8D77-488D-9726-907DC477FFA8','Customer Product','Customer Selling Product','#/view/WhS_BusinessEntity/Views/SellingProduct/CustomerSellingProductManagement'			,'1C8B893E-4DDA-4044-A1AE-D4E8536C3FBC','WhS_BE/CustomerSellingProduct/GetFilteredCustomerSellingProducts',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',50),
 
 ('DBD01498-8194-4BA0-85FD-B9B8CD6C7529','Code Comparison','Code Comparison','#/view/WhS_Sales/Views/CodeComparison/CodeComparisonManagement'		,'80E0E78C-F7DA-481C-B8D3-1FF61188263B','WhS_Sales/CodeCompare/GetFilteredCodeCompare',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',14),
@@ -655,6 +656,7 @@ as (select * from (values
 ('WhS_BE/SalePricelist/GetFilteredSalePriceLists','WHS_BE_SalePricelist: View'),
 
 ('WhS_BE/SaleRate/GetFilteredSaleRate','WhS_BE_SaleRate: View'),
+('WhS_BE/CustomerSoldZones/GetFilteredCustomerSoldZones','WhS_BE_SaleRate: View')
 
 ('WhS_BE/SaleZone/GetFilteredSaleZones','WhS_BE_SaleZoneAndCode: View'),
 ('WhS_BE/SaleZone/UpdateSaleZoneName','WhS_BE_SaleZoneAndCode: Edit'),
