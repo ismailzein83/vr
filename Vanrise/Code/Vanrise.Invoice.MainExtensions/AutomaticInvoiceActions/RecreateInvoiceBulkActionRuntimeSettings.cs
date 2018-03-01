@@ -57,17 +57,29 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
             InvoiceManager invoiceManager = new InvoiceManager();
             var getGenerationCustomPayloadContext = new GetGenerationCustomPayloadContext
             {
+                InvoiceGenerationInfo = new List<InvoiceGenerationInfo> {
+                    new InvoiceGenerationInfo
+                    {
+                       PartnerId = context.Invoice.PartnerId,
+                       FromDate = context.Invoice.FromDate,
+                       ToDate = context.Invoice.ToDate,
+                    },
+                },
                 InvoiceTypeId = context.Invoice.InvoiceTypeId,
-                PartnerId = context.Invoice.PartnerId
+                MaximumTo = context.Invoice.FromDate,
+                MinimumFrom = context.Invoice.ToDate,
             };
-            dynamic customSectionPayload = null;
             if (invoiceType.Settings.ExtendedSettings != null && invoiceType.Settings.ExtendedSettings.GenerationCustomSection != null)
             {
-                customSectionPayload = invoiceType.Settings.ExtendedSettings.GenerationCustomSection.GetGenerationCustomPayload(getGenerationCustomPayloadContext);
+                invoiceType.Settings.ExtendedSettings.GenerationCustomSection.EvaluateGenerationCustomPayload(getGenerationCustomPayloadContext);
             }
+
+            var invoiceGenerationInfo = getGenerationCustomPayloadContext.InvoiceGenerationInfo.FirstOrDefault();
+            invoiceGenerationInfo.ThrowIfNull("invoiceGenerationInfo");
+
             var regenerateOutput = invoiceManager.ReGenerateInvoice(new GenerateInvoiceInput
             {
-                CustomSectionPayload = customSectionPayload,
+                CustomSectionPayload = invoiceGenerationInfo.CustomPayload,
                 FromDate = context.Invoice.FromDate,
                 InvoiceId = context.Invoice.InvoiceId,
                 InvoiceTypeId = context.Invoice.InvoiceTypeId,

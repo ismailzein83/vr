@@ -10,11 +10,12 @@ namespace Vanrise.Invoice.Data
 {
     public interface IInvoiceDataManager : IDataManager
     {
-        List<Entities.Invoice> GetPartnerInvoicesByDate(Guid invoiceTypeId, string partnerId, DateTime fromDate, DateTime toDate);
+        List<Entities.Invoice> GetPartnerInvoicesByDate(Guid invoiceTypeId, IEnumerable<string> partnerIds, DateTime fromDate, DateTime toDate);
         IEnumerable<Entities.Invoice> GetFilteredInvoices(DataRetrievalInput<InvoiceQuery> input);
         int GetInvoiceCount(Guid InvoiceTypeId, string partnerId, DateTime? fromDate, DateTime? toDate);
         bool SaveInvoices(List<GeneratedInvoiceItemSet> invoiceItemSets, Entities.Invoice invoiceEntity, long? invoiceIdToDelete, Dictionary<string, List<string>> itemSetNameStorageDic, IEnumerable<Vanrise.AccountBalance.Entities.BillingTransaction> billingTransactions, Func<Entities.Invoice, bool> actionBeforeGenerateInvoice, out long insertedInvoiceId);
-        Entities.Invoice GetInvoice(long invoiceId);
+        List<Entities.Invoice> GetInvoices(List<long> invoiceIds);
+
         bool CheckInvoiceOverlaping(Guid invoiceTypeId, string partnerId, DateTime fromDate, DateTime toDate, long? invoiceId);
         bool SetInvoicePaid(long invoiceId, DateTime? paidDate);
         bool SetInvoiceLocked(long invoiceId, DateTime? lockedDate);

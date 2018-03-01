@@ -40,10 +40,20 @@ namespace Vanrise.Invoice.Business
         }
         public IEnumerable<InvoiceItem> GetInvoiceItemsByItemSetNames(long invoiceId, List<string> itemSetNames, CompareOperator compareOperator)
         {
-            List<InvoiceItem> invoiceItems = new List<InvoiceItem>();
+            IEnumerable<InvoiceItem> invoiceItems = new List<InvoiceItem>();
             if (itemSetNames != null)
             {
                 var invoiceTypeId = new InvoiceManager().GetInvoiceTypeId(invoiceId);
+                invoiceItems = GetInvoiceItemsByItemSetNames(invoiceTypeId, new List<long> { invoiceId }, itemSetNames, compareOperator);
+            }
+            return invoiceItems;
+        }
+
+        public IEnumerable<InvoiceItem> GetInvoiceItemsByItemSetNames(Guid invoiceTypeId, List<long> invoiceIds, List<string> itemSetNames, CompareOperator compareOperator)
+        {
+            List<InvoiceItem> invoiceItems = new List<InvoiceItem>();
+            if (itemSetNames != null)
+            {
                 var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId);
                 invoiceType.ThrowIfNull("invoiceType", invoiceTypeId);
                 Dictionary<string, List<string>> itemSetNamesByStorageConnectionString = GetItemSetNamesByStorageConnectionString(invoiceTypeId, itemSetNames);
@@ -51,14 +61,14 @@ namespace Vanrise.Invoice.Business
                 {
                     IInvoiceItemDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceItemDataManager>();
                     dataManager.StorageConnectionStringKey = item.Key;
-                    var result = dataManager.GetInvoiceItemsByItemSetNames(invoiceId, item.Value, compareOperator);
+                    var result = dataManager.GetInvoiceItemsByItemSetNames(invoiceIds, item.Value, compareOperator);
                     invoiceItems.AddRange(result);
                 }
                 var remainingInvoiceItemSets = itemSetNames.FindAllRecords(x => !itemSetNamesByStorageConnectionString.Values.Any(y => y.Contains(x)));
                 if (remainingInvoiceItemSets != null)
                 {
                     IInvoiceItemDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceItemDataManager>();
-                    var result = dataManager.GetInvoiceItemsByItemSetNames(invoiceId, remainingInvoiceItemSets, compareOperator);
+                    var result = dataManager.GetInvoiceItemsByItemSetNames(invoiceIds, remainingInvoiceItemSets, compareOperator);
                     invoiceItems.AddRange(result);
 
                 }
@@ -66,7 +76,6 @@ namespace Vanrise.Invoice.Business
             }
             return invoiceItems;
         }
-
 
         public IDataRetrievalResult<GroupingInvoiceItemDetail> GetFilteredGroupingInvoiceItems(DataRetrievalInput<GroupingInvoiceItemQuery> input)
         {

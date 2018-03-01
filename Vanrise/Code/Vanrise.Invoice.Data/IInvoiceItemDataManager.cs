@@ -12,6 +12,6 @@ namespace Vanrise.Invoice.Data
     {
         string StorageConnectionStringKey { set; }
         IEnumerable<Entities.InvoiceItem> GetFilteredInvoiceItems(long invoiceId, string itemSetNam, CompareOperator compareOperator);
-        IEnumerable<InvoiceItem> GetInvoiceItemsByItemSetNames(long invoiceId, IEnumerable<string> itemSetNames, CompareOperator compareOperator);
+        IEnumerable<InvoiceItem> GetInvoiceItemsByItemSetNames(List<long> invoiceIds, IEnumerable<string> itemSetNames, CompareOperator compareOperator);
     }
 }

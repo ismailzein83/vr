@@ -70,12 +70,12 @@ namespace Vanrise.Invoice.Data.SQL
 
         }
 
-        public IEnumerable<InvoiceItem> GetInvoiceItemsByItemSetNames(long invoiceId, IEnumerable<string> itemSetNames, CompareOperator compareOperator)
+        public IEnumerable<InvoiceItem> GetInvoiceItemsByItemSetNames(List<long> invoiceIds, IEnumerable<string> itemSetNames, CompareOperator compareOperator)
         {
             switch (compareOperator)
             {
                 case CompareOperator.Contains:
-                  itemSetNames = itemSetNames.Select(x => string.Format("%{0}%", x));
+                    itemSetNames = itemSetNames.Select(x => string.Format("%{0}%", x));
                     break;
                 case CompareOperator.EndWith:
                     itemSetNames = itemSetNames.Select(x => string.Format("%{0}", x));
@@ -91,8 +91,14 @@ namespace Vanrise.Invoice.Data.SQL
             {
                 itemSetNamesString = string.Join(",", itemSetNames);
             }
-           
-            return GetItemsSP("VR_Invoice.sp_InvoiceItem_GetByItemSetNames", InvoiceMapper, invoiceId,itemSetNamesString);
+
+            string invoiceIdsString = null;
+            if (invoiceIds != null && invoiceIds.Count() > 0)
+            {
+                invoiceIdsString = string.Join<long>(",", invoiceIds);
+            }
+
+            return GetItemsSP("VR_Invoice.sp_InvoiceItem_GetByItemSetNames", InvoiceMapper, invoiceIdsString, itemSetNamesString);
         }
 
         #region Private Methods

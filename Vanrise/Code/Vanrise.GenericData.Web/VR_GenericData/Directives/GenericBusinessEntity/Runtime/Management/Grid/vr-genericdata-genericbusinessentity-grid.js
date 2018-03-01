@@ -118,7 +118,7 @@
                     var gridLoadDeferred = UtilsService.createPromiseDeferred();
 
                     //Retrieving Data
-                    UtilsService.waitMultiplePromises(promises).then(function () {
+                    UtilsService.waitMultiplePromises(promises).finally(function () {
                         var promise =  gridAPI.retrieveData(buildGridQuery());
                         if (promise != undefined)
                         {

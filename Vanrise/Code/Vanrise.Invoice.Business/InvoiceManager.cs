@@ -63,8 +63,14 @@ namespace Vanrise.Invoice.Business
 
         public Entities.Invoice GetInvoice(long invoiceId)
         {
+            var invoices = GetInvoices(new List<long>() { invoiceId });
+            return invoices.FirstOrDefault();
+        }
+
+        public List<Entities.Invoice> GetInvoices(List<long> invoiceIds)
+        {
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
-            return dataManager.GetInvoice(invoiceId);
+            return dataManager.GetInvoices(invoiceIds);
         }
 
         public Entities.Invoice GetInvoiceBySourceId(Guid invoiceTypeId, string sourceId)
@@ -136,10 +142,10 @@ namespace Vanrise.Invoice.Business
             return updateOperationOutput;
         }
 
-        public List<Entities.Invoice> GetPartnerInvoicesByDate(Guid invoiceTypeId, string partnerId, DateTime fromDate, DateTime toDate)
+        public List<Entities.Invoice> GetPartnerInvoicesByDate(Guid invoiceTypeId, IEnumerable<string> partnerIds, DateTime fromDate, DateTime toDate)
         {
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
-            return dataManager.GetPartnerInvoicesByDate(invoiceTypeId, partnerId, fromDate, toDate);
+            return dataManager.GetPartnerInvoicesByDate(invoiceTypeId, partnerIds, fromDate, toDate);
 
         }
         bool AreInvoiceDatesValid(DateTime from, DateTime to, DateTime issueDate, out string message)
@@ -335,8 +341,7 @@ namespace Vanrise.Invoice.Business
         }
         public Entities.InvoiceDetail GetInvoiceDetail(long invoiceId)
         {
-            IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
-            var invoice = dataManager.GetInvoice(invoiceId);
+            var invoice = GetInvoice(invoiceId);
             var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoice.InvoiceTypeId);
             var invoiceAccounts = new InvoiceAccountManager().GetInvoiceAccountsByPartnerIds(invoice.InvoiceTypeId, new List<string> { invoice.PartnerId });
             invoiceAccounts.ThrowIfNull("invoiceAccounts");

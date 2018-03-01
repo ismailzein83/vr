@@ -20,19 +20,23 @@ namespace Vanrise.Invoice.Entities
     {
         public abstract string GenerationCustomSectionDirective { get; }
 
-        public abstract dynamic GetGenerationCustomPayload(IGetGenerationCustomPayloadContext context);
+        public abstract void EvaluateGenerationCustomPayload(IGetGenerationCustomPayloadContext context);
     }
 
     public interface IGetGenerationCustomPayloadContext 
     {
-        Guid InvoiceTypeId { get; }
-        string PartnerId { get; }
+        List<InvoiceGenerationInfo> InvoiceGenerationInfo { get; set; }
+        Guid InvoiceTypeId { get;  }
+        DateTime MinimumFrom { get;  }
+        DateTime MaximumTo { get; }
     }
 
     public class GetGenerationCustomPayloadContext : IGetGenerationCustomPayloadContext
     {
         public Guid InvoiceTypeId { get; set; }
-        public string PartnerId { get; set; }
+        public List<InvoiceGenerationInfo> InvoiceGenerationInfo { get; set; }
+        public DateTime MinimumFrom { get; set; }
+        public DateTime MaximumTo { get; set; }
     }
 
     public abstract class InvoiceGenerator

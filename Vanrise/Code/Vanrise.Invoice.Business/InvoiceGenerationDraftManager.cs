@@ -42,6 +42,9 @@ namespace Vanrise.Invoice.Business
             DateTime minimumFrom = DateTime.MaxValue;
             DateTime maximumTo = DateTime.MinValue;
             DateTime now = DateTime.Now;
+            List<InvoiceGenerationDraft> invoiceGenerationDrafts = new List<InvoiceGenerationDraft>();
+
+            List<InvoiceGenerationInfo> generationCustomPayloads = new List<InvoiceGenerationInfo>();
 
             foreach (string partnerId in partnerIds)
             {
@@ -104,37 +107,53 @@ namespace Vanrise.Invoice.Business
                 if (!CheckIFShouldGenerateInvoice(toDate.Value, query.MaximumToDate))
                     continue;
 
-                dynamic generationCustomPayload = null;
-                if (generationCustomSection != null)
+                generationCustomPayloads.Add(new InvoiceGenerationInfo
                 {
-                    GetGenerationCustomPayloadContext generationCustomPayloadContext = new Entities.GetGenerationCustomPayloadContext() { PartnerId = partnerId, InvoiceTypeId = query.InvoiceTypeId };
-                    generationCustomPayload = generationCustomSection.GetGenerationCustomPayload(generationCustomPayloadContext);
-                }
-
-                InvoiceGenerationDraft invoiceGenerationDraft = new InvoiceGenerationDraft()
-                {
-                    InvoiceGenerationIdentifier = query.InvoiceGenerationIdentifier,
-                    InvoiceTypeId = query.InvoiceTypeId,
-                    From = fromDate.Value,
-                    To = toDate.Value,
+                    FromDate = fromDate.Value,
                     PartnerId = partnerId,
-                    PartnerName = partnerName,
-                    CustomPayload = generationCustomPayload
-                };
+                    ToDate = toDate.Value,
+                    PartnerName = partnerName
+                });
 
-                if (minimumFrom > invoiceGenerationDraft.From)
-                    minimumFrom = invoiceGenerationDraft.From;
+                if (minimumFrom > fromDate.Value)
+                    minimumFrom = fromDate.Value;
 
-                if (maximumTo < invoiceGenerationDraft.To)
-                    maximumTo = invoiceGenerationDraft.To;
-
-                InsertOperationOutput<InvoiceGenerationDraft> insertedInvoiceGenerationDraft = InsertInvoiceGenerationDraft(invoiceGenerationDraft);
-                if (insertedInvoiceGenerationDraft.Result != InsertOperationResult.Succeeded)
-                    return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Failed, Message = "Technical Error occurred while trying to Add Records" };
-
-                count++;
+                if (maximumTo < toDate.Value)
+                    maximumTo = toDate.Value;
             }
 
+
+            if (generationCustomSection != null)
+            {
+                var generationCustomPayloadContext = new Entities.GetGenerationCustomPayloadContext()
+                {
+                    InvoiceGenerationInfo = generationCustomPayloads,
+                    MinimumFrom = minimumFrom,
+                    MaximumTo = maximumTo,
+                    InvoiceTypeId = query.InvoiceTypeId
+                };
+                generationCustomSection.EvaluateGenerationCustomPayload(generationCustomPayloadContext);
+
+                foreach (var invoiceGenerationInfo in generationCustomPayloadContext.InvoiceGenerationInfo)
+                {
+
+                    var invoiceGenerationDraft = new InvoiceGenerationDraft()
+                    {
+                        InvoiceGenerationIdentifier = query.InvoiceGenerationIdentifier,
+                        InvoiceTypeId = query.InvoiceTypeId,
+                        From = invoiceGenerationInfo.FromDate,
+                        To = invoiceGenerationInfo.ToDate,
+                        PartnerId = invoiceGenerationInfo.PartnerId,
+                        PartnerName = invoiceGenerationInfo.PartnerName,
+                        CustomPayload = invoiceGenerationInfo.CustomPayload,
+                    };
+                    InsertOperationOutput<InvoiceGenerationDraft> insertedInvoiceGenerationDraft = InsertInvoiceGenerationDraft(invoiceGenerationDraft);
+                    if (insertedInvoiceGenerationDraft.Result != InsertOperationResult.Succeeded)
+                        return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Failed, Message = "Technical Error occurred while trying to Add Records" };
+                    count++;
+                }
+            }
+          
             if (count == 0)
                 return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Failed, Message = "No partners found." };
             else
