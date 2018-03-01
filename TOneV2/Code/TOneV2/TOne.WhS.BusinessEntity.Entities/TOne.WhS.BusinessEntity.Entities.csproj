@@ -126,6 +126,8 @@
     <Compile Include="CompanyDefinition\CompanyDefinitionPricelistSettings.cs" />
     <Compile Include="CompanyDefinition\CompanyPricelistSettings.cs" />
     <Compile Include="CustomerInvoiceSettingInfo.cs" />
+    <Compile Include="CustomerSoldZones\CustomerSoldZonesQuery.cs" />
+    <Compile Include="CustomerSoldZones\CustomerSoldZones.cs" />
     <Compile Include="FaultTickets\CustomerFaultTicketSettings.cs" />
     <Compile Include="FaultTickets\SupplierFaultTicketSettingsInput.cs" />
     <Compile Include="Settings\FaultTicketsSettingsData.cs" />
