@@ -15,20 +15,17 @@ namespace TOne.WhS.DBSync.Business
 {
     public class SpecialRequestRuleMigrator : RuleBaseMigrator
     {
-        readonly Dictionary<string, CarrierAccount> _allCarrierAccounts;
         readonly int _routeRuleTypeId;
+        readonly Dictionary<string, CarrierAccount> _allCarrierAccounts;
 
         public override string EntityName { get { return "Special Request"; } }
 
         public SpecialRequestRuleMigrator(RuleMigrationContext context)
             : base(context)
         {
-
             var dbTableCarrierAccount = Context.MigrationContext.DBTables[DBTableName.CarrierAccount];
+            _routeRuleTypeId = new RouteRuleManager().GetRuleTypeId();
             _allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
-
-            RouteRuleManager manager = new RouteRuleManager();
-            _routeRuleTypeId = manager.GetRuleTypeId();
         }
 
         public override IEnumerable<SourceRule> GetSourceRules()
@@ -40,7 +37,6 @@ namespace TOne.WhS.DBSync.Business
             Dictionary<string, List<SourceSpecialRequest>> groupedSourceRules = GroupSpecialRequests(sourceRules);
             foreach (var groupedRule in groupedSourceRules.Values)
             {
-
                 var outputRules = StructureSpecialRequestRulesByDate(groupedRule);
                 foreach (var outputRule in outputRules)
                 {
@@ -51,28 +47,37 @@ namespace TOne.WhS.DBSync.Business
             return rules;
         }
 
-        private SourceRule GetSourceRule(SpecialRequestOutput outputRule)
-        {
-            RouteRule routeRule = GetRouteRuleDetails(outputRule.SpecialRequests, outputRule.BED, outputRule.EED);
-            SourceRule rule = new SourceRule
-            {
-                Rule = new Rule
-                {
-                    BED = outputRule.BED,
-                    EED = outputRule.EED,
-                    RuleDetails = Serializer.Serialize(routeRule),
-                    TypeId = _routeRuleTypeId
-                }
-            };
-            return rule;
-        }
 
         #region Private Methods
 
-        static List<SpecialRequestOutput> StructureSpecialRequestRulesByDate(List<SourceSpecialRequest> specialRequestRules)
+        private Dictionary<string, List<SourceSpecialRequest>> GroupSpecialRequests(IEnumerable<SourceSpecialRequest> sourceRules)
+        {
+            Dictionary<string, List<SourceSpecialRequest>> groupedRules = new Dictionary<string, List<SourceSpecialRequest>>();
+
+            foreach (var specialRequest in sourceRules)
+            {
+                List<SourceSpecialRequest> rules;
+                string key = GetKey(specialRequest);
+                if (!groupedRules.TryGetValue(key, out rules))
+                {
+                    rules = new List<SourceSpecialRequest>();
+                    groupedRules.Add(key, rules);
+                }
+                rules.Add(specialRequest);
+            }
+            return groupedRules;
+        }
+
+        private string GetKey(SourceSpecialRequest specialRequest)
+        {
+            return string.Format("{0}-{1}-{2}-{3}", specialRequest.CustomerId, specialRequest.Code, specialRequest.IncludeSubCode, specialRequest.ExcludedCodesList == null ? "" : specialRequest.ExcludedCodesList.Aggregate((i, j) => i + j));
+        }
+
+        private static List<SpecialRequestOutput> StructureSpecialRequestRulesByDate(List<SourceSpecialRequest> specialRequestRules)
         {
             List<SpecialRequestOutput> outputRules = new List<SpecialRequestOutput>();
             HashSet<DateTime> distinctDateTimes = new HashSet<DateTime>();
+
             foreach (var specialRequest in specialRequestRules)
             {
                 distinctDateTimes.Add(specialRequest.BED);
@@ -91,8 +96,10 @@ namespace TOne.WhS.DBSync.Business
                 {
                     if (!isLastItem && !itm.EED.HasValue)
                         return false;
+
                     if (!isLastItem && itm.BED > bed)
                         return false;
+
                     if (itm.EED.HasValue && itm.EED.Value <= bed)
                         return false;
 
@@ -101,18 +108,36 @@ namespace TOne.WhS.DBSync.Business
 
                 IEnumerable<SourceSpecialRequest> matchingSpecialRequestRules = specialRequestRules.FindAllRecords(predicate);
                 if (matchingSpecialRequestRules.Count() > 0)
+                {
                     outputRules.Add(new SpecialRequestOutput
                     {
                         SpecialRequests = matchingSpecialRequestRules,
                         BED = bed,
                         EED = eed
                     });
+                }
             }
 
             return outputRules;
         }
 
-        RouteRule GetRouteRuleDetails(IEnumerable<SourceSpecialRequest> specialRequestRules, DateTime bed, DateTime? eed)
+        private SourceRule GetSourceRule(SpecialRequestOutput outputRule)
+        {
+            RouteRule routeRule = GetRouteRuleDetails(outputRule.SpecialRequests, outputRule.BED, outputRule.EED);
+            SourceRule rule = new SourceRule
+            {
+                Rule = new Rule
+                {
+                    BED = outputRule.BED,
+                    EED = outputRule.EED,
+                    RuleDetails = Serializer.Serialize(routeRule),
+                    TypeId = _routeRuleTypeId
+                }
+            };
+            return rule;
+        }
+
+        private RouteRule GetRouteRuleDetails(IEnumerable<SourceSpecialRequest> specialRequestRules, DateTime bed, DateTime? eed)
         {
             CarrierAccount customer;
             SourceSpecialRequest defaultRule = specialRequestRules.FirstOrDefault();
@@ -147,7 +172,7 @@ namespace TOne.WhS.DBSync.Business
             return routeRule;
         }
 
-        List<SpecialRequestRouteOptionSettings> GetSupplierOptions(IEnumerable<SpecialRequestSupplierOption> suppliers)
+        private List<SpecialRequestRouteOptionSettings> GetSupplierOptions(IEnumerable<SpecialRequestSupplierOption> suppliers)
         {
             List<SpecialRequestRouteOptionSettings> results = new List<SpecialRequestRouteOptionSettings>();
 
@@ -178,7 +203,7 @@ namespace TOne.WhS.DBSync.Business
             return results;
         }
 
-        void AddSpecialRequestRouteOptionSettings(List<SpecialRequestRouteOptionSettings> options, SpecialRequestSupplierOption option)
+        private void AddSpecialRequestRouteOptionSettings(List<SpecialRequestRouteOptionSettings> options, SpecialRequestSupplierOption option)
         {
             CarrierAccount supplier;
             if (!_allCarrierAccounts.TryGetValue(option.SupplierId, out supplier))
@@ -196,7 +221,7 @@ namespace TOne.WhS.DBSync.Business
             options.Add(specialRequestOptionSettings);
         }
 
-        List<CodeCriteria> GetCodeCriteria(SourceSpecialRequest groupedRule)
+        private List<CodeCriteria> GetCodeCriteria(SourceSpecialRequest groupedRule)
         {
             return new List<CodeCriteria> { 
              new CodeCriteria{
@@ -204,29 +229,6 @@ namespace TOne.WhS.DBSync.Business
                WithSubCodes = groupedRule.IncludeSubCode
              }
             };
-        }
-
-        Dictionary<string, List<SourceSpecialRequest>> GroupSpecialRequests(IEnumerable<SourceSpecialRequest> sourceRules)
-        {
-            Dictionary<string, List<SourceSpecialRequest>> groupedRules = new Dictionary<string, List<SourceSpecialRequest>>();
-
-            foreach (var specialRequest in sourceRules)
-            {
-                List<SourceSpecialRequest> rules;
-                string key = GetKey(specialRequest);
-                if (!groupedRules.TryGetValue(key, out rules))
-                {
-                    rules = new List<SourceSpecialRequest>();
-                    groupedRules.Add(key, rules);
-                }
-                rules.Add(specialRequest);
-            }
-            return groupedRules;
-        }
-
-        string GetKey(SourceSpecialRequest specialRequest)
-        {
-            return string.Format("{0}-{1}-{2}-{3}", specialRequest.CustomerId, specialRequest.Code, specialRequest.IncludeSubCode, specialRequest.ExcludedCodesList == null ? "" : specialRequest.ExcludedCodesList.Aggregate((i, j) => i + j));
         }
 
         #endregion
