@@ -13,7 +13,7 @@
         var context;
         var isViewHistoryMode;
         var oldselectedCarrier;
-
+        var isReadOnly;
         var carrierAccountSelectorAPI;
         var carrierAccountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
@@ -38,9 +38,11 @@
                 dealId = parameters.dealId;
                 context = parameters.context;
 
+                isReadOnly = parameters.isReadOnly;
                 isViewHistoryMode = context != undefined && context.historyId != undefined;
             }
-            
+            if (isReadOnly == true)
+                UtilsService.setContextReadOnly($scope);
             isEditMode = (dealId != undefined);
         }
         function defineScope() {
@@ -118,7 +120,7 @@
             }
 
             $scope.scopeModel.save = function () {
-                    return (isEditMode) ? updateSwapDeal() : insertSwapDeal();
+                return (isEditMode) ? updateSwapDeal() : insertSwapDeal();
             };
 
             $scope.scopeModel.close = function () {
@@ -203,7 +205,7 @@
         function isGraceValid() {
             var beginDate = new Date($scope.scopeModel.beginDate);
             var endDate = new Date($scope.scopeModel.endDate);
-            return ($scope.scopeModel.gracePeriod > UtilsService.diffDays(beginDate, endDate));
+            return ($scope.scopeModel.gracePeriod < UtilsService.diffDays(beginDate, endDate));
         }
         function setTitle() {
             if (isEditMode) {
@@ -216,6 +218,10 @@
         function loadStaticData() {
             if (dealEntity == undefined)
                 return;
+            $scope.scopeModel.isCommitmentAgreement = isCommitmentAgreement();
+            //console.log(isCommitmentAgreement())
+            //if (isCommitmentAgreement())
+            //    UtilsService.setContextReadOnly($scope);
             $scope.scopeModel.description = dealEntity.Name;
             //$scope.scopeModel.gracePeriod = dealEntity.Settings.GracePeriod;
             $scope.scopeModel.selectedContractType = UtilsService.getItemByVal($scope.scopeModel.contractTypes, dealEntity.Settings.DealContract, 'value');
@@ -265,7 +271,8 @@
                     };
                     if (dealEntity != undefined && dealEntity.Settings != undefined)
                         payloadOutbound.Outbounds = dealEntity.Settings.Outbounds;
-                    VRUIUtilsService.callDirectiveLoad(dealInboundAPI, payload, loadSwapDealInboundPromiseDeferred);
+                    if ((isEditMode && dealEntity != undefined) || !isEditMode)
+                        VRUIUtilsService.callDirectiveLoad(dealInboundAPI, payload, loadSwapDealInboundPromiseDeferred);
                     VRUIUtilsService.callDirectiveLoad(dealOutboundAPI, payloadOutbound, loadSwapDealOutboundPromiseDeferred);
                     carrierAccountSelectedPromise = undefined;
                 });
@@ -283,6 +290,11 @@
             })
 
         }
+        function isCommitmentAgreement() {
+            if (dealEntity != undefined && dealEntity.Settings != undefined)
+                return (dealEntity.Settings.DealType == WhS_Deal_DealAgreementTypeEnum.Commitment.value)
+        }
+
         function loadCurrencySelector() {
             var loadCurrencySelectorPromiseDeferred = UtilsService.createPromiseDeferred();
 

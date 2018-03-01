@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SwapDealGridDirective.$inject = ['WhS_Deal_SwapDealAPIService', 'WhS_Deal_SwapDealService', 'VRNotificationService', 'VRUIUtilsService'];
+    SwapDealGridDirective.$inject = ['WhS_Deal_SwapDealAPIService', 'WhS_Deal_SwapDealService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_Deal_DealAgreementTypeEnum'];
 
-    function SwapDealGridDirective(WhS_Deal_SwapDealAPIService, WhS_Deal_SwapDealService, VRNotificationService, VRUIUtilsService) {
+    function SwapDealGridDirective(WhS_Deal_SwapDealAPIService, WhS_Deal_SwapDealService, VRNotificationService, VRUIUtilsService, WhS_Deal_DealAgreementTypeEnum) {
         return {
             restrict: 'E',
             scope: {
@@ -71,18 +71,39 @@
             }
 
             function defineMenuActions() {
-                $scope.scopeModel.menuActions = [{
-                    name: 'Edit',
-                    clicked: editDeal,
-                    haspermission: hasEditSwapDealPermission
-                }];
+                $scope.scopeModel.gridMenuActions = function (dataItem) {
+                    var menuActions = [];
+                    var menuAction;
+                    if (dataItem.TypeDescription == WhS_Deal_DealAgreementTypeEnum.Commitment.description) {
+                        menuAction = {
+                            name: "View",
+                            clicked: viewDeal,
+                        };
+                    }
+                    else {
+                        menuAction = {
+                            name: 'Edit',
+                            clicked: editDeal,
+                            haspermission: hasEditSwapDealPermission
+                        }
+                    }
+                    menuActions.push(menuAction);
+                    return menuActions;
+                };
             }
             function editDeal(dataItem) {
+                var isReadOnly =  false;
+                if (dataItem.Entity != undefined && dataItem.Entity.Settings != undefined)
+                    isReadOnly = dataItem.Entity.Settings.DealType == WhS_Deal_DealAgreementTypeEnum.Commitment.value;
                 var onDealUpdated = function (updatedDeal) {
                     gridDrillDownTabsObj.setDrillDownExtensionObject(updatedDeal);
                     gridAPI.itemUpdated(updatedDeal);
                 };
-                WhS_Deal_SwapDealService.editSwapDeal(dataItem.Entity.DealId, onDealUpdated);
+                WhS_Deal_SwapDealService.editSwapDeal(dataItem.Entity.DealId, onDealUpdated , isReadOnly);
+            }
+
+            function viewDeal(dataItem) {
+                WhS_Deal_SwapDealService.viewSwapDeal(dataItem.Entity.DealId);
             }
             function hasEditSwapDealPermission() {
                 return WhS_Deal_SwapDealAPIService.HasEditDealPermission();

@@ -143,7 +143,7 @@
         function setTitle() {
             if (isEditMode) {
                 if (swapDealOutboundEntity != undefined)
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(swapDealOutboundEntity.Name, 'Buying Part');
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(swapDealOutboundEntity.Name, 'Buying Part',$scope);
             }
             else
                 $scope.title = UtilsService.buildTitleForAddEditor('Buying Part');

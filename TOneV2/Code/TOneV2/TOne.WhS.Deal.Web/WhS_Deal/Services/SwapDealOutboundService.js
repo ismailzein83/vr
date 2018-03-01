@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SwapDealOutboundService.$inject = ['VRModalService', 'VRNotificationService'];
+    SwapDealOutboundService.$inject = ['VRModalService', 'VRNotificationService', 'UtilsService'];
 
-    function SwapDealOutboundService(VRModalService, VRNotificationService) {
+    function SwapDealOutboundService(VRModalService, VRNotificationService, UtilsService) {
         var editorUrl = '/Client/Modules/WhS_Deal/Directives/SwapDeal/Templates/SwapDealOutboundEditor.html';
 
         function addSwapDealOutbound(onSwapDealOutboundAdded, supplierId) {
@@ -16,6 +16,20 @@
             settings.onScopeReady = function (modalScope) {
                 modalScope.onSwapDealOutboundAdded = onSwapDealOutboundAdded;
             };
+            VRModalService.showModal(editorUrl, parameters, settings);
+        }
+        function viewSwapDealOutbound(swapDealOutbound, sellingNumberPlanId) {
+            var parameters = {
+                swapDealOutbound: swapDealOutbound,
+                sellingNumberPlanId: sellingNumberPlanId
+            };
+
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+                UtilsService.setContextReadOnly(modalScope);
+            };
+
             VRModalService.showModal(editorUrl, parameters, settings);
         }
 
@@ -46,7 +60,8 @@
         return {
             addSwapDealOutbound: addSwapDealOutbound,
             editSwapDealOutbound: editSwapDealOutbound,
-            deleteSwapDealOutbound: deleteSwapDealOutbound
+            deleteSwapDealOutbound: deleteSwapDealOutbound,
+            viewSwapDealOutbound: viewSwapDealOutbound
         };
     }
 

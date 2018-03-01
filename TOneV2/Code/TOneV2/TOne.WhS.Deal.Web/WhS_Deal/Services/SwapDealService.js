@@ -18,17 +18,27 @@
             VRModalService.showModal(editorUrl, null, settings);
         }
 
-        function editSwapDeal(dealId, onSwapDealUpdated) {
+        function editSwapDeal(dealId, onSwapDealUpdated, isReadOnly) {
             var parameters = {
-                dealId: dealId
+                dealId: dealId,
+                isReadOnly:isReadOnly
             };
 
             var settings = {};
 
-            settings.onScopeReady = function (modalScope) {
+            settings.onScopeReady = function (modalScope) {    
                 modalScope.onSwapDealUpdated = onSwapDealUpdated;
             };
 
+            VRModalService.showModal(editorUrl, parameters, settings);
+        }
+        function viewSwapDeal(dealId) {
+            var parameters = {
+                dealId:dealId,
+                isReadOnly : true
+            };
+
+            var settings = {};
             VRModalService.showModal(editorUrl, parameters, settings);
         }
 
@@ -163,7 +173,8 @@
             registerSwapDealBuyRouteRuleViewToSwapDeal: registerSwapDealBuyRouteRuleViewToSwapDeal,
             getDrillDownDefinition: getDrillDownDefinition,
             registerHistoryViewAction: registerHistoryViewAction,
-            analyzeSwapDeal: analyzeSwapDeal
+            analyzeSwapDeal: analyzeSwapDeal,
+            viewSwapDeal: viewSwapDeal
         };
     }
 

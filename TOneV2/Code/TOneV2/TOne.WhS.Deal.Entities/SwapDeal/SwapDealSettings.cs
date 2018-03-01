@@ -55,7 +55,7 @@ namespace TOne.WhS.Deal.Entities
 
         public override bool ValidateDataBeforeSave()
         {
-            return (GracePeriod > (EndDate.Value - BeginDate).Days);
+            return (GracePeriod < (EndDate.Value - BeginDate).Days);
         }
 
         public override void GetZoneGroups(IDealGetZoneGroupsContext context)

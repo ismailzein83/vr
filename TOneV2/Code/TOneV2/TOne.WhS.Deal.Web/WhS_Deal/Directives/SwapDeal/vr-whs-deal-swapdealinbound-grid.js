@@ -28,6 +28,7 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
         function SwapDealInboundGrid($scope, ctrl, $attrs) {
 
             this.initializeController = initializeController;
+            var gridApi;
             var mainPayload;
             var lastInboundGroupNumber = 0;
             function initializeController() {
@@ -44,8 +45,11 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
                     WhS_Deal_SwapDealInboundService.addSwapDealInbound(onSwapDealInboundAdded, sellingNumberPlanId);
                 };
 
+                $scope.onGridReady = function (api) {
+                    gridApi = api;
+                    defineAPI();
+                };
                 defineMenuActions();
-                defineAPI();
             }
 
             function defineAPI() {
@@ -64,6 +68,9 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
                     if (payload != undefined && payload.lastInboundGroupNumber != undefined) {
                         lastInboundGroupNumber = payload.lastInboundGroupNumber;
                     }
+
+                    
+
                 };
 
                 api.getData = function () {
@@ -94,16 +101,25 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
             }
 
             function defineMenuActions() {
-                var defaultMenuActions = [
-                {
-                    name: "Edit",
-                    clicked: editSwapDealInbound
-                },
-                {
-                    name: "Delete",
-                    clicked: deleteSwapDealInbound
-                }];
-
+                var defaultMenuActions;
+                if (UtilsService.isContextReadOnly($scope)) {
+                    defaultMenuActions = [
+                       {
+                           name: "View",
+                           clicked: viewSwapDealInbound
+                       }];
+                }
+                else {
+                    defaultMenuActions = [
+                        {
+                            name: "Edit",
+                            clicked: editSwapDealInbound
+                        },
+                        {
+                            name: "Delete",
+                            clicked: deleteSwapDealInbound
+                        }];
+                }
                 $scope.gridMenuActions = function (dataItem) {
                     return defaultMenuActions;
                 };
@@ -118,6 +134,13 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
                 var sellingNumberPlanId = mainPayload != undefined ? mainPayload.sellingNumberPlanId : undefined;
 
                 WhS_Deal_SwapDealInboundService.editSwapDealInbound(dealInboundObj, sellingNumberPlanId, onDealInboundUpdated);
+            }
+
+            function viewSwapDealInbound(dealInboundObj) {
+               
+                var sellingNumberPlanId = mainPayload != undefined ? mainPayload.sellingNumberPlanId : undefined;
+
+                WhS_Deal_SwapDealInboundService.viewSwapDealInbound(dealInboundObj, sellingNumberPlanId);
             }
 
             function deleteSwapDealInbound(swapDealInboundObj) {
