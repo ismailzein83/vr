@@ -92,7 +92,48 @@ when not matched by target then
 	values(s.[Id],s.[Name],s.[ExecutionFlowDefinitionID]);
 
 
---[integration].[DataSource]----------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[Name],[AdapterID],[AdapterState],[TaskId],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('124A1280-31E8-4B0F-9023-E2DEF170F335','ICX Nokia Siemens - Sample Datasource','396A4933-DF4F-49CD-9799-BF605B9F4597','null','354CA4ED-81CF-4AC4-A234-C01FB42903F1','{"$type":"Vanrise.Integration.Entities.DataSourceSettings, Vanrise.Integration.Entities","AdapterArgument":{"$type":"Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument, Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments","Extension":".dat","Mask":"","Directory":"/Mediation/NokiaSiemensOgero","ServerIP":"192.168.110.185","UserName":"devftpuser","Password":"P@ssw0rd","ActionAfterImport":0,"BasedOnLastModifiedTime":false,"CompressedFiles":false,"CompressionType":0,"MaxParallelRuntimeInstances":1},"MapperCustomCode":"Vanrise.DataParser.Business.ExecuteParserOptions options = new Vanrise.DataParser.Business.ExecuteParserOptions { GenerateIds = true };\n            Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));\n            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, new Guid(\"202c8508-a24c-4664-b769-be71c86fcd75\"), options, (parsedBatch) =>\n            {\n                Vanrise.Integration.Entities.MappedBatchItem batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, \"#RECORDSCOUNT# of Nokia Siemens Parsed CDRs\", parsedBatch.RecordType);\n                switch (parsedBatch.RecordType)\n                {\n                    case \"ICX_NokiaSiemens_CDR\":\n                        mappedBatches.Add(\"CDRTransformationStage\", batch);\n                        break;\n                     default:break;\n                }\n\n            });\n            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();\n            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;\n            LogVerbose(\"Finished\");\n            return result;","ExecutionFlowId":"4c38c49d-a35c-4875-b654-40996cc7a174"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[AdapterID],[AdapterState],[TaskId],[Settings]))merge	[integration].[DataSource] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[AdapterID] = s.[AdapterID],[AdapterState] = s.[AdapterState],[TaskId] = s.[TaskId],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[AdapterID],[AdapterState],[TaskId],[Settings])	values(s.[ID],s.[Name],s.[AdapterID],s.[AdapterState],s.[TaskId],s.[Settings]);--[runtime].[ScheduleTask]------------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([Id],[Name],[IsEnabled],[TaskType],[TriggerTypeId],[ActionTypeId],[TaskSettings],[OwnerId])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('354CA4ED-81CF-4AC4-A234-C01FB42903F1','Data Source Task',0,0,'295B4FAC-DBF9-456F-855E-60D0B176F86B','B7CF41B9-F1B3-4C02-980D-B9FAFB4CFF68','{"$type":"Vanrise.Runtime.Entities.SchedulerTaskSettings, Vanrise.Runtime.Entities","TaskTriggerArgument":{"$type":"Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.IntervalTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments","Interval":30.0,"IntervalType":2,"TimerTriggerTypeFQTN":"Vanrise.Runtime.Triggers.TimeTaskTrigger.IntervalTimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger","IgnoreSkippedIntervals":false},"StartEffDate":"2018-02-08T14:14:58.504"}',-1)--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Id],[Name],[IsEnabled],[TaskType],[TriggerTypeId],[ActionTypeId],[TaskSettings],[OwnerId]))merge	[runtime].[ScheduleTask] as tusing	cte_data as son		1=1 and t.[Id] = s.[Id]--when matched then--	update set--	[Name] = s.[Name],[IsEnabled] = s.[IsEnabled],[TaskType] = s.[TaskType],[TriggerTypeId] = s.[TriggerTypeId],[ActionTypeId] = s.[ActionTypeId],[TaskSettings] = s.[TaskSettings],[OwnerId] = s.[OwnerId]when not matched by target then	insert([Id],[Name],[IsEnabled],[TaskType],[TriggerTypeId],[ActionTypeId],[TaskSettings],[OwnerId])	values(s.[Id],s.[Name],s.[IsEnabled],s.[TaskType],s.[TriggerTypeId],s.[ActionTypeId],s.[TaskSettings],s.[OwnerId]);--[genericdata].[DataTransformationDefinition]------------------------------------------------------
+
+--[integration].[DataSource]------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[AdapterID],[AdapterState],[TaskId],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('124A1280-31E8-4B0F-9023-E2DEF170F335','ICX Nokia Siemens - Sample Datasource','396A4933-DF4F-49CD-9799-BF605B9F4597','null','354CA4ED-81CF-4AC4-A234-C01FB42903F1','{"$type":"Vanrise.Integration.Entities.DataSourceSettings, Vanrise.Integration.Entities","AdapterArgument":{"$type":"Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments.FTPAdapterArgument, Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments","Extension":".dat","Mask":"","Directory":"/Mediation/NokiaSiemensOgero","ServerIP":"192.168.110.185","UserName":"devftpuser","Password":"P@ssw0rd","ActionAfterImport":0,"BasedOnLastModifiedTime":false,"CompressedFiles":false,"CompressionType":0,"MaxParallelRuntimeInstances":1},"MapperCustomCode":"Vanrise.DataParser.Business.ExecuteParserOptions options = new Vanrise.DataParser.Business.ExecuteParserOptions { GenerateIds = true };\n            Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));\n            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, new Guid(\"202c8508-a24c-4664-b769-be71c86fcd75\"), options, (parsedBatch) =>\n            {\n                Vanrise.Integration.Entities.MappedBatchItem batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, \"#RECORDSCOUNT# of Nokia Siemens Parsed CDRs\", parsedBatch.RecordType);\n                switch (parsedBatch.RecordType)\n                {\n                    case \"ICX_NokiaSiemens_CDR\":\n                        mappedBatches.Add(\"CDRTransformationStage\", batch);\n                        break;\n                     default:break;\n                }\n\n            });\n            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();\n            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;\n            LogVerbose(\"Finished\");\n            return result;","ExecutionFlowId":"4c38c49d-a35c-4875-b654-40996cc7a174"}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[AdapterID],[AdapterState],[TaskId],[Settings]))
+merge	[integration].[DataSource] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+--when matched then
+--	update set
+--	[Name] = s.[Name],[AdapterID] = s.[AdapterID],[AdapterState] = s.[AdapterState],[TaskId] = s.[TaskId],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[AdapterID],[AdapterState],[TaskId],[Settings])
+	values(s.[ID],s.[Name],s.[AdapterID],s.[AdapterState],s.[TaskId],s.[Settings]);
+
+
+--[runtime].[ScheduleTask]--------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([Id],[Name],[IsEnabled],[TaskType],[TriggerTypeId],[ActionTypeId],[TaskSettings],[OwnerId])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('354CA4ED-81CF-4AC4-A234-C01FB42903F1','Data Source Task',0,0,'295B4FAC-DBF9-456F-855E-60D0B176F86B','B7CF41B9-F1B3-4C02-980D-B9FAFB4CFF68','{"$type":"Vanrise.Runtime.Entities.SchedulerTaskSettings, Vanrise.Runtime.Entities","TaskTriggerArgument":{"$type":"Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.IntervalTimeTaskTriggerArgument, Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments","Interval":30.0,"IntervalType":2,"TimerTriggerTypeFQTN":"Vanrise.Runtime.Triggers.TimeTaskTrigger.IntervalTimeSchedulerTaskTrigger, Vanrise.Runtime.Triggers.TimeTaskTrigger","IgnoreSkippedIntervals":false},"StartEffDate":"2018-02-08T14:14:58.504"}',-1)
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[IsEnabled],[TaskType],[TriggerTypeId],[ActionTypeId],[TaskSettings],[OwnerId]))
+merge	[runtime].[ScheduleTask] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+--when matched then
+--	update set
+--	[Name] = s.[Name],[IsEnabled] = s.[IsEnabled],[TaskType] = s.[TaskType],[TriggerTypeId] = s.[TriggerTypeId],[ActionTypeId] = s.[ActionTypeId],[TaskSettings] = s.[TaskSettings],[OwnerId] = s.[OwnerId]
+when not matched by target then
+	insert([Id],[Name],[IsEnabled],[TaskType],[TriggerTypeId],[ActionTypeId],[TaskSettings],[OwnerId])
+	values(s.[Id],s.[Name],s.[IsEnabled],s.[TaskType],s.[TriggerTypeId],s.[ActionTypeId],s.[TaskSettings],s.[OwnerId]);
+
+
+--[genericdata].[DataTransformationDefinition]------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
 ;with cte_data([ID],[Name],[Title],[Details])
@@ -109,7 +150,10 @@ when matched then
 	[Name] = s.[Name],[Title] = s.[Title],[Details] = s.[Details]
 when not matched by target then
 	insert([ID],[Name],[Title],[Details])
-	values(s.[ID],s.[Name],s.[Title],s.[Details]);--[dataparser].[ParserType]-------------------------------------------------------------------------
+	values(s.[ID],s.[Name],s.[Title],s.[Details]);
+
+
+--[dataparser].[ParserType]-------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 set nocount on;
 ;with cte_data([ID],[Name],[Settings])
