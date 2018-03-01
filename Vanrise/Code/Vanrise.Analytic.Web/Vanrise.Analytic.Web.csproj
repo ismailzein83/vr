@@ -192,7 +192,6 @@
     <Content Include="Analytic\Directives\DataAnalysis\Common\vr-analytic-darecordaggregate-selective.js" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\ScheduleTask\Templates\GenerateAlertProcessTaskTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\ScheduleTask\vr-analytic-daprofcalc-generatealertprocesstask.js" />
-    <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticMeasureExternalSourceGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticDimensionGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticJoinGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticAggregateGridTemplate.html" />
