@@ -44,6 +44,15 @@ namespace Vanrise.BusinessProcess
             bpDefinitionInitiator.RunPendingProcesses();
         }
 
+        public void ExecuteCancellationRequest(BPInstanceCancellationRequest cancellationRequest)
+        {
+            LoadProcessDefinitionInitiators();
+            BPDefinitionInitiator bpDefinitionInitiator;
+            if (!this._processDefinitionInitiators.TryGetValue(cancellationRequest.BPDefinitionId, out bpDefinitionInitiator))
+                throw new NullReferenceException(String.Format("bpDefinitionInitiator. bpDefinitionId '{0}'", cancellationRequest.BPDefinitionId));
+            bpDefinitionInitiator.ExecuteCancellationRequest(cancellationRequest.BPInstanceId, cancellationRequest.Reason);
+        }
+
         #endregion
 
         #region Private Methods

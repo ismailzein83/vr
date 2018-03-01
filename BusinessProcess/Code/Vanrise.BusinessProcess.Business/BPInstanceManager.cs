@@ -7,11 +7,14 @@ using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
+using System.Linq;
 
 namespace Vanrise.BusinessProcess.Business
 {
     public class BPInstanceManager
     {
+        static BPDefinitionManager s_definitionManager = new BPDefinitionManager();
+        static IBPInstanceDataManager s_dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
         #region public methods
 
         public BPInstance GetBPInstance(long bpInstanceId)
@@ -139,6 +142,38 @@ namespace Vanrise.BusinessProcess.Business
                 Result = CreateProcessResult.Succeeded
             };
             return output;
+        }
+
+        public UpdateOperationOutput<object> CancelProcess(long bpInstanceId)
+        {
+            int cancelRequestByUserId = SecurityContext.Current.GetLoggedInUserId();
+            List<BPInstanceStatus> allowedStatuses = BPInstanceStatusAttribute.GetNonClosedStatuses();
+            s_dataManager.SetCancellationRequestUserId(bpInstanceId, allowedStatuses, cancelRequestByUserId);
+            var bpInstance = GetBPInstance(bpInstanceId);
+            bpInstance.ThrowIfNull("bpInstance", bpInstanceId);
+            if (bpInstance.CancellationRequestByUserId == cancelRequestByUserId)
+                return new UpdateOperationOutput<object>
+                {
+                    Result = UpdateOperationResult.Succeeded
+                };
+            else
+                return new UpdateOperationOutput<object>
+                {
+                    Result = UpdateOperationResult.Failed,
+                    Message = String.Format("Process cannot be cancelled because it is in status '{0}'", Utilities.GetEnumDescription(bpInstance.Status)),
+                    ShowExactMessage = true
+                };
+        }
+
+        public bool DoesUserHaveCancelAccess(int userId, long bpInstanceId)
+        {
+            var bpInstance = GetBPInstance(bpInstanceId);
+            bpInstance.ThrowIfNull("bpInstance", bpInstanceId);
+            bpInstance.InputArgument.ThrowIfNull("bpInstance.InputArgument", bpInstanceId);
+            var bpDefinition = s_definitionManager.GetBPDefinition(bpInstance.DefinitionID);
+            bpDefinition.ThrowIfNull("bpDefinition", bpInstance.DefinitionID);
+            return s_definitionManager.DoesUserHaveViewAccess(userId, bpDefinition, bpInstance.InputArgument) 
+                && s_definitionManager.DoesUserHaveStartNewInstanceAccess(userId, bpInstance.InputArgument);
         }
 
         #endregion

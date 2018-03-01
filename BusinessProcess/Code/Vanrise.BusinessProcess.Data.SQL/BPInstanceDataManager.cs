@@ -278,6 +278,12 @@ namespace Vanrise.BusinessProcess.Data.SQL
             ExecuteNonQuerySP("[bp].[sp_BPInstance_UpdateAssignmentStatus]", processInstanceId, assignmentStatus);
         }
 
+        public void SetCancellationRequestUserId(long bpInstanceId, List<BPInstanceStatus> allowedStatuses, int cancelRequestByUserId)
+        {
+            string allowedStatusesString = String.Join(",", allowedStatuses.Select(status => (int)status));
+            ExecuteNonQuerySP("bp.sp_BPInstance_SetCancellationRequestUserId", bpInstanceId, allowedStatusesString, cancelRequestByUserId);
+        }
+
         #endregion
 
         #region mapper
@@ -299,6 +305,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
       ,[InitiatorUserId]
 	  ,[ServiceInstanceID]
       ,[TaskId]
+      ,[CancellationRequestUserId]
 	  ,[timestamp] ";
 
         private BPInstance BPInstanceMapper(IDataReader reader)
@@ -319,7 +326,8 @@ namespace Vanrise.BusinessProcess.Data.SQL
                 EntityId = reader["EntityId"] as string,
                 ViewRequiredPermissionSetId = GetReaderValue<int?>(reader, "ViewRequiredPermissionSetId"),
                 ServiceInstanceId = GetReaderValue<Guid?>(reader, "ServiceInstanceID"),
-                TaskId = GetReaderValue<Guid?>(reader, "TaskId")
+                TaskId = GetReaderValue<Guid?>(reader, "TaskId"),
+                CancellationRequestByUserId = GetReaderValue<int?>(reader, "CancellationRequestUserId")
             };
 
             string inputArg = reader["InputArgument"] as string;

@@ -17,6 +17,8 @@ namespace Vanrise.BusinessProcess.Entities
         Running = 10,
         [BPInstanceStatus(TrackingSeverity = LogEntryType.Information, IsClosed = false)]
         Waiting = 20,
+        [BPInstanceStatus(TrackingSeverity = LogEntryType.Warning, IsClosed = false)]
+        Cancelling = 30,
         [BPInstanceStatus(TrackingSeverity = LogEntryType.Information, IsClosed = true)]
         Completed = 50,
         [BPInstanceStatus(TrackingSeverity = LogEntryType.Error, IsClosed = true)]
@@ -24,7 +26,9 @@ namespace Vanrise.BusinessProcess.Entities
         [BPInstanceStatus(TrackingSeverity = LogEntryType.Error, IsClosed = true)]
         Suspended = 70,
         [BPInstanceStatus(TrackingSeverity = LogEntryType.Error, IsClosed = true)]
-        Terminated = 80
+        Terminated = 80,
+        [BPInstanceStatus(TrackingSeverity = LogEntryType.Error, IsClosed = true)]
+        Cancelled = 90
     }
 
     public enum BPInstanceAssignmentStatus
@@ -57,7 +61,7 @@ namespace Vanrise.BusinessProcess.Entities
             return _cachedAttributes[status];
         }
 
-        public static IEnumerable<BPInstanceStatus> GetNonClosedStatuses()
+        public static List<BPInstanceStatus> GetNonClosedStatuses()
         {
             List<BPInstanceStatus> rslt = new List<BPInstanceStatus>();
             foreach (var statusEnum in Enum.GetValues(typeof(BPInstanceStatus)))

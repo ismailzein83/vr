@@ -13,5 +13,7 @@ namespace Vanrise.BusinessProcess
         public WorkflowApplication WFApplication { get; set; }
 
         public bool IsIdle { get; set; }
+
+        public bool IsWorkflowCompleted { get; set; }
     }
 }

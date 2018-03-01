@@ -5,6 +5,7 @@ using Vanrise.BusinessProcess.Business;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.BusinessProcess.Web.ModelMappers;
 using Vanrise.BusinessProcess.Web.Models;
+using Vanrise.Entities;
 using Vanrise.Web.Base;
 
 namespace Vanrise.BusinessProcess.Web.Controllers
@@ -14,6 +15,8 @@ namespace Vanrise.BusinessProcess.Web.Controllers
     public class BPInstanceController : BaseAPIController
     {
         BPDefinitionManager _bpManager = new BPDefinitionManager();
+        static BPInstanceManager s_instanceManager = new BPInstanceManager();
+
         [HttpPost]
         [Route("GetUpdated")]
         public BPInstanceUpdateOutput GetUpdated(BPInstanceUpdateInput input)
@@ -74,11 +77,30 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             return manager.GetBPDefinitionSummary();
         }
 
-        
+        [HttpGet]
+        [Route("DoesUserHaveCancelProcessAccess")]
+        public bool DoesUserHaveCancelProcessAccess(long bpInstanceId)
+        {
+            return s_instanceManager.DoesUserHaveCancelAccess(Security.Entities.ContextFactory.GetContext().GetLoggedInUserId(), bpInstanceId);
+        }
+
+        [HttpPost]
+        [Route("CancelProcess")]
+        public object CancelProcess(CancelProcessInput input)
+        {
+            if (!s_instanceManager.DoesUserHaveCancelAccess(Security.Entities.ContextFactory.GetContext().GetLoggedInUserId(), input.BPInstanceId))
+                return GetUnauthorizedResponse();
+            return s_instanceManager.CancelProcess(input.BPInstanceId);
+        }
     }
     public class HasRunningInstancesInput
     {
         public Guid definitionId { get; set; }
         public List<string> entityIds { get; set; }
+    }
+
+    public class CancelProcessInput
+    {
+        public long BPInstanceId { get; set; }
     }
 }

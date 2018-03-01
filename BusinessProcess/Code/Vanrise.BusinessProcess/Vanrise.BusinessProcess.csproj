@@ -68,6 +68,10 @@
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Runtime">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.dll</HintPath>
     </Reference>
@@ -100,13 +104,14 @@
     <Compile Include="BusinessRuleActions\WarningItemAction.cs" />
     <Compile Include="BusinessRuleActions\ExcludeItemAction.cs" />
     <Compile Include="BusinessRuleConditionValidateContext.cs" />
-    <Compile Include="InterBPServicePendingInstancesRequest.cs" />
+    <Compile Include="RuntimeServices\InterBPServiceCancelInstanceRequest.cs" />
+    <Compile Include="RuntimeServices\InterBPServicePendingInstancesRequest.cs" />
     <Compile Include="Internals\ActivityEventsTracking.cs" />
     <Compile Include="Internals\ConsoleTracking.cs" />
     <Compile Include="ContextExtensions.cs" />
     <Compile Include="Internals\BPService.cs" />
     <Compile Include="Internals\IBPService.cs" />
-    <Compile Include="PendingItemsHandler.cs" />
+    <Compile Include="RuntimeServices\PendingItemsHandler.cs" />
     <Compile Include="ProcessCompletedEventPayload.cs" />
     <Compile Include="Internals\BPRunningInstance.cs" />
     <Compile Include="Internals\BPDefinitionInitiator.cs" />

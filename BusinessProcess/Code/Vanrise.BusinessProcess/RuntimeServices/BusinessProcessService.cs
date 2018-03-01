@@ -29,6 +29,11 @@ namespace Vanrise.BusinessProcess
 
         protected override void Execute()
         {
+            BPInstanceCancellationRequest cancellationRequest;
+            while (PendingItemsHandler.Current.TryGetCancellationRequestToProcess(base.ServiceInstance.ServiceInstanceId, out cancellationRequest))
+            {
+                _businessProcessRuntime.ExecuteCancellationRequest(cancellationRequest);
+            }
             Guid definitionId;
             while(PendingItemsHandler.Current.TryGetPendingDefinitionsToProcess(base.ServiceInstance.ServiceInstanceId, out definitionId))
             {

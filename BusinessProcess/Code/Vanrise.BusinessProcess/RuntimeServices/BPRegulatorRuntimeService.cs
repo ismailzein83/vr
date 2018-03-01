@@ -10,6 +10,7 @@ using Vanrise.Common;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.BusinessProcess.Business;
 using System.Configuration;
+using Vanrise.Security.Business;
 
 namespace Vanrise.BusinessProcess
 {
@@ -23,6 +24,7 @@ namespace Vanrise.BusinessProcess
         IBPInstanceDataManager _bpInstanceDataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
         IBPEventDataManager _bpEventDataManager = BPDataManagerFactory.GetDataManager<IBPEventDataManager>();
         RuntimeServiceInstanceManager _serviceInstanceManager = new RuntimeServiceInstanceManager();
+        UserManager _userManager = new UserManager();
 
         static BPRegulatorRuntimeService()
         {
@@ -48,7 +50,7 @@ namespace Vanrise.BusinessProcess
             return _serviceInstanceManager.GetServices(BusinessProcessService.SERVICE_TYPE_UNIQUE_NAME);
         }
 
-        static List<BPInstanceStatus> s_pendingStatuses = new List<BPInstanceStatus> { BPInstanceStatus.New, BPInstanceStatus.Postponed, BPInstanceStatus.Running, BPInstanceStatus.Waiting };
+        static List<BPInstanceStatus> s_pendingStatuses = BPInstanceStatusAttribute.GetNonClosedStatuses();
 
         private void AssignPendingInstancesToServices(List<RuntimeServiceInstance> bpServiceInstances)
         {
@@ -57,19 +59,19 @@ namespace Vanrise.BusinessProcess
             {
                 Dictionary<long, BPInstance> pendingInstancesDict = pendingInstances.ToDictionary(itm => itm.ProcessInstanceID, itm => itm);
                 List<long> processInstanceIdsHavingEvents = _bpEventDataManager.GetEventsDistinctProcessInstanceIds();
-                var bpDefinitionsList = _bpDefinitionManager.GetBPDefinitions().ToList();
-                Dictionary<Guid, BPDefinition> bpDefinitions = bpDefinitionsList.ToDictionary(bpDefinition => bpDefinition.BPDefinitionID, bpDefinition => bpDefinition);
+                Dictionary<Guid, BPDefinition> bpDefinitions = _bpDefinitionManager.GetCachedBPDefinitions();
                 Dictionary<Guid, ServiceInstanceBPDefinitionInfo> serviceInstancesInfo
                     = bpServiceInstances.ToDictionary(serviceInstance => serviceInstance.ServiceInstanceId,
                     serviceInstance => new ServiceInstanceBPDefinitionInfo
                     {
                         ServiceInstance = serviceInstance,
-                        ItemsCountByBPDefinition = BuildItemsCountByBPDefinition(bpDefinitionsList)
+                        ItemsCountByBPDefinition = BuildItemsCountByBPDefinition(bpDefinitions)
                     });
                 List<BPInstance> startedBPInstances = new List<BPInstance>();
                 List<BPInstance> waitingAndNotPersistedInstances = new List<BPInstance>();
                 List<BPInstance> persistedInstances = new List<BPInstance>();
                 List<BPInstance> newInstances = new List<BPInstance>();
+                List<BPInstanceCancellationRequestInfo> instanceCancellationRequests = new List<BPInstanceCancellationRequestInfo>();
                 // - handling BPInstances assigned to Services and scheduled for execution
                 // - distribute other BPInstances to corresponding lists (waitingAndNotPersistedInstances, newAndPersistedInstances)
                 // - suspend instances where applicable
@@ -81,12 +83,13 @@ namespace Vanrise.BusinessProcess
                         ServiceInstanceBPDefinitionInfo serviceInstanceInfo;
                         if (serviceInstancesInfo.TryGetValue(pendingInstanceInfo.ServiceInstanceId.Value, out serviceInstanceInfo))
                         {
+                            bool instanceStopped = StopInstanceIfNeeded(pendingInstanceInfo, pendingInstancesDict, instanceCancellationRequests);
                             if (pendingInstanceInfo.AssignmentStatus != BPInstanceAssignmentStatus.Free)//already assigned for execution
                             {
                                 var bpDefinitionInfo = serviceInstanceInfo.GetBPDefinitionInfo(pendingInstanceInfo.DefinitionID);
                                 serviceInstanceInfo.TotalItemsCount++;
                                 bpDefinitionInfo.ItemsCount++;
-                                if (pendingInstanceInfo.AssignmentStatus == BPInstanceAssignmentStatus.AssignedForExecution)//execution not started yet
+                                if (pendingInstanceInfo.AssignmentStatus != BPInstanceAssignmentStatus.Executing)//execution might not be started yet
                                 {
                                     bpDefinitionInfo.HasAnyNewInstance = true;
                                     serviceInstanceInfo.HasAnyNewInstance = true;
@@ -94,42 +97,33 @@ namespace Vanrise.BusinessProcess
                             }
                             else//waiting event
                             {
-                                if (processInstanceIdsHavingEvents.Contains(pendingInstanceInfo.ProcessInstanceID))
+                                if (!instanceStopped && processInstanceIdsHavingEvents.Contains(pendingInstanceInfo.ProcessInstanceID))
                                     waitingAndNotPersistedInstances.Add(pendingInstanceInfo);
                             }
                             startedBPInstances.Add(pendingInstanceInfo);
                         }
                         else//runtime service not alive
                         {
-                            SuspendPendingInstance(pendingInstanceInfo, pendingInstancesDict, true, "Runtime is no longer available");
+                            StopPendingInstance(pendingInstanceInfo, pendingInstancesDict, true, true, "Runtime is no longer available");
                         }
                     }
                     else//waiting event and persisted or not started yet
                     {
-                        bool isSuspended = false;
-                        if (pendingInstanceInfo.ParentProcessID.HasValue)
-                        {
-                            BPInstance parentBPInstance;
-                            if (!pendingInstancesDict.TryGetValue(pendingInstanceInfo.ParentProcessID.Value, out parentBPInstance) || parentBPInstance.Status == BPInstanceStatus.Suspended)
-                            {
-                                SuspendPendingInstance(pendingInstanceInfo, pendingInstancesDict, false, "Parent Process is not running anymore");
-                                isSuspended = true;
-                            }
-                        }
-                        if (!isSuspended)
+                        bool instanceStopped = StopInstanceIfNeeded(pendingInstanceInfo, pendingInstancesDict, instanceCancellationRequests);
+                        if (!instanceStopped)
                         {
                             if (pendingInstanceInfo.Status == BPInstanceStatus.New || pendingInstanceInfo.Status == BPInstanceStatus.Postponed)
                             {
                                 newInstances.Add(pendingInstanceInfo);
                             }
                             else//Waiting
-                            {                                
+                            {
                                 if (processInstanceIdsHavingEvents.Contains(pendingInstanceInfo.ProcessInstanceID))
                                     persistedInstances.Add(pendingInstanceInfo);
-                                startedBPInstances.Add(pendingInstanceInfo); 
+                                startedBPInstances.Add(pendingInstanceInfo);
                             }
                         }
-                    }
+                    }                    
                 }
 
                 Dictionary<Guid, ServiceInstanceBPDefinitionInfo> servicesToAssign = serviceInstancesInfo.Values.Where(itm => itm.TotalItemsCount < s_maxWorkflowsPerServiceInstance).ToDictionary(itm => itm.ServiceInstance.ServiceInstanceId, itm => itm);
@@ -198,6 +192,9 @@ namespace Vanrise.BusinessProcess
 
                 if (pendingInstancesToUpdate.Count > 0)
                     _bpInstanceDataManager.UpdateServiceInstancesAndAssignmentStatus(pendingInstancesToUpdate);
+
+                if (instanceCancellationRequests.Count > 0)
+                    SendCancellationRequests(serviceInstancesInfo, instanceCancellationRequests);
                 NotifyServiceInstances(serviceInstancesInfo);
 
                 //delete BPEvents for BPInstances that are not running
@@ -206,11 +203,65 @@ namespace Vanrise.BusinessProcess
                     foreach(var processInstanceId in processInstanceIdsHavingEvents)
                     {
                         BPInstance processInstance;
-                        if (!pendingInstancesDict.TryGetValue(processInstanceId, out processInstance) || processInstance.Status == BPInstanceStatus.Suspended)
+                        if (!pendingInstancesDict.TryGetValue(processInstanceId, out processInstance) || processInstance.Status == BPInstanceStatus.Suspended || processInstance.Status == BPInstanceStatus.Cancelled)
                             _bpEventDataManager.DeleteProcessInstanceEvents(processInstanceId);
                     }
                 }
             }
+        }
+
+        private bool StopInstanceIfNeeded(BPInstance pendingInstanceInfo, Dictionary<long, BPInstance> pendingInstancesDict, List<BPInstanceCancellationRequestInfo> instanceCancellationRequests)
+        {
+            bool shouldStopInstance = false;
+            bool suspend = false;
+            bool notifyParent = false;
+            string reason = null;
+            if (pendingInstanceInfo.Status != BPInstanceStatus.Cancelling)
+            {
+                if (pendingInstanceInfo.CancellationRequestByUserId.HasValue)
+                {
+                    shouldStopInstance = true;
+                    suspend = false;
+                    reason = String.Format("Cancellation requested by User '{0}'", _userManager.GetUserName(pendingInstanceInfo.CancellationRequestByUserId.Value));
+                    notifyParent = true;
+                }
+                else if (pendingInstanceInfo.ParentProcessID.HasValue)
+                {
+                    BPInstance parentBPInstance;
+                    pendingInstancesDict.TryGetValue(pendingInstanceInfo.ParentProcessID.Value, out parentBPInstance);
+                    if (parentBPInstance == null || (parentBPInstance.Status != BPInstanceStatus.Running && parentBPInstance.Status != BPInstanceStatus.Waiting))
+                    {
+                        shouldStopInstance = true;
+                        if (parentBPInstance != null && parentBPInstance.Status == BPInstanceStatus.Cancelled)
+                        {
+                            suspend = false;
+                            reason = "Parent Process is cancelled";
+                        }
+                        else
+                        {
+                            suspend = true;
+                            reason = "Parent Process is not running anymore";
+                        }
+                        notifyParent = false;                        
+                    }
+                }
+                if (shouldStopInstance)
+                {
+                    if(pendingInstanceInfo.ServiceInstanceId.HasValue)
+                    {
+                        instanceCancellationRequests.Add(new BPInstanceCancellationRequestInfo
+                        {
+                            BPInstance = pendingInstanceInfo,
+                            Reason = reason
+                        });
+                    }
+                    else
+                    {
+                        StopPendingInstance(pendingInstanceInfo, pendingInstancesDict, suspend, notifyParent, reason);
+                    }
+                }
+            }
+            return shouldStopInstance;
         }
 
         private bool TryAssignLeastBusyServiceToBPInstance(BPInstance pendingInstanceInfo, Dictionary<Guid, ServiceInstanceBPDefinitionInfo> servicesToAssign, List<BPInstance> pendingInstancesToUpdate)
@@ -272,7 +323,37 @@ namespace Vanrise.BusinessProcess
             });
         }
 
-        private void SuspendPendingInstance(BPInstance pendingInstanceInfo, Dictionary<long, BPInstance> pendingInstancesDict, bool notifyParentIfAny, string errorMessage)
+        private void SendCancellationRequests(Dictionary<Guid, ServiceInstanceBPDefinitionInfo> serviceInstancesInfo, List<BPInstanceCancellationRequestInfo> instanceCancellationRequests)
+        {
+            var interRuntimeServiceManager = new InterRuntimeServiceManager();
+            foreach (var cancellationRequestInfo in instanceCancellationRequests)
+            {
+                if (!cancellationRequestInfo.BPInstance.ServiceInstanceId.HasValue)
+                    throw new NullReferenceException(String.Format("cancellationRequestInfo.BPInstance.ServiceInstanceId. BPInstanceId '{0}'", cancellationRequestInfo.BPInstance.ProcessInstanceID));
+                var serviceInstanceInfo = serviceInstancesInfo.GetRecord(cancellationRequestInfo.BPInstance.ServiceInstanceId.Value);
+                serviceInstanceInfo.ThrowIfNull("serviceInstanceInfo", cancellationRequestInfo.BPInstance.ServiceInstanceId.Value);
+                InterBPServiceCancelInstanceRequest request = new InterBPServiceCancelInstanceRequest
+                {
+                    ServiceInstanceId = serviceInstanceInfo.ServiceInstance.ServiceInstanceId,
+                    CancellationRequest = new BPInstanceCancellationRequest
+                    {
+                        BPDefinitionId = cancellationRequestInfo.BPInstance.DefinitionID,
+                        BPInstanceId = cancellationRequestInfo.BPInstance.ProcessInstanceID,
+                        Reason = cancellationRequestInfo.Reason
+                    }
+                };
+                try
+                {
+                    interRuntimeServiceManager.SendRequest(serviceInstanceInfo.ServiceInstance.ProcessId, request);
+                }
+                catch (Exception ex)
+                {
+                    LoggerFactory.GetExceptionLogger().WriteException(ex);
+                }
+            }
+        }
+
+        private void StopPendingInstance(BPInstance pendingInstanceInfo, Dictionary<long, BPInstance> pendingInstancesDict, bool isSuspend, bool notifyParentIfAny, string errorMessage)
         {
             BPTrackingChannel.Current.WriteTrackingMessage(new BPTrackingMessage
                 {
@@ -282,13 +363,13 @@ namespace Vanrise.BusinessProcess
                     TrackingMessage = errorMessage,
                     EventTime = DateTime.Now
                 });
-            var status = BPInstanceStatus.Suspended;
+            var status = isSuspend ? BPInstanceStatus.Suspended : BPInstanceStatus.Cancelled;
             BPDefinitionInitiator.UpdateProcessStatus(pendingInstanceInfo.ProcessInstanceID, pendingInstanceInfo.ParentProcessID, status, BPInstanceAssignmentStatus.Free, errorMessage, null);
             pendingInstanceInfo.Status = status;
             if (notifyParentIfAny && pendingInstanceInfo.ParentProcessID.HasValue)
             {
                 BPInstance parentBPInstance;
-                if (pendingInstancesDict.TryGetValue(pendingInstanceInfo.ParentProcessID.Value, out parentBPInstance) && parentBPInstance.Status != BPInstanceStatus.Suspended)
+                if (pendingInstancesDict.TryGetValue(pendingInstanceInfo.ParentProcessID.Value, out parentBPInstance) && parentBPInstance.Status != BPInstanceStatus.Suspended && parentBPInstance.Status != BPInstanceStatus.Cancelled)
                 {
                     BPDefinitionInitiator.NotifyParentBPChildCompleted(pendingInstanceInfo.ProcessInstanceID, pendingInstanceInfo.ParentProcessID.Value,
                         status, errorMessage, null, null);
@@ -308,9 +389,9 @@ namespace Vanrise.BusinessProcess
             return definition;
         }
 
-        private Dictionary<Guid, BPDefinitionInfo> BuildItemsCountByBPDefinition(List<BPDefinition> bpDefinitions)
+        private Dictionary<Guid, BPDefinitionInfo> BuildItemsCountByBPDefinition(Dictionary<Guid, BPDefinition> bpDefinitions)
         {
-            return bpDefinitions.ToDictionary(bpDefinition => bpDefinition.BPDefinitionID
+            return bpDefinitions.Values.ToDictionary(bpDefinition => bpDefinition.BPDefinitionID
                 , bpDefinition => new BPDefinitionInfo
                 {
                     BPDefinition = bpDefinition
@@ -371,6 +452,13 @@ namespace Vanrise.BusinessProcess
             {
                 return _getStartedBPInstances();
             }
+        }
+
+        private class BPInstanceCancellationRequestInfo
+        {
+            public BPInstance BPInstance { get; set; }
+
+            public string Reason { get; set; }
         }
 
         #endregion

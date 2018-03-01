@@ -26,6 +26,9 @@ namespace Vanrise.BusinessProcess.Entities
         public ProcessCompletionNotifier CompletionNotifier { get; set; }
 
         public string LastMessage { get; set; }
+
+        public int? CancellationRequestByUserId { get; set; }
+
         public DateTime CreatedTime { get; set; }
         public DateTime? StatusUpdatedTime { get; set; }
         public Guid? ServiceInstanceId { get; set; }

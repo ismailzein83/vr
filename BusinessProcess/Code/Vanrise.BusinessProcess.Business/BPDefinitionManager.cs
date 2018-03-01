@@ -14,7 +14,7 @@ namespace Vanrise.BusinessProcess.Business
     public class BPDefinitionManager : IBPDefinitionManager
     {
         #region public methods
-
+        static SecurityManager s_securityManager = new SecurityManager();
         public IEnumerable<BPDefinition> GetBPDefinitions()
         {
             var cachedDefinitions = GetCachedBPDefinitions();
@@ -162,6 +162,12 @@ namespace Vanrise.BusinessProcess.Business
             return GetBPDefinitionExtendedSettings(bPDefinition).DoesUserHaveViewAccess(definitionContext);
         }
 
+        public bool DoesUserHaveViewAccess(int userId, BPDefinition bPDefinition, BaseProcessInputArgument inputArg)
+        {
+            RequiredPermissionSettings viewInstanceRequiredPermissions = GetViewInstanceRequiredPermissions(bPDefinition, inputArg);
+            return s_securityManager.IsAllowed(viewInstanceRequiredPermissions, userId);
+        }
+
         public RequiredPermissionSettings GetViewInstanceRequiredPermissions(BPDefinition bpDefinition, BaseProcessInputArgument inputArg)
         {
             var getViewInstanceRequiredPermissionsContext = new BPDefinitionGetViewInstanceRequiredPermissionsContext
@@ -195,7 +201,13 @@ namespace Vanrise.BusinessProcess.Business
 
         public bool DoesUserHaveStartNewInstanceAccess(int userId, CreateProcessInput processInput)
         {
-            var bPDefinition = GetDefinition(processInput.InputArguments.ProcessName);
+            return DoesUserHaveStartNewInstanceAccess(userId, processInput.InputArguments);
+
+        }
+
+        public bool DoesUserHaveStartNewInstanceAccess(int userId, BaseProcessInputArgument inputArg)
+        {
+            var bPDefinition = GetDefinition(inputArg.ProcessName);
 
             var context = new BPDefinitionDoesUserHaveStartSpecificInstanceAccessContext
             {
@@ -204,7 +216,7 @@ namespace Vanrise.BusinessProcess.Business
                     UserId = userId,
                     BPDefinition = bPDefinition
                 },
-                InputArg = processInput.InputArguments
+                InputArg = inputArg
 
             };
             return GetBPDefinitionExtendedSettings(bPDefinition).DoesUserHaveStartSpecificInstanceAccess(context);
@@ -288,7 +300,7 @@ namespace Vanrise.BusinessProcess.Business
             return secManager.IsAllowed(permission, userId);
         }
 
-        private Dictionary<Guid, BPDefinition> GetCachedBPDefinitions()
+        public Dictionary<Guid, BPDefinition> GetCachedBPDefinitions()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetBPDefinitions",
                () =>
