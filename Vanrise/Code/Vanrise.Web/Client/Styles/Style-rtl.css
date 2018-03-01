@@ -19,6 +19,10 @@
     right: 50%;
     left: unset !important;
 }
+.rtl .spaced-item{    
+     margin-right : unset;
+     margin-left : 10px;
+}
 /* start main-menu*/
 
 @media (min-width: 768px) {

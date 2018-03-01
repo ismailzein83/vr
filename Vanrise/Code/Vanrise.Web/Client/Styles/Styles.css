@@ -28,7 +28,9 @@
     padding: 0px 0px 0px 30px !important;
     color: #333;
 }
-
+.spaced-item{
+    margin-right : 10px;
+}
 .pin-icon {
     font-size: 17px;
     margin: 6px 4px;
