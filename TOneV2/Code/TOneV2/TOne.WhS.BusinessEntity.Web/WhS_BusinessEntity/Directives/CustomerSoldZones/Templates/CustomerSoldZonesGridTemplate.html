@@ -6,13 +6,13 @@
              idfield="SaleZoneId"
              defaultsortbyfieldname="'Name'" enableautoexport="true" normalcell>
     <vr-datagridcolumn headertext="'ID'" field="'ZoneId'" type="'Text'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Zone Name'" field="'Name'" type="'Text'" fixedwidth="200">
+    <vr-datagridcolumn headertext="'Zone'" field="'Name'" type="'Text'" widthfactor="'1'">
     </vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Sale Rates'">
+    <vr-datagridcolumn headertext="'Sale Rates'" widthfactor="'5'">
         <div class="responsive-container" style="white-space: normal;">
-            <span ng-repeat="customerZone in dataItem.CustomerZones" class="spaced-item" style="display:inline-flex ; width : 210px;" title="{{customerZone.CustomerName}} {{customerZone.Rate| number: viewScope.longPrecision}}">
-                <span style="width:160px;display:inline-block;white-space:nowrap;text-overflow:ellipsis;overflow: hidden;">{{customerZone.CustomerName}}</span>
-                <span style="width:50px;display:inline-block;white-space:nowrap;text-overflow:ellipsis;overflow: hidden;font-weight:bold">
+            <span ng-repeat="customerZone in dataItem.CustomerZones" class="spaced-item" style="display:inline-flex ; width : 180px;" title="{{customerZone.CustomerName}} {{customerZone.Rate| number: viewScope.longPrecision}}">
+                <span style="max-width:140px;display:inline-block;white-space:nowrap;text-overflow:ellipsis;overflow: hidden;">{{customerZone.CustomerName}}</span>
+                <span style="width:40px;display:inline-block;white-space:nowrap;text-overflow:ellipsis;overflow: hidden;font-weight:bold">
                     {{customerZone.Rate| number: viewScope.longPrecision}}
                 </span>
             </span>
