@@ -160,6 +160,26 @@ namespace TOne.WhS.BusinessEntity.Business
                 return saleZones.FindAllRecords(x => x.IsEffective(effectiveOn));
         }
 
+        public IEnumerable<SaleZone> GetSoldZonesBySellingNumberPlan(int sellingNumberPlanId, List<int> countryIds, List<long> zoneIds, string zoneName, DateTime effectiveOn)
+        {
+            var saleZones =  GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
+           
+            Func<SaleZone, bool> filterExpression = (x) =>
+            {
+                if (countryIds != null && countryIds.Count > 0 && !countryIds.Contains(x.CountryId))
+                    return false;
+                if (zoneIds != null && zoneIds.Count > 0 && !zoneIds.Contains(x.SaleZoneId))
+                    return false;
+                if (zoneName != null && !x.Name.ToLower().Contains(zoneName.ToLower()))
+                    return false;
+                if (!x.IsEffectiveOrFuture(effectiveOn))
+                    return false;
+                return true;
+            };
+
+            return saleZones.FindAllRecords(filterExpression);
+        }
+
         public IEnumerable<SaleZone> GetCustomerSaleZones(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture)
         {
             var carrierAccountManager = new CarrierAccountManager();

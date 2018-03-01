@@ -305,6 +305,24 @@ namespace TOne.WhS.BusinessEntity.Business
             return (allCustomerCountries != null) ? allCustomerCountries.FindAllRecords(x => countryIds.Contains(x.CountryId)) : null;
         }
 
+        public List<CustomerCountry2> GetCustomersCountriesEffectiveOrFuture(List<int> countriesIds, List<int> customersIds, DateTime effectiveOn)
+        {
+            var cachedCustomerCountries = GetAllCachedCustomerCountries();
+
+            Func<CustomerCountry2, bool> filterExpression = (x) =>
+            {
+                if (countriesIds != null && countriesIds.Count > 0 && !countriesIds.Contains(x.CountryId))
+                    return false;
+                if (customersIds!=null && customersIds.Count > 0 && !customersIds.Contains(x.CustomerId))
+                    return false;
+                if (!x.IsEffectiveOrFuture(effectiveOn))
+                    return false;
+                return true;
+            };
+
+            return cachedCustomerCountries.FindAllRecords(filterExpression).ToList();
+        }
+
         #endregion
 
         #region Private Classes

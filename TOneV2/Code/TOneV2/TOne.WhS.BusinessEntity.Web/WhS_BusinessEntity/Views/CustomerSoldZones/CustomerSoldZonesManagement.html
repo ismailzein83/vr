@@ -1,0 +1,45 @@
+﻿<vr-panel ng-controller="WhS_BE_CustomerSoldZonesManagementController" vr-loader="scopeModel.isGettingData">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed">
+            <vr-row removeline>
+                <vr-whs-be-sellingnumberplan-selector on-ready="scopeModel.onSellingNumberReady" onselectionchanged="scopeModel.onSellingNumberPlanSelectionChanged" normal-col-num="2" selectedvalues="scopeModel.sellingNumber" isrequired="true"> </vr-whs-be-sellingnumberplan-selector>
+                <vr-columns width="normal" haschildcolumns>
+                    <vr-common-country-selector on-ready="scopeModel.onCountryReady" ismultipleselection></vr-common-country-selector>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-textbox value="scopeModel.zoneName" label="Zone Name"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-textbox value="scopeModel.saleCode" label="Code Start With"></vr-textbox>
+                </vr-columns>
+                <span vr-loader="scopeModel.isLoadingCustomerSelector" vr-disabled="!scopeModel.sellingNumber">
+                    <vr-whs-be-customer-selector normal-col-num="2" selectedvalues="scopeModel.selectedCustomers" on-ready="scopeModel.onCustomerSelectorReady" ismultipleselection></vr-whs-be-customer-selector>
+                </span>
+                <vr-columns width="normal">
+                    <span vr-disabled="!scopeModel.sellingNumber" vr-loader="scopeModel.isLoadingRoutingProductSelector">
+                        <vr-whs-be-routingproduct-selector on-ready="scopeModel.onRoutingProductSelectorReady" selectedvalues="scopeModel.selectedRoutingProducts" ismultipleselection></vr-whs-be-routingproduct-selector>
+                    </span>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-textbox value="scopeModel.top" label="Top" isrequired type="number" minvalue="1" decimalprecision="0"></vr-textbox>
+                </vr-columns>
+                <vr-columns width="normal">
+                    <vr-datetimepicker type="date" label="Effective On" value="scopeModel.effectiveOn" isrequired></vr-datetimepicker>
+                </vr-columns>
+                <vr-common-currency-selector on-ready="scopeModel.onCurrencySelectorReady" isrequired="true" hideremoveicon normal-col-num="2"></vr-common-currency-selector>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.searchClicked"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-whs-be-customersoledzones-grid on-ready="scopeModel.onGridReady"></vr-whs-be-customersoledzones-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>

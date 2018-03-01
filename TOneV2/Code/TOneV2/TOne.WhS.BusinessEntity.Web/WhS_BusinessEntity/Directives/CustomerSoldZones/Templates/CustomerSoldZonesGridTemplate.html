@@ -1,0 +1,26 @@
+﻿<vr-datagrid datasource="customerSoldZones"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="SaleZoneId"
+             defaultsortbyfieldname="'Name'" enableautoexport="true" normalcell>
+    <vr-datagridcolumn headertext="'ID'" field="'ZoneId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Zone Name'" field="'Name'" type="'Text'" widthfactor="1">
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Sale Rates'" widthfactor="3">
+        <div class="responsive-container" style="white-space: normal;">
+            <span ng-repeat="customerZone in dataItem.CustomerZones" class="spaced-item" style="display:inline-flex ; width : 210px; color:#3566ee" title="{{customerZone.CustomerName}} {{customerZone.Rate| number: viewScope.longPrecision}}">
+                <span style="width:140px;display:inline-block;white-space:nowrap;text-overflow:ellipsis;overflow: hidden;">{{customerZone.CustomerName}}</span>
+                <span style="width:50px;display:inline-block;white-space:nowrap;text-overflow:ellipsis;overflow: hidden;font-weight:bold">
+                    {{customerZone.Rate| number: viewScope.longPrecision}}
+                </span>
+            </span>
+        </div>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Sale Count'" field="'SaleCount'" fixedwidth="75" type="'Number'" numberprecision="'NoDecimal'"></vr-datagridcolumn>
+
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
+</vr-datagrid>

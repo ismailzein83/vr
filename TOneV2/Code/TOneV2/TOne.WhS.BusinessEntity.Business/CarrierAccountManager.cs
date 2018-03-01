@@ -827,11 +827,33 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return carrierAccounts.OrderBy(x => x.Name);
         }
+
+
+        public List<int> GetCustomersIdsAssignedToSellingNumberPlanId(int sellingNumberPlanId)
+        {
+            return GetCustomersBySellingNumberPlanId(sellingNumberPlanId).Select(x => x.CarrierAccountId).ToList();
+        }
         public CarrierAccount GetCarrierAccountHistoryDetailbyHistoryId(int carrierAccountHistoryId)
         {
             VRObjectTrackingManager s_vrObjectTrackingManager = new VRObjectTrackingManager();
             var carrierAccount = s_vrObjectTrackingManager.GetObjectDetailById(carrierAccountHistoryId);
             return carrierAccount.CastWithValidate<CarrierAccount>("Carrier Account : historyId ", carrierAccountHistoryId);
+        }
+
+        public IEnumerable<RoutingCustomerInfoDetails> GetRoutingCustomerInfoDetailsByCustomersIds(IEnumerable<int> customerIds)
+        {
+            if (customerIds == null || customerIds.Count() == 0)
+                return null;
+
+            var dataByCustomer = new List<RoutingCustomerInfoDetails>();
+
+            foreach (int customerId in customerIds)
+            {
+                int sellingProductId = GetSellingProductId(customerId);
+                dataByCustomer.Add(new RoutingCustomerInfoDetails() { CustomerId = customerId, SellingProductId = sellingProductId });
+            }
+
+            return dataByCustomer;
         }
         public bool IsInterconnectSwitch(int carrierAccountId)
         {
