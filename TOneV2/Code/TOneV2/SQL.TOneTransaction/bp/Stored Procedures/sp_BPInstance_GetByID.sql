@@ -7,7 +7,7 @@ BEGIN
 	SELECT @ID_Local = @ID
 	
     SELECT	[ID],[Title],[ParentID],[DefinitionID],[WorkflowInstanceID],[InputArgument], [CompletionNotifier],[ExecutionStatus], AssignmentStatus,[LastMessage],EntityID
-      ,[ViewRequiredPermissionSetId],[CreatedTime],[StatusUpdatedTime],[InitiatorUserId], [ServiceInstanceID], TaskId
+      ,[ViewRequiredPermissionSetId],[CreatedTime],[StatusUpdatedTime],[InitiatorUserId], [ServiceInstanceID], TaskId, CancellationRequestUserId
 	FROM	bp.[BPInstance] WITH(NOLOCK)
 	WHERE	ID = @ID_Local
 END

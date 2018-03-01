@@ -13,12 +13,15 @@
     [LastMessage]                 NVARCHAR (MAX)   NULL,
     [EntityId]                    VARCHAR (255)    NULL,
     [ViewRequiredPermissionSetId] INT              NULL,
+    [CancellationRequestUserId]   INT              NULL,
     [CreatedTime]                 DATETIME         CONSTRAINT [DF_BPInstance_CreatedTime] DEFAULT (getdate()) NULL,
     [StatusUpdatedTime]           DATETIME         NULL,
     [TaskId]                      UNIQUEIDENTIFIER NULL,
     [timestamp]                   ROWVERSION       NULL,
     CONSTRAINT [PK_BPInstance_1] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

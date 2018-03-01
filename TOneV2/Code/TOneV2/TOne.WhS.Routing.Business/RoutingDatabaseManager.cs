@@ -43,8 +43,14 @@ namespace TOne.WhS.Routing.Business
 
         public RoutingDatabase GetRoutingDatabase(int routingDatabaseId)
         {
-            var items = GetNotDeletedDatabases();
-            return items.GetRecord(routingDatabaseId);
+            var notDeletedDBs = GetNotDeletedDatabases();
+            RoutingDatabase db = notDeletedDBs.GetRecord(routingDatabaseId);
+            if (db == null && notDeletedDBs != null && !notDeletedDBs.Values.Any(itm => itm.ID > routingDatabaseId))
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                db = GetNotDeletedDatabases().GetRecord(routingDatabaseId);
+            }
+            return db;
         }
 
         public RoutingDatabase GetRoutingDatabaseFromDB(int routingDatabaseId)

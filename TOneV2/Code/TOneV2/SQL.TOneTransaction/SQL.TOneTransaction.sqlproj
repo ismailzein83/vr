@@ -232,6 +232,7 @@
     <Build Include="Security\SOM.sql" />
     <Build Include="SOM\Stored Procedures\sp_SOMRequest_GetRecentHeadersByEntityID.sql" />
     <Build Include="SOM\Stored Procedures\sp_SOMRequest_GetProcessInstanceId.sql" />
+    <Build Include="bp\Stored Procedures\sp_BPInstance_SetCancellationRequestUserId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="TOne.PostDeployment.sql" />

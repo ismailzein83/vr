@@ -18,7 +18,7 @@ BEGIN
 	select Convert(int, ParsedString) from [bp].[ParseStringList](@ViewRequiredPermissionSetIds)
 
 	SELECT	[ID],[Title],[ParentID],[DefinitionID],[WorkflowInstanceID],[InputArgument], [CompletionNotifier],[ExecutionStatus], AssignmentStatus,
-			[LastMessage],[CreatedTime],[StatusUpdatedTime],[InitiatorUserId],EntityID,[ViewRequiredPermissionSetId], [ServiceInstanceID], TaskId
+			[LastMessage],[CreatedTime],[StatusUpdatedTime],[InitiatorUserId],EntityID,[ViewRequiredPermissionSetId], [ServiceInstanceID], TaskId, CancellationRequestUserId
 
 	FROM	bp.[BPInstance] as bps WITH(NOLOCK)
 	WHERE	(@EntityID is null OR EntityID = @EntityID) 
