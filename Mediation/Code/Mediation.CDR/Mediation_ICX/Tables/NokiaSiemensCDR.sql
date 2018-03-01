@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [Mediation_ICX].[NokiaSiemensCDR] (
-    [Id]                       BIGINT        NULL,
+    [Id]                       BIGINT        NOT NULL,
     [BeginDate]                DATETIME      NULL,
     [EndDate]                  DATETIME      NULL,
     [DurationInSeconds]        INT           NULL,
@@ -11,8 +11,11 @@
     [OutgoingTrunkNumber]      INT           NULL,
     [CauseValue]               INT           NULL,
     [Zone]                     VARCHAR (50)  NULL,
-    [FileName]                 VARCHAR (255) NULL
+    [FileName]                 VARCHAR (255) NULL,
+    CONSTRAINT [PK_NokiaSiemensCDR] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 

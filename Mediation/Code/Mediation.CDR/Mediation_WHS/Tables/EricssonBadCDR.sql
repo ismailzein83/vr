@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [Mediation_WHS].[EricssonBadCDR] (
-    [Id]                       BIGINT       NULL,
+    [Id]                       BIGINT       NOT NULL,
     [RecordType]               VARCHAR (5)  NULL,
     [CallStatus]               VARCHAR (20) NULL,
     [CauseForOutput]           VARCHAR (20) NULL,
@@ -19,6 +19,9 @@
     [OriginForCharging]        VARCHAR (5)  NULL,
     [OutgoingRoute]            VARCHAR (20) NULL,
     [IncomingRoute]            VARCHAR (20) NULL,
-    [Reserved]                 VARCHAR (10) NULL
+    [Reserved]                 VARCHAR (10) NULL,
+    CONSTRAINT [PK_EricssonBadCDR] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
