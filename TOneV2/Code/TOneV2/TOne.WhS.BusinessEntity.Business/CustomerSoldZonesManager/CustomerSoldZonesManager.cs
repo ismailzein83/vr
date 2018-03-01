@@ -114,7 +114,7 @@ namespace TOne.WhS.BusinessEntity.Business
                         });
                     }
 
-                    customerSoldZone.CustomerZoneData = customerZonesData.OrderBy(x => x.Rate).Take(input.Query.Top).ToList();
+                    customerSoldZone.CustomerZoneData = customerZonesData.OrderBy(x => x.Rate).ThenBy(x=>x.CustomerId).Take(input.Query.Top).ToList();
                     customerSoldZone.SaleCount = customerZonesData.Count;
 
                     customersSoldZone.Add(customerSoldZone);
