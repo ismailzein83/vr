@@ -19,38 +19,45 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
         }
 
-        public override dynamic GetGenerationCustomPayload(IGetGenerationCustomPayloadContext context)
+        public override void EvaluateGenerationCustomPayload(IGetGenerationCustomPayloadContext context)
         {
-            int? timeZoneId;
-            decimal? commission = null;
-            CommissionType commissionType = CommissionType.Display;
 
-            WHSFinancialAccountManager whsFinancialAccountManager = new WHSFinancialAccountManager();
-
-            var financialAccount = whsFinancialAccountManager.GetFinancialAccount(int.Parse(context.PartnerId));
-            financialAccount.ThrowIfNull("financialAccount", context.PartnerId);
-            financialAccount.Settings.ThrowIfNull("financialAccount.Settings", context.PartnerId);
-
-            if (financialAccount.CarrierAccountId.HasValue)
+            if (context.InvoiceGenerationInfo != null)
             {
-                timeZoneId = new CarrierAccountManager().GetSupplierTimeZoneId(financialAccount.CarrierAccountId.Value);
-            }
-            else
-            {
-                timeZoneId = new CarrierProfileManager().GetSupplierTimeZoneId(financialAccount.CarrierProfileId.Value);
-            }
-            List<FinancialAccountInvoiceSetting> financialAccountInvoiceSettings = financialAccount.Settings.FinancialAccountInvoiceSettings;
-            if (financialAccountInvoiceSettings != null && financialAccountInvoiceSettings.Count > 0)
-            {
-                FinancialAccountInvoiceSetting financialAccountInvoiceSetting = financialAccountInvoiceSettings.FindRecord(itm => itm.InvoiceTypeId == context.InvoiceTypeId);
-                if (financialAccountInvoiceSetting != null && financialAccountInvoiceSetting.FinancialAccountCommission != null)
+                foreach (var invoiceGenerationInfo in context.InvoiceGenerationInfo)
                 {
-                    commission = financialAccountInvoiceSetting.FinancialAccountCommission.Commission;
-                    commissionType = financialAccountInvoiceSetting.FinancialAccountCommission.CommissionType;
+                    int? timeZoneId;
+                    decimal? commission = null;
+                    CommissionType commissionType = CommissionType.Display;
+
+                    WHSFinancialAccountManager whsFinancialAccountManager = new WHSFinancialAccountManager();
+
+                    var financialAccount = whsFinancialAccountManager.GetFinancialAccount(int.Parse(invoiceGenerationInfo.PartnerId));
+                    financialAccount.ThrowIfNull("financialAccount", invoiceGenerationInfo.PartnerId);
+                    financialAccount.Settings.ThrowIfNull("financialAccount.Settings", invoiceGenerationInfo.PartnerId);
+
+                    if (financialAccount.CarrierAccountId.HasValue)
+                    {
+                        timeZoneId = new CarrierAccountManager().GetSupplierTimeZoneId(financialAccount.CarrierAccountId.Value);
+                    }
+                    else
+                    {
+                        timeZoneId = new CarrierProfileManager().GetSupplierTimeZoneId(financialAccount.CarrierProfileId.Value);
+                    }
+                    List<FinancialAccountInvoiceSetting> financialAccountInvoiceSettings = financialAccount.Settings.FinancialAccountInvoiceSettings;
+                    if (financialAccountInvoiceSettings != null && financialAccountInvoiceSettings.Count > 0)
+                    {
+                        FinancialAccountInvoiceSetting financialAccountInvoiceSetting = financialAccountInvoiceSettings.FindRecord(itm => itm.InvoiceTypeId == context.InvoiceTypeId);
+                        if (financialAccountInvoiceSetting != null && financialAccountInvoiceSetting.FinancialAccountCommission != null)
+                        {
+                            commission = financialAccountInvoiceSetting.FinancialAccountCommission.Commission;
+                            commissionType = financialAccountInvoiceSetting.FinancialAccountCommission.CommissionType;
+                        }
+                    }
+                    invoiceGenerationInfo.CustomPayload = new SupplierGenerationCustomSectionPayload() { TimeZoneId = timeZoneId, Commission = commission, CommissionType = commissionType };
                 }
             }
-
-            return new SupplierGenerationCustomSectionPayload() { TimeZoneId = timeZoneId, Commission = commission, CommissionType = commissionType };
+            
         }
     }
 }

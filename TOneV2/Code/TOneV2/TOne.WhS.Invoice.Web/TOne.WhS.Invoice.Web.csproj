@@ -25,6 +25,8 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -175,8 +177,10 @@
     <Content Include="WhS_Invoice\Constants\ComparisonResultEnum.js" />
     <Content Include="WhS_Invoice\Constants\InvoiceTypeEnum.js" />
     <Content Include="WhS_Invoice\Constants\ModuleConfig.js" />
+    <Content Include="WhS_Invoice\Directives\Extensions\GenerationCustomSection\Templates\SettlementGenerationCustomSectionTemplate.html" />
     <Content Include="WhS_Invoice\Directives\Extensions\GenerationCustomSection\Templates\SupplierGenerationCustomSectionTemplate.html" />
     <Content Include="WhS_Invoice\Directives\Extensions\GenerationCustomSection\Templates\CustomerGenerationCustomSectionTemplate.html" />
+    <Content Include="WhS_Invoice\Directives\Extensions\GenerationCustomSection\whs-invoicetype-generationcustomsection-settlement.js" />
     <Content Include="WhS_Invoice\Directives\Extensions\GenerationCustomSection\whs-invoicetype-generationcustomsection-supplier.js" />
     <Content Include="WhS_Invoice\Directives\Extensions\GenerationCustomSection\whs-invoicetype-generationcustomsection-customer.js" />
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceAction\Templates\OriginalInvoiceDataActionTemplate.html" />
@@ -233,7 +237,9 @@
     <EmbeddedResource Include="WhS_Invoice\Reports\SupplierInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\SupplierInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\InvoiceItemsReportByCurrency.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\CustomerInvoiceItemsReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\CustomerInvoiceItemsReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="WhS_Invoice\Reports\InvoiceReportByCurrency.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\SupplierProfileInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\ProfileInvoiceItemsReport.rdlc" />

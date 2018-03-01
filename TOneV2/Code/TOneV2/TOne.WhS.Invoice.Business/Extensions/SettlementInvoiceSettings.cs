@@ -13,7 +13,7 @@ using Vanrise.Invoice.Entities;
 
 namespace TOne.WhS.Invoice.Business.Extensions
 {
-    public class SattlementInvoiceSettings : InvoiceTypeExtendedSettings
+    public class SettlementInvoiceSettings : InvoiceTypeExtendedSettings
     {
         public override Guid ConfigId
         {
@@ -21,7 +21,11 @@ namespace TOne.WhS.Invoice.Business.Extensions
         }
         public override InvoiceGenerator GetInvoiceGenerator()
         {
-            return new SattlementInvoiceGenerator(CustomerInvoiceTypeId, SupplierInvoiceTypeId);
+            return new SettlementInvoiceGenerator(CustomerInvoiceTypeId, SupplierInvoiceTypeId);
+        }
+        public override GenerationCustomSection GenerationCustomSection
+        {
+            get { return new SettlementGenerationCustomSection(CustomerInvoiceTypeId, SupplierInvoiceTypeId); }
         }
         public override InvoicePartnerManager GetPartnerManager()
         {

@@ -19,7 +19,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
         public override void GenerateInvoice(IInvoiceGenerationContext context)
         {
             List<string> listMeasures = new List<string> { "CostNetNotNULL", "NumberOfCalls", "CostDuration", "BillingPeriodTo", "BillingPeriodFrom", "CostNet_OrigCurr" };
-            List<string> listDimensions = new List<string> { "Supplier", "SupplierZone", "CostCurrency", "CostRate", "CostRateType" };
+            List<string> listDimensions = new List<string> { "SupplierZone", "Supplier", "CostCurrency", "CostRate", "CostRateType" };
             WHSFinancialAccountManager financialAccountManager = new WHSFinancialAccountManager();
             var financialAccount = financialAccountManager.GetFinancialAccount(Convert.ToInt32(context.PartnerId));
             var supplierGenerationCustomSectionPayload = context.CustomSectionPayload as SupplierGenerationCustomSectionPayload;
@@ -87,7 +87,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 context.ErrorMessage = "No data available between the selected period.";
                 throw new InvoiceGeneratorException("No data available between the selected period.");
             }
-            List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic, taxItemDetails);
+
+            var supplierInvoiceBySaleCurrency = loadCurrencyItemSet(dimentionName, dimensionValue, fromDate, toDate, commission, commissionType, taxItemDetails);
+
+            List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic, taxItemDetails, supplierInvoiceBySaleCurrency);
             #region BuildSupplierInvoiceDetails
             SupplierInvoiceDetails supplierInvoiceDetails = BuilSupplierInvoiceDetails(itemSetNamesDic, partnerType, context.FromDate, context.ToDate, commission, commissionType);
             if (supplierInvoiceDetails != null && supplierInvoiceDetails.CostAmount != 0)
@@ -131,6 +134,78 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
            
         }
+
+        private List<SupplierInvoiceBySaleCurrencyItemDetails> loadCurrencyItemSet(string dimentionName, int dimensionValue, DateTime fromDate, DateTime toDate, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails)
+        {
+
+            List<string> listMeasures = new List<string> {  "NumberOfCalls", "CostDuration", "BillingPeriodTo", "BillingPeriodFrom", "CostNet_OrigCurr" };
+            List<string> listDimensions = new List<string> {  "CostCurrency" };
+            var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, null);
+            if (analyticResult != null && analyticResult.Data != null && analyticResult.Data.Count() != 0)
+            {
+                return BuildCurrencyItemSetNameFromAnalytic(analyticResult.Data, commission, commissionType, taxItemDetails);
+            }
+            return null;
+        }
+        private List<SupplierInvoiceBySaleCurrencyItemDetails> BuildCurrencyItemSetNameFromAnalytic(IEnumerable<AnalyticRecord> analyticRecords, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails)
+        {
+            List<SupplierInvoiceBySaleCurrencyItemDetails> supplierInvoiceBySaleCurrencies = null;
+
+            if (analyticRecords != null)
+            {
+                supplierInvoiceBySaleCurrencies = new List<SupplierInvoiceBySaleCurrencyItemDetails>();
+                foreach (var analyticRecord in analyticRecords)
+                {
+                    #region ReadDataFromAnalyticResult
+                    DimensionValue costCurrencyId = analyticRecord.DimensionValues.ElementAtOrDefault(0);
+
+                    MeasureValue costNet_OrigCurr = GetMeasureValue(analyticRecord, "CostNet_OrigCurr");
+                    MeasureValue costDuration = GetMeasureValue(analyticRecord, "CostDuration");
+                    MeasureValue calls = GetMeasureValue(analyticRecord, "NumberOfCalls");
+                    MeasureValue billingPeriodTo = GetMeasureValue(analyticRecord, "BillingPeriodTo");
+                    MeasureValue billingPeriodFrom = GetMeasureValue(analyticRecord, "BillingPeriodFrom");
+                    #endregion
+
+                    var costNet = Convert.ToDecimal(costNet_OrigCurr == null ? 0.0 : costNet_OrigCurr.Value ?? 0.0);
+                    if (costNet != 0)
+                    {
+                        var supplierInvoiceBySaleCurrencyItemDetails = new SupplierInvoiceBySaleCurrencyItemDetails
+                        {
+                            CurrencyId = Convert.ToInt32(costCurrencyId.Value),
+                            FromDate = billingPeriodFrom != null ? Convert.ToDateTime(billingPeriodFrom.Value) : default(DateTime),
+                            ToDate = billingPeriodTo != null ? Convert.ToDateTime(billingPeriodTo.Value) : default(DateTime),
+                            Duration = Convert.ToDecimal(costDuration.Value ?? 0.0),
+                            NumberOfCalls = Convert.ToInt32(calls.Value ?? 0.0),
+                            Amount = costNet,
+                        };
+                        if (commission.HasValue)
+                        {
+                            supplierInvoiceBySaleCurrencyItemDetails.AmountAfterCommission = supplierInvoiceBySaleCurrencyItemDetails.Amount + ((supplierInvoiceBySaleCurrencyItemDetails.Amount * commission.Value) / 100);
+                        }
+                        else
+                        {
+                            supplierInvoiceBySaleCurrencyItemDetails.AmountAfterCommission = supplierInvoiceBySaleCurrencyItemDetails.Amount;
+                        }
+
+                        supplierInvoiceBySaleCurrencyItemDetails.AmountAfterCommissionWithTaxes = supplierInvoiceBySaleCurrencyItemDetails.AmountAfterCommission;
+
+                        if (taxItemDetails != null)
+                        {
+                            foreach (var tax in taxItemDetails)
+                            {
+                                supplierInvoiceBySaleCurrencyItemDetails.AmountAfterCommissionWithTaxes += ((supplierInvoiceBySaleCurrencyItemDetails.Amount * Convert.ToDecimal(tax.Value)) / 100);
+                            }
+                        }
+                        supplierInvoiceBySaleCurrencies.Add(supplierInvoiceBySaleCurrencyItemDetails);
+                    }
+
+                }
+            }
+            return supplierInvoiceBySaleCurrencies;
+        }
+
+
+
         private void SetInvoiceBillingTransactions(IInvoiceGenerationContext context, SupplierInvoiceDetails invoiceDetails, WHSFinancialAccount financialAccount, DateTime fromDate,DateTime toDate)
         {
             var financialAccountDefinitionManager = new WHSFinancialAccountDefinitionManager();
@@ -218,9 +293,29 @@ namespace TOne.WhS.Invoice.Business.Extensions
             return supplierInvoiceDetails;
         }
 
-        private List<GeneratedInvoiceItemSet> BuildGeneratedInvoiceItemSet(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, IEnumerable<VRTaxItemDetail> taxItemDetails)
+        private List<GeneratedInvoiceItemSet> BuildGeneratedInvoiceItemSet(Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic, IEnumerable<VRTaxItemDetail> taxItemDetails, List<SupplierInvoiceBySaleCurrencyItemDetails> supplierInvoicesBySaleCurrency)
         {
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = new List<GeneratedInvoiceItemSet>();
+
+            if (supplierInvoicesBySaleCurrency != null && supplierInvoicesBySaleCurrency.Count > 0)
+            {
+                GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
+                generatedInvoiceItemSet.SetName = "GroupingBySaleCurrency";
+                generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
+
+                foreach (var supplierInvoiceBySaleCurrency in supplierInvoicesBySaleCurrency)
+                {
+                    generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
+                    {
+                        Details = supplierInvoiceBySaleCurrency,
+                        Name = " "
+                    });
+                }
+              
+                generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
+
+            }
+
             if (itemSetNamesDic != null)
             {
                 foreach (var itemSet in itemSetNamesDic)
@@ -285,7 +380,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             }
             return generatedInvoiceItemSets;
         }
-        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, string dimentionFilterName, object dimentionFilterValue, DateTime fromDate, DateTime toDate,int currencyId)
+        private AnalyticSummaryBigResult<AnalyticRecord> GetFilteredRecords(List<string> listDimensions, List<string> listMeasures, string dimentionFilterName, object dimentionFilterValue, DateTime fromDate, DateTime toDate,int? currencyId)
         {
             AnalyticManager analyticManager = new AnalyticManager();
             Vanrise.Entities.DataRetrievalInput<AnalyticQuery> analyticQuery = new DataRetrievalInput<AnalyticQuery>()
@@ -302,7 +397,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     CurrencyId = currencyId,
                   //  OrderType = AnalyticQueryOrderType.ByAllDimensions
                 },
-                SortByColumnName = "DimensionValues[1].Name"
+                SortByColumnName = "DimensionValues[0].Name"
             };
             DimensionFilter dimensionFilter = new DimensionFilter()
             {

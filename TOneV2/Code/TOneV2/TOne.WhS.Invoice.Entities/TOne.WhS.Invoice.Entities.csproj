@@ -56,6 +56,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompareInvoiceOperationOutput.cs" />
+    <Compile Include="CustomerInvoiceBySaleCurrencyItemDetails.cs" />
+    <Compile Include="InvoiceBySaleCurrencyItemDetails.cs" />
+    <Compile Include="SettlementGenerationCustomSectionPayload.cs" />
     <Compile Include="InvoiceComparisonTemplate.cs" />
     <Compile Include="OriginalInvoiceDataFileSetting.cs" />
     <Compile Include="OriginalInvoiceDataInput.cs" />
@@ -72,6 +75,7 @@
     <Compile Include="RDLCSupplierInvoiceItemDetails.cs" />
     <Compile Include="RDLCCustomerInvoiceItemDetails.cs" />
     <Compile Include="SattlementInvoiceDetails.cs" />
+    <Compile Include="SupplierInvoiceBySaleCurrencyItemDetails.cs" />
     <Compile Include="SupplierInvoiceDetails.cs" />
     <Compile Include="SupplierInvoiceItemDetails.cs" />
   </ItemGroup>

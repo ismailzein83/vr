@@ -1,0 +1,21 @@
+﻿<vr-columns colnum="{{ctrlSettlementGeneration.normalColNum}}">
+    <vr-textbox type="number" label="Commission (%)" value="scopeModel.commission" minvalue="-100" maxvalue="100" onblurtextbox="scopeModel.onCommissionFocusChanged"></vr-textbox>
+</vr-columns>
+<vr-columns colnum="{{ctrlSettlementGeneration.normalColNum}}">
+    <vr-select datasource="scopeModel.commissionTypes"
+               datatextfield="description"
+               datavaluefield="value"
+               selectedvalues="scopeModel.selectedCommissionType"
+               entityname="Commission Type"
+               label="Commission Type"
+               hideremoveicon onselectionchanged="scopeModel.onCommissionTypeSelectionChanged">
+    </vr-select>
+</vr-columns>
+
+<vr-columns colnum="{{ctrlSettlementGeneration.normalColNum}}">
+</vr-columns>
+<vr-columns colnum="{{ctrlSettlementGeneration.normalColNum}}">
+    <vr-button type="Edit" standalone></vr-button>
+</vr-columns>
+
+
