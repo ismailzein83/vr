@@ -16,7 +16,7 @@ namespace Retail.BusinessEntity.Business
     public class RetailAccountManagerAssignmentManager
     {
         #region Public Methods
-        Vanrise.AccountManager.Business.AccountManagerAssignmentManager _manager = new Vanrise.AccountManager.Business.AccountManagerAssignmentManager();
+        static Vanrise.AccountManager.Business.AccountManagerAssignmentManager s_manager = new Vanrise.AccountManager.Business.AccountManagerAssignmentManager();
         public IDataRetrievalResult<AccountManagerAssignmentDetail> GetFilteredAccountManagerAssignments(DataRetrievalInput<AccountManagerAssignmentQuery> input)
         {
             var accountManagerAssignementDefinitionId = input.Query.AccountManagerAssignementDefinitionId;
@@ -26,7 +26,7 @@ namespace Retail.BusinessEntity.Business
                 if (accountManagerDefInfoByAccount != null && accountManagerDefInfoByAccount.AccountManagerAssignmentDefinition != null)
                     accountManagerAssignementDefinitionId = accountManagerDefInfoByAccount.AccountManagerAssignmentDefinition.AccountManagerAssignementDefinitionId;
             }
-            var accountManagerAssignments = _manager.GetAccountManagerAssignments(accountManagerAssignementDefinitionId);
+            var accountManagerAssignments = s_manager.GetAccountManagerAssignments(accountManagerAssignementDefinitionId);
             Func<AccountManagerAssignment, bool> filterExpression = (prod) =>
             {
                 if (input.Query.AccountManagerId.HasValue && !input.Query.AccountManagerId.Equals(prod.AccountManagerId))
@@ -70,7 +70,7 @@ namespace Retail.BusinessEntity.Business
             if (accountManagerAssignmentRuntimeInput.AccountManagerAssignementId.HasValue)
             {
                 var accountManagerAssignmentId = accountManagerAssignmentRuntimeInput.AccountManagerAssignementId.Value;
-                accountManagerAssignmentRuntime.AccountManagerAssignment = _manager.GetAccountManagerAssignment(accountManagerAssignmentId, accountManagerAssignmentRuntimeInput.AssignmentDefinitionId);
+                accountManagerAssignmentRuntime.AccountManagerAssignment = s_manager.GetAccountManagerAssignment(accountManagerAssignmentId, accountManagerAssignmentRuntimeInput.AssignmentDefinitionId);
                 accountManagerAssignmentRuntime.AccountName = accountManagerAssignmentRuntime.AccountManagrAssignmentDefinition.Settings.GetAccountName(accountManagerAssignmentRuntime.AccountManagerAssignment.AccountId);
             }
             return accountManagerAssignmentRuntime;
@@ -81,7 +81,7 @@ namespace Retail.BusinessEntity.Business
             InsertOperationOutput<AccountManagerAssignmentDetail> insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<AccountManagerAssignmentDetail>();
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
-            bool insertActionSucc = _manager.AssignAccountManagerToAccounts(accountManagerAssignment, out errorMessage);
+            bool insertActionSucc = s_manager.AssignAccountManagerToAccounts(accountManagerAssignment, out errorMessage);
             if (insertActionSucc)
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
@@ -99,11 +99,11 @@ namespace Retail.BusinessEntity.Business
             UpdateOperationOutput<AccountManagerAssignmentDetail> updateOperationOutput = new UpdateOperationOutput<AccountManagerAssignmentDetail>();
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
-            bool updateActionSucc = _manager.UpdateAccountManagerAssignment(accountManagerAssignment, out errorMessage);
+            bool updateActionSucc = s_manager.UpdateAccountManagerAssignment(accountManagerAssignment, out errorMessage);
             if (updateActionSucc)
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                var accountManagerAssignmentUpdated = _manager.GetAccountManagerAssignment(accountManagerAssignment.AccountManagerAssignmentId, accountManagerAssignment.AccountManagerAssignmentDefinitionId);
+                var accountManagerAssignmentUpdated = s_manager.GetAccountManagerAssignment(accountManagerAssignment.AccountManagerAssignmentId, accountManagerAssignment.AccountManagerAssignmentDefinitionId);
                 updateOperationOutput.UpdatedObject = AccountManagerDetailMapper(accountManagerAssignmentUpdated);
             }
             else
@@ -155,6 +155,20 @@ namespace Retail.BusinessEntity.Business
             var accountManagerDefsInfo = GetAccountManagerDefsInfo();
             return accountManagerDefsInfo.GetRecord(accountBeDefinitionId);
         }
+
+        public long? GetAssignedAccountManagerId(Guid accountBeDefinitionId, long accountId, DateTime effectiveOn)
+        {
+            AccountManagerDefInfo amDef = GetAccountManagerDefInfoByAccountBeDefinitionId(accountBeDefinitionId);
+            if (amDef == null)
+                return null;
+            amDef.AccountManagerAssignmentDefinition.ThrowIfNull("amDef.AccountManagerAssignmentDefinition", accountBeDefinitionId);
+            var amAssignment = s_manager.GetAccountAssignment(amDef.AccountManagerAssignmentDefinition.AccountManagerAssignementDefinitionId, accountId.ToString(), effectiveOn);
+            if (amAssignment != null)
+                return amAssignment.AccountManagerId;
+            else
+                return null;
+        }
+
         #endregion
 
         #region Mappers
