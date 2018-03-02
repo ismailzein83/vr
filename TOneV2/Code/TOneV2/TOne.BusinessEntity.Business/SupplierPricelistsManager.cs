@@ -36,20 +36,5 @@ namespace TOne.BusinessEntity.Business
         }
     }
 
-    public class PriceListFileSettings : Vanrise.Entities.VRFileExtendedSettings
-    {
-        public override Guid ConfigId
-        {
-            get { return new Guid("7042919C-A79D-4600-943F-A0BE8E3CC4F7"); }
-        }
-
-        public int PriceListId { get; set; }
-
-        Vanrise.Security.Business.SecurityManager s_securityManager = new Vanrise.Security.Business.SecurityManager();
-        public override bool DoesUserHaveViewAccess(Vanrise.Entities.IVRFileDoesUserHaveViewAccessContext context)
-        {
-            return s_securityManager.HasPermissionToActions("WhS_BE/SupplierPricelist/GetFilteredSupplierPricelist", context.UserId);
-        }
-
-    }
+    
 }

@@ -42,7 +42,7 @@ namespace TOne.WhS.SupplierPriceList.BP.Activities
             int userId = context.GetSharedInstanceData().InstanceInfo.InitiatorUserId;
 
             VRFileManager fileManager = new VRFileManager();
-            var fileSettings = new VRFileSettings { ExtendedSettings = new TOne.BusinessEntity.Business.PriceListFileSettings { PriceListId = priceListId } };
+            var fileSettings = new VRFileSettings { ExtendedSettings = new TOne.WhS.BusinessEntity.Business.PriceListFileSettings { PriceListId = priceListId } };
             
             if (!fileManager.SetFileUsedAndUpdateSettings(fileId, fileSettings))
                 throw new VRBusinessException("Pricelist files have been removed, Process must be restarted.");

@@ -68,7 +68,7 @@ namespace TOne.WhS.DBSync.Business
                 if (sourceItem.SourceFileBytes != null)
                 {
                     string[] nameastab = sourceItem.SourceFileName.Split('.');
-                    var fileSettings = new VRFileSettings { ExtendedSettings = new TOne.BusinessEntity.Business.PriceListFileSettings { PriceListId = priceListId } };
+                    var fileSettings = new VRFileSettings { ExtendedSettings = new TOne.WhS.BusinessEntity.Business.PriceListFileSettings { PriceListId = priceListId } };
 
                     VRFile file = new VRFile()
                     {
