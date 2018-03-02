@@ -435,7 +435,7 @@ namespace Vanrise.GenericData.Business
                     var statusValue = genericBusinessEntity.FieldValues.GetRecord(statusFieldName);
                     if (statusValue != null)
                     {
-                        if (!businessEntityStatusHistoryManager.InsertStatusHistory(businessEntityDefinitionId, genericBusinessEntityId.ToString(), statusFieldName, (Guid)statusValue))
+                        if (!businessEntityStatusHistoryManager.InsertStatusHistory(businessEntityDefinitionId, genericBusinessEntityId.ToString(), statusFieldName,Guid.Parse(statusValue.ToString())))
                             result = false;
                     }
                 }
