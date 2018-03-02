@@ -205,12 +205,21 @@ namespace Vanrise.AccountManager.Business
 
         public IEnumerable<AccountManagerAssignment> GetAccountManagerAssignmentsById(string accountId, Guid accountManagerAssignementDefinitionId)
         {
-            var allAccountMaanagerAssignments = this.GetCachedAccountManagerAssignments(accountManagerAssignementDefinitionId).Values;
-            return allAccountMaanagerAssignments.FindAllRecords(item => item.AccountId == accountId);
+            var accountAssignments = GetOrderedAssignmentsByAccountId(accountManagerAssignementDefinitionId).GetRecord(accountId);
+            return accountAssignments != null ? accountAssignments.ToList() : new List<AccountManagerAssignment>();
         }
         public AccountManagerAssignment GetAccountAssignment(Guid assignmentDefinitionId, string accountId, DateTime effectiveOn)
         {
-            throw new NotImplementedException();
+            var orderedAccountAssignments = GetOrderedAssignmentsByAccountId(assignmentDefinitionId).GetRecord(accountId);
+            if (orderedAccountAssignments != null)
+            {
+                foreach (var assignment in orderedAccountAssignments)
+                {
+                    if (assignment.IsEffective(effectiveOn))
+                        return assignment;
+                }
+            }
+            return null;
         }
         #endregion
 
@@ -232,6 +241,25 @@ namespace Vanrise.AccountManager.Business
         #endregion
 
         #region Private Methods
+
+        Dictionary<string, IOrderedEnumerable<AccountManagerAssignment>> GetOrderedAssignmentsByAccountId(Guid accountManagerAssignmentDefinitionId)
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetOrderedAssignmentsByAccountId", accountManagerAssignmentDefinitionId,
+               () =>
+               {
+                   Dictionary<string, List<AccountManagerAssignment>> assignmentsByAccountId = new Dictionary<string, List<AccountManagerAssignment>>();
+                   Dictionary<long, AccountManagerAssignment> allAssignments = GetCachedAccountManagerAssignments(accountManagerAssignmentDefinitionId);
+                   if(allAssignments != null)
+                   {
+                       foreach(var assignment in allAssignments.Values)
+                       {
+                           assignmentsByAccountId.GetOrCreateItem(assignment.AccountId).Add(assignment);
+                       }
+                   }
+                   return assignmentsByAccountId.ToDictionary(itm => itm.Key, itm => itm.Value.OrderByDescending(ass => ass.EED.HasValue ? ass.EED.Value : DateTime.MaxValue));
+               });
+        }
+
         Dictionary<long, AccountManagerAssignment> GetCachedAccountManagerAssignments(Guid accountManagerAssignmentDefinitionId)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetAccountManagerAssignments", accountManagerAssignmentDefinitionId,

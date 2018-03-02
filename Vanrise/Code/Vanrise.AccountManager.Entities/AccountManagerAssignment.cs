@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.AccountManager.Entities
 {
-    public class AccountManagerAssignment
+    public class AccountManagerAssignment : Vanrise.Entities.IDateEffectiveSettings
     {
         public long AccountManagerAssignementId { get; set; }
 

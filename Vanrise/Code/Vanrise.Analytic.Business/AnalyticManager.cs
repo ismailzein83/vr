@@ -324,6 +324,7 @@ namespace Vanrise.Analytic.Business
 
             if (dimensionNamesToCalculate.Count > 0)
             {
+                dimensionNamesToCalculate = ResolveDimensionDependencies(dimensionNamesToCalculate, analyticTableQueryContext);
                 IEnumerable<AnalyticDimension> dimensionsToCalculate = new HashSet<string>(dimensionNamesToCalculate).Select(dimName => analyticTableQueryContext.GetDimensionConfig(dimName));
                 foreach (var sqlRecord in sqlRecords)
                 {
@@ -337,6 +338,29 @@ namespace Vanrise.Analytic.Business
                     }
                 }
             }
+        }
+
+        private List<string> ResolveDimensionDependencies(List<string> dimensionNamesToCalculate, IAnalyticTableQueryContext analyticTableQueryContext)
+        {
+            List<string> dimOrderedByDependencies = new List<string>();
+            foreach(var dimName in dimensionNamesToCalculate)
+            {
+                AddDimensionToOrderedByDependencies(analyticTableQueryContext.GetDimensionConfig(dimName), dimOrderedByDependencies, analyticTableQueryContext);
+            }
+            return dimOrderedByDependencies;
+        }
+
+        private void AddDimensionToOrderedByDependencies(AnalyticDimension dimConfig, List<string> dimOrderedByDependencies, IAnalyticTableQueryContext analyticTableQueryContext)
+        {
+            if(dimConfig.Config.DependentDimensions != null && dimConfig.Config.DependentDimensions.Count > 0)
+            {
+                foreach (var dependentDimName in dimConfig.Config.DependentDimensions)
+                {
+                    AddDimensionToOrderedByDependencies(analyticTableQueryContext.GetDimensionConfig(dependentDimName), dimOrderedByDependencies, analyticTableQueryContext);
+                }
+            }
+            if (!dimOrderedByDependencies.Contains(dimConfig.Name) && dimConfig.Evaluator != null)
+                dimOrderedByDependencies.Add(dimConfig.Name);
         }
 
         private List<AnalyticRecord> ApplyFinalGroupingAndFiltering(IAnalyticTableQueryContext analyticTableQueryContext, IEnumerable<DBAnalyticRecord> dbRecords,
