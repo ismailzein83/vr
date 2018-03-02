@@ -96,8 +96,10 @@
   <ItemGroup>
     <Compile Include="CodeMatchBuilder.cs" />
     <Compile Include="CodeZoneMatchManager.cs" />
+    <Compile Include="QualityConfiguration\QualityConfigurationDefinition\QualityConfigurationDefinitionManager.cs" />
+    <Compile Include="QualityConfiguration\QualityConfigurationDefinition\TrafficStatisticExtendedSettings.cs" />
     <Compile Include="SupplierZoneDetailsManager.cs" />
-    <Compile Include="QualityConfigurationManager.cs" />
+    <Compile Include="QualityConfiguration\QualityConfigurationRuntime\QualityConfigurationManager.cs" />
     <Compile Include="ConfigManager.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="CustomerRouteManager.cs" />
