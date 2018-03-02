@@ -196,14 +196,14 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 ExportExcelSheet sheet = new ExportExcelSheet()
                 {
-                    SheetName = "Customers Sold Zones",
+                    SheetName = "Least Sale Price",
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Sale Rates" , Width = 200});
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Sale Count", Width = 50 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Count" });
 
 
                 sheet.Rows = new List<ExportExcelRow>();
