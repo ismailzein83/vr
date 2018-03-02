@@ -301,7 +301,10 @@ namespace TOne.WhS.Sales.BP.Activities
                     {
                         DraftRateToChange newNormalRate = zoneDraft.NewRates.FindRecord(x => !x.RateTypeId.HasValue);
                         if (newNormalRate != null)
+                        {
                             zoneRPToAdd.BED = newNormalRate.BED;
+                            zoneDraft.NewRoutingProduct.BED = newNormalRate.BED;
+                        }
                     }
                 }
 
@@ -322,7 +325,8 @@ namespace TOne.WhS.Sales.BP.Activities
                     if (!newNormalRateBED.HasValue)
                         throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("The routing product of zone '{0}' has been changed and has been set to follow the new normal rate's BED. However, the new normal rate was not found", zoneDraft.ZoneName));
                     zoneRPToClose.CloseEffectiveDate = newNormalRateBED.Value;
-                }
+					zoneDraft.RoutingProductChange.EED = newNormalRateBED.Value;
+				}
                 else
                 {
                     zoneRPToClose.CloseEffectiveDate = DateTime.Today;

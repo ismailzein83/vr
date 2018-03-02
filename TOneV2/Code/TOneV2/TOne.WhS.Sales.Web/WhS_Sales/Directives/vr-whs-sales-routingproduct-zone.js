@@ -22,7 +22,7 @@ app.directive("vrWhsSalesRoutingproductZone", ["UtilsService", "VRUIUtilsService
 
             var zoneItem;
 
-            var currentServiceViewerAPI;
+            var currentServiceViewerAPI;           
             var currentServiceViewerReadyDeferred = UtilsService.createPromiseDeferred();
 
             var selectorAPI;
@@ -186,10 +186,9 @@ app.directive("vrWhsSalesRoutingproductZone", ["UtilsService", "VRUIUtilsService
                     zoneItem.NewRoutingProduct = null;
                 }
             }
-            function setNewRoutingProductBED()
-            {
-                var zoneBED = zoneItem.ZoneBED;
-                var countryBED = (zoneItem.CountryBED != undefined) ? zoneItem.CountryBED : undefined;
+            function setNewRoutingProductBED() {
+                var zoneBED = UtilsService.createDateFromString(zoneItem.ZoneBED);
+                var countryBED = (zoneItem.CountryBED != undefined) ? UtilsService.createDateFromString(zoneItem.CountryBED) : undefined;
                 var today = UtilsService.getDateFromDateTime(VRDateTimeService.getNowDateTime());
                 var dates = [];
                 dates.push(zoneBED);
