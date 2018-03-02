@@ -582,6 +582,8 @@
                         deleteDraftPromise.then(function () {
                             VRNotificationService.showSuccess("Draft deleted");
 
+                            subscriberOwnerEntities = undefined;
+                            subscriberOwnerIds = undefined;
                             countryChanges = undefined;
                             draftCurrencyId = undefined;
                             if (gridAPI != undefined)
@@ -1037,6 +1039,8 @@
             showRatePlan(false);
             showActionBarButtons(false);
             countryChanges = undefined;
+            subscriberOwnerEntities = undefined;
+            subscriberOwnerIds = undefined;
         }
         function resetZoneLetters() {
             $scope.zoneLetters.length = 0;

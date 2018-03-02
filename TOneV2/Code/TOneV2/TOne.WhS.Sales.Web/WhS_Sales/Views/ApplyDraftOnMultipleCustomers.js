@@ -87,7 +87,6 @@
         }
          function loadFollowPublisherRoutingProduct() {
              return WhS_Sales_RatePlanAPIService.GetFollowPublisherRoutingProduct().then(function (response) {
-                 console.log(response);
                  $scope.followPublisherRoutingProduct = response;
             });
             }
@@ -109,6 +108,7 @@
         }
 
         function loadDraftSubscriberOwnerIds() {
+            $scope.gridDataSource = [];
             var loadDraftSubscriberOwnerIdsPromiseDeferred = UtilsService.createPromiseDeferred();
             WhS_Sales_RatePlanAPIService.GetDraftSubscriberOwnerEntities(WhS_BE_SalePriceListOwnerTypeEnum.Customer.value, ownerId).
             then(function (response) {
