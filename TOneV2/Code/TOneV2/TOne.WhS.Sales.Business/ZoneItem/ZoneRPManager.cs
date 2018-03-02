@@ -18,10 +18,10 @@ namespace TOne.WhS.Sales.Business
         private SaleEntityZoneRoutingProductLocator _ratePlanRPLocator;
         private RoutingProductManager _rpManager;
 
-        public ZoneRPManager(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, Changes draft, SaleEntityZoneRoutingProductLocator zoneRPLocator)
+        public ZoneRPManager(SalePriceListOwnerType ownerType, int ownerId, Changes draft, SaleEntityZoneRoutingProductLocator zoneRPLocator, SaleEntityRoutingProductReadByRateBED zoneRPReader)
         {
             _rpLocator = zoneRPLocator;
-            _ratePlanRPLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithDraft(ownerType, ownerId, effectiveOn, draft, true));
+            _ratePlanRPLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithDraft(ownerType, ownerId, draft, zoneRPReader));
             _rpManager = new RoutingProductManager();
         }
 

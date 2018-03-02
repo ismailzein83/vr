@@ -17,36 +17,28 @@ namespace TOne.WhS.Sales.Business
 
         private SalePriceListOwnerType _ownerType;
         private int _ownerId;
+        private bool _defaultRoutingProductDraftExist;
 
         private BusinessEntity.Entities.DefaultRoutingProduct _defaultRoutingProduct;
         private BusinessEntity.Business.SaleZoneRoutingProductsByZone _routingProductsByZone;
 
-        public SaleEntityRoutingProductReadWithDraft(SalePriceListOwnerType ownerType, int ownerId, DateTime effectiveOn, Changes draft, bool readWithCache)
+        public SaleEntityRoutingProductReadWithDraft(SalePriceListOwnerType ownerType, int ownerId, Changes draft,ISaleEntityRoutingProductReader reader)
         {
             _ownerType = ownerType;
             _ownerId = ownerId;
+            _reader = reader;
 
-            if (readWithCache)
-                _reader = new SaleEntityRoutingProductReadWithCache(effectiveOn);
-            else
-            {
-                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-
-                IEnumerable<int> customerIds = ownerType == SalePriceListOwnerType.SellingProduct
-                    ? carrierAccountManager.GetCarrierAccountIdsAssignedToSellingProduct(ownerId)
-                    : new List<int> { ownerId };
-
-                _reader = new SaleEntityRoutingProductReadAllNoCache(customerIds, effectiveOn, false);
-            }
             SetDefaultRoutingProduct(draft != null ? draft.DefaultChanges : null);
             SetRoutingProductsByZone(draft != null ? draft.ZoneChanges : null);
         }
-
+        
         #endregion
 
         public BusinessEntity.Entities.DefaultRoutingProduct GetDefaultRoutingProduct(SalePriceListOwnerType ownerType, int ownerId, long? saleZoneId)
         {
-            return IsSameOwner(ownerType, ownerId) ? _defaultRoutingProduct : _reader.GetDefaultRoutingProduct(ownerType, ownerId, saleZoneId);
+            if (_defaultRoutingProductDraftExist == true)
+                return _defaultRoutingProduct;
+            return _reader.GetDefaultRoutingProduct(ownerType, ownerId, saleZoneId);
         }
 
         public BusinessEntity.Business.SaleZoneRoutingProductsByZone GetRoutingProductsOnZones(SalePriceListOwnerType ownerType, int ownerId)
@@ -63,6 +55,7 @@ namespace TOne.WhS.Sales.Business
                 // TODO: Rename DefaultRPChange to DraftResetRP
                 if (defaultDraft.DefaultRoutingProductChange != null)
                 {
+                    _defaultRoutingProductDraftExist = true;
                     _defaultRoutingProduct = null;
                     return;
                 }
@@ -76,21 +69,9 @@ namespace TOne.WhS.Sales.Business
                         BED = defaultDraft.NewDefaultRoutingProduct.BED,
                         EED = defaultDraft.NewDefaultRoutingProduct.EED
                     };
+                    _defaultRoutingProductDraftExist = true;
                     return;
                 }
-            }
-            DefaultRoutingProduct existingDefaultRP = _reader.GetDefaultRoutingProduct(_ownerType, _ownerId, null);
-            if (existingDefaultRP != null)
-            {
-                _defaultRoutingProduct = new DefaultRoutingProduct()
-                {
-                    SaleEntityRoutingProductId = existingDefaultRP.SaleEntityRoutingProductId,
-                    OwnerType = _ownerType,
-                    OwnerId = _ownerId,
-                    RoutingProductId = existingDefaultRP.RoutingProductId,
-                    BED = existingDefaultRP.BED,
-                    EED = existingDefaultRP.EED
-                };
             }
         }
 

@@ -71,8 +71,10 @@ namespace TOne.WhS.Sales.BP.Activities
             List<SalePricelistRPChange> outRoutingProductChanges = new List<SalePricelistRPChange>();
             List<int> customerIds;
             IEnumerable<RoutingCustomerInfoDetails> dataByCustomer = GetDataByCustomer(ratePlanContext.OwnerType, ratePlanContext.OwnerId, ratePlanContext.EffectiveDate, out customerIds);
-            SaleEntityZoneRoutingProductLocator effectiveRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithDraft(ownerType, ownerId, effectiveOn, draft, false));
-            SaleEntityZoneRoutingProductLocator currenRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadAllNoCache(customerIds, effectiveOn, false));
+            var saleZonesByEffectiveDates = UtilitiesManager.GetZoneEffectiveDatesByZoneId(saleZones);
+            ISaleEntityRoutingProductReader zoneRoutingProductReadByEffectiveDates = new SaleEntityRoutingProductReadByRateBED(customerIds, saleZonesByEffectiveDates);
+            SaleEntityZoneRoutingProductLocator effectiveRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadWithDraft(ownerType, ownerId, draft, zoneRoutingProductReadByEffectiveDates));
+            SaleEntityZoneRoutingProductLocator currenRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(zoneRoutingProductReadByEffectiveDates);
 
             List<CustomerPriceListChange> customerPriceListChanges = new List<CustomerPriceListChange>();
             var lastRateNoCachelocator = new SaleEntityZoneRateLocator(new SaleRateReadLastRateNoCache(dataByCustomer, ratePlanContext.EffectiveDate));
@@ -85,7 +87,7 @@ namespace TOne.WhS.Sales.BP.Activities
                 {
                     #region Selling Product
 
-                    var futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(dataByCustomer, ratePlanContext.EffectiveDate, false));
+                    var futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(dataByCustomer, ratePlanContext.EffectiveDate, true));
 
                     SellingProductChangesContext sellingProductContext = new SellingProductChangesContext
                     {
@@ -379,9 +381,11 @@ namespace TOne.WhS.Sales.BP.Activities
                     if (zoneRate == null)
                         throw new DataIntegrityValidationException(string.Format("Zone {0} does neither have an explicit rate nor a default rate set for selling product. Additional info: customer with id {1}", zone.ZoneName, customerId));
 
+                    //Scenario 1: customer explicit rate is found, no need to notify the customer with this change
                     if (zoneRate.Source == SalePriceListOwnerType.Customer)
-                        continue; // customer has explicit rate and no need to notify him with this change
+                        continue;
 
+                    //Scenario 2: customer has no explicit rate, build the rate to send for the customer setting its BED based on the max between Action BED and BED of Country sell date
                     if (zone.NormalRateToChange != null && zone.NormalRateToChange.RateTypeId == null)
                     {
                         SalePricelistRateChange rateChange = new SalePricelistRateChange
@@ -396,7 +400,12 @@ namespace TOne.WhS.Sales.BP.Activities
                             EED = zone.NormalRateToChange.EED,
                             CurrencyId = saleRateManager.GetCurrencyId(zoneRate.Rate)
                         };
+
+                        //Scenario 3: When the customer rate is pending closed, the BED of the new SP rate should be the EED of this customer explicit rate
+                        //Scenario 4: When the zone is pending effective and we have no customer rate, we will reach this line and the original BED will be returned (only to avoind null reference)
                         rateChange.BED = GetRateChangeBED(customerId, sellingProductId, zone.ZoneId, rateChange.BED, futurelocator);
+
+                        //In all scenarios recent existing rate will be the same which is the one we are getting at processing time
                         if (zone.NormalRateToChange.RecentExistingRate != null)
                             rateChange.RecentRate = zone.NormalRateToChange.RecentExistingRate.ConvertedRate;
 
@@ -411,9 +420,14 @@ namespace TOne.WhS.Sales.BP.Activities
         private DateTime GetRateChangeBED(int customerId, int sellingProductId, long zoneId, DateTime originalBED, SaleEntityZoneRateLocator futurelocator)
         {
             SaleEntityZoneRate zoneRate = futurelocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
-            DateTime? currentEEd = zoneRate.Rate.EED;
-            if (currentEEd.HasValue)
-                return originalBED > currentEEd ? originalBED : currentEEd.Value;
+            if (zoneRate == null)
+                throw new DataIntegrityValidationException(string.Format("Zone with id {0} does neither have a default rate nor an explicit rate for customer with id {1}", zoneId, customerId));
+            if (zoneRate.Source == SalePriceListOwnerType.Customer)
+            {
+                DateTime? currentEEd = zoneRate.Rate.EED;
+                if (currentEEd.HasValue)
+                    return originalBED > currentEEd ? originalBED : currentEEd.Value;
+            }
             return originalBED;
         }
         #endregion

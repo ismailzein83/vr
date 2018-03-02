@@ -101,7 +101,7 @@ namespace TOne.WhS.Sales.Business
             int longPrecision = -1;
             var zoneRateManager = new ZoneRateManager(input.OwnerType, input.OwnerId, sellingProductId.Value, input.EffectiveOn, draft, input.CurrencyId, longPrecision, rateLocator);
 
-            var rpManager = new ZoneRPManager(input.OwnerType, input.OwnerId, input.EffectiveOn, draft, null);
+            var rpManager = new ZoneRPManager(input.OwnerType, input.OwnerId, draft, null,null);
 
             foreach (SaleZone zone in saleZones)
             {
