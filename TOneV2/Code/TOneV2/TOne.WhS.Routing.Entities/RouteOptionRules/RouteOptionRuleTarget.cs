@@ -4,11 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.Entities
 {
     public class BaseRouteOptionRuleTarget : Vanrise.Rules.BaseRuleTarget, IRouteOptionOrderTarget, IRouteOptionFilterTarget, IRuleSupplierTarget, IRuleSupplierZoneTarget,
-         IRuleCodeTarget, IRuleSaleZoneTarget, IRuleCustomerTarget, IRuleRoutingProductTarget
+         IRuleCodeTarget, IRuleSaleZoneTarget, IRuleCustomerTarget, IRuleRoutingProductTarget, IRuleCountryTarget
     {
         public RouteRuleTarget RouteTarget { get; set; }
 
@@ -59,6 +60,8 @@ namespace TOne.WhS.Routing.Entities
         long? IRuleSupplierZoneTarget.SupplierZoneId { get { return this.SupplierZoneId; } }
 
         long? IRouteOptionOrderTarget.SaleZoneId { get { return this.RouteTarget.SaleZoneId; } }
+
+        int? IRuleCountryTarget.CountryId { get { return this.RouteTarget.CountryId; } }
 
         long? IRouteOptionOrderTarget.SupplierZoneId { get { return this.SupplierZoneId; } }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Activities;
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
@@ -8,6 +9,7 @@ using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.Entities;
 using Vanrise.Common;
+using TOne.WhS.BusinessEntity.Business;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
@@ -109,7 +111,7 @@ namespace TOne.WhS.Routing.BP.Activities
             if (affectedRoutesList.Count > 0 || affectedRouteOptionsList.Count > 0)
             {
                 long customerRouteTotalCount = dataManager.GetTotalCount();
-                int partialRoutesPercentageLimit = new ConfigManager().GetPartialRoutesPercentageLimit();
+                int partialRoutesPercentageLimit = new TOne.WhS.Routing.Business.ConfigManager().GetPartialRoutesPercentageLimit();
                 long partialRoutesNumberLimit = partialRoutesPercentageLimit * customerRouteTotalCount / 100;
 
                 bool maximumExceeded;
@@ -259,7 +261,7 @@ namespace TOne.WhS.Routing.BP.Activities
                 }
             }
         }
-        
+
         private IEnumerable<int> GetAffectedCustomers(RouteRuleCriteria criteria, out bool isCustomerGeneric)
         {
             isCustomerGeneric = false;
@@ -282,8 +284,9 @@ namespace TOne.WhS.Routing.BP.Activities
 
             CodeCriteriaGroupSettings codeCriteriaGroupSettings = criteria.GetCodeCriteriaGroupSettings();
             SaleZoneGroupSettings saleZoneGroupSettings = criteria.GetSaleZoneGroupSettings();
+            CountryCriteriaGroupSettings countryCriteriaGroupSettings = criteria.GetCountryCriteriaGroupSettings();
 
-            if (codeCriteriaGroupSettings == null && saleZoneGroupSettings == null)
+            if (codeCriteriaGroupSettings == null && saleZoneGroupSettings == null && countryCriteriaGroupSettings == null)
             {
                 areCodesAndZonesGeneric = true;
                 return;
@@ -293,9 +296,33 @@ namespace TOne.WhS.Routing.BP.Activities
             {
                 affectedCodes = codeCriteriaGroupSettings.GetCodeCriterias(GetCodeCriteriaGroupContext());
             }
-            else
+            else if (saleZoneGroupSettings != null)
             {
                 affectedZones = saleZoneGroupSettings.GetZoneIds(GetSaleZoneGroupContext());
+            }
+            else if (countryCriteriaGroupSettings != null)
+            {
+                IEnumerable<int> affectedCountries = countryCriteriaGroupSettings.GetCountryIds(GetCountryCriteriaGroupContext());
+
+                if (affectedCountries != null)
+                {
+                    List<long> zoneIds = new List<long>();
+
+                    IEnumerable<SellingNumberPlan> sellingNumberPlans = new SellingNumberPlanManager().GetAllSellingNumberPlans();
+                    if (sellingNumberPlans != null)
+                    {
+                        SaleZoneManager saleZoneManager = new SaleZoneManager();
+                        foreach (SellingNumberPlan sellingNumberPlan in sellingNumberPlans)
+                        {
+                            var saleZones = saleZoneManager.GetSaleZonesByCountryIds(sellingNumberPlan.SellingNumberPlanId, affectedCountries, DateTime.Now, false);
+                            if (saleZones == null)
+                                continue;
+
+                            zoneIds.AddRange(saleZones.Select(itm => itm.SaleZoneId));
+                        }
+                    }
+                    affectedZones = zoneIds.Count > 0 ? zoneIds : null;
+                }
             }
         }
 
@@ -321,8 +348,9 @@ namespace TOne.WhS.Routing.BP.Activities
 
             CodeCriteriaGroupSettings codeCriteriaGroupSettings = criteria.CodeCriteriaGroupSettings;
             SaleZoneGroupSettings saleZoneGroupSettings = criteria.SaleZoneGroupSettings;
+            CountryCriteriaGroupSettings countryCriteriaGroupSettings = criteria.CountryCriteriaGroupSettings;
 
-            if (codeCriteriaGroupSettings == null && saleZoneGroupSettings == null)
+            if (codeCriteriaGroupSettings == null && saleZoneGroupSettings == null && countryCriteriaGroupSettings == null)
             {
                 areCodesAndZonesGeneric = true;
                 return;
@@ -332,9 +360,33 @@ namespace TOne.WhS.Routing.BP.Activities
             {
                 affectedCodes = codeCriteriaGroupSettings.GetCodeCriterias(GetCodeCriteriaGroupContext());
             }
-            else
+            else if (saleZoneGroupSettings != null)
             {
                 affectedZones = saleZoneGroupSettings.GetZoneIds(GetSaleZoneGroupContext());
+            }
+            else if (countryCriteriaGroupSettings != null)
+            {
+                IEnumerable<int> affectedCountries = countryCriteriaGroupSettings.GetCountryIds(GetCountryCriteriaGroupContext());
+
+                if (affectedCountries != null)
+                {
+                    List<long> zoneIds = new List<long>();
+
+                    IEnumerable<SellingNumberPlan> sellingNumberPlans = new SellingNumberPlanManager().GetAllSellingNumberPlans();
+                    if (sellingNumberPlans != null)
+                    {
+                        SaleZoneManager saleZoneManager = new SaleZoneManager();
+                        foreach (SellingNumberPlan sellingNumberPlan in sellingNumberPlans)
+                        {
+                            var saleZones = saleZoneManager.GetSaleZonesByCountryIds(sellingNumberPlan.SellingNumberPlanId, affectedCountries, DateTime.Now, false);
+                            if (saleZones == null)
+                                continue;
+
+                            zoneIds.AddRange(saleZones.Select(itm => itm.SaleZoneId));
+                        }
+                    }
+                    affectedZones = zoneIds.Count > 0 ? zoneIds : null;
+                }
             }
         }
 
@@ -348,6 +400,12 @@ namespace TOne.WhS.Routing.BP.Activities
                 return null;
             }
             return suppliersWithZonesGroupSettings.GetSuppliersWithZones(GetSuppliersWithZonesGroupContext());
+        }
+
+        ICountryCriteriaGroupContext GetCountryCriteriaGroupContext()
+        {
+            CountryCriteriaGroupContext countryCriteriaGroupContext = new CountryCriteriaGroupContext();
+            return countryCriteriaGroupContext;
         }
 
         ISaleZoneGroupContext GetSaleZoneGroupContext()

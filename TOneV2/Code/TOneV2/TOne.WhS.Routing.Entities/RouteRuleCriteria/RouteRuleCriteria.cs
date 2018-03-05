@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.Entities
 {
@@ -15,6 +16,8 @@ namespace TOne.WhS.Routing.Entities
 
         public SaleZoneGroupSettings SaleZoneGroupSettings { get; set; }
 
+        public CountryCriteriaGroupSettings CountryCriteriaGroupSettings { get; set; }
+
         public CustomerGroupSettings CustomerGroupSettings { get; set; }
 
         public RoutingExcludedDestinations ExcludedDestinations { get; set; }
@@ -26,6 +29,8 @@ namespace TOne.WhS.Routing.Entities
         public override CodeCriteriaGroupSettings GetCodeCriteriaGroupSettings() { return CodeCriteriaGroupSettings; }
 
         public override SaleZoneGroupSettings GetSaleZoneGroupSettings() { return SaleZoneGroupSettings; }
+
+        public override CountryCriteriaGroupSettings GetCountryCriteriaGroupSettings() { return CountryCriteriaGroupSettings; }
 
         public override CustomerGroupSettings GetCustomerGroupSettings() { return CustomerGroupSettings; }
     }

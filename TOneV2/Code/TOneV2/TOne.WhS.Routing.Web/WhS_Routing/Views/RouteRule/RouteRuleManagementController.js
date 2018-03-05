@@ -2,9 +2,9 @@
 
     "use strict";
 
-    routeRuleManagementController.$inject = ['$scope', 'WhS_Routing_RouteRuleService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_Routing_RouteRuleAPIService', 'VRDateTimeService'];
+    routeRuleManagementController.$inject = ['$scope', 'WhS_Routing_RouteRuleService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_Routing_RouteRuleAPIService', 'VRDateTimeService', 'WhS_Routing_RouteRuleCriteriaTypeEnum'];
 
-    function routeRuleManagementController($scope, WhS_Routing_RouteRuleService, UtilsService, VRUIUtilsService, VRNotificationService, WhS_Routing_RouteRuleAPIService, VRDateTimeService) {
+    function routeRuleManagementController($scope, WhS_Routing_RouteRuleService, UtilsService, VRUIUtilsService, VRNotificationService, WhS_Routing_RouteRuleAPIService, VRDateTimeService, WhS_Routing_RouteRuleCriteriaTypeEnum) {
         var gridAPI;
 
         var carrierAccountDirectiveAPI;
@@ -12,6 +12,9 @@
 
         var saleZoneDirectiveAPI;
         var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var countryDirectiveAPI;
+        var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var routeRuleTypeSelectorAPI;
         var routeRuleTypeSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -31,6 +34,11 @@
                 saleZoneDirectiveAPI = api;
                 saleZoneReadyPromiseDeferred.resolve();
             };
+
+            $scope.onCountrySelectorReady = function (api) {
+                countryDirectiveAPI = api;
+                countryReadyPromiseDeferred.resolve();
+            }
 
             $scope.onRouteRuleTypeSelectorReady = function (api) {
                 routeRuleTypeSelectorAPI = api;
@@ -66,15 +74,16 @@
             $scope.hasDeleteRulePermission = function () {
                 return WhS_Routing_RouteRuleAPIService.HasUpdateRulePermission();
             };
-            
+
 
             function getFilterObject() {
 
                 var query = {
                     Name: $scope.name,
-                    Code: $scope.code,
+                    Code: $scope.selectedRouteRuleCriteriaType.value == 'Code' ? $scope.code : undefined,
                     CustomerIds: carrierAccountDirectiveAPI.getSelectedIds(),
-                    SaleZoneIds: saleZoneDirectiveAPI.getSelectedIds(),
+                    SaleZoneIds: $scope.selectedRouteRuleCriteriaType.value == 'SaleZone' ? saleZoneDirectiveAPI.getSelectedIds() : undefined,
+                    CountryIds: $scope.selectedRouteRuleCriteriaType.value == 'Country' ? countryDirectiveAPI.getSelectedIds() : undefined,
                     EffectiveOn: $scope.effectiveOn,
                     RouteRuleSettingsConfigIds: routeRuleTypeSelectorAPI.getSelectedIds(),
                     IsManagementScreen: true,
@@ -84,10 +93,13 @@
             }
         }
         function load() {
+            $scope.routeRuleCriteriaTypes = UtilsService.getArrayEnum(WhS_Routing_RouteRuleCriteriaTypeEnum);
+            $scope.selectedRouteRuleCriteriaType = $scope.routeRuleCriteriaTypes[0];
+
             $scope.isLoadingFilterData = true;
             $scope.effectiveOn = VRDateTimeService.getNowDateTime();
 
-            return UtilsService.waitMultipleAsyncOperations([loadCustomersSection, loadSellingNumberPlanSection, loadRouteRuleTypeSelector])
+            return UtilsService.waitMultipleAsyncOperations([loadCustomersSection, loadSellingNumberPlanSection, loadRouteRuleTypeSelector, loadCountrySection])
                     .catch(function (error) {
                         VRNotificationService.notifyExceptionWithClose(error, $scope);
                     }).finally(function () {
@@ -108,17 +120,22 @@
             var loadSellingNumberPlanPromiseDeferred = UtilsService.createPromiseDeferred();
 
             saleZoneReadyPromiseDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI,
-                     //{
-                     //   //sellingNumberPlanId: 16,
-                     //  // selectedIds: [10748, 10754]
-                     //}  
-                     undefined
-                    , loadSellingNumberPlanPromiseDeferred);
+                VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, undefined, loadSellingNumberPlanPromiseDeferred);
             });
 
             return loadSellingNumberPlanPromiseDeferred.promise;
         }
+
+        function loadCountrySection() {
+            var countryReadyPromiseLoadDeferred = UtilsService.createPromiseDeferred();
+
+            countryReadyPromiseDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(countryDirectiveAPI, undefined, countryReadyPromiseLoadDeferred);
+            });
+
+            return countryReadyPromiseLoadDeferred.promise;
+        }
+
         function loadRouteRuleTypeSelector() {
             var loadRouteRuleTypePromiseDeferred = UtilsService.createPromiseDeferred();
 

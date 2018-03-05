@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
+using System.Linq;
 
 namespace TOne.WhS.Routing.Business
 {
@@ -42,6 +43,14 @@ namespace TOne.WhS.Routing.Business
         public override RoutingExcludedDestinationData GetRoutingExcludedDestinationData()
         {
             return new RoutingExcludedDestinationData() { CodeRanges = this.CodeRanges };
+        }
+
+        public override string GetDescription()
+        {
+            if (this.CodeRanges == null)
+                return string.Empty;
+
+            return string.Join<string>(", ", this.CodeRanges.Select(itm => itm.GetDescription()));
         }
     }
 }

@@ -57,6 +57,7 @@ app.directive('vrWhsRoutingExcludedranges', ['UtilsService', 'VRUIUtilsService',
 
                     if (rangeIsValid) {
                         $scope.scopeModel.excludedRanges.push({ FromCode: fromCode, ToCode: toCode });
+                        $scope.scopeModel.fromCode = $scope.scopeModel.toCode = undefined;
                     }
                 };
 

@@ -1,17 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Vanrise.Entities;
 using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class RouteRuleTarget : Vanrise.Rules.BaseRuleTarget, IRuleCodeTarget, IRuleSaleZoneTarget, IRuleCustomerTarget, IRuleRoutingProductTarget
+    public class RouteRuleTarget : Vanrise.Rules.BaseRuleTarget, IRuleCodeTarget, IRuleSaleZoneTarget, IRuleCustomerTarget, IRuleRoutingProductTarget, IRuleCountryTarget
     {
         public string Code { get; set; }
 
         public long SaleZoneId { get; set; }
+
+        public int CountryId { get; set; }
 
         public int? CustomerId { get; set; }
 
@@ -26,6 +25,11 @@ namespace TOne.WhS.Routing.Entities
         long? IRuleSaleZoneTarget.SaleZoneId
         {
             get { return this.SaleZoneId; }
+        }
+
+        int? IRuleCountryTarget.CountryId
+        {
+            get { return this.CountryId; }
         }
 
         int? IRuleCustomerTarget.CustomerId

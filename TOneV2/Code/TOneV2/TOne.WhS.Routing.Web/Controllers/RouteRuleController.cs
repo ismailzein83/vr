@@ -65,7 +65,7 @@ namespace TOne.WhS.Routing.Web.Controllers
         public RouteRule BuildLinkedRouteRule(LinkedRouteRuleInput input)
         {
             RouteRuleManager manager = new RouteRuleManager();
-            return manager.BuildLinkedRouteRule(input.RuleId, input.CustomerId, input.Code, input.SaleZoneId, input.RouteOptions);
+            return manager.BuildLinkedRouteRule(input.RuleId, input.CustomerId, input.Code, input.SaleZoneId, input.RuleByCountry, input.RouteOptions);
         }
 
         [HttpPost]
@@ -104,6 +104,8 @@ namespace TOne.WhS.Routing.Web.Controllers
         public string Code { get; set; }
 
         public long? SaleZoneId { get; set; }
+
+        public bool RuleByCountry { get; set; }
 
         public int? CustomerId { get; set; }
 

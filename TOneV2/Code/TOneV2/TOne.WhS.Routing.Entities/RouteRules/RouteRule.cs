@@ -17,7 +17,7 @@ namespace TOne.WhS.Routing.Entities
         }
     }
 
-    public class RouteRule : Vanrise.Rules.BaseRule, IRuleCustomerCriteria, IRuleCodeCriteria, IRuleSaleZoneCriteria, IRuleRoutingProductCriteria, IDateEffectiveSettings
+    public class RouteRule : Vanrise.Rules.BaseRule, IRuleCustomerCriteria, IRuleCodeCriteria, IRuleSaleZoneCriteria, IRuleRoutingProductCriteria, IDateEffectiveSettings, IRuleCountryCriteria
     {
         public string Name { get; set; }
 
@@ -43,7 +43,7 @@ namespace TOne.WhS.Routing.Entities
             if (this.Criteria != null)
             {
                 RoutingExcludedDestinations routingExcludedDestinations = this.Criteria.GetExcludedDestinations();
-                if(routingExcludedDestinations != null)
+                if (routingExcludedDestinations != null)
                 {
                     RoutingExcludedDestinationContext context = new RoutingExcludedDestinationContext(routeRuleTarget.Code, base.RuleId);
                     if (routingExcludedDestinations.IsExcludedDestination(context))
@@ -127,6 +127,11 @@ namespace TOne.WhS.Routing.Entities
             return context;
         }
 
+        public ICountryCriteriaGroupContext GetCountryCriteriaGroupContext()
+        {
+            return new CountryCriteriaGroupContext();
+        }
+
         IEnumerable<CodeCriteria> IRuleCodeCriteria.CodeCriterias
         {
             get
@@ -154,6 +159,21 @@ namespace TOne.WhS.Routing.Entities
                     return null;
 
                 return GetSaleZoneGroupContext().GetGroupZoneIds(saleZoneGroupSettings);
+            }
+        }
+
+        IEnumerable<int> IRuleCountryCriteria.CountryIds
+        {
+            get
+            {
+                if (this.Criteria == null)
+                    return null;
+
+                CountryCriteriaGroupSettings countryCriteriaGroupSettings = this.Criteria.GetCountryCriteriaGroupSettings();
+                if (countryCriteriaGroupSettings == null)
+                    return null;
+
+                return countryCriteriaGroupSettings.GetCountryIds(GetCountryCriteriaGroupContext());
             }
         }
 

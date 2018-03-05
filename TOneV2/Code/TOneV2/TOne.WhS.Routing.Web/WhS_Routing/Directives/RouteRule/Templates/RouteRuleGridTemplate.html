@@ -10,12 +10,11 @@
     <vr-datagridcolumn fixedwidth="'30'" disablesorting="true" headertext="'Selected'" columnindex="1" invisibleheader ng-if="includeCheckIcon">
         <vr-check value="dataItem.isSelected"></vr-check>
     </vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" fixedwidth="'200'"></vr-datagridcolumn>
-
-    <vr-datagridcolumn headertext="'Included Codes'" field="'IncludedCodes'" ng-show="showIncludedCodesColumn"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Customers'" field="'Customers'" ng-show="showCustomerColumn"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Sale Zones'" field="'SaleZones'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Rule Type'" field="'RouteRuleSettingsTypeName'" fixedwidth="'120'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" fixedwidth="'200'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Destinations'" field="'Destinations'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Customers'" field="'Customers'" ng-show="showCustomerColumn"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Excluded Codes'" field="'Excluded'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'BED'" field="'Entity.BeginEffectiveTime'" type="'LongDatetime'" fixedwidth="'120'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'EED'" field="'Entity.EndEffectiveTime'" type="'LongDatetime'" fixedwidth="'120'"></vr-datagridcolumn>
     <vr-datagridexpandablerow>

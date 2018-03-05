@@ -11,5 +11,10 @@ namespace TOne.WhS.Routing.Entities
         public string FromCode { get; set; }
 
         public string ToCode { get; set; }
+
+        public string GetDescription()
+        {
+            return string.Concat(FromCode, " -> ", ToCode);
+        }
     }
 }

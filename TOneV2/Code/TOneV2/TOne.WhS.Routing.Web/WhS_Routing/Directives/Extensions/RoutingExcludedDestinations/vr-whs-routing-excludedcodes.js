@@ -52,8 +52,10 @@ app.directive('vrWhsRoutingExcludedcodes', ['UtilsService', 'VRUIUtilsService',
                         });
                     }
 
-                    if (codeIsValid)
+                    if (codeIsValid) {
                         $scope.scopeModel.excludedCodes.push($scope.scopeModel.excludedCode);
+                        $scope.scopeModel.excludedCode = undefined;
+                    }
                 };
 
                 $scope.scopeModel.validateExcludedCodes = function () {

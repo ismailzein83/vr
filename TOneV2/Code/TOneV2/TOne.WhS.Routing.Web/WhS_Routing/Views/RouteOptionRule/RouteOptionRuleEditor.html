@@ -25,11 +25,20 @@
                         </span>
                     </vr-row>
                     <vr-row>
-                        <vr-columns width="1/2row" ng-show="scopeModel.showRouteOptionRuleTypeFilterSection">
+                        <vr-columns width="1/2row">
                             <span vr-disabled="scopeModel.disableCriteria">
                                 <vr-select datatextfield="description" datavaluefield="value" label="Filter By" datasource="scopeModel.routeOptionRuleCriteriaTypes"
                                            selectedvalues="scopeModel.selectedRouteOptionRuleCriteriaType" onselectionchanged="scopeModel.onRouteOptionRuleCriteriaTypeSelectionChanged" hideremoveicon />
                             </span>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row ng-if="scopeModel.showCountrySection">
+                        <vr-columns width="fullrow">
+                            <vr-section title="Country" vr-loader="scopeModel.isLoadingCountryGroup">
+                                <span vr-disabled="scopeModel.disableCriteria">
+                                    <vr-common-country-countrycriteriagroup on-ready="scopeModel.onCountryGroupSettingsDirectiveReady"></vr-common-country-countrycriteriagroup>
+                                </span>
+                            </vr-section>
                         </vr-columns>
                     </vr-row>
                     <vr-row ng-if="scopeModel.showSaleZoneSection">

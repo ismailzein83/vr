@@ -149,26 +149,35 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
                         });
                     }
 
-                    if (!dataItem.LinkedRouteRuleIds || dataItem.LinkedRouteRuleIds.length == 0) {
+                    if (dataItem.CanAddRuleByCode) {
                         menu.push({
                             name: "Add Rule By Code",
                             clicked: addRouteRuleByCode,
                             haspermission: hasAddRulePermission
                         });
+                    }
 
+                    if (dataItem.CanAddRuleByZone) {
                         menu.push({
                             name: "Add Rule By Zone",
                             clicked: addRouteRuleByZone,
                             haspermission: hasAddRulePermission
                         });
                     }
-                    else {
-                        if (dataItem.LinkedRouteRuleIds.length > 1) {
-                            menu.push({
-                                name: "Linked Rules",
-                                clicked: viewLinkedRouteRules
-                            });
-                        }
+
+                    if (dataItem.CanAddRuleByCountry) {
+                        menu.push({
+                            name: "Add Rule By Country",
+                            clicked: addRouteRuleByCountry,
+                            haspermission: hasAddRulePermission
+                        });
+                    }
+
+                    if (dataItem.LinkedRouteRuleIds != undefined && dataItem.LinkedRouteRuleIds.length > 1) {
+                        menu.push({
+                            name: "Linked Rules",
+                            clicked: viewLinkedRouteRules
+                        });
                     }
                     return menu;
                 };
@@ -217,32 +226,15 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
                 addRouteRule(dataItem, linkedRouteRuleInput);
             }
 
+            function addRouteRuleByCountry(dataItem) {
+                var linkedRouteRuleInput = {
+                    CustomerId: dataItem.CustomerId, Code: dataItem.Code, SaleZoneId: dataItem.SaleZoneId, RuleId: dataItem.ExecutedRuleId, RouteOptions: dataItem.Options, RuleByCountry: true
+                };
+                addRouteRule(dataItem, linkedRouteRuleInput);
+            }
+
             function addRouteRule(dataItem, linkedRouteRuleInput) {
                 var onRouteRuleAdded = function (addedItem) {
-                    //var newDataItem = {
-                    //    CustomerRouteDetailId: dataItem.CustomerRouteDetailId,
-                    //    CustomerId:dataItem.CustomerId,
-                    //    CustomerName: dataItem.CustomerName,
-                    //    SaleZoneName: dataItem.SaleZoneName,
-                    //    Code: dataItem.Code,
-                    //    Rate: dataItem.Rate,
-                    //    IsBlocked: dataItem.IsBlocked,
-                    //    SaleZoneServiceIds: dataItem.SaleZoneServiceIds,
-                    //    ExecutedRuleId: dataItem.ExecutedRuleId,
-                    //    Options: dataItem.Options,
-                    //    ExecutedRouteRuleName: dataItem.ExecutedRouteRuleName,
-                    //    ExecutedRouteRuleSettingsTypeName: dataItem.ExecutedRouteRuleSettingsTypeName,
-                    //    RouteOptionDetails: dataItem.RouteOptionDetails,
-                    //    LinkedRouteRuleCount: 1,
-                    //    LinkedRouteRuleIds: [],
-                    //    CanEditMatchingRule: true
-                    //};
-                    //newDataItem.LinkedRouteRuleIds.push(addedItem.Entity.RuleId);
-
-                    //extendCutomerRouteObject(newDataItem);
-                    //gridDrillDownTabsObj.setDrillDownExtensionObject(newDataItem);
-                    //gridAPI.itemUpdated(newDataItem);
-
                     triggerPartialRoute(addedItem.Entity.RuleId);
                 };
                 var customerRouteData = { code: dataItem.Code, SaleZoneServiceIds: dataItem.SaleZoneServiceIds, Rate: dataItem.Rate, CustomerId: dataItem.CustomerId };

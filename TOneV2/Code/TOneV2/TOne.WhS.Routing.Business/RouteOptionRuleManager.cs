@@ -118,6 +118,9 @@ namespace TOne.WhS.Routing.Business
                 if (input.Query.SaleZoneIds != null && !CheckIfSaleZoneSettingsContains(routeOptionRule, input.Query.SaleZoneIds))
                     return false;
 
+                if (input.Query.CountryIds != null && !CheckIfCountrySettingsContains(routeOptionRule, input.Query.CountryIds))
+                    return false;
+
                 if (input.Query.SupplierId.HasValue && !CheckIfSupplierSettingsContains(routeOptionRule, input.Query.SupplierId.Value))
                     return false;
 
@@ -322,6 +325,7 @@ namespace TOne.WhS.Routing.Business
             ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorBySupplier());
             ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByCode());
             ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorBySaleZone());
+            ruleStructureBehaviors.Add(new Vanrise.Common.Business.Rules.StructureRuleBehaviors.RuleBehaviorByCountry());
             ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByCustomer());
             //ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByRoutingProduct());
             return ruleStructureBehaviors;
@@ -387,6 +391,19 @@ namespace TOne.WhS.Routing.Business
 
             return false;
         }
+
+        private bool CheckIfCountrySettingsContains(RouteOptionRule routeOptionRule, IEnumerable<int> countryIds)
+        {
+            if (routeOptionRule.Criteria.CountryCriteriaGroupSettings != null)
+            {
+                IRuleCountryCriteria ruleCode = routeOptionRule as IRuleCountryCriteria;
+                if (ruleCode.CountryIds != null && ruleCode.CountryIds.Intersect(countryIds).Count() > 0)
+                    return true;
+            }
+
+            return false;
+        }
+
         private bool CheckIfSameRouteOptionRuleSettingsConfigId(RouteOptionRule routeOptionRule, List<Guid> RouteOptionRuleSettingsConfigIds)
         {
             if (RouteOptionRuleSettingsConfigIds.Contains(routeOptionRule.Settings.ConfigId))
@@ -508,13 +525,12 @@ namespace TOne.WhS.Routing.Business
                     SheetName = "Route Options",
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
-
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name", Width = 30 });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Included Codes" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customers", Width = 30 });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Suppliers", Width = 45 });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Sale Zones", Width = 30 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rule Type" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name", Width = 30 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Suppliers", Width = 45 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Destinations" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customers", Width = 30 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Excluded Codes" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
 
@@ -527,12 +543,12 @@ namespace TOne.WhS.Routing.Business
                         {
                             var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
                             sheet.Rows.Add(row);
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
-                            row.Cells.Add(new ExportExcelCell { Value = record.IncludedCodes });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Customers });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Suppliers });
-                            row.Cells.Add(new ExportExcelCell { Value = record.SaleZones });
                             row.Cells.Add(new ExportExcelCell { Value = record.RouteOptionRuleSettingsTypeName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Suppliers });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Destinations });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Customers });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Excluded });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.BeginEffectiveTime });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.EndEffectiveTime });
                         }

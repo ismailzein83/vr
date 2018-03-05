@@ -10,6 +10,7 @@ using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Common.MainExtensions.Country;
 using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.Business
@@ -44,7 +45,7 @@ namespace TOne.WhS.Routing.Business
             return routeRule.CastWithValidate<RouteRule>("RouteRule : historyId ", routeRuleHistoryId);
         }
 
-        public RouteRule BuildLinkedRouteRule(int ruleId, int? customerId, string code, long? saleZoneId, List<RouteOption> routeOptions)
+        public RouteRule BuildLinkedRouteRule(int ruleId, int? customerId, string code, long? saleZoneId, bool ruleByCountry, List<RouteOption> routeOptions)
         {
             RouteRule relatedRouteRule = base.GetRuleWithDeleted(ruleId);
             if (relatedRouteRule == null)
@@ -67,7 +68,10 @@ namespace TOne.WhS.Routing.Business
             if (saleZoneId.HasValue)
             {
                 SaleZone saleZone = new SaleZoneManager().GetSaleZone(saleZoneId.Value);
-                routeRuleCriteria.SaleZoneGroupSettings = new SelectiveSaleZoneGroup() { SellingNumberPlanId = saleZone.SellingNumberPlanId, ZoneIds = new List<long>() { saleZoneId.Value } };
+                if (!ruleByCountry)
+                    routeRuleCriteria.SaleZoneGroupSettings = new SelectiveSaleZoneGroup() { SellingNumberPlanId = saleZone.SellingNumberPlanId, ZoneIds = new List<long>() { saleZoneId.Value } };
+                else
+                    routeRuleCriteria.CountryCriteriaGroupSettings = new SelectiveCountryCriteriaGroup() { CountryIds = new List<int>() { saleZone.CountryId } };
             }
             else
             {
@@ -145,6 +149,9 @@ namespace TOne.WhS.Routing.Business
                         return false;
 
                     if (input.Query.SaleZoneIds != null && !CheckIfSaleZoneSettingsContains(routeRule, input.Query.SaleZoneIds))
+                        return false;
+
+                    if (input.Query.CountryIds != null && !CheckIfCountrySettingsContains(routeRule, input.Query.CountryIds))
                         return false;
 
                     if (input.Query.RouteRuleSettingsConfigIds != null && !CheckIfSameRouteRuleSettingsConfigId(routeRule, input.Query.RouteRuleSettingsConfigIds))
@@ -263,7 +270,6 @@ namespace TOne.WhS.Routing.Business
             return RouteRuleLoggableEntity.Instance;
         }
 
-
         public bool HasSelectiveCustomerCriteria(BaseRouteRuleCriteria criteria)
         {
             CustomerGroupSettings customerGroupSettings = criteria.GetCustomerGroupSettings();
@@ -302,15 +308,28 @@ namespace TOne.WhS.Routing.Business
 
             return selectiveSaleZoneGroup.ZoneIds != null && selectiveSaleZoneGroup.ZoneIds.Count > 0;
         }
+
+        public bool HasSelectiveCountryCriteria(BaseRouteRuleCriteria criteria)
+        {
+            CountryCriteriaGroupSettings countryCriteriaGroupSettings = criteria.GetCountryCriteriaGroupSettings();
+            if (countryCriteriaGroupSettings == null)
+                return false;
+
+            SelectiveCountryCriteriaGroup selectiveCountryCriteriaGroup = countryCriteriaGroupSettings as SelectiveCountryCriteriaGroup;
+            if (selectiveCountryCriteriaGroup == null)
+                return false;
+
+            return selectiveCountryCriteriaGroup.CountryIds != null && selectiveCountryCriteriaGroup.CountryIds.Count > 0;
+        }
         #endregion
 
         #region Private Methods
-
         private IEnumerable<Vanrise.Rules.BaseRuleStructureBehavior> GetRuleStructureBehaviors()
         {
             List<Vanrise.Rules.BaseRuleStructureBehavior> ruleStructureBehaviors = new List<Vanrise.Rules.BaseRuleStructureBehavior>();
             ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByCode());
             ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorBySaleZone());
+            ruleStructureBehaviors.Add(new Vanrise.Common.Business.Rules.StructureRuleBehaviors.RuleBehaviorByCountry());
             ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByCustomer());
             ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByRoutingProduct());
             return ruleStructureBehaviors;
@@ -427,6 +446,19 @@ namespace TOne.WhS.Routing.Business
             return false;
         }
 
+        private bool CheckIfCountrySettingsContains(RouteRule routeRule, IEnumerable<int> countryIds)
+        {
+            CountryCriteriaGroupSettings countryCriteriaGroupSettings = routeRule.Criteria.GetCountryCriteriaGroupSettings();
+            if (countryCriteriaGroupSettings != null)
+            {
+                IRuleCountryCriteria ruleCode = routeRule as IRuleCountryCriteria;
+                if (ruleCode.CountryIds != null && ruleCode.CountryIds.Intersect(countryIds).Count() > 0)
+                    return true;
+            }
+
+            return false;
+        }
+
         private bool CheckIfSaleZoneSettingsContains(RouteRule routeRule, IEnumerable<long> saleZoneIds)
         {
             SaleZoneGroupSettings saleZoneGroupSettings = routeRule.Criteria.GetSaleZoneGroupSettings();
@@ -461,12 +493,11 @@ namespace TOne.WhS.Routing.Business
                     SheetName = "Routes",
                     Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
                 };
-
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Included Codes" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customers", Width = 30 });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Sale Zones" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Rule Type" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Destinations" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Customers", Width = 30 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Excluded Codes" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.LongDateTime });
 
@@ -479,11 +510,11 @@ namespace TOne.WhS.Routing.Business
                         {
                             var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
                             sheet.Rows.Add(row);
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
-                            row.Cells.Add(new ExportExcelCell { Value = record.IncludedCodes });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Customers });
-                            row.Cells.Add(new ExportExcelCell { Value = record.SaleZones });
                             row.Cells.Add(new ExportExcelCell { Value = record.RouteRuleSettingsTypeName });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Destinations });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Customers });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Excluded });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.BED });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.EED });
                         }

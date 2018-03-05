@@ -20,7 +20,8 @@ namespace TOne.WhS.Routing.Entities
         public long SupplierZoneId { get; set; }
     }
 
-    public class RouteOptionRule : Vanrise.Rules.BaseRule, IRuleSupplierCriteria, IRuleSupplierZoneCriteria, IRuleCustomerCriteria, IRuleCodeCriteria, IRuleSaleZoneCriteria, IRuleRoutingProductCriteria, IDateEffectiveSettings
+    public class RouteOptionRule : Vanrise.Rules.BaseRule, IRuleSupplierCriteria, IRuleSupplierZoneCriteria, IRuleCustomerCriteria, IRuleCodeCriteria, IRuleSaleZoneCriteria, 
+        IRuleRoutingProductCriteria, IDateEffectiveSettings, IRuleCountryCriteria
     {
         public string Name { get; set; }
 
@@ -115,6 +116,11 @@ namespace TOne.WhS.Routing.Entities
                 RoutingProductId = this.Criteria.RoutingProductId
             };
             return saleZoneGroupContext;
+        }
+
+        public ICountryCriteriaGroupContext GetCountryCriteriaGroupContext()
+        {
+            return new CountryCriteriaGroupContext();
         }
 
         public ICustomerGroupContext GetCustomerGroupContext()
@@ -219,6 +225,21 @@ namespace TOne.WhS.Routing.Entities
                 if (this.Criteria != null && this.Criteria.SaleZoneGroupSettings != null)
                 {
                     return GetSaleZoneGroupContext().GetGroupZoneIds(this.Criteria.SaleZoneGroupSettings);
+                }
+                else
+                {
+                    return null;
+                }
+            }
+        }
+
+        IEnumerable<int> IRuleCountryCriteria.CountryIds
+        {
+            get
+            {
+                if (this.Criteria != null && this.Criteria.CountryCriteriaGroupSettings != null)
+                {
+                    return this.Criteria.CountryCriteriaGroupSettings.GetCountryIds(GetCountryCriteriaGroupContext());
                 }
                 else
                 {

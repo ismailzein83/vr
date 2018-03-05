@@ -1,4 +1,5 @@
 ﻿using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.Entities
 {
@@ -10,7 +11,7 @@ namespace TOne.WhS.Routing.Entities
 
         public string RouteRuleSettingsTypeName { get; set; }
 
-        public string IncludedCodes
+        public string Destinations
         {
             get
             {
@@ -18,10 +19,31 @@ namespace TOne.WhS.Routing.Entities
                     return string.Empty;
 
                 CodeCriteriaGroupSettings codeCriteriaGroupSettings = this.Entity.Criteria.GetCodeCriteriaGroupSettings();
-                if (codeCriteriaGroupSettings == null)
-                    return string.Empty;
+                if (codeCriteriaGroupSettings != null)
+                {
+                    string codesDesription = codeCriteriaGroupSettings.GetDescription(this.Entity.GetCodeCriteriaGroupContext());
+                    return !string.IsNullOrEmpty(codesDesription) ? string.Concat("Codes: ", codesDesription) : string.Empty;
+                }
 
-                return codeCriteriaGroupSettings.GetDescription(this.Entity.GetCodeCriteriaGroupContext());
+                SaleZoneGroupSettings saleZoneGroupSettings = this.Entity.Criteria.GetSaleZoneGroupSettings();
+                if (saleZoneGroupSettings != null)
+                {
+                    string saleZonesDesription = saleZoneGroupSettings.GetDescription(this.Entity.GetSaleZoneGroupContext());
+                    return !string.IsNullOrEmpty(saleZonesDesription)
+                        ? !saleZonesDesription.Contains("Sale Zones")
+                                ? string.Concat("Sale Zones: ", saleZonesDesription)
+                                : saleZonesDesription
+                        : string.Empty;
+                }
+
+                CountryCriteriaGroupSettings countryCriteriaGroupSettings = this.Entity.Criteria.GetCountryCriteriaGroupSettings();
+                if (countryCriteriaGroupSettings != null)
+                {
+                    string countriesDesription = countryCriteriaGroupSettings.GetDescription(this.Entity.GetCountryCriteriaGroupContext());
+                    return !string.IsNullOrEmpty(countriesDesription) ? string.Concat("Countries: ", countriesDesription) : string.Empty;
+                }
+
+                return string.Empty;
             }
         }
 
@@ -40,18 +62,18 @@ namespace TOne.WhS.Routing.Entities
             }
         }
 
-        public string SaleZones
+        public string Excluded
         {
             get
             {
                 if (this.Entity.Criteria == null)
                     return string.Empty;
 
-                SaleZoneGroupSettings saleZoneGroupSettings = this.Entity.Criteria.GetSaleZoneGroupSettings();
-                if (saleZoneGroupSettings == null)
+                RoutingExcludedDestinations routingExcludedDestinations = this.Entity.Criteria.GetExcludedDestinations();
+                if (routingExcludedDestinations == null)
                     return string.Empty;
 
-                return saleZoneGroupSettings.GetDescription(this.Entity.GetSaleZoneGroupContext());
+                return routingExcludedDestinations.GetDescription();
             }
         }
     }

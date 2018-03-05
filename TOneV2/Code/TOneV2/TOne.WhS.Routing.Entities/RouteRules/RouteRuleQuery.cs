@@ -18,6 +18,8 @@ namespace TOne.WhS.Routing.Entities
 
         public IEnumerable<long> SaleZoneIds { get; set; }
 
+        public IEnumerable<int> CountryIds { get; set; }
+
         public DateTime? EffectiveOn { get; set; }
 
         public List<Guid> RouteRuleSettingsConfigIds { get; set; }

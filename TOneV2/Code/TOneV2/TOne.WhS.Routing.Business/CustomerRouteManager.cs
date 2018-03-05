@@ -88,7 +88,10 @@ namespace TOne.WhS.Routing.Business
                 RouteOptionDetails = optionDetails,
                 LinkedRouteRuleIds = linkedRouteRules != null ? linkedRouteRules.Select(itm => itm.RuleId).ToList() : null,
                 ExecutedRouteRuleName = routeRule != null ? routeRule.Name : null,
-                ExecutedRouteRuleSettingsTypeName = executedRouteRuleSettingsTypeName
+                ExecutedRouteRuleSettingsTypeName = executedRouteRuleSettingsTypeName,
+                CanAddRuleByCode = true,
+                CanAddRuleByZone = true,
+                CanAddRuleByCountry = true
             };
 
             if (routeRule != null)
@@ -96,9 +99,32 @@ namespace TOne.WhS.Routing.Business
                 bool hasSelectiveCustomerCriteria = routeRuleManager.HasSelectiveCustomerCriteria(routeRule.Criteria);
                 bool hasSelectiveCodeCriteria = routeRuleManager.HasSelectiveCodeCriteria(routeRule.Criteria);
                 bool hasSelectiveSaleZoneCriteria = routeRuleManager.HasSelectiveSaleZoneCriteria(routeRule.Criteria);
+                bool hasSelectiveCountryCriteria = routeRuleManager.HasSelectiveCountryCriteria(routeRule.Criteria);
 
-                if (hasSelectiveCustomerCriteria && (hasSelectiveCodeCriteria || hasSelectiveSaleZoneCriteria))
-                    customerRouteDetail.CanEditMatchingRule = true;
+                //if (hasSelectiveCustomerCriteria && (hasSelectiveCodeCriteria || hasSelectiveSaleZoneCriteria || hasSelectiveCountryCriteria))
+                //    customerRouteDetail.CanEditMatchingRule = true;
+
+                if (hasSelectiveCustomerCriteria)
+                {
+                    if (hasSelectiveCodeCriteria)
+                    {
+                        customerRouteDetail.CanEditMatchingRule = true;
+                        customerRouteDetail.CanAddRuleByCode = false;
+                        customerRouteDetail.CanAddRuleByZone = false;
+                        customerRouteDetail.CanAddRuleByCountry = false;
+                    }
+                    else if (hasSelectiveSaleZoneCriteria)
+                    {
+                        customerRouteDetail.CanEditMatchingRule = true;
+                        customerRouteDetail.CanAddRuleByZone = false;
+                        customerRouteDetail.CanAddRuleByCountry = false;
+                    }
+                    else if (hasSelectiveCountryCriteria)
+                    {
+                        customerRouteDetail.CanEditMatchingRule = true;
+                        customerRouteDetail.CanAddRuleByCountry = false;
+                    }
+                }
             }
 
             return customerRouteDetail;

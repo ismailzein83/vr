@@ -22,5 +22,8 @@ namespace TOne.WhS.Routing.Entities
         public string ExecutedRouteRuleSettingsTypeName { get; set; }
         public bool CanEditMatchingRule { get; set; }
         public int LinkedRouteRuleCount { get { return LinkedRouteRuleIds != null ? LinkedRouteRuleIds.Count : 0; } }
+        public bool CanAddRuleByCode { get; set; }
+        public bool CanAddRuleByZone { get; set; }
+        public bool CanAddRuleByCountry { get; set; }
     }
 }

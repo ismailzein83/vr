@@ -41,6 +41,7 @@ namespace TOne.WhS.Routing.Business
             CodeGroup codeGroup = codeGroupeManager.GetMatchCodeGroup(routeCode);
 
             CustomerCountryManager customerCountryManager = new CustomerCountryManager();
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
 
             HashSet<int> countryIdsHavingParentCode = codeGroupeManager.GetCGsParentCountries().GetRecord(codeGroup.Code);
             bool isCountryIdsHavingParentCodeNotEmpty = countryIdsHavingParentCode != null && countryIdsHavingParentCode.Count > 0;
@@ -54,6 +55,9 @@ namespace TOne.WhS.Routing.Business
 
                 foreach (var saleZoneDefintion in context.SaleZoneDefintions)
                 {
+                    SaleZone saleZone = saleZoneManager.GetSaleZone(saleZoneDefintion.SaleZoneId);
+                    saleZone.ThrowIfNull("saleZone", saleZoneDefintion.SaleZoneId);
+
                     HashSet<int> soldCustomers = new HashSet<int>();
                     List<CustomerZoneDetail> matchCustomerZoneDetails = null;
 
@@ -68,6 +72,7 @@ namespace TOne.WhS.Routing.Business
                                 CustomerId = customerZoneDetail.CustomerId,
                                 Code = routeCode,
                                 SaleZoneId = saleZoneDefintion.SaleZoneId,
+                                CountryId = saleZone.CountryId,
                                 RoutingProductId = customerZoneDetail.RoutingProductId,
                                 SaleRate = customerZoneDetail.EffectiveRateValue,
                                 EffectiveOn = context.EntitiesEffectiveOn,
@@ -138,6 +143,8 @@ namespace TOne.WhS.Routing.Business
         public IEnumerable<RPRoute> BuildRoutes(IBuildRoutingProductRoutesContext context, long saleZoneId)
         {
             List<RPRoute> routes = new List<RPRoute>();
+            SaleZone saleZone = new SaleZoneManager().GetSaleZone(saleZoneId);
+            saleZone.ThrowIfNull("saleZone", saleZoneId);
 
             if (context.RoutingProducts != null)
             {
@@ -149,9 +156,11 @@ namespace TOne.WhS.Routing.Business
                     {
                         RoutingProductId = routingProduct.RoutingProductId,
                         SaleZoneId = saleZoneId,
+                        CountryId = saleZone.CountryId,
                         EffectiveOn = context.EntitiesEffectiveOn,
                         IsEffectiveInFuture = context.EntitiesEffectiveInFuture
                     };
+
                     if (routingProduct.Settings == null)
                         throw new NullReferenceException(string.Format("routingProduct.Settings of Routing Product Id: {0}", routingProduct.RoutingProductId));
 

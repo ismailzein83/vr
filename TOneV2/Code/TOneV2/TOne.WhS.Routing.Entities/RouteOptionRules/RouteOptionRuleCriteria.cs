@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.Entities
 {
@@ -20,5 +21,7 @@ namespace TOne.WhS.Routing.Entities
         public CustomerGroupSettings CustomerGroupSettings { get; set; }
 
         public SuppliersWithZonesGroupSettings SuppliersWithZonesGroupSettings { get; set; }
+
+        public CountryCriteriaGroupSettings CountryCriteriaGroupSettings { get; set; }
     }
 }

@@ -15,6 +15,14 @@ namespace TOne.WhS.BusinessEntity.Business
     public class SellingNumberPlanManager : IBusinessEntityManager , ISellingNumberPlanManager
     {
         #region Public Methods
+        public IEnumerable<SellingNumberPlan> GetAllSellingNumberPlans()
+        {
+            var allSellingNumberPlans = GetCachedSellingNumberPlans();
+            if (allSellingNumberPlans == null)
+                return null;
+
+            return allSellingNumberPlans.Values;
+        }
 
         public IEnumerable<SellingNumberPlanInfo> GetSellingNumberPlans()
         {

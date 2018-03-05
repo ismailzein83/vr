@@ -31,5 +31,13 @@ namespace TOne.WhS.Routing.Business
         {
             return new RoutingExcludedDestinationData() { ExcludedCodes = this.Codes };
         }
+
+        public override string GetDescription()
+        {
+            if (this.Codes == null)
+                return string.Empty;
+
+            return string.Join<string>(", ", this.Codes);
+        }
     }
 }

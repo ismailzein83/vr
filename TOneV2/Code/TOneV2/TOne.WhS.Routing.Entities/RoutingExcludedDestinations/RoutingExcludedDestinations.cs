@@ -10,6 +10,8 @@ namespace TOne.WhS.Routing.Entities
         public abstract bool IsExcludedDestination(IRoutingExcludedDestinationContext context);
 
         public abstract RoutingExcludedDestinationData GetRoutingExcludedDestinationData();
+
+        public abstract string GetDescription();
     }
 
     public interface IRoutingExcludedDestinationContext
