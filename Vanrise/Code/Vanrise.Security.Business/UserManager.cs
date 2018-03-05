@@ -45,6 +45,8 @@ namespace Vanrise.Security.Business
             var allItems = GetUsersByTenant();
 
             Func<User, bool> filterExpression = (itemObject) =>
+                !itemObject.IsSystemUser
+                &&
                  (input.Query.Name == null || itemObject.Name.ToLower().Contains(input.Query.Name.ToLower()))
                  &&
                  (input.Query.Email == null || itemObject.Email.ToLower().Contains(input.Query.Email.ToLower()));
@@ -132,7 +134,17 @@ namespace Vanrise.Security.Business
             else
                 users = GetUsersByTenant();
 
-            return users.MapRecords(UserInfoMapper, user => (filter == null || filter.GetOnlyTenantUsers || (filter.ExcludeInactive == false || IsUserEnable(user))));
+            Func<User, bool> filterExpression = (user) =>
+                {
+                    if (user.IsSystemUser)
+                    {
+                        if (filter == null || !filter.IncludeSystemUsers)
+                            return false;
+                    }
+                    return (filter == null || filter.GetOnlyTenantUsers || (filter.ExcludeInactive == false || IsUserEnable(user)));
+                };
+
+            return users.MapRecords(UserInfoMapper, filterExpression);
         }
 
         private Dictionary<int, User> FilterUsers(Dictionary<int, User> users, List<IUserFilter> filters)
@@ -320,6 +332,8 @@ namespace Vanrise.Security.Business
             updateOperationOutput.UpdatedObject = null;
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
             var user = GetUserbyId(userId);
+            if (user.IsSystemUser)
+                throw new Exception("Cannot update System User");
             user.EnabledTill = enabledTill;
             bool updateActionSucc = dataManager.UpdateUser(user);
             if (updateActionSucc)
@@ -369,6 +383,8 @@ namespace Vanrise.Security.Business
             else
             {
                 User currentUser = GetUserbyId(userObject.UserId);
+                if (currentUser.IsSystemUser)
+                    throw new Exception("Cannot update System User");
                 UserSetting settings = currentUser.Settings;
                  if (settings == null)
                       settings = new UserSetting();
@@ -908,6 +924,21 @@ namespace Vanrise.Security.Business
             }
             return succ;
         }
+
+        public int? GetSystemUserId()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSystemUserId",
+                () =>
+                {
+                    User systemUser = null;
+                    var allUsers = GetCachedUsers();
+
+                    if (allUsers != null)
+                        systemUser = allUsers.Values.FindRecord(user => user.IsSystemUser);
+                    return systemUser != null ? systemUser.UserId : default(int?);
+                });
+        }
+
         #endregion
 
         #region Private Methods

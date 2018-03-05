@@ -140,6 +140,7 @@ namespace Vanrise.Security.Data.SQL
                 Description = reader["Description"] as string,
                 TenantId = Convert.ToInt32(reader["TenantId"]),
                 Settings = Vanrise.Common.Serializer.Deserialize<UserSetting>(reader["Settings"] as string),
+                IsSystemUser = GetReaderValue<bool>(reader, "IsSystemUser"),
                 ExtendedSettings = reader["ExtendedSettings"] != DBNull.Value ? Vanrise.Common.Serializer.Deserialize<Dictionary<string, object>>(reader["ExtendedSettings"] as string) : null
             };
         }

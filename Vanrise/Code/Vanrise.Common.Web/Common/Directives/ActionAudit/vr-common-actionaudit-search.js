@@ -97,7 +97,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
 
                     userSelectorReadyPromiseDeferred.promise
                         .then(function () {
-                            VRUIUtilsService.callDirectiveLoad(userSelectorApi, undefined, userSelectorLoadPromiseDeferred);
+                            VRUIUtilsService.callDirectiveLoad(userSelectorApi, { filter: { IncludeSystemUsers: true } }, userSelectorLoadPromiseDeferred);
                         });
                     return userSelectorLoadPromiseDeferred.promise;
                 }

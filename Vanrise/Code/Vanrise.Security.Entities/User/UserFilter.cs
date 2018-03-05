@@ -10,6 +10,9 @@ namespace Vanrise.Security.Entities
     {
         public EntityType? EntityType { get; set; }
         public string EntityId { get; set; }
+
+        public bool IncludeSystemUsers { get; set; }
+
         public bool ExcludeInactive { get; set; }
         public bool GetOnlyTenantUsers { get; set; }
         public int? TenantId { get; set; }

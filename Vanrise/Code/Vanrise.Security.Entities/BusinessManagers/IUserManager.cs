@@ -9,5 +9,7 @@ namespace Vanrise.Security.Entities
     public interface IUserManager : IBEManager
     {
         string GetUserName(int userId);
+
+        int? GetSystemUserId();
     }
 }

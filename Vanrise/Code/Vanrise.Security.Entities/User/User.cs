@@ -36,6 +36,8 @@ namespace Vanrise.Security.Entities
         public Dictionary<string, Object> ExtendedSettings { get; set; }
 
         public UserSetting Settings { get; set; }
+
+        public bool IsSystemUser { get; set; }
     }
     public class UserSetting
     {

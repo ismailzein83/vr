@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Runtime.Business;
 using Vanrise.Runtime.Entities;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Runtime
 {
@@ -15,6 +16,7 @@ namespace Vanrise.Runtime
     {
         SchedulerTaskStateManager _scheduleTaskStateManager = new SchedulerTaskStateManager();
         SchedulerTaskManager _scheduleTaskManager = new SchedulerTaskManager();
+        IUserManager _userManager = Vanrise.Security.Entities.BEManagerFactory.GetManager<IUserManager>();
 
         static int s_maxConcurrentTasks;
 
@@ -45,7 +47,9 @@ namespace Vanrise.Runtime
                             _scheduleTaskStateManager.DeleteTaskState(schedulerTaskState.TaskId);
                             continue;
                         }
-                        Vanrise.Security.Entities.ContextFactory.GetContext().SetContextUserId(schedulerTask.OwnerId);
+                        int? systemUserId = _userManager.GetSystemUserId();
+                        int userId = systemUserId.HasValue ? systemUserId.Value : schedulerTask.OwnerId;
+                        Vanrise.Security.Entities.ContextFactory.GetContext().SetContextUserId(userId);
                         if (!IsTaskEnabledAndEffective(schedulerTask))
                         {
                             if (schedulerTaskState.Status == SchedulerTaskStatus.WaitingEvent && CheckIfScheduleTaskCompleted(schedulerTaskState, schedulerTask))
@@ -56,7 +60,7 @@ namespace Vanrise.Runtime
                         }
                         else
                         {
-                            TryLockAndExecuteTask(schedulerTask, schedulerTaskState);
+                            TryLockAndExecuteTask(schedulerTask, schedulerTaskState, userId);
                         }
                     }
                 });
@@ -67,12 +71,12 @@ namespace Vanrise.Runtime
             return schedulerTask.IsEnabled && schedulerTask.TaskSettings.StartEffDate <= DateTime.Now && (!schedulerTask.TaskSettings.EndEffDate.HasValue || schedulerTask.TaskSettings.EndEffDate.Value > DateTime.Now);
         }
 
-        private void TryLockAndExecuteTask(SchedulerTask schedulerTask, Entities.SchedulerTaskState schedulerTaskState)
+        private void TryLockAndExecuteTask(SchedulerTask schedulerTask, Entities.SchedulerTaskState schedulerTaskState, int userId)
         {
             TransactionLocker.Instance.TryLock(String.Concat("SchedulerTask_", schedulerTaskState.TaskId),
                 () =>
-                {
-                    Vanrise.Security.Entities.ContextFactory.GetContext().SetContextUserId(schedulerTask.OwnerId);
+                {                    
+                    Vanrise.Security.Entities.ContextFactory.GetContext().SetContextUserId(userId);
                     SchedulerTaskTrigger taskTrigger = (SchedulerTaskTrigger)Activator.CreateInstance(Type.GetType(schedulerTask.TriggerInfo.FQTN));
                     bool updateTaskState = false;
                     try
