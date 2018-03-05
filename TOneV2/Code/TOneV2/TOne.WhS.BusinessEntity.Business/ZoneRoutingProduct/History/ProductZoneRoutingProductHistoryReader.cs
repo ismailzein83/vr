@@ -54,7 +54,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (defaultRoutingProducts == null || defaultRoutingProducts.Count() == 0)
                 return;
 
-            foreach (DefaultRoutingProduct defaultRoutingPrdouct in defaultRoutingProducts)
+            foreach (DefaultRoutingProduct defaultRoutingPrdouct in defaultRoutingProducts.OrderBy(x => x.BED))
             {
                 SaleEntityRoutingProducts productRoutingProducts = _productRoutingProducts.GetOrCreateItem(defaultRoutingPrdouct.OwnerId, () => { return new SaleEntityRoutingProducts(); });
                 productRoutingProducts.AddDefaultRoutingProduct(defaultRoutingPrdouct);
@@ -67,7 +67,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             var saleZoneManager = new SaleZoneManager();
 
-            foreach (SaleZoneRoutingProduct zoneRoutingProduct in zoneRoutingProducts)
+            foreach (SaleZoneRoutingProduct zoneRoutingProduct in zoneRoutingProducts.OrderBy(x => x.BED))
             {
                 SaleEntityRoutingProducts productRoutingProducts = _productRoutingProducts.GetOrCreateItem(zoneRoutingProduct.OwnerId, () => { return new SaleEntityRoutingProducts(); });
                 productRoutingProducts.AddZoneRoutingProduct(saleZoneManager.GetSaleZoneName(zoneRoutingProduct.SaleZoneId), zoneRoutingProduct);
