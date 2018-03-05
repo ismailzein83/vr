@@ -21,7 +21,9 @@ namespace Vanrise.BusinessProcess.Extensions.WFTaskAction
 
             BPInstanceManager bpInstanceManager = new BPInstanceManager();
             BaseProcessInputArgument inputArguments = wfTaskActionArgument.ProcessInputArguments;
-            inputArguments.UserId = task.OwnerId;
+            int? userId;
+            Vanrise.Security.Entities.ContextFactory.GetContext().TryGetLoggedInUserId(out userId);
+            inputArguments.UserId = userId.HasValue ? userId.Value : task.OwnerId;
 
 
             BPDefinitionManager bpDefinitionManager = new BPDefinitionManager();
