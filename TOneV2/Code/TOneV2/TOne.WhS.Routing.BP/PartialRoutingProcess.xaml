@@ -214,6 +214,11 @@
                 <mca:CSharpValue x:TypeArguments="twre:BERouteInfo">BERouteInfo</mca:CSharpValue>
               </InArgument>
             </twrba1:GetAffectedRoutes.BERouteInfo>
+            <twrba1:GetAffectedRoutes.EffectiveDate>
+              <InArgument x:TypeArguments="s:DateTime">
+                <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveDate</mca:CSharpValue>
+              </InArgument>
+            </twrba1:GetAffectedRoutes.EffectiveDate>
             <twrba1:GetAffectedRoutes.PartialRouteInfo>
               <InArgument x:TypeArguments="twre:PartialRouteInfo">
                 <mca:CSharpValue x:TypeArguments="twre:PartialRouteInfo">PartialRouteInfo</mca:CSharpValue>
@@ -407,7 +412,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0hDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUGFydGlhbFJvdXRpbmdQcm9jZXNzLnhhbWxLTgObAw4CAQFWC1ZXAgECYAVmIAMB9gRnBXcnAwHOBHgFkgMKAgEekwMFmQMgAgEPYwtjhQEDAfgEYGBggwEDAfcEbwtvdAMB6QRqC2psAwHcBHQLdHgDAc8Eewt7XwIBH38JhwMUAgE7igMJkAMkAgEslgMLlgOFAQIBEZMDYJMDgwECARCAAQuLASgDAbMEjAELlwEjAwGYBJgBC6MBFAMB/QOkAQvDASYDAa4DxAEL6AEmAwHSAukBC4YDEAIBPI0DD40DhQECAS6KA2SKA4IBAgEtgwERgwF0AwHBBIgBEYgBagMBtASPARGPAWoDAaYElAERlAFqAwGZBKABEaABcAMBiwSbARGbAWQDAf4DuwERuwFsAwHwA6wBEawBeAMB4wPAARHAAWsDAdYDpwERpwGEAQMByQO2ARG2AXwDAbwDsQERsQFeAwGvA9sBEdsBbAMBoQPHARHHAYUBAwGUA9EBEdEBcAMBhwPMARHMAXwDAfoC5QER5QF1AwHtAtYBEdYBYgMB4ALgARHgAWoDAdMC7AER7AFuAgE98AEP0gIaAwGXAdUCD4QDGgIBSvEBEaUCFgMBggKmAhHKAjADAaYBywIR0QIxAwGYAdkCEeoCIgIBeesCEYMDFgIBS/QBF/QBowEDAYMC+AEVowIwAwGQArMCF7MCiQEDAfUBwgIXwgJyAwHoAb0CF70CegMB2wGuAheuAmIDAc4BqQIXqQJkAwHBAccCF8cCcAMBtAG4Ahe4AoUBAwGnAc4CF84CcQMBmQHcAhfiAhQDAYkB5wIX5wKQAQIBe9kCvQHZAsMBAgF67gIX7gK/AQIBTPICFfgCKQIBavsCFYEDMAIBWvsBG/sBhwEDAcUChQIbhQJmAwG4AoACG4ACaAMBqwKKAhuKAnQDAZ4CjwIbjwJuAwGRAvUCG/UCxAECAWv+Ahv+ApUBAgFc+wJw+wKUAQIBWw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0hDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUGFydGlhbFJvdXRpbmdQcm9jZXNzLnhhbWxMTgOgAw4CAQFWC1ZXAgECYAVmIAMBgwVnBXcnAwHbBHgFlwMKAgEemAMFngMgAgEPYwtjhQEDAYUFYGBggwEDAYQFbwtvdAMB9gRqC2psAwHpBHQLdHgDAdwEewt7XwIBH38JjAMUAgE7jwMJlQMkAgEsmwMLmwOFAQIBEZgDYJgDgwECARCAAQuLASgDAcAEjAELlwEjAwGlBJgBC6MBFAMBigSkAQvDASYDAbsDxAEL7QEmAwHSAu4BC4sDEAIBPJIDD5IDhQECAS6PA2SPA4IBAgEtgwERgwF0AwHOBIgBEYgBagMBwQSPARGPAWoDAbMElAERlAFqAwGmBKABEaABcAMBmASbARGbAWQDAYsEuwERuwFsAwH9A6wBEawBeAMB8APAARHAAWsDAeMDpwERpwGEAQMB1gO2ARG2AXwDAckDsQERsQFeAwG8A+ABEeABbAMBrgPHARHHAYUBAwGhA9EBEdEBcAMBlAPMARHMAXwDAYcD6gER6gF1AwH6AtYBEdYBYgMB7QLbARHbAV4DAeAC5QER5QFqAwHTAvEBEfEBbgIBPfUBD9cCGgMBlwHaAg+JAxoCAUr2ARGqAhYDAYICqwIRzwIwAwGmAdACEdYCMQMBmAHeAhHvAiICAXnwAhGIAxYCAUv5ARf5AaMBAwGDAv0BFagCMAMBkAK4Ahe4AokBAwH1AccCF8cCcgMB6AHCAhfCAnoDAdsBswIXswJiAwHOAa4CF64CZAMBwQHMAhfMAnADAbQBvQIXvQKFAQMBpwHTAhfTAnEDAZkB4QIX5wIUAwGJAewCF+wCkAECAXveAr0B3gLDAQIBevMCF/MCvwECAUz3AhX9AikCAWqAAxWGAzACAVqAAhuAAocBAwHFAooCG4oCZgMBuAKFAhuFAmgDAasCjwIbjwJ0AwGeApQCG5QCbgMBkQL6Ahv6AsQBAgFrgwMbgwOVAQIBXIADcIADlAECAVs=</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

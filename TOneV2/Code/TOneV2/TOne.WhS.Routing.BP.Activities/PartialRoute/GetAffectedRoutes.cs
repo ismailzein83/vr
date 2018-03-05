@@ -25,6 +25,9 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<RoutingDatabase> RoutingDatabase { get; set; }
 
         [RequiredArgument]
+        public InArgument<DateTime> EffectiveDate { get; set; }
+
+        [RequiredArgument]
         public InArgument<AffectedRouteRules> AffectedRouteRules { get; set; }
 
         [RequiredArgument]
@@ -39,6 +42,7 @@ namespace TOne.WhS.Routing.BP.Activities
 
         protected override void Execute(CodeActivityContext context)
         {
+            DateTime effectiveDate = this.EffectiveDate.Get(context);
             var routingDatabase = this.RoutingDatabase.Get(context);
             BERouteInfo beRouteInfo = this.BERouteInfo.Get(context);
             PartialRouteInfo partialRouteInfo = this.PartialRouteInfo.Get(context);
@@ -55,30 +59,30 @@ namespace TOne.WhS.Routing.BP.Activities
 
             if (affectedRouteRules != null)
             {
-                BuildAffectedRoutes(affectedRouteRules.AddedRouteRules, affectedRoutesList, out shouldTriggerFullRouteProcess);
+                BuildAffectedRoutes(affectedRouteRules.AddedRouteRules, affectedRoutesList, effectiveDate, out shouldTriggerFullRouteProcess);
 
                 if (!shouldTriggerFullRouteProcess)
-                    BuildAffectedRoutes(affectedRouteRules.UpdatedRouteRules, affectedRoutesList, out shouldTriggerFullRouteProcess);
+                    BuildAffectedRoutes(affectedRouteRules.UpdatedRouteRules, affectedRoutesList, effectiveDate, out shouldTriggerFullRouteProcess);
 
                 if (!shouldTriggerFullRouteProcess)
-                    BuildAffectedRoutes(affectedRouteRules.OpenedRouteRules, affectedRoutesList, out shouldTriggerFullRouteProcess);
+                    BuildAffectedRoutes(affectedRouteRules.OpenedRouteRules, affectedRoutesList, effectiveDate, out shouldTriggerFullRouteProcess);
 
                 if (!shouldTriggerFullRouteProcess)
-                    BuildAffectedRoutes(affectedRouteRules.ClosedRouteRules, affectedRoutesList, out shouldTriggerFullRouteProcess);
+                    BuildAffectedRoutes(affectedRouteRules.ClosedRouteRules, affectedRoutesList, effectiveDate, out shouldTriggerFullRouteProcess);
             }
 
             if (!shouldTriggerFullRouteProcess && affectedRouteOptionRules != null)
             {
-                BuildAffectedRouteOptions(affectedRouteOptionRules.AddedRouteOptionRules, affectedRouteOptionsList, out shouldTriggerFullRouteProcess);
+                BuildAffectedRouteOptions(affectedRouteOptionRules.AddedRouteOptionRules, affectedRouteOptionsList, effectiveDate, out shouldTriggerFullRouteProcess);
 
                 if (!shouldTriggerFullRouteProcess)
-                    BuildAffectedRouteOptions(affectedRouteOptionRules.UpdatedRouteOptionRules, affectedRouteOptionsList, out shouldTriggerFullRouteProcess);
+                    BuildAffectedRouteOptions(affectedRouteOptionRules.UpdatedRouteOptionRules, affectedRouteOptionsList, effectiveDate, out shouldTriggerFullRouteProcess);
 
                 if (!shouldTriggerFullRouteProcess)
-                    BuildAffectedRouteOptions(affectedRouteOptionRules.OpenedRouteOptionRules, affectedRouteOptionsList, out shouldTriggerFullRouteProcess);
+                    BuildAffectedRouteOptions(affectedRouteOptionRules.OpenedRouteOptionRules, affectedRouteOptionsList, effectiveDate, out shouldTriggerFullRouteProcess);
 
                 if (!shouldTriggerFullRouteProcess)
-                    BuildAffectedRouteOptions(affectedRouteOptionRules.ClosedRouteOptionRules, affectedRouteOptionsList, out shouldTriggerFullRouteProcess);
+                    BuildAffectedRouteOptions(affectedRouteOptionRules.ClosedRouteOptionRules, affectedRouteOptionsList, effectiveDate, out shouldTriggerFullRouteProcess);
             }
 
             if (!shouldTriggerFullRouteProcess)
@@ -186,7 +190,7 @@ namespace TOne.WhS.Routing.BP.Activities
             }
         }
 
-        private void BuildAffectedRoutes(List<RouteRule> routeRules, List<AffectedRoutes> affectedRoutesList, out bool shouldTriggerFullRouteProcess)
+        private void BuildAffectedRoutes(List<RouteRule> routeRules, List<AffectedRoutes> affectedRoutesList, DateTime effectiveDate, out bool shouldTriggerFullRouteProcess)
         {
             shouldTriggerFullRouteProcess = false;
             if (routeRules != null)
@@ -201,7 +205,7 @@ namespace TOne.WhS.Routing.BP.Activities
                     IEnumerable<long> affectedZones;
 
                     bool areCodesAndZonesGeneric;
-                    GetAffectedCodesAndZones(criteria, out affectedCodes, out affectedZones, out areCodesAndZonesGeneric);
+                    GetAffectedCodesAndZones(criteria, effectiveDate, out affectedCodes, out affectedZones, out areCodesAndZonesGeneric);
 
                     if (isCustomerGeneric && areCodesAndZonesGeneric)
                     {
@@ -222,7 +226,7 @@ namespace TOne.WhS.Routing.BP.Activities
             }
         }
 
-        private void BuildAffectedRouteOptions(List<RouteOptionRule> routeOptionRules, List<AffectedRouteOptions> affectedRouteOptionsList, out bool shouldTriggerFullRouteProcess)
+        private void BuildAffectedRouteOptions(List<RouteOptionRule> routeOptionRules, List<AffectedRouteOptions> affectedRouteOptionsList, DateTime effectiveDate, out bool shouldTriggerFullRouteProcess)
         {
             shouldTriggerFullRouteProcess = false;
             if (routeOptionRules != null)
@@ -237,7 +241,7 @@ namespace TOne.WhS.Routing.BP.Activities
                     IEnumerable<long> affectedZones;
 
                     bool areCodesAndZonesGeneric;
-                    GetAffectedCodesAndZones(criteria, out affectedCodes, out affectedZones, out areCodesAndZonesGeneric);
+                    GetAffectedCodesAndZones(criteria, effectiveDate, out affectedCodes, out affectedZones, out areCodesAndZonesGeneric);
 
                     bool areSupplierWithZonesGeneric;
                     IEnumerable<SupplierWithZones> supplierWithZones = GetAffectedSupplierZones(criteria, out areSupplierWithZonesGeneric);
@@ -276,7 +280,7 @@ namespace TOne.WhS.Routing.BP.Activities
             return customerGroupSettings.GetCustomerIds(GetCustomerGroupContext());
         }
 
-        private void GetAffectedCodesAndZones(RouteRuleCriteria criteria, out IEnumerable<CodeCriteria> affectedCodes, out IEnumerable<long> affectedZones, out bool areCodesAndZonesGeneric)
+        private void GetAffectedCodesAndZones(RouteRuleCriteria criteria, DateTime effectiveDate, out IEnumerable<CodeCriteria> affectedCodes, out IEnumerable<long> affectedZones, out bool areCodesAndZonesGeneric)
         {
             affectedCodes = null;
             affectedZones = null;
@@ -314,7 +318,7 @@ namespace TOne.WhS.Routing.BP.Activities
                         SaleZoneManager saleZoneManager = new SaleZoneManager();
                         foreach (SellingNumberPlan sellingNumberPlan in sellingNumberPlans)
                         {
-                            var saleZones = saleZoneManager.GetSaleZonesByCountryIds(sellingNumberPlan.SellingNumberPlanId, affectedCountries, DateTime.Now, false);
+                            var saleZones = saleZoneManager.GetSaleZonesByCountryIds(sellingNumberPlan.SellingNumberPlanId, affectedCountries, effectiveDate, false);
                             if (saleZones == null)
                                 continue;
 
@@ -340,7 +344,7 @@ namespace TOne.WhS.Routing.BP.Activities
             return customerGroupSettings.GetCustomerIds(GetCustomerGroupContext());
         }
 
-        private void GetAffectedCodesAndZones(RouteOptionRuleCriteria criteria, out IEnumerable<CodeCriteria> affectedCodes, out IEnumerable<long> affectedZones, out bool areCodesAndZonesGeneric)
+        private void GetAffectedCodesAndZones(RouteOptionRuleCriteria criteria, DateTime effectiveDate, out IEnumerable<CodeCriteria> affectedCodes, out IEnumerable<long> affectedZones, out bool areCodesAndZonesGeneric)
         {
             affectedCodes = null;
             affectedZones = null;
@@ -378,7 +382,7 @@ namespace TOne.WhS.Routing.BP.Activities
                         SaleZoneManager saleZoneManager = new SaleZoneManager();
                         foreach (SellingNumberPlan sellingNumberPlan in sellingNumberPlans)
                         {
-                            var saleZones = saleZoneManager.GetSaleZonesByCountryIds(sellingNumberPlan.SellingNumberPlanId, affectedCountries, DateTime.Now, false);
+                            var saleZones = saleZoneManager.GetSaleZonesByCountryIds(sellingNumberPlan.SellingNumberPlanId, affectedCountries, effectiveDate, false);
                             if (saleZones == null)
                                 continue;
 
