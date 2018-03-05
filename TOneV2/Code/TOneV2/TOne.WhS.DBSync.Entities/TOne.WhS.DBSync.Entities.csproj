@@ -100,6 +100,7 @@
     <Compile Include="Rules\SourceSpecialRequest.cs" />
     <Compile Include="Rules\SourceTariffRule.cs" />
     <Compile Include="Rules\SupplierOption.cs" />
+    <Compile Include="SaleCodeZone.cs" />
     <Compile Include="SaleEntityRoutingProduct.cs" />
     <Compile Include="SourceCarrierAccountStatusHistory.cs" />
     <Compile Include="SourceCarrierDocument.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SourceCarrierProfile.cs" />
     <Compile Include="SourceSwitch.cs" />
+    <Compile Include="SupplierCodeZone.cs" />
     <Compile Include="SwitchMigration\InParsedMapping.cs" />
     <Compile Include="SwitchMigration\OutParsedMapping.cs" />
     <Compile Include="SwitchMigration\SwitchContext.cs" />

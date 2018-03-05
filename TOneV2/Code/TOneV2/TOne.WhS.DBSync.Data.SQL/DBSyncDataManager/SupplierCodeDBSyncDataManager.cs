@@ -10,16 +10,17 @@ namespace TOne.WhS.DBSync.Data.SQL
 {
     public class SupplierCodeDBSyncDataManager : BaseSQLDataManager, IDBSyncDataManager
     {
+        static string[] s_columns = new string[] { "Code", "ZoneID", "CodeGroupID", "BED", "EED", "SourceID", "ID" };
+
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.SupplierCode);
         string _Schema = "TOneWhS_BE";
         bool _UseTempTables;
+
         public SupplierCodeDBSyncDataManager(bool useTempTables) :
             base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
             _UseTempTables = useTempTables;
         }
-
-        static string[] s_columns = new string[] { "Code", "ZoneID", "CodeGroupID", "BED", "EED", "SourceID", "ID" };
 
         public void ApplySupplierCodesToTemp(List<SupplierCode> supplierCodes, long startingId)
         {
@@ -41,6 +42,7 @@ namespace TOne.WhS.DBSync.Data.SQL
                 TabLock = true
             };
             base.InsertBulkToTable(streamBulkInsert);
+
             //dt.Columns.Add("Code", typeof(string));
             //dt.Columns.Add("ZoneID", typeof(long));
             //dt.Columns.Add(new DataColumn { AllowDBNull = true, ColumnName = "CodeGroupID", DataType = typeof(int) });
@@ -74,11 +76,16 @@ namespace TOne.WhS.DBSync.Data.SQL
             //WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
         }
 
-
         public Dictionary<string, SupplierCode> GetSupplierCodes(bool useTempTables)
         {
-            return GetItemsText(string.Format("SELECT [ID] ,[Code]  ,[ZoneID] ,[BED], [EED], [SourceID] FROM {0} where sourceid is not null"
-                , MigrationUtils.GetTableName(_Schema, _TableName, useTempTables)), SupplierCodeMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+            return GetItemsText(string.Format("SELECT [ID] ,[Code]  ,[ZoneID] ,[BED], [EED], [SourceID] FROM {0} where sourceid is not null",
+                        MigrationUtils.GetTableName(_Schema, _TableName, useTempTables)), SupplierCodeMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+        }
+
+        public List<SupplierCodeZone> GetDictinctSupplierCodeZones()
+        {
+            return GetItemsText(string.Format("SELECT distinct [Code], [ZoneID] FROM {0} where [EED] is not null",
+                        MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables)), SupplierCodeZoneMapper, cmd => { });
         }
 
         public SupplierCode SupplierCodeMapper(IDataReader reader)
@@ -91,6 +98,15 @@ namespace TOne.WhS.DBSync.Data.SQL
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
                 SourceId = reader["SourceID"] as string,
+            };
+        }
+
+        public SupplierCodeZone SupplierCodeZoneMapper(IDataReader reader)
+        {
+            return new SupplierCodeZone
+            {
+                Code = GetReaderValue<string>(reader, "Code"),
+                ZoneId = (long)reader["ZoneID"],
             };
         }
 

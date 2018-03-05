@@ -75,7 +75,7 @@ namespace TOne.WhS.DBSync.Business
         {
             DBTable dbTableSaleZone = Context.DBTables[DBTableName.SaleZone];
             if (dbTableSaleZone != null)
-                dbTableSaleZone.Records = dbSyncDataManager.GetSaleZones(useTempTables);
+                dbTableSaleZone.Records = dbSyncDataManager.GetSaleZonesBySourceId(useTempTables);
         }
     }
 }

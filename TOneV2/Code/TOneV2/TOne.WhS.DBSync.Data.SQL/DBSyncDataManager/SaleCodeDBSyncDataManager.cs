@@ -55,8 +55,14 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, SaleCode> GetSaleCodes(bool useTempTables)
         {
-            return GetItemsText(string.Format("SELECT [ID] ,[Code]  ,[ZoneID]  ,[BED], [EED], [SourceID] FROM {0} where sourceid is not null"
-                , MigrationUtils.GetTableName(_Schema, _TableName, useTempTables)), SaleCodeMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+            return GetItemsText(string.Format("SELECT [ID] ,[Code]  ,[ZoneID]  ,[BED], [EED], [SourceID] FROM {0} where sourceid is not null",
+                        MigrationUtils.GetTableName(_Schema, _TableName, useTempTables)), SaleCodeMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+        }
+
+        public List<SaleCodeZone> GetDistinctSaleCodeZones()
+        {
+            return GetItemsText(string.Format("SELECT distinct [Code], [ZoneID] FROM {0} where [EED] is null",
+                        MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables)), SaleCodeZoneMapper, cmd => { });
         }
 
         public SaleCode SaleCodeMapper(IDataReader reader)
@@ -69,6 +75,15 @@ namespace TOne.WhS.DBSync.Data.SQL
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
                 SourceId = reader["SourceID"] as string,
+            };
+        }
+
+        public SaleCodeZone SaleCodeZoneMapper(IDataReader reader)
+        {
+            return new SaleCodeZone
+            {
+                Code = reader["Code"] as string,
+                ZoneId = GetReaderValue<long>(reader, "ZoneID"),
             };
         }
 
@@ -86,6 +101,5 @@ namespace TOne.WhS.DBSync.Data.SQL
         {
             return _Schema;
         }
-
     }
 }

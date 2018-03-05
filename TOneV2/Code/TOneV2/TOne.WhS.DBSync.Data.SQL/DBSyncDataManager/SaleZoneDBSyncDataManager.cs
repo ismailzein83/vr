@@ -13,6 +13,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.SaleZone);
         string _Schema = "TOneWhS_BE";
         bool _UseTempTables;
+
         public SaleZoneDBSyncDataManager(bool useTempTables) :
             base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
@@ -52,10 +53,16 @@ namespace TOne.WhS.DBSync.Data.SQL
             WriteDataTableToDB(dt, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
         }
 
-        public Dictionary<string, SaleZone> GetSaleZones(bool useTempTables)
+        public Dictionary<string, SaleZone> GetSaleZonesBySourceId(bool useTempTables)
         {
             return GetItemsText(string.Format("SELECT ID, SellingNumberPlanID, CountryID, Name, BED, EED, SourceID FROM {0} where sourceid is not null",
                 MigrationUtils.GetTableName(_Schema, _TableName, useTempTables)), SaleZoneMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+        }
+
+        public Dictionary<long, SaleZone> GetSaleZonesById()
+        {
+            return GetItemsText(string.Format("SELECT ID, SellingNumberPlanID, CountryID, Name, BED, EED, SourceID FROM {0} where sourceid is not null",
+                MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables)), SaleZoneMapper, cmd => { }).ToDictionary(x => x.SaleZoneId, x => x);
         }
 
         public SaleZone SaleZoneMapper(IDataReader reader)
@@ -70,7 +77,6 @@ namespace TOne.WhS.DBSync.Data.SQL
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
                 SourceId = reader["SourceID"] as string,
             };
-
         }
 
         public string GetConnection()

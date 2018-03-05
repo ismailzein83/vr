@@ -4,12 +4,15 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.BusinessEntity.MainExtensions.CodeCriteriaGroups;
 using TOne.WhS.BusinessEntity.MainExtensions.CustomerGroups;
 using TOne.WhS.BusinessEntity.MainExtensions.SaleZoneGroups;
+using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Data.SQL.SourceDataManger;
 using TOne.WhS.DBSync.Entities;
 using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Business.RouteRules.Filters;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Common;
+using Vanrise.Common.MainExtensions.Country;
+using Vanrise.Entities;
 using Vanrise.Rules.Entities;
 
 namespace TOne.WhS.DBSync.Business
@@ -188,7 +191,6 @@ namespace TOne.WhS.DBSync.Business
                 }
             }
             return routeRules;
-
         }
 
         SourceRule GetSourceRuleFromZones(IEnumerable<SourceRouteOverrideRule> rules)
@@ -228,7 +230,9 @@ namespace TOne.WhS.DBSync.Business
         {
             var criteria = GetRuleZoneCriteria(lstZoneIds, sourceRule);
             if (criteria == null)
+            {
                 return null;
+            }
             else
             {
                 RouteRule details = new RouteRule
@@ -258,10 +262,7 @@ namespace TOne.WhS.DBSync.Business
                 return new RouteRuleCriteria
                 {
                     SaleZoneGroupSettings = new SelectiveSaleZoneGroup { ZoneIds = lstZoneIds, SellingNumberPlanId = Context.MigrationContext.DefaultSellingNumberPlanId },
-                    CustomerGroupSettings = new SelectiveCustomerGroup
-                    {
-                        CustomerIds = new List<int>() { customer.CarrierAccountId },
-                    }
+                    CustomerGroupSettings = new SelectiveCustomerGroup { CustomerIds = new List<int>() { customer.CarrierAccountId }, }
                 };
             }
         }
@@ -272,26 +273,31 @@ namespace TOne.WhS.DBSync.Business
 
         IEnumerable<SourceRule> GetRulesWithCode(IEnumerable<SourceRouteOverrideRule> overrideRules)
         {
-            List<SourceRule> routeRules = new List<SourceRule>();
             var dicRules = GetRulesDictionary(overrideRules);
+            Dictionary<string, CodeGroup> codeGroups = new CodeGroupDBSyncDataManager(true).GetSingleCodeGroupContriesCodeGroups();
+
+            List<SourceRule> routeRules = new List<SourceRule>();
+
             foreach (var rules in dicRules.Values)
             {
                 SourceRouteOverrideRule sourceRule = rules.First();
                 if (sourceRule == null)
                     continue;
-                var rule = GetSourceRuleFromCodes(rules);
+
+                var rule = GetSourceRuleFromCodes(rules, codeGroups);
                 if (rule == null)
                     this.TotalRowsFailed++;
                 else
                     routeRules.Add(rule);
             }
+
             return routeRules;
         }
 
-        SourceRule GetSourceRuleFromCodes(IEnumerable<SourceRouteOverrideRule> rules)
+        SourceRule GetSourceRuleFromCodes(IEnumerable<SourceRouteOverrideRule> rules, Dictionary<string, CodeGroup> codeGroups)
         {
             SourceRouteOverrideRule sourceRule = rules.First();
-            var details = GetRuleDetailsFromCode(rules, sourceRule);
+            var details = GetRuleDetailsFromCode(rules, sourceRule, codeGroups);
             if (details == null)
             {
                 return null;
@@ -311,11 +317,13 @@ namespace TOne.WhS.DBSync.Business
             }
         }
 
-        RouteRule GetRuleDetailsFromCode(IEnumerable<SourceRouteOverrideRule> rules, SourceRouteOverrideRule sourceRule)
+        RouteRule GetRuleDetailsFromCode(IEnumerable<SourceRouteOverrideRule> rules, SourceRouteOverrideRule sourceRule, Dictionary<string, CodeGroup> codeGroups)
         {
-            var criteria = GetRuleCodeCriteria(GetRuleCodeCriterias(rules), sourceRule);
+            var criteria = GetRuleCodeCriteria(GetRuleCodeCriterias(rules), sourceRule, codeGroups);
             if (criteria == null)
+            {
                 return null;
+            }
             else
             {
                 RouteRule details = new RouteRule
@@ -347,7 +355,7 @@ namespace TOne.WhS.DBSync.Business
             return criterias;
         }
 
-        RouteRuleCriteria GetRuleCodeCriteria(List<CodeCriteria> codeCriterias, SourceRouteOverrideRule sourceRule)
+        RouteRuleCriteria GetRuleCodeCriteria(List<CodeCriteria> codeCriterias, SourceRouteOverrideRule sourceRule, Dictionary<string, CodeGroup> codeGroups)
         {
             CarrierAccount customer;
             if (!_allCarrierAccounts.TryGetValue(sourceRule.CustomerId, out customer))
@@ -357,16 +365,20 @@ namespace TOne.WhS.DBSync.Business
             }
             else
             {
+                CodeCriteriaGroupSettings codeCriteriaGroupSettings = null;
+                CountryCriteriaGroupSettings countryCriteriaGroupSettings = null;
+
+                int? countryId;
+                if (IsRouteOverrideRuleByCountry(sourceRule, codeGroups, out countryId))
+                    countryCriteriaGroupSettings = new SelectiveCountryCriteriaGroup { CountryIds = new List<int>() { countryId.Value } };
+                else
+                    codeCriteriaGroupSettings = new SelectiveCodeCriteriaGroup { Codes = codeCriterias };
+
                 RouteRuleCriteria routeRuleCriteria = new RouteRuleCriteria
                 {
-                    CodeCriteriaGroupSettings = new SelectiveCodeCriteriaGroup
-                    {
-                        Codes = codeCriterias,
-                    },
-                    CustomerGroupSettings = new SelectiveCustomerGroup
-                    {
-                        CustomerIds = new List<int>() { customer.CarrierAccountId },
-                    }
+                    CountryCriteriaGroupSettings = countryCriteriaGroupSettings,
+                    CodeCriteriaGroupSettings = codeCriteriaGroupSettings,
+                    CustomerGroupSettings = new SelectiveCustomerGroup { CustomerIds = new List<int>() { customer.CarrierAccountId }, }
                 };
 
                 if (sourceRule.ExcludedCodesList != null && sourceRule.ExcludedCodesList.Count > 0)
@@ -374,6 +386,21 @@ namespace TOne.WhS.DBSync.Business
 
                 return routeRuleCriteria;
             }
+        }
+
+        bool IsRouteOverrideRuleByCountry(SourceRouteOverrideRule sourceRouteOverrideRule, Dictionary<string, CodeGroup> codeGroups, out int? countryId)
+        {
+            countryId = default(int);
+
+            if (!sourceRouteOverrideRule.IncludeSubCode)
+                return false;
+
+            CodeGroup codeGroup;
+            if (!codeGroups.TryGetValue(sourceRouteOverrideRule.Code, out codeGroup))
+                return false;
+
+            countryId = codeGroup.CountryId;
+            return true;
         }
 
         #endregion

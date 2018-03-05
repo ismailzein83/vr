@@ -11,11 +11,8 @@ namespace TOne.WhS.DBSync.Entities
 {
     public class SourceRule : ISourceItem
     {
-        public string SourceId
-        {
-            get;
-            set;
-        }
+        public string SourceId { get; set; }
+
         public Rule Rule { get; set; }
     }
 }

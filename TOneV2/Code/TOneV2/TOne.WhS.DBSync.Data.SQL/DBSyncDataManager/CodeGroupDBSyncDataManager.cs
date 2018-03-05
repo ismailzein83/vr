@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Entities;
 using Vanrise.Data.SQL;
-
 
 namespace TOne.WhS.DBSync.Data.SQL
 {
@@ -14,6 +12,7 @@ namespace TOne.WhS.DBSync.Data.SQL
         string _TableName = Vanrise.Common.Utilities.GetEnumDescription(DBTableName.CodeGroup);
         string _Schema = "TOneWhS_BE";
         bool _UseTempTables;
+
         public CodeGroupDBSyncDataManager(bool useTempTables) :
             base(GetConnectionStringName("TOneWhS_BE_DBConnStringKey", "TOneWhS_BE_DBConnString"))
         {
@@ -46,8 +45,16 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public Dictionary<string, CodeGroup> GetCodeGroups(bool useTempTables)
         {
-            return GetItemsText(string.Format("SELECT [ID], [CountryID], [Code],[Name], [SourceID] FROM {0} where sourceid is not null",
-                 MigrationUtils.GetTableName(_Schema, _TableName, useTempTables)), CodeGroupMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+            return GetItemsText(string.Format("SELECT [ID], [CountryID], [Code], [Name], [SourceID] FROM {0} where sourceid is not null",
+                        MigrationUtils.GetTableName(_Schema, _TableName, useTempTables)), CodeGroupMapper, cmd => { }).ToDictionary(x => x.SourceId, x => x);
+        }
+
+        public Dictionary<string, CodeGroup> GetSingleCodeGroupContriesCodeGroups()
+        {
+            string inlineQuery = @"SELECT [ID], [CountryID], [Code], [Name], [SourceID] FROM {0}
+	                               Where [CountryID] in (select [CountryID] FROM {0} group by [CountryID] having count(*) = 1)";
+
+            return GetItemsText(string.Format(inlineQuery, MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables)), CodeGroupMapper, cmd => { }).ToDictionary(itm => itm.Code, itm => itm);
         }
 
         public CodeGroup CodeGroupMapper(IDataReader reader)
