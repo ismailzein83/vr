@@ -32,7 +32,7 @@ namespace Vanrise.Security.Business
             UserManager manager = new UserManager();
             User user = manager.GetUserbyEmail(email);
             if (user != null && user.IsSystemUser)
-                throw new Exception("Cannot login using System User");
+                throw new Exception("Can not login using System Account");
 
             AuthenticateOperationOutput<AuthenticationToken> authenticationOperationOutput = new AuthenticateOperationOutput<AuthenticationToken>();
             authenticationOperationOutput.Result = AuthenticateOperationResult.Failed;
