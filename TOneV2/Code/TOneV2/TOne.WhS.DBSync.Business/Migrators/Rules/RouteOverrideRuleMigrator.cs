@@ -37,15 +37,13 @@ namespace TOne.WhS.DBSync.Business
 
         public override IEnumerable<SourceRule> GetSourceRules()
         {
-            List<SourceRule> routeRules = new List<SourceRule>();
-
             SourceRouteOverrideRuleDataManager dataManager = new SourceRouteOverrideRuleDataManager(Context.MigrationContext.ConnectionString, Context.MigrationContext.EffectiveAfterDate, Context.MigrationContext.OnlyEffective);
             var overrideRules = dataManager.GetRouteOverrideRules();
 
+            List<SourceRule> routeRules = new List<SourceRule>();
             routeRules.Add(GetDefaultRule());
             routeRules.AddRange(GetRulesWithCode(overrideRules.Where(o => !o.SaleZoneId.HasValue)));
             routeRules.AddRange(GetRulesWithZone(overrideRules.Where(o => o.SaleZoneId.HasValue)));
-
             return routeRules;
         }
 
@@ -245,6 +243,7 @@ namespace TOne.WhS.DBSync.Business
                 return details;
             }
         }
+
         RouteRuleCriteria GetRuleZoneCriteria(List<long> lstZoneIds, SourceRouteOverrideRule sourceRule)
         {
             CarrierAccount customer;
@@ -288,6 +287,7 @@ namespace TOne.WhS.DBSync.Business
             }
             return routeRules;
         }
+
         SourceRule GetSourceRuleFromCodes(IEnumerable<SourceRouteOverrideRule> rules)
         {
             SourceRouteOverrideRule sourceRule = rules.First();
@@ -310,6 +310,7 @@ namespace TOne.WhS.DBSync.Business
                 };
             }
         }
+
         RouteRule GetRuleDetailsFromCode(IEnumerable<SourceRouteOverrideRule> rules, SourceRouteOverrideRule sourceRule)
         {
             var criteria = GetRuleCodeCriteria(GetRuleCodeCriterias(rules), sourceRule);
@@ -329,6 +330,7 @@ namespace TOne.WhS.DBSync.Business
                 return details;
             }
         }
+
         List<CodeCriteria> GetRuleCodeCriterias(IEnumerable<SourceRouteOverrideRule> rules)
         {
             List<CodeCriteria> criterias = new List<CodeCriteria>();
@@ -344,6 +346,7 @@ namespace TOne.WhS.DBSync.Business
             }
             return criterias;
         }
+
         RouteRuleCriteria GetRuleCodeCriteria(List<CodeCriteria> codeCriterias, SourceRouteOverrideRule sourceRule)
         {
             CarrierAccount customer;
