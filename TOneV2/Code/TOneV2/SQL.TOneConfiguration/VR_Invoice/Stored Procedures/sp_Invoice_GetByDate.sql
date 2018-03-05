@@ -3,13 +3,18 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE [VR_Invoice].sp_Invoice_GetByDate
+CREATE PROCEDURE [VR_Invoice].[sp_Invoice_GetByDate]
 	@InvoiceTypeId uniqueidentifier,
-	@PartnerId varchar(50),
+	@PartnerIds nvarchar(MAX),
 	@FromDate datetime,
 	@ToDate datetime
 AS
 BEGIN
+	    DECLARE @PartnerIdsTable TABLE (PartnerId varchar(50))
+		INSERT INTO @PartnerIdsTable (PartnerId)
+		select ParsedString from [VR_Invoice].[ParseStringList](@PartnerIds)
+
+
 	SELECT	vrIn.ID,
 			vrIn.InvoiceTypeID,
 			vrIn.PartnerID,SerialNumber,
@@ -30,7 +35,7 @@ BEGIN
 			vrIn.SentDate
 	FROM	VR_Invoice.Invoice vrIn with(nolock)  
 	where	vrIn.InvoiceTypeId = @InvoiceTypeId AND  
-			vrIn.PartnerID = @PartnerId AND 
+			vrIn.PartnerID  IN (select PartnerId from @PartnerIdsTable) AND 
 			vrIn.FromDate < @ToDate  AND 
 			vrIn.ToDate > @FromDate AND
 			ISNULL(vrIn.IsDeleted,0) = 0 AND 

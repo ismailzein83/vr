@@ -40,13 +40,14 @@ end
 begin
 set nocount on;
 set identity_insert [sec].[User] on;
-;with cte_data([ID],[Name],[Password],[Email],[TenantId])
+;with cte_data([ID],[Name],[Password],[Email],[TenantId],[Description],[IsSystemUser])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,'Administrator','9se8222byLvgU9Bzln+oPVZAblIhczMtIT8hLVNhMXQ=','admin@vanrise.com',1),
-(-1,'Support','FY5vaAn+kWWvh6cgCgfysC0R+27O0Do=','support@vanrise.com',1)
+(-999,'System Account',null,'System Account',1,'this User is used as System account for System tasks', 1),
+(1,'Administrator','9se8222byLvgU9Bzln+oPVZAblIhczMtIT8hLVNhMXQ=','admin@vanrise.com',1,null, null),
+(-1,'Support','FY5vaAn+kWWvh6cgCgfysC0R+27O0Do=','support@vanrise.com',1,null, null)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Password],[Email],[TenantId]))
+)c([ID],[Name],[Password],[Email],[TenantId],[Description],[IsSystemUser]))
 merge	[sec].[User] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
@@ -54,8 +55,8 @@ on		1=1 and t.[ID] = s.[ID]
 --	update set
 --	[Name] = s.[Name],[Password] = s.[Password],[Email] = s.[Email]
 when not matched by target then
-	insert([ID],[Name],[Password],[Email],[TenantId])
-	values(s.[ID],s.[Name],s.[Password],s.[Email],s.[TenantId]);
+	insert([ID],[Name],[Password],[Email],[TenantId],[Description],[IsSystemUser])
+	values(s.[ID],s.[Name],s.[Password],s.[Email],s.[TenantId],s.[Description],s.[IsSystemUser]);
 set identity_insert [sec].[User] off;
 ----------------------------------------------------------------------------------------------------
 end

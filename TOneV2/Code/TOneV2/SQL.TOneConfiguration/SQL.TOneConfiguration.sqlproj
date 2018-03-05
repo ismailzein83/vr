@@ -215,8 +215,6 @@
     <Build Include="dbo\Stored Procedures\LKUPtable_GenerateMergeScript.sql" />
     <Build Include="common\Tables\CurrencyExchangeRate.sql" />
     <Build Include="common\Tables\Currency.sql" />
-    <Build Include="sec\Stored Procedures\sp_User_GetById.sql" />
-    <Build Include="sec\Stored Procedures\sp_User_GetByEmail.sql" />
     <Build Include="sec\Stored Procedures\sp_User_CheckUserName.sql" />
     <Build Include="sec\Stored Procedures\sp_Group_Get.sql" />
     <Build Include="sec\Stored Procedures\sp_Group_CreateTempByName.sql" />
