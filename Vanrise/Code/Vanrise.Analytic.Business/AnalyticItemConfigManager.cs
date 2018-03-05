@@ -341,6 +341,7 @@ namespace Vanrise.Analytic.Business
                 case AnalyticItemType.Join: data = GetCachedAnalyticItemConfigs<AnalyticJoinConfig>(tableId, itemType).FindRecord(x => x.AnalyticItemConfigId == analyticItemConfigId); break;
                 case AnalyticItemType.Measure: data = GetCachedAnalyticItemConfigs<AnalyticMeasureConfig>(tableId, itemType).FindRecord(x => x.AnalyticItemConfigId == analyticItemConfigId); break;
                 case AnalyticItemType.Aggregate: data = GetCachedAnalyticItemConfigs<AnalyticAggregateConfig>(tableId, itemType).FindRecord(x => x.AnalyticItemConfigId == analyticItemConfigId); break;
+                case  AnalyticItemType.MeasureExternalSource: data = GetCachedAnalyticItemConfigs<AnalyticMeasureExternalSourceConfig>(tableId, itemType).FindRecord(x => x.AnalyticItemConfigId == analyticItemConfigId); break;
             }
             return data;
         }
@@ -391,7 +392,16 @@ namespace Vanrise.Analytic.Business
                     }
                     data = aggregates;
                     break;
-
+                case AnalyticItemType.MeasureExternalSource:
+                    List<AnalyticItemConfig<AnalyticMeasureExternalSourceConfig>> measureExternalSources = new List<AnalyticItemConfig<AnalyticMeasureExternalSourceConfig>>();
+                    foreach (Guid tableId in tableIds)
+                    {
+                        var obj = GetCachedAnalyticItemConfigs<AnalyticMeasureExternalSourceConfig>(tableId, itemType).ToList();
+                        RemoveCommonItemsInList(obj, measureExternalSources);
+                        measureExternalSources.AddRange(obj);
+                    }
+                    data = measureExternalSources;
+                    break;
 
             }
             return data;
