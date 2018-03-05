@@ -47,7 +47,7 @@ namespace TOne.WhS.BusinessEntity.Business
             var salePriceListManager = new SalePriceListManager();
             var saleZoneManager = new SaleZoneManager();
 
-            foreach (SaleRate rate in rates)
+            foreach (SaleRate rate in rates.OrderBy(x => x.BED))
             {
                 SalePriceList priceList = salePriceListManager.GetPriceList(rate.PriceListId);
                 priceList.ThrowIfNull("priceList");
