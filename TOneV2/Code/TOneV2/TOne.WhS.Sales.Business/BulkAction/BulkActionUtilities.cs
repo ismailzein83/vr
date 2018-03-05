@@ -35,5 +35,10 @@ namespace TOne.WhS.Sales.Business
                 throw new DataIntegrityValidationException(string.Format("Missing sale zone with Id {0}", zoneId));
             return contextZoneItem;
         }
+
+        public static string GetZoneNameKey(string importedZoneName)
+        {
+            return (importedZoneName != null) ? importedZoneName.Trim().ToLower() : null;
+        }
     }
 }
