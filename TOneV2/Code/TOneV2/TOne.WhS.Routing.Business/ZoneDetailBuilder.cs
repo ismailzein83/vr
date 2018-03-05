@@ -208,8 +208,10 @@ namespace TOne.WhS.Routing.Business
                         supplierRate.ThrowIfNull("supplierRate", supplierZone.SupplierZoneId);
 
                         int currencyId = output.GetRecordValue("SupplierCurrencyId");
+                        decimal rateValue = output.GetRecordValue("EffectiveRate");
+
                         //rateValue = decimal.Round(currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, currencyEffectiveDate), 8);
-                        decimal rateValue = currencyExchangeRateManager.ConvertValueToCurrency(supplierRate.Rate, currencyId, systemCurrencyId, currencyEffectiveDate);
+                        rateValue = currencyExchangeRateManager.ConvertValueToCurrency(rateValue, currencyId, systemCurrencyId, currencyEffectiveDate);
 
                         SupplierZoneDetail supplierZoneDetail = new SupplierZoneDetail
                         {
