@@ -76,7 +76,10 @@ namespace TOne.WhS.Sales.MainExtensions
                 currentZoneRP = context.GetCurrentSellingProductZoneRP(context.OwnerId, context.SaleZone.SaleZoneId);
             }
 
-            if (IsDuplicateRoutingProduct(currentZoneRP))
+            if (currentZoneRP == null)
+                throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Zone '{0}' does neither has an explicit nor an inherited routing product", context.SaleZone.Name));
+
+            if (IsDuplicateRoutingProduct(currentZoneRP, context.OwnerType))
                 return false;
 
             if (!_rpZoneRelationType.HasValue)
@@ -113,8 +116,8 @@ namespace TOne.WhS.Sales.MainExtensions
         }
 
         public override void ApplyBulkActionToZoneDraft(IApplyBulkActionToZoneDraftContext context)
-        {    
-            var zoneItem =  context.GetZoneItem(context.ZoneDraft.ZoneId);
+        {
+            var zoneItem = context.GetZoneItem(context.ZoneDraft.ZoneId);
             var BEDs = new List<DateTime?>();
             var zoneBED = zoneItem.ZoneBED;
             var countryBED = zoneItem.CountryBED;
@@ -171,9 +174,13 @@ namespace TOne.WhS.Sales.MainExtensions
             return null;
         }
 
-        private bool IsDuplicateRoutingProduct(SaleEntityZoneRoutingProduct currentZoneRP)
+        private bool IsDuplicateRoutingProduct(SaleEntityZoneRoutingProduct currentZoneRP, SalePriceListOwnerType ownerType)
         {
-            return (currentZoneRP != null && currentZoneRP.RoutingProductId == RoutingProductId);
+            if (ownerType == SalePriceListOwnerType.SellingProduct && currentZoneRP.Source != SaleEntityZoneRoutingProductSource.ProductZone)
+                return false;
+            if (ownerType == SalePriceListOwnerType.Customer && currentZoneRP.Source != SaleEntityZoneRoutingProductSource.CustomerZone)
+                return false;
+            return (currentZoneRP.RoutingProductId == RoutingProductId);
         }
 
         #endregion

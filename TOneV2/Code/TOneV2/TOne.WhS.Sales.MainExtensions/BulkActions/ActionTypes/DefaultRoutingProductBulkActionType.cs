@@ -52,7 +52,7 @@ namespace TOne.WhS.Sales.MainExtensions
             if (context.ZoneDraft != null && context.ZoneDraft.NewRoutingProduct != null)
                 return;
             ZoneItem contextZoneItem = context.GetContextZoneItem(context.ZoneItem.ZoneId);
-            if (contextZoneItem.CurrentRoutingProductId.HasValue && contextZoneItem.IsCurrentRoutingProductEditable.Value)
+            if (contextZoneItem.CurrentRoutingProductId.HasValue && contextZoneItem.IsCurrentRoutingProductEditable.Value && (context.ZoneDraft == null || context.ZoneDraft.RoutingProductChange == null))
                 return;
 
             if (DefaultRoutingProductId.HasValue)
