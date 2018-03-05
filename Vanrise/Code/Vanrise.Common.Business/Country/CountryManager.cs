@@ -373,6 +373,24 @@ namespace Vanrise.Common.Business
             return countries.MapRecords(x => x.CountryId);
         }
 
+        public string GetDescription(IEnumerable<int> countryIds)
+        {
+            if (countryIds == null)
+                return null;
+
+            IEnumerable<Country> countries = GetCountriesByCountryIds(countryIds);
+            if (countries == null)
+                return null;
+
+            return string.Join(", ", countries.Select(x => x.Name));
+        }
+
+        public IEnumerable<CountryCriteriaGroupConfig> GetCountryCriteriaGroupTemplates()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<CountryCriteriaGroupConfig>(CountryCriteriaGroupConfig.EXTENSION_TYPE);
+        }
+
         #endregion
 
         #region Private Classes

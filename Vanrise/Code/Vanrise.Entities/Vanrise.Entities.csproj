@@ -72,6 +72,12 @@
     <Compile Include="ComponentType\VRComponentTypeQuery.cs" />
     <Compile Include="ComponentType\VRComponentTypeSettings.cs" />
     <Compile Include="Country\CountryFilter.cs" />
+    <Compile Include="Country\Criteria\CountryCriteriaGroupConfig.cs" />
+    <Compile Include="Country\Criteria\CountryCriteriaGroupSettings.cs" />
+    <Compile Include="Country\Criteria\ICountryCriteriaGroupContext.cs" />
+    <Compile Include="Country\Criteria\IRuleCountryTarget.cs" />
+    <Compile Include="Country\Criteria\IRuleCountryCriteria.cs" />
+    <Compile Include="Country\Criteria\CountryCriteria.cs" />
     <Compile Include="DataRetrieval\RemoteExcelResult.cs" />
     <Compile Include="EntityFilterEffectiveMode.cs" />
     <Compile Include="Enumeration.cs" />

@@ -1,0 +1,10 @@
+﻿<vr-row removeline>
+    <vr-columns width="1/4row">
+        <vr-select datatextfield="Title" datavaluefield="ExtensionConfigurationId" label="Filter Type" datasource="countryGroupTemplates" text="None"
+                   selectedvalues="selectedCountryGroupTemplate" on-ready="onCountryGroupSelectorReady">
+        </vr-select>
+    </vr-columns>
+    <span vr-loader="isLoadingCountryGroupDirective">
+        <vr-directivewrapper directive="selectedCountryGroupTemplate.Editor" on-ready="onCountryGroupDirectiveReady" normal-col-num="8"></vr-directivewrapper>
+    </span>
+</vr-row>

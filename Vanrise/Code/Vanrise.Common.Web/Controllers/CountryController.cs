@@ -112,5 +112,12 @@ namespace Vanrise.Common.Web.Controllers
            return  manager.GetCountriesByCountryIds(countryIds);
         }
 
+        [HttpGet]
+        [Route("GetCountryCriteriaGroupTemplates")]
+        public IEnumerable<CountryCriteriaGroupConfig> GetCountryCriteriaGroupTemplates()
+        {
+            CountryManager manager = new CountryManager();
+            return manager.GetCountryCriteriaGroupTemplates();
+        }
 	}
 }

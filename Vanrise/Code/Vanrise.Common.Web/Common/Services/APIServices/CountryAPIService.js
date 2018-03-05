@@ -16,9 +16,9 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetFilteredCountries"), input);
         }
         function GetCountriesInfo(filter) {
-        	return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetCountriesInfo"), {
-        		filter: filter
-        	});
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetCountriesInfo"), {
+                filter: filter
+            });
         }
         function GetCountry(countryId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetCountry"), {
@@ -57,7 +57,7 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "UploadCountries"), { fileId: fileId });
         }
         function GetCountriesByCountryIds(countryIds) {
-            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetCountriesByCountryIds"),countryIds);
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetCountriesByCountryIds"), countryIds);
         }
         function HasAddCountryPermission() {
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['AddCountry']));
@@ -75,7 +75,9 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VRCommon_ModuleConfig.moduleName, controllerName, ['UpdateCountry']));
         }
 
-        
+        function GetCountryCriteriaGroupTemplates() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetCountryCriteriaGroupTemplates"));
+        }
 
         return ({
             GetFilteredCountries: GetFilteredCountries,
@@ -92,7 +94,8 @@
             HasDownloadCountryPermission: HasDownloadCountryPermission,
             HasEditCountryPermission: HasEditCountryPermission,
             GetCountryHistoryDetailbyHistoryId: GetCountryHistoryDetailbyHistoryId,
-            GetCountriesByCountryIds: GetCountriesByCountryIds
+            GetCountriesByCountryIds: GetCountriesByCountryIds,
+            GetCountryCriteriaGroupTemplates: GetCountryCriteriaGroupTemplates
         });
     }
 

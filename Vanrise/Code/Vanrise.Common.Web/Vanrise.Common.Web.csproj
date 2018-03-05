@@ -223,6 +223,10 @@
     <Content Include="Common\Directives\ActionAudit\vr-common-actionaudit-search.js" />
     <Content Include="Common\Directives\ActionAudit\vr-common-actionauditlkup-selector.js" />
     <Content Include="Common\Directives\BankDetail\vr-common-bank-detail-selector.js" />
+    <Content Include="Common\Directives\Country\MainExtensions\Criteria\Templates\SelectiveCountryCriteriaDirectiveTemplate.html" />
+    <Content Include="Common\Directives\Country\MainExtensions\Criteria\vr-common-country-countrycriteriagroup-selective.js" />
+    <Content Include="Common\Directives\Country\Templates\CountryCriteriaDirectiveTemplate.html" />
+    <Content Include="Common\Directives\Country\vr-common-country-countrycriteriagroup.js" />
     <Content Include="Common\Directives\GATechnicalSettings\Templates\GATemplateSettings.html" />
     <Content Include="Common\Directives\GATechnicalSettings\vr-common-ga-settings-editor.js" />
     <Content Include="Common\Directives\Gender\vr-common-gender-selector.js" />
