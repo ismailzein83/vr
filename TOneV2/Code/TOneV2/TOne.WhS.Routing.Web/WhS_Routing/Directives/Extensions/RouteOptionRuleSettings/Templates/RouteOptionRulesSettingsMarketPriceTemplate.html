@@ -1,31 +1,29 @@
-﻿<vr-section title="Currency">
-    <vr-common-currency-selector on-ready="ctrl.onCurrencySelectorReady" selectedvalues="scopeModel.currencySelectedValues" isrequired="true" normal-col-num="3"></vr-common-currency-selector>
-</vr-section>
-<vr-section title="Market Prices">
-    <div>
-        <vr-row removeline>
-            <vr-columns width="fullrow" simplecol>
-                <vr-button type="Add" data-onclick="ctrl.onAddMarketPrice" standalone></vr-button>
-            </vr-columns>
-        </vr-row>
-        <vr-row>
-            <vr-columns width="fullrow">
+﻿<vr-section title="Market Prices">
+    <vr-row>
+        <vr-common-currency-selector on-ready="ctrl.onCurrencySelectorReady" selectedvalues="scopeModel.currencySelectedValues" isrequired="true" normal-col-num="3"></vr-common-currency-selector>
+    </vr-row>
+    <vr-row removeline>
+        <vr-columns width="fullrow" simplecol>
+            <vr-button type="Add" data-onclick="ctrl.onAddMarketPrice" standalone></vr-button>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="fullrow">
 
-                <vr-validator validate="ctrl.onValidateMarketPrice()">
-                    <vr-datagrid on-ready="ctrl.onGridReady"
-                                 datasource="ctrl.marketPrices"
-                                 menuactions="ctrl.menuActions"
-                                 ondeleterow="ctrl.onDeleteMarketPrice"
-                                 enabledraggablerow="true"
-                                 hidegridmenu>
+            <vr-validator validate="ctrl.onValidateMarketPrice()">
+                <vr-datagrid on-ready="ctrl.onGridReady"
+                             datasource="ctrl.marketPrices"
+                             menuactions="ctrl.menuActions"
+                             ondeleterow="ctrl.onDeleteMarketPrice"
+                             enabledraggablerow="true"
+                             hidegridmenu>
 
-                        <vr-datagridcolumn headertext="'Services'" type="'Text'" field="'ServiceNames'" widthfactor="1" disablesorting></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'From Price'" type="'Text'" field="'Minimum'" widthfactor="1" disablesorting></vr-datagridcolumn>
-                        <vr-datagridcolumn headertext="'To Price'" type="'Text'" field="'Maximum'" widthfactor="1" disablesorting></vr-datagridcolumn>
-                    </vr-datagrid>
-                </vr-validator>
+                    <vr-datagridcolumn headertext="'Services'" type="'Text'" field="'ServiceNames'" widthfactor="1" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'From Price'" type="'Text'" field="'Minimum'" widthfactor="1" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'To Price'" type="'Text'" field="'Maximum'" widthfactor="1" disablesorting></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-validator>
 
-            </vr-columns>
-        </vr-row>
-    </div>
+        </vr-columns>
+    </vr-row>
 </vr-section>
