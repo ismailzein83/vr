@@ -24,6 +24,9 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             var countryData = context.Target as CountryData;
 
+            if (!countryData.IsCountryNew)
+                return true;
+
             if (countryData.ZoneDataByZoneId == null || countryData.ZoneDataByZoneId.Count == 0)
                 return true;
 
@@ -32,9 +35,6 @@ namespace TOne.WhS.Sales.Business.BusinessRules
 
             foreach (DataByZone zoneData in countryData.ZoneDataByZoneId.Values)
             {
-                if (!zoneData.IsCustomerCountryNew.HasValue || !zoneData.IsCustomerCountryNew.Value)
-                    continue;
-
                 DateTime validRateBED = Vanrise.Common.Utilities.Max(countryData.CountryBED, zoneData.BED);
 
                 if (zoneData.NormalRateToChange != null && zoneData.NormalRateToChange.BED != validRateBED)

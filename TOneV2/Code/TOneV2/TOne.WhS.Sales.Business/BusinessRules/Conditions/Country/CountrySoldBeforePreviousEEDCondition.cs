@@ -27,7 +27,7 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             var countryManager = new Vanrise.Common.Business.CountryManager();
 
             IRatePlanContext ratePlanContext = context.GetExtension<IRatePlanContext>();
-            Dictionary<int, DateTime> lastCountryEEDByCountryIds = GetLastCountryEEDByCountryId(ratePlanContext.OwnerId, allCustomerCountriesToAdd.CustomerCountriesToAdd.MapRecords(x => x.CountryId));
+            Dictionary<int, DateTime> lastCountryEEDByCountryIds = GetLastCountryEEDByCountryId(ratePlanContext.OwnerId, allCustomerCountriesToAdd.CustomerCountriesToAdd.MapRecords(x => x.CountryId), ratePlanContext.DateFormat);
 
             if (lastCountryEEDByCountryIds.Count == 0)
                 return true;
@@ -57,17 +57,23 @@ namespace TOne.WhS.Sales.Business.BusinessRules
         }
 
         #region Private Methods
-        private Dictionary<int, DateTime> GetLastCountryEEDByCountryId(int customerId, IEnumerable<int> countryIds)
+        private Dictionary<int, DateTime> GetLastCountryEEDByCountryId(int customerId, IEnumerable<int> countryIds, string dateFormat)
         {
             var lastCountryEEDByCountryIds = new Dictionary<int, DateTime>();
             IEnumerable<CustomerCountry2> customerCountries = new CustomerCountryManager().GetAllCustomerCountriesByCountryIds(customerId, countryIds);
+
+            var countryManager = new Vanrise.Common.Business.CountryManager();
 
             if (customerCountries != null)
             {
                 foreach (CustomerCountry2 customerCountry in customerCountries.OrderByDescending(x => x.BED))
                 {
-                    if (!customerCountry.EED.HasValue || lastCountryEEDByCountryIds.ContainsKey(customerCountry.CountryId))
+                    if (!customerCountry.EED.HasValue)
+                        throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Can not sell country '{0}' that's already been sold on '{1}' if it's not been ended yet", countryManager.GetCountryName(customerCountry.CountryId), customerCountry.BED.ToString(dateFormat)));
+
+                    if (lastCountryEEDByCountryIds.ContainsKey(customerCountry.CountryId))
                         continue;
+
                     lastCountryEEDByCountryIds.Add(customerCountry.CountryId, customerCountry.EED.Value);
                 }
             }
