@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class QualityConfigurationInfoFilter
+    public class QualityConfigurationDefinition : Vanrise.Entities.VRComponentType<QualityConfigurationDefinitionSettings>
     {
     }
 }
