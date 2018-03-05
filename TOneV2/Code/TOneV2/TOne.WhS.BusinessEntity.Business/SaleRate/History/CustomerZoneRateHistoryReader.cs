@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
@@ -12,15 +13,21 @@ namespace TOne.WhS.BusinessEntity.Business
     public class CustomerZoneRateHistoryReader
     {
         #region Fields
-        private Dictionary<int, SaleEntityRates> _productRatesByProductId;
-        private Dictionary<int, SaleEntityRates> _customerRatesByCustomerId;
+        private Dictionary<int, SaleEntityRates> _productRatesByProductId = new Dictionary<int, SaleEntityRates>();
+        private Dictionary<int, SaleEntityRates> _customerRatesByCustomerId = new Dictionary<int, SaleEntityRates>();
+
+        SaleZoneManager _saleZoneManager = new SaleZoneManager();
+        SalePriceListManager _salePriceListManager = new SalePriceListManager();
         #endregion
 
         #region Constructors
         public CustomerZoneRateHistoryReader(IEnumerable<int> customerIds, IEnumerable<int> sellingProductIds, IEnumerable<long> zoneIds, bool getNormalRates, bool getOtherRates)
         {
-            InitializeFields();
             ReadRates(customerIds, sellingProductIds, zoneIds, getNormalRates, getOtherRates);
+        }
+        public CustomerZoneRateHistoryReader(IEnumerable<SaleRate> productRates, IEnumerable<SaleRate> customerRates)
+        {
+            StructureRates(productRates, customerRates);
         }
         #endregion
 
@@ -36,11 +43,6 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         #region Private Methods
-        private void InitializeFields()
-        {
-            _productRatesByProductId = new Dictionary<int, SaleEntityRates>();
-            _customerRatesByCustomerId = new Dictionary<int, SaleEntityRates>();
-        }
         private void ReadRates(IEnumerable<int> customerIds, IEnumerable<int> sellingProductIds, IEnumerable<long> zoneIds, bool getNormalRates, bool getOtherRates)
         {
             IEnumerable<SaleRate> rates = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>().GetAllSaleRatesByOwners(sellingProductIds, customerIds, zoneIds, getNormalRates, getOtherRates);
@@ -51,19 +53,41 @@ namespace TOne.WhS.BusinessEntity.Business
             if (rates == null || rates.Count() == 0)
                 return;
 
-            var saleZoneManager = new SaleZoneManager();
-            var salePriceListManager = new SalePriceListManager();
-
             foreach (SaleRate rate in rates.OrderBy(x => x.BED))
             {
-                SalePriceList salePriceList = salePriceListManager.GetPriceList(rate.PriceListId);
+                SalePriceList salePriceList = _salePriceListManager.GetPriceList(rate.PriceListId);
                 salePriceList.ThrowIfNull("salePriceList");
 
                 Dictionary<int, SaleEntityRates> saleEntityRatesBySaleEntityId = (salePriceList.OwnerType == SalePriceListOwnerType.SellingProduct) ? _productRatesByProductId : _customerRatesByCustomerId;
-
-                SaleEntityRates saleEntityRates = saleEntityRatesBySaleEntityId.GetOrCreateItem(salePriceList.OwnerId, () => { return new SaleEntityRates(); });
-                saleEntityRates.AddZoneRate(saleZoneManager.GetSaleZoneName(rate.ZoneId), rate);
+                AddZoneRate(saleEntityRatesBySaleEntityId, salePriceList.OwnerId, rate);
             }
+        }
+        private void StructureRates(IEnumerable<SaleRate> productRates, IEnumerable<SaleRate> customerRates)
+        {
+            if (productRates != null && productRates.Count() > 0)
+            {
+                foreach (SaleRate productRate in productRates.OrderBy(x => x.BED))
+                {
+                    SalePriceList salePriceList = _salePriceListManager.GetPriceList(productRate.PriceListId);
+                    salePriceList.ThrowIfNull("salePriceList");
+                    AddZoneRate(_productRatesByProductId, salePriceList.OwnerId, productRate);
+                }
+            }
+
+            if (customerRates != null && customerRates.Count() > 0)
+            {
+                foreach (SaleRate customerRate in customerRates.OrderBy(x => x.BED))
+                {
+                    SalePriceList salePriceList = _salePriceListManager.GetPriceList(customerRate.PriceListId);
+                    salePriceList.ThrowIfNull("salePriceList");
+                    AddZoneRate(_customerRatesByCustomerId, salePriceList.OwnerId, customerRate);
+                }
+            }
+        }
+        private void AddZoneRate(Dictionary<int, SaleEntityRates> saleEntityRatesByEntityId, int saleEntityId, SaleRate saleRate)
+        {
+            SaleEntityRates saleEntityRates = saleEntityRatesByEntityId.GetOrCreateItem(saleEntityId, () => { return new SaleEntityRates(); });
+            saleEntityRates.AddZoneRate(_saleZoneManager.GetSaleZoneName(saleRate.ZoneId), saleRate);
         }
         #endregion
     }
