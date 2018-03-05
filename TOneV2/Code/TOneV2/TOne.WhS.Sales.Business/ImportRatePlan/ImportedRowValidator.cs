@@ -33,51 +33,47 @@ namespace TOne.WhS.Sales.Business
             if (context.ImportedRows == null || context.ImportedRows.Count() == 0)
                 return;
 
-            var importedZones = new Dictionary<string, ImportedZone>();
-            var duplicatedZones = new Dictionary<string, ImportedZone>();
+            var importedRowsByZoneName = new Dictionary<string, List<ImportedRowWrapper>>();
+            var duplicateZoneNameKeys = new HashSet<string>();
 
             for (int i = 0; i < context.ImportedRows.Count(); i++)
             {
                 ImportedRow importedRow = context.ImportedRows.ElementAt(i);
 
-                if (importedRow.Zone == null)
+                if (string.IsNullOrWhiteSpace(importedRow.Zone))
                     continue;
 
-                string zoneName = importedRow.Zone.ToLower();
+                List<ImportedRowWrapper> zoneImportedRows;
+                string zoneNameKey = BulkActionUtilities.GetZoneNameKey(importedRow.Zone);
 
-                ImportedZone importedZone;
-
-                if (!importedZones.TryGetValue(zoneName, out importedZone))
+                if (!importedRowsByZoneName.TryGetValue(zoneNameKey, out zoneImportedRows))
                 {
-                    importedZone = new ImportedZone() { ZoneName = zoneName };
-                    importedZones.Add(zoneName, importedZone);
+                    zoneImportedRows = new List<ImportedRowWrapper>();
+                    importedRowsByZoneName.Add(zoneNameKey, zoneImportedRows);
+                }
+                else
+                {
+                    duplicateZoneNameKeys.Add(zoneNameKey);
                 }
 
-                importedZone.RowIndexes.Add(i);
-                importedZone.ImportedRows.Add(importedRow);
-
-                if (importedZone.RowIndexes.Count > 1)
-                {
-                    if (!duplicatedZones.ContainsKey(zoneName))
-                    {
-                        duplicatedZones.Add(zoneName, importedZone);
-                    }
-                }
+                zoneImportedRows.Add(new ImportedRowWrapper() { RowIndex = i, ImportedRow = importedRow });
             }
 
             var invalidImportedRows = new List<InvalidImportedRow>();
 
-            foreach (ImportedZone duplicatedZone in duplicatedZones.Values)
+            foreach (string duplicateZoneNameKey in duplicateZoneNameKeys)
             {
-                for (int i = 0; i < duplicatedZone.ImportedRows.Count; i++)
+                long? importedZoneId = GetSaleZoneId(context.SaleZonesByZoneName, duplicateZoneNameKey);
+                IEnumerable<ImportedRowWrapper> zoneImportedRows = importedRowsByZoneName.GetRecord(duplicateZoneNameKey);
+
+                foreach (ImportedRowWrapper zoneImportedRow in zoneImportedRows)
                 {
-                    ImportedRow importedRow = duplicatedZone.ImportedRows.ElementAt(i);
                     invalidImportedRows.Add(new InvalidImportedRow()
                     {
-                        RowIndex = duplicatedZone.RowIndexes.ElementAt(i),
-                        ZoneId = GetSaleZoneId(context.SaleZonesByZoneName, duplicatedZone.ZoneName),
-                        ImportedRow = importedRow,
-                        ErrorMessage = string.Format("Zone '{0}' is duplicated", importedRow.Zone)
+                        RowIndex = zoneImportedRow.RowIndex,
+                        ZoneId = importedZoneId,
+                        ImportedRow = zoneImportedRow.ImportedRow,
+                        ErrorMessage = string.Format("Zone '{0}' is duplicated", zoneImportedRow.ImportedRow.Zone)
                     });
                 }
             }
@@ -128,27 +124,18 @@ namespace TOne.WhS.Sales.Business
 
         #region Private Members
 
-        private class ImportedZone
-        {
-            public ImportedZone()
-            {
-                RowIndexes = new List<int>();
-                ImportedRows = new List<ImportedRow>();
-            }
-
-            public string ZoneName { get; set; }
-
-            public List<int> RowIndexes { get; set; }
-
-            public List<ImportedRow> ImportedRows { get; set; }
-        }
-
         private long? GetSaleZoneId(Dictionary<string, SaleZone> saleZonesByZoneName, string saleZoneName)
         {
             SaleZone saleZone = saleZonesByZoneName.GetRecord(saleZoneName);
             if (saleZone == null)
                 return null;
             return saleZone.SaleZoneId;
+        }
+
+        private class ImportedRowWrapper
+        {
+            public int RowIndex { get; set; }
+            public ImportedRow ImportedRow { get; set; }
         }
 
         #endregion

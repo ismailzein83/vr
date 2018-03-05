@@ -77,8 +77,7 @@ namespace TOne.WhS.Sales.MainExtensions
 
         public override bool IsApplicableToZone(IActionApplicableToZoneContext context)
         {
-            ImportedDataValidationResult cachedValidationData = GetOrCreateObject();
-            return cachedValidationData.ValidDataByZoneId.ContainsKey(context.SaleZone.SaleZoneId);
+            return true;
         }
 
         public override void ApplyBulkActionToZoneItem(IApplyBulkActionToZoneItemContext context)
@@ -100,6 +99,9 @@ namespace TOne.WhS.Sales.MainExtensions
         {
             ImportedDataValidationResult cachedValidationData = GetOrCreateObject();
             ImportedRow importedRow = cachedValidationData.ValidDataByZoneId.GetRecord(zoneId);
+
+            if (importedRow == null)
+                return zoneDraftNewRates;
 
             var newRates = new List<DraftRateToChange>();
 

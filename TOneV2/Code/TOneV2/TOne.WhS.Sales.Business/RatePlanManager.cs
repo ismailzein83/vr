@@ -886,9 +886,9 @@ namespace TOne.WhS.Sales.Business
             for (int i = 0; i < importedRows.Count(); i++)
             {
                 ImportedRow importedRow = importedRows.ElementAt(i);
-                string zoneName = (importedRow.Zone != null) ? importedRow.Zone.ToLower() : null;
+                string zoneName = (importedRow.Zone != null) ? BulkActionUtilities.GetZoneNameKey(importedRow.Zone) : null;
 
-                if (zoneName != null && importedFileValidationContext.InvalidImportedRows.FindRecord(x => x.ImportedRow.Zone.ToLower() == zoneName) != null)
+                if (zoneName != null && importedFileValidationContext.InvalidImportedRows.FindRecord(x => BulkActionUtilities.GetZoneNameKey(x.ImportedRow.Zone) == zoneName) != null)
                     continue;
 
                 var context = new IsImportedRowValidContext()
@@ -912,6 +912,7 @@ namespace TOne.WhS.Sales.Business
                     {
                         RowIndex = i,
                         ImportedRow = importedRow,
+                        ZoneId = context.ExistingZone.SaleZoneId,
                         ErrorMessage = context.ErrorMessage
                     });
                 }
@@ -1474,7 +1475,7 @@ namespace TOne.WhS.Sales.Business
             {
                 foreach (SaleZone saleZone in saleZones)
                 {
-                    string saleZoneName = saleZone.Name.Trim().ToLower();
+                    string saleZoneName = BulkActionUtilities.GetZoneNameKey(saleZone.Name);
                     if (!saleZonesByName.ContainsKey(saleZoneName))
                         saleZonesByName.Add(saleZoneName, saleZone);
                 }
