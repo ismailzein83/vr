@@ -71,6 +71,9 @@
     <Reference Include="Vanrise.Common.Business">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.MainExtensions">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.MainExtensions.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
