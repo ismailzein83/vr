@@ -21,69 +21,66 @@ namespace TOne.WhS.Sales.MainExtensions
 
         public override IEnumerable<long> GetApplicableZoneIds(IApplicableZoneIdsContext context)
         {
+            if (context.SaleZones == null || context.SaleZones.Count() == 0)
+                throw new Vanrise.Entities.MissingArgumentValidationException("saleZones");
+
             var applicableZoneIds = new List<long>();
-            if (CountryZonesByCountry != null && CountryZonesByCountry.Count > 0)
+
+            Func<int, long, bool, SaleEntityZoneRate> getSellingProductZoneRate;
+            Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate;
+            Func<int, long, SaleEntityZoneRoutingProduct> getSellingProductZoneCurrentRP;
+            Func<int, int, long, SaleEntityZoneRoutingProduct> getCustomerZoneCurrentRP;
+            Dictionary<int, DateTime> countryBEDsByCountryId;
+            Dictionary<int, DateTime> countryEEDsByCountryId;
+
+            UtilitiesManager.SetBulkActionContextHelpers(context.OwnerType, context.OwnerId, context.GetSellingProductZoneRate, context.GetCustomerZoneRate, out getSellingProductZoneRate, out getCustomerZoneRate, out getSellingProductZoneCurrentRP, out getCustomerZoneCurrentRP, out countryBEDsByCountryId, out countryEEDsByCountryId);
+
+            Func<SaleZone, bool> filterFunc = (saleZone) =>
             {
-                var ratePlanManager = new RatePlanManager();
-                int sellingNumberPlanId = ratePlanManager.GetOwnerSellingNumberPlanId(context.OwnerType, context.OwnerId);
-                IEnumerable<SaleZone> ownerSaleZones = ratePlanManager.GetSaleZones(context.OwnerType, context.OwnerId, DateTime.Today, true);
+                CountryZones countryZones;
 
-                if (ownerSaleZones != null)
+                if (CountryZonesByCountry != null && CountryZonesByCountry.TryGetValue(saleZone.CountryId, out countryZones))
                 {
-                    Func<int, long, bool, SaleEntityZoneRate> getSellingProductZoneRate;
-                    Func<int, int, long, bool, SaleEntityZoneRate> getCustomerZoneRate;
-                    Func<int, long, SaleEntityZoneRoutingProduct> getSellingProductZoneCurrentRP;
-                    Func<int, int, long, SaleEntityZoneRoutingProduct> getCustomerZoneCurrentRP;
-                    Dictionary<int, DateTime> countryBEDsByCountryId;
-                    Dictionary<int, DateTime> countryEEDsByCountryId;
-
-                    UtilitiesManager.SetBulkActionContextHelpers(context.OwnerType, context.OwnerId, context.GetSellingProductZoneRate, context.GetCustomerZoneRate, out getSellingProductZoneRate, out getCustomerZoneRate, out getSellingProductZoneCurrentRP, out getCustomerZoneCurrentRP, out countryBEDsByCountryId, out countryEEDsByCountryId);
-
-                    var excludedSaleZoneIds = new List<long>();
-                    foreach (CountryZones countryZones in CountryZonesByCountry.Values)
-                    {
-                        if (countryZones.ExcludedZoneIds != null)
-                            excludedSaleZoneIds.AddRange(countryZones.ExcludedZoneIds);
-                    }
-                    IEnumerable<SaleZone> saleZonesByCountryIds = ownerSaleZones.FindAllRecords(x =>
-                    {
-                        if (!CountryZonesByCountry.Keys.Contains(x.CountryId))
-                            return false;
-                        if (excludedSaleZoneIds.Contains(x.SaleZoneId))
-                            return false;
-                        return true;
-                    });
-                    foreach (SaleZone saleZone in saleZonesByCountryIds)
-                    {
-                        var isActionApplicableToZoneInput = new BulkActionApplicableToZoneInput()
-                        {
-                            OwnerType = context.OwnerType,
-                            OwnerId = context.OwnerId,
-                            SaleZone = saleZone,
-                            BulkAction = context.BulkAction,
-                            Draft = context.DraftData,
-                            GetCurrentSellingProductZoneRP = getSellingProductZoneCurrentRP,
-                            GetCurrentCustomerZoneRP = getCustomerZoneCurrentRP,
-                            GetSellingProductZoneRate = getSellingProductZoneRate,
-                            GetCustomerZoneRate = getCustomerZoneRate,
-                            CountryBEDsByCountryId = countryBEDsByCountryId,
-                            CountryEEDsByCountryId = countryEEDsByCountryId
-                        };
-                        if (UtilitiesManager.IsActionApplicableToZone(isActionApplicableToZoneInput))
-                            applicableZoneIds.Add(saleZone.SaleZoneId);
-                    }
+                    if (countryZones.ExcludedZoneIds != null && countryZones.ExcludedZoneIds.Contains(saleZone.SaleZoneId))
+                        return false;
                 }
+                else if (IncludedZoneIds != null && !IncludedZoneIds.Contains(saleZone.SaleZoneId))
+                    return false;
+
+                return true;
+            };
+
+            IEnumerable<SaleZone> filteredZones = context.SaleZones.FindAllRecords(filterFunc);
+
+            foreach (SaleZone saleZone in filteredZones)
+            {
+                var isActionApplicableToZoneInput = new BulkActionApplicableToZoneInput()
+                {
+                    OwnerType = context.OwnerType,
+                    OwnerId = context.OwnerId,
+                    SaleZone = saleZone,
+                    BulkAction = context.BulkAction,
+                    Draft = context.DraftData,
+                    GetCurrentSellingProductZoneRP = getSellingProductZoneCurrentRP,
+                    GetCurrentCustomerZoneRP = getCustomerZoneCurrentRP,
+                    GetSellingProductZoneRate = getSellingProductZoneRate,
+                    GetCustomerZoneRate = getCustomerZoneRate,
+                    CountryBEDsByCountryId = countryBEDsByCountryId,
+                    CountryEEDsByCountryId = countryEEDsByCountryId
+                };
+
+                if (UtilitiesManager.IsActionApplicableToZone(isActionApplicableToZoneInput))
+                    applicableZoneIds.Add(saleZone.SaleZoneId);
             }
-            if (IncludedZoneIds != null && IncludedZoneIds.Count() > 0)
-                applicableZoneIds.AddRange(IncludedZoneIds);
+
             return applicableZoneIds;
         }
+    }
 
-        public class CountryZones
-        {
-            public int CountryId { get; set; }
+    public class CountryZones
+    {
+        public int CountryId { get; set; }
 
-            public IEnumerable<long> ExcludedZoneIds { get; set; }
-        }
+        public IEnumerable<long> ExcludedZoneIds { get; set; }
     }
 }

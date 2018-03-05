@@ -21,6 +21,9 @@ namespace TOne.WhS.Sales.MainExtensions
 
         public override IEnumerable<long> GetApplicableZoneIds(IApplicableZoneIdsContext context)
         {
+            if (context.SaleZones == null || context.SaleZones.Count() == 0)
+                throw new Vanrise.Entities.MissingArgumentValidationException("saleZones");
+
             var applicableZoneIds = new List<long>();
 
             Func<int, long, bool, SaleEntityZoneRate> getSellingProductZoneRate;
@@ -32,19 +35,25 @@ namespace TOne.WhS.Sales.MainExtensions
 
             UtilitiesManager.SetBulkActionContextHelpers(context.OwnerType, context.OwnerId, context.GetSellingProductZoneRate, context.GetCustomerZoneRate, out getSellingProductZoneRate, out getCustomerZoneRate, out getSellingProductZoneCurrentRP, out getCustomerZoneCurrentRP, out countryBEDsByCountryId, out countryEEDsByCountryId);
 
-            foreach (SaleZone saleZone in context.SaleZones)
+            Func<SaleZone, bool> filterFunc = (saleZone) =>
             {
-                if (ExceptZoneIds.Contains(saleZone.SaleZoneId))
-                    continue;
-
                 CountryZones exceptCountryZones;
 
                 if (ExceptCountryZones != null && ExceptCountryZones.TryGetValue(saleZone.CountryId, out exceptCountryZones))
                 {
                     if (exceptCountryZones.ExcludedZoneIds == null || !exceptCountryZones.ExcludedZoneIds.Contains(saleZone.SaleZoneId))
-                        continue;
+                        return false;
                 }
+                else if (ExceptZoneIds.Contains(saleZone.SaleZoneId))
+                    return false;
 
+                return true;
+            };
+
+            IEnumerable<SaleZone> filteredZones = context.SaleZones.FindAllRecords(filterFunc);
+
+            foreach (SaleZone saleZone in filteredZones)
+            {
                 var isActionApplicableToZoneInput = new BulkActionApplicableToZoneInput()
                 {
                     OwnerType = context.OwnerType,
@@ -60,20 +69,11 @@ namespace TOne.WhS.Sales.MainExtensions
                     CountryEEDsByCountryId = countryEEDsByCountryId
                 };
 
-                if (!UtilitiesManager.IsActionApplicableToZone(isActionApplicableToZoneInput))
-                    continue;
-
-                applicableZoneIds.Add(saleZone.SaleZoneId);
+                if (UtilitiesManager.IsActionApplicableToZone(isActionApplicableToZoneInput))
+                    applicableZoneIds.Add(saleZone.SaleZoneId);
             }
 
             return applicableZoneIds;
-        }
-
-        public class CountryZones
-        {
-            public int CountryId { get; set; }
-
-            public IEnumerable<long> ExcludedZoneIds { get; set; }
         }
     }
 }
