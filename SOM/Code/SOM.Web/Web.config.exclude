@@ -24,12 +24,11 @@
   </vanriseLogging>
 
   <connectionStrings>
-    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=SOM_Dev_Configuration;User ID=development;Password=dev!123;" />
-    <add name="SOMDBConnString" connectionString="Data Source=localhost;Initial Catalog=SOM_Dev;User ID=development;Password=dev!123;" providerName="System.Data.SqlClient" />
+    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=SOM_Configuration;User ID=sa;Password=" />
     <add name="MainDBConnString" connectionString=""/>
 
-    <add name="LogDBConnString" connectionString="Initial Catalog=SOM_Dev_Logging;Data Source=localhost;User ID=sa; Password=p@ssw0rd" />
-    <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=SOM_Dev_Transaction;User ID=sa; Password=p@ssw0rd" />
+    <add name="LogDBConnString" connectionString="Initial Catalog=SOM_Logging;Data Source=localhost;User ID=sa; Password=" />
+    <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=SOM_Transaction;User ID=sa; Password=" />
   </connectionStrings>
   
   <appSettings>
@@ -61,10 +60,9 @@
     <add key="RulesDBConnStringKey" value="ConfigurationDBConnString" />
     <add key="LoggingConfigDBConnStringKey" value="ConfigurationDBConnString" />
     
-    <add key="SOM_DBConnStringKey" value="SOMDBConnString" />
+    <add key="SOM_DBConnStringKey" value="ConfigurationDBConnString" />
     <add key="SOMTransaction_DBConnStringKey" value="TransactionDBConnString" />
-    <add key="ExposedConnectionStringNames" value="" />
-    
+    <add key="ExposedConnectionStringNames" value="" />    
   </appSettings>
   
   <system.web>
