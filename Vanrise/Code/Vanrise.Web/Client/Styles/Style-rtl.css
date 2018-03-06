@@ -23,6 +23,11 @@
      margin-right : unset;
      margin-left : 10px;
 }
+
+.rtl .spaced-item>span:first-of-type{
+    padding-right : unset;
+    padding-left:5px;
+}
 /* start main-menu*/
 
 @media (min-width: 768px) {

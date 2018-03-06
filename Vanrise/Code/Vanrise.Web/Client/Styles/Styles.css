@@ -31,6 +31,9 @@
 .spaced-item{
     margin-right : 10px;
 }
+.spaced-item>span:first-of-type{
+    padding-right : 5px;
+}
 .pin-icon {
     font-size: 17px;
     margin: 6px 4px;
