@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
+using Vanrise.Common;
+using Vanrise.Security.Data.SQL;
+using Vanrise.Data.RDB;
 
 namespace Retail.Runtime.Tasks
 {
@@ -16,6 +19,9 @@ namespace Retail.Runtime.Tasks
       
         public void Execute()
         {
+            //TestAppDomain();
+            //Console.ReadKey();
+            //TestRDBSelectQuery();
             //var analyticTableMeasureExternalSource =
             //    new Vanrise.Analytic.Entities.AnalyticMeasureExternalSourceConfig
             //    {
@@ -82,7 +88,8 @@ namespace Retail.Runtime.Tasks
             //    originatorNumber = Console.ReadLine();
             //    batchSize = int.Parse(Console.ReadLine());
             //}
-
+            DateTime date = DateTime.Now;
+            new DateTime(date.Year, date.Month, date.Day, date.Hour, date.Minute, date.Second);
             Vanrise.Common.Business.OverriddenConfigurationManager overriddenConfigurationManager = new Vanrise.Common.Business.OverriddenConfigurationManager();
             var zajilScript = overriddenConfigurationManager.GenerateOverriddenConfigurationGroupScript(new Guid("CF1EAF73-93DB-416F-92FC-F8C0E7EE6EA7"));
             var multinetScript = overriddenConfigurationManager.GenerateOverriddenConfigurationGroupScript(new Guid("D79E9957-3EA5-49C1-AEDB-15F251BEDCDC"));
@@ -96,9 +103,18 @@ namespace Retail.Runtime.Tasks
             runtimeServices.Add(queueRegulatorService);
 
             QueueActivationRuntimeService queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(queueActivationService); queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(queueActivationService); queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(queueActivationService); queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(queueActivationService); queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(queueActivationService); queueActivationService = new QueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(queueActivationService);
 
             SummaryQueueActivationRuntimeService summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(summaryQueueActivationService); summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(summaryQueueActivationService); summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(summaryQueueActivationService); summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            runtimeServices.Add(summaryQueueActivationService); summaryQueueActivationService = new SummaryQueueActivationRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(summaryQueueActivationService);
 
             SchedulerService schedulerService = new SchedulerService() { Interval = new TimeSpan(0, 0, 1) };
@@ -145,6 +161,166 @@ namespace Retail.Runtime.Tasks
 
             Console.WriteLine("DONE");
             Console.ReadKey();
+        }
+
+        RDBTableDefinition _userTable = new RDBTableDefinition
+        {
+            DBSchemaName = "sec",
+            DBTableName = "User",
+            IdColumnName = "ID",
+            Columns = new Dictionary<string, RDBTableColumnDefinition>
+            {
+                  {"ID", new RDBTableColumnDefinition { DBColumnName = "DBID", DataType = RDBDataType.Int}},
+                  {"Name", new RDBTableColumnDefinition { DBColumnName = "DBName", DataType = RDBDataType.NVarchar, Size = 255}},
+                   {"GroupID", new RDBTableColumnDefinition { DBColumnName = "DBGroupID", DataType = RDBDataType.Int}},
+                   {"Age", new RDBTableColumnDefinition { DBColumnName = "DBAge", DataType = RDBDataType.Decimal, Size=20, Precision = 8}},
+                   {"CityID", new RDBTableColumnDefinition { DBColumnName = "DBCityID", DataType = RDBDataType.Int}},
+                   {"Email", new RDBTableColumnDefinition { DBColumnName = "DBEmail", DataType = RDBDataType.NVarchar, Size = 255}}
+            }
+        };
+
+        RDBTableDefinition _groupTable = new RDBTableDefinition
+        {
+            DBSchemaName = "sec",
+            DBTableName = "Group",
+            IdColumnName = "ID",
+            Columns = new Dictionary<string, RDBTableColumnDefinition>
+            {
+                  {"ID", new RDBTableColumnDefinition { DBColumnName = "DBID", DataType = RDBDataType.Int}},
+                  {"Name", new RDBTableColumnDefinition { DBColumnName = "DBName", DataType = RDBDataType.NVarchar, Size = 255}}
+            }
+        };
+
+        void TestRDBSelectQuery()
+        {
+            RDBSchemaManager.Current.RegisterDefaultTableDefinition("SEC_User", _userTable);
+            RDBSchemaManager.Current.RegisterDefaultTableDefinition("SEC_Group", _groupTable);
+            RDBSchemaManager.Current.OverrideTableInfo(new Vanrise.Data.RDB.DataProvider.Providers.MSSQLRDBDataProvider().UniqueName, "SEC_User", null, "[User]");
+            int? id = 6;
+
+            var dataProvider = new Vanrise.Data.RDB.DataProvider.Providers.MSSQLRDBDataProvider("Data Source=.;Initial Catalog=test;User ID=sa; Password=p@ssw0rd");
+            Dictionary<string, Object> parameterValues;
+
+            Dictionary<string, Object> outputParameters;
+
+            var nbOfRows = new RDBQueryContext(dataProvider).Insert().IntoTable("SEC_User").GenerateIdAndAssignToParameter("UserId").ColumnValue("Name", "Ismail").EndInsert().ExecuteNonQuery(out outputParameters);
+
+            var selectQuery = new RDBQueryContext(dataProvider).Select().FromTable("SEC_User")
+                .Join().JoinOnEqualOtherTableColumn("SEC_Group", "ID", "SEC_User", "GroupID").EndJoin()
+                .Where().And()
+                            .ConditionIf(() => id.HasValue, (conditionContext) => conditionContext.EqualsCondition("ID", 5))
+                            .EqualsCondition("Name", "5dddd")
+                            .Or()
+                                .ConditionIf(() => id.HasValue, (conditionContext) => conditionContext.EqualsCondition("SEC_Group", "ID", 3))
+                                .EqualsCondition("SEC_Group", "ID", 4)
+                                .ConditionIf(() => id.HasValue, (conditionContext) => conditionContext.EqualsCondition("SEC_Group", "ID", id.Value))
+                                .ConditionIfNotDefaultValue(DateTime.Now, (conditionContext) => conditionContext.EqualsCondition("Name", "fdsgf"))
+                                .ContainsCondition("Name", "sa")
+                            .EndOr()
+                            .CompareCondition("Age", RDBCompareConditionOperator.GEq, 45)
+                            .ListCondition("CityID", RDBListConditionOperator.IN, new List<int> { 3, 5, 7, 85, 6, 5 })
+                            .ListCondition("Name", RDBListConditionOperator.NotIN, new List<string> { "Admin", "Sales", "Billing", "Technical" })
+                        .EndAnd()
+                .SelectColumns().Columns("ID", "Name").Column("SEC_Group", "Name", "GroupName").EndColumns().EndSelect();
+
+
+            var resolvedSelectquery = selectQuery.GetResolvedQuery();
+
+            var insertQuery = new RDBQueryContext(dataProvider).Insert().IntoTable("SEC_User")
+                .IfNotExists().EqualsCondition("Email", "test@nodomain.com")
+                .GenerateIdAndAssignToParameter("UserId").ColumnValue("Name", "test").ColumnValue("Email", "test@nodomain.com").ColumnValue("GroupID", 5).EndInsert();
+            var resolvedInsertQuery = insertQuery.GetResolvedQuery();
+
+
+            var updateQuery = new RDBQueryContext(dataProvider).Update().FromTable("SEC_User")
+            .IfNotExists().And().CompareCondition("ID", RDBCompareConditionOperator.NEq, 5).EqualsCondition("Email", "test@nodomain.com").EndAnd()
+            .Where().EqualsCondition("ID", 5)
+            .ColumnValue("Name", "test").ColumnValue("Email", "test@nodomain.com").ColumnValue("GroupID", 5).EndUpdate()
+            ;
+            var resolvedUpdateQuery = updateQuery.GetResolvedQuery();
+
+            Dictionary<string, RDBTableColumnDefinition> tempUserColumns = new Dictionary<string, RDBTableColumnDefinition>
+            {
+                {"ID", new RDBTableColumnDefinition { DBColumnName = "DBID", DataType = RDBDataType.Int}},
+                  {"Name", new RDBTableColumnDefinition { DBColumnName = "DBName", DataType = RDBDataType.NVarchar, Size = 255}},
+                   {"GroupID", new RDBTableColumnDefinition { DBColumnName = "DBGroupID", DataType = RDBDataType.Int}},
+                   {"Age", new RDBTableColumnDefinition { DBColumnName = "DBAge", DataType = RDBDataType.Decimal, Size=20, Precision = 8}},
+                   {"CityID", new RDBTableColumnDefinition { DBColumnName = "DBCityID", DataType = RDBDataType.Int}},
+                   {"Email", new RDBTableColumnDefinition { DBColumnName = "DBEmail", DataType = RDBDataType.NVarchar, Size = 255}}
+            };
+
+            var tempUserTable = new RDBTempTableQuery(tempUserColumns);
+
+           var batchQuery = new RDBQueryContext(dataProvider)
+               .StartBatchQuery()
+                    .AddQuery().CreateTempTable(tempUserTable)
+                    .AddQuery().Insert().IntoTable(tempUserTable).ColumnValue("ID", 2).ColumnValue("GroupID", 4).ColumnValue("Age", 34).EndInsert()
+                    .AddQuery().Insert().IntoTable(tempUserTable).ColumnValue("ID", 4).ColumnValue("GroupID", 5).ColumnValue("Age", 32).EndInsert()
+                    .AddQuery().Insert().IntoTable(tempUserTable).ColumnValue("ID", 3).ColumnValue("GroupID", 4).ColumnValue("Age", 22).EndInsert()
+                    .AddQuery().Insert().IntoTable(tempUserTable).ColumnValue("ID", 5).ColumnValue("GroupID", 4).ColumnValue("Age", 57).EndInsert()
+                    .AddQuery().Update().FromTable("SEC_User")
+                                .Join().JoinOnEqualOtherTableColumn(tempUserTable, "ID", new RDBTableDefinitionQuerySource("SEC_User"), "ID").EndJoin()
+                                //.ColumnValue("Name", new RDBColumnExpression { Table = tempUserTable, ColumnName = "Name" })
+                                .ColumnValue("GroupID", new RDBColumnExpression { Table = tempUserTable, ColumnName = "GroupID" })
+                                .ColumnValue("Age", new RDBColumnExpression { Table = tempUserTable, ColumnName = "Age" })
+                                .ColumnValue("CityID", new RDBColumnExpression { Table = tempUserTable, ColumnName = "CityID" })
+                                .EndUpdate()
+               .EndBatchQuery()
+                                //.ColumnValue("Email", new RDBColumnExpression { Table = tempUserTable, ColumnName = "Email" })
+                                ;
+
+             var resolvedBatchQuery = batchQuery.GetResolvedQuery();
+
+             var selectQueryWithGrouping = new RDBQueryContext(dataProvider).Select().FromTable("SEC_User")//.StartSelectAggregates().Count("count").Avg("SEC_User", "Age", "AvgAge").EndSelectAggregates()
+                 .GroupBy()
+                     .Select().Column("CityID").Column("GroupID").EndColumns()
+                     .SelectAggregates().Count("Nb").Aggregate(RDBNonCountAggregateType.AVG, "Age", "AvgAge").EndSelectAggregates()
+                     .Having().And().CompareCount(RDBCompareConditionOperator.G, 1).CompareAggregate(RDBNonCountAggregateType.SUM, "Age", RDBCompareConditionOperator.G, 5).EndAnd()
+                 .EndGroupBy()
+                 .Sort().ByColumn("CityID", RDBSortDirection.ASC).ByAlias("AvgAge", RDBSortDirection.DESC).EndSort().EndSelect();
+             var resolvedSelectWithGroupingquery = selectQueryWithGrouping.GetResolvedQuery();
+            Console.ReadKey();
+            //var query = new RDBQueryBuilder().Select().FromTable("User", "u").Columns("ID", "u.Name", "Settings", "g.Name")
+            //    .Join("Group", "g", RDBJoinType.Inner)
+            //    .IntCondition("", RDBConditionOperator.G, 0).And().DecimalCondition("", RDBConditionOperator.G, 3).EndJoin()
+            //    .Where()
+            //    .TextCondition("Name", RDBConditionOperator.Eq, "Sami")
+            //    .And().ConditionGroup().IntCondition("ID", RDBConditionOperator.L, 5).Or().IntCondition("ID", RDBConditionOperator.G, 10).EndConditionGroup()
+            //    .And().DecimalCondition("Age", RDBConditionOperator.G, 24).EndWhere();
+        }
+
+
+        void TestAppDomain()
+        {
+            var domain = AppDomain.CreateDomain("ChildDomain");
+            domain.DomainUnload += domain_DomainUnload;
+            domain.ProcessExit += domain_ProcessExit;
+            domain.UnhandledException += domain_UnhandledException;
+            // use the proper assembly and type name.
+            // child is a remote object here, ChildExample.dll is not loaded into the main domain
+            ChildDomainClass child = domain.CreateInstanceAndUnwrap("Retail.Runtime", "Retail.Runtime.Tasks.ChildDomainClass") as ChildDomainClass;
+            var parentDomainObj = new ParentDomainClass();
+            // pass the host to the child
+            child.Initialize(parentDomainObj);
+            System.Threading.Thread.Sleep(2100);
+            AppDomain.Unload(domain);
+            //// now child can send feedbacks
+            //child.DoSomeChildishJob();
+        }
+
+        static void domain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Console.WriteLine("domain_UnhandledException. {0}", e.ExceptionObject);
+        }
+
+        static void domain_ProcessExit(object sender, EventArgs e)
+        {
+            Console.WriteLine("Process Exit");
+        }
+
+        static void domain_DomainUnload(object sender, EventArgs e)
+        {
+            Console.WriteLine("Domain Unload");
         }
 
         private class TestData : Vanrise.Data.SQL.BaseSQLDataManager
@@ -271,5 +447,35 @@ order by [AttemptDateTime] desc";
             public Object TerminationCallType { get; set; }
         }
     }
-    
+
+    public class ParentDomainClass : MarshalByRefObject
+    {
+        Guid _id;
+        public ParentDomainClass()
+        {
+            _id = Guid.NewGuid();
+            Console.WriteLine("Parent Domain Object created: {0}", _id);
+        }
+
+        public void CallFromChild()
+        {
+            Console.WriteLine("Call from client. Parent Id '{0}'", _id);
+        }
+    }
+
+    public class ChildDomainClass : MarshalByRefObject
+    {
+        ParentDomainClass _parent;
+        public void Initialize(ParentDomainClass parent)
+        {
+            _parent = parent;
+            Task t = new Task(() =>
+            {
+                System.Threading.Thread.Sleep(2000);
+                _parent.CallFromChild();
+            });
+            t.Start();
+        }
+    }
+
 }
