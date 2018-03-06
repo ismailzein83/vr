@@ -54,7 +54,6 @@
   </connectionStrings>
   <appSettings>
     <add key="IsRuntimeService" value="true"/>
-    <add key="EncryptionSecretKey" value="V@nR!se-Se6r3t" />
     
     <add key="RuntimeConnStringKey"                             value="TransactionDBConnString"/>
     <add key="BigDataServiceDBConnStringKey"                    value="TransactionDBConnString"/>
