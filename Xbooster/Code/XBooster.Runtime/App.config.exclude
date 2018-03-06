@@ -47,7 +47,6 @@
     <add name="MainDBConnString" connectionString=""/>    
   </connectionStrings>
   <appSettings>
-    <add key="EncryptionSecretKey" value="V@nR!se-Se6r3t" />
     <add key="IsRuntimeService" value="true"/>
     <add key="BCPTempFilesDirectory"  value="C:\BCPFiles" />
 
