@@ -734,6 +734,8 @@
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_GetByDate.sql" />
     <Build Include="genericdata\Stored Procedures\sp_BusinessEntityStatusHistory_Insert.sql" />
     <Build Include="genericdata\Stored Procedures\sp_BusinessEntityStatusHistory_GetLast.sql" />
+    <Build Include="sec\Tables\EncryptionKey.sql" />
+    <Build Include="sec\Stored Procedures\sp_EncryptionKey_InsertIfNotExistsAndGetEncryptionKey.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
