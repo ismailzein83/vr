@@ -660,7 +660,14 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 var odd = false;
                 ctrl.getCellContainerClass = function (dataItem, colDef) {
                     var object = ctrl.getRowCSSClass(dataItem);
-                    return object == null ? colDef && colDef.cssClass : "";
+                    if (object != null)
+                        return;
+
+                    var index = ctrl.datasource.indexOf(dataItem);
+                    if (index % 2 == 0 && ctrl.layoutOption.alternativeColor == true)
+                        return;
+
+                    return  colDef && colDef.cssClass ;
                 };
 
                 function fixHeaderLayout() {

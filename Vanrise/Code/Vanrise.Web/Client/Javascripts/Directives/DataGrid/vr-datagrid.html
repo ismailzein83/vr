@@ -75,7 +75,7 @@
     <div class="vr-scroll-pager-info" > Total count ({{ctrl.pagerSettings.totalDataCount}})</div>
 </div>
 <div id="rowTemplate">
-    <div style="white-space:nowrap" ng-style="{'background-color': dataItem.isRowExpanded ? '#F5F5F5' : 'Transparent', 'font-weight' :dataItem.isRowExpanded ? 'bolder' : 'normal', 'border-right': '1px solid #D0D0D0', 'border-left': '1px solid #D0D0D0', 'display': 'flex'}">
+    <div style="white-space:nowrap" ng-class="$parent.ctrl.getRowCSSClass(dataItem)" ng-style="{'background-color': dataItem.isRowExpanded ? '#F5F5F5 !important' : '', 'font-weight' :dataItem.isRowExpanded ? 'bolder' : 'normal', 'border-right': '1px solid #D0D0D0', 'border-left': '1px solid #D0D0D0', 'display': 'flex'}">
         <div ng-if="ctrl.showDraggableRowSection && !ctrl.readOnly" ng-style="{'width': $parent.ctrl.draggableRowIconWidth, 'display':'inline-block'}" style="height:24px">
             <i class="glyphicon glyphicon-th-list handeldrag hand-cursor" style="top: calc(50% - 6px); left: 3px"></i>
         </div>
@@ -85,7 +85,7 @@
                 <span class="glyphicon glyphicon-menu-down hand-cursor  grid-expand-collapse-icon" ng-click="$parent.ctrl.collapseRow(dataItem)" ng-show="dataItem.isRowExpanded"></span>
             </div>
         </div>
-        <div ng-style="{'display':'inline-block', 'width': $parent.ctrl.dataColumnsSectionWidth}" class="vr-datagrid-row" ng-click="$parent.ctrl.onRowClicked($event);showMenu=$parent.ctrl.isActionMenuVisible(dataItem) ; " ng-mouseleave="showMenu = false" ng-class="$parent.ctrl.getRowCSSClass(dataItem)">
+        <div ng-style="{'display':'inline-block', 'width': $parent.ctrl.dataColumnsSectionWidth}" class="vr-datagrid-row" ng-click="$parent.ctrl.onRowClicked($event);showMenu=$parent.ctrl.isActionMenuVisible(dataItem) ; " ng-mouseleave="showMenu = false">
             <div ng-class="::$parent.ctrl.isActionMenuVisible(dataItem)?'vr-datagrid-datacells' : ''" vr-htmlcompiler="$parent.ctrl.rowHtml" style="display: flex;"></div>
             <ul role="menu" class="dropdown-menu gid-cell-menu am-fade-and-slide-top" ng-show=" showMenu == true"
                 ng-style="{'position': 'fixed', 'left': ctrl.menuLeft,'top': ctrl.menuTop}">
@@ -100,7 +100,7 @@
             <span ng-style="::$parent.ctrl.cellLayoutStyle" class="span-summary" style="top: 50%; position: absolute; transform: translate(0%,-50%);">  {{ dataItem.actionType}}</span>
         </div>
         <div ng-if="ctrl.showDeleteRowSection &&  !ctrl.readOnly" ng-style="{'width': $parent.ctrl.deleteRowColumnWidth, 'display':'inline-block', 'position':'relative'}">
-            <span class="hand-cursor glyphicon glyphicon-remove vr-remove-row" ng-click="ctrl.deleteRowClicked(dataItem)" ></span>
+            <span class="hand-cursor glyphicon glyphicon-remove vr-remove-row" ng-click="ctrl.deleteRowClicked(dataItem)"></span>
         </div>
     </div>
     <div id="divExpandableRowContent_{{$index}}" ng-show="dataItem.isRowExpanded" style="border-top: 1px solid #D0D0D0; border-right:1px solid #D0D0D0;white-space:nowrap;background-color: #fff;">
