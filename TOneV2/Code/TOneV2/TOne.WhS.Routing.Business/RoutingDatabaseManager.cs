@@ -5,10 +5,11 @@ using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Caching;
 using Vanrise.Common;
+using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.Business
 {
-    public class RoutingDatabaseManager
+    public class RoutingDatabaseManager : IRoutingDatabaseManager
     {
         public IEnumerable<RoutingDatabaseInfo> GetRoutingDatabaseInfo(RoutingDatabaseInfoFilter filter)
         {
@@ -18,9 +19,9 @@ namespace TOne.WhS.Routing.Business
             foreach (RoutingDatabaseType routingDatabaseType in Enum.GetValues(typeof(RoutingDatabaseType)))
             {
                 RoutingDatabase database = GetLatestRoutingDatabase(filter.ProcessType, routingDatabaseType);
-				if (database != null)
+                if (database != null)
                 {
-					var item = RoutingDatabaseInfoMapper(database);
+                    var item = RoutingDatabaseInfoMapper(database);
                     item.Title = routingDatabaseType.ToString();
                     item.Type = database.Type;
                     routingDatabases.Add(item);
@@ -59,6 +60,17 @@ namespace TOne.WhS.Routing.Business
             return dataManager.GetRoutingDatabase(routingDatabaseId);
         }
 
+        public DateTime? GetLatestRoutingDatabaseEffectiveTime(RoutingProcessType routingProcessType, RoutingDatabaseType routingDatabaseType)
+        {
+            var latestRoutingDatabase = GetLatestRoutingDatabase(routingProcessType, routingDatabaseType);
+            DateTime? effectiveTime = latestRoutingDatabase.EffectiveTime;
+
+            if (routingDatabaseType == RoutingDatabaseType.Current && !effectiveTime.HasValue)
+                throw new DataIntegrityValidationException(string.Format("Routing Database with Id {0} of type Current has no effective Time", latestRoutingDatabase.ID));
+
+            return effectiveTime;
+        }
+
         public Dictionary<int, RoutingDatabase> GetNotDeletedDatabases()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetRoutingDatabases",
@@ -87,18 +99,18 @@ namespace TOne.WhS.Routing.Business
         public int CreateDatabase(string name, RoutingDatabaseType type, RoutingProcessType processType, DateTime? effectiveTime, RoutingDatabaseInformation information, RoutingDatabaseSettings settings)
         {
             IRoutingDatabaseDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRoutingDatabaseDataManager>();
-            int databaseId =  dataManager.CreateDatabase(name, type, processType, effectiveTime, information, settings);
+            int databaseId = dataManager.CreateDatabase(name, type, processType, effectiveTime, information, settings);
             CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
             return databaseId;
         }
 
-		public RoutingDatabase GetLatestRoutingDatabase(RoutingProcessType routingProcessType, RoutingDatabaseType routingDatabaseType)
-		{
-			IEnumerable<RoutingDatabase> routingDatabases = GetRoutingDatabasesReady(routingProcessType, routingDatabaseType);
+        public RoutingDatabase GetLatestRoutingDatabase(RoutingProcessType routingProcessType, RoutingDatabaseType routingDatabaseType)
+        {
+            IEnumerable<RoutingDatabase> routingDatabases = GetRoutingDatabasesReady(routingProcessType, routingDatabaseType);
             if (routingDatabases == null || routingDatabases.Count() == 0)
-				return null;
-			return routingDatabases.OrderByDescending(itm => itm.CreatedTime).First();
-		}
+                return null;
+            return routingDatabases.OrderByDescending(itm => itm.CreatedTime).First();
+        }
 
         #region Private Methods
 

@@ -251,5 +251,10 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         {
             throw new NotImplementedException();
         }
+
+        public List<CustomerZoneDetail> GetCustomerZoneDetailsByZoneIdsAndCustomerIds(List<long> saleZoneIds, List<int> customerIds)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

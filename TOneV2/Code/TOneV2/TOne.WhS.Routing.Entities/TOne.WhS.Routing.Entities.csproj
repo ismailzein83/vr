@@ -65,6 +65,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AnalyticMeasureInfo.cs" />
+    <Compile Include="BusinessManagers\IRoutingDatabaseManager.cs" />
+    <Compile Include="BusinessManagers\RoutingManagerFactory.cs" />
+    <Compile Include="BusinessManagers\IRoutingManagerFactory.cs" />
+    <Compile Include="BusinessManagers\ICustomerZoneDetailsManager.cs" />
     <Compile Include="CodeMatches.cs" />
     <Compile Include="CodeMatchesBatch.cs" />
     <Compile Include="CodePrefix.cs" />

@@ -11,6 +11,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public long ZoneId { get; set; }
         public List<CustomerZoneData> CustomerZoneData { get; set; }
         public int SaleCount { get; set; }
+        public  DateTime EffectiveOn { get; set; }
     }
 
     public class CustomerZoneData
@@ -29,6 +30,8 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string Name { get; set; }
         public IEnumerable<CustomerZoneDataDetail> CustomerZones { get; set; }
         public int SaleCount { get; set; }
+        public DateTime EffectiveOn { get; set; }
+
     }
 
     public class CustomerZoneDataDetail

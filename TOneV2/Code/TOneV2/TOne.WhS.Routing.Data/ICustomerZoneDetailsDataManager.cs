@@ -15,5 +15,6 @@ namespace TOne.WhS.Routing.Data
         List<CustomerZoneDetail> GetCustomerZoneDetails(HashSet<CustomerSaleZone> customerSaleZones);
         List<CustomerZoneDetail> GetCustomerZoneDetailsAfterVersionNumber(int versionNumber);
         void UpdateCustomerZoneDetails(List<CustomerZoneDetail> customerZoneDetails);
+        List<CustomerZoneDetail> GetCustomerZoneDetailsByZoneIdsAndCustomerIds(List<long> saleZoneIds, List<int> customerIds);
     }
 }

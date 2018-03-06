@@ -99,6 +99,7 @@
   <ItemGroup>
     <Compile Include="CodeMatchBuilder.cs" />
     <Compile Include="CodeZoneMatchManager.cs" />
+    <Compile Include="CustomerZoneDetailsManager.cs" />
     <Compile Include="QualityConfiguration\QualityConfigurationDefinition\QualityConfigurationDefinitionManager.cs" />
     <Compile Include="QualityConfiguration\QualityConfigurationDefinition\TrafficStatisticExtendedSettings.cs" />
     <Compile Include="SupplierZoneDetailsManager.cs" />

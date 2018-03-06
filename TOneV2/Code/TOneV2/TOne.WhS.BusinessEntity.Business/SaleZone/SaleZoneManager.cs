@@ -160,7 +160,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return saleZones.FindAllRecords(x => x.IsEffective(effectiveOn));
         }
 
-        public IEnumerable<SaleZone> GetSoldZonesBySellingNumberPlan(int sellingNumberPlanId, List<int> countryIds, List<long> zoneIds, string zoneName, DateTime effectiveOn)
+        public List<long> GetSoldZonesBySellingNumberPlan(int sellingNumberPlanId, List<int> countryIds, List<long> zoneIds, string zoneName , DateTime effectiveOn)
         {
             var saleZones =  GetSaleZonesBySellingNumberPlan(sellingNumberPlanId);
            
@@ -177,7 +177,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return true;
             };
 
-            return saleZones.FindAllRecords(filterExpression);
+            return saleZones.FindAllRecords(filterExpression).Select(x=>x.SaleZoneId).Distinct().ToList();
         }
 
         public IEnumerable<SaleZone> GetCustomerSaleZones(int customerId, DateTime? effectiveOn, bool isEffectiveInFuture)

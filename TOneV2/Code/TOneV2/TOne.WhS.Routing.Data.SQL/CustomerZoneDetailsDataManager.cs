@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Text;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
 using Vanrise.Data.SQL;
@@ -96,6 +97,26 @@ namespace TOne.WhS.Routing.Data.SQL
             string query = query_GetCustomerZoneDetails.Replace("#FILTER#", string.Format("WHERE VersionNumber > {0}", versionNumber));
             return GetItemsText(query, CustomerZoneDetailMapper, null);
         }
+
+        public List<CustomerZoneDetail> GetCustomerZoneDetailsByZoneIdsAndCustomerIds(List<long> saleZoneIds, List<int> customerIds)
+        {
+            StringBuilder filter = new StringBuilder();
+
+            if (saleZoneIds != null && saleZoneIds.Count() > 0)
+            {
+                filter.AppendFormat(" WHERE SaleZoneId IN ({0}) ", String.Join(", ", saleZoneIds));
+            }
+
+            if (customerIds != null && customerIds.Count() > 0)
+            {
+                filter.AppendFormat(" {0} CustomerId IN ({1})", filter.Length > 0 ? " AND " : " WHERE ", String.Join(", ", customerIds));
+            }
+            string query = query_GetCustomerZoneDetails.Replace("#FILTER#", filter.ToString());
+            return GetItemsText(query, CustomerZoneDetailMapper, null);
+        }
+
+
+
 
         public void UpdateCustomerZoneDetails(List<CustomerZoneDetail> customerZoneDetails)
         {

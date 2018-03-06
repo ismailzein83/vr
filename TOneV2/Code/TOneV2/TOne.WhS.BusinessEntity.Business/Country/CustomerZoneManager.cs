@@ -313,7 +313,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 if (countriesIds != null && countriesIds.Count > 0 && !countriesIds.Contains(x.CountryId))
                     return false;
-                if (customersIds!=null && customersIds.Count > 0 && !customersIds.Contains(x.CustomerId))
+                if (customersIds != null && customersIds.Count > 0 && !customersIds.Contains(x.CustomerId))
                     return false;
                 if (!x.IsEffectiveOrFuture(effectiveOn))
                     return false;

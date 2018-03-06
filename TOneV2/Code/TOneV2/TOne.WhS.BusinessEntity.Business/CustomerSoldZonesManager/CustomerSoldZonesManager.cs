@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Data;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Routing.Entities;
 using Vanrise.Caching;
 using Vanrise.Caching.Runtime;
 using Vanrise.Common;
@@ -30,8 +31,7 @@ namespace TOne.WhS.BusinessEntity.Business
             private SaleZoneManager _saleZoneManager;
             private SaleCodeManager _saleCodeManager;
             private CurrencyExchangeRateManager _currencyExchangeRateManager;
-            private SaleRateManager _saleRateManager;
-
+            private Vanrise.Common.Business.ConfigManager _configManager;
             #endregion
 
             public CustomerSoldZonesRequestHandler()
@@ -41,82 +41,75 @@ namespace TOne.WhS.BusinessEntity.Business
                 _saleZoneManager = new SaleZoneManager();
                 _saleCodeManager = new SaleCodeManager();
                 _currencyExchangeRateManager = new CurrencyExchangeRateManager();
-                _saleRateManager = new SaleRateManager();
+                _configManager = new Vanrise.Common.Business.ConfigManager();
+
             }
 
             public override IEnumerable<CustomersSoldZone> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<CustomerSoldZonesQuery> input)
             {
                 var customersIds = input.Query.CustomersIds == null ? _carrierAccountManager.GetCustomersIdsAssignedToSellingNumberPlanId(input.Query.SellingNumberPlanId) : input.Query.CustomersIds;
 
+                DateTime? dataBaseEffectiveTime = RoutingManagerFactory.GetManager<IRoutingDatabaseManager>().GetLatestRoutingDatabaseEffectiveTime(RoutingProcessType.CustomerRoute, RoutingDatabaseType.Current);
+
+                DateTime effectiveOn = dataBaseEffectiveTime.Value;
                 if (customersIds.Count == 0)
                     return null;
 
-                var soldCustomersCountries = _customerCountryManager.GetCustomersCountriesEffectiveOrFuture(input.Query.CountriesIds, customersIds, input.Query.EffectiveOn);
+                var soldCustomersCountries = _customerCountryManager.GetCustomersCountriesEffectiveOrFuture(input.Query.CountriesIds, customersIds, effectiveOn);
 
                 if (soldCustomersCountries.Count == 0)
                     return null;
 
                 List<long> filterdZonesIdsByCode = null;
 
-                if(input.Query.Code != null)
+                if (input.Query.Code != null)
                 {
                     filterdZonesIdsByCode = _saleCodeManager.GetSaleZonesIdsByCode(input.Query.Code);
-                    
+
                     if (filterdZonesIdsByCode.Count == 0)
                         return null;
                 }
 
                 var customerCountriesByCountryId = StructureCustomersCountriesByCountryId(soldCustomersCountries);
-                var soldZones = _saleZoneManager.GetSoldZonesBySellingNumberPlan(input.Query.SellingNumberPlanId, customerCountriesByCountryId.Keys.ToList(), filterdZonesIdsByCode, input.Query.ZoneName, input.Query.EffectiveOn);
 
-                var distinctCustomerIds = soldCustomersCountries.Select(x => x.CustomerId).Distinct().ToList();
+                var soldZonesIds = _saleZoneManager.GetSoldZonesBySellingNumberPlan(input.Query.SellingNumberPlanId, customerCountriesByCountryId.Keys.ToList(), filterdZonesIdsByCode, input.Query.ZoneName, effectiveOn);
 
-                var dataByCustomerList = _carrierAccountManager.GetRoutingCustomerInfoDetailsByCustomersIds(distinctCustomerIds);
+                var customerZoneDetails = RoutingManagerFactory.GetManager<ICustomerZoneDetailsManager>().GetCustomerZoneDetailsByZoneIdsAndCustomerIds(soldZonesIds,customersIds);
 
-                var sellingProductByCustomerId = StructureSellingProductByCustomerId(dataByCustomerList);
-
-                var futureRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadLastRateNoCache(dataByCustomerList, input.Query.EffectiveOn));
-                var customerZoneRoutingProductLocator = new SaleEntityZoneRoutingProductLocator(new SaleEntityRoutingProductReadAllNoCache(distinctCustomerIds, input.Query.EffectiveOn, true));
-
+                var customerZoneDetailByZoneId = StructureCustomerZoneDetailByZoneId(customerZoneDetails);
 
                 var customersSoldZone = new List<CustomersSoldZone>();
-                foreach (SaleZone soldZone in soldZones)
+
+                int sysCurrencyId = _configManager.GetSystemCurrencyId();
+
+                foreach (var customerZoneDetail in customerZoneDetailByZoneId)
                 {
                     CustomersSoldZone customerSoldZone = new CustomersSoldZone();
-                    customerSoldZone.ZoneId = soldZone.SaleZoneId;
+
+                    customerSoldZone.ZoneId = customerZoneDetail.Key;
+
+                    customerSoldZone.EffectiveOn = effectiveOn;
 
                     var customerZonesData = new List<CustomerZoneData>();
 
-                    var customerCountriesByZoneCountryId = customerCountriesByCountryId.GetRecord(soldZone.CountryId);
 
-                    foreach (var customerCountry in customerCountriesByZoneCountryId)
+                    foreach (var customerRate in customerZoneDetail.Value)
                     {
-                        int sellingProductId = sellingProductByCustomerId.GetRecord(customerCountry.CustomerId);
-                        var saleRate = futureRateLocator.GetCustomerZoneRate(customerCountry.CustomerId, sellingProductId, soldZone.SaleZoneId);
-                        if (saleRate == null)
-                            throw new DataIntegrityValidationException(string.Format("Zone {0} does neither have an explicit rate nor a default rate set for selling product {1}.", soldZone.SaleZoneId, sellingProductId));
-
-                        SaleEntityZoneRoutingProduct saleEntityZoneRoutingProduct = customerZoneRoutingProductLocator.GetCustomerZoneRoutingProduct(customerCountry.CustomerId, sellingProductId, soldZone.SaleZoneId);
-
-                        if (saleEntityZoneRoutingProduct == null)
-                            throw new DataIntegrityValidationException(string.Format("Customer {0} does not have an explicit routing product.", customerCountry.CustomerId));
-
-                        if (input.Query.RoutingProductsIds != null && input.Query.RoutingProductsIds.Count > 0 && !input.Query.RoutingProductsIds.Contains(saleEntityZoneRoutingProduct.RoutingProductId))
+                      
+                        if (input.Query.RoutingProductsIds != null && input.Query.RoutingProductsIds.Count > 0 && !input.Query.RoutingProductsIds.Contains(customerRate.RoutingProductId))
                             continue;
 
-                        int rateCurrency = _saleRateManager.GetCurrencyId(saleRate.Rate);
 
                         customerZonesData.Add(new CustomerZoneData
                         {
-                            CustomerId = customerCountry.CustomerId,
-                            Rate =_currencyExchangeRateManager.ConvertValueToCurrency(saleRate.Rate.Rate,rateCurrency, input.Query.CurrencyId, saleRate.Rate.BED),
-                            RoutingProductId = saleEntityZoneRoutingProduct.RoutingProductId
+                            CustomerId = customerRate.CustomerId,
+                            Rate = _currencyExchangeRateManager.ConvertValueToCurrency(customerRate.EffectiveRateValue, sysCurrencyId, input.Query.CurrencyId, DateTime.Now),
+                            RoutingProductId = customerRate.RoutingProductId
                         });
                     }
 
-                    customerSoldZone.CustomerZoneData = customerZonesData.OrderBy(x => x.Rate).ThenBy(x=>x.CustomerId).Take(input.Query.Top).ToList();
+                    customerSoldZone.CustomerZoneData = customerZonesData.OrderBy(x => x.Rate).ThenBy(x => x.CustomerId).Take(input.Query.Top).ToList();
                     customerSoldZone.SaleCount = customerZonesData.Count;
-
                     customersSoldZone.Add(customerSoldZone);
                 }
 
@@ -128,13 +121,14 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 var customerSoldZonesDetail = new CustomersSoldZoneDetail();
                 customerSoldZonesDetail.ZoneId = entity.ZoneId;
+                customerSoldZonesDetail.EffectiveOn = entity.EffectiveOn;
                 customerSoldZonesDetail.Name = _saleZoneManager.GetSaleZoneName(entity.ZoneId);
                 customerSoldZonesDetail.SaleCount = entity.SaleCount;
                 customerSoldZonesDetail.CustomerZones = entity.CustomerZoneData.MapRecords(CustomerZoneDataDetailMapper);
                 return customerSoldZonesDetail;
             }
 
-         
+
 
             private CustomerZoneDataDetail CustomerZoneDataDetailMapper(CustomerZoneData customerZoneData)
             {
@@ -168,22 +162,20 @@ namespace TOne.WhS.BusinessEntity.Business
                 return structuredCustomersCountries;
             }
 
-            private Dictionary<int, int> StructureSellingProductByCustomerId(IEnumerable<RoutingCustomerInfoDetails> routingCustomerInfoDetails)
-            {
-                var structuredRoutingCustomerInfoDetails = new Dictionary<int, int>();
+          
 
-                foreach (var routingCustomer in routingCustomerInfoDetails)
+            private Dictionary<long, List<CustomerZoneDetail>> StructureCustomerZoneDetailByZoneId(IEnumerable<CustomerZoneDetail> customerZoneDetails)
+            {
+                var structuredCustomerZoneDetail = new Dictionary<long, List<CustomerZoneDetail>>();
+
+                foreach (var customerZoneDetail in customerZoneDetails)
                 {
-                    int customerId;
-                    if (!structuredRoutingCustomerInfoDetails.TryGetValue(routingCustomer.CustomerId, out customerId))
-                    {
-                        structuredRoutingCustomerInfoDetails.Add(routingCustomer.CustomerId, routingCustomer.SellingProductId);
-                    }
+                    List<CustomerZoneDetail> customerZoneDetailList = structuredCustomerZoneDetail.GetOrCreateItem(customerZoneDetail.SaleZoneId);
+                    customerZoneDetailList.Add(customerZoneDetail);
                 }
 
-                return structuredRoutingCustomerInfoDetails;
+                return structuredCustomerZoneDetail;
             }
-
 
             #endregion
         }
@@ -202,7 +194,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Zone" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Sale Rates" , Width = 200});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Sale Rates", Width = 200 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Count" });
 
 
@@ -215,7 +207,7 @@ namespace TOne.WhS.BusinessEntity.Business
                         {
                             var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
                             sheet.Rows.Add(row);
-                            row.Cells.Add(new ExportExcelCell { Value = record.ZoneId});
+                            row.Cells.Add(new ExportExcelCell { Value = record.ZoneId });
                             row.Cells.Add(new ExportExcelCell { Value = record.Name });
                             row.Cells.Add(new ExportExcelCell { Value = GetCustomerZoneDataDetailsAsString(record.CustomerZones) });
                             row.Cells.Add(new ExportExcelCell { Value = record.SaleCount });

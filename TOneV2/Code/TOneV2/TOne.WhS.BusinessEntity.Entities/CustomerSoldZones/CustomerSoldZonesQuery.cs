@@ -21,9 +21,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public List<int> CustomersIds { get; set; }
 
         public List<int> RoutingProductsIds { get; set; }
-
-        public DateTime EffectiveOn { get; set; }
-
+        
         public int CurrencyId { get; set; }   
 
     }

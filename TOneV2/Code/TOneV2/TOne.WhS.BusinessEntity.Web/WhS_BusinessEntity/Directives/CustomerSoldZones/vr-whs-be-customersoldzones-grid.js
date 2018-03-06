@@ -23,9 +23,6 @@ app.directive("vrWhsBeCustomersoledzonesGrid", ["UtilsService", "VRNotificationS
 
         var gridAPI;
         var gridDrillDownTabsObj;
-
-        var effectiveOn;
-
         function initializeController() {
 
             $scope.customerSoldZones = [];
@@ -55,7 +52,6 @@ app.directive("vrWhsBeCustomersoledzonesGrid", ["UtilsService", "VRNotificationS
             var api = {};
 
             api.loadGrid = function (query) {
-                effectiveOn = query.EffectiveOn;
                 return gridAPI.retrieveData(query);
             };
 
@@ -77,7 +73,7 @@ app.directive("vrWhsBeCustomersoledzonesGrid", ["UtilsService", "VRNotificationS
                     };
                     queryHandler.Query = {
                         ZonesIds: [dataItem.ZoneId],
-                        EffectiveOn: effectiveOn
+                        EffectiveOn: dataItem.EffectiveOn
                     };
                     var saleCodeGridPayload = {
                         queryHandler: queryHandler,

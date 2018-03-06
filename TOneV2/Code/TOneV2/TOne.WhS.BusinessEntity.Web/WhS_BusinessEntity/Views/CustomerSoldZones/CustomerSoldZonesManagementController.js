@@ -133,7 +133,6 @@
                 CountriesIds: countryDirectiveApi.getSelectedIds(),
                 CustomersIds: customerApi.getSelectedIds(),
                 RoutingProductsIds:routingProductApi.getSelectedIds(),
-                EffectiveOn: $scope.scopeModel.effectiveOn,
                 CurrencyId: currencySelectorAPI.getSelectedIds(),
                 Top: $scope.scopeModel.top
             };
