@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BinaryParsers\AlcatelParsers\RecordParsers\HeaderRecordParser.cs" />
+    <Compile Include="BinaryParsers\NokiaSiemensParsers\FieldParsers\ZonePackageParser.cs" />
     <Compile Include="CompositeFieldParsers\DateFromDayNumberCompositeParser.cs" />
     <Compile Include="CompositeFieldParsers\DateTimeCompositeParser.cs" />
     <Compile Include="CompositeFieldParsers\FileNameCompositeParser.cs" />
