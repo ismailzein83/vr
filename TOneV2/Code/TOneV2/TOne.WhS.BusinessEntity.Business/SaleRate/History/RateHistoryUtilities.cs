@@ -103,5 +103,92 @@ namespace TOne.WhS.BusinessEntity.Business
                 return RateChangeType.NotChanged;
         }
         #endregion
+
+        public static List<CustomerCountry2> GetAllCustomerCountries(int customerId, int countryId)
+        {
+            var customerCountryManager = new CustomerCountryManager();
+            IEnumerable<CustomerCountry2> allCustomerCountries = customerCountryManager.GetCustomerCountries(customerId);
+            //ThrowIfNullOrEmpty(allCustomerCountries, "allCustomerCountries");
+
+            if (allCustomerCountries == null || allCustomerCountries.Count() == 0)
+                return null;
+
+            IEnumerable<CustomerCountry2> customerCountries = allCustomerCountries.FindAllRecords(x => x.CountryId == countryId);
+            //ThrowIfNullOrEmpty(customerCountries, "customerCountries");
+
+            if (customerCountries == null || customerCountries.Count() == 0)
+                return null;
+
+            return customerCountries.OrderBy(x => x.BED).ToList();
+        }
+
+        public static void AddProductZoneRateHistory(SaleRateHistoryBySource rateHistoryBySource, int sellingProductId, string zoneName, int? rateTypeId, List<TimeInterval> timeIntervals, CustomerZoneRateHistoryReader reader)
+        {
+            IEnumerable<SaleRate> productZoneRates = reader.GetProductZoneRates(sellingProductId, zoneName, rateTypeId);
+
+            if (productZoneRates == null || productZoneRates.Count() == 0)
+                return;
+
+            var saleRateManager = new SaleRateManager();
+
+            Action<SaleRate, SaleRateHistoryRecord> mapSaleRate = (saleRate, saleRateHistoryRecord) =>
+            {
+                saleRateHistoryRecord.SaleRateId = saleRate.SaleRateId;
+                saleRateHistoryRecord.Rate = saleRate.Rate;
+                saleRateHistoryRecord.PriceListId = saleRate.PriceListId;
+                saleRateHistoryRecord.CurrencyId = saleRateManager.GetCurrencyId(saleRate);
+                saleRateHistoryRecord.SellingProductId = sellingProductId;
+                saleRateHistoryRecord.SourceId = saleRate.SourceId;
+            };
+
+            IEnumerable<SaleRateHistoryRecord> productZoneRateHistory = Utilities.GetQIntersectT(timeIntervals, productZoneRates.ToList(), mapSaleRate);
+
+            if (productZoneRateHistory != null && productZoneRateHistory.Count() > 0)
+                rateHistoryBySource.AddSaleRateHistoryRange(SaleEntityZoneRateSource.ProductZone, productZoneRateHistory);
+        }
+
+        public static void AddCustomerZoneRateHistory(SaleRateHistoryBySource rateHistoryBySource, int customerId, string zoneName, int? rateTypeId, CustomerZoneRateHistoryReader reader)
+        {
+            IEnumerable<SaleRate> customerZoneRates = reader.GetCustomerZoneRates(customerId, zoneName, rateTypeId);
+
+            if (customerZoneRates == null || customerZoneRates.Count() == 0)
+                return;
+
+            var saleRateManager = new SaleRateManager();
+
+            Func<SaleRate, SaleRateHistoryRecord> saleRateMapper = (saleRate) =>
+            {
+                return new SaleRateHistoryRecord()
+                {
+                    SaleRateId = saleRate.SaleRateId,
+                    Rate = saleRate.Rate,
+                    PriceListId = saleRate.PriceListId,
+                    CurrencyId = saleRateManager.GetCurrencyId(saleRate),
+                    SellingProductId = null,
+                    BED = saleRate.BED,
+                    EED = saleRate.EED,
+                    SourceId = saleRate.SourceId
+                };
+            };
+
+            IEnumerable<SaleRateHistoryRecord> customerZoneRateHistory = customerZoneRates.MapRecords(saleRateMapper);
+            rateHistoryBySource.AddSaleRateHistoryRange(SaleEntityZoneRateSource.CustomerZone, customerZoneRateHistory);
+        }
+
+        public static TimeInterval CountryTimeIntervalMapper (CustomerCountry2 customerCountry)
+        {
+            return new TimeInterval()
+            {
+                BED = customerCountry.BED,
+                EED = customerCountry.EED
+            };
+        }
+
+    }
+
+    public class TimeInterval : Vanrise.Entities.IDateEffectiveSettingsEditable
+    {
+        public DateTime BED { get; set; }
+        public DateTime? EED { get; set; }
     }
 }

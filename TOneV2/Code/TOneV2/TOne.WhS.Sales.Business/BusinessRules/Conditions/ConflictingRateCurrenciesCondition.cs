@@ -26,11 +26,13 @@ namespace TOne.WhS.Sales.Business.BusinessRules
             if (ratePlanContext.OwnerType == SalePriceListOwnerType.SellingProduct || countryData.IsCountryNew)
                 return true;
 
+            int sellingProductId = new CarrierAccountManager().GetSellingProductId(ratePlanContext.OwnerId);
+
             string errorMessage;
-            bool doZoneRateCurrenciesConflict = BusinessRuleUtilities.DoZoneRateCurrenciesConflict(countryData, ratePlanContext, out errorMessage);
+            bool areCountryZoneRateCurrenciesValid = BusinessRuleUtilities.ValidateCountryZoneRateCurrencies(countryData, ratePlanContext, sellingProductId, out errorMessage);
 
             context.Message = errorMessage;
-            return !doZoneRateCurrenciesConflict;
+            return areCountryZoneRateCurrenciesValid;
         }
         public override string GetMessage(Vanrise.BusinessProcess.Entities.IRuleTarget target)
         {

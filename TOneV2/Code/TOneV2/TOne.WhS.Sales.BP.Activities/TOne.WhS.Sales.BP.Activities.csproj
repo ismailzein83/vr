@@ -114,7 +114,7 @@
     <Compile Include="ProcessCustomerCountries.cs" />
     <Compile Include="ReadRatePlanContext.cs" />
     <Compile Include="SavePricelistFiles.cs" />
-    <Compile Include="SetContextCustomerZoneRateHistoryLocator.cs" />
+    <Compile Include="SetContextCustomerZoneRateHistoryReader.cs" />
     <Compile Include="SetContextDataByZoneList.cs" />
     <Compile Include="SetContextEffectiveAfterCustomerZoneRatesByZone.cs" />
     <Compile Include="SetContextExistingZonesByCountry.cs" />

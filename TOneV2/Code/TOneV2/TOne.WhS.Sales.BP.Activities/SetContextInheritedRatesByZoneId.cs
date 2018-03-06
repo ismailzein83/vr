@@ -36,6 +36,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
             IEnumerable<SaleRate> rates = new SaleRateManager().GetExistingRatesByZoneIds(SalePriceListOwnerType.SellingProduct, sellingProductId, saleZoneIds, minimumDate);
             ratePlanContext.InheritedRatesByZoneId = StructureRatesByZoneId(rates);
+            ratePlanContext.InheritedRates = rates;
         }
 
         #region Private Methods

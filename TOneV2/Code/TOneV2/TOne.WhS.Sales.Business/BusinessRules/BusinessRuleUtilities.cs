@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
 
@@ -86,231 +87,232 @@ namespace TOne.WhS.Sales.Business
             return false;
         }
 
-        #region DoZoneRateCurrenciesConflict
-        public static bool DoZoneRateCurrenciesConflict(CountryData countryData, IRatePlanContext ratePlanContext, out string errorMessage)
+        #region Validate Country Zone Rate Currencies
+
+        public static bool ValidateCountryZoneRateCurrencies(CountryData countryData, IRatePlanContext ratePlanContext, int sellingProductId, out string errorMessage)
         {
-            Dictionary<long, RateToChange> newRatesByZoneId;
-            Dictionary<long, RateToClose> closedRatesByZoneId;
+            IEnumerable<ExistingZone> countryZones = ratePlanContext.EffectiveAndFutureExistingZonesByCountry.GetRecord(countryData.CountryId);
+
+            if (countryZones == null || countryZones.Count() == 0)
+                throw new Vanrise.Entities.DataIntegrityValidationException("countryZones");
+
+            var newRates = new List<RateToChange>();
+            var closedRates = new List<RateToClose>();
+            var zonesWithoutRateActions = new List<ExistingZone>();
             DateTime? minRateActionDate;
 
-            if (!DoRateActionsExist(countryData.ZoneDataByZoneId, out newRatesByZoneId, out closedRatesByZoneId, out minRateActionDate))
+            if (!DoRateActionsExist(countryZones, countryData.ZoneDataByZoneId, newRates, closedRates, zonesWithoutRateActions, out minRateActionDate))
             {
                 errorMessage = null;
-                return false;
+                return true;
             }
 
             string countryName = new Vanrise.Common.Business.CountryManager().GetCountryName(countryData.CountryId);
 
-            IEnumerable<ExistingZone> existingZones = ratePlanContext.ExistingZonesByCountry.GetRecord(countryData.CountryId);
-            IEnumerable<ExistingZone> effectiveOrFutureZones = GetEffectiveOrFutureZones(existingZones, countryName, countryData.CountryBED);
-
-            if (closedRatesByZoneId.Count > 0 && closedRatesByZoneId.Count < effectiveOrFutureZones.Count() && ratePlanContext.CurrencyId != ratePlanContext.SellingProductCurrencyId)
+            if (newRates.Count > 0 && closedRates.Count > 0 && ratePlanContext.CurrencyId != ratePlanContext.SellingProductCurrencyId)
             {
                 var currencyManager = new Vanrise.Common.Business.CurrencyManager();
-                string processCurrencySymbol = currencyManager.GetCurrencySymbol(ratePlanContext.CurrencyId);
-                string sellingProductCurrencySymbol = currencyManager.GetCurrencySymbol(ratePlanContext.SellingProductCurrencyId);
-                errorMessage = string.Format("When pricing with a currency '{0}' different than selling product currency '{1}', rates of zones for country '{2}' must be all inherited or explicit", processCurrencySymbol, sellingProductCurrencySymbol, countryName);
+                errorMessage = string.Format("Cannot define new rates and close others for country '{0}' when the process's currency '{1}' is different than that of the selling product '{2}'", countryName, currencyManager.GetCurrencySymbol(ratePlanContext.CurrencyId), currencyManager.GetCurrencySymbol(ratePlanContext.SellingProductCurrencyId));
+                return false;
+            }
+
+            int targetCurrencyId = (closedRates.Count > 0) ? ratePlanContext.SellingProductCurrencyId : ratePlanContext.CurrencyId;
+
+            if
+            (
+                ValidateNewRates(newRates, ratePlanContext, minRateActionDate.Value, targetCurrencyId, sellingProductId, countryData) &&
+                ValidateClosedRates(closedRates, ratePlanContext, minRateActionDate.Value, targetCurrencyId, sellingProductId, countryData) &&
+                ValidateZonesWithoutRateActions(zonesWithoutRateActions, ratePlanContext, minRateActionDate.Value, targetCurrencyId, sellingProductId, countryData)
+            )
+            {
+                errorMessage = null;
                 return true;
             }
 
-            foreach (ExistingZone countryZone in effectiveOrFutureZones)
-            {
-                RateToChange newRate = newRatesByZoneId.GetRecord(countryZone.ZoneId);
-                RateToClose closedRate = closedRatesByZoneId.GetRecord(countryZone.ZoneId);
-
-                DateTime? zoneRateActionDate = null;
-
-                if (newRate != null)
-                {
-                    if (newRate.BED == minRateActionDate.Value)
-                        continue;
-                    zoneRateActionDate = newRate.BED;
-                }
-                else if (closedRate != null)
-                {
-                    if (closedRate.CloseEffectiveDate == minRateActionDate.Value)
-                        continue;
-                    zoneRateActionDate = closedRate.CloseEffectiveDate;
-                }
-
-                DateTime? xDate = Max(countryZone.BED, countryData.CountryBED, minRateActionDate.Value);
-                DateTime? yDate = Min(countryZone.EED, countryData.CountryEED, zoneRateActionDate);
-
-                if (!yDate.HasValue || yDate.Value > xDate)
-                {
-                    IEnumerable<ExistingRate> effectiveOrFutureRates = GetEffectiveOrFutureRates(countryZone.ExistingRates, countryData.CountryBED);
-
-                    if (AreZoneRatesInConflict(effectiveOrFutureRates, xDate.Value, yDate, ratePlanContext))
-                    {
-                        errorMessage = string.Format("When changing currency, rates of zones for country '{0}' must be all with the same date", countryName);
-                        return true;
-                    }
-                }
-            }
-
-            errorMessage = null;
+            errorMessage = string.Format("Rate actions taken on country '{0}' violate currency constraints", countryName);
             return false;
         }
-        private static bool DoRateActionsExist(Dictionary<long, DataByZone> dataByZoneId, out Dictionary<long, RateToChange> newRatesByZoneId, out Dictionary<long, RateToClose> closedRatesByZoneId, out DateTime? minRateActionDate)
+
+        #region Methods
+        private static bool DoRateActionsExist(IEnumerable<ExistingZone> countryZones, Dictionary<long, DataByZone> zoneDataByZoneId, List<RateToChange> newRates, List<RateToClose> closedRates, List<ExistingZone> zonesWithoutRateActions, out DateTime? minRateActionDate)
         {
-            if (dataByZoneId == null || dataByZoneId.Count == 0)
+            if (zoneDataByZoneId == null || zoneDataByZoneId.Count == 0)
             {
-                newRatesByZoneId = null;
-                closedRatesByZoneId = null;
                 minRateActionDate = null;
                 return false;
             }
 
-            newRatesByZoneId = new Dictionary<long, RateToChange>();
-            closedRatesByZoneId = new Dictionary<long, RateToClose>();
-            minRateActionDate = null;
+            DateTime? minRateActionDateValue = null;
+            Action<DateTime> updateMinRateActionDateValue = (date) => { if (!minRateActionDateValue.HasValue || date < minRateActionDateValue.Value) { minRateActionDateValue = date; } };
 
-            foreach (DataByZone zoneData in dataByZoneId.Values)
+            foreach (ExistingZone countryZone in countryZones)
             {
-                if (zoneData.NormalRateToChange != null)
-                {
-                    if (!minRateActionDate.HasValue || zoneData.NormalRateToChange.BED < minRateActionDate.Value)
-                        minRateActionDate = zoneData.NormalRateToChange.BED;
-                    newRatesByZoneId.Add(zoneData.ZoneId, zoneData.NormalRateToChange);
-                }
-                else if (zoneData.NormalRateToClose != null)
-                {
-                    if (!minRateActionDate.HasValue || zoneData.NormalRateToClose.CloseEffectiveDate < minRateActionDate.Value)
-                        minRateActionDate = zoneData.NormalRateToClose.CloseEffectiveDate;
-                    closedRatesByZoneId.Add(zoneData.ZoneId, zoneData.NormalRateToClose);
-                }
-            }
+                DataByZone zoneData;
 
-            return minRateActionDate.HasValue;
-        }
-        private static IEnumerable<ExistingZone> GetEffectiveOrFutureZones(IEnumerable<ExistingZone> existingZones, string countryName, DateTime countryBED)
-        {
-            if (existingZones == null || existingZones.Count() == 0)
-                throw new Vanrise.Entities.VRBusinessException(string.Format("The existing zones of country '{0}' were not found", countryName));
-
-            IEnumerable<ExistingZone> effectiveOrFutureZones = existingZones.FindAllRecords(x => x.IsEffectiveOrFuture(countryBED));
-
-            if (effectiveOrFutureZones.Count() == 0)
-                throw new Vanrise.Entities.VRBusinessException(string.Format("No effective or future zones of country '{0}' were found after the country's BED '{1}'", countryName, UtilitiesManager.GetDateTimeAsString(countryBED)));
-
-            return effectiveOrFutureZones;
-        }
-        private static IEnumerable<ExistingRate> GetEffectiveOrFutureRates(IEnumerable<ExistingRate> existingRates, DateTime countryBED)
-        {
-            if (existingRates == null || existingRates.Count() == 0)
-                return null;
-            return existingRates.FindAllRecords(x => x.IsEffectiveOrFuture(countryBED));
-        }
-        private static bool AreZoneRatesInConflict(IEnumerable<ExistingRate> existingRates, DateTime xDate, DateTime? yDate, IRatePlanContext ratePlanContext)
-        {
-            if (existingRates == null || existingRates.Count() == 0)
-            {
-                if (AreProcessAndSystemCurrenciesInConflict(ratePlanContext))
-                    return true;
-            }
-            else
-            {
-                var saleRateManager = new SaleRateManager();
-                DateTime? previousRateEED = null;
-
-                int existingRatesCount = existingRates.Count();
-
-                for (int i = 0; i < existingRatesCount; i++)
-                {
-                    ExistingRate existingRate = existingRates.ElementAt(i);
-
-                    if (i == 0)
-                    {
-                        if (existingRate.BED > xDate && AreProcessAndSystemCurrenciesInConflict(ratePlanContext))
-                            return true;
-                    }
-                    else if (existingRate.BED > previousRateEED.Value && AreProcessAndSystemCurrenciesInConflict(ratePlanContext))
-                        return true;
-
-                    int existingRateCurrencyId = saleRateManager.GetCurrencyId(existingRate.RateEntity);
-
-                    if (existingRateCurrencyId != ratePlanContext.CurrencyId)
-                        return true;
-
-                    if (!existingRate.EED.HasValue || (yDate.HasValue && existingRate.EED.Value >= yDate.Value))
-                        break;
-
-                    if (i == existingRatesCount - 1)
-                    {
-                        if (AreProcessAndSystemCurrenciesInConflict(ratePlanContext))
-                            return false;
-                    }
-
-                    previousRateEED = existingRate.EED;
-                }
-            }
-
-            return false;
-        }
-        private static bool AreProcessAndSystemCurrenciesInConflict(IRatePlanContext ratePlanContext)
-        {
-            return ratePlanContext.CurrencyId != ratePlanContext.SellingProductCurrencyId;
-        }
-        private static DateTime? Max(params DateTime?[] dates)
-        {
-            if (dates == null || dates.Count() == 0)
-                return default(DateTime);
-            else
-            {
-                int datesCount = dates.Count();
-                DateTime? firstDate = dates.ElementAt(0);
-
-                if (datesCount == 1)
-                    return firstDate;
+                if (!zoneDataByZoneId.TryGetValue(countryZone.ZoneId, out zoneData))
+                    zonesWithoutRateActions.Add(countryZone);
                 else
                 {
-                    DateTime? maxDate = firstDate;
-
-                    for (int i = 1; i < dates.Count(); i++)
+                    if (zoneData.NormalRateToChange != null)
                     {
-                        DateTime? date = dates.ElementAt(i);
-
-                        if (!date.HasValue)
-                            continue;
-
-                        if (!maxDate.HasValue || date.Value > maxDate.Value)
-                            maxDate = date;
+                        updateMinRateActionDateValue(zoneData.NormalRateToChange.BED);
+                        newRates.Add(zoneData.NormalRateToChange);
                     }
-
-                    return maxDate;
+                    else if (zoneData.NormalRateToClose != null)
+                    {
+                        updateMinRateActionDateValue(zoneData.NormalRateToClose.CloseEffectiveDate);
+                        closedRates.Add(zoneData.NormalRateToClose);
+                    }
                 }
             }
+
+            minRateActionDate = minRateActionDateValue;
+            return minRateActionDateValue.HasValue;
         }
-        private static DateTime? Min(params DateTime?[] dates)
+        private static bool ValidateNewRates(IEnumerable<RateToChange> newRates, IRatePlanContext ratePlanContext, DateTime minRateActionDate, int targetCurrencyId, int sellingProductId, CountryData countryData)
         {
-            if (dates == null || dates.Count() == 0)
-                return default(DateTime);
-            else
+            TimeInterval timeInterval=null;
+            if (newRates.Count() == 0)
+                return true;
+
+            if (ratePlanContext.CurrencyId != targetCurrencyId)
+                return false;
+
+            foreach (RateToChange newRate in newRates)
             {
-                int datesCount = dates.Count();
-                DateTime? firstDate = dates.ElementAt(0);
-
-                if (datesCount == 1)
-                    return firstDate;
-                else
+                if (newRate.BED == minRateActionDate)
+                    continue;
+                if(countryData.IsCountryNew)
                 {
-                    DateTime? maxDate = firstDate;
-
-                    for (int i = 1; i < dates.Count(); i++)
-                    {
-                        DateTime? date = dates.ElementAt(i);
-
-                        if (!date.HasValue)
-                            continue;
-
-                        if (!maxDate.HasValue || date.Value < maxDate.Value)
-                            maxDate = date;
-                    }
-
-                    return maxDate;
+                    timeInterval = new TimeInterval() { BED = newRate.BED};
                 }
+                IEnumerable<SaleRateHistoryRecord> zoneRateHistory = GetCustomerZoneRateHistory(ratePlanContext.OwnerId, sellingProductId, newRate.ZoneName, newRate.RateTypeId, countryData.CountryId, targetCurrencyId, ratePlanContext.LongPrecision, ratePlanContext.CustomerZoneRateHistoryReader, timeInterval);
+
+                if (zoneRateHistory == null || zoneRateHistory.Count() == 0)
+                    throw new Vanrise.Entities.DataIntegrityValidationException("zoneRateHistory");
+
+                if (!ValidateZoneRateHistoryWithinTimeInterval(zoneRateHistory, minRateActionDate, newRate.BED, targetCurrencyId, newRate.RateTypeId))
+                    return false;
             }
+
+            return true;
         }
+        private static bool ValidateClosedRates(IEnumerable<RateToClose> closedRates, IRatePlanContext ratePlanContext, DateTime minRateActionDate, int targetCurrencyId, int sellingProductId, CountryData countryData)
+        {
+            foreach (RateToClose closedRate in closedRates)
+            {
+                if (closedRate.CloseEffectiveDate == minRateActionDate)
+                    continue;
+
+                IEnumerable<SaleRateHistoryRecord> zoneRateHistory = GetCustomerZoneRateHistory(ratePlanContext.OwnerId, sellingProductId, closedRate.ZoneName, closedRate.RateTypeId, countryData.CountryId, targetCurrencyId, ratePlanContext.LongPrecision, ratePlanContext.CustomerZoneRateHistoryReader, null);
+
+                if (zoneRateHistory == null || zoneRateHistory.Count() == 0)
+                    throw new Vanrise.Entities.DataIntegrityValidationException("zoneRateHistory");
+
+                if (!ValidateZoneRateHistoryWithinTimeInterval(zoneRateHistory, minRateActionDate, closedRate.CloseEffectiveDate, targetCurrencyId, closedRate.RateTypeId))
+                    return false;
+            }
+
+            return true;
+        }
+        private static bool ValidateZonesWithoutRateActions(IEnumerable<ExistingZone> zonesWithoutRateActions, IRatePlanContext ratePlanContext, DateTime minRateActionDate, int targetCurrencyId, int sellingProductId, CountryData countryData)
+        {
+            var rateTypeRuleManager = new Vanrise.GenericData.Pricing.RateTypeRuleManager();
+            var rateTypeRuleDefinitionId = new Guid("8A637067-0056-4BAE-B4D5-F80F00C0141B");
+
+            Func<long, IEnumerable<int>> getZoneOtherRateTypeIds = (saleZoneId) =>
+            {
+                var genericRuleTarget = new Vanrise.GenericData.Entities.GenericRuleTarget()
+                {
+                    TargetFieldValues = new Dictionary<string, object>()
+                    {
+                        {"CustomerId", ratePlanContext.OwnerId},
+                        {"SaleZoneId", saleZoneId}
+                    },
+                    EffectiveOn = ratePlanContext.EffectiveDate
+                };
+                return rateTypeRuleManager.GetRateTypes(rateTypeRuleDefinitionId, genericRuleTarget);
+            };
+
+            foreach (ExistingZone zoneWithoutRateActions in zonesWithoutRateActions)
+            {
+                IEnumerable<int> zoneOtherRateTypeIds = getZoneOtherRateTypeIds(zoneWithoutRateActions.ZoneId);
+
+                if (!ValidateZoneWithoutRateActions(zoneWithoutRateActions, ratePlanContext, minRateActionDate, targetCurrencyId, sellingProductId, countryData, zoneOtherRateTypeIds))
+                    return false;
+            }
+
+            return true;
+        }
+        private static bool ValidateZoneWithoutRateActions(ExistingZone zoneWithoutRateActions, IRatePlanContext ratePlanContext, DateTime minRateActionDate, int targetCurrencyId, int sellingProductId,CountryData countryData, IEnumerable<int> zoneOtherRateTypeIds)
+        {
+            TimeInterval timeInterval = null;
+            DateTime zoneEffectiveDate = Utilities.Max(countryData.CountryBED, zoneWithoutRateActions.ZoneEntity.BED);
+            DateTime timeIntervalBED = Utilities.Max(minRateActionDate, zoneEffectiveDate);
+            if(countryData.IsCountryNew)
+            {
+                timeInterval = new TimeInterval() { BED = zoneEffectiveDate };
+            }
+            IEnumerable<SaleRateHistoryRecord> zoneNormalRateHistory = GetCustomerZoneRateHistory(ratePlanContext.OwnerId, sellingProductId, zoneWithoutRateActions.Name, null, countryData.CountryId, targetCurrencyId, ratePlanContext.LongPrecision, ratePlanContext.CustomerZoneRateHistoryReader, timeInterval);
+
+            if (zoneNormalRateHistory == null || zoneNormalRateHistory.Count() == 0)
+                throw new Vanrise.Entities.DataIntegrityValidationException("zoneNormalRateHistory");
+
+            if (!ValidateZoneRateHistoryWithinTimeInterval(zoneNormalRateHistory, timeIntervalBED, null, targetCurrencyId, null))
+                return false;
+
+            if (zoneOtherRateTypeIds == null || zoneOtherRateTypeIds.Count() == 0)
+                return true;
+
+            foreach (int zoneOtherRateTypeId in zoneOtherRateTypeIds)
+            {
+                IEnumerable<SaleRateHistoryRecord> zoneOtherRateHistory = GetCustomerZoneRateHistory(ratePlanContext.OwnerId, sellingProductId, zoneWithoutRateActions.Name, zoneOtherRateTypeId, countryData.CountryId, targetCurrencyId, ratePlanContext.LongPrecision, ratePlanContext.CustomerZoneRateHistoryReader, timeInterval);
+
+                if (zoneOtherRateHistory == null || zoneOtherRateHistory.Count() == 0)
+                    continue;
+
+                if (!ValidateZoneRateHistoryWithinTimeInterval(zoneOtherRateHistory, timeIntervalBED, null, targetCurrencyId, zoneOtherRateTypeId))
+                    return false;
+            }
+
+            return true;
+        }
+        private static bool ValidateZoneRateHistoryWithinTimeInterval(IEnumerable<SaleRateHistoryRecord> zoneRateHistory, DateTime timeIntervalBED, DateTime? timeIntervalEED, int targetCurrencyId, int? rateTypeId)
+        {
+            var timeInterval = new TimeInterval() { BED = timeIntervalBED, EED = timeIntervalEED };
+            IEnumerable<SaleRateHistoryRecord> targetZoneRateHistory = Vanrise.Common.Utilities.GetQIntersectT(ToList(timeInterval), zoneRateHistory.ToList(), ZoneRateHistoryMapper);
+
+            if (!rateTypeId.HasValue && (targetZoneRateHistory == null || targetZoneRateHistory.Count() == 0))
+                throw new Vanrise.Entities.DataIntegrityValidationException("targetZoneRateHistory");
+
+            foreach (SaleRateHistoryRecord saleRateHistoryRecord in targetZoneRateHistory)
+            {
+                if (saleRateHistoryRecord.CurrencyId != targetCurrencyId)
+                    return false;
+            }
+
+            return true;
+        }
+        private static List<T> ToList<T>(T item)
+        {
+            return new List<T>() { item };
+        }
+        #endregion
+
+        #region Mappers
+        private static Action<SaleRateHistoryRecord, SaleRateHistoryRecord> ZoneRateHistoryMapper = (saleRateHistoryRecord, saleRateHistoryRecordOutput) =>
+        {
+            saleRateHistoryRecordOutput.SaleRateId = saleRateHistoryRecord.SaleRateId;
+            saleRateHistoryRecordOutput.Rate = saleRateHistoryRecord.Rate;
+            saleRateHistoryRecordOutput.ConvertedRate = saleRateHistoryRecord.ConvertedRate;
+            saleRateHistoryRecordOutput.PriceListId = saleRateHistoryRecord.PriceListId;
+            saleRateHistoryRecordOutput.ChangeType = saleRateHistoryRecord.ChangeType;
+            saleRateHistoryRecordOutput.CurrencyId = saleRateHistoryRecord.CurrencyId;
+            saleRateHistoryRecordOutput.SellingProductId = saleRateHistoryRecord.SellingProductId;
+            saleRateHistoryRecordOutput.SourceId = saleRateHistoryRecord.SourceId;
+        };
+        #endregion
+
         #endregion
 
         #region Private Methods
@@ -326,6 +328,24 @@ namespace TOne.WhS.Sales.Business
             decimal convertedMaximumRate = ratePlanContext.GetMaximumRateConverted(rateToChangeCurrencyId);
             return rateToChange.NormalRate > convertedMaximumRate;
         }
+
+        private static IEnumerable<SaleRateHistoryRecord> GetCustomerZoneRateHistory(int customerId, int sellingProductId, string zoneName, int? rateTypeId, int countryId, int targetCurrencyId, int longPrecision, CustomerZoneRateHistoryReader reader, TimeInterval timeInterval)
+        {
+            var orderedRateSources = new List<SaleEntityZoneRateSource>() { SaleEntityZoneRateSource.ProductZone, SaleEntityZoneRateSource.CustomerZone };
+            var rateHistoryBySource = new SaleRateHistoryBySource();
+
+            List<TimeInterval> customerCountryTimeIntervals = new List<TimeInterval>();
+            if(timeInterval == null)
+                customerCountryTimeIntervals = RateHistoryUtilities.GetAllCustomerCountries(customerId, countryId).MapRecords(RateHistoryUtilities.CountryTimeIntervalMapper).ToList();
+            else customerCountryTimeIntervals.Add(timeInterval);
+
+            RateHistoryUtilities.AddProductZoneRateHistory(rateHistoryBySource, sellingProductId, zoneName, rateTypeId, customerCountryTimeIntervals, reader);
+            RateHistoryUtilities.AddCustomerZoneRateHistory(rateHistoryBySource, customerId, zoneName, rateTypeId, reader);
+
+            return RateHistoryUtilities.GetZoneRateHistory(rateHistoryBySource, orderedRateSources, targetCurrencyId, longPrecision);
+        }
+
+
         #endregion
     }
 }

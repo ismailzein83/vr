@@ -66,6 +66,7 @@ namespace TOne.WhS.Sales.Business
         }
         public EffectiveAfterCustomerZoneRatesByZone EffectiveAfterCustomerZoneRatesByZone { get; set; }
         public InheritedRatesByZoneId InheritedRatesByZoneId { get; set; }
+        public IEnumerable<SaleRate> InheritedRates { get; set; }
         public Dictionary<int, List<ExistingZone>> ExistingZonesByCountry { get; set; } // Should be removed; EffectiveAndFutureExistingZonesByCountry should be used instead
         public Dictionary<int, List<ExistingZone>> EffectiveAndFutureExistingZonesByCountry { get; set; }
         public bool ProcessHasChanges
@@ -81,6 +82,7 @@ namespace TOne.WhS.Sales.Business
         public IEnumerable<DataByZone> DataByZoneList { get; set; }
         public string DateFormat { get; set; }
         public DateTime PriceListCreationDate { get; set; }
+        public CustomerZoneRateHistoryReader CustomerZoneRateHistoryReader { get; set; }
 
         #endregion
 
@@ -142,6 +144,7 @@ namespace TOne.WhS.Sales.Business
         DateTime RetroactiveDate { get; }
         EffectiveAfterCustomerZoneRatesByZone EffectiveAfterCustomerZoneRatesByZone { get; }
         InheritedRatesByZoneId InheritedRatesByZoneId { get; }
+        IEnumerable<SaleRate> InheritedRates { get; }
         Dictionary<int, List<ExistingZone>> ExistingZonesByCountry { get; }
         Dictionary<int, List<ExistingZone>> EffectiveAndFutureExistingZonesByCountry { get; }
         bool ProcessHasChanges { get; }
@@ -154,6 +157,7 @@ namespace TOne.WhS.Sales.Business
         DateTime PriceListCreationDate { get; }
         bool IsSubscriberOwner { get; }
         long RootProcessInstanceId { get; }
+        CustomerZoneRateHistoryReader CustomerZoneRateHistoryReader { get; }
 
         #endregion
 
