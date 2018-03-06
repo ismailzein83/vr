@@ -8,8 +8,8 @@ For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 ECHO SOM WebSite
 
 xcopy "C:\Publish\SOM" /S /E /R /y /v /i /z /Q "\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\SOM\list-of-excluded-files.txt
-::xcopy "C:\TFS\SOM\Code\SOM.Web\Web.config.exclude" /y /v /z /i /Q /R "\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\"
-::rename "\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Web.config.exclude" "Web.config"
+xcopy "C:\TFS\SOM\Code\SOM.Web\Web.config.exclude" /y /v /z /i /Q /R "\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\"
+rename "\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Web.config.exclude" "Web.config"
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\ICSharpCode.SharpZipLib.dll" /y /v /z /i /Q /R									"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Bin\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security" /S /E /R /y /v /i /z /Q											"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Client\Modules\Security\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\Fixes\WebSite\BIL\%YYYYMMDD%\Client\Modules\Common\"
@@ -25,8 +25,8 @@ xcopy "C:\TFS\SOM\Code\SOM.Main.Web\SOM_Main" /S /E /R /y /v /i /z /Q											
 ECHO TOne V2 WebSite Full version
 
 xcopy "C:\Publish\SOM" /S /E /R /y /v /i /z /Q "\\192.168.110.185\FixesFullVersion\WebSite\BIL\%YYYYMMDD%\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\SOM\list-of-excluded-files.txt
-::xcopy "C:\TFS\SOM\Code\SOM.Web\Web.config.exclude" /y /v /z /i /Q /R "\\192.168.110.185\FixesFullVersion\WebSite\BIL\%YYYYMMDD%\"
-::rename "\\192.168.110.185\FixesFullVersion\WebSite\BIL\%YYYYMMDD%\Web.config.exclude" "Web.config"
+xcopy "C:\TFS\SOM\Code\SOM.Web\Web.config.exclude" /y /v /z /i /Q /R "\\192.168.110.185\FixesFullVersion\WebSite\BIL\%YYYYMMDD%\"
+rename "\\192.168.110.185\FixesFullVersion\WebSite\BIL\%YYYYMMDD%\Web.config.exclude" "Web.config"
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\ICSharpCode.SharpZipLib.dll" /y /v /z /i /Q /R									"\\192.168.110.185\FixesFullVersion\WebSite\BIL\%YYYYMMDD%\Bin\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Security.Web\Security" /S /E /R /y /v /i /z /Q											"\\192.168.110.185\FixesFullVersion\WebSite\BIL\%YYYYMMDD%\Client\Modules\Security\"
 xcopy "C:\TFS\Vanrise\Code\Vanrise.Common.Web\Common" /S /E /R /y /v /i /z /Q												"\\192.168.110.185\FixesFullVersion\WebSite\BIL\%YYYYMMDD%\Client\Modules\Common\"
