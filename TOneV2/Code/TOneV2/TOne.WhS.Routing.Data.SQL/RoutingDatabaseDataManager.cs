@@ -97,7 +97,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 IsReady = GetReaderValue<bool>(reader, "IsReady"),
                 Type = GetReaderValue<RoutingDatabaseType>(reader, "Type"),
                 ProcessType = processType,
-                EffectiveTime = GetReaderValue<DateTime>(reader, "EffectiveTime"),
+                EffectiveTime = GetReaderValue<DateTime?>(reader, "EffectiveTime"),
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
                 ReadyTime = GetReaderValue<DateTime>(reader, "ReadyTime"),
                 Information = reader["Information"] != null ? Vanrise.Common.Serializer.Deserialize<RoutingDatabaseInformation>(reader["Information"].ToString()) : null,

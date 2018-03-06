@@ -63,6 +63,10 @@ namespace TOne.WhS.Routing.Business
         public DateTime? GetLatestRoutingDatabaseEffectiveTime(RoutingProcessType routingProcessType, RoutingDatabaseType routingDatabaseType)
         {
             var latestRoutingDatabase = GetLatestRoutingDatabase(routingProcessType, routingDatabaseType);
+
+            if (latestRoutingDatabase == null)
+                return null;
+
             DateTime? effectiveTime = latestRoutingDatabase.EffectiveTime;
 
             if (routingDatabaseType == RoutingDatabaseType.Current && !effectiveTime.HasValue)

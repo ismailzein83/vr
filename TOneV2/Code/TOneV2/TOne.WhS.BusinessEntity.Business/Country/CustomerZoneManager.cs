@@ -315,7 +315,7 @@ namespace TOne.WhS.BusinessEntity.Business
                     return false;
                 if (customersIds != null && customersIds.Count > 0 && !customersIds.Contains(x.CustomerId))
                     return false;
-                if (!x.IsEffectiveOrFuture(effectiveOn))
+                if (!x.IsEffective(effectiveOn))
                     return false;
                 return true;
             };

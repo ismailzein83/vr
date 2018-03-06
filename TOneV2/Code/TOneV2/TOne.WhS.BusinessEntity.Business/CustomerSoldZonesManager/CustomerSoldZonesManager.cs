@@ -47,9 +47,12 @@ namespace TOne.WhS.BusinessEntity.Business
 
             public override IEnumerable<CustomersSoldZone> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<CustomerSoldZonesQuery> input)
             {
-                var customersIds = input.Query.CustomersIds == null ? _carrierAccountManager.GetCustomersIdsAssignedToSellingNumberPlanId(input.Query.SellingNumberPlanId) : input.Query.CustomersIds;
 
                 DateTime? dataBaseEffectiveTime = RoutingManagerFactory.GetManager<IRoutingDatabaseManager>().GetLatestRoutingDatabaseEffectiveTime(RoutingProcessType.CustomerRoute, RoutingDatabaseType.Current);
+                if (!dataBaseEffectiveTime.HasValue)
+                    return null;
+
+                var customersIds = input.Query.CustomersIds == null ? _carrierAccountManager.GetCustomersIdsAssignedToSellingNumberPlanId(input.Query.SellingNumberPlanId) : input.Query.CustomersIds;
 
                 DateTime effectiveOn = dataBaseEffectiveTime.Value;
                 if (customersIds.Count == 0)
@@ -73,8 +76,9 @@ namespace TOne.WhS.BusinessEntity.Business
                 var customerCountriesByCountryId = StructureCustomersCountriesByCountryId(soldCustomersCountries);
 
                 var soldZonesIds = _saleZoneManager.GetSoldZonesBySellingNumberPlan(input.Query.SellingNumberPlanId, customerCountriesByCountryId.Keys.ToList(), filterdZonesIdsByCode, input.Query.ZoneName, effectiveOn);
-
-                var customerZoneDetails = RoutingManagerFactory.GetManager<ICustomerZoneDetailsManager>().GetCustomerZoneDetailsByZoneIdsAndCustomerIds(soldZonesIds,customersIds);
+                if (soldZonesIds == null)
+                    return null;
+                var customerZoneDetails = RoutingManagerFactory.GetManager<ICustomerZoneDetailsManager>().GetCustomerZoneDetailsByZoneIdsAndCustomerIds(soldZonesIds, customersIds);
 
                 var customerZoneDetailByZoneId = StructureCustomerZoneDetailByZoneId(customerZoneDetails);
 
@@ -95,7 +99,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
                     foreach (var customerRate in customerZoneDetail.Value)
                     {
-                      
+
                         if (input.Query.RoutingProductsIds != null && input.Query.RoutingProductsIds.Count > 0 && !input.Query.RoutingProductsIds.Contains(customerRate.RoutingProductId))
                             continue;
 
@@ -162,7 +166,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 return structuredCustomersCountries;
             }
 
-          
+
 
             private Dictionary<long, List<CustomerZoneDetail>> StructureCustomerZoneDetailByZoneId(IEnumerable<CustomerZoneDetail> customerZoneDetails)
             {
