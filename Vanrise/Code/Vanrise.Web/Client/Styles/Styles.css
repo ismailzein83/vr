@@ -4116,10 +4116,8 @@ vr-datalist .drag-icon {
     background-color: #e9e9e9;
 }
 
-.vr-datagrid[alternative-color] .vr-datagrid-body:hover {
-    background-color: #d7ebee !important;
-}
-.vr-datagrid[alternative-color] .vr-datagrid-body>div:first-child:hover {
+
+.vr-datagrid[alternative-color] .vr-datagrid-body>div:first-of-type:hover {
     background-color: #d7ebee !important;
 }
 
