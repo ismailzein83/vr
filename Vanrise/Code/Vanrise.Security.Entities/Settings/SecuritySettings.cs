@@ -39,7 +39,18 @@ namespace Vanrise.Security.Entities
 
         public bool SendEmailOnResetPasswordByAdmin { get; set; }
 
-
+        int _sessionExpirationInMinutes = 30;
+        public int SessionExpirationInMinutes
+        {
+            get
+            {
+                return _sessionExpirationInMinutes;
+            }
+            set
+            {
+                _sessionExpirationInMinutes = value;
+            }
+        }
     }
 
 }

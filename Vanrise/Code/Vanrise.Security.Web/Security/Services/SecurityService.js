@@ -12,8 +12,7 @@ function ($rootScope, Sec_CookieService, UtilsService, VR_Sec_PermissionFlagEnum
         VR_Sec_SecurityAPIService.Authenticate(credentialsObject).then(function (response) {
             if (VRNotificationService.notifyOnUserAuthenticated(response, onValidationNeeded)) {
 
-                var userInfo = JSON.stringify(response.AuthenticationObject);
-                Sec_CookieService.createAccessCookie(userInfo);
+                Sec_CookieService.createAccessCookieFromAuthToken(response.AuthenticationObject);
                 deferred.resolve();
             }
             else {
@@ -166,13 +165,44 @@ function ($rootScope, Sec_CookieService, UtilsService, VR_Sec_PermissionFlagEnum
         }
     }
 
+    function getUserToken() {
+        var userToken = Sec_CookieService.getLoggedInUserInfo();
+        if (userToken != undefined) {
+            renewTokenIfNeeded(userToken);
+            return userToken.Token;
+        }
+        else
+        {
+            return undefined;
+        }
+    }
+
+    var isRenewingToken = false;
+    function renewTokenIfNeeded(userToken) {
+        var cookieCreatedTime = userToken.cookieCreatedTime;
+        if (cookieCreatedTime != undefined && typeof (cookieCreatedTime) != typeof (Date))
+            cookieCreatedTime = new Date(cookieCreatedTime);
+        if (cookieCreatedTime == undefined || ((new Date()).getTime() - cookieCreatedTime.getTime()) / 1000 > (userToken.ExpirationIntervalInSeconds - 60)) {
+            if (!isRenewingToken) {
+                isRenewingToken = true;
+                VR_Sec_SecurityAPIService.TryRenewCurrentSecurityToken().then(function (response) {
+                    if (response != null && response.IsSucceeded) {
+                        Sec_CookieService.createAccessCookieFromAuthToken(response.NewAuthenticationToken);
+                    }
+                }).finally(function () {
+                    isRenewingToken = false;
+                });
+            }
+        }
+    }
+
     return ({
         authenticate: authenticate,
         isAllowed: isAllowed,
         createAccessCookie: Sec_CookieService.createAccessCookie,
         deleteAccessCookie: Sec_CookieService.deleteAccessCookie,
         getLoggedInUserInfo: Sec_CookieService.getLoggedInUserInfo,
-        getUserToken: Sec_CookieService.getUserToken,
+        getUserToken: getUserToken,
         IsAllowed: IsAllowed,
         HasPermissionToActions: HasPermissionToActions,
         setAccessCookieName: Sec_CookieService.setAccessCookieName,

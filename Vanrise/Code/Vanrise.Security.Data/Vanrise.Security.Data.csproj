@@ -47,6 +47,7 @@
     <Compile Include="IBusinessEntityModuleDataManager.cs" />
     <Compile Include="ICloudAuthServerDataManager.cs" />
     <Compile Include="IDataManager.cs" />
+    <Compile Include="IEncryptionKeyDataManager.cs" />
     <Compile Include="IModuleDataManager.cs" />
     <Compile Include="IOrgChartDataManager.cs" />
     <Compile Include="IOrgChartLinkedEntityDataManager.cs" />

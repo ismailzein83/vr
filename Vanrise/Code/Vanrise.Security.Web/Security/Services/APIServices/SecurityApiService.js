@@ -9,6 +9,7 @@
 
         return ({
             Authenticate: Authenticate,
+            TryRenewCurrentSecurityToken: TryRenewCurrentSecurityToken,
             ChangePassword: ChangePassword,
             IsAllowed: IsAllowed,
             HasPermissionToActions: HasPermissionToActions,
@@ -18,6 +19,10 @@
 
         function Authenticate(credentialsObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'Authenticate'), credentialsObject);
+        }
+
+        function TryRenewCurrentSecurityToken() {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'TryRenewCurrentSecurityToken'), null);
         }
 
         function ChangePassword(changedPasswordObject) {

@@ -15,13 +15,8 @@ namespace Vanrise.Security.Business
 {
     public class SecurityManager
     {
-        static TimeSpan s_tokenExpirationInterval;
-
-        static SecurityManager()
-        {
-            if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["Security_TokenExpirationInterval"], out s_tokenExpirationInterval))
-                s_tokenExpirationInterval = TimeSpan.FromDays(1);
-        }
+        static UserManager s_userManager = new UserManager();
+        static ConfigManager s_configManager = new ConfigManager();
 
         #region Public Methods
 
@@ -42,13 +37,7 @@ namespace Vanrise.Security.Business
             {
                 authenticationOperationOutput.LoggedInUser = user;
 
-                AuthenticationToken authToken = new AuthenticationToken();
-                authToken.TokenName = SecurityContext.SECURITY_TOKEN_NAME;
-                authToken.Token = null;
-                authToken.UserName = user.Email;
-                authToken.UserDisplayName = user.Name;
-                authToken.PhotoFileId = user.Settings != null ? user.Settings.PhotoFileId : null;
-                authToken.ExpirationIntervalInMinutes = (int)Math.Ceiling(s_tokenExpirationInterval.TotalMinutes);
+               
 
                 ConfigManager cManager = new ConfigManager();
 
@@ -93,16 +82,7 @@ namespace Vanrise.Security.Business
 
                     if (HashingUtility.VerifyHash(password, "", loggedInUserPassword))
                     {
-                        SecurityToken securityToken = new SecurityToken
-                        {
-                            UserId = user.UserId,
-                            IssuedAt = DateTime.Now,
-                            ExpiresAt = DateTime.Now.Add(s_tokenExpirationInterval)
-                        };
-                        AddTokenExtensions(securityToken);
-
-                        string encrypted = Common.Cryptography.Encrypt(Common.Serializer.Serialize(securityToken), ConfigurationManager.AppSettings[SecurityContext.SECURITY_ENCRYPTION_SECRETE_KEY]);
-                        authToken.Token = encrypted;
+                        AuthenticationToken authToken = CreateAuthenticationToken(user);
                         authenticationOperationOutput.Result = AuthenticateOperationResult.Succeeded;
                         authenticationOperationOutput.AuthenticationObject = authToken;
 
@@ -143,6 +123,53 @@ namespace Vanrise.Security.Business
             }
 
             return authenticationOperationOutput;
+        }
+
+        public bool TryRenewCurrentAuthenticationToken(out AuthenticationToken newAuthenticationToken)
+        {
+            SecurityToken currentUserToken;
+            if(SecurityContext.TryGetSecurityToken(out currentUserToken))
+            {
+                if(currentUserToken.ExpiresAt >= DateTime.Now)
+                {
+                    newAuthenticationToken = CreateAuthenticationToken(currentUserToken.UserId);
+                    return true;
+                }
+            }
+            newAuthenticationToken = null;
+            return false;
+        }
+
+        public AuthenticationToken CreateAuthenticationToken(int userId)
+        {
+            var user = s_userManager.GetUserbyId(userId);
+            user.ThrowIfNull("user", userId);
+            return CreateAuthenticationToken(user);
+        }
+
+        public AuthenticationToken CreateAuthenticationToken(User user)
+        {
+            AuthenticationToken authToken = new AuthenticationToken();
+            authToken.TokenName = SecurityContext.SECURITY_TOKEN_NAME;
+            authToken.Token = null;
+            authToken.UserName = user.Email;
+            authToken.UserDisplayName = user.Name;
+            authToken.PhotoFileId = user.Settings != null ? user.Settings.PhotoFileId : null;
+            int sessionExpirationInMinutes = s_configManager.GetSessionExpirationInMinutes();
+            authToken.ExpirationIntervalInMinutes = sessionExpirationInMinutes;
+            authToken.ExpirationIntervalInSeconds = sessionExpirationInMinutes * 60;
+
+            SecurityToken securityToken = new SecurityToken
+            {
+                UserId = user.UserId,
+                IssuedAt = DateTime.Now,
+                ExpiresAt = DateTime.Now.AddMinutes(sessionExpirationInMinutes)
+            };
+            AddTokenExtensions(securityToken);
+
+            string encrypted = Common.Cryptography.Encrypt(Common.Serializer.Serialize(securityToken), GetLocalTokenDecryptionKey());
+            authToken.Token = encrypted;
+            return authToken;
         }
 
         private static void SendNotificationMail(User user, ConfigManager cManager)
@@ -310,7 +337,26 @@ namespace Vanrise.Security.Business
                 return authServer.Settings.TokenDecryptionKey;
             }
             else
-                return ConfigurationManager.AppSettings[SecurityContext.SECURITY_ENCRYPTION_SECRETE_KEY];
+                return GetLocalTokenDecryptionKey();
+        }
+
+        static string s_localTokenDecryptionKey;
+        static Object s_GetLocalTokenDecryptionKey_LockObj = new object();
+        private string GetLocalTokenDecryptionKey()
+        {
+            if(s_localTokenDecryptionKey == null)
+            {
+                lock(s_GetLocalTokenDecryptionKey_LockObj)
+                {
+                    if (s_localTokenDecryptionKey == null)
+                    {
+                        var dataManager = SecurityDataManagerFactory.GetDataManager<IEncryptionKeyDataManager>();
+                        string keyToInsertIfNotExists = Guid.NewGuid().ToString();
+                        s_localTokenDecryptionKey = string.Format("{0}_{1}", ConfigurationManager.AppSettings[SecurityContext.SECURITY_ENCRYPTION_SECRETE_KEY], dataManager.InsertIfNotExistsAndGetEncryptionKey(keyToInsertIfNotExists));
+                    }
+                }
+            }
+            return s_localTokenDecryptionKey;
         }
 
         CloudAuthServer GetAuthServer()

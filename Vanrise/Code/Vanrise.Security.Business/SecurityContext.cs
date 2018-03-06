@@ -17,6 +17,8 @@ namespace Vanrise.Security.Business
         public const string SECURITY_TOKEN_NAME = "Auth-Token";
         public const string SECURITY_ENCRYPTION_SECRETE_KEY = "EncryptionSecretKey";
 
+        static SecurityManager s_securityManager = new SecurityManager();
+
         [ThreadStatic]
         static int? s_currentContextUserId;
 
@@ -76,31 +78,26 @@ namespace Vanrise.Security.Business
         
         public bool IsAllowed(RequiredPermissionSettings requiredPermissions)
         {
-            SecurityManager manager = new SecurityManager();
             return IsAllowed(requiredPermissions, GetLoggedInUserId());
         }
         public bool IsAllowed(RequiredPermissionSettings requiredPermissions , int userId)
         {
-            SecurityManager manager = new SecurityManager();
-            return manager.IsAllowed(requiredPermissions, userId);
+            return s_securityManager.IsAllowed(requiredPermissions, userId);
         }
 
         public bool IsAllowed(string requiredPermissions)
         {
-            SecurityManager manager = new SecurityManager();
-            return manager.IsAllowed(requiredPermissions, GetLoggedInUserId());
+            return s_securityManager.IsAllowed(requiredPermissions, GetLoggedInUserId());
         }
 
         public bool IsAllowed(string requiredPermissions , int userId)
         {
-            SecurityManager manager = new SecurityManager();
-            return manager.IsAllowed(requiredPermissions, userId);
+            return s_securityManager.IsAllowed(requiredPermissions, userId);
         }
 
         public bool HasPermissionToActions(string systemActionNames)
         {
-            SecurityManager manager = new SecurityManager();
-            return manager.HasPermissionToActions(systemActionNames, GetLoggedInUserId());
+            return s_securityManager.HasPermissionToActions(systemActionNames, GetLoggedInUserId());
         }
 
         public void SetContextUserId(int userId)
@@ -160,11 +157,11 @@ namespace Vanrise.Security.Business
                 }
                 if (!string.IsNullOrEmpty(token))
                 {
-                    string decryptionKey = (new SecurityManager()).GetTokenDecryptionKey();
+                    string decryptionKey = s_securityManager.GetTokenDecryptionKey();
                     string decryptedToken = Common.Cryptography.Decrypt(token, decryptionKey);
 
                     securityToken = Common.Serializer.Deserialize<SecurityToken>(decryptedToken);
-                    return true;
+                    return securityToken != null;
                 }
                 else
                 {

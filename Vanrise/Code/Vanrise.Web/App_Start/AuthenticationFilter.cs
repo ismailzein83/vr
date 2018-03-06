@@ -11,6 +11,7 @@ namespace Vanrise.Web.App_Start
 {
     public class AuthenticationFilter : System.Web.Http.Filters.AuthorizationFilterAttribute
     {
+        static SecurityManager s_securityManager = new SecurityManager();
         public override void OnAuthorization(System.Web.Http.Controllers.HttpActionContext actionContext)
         {
             try
@@ -26,7 +27,7 @@ namespace Vanrise.Web.App_Start
                     {
                         InvalidAccess invalidAccess;
                         string errorMessage;
-                        if (!(new SecurityManager()).CheckTokenAccess(securityToken, out errorMessage, out invalidAccess))
+                        if (!s_securityManager.CheckTokenAccess(securityToken, out errorMessage, out invalidAccess))
                         {
                             System.Net.HttpStatusCode httpStatusCode;
                             switch (invalidAccess)

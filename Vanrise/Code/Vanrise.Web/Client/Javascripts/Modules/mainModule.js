@@ -176,10 +176,8 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
 
                 userInfo.PhotoFileId = response.PhotoFileId;
                 userInfo.UserDisplayName = response.Name;
-                var jsonInfo = UtilsService.serializetoJson(userInfo);
 
-
-                SecurityService.createAccessCookie(jsonInfo);
+                SecurityService.createAccessCookieFromAuthToken(userInfo);
             };
         };
         VRModalService.showModal('/Client/Modules/Security/Views/User/EditProfile.html', null, modalSettings);

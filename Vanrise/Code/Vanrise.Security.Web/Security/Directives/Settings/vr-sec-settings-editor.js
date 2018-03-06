@@ -57,6 +57,7 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                         passwordSettingsPayload = payload.data.PasswordSettings;
                         mailMessageTemplateSettingsPayload.SendEmailNewUser = payload.data.SendEmailNewUser;
                         mailMessageTemplateSettingsPayload.SendEmailOnResetPasswordByAdmin = payload.data.SendEmailOnResetPasswordByAdmin;
+                        $scope.scopeModel.sessionExpirationInMinutes = payload.data.SessionExpirationInMinutes;
                     }
 
 
@@ -88,7 +89,8 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                         MailMessageTemplateSettings: mailMessageTemplateSettingsAPI.getData(),
                         PasswordSettings: passwordSettingsAPI.getData(),
                         SendEmailNewUser: mailMessageTemplateSettingsAPI.getSendEmailNewUser(),
-                        SendEmailOnResetPasswordByAdmin: mailMessageTemplateSettingsAPI.getSendEmailOnResetPasswordByAdmin()
+                        SendEmailOnResetPasswordByAdmin: mailMessageTemplateSettingsAPI.getSendEmailOnResetPasswordByAdmin(),
+                        SessionExpirationInMinutes: $scope.scopeModel.sessionExpirationInMinutes
                     };
                 };
 

@@ -17,6 +17,8 @@ namespace Vanrise.Security.Entities
 
         public int ExpirationIntervalInMinutes { get; set; }
 
+        public int ExpirationIntervalInSeconds { get; set; }
+
         public string Token { get; set; }
 
         public long? PhotoFileId { get; set; }

@@ -29,6 +29,20 @@ namespace Vanrise.Security.Web.Controllers
             return manager.Authenticate(credentialsObject.Email, credentialsObject.Password);
         }
 
+        [IsAnonymous]
+        [HttpPost]
+        [Route("TryRenewCurrentSecurityToken")]
+        public TryRenewCurrentSecurityTokenOutput TryRenewCurrentSecurityToken()
+        {
+            AuthenticationToken newAuthenticationToken;
+            bool isSucceeded = _manager.TryRenewCurrentAuthenticationToken(out newAuthenticationToken);
+            return new TryRenewCurrentSecurityTokenOutput
+            {
+                IsSucceeded = isSucceeded,
+                NewAuthenticationToken = newAuthenticationToken
+            };
+        }
+
         [HttpPost]
         [Route("ChangePassword")]
         public Vanrise.Entities.UpdateOperationOutput<object> ChangePassword(ChangedPasswordObject changedPasswordObject)
@@ -68,7 +82,12 @@ namespace Vanrise.Security.Web.Controllers
             SecurityManager manager = new SecurityManager();
             return manager.GetPasswordValidationInfo();
         }
+    }
 
+    public class TryRenewCurrentSecurityTokenOutput
+    {
+        public bool IsSucceeded { get; set; }
 
+        public AuthenticationToken NewAuthenticationToken { get; set; }
     }
 }

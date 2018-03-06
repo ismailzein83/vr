@@ -7,6 +7,12 @@ function ($cookies) {
         $cookies.put(getAccessCookieName(), userInfo, { path: '/', domain: location.hostname, expires: '', secure: false });
     }
 
+    function createAccessCookieFromAuthToken(authToken) {
+        authToken.cookieCreatedTime = new Date();
+        var userInfo = JSON.stringify(authToken);
+        createAccessCookie(userInfo);
+    }
+
     function getAccessCookie() {
         return $cookies.get(getAccessCookieName());
     }
@@ -47,6 +53,7 @@ function ($cookies) {
 
     return ({
         createAccessCookie: createAccessCookie,
+        createAccessCookieFromAuthToken: createAccessCookieFromAuthToken,
         deleteAccessCookie: deleteAccessCookie,
         isAccessCookieAvailable: isAccessCookieAvailable,
         getLoggedInUserInfo: getLoggedInUserInfo,

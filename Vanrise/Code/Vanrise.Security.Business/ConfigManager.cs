@@ -93,6 +93,11 @@ namespace Vanrise.Security.Business
             return GetSecuritySettings().SendEmailOnResetPasswordByAdmin;
         }
 
+        public int GetSessionExpirationInMinutes()
+        {
+            return GetSecuritySettings().SessionExpirationInMinutes;
+        }
+
         #endregion
 
 
