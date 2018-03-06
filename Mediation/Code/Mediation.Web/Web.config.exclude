@@ -35,7 +35,7 @@
   <appSettings>
     <add key="Web_ExtendedModulesNames" value="VR_DataParser,Mediation_Huawei"/>
     <add key="Vanrise License" value="28-22-92-DB-92-8B-8A-DE-78-FD-95-85-7B-E3-E8-19::==wMwkDM5EDMyMDM5ATNxAjM:kVGdwlncj5WR09mT" />
-    <add key="EncryptionSecretKey" value="V@nR!se-Se6r3t" />
+    <add key="EncryptionSecretKey" value="V@nR!se-Se6r3tMeD!@t!0n" />
     <add key="TempPasswordValidity" value="24:00:00"/>
     
     <add key="webpages:Version" value="2.0.0.0" />
