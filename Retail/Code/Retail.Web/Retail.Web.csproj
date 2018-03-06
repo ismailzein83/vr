@@ -24,6 +24,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -899,15 +901,10 @@
     <None Include="Web.config.exclude">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Web.config.Debug.exclude">
-      <DependentUpon>Web.config.exclude</DependentUpon>
-    </None>
-    <None Include="Web.config.Release.exclude">
-      <DependentUpon>Web.config.exclude</DependentUpon>
-    </None>
     <Content Include="Web.config.Zajil.exclude" />
     <Content Include="Web.config.Ringo.exclude" />
     <Content Include="Web.config.MultiNet.exclude" />
+    <Content Include="Web.config.TestCallAnalysis.exclude" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

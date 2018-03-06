@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!--
+  For more information on how to configure your ASP.NET application, please visit
+  http://go.microsoft.com/fwlink/?LinkId=301879
+  -->
+<configuration>
+  <connectionStrings>
+    <!--replace same key in main configuration file-->
+    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=TestCallAnalysis_Configuration;User ID=sa;Password= "/>
+  </connectionStrings>
+  <appSettings>
+    <add key="Web_ExtendedModulesNames" value="TestCallAnalysis"/>
+  </appSettings>
+</configuration>

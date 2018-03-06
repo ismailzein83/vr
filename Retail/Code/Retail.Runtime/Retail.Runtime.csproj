@@ -609,6 +609,9 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="App.config.TestCallAnalysis.exclude">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="App.config.exclude">
       <SubType>Designer</SubType>
     </None>

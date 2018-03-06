@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <connectionStrings>
+    <!--replace same key in main configuration file-->
+    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=TestCallAnalysis_Configuration;User ID=sa;Password= "/>
+  </connectionStrings>
+  <appSettings>
+    <add key="TestCallAnalysis_DBConnStringKey"                 value="ConfigurationDBConnString"/>
+
+    <add key="ExposedConnectionStringNames" value=""/>
+  </appSettings>
+</configuration>
