@@ -99,7 +99,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
 
 
-            if (customerInvoiceDetails != null && ((minAmount.HasValue && customerInvoiceDetails.SaleAmount >= minAmount.Value) || (!minAmount.HasValue && customerInvoiceDetails.SaleAmount != 0)))
+            if (customerInvoiceDetails != null)
             {
                 customerInvoiceDetails.TimeZoneId = timeZoneId;
                 customerInvoiceDetails.Commission = commission;
@@ -118,25 +118,27 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         customerInvoiceDetails.TotalAmount += ((customerInvoiceDetails.SaleAmount * Convert.ToDecimal(tax.Value)) / 100);
                     }
                 }
-                if (!financialAccountInvoiceType.IgnoreFromBalance)
+                if ((minAmount.HasValue && customerInvoiceDetails.TotalAmountAfterCommission >= minAmount.Value) || (!minAmount.HasValue && customerInvoiceDetails.TotalAmountAfterCommission != 0))
                 {
-                    SetInvoiceBillingTransactions(context, customerInvoiceDetails, financialAccount, fromDate, toDateForBillingTransaction);
+                    if (!financialAccountInvoiceType.IgnoreFromBalance)
+                    {
+                        SetInvoiceBillingTransactions(context, customerInvoiceDetails, financialAccount, fromDate, toDateForBillingTransaction);
+                    }
+
+                    context.Invoice = new GeneratedInvoice
+                    {
+                        InvoiceDetails = customerInvoiceDetails,
+                        InvoiceItemSets = generatedInvoiceItemSets,
+                    };
                 }
-                context.Invoice = new GeneratedInvoice
+                else
                 {
-                    InvoiceDetails = customerInvoiceDetails,
-                    InvoiceItemSets = generatedInvoiceItemSets,
-                };
+                    context.ErrorMessage = "Connot generate invoice with amount less than threshold.";
+                    throw new InvoiceGeneratorException("Connot generate invoice with amount less than threshold.");
+                }
 
-            }else
-            {
-                context.ErrorMessage = "No billing data available.";
-                throw new InvoiceGeneratorException("No billing data available.");
             }
-
             #endregion
-
-           
         }
 
         private List<CustomerInvoiceBySaleCurrencyItemDetails> loadCurrencyItemSet(string dimentionName, int dimensionValue, DateTime fromDate, DateTime toDate,decimal? commission, CommissionType? commissionType,IEnumerable<VRTaxItemDetail>  taxItemDetails)
