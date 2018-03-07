@@ -104,6 +104,7 @@
     <Compile Include="Context\SwapDealAnalysisOutboundRateCalcMethodContext.cs" />
     <Compile Include="SwapDeals\RouteRules\SwapDealBuyRouteRuleManager.cs" />
     <Compile Include="SwapDeals\SwapDealRouteBuildInterceptor.cs" />
+    <Compile Include="SwapDeals\ValidateBeforeSaveContext.cs" />
     <Compile Include="VolCommitmentDealManager.cs" />
     <Compile Include="SwapDeals\SwapDealManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

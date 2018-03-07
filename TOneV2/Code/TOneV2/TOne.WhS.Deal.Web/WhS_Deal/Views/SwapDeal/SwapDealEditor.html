@@ -3,25 +3,26 @@
         <vr-form name="formEditor">
             <vr-tabs>
                 <vr-tab header="'Definition'">
+
                     <vr-row>
                         <span vr-disabled="scopeModel.disabelType">
                             <vr-whs-be-carrieraccount-selector onselectionchanged="scopeModel.onCarrierAccountSelectionChanged" on-ready="scopeModel.onCarrierAccountSelectorReady"
                                                                selectedvalues="scopeModel.carrierAccount" normal-col-num="4" isrequired="true"
                                                                hideremoveicon="true" getexchangecarriers>
                             </vr-whs-be-carrieraccount-selector>
-                        </span>
-                        <span vr-disabled="scopeModel.isCommitmentAgreement">
-                            <vr-columns width="1/3row">
-                                <vr-select label="Deal Contract"
-                                           datasource="scopeModel.contractTypes"
-                                           datavaluefield="value"
-                                           datatextfield="description"
-                                           selectedvalues="scopeModel.selectedContractType"
-                                           isrequired="true"
-                                           hideremoveicon="true">
-                                </vr-select>
-                            </vr-columns>
-                        </span>
+                            </span>
+                            <span vr-disabled="scopeModel.isCommitmentAgreement">
+                                <vr-columns width="1/3row">
+                                    <vr-select label="Deal Contract"
+                                               datasource="scopeModel.contractTypes"
+                                               datavaluefield="value"
+                                               datatextfield="description"
+                                               selectedvalues="scopeModel.selectedContractType"
+                                               isrequired="true"
+                                               hideremoveicon="true">
+                                    </vr-select>
+                                </vr-columns>
+                            </span>
                         <span vr-disabled="scopeModel.disabelType">
                             <vr-columns width="1/3row">
                                 <vr-select label="Deal Type"
@@ -33,8 +34,9 @@
                                            hideremoveicon="true">
                                 </vr-select>
                             </vr-columns>
-                        </span>
-                    </vr-row>
+                            </span>
+
+</vr-row>
                     <span vr-disabled="scopeModel.isCommitmentAgreement">
                         <vr-row>
                             <vr-columns width="1/3row">
@@ -81,6 +83,16 @@
                         </vr-row>
                 </vr-tab>
             </vr-tabs>
+            <vr-row ng-if="validationMessages != undefined && validationMessages.length > 0">
+                <vr-columns width="fullrow">
+                    <label class="alert alert-danger" vr-alert>
+                        <ul>
+                            <li ng-repeat="message in validationMessages">{{message}}</li>
+                        </ul>
+                    </label>
+                    </vr-columns>
+
+            </vr-row>
         </vr-form>
     </vr-modalbody>
     <div>

@@ -322,6 +322,9 @@
                         $scope.onSwapDealAdded(response.InsertedObject);
                     $scope.modalContext.closeModal();
                 }
+                else {
+                    $scope.validationMessages = response.ValidationMessages;
+                }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
@@ -335,6 +338,9 @@
                     if ($scope.onSwapDealUpdated != undefined)
                         $scope.onSwapDealUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();
+                }
+                else {
+                    $scope.validationMessages = response.ValidationMessages;
                 }
             }).catch(function (error) {
                 VRNotificationService.notifyException(error, $scope);

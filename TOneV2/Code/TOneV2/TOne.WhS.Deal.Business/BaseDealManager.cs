@@ -7,6 +7,8 @@ using Vanrise.Entities;
 using TOne.WhS.Deal.Entities;
 using TOne.WhS.Deal.Data;
 using Vanrise.Caching;
+using TOne.WhS.Deal.Business;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Deal.Business
 {
@@ -32,41 +34,52 @@ namespace TOne.WhS.Deal.Business
 
         public Vanrise.Entities.InsertOperationOutput<DealDefinitionDetail> AddDeal(DealDefinition deal)
         {
-            var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<DealDefinitionDetail>();
-
+            ValidateBeforeSaveContext context = new ValidateBeforeSaveContext();
+            context.IsEditMode = false;
+            InsertDealOperationOutput insertOperationOutput = new InsertDealOperationOutput();
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
 
             IDealDataManager dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
             int insertedId = -1;
-
-            if (dataManager.Insert(deal, out insertedId))
+            if (deal.Settings.ValidateDataBeforeSave(context))
             {
-                CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
-                deal.DealId = insertedId;
-                VRActionLogger.Current.TrackAndLogObjectAdded(GetLoggableEntity(), deal);
+                if (dataManager.Insert(deal, out insertedId))
+                {
+                    CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
+                    deal.DealId = insertedId;
+                    VRActionLogger.Current.TrackAndLogObjectAdded(GetLoggableEntity(), deal);
 
-                insertOperationOutput.InsertedObject = DealDeinitionDetailMapper(deal);
+                    insertOperationOutput.InsertedObject = DealDeinitionDetailMapper(deal);
+                }
+                else
+                {
+                    insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+                }
             }
             else
             {
-                insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.SameExists;
+                insertOperationOutput.ValidationMessages = context.ValidateMessages;
             }
+
+
 
             return insertOperationOutput;
         }
 
         public Vanrise.Entities.UpdateOperationOutput<DealDefinitionDetail> UpdateDeal(DealDefinition deal)
         {
-
-            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<DealDefinitionDetail>();
-
+            var dealDefinition = GetDeal(deal.DealId);
+            UpdateDealOperationOutput updateOperationOutput = new UpdateDealOperationOutput();
+            ValidateBeforeSaveContext context = new ValidateBeforeSaveContext();
+            context.IsEditMode = true;
+            context.ExistingDeal = deal;
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
 
             IDealDataManager dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
-            if (deal.Settings.ValidateDataBeforeSave())
+            if (deal.Settings.ValidateDataBeforeSave(context))
             {
                 if (dataManager.Update(deal))
                 {
@@ -83,13 +96,11 @@ namespace TOne.WhS.Deal.Business
             }
             else
             {
-                updateOperationOutput.ShowExactMessage = true;
-                updateOperationOutput.Message = "Grace Period should be less than difference between BED and EED";
+                updateOperationOutput.ValidationMessages = context.ValidateMessages;
             }
 
             return updateOperationOutput;
         }
-
         public T GetDealSettings<T>(int dealId) where T : DealSettings
         {
             DealDefinition deal = GetDeal(dealId);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TOne.WhS.Deal.Entities;
 
 namespace TOne.WhS.Deal.Entities
 {
@@ -12,8 +13,8 @@ namespace TOne.WhS.Deal.Entities
         public DateTime? EndDate { get; set; }
 
         public abstract void GetZoneGroups(IDealGetZoneGroupsContext context);
-        
-        public abstract bool ValidateDataBeforeSave();
+
+        public abstract bool ValidateDataBeforeSave(IValidateBeforeSaveContext validateBeforeSaveContext);
     }
 
     public interface IDealGetZoneGroupsContext

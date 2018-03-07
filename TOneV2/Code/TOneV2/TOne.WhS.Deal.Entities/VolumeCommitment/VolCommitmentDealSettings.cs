@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.Deal.Entities;
 
 namespace TOne.WhS.Deal.Entities
 {
@@ -30,7 +31,7 @@ namespace TOne.WhS.Deal.Entities
 
         public int CurrencyId { get; set; }
 
-        public override bool ValidateDataBeforeSave()
+        public override bool ValidateDataBeforeSave(IValidateBeforeSaveContext validateBeforeSaveContext)
         {
             return true;
         }

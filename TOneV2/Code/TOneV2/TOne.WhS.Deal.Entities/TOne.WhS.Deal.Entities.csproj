@@ -41,6 +41,9 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Common">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
@@ -62,6 +65,7 @@
     <Compile Include="DealRateEvaluator\DealSupplierRateEvaluatorConfig.cs" />
     <Compile Include="DealSaleZoneGroup.cs" />
     <Compile Include="DealSupplierZoneGroup.cs" />
+    <Compile Include="InsertDealOperationOutput.cs" />
     <Compile Include="Settings\DealTechnicalSettingData.cs" />
     <Compile Include="Settings\SwapDealTechnicalSettingData.cs" />
     <Compile Include="SwapDealAnalysis\Input\CalculateInboundRateInput.cs" />
@@ -72,6 +76,7 @@
     <Compile Include="SwapDealAnalysis\RateCalcMethod\Outbound\SwapDealAnalysisOutboundItemRateCalcMethod.cs" />
     <Compile Include="SwapDealAnalysis\RateCalcMethod\Outbound\SwapDealAnalysisOutboundRateCalcMethod.cs" />
     <Compile Include="SwapDealAnalysis\RateCalcMethod\Outbound\SwapDealAnalysisOutboundRateCalcMethodConfig.cs" />
+    <Compile Include="SwapDeal\IValidateBeforeSaveContext.cs" />
     <Compile Include="SwapDeal\RouteRules\RouteRulesDefinition\SwapDealBuyRouteRuleDefinitionSettings.cs" />
     <Compile Include="SwapDeal\RouteRules\SwapDealBuyRouteRule.cs" />
     <Compile Include="SwapDeal\RouteRules\SwapDealBuyRouteRuleDetails.cs" />
@@ -90,6 +95,7 @@
     <Compile Include="SwapDeal\SwapDealInbound.cs" />
     <Compile Include="SwapDeal\SwapDealSettingsDetail.cs" />
     <Compile Include="DealRateEvaluator\BaseDealRateEvaluator.cs" />
+    <Compile Include="UpdateDealOperationOutput.cs" />
     <Compile Include="VolumeCommitment\VolCommitmentDealQuery.cs" />
     <Compile Include="VolumeCommitment\VolCommitmentDealItem.cs" />
     <Compile Include="VolumeCommitment\VolCommitmentDealItemTier.cs" />
