@@ -399,6 +399,14 @@ namespace TOne.WhS.Routing.Business
 
         private class RPRouteByZoneExcelExportHandler : ExcelExportHandler<RPRouteDetailByZone>
         {
+            public int NumberOfOptions { get; set; }
+
+            int _longPrecisionValue;
+            public RPRouteByZoneExcelExportHandler()
+            {
+                _longPrecisionValue = new GeneralSettingsManager().GetLongPrecisionValue();
+            }
+
             public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<RPRouteDetailByZone> context)
             {
                 ZoneServiceConfigManager zoneServiceConfigManager = new ZoneServiceConfigManager();
@@ -406,7 +414,8 @@ namespace TOne.WhS.Routing.Business
                 ExportExcelSheet sheet = new ExportExcelSheet()
                 {
                     SheetName = "Product Cost",
-                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() },
+                    AutoFitColumns = true
                 };
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Routing Product", Width = 25 });
@@ -414,7 +423,10 @@ namespace TOne.WhS.Routing.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Sale Zone", Width = 25 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Services" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Blocked" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Route Options", Width = 125 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Option 1", Width = 50 });
+
+                for (var optionNb = 2; optionNb <= this.NumberOfOptions; optionNb++)
+                    sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = string.Format("Option {0}", optionNb), Width = 50 });
 
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
@@ -422,25 +434,38 @@ namespace TOne.WhS.Routing.Business
                     foreach (var record in context.BigResult.Data)
                     {
                         var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
-                        sheet.Rows.Add(row);
                         row.Cells.Add(new ExportExcelCell { Value = record.RoutingProductName });
                         row.Cells.Add(new ExportExcelCell { Value = record.SellingNumberPlan });
                         row.Cells.Add(new ExportExcelCell { Value = record.SaleZoneName });
                         row.Cells.Add(new ExportExcelCell { Value = record.SaleZoneServiceIds == null ? "" : zoneServiceConfigManager.GetZoneServicesNames(record.SaleZoneServiceIds.ToList()) });
                         row.Cells.Add(new ExportExcelCell { Value = record.IsBlocked });
+
                         if (record.RouteOptionsDetails != null)
                         {
-                            string routeOptionsDetails = "";
                             foreach (var customerRouteOptionDetail in record.RouteOptionsDetails)
                             {
-                                routeOptionsDetails = routeOptionsDetails + customerRouteOptionDetail.SupplierName + " ";
+                                string optionPercentage = string.Empty;
                                 if (customerRouteOptionDetail.Percentage != null)
-                                    routeOptionsDetails = routeOptionsDetails + customerRouteOptionDetail.Percentage + "% ";
+                                    optionPercentage = customerRouteOptionDetail.Percentage + "% ";
+
+                                string routeOptionsDetails = string.Concat(optionPercentage, customerRouteOptionDetail.SupplierName, " (", Math.Round(customerRouteOptionDetail.ConvertedSupplierRate, _longPrecisionValue), ")");
+                                row.Cells.Add(new ExportExcelCell { Value = routeOptionsDetails });
                             }
-                            row.Cells.Add(new ExportExcelCell { Value = routeOptionsDetails });
+
+                            int remainingOptions = this.NumberOfOptions - record.RouteOptionsDetails.Count();
+                            if (remainingOptions > 0)
+                            {
+                                for (int i = 1; i <= remainingOptions; i++)
+                                    row.Cells.Add(new ExportExcelCell { Value = "" });
+                            }
                         }
                         else
-                            row.Cells.Add(new ExportExcelCell { Value = "" });
+                        {
+                            for (var optionNb = 1; optionNb <= this.NumberOfOptions; optionNb++)
+                                row.Cells.Add(new ExportExcelCell { Value = "" });
+                        }
+
+                        sheet.Rows.Add(row);
                     }
                 }
                 context.MainSheet = sheet;
@@ -491,11 +516,7 @@ namespace TOne.WhS.Routing.Business
 
             protected override ResultProcessingHandler<RPRouteDetailByZone> GetResultProcessingHandler(DataRetrievalInput<RPRouteQueryByZone> input, BigResult<RPRouteDetailByZone> bigResult)
             {
-                var resultProcessingHandler = new ResultProcessingHandler<RPRouteDetailByZone>()
-                {
-                    ExportExcelHandler = new RPRouteByZoneExcelExportHandler()
-                };
-                return resultProcessingHandler;
+                return new ResultProcessingHandler<RPRouteDetailByZone>() { ExportExcelHandler = new RPRouteByZoneExcelExportHandler() { NumberOfOptions = input.Query.NumberOfOptions } };
             }
         }
 
