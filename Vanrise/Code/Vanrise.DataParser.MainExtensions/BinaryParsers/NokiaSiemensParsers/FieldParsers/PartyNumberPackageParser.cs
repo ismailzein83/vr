@@ -19,7 +19,7 @@ namespace Vanrise.DataParser.MainExtensions.BinaryParsers.NokiaSiemensParsers.Fi
             byte[] digitsBytes = new byte[digitBytesLength];
             Array.Copy(context.FieldValue, 3, digitsBytes, 0, digitBytesLength);
 
-            string digits = ParserHelper.ByteArrayToString(digitsBytes, false);
+            string digits = ParserHelper.GetBCDNumber(digitsBytes, true, false);
             partyNumber = numberOfDigits % 2 != 0 ? digits.Remove(digits.Length - 1, 1) : digits;
 
             context.Record.SetFieldValue(this.PartyNumberFieldName, partyNumber);

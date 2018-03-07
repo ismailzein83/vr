@@ -273,6 +273,8 @@ namespace Vanrise.Integration.Business
                 using System.Collections.Generic;
                 using System.IO;
                 using System.Data;
+                using Vanrise.Common;
+                using Vanrise.Entities;
                 using Vanrise.Integration.Entities;
                 using Vanrise.Integration.Mappers;
 
@@ -282,8 +284,7 @@ namespace Vanrise.Integration.Business
                     {                        
                         ").Append(code).Append(@"
                     }
-                }
-                ");
+                }");
 
             string classNamespace = CSharpCompiler.GenerateUniqueNamespace("Vanrise.Integration.Business");
             string className = "DataSourceDataMapper";

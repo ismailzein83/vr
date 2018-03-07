@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Vanrise.DataParser.Business;
 using Vanrise.DataParser.Entities;
-using Vanrise.DataParser.MainExtensions.BinaryParsers.Common.RecordParsers;
+using Vanrise.DataParser.MainExtensions.BinaryParsers.NokiaSiemensParsers.FieldParsers.PackageFieldParser;
 
 namespace Vanrise.DataParser.MainExtensions.BinaryParsers.NokiaSiemensParsers.RecordParsers
 {
@@ -22,25 +22,16 @@ namespace Vanrise.DataParser.MainExtensions.BinaryParsers.NokiaSiemensParsers.Re
             BinaryParserHelper.ReadBlockFromStream(context.RecordStream, PackageTagLength, (packageTag) =>
             {
                 int packageId = ParserHelper.GetInt(packageTag.Value, 0, PackageTagLength);
-                
+
                 PackageFieldParser packageFieldParser;
                 if (this.Packages != null && this.Packages.TryGetValue(packageId, out packageFieldParser))
                 {
-                    int packageLengthByteLengthRead = 0;
+                    var packageFieldParserGetLengthContext = new PackageFieldParserGetLengthContext() { PackageLengthByteLength = this.PackageLengthByteLength, Stream = context.RecordStream };
+                    int calculatedPackageLength = packageFieldParser.GetPackageLength(packageFieldParserGetLengthContext);
 
-                    int? calculatedPackageLength = packageFieldParser.PackageLength;
-                    if (!calculatedPackageLength.HasValue)
-                    {
-                        packageLengthByteLengthRead = PackageLengthByteLength;
-                        BinaryParserHelper.ReadBlockFromStream(context.RecordStream, PackageLengthByteLength, (packageLength) =>
-                        {
-                            calculatedPackageLength = ParserHelper.GetInt(packageLength.Value, 0, PackageLengthByteLength);
-                        }, true);
-                    }
+                    int previouslyReadBytes = packageFieldParserGetLengthContext.PackageLengthByteLengthRead + this.PackageTagLength;
 
-                    int previouslyReadBytes = packageLengthByteLengthRead + this.PackageTagLength;
-
-                    BinaryParserHelper.ReadBlockFromStream(context.RecordStream, calculatedPackageLength.Value - previouslyReadBytes, (packageContent) =>
+                    BinaryParserHelper.ReadBlockFromStream(context.RecordStream, calculatedPackageLength - previouslyReadBytes, (packageContent) =>
                     {
                         BinaryParserHelper.ExecuteFieldParser(packageFieldParser.FieldParser, parsedRecord, packageContent.Value);
                     }, true);
@@ -75,14 +66,5 @@ namespace Vanrise.DataParser.MainExtensions.BinaryParsers.NokiaSiemensParsers.Re
             }
             context.OnRecordParsed(parsedRecord);
         }
-    }
-
-    public class PackageFieldParser
-    {
-        public BinaryFieldParserSettings FieldParser { get; set; }
-
-        public int PackageTagLength { get; set; }
-
-        public int? PackageLength { get; set; }
     }
 }

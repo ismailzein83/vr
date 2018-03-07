@@ -44,6 +44,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BinaryParsers\AlcatelParsers\RecordParsers\HeaderRecordParser.cs" />
+    <Compile Include="BinaryParsers\NokiaSiemensParsers\FieldParsers\PackageFieldParser\DigitStringPackageFieldParser.cs" />
+    <Compile Include="BinaryParsers\NokiaSiemensParsers\FieldParsers\PackageFieldParser\DirectLengthPackageFieldParser.cs" />
+    <Compile Include="BinaryParsers\NokiaSiemensParsers\FieldParsers\PackageFieldParser\FixedLengthPackageFieldParser.cs" />
+    <Compile Include="BinaryParsers\NokiaSiemensParsers\FieldParsers\PackageFieldParser\IPackageFieldParserGetLengthContext.cs" />
+    <Compile Include="BinaryParsers\NokiaSiemensParsers\FieldParsers\PackageFieldParser\PackageFieldParser.cs" />
     <Compile Include="BinaryParsers\NokiaSiemensParsers\FieldParsers\ZonePackageParser.cs" />
     <Compile Include="CompositeFieldParsers\DateFromDayNumberCompositeParser.cs" />
     <Compile Include="CompositeFieldParsers\DateTimeCompositeParser.cs" />
