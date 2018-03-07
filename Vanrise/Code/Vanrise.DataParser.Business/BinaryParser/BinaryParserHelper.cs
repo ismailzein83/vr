@@ -110,7 +110,6 @@ namespace Vanrise.DataParser.Business
                 if (readOnce)
                     break;
             }
-
         }
 
         public static byte[] Combine(byte[] first, byte[] second)
