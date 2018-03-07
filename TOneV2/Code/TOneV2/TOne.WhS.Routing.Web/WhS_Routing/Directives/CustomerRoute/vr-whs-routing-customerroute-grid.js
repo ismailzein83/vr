@@ -73,13 +73,6 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
                     return loadGridPromiseDeffered.promise;
                 };
 
-                //$scope.getRowStyle = function (dataItem) {
-                //    var rowStyle;
-                //    if (dataItem.IsBlocked)
-                //        rowStyle = { CssClass: "bg-danger" };
-                //    return rowStyle;
-                //};
-
                 defineMenuActions();
             }
 
@@ -288,13 +281,21 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
 
                 drillDownDefinition.loadDirective = function (directiveAPI, customerRoute) {
                     var payload = {
-                        customerRoute: customerRoute
+                        customerRoute: customerRoute,
+                        context: buildContext()
                     };
 
                     return directiveAPI.load(payload);
                 };
                 return [drillDownDefinition];
-            }
+            };
+
+            function buildContext() {
+                return {
+                    isDatabaseTypeCurrent: isDatabaseTypeCurrent,
+                    refreshGrid: function () { return gridAPI.refreshGrid(); }
+                };
+            };
         }
 
         return directiveDefinitionObject;

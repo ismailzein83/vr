@@ -12,14 +12,22 @@ namespace TOne.WhS.Routing.BP.Activities
     {
         public InArgument<int?> RouteRuleId { get; set; }
 
+        public InArgument<int?> RouteOptionRuleId { get; set; }
+
         protected override void Execute(CodeActivityContext context)
         {
             int? routeRuleId = this.RouteRuleId.Get(context);
+            int? routeOptionRuleId = this.RouteOptionRuleId.Get(context);
+
             RouteRuleManager routeRuleManager = new RouteRuleManager();
             RouteOptionRuleManager routeOptionRuleManager = new RouteOptionRuleManager();
             if (routeRuleId.HasValue)
             {
                 routeRuleManager.DeleteRuleChangedForProcessing(routeRuleId.Value);
+            }
+            else if (routeOptionRuleId.HasValue)
+            {
+                routeOptionRuleManager.DeleteRuleChangedForProcessing(routeOptionRuleId.Value);
             }
             else
             {

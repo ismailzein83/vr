@@ -21,6 +21,9 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<int?> RouteRuleId { get; set; }
 
         [RequiredArgument]
+        public InArgument<int?> RouteOptionRuleId { get; set; }
+
+        [RequiredArgument]
         public OutArgument<AffectedRouteRules> AffectedRouteRules { get; set; }
 
         [RequiredArgument]
@@ -35,17 +38,22 @@ namespace TOne.WhS.Routing.BP.Activities
             PartialRouteInfo partialRouteInfo = this.PartialRouteInfo.Get(context);
 
             int? routeRuleId = this.RouteRuleId.Get(context);
+            int? routeOptionRuleId = this.RouteOptionRuleId.Get(context);
             DateTime? nextOpenOrCloseRuleTime = null;
 
             RouteRuleManager routeRuleManager = new RouteRuleManager();
             RouteOptionRuleManager routeOptionRuleManager = new RouteOptionRuleManager();
 
-            List<RuleChangedData<RouteRule>> routeRuleChangedList;
+            List<RuleChangedData<RouteRule>> routeRuleChangedList = null;
             List<RuleChangedData<RouteOptionRule>> routeOptionRuleChangedList = null;
 
             if (routeRuleId.HasValue)
             {
                 routeRuleChangedList = new List<RuleChangedData<RouteRule>>() { routeRuleManager.FillAndGetRuleChangedForProcessing(routeRuleId.Value) };
+            }
+            else if (routeOptionRuleId.HasValue)
+            {
+                routeOptionRuleChangedList = new List<RuleChangedData<RouteOptionRule>>() { routeOptionRuleManager.FillAndGetRuleChangedForProcessing(routeOptionRuleId.Value) };
             }
             else
             {
@@ -61,7 +69,7 @@ namespace TOne.WhS.Routing.BP.Activities
             HashSet<int> affectedRouteOptionRuleIds = new HashSet<int>();
             BuildAddedUpdatedRouteOptionRules(routeOptionRuleChangedList, affectedRouteOptionRules, affectedRouteOptionRuleIds, effectiveDate);
 
-            if (!routeRuleId.HasValue && effectiveDate > partialRouteInfo.LatestRoutingDate)
+            if (!routeRuleId.HasValue && !routeOptionRuleId.HasValue && effectiveDate > partialRouteInfo.LatestRoutingDate)
             {
                 BuildOpenedClosedRouteRules(affectedRouteRules, affectedRouteRuleIds, effectiveDate, partialRouteInfo, ref nextOpenOrCloseRuleTime);
                 BuildOpenedClosedRouteOptionRules(affectedRouteOptionRules, affectedRouteOptionRuleIds, effectiveDate, partialRouteInfo, ref nextOpenOrCloseRuleTime);

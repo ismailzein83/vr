@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_Routing_RouteOptionRuleAPIService',
-    function (WhS_Routing_RouteOptionRuleService, UtilsService, VRUIUtilsService, VRNotificationService, WhS_Routing_RouteOptionRuleAPIService) {
+app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleService', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_Routing_RouteOptionRuleAPIService', 'BusinessProcess_BPInstanceAPIService', 'WhS_BP_CreateProcessResultEnum', 'BusinessProcess_BPInstanceService', 'BPInstanceStatusEnum',
+    function (WhS_Routing_RouteOptionRuleService, UtilsService, VRUIUtilsService, VRNotificationService, WhS_Routing_RouteOptionRuleAPIService, BusinessProcess_BPInstanceAPIService, WhS_BP_CreateProcessResultEnum, BusinessProcess_BPInstanceService, BPInstanceStatusEnum) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -29,8 +29,8 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
             this.initializeController = initializeController;
 
             var customerRoute;
-
             var gridAPI;
+            var context;
 
             function initializeController() {
                 $scope.routeOptionDetails = [];
@@ -75,17 +75,6 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
 
                     return menuActions;
                 };
-
-                //$scope.getRowStyle = function (dataItem) {
-                //    var rowStyle;
-                //    if (dataItem.IsBlocked) {
-                //        rowStyle = { CssClass: "bg-danger" };
-                //    }
-                //    else if (dataItem.ExecutedRuleId) {
-                //        rowStyle = { CssClass: "bg-success" };
-                //    }
-                //    return rowStyle
-                //};
             }
 
             function defineAPI() {
@@ -96,6 +85,7 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
 
                     if (payload != undefined) {
                         customerRoute = payload.customerRoute;
+                        context = payload.context;
                     }
 
                     if (customerRoute != undefined && customerRoute.RouteOptionDetails != null) {
@@ -154,26 +144,7 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
 
             function addRouteOptionRuleEditor(dataItem) {
                 var onRouteOptionRuleAdded = function (addedItem) {
-                    //var newDataItem = {
-                    //    CustomerRouteOptionDetailId: dataItem.CustomerRouteOptionDetailId,
-                    //    SupplierId: dataItem.SupplierId,
-                    //    SupplierName: dataItem.SupplierName,
-                    //    SupplierZoneId: dataItem.SupplierZoneId,
-                    //    SupplierZoneName: dataItem.SupplierZoneName,
-                    //    SupplierCode: dataItem.SupplierCode,
-                    //    SupplierRate: dataItem.SupplierRate,
-                    //    Percentage: dataItem.Percentage,
-                    //    IsBlocked: dataItem.IsBlocked,
-                    //    IsBackup: dataItem.IsBackup,
-                    //    ExactSupplierServiceIds: dataItem.ExactSupplierServiceIds,
-                    //    ExecutedRuleId: dataItem.ExecutedRuleId,
-                    //    LinkedRouteOptionRuleCount: 1,
-                    //    LinkedRouteOptionRuleIds: []
-                    //};
-                    //newDataItem.LinkedRouteOptionRuleIds.push(addedItem.Entity.RuleId);
-
-                    //extendRouteOptionDetailObject(newDataItem);
-                    //gridAPI.itemUpdated(newDataItem);
+                    triggerPartialRoute(addedItem.Entity.RuleId);
                 };
 
                 var linkedRouteOptionRuleInput = { RuleId: dataItem.ExecutedRuleId, CustomerId: customerRoute.CustomerId, Code: customerRoute.Code, SupplierId: dataItem.SupplierId, SupplierZoneId: dataItem.SupplierZoneId };
@@ -193,11 +164,54 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
             }
 
             function editLinkedRouteOptionRule(dataItem) {
-                WhS_Routing_RouteOptionRuleService.editLinkedRouteOptionRule(dataItem.LinkedRouteOptionRuleIds[0], customerRoute.Code);
+                var onRouteRuleUpdated = function (updatedItem) {
+                    triggerPartialRoute(updatedItem.Entity.RuleId);
+                };
+                WhS_Routing_RouteOptionRuleService.editLinkedRouteOptionRule(dataItem.LinkedRouteOptionRuleIds[0], customerRoute.Code, onRouteRuleUpdated);
             }
 
             function viewRouteOptionRuleEditor(dataItem) {
                 WhS_Routing_RouteOptionRuleService.viewRouteOptionRule(dataItem.ExecutedRuleId);
+            }
+
+            function triggerPartialRoute(ruleId) {
+                if (context != undefined && context.isDatabaseTypeCurrent) {
+                    var inputArguments = {
+                        $type: 'TOne.WhS.Routing.BP.Arguments.PartialRoutingProcessInput, TOne.WhS.Routing.BP.Arguments',
+                        RouteOptionRuleId: ruleId
+                    };
+
+                    var input = {
+                        InputArguments: inputArguments
+                    };
+                    $scope.isLoading = true;
+                    BusinessProcess_BPInstanceAPIService.CreateNewProcess(input).then(function (response) {
+                        if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
+                            var processTrackingContext = {
+                                automaticCloseWhenCompleted: true,
+                                onClose: function (bpInstanceClosureContext) {
+
+                                    if (bpInstanceClosureContext != undefined && bpInstanceClosureContext.bpInstanceStatusValue === BPInstanceStatusEnum.Completed.value) {
+                                        $scope.isLoading = true;
+                                        if (context != undefined && context.refreshGrid != undefined && typeof (context.refreshGrid) == 'function') {
+                                            context.refreshGrid().then(function () {
+                                                $scope.isLoading = false;
+                                            }).catch(function (error) {
+                                                $scope.isLoading = false;
+                                            });
+                                        }
+                                        else {
+                                            $scope.isLoading = false;
+                                        }
+                                    }
+                                }
+                            }
+                            BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, processTrackingContext);
+                        }
+                    }).catch(function (error) {
+                        $scope.isLoading = false;
+                    });
+                }
             }
         }
 
