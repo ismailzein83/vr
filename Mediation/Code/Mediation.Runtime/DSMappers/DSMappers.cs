@@ -1,9 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Integration.Entities;
@@ -47,11 +43,12 @@ namespace Mediation.Runtime
 
                         dynamic cdr = Activator.CreateInstance(mediationCDRRuntimeType) as dynamic;
 
+                        cdr.FileName = importedData.Name;
                         cdr.RecordType = cdrAsString.Substring(0, 2);
                         cdr.CallStatus = cdrAsString.Substring(2, 1);
                         cdr.CauseForOutput = cdrAsString.Substring(3, 1);
 
-                        string aNumber = cdrAsString.Substring(24, 20);
+                        string aNumber = cdrAsString.Substring(4, 20);
                         if (!string.IsNullOrEmpty(aNumber))
                             cdr.ANumber = Utilities.ReplaceString(aNumber.TrimStart(), "F", "", StringComparison.OrdinalIgnoreCase);
 
@@ -153,6 +150,31 @@ namespace Mediation.Runtime
                 }
 
             });
+            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
+            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
+            LogVerbose("Finished");
+            return result;
+        }
+
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_NokiaSiemens_Binary(IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
+        {
+            Vanrise.DataParser.Business.ExecuteParserOptions options = new Vanrise.DataParser.Business.ExecuteParserOptions { GenerateIds = true };
+            Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
+
+            Vanrise.DataParser.Business.ParserHelper.ExecuteParser(ImportedData.Stream, ImportedData.Name, new Guid("202c8508-a24c-4664-b769-be71c86fcd75"), options, (parsedBatch) =>
+            {
+                Vanrise.Integration.Entities.MappedBatchItem batch = 
+                    Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(parsedBatch.Records, "#RECORDSCOUNT# of Nokia Siemens Parsed CDRs", parsedBatch.RecordType);
+
+                switch (parsedBatch.RecordType)
+                {
+                    case "ICX_NokiaSiemens_CDR":
+                        mappedBatches.Add("CDRTransformationStage", batch);
+                        break;
+                    default: break;
+                }
+            });
+
             Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
             result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
             LogVerbose("Finished");

@@ -397,7 +397,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataParser\DataParserTester.cs" />
-    <Compile Include="DSMappers.cs" />
+    <Compile Include="DSMappers\DSMappers.cs" />
     <Compile Include="ITask.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
