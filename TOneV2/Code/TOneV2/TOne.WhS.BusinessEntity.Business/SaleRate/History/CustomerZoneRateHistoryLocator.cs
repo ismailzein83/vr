@@ -23,7 +23,7 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         #endregion
 
-        public IEnumerable<SaleRateHistoryRecord> GetCustomerZoneRateHistory(int customerId, int sellingProductId, string zoneName, int? rateTypeId, int countryId, int targetCurrencyId, int longPrecision)
+        public IEnumerable<SaleRateHistoryRecord> GetCustomerZoneRateHistory(int customerId, int sellingProductId, string zoneName, int? rateTypeId, int countryId, int? targetCurrencyId, int? longPrecision)
         {
             var rateHistoryBySource = new SaleRateHistoryBySource();
             List<CustomerCountry2> customerCountries = RateHistoryUtilities.GetAllCustomerCountries(customerId, countryId);
