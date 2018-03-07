@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [VR_Invoice].sp_Invoice_GetLastByPartners
+CREATE PROCEDURE [VR_Invoice].[sp_Invoice_GetLastByPartners]
 		@PartnerInvoiceTypeTable [VR_Invoice].PartnerInvoiceTypeTable READONLY
 AS
 BEGIN
@@ -24,6 +24,7 @@ BEGIN
 			SourceId,
 			IsAutomatic,
 			InvoiceSettingId,
+			SettlementInvoiceId,
 			SentDate
 	FROM	VR_Invoice.Invoice inv with(nolock)
 	join @PartnerInvoiceTypeTable pit on  inv.InvoiceTypeID = pit.InvoiceTypeID AND inv.PartnerID = pit.PartnerId 

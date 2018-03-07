@@ -32,7 +32,8 @@ BEGIN
 			vrIn.Settings,
 			vrIn.IsAutomatic,
 			vrIn.InvoiceSettingId,
-			vrIn.SentDate
+			vrIn.SentDate,
+			vrIn.SettlementInvoiceId
 	FROM	VR_Invoice.Invoice vrIn with(nolock)  
 	where	vrIn.InvoiceTypeId = @InvoiceTypeId AND  
 			vrIn.PartnerID  IN (select PartnerId from @PartnerIdsTable) AND 

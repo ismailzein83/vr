@@ -24,6 +24,7 @@ BEGIN
 			SourceId,
 			IsAutomatic,
 			InvoiceSettingId,
+			SettlementInvoiceId,
 			SentDate
 	FROM	VR_Invoice.Invoice inv with(nolock)
 	join @PartnerInvoiceTypeTable pit on  inv.InvoiceTypeID = pit.InvoiceTypeID AND inv.PartnerID = pit.PartnerId 

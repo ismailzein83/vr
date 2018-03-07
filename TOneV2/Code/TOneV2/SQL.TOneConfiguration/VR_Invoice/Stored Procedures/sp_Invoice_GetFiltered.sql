@@ -28,6 +28,7 @@ select Convert(nvarchar(50), ParsedString) from [VR_Invoice].ParseStringList(@Pa
 			vrIn.PartnerID,SerialNumber,
 			vrIn.FromDate,
 			vrIn.ToDate,
+			vrIn.SettlementInvoiceId,
 			vrIn.IssueDate,
 			vrIn.DueDate,
 			vrIn.Details,
