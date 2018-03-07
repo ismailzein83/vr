@@ -18,7 +18,7 @@ namespace Vanrise.Rules.Pricing.MainExtensions.RateType
 
         public override string GetDescription()
         {
-            return (Date != null) ? String.Format("Date: {0}", Date.ToString()) : null;
+            return (Date != null) ? String.Format("Date: {0}", Date.ToString("yyyy-MM-dd")) : null;
         }
     }
 }
