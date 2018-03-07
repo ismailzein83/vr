@@ -10,6 +10,7 @@ namespace Vanrise.DataParser.Entities
     {
         public BinaryFieldParserSettings Settings { get; set; }
     }
+
     public abstract class BinaryFieldParserSettings
     {
         public abstract Guid ConfigId { get; }
