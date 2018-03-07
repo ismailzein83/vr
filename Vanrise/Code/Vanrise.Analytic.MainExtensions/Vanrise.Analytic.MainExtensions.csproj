@@ -49,6 +49,7 @@
     <Compile Include="AnalyticMeasureExternalSources\AnalyticTable\DimensionMappingRule.cs" />
     <Compile Include="AnalyticMeasureExternalSources\AnalyticTable\DimensionMappingRules\ExcludeDimensions.cs" />
     <Compile Include="AnalyticMeasureExternalSources\AnalyticTable\DimensionMappingRules\SameDimensionName.cs" />
+    <Compile Include="AnalyticMeasureExternalSources\AnalyticTable\DimensionMappingRules\SpecificDimensionMapping.cs" />
     <Compile Include="AnalyticMeasureExternalSources\AnalyticTable\MeasureMappingRule.cs" />
     <Compile Include="AnalyticMeasureExternalSources\MeasureMappingRules\SpecificMapping.cs" />
     <Compile Include="DARecordAggregates\CountAggregate.cs" />
