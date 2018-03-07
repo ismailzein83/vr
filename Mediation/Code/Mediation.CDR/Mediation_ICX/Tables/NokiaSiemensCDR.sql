@@ -10,10 +10,12 @@
     [OutgoingTrunkGroupNumber] VARCHAR (50)  NULL,
     [OutgoingTrunkNumber]      INT           NULL,
     [CauseValue]               INT           NULL,
-    [Zone]                     VARCHAR (50)  NULL,
+    [Zone]                     INT           NULL,
     [FileName]                 VARCHAR (255) NULL,
     CONSTRAINT [PK_NokiaSiemensCDR] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 
