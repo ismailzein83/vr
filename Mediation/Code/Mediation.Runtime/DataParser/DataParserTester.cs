@@ -10,9 +10,9 @@ using Vanrise.DataParser.MainExtensions.BinaryParsers.Common.RecordParsers;
 using Vanrise.DataParser.MainExtensions.BinaryParsers.HexTLV.FieldParsers;
 using Vanrise.DataParser.MainExtensions.BinaryParsers.HexTLV.RecordParsers;
 using Vanrise.DataParser.MainExtensions.BinaryParsers.NokiaSiemensParsers.FieldParsers;
+using Vanrise.DataParser.MainExtensions.BinaryParsers.NokiaSiemensParsers.FieldParsers.PackageFieldParser;
 using Vanrise.DataParser.MainExtensions.BinaryParsers.NokiaSiemensParsers.RecordParsers;
 using Vanrise.DataParser.MainExtensions.CompositeFieldParsers;
-using Vanrise.DataParser.MainExtensions.HexTLV2.FieldParsers;
 using Vanrise.DataParser.MainExtensions.StringFieldParsers;
 
 namespace Mediation.Runtime.DataParser
@@ -11888,8 +11888,8 @@ namespace Mediation.Runtime.DataParser
                         Settings = new PackageRecordParser
                         {
                             PackageTagLength = 1,
-                            RecordType = "ICX_NokiaSiemens_CDR",
                             PackageLengthByteLength = 1,
+                            RecordType = "ICX_NokiaSiemens_CDR",
                             Packages = GetNokiaSiemensPackages(),
                             CompositeFieldsParsers = GetNokiaSiemensCompositeParsers()
                         }
@@ -11910,10 +11910,10 @@ namespace Mediation.Runtime.DataParser
         {
             Dictionary<int, PackageFieldParser> packages = new Dictionary<int, PackageFieldParser>();
 
-            PackageFieldParser dateTimePackage_100 = new PackageFieldParser()
+            PackageFieldParser dateTimePackage_100 = new FixedLengthPackageFieldParser()
             {
-                PackageLength = 11,
                 PackageTagLength = 1,
+                PackageLength = 11,
                 FieldParser = new DateTimePackageParser()
                 {
                     BeginDateTimeFieldName = "BeginDate",
@@ -11931,27 +11931,7 @@ namespace Mediation.Runtime.DataParser
             };
             packages.Add(100, dateTimePackage_100);
 
-            PackageFieldParser callingPartyNumberPackage_142 = new PackageFieldParser()
-            {
-                PackageTagLength = 1,
-                FieldParser = new PartyNumberPackageParser()
-                {
-                    PartyNumberFieldName = "CallingPartyNumber"
-                }
-            };
-            packages.Add(142, callingPartyNumberPackage_142);
-
-            PackageFieldParser calledPartyNumberPackage_168 = new PackageFieldParser()
-            {
-                PackageTagLength = 1,
-                FieldParser = new PartyNumberPackageParser()
-                {
-                    PartyNumberFieldName = "CalledPartyNumber"
-                }
-            };
-            packages.Add(168, calledPartyNumberPackage_168);
-
-            PackageFieldParser trunkIdIncommingPackage_105 = new PackageFieldParser()
+            PackageFieldParser trunkIdIncommingPackage_105 = new FixedLengthPackageFieldParser()
             {
                 PackageTagLength = 1,
                 PackageLength = 9,
@@ -11963,7 +11943,7 @@ namespace Mediation.Runtime.DataParser
             };
             packages.Add(105, trunkIdIncommingPackage_105);
 
-            PackageFieldParser trunkIdOutgoingPackage_106 = new PackageFieldParser()
+            PackageFieldParser trunkIdOutgoingPackage_106 = new FixedLengthPackageFieldParser()
             {
                 PackageTagLength = 1,
                 PackageLength = 9,
@@ -11975,7 +11955,35 @@ namespace Mediation.Runtime.DataParser
             };
             packages.Add(106, trunkIdOutgoingPackage_106);
 
-            PackageFieldParser trafficQualityPackage_130 = new PackageFieldParser()
+            PackageFieldParser zonePackage_122 = new FixedLengthPackageFieldParser()
+            {
+                PackageTagLength = 1,
+                PackageLength = 3,
+                FieldParser = new ZonePackageParser() { ZoneFieldName = "Zone" }
+            };
+            packages.Add(122, zonePackage_122);
+
+            PackageFieldParser callingPartyNumberPackage_142 = new DirectLengthPackageFieldParser()
+            {
+                PackageTagLength = 1,
+                FieldParser = new PartyNumberPackageParser()
+                {
+                    PartyNumberFieldName = "CallingPartyNumber"
+                }
+            };
+            packages.Add(142, callingPartyNumberPackage_142);
+
+            PackageFieldParser calledPartyNumberPackage_168 = new DirectLengthPackageFieldParser()
+            {
+                PackageTagLength = 1,
+                FieldParser = new PartyNumberPackageParser()
+                {
+                    PartyNumberFieldName = "CalledPartyNumber"
+                }
+            };
+            packages.Add(168, calledPartyNumberPackage_168);
+
+            PackageFieldParser trafficQualityPackage_130 = new DirectLengthPackageFieldParser()
             {
                 PackageTagLength = 1,
                 FieldParser = new NumberFieldParser()
@@ -11989,29 +11997,32 @@ namespace Mediation.Runtime.DataParser
             };
             packages.Add(130, trafficQualityPackage_130);
 
-            PackageFieldParser serviceInfoPackage_102 = new PackageFieldParser() { PackageTagLength = 1, PackageLength = 4, FieldParser = new SkipBlockParser() };
+            PackageFieldParser serviceInfoPackage_102 = new FixedLengthPackageFieldParser() { PackageTagLength = 1, PackageLength = 4, FieldParser = new SkipBlockParser() };
             packages.Add(102, serviceInfoPackage_102);
 
-            PackageFieldParser chargeUnitsForConnectionPackage_103 = new PackageFieldParser() { PackageTagLength = 1, PackageLength = 4, FieldParser = new SkipBlockParser() };
+            PackageFieldParser chargeUnitsForConnectionPackage_103 = new FixedLengthPackageFieldParser() { PackageTagLength = 1, PackageLength = 4, FieldParser = new SkipBlockParser() };
             packages.Add(103, chargeUnitsForConnectionPackage_103);
 
-            PackageFieldParser trunkIdIncommingWithCICPackage_107 = new PackageFieldParser() { PackageTagLength = 1, PackageLength = 10, FieldParser = new SkipBlockParser() };
+            PackageFieldParser chargeUnitsForFacilityUsagePackage_104 = new FixedLengthPackageFieldParser() { PackageTagLength = 1, PackageLength = 3, FieldParser = new SkipBlockParser() };
+            packages.Add(104, chargeUnitsForFacilityUsagePackage_104);
+
+            PackageFieldParser trunkIdIncommingWithCICPackage_107 = new FixedLengthPackageFieldParser() { PackageTagLength = 1, PackageLength = 10, FieldParser = new SkipBlockParser() };
             packages.Add(107, trunkIdIncommingWithCICPackage_107);
 
-            PackageFieldParser trunkIdOutgoingWithCICPackage_108 = new PackageFieldParser() { PackageTagLength = 1, PackageLength = 10, FieldParser = new SkipBlockParser() };
+            PackageFieldParser trunkIdOutgoingWithCICPackage_108 = new FixedLengthPackageFieldParser() { PackageTagLength = 1, PackageLength = 10, FieldParser = new SkipBlockParser() };
             packages.Add(108, trunkIdOutgoingWithCICPackage_108);
 
-            PackageFieldParser dateTimePackage_116 = new PackageFieldParser() { PackageTagLength = 1, PackageLength = 8, FieldParser = new SkipBlockParser() };
+            PackageFieldParser dateTimePackage_116 = new FixedLengthPackageFieldParser() { PackageTagLength = 1, PackageLength = 8, FieldParser = new SkipBlockParser() };
             packages.Add(116, dateTimePackage_116);
 
-            PackageFieldParser transmissionMediumRequirementPackage_119 = new PackageFieldParser() { PackageTagLength = 1, PackageLength = 2, FieldParser = new SkipBlockParser() };
+            PackageFieldParser digitStringPackage_118 = new DigitStringPackageFieldParser() { PackageTagLength = 1, FieldParser = new SkipBlockParser() };
+            packages.Add(118, digitStringPackage_118);
+
+            PackageFieldParser transmissionMediumRequirementPackage_119 = new FixedLengthPackageFieldParser() { PackageTagLength = 1, PackageLength = 2, FieldParser = new SkipBlockParser() };
             packages.Add(119, transmissionMediumRequirementPackage_119);
 
-            PackageFieldParser callingPartyCategoryPackage_120 = new PackageFieldParser() { PackageTagLength = 1, PackageLength = 2, FieldParser = new SkipBlockParser() };
+            PackageFieldParser callingPartyCategoryPackage_120 = new FixedLengthPackageFieldParser() { PackageTagLength = 1, PackageLength = 2, FieldParser = new SkipBlockParser() };
             packages.Add(120, callingPartyCategoryPackage_120);
-
-            PackageFieldParser zonePackage_122 = new PackageFieldParser() { PackageTagLength = 1, PackageLength = 3, FieldParser = new SkipBlockParser() };
-            packages.Add(122, zonePackage_122);
 
             return packages;
         }
