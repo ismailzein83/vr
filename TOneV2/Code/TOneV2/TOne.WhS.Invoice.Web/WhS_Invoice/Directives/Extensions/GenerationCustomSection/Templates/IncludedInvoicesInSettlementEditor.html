@@ -1,0 +1,74 @@
+﻿<div vr-modalcontent ng-controller="WhS_Invoice_IncludedInvoicesInSettlementEditorController" vr-loader="scopeModel.isLoading" width="'80%'">
+    <vr-modalbody>
+        <vr-form name="formFilter">
+            <vr-row ng-if="scopeModel.showCustomerInvoiceGrid">
+                <vr-columns width="fullrow">
+                    <vr-section header="Customer Invoices">
+                        <vr-row removeline>
+                            <vr-columns width="fullrow" >
+                                <vr-datagrid on-ready="scopeModel.onGridReady"
+                                             datasource="scopeModel.customerInvoices"
+                                             pagingtype="'PagingOnScroll'">
+                                    <vr-datagridcolumn widthfactor="3" disablesorting isfielddynamic="true">
+                                            <vr-check value="dataItem.Entity.isSelected"></vr-check>
+                                    </vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'ID'" type="'Text'" field="'Entity.InvoiceId'" widthfactor="20"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Serial No.'" type="'Text'" field="'Entity.SerialNumber'" widthfactor="20"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'From Date'" field="'Entity.FromDate'" type="'Date'" numberprecision="'LongPrecision'" widthfactor="10"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'To Date'" field="'Entity.ToDate'" type="'Date'" numberprecision="'LongPrecision'" widthfactor="10"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Time Zone'" field="'Entity.From'" type="'Date'" fixedwidth="80"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Issue Date'" field="'Entity.IssueDate'" type="'Date'" fixedwidth="80"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Due Date'" field="'Entity.DueDate'" type="'Date'" widthfactor="10"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Duration'" type="'Number'" field="'Entity.Duration'"  widthfactor="10" ></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Number Of Calls'" field="'Entity.TotalNumberOfCalls'" type="'Number'" widthfactor="10"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Net Amount'" field="'Entity.TotalAmountAfterCommission'" type="'Number'" widthfactor="10"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Currency'" field="'Entity.Currency'"  widthfactor="10"></vr-datagridcolumn>
+
+                                </vr-datagrid>
+                            </vr-columns>
+                        </vr-row>
+                    </vr-section>
+                </vr-columns>
+            </vr-row>
+
+            <vr-row ng-if="scopeModel.showSupplierInvoiceGrid">
+                <vr-columns width="fullrow" >
+                    <vr-section header="Supplier Invoices">
+                        <vr-row removeline>
+                            <vr-columns width="fullrow" >
+                                <vr-datagrid on-ready="scopeModel.onGridReady"
+                                             datasource="scopeModel.supplierInvoices"
+                                             pagingtype="'PagingOnScroll'">
+                                    <vr-datagridcolumn widthfactor="3" disablesorting isfielddynamic="true">
+                                            <vr-check value="dataItem.Entity.isSelected"></vr-check>
+                                    </vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'ID'" type="'Text'" field="'Entity.InvoiceId'" widthfactor="20"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Serial No.'" type="'Text'" field="'Entity.SerialNumber'" widthfactor="20"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'From Date'" field="'Entity.FromDate'" type="'Date'" numberprecision="'LongPrecision'" widthfactor="10"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'To Date'" field="'Entity.ToDate'" type="'Date'" numberprecision="'LongPrecision'" widthfactor="10"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Time Zone'" field="'Entity.From'" type="'Date'" fixedwidth="80"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Issue Date'" field="'Entity.IssueDate'" type="'Date'" fixedwidth="80"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Due Date'" field="'Entity.DueDate'" type="'Date'" widthfactor="10"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Duration'" type="'Number'" field="'Entity.Duration'" widthfactor="10"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Number Of Calls'" field="'Entity.TotalNumberOfCalls'" type="'Number'" widthfactor="10"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Net Amount'" field="'Entity.TotalAmountAfterCommission'" type="'Number'" widthfactor="10"></vr-datagridcolumn>
+                                    <vr-datagridcolumn headertext="'Currency'" field="'Entity.Currency'"  widthfactor="10"></vr-datagridcolumn>
+                                </vr-datagrid>
+                            </vr-columns>
+                        </vr-row>
+                    </vr-section>
+                </vr-columns>
+            </vr-row>
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" data-onclick="scopeModel.save" formname="formFilter"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+
+    </div>
+</div>

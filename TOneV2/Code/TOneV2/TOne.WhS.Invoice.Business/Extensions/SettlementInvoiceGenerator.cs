@@ -77,27 +77,65 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
             InvoiceItemManager _invoiceItemManager = new InvoiceItemManager();
 
+
+            List<long> invoiceToSettleIds = null;
+
+
             if (definitionSettings.ExtendedSettings.IsApplicableToCustomer)
             {
-                customerInvoices = GetInvoices(settlementGenerationCustomSectionPayload.CustomerInvoiceIds);
-                if (customerInvoices != null)
+                if (settlementGenerationCustomSectionPayload.AvailableCustomerInvoices != null)
                 {
-                    ValidateInvoicesDates(customerInvoices, fromDate, toDate, context);
-                    customerInvoiceItems = _invoiceItemManager.GetInvoiceItemsByItemSetNames(_customerInvoiceTypeId, settlementGenerationCustomSectionPayload.CustomerInvoiceIds, new List<string> { "GroupingByCurrency" }, CompareOperator.Equal);
+                    if (invoiceToSettleIds == null)
+                        invoiceToSettleIds = new List<long>();
+
+                    List<long> customerInvoiceIds = new List<long>();
+                    foreach (var availableCustomerInvoice in settlementGenerationCustomSectionPayload.AvailableCustomerInvoices)
+                    {
+                        if (availableCustomerInvoice.IsSelected)
+                        {
+                            invoiceToSettleIds.Add(availableCustomerInvoice.InvoiceId);
+                            customerInvoiceIds.Add(availableCustomerInvoice.InvoiceId);
+                        }
+                    }
+
+                    customerInvoices = GetInvoices(customerInvoiceIds);
+                    if (customerInvoices != null && customerInvoices.Count() > 0)
+                    {
+                        ValidateInvoicesDates(customerInvoices, fromDate, toDate, context);
+                        customerInvoiceItems = _invoiceItemManager.GetInvoiceItemsByItemSetNames(_customerInvoiceTypeId, customerInvoiceIds, new List<string> { "GroupingByCurrency" }, CompareOperator.Equal);
+                    }
                 }
             }
 
             if (definitionSettings.ExtendedSettings.IsApplicableToSupplier)
             {
-                supplierInvoices = GetInvoices(settlementGenerationCustomSectionPayload.SupplierInvoiceIds);
-                if (supplierInvoices != null)
+                if (settlementGenerationCustomSectionPayload.AvailableSupplierInvoices != null)
                 {
-                    ValidateInvoicesDates(supplierInvoices, fromDate, toDate, context);
+                    if (invoiceToSettleIds == null)
+                        invoiceToSettleIds = new List<long>();
 
-                    supplierInvoiceItems = _invoiceItemManager.GetInvoiceItemsByItemSetNames(_supplierInvoiceTypeId, settlementGenerationCustomSectionPayload.SupplierInvoiceIds, new List<string> { "GroupingByCurrency" }, CompareOperator.Equal);
+                    List<long> supplierInvoiceIds = new List<long>();
+
+                    foreach (var availableSupplierInvoice in settlementGenerationCustomSectionPayload.AvailableSupplierInvoices)
+                    {
+                        if (availableSupplierInvoice.IsSelected)
+                        {
+                            invoiceToSettleIds.Add(availableSupplierInvoice.InvoiceId);
+                            supplierInvoiceIds.Add(availableSupplierInvoice.InvoiceId);
+                        }
+                    }
+
+                    supplierInvoices = GetInvoices(supplierInvoiceIds);
+                    if (supplierInvoices != null && supplierInvoices.Count() > 0)
+                    {
+                        ValidateInvoicesDates(supplierInvoices, fromDate, toDate, context);
+
+                        supplierInvoiceItems = _invoiceItemManager.GetInvoiceItemsByItemSetNames(_supplierInvoiceTypeId, supplierInvoiceIds, new List<string> { "GroupingByCurrency" }, CompareOperator.Equal);
+                    }
                 }
             }
 
+            context.InvoiceToSettleIds = invoiceToSettleIds;
 
             Dictionary<string, List<SattlementInvoiceItemDetails>> itemSetNamesDic = ConvertInvoicesToItemSetNames(customerInvoices, supplierInvoices);
             if (itemSetNamesDic.Count == 0)

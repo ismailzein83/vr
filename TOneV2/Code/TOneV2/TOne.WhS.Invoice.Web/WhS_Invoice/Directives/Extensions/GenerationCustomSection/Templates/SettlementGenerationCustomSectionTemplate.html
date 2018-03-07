@@ -1,21 +1,39 @@
-﻿<vr-columns colnum="{{ctrlSettlementGeneration.normalColNum}}">
-    <vr-textbox type="number" label="Commission (%)" value="scopeModel.commission" minvalue="-100" maxvalue="100" onblurtextbox="scopeModel.onCommissionFocusChanged"></vr-textbox>
-</vr-columns>
-<vr-columns colnum="{{ctrlSettlementGeneration.normalColNum}}">
-    <vr-select datasource="scopeModel.commissionTypes"
-               datatextfield="description"
-               datavaluefield="value"
-               selectedvalues="scopeModel.selectedCommissionType"
-               entityname="Commission Type"
-               label="Commission Type"
-               hideremoveicon onselectionchanged="scopeModel.onCommissionTypeSelectionChanged">
-    </vr-select>
-</vr-columns>
+﻿<vr-row removeline>
+    <vr-columns colnum="{{ctrlSettlementGeneration.normalColNum/2}}">
+        <vr-textbox type="number" label="Commission (%)" value="scopeModel.commission" minvalue="-100" maxvalue="100" onblurtextbox="scopeModel.onCommissionFocusChanged"></vr-textbox>
+    </vr-columns>
 
-<vr-columns colnum="{{ctrlSettlementGeneration.normalColNum}}">
-</vr-columns>
-<vr-columns colnum="{{ctrlSettlementGeneration.normalColNum}}">
-    <vr-button type="Edit" standalone></vr-button>
-</vr-columns>
+    <vr-columns colnum="{{ctrlSettlementGeneration.normalColNum/2}}">
+        <vr-select datasource="scopeModel.commissionTypes"
+                   datatextfield="description"
+                   datavaluefield="value"
+                   selectedvalues="scopeModel.selectedCommissionType"
+                   entityname="Commission Type"
+                   label="Commission Type"
+                   hideremoveicon onselectionchanged="scopeModel.onCommissionTypeSelectionChanged">
+        </vr-select>
+    </vr-columns>
+
+    <vr-columns width="fullrow" haschildcolumns>
+
+        <vr-columns colnum="10" ng-if="scopeModel.errorMessage != undefined">
+            <vr-label class="alert alert-danger" vr-alert breakline>{{scopeModel.errorMessage}}</vr-label>
+        </vr-columns>
+
+        <vr-columns colnum="5" ng-if="scopeModel.showSupplierSummary && scopeModel.errorMessage == undefined">
+            <vr-label breakline>{{scopeModel.customerCountSummary}}</vr-label>
+        </vr-columns>
+
+        <vr-columns colnum="5" ng-if="scopeModel.showSupplierSummary && scopeModel.errorMessage == undefined">
+            <vr-label breakline>{{scopeModel.supplierCountSummary}}</vr-label>
+        </vr-columns>
+
+        <vr-columns colnum="2" >
+            <vr-button type="Edit" standalone data-onclick="scopeModel.openInvoicesEditor"></vr-button>
+        </vr-columns>
+
+    </vr-columns>
+</vr-row>
+
 
 

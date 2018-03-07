@@ -1,15 +1,18 @@
-﻿<vr-common-timezone-selector on-ready="scopeModel.onTimeZoneSelectorReady" normal-col-num="{{ctrlCustomerGeneration.normalColNum}}" selectedvalues="scopeModel.selectedTimeZone" onselectionchanged="    scopeModel.onTimeZoneSelectionChanged"></vr-common-timezone-selector>
-<vr-columns colnum="{{ctrlCustomerGeneration.normalColNum}}">
-    <vr-textbox type="number" label="Commission (%)" value="scopeModel.commission" minvalue="-100" maxvalue="100" onblurtextbox="scopeModel.onCommissionFocusChanged"></vr-textbox>
-</vr-columns>
-<vr-columns colnum="{{ctrlCustomerGeneration.normalColNum}}">
-    <vr-select datasource="scopeModel.commissionTypes"
-               datatextfield="description"
-               datavaluefield="value"
-               selectedvalues="scopeModel.selectedCommissionType"
-               entityname="Commission Type"
-               label="Commission Type"
-               hideremoveicon onselectionchanged="scopeModel.onCommissionTypeSelectionChanged">
-    </vr-select>
-</vr-columns>
+﻿<vr-row removeline>
+    <vr-common-timezone-selector on-ready="scopeModel.onTimeZoneSelectorReady" normal-col-num="{{ctrlCustomerGeneration.normalColNum / 2}}" selectedvalues="scopeModel.selectedTimeZone" onselectionchanged="    scopeModel.onTimeZoneSelectionChanged"></vr-common-timezone-selector>
+    <vr-columns colnum="{{ctrlCustomerGeneration.normalColNum / 2}}">
+        <vr-textbox type="number" label="Commission (%)" value="scopeModel.commission" minvalue="-100" maxvalue="100" onblurtextbox="scopeModel.onCommissionFocusChanged"></vr-textbox>
+    </vr-columns>
+    <vr-columns colnum="{{ctrlCustomerGeneration.normalColNum / 2}}">
+        <vr-select datasource="scopeModel.commissionTypes"
+                   datatextfield="description"
+                   datavaluefield="value"
+                   selectedvalues="scopeModel.selectedCommissionType"
+                   entityname="Commission Type"
+                   label="Commission Type"
+                   hideremoveicon onselectionchanged="scopeModel.onCommissionTypeSelectionChanged">
+        </vr-select>
+    </vr-columns>
+
+</vr-row>
 

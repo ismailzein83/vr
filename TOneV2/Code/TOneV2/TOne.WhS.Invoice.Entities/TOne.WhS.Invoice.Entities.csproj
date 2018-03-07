@@ -58,6 +58,7 @@
     <Compile Include="CompareInvoiceOperationOutput.cs" />
     <Compile Include="CustomerInvoiceBySaleCurrencyItemDetails.cs" />
     <Compile Include="InvoiceBySaleCurrencyItemDetails.cs" />
+    <Compile Include="SettlementGenerationCustomSectionInvoices.cs" />
     <Compile Include="SettlementGenerationCustomSectionPayload.cs" />
     <Compile Include="InvoiceComparisonTemplate.cs" />
     <Compile Include="OriginalInvoiceDataFileSetting.cs" />

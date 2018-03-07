@@ -148,6 +148,7 @@
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\InvoiceCompareTemplateController.cs" />
     <Compile Include="Controllers\InvoiceController.cs" />
+    <Compile Include="Controllers\InvoiceSettlementController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WhS_Invoice\Reports\Reporting.aspx.cs">
       <DependentUpon>Reporting.aspx</DependentUpon>
@@ -177,6 +178,8 @@
     <Content Include="WhS_Invoice\Constants\ComparisonResultEnum.js" />
     <Content Include="WhS_Invoice\Constants\InvoiceTypeEnum.js" />
     <Content Include="WhS_Invoice\Constants\ModuleConfig.js" />
+    <Content Include="WhS_Invoice\Directives\Extensions\GenerationCustomSection\IncludedInvoicesInSettlementEditorCotroller.js" />
+    <Content Include="WhS_Invoice\Directives\Extensions\GenerationCustomSection\Templates\IncludedInvoicesInSettlementEditor.html" />
     <Content Include="WhS_Invoice\Directives\Extensions\GenerationCustomSection\Templates\SettlementGenerationCustomSectionTemplate.html" />
     <Content Include="WhS_Invoice\Directives\Extensions\GenerationCustomSection\Templates\SupplierGenerationCustomSectionTemplate.html" />
     <Content Include="WhS_Invoice\Directives\Extensions\GenerationCustomSection\Templates\CustomerGenerationCustomSectionTemplate.html" />
@@ -189,6 +192,8 @@
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceAction\whs-invoicetype-gridactionsettings-compare.js" />
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceGeneratorFilterCondition\Templates\PartnerConditionTemplate.html" />
     <Content Include="WhS_Invoice\Directives\Extensions\InvoiceGeneratorFilterCondition\vr-invoicetype-invoicegeneratorfiltercondition-partner.js" />
+    <Content Include="WhS_Invoice\Directives\InvoiceAccountTypes\SettlementInvoice\Templates\SettlementInvoiceSettingsDefinitionTemplate.html" />
+    <Content Include="WhS_Invoice\Directives\InvoiceAccountTypes\SettlementInvoice\whs-invoicetype-definition-settlementinvoicesettings.js" />
     <Content Include="WhS_Invoice\Directives\InvoiceAccountTypes\SupplierInvoice\Templates\SupplierInvoiceSettingsDefinitionTemplate.html" />
     <Content Include="WhS_Invoice\Directives\InvoiceAccountTypes\SupplierInvoice\whs-invoicetype-definition-supplierinvoicesettings.js" />
     <Content Include="WhS_Invoice\Directives\InvoiceAccountTypes\CustomerInvoice\Templates\CustomerInvoiceSettingsDefinitionTemplate.html" />
@@ -196,8 +201,6 @@
     <Content Include="WhS_Invoice\Directives\InvoiceAccount\whs-invoice-invoiceaccount-selector.js" />
     <Content Include="WhS_Invoice\Directives\MainExtensions\CarrierInvoiceSettings\Templates\CarrierInvoiceSettingsTemplate.html" />
     <Content Include="WhS_Invoice\Directives\MainExtensions\CarrierInvoiceSettings\whs-invoice-invoicetype-carrierinvoicesettings.js" />
-    <Content Include="WhS_Invoice\Directives\MainExtensions\SattlementInvoice\Templates\SattlementInvoiceInvoiceGeneratorTemplate.html" />
-    <Content Include="WhS_Invoice\Directives\MainExtensions\SattlementInvoice\whs-invoice-invoicetype-sattlementinvoiceinvoicegenerator.js" />
     <Content Include="WhS_Invoice\Directives\MainExtensions\CustomerInvoice\Templates\CustomerInvoiceGeneratorTemplate.html" />
     <Content Include="WhS_Invoice\Directives\MainExtensions\CustomerInvoice\whs-invoice-invoicetype-customerinvoicegenerator.js" />
     <Content Include="WhS_Invoice\Directives\MainExtensions\PartnerSettings\Templates\CarrierPartnerSettingsTemplate.html" />
@@ -206,8 +209,10 @@
     <Content Include="WhS_Invoice\Directives\MainExtensions\SupplierInvoice\whs-invoice-invoicetype-supplierinvoicegenerator.js" />
     <Content Include="WhS_Invoice\ModuleInitialization.js" />
     <Content Include="WhS_Invoice\Reports\Reporting.aspx" />
+    <Content Include="WhS_Invoice\Services\APIServices\IncludedInvoicesInSettlementAPIService.js" />
     <Content Include="WhS_Invoice\Services\APIServices\InvoiceAPIService.js" />
     <Content Include="WhS_Invoice\Services\APIServices\InvoiceCompareTemplateAPIService.js" />
+    <Content Include="WhS_Invoice\Services\IncludedInvoicesInSettlementService.js" />
     <Content Include="WhS_Invoice\Services\InvoiceService.js" />
     <Content Include="WhS_Invoice\Views\OriginalInvoiceDataTemplateController.js" />
     <Content Include="WhS_Invoice\Views\OriginalInvoiceDataTemplate.html" />
