@@ -47,7 +47,7 @@ app.directive('vrCommonMailmessagetemplateSelector', ['VRCommon_VRMailMessageTem
                 var mailMessageTypeId = filter != undefined && filter.VRMailMessageTypeId ? filter.VRMailMessageTypeId : undefined;
                 var onMailMessageTemplateAdded = function (mailMessageObj) {
                     ctrl.datasource.push(mailMessageObj.Entity);
-                    if ($attrs.ismultipleselection != undefined)
+                    if (attrs.ismultipleselection != undefined)
                         ctrl.selectedvalues.push(mailMessageObj.Entity);
                     else
                         ctrl.selectedvalues = mailMessageObj.Entity;
