@@ -172,7 +172,7 @@ app.directive("vrInvoiceInvoicegenerationdraftGrid", ["UtilsService", "VRNotific
                                             else {
                                                 currentItem.onGenerationCustomSectionDirectiveReady = function (api) {
                                                     currentItem.generationCustomSectionDirectiveAPI = api;
-                                                    var payload = { partnerId: currentItem.PartnerId, customPayload: currentItem.CustomPayload, context: { onvaluechanged: currentItem.onItemChanged } };
+                                                    var payload = { partnerId: currentItem.PartnerId, customPayload: currentItem.CustomPayload,fromDate:currentItem.From,toDate:currentItem.To, context: { onvaluechanged: currentItem.onItemChanged }, invoiceTypeId: invoiceTypeId };
                                                     VRUIUtilsService.callDirectiveLoad(currentItem.generationCustomSectionDirectiveAPI, payload, currentItem.generationCustomSectionDirectiveLoadDeferred);
                                                 };
                                             }

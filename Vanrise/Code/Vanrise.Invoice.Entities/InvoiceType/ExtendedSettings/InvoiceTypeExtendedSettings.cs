@@ -55,6 +55,7 @@ namespace Vanrise.Invoice.Entities
         GeneratedInvoice Invoice { set; }
         string ErrorMessage { set; }
         List<GeneratedInvoiceBillingTransaction> BillingTransactions { set; }
+        List<long> InvoiceToSettleIds { set; }
     }
     public interface IInvoiceTypeExtendedSettingsInfoContext
     {

@@ -147,7 +147,7 @@ namespace Vanrise.Invoice.Data.SQL
                 return GetReaderValue<int>(reader, "Counter");
             }, InvoiceTypeId, partnerId, fromDate, toDate);
         }
-        public bool SaveInvoices(List<GeneratedInvoiceItemSet> invoiceItemSets, Entities.Invoice invoiceEntity, long? invoiceIdToDelete, Dictionary<string, List<string>> itemSetNameStorageDic, IEnumerable<Vanrise.AccountBalance.Entities.BillingTransaction> billingTransactions, Func<Entities.Invoice, bool> actionBeforeGenerateInvoice, out long insertedInvoiceId)
+        public bool SaveInvoices(List<GeneratedInvoiceItemSet> invoiceItemSets, Entities.Invoice invoiceEntity, long? invoiceIdToDelete, Dictionary<string, List<string>> itemSetNameStorageDic, IEnumerable<Vanrise.AccountBalance.Entities.BillingTransaction> billingTransactions,List<long> invoiceToSettleIds, Func<Entities.Invoice, bool> actionBeforeGenerateInvoice, out long insertedInvoiceId)
         {
             object invoiceId;
             string serializedSettings = null;
@@ -179,6 +179,7 @@ namespace Vanrise.Invoice.Data.SQL
             );
 
             insertedInvoiceId = Convert.ToInt64(invoiceId);
+
 
             if (itemSetNameStorageDic != null && itemSetNameStorageDic.Count > 0)
             {
@@ -216,12 +217,25 @@ namespace Vanrise.Invoice.Data.SQL
             {
                 var transactionDataManager = new Vanrise.AccountBalance.Data.SQL.BillingTransactionDataManager();
 
+
+                if(invoiceToSettleIds != null && invoiceToSettleIds.Count > 0)
+                {
+                    UpdateInvoiceSettleIds(insertedInvoiceId, invoiceToSettleIds);
+                    if (invoiceIdToDelete.HasValue)
+                    {
+                        ClearSettlementInvoiceIds(invoiceIdToDelete.Value);
+                    }
+                }
+                
+
                 if (billingTransactions != null && billingTransactions.Count() > 0)
                     InsertBillingTransactions(billingTransactions, insertedInvoiceId, transactionDataManager);
 
                 if (invoiceIdToDelete.HasValue)
                 {
+
                     DeleteInvoice(invoiceIdToDelete.Value);
+
                     transactionDataManager.SetBillingTransactionsAsDeleted(invoiceIdToDelete.Value);
                 }
 
@@ -230,6 +244,21 @@ namespace Vanrise.Invoice.Data.SQL
             }
 
             return true;
+        }
+        public bool ClearSettlementInvoiceIds(long settlementInvoiceId)
+        {
+            int affectedRows = ExecuteNonQuerySP("[VR_Invoice].[sp_Invoice_ClearSettlementId]", settlementInvoiceId);
+            return (affectedRows > -1);
+        }
+        public bool UpdateInvoiceSettleIds(long invoiceId, List<long> invoiceToSettleIds)
+        {
+            string invoiceToSettleIdsAsString = null;
+            if (invoiceToSettleIds != null)
+            {
+                invoiceToSettleIdsAsString = string.Join<long>(",", invoiceToSettleIds);
+            }
+            int affectedRows = ExecuteNonQuerySP("[VR_Invoice].[sp_Invoice_UpdateSettleIds]", invoiceId, invoiceToSettleIdsAsString);
+            return (affectedRows > -1);
         }
         public bool SetDraft(long invoiceId, bool isDraft)
         {
@@ -384,6 +413,7 @@ namespace Vanrise.Invoice.Data.SQL
                 Settings = Vanrise.Common.Serializer.Deserialize<InvoiceSettings>(reader["Settings"] as string),
                 InvoiceSettingId =  GetReaderValue<Guid>(reader, "InvoiceSettingId"),
                 SentDate = GetReaderValue<DateTime?>(reader, "SentDate"),
+                SettlementInvoiceId = GetReaderValue<long?>(reader, "SettlementInvoiceId"),
             };
             return invoice;
         }

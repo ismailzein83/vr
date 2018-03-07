@@ -22,10 +22,15 @@
                         </vr-columns>
                     </span>
 
-                    <span ng-if="scopeModel.invoiceTypeEntity.InvoiceType.Settings.ExtendedSettings.GenerationCustomSection.GenerationCustomSectionDirective" vr-loader="scopeModel.isLoadingCustomSectionPayloadDirective">
-                        <vr-directivewrapper directive="scopeModel.invoiceTypeEntity.InvoiceType.Settings.ExtendedSettings.GenerationCustomSection.GenerationCustomSectionDirective" on-ready="scopeModel.onGenerationCustomSectionDirectiveReady" normal-col-num="4" isrequired="true"></vr-directivewrapper>
-                    </span>
+                   
                 </vr-row>
+            <vr-row ng-if="scopeModel.invoiceTypeEntity.InvoiceType.Settings.ExtendedSettings.GenerationCustomSection.GenerationCustomSectionDirective" vr-loader="scopeModel.isLoadingCustomSectionPayloadDirective">
+                <vr-columns width="fullrow">
+                    <vr-section header="More Options">
+                                <vr-directivewrapper directive="scopeModel.invoiceTypeEntity.InvoiceType.Settings.ExtendedSettings.GenerationCustomSection.GenerationCustomSectionDirective" on-ready="scopeModel.onGenerationCustomSectionDirectiveReady" normal-col-num="4" isrequired="true"></vr-directivewrapper>
+                    </vr-section>
+                </vr-columns>
+            </vr-row>
         </vr-form>
     </vr-modalbody>
     <div>

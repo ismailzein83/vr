@@ -72,7 +72,20 @@ namespace Vanrise.Invoice.Business
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
             return dataManager.GetInvoices(invoiceIds);
         }
-
+        public IEnumerable<Entities.InvoiceDetail> GetInvoicesDetails(Guid invoiceTypeId, string partnerId, List<long> invoiceIds)
+        {
+            var invoices = GetInvoices(invoiceIds);
+            if (invoices == null || invoices.Count == 0)
+                return null;
+            else
+            {
+                var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceTypeId);
+                var invoiceAccounts = new InvoiceAccountManager().GetInvoiceAccountsByPartnerIds(invoiceTypeId, new List<string> { partnerId });
+                invoiceAccounts.ThrowIfNull("invoiceAccounts");
+                var invoiceAccount = invoiceAccounts.FirstOrDefault();
+                return invoices.MapRecords(x=> InvoiceDetailMapper(x, invoiceType, invoiceAccount, true));
+            }
+        }
         public Entities.Invoice GetInvoiceBySourceId(Guid invoiceTypeId, string sourceId)
         {
             IInvoiceDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceDataManager>();
@@ -105,13 +118,14 @@ namespace Vanrise.Invoice.Business
                     var duePeriod = _partnerManager.GetPartnerDuePeriod(invoiceType.InvoiceTypeId, createInvoiceInput.PartnerId);
                     var invoiceAccountData = _partnerManager.GetInvoiceAccountData(invoiceType.InvoiceTypeId, createInvoiceInput.PartnerId);
                     IEnumerable<GeneratedInvoiceBillingTransaction> billingTarnsactions;
-                    GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, createInvoiceInput.CustomSectionPayload, createInvoiceInput.InvoiceId, duePeriod, invoiceAccountData, out billingTarnsactions);
+                    List<long> invoiceToSettleIds;
+                    GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, createInvoiceInput.CustomSectionPayload, createInvoiceInput.InvoiceId, duePeriod, invoiceAccountData, out billingTarnsactions, out invoiceToSettleIds);
 
                     Entities.Invoice invoice = BuildInvoice(invoiceType, createInvoiceInput.PartnerId, createInvoiceInput.FromDate, createInvoiceInput.ToDate, createInvoiceInput.IssueDate, generatedInvoice.InvoiceDetails, duePeriod, createInvoiceInput.IsAutomatic);
                     invoice.SerialNumber = currentInvocie.SerialNumber;
                     invoice.Note = currentInvocie.Note;
 
-                    if (SaveInvoice(generatedInvoice.InvoiceItemSets, invoice, createInvoiceInput.InvoiceId, billingTarnsactions, out insertedInvoiceId))
+                    if (SaveInvoice(generatedInvoice.InvoiceItemSets, invoice, createInvoiceInput.InvoiceId, billingTarnsactions, invoiceToSettleIds, out insertedInvoiceId))
                     {
                         updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                         var invoiceAccounts = new InvoiceAccountManager().GetInvoiceAccountsByPartnerIds(invoice.InvoiceTypeId, new List<string> { invoice.PartnerId });
@@ -202,7 +216,8 @@ namespace Vanrise.Invoice.Business
                     throw new InvoiceGeneratorException("Cannot generate invoice for inactive account.");
 
                 IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions;
-                GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, fromDate, toDate, createInvoiceInput.IssueDate, createInvoiceInput.CustomSectionPayload, createInvoiceInput.InvoiceId, duePeriod, invoiceAccountData, out billingTransactions);
+                List<long> invoiceToSettleIds;
+                GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, fromDate, toDate, createInvoiceInput.IssueDate, createInvoiceInput.CustomSectionPayload, createInvoiceInput.InvoiceId, duePeriod, invoiceAccountData, out billingTransactions, out invoiceToSettleIds);
 
 
                 if (generatedInvoice == null || generatedInvoice.InvoiceDetails == null)
@@ -228,7 +243,7 @@ namespace Vanrise.Invoice.Business
 
                 invoice.SerialNumber = serialNumber;
 
-                if (SaveInvoice(generatedInvoice.InvoiceItemSets, invoice, null, billingTransactions, out insertedInvoiceId))
+                if (SaveInvoice(generatedInvoice.InvoiceItemSets, invoice, null, billingTransactions, invoiceToSettleIds, out insertedInvoiceId))
                 {
                     insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
                     long invoiceAccountId;
@@ -917,7 +932,7 @@ namespace Vanrise.Invoice.Business
             invoice.DueDate = issueDate.AddDays(duePeriod);
             return invoice;
         }
-        private GeneratedInvoice BuildGeneratedInvoice(InvoiceType invoiceType, string partnerId, DateTime fromDate, DateTime toDate, DateTime issueDate, dynamic customSectionPayload, long? invoiceId, int duePeriod, VRInvoiceAccountData invoiceAccountData, out IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions)
+        private GeneratedInvoice BuildGeneratedInvoice(InvoiceType invoiceType, string partnerId, DateTime fromDate, DateTime toDate, DateTime issueDate, dynamic customSectionPayload, long? invoiceId, int duePeriod, VRInvoiceAccountData invoiceAccountData, out IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions, out List<long> invoiceToSettleIds)
         {
             invoiceAccountData.ThrowIfNull("invoiceAccountData");
             if ((invoiceAccountData.BED.HasValue && fromDate < invoiceAccountData.BED.Value) || (invoiceAccountData.EED.HasValue && toDate > invoiceAccountData.EED.Value))
@@ -941,6 +956,8 @@ namespace Vanrise.Invoice.Business
             generator.GenerateInvoice(context);
 
             billingTransactions = context.BillingTransactions;
+            billingTransactions = context.BillingTransactions;
+            invoiceToSettleIds = context.InvoiceToSettleIds;
             return context.Invoice;
         }
 
@@ -950,7 +967,7 @@ namespace Vanrise.Invoice.Business
             return dataManager.CheckInvoiceOverlaping(invoiceTypeId, partnerId, fromDate, toDate, invoiceId);
         }
 
-        private bool SaveInvoice(List<GeneratedInvoiceItemSet> invoiceItemSets, Entities.Invoice invoice, long? invoiceIdToDelete, IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions, out long invoiceId)
+        private bool SaveInvoice(List<GeneratedInvoiceItemSet> invoiceItemSets, Entities.Invoice invoice, long? invoiceIdToDelete, IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions, List<long> invoiceToSettleIds, out long invoiceId)
         {
             IEnumerable<string> itemSetNames = invoiceItemSets.MapRecords(x => x.SetName);
             Dictionary<string, List<string>> itemSetNameStorageDic = new InvoiceItemManager().GetItemSetNamesByStorageConnectionString(invoice.InvoiceTypeId, itemSetNames);
@@ -961,7 +978,7 @@ namespace Vanrise.Invoice.Business
             if (billingTransactions != null)
                 mappedTransactions = MapGeneratedInvoiceBillingTransactions(billingTransactions, invoice.SerialNumber, invoice.FromDate, invoice.ToDate, invoice.IssueDate);
 
-            return dataManager.SaveInvoices(invoiceItemSets, invoice, invoiceIdToDelete, itemSetNameStorageDic, mappedTransactions, ActionBeforeGenerateInvoice, out invoiceId);
+            return dataManager.SaveInvoices(invoiceItemSets, invoice, invoiceIdToDelete, itemSetNameStorageDic, mappedTransactions, invoiceToSettleIds, ActionBeforeGenerateInvoice, out invoiceId);
         }
 
         private IEnumerable<Vanrise.AccountBalance.Entities.BillingTransaction> MapGeneratedInvoiceBillingTransactions(IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions, string serialNumber, DateTime fromDate, DateTime toDate, DateTime issueDate)

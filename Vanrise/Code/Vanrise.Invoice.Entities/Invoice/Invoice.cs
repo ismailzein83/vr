@@ -11,7 +11,7 @@ namespace Vanrise.Invoice.Entities
         public long InvoiceId { get; set; }
 
         public Guid InvoiceTypeId { get; set; }
-
+        public long? SettlementInvoiceId { get; set; }
         public string PartnerId { get; set; }
         public int UserId { get; set; }
         public string SerialNumber { get; set; }
