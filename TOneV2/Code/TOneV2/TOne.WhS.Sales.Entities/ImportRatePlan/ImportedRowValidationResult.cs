@@ -12,6 +12,8 @@ namespace TOne.WhS.Sales.Entities
 
         public Dictionary<int, InvalidImportedRow> InvalidDataByRowIndex { get; set; }
 
+		public bool FileIsEmpty;
+
         public ImportedDataValidationResult()
         {
             ValidDataByZoneId = new Dictionary<long, ImportedRow>();

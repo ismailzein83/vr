@@ -11,136 +11,163 @@ using Vanrise.Common;
 
 namespace TOne.WhS.Sales.MainExtensions
 {
-    public class ImportBulkAction : BulkActionType
-    {
-        #region Fields / Constructors
+	public class ImportBulkAction : BulkActionType
+	{
+		#region Fields / Constructors
 
-        private ImportBulkActionValidationCacheManager _cacheManager;
+		private ImportBulkActionValidationCacheManager _cacheManager;
 
-        public ImportBulkAction()
-        {
-            _cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<ImportBulkActionValidationCacheManager>();
-        }
+		public ImportBulkAction()
+		{
+			_cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<ImportBulkActionValidationCacheManager>();
+		}
 
-        #endregion
+		#endregion
 
-        public long FileId { get; set; }
+		public long FileId { get; set; }
 
-        public bool HeaderRowExists { get; set; }
+		public bool HeaderRowExists { get; set; }
 
-        public string DateTimeFormat { get; set; }
+		public string DateTimeFormat { get; set; }
 
-        public SalePriceListOwnerType OwnerType { get; set; }
+		public SalePriceListOwnerType OwnerType { get; set; }
 
-        public int OwnerId { get; set; }
+		public int OwnerId { get; set; }
 
-        public Guid CacheObjectName { get; set; }
+		public Guid CacheObjectName { get; set; }
 
-        #region Bulk Action Members
+		#region Bulk Action Members
 
-        public override Guid ConfigId
-        {
-            get { return new Guid("1136DAC5-A1EE-4C72-B12C-05FF513CE3D3"); }
-        }
+		public override Guid ConfigId
+		{
+			get { return new Guid("1136DAC5-A1EE-4C72-B12C-05FF513CE3D3"); }
+		}
 
-        public override bool IsApplicableToCountry(IBulkActionApplicableToCountryContext context)
-        {
-            return UtilitiesManager.IsActionApplicableToCountry(context, this.IsApplicableToZone);
-        }
+		public override bool IsApplicableToCountry(IBulkActionApplicableToCountryContext context)
+		{
+			return UtilitiesManager.IsActionApplicableToCountry(context, this.IsApplicableToZone);
+		}
 
-        public override void ValidateZone(IZoneValidationContext context)
-        {
-            if (context.ValidationResult == null)
-            {
-                var validationResult = new ImportBulkActionValidationResult();
+		public override void ValidateZone(IZoneValidationContext context)
+		{
+			if (context.ValidationResult == null)
+			{
+				var validationResult = new ImportBulkActionValidationResult();
 
-                ImportedDataValidationResult cachedValidationData = GetOrCreateObject();
+				ImportedDataValidationResult cachedValidationData = GetOrCreateObject();
+				if (cachedValidationData.FileIsEmpty)
+				{
+					validationResult.InvalidDataExists = true;
+					validationResult.ErrorMessage = "Imported file is empty";
+				}
+				if (cachedValidationData.InvalidDataByRowIndex != null && cachedValidationData.InvalidDataByRowIndex.Values != null && cachedValidationData.InvalidDataByRowIndex.Values.Count > 0)
+				{
+					validationResult.InvalidDataExists = true;
 
-                if (cachedValidationData.InvalidDataByRowIndex != null && cachedValidationData.InvalidDataByRowIndex.Values != null && cachedValidationData.InvalidDataByRowIndex.Values.Count > 0)
-                {
-                    validationResult.InvalidDataExists = true;
+					foreach (InvalidImportedRow invalidImportedRow in cachedValidationData.InvalidDataByRowIndex.Values)
+					{
+						validationResult.InvalidImportedRows.Add(invalidImportedRow);
 
-                    foreach (InvalidImportedRow invalidImportedRow in cachedValidationData.InvalidDataByRowIndex.Values)
-                    {
-                        validationResult.InvalidImportedRows.Add(invalidImportedRow);
+						if (invalidImportedRow.ZoneId.HasValue)
+						{
+							validationResult.ExcludedZoneIds.Add(invalidImportedRow.ZoneId.Value);
+						}
+					}
+				}
 
-                        if (invalidImportedRow.ZoneId.HasValue)
-                        {
-                            validationResult.ExcludedZoneIds.Add(invalidImportedRow.ZoneId.Value);
-                        }
-                    }
-                }
+				context.ValidationResult = validationResult;
+			}
+		}
 
-                context.ValidationResult = validationResult;
-            }
-        }
+		public override bool IsApplicableToZone(IActionApplicableToZoneContext context)
+		{
+			return true;
+		}
 
-        public override bool IsApplicableToZone(IActionApplicableToZoneContext context)
-        {
-            return true;
-        }
+		public override void ApplyBulkActionToZoneItem(IApplyBulkActionToZoneItemContext context)
+		{
+			IEnumerable<DraftRateToChange> zoneDraftNewRates = (context.ZoneDraft != null) ? context.ZoneDraft.NewRates : null;
+			context.ZoneItem.NewRates = GetZoneItemNewRates(context.ZoneItem.ZoneId, zoneDraftNewRates, context.GetRoundedRate);
+		}
 
-        public override void ApplyBulkActionToZoneItem(IApplyBulkActionToZoneItemContext context)
-        {
-            IEnumerable<DraftRateToChange> zoneDraftNewRates = (context.ZoneDraft != null) ? context.ZoneDraft.NewRates : null;
-            context.ZoneItem.NewRates = GetZoneItemNewRates(context.ZoneItem.ZoneId, zoneDraftNewRates, context.GetRoundedRate);
-        }
+		public override void ApplyBulkActionToZoneDraft(IApplyBulkActionToZoneDraftContext context)
+		{
+			context.ZoneDraft.NewRates = GetZoneItemNewRates(context.ZoneDraft.ZoneId, context.ZoneDraft.NewRates, context.GetRoundedRate);
+		}
 
-        public override void ApplyBulkActionToZoneDraft(IApplyBulkActionToZoneDraftContext context)
-        {
-            context.ZoneDraft.NewRates = GetZoneItemNewRates(context.ZoneDraft.ZoneId, context.ZoneDraft.NewRates, context.GetRoundedRate);
-        }
+		#endregion
 
-        #endregion
+		#region Private Methods
 
-        #region Private Methods
+		private IEnumerable<DraftRateToChange> GetZoneItemNewRates(long zoneId, IEnumerable<DraftRateToChange> zoneDraftNewRates, Func<decimal, decimal> getRoundedRate)
+		{
+			ImportedDataValidationResult cachedValidationData = GetOrCreateObject();
+			ImportedRow importedRow = cachedValidationData.ValidDataByZoneId.GetRecord(zoneId);
 
-        private IEnumerable<DraftRateToChange> GetZoneItemNewRates(long zoneId, IEnumerable<DraftRateToChange> zoneDraftNewRates, Func<decimal, decimal> getRoundedRate)
-        {
-            ImportedDataValidationResult cachedValidationData = GetOrCreateObject();
-            ImportedRow importedRow = cachedValidationData.ValidDataByZoneId.GetRecord(zoneId);
+			if (importedRow == null)
+				return zoneDraftNewRates;
 
-            if (importedRow == null)
-                return zoneDraftNewRates;
+			var newRates = new List<DraftRateToChange>();
 
-            var newRates = new List<DraftRateToChange>();
+			foreach (var otherRate in importedRow.OtherRates)
+			{
+				if (!string.IsNullOrEmpty(otherRate.Value))
+				{
+					var newOtherRate = new DraftRateToChange()
+					{
+						ZoneId = zoneId,
+						RateTypeId = otherRate.TypeId,
+						Rate = getRoundedRate(Convert.ToDecimal(otherRate.Value)),
+						BED = Convert.ToDateTime(importedRow.EffectiveDate)
+					};
+					newRates.Add(newOtherRate);
+				}
+			}
 
-            if (zoneDraftNewRates != null)
-            {
-                foreach (DraftRateToChange newRate in zoneDraftNewRates)
-                {
-                    if (newRate.RateTypeId.HasValue)
-                        newRates.Add(newRate);
-                }
-            }
+			if (zoneDraftNewRates != null)
+			{
+				foreach (DraftRateToChange newRate in zoneDraftNewRates)
+				{
+					if (newRate.RateTypeId.HasValue && !newRates.Any(item => item.RateTypeId == newRate.RateTypeId))
+						newRates.Add(newRate);
+				}
+			}
 
-            var newNormalRate = new DraftRateToChange()
-            {
-                ZoneId = zoneId,
-                RateTypeId = null,
-                Rate = getRoundedRate(Convert.ToDecimal(importedRow.Rate)),
-                BED = Convert.ToDateTime(importedRow.EffectiveDate)
-            };
+			DraftRateToChange newNormalRate = null;
 
-            newRates.Add(newNormalRate);
-            return newRates;
-        }
+			if (!string.IsNullOrEmpty(importedRow.Rate))
+			{
+				newNormalRate = new DraftRateToChange()
+				{
+					ZoneId = zoneId,
+					RateTypeId = null,
+					Rate = getRoundedRate(Convert.ToDecimal(importedRow.Rate)),
+					BED = Convert.ToDateTime(importedRow.EffectiveDate)
+				};
+			}
+			else if (zoneDraftNewRates != null)
+				newNormalRate = zoneDraftNewRates.FindRecord(item => !item.RateTypeId.HasValue);
 
-        private ImportedDataValidationResult GetOrCreateObject()
-        {
-            return _cacheManager.GetOrCreateObject(CacheObjectName, () =>
-            {
-                return new RatePlanManager().ValidateImportedData(new ImportedDataValidationInput()
-                {
-                    FileId = FileId,
-                    HeaderRowExists = HeaderRowExists,
-                    DateTimeFormat = DateTimeFormat,
-                    OwnerType = OwnerType,
-                    OwnerId = OwnerId
-                });
-            });
-        }
+			if (newNormalRate != null)
+				newRates.Add(newNormalRate);
+			return newRates;
+		}
 
-        #endregion
-    }
+		private ImportedDataValidationResult GetOrCreateObject()
+		{
+			return _cacheManager.GetOrCreateObject(CacheObjectName, () =>
+			{
+				return new RatePlanManager().ValidateImportedData(new ImportedDataValidationInput()
+				{
+					FileId = FileId,
+					HeaderRowExists = HeaderRowExists,
+					DateTimeFormat = DateTimeFormat,
+					OwnerType = OwnerType,
+					OwnerId = OwnerId
+				});
+			});
+		}
+
+		#endregion
+	}
 }

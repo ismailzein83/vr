@@ -9,7 +9,9 @@ namespace TOne.WhS.Sales.MainExtensions
 {
     public class ImportBulkActionValidationResult : BulkActionValidationResult
     {
-        public List<InvalidImportedRow> InvalidImportedRows { get; set; }
+		public string ErrorMessage { get; set; }
+
+		public List<InvalidImportedRow> InvalidImportedRows { get; set; }
 
         public ImportBulkActionValidationResult()
         {

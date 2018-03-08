@@ -40,5 +40,28 @@ namespace TOne.WhS.Sales.Business
         {
             return (importedZoneName != null) ? importedZoneName.Trim().ToLower() : null;
         }
-    }
+
+		public static bool ValidateRateValue(string rate, out string errorMessage)
+		{
+			decimal rateAsDecimal;
+			if (!decimal.TryParse(rate, out rateAsDecimal))
+			{
+				errorMessage = "Rate is an invalid number.";
+				return false;
+			}
+			if (rateAsDecimal == 0)
+			{
+				errorMessage = "Rate is zero.";
+				return false;
+			}
+
+			else if (rateAsDecimal < 0)
+			{
+				errorMessage = "Rate is negative.";
+				return false;
+			}
+			errorMessage = null;
+			return true;
+		}
+	}
 }

@@ -12,6 +12,8 @@ namespace TOne.WhS.Sales.Business
     {
         public SalePriceListOwnerType OwnerType { get; set; }
 
+        public int OwnerId { get; set; }
+
         public ImportedRow ImportedRow { get; set; }
 
         public ZoneChanges ZoneDraft { get; set; }
@@ -32,6 +34,10 @@ namespace TOne.WhS.Sales.Business
     public class IsValidContext : IIsValidContext
     {
         public SalePriceListOwnerType OwnerType { get; set; }
+
+        public int OwnerId { get; set; }
+
+        public IEnumerable<int> AllRateTypeIds { get; set; }
 
         public ImportedRow ImportedRow { get; set; }
 

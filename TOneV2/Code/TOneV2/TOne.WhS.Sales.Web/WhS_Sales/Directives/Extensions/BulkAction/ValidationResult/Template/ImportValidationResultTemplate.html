@@ -1,16 +1,20 @@
 ﻿<vr-columns colnum="{{importValidationResultCtrl.normalColNum * 2}}">
-    <vr-datagrid on-ready="scopeModel.onGridReady"
-                 datasource="scopeModel.invalidImportedRows"
-                 loadmoredata="scopeModel.loadMoreGridData"
-                 pagingtype="'PagingOnScroll'"
-                 norowhighlightonclick="'true'"
-                 maxheight="300px"
-                 hidegridmenu>
-        <vr-datagridcolumn headertext="'Row Index'" field="'Entity.RowIndex'" type="'Text'" disablesorting></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Zone'" field="'Entity.ImportedRow.Zone'" type="'Text'" disablesorting></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Rate'" field="'Entity.ImportedRow.Rate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
-        <vr-datagridcolumn widthfactor="5" disablesorting></vr-datagridcolumn><!-- Added to create some spacing between the columns -->
-        <vr-datagridcolumn headertext="'Effective Date'" field="'Entity.ImportedRow.EffectiveDate'" type="'Date'" widthfactor="20" disablesorting></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Error Message'" field="'Entity.ErrorMessage'" type="'Text'" widthfactor="60" disablesorting></vr-datagridcolumn>
-    </vr-datagrid>
+	<vr-row>
+	<vr-label color={{scopeModel.errorMessageColor}} ng-if="scopeModel.errorMessage">{{scopeModel.errorMessage}}</vr-label>
+	</vr-row>
+	<vr-datagrid on-ready="scopeModel.onGridReady"
+				 datasource="scopeModel.invalidImportedRows"
+				 loadmoredata="scopeModel.loadMoreGridData"
+				 pagingtype="'PagingOnScroll'"
+				 norowhighlightonclick="'true'"
+				 maxheight="300px"
+				 hidegridmenu
+				 ng-if="!scopeModel.errorMessage">
+		<vr-datagridcolumn headertext="'Row Index'" field="'Entity.RowIndex'" type="'Text'" disablesorting></vr-datagridcolumn>
+		<vr-datagridcolumn headertext="'Zone'" field="'Entity.ImportedRow.Zone'" type="'Text'" disablesorting></vr-datagridcolumn>
+		<vr-datagridcolumn headertext="'Rate'" field="'Entity.ImportedRow.Rate'" type="'Number'" numberprecision="'LongPrecision'" disablesorting></vr-datagridcolumn>
+		<vr-datagridcolumn widthfactor="5" disablesorting></vr-datagridcolumn><!-- Added to create some spacing between the columns -->
+		<vr-datagridcolumn headertext="'Effective Date'" field="'Entity.ImportedRow.EffectiveDate'" type="'Date'" widthfactor="20" disablesorting></vr-datagridcolumn>
+		<vr-datagridcolumn headertext="'Error Message'" field="'Entity.ErrorMessage'" type="'Text'" widthfactor="60" disablesorting></vr-datagridcolumn>
+	</vr-datagrid>
 </vr-columns>

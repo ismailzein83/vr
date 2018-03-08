@@ -11,6 +11,8 @@ namespace TOne.WhS.Sales.Entities
     {
         SalePriceListOwnerType OwnerType { get; }
 
+        int OwnerId { get; }
+
         ImportedRow ImportedRow { get; }
 
         ZoneChanges ZoneDraft { get; }
