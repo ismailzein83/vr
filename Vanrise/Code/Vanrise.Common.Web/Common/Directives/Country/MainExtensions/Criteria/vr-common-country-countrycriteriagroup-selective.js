@@ -24,7 +24,7 @@ app.directive('vrCommonCountryCountrycriteriagroupSelective', ['UtilsService', '
                 };
             },
             templateUrl: function (element, attrs) {
-                return "/Client/Modules/Common/Directives/Country/MainExtensions/Criteria/Templates/SelectiveCountryCriteriaDirectiveTemplate.html"
+                return "/Client/Modules/Common/Directives/Country/MainExtensions/Criteria/Templates/SelectiveCountryCriteriaDirectiveTemplate.html";
             }
         };
 
@@ -39,7 +39,7 @@ app.directive('vrCommonCountryCountrycriteriagroupSelective', ['UtilsService', '
                 $scope.scopeModel.onCountrySelectorReady = function (api) {
                     countrySelectorAPI = api;
                     countrySelectorReadyDeferred.resolve();
-                }
+                };
                 defineAPI();
             }
 
