@@ -88,6 +88,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 foreach (var customerZoneDetail in customerZoneDetailByZoneId)
                 {
+                    if (input.Query.RoutingProductsIds != null && input.Query.RoutingProductsIds.Count > 0 && !customerZoneDetail.Value.Any(x => input.Query.RoutingProductsIds.Contains(x.RoutingProductId)))
+                        continue;
+
                     CustomersSoldZone customerSoldZone = new CustomersSoldZone();
 
                     customerSoldZone.ZoneId = customerZoneDetail.Key;
