@@ -926,7 +926,7 @@ namespace TOne.WhS.Sales.Business
 					{
 						RowIndex = i,
 						ImportedRow = importedRow,
-						ZoneId = context.ExistingZone?.SaleZoneId,
+						ZoneId = (context.ExistingZone!=null) ? (long?)context.ExistingZone.SaleZoneId : null,
 						ErrorMessage = context.ErrorMessage
 					});
 				}
