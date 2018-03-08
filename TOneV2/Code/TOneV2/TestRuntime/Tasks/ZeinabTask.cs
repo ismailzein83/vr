@@ -11,6 +11,7 @@ using Vanrise.Runtime;
 using TOne.WhS.DBSync.Business;
 using TOne.WhS.DBSync.Business.SwitchMigration;
 using TOne.WhS.DBSync.Entities;
+using Vanrise.Runtime.Entities;
 
 namespace TestRuntime
 {

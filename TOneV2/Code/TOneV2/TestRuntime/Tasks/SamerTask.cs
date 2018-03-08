@@ -981,7 +981,7 @@ namespace TestRuntime.Tasks
             //var test = Vanrise.Common.Serializer.Serialize(AnalyticDimensionConfig);
             //var test1 = Vanrise.Common.Serializer.Serialize(AnalyticDimensionConfig1);
 
-            var runtimeServices = new List<Vanrise.Runtime.RuntimeService>();
+            var runtimeServices = new List<Vanrise.Runtime.Entities.RuntimeService>();
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(bpService);
             BPRegulatorRuntimeService bpRegulatorService = new BPRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };

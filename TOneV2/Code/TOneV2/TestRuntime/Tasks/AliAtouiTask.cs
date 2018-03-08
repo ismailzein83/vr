@@ -17,6 +17,7 @@ using Vanrise.Integration.Mappers;
 using Vanrise.Queueing;
 using Vanrise.Rules.Normalization;
 using Vanrise.Runtime;
+using Vanrise.Runtime.Entities;
 
 namespace TOne.WhS.Runtime.Tasks
 {

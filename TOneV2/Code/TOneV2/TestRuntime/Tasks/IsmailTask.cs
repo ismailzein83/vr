@@ -17,6 +17,7 @@ using Vanrise.Common.Business;
 using Vanrise.Queueing;
 using Vanrise.Queueing.Entities;
 using Vanrise.Runtime;
+using Vanrise.Runtime.Entities;
 
 namespace TestRuntime
 {
@@ -121,12 +122,85 @@ namespace TestRuntime
                                        MeasureName = "SaleRate_DurAvg",
                                        MappedMeasures = new List<string> {"SaleRate_DurAvg"}
                                   }
+                             },
+                             new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.MeasureMappingRule
+                             {
+                                  Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                                  {
+                                       MeasureName = "Netting",
+                                       MappedMeasures = new List<string> {"Netting"}
+                                  }
                              }
                         }
                     }
                 };
 
+
             var serializedBillingMeasureExternalSource = Vanrise.Common.Serializer.Serialize(billingMeasureExternalSource);
+
+
+            var billingStatsToBillingStatsMeasureExternalSource = new Vanrise.Analytic.Entities.AnalyticMeasureExternalSourceConfig
+            {
+                ExtendedSettings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.AnalyticTableMeasureExternalSource
+                {
+                    AnalyticTableId = new Guid("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
+                    DimensionMappingRules = new List<Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule>
+                        {
+                            new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule 
+                            { 
+                                Settings= new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SpecificDimensionMapping 
+                                { 
+                                    DimensionName = "Customer", 
+                                    MappedDimensionName = "Supplier"
+                                }
+                            },
+                            new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule 
+                            { 
+                                Settings= new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SpecificDimensionMapping 
+                                { 
+                                    DimensionName = "CustomerProfile", 
+                                    MappedDimensionName = "SupplierProfile"
+                                }
+                            },
+                            new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule 
+                            { 
+                                Settings= new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SpecificDimensionMapping 
+                                { 
+                                    DimensionName = "Supplier", 
+                                    MappedDimensionName = "Customer"
+                                }
+                            },
+                            new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule 
+                            { 
+                                Settings= new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SpecificDimensionMapping 
+                                { 
+                                    DimensionName = "SupplierProfile", 
+                                    MappedDimensionName = "CustomerProfile"
+                                }
+                            },
+                            new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule 
+                            { 
+                                Settings= new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SameDimensionName 
+                                { 
+                                      Type = Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SameDimensionNameType.AllDimensions
+                                }
+                            }
+                        },
+                    MeasureMappingRules = new List<Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.MeasureMappingRule>
+                        {
+                             new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.MeasureMappingRule
+                             {
+                                  Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                                  {
+                                       MeasureName = "Netting",
+                                       MappedMeasures = new List<string> {"SaleNetNotNULL", "CostNetNotNULL"}
+                                  }
+                             }
+                        }
+                }
+            };
+            var serializedBillingStatsToBillingStatsMeasureExternalSource = Vanrise.Common.Serializer.Serialize(billingStatsToBillingStatsMeasureExternalSource);
+
 
             //var services = Vanrise.Common.Serializer.Deserialize<List<TOne.WhS.BusinessEntity.Entities.ZoneService>>("{\"$values\":[{\"ServiceId\":1},{\"ServiceId\":2},{\"ServiceId\":3}]}");
             //string inIP = null;

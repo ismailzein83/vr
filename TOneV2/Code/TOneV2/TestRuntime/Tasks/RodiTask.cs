@@ -9,6 +9,7 @@ using TestRuntime;
 using Vanrise.BusinessProcess;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
+using Vanrise.Runtime.Entities;
 
 namespace TOne.WhS.Runtime.Tasks
 {

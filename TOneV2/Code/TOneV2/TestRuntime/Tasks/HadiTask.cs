@@ -18,6 +18,7 @@ using Vanrise.Common.Business;
 using Vanrise.Queueing;
 using Vanrise.Queueing.Entities;
 using Vanrise.Runtime;
+using Vanrise.Runtime.Entities;
 
 namespace TestRuntime.Tasks
 {

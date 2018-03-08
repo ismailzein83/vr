@@ -9,6 +9,7 @@ using Vanrise.AccountBalance.Data;
 using Vanrise.AccountBalance.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.Runtime;
+using Vanrise.Runtime.Entities;
 
 namespace TOne.WhS.Runtime.Tasks
 {

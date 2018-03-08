@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
+using Vanrise.Runtime.Entities;
 
 namespace TestRuntime.Tasks
 {

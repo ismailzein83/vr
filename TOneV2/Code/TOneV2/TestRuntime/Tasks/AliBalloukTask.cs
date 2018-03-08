@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.BusinessProcess;
 using Vanrise.Runtime;
+using Vanrise.Runtime.Entities;
 
 namespace TestRuntime.Tasks
 {
