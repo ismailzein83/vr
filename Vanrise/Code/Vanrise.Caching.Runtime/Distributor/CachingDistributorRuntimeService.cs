@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Runtime;
+using Vanrise.Runtime.Entities;
 
 namespace Vanrise.Caching.Runtime
 {
@@ -23,7 +24,7 @@ namespace Vanrise.Caching.Runtime
 
         static Object s_lockExecutionObj = new object();
 
-        protected override void Execute()
+        public override void Execute()
         {
             lock (s_lockExecutionObj)//this locking is required to avoid simultanuous execution of multiple instances of the CachingDistributorRuntimeService
             {

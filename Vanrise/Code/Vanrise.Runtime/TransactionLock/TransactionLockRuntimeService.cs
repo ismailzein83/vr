@@ -12,8 +12,7 @@ namespace Vanrise.Runtime
 {
     public class TransactionLockRuntimeService : RuntimeService
     {
-       
-        protected override void Execute()
+        public override void Execute()
         {
             throw new NotImplementedException("TransactionLockRuntimeService is no longer available. It should be removed from Runtime");
         }

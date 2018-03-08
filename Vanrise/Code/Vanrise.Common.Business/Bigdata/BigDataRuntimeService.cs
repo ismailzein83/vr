@@ -8,10 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Data;
 using Vanrise.Runtime;
+using Vanrise.Runtime.Entities;
 
 namespace Vanrise.Common.Business
 {
-    public class BigDataRuntimeService : Vanrise.Runtime.RuntimeService
+    public class BigDataRuntimeService : RuntimeService
     {
         ServiceHost _serviceHost;
         IBigDataServiceDataManager _dataManager = CommonDataManagerFactory.GetDataManager<IBigDataServiceDataManager>();
@@ -29,7 +30,7 @@ namespace Vanrise.Common.Business
                 _deleteTimedOutServicesInterval = TimeSpan.FromMinutes(2);
         }
 
-        protected override void OnInitialized(IRuntimeServiceInitializeContext context)
+        public override void OnInitialized(IRuntimeServiceInitializeContext context)
         {
             BigDataManager.Instance._isBigDataHost = true;
             _serviceHost = ServiceHostManager.Current.CreateAndOpenTCPServiceHost(typeof(BigDataWCFService), typeof(IBigDataWCFService), OnServiceHostCreated, OnServiceHostRemoved, out _serviceUrl);            
@@ -37,7 +38,7 @@ namespace Vanrise.Common.Business
         }
 
 
-        protected override void OnStarted(IRuntimeServiceStartContext context)
+        public override void OnStarted(IRuntimeServiceStartContext context)
         {            
             if (!_dataManager.Insert(_serviceUrl, Vanrise.Runtime.RunningProcessManager.CurrentProcess.ProcessId, out _bigDataServiceId))
                 throw new Exception("Could not insert BigDataService into database");
@@ -60,7 +61,7 @@ namespace Vanrise.Common.Business
             serviceHost.Closed -= serviceHost_Closed;
         }
 
-        protected override void OnStopped(IRuntimeServiceStopContext context)
+        public override void OnStopped(IRuntimeServiceStopContext context)
         {
             if(_serviceHost != null && _serviceHost.State == CommunicationState.Opened)
             {
@@ -89,7 +90,7 @@ namespace Vanrise.Common.Business
             LoggerFactory.GetLogger().WriteInformation("BigData WCF Service is closing..");
         }
 
-        protected override void Execute()
+        public override void Execute()
         {
             if(BigDataManager.Instance._isCachedDataChanged)
             {

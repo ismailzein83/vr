@@ -17,7 +17,7 @@ namespace Vanrise.Runtime
     public class RuntimeHost
     {
         Logger _logger = LoggerFactory.GetLogger();
-        List<RuntimeService> _services;
+        List<RuntimeServiceExecutor> _serviceExecutors;
         Timer _timerServicesManager;
         Timer _timerRuntimeManager;
         List<ChildRuntimeProcessProxy> _childRuntimeProcessProxies;
@@ -26,7 +26,7 @@ namespace Vanrise.Runtime
             : this()
         {
             InitializeRuntimeManager(true);
-            _services = services;
+            _serviceExecutors = services != null ? services.Select(s => new RuntimeServiceExecutor(s)).ToList() : null;
         }
 
         public RuntimeHost(string[] applicationArgs)
@@ -38,7 +38,7 @@ namespace Vanrise.Runtime
             int parentProcessId;
             if (applicationArgs != null && applicationArgs.Length > 0)
             {
-                List<RuntimeService> runtimeServices = new List<RuntimeService>();
+                List<RuntimeServiceExecutor> runtimeServiceExecutors = new List<RuntimeServiceExecutor>();
 
                 parentProcessId = int.Parse(applicationArgs[1]);
                 Console.WriteLine("Parent Process Id: {0}", parentProcessId);
@@ -51,8 +51,8 @@ namespace Vanrise.Runtime
 
                 var runtimeServiceGroupName = applicationArgs[2];
                 var runtimeServiceGroupConfig = runtimeConfig.RuntimeServiceGroups[runtimeServiceGroupName];
-                CreateAndAddRuntimeServices(runtimeServices, runtimeServiceGroupConfig);
-                _services = runtimeServices;
+                CreateAndAddRuntimeServices(runtimeServiceExecutors, runtimeServiceGroupConfig);
+                _serviceExecutors = runtimeServiceExecutors;
             }
             else
             {
@@ -147,23 +147,24 @@ namespace Vanrise.Runtime
             };
         }
 
-        private void CreateAndAddRuntimeServices(List<RuntimeService> runtimeServices, Configuration.RuntimeServiceGroup runtimeServiceGroupConfig)
+        private void CreateAndAddRuntimeServices(List<RuntimeServiceExecutor> runtimeServiceExecutors, Configuration.RuntimeServiceGroup runtimeServiceGroupConfig)
         {
-            runtimeServices.ThrowIfNull("runtimeServices");
+            runtimeServiceExecutors.ThrowIfNull("runtimeServiceExecutors");
             runtimeServiceGroupConfig.ThrowIfNull("runtimeServiceGroupConfig");
             foreach (Configuration.RuntimeService runtimeServiceConfig in runtimeServiceGroupConfig.RuntimeServices)
             {
-                RuntimeService service = CreateRuntimeService(runtimeServiceConfig);
-                runtimeServices.Add(service);
+                RuntimeServiceExecutor serviceExecutor = CreateRuntimeServiceExecutor(runtimeServiceConfig);
+                runtimeServiceExecutors.Add(serviceExecutor);
             }
         }
 
-        private RuntimeService CreateRuntimeService(Configuration.RuntimeService serviceConfig)
+        private RuntimeServiceExecutor CreateRuntimeServiceExecutor(Configuration.RuntimeService serviceConfig)
         {
             Type type = Type.GetType(serviceConfig.Type);
-            var service = Activator.CreateInstance(type) as RuntimeService;
-            service.Interval = serviceConfig.Interval;
-            return service;
+            var service = Activator.CreateInstance(type).CastWithValidate<RuntimeService>("service", serviceConfig.Name);
+            var serviceExecutor = new RuntimeServiceExecutor(service);
+            serviceExecutor.RuntimeService.Interval = serviceConfig.Interval;
+            return serviceExecutor;
         }
 
         public RuntimeStatus Status { get; private set; }
@@ -174,15 +175,15 @@ namespace Vanrise.Runtime
                 throw new Exception(String.Format("Cannot Start a {0} RuntimeHost", this.Status));
 
             _logger.WriteInformation("Starting Host...");
-            if (_services != null)
+            if (_serviceExecutors != null)
             {
                 LoggerFactory.GetLogger().WriteInformation("Registering Runtime Host...");
                 string currentProcessInterRuntimeServiceURL;
                 ServiceHostManager.Current.CreateAndOpenTCPServiceHost(typeof(InterRuntimeWCFService), typeof(IInterRuntimeWCFService), OnServiceHostCreated, OnServiceHostRemoved, out currentProcessInterRuntimeServiceURL);
 
                 List<RegisterRuntimeServiceInput> runtimeServicesRegistrationInfos = new List<RegisterRuntimeServiceInput>();
-                Dictionary<Guid, RuntimeService> runtimeServicesByInstanceId = new Dictionary<Guid, RuntimeService>();
-                foreach (var service in _services)
+                Dictionary<Guid, RuntimeServiceExecutor> runtimeServiceExecutorsByInstanceId = new Dictionary<Guid, RuntimeServiceExecutor>();
+                foreach (var service in _serviceExecutors)
                 {
                     RuntimeServiceInitializeContext initializeContext = new RuntimeServiceInitializeContext();
                     service.Initialize(initializeContext);
@@ -190,10 +191,10 @@ namespace Vanrise.Runtime
                     runtimeServicesRegistrationInfos.Add(new RegisterRuntimeServiceInput
                         {
                             ServiceInstanceId = serviceInstanceId,
-                            ServiceTypeUniqueName = service.ServiceTypeUniqueName,
+                            ServiceTypeUniqueName = service.RuntimeService.ServiceTypeUniqueName,
                             ServiceInstanceInfo = initializeContext.ServiceInstanceInfo
                         });
-                    runtimeServicesByInstanceId.Add(serviceInstanceId, service);
+                    runtimeServiceExecutorsByInstanceId.Add(serviceInstanceId, service);
                 }
                 RunningProcessAdditionalInfo additionalInfo = new RunningProcessAdditionalInfo
                 {
@@ -217,12 +218,12 @@ namespace Vanrise.Runtime
                                                RuntimeServiceInstanceManager.SetRuntimeServices(registrationOutput.AllRunningServices);
                                                foreach (var runtimeServiceInstance in registrationOutput.RegisteredServices)
                                                {
-                                                   RuntimeService service = runtimeServicesByInstanceId.GetRecord(runtimeServiceInstance.ServiceInstanceId);
-                                                   service.ThrowIfNull("service", runtimeServiceInstance.ServiceInstanceId);
-                                                   service.ServiceInstance = runtimeServiceInstance;
+                                                   RuntimeServiceExecutor serviceExecutor = runtimeServiceExecutorsByInstanceId.GetRecord(runtimeServiceInstance.ServiceInstanceId);
+                                                   serviceExecutor.ThrowIfNull("serviceExecutor", runtimeServiceInstance.ServiceInstanceId);
+                                                   serviceExecutor.RuntimeService.ServiceInstance = runtimeServiceInstance;
                                                    RuntimeServiceStartContext startContext = new RuntimeServiceStartContext();
-                                                   service.Start(startContext);
-                                                   service.Status = RuntimeStatus.Started;
+                                                   serviceExecutor.Start(startContext);
+                                                   serviceExecutor.Status = RuntimeStatus.Started;
                                                }
                                            });
 
@@ -282,17 +283,17 @@ namespace Vanrise.Runtime
                 throw new Exception(String.Format("Cannot Stop a {0} RuntimeHost", this.Status));
 
             _logger.WriteInformation("Stopping Host...");
-            if (_services != null)
+            if (_serviceExecutors != null)
             {
                 _timerServicesManager.Stop();
 
-                foreach (var service in _services)
+                foreach (var serviceExecutor in _serviceExecutors)
                 {
-                    while (service.IsExecuting)
+                    while (serviceExecutor.IsExecuting)
                         System.Threading.Thread.Sleep(1000);
-                    service.Stop(null);
-                    service.Status = RuntimeStatus.Stopped;
-                    service.Dispose();
+                    serviceExecutor.Stop(null);
+                    serviceExecutor.Status = RuntimeStatus.Stopped;
+                    serviceExecutor.Dispose();
                 }
             }
             this.Status = RuntimeStatus.Stopped;
@@ -326,9 +327,9 @@ namespace Vanrise.Runtime
             try
             {
                 ExitCurrentProcessIfNotRegistered();
-                if (_services != null && _services.Count > 0)
+                if (_serviceExecutors != null && _serviceExecutors.Count > 0)
                 {
-                    foreach (var service in _services)
+                    foreach (var service in _serviceExecutors)
                         service.ExecuteIfIdleAndDue();
                 }
                 TransactionLockItem lockItem;

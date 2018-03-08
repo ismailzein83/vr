@@ -26,7 +26,7 @@ namespace Vanrise.Runtime
                 s_maxConcurrentTasks = 3;
         }
 
-        protected override void Execute()
+        public override void Execute()
         {
             List<Entities.SchedulerTaskState> schedulerTaskStates = GetDueTasks();
             if (schedulerTaskStates == null)

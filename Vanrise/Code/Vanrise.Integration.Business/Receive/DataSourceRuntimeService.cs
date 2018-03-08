@@ -7,17 +7,18 @@ using Vanrise.Integration.Data;
 using Vanrise.Integration.Entities;
 using Vanrise.Queueing.Entities;
 using Vanrise.Runtime;
+using Vanrise.Runtime.Entities;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
 
 namespace Vanrise.Integration.Business
 {
-    public class DataSourceRuntimeService : Vanrise.Runtime.RuntimeService
+    public class DataSourceRuntimeService : RuntimeService
     {
         DataSourceRuntimeInstanceManager _dsRuntimeInstanceManager = new DataSourceRuntimeInstanceManager();
         IDataSourceRuntimeInstanceDataManager _dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceRuntimeInstanceDataManager>();
         DataSourceManager _dataSourceManager = new DataSourceManager();
-        protected override void Execute()
+        public override void Execute()
         {
             List<DataSourceRuntimeInstance> dataSourceRuntimeInstances = _dataManager.GetAll();
             if(dataSourceRuntimeInstances != null && dataSourceRuntimeInstances.Count > 0)

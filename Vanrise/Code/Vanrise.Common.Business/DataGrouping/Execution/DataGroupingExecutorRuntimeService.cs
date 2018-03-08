@@ -21,7 +21,7 @@ namespace Vanrise.Common.Business
             }
         }
 
-        protected override void OnInitialized(IRuntimeServiceInitializeContext context)
+        public override void OnInitialized(IRuntimeServiceInitializeContext context)
         {
             HostServiceIfNeeded();
             context.ServiceInstanceInfo = new DataGroupingExecutorServiceInstanceInfo
@@ -85,7 +85,7 @@ namespace Vanrise.Common.Business
 
         #endregion
 
-        protected override void Execute()
+        public override void Execute()
         {
             DataGroupingExecutor.Current.ProcessItems();
         }

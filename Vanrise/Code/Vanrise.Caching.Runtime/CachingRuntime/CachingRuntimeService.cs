@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Runtime;
+using Vanrise.Runtime.Entities;
 
 namespace Vanrise.Caching.Runtime
 {
@@ -22,7 +23,7 @@ namespace Vanrise.Caching.Runtime
         internal static HashSet<string> s_currentCacheFullNames = new HashSet<string>();
         //internal static bool s_isCurrent
 
-        protected override void Execute()
+        public override void Execute()
         {            
         }
 
