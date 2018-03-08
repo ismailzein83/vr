@@ -316,6 +316,10 @@
     <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\whs-be-financialaccountbedefinition-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\whs-be-financialaccountbedefinition-extendedsettings.js" />
     <Content Include="WhS_BusinessEntity\Directives\FlaggedService\vr-whs-be-flaggedservice-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Definition\Templates\ANumberSaleCodeGridDefinitionViewTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Definition\whs-be-anumber-salecodegridview-definition.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Runtime\Templates\ANumberSaleCodeGridRuntimeViewTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Runtime\whs-be-anumber-salecodegridview-runtime.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CompanyPricelistSettings\Templates\CompanyDefinitionPricelistSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CompanyPricelistSettings\whs-be-companypricelistsettings-definition.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CompanyPricelistSettings\Templates\CompanyPricelistSettingsTemplate.html" />
