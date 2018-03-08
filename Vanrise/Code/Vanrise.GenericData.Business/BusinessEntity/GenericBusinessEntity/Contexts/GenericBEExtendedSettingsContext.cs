@@ -9,6 +9,8 @@ namespace Vanrise.GenericData.Business
 {
     public class GenericBEExtendedSettingsContext : IGenericBEExtendedSettingsContext
     {
+        public GenericBusinessEntity GenericBusinessEntity { get; set; }
         public string InfoType { get; set; }
+        public GenericBEDefinitionSettings DefinitionSettings { get; set; }
     }
 }

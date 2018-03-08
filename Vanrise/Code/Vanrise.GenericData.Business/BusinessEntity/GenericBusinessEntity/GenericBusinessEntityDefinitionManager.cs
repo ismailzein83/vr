@@ -114,14 +114,16 @@ namespace Vanrise.GenericData.Business
             });
         }
         
-        public Object GetExtendedSettingsInfoByType(GenericBEDefinitionSettings definitionSettings, string infoType)
+        public Object GetExtendedSettingsInfoByType(GenericBEDefinitionSettings definitionSettings, string infoType, GenericBusinessEntity genericBusinessEntity = null)
         {
             definitionSettings.ThrowIfNull("context.DefinitionSettings");
             definitionSettings.ExtendedSettings.ThrowIfNull("context.DefinitionSettings.ExtendedSettings");
            return definitionSettings.ExtendedSettings.GetInfoByType(new GenericBEExtendedSettingsContext
             {
-                InfoType = infoType
-            }) ;
+                GenericBusinessEntity = genericBusinessEntity,
+                InfoType = infoType,
+                DefinitionSettings = definitionSettings
+           }) ;
         }
 
         public List<string> GetStatusFieldNames(Guid businessEntityDefinitionId)

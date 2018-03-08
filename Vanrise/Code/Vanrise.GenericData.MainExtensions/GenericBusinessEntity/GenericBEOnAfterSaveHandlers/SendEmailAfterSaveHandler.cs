@@ -27,8 +27,18 @@ namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEOnAf
             var dataRecordFiller = Activator.CreateInstance(dataRecordRuntimeType) as IDataRecordFiller;
             dataRecordFiller.FillDataRecordTypeFromDictionary(context.NewEntity.FieldValues);
             objects.Add(EntityObjectName, dataRecordFiller);
+            GenericBusinessEntityDefinitionManager genericBusinessEntityDefinitionManager = new GenericBusinessEntityDefinitionManager();
+            if (SendEmailObjectsInfo != null)
+            {
+                foreach(var sendEmailObjectInfo in SendEmailObjectsInfo)
+                {
+                    var objectValue = genericBusinessEntityDefinitionManager.GetExtendedSettingsInfoByType(context.DefinitionSettings, sendEmailObjectInfo.InfoType, context.NewEntity);
+                    objectValue.ThrowIfNull("objectValue", sendEmailObjectInfo.InfoType);
+                    objects.Add(sendEmailObjectInfo.ObjectName, objectValue);
+                }
+            }
 
-            var mailTemplateId = new GenericBusinessEntityDefinitionManager().GetExtendedSettingsInfoByType(context.DefinitionSettings, this.InfoType);
+            var mailTemplateId = genericBusinessEntityDefinitionManager.GetExtendedSettingsInfoByType(context.DefinitionSettings, this.InfoType);
             if(mailTemplateId != null)
             {
                 var emailTemplateEvaluator = vrMailManager.EvaluateMailTemplate((Guid)mailTemplateId, objects);
@@ -40,5 +50,13 @@ namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEOnAf
         }
         public string EntityObjectName { get; set; }
         public string InfoType { get; set; }
+        public List<SendEmailObjectInfo> SendEmailObjectsInfo { get; set; }
+    }
+    public class SendEmailObjectInfo
+    {
+        public Guid SendEmailObjectInfoId { get; set; }
+        public string InfoType { get; set; }
+        public string ObjectName { get; set; }
+
     }
 }

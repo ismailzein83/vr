@@ -70,6 +70,8 @@ namespace Vanrise.GenericData.Business
     }
     public interface IGenericBEExtendedSettingsContext
     {
+        GenericBusinessEntity GenericBusinessEntity { get; }
+        GenericBEDefinitionSettings DefinitionSettings { get;  }
         string InfoType { get; }
     }
   

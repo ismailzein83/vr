@@ -5,4 +5,21 @@
     <vr-columns colnum="{{sendEmailCtrl.normalColNum}}">
         <vr-textbox value="scopeModel.infoType" label="Info Type" isrequired="true"> </vr-textbox>
     </vr-columns>
+
+
+    <vr-columns colnum="fullrow">
+        <vr-button type="Add" data-onclick="scopeModel.addSendEmailObjectsInfo" standalone></vr-button>
+    </vr-columns>
+    <vr-columns width="fullrow" vr-loader="scopeModel.isLoadingDirective">
+            <vr-datagrid datasource="scopeModel.datasource" norowhighlightonclick="true"
+                         on-ready="onGridReady" ondeleterow="scopeModel.removeSendEmailObjectsInfo" hidegridmenu>
+                <vr-datagridcolumn headertext="'Info Type'" widthfactor="10">
+                    <vr-textbox value="dataItem.Entity.InfoType" isrequired="true"></vr-textbox>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Object Name'" widthfactor="10">
+                    <vr-textbox value="dataItem.Entity.ObjectName" isrequired="true"></vr-textbox>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+    </vr-columns>
+
 </vr-row>
