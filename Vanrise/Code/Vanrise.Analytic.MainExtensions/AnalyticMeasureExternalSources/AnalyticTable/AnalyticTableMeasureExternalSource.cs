@@ -12,10 +12,7 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
 {
     public class AnalyticTableMeasureExternalSource : AnalyticMeasureExternalSourceExtendedSettings
     {
-        public override Guid ConfigId
-        {
-            get { return new Guid("56B17184-3E6C-4130-8E5A-329BB9720D8E"); }
-        }
+        public override Guid ConfigId { get { return new Guid("56B17184-3E6C-4130-8E5A-329BB9720D8E"); } }
 
         public Guid AnalyticTableId { get; set; }
 
@@ -27,10 +24,13 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
         {
             this.DimensionMappingRules.ThrowIfNull("this.DimensionMappingRules");
             context.AnalyticQuery.ThrowIfNull("context.AnalyticQuery");
+
             var originalQuery = context.AnalyticQuery;
             var mappedQuery = originalQuery.VRDeepCopy();
             mappedQuery.TableId = this.AnalyticTableId;
+
             var dimensionNames = GetAllDimensionNames(mappedQuery);
+
             Dictionary<string, string> mappedDimensionNames = new Dictionary<string, string>();
             if (dimensionNames != null)
             {
@@ -45,6 +45,7 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
                             DimensionName = dimName,
                             AnalyticQuery = mappedQuery
                         };
+
                         if (dimensionMappingRule.Settings.TryMapDimension(tryMapDimensionContext))
                         {
                             isMatchRuleFound = true;
@@ -57,15 +58,14 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
                         throw new Exception(String.Format("No DimensionMappingRule found for dimension '{0}'", dimName));
                 }
             }
+
             List<string> measures = new List<string>();
             if (originalQuery.MeasureFields != null)
             {
                 foreach (var origMeasure in originalQuery.MeasureFields)
                 {
-                    var tryMapMeasureContext = new MeasureMappingRuleTryMapMeasureContext
-                    {
-                        MeasureName = origMeasure,
-                    };
+                    var tryMapMeasureContext = new MeasureMappingRuleTryMapMeasureContext { MeasureName = origMeasure };
+
                     foreach (var measureMappingRule in this.MeasureMappingRules)
                     {
                         measureMappingRule.Settings.ThrowIfNull("measureMappingRule.Settings");
@@ -85,6 +85,7 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
             MapQueryDimensionFields(mappedQuery, mappedDimensionNames);
             MapQueryFilters(mappedQuery, mappedDimensionNames);
             MapQueryFilterGroup(mappedQuery, mappedDimensionNames);
+
             AnalyticManager analyticManager = new AnalyticManager();
             AnalyticRecord summaryRecord;
             var analyticRecords = analyticManager.GetAllFilteredRecords(mappedQuery, out summaryRecord);
@@ -94,7 +95,7 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
                 return null;
         }
 
-        private static void MapQueryDimensionFields(AnalyticQuery mappedQuery, Dictionary<string, string> mappedDimensionNames)
+        private void MapQueryDimensionFields(AnalyticQuery mappedQuery, Dictionary<string, string> mappedDimensionNames)
         {
             if (mappedQuery.DimensionFields != null)
             {
@@ -113,7 +114,7 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
             }
         }
 
-        private static void MapQueryFilters(AnalyticQuery mappedQuery, Dictionary<string, string> mappedDimensionNames)
+        private void MapQueryFilters(AnalyticQuery mappedQuery, Dictionary<string, string> mappedDimensionNames)
         {
             if (mappedQuery.Filters != null)
             {
@@ -180,7 +181,7 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
             }
         }
 
-        HashSet<string> GetAllDimensionNames(AnalyticQuery query)
+        private HashSet<string> GetAllDimensionNames(AnalyticQuery query)
         {
             HashSet<string> dimensionNames = new HashSet<string>();
             if (query.DimensionFields != null)
@@ -204,7 +205,7 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
             return dimensionNames;
         }
 
-        void AddDimensionsNamesFromFilterGroup(HashSet<string> dimensionNames, RecordFilterGroup filterGroup)
+        private void AddDimensionsNamesFromFilterGroup(HashSet<string> dimensionNames, RecordFilterGroup filterGroup)
         {
             if (filterGroup.Filters != null)
             {
@@ -225,41 +226,19 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
 
         private class DimensionMappingRuleTryMapDimensionContext : IDimensionMappingRuleTryMapDimensionContext
         {
-            public string DimensionName
-            {
-                get;
-                set;
-            }
+            public string DimensionName { get; set; }
 
-            public AnalyticQuery AnalyticQuery
-            {
-                get;
-                set;
-            }
+            public AnalyticQuery AnalyticQuery { get; set; }
 
-
-            public string MappedDimensionName
-            {
-                get;
-                set;
-            }
+            public string MappedDimensionName { get; set; }
         }
 
         private class MeasureMappingRuleTryMapMeasureContext : IMeasureMappingRuleTryMapMeasureContext
         {
-            public string MeasureName
-            {
-                get;
-                set;
-            }
+            public string MeasureName { get; set; }
 
-            public List<string> MappedMeasureNames
-            {
-                get;
-                set;
-            }
+            public List<string> MappedMeasureNames { get; set; }
         }
-
 
         #endregion
     }
