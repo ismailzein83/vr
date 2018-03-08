@@ -21,54 +21,9 @@ namespace Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.Analyti
         {
             string dimName = context.DimensionName;
             if (this.ExcludedDimensions.Contains(dimName))
-            {
-                var query = context.AnalyticQuery;
-                if (query.DimensionFields != null && query.DimensionFields.Contains(dimName))
-                    query.DimensionFields.Remove(dimName);
-                if (query.Filters != null)
-                    query.Filters.RemoveAll(itm => itm.Dimension == dimName);
-                if (query.FilterGroup != null)
-                {
-                    bool filterBecomesEmpty;
-                    ExcludeFilterFromGroup(query.FilterGroup, dimName, out filterBecomesEmpty);
-                    if (filterBecomesEmpty)
-                        query.FilterGroup = null;
-                }
                 return true;
-            }
             else
                 return false;
-        }
-
-        private void ExcludeFilterFromGroup(GenericData.Entities.RecordFilterGroup filterGroup, string dimName, out bool filterBecomesEmpty)
-        {
-            if (filterGroup.Filters != null)
-            {
-                int originalFilterCount = filterGroup.Filters.Count;
-                for (int i = filterGroup.Filters.Count - 1; i >= 0; i--)
-                {
-                    var filter = filterGroup.Filters[i];
-
-                    if (filter.FieldName == dimName)
-                    {
-                        filterGroup.Filters.RemoveAt(i);
-                    }
-                    else
-                    {
-                        RecordFilterGroup childFilterGroup = filter as RecordFilterGroup;
-                        if (childFilterGroup != null)
-                        {
-                            bool subFilterBecomesEmpty;
-                            ExcludeFilterFromGroup(childFilterGroup, dimName, out subFilterBecomesEmpty);
-                            if (subFilterBecomesEmpty)
-                                filterGroup.Filters.RemoveAt(i);
-                        }
-                    }
-                }
-                if (filterGroup.Filters.Count != originalFilterCount)
-                    filterBecomesEmpty = filterGroup.Filters.Count == 0 || filterGroup.LogicalOperator == RecordQueryLogicalOperator.Or;
-            }
-            filterBecomesEmpty = false;
         }
     }
 }
