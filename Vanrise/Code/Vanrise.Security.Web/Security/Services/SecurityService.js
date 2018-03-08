@@ -182,7 +182,12 @@ function ($rootScope, Sec_CookieService, UtilsService, VR_Sec_PermissionFlagEnum
         var cookieCreatedTime = userToken.cookieCreatedTime;
         if (cookieCreatedTime != undefined && typeof (cookieCreatedTime) != typeof (Date))
             cookieCreatedTime = new Date(cookieCreatedTime);
-        if (cookieCreatedTime == undefined || ((new Date()).getTime() - cookieCreatedTime.getTime()) / 1000 > (userToken.ExpirationIntervalInSeconds - 60)) {
+        var nbOfSecondsToCompareWith = (userToken.ExpirationIntervalInSeconds - 60);
+        if (nbOfSecondsToCompareWith > 300)//max 5 minutes to renew token
+            nbOfSecondsToCompareWith = 300;
+        else if (nbOfSecondsToCompareWith < 60)//min 1 minute to renew token
+            nbOfSecondsToCompareWith = 60;
+        if (cookieCreatedTime == undefined || ((new Date()).getTime() - cookieCreatedTime.getTime()) / 1000 > nbOfSecondsToCompareWith) {
             if (!isRenewingToken) {
                 isRenewingToken = true;
                 VR_Sec_SecurityAPIService.TryRenewCurrentSecurityToken().then(function (response) {
