@@ -33,7 +33,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 foreach (var value in valueObject)
                 {
                     if (description.Length > 0)
-                        description.Append(Utilities.NewLine());
+                        description.Append(",");
                     description.Append(value.CodeNumber);
                     description.AppendFormat(" {0}", genericBuinessEntityManager.GetGenericBusinessEntityName(value.ReasonId, reasonDefinitionId));
 
