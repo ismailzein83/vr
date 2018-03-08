@@ -551,8 +551,6 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetAllByOwnerType.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleEntityRoutingProduct_GetSaleZoneRoutingProducts.sql" />
     <Build Include="TOneWhS_BE\User Defined Types\RoutingProductToClose.sql" />
-    <Build Include="TOneWhS_Case\Tables\CustomerCase.sql" />
-    <Build Include="TOneWhS_Case\Tables\SupplierCase.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\SP_SalePricelistNewCountryChanges_GetAffectedCustomerIds.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\SP_SalePricelistChangedCountryChanges_GetAffectedCustomerIds.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleCode_GetByCode.sql" />
@@ -575,5 +573,16 @@
     <Build Include="TOneWhS_Case\User Defined Types\CaseWorkGroupType.sql" />
     <Build Include="TOneWhS_Case\User Defined Types\CaseReasonType.sql" />
     <Build Include="TOneWhS_SPL\Stored Procedures\sp_SupplierZoneRate_Preview_GetNumberOfOtherRatesWithChangeType.sql" />
+    <Build Include="TOneWhS_Deal\Tables\DealZoneRate.sql" />
+    <Build Include="TOneWhS_Deal\Tables\DaysToReprocess.sql" />
+    <Build Include="TOneWhS_Case\Tables\SupplierFaultTicket.sql" />
+    <Build Include="TOneWhS_Case\Tables\CustomerFaultTicket.sql" />
+    <Build Include="TOneWhS_BE\Tables\ANumberSupplierCode.sql" />
+    <Build Include="TOneWhS_BE\Tables\ANumberSaleCode.sql" />
+    <Build Include="TOneWhS_BE\Tables\ANumberGroup.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_ANumberSaleCode_GetFiltered.sql" />
+    <Build Include="TOneWhS_Case\User Defined Types\SupplierFaultTicketType.sql" />
+    <Build Include="TOneWhS_Case\User Defined Types\CustomerFaultTicketType.sql" />
+    <Build Include="TOneWhS_BE\User Defined Types\ANumberGroupType.sql" />
   </ItemGroup>
 </Project>

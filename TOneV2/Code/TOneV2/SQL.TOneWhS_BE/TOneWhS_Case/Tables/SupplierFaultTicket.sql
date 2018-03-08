@@ -1,4 +1,4 @@
-﻿CREATE TABLE [TOneWhS_Case].[SupplierCase] (
+﻿CREATE TABLE [TOneWhS_Case].[SupplierFaultTicket] (
     [ID]                BIGINT           IDENTITY (1, 1) NOT NULL,
     [SupplierId]        INT              NULL,
     [SupplierZoneId]    BIGINT           NULL,
@@ -22,13 +22,7 @@
     [LastModifiedTime]  DATETIME         NULL,
     [TicketDetails]     NVARCHAR (MAX)   NULL,
     [SendEmail]         BIT              NULL,
-    [OwnerReference]    NVARCHAR (1000)  NULL,
+    [SystemReference]   NVARCHAR (1000)  NULL,
     CONSTRAINT [PK_SupplierCase] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
-
-
-
-
-
-
 

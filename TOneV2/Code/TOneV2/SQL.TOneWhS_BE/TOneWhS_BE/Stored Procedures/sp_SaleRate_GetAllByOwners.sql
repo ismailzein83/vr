@@ -25,6 +25,6 @@ BEGIN
 	where (rate.EED is null or rate.EED > rate.BED)
 		and ((rate.RateTypeID is null and @GetNormalRates = 1) or (rate.RateTypeID is not null and @GetOtherRates = 1))
 		and ((OwnerType = 0 and OwnerID in (select SellingProductId from @SellingProductIdsTable)) or (OwnerType = 1 and OwnerID in (select CustomerId from @CustomerIdsTable)))
-		and rate.ZoneID in (select ZoneId from @ZoneIdsTable)
+		and (@ZoneIds is null or @ZoneIds = '' or rate.ZoneID in (select ZoneId from @ZoneIdsTable))
 		--and rate.RateTypeID is null
 END

@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE TOneWhS_BE.sp_SaleRate_GetAllByOwnerType
+CREATE PROCEDURE [TOneWhS_BE].[sp_SaleRate_GetAllByOwnerType]
 	@OwnerType int,
 	@OwnerIds nvarchar(max),
 	@ZoneIds nvarchar(max),
@@ -23,5 +23,5 @@ BEGIN
 		and ((rate.RateTypeID is null and @GetNormalRates = 1) or (rate.RateTypeID is not null and @GetOtherRates = 1))
 		and priceList.OwnerType = @OwnerType
 		and priceList.OwnerID in (select OwnerId from @OwnerIdsTable)
-		and rate.ZoneID in (select ZoneId from @ZoneIdsTable)
+		and (@ZoneIds is null or rate.ZoneID in (select ZoneId from @ZoneIdsTable))
 END
