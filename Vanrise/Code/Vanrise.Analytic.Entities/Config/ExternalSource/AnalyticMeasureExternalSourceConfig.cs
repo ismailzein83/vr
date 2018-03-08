@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Vanrise.Analytic.Entities
 {
@@ -50,5 +51,11 @@ namespace Vanrise.Analytic.Entities
         public Dictionary<string, Object> DimensionValues { get; set; }
 
         public Dictionary<string, Object> MeasureValues { get; set; }
+    }
+    public class AnalyticMeasureExternalSourceExtendedSettingsConfig: ExtensionConfiguration
+    {
+        public const string EXTENSION_TYPE = "VR_Analytic_AnalyticMeasureExternalSourceExtendedSettings";
+
+        public string Editor { get; set; }
     }
 }
