@@ -6,6 +6,7 @@ using Vanrise.Common.Business;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
 using Mediation.Runtime.DataParser;
+using Vanrise.Runtime.Entities;
 
 namespace Mediation.Runtime.Tasks
 {

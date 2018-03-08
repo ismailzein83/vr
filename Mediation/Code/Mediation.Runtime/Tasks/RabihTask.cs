@@ -14,6 +14,7 @@ using Vanrise.BusinessProcess.Entities;
 using Vanrise.Caching.Runtime;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
+using Vanrise.Runtime.Entities;
 
 namespace Mediation.Runtime.Tasks
 {
