@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Vanrise.Runtime;
+using Vanrise.Runtime.Entities;
 
 namespace QM.Runtime.Tasks
 {
