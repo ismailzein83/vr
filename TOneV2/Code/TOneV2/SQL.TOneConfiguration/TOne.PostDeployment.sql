@@ -657,7 +657,7 @@ as (select * from (values
 ('WhS_BE/SalePricelist/GetFilteredSalePriceLists','WHS_BE_SalePricelist: View'),
 
 ('WhS_BE/SaleRate/GetFilteredSaleRate','WhS_BE_SaleRate: View'),
-('WhS_BE/CustomerSoldZones/GetFilteredCustomerSoldZones','WhS_BE_SaleRate: View')
+('WhS_BE/CustomerSoldZones/GetFilteredCustomerSoldZones','WhS_BE_SaleRate: View'),
 
 ('WhS_BE/SaleZone/GetFilteredSaleZones','WhS_BE_SaleZoneAndCode: View'),
 ('WhS_BE/SaleZone/UpdateSaleZoneName','WhS_BE_SaleZoneAndCode: Edit'),
