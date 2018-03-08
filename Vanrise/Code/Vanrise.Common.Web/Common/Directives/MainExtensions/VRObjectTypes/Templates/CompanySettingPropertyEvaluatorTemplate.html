@@ -1,7 +1,18 @@
 ﻿
 <vr-columns width="1/2row">
-    <vr-select on-ready="scopeModel.onContactTypeSelectorReady"
-               datasource="scopeModel.contactTypes"
+    <vr-select datasource="scopeModel.propertyFields"
+               selectedvalues="scopeModel.selectedField"
+               datavaluefield="value"
+               datatextfield="description"
+               onselectionchanged="scopeModel.onPropertyFieldSelectionChanged"
+               label="Field"
+               hideremoveicon 
+               isrequired="true">
+    </vr-select>
+</vr-columns>
+
+<vr-columns width="1/2row" ng-if="scopeModel.showContactTypes">
+    <vr-select datasource="scopeModel.contactTypes"
                selectedvalues="scopeModel.selectedContactType"
                datavaluefield="Name"
                datatextfield="Title"
@@ -9,9 +20,9 @@
                hideremoveicon isrequired="true">
     </vr-select>
 </vr-columns>
-<vr-columns width="1/2row">
-    <vr-select on-ready="scopeModel.onPropertyEnumSelectorReady"
-               datasource="scopeModel.propertyEnums"
+
+<vr-columns width="1/2row" ng-if="scopeModel.showContactTypes">
+    <vr-select datasource="scopeModel.propertyEnums"
                selectedvalues="scopeModel.selectedPropertyEnum"
                datavaluefield="value"
                datatextfield="description"
