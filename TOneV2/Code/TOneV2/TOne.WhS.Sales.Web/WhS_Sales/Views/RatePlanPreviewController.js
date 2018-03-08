@@ -262,52 +262,69 @@
             });
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadDefaultRoutingProductPreview,
-                loadCustomerRatePreview,
-                loadCustomerRoutingProductPreview,
-                loadNewCountryPreview,
-                loadChangedCountryPreviewGrid,
-                loadSubscriberPreviewDirective,
-                loadSaleZoneRoutingProductPreviewGrid,
-                loadProductRatePreviewGrid,
-            ])
-                .then(function () {
-                    if (subscriberPreviewDirectiveAPI.hasData())
-                        $scope.scopeModel.tabSubscriberPreview.showTab = true;
-                    else {
-                        tabsAPI.setTabSelected(1);
-                    }
-                    if (customerSaleZoneRoutingProductPreviewGridAPI.gridHasData())
-                        $scope.scopeModel.tabCustomerRPObject.showTab = true;
-                    else {
-                        $scope.scopeModel.showCustomerRPMsg = true;
+        	var promises = [];
 
-                    }
-                    if (ratePreviewGridAPI.gridHasData())
-                        $scope.scopeModel.tabCustomerRateObject.showTab = true;
-                    else {
-                        $scope.scopeModel.showCustomerRateMsg = true;
+        	var selectTabDeferred = UtilsService.createPromiseDeferred();
+            promises.push(selectTabDeferred.promise);
 
+            var waitMultipleAsyncOperationsPromise = waitMultipleAsyncOperations();
+            promises.push(waitMultipleAsyncOperationsPromise);
+
+            waitMultipleAsyncOperationsPromise.then(function () {
+            	if (subscriberPreviewDirectiveAPI.hasData()) {
+            		$scope.scopeModel.tabSubscriberPreview.showTab = true;
+            		selectTabDeferred.resolve();
+            	}
+            	else {
+                    tabsAPI.setTabSelected(1).then(function () { selectTabDeferred.resolve(); }).catch(function (error) {
+                        selectTabDeferred.reject(error);
+                    });
+                }
+                if (customerSaleZoneRoutingProductPreviewGridAPI.gridHasData())
+                    $scope.scopeModel.tabCustomerRPObject.showTab = true;
+                else {
+                	$scope.scopeModel.showCustomerRPMsg = true;
+
+                }
+                if (ratePreviewGridAPI.gridHasData())
+                    $scope.scopeModel.tabCustomerRateObject.showTab = true;
+                else {
+                	$scope.scopeModel.showCustomerRateMsg = true;
+
+                }
+                if (ownerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) {
+                    $scope.scopeModel.tabProductRPObject.showTab = true;
+                    $scope.scopeModel.tabProductRateObject.showTab = true;
+                    if (saleZoneRoutingProductPreviewGridAPI.gridHasData())
+                        $scope.scopeModel.showProductRPData = true;
+                    else {
+                        $scope.scopeModel.showProductRPMsg = true;
                     }
-                    if (ownerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value) {
-                        $scope.scopeModel.tabProductRPObject.showTab = true;
-                        $scope.scopeModel.tabProductRateObject.showTab = true;
-                        if (saleZoneRoutingProductPreviewGridAPI.gridHasData())
-                            $scope.scopeModel.showProductRPData = true;
-                        else {
-                            $scope.scopeModel.showProductRPMsg = true;
-                        }
-                        if (productRatePreviewGridAPI.gridHasData())
-                            $scope.scopeModel.showProductRateData = true;
-                        else {
-                            $scope.scopeModel.showProductRateMsg = true;
-                        }
+                    if (productRatePreviewGridAPI.gridHasData())
+                        $scope.scopeModel.showProductRateData = true;
+                    else {
+                        $scope.scopeModel.showProductRateMsg = true;
                     }
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                }).finally(function () {
-                    $scope.scopeModel.isLoading = false;
-                });
+                }
+            });
+
+            function waitMultipleAsyncOperations() {
+                return UtilsService.waitMultipleAsyncOperations([
+                    setTitle,
+                    loadDefaultRoutingProductPreview,
+                    loadCustomerRatePreview,
+                    loadCustomerRoutingProductPreview,
+                    loadNewCountryPreview,
+                    loadChangedCountryPreviewGrid,
+                    loadSubscriberPreviewDirective,
+                    loadSaleZoneRoutingProductPreviewGrid,
+                    loadProductRatePreviewGrid
+                ]);
+            }
+
+            return UtilsService.waitMultiplePromises(promises).finally(function () {
+                $scope.scopeModel.isLoading = false;
+            });
         }
 
         // #region RateTab
@@ -367,7 +384,7 @@
             rateLoadCarrierAccountSelector().then(function (response) {
                 $scope.scopeModel.showRateCarrierAccountSelector = !rateCarrierAccountSelectorAPI.hasSingleItem();
                 loadRatePreviewGrid().then(function (response) {
-                    loadRatePreviewPromiseDeffered.resolve();
+                        loadRatePreviewPromiseDeffered.resolve();
                 });
             });
             return loadRatePreviewPromiseDeffered.promise;

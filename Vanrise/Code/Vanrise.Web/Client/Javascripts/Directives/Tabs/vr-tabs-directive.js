@@ -38,7 +38,7 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', function (Mul
                     UtilsService.safeApply($scope);
                 }, 1);
                 if (ctrl.tabs[0] != undefined && tab.onremove!=undefined)
-                     ctrl.tabs[0].isSelected = true;
+                    ctrl.tabs[0].isSelected = true;
 
             };
             var api = {};
@@ -46,11 +46,14 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', function (Mul
                 ctrl.tabs.length = 0;
             };
             api.setTabSelected = function (index) {
+                var deferred = UtilsService.createPromiseDeferred();
                 setTimeout(function () {
                     var tab = ctrl.tabs[index];
                     if (tab != undefined)
                         tab.isSelected = true;
+                    deferred.resolve();
                 },1);
+                return deferred.promise;
             };
             api.setLastTabSelected = function () {
                 setTimeout(function () {
