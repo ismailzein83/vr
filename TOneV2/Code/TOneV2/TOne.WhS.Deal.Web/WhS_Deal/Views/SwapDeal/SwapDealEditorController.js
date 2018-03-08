@@ -117,7 +117,7 @@
                 if (!isGraceValid())
                     return "Grace period should be less than difference between BED and EED";
                 return null;
-            }
+            };
 
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateSwapDeal() : insertSwapDeal();
