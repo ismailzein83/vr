@@ -51,6 +51,7 @@
     <Compile Include="IDealDetailedProgressDataManager.cs" />
     <Compile Include="IDealProgressDataManager.cs" />
     <Compile Include="IDealDataManager.cs" />
+    <Compile Include="IDealZoneRateDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
