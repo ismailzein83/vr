@@ -59,6 +59,7 @@
     <Compile Include="DealDetailedProgressDataManager.cs" />
     <Compile Include="DealProgressDataManager.cs" />
     <Compile Include="DealDataManager.cs" />
+    <Compile Include="DealZoneRateDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
