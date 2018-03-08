@@ -38,7 +38,7 @@
             $scope.onCountrySelectorReady = function (api) {
                 countryDirectiveAPI = api;
                 countryReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onRouteRuleTypeSelectorReady = function (api) {
                 routeRuleTypeSelectorAPI = api;
