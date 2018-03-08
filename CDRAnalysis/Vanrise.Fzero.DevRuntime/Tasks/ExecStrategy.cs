@@ -7,6 +7,7 @@ using Vanrise.Fzero.FraudAnalysis.Business;
 using Vanrise.Fzero.FraudAnalysis.Entities;
 using System.Linq;
 using Vanrise.BusinessProcess.Business;
+using Vanrise.Runtime.Entities;
 
 
 namespace Vanrise.Fzero.DevRuntime.Tasks

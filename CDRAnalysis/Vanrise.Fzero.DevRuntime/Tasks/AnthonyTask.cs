@@ -7,6 +7,7 @@ using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
+using Vanrise.Runtime.Entities;
 
 namespace Vanrise.Fzero.DevRuntime.Tasks
 {

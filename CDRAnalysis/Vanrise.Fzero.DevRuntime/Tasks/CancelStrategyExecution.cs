@@ -4,6 +4,7 @@ using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Business;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.Runtime;
+using Vanrise.Runtime.Entities;
 
 
 namespace Vanrise.Fzero.DevRuntime.Tasks

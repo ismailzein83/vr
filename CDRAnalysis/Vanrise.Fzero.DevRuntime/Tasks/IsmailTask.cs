@@ -10,6 +10,7 @@ using Vanrise.Common.Business;
 using Vanrise.Integration.Mappers;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
+using Vanrise.Runtime.Entities;
 
 namespace Vanrise.Fzero.DevRuntime.Tasks
 {
