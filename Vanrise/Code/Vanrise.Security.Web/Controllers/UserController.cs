@@ -89,16 +89,16 @@ namespace Vanrise.Security.Web.Controllers
 
         [HttpPost]
         [Route("DisableUser")]
-        public Vanrise.Entities.UpdateOperationOutput<UserDetail> DisableUser(User userObject)
+        public Vanrise.Entities.UpdateOperationOutput<UserDetail> DisableUser(UserDisableInput userObject)
         {
-            return _manager.DisableUser(userObject);
+            return _manager.DisableUser(userObject.UserId);
         }
 
         [HttpPost]
         [Route("EnableUser")]
-        public Vanrise.Entities.UpdateOperationOutput<UserDetail> EnableUser(User userObject)
+        public Vanrise.Entities.UpdateOperationOutput<UserDetail> EnableUser(UserEnableInput userObject)
         {
-            return _manager.EnableUser(userObject);
+            return _manager.EnableUser(userObject.UserId);
         }
         [HttpPost]
         [Route("UnlockUser")]
@@ -197,5 +197,16 @@ namespace Vanrise.Security.Web.Controllers
 
         public DateTime? EnabledTill { get; set; }
 
+    }
+
+    public class UserEnableInput
+    {
+        public int UserId { get; set; }
+
+    }
+
+    public class UserDisableInput
+    {
+        public int UserId { get; set; }
     }
 }

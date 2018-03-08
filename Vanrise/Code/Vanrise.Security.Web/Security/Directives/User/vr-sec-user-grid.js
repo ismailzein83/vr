@@ -187,7 +187,7 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
 
                 VRNotificationService.showConfirmation().then(function (confirmed) {
                     if (confirmed) {
-                        return VR_Sec_UserAPIService.DisableUser(dataItem.Entity).then(function (response) {
+                        return VR_Sec_UserAPIService.DisableUser({ UserId: dataItem.Entity.UserId }).then(function (response) {
                             if (onPermissionDisabled && typeof onPermissionDisabled == 'function') {
                                 dataItem.Entity.EnabledTill = response.UpdatedObject.Entity.EnabledTill;
                                 onPermissionDisabled(dataItem.Entity);
@@ -234,7 +234,7 @@ app.directive("vrSecUserGrid", ["VR_Sec_UserAPIService", "VR_Sec_UserService", '
 
                 VRNotificationService.showConfirmation().then(function (confirmed) {
                     if (confirmed) {
-                        return VR_Sec_UserAPIService.EnableUser(dataItem.Entity).then(function (response) {
+                        return VR_Sec_UserAPIService.EnableUser({ UserId: dataItem.Entity.UserId }).then(function (response) {
                             if (onPermissionEnabled && typeof onPermissionEnabled == 'function') {
                                 dataItem.Entity.EnabledTill = response.UpdatedObject.Entity.EnabledTill;
                                 onPermissionEnabled(dataItem.Entity);

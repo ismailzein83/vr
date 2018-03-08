@@ -135,14 +135,14 @@ namespace Vanrise.Security.Business
                 users = GetUsersByTenant();
 
             Func<User, bool> filterExpression = (user) =>
+            {
+                if (user.IsSystemUser)
                 {
-                    if (user.IsSystemUser)
-                    {
-                        if (filter == null || !filter.IncludeSystemUsers)
-                            return false;
-                    }
-                    return (filter == null || filter.GetOnlyTenantUsers || (filter.ExcludeInactive == false || IsUserEnable(user)));
-                };
+                    if (filter == null || !filter.IncludeSystemUsers)
+                        return false;
+                }
+                return (filter == null || filter.GetOnlyTenantUsers || (filter.ExcludeInactive == false || IsUserEnable(user)));
+            };
 
             return users.MapRecords(UserInfoMapper, filterExpression);
         }
@@ -386,9 +386,9 @@ namespace Vanrise.Security.Business
                 if (currentUser.IsSystemUser)
                     throw new Exception("Cannot update System User");
                 UserSetting settings = currentUser.Settings;
-                 if (settings == null)
-                      settings = new UserSetting();
-                settings.PhotoFileId = userObject.PhotoFileId;               
+                if (settings == null)
+                    settings = new UserSetting();
+                settings.PhotoFileId = userObject.PhotoFileId;
                 updatedUser = new User()
                 {
                     UserId = userObject.UserId,
@@ -398,7 +398,7 @@ namespace Vanrise.Security.Business
                     Description = userObject.Description,
                     TenantId = userObject.TenantId,
                     ExtendedSettings = userObject.ExtendedSettings,
-                    Settings = settings 
+                    Settings = settings
                 };
                 IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
                 updateActionSucc = dataManager.UpdateUser(updatedUser);
@@ -445,18 +445,13 @@ namespace Vanrise.Security.Business
 
             return updateOperationOutput;
         }
-        public bool DisableUser (int userId)
-        {
-            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-            return dataManager.DisableUser(userId);
-        }
-
-        public Vanrise.Entities.UpdateOperationOutput<UserDetail> DisableUser(User userObject)
+        public Vanrise.Entities.UpdateOperationOutput<UserDetail> DisableUser(int userId)
         {
             UpdateOperationOutput<UserDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<UserDetail>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
+            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
 
             bool updateActionSucc;
             var cloudServiceProxy = GetCloudServiceProxy();
@@ -466,14 +461,13 @@ namespace Vanrise.Security.Business
             }
             else
             {
-
-                updateActionSucc = DisableUser(userObject.UserId);
+                updateActionSucc = dataManager.DisableUser(userId);
             }
 
             if (updateActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                var user = GetUserbyId(userObject.UserId);
+                var user = GetUserbyId(userId);
                 VRActionLogger.Current.LogObjectCustomAction(UserLoggableEntity.Instance, "Disable", true, user, null);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = UserDetailMapper(user);
@@ -504,7 +498,6 @@ namespace Vanrise.Security.Business
             return true;
         }
         public bool IsUserEnable(int userId, out  UserStatus userStatus)
-        
         {
             var user = GetUserbyId(userId);
             return IsUserEnable(user, out userStatus);
@@ -524,16 +517,11 @@ namespace Vanrise.Security.Business
             }
             return true;
         }
-        public bool EnableUser(int userId)
-        {
-            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-            return dataManager.EnableUser(userId);
-        }
-      
 
-        public Vanrise.Entities.UpdateOperationOutput<UserDetail> EnableUser(User userObject)
+        public Vanrise.Entities.UpdateOperationOutput<UserDetail> EnableUser(int userId)
         {
             UpdateOperationOutput<UserDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<UserDetail>();
+            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
@@ -547,13 +535,13 @@ namespace Vanrise.Security.Business
             else
             {
 
-                updateActionSucc = EnableUser(userObject.UserId);
+                updateActionSucc = dataManager.EnableUser(userId);
             }
 
             if (updateActionSucc)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
-                var user = GetUserbyId(userObject.UserId);
+                var user = GetUserbyId(userId);
                 VRActionLogger.Current.LogObjectCustomAction(UserLoggableEntity.Instance, "Enable", true, user, null);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = UserDetailMapper(user);
@@ -842,7 +830,7 @@ namespace Vanrise.Security.Business
                 setting = new UserSetting();
             setting.PhotoFileId = userProfileObject.PhotoFileId;
 
-            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();           
+            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
             bool updateActionSucc = dataManager.EditUserProfile(userProfileObject.Name, userProfileObject.UserId, setting);
             UpdateOperationOutput<UserProfile> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<UserProfile>();
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
@@ -859,8 +847,8 @@ namespace Vanrise.Security.Business
         {
             UserManager manager = new UserManager();
             User currentUser = manager.GetUserbyId(SecurityContext.Current.GetLoggedInUserId());
-            long? photoFileId  = null;
-            if(currentUser.Settings!=null)
+            long? photoFileId = null;
+            if (currentUser.Settings != null)
                 photoFileId = currentUser.Settings.PhotoFileId;
             return new UserProfile { UserId = SecurityContext.Current.GetLoggedInUserId(), Name = currentUser.Name, PhotoFileId = photoFileId };
 
@@ -943,12 +931,12 @@ namespace Vanrise.Security.Business
 
         #region Private Methods
 
-        private UserSetting  GetUserSetting (int userId)
+        private UserSetting GetUserSetting(int userId)
         {
             var user = GetUserbyId(userId);
             user.ThrowIfNull("user is null");
             return user.Settings;
-               
+
         }
         private UserDTO GetUserDetails(User user)
         {
