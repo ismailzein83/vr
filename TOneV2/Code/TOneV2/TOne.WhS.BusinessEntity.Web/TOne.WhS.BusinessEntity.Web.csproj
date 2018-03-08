@@ -25,6 +25,8 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -213,6 +215,7 @@
     <Content Include="WhS_BusinessEntity\Constant\CommisssionTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ContactTypeEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\CarrierAccountTypeEnum.js" />
+    <Content Include="WhS_BusinessEntity\Constant\CustomerTicketDetailsFieldPropertyEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ExclusiveSessionTargetIdPrefixEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\ExclusiveSessionTypeIdEnum.js" />
     <Content Include="WhS_BusinessEntity\Constant\FinancialAccountCarrierTypeEnum.js" />
@@ -262,6 +265,8 @@
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\CustomerCase\Templates\CustomerFaultTicketCustomObjectSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\CustomerCase\Templates\CustomerFaultTicketSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\CustomerCase\Templates\CustomerCaseStaticEditorDefinitionTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\CaseManagement\CustomerCase\Templates\CustomerTicketDetailsPropertyEvaluatorTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\CaseManagement\CustomerCase\whs-be-customerticketdetailspropertyevaluator.js" />
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\CustomerCase\whs-be-casemanagement-customercase-staticeditor.js" />
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\SupplierCase\Templates\SupplierFaultTicketSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\SupplierCase\Templates\SupplierCaseStaticEditorDefinitionTemplate.html" />

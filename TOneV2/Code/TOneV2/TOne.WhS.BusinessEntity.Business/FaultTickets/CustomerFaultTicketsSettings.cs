@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -26,6 +27,15 @@ namespace TOne.WhS.BusinessEntity.Business
                 case "OpenTicketMailTemplate": return new ConfigManager().GetFaultTicketsCustomerOpenMailTemplateId();
                 case "PendingTicketMailTemplate": return new ConfigManager().GetFaultTicketsCustomerPendingMailTemplateId();
                 case "ClosedTicketMailTemplate": return new ConfigManager().GetFaultTicketsCustomerClosedMailTemplateId();
+                case "CompanySetting":
+                    var customerId = (int)context.GenericBusinessEntity.FieldValues.GetRecord("CustomerId");
+                    return new CarrierAccountManager().GetCompanySetting(customerId);
+                case "TicketDetails":
+                    DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
+                    var dataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(context.DefinitionSettings.DataRecordTypeId);
+                    var dataRecordFiller = Activator.CreateInstance(dataRecordRuntimeType) as IDataRecordFiller;
+                    dataRecordFiller.FillDataRecordTypeFromDictionary(context.GenericBusinessEntity.FieldValues);
+                    return dataRecordFiller;
                 default: return null;
             }
         }

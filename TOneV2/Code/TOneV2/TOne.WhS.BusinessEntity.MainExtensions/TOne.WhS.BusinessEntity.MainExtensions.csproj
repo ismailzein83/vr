@@ -64,6 +64,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.GenericData.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Business.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
@@ -127,6 +131,7 @@
     <Compile Include="TransformationSteps\CustomerZoneRateStep.cs" />
     <Compile Include="TransformationSteps\SupplierZoneRateStep.cs" />
     <Compile Include="VRObjectTypes\CustomerObjectType.cs" />
+    <Compile Include="VRObjectTypes\CustomerTicketDetailsPropertyEvaluator.cs" />
     <Compile Include="VRObjectTypes\CustomerPropertyEvaluator.cs" />
     <Compile Include="VRObjectTypes\WHSFinancialAccountObjectType.cs" />
     <Compile Include="VRObjectTypes\WHSFinancialAccountPropertyEvaluator.cs" />
