@@ -10,7 +10,7 @@ namespace Retail.Runtime.Tasks
     {
         public void Execute()
         {
-            var runtimeServices = new List<Vanrise.Runtime.RuntimeService>();
+            var runtimeServices = new List<Vanrise.Runtime.Entities.RuntimeService>();
 
             // BP Services
             var bpService = new Vanrise.BusinessProcess.BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };

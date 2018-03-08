@@ -8,6 +8,7 @@ using Vanrise.Caching.Runtime;
 using Vanrise.Common.Business;
 using Vanrise.Queueing;
 using Vanrise.Runtime;
+using Vanrise.Runtime.Entities;
 
 namespace Retail.Runtime.Tasks
 {

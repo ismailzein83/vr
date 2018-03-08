@@ -11,6 +11,7 @@ using Vanrise.Runtime;
 using Vanrise.Common;
 using Vanrise.Security.Data.SQL;
 using Vanrise.Data.RDB;
+using Vanrise.Runtime.Entities;
 
 namespace Retail.Runtime.Tasks
 {

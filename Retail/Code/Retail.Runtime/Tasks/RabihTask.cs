@@ -29,7 +29,7 @@ namespace Retail.Runtime.Tasks
             //UpdateUsageBalance();
             //var str = GetSerialisedSettings();
 
-            var runtimeServices = new List<Vanrise.Runtime.RuntimeService>();
+            var runtimeServices = new List<Vanrise.Runtime.Entities.RuntimeService>();
             BusinessProcessService bpService = new BusinessProcessService() { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(bpService);
             BPRegulatorRuntimeService bpRegulatorService = new BPRegulatorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
