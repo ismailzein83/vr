@@ -15,6 +15,7 @@ namespace Vanrise.Invoice.Business
 {
     public class InvoiceSettingManager : IInvoiceSettingManager
     {
+        PartnerInvoiceSettingManager _partnerInvoiceSettingManager = new PartnerInvoiceSettingManager();
         #region Public Methods
         public InvoiceSetting GetInvoiceSetting(Guid invoiceSettingId, bool isViewedFromUI)
         {
@@ -419,6 +420,7 @@ namespace Vanrise.Invoice.Business
                     invoiceSettingDetail.DuePeriodDescription = string.Format("{0}", duePeriodPartItem.DuePeriod);
                 }
             }
+            invoiceSettingDetail.TotalLinkedPartners = _partnerInvoiceSettingManager.GetInvoiceSettingTotalLinkedPartners(invoiceSettingObject.InvoiceSettingId);
             invoiceSettingDetail.CanDeleteInvoiceSetting = CanDeleteInvoiceSetting(invoiceSettingObject.InvoiceSettingId);
             return invoiceSettingDetail;
         }
