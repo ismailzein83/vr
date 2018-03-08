@@ -59,7 +59,7 @@
             $scope.onCountrySelectorReady = function (api) {
                 countryDirectiveAPI = api;
                 countryReadyPromiseDeferred.resolve();
-            }
+            };
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
