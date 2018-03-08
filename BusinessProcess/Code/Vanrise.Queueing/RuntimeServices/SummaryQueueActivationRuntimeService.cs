@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Queueing.Data;
 using Vanrise.Queueing.Entities;
 using Vanrise.Runtime;
+using Vanrise.Runtime.Entities;
 
 namespace Vanrise.Queueing
 {
@@ -24,7 +25,7 @@ namespace Vanrise.Queueing
         QueueInstanceManager _queueManager = new QueueInstanceManager();
         ISummaryBatchActivatorDataManager _summaryBatchActivatorDataManager = QDataManagerFactory.GetDataManager<ISummaryBatchActivatorDataManager>();
 
-        protected override void Execute()
+        public override void Execute()
         {
             if (PendingItemsHandler.Current.HasSummaryItemsToProcess(base.ServiceInstance.ServiceInstanceId))
             {

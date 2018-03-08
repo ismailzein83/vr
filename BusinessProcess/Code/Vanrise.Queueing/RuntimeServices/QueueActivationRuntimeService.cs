@@ -8,6 +8,7 @@ using Vanrise.Common;
 using Vanrise.Queueing.Data;
 using Vanrise.Queueing.Entities;
 using Vanrise.Runtime;
+using Vanrise.Runtime.Entities;
 
 namespace Vanrise.Queueing
 {
@@ -26,7 +27,7 @@ namespace Vanrise.Queueing
         IQueueItemDataManager _queueItemDataManager = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();
         QueueInstanceManager _queueManager = new QueueInstanceManager();
         QueueExecutionFlowManager _executionFlowManager = new QueueExecutionFlowManager();
-        protected override void Execute()
+        public override void Execute()
         {
             int queueIdToProcess;
             while (PendingItemsHandler.Current.TryGetPendingQueueToProcess(base.ServiceInstance.ServiceInstanceId, out queueIdToProcess))

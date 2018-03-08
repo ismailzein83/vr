@@ -34,7 +34,7 @@ namespace Vanrise.BusinessProcess
                 s_moreAssignableItemsToMaxConcurrentPerBPDefinition = 0;
         }
 
-        protected override void Execute()
+        public override void Execute()
         {
             TransactionLocker.Instance.TryLock("BPRegulatorRuntimeService_Execute", () =>
             {

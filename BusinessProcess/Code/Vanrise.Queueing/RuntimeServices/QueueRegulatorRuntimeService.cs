@@ -7,6 +7,7 @@ using Vanrise.Queueing.Data;
 using Vanrise.Queueing.Entities;
 using Vanrise.Runtime;
 using Vanrise.Common;
+using Vanrise.Runtime.Entities;
 
 namespace Vanrise.Queueing
 {
@@ -23,7 +24,7 @@ namespace Vanrise.Queueing
 
         RuntimeServiceInstanceManager _serviceInstanceManager = new RuntimeServiceInstanceManager();
 
-        protected override void Execute()
+        public override void Execute()
         {
             TransactionLocker.Instance.TryLock("QueueRegulatorRuntimeService_Execute", () =>
             {

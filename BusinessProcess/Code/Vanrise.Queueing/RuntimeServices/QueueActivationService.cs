@@ -10,6 +10,7 @@ using Vanrise.Entities.SummaryTransformation;
 using Vanrise.Queueing.Data;
 using Vanrise.Queueing.Entities;
 using Vanrise.Runtime;
+using Vanrise.Runtime.Entities;
 
 namespace Vanrise.Queueing
 {
@@ -28,7 +29,7 @@ namespace Vanrise.Queueing
 
         //Task _taskProcessing;
 
-        protected override void Execute()
+        public override void Execute()
         {
             //if (_taskProcessing == null)
             //    CreateTaskProcessing();            

@@ -21,13 +21,13 @@ namespace Vanrise.BusinessProcess
         }
 
         BusinessProcessRuntime _businessProcessRuntime;
-        protected override void OnStarted(IRuntimeServiceStartContext context)
+        public override void OnStarted(IRuntimeServiceStartContext context)
         {
             _businessProcessRuntime = new BusinessProcessRuntime(base.ServiceInstance.ServiceInstanceId);
             base.OnStarted(context);
         }
 
-        protected override void Execute()
+        public override void Execute()
         {
             BPInstanceCancellationRequest cancellationRequest;
             while (PendingItemsHandler.Current.TryGetCancellationRequestToProcess(base.ServiceInstance.ServiceInstanceId, out cancellationRequest))
