@@ -319,6 +319,8 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Definition\Templates\ANumberSaleCodeGridDefinitionViewTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Definition\whs-be-anumber-salecodegridview-definition.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Runtime\Templates\ANumberSaleCodeGridRuntimeViewTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Runtime\Templates\ANumberSaleCodeGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Runtime\whs-be-anumber-salecode-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Runtime\whs-be-anumber-salecodegridview-runtime.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CompanyPricelistSettings\Templates\CompanyDefinitionPricelistSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CompanyPricelistSettings\whs-be-companypricelistsettings-definition.js" />

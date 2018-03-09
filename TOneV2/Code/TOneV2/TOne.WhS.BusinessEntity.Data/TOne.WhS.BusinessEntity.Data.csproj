@@ -67,6 +67,7 @@
     <Compile Include="ISalePriceListChangeDataManager.cs" />
     <Compile Include="ISalePriceListDataManager.cs" />
     <Compile Include="ISalePriceListTemplateDataManager.cs" />
+    <Compile Include="IANumberSaleCodeDataManager.cs" />
     <Compile Include="ISellingProductDataManager.cs" />
     <Compile Include="IRoutingProductDataManager.cs" />
     <Compile Include="ISaleCodeDataManager.cs" />

@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AccountManagerCarrierDataManager.cs" />
+    <Compile Include="ANumberSaleCodeDataManager.cs" />
     <Compile Include="CarrierAccountStatusHistoryDataManager.cs" />
     <Compile Include="CodeGroupDataManager.cs" />
     <Compile Include="CarrierAccountDataManager.cs" />
