@@ -1,148 +1,211 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Configuration;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
-//using System.Timers;
-//using Vanrise.BusinessProcess;
-//using Vanrise.BusinessProcess.Business;
-//using Vanrise.BusinessProcess.Entities;
+﻿using System;
+using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Timers;
+using Vanrise.BusinessProcess;
+using Vanrise.BusinessProcess.Business;
+using Vanrise.BusinessProcess.Entities;
 
-//namespace TestRuntime
-//{
-//    public class HaSSanTask : ITask
-//    {
-//        public void Execute()
-//        {
-
-//            var config = new BPConfiguration { MaxConcurrentWorkflows = 20 };
-//            var ser = Vanrise.Common.Serializer.Serialize(config);
-//            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler(CurrentDomain_UnhandledException);
-
-
-//            //Console.WriteLine("Host Started");
-//            //BusinessProcessRuntime.Current.TerminatePendingProcesses();
-
-//            //Timer timer = new Timer(1000);
-//            //timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
-//            //timer.Start();
-//            //int switchID = 66;
-//            //System.Threading.Tasks.Task t = new System.Threading.Tasks.Task(() =>
-//            //{
-//            //    TriggerProcessImportCDRProcess(switchID);
-//            //    // System.Threading.Thread.Sleep(30000);
-//            //});
-//            //t.Start();
-
-
-         
-//            BusinessProcessRuntime.Current.TerminatePendingProcesses();
-//            Timer timer = new Timer(1000);
-//            timer.Elapsed += new ElapsedEventHandler(timer_Elapsed);
-//            timer.Start();
-
-//            System.Threading.Tasks.Task t = new System.Threading.Tasks.Task(() =>
-//                {
-//                    for (DateTime d = DateTime.Parse(ConfigurationManager.AppSettings["RepricingFrom"]); d <= DateTime.Parse(ConfigurationManager.AppSettings["RepricingTo"]); d = d.AddDays(1))
-//                    {
-//                        TriggerProcess(d);
-//                        System.Threading.Thread.Sleep(30000);
-//                    }
-//                });
-//            t.Start();
-
-
-//            Console.ReadKey();
-//        }
-
-//        private static void TriggerProcess(DateTime date)
-//        {
-//            TOne.CDRProcess.Arguments.DailyRepricingProcessInput inputArguments = new TOne.CDRProcess.Arguments.DailyRepricingProcessInput { RepricingDay = date };
-//            CreateProcessInput input = new CreateProcessInput
-//            {
-//                InputArguments = inputArguments
-//            };
-//            BPInstanceManager processManager = new BPInstanceManager();
-//            processManager.CreateNewProcess(input);
-//        }
-
-
-//        private static void TriggerProcessImportCDRProcess(int SwitchID)
-//        {
-//            TOne.CDRProcess.Arguments.ImportCDRProcessInput inputArguments = new TOne.CDRProcess.Arguments.ImportCDRProcessInput { SwitchID = SwitchID };
-//            CreateProcessInput input = new CreateProcessInput
-//            {
-//                InputArguments = inputArguments
-//            };
-//            BPInstanceManager processManager = new BPInstanceManager();
-//            processManager.CreateNewProcess(input);
-
-//        }
-
-//        private static void TriggerProcess(int SwitchID)
-//        {
-//            TOne.CDRProcess.Arguments.CDRImportProcessInput inputArguments = new TOne.CDRProcess.Arguments.CDRImportProcessInput { SwitchID = SwitchID };
-//            CreateProcessInput input = new CreateProcessInput
-//            {
-//                InputArguments = inputArguments
-//            };
-//            BPInstanceManager processManager = new BPInstanceManager();
-//            processManager.CreateNewProcess(input);
-
-//            TOne.CDRProcess.Arguments.CDRGenerationProcessInput CDRProcessInputArguments = new TOne.CDRProcess.Arguments.CDRGenerationProcessInput { SwitchID = SwitchID };
-//            CreateProcessInput inputCDRProcess = new CreateProcessInput
-//            {
-//                InputArguments = CDRProcessInputArguments
-//            };
-//            BPInstanceManager processManager1 = new BPInstanceManager();
-//            processManager1.CreateNewProcess(inputCDRProcess);
-//        }
-
-
-
-//        static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
-//        {
-//            System.Windows.Forms.MessageBox.Show(e.ExceptionObject.ToString());
-
-//        }
-
-//        static bool _isRunning;
-//        static object _lockObj = new object();
-//        static void timer_Elapsed(object sender, ElapsedEventArgs e)
-//        {
-//            lock (_lockObj)
-//            {
-//                if (_isRunning)
-//                    return;
-//                _isRunning = true;
-//            }
-//            try
-//            {
-//                //BusinessProcessRuntime.Current.LoadAndExecutePendings();
-
-//                BusinessProcessRuntime.Current.ExecutePendings();
-//                BusinessProcessRuntime.Current.TriggerPendingEvents();
-//            }
-//            finally
-//            {
-//                lock (_lockObj)
-//                {
-//                    _isRunning = false;
-//                }
-//            }
-//        }
-//    }
-
-
-//}
+namespace TestRuntime
+{
+    public class HaSSanTask : ITask
+    {
+        public void Execute()
+        {
+            var billingMeasureExternalSource = new Vanrise.Analytic.Entities.AnalyticMeasureExternalSourceConfig
+            {
+                ExtendedSettings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.AnalyticTableMeasureExternalSource
+                {
+                    AnalyticTableId = new Guid("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
+                    DimensionMappingRules = new List<Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule>
+                    {
+                        new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule 
+                        { 
+                            Settings= new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SameDimensionName 
+                            { 
+                                Type = Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SameDimensionNameType.SpecificDimensions, 
+                                DimensionNames = new List<string> { "MasterZone", "Customer", "CustomerProfile", "Supplier", "SupplierProfile", "CDRType", "Switch" } 
+                            }
+                        }
+                    },
+                    MeasureMappingRules = new List<Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.MeasureMappingRule>
+                    {
+                         new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.MeasureMappingRule
+                         {
+                              Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                              {
+                                   MeasureName = "PricedCalls",
+                                   MappedMeasures = new List<string> {"NumberOfCalls"}
+                              }
+                         },
+                         new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.MeasureMappingRule
+                         {
+                              Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                              {
+                                   MeasureName = "SaleNet",
+                                   MappedMeasures = new List<string> {"SaleNetNotNULL"}
+                              }
+                         },
+                         new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.MeasureMappingRule
+                         {
+                              Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                              {
+                                   MeasureName = "CostNet",
+                                   MappedMeasures = new List<string> {"CostNetNotNULL"}
+                              }
+                         },
+                         new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.MeasureMappingRule
+                         {
+                              Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                              {
+                                   MeasureName = "Profit",
+                                   MappedMeasures = new List<string> {"SaleNetNotNULL", "CostNetNotNULL"}
+                              }
+                         },
+                         new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.MeasureMappingRule
+                         {
+                              Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                              {
+                                   MeasureName = "PercentageProfit",
+                                   MappedMeasures = new List<string> {"SaleNetNotNULL", "CostNetNotNULL"}
+                              }
+                         },
+                         new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.MeasureMappingRule
+                         {
+                              Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                              {
+                                   MeasureName = "MarkupPercentage",
+                                   MappedMeasures = new List<string> {"SaleNetNotNULL", "CostNetNotNULL"}
+                              }
+                         },
+                         new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.MeasureMappingRule
+                         {
+                              Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                              {
+                                   MeasureName = "SaleDuration",
+                                   MappedMeasures = new List<string> {"SaleDuration"}
+                              }
+                         },
+                         new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.MeasureMappingRule
+                         {
+                              Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                              {
+                                   MeasureName = "CostDuration",
+                                   MappedMeasures = new List<string> {"CostDuration"}
+                              }
+                         },
+                         new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.MeasureMappingRule
+                         {
+                              Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                              {
+                                   MeasureName = "CostRate_DurAvg",
+                                   MappedMeasures = new List<string> {"CostRate_DurAvg"}
+                              }
+                         },
+                         new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.MeasureMappingRule
+                         {
+                              Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                              {
+                                   MeasureName = "SaleRate_DurAvg",
+                                   MappedMeasures = new List<string> {"SaleRate_DurAvg"}
+                              }
+                         },
+                         new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.MeasureMappingRule
+                         {
+                              Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                              {
+                                   MeasureName = "Netting",
+                                   MappedMeasures = new List<string> {"Netting"}
+                              }
+                         },
+                         new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.MeasureMappingRule
+                         {
+                              Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                              {
+                                   MeasureName = "GlobalProfit",
+                                   MappedMeasures = new List<string> {"GlobalProfit"}
+                              }
+                         }
+                    }
+                }
+            };
+            var serializedBillingMeasureExternalSource = Vanrise.Common.Serializer.Serialize(billingMeasureExternalSource);
 
 
+            var billingStatsToBillingStatsMeasureExternalSource = new Vanrise.Analytic.Entities.AnalyticMeasureExternalSourceConfig
+            {
+                ExtendedSettings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.AnalyticTableMeasureExternalSource
+                {
+                    AnalyticTableId = new Guid("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
+                    DimensionMappingRules = new List<Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule>
+                    {
+                        new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule 
+                        { 
+                            Settings= new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SpecificDimensionMapping 
+                            { 
+                                DimensionName = "Customer", 
+                                MappedDimensionName = "Supplier"
+                            }
+                        },
+                        new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule 
+                        { 
+                            Settings= new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SpecificDimensionMapping 
+                            { 
+                                DimensionName = "CustomerProfile", 
+                                MappedDimensionName = "SupplierProfile"
+                            }
+                        },
+                        new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule 
+                        { 
+                            Settings= new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SpecificDimensionMapping 
+                            { 
+                                DimensionName = "Supplier", 
+                                MappedDimensionName = "Customer"
+                            }
+                        },
+                        new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule 
+                        { 
+                            Settings= new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SpecificDimensionMapping 
+                            { 
+                                DimensionName = "SupplierProfile", 
+                                MappedDimensionName = "CustomerProfile"
+                            }
+                        },
+                        new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRule 
+                        { 
+                            Settings= new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SameDimensionName 
+                            { 
+                                  Type = Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.DimensionMappingRules.SameDimensionNameType.AllDimensions
+                            }
+                        }
+                    },
+                    MeasureMappingRules = new List<Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.MeasureMappingRule>
+                    {
+                         new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.MeasureMappingRule
+                         {
+                              Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                              {
+                                   MeasureName = "Netting",
+                                   MappedMeasures = new List<string> {"SaleNetNotNULL", "CostNetNotNULL"}
+                              }
+                         },
+                         new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.MeasureMappingRule
+                         {
+                              Settings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.MeasureMappingRules.SpecificMapping
+                              {
+                                   MeasureName = "GlobalProfit",
+                                   MappedMeasures = new List<string> {"ProfitNotNULL"}
+                              }
+                         }
+                    }
+                }
+            };
+            var serializedBillingStatsToBillingStatsMeasureExternalSource = Vanrise.Common.Serializer.Serialize(billingStatsToBillingStatsMeasureExternalSource);
 
-
-
-
-
-
-
-
+            Console.ReadKey();
+        }
+    }
+}
