@@ -9,12 +9,14 @@ namespace Vanrise.DataParser.Entities
     public class ParserTypeSettings
     {
         public Boolean UseRecordType { get; set; }
+
         public ParserTypeExtendedSettings ExtendedSettings { get; set; }
     }
 
     public abstract class ParserTypeExtendedSettings
     {
         public abstract Guid ConfigId { get; }
+
         public abstract void Execute(IParserTypeExecuteContext context);
     }
 
