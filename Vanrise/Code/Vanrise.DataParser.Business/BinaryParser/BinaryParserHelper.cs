@@ -65,7 +65,7 @@ namespace Vanrise.DataParser.Business
         public static void ExecuteRecordParser(BinaryRecordParser subRecordsParser, Stream recordStream, IBinaryRecordParserContext parentRecordContext)
         {
             subRecordsParser.Settings.ThrowIfNull("subRecordParser.Settings");
-            var subRecordContext = new SubRecordHexTLVRecordParserContext(recordStream, parentRecordContext);
+            var subRecordContext = new SubRecordBinaryRecordParserContext(recordStream, parentRecordContext);
             subRecordsParser.Settings.Execute(subRecordContext);
         }
 
@@ -123,23 +123,27 @@ namespace Vanrise.DataParser.Business
 
         #region Private Classes
 
-        private class SubRecordHexTLVRecordParserContext : IBinaryRecordParserContext
+        private class SubRecordBinaryRecordParserContext : IBinaryRecordParserContext
         {
             Stream _recordStream;
+            string _fileName;
+            Guid _dataSourceId;
             IBinaryRecordParserContext _parentContext;
 
-            public SubRecordHexTLVRecordParserContext(Stream recordStream, IBinaryRecordParserContext parentContext)
+            public Stream RecordStream { get { return _recordStream; } }
+
+            public string FileName { get { return _fileName; } }
+
+            public Guid DataSourceId { get { return _dataSourceId; } }
+
+            public SubRecordBinaryRecordParserContext(Stream recordStream, IBinaryRecordParserContext parentContext)
             {
                 recordStream.ThrowIfNull("recordData");
                 parentContext.ThrowIfNull("parentContext");
-                _recordStream = recordStream;
                 _parentContext = parentContext;
-                FileName = parentContext.FileName;
-            }
-
-            public Stream RecordStream
-            {
-                get { return _recordStream; }
+                _recordStream = recordStream;
+                _fileName = parentContext.FileName;
+                _dataSourceId = parentContext.DataSourceId;
             }
 
             public void OnRecordParsed(ParsedRecord parsedRecord)
@@ -147,24 +151,15 @@ namespace Vanrise.DataParser.Business
                 _parentContext.OnRecordParsed(parsedRecord);
             }
 
-
             public BinaryRecordParser GetParserTemplate(Guid templateId)
             {
                 return _parentContext.GetParserTemplate(templateId);
             }
 
-
             public ParsedRecord CreateRecord(string recordType, HashSet<string> tempFieldNames)
             {
                 return _parentContext.CreateRecord(recordType, tempFieldNames);
             }
-
-            public string FileName
-            {
-                get;
-                set;
-            }
-
 
             public Dictionary<string, dynamic> GetGlobalVariables()
             {

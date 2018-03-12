@@ -11,9 +11,8 @@ namespace Vanrise.DataParser.Business
 {
     public class ParserHelper
     {
-        public static void ExecuteParser(Stream stream, string fileName, Guid parserTypeId, Action<ParsedBatch> onParsedBatch)
+        public static void ExecuteParser(Stream stream, string fileName, Guid dataSourceId, Guid parserTypeId, Action<ParsedBatch> onParsedBatch)
         {
-            ParserType parserType = new ParserTypeManager().GetParserType(parserTypeId);
             Action<ParsedRecord> onRecordParsed = (parsedRecord) =>
             {
 
@@ -23,9 +22,12 @@ namespace Vanrise.DataParser.Business
                 Input = new StreamDataParserInput
                 {
                     Stream = stream,
-                    FileName = fileName
+                    FileName = fileName,
+                    DataSourceId = dataSourceId
                 }
             };
+
+            ParserType parserType = new ParserTypeManager().GetParserType(parserTypeId);
             parserType.Settings.ExtendedSettings.Execute(context);
 
             foreach (var parsedRecords in context.ParsedRecords)
@@ -40,6 +42,7 @@ namespace Vanrise.DataParser.Business
                     record.FillDataRecordTypeFromDictionary(item.FieldValues);
                     records.Add(record);
                 }
+
                 onParsedBatch(new ParsedBatch
                 {
                     Records = records,
@@ -48,9 +51,8 @@ namespace Vanrise.DataParser.Business
             }
         }
 
-        public static void ExecuteParser(Stream stream, string fileName, Guid parserTypeId, ExecuteParserOptions options, Action<ParsedBatch> onParsedBatch)
+        public static void ExecuteParser(Stream stream, string fileName, Guid dataSourceId, Guid parserTypeId, ExecuteParserOptions options, Action<ParsedBatch> onParsedBatch)
         {
-            ParserType parserType = new ParserTypeManager().GetParserType(parserTypeId);
             Action<ParsedRecord> onRecordParsed = (parsedRecord) =>
             {
 
@@ -60,10 +62,12 @@ namespace Vanrise.DataParser.Business
                 Input = new StreamDataParserInput
                 {
                     Stream = stream,
-                    FileName = fileName
+                    FileName = fileName,
+                    DataSourceId = dataSourceId
                 }
             };
 
+            ParserType parserType = new ParserTypeManager().GetParserType(parserTypeId);
             parserType.Settings.ExtendedSettings.Execute(context);
 
             foreach (var parsedRecords in context.ParsedRecords)
@@ -78,6 +82,7 @@ namespace Vanrise.DataParser.Business
                 Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, parsedRecords.Value.Count, out startingId);
                 List<dynamic> records = new List<dynamic>();
                 long currentId = startingId;
+
                 foreach (Vanrise.DataParser.Entities.FldDictParsedRecord item in parsedRecords.Value)
                 {
                     dynamic record = Activator.CreateInstance(dataRecordRuntimeType) as dynamic;
@@ -87,6 +92,7 @@ namespace Vanrise.DataParser.Business
                     currentId++;
                     records.Add(record);
                 }
+
                 onParsedBatch(new ParsedBatch
                 {
                     Records = records,

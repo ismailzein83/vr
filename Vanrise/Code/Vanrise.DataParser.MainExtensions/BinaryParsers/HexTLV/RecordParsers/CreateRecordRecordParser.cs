@@ -28,10 +28,12 @@ namespace Vanrise.DataParser.MainExtensions.BinaryParsers.HexTLV.RecordParsers
                     compositeFieldsParser.Execute(new CompositeFieldsParserContext
                     {
                         Record = parsedRecord,
-                        FileName = context.FileName
+                        FileName = context.FileName,
+                        DataSourceId = context.DataSourceId
                     });
                 }
             }
+
             if (this.FieldConstantValues != null)
             {
                 foreach (var fldConstantValue in this.FieldConstantValues)
@@ -39,6 +41,7 @@ namespace Vanrise.DataParser.MainExtensions.BinaryParsers.HexTLV.RecordParsers
                     parsedRecord.SetFieldValue(fldConstantValue.FieldName, fldConstantValue.Value);
                 }
             }
+
             context.OnRecordParsed(parsedRecord);
         }
     }

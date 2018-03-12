@@ -50,6 +50,7 @@
     <Compile Include="BinaryParsers\NokiaSiemensParsers\FieldParsers\PackageFieldParser\IPackageFieldParserGetLengthContext.cs" />
     <Compile Include="BinaryParsers\NokiaSiemensParsers\FieldParsers\PackageFieldParser\PackageFieldParser.cs" />
     <Compile Include="BinaryParsers\NokiaSiemensParsers\FieldParsers\ZonePackageParser.cs" />
+    <Compile Include="CompositeFieldParsers\DataSourceCompositeParser.cs" />
     <Compile Include="CompositeFieldParsers\DateFromDayNumberCompositeParser.cs" />
     <Compile Include="CompositeFieldParsers\DateTimeCompositeParser.cs" />
     <Compile Include="CompositeFieldParsers\FileNameCompositeParser.cs" />

@@ -16,10 +16,7 @@ namespace Vanrise.DataParser.Entities
     {
         public Stream Stream { get; set; }
         public string FileName { get; set; }
-        public byte[] Data
-        {
-            get;
-            set;
-        }
+        public Guid DataSourceId { get; set; }
+        public byte[] Data { get; set; }
     }
 }

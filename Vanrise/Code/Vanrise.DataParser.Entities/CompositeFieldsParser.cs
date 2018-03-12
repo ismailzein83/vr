@@ -18,6 +18,8 @@ namespace Vanrise.DataParser.Entities
         ParsedRecord Record { get; }
 
         string FileName { get; }
+
+        Guid DataSourceId { get; }
     }
 
     public class CompositeFieldsParserContext : ICompositeFieldsParserContext
@@ -25,5 +27,7 @@ namespace Vanrise.DataParser.Entities
         public ParsedRecord Record { get; set; }
 
         public string FileName { get; set; }
+
+        public Guid DataSourceId { get; set; }
     }
 }

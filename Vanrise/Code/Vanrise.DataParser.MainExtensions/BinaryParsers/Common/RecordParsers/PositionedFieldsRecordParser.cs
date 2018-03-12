@@ -79,7 +79,8 @@ namespace Vanrise.DataParser.MainExtensions.BinaryParsers.Common.RecordParsers
                     compositeFieldsParser.Execute(new CompositeFieldsParserContext
                     {
                         Record = parsedRecord,
-                        FileName = context.FileName
+                        FileName = context.FileName,
+                        DataSourceId = context.DataSourceId
                     });
                 }
             }

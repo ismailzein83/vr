@@ -60,10 +60,12 @@ namespace Vanrise.DataParser.MainExtensions.BinaryParsers.NokiaSiemensParsers.Re
                     compositeFieldsParser.Execute(new CompositeFieldsParserContext
                     {
                         Record = parsedRecord,
-                        FileName = context.FileName
+                        FileName = context.FileName,
+                        DataSourceId = context.DataSourceId
                     });
                 }
             }
+
             context.OnRecordParsed(parsedRecord);
         }
     }

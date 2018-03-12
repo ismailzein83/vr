@@ -19,7 +19,8 @@ namespace Vanrise.DataParser.Business
             StreamDataParserInput streamDataParserInput = context.Input.CastWithValidate<StreamDataParserInput>("context.Input");
             streamDataParserInput.Stream.ThrowIfNull("streamDataParserInput.Stream");
             this.RecordParser.ThrowIfNull("this.RecordParser");
-            var recordParserContext = new BinaryRecordParserContext(streamDataParserInput.Stream, streamDataParserInput.FileName, context, this.RecordParserTemplates);
+
+            var recordParserContext = new BinaryRecordParserContext(streamDataParserInput.Stream, streamDataParserInput.FileName, streamDataParserInput.DataSourceId, context, this.RecordParserTemplates);
             this.RecordParser.Execute(recordParserContext);
         }
 
@@ -29,21 +30,26 @@ namespace Vanrise.DataParser.Business
         {
             Stream _recordStream;
             string _fileName;
+            Guid _dataSourceId;
             IParserTypeExecuteContext _parserTypeContext;
             Dictionary<Guid, BinaryRecordParser> _recordParserTemplates;
 
-            public string FileName { get { return _fileName; } }
-
             public Stream RecordStream { get { return _recordStream; } }
 
-            public BinaryRecordParserContext(Stream recordStream, string fileName, IParserTypeExecuteContext parserTypeContext, Dictionary<Guid, BinaryRecordParser> recordParserTemplates)
+            public string FileName { get { return _fileName; } }
+
+            public Guid DataSourceId { get { return _dataSourceId; } }
+
+
+            public BinaryRecordParserContext(Stream recordStream, string fileName, Guid dataSourceId, IParserTypeExecuteContext parserTypeContext, Dictionary<Guid, BinaryRecordParser> recordParserTemplates)
             {
                 recordStream.ThrowIfNull("recordData");
                 parserTypeContext.ThrowIfNull("parserTypeContext");
-                _recordStream = recordStream;
                 _parserTypeContext = parserTypeContext;
                 _recordParserTemplates = recordParserTemplates;
+                _recordStream = recordStream;
                 _fileName = fileName;
+                _dataSourceId = dataSourceId;
             }
 
             public void OnRecordParsed(ParsedRecord parsedRecord)

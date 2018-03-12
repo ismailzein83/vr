@@ -21,9 +21,11 @@ namespace Vanrise.DataParser.Entities
 
     public interface IBinaryRecordParserContext
     {
+        Stream RecordStream { get; }
+
         string FileName { get; }
 
-        Stream RecordStream { get; }
+        Guid DataSourceId { get; }
 
         ParsedRecord CreateRecord(string recordType, HashSet<string> tempFieldNames);
 
