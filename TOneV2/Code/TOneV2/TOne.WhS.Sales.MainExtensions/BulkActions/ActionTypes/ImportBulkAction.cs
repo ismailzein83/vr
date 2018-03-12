@@ -81,7 +81,8 @@ namespace TOne.WhS.Sales.MainExtensions
 
 		public override bool IsApplicableToZone(IActionApplicableToZoneContext context)
 		{
-			return true;
+			ImportedDataValidationResult cachedValidationData = GetOrCreateObject();
+			return cachedValidationData.ApplicableZoneIds.Contains(context.SaleZone.SaleZoneId);
 		}
 
 		public override void ApplyBulkActionToZoneItem(IApplyBulkActionToZoneItemContext context)

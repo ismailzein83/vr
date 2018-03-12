@@ -8,7 +8,9 @@ namespace TOne.WhS.Sales.Entities
 {
     public class ImportedDataValidationResult
     {
-        public Dictionary<long, ImportedRow> ValidDataByZoneId { get; set; }
+		public HashSet<long> ApplicableZoneIds { get; set; }
+
+		public Dictionary<long, ImportedRow> ValidDataByZoneId { get; set; }
 
         public Dictionary<int, InvalidImportedRow> InvalidDataByRowIndex { get; set; }
 
@@ -16,7 +18,8 @@ namespace TOne.WhS.Sales.Entities
 
         public ImportedDataValidationResult()
         {
-            ValidDataByZoneId = new Dictionary<long, ImportedRow>();
+			ApplicableZoneIds = new HashSet<long>();
+			ValidDataByZoneId = new Dictionary<long, ImportedRow>();
             InvalidDataByRowIndex = new Dictionary<int, InvalidImportedRow>();
         }
     }

@@ -736,7 +736,7 @@ namespace TOne.WhS.Sales.Business
 			{
 				if (zoneItems == null)
 				{
-					if (routingProductLocator == null || zoneRoutingProductReader==null)
+					if (routingProductLocator == null || zoneRoutingProductReader == null)
 					{
 						Dictionary<long, DateTime> zoneEffectiveDatesByZoneId = UtilitiesManager.GetZoneEffectiveDatesByZoneId(saleZones);
 						zoneRoutingProductReader = new SaleEntityRoutingProductReadByRateBED(new List<int> { input.OwnerId }, zoneEffectiveDatesByZoneId);
@@ -879,7 +879,7 @@ namespace TOne.WhS.Sales.Business
 				countryBEDsByCountry = UtilitiesManager.GetDatesByCountry(input.OwnerId, DateTime.Today, true);
 				closedCountryIds = UtilitiesManager.GetClosedCountryIds(input.OwnerId, null, DateTime.Today);
 			}
-			
+
 			// Validate the data of the entire file
 			var importedFileValidationContext = new ImportedFileValidationContext()
 			{
@@ -919,14 +919,19 @@ namespace TOne.WhS.Sales.Business
 				if (validator.IsImportedRowValid(context))
 				{
 					result.ValidDataByZoneId.Add(context.ExistingZone.SaleZoneId, importedRow);
+					result.ApplicableZoneIds.Add(context.ExistingZone.SaleZoneId);
 				}
 				else
 				{
+					if (context.ExistingZone != null)
+					{
+						result.ApplicableZoneIds.Add(context.ExistingZone.SaleZoneId);
+					}
 					result.InvalidDataByRowIndex.Add(i, new InvalidImportedRow()
 					{
 						RowIndex = i,
 						ImportedRow = importedRow,
-						ZoneId = (context.ExistingZone!=null) ? (long?)context.ExistingZone.SaleZoneId : null,
+						ZoneId = (context.ExistingZone != null) ? (long?)context.ExistingZone.SaleZoneId : null,
 						ErrorMessage = context.ErrorMessage
 					});
 				}
@@ -1064,7 +1069,7 @@ namespace TOne.WhS.Sales.Business
 
 				zoneItem.IsCountryNew = newCountryIds.Contains(zoneItem.CountryId);
 				zoneItem.IsCountryEnded = closedCountryIds.Contains(zoneItem.CountryId);
-				zoneItem.ProfitPerc = (zoneDraft!=null)?zoneDraft.ProfitPerc:0;
+				zoneItem.ProfitPerc = (zoneDraft != null) ? zoneDraft.ProfitPerc : 0;
 				zoneItems.Add(zoneItem);
 			}
 
@@ -1076,7 +1081,7 @@ namespace TOne.WhS.Sales.Business
 			}
 
 			IEnumerable<RPZone> rpZones = zoneItems.MapRecords(x => new RPZone() { SaleZoneId = x.ZoneId, RoutingProductId = x.EffectiveRoutingProductId.Value }, x => x.EffectiveRoutingProductId.HasValue);
-			routeOptionManager = new ZoneRouteOptionManager(input.OwnerType, input.OwnerId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, rpZones, input.CostCalculationMethods, null, null, input.CurrencyId, longPrecisionValue, normalPrecisionValue,input.IncludeBlockedSuppliers);
+			routeOptionManager = new ZoneRouteOptionManager(input.OwnerType, input.OwnerId, input.RoutingDatabaseId, input.PolicyConfigId, input.NumberOfOptions, rpZones, input.CostCalculationMethods, null, null, input.CurrencyId, longPrecisionValue, normalPrecisionValue, input.IncludeBlockedSuppliers);
 			routeOptionManager.SetZoneRouteOptionProperties(zoneItems);
 
 			return zoneItems;
