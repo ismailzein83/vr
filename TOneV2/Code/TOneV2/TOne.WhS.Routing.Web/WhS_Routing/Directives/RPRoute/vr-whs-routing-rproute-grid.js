@@ -43,6 +43,14 @@ app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService
                 $scope.rpRoutes = [];
                 $scope.isCustomerSelected = false;
 
+                $scope.getColor = function (dataItem) {
+                    var cssClass = 'span-summary bold-label';
+                    if (dataItem.IsBlocked)
+                        cssClass += ' danger-font';
+
+                    return cssClass;
+                };
+
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
                     var drillDownDefinitions = initDrillDownDefinitions();
@@ -53,7 +61,7 @@ app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService
                 $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                     var loadGridPromiseDeffered = UtilsService.createPromiseDeferred();
 
-                    WhS_Routing_RPRouteAPIService.GetFilteredRPRoutes(dataRetrievalInput).then(function (response) {
+                    WhS_Routing_RPRouteAPIService.GetFilteredRPRoutesByZone(dataRetrievalInput).then(function (response) {
                         var promises = [];
                         if (response && response.Data) {
                             for (var i = 0; i < response.Data.length; i++) {

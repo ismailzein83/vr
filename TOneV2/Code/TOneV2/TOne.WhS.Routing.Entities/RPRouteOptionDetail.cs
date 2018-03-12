@@ -23,6 +23,31 @@ namespace TOne.WhS.Routing.Entities
         public int? ExecutedRuleId { get; set; }
         public SupplierStatus SupplierStatus { get; set; }
         public bool IsForced { get; set; }
-        public RouteOptionEvaluatedStatus? EvaluatedStatus { get; set; } 
+        public RouteOptionEvaluatedStatus? EvaluatedStatus { get; set; }
+    }
+
+    public class BaseRPRouteOptionByCodeDetail
+    {
+        public int SupplierId { get; set; }
+        public string SupplierCode { get; set; }
+        public string SupplierName { get; set; }
+        public Decimal SupplierRate { get; set; }
+        public long SupplierZoneId { get; set; }
+        public string SupplierZoneName { get; set; }
+        public decimal ConvertedSupplierRate { get; set; }
+        public string CurrencySymbol { get; set; }
+        public int? ExecutedRuleId { get; set; }
+        public RouteOptionEvaluatedStatus? EvaluatedStatus { get; set; }
+    }
+    public class RPRouteOptionByCodeDetail : BaseRPRouteOptionByCodeDetail
+    {
+        public int OptionOrder { get; set; }
+        public int? Percentage { get; set; }
+        public List<RPRouteBackupOptionByCodeDetail> Backups { get; set; }
+    }
+
+    public class RPRouteBackupOptionByCodeDetail : BaseRPRouteOptionByCodeDetail
+    {
+
     }
 }

@@ -174,12 +174,12 @@ namespace TOne.WhS.Routing.Business
             if (context.RouteOptions == null)
                 return null;
 
-            if (OptionsSupplierIds == null)
+            if (OptionsSupplierIds == null || !context.NumberOfOptionsInSettings.HasValue)
                 return context.RouteOptions;
 
             int blockedOptionsCount = context.RouteOptions.Count(itm => itm.IsFullyBlocked());
 
-            int totalCount = blockedOptionsCount + context.NumberOfOptionsInSettings;
+            int totalCount = blockedOptionsCount + context.NumberOfOptionsInSettings.Value;
             if (context.RouteOptions.Count <= totalCount)
                 return context.RouteOptions;
 

@@ -150,6 +150,7 @@ namespace TOne.WhS.Routing.Data.SQL
             StringBuilder query = new StringBuilder();
 
             query.AppendLine(query_SupplierZoneDetailsTable);
+            query.AppendLine(query_CustomerQualityConfigurationTable);
             query.AppendLine(query_RPQualityConfigurationTable);
             query.AppendLine(query_CustomerZoneDetailTable);
             query.AppendLine(query_CodeSaleZoneTable);
@@ -167,13 +168,13 @@ namespace TOne.WhS.Routing.Data.SQL
 
         #region Constants
 
-        const string query_CustomerQualityConfigurationTable = @"CREATE TABLE [dbo].[QualityConfigurationData](
+        const string query_CustomerQualityConfigurationTable = @"CREATE TABLE [dbo].[CustomerQualityConfigurationData](
                                                         [QualityConfigurationId] [uniqueidentifier] NOT NULL,
                                                         [SupplierZoneId] [bigint] NOT NULL,
                                                         [Quality] [decimal](20, 8) NOT NULL
                                                         )ON [PRIMARY]";
 
-        const string query_RPQualityConfigurationTable = @"CREATE TABLE [dbo].[QualityConfigurationData](
+        const string query_RPQualityConfigurationTable = @"CREATE TABLE [dbo].[RPQualityConfigurationData](
                                                         [QualityConfigurationId] [uniqueidentifier] NOT NULL,
                                                         [SaleZoneId] [bigint] NOT NULL,
                                                         [SupplierId] [int] NOT NULL,

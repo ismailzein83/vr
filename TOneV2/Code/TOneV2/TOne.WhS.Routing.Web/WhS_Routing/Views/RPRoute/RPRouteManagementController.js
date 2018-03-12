@@ -2,13 +2,14 @@
 
     "use strict";
 
-    rpRouteManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_Routing_RoutingProductFilterEnum'];
+    rpRouteManagementController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'WhS_Routing_RoutingProductFilterEnum', 'WhS_Routing_RouteFilterEnum'];
 
-    function rpRouteManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, WhS_Routing_RoutingProductFilterEnum) {
+    function rpRouteManagementController($scope, UtilsService, VRUIUtilsService, VRNotificationService, WhS_Routing_RoutingProductFilterEnum, WhS_Routing_RouteFilterEnum) {
 
         var currencyId;
 
         var gridAPI;
+        var gridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var routingDatabaseSelectorAPI;
         var routingDatabaseReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -34,12 +35,20 @@
         load();
 
         function defineScope() {
+            $scope.showRPRouteGrid = true;
+
             $scope.numberOfOptions = 3;
             $scope.legendHeader = "Legend";
             $scope.legendContent = getLegendContent();
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
+                gridReadyPromiseDeferred.resolve();
+            };
+
+            $scope.onGridByCodeReady = function (api) {
+                gridAPI = api;
+                gridReadyPromiseDeferred.resolve();
             };
 
             $scope.onRoutingDatabaseSelectorReady = function (api) {
@@ -79,6 +88,9 @@
             $scope.onRoutingProductFilterSelectorReady = function (api) {
             };
 
+            $scope.onRouteFilterSelectorReady = function (api) {
+            };
+
             $scope.onRoutingDatabaseSelectorChange = function () {
                 var selectedId = routingDatabaseSelectorAPI.getSelectedIds();
 
@@ -99,8 +111,24 @@
             };
 
             $scope.searchClicked = function () {
-                if (gridAPI != undefined)
+                gridReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+                var oldShowRPRouteGrid = $scope.showRPRouteGrid;
+                $scope.showRPRouteGrid = $scope.selectedRouteFilter == WhS_Routing_RouteFilterEnum.Zone;
+                if (oldShowRPRouteGrid != $scope.showRPRouteGrid)
+                    gridAPI = undefined;
+
+                if (gridAPI != undefined) {
                     return gridAPI.loadGrid(getFilterObject());
+                }
+                else {
+                    var loadGridPromiseDeferred = UtilsService.createPromiseDeferred();
+                    gridReadyPromiseDeferred.promise.then(function () {
+                        gridAPI.loadGrid(getFilterObject()).then(function () {
+                            loadGridPromiseDeferred.resolve();
+                        });
+                    });
+                    return loadGridPromiseDeferred.promise;
+                }
             };
 
             function getLegendContent() {
@@ -133,7 +161,8 @@
                     ShowInSystemCurrency: $scope.showInSystemCurrency,
                     CurrencyId: currencyId,
                     IncludeBlockedSuppliers: $scope.includeBlockedSuppliers,
-                    MaxSupplierRate: $scope.maxSupplierRate
+                    MaxSupplierRate: $scope.maxSupplierRate,
+                    CodePrefix: $scope.codePrefix
                 };
                 return query;
             }
@@ -143,6 +172,9 @@
             $scope.limit = 1000;
             $scope.routingProductFilters = UtilsService.getArrayEnum(WhS_Routing_RoutingProductFilterEnum);
             $scope.selectedRoutingProductFilter = $scope.routingProductFilters[0];
+
+            $scope.routeFilters = UtilsService.getArrayEnum(WhS_Routing_RouteFilterEnum);
+            $scope.selectedRouteFilter = $scope.routeFilters[0];
 
             return UtilsService.waitMultipleAsyncOperations([loadRoutingDatabaseSelector, loadSingleRoutingProductSelector, loadMultipleRoutingProductSelector, loadSaleZoneSection, loadRouteStatusSelector, loadCustomerSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);

@@ -34,7 +34,7 @@ namespace TOne.WhS.Routing.Business
 
         #region Public Methods
 
-        public Vanrise.Entities.IDataRetrievalResult<RPRouteDetailByZone> GetFilteredRPRoutes(Vanrise.Entities.DataRetrievalInput<RPRouteQueryByZone> input)
+        public Vanrise.Entities.IDataRetrievalResult<RPRouteDetailByZone> GetFilteredRPRoutesByZone(Vanrise.Entities.DataRetrievalInput<RPRouteQueryByZone> input)
         {
             return BigDataManager.Instance.RetrieveData(input, new RPRouteByZoneRequestHandler());
         }
@@ -489,7 +489,7 @@ namespace TOne.WhS.Routing.Business
 
                 IRPRouteDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
                 dataManager.RoutingDatabase = latestRoutingDatabase;
-                return dataManager.GetFilteredRPRoutes(input);
+                return dataManager.GetFilteredRPRoutesByZone(input);
             }
 
             protected override BigResult<RPRouteDetailByZone> AllRecordsToBigResult(DataRetrievalInput<RPRouteQueryByZone> input, IEnumerable<RPRoute> allRecords)
@@ -528,23 +528,51 @@ namespace TOne.WhS.Routing.Business
             }
         }
 
-        private class RPRouteByCodeRequestHandler : BigDataRequestHandler<RPRouteQueryByCode, RPRoute, RPRouteDetailByCode>
+        private class RPRouteByCodeRequestHandler : BigDataRequestHandler<RPRouteQueryByCode, RPRouteByCode, RPRouteDetailByCode>
         {
             RPRouteManager _manager = new RPRouteManager();
 
-            public override RPRouteDetailByCode EntityDetailMapper(RPRoute entity)
+            RoutingDatabase RoutingDatabase { get; set; }
+
+            public override RPRouteDetailByCode EntityDetailMapper(RPRouteByCode entity)
             {
                 throw new NotImplementedException();
             }
 
-            public override IEnumerable<RPRoute> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<RPRouteQueryByCode> input)
+            public override IEnumerable<RPRouteByCode> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<RPRouteQueryByCode> input)
             {
-                throw new NotImplementedException();
+                var latestRoutingDatabase = _manager.GetLatestRoutingDatabase(input.Query.RoutingDatabaseId);
+                if (latestRoutingDatabase == null)
+                    return null;
+
+                RoutingDatabase = latestRoutingDatabase;
+                List<RPRouteByCode> rpRouteByCodes = new List<RPRouteByCode>();
+
+                IRPRouteDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRPRouteDataManager>();
+                dataManager.RoutingDatabase = latestRoutingDatabase;
+                return dataManager.GetFilteredRPRoutesByCode(input);
             }
 
-            protected override BigResult<RPRouteDetailByCode> AllRecordsToBigResult(DataRetrievalInput<RPRouteQueryByCode> input, IEnumerable<RPRoute> allRecords)
+            protected override BigResult<RPRouteDetailByCode> AllRecordsToBigResult(DataRetrievalInput<RPRouteQueryByCode> input, IEnumerable<RPRouteByCode> allRecords)
             {
-                throw new NotImplementedException();
+                int? systemCurrencyId = null;
+                int? toCurrencyId = null;
+                CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+
+                if (!input.Query.ShowInSystemCurrency && input.Query.CustomerId.HasValue)
+                {
+                    systemCurrencyId = new Vanrise.Common.Business.ConfigManager().GetSystemCurrencyId();
+                    toCurrencyId = carrierAccountManager.GetCarrierAccountCurrencyId(input.Query.CustomerId.Value);
+                }
+
+                int? carrierProfileId = null;
+                if (input.Query.CustomerId.HasValue)
+                    carrierProfileId = carrierAccountManager.GetCarrierProfileId(input.Query.CustomerId.Value);
+
+                DateTime effectiveDate = DateTime.Now;
+
+                return allRecords.ToBigResult(input, null, (entity) => _manager.RPRouteDetailByCodeMapper(entity, input.Query.NumberOfOptions, systemCurrencyId,
+                    toCurrencyId, carrierProfileId, effectiveDate, input.Query.RoutingDatabaseId, input.Query.IncludeBlockedSuppliers, input.Query.MaxSupplierRate, input.Query.CustomerId));
             }
 
             protected override ResultProcessingHandler<RPRouteDetailByCode> GetResultProcessingHandler(DataRetrievalInput<RPRouteQueryByCode> input, BigResult<RPRouteDetailByCode> bigResult)
@@ -598,6 +626,191 @@ namespace TOne.WhS.Routing.Business
                 EffectiveRateValue = effectiveRateValue,
                 CurrencySymbol = currencySymbol
             };
+        }
+
+        private RPRouteDetailByCode RPRouteDetailByCodeMapper(RPRouteByCode rpRoute, int? numberOfOptions, int? systemCurrencyId, int? toCurrencyId, int? customerProfileId,
+          DateTime effectiveDate, int routingDatabaseId, bool includeBlockedSuppliers, decimal? maxSupplierRate, int? customerId)
+        {
+            RoutingDatabase routingDatabase = GetLatestRoutingDatabase(routingDatabaseId);
+
+            var rpRouteByCode = BuildRPRouteByCodeWithOptions(rpRoute, routingDatabase, customerId);
+
+            CurrencyManager currencyManager = new CurrencyManager();
+            string currencySymbol;
+            decimal? effectiveRateValue = rpRoute.Rate;
+
+            if (toCurrencyId.HasValue)
+            {
+                currencySymbol = currencyManager.GetCurrencySymbol(toCurrencyId.Value);
+                if (effectiveRateValue.HasValue)
+                {
+                    if (!systemCurrencyId.HasValue)
+                        throw new ArgumentNullException("systemCurrencyId");
+
+                    effectiveRateValue = GetRateConvertedToCurrency(effectiveRateValue.Value, systemCurrencyId.Value, toCurrencyId.Value, effectiveDate);
+                }
+            }
+            else
+            {
+                currencySymbol = currencyManager.GetSystemCurrency().Symbol;
+            }
+
+            SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+
+            List<RPRouteOptionByCodeDetail> details = null;
+            if (rpRouteByCode.Options != null)
+            {
+                details = new List<RPRouteOptionByCodeDetail>();
+
+                int addedActiveItems = 0;
+                var optionOrder = 1;
+
+                foreach (RouteOption option in rpRouteByCode.Options)
+                {
+                    if (!includeBlockedSuppliers && option.IsBlocked)
+                        continue;
+
+                    decimal convertedSupplierRate = toCurrencyId.HasValue ? GetRateConvertedToCurrency(option.SupplierRate, systemCurrencyId.Value, toCurrencyId.Value, effectiveDate) : option.SupplierRate;
+                    bool isLossy = effectiveRateValue.HasValue ? effectiveRateValue.Value < convertedSupplierRate : false;
+
+                    if (maxSupplierRate.HasValue && maxSupplierRate.Value < convertedSupplierRate)
+                        continue;
+
+                    RPRouteOptionByCodeDetail detail = BuildRPRouteOptionByCodeDetail(option, convertedSupplierRate, currencySymbol, isLossy, systemCurrencyId, toCurrencyId, effectiveDate, effectiveRateValue, includeBlockedSuppliers, optionOrder);
+                    details.Add(detail);
+                    optionOrder++;
+
+                    if (option.IsBlocked)
+                        continue;
+
+                    addedActiveItems++;
+                    if (numberOfOptions.HasValue && numberOfOptions.Value == addedActiveItems)
+                        break;
+                }
+            }
+
+            return new RPRouteDetailByCode()
+            {
+                RoutingProductId = rpRoute.RoutingProductId,
+                RoutingProductName = new RoutingProductManager().GetRoutingProductName(rpRoute.RoutingProductId),
+                Code = rpRoute.Code,
+                SaleZoneId = rpRoute.SaleZoneId,
+                SaleZoneServiceIds = rpRoute.SaleZoneServiceIds,
+                SellingNumberPlan = GetSellingNumberPlan(rpRoute.SaleZoneId),
+                SaleZoneName = rpRoute.SaleZoneName,
+                IsBlocked = rpRoute.IsBlocked,
+                RouteOptionsDetails = details,
+                ExecutedRuleId = rpRoute.ExecutedRuleId.Value,
+                EffectiveRateValue = effectiveRateValue,
+                CurrencySymbol = currencySymbol
+            };
+        }
+
+        private RPRouteOptionByCodeDetail BuildRPRouteOptionByCodeDetail(RouteOption option, decimal convertedSupplierRate, string currencySymbol, bool isLossy,
+            int? systemCurrencyId, int? toCurrencyId, DateTime effectiveDate, decimal? effectiveRateValue, bool includeBlockedSuppliers, int optionOrder)
+        {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
+            RPRouteOptionByCodeDetail detail = new RPRouteOptionByCodeDetail()
+              {
+                  ConvertedSupplierRate = convertedSupplierRate,
+                  CurrencySymbol = currencySymbol,
+                  EvaluatedStatus = TOne.WhS.Routing.Entities.Helper.GetEvaluatedStatus(option.IsBlocked, isLossy, option.IsForced, option.ExecutedRuleId),
+                  ExecutedRuleId = option.ExecutedRuleId,
+                  Percentage = option.Percentage,
+                  SupplierCode = option.SupplierCode,
+                  SupplierId = option.SupplierId,
+                  SupplierName = carrierAccountManager.GetCarrierAccountName(option.SupplierId),
+                  SupplierRate = option.SupplierRate,
+                  SupplierZoneId = option.SupplierZoneId,
+                  SupplierZoneName = supplierZoneManager.GetSupplierZoneName(option.SupplierZoneId),
+                  OptionOrder = optionOrder
+              };
+
+            if (option.Backups != null)
+            {
+                detail.Backups = new List<RPRouteBackupOptionByCodeDetail>();
+                foreach (var backupOption in option.Backups)
+                {
+                    if (!includeBlockedSuppliers && backupOption.IsBlocked)
+                        continue;
+
+                    decimal convertedBackupRate = toCurrencyId.HasValue ? GetRateConvertedToCurrency(backupOption.SupplierRate, systemCurrencyId.Value, toCurrencyId.Value, effectiveDate) : backupOption.SupplierRate;
+                    bool isBackupLossy = effectiveRateValue.HasValue ? effectiveRateValue.Value < convertedSupplierRate : false;
+
+                    RPRouteBackupOptionByCodeDetail backup = new RPRouteBackupOptionByCodeDetail()
+                    {
+                        ConvertedSupplierRate = convertedBackupRate,
+                        CurrencySymbol = currencySymbol,
+                        EvaluatedStatus = TOne.WhS.Routing.Entities.Helper.GetEvaluatedStatus(backupOption.IsBlocked, isBackupLossy, backupOption.IsForced, backupOption.ExecutedRuleId),
+                        ExecutedRuleId = backupOption.ExecutedRuleId,
+                        SupplierCode = backupOption.SupplierCode,
+                        SupplierId = backupOption.SupplierId,
+                        SupplierName = carrierAccountManager.GetCarrierAccountName(backupOption.SupplierId),
+                        SupplierRate = backupOption.SupplierRate,
+                        SupplierZoneId = backupOption.SupplierZoneId,
+                        SupplierZoneName = supplierZoneManager.GetSupplierZoneName(backupOption.SupplierZoneId)
+                    };
+                    detail.Backups.Add(backup);
+                }
+            }
+
+            return detail;
+        }
+
+        private RPRouteByCode BuildRPRouteByCodeWithOptions(RPRouteByCode rpRoute, RoutingDatabase routingDatabase, int? customerId)
+        {
+            RouteBuilder routeBuilder = new RouteBuilder(RoutingProcessType.RoutingProductRoute);
+            Dictionary<RouteRule, List<RouteOptionRuleTarget>> optionsByRules = new Dictionary<RouteRule, List<RouteOptionRuleTarget>>();
+
+            SaleZoneDefintion saleZoneDefintion = new SaleZoneDefintion() { SaleZoneId = rpRoute.SaleZoneId, SellingNumberPlanId = rpRoute.SellingNumberPlanID };
+            CustomerZoneDetailData customerZoneDetailData = new CustomerZoneDetailData() { CustomerId = customerId, EffectiveRateValue = rpRoute.Rate, SaleZoneId = rpRoute.SaleZoneId, SaleZoneServiceIds = rpRoute.SaleZoneServiceIds };
+            RouteRule routeRule = new RouteRuleManager().GetRule(rpRoute.ExecutedRuleId.Value);
+
+            List<SupplierCodeMatchWithRate> supplierCodeMatchWithRates = new List<SupplierCodeMatchWithRate>();
+            SupplierCodeMatchWithRateBySupplier supplierCodeMatchWithRateBySupplier = new Entities.SupplierCodeMatchWithRateBySupplier();
+
+            var routeRuleTarget = new RouteRuleTarget
+            {
+                CustomerId = customerId,
+                Code = rpRoute.Code,
+                SaleZoneId = saleZoneDefintion.SaleZoneId,
+                CountryId = new SaleZoneManager().GetSaleZoneCountryId(saleZoneDefintion.SaleZoneId).Value,
+                RoutingProductId = rpRoute.RoutingProductId,
+                SaleRate = rpRoute.Rate,
+                EffectiveOn = routingDatabase.EffectiveTime,
+                IsEffectiveInFuture = routingDatabase.Type == RoutingDatabaseType.Future
+            };
+
+            if (rpRoute.SupplierZoneDetails != null)
+            {
+                foreach (var supplierZoneDetail in rpRoute.SupplierZoneDetails)
+                {
+                    SupplierCodeMatchWithRate supplierCodeMatchWithRate = new SupplierCodeMatchWithRate()
+                    {
+                        CodeMatch = new SupplierCodeMatch()
+                        {
+                            SupplierCode = rpRoute.SupplierCodeMatchByZoneId.GetRecord(supplierZoneDetail.SupplierZoneId),
+                            SupplierId = supplierZoneDetail.SupplierId,
+                            SupplierZoneId = supplierZoneDetail.SupplierZoneId
+                        },
+                        ExactSupplierServiceIds = supplierZoneDetail.ExactSupplierServiceIds,
+                        RateValue = supplierZoneDetail.EffectiveRateValue,
+                        SupplierRateEED = supplierZoneDetail.SupplierRateEED,
+                        SupplierRateId = supplierZoneDetail.SupplierRateId,
+                        SupplierServiceIds = supplierZoneDetail.SupplierServiceIds,
+                        SupplierServiceWeight = supplierZoneDetail.SupplierServiceWeight
+                    };
+                    supplierCodeMatchWithRates.Add(supplierCodeMatchWithRate);
+
+                    supplierCodeMatchWithRateBySupplier.Add(supplierZoneDetail.SupplierId, supplierCodeMatchWithRate);
+                }
+            }
+
+            bool keepBackupsForRemovedOptions = new ConfigManager().GetProductRouteBuildKeepBackUpsForRemovedOptions();
+
+            return routeBuilder.ExecuteRule<RPRouteByCode>(optionsByRules, rpRoute.Code, saleZoneDefintion, customerZoneDetailData, supplierCodeMatchWithRates, supplierCodeMatchWithRateBySupplier, routeRuleTarget, routeRule, routingDatabase, RoutingProcessType.RoutingProductRoute, keepBackupsForRemovedOptions);
         }
 
         private RPRouteOptionDetail RPRouteOptionMapper(RPRouteOption routeOption, int? systemCurrencyId, int? toCurrencyId, int optionOrder, DateTime effectiveDate, decimal? effectiveRateValue)

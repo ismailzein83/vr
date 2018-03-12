@@ -29,7 +29,7 @@ namespace TOne.WhS.Routing.Data.SQL
             streamForBulkInsert.Close();
             return new StreamBulkInsertInfo
             {
-                TableName = "[dbo].[QualityConfigurationData]",
+                TableName = "[dbo].[RPQualityConfigurationData]",
                 Stream = streamForBulkInsert,
                 TabLock = true,
                 KeepIdentity = false,
@@ -70,7 +70,7 @@ namespace TOne.WhS.Routing.Data.SQL
 
         const string query_GetRPQualityConfigurationData = @"                                                       
                                                 SELECT  [QualityConfigurationId], [SaleZoneId], [SupplierId], [Quality]
-                                                  FROM [dbo].[QualityConfigurationData] with(nolock)
+                                                  FROM [dbo].[RPQualityConfigurationData] with(nolock)
                                                   #FILTER#";
 
         #endregion

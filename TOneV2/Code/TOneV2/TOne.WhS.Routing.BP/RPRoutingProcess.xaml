@@ -273,6 +273,28 @@
           </sap2010:ViewStateManager>
         </sap2010:WorkflowViewState.ViewStateManager>
       </local:CalculateRPQualityData>
+      <local:CalculateCustomerRouteQualityData sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.WhS.Routing.BP.SubProcesses.CalculateCustomerRouteQualityData_1">
+        <local:CalculateCustomerRouteQualityData.EffectiveOn>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">(Input.EffectiveOn.HasValue &amp;&amp; Input.EffectiveOn.Value &lt;= DateTime.Now) ? Input.EffectiveOn.Value : DateTime.Now</mca:CSharpValue>
+          </InArgument>
+        </local:CalculateCustomerRouteQualityData.EffectiveOn>
+        <local:CalculateCustomerRouteQualityData.RoutingDatabaseId>
+          <InArgument x:TypeArguments="x:Int32">
+            <mca:CSharpValue x:TypeArguments="x:Int32">routingDatabaseId</mca:CSharpValue>
+          </InArgument>
+        </local:CalculateCustomerRouteQualityData.RoutingDatabaseId>
+        <sap2010:WorkflowViewState.ViewStateManager>
+          <sap2010:ViewStateManager>
+            <sap2010:ViewStateData Id="CalculateCustomerRouteQualityData_1" sap2010:WorkflowViewState.IdRef="ViewStateData_39" />
+            <sap2010:ViewStateData Id="PrepareCustomerRouteQualityDataForDBApply_1" sap2010:WorkflowViewState.IdRef="ViewStateData_40" />
+            <sap2010:ViewStateData Id="ApplyCustomerRouteQualityDataToDB_1" sap2010:WorkflowViewState.IdRef="ViewStateData_41" />
+            <sap2010:ViewStateData Id="Parallel_1" sap2010:WorkflowViewState.IdRef="ViewStateData_42" />
+            <sap2010:ViewStateData Id="Sequence_1" sap2010:WorkflowViewState.IdRef="ViewStateData_43" />
+            <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.CalculateCustomerRouteQualityData_1" sap2010:WorkflowViewState.IdRef="ViewStateData_44" />
+          </sap2010:ViewStateManager>
+        </sap2010:WorkflowViewState.ViewStateManager>
+      </local:CalculateCustomerRouteQualityData>
       <Sequence sap2010:WorkflowViewState.IdRef="Sequence_8">
         <twrba1:PrepareCodePrefixes Status="{x:Null}" sap2010:WorkflowViewState.IdRef="PrepareCodePrefixes_1">
           <twrba1:PrepareCodePrefixes.DistinctCodePrefixes>
@@ -640,16 +662,16 @@
         </InArgument>
       </twrba1:DropOldRoutingDatabases.ProcessType>
     </twrba1:DropOldRoutingDatabases>
-    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBSb3V0aW5nUHJvY2Vzcy54YW1sflIDhAUOAgEBXAtcrQECARVfM182AgEUYDNgNgIBE2QLZP4BAgEDZzVnOwIBAmsFhQEkAwHcCIYBBYwBIAMBygiNAQWcARADAacInQEFqAEiAwGGCKkBBfMCEAMBuAX0AgX6AiADAaYF+wIF3wMXAwGwA+ADBeYDMgMBnwPnAwX3AyUDAe4C+AMFiAQfAwG9AokEBY8EIAMBqwKQBAXhBBcCAXriBAXoBCACAWjpBAXvBCsCAVfwBAX2BCYCAUb3BAWCBSYCASV9C31wAwGdCXMLc2gDAY0JbgtuYQMB/QiCAQuCAXIDAe0IeAt4jgEDAd0IiQELiQGFAQMBzAiGAWCGAXQDAcsIjgEHlAEnAwG5CJUBB5sBJwMBqAilAQulAWEDAZcIoAELoAFhAwGHCKoBB9MBJwMB1QfUAQf9AScDAaQH/gEHkwImAwGDB5QCB/ICEgMBuQX3Agv3AoUBAwGoBfQCYPQCpwEDAacF/gIL/gKIAQMBlgWFAwndAxQDAbED4wML4wOHAQMBoAPvAwvvA1gDAY8D6gML6gNoAwH/AvQDC/QDcgMB7wL7Awv7A1sDAd4CgAQLgARyAwHOAoUEC4UEZgMBvgKMBAuMBIUBAwGtAokEYIkEoQEDAawCkwQLkwR4AwGbApoECd8EFAIBe+UEC+UEhQECAWriBGDiBIYBAgFp7AQL7ARZAgFY8wQL8wRZAgFH+gQL+gRyAgE2/wQL/wRwAgEmkQENkQGAAQMBugiYAQ2YAYABAwGpCLIBDbIBWwMB9getAQ2tAbwBAwHmB7cBDbwBIAMB1gfcAQ3cAVsDAcUH1wEN1wG8AQMBtQfhAQ3mASADAaUHgQINgQLIAQMBlAeGAg2GAlsDAYQHlQIJpQImAwHSBqYCCawCOwMBwQatAgnvAhsDAb0F8AIJ8AJvAwG8BfECCfECmwEDAboFiwMLmwMuAwHZBJwDC7ADHAMBrwSxAwvcAxADAbIDnwQLsgQcAwHzAbMEC94EEAIBfJgCD5gCigEDAfMGnQIPnQJsAwHjBqICD6ICXAMB0wapAg+pAoIBAwHCBrACD7ACiAEDAbEGtwIN7QIYAwG+BfECePECmAEDAbsFjgMRjgN2AwGCBZMDEZMDagMB7gSYAxGYA3EDAdoEnwMRqAMgAwHFBK0DEa0DhAEDAbEEnAO3AZwDvQEDAbAEtAMRtAORAQMBswO4Aw++AyMDAZoEwQMP2gMaAwHHA6IEEaoEIAMBiAKvBBGvBIsBAwH1AZ8EtwGfBL0BAwH0AbYEEbYEmQECAX26BA/ABCMDAd8BwwQP3AQaAwGQAbsCD8wCIAMBiwbNAg/sAhQDAb8FuwMVuwPcAQMBmwTCAxHNAxoDAfEDzgMR2QMsAwHIA70EFb0EgAIDAeABxAQRzwQaAwG4AdAEEdsELAMBkQG+AhXEAiADAZ8GyQIVyQKRAQMBjQa7ArsBuwLBAQMBjAbQAhXQAsABAwHABdQCE9oCJwMB+AXdAhPqAh4DAdIFygMXygNzAwGGBMUDF8UDdwMB8gPWAxfWA5EBAwHdA9EDF9EDpAIDAckDzAQXzAR3AwHMAccEF8cEewMBuQHYBBfYBJEBAwGlAdMEF9MElwIDAZIB1wIZ1wLoAQMB+QXeAhXpAh4DAdMF5gIb5gKzAQMB5gXhAhvhApEBAwHUBQ==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcUlBSb3V0aW5nUHJvY2Vzcy54YW1sgQFSA5oFDgIBAVwLXK0BAgEVXzNfNgIBFGAzYDYCARNkC2T+AQIBA2c1ZzsCAQJrBYUBJAMB/QiGAQWMASADAesIjQEFnAEQAwHICJ0BBagBIgMBpwipAQWJAxADAbgFigMFkAMgAwGmBZEDBfUDFwMBsAP2AwX8AzIDAZ8D/QMFjQQlAwHuAo4EBZ4EHwMBvQKfBAWlBCADAasCpgQF9wQXAgF6+AQF/gQgAgFo/wQFhQUrAgFXhgUFjAUmAgFGjQUFmAUmAgElfQt9cAMBvglzC3NoAwGuCW4LbmEDAZ4JggELggFyAwGOCXgLeI4BAwH+CIkBC4kBhQEDAe0IhgFghgF0AwHsCI4BB5QBJwMB2giVAQebAScDAckIpQELpQFhAwG4CKABC6ABYQMBqAiqAQfTAScDAfYH1AEH/QEnAwHFB/4BB5MCJgMBpAeUAgepAjEDAYMHqgIHiAMSAwG5BY0DC40DhQEDAagFigNgigOnAQMBpwWUAwuUA4gBAwGWBZsDCfMDFAMBsQP5Awv5A4cBAwGgA4UEC4UEWAMBjwOABAuABGgDAf8CigQLigRyAwHvApEEC5EEWwMB3gKWBAuWBHIDAc4CmwQLmwRmAwG+AqIEC6IEhQEDAa0CnwRgnwShAQMBrAKpBAupBHgDAZsCsAQJ9QQUAgF7+wQL+wSFAQIBavgEYPgEhgECAWmCBQuCBVkCAViJBQuJBVkCAUeQBQuQBXICATaVBQuVBXACASaRAQ2RAYABAwHbCJgBDZgBgAEDAcoIsgENsgFbAwGXCK0BDa0BvAEDAYcItwENvAEgAwH3B9wBDdwBWwMB5gfXAQ3XAbwBAwHWB+EBDeYBIAMBxgeBAg2BAsgBAwG1B4YCDYYCWwMBpQeXAg2XAsgBAwGUB5wCDZwCWwMBhAerAgm7AiYDAdIGvAIJwgI7AwHBBsMCCYUDGwMBvQWGAwmGA28DAbwFhwMJhwObAQMBugWhAwuxAy4DAdkEsgMLxgMcAwGvBMcDC/IDEAMBsgO1BAvIBBwDAfMByQQL9AQQAgF8rgIPrgKKAQMB8wazAg+zAmwDAeMGuAIPuAJcAwHTBr8CD78CggEDAcIGxgIPxgKIAQMBsQbNAg2DAxgDAb4FhwN4hwOYAQMBuwWkAxGkA3YDAYIFqQMRqQNqAwHuBK4DEa4DcQMB2gS1AxG+AyADAcUEwwMRwwOEAQMBsQSyA7cBsgO9AQMBsATKAxHKA5EBAwGzA84DD9QDIwMBmgTXAw/wAxoDAccDuAQRwAQgAwGIAsUEEcUEiwEDAfUBtQS3AbUEvQEDAfQBzAQRzASZAQIBfdAED9YEIwMB3wHZBA/yBBoDAZAB0QIP4gIgAwGLBuMCD4IDFAMBvwXRAxXRA9wBAwGbBNgDEeMDGgMB8QPkAxHvAywDAcgD0wQV0wSAAgMB4AHaBBHlBBoDAbgB5gQR8QQsAwGRAdQCFdoCIAMBnwbfAhXfApEBAwGNBtECuwHRAsEBAwGMBuYCFeYCwAEDAcAF6gIT8AInAwH4BfMCE4ADHgMB0gXgAxfgA3MDAYYE2wMX2wN3AwHyA+wDF+wDkQEDAd0D5wMX5wOkAgMByQPiBBfiBHcDAcwB3QQX3QR7AwG5Ae4EF+4EkQEDAaUB6QQX6QSXAgMBkgHtAhntAugBAwH5BfQCFf8CHgMB0wX8Ahv8ArMBAwHmBfcCG/cCkQEDAdQF</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="CreateRoutingDatabase_2" sap:VirtualizedContainerService.HintSize="1397,22" />
-      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="1397,22" />
+      <sap2010:ViewStateData Id="CreateRoutingDatabase_2" sap:VirtualizedContainerService.HintSize="1637,22" />
+      <sap2010:ViewStateData Id="WriteTrackingMessage_3" sap:VirtualizedContainerService.HintSize="1637,22" />
       <sap2010:ViewStateData Id="GetActiveSupplierInfos_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="GetActiveCustomerInfos_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1397,86" />
-      <sap2010:ViewStateData Id="LoadRoutingSettings_1" sap:VirtualizedContainerService.HintSize="1397,22" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="1637,86" />
+      <sap2010:ViewStateData Id="LoadRoutingSettings_1" sap:VirtualizedContainerService.HintSize="1637,22" />
       <sap2010:ViewStateData Id="ViewStateData_1" sap:VirtualizedContainerService.HintSize="541,22" />
       <sap2010:ViewStateData Id="ViewStateData_2" sap:VirtualizedContainerService.HintSize="489,62" />
       <sap2010:ViewStateData Id="ViewStateData_3" sap:VirtualizedContainerService.HintSize="489,62" />
@@ -732,6 +754,19 @@
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="ViewStateData_38" sap:VirtualizedContainerService.HintSize="856,290" />
       <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.CalculateRPQualityData_1" sap:VirtualizedContainerService.HintSize="200,1044" />
+      <sap2010:ViewStateData Id="ViewStateData_39" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_40" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_41" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_42" sap:VirtualizedContainerService.HintSize="794,86" />
+      <sap2010:ViewStateData Id="ViewStateData_43" sap:VirtualizedContainerService.HintSize="816,210">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ViewStateData_44" sap:VirtualizedContainerService.HintSize="856,290" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.SubProcesses.CalculateCustomerRouteQualityData_1" sap:VirtualizedContainerService.HintSize="200,1044" />
       <sap2010:ViewStateData Id="PrepareCodePrefixes_1" sap:VirtualizedContainerService.HintSize="541,22" />
       <sap2010:ViewStateData Id="MakeCodePrefixesAvailableForSubProcesses_1" sap:VirtualizedContainerService.HintSize="541,22" />
       <sap2010:ViewStateData Id="RunProcess_5" sap:VirtualizedContainerService.HintSize="489,22" />
@@ -762,7 +797,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1397,1090" />
+      <sap2010:ViewStateData Id="Parallel_2" sap:VirtualizedContainerService.HintSize="1637,1090" />
       <sap2010:ViewStateData Id="WriteTrackingMessage_4" sap:VirtualizedContainerService.HintSize="1397,22" />
       <sap2010:ViewStateData Id="GetCodePrefixGroupDetails_1" sap:VirtualizedContainerService.HintSize="489,22" />
       <sap2010:ViewStateData Id="RunProcess_1" sap:VirtualizedContainerService.HintSize="489,22" />
@@ -829,14 +864,14 @@
       <sap2010:ViewStateData Id="FinalizeProductRouteDatabase_1" sap:VirtualizedContainerService.HintSize="1157,22" />
       <sap2010:ViewStateData Id="SetRoutingDatabaseReady_1" sap:VirtualizedContainerService.HintSize="1157,22" />
       <sap2010:ViewStateData Id="DropOldRoutingDatabases_1" sap:VirtualizedContainerService.HintSize="1157,22" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1419,3694">
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="1659,3694">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RPRoutingProcess_1" sap:VirtualizedContainerService.HintSize="1459,3774" />
+      <sap2010:ViewStateData Id="TOne.WhS.Routing.BP.RPRoutingProcess_1" sap:VirtualizedContainerService.HintSize="1699,3774" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

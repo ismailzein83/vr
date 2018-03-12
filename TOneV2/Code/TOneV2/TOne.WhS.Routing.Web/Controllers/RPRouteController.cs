@@ -13,11 +13,19 @@ namespace TOne.WhS.Routing.Web.Controllers
     public class RPRouteController : BaseAPIController
     {
         [HttpPost]
-        [Route("GetFilteredRPRoutes")]
+        [Route("GetFilteredRPRoutesByZone")]
         public object GetFilteredRPRoutes(Vanrise.Entities.DataRetrievalInput<RPRouteQueryByZone> input)
         {
             RPRouteManager manager = new RPRouteManager();
-            return GetWebResponse(input, manager.GetFilteredRPRoutes(input));
+            return GetWebResponse(input, manager.GetFilteredRPRoutesByZone(input));
+        }
+
+        [HttpPost]
+        [Route("GetFilteredRPRoutesByCode")]
+        public object GetFilteredRPRoutesByCode(Vanrise.Entities.DataRetrievalInput<RPRouteQueryByCode> input)
+        {
+            RPRouteManager manager = new RPRouteManager();
+            return GetWebResponse(input, manager.GetFilteredRPRoutesByCode(input));
         }
 
         [HttpGet]

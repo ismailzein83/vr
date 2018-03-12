@@ -3,16 +3,8 @@ using System.Collections.Generic;
 
 namespace TOne.WhS.Routing.Entities
 {
-    public class RPRouteOptionSupplierZone
+    public abstract class BaseRPRouteOptionSupplier
     {
-        static RPRouteOptionSupplierZone()
-        {
-            Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(RPRouteOptionSupplierZone),
-                "SupplierZoneId", "SupplierRate", "ExactSupplierServiceIds", "ExecutedRuleId", "IsBlocked", "SupplierRateId");
-        }
-
-        //public string SupplierCode { get; set; }
-
         public long SupplierZoneId { get; set; }
 
         public long SupplierRateId { get; set; }
@@ -25,6 +17,15 @@ namespace TOne.WhS.Routing.Entities
 
         public bool IsBlocked { get; set; }
 
-        public bool IsForced { get; set; } 
+        public bool IsForced { get; set; }
+    }
+    public class RPRouteOptionSupplierZone : BaseRPRouteOptionSupplier
+    {
+
+    }
+
+    public class RPRouteOptionSupplierCode : BaseRPRouteOptionSupplier
+    {
+        public string SupplierCode { get; set; }
     }
 }

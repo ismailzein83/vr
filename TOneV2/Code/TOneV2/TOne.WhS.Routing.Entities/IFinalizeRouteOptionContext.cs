@@ -6,6 +6,6 @@ namespace TOne.WhS.Routing.Entities
     {
         List<RouteOption> RouteOptions { get; set; }
 
-        int NumberOfOptionsInSettings { get; }
+        int? NumberOfOptionsInSettings { get; }
     }
 }

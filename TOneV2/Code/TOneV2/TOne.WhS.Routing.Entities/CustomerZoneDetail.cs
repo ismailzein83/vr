@@ -28,6 +28,17 @@ namespace TOne.WhS.Routing.Entities
         public int VersionNumber { get; set; }
     }
 
+    public class CustomerZoneDetailData
+    {
+        public int? CustomerId { get; set; }
+
+        public long SaleZoneId { get; set; }
+
+        public Decimal? EffectiveRateValue { get; set; }
+
+        public HashSet<int> SaleZoneServiceIds { get; set; }
+    }
+
     public class CustomerZoneDetailByZone : Dictionary<long, List<CustomerZoneDetail>>
     {
 

@@ -163,7 +163,7 @@ namespace TOne.WhS.Routing.Data.SQL
             return dtSupplierZoneDetailsInfo;
         }
 
-        private SupplierZoneDetail SupplierZoneDetailMapper(IDataReader reader)
+        public static SupplierZoneDetail SupplierZoneDetailMapper(IDataReader reader)
         {
             string supplierServiceIds = reader["SupplierServiceIds"] as string;
             string exactSupplierServiceIds = reader["ExactSupplierServiceIds"] as string;
@@ -172,12 +172,12 @@ namespace TOne.WhS.Routing.Data.SQL
             {
                 SupplierId = (int)reader["SupplierId"],
                 SupplierZoneId = (long)reader["SupplierZoneId"],
-                EffectiveRateValue = GetReaderValue<decimal>(reader, "EffectiveRateValue"),
+                EffectiveRateValue = (decimal)reader["EffectiveRateValue"],
                 SupplierServiceIds = !string.IsNullOrEmpty(supplierServiceIds) ? new HashSet<int>(supplierServiceIds.Split(',').Select(itm => int.Parse(itm))) : null,
                 ExactSupplierServiceIds = !string.IsNullOrEmpty(exactSupplierServiceIds) ? new HashSet<int>(exactSupplierServiceIds.Split(',').Select(itm => int.Parse(itm))) : null,
-                SupplierServiceWeight = GetReaderValue<int>(reader, "SupplierServiceWeight"),
+                SupplierServiceWeight = (int)reader["SupplierServiceWeight"],
                 SupplierRateId = (long)reader["SupplierRateId"],
-                SupplierRateEED = GetReaderValue<DateTime?>(reader, "SupplierRateEED"),
+                SupplierRateEED = reader["SupplierRateEED"] != DBNull.Value ? (DateTime)reader["SupplierRateEED"] : default(DateTime?),
                 VersionNumber = (int)reader["VersionNumber"]
             };
         }

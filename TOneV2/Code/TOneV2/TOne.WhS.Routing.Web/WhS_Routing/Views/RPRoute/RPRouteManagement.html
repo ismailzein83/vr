@@ -13,39 +13,61 @@
                 <vr-columns colnum="2">
                     <vr-whs-routing-routingdatabase-selector onselectionchanged="onRoutingDatabaseSelectorChange" getroutingproductroutes on-ready="onRoutingDatabaseSelectorReady" isrequired hideremoveicon />
                 </vr-columns>
+
                 <vr-columns colnum="2">
+                    <vr-select on-ready="onRouteFilterSelectorReady" datasource="routeFilters" datatextfield="description" datavaluefield="value"
+                               selectedvalues="selectedRouteFilter" label="Filter By" isrequired="true" hideremoveicon>
+                    </vr-select>
+                </vr-columns>
+
+                <vr-columns colnum="2" ng-show="selectedRouteFilter.value == 0">
                     <vr-whs-routing-rproutepolicy-selector on-ready="onRPRoutePolicySelectorReady" isrequired />
                 </vr-columns>
+
                 <vr-columns colnum="2">
                     <vr-textbox label="Number of Options" value="numberOfOptions" isrequired type="number" minvalue="1" decimalprecision="0"></vr-textbox>
                 </vr-columns>
+
                 <vr-columns colnum="2">
                     <vr-textbox label="Limit Result To" value="limit" type="number" decimalprecision="0" minvalue="1" isrequired="true"></vr-textbox>
                 </vr-columns>
+
                 <vr-whs-be-salezone-selector ng-show="advancedSelected" ismultipleselection on-ready="onSaleZoneSelectorReady" normal-col-num="2"></vr-whs-be-salezone-selector>
 
                 <vr-whs-routing-routestatus-selector ng-show="advancedSelected" on-ready="onRouteStatusDirectiveReady" normal-col-num="2"></vr-whs-routing-routestatus-selector>
-                <vr-columns colnum="2">
-                    <vr-textbox label="Max Supplier Rate" value="maxSupplierRate" type="number"></vr-textbox>
-                </vr-columns>
+
                 <vr-whs-be-customer-selector ng-show="advancedSelected" on-ready="onCustomerSelectorReady" normal-col-num="2" selectedvalues="selectedCustomer"></vr-whs-be-customer-selector>
+
                 <vr-columns colnum="2" ng-show="selectedCustomer!=undefined && advancedSelected">
                     <vr-switch label="Show In System Currency" value="showInSystemCurrency"></vr-switch>
                 </vr-columns>
+
                 <vr-columns colnum="2" ng-show="selectedCustomer!=undefined && advancedSelected" withemptyline>
                     <vr-select on-ready="onRoutingProductFilterSelectorReady" datasource="routingProductFilters" datatextfield="description" datavaluefield="value"
                                selectedvalues="selectedRoutingProductFilter" label="filter" isrequired="true" hidelabel hideremoveicon>
                     </vr-select>
                 </vr-columns>
+
                 <vr-columns colnum="2" ng-show="advancedSelected && (selectedRoutingProductFilter.value == 0 || selectedCustomer == undefined)">
-                    <vr-whs-be-routingproduct-selector ismultipleselection on-ready="onMultipleRoutingProductSelectorReady"/>
+                    <vr-whs-be-routingproduct-selector ismultipleselection on-ready="onMultipleRoutingProductSelectorReady" />
                 </vr-columns>
+
                 <vr-columns colnum="2" ng-show="advancedSelected && selectedRoutingProductFilter.value == 1 && selectedCustomer != undefined">
                     <vr-whs-be-routingproduct-selector on-ready="onSingleRoutingProductSelectorReady"></vr-whs-be-routingproduct-selector>
                 </vr-columns>
+
+                <vr-columns colnum="2">
+                    <vr-textbox label="Max Supplier Rate" value="maxSupplierRate" type="number"></vr-textbox>
+                </vr-columns>
+
+                <vr-columns colnum="2" ng-show="selectedRouteFilter.value == 1">
+                    <vr-textbox label="Code Prefix" value="codePrefix"></vr-textbox>
+                </vr-columns>
+
                 <vr-columns colnum="2">
                     <vr-switch value="includeBlockedSuppliers" label="Include Blocked Suppliers"></vr-switch>
                 </vr-columns>
+
                 <vr-columns colnum="2" withemptyline>
                     <vr-legend header="{{legendHeader}}" content="{{legendContent}}"></vr-legend>
                 </vr-columns>
@@ -59,8 +81,11 @@
             </vr-actionbar>
         </vr-row>
         <vr-row>
-            <vr-columns colnum="12" simplecol>
+            <vr-columns colnum="12" simplecol ng-if="showRPRouteGrid">
                 <vr-whs-routing-rproute-grid on-ready="onGridReady"></vr-whs-routing-rproute-grid>
+            </vr-columns>
+            <vr-columns colnum="12" simplecol ng-if="!showRPRouteGrid">
+                <vr-whs-routing-rproutebycode-grid on-ready="onGridByCodeReady"></vr-whs-routing-rproutebycode-grid>
             </vr-columns>
         </vr-row>
     </vr-form>

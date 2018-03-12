@@ -20,18 +20,21 @@ namespace TOne.WhS.Routing.Entities
         public decimal? EffectiveRateValue { get; set; }
 
         public string CurrencySymbol { get; set; }
-
-        public IEnumerable<RPRouteOptionDetail> RouteOptionsDetails { get; set; }
     }
 
     public class RPRouteDetailByZone : BaseRPRouteDetail
     {
         public int RoutingProductId { get; set; }
         public string RoutingProductName { get; set; }
+        public IEnumerable<RPRouteOptionDetail> RouteOptionsDetails { get; set; }
+
     }
 
-    public class RPRouteDetailByCode
+    public class RPRouteDetailByCode : BaseRPRouteDetail
     {
         public string Code { get; set; }
+        public int RoutingProductId { get; set; }
+        public string RoutingProductName { get; set; }
+        public IEnumerable<RPRouteOptionByCodeDetail> RouteOptionsDetails { get; set; }
     }
 }

@@ -48,6 +48,8 @@ namespace TOne.WhS.Routing.Business
 
             List<CustomerRoute> customerRoutes = new List<CustomerRoute>();
 
+            bool keepBackupsForRemovedOptions = new ConfigManager().GetCustomerRouteBuildKeepBackUpsForRemovedOptions();
+
             if (context.SaleZoneDefintions != null)
             {
                 Dictionary<RouteRule, List<RouteOptionRuleTarget>> optionsByRules = new Dictionary<RouteRule, List<RouteOptionRuleTarget>>();
@@ -86,8 +88,15 @@ namespace TOne.WhS.Routing.Business
 
                                 if (createCustomerRoute)
                                 {
-                                    CustomerRoute route = ExecuteRule<CustomerRoute>(optionsByRules, routeCode, saleZoneDefintion, customerZoneDetail, context.SupplierCodeMatches, context.SupplierCodeMatchesBySupplier,
-                                        routeRuleTarget, routeRule, context.RoutingDatabase);
+                                    CustomerZoneDetailData customerZoneDetailData = new CustomerZoneDetailData()
+                                    {
+                                        CustomerId = customerZoneDetail.CustomerId,
+                                        EffectiveRateValue = customerZoneDetail.EffectiveRateValue,
+                                        SaleZoneId = customerZoneDetail.SaleZoneId,
+                                        SaleZoneServiceIds = customerZoneDetail.SaleZoneServiceIds
+                                    };
+                                    CustomerRoute route = ExecuteRule<CustomerRoute>(optionsByRules, routeCode, saleZoneDefintion, customerZoneDetailData, context.SupplierCodeMatches, context.SupplierCodeMatchesBySupplier,
+                                        routeRuleTarget, routeRule, context.RoutingDatabase, RoutingProcessType.CustomerRoute, keepBackupsForRemovedOptions);
 
                                     route.CustomerId = customerZoneDetail.CustomerId;
                                     route.VersionNumber = context.VersionNumber;
@@ -216,19 +225,18 @@ namespace TOne.WhS.Routing.Business
             return null;
         }
 
-        private T ExecuteRule<T>(Dictionary<RouteRule, List<RouteOptionRuleTarget>> optionsByRules, string routeCode, SaleZoneDefintion saleZoneDefintion, CustomerZoneDetail customerZoneDetail, List<SupplierCodeMatchWithRate> supplierCodeMatches,
-            SupplierCodeMatchWithRateBySupplier supplierCodeMatchBySupplier, RouteRuleTarget routeRuleTarget, RouteRule routeRule, RoutingDatabase routingDatabase) where T : BaseRoute
+        public T ExecuteRule<T>(Dictionary<RouteRule, List<RouteOptionRuleTarget>> optionsByRules, string routeCode, SaleZoneDefintion saleZoneDefintion, CustomerZoneDetailData customerZoneDetailData, List<SupplierCodeMatchWithRate> supplierCodeMatches,
+            SupplierCodeMatchWithRateBySupplier supplierCodeMatchBySupplier, RouteRuleTarget routeRuleTarget, RouteRule routeRule, RoutingDatabase routingDatabase, RoutingProcessType processType, bool keepBackupsForRemovedOptions) where T : BaseRoute
         {
             ConfigManager configManager = new ConfigManager();
             int numberOfOptionsInSettings = configManager.GetCustomerRouteBuildNumberOfOptions();
-            bool keepBackupsForRemovedOptions = configManager.GetCustomerRouteBuildKeepBackUpsForRemovedOptions();
 
             SaleEntityRouteRuleExecutionContext routeRuleExecutionContext = new SaleEntityRouteRuleExecutionContext(routeRule, _ruleTreesForRouteOptions);
             routeRuleExecutionContext.NumberOfOptions = numberOfOptionsInSettings;
             routeRuleExecutionContext.SupplierCodeMatches = supplierCodeMatches;
             routeRuleExecutionContext.SupplierCodeMatchBySupplier = supplierCodeMatchBySupplier;
-            routeRuleExecutionContext.SaleZoneServiceList = customerZoneDetail.SaleZoneServiceIds; //used for service matching
-            routeRuleExecutionContext.SaleZoneServiceIds = customerZoneDetail.SaleZoneServiceIds != null ? string.Join(",", customerZoneDetail.SaleZoneServiceIds) : null; //used for market price
+            routeRuleExecutionContext.SaleZoneServiceList = customerZoneDetailData.SaleZoneServiceIds; //used for service matching
+            routeRuleExecutionContext.SaleZoneServiceIds = customerZoneDetailData.SaleZoneServiceIds != null ? string.Join(",", customerZoneDetailData.SaleZoneServiceIds) : null; //used for market price
             routeRuleExecutionContext.RoutingDatabase = routingDatabase;
             routeRuleExecutionContext.KeepBackupsForRemovedOptions = keepBackupsForRemovedOptions;
 
@@ -236,11 +244,17 @@ namespace TOne.WhS.Routing.Business
             route.Code = routeCode;
             route.SaleZoneId = saleZoneDefintion.SaleZoneId;
             route.ExecutedRuleId = routeRule.RuleId;
-            route.Rate = customerZoneDetail.EffectiveRateValue;
-            route.SaleZoneServiceIds = customerZoneDetail.SaleZoneServiceIds;
+            route.Rate = customerZoneDetailData.EffectiveRateValue;
+            route.SaleZoneServiceIds = customerZoneDetailData.SaleZoneServiceIds;
             route.CorrespondentType = routeRule.CorrespondentType;
 
-            int? maxNumberOfOptions = routeRule.Settings.GetMaxNumberOfOptions(routeRuleExecutionContext);
+            int? maxNumberOfOptions = null;
+            switch (processType)
+            {
+                case RoutingProcessType.CustomerRoute: maxNumberOfOptions = routeRule.Settings.GetMaxNumberOfOptions(routeRuleExecutionContext); break;
+                case RoutingProcessType.RoutingProductRoute: maxNumberOfOptions = null; break;
+            }
+
 
             if (routeRule.Settings.UseOrderedExecution)
             {
@@ -253,7 +267,7 @@ namespace TOne.WhS.Routing.Business
                 {
                     int optionsAdded = 0;
                     route.Options = new List<RouteOption>();
-                    CarrierAccount customer = _carrierAccounts.GetRecord(customerZoneDetail.CustomerId);
+                    CarrierAccount customer = customerZoneDetailData.CustomerId.HasValue ? _carrierAccounts.GetRecord(customerZoneDetailData.CustomerId.Value) : null;
 
                     foreach (RouteOptionRuleTarget targetOption in routeOptionRuleTargets)
                     {
@@ -262,7 +276,7 @@ namespace TOne.WhS.Routing.Business
                         List<RouteOptionRuleTarget> processedTargetOptions = ProcessRouteOptionRuleTarget(targetOption, keepBackupsForRemovedOptions, (optionTarget) =>
                         {
                             var supplier = _carrierAccounts.GetRecord(optionTarget.SupplierId);
-                            if (supplier.CarrierProfileId == customer.CarrierProfileId)
+                            if (customer != null && supplier.CarrierProfileId == customer.CarrierProfileId)
                                 return false;
 
                             routeRule.Settings.CheckOptionFilter(routeRuleExecutionContext, routeRuleTarget, optionTarget);
@@ -294,7 +308,7 @@ namespace TOne.WhS.Routing.Business
                     }
                 }
 
-                FinalizeRouteOptionContext finalizeRouteOptionContext = new FinalizeRouteOptionContext() { NumberOfOptionsInSettings = numberOfOptionsInSettings, RouteOptions = route.Options };
+                FinalizeRouteOptionContext finalizeRouteOptionContext = new FinalizeRouteOptionContext() { NumberOfOptionsInSettings = maxNumberOfOptions, RouteOptions = route.Options };
                 route.Options = routeRule.Settings.GetFinalOptions(finalizeRouteOptionContext);
 
                 routeRule.Settings.ApplyOptionsPercentage(route.Options);
@@ -431,11 +445,14 @@ namespace TOne.WhS.Routing.Business
 
         private RPRoute ExecuteRule(int routingProductId, long saleZoneId, HashSet<int> saleZoneServiceIds, IBuildRoutingProductRoutesContext context, RouteRuleTarget routeRuleTarget, RouteRule routeRule, RoutingDatabase routingDatabase)
         {
+            bool keepBackupsForRemovedOptions = new ConfigManager().GetProductRouteBuildKeepBackUpsForRemovedOptions();
+
             RPRouteRuleExecutionContext routeRuleExecutionContext = new RPRouteRuleExecutionContext(routeRule, _ruleTreesForRouteOptions);
             routeRuleExecutionContext.SupplierCodeMatches = context.SupplierCodeMatches;
             routeRuleExecutionContext.SupplierCodeMatchesBySupplier = context.SupplierCodeMatchesBySupplier;
             routeRuleExecutionContext.SaleZoneServiceIds = saleZoneServiceIds;
             routeRuleExecutionContext.RoutingDatabase = routingDatabase;
+            routeRuleExecutionContext.KeepBackupsForRemovedOptions = keepBackupsForRemovedOptions;
 
             routeRule.Settings.CreateSupplierZoneOptionsForRP(routeRuleExecutionContext, routeRuleTarget);
             RPRoute route = new RPRoute
@@ -546,7 +563,7 @@ namespace TOne.WhS.Routing.Business
         {
             public List<RouteOption> RouteOptions { get; set; }
 
-            public int NumberOfOptionsInSettings { get; set; }
+            public int? NumberOfOptionsInSettings { get; set; }
         }
 
         #endregion

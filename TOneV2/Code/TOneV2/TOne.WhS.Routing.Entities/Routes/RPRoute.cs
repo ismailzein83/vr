@@ -33,4 +33,13 @@ namespace TOne.WhS.Routing.Entities
 
         public List<RPRoute> RPRoutes { get; set; }
     }
+
+    public class RPRouteByCode : BaseRoute
+    {
+        public int RoutingProductId { get; set; }
+        public string SaleZoneName { get; set; }
+        public int SellingNumberPlanID { get; set; }
+        public List<SupplierZoneDetail> SupplierZoneDetails { get; set; }
+        public Dictionary<long, string> SupplierCodeMatchByZoneId { get; set; }
+    }
 }

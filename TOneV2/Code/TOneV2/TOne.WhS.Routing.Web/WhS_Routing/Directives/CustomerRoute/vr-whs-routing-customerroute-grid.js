@@ -142,7 +142,7 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
                         });
                     }
 
-                    if (dataItem.CanAddRuleByCode) {
+                    if (dataItem.CanAddRuleByCode || dataItem.LinkedRouteRuleIds == undefined || dataItem.LinkedRouteRuleIds.length == 0) {
                         menu.push({
                             name: "Add Rule By Code",
                             clicked: addRouteRuleByCode,

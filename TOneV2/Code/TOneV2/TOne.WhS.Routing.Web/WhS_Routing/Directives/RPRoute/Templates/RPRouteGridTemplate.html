@@ -5,14 +5,11 @@
                  menuactions="gridMenuActions"
                  pagingtype="'Pager'"
                  enableautoexport="true"
+                 normalcell
                  defaultsortbyfieldname="'SaleZoneName'">
 
-        <vr-datagridcolumn headertext="'Routing Product'" fixedwidth="150" disablesorting>
-            <span style="font-size: 11px" class="bold-label" blocked="{{dataItem.IsBlocked}}">{{dataItem.RoutingProductName}}</span>
-        </vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Sale Zone'" fixedwidth="200">
-            <span style="font-size: 11px" class="bold-label" blocked="{{dataItem.IsBlocked}}">{{dataItem.SaleZoneName}}</span>
-        </vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Routing Product'" fixedwidth="150" field="'RoutingProductName'" disablesorting getcolor="getColor"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Sale Zone'" fixedwidth="150" blocked="true" field="'SaleZoneName'" getcolor="getColor"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Selling Number Plan'" field="'SellingNumberPlan'" disablesorting fixedwidth="150"></vr-datagridcolumn>
         <vr-datagridcolumn ng-show="isCustomerSelected" headertext="'Rate'" field="'EffectiveRateValue'" fixedwidth="60" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
         <vr-datagridcolumn ng-show="isCustomerSelected" headertext="'Currency'" field="'CurrencySymbol'" type="'Text'" fixedwidth="60"></vr-datagridcolumn>

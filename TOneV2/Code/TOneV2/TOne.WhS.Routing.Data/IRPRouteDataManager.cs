@@ -9,7 +9,7 @@ namespace TOne.WhS.Routing.Data
     {
         void ApplyProductRouteForDB(object preparedProductRoute);
 
-        IEnumerable<Entities.RPRoute> GetFilteredRPRoutes(Vanrise.Entities.DataRetrievalInput<Entities.RPRouteQueryByZone> input);
+        IEnumerable<RPRoute> GetFilteredRPRoutesByZone(Vanrise.Entities.DataRetrievalInput<RPRouteQueryByZone> input);
 
         Dictionary<Guid, IEnumerable<RPRouteOption>> GetRouteOptions(int routingProductId, long saleZoneId);
 
@@ -18,5 +18,7 @@ namespace TOne.WhS.Routing.Data
         IEnumerable<RPRoute> GetRPRoutes(IEnumerable<RPZone> rpZones);
 
         void FinalizeProductRoute(Action<string> trackStep, int commandTimeoutInSeconds, int? maxDOP);
+
+        IEnumerable<RPRouteByCode> GetFilteredRPRoutesByCode(Vanrise.Entities.DataRetrievalInput<RPRouteQueryByCode> input);
     }
 }

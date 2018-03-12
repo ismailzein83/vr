@@ -1,18 +1,15 @@
 ﻿<div ng-show="showGrid">
-    <vr-datagrid on-ready="onGridReady" 
+    <vr-datagrid on-ready="onGridReady"
                  datasource="rpRoutes"
                  dataretrievalfunction="dataRetrievalFunction"
                  pagingtype="'PagingOnScroll'"
                  menuactions="gridMenuActions"
-                 enableautoexport="true" 
-                 defaultsortbyfieldname="'SaleZoneName'">
+                 normalcell
+                 defaultsortbyfieldname="'Code'">
 
-        <vr-datagridcolumn headertext="'Code'" fixedwidth="150" disablesorting>
-            <span style="font-size: 11px" class="bold-label" blocked="{{dataItem.IsBlocked}}">{{dataItem.RoutingProductName}}</span>
-        </vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Sale Zone'" fixedwidth="200">
-            <span style="font-size: 11px" class="bold-label" blocked="{{dataItem.IsBlocked}}">{{dataItem.SaleZoneName}}</span>
-        </vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Code'" fixedwidth="100" field="'Code'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Routing Product'" fixedwidth="150" field="'RoutingProductName'" disablesorting getcolor="getColor"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Sale Zone'" fixedwidth="150" blocked="true" field="'SaleZoneName'" getcolor="getColor"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Selling Number Plan'" field="'SellingNumberPlan'" disablesorting fixedwidth="150"></vr-datagridcolumn>
         <vr-datagridcolumn ng-show="isCustomerSelected" headertext="'Rate'" field="'EffectiveRateValue'" fixedwidth="60" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
         <vr-datagridcolumn ng-show="isCustomerSelected" headertext="'Currency'" field="'CurrencySymbol'" type="'Text'" fixedwidth="60"></vr-datagridcolumn>
@@ -25,11 +22,17 @@
             </span>
         </vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Route Options'" disablesorting>
-            <vr-whs-routing-zonerouteoptions on-ready="dataItem.onRouteOptionsReady"></vr-whs-routing-zonerouteoptions>
-        </vr-datagridcolumn>
 
-        <!--<vr-datagridexpandablerow>
-            <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
-        </vr-datagridexpandablerow>-->
+            <div class="responsive-container" style="white-space: normal;">
+                <a ng-repeat="routeOption in dataItem.RouteOptionsDetails" title="{{::routeOption.title}}"
+                   style="font-size: 11px; cursor: pointer; display: inline-block; padding: 0 10px 0 0; color: {{routeOption.Color}};">
+
+                    <span style="display: inline-block; width: 190px;">
+                        <span class="clickableoption" ng-class="routeOption.EvaluatedStatusCssClass">{{::routeOption.titleToDisplay}}</span>
+                        <span style="color:#FFA500; font-weight:bold;" ng-if="::routeOption.SupplierZoneMatchHasClosedRate">*</span>
+                    </span>
+                </a>
+            </div>
+        </vr-datagridcolumn>
     </vr-datagrid>
 </div>

@@ -65,10 +65,132 @@ namespace TOne.WhS.Routing.Data.SQL
                 ColumnNames = columns
             };
         }
-
-        public IEnumerable<Entities.RPRoute> GetFilteredRPRoutes(Vanrise.Entities.DataRetrievalInput<Entities.RPRouteQueryByZone> input)
+        public IEnumerable<RPRouteByCode> GetFilteredRPRoutesByCode(Vanrise.Entities.DataRetrievalInput<RPRouteQueryByCode> input)
         {
-            query_GetFilteredRPRoutes.Replace("#LimitResult#", input.Query.LimitResult.ToString());
+            Dictionary<string, List<RPRouteByCode>> result = new Dictionary<string, List<RPRouteByCode>>();
+            Dictionary<long, SupplierZoneDetail> supplierZoneDetailsById = new Dictionary<long, SupplierZoneDetail>();
+            Dictionary<string, Dictionary<long, string>> supplierZoneIdsByCode = new Dictionary<string, Dictionary<long, string>>();
+
+            string query = query_GetFilteredRPRoutesByCode.ToString();
+            query = query.Replace("#LimitResult#", input.Query.LimitResult.ToString());
+
+            string codeFilter = string.Empty;
+            if (!string.IsNullOrEmpty(input.Query.CodePrefix))
+                codeFilter = string.Format(" AND cszm.Code like '{0}%' ", input.Query.CodePrefix);
+
+            string routingProductIdsFilter = string.Empty;
+            string saleZoneIdsFilter = string.Empty;
+            string customerIdFilter = string.Empty;
+
+            string joinCustomerZoneDetail = string.Empty;
+            string effectiveRateValue = string.Empty;
+
+
+            if (input.Query.RoutingProductIds != null && input.Query.RoutingProductIds.Count > 0)
+                routingProductIdsFilter = string.Format(" AND pr.RoutingProductId In({0})", string.Join(",", input.Query.RoutingProductIds));
+
+            if (input.Query.SaleZoneIds != null && input.Query.SaleZoneIds.Count > 0)
+                saleZoneIdsFilter = string.Format(" AND pr.SaleZoneId In({0})", string.Join(",", input.Query.SaleZoneIds));
+
+            if (input.Query.CustomerId.HasValue)
+            {
+                customerIdFilter = string.Format(" AND CustomerId = {0} ", input.Query.CustomerId);
+                effectiveRateValue = "czd.[EffectiveRateValue] ";
+
+                if (input.Query.SimulatedRoutingProductId.HasValue)
+                {
+                    joinCustomerZoneDetail = " JOIN [dbo].[CustomerZoneDetail] as czd ON pr.SaleZoneId = czd.SaleZoneId ";
+                    customerIdFilter = string.Concat(customerIdFilter, string.Format(" AND pr.RoutingProductId = {0} ", input.Query.SimulatedRoutingProductId.Value));
+                }
+                else
+                {
+                    joinCustomerZoneDetail = " JOIN [dbo].[CustomerZoneDetail] as czd ON pr.SaleZoneId = czd.SaleZoneId and pr.RoutingProductId = czd.RoutingProductId ";
+                }
+            }
+            else
+            {
+                effectiveRateValue = "null as EffectiveRateValue ";
+            }
+
+            query = query.Replace("#ROUTING_PRODUCT_IDS#", routingProductIdsFilter);
+            query = query.Replace("#SALE_ZONE_IDS#", saleZoneIdsFilter);
+            query = query.Replace("#CUSTOMER_IDS#", customerIdFilter);
+            query = query.Replace("#CUSTOMERZONEDETAILS#", joinCustomerZoneDetail);
+            query = query.Replace("#EFFECTIVERATE#", effectiveRateValue);
+            query = query.Replace("#CodeFilter#", codeFilter);
+
+            bool? isBlocked = null;
+            if (input.Query.RouteStatus.HasValue)
+                isBlocked = input.Query.RouteStatus.Value == RouteStatus.Blocked ? true : false;
+
+
+            ExecuteReaderText(query, (reader) =>
+            {
+                while (reader.Read())
+                {
+                    string code = reader["Code"] as string;
+                    RPRouteByCode rpRouteByCode = RPRouteByCodeMapper(reader);
+                    List<RPRouteByCode> tempRPRouteByCodes = result.GetOrCreateItem(code);
+                    tempRPRouteByCodes.Add(rpRouteByCode);
+                }
+
+                if (reader.NextResult())
+                    while (reader.Read())
+                    {
+                        string code = reader["Code"] as string;
+                        long supplierZoneId = (long)reader["supplierZoneId"];
+                        string codeMatch = reader["CodeMatch"] as string;
+
+                        Dictionary<long, string> tempSupplierZoneIds = supplierZoneIdsByCode.GetOrCreateItem(code);
+                        tempSupplierZoneIds.Add(supplierZoneId, codeMatch);
+                    }
+
+                if (reader.NextResult())
+                    while (reader.Read())
+                    {
+                        SupplierZoneDetail supplierZoneDetail = SupplierZoneDetailsDataManager.SupplierZoneDetailMapper(reader);
+                        supplierZoneDetailsById.Add(supplierZoneDetail.SupplierZoneId, supplierZoneDetail);
+                    }
+            }, (cmd) => { cmd.Parameters.Add(new SqlParameter("@IsBlocked", isBlocked.HasValue ? isBlocked.Value : (object)DBNull.Value)); });
+
+            if (result.Count == 0)
+                return null;
+
+            List<RPRouteByCode> rpRouteByCodes = new List<RPRouteByCode>();
+            foreach (var rpRouteBCodesKvp in result)
+            {
+                string code = rpRouteBCodesKvp.Key;
+                Dictionary<long, string> supplierZoneIds = supplierZoneIdsByCode.GetRecord(code);
+                List<SupplierZoneDetail> supplierZoneDetails = null;
+                Dictionary<long, string> supplierCodeMatchByZoneId = null;
+
+                if (supplierZoneIds != null)
+                {
+                    supplierZoneDetails = new List<SupplierZoneDetail>();
+                    supplierCodeMatchByZoneId = new Dictionary<long, string>();
+
+                    foreach (var supplierZoneIdKvp in supplierZoneIds)
+                    {
+                        supplierZoneDetails.Add(supplierZoneDetailsById.GetRecord(supplierZoneIdKvp.Key));
+                        supplierCodeMatchByZoneId.Add(supplierZoneIdKvp.Key, supplierZoneIdKvp.Value);
+                    }
+                }
+
+                foreach (var rpRouteByCode in rpRouteBCodesKvp.Value)
+                {
+                    rpRouteByCode.SupplierZoneDetails = supplierZoneDetails;
+                    rpRouteByCode.SupplierCodeMatchByZoneId = supplierCodeMatchByZoneId;
+                    rpRouteByCodes.Add(rpRouteByCode);
+                }
+            }
+
+            return rpRouteByCodes;
+        }
+
+        public IEnumerable<Entities.RPRoute> GetFilteredRPRoutesByZone(Vanrise.Entities.DataRetrievalInput<Entities.RPRouteQueryByZone> input)
+        {
+            string query = query_GetFilteredRPRoutesByZone.ToString();
+            query = query.Replace("#LimitResult#", input.Query.LimitResult.ToString());
 
             string routingProductIdsFilter = string.Empty;
             string saleZoneIdsFilter = string.Empty;
@@ -104,17 +226,17 @@ namespace TOne.WhS.Routing.Data.SQL
                 effectiveRateValue = " ,null as EffectiveRateValue ";
             }
 
-            query_GetFilteredRPRoutes.Replace("#ROUTING_PRODUCT_IDS#", routingProductIdsFilter);
-            query_GetFilteredRPRoutes.Replace("#SALE_ZONE_IDS#", saleZoneIdsFilter);
-            query_GetFilteredRPRoutes.Replace("#CUSTOMER_IDS#", customerIdFilter);
-            query_GetFilteredRPRoutes.Replace("#CUSTOMERZONEDETAILS#", joinCustomerZoneDetail);
-            query_GetFilteredRPRoutes.Replace("#EFFECTIVERATE#", effectiveRateValue);
+            query = query.Replace("#ROUTING_PRODUCT_IDS#", routingProductIdsFilter);
+            query = query.Replace("#SALE_ZONE_IDS#", saleZoneIdsFilter);
+            query = query.Replace("#CUSTOMER_IDS#", customerIdFilter);
+            query = query.Replace("#CUSTOMERZONEDETAILS#", joinCustomerZoneDetail);
+            query = query.Replace("#EFFECTIVERATE#", effectiveRateValue);
 
             bool? isBlocked = null;
             if (input.Query.RouteStatus.HasValue)
                 isBlocked = input.Query.RouteStatus.Value == RouteStatus.Blocked ? true : false;
 
-            return GetItemsText(query_GetFilteredRPRoutes.ToString(), RPRouteMapper, (cmd) =>
+            return GetItemsText(query, RPRouteMapper, (cmd) =>
             {
                 cmd.Parameters.Add(new SqlParameter("@IsBlocked", isBlocked.HasValue ? isBlocked.Value : (object)DBNull.Value));
             });
@@ -181,6 +303,23 @@ namespace TOne.WhS.Routing.Data.SQL
         #endregion
 
         #region Private Methods
+        private RPRouteByCode RPRouteByCodeMapper(IDataReader reader)
+        {
+            string saleZoneServices = reader["SaleZoneServices"] as string;
+
+            return new RPRouteByCode()
+            {
+                Code = reader["Code"] as string,
+                RoutingProductId = (int)reader["RoutingProductId"],
+                SaleZoneId = (long)reader["SaleZoneId"],
+                SaleZoneName = reader["SaleZoneName"] as string,
+                SellingNumberPlanID = (int)reader["SellingNumberPlanID"],
+                SaleZoneServiceIds = !string.IsNullOrEmpty(saleZoneServices) ? new HashSet<int>(saleZoneServices.Split(',').Select(itm => int.Parse(itm))) : null,
+                IsBlocked = (bool)reader["IsBlocked"],
+                ExecutedRuleId = (int)reader["ExecutedRuleId"],
+                Rate = GetReaderValue<decimal?>(reader, "EffectiveRateValue")
+            };
+        }
 
         private RPRoute RPRouteMapper(IDataReader reader)
         {
@@ -417,7 +556,7 @@ namespace TOne.WhS.Routing.Data.SQL
 
         #region Queries
 
-        private StringBuilder query_GetFilteredRPRoutes = new StringBuilder(@"SELECT TOP #LimitResult# pr.[RoutingProductId]
+        private StringBuilder query_GetFilteredRPRoutesByZone = new StringBuilder(@"SELECT TOP #LimitResult# pr.[RoutingProductId]
                                                                                     ,pr.[SaleZoneId]
                                                                                     ,sz.[Name] 
                                                                                     ,pr.[SaleZoneServices]
@@ -430,6 +569,49 @@ namespace TOne.WhS.Routing.Data.SQL
                                                                               JOIN [dbo].[SaleZone] as sz ON pr.SaleZoneId=sz.ID
                                                                               #CUSTOMERZONEDETAILS#
                                                                               Where (@IsBlocked is null or IsBlocked = @IsBlocked) #ROUTING_PRODUCT_IDS# #CUSTOMER_IDS# #SALE_ZONE_IDS#");
+
+        private StringBuilder query_GetFilteredRPRoutesByCode = new StringBuilder(@"SELECT TOP #LimitResult# pr.[RoutingProductId], 
+                                                                                    pr.[SaleZoneId], 
+                                                                                    sz.Name as SaleZoneName, 
+                                                                                    cszm.SellingNumberPlanID,
+                                                                                    [SaleZoneServices],
+                                                                                    [ExecutedRuleId], 
+                                                                                    cszm.Code, 
+                                                                                    pr.IsBlocked,
+                                                                                    #EFFECTIVERATE#
+                                                                                    into #routes
+                                                                                    FROM [dbo].[ProductRoute] pr
+                                                                                    JOIN [dbo].[CodeSaleZoneMatch] cszm on pr.SaleZoneId = cszm.SaleZoneID
+                                                                                    JOIN [dbo].[SaleZone] as sz ON cszm.SaleZoneID = sz.ID
+                                                                                    #CUSTOMERZONEDETAILS#
+                                                                                    Where (@IsBlocked is null or IsBlocked = @IsBlocked) #ROUTING_PRODUCT_IDS# #CUSTOMER_IDS# #SALE_ZONE_IDS# #CodeFilter#
+
+                                                                                    select distinct code into #distinctCodes from #routes
+
+                                                                                    select cszm.SupplierZoneID, cszm.Code, cszm.CodeMatch
+                                                                                    into #CodeSupplierZoneMatch
+                                                                                    FROM [dbo].[CodeSupplierZoneMatch] cszm 
+                                                                                    JOIN #distinctCodes codes on cszm.Code = codes.Code
+
+                                                                                    select distinct supplierzoneid
+                                                                                    into #distinctSupplierZoneIds
+                                                                                    from #CodeSupplierZoneMatch
+
+                                                                                    SELECT * FROM #routes
+
+                                                                                    SELECT * FROM #CodeSupplierZoneMatch
+
+                                                                                    SELECT szd.[SupplierId],
+                                                                                    szd.[SupplierZoneId],
+                                                                                    szd.[EffectiveRateValue],
+                                                                                    szd.[SupplierServiceIds],
+                                                                                    szd.[ExactSupplierServiceIds],
+                                                                                    szd.[SupplierServiceWeight],
+                                                                                    szd.[SupplierRateId],
+                                                                                    szd.[SupplierRateEED],
+                                                                                    szd.[VersionNumber]
+                                                                                    FROM [dbo].[SupplierZoneDetail] szd 
+                                                                                    JOIN #distinctSupplierZoneIds sz on sz.SupplierZoneID = szd.SupplierZoneId");
 
         private const string query_GetRouteOptions = @"SELECT [OptionsByPolicy]
                                                        FROM [dbo].[ProductRoute] 

@@ -21,6 +21,7 @@ namespace TOne.WhS.Routing.Business
         internal List<SupplierCodeMatchWithRate> SupplierCodeMatches { private get; set; }
         internal SupplierCodeMatchesWithRateBySupplier SupplierCodeMatchesBySupplier { private get; set; }
 
+        internal bool KeepBackupsForRemovedOptions { get; set; }
         public RPRouteRuleExecutionContext(RouteRule routeRule, Vanrise.Rules.RuleTree[] ruleTreesForRouteOptions)
         {
             _routeRule = routeRule;
@@ -80,7 +81,7 @@ namespace TOne.WhS.Routing.Business
                 }
             }
 
-            if (optionAdded || backupsSettings == null)
+            if (optionAdded || backupsSettings == null || !KeepBackupsForRemovedOptions)
                 return;
 
             bool backupAdded = false;
