@@ -12031,6 +12031,7 @@ namespace Mediation.Runtime.DataParser
         {
             List<CompositeFieldsParser> compositeParsers = new List<CompositeFieldsParser>();
             compositeParsers.Add(new FileNameCompositeParser() { FieldName = "FileName" });
+            compositeParsers.Add(new DataSourceCompositeParser() { DataSourceFieldName = "DataSourceId" });
             return compositeParsers;
         }
 
@@ -12176,6 +12177,7 @@ namespace Mediation.Runtime.DataParser
         {
             List<CompositeFieldsParser> compositeParsers = new List<CompositeFieldsParser>();
             compositeParsers.Add(new FileNameCompositeParser() { FieldName = "FileName" });
+            compositeParsers.Add(new DataSourceCompositeParser() { DataSourceFieldName = "DataSourceId" });
             compositeParsers.Add(new DateFromDayNumberCompositeParser() { FieldName = "DateOfCall", YearFieldName = "Year", DayNumberFieldName = "DayNumber" });
             return compositeParsers;
         }
