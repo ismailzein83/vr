@@ -13,8 +13,6 @@ namespace Vanrise.DataParser.MainExtensions.BinaryParsers.NokiaSiemensParsers.Fi
 
         public BinaryFieldParserSettings FieldParser { get; set; }
 
-        public int PackageTagLength { get; set; }
-
         public abstract int GetPackageLength(IPackageFieldParserGetLengthContext context);
     }
 }
