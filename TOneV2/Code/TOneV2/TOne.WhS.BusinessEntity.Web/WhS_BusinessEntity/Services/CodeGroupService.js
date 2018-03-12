@@ -2,9 +2,9 @@
 
     'use strict';
 
-    CodeGroupService.$inject = ['VRCommon_CountryService', 'VRModalService', 'VRCommon_ObjectTrackingService'];
+    CodeGroupService.$inject = ['VRCommon_CountryService', 'VRModalService', 'VRCommon_ObjectTrackingService', 'WhS_BE_CodeGroupAPIService'];
 
-    function CodeGroupService(VRCommon_CountryService, VRModalService, VRCommon_ObjectTrackingService) {
+    function CodeGroupService(VRCommon_CountryService, VRModalService, VRCommon_ObjectTrackingService, WhS_BE_CodeGroupAPIService) {
         var drillDownDefinitions = [];
         return ({
             addCodeGroup: addCodeGroup,
@@ -66,7 +66,11 @@
                         }
                     };
                     addCodeGroup(onCodeGroupAdded, countryItem.Entity.CountryId);
+                },
+                haspermission: function () {
+                    return WhS_BE_CodeGroupAPIService.HasAddCodeGroupPermission();
                 }
+
             }];
 
             drillDownDefinition.loadDirective = function (directiveAPI, countryItem) {
@@ -92,7 +96,7 @@
 
             drillDownDefinition.loadDirective = function (directiveAPI, CodeGroupItem) {
                 CodeGroupItem.objectTrackingGridAPI = directiveAPI;
-            
+
                 var query = {
                     ObjectId: CodeGroupItem.Entity.CodeGroupId,
                     EntityUniqueName: getEntityUniqueName(),
