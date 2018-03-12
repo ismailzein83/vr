@@ -24,14 +24,14 @@
         <vr-datagridcolumn headertext="'Route Options'" disablesorting>
 
             <div class="responsive-container" style="white-space: normal;">
-                <a ng-repeat="routeOption in dataItem.RouteOptionsDetails" title="{{::routeOption.title}}"
+                <span ng-repeat="routeOption in dataItem.RouteOptionsDetails" title="{{::routeOption.title}}"
                    style="font-size: 11px; cursor: pointer; display: inline-block; padding: 0 10px 0 0; color: {{routeOption.Color}};">
 
                     <span style="display: inline-block; width: 190px;">
-                        <span class="clickableoption" ng-class="routeOption.EvaluatedStatusCssClass">{{::routeOption.titleToDisplay}}</span>
+                        <span class="option" ng-class="routeOption.EvaluatedStatusCssClass">{{::routeOption.titleToDisplay}}</span>
                         <span style="color:#FFA500; font-weight:bold;" ng-if="::routeOption.SupplierZoneMatchHasClosedRate">*</span>
                     </span>
-                </a>
+                </span>
             </div>
         </vr-datagridcolumn>
     </vr-datagrid>
