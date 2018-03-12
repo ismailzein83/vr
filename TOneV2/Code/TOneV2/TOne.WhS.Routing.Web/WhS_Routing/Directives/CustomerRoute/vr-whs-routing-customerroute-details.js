@@ -187,25 +187,25 @@ app.directive('vrWhsRoutingCustomerrouteDetails', ['WhS_Routing_RouteOptionRuleS
                     $scope.isLoading = true;
                     BusinessProcess_BPInstanceAPIService.CreateNewProcess(input).then(function (response) {
                         if (response.Result == WhS_BP_CreateProcessResultEnum.Succeeded.value) {
-                            var processTrackingContext = {
-                                automaticCloseWhenCompleted: true,
-                                onClose: function (bpInstanceClosureContext) {
+							var processTrackingContext = {
+								automaticCloseWhenCompleted: true,
+								onClose: function (bpInstanceClosureContext) {
 
-                                    if (bpInstanceClosureContext != undefined && bpInstanceClosureContext.bpInstanceStatusValue === BPInstanceStatusEnum.Completed.value) {
-                                        $scope.isLoading = true;
-                                        if (context != undefined && context.refreshGrid != undefined && typeof (context.refreshGrid) == 'function') {
-                                            context.refreshGrid().then(function () {
-                                                $scope.isLoading = false;
-                                            }).catch(function (error) {
-                                                $scope.isLoading = false;
-                                            });
-                                        }
-                                        else {
-                                            $scope.isLoading = false;
-                                        }
-                                    }
-                                }
-                            }
+									if (bpInstanceClosureContext != undefined && bpInstanceClosureContext.bpInstanceStatusValue === BPInstanceStatusEnum.Completed.value) {
+										$scope.isLoading = true;
+										if (context != undefined && context.refreshGrid != undefined && typeof (context.refreshGrid) == 'function') {
+											context.refreshGrid().then(function () {
+												$scope.isLoading = false;
+											}).catch(function (error) {
+												$scope.isLoading = false;
+											});
+										}
+										else {
+											$scope.isLoading = false;
+										}
+									}
+								}
+							};
                             BusinessProcess_BPInstanceService.openProcessTracking(response.ProcessInstanceId, processTrackingContext);
                         }
                     }).catch(function (error) {
