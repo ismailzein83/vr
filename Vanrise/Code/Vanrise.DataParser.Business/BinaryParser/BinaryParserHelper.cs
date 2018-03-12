@@ -62,6 +62,26 @@ namespace Vanrise.DataParser.Business
 
         }
 
+        public static void ReadBlockFromStream(Stream stream, int blockSize, Action<RecordValue> onBlockRead, bool readOnce = false)
+        {
+            while (stream.Length - stream.Position >= blockSize)
+            {
+                byte[] bytes = null;
+                bytes = new byte[blockSize];
+                stream.Read(bytes, 0, blockSize);
+
+                RecordValue recordValue = new RecordValue
+                {
+                    Length = blockSize,
+                    Value = bytes
+                };
+                onBlockRead(recordValue);
+
+                if (readOnce)
+                    break;
+            }
+        }
+
         public static void ExecuteRecordParser(BinaryRecordParser subRecordsParser, Stream recordStream, IBinaryRecordParserContext parentRecordContext)
         {
             subRecordsParser.Settings.ThrowIfNull("subRecordParser.Settings");
@@ -89,26 +109,6 @@ namespace Vanrise.DataParser.Business
                           var fieldParserContext = new BinaryFieldParserContext { Record = parsedRecord, FieldValue = recordType.Value };
                           positionedFieldParser.FieldParser.Settings.Execute(fieldParserContext);
                       });
-            }
-        }
-
-        public static void ReadBlockFromStream(Stream stream, int blockSize, Action<RecordValue> onBlockRead, bool readOnce = false)
-        {
-            while (stream.Length - stream.Position >= blockSize)
-            {
-                byte[] bytes = null;
-                bytes = new byte[blockSize];
-                stream.Read(bytes, 0, blockSize);
-
-                RecordValue recordValue = new RecordValue
-                {
-                    Length = blockSize,
-                    Value = bytes
-                };
-                onBlockRead(recordValue);
-
-                if (readOnce)
-                    break;
             }
         }
 
