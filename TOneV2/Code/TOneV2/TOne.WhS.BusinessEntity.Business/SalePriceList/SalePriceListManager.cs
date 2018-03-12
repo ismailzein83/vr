@@ -767,7 +767,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
 			if (filteredZoneNotifications.Any())
 				return filteredZoneNotifications;
-			return salePlZoneNotifications.FindAllRecords(item => item.Rate.RateChangeType == RateChangeType.Deleted).ToList();
+			return salePlZoneNotifications;
 		}
 
 		private SalePLZoneNotification GetSalePlNotification(long zoneId, string zoneName, Dictionary<long, SalePLZoneNotification> salePLZoneNotificationByZoneId)
