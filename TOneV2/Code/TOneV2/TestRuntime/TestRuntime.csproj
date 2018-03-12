@@ -722,7 +722,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DSMappers.cs" />
+    <Compile Include="DSMappers\DSMappers.cs" />
     <Compile Include="ExecutionFlows\AllFlows.cs" />
     <Compile Include="Tasks\ABaghdadiTask.cs" />
     <Compile Include="Tasks\AliAtouiTask.cs" />

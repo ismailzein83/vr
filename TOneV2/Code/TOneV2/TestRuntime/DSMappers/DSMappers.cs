@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Integration.Entities;
 
 namespace TestRuntime
 {
     public static class DSMappers
     {
-
-        public static Vanrise.Integration.Entities.MappingOutput MapCDR_SQL()
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_SQL(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
         {
             LogVerbose("Started");
 
@@ -93,7 +89,7 @@ namespace TestRuntime
             return result;
         }
 
-        public static Vanrise.Integration.Entities.MappingOutput ImportingCDR_MySQL(object localData)
+        public static Vanrise.Integration.Entities.MappingOutput ImportingCDR_MySQL(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
         {
             //Retail.Runtime.Mappers.RingoMapper mapper = new Retail.Runtime.Mappers.RingoMapper();
             //return DSMappers.ImportingCDR_MySQL(data);
@@ -175,9 +171,6 @@ namespace TestRuntime
             LogVerbose("Finished");
             return result;
         }
-
-        static int dataSourceId = 24;
-        static DBReaderImportedData data = new DBReaderImportedData();
 
         private static void LogVerbose(string Message)
         {
