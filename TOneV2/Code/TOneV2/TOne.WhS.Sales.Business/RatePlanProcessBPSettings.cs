@@ -98,7 +98,7 @@ namespace TOne.WhS.Sales.Business
                         return false;
                     }
 
-                    if (subscriberOwnerIds.Contains(startedBPInstanceInputArg.OwnerId))
+                    if (subscriberOwnerIds != null && subscriberOwnerIds.Contains(startedBPInstanceInputArg.OwnerId))
                     {
                         var customerName = carrierAccountManager.GetCarrierAccountName(startedBPInstanceInputArg.OwnerId);
                         reason = string.Format("Another process is running for customer {0}", customerName);
