@@ -11,52 +11,67 @@ namespace TOne.WhS.Routing.Business
 {
     public class QualityConfigurationDefinitionManager
     {
-        //#region Public Methods
+        #region Public Methods
 
-        //public IEnumerable<QualityConfigurationDefinitionInfo> GetBEParentChildRelationDefinitionsInfo(QualityConfigurationDefinitionFilter filter)
-        //{
-        //    Func<QualityConfigurationDefinition, bool> filterExpression = null;
-        //    if (filter != null)
-        //    {
-        //        filterExpression = (qualityConfigurationDefinition) => 
-        //        {
-        //            return true;
-        //        };
-        //    }
+        public QualityConfigurationDefinition GetQualityConfigurationDefinition(Guid qualityConfigurationDefinitionId)
+        {
+            var beParentChildRelationDefinitions = this.GetCachedQualityConfigurationDefinitions();
+            return beParentChildRelationDefinitions.GetRecord(qualityConfigurationDefinitionId);
+        }
 
-        //    var beParentChildRelationDefinitions = this.GetCachedQualityConfigurationDefinitions();
-        //    return beParentChildRelationDefinitions.MapRecords(BEParentChildRelationDefinitionInfoMapper, filterExpression);
-        //} 
+        public QualityConfigurationDefinitionExtendedSettings GetQualityConfigurationDefinitionExtendedSettings(Guid qualityConfigurationDefinitionId)
+        {
+            QualityConfigurationDefinition qualityConfigurationDefinition = this.GetQualityConfigurationDefinition(qualityConfigurationDefinitionId);
+            qualityConfigurationDefinition.ThrowIfNull("qualityConfigurationDefinition", qualityConfigurationDefinitionId);
+            qualityConfigurationDefinition.Settings.ThrowIfNull("qualityConfigurationDefinition.Settings", qualityConfigurationDefinitionId);
+            qualityConfigurationDefinition.Settings.ExtendedSettings.ThrowIfNull("qualityConfigurationDefinition.Settings.ExtendedSettings", qualityConfigurationDefinitionId);
+            return qualityConfigurationDefinition.Settings.ExtendedSettings;
+        }
 
-        //public IEnumerable<QualityConfigurationDefinitionExtendedSettingsConfig> GetQualityConfigurationDefinitionExtendedSettingsConfigs()
-        //{
-        //    var manager = new ExtensionConfigurationManager();
-        //    return manager.GetExtensionConfigurations<QualityConfigurationDefinitionExtendedSettingsConfig>(QualityConfigurationDefinitionExtendedSettingsConfig.EXTENSION_TYPE);
-        //}
+        public IEnumerable<QualityConfigurationDefinitionInfo> GetBEParentChildRelationDefinitionsInfo(QualityConfigurationDefinitionFilter filter)
+        {
+            Func<QualityConfigurationDefinition, bool> filterExpression = null;
+            if (filter != null)
+            {
+                filterExpression = (qualityConfigurationDefinition) =>
+                {
+                    return true;
+                };
+            }
 
-        //#endregion
+            var beParentChildRelationDefinitions = this.GetCachedQualityConfigurationDefinitions();
+            return beParentChildRelationDefinitions.MapRecords(BEParentChildRelationDefinitionInfoMapper, filterExpression);
+        }
 
-        //#region Private Methods
+        public IEnumerable<QualityConfigurationDefinitionExtendedSettingsConfig> GetQualityConfigurationDefinitionExtendedSettingsConfigs()
+        {
+            var manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<QualityConfigurationDefinitionExtendedSettingsConfig>(QualityConfigurationDefinitionExtendedSettingsConfig.EXTENSION_TYPE);
+        }
 
-        //private Dictionary<Guid, QualityConfigurationDefinition> GetCachedQualityConfigurationDefinitions()
-        //{
-        //    VRComponentTypeManager vrComponentTypeManager = new Vanrise.Common.Business.VRComponentTypeManager();
-        //    return vrComponentTypeManager.GetCachedComponentTypes<QualityConfigurationDefinitionSettings, QualityConfigurationDefinition>();
-        //}
+        #endregion
 
-        //#endregion
+        #region Private Methods
 
-        //#region Mappers
+        private Dictionary<Guid, QualityConfigurationDefinition> GetCachedQualityConfigurationDefinitions()
+        {
+            VRComponentTypeManager vrComponentTypeManager = new Vanrise.Common.Business.VRComponentTypeManager();
+            return vrComponentTypeManager.GetCachedComponentTypes<QualityConfigurationDefinitionSettings, QualityConfigurationDefinition>();
+        }
 
-        //public QualityConfigurationDefinitionInfo BEParentChildRelationDefinitionInfoMapper(QualityConfigurationDefinition qualityConfigurationDefinition)
-        //{
-        //    return new QualityConfigurationDefinitionInfo
-        //    {
-        //        QualityConfigurationDefinitionId = qualityConfigurationDefinition.VRComponentTypeId,
-        //        Name = qualityConfigurationDefinition.Name
-        //    };
-        //}
+        #endregion
 
-        //#endregion
+        #region Mappers
+
+        public QualityConfigurationDefinitionInfo BEParentChildRelationDefinitionInfoMapper(QualityConfigurationDefinition qualityConfigurationDefinition)
+        {
+            return new QualityConfigurationDefinitionInfo
+            {
+                QualityConfigurationDefinitionId = qualityConfigurationDefinition.VRComponentTypeId,
+                Name = qualityConfigurationDefinition.Name
+            };
+        }
+
+        #endregion
     }
 }
