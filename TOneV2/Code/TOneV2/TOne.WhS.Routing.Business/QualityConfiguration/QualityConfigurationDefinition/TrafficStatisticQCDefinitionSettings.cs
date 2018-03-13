@@ -27,8 +27,8 @@ namespace TOne.WhS.Routing.Business
         //}
     }
 
-    public class InitializedTrafficStatisticQualityConfiguration : InitializedQualityConfiguration
-    {
-        public IRouteRuleQualityConfigurationEvaluator Evaluator { get; set; }
-    }
+    //public class InitializedTrafficStatisticQualityConfiguration : InitializedQualityConfiguration
+    //{
+    //    public IRouteRuleQualityConfigurationEvaluator Evaluator { get; set; }
+    //}
 }
