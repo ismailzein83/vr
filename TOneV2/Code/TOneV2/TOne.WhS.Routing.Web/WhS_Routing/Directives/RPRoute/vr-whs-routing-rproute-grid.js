@@ -114,6 +114,8 @@ app.directive('vrWhsRoutingRprouteGrid', ['VRNotificationService', 'UtilsService
 
                     if (query.CustomerId != undefined)
                         $scope.isCustomerSelected = true;
+                    else
+                        $scope.isCustomerSelected = false;
 
                     return gridAPI.retrieveData(query);
                 };

@@ -255,7 +255,7 @@ namespace TOne.WhS.Routing.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Option 1", Width = 50 });
 
                 sheet.Rows = new List<ExportExcelRow>();
-                if (context.BigResult != null && context.BigResult.Data != null)
+                if (context.BigResult != null && context.BigResult.Data != null && context.BigResult.Data.Count() > 0)
                 {
                     int maxNumberOfOptions = context.BigResult.Data.Max(itm => itm.RouteOptionDetails != null ? itm.RouteOptionDetails.Count : 0);
 

@@ -2,8 +2,9 @@
     <vr-datagrid on-ready="onGridReady"
                  datasource="rpRoutes"
                  dataretrievalfunction="dataRetrievalFunction"
-                 pagingtype="'PagingOnScroll'"
+                 pagingtype="'Pager'"
                  menuactions="gridMenuActions"
+                 enableautoexport="true"
                  normalcell
                  defaultsortbyfieldname="'Code'">
 
@@ -25,7 +26,7 @@
 
             <div class="responsive-container" style="white-space: normal;">
                 <span ng-repeat="routeOption in dataItem.RouteOptionsDetails" title="{{::routeOption.title}}"
-                   style="font-size: 11px; cursor: pointer; display: inline-block; padding: 0 10px 0 0; color: {{routeOption.Color}};">
+                      style="font-size: 11px; cursor: pointer; display: inline-block; padding: 0 10px 0 0; color: {{routeOption.Color}};">
 
                     <span style="display: inline-block; width: 190px;">
                         <span class="option" ng-class="routeOption.EvaluatedStatusCssClass">{{::routeOption.titleToDisplay}}</span>

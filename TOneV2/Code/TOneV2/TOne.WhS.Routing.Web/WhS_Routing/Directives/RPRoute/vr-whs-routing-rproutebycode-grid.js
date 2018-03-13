@@ -103,6 +103,8 @@ app.directive('vrWhsRoutingRproutebycodeGrid', ['VRNotificationService', 'UISett
 
                     if (query.CustomerId != undefined)
                         $scope.isCustomerSelected = true;
+                    else
+                        $scope.isCustomerSelected = false;
 
                     return gridAPI.retrieveData(query);
                 };
