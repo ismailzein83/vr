@@ -27,8 +27,11 @@ namespace TOne.WhS.BusinessEntity.Business
                 case "PendingTicketMailTemplate": return new ConfigManager().GetFaultTicketsSupplierPendingMailTemplateId();
                 case "ClosedTicketMailTemplate": return new ConfigManager().GetFaultTicketsSupplierClosedMailTemplateId();
                 case "CompanySetting":
-                    var supplierId = (int)context.GenericBusinessEntity.FieldValues.GetRecord("SupplierId");
-                    return new CarrierAccountManager().GetCompanySetting(supplierId);
+                    var supplierId = Convert.ToInt32(context.GenericBusinessEntity.FieldValues.GetRecord("SupplierId"));
+                    var companySettings = new CarrierAccountManager().GetCompanySetting(supplierId);
+                    companySettings.ThrowIfNull("companySettings");
+                    return companySettings;
+
                 case "TicketDetails":
                     DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
                     var dataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(context.DefinitionSettings.DataRecordTypeId);
