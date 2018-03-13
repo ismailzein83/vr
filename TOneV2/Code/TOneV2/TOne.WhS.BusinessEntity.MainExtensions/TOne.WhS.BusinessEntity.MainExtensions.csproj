@@ -88,6 +88,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ANumber\ANumberSupplierCodeDefinitionView.cs" />
     <Compile Include="ANumber\ANumberSaleCodeDefinitionView.cs" />
     <Compile Include="CodeCriteriaGroups\SelectiveCodeCriteriaGroup.cs" />
     <Compile Include="CustomerGroups\SelectiveCustomerGroup.cs" />
