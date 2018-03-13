@@ -144,8 +144,9 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
 
         public override string GetPricingDescription()
         {
-            int firstFraction = FirstPeriod == 0 ? PricingUnit : FirstPeriod;
-            return String.Format("{0}/{1}", firstFraction, FractionUnit);
+            var effectiveFractionUnit = FractionUnit == 0 ? 1 : FractionUnit;
+            int firstFraction = FirstPeriod == 0 ? effectiveFractionUnit : FirstPeriod;
+            return String.Format("{0}/{1}", firstFraction, effectiveFractionUnit);
         }
     }
 }
