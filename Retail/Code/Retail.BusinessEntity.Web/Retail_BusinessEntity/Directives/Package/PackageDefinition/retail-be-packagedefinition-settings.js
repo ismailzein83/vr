@@ -30,28 +30,35 @@ app.directive('retailBePackagedefinitionSettings', ['UtilsService', 'VRUIUtilsSe
 
             function initializeController() {
                 $scope.scopeModel = {};
+
                 $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
                     businessEntityDefinitionSelectorAPI = api;
                     businessEntityDefinitionSelectorReadyDeferred.resolve();
                 };
+
                 $scope.scopeModel.onExtendedSettingsReady = function (api) {
                     extendedSettingsAPI = api;
                     extendedSettingsReadyDeferred.resolve();
                 };
+
                 defineAPI();
             }
             function defineAPI() {
                 var api = {};
+
                 api.load = function (payload) {
                     var promises = [];
+
                     if (payload != undefined) {
                         packageDefinitionEntity = payload.componentType;
                         if (packageDefinitionEntity != undefined) {
                             $scope.scopeModel.name = packageDefinitionEntity.Name;
                         }
                     }
+
                     promises.push(loadBusinessEntityDefinitionSelector());
                     promises.push(loadExtendedSettings());
+
                     function loadBusinessEntityDefinitionSelector() {
                         var businessEntityDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                         businessEntityDefinitionSelectorReadyDeferred.promise.then(function () {
@@ -77,8 +84,10 @@ app.directive('retailBePackagedefinitionSettings', ['UtilsService', 'VRUIUtilsSe
 
                         return extendedSettingsLoadDeferred.promise;
                     }
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
+
                 api.getData = function () {
 
                     return {
@@ -86,6 +95,7 @@ app.directive('retailBePackagedefinitionSettings', ['UtilsService', 'VRUIUtilsSe
                         Settings: GetAccountSettings()
                     };
                 };
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
