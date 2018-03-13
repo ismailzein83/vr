@@ -99,6 +99,7 @@ app.directive("vrAnalyticAnalytictableGrid", ['VRCommon_ObjectTrackingService', 
             drillDownDefinitions.push(getJoinDrillDownDefinition());
             drillDownDefinitions.push(getAggregateDrillDownDefinition());
             drillDownDefinitions.push(getDrillDownToAnalyticTable());
+            drillDownDefinitions.push(getExternalSourceDrillDownDefinition()); 
             return drillDownDefinitions;
         }
         function getDimensionDrillDownDefinition() {
@@ -239,6 +240,34 @@ app.directive("vrAnalyticAnalytictableGrid", ['VRCommon_ObjectTrackingService', 
                     };
                     VR_Analytic_AnalyticItemConfigService.addItemConfig(onAggregateAdded, tableItem.Entity.AnalyticTableId, VR_Analytic_AnalyticTypeEnum.Aggregate.value);
                 },
+            }];
+            return drillDownDefinition;
+        }
+        function getExternalSourceDrillDownDefinition() { 
+            var drillDownDefinition = {};
+            drillDownDefinition.title = "External Sources";
+            drillDownDefinition.directive = "vr-analytic-analyticconfig-measureexternalsource-grid";
+            drillDownDefinition.loadDirective = function (externalSourceGridAPI, tableItem) {
+                tableItem.externalSourceGridAPI = externalSourceGridAPI;
+
+                var query = {
+                    TableId: tableItem.Entity.AnalyticTableId,
+                    ItemType: VR_Analytic_AnalyticTypeEnum.MeasureExternalSource.value
+                };
+                return externalSourceGridAPI.loadGrid(query);
+            };
+            drillDownDefinition.parentMenuActions = [{
+                name: "Add External Source",
+                clicked: function (tableItem) {
+                    if (drillDownDefinition.setTabSelected != undefined)
+                        drillDownDefinition.setTabSelected(tableItem);
+                    var onExternalSourceAdded = function (externalSourceObj) {
+                        if (tableItem.externalSourceGridAPI != undefined) {
+                            tableItem.externalSourceGridAPI.onAnalyticExternalSourceAdded(externalSourceObj);
+                        }
+                    };
+                    VR_Analytic_AnalyticItemConfigService.addItemConfig(onExternalSourceAdded, tableItem.Entity.AnalyticTableId, VR_Analytic_AnalyticTypeEnum.MeasureExternalSource.value);
+                }
             }];
             return drillDownDefinition;
         }

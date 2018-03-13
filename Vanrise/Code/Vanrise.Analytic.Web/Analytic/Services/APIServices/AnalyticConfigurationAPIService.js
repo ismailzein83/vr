@@ -40,16 +40,12 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDRSearchPageSubviewDefinitionSettingsConfigs"));
         }
 
-        function GetMeasureExternalSourceTemplateConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetMeasureExternalSourceTemplateConfigs"));
+        function GetMeasureExternalSourceExtendedSettingConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetMeasureExternalSourceExtendedSettingConfigs"));
         }
 
-        function GetDimensionMappingRuleTemplateConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDimensionMappingRuleTemplateConfigs"));
-        }
-
-        function GetMeasureMappingRuleTemplateConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetMeasureMappingRuleTemplateConfigs"));
+        function GetDimensionMappingRuleSettingConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Analytic_ModuleConfig.moduleName, controllerName, "GetDimensionMappingRuleSettingConfigs"));
         }
         return ({
             GetAnalyticReportSettingsTemplateConfigs: GetAnalyticReportSettingsTemplateConfigs,
@@ -60,9 +56,8 @@
             GetAnalyticDataProviderConfigs: GetAnalyticDataProviderConfigs,
             GetVRRestAPIAnalyticQueryInterceptorConfigs: GetVRRestAPIAnalyticQueryInterceptorConfigs,
             GetDRSearchPageSubviewDefinitionSettingsConfigs: GetDRSearchPageSubviewDefinitionSettingsConfigs,
-            GetMeasureExternalSourceTemplateConfigs: GetMeasureExternalSourceTemplateConfigs,
-            GetDimensionMappingRuleTemplateConfigs: GetDimensionMappingRuleTemplateConfigs,
-            GetMeasureMappingRuleTemplateConfigs: GetMeasureMappingRuleTemplateConfigs
+            GetMeasureExternalSourceExtendedSettingConfigs: GetMeasureExternalSourceExtendedSettingConfigs,
+            GetDimensionMappingRuleSettingConfigs: GetDimensionMappingRuleSettingConfigs
         });
     }
 

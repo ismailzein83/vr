@@ -115,6 +115,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Analytic\Constants\AnalyticSameDimensionTypeEnum.js" />
     <Content Include="Analytic\Constants\DAProfCalcOutputFieldTypeEnum.js" />
     <Content Include="Analytic\Constants\AccessTypeEnum.js" />
     <Content Include="Analytic\Constants\AnalyticAggregateTypeEnum.js" />
@@ -133,9 +134,21 @@
     <Content Include="Analytic\Constants\DAProfCalcChunkTimeEnum.js" />
     <Content Include="Analytic\Constants\DAProfCalcTimeUnitEnum.js" />
     <Content Include="Analytic\Constants\TimeUnitEnum.js" />
+    <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\AnalyticDimensionMappingRulesGridEditorController.js" />
+    <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\Templates\AnalyticDimensionMappingRulesGridTemplate.html" />
+    <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\Templates\AnalyticTableMeasureExternalSourceTemplate.html" />
+    <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\Templates\DimensionMappingRulesGridEditor.html" />
+    <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\vr-analytic-analytictableexternalource.js" />
+    <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\vr-analytic-dimensionmappingrulesettings-selective.js" />
+    <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\vr-analytic-dimensionmappingrules-grid.js" />
+    <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\Dimension\Templates\AnalyticExcludeDimensionTemplate.html" />
+    <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\Dimension\Templates\AnalyticSameDimensionTemplate.html" />
+    <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\Dimension\vr-analytic-dimension-exclude.js" />
+    <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\Dimension\vr-analytic-dimension-same.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\MainExtensions\OrderType\Templates\AdvancedMeasureOrderOptionsTemplate.html" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\MainExtensions\OrderType\vr-analytic-ordertype-advancedmeasureorderoptions.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-measure-remoteselector.js" />
+    <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-measureexternalsource-selective.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-ordertype-selective.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-aggregate-selector.js" />
     <Content Include="Analytic\Directives\AnalyticConfiguration\vr-analytic-dimension-selector.js" />
@@ -148,10 +161,12 @@
     <Content Include="Analytic\Directives\AnalyticItemConfig\Templates\DimensionEditorTemplate.html" />
     <Content Include="Analytic\Directives\AnalyticItemConfig\Templates\JoinEditorTemplate.html" />
     <Content Include="Analytic\Directives\AnalyticItemConfig\Templates\MeasureEditorTemplate.html" />
+    <Content Include="Analytic\Directives\AnalyticItemConfig\Templates\MeasureExternalSourceEditorTemplate.html" />
     <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-itemconfig-aggregate-editor.js" />
     <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-itemconfig-dimension-editor.js" />
     <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-itemconfig-join-editor.js" />
     <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-itemconfig-measure-editor.js" />
+    <Content Include="Analytic\Directives\AnalyticItemConfig\vr-analytic-itemconfig-measureexternalsource-editor.js" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\Templates\DAProfCalcAlertRuleSettingsTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\AlertRuleExtensions\vr-analytic-daprofcalc-alertrulesettings.js" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\Common\Templates\DAProfCalcAnalysisPeriod.html" />
@@ -193,6 +208,7 @@
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\ScheduleTask\Templates\GenerateAlertProcessTaskTemplate.html" />
     <Content Include="Analytic\Directives\DataAnalysis\ProfilingAndCalculation\ScheduleTask\vr-analytic-daprofcalc-generatealertprocesstask.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticDimensionGridTemplate.html" />
+    <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticMeasureExternalSourceGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticJoinGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticAggregateGridTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\Templates\AnalyticMeasureGridTemplate.html" />
@@ -200,6 +216,7 @@
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\vr-analytic-analyticconfig-dimension-grid.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\vr-analytic-analyticconfig-join-grid.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticConfig\vr-analytic-analyticconfig-measure-grid.js" />
+    <Content Include="Analytic\Directives\Definition\AnalyticConfig\vr-analytic-analyticconfig-measureexternalsource-grid.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticItemAction\Templates\AnalyticItemActionEditorTemplate.html" />
     <Content Include="Analytic\Directives\Definition\AnalyticItemAction\vr-analytic-analyticitemaction-editor.js" />
     <Content Include="Analytic\Directives\Definition\AnalyticReport\History\Templates\HistoryAnalyticReportTemplates.html" />
@@ -301,7 +318,7 @@
     <Content Include="Analytic\Services\AnalyticItemActionService.js" />
     <Content Include="Analytic\Services\AnalyticItemConfigService.js" />
     <Content Include="Analytic\Services\AnalyticReportService.js" />
-    <Content Include="Analytic\Services\MappingRulesService.js" />
+    <Content Include="Analytic\Services\DimensionMappingRulesService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticItemActionAPIService.js" />
     <Content Include="Analytic\Services\APIServices\DAProfCalcNotitificationAPIService.js" />
     <Content Include="Analytic\Services\APIServices\DAProfCalcOutputSettingsAPIService.js" />

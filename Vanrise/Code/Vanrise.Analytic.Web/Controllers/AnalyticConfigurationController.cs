@@ -67,24 +67,37 @@ namespace Vanrise.Analytic.Web.Controllers
         {
             return _manager.GetDRSearchPageSubviewDefinitionSettingsConfigs();
         }
-        [HttpGet]
-        [Route("GetMeasureExternalSourceTemplateConfigs")]
-        public IEnumerable<MeasureExternalSourceSetting> GetMeasureExternalSourceTemplateConfigs()
-        {
-            return _manager.GetMeasureExternalSourceTemplateConfigs();
-        }
+        //[HttpGet]
+        //[Route("GetMeasureExternalSourceTemplateConfigs")]
+        //public IEnumerable<MeasureExternalSourceSetting> GetMeasureExternalSourceTemplateConfigs()
+        //{
+        //    return _manager.GetMeasureExternalSourceTemplateConfigs();
+        //}
+
+        //[HttpGet]
+        //[Route("GetDimensionMappingRuleTemplateConfigs")]
+        //public IEnumerable<DimensionMappingRuleSetting> GetDimensionMappingRuleTemplateConfigs()
+        //{
+        //    return _manager.GetDimensionMappingRuleTemplateConfigs();
+        //}
+        //[HttpGet]
+        //[Route("GetMeasureMappingRuleTemplateConfigs")]
+        //public IEnumerable<MeasureMappingRuleSettingConfig> GetMeasureMappingRuleTemplateConfigs()
+        //{
+        //    return _manager.GetMeasureMappingRuleTemplateConfigs();
+        //}
 
         [HttpGet]
-        [Route("GetDimensionMappingRuleTemplateConfigs")]
-        public IEnumerable<DimensionMappingRuleSetting> GetDimensionMappingRuleTemplateConfigs()
+        [Route("GetDimensionMappingRuleSettingConfigs")]
+        public IEnumerable<DimensionMappingRuleSettingConfig> GetDimensionMappingRuleSettingConfigs()
         {
-            return _manager.GetDimensionMappingRuleTemplateConfigs();
+            return _manager.GetDimensionMappingRuleSettingConfigs();
         }
         [HttpGet]
-        [Route("GetMeasureMappingRuleTemplateConfigs")]
-        public IEnumerable<MeasureMappingRuleSetting> GetMeasureMappingRuleTemplateConfigs()
+        [Route("GetMeasureExternalSourceExtendedSettingConfigs")]
+        public IEnumerable<MeasureExternalSourceSettingConfig> GetMeasureExternalSourceExtendedSettingConfigs()
         {
-            return _manager.GetMeasureMappingRuleTemplateConfigs();
+            return _manager.GetMeasureExternalSourceExtendedSettingConfigs();
         }
     }
 }

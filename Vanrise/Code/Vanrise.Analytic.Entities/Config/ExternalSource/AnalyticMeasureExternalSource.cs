@@ -14,19 +14,19 @@ namespace Vanrise.Analytic.Entities
         public AnalyticMeasureExternalSourceConfig Config { get; set; }
     }
 
-    public class MeasureExternalSourceSetting : ExtensionConfiguration
+    public class MeasureExternalSourceSettingConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "Analytic_MeasureExternalSourceSettings";
+        public const string EXTENSION_TYPE = "VR_Analytic_MeasureExternalSourceSettings";
         public string Editor { get; set; }
     }
-    public class DimensionMappingRuleSetting : ExtensionConfiguration
+    public class DimensionMappingRuleSettingConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "Analytic_DimensionMappingRuleSettings";
+        public const string EXTENSION_TYPE = "VR_Analytic_DimensionMappingRuleSettings";
         public string Editor { get; set; }
     }
-    public class MeasureMappingRuleSetting : ExtensionConfiguration
+    public class MeasureMappingRuleSettingConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "Analytic_MeasureMappingRuleSettings";
+        public const string EXTENSION_TYPE = "VR_Analytic_MeasureMappingRuleSettings";
         public string Editor { get; set; }
     }
 }

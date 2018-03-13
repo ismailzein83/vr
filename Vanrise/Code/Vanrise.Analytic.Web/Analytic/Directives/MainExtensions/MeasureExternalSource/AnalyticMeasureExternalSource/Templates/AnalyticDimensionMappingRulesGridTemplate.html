@@ -1,0 +1,8 @@
+﻿<vr-button type="Add" data-onclick="ctrl.addRule" standalone vr-disabled="isDisabled()"></vr-button>
+
+<vr-validator validate="ctrl.isValid()">
+    <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+                 on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeRule" hidegridmenu>
+        <vr-datagridcolumn headertext="'Rule Name'" field="'Entity.Name'" widthfactor="10" disablesorting></vr-datagridcolumn>
+    </vr-datagrid>
+</vr-validator>

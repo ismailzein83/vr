@@ -52,10 +52,4 @@ namespace Vanrise.Analytic.Entities
 
         public Dictionary<string, Object> MeasureValues { get; set; }
     }
-    public class AnalyticMeasureExternalSourceExtendedSettingsConfig: ExtensionConfiguration
-    {
-        public const string EXTENSION_TYPE = "VR_Analytic_AnalyticMeasureExternalSourceExtendedSettings";
-
-        public string Editor { get; set; }
-    }
 }

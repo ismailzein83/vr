@@ -1,0 +1,14 @@
+﻿<vr-datagrid datasource="externalSources"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="onGridReady"
+             menuactions="gridMenuActions"
+             idfield="AnalyticItemConfigId">
+
+    <vr-datagridcolumn headertext="'ID'" field="'AnalyticItemConfigId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" field="'Name'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Title'" field="'Title'"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
+</vr-datagrid>

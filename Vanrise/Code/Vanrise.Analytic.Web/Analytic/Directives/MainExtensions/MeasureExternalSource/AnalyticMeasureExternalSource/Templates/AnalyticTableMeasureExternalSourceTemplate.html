@@ -1,0 +1,10 @@
+﻿<vr-row removeline>
+    <vr-columns width="1/3row">
+        <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady" isrequired="true" onselectionchanged="scopeModel.onTableSelectionChange" hideremoveicon></vr-analytic-table-selector>
+    </vr-columns>
+</vr-row>
+<vr-row removeline>
+    <vr-columns width="fullrow" vr-loader="scopeModel.isLoadingDirective">
+        <vr-analytic-dimensionmappingrules-grid on-ready="scopeModel.onGridDirectiveReady"></vr-analytic-dimensionmappingrules-grid>
+    </vr-columns>
+</vr-row>

@@ -97,8 +97,9 @@ namespace Vanrise.Analytic.Web.Controllers
                     var aggregateAnalyticItemConfigObj = Serializer.Deserialize<AnalyticItemConfig<AnalyticAggregateConfig>>(analyticItemConfig.AnalyticItemConfig);
                     return manager.AddAnalyticItemConfig(aggregateAnalyticItemConfigObj);
                 case AnalyticItemType.MeasureExternalSource:
-                    var measureExternalSourceAnalyticItemConfigObj = Serializer.Deserialize<AnalyticItemConfig<AnalyticMeasureExternalSource>>(analyticItemConfig.AnalyticItemConfig);
+                    var measureExternalSourceAnalyticItemConfigObj = Serializer.Deserialize<AnalyticItemConfig<AnalyticMeasureExternalSourceConfig>>(analyticItemConfig.AnalyticItemConfig);
                     return manager.AddAnalyticItemConfig(measureExternalSourceAnalyticItemConfigObj);
+                
 
             }
             return null;
@@ -123,7 +124,7 @@ namespace Vanrise.Analytic.Web.Controllers
                     var aggregateAnalyticItemConfigObj = Serializer.Deserialize<AnalyticItemConfig<AnalyticAggregateConfig>>(analyticItemConfig.AnalyticItemConfig);
                     return manager.UpdateAnalyticItemConfig(aggregateAnalyticItemConfigObj);
                 case AnalyticItemType.MeasureExternalSource:
-                    var measureExternalSourceAnalyticItemConfigObj = Serializer.Deserialize<AnalyticItemConfig<AnalyticMeasureExternalSource>>(analyticItemConfig.AnalyticItemConfig);
+                    var measureExternalSourceAnalyticItemConfigObj = Serializer.Deserialize<AnalyticItemConfig<AnalyticMeasureExternalSourceConfig>>(analyticItemConfig.AnalyticItemConfig);
                     return manager.UpdateAnalyticItemConfig(measureExternalSourceAnalyticItemConfigObj);
             }
             return null;
