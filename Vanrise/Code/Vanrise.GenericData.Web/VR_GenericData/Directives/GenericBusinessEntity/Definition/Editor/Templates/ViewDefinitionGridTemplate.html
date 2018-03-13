@@ -2,7 +2,7 @@
 
 <vr-validator validate="ctrl.isValid()">
     <vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
-                 on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeColumn" hidegridmenu>
+                 on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeView" hidegridmenu>
         <vr-datagridcolumn headertext="'ID'" field="'GenericBEViewDefinitionId'" disablesorting></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Name'" field="'Name'" disablesorting></vr-datagridcolumn>
     </vr-datagrid>
