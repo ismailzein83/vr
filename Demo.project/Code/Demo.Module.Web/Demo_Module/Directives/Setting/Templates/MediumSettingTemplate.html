@@ -1,0 +1,12 @@
+﻿<vr-row removeline>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.size" label="Size" isrequired></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.location" label="Location" isrequired></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/3row">
+        <vr-textbox value="scopeModel.employees" label="No. of Employees" isrequired></vr-textbox>
+    </vr-columns>
+</vr-row>
+<demo-module-dimensions-selector on-ready="scopeModel.onDimensionsDirectiveReady" isrequired="true" normal-col-num="12"></demo-module-dimensions-selector>

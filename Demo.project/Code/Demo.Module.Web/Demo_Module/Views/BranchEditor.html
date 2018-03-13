@@ -1,0 +1,28 @@
+﻿<div vr-modalcontent ng-controller="Demo_Module_BranchEditorController" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formBranchEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row removeline>                       
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.name" label="Name" isrequired normal-col-num="4"></vr-textbox>   
+                        </vr-columns>                                              
+                        <vr-columns width="1/2row">
+                            <demo-module-company-selector on-ready="scopeModel.onCompanyDirectiveReady" isrequired="true"></demo-module-company-selector>
+                        </vr-columns>                      
+                     </vr-row>                 
+                     <demo-module-setting-selector on-ready="scopeModel.onSettingDirectiveReady" isrequired="true" normal-col-num="12"></demo-module-setting-selector>                          
+                </vr-tab>
+            </vr-tabs>
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formBranchEditor" data-onclick="scopeModel.saveBranch"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

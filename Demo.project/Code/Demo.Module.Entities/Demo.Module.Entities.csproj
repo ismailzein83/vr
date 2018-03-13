@@ -52,6 +52,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Branch\Branch.cs" />
+    <Compile Include="Branch\BranchDetails.cs" />
+    <Compile Include="Branch\BranchQuery.cs" />
+    <Compile Include="Branch\Setting\Dimensions\Dimensions.cs" />
+    <Compile Include="Branch\Setting\Dimensions\DimensionsConfig.cs" />
+    <Compile Include="Company\Company.cs" />
+    <Compile Include="Company\CompanyDetails.cs" />
+    <Compile Include="Company\CompanyInfoFilter.cs" />
+    <Compile Include="Company\CompanyQuery.cs" />
     <Compile Include="DisputeCase\DisputeCaseQuery.cs" />
     <Compile Include="DisputeCase\DisputeCase.cs" />
     <Compile Include="DisputeCase\DisputeCaseDetails.cs" />
@@ -64,6 +73,8 @@
     <Compile Include="CityFilter.cs" />
     <Compile Include="CityInfo.cs" />
     <Compile Include="CityQ.cs" />
+    <Compile Include="Branch\Setting\Setting.cs" />
+    <Compile Include="Branch\Setting\SettingConfig.cs" />
     <Compile Include="Student\PaymentConfig.cs" />
     <Compile Include="Payment\Cash.cs" />
     <Compile Include="Payment\Card.cs" />

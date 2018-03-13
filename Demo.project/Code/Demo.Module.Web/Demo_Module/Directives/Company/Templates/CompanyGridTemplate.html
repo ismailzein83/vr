@@ -1,0 +1,13 @@
+﻿<vr-datagrid datasource="companies"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="CompanyId" enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" field="'CompanyId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Company Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
+
+</vr-datagrid>

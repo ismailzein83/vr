@@ -1,0 +1,24 @@
+﻿<vr-panel ng-controller="Demo_Module_CompanyManagementController">
+    <vr-form name="formFilter">
+        <div ng-hide="filterSectionCollapsed" vr-loader="isLoadingFilters">
+            <vr-row removeline>
+                <vr-columns width="normal">
+                    <vr-textbox value="name" label="Name"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+        </div>
+        <vr-row removeline>
+            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+                <div transclude-to="buttons">
+                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
+                    <vr-button type="Add" data-onclick="addNewCompany"></vr-button>
+                </div>
+            </vr-actionbar>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <demo-module-company-grid on-ready="onGridReady"></demo-module-company-grid>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-panel>

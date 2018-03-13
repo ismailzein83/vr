@@ -50,6 +50,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DemoModuleFactory.cs" />
+    <Compile Include="IBranchDataManager.cs" />
+    <Compile Include="ICompanyDataManager.cs" />
     <Compile Include="IDisputeCaseDataManager.cs" />
     <Compile Include="IBuildingDataManager.cs" />
     <Compile Include="ICityDataManager.cs" />

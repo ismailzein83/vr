@@ -1,0 +1,12 @@
+﻿<vr-datagrid datasource="branches"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="BranchId" enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" field="'BranchId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Branch Name'" field="'Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Company Name'" field="'CompanyName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Branch Setting'" field="'BranchSettingDescription'" type="'Text'"></vr-datagridcolumn>
+
+</vr-datagrid>

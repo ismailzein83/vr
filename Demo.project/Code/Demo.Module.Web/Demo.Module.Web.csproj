@@ -46,7 +46,7 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Vanrise\Code\Vanrise.Common\bin\Debug\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -128,6 +128,11 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Demo_Module\Constant\ModuleConfig.js" />
+    <Content Include="Demo_Module\Directives\Branch\demo-module-branch-grid.js" />
+    <Content Include="Demo_Module\Directives\Branch\Templates\BranchGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\Company\demo-module-company-grid.js" />
+    <Content Include="Demo_Module\Directives\Company\demo-module-company-selector.js" />
+    <Content Include="Demo_Module\Directives\Company\Templates\CompanyGridTemplate.html" />
     <Content Include="Demo_Module\Directives\DisputeCase\demo-module-disputecase-grid.js" />
     <Content Include="Demo_Module\Directives\DisputeCase\Templates\DisputeCaseGridTemplate.html" />
     <Content Include="Demo_Module\Directives\Building\demo-module-building-grid.js" />
@@ -139,6 +144,18 @@
     <Content Include="Demo_Module\Directives\Room\demo-module-room-grid.js" />
     <Content Include="Demo_Module\Directives\Room\demo-module-room-selector.js" />
     <Content Include="Demo_Module\Directives\Room\Templates\RoomGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\Setting\demo-module-medium-setting.js" />
+    <Content Include="Demo_Module\Directives\Setting\demo-module-setting-selector.js" />
+    <Content Include="Demo_Module\Directives\Setting\demo-module-small-setting.js" />
+    <Content Include="Demo_Module\Directives\Setting\Dimensions\demo-module-advanced-dimensions.js" />
+    <Content Include="Demo_Module\Directives\Setting\Dimensions\demo-module-advanced-grid.js" />
+    <Content Include="Demo_Module\Directives\Setting\Dimensions\demo-module-dimensions-selector.js" />
+    <Content Include="Demo_Module\Directives\Setting\Dimensions\demo-module-standard-dimensions.js" />
+    <Content Include="Demo_Module\Directives\Setting\Dimensions\Templates\AdvancedDimensionsGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\Setting\Dimensions\Templates\AdvancedDimensionsTemplate.html" />
+    <Content Include="Demo_Module\Directives\Setting\Dimensions\Templates\StandardDimensionsTemplate.html" />
+    <Content Include="Demo_Module\Directives\Setting\Templates\MediumSettingTemplate.html" />
+    <Content Include="Demo_Module\Directives\Setting\Templates\SmallSettingTemplate.html" />
     <Content Include="Demo_Module\Directives\Student\MainExtensions\demo-module-payment.js" />
     <Content Include="Demo_Module\Directives\Student\MainExtensions\Payment\demo-module-card-payment.js" />
     <Content Include="Demo_Module\Directives\Student\MainExtensions\Payment\Template\CardPaymentTemplate.html" />
@@ -148,20 +165,36 @@
     <Content Include="Demo_Module\Directives\Student\demo-module-student-grid.js" />
     <Content Include="Demo_Module\Directives\User\templates\demo-module-user-grid.js" />
     <Content Include="Demo_Module\Directives\User\templates\UserGridTemplate.html" />
+    <Content Include="Demo_Module\Services\AdvancedGridService.js" />
+    <Content Include="Demo_Module\Services\APIServices\BranchAPIService.js" />
+    <Content Include="Demo_Module\Services\APIServices\CompanyAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\DisputeCaseAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\BuildingAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\CityAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\PaymentConfigsAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\RoomAPIService.js" />
+    <Content Include="Demo_Module\Services\APIServices\SettingConfigsAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\StudentAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\UserAPIService.js" />
+    <Content Include="Demo_Module\Services\BranchService.js" />
     <Content Include="Demo_Module\Services\CityService.js" />
+    <Content Include="Demo_Module\Services\CompanyService.js" />
     <Content Include="Demo_Module\Services\RoomService.js" />
     <Content Include="Demo_Module\Services\StudentService.js" />
     <Content Include="Demo_Module\Services\UserService.js" />
     <Content Include="Demo_Module\Templates\CodeGroupTemplate.xlsx" />
+    <Content Include="Demo_Module\Views\AdvancedGridEditor.html" />
+    <Content Include="Demo_Module\Views\AdvancedGridEditorController.js" />
+    <Content Include="Demo_Module\Views\BranchEditor.html" />
+    <Content Include="Demo_Module\Views\BranchEditorController.js" />
+    <Content Include="Demo_Module\Views\BranchManagement.html" />
+    <Content Include="Demo_Module\Views\BranchManagementController.js" />
     <Content Include="Demo_Module\Views\BuildingEditor.html" />
     <Content Include="Demo_Module\Views\BuildingEditorController.js" />
+    <Content Include="Demo_Module\Views\CompanyEditor.html" />
+    <Content Include="Demo_Module\Views\CompanyEditorController.js" />
+    <Content Include="Demo_Module\Views\CompanyManagement.html" />
+    <Content Include="Demo_Module\Views\CompanyManagementController.js" />
     <Content Include="Demo_Module\Views\DisputeCaseManagement.html" />
     <Content Include="Demo_Module\Views\BuildingManagement.html" />
     <Content Include="Demo_Module\Views\DisputeCaseManagementController.js" />
@@ -185,11 +218,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\BranchController.cs" />
+    <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\DisputeCaseController.cs" />
     <Compile Include="Controllers\BuildingController.cs" />
     <Compile Include="Controllers\CityController.cs" />
     <Compile Include="Controllers\PymentConfigsController.cs" />
     <Compile Include="Controllers\RoomController.cs" />
+    <Compile Include="Controllers\SettingConfigsController.cs" />
     <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Content Include="Demo_Module\Services\BuildingService.js" />

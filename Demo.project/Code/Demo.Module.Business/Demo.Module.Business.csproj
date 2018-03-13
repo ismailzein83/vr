@@ -81,6 +81,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BranchManager.cs" />
+    <Compile Include="CompanyManager.cs" />
     <Compile Include="DisputeCaseManager.cs" />
     <Compile Include="BuildingManager.cs" />
     <Compile Include="CityManager.cs" />
