@@ -19,11 +19,15 @@ app.directive('retailBePackagedefinitionSettings', ['UtilsService', 'VRUIUtilsSe
 
         function PackageDefinitionSettings($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+
             var packageDefinitionEntity;
+
             var businessEntityDefinitionSelectorAPI;
             var businessEntityDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
             var extendedSettingsAPI;
             var extendedSettingsReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
@@ -42,8 +46,7 @@ app.directive('retailBePackagedefinitionSettings', ['UtilsService', 'VRUIUtilsSe
                     var promises = [];
                     if (payload != undefined) {
                         packageDefinitionEntity = payload.componentType;
-                        if(packageDefinitionEntity != undefined)
-                        {
+                        if (packageDefinitionEntity != undefined) {
                             $scope.scopeModel.name = packageDefinitionEntity.Name;
                         }
                     }
@@ -68,7 +71,7 @@ app.directive('retailBePackagedefinitionSettings', ['UtilsService', 'VRUIUtilsSe
                     function loadExtendedSettings() {
                         var extendedSettingsLoadDeferred = UtilsService.createPromiseDeferred();
                         extendedSettingsReadyDeferred.promise.then(function () {
-                            var extendedSettingsPayload =  packageDefinitionEntity != undefined && packageDefinitionEntity.Settings != undefined ? {extendedSettings :packageDefinitionEntity.Settings.ExtendedSettings} : undefined;
+                            var extendedSettingsPayload = packageDefinitionEntity != undefined && packageDefinitionEntity.Settings != undefined ? { extendedSettings: packageDefinitionEntity.Settings.ExtendedSettings } : undefined;
                             VRUIUtilsService.callDirectiveLoad(extendedSettingsAPI, extendedSettingsPayload, extendedSettingsLoadDeferred);
                         });
 
