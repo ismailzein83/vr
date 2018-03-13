@@ -60,7 +60,7 @@
                     if (selectedValue != null)
                         ctrl.selectedvalues.push(selectedValue);
                     else
-                        console.log(idProperty + " : " + selectedIds[i] + " doses not exist in the data source.");
+                        console.log(idProperty + " : " + selectedIds[i] + " does not exist in the data source.");
                 }
             }
             else {
@@ -68,7 +68,7 @@
                 if (selectedValue != null)
                     ctrl.selectedvalues = selectedValue;
                 else
-                    console.log(idProperty + " : " + selectedIds + " doses not exist in the data source.");
+                    console.log(idProperty + " : " + selectedIds + " does not exist in the data source.");
             }
         }
 
