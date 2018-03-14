@@ -44,10 +44,18 @@ app.directive('vrCommonObjecttypepropertyGrid', ['VRCommon_VRObjectTypeDefinitio
                 body.removeChild(copyElement);
                 var self = angular.element(event.currentTarget);
                 var divParent = $(self).parent();
-                $(divParent).append('<span id="quickMsg"  class="alert alert-info vr-quickmsg">Expression Copied</span>');
-                $(divParent).find("#quickMsg").fadeIn(300);
+
+                var selfOffset = $(divParent).offset();
+                var eltop = selfOffset.top - $(window).scrollTop();
+                var elleft = selfOffset.left - $(window).scrollLeft();
                 setTimeout(function () {
-                    $(divParent).find("#quickMsg").fadeOut(3000, function () {
+                    $(divParent).append('<span id="quickMsg"  class="alert alert-info vr-quickmsg">Expression Copied</span>');
+                    $("#quickMsg").css({ position: 'fixed', top: eltop, left: elleft });
+                    $(divParent).find("#quickMsg").fadeIn(300);
+                }, 100);
+               
+                setTimeout(function () {
+                    $(divParent).find("#quickMsg").fadeOut(2000, function () {
                         $(divParent).find("#quickMsg").remove();
                     });
                 },100)
