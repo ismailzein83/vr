@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Country\Rules\StructureRulesBehaviors\RuleBehaviorByCountry.cs" />
     <Compile Include="Country\SelectiveCountryCriteriaGroup.cs" />
     <Compile Include="ExchangeRateUpdateService\ExchangeRateAction.cs" />
     <Compile Include="ExchangeRateUpdateService\ExchangeRateActionActionArgument.cs" />
@@ -103,6 +104,10 @@
     <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
       <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
       <Name>Vanrise.GenericData.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Rules\Vanrise.Rules.csproj">
+      <Project>{f8450e80-5d8e-4fea-a2e0-777cb05e0542}</Project>
+      <Name>Vanrise.Rules</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Runtime.Entities\Vanrise.Runtime.Entities.csproj">
       <Project>{07b66e74-bd84-4023-b839-5bb522b7a98c}</Project>

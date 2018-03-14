@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Vanrise.Entities;
 
-namespace Vanrise.Common.Business.Rules.StructureRuleBehaviors
+namespace Vanrise.Common.MainExtensions.Country.Rules.StructureRulesBehaviors
 {
     public class RuleBehaviorByCountry : Vanrise.Rules.RuleStructureBehaviors.RuleStructureBehaviorByKey<int>
     {

@@ -77,7 +77,6 @@
     <Compile Include="ComponentType\VRComponentTypeManager.cs" />
     <Compile Include="ComponentType\VRComponentTypeOverriddenConfiguration.cs" />
     <Compile Include="ConfigManager.cs" />
-    <Compile Include="Country\Rules\StructureRulesBehaviors\RuleBehaviorByCountry.cs" />
     <Compile Include="DataGrouping\DataGrouper.cs" />
     <Compile Include="DataGrouping\RemoteDataGrouper.cs" />
     <Compile Include="DataGrouping\LocalDataGrouper.cs" />
@@ -207,10 +206,6 @@
     <ProjectReference Include="..\Vanrise.Logging.SQL\Vanrise.Logging.SQL.csproj">
       <Project>{b89988cc-cb1f-440f-9c0d-779d926d9d1a}</Project>
       <Name>Vanrise.Logging.SQL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Vanrise.Rules\Vanrise.Rules.csproj">
-      <Project>{f8450e80-5d8e-4fea-a2e0-777cb05e0542}</Project>
-      <Name>Vanrise.Rules</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Runtime.Entities\Vanrise.Runtime.Entities.csproj">
       <Project>{07b66e74-bd84-4023-b839-5bb522b7a98c}</Project>
