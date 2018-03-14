@@ -1,18 +1,16 @@
 ﻿<div vr-modalcontent ng-controller="Retail_BE_PackageEditorController" vr-loader="isLoading" width="'50%'">
     <vr-modalbody>
         <vr-form name="formPackageEditor">
-
             <vr-tabs>
                 <vr-tab header="'Definition'">
                     <vr-row>
                         <vr-columns width="1/2row">
                             <vr-textbox value="scopeModel.name" label="Package Name" isrequired></vr-textbox>
                         </vr-columns>
-                        <retail-be-packagedefinition-selector on-ready="scopeModel.onPackageDefinitionsSelectorReady" normal-col-num="6"
+                        <retail-be-packagedefinition-selector on-ready="scopeModel.onPackageDefinitionsSelectorReady"
+                                                              onselectionchanged="scopeModel.onPackageDefinitionsSelectionChanged"
                                                               selectedvalues="scopeModel.selectedPackageDefinition"
-                                                              hideremoveicon
-                                                              isrequired="true"
-                                                              onselectionchanged="scopeModel.onPackageDefinitionsSelectionChanged">
+                                                              normal-col-num="6" isrequired="true" hideremoveicon>
                         </retail-be-packagedefinition-selector>
                     </vr-row>
                     <vr-row>
@@ -26,18 +24,15 @@
                                      on-ready="scopeModel.onPackageExtendedSettingsDirectiveReady"
                                      vr-loader="scopeModel.isPackageExtendedSettingsDirectiveLoading">
                 </vr-directivewrapper>
-
             </vr-tabs>
-
         </vr-form>
     </vr-modalbody>
     <div>
         <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
             <div transclude-to="buttons">
-                <vr-button type="Save" data-onclick="scopeModel.save" formname="formPackageEditor" ></vr-button>
+                <vr-button type="Save" data-onclick="scopeModel.save" formname="formPackageEditor"></vr-button>
                 <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
             </div>
         </vr-actionbar>
     </div>
 </div>
-
