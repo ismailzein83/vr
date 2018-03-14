@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
@@ -34,7 +35,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 carrierAccount.SellingProductId,
                 Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings),
                 Vanrise.Common.Serializer.Serialize(carrierAccount.SupplierSettings),
-                Vanrise.Common.Serializer.Serialize(carrierAccount.CarrierAccountSettings)
+                Vanrise.Common.Serializer.Serialize(carrierAccount.CarrierAccountSettings),
+                carrierAccount.CreatedBy,
+                carrierAccount.LastModifiedBy
             );
 
             insertedId = (int)carrierAccountId;
@@ -42,7 +45,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
         public bool Update(CarrierAccountToEdit carrierAccount, int carrierProfileId)
         {
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierAccount_Update", carrierAccount.CarrierAccountId, carrierAccount.NameSuffix, carrierProfileId, carrierAccount.SellingProductId, Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.SupplierSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.CarrierAccountSettings));
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierAccount_Update", carrierAccount.CarrierAccountId, carrierAccount.NameSuffix, carrierProfileId, carrierAccount.SellingProductId, Vanrise.Common.Serializer.Serialize(carrierAccount.CustomerSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.SupplierSettings), Vanrise.Common.Serializer.Serialize(carrierAccount.CarrierAccountSettings), carrierAccount.LastModifiedBy);
             return (recordsEffected > 0);
         }
 
@@ -121,6 +124,9 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 SourceId = reader["SourceID"] as string,
                 IsDeleted = GetReaderValue<bool>(reader, "IsDeleted"),
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
+                CreatedBy = GetReaderValue<int>(reader, "CreatedBy"),
+                LastModifiedBy = GetReaderValue<int>(reader, "LastModifiedBy"),
+                LastModifiedTime = GetReaderValue<DateTime>(reader, "LastModifiedTime")
             };
             carrierAccount.ExtendedSettings = Vanrise.Common.Serializer.Deserialize(reader["ExtendedSettings"] as string) as Dictionary<string, Object>;
             return carrierAccount;

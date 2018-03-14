@@ -12,6 +12,7 @@ using Vanrise.GenericData.Entities;
 using Vanrise.Caching;
 using Vanrise.Invoice.Entities;
 using TOne.WhS.BusinessEntity.Business.CarrierAccounts;
+using Vanrise.Security.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -668,6 +669,10 @@ namespace TOne.WhS.BusinessEntity.Business
             if (CarrierAccountManager.IsCustomer(carrierAccount.AccountType) && carrierAccount.SellingNumberPlanId == null)
                 throw new ArgumentNullException("Missing SellingNumberPlanId");
 
+            int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
+            carrierAccount.CreatedBy = loggedInUserId;
+            carrierAccount.LastModifiedBy = loggedInUserId;
+
             ICarrierAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierAccountDataManager>();
             bool insertActionSucc = dataManager.Insert(carrierAccount, out carrierAccountId);
             bool isDefaultServiceInsertedSuccessfully = true;
@@ -727,6 +732,8 @@ namespace TOne.WhS.BusinessEntity.Business
 
             ActivationStatus previousActivationStatus = cachedAccount.CarrierAccountSettings.ActivationStatus;
             ActivationStatus activationStatus = carrierAccountToEdit.CarrierAccountSettings.ActivationStatus;
+
+            carrierAccountToEdit.LastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
 
             bool updateActionSucc = dataManager.Update(carrierAccountToEdit, carrierProfileId);
 
