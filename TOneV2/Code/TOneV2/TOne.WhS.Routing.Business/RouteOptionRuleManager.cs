@@ -325,7 +325,7 @@ namespace TOne.WhS.Routing.Business
             ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorBySupplier());
             ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByCode());
             ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorBySaleZone());
-            ruleStructureBehaviors.Add(new Vanrise.Common.Business.Rules.StructureRuleBehaviors.RuleBehaviorByCountry());
+            ruleStructureBehaviors.Add(new Vanrise.Common.MainExtensions.Country.Rules.StructureRulesBehaviors.RuleBehaviorByCountry());
             ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByCustomer());
             //ruleStructureBehaviors.Add(new TOne.WhS.BusinessEntity.Business.Rules.StructureRuleBehaviors.RuleBehaviorByRoutingProduct());
             return ruleStructureBehaviors;
