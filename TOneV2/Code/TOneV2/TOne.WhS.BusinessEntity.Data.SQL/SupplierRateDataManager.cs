@@ -82,15 +82,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("[TOneWhS_BE].[sp_SupplierRate_GetSupplierRatesForZone]", SupplierRateMapper, query.SupplierZoneId, effectiveOn);
         }
 
-        public IEnumerable<SupplierRate> GetZoneRateHistory(List<long> zoneIds, List<int> countryIds, int supplierId)
+        public IEnumerable<SupplierRate> GetZoneRateHistory(List<long> zoneIds)
         {
-            string zoneIdsStr = "", countryIdsStr = "";
+            string zoneIdsStr = "";
             if (zoneIds != null && zoneIds.Any())
                 zoneIdsStr = string.Join(",", zoneIds);
-            if (countryIds != null && countryIds.Any())
-                countryIdsStr = string.Join(",", countryIds);
-            return GetItemsSP("[TOneWhS_BE].[sp_SupplierRate_GetZoneHistory]", SupplierRateMapper, supplierId,
-                zoneIdsStr, countryIdsStr);
+            return GetItemsSP("[TOneWhS_BE].[sp_SupplierRate_GetZoneHistory]", SupplierRateMapper, zoneIdsStr);
         }
 
         public List<SupplierRate> GetSupplierRates(HashSet<long> supplierRateIds)

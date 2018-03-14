@@ -6,7 +6,7 @@ namespace TOne.WhS.BusinessEntity.Data
 {
     public interface ISupplierRateDataManager : IDataManager
     {
-        IEnumerable<SupplierRate> GetZoneRateHistory(List<long> zoneIds, List<int> countryIds, int supplierId);
+        IEnumerable<SupplierRate> GetZoneRateHistory(List<long> zoneIds);
         IEnumerable<SupplierRate> GetFilteredSupplierRates(SupplierRateQuery input, DateTime effectiveOn);
         IEnumerable<SupplierRate> GetFilteredSupplierPendingRates(SupplierRateQuery input, DateTime effectiveOn);
         IEnumerable<SupplierRate> GetSupplierRatesForZone(SupplierRateForZoneQuery input, DateTime effectiveOn);
