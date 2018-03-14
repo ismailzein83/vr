@@ -25,7 +25,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             object carrierProfileId;
 
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierProfile_Insert", out carrierProfileId, carrierProfile.Name, Vanrise.Common.Serializer.Serialize(carrierProfile.Settings));
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierProfile_Insert", out carrierProfileId, carrierProfile.Name, Vanrise.Common.Serializer.Serialize(carrierProfile.Settings), carrierProfile.CreatedBy, carrierProfile.LastModifiedBy);
             bool insertedSuccesfully = (recordsEffected > 0);
             if (insertedSuccesfully)
                 insertedId = (int)carrierProfileId;
@@ -35,7 +35,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
         public bool Update(CarrierProfileToEdit carrierProfile)
         {
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierProfile_Update", carrierProfile.CarrierProfileId, carrierProfile.Name, Vanrise.Common.Serializer.Serialize(carrierProfile.Settings));
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_CarrierProfile_Update", carrierProfile.CarrierProfileId, carrierProfile.Name, Vanrise.Common.Serializer.Serialize(carrierProfile.Settings), carrierProfile.LastModifiedBy);
             return (recordsEffected > 0);
         }
 
@@ -70,6 +70,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 carrierProfile.CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime");
                 carrierProfile.ExtendedSettings = Vanrise.Common.Serializer.Deserialize(reader["ExtendedSettings"] as string) as Dictionary<string,Object>;
                 carrierProfile.IsDeleted = GetReaderValue<bool>(reader, "IsDeleted");
+                carrierProfile.CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime");
+                carrierProfile.CreatedBy = GetReaderValue<int>(reader, "CreatedBy");
+                carrierProfile.LastModifiedBy = GetReaderValue<int>(reader, "LastModifiedBy");
+                carrierProfile.LastModifiedTime = GetReaderValue<DateTime>(reader, "LastModifiedTime");
             
             return carrierProfile;
         }

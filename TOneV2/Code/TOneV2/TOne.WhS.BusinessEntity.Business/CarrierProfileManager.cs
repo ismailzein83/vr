@@ -12,6 +12,7 @@ using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.Invoice.Business;
 using Vanrise.Invoice.Entities;
+using Vanrise.Security.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -97,6 +98,11 @@ namespace TOne.WhS.BusinessEntity.Business
 
             if (fileIds != null && fileIds.Any())
                 SetFilesUsed(fileIds, null);
+            
+            int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
+            carrierProfile.CreatedBy = loggedInUserId;
+            carrierProfile.LastModifiedBy = loggedInUserId;
+
             bool insertActionSucc = dataManager.Insert(carrierProfile, out carrierProfileId);
             if (insertActionSucc)
             {
@@ -147,6 +153,9 @@ namespace TOne.WhS.BusinessEntity.Business
             ICarrierProfileDataManager dataManager = BEDataManagerFactory.GetDataManager<ICarrierProfileDataManager>();
             carrierProfileToEdit.Settings.CustomerActivationStatus = GetCarrierProfileCustomerActivationStatus(carrierProfileToEdit.CarrierProfileId);
             carrierProfileToEdit.Settings.SupplierActivationStatus = GetCarrierProfileSupplierActivationStatus(carrierProfileToEdit.CarrierProfileId);
+
+            carrierProfileToEdit.LastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
+
             bool updateActionSucc = dataManager.Update(carrierProfileToEdit);
             UpdateOperationOutput<CarrierProfileDetail> updateOperationOutput = new UpdateOperationOutput<CarrierProfileDetail>();
 
