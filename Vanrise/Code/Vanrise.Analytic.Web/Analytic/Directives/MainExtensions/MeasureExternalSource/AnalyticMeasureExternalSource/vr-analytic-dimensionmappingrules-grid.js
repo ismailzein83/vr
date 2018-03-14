@@ -49,7 +49,7 @@ app.directive("vrAnalyticDimensionmappingrulesGrid", ["UtilsService", "VRNotific
                 };
                 defineMenuActions();
                 defineAPI();
-            };
+            }
 
             function defineMenuActions() {
                 var defaultMenuActions = [
@@ -61,7 +61,7 @@ app.directive("vrAnalyticDimensionmappingrulesGrid", ["UtilsService", "VRNotific
                 $scope.gridMenuActions = function (rule) {
                     return defaultMenuActions;
                 };
-            };
+            }
             function editRule(ruleObject) {
                
                 var onRuleUpdated = function (rule) {
@@ -69,7 +69,7 @@ app.directive("vrAnalyticDimensionmappingrulesGrid", ["UtilsService", "VRNotific
                     ctrl.datasource[index] = { Entity: rule };
                 };
                 VR_Analytic_DimensionMappingRulesService.editRule(ruleObject, onRuleUpdated, { context: getContext(), tableId: tableId });
-            };
+            }
             function defineAPI() {
                 var api = {};
                 api.getData = function () {
@@ -85,11 +85,11 @@ app.directive("vrAnalyticDimensionmappingrulesGrid", ["UtilsService", "VRNotific
                 };
                 api.load = function (payload) {
                     ctrl.datasource.length = 0;
-                    
+
                     if (payload != undefined) {
                         context = payload.context;
                         tableId = payload.tableId;
-                       
+
                         if (payload.rules != undefined) {
                             var rules = payload.rules;
                             for (var i = 0; i < rules.length; i++) {
@@ -105,7 +105,7 @@ app.directive("vrAnalyticDimensionmappingrulesGrid", ["UtilsService", "VRNotific
                 if (ctrl.onReady != null) {
                     ctrl.onReady(api);
                 }
-            };
+            }
 
             function getContext() {
 
@@ -116,6 +116,6 @@ app.directive("vrAnalyticDimensionmappingrulesGrid", ["UtilsService", "VRNotific
 
                 return currentContext;
             }
-        };
+        }
         return directiveDefinitionObject;
     }]);

@@ -28,7 +28,7 @@
             }
             isEditMode = (ruleEntity != undefined);
 
-        };
+        }
         function defineScope() {
 
             $scope.scopeModel = {};
@@ -53,27 +53,27 @@
                     Settings: dimensionSelectiveAPI.getData()                        
 
                 };
-            };
+            }
 
             function addRule() {
                 var ruleObject = buildRuleObjFromScope();
                 if ($scope.onRuleAdded != undefined)
                     $scope.onRuleAdded(ruleObject);
                 $scope.modalContext.closeModal();
-            };
+            }
             function updateRule() {
                 var ruleObject = buildRuleObjFromScope();
                 if ($scope.onRuleUpdated != undefined)
                     $scope.onRuleUpdated(ruleObject);
                 $scope.modalContext.closeModal();
                 
-            };
-        };
+            }
+        }
 
         function load() {
             $scope.scopeModel.isLoading = true;
             loadAllControls();
-        };
+        }
 
         function loadAllControls() {
 
@@ -114,7 +114,7 @@
             .finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
-        };
+        }
 
         function getContext() {
             var currentContext = context;

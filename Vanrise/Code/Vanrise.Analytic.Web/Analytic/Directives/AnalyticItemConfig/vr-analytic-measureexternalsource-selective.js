@@ -105,7 +105,7 @@
                                 context: getContext(),
                                 entity: entity,
                                 tableId: tableId
-                            }
+                            };
                             
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });

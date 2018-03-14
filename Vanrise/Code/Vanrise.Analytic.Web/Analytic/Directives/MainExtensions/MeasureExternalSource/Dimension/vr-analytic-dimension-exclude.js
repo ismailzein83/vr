@@ -30,7 +30,7 @@ app.directive("vrAnalyticDimensionExclude", ["UtilsService","VRUIUtilsService",
                 };
 
                 defineAPI();
-            };
+            }
             function defineAPI() {
                
                 var api = {};

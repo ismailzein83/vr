@@ -30,7 +30,7 @@ function (UtilsService, VRUIUtilsService, VR_Analytic_SameDimensionTypeEnum) {
                 };
                 $scope.scopeModel.sameDimensionTypes = UtilsService.getArrayEnum(VR_Analytic_SameDimensionTypeEnum);
                 defineAPI();
-            };
+            }
             function defineAPI() {
                 var api = {};
                 
