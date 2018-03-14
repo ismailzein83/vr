@@ -79,13 +79,20 @@ namespace TOne.WhS.Invoice.Business.Extensions
             var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, currencyId);
             if (analyticResult == null || analyticResult.Data == null || analyticResult.Data.Count() == 0)
             {
+                context.ErrorMessage = "No data available between the selected period.";
                 throw new InvoiceGeneratorException("No data available between the selected period.");
+
+               // context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
+               // return;
             }
             Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data, currencyId, commission, commissionType, taxItemDetails);
             if (itemSetNamesDic.Count == 0)
             {
                 context.ErrorMessage = "No data available between the selected period.";
                 throw new InvoiceGeneratorException("No data available between the selected period.");
+
+               // context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
+              //  return;
             }
 
             var supplierInvoiceBySaleCurrency = loadCurrencyItemSet(dimentionName, dimensionValue, fromDate, toDate, commission, commissionType, taxItemDetails);
@@ -129,6 +136,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
             {
                 context.ErrorMessage = "No billing data available.";
                 throw new InvoiceGeneratorException("No billing data available.");
+
+            //    context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
+               // return;
             }
             #endregion
 
@@ -422,8 +432,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 {
 
                     #region ReadDataFromAnalyticResult
-                    DimensionValue supplierId = analyticRecord.DimensionValues.ElementAtOrDefault(0);
-                    DimensionValue supplierZoneId = analyticRecord.DimensionValues.ElementAtOrDefault(1);
+                    DimensionValue supplierZoneId = analyticRecord.DimensionValues.ElementAtOrDefault(0);
+                    DimensionValue supplierId = analyticRecord.DimensionValues.ElementAtOrDefault(1);
                     DimensionValue supplierCurrencyId = analyticRecord.DimensionValues.ElementAtOrDefault(2);
                     DimensionValue supplierRate = analyticRecord.DimensionValues.ElementAtOrDefault(3);
                     DimensionValue supplierRateTypeId = analyticRecord.DimensionValues.ElementAtOrDefault(4);

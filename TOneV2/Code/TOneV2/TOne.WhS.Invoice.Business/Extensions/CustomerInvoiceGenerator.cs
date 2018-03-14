@@ -82,14 +82,20 @@ namespace TOne.WhS.Invoice.Business.Extensions
             var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, currencyId);
             if (analyticResult == null || analyticResult.Data == null || analyticResult.Data.Count() == 0)
             {
-                context.ErrorMessage = "No data available between the selected period."; 
+                context.ErrorMessage = "No data available between the selected period.";
                 throw new InvoiceGeneratorException("No data available between the selected period.");
+                /// context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
+                //  return;
             }
             Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data, currencyId, commission, commissionType, taxItemDetails);
             if(itemSetNamesDic.Count == 0)
             {
                 context.ErrorMessage = "No data available between the selected period.";
                 throw new InvoiceGeneratorException("No data available between the selected period.");
+
+                //  context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
+
+                // return;
             }
             var customerInvoiceBySaleCurrency = loadCurrencyItemSet(dimentionName, dimensionValue, fromDate, toDate, commission, commissionType, taxItemDetails);
 
@@ -135,6 +141,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 {
                     context.ErrorMessage = "Connot generate invoice with amount less than threshold.";
                     throw new InvoiceGeneratorException("Connot generate invoice with amount less than threshold.");
+
+                   // context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
+                  //  return;
                 }
 
             }
@@ -429,8 +438,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 {
 
                     #region ReadDataFromAnalyticResult
-                    DimensionValue customerId = analyticRecord.DimensionValues.ElementAtOrDefault(0);
-                    DimensionValue saleZoneId = analyticRecord.DimensionValues.ElementAtOrDefault(1);
+
+                    DimensionValue saleZoneId = analyticRecord.DimensionValues.ElementAtOrDefault(0);
+                    DimensionValue customerId = analyticRecord.DimensionValues.ElementAtOrDefault(1);
                     DimensionValue saleCurrencyId = analyticRecord.DimensionValues.ElementAtOrDefault(2);
                     DimensionValue saleRate = analyticRecord.DimensionValues.ElementAtOrDefault(3);
                     DimensionValue saleRateTypeId = analyticRecord.DimensionValues.ElementAtOrDefault(4);
