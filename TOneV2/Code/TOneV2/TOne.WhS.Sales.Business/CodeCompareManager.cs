@@ -58,8 +58,10 @@ namespace TOne.WhS.Sales.Business
 
             IEnumerable<CodeSupplierZoneMatch> codeMatchBySupplier = codeZoneMatchManager.GetSupplierZoneMatchBysupplierIdsAndSellingNumberPanId(query.sellingNumberPlanId, query.supplierIds, query.codeStartWith);
             IEnumerable<CodeSaleZoneMatch> saleCodeMatch = codeZoneMatchManager.GetSaleCodeMatchBySellingNumberPlanId(query.sellingNumberPlanId, query.codeStartWith);
-            if (codeMatchBySupplier == null || codeMatchBySupplier.Count() == 0)
+
+            if (codeMatchBySupplier == null || !codeMatchBySupplier.Any())
                 return null;
+
             Dictionary<string, List<CodeSupplierZoneMatch>> codeSupplierZoneMatchDictionary = codeCompareManager.StructureCodeSupplierZoneMatchDictionary(codeMatchBySupplier);
             Dictionary<string, CodeSaleZoneMatch> codeSaleZoneMatchDictionary = codeCompareManager.StructureCodeSaleZoneMatchDictionary(saleCodeMatch);
 
@@ -73,40 +75,37 @@ namespace TOne.WhS.Sales.Business
             {
                 CodeSaleZoneMatch codeSaleZoneMatch;
                 List<CodeSupplierZoneMatch> codeSupplierZoneMatches;
-                var codeCompareItem = new CodeCompareItem();
+                var codeCompareItem = new CodeCompareItem { Code = code };
 
-                codeCompareItem.Code = code;
                 if (codeSaleZoneMatchDictionary.TryGetValue(code, out codeSaleZoneMatch))
                 {
                     codeCompareItem.SaleZone = saleZoneManager.GetSaleZoneName(codeSaleZoneMatch.SaleZoneId);
                     codeCompareItem.SaleCode = codeSaleZoneMatch.CodeMatch;
-                    if (codeSaleZoneMatch.CodeMatch == code)
-                        codeCompareItem.SaleCodeIndicator = CodeCompareIndicator.None;
-                    else
-                        codeCompareItem.SaleCodeIndicator = CodeCompareIndicator.Highlight;
+
+                    codeCompareItem.SaleCodeIndicator = codeSaleZoneMatch.CodeMatch == code
+                        ? CodeCompareIndicator.None
+                        : CodeCompareIndicator.Highlight;
                 }
                 if (codeSupplierZoneMatchDictionary.TryGetValue(code, out codeSupplierZoneMatches))
                 {
                     codeCompareItem.SupplierItems = new List<CodeCompareSupplierItem>();
                     foreach (var codeSupplierZoneMatch in codeSupplierZoneMatches)
                     {
-                        CodeCompareSupplierItem codeCompareSupplierItem = new CodeCompareSupplierItem();
-                        codeCompareSupplierItem.SupplierId = codeSupplierZoneMatch.SupplierId;
-                        codeCompareSupplierItem.SupplierZone = supplierZoneManager.GetSupplierZoneName(codeSupplierZoneMatch.SupplierZoneId);
-                        codeCompareSupplierItem.SupplierCode = codeSupplierZoneMatch.CodeMatch;
+                        CodeCompareSupplierItem codeCompareSupplierItem = new CodeCompareSupplierItem
+                        {
+                            SupplierId = codeSupplierZoneMatch.SupplierId,
+                            SupplierZone = supplierZoneManager.GetSupplierZoneName(codeSupplierZoneMatch.SupplierZoneId),
+                            SupplierCode = codeSupplierZoneMatch.CodeMatch
+                        };
                         if (!string.IsNullOrEmpty(codeSupplierZoneMatch.CodeMatch) && codeSupplierZoneMatch.CodeMatch == code)
                         {
                             codeCompareSupplierItem.SupplierCodeIndicator = CodeCompareIndicator.None;
                             codeCompareItem.OccurrenceInSuppliers++;
                         }
                         else
-                        {
                             codeCompareSupplierItem.SupplierCodeIndicator = CodeCompareIndicator.Highlight;
 
-
-                        }
                         codeCompareItem.SupplierItems.Add(codeCompareSupplierItem);
-
                     }
                 }
                 codeCompareItem.AbsenceInSuppliers = query.supplierIds.Count() - codeCompareItem.OccurrenceInSuppliers;
@@ -116,16 +115,11 @@ namespace TOne.WhS.Sales.Business
                     codeCompareItem.AbsenceInSuppliersIndicator = CodeCompareIndicator.None;
                     codeCompareItem.Action = CodeCompareAction.New;
                 }
-                else
+                else if (codeCompareItem.AbsenceInSuppliers >= query.threshold && codeCompareItem.SaleCode == code)
                 {
-                    if (codeCompareItem.AbsenceInSuppliers > query.threshold && codeCompareItem.SaleCode == code)
-                    {
-                        codeCompareItem.OccurrenceInSuppliersIndicator = CodeCompareIndicator.None;
-                        codeCompareItem.AbsenceInSuppliersIndicator = CodeCompareIndicator.Highlight;
-                        codeCompareItem.Action = CodeCompareAction.Delete;
-                    }
-
-
+                    codeCompareItem.OccurrenceInSuppliersIndicator = CodeCompareIndicator.None;
+                    codeCompareItem.AbsenceInSuppliersIndicator = CodeCompareIndicator.Highlight;
+                    codeCompareItem.Action = CodeCompareAction.Delete;
                 }
                 codeCompareItems.Add(codeCompareItem);
 
