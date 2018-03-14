@@ -15,10 +15,13 @@ namespace TOne.WhS.BusinessEntity.Business
             SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
             var allZones = supplierZoneManager.GetCachedSupplierZones();
             var filteredZones =
-                allZones.Values.Where(z => z.Name.ToLower().Equals(Query.SupplierZoneName.ToLower()));
+                allZones.Values.Where(z => z.Name.ToLower().Equals(Query.SupplierZoneName.ToLower())
+                                           && z.SupplierId == Query.SupplierId);
+            if (!filteredZones.Any())
+                return null;
+
             List<long> allZonesIds = filteredZones.Select(z => z.SupplierZoneId).ToList();
-            List<int> allContryIds = filteredZones.Select(c => c.CountryId).Distinct().ToList();
-            return dataManager.GetZoneRateHistory(allZonesIds, allContryIds, Query.SupplierId);
+            return dataManager.GetZoneRateHistory(allZonesIds);
         }
     }
 }
