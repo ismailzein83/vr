@@ -17,5 +17,13 @@ namespace Vanrise.Rules.Entities
         public string SourceId { get; set; }
 
         public bool IsDeleted { get; set; }
+
+        public DateTime CreatedTime { get; set; }
+
+        public int CreatedBy { get; set; }
+
+        public DateTime LastModifiedTime { get; set; }
+
+        public int LastModifiedBy { get; set; }
     }
 }
