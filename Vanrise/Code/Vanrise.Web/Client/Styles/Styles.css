@@ -3108,6 +3108,10 @@ vr-panel[fullscreen] .panel-body {
     vr-tabs div[class^="col"] {
         margin-bottom: -1px !important;
     }
+
+    vr-columns div[class^="col"].empty-line-col {
+        margin-bottom: 10px !important;
+    }
 }
 
 /*end of vr-tabs*/
