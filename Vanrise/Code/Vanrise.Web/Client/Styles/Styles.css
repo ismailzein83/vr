@@ -1738,6 +1738,7 @@ loader .outer-loader {
         background-color: #FFF;
         padding: 0px 5px 0px 0px;
         position: relative;
+        z-index:1;
     }
 
 .panel-vr.panel-vr-child > .panel-body {
