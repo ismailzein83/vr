@@ -1,0 +1,63 @@
+﻿<div vr-modalcontent ng-controller="WhS_BE_ANumberSupplierCodeEditorController" vr-loader="scopeModel.isLoading" size="small">
+    <vr-modalbody>
+        <vr-form name="formSupplierCodeEditor">
+            <vr-row>
+                <vr-whs-be-supplier-selector on-ready="scopeModel.onSupplierReady" normal-col-num="6" isrequired="true"> </vr-whs-be-supplier-selector>
+                <vr-columns colnum="6">
+                    <vr-datetimepicker type="date" label="Effective On" value="scopeModel.effectiveOn" isrequired="true"></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns colnum="5">
+                    <vr-textbox label="Code" onvaluechanged="scopeModel.onCodeValueChange" value="scopeModel.codeValue" type="number" minvalue="0" decimalprecision="0"></vr-textbox>
+                </vr-columns>
+                <vr-columns withemptyline colnum="1" haschildcolumns>
+                    <vr-button type="Add" data-onclick="scopeModel.addSupplierCode" vr-disabled="scopeModel.disabledAddSupplierCode" standalone></vr-button>
+                </vr-columns>
+                <vr-columns colnum="6">
+                    <vr-fileupload value="scopeModel.file" label="Upload File" tempfile="true" extension="xls,xlsx" onvaluechanged="scopeModel.onFileUploadChange"></vr-fileupload>
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns width="fullrow">
+                    <vr-section level="2" header="Codes" vr-loader="scopeModel.isLoadingCodes">
+                        <div style="height:110px; overflow : auto;padding: 10px 5px ;">
+                            <vr-validator validate="scopeModel.validateSupplierCodes()">
+                                <vr-datalist maxitemsperrow="4" datasource="scopeModel.supplierCodes" autoremoveitem="true">
+                                    {{dataItem}}
+                                </vr-datalist>
+                            </vr-validator>
+                        </div>
+                    </vr-section>
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline ng-show="scopeModel.isUploadingComplete">
+                <vr-columns width="fullrow" haschildcolumns>
+                    <vr-row removeline>
+                        <vr-columns width="fullrow">
+                            <vr-label>Number Of SupplierCodes Added:</vr-label><vr-label isvalue>{{scopeModel.addedSupplierCodes}}</vr-label>
+                        </vr-columns>
+
+                    </vr-row>
+                    <vr-row removeline>
+                        <vr-columns width="fullrow">
+                            <vr-label>Number Of SupplierCodes Failed:</vr-label><vr-label isvalue>{{scopeModel.failedSupplierCodes}}</vr-label>
+                        </vr-columns>
+                    </vr-row>
+                    <vr-row removeline>
+                        <vr-columns width="fullrow">
+                            <vr-label>Download Result</vr-label>
+                            <vr-button type="Download" data-onclick="scopeModel.downloadLog" standalone></vr-button>
+                        </vr-columns>
+                    </vr-row>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formSupplierCodeEditor" data-onclick="scopeModel.saveSupplierCode"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

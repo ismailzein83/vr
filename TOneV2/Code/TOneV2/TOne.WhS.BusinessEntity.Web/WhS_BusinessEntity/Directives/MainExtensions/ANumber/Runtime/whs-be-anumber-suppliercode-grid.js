@@ -2,9 +2,9 @@
 
     'use strict';
 
-    AnumberSalecodeGrid.$inject = ['WhS_BE_ANumberSaleCodeAPIService', 'VRNotificationService'];
+    AnumberSuppliercodeGrid.$inject = ['WhS_BE_ANumberSupplierCodeAPIService', 'VRNotificationService'];
 
-    function AnumberSalecodeGrid(WhS_BE_ANumberSaleCodeAPIService, VRNotificationService) {
+    function AnumberSuppliercodeGrid(WhS_BE_ANumberSupplierCodeAPIService, VRNotificationService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -13,21 +13,21 @@
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var saleCodeGrid = new SaleCodeGrid($scope, ctrl, $attrs);
-                saleCodeGrid.initialize();
+                var supplierCodeGrid = new SupplierCodeGrid($scope, ctrl, $attrs);
+                supplierCodeGrid.initialize();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/ANumber/Runtime/Templates/ANumberSaleCodeGridTemplate.html'
+            templateUrl: '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/ANumber/Runtime/Templates/ANumberSupplierCodeGridTemplate.html'
         };
 
-        function SaleCodeGrid($scope, ctrl, $attrs) {
+        function SupplierCodeGrid($scope, ctrl, $attrs) {
             this.initialize = initialize;
 
             var gridAPI;
 
             function initialize() {
-                ctrl.saleCodes = [];
+                ctrl.supplierCodes = [];
 
                 ctrl.onGridReady = function (api) {
                     gridAPI = api;
@@ -38,7 +38,7 @@
                 };
 
                 ctrl.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
-                    return WhS_BE_ANumberSaleCodeAPIService.GetFilteredANumberSaleCodes(dataRetrievalInput).then(function (response) {
+                    return WhS_BE_ANumberSupplierCodeAPIService.GetFilteredANumberSupplierCodes(dataRetrievalInput).then(function (response) {
                         onResponseReady(response);
                     }).catch(function (error) {
                         VRNotificationService.notifyException(error, $scope);
@@ -60,6 +60,6 @@
         return directiveDefinitionObject;
     }
 
-    app.directive('whsBeAnumberSalecodeGrid', AnumberSalecodeGrid);
+    app.directive('whsBeAnumberSuppliercodeGrid', AnumberSuppliercodeGrid);
 
 })(app);

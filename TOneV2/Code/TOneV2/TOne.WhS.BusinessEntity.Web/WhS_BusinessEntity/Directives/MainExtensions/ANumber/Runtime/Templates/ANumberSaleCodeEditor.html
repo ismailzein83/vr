@@ -1,0 +1,44 @@
+﻿<div vr-modalcontent ng-controller="WhS_BE_ANumberSaleCodeEditorController" vr-loader="scopeModel.isLoading" size="small">
+    <vr-modalbody>
+        <vr-form name="formSaleCodeEditor">
+            <vr-row>
+                <vr-whs-be-sellingnumberplan-selector on-ready="scopeModel.onSellingNumberReady" normal-col-num="6" isrequired="true"> </vr-whs-be-sellingnumberplan-selector>
+                <vr-columns colnum="6">
+                    <vr-datetimepicker type="date" label="Effective On" value="scopeModel.effectiveOn" isrequired="true"></vr-datetimepicker>
+                </vr-columns>
+                <vr-columns colnum="5">
+                    <vr-textbox label="Code" onvaluechanged="scopeModel.onCodeValueChange" value="scopeModel.codeValue" type="number" minvalue="0" decimalprecision="0"></vr-textbox>
+                </vr-columns>
+                <vr-columns withemptyline colnum="1" haschildcolumns>
+                    <vr-button type="Add" data-onclick="scopeModel.addSaleCode" vr-disabled="scopeModel.disabledAddSaleCode" standalone></vr-button>
+                </vr-columns>
+                <vr-columns colnum="6">
+                    <vr-fileupload value="scopeModel.file" label="Upload File" tempfile="true" extension="xls,xlsx" onvaluechanged="scopeModel.onFileUploadChange"></vr-fileupload>
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns width="fullrow">
+                    <vr-section level="2" header="Codes" vr-loader="scopeModel.isLoadingCodes">
+                        <div style="height:110px; overflow : auto;padding: 10px 5px ;">
+                            <vr-validator validate="scopeModel.validateSaleCodes()">
+                                <vr-datalist maxitemsperrow="4" datasource="scopeModel.saleCodes" autoremoveitem="true">
+                                    <vr-validator validate="dataItem.message" normalheight>
+                                        {{dataItem.code}}
+                                    </vr-validator>
+                                </vr-datalist>
+                            </vr-validator>
+                        </div>
+                    </vr-section>
+                </vr-columns>
+            </vr-row>           
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formSaleCodeEditor" data-onclick="scopeModel.saveSaleCode"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

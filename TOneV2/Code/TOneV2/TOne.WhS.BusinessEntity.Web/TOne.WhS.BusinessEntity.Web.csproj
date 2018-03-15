@@ -147,7 +147,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\ANumberSupplierCodeController.cs" />
     <Compile Include="Controllers\CustomerCountryController.cs" />
+    <Compile Include="Controllers\ANumberSaleCodeController.cs" />
     <Compile Include="Controllers\FaultTicketController.cs" />
     <Compile Include="Controllers\CustomerSoldZonesController.cs" />
     <Compile Include="Controllers\SwitchReleaseCauseController.cs" />
@@ -316,11 +318,21 @@
     <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\whs-be-financialaccountbedefinition-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\FinancialAccount\whs-be-financialaccountbedefinition-extendedsettings.js" />
     <Content Include="WhS_BusinessEntity\Directives\FlaggedService\vr-whs-be-flaggedservice-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Definition\Templates\ANumberSupplierCodeGridDefinitionViewTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Definition\Templates\ANumberSaleCodeGridDefinitionViewTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Definition\whs-be-anumber-suppliercodegridview-definition.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Definition\whs-be-anumber-salecodegridview-definition.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Runtime\ANumberSupplierCodeEditorController.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Runtime\Templates\ANumberSupplierCodeEditor.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Runtime\Templates\ANumberSupplierCodeGridRuntimeViewTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Runtime\Templates\ANumberSaleCodeGridRuntimeViewTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Runtime\Templates\ANumberSupplierCodeGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Runtime\Templates\ANumberSaleCodeGridTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Runtime\Templates\ANumberSaleCodeEditor.html" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Runtime\ANumberSaleCodeEditorController.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Runtime\whs-be-anumber-suppliercode-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Runtime\whs-be-anumber-salecode-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Runtime\whs-be-anumber-suppliercodegridview-runtime.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\ANumber\Runtime\whs-be-anumber-salecodegridview-runtime.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CompanyPricelistSettings\Templates\CompanyDefinitionPricelistSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\CompanyPricelistSettings\whs-be-companypricelistsettings-definition.js" />
@@ -547,7 +559,10 @@
     <Content Include="WhS_BusinessEntity\Images\ReOpen.png" />
     <Content Include="WhS_BusinessEntity\Images\Zone.png" />
     <Content Include="WhS_BusinessEntity\ModuleInitialization.js" />
+    <Content Include="WhS_BusinessEntity\Services\ANumberSupplierCodeService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\ANumberSupplierCodeAPIService .js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\CustomerCountryAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\ANumberSaleCodeAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\FaultTicketAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\FinancialAccountAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\FinancialAccountDefinitionAPIService.js" />
@@ -570,6 +585,7 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\SupplierRateAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SwitchConnectivityAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SwitchReleaseCauseAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\ANumberSaleCodeService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\TechnicalSettingsAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\ZoneRoutingProductAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\CDRImportTechnicalSettingsService.js" />

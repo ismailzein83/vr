@@ -29,7 +29,62 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 sellingNumberPlanIdsAsString = string.Join<int>(",", sellingNumberPlanIds);
             return GetItemsSP("TOneWhS_BE.sp_ANumberSaleCode_GetFiltered", ANumberSaleCodeMapper, aNumberGroupId, sellingNumberPlanIdsAsString);
         }
-       
+
+        public IEnumerable<ANumberSaleCode> GetEffectiveAfterBySellingNumberPlanId(int sellingNumberPlanId,DateTime effectiveOn)
+        {
+            return GetItemsSP("TOneWhS_BE.sp_ANumberSaleCode_GetEffectiveAfterBySellingNumberPlanId", ANumberSaleCodeMapper, sellingNumberPlanId, effectiveOn);
+        }
+      
+        public bool Insert(List<ANumberSaleCodeToClose> listOfSaleCodesToClose, long aNumberSaleCodeId, int aNumberGroupID, int sellingNumberPlanID, string code, DateTime effectiveOn)
+        {
+            DataTable dtSaleCodesToClose = BuildANumberSaleCodesTableToClose(listOfSaleCodesToClose);
+            return ExecuteNonQuerySPCmd("[TOneWhS_BE].[sp_ANumberSaleCode_Insert]", (cmd) =>
+            {
+                cmd.Parameters.Add(new SqlParameter("@ANumberSaleCodeId", aNumberSaleCodeId));
+                cmd.Parameters.Add(new SqlParameter("@ANumberGroupID", aNumberGroupID));
+                cmd.Parameters.Add(new SqlParameter("@SellingNumberPlanID", sellingNumberPlanID));
+                cmd.Parameters.Add(new SqlParameter("@Code", code));
+                cmd.Parameters.Add(new SqlParameter("@BED", effectiveOn));
+                var dtPrm = new SqlParameter("@ANumberSaleCodeClose", SqlDbType.Structured);
+                dtPrm.Value = dtSaleCodesToClose;
+                cmd.Parameters.Add(dtPrm);
+            }) > 0;
+        }
+
+        public ANumberSaleCode GetANumberSaleCode(long aNumberSaleCodeId)
+        {
+            return GetItemSP("sp_ANumberSaleCode_Get", ANumberSaleCodeMapper, aNumberSaleCodeId);
+        }
+
+        public bool Close(long aNumberSaleCodeId, DateTime effectiveOn)
+        {
+            return ExecuteNonQuerySP("[TOneWhS_BE].[sp_ANumberSaleCode_Close]", aNumberSaleCodeId, effectiveOn) > 0;
+        }
+
+        internal static DataTable BuildANumberSaleCodesTableToClose(List<ANumberSaleCodeToClose> listOfANumberSaleCodesToClose)
+        {
+            DataTable dtANumberSaleCodeToClose = GetANumberSaleCodeTableToClose();
+            dtANumberSaleCodeToClose.BeginLoadData();
+            foreach (var saleCodeToClose in listOfANumberSaleCodesToClose)
+            {
+                DataRow drSupplierZoneServiceToClose = dtANumberSaleCodeToClose.NewRow();
+                drSupplierZoneServiceToClose["ANumberSaleCodeIdToClose"] = saleCodeToClose.ANumberSaleCodeId;
+                drSupplierZoneServiceToClose["ANumberSaleCodeEEDToClose"] = saleCodeToClose.CloseDate;
+                dtANumberSaleCodeToClose.Rows.Add(drSupplierZoneServiceToClose);
+            }
+            dtANumberSaleCodeToClose.EndLoadData();
+            Console.WriteLine(dtANumberSaleCodeToClose);
+            return dtANumberSaleCodeToClose;
+        }
+
+        private static DataTable GetANumberSaleCodeTableToClose()
+        {
+            DataTable dtANumberSaleCodeTableToClose = new DataTable();
+            dtANumberSaleCodeTableToClose.Columns.Add("ANumberSaleCodeIdToClose", typeof(long));
+            dtANumberSaleCodeTableToClose.Columns.Add("ANumberSaleCodeEEDToClose", typeof(DateTime));
+            return dtANumberSaleCodeTableToClose;
+        }
+
         #endregion
 
        
