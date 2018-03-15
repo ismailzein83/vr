@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="DealDataManagerFactory.cs" />
     <Compile Include="IDataManager.cs" />
+    <Compile Include="IDaysToReprocessDataManager.cs" />
     <Compile Include="IDealDetailedProgressDataManager.cs" />
     <Compile Include="IDealProgressDataManager.cs" />
     <Compile Include="IDealDataManager.cs" />

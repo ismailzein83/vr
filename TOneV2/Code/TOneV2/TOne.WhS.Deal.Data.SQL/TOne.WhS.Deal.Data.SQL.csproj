@@ -56,6 +56,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DaysToReprocessDataManager.cs" />
     <Compile Include="DealDetailedProgressDataManager.cs" />
     <Compile Include="DealProgressDataManager.cs" />
     <Compile Include="DealDataManager.cs" />
