@@ -72,13 +72,18 @@
       <Variable x:TypeArguments="scg:List(vae:DAProfCalcExecInput)" Name="DAProfCalcExecInputs" />
       <Variable x:TypeArguments="s:Guid" Name="DataAnalysisDefinitionId" />
       <Variable x:TypeArguments="scg:List(s:Guid)" Name="RecordStorageIds" />
-      <Variable x:TypeArguments="s:DateTime" Name="EffectiveDate">
+      <Variable x:TypeArguments="s:DateTime" Name="NowDate">
         <Variable.Default>
           <mca:CSharpValue x:TypeArguments="s:DateTime">DateTime.Now</mca:CSharpValue>
         </Variable.Default>
       </Variable>
       <Variable x:TypeArguments="s:DateTime" Name="FromTime" />
       <Variable x:TypeArguments="s:DateTime" Name="ToTime" />
+      <Variable x:TypeArguments="s:DateTime" Name="EffectiveDate">
+        <Variable.Default>
+          <mca:CSharpValue x:TypeArguments="s:DateTime">new DateTime(NowDate.Year, NowDate.Month, NowDate.Day, NowDate.Hour, NowDate.Minute, NowDate.Second)</mca:CSharpValue>
+        </Variable.Default>
+      </Variable>
     </Sequence.Variables>
     <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="Starting Profiling and Calculation Process.">
       <vbw:WriteTrackingMessage.Severity>
@@ -162,7 +167,7 @@
       </local:DAProfCalcSubProcess.FromTime>
       <local:DAProfCalcSubProcess.OutputRecordProcessor>
         <InArgument x:TypeArguments="vae:IDAProfCalcOutputRecordProcessor">
-          <mca:CSharpValue x:TypeArguments="vae:IDAProfCalcOutputRecordProcessor">new Vanrise.Analytic.Business.DAProfCalcGenerateVRAlertEventsOutputProcessor()</mca:CSharpValue>
+          <mca:CSharpValue x:TypeArguments="vae:IDAProfCalcOutputRecordProcessor">new Vanrise.Analytic.Business.DAProfCalcGenerateVRAlertEventsOutputProcessor(EffectiveDate)</mca:CSharpValue>
         </InArgument>
       </local:DAProfCalcSubProcess.OutputRecordProcessor>
       <local:DAProfCalcSubProcess.RecordStorageIds>
@@ -219,7 +224,7 @@
         </InArgument>
       </vbw:WriteTrackingMessage.Severity>
     </vbw:WriteTrackingMessage>
-    <sads:DebugSymbol.Symbol>d0tDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY0dlbmVyYXRlQWxlcnRQcm9jZXNzLnhhbWwbRgPfAQ4CAQFNC01XAgECUwVZIAMBngFaBYgBKQIBVYkBBdYBIgIBFNcBBd0BIAIBClYLVoUBAwGgAVNgU40BAwGfAWcLZ2cDAZYBdgt2fgMBjgGAAQuAAWkDAYYBewt7fgIBfmILYn4CAXZdC11cAgFubAtsWAIBZnELcVsCAV6FAQuFAVkCAVaMAQuMAXcCAU2RAQuRAV8CAUWlAQulAbMBAgE9qgELqgFhAgE1lgELlgF2AgEtmwELmwFYAgEloAELoAFTAgEdrwELrwFRAgEV2gEL2gGFAQIBDNcBYNcBjQECAQs=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0tDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuQW5hbHl0aWMuQlBcREFQcm9mQ2FsY0dlbmVyYXRlQWxlcnRQcm9jZXNzLnhhbWwcRgPkAQ4CAQFNC01XAgELVAtUrwECAQJYBV4gAwG6AV8FjQEpAgFojgEF2wEiAgEf3AEF4gEgAgEUWwtbhQEDAbwBWGBYjQEDAbsBbAtsZwMBsQF7C3t+AwGoAYUBC4UBaQMBnwGAAQuAAX4DAZYBZwtnfgMBjQFiC2JcAwGEAXELcVgCAXt2C3ZbAgFyigELigFZAgFpkQELkQF3AgFflgELlgFfAgFWqgELqgHAAQIBTa8BC68BYQIBRJsBC5sBdgIBO6ABC6ABWAIBMqUBC6UBUwIBKbQBC7QBUQIBIN8BC98BhQECARbcAWDcAY0BAgEV</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

@@ -11,7 +11,7 @@
             <vr-datagridcolumn headertext="'Alert Level'" tooltipfield="'AlertLevelDescription'" getcolor="scopeModel.getAlertLevelStyleColor" disablesorting="true" fixedwidth="'20'" invisibleheader></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'ID'" field="'Entity.VRNotificationId'" disablesorting="true" fixedwidth="'80'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Created'" field="'Entity.CreationTime'" type="'LongDatetime'" disablesorting="true" fixedwidth="'65'"></vr-datagridcolumn>
-            <!--<vr-datagridcolumn headertext="'Description'" field="'Entity.Description'" disablesorting="true" widthfactor="'20'"></vr-datagridcolumn>-->
+            <vr-datagridcolumn headertext="'Description'" field="'Entity.Description'" disablesorting="true" widthfactor="'20'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'Status'" field="'StatusDescription'" getcolor="scopeModel.getStatusColor" disablesorting="true" fixedwidth="'90'"></vr-datagridcolumn>
             <vr-datagridcolumn ng-repeat="column in scopeModel.columns" columnattributes="column"></vr-datagridcolumn>
         </vr-datagrid>

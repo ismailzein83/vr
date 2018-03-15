@@ -35,20 +35,25 @@ namespace Vanrise.Analytic.Entities
 
     public enum DAProfCalcTimeUnit
     {
-        [DAProfCalcTimeUnitAttribute(1440)]
+        [DAProfCalcTimeUnitAttribute(1440, "Day", "Days")]
         Days = 0,
-        [DAProfCalcTimeUnitAttribute(60)]
+        [DAProfCalcTimeUnitAttribute(60, "Hour", "Hours")]
         Hours = 1,
-        [DAProfCalcTimeUnitAttribute(1)]
+        [DAProfCalcTimeUnitAttribute(1, "Minute", "Minutes")]
         Minutes = 2
     }
 
     public class DAProfCalcTimeUnitAttribute : Attribute
     {
-        public DAProfCalcTimeUnitAttribute(int value)
+        public DAProfCalcTimeUnitAttribute(int value, string singularDescription, string pluralDescription)
         {
             this.Value = value;
+            this.SingularDescription = singularDescription;
+            this.PluralDescription = pluralDescription;
         }
         public int Value { get; set; }
+
+        public string SingularDescription { get; set; }
+        public string PluralDescription { get; set; }
     }
 }

@@ -16,5 +16,11 @@ namespace Vanrise.Analytic.Entities
         {
             return this.AnalysisPeriodTimeBack * Vanrise.Common.Utilities.GetEnumAttribute<DAProfCalcTimeUnit, DAProfCalcTimeUnitAttribute>(this.AnalysisPeriodTimeUnit).Value;
         }
+
+        public string GetDescription()
+        {
+            DAProfCalcTimeUnitAttribute daProfCalcTimeUnitAttribute = Vanrise.Common.Utilities.GetEnumAttribute<DAProfCalcTimeUnit, DAProfCalcTimeUnitAttribute>(this.AnalysisPeriodTimeUnit);
+            return string.Format("{0} {1}", this.AnalysisPeriodTimeBack, this.AnalysisPeriodTimeBack > 1 ? daProfCalcTimeUnitAttribute.PluralDescription : daProfCalcTimeUnitAttribute.SingularDescription);
+        }
     }
 }

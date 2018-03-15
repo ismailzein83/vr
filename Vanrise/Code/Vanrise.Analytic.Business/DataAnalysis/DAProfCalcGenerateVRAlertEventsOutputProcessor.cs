@@ -12,6 +12,13 @@ namespace Vanrise.Analytic.Business
 {
     public class DAProfCalcGenerateVRAlertEventsOutputProcessor : IDAProfCalcOutputRecordProcessor
     {
+        public DateTime EffectiveDate { get; set; }
+
+        public DAProfCalcGenerateVRAlertEventsOutputProcessor(DateTime effectiveDate)
+        {
+            this.EffectiveDate = effectiveDate;
+        }
+
         public void Initialize(IDAProfCalcOutputRecordProcessorIntializeContext context)
         {
 
@@ -81,9 +88,11 @@ namespace Vanrise.Analytic.Business
                 {
                     DAProfCalcNotificationData daProfCalcNotificationData = daProfCalcNotificationDataItem.Value;
 
+                    string description = string.Format("Analysis Period: {0}, Period End: {1:yyyy-MM-dd HH:mm:ss}, Rule: {2}", daProfCalcNotificationData.DAProfCalcAlertRuleSettings.DAProfCalcAnalysisPeriod.GetDescription(), EffectiveDate, daProfCalcNotificationData.AlertRule.Name);
+
                     DataRecordAlertRuleNotificationManager dataRecordAlertRuleNotificationManager = new DataRecordAlertRuleNotificationManager();
                     dataRecordAlertRuleNotificationManager.CreateAlertRuleNotifications(daProfCalcNotificationData.DataRecordAlertRuleNotifications, daProfCalcNotificationData.EventKeys, daProfCalcNotificationData.AlertRule.RuleTypeId, notificationTypeId, daProfCalcNotificationDataItem.Key,
-                         daProfCalcNotificationData.DAProfCalcAlertRuleSettings.MinNotificationInterval, daProfCalcOutputSettings.RecordTypeId, string.Format("Alert Rule {0}, Data Analysis Item {1}", daProfCalcNotificationData.AlertRule.Name, dataAnalysisItemDefinition.Name), daProfCalcNotificationData.AlertRule.UserId);
+                         daProfCalcNotificationData.DAProfCalcAlertRuleSettings.MinNotificationInterval, daProfCalcOutputSettings.RecordTypeId, description, daProfCalcNotificationData.AlertRule.UserId);
                 }
             }
         }
