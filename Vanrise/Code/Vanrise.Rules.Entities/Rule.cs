@@ -20,10 +20,10 @@ namespace Vanrise.Rules.Entities
 
         public DateTime CreatedTime { get; set; }
 
-        public int CreatedBy { get; set; }
+        public int? CreatedBy { get; set; }
 
-        public DateTime LastModifiedTime { get; set; }
+        public DateTime? LastModifiedTime { get; set; }
 
-        public int LastModifiedBy { get; set; }
+        public int? LastModifiedBy { get; set; }
     }
 }

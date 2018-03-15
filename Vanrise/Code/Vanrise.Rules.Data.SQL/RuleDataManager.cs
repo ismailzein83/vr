@@ -26,40 +26,40 @@ namespace Vanrise.Rules.Data.SQL
         public bool AddRule(Entities.Rule rule, out int ruleId)
         {
             object insertedId;
-            int recordesEffected = ExecuteNonQuerySP("rules.sp_Rule_Insert", out insertedId, rule.TypeId, rule.RuleDetails, rule.BED, rule.EED);
+            int recordesEffected = ExecuteNonQuerySP("rules.sp_Rule_Insert", out insertedId, rule.TypeId, rule.RuleDetails, rule.BED, rule.EED, rule.CreatedBy, rule.LastModifiedBy);
             ruleId = (recordesEffected > 0) ? (int)insertedId : -1;
             return (recordesEffected > 0);
         }
 
         public bool UpdateRule(Entities.Rule ruleEntity)
         {
-            int recordesEffected = ExecuteNonQuerySP("rules.sp_Rule_Update", ruleEntity.RuleId, ruleEntity.TypeId, ruleEntity.RuleDetails, ruleEntity.BED, ruleEntity.EED);
+            int recordesEffected = ExecuteNonQuerySP("rules.sp_Rule_Update", ruleEntity.RuleId, ruleEntity.TypeId, ruleEntity.RuleDetails, ruleEntity.BED, ruleEntity.EED, ruleEntity.LastModifiedBy);
             return (recordesEffected > 0);
         }
 
-        public bool SetDeleted(List<int> rulesIds)
+        public bool SetDeleted(List<int> rulesIds, int lastModifiedBy)
         {
-            int affectedRecords = ExecuteNonQuerySP("rules.sp_Rule_SetDeleted", string.Join<int>(",", rulesIds));
+            int affectedRecords = ExecuteNonQuerySP("rules.sp_Rule_SetDeleted", string.Join<int>(",", rulesIds), lastModifiedBy);
             return (affectedRecords > 0);
         }
 
         public bool AddRuleAndRuleChanged(Entities.Rule rule, ActionType actionType, out int ruleId)
         {
             object insertedId;
-            int recordesEffected = ExecuteNonQuerySP("rules.sp_Rule_InsertRuleAndRuleChanged", out insertedId, rule.TypeId, rule.RuleDetails, rule.BED, rule.EED, actionType);
+            int recordesEffected = ExecuteNonQuerySP("rules.sp_Rule_InsertRuleAndRuleChanged", out insertedId, rule.TypeId, rule.RuleDetails, rule.BED, rule.EED, rule.CreatedBy, rule.LastModifiedBy, actionType);
             ruleId = (recordesEffected > 0) ? (int)insertedId : -1;
             return (recordesEffected > 0);
         }
 
         public bool UpdateRuleAndRuleChanged(Entities.Rule rule, ActionType actionType, string initialRule, string additionalInformation)
         {
-            int recordesEffected = ExecuteNonQuerySP("rules.sp_Rule_UpdateRuleAndRuleChanged", rule.RuleId, rule.TypeId, rule.RuleDetails, rule.BED, rule.EED, actionType, initialRule, additionalInformation);
+            int recordesEffected = ExecuteNonQuerySP("rules.sp_Rule_UpdateRuleAndRuleChanged", rule.RuleId, rule.TypeId, rule.RuleDetails, rule.BED, rule.EED, rule.LastModifiedBy, actionType, initialRule, additionalInformation);
             return (recordesEffected > 0);
         }
 
-        public bool DeleteRuleAndRuleChanged(int ruleId, int ruleTypeId, ActionType actionType, string initialRule)
+        public bool DeleteRuleAndRuleChanged(int ruleId, int ruleTypeId, int lastModifiedBy, ActionType actionType, string initialRule)
         {
-            int recordesEffected = ExecuteNonQuerySP("rules.sp_Rule_DeleteRuleAndRuleChanged", ruleId, ruleTypeId, actionType, initialRule);
+            int recordesEffected = ExecuteNonQuerySP("rules.sp_Rule_DeleteRuleAndRuleChanged", ruleId, ruleTypeId, lastModifiedBy, actionType, initialRule);
             return (recordesEffected > 0);
         }
        
@@ -131,7 +131,11 @@ namespace Vanrise.Rules.Data.SQL
                 RuleDetails = reader["RuleDetails"] as string,
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
-                IsDeleted = GetReaderValue<bool>(reader, "IsDeleted")
+                IsDeleted = GetReaderValue<bool>(reader, "IsDeleted"),
+                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
+                CreatedBy = GetReaderValue<int?>(reader, "CreatedBy"),
+                LastModifiedTime = GetReaderValue<DateTime?>(reader, "LastModifiedTime"),
+                LastModifiedBy = GetReaderValue<int?>(reader, "LastModifiedBy")
             };
             return instance;
         }
@@ -146,7 +150,7 @@ namespace Vanrise.Rules.Data.SQL
                 ActionType = GetReaderValue<ActionType>(reader, "ActionType"),
                 InitialRule = reader["InitialRule"] as string,
                 AdditionalInformation = reader["AdditionalInformation"] as string,
-                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
+                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),    
             };
             return ruleChanged;
         }

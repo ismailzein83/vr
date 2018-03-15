@@ -9,13 +9,13 @@ namespace Vanrise.Rules.Data
 
         bool UpdateRule(Rule ruleEntity);
 
-        bool SetDeleted(List<int> rulesIds);
+        bool SetDeleted(List<int> rulesIds, int lastModifiedBy);
 
         bool AddRuleAndRuleChanged(Rule rule, ActionType actionType, out int ruleId);
 
         bool UpdateRuleAndRuleChanged(Rule rule, ActionType actionType, string initialRule, string additionalInformation);
 
-        bool DeleteRuleAndRuleChanged(int ruleId, int ruleTypeId, ActionType actionType, string initialRule);
+        bool DeleteRuleAndRuleChanged(int ruleId, int ruleTypeId, int lastModifiedBy, ActionType actionType, string initialRule);
 
         IEnumerable<Rule> GetRulesByType(int ruleTypeId);
 

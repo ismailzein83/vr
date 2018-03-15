@@ -2,12 +2,14 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Rules.Data;
 using Vanrise.Rules.Entities;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Rules
 {
@@ -38,6 +40,7 @@ namespace Vanrise.Rules
 
             if (TryAdd(rule))
             {
+
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 GetCacheManager().SetCacheExpired(GetRuleTypeId());
                 TrackAndLogRuleAdded(rule);
@@ -55,12 +58,16 @@ namespace Vanrise.Rules
         public bool TryAdd(T rule)
         {
             int ruleTypeId = GetRuleTypeId();
+            int loggedInUserId = ContextFactory.GetContext().GetLoggedInUserId();
+
             Entities.Rule ruleEntity = new Entities.Rule
             {
                 TypeId = ruleTypeId,
                 RuleDetails = Serializer.Serialize(rule),
                 BED = rule.BeginEffectiveTime,
                 EED = rule.EndEffectiveTime,
+                CreatedBy = loggedInUserId,
+                LastModifiedBy = loggedInUserId
             };
 
             if (ValidateBeforeAdd(rule))
@@ -121,7 +128,8 @@ namespace Vanrise.Rules
                 TypeId = ruleTypeId,
                 RuleDetails = Serializer.Serialize(rule),
                 EED = rule.EndEffectiveTime,
-                BED = rule.BeginEffectiveTime
+                BED = rule.BeginEffectiveTime,
+                LastModifiedBy =  ContextFactory.GetContext().GetLoggedInUserId()
             };
 
             if (ValidateBeforeUpdate(rule))
@@ -193,6 +201,8 @@ namespace Vanrise.Rules
             int ruleTypeID = GetRuleTypeId();
             T firstRule = GetRule(ruleIds.First());
 
+            int lastModifiedBy = ContextFactory.GetContext().GetLoggedInUserId();
+
             if (firstRule.HasAdditionalInformation)
             {
                 foreach (var ruleId in ruleIds)
@@ -212,7 +222,7 @@ namespace Vanrise.Rules
                         initialRule = Vanrise.Common.Serializer.Serialize(ruleChanged.InitialRule);
                     }
 
-                    if (ruleDataManager.DeleteRuleAndRuleChanged(ruleId, ruleTypeID, ActionType.DeletedRule, initialRule))
+                    if (ruleDataManager.DeleteRuleAndRuleChanged(ruleId, ruleTypeID, lastModifiedBy, ActionType.DeletedRule, initialRule))
                         TrackAndLogRuleDeleted(rule);
                 }
 
@@ -221,7 +231,7 @@ namespace Vanrise.Rules
             }
             else
             {
-                if (ruleDataManager.SetDeleted(ruleIds))
+                if (ruleDataManager.SetDeleted(ruleIds, lastModifiedBy))
                 {
                     deleteOperationOutput.Result = DeleteOperationResult.Succeeded;
                     GetCacheManager().SetCacheExpired(ruleTypeID);
