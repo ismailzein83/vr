@@ -58,7 +58,7 @@ Post-Deployment Script Template
 ('ad2d93e0-0c06-4ebe-b7a9-bf380c256eee','Tabs_Container','Tabs Container','VR_GenericData_GenericBEEditorDefinitionSettings','{"Editor":"vr-genericdata-tabscontainereditor-definition"}'),	
 ('5be30b11-8ee3-47eb-8269-41bdafe077e1','Generic_Editor','Generic Editor','VR_GenericData_GenericBEEditorDefinitionSettings','{"Editor":"vr-genericdata-genericeditorsetting-definition"}'),			
 ('ec8b54d7-28ac-474f-b40a-d7ac02d89630','Static_Editor','Static Editor','VR_GenericData_GenericBEEditorDefinitionSettings','{"Editor":"vr-genericdata-staticeditor-definition"}'),					
-('77f7dcb8-e42f-4ec3-8f46-0d655fd519b0','History_Grid_View','History Grid View','VR_GenericData_GenericBEViewDefinitionSettings		','{"Editor":"vr-genericdata-genericbe-historygridview-definition"}'),
+('77f7dcb8-e42f-4ec3-8f46-0d655fd519b0','History_Grid_View','History Grid View','VR_GenericData_GenericBEViewDefinitionSettings','{"Editor":"vr-genericdata-genericbe-historygridview-definition"}'),
 ('C094566B-B9AE-4D49-9810-A7238503FC1C','Condition_Group','	Condition Group','VR_GenericData_GenericBESaveConditionSettings','{"Editor":"vr-genericdata-genericbe-savecondition-conditiongroup"}'),
 ('D89CB0E3-BD36-409A-965B-3E6AFBCAD4C9','Filter_Group_Condition','Filter Group Condition','VR_GenericData_GenericBEConditionSettings','{"Editor":"vr-genericdata-genericbe-filtergroupcondition"}'),	
 ('39D842AB-7AFB-46EC-B43E-E7F19493CB86','Serial_Number','Serial Number','VR_GenericData_GenericBEOnBeforeInsertHandlerSettings','{"Editor":"vr-genericdata-genericbe-beforeinserthandler-serialnumber"}'),
