@@ -365,7 +365,8 @@ namespace Vanrise.Invoice.Business
                     preparedGenerateInvoiceInput.Invoice.SerialNumber = serialNumber;
                 }
 
-                if (SaveInvoice(preparedGenerateInvoiceInputs, out List<long> insertedInvoiceIds))
+                List<long> insertedInvoiceIds = null;
+                if (SaveInvoice(preparedGenerateInvoiceInputs, out  insertedInvoiceIds))
                 {
                     long invoiceAccountId;
                     var invoiceAccountManager = new InvoiceAccountManager();

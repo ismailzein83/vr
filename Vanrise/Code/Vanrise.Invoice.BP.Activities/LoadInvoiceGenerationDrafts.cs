@@ -39,7 +39,7 @@ namespace Vanrise.Invoice.BP.Activities
                         return new PartnerInvoiceGenerationDraft
                         {
                             Items = new List<PartnerInvoiceGenerationDraftItem>()
-                        }
+                        };
                     });
 
                     partnerInvoiceGenerationDraft.InvoiceGenerationIdentifier = invoiceGenerationIdentifier;
