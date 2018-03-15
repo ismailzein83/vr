@@ -77,15 +77,15 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
             var invoiceGenerationInfo = getGenerationCustomPayloadContext.InvoiceGenerationInfo.FirstOrDefault();
             invoiceGenerationInfo.ThrowIfNull("invoiceGenerationInfo");
 
-            var regenerateOutput = invoiceManager.ReGenerateInvoice(new GenerateInvoiceInput
+            var regenerateOutput = invoiceManager.ReGenerateInvoice(new ReGenerateInvoiceInput
             {
                 CustomSectionPayload = invoiceGenerationInfo.CustomPayload,
                 FromDate = context.Invoice.FromDate,
                 InvoiceId = context.Invoice.InvoiceId,
+                ToDate = context.Invoice.ToDate,
                 InvoiceTypeId = context.Invoice.InvoiceTypeId,
                 IssueDate = context.Invoice.IssueDate,
                 PartnerId = context.Invoice.PartnerId,
-                ToDate = context.Invoice.ToDate
             });
             if (regenerateOutput.Result == UpdateOperationResult.Failed)
             {

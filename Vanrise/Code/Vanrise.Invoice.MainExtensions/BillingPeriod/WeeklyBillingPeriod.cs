@@ -12,8 +12,9 @@ namespace Vanrise.Invoice.MainExtensions
         public override Guid ConfigId { get { return new Guid("A08230D0-317E-4B30-A5EA-5ED72E2604D8"); } }
         public DayOfWeek DailyType { get; set; }
         public Boolean SplitInvoice { get; set; }
-        public override BillingInterval GetPeriod(IBillingPeriodContext context)
+        public override List<BillingInterval> GetPeriod(IBillingPeriodContext context)
         {
+            List<BillingInterval> billingIntervalList = new List<BillingInterval>();
             BillingInterval perviousBillingInterval = new Entities.BillingInterval();
             if (context.PreviousPeriodEndDate.HasValue)
             {
@@ -44,11 +45,11 @@ namespace Vanrise.Invoice.MainExtensions
                 {
                     nextBillingInterval.ToDate = nextBillingInterval.FromDate.AddDays(6);
                 }
-                UpdateToDateIfExcludeOtherMonth(nextBillingInterval);
+               // SplitIfExcludeOtherMonth(nextBillingInterval);
 
                 if (nextBillingInterval.ToDate > context.IssueDate)
                 {
-                    perviousBillingInterval = GetIntervalIfPreviousPeriodNotValid(context.IssueDate);
+                    return GetIntervalIfPreviousPeriodNotValid(context.IssueDate);
                 }else
                 {
                     perviousBillingInterval.FromDate = nextBillingInterval.FromDate;
@@ -60,16 +61,15 @@ namespace Vanrise.Invoice.MainExtensions
                         nextBillingInterval.FromDate = nextBillingInterval.ToDate.AddDays(1);
                         nextBillingInterval.ToDate = nextBillingInterval.FromDate.AddDays(6);
                     }
-                    UpdateToDateIfExcludeOtherMonth(perviousBillingInterval);
+                   return SplitIfExcludeOtherMonth(perviousBillingInterval);
                 }
             }else
             {
-                perviousBillingInterval = GetIntervalIfPreviousPeriodNotValid(context.IssueDate);
+                return GetIntervalIfPreviousPeriodNotValid(context.IssueDate);
                
             }
-            return perviousBillingInterval;
         }
-        private BillingInterval GetIntervalIfPreviousPeriodNotValid(DateTime issueDate)
+        private List<BillingInterval> GetIntervalIfPreviousPeriodNotValid(DateTime issueDate)
         {
             BillingInterval perviousBillingInterval = new BillingInterval();
             perviousBillingInterval.ToDate = issueDate.AddDays(-1);
@@ -82,16 +82,35 @@ namespace Vanrise.Invoice.MainExtensions
                     perviousBillingInterval.ToDate = perviousBillingInterval.ToDate.AddDays(-1);
                 }
             }
-            UpdateToDateIfExcludeOtherMonth(perviousBillingInterval);
-            return perviousBillingInterval;
+           return SplitIfExcludeOtherMonth(perviousBillingInterval);
         }
-        private void UpdateToDateIfExcludeOtherMonth(BillingInterval billingInterval)
+        private List<BillingInterval> SplitIfExcludeOtherMonth(BillingInterval billingInterval)
         {
-            if (this.SplitInvoice)
+            List<BillingInterval> billingIntervals = new List<BillingInterval>();
+
+            if (this.SplitInvoice && billingInterval.FromDate.Month != billingInterval.ToDate.Month)
             {
-                if (billingInterval.FromDate.Month != billingInterval.ToDate.Month)
-                    billingInterval.ToDate = billingInterval.FromDate.GetLastDayOfMonth();
+
+                billingIntervals.Add(new BillingInterval
+                {
+                    FromDate = billingInterval.FromDate,
+                    ToDate = billingInterval.FromDate.GetLastDayOfMonth()
+                });
+                billingIntervals.Add(new BillingInterval
+                {
+                    FromDate = billingInterval.FromDate.GetLastDayOfMonth().AddDays(1),
+                    ToDate = billingInterval.ToDate
+                });
             }
+            else
+            {
+                billingIntervals.Add(new BillingInterval
+                {
+                    FromDate = billingInterval.FromDate,
+                    ToDate = billingInterval.ToDate
+                });
+            }
+            return billingIntervals;
         }
         public override string GetDescription()
         {

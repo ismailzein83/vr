@@ -30,6 +30,7 @@ namespace Vanrise.Invoice.Entities
         public string SourceId { get; set; }
         public Boolean IsAutomatic { get; set; }
         public DateTime? SentDate { get; set; }
+        public Guid? SplitInvoiceGroupId { get; set; }
         public InvoiceSettings Settings { get; set; }
         public Invoice() { }
         public IEnumerable<Invoice> GetInvoiceRDLCSchema()

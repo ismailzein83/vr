@@ -13,8 +13,10 @@ namespace Vanrise.Invoice.MainExtensions
         public override Guid ConfigId { get { return new Guid("66B9FD8C-DACB-4F35-9853-F6C0C9DFE4F1"); } }
         public DayOfWeek DailyType { get; set; }
 
-        public override BillingInterval GetPeriod(IBillingPeriodContext context)
+        public override List<BillingInterval> GetPeriod(IBillingPeriodContext context)
         {
+            List<BillingInterval> billingIntervalList = new List<BillingInterval>();
+
             BillingInterval perviousBillingInterval = new Entities.BillingInterval();
             if (context.PreviousPeriodEndDate.HasValue)
             {
@@ -50,7 +52,8 @@ namespace Vanrise.Invoice.MainExtensions
             {
                 perviousBillingInterval = GetIntervalIfPreviousPeriodNotValid(context.IssueDate);
             }
-            return perviousBillingInterval;
+            billingIntervalList.Add(perviousBillingInterval);
+            return billingIntervalList;
         }
 
         private BillingInterval GetIntervalIfPreviousPeriodNotValid(DateTime issueDate)

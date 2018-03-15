@@ -4,6 +4,22 @@ using Vanrise.Entities;
 
 namespace Vanrise.Invoice.Entities
 {
+    public class PartnerInvoiceGenerationDraftItem
+    {
+        public long InvoiceGenerationDraftId { get; set; }
+        public DateTime From { get; set; }
+        public DateTime To { get; set; }
+        public dynamic CustomPayload { get; set; }
+
+    }
+    public class PartnerInvoiceGenerationDraft
+    {
+        public List<PartnerInvoiceGenerationDraftItem> Items { get; set; }
+        public Guid InvoiceTypeId { get; set; }
+        public Guid InvoiceGenerationIdentifier { get; set; }
+        public string PartnerId { get; set; }
+        public string PartnerName { get; set; }
+    }
     public class InvoiceGenerationDraft
     {
         public long InvoiceGenerationDraftId { get; set; }

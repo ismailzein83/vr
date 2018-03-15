@@ -69,7 +69,6 @@
     <Compile Include="InvoiceBulkActionsDraftSummary.cs" />
     <Compile Include="InvoiceByPartnerInvoiceType.cs" />
     <Compile Include="InvoiceGapAction.cs" />
-    <Compile Include="InvoiceGeneratorException.cs" />
     <Compile Include="InvoiceItem\ConvertItemGroupingToGridColumnAttributeInput.cs" />
     <Compile Include="InvoiceItem\GroupingInvoiceItemDetail.cs" />
     <Compile Include="InvoiceItem\GroupingInvoiceItemQuery.cs" />
@@ -172,6 +171,14 @@
     <Compile Include="VRPopulatedPeriod.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.AccountBalance.Entities\Vanrise.AccountBalance.Entities.csproj">
+      <Project>{5111e97a-c9ab-4bef-8f75-32cc46526074}</Project>
+      <Name>Vanrise.AccountBalance.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.AccountManager.Entities\Vanrise.AccountManager.Entities.csproj">
+      <Project>{f6b69e54-b351-41f5-a845-5803900ba05f}</Project>
+      <Name>Vanrise.AccountManager.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Analytic.Entities\Vanrise.Analytic.Entities.csproj">
       <Project>{bf85d7b4-84c2-441b-bca0-b42fe2619ae9}</Project>
       <Name>Vanrise.Analytic.Entities</Name>

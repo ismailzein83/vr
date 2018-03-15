@@ -8,6 +8,8 @@ using Vanrise.Invoice.Business.Context;
 using System.Collections.Generic;
 using Vanrise.Common;
 using Vanrise.Invoice.BP.Arguments;
+using System.Linq;
+
 namespace Vanrise.Invoice.BP.Activities
 {
     public sealed class GeneratePartnerInvoice : BaseCodeActivity
@@ -15,7 +17,7 @@ namespace Vanrise.Invoice.BP.Activities
         #region Arguments
 
         [RequiredArgument]
-        public InArgument<InvoiceGenerationDraft> InvoiceGenerationDraft { get; set; }
+        public InArgument<PartnerInvoiceGenerationDraft> PartnerInvoiceGenerationDraft { get; set; }
 
         [RequiredArgument]
         public InArgument<bool> IsAutomatic { get; set; }
@@ -25,58 +27,63 @@ namespace Vanrise.Invoice.BP.Activities
         public InArgument<DateTime> IssueDate { get; set; }
 
         [RequiredArgument]
-        public OutArgument<bool> Succeeded { get; set; }
-
-        [RequiredArgument]
-        public OutArgument<List<InvoiceGenerationMessageOutput>> Messages { get; set; }
-
-        [RequiredArgument]
         public OutArgument<bool> GenerationErrorOccured { get; set; }
 
         [RequiredArgument]
         public OutArgument<Exception> GenerationErrorException { get; set; }
-
+        [RequiredArgument]
+        public InArgument<int> RemainingInvoices { get; set; }
+        [RequiredArgument]
+        public OutArgument<int> ProccessedInvoices { get; set; }
+        [RequiredArgument]
+        public OutArgument<int> SucceededInvoices { get; set; }
 
         #endregion
 
         protected override void VRExecute(IBaseCodeActivityContext context)
         {
-            InvoiceGenerationDraft invoiceGenerationDraft = context.ActivityContext.GetValue(this.InvoiceGenerationDraft);
-            var partnerId = invoiceGenerationDraft.PartnerId;
-            var invoiceTypeId = invoiceGenerationDraft.InvoiceTypeId;
+
+            PartnerInvoiceGenerationDraft partnerInvoiceGenerationDraft = context.ActivityContext.GetValue(this.PartnerInvoiceGenerationDraft);
+            partnerInvoiceGenerationDraft.ThrowIfNull("partnerInvoiceGenerationDraft");
+
+            var partnerId = partnerInvoiceGenerationDraft.PartnerId;
+            var invoiceTypeId = partnerInvoiceGenerationDraft.InvoiceTypeId;
             var isAutomatic = context.ActivityContext.GetValue(this.IsAutomatic);
             var issueDate = context.ActivityContext.GetValue(this.IssueDate);
             var invoiceGapAction = context.ActivityContext.GetValue(this.InvoiceGapAction);
-            List<InvoiceGenerationMessageOutput> messages = new List<InvoiceGenerationMessageOutput>();
+
             InvoiceManager invoiceManager = new InvoiceManager();
-            InvoiceSettingManager invoiceSettingManager = new Business.InvoiceSettingManager();
             InvoiceTypeManager invoiceTypeManager = new Business.InvoiceTypeManager();
-           
+
+            var remainingInvoices = context.ActivityContext.GetValue(this.RemainingInvoices);
+
+            int succeededInvoices = 0;
+            int proccessedInvoices = 0;
+
             if (partnerId != null)
             {
+                GenerateInvoiceInput generateInvoiceInput = new GenerateInvoiceInput
+                {
+                    InvoiceTypeId = invoiceTypeId,
+                    IsAutomatic = isAutomatic,
+                    IssueDate = issueDate,
+                    PartnerId = partnerId,
+                    Items = new List<GenerateInvoiceInputItem>()
+                };
+
                 var invoiceType = invoiceTypeManager.GetInvoiceType(invoiceTypeId);
+                invoiceType.ThrowIfNull("invoiceType", invoiceTypeId);
+                invoiceType.ThrowIfNull("invoiceType.Settings", invoiceTypeId);
+                invoiceType.ThrowIfNull("invoiceType.Settings.ExtendedSettings", invoiceTypeId);
+
                 var invoiceTypePartnerManager = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
+                invoiceTypePartnerManager.ThrowIfNull("invoiceTypePartnerManager");
+
                 PartnerManager partnerManager = new PartnerManager();
                 var partnerSetting = partnerManager.GetInvoicePartnerSetting(invoiceTypeId, partnerId);
+                partnerSetting.ThrowIfNull("partnerSetting", partnerId);
+                partnerSetting.ThrowIfNull(" partnerSetting.InvoiceSetting", partnerId);
 
-                //if (isAutomatic)
-                //{
-                //    AutomaticInvoiceSettingPart automaticInvoiceSettingPart = invoiceTypePartnerManager.GetInvoicePartnerSettingPart<AutomaticInvoiceSettingPart>(
-                //    new InvoicePartnerSettingPartContext
-                //    {
-                //        InvoiceSettingId = partnerSetting.InvoiceSetting.InvoiceSettingId,
-                //        InvoiceTypeId = invoiceTypeId,
-                //        PartnerId = partnerId
-                //    });
-
-                //    if (automaticInvoiceSettingPart == null || !automaticInvoiceSettingPart.IsEnabled)
-                //    {
-                //        this.Succeeded.Set(context.ActivityContext, false);
-                //        this.LogEntryType.Set(context.ActivityContext, Vanrise.Entities.LogEntryType.Warning);
-                //        this.Message.Set(context.ActivityContext, string.Format("Invoice not generated for {0} from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}. Reason : 'Automatic invoice not enabled for this partner'", invoiceGenerationDraft.PartnerName, invoiceGenerationDraft.From, invoiceGenerationDraft.To));
-                //        return;
-                //    }
-                //}
 
                 BillingPeriodInvoiceSettingPart billingPeriodInvoiceSettingPart = invoiceTypePartnerManager.GetInvoicePartnerSettingPart<BillingPeriodInvoiceSettingPart>(
                     new InvoicePartnerSettingPartContext
@@ -86,122 +93,153 @@ namespace Vanrise.Invoice.BP.Activities
                         PartnerId = partnerId
                     });
 
-                if (billingPeriodInvoiceSettingPart != null && billingPeriodInvoiceSettingPart.FollowBillingPeriod)
+                if (partnerInvoiceGenerationDraft.Items != null && partnerInvoiceGenerationDraft.Items.Count > 0)
                 {
-                    DateTime partnerIssueDate = invoiceGenerationDraft.To.Date.AddDays(1);
-                    var billingPeriod = invoiceManager.GetBillingInterval(invoiceTypeId, partnerId, partnerIssueDate);
-                    if (billingPeriod == null || billingPeriod.FromDate != invoiceGenerationDraft.From || billingPeriod.ToDate != invoiceGenerationDraft.To)
+
+                    proccessedInvoices = partnerInvoiceGenerationDraft.Items.Count;
+                    this.ProccessedInvoices.Set(context.ActivityContext, proccessedInvoices);
+
+
+                    DateTime partnerIssueDate = partnerInvoiceGenerationDraft.Items.Max(x => x.To).AddDays(1);
+                    List<BillingInterval> billingPeriods = null;
+                    if (billingPeriodInvoiceSettingPart != null && billingPeriodInvoiceSettingPart.FollowBillingPeriod)
                     {
-                        this.Succeeded.Set(context.ActivityContext, false);
-                        messages.Add(new InvoiceGenerationMessageOutput
-                        {
-                            LogEntryType = Vanrise.Entities.LogEntryType.Warning,
-                            Message = string.Format("Invoice not generated for {0} from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}. Reason : 'Invalid Billing Period'", invoiceGenerationDraft.PartnerName, invoiceGenerationDraft.From, invoiceGenerationDraft.To)
-                        });
-                        this.Messages.Set(context.ActivityContext, messages);
-                        return;
+                        billingPeriods = invoiceManager.GetBillingInterval(invoiceTypeId, partnerId, issueDate);
                     }
-                }
-                var invoiceGenerationGap = invoiceManager.CheckGeneratedInvoicePeriodGaP(invoiceGenerationDraft.From,invoiceTypeId,partnerId);
-                if (invoiceGenerationGap.HasValue)
-                {
-                    switch (invoiceGapAction)
-                    {
-                        case Entities.InvoiceGapAction.GenerateInvoice:
-                            break;
-                        case Entities.InvoiceGapAction.SkipInvoice:
-                            messages.Add(new InvoiceGenerationMessageOutput
-                            {
-                                LogEntryType = Vanrise.Entities.LogEntryType.Warning,
-                                Message = string.Format("Invoice not generated for {0} from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}. Reason : 'invoice must be generated from date {3:yyyy-MM-dd}.'", invoiceGenerationDraft.PartnerName, invoiceGenerationDraft.From, invoiceGenerationDraft.To, invoiceGenerationGap.Value)
-                            });
-                            this.Messages.Set(context.ActivityContext, messages);
-                            return;
-                    }
-                }
-                bool succeeded;
-                var generatedInvoice = invoiceManager.GenerateInvoice(new Entities.GenerateInvoiceInput
-                {
-                    InvoiceTypeId = invoiceTypeId,
-                    IssueDate = issueDate,
-                    PartnerId = partnerId,
-                    FromDate = invoiceGenerationDraft.From,
-                    ToDate = invoiceGenerationDraft.To,
-                    IsAutomatic = isAutomatic,
-                    CustomSectionPayload = invoiceGenerationDraft.CustomPayload
-                });
 
-                if (generatedInvoice.Result == InsertOperationResult.Succeeded)
-                {
-                    succeeded = true;
+                    for (var i = 0; i < partnerInvoiceGenerationDraft.Items.Count; i++)
+                    {
+                        var item = partnerInvoiceGenerationDraft.Items[i];
 
-                    messages.Add(new InvoiceGenerationMessageOutput
-                    {
-                        LogEntryType = Vanrise.Entities.LogEntryType.Information,
-                        Message = string.Format("Invoice generated for '{0}' from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}", invoiceGenerationDraft.PartnerName, invoiceGenerationDraft.From, invoiceGenerationDraft.To)
-                    });
-                   
-                    if (isAutomatic)
-                    {
-                        AutomaticInvoiceActionsPart automaticInvoiceActionsPart = invoiceTypePartnerManager.GetInvoicePartnerSettingPart<AutomaticInvoiceActionsPart>(
-                            new InvoicePartnerSettingPartContext
-                            {
-                                InvoiceSettingId = partnerSetting.InvoiceSetting.InvoiceSettingId,
-                                InvoiceTypeId = invoiceTypeId,
-                                PartnerId = partnerId
-                            });
-                        if (automaticInvoiceActionsPart != null && automaticInvoiceActionsPart.Actions != null)
+                        if (billingPeriodInvoiceSettingPart != null && billingPeriodInvoiceSettingPart.FollowBillingPeriod)
                         {
-                            try
+                            if (billingPeriods == null || !billingPeriods.Any(x => x.FromDate == item.From && x.ToDate == item.To))
                             {
-                                invoiceType.Settings.AutomaticInvoiceActions.ThrowIfNull("invoiceType.Settings.AutomaticInvoiceActions");
-
-                                 foreach (var action in automaticInvoiceActionsPart.Actions)
-                                 {
-
-
-                                     var automaticInvoiceAction = invoiceType.Settings.AutomaticInvoiceActions.FindRecord(x => x.AutomaticInvoiceActionId == action.AutomaticInvoiceActionId);
-                                     automaticInvoiceAction.ThrowIfNull("automaticInvoiceAction");
-
-                                    AutomaticActionRuntimeSettingsContext automaticActionContext = new Business.Context.AutomaticActionRuntimeSettingsContext
-                                    {
-                                        Invoice = generatedInvoice.InsertedObject.Entity,
-                                        DefinitionSettings = automaticInvoiceAction.Settings
-                                    };
-                                    action.Settings.Execute(automaticActionContext);
-                                    if (automaticActionContext.ErrorMessage != null)
-                                    {
-                                        messages.Add(new InvoiceGenerationMessageOutput
-                                        {
-                                            LogEntryType = Vanrise.Entities.LogEntryType.Warning,
-                                            Message = string.Format("{0} Account '{1}'", automaticActionContext.ErrorMessage, invoiceGenerationDraft.PartnerName)
-                                        });
-                                    }
-                                 }
-                            }
-                            catch(Exception ex)
-                            {
-                                this.Messages.Set(context.ActivityContext, messages);
-                                this.GenerationErrorOccured.Set(context.ActivityContext, true);
-                                this.GenerationErrorException.Set(context.ActivityContext, ex);
+                                WriteErrorMessages(partnerInvoiceGenerationDraft.Items, partnerInvoiceGenerationDraft.PartnerName, "Invalid Billing Period", item.InvoiceGenerationDraftId, remainingInvoices, context);
                                 return;
                             }
                         }
+                        if (partnerInvoiceGenerationDraft.Items.Any(x => item.InvoiceGenerationDraftId != x.InvoiceGenerationDraftId && Utilities.AreTimePeriodsOverlapped(x.From, x.To, item.From, item.To)))
+                        {
+                            WriteErrorMessages(partnerInvoiceGenerationDraft.Items, partnerInvoiceGenerationDraft.PartnerName, "'Overlapped Billing Period", item.InvoiceGenerationDraftId, remainingInvoices, context);
+                            return;
+                        }
+
+                        var invoiceGenerationGap = invoiceManager.CheckGeneratedInvoicePeriodGaP(item.From, invoiceTypeId, partnerId);
+                        if (invoiceGenerationGap.HasValue)
+                        {
+                            switch (invoiceGapAction)
+                            {
+                                case Entities.InvoiceGapAction.GenerateInvoice:
+                                    break;
+                                case Entities.InvoiceGapAction.SkipInvoice:
+                                    WriteErrorMessages(partnerInvoiceGenerationDraft.Items, partnerInvoiceGenerationDraft.PartnerName, string.Format("invoice must be generated from date {0:yyyy-MM-dd}'", invoiceGenerationGap.Value), item.InvoiceGenerationDraftId, remainingInvoices, context);
+                                    return;
+                            }
+                        }
+                        generateInvoiceInput.Items.Add(new GenerateInvoiceInputItem
+                        {
+                            CustomSectionPayload = item.CustomPayload,
+                            FromDate = item.From,
+                            ToDate = item.To
+                        });
+
                     }
-                   
+                }
+
+
+                if (generateInvoiceInput.Items.Count > 0)
+                {
+                    var generatedInvoices = invoiceManager.GenerateInvoice(generateInvoiceInput);
+                    if (generatedInvoices != null)
+                    {
+
+                        for (var i = 0; i < generatedInvoices.Count; i++)
+                        {
+                            var generatedInvoice = generatedInvoices[i];
+                            if (generatedInvoice.IsSucceeded)
+                            {
+                                context.ActivityContext.WriteBusinessTrackingMsg(LogEntryType.Information, "Invoice generated for '{0}' from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}. Remaining Invoices: {3}", partnerInvoiceGenerationDraft.PartnerName, generatedInvoice.FromDate, generatedInvoice.ToDate, remainingInvoices - (i + 1));
+                                if (isAutomatic)
+                                {
+                                    AutomaticInvoiceActionsPart automaticInvoiceActionsPart = invoiceTypePartnerManager.GetInvoicePartnerSettingPart<AutomaticInvoiceActionsPart>(
+                                        new InvoicePartnerSettingPartContext
+                                        {
+                                            InvoiceSettingId = partnerSetting.InvoiceSetting.InvoiceSettingId,
+                                            InvoiceTypeId = invoiceTypeId,
+                                            PartnerId = partnerId
+                                        });
+                                    if (automaticInvoiceActionsPart != null && automaticInvoiceActionsPart.Actions != null)
+                                    {
+                                        try
+                                        {
+                                            invoiceType.Settings.AutomaticInvoiceActions.ThrowIfNull("invoiceType.Settings.AutomaticInvoiceActions");
+
+                                            foreach (var action in automaticInvoiceActionsPart.Actions)
+                                            {
+
+                                                var automaticInvoiceAction = invoiceType.Settings.AutomaticInvoiceActions.FindRecord(x => x.AutomaticInvoiceActionId == action.AutomaticInvoiceActionId);
+                                                automaticInvoiceAction.ThrowIfNull("automaticInvoiceAction");
+
+                                                AutomaticActionRuntimeSettingsContext automaticActionContext = new Business.Context.AutomaticActionRuntimeSettingsContext
+                                                {
+                                                    Invoice = generatedInvoice.Invoice,
+                                                    DefinitionSettings = automaticInvoiceAction.Settings
+                                                };
+                                                action.Settings.Execute(automaticActionContext);
+                                                if (automaticActionContext.ErrorMessage != null)
+                                                {
+                                                    context.ActivityContext.WriteBusinessTrackingMsg(LogEntryType.Warning, "{0} Account '{1}'. Remaining Invoices: {2}", automaticActionContext.ErrorMessage, partnerInvoiceGenerationDraft.PartnerName, remainingInvoices - (i + 1));
+                                                }
+                                                else
+                                                {
+                                                    context.ActivityContext.WriteBusinessTrackingMsg(LogEntryType.Information, "Invoice action '{0}' executed successfully for account '{1}'. Remaining Invoices: {2}", automaticInvoiceAction.Title, partnerInvoiceGenerationDraft.PartnerName, remainingInvoices - (i + 1));
+                                                }
+                                            }
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            this.GenerationErrorOccured.Set(context.ActivityContext, true);
+                                            this.GenerationErrorException.Set(context.ActivityContext, ex);
+                                            this.SucceededInvoices.Set(context.ActivityContext, succeededInvoices);
+                                            return;
+                                        }
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+                                if (generatedInvoice.Message != null)
+                                {
+                                    context.ActivityContext.WriteBusinessTrackingMsg(LogEntryType.Warning, "Invoice not generated for {0} from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}. Reason : {3}. Remaining Invoices: {4}", partnerInvoiceGenerationDraft.PartnerName, generatedInvoice.FromDate, generatedInvoice.ToDate, generatedInvoice.Message.Message, remainingInvoices - (i + 1));
+                                }
+                            }
+                        }
+                    }
+
+                }
+
+                this.SucceededInvoices.Set(context.ActivityContext, succeededInvoices);
+            }
+        }
+
+        private void WriteErrorMessages(List<PartnerInvoiceGenerationDraftItem> items,string partnerName, string errorMessage, long invoiceGenerationDraftId, int remainingInvoices, IBaseCodeActivityContext context)
+        {
+            var generateInvoiceOutputs = new List<GenerateInvoiceOutput>();
+
+            for (var i = 0; i < items.Count; i++)
+            {
+                var item = items[i];
+                if(item.InvoiceGenerationDraftId == invoiceGenerationDraftId)
+                {
+                    context.ActivityContext.WriteBusinessTrackingMsg(LogEntryType.Warning, "Invoice not generated for {0} from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}. Reason : '{3}'. Remaining Invoices: {4}", partnerName, item.From, item.To, errorMessage, --remainingInvoices);
                 }
                 else
                 {
-                    succeeded = false;
-                    messages.Add(new InvoiceGenerationMessageOutput
-                    {
-                        LogEntryType = Vanrise.Entities.LogEntryType.Warning,
-                        Message = string.Format("Invoice not generated for {0} from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}. Reason : {3}", invoiceGenerationDraft.PartnerName, invoiceGenerationDraft.From, invoiceGenerationDraft.To, generatedInvoice.Message)
-                    });
+                    context.ActivityContext.WriteBusinessTrackingMsg(LogEntryType.Warning, "Invoice not generated for {0} from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}. Reason : 'Stopped due to an error accurred in generation of related invoice'. Remaining Invoices: {3}", partnerName, item.From, item.To, --remainingInvoices);
                 }
-
-                this.Succeeded.Set(context.ActivityContext, succeeded);
-                this.Messages.Set(context.ActivityContext, messages);
+               
             }
         }
     }

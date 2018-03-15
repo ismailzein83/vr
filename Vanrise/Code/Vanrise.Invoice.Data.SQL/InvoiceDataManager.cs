@@ -147,102 +147,124 @@ namespace Vanrise.Invoice.Data.SQL
                 return GetReaderValue<int>(reader, "Counter");
             }, InvoiceTypeId, partnerId, fromDate, toDate);
         }
-        public bool SaveInvoices(List<GeneratedInvoiceItemSet> invoiceItemSets, Entities.Invoice invoiceEntity, long? invoiceIdToDelete, Dictionary<string, List<string>> itemSetNameStorageDic, IEnumerable<Vanrise.AccountBalance.Entities.BillingTransaction> billingTransactions,List<long> invoiceToSettleIds, Func<Entities.Invoice, bool> actionBeforeGenerateInvoice, out long insertedInvoiceId)
+
+        public bool SaveInvoices(List<GenerateInvoiceInputToSave> generateInvoicesInputToSave, out List<long> insertedInvoiceIds)
         {
-            object invoiceId;
-            string serializedSettings = null;
-            if (invoiceEntity.Settings != null)
+            insertedInvoiceIds = null;
+            if (generateInvoicesInputToSave != null)
             {
-                serializedSettings = Vanrise.Common.Serializer.Serialize(invoiceEntity.Settings);
-            }
+                insertedInvoiceIds = new List<long>();
 
-            int affectedRows = ExecuteNonQuerySP
-            (
-                "[VR_Invoice].[sp_Invoice_Save]",
-                out invoiceId,
-                invoiceEntity.UserId,
-                invoiceEntity.InvoiceTypeId,
-                invoiceEntity.PartnerId,
-                invoiceEntity.SerialNumber,
-                invoiceEntity.FromDate,
-                invoiceEntity.ToDate,
-                invoiceEntity.IssueDate,
-                invoiceEntity.DueDate,
-                Vanrise.Common.Serializer.Serialize(invoiceEntity.Details),
-                invoiceEntity.Note,
-                invoiceEntity.SourceId,
-                true,
-                invoiceEntity.IsAutomatic,
-                serializedSettings,
-                invoiceEntity.InvoiceSettingId,
-                invoiceEntity.SentDate
-            );
+                Guid? splitInvoiceGroupId = Guid.NewGuid();
 
-            insertedInvoiceId = Convert.ToInt64(invoiceId);
-
-
-            if (itemSetNameStorageDic != null && itemSetNameStorageDic.Count > 0)
-            {
-                var remainingInvoiceItemSets = invoiceItemSets.FindAllRecords(x => !itemSetNameStorageDic.Values.Any(y => y.Contains(x.SetName)));
-                if (remainingInvoiceItemSets != null)
+                for(var i = 0;i<  generateInvoicesInputToSave.Count;i++)
                 {
-                    InvoiceItemDataManager dataManager = new InvoiceItemDataManager();
-                    dataManager.SaveInvoiceItems(insertedInvoiceId, remainingInvoiceItemSets);
-                }
-                foreach (var item in itemSetNameStorageDic)
-                {
-                    InvoiceItemDataManager dataManager = new InvoiceItemDataManager();
-                    dataManager.StorageConnectionStringKey = item.Key;
-                    var invoiceItemSetsToSave = invoiceItemSets.FindAllRecords(x => item.Value.Contains(x.SetName));
-                    dataManager.SaveInvoiceItems(insertedInvoiceId, invoiceItemSetsToSave);
-                }
-            }
-            else
-            {
-                InvoiceItemDataManager dataManager = new InvoiceItemDataManager();
-                dataManager.SaveInvoiceItems(insertedInvoiceId, invoiceItemSets);
-            }
-            if (actionBeforeGenerateInvoice != null)
-            {
-                invoiceEntity.InvoiceId = insertedInvoiceId;
-                actionBeforeGenerateInvoice(invoiceEntity);
-            }
-            var transactionOptions = new TransactionOptions
-            {
-                IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted,
-                Timeout = TransactionManager.DefaultTimeout
-            };
+                    var generateInvoiceInputToSave = generateInvoicesInputToSave[i];
 
-            using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions))
-            {
-                var transactionDataManager = new Vanrise.AccountBalance.Data.SQL.BillingTransactionDataManager();
-
-
-                if(invoiceToSettleIds != null && invoiceToSettleIds.Count > 0)
-                {
-                    UpdateInvoiceSettleIds(insertedInvoiceId, invoiceToSettleIds);
-                    if (invoiceIdToDelete.HasValue)
+                    if(generateInvoiceInputToSave.InvoiceIdToDelete.HasValue && generateInvoiceInputToSave.SplitInvoiceGroupId.HasValue)
                     {
-                        ClearSettlementInvoiceIds(invoiceIdToDelete.Value);
+                        splitInvoiceGroupId = generateInvoiceInputToSave.SplitInvoiceGroupId.Value;
                     }
+
+                    string serializedSettings = null;
+                    if (generateInvoiceInputToSave.Invoice.Settings != null)
+                    {
+                        serializedSettings = Vanrise.Common.Serializer.Serialize(generateInvoiceInputToSave.Invoice.Settings);
+                    }
+
+                    object invoiceId;
+                    int affectedRows = ExecuteNonQuerySP
+                    (
+                        "[VR_Invoice].[sp_Invoice_Save]",
+                        out invoiceId,
+                        generateInvoiceInputToSave.Invoice.UserId,
+                        generateInvoiceInputToSave.Invoice.InvoiceTypeId,
+                        generateInvoiceInputToSave.Invoice.PartnerId,
+                        generateInvoiceInputToSave.Invoice.SerialNumber,
+                        generateInvoiceInputToSave.Invoice.FromDate,
+                        generateInvoiceInputToSave.Invoice.ToDate,
+                        generateInvoiceInputToSave.Invoice.IssueDate,
+                        generateInvoiceInputToSave.Invoice.DueDate,
+                        Vanrise.Common.Serializer.Serialize(generateInvoiceInputToSave.Invoice.Details),
+                        generateInvoiceInputToSave.Invoice.Note,
+                        generateInvoiceInputToSave.Invoice.SourceId,
+                        true,
+                        generateInvoiceInputToSave.Invoice.IsAutomatic,
+                        serializedSettings,
+                        generateInvoiceInputToSave.Invoice.InvoiceSettingId,
+                        generateInvoiceInputToSave.Invoice.SentDate,
+                        splitInvoiceGroupId
+                    );
+                    long insertedInvoiceId = Convert.ToInt64(invoiceId);
+
+                    insertedInvoiceIds.Add(insertedInvoiceId);
+
+                    if (generateInvoiceInputToSave.ItemSetNameStorageDic != null && generateInvoiceInputToSave.ItemSetNameStorageDic.Count > 0)
+                    {
+                        var remainingInvoiceItemSets = generateInvoiceInputToSave.InvoiceItemSets.FindAllRecords(x => !generateInvoiceInputToSave.ItemSetNameStorageDic.Values.Any(y => y.Contains(x.SetName)));
+                        if (remainingInvoiceItemSets != null)
+                        {
+                            InvoiceItemDataManager dataManager = new InvoiceItemDataManager();
+                            dataManager.SaveInvoiceItems(insertedInvoiceId, remainingInvoiceItemSets);
+                        }
+                        foreach (var item in generateInvoiceInputToSave.ItemSetNameStorageDic)
+                        {
+                            InvoiceItemDataManager dataManager = new InvoiceItemDataManager();
+                            dataManager.StorageConnectionStringKey = item.Key;
+                            var invoiceItemSetsToSave = generateInvoiceInputToSave.InvoiceItemSets.FindAllRecords(x => item.Value.Contains(x.SetName));
+                            dataManager.SaveInvoiceItems(insertedInvoiceId, invoiceItemSetsToSave);
+                        }
+                    }
+                    else
+                    {
+                        InvoiceItemDataManager dataManager = new InvoiceItemDataManager();
+                        dataManager.SaveInvoiceItems(insertedInvoiceId, generateInvoiceInputToSave.InvoiceItemSets);
+                    }
+                    generateInvoiceInputToSave.Invoice.InvoiceId = insertedInvoiceId;
+
+                    if (generateInvoiceInputToSave.ActionBeforeGenerateInvoice != null)
+                    {
+                        generateInvoiceInputToSave.ActionBeforeGenerateInvoice(generateInvoiceInputToSave.Invoice);
+                    }
+
                 }
-                
 
-                if (billingTransactions != null && billingTransactions.Count() > 0)
-                    InsertBillingTransactions(billingTransactions, insertedInvoiceId, transactionDataManager);
-
-                if (invoiceIdToDelete.HasValue)
+                var transactionOptions = new TransactionOptions
                 {
+                    IsolationLevel = System.Transactions.IsolationLevel.ReadUncommitted,
+                    Timeout = TransactionManager.DefaultTimeout
+                };
 
-                    DeleteInvoice(invoiceIdToDelete.Value);
+                using (var transactionScope = new TransactionScope(TransactionScopeOption.Required, transactionOptions))
+                {
+                    var transactionDataManager = new Vanrise.AccountBalance.Data.SQL.BillingTransactionDataManager();
 
-                    transactionDataManager.SetBillingTransactionsAsDeleted(invoiceIdToDelete.Value);
+                    foreach (var generateInvoiceInputToSave in generateInvoicesInputToSave)
+                    {
+
+                        if (generateInvoiceInputToSave.InvoiceToSettleIds != null && generateInvoiceInputToSave.InvoiceToSettleIds.Count > 0)
+                        {
+                            UpdateInvoiceSettleIds(generateInvoiceInputToSave.Invoice.InvoiceId, generateInvoiceInputToSave.InvoiceToSettleIds);
+                            if (generateInvoiceInputToSave.InvoiceIdToDelete.HasValue)
+                            {
+                                ClearSettlementInvoiceIds(generateInvoiceInputToSave.InvoiceIdToDelete.Value);
+                            }
+                        }
+                        if (generateInvoiceInputToSave.MappedTransactions != null && generateInvoiceInputToSave.MappedTransactions.Count() > 0)
+                            InsertBillingTransactions(generateInvoiceInputToSave.MappedTransactions, generateInvoiceInputToSave.Invoice.InvoiceId, transactionDataManager);
+
+                        if (generateInvoiceInputToSave.InvoiceIdToDelete.HasValue)
+                        {
+
+                            DeleteInvoice(generateInvoiceInputToSave.InvoiceIdToDelete.Value);
+
+                            transactionDataManager.SetBillingTransactionsAsDeleted(generateInvoiceInputToSave.InvoiceIdToDelete.Value);
+                        }
+                        SetDraft(generateInvoiceInputToSave.Invoice.InvoiceId, false);
+                    }
+                    transactionScope.Complete();
                 }
-
-                SetDraft(insertedInvoiceId, false);
-                transactionScope.Complete();
             }
-
             return true;
         }
         public bool ClearSettlementInvoiceIds(long settlementInvoiceId)
@@ -414,6 +436,7 @@ namespace Vanrise.Invoice.Data.SQL
                 InvoiceSettingId =  GetReaderValue<Guid>(reader, "InvoiceSettingId"),
                 SentDate = GetReaderValue<DateTime?>(reader, "SentDate"),
                 SettlementInvoiceId = GetReaderValue<long?>(reader, "SettlementInvoiceId"),
+                SplitInvoiceGroupId = GetReaderValue<Guid?>(reader, "SplitInvoiceGroupId"),
             };
             return invoice;
         }

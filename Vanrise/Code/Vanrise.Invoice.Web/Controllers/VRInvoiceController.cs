@@ -50,15 +50,6 @@ namespace Vanrise.Invoice.Web.Controllers
             InvoiceManager manager = new InvoiceManager();
             return manager.CheckGeneratedInvoicePeriodGaP(fromDate, invoiceTypeId, partnerId);
         }
-        [HttpPost]
-        [Route("GenerateInvoice")]
-        public object GenerateInvoice(GenerateInvoiceInput createInvoiceInput)
-        {
-            if (!DoesUserHaveGenerateAccess(createInvoiceInput.InvoiceTypeId))
-                return GetUnauthorizedResponse();
-            InvoiceManager manager = new InvoiceManager();
-            return manager.GenerateInvoice(createInvoiceInput);
-        }
 
         [HttpGet]
         [Route("DoesUserHaveGenerateAccess")]
@@ -69,13 +60,13 @@ namespace Vanrise.Invoice.Web.Controllers
 
         [HttpPost]
         [Route("ReGenerateInvoice")]
-        public object ReGenerateInvoice(GenerateInvoiceInput createInvoiceInput)
+        public object ReGenerateInvoice(ReGenerateInvoiceInput recreateInvoiceInput)
         {
-            if (!_invoiceTypeManager.DosesUserHaveActionAccess(InvoiceActionType.ReCreateInvoice, createInvoiceInput.InvoiceTypeId, createInvoiceInput.InvoiceActionId))
+            if (!_invoiceTypeManager.DosesUserHaveActionAccess(InvoiceActionType.ReCreateInvoice, recreateInvoiceInput.InvoiceTypeId, recreateInvoiceInput.InvoiceActionId))
                 return GetUnauthorizedResponse();
 
             InvoiceManager manager = new InvoiceManager();
-            return manager.ReGenerateInvoice(createInvoiceInput);
+            return manager.ReGenerateInvoice(recreateInvoiceInput);
         }
         [HttpPost]
         [Route("GetFilteredInvoices")]
@@ -132,13 +123,6 @@ namespace Vanrise.Invoice.Web.Controllers
         {
             InvoiceManager manager = new InvoiceManager();
             return manager.GetInvoiceDetail(invoiceId);
-        }
-        [HttpGet]
-        [Route("GetBillingInterval")]
-        public BillingInterval GetBillingInterval(Guid invoiceTypeId, string partnerId, DateTime issueDate)
-        {
-            InvoiceManager manager = new InvoiceManager();
-            return manager.GetBillingInterval(invoiceTypeId, partnerId, issueDate);
         }
         [HttpGet]
         [Route("DownloadAttachment")]

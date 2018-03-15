@@ -31,7 +31,7 @@ namespace Vanrise.Invoice.Business
             var invoiceAccountData = _partnerManager.GetInvoiceAccountData(invoiceType.InvoiceTypeId, this.PartnerId);
             invoiceAccountData.ThrowIfNull("invoiceAccountData");
             if ((invoiceAccountData.BED.HasValue && this.FromDate < invoiceAccountData.BED.Value) || (invoiceAccountData.EED.HasValue && this.ToDate > invoiceAccountData.EED.Value))
-                throw new InvoiceGeneratorException("From date and To date should be within the effective date of invoice account.");
+                throw new Exception("From date and To date should be within the effective date of invoice account.");
 
             PartnerManager partnerManager = new PartnerManager();
 
@@ -56,7 +56,17 @@ namespace Vanrise.Invoice.Business
 
             var invoiceGenerator = invoiceType.Settings.ExtendedSettings.GetInvoiceGenerator();
             invoiceGenerator.GenerateInvoice(context);
-            
+
+
+            switch(context.GenerateInvoiceResult)
+            {
+                case GenerateInvoiceResult.Succeeded:
+                    break;
+                case GenerateInvoiceResult.Failed:
+                case GenerateInvoiceResult.NoData:
+                    throw new Exception(context.ErrorMessage);
+            }
+
             this.GeneratedInvoice = context.Invoice;
 
             GeneratedInvoice.ThrowIfNull("GeneratedInvoice");

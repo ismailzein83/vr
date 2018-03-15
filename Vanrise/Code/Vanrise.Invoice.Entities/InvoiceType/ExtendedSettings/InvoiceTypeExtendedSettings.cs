@@ -54,6 +54,7 @@ namespace Vanrise.Invoice.Entities
         int GetDuePeriod();
         GeneratedInvoice Invoice { set; }
         string ErrorMessage { set; }
+        GenerateInvoiceResult GenerateInvoiceResult { set; }
         List<GeneratedInvoiceBillingTransaction> BillingTransactions { set; }
         List<long> InvoiceToSettleIds { set; }
     }

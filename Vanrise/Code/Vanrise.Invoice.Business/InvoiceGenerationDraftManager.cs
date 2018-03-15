@@ -67,19 +67,35 @@ namespace Vanrise.Invoice.Business
 
                 DateTime? fromDate = null;
                 DateTime? toDate = null;
+
                 switch (query.Period)
                 {
                     case InvoicePartnerPeriod.FixedDates:
-                        fromDate = query.FromDate.HasValue ? query.FromDate.Value.Date : default(DateTime?);
-                        toDate = query.ToDate.HasValue ? new DateTime(query.ToDate.Value.Year, query.ToDate.Value.Month, query.ToDate.Value.Day, 23, 59, 59, 997) : default(DateTime?);
+                         fromDate = query.FromDate.HasValue ? query.FromDate.Value.Date : default(DateTime?);
+                         toDate = query.ToDate.HasValue ? new DateTime(query.ToDate.Value.Year, query.ToDate.Value.Month, query.ToDate.Value.Day, 23, 59, 59, 997) : default(DateTime?);
+
+                        if (!query.IsAutomatic)
+                        {
+                            if (!fromDate.HasValue || !toDate.HasValue)
+                            {
+                                return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Failed, Message = "Billing cycle is not defined for some partners. Please fill the following fields: 'From' and 'To'" };
+                            }
+                        }
+                        AddGenerationCustomPayloads(generationCustomPayloads, fromDate, toDate, partnerId, partnerName, query.MaximumToDate, query.IsAutomatic, invalidPartnerMessages, ref minimumFrom, ref maximumTo);
                         break;
 
                     case InvoicePartnerPeriod.FollowBillingCycle:
-                        BillingInterval billingInterval = invoiceManager.GetBillingInterval(query.InvoiceTypeId, partnerId, query.IssueDate);
-                        if (billingInterval != null)
+                        List<BillingInterval> billingIntervals = invoiceManager.GetBillingInterval(query.InvoiceTypeId, partnerId, query.IssueDate);
+                        
+                       
+                        if (billingIntervals != null && billingIntervals.Count > 0)
                         {
-                            fromDate = billingInterval.FromDate;
-                            toDate = billingInterval.ToDate;
+                            var orderedBillingIntervals = billingIntervals.OrderBy(x => x.FromDate);
+
+                            foreach (var orderedBillingInterval in orderedBillingIntervals)
+                            {
+                                AddGenerationCustomPayloads(generationCustomPayloads, orderedBillingInterval.FromDate, orderedBillingInterval.ToDate, partnerId, partnerName, query.MaximumToDate, query.IsAutomatic, invalidPartnerMessages, ref minimumFrom, ref maximumTo);
+                            }
                         }
                         else
                         {
@@ -87,41 +103,18 @@ namespace Vanrise.Invoice.Business
                             {
                                 fromDate = query.FromDate.HasValue ? query.FromDate.Value.Date : default(DateTime?);
                                 toDate = query.ToDate.HasValue ? new DateTime(query.ToDate.Value.Year, query.ToDate.Value.Month, query.ToDate.Value.Day, 23, 59, 59, 997) : default(DateTime?);
+
+                                if (!fromDate.HasValue || !toDate.HasValue)
+                                {
+                                    return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Failed, Message = "Billing cycle is not defined for some partners. Please fill the following fields: 'From' and 'To'" };
+                                }
                             }
+                            AddGenerationCustomPayloads(generationCustomPayloads, fromDate, toDate, partnerId, partnerName, query.MaximumToDate, query.IsAutomatic, invalidPartnerMessages, ref minimumFrom, ref maximumTo);
                         }
                         break;
                     default: throw new NotSupportedException(string.Format("InvoicePartnerPeriod '{0}' is not supported", query.Period));
                 }
-
-                if (!fromDate.HasValue || !toDate.HasValue)
-                {
-                    if (!query.IsAutomatic)
-                        return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Failed, Message = "Billing cycle is not defined for some partners. Please fill the following fields: 'From' and 'To'" };
-                    else
-                    {
-                        invalidPartnerMessages.Add(string.Format("Billing cycle is not defined for partner '{0}'", partnerName));
-                        continue;
-                    }
-                }
-
-                if (!CheckIFShouldGenerateInvoice(toDate.Value, query.MaximumToDate))
-                    continue;
-
-                generationCustomPayloads.Add(new InvoiceGenerationInfo
-                {
-                    FromDate = fromDate.Value,
-                    PartnerId = partnerId,
-                    ToDate = toDate.Value,
-                    PartnerName = partnerName
-                });
-
-                if (minimumFrom > fromDate.Value)
-                    minimumFrom = fromDate.Value;
-
-                if (maximumTo < toDate.Value)
-                    maximumTo = toDate.Value;
             }
-
 
             if (generationCustomSection != null)
             {
@@ -132,32 +125,64 @@ namespace Vanrise.Invoice.Business
                     MaximumTo = maximumTo,
                     InvoiceTypeId = query.InvoiceTypeId
                 };
+
                 generationCustomSection.EvaluateGenerationCustomPayload(generationCustomPayloadContext);
-
-                foreach (var invoiceGenerationInfo in generationCustomPayloadContext.InvoiceGenerationInfo)
-                {
-
-                    var invoiceGenerationDraft = new InvoiceGenerationDraft()
-                    {
-                        InvoiceGenerationIdentifier = query.InvoiceGenerationIdentifier,
-                        InvoiceTypeId = query.InvoiceTypeId,
-                        From = invoiceGenerationInfo.FromDate,
-                        To = invoiceGenerationInfo.ToDate,
-                        PartnerId = invoiceGenerationInfo.PartnerId,
-                        PartnerName = invoiceGenerationInfo.PartnerName,
-                        CustomPayload = invoiceGenerationInfo.CustomPayload,
-                    };
-                    InsertOperationOutput<InvoiceGenerationDraft> insertedInvoiceGenerationDraft = InsertInvoiceGenerationDraft(invoiceGenerationDraft);
-                    if (insertedInvoiceGenerationDraft.Result != InsertOperationResult.Succeeded)
-                        return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Failed, Message = "Technical Error occurred while trying to Add Records" };
-                    count++;
-                }
+                generationCustomPayloads = generationCustomPayloadContext.InvoiceGenerationInfo;
             }
-          
+
+            foreach (var invoiceGenerationInfo in generationCustomPayloads)
+            {
+                InsertOperationOutput<InvoiceGenerationDraft> insertedInvoiceGenerationDraft = AddInvoiceGenerationDraft(invoiceGenerationInfo, query.InvoiceGenerationIdentifier, query.InvoiceTypeId);
+                if (insertedInvoiceGenerationDraft.Result != InsertOperationResult.Succeeded)
+                    return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Failed, Message = "Technical Error occurred while trying to Add Records" };
+                count++;
+            }
+
             if (count == 0)
                 return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Failed, Message = "No partners found." };
             else
                 return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Succeeded, Count = count, MinimumFrom = minimumFrom, MaximumTo = maximumTo, InvalidPartnerMessages = invalidPartnerMessages.Count > 0 ? invalidPartnerMessages : null };
+        }
+        private InsertOperationOutput<InvoiceGenerationDraft> AddInvoiceGenerationDraft(InvoiceGenerationInfo invoiceGenerationInfo, Guid invoiceGenerationIdentifier,Guid invoiceTypeId)
+        {
+            var invoiceGenerationDraft = new InvoiceGenerationDraft()
+            {
+                InvoiceGenerationIdentifier = invoiceGenerationIdentifier,
+                InvoiceTypeId = invoiceTypeId,
+                From = invoiceGenerationInfo.FromDate,
+                To = invoiceGenerationInfo.ToDate,
+                PartnerId = invoiceGenerationInfo.PartnerId,
+                PartnerName = invoiceGenerationInfo.PartnerName,
+                CustomPayload = invoiceGenerationInfo.CustomPayload,
+            };
+            return InsertInvoiceGenerationDraft(invoiceGenerationDraft);
+        }
+
+        private void AddGenerationCustomPayloads(List<InvoiceGenerationInfo> generationCustomPayloads, DateTime? fromDate, DateTime? toDate, string partnerId, string partnerName, DateTime? maximumToDate, bool isAutomatic, List<string> invalidPartnerMessages, ref DateTime minimumFrom, ref DateTime maximumTo)
+        {
+
+            if (!fromDate.HasValue || !toDate.HasValue)
+            {
+                invalidPartnerMessages.Add(string.Format("Billing cycle is not defined for partner '{0}'", partnerName));
+                return;
+            }
+
+            if (!CheckIFShouldGenerateInvoice(toDate.Value, maximumToDate))
+                return;
+
+            generationCustomPayloads.Add(new InvoiceGenerationInfo
+            {
+                FromDate = fromDate.Value,
+                PartnerId = partnerId,
+                ToDate = toDate.Value,
+                PartnerName = partnerName
+            });
+
+            if (minimumFrom > fromDate.Value)
+                minimumFrom = fromDate.Value;
+
+            if (maximumTo < toDate.Value)
+                maximumTo = toDate.Value;
         }
 
         private bool CheckIFShouldGenerateInvoice(DateTime toDate, DateTime? maximumToDate)
@@ -213,14 +238,17 @@ namespace Vanrise.Invoice.Business
             InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
             var invoiceGeneratorActions = invoiceTypeManager.GetInvoiceGeneratorActions(new GenerateInvoiceInput
             {
-                CustomSectionPayload = invoiceGenerationDraftDetail.CustomPayload,
-                FromDate = invoiceGenerationDraftDetail.From,
-                InvoiceId = null,
+                Items = new List<GenerateInvoiceInputItem> { new GenerateInvoiceInputItem
+                {
+                    CustomSectionPayload = invoiceGenerationDraftDetail.CustomPayload,
+                    FromDate = invoiceGenerationDraftDetail.From,
+                    InvoiceId =null,
+                    ToDate = invoiceGenerationDraftDetail.To
+                } },
                 InvoiceTypeId = query.InvoiceTypeId,
                 IsAutomatic = query.IsAutomatic,
                 IssueDate = query.IssueDate,
                 PartnerId = invoiceGenerationDraftDetail.PartnerId,
-                ToDate = invoiceGenerationDraftDetail.To
             });
 
             Dictionary<VRButtonType, List<InvoiceGenerationDraftActionDetail>> actionDetailsByButtonType = null;

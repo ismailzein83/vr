@@ -76,11 +76,17 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
                             InvoiceType = invoiceType,
                             generateInvoiceInput = new GenerateInvoiceInput
                             {
+                                Items = new List<GenerateInvoiceInputItem>
+                                {
+                                    new GenerateInvoiceInputItem
+                                    {
+                                        FromDate = context.Invoice.FromDate,
+                                        ToDate = context.Invoice.ToDate,
+                                    }
+                                },
                                 InvoiceTypeId = context.Invoice.InvoiceTypeId,
                                 IssueDate = context.Invoice.IssueDate,
                                 PartnerId = context.Invoice.PartnerId,
-                                FromDate = context.Invoice.FromDate,
-                                ToDate = context.Invoice.ToDate,
                             }
                         };
                         if (emailActionAttachmentSetDefinition.FilterCondition == null || emailActionAttachmentSetDefinition.FilterCondition.IsFilterMatch(partnerInvoiceFilterConditionContext))
