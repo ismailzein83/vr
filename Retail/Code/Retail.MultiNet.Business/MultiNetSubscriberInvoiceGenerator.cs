@@ -87,7 +87,12 @@ namespace Retail.MultiNet.Business
             FinancialAccountData financialAccountData = _financialAccountManager.GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
 
             if (context.FromDate < financialAccountData.FinancialAccount.BED || context.ToDate > financialAccountData.FinancialAccount.EED)
-                throw new InvoiceGeneratorException("From date and To date should be within the effective date of financial account.");
+            {
+                context.ErrorMessage = "From date and To date should be within the effective date of financial account.";
+                context.GenerateInvoiceResult = GenerateInvoiceResult.Failed;
+                return;
+
+            }
 
             int currencyId = _accountBEManager.GetCurrencyId(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
 
@@ -156,7 +161,10 @@ namespace Retail.MultiNet.Business
                 SetInvoiceBillingTransactions(context, retailSubscriberInvoiceDetails);
             }
             else
-                throw new InvoiceGeneratorException("No data available between the selected period.");
+            {
+                context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
+                return;
+            }
         }
 
         private void SetInvoiceBillingTransactions(IInvoiceGenerationContext context, InvoiceDetails invoiceDetails)

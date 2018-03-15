@@ -39,14 +39,18 @@ namespace Retail.Zajil.MainExtensions
             IAccountPayment accountPayment;
             long accountId = Convert.ToInt32(context.PartnerId);
             if (!accountBEManager.HasAccountPayment(this._acountBEDefinitionId, accountId, false, out accountPayment))
-                throw new InvoiceGeneratorException(string.Format("Account Id: {0} is not a financial account", accountId));
+            {
+                context.ErrorMessage = string.Format("Account Id: {0} is not a financial account", accountId);
+                context.GenerateInvoiceResult = GenerateInvoiceResult.Failed;
+            }
 
             int currencyId = accountPayment.CurrencyId;
 
             var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimensionName, accountId, context.FromDate, context.ToDate, currencyId);
             if (analyticResult == null || analyticResult.Data == null || analyticResult.Data.Count() == 0)
             {
-                throw new InvoiceGeneratorException("No data available between the selected period.");
+                context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
+                return;
             }
 
             Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data);

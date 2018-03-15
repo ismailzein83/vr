@@ -32,7 +32,11 @@ namespace Retail.Invoice.Business
             IAccountPayment accountPayment;
             long accountId = Convert.ToInt32(context.PartnerId);
             if (!accountBEManager.HasAccountPayment(this._acountBEDefinitionId, accountId, false, out accountPayment))
-                throw new InvoiceGeneratorException(string.Format("Account Id: {0} is not a financial account", accountId));
+            {
+                context.ErrorMessage = string.Format("Account Id: {0} is not a financial account", accountId);
+                context.GenerateInvoiceResult = GenerateInvoiceResult.Failed;
+                return;
+            }
 
             int currencyId = accountPayment.CurrencyId;
             Account account = accountBEManager.GetAccount(this._acountBEDefinitionId, accountId);
@@ -40,7 +44,8 @@ namespace Retail.Invoice.Business
             var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimensionName, accountId, context.FromDate, context.ToDate, currencyId);
             if (analyticResult == null || analyticResult.Data == null || analyticResult.Data.Count() == 0)
             {
-                throw new InvoiceGeneratorException("No data available between the selected period.");
+                context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
+                return;
             }
 
             Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data);
