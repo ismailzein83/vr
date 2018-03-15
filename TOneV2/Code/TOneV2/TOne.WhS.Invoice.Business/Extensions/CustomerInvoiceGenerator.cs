@@ -82,20 +82,15 @@ namespace TOne.WhS.Invoice.Business.Extensions
             var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, currencyId);
             if (analyticResult == null || analyticResult.Data == null || analyticResult.Data.Count() == 0)
             {
-                context.ErrorMessage = "No data available between the selected period.";
-                throw new InvoiceGeneratorException("No data available between the selected period.");
-                /// context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
-                //  return;
+                context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
+                return;
             }
             Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data, currencyId, commission, commissionType, taxItemDetails);
             if(itemSetNamesDic.Count == 0)
             {
-                context.ErrorMessage = "No data available between the selected period.";
-                throw new InvoiceGeneratorException("No data available between the selected period.");
+                  context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
 
-                //  context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
-
-                // return;
+                 return;
             }
             var customerInvoiceBySaleCurrency = loadCurrencyItemSet(dimentionName, dimensionValue, fromDate, toDate, commission, commissionType, taxItemDetails);
 
@@ -139,11 +134,10 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 }
                 else
                 {
-                    context.ErrorMessage = "Connot generate invoice with amount less than threshold.";
-                    throw new InvoiceGeneratorException("Connot generate invoice with amount less than threshold.");
+                    context.ErrorMessage = "Cannot generate invoice with amount less than threshold.";
 
-                   // context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
-                  //  return;
+                    context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
+                    return;
                 }
 
             }

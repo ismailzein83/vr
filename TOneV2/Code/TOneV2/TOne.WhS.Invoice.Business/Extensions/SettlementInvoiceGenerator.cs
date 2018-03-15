@@ -140,8 +140,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
             Dictionary<string, List<SattlementInvoiceItemDetails>> itemSetNamesDic = ConvertInvoicesToItemSetNames(customerInvoices, supplierInvoices);
             if (itemSetNamesDic.Count == 0)
             {
-                context.ErrorMessage = "No data available between the selected period.";
-                throw new InvoiceGeneratorException("No data available between the selected period.");
+                context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
+                return;
+                
             }
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic);
 
@@ -168,7 +169,9 @@ namespace TOne.WhS.Invoice.Business.Extensions
             if (invoices.Min(x => x.FromDate) < fromDate || invoices.Max(x => x.ToDate) > toDate)
             {
                 context.ErrorMessage = "Unable to generate settlement at this period.";
-                throw new InvoiceGeneratorException("Unable to generate settlement at this period.");
+                context.GenerateInvoiceResult = GenerateInvoiceResult.Failed;
+                return;
+
             }
         }
         IEnumerable<Vanrise.Invoice.Entities.Invoice> GetInvoices(List<long> invoiceIds)

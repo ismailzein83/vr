@@ -79,20 +79,14 @@ namespace TOne.WhS.Invoice.Business.Extensions
             var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, currencyId);
             if (analyticResult == null || analyticResult.Data == null || analyticResult.Data.Count() == 0)
             {
-                context.ErrorMessage = "No data available between the selected period.";
-                throw new InvoiceGeneratorException("No data available between the selected period.");
-
-               // context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
-               // return;
+                context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
+                return;
             }
             Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data, currencyId, commission, commissionType, taxItemDetails);
             if (itemSetNamesDic.Count == 0)
             {
-                context.ErrorMessage = "No data available between the selected period.";
-                throw new InvoiceGeneratorException("No data available between the selected period.");
-
-               // context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
-              //  return;
+                context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
+                return;
             }
 
             var supplierInvoiceBySaleCurrency = loadCurrencyItemSet(dimentionName, dimensionValue, fromDate, toDate, commission, commissionType, taxItemDetails);
@@ -135,10 +129,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
             else
             {
                 context.ErrorMessage = "No billing data available.";
-                throw new InvoiceGeneratorException("No billing data available.");
-
-            //    context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
-               // return;
+                context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
+                return;
             }
             #endregion
 
