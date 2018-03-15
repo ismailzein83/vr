@@ -8,6 +8,7 @@ using Vanrise.Common;
 using Vanrise.Entities;
 using Vanrise.Notification.Data;
 using Vanrise.Common.Business;
+using Vanrise.Security.Business;
 
 namespace Vanrise.Notification.Business
 {
@@ -90,6 +91,10 @@ namespace Vanrise.Notification.Business
 
             IVRAlertRuleDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRAlertRuleDataManager>();
 
+            int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
+            vrAlertRuleItem.CreatedBy = loggedInUserId;
+            vrAlertRuleItem.LastModifiedBy = loggedInUserId;
+
             if (dataManager.Insert(vrAlertRuleItem, out vrAlertRuleId))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -114,6 +119,8 @@ namespace Vanrise.Notification.Business
             updateOperationOutput.UpdatedObject = null;
 
             IVRAlertRuleDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRAlertRuleDataManager>();
+            
+            vrAlertRuleItem.LastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
 
             if (dataManager.Update(vrAlertRuleItem))
             {

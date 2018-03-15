@@ -17,5 +17,15 @@ namespace Vanrise.Notification.Entities
         public int UserId { get; set; }
 
         public VRAlertRuleSettings Settings { get; set; }
+
+        public DateTime CreatedTime { get; set; }
+
+        public int? CreatedBy { get; set; }
+
+        public int? LastModifiedBy { get; set; }
+
+        public DateTime? LastModifiedTime { get; set; }
+
+       
     }
 }

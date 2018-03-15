@@ -38,7 +38,7 @@ namespace Vanrise.Notification.Data.SQL
             object vrAlertRuleID;
             string serializedSettings = vrAlertRule.Settings != null ? Vanrise.Common.Serializer.Serialize(vrAlertRule.Settings) : null;
 
-            int affectedRecords = ExecuteNonQuerySP("VRNotification.sp_VRAlertRule_Insert", out vrAlertRuleID, vrAlertRule.Name, vrAlertRule.RuleTypeId, vrAlertRule.UserId, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("VRNotification.sp_VRAlertRule_Insert", out vrAlertRuleID, vrAlertRule.Name, vrAlertRule.RuleTypeId, vrAlertRule.UserId, vrAlertRule.CreatedBy, vrAlertRule.LastModifiedBy, serializedSettings);
 
             insertedId = (affectedRecords > 0) ? Convert.ToInt64(vrAlertRuleID) : -1;
             return (affectedRecords > 0);
@@ -47,7 +47,7 @@ namespace Vanrise.Notification.Data.SQL
         public bool Update(VRAlertRule vrAlertRule)
         {
             string serializedSettings = vrAlertRule.Settings != null ? Vanrise.Common.Serializer.Serialize(vrAlertRule.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("VRNotification.sp_VRAlertRule_Update", vrAlertRule.VRAlertRuleId, vrAlertRule.Name, vrAlertRule.RuleTypeId, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("VRNotification.sp_VRAlertRule_Update", vrAlertRule.VRAlertRuleId, vrAlertRule.Name, vrAlertRule.RuleTypeId, vrAlertRule.LastModifiedBy, serializedSettings);
             return (affectedRecords > 0);
         }
 
@@ -63,7 +63,11 @@ namespace Vanrise.Notification.Data.SQL
                 Name = reader["Name"] as string,
                 RuleTypeId = (Guid) reader["RuleTypeId"],
                 UserId = (int) reader["UserID"],
-                Settings = Vanrise.Common.Serializer.Deserialize<VRAlertRuleSettings>(reader["Settings"] as string) 
+                Settings = Vanrise.Common.Serializer.Deserialize<VRAlertRuleSettings>(reader["Settings"] as string) ,
+                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
+                CreatedBy = GetReaderValue<int?>(reader, "CreatedBy"),
+                LastModifiedTime = GetReaderValue<DateTime?>(reader, "LastModifiedTime"),
+                LastModifiedBy = GetReaderValue<int?>(reader, "LastModifiedBy")
             };
             return vrAlertRule;
         }
