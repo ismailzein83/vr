@@ -71,7 +71,9 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                     $scope.scopeModel.isLoadingSelectedSupplier = true;
                     extendAndAddOptionToGrid(selectedItem, undefined, undefined).then(function () {
                         setTimeout(function () {
-                            $scope.scopeModel.isLoadingSelectedSupplier = false;
+                            $scope.$apply(function () {
+                                $scope.scopeModel.isLoadingSelectedSupplier = false;
+                            });
                         });
                     });
                     $scope.scopeModel.selectedSuppliers = [];
@@ -85,6 +87,9 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                 $scope.scopeModel.onDeleteRow = function (deletedItem) {
                     var index = UtilsService.getItemIndexByVal($scope.scopeModel.suppliers, deletedItem.tempId, 'tempId');
                     $scope.scopeModel.suppliers.splice(index, 1);
+
+                    if ($scope.scopeModel.suppliers.length == 0)
+                        $scope.scopeModel.showBackupTabs = false;
                 };
 
                 $scope.scopeModel.isValid = function () {
@@ -151,8 +156,10 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
                 var api = {};
 
                 api.load = function (payload) {
-                    var promises = [];
                     $scope.scopeModel.showRateServices = false;
+
+                    var promises = [];
+
                     var options;
                     var overallBackupOptions;
                     var customerRouteData;
@@ -292,8 +299,8 @@ app.directive('vrWhsRoutingRouterulesettingsFixed', ['UtilsService', 'VRUIUtilsS
             }
 
             function extendAndAddOptionToGrid(selectedSupplier, currentOption, backupOptionDirectiveLoadPromiseDeferred) {
-
                 var extendOptionPromises = [];
+
                 var option = {
                     tempId: UtilsService.guid(),
                     SupplierId: selectedSupplier.CarrierAccountId,
