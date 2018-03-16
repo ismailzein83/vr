@@ -228,7 +228,7 @@ namespace Retail.BusinessEntity.Business
             insertOperationOutput.InsertedObject = null;
             long accountId;
 
-            Account accountBE;
+            Account accountBE;          
             if (TryAddAccount(accountToInsert, out accountId, false, out accountBE))
             {
                 insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Succeeded;
@@ -248,7 +248,7 @@ namespace Retail.BusinessEntity.Business
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;            
-            Account account;
+            Account account;        
             if (TryUpdateAccount(accountToEdit, out account))
             {                
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
@@ -584,7 +584,9 @@ namespace Retail.BusinessEntity.Business
                         string previousStatusName = null;
                         if (previousStatusId.HasValue)
                             previousStatusName = s_statusDefinitionManager.GetStatusDefinitionName(previousStatusId.Value);
-                        bool updateStatus = dataManager.UpdateStatus(account.AccountId, statusId);
+                        
+                        int lastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
+                        bool updateStatus = dataManager.UpdateStatus(account.AccountId, statusId, lastModifiedBy);
                         if (updateStatus)
                         {
                             if (shouldInsertAccountHistory)
@@ -980,7 +982,10 @@ namespace Retail.BusinessEntity.Business
             Account account = GetAccount(accountBEDefinitionId, accountId);
             SetExtendedSettings<T>(extendedSettings, account);
             IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
-            if (dataManager.UpdateExtendedSettings(accountId, account.ExtendedSettings))
+            
+            int lastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
+
+            if (dataManager.UpdateExtendedSettings(accountId, account.ExtendedSettings, lastModifiedBy))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountBEDefinitionId);
                 return true;
@@ -1141,6 +1146,9 @@ namespace Retail.BusinessEntity.Business
         {
             ValidateAccountToEdit(accountToEdit);
             IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
+
+            accountToEdit.LastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
+
             if (dataManager.Update(accountToEdit))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired(accountToEdit.AccountBEDefinitionId);
@@ -1171,6 +1179,10 @@ namespace Retail.BusinessEntity.Business
             ValidateAccountToAdd(accountToInsert, donotValidateParent);
 
             IAccountBEDataManager dataManager = BEDataManagerFactory.GetDataManager<IAccountBEDataManager>();
+          
+            int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
+            accountToInsert.CreatedBy = loggedInUserId;
+            accountToInsert.LastModifiedBy = loggedInUserId;
 
             if (dataManager.Insert(accountToInsert, out accountId))
             {

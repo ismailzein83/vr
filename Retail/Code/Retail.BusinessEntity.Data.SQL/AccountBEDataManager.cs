@@ -23,15 +23,15 @@ namespace Retail.BusinessEntity.Data.SQL
         #endregion
 
         #region Public Methods
-        public bool UpdateExtendedSettings(long accountId, Dictionary<string, BaseAccountExtendedSettings> extendedSettings)
+        public bool UpdateExtendedSettings(long accountId, Dictionary<string, BaseAccountExtendedSettings> extendedSettings, int lastModifiedBy)
         {
-            int recordsEffected = ExecuteNonQuerySP("Retail.sp_Account_UpdateExtendedSettings", accountId, Vanrise.Common.Serializer.Serialize(extendedSettings));
+            int recordsEffected = ExecuteNonQuerySP("Retail.sp_Account_UpdateExtendedSettings", accountId, Vanrise.Common.Serializer.Serialize(extendedSettings), lastModifiedBy);
             return (recordsEffected > 0);
         }
 
         public IEnumerable<Account> GetAccounts(List<Guid> accountTypeIds, byte[] afterLastTimeStamp)
         {
-            string query = String.Format(@"SELECT	a.ID, a.Name, a.TypeID, a.Settings, a.StatusID, a.ParentID, a.SourceID, a.ExecutedActionsData,a.ExtendedSettings,a.CreatedTime
+            string query = String.Format(@"SELECT	a.ID, a.Name, a.TypeID, a.Settings, a.StatusID, a.ParentID, a.SourceID, a.ExecutedActionsData,a.ExtendedSettings,a.CreatedTime, a.CreatedBy, a.LastModifiedBy, a.LastModifiedTime
 	                            FROM [Retail].[Account] a with(nolock)
 	                            where {0} ", BuildAccountTypesFilter(accountTypeIds));
             if (afterLastTimeStamp != null)
@@ -58,7 +58,7 @@ namespace Retail.BusinessEntity.Data.SQL
             object accountId;
             string serializedSettings = accountToInsert.Settings != null ? Vanrise.Common.Serializer.Serialize(accountToInsert.Settings) : null;
             string serializedExtendedSettings = accountToInsert.ExtendedSettings != null ? Vanrise.Common.Serializer.Serialize(accountToInsert.ExtendedSettings) : null;
-            int affectedRecords = ExecuteNonQuerySP("Retail.sp_Account_Insert", out accountId, accountToInsert.Name, accountToInsert.TypeId, serializedSettings, serializedExtendedSettings, accountToInsert.ParentAccountId, accountToInsert.StatusId, accountToInsert.SourceId, ToDBNullIfDefault(accountToInsert.CreatedTime));
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_Account_Insert", out accountId, accountToInsert.Name, accountToInsert.TypeId, serializedSettings, serializedExtendedSettings, accountToInsert.ParentAccountId, accountToInsert.StatusId, accountToInsert.SourceId, ToDBNullIfDefault(accountToInsert.CreatedTime), accountToInsert.CreatedBy, accountToInsert.LastModifiedBy);
 
             if (affectedRecords > 0)
             {
@@ -73,7 +73,7 @@ namespace Retail.BusinessEntity.Data.SQL
         public bool Update(AccountToEdit accountToEdit)
         {
             string serializedSettings = accountToEdit.Settings != null ? Vanrise.Common.Serializer.Serialize(accountToEdit.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("Retail.sp_Account_Update", accountToEdit.AccountId, accountToEdit.Name, accountToEdit.TypeId, serializedSettings, accountToEdit.SourceId);
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_Account_Update", accountToEdit.AccountId, accountToEdit.Name, accountToEdit.TypeId, serializedSettings, accountToEdit.SourceId, accountToEdit.LastModifiedBy);
             return (affectedRecords > 0);
         }
 
@@ -88,9 +88,9 @@ namespace Retail.BusinessEntity.Data.SQL
         
         }
 
-        public bool UpdateStatus(long accountId, Guid statusId)
+        public bool UpdateStatus(long accountId, Guid statusId, int lastModifiedBy)
         {
-            int affectedRecords = ExecuteNonQuerySP("Retail.sp_Account_UpdateStatusID", accountId, statusId);
+            int affectedRecords = ExecuteNonQuerySP("Retail.sp_Account_UpdateStatusID", accountId, statusId, lastModifiedBy);
             return (affectedRecords > 0);
         }
         #endregion
@@ -109,7 +109,10 @@ namespace Retail.BusinessEntity.Data.SQL
                 StatusId = GetReaderValue<Guid>(reader, "StatusID"),
                 SourceId = reader["SourceID"] as string,
                 ExtendedSettings = Vanrise.Common.Serializer.Deserialize(reader["ExtendedSettings"] as string) as Dictionary<string, BaseAccountExtendedSettings>,
-                CreatedTime = GetReaderValue<DateTime>(reader,"CreatedTime")
+                CreatedTime = GetReaderValue<DateTime>(reader,"CreatedTime"),
+                CreatedBy = GetReaderValue<int?>(reader,"CreatedBy"),
+                LastModifiedBy = GetReaderValue<int?>(reader,"LastModifiedBy"),
+                LastModifiedTime = GetReaderValue<DateTime?>(reader,"LastModifiedTime")
             };
         }
 

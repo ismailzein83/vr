@@ -17,9 +17,9 @@ namespace Retail.BusinessEntity.Data
 
         bool AreAccountsUpdated(List<Guid> accountTypeIds, ref object updateHandle);
 
-        bool UpdateStatus(long accountId, Guid statusId);
+        bool UpdateStatus(long accountId, Guid statusId, int lastModifiedBy);
 
-        bool UpdateExtendedSettings(long accountId, Dictionary<string, BaseAccountExtendedSettings> extendedSettings);
+        bool UpdateExtendedSettings(long accountId, Dictionary<string, BaseAccountExtendedSettings> extendedSettings, int lastModifiedBy);
 
 
         byte[] GetMaxTimeStamp(List<Guid> accountTypeIds);
