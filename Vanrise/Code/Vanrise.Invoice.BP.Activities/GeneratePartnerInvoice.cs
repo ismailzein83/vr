@@ -104,7 +104,7 @@ namespace Vanrise.Invoice.BP.Activities
                     List<BillingInterval> billingPeriods = null;
                     if (billingPeriodInvoiceSettingPart != null && billingPeriodInvoiceSettingPart.FollowBillingPeriod)
                     {
-                        billingPeriods = invoiceManager.GetBillingInterval(invoiceTypeId, partnerId, issueDate);
+                        billingPeriods = invoiceManager.GetBillingInterval(invoiceTypeId, partnerId, partnerIssueDate);
                     }
 
                     for (var i = 0; i < partnerInvoiceGenerationDraft.Items.Count; i++)

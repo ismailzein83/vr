@@ -64,7 +64,7 @@ namespace Vanrise.Invoice.Business
                     break;
                 case GenerateInvoiceResult.Failed:
                 case GenerateInvoiceResult.NoData:
-                    throw new Exception(context.ErrorMessage);
+                    throw new Exception(context.ErrorMessage != null ? context.ErrorMessage : "No data available between the selected period.");
             }
 
             this.GeneratedInvoice = context.Invoice;
