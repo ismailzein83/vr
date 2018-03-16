@@ -243,7 +243,7 @@ namespace Vanrise.Invoice.Business
                     generateInvoiceOutput.Message = new InvoiceGenerationMessageOutput
                     {
                         LogEntryType = LogEntryType.Warning,
-                        Message = "Stopped due to an error accurred in generation of related invoice"
+                        Message = "Stopped due to an error occurred in the generation of related invoice"
                     };
                 }else
                 {
@@ -512,7 +512,7 @@ namespace Vanrise.Invoice.Business
 
             BillingPeriodContext billingPeriodContext = new Context.BillingPeriodContext
             {
-                IssueDate = issueDate,
+                IssueDate = issueDate.Date,
             };
             var billingPeriodInfo = new BillingPeriodInfoManager().GetBillingPeriodInfoById(partnerId, invoiceTypeId);
             if (billingPeriodInfo != null)

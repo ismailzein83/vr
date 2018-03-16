@@ -237,7 +237,7 @@ namespace Vanrise.Invoice.BP.Activities
                 }
                 else
                 {
-                    context.ActivityContext.WriteBusinessTrackingMsg(LogEntryType.Warning, "Invoice not generated for {0} from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}. Reason : 'Stopped due to an error accurred in generation of related invoice'. Remaining Invoices: {3}", partnerName, item.From, item.To, --remainingInvoices);
+                    context.ActivityContext.WriteBusinessTrackingMsg(LogEntryType.Warning, "Invoice not generated for {0} from {1:yyyy-MM-dd} to {2:yyyy-MM-dd}. Reason : 'Stopped due to an error occurred in the generation of related invoice'. Remaining Invoices: {3}", partnerName, item.From, item.To, --remainingInvoices);
                 }
                
             }
