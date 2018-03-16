@@ -16,7 +16,10 @@ BEGIN
 		ca.sourceid,
 		ca.IsDeleted,
 		ca.ExtendedSettings,
-		ca.CreatedTime
+		ca.CreatedTime,
+		ca.CreatedBy,
+		ca.LastModifiedBy,
+		ca.LastModifiedTime
 	FROM TOneWhS_BE.CarrierAccount ca WITH(NOLOCK)
 	SET NOCOUNT OFF
 END

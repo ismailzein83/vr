@@ -1,4 +1,4 @@
-﻿CREATE PROCEDURE [TOneWhS_BE].[sp_ANumberSaleCode_GetEffectiveBySellingNumberPlanId]	
+﻿CREATE PROCEDURE [TOneWhS_BE].[sp_ANumberSaleCode_GetEffectiveAfterBySellingNumberPlanId]	
 	@SellingNumberPlanId int ,
 	@EfectiveOn DateTime
 AS

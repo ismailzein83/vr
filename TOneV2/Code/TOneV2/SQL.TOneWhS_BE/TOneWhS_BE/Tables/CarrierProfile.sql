@@ -7,8 +7,13 @@
     [SourceID]         VARCHAR (50)   NULL,
     [IsDeleted]        BIT            NULL,
     [CreatedTime]      DATETIME       CONSTRAINT [DF_CarrierProfile_CreatedTime] DEFAULT (getdate()) NULL,
+    [CreatedBy]        INT            NULL,
+    [LastModifiedBy]   INT            NULL,
+    [LastModifiedTime] DATETIME       NULL,
     CONSTRAINT [PK_CarrierProfile] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

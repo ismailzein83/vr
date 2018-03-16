@@ -586,6 +586,17 @@
     <Build Include="TOneWhS_BE\User Defined Types\ANumberGroupType.sql" />
     <Build Include="TOneWhS_Deal\Stored Procedures\sp_DealZoneRate_GetAllDealZoneRates.sql" />
     <Build Include="TOneWhS_Deal\Stored Procedures\sp_DealZoneRate_GetAll.sql" />
-    <Build Include="TOneWhS_BE\Stored Procedures\sp_ANumberSaleCode_GetEffectiveBySellingNumberPlanId.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_DaysToReprocess_Insert.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_ANumberSupplierCode_Insert.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_ANumberSupplierCode_GetFiltered.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_ANumberSupplierCode_GetEffectiveAfterBySupplierId.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_ANumberSupplierCode_Get.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_ANumberSupplierCode_Close.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_ANumberSaleCode_Insert.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_ANumberSaleCode_GetEffectiveAfterBySellingNumberPlanId.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_ANumberSaleCode_Get.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_ANumberSaleCode_Close.sql" />
+    <Build Include="TOneWhS_BE\User Defined Types\ANumberSupplierCodeClose.sql" />
+    <Build Include="TOneWhS_BE\User Defined Types\ANumberSaleCodeClose.sql" />
   </ItemGroup>
 </Project>

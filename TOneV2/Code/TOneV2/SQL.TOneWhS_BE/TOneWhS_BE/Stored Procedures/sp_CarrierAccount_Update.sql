@@ -10,7 +10,8 @@ CREATE PROCEDURE [TOneWhS_BE].[sp_CarrierAccount_Update]
 	@SellingProductId int = null,
 	@CustomerSettings nvarchar(MAX),
 	@SupplierSettings nvarchar(MAX),
-	@CarrierAccountSettings nvarchar(MAX)
+	@CarrierAccountSettings nvarchar(MAX),
+	@LastModifiedBy int
 	
 AS
 BEGIN
@@ -21,8 +22,9 @@ BEGIN
 		SellingProductID = @SellingProductId,
 		CustomerSettings=@CustomerSettings,
 		SupplierSettings = @SupplierSettings,
-		CarrierAccountSettings=@CarrierAccountSettings
-		
+		CarrierAccountSettings=@CarrierAccountSettings,
+		LastModifiedBy=@LastModifiedBy,
+		LastModifiedTime=GETDATE()
 	Where ID = @ID
 END
 

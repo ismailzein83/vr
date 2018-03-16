@@ -6,8 +6,12 @@
     [TierNb]      INT             NOT NULL,
     [ZoneId]      BIGINT          NOT NULL,
     [Rate]        DECIMAL (20, 8) NOT NULL,
+    [CurrencyId]  INT             NOT NULL,
     [BED]         DATETIME        NOT NULL,
     [EED]         DATETIME        NULL,
+    [timestamp]   ROWVERSION      NULL,
     CONSTRAINT [PK_DealZoneRate] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
