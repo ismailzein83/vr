@@ -17,6 +17,18 @@ namespace TOne.WhS.BusinessEntity.Business
             VRActionLogger.Current.LogGetFilteredAction(SupplierRateLoggableEntity.Instance, input);
             return BigDataManager.Instance.RetrieveData(input, new SupplierRateRequestHandler());
         }
+        public Dictionary<long, SupplierRate> GetSupplierRateByZoneId(List<long> supplierZoneIds, DateTime minimumDate)
+        {
+            var supplierRateByZoneId = new Dictionary<long, SupplierRate>();
+            ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
+            var supplierRates = dataManager.GetSupplierRatesByZoneIds(supplierZoneIds, minimumDate);
+            foreach (var supplierRate in supplierRates)
+            {
+                if (!supplierRateByZoneId.ContainsKey(supplierRate.ZoneId))
+                    supplierRateByZoneId.Add(supplierRate.ZoneId, supplierRate);
+            }
+            return supplierRateByZoneId;
+        }
         public List<SupplierRate> GetSupplierRatesEffectiveAfter(int supplierId, DateTime minimumDate)
         {
             ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
@@ -160,7 +172,7 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Mappers
-       
+
         #endregion
 
         #region Private Classes
@@ -169,7 +181,7 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             private SupplierPriceListManager _supplierPriceListManager;
 
-            private SupplierRateManager _supplierRateManager; 
+            private SupplierRateManager _supplierRateManager;
             private RateTypeManager _rateTypeManager;
             private CurrencyExchangeRateManager _currencyExchangeRateManager;
             private CurrencyManager _currencyManager;
@@ -187,7 +199,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 throw new NotImplementedException();
             }
-            private SupplierRateDetail SupplierRateDetailMapper(SupplierRate supplierRate, int? systemCurrencyId,DateTime effectiveOn)
+            private SupplierRateDetail SupplierRateDetailMapper(SupplierRate supplierRate, int? systemCurrencyId, DateTime effectiveOn)
             {
                 SupplierPriceList priceList = _supplierPriceListManager.GetPriceList(supplierRate.PriceListId);
                 supplierRate.PriceListFileId = priceList.FileId;

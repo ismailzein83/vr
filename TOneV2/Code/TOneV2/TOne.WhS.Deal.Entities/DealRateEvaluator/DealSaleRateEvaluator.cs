@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.Deal.Entities
 {
@@ -13,25 +11,13 @@ namespace TOne.WhS.Deal.Entities
 
     public interface IDealSaleRateEvaluatorContext
     {
-        List<long> ZoneIds { get; }
-
+        int CustomerId { get; }
+        int SellingProductId { get; }
+        int CurrencyId { get; }
         DateTime DealBED { get; }
-
-        DateTime DealEED { get; }
-
-        Dictionary<long, List<EvaluatedDealSaleRate>> EvaluatedSaleRatesByZoneId { get; }
-
-    }
-
-    public class EvaluatedDealSaleRate
-    {
-        public Decimal Rate { get; set; }
-
-        //public int CurrencyId { get; set; }
-
-        public DateTime BED { get; set; }
-
-        public DateTime? EED { get; set; }
-
+        DateTime? DealEED { get; }
+        Dictionary<long, List<DealRate>> SaleRatesByZoneId { get; set; }
+        List<long> ZoneIds { get; set; }
+        Func<string, int, IEnumerable<SaleRateHistoryRecord>> GetCustomerZoneRatesFunc { get; }
     }
 }

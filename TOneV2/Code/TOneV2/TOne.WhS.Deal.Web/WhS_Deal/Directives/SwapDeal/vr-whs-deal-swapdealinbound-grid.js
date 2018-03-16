@@ -69,13 +69,12 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
                         lastInboundGroupNumber = payload.lastInboundGroupNumber;
                     }
 
-                    
+
 
                 };
 
                 api.getData = function () {
                     var inbounds = [];
-
                     if (ctrl.datasource != undefined) {
                         for (var i = 0; i < ctrl.datasource.length; i++) {
                             var currentItem = ctrl.datasource[i];
@@ -83,6 +82,7 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
                                 Name: currentItem.Name,
                                 Volume: currentItem.Volume,
                                 Rate: currentItem.Rate,
+                                EvaluatedRate: currentItem.EvaluatedRate,
                                 SaleZoneIds: currentItem.SaleZoneIds,
                                 CountryId: currentItem.CountryId,
                                 ZoneGroupNumber: currentItem.ZoneGroupNumber
@@ -137,7 +137,7 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
             }
 
             function viewSwapDealInbound(dealInboundObj) {
-               
+
                 var sellingNumberPlanId = mainPayload != undefined ? mainPayload.sellingNumberPlanId : undefined;
 
                 WhS_Deal_SwapDealInboundService.viewSwapDealInbound(dealInboundObj, sellingNumberPlanId);

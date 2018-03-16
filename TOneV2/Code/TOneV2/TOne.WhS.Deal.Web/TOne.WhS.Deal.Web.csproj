@@ -169,7 +169,9 @@
     <Content Include="WhS_Deal\Constant\ZoneRateEvaluationTypeEnum.js" />
     <Content Include="WhS_Deal\Directives\DealDefinition\vr-whs-deal-dealdefinition-selector.js" />
     <Content Include="WhS_Deal\Directives\DealRateEvaluator\Templates\DealSaleRateEvaluatorTemplate.html" />
+    <Content Include="WhS_Deal\Directives\DealRateEvaluator\Templates\DealSupplierRateEvaluatorTemplate.html" />
     <Content Include="WhS_Deal\Directives\DealRateEvaluator\vr-whs-deal-salerateevaluator-selective.js" />
+    <Content Include="WhS_Deal\Directives\DealRateEvaluator\vr-whs-deal-supplierrateevaluator-selective.js" />
     <Content Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SaleRateEvaluator\Templates\DealSaleRateEvaluatorDiccount.html" />
     <Content Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SaleRateEvaluator\Templates\DealSaleRateEvaluatorFixed.html" />
     <Content Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SaleRateEvaluator\vr-whs-deal-salerateevaluator-fixed.js" />

@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrWhsDealSalerateevaluatorSelective", ["WhS_Deal_VolCommitmentDealAPIService", "UtilsService", "VRUIUtilsService",
+app.directive("vrWhsDealSupplierrateevaluatorSelective", ["WhS_Deal_VolCommitmentDealAPIService", "UtilsService", "VRUIUtilsService",
 function (WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService) {
 
     return {
@@ -12,34 +12,30 @@ function (WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService) 
         },
         controller: function ($scope, $element, $attrs) {
             var selectiveCtrl = this;
-            var saleRateEvaluator = new SaleRateEvaluator(selectiveCtrl, $scope);
-            saleRateEvaluator.initializeController();
+            var supplierRateEvaluator = new SupplierRateEvaluator(selectiveCtrl, $scope);
+            supplierRateEvaluator.initializeController();
         },
         controllerAs: "selectiveCtrl",
         bindToController: true,
-        templateUrl: "/Client/Modules/WhS_Deal/Directives/DealRateEvaluator/Templates/DealSaleRateEvaluatorTemplate.html"
+        templateUrl: "/Client/Modules/WhS_Deal/Directives/DealRateEvaluator/Templates/DealSupplierRateEvaluatorTemplate.html"
     };
 
-    function SaleRateEvaluator(selectiveCtrl, $scope) {
+    function SupplierRateEvaluator(selectiveCtrl, $scope) {
         this.initializeController = initializeController;
         var directiveReadyDeferred;
-        var evaluatedRate;
         var directiveAPI;
-        var selectorAPI;
-        $scope.scopeModel = {};
+        var evaluatedRate;
 
         function initializeController() {
             selectiveCtrl.templateConfigs = [];
-            //selectiveCtrl.selectedTemplateConfig;
 
-            selectiveCtrl.onSaleRateEvaluatorSelectorReady = function (api) {
-                selectorAPI = api;
+            selectiveCtrl.onSupplierRateEvaluatorSelectorReady = function (api) {
                 defineAPI();
             };
             selectiveCtrl.onDirectiveWrapperReady = function (api) {
                 directiveAPI = api;
                 var setLoader = function (value) {
-                    selectiveCtrl.isLoadingDirective = value;
+                    $scope.isLoadingDirective = value;
                 };
                 var directivePayload = undefined;
                 if (evaluatedRate != undefined)
@@ -51,13 +47,12 @@ function (WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService) 
             }
         }
         function defineAPI() {
+
             var api = {};
             api.load = function (payload) {
-                // selectorAPI.clearDataSource();
-
                 var promises = [];
-                var getsaleRateEvaluatorConfigurationPromise = getSaleRateEvaluatorConfiguration();
-                promises.push(getsaleRateEvaluatorConfigurationPromise);
+                var getsupplierRateEvaluatorConfigurationPromise = getSupplierRateEvaluatorConfiguration();
+                promises.push(getsupplierRateEvaluatorConfigurationPromise);
 
                 if (payload != undefined) {
                     directiveReadyDeferred = UtilsService.createPromiseDeferred();
@@ -72,12 +67,12 @@ function (WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService) 
                     promises.push(loadDirectivePromiseDeferred.promise);
                 }
 
-                function getSaleRateEvaluatorConfiguration() {
-                    return WhS_Deal_VolCommitmentDealAPIService.GetSaleRateEvaluatorConfigurationTemplateConfigs().then(
-                        function (rateEvaluators) {
-                            if (rateEvaluators != null) {
-                                for (var i = 0; i < rateEvaluators.length; i++) {
-                                    selectiveCtrl.templateConfigs.push(rateEvaluators[i]);
+                function getSupplierRateEvaluatorConfiguration() {
+                    return WhS_Deal_VolCommitmentDealAPIService.GetSupplierRateEvaluatorConfigurationTemplateConfigs().then(
+                        function (supplierRateEvaluators) {
+                            if (supplierRateEvaluators != null) {
+                                for (var i = 0; i < supplierRateEvaluators.length; i++) {
+                                    selectiveCtrl.templateConfigs.push(supplierRateEvaluators[i]);
                                 }
                             }
                             if (evaluatedRate != undefined) {
@@ -89,17 +84,11 @@ function (WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService) 
                 return UtilsService.waitMultiplePromises(promises);
             };
             api.getData = function () {
-                var data;
-                if (selectiveCtrl.selectedTemplateConfig != undefined && directiveAPI != undefined) {
-                    data = directiveAPI.getData();
-                    if (data != undefined) {
-                        data.ConfigId = selectiveCtrl.selectedTemplateConfig.ExtensionConfigurationId;
-                    }
-                }
-                return data;
+                return directiveAPI.getData();
             };
             if (selectiveCtrl.onReady && typeof selectiveCtrl.onReady == "function")
                 selectiveCtrl.onReady(api);
         }
+
     }
 }]);

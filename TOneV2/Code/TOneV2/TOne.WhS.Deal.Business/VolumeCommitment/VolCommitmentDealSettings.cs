@@ -2,20 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Deal.Entities;
 
-namespace TOne.WhS.Deal.Entities
+namespace TOne.WhS.Deal.Business
 {
-    public enum VolCommitmentDealType
-    {
-        [Description("Buy")]
-        Buy = 0,
-
-        [Description("Sell")]
-        Sell = 1
-    }
     public class VolCommitmentDealSettings : DealSettings
     {
         public static Guid VolCommitmentDealSettingsConfigId = new Guid("B606E88C-4AE5-4BF0-BCE5-10D456A092F5");
@@ -36,6 +28,7 @@ namespace TOne.WhS.Deal.Entities
             return true;
         }
 
+
         public override void GetZoneGroups(IDealGetZoneGroupsContext context)
         {
             switch (DealType)
@@ -53,7 +46,7 @@ namespace TOne.WhS.Deal.Entities
                                 DealSupplierZoneGroupNb = volCommitmentDealItem.ZoneGroupNumber,
                                 EED = EndDate,
                                 SupplierId = CarrierAccountId,
-                                Tiers = BuildSupplierTiers(volCommitmentDealItem.Tiers),
+                                Tiers = BuildSupplierTiers(volCommitmentDealItem.Tiers, volCommitmentDealItem.ZoneIds),
                                 Zones = BuildSupplierZones(volCommitmentDealItem.ZoneIds)
                             };
                             dealSupplierZoneGroups.Add(dealSupplierZoneGroup);
@@ -74,7 +67,7 @@ namespace TOne.WhS.Deal.Entities
                                 DealSaleZoneGroupNb = volCommitmentDealItem.ZoneGroupNumber,
                                 EED = EndDate,
                                 CustomerId = CarrierAccountId,
-                                Tiers = BuildSaleTiers(volCommitmentDealItem.Tiers),
+                                Tiers = BuildSaleTiers(volCommitmentDealItem.Tiers, volCommitmentDealItem.ZoneIds),
                                 Zones = BuildSaleZones(volCommitmentDealItem.ZoneIds)
                             };
                             dealSaleZoneGroups.Add(dealSaleZoneGroup);
@@ -100,56 +93,61 @@ namespace TOne.WhS.Deal.Entities
             return dealSaleZoneGroupZoneItems;
         }
 
-        private IOrderedEnumerable<DealSaleZoneGroupTier> BuildSaleTiers(List<VolCommitmentDealItemTier> volCommitmentDealItemTiers)
+        private void SetRateLocatorContext(List<long> zoneIds, out Func<string, int, IEnumerable<SaleRateHistoryRecord>> getCustomerZoneRatesFunc)
+        {
+            var carrierAccountManager = new CarrierAccountManager();
+            int sellingProductId = carrierAccountManager.GetSellingProductId(CarrierAccountId);
+
+            var customerZoneRateHistoryLocator =
+               new CustomerZoneRateHistoryLocator(new CustomerZoneRateHistoryReader(new List<int> { CarrierAccountId }
+                   , new List<int> { sellingProductId }, zoneIds, true, false));
+
+            getCustomerZoneRatesFunc = (zoneName, countryId) => customerZoneRateHistoryLocator.GetCustomerZoneRateHistory(CarrierAccountId, sellingProductId, zoneName, null, countryId, null, null);
+        }
+        private IOrderedEnumerable<DealSaleZoneGroupTier> BuildSaleTiers(List<VolCommitmentDealItemTier> volCommitmentDealItemTiers, List<long> zoneIds)
         {
             if (volCommitmentDealItemTiers == null || volCommitmentDealItemTiers.Count == 0)
                 throw new NullReferenceException("volCommitmentDealItemTiers");
 
             int tierNumber = 1;
-            IOrderedEnumerable<VolCommitmentDealItemTier> orderedVolCommitmentDealItemTiers = volCommitmentDealItemTiers.OrderBy(itm => itm.UpToVolume.HasValue ? itm.UpToVolume.Value : Int32.MaxValue);
+            IOrderedEnumerable<VolCommitmentDealItemTier> orderedVolCommitmentDealItemTiers = volCommitmentDealItemTiers.OrderBy(itm => itm.UpToVolume ?? Int32.MaxValue);
 
-            List<DealSaleZoneGroupTier> dealSaleZoneGroupTiers = new List<DealSaleZoneGroupTier>();
+            var dealSaleZoneGroupTiers = new List<DealSaleZoneGroupTier>();
             int previousVolumeAssigned = 0;
+
+            Func<string, int, IEnumerable<SaleRateHistoryRecord>> getCustomerZoneRatesFunc;
+            SetRateLocatorContext(zoneIds, out getCustomerZoneRatesFunc);
+
+            var context = new DealSaleRateEvaluatorContext
+            {
+                GetCustomerZoneRatesFunc = getCustomerZoneRatesFunc,
+                DealBED = BeginDate,
+                DealEED = EndDate,
+                ZoneIds = zoneIds
+            };
+
             foreach (VolCommitmentDealItemTier volCommitmentDealItemTier in orderedVolCommitmentDealItemTiers)
             {
-                DealSaleZoneGroupTier dealSaleZoneGroupTier = new DealSaleZoneGroupTier()
+                var saleEvaluatedRate = volCommitmentDealItemTier.EvaluatedRate as DealSaleRateEvaluator;
+
+                if (saleEvaluatedRate == null)
+                    throw new NullReferenceException("DealSaleRateEvaluator");
+
+                saleEvaluatedRate.EvaluateRate(context);
+
+                DealSaleZoneGroupTier dealSaleZoneGroupTier = new DealSaleZoneGroupTier
                 {
                     RetroActiveFromTierNumber = volCommitmentDealItemTier.RetroActiveFromTierNumber,
                     VolumeInSeconds = volCommitmentDealItemTier.UpToVolume.HasValue ? (volCommitmentDealItemTier.UpToVolume.Value * 60) - previousVolumeAssigned : (int?)null,
                     TierNumber = tierNumber,
-                    Rate = volCommitmentDealItemTier.DefaultRate,
-                    ExceptionRates = BuildSaleExceptionRates(volCommitmentDealItemTier.ExceptionZoneRates),
+                    RatesByZoneId = context.SaleRatesByZoneId,
                     CurrencyId = CurrencyId
                 };
                 dealSaleZoneGroupTiers.Add(dealSaleZoneGroupTier);
                 tierNumber++;
-                previousVolumeAssigned += dealSaleZoneGroupTier.VolumeInSeconds.HasValue ? dealSaleZoneGroupTier.VolumeInSeconds.Value : 0;
+                previousVolumeAssigned += dealSaleZoneGroupTier.VolumeInSeconds ?? 0;
             }
             return dealSaleZoneGroupTiers.OrderBy(itm => itm.TierNumber);
-        }
-
-        private List<DealSaleZoneGroupTierZoneRate> BuildSaleExceptionRates(IEnumerable<VolCommitmentDealItemTierZoneRate> volCommitmentDealItemTierZoneRates)
-        {
-            if (volCommitmentDealItemTierZoneRates == null || volCommitmentDealItemTierZoneRates.Count() == 0)
-                return null;
-
-            List<DealSaleZoneGroupTierZoneRate> dealSaleZoneGroupTierZoneRates = new List<DealSaleZoneGroupTierZoneRate>();
-            foreach (VolCommitmentDealItemTierZoneRate volCommitmentDealItemTierZoneRate in volCommitmentDealItemTierZoneRates)
-            {
-                if (volCommitmentDealItemTierZoneRate.ZoneIds == null || volCommitmentDealItemTierZoneRate.ZoneIds.Count == 0)
-                    throw new NullReferenceException("volCommitmentDealItemTierZoneRate.ZoneIds");
-
-                foreach (long zoneId in volCommitmentDealItemTierZoneRate.ZoneIds)
-                {
-                    DealSaleZoneGroupTierZoneRate dealSaleZoneGroupTierZoneRate = new DealSaleZoneGroupTierZoneRate()
-                    {
-                        ZoneId = zoneId,
-                        Rate = volCommitmentDealItemTierZoneRate.Rate
-                    };
-                    dealSaleZoneGroupTierZoneRates.Add(dealSaleZoneGroupTierZoneRate);
-                }
-            }
-            return dealSaleZoneGroupTierZoneRates;
         }
 
         #endregion
@@ -169,30 +167,43 @@ namespace TOne.WhS.Deal.Entities
             return dealSupplierZoneGroupZoneItems;
         }
 
-        private IOrderedEnumerable<DealSupplierZoneGroupTier> BuildSupplierTiers(List<VolCommitmentDealItemTier> volCommitmentDealItemTiers)
+        private IOrderedEnumerable<DealSupplierZoneGroupTier> BuildSupplierTiers(List<VolCommitmentDealItemTier> volCommitmentDealItemTiers, List<long> zoneIds)
         {
             if (volCommitmentDealItemTiers == null || volCommitmentDealItemTiers.Count == 0)
                 throw new NullReferenceException("volCommitmentDealItemTiers");
 
             int tierNumber = 1;
-            IOrderedEnumerable<VolCommitmentDealItemTier> orderedVolCommitmentDealItemTiers = volCommitmentDealItemTiers.OrderBy(itm => itm.UpToVolume.HasValue ? itm.UpToVolume.Value : Int32.MaxValue);
+            IOrderedEnumerable<VolCommitmentDealItemTier> orderedVolCommitmentDealItemTiers = volCommitmentDealItemTiers.OrderBy(itm => itm.UpToVolume ?? Int32.MaxValue);
+
+            var context = new DealSupplierRateEvaluatorContext
+            {
+                DealBED = BeginDate,
+                DealEED = EndDate,
+                ZoneIds = zoneIds
+            };
 
             List<DealSupplierZoneGroupTier> dealSupplierZoneGroupTiers = new List<DealSupplierZoneGroupTier>();
             int previousVolumeAssigned = 0;
             foreach (VolCommitmentDealItemTier volCommitmentDealItemTier in orderedVolCommitmentDealItemTiers)
             {
-                DealSupplierZoneGroupTier dealSupplierZoneGroupTier = new DealSupplierZoneGroupTier()
+                var supplierEvaluatedRate = volCommitmentDealItemTier.EvaluatedRate as DealSupplierRateEvaluator;
+
+                if (supplierEvaluatedRate == null)
+                    throw new NullReferenceException("DealSupplierRateEvaluator");
+
+                supplierEvaluatedRate.EvaluateRate(context);
+
+                DealSupplierZoneGroupTier dealSupplierZoneGroupTier = new DealSupplierZoneGroupTier
                 {
                     RetroActiveFromTierNumber = volCommitmentDealItemTier.RetroActiveFromTierNumber,
                     VolumeInSeconds = volCommitmentDealItemTier.UpToVolume.HasValue ? (volCommitmentDealItemTier.UpToVolume.Value * 60) - previousVolumeAssigned : (int?)null,
+                    RatesByZoneId = context.SupplierDealRatesByZoneId,
                     TierNumber = tierNumber,
-                    Rate = volCommitmentDealItemTier.DefaultRate,
-                    ExceptionRates = BuildSupplierExceptionRates(volCommitmentDealItemTier.ExceptionZoneRates),
                     CurrencyId = CurrencyId
                 };
                 dealSupplierZoneGroupTiers.Add(dealSupplierZoneGroupTier);
                 tierNumber++;
-                previousVolumeAssigned += dealSupplierZoneGroupTier.VolumeInSeconds.HasValue ? dealSupplierZoneGroupTier.VolumeInSeconds.Value : 0;
+                previousVolumeAssigned += dealSupplierZoneGroupTier.VolumeInSeconds ?? 0;
             }
             return dealSupplierZoneGroupTiers.OrderBy(itm => itm.TierNumber);
         }
@@ -213,7 +224,7 @@ namespace TOne.WhS.Deal.Entities
                     DealSupplierZoneGroupTierZoneRate dealSupplierZoneGroupTierZoneRate = new DealSupplierZoneGroupTierZoneRate()
                     {
                         ZoneId = zoneId,
-                        Rate = volCommitmentDealItemTierZoneRate.Rate
+                        // Rate = volCommitmentDealItemTierZoneRate.Rate
                     };
                     dealSupplierZoneGroupTierZoneRates.Add(dealSupplierZoneGroupTierZoneRate);
                 }

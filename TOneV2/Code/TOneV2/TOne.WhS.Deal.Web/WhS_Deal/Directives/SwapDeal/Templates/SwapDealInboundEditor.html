@@ -14,9 +14,17 @@
                 <vr-columns width="1/3row">
                     <vr-textbox label="Volume" value="scopeModel.volume" type="number" isrequired="true"></vr-textbox>
                 </vr-columns>
-                <vr-columns width="1/3row">
+                <!--<vr-columns width="1/3row">
                     <vr-textbox label="Rate" value="scopeModel.rate" type="number" isrequired="true"></vr-textbox>
-                </vr-columns>
+                </vr-columns>-->
+                <span vr-loader="scopeModel.isLoadingDirective">
+                    <vr-whs-deal-salerateevaluator-selective selectedvalues="scopeModel.selectedValue"
+                                                             on-ready="scopeModel.onrateEvaluatorSelectiveReady"
+                                                             normal-col-num="4"
+                                                             isrequired="true"
+                                                             hideremoveicon="true">
+                    </vr-whs-deal-salerateevaluator-selective>
+                </span>
             </vr-row>
         </vr-form>
     </vr-modalbody>

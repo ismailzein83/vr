@@ -2,12 +2,10 @@
 
     'use strict';
 
-    SwapDealInboundEditorController.$inject = ['$scope',  'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
+    SwapDealInboundEditorController.$inject = ['$scope', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService'];
 
     function SwapDealInboundEditorController($scope, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService) {
         var isEditMode;
-
-
 
         var swapDealInboundEntity;
         var sellingNumberPlanId;
@@ -15,10 +13,11 @@
         var countryDirectiveApi;
         var countryReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-   
-
         var saleZoneDirectiveAPI;
         var saleZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+        var rateEvaluatorSelectiveDirectiveAPI;
+        var rateEvaluatorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         var countrySelectedPromiseDeferred;
 
@@ -32,7 +31,7 @@
                 sellingNumberPlanId = parameters.sellingNumberPlanId;
                 swapDealInboundEntity = parameters.swapDealInbound;
             }
-            
+
             isEditMode = (swapDealInboundEntity != undefined);
         }
 
@@ -43,7 +42,10 @@
                 return (isEditMode) ? updateSwapDealInbound() : insertSwapDealInbound();
             };
 
-
+            $scope.scopeModel.onrateEvaluatorSelectiveReady = function (api) {
+                rateEvaluatorSelectiveDirectiveAPI = api;
+                rateEvaluatorReadyPromiseDeferred.resolve();
+            };
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
@@ -88,7 +90,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCountrySaleZoneSection]).then(function () {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCountrySaleZoneSection, loadRateEvaluatorSelectiveDirective]).then(function () {
                 swapDealInboundEntity = undefined;
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -96,7 +98,21 @@
                 $scope.scopeModel.isLoading = false;
             });
         }
+        function loadRateEvaluatorSelectiveDirective() {
+            var loadREWSelectiveDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
 
+            rateEvaluatorReadyPromiseDeferred.promise.then(function () {
+
+                var payload = undefined;
+                if (swapDealInboundEntity != undefined && swapDealInboundEntity.EvaluatedRate != undefined)
+                    payload =
+                    {
+                        evaluatedRate: swapDealInboundEntity.EvaluatedRate
+                    };
+                VRUIUtilsService.callDirectiveLoad(rateEvaluatorSelectiveDirectiveAPI, payload, loadREWSelectiveDirectivePromiseDeferred);
+            });
+            return loadREWSelectiveDirectivePromiseDeferred.promise;
+        }
 
         function loadCountrySaleZoneSection() {
             var loadCountryPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -139,8 +155,8 @@
         }
 
 
-        
-        
+
+
         function loadSaleZoneSection() {
             //if (swapDealInboundEntity != undefined) {
             //    var setLoader = function (value) { $scope.isLoadingSelector = value };
@@ -151,14 +167,14 @@
             //    }
             //    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
             //}
-            
+
         }
 
 
         function setTitle() {
             if (isEditMode) {
                 if (swapDealInboundEntity != undefined)
-                    $scope.title = UtilsService.buildTitleForUpdateEditor(swapDealInboundEntity.Name, 'Selling Part',$scope);
+                    $scope.title = UtilsService.buildTitleForUpdateEditor(swapDealInboundEntity.Name, 'Selling Part', $scope);
             }
             else
                 $scope.title = UtilsService.buildTitleForAddEditor('Selling Part');
@@ -169,13 +185,13 @@
                 return;
             $scope.scopeModel.name = swapDealInboundEntity.Name;
             $scope.scopeModel.volume = swapDealInboundEntity.Volume;
-            $scope.scopeModel.rate = swapDealInboundEntity.Rate;
-           
+            // $scope.scopeModel.rate = swapDealInboundEntity.Rate;
+
         }
 
         function insertSwapDealInbound() {
             $scope.scopeModel.isLoading = true;
-            
+
             var swapDealInboundObject = buildSwapDealInboundObjFromScope();
             if ($scope.onSwapDealInboundAdded != undefined)
                 $scope.onSwapDealInboundAdded(swapDealInboundObject);
@@ -194,7 +210,8 @@
                 Name: $scope.scopeModel.name,
                 SaleZoneIds: saleZoneDirectiveAPI.getSelectedIds(),
                 Volume: $scope.scopeModel.volume,
-                Rate: $scope.scopeModel.rate,
+                EvaluatedRate: rateEvaluatorSelectiveDirectiveAPI.getData(),
+                Rate: 0,
                 CountryId: countryDirectiveApi.getSelectedIds()
             };
             return obj;

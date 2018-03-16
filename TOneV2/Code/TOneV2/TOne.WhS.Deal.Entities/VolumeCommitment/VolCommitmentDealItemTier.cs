@@ -12,15 +12,19 @@ namespace TOne.WhS.Deal.Entities
 
         public int? RetroActiveFromTierNumber { get; set; }
 
-        public Decimal DefaultRate { get; set; }
+        public BaseDealRateEvaluator EvaluatedRate { get; set; }
+
+        public string Description {get { return this.EvaluatedRate.GetDescription(); }}
 
         public IEnumerable<VolCommitmentDealItemTierZoneRate> ExceptionZoneRates { get; set; }
+
     }
 
     public class VolCommitmentDealItemTierZoneRate
     {
         public List<long> ZoneIds { get; set; }
 
-        public Decimal Rate { get; set; }
+        public BaseDealRateEvaluator EvaluatedRate { get; set; }
+
     }
 }

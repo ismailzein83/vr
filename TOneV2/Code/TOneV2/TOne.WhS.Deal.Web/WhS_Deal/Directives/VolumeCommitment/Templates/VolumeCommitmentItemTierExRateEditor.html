@@ -5,9 +5,16 @@
                 <span vr-loader="scopeModel.isLoadingDirective">
                     <vr-directivewrapper directive="scopeModel.zoneSelector" on-ready="scopeModel.onZoneSelectorReady" normal-col-num="6" isrequired="true" hideremoveicon="true" ismultipleselection></vr-directivewrapper>
                 </span>
-                <vr-columns width="1/2row">
-                    <vr-textbox value="scopeModel.rate" label="Rate" type="number" isrequired="true"></vr-textbox>
-                </vr-columns>
+                <span vr-loader="scopeModel.isLoadingDirective">
+                    <vr-directivewrapper directive="scopeModel.rateEvaluatorSelective"
+                                         selectedvalues="scopeModel.selectedValue"
+                                         onblurdropdown="scopeModel.onRateEvaluatorSelection"
+                                         on-ready="scopeModel.onrateEvaluatorSelectiveReady"
+                                         normal-col-num="4"
+                                         isrequired="true"
+                                         hideremoveicon="true">
+                    </vr-directivewrapper>
+                </span>
             </vr-row>
         </vr-form>
     </vr-modalbody>

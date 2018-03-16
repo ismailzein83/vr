@@ -31,15 +31,15 @@ namespace TOne.WhS.Deal.Business
             DealTechnicalSettingData dealTechnicalSettingData = GetDealTechnicalSettingData();
             return dealTechnicalSettingData.IntervalOffsetInMinutes;
         }
-        public IEnumerable<DealSaleRateEvaluatorConfig> GetDealSaleRateEvaluator()
+        public IEnumerable<DealSaleRateEvaluatorConfig> GetSaleRateEvaluatorConfigurationTemplateConfigs()
         {
             var extensionConfigManager = new ExtensionConfigurationManager();
             return extensionConfigManager.GetExtensionConfigurations<DealSaleRateEvaluatorConfig>(DealSaleRateEvaluatorConfig.EXTENSION_TYPE).OrderBy(x => x.Title);
         }
-        public IEnumerable<DealSupplierRateEvaluatorConfig> GetDealSupplierRateEvaluator()
+        public IEnumerable<DealSupplierRateEvaluatorConfig> GetSupplierRateEvaluatorConfigurationTemplateConfigs()
         {
             var extensionConfigManager = new ExtensionConfigurationManager();
-            return extensionConfigManager.GetExtensionConfigurations<DealSupplierRateEvaluatorConfig>(DealSaleRateEvaluatorConfig.EXTENSION_TYPE).OrderBy(x => x.Title);
+            return extensionConfigManager.GetExtensionConfigurations<DealSupplierRateEvaluatorConfig>(DealSupplierRateEvaluatorConfig.EXTENSION_TYPE).OrderBy(x => x.Title);
         }
 
 

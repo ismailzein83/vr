@@ -13,6 +13,9 @@
         var zoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var zoneDirectiveAPI;
 
+        var rateEvaluatorSelectiveDirectiveAPI;
+        var rateEvaluatorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         $scope.scopeModel = {};
         loadParameters();
         defineScope();
@@ -23,8 +26,10 @@
             if (parametersObj != undefined) {
                 exRateEntity = parametersObj.exRateEntity;
                 context = parametersObj.context;
-                if (context != undefined) 
+                if (context != undefined) {
                     $scope.scopeModel.zoneSelector = context.getZoneSelector();
+                    $scope.scopeModel.rateEvaluatorSelective = context.getRateEvaluatorSelective();
+                }
             }
             isEditMode = (exRateEntity != undefined);
         }
@@ -40,6 +45,10 @@
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
+            $scope.scopeModel.onrateEvaluatorSelectiveReady = function (api) {
+                rateEvaluatorSelectiveDirectiveAPI = api;
+                rateEvaluatorReadyPromiseDeferred.resolve();
+            };
         }
 
         function load() {
@@ -48,7 +57,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadZoneSection]).then(function () {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadZoneSection, loadRateEvaluatorSelectiveDirective]).then(function () {
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             }).catch(function (error) {
@@ -56,9 +65,24 @@
             });
         }
 
+        function loadRateEvaluatorSelectiveDirective() {
+            var loadREWSelectiveDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+
+            rateEvaluatorReadyPromiseDeferred.promise.then(function () {
+
+                var payload = undefined;
+                if (exRateEntity != undefined && exRateEntity.EvaluatedRate != undefined) {
+                    payload =
+                    {
+                        evaluatedRate: exRateEntity.EvaluatedRate
+                    };
+                }
+                VRUIUtilsService.callDirectiveLoad(rateEvaluatorSelectiveDirectiveAPI, payload, loadREWSelectiveDirectivePromiseDeferred);
+            });
+            return loadREWSelectiveDirectivePromiseDeferred.promise;
+        }
 
 
-      
         function setTitle() {
             if (isEditMode && exRateEntity != undefined)
                 $scope.title = 'Edit Exception Rate';
@@ -66,12 +90,7 @@
                 $scope.title = 'Add Exception Rate';
         }
 
-        function loadStaticData() {
-            if (exRateEntity == undefined)
-                return;
-            $scope.scopeModel.rate = exRateEntity.Rate;
-        }
-    
+
         function loadZoneSection() {
             var loadZonePromiseDeferred = UtilsService.createPromiseDeferred();
             zoneReadyPromiseDeferred.promise.then(function () {
@@ -91,7 +110,8 @@
             return {
                 ZoneIds: zoneDirectiveAPI.getSelectedIds(),
                 ZoneNames: context.getZonesNames(zoneDirectiveAPI.getSelectedIds()),
-                Rate: $scope.scopeModel.rate
+                Rate: $scope.scopeModel.rate,
+                EvaluatedRate: rateEvaluatorSelectiveDirectiveAPI.getData()
             };
         }
 

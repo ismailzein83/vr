@@ -49,19 +49,19 @@ namespace TOne.WhS.Deal.Web.Controllers
             return _manager.AddDeal(deal);
         }
         [HttpGet]
-        [Route("GetDealSaleRateEvaluator")]
-        public IEnumerable<DealSaleRateEvaluatorConfig> GetDealSaleRateEvaluator()
+        [Route("GetSaleRateEvaluatorConfigurationTemplateConfigs")]
+        public IEnumerable<DealSaleRateEvaluatorConfig> GetSaleRateEvaluatorConfigurationTemplateConfigs()
         {
             ConfigManager configManager = new ConfigManager();
-            return configManager.GetDealSaleRateEvaluator();
+            return configManager.GetSaleRateEvaluatorConfigurationTemplateConfigs();
         }
 
         [HttpGet]
-        [Route("GetDealSupplierRateEvaluator")]
-        public IEnumerable<DealSupplierRateEvaluatorConfig> GetDealSupplierRateEvaluator()
+        [Route("GetSupplierRateEvaluatorConfigurationTemplateConfigs")]
+        public IEnumerable<DealSupplierRateEvaluatorConfig> GetSupplierRateEvaluatorConfigurationTemplateConfigs()
         {
             ConfigManager configManager = new ConfigManager();
-            return configManager.GetDealSupplierRateEvaluator();
+            return configManager.GetSupplierRateEvaluatorConfigurationTemplateConfigs();
         }
 
     }

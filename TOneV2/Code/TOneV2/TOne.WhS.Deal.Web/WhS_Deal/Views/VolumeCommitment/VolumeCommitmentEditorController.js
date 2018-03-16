@@ -255,7 +255,7 @@
                 DealId: dealId,
                 Name: $scope.scopeModel.description,
                 Settings: {
-                    $type: "TOne.WhS.Deal.Entities.VolCommitmentDealSettings, TOne.WhS.Deal.Entities",
+                    $type: "TOne.WhS.Deal.Business.VolCommitmentDealSettings, TOne.WhS.Deal.Business",
                     DealType: $scope.scopeModel.selectedVolumeCommitmentType.value,
                     CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
                     BeginDate: $scope.scopeModel.beginDate,
@@ -271,6 +271,10 @@
         function getContext() {
             var context = {
                 lastGroupNumber: lastGroupNumber,
+                getRateEvaluatorSelective: function () {
+                    if ($scope.scopeModel.selectedVolumeCommitmentType != undefined)
+                        return $scope.scopeModel.selectedVolumeCommitmentType.RateEvaluatorSelective;
+                },
                 getZoneSelector: function () {
                     if ($scope.scopeModel.selectedVolumeCommitmentType != undefined)
                         return $scope.scopeModel.selectedVolumeCommitmentType.zoneSelector;

@@ -16,6 +16,9 @@
         var supplierZoneDirectiveAPI;
         var supplierZoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var rateEvaluatorSelectiveDirectiveAPI;
+        var rateEvaluatorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
         var countrySelectedPromiseDeferred;
 
 
@@ -57,6 +60,10 @@
                 countryReadyPromiseDeferred.resolve();
             };
 
+            $scope.scopeModel.onrateEvaluatorSelectiveReady = function (api) {
+                rateEvaluatorSelectiveDirectiveAPI = api;
+                rateEvaluatorReadyPromiseDeferred.resolve();
+            };
 
             $scope.onCountrySelectionChanged = function () {
                 var country = countryDirectiveApi.getSelectedIds();
@@ -89,7 +96,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCountrySupplierZoneSection]).then(function () {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCountrySupplierZoneSection, loadRateEvaluatorSelectiveDirective]).then(function () {
                 swapDealOutboundEntity = undefined;
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
@@ -98,7 +105,21 @@
             });
         }
 
+        function loadRateEvaluatorSelectiveDirective() {
+            var loadREWSelectiveDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
 
+            rateEvaluatorReadyPromiseDeferred.promise.then(function () {
+
+                var payload = undefined;
+                if (swapDealOutboundEntity != undefined && swapDealOutboundEntity.EvaluatedRate != undefined)
+                    payload =
+                    {
+                        evaluatedRate: swapDealOutboundEntity.EvaluatedRate
+                    };
+                VRUIUtilsService.callDirectiveLoad(rateEvaluatorSelectiveDirectiveAPI, payload, loadREWSelectiveDirectivePromiseDeferred);
+            });
+            return loadREWSelectiveDirectivePromiseDeferred.promise;
+        }
         function loadCountrySupplierZoneSection() {
             var loadCountryPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -178,7 +199,8 @@
                 Name: $scope.scopeModel.name,
                 SupplierZoneIds: supplierZoneDirectiveAPI.getSelectedIds(),
                 Volume: $scope.scopeModel.volume,
-                Rate: $scope.scopeModel.rate,
+                EvaluatedRate: rateEvaluatorSelectiveDirectiveAPI.getData(),
+                Rate: 0,
                 CountryId: countryDirectiveApi.getSelectedIds()
 
             };

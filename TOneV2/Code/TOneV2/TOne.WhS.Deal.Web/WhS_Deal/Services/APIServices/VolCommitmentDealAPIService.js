@@ -34,11 +34,11 @@
                 volumeCommitmentHistoryId: volumeCommitmentHistoryId
             });
         }
-        function GetDealSaleRateEvaluator() {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, "GetDealSaleRateEvaluator"));
+        function GetSaleRateEvaluatorConfigurationTemplateConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, "GetSaleRateEvaluatorConfigurationTemplateConfigs"));
         }
-        function GetDealSupplierRateEvaluator() {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, "GetDealSupplierRateEvaluator"));
+        function GetSupplierRateEvaluatorConfigurationTemplateConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Deal_ModuleConfig.moduleName, controllerName, "GetSupplierRateEvaluatorConfigurationTemplateConfigs"));
         }
         return ({
             GetFilteredVolCommitmentDeals: GetFilteredVolCommitmentDeals,
@@ -48,8 +48,8 @@
             HasAddDealPermission: HasAddDealPermission,
             HasEditDealPermission: HasEditDealPermission,
             GetVolumeCommitmentHistoryDetailbyHistoryId: GetVolumeCommitmentHistoryDetailbyHistoryId,
-            GetDealSaleRateEvaluator: GetDealSaleRateEvaluator,
-            GetDealSupplierRateEvaluator: GetDealSupplierRateEvaluator
+            GetSaleRateEvaluatorConfigurationTemplateConfigs: GetSaleRateEvaluatorConfigurationTemplateConfigs,
+            GetSupplierRateEvaluatorConfigurationTemplateConfigs: GetSupplierRateEvaluatorConfigurationTemplateConfigs
         });
     }
 

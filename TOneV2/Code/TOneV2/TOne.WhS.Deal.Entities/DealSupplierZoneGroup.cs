@@ -37,9 +37,9 @@ namespace TOne.WhS.Deal.Entities
 
         public int? VolumeInSeconds { get; set; }
 
-        //public DealSupplierZoneRateEvaluator DefaultRateEvaluator { get; set; }
         public Decimal Rate { get; set; }
 
+        public Dictionary<long, List<DealRate>> RatesByZoneId { get; set; }
         public List<DealSupplierZoneGroupTierZoneRate> ExceptionRates { get; set; }
 
         public int CurrencyId { get; set; }
@@ -50,7 +50,7 @@ namespace TOne.WhS.Deal.Entities
         public long ZoneId { get; set; }
 
         public Decimal Rate { get; set; }
-        //public DealSupplierZoneRateEvaluator RateEvaluator { get; set; }
+        public DealSupplierZoneRateEvaluator RateEvaluator { get; set; }
     }
 
     public abstract class DealSupplierZoneRateEvaluator

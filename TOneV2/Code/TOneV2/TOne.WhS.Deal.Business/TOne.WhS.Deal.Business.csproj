@@ -105,12 +105,16 @@
     <Compile Include="DealZoneRateManager.cs" />
     <Compile Include="SwapDeals\RouteRules\SwapDealBuyRouteRuleManager.cs" />
     <Compile Include="SwapDeals\SwapDealRouteBuildInterceptor.cs" />
+    <Compile Include="SwapDeals\SwapDealSettings.cs" />
     <Compile Include="SwapDeals\ValidateBeforeSaveContext.cs" />
     <Compile Include="VolCommitmentDealManager.cs" />
     <Compile Include="SwapDeals\SwapDealManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BaseDealManager.cs" />
     <Compile Include="SwapDeals\SwapDealAnalysisManager.cs" />
+    <Compile Include="VolumeCommitment\DealSaleRateEvaluatorContext.cs" />
+    <Compile Include="VolumeCommitment\DealSupplierRateEvaluatorContext.cs" />
+    <Compile Include="VolumeCommitment\VolCommitmentDealSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">

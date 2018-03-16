@@ -2,9 +2,9 @@
 
     'use strict';
 
-    VolumeCommitmentItemTierEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_Deal_VolumeCommitmentService'];
+    VolumeCommitmentItemTierEditorController.$inject = ['$scope', 'VRNavigationService', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'WhS_Deal_VolumeCommitmentService', 'WhS_Deal_VolumeCommitmentTypeEnum'];
 
-    function VolumeCommitmentItemTierEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService, WhS_Deal_VolumeCommitmentService) {
+    function VolumeCommitmentItemTierEditorController($scope, VRNavigationService, UtilsService, VRNotificationService, VRUIUtilsService, WhS_Deal_VolumeCommitmentService, WhS_Deal_VolumeCommitmentTypeEnum) {
 
         var volumeCommitmentItemTierEntity;
         var tiers;
@@ -12,6 +12,9 @@
         var isEditMode;
         var zoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
         var zoneDirectiveAPI;
+
+        var rateEvaluatorSelectiveDirectiveAPI;
+        var rateEvaluatorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         $scope.scopeModel = {};
         loadParameters();
@@ -24,6 +27,7 @@
                 volumeCommitmentItemTierEntity = parametersObj.volumeCommitmentItemTierEntity;
                 tiers = parametersObj.tiers;
                 context = parametersObj.context;
+                $scope.scopeModel.rateEvaluatorSelective = context.getRateEvaluatorSelective();
             }
             isEditMode = (volumeCommitmentItemTierEntity != undefined);
         }
@@ -36,6 +40,11 @@
 
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
+            };
+
+            $scope.scopeModel.onrateEvaluatorSelectiveReady = function (api) {
+                rateEvaluatorSelectiveDirectiveAPI = api;
+                rateEvaluatorReadyPromiseDeferred.resolve();
             };
 
             $scope.scopeModel.validateUpToVolume = function () {
@@ -89,7 +98,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).then(function () {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadRateEvaluatorSelectiveDirective]).then(function () {
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             }).catch(function (error) {
@@ -97,6 +106,21 @@
             });
         }
 
+        function loadRateEvaluatorSelectiveDirective() {
+            var loadREWSelectiveDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+
+            rateEvaluatorReadyPromiseDeferred.promise.then(function () {
+
+                var payload = undefined;
+                if (volumeCommitmentItemTierEntity != undefined && volumeCommitmentItemTierEntity.EvaluatedRate != undefined)
+                    payload =
+                    {
+                        evaluatedRate: volumeCommitmentItemTierEntity.EvaluatedRate
+                    };
+                VRUIUtilsService.callDirectiveLoad(rateEvaluatorSelectiveDirectiveAPI, payload, loadREWSelectiveDirectivePromiseDeferred);
+            });
+            return loadREWSelectiveDirectivePromiseDeferred.promise;
+        }
         function setTitle() {
             if (isEditMode)
                 $scope.title = UtilsService.buildTitleForUpdateEditor(volumeCommitmentItemTierEntity.tierName, 'Volume Commitment Item Tier');
@@ -107,10 +131,9 @@
         function loadStaticData() {
             if (!isEditMode)
                 return;
-
             $scope.scopeModel.isLastTier = volumeCommitmentItemTierEntity.UpToVolume == null;
             $scope.scopeModel.upToVolume = volumeCommitmentItemTierEntity.UpToVolume;
-            $scope.scopeModel.defaultRate = volumeCommitmentItemTierEntity.DefaultRate;
+            // $scope.scopeModel.defaultRate = volumeCommitmentItemTierEntity.DefaultRate;
             $scope.scopeModel.selectedRetroActive = UtilsService.getItemByVal($scope.scopeModel.tiers, volumeCommitmentItemTierEntity.RetroActiveFromTierNumber, 'tierId');
             if (volumeCommitmentItemTierEntity.ExceptionZoneRates != null && volumeCommitmentItemTierEntity.ExceptionZoneRates.length > 0)
                 buildExceptionZoneRatesDataSource(volumeCommitmentItemTierEntity.ExceptionZoneRates);
@@ -125,10 +148,10 @@
                     exceptions.push(exception.Entity);
                 }
             }
-
             return {
                 UpToVolume: $scope.scopeModel.upToVolume,
-                DefaultRate: $scope.scopeModel.defaultRate,
+                EvaluatedRate: rateEvaluatorSelectiveDirectiveAPI.getData(),
+                DefaultRate: 0,
                 RetroActiveFromTierNumber: ($scope.scopeModel.selectedRetroActive != undefined) ? $scope.scopeModel.selectedRetroActive.tierId : undefined,
                 ExceptionZoneRates: exceptions
             };
@@ -255,7 +278,7 @@
                 return obj;
             else {
                 obj.ZoneIds = zoneIds;
-                obj.Rate = excep.Rate;
+                obj.EvaluatedRate = excep.EvaluatedRate;
             }
             return obj;
         }

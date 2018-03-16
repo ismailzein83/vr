@@ -39,33 +39,27 @@ namespace TOne.WhS.Deal.Entities
 
         public Decimal Rate { get; set; }
 
-        //public DealSaleZoneRateEvaluator DefaultRateEvaluator { get; set; }
-
         public List<DealSaleZoneGroupTierZoneRate> ExceptionRates { get; set; }
 
+        public Dictionary<long, List<DealRate>> RatesByZoneId { get; set; }
         public int CurrencyId { get; set; }
     }
 
+    public class DealRate
+    {
+        public Decimal Rate { get; set; }
+        public DateTime BED { get; set; }
+        public DateTime? EED { get; set; }
+        public int CurrencyId { get; set; }
+
+    }
     public class DealSaleZoneGroupTierZoneRate
     {
         public long ZoneId { get; set; }
 
         public Decimal Rate { get; set; }
 
-        //public DealSaleZoneRateEvaluator RateEvaluator { get; set; }
     }
 
-    public abstract class DealSaleZoneRateEvaluator
-    {
-        public abstract void Evaluate(IDealSaleZoneRateEvaluatorContext context);
-    }
 
-    public interface IDealSaleZoneRateEvaluatorContext
-    {
-        long SaleZoneId { get; }
-
-        DateTime AttemptTime { get; }
-
-        Decimal Rate { set; }
-    }
 }

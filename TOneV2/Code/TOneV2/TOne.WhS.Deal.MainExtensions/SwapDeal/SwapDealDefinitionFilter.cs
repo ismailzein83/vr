@@ -1,4 +1,5 @@
-﻿using TOne.WhS.Deal.Entities;
+﻿using TOne.WhS.Deal.Business;
+using TOne.WhS.Deal.Entities;
 using Vanrise.Common;
 
 namespace TOne.WhS.Deal.MainExtensions.SwapDeal

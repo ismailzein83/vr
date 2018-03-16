@@ -16,5 +16,7 @@ namespace TOne.WhS.Deal.Entities
         public int Volume { get; set; }
 
         public Decimal Rate { get; set; }
+
+        public BaseDealRateEvaluator EvaluatedRate { get; set; }
     }
 }

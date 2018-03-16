@@ -221,7 +221,14 @@
                 tiers = [];
                 for (var i = 0; i < $scope.scopeModel.tiers.length; i++) {
                     var tier = $scope.scopeModel.tiers[i];
-                    tiers.push({ DefaultRate: tier.DefaultRate, UpToVolume: tier.UpToVolume, RetroActiveFromTierNumber: tier.RetroActiveFromTierNumber, ExceptionZoneRates: tier.ExceptionZoneRates });
+                    tiers.push(
+                        {
+                            DefaultRate: tier.DefaultRate,
+                            EvaluatedRate: tier.EvaluatedRate,
+                            UpToVolume: tier.UpToVolume,
+                            RetroActiveFromTierNumber: tier.RetroActiveFromTierNumber,
+                            ExceptionZoneRates: tier.ExceptionZoneRates
+                        });
                 }
             }
             return {
@@ -240,6 +247,7 @@
                 FromVol: index == 0 ? 0 : $scope.scopeModel.tiers[index - 1].UpToVolume,
                 UpToVolume: tier.UpToVolume,
                 DefaultRate: tier.DefaultRate,
+                EvaluatedRate: tier.EvaluatedRate,
                 RetroActiveFromTierNumber: tier.RetroActiveFromTierNumber,
                 RetroActiveFromTier: (tier.RetroActiveFromTierNumber != undefined) ? UtilsService.getItemByVal($scope.scopeModel.tiers, tier.RetroActiveFromTierNumber, 'tierId').tierName : '',
                 RetroActiveVolume: (tier.RetroActiveFromTierNumber != undefined) ? UtilsService.getItemByVal($scope.scopeModel.tiers, tier.RetroActiveFromTierNumber, 'tierId').FromVol : 'N/A',
@@ -299,7 +307,7 @@
                 for (var i = 0 ; i < exrates.length; i++) {
                     if (exrates[i].ZoneIds.some(containesInZonesIds)) {
                         newexrates[newexrates.length] = {
-                            Rate: exrates[i].Rate,
+                            EvaluatedRate: exrates[i].EvaluatedRate,
                             ZoneIds: exrates[i].ZoneIds.filter(containesInZonesIds)
                         }
                     }
@@ -321,6 +329,7 @@
                     FromVol: i == 0 ? 0 : tiers[i - 1].UpToVolume,
                     UpToVolume: tier.UpToVolume,
                     DefaultRate: tier.DefaultRate,
+                    EvaluatedRate: tier.EvaluatedRate,
                     RetroActiveFromTierNumber: tier.RetroActiveFromTierNumber,
                     RetroActiveFromTier: (tier.RetroActiveFromTierNumber != undefined) ? 'Tier ' + parseInt(tier.RetroActiveFromTierNumber) : '',
                     RetroActiveVolume: (tier.RetroActiveFromTierNumber != undefined) ? UtilsService.getItemByVal(newTiersArray, tier.RetroActiveFromTierNumber, 'tierId').FromVol : 'N/A',
