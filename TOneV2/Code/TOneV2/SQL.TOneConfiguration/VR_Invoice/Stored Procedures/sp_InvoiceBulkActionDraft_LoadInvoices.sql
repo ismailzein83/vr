@@ -19,6 +19,8 @@ BEGIN
 			SourceId,
 			Settings,
 			InvoiceSettingID,
+			SettlementInvoiceId,
+			SplitInvoiceGroupId,
 			SentDate
 	FROM	[VR_Invoice].InvoiceBulkActionDraft ibad  with(nolock)
 	JOIN  	VR_Invoice.Invoice inv with(nolock)

@@ -8,6 +8,7 @@
 CREATE PROCEDURE [rules].[sp_Rule_DeleteRuleAndRuleChanged] 
 	@RuleID INT,
 	@RuleTypeID INT,
+	@LastModifiedBy INT,
 	@ActionType INT,
 	@InitialRule varchar(MAX)
 AS
@@ -15,7 +16,7 @@ BEGIN
 	Begin Try
 	    Begin Transaction
 			Update [rules].[Rule]
-			set [IsDeleted] = 1
+			set [IsDeleted] = 1, [LastModifiedBy] = @LastModifiedBy, [LastModifiedTime] = GETDATE()
 			Where Id = @RuleID and TypeID = @RuleTypeID
 	    
 	    	IF NOT EXISTS(SELECT 1 FROM  [rules].[RuleChanged]  WHERE RuleID = @RuleID and RuleTypeId = @RuleTypeID)

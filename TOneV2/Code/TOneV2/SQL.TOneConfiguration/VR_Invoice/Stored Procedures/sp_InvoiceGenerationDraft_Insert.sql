@@ -10,12 +10,10 @@
 
 AS
 BEGIN
-SET @id =0;
-IF NOT EXISTS(SELECT 1 FROM [VR_Invoice].[InvoiceGenerationDraft] WHERE PartnerID = @PartnerId and InvoiceGenerationIdentifier= @InvoiceGenerationIdentifier)
-	BEGIN
-		INSERT INTO [VR_Invoice].[InvoiceGenerationDraft](InvoiceGenerationIdentifier,InvoiceTypeId, PartnerID,PartnerName, FromDate, ToDate, CustomPayload)
-		VALUES (@InvoiceGenerationIdentifier,@InvoiceTypeId, @PartnerId,@PartnerName, @From, @To, @CustomPayload)
 
-		SET @id = SCOPE_IDENTITY()
-	END
+	INSERT INTO [VR_Invoice].[InvoiceGenerationDraft](InvoiceGenerationIdentifier,InvoiceTypeId, PartnerID,PartnerName, FromDate, ToDate, CustomPayload)
+	VALUES (@InvoiceGenerationIdentifier,@InvoiceTypeId, @PartnerId,@PartnerName, @From, @To, @CustomPayload)
+
+	SET @id = SCOPE_IDENTITY()
+
 END

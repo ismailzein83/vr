@@ -10,14 +10,16 @@ CREATE PROCEDURE [rules].[sp_Rule_InsertRuleAndRuleChanged]
 	@RuleDetails varchar(MAX),
 	@BED Datetime,
 	@EED Datetime,
+	@CreatedBy INT,
+	@LastModifiedBy INT,
 	@ActionType INT,
 	@Id int out
 AS
 BEGIN
 	Begin Try
 	    Begin Transaction
-			Insert into [rules].[Rule] (TypeID, RuleDetails, BED, EED)
-			values(@RuleTypeID, @RuleDetails, @BED, @EED)
+			Insert into [rules].[Rule] (TypeID, RuleDetails, BED, EED, CreatedBy, LastModifiedBy, LastModifiedTime)
+			values(@RuleTypeID, @RuleDetails, @BED, @EED, @CreatedBy, @LastModifiedBy, GETDATE())
 			SET @Id = SCOPE_IDENTITY()
 
 			Insert into [rules].[RuleChanged] ([RuleID], [RuleTypeID], [ActionType])

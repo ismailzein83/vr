@@ -4,6 +4,7 @@
     [InvoiceTypeID]       UNIQUEIDENTIFIER NOT NULL,
     [PartnerID]           VARCHAR (50)     NOT NULL,
     [SettlementInvoiceId] BIGINT           NULL,
+    [SplitInvoiceGroupId] UNIQUEIDENTIFIER NULL,
     [InvoiceSettingID]    UNIQUEIDENTIFIER NULL,
     [SerialNumber]        NVARCHAR (255)   NOT NULL,
     [FromDate]            DATETIME         NOT NULL,
@@ -23,6 +24,8 @@
     [CreatedTime]         DATETIME         CONSTRAINT [DF_Invoice_CreatedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_Invoice] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

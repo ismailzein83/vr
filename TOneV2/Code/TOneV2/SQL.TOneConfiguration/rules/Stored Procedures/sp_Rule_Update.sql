@@ -8,11 +8,17 @@ CREATE PROCEDURE [rules].[sp_Rule_Update]
 	@TypeID INT,
 	@RuleDetails VARCHAR(MAX),
 	@BED Datetime,
-	@EED Datetime
+	@EED Datetime,
+	@LastModifiedBy int
 AS
 BEGIN
 	Update rules.[Rule]
-	Set TypeID=@TypeID,RuleDetails=@RuleDetails,BED=@BED,EED=@EED
-	WHERE ID=@ID
+	Set  TypeID = @TypeID,
+		 RuleDetails = @RuleDetails,
+		 BED = @BED,
+		 EED = @EED,
+		 LastModifiedBy = @LastModifiedBy,
+		 LastModifiedTime = GETDATE()
+	WHERE ID  =@ID
 
 END

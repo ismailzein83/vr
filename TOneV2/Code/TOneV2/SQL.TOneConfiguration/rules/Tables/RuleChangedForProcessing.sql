@@ -6,8 +6,13 @@
     [InitialRule]           NVARCHAR (MAX) NULL,
     [AdditionalInformation] NVARCHAR (MAX) NULL,
     [CreatedTime]           DATETIME       NULL,
-    [timestamp]             ROWVERSION     NULL
+    [timestamp]             ROWVERSION     NULL,
+    [CreatedBy]             INT            NULL,
+    [LastModifiedTime]      DATETIME       NULL,
+    [LastModifiedBy]        INT            NULL
 );
+
+
 
 
 

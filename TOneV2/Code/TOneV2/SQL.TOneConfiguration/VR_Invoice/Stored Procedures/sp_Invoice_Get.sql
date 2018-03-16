@@ -12,7 +12,7 @@ BEGIN
 	INSERT INTO @InvoiceIdsTable (InvoiceId)
 	select Convert(nvarchar(50), ParsedString) from [VR_Invoice].ParseStringList(@InvoiceIds)
 
-	SELECT	ID,InvoiceTypeID,PartnerID,SerialNumber,FromDate,ToDate,IssueDate,DueDate,Details,PaidDate,UserId,CreatedTime,LockDate,Notes,IsAutomatic, SourceId,Settings,InvoiceSettingID,SentDate,SettlementInvoiceId
+	SELECT	ID,InvoiceTypeID,PartnerID,SerialNumber,FromDate,ToDate,SplitInvoiceGroupId,IssueDate,DueDate,Details,PaidDate,UserId,CreatedTime,LockDate,Notes,IsAutomatic, SourceId,Settings,InvoiceSettingID,SentDate,SettlementInvoiceId
 	FROM	VR_Invoice.Invoice with(nolock)
 	where	ID IN (SELECT InvoiceId FROM  @InvoiceIdsTable)
 END

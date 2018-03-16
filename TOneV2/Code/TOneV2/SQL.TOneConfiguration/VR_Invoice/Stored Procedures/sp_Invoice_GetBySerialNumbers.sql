@@ -31,7 +31,8 @@ select  ParsedString from [VR_Invoice].ParseStringList(@SerialNumbers)
 			vrIn.IsAutomatic,
 			vrIn.InvoiceSettingId,
 			vrIn.SentDate,
-			vrIn.SettlementInvoiceId
+			vrIn.SettlementInvoiceId,
+			vrIn.SplitInvoiceGroupId
 	FROM	VR_Invoice.Invoice vrIn with(nolock)  
 	where	
 			@InvoiceTypeId = vrIn.InvoiceTypeID and (@SerialNumbers is Null or vrIn.SerialNumber IN (SELECT SerialNumber FROM @SerialNumbersTable)) 

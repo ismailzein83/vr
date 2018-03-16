@@ -7,8 +7,13 @@
     [AdditionalInformation] NVARCHAR (MAX) NULL,
     [CreatedTime]           DATETIME       CONSTRAINT [DF_RuleChanged_CreatedTime] DEFAULT (getdate()) NULL,
     [timestamp]             ROWVERSION     NULL,
+    [CreatedBy]             INT            NULL,
+    [LastModifiedTime]      DATETIME       NULL,
+    [LastModifiedBy]        INT            NULL,
     CONSTRAINT [PK_RuleChanged] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

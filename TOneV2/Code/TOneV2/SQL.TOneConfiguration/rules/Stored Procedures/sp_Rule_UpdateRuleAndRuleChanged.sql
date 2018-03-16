@@ -11,6 +11,7 @@ CREATE PROCEDURE [rules].[sp_Rule_UpdateRuleAndRuleChanged]
 	@RuleDetails VARCHAR(MAX),
 	@BED Datetime,
 	@EED Datetime,
+	@LastModifiedBy int,
 	@ActionType INT,
 	@InitialRule varchar(MAX),
 	@AdditionalInformation varchar(MAX)
@@ -23,7 +24,9 @@ BEGIN
 			Set   TypeID = @RuleTypeID,
 				  RuleDetails = @RuleDetails,
 				  BED = @BED,
-				  EED = @EED
+				  EED = @EED,
+				  LastModifiedBy = @LastModifiedBy,
+				  LastModifiedTime = GETDATE()
 			WHERE ID = @RuleID
 
 			IF NOT EXISTS(SELECT 1 FROM  [rules].[RuleChanged]  WHERE RuleID = @RuleID and RuleTypeId = @RuleTypeID)

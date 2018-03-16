@@ -738,6 +738,11 @@
     <Build Include="sec\Stored Procedures\sp_EncryptionKey_InsertIfNotExistsAndGetEncryptionKey.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_UpdateSettleIds.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_ClearSettlementId.sql" />
+    <Build Include="runtime\Tables\RuntimeServiceConfiguration.sql" />
+    <Build Include="runtime\Tables\RuntimeProcessConfiguration.sql" />
+    <Build Include="runtime\Tables\RuntimeNodeConfiguration.sql" />
+    <Build Include="runtime\Tables\RuntimeNode.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_GetSplitInvoiceGroupId.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

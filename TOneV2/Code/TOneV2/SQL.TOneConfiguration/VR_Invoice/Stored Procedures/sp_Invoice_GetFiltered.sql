@@ -41,7 +41,8 @@ select Convert(nvarchar(50), ParsedString) from [VR_Invoice].ParseStringList(@Pa
 			vrIn.Settings,
 			vrIn.IsAutomatic,
 			vrIn.InvoiceSettingId,
-			vrIn.SentDate
+			vrIn.SentDate,
+			vrIn.SplitInvoiceGroupId
 			into #InvoicesResult
 	FROM	VR_Invoice.Invoice vrIn with(nolock)  
 	Inner Join VR_Invoice.InvoiceAccount vrInAcc 
