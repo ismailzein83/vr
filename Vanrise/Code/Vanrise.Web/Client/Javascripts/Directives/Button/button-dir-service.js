@@ -414,6 +414,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: "Delete",
                     class: "glyphicon glyphicon-trash"
                 };
+            case "UploadExcel":
+                return {
+                    text: "Upload Excel",
+                    class: "glyphicon glyphicon-circle-arrow-up"
+                };
         }
     }
 }]);

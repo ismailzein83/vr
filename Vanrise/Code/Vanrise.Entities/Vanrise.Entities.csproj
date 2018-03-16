@@ -83,6 +83,7 @@
     <Compile Include="Enumeration.cs" />
     <Compile Include="IBusinessManager.cs" />
     <Compile Include="ICompanySettingsManager.cs" />
+    <Compile Include="ExcelFileValueType.cs" />
     <Compile Include="LabelColor.cs" />
     <Compile Include="ModalWidthEnum.cs" />
     <Compile Include="ObjectFactory.cs" />

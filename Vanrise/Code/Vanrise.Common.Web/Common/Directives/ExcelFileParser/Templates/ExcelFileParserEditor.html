@@ -1,0 +1,31 @@
+﻿<div vr-modalcontent ng-controller="VRCommon_ExcelFileParserController" vr-loader="scopeModel.isLoading" size="small">
+    <vr-modalbody>
+        <vr-form name="excelFileParserEditor">
+            <vr-row removeline>
+                <vr-columns colnum="6">
+                    <vr-fileupload value="scopeModel.file" label="Upload File" tempfile="true" extension="xls,xlsx" onvaluechanged="scopeModel.onFileUploadChange"></vr-fileupload>
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns width="fullrow">
+                    <vr-section level="2" header="Values" vr-loader="scopeModel.isLoadingValues">
+                        <div style="min-height:20px;max-height:140px; overflow : auto;padding: 10px 5px ;">
+                            <vr-datalist maxitemsperrow="4" datasource="scopeModel.dataValues" autoremoveitem="true">
+                                {{dataItem}}
+                            </vr-datalist>
+                        </div>
+                    </vr-section>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Download" data-onclick="scopeModel.downloadTemplate"></vr-button>
+                <vr-button type="Ok" formname="excelFileParserEditor" data-onclick="scopeModel.returnDataValues" vr-disabled="scopeModel.dataValues.length==0"></vr-button>
+                <vr-button type="Cancel" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

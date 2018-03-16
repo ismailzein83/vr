@@ -360,6 +360,18 @@ vr-button .btn.active {
 vr-button[type="Add"][standalone] div > span {
     color: #5cb85c;
 }
+
+vr-button[type="UploadExcel"][standalone] div > span {
+    color: #5cb85c;
+}
+vr-button[class*="divDisabled"][type="UploadExcel"][standalone] div > span {
+    color: #333;
+}
+vr-button[standalone] .loading-btn {
+    opacity:0.3;
+}
+
+
 /* override  bootstrap btn class focus and active behavior */
 .modal-x-lg {
     width: 97%;

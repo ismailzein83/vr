@@ -80,6 +80,7 @@
     <Compile Include="DataGrouping\DataGrouper.cs" />
     <Compile Include="DataGrouping\RemoteDataGrouper.cs" />
     <Compile Include="DataGrouping\LocalDataGrouper.cs" />
+    <Compile Include="ExcelFileParser\ExcelFileParserManger.cs" />
     <Compile Include="UtilityManager.cs" />
     <Compile Include="Filters\GenericLKUPBEDefinitionFilter.cs" />
     <Compile Include="GenericLKUP\GenericLKUPBEDefinitionSettings.cs" />
