@@ -28,12 +28,12 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
             return getDirectiveTemplate(attrs);
         }
     };
-    
+
     function textCtor(ctrl, $scope, $attrs) {
 
         function initializeController() {
             $scope.scopeModel.value;
-            
+
             if (ctrl.selectionmode != 'single') {
                 defineScopeForMultiModes();
             }
@@ -49,6 +49,13 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
             $scope.scopeModel.addValue = function () {
                 $scope.scopeModel.values.push($scope.scopeModel.value);
                 $scope.scopeModel.value = undefined;
+            };
+
+            $scope.scopeModel.getImportedValues = function (importedValues) {
+                for (var i = 0 ; i < importedValues.length ; i++) {
+                    if ($scope.scopeModel.values.indexOf(importedValues[i]) == -1)
+                        $scope.scopeModel.values.push(importedValues[i]);
+                }
             };
 
             $scope.scopeModel.validateValue = function () {
@@ -135,8 +142,13 @@ app.directive('vrGenericdataFieldtypeTextRuntimeeditor', ['UtilsService', functi
             return '<vr-columns colnum="12" haschildcolumns>'
                     //+ '<vr-row>'
                         + getSingleSelectionModeTemplate()
-                        + '<vr-columns withemptyline>'
-                            + '<vr-button type="Add" data-onclick="scopeModel.addValue" standalone vr-disabled="scopeModel.isAddButtonDisabled"></vr-button>'
+                        + '<vr-columns withemptyline haschildcolumns colnum="1">'
+                            + '<vr-columns   colnum="6">'
+                                + '<vr-button type="Add" data-onclick="scopeModel.addValue" standalone vr-disabled="scopeModel.isAddButtonDisabled" ></vr-button>'
+                            + '</vr-columns>'
+                            + '<vr-columns   colnum="6">'
+                                    + '<vr-common-excelfileparser  fieldname="{{scopeModel.label}}" onokclicked="scopeModel.getImportedValues" standalone ></vr-common-excelfileparser>'
+                            + '</vr-columns>'
                         + '</vr-columns>'
                     //+ '</vr-row>'
                     //+ '<vr-row>'
