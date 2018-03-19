@@ -2,15 +2,18 @@
     <vr-modalbody>
         <vr-form name="formApplyDraftOnMultipleCustomersEditor">
             <vr-row removeline>
-                <vr-columns colnum="6">
-                    <vr-select label="Subscribers"
-                               on-ready="onCustomersSelectorReady"
-                               datasource="datasource"
-                               selectedvalues="selectedvalues"
-                               datatextfield="Name" datavaluefield="CarrierAccountId"
-                               ismultipleselection>
-                    </vr-select>
-                </vr-columns>
+               
+                    <vr-whs-be-carrieraccount-selector on-ready="onCarrierAccountSelectorReady"
+                                                       selectedvalues="selectedCustomer"
+                                                       onselectitem="onCustomerSelected"
+                                                       customlabel="Subscribers"
+                                                       ismultipleselection="true"
+                                                       getcustomers
+                                                       normal-col-num="6"
+                                                       hideremoveicon isrequired="showCarrierAccountSelector">
+
+                    </vr-whs-be-carrieraccount-selector>
+                
                 <vr-columns colnum="2" withemptyline>
                     <vr-button type="Add" data-onclick="add" vr-disabled="isAddButtonDisabled()" standalone></vr-button>
                 </vr-columns>

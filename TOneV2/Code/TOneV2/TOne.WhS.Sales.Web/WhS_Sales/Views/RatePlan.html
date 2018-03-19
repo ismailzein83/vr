@@ -47,6 +47,7 @@
 
                     <span ng-show="isSettingsSelected">
                         <vr-common-currency-selector on-ready="onCurrencySelectorReady"
+                                                     selectedvalues="currencySymbol"
                                                      normal-col-num="2"
                                                      onselectitem="onCurrencyChanged"
                                                      vr-disabled="!showCarrierAccountSelector"

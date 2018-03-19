@@ -485,7 +485,10 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         $scope.isLoading = false;
                     });
                 };
-
+                api.doesGridHasCustomerData = function()
+                {
+                    return ($scope.zoneLetters.length > 0 && gridQuery.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value)
+                }
                 api.getZoneDrafts = function () {
                     var zoneDrafts = [];
 
@@ -776,7 +779,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         VRUIUtilsService.callDirectiveLoad(zoneItem.serviceViewerAPI, serviceViewerPayload, zoneItem.serviceViewerLoadDeferred);
                     };
                 }
-              
+
                 function setCurrencyIconProperties(dataItem) {
                     if (gridQuery.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value)
                         return;
@@ -785,8 +788,8 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     if (gridQuery.CurrencyId == undefined || gridQuery.CurrencyId == null)
                         return;
                     if (gridQuery.CurrencyId != dataItem.CurrentRateCurrencyId) {
-                        dataItem.currencyIconType = 'music';
-                        dataItem.currencyIconTooltip = dataItem.CurrentRateCurrencySymbol;
+                        dataItem.currencyIconType = 'exchange';
+                        dataItem.currencyIconTooltip =  'The real currency for this rate is ' + dataItem.CurrentRateCurrencySymbol;
                     }
                 }
             }

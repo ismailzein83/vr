@@ -6,6 +6,12 @@
 
         var ownerId;
         var customersSelectorApi;
+        var sellingNumberPlanId;
+        var customerSellingProductId;
+
+        var carrierAccountSelectorAPI;
+        var carrierAccountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
         var customersSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
         loadParameters();
@@ -16,6 +22,8 @@
             var parameters = VRNavigationService.getParameters($scope);
             if (parameters != undefined && parameters != null) {
                 ownerId = parameters.ownerId;
+                sellingNumberPlanId = parameters.sellingNumberPlanId;
+                customerSellingProductId = parameters.customerSellingProductId;
             }
         }
 
@@ -24,7 +32,6 @@
             $scope.hintText = "Rate's BED of the subscribers can either follow the same BED of their publisher, or can be calculated according to the system parameters for increased and decreased rates.";
             $scope.followPublisherHintText = "Subscribers can follow the publisher routing product in case of rate change";
             $scope.datasource = [];
-            $scope.selectedvalues = [];
             $scope.gridDataSource = [];
             $scope.onCustomersSelectorReady = function (api) {
                 customersSelectorApi = api;
@@ -33,15 +40,18 @@
             $scope.isGridDataValid = function () {
                 return ($scope.gridDataSource.length == 0) ? 'No customers selected' : null;
             };
+            $scope.onCarrierAccountSelectorReady = function (api) {
+                carrierAccountSelectorAPI = api;
+                carrierAccountSelectorReadyDeferred.resolve();
+            };
 
             $scope.add = function () {
                 addToGrid();
             };
 
             $scope.isAddButtonDisabled = function () {
-                if ($scope.selectedvalues == null || $scope.selectedvalues.length == 0) {
-                    return true;
-                }
+                if (carrierAccountSelectorAPI != undefined)
+                    return (carrierAccountSelectorAPI.getSelectedValues().length == 0)
             };
             $scope.applyDraftOnMultipleCustomers = function () {
                 return applyDraftOnMultipleCustomers();
@@ -55,7 +65,7 @@
                 $scope.gridDataSource.splice(index, 1);
 
                 $scope.isLoading = true;
-                loadCustomersSelector().finally(function () {
+                loadCarrierAccount().finally(function () {
                     $scope.isLoading = false;
                 });
             };
@@ -71,7 +81,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadDraftSubscriberOwnerIds, loadFollowPublisherRatesBED, loadFollowPublisherRoutingProduct])
+            return UtilsService.waitMultipleAsyncOperations([loadDraftSubscriberOwnerIds, loadFollowPublisherRatesBED, loadFollowPublisherRoutingProduct, loadCarrierAccount])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -91,21 +101,23 @@
             });
             }
 
-        function loadCustomersSelector() {
-            $scope.datasource = [];
-            $scope.selectedvalues = [];
-            var GetSubscriberOwnersInput = {
-                OwnerId: ownerId,
-                ExecludedOwnerIds: getAddedOwnerIds(),
-            };
-            return WhS_Sales_RatePlanAPIService.GetSubscriberOwners(GetSubscriberOwnersInput).then(function (response) {
-                if (response != null) {
-                    for (var i = 0; i < response.length; i++) {
-                        $scope.datasource.push(response[i]);
-                    }
-                }
-            });
-        }
+         function loadCarrierAccount() {
+
+             var carrierAccountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+             console.log("selling product id in apply for multiple");
+             console.log(customerSellingProductId);
+             var carrierAccountPayload = {
+                 filter: {
+                     SellingNumberPlanId: sellingNumberPlanId,
+                     ExcludedCarrierAccountIds: getExcludedOwnerIds(),
+                     SellingProductId: (customerSellingProductId != undefined) ? customerSellingProductId : undefined,
+                 }
+             };
+             carrierAccountSelectorReadyDeferred.promise.then(function () {
+                 VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, carrierAccountPayload, carrierAccountSelectorLoadDeferred);
+             });
+             return carrierAccountSelectorLoadDeferred.promise;
+         }
 
         function loadDraftSubscriberOwnerIds() {
             $scope.gridDataSource = [];
@@ -119,7 +131,7 @@
                     }
                 }
 
-                loadCustomersSelector().finally(function (response) {
+                loadCarrierAccount().finally(function (response) {
                     loadDraftSubscriberOwnerIdsPromiseDeferred.resolve();
                 });
             });
@@ -133,8 +145,9 @@
             $scope.modalContext.closeModal();
         }
 
-        function getAddedOwnerIds() {
+        function getExcludedOwnerIds() {
             var addedOwnerIds = [];
+            addedOwnerIds.push(ownerId);
             if ($scope.gridDataSource != null) {
                 for (var i = 0; i < $scope.gridDataSource.length; i++)
                     addedOwnerIds.push($scope.gridDataSource[i].Entity.EntityId);
@@ -143,10 +156,11 @@
         }
 
         function addToGrid() {
-
-            if ($scope.selectedvalues != undefined) {
-                for (var i = 0; i < $scope.selectedvalues.length; i++) {
-                    var customer = $scope.selectedvalues[i];
+            if (carrierAccountSelectorAPI != undefined)
+                var selectedCustomers = carrierAccountSelectorAPI.getSelectedValues();
+            if (selectedCustomers != undefined && selectedCustomers.length != 0) {
+                for (var i = 0; i < selectedCustomers.length; i++) {
+                    var customer = selectedCustomers[i];
                     var entity = {
                         Id: ($scope.gridDataSource.length + 1),
                         EntityId: customer.CarrierAccountId,
@@ -156,7 +170,7 @@
                 }
 
                 $scope.isLoading = true;
-                loadCustomersSelector().finally(function () {
+                loadCarrierAccount().finally(function () {
                     $scope.isLoading = false;
                 });
             }

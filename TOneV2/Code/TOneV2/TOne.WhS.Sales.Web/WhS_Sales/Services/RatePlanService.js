@@ -175,10 +175,12 @@
                 return false;
         }
 
-        function applyDraftOnMultipleCustomers(executeApplyDraftOnMultipleCustomersProcess, ownerId)
+        function applyDraftOnMultipleCustomers(executeApplyDraftOnMultipleCustomersProcess, ownerId, sellingNumberPlanId, customerSellingProductId)
         {
             var parameters = {
                 ownerId: ownerId,
+                sellingNumberPlanId: sellingNumberPlanId,
+                customerSellingProductId: customerSellingProductId
             };
             var modalSettings = {
                 onScopeReady: function (modalScope) {
