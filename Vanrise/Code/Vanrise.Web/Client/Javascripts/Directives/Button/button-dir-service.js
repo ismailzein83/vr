@@ -416,7 +416,7 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 };
             case "UploadExcel":
                 return {
-                    text: "Upload Excel",
+                    text: "Upload Excel File",
                     class: "glyphicon glyphicon-circle-arrow-up"
                 };
         }
