@@ -52,10 +52,10 @@ namespace TOne.WhS.SupplierPriceList.Business
             List<CodeGroupInfo> codeGroupInfos = GetCodeGroupInfo(importedCodeByCodeGroup);
 
             var exactMatchCodeGroups = codeGroupInfos.Where(c => c.IsExactMatch);
-            if (exactMatchCodeGroups!= null)
+            if (exactMatchCodeGroups != null && exactMatchCodeGroups.Any())
             {
-                if(!exactMatchCodeGroups.Any(item => item.CountryId != exactMatchCodeGroups.First().CountryId))
-                return exactMatchCodeGroups.First().CountryId;
+                if (!exactMatchCodeGroups.Any(item => item.CountryId != exactMatchCodeGroups.First().CountryId))
+                    return exactMatchCodeGroups.First().CountryId;
             }
 
             int maxCodeCount = codeGroupInfos.Max(r => r.RelatedCodesCount);
