@@ -444,7 +444,7 @@
         function updateRouteRule() {
             var routeRuleObject = buildRouteRuleObjFromScope();
 
-            WhS_Routing_RouteRuleAPIService.UpdateRule(routeRuleObject).then(function (response) {
+            return WhS_Routing_RouteRuleAPIService.UpdateRule(routeRuleObject).then(function (response) {
                 if (VRNotificationService.notifyOnItemUpdated("Route Rule", response, "Name")) {
                     if ($scope.onRouteRuleUpdated != undefined)
                         $scope.onRouteRuleUpdated(response.UpdatedObject);
