@@ -24,8 +24,11 @@ namespace Vanrise.Common.Data.SQL
             {
                 TimeZoneId = (int)reader["ID"],
                 Name = reader["Name"] as string,
-                Settings = Vanrise.Common.Serializer.Deserialize<VRTimeZoneSettings>(reader["Settings"] as string) 
-                 
+                Settings = Vanrise.Common.Serializer.Deserialize<VRTimeZoneSettings>(reader["Settings"] as string) ,
+                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
+                CreatedBy = GetReaderValue<int?>(reader, "CreatedBy"),
+                LastModifiedBy = GetReaderValue<int?>(reader, "LastModifiedBy"),
+                LastModifiedTime = GetReaderValue<DateTime?>(reader, "LastModifiedTime")
             };        
             return timeZone;
         }
@@ -42,7 +45,8 @@ namespace Vanrise.Common.Data.SQL
             int recordsEffected = ExecuteNonQuerySP("common.sp_VRTimeZone_Update",
                 timeZone.TimeZoneId,
                 timeZone.Name,
-                Vanrise.Common.Serializer.Serialize(timeZone.Settings));
+                Vanrise.Common.Serializer.Serialize(timeZone.Settings),
+                timeZone.LastModifiedBy);
             return (recordsEffected > 0);
         }
 
@@ -53,7 +57,9 @@ namespace Vanrise.Common.Data.SQL
             int recordsEffected = ExecuteNonQuerySP("common.sp_VRTimeZone_Insert",
                 out timeZoneId,
                 timeZone.Name,
-                Vanrise.Common.Serializer.Serialize(timeZone.Settings)                
+                Vanrise.Common.Serializer.Serialize(timeZone.Settings),
+                timeZone.CreatedBy,
+                timeZone.LastModifiedBy
                 );
             insertedId = (int)timeZoneId;
             return (recordsEffected > 0);

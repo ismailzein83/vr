@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Common.Business
 {
@@ -79,6 +80,11 @@ namespace Vanrise.Common.Business
             int RegionId = -1;
 
             IRegionDataManager dataManager = CommonDataManagerFactory.GetDataManager<IRegionDataManager>();
+
+            int loggedInUserId = ContextFactory.GetContext().GetLoggedInUserId();
+            Region.CreatedBy = loggedInUserId;
+            Region.LastModifiedBy = loggedInUserId;
+
             bool insertActionSucc = dataManager.Insert(Region, out RegionId);
             if (insertActionSucc)
             {
@@ -99,6 +105,8 @@ namespace Vanrise.Common.Business
         public Vanrise.Entities.UpdateOperationOutput<RegionDetail> UpdateRegion(Region Region)
         {
             IRegionDataManager dataManager = CommonDataManagerFactory.GetDataManager<IRegionDataManager>();
+
+            Region.LastModifiedBy = ContextFactory.GetContext().GetLoggedInUserId();
 
             bool updateActionSucc = dataManager.Update(Region);
             Vanrise.Entities.UpdateOperationOutput<RegionDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<RegionDetail>();

@@ -24,7 +24,11 @@ namespace Vanrise.Common.Data.SQL
             {
                 CountryId = (int)reader["ID"],
                 Name = reader["Name"] as string,
-                SourceId = reader["SourceId"] as string
+                SourceId = reader["SourceId"] as string,
+                CreatedTime =  GetReaderValue<DateTime?>(reader, "CreatedTime"),
+                CreatedBy = GetReaderValue<int?>(reader, "CreatedBy"),
+                LastModifiedBy = GetReaderValue<int?>(reader, "LastModifiedBy"),
+                LastModifiedTime = GetReaderValue<DateTime?>(reader, "LastModifiedTime")
                  
             };
 
@@ -38,7 +42,7 @@ namespace Vanrise.Common.Data.SQL
         }
         public bool Update(Country country)
         {
-            int recordsEffected = ExecuteNonQuerySP("common.sp_Country_Update", country.CountryId, country.Name);
+            int recordsEffected = ExecuteNonQuerySP("common.sp_Country_Update", country.CountryId, country.Name, country.LastModifiedBy);
             return (recordsEffected > 0);
         }
 
@@ -46,19 +50,19 @@ namespace Vanrise.Common.Data.SQL
         {
             
 
-            int recordsEffected = ExecuteNonQuerySP("common.sp_Country_Insert", country.CountryId, country.Name);
+            int recordsEffected = ExecuteNonQuerySP("common.sp_Country_Insert", country.CountryId, country.Name, country.CreatedBy, country.LastModifiedBy);
             
             return (recordsEffected > 0);
         }
         public void InsertFromSource(Country country)
         {
-            ExecuteNonQuerySP("common.sp_Country_InsertFromSource", country.CountryId, country.Name, country.SourceId);
+            ExecuteNonQuerySP("common.sp_Country_InsertFromSource", country.CountryId, country.Name, country.SourceId, country.CreatedBy, country.LastModifiedBy);
         }
 
         public void UpdateFromSource(Country country)
         {
 
-            ExecuteNonQuerySP("common.sp_Country_UpdateFromSource", country.CountryId, country.Name);
+            ExecuteNonQuerySP("common.sp_Country_UpdateFromSource", country.CountryId, country.Name, country.LastModifiedBy);
         }
         public bool AreCountriesUpdated(ref object updateHandle)
         {

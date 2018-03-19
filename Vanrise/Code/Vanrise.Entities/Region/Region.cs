@@ -18,6 +18,15 @@ namespace Vanrise.Entities
         public int CountryId { get; set; }
 
         public RegionSettings Settings { get; set; }
+
+        public DateTime CreatedTime { get; set; }
+
+        public int? CreatedBy { get; set; }
+
+        public int? LastModifiedBy { get; set; }
+
+        public DateTime? LastModifiedTime { get; set; }
+        
     }
 
     public class RegionSettings

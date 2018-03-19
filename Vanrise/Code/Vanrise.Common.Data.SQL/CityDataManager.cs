@@ -2,6 +2,7 @@
 using System.Data;
 using Vanrise.Data.SQL;
 using Vanrise.Entities;
+using System;
 
 namespace Vanrise.Common.Data.SQL
 {
@@ -21,14 +22,14 @@ namespace Vanrise.Common.Data.SQL
 
         public bool Update(Entities.City city)
         {
-            int recordsEffected = ExecuteNonQuerySP("[common].[sp_City_Update]", city.CityId, city.Name, city.CountryId, Vanrise.Common.Serializer.Serialize(city.Settings));
+            int recordsEffected = ExecuteNonQuerySP("[common].[sp_City_Update]", city.CityId, city.Name, city.CountryId, Vanrise.Common.Serializer.Serialize(city.Settings), city.LastModifiedBy);
             return (recordsEffected > 0);
         }
 
         public bool Insert(Entities.City city, out int insertedId)
         {
             object cityId;
-            int recordsEffected = ExecuteNonQuerySP("[common].[sp_City_Insert]", out cityId, city.Name, city.CountryId, Vanrise.Common.Serializer.Serialize(city.Settings));
+            int recordsEffected = ExecuteNonQuerySP("[common].[sp_City_Insert]", out cityId, city.Name, city.CountryId, Vanrise.Common.Serializer.Serialize(city.Settings), city.CreatedBy, city.LastModifiedBy);
             insertedId = (int)cityId;
             return (recordsEffected > 0);
         }
@@ -51,6 +52,10 @@ namespace Vanrise.Common.Data.SQL
             city.CountryId = (int)reader["CountryID"];
             city.SourceId = reader["SourceID"] as string;
             city.Settings = !string.IsNullOrEmpty(settings) ? Vanrise.Common.Serializer.Deserialize<CitySettings>(settings) : null;
+            city.CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime");
+            city.CreatedBy = GetReaderValue<int?>(reader, "CreatedBy");
+            city.LastModifiedBy = GetReaderValue<int?>(reader, "LastModifiedBy");
+            city.LastModifiedTime = GetReaderValue<DateTime?>(reader, "LastModifiedTime");
             return city;
         }
 

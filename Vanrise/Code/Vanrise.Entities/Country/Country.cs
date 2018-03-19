@@ -29,5 +29,13 @@ namespace Vanrise.Entities
                 this.CountryId = (int)value;
             }
         }
+
+        public DateTime? CreatedTime { get; set; }
+
+        public int? CreatedBy { get; set; }
+
+        public int? LastModifiedBy { get; set; }
+
+        public DateTime? LastModifiedTime { get; set; }
     }
 }

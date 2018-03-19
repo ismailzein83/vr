@@ -66,8 +66,8 @@ namespace Vanrise.Notification.Data.SQL
                 Settings = Vanrise.Common.Serializer.Deserialize<VRAlertRuleSettings>(reader["Settings"] as string) ,
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
                 CreatedBy = GetReaderValue<int?>(reader, "CreatedBy"),
-                LastModifiedTime = GetReaderValue<DateTime?>(reader, "LastModifiedTime"),
-                LastModifiedBy = GetReaderValue<int?>(reader, "LastModifiedBy")
+                LastModifiedBy = GetReaderValue<int?>(reader, "LastModifiedBy"),
+                LastModifiedTime = GetReaderValue<DateTime?>(reader, "LastModifiedTime")
             };
             return vrAlertRule;
         }

@@ -7,6 +7,7 @@ using Vanrise.Common.Data;
 using Vanrise.Caching;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
+using Vanrise.Security.Entities;
 namespace Vanrise.Common.Business
 {
     public class CurrencyManager : IBusinessEntityManager
@@ -126,6 +127,11 @@ namespace Vanrise.Common.Business
             int currencyId = -1;
 
             ICurrencyDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICurrencyDataManager>();
+            
+            int loggedInUserId = ContextFactory.GetContext().GetLoggedInUserId();
+            currency.CreatedBy = loggedInUserId;
+            currency.LastModifiedBy = loggedInUserId;
+            
             bool insertActionSucc = dataManager.Insert(currency, out currencyId);
             if (insertActionSucc)
             {
@@ -150,6 +156,8 @@ namespace Vanrise.Common.Business
         public Vanrise.Entities.UpdateOperationOutput<CurrencyDetail> UpdateCurrency(Currency currency)
         {
             ICurrencyDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICurrencyDataManager>();
+
+            currency.LastModifiedBy = ContextFactory.GetContext().GetLoggedInUserId();
 
             bool updateActionSucc = dataManager.Update(currency);
             Vanrise.Entities.UpdateOperationOutput<CurrencyDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<CurrencyDetail>();

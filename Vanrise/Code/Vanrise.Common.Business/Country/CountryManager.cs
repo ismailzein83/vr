@@ -9,6 +9,7 @@ using Vanrise.Common;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Common.Business
 {
@@ -197,6 +198,11 @@ namespace Vanrise.Common.Business
                         country.Name = addedCountry;
 
                         ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
+                        
+                        int loggedInUserId = ContextFactory.GetContext().GetLoggedInUserId();
+                        country.CreatedBy = loggedInUserId;
+                        country.LastModifiedBy = loggedInUserId;
+
                         bool insertActionSucc = dataManager.Insert(country);
                         if (insertActionSucc)
                         {
@@ -257,6 +263,11 @@ namespace Vanrise.Common.Business
             country.CountryId = (int)startingId;
 
             ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
+            
+            int loggedInUserId = ContextFactory.GetContext().GetLoggedInUserId();
+            country.CreatedBy = loggedInUserId;
+            country.LastModifiedBy = loggedInUserId;
+
             bool insertActionSucc = dataManager.Insert(country);
             if (insertActionSucc)
             {
@@ -280,6 +291,10 @@ namespace Vanrise.Common.Business
             country.CountryId = (int)startingId;
 
             ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
+            int loggedInUserId = ContextFactory.GetContext().GetLoggedInUserId();
+            country.CreatedBy = loggedInUserId;
+            country.LastModifiedBy = loggedInUserId;
+
             dataManager.InsertFromSource(country);
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
 
@@ -289,6 +304,8 @@ namespace Vanrise.Common.Business
         {
 
             ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
+
+            country.LastModifiedBy = ContextFactory.GetContext().GetLoggedInUserId();
             dataManager.UpdateFromSource(country);
             Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
         }
@@ -296,7 +313,7 @@ namespace Vanrise.Common.Business
         public Vanrise.Entities.UpdateOperationOutput<CountryDetail> UpdateCountry(Country country)
         {
             ICountrytDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICountrytDataManager>();
-
+            country.LastModifiedBy = ContextFactory.GetContext().GetLoggedInUserId();
             bool updateActionSucc = dataManager.Update(country);
             Vanrise.Entities.UpdateOperationOutput<CountryDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<CountryDetail>();
 

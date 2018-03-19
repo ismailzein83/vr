@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Common.Business
 {
@@ -102,6 +104,11 @@ namespace Vanrise.Common.Business
             int cityId = -1;
 
             ICityDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICityDataManager>();
+
+            int loggedInUserId = ContextFactory.GetContext().GetLoggedInUserId();
+            city.CreatedBy = loggedInUserId;
+            city.LastModifiedBy = loggedInUserId;
+
             bool insertActionSucc = dataManager.Insert(city, out cityId);
             if (insertActionSucc)
             {
@@ -123,6 +130,7 @@ namespace Vanrise.Common.Business
         {
             ICityDataManager dataManager = CommonDataManagerFactory.GetDataManager<ICityDataManager>();
 
+            city.LastModifiedBy = ContextFactory.GetContext().GetLoggedInUserId();
             bool updateActionSucc = dataManager.Update(city);
             Vanrise.Entities.UpdateOperationOutput<CityDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<CityDetail>();
 
@@ -177,7 +185,7 @@ namespace Vanrise.Common.Business
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "City Name" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Country" });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Region" });
-
+                
 
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)

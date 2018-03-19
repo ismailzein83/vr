@@ -22,7 +22,7 @@ namespace Vanrise.Common.Data.SQL
         }
         public bool Update(Currency currency)
         {
-            int recordsEffected = ExecuteNonQuerySP("common.sp_Currency_Update", currency.CurrencyId, currency.Name, currency.Symbol);
+            int recordsEffected = ExecuteNonQuerySP("common.sp_Currency_Update", currency.CurrencyId, currency.Name, currency.Symbol, currency.LastModifiedBy);
             return (recordsEffected > 0);
         }
 
@@ -30,7 +30,7 @@ namespace Vanrise.Common.Data.SQL
         {
             object currencyId;
 
-            int recordsEffected = ExecuteNonQuerySP("common.sp_Currency_Insert", out currencyId, currency.Name, currency.Symbol, currency.SourceId);
+            int recordsEffected = ExecuteNonQuerySP("common.sp_Currency_Insert", out currencyId, currency.Name, currency.Symbol, currency.SourceId, currency.CreatedBy, currency.LastModifiedBy);
             insertedId = (int)currencyId;
             return (recordsEffected > 0);
         }
@@ -47,7 +47,11 @@ namespace Vanrise.Common.Data.SQL
                 CurrencyId = (int)reader["ID"],
                 Name = reader["Name"] as string,
                 Symbol = reader["Symbol"] as string,
-                SourceId = reader["SourceID"] as string
+                SourceId = reader["SourceID"] as string,
+                CreatedTime = GetReaderValue<DateTime?>(reader, "CreatedTime"),
+                CreatedBy = GetReaderValue<int?>(reader, "CreatedBy"),
+                LastModifiedBy = GetReaderValue<int?>(reader, "LastModifiedBy"),
+                LastModifiedTime = GetReaderValue<DateTime?>(reader, "LastModifiedTime")
             };
 
             return currency;

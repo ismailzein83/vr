@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Common.Business
 {
@@ -64,6 +65,11 @@ namespace Vanrise.Common.Business
             int timeZoneId = -1;
 
             IVRTimeZoneDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRTimeZoneDataManager>();
+            
+            int loggedInUserId = ContextFactory.GetContext().GetLoggedInUserId();
+            timeZone.CreatedBy = loggedInUserId;
+            timeZone.LastModifiedBy = loggedInUserId;
+
             bool insertActionSucc = dataManager.Insert(timeZone, out timeZoneId);
             if (insertActionSucc)
             {
@@ -84,6 +90,8 @@ namespace Vanrise.Common.Business
         public Vanrise.Entities.UpdateOperationOutput<VRTimeZoneDetail> UpdateVRTimeZone(VRTimeZone timeZone)
         {
             IVRTimeZoneDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRTimeZoneDataManager>();
+
+            timeZone.LastModifiedBy = ContextFactory.GetContext().GetLoggedInUserId();
 
             bool updateActionSucc = dataManager.Update(timeZone);
             Vanrise.Entities.UpdateOperationOutput<VRTimeZoneDetail> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<VRTimeZoneDetail>();
