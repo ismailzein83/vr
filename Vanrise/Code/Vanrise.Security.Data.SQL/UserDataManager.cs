@@ -28,9 +28,9 @@ namespace Vanrise.Security.Data.SQL
         {
             return GetItemsSP("sec.sp_User_GetAll", UserMapper);
         }
-        public bool UpdateUserSetting(UserSetting userSetting, int userId)
+        public bool UpdateUserSetting(UserSetting userSetting, int userId, int lastModifiedBy)
         {
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_UpdateSetting", Serializer.Serialize(userSetting), userId);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_UpdateSetting", Serializer.Serialize(userSetting), userId, lastModifiedBy);
             return (recordesEffected > 0);
         }
         public string GetUserPassword(int userId)
@@ -47,7 +47,7 @@ namespace Vanrise.Security.Data.SQL
         {
             object userID;
 
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Insert", out userID, userObject.Name, tempPassword, userObject.Email, userObject.Description, userObject.TenantId, userObject.EnabledTill, userObject.ExtendedSettings != null ? Vanrise.Common.Serializer.Serialize(userObject.ExtendedSettings) : null, userObject.Settings != null ? Vanrise.Common.Serializer.Serialize(userObject.Settings) : null);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Insert", out userID, userObject.Name, tempPassword, userObject.Email, userObject.Description, userObject.TenantId, userObject.EnabledTill, userObject.ExtendedSettings != null ? Vanrise.Common.Serializer.Serialize(userObject.ExtendedSettings) : null, userObject.Settings != null ? Vanrise.Common.Serializer.Serialize(userObject.Settings) : null, userObject.CreatedBy, userObject.LastModifiedBy);
             insertedId = (recordesEffected > 0) ? (int)userID : -1;
 
             return (recordesEffected > 0);
@@ -55,67 +55,67 @@ namespace Vanrise.Security.Data.SQL
 
         public bool UpdateUser(User userObject)
         {
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Update", userObject.UserId, userObject.Name, userObject.Email, userObject.Description, userObject.TenantId, userObject.EnabledTill, userObject.Settings != null ? Vanrise.Common.Serializer.Serialize(userObject.Settings) : null);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Update", userObject.UserId, userObject.Name, userObject.Email, userObject.Description, userObject.TenantId, userObject.EnabledTill, userObject.Settings != null ? Vanrise.Common.Serializer.Serialize(userObject.Settings) : null, userObject.LastModifiedBy);
             return (recordesEffected > 0);
         }
 
-        public bool DisableUser(int userID)
+        public bool DisableUser(int userID, int lastModifiedBy)
         {
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_SetDisable", userID);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_SetDisable", userID, lastModifiedBy);
             return (recordesEffected > 0);
         }
 
 
-        public bool EnableUser(int userID)
+        public bool EnableUser(int userID, int lastModifiedBy)
         {
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_SetEnable", userID);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_SetEnable", userID, lastModifiedBy);
             return (recordesEffected > 0);
         }
 
-        public bool UnlockUser(int userID)
+        public bool UnlockUser(int userID, int lastModifiedBy)
         {
-            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Unlock", userID);
+            int recordesEffected = ExecuteNonQuerySP("sec.sp_User_Unlock", userID, lastModifiedBy);
             return (recordesEffected > 0);
         }
-        public bool UpdateLastLogin(int userID)
+        public bool UpdateLastLogin(int userID, int lastModifiedBy)
         {
-            int recordsAffected = (int)ExecuteNonQuerySP("sec.sp_User_UpdateLastLogin", userID);
+            int recordsAffected = (int)ExecuteNonQuerySP("sec.sp_User_UpdateLastLogin", userID, lastModifiedBy);
             return (recordsAffected > 0);
         }
-        public bool UpdateDisableTill(int userId, DateTime disableTill)
+        public bool UpdateDisableTill(int userId, DateTime disableTill, int lastModifiedBy)
         {
-            int recordsAffected = (int)ExecuteNonQuerySP("sec.sp_User_UpdateDisableTill", userId, disableTill);
+            int recordsAffected = (int)ExecuteNonQuerySP("sec.sp_User_UpdateDisableTill", userId, disableTill, lastModifiedBy);
             return (recordsAffected > 0);
         }
-        public bool ResetPassword(int userId, string password)
+        public bool ResetPassword(int userId, string password, int lastModifiedBy)
         {
-            return ExecuteNonQuerySP("sec.sp_User_UpdatePassword", userId, password) > 0;
+            return ExecuteNonQuerySP("sec.sp_User_UpdatePassword", userId, password, lastModifiedBy) > 0;
         }
 
-        public bool ActivatePassword(string email, string password, string name)
+        public bool ActivatePassword(string email, string password, string name, int lastModifiedBy)
         {
-            return ExecuteNonQuerySP("sec.sp_User_ActivatePassword", email, password, name) > 0;
+            return ExecuteNonQuerySP("sec.sp_User_ActivatePassword", email, password, name, lastModifiedBy) > 0;
         }
 
-        public bool UpdateTempPasswordById(int userId, string password, DateTime? passwordValidTill)
+        public bool UpdateTempPasswordById(int userId, string password, DateTime? passwordValidTill, int lastModifiedBy)
         {
-            return ExecuteNonQuerySP("sec.sp_User_UpdateTempPasswordById", userId, password, passwordValidTill) > 0;
+            return ExecuteNonQuerySP("sec.sp_User_UpdateTempPasswordById", userId, password, passwordValidTill, lastModifiedBy) > 0;
         }
 
-        public bool UpdateTempPasswordByEmail(string email, string password, DateTime? passwordValidTill)
+        public bool UpdateTempPasswordByEmail(string email, string password, DateTime? passwordValidTill, int lastModifiedBy)
         {
-            return ExecuteNonQuerySP("sec.sp_User_UpdateTempPasswordByEmail", email, password, passwordValidTill) > 0;
+            return ExecuteNonQuerySP("sec.sp_User_UpdateTempPasswordByEmail", email, password, passwordValidTill, lastModifiedBy) > 0;
         }
 
-        public bool ChangePassword(int userId, string newPassword)
+        public bool ChangePassword(int userId, string newPassword, int lastModifiedBy)
         {
-            int recordsAffected = ExecuteNonQuerySP("sec.sp_User_UpdatePassword", userId, newPassword);
+            int recordsAffected = ExecuteNonQuerySP("sec.sp_User_UpdatePassword", userId, newPassword, lastModifiedBy);
             return (recordsAffected > 0);
         }
 
-        public bool EditUserProfile(string name, int userId ,UserSetting settings)
+        public bool EditUserProfile(string name, int userId ,UserSetting settings, int lastModifiedBy)
         {
-            return ExecuteNonQuerySP("sec.sp_User_UpdateProfile", userId, name, settings != null ? Vanrise.Common.Serializer.Serialize(settings) : null) > 0;
+            return ExecuteNonQuerySP("sec.sp_User_UpdateProfile", userId, name, settings != null ? Vanrise.Common.Serializer.Serialize(settings) : null, lastModifiedBy) > 0;
         }
 
         public bool AreUsersUpdated(ref object updateHandle)
@@ -141,7 +141,11 @@ namespace Vanrise.Security.Data.SQL
                 TenantId = Convert.ToInt32(reader["TenantId"]),
                 Settings = Vanrise.Common.Serializer.Deserialize<UserSetting>(reader["Settings"] as string),
                 IsSystemUser = GetReaderValue<bool>(reader, "IsSystemUser"),
-                ExtendedSettings = reader["ExtendedSettings"] != DBNull.Value ? Vanrise.Common.Serializer.Deserialize<Dictionary<string, object>>(reader["ExtendedSettings"] as string) : null
+                ExtendedSettings = reader["ExtendedSettings"] != DBNull.Value ? Vanrise.Common.Serializer.Deserialize<Dictionary<string, object>>(reader["ExtendedSettings"] as string) : null,
+                CreatedTime = GetReaderValue<DateTime?>(reader, "CreatedTime"),
+                CreatedBy = GetReaderValue<int?>(reader, "CreatedBy"),
+                LastModifiedBy = GetReaderValue<int?>(reader, "LastModifiedBy"),
+                LastModifiedTime = GetReaderValue<DateTime?>(reader, "LastModifiedTime")
             };
         }
 

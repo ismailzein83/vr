@@ -85,8 +85,8 @@ namespace Vanrise.Security.Business
                         AuthenticationToken authToken = CreateAuthenticationToken(user);
                         authenticationOperationOutput.Result = AuthenticateOperationResult.Succeeded;
                         authenticationOperationOutput.AuthenticationObject = authToken;
-
-                        dataManager.UpdateLastLogin(user.UserId);
+                        int lastModifiedBy = user.UserId;
+                        dataManager.UpdateLastLogin(user.UserId, lastModifiedBy);
                         VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Login successfully");
 
                     }
@@ -277,7 +277,8 @@ namespace Vanrise.Security.Business
             if (oldPasswordIsCorrect)
             {
                 encryptedNewPassword = HashingUtility.ComputeHash(newPassword, "", null);
-                changePasswordActionSucc = dataManager.ChangePassword(loggedInUserId, encryptedNewPassword);
+                int lastModifiedBy = loggedInUserId;
+                changePasswordActionSucc = dataManager.ChangePassword(loggedInUserId, encryptedNewPassword, lastModifiedBy);
             }
 
             if (changePasswordActionSucc)

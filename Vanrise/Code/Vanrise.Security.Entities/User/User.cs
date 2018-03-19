@@ -30,7 +30,7 @@ namespace Vanrise.Security.Entities
 
         public string Description { get; set; }
 
-        public DateTime? EnabledTill { get; set; }
+        public DateTime? EnabledTill { get; set; } 
         public DateTime? DisabledTill { get; set; }
 
         public Dictionary<string, Object> ExtendedSettings { get; set; }
@@ -38,6 +38,15 @@ namespace Vanrise.Security.Entities
         public UserSetting Settings { get; set; }
 
         public bool IsSystemUser { get; set; }
+
+        public DateTime? CreatedTime { get; set; }
+
+        public int? CreatedBy { get; set; }
+
+        public int? LastModifiedBy { get; set; }
+
+        public DateTime? LastModifiedTime { get; set; }
+
     }
     public class UserSetting
     {

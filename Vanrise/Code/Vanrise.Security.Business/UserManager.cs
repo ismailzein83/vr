@@ -67,11 +67,12 @@ namespace Vanrise.Security.Business
             updateOperationOutput.UpdatedObject = null;
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
             var userId = SecurityContext.Current.GetLoggedInUserId();
+            var lastModifiedBy = userId;
             var userSettings = GetUserSetting(userId);
             if (userSettings == null)
                 userSettings = new UserSetting();
             userSettings.LanguageId = languageId;
-            bool updateActionSucc = dataManager.UpdateUserSetting(userSettings, userId);
+            bool updateActionSucc = dataManager.UpdateUserSetting(userSettings, userId, lastModifiedBy);
             if (updateActionSucc)
             {
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
@@ -265,8 +266,9 @@ namespace Vanrise.Security.Business
                     pwd = passwordGenerator.Generate();
                 }
                 string encryptedPassword = HashingUtility.ComputeHash(pwd, "", null);
-
+         
                 IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+                int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
                 addedUser = new User
                 {
                     Email = userObject.Email,
@@ -278,7 +280,9 @@ namespace Vanrise.Security.Business
                     Settings = new UserSetting()
                     {
                         PhotoFileId = userObject.PhotoFileId
-                    }
+                    },
+                    CreatedBy = loggedInUserId,
+                    LastModifiedBy = loggedInUserId
 
                 };
                 insertActionSucc = dataManager.AddUser(addedUser, encryptedPassword, out userId);
@@ -335,6 +339,7 @@ namespace Vanrise.Security.Business
             if (user.IsSystemUser)
                 throw new Exception("Cannot update System User");
             user.EnabledTill = enabledTill;
+            user.LastModifiedBy = userId;
             bool updateActionSucc = dataManager.UpdateUser(user);
             if (updateActionSucc)
             {
@@ -398,7 +403,8 @@ namespace Vanrise.Security.Business
                     Description = userObject.Description,
                     TenantId = userObject.TenantId,
                     ExtendedSettings = userObject.ExtendedSettings,
-                    Settings = settings
+                    Settings = settings,
+                    LastModifiedBy = userObject.UserId
                 };
                 IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
                 updateActionSucc = dataManager.UpdateUser(updatedUser);
@@ -461,7 +467,8 @@ namespace Vanrise.Security.Business
             }
             else
             {
-                updateActionSucc = dataManager.DisableUser(userId);
+                int lastModifiedBy = userId;
+                updateActionSucc = dataManager.DisableUser(userId, lastModifiedBy);
             }
 
             if (updateActionSucc)
@@ -534,8 +541,8 @@ namespace Vanrise.Security.Business
             }
             else
             {
-
-                updateActionSucc = dataManager.EnableUser(userId);
+                int lastModifiedBy = userId;
+                updateActionSucc = dataManager.EnableUser(userId, lastModifiedBy);
             }
 
             if (updateActionSucc)
@@ -570,7 +577,8 @@ namespace Vanrise.Security.Business
             else
             {
                 IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-                updateActionSucc = dataManager.UnlockUser(userObject.UserId);
+                int lastModifiedBy = userObject.UserId;
+                updateActionSucc = dataManager.UnlockUser(userObject.UserId, lastModifiedBy);
             }
 
             if (updateActionSucc)
@@ -630,7 +638,8 @@ namespace Vanrise.Security.Business
 
                 string hashedPassword = HashingUtility.ComputeHash(password, "", null);
                 IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-                updateActionSucc = dataManager.ResetPassword(userId, hashedPassword);
+                int lastModifiedBy = userId;
+                updateActionSucc = dataManager.ResetPassword(userId, hashedPassword, lastModifiedBy);
 
 
                 if (updateActionSucc)
@@ -715,7 +724,8 @@ namespace Vanrise.Security.Business
                 string pwd = pwdGenerator.Generate();
 
                 IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-                updateActionSucc = dataManager.UpdateTempPasswordByEmail(email, HashingUtility.ComputeHash(pwd, "", null), DateTime.Now.Add(s_tempPasswordValidity));
+                int lastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
+                updateActionSucc = dataManager.UpdateTempPasswordByEmail(email, HashingUtility.ComputeHash(pwd, "", null), DateTime.Now.Add(s_tempPasswordValidity), lastModifiedBy);
                 if (updateActionSucc)
                 {
                     //EmailTemplateManager emailTemplateManager = new EmailTemplateManager();
@@ -749,8 +759,8 @@ namespace Vanrise.Security.Business
         public UpdateOperationOutput<object> UpdateTempPasswordById(int userId, string password, DateTime? passwordValidTill)
         {
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-
-            bool updateActionSucc = dataManager.UpdateTempPasswordById(userId, HashingUtility.ComputeHash(password, "", null), passwordValidTill);
+            int lastModifiedBy = userId;
+            bool updateActionSucc = dataManager.UpdateTempPasswordById(userId, HashingUtility.ComputeHash(password, "", null), passwordValidTill, lastModifiedBy);
 
             UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
 
@@ -768,8 +778,8 @@ namespace Vanrise.Security.Business
         public UpdateOperationOutput<object> UpdateTempPasswordByEmail(string email, string password, DateTime? passwordValidTill)
         {
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-
-            bool updateActionSucc = dataManager.UpdateTempPasswordByEmail(email, HashingUtility.ComputeHash(password, "", null), passwordValidTill);
+            int lastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
+            bool updateActionSucc = dataManager.UpdateTempPasswordByEmail(email, HashingUtility.ComputeHash(password, "", null), passwordValidTill, lastModifiedBy);
 
             UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
 
@@ -808,7 +818,8 @@ namespace Vanrise.Security.Business
 
             string hashedPass = HashingUtility.ComputeHash(password, "", null);
 
-            bool updateActionSucc = dataManager.ActivatePassword(email, hashedPass, name);
+            int lastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
+            bool updateActionSucc = dataManager.ActivatePassword(email, hashedPass, name, lastModifiedBy);
 
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
@@ -831,7 +842,8 @@ namespace Vanrise.Security.Business
             setting.PhotoFileId = userProfileObject.PhotoFileId;
 
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-            bool updateActionSucc = dataManager.EditUserProfile(userProfileObject.Name, userProfileObject.UserId, setting);
+            int lastModifiedBy = userProfileObject.UserId;
+            bool updateActionSucc = dataManager.EditUserProfile(userProfileObject.Name, userProfileObject.UserId, setting, lastModifiedBy);
             UpdateOperationOutput<UserProfile> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<UserProfile>();
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             if (updateActionSucc)
@@ -905,7 +917,8 @@ namespace Vanrise.Security.Business
         public bool UpdateDisableTill(int userId, DateTime disableTill)
         {
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-            bool succ = dataManager.UpdateDisableTill(userId, disableTill);
+            int lastModifiedBy = userId;
+            bool succ = dataManager.UpdateDisableTill(userId, disableTill, lastModifiedBy);
             if (succ)
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -1036,7 +1049,11 @@ namespace Vanrise.Security.Business
                 LastLogin = cloudApplicationUser.User.LastLogin,
                 Description = cloudApplicationUser.Description,
                 EnabledTill = cloudApplicationUser.EnabledTill,
-                TenantId = cloudApplicationUser.User.TenantId
+                TenantId = cloudApplicationUser.User.TenantId,
+                CreatedTime = cloudApplicationUser.User.CreatedTime,
+                CreatedBy = cloudApplicationUser.User.CreatedBy,
+                LastModifiedBy = cloudApplicationUser.User.LastModifiedBy,
+                LastModifiedTime = cloudApplicationUser.User.LastModifiedTime
             };
         }
 

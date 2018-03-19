@@ -19,27 +19,27 @@ namespace Vanrise.Security.Data
 
         bool UpdateUser(User user);
 
-        bool DisableUser(int userID);
+        bool DisableUser(int userID, int lastModifiedBy);
 
-        bool EnableUser(int userID);
-        bool UnlockUser(int userID);
-        bool UpdateLastLogin(int userID);
+        bool EnableUser(int userID, int lastModifiedBy);
+        bool UnlockUser(int userID, int lastModifiedBy);
+        bool UpdateLastLogin(int userID, int lastModifiedBy);
 
-        bool ResetPassword(int userId, string password);
+        bool ResetPassword(int userId, string password, int lastModifiedBy);
 
-        bool ChangePassword(int userId, string newPassword);
+        bool ChangePassword(int userId, string newPassword, int lastModifiedBy);
 
-        bool EditUserProfile(string name, int userId, UserSetting settings);
+        bool EditUserProfile(string name, int userId, UserSetting settings, int lastModifiedBy);
 
         bool AreUsersUpdated(ref object updateHandle);
 
-        bool ActivatePassword(string email, string password, string name);
+        bool ActivatePassword(string email, string password, string name, int lastModifiedBy);
 
-        bool UpdateTempPasswordById(int userId, string password, DateTime? passwordValidTill);
+        bool UpdateTempPasswordById(int userId, string password, DateTime? passwordValidTill, int lastModifiedBy);
         
-        bool UpdateTempPasswordByEmail(string email, string password, DateTime? passwordValidTill);
+        bool UpdateTempPasswordByEmail(string email, string password, DateTime? passwordValidTill, int lastModifiedBy);
 
-        bool UpdateDisableTill(int userID, DateTime disableTill);
-        bool UpdateUserSetting(UserSetting userSetting, int userId);
+        bool UpdateDisableTill(int userID, DateTime disableTill, int lastModifiedBy);
+        bool UpdateUserSetting(UserSetting userSetting, int userId, int lastModifiedBy);
     }
 }
