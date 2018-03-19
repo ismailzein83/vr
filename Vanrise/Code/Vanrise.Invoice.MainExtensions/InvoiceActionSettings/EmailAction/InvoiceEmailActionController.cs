@@ -25,7 +25,7 @@ namespace Vanrise.Invoice.MainExtensions
         [Route("SendEmail")]
         public object SendEmail(SendEmailActionInput input)
         {
-            if (!_invoiceManager.DosesUserHaveActionAccess(InvoiceActionType.ReCreateInvoice, input.InvoiceId, input.InvoiceActionId))
+            if (!_invoiceManager.DosesUserHaveActionAccess(InvoiceActionType.SendMail, input.InvoiceId, input.InvoiceActionId))
                 return GetUnauthorizedResponse();
             InvoiceEmailActionManager manager = new InvoiceEmailActionManager();
             return manager.SendEmail(input);
