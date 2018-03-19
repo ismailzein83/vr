@@ -11,6 +11,15 @@ namespace TOne.WhS.BusinessEntity.Entities
         public int SellingNumberPlanId { get; set; }
 
         public string Name { get; set; }
+
+        public DateTime? CreatedTime { get; set; }
+
+        public int? CreatedBy { get; set; }
+
+        public int? LastModifiedBy { get; set; }
+
+        public DateTime? LastModifiedTime { get; set; }
+
     }
 
     public class SellingNumberPlan : BaseSellingNumberPlan

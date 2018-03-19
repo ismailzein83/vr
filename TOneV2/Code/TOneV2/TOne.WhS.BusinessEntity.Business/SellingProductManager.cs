@@ -9,6 +9,7 @@ using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Security.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -433,6 +434,11 @@ namespace TOne.WhS.BusinessEntity.Business
             int sellingProductId = -1;
 
             ISellingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ISellingProductDataManager>();
+
+            int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
+            sellingProduct.CreatedBy = loggedInUserId;
+            sellingProduct.LastModifiedBy = loggedInUserId;
+
             bool insertActionSucc = dataManager.Insert(sellingProduct, out sellingProductId);
 
             if (insertActionSucc)
@@ -457,6 +463,8 @@ namespace TOne.WhS.BusinessEntity.Business
             ValidateSellingProductToEdit(sellingProductToEdit, existingSellingProduct);
 
             ISellingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ISellingProductDataManager>();
+
+            sellingProductToEdit.LastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
 
             bool updateActionSucc = dataManager.Update(sellingProductToEdit);
             UpdateOperationOutput<SellingProductDetail> updateOperationOutput = new UpdateOperationOutput<SellingProductDetail>();

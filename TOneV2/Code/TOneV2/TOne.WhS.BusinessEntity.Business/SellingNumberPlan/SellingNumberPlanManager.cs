@@ -9,6 +9,7 @@ using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.Common.Business;
+using Vanrise.Security.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -75,6 +76,11 @@ namespace TOne.WhS.BusinessEntity.Business
             int sellingNumberPlanId = -1;
 
             ISellingNumberPlanDataManager dataManager = BEDataManagerFactory.GetDataManager<ISellingNumberPlanDataManager>();
+
+            int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
+            sellingNumberPlan.CreatedBy = loggedInUserId;
+            sellingNumberPlan.LastModifiedBy = loggedInUserId;
+
             bool insertActionSucc = dataManager.Insert(sellingNumberPlan, out sellingNumberPlanId);
             if (insertActionSucc)
             {
@@ -97,6 +103,8 @@ namespace TOne.WhS.BusinessEntity.Business
             ValidateSellingNumberPlanToEdit(sellingNumberPlanToEdit);
 
             ISellingNumberPlanDataManager dataManager = BEDataManagerFactory.GetDataManager<ISellingNumberPlanDataManager>();
+
+            sellingNumberPlanToEdit.LastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
 
             bool updateActionSucc = dataManager.Update(sellingNumberPlanToEdit);
             UpdateOperationOutput<SellingNumberPlanDetail> updateOperationOutput = new UpdateOperationOutput<SellingNumberPlanDetail>();

@@ -23,13 +23,13 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         #region Public Methods
         public bool Update(Entities.SellingNumberPlanToEdit sellingNumberPlan)
         {
-            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_SellingNumberPlan_Update]", sellingNumberPlan.SellingNumberPlanId, sellingNumberPlan.Name);
+            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_SellingNumberPlan_Update]", sellingNumberPlan.SellingNumberPlanId, sellingNumberPlan.Name, sellingNumberPlan.LastModifiedBy);
             return (recordsEffected > 0);
         }
         public bool Insert(Entities.SellingNumberPlan sellingNumberPlan, out int insertedId)
         {
             object sellingNumberPlanId;
-            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_SellingNumberPlan_Insert]", out sellingNumberPlanId, sellingNumberPlan.Name);
+            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_SellingNumberPlan_Insert]", out sellingNumberPlanId, sellingNumberPlan.Name, sellingNumberPlan.CreatedBy, sellingNumberPlan.LastModifiedBy);
             insertedId = (int)sellingNumberPlanId;
             return (recordsEffected > 0);
         }
@@ -55,6 +55,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             {
                 SellingNumberPlanId = (int)reader["ID"],
                 Name = reader["Name"] as string,
+                CreatedTime = GetReaderValue<DateTime?>(reader, "CreatedTime"),
+                CreatedBy = GetReaderValue<int?>(reader, "CreatedBy"),
+                LastModifiedBy = GetReaderValue<int?>(reader, "LastModifiedBy"),
+                LastModifiedTime = GetReaderValue<DateTime?>(reader, "LastModifiedTime")
             };
             return sellingNumberPlan;
         }

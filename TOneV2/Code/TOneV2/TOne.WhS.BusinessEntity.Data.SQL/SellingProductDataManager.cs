@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Data.SQL;
@@ -23,7 +24,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             object sellingProductId;
 
             int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SellingProduct_Insert", out sellingProductId, sellingProduct.Name, sellingProduct.SellingNumberPlanId,
-                Vanrise.Common.Serializer.Serialize(sellingProduct.Settings));
+                Vanrise.Common.Serializer.Serialize(sellingProduct.Settings), sellingProduct.CreatedBy, sellingProduct.LastModifiedBy);
 
             insertedId = (int)sellingProductId;
             return (recordsEffected > 0);
@@ -31,7 +32,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public bool Update(SellingProductToEdit sellingProduct)
         {
             var settings = (sellingProduct.Settings != null) ? Vanrise.Common.Serializer.Serialize(sellingProduct.Settings) : null;
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SellingProduct_Update", sellingProduct.SellingProductId, sellingProduct.Name, settings);
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SellingProduct_Update", sellingProduct.SellingProductId, sellingProduct.Name, settings, sellingProduct.LastModifiedBy);
             return (recordsEffected > 0);
         }
         public bool AreSellingProductsUpdated(ref object updateHandle)
@@ -56,6 +57,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 Name = reader["Name"] as string,
                 SellingNumberPlanId = (int)reader["SellingNumberPlanID"],
                 Settings = ((reader["Settings"] as string) != null) ? Vanrise.Common.Serializer.Deserialize<SellingProductSettings>(reader["Settings"] as string) : null,
+                CreatedTime = GetReaderValue<DateTime?>(reader, "CreatedTime"),
+                CreatedBy = GetReaderValue<int?>(reader, "CreatedBy"),
+                LastModifiedBy = GetReaderValue<int?>(reader, "LastModifiedBy"),
+                LastModifiedTime = GetReaderValue<DateTime?>(reader, "LastModifiedTime")
             };
             return sellingProductDetail;
         }
