@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrWhsRoutingRouteQualityconfiguration', ['UtilsService', 'VRModalService', 'WhS_Routing_QualityConfigurationService',
+app.directive('vrWhsRoutingQualityconfigurationManagement', ['UtilsService', 'VRModalService', 'WhS_Routing_QualityConfigurationService',
     function (UtilsService, VRModalService, WhS_Routing_QualityConfigurationService) {
 
         var directiveDefinitionObject = {
@@ -10,7 +10,7 @@ app.directive('vrWhsRoutingRouteQualityconfiguration', ['UtilsService', 'VRModal
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new QualityConfigurationEditor(ctrl, $scope, $attrs);
+                var ctor = new QualityConfigurationManagementCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
@@ -18,10 +18,10 @@ app.directive('vrWhsRoutingRouteQualityconfiguration', ['UtilsService', 'VRModal
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/WhS_Routing/Directives/RouteSettings/Templates/RouteQualityConfigurationTemplate.html"
+            templateUrl: "/Client/Modules/WhS_Routing/Directives/QualityConfiguration/QualityConfigurationRuntime/Templates/QualityConfigurationManagementTemplate.html"
         };
 
-        function QualityConfigurationEditor(ctrl, $scope, $attrs) {
+        function QualityConfigurationManagementCtor(ctrl, $scope, $attrs) {
             this.initializeController = initializeController;
 
             function initializeController() {
@@ -59,7 +59,7 @@ app.directive('vrWhsRoutingRouteQualityconfiguration', ['UtilsService', 'VRModal
                         $scope.scopeModel.datasource.push({ Entity: qualityConfiguration });
                     };
 
-                    WhS_Routing_QualityConfigurationService.addQualityConfiguration(onQualityConfigurationAdded, getQualityConfigurationNames());
+                    WhS_Routing_QualityConfigurationService.addRouteRuleQualityConfiguration(onQualityConfigurationAdded, getQualityConfigurationNames());
                 };
 
                 defineMenuActions();
@@ -115,14 +115,14 @@ app.directive('vrWhsRoutingRouteQualityconfiguration', ['UtilsService', 'VRModal
 
                     if (!dataItem.Entity.IsActive) {
                         actions.push({
-                                name: "Enable",
-                                clicked: setActive
+                            name: "Enable",
+                            clicked: setActive
                         });
                     }
                     else if (!dataItem.Entity.IsDefault) {
                         actions.push({
-                                name: "Disable",
-                                clicked: setDisable
+                            name: "Disable",
+                            clicked: setDisable
                         });
                     }
 
@@ -138,7 +138,7 @@ app.directive('vrWhsRoutingRouteQualityconfiguration', ['UtilsService', 'VRModal
                     $scope.scopeModel.datasource[index] = { Entity: newQualityConfiguration };
                 };
 
-                WhS_Routing_QualityConfigurationService.editQualityConfiguration(onQualityConfigurationUpdated, editQualityConfigurationObject.Entity, getQualityConfigurationNames());
+                WhS_Routing_QualityConfigurationService.editRouteRuleQualityConfiguration(onQualityConfigurationUpdated, editQualityConfigurationObject.Entity, getQualityConfigurationNames());
             }
 
             function removeQualityConfiguration(removedQualityConfigurationObject) {

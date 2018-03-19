@@ -73,33 +73,37 @@
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Parallel DisplayName="Parallel_RPQualityData" sap2010:WorkflowViewState.IdRef="Parallel_1">
       <Parallel.Variables>
-        <Variable x:TypeArguments="vq:BaseQueue(twre:RPQualityConfigurationDataBatch)" Name="queueRPQualityDataBatch" />
+        <Variable x:TypeArguments="vq:BaseQueue(twre:RouteRuleQualityConfigurationDataBatch)" Name="queueRouteRuleQualityConfigurationDataBatch" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="calculateRPQualityDataStatus" />
         <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="queuePreparedRPQualityData" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareRPQualityDataStatus" />
       </Parallel.Variables>
-      <twrba:CalculateRPQualityData>
-        <twrba:CalculateRPQualityData.EffectiveDate>
+      <twrba:CalculateRoutingQualityData sap2010:WorkflowViewState.IdRef="CalculateRoutingQualityData_1">
+        <twrba:CalculateRoutingQualityData.EffectiveDate>
           <InArgument x:TypeArguments="s:DateTime">
             <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveOn</mca:CSharpValue>
           </InArgument>
-        </twrba:CalculateRPQualityData.EffectiveDate>
-        <twrba:CalculateRPQualityData.OutputQueue>
-          <InOutArgument x:TypeArguments="vq:BaseQueue(twre:RPQualityConfigurationDataBatch)">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(twre:RPQualityConfigurationDataBatch)">queueRPQualityDataBatch</mca:CSharpReference>
+        </twrba:CalculateRoutingQualityData.EffectiveDate>
+        <twrba:CalculateRoutingQualityData.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(twre:RouteRuleQualityConfigurationDataBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(twre:RouteRuleQualityConfigurationDataBatch)">queueRouteRuleQualityConfigurationDataBatch</mca:CSharpReference>
           </InOutArgument>
-        </twrba:CalculateRPQualityData.OutputQueue>
-        <twrba:CalculateRPQualityData.Status>
+        </twrba:CalculateRoutingQualityData.OutputQueue>
+        <twrba:CalculateRoutingQualityData.RoutingProcessType>
+          <InArgument x:TypeArguments="twre:RoutingProcessType">
+            <mca:CSharpValue x:TypeArguments="twre:RoutingProcessType">Entities.RoutingProcessType.RoutingProductRoute</mca:CSharpValue>
+          </InArgument>
+        </twrba:CalculateRoutingQualityData.RoutingProcessType>
+        <twrba:CalculateRoutingQualityData.Status>
           <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">calculateRPQualityDataStatus</mca:CSharpReference>
           </OutArgument>
-        </twrba:CalculateRPQualityData.Status>
-        <sap2010:WorkflowViewState.IdRef>CalculateRPQualityData_1</sap2010:WorkflowViewState.IdRef>
-      </twrba:CalculateRPQualityData>
-      <twrba:PrepareRPQualityDataForDBApply>
+        </twrba:CalculateRoutingQualityData.Status>
+      </twrba:CalculateRoutingQualityData>
+      <twrba:PrepareRPQualityDataForDBApply sap2010:WorkflowViewState.IdRef="PrepareRPQualityDataForDBApply_1">
         <twrba:PrepareRPQualityDataForDBApply.InputQueue>
-          <InArgument x:TypeArguments="vq:BaseQueue(twre:RPQualityConfigurationDataBatch)">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:RPQualityConfigurationDataBatch)">queueRPQualityDataBatch</mca:CSharpValue>
+          <InArgument x:TypeArguments="vq:BaseQueue(twre:RouteRuleQualityConfigurationDataBatch)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:RouteRuleQualityConfigurationDataBatch)">queueRouteRuleQualityConfigurationDataBatch</mca:CSharpValue>
           </InArgument>
         </twrba:PrepareRPQualityDataForDBApply.InputQueue>
         <twrba:PrepareRPQualityDataForDBApply.OutputQueue>
@@ -122,9 +126,8 @@
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">prepareRPQualityDataStatus</mca:CSharpReference>
           </OutArgument>
         </twrba:PrepareRPQualityDataForDBApply.Status>
-        <sap2010:WorkflowViewState.IdRef>PrepareRPQualityDataForDBApply_1</sap2010:WorkflowViewState.IdRef>
       </twrba:PrepareRPQualityDataForDBApply>
-      <twrba:ApplyRPQualityDataToDB Status="{x:Null}">
+      <twrba:ApplyRPQualityDataToDB Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ApplyRPQualityDataToDB_1">
         <twrba:ApplyRPQualityDataToDB.InputQueue>
           <InArgument x:TypeArguments="vq:BaseQueue(x:Object)">
             <mca:CSharpValue x:TypeArguments="vq:BaseQueue(x:Object)">queuePreparedRPQualityData</mca:CSharpValue>
@@ -140,14 +143,13 @@
             <mca:CSharpValue x:TypeArguments="x:Int32">RoutingDatabaseId</mca:CSharpValue>
           </InArgument>
         </twrba:ApplyRPQualityDataToDB.RoutingDatabaseId>
-        <sap2010:WorkflowViewState.IdRef>ApplyRPQualityDataToDB_1</sap2010:WorkflowViewState.IdRef>
       </twrba:ApplyRPQualityDataToDB>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d1ZDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXENhbGN1bGF0ZVJQUXVhbGl0eURhdGEueGFtbBBJA5MBDgIBAUoFkQEQAgECUQdiJgIBPWMHfi4CARl/B5ABJgIBA1QNVFgCAUxeDV59AgFFWQ1ZlAECAT5wDXB1AgE2Zg1mjAECAS91DXVbAgEoeg16ewIBIWsNa3sCARqHAQ2HAXMCARKCAQ2CAXMCAQuMAQ2MAVsCAQQ=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1ZDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXENhbGN1bGF0ZVJQUXVhbGl0eURhdGEueGFtbBFJA5UBDgIBAUoFkwEQAgECUQdmKwIBPWcHgQEuAgEZggEHkgEmAgEDVA1UWAIBU2MNY30CAUxZDVmvAQIBRV4NXokBAgE+dA10dQIBNmoNaqcBAgEveQ15WwIBKH4NfnsCASFvDW97AgEaigENigFzAgEShQENhQFzAgELjwENjwFbAgEE</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="CalculateRPQualityData_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="CalculateRoutingQualityData_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareRPQualityDataForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyRPQualityDataToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="794,86" />

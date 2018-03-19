@@ -6,13 +6,15 @@ using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.Entities;
 using Vanrise.Queueing;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
     public class PrepareCustomerRouteQualityDataForDBApplyInput
     {
         public int RoutingDatabaseId { get; set; }
-        public BaseQueue<CustomerRouteQualityConfigurationDataBatch> InputQueue { get; set; }
+        public BaseQueue<RouteRuleQualityConfigurationDataBatch> InputQueue { get; set; }
         public BaseQueue<Object> OutputQueue { get; set; }
     }
 
@@ -22,7 +24,7 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<int> RoutingDatabaseId { get; set; }
 
         [RequiredArgument]
-        public InArgument<BaseQueue<CustomerRouteQualityConfigurationDataBatch>> InputQueue { get; set; }
+        public InArgument<BaseQueue<RouteRuleQualityConfigurationDataBatch>> InputQueue { get; set; }
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<Object>> OutputQueue { get; set; }
@@ -32,7 +34,11 @@ namespace TOne.WhS.Routing.BP.Activities
             ICustomerQualityConfigurationDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICustomerQualityConfigurationDataManager>();
             dataManager.RoutingDatabase = new RoutingDatabaseManager().GetRoutingDatabase(inputArgument.RoutingDatabaseId);
 
-            PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, batch => batch.CustomerRouteQualityConfigurationDataList);
+            PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, (batch) =>
+            {
+                return batch.RoutingQualityConfigurationDataList.Select(itm => itm as CustomerRouteQualityConfigurationData).ToList();
+            });
+
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Preparing Customer Route Quality Data For DB Apply is done", null);
         }
 

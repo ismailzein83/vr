@@ -14,14 +14,6 @@ namespace TOne.WhS.Routing.Web.Controllers
     public class QualityConfigurationController : Vanrise.Web.Base.BaseAPIController
     {
         [HttpGet]
-        [Route("GetQualityConfigurationFields")]
-        public List<AnalyticMeasureInfo> GetQualityConfigurationFields()
-        {
-            ConfigManager configManager = new ConfigManager();
-            return configManager.GetQualityConfigurationFields();
-        }
-
-        [HttpGet]
         [Route("GetQualityConfigurationInfo")]
         public IEnumerable<QualityConfigurationInfo> GetQualityConfigurationInfo(string filter = null)
         {
@@ -30,10 +22,11 @@ namespace TOne.WhS.Routing.Web.Controllers
         }
 
         [HttpGet]
-        [Route("TryCompileQualityConfigurationExpression")]
-        public bool TryCompileQualityConfigurationExpression(string qualityConfigurationExpression)
+        [Route("ValidateRouteRuleQualityConfiguration")]
+        public bool ValidateRouteRuleQualityConfiguration(string serializedRouteRuleQualityConfiguration)
         {
-            return new QualityConfigurationManager().TryCompileQualityConfigurationExpression(qualityConfigurationExpression);
+            RouteRuleQualityConfiguration routeRuleQualityConfiguration = Vanrise.Common.Serializer.Deserialize<RouteRuleQualityConfiguration>(serializedRouteRuleQualityConfiguration);
+            return new QualityConfigurationManager().ValidateRouteRuleQualityConfiguration(routeRuleQualityConfiguration);
         }
     }
 }

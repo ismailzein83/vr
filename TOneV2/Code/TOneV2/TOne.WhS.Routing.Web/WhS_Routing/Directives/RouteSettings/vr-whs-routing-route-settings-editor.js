@@ -102,50 +102,44 @@ app.directive('vrWhsRoutingRouteSettingsEditor', ['UtilsService', 'VRUIUtilsServ
 
                     //Loading Customer Route Database Configuration
                     var customerRouteDatabaseConfigurationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    customerRouteDatabaseConfigurationReadyPromiseDeferred.promise
-                        .then(function () {
-                            VRUIUtilsService.callDirectiveLoad(customerRouteDatabaseConfigurationAPI, customerRoutePayload, customerRouteDatabaseConfigurationLoadPromiseDeferred);
-                        });
+                    customerRouteDatabaseConfigurationReadyPromiseDeferred.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(customerRouteDatabaseConfigurationAPI, customerRoutePayload, customerRouteDatabaseConfigurationLoadPromiseDeferred);
+                    });
                     promises.push(customerRouteDatabaseConfigurationLoadPromiseDeferred.promise);
 
                     //Loading Product Route Database Configuration
                     var productRouteDatabaseConfigurationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    productRouteDatabaseConfigurationReadyPromiseDeferred.promise
-                        .then(function () {
-                            VRUIUtilsService.callDirectiveLoad(productRouteDatabaseConfigurationAPI, productRoutePayload, productRouteDatabaseConfigurationLoadPromiseDeferred);
-                        });
+                    productRouteDatabaseConfigurationReadyPromiseDeferred.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(productRouteDatabaseConfigurationAPI, productRoutePayload, productRouteDatabaseConfigurationLoadPromiseDeferred);
+                    });
                     promises.push(productRouteDatabaseConfigurationLoadPromiseDeferred.promise);
 
                     //Loading Sub Process Settings
                     var subProcessSettingsConfigurationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    subProcessSettingsReadyPromiseDeferred.promise
-                        .then(function () {
-                            VRUIUtilsService.callDirectiveLoad(subProcessSettingsAPI, subProcessSettingsPayload, subProcessSettingsConfigurationLoadPromiseDeferred);
-                        });
+                    subProcessSettingsReadyPromiseDeferred.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(subProcessSettingsAPI, subProcessSettingsPayload, subProcessSettingsConfigurationLoadPromiseDeferred);
+                    });
                     promises.push(subProcessSettingsConfigurationLoadPromiseDeferred.promise);
 
                     //Loading Customer Route Settings
                     var customerRouteSettingsConfigurationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    customerRouteSettingsReadyPromiseDeferred.promise
-                        .then(function () {
-                            VRUIUtilsService.callDirectiveLoad(customerRouteSettingsAPI, customerRouteSettingsPayload, customerRouteSettingsConfigurationLoadPromiseDeferred);
-                        });
+                    customerRouteSettingsReadyPromiseDeferred.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(customerRouteSettingsAPI, customerRouteSettingsPayload, customerRouteSettingsConfigurationLoadPromiseDeferred);
+                    });
                     promises.push(customerRouteSettingsConfigurationLoadPromiseDeferred.promise);
 
                     //Loading Route Option Rule Configuration
                     var routeOptionRuleConfigurationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    routeOptionRuleConfigurationReadyPromiseDeferred.promise
-                        .then(function () {
-                            VRUIUtilsService.callDirectiveLoad(routeOptionRuleConfigurationAPI, routeOptionRuleConfiguration, routeOptionRuleConfigurationLoadPromiseDeferred);
-                        });
+                    routeOptionRuleConfigurationReadyPromiseDeferred.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(routeOptionRuleConfigurationAPI, routeOptionRuleConfiguration, routeOptionRuleConfigurationLoadPromiseDeferred);
+                    });
                     promises.push(routeOptionRuleConfigurationLoadPromiseDeferred.promise);
 
                     //Loading Route Quality Configuration
                     var qualityConfigurationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
-                    qualityConfigurationReadyPromiseDeferred.promise
-                        .then(function () {
-                            VRUIUtilsService.callDirectiveLoad(qualityConfigurationAPI, qualityConfiguration, qualityConfigurationLoadPromiseDeferred);
-                        });
+                    qualityConfigurationReadyPromiseDeferred.promise.then(function () {
+                        VRUIUtilsService.callDirectiveLoad(qualityConfigurationAPI, qualityConfiguration, qualityConfigurationLoadPromiseDeferred);
+                    });
                     promises.push(qualityConfigurationLoadPromiseDeferred.promise);
 
                     return UtilsService.waitMultiplePromises(promises);

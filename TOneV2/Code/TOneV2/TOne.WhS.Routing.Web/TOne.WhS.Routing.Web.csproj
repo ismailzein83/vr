@@ -129,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\QualityConfigurationDefinitionController.cs" />
     <Compile Include="Controllers\SupplierZoneDetailsController.cs" />
     <Compile Include="Controllers\CustomerRouteController.cs" />
     <Compile Include="Controllers\QualityConfigurationController.cs" />
@@ -137,6 +138,7 @@
     <Compile Include="Controllers\RPRouteController.cs" />
     <Compile Include="Controllers\RouteRuleController.cs" />
     <Compile Include="Controllers\RoutingDatabaseController.cs" />
+    <Compile Include="Controllers\TrafficStatisticQualityConfigurationController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Controllers\RouteRuleSettingsController.cs" />
   </ItemGroup>
@@ -226,7 +228,19 @@
     <Content Include="WhS_Routing\Directives\Extensions\RoutingExcludedDestinations\Templates\RoutingExcludedRangesTemplate.html" />
     <Content Include="WhS_Routing\Directives\Extensions\RoutingExcludedDestinations\vr-whs-routing-excludedranges.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RoutingExcludedDestinations\vr-whs-routing-excludedcodes.js" />
-    <Content Include="WhS_Routing\Directives\QualityConfiguration\vr-whs-routing-qualityconfiguration-selector.js" />
+    <Content Include="WhS_Routing\Directives\QualityConfiguration\QualityConfigurationDefinition\Extensions\Templates\QCDefinitionTrafficStatisticSettingsTemplate.html" />
+    <Content Include="WhS_Routing\Directives\QualityConfiguration\QualityConfigurationDefinition\Extensions\vr-whs-routing-qcdefinition-trafficstatistic-settings.js" />
+    <Content Include="WhS_Routing\Directives\QualityConfiguration\QualityConfigurationDefinition\Templates\QualityConfigurationDefinitionExtendedSettingsTemplate.html" />
+    <Content Include="WhS_Routing\Directives\QualityConfiguration\QualityConfigurationDefinition\Templates\QualityConfigurationDefinitionSettingsTemplate.html" />
+    <Content Include="WhS_Routing\Directives\QualityConfiguration\QualityConfigurationDefinition\vr-whs-routing-qualityconfigurationdefinition-extendedsettings.js" />
+    <Content Include="WhS_Routing\Directives\QualityConfiguration\QualityConfigurationDefinition\vr-whs-routing-qualityconfigurationdefinition-selector.js" />
+    <Content Include="WhS_Routing\Directives\QualityConfiguration\QualityConfigurationDefinition\vr-whs-routing-qualityconfigurationdefinition-settings.js" />
+    <Content Include="WhS_Routing\Directives\QualityConfiguration\QualityConfigurationRuntime\Extensions\Templates\TrafficStatisticQualityConfigurationSettingsTemplate.html" />
+    <Content Include="WhS_Routing\Directives\QualityConfiguration\QualityConfigurationRuntime\Extensions\vr-whs-routing-qc-trafficstatistic-settings.js" />
+    <Content Include="WhS_Routing\Directives\QualityConfiguration\QualityConfigurationRuntime\Templates\QualityConfigurationManagementTemplate.html" />
+    <Content Include="WhS_Routing\Directives\QualityConfiguration\QualityConfigurationRuntime\Templates\RouteRuleQualityConfigurationEditor.html" />
+    <Content Include="WhS_Routing\Directives\QualityConfiguration\QualityConfigurationRuntime\vr-whs-routing-qualityconfiguration-management.js" />
+    <Content Include="WhS_Routing\Directives\QualityConfiguration\QualityConfigurationRuntime\vr-whs-routing-qualityconfiguration-selector.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-order.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Order\vr-whs-routing-routerulesettings-ordertype-selector.js" />
     <Content Include="WhS_Routing\Directives\Extensions\RouteRuleSettings\Percentage\Templates\OptionPercentageOptimizationDirective.html" />
@@ -250,14 +264,11 @@
     <Content Include="WhS_Routing\Directives\ProcessInput\Templates\BuildPartialRouteProcessTemplate.html" />
     <Content Include="WhS_Routing\Directives\ProcessInput\vr-whs-routing-routingentitiesupdaterprocess.js" />
     <Content Include="WhS_Routing\Directives\ProcessInput\vr-whs-routing-buildpartialrouteprocess.js" />
+    <Content Include="WhS_Routing\Directives\QualityConfiguration\QualityConfigurationRuntime\RouteRuleQualityConfigurationEditor.js" />
     <Content Include="WhS_Routing\Directives\RouteRule\Templates\RouteRuleViewTemplate.html" />
     <Content Include="WhS_Routing\Directives\RouteRule\vr-whs-be-routerule-view.js" />
-    <Content Include="WhS_Routing\Directives\RouteSettings\QualityConfigurationEditorController.js" />
-    <Content Include="WhS_Routing\Directives\RouteSettings\Templates\QualityConfigurationEditor.html" />
     <Content Include="WhS_Routing\Directives\RouteSettings\Templates\RouteOptionRuleConfigurationGridTemplate.html" />
     <Content Include="WhS_Routing\Directives\RouteSettings\Templates\RouteOptionRuleConfigurationTemplate.html" />
-    <Content Include="WhS_Routing\Directives\RouteSettings\Templates\RouteQualityConfigurationTemplate.html" />
-    <Content Include="WhS_Routing\Directives\RouteSettings\vr-whs-routing-route-qualityconfiguration.js" />
     <Content Include="WhS_Routing\Directives\RouteSettings\vr-whs-routing-route-routeoptionruleconfiguration-grid.js" />
     <Content Include="WhS_Routing\Directives\RouteSettings\vr-whs-routing-route-routeoptionruleconfiguration.js" />
     <Content Include="WhS_Routing\Directives\RoutingExcludedDestinations\Templates\RoutingExcludedDestinationsTemplate.html" />
@@ -329,6 +340,7 @@
     <Content Include="WhS_Routing\Directives\TransformationSteps\SupplierCodeMatchStep\vr-whs-routing-datatransformation-suppliercodematch-preview.js" />
     <Content Include="WhS_Routing\Directives\TransformationSteps\SupplierCodeMatchStep\vr-whs-routing-datatransformation-suppliercodematch.js" />
     <Content Include="WhS_Routing\ModuleInitialization.js" />
+    <Content Include="WhS_Routing\Services\APIServices\QualityConfigurationDefinitionAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\SupplierZoneDetailsAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\CustomerRouteAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\QualityConfigurationAPIService.js" />
@@ -338,6 +350,7 @@
     <Content Include="WhS_Routing\Services\APIServices\RouteRuleAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RouteRuleSettingsAPIService.js" />
     <Content Include="WhS_Routing\Services\APIServices\RoutingDatabaseAPIService.js" />
+    <Content Include="WhS_Routing\Services\APIServices\TrafficStatisticQualityConfigurationAPIService.js" />
     <Content Include="WhS_Routing\Services\QualityConfigurationService.js" />
     <Content Include="WhS_Routing\Services\RouteOptionRuleService.js" />
     <Content Include="WhS_Routing\Services\MarketPriceService.js" />
@@ -370,9 +383,7 @@
     <Content Include="WhS_Routing\Views\RPRoute\RPRouteOptionSupplier.html" />
     <Content Include="WhS_Routing\Views\RPRoute\RPRouteOptionSupplierController.js" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="WhS_Routing\Directives\QualityConfiguration\Templates\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
@@ -388,7 +399,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>54045</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>

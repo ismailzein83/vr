@@ -11,5 +11,7 @@ namespace TOne.WhS.Routing.Entities
         public Guid QualityConfigurationDefinitionId { get; set; }
 
         public string Name { get; set; }
+
+        public string RuntimeEditor { get; set; }
     }
 }

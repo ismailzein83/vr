@@ -1,0 +1,12 @@
+﻿<vr-tabs>
+    <vr-tab header="'Definition'">
+        <vr-columns width="1/2row">
+            <vr-textbox value="scopeModel.name" label="Name" isrequired></vr-textbox>
+        </vr-columns>
+    </vr-tab>
+    <vr-tab header="'Settings'">
+        <vr-whs-routing-qualityconfigurationdefinition-extendedsettings on-ready="scopeModel.onQCDefinitionExtendedSettingsDirectiveReady"
+                                                                        normal-col-num="6">
+        </vr-whs-routing-qualityconfigurationdefinition-extendedsettings>
+    </vr-tab>
+</vr-tabs>

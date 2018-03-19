@@ -8,25 +8,20 @@
 
         var controllerName = "QualityConfiguration";
 
-        function GetQualityConfigurationFields() {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetQualityConfigurationFields"));
-        }
-
         function GetQualityConfigurationInfo(serializedFilter) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "GetQualityConfigurationInfo"), { filter: serializedFilter });
         }
 
-        function TryCompileQualityConfigurationExpression(expression) {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "TryCompileQualityConfigurationExpression"), {
-                qualityConfigurationExpression: expression
+        function ValidateRouteRuleQualityConfiguration(serializedRouteRuleQualityConfiguration) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_Routing_ModuleConfig.moduleName, controllerName, "ValidateRouteRuleQualityConfiguration"), {
+                serializedRouteRuleQualityConfiguration: serializedRouteRuleQualityConfiguration
             });
         }
 
 
         return ({
-            GetQualityConfigurationFields: GetQualityConfigurationFields,
             GetQualityConfigurationInfo: GetQualityConfigurationInfo,
-            TryCompileQualityConfigurationExpression: TryCompileQualityConfigurationExpression
+            ValidateRouteRuleQualityConfiguration: ValidateRouteRuleQualityConfiguration
         });
     }
 

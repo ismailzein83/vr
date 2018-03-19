@@ -1,16 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.Routing.Entities;
-using Vanrise.Common.Business;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.Routing.Business
 {
     public class QualityConfigurationDefinitionManager
-    {
+    { 
         #region Public Methods
 
         public QualityConfigurationDefinition GetQualityConfigurationDefinition(Guid qualityConfigurationDefinitionId)
@@ -28,7 +25,7 @@ namespace TOne.WhS.Routing.Business
             return qualityConfigurationDefinition.Settings.ExtendedSettings;
         }
 
-        public IEnumerable<QualityConfigurationDefinitionInfo> GetBEParentChildRelationDefinitionsInfo(QualityConfigurationDefinitionFilter filter)
+        public IEnumerable<QualityConfigurationDefinitionInfo> GetQualityConfigurationDefinitionInfo(QualityConfigurationDefinitionFilter filter)
         {
             Func<QualityConfigurationDefinition, bool> filterExpression = null;
             if (filter != null)
@@ -40,7 +37,7 @@ namespace TOne.WhS.Routing.Business
             }
 
             var beParentChildRelationDefinitions = this.GetCachedQualityConfigurationDefinitions();
-            return beParentChildRelationDefinitions.MapRecords(BEParentChildRelationDefinitionInfoMapper, filterExpression);
+            return beParentChildRelationDefinitions.MapRecords(QualityConfigurationDefinitionInfoMapper, filterExpression);
         }
 
         public IEnumerable<QualityConfigurationDefinitionExtendedSettingsConfig> GetQualityConfigurationDefinitionExtendedSettingsConfigs()
@@ -63,12 +60,15 @@ namespace TOne.WhS.Routing.Business
 
         #region Mappers
 
-        public QualityConfigurationDefinitionInfo BEParentChildRelationDefinitionInfoMapper(QualityConfigurationDefinition qualityConfigurationDefinition)
+        public QualityConfigurationDefinitionInfo QualityConfigurationDefinitionInfoMapper(QualityConfigurationDefinition qualityConfigurationDefinition)
         {
+            QualityConfigurationDefinitionExtendedSettings extendedSettings = GetQualityConfigurationDefinitionExtendedSettings(qualityConfigurationDefinition.VRComponentTypeId);
+
             return new QualityConfigurationDefinitionInfo
             {
                 QualityConfigurationDefinitionId = qualityConfigurationDefinition.VRComponentTypeId,
-                Name = qualityConfigurationDefinition.Name
+                Name = qualityConfigurationDefinition.Name,
+                RuntimeEditor = extendedSettings.RuntimeEditor
             };
         }
 

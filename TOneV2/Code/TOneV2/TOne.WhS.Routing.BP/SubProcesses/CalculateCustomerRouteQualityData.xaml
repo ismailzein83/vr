@@ -73,32 +73,38 @@
   <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
     <Parallel DisplayName="Parallel_CustomerRouteQualityData" sap2010:WorkflowViewState.IdRef="Parallel_1">
       <Parallel.Variables>
-        <Variable x:TypeArguments="vq:BaseQueue(twre:CustomerRouteQualityConfigurationDataBatch)" Name="queueCustomerRouteQualityDataBatch" />
+        <Variable x:TypeArguments="vq:BaseQueue(twre:RouteRuleQualityConfigurationDataBatch)" Name="queueRouteRuleQualityConfigurationDataBatch" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="calculateCustomerRouteQualityDataStatus" />
         <Variable x:TypeArguments="vq:BaseQueue(x:Object)" Name="queuePreparedCustomerRouteQualityData" />
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="prepareCustomerRouteQualityDataStatus" />
       </Parallel.Variables>
-      <twrba:CalculateCustomerRouteQualityData sap2010:WorkflowViewState.IdRef="CalculateCustomerRouteQualityData_1">
-        <twrba:CalculateCustomerRouteQualityData.EffectiveDate>
+      <twrba:CalculateRoutingQualityData>
+        <twrba:CalculateRoutingQualityData.EffectiveDate>
           <InArgument x:TypeArguments="s:DateTime">
             <mca:CSharpValue x:TypeArguments="s:DateTime">EffectiveOn</mca:CSharpValue>
           </InArgument>
-        </twrba:CalculateCustomerRouteQualityData.EffectiveDate>
-        <twrba:CalculateCustomerRouteQualityData.OutputQueue>
-          <InOutArgument x:TypeArguments="vq:BaseQueue(twre:CustomerRouteQualityConfigurationDataBatch)">
-            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(twre:CustomerRouteQualityConfigurationDataBatch)">queueCustomerRouteQualityDataBatch</mca:CSharpReference>
+        </twrba:CalculateRoutingQualityData.EffectiveDate>
+        <twrba:CalculateRoutingQualityData.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(twre:RouteRuleQualityConfigurationDataBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(twre:RouteRuleQualityConfigurationDataBatch)">queueRouteRuleQualityConfigurationDataBatch</mca:CSharpReference>
           </InOutArgument>
-        </twrba:CalculateCustomerRouteQualityData.OutputQueue>
-        <twrba:CalculateCustomerRouteQualityData.Status>
+        </twrba:CalculateRoutingQualityData.OutputQueue>
+        <twrba:CalculateRoutingQualityData.RoutingProcessType>
+          <InArgument x:TypeArguments="twre:RoutingProcessType">
+            <mca:CSharpValue x:TypeArguments="twre:RoutingProcessType">Entities.RoutingProcessType.CustomerRoute</mca:CSharpValue>
+          </InArgument>
+        </twrba:CalculateRoutingQualityData.RoutingProcessType>
+        <twrba:CalculateRoutingQualityData.Status>
           <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
             <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">calculateCustomerRouteQualityDataStatus</mca:CSharpReference>
           </OutArgument>
-        </twrba:CalculateCustomerRouteQualityData.Status>
-      </twrba:CalculateCustomerRouteQualityData>
+        </twrba:CalculateRoutingQualityData.Status>
+        <sap2010:WorkflowViewState.IdRef>CalculateRoutingQualityData_1</sap2010:WorkflowViewState.IdRef>
+      </twrba:CalculateRoutingQualityData>
       <twrba:PrepareCustomerRouteQualityDataForDBApply sap2010:WorkflowViewState.IdRef="PrepareCustomerRouteQualityDataForDBApply_1">
         <twrba:PrepareCustomerRouteQualityDataForDBApply.InputQueue>
-          <InArgument x:TypeArguments="vq:BaseQueue(twre:CustomerRouteQualityConfigurationDataBatch)">
-            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:CustomerRouteQualityConfigurationDataBatch)">queueCustomerRouteQualityDataBatch</mca:CSharpValue>
+          <InArgument x:TypeArguments="vq:BaseQueue(twre:RouteRuleQualityConfigurationDataBatch)">
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(twre:RouteRuleQualityConfigurationDataBatch)">queueRouteRuleQualityConfigurationDataBatch</mca:CSharpValue>
           </InArgument>
         </twrba:PrepareCustomerRouteQualityDataForDBApply.InputQueue>
         <twrba:PrepareCustomerRouteQualityDataForDBApply.OutputQueue>
@@ -140,11 +146,11 @@
         </twrba:ApplyCustomerRouteQualityDataToDB.RoutingDatabaseId>
       </twrba:ApplyCustomerRouteQualityDataToDB>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d2FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXENhbGN1bGF0ZUN1c3RvbWVyUm91dGVRdWFsaXR5RGF0YS54YW1sEEkDkAEOAgEBSgWOARACAQJRB2ExAgE9Ygd8OQIBGX0HjQExAgEDVA1UWAIBTF4NXogBAgFFWQ1ZqgECAT5vDW+AAQIBNmUNZaIBAgEvdA10WwIBKHkNeYYBAgEhag1qhgECARqFAQ2FAX4CARKAAQ2AAX4CAQuKAQ2KAVsCAQQ=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d2FDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLlJvdXRpbmcuQlBcU3ViUHJvY2Vzc2VzXENhbGN1bGF0ZUN1c3RvbWVyUm91dGVRdWFsaXR5RGF0YS54YW1sEUkDlgEOAgEBSgWUARACAQJRB2crAgE9aAeCATkCARmDAQeTATECAQNUDVRYAgFTYw1jiAECAUxZDVmvAQIBRV4NXoMBAgE+dQ11gAECATZrDWurAQIBL3oNelsCASh/DX+GAQIBIXANcIYBAgEaiwENiwF+AgEShgENhgF+AgELkAENkAFbAgEE</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="CalculateCustomerRouteQualityData_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="CalculateRoutingQualityData_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="PrepareCustomerRouteQualityDataForDBApply_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="ApplyCustomerRouteQualityDataToDB_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="794,86" />

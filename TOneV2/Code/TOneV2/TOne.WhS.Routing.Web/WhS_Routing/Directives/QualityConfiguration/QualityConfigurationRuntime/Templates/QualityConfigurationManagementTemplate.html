@@ -1,11 +1,13 @@
 ﻿<vr-button type="Add" data-onclick="scopeModel.addQualityConfiguration" standalone></vr-button>
+
 <vr-validator validate="scopeModel.isValid()">
     <vr-datagrid on-ready="scopeModel.onGridReady"
                  datasource="scopeModel.datasource"
                  menuactions="scopeModel.gridMenuActions"
-                 norowhighlightonclick="true" 
+                 norowhighlightonclick="true"
                  maxheight="300px" hidegridmenu>
 
+        <!--<vr-datagridcolumn headertext="'ID'" field="'Entity.QualityConfigurationId'" widthfactor="15" disablesorting></vr-datagridcolumn>-->
         <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" widthfactor="15" disablesorting></vr-datagridcolumn>
         <vr-datagridcolumn isfielddynamic="true" headertext="'Active'" widthfactor="10" disablesorting">
             <vr-icon icontype="dataItem.Entity.IsActive"></vr-icon>

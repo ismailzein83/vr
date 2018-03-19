@@ -6,7 +6,7 @@
 
     function qualityConfigurationService(UtilsService, VRModalService) {
 
-        function addQualityConfiguration(onQualityConfigurationAdded, qualityConfigurationNames) {
+        function addRouteRuleQualityConfiguration(onQualityConfigurationAdded, qualityConfigurationNames) {
 
             var modalParameters = {
                 qualityConfigurationNames: qualityConfigurationNames
@@ -17,10 +17,10 @@
                 modalScope.onQualityConfigurationAdded = onQualityConfigurationAdded;
             };
 
-            VRModalService.showModal('/Client/Modules/WhS_Routing/Directives/RouteSettings/Templates/QualityConfigurationEditor.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/WhS_Routing/Directives/QualityConfiguration/QualityConfigurationRuntime/Templates/RouteRuleQualityConfigurationEditor.html', modalParameters, modalSettings);
         }
 
-        function editQualityConfiguration(onQualityConfigurationUpdated, qualityConfigurationEntity, qualityConfigurationNames) {
+        function editRouteRuleQualityConfiguration(onQualityConfigurationUpdated, qualityConfigurationEntity, qualityConfigurationNames) {
 
             var modalParameters = {
                 qualityConfigurationEntity: qualityConfigurationEntity,
@@ -32,13 +32,13 @@
                 modalScope.onQualityConfigurationUpdated = onQualityConfigurationUpdated;
             };
 
-            VRModalService.showModal('/Client/Modules/WhS_Routing/Directives/RouteSettings/Templates/QualityConfigurationEditor.html', modalParameters, modalSettings);
+            VRModalService.showModal('/Client/Modules/WhS_Routing/Directives/QualityConfiguration/QualityConfigurationRuntime/Templates/RouteRuleQualityConfigurationEditor.html', modalParameters, modalSettings);
         }
 
 
         return ({
-            addQualityConfiguration: addQualityConfiguration,
-            editQualityConfiguration: editQualityConfiguration
+            addRouteRuleQualityConfiguration: addRouteRuleQualityConfiguration,
+            editRouteRuleQualityConfiguration: editRouteRuleQualityConfiguration
         });
     }
 

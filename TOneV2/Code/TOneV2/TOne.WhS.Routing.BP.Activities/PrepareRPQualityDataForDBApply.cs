@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Activities;
+using System.Collections.Generic;
+using System.Linq;
 using TOne.WhS.Routing.Business;
 using TOne.WhS.Routing.Data;
 using TOne.WhS.Routing.Entities;
@@ -12,7 +14,7 @@ namespace TOne.WhS.Routing.BP.Activities
     public class PrepareRPQualityDataForDBApplyInput
     {
         public int RoutingDatabaseId { get; set; }
-        public BaseQueue<RPQualityConfigurationDataBatch> InputQueue { get; set; }
+        public BaseQueue<RouteRuleQualityConfigurationDataBatch> InputQueue { get; set; }
         public BaseQueue<Object> OutputQueue { get; set; }
     }
 
@@ -22,7 +24,7 @@ namespace TOne.WhS.Routing.BP.Activities
         public InArgument<int> RoutingDatabaseId { get; set; }
 
         [RequiredArgument]
-        public InArgument<BaseQueue<RPQualityConfigurationDataBatch>> InputQueue { get; set; }
+        public InArgument<BaseQueue<RouteRuleQualityConfigurationDataBatch>> InputQueue { get; set; }
 
         [RequiredArgument]
         public InOutArgument<BaseQueue<Object>> OutputQueue { get; set; }
@@ -33,7 +35,11 @@ namespace TOne.WhS.Routing.BP.Activities
             IRPQualityConfigurationDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRPQualityConfigurationDataManager>();
             dataManager.RoutingDatabase = new RoutingDatabaseManager().GetRoutingDatabase(inputArgument.RoutingDatabaseId);
 
-            PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, batch => batch.RPQualityConfigurationDataList);
+            PrepareDataForDBApply(previousActivityStatus, handle, dataManager, inputArgument.InputQueue, inputArgument.OutputQueue, (batch) =>
+            {
+                return batch.RoutingQualityConfigurationDataList.Select(itm => itm as RPQualityConfigurationData).ToList();
+            });
+
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Preparing Routing Product Quality Data For DB Apply is done", null);
         }
 

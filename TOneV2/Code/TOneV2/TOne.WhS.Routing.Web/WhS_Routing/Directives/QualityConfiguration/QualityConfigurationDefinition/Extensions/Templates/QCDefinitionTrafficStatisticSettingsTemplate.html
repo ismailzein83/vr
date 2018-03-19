@@ -1,0 +1,30 @@
+﻿<vr-columns width="1/2row">
+    <vr-analytic-table-selector on-ready="scopeModel.onTableSelectorDirectiveReady"
+                                onselectionchanged="scopeModel.onTableSelectionChanged"
+                                isrequired="true" hideremoveicon>
+    </vr-analytic-table-selector>
+</vr-columns>
+
+<vr-analytic-measure-selector on-ready="scopeModel.onMeasureSelectorDirectiveReady" 
+                              isloading="scopeModel.isMeasureSelectorLoading"
+                              customlabel="Included Measures" isrequired="true" 
+                              normal-col-num="6" ismultipleselection>
+</vr-analytic-measure-selector>
+
+<vr-analytic-dimension-selector on-ready="scopeModel.onSaleZoneDimensionSelectorReady"
+                                isloading="scopeModel.isSaleZoneDimensionSelectorLoading"
+                                customlabel="Sale Zone Dimension" isrequired="true"
+                                normal-col-num="6" hideremoveicon>
+</vr-analytic-dimension-selector>
+
+<vr-analytic-dimension-selector on-ready="scopeModel.onSupplierDimensionSelectorReady"
+                                isloading="scopeModel.isSupplierDimensionSelectorLoading"
+                                customlabel="Supplier Dimension" isrequired="true"
+                                normal-col-num="6" hideremoveicon>
+</vr-analytic-dimension-selector>
+
+<vr-analytic-dimension-selector on-ready="scopeModel.onSupplierZoneDimensionSelectorReady"
+                                isloading="scopeModel.isSupplierZoneDimensionSelectorLoading"
+                                customlabel="Supplier Zone Dimension" isrequired="true"
+                                normal-col-num="6" hideremoveicon>
+</vr-analytic-dimension-selector>

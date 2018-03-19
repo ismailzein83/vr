@@ -11,5 +11,15 @@ namespace TOne.WhS.Routing.Entities
         public abstract Guid ConfigId { get; }
 
         public virtual string RuntimeEditor { get; set; }
+
+        public virtual Dictionary<Guid, InitializedQualityConfiguration> InitializeQualityConfigurations(List<RouteRuleQualityConfiguration> qualityConfigurations)
+        {
+            return null;
+        }
+    }
+
+    public abstract class InitializedQualityConfiguration
+    {
+
     }
 }

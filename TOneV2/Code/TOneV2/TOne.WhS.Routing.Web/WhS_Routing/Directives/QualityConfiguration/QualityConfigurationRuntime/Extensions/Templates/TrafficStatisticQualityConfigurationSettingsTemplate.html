@@ -1,0 +1,26 @@
+﻿<vr-tab header="'Time Settings'">
+    <vr-common-timeperiod normal-col-num="3" on-ready="scopeModel.onTimeperiodReady" isrequired="true"></vr-common-timeperiod>
+</vr-tab>
+<vr-tab header="'Expression'">
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-datalist datasource="scopeModel.qualityConfigurationFields" titlefield="'Title'" onitemclicked="scopeModel.qualityConfigurationFieldClicked" maxitemsperrow="6">
+                <span title="{{dataItem.Title}}">
+                    {{dataItem.Title}}
+                </span>
+            </vr-datalist>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="1/2row">
+            <vr-datalist datasource="scopeModel.qualityConfigurationSignsFields" onitemclicked="scopeModel.qualityConfigurationFieldClicked" maxitemsperrow="6">
+                <vr-label largesize prespace>{{dataItem.Title}}</vr-label>
+            </vr-datalist>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="fullrow">
+            <vr-textarea label="Expression" value="scopeModel.expression" customvalidate="scopeModel.validateExpression()" rows="6" isrequired></vr-textarea>
+        </vr-columns>
+    </vr-row>
+</vr-tab>
