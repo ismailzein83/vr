@@ -52,7 +52,7 @@ namespace Vanrise.Common.Business
             style.Font.IsBold = true;
             cell.SetStyle(style);
             MemoryStream memoryStream = new MemoryStream();
-            memoryStream = excelTemplate.SaveToStream();
+            excelTemplate.Save(memoryStream, SaveFormat.Xlsx);         
             return memoryStream.ToArray();
         }
 

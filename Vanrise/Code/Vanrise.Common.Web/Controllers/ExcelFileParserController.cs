@@ -26,7 +26,7 @@ namespace Vanrise.Common.Web.Controllers
         {
             ExcelFileParserManger manager = new ExcelFileParserManger();
             byte[] bytes = manager.DowloadFileExcelParserTemplate(fieldName);
-            return GetExcelResponse(bytes, string.Format("{0}-Template.xls", fieldName));
+            return GetExcelResponse(bytes, string.Format("{0}-Template.xlsx", fieldName));
         }
 
     }
