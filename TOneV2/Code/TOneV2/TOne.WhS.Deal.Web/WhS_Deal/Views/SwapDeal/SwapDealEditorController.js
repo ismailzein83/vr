@@ -357,7 +357,7 @@
                 DealId: dealId,
                 Name: $scope.scopeModel.description,
                 Settings: {
-                    $type: "TOne.WhS.Deal.Entities.SwapDealSettings, TOne.WhS.Deal.Entities",
+                    $type: "TOne.WhS.Deal.Business.SwapDealSettings, TOne.WhS.Deal.Business",
                     CarrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
                     BeginDate: $scope.scopeModel.beginDate,
                     EndDate: $scope.scopeModel.endDate,
