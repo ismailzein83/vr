@@ -246,7 +246,7 @@
                 tierName: 'Tier ' + parseInt(tierNb),
                 FromVol: index == 0 ? 0 : $scope.scopeModel.tiers[index - 1].UpToVolume,
                 UpToVolume: tier.UpToVolume,
-                DefaultRate: tier.DefaultRate,
+                Description: tier.Description,
                 EvaluatedRate: tier.EvaluatedRate,
                 RetroActiveFromTierNumber: tier.RetroActiveFromTierNumber,
                 RetroActiveFromTier: (tier.RetroActiveFromTierNumber != undefined) ? UtilsService.getItemByVal($scope.scopeModel.tiers, tier.RetroActiveFromTierNumber, 'tierId').tierName : '',
@@ -308,7 +308,8 @@
                     if (exrates[i].ZoneIds.some(containesInZonesIds)) {
                         newexrates[newexrates.length] = {
                             EvaluatedRate: exrates[i].EvaluatedRate,
-                            ZoneIds: exrates[i].ZoneIds.filter(containesInZonesIds)
+                            ZoneIds: exrates[i].ZoneIds.filter(containesInZonesIds),
+                            Description: exrates[i].Description
                         }
                     }
                 };
@@ -321,14 +322,13 @@
             for (var i = 0 ; i < tiers.length; i++) {
                 var tier = tiers[i];
                 var tierExceptions = findExceptionZoneIds(tier.ExceptionZoneRates);
-
                 var tierNb = i + 1;
                 var obj = {
                     tierId: tierNb,
                     tierName: 'Tier ' + parseInt(tierNb),
                     FromVol: i == 0 ? 0 : tiers[i - 1].UpToVolume,
                     UpToVolume: tier.UpToVolume,
-                    DefaultRate: tier.DefaultRate,
+                    Description: tier.Description,
                     EvaluatedRate: tier.EvaluatedRate,
                     RetroActiveFromTierNumber: tier.RetroActiveFromTierNumber,
                     RetroActiveFromTier: (tier.RetroActiveFromTierNumber != undefined) ? 'Tier ' + parseInt(tier.RetroActiveFromTierNumber) : '',

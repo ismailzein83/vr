@@ -133,10 +133,10 @@
                 return;
             $scope.scopeModel.isLastTier = volumeCommitmentItemTierEntity.UpToVolume == null;
             $scope.scopeModel.upToVolume = volumeCommitmentItemTierEntity.UpToVolume;
-            // $scope.scopeModel.defaultRate = volumeCommitmentItemTierEntity.DefaultRate;
             $scope.scopeModel.selectedRetroActive = UtilsService.getItemByVal($scope.scopeModel.tiers, volumeCommitmentItemTierEntity.RetroActiveFromTierNumber, 'tierId');
-            if (volumeCommitmentItemTierEntity.ExceptionZoneRates != null && volumeCommitmentItemTierEntity.ExceptionZoneRates.length > 0)
+            if (volumeCommitmentItemTierEntity.ExceptionZoneRates != null && volumeCommitmentItemTierEntity.ExceptionZoneRates.length > 0) {
                 buildExceptionZoneRatesDataSource(volumeCommitmentItemTierEntity.ExceptionZoneRates);
+            }
 
         }
 
@@ -151,7 +151,7 @@
             return {
                 UpToVolume: $scope.scopeModel.upToVolume,
                 EvaluatedRate: rateEvaluatorSelectiveDirectiveAPI.getData(),
-                DefaultRate: 0,
+                Description: rateEvaluatorSelectiveDirectiveAPI.getDescription(),
                 RetroActiveFromTierNumber: ($scope.scopeModel.selectedRetroActive != undefined) ? $scope.scopeModel.selectedRetroActive.tierId : undefined,
                 ExceptionZoneRates: exceptions
             };
@@ -266,6 +266,7 @@
         //  filtering Exceptions Zone Rates base on Zones selected values from item editor.
 
         function filterExceptionsZoneRatesByZonesIds(excep, ids) {
+            console.log(excep);
             var obj = new Object();
             if (ids == undefined)
                 return obj;
@@ -279,6 +280,7 @@
             else {
                 obj.ZoneIds = zoneIds;
                 obj.EvaluatedRate = excep.EvaluatedRate;
+                obj.Description = excep.Description;
             }
             return obj;
         }

@@ -37,7 +37,7 @@ app.directive("vrWhsDealSupplierrateevaluatorDiscount", ['UtilsService', functio
             };
 
             api.getDescription = function () {
-                return $scope.scopeModel.Discount;
+                return $scope.scopeModel.Discount + '%';
             };
 
             api.getData = function () {

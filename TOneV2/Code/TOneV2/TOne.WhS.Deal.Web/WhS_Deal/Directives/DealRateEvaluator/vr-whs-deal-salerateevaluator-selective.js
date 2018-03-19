@@ -98,6 +98,12 @@ function (WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService) 
                 }
                 return data;
             };
+            api.getDescription = function () {
+                if (directiveAPI != undefined) {
+                    return directiveAPI.getDescription();
+                }
+            };
+
             if (selectiveCtrl.onReady && typeof selectiveCtrl.onReady == "function")
                 selectiveCtrl.onReady(api);
         }

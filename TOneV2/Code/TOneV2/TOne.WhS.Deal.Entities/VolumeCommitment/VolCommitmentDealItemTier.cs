@@ -25,6 +25,8 @@ namespace TOne.WhS.Deal.Entities
         public List<long> ZoneIds { get; set; }
 
         public BaseDealRateEvaluator EvaluatedRate { get; set; }
+        public string Description { get { return this.EvaluatedRate.GetDescription(); } }
+
 
     }
 }
