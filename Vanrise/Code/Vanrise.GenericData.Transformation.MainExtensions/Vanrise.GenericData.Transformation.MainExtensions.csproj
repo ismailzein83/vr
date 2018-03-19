@@ -49,6 +49,7 @@
     <Compile Include="MappingSteps\CloneDataRecordStep.cs" />
     <Compile Include="MappingSteps\ExecuteTransformationStep.cs" />
     <Compile Include="MappingSteps\ForLoopStep.cs" />
+    <Compile Include="MappingSteps\IfStep.cs" />
     <Compile Include="MappingSteps\IfElseStep.cs" />
     <Compile Include="MappingSteps\ExecuteExpressionStep.cs" />
     <Compile Include="MappingSteps\InitializeRecordStep.cs" />

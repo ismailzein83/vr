@@ -449,6 +449,10 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\ExecuteExpression\Templates\ExecuteExpressionStepTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\ExecuteExpression\vr-genericdata-datatransformation-executeexpressionstep-preview.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\ExecuteExpression\vr-genericdata-datatransformation-executeexpressionstep.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\If\Templates\IfStepPreviewTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\If\Templates\IfStepTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\If\vr-genericdata-datatransformation-ifstep-preview.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\If\vr-genericdata-datatransformation-ifstep.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\StopIteration\Templates\StopIterationStepPreviewTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\StopIteration\Templates\StopIterationStepTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\MappingSteps\GeneralSteps\StopIteration\vr-genericdata-datatransformation-stopiterationstep-preview.js" />
