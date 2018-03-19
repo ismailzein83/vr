@@ -226,8 +226,10 @@ as (select * from (values
 ('aa4c29f5-0b6a-4f38-8b2e-29a78d3961fe','Supplier_Fault_Ticket','Supplier Fault Ticket','VR_GenericData_FieldCustomObjectTypeSettings'			,'{"Editor":"whs-be-supplierfaultticket-customobjectsettings"}'),
 
 ('fcfa0193-9463-4435-9d96-54fd2b6d050b','Supplier_Fault_Tickets','Supplier Fault Tickets','VR_GenericData_GenericBEExtendedSettings','{"Editor":"whs-be-supplierfaultticket-settings"}'),
-('3705144e-4bc8-45d8-94d9-96e9af95353b','Customer_Fault_Tickets','Customer Fault Tickets','VR_GenericData_GenericBEExtendedSettings','{"Editor":"whs-be-customerfaultticket-settings"}')
+('3705144e-4bc8-45d8-94d9-96e9af95353b','Customer_Fault_Tickets','Customer Fault Tickets','VR_GenericData_GenericBEExtendedSettings','{"Editor":"whs-be-customerfaultticket-settings"}'),
 
+('B69F4C1B-FAE8-4352-BB9F-A5AA140F30EE','VR_WhS_Routing_QualityConfigurationDefinition','Quality Configuration Definition','VR_Common_VRComponentType','{"Editor":"vr-whs-routing-qualityconfigurationdefinition-settings"}'),
+('E670425F-2F91-4C9A-BB03-8B85CD77BBD2','VR_WhS_Routing_QCDefinition_TrafficStatistic','Traffic Statistic','WhS_Routing_QualityConfigurationDefinitionExtendedSettings','{"Editor":"vr-whs-routing-qcdefinition-trafficstatistic-settings"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
