@@ -8,7 +8,7 @@ app.directive("vrCommonTimeperiodLastTime", ['UtilsService', 'VRUIUtilsService',
             scope: {
                 onReady: "=",
                 isrequired: '=',
-                hideremoveicon: '@',
+                hideremoveicon: '@'
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -17,27 +17,20 @@ app.directive("vrCommonTimeperiodLastTime", ['UtilsService', 'VRUIUtilsService',
             },
             controllerAs: "ctrl",
             bindToController: true,
-            compile: function (element, attrs) {
-            },
-            templateUrl: function (element, attrs) {
-                return getDirectiveTemplateUrl();
-            }
+            templateUrl: "/Client/Modules/Common/Directives/VRTimePeriod/MainExtensions/Templates/LastTimeDirectiveTemplate.html"
         };
-
-        function getDirectiveTemplateUrl() {
-            return "/Client/Modules/Common/Directives/VRTimePeriod/MainExtensions/Templates/LastTimeDirectiveTemplate.html";
-        }
 
         function TimePeriodLastTime($scope, ctrl) {
             this.initializeController = initializeController;
+
             var timeUnitAPI;
             var timeUnitReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             var startingfromAPI;
             var startingfromReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
 
             function initializeController() {
-
                 $scope.scopeModel = {};
 
                 $scope.scopeModel.onTimeUnitReady = function (api) {
@@ -53,7 +46,6 @@ app.directive("vrCommonTimeperiodLastTime", ['UtilsService', 'VRUIUtilsService',
                 UtilsService.waitMultiplePromises([timeUnitReadyPromiseDeferred.promise, startingfromReadyPromiseDeferred.promise]).then(function () {
                     defineAPI();
                 });
-
             }
 
             function defineAPI() {
@@ -62,18 +54,21 @@ app.directive("vrCommonTimeperiodLastTime", ['UtilsService', 'VRUIUtilsService',
 
                 api.load = function (payload) {
                     var promises = [];
+
                     var timeUnit;
                     var startingfrom;
 
                     if (payload != undefined) {
-                        $scope.scopeModel.timeValue = payload.timePeriod.TimeValue;
                         timeUnit = payload.timePeriod.TimeUnit;
                         startingfrom = payload.timePeriod.StartingFrom;
+
+                        $scope.scopeModel.timeValue = payload.timePeriod.TimeValue;
                     }
 
                     function loadTimeUnit() {
+
                         var timeunitPayload = {
-                            timeUnit: timeUnit
+                            timeUnit: timeUnit != undefined ? timeUnit : VRCommon_TimeunitEnum.Day.value
                         };
                         return timeUnitAPI.load(timeunitPayload);
                     }
@@ -81,7 +76,7 @@ app.directive("vrCommonTimeperiodLastTime", ['UtilsService', 'VRUIUtilsService',
                     function loadStartingFrom() {
 
                         var startingFromPayload = {
-                            startingfrom: startingfrom
+                            startingfrom: startingfrom != undefined ? startingfrom : VRCommon_StartingFromEnum.ExecutionTime.value
                         };
                         return startingfromAPI.load(startingFromPayload);
                     }
@@ -90,7 +85,6 @@ app.directive("vrCommonTimeperiodLastTime", ['UtilsService', 'VRUIUtilsService',
                     promises.push(loadStartingFrom());
 
                     return UtilsService.waitMultiplePromises(promises);
-
                 };
 
                 api.getData = function () {

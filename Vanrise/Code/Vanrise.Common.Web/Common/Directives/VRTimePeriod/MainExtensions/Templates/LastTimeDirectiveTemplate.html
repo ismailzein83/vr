@@ -1,7 +1,9 @@
 ﻿<vr-row>
-    <vr-common-timeunit-selector on-ready="scopeModel.onTimeUnitReady" isrequired="true" hideremoveicon="true" normal-col-num="3"></vr-common-timeunit-selector>
-    <vr-common-startingfrom-selector on-ready="scopeModel.onStartingfromReady" isrequired="true" hideremoveicon="true" normal-col-num="3"></vr-common-startingfrom-selector>
     <vr-columns width="1/4row">
-        <vr-textbox value="scopeModel.timeValue" type="number" label="Time Value" localizedlabel="VRRes.TimeValue.VREnd" minvalue="0" decimalprecision="0" isrequired="true"></vr-textbox>
+        <vr-textbox value="scopeModel.timeValue" type="number" decimalprecision="0" minvalue="0"
+                    label="Last" localizedlabel="VRRes.TimeValue.VREnd" isrequired="true">
+        </vr-textbox>
     </vr-columns>
+    <vr-common-timeunit-selector on-ready="scopeModel.onTimeUnitReady" customlabel="" isrequired="true" hideremoveicon="true" normal-col-num="3"></vr-common-timeunit-selector>
+    <vr-common-startingfrom-selector on-ready="scopeModel.onStartingfromReady" isrequired="true" hideremoveicon="true" normal-col-num="3"></vr-common-startingfrom-selector>
 </vr-row>

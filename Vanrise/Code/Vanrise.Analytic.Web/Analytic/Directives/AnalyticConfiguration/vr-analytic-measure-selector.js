@@ -17,7 +17,8 @@
                 isrequired: "=",
                 isdisabled: "=",
                 customlabel: "@",
-                normalColNum: '='
+                normalColNum: '=',
+                isloading: "="
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
@@ -110,23 +111,25 @@
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : null;
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}">'
-                + '<vr-select on-ready="ctrl.onSelectorReady"'
-                    + ' datasource="ctrl.datasource"'
-                    + ' selectedvalues="ctrl.selectedvalues"'
-                    + ' onselectionchanged="ctrl.onselectionchanged"'
-                    + ' onselectitem="ctrl.onselectitem"'
-                    + ' ondeselectitem="ctrl.ondeselectitem"'
-                    + ' datavaluefield="AnalyticItemConfigId"'
-                    + ' datatextfield="Title"'
-                    + ' ' + multipleselection
-                    + ' ' + hideselectedvaluessection
-                    + ' isrequired="ctrl.isrequired"'
-                    + ' ' + hideremoveicon
-                    + ' vr-disabled="ctrl.isdisabled"'
-                    + ' label="' + label + '"'
-                    + ' entityName="' + label + '"'
-                + '</vr-select>'
-            + '</vr-columns>';
+                        + '<span vr-loader="ctrl.isloading">'
+                            + '<vr-select on-ready="ctrl.onSelectorReady"'
+                                + ' datasource="ctrl.datasource"'
+                                + ' selectedvalues="ctrl.selectedvalues"'
+                                + ' onselectionchanged="ctrl.onselectionchanged"'
+                                + ' onselectitem="ctrl.onselectitem"'
+                                + ' ondeselectitem="ctrl.ondeselectitem"'
+                                + ' datavaluefield="AnalyticItemConfigId"'
+                                + ' datatextfield="Title"'
+                                + ' ' + multipleselection
+                                + ' ' + hideselectedvaluessection
+                                + ' isrequired="ctrl.isrequired"'
+                                + ' ' + hideremoveicon
+                                + ' vr-disabled="ctrl.isdisabled"'
+                                + ' label="' + label + '"'
+                                + ' entityName="' + label + '"'
+                            + '</vr-select>'
+                        + '</span>'
+                   + '</vr-columns>';
         }
     }
 

@@ -10,9 +10,8 @@ app.directive('vrCommonTimeunitSelector', ['UtilsService', 'VRUIUtilsService', '
                 selectedvalues: '=',
                 isrequired: '=',
                 hideremoveicon: '@',
-                normalColNum:'@',
+                normalColNum: '@',
             },
-
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
                 ctrl.datasource = [];
@@ -22,7 +21,6 @@ app.directive('vrCommonTimeunitSelector', ['UtilsService', 'VRUIUtilsService', '
 
                 var ctor = new TimeUnitCtor(ctrl, $scope, $attrs);
                 ctor.initializeController();
-
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -35,6 +33,7 @@ app.directive('vrCommonTimeunitSelector', ['UtilsService', 'VRUIUtilsService', '
             this.initializeController = initializeController;
 
             var selectorAPI;
+
             function initializeController() {
 
                 ctrl.onSelectorReady = function (api) {
@@ -48,6 +47,7 @@ app.directive('vrCommonTimeunitSelector', ['UtilsService', 'VRUIUtilsService', '
 
                 api.load = function (payload) {
                     selectorAPI.clearDataSource();
+
                     var selectedIds;
 
                     if (payload != undefined) {
@@ -57,7 +57,7 @@ app.directive('vrCommonTimeunitSelector', ['UtilsService', 'VRUIUtilsService', '
                     var timeunits = UtilsService.getArrayEnum(VRCommon_TimeunitEnum);
 
                     if (timeunits != null) {
-                        for (var i = 0,length=timeunits.length; i< length; i++) {
+                        for (var i = 0, length = timeunits.length; i < length; i++) {
                             ctrl.datasource.push(timeunits[i]);
                         }
 
@@ -65,6 +65,7 @@ app.directive('vrCommonTimeunitSelector', ['UtilsService', 'VRUIUtilsService', '
                             VRUIUtilsService.setSelectedValues(selectedIds, 'value', attrs, ctrl);
                         }
                     }
+
                     var promises = [];
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -95,10 +96,10 @@ app.directive('vrCommonTimeunitSelector', ['UtilsService', 'VRUIUtilsService', '
                 hideremoveicon = ' hideremoveicon ';
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}" >' +
-                '<vr-select ' + multipleselection + ' datatextfield="description" datavaluefield="value" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" '
-                            + ' selectedvalues="ctrl.selectedvalues"  entityName="' + label + '" '
-                            + hideremoveicon + '>' +
-                        '</vr-select>'
-            + '</vr-columns>';
+                        '<vr-select ' + multipleselection + ' datatextfield="description" datavaluefield="value" isrequired="ctrl.isrequired" label="' + label + '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" '
+                                + ' selectedvalues="ctrl.selectedvalues"  entityName="' + label + '" '
+                                + hideremoveicon + '>' +
+                        '</vr-select>' +
+                   '</vr-columns>';
         }
     }]);
