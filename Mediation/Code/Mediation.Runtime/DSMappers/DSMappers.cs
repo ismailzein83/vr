@@ -191,7 +191,12 @@ namespace Mediation.Runtime
 
                         string chargeableDuration = cdrAsString.Substring(61, 6);
                         if (!string.IsNullOrEmpty(chargeableDuration))
-                            cdr.ChargeableDuration = Convert.ToInt32(chargeableDuration);
+                        {
+                            int hour = Convert.ToInt32(chargeableDuration.Substring(0, 2));
+                            int minute = Convert.ToInt32(chargeableDuration.Substring(2, 2));
+                            int second = Convert.ToInt32(chargeableDuration.Substring(4, 2));
+                            cdr.ChargeableDuration = (int)new TimeSpan(hour, minute, second).TotalSeconds;
+                        }
 
                         string faultCode = cdrAsString.Substring(67, 5);
                         if (!string.IsNullOrEmpty(faultCode))
