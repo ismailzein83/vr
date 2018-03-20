@@ -32,7 +32,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             string serializedSettings = null;
             if (financialAccountToEdit.Settings != null)
                 serializedSettings = Vanrise.Common.Serializer.Serialize(financialAccountToEdit.Settings);
-            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_FinancialAccount_Update]", financialAccountToEdit.FinancialAccountId, serializedSettings, financialAccountToEdit.BED, financialAccountToEdit.EED);
+            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_FinancialAccount_Update]", financialAccountToEdit.FinancialAccountId, serializedSettings, financialAccountToEdit.BED, financialAccountToEdit.EED, financialAccountToEdit.LastModifiedBy);
             return (recordsEffected > 0);
         }
 
@@ -42,7 +42,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             string serializedSettings = null;
             if (financialAccount.Settings != null)
                 serializedSettings = Vanrise.Common.Serializer.Serialize(financialAccount.Settings);
-            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_FinancialAccount_Insert]", out financialAccountId, financialAccount.CarrierProfileId, financialAccount.CarrierAccountId,financialAccount.FinancialAccountDefinitionId, serializedSettings, financialAccount.BED, financialAccount.EED);
+            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_FinancialAccount_Insert]", out financialAccountId, financialAccount.CarrierProfileId, financialAccount.CarrierAccountId,financialAccount.FinancialAccountDefinitionId, serializedSettings, financialAccount.BED, financialAccount.EED, financialAccount.CreatedBy, financialAccount.LastModifiedBy);
             insertedId = (int)financialAccountId;
             return (recordsEffected > 0);
         }
@@ -66,6 +66,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             financialAccount.Settings = Vanrise.Common.Serializer.Deserialize<WHSFinancialAccountSettings>(reader["FinancialAccountSettings"] as string);
             financialAccount.BED = GetReaderValue<DateTime>(reader, "BED");
             financialAccount.EED = GetReaderValue<DateTime?>(reader, "EED");
+            financialAccount.CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime");
+            financialAccount.CreatedBy = GetReaderValue<int?>(reader, "CreatedBy");
+            financialAccount.LastModifiedBy = GetReaderValue<int?>(reader, "LastModifiedBy");
+            financialAccount.LastModifiedTime = GetReaderValue<DateTime?>(reader, "LastModifiedTime");
             return financialAccount;
         }
 

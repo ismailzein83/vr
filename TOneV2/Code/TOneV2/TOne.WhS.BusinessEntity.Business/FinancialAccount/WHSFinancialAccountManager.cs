@@ -11,6 +11,7 @@ using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.Invoice.Business;
+using Vanrise.Security.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -66,6 +67,9 @@ namespace TOne.WhS.BusinessEntity.Business
                 int financialAccountId;
 
                 IWHSFinancialAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IWHSFinancialAccountDataManager>();
+                int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
+                financialAccountToAdd.FinancialAccount.CreatedBy = loggedInUserId;
+                financialAccountToAdd.FinancialAccount.LastModifiedBy = loggedInUserId;
                 bool insertActionSucc = dataManager.Insert(financialAccountToAdd.FinancialAccount, out financialAccountId);
                 if (insertActionSucc)
                 {
@@ -139,6 +143,7 @@ namespace TOne.WhS.BusinessEntity.Business
         internal bool TryUpdateFinancialAccount(WHSFinancialAccountToEdit financialAccountToEdit)
         {
             IWHSFinancialAccountDataManager dataManager = BEDataManagerFactory.GetDataManager<IWHSFinancialAccountDataManager>();
+            financialAccountToEdit.LastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
             return dataManager.Update(financialAccountToEdit);
         }
         public WHSFinancialAccount GetFinancialAccount(int financialAccountId)
