@@ -86,6 +86,11 @@ function (WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService) 
             api.getData = function () {
                 return directiveAPI.getData();
             };
+            api.getDescription = function () {
+                if (directiveAPI != undefined) {
+                    return directiveAPI.getDescription();
+                }
+            };
             if (selectiveCtrl.onReady && typeof selectiveCtrl.onReady == "function")
                 selectiveCtrl.onReady(api);
         }
