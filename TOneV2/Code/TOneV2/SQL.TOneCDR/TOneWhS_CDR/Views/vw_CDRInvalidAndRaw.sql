@@ -1,9 +1,12 @@
-﻿CREATE VIEW TOneWhS_CDR.vw_CDRInvalidAndRaw
+﻿
+
+CREATE VIEW [TOneWhS_CDR].[vw_CDRInvalidAndRaw]
 AS
-SELECT        invalidCDR.CDRId, invalidCDR.AttemptDateTime, invalidCDR.DurationInSeconds, invalidCDR.CustomerID, invalidCDR.SaleZoneID, invalidCDR.SupplierID, invalidCDR.CDPN, invalidCDR.OrigCDPNOut, 
-                         invalidCDR.SupplierZoneID, invalidCDR.CostRateId, invalidCDR.SaleRateId, invalidCDR.SaleFinancialAccountId, invalidCDR.CostFinancialAccountId, cdr.IN_CARRIER, cdr.OUT_CARRIER
-FROM            TOneWhS_CDR.BillingCDR_Invalid AS invalidCDR WITH (NOLOCK) INNER JOIN
-                         TOneWhS_CDR.CDR AS cdr WITH (NOLOCK) ON invalidCDR.CDRId = cdr.Id
+SELECT invalidCDR.CDRId, invalidCDR.SwitchId, invalidCDR.AttemptDateTime, invalidCDR.DurationInSeconds, invalidCDR.CustomerID, invalidCDR.SaleZoneID, invalidCDR.SupplierID, 
+       invalidCDR.CDPN, invalidCDR.OrigCDPNOut, invalidCDR.SupplierZoneID, invalidCDR.CostRateId, invalidCDR.SaleRateId, invalidCDR.SaleFinancialAccountId, 
+       invalidCDR.CostFinancialAccountId, cdr.IN_CARRIER, cdr.OUT_CARRIER
+FROM   TOneWhS_CDR.BillingCDR_Invalid AS invalidCDR WITH (NOLOCK) 
+INNER JOIN  TOneWhS_CDR.CDR AS cdr WITH (NOLOCK) ON invalidCDR.CDRId = cdr.Id
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 1, @level0type = N'SCHEMA', @level0name = N'TOneWhS_CDR', @level1type = N'VIEW', @level1name = N'vw_CDRInvalidAndRaw';
 

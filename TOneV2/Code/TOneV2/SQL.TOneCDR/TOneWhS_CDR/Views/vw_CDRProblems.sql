@@ -1,12 +1,16 @@
-﻿CREATE VIEW TOneWhS_CDR.vw_CDRProblems
+﻿
+
+CREATE VIEW [TOneWhS_CDR].[vw_CDRProblems]
 AS
-SELECT        CDRId, AttemptDateTime, DurationInSeconds, CustomerID, SaleZoneID, SupplierID, CDPN, OrigCDPNOut, SupplierZoneID, CostRateId, SaleRateId, SaleFinancialAccountId
-      ,CostFinancialAccountId
-FROM            TOneWhS_CDR.BillingCDR_Invalid WITH (NOLOCK)
+SELECT CDRId, SwitchId, AttemptDateTime, DurationInSeconds, CustomerID, SaleZoneID, SupplierID, CDPN, OrigCDPNOut, SupplierZoneID, CostRateId, SaleRateId, SaleFinancialAccountId,
+       CostFinancialAccountId
+FROM  TOneWhS_CDR.BillingCDR_Invalid WITH (NOLOCK)
+
 UNION ALL
-SELECT        CDRId, AttemptDateTime, DurationInSeconds, CustomerID, SaleZoneID, SupplierID, CDPN, OrigCDPNOut, SupplierZoneID, CostRateID, SaleRateID, SaleFinancialAccountId
-      ,CostFinancialAccountId
-FROM            TOneWhS_CDR.BillingCDR_PartialPriced WITH (NOLOCK)
+
+SELECT CDRId, SwitchId, AttemptDateTime, DurationInSeconds, CustomerID, SaleZoneID, SupplierID, CDPN, OrigCDPNOut, SupplierZoneID, CostRateID, SaleRateID, SaleFinancialAccountId,
+       CostFinancialAccountId
+FROM  TOneWhS_CDR.BillingCDR_PartialPriced WITH (NOLOCK)
 GO
 EXECUTE sp_addextendedproperty @name = N'MS_DiagramPaneCount', @value = 1, @level0type = N'SCHEMA', @level0name = N'TOneWhS_CDR', @level1type = N'VIEW', @level1name = N'vw_CDRProblems';
 
