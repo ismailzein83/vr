@@ -1,0 +1,20 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-label>Input Fields</vr-label>
+        <vr-list maxitemsperrow="1">
+            <vr-listitem ng-show="ctrl.number !=undefined"><vr-label>Rule.Number = {{ctrl.number}}</vr-label></vr-listitem>
+            <vr-listitem ng-show="ctrl.customerId !=undefined"><vr-label>Rule.CustomerId = {{ctrl.customerId}}</vr-label></vr-listitem>
+            <vr-listitem ng-show="ctrl.customerANumberId !=undefined"><vr-label>Rule.CustomerANumberId = {{ctrl.customerANumberId}}</vr-label></vr-listitem>
+            <vr-listitem ng-show="ctrl.effectiveOn !=undefined"><vr-label>Rule.EffectiveOn = {{ctrl.effectiveOn}}</vr-label></vr-listitem>
+        </vr-list>
+        <vr-label>Output Fields</vr-label>
+        <vr-list maxitemsperrow="1">
+            <vr-listitem ng-show="ctrl.matchingCustomerId !=undefined"><vr-label>{{ctrl.matchingCustomerId}} = Rule.MatchingCustomerId</vr-label></vr-listitem>
+            <vr-listitem ng-show="ctrl.customerSellingNumberPlanId !=undefined"><vr-label>{{ctrl.customerSellingNumberPlanId}} = Rule.CustomerSellingNumberPlanId</vr-label></vr-listitem>
+            <vr-listitem ng-show="ctrl.saleCode !=undefined"><vr-label>{{ctrl.saleCode}} = Rule.SaleCode</vr-label></vr-listitem>
+            <vr-listitem ng-show="ctrl.saleZoneId !=undefined"><vr-label>{{ctrl.saleZoneId}} = Rule.SaleZoneId</vr-label></vr-listitem>
+            <vr-listitem ng-show="ctrl.masterSaleCode !=undefined"><vr-label>{{ctrl.masterSaleCode}} = Rule.MasterSaleCode</vr-label></vr-listitem>
+            <vr-listitem ng-show="ctrl.masterSaleZoneId !=undefined"><vr-label>{{ctrl.masterSaleZoneId}} = Rule.MasterSaleZoneId</vr-label></vr-listitem>
+        </vr-list>
+    </vr-columns>
+</vr-row>

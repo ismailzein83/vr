@@ -51,6 +51,66 @@ namespace TOne.WhS.Routing.Business
                 return null;
         }
 
+        public CustomerSaleCodeMatchWithMaster GetCustomerSaleCodeMatchWithMaster(string number, int? customerId, int? customerANumberId, DateTime effectiveOn)
+        {
+            CustomerSaleCodeMatchWithMaster customerSaleCodeMatchWithMaster = new CustomerSaleCodeMatchWithMaster() { CustomerId = customerId, SaleCodeMatchWithMaster = GetSaleCodeMatchWithMaster(number, customerId, effectiveOn) };
+
+            if (customerId.HasValue && customerANumberId.HasValue && customerId.Value == customerANumberId.Value)
+                return customerSaleCodeMatchWithMaster;
+
+            CustomerSaleCodeMatchWithMaster customerANumberSaleCodeMatchWithMaster = new CustomerSaleCodeMatchWithMaster() { CustomerId = customerANumberId, SaleCodeMatchWithMaster = GetSaleCodeMatchWithMaster(number, customerANumberId, effectiveOn) };
+
+            var codeMatchForCustomer = customerSaleCodeMatchWithMaster.SaleCodeMatchWithMaster;
+            var codeMatchForCustomerANumber = customerANumberSaleCodeMatchWithMaster.SaleCodeMatchWithMaster;
+
+            if (!customerId.HasValue)
+                return customerANumberSaleCodeMatchWithMaster;
+
+            if (!customerANumberId.HasValue)
+                return customerSaleCodeMatchWithMaster;
+
+            bool hasSameSNP = codeMatchForCustomer.CustomerSellingNumberPlanId.Value == codeMatchForCustomerANumber.CustomerSellingNumberPlanId.Value;
+            if (hasSameSNP)
+            {
+                if (codeMatchForCustomer.SaleCodeMatch == null) // SaleCodeMatch will be the same for codeMatchForCustomer and codeMatchForCustomerANumber
+                    return customerANumberSaleCodeMatchWithMaster;
+
+                if (IsCountrySoldToCustomer(customerANumberId.Value, codeMatchForCustomerANumber.SaleCodeMatch.SaleZoneId, effectiveOn))
+                    return customerANumberSaleCodeMatchWithMaster;
+
+                if (IsCountrySoldToCustomer(customerId.Value, codeMatchForCustomer.SaleCodeMatch.SaleZoneId, effectiveOn))
+                    return customerSaleCodeMatchWithMaster;
+
+                return customerANumberSaleCodeMatchWithMaster;
+            }
+            else
+            {
+                if (codeMatchForCustomer.SaleCodeMatch == null)
+                    return customerANumberSaleCodeMatchWithMaster;
+
+                if (codeMatchForCustomerANumber.SaleCodeMatch == null)
+                    return customerSaleCodeMatchWithMaster;
+
+                bool isCountrySoldToCustomer = IsCountrySoldToCustomer(customerId.Value, codeMatchForCustomer.SaleCodeMatch.SaleZoneId, effectiveOn);
+                bool isCountrySoldToCustomerANumber = IsCountrySoldToCustomer(customerANumberId.Value, codeMatchForCustomerANumber.SaleCodeMatch.SaleZoneId, effectiveOn);
+
+                if (isCountrySoldToCustomer == isCountrySoldToCustomerANumber)//Country is sold to both customers or not sold for both
+                {
+                    string customerCode = codeMatchForCustomer.SaleCodeMatch.SaleCode;
+                    string customerANumberCode = codeMatchForCustomerANumber.SaleCodeMatch.SaleCode;
+
+                    return customerANumberCode.Length >= customerCode.Length ? customerANumberSaleCodeMatchWithMaster : customerSaleCodeMatchWithMaster;
+                }
+                else //Country is sold to only one of the customers
+                {
+                    if (isCountrySoldToCustomer)
+                        return customerSaleCodeMatchWithMaster;
+                    else
+                        return customerANumberSaleCodeMatchWithMaster;
+                }
+            }
+        }
+
         public SaleCodeMatchWithMaster GetSaleCodeMatchWithMaster(string number, int? customerId, DateTime effectiveOn)
         {
             SaleCodeMatchWithMaster codeMatch = new SaleCodeMatchWithMaster();
@@ -86,6 +146,60 @@ namespace TOne.WhS.Routing.Business
                 return supplierCodeIteratorInfo.SupplierCodeIterator.GetCodeMatch(number);
             else
                 return null;
+        }
+
+        public SupplierCodeMatch GetSupplierCodeMatch(string number, int? supplierId, int? supplierANumberId, DateTime effectiveOn, out int? matchingSupplier)
+        {
+            SupplierCodeMatch supplierCodeMatch = null;
+            if (supplierId.HasValue)
+            {
+                supplierCodeMatch = GetSupplierCodeMatch(number, supplierId.Value, effectiveOn);
+                if (supplierANumberId.HasValue && supplierId.Value == supplierANumberId.Value)
+                {
+                    matchingSupplier = supplierId;
+                    return supplierCodeMatch;
+                }
+            }
+
+            SupplierCodeMatch supplierANumberCodeMatch = null;
+            if (supplierANumberId.HasValue)
+                supplierANumberCodeMatch = GetSupplierCodeMatch(number, supplierANumberId.Value, effectiveOn);
+
+            if (supplierCodeMatch == null)
+            {
+                if (supplierANumberId.HasValue)
+                {
+                    matchingSupplier = supplierANumberId;
+                    return supplierANumberCodeMatch;
+                }
+                else
+                {
+                    matchingSupplier = supplierId;
+                    return null;
+                }
+            }
+
+            //supplierCodeMatch !=null
+            if (supplierANumberCodeMatch == null)
+            {
+                matchingSupplier = supplierId;
+                return supplierCodeMatch;
+            }
+
+            //supplierCodeMatch !=null && supplierANumberCodeMatch!=null
+            string supplierCode = supplierCodeMatch.SupplierCode;
+            string supplierANumberCode = supplierANumberCodeMatch.SupplierCode;
+
+            if (supplierANumberCode.Length >= supplierCode.Length)
+            {
+                matchingSupplier = supplierANumberId;
+                return supplierANumberCodeMatch;
+            }
+            else
+            {
+                matchingSupplier = supplierId;
+                return supplierCodeMatch;
+            }
         }
 
         #endregion
@@ -349,6 +463,19 @@ namespace TOne.WhS.Routing.Business
                  }
                  return rslt;
              });
+        }
+
+        private bool IsCountrySoldToCustomer(int customerId, long saleZoneId, DateTime effectiveOn)
+        {
+            int? saleZoneCountryId = new SaleZoneManager().GetSaleZoneCountryId(saleZoneId);
+            if (!saleZoneCountryId.HasValue)
+                throw new NullReferenceException(string.Format("saleZoneCountryId of saleZoneId: {0}", saleZoneId));
+
+            CustomerCountry2 customerCountry = new CustomerCountryManager().GetCustomerCountry(customerId, saleZoneCountryId.Value, effectiveOn, false);
+            if (customerCountry == null)
+                return false;
+
+            return true;
         }
 
         #endregion
