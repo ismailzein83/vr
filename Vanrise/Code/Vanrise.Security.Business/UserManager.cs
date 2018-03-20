@@ -577,7 +577,7 @@ namespace Vanrise.Security.Business
             else
             {
                 IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-                int lastModifiedBy = userObject.UserId;
+                int lastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
                 updateActionSucc = dataManager.UnlockUser(userObject.UserId, lastModifiedBy);
             }
 
