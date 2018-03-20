@@ -60,7 +60,7 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    var promise = [];
+                    var promises = [];
 
                     var qualityConfigurationSettings;
                     var qualityConfigurationDefinitionId;
@@ -73,11 +73,11 @@
                     }
 
                     var loadTimeperiodDirectivePromise = loadTimeperiodDirective();
-                    promise.push(loadTimeperiodDirectivePromise);
+                    promises.push(loadTimeperiodDirectivePromise);
 
                     if (qualityConfigurationDefinitionId != undefined) {
                         var loadTrafficStatisticQualityConfigurationMeasuresPromise = loadTrafficStatisticQualityConfigurationMeasures();
-                        promise.push(loadTrafficStatisticQualityConfigurationMeasuresPromise);
+                        promises.push(loadTrafficStatisticQualityConfigurationMeasuresPromise);
                     }
 
 
@@ -109,6 +109,8 @@
                             }
                         });
                     }
+
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
