@@ -6,7 +6,7 @@ BEGIN
 	SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT	[ID],[Name],[Symbol],[SourceID]
+	SELECT	[ID],[Name],[Symbol],[SourceID], [CreatedTime], [CreatedBy], [LastModifiedBy], [LastModifiedTime]
     from	[common].Currency WITH(NOLOCK) 
 	ORDER BY [Name]
 END

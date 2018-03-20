@@ -5,7 +5,8 @@
 	@Description Nvarchar(1000),
 	@TenantId int,
 	@EnabledTill datetime,
-	@Settings nvarchar(max)
+	@Settings nvarchar(max),
+	@LastModifiedBy int
 AS
 BEGIN
 	IF NOT EXISTS(SELECT 1 FROM sec.[User] WHERE ID != @ID AND Email = @Email)
@@ -16,7 +17,9 @@ BEGIN
 			[Description] = @Description,
 			TenantId = @TenantId,
 			EnabledTill = @EnabledTill,
-			Settings = @Settings
+			Settings = @Settings,
+			LastModifiedBy = @LastModifiedBy,
+			LastModifiedTime = GETDATE()
 		WHERE ID = @ID
 	end
 END

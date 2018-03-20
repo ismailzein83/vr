@@ -15,9 +15,14 @@
     [ExtendedSettings]      NVARCHAR (MAX)  NULL,
     [IsSystemUser]          BIT             NULL,
     [CreatedTime]           DATETIME        CONSTRAINT [DF_User_CreatedTime] DEFAULT (getdate()) NULL,
+    [CreatedBy]             INT             NULL,
+    [LastModifiedBy]        INT             NULL,
+    [LastModifiedTime]      DATETIME        NULL,
     CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [IX_User_Email] UNIQUE NONCLUSTERED ([Email] ASC)
 );
+
+
 
 
 
