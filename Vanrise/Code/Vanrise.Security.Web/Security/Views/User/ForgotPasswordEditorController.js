@@ -48,7 +48,7 @@
         }
 
         function setTitle() {
-            $scope.title = 'Forogt Password';
+            $scope.title = 'Forgot Password';
         }
     }
 
