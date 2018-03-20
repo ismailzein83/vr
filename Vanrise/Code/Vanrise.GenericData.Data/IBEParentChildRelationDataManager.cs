@@ -9,7 +9,7 @@ namespace Vanrise.GenericData.Data
 {
     public interface IBEParentChildRelationDataManager : IDataManager
     {
-        List<BEParentChildRelation> GetBEParentChildRelationes();
+        List<BEParentChildRelation> GetBEParentChildRelations(Guid beParentChildRelationDefinitionId);
 
         bool AreBEParentChildRelationUpdated(Guid beParentChildRelationDefinitionId, ref object updateHandle);
 

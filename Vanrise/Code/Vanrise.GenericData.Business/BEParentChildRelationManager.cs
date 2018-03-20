@@ -218,7 +218,7 @@ namespace Vanrise.GenericData.Business
                () =>
                {
                    IBEParentChildRelationDataManager dataManager = GenericDataDataManagerFactory.GetDataManager<IBEParentChildRelationDataManager>();
-                   return dataManager.GetBEParentChildRelationes().ToDictionary(x => x.BEParentChildRelationId, x => x);
+                   return dataManager.GetBEParentChildRelations(beParentChildRelationDefinitionId).ToDictionary(x => x.BEParentChildRelationId, x => x);
                });
         }
 

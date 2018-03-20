@@ -24,9 +24,9 @@ namespace Vanrise.GenericData.Data.SQL
 
         #region Public Methods
 
-        public List<BEParentChildRelation> GetBEParentChildRelationes()
+        public List<BEParentChildRelation> GetBEParentChildRelations(Guid beParentChildRelationDefinitionId)
         {
-            return GetItemsSP("[genericdata].[sp_BEParentChildRelation_GetAll]", BEParentChildRelationMapper);
+            return GetItemsSP("[genericdata].[sp_BEParentChildRelation_GetAll]", BEParentChildRelationMapper, beParentChildRelationDefinitionId);
         }
 
         public bool AreBEParentChildRelationUpdated(Guid beParentChildRelationDefinitionId, ref object updateHandle)
