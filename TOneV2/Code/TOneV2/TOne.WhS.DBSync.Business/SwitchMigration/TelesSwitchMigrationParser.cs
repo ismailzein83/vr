@@ -60,8 +60,8 @@ namespace TOne.WhS.DBSync.Business
             {
                 synchroniser.DataManager = new IdbPostgresDataManager()
                 {
-                    ConnectionString = GetIdbConnectionString(schemaName, connectionString),
-                    RedundantConnectionStrings = !string.IsNullOrEmpty(redundantConnectionString) ? new List<IdbConnectionString>() { GetIdbConnectionString(schemaName, redundantConnectionString) } : null
+                    ConnectionString = new IdbConnectionString (), //GetIdbConnectionString(schemaName, connectionString),
+                    //RedundantConnectionStrings = !string.IsNullOrEmpty(redundantConnectionString) ? new List<IdbConnectionString>() { GetIdbConnectionString(schemaName, redundantConnectionString) } : null
                 };
             }
 

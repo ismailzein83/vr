@@ -84,7 +84,7 @@ namespace TOne.WhS.DBSync.Data.SQL
 
         public List<SupplierCodeZone> GetDictinctSupplierCodeZones()
         {
-            return GetItemsText(string.Format("SELECT distinct [Code], [ZoneID] FROM {0} where [EED] is not null",
+            return GetItemsText(string.Format("SELECT distinct [Code], [ZoneID] FROM {0} where [EED] is null",
                         MigrationUtils.GetTableName(_Schema, _TableName, _UseTempTables)), SupplierCodeZoneMapper, cmd => { });
         }
 
