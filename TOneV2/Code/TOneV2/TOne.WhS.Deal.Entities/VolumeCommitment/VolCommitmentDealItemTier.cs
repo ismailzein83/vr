@@ -22,7 +22,7 @@ namespace TOne.WhS.Deal.Entities
 
     public class VolCommitmentDealItemTierZoneRate
     {
-        public IEnumerable<VolSaleZone> ZoneIds { get; set; }
+        public IEnumerable<VolSaleZone> Zones { get; set; }
 
         public BaseDealRateEvaluator EvaluatedRate { get; set; }
         public string Description { get { return this.EvaluatedRate.GetDescription(); } }
