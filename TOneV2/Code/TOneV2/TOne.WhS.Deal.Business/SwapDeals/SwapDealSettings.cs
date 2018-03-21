@@ -195,7 +195,7 @@ namespace TOne.WhS.Deal.Business
                 return null;
 
             Func<string, int, IEnumerable<SaleRateHistoryRecord>> getCustomerZoneRatesFunc;
-            SetRateLocatorContext(Inbounds.SelectMany(inb => inb.SaleZoneIds), out getCustomerZoneRatesFunc);
+            SetRateLocatorContext(Inbounds.SelectMany(inb => inb.SaleZones.Select(z=>z.ZoneId)), out getCustomerZoneRatesFunc);
 
             List<DealSaleZoneGroup> saleZoneGroups = new List<DealSaleZoneGroup>();
             foreach (SwapDealInbound swapDealInbound in Inbounds)
@@ -208,7 +208,7 @@ namespace TOne.WhS.Deal.Business
                     DealSaleZoneGroupNb = swapDealInbound.ZoneGroupNumber,
                     EED = EndDate,
                     Tiers = BuildSaleTiers(swapDealInbound, getCustomerZoneRatesFunc),
-                    Zones = BuildSaleZones(swapDealInbound.SaleZoneIds)
+                    Zones = BuildSaleZones(swapDealInbound.SaleZones.Select(z=>z.ZoneId))
                 };
                 saleZoneGroups.Add(dealSaleZoneGroup);
             }
@@ -225,9 +225,9 @@ namespace TOne.WhS.Deal.Business
 
             getCustomerZoneRatesFunc = (zoneName, countryId) => customerZoneRateHistoryLocator.GetCustomerZoneRateHistory(CarrierAccountId, sellingProductId, zoneName, null, countryId, null, null);
         }
-        private List<DealSaleZoneGroupZoneItem> BuildSaleZones(List<long> saleZoneIds)
+        private List<DealSaleZoneGroupZoneItem> BuildSaleZones(IEnumerable<long> saleZoneIds)
         {
-            if (saleZoneIds == null || saleZoneIds.Count == 0)
+            if (saleZoneIds == null || !saleZoneIds.Any())
                 throw new NullReferenceException("saleZoneIds");
 
             return saleZoneIds.Select(zoneId => new DealSaleZoneGroupZoneItem { ZoneId = zoneId }).ToList();
@@ -245,7 +245,7 @@ namespace TOne.WhS.Deal.Business
                 GetCustomerZoneRatesFunc = getCustomerZoneRatesFunc,
                 DealBED = BeginDate,
                 DealEED = EndDate,
-                ZoneIds = swapDealInbound.SaleZoneIds
+                ZoneIds = swapDealInbound.SaleZones.Select(z=>z.ZoneId)
             };
             saleEvaluatedRate.EvaluateRate(context);
 
@@ -277,16 +277,16 @@ namespace TOne.WhS.Deal.Business
                     DealSupplierZoneGroupNb = swapDealOutbound.ZoneGroupNumber,
                     EED = EndDate,
                     Tiers = BuildSupplierTiers(swapDealOutbound),
-                    Zones = BuildSupplierZones(swapDealOutbound.SupplierZoneIds)
+                    Zones = BuildSupplierZones(swapDealOutbound.SupplierZones.Select(z=>z.ZoneId))
                 };
                 dealSupplierZoneGroups.Add(dealSupplierZoneGroup);
             }
             return dealSupplierZoneGroups;
         }
 
-        private List<DealSupplierZoneGroupZoneItem> BuildSupplierZones(List<long> supplierZoneIds)
+        private List<DealSupplierZoneGroupZoneItem> BuildSupplierZones(IEnumerable<long> supplierZoneIds)
         {
-            if (supplierZoneIds == null || supplierZoneIds.Count == 0)
+            if (supplierZoneIds == null || !supplierZoneIds.Any())
                 throw new NullReferenceException("supplierZoneIds");
 
             return supplierZoneIds.Select(zoneId => new DealSupplierZoneGroupZoneItem { ZoneId = zoneId }).ToList();
@@ -294,13 +294,15 @@ namespace TOne.WhS.Deal.Business
         private IOrderedEnumerable<DealSupplierZoneGroupTier> BuildSupplierTiers(SwapDealOutbound swapDealOutbound)
         {
             SupplierRateManager supplierRateManager = new SupplierRateManager();
-            var supplierRates = supplierRateManager.GetSupplierRateByZoneId(swapDealOutbound.SupplierZoneIds, BeginDate);
+
+            List<long> supplierZoneIds = swapDealOutbound.SupplierZones.Select(z => z.ZoneId).ToList();
+            var supplierRates = supplierRateManager.GetSupplierRateByZoneId(supplierZoneIds, BeginDate);
 
             var context = new DealSupplierRateEvaluatorContext
             {
                 DealBED = BeginDate,
                 DealEED = EndDate,
-                ZoneIds = swapDealOutbound.SupplierZoneIds,
+                ZoneIds = supplierZoneIds,
                 SupplierZoneRateByZoneId = supplierRates
             };
             var supplierEvaluatedRate = swapDealOutbound.EvaluatedRate as DealSupplierRateEvaluator;
