@@ -245,7 +245,7 @@ namespace TOne.WhS.Deal.Business
                 GetCustomerZoneRatesFunc = getCustomerZoneRatesFunc,
                 DealBED = BeginDate,
                 DealEED = EndDate,
-                ZoneIds = swapDealInbound.SaleZones.Select(z=>z.ZoneId)
+                ZoneIds = swapDealInbound.SaleZones.Select(z=>z.ZoneId).ToList()
             };
             saleEvaluatedRate.EvaluateRate(context);
 
