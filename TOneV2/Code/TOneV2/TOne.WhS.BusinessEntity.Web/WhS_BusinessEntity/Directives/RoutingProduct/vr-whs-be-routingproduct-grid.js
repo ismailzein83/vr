@@ -56,20 +56,20 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
 
             $scope.dataRetrievalFunction = function (dataRetrievalInput, onResponseReady) {
                 var serviceViewerLoadPromises = [];
-               WhS_BE_RoutingProductAPIService.GetFilteredRoutingProducts(dataRetrievalInput)
-                   .then(function (response) {
-                       if (response && response.Data) {
-                           for (var i = 0; i < response.Data.length; i++) {
-                               drillDownManager.setDrillDownExtensionObject(response.Data[i]);
-                               setService(response.Data[i]);
-                               serviceViewerLoadPromises.push(response.Data[i].serviceViewerLoadDeferred.promise);
-                           }
-                       }
-                       onResponseReady(response);
-                   })
-                   .catch(function (error) {
-                       VRNotificationService.notifyExceptionWithClose(error, $scope);
-                   });
+                WhS_BE_RoutingProductAPIService.GetFilteredRoutingProducts(dataRetrievalInput)
+                    .then(function (response) {
+                        if (response && response.Data) {
+                            for (var i = 0; i < response.Data.length; i++) {
+                                drillDownManager.setDrillDownExtensionObject(response.Data[i]);
+                                setService(response.Data[i]);
+                                serviceViewerLoadPromises.push(response.Data[i].serviceViewerLoadDeferred.promise);
+                            }
+                        }
+                        onResponseReady(response);
+                    })
+                    .catch(function (error) {
+                        VRNotificationService.notifyExceptionWithClose(error, $scope);
+                    });
                 return UtilsService.waitMultiplePromises(serviceViewerLoadPromises);
             };
 
@@ -91,10 +91,11 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
             var directiveTab = {
                 title: "Route Rules",
                 directive: "vr-whs-routing-routerule-view",
+                haspermission: HasViewRouteRulePermission,
                 loadDirective: function (directiveAPI, routingProductDataItem) {
                     routingProductDataItem.routeRuleGridAPI = directiveAPI;
 
-                    var routeRuleGridPayload = {                        
+                    var routeRuleGridPayload = {
                         query: {
                             loadedFromRoutingProduct: true,
                             RoutingProductId: routingProductDataItem.Entity.RoutingProductId,
@@ -110,8 +111,6 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
 
                 title: VRCommon_ObjectTrackingService.getObjectTrackingGridTitle(),
                 directive: "vr-common-objecttracking-grid",
-
-
                 loadDirective: function (directiveAPI, routingProductItem) {
                     routingProductItem.objectTrackingGridAPI = directiveAPI;
 
@@ -155,6 +154,9 @@ function (VRNotificationService, WhS_BE_RoutingProductAPIService, WhS_Routing_Ro
             });
         }
 
+        function HasViewRouteRulePermission() {
+            return WhS_Routing_RouteRuleAPIService.HasViewRulePermission();
+        }
 
         function hasAddRulePermission() {
             return WhS_Routing_RouteRuleAPIService.HasAddRulePermission();

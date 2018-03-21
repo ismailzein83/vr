@@ -69,6 +69,9 @@
             return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_Routing_ModuleConfig.moduleName, controllerName, ['DeleteRule']));
         }
 
+        function HasViewRulePermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_Routing_ModuleConfig.moduleName, controllerName, ['GetFilteredRouteRules']));
+        }
 
         return ({
             GetFilteredRouteRules: GetFilteredRouteRules,
@@ -84,7 +87,8 @@
             BuildLinkedRouteRule: BuildLinkedRouteRule,
             HasAddRulePermission: HasAddRulePermission,
             HasUpdateRulePermission: HasUpdateRulePermission,
-            HasDeleteRulePermission: HasDeleteRulePermission
+            HasDeleteRulePermission: HasDeleteRulePermission,
+            HasViewRulePermission: HasViewRulePermission
         });
     }
 
