@@ -898,6 +898,9 @@
     <Content Include="ConnectionStrings.config" />
     <Content Include="appSettings.config" />
     <None Include="Properties\PublishProfiles\Retail.pubxml" />
+    <None Include="Web.config.RA.exclude">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Web.config.exclude">
       <SubType>Designer</SubType>
     </None>
