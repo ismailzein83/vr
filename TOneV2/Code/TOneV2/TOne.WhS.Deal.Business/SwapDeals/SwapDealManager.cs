@@ -27,13 +27,16 @@ namespace TOne.WhS.Deal.Business
             if (!sellingNumberPlan.HasValue)
                 throw new NullReferenceException(string.Format("sellingNumberPlan. CarrierAccountId: '{0}'", swapDealSettings.CarrierAccountId));
 
+            List<long> saleZoneIds = swapDealSettings.Inbounds.SelectMany(itm => itm.SaleZones.Select(z => z.ZoneId)).ToList();
+            List<long> supplierZoneIds = swapDealSettings.Outbounds.SelectMany(itm => itm.SupplierZones.Select(z => z.ZoneId)).ToList();
+
             return new SwapDealSettingsDetail()
             {
                 SwapDealId = dealId,
                 CarrierAccountId = swapDealSettings.CarrierAccountId,
                 SellingNumberPlanId = sellingNumberPlan.Value,
-                SaleZoneIds = swapDealSettings.Inbounds.SelectMany(itm => itm.SaleZoneIds).ToList(),
-                SupplierZoneIds = swapDealSettings.Outbounds.SelectMany(itm => itm.SupplierZoneIds).ToList(),
+                SaleZoneIds = saleZoneIds,
+                SupplierZoneIds = supplierZoneIds,
                 BED = swapDealSettings.BeginDate,
                 EED = swapDealSettings.EndDate
             };
