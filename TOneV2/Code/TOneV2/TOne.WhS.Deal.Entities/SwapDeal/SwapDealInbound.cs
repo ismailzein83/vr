@@ -11,12 +11,17 @@ namespace TOne.WhS.Deal.Entities
 
         public int CountryId { get; set; }
 
-        public List<long> SaleZoneIds { get; set; }
+        public List<SwapSaleZone> SaleZones { get; set; }
 
         public int Volume { get; set; }
 
         public Decimal Rate { get; set; }
 
         public BaseDealRateEvaluator EvaluatedRate { get; set; }
+    }
+
+    public class SwapSaleZone
+    {
+        public long ZoneId { get; set; }
     }
 }
