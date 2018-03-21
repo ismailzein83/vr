@@ -11,8 +11,13 @@ namespace TOne.WhS.Deal.Entities
 
         public int CountryId { get; set; }
 
-        public List<long> ZoneIds { get; set; }
+        public List<VolSaleZone> SaleZones { get; set; }
 
         public List<VolCommitmentDealItemTier> Tiers { get; set; }
+    }
+
+    public class VolSaleZone
+    {
+        public long ZoneId { get; set; }
     }
 }

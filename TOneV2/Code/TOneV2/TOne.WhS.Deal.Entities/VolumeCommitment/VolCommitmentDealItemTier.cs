@@ -14,7 +14,7 @@ namespace TOne.WhS.Deal.Entities
 
         public BaseDealRateEvaluator EvaluatedRate { get; set; }
 
-        public string Description {get { return this.EvaluatedRate.GetDescription(); }}
+        // public string Description { get { return this.EvaluatedRate.GetDescription(); } }
 
         public IEnumerable<VolCommitmentDealItemTierZoneRate> ExceptionZoneRates { get; set; }
 
@@ -22,7 +22,7 @@ namespace TOne.WhS.Deal.Entities
 
     public class VolCommitmentDealItemTierZoneRate
     {
-        public List<long> ZoneIds { get; set; }
+        public IEnumerable<VolSaleZone> ZoneIds { get; set; }
 
         public BaseDealRateEvaluator EvaluatedRate { get; set; }
         public string Description { get { return this.EvaluatedRate.GetDescription(); } }
