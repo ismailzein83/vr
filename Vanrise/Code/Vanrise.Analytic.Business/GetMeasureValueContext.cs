@@ -1,23 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Analytic.Entities;
-using Vanrise.GenericData.Entities;
 using Vanrise.Common;
 
 namespace Vanrise.Analytic.Business
 {
     internal class GetMeasureValueContext : IGetMeasureValueContext
     {
+        IAnalyticTableQueryContext _analyticTableQueryContext;
         AnalyticQuery _query;
         string _recordGroupingKey;
         DBAnalyticRecord _sqlRecord;
         HashSet<string> _allDimensions;
-        IAnalyticTableQueryContext _analyticTableQueryContext;
         AnalyticRecord _analyticRecord;
         bool _isSummaryRecord;
+
         internal GetMeasureValueContext(IAnalyticTableQueryContext analyticTableQueryContext, string recordGroupingKey, DBAnalyticRecord sqlRecord, HashSet<string> allDimensions,
             AnalyticRecord analyticRecord, bool isSummaryRecord)
         {
@@ -29,6 +27,7 @@ namespace Vanrise.Analytic.Business
                 throw new ArgumentNullException("sqlRecord");
             if (allDimensions == null)
                 throw new ArgumentNullException("allDimensions");
+
             analyticRecord.ThrowIfNull("analyticRecord");
             _analyticTableQueryContext = analyticTableQueryContext;
             _query = _analyticTableQueryContext.Query;
@@ -38,6 +37,7 @@ namespace Vanrise.Analytic.Business
             _analyticRecord = analyticRecord;
             _isSummaryRecord = isSummaryRecord;
         }
+
         public dynamic GetAggregateValue(string aggregateName)
         {
             DBAnalyticRecordAggValue aggValue;
@@ -56,9 +56,11 @@ namespace Vanrise.Analytic.Business
             DBAnalyticRecordGroupingValue groupingValue;
             if (!_sqlRecord.GroupingValuesByDimensionName.TryGetValue(dimensionName, out groupingValue))
                 throw new NullReferenceException(String.Format("groupingValue. dimensionName '{0}'", dimensionName));
+
             var allValues = groupingValue.AllValues;
             if (allValues == null)
                 throw new NullReferenceException("allValues");
+
             return allValues;
         }
 
@@ -79,14 +81,16 @@ namespace Vanrise.Analytic.Business
 
         public bool IsFilterIncluded(string filterName)
         {
+            if (_query.Filters != null && _query.Filters.Any(itm => itm.Dimension == filterName))
+                return true;
+
             return _analyticTableQueryContext.GetDimensionNames(_query.FilterGroup).Contains(filterName);
         }
-
 
         public dynamic GetExternalSourceMatchRecordMeasureValue(string sourceName, string measureName)
         {
             var externalSourceRslt = _analyticTableQueryContext.GetMeasureExternalSourceResult(sourceName);
-            if(externalSourceRslt != null)
+            if (externalSourceRslt != null)
             {
                 var getValueContext = new AnalyticMeasureExternalSourceResultGetMatchRecordMesureValueContext
                 {
@@ -107,32 +111,15 @@ namespace Vanrise.Analytic.Business
 
         private class AnalyticMeasureExternalSourceResultGetMatchRecordMesureValueContext : IAnalyticMeasureExternalSourceResultGetMatchRecordMesureValueContext
         {
-            public AnalyticQuery Query
-            {
-                get;
-                set;
-            }
+            public AnalyticQuery Query { get; set; }
 
-            public AnalyticRecord Record
-            {
-                get;
-                set;
-            }
+            public AnalyticRecord Record { get; set; }
 
-            public bool IsSummaryRecord
-            {
-                get;
-                set;
-            }
+            public bool IsSummaryRecord { get; set; }
 
-            public string MeasureName
-            {
-                get;
-                set;
-            }
+            public string MeasureName { get; set; }
         }
 
-
-        #endregion 
+        #endregion
     }
 }
