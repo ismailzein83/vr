@@ -10,6 +10,7 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
+using Vanrise.Security.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -86,7 +87,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
             ISwitchConnectivityDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchConnectivityDataManager>();
             int insertedId = -1;
-
+            int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
+            switchConnectivity.CreatedBy = loggedInUserId;
+            switchConnectivity.LastModifiedBy = loggedInUserId;
             if (dataManager.Insert(switchConnectivity, out insertedId))
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -113,7 +116,7 @@ namespace TOne.WhS.BusinessEntity.Business
             updateOperationOutput.UpdatedObject = null;
 
             ISwitchConnectivityDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchConnectivityDataManager>();
-
+            switchConnectivityToEdit.LastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
             if (dataManager.Update(switchConnectivityToEdit))
             {
                 CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();

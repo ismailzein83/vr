@@ -28,7 +28,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public bool Insert(Switch whsSwitch, out int insertedId)
         {
             object switchId;
-            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_Switch_Insert]", out switchId, whsSwitch.Name, Serializer.Serialize(whsSwitch.Settings));
+            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_Switch_Insert]", out switchId, whsSwitch.Name, Serializer.Serialize(whsSwitch.Settings), whsSwitch.CreatedBy, whsSwitch.LastModifiedBy);
             bool insertedSuccesfully = (recordsEffected > 0);
             if (insertedSuccesfully)
                 insertedId = (int)switchId;
@@ -38,7 +38,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
         public bool Update(SwitchToEdit whsSwitch)
         {
-            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_Switch_Update]", whsSwitch.SwitchId, whsSwitch.Name, Serializer.Serialize(whsSwitch.Settings));
+            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_Switch_Update]", whsSwitch.SwitchId, whsSwitch.Name, Serializer.Serialize(whsSwitch.Settings), whsSwitch.LastModifiedBy);
             return (recordsEffected > 0);
         }
         public bool AreSwitchesUpdated(ref object updateHandle)
@@ -63,7 +63,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 SwitchId = (int)reader["ID"],
                 Name = reader["Name"] as string,
                 SourceId = reader["SourceID"] as string,
-                Settings = Serializer.Deserialize<SwitchSettings>(reader["Settings"] as string)
+                Settings = Serializer.Deserialize<SwitchSettings>(reader["Settings"] as string),
+                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
+                CreatedBy = GetReaderValue<int?>(reader, "CreatedBy"),
+                LastModifiedBy = GetReaderValue<int?>(reader, "LastModifiedBy"),
+                LastModifiedTime = GetReaderValue<DateTime?>(reader, "LastModifiedTime")
             };
             return whsSwitch;
         }

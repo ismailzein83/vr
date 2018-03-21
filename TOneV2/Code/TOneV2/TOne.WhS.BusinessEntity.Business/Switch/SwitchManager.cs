@@ -9,6 +9,7 @@ using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.Normalization;
 using Vanrise.Rules.Normalization;
+using Vanrise.Security.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -105,6 +106,9 @@ namespace TOne.WhS.BusinessEntity.Business
             if (ValidateSwitchToAdd(whsSwitch, out validationMessages))
             {
                 ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
+                int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
+                whsSwitch.CreatedBy = loggedInUserId;
+                whsSwitch.LastModifiedBy = loggedInUserId;
                 bool insertActionSucc = dataManager.Insert(whsSwitch, out switchId);
                 if (insertActionSucc)
                 {
@@ -137,6 +141,7 @@ namespace TOne.WhS.BusinessEntity.Business
             if (ValidateSwitchToUpdate(whsSwitch, out validationMessages))
             {
                 ISwitchDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
+                whsSwitch.LastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
                 bool updateActionSucc = dataManager.Update(whsSwitch);
 
                 if (updateActionSucc)

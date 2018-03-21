@@ -37,7 +37,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             object switchConnectivityId;
 
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SwitchConnectivity_Insert", out switchConnectivityId, switchConnectivity.Name, switchConnectivity.SwitchId, switchConnectivity.CarrierAccountId, Vanrise.Common.Serializer.Serialize(switchConnectivity.Settings), switchConnectivity.BED, switchConnectivity.EED);
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SwitchConnectivity_Insert", out switchConnectivityId, switchConnectivity.Name, switchConnectivity.SwitchId, switchConnectivity.CarrierAccountId, Vanrise.Common.Serializer.Serialize(switchConnectivity.Settings), switchConnectivity.BED, switchConnectivity.EED, switchConnectivity.CreatedBy, switchConnectivity.LastModifiedBy);
             bool insertedSuccesfully = (recordsEffected > 0);
             if (insertedSuccesfully)
                 insertedId = (int)switchConnectivityId;
@@ -48,7 +48,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
 
         public bool Update(SwitchConnectivityToEdit switchConnectivity)
         {
-            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SwitchConnectivity_Update", switchConnectivity.SwitchConnectivityId, switchConnectivity.Name, switchConnectivity.SwitchId, switchConnectivity.CarrierAccountId, Vanrise.Common.Serializer.Serialize(switchConnectivity.Settings), switchConnectivity.BED, switchConnectivity.EED);
+            int recordsEffected = ExecuteNonQuerySP("TOneWhS_BE.sp_SwitchConnectivity_Update", switchConnectivity.SwitchConnectivityId, switchConnectivity.Name, switchConnectivity.SwitchId, switchConnectivity.CarrierAccountId, Vanrise.Common.Serializer.Serialize(switchConnectivity.Settings), switchConnectivity.BED, switchConnectivity.EED, switchConnectivity.LastModifiedBy);
             return (recordsEffected > 0);
         }
         
@@ -67,6 +67,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 CarrierAccountId = GetReaderValue<int>(reader, "CarrierAccountID"),
                 BED = GetReaderValue<DateTime>(reader, "BED"),
                 EED = GetReaderValue<DateTime?>(reader, "EED"),
+                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
+                CreatedBy = GetReaderValue<int?>(reader, "CreatedBy"),
+                LastModifiedBy = GetReaderValue<int?>(reader, "LastModifiedBy"),
+                LastModifiedTime = GetReaderValue<DateTime?>(reader, "LastModifiedTime"),
             };
             return switchConnectivity;
         }

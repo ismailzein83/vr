@@ -122,7 +122,7 @@
             $scope.scopeModel.isLoading = true;
             var switchReleaseCauseObject = buildObjectFromScope();
           return  WhS_BE_SwitchReleaseCauseAPIService.UpdateSwitchReleaseCause(switchReleaseCauseObject).then(function (response) {
-              if (VRNotificationService.notifyOnItemAdded("Switch Release Cause", response)) {
+              if (VRNotificationService.notifyOnItemUpdated("Switch Release Cause", response)) {
                     if ($scope.onSwitchReleaseCauseUpdated != undefined)
                     $scope.onSwitchReleaseCauseUpdated(response.UpdatedObject);
                     $scope.modalContext.closeModal();

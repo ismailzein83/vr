@@ -25,7 +25,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         public bool AddSwitchReleaseCause(SwitchReleaseCause switchReleaseCause, out int insertedId)
         {
             object switchReleaseCauseId;
-            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_SwitchReleaseCause_Insert]", out switchReleaseCauseId, switchReleaseCause.SwitchId, switchReleaseCause.ReleaseCode, Serializer.Serialize(switchReleaseCause.Settings), switchReleaseCause.SourceId);
+            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_SwitchReleaseCause_Insert]", out switchReleaseCauseId, switchReleaseCause.SwitchId, switchReleaseCause.ReleaseCode, Serializer.Serialize(switchReleaseCause.Settings), switchReleaseCause.SourceId, switchReleaseCause.CreatedBy, switchReleaseCause.LastModifiedBy);
             bool insertedSuccesfully = (recordsEffected > 0);
             if (insertedSuccesfully)
                 insertedId = (int)switchReleaseCauseId;
@@ -36,7 +36,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
         public bool UpdateSwitchReleaseCause(SwitchReleaseCause switchReleaseCause)
         {
-            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_SwitchReleaseCause_Update]", switchReleaseCause.SwitchReleaseCauseId, switchReleaseCause.SwitchId, switchReleaseCause.ReleaseCode, Serializer.Serialize(switchReleaseCause.Settings), switchReleaseCause.SourceId);
+            int recordsEffected = ExecuteNonQuerySP("[TOneWhS_BE].[sp_SwitchReleaseCause_Update]", switchReleaseCause.SwitchReleaseCauseId, switchReleaseCause.SwitchId, switchReleaseCause.ReleaseCode, Serializer.Serialize(switchReleaseCause.Settings), switchReleaseCause.SourceId, switchReleaseCause.LastModifiedBy);
             return (recordsEffected > 0);
         }
         SwitchReleaseCause SwitchReleaseCauseMapper(IDataReader reader)
@@ -47,7 +47,11 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 SwitchReleaseCauseId = (int)reader["ID"],
                 SwitchId = (int)reader["SwitchID"],
                 Settings = Serializer.Deserialize<SwitchReleaseCauseSetting>(reader["Settings"] as string),
-                SourceId = reader["SourceID"] as string
+                SourceId = reader["SourceID"] as string,
+                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
+                CreatedBy = GetReaderValue<int?>(reader, "CreatedBy"),
+                LastModifiedBy = GetReaderValue<int?>(reader, "LastModifiedBy"),
+                LastModifiedTime = GetReaderValue<DateTime?>(reader, "LastModifiedTime"),
             };
         }
         public bool AreSwitchReleaseCausesUpdated(ref object updateHandle)

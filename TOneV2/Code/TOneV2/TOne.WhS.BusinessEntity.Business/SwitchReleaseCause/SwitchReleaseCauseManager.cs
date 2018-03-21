@@ -11,6 +11,7 @@ using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Security.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
@@ -40,6 +41,9 @@ namespace TOne.WhS.BusinessEntity.Business
             insertOperationOutput.Result = Vanrise.Entities.InsertOperationResult.Failed;
             insertOperationOutput.InsertedObject = null;
             ISwitchReleaseCauseDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchReleaseCauseDataManager>();
+            int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
+            switchReleaseCause.CreatedBy = loggedInUserId;
+            switchReleaseCause.LastModifiedBy = loggedInUserId;
             bool insertActionSucc = dataManager.AddSwitchReleaseCause(switchReleaseCause, out switchReleaseCauseId);
             if (insertActionSucc)
             {
@@ -71,6 +75,7 @@ namespace TOne.WhS.BusinessEntity.Business
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
             updateOperationOutput.UpdatedObject = null;
             ISwitchReleaseCauseDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchReleaseCauseDataManager>();
+            switchReleaseCause.LastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
             bool updateActionSucc = dataManager.UpdateSwitchReleaseCause(switchReleaseCause);
             if (updateActionSucc)
             {
@@ -162,6 +167,9 @@ namespace TOne.WhS.BusinessEntity.Business
                     {
                         int switchReleaseCauseId = -1;
                         ISwitchReleaseCauseDataManager dataManager = BEDataManagerFactory.GetDataManager<ISwitchReleaseCauseDataManager>();
+                        int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
+                        addedSwitchReleaseCause.CreatedBy = loggedInUserId;
+                        addedSwitchReleaseCause.LastModifiedBy = loggedInUserId;
                         bool insertActionSucc = dataManager.AddSwitchReleaseCause(addedSwitchReleaseCause, out switchReleaseCauseId);
                         if (insertActionSucc)
                         {
