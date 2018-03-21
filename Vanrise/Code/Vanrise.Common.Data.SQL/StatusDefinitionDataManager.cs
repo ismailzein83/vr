@@ -33,7 +33,7 @@ namespace Vanrise.Common.Data.SQL
         public bool Insert(StatusDefinition statusDefinitionItem)
         {
             string serializedSettings = statusDefinitionItem.Settings != null ? Vanrise.Common.Serializer.Serialize(statusDefinitionItem.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("Common.sp_StatusDefinition_Insert", statusDefinitionItem.StatusDefinitionId, statusDefinitionItem.Name, statusDefinitionItem.BusinessEntityDefinitionId,serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("Common.sp_StatusDefinition_Insert", statusDefinitionItem.StatusDefinitionId, statusDefinitionItem.Name, statusDefinitionItem.BusinessEntityDefinitionId,serializedSettings, statusDefinitionItem.CreatedBy, statusDefinitionItem.LastModifiedBy);
 
             if (affectedRecords > 0)
             {
@@ -45,7 +45,7 @@ namespace Vanrise.Common.Data.SQL
         public bool Update(StatusDefinition statusDefinitionItem)
         {
             string serializedSettings = statusDefinitionItem.Settings != null ? Vanrise.Common.Serializer.Serialize(statusDefinitionItem.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("Common.sp_StatusDefinition_Update", statusDefinitionItem.StatusDefinitionId, statusDefinitionItem.Name, statusDefinitionItem.BusinessEntityDefinitionId,serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("Common.sp_StatusDefinition_Update", statusDefinitionItem.StatusDefinitionId, statusDefinitionItem.Name, statusDefinitionItem.BusinessEntityDefinitionId,serializedSettings, statusDefinitionItem.LastModifiedBy);
             return (affectedRecords > 0);
         }
         #endregion
@@ -59,6 +59,10 @@ namespace Vanrise.Common.Data.SQL
                 Name = reader["Name"] as string,
                 BusinessEntityDefinitionId = GetReaderValue<Guid>(reader, "BusinessEntityDefinitionID"),
                 Settings = reader["Settings"] as string != null ? Vanrise.Common.Serializer.Deserialize<StatusDefinitionSettings>(reader["Settings"] as string) : null,
+                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
+                CreatedBy = GetReaderValue<int?>(reader, "CreatedBy"),
+                LastModifiedBy = GetReaderValue<int?>(reader, "LastModifiedBy"),
+                LastModifiedTime = GetReaderValue<DateTime?>(reader, "LastModifiedTime"),
             };
             return statusDefinition;
         }

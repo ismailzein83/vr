@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Common.Business
 {
@@ -50,7 +51,9 @@ namespace Vanrise.Common.Business
             IStatusDefinitionDataManager dataManager = CommonDataManagerFactory.GetDataManager<IStatusDefinitionDataManager>();
 
             statusDefinitionItem.StatusDefinitionId = Guid.NewGuid();
-
+            int loggedInUserId = ContextFactory.GetContext().GetLoggedInUserId();
+            statusDefinitionItem.CreatedBy = loggedInUserId;
+            statusDefinitionItem.LastModifiedBy = loggedInUserId;
             if (dataManager.Insert(statusDefinitionItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -74,7 +77,7 @@ namespace Vanrise.Common.Business
             updateOperationOutput.UpdatedObject = null;
 
             IStatusDefinitionDataManager dataManager = CommonDataManagerFactory.GetDataManager<IStatusDefinitionDataManager>();
-
+            statusDefinitionItem.LastModifiedBy = ContextFactory.GetContext().GetLoggedInUserId();
             if (dataManager.Update(statusDefinitionItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
