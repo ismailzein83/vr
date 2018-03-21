@@ -35,6 +35,7 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
         public string Title { get; set; }
         public bool IsRootDimension { get; set; }
         public GridColumnSettings ColumnSettings { get; set; }
+        public Guid? ColumnStyleId { get; set; }
     }
 
     public class AnalyticGridWidgetMeasure
@@ -43,6 +44,7 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
 
         public string Title { get; set; }
         public GridColumnSettings ColumnSettings { get; set; }
+        public Guid? ColumnStyleId { get; set; }
 
     }
 }

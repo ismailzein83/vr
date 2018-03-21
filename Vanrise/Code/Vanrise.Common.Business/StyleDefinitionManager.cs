@@ -26,10 +26,15 @@ namespace Vanrise.Common.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allStyleDefinitions.ToBigResult(input, filterExpression, StyleDefinitionDetailMapper));
         }
 
+        public List<StyleDefinition> GetAllStyleDefinitions()
+        {
+            var allStyleDefinitions = this.GetCachedStyleDefinitions();
+            return allStyleDefinitions.Select(x => x.Value).ToList();
+        }
         public string GetStyleDefinitionName(StyleDefinition styleDefinition)
         {
             return (styleDefinition != null) ? styleDefinition.Name : null;
-        
+
         }
 
         public Vanrise.Entities.InsertOperationOutput<StyleDefinitionDetail> AddStyleDefinition(StyleDefinition styleDefinitionItem)

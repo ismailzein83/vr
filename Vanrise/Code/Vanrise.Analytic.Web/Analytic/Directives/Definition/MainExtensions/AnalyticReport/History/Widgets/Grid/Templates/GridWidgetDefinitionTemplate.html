@@ -24,6 +24,9 @@
                         <vr-datagridcolumn headertext="'Width'" widthfactor="9" disablesorting="true">
                             <vr-common-gridcolumnwidth-editor on-ready="dataItem.onDimensionGridWidthFactorEditorReady" hidelabel></vr-common-gridcolumnwidth-editor>
                         </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Column Style'" fixedwidth="'100'" disablesorting="true">
+                            <vr-common-styledefinition-selector on-ready="dataItem.onDimensionGridStyleDefinitionReady" hidelabel usefullcolumn ></vr-common-styledefinition-selector>
+                        </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Root Dimension'" widthfactor="3" disablesorting="true">
                             <vr-switch value="dataItem.IsRootDimension"></vr-switch>
                         </vr-datagridcolumn>
@@ -45,6 +48,9 @@
                         </vr-datagridcolumn>
                         <vr-datagridcolumn headertext="'Width'" widthfactor="9" disablesorting="true">
                             <vr-common-gridcolumnwidth-editor on-ready="dataItem.onMeasureGridWidthFactorEditorReady" hidelabel></vr-common-gridcolumnwidth-editor>                        
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Column Style'" fixedwidth="'100'" disablesorting="true">
+                            <vr-common-styledefinition-selector on-ready="dataItem.onMeasureGridStyleDefinitionReady" hidelabel usefullcolumn></vr-common-styledefinition-selector>
                         </vr-datagridcolumn>
                     </vr-datagrid>
                 </vr-validator>

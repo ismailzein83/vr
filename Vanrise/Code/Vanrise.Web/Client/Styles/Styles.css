@@ -2166,11 +2166,16 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
     cursor: pointer !important;
 }
 
-    .vr-datagrid-datacells:hover .vr-datagrid-cell-container {
-        background-color: inherit !important;
-    }
-
+.vr-datagrid-datacells:hover .vr-datagrid-cell-container {
+    background-color: inherit !important;
+}
+.vr-datagrid-body:hover .vr-datagrid-cell-container {
+    background-color: inherit !important;
+}
 .vr-datagrid-datacells-click {
+    background-color: #d7ebee !important;
+}
+.vr-datagrid-datacells-click .vr-datagrid-cell-container {
     background-color: #d7ebee !important;
 }
 
@@ -4191,3 +4196,30 @@ span.option-marketprice {
 }
 
 /* end vr-datagrid custom cell */
+
+/* start custom style classes */
+
+.green-column-grid{
+  background-color: #D3F4DD;
+}
+
+.red-column-grid{
+  background-color: #FBE1DB;
+}
+
+.blue-column-grid{
+     background-color: #DBEAFB;
+}
+.yellow-column-grid{
+     background-color: #fff3cd;
+}
+
+.green-font{
+    color:green;
+}
+
+.red-font{
+    color:red;
+}
+
+/* end custom style classes */

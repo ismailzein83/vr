@@ -23,6 +23,13 @@ namespace Vanrise.Common.Web.Controllers
         }
 
         [HttpGet]
+        [Route("GetAllStyleDefinitions")]
+        public object GetAllStyleDefinitions()
+        {
+            return _manager.GetAllStyleDefinitions();
+        }
+
+        [HttpGet]
         [Route("GetStyleDefinition")]
         public StyleDefinition GetStyleDefinition(Guid styleDefinitionId)
         {

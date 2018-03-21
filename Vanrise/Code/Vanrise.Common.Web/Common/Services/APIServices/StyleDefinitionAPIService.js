@@ -12,11 +12,14 @@
         function GetFilteredStyleDefinitions(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'GetFilteredStyleDefinitions'), input);
         }
-
         function GetStyleDefinition(styleDefinitionId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'GetStyleDefinition'), {
                 StyleDefinitionId: styleDefinitionId
             });
+        }
+
+        function GetAllStyleDefinitions() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'GetAllStyleDefinitions'));
         }
 
         function AddStyleDefinition(styleDefinitionItem) {
@@ -49,13 +52,14 @@
 
         return ({
             GetFilteredStyleDefinitions: GetFilteredStyleDefinitions,
+            GetAllStyleDefinitions: GetAllStyleDefinitions,
             GetStyleDefinition: GetStyleDefinition,
             AddStyleDefinition: AddStyleDefinition,
             UpdateStyleDefinition: UpdateStyleDefinition,
             GetStyleFormatingExtensionConfigs: GetStyleFormatingExtensionConfigs,
             GetStyleDefinitionsInfo: GetStyleDefinitionsInfo,
             HasAddStyleDefinitionPermission: HasAddStyleDefinitionPermission,
-            HasEditStyleDefinitionPermission: HasEditStyleDefinitionPermission,
+            HasEditStyleDefinitionPermission: HasEditStyleDefinitionPermission
         });
     }
 

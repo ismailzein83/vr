@@ -13,7 +13,6 @@ app.directive('vrCommonStyledefinitionSelector', ['VRCommon_StyleDefinitionAPISe
                 onselectitem: '=',
                 ondeselectitem: '=',
                 isrequired: '=',
-                hideremoveicon: '@',
                 normalColNum: '@',
                 customvalidate: '='
             },
@@ -97,11 +96,22 @@ app.directive('vrCommonStyledefinitionSelector', ['VRCommon_StyleDefinitionAPISe
             }
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
+            var hidelabel = "";
+            if (attrs.hidelabel != undefined)
+                hidelabel = "hidelabel";
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}">' +
-                       '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="StyleDefinitionId" isrequired="ctrl.isrequired" label="' + label +
+            var haschildcolumns = "";
+            if (attrs.usefullcolumn != undefined)
+                haschildcolumns = "haschildcolumns";
+
+            var hideremoveicon = "";
+            if (attrs.hideremoveicon != undefined)
+                hideremoveicon = "hideremoveicon";
+
+            return '<vr-columns colnum="{{ctrl.normalColNum}}" ' + haschildcolumns + ' >' +
+                       '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="StyleDefinitionId" isrequired="ctrl.isrequired" ' + hidelabel + ' label="' + label +
                            '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
-                           '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
+                           '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' customvalidate="ctrl.customvalidate">' +
                        '</vr-select>' +
                    '</vr-columns>';
         }
