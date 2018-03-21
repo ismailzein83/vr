@@ -1,13 +1,13 @@
 ﻿"use strict";
 
 
-app.directive("vrTab", ["MultiTranscludeService", "UtilsService","VRLocalizationService", function (MultiTranscludeService, UtilsService, VRLocalizationService) {
+app.directive("vrTab", ["MultiTranscludeService", "UtilsService", "VRLocalizationService", function (MultiTranscludeService, UtilsService, VRLocalizationService) {
 
     var directiveDefinitionObject = {
         transclude: true,
         restrict: "E",
         scope: {
-            tabobject:"="
+            tabobject: "="
         },
         require: "^vrTabs",
         controller: function ($scope, $element, $attrs) {
@@ -31,26 +31,28 @@ app.directive("vrTab", ["MultiTranscludeService", "UtilsService","VRLocalization
             }
             tab.header = header;
             tab.data = iAttrs.data != undefined ? $scope.$parent.$eval(iAttrs.data) : header;
-            if (tab.showTab==undefined)
+            if (tab.showTab == undefined)
                 tab.showTab = iAttrs.showtab != undefined ? $scope.$parent.$eval(iAttrs.showtab) : undefined;
             var dontLoad = iAttrs.dontload != undefined ? $scope.$parent.$eval(iAttrs.dontload) : false;
             if (!dontLoad)
                 tab.isLoaded = true;
             tab.guid = UtilsService.guid();
+            var haspermission = iAttrs.haspermission != undefined && typeof ($scope.$parent.$eval(iAttrs.haspermission) == 'function') ? $scope.$parent.$eval(iAttrs.haspermission) : undefined;
+            tab.haspermission = haspermission;
             tabsCtrl.addTab(tab);
-           
+
             ctrl.getMinHeight = function () {
                 return tabsCtrl.getMinHeight(ctrl);
-            };           
+            };
             elem.bind("$destroy", function () {
-                if (ctrl.tabobject != undefined && tab.onremove==undefined) {
-                   tabsCtrl.removeTab(ctrl.tabobject);
+                if (ctrl.tabobject != undefined && tab.onremove == undefined) {
+                    tabsCtrl.removeTab(ctrl.tabobject);
                     ctrl.tabobject = undefined;
                 }
             });
         },
         templateUrl: function (elem, attrs) {
-                return "/Client/Javascripts/Directives/Tabs/Templates/TabTemplate.html";
+            return "/Client/Javascripts/Directives/Tabs/Templates/TabTemplate.html";
         }
     };
 

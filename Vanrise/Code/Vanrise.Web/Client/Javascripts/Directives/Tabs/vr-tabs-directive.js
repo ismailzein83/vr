@@ -11,11 +11,40 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', function (Mul
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
             ctrl.tabs = [];
+            var isAddingTab = false;
+            var tempTabs = [];
             ctrl.addTab = function (tab) {
+                if (!isAddingTab) {
+                    if (tab.haspermission != undefined) {
+                        isAddingTab = true;
+                        tab.haspermission(tab).then(function (isAllowed) {
+                            isAddingTab = false;
+                            if (isAllowed) {
+                                addTabObject(tab);
+                            }
+                            if (tempTabs.length > 0) {
+                                var nextTab = tempTabs[0];
+                                ctrl.addTab(nextTab);
+                                tempTabs.splice(0, 1);
+                            }
+                        });
+                    }
+                    else {
+                        addTabObject(tab);
+                        isAddingTab = false;
+                    }
+                }
+                else {
+                    tempTabs.push(tab);
+                }
+            };
+
+            function addTabObject(tab) {
                 if (ctrl.tabs.length == 0)
                     tab.isLoaded = true;
                 ctrl.tabs.push(tab);
-            };
+            }
+
             ctrl.getMinHeight = function () {
                 return { 'min-height': (ctrl.tabs.length * 26 + 1) + 'px' };
             };
@@ -37,7 +66,7 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', function (Mul
                 setTimeout(function () {
                     UtilsService.safeApply($scope);
                 }, 1);
-                if (ctrl.tabs[0] != undefined && tab.onremove!=undefined)
+                if (ctrl.tabs[0] != undefined && tab.onremove != undefined)
                     ctrl.tabs[0].isSelected = true;
 
             };
@@ -52,7 +81,7 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', function (Mul
                     if (tab != undefined)
                         tab.isSelected = true;
                     deferred.resolve();
-                },1);
+                }, 1);
                 return deferred.promise;
             };
             api.setLastTabSelected = function () {
@@ -66,7 +95,7 @@ app.directive('vrTabs', ['MultiTranscludeService', 'UtilsService', function (Mul
         controllerAs: 'ctrl',
         bindToController: true,
         compile: function (element, attrs) {
-            element.prepend('<vr-tabs-header></vr-tabs-header>');
+            element.prepend('<vr-tabs-header ></vr-tabs-header>');
 
             return {
                 pre: function ($scope, iElem, iAttrs, ctrl) {

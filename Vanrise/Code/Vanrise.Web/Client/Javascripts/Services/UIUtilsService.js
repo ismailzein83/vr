@@ -186,6 +186,7 @@ function GridDrillDownTabs(UtilsService, drillDownDefinitions, gridAPI, gridMenu
         drillDownDirectiveTab.title = drillDownDefinition.title;
         drillDownDirectiveTab.localizedtitle = drillDownDefinition.localizedtitle;
         drillDownDirectiveTab.directive = drillDownDefinition.directive;
+        drillDownDirectiveTab.haspermission = drillDownDefinition.haspermission;
         drillDownDirectiveTab.loadDirective = function (directiveAPI) {
             return drillDownDefinition.loadDirective(directiveAPI, dataItem);
         };
