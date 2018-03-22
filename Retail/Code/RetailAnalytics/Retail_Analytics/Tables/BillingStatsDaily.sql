@@ -18,6 +18,7 @@
     [ChargingPolicyId]        INT              NULL,
     [SaleRate]                DECIMAL (20, 8)  NULL,
     [SaleCurrencyId]          INT              NULL,
+    [IsCharged]               BIT              NULL,
     [NumberOfCDRs]            INT              NULL,
     [TotalDuration]           DECIMAL (20, 4)  NULL,
     [TotalSaleDuration]       DECIMAL (20, 4)  NULL,
@@ -32,6 +33,8 @@
     [ProfitStatus]            INT              NULL,
     CONSTRAINT [IX_BillingStatsDaily_Id] UNIQUE NONCLUSTERED ([Id] ASC)
 );
+
+
 
 
 

@@ -17,11 +17,14 @@
     [ChargingPolicyId]        INT              NULL,
     [SaleRate]                DECIMAL (20, 8)  NULL,
     [SaleCurrencyId]          INT              NULL,
+    [IsCharged]               BIT              NULL,
     [NumberOfCDRs]            INT              NULL,
     [SuccessfulCalls]         INT              NULL,
     [TotalDuration]           DECIMAL (20, 4)  NULL,
     [TotalSaleDuration]       DECIMAL (20, 4)  NULL,
     [TotalSaleAmount]         DECIMAL (26, 10) NULL);
+
+
 
 
 
