@@ -16,6 +16,7 @@ Post-Deployment Script Template
 ('6F3FBD7B-275A-4D92-8E06-AD7F7B04C7D6','Generic Business Entity','Generic BE','VR_GenericData_BusinessEntityDefinitionSettingsConfig'					,'{"Editor":"vr-genericdata-genericbusinessentity-editor"}'),
 
 ('9CF3C165-1921-4F83-990D-03B82A04AA5A','IfElseStep','IfElseStep','VR_GenericData_DataTransformationStepConfig'											,'{"Editor":"vr-genericdata-datatransformation-ifelsestep","StepPreviewUIControl":"vr-genericdata-datatransformation-ifelsestep-preview"}'),
+('1B22813C-F507-4BFB-BEE8-621F9F983ECB','IfStep','IfStep','VR_GenericData_DataTransformationStepConfig'													,'{"Editor":"vr-genericdata-datatransformation-ifstep","StepPreviewUIControl":"vr-genericdata-datatransformation-ifstep-preview"}'),
 ('9C158FA5-8516-4AF7-AEDD-1BC69D026AFC','AddItemToArrayStep','AddItemToArrayStep','VR_GenericData_DataTransformationStepConfig'							,'{"Editor":"vr-genericdata-datatransformation-additemtoarraystep","StepPreviewUIControl":"vr-genericdata-datatransformation-additemtoarraystep-preview"}'),
 ('D7CE9698-2721-467E-9820-1ED44B446D0D','ForLoopStep','ForLoopStep','VR_GenericData_DataTransformationStepConfig'										,'{"Editor":"vr-genericdata-datatransformation-forloopstep","StepPreviewUIControl":"vr-genericdata-datatransformation-forloopstep-preview"}'),
 ('3FC597F0-F5CE-4B49-9AEA-24795C81FE80','TariffRule','TariffRule','VR_GenericData_DataTransformationStepConfig'											,'{"Editor":"vr-genericdata-datatransformation-tariffrulestep","StepPreviewUIControl":"vr-genericdata-datatransformation-tariffrulestep-preview"}'),
