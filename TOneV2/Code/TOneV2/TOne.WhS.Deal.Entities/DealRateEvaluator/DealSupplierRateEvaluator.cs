@@ -18,8 +18,8 @@ namespace TOne.WhS.Deal.Entities
         DateTime DealBED { get; }
         DateTime? DealEED { get; }
         int CurrencyId { get; }
-        Dictionary<long, List<DealRate>> SupplierDealRatesByZoneId { get; set; }
-        List<long> ZoneIds { get; set; }
+        IEnumerable<DealRate> SupplierRates { get; set; }
+        IEnumerable<long> ZoneIds { get; set; }
         Dictionary<long, SupplierRate> SupplierZoneRateByZoneId { get; set; }
 
     }

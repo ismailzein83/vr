@@ -231,9 +231,17 @@
                         });
                 }
             }
+            var saleZones = [];
+            var zoneIds = zoneDirectiveAPI.getSelectedIds();
+            for (var j = 0; j < zoneIds.length; j++) {
+                saleZones.push(
+                {
+                    ZoneId: zoneIds[j]
+                });
+            }
             return {
                 Name: $scope.scopeModel.name,
-                ZoneIds: zoneDirectiveAPI.getSelectedIds(),
+                SaleZones: saleZones,
                 CountryId: countryDirectiveApi.getSelectedIds(),
                 Tiers: tiers
             };

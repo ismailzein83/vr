@@ -286,12 +286,16 @@
                             case WhS_Deal_VolumeCommitmentTypeEnum.Buy.value:
 
                                 payload = {
-                                    supplierId: carrierAccountSelectorAPI.getSelectedIds(),
+                                    supplierId: carrierAccountSelectorAPI.getSelectedIds()
                                 };
                                 if (item != undefined) {
-                                    payload.selectedIds = item.ZoneIds;
+                                    var zoneIds = [];
+                                    for (var x = 0; x < item.SaleZones.length; x++) {
+                                        zoneIds.push(item.SaleZones[x].ZoneId);
+                                    }
+                                    payload.selectedIds = zoneIds;
                                     payload.filter = {
-                                        ExcludedZoneIds: getSelectedZonesIdsFromItems(item.ZoneIds),
+                                        ExcludedZoneIds: getSelectedZonesIdsFromItems(zoneIds),
                                         CountryIds: (item.CountryId != undefined) ? [item.CountryId] : undefined
                                     };
                                 }
@@ -306,9 +310,13 @@
                                     sellingNumberPlanId: carrierAccount != undefined ? carrierAccount.SellingNumberPlanId : undefined
                                 };
                                 if (item != undefined) {
-                                    payload.selectedIds = item.ZoneIds;
+                                    var sellZoneIds = [];
+                                    for (var j = 0; j < item.SaleZones.length; j++) {
+                                        sellZoneIds.push(item.SaleZones[j].ZoneId);
+                                    }
+                                    payload.selectedIds = sellZoneIds;
                                     payload.filter = {
-                                        ExcludedZoneIds: getSelectedZonesIdsFromItems(item.ZoneIds),
+                                        ExcludedZoneIds: getSelectedZonesIdsFromItems(sellZoneIds),
                                         CountryIds: (item.CountryId != undefined) ? [item.CountryId] : undefined
                                     };
                                 }
@@ -359,7 +367,11 @@
             if (items.volumeCommitmentItems.length > 0) {
                 zonesIds = [];
                 for (var i = 0; i < items.volumeCommitmentItems.length; i++) {
-                    zonesIds = zonesIds.concat(items.volumeCommitmentItems[i].ZoneIds);
+                    var zoneIds = [];
+                    for (var x = 0; x < items.volumeCommitmentItems[i].SaleZones.length; x++) {
+                        zoneIds.push(items.volumeCommitmentItems[i].SaleZones[x].ZoneId);
+                    }
+                    zonesIds = zonesIds.concat(zoneIds);
                 }
             }
             return zonesIds;

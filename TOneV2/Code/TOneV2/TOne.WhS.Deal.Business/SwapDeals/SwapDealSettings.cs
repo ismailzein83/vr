@@ -208,7 +208,7 @@ namespace TOne.WhS.Deal.Business
                     DealSaleZoneGroupNb = swapDealInbound.ZoneGroupNumber,
                     EED = EndDate,
                     Tiers = BuildSaleTiers(swapDealInbound, getCustomerZoneRatesFunc),
-                    Zones = BuildSaleZones(swapDealInbound.SaleZones.Select(z=>z.ZoneId))
+                    Zones = BuildSaleZones(swapDealInbound.SaleZones.Select(z => z.ZoneId))
                 };
                 saleZoneGroups.Add(dealSaleZoneGroup);
             }
@@ -245,14 +245,15 @@ namespace TOne.WhS.Deal.Business
                 GetCustomerZoneRatesFunc = getCustomerZoneRatesFunc,
                 DealBED = BeginDate,
                 DealEED = EndDate,
-                ZoneIds = swapDealInbound.SaleZones.Select(z=>z.ZoneId).ToList()
+                ZoneIds = swapDealInbound.SaleZones.Select(z => z.ZoneId)
             };
             saleEvaluatedRate.EvaluateRate(context);
 
+            Dictionary<long, List<DealRate>> saleRatesByZoneId = StructureDealRateByZoneId(context.SaleRates);
             DealSaleZoneGroupTier dealSaleZoneGroupTier = new DealSaleZoneGroupTier
             {
                 ExceptionRates = null,
-                RatesByZoneId = context.SaleRatesByZoneId,
+                RatesByZoneId = saleRatesByZoneId,
                 RetroActiveFromTierNumber = null,
                 TierNumber = 1,
                 VolumeInSeconds = swapDealInbound.Volume * 60,
@@ -277,7 +278,7 @@ namespace TOne.WhS.Deal.Business
                     DealSupplierZoneGroupNb = swapDealOutbound.ZoneGroupNumber,
                     EED = EndDate,
                     Tiers = BuildSupplierTiers(swapDealOutbound),
-                    Zones = BuildSupplierZones(swapDealOutbound.SupplierZones.Select(z=>z.ZoneId))
+                    Zones = BuildSupplierZones(swapDealOutbound.SupplierZones.Select(z => z.ZoneId))
                 };
                 dealSupplierZoneGroups.Add(dealSupplierZoneGroup);
             }
@@ -311,17 +312,28 @@ namespace TOne.WhS.Deal.Business
                 throw new NullReferenceException("DealSupplierRateEvaluator");
 
             supplierEvaluatedRate.EvaluateRate(context);
+            Dictionary<long, List<DealRate>> supplierDealRatesByZoneId = StructureDealRateByZoneId(context.SupplierRates);
 
             DealSupplierZoneGroupTier dealSupplierZoneGroupTier = new DealSupplierZoneGroupTier()
             {
                 ExceptionRates = null,
-                RatesByZoneId = context.SupplierDealRatesByZoneId,
+                RatesByZoneId = supplierDealRatesByZoneId,
                 RetroActiveFromTierNumber = null,
                 TierNumber = 1,
                 VolumeInSeconds = swapDealOutbound.Volume * 60,
                 CurrencyId = CurrencyId
             };
             return new List<DealSupplierZoneGroupTier> { dealSupplierZoneGroupTier }.OrderBy(itm => itm.TierNumber);
+        }
+        private Dictionary<long, List<DealRate>> StructureDealRateByZoneId(IEnumerable<DealRate> dealRates)
+        {
+            var dealRateByZoneId = new Dictionary<long, List<DealRate>>();
+            foreach (var dealRate in dealRates)
+            {
+                List<DealRate> rates = dealRateByZoneId.GetOrCreateItem(dealRate.ZoneId);
+                rates.Add(dealRate);
+            }
+            return dealRateByZoneId;
         }
     }
 }

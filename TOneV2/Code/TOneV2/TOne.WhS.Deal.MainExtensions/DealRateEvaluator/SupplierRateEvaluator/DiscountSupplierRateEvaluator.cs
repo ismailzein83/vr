@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using TOne.WhS.BusinessEntity.Business;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Deal.Entities;
 using Vanrise.Common;
 
@@ -11,25 +14,31 @@ namespace TOne.WhS.Deal.MainExtensions
         public int Discount { get; set; }
         public override void EvaluateRate(IDealSupplierRateEvaluatorContext context)
         {
-            var supplierRateByZoneId = new Dictionary<long, List<DealRate>>();
+            var supplierRateManager = new SupplierRateManager();
+            var supplierDealRates = new List<DealRate>(); 
 
-            foreach (var supplierZoneRate in context.SupplierZoneRateByZoneId)
+            foreach (var zoneId in context.ZoneIds)
             {
-                List<DealRate> supplierDealRates = supplierRateByZoneId.GetOrCreateItem(supplierZoneRate.Key);
-                var suplierRateValue = supplierZoneRate.Value;
+                SupplierRate supplierRate = context.SupplierZoneRateByZoneId.GetRecord(zoneId);
 
-                var discountValue = (suplierRateValue.Rate * Discount) / 100;
-                var discountedRate = suplierRateValue.Rate - discountValue;
+                if (supplierRate == null)
+                    continue;
+
+                int supplierCurrencyId = supplierRateManager.GetCurrencyId(supplierRate);
+
+                var discountValue = (supplierRate.Rate * Discount) / 100;
+                var discountedRate = supplierRate.Rate - discountValue;
 
                 supplierDealRates.Add(new DealRate
                 {
                     Rate = discountedRate,
-                    BED = suplierRateValue.BED,
-                    EED = suplierRateValue.EED,
-                    CurrencyId = suplierRateValue.CurrencyId.Value
+                    BED = supplierRate.BED,
+                    EED = supplierRate.EED,
+                    CurrencyId = supplierCurrencyId
                 });
             }
-            context.SupplierDealRatesByZoneId = supplierRateByZoneId;
+            if (supplierDealRates.Any())
+                context.SupplierRates = supplierDealRates;
         }
 
         public override string GetDescription()

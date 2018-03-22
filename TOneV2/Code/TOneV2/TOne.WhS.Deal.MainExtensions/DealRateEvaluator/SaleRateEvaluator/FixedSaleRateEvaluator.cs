@@ -12,13 +12,11 @@ namespace TOne.WhS.Deal.MainExtensions
         public Decimal Rate { get; set; }
         public override void EvaluateRate(IDealSaleRateEvaluatorContext context)
         {
-            var saleRateByZoneId = new Dictionary<long, List<DealRate>>();
+            var saleRates = new List<DealRate>();
 
             foreach (var zoneId in context.ZoneIds)
             {
-                List<DealRate> rates = saleRateByZoneId.GetOrCreateItem(zoneId);
-
-                rates.Add(new DealRate
+                saleRates.Add(new DealRate
                 {
                     BED = context.DealBED,
                     EED = context.DealEED,
@@ -27,8 +25,8 @@ namespace TOne.WhS.Deal.MainExtensions
                 });
 
             }
-            if (saleRateByZoneId.Any())
-                context.SaleRatesByZoneId = saleRateByZoneId;
+            if (saleRates.Any())
+                context.SaleRates = saleRates;
         }
         public override string GetDescription()
         {

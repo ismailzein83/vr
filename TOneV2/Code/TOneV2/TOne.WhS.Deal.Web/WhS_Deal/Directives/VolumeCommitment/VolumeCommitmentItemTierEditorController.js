@@ -10,8 +10,6 @@
         var tiers;
         var context;
         var isEditMode;
-        var zoneReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-        var zoneDirectiveAPI;
 
         var rateEvaluatorSelectiveDirectiveAPI;
         var rateEvaluatorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -141,20 +139,22 @@
         }
 
         function builVolumeCommitmentItemTierObjFromScope() {
-            var exceptions = [];
+            var volumeObject = {
+                UpToVolume: $scope.scopeModel.upToVolume,
+                EvaluatedRate: rateEvaluatorSelectiveDirectiveAPI.getData(),
+                Description: rateEvaluatorSelectiveDirectiveAPI.getDescription(),
+                RetroActiveFromTierNumber: ($scope.scopeModel.selectedRetroActive != undefined) ? $scope.scopeModel.selectedRetroActive.tierId : undefined
+            };
+
             if ($scope.scopeModel.exceptions.length > 0) {
+                var exceptions = [];
                 for (var i = 0, length = $scope.scopeModel.exceptions.length; i < length; i++) {
                     var exception = $scope.scopeModel.exceptions[i];
                     exceptions.push(exception.Entity);
                 }
+                volumeObject.ExceptionZoneRates = exceptions;
             }
-            return {
-                UpToVolume: $scope.scopeModel.upToVolume,
-                EvaluatedRate: rateEvaluatorSelectiveDirectiveAPI.getData(),
-                Description: rateEvaluatorSelectiveDirectiveAPI.getDescription(),
-                RetroActiveFromTierNumber: ($scope.scopeModel.selectedRetroActive != undefined) ? $scope.scopeModel.selectedRetroActive.tierId : undefined,
-                ExceptionZoneRates: exceptions
-            };
+            return volumeObject;
         }
 
         function addVolumeCommitmentItemTier() {
@@ -195,7 +195,7 @@
         function getContext() {
             var currentContext = context;
             currentContext.getExceptionsZoneIds = function (exzoneIds) {
-                return getSelectedZonesIdsFromTiers(exzoneIds)
+                return getSelectedZonesIdsFromTiers(exzoneIds);
             };
             return currentContext;
         }
@@ -266,7 +266,6 @@
         //  filtering Exceptions Zone Rates base on Zones selected values from item editor.
 
         function filterExceptionsZoneRatesByZonesIds(excep, ids) {
-            console.log(excep);
             var obj = new Object();
             if (ids == undefined)
                 return obj;

@@ -74,7 +74,7 @@ app.directive("vrWhsDealVolumecommitmentItems", ["UtilsService", "VRNotification
                             var currentItem = ctrl.datasource[i];
                             volumeCommitmentItems.push({
                                 Name: currentItem.Entity.Name,
-                                ZoneIds: currentItem.Entity.ZoneIds,
+                                SaleZones: currentItem.Entity.SaleZones,
                                 CountryId: currentItem.Entity.CountryId,
                                 Tiers: currentItem.Entity.Tiers,
                                 ZoneGroupNumber: currentItem.Entity.ZoneGroupNumber

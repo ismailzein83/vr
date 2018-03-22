@@ -14,7 +14,7 @@ namespace TOne.WhS.Deal.MainExtensions
         public int Discount { get; set; }
         public override void EvaluateRate(IDealSaleRateEvaluatorContext context)
         {
-            var saleRateByZoneId = new Dictionary<long, List<DealRate>>();
+            var saleRates = new List<DealRate>();
             var saleZoneManager = new SaleZoneManager();
 
             foreach (var zoneId in context.ZoneIds)
@@ -23,17 +23,19 @@ namespace TOne.WhS.Deal.MainExtensions
                 var countryId = saleZoneManager.GetSaleZoneCountryId(zoneId);
 
                 if (!countryId.HasValue)
-                    return; //Throw exception
+                    continue; 
 
-                IEnumerable<SaleRateHistoryRecord> saleRates = context.GetCustomerZoneRatesFunc(zoneName, countryId.Value);
+                IEnumerable<SaleRateHistoryRecord> saleRateHistoryRecords = context.GetCustomerZoneRatesFunc(zoneName, countryId.Value);
 
-                List<DealRate> dealRates = saleRateByZoneId.GetOrCreateItem(zoneId);
-                foreach (var saleRate in saleRates)
+                if (saleRateHistoryRecords == null || !saleRateHistoryRecords.Any())
+                    continue;
+
+                foreach (var saleRate in saleRateHistoryRecords)
                 {
                     var discountValue = (saleRate.Rate * Discount) / 100;
                     var discountedRate = saleRate.Rate - discountValue;
 
-                    dealRates.Add(new DealRate
+                    saleRates.Add(new DealRate
                     {
                         Rate = discountedRate,
                         BED = saleRate.BED,
@@ -42,8 +44,8 @@ namespace TOne.WhS.Deal.MainExtensions
                     });
                 }
             }
-            if (saleRateByZoneId.Any())
-                context.SaleRatesByZoneId = saleRateByZoneId;
+            if (saleRates.Any())
+                context.SaleRates = saleRates;
         }
         public override string GetDescription()
         {

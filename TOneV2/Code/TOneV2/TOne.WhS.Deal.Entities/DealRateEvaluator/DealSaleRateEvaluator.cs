@@ -16,8 +16,8 @@ namespace TOne.WhS.Deal.Entities
         int CurrencyId { get; }
         DateTime DealBED { get; }
         DateTime? DealEED { get; }
-        Dictionary<long, List<DealRate>> SaleRatesByZoneId { get; set; }
-        List<long> ZoneIds { get; set; }
+        List<DealRate> SaleRates { get; set; }
+        IEnumerable<long> ZoneIds { get; set; }
         Func<string, int, IEnumerable<SaleRateHistoryRecord>> GetCustomerZoneRatesFunc { get; }
     }
 }

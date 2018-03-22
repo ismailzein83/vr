@@ -13,22 +13,17 @@ namespace TOne.WhS.Deal.MainExtensions
         public decimal Rate { get; set; }
         public override void EvaluateRate(IDealSupplierRateEvaluatorContext context)
         {
-            var suplierRateByZoneId = new Dictionary<long, List<DealRate>>();
-
-            foreach (var zoneId in context.ZoneIds)
+            var suplierRates = context.ZoneIds.Select(zoneId => new DealRate
             {
-                List<DealRate> rates = suplierRateByZoneId.GetOrCreateItem(zoneId);
+                ZoneId = zoneId,
+                BED = context.DealBED,
+                EED = context.DealEED,
+                Rate = Rate,
+                CurrencyId = context.CurrencyId
+            });
 
-                rates.Add(new DealRate
-                {
-                    BED = context.DealBED,
-                    EED = context.DealEED,
-                    Rate = Rate,
-                    CurrencyId = context.CurrencyId
-                });
-            }
-            if (suplierRateByZoneId.Any())
-                context.SupplierDealRatesByZoneId = suplierRateByZoneId;
+            if (suplierRates.Any())
+                context.SupplierRates = suplierRates;
         }
         public override string GetDescription()
         {
