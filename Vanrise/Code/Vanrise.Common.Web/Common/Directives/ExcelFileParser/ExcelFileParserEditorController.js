@@ -7,7 +7,7 @@
     function excelFileParserController($scope, VRCommon_ExcelFileParserAPIService, UtilsService, VRNotificationService, VRNavigationService, VRUIUtilsService) {
 
         var fieldName;
-        var type
+        var type;
 
         loadParameters();
         defineScope();
