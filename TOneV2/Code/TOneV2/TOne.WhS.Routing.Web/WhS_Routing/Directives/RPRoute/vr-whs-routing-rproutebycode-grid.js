@@ -37,14 +37,6 @@ app.directive('vrWhsRoutingRproutebycodeGrid', ['VRNotificationService', 'UISett
                 $scope.rpRoutes = [];
                 $scope.isCustomerSelected = false;
 
-                $scope.getColor = function (dataItem) {
-                    var cssClass = 'span-summary bold-label';
-                    if (dataItem.IsBlocked)
-                        cssClass += ' danger-font';
-
-                    return cssClass;
-                };
-
                 $scope.onGridReady = function (api) {
                     gridAPI = api;
                     defineAPI();
@@ -89,6 +81,14 @@ app.directive('vrWhsRoutingRproutebycodeGrid', ['VRNotificationService', 'UISett
                     });
 
                     return loadGridPromiseDeffered.promise;
+                };
+
+                $scope.getColor = function (dataItem) {
+                    var cssClass = 'span-summary bold-label';
+                    if (dataItem.IsBlocked)
+                        cssClass += ' danger-font';
+
+                    return cssClass;
                 };
 
                 defineMenuActions();

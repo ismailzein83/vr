@@ -1,19 +1,18 @@
 ﻿<div ng-show="showGrid">
     <vr-datagrid on-ready="onGridReady"
-                 datasource="rpRoutes" 
+                 datasource="rpRoutes"
                  dataretrievalfunction="dataRetrievalFunction"
                  menuactions="gridMenuActions"
                  pagingtype="'Pager'"
-                 enableautoexport="true"
-                 normalcell
-                 defaultsortbyfieldname="'SaleZoneName'">
+                 defaultsortbyfieldname="'SaleZoneName'"
+                 enableautoexport="true" normalcell>
 
-        <vr-datagridcolumn headertext="'Routing Product'" fixedwidth="150" field="'RoutingProductName'" disablesorting getcolor="getColor"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Sale Zone'" fixedwidth="150" blocked="true" field="'SaleZoneName'" getcolor="getColor"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Selling Number Plan'" field="'SellingNumberPlan'" disablesorting fixedwidth="150"></vr-datagridcolumn>
-        <vr-datagridcolumn ng-show="isCustomerSelected" headertext="'Rate'" field="'EffectiveRateValue'" fixedwidth="60" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
-        <vr-datagridcolumn ng-show="isCustomerSelected" headertext="'Currency'" field="'CurrencySymbol'" type="'Text'" fixedwidth="60"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Services'" disablesorting="true" fixedwidth="60">
+        <vr-datagridcolumn headertext="'Routing Product'" field="'RoutingProductName'" fixedwidth="150" getcolor="getColor"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Sale Zone'" field="'SaleZoneName'" fixedwidth="150" getcolor="getColor"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Selling Number Plan'" field="'SellingNumberPlan'" fixedwidth="150"></vr-datagridcolumn>
+        <vr-datagridcolumn ng-show="isCustomerSelected" headertext="'Rate'" field="'EffectiveRateValue'" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="60"></vr-datagridcolumn>
+        <vr-datagridcolumn ng-show="isCustomerSelected" headertext="'Currency'" field="'CurrencySymbol'" type="'Text'" fixedwidth="60" disablesorting></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Services'" fixedwidth="60">
             <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
         </vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Blocked'" fixedwidth="50">

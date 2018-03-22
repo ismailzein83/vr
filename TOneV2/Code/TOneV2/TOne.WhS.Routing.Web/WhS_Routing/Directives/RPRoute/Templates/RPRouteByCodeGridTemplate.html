@@ -2,19 +2,18 @@
     <vr-datagrid on-ready="onGridReady"
                  datasource="rpRoutes"
                  dataretrievalfunction="dataRetrievalFunction"
-                 pagingtype="'Pager'"
                  menuactions="gridMenuActions"
-                 enableautoexport="true"
-                 normalcell
-                 defaultsortbyfieldname="'Code'">
+                 pagingtype="'Pager'"
+                 defaultsortbyfieldname="'Code'"
+                 enableautoexport="true" normalcell>
 
         <vr-datagridcolumn headertext="'Code'" fixedwidth="100" field="'Code'"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Routing Product'" fixedwidth="150" field="'RoutingProductName'" disablesorting getcolor="getColor"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Sale Zone'" fixedwidth="150" blocked="true" field="'SaleZoneName'" getcolor="getColor"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Selling Number Plan'" field="'SellingNumberPlan'" disablesorting fixedwidth="150"></vr-datagridcolumn>
-        <vr-datagridcolumn ng-show="isCustomerSelected" headertext="'Rate'" field="'EffectiveRateValue'" fixedwidth="60" type="'Number'" numberprecision="'LongPrecision'"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Routing Product'" field="'RoutingProductName'" fixedwidth="150" getcolor="getColor"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Sale Zone'" field="'SaleZoneName'" fixedwidth="150" getcolor="getColor"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Selling Number Plan'" field="'SellingNumberPlan'" fixedwidth="150"></vr-datagridcolumn>
+        <vr-datagridcolumn ng-show="isCustomerSelected" headertext="'Rate'" field="'EffectiveRateValue'" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="60"></vr-datagridcolumn>
         <vr-datagridcolumn ng-show="isCustomerSelected" headertext="'Currency'" field="'CurrencySymbol'" type="'Text'" fixedwidth="60"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Services'" disablesorting="true" fixedwidth="60">
+        <vr-datagridcolumn headertext="'Services'" fixedwidth="60">
             <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
         </vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Blocked'" fixedwidth="50">
@@ -23,7 +22,6 @@
             </span>
         </vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Route Options'" disablesorting>
-
             <div class="responsive-container" style="white-space: normal;">
                 <span ng-repeat="routeOption in dataItem.RouteOptionsDetails" title="{{::routeOption.title}}"
                       style="font-size: 11px; cursor: pointer; display: inline-block; padding: 0 10px 0 0; color: {{routeOption.Color}};">
