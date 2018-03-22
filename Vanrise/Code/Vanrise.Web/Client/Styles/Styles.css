@@ -2169,7 +2169,7 @@ vr-datagrid[hideheader="true"] .vr-datagrid {
 .vr-datagrid-datacells:hover .vr-datagrid-cell-container {
     background-color: inherit !important;
 }
-.vr-datagrid-body:hover .vr-datagrid-cell-container {
+.vr-datagrid-row:hover .vr-datagrid-cell-container {
     background-color: inherit !important;
 }
 .vr-datagrid-datacells-click {
