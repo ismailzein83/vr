@@ -485,10 +485,9 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         $scope.isLoading = false;
                     });
                 };
-                api.doesGridHasCustomerData = function()
-                {
-                    return ($scope.zoneLetters.length > 0 && gridQuery.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value)
-                }
+                api.doesGridHasCustomerData = function () {
+                    return ($scope.zoneLetters.length > 0 && gridQuery.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.Customer.value);
+                };
                 api.getZoneDrafts = function () {
                     var zoneDrafts = [];
 
