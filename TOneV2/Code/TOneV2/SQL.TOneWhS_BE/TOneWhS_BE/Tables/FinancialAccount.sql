@@ -8,8 +8,13 @@
     [EED]                          DATETIME         NULL,
     [CreatedTime]                  DATETIME         CONSTRAINT [DF_FinancialAccount_CreatedTime] DEFAULT (getdate()) NULL,
     [timestamp]                    ROWVERSION       NULL,
+    [CreatedBy]                    INT              NULL,
+    [LastModifiedBy]               INT              NULL,
+    [LastModifiedTime]             DATETIME         NULL,
     CONSTRAINT [PK_FinancialAccount] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

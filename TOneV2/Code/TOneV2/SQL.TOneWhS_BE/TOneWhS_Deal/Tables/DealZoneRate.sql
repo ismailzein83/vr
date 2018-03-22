@@ -15,3 +15,25 @@
 
 
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_DealZoneRate_IsSale]
+    ON [TOneWhS_Deal].[DealZoneRate]([IsSale] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_DealZoneRate_EED]
+    ON [TOneWhS_Deal].[DealZoneRate]([EED] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_DealZoneRate_DealId]
+    ON [TOneWhS_Deal].[DealZoneRate]([DealId] ASC);
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_DealZoneRate_BED]
+    ON [TOneWhS_Deal].[DealZoneRate]([BED] ASC);
+

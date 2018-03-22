@@ -10,7 +10,11 @@ BEGIN
 			fa.FinancialAccountDefinitionId,
 			fa.EED,
 			fa.BED,
-			fa.FinancialAccountSettings
+			fa.FinancialAccountSettings,
+			fa.CreatedTime,
+			fa.CreatedBy,
+			fa.LastModifiedBy,
+			fa.LastModifiedTime
 	FROM    [TOneWhS_BE].FinancialAccount fa WITH(NOLOCK)
 	SET NOCOUNT OFF
 END

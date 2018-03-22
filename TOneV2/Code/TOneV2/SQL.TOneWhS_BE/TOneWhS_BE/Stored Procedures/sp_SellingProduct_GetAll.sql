@@ -10,6 +10,6 @@ BEGIN
 	-- interfering with SELECT statements.
 	SET NOCOUNT ON;
 
-SELECT  pp.[ID],pp.[Name],pp.DefaultRoutingProductID,pp.[SellingNumberPlanID],pp.[Settings]
+SELECT  pp.[ID],pp.[Name],pp.DefaultRoutingProductID,pp.[SellingNumberPlanID],pp.[Settings], pp.[CreatedTime], pp.[CreatedBy], pp.[LastModifiedBy], pp.[LastModifiedTime]
 from	[TOneWhS_BE].SellingProduct pp WITH(NOLOCK) 
 END

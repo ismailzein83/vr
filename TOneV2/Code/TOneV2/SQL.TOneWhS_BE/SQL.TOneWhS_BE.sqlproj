@@ -584,7 +584,6 @@
     <Build Include="TOneWhS_Case\User Defined Types\SupplierFaultTicketType.sql" />
     <Build Include="TOneWhS_Case\User Defined Types\CustomerFaultTicketType.sql" />
     <Build Include="TOneWhS_BE\User Defined Types\ANumberGroupType.sql" />
-    <Build Include="TOneWhS_Deal\Stored Procedures\sp_DealZoneRate_GetAllDealZoneRates.sql" />
     <Build Include="TOneWhS_Deal\Stored Procedures\sp_DealZoneRate_GetAll.sql" />
     <Build Include="TOneWhS_Deal\Stored Procedures\sp_DaysToReprocess_Insert.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_ANumberSupplierCode_Insert.sql" />
@@ -598,5 +597,9 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_ANumberSaleCode_Close.sql" />
     <Build Include="TOneWhS_BE\User Defined Types\ANumberSupplierCodeClose.sql" />
     <Build Include="TOneWhS_BE\User Defined Types\ANumberSaleCodeClose.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_DealZoneRate_GetDealZoneRatesByTime.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_DealZoneRate_GetDealZoneRatesByDealIds.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_DaysToReprocess_Delete.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierRate_GetSupplierRatesForZones.sql" />
   </ItemGroup>
 </Project>

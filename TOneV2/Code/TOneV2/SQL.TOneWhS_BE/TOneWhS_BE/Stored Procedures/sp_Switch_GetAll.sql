@@ -7,6 +7,10 @@ BEGIN
 	SELECT	s.ID,
 			s.Name,
 			s.Settings,
-			s.sourceid
+			s.sourceid,
+			s.CreatedTime,
+			s.CreatedBy,
+			s.LastModifiedBy,
+			s.LastModifiedTime
 	FROM	[TOneWhS_BE].Switch  as s WITH(NOLOCK) 
 END
