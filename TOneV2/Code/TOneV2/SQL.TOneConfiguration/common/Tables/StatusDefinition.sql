@@ -5,6 +5,11 @@
     [Settings]                   NVARCHAR (MAX)   NULL,
     [CreatedTime]                DATETIME         CONSTRAINT [DF_StatusDefinition_CreatedTime] DEFAULT (getdate()) NULL,
     [timestamp]                  ROWVERSION       NULL,
+    [CreatedBy]                  INT              NULL,
+    [LastModifiedBy]             INT              NULL,
+    [LastModifiedTime]           DATETIME         NULL,
     CONSTRAINT [PK_StatusDefinition] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
