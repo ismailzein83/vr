@@ -68,11 +68,18 @@
             $scope.onCountrySelectionChanged = function () {
                 var country = countryDirectiveApi.getSelectedIds();
                 if (country != undefined) {
+                    var zoneIds = undefined;
+                    if (swapDealOutboundEntity != undefined) {
+                        zoneIds = [];
+                        for (var i = 0; i < swapDealOutboundEntity.SupplierZones.length; i++) {
+                            zoneIds.push(swapDealOutboundEntity.SupplierZones[i].ZoneId);
+                        }
+                    }
                     var setLoader = function (value) { $scope.isLoadingSelector = value };
                     var payload = {
                         supplierId: supplierId,
                         filter: { CountryIds: [countryDirectiveApi.getSelectedIds()] },
-                        selectedIds: swapDealOutboundEntity != undefined ? swapDealOutboundEntity.SupplierZoneIds : undefined
+                        selectedIds: zoneIds
 
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierZoneDirectiveAPI, payload, setLoader, countrySelectedPromiseDeferred);
@@ -146,10 +153,17 @@
                 promises.push(loadSupplierZonePromiseDeferred.promise);
 
                 UtilsService.waitMultiplePromises([supplierZoneReadyPromiseDeferred.promise, countrySelectedPromiseDeferred.promise]).then(function () {
+                    var zoneIds = undefined;
+                    if (swapDealOutboundEntity != undefined) {
+                        zoneIds = [];
+                        for (var i = 0; i < swapDealOutboundEntity.SupplierZones.length; i++) {
+                            zoneIds.push(swapDealOutboundEntity.SupplierZones[i].ZoneId);
+                        }
+                    }
                     var supplierZonePayload = {
                         supplierId: supplierId,
                         filter: { CountryIds: [swapDealOutboundEntity.CountryId] },
-                        selectedIds: swapDealOutboundEntity != undefined ? swapDealOutboundEntity.SupplierZoneIds : undefined
+                        selectedIds: zoneIds
                     };
 
                     VRUIUtilsService.callDirectiveLoad(supplierZoneDirectiveAPI, supplierZonePayload, loadSupplierZonePromiseDeferred);
@@ -195,12 +209,19 @@
         }
 
         function buildSwapDealOutboundObjFromScope() {
+            var supplierZones = [];
+            var zoneIds = supplierZoneDirectiveAPI.getSelectedIds();
+            for (var j = 0; j < zoneIds.length; j++) {
+                supplierZones.push(
+                {
+                    ZoneId: zoneIds[j]
+                });
+            }
             var obj = {
                 Name: $scope.scopeModel.name,
-                SupplierZoneIds: supplierZoneDirectiveAPI.getSelectedIds(),
+                SupplierZones: supplierZones,
                 Volume: $scope.scopeModel.volume,
                 EvaluatedRate: rateEvaluatorSelectiveDirectiveAPI.getData(),
-                Rate: 0,
                 CountryId: countryDirectiveApi.getSelectedIds()
 
             };

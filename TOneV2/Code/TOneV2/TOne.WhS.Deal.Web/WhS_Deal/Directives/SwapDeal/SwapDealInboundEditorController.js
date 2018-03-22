@@ -140,10 +140,17 @@
                 promises.push(loadSalesZonesPromiseDeferred.promise);
 
                 UtilsService.waitMultiplePromises([saleZoneReadyPromiseDeferred.promise, countrySelectedPromiseDeferred.promise]).then(function () {
+                    var zoneIds = undefined;
+                    if (swapDealInboundEntity != undefined) {
+                        zoneIds = [];
+                        for (var i = 0; i < swapDealInboundEntity.SaleZones.length; i++) {
+                            zoneIds.push(swapDealInboundEntity.SaleZones[i].ZoneId);
+                        }
+                    }
                     var salezonePayload = {
                         sellingNumberPlanId: sellingNumberPlanId,
                         filter: { CountryIds: [swapDealInboundEntity.CountryId] },
-                        selectedIds: swapDealInboundEntity != undefined ? swapDealInboundEntity.SaleZoneIds : undefined
+                        selectedIds: zoneIds
                     };
 
                     VRUIUtilsService.callDirectiveLoad(saleZoneDirectiveAPI, salezonePayload, loadSalesZonesPromiseDeferred);
@@ -153,23 +160,6 @@
 
             return UtilsService.waitMultiplePromises(promises);
         }
-
-
-
-
-        function loadSaleZoneSection() {
-            //if (swapDealInboundEntity != undefined) {
-            //    var setLoader = function (value) { $scope.isLoadingSelector = value };
-            //    var payload = {
-            //        sellingNumberPlanId: sellingNumberPlanId,
-            //        filter: { CountryIds: [swapDealInboundEntity.CountryId] },
-            //        selectedIds: swapDealInboundEntity != undefined ? swapDealInboundEntity.SaleZoneIds : undefined
-            //    }
-            //    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, saleZoneDirectiveAPI, payload, setLoader);
-            //}
-
-        }
-
 
         function setTitle() {
             if (isEditMode) {
@@ -206,12 +196,19 @@
         }
 
         function buildSwapDealInboundObjFromScope() {
+            var saleZones = [];
+            var zoneIds = saleZoneDirectiveAPI.getSelectedIds();
+            for (var j = 0; j < zoneIds.length; j++) {
+                saleZones.push(
+                {
+                    ZoneId: zoneIds[j]
+                });
+            }
             var obj = {
                 Name: $scope.scopeModel.name,
-                SaleZoneIds: saleZoneDirectiveAPI.getSelectedIds(),
+                SaleZones: saleZones,
                 Volume: $scope.scopeModel.volume,
                 EvaluatedRate: rateEvaluatorSelectiveDirectiveAPI.getData(),
-                Rate: 0,
                 CountryId: countryDirectiveApi.getSelectedIds()
             };
             return obj;
