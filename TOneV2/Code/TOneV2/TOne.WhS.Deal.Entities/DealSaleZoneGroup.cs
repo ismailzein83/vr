@@ -47,6 +47,7 @@ namespace TOne.WhS.Deal.Entities
 
     public class DealRate
     {
+        public long ZoneId { get; set; }
         public Decimal Rate { get; set; }
         public DateTime BED { get; set; }
         public DateTime? EED { get; set; }
