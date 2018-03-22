@@ -73,6 +73,14 @@ app.directive('vrWhsRoutingCustomerrouteGrid', ['VRNotificationService', 'VRUIUt
                     return loadGridPromiseDeffered.promise;
                 };
 
+                $scope.getColor = function (dataItem) {
+                    var cssClass = 'span-summary bold-label';
+                    if (dataItem.IsBlocked)
+                        cssClass += ' danger-font';
+
+                    return cssClass;
+                };
+
                 defineMenuActions();
             }
 

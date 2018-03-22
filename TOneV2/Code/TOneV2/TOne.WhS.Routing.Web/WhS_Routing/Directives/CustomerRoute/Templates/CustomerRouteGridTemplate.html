@@ -2,19 +2,17 @@
     <vr-datagrid on-ready="onGridReady"
                  datasource="customerRoutes"
                  dataretrievalfunction="dataRetrievalFunction"
-                 pagingtype="'Pager'"
                  menuactions="gridMenuActions"
+                 pagingtype="'Pager'"
                  defaultsortbyfieldname="'CustomerName'"
                  idfield="CustomerRouteDetailId"
                  enableautoexport="true" normalcell>
 
-        <vr-datagridcolumn headertext="'Customer'" fixedwidth="120">
-            <span style="font-size: 11px" class="bold-label" blocked="{{dataItem.IsBlocked}}">{{dataItem.CustomerName}}</span>
-        </vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Customer'" field="'CustomerName'" fixedwidth="120" getcolor="getColor"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Code'" field="'Code'" fixedwidth="100"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Zone'" field="'SaleZoneName'" fixedwidth="120"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Rate'" field="'Rate'" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="60"></vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Services'" widthfactor="1" disablesorting="true" fixedwidth="60">
+        <vr-datagridcolumn headertext="'Services'" fixedwidth="60">
             <vr-whs-be-services-viewer on-ready="dataItem.onServiceViewerReady"></vr-whs-be-services-viewer>
         </vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Blocked'" fixedwidth="50">
@@ -22,7 +20,7 @@
                 <vr-icon icontype="'2'" tooltip="'Blocked'" centered></vr-icon>
             </span>
         </vr-datagridcolumn>
-        <vr-datagridcolumn headertext="'Linked Rules'" field="'LinkedRouteRuleCount'" fixedwidth="75" disablesorting="true" isfielddynamic="true"></vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Linked Rules'" field="'LinkedRouteRuleCount'" fixedwidth="75" isfielddynamic="true" disablesorting></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Rule Type'" field="'ExecutedRouteRuleSettingsTypeName'" fixedwidth="90"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Rule Name'" field="'ExecutedRouteRuleName'" fixedwidth="100"></vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Route Options'" disablesorting>
@@ -34,7 +32,7 @@
                     <span ng-if="details.Backups != null && details.Backups.length > 0">
                         &lt;
                         <span ng-repeat="backupDetails in details.Backups">
-                            <span style="font-style:italic" class="option" ng-class="backupDetails.EvaluatedStatusCssClass" 
+                            <span style="font-style:italic" class="option" ng-class="backupDetails.EvaluatedStatusCssClass"
                                   title="Rate: {{backupDetails.SupplierRate}}, Services: {{backupDetails.ExactSupplierServiceSymbols}}">
                                 {{backupDetails.SupplierName}}
                             </span>
