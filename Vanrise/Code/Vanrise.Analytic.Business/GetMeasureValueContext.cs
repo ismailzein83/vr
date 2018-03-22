@@ -80,11 +80,8 @@ namespace Vanrise.Analytic.Business
         }
 
         public bool IsFilterIncluded(string filterName)
-        {
-            if (_query.Filters != null && _query.Filters.Any(itm => itm.Dimension == filterName))
-                return true;
-
-            return _analyticTableQueryContext.GetDimensionNames(_query.FilterGroup).Contains(filterName);
+        {            
+            return _analyticTableQueryContext.GetDimensionNamesFromQueryFilters().Contains(filterName);
         }
 
         public dynamic GetExternalSourceMatchRecordMeasureValue(string sourceName, string measureName)

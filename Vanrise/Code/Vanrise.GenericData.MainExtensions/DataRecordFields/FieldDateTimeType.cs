@@ -31,7 +31,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
     {
         public override Guid ConfigId { get { return new Guid("b8712417-83ab-4d4b-9ee1-109d20ceb909"); } }
 
-        public override string RuntimeEditor { get { return null; } }
+        public override string RuntimeEditor { get { return "vr-genericdata-fieldtype-datetime-runtimeeditor"; } }
 
         public FieldDateTimeDataType DataType { get; set; }
 

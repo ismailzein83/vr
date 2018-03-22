@@ -18,6 +18,7 @@ namespace Vanrise.Analytic.Business
         Dictionary<string, AnalyticJoin> _joins;
         Dictionary<string, AnalyticMeasureExternalSource> _measureExternalSources;
         Dictionary<string, AnalyticMeasureExternalSourceResult> _measureExternalSourceResults;
+        List<string> _dimensionNamesFromQueryFilters;
 
         public AnalyticTableQueryContext(AnalyticQuery query)
         {
@@ -38,6 +39,33 @@ namespace Vanrise.Analytic.Business
             _measures = analyticItemConfigManager.GetMeasures(analyticTableId);
             _joins = analyticItemConfigManager.GetJoins(analyticTableId);
             _measureExternalSources = analyticItemConfigManager.GetMeasureExternalSources(analyticTableId);
+            FillDimensionNamesFromQueryFilters();
+        }
+
+        private void FillDimensionNamesFromQueryFilters()
+        {
+            List<string> dimensionNames = new List<string>();
+            if(_query.Filters != null && _query.Filters.Count > 0)
+            {
+                dimensionNames.AddRange(_query.Filters.Select(itm => itm.Dimension));
+            }
+            if(_query.FilterGroup != null)
+            {
+                FillDimensionNamesFromFilterGroup(dimensionNames, _query.FilterGroup);
+            }
+            _dimensionNamesFromQueryFilters = dimensionNames.Distinct().ToList();
+        }
+
+        private void FillDimensionNamesFromFilterGroup(List<string> dimensionNames, RecordFilterGroup filterGroup)
+        {
+            foreach (var filter in filterGroup.Filters)
+            {
+                RecordFilterGroup childFilterGroup = filter as RecordFilterGroup;
+                if (childFilterGroup != null)
+                    FillDimensionNamesFromFilterGroup(dimensionNames, childFilterGroup);
+                else
+                    dimensionNames.Add(filter.FieldName);
+            }
         }
         public AnalyticTable GetTable()
         {
@@ -94,21 +122,9 @@ namespace Vanrise.Analytic.Business
             return measureExternalSource;
         }
 
-        public IEnumerable<string> GetDimensionNames(RecordFilterGroup filterGroup)
+        public List<string> GetDimensionNamesFromQueryFilters()
         {
-            List<string> dimensionNames = new List<string>();
-            if (filterGroup != null)
-            {
-                foreach (var filter in filterGroup.Filters)
-                {
-                    RecordFilterGroup childFilterGroup = filter as RecordFilterGroup;
-                    if (childFilterGroup != null)
-                        dimensionNames.AddRange(GetDimensionNames(childFilterGroup));
-                    else
-                        dimensionNames.Add(filter.FieldName);
-                }
-            }
-            return new HashSet<string>(dimensionNames);
+            return _dimensionNamesFromQueryFilters;
         }
 
         public AnalyticQuery Query

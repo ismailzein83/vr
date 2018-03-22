@@ -143,19 +143,12 @@ namespace Vanrise.Analytic.Business
                     }
                 }
             }
-            if (dimensionFilters != null)
+            var filterDimensions = GetDimensionNamesFromQueryFilters();
+            if (filterDimensions != null)
             {
-                foreach (var dimensionFilter in dimensionFilters)
+                foreach (var filterDimension in filterDimensions)
                 {
-                    AddSQLDimensions(dimensionFilter.Dimension, sqlDimensions);
-                }
-            }
-            var filterGroupDimensions = GetDimensionNames(filterGroup);
-            if (filterGroupDimensions != null)
-            {
-                foreach (var dimensionName in filterGroupDimensions)
-                {
-                    AddSQLDimensions(dimensionName, sqlDimensions);
+                    AddSQLDimensions(filterDimension, sqlDimensions);
                 }
             }
             //TODO: add dimensions from FilterGroup
@@ -224,11 +217,11 @@ namespace Vanrise.Analytic.Business
             return _analyticTableQueryContext.GetMeasureConfig(measureName);
         }
 
-        IEnumerable<string> GetDimensionNames(RecordFilterGroup filterGroup)
+        List<string> GetDimensionNamesFromQueryFilters()
         {
             if (_analyticTableQueryContext == null)
                 throw new NullReferenceException("_analyticTableQueryContext");
-            return _analyticTableQueryContext.GetDimensionNames(filterGroup);
+            return _analyticTableQueryContext.GetDimensionNamesFromQueryFilters();
         }
 
         #endregion

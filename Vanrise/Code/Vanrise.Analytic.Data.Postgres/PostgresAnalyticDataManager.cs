@@ -114,19 +114,12 @@ namespace Vanrise.Analytic.Data.Postgres
                     }
                 }
             }
-            if (dimensionFilters != null)
+            var filterDimensions = GetDimensionNamesFromQueryFilters();
+            if (filterDimensions != null)
             {
-                foreach (var dimensionFilter in dimensionFilters)
+                foreach (var filterDimension in filterDimensions)
                 {
-                    AddSQLDimensions(dimensionFilter.Dimension, sqlDimensions);
-                }
-            }
-            var filterGroupDimensions = GetDimensionNames(filterGroup);
-            if (filterGroupDimensions != null)
-            {
-                foreach (var dimensionName in filterGroupDimensions)
-                {
-                    AddSQLDimensions(dimensionName, sqlDimensions);
+                    AddSQLDimensions(filterDimension, sqlDimensions);
                 }
             }
             //TODO: add dimensions from FilterGroup
@@ -778,12 +771,14 @@ namespace Vanrise.Analytic.Data.Postgres
             return _analyticTableQueryContext.GetJoinContig(joinName);
         }
 
-        public IEnumerable<string> GetDimensionNames(RecordFilterGroup filterGroup)
+
+        List<string> GetDimensionNamesFromQueryFilters()
         {
             if (_analyticTableQueryContext == null)
                 throw new NullReferenceException("_analyticTableQueryContext");
-            return _analyticTableQueryContext.GetDimensionNames(filterGroup);
+            return _analyticTableQueryContext.GetDimensionNamesFromQueryFilters();
         }
+
 
         #endregion
 

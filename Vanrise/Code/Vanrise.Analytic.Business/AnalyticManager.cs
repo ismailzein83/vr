@@ -314,12 +314,10 @@ namespace Vanrise.Analytic.Business
             List<string> dimensionNamesToCalculate = new List<string>();
             if (requestedDimensionNames != null)
                 dimensionNamesToCalculate.AddRange(requestedDimensionNames);
-            if (dimensionFilters != null)
-                dimensionNamesToCalculate.AddRange(dimensionFilters.Select(dimFilter => dimFilter.Dimension));
-            var filterGroupDimensions = analyticTableQueryContext.GetDimensionNames(filterGroup);
-            if (filterGroupDimensions != null)
-                dimensionNamesToCalculate.AddRange(filterGroupDimensions);
-
+            var filterDimensions = analyticTableQueryContext.GetDimensionNamesFromQueryFilters();
+            if (filterDimensions != null && filterDimensions.Count > 0)
+                dimensionNamesToCalculate.AddRange(filterDimensions);
+            
             dimensionNamesToCalculate = dimensionNamesToCalculate.Where(dimName => !availableDimensions.Contains(dimName)).ToList();
 
             if (dimensionNamesToCalculate.Count > 0)

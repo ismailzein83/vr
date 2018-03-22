@@ -70,7 +70,7 @@ namespace Vanrise.Analytic.Entities
 
         AnalyticJoin GetJoinContig(string joinName);
 
-        IEnumerable<string> GetDimensionNames(RecordFilterGroup filterGroup);
+        List<string> GetDimensionNamesFromQueryFilters();
 
         AnalyticMeasureExternalSourceResult GetMeasureExternalSourceResult(string sourceName);
     }
