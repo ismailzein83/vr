@@ -2,6 +2,7 @@
 CREATE Procedure [VRNotification].[sp_VRAlertRule_Update]
 	@ID int,
 	@Name nvarchar(255),
+	@IsDisabled bit,
 	@RuleTypeID uniqueidentifier,
 	@LastModifiedBy int,
 	@Settings nvarchar(MAX)
@@ -14,6 +15,7 @@ BEGIN
 			RuleTypeID = @RuleTypeID,
 			Settings = @Settings,
 			LastModifiedBy = @LastModifiedBy,
+			IsDisabled =@IsDisabled,
 			LastModifiedTime = GETDATE()
 		where ID = @ID
 	END

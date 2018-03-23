@@ -9,8 +9,11 @@
     [CreatedBy]        INT              NULL,
     [LastModifiedBy]   INT              NULL,
     [LastModifiedTime] DATETIME         NULL,
+    [IsDisabled]       BIT              NULL,
     CONSTRAINT [PK_VRAlertRule] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

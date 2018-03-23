@@ -743,6 +743,8 @@
     <Build Include="runtime\Tables\RuntimeNodeConfiguration.sql" />
     <Build Include="runtime\Tables\RuntimeNode.sql" />
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_GetSplitInvoiceGroupId.sql" />
+    <Build Include="VRNotification\Stored Procedures\sp_VRAlertRule_SetEnable.sql" />
+    <Build Include="VRNotification\Stored Procedures\sp_VRAlertRule_SetDisable.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
