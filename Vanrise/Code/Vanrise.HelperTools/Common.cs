@@ -379,14 +379,12 @@ when not matched by target then
 
             if (item != mainItem && !item.Contains(mainItem) && !mainItem.Contains(item))
             {
-                if (projectName == "RA")
-                {
-                    sb = sb.Replace(mainItem, "StandardRAStructure");
-                }
-                else
-                {
-                    sb = sb.Replace(mainItem, string.Format("{0}_{1}", mainItem, currentDateShort));
-                }
+                sb = sb.Replace(mainItem, string.Format("{0}_{1}", mainItem, currentDateShort));
+            }
+
+            if (projectName == "RA")
+            {
+                sb = sb.Replace(mainItem, "StandardRAStructure");
             }
 
             if (!Directory.Exists(sqlFilesOutputPath))
