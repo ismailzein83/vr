@@ -116,6 +116,12 @@
     <Compile Include="GenericBusinessEntity\GenericBEDefinitionGridColumnAttribute.cs" />
     <Compile Include="GenericBusinessEntity\GenericBusinessEntityFilter.cs" />
     <Compile Include="GenericEditorDefinitionSetting\VRGenericEditorDefinitionSetting.cs" />
+    <Compile Include="GenericRules\AdditionalField.cs" />
+    <Compile Include="GenericRules\GenericRuleInvalidRow.cs" />
+    <Compile Include="GenericRules\GenericRuleRowToAdd.cs" />
+    <Compile Include="GenericRules\ParsedGenericRuleRow.cs" />
+    <Compile Include="GenericRules\UploadGenericRulesInput.cs" />
+    <Compile Include="GenericRules\UploadGenericRulesOutput.cs" />
     <Compile Include="IFieldBusinessEntityType.cs" />
     <Compile Include="IGenericObject.cs" />
     <Compile Include="RecordFilter\FilterParameter.cs" />
