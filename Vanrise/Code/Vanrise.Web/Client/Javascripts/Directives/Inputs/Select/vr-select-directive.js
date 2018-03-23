@@ -872,12 +872,13 @@
                                 ctrl.selectedvalues = undefined;
                             }
 
-                            else {                            
+                            else {
+                                var selectedvalues = ctrl.selectedvalues;
                                 ctrl.selectedvalues = ctrl.selectedvalues.filter(function (obj) {
                                     return ctrl.itemLocked(obj);
                                 });
                                 if (ctrl.ondeselectallitems && typeof (ctrl.ondeselectallitems) == 'function') {
-                                    ctrl.ondeselectallitems(ctrl.selectedvalues);
+                                    ctrl.ondeselectallitems(selectedvalues);
                                 }
                             }
 
