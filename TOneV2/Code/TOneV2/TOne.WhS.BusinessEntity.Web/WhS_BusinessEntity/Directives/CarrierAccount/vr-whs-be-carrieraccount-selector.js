@@ -50,23 +50,28 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
         function getTemplate(attrs) {
 
             var label;
+
             if (attrs.ismultipleselection != undefined) {
                 if ((attrs.getcustomers != undefined && attrs.getsuppliers != undefined) || attrs.getexchangecarriers != undefined) {
                     label = 'Carriers';
                 }
-                else if (attrs.getcustomers != undefined)
+                else if (attrs.getcustomers != undefined) {
                     label = 'Customers';
-                else
+                }
+                else {
                     label = 'Suppliers';
+                }
             }
             else {
                 if ((attrs.getcustomers != undefined && attrs.getsuppliers != undefined) || attrs.getexchangecarriers != undefined) {
                     label = 'Carrier';
                 }
-                else if (attrs.getcustomers != undefined)
+                else if (attrs.getcustomers != undefined) {
                     label = 'Customer';
-                else
+                }
+                else {
                     label = 'Supplier';
+                }
             }
 
             if (attrs.customlabel != undefined)
@@ -91,11 +96,17 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
             if (attrs.ismultipleselection != undefined)
                 ismultipleselection = "ismultipleselection";
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}"> <vr-select hasviewpermission="ctrl.hasviewpermission"  isrequired="ctrl.isrequired" on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" onblurdropdown="ctrl.onblurdropdown" onselectitem="ctrl.onselectitem"  ondeselectitem="ctrl.ondeselectitem" datalockfield="Locked" datatextfield="Name" datavaluefield="CarrierAccountId" label="'
-                + label + '" ' + hideselectedvaluessection + '  ' + hideremoveicon + ' ' + ismultipleselection + ' ' + viewCliked + ' ></vr-select></vr-columns>';
+            return '<vr-columns colnum="{{ctrl.normalColNum}}"> ' +
+                        '<vr-select hasviewpermission="ctrl.hasviewpermission"  isrequired="ctrl.isrequired" on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" '
+                            + ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" onblurdropdown="ctrl.onblurdropdown" onselectitem="ctrl.onselectitem" '
+                            + ' ondeselectitem="ctrl.ondeselectitem" datalockfield="Locked" datatextfield="Name" datavaluefield="CarrierAccountId" label="' + label + '" '
+                            + hideselectedvaluessection + '  ' + hideremoveicon + ' ' + ismultipleselection + ' ' + viewCliked + ' >' +
+                        '</vr-select>' +
+                   '</vr-columns>';
         }
 
         function carriersCtor(ctrl, $scope, WhS_BE_CarrierAccountAPIService, attrs) {
+            this.initializeController = initializeController;
 
             var selectorApi;
 
@@ -103,6 +114,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
                 ctrl.ViewCarrierAccount = function (obj) {
                     WhS_BE_CarrierAccountService.viewCarrierAccount(obj.CarrierAccountId);
                 };
+
                 ctrl.hasviewpermission = function () {
                     return WhS_BE_CarrierAccountAPIService.HasViewCarrierAccountPermission();
                 };
@@ -165,11 +177,10 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
                 api.hasSingleItem = function () {
                     return ctrl.datasource.length == 1;
                 };
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
-            this.initializeController = initializeController;
         }
 
         return directiveDefinitionObject;
