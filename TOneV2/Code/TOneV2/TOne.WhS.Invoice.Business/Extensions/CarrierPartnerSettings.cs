@@ -26,7 +26,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
         RegAddress = 9,
         Name = 10,
         VatID = 11,
-        CustomerVatID = 12
+        CustomerVatID = 12,
+        CarrierCompanyName = 13
     }
     public class CarrierPartnerSettings : InvoicePartnerManager
     {
@@ -68,6 +69,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         CarrierProfile carrierProfile = null;
                         string carrierName = null;
                         string currencySymbol = null;
+                        string carrierCompanyName = null;
                         CompanySetting companySetting = null;
 
                         if (financialAccount.CarrierProfileId.HasValue)
@@ -75,6 +77,8 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             companySetting = carrierProfileManager.GetCompanySetting(financialAccount.CarrierProfileId.Value);
                             carrierProfile = carrierProfileManager.GetCarrierProfile(financialAccount.CarrierProfileId.Value);
                             carrierName = carrierProfileManager.GetCarrierProfileName(carrierProfile.CarrierProfileId);
+                            carrierProfile.Settings.ThrowIfNull("carrierProfile.Settings", carrierProfile.CarrierProfileId);
+                            carrierCompanyName = carrierProfile.Settings.Company;
                             currencySymbol = currencyManager.GetCurrencySymbol(carrierProfile.Settings.CurrencyId);
                         }
                         else
@@ -83,10 +87,13 @@ namespace TOne.WhS.Invoice.Business.Extensions
                             companySetting = carrierAccountManager.GetCompanySetting(financialAccount.CarrierAccountId.Value);
                             var carrierAccount = carrierAccountManager.GetCarrierAccount(Convert.ToInt32(financialAccount.CarrierAccountId.Value));
                             carrierProfile = carrierProfileManager.GetCarrierProfile(carrierAccount.CarrierProfileId);
+                            carrierProfile.Settings.ThrowIfNull("carrierProfile.Settings", carrierAccount.CarrierProfileId);
+                            carrierCompanyName = carrierProfile.Settings.Company;
                             carrierName = carrierAccountManager.GetCarrierAccountName(carrierAccount.CarrierAccountId);
+
                             currencySymbol = currencyManager.GetCurrencySymbol(carrierAccount.CarrierAccountSettings.CurrencyId);
                         }
-
+                        AddRDLCParameter(rdlcReportParameters, RDLCParameter.CarrierCompanyName,carrierCompanyName , true);
                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.Carrier, carrierName, true);
                         AddRDLCParameter(rdlcReportParameters, RDLCParameter.Currency, currencySymbol, true);
                         if (carrierProfile != null)

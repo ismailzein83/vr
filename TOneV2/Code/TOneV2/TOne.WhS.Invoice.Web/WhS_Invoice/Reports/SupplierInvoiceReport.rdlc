@@ -76,7 +76,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=Parameters!Carrier.Value</Value>
+                <Value>=Parameters!CarrierCompanyName.Value</Value>
                 <Style>
                   <FontStyle>Italic</FontStyle>
                   <FontFamily>Verdana</FontFamily>
@@ -1633,6 +1633,9 @@
               </Parameter>
               <Parameter Name="Carrier">
                 <Value>=Parameters!Carrier.Value</Value>
+              </Parameter>
+              <Parameter Name="CarrierCompanyName">
+                <Value>=Parameters!CarrierCompanyName.Value</Value>
               </Parameter>
             </Parameters>
             <Top>0.14722in</Top>
@@ -4126,7 +4129,7 @@
         <Top>5.20771in</Top>
         <Left>0.58479in</Left>
         <Height>0.25in</Height>
-        <Width>7.26771in</Width>
+        <Width>7.2677in</Width>
         <ZIndex>37</ZIndex>
         <Visibility>
           <Hidden>= iif(Parameters!DisplayCommission.Value = True, false, True)</Hidden>
@@ -4953,6 +4956,10 @@
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="CarrierCompanyName">
+      <DataType>String</DataType>
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
   </ReportParameters>

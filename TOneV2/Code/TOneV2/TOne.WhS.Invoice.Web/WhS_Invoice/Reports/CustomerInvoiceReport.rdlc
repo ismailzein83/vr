@@ -76,7 +76,7 @@
           <Paragraph>
             <TextRuns>
               <TextRun>
-                <Value>=Parameters!Carrier.Value</Value>
+                <Value>=Parameters!CarrierCompanyName.Value</Value>
                 <Style>
                   <FontStyle>Italic</FontStyle>
                   <FontFamily>Verdana</FontFamily>
@@ -2819,6 +2819,9 @@
               <Parameter Name="Carrier">
                 <Value>=Parameters!Carrier.Value</Value>
               </Parameter>
+              <Parameter Name="CarrierCompanyName">
+                <Value>=Parameters!CarrierCompanyName.Value</Value>
+              </Parameter>
             </Parameters>
             <Top>0.14722in</Top>
             <Height>3in</Height>
@@ -5108,6 +5111,12 @@
       <Prompt>ReportParameter1</Prompt>
     </ReportParameter>
     <ReportParameter Name="SaleAmount">
+      <DataType>String</DataType>
+      <Nullable>true</Nullable>
+      <AllowBlank>true</AllowBlank>
+      <Prompt>ReportParameter1</Prompt>
+    </ReportParameter>
+    <ReportParameter Name="CarrierCompanyName">
       <DataType>String</DataType>
       <Nullable>true</Nullable>
       <AllowBlank>true</AllowBlank>

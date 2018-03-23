@@ -309,7 +309,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             if(customerInvoicesBySaleCurrency != null && customerInvoicesBySaleCurrency.Count > 0)
             {
                 GeneratedInvoiceItemSet generatedInvoiceItemSet = new GeneratedInvoiceItemSet();
-                generatedInvoiceItemSet.SetName = "GroupingBySaleCurrency";
+                generatedInvoiceItemSet.SetName = "GroupingByCurrency";
                 generatedInvoiceItemSet.Items = new List<GeneratedInvoiceItem>();
 
                 foreach (var customerInvoiceBySaleCurrency in customerInvoicesBySaleCurrency)
