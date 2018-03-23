@@ -541,9 +541,21 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                             lastSelectedRow.removeClass('vr-datagrid-datacells-click');
                         $(evnt.target).closest('.vr-datagrid-row').addClass('vr-datagrid-datacells-click');
                     }
-                    ctrl.menuLeft = (VRLocalizationService.isLocalizationRTL()) ? evnt.clientX - 90 : evnt.clientX;// evnt.offsetX == undefined ? evnt.originalEvent.layerX : evnt.offsetX;
-                    ctrl.menuTop = evnt.clientY;// evnt.offsetY == undefined ? evnt.originalEvent.layerY : evnt.offsetY;
-
+                    var self = angular.element(evnt.currentTarget);
+                    var menu = self.find('.gid-cell-menu')[0];
+                    var menuTop = evnt.clientY;
+                    $(menu).hide();
+                    setTimeout(function () {
+                        var self = angular.element(evnt.currentTarget);
+                        var menuHeigth = $(menu).height();
+                        if (innerHeight - menuTop - 30 < menuHeigth) {
+                            menuTop -= menuHeigth;
+                        }
+                        ctrl.menuLeft = (VRLocalizationService.isLocalizationRTL()) ? evnt.clientX - 90 : evnt.clientX;// evnt.offsetX == undefined ? evnt.originalEvent.layerX : evnt.offsetX;
+                        ctrl.menuTop = menuTop;
+                        scope.$apply();
+                        $(menu).show();
+                    }, 1);
                 };
                 ctrl.isDraggableColumns = attrs.disabledraggablecolumns == undefined;
                 ctrl.headerSortableListener = {
@@ -667,7 +679,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     if (index % 2 == 0 && ctrl.layoutOption.alternativeColor == true)
                         return;
 
-                    return  colDef && colDef.cssClass ;
+                    return colDef && colDef.cssClass;
                 };
 
                 function fixHeaderLayout() {
