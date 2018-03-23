@@ -50,7 +50,7 @@ as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('101D7E3E-3D06-4379-A6BD-02828FD8E782','Retail RA Analytics DB','{"$type":"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage","ConfigId":"2aeec2de-ec44-4698-aaef-8e9dbf669d1e","ConnectionStringName":"RetailRAAnalyticsDBConnString","IsRemoteDataStore":false}','2018-03-19 11:18:40.170'),
 ('0947B915-AFC8-4DCB-9C15-75D922F063EA','Retail RA CDR DB','{"$type":"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage","ConfigId":"2aeec2de-ec44-4698-aaef-8e9dbf669d1e","ConnectionStringName":"RetailRACDRDBConnString","IsRemoteDataStore":false}','2018-03-19 11:18:24.507'),
-('5F0AFECD-C203-41A4-860E-BD29C9C4CAA1','Retail RA DB','{"$type":"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage","ConfigId":"2aeec2de-ec44-4698-aaef-8e9dbf669d1e","ConnectionStringName":"RetailRADBConnString","IsRemoteDataStore":false}','2018-03-15 17:53:26.217')
+('5F0AFECD-C203-41A4-860E-BD29C9C4CAA1','Retail RA DB','{"$type":"Vanrise.GenericData.SQLDataStorage.SQLDataStoreSettings, Vanrise.GenericData.SQLDataStorage","ConfigId":"2aeec2de-ec44-4698-aaef-8e9dbf669d1e","ConnectionStringName":"ConfigurationDBConnString","IsRemoteDataStore":false}','2018-03-15 17:53:26.217')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Settings],[CreatedTime]))
 merge	[genericdata].[DataStore] as t
