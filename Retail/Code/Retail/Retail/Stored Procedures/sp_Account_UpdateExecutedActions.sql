@@ -3,12 +3,12 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE [Retail].[sp_Account_UpdateExecutedActions]
+CREATE PROCEDURE [Retail].[sp_Account_UpdateExecutedActions]
 	@ID BIGINT,
 	@ExecutedActions nvarchar(MAX)
 AS
 BEGIN
 		UPDATE Retail.Account
-		SET ExecutedActionsData = @ExecutedActions
+		SET ExecutedActionsData = @ExecutedActions, LastModifiedTime = GETDATE()
 		WHERE ID = @ID
 END

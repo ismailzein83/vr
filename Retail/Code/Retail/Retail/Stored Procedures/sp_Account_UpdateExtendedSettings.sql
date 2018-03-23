@@ -3,16 +3,17 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE Retail.[sp_Account_UpdateExtendedSettings]
+CREATE PROCEDURE [Retail].[sp_Account_UpdateExtendedSettings]
 	@ID bigint, 
-	@ExtendedSettings nvarchar(MAX)
+	@ExtendedSettings nvarchar(MAX),
+	@LastModifiedBy int
 	
 AS
 BEGIN
  
 	Update Retail.Account
 	Set 
-		 ExtendedSettings = @ExtendedSettings		
+		 ExtendedSettings = @ExtendedSettings, LastModifiedBy = @LastModifiedBy, LastModifiedTime = GETDATE()		
 	Where ID = @ID
 
 END

@@ -3,12 +3,13 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE Retail.sp_Account_UpdateStatusID
+CREATE PROCEDURE [Retail].[sp_Account_UpdateStatusID]
 	@ID BIGINT,
-	@StatusID uniqueidentifier
+	@StatusID uniqueidentifier,
+	@LastModifiedBy int
 AS
 BEGIN
 		UPDATE Retail.Account
-		SET StatusID = @StatusID
+		SET StatusID = @StatusID, LastModifiedBy = @LastModifiedBy, LastModifiedTime = GETDATE()
 		WHERE ID = @ID
 END
