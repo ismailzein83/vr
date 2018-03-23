@@ -16,6 +16,10 @@
 \images\RA-login.png
 \images\RA-logoonheader.png
 
+\images\iconheader.ico
+\images\login.png
+\images\logoonheader.png
+
 \bin\Retail.Ringo.Business.dll
 \bin\Retail.Ringo.Data.dll
 \bin\Retail.Ringo.Data.SQL.dll

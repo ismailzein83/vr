@@ -33,8 +33,15 @@ xcopy "C:\TFS\Retail\Code\Retail.SMS.Web\Retail_SMS" /S /E /R /y /v /i /z /Q				
 xcopy "C:\TFS\Retail\Code\Retail.Data.Web\Retail_Data" /S /E /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Client\Modules\Retail_Data\"
 xcopy "C:\TFS\Retail\Code\Retail.Invoice.Web\Retail_Invoice" /S /E /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Client\Modules\Retail_Invoice\"
 xcopy "C:\TFS\Retail\Code\Retail.Cost.Web\Retail_Cost" /S /E /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Client\Modules\Retail_Cost\"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\RA-logoonheader.png" /S /R /y /v /i /z /Q					"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Images\"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\RA-login.png" /S /R /y /v /i /z /Q							"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Images\"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\RA-iconheader.ico" /S /R /y /v /i /z /Q						"\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Images\"
 
-rename "\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Web.config.RA.exclude" "Web.config" 
+rename "\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Web.config.RA.exclude" "Web.config"
+rename "\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Images\RA-logoonheader.png" "logoonheader.png"
+rename "\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Images\RA-login.png" "login.png"
+rename "\\192.168.110.185\Fixes\WebSite\RA\%YYYYMMDD%\Images\RA-iconheader.ico" "iconheader.ico"
+
 ECHO RA WebSite Full version
 
 xcopy "C:\Publish\Retail" /S /E /R /y /v /i /z /Q														"\\192.168.110.185\FixesFullVersion\WebSite\RA\%YYYYMMDD%\" /EXCLUDE:C:\TFS\Vanrise\Code\Resources\BatchScripts\RA\list-of-excluded-files.txt
@@ -62,5 +69,11 @@ xcopy "C:\TFS\Retail\Code\Retail.SMS.Web\Retail_SMS" /S /E /R /y /v /i /z /Q				
 xcopy "C:\TFS\Retail\Code\Retail.Data.Web\Retail_Data" /S /E /R /y /v /i /z /Q							"\\192.168.110.185\FixesFullVersion\WebSite\RA\%YYYYMMDD%\Client\Modules\Retail_Data\"
 xcopy "C:\TFS\Retail\Code\Retail.Invoice.Web\Retail_Invoice" /S /E /R /y /v /i /z /Q					"\\192.168.110.185\FixesFullVersion\WebSite\RA\%YYYYMMDD%\Client\Modules\Retail_Invoice\"
 xcopy "C:\TFS\Retail\Code\Retail.Cost.Web\Retail_Cost" /S /E /R /y /v /i /z /Q							"\\192.168.110.185\FixesFullVersion\WebSite\RA\%YYYYMMDD%\Client\Modules\Retail_Cost\"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\RA-logoonheader.png" /S /R /y /v /i /z /Q					"\\192.168.110.185\FixesFullVersion\WebSite\RA\%YYYYMMDD%\Images\"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\RA-login.png" /S /R /y /v /i /z /Q							"\\192.168.110.185\FixesFullVersion\WebSite\RA\%YYYYMMDD%\Images\"
+xcopy "C:\TFS\Retail\Code\Retail.Web\Images\RA-iconheader.ico" /S /R /y /v /i /z /Q						"\\192.168.110.185\FixesFullVersion\WebSite\RA\%YYYYMMDD%\Images\"
 
-rename "\\192.168.110.185\FixesFullVersion\WebSite\RA\%YYYYMMDD%\Web.config.RA.exclude" "Web.config" 
+rename "\\192.168.110.185\FixesFullVersion\WebSite\RA\%YYYYMMDD%\Web.config.RA.exclude" "Web.config"
+rename "\\192.168.110.185\FixesFullVersion\WebSite\RA\%YYYYMMDD%\Images\RA-logoonheader.png" "logoonheader.png"
+rename "\\192.168.110.185\FixesFullVersion\WebSite\RA\%YYYYMMDD%\Images\RA-login.png" "login.png"
+rename "\\192.168.110.185\FixesFullVersion\WebSite\RA\%YYYYMMDD%\Images\RA-iconheader.ico" "iconheader.ico"
