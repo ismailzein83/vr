@@ -877,7 +877,7 @@
                                     return ctrl.itemLocked(obj);
                                 });
                                 if (ctrl.ondeselectallitems && typeof (ctrl.ondeselectallitems) == 'function') {
-                                    ctrl.ondeselectallitems();
+                                    ctrl.ondeselectallitems(ctrl.selectedvalues);
                                 }
                             }
 
