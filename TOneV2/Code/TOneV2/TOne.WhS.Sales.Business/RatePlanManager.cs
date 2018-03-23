@@ -855,90 +855,102 @@ namespace TOne.WhS.Sales.Business
 
 			ratePlanDraftManager.SaveDraft(input.OwnerType, input.OwnerId, newDraft);
 		}
-		public ImportedDataValidationResult ValidateImportedData(ImportedDataValidationInput input)
-		{
-			IEnumerable<string> worksheetHeaders;
-			IEnumerable<ImportedRow> importedRows = GetImportedRows(input.FileId, input.HeaderRowExists, out worksheetHeaders);
-			var result = new ImportedDataValidationResult();
-			var validator = new ImportedRowValidator();
+        public ImportedDataValidationResult ValidateImportedData(ImportedDataValidationInput input)
+        {
+            Dictionary<long, DateTime> customerZoneEffectiveDatesByZoneId = new Dictionary<long, DateTime>();
+            List<long> zoneIds = new List<long>();
+            IEnumerable<string> worksheetHeaders;
+            IEnumerable<ImportedRow> importedRows = GetImportedRows(input.FileId, input.HeaderRowExists, out worksheetHeaders);
+            var result = new ImportedDataValidationResult();
+            var validator = new ImportedRowValidator();
+            DateTime minDate = DateTime.MaxValue;
 
-			if (importedRows == null || importedRows.Count() == 0)
-			{
-				result.FileIsEmpty = true;
-				return result;
-			}
+            if (importedRows == null || importedRows.Count() == 0)
+            {
+                result.FileIsEmpty = true;
+                return result;
+            }
 
-			Dictionary<string, SaleZone> saleZonesByName = GetSaleZonesEffectiveAfterByName(input.OwnerType, input.OwnerId, DateTime.Today);
-			Dictionary<string, ZoneChanges> zoneDraftsByZoneName = GetZoneDraftsByZoneName(input.OwnerType, input.OwnerId);
+            Dictionary<string, SaleZone> saleZonesByName = GetSaleZonesEffectiveAfterByName(input.OwnerType, input.OwnerId, DateTime.Today);
+            Dictionary<string, ZoneChanges> zoneDraftsByZoneName = GetZoneDraftsByZoneName(input.OwnerType, input.OwnerId);
 
-			var countryBEDsByCountry = new Dictionary<int, DateTime>();
-			IEnumerable<int> closedCountryIds = new List<int>();
+            var countryBEDsByCountry = new Dictionary<int, DateTime>();
+            IEnumerable<int> closedCountryIds = new List<int>();
 
-			if (input.OwnerType == SalePriceListOwnerType.Customer)
-			{
-				countryBEDsByCountry = UtilitiesManager.GetDatesByCountry(input.OwnerId, DateTime.Today, true);
-				closedCountryIds = UtilitiesManager.GetClosedCountryIds(input.OwnerId, null, DateTime.Today);
-			}
+            if (input.OwnerType == SalePriceListOwnerType.Customer)
+            {
+                countryBEDsByCountry = UtilitiesManager.GetDatesByCountry(input.OwnerId, DateTime.Today, true);
+                closedCountryIds = UtilitiesManager.GetClosedCountryIds(input.OwnerId, null, DateTime.Today);
+            }
 
-			// Validate the data of the entire file
-			var importedFileValidationContext = new ImportedFileValidationContext()
-			{
-				ImportedRows = importedRows,
-				SaleZonesByZoneName = saleZonesByName
-			};
+            // Validate the data of the entire file
+            var importedFileValidationContext = new ImportedFileValidationContext()
+            {
+                ImportedRows = importedRows,
+                SaleZonesByZoneName = saleZonesByName
+            };
 
-			validator.ValidateImportedFile(importedFileValidationContext);
+            validator.ValidateImportedFile(importedFileValidationContext);
 
-			if (importedFileValidationContext.InvalidImportedRows != null)
-			{
-				foreach (InvalidImportedRow invalidImportedRow in importedFileValidationContext.InvalidImportedRows)
-					result.InvalidDataByRowIndex.Add(invalidImportedRow.RowIndex, invalidImportedRow);
-			}
+            if (importedFileValidationContext.InvalidImportedRows != null)
+            {
+                foreach (InvalidImportedRow invalidImportedRow in importedFileValidationContext.InvalidImportedRows)
+                    result.InvalidDataByRowIndex.Add(invalidImportedRow.RowIndex, invalidImportedRow);
+            }
 
-			// Validate the data of each zone
-			for (int i = 0; i < importedRows.Count(); i++)
-			{
-				ImportedRow importedRow = importedRows.ElementAt(i);
-				string zoneName = (importedRow.Zone != null) ? BulkActionUtilities.GetZoneNameKey(importedRow.Zone) : null;
+            // Validate the data of each zone
+            for (int i = 0; i < importedRows.Count(); i++)
+            {
+                ImportedRow importedRow = importedRows.ElementAt(i);
+                string zoneName = (importedRow.Zone != null) ? BulkActionUtilities.GetZoneNameKey(importedRow.Zone) : null;
 
-				if (zoneName != null && importedFileValidationContext.InvalidImportedRows.FindRecord(x => BulkActionUtilities.GetZoneNameKey(x.ImportedRow.Zone) == zoneName) != null)
-					continue;
+                if (zoneName != null && importedFileValidationContext.InvalidImportedRows.FindRecord(x => BulkActionUtilities.GetZoneNameKey(x.ImportedRow.Zone) == zoneName) != null)
+                    continue;
+                var existingZone = saleZonesByName.GetRecord(zoneName);
+                var context = new IsImportedRowValidContext()
+                {
+                    OwnerType = input.OwnerType,
+                    OwnerId = input.OwnerId,
+                    ImportedRow = importedRow,
+                    ExistingZone = existingZone,
+                    ZoneDraft = zoneDraftsByZoneName.GetRecord(zoneName),
+                    CountryBEDsByCountry = countryBEDsByCountry,
+                    ClosedCountryIds = closedCountryIds,
+                    DateTimeFormat = input.DateTimeFormat
+                };
 
-				var context = new IsImportedRowValidContext()
-				{
-					OwnerType = input.OwnerType,
-					OwnerId = input.OwnerId,
-					ImportedRow = importedRow,
-					ExistingZone = saleZonesByName.GetRecord(zoneName),
-					ZoneDraft = zoneDraftsByZoneName.GetRecord(zoneName),
-					CountryBEDsByCountry = countryBEDsByCountry,
-					ClosedCountryIds = closedCountryIds,
-					DateTimeFormat = input.DateTimeFormat
-				};
 
-				if (validator.IsImportedRowValid(context))
-				{
-					result.ValidDataByZoneId.Add(context.ExistingZone.SaleZoneId, importedRow);
-					result.ApplicableZoneIds.Add(context.ExistingZone.SaleZoneId);
-				}
-				else
-				{
-					if (context.ExistingZone != null)
-					{
-						result.ApplicableZoneIds.Add(context.ExistingZone.SaleZoneId);
-					}
-					result.InvalidDataByRowIndex.Add(i, new InvalidImportedRow()
-					{
-						RowIndex = i,
-						ImportedRow = importedRow,
-						ZoneId = (context.ExistingZone != null) ? (long?)context.ExistingZone.SaleZoneId : null,
-						ErrorMessage = context.ErrorMessage
-					});
-				}
-			}
-
-			return result;
-		}
+                if (validator.IsImportedRowValid(context))
+                {
+                    DateTime effectiveDateAsDateTime;
+                    DateTime.TryParse(importedRow.EffectiveDate, out effectiveDateAsDateTime);
+                    if (effectiveDateAsDateTime < minDate)
+                        minDate = effectiveDateAsDateTime;
+                    customerZoneEffectiveDatesByZoneId.Add(existingZone.SaleZoneId, effectiveDateAsDateTime);
+                    zoneIds.Add(existingZone.SaleZoneId);
+                    result.ValidDataByZoneId.Add(context.ExistingZone.SaleZoneId, importedRow);
+                    result.ApplicableZoneIds.Add(context.ExistingZone.SaleZoneId);
+                }
+                else
+                {
+                    if (context.ExistingZone != null)
+                    {
+                        result.ApplicableZoneIds.Add(context.ExistingZone.SaleZoneId);
+                    }
+                    result.InvalidDataByRowIndex.Add(i, new InvalidImportedRow()
+                    {
+                        RowIndex = i,
+                        ImportedRow = importedRow,
+                        ZoneId = (context.ExistingZone != null) ? (long?)context.ExistingZone.SaleZoneId : null,
+                        ErrorMessage = context.ErrorMessage
+                    });
+                }
+               
+            }
+            if (result.ValidDataByZoneId != null)
+                ValidateRates(input.OwnerId, input.OwnerType, zoneIds, minDate, customerZoneEffectiveDatesByZoneId, result.ValidDataByZoneId, saleZonesByName);
+            return result;
+        }
 
 		private IEnumerable<ZoneItem> BuildZoneItems(RatePlanZoneCreationInput input)
 		{
@@ -1372,7 +1384,7 @@ namespace TOne.WhS.Sales.Business
 		{
 			var validatedImportedRows = new List<ValidatedImportedRow>();
 			invalidImportedRowsExist = false;
-
+          
 			var validator = new ImportedRowValidator();
 
 			foreach (ImportedRow importedRow in importedRows)
@@ -1381,17 +1393,17 @@ namespace TOne.WhS.Sales.Business
 				{
 					ImportedRow = importedRow
 				};
-
+                
 				var context = new IsImportedRowValidContext()
 				{
 					OwnerType = ownerType,
 					OwnerId = ownerId,
 					ImportedRow = importedRow,
-					ExistingZone = saleZonesByName.GetRecord(importedRow.Zone),
+                    ExistingZone = saleZonesByName.GetRecord(importedRow.Zone),
 					ZoneDraft = zoneDraftsByZoneName.GetRecord(importedRow.Zone),
 					CountryBEDsByCountry = countryBEDsByCountry
 				};
-
+             
 				if (!validator.IsImportedRowValid(context))
 					invalidImportedRowsExist = true;
 
@@ -1403,6 +1415,57 @@ namespace TOne.WhS.Sales.Business
 
 			return validatedImportedRows;
 		}
+        public void ValidateRates(int ownerId, SalePriceListOwnerType ownerType, List<long> zoneIds, DateTime minimumDate, Dictionary<long, DateTime> customerZoneEffectiveDatesByZoneId, Dictionary<long, ImportedRow> validatedImportedRows, Dictionary<string, SaleZone> saleZonesByName)
+        {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+
+            var sellingProductId = ownerType == SalePriceListOwnerType.SellingProduct ? ownerId : carrierAccountManager.GetSellingProductId(ownerId);
+            var rateLocator = new SaleEntityZoneRateLocator(new SaleRateReadRPChanges(ownerId, sellingProductId, zoneIds, minimumDate, customerZoneEffectiveDatesByZoneId));
+
+            foreach (var importedRow in validatedImportedRows.Values)
+            {
+                List<ImportedOtherRate> effectiveOtherRates = new List<ImportedOtherRate>();
+                Decimal importedNormalRate;
+                Decimal.TryParse(importedRow.Rate, out importedNormalRate);
+                string zoneName = importedRow.Zone.ToLower();
+                var existingZone = saleZonesByName.GetRecord(zoneName);
+                existingZone.ThrowIfNull("existingZone");
+
+                var existingRates = rateLocator.GetCustomerZoneRate(ownerId, sellingProductId, existingZone.SaleZoneId);
+                if (existingRates != null)
+                {
+                    if (importedNormalRate == existingRates.Rate.Rate)
+                    {
+                        //Because we are not able to remove from the list we are looping over, we are considering that the user did not provide us with a rate
+                        //This would go as valid row but without a rate and will be ignored in apply logic
+                        importedRow.Rate = null;
+                    }
+                }
+                var otherRates = importedRow.OtherRates;
+
+                foreach (var otherRate in otherRates)
+                {
+                    Decimal importedOtherRate;
+                    Decimal.TryParse(otherRate.Value, out importedOtherRate);
+
+                    var existingOtherRate = existingRates != null ? existingRates.RatesByRateType.GetRecord(otherRate.TypeId) : null;
+
+                    if (existingOtherRate != null)
+                    {
+                        if (existingOtherRate.Rate != importedOtherRate)
+                        {
+                            effectiveOtherRates.Add(otherRate);
+                        }
+                    }
+                    else if (importedOtherRate != importedNormalRate)
+                    {
+                        effectiveOtherRates.Add(otherRate);
+                    }
+                }
+
+                importedRow.OtherRates = effectiveOtherRates;
+            }
+        }
 
 		private long CreateExcelFile(IEnumerable<ValidatedImportedRow> validatedImportedRows, IEnumerable<string> worksheetHeaders)
 		{
