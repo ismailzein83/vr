@@ -27,6 +27,9 @@ namespace Vanrise.GenericData.Entities
         {
             return false;
         }
+        public virtual void GetValueByDescription(IDataRecordFieldTypeTryGetValueByDescriptionContext context)
+        {
+        }
 
         public virtual void onBeforeSave(IDataRecordFieldTypeOnBeforeSaveContext context)
         {
@@ -187,5 +190,19 @@ namespace Vanrise.GenericData.Entities
         Object OldValue { get; }
         Object NewValue { get;  }
         Object Changes { set; }
+    }
+    public interface IDataRecordFieldTypeTryGetValueByDescriptionContext
+    {
+        Object FieldDescription { get; }
+        List<AdditionalField> AdditionalFields { get; }
+        string ErrorMessage { set; }
+        Object FieldValue { set; }
+    }
+    public class DataRecordFieldTypeTryGetValueByDescriptionContext: IDataRecordFieldTypeTryGetValueByDescriptionContext
+    {
+        public Object FieldDescription { get; set; }
+        public List<AdditionalField> AdditionalFields { get; set; }
+        public string ErrorMessage { get; set; }
+        public Object FieldValue { get; set; }
     }
 }
