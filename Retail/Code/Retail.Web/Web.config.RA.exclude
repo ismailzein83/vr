@@ -23,18 +23,17 @@
     </exceptionLoggers>
   </vanriseLogging>
   <connectionStrings>
-    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=Retail_Configuration;User ID=sa;Password= "/>
+    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=RevenueAssurance_Configuration;User ID=sa;Password= "/>
 
-    <add name="QueueItemDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Queueing;User ID=sa; Password= " />
-    <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Transaction;User ID=sa; Password= " />
-    <add name="LogDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Logging;User ID=sa; Password= " />
-    
-    <add name="RetailRADBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_RA;User ID=sa; Password=" />
-    <add name="RetailRACDRDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_RA_CDR;User ID=sa; Password=" />
+    <add name="QueueItemDBConnString" connectionString="Data Source=localhost;Initial Catalog=RevenueAssurance_Queueing;User ID=sa; Password= " />
+    <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=RevenueAssurance_Transaction;User ID=sa; Password= " />
+    <add name="LogDBConnString" connectionString="Data Source=localhost;Initial Catalog=RevenueAssurance_Logging;User ID=sa; Password= " />
+        
+    <add name="RetailRACDRDBConnString" connectionString="Data Source=localhost;Initial Catalog=RevenueAssurance_CDR;User ID=sa; Password=" />
     <add name="MainDBConnString" connectionString=""/>
   </connectionStrings>
   <appSettings>
-    <add key="Web_ExtendedModulesNames" value="Retail_Cost"/>
+    <add key="Web_ExtendedModulesNames" value=""/>
     <!-- , separated module names to include in web bundle (e.g. Common,VR_Notification,VRInvoice) -->
     <add key="Vanrise License" value="28-22-92-DB-92-8B-8A-DE-78-FD-95-85-7B-E3-E8-19::==wMwkDM5EDMyMDM5ATNxAjM:kVGdwlncj5WR09mT" />
     <add key="EncryptionSecretKey" value="V@nR!se-Se6r3tRet@i!" />
@@ -74,13 +73,10 @@
 
     <add key="Retail_BE_DBConnStringKey"                        value="ConfigurationDBConnString"/>
 
-    <add key="RetailCDRDBConnStringKey"                         value="RetailCDRDBConnString"/>
-    <add key="Retail_Analytics_DBConnStringKey"                 value="RetailAnalyticsDBConnString"/>
-
     <add key="ImportCodePreparationTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/Code preperation sample.xls"/>
     <add key="DownloadVRCodeGroupTemplatePath" value="/Client/Modules/VR_NumberingPlan/Template/CodeGroupTemplate.xlsx"/>
 
-    <add key="ExposedConnectionStringNames" value="RetailRADBConnString,RetailRACDRDBConnString"/>
+    <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString,RetailRACDRDBConnString"/>
   </appSettings>
 
   <system.web>

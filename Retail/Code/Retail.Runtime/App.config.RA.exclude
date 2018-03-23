@@ -79,14 +79,13 @@
   </vanriseLogging>
   
   <connectionStrings>    
-    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=Retail_Configuration;User ID=sa;Password= "/>
+    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=RevenueAssurance_Configuration;User ID=sa;Password= "/>
     
-    <add name="QueueItemDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Queueing;User ID=sa; Password= " />
-    <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Transaction;User ID=sa; Password= " />
-    <add name="LogDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Logging;User ID=sa; Password= " />
+    <add name="QueueItemDBConnString" connectionString="Data Source=localhost;Initial Catalog=RevenueAssurance_Queueing;User ID=sa; Password= " />
+    <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=RevenueAssurance_Transaction;User ID=sa; Password= " />
+    <add name="LogDBConnString" connectionString="Data Source=localhost;Initial Catalog=RevenueAssurance_Logging;User ID=sa; Password= " />
 
-    <add name="RetailRADBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_RA;User ID=sa; Password=" />
-    <add name="RetailRACDRDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_RA_CDR;User ID=sa; Password=" />
+    <add name="RetailRACDRDBConnString" connectionString="Data Source=localhost;Initial Catalog=RevenueAssurance_CDR;User ID=sa; Password=" />
     
     <add name="MainDBConnString" connectionString=""/>
   </connectionStrings>
@@ -122,10 +121,7 @@
     <add key="Retail_BE_DBConnStringKey"                        value="ConfigurationDBConnString" />    
     <add key="NumberingPlanDBConnStringKey"                     value="ConfigurationDBConnString"/>
     
-    <add key="RetailCDRDBConnStringKey"                         value="RetailCDRDBConnString"/>
-    <add key="Retail_Analytics_DBConnStringKey"                 value="RetailAnalyticsDBConnString"/>
-    
-    <add key="ExposedConnectionStringNames" value="RetailRADBConnString,RetailRACDRDBConnString"/>
+    <add key="ExposedConnectionStringNames" value="ConfigurationDBConnString,RetailRACDRDBConnString"/>
   </appSettings>
   <runtime>
     <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
