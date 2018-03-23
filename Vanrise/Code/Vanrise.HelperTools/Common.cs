@@ -292,12 +292,12 @@ when not matched by target then
             Parallel.ForEach(lstDBs, item =>
             {
                 Console.WriteLine(string.Format("Creating database structure for: {0}", item));
-                GenerateSQLDBScript(item, lstDBs[0], string.Format(sqlFilesOutputPath, currentDateShort, "DBsStructure", projectName), currentDateShort, currentDateShort, !string.IsNullOrEmpty(projectName));
+                GenerateSQLDBScript(item, lstDBs[0], string.Format(sqlFilesOutputPath, currentDateShort, "DBsStructure", projectName), currentDateShort, currentDateShort, !string.IsNullOrEmpty(projectName), projectName);
                 Console.WriteLine(string.Format("Finish creating database structure for: {0}", item));
             });
         }
 
-        public static void GenerateSQLDBScript(string item, string mainItem, string sqlFilesOutputPath, string currentDate, string currentDateShort, bool autoGeneration)
+        public static void GenerateSQLDBScript(string item, string mainItem, string sqlFilesOutputPath, string currentDate, string currentDateShort, bool autoGeneration, string projectName)
         {
             var sb = new StringBuilder();
 
@@ -379,7 +379,14 @@ when not matched by target then
 
             if (item != mainItem && !item.Contains(mainItem) && !mainItem.Contains(item))
             {
-                sb = sb.Replace(mainItem, string.Format("{0}_{1}", mainItem, currentDateShort));
+                if (projectName == "RA")
+                {
+                    sb = sb.Replace(mainItem, "StandardRAStructure");
+                }
+                else
+                {
+                    sb = sb.Replace(mainItem, string.Format("{0}_{1}", mainItem, currentDateShort));
+                }
             }
 
             if (!Directory.Exists(sqlFilesOutputPath))
