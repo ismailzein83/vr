@@ -597,9 +597,9 @@
     <Build Include="TOneWhS_BE\Stored Procedures\sp_ANumberSaleCode_Close.sql" />
     <Build Include="TOneWhS_BE\User Defined Types\ANumberSupplierCodeClose.sql" />
     <Build Include="TOneWhS_BE\User Defined Types\ANumberSaleCodeClose.sql" />
-    <Build Include="TOneWhS_Deal\Stored Procedures\sp_DealZoneRate_GetDealZoneRatesByTime.sql" />
     <Build Include="TOneWhS_Deal\Stored Procedures\sp_DealZoneRate_GetDealZoneRatesByDealIds.sql" />
     <Build Include="TOneWhS_Deal\Stored Procedures\sp_DaysToReprocess_Delete.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierRate_GetSupplierRatesForZones.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_DealZoneRate_GetDealZoneRatesByDate.sql" />
   </ItemGroup>
 </Project>
