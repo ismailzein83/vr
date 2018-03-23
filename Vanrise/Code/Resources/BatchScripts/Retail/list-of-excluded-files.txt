@@ -2,9 +2,19 @@
 \appSettings.config
 \ConnectionStrings.config
 
+\Web.config.MultiNet.exclude
+\Web.config.RA.exclude
+\Web.config.Ringo.exclude
+\Web.config.TestCallAnalysis.exclude
+\Web.config.Zajil.exclude
+
 \images\nTegra-logoonheader.png
 \images\nTegra-login.png
 \images\nTegra-iconheader.ico
+
+\images\RA-iconheader.ico
+\images\RA-login.png
+\images\RA-logoonheader.png
 
 \bin\Retail.Ringo.Business.dll
 \bin\Retail.Ringo.Data.dll
