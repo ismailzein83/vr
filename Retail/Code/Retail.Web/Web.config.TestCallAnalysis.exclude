@@ -23,11 +23,11 @@
     </exceptionLoggers>
   </vanriseLogging>
   <connectionStrings>
-    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=TestCallAnalysis_Configuration;User ID=sa;Password= "/>
+    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=TestCallAnalysis_Configuration;User ID=sa;Password="/>
 
-    <add name="QueueItemDBConnString" connectionString="Data Source=localhost;Initial Catalog=TestCallAnalysis_Queueing;User ID=sa; Password= " />
-    <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=TestCallAnalysis_Transaction;User ID=sa; Password= " />
-    <add name="LogDBConnString" connectionString="Data Source=localhost;Initial Catalog=TestCallAnalysis_Logging;User ID=sa; Password= " />
+    <add name="QueueItemDBConnString" connectionString="Data Source=localhost;Initial Catalog=TestCallAnalysis_Queueing;User ID=sa; Password=" />
+    <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=TestCallAnalysis_Transaction;User ID=sa; Password=" />
+    <add name="LogDBConnString" connectionString="Data Source=localhost;Initial Catalog=TestCallAnalysis_Logging;User ID=sa; Password=" />
 
     <add name="MainDBConnString" connectionString=""/>
   </connectionStrings>

@@ -79,14 +79,14 @@
   </vanriseLogging>
   
   <connectionStrings>    
-    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=Retail_Configuration;User ID=sa;Password= "/>
+    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=Retail_Configuration;User ID=sa;Password="/>
     
-    <add name="RetailCDRDBConnString" connectionString="Server=localhost;Database=Retail_EDR;User ID=sa;Password= "/>
-    <add name="RetailAnalyticsDBConnString" connectionString="Server=localhost;Database=Retail_Analytics;User ID=sa;Password= "/>
+    <add name="RetailCDRDBConnString" connectionString="Server=localhost;Database=Retail_EDR;User ID=sa;Password="/>
+    <add name="RetailAnalyticsDBConnString" connectionString="Server=localhost;Database=Retail_Analytics;User ID=sa;Password="/>
     
-    <add name="QueueItemDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Queueing;User ID=sa; Password= " />
-    <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Transaction;User ID=sa; Password= " />
-    <add name="LogDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Logging;User ID=sa; Password= " />
+    <add name="QueueItemDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Queueing;User ID=sa; Password=" />
+    <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Transaction;User ID=sa; Password=" />
+    <add name="LogDBConnString" connectionString="Data Source=localhost;Initial Catalog=Retail_Logging;User ID=sa; Password=" />
     
     <add name="MainDBConnString" connectionString=""/>
   </connectionStrings>

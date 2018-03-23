@@ -79,13 +79,13 @@
   </vanriseLogging>
   
   <connectionStrings>    
-    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=RevenueAssurance_Configuration;User ID=sa;Password= "/>
+    <add name="ConfigurationDBConnString" connectionString="Server=localhost;Database=RevenueAssurance_Configuration;User ID=sa;Password="/>
     
-    <add name="QueueItemDBConnString" connectionString="Data Source=localhost;Initial Catalog=RevenueAssurance_Queueing;User ID=sa; Password= " />
-    <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=RevenueAssurance_Transaction;User ID=sa; Password= " />
-    <add name="LogDBConnString" connectionString="Data Source=localhost;Initial Catalog=RevenueAssurance_Logging;User ID=sa; Password= " />
+    <add name="QueueItemDBConnString" connectionString="Data Source=localhost;Initial Catalog=RevenueAssurance_Queueing;User ID=sa;Password=" />
+    <add name="TransactionDBConnString" connectionString="Data Source=localhost;Initial Catalog=RevenueAssurance_Transaction;User ID=sa; Password=" />
+    <add name="LogDBConnString" connectionString="Data Source=localhost;Initial Catalog=RevenueAssurance_Logging;User ID=sa; Password=" />
 
-    <add name="RetailRACDRDBConnString" connectionString="Data Source=localhost;Initial Catalog=RevenueAssurance_CDR;User ID=sa; Password=" />
+    <add name="RetailRACDRDBConnString" connectionString="Data Source=localhost;Initial Catalog=RevenueAssurance_CDR;User ID=sa;Password=" />
     
     <add name="MainDBConnString" connectionString=""/>
   </connectionStrings>
