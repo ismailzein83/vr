@@ -133,6 +133,8 @@
                 return;
 
             $scope.scopeModel.name = vrAlertRuleEntity.Name;
+            $scope.scopeModel.isDisabled = vrAlertRuleEntity.IsDisabled;
+
         }
         function loadRuleTypeSection() {
             var promises = [];
@@ -221,6 +223,7 @@
             return {
                 VRAlertRuleId: vrAlertRuleId,
                 Name: $scope.scopeModel.name,
+                IsDisabled: $scope.scopeModel.isDisabled,
                 RuleTypeId: vrAlertRuleTypeSelectorAPI.getSelectedIds(),
                 Settings: {
                     RuleTypeId: null,

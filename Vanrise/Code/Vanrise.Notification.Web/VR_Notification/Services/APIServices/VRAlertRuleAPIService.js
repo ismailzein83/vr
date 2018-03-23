@@ -32,12 +32,22 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, 'DoesUserHaveAddAlertRulePermission'));
         }
 
+        function EnableVRAlertRule(enableInput) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, 'EnableVRAlertRule'), enableInput);
+        }
+
+        function DisableVRAlertRule(disableInput) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Notification_ModuleConfig.moduleName, controllerName, 'DisableVRAlertRule'), disableInput);
+        }
+        
         return ({
             GetFilteredVRAlertRules: GetFilteredVRAlertRules,
             GetVRAlertRule: GetVRAlertRule,
             AddVRAlertRule: AddVRAlertRule,
             UpdateVRAlertRule: UpdateVRAlertRule,
-            HasAddVRAlertRulePermission: HasAddVRAlertRulePermission
+            HasAddVRAlertRulePermission: HasAddVRAlertRulePermission,
+            EnableVRAlertRule: EnableVRAlertRule,
+            DisableVRAlertRule: DisableVRAlertRule
         });
     }
 

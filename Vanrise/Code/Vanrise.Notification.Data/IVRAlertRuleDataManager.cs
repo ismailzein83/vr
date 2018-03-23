@@ -16,5 +16,9 @@ namespace Vanrise.Notification.Data
         bool Insert(VRAlertRule VRAlertRuleTypeItem, out long insertedId);
 
         bool Update(VRAlertRule VRAlertRuleTypeItem);
+
+        bool DisableAlertRule(long vrAlertRuleId);
+
+        bool EnableAlertRule(long vrAlertRuleId);
     }
 }

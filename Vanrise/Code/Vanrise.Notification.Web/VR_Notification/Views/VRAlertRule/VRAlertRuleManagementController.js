@@ -9,6 +9,8 @@
         var gridAPI;
         var vrAlertRuleTypeSelectorAPI;
         var vrAlertRuleTypeSelectoReadyDeferred = UtilsService.createPromiseDeferred();
+        var vrAlertRuleStatusSelectorAPI;
+        var vrAlertRuleStatusSelectorReadyDeferred = UtilsService.createPromiseDeferred();
         defineScope();
         load();
 
@@ -24,6 +26,12 @@
                 vrAlertRuleTypeSelectorAPI = api;
                 vrAlertRuleTypeSelectoReadyDeferred.resolve();
             };
+
+            $scope.scopeModel.onAlertRuleStatusSelectorReady = function (api) { 
+                vrAlertRuleStatusSelectorAPI = api;
+                vrAlertRuleStatusSelectorReadyDeferred.resolve();
+            };
+
             $scope.scopeModel.add = function () {
                 var onVRAlertRuleAdded = function (addedVRAlertRule) {
                     gridAPI.onVRAlertRuleAdded(addedVRAlertRule);
@@ -50,7 +58,7 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([loadVRAlertRuleTypeSelector]).catch(function (error) {
+            return UtilsService.waitMultipleAsyncOperations([loadVRAlertRuleTypeSelector, loadVRAlertRuleStatusSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
@@ -64,10 +72,18 @@
             });
             return vrAlertRuleTypeSelectorLoadDeferred.promise;
         }
+        function loadVRAlertRuleStatusSelector() {
+            var vrAlertRuleStatusSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+            vrAlertRuleStatusSelectorReadyDeferred.promise.then(function () {
+                VRUIUtilsService.callDirectiveLoad(vrAlertRuleStatusSelectorAPI, undefined, vrAlertRuleStatusSelectorLoadDeferred);
+            });
+            return vrAlertRuleStatusSelectorLoadDeferred.promise;
+        }
         function buildGridQuery() {
             return {
                 Name: $scope.scopeModel.name,
-                RuleTypeIds: vrAlertRuleTypeSelectorAPI.getSelectedIds()
+                RuleTypeIds: vrAlertRuleTypeSelectorAPI.getSelectedIds(),
+                Statuses: vrAlertRuleStatusSelectorAPI.getSelectedIds()
             };
         }
     }

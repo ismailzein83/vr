@@ -10,6 +10,8 @@ namespace Vanrise.Notification.Entities
     {
         public string Name { get; set; }
         public List<Guid> RuleTypeIds { get; set; }
+        public List<VRAlertRuleStatus> Statuses { get; set; }
     }
+    public enum VRAlertRuleStatus { Enabled = 0, Disabled = 1 }
 }
  

@@ -26,6 +26,7 @@ namespace Vanrise.Notification.Entities
 
         public DateTime? LastModifiedTime { get; set; }
 
+        public bool IsDisabled { get; set; }
        
     }
 }

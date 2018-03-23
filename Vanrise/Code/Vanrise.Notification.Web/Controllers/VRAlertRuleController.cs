@@ -53,5 +53,37 @@ namespace Vanrise.Notification.Web.Controllers
                 return GetUnauthorizedResponse();
             return _manager.UpdateVRAlertRule(vrAlertRuleItem);
         }
+        
+        [HttpPost]
+        [Route("DisableVRAlertRule")]
+        public object DisableVRAlertRule(VRAlertRuleDisableInput vrAlertRuleDisableInput)
+        {
+            if (!_typeManager.DoesUserHaveEditAccess(vrAlertRuleDisableInput.RuleTypeId))
+                return GetUnauthorizedResponse();
+            return _manager.DisableVRAlertRule(vrAlertRuleDisableInput.VRAlertRuleId);
+        }
+
+        [HttpPost]
+        [Route("EnableVRAlertRule")]
+        public object DisableVRAlertRule(VRAlertRuleEnableInput vrAlertRuleEnableInput)
+        {
+            if (!_typeManager.DoesUserHaveEditAccess(vrAlertRuleEnableInput.RuleTypeId))
+                return GetUnauthorizedResponse();
+            return _manager.EnableVRAlertRule(vrAlertRuleEnableInput.VRAlertRuleId);
+        }
+    }
+
+    public class VRAlertRuleDisableInput
+    {
+        public Guid RuleTypeId { get; set; }
+
+        public long VRAlertRuleId { get; set; }
+    }
+
+    public class VRAlertRuleEnableInput
+    {
+        public Guid RuleTypeId { get; set; }
+
+        public long VRAlertRuleId { get; set; }
     }
 }

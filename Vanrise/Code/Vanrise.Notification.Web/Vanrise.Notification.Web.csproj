@@ -157,6 +157,7 @@
   <ItemGroup>
     <Content Include="VR_Notification\Constants\GridMaxSize.js" />
     <Content Include="VR_Notification\Constants\ModuleConfig.js" />
+    <Content Include="VR_Notification\Constants\VRAlertRuleStatusEnum.js" />
     <Content Include="VR_Notification\Constants\VRNotificationStatusEnum.js" />
     <Content Include="VR_Notification\Directives\VRActions\vr-notification-vractiondefinitionconfig-selector.js" />
     <Content Include="VR_Notification\Directives\MainExtensions\VRNotificationType\vr-notification-vrnotifivationtype-settings.js" />
@@ -178,6 +179,7 @@
     <Content Include="VR_Notification\Directives\VRAlertRule\Templates\OverriddenAlertRuleTypeDefinition.html" />
     <Content Include="VR_Notification\Directives\VRAlertRule\Templates\VRAlertRuleGridTemplate.html" />
     <Content Include="VR_Notification\Directives\MainExtensions\VRBalanceAlertRule\Templates\VRBalanceAlertRuleSettingsTemplate.html" />
+    <Content Include="VR_Notification\Directives\VRAlertRule\vr-notification-alertrulestatus-selector.js" />
     <Content Include="VR_Notification\Directives\VRAlertRule\vr-notification-overriddenconfiguration-alertruletype.js" />
     <Content Include="VR_Notification\Directives\VRAlertRule\vr-notification-vralertrule-grid.js" />
     <Content Include="VR_Notification\Directives\MainExtensions\VRBalanceAlertRule\vr-notification-vrbalancealertrule-settings.js" />

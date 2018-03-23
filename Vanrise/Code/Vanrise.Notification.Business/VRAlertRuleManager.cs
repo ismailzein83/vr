@@ -67,6 +67,15 @@ namespace Vanrise.Notification.Business
                     return false;
                 if (input.Query.RuleTypeIds != null && !input.Query.RuleTypeIds.Contains(x.RuleTypeId))
                     return false;
+                if (input.Query.Statuses != null)
+                {
+                    if (!input.Query.Statuses.Contains(VRAlertRuleStatus.Disabled) && x.IsDisabled)
+                        return false;
+
+                    if (!input.Query.Statuses.Contains(VRAlertRuleStatus.Enabled) && !x.IsDisabled)
+                        return false;
+                }
+
                 return true;
             };
 
@@ -77,7 +86,7 @@ namespace Vanrise.Notification.Business
 
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allVRAlertRules.ToBigResult(input, filterExpression, VRAlertRuleDetailMapper), handler);
         }
-         
+
         public Vanrise.Entities.InsertOperationOutput<VRAlertRuleDetail> AddVRAlertRule(VRAlertRule vrAlertRuleItem)
         {
             var insertOperationOutput = new Vanrise.Entities.InsertOperationOutput<VRAlertRuleDetail>();
@@ -119,7 +128,7 @@ namespace Vanrise.Notification.Business
             updateOperationOutput.UpdatedObject = null;
 
             IVRAlertRuleDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRAlertRuleDataManager>();
-            
+
             vrAlertRuleItem.LastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
 
             if (dataManager.Update(vrAlertRuleItem))
@@ -134,6 +143,58 @@ namespace Vanrise.Notification.Business
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
             }
 
+            return updateOperationOutput;
+        }
+
+        public Vanrise.Entities.UpdateOperationOutput<VRAlertRuleDetail> DisableVRAlertRule(long vrAlertRuleId)
+        {
+            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<VRAlertRuleDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            var vrAlertRule = GetVRAlertRule(vrAlertRuleId);
+            IVRAlertRuleDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRAlertRuleDataManager>();
+
+            vrAlertRule.LastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
+
+            if (dataManager.DisableAlertRule(vrAlertRuleId))
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(new VRAlertRuleLoggableEntity(vrAlertRule.RuleTypeId), vrAlertRule);
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = VRAlertRuleDetailMapper(this.GetVRAlertRule(vrAlertRuleId));
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
+            return updateOperationOutput;
+        }
+
+        public Vanrise.Entities.UpdateOperationOutput<VRAlertRuleDetail> EnableVRAlertRule(long vrAlertRuleId)
+        {
+            var updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<VRAlertRuleDetail>();
+
+            updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            var vrAlertRule = GetVRAlertRule(vrAlertRuleId);
+            IVRAlertRuleDataManager dataManager = NotificationDataManagerFactory.GetDataManager<IVRAlertRuleDataManager>();
+
+            vrAlertRule.LastModifiedBy = SecurityContext.Current.GetLoggedInUserId();
+
+            if (dataManager.EnableAlertRule(vrAlertRuleId))
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+                VRActionLogger.Current.TrackAndLogObjectUpdated(new VRAlertRuleLoggableEntity(vrAlertRule.RuleTypeId), vrAlertRule);
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = VRAlertRuleDetailMapper(this.GetVRAlertRule(vrAlertRuleId));
+            }
+            else
+            {
+                updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.SameExists;
+            }
             return updateOperationOutput;
         }
 
@@ -220,8 +281,11 @@ namespace Vanrise.Notification.Business
                 };
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Id" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name", Width = 35});
-                
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Name", Width = 35 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Type", Width = 35 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Status" });
+
+
                 sheet.Rows = new List<ExportExcelRow>();
                 if (context.BigResult != null && context.BigResult.Data != null)
                 {
@@ -233,6 +297,9 @@ namespace Vanrise.Notification.Business
                             sheet.Rows.Add(row);
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.VRAlertRuleId });
                             row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
+                            row.Cells.Add(new ExportExcelCell { Value = record.RuleTypeName });
+                            row.Cells.Add(new ExportExcelCell { Value = string.Format("{0}", record.Entity.IsDisabled ? "Disabled" : "Enabled") });
+
                         }
                     }
                 }

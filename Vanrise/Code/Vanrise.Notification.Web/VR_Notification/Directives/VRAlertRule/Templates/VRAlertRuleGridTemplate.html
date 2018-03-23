@@ -9,6 +9,9 @@
     <vr-datagridcolumn headertext="'Id'" field="'Entity.VRAlertRuleId'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Rule Type'" field="'RuleTypeName'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Status'" fixedwidth="'75'" >
+        <vr-icon icontype="dataItem.Entity.IsDisabled == false ? 'true' : 'false'" tooltip="dataItem.Entity.IsDisabled == false ? 'Enabled' : 'Disabled' "></vr-icon>
+    </vr-datagridcolumn>
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
     </vr-datagridexpandablerow>
