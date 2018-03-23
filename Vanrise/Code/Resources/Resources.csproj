@@ -123,6 +123,9 @@
     <Content Include="BatchScripts\Ntegra\C5ExternalAccess-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\Ntegra\list-of-excluded-files-ExternalAccess.txt" />
     <Content Include="BatchScripts\Ntegra\list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\RA\Client-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\RA\list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\RA\runtime-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\Retail.MultiNet\runtime-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\Retail.Zajil\runtime-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\Retail\Client-list-of-excluded-files.txt" />
@@ -438,6 +441,14 @@
     <None Include="BatchScripts\Publishing_Data\Visual Studio Solutions\Zebra.sln.lnk" />
     <None Include="BatchScripts\Publishing_Data\Visual Studio Solutions\ZebraAPI.sln.lnk" />
     <None Include="BatchScripts\Publishing_Data\Visual Studio Solutions\ZebraEmailService.sln.lnk" />
+    <None Include="BatchScripts\RA\01-Runtime.bat" />
+    <None Include="BatchScripts\RA\02-DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\RA\03-WebSite.bat" />
+    <None Include="BatchScripts\RA\05-CompressFiles.bat" />
+    <None Include="BatchScripts\RA\06-GroupJSFiles.bat" />
+    <None Include="BatchScripts\RA\07-CreateStandardDBs.bat" />
+    <None Include="BatchScripts\RA\08-GroupSQLFiles.bat" />
+    <None Include="BatchScripts\RA\All.bat" />
     <None Include="BatchScripts\Retail.MultiNet\02-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\Retail.MultiNet\01-Runtime.bat" />
     <None Include="BatchScripts\Retail.MultiNet\03-WebSite.bat" />
