@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{C9D155CA-F029-4600-994D-B363EB3036AC}"
 EndProject
@@ -193,9 +193,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCallAnalysis.Activities
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestCallAnalysis.Arguments", "TestCallAnalysis.Arguments\TestCallAnalysis.Arguments.csproj", "{285E7DC7-8EC0-4324-96FD-2F477263BA98}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "RevenueAssurance", "RevenueAssurance\RevenueAssurance.sqlproj", "{1B679A09-D86A-4705-B4F9-434BD920B6E6}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "RevenueAssuranceEDR", "RevenueAssuranceEDR\RevenueAssuranceEDR.sqlproj", "{2EF5FB77-F394-4846-B89D-DC9283380D51}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 79
+		SccNumberOfProjects = 81
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -511,6 +515,14 @@ Global
 		SccProjectTopLevelParentUniqueName78 = Retail.sln
 		SccProjectName78 = TestCallAnalysis.Arguments
 		SccLocalPath78 = TestCallAnalysis.Arguments
+		SccProjectUniqueName79 = RevenueAssurance\\RevenueAssurance.sqlproj
+		SccProjectTopLevelParentUniqueName79 = Retail.sln
+		SccProjectName79 = RevenueAssurance
+		SccLocalPath79 = RevenueAssurance
+		SccProjectUniqueName80 = RevenueAssuranceEDR\\RevenueAssuranceEDR.sqlproj
+		SccProjectTopLevelParentUniqueName80 = Retail.sln
+		SccProjectName80 = RevenueAssuranceEDR
+		SccLocalPath80 = RevenueAssuranceEDR
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -839,6 +851,18 @@ Global
 		{285E7DC7-8EC0-4324-96FD-2F477263BA98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{285E7DC7-8EC0-4324-96FD-2F477263BA98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{285E7DC7-8EC0-4324-96FD-2F477263BA98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B679A09-D86A-4705-B4F9-434BD920B6E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B679A09-D86A-4705-B4F9-434BD920B6E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B679A09-D86A-4705-B4F9-434BD920B6E6}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{1B679A09-D86A-4705-B4F9-434BD920B6E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B679A09-D86A-4705-B4F9-434BD920B6E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B679A09-D86A-4705-B4F9-434BD920B6E6}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{2EF5FB77-F394-4846-B89D-DC9283380D51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2EF5FB77-F394-4846-B89D-DC9283380D51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2EF5FB77-F394-4846-B89D-DC9283380D51}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{2EF5FB77-F394-4846-B89D-DC9283380D51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2EF5FB77-F394-4846-B89D-DC9283380D51}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2EF5FB77-F394-4846-B89D-DC9283380D51}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -934,5 +958,7 @@ Global
 		{4EC50608-9E41-458B-8854-00952AA1E892} = {FBFE042B-5035-4C2E-A37F-570B032FB7AF}
 		{A4FFB792-990D-4E29-9B88-F4EAEED2A15E} = {FBFE042B-5035-4C2E-A37F-570B032FB7AF}
 		{285E7DC7-8EC0-4324-96FD-2F477263BA98} = {FBFE042B-5035-4C2E-A37F-570B032FB7AF}
+		{1B679A09-D86A-4705-B4F9-434BD920B6E6} = {DBCF7D23-8951-4886-9024-282788E5D24F}
+		{2EF5FB77-F394-4846-B89D-DC9283380D51} = {DBCF7D23-8951-4886-9024-282788E5D24F}
 	EndGlobalSection
 EndGlobal
