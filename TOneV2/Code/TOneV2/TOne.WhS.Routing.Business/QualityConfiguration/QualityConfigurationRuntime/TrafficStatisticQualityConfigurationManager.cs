@@ -172,16 +172,21 @@ namespace TOne.WhS.Routing.Business
             QualityConfigurationDefinitionManager qualityConfigurationDefinitionManager = new QualityConfigurationDefinitionManager();
             QualityConfigurationDefinitionExtendedSettings extendedSettings = qualityConfigurationDefinitionManager.GetQualityConfigurationDefinitionExtendedSettings(qualityConfigurationDefinitionId);
             var trafficStatisticQCDefinitionSettings = extendedSettings.CastWithValidate<TrafficStatisticQCDefinitionSettings>("qualityConfigurationDefinitionExtendedSettings", qualityConfigurationDefinitionId);
+            List<string> includedMeasures = trafficStatisticQCDefinitionSettings.IncludedMeasures;
+            if (includedMeasures == null || includedMeasures.Count == 0)
+                throw new Exception("trafficStatisticQCDefinitionSettings.IncludedMeasures should contains at least one measure.");
 
             Dictionary<string, AnalyticMeasure> analyticItemConfigs = new AnalyticItemConfigManager().GetMeasures(trafficStatisticQCDefinitionSettings.AnalyticTableId);
             List<AnalyticMeasureInfo> analyticMeasureInfos = new List<AnalyticMeasureInfo>();
 
             if (analyticItemConfigs != null)
             {
-                foreach (var analyticItemConfig in analyticItemConfigs)
+                AnalyticMeasure analyticMeasure;
+                foreach (var measureName in includedMeasures)
                 {
-                    if (trafficStatisticQCDefinitionSettings.IncludedMeasures.Contains(analyticItemConfig.Key))
-                        analyticMeasureInfos.Add(new AnalyticMeasureInfo { Name = analyticItemConfig.Key, Title = analyticItemConfig.Value.Title });
+                    if (analyticItemConfigs.TryGetValue(measureName, out analyticMeasure))
+                        analyticMeasureInfos.Add(new AnalyticMeasureInfo { Name = measureName, Title = analyticMeasure.Title });
+
                 }
             }
 
