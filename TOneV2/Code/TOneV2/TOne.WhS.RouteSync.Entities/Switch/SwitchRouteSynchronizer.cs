@@ -9,7 +9,7 @@ namespace TOne.WhS.RouteSync.Entities
 {
     public abstract class SwitchRouteSynchronizer
     {
-        public virtual Guid ConfigId { get; set; }
+        public abstract Guid ConfigId { get; }
 
         public abstract void Initialize(ISwitchRouteSynchronizerInitializeContext context);
 
@@ -163,9 +163,9 @@ namespace TOne.WhS.RouteSync.Entities
 
         public Action<Exception, bool> WriteBusinessHandledException { get; set; }
 
-        public SwitchSyncOutput SwitchSyncOutput { get;  set; }
+        public SwitchSyncOutput SwitchSyncOutput { get; set; }
     }
-     
+
     public interface ITryBlockCustomerContext
     {
         string SwitchName { get; }
