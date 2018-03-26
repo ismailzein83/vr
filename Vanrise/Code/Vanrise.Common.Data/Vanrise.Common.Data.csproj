@@ -53,6 +53,7 @@
     <Compile Include="IVRActionAuditDataManager.cs" />
     <Compile Include="IVRActionAuditLKUPDataManager.cs" />
     <Compile Include="IVRApplicationVisibilityDataManager.cs" />
+    <Compile Include="IVRBulkActionDraftDataManager.cs" />
     <Compile Include="IVRConnectionDataManager.cs" />
     <Compile Include="CommonDataManagerFactory.cs" />
     <Compile Include="IBigDataServiceDataManager.cs" />

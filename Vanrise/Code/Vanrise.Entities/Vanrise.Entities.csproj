@@ -87,6 +87,7 @@
     <Compile Include="LabelColor.cs" />
     <Compile Include="ModalWidthEnum.cs" />
     <Compile Include="ObjectFactory.cs" />
+    <Compile Include="VRBulkActionDraft\VRBulkActionDraft.cs" />
     <Compile Include="VRPushNotification\VRPushNotificationClientMessage.cs" />
     <Compile Include="VRPushNotification\VRPushNotificationClientSubscription.cs" />
     <Compile Include="VRPushNotification\VRPushNotificationClientUnsubscribe.cs" />

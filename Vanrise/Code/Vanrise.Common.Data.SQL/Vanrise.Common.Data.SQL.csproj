@@ -57,6 +57,7 @@
     <Compile Include="VRActionAuditLKUPDataManager.cs" />
     <Compile Include="VRApplicationVisibilityDataManager.cs" />
     <Compile Include="UtilityDataManager.cs" />
+    <Compile Include="VRBulkActionDraftDataManager.cs" />
     <Compile Include="VRConnectionDataManager.cs" />
     <Compile Include="VRComponentTypeDataManager.cs" />
     <Compile Include="VREventHandlerDataManager.cs" />
