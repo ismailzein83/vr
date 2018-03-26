@@ -7,6 +7,7 @@ using Vanrise.Integration.Data;
 using Vanrise.Integration.Entities;
 using Vanrise.Queueing.Entities;
 using Vanrise.Runtime;
+using Vanrise.Runtime.Business;
 using Vanrise.Runtime.Entities;
 using Vanrise.Security.Business;
 using Vanrise.Security.Entities;
@@ -91,8 +92,10 @@ namespace Vanrise.Integration.Business
 
             adapter.SetLogger(logger);
             adapter.SetDataSourceManager(_dataSourceManager);
+            IImportedData lastReceivedBatchData = null;
             Func<IImportedData, ImportedBatchProcessingOutput> onDataReceivedAction = (data) =>
             {
+                lastReceivedBatchData = data;
                 logger.WriteVerbose("Executing the custom code written for the mapper");
                 MappedBatchItemsToEnqueue outputItems = new MappedBatchItemsToEnqueue();
                 MappingOutput outputResult = this.ExecuteCustomCode(dataSource.Entity.DataSourceId, dataSource.Entity.Settings.MapperCustomCode, data, outputItems, logger);
@@ -163,10 +166,30 @@ namespace Vanrise.Integration.Business
                 return batchProcessingOutput;
             };
 
-            AdapterImportDataContext adapterContext = new AdapterImportDataContext(dataSource.Entity, onDataReceivedAction);
-            adapter.ImportData(adapterContext);
+            try
+            {
+                AdapterImportDataContext adapterContext = new AdapterImportDataContext(dataSource.Entity, onDataReceivedAction);
+                adapter.ImportData(adapterContext);
 
-            logger.WriteInformation("A runtime Instance is finished for the Data Source '{0}'", dataSource.Entity.Name);
+                logger.WriteInformation("A runtime Instance is finished for the Data Source '{0}'", dataSource.Entity.Name);
+            }
+            catch(Exception ex)
+            {
+                string errorMessage = string.Format("Adapter failed due to error: {0}", ex.ToString());
+                logger.WriteError(errorMessage);
+                if (dataSource.Entity.Settings.ErrorMailTemplateId.HasValue)
+                {
+                    FailedBatchInfo batchInfo = new FailedBatchInfo
+                    {
+                        Message = errorMessage,
+                        DataSourceId = dataSource.Entity.DataSourceId,
+                        DataSourceName = dataSource.Entity.Name,
+                        BatchDescription = lastReceivedBatchData != null ? lastReceivedBatchData.Description : null
+                    };
+                    SendErrorNotification(dataSource, batchInfo);
+                }
+                throw;
+            }
         }
 
         bool SendErrorNotification(DataSourceDetail dataSource, IImportedData data, MappingOutput outputResult)
@@ -181,17 +204,27 @@ namespace Vanrise.Integration.Business
                     {
                         batchInfo.IsEmpty = true;
                     }
-                    Dictionary<string, dynamic> mailObjects = new Dictionary<string, dynamic>();
-                    User user = new UserManager().GetUserbyId(SecurityContext.Current.GetLoggedInUserId());
-                    mailObjects.Add("User", user);
-                    mailObjects.Add("Failed Batch Info", batchInfo);
-                    VRMailManager vrMailManager = new VRMailManager();
-                    vrMailManager.SendMail(dataSource.Entity.Settings.ErrorMailTemplateId.Value, mailObjects);
+                    SendErrorNotification(dataSource, batchInfo);
                     return true;
                 }
             }
             return false;
         }
+
+        private void SendErrorNotification(DataSourceDetail dataSource, FailedBatchInfo batchInfo)
+        {
+            SchedulerTaskManager schedulerTaskManager = new SchedulerTaskManager();
+            var task = schedulerTaskManager.GetTask(dataSource.Entity.TaskId);
+            task.ThrowIfNull("task", dataSource.Entity.TaskId);
+            Dictionary<string, dynamic> mailObjects = new Dictionary<string, dynamic>();
+            User user = new UserManager().GetUserbyId(task.OwnerId);
+            user.ThrowIfNull("user", task.OwnerId);
+            mailObjects.Add("User", user);
+            mailObjects.Add("Failed Batch Info", batchInfo);
+            VRMailManager vrMailManager = new VRMailManager();
+            vrMailManager.SendMail(dataSource.Entity.Settings.ErrorMailTemplateId.Value, mailObjects);
+        }
+
         FailedBatchInfo BuildFailedBatchInfo(DataSourceDetail dataSource, IImportedData data, MappingOutput outputResult)
         {
             FailedBatchInfo batchInfo = new FailedBatchInfo

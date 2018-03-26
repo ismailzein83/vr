@@ -32,7 +32,24 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments
         public bool CompressedFiles { get; set; }
         public CompressionTypes CompressionType { get; set; }
         public short? NumberOfFiles { get; set; }
-        public short? FileCompletenessCheckInterval { get; set; }
+
+        short? _fileCompletenessCheckInterval = 5;
+
+        /// <summary>
+        /// in seconds
+        /// </summary>
+        public short? FileCompletenessCheckInterval
+        {
+            get
+            {
+                return _fileCompletenessCheckInterval;
+            }
+            set
+            {
+                _fileCompletenessCheckInterval = value;
+            }
+        }
+
         public string InvalidFilesDirectory { get; set; }
 
         # endregion

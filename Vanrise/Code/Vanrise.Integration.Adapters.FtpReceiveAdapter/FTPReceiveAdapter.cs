@@ -7,6 +7,7 @@ using Rebex.Net;
 using Vanrise.Common;
 using Vanrise.Integration.Adapters.FTPReceiveAdapter.Arguments;
 using Vanrise.Integration.Entities;
+using System.Collections.Generic;
 
 namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
 {
@@ -42,10 +43,9 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                 if (ftpList.Count > 0)
                 {
                     short numberOfFilesRead = 0;
-                    DateTime? localLastRetrievedFileTime = null;
 
                     FtpList ftpListToPreccess = CheckandGetFinalFtpCollection(ftpAdapterArgument, ftp, ftpList);
-
+                    bool newFilesStarted = false;
                     foreach (var fileObj in ftpListToPreccess.OrderBy(c => c.Modified).ThenBy(c => c.Name))
                     {
 
@@ -53,29 +53,30 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                         {
                             if (ftpAdapterArgument.BasedOnLastModifiedTime)
                             {
-                                if ((!localLastRetrievedFileTime.HasValue || DateTime.Compare(localLastRetrievedFileTime.Value, fileObj.Modified) != 0)
-                                    && DateTime.Compare(ftpAdapterState.LastRetrievedFileTime, fileObj.Modified) >= 0)
+                                if (!newFilesStarted)
                                 {
-                                    if (!string.IsNullOrEmpty(ftpAdapterState.LastRetrievedFileName) && ftpAdapterState.LastRetrievedFileName.CompareTo(fileObj.Name) >= 0)
+                                    if (DateTime.Compare(ftpAdapterState.LastRetrievedFileTime, fileObj.Modified) > 0)
+                                    {
                                         continue;
+                                    }
+                                    else if (DateTime.Compare(ftpAdapterState.LastRetrievedFileTime, fileObj.Modified) == 0)
+                                    {
+                                        if (!string.IsNullOrEmpty(ftpAdapterState.LastRetrievedFileName) && ftpAdapterState.LastRetrievedFileName.CompareTo(fileObj.Name) >= 0)
+                                            continue;
+                                    }
+                                    newFilesStarted = true;
                                 }
                             }
 
                             if (!string.IsNullOrEmpty(ftpAdapterArgument.LastImportedFile) && ftpAdapterArgument.LastImportedFile.CompareTo(fileObj.Name) >= 0)
                                 continue;
 
-
-                            ftpAdapterState.LastRetrievedFileName = fileObj.Name;
-                            ftpAdapterState = SaveOrGetAdapterState(context, ftpAdapterArgument, fileObj.Name);
-
                             String filePath = ftpAdapterArgument.Directory + "/" + fileObj.Name;
-                            if (ftpAdapterState.LastRetrievedFileTime != fileObj.Modified)
-                            {
-                                ftpAdapterState = SaveOrGetAdapterState(context, ftpAdapterArgument, fileObj.Name, fileObj.Modified);
-                                localLastRetrievedFileTime = fileObj.Modified;
-                            }
-
                             ImportedBatchProcessingOutput output = CreateStreamReader(context.OnDataReceived, ftp, fileObj, filePath, ftpAdapterArgument);
+
+                            ftpAdapterState = SaveOrGetAdapterState(context, ftpAdapterArgument, fileObj.Name, fileObj.Modified);
+                            
+
                             AfterImport(ftp, fileObj, filePath, ftpAdapterArgument, output);
 
                             numberOfFilesRead++;
@@ -100,7 +101,7 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
 
         #region Private Functions
 
-        FTPAdapterState SaveOrGetAdapterState(IAdapterImportDataContext context, FTPAdapterArgument ftpAdapterArgument, string fileName = "", DateTime? fileModifiedDate = null)
+        FTPAdapterState SaveOrGetAdapterState(IAdapterImportDataContext context, FTPAdapterArgument ftpAdapterArgument, string fileName = null, DateTime? fileModifiedDate = null)
         {
             FTPAdapterState adapterState = null;
             context.GetStateWithLock((state) =>
@@ -110,7 +111,7 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                 if (adapterState == null)
                     adapterState = new FTPAdapterState();
 
-                if (fileModifiedDate != null && fileModifiedDate.HasValue)
+                if (fileModifiedDate.HasValue)
                 {
                     adapterState.LastRetrievedFileTime = fileModifiedDate.Value;
                 }
@@ -214,15 +215,16 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
             FtpList ftpListToPreccess = new FtpList();
             if (ftpAdapterArgument.FileCompletenessCheckInterval.HasValue)
             {
+                Dictionary<string, FtpItem> firstReadFilesByName = ftpList.ToDictionary(itm => itm.Name, itm => itm);
                 Thread.Sleep(ftpAdapterArgument.FileCompletenessCheckInterval.Value * 1000);
                 FtpList currentItems = ftp.GetList(string.Format("*{0}", ftpAdapterArgument.Extension));
-                foreach (var ftpFile in ftpList.OrderBy(c => c.Modified))
+                foreach (var ftpFile in currentItems.OrderBy(c => c.Modified))
                 {
-                    FtpItem ftpItem = currentItems.FindRecord(itm => itm.Name == ftpFile.Name);
-                    if (ftpItem.Size != ftpFile.Size)
+                    FtpItem fileReadFirstTime = firstReadFilesByName.GetRecord(ftpFile.Name);
+                    if (fileReadFirstTime == null || fileReadFirstTime.Size != ftpFile.Size)
                         break;
 
-                    ftpListToPreccess.Add(ftpItem);
+                    ftpListToPreccess.Add(ftpFile);
                 }
             }
             else
