@@ -23,8 +23,8 @@
                              datasource="scopeModel.suppliers"
                              ondeleterow="scopeModel.onDeleteRow"
                              showexpand="scopeModel.showExpand"
-                             disablesorting="true" enabledraggablerow="true"
-                             hidegridmenu disabledraggablecolumns vr-loader="scopeModel.isLoadingSelectedSupplier">
+                             disablesorting="true" enabledraggablerow="true" rowdeleteicontitle="Reset to LCR position"
+                             vr-loader="scopeModel.isLoadingSelectedSupplier" hidegridmenu disabledraggablecolumns>
 
                     <vr-datagridcolumn headertext="'Supplier'" field="'Name'"></vr-datagridcolumn>
                     <vr-datagridcolumn headertext="'Rate'" field="'Rate'" fixedwidth="60" type="'Number'" numberprecision="'LongPrecision'" ng-if="scopeModel.showRateServices" columnindex="1"></vr-datagridcolumn>
@@ -43,7 +43,7 @@
                         <vr-switch value="dataItem.ForceOption"></vr-switch>
                     </vr-datagridcolumn>
                     <vr-datagridcolumn fixedwidth="30" invisibleheader>
-                        <vr-button type="Exclude" ng-click="viewScope.scopeModel.excludeOption(dataItem)" standalone small></vr-button>
+                        <vr-button type="Exclude" ng-click="viewScope.scopeModel.excludeOption(dataItem)" buttontitle="Exclude From Route" standalone small></vr-button>
                     </vr-datagridcolumn>
 
                     <vr-datagridexpandablerow>
@@ -70,5 +70,3 @@
         </vr-columns>
     </vr-row>
 </vr-section>
-
-<!--formname="formChartSettings"--> 
