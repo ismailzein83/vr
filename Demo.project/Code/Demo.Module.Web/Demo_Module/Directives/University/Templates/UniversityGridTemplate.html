@@ -1,0 +1,12 @@
+﻿<vr-datagrid datasource="universities"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="Entity.UniversityId" enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" field="'Entity.UniversityId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'University Name'" field="'Entity.Name'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
+</vr-datagrid>

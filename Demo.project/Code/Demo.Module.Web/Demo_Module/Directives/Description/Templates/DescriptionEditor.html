@@ -1,0 +1,19 @@
+﻿<div vr-modalcontent ng-controller="Demo_Module_DescriptionEditorController" vr-loader="scopeModel.isLoading" width="'35%'">
+    <vr-modalbody>
+        <vr-form name="formDescriptionEditor">
+            <vr-row>
+                <vr-columns width="fullrow">
+                    <vr-textbox value="scopeModel.descriptionTitle" label="Description" isrequired="true"></vr-textbox>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formDescriptionEditor" data-onclick="scopeModel.save"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

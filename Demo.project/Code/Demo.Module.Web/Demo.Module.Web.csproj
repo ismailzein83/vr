@@ -52,15 +52,15 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.Abstractions" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
-    <Reference Include="System.Web.Abstractions" />
-    <Reference Include="System.Web.Routing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -128,8 +128,20 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Demo_Module\Constant\ModuleConfig.js" />
+    <Content Include="Demo_Module\Directives\Description\demo-module-description.js" />
+    <Content Include="Demo_Module\Directives\Description\DescriptionEditorController.js" />
+    <Content Include="Demo_Module\Directives\Description\Templates\DescriptionTemplate.html" />
+    <Content Include="Demo_Module\Directives\Description\Templates\DescriptionEditor.html" />
     <Content Include="Demo_Module\Directives\Branch\demo-module-branch-grid.js" />
     <Content Include="Demo_Module\Directives\Branch\Templates\BranchGridTemplate.html" />
+    <Content Include="Demo_Module\Directives\College\demo-module-college-grid.js" />
+    <Content Include="Demo_Module\Directives\College\demo-module-college-selector.js" />
+    <Content Include="Demo_Module\Directives\College\MainExtensions\CollegeInfo\demo-module-advanced-info.js" />
+    <Content Include="Demo_Module\Directives\College\MainExtensions\CollegeInfo\demo-module-basic-info.js" />
+    <Content Include="Demo_Module\Directives\College\MainExtensions\CollegeInfo\Templates\AdvancedCollegeInfoTypeTemplate.html" />
+    <Content Include="Demo_Module\Directives\College\MainExtensions\CollegeInfo\Templates\BasicCollegeInfoTypeTemplate.html" />
+    <Content Include="Demo_Module\Directives\College\MainExtensions\demo-module-college-info.js" />
+    <Content Include="Demo_Module\Directives\College\Templates\CollegeGridTemplate.html" />
     <Content Include="Demo_Module\Directives\Company\demo-module-company-grid.js" />
     <Content Include="Demo_Module\Directives\Company\demo-module-company-selector.js" />
     <Content Include="Demo_Module\Directives\Company\Templates\CompanyGridTemplate.html" />
@@ -163,10 +175,15 @@
     <Content Include="Demo_Module\Directives\Student\MainExtensions\Payment\demo-module-cash-payment.js" />
     <Content Include="Demo_Module\Directives\Student\Templates\StudentGridTemplate.html" />
     <Content Include="Demo_Module\Directives\Student\demo-module-student-grid.js" />
+    <Content Include="Demo_Module\Directives\University\demo-module-university-grid.js" />
+    <Content Include="Demo_Module\Directives\University\demo-module-university-selector.js" />
+    <Content Include="Demo_Module\Directives\University\Templates\UniversityGridTemplate.html" />
     <Content Include="Demo_Module\Directives\User\templates\demo-module-user-grid.js" />
     <Content Include="Demo_Module\Directives\User\templates\UserGridTemplate.html" />
     <Content Include="Demo_Module\Services\AdvancedGridService.js" />
     <Content Include="Demo_Module\Services\APIServices\BranchAPIService.js" />
+    <Content Include="Demo_Module\Services\APIServices\CollegeAPIService.js" />
+    <Content Include="Demo_Module\Services\APIServices\CollegeInfoConfigsAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\CompanyAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\DisputeCaseAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\BuildingAPIService.js" />
@@ -175,12 +192,16 @@
     <Content Include="Demo_Module\Services\APIServices\RoomAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\SettingConfigsAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\StudentAPIService.js" />
+    <Content Include="Demo_Module\Services\APIServices\UniversityAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\UserAPIService.js" />
     <Content Include="Demo_Module\Services\BranchService.js" />
     <Content Include="Demo_Module\Services\CityService.js" />
+    <Content Include="Demo_Module\Services\CollegeService.js" />
     <Content Include="Demo_Module\Services\CompanyService.js" />
+    <Content Include="Demo_Module\Services\DescriptionService.js" />
     <Content Include="Demo_Module\Services\RoomService.js" />
     <Content Include="Demo_Module\Services\StudentService.js" />
+    <Content Include="Demo_Module\Services\UniversityService.js" />
     <Content Include="Demo_Module\Services\UserService.js" />
     <Content Include="Demo_Module\Templates\CodeGroupTemplate.xlsx" />
     <Content Include="Demo_Module\Views\AdvancedGridEditor.html" />
@@ -191,6 +212,10 @@
     <Content Include="Demo_Module\Views\BranchManagementController.js" />
     <Content Include="Demo_Module\Views\BuildingEditor.html" />
     <Content Include="Demo_Module\Views\BuildingEditorController.js" />
+    <Content Include="Demo_Module\Views\CollegeEditor.html" />
+    <Content Include="Demo_Module\Views\CollegeEditorController.js" />
+    <Content Include="Demo_Module\Views\CollegeManagement.html" />
+    <Content Include="Demo_Module\Views\CollegeManagementController.js" />
     <Content Include="Demo_Module\Views\CompanyEditor.html" />
     <Content Include="Demo_Module\Views\CompanyEditorController.js" />
     <Content Include="Demo_Module\Views\CompanyManagement.html" />
@@ -211,6 +236,10 @@
     <Content Include="Demo_Module\Views\StudentEditorController.js" />
     <Content Include="Demo_Module\Views\StudentManagement.html" />
     <Content Include="Demo_Module\Views\StudentManagementController.js" />
+    <Content Include="Demo_Module\Views\UniversityEditor.html" />
+    <Content Include="Demo_Module\Views\UniversityEditorController.js" />
+    <Content Include="Demo_Module\Views\UniversityManagement.html" />
+    <Content Include="Demo_Module\Views\UniversityManagementController.js" />
     <Content Include="Demo_Module\Views\UserEditor.html" />
     <Content Include="Demo_Module\Views\UserEditorController.js" />
     <Content Include="Demo_Module\Views\UserManagement.html" />
@@ -219,6 +248,8 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\BranchController.cs" />
+    <Compile Include="Controllers\CollegeController.cs" />
+    <Compile Include="Controllers\CollegeInfoConfigsController.cs" />
     <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\DisputeCaseController.cs" />
     <Compile Include="Controllers\BuildingController.cs" />
@@ -227,6 +258,7 @@
     <Compile Include="Controllers\RoomController.cs" />
     <Compile Include="Controllers\SettingConfigsController.cs" />
     <Compile Include="Controllers\StudentController.cs" />
+    <Compile Include="Controllers\UniversityController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Content Include="Demo_Module\Services\BuildingService.js" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -248,7 +280,6 @@
       <Name>Demo.Module.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

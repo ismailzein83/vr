@@ -1,0 +1,10 @@
+﻿<vr-datagrid datasource="colleges"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="CollegeId" enableautoexport="true">
+    <vr-datagridcolumn headertext="'ID'" field="'CollegeId'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'College Name'" field="'CollegeName'" type="'Text'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'University Name'" field="'UniversityName'" type="'Text'"></vr-datagridcolumn>
+</vr-datagrid>

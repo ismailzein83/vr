@@ -57,6 +57,15 @@
     <Compile Include="Branch\BranchQuery.cs" />
     <Compile Include="Branch\Setting\Dimensions\Dimensions.cs" />
     <Compile Include="Branch\Setting\Dimensions\DimensionsConfig.cs" />
+    <Compile Include="CollegeInfoType\AdvancedInfo.cs" />
+    <Compile Include="CollegeInfoType\Basic.cs" />
+    <Compile Include="CollegeInfoType\CollegeInfoType.cs" />
+    <Compile Include="College\College.cs" />
+    <Compile Include="College\CollegeDetails.cs" />
+    <Compile Include="College\CollegeInfo.cs" />
+    <Compile Include="College\CollegeInfoConfig.cs" />
+    <Compile Include="College\CollegeQuery.cs" />
+    <Compile Include="College\Description.cs" />
     <Compile Include="Company\Company.cs" />
     <Compile Include="Company\CompanyDetails.cs" />
     <Compile Include="Company\CompanyInfoFilter.cs" />
@@ -88,6 +97,10 @@
     <Compile Include="Student\Student.cs" />
     <Compile Include="Student\StudentDetails.cs" />
     <Compile Include="Student\StudentQuery.cs" />
+    <Compile Include="University\University.cs" />
+    <Compile Include="University\UniversityDetails.cs" />
+    <Compile Include="University\UniversityInfo.cs" />
+    <Compile Include="University\UniversityQuery.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserDetails.cs" />
     <Compile Include="UserQ.cs" />
