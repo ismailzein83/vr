@@ -98,6 +98,8 @@ namespace Vanrise.Reprocess.Entities
     public class GenericReprocessFilter : ReprocessFilter
     {
         public Dictionary<string, List<object>> Fields { get; set; }
+
+        public RecordQueryLogicalOperator LogicalOperator { get; set; }
     }
 
     public class GenericReprocessFilterFieldDefinition

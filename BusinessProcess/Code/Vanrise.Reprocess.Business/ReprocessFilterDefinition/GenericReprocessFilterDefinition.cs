@@ -33,7 +33,7 @@ namespace Vanrise.Reprocess.Business
 
             Dictionary<string, GenericReprocessFilterFieldDefinition> fields = Fields.ToDictionary(itm => itm.FieldName, itm => itm);
 
-            RecordFilterGroup recordFilterGroup = new RecordFilterGroup() { Filters = new List<RecordFilter>(), LogicalOperator = RecordQueryLogicalOperator.And };
+            RecordFilterGroup recordFilterGroup = new RecordFilterGroup() { Filters = new List<RecordFilter>(), LogicalOperator = genericReprocessFilter.LogicalOperator };
             foreach (var fieldKvp in genericReprocessFilter.Fields)
             {
                 string fieldName = fieldKvp.Key;

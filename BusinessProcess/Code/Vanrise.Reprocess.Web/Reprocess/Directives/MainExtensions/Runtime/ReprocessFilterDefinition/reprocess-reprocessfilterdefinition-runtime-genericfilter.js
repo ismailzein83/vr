@@ -76,7 +76,8 @@
                 api.getData = function () {
                     var obj = {
                         $type: "Vanrise.Reprocess.Entities.GenericReprocessFilter, Vanrise.Reprocess.Entities",
-                        Fields: {}
+                        Fields: {},
+                        LogicalOperator: 0 // AND
                     };
 
                     var oneItemIsAddedAtLeast = false;
