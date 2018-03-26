@@ -7,7 +7,6 @@ using Vanrise.Data.SQL;
 using System.Data;
 using Demo.Module.Entities;
 using Newtonsoft.Json;
-using Demo.Module.Entities.Company;
 
 namespace Demo.Module.Data.SQL
 {

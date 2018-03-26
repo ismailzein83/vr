@@ -4,9 +4,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using Vanrise.Web.Base;
-using Demo.Module.Entities.Company;
 using Demo.Module.Business;
 using Vanrise.Entities;
+using Demo.Module.Entities;
 
 
 namespace Demo.Module.Web.Controllers

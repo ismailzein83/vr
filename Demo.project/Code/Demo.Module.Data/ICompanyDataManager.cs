@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Demo.Module.Entities.Company;
+using Demo.Module.Entities;
 
 namespace Demo.Module.Data
 {

@@ -7,7 +7,6 @@ using Demo.Module.Entities;
 using Demo.Module.Data;
 using Vanrise.Entities;
 using Vanrise.Common;
-using Demo.Module.Entities.Company;
 using Vanrise.Common.Business;
 
 

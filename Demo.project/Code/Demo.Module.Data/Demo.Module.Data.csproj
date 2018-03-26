@@ -53,14 +53,8 @@
     <Compile Include="IBranchDataManager.cs" />
     <Compile Include="ICollegeDataManager.cs" />
     <Compile Include="ICompanyDataManager.cs" />
-    <Compile Include="IDisputeCaseDataManager.cs" />
-    <Compile Include="IBuildingDataManager.cs" />
-    <Compile Include="ICityDataManager.cs" />
     <Compile Include="IDataManager.cs" />
-    <Compile Include="IRoomDataManager.cs" />
-    <Compile Include="IStudentDataManager.cs" />
     <Compile Include="IUniversityDataManager.cs" />
-    <Compile Include="IUserDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

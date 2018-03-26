@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Demo.Module.Entities.Company
+namespace Demo.Module.Entities
 {
     public class Company
     {

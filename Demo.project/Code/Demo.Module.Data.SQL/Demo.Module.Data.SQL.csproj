@@ -62,14 +62,8 @@
     <Compile Include="BranchDataManager.cs" />
     <Compile Include="CollegeDataManager.cs" />
     <Compile Include="CompanyDataManager.cs" />
-    <Compile Include="DisputeCaseDataManager.cs" />
-    <Compile Include="BuildingDataManager.cs" />
-    <Compile Include="CityDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RoomDataManager.cs" />
-    <Compile Include="StudentDataManager.cs" />
     <Compile Include="UniversityDataManager.cs" />
-    <Compile Include="UserDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Demo.Module.Data\Demo.Module.Data.csproj">

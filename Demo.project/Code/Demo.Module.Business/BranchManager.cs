@@ -7,8 +7,6 @@ using Demo.Module.Entities;
 using Demo.Module.Data;
 using Vanrise.Entities;
 using Vanrise.Common;
-using Demo.Module.Entities;
-using Demo.Module.Entities.Company;
 using Vanrise.Common.Business;
 
 
@@ -16,6 +14,7 @@ namespace Demo.Module.Business
 {
     public class BranchManager
     {
+       
         #region Public Methods
         public InsertOperationOutput<BranchDetails> AddBranch(Branch branch)
         {
@@ -120,6 +119,7 @@ namespace Demo.Module.Business
             return branchDetails;
         }
         #endregion
+
     }
     public class SettingConfigsManager
     {
