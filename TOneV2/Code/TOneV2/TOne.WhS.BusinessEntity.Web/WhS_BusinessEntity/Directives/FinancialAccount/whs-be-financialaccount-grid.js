@@ -79,6 +79,7 @@ app.directive('whsBeFinancialaccountGrid', ['WhS_BE_FinancialAccountAPIService',
             var menuActions = [{
                 name: "Edit",
                 clicked: editFinancialAccount,
+                haspermission: hasUpdateFinancialAccountPermission
             }];
 
             $scope.scopeModel.gridMenuActions = function (dataItem) {
@@ -88,6 +89,7 @@ app.directive('whsBeFinancialaccountGrid', ['WhS_BE_FinancialAccountAPIService',
                 return null;
             };
         }
+
         function editFinancialAccount(dataItem) {
             var onFinancialAccountUpdated = function (financialAccount) {
                 if (context != undefined && context.checkAllowAddFinancialAccount != undefined)
@@ -96,6 +98,10 @@ app.directive('whsBeFinancialaccountGrid', ['WhS_BE_FinancialAccountAPIService',
                 gridAPI.itemUpdated(financialAccount);
             };
             WhS_BE_FinancialAccountService.editFinancialAccount(onFinancialAccountUpdated, dataItem.Entity.FinancialAccountId);
+        }
+
+        function hasUpdateFinancialAccountPermission() {
+            return WhS_BE_FinancialAccountAPIService.HasUpdateFinancialAccountPermission();
         }
     }
 }]);

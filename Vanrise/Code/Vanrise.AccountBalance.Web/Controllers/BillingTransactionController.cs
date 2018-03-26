@@ -18,10 +18,17 @@ namespace Vanrise.AccountBalance.Web.Controllers
         [Route("GetFilteredBillingTransactions")]
         public object GetFilteredBillingTransactions(Vanrise.Entities.DataRetrievalInput<BillingTransactionQuery> input)
         {
-            if (!_accountTypeManager.DoesUserHaveViewAccess(input.Query.AccountTypeId))
+            if (!DoesUserHaveViewAccess(input.Query.AccountTypeId))
                 return GetUnauthorizedResponse();
             BillingTransactionManager manager = new BillingTransactionManager();
             return GetWebResponse(input, manager.GetFilteredBillingTransactions(input));
+        }
+
+        [HttpGet]
+        [Route("DoesUserHaveViewAccess")]
+        public bool  DoesUserHaveViewAccess(Guid accountTypeId)
+        {
+            return _accountTypeManager.DoesUserHaveViewAccess(accountTypeId);              
         }
 
         [HttpGet]

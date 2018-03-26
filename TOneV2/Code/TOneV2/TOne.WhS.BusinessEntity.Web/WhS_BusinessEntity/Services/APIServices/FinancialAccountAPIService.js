@@ -54,11 +54,25 @@
                 financialAccountId: financialAccountId
             });
         }
+
         function GetCustomerTimeZoneId(financialAccountId) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetCustomerTimeZoneId"), {
                 financialAccountId: financialAccountId
             });
         }
+
+        function HasViewFinancialAccountPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['GetFilteredFinancialAccounts']));
+        }
+
+        function HasUpdateFinancialAccountPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['UpdateFinancialAccount']));
+        }
+
+        function HasAddFinancialAccountPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(WhS_BE_ModuleConfig.moduleName, controllerName, ['AddFinancialAccount']));
+        }
+
         return ({
             GetAccountCurrencyName: GetAccountCurrencyName,
             AddFinancialAccount: AddFinancialAccount,
@@ -69,7 +83,10 @@
             GetFinancialAccount: GetFinancialAccount,
             GetFinancialAccountRuntimeEditor: GetFinancialAccountRuntimeEditor,
             GetSupplierTimeZoneId: GetSupplierTimeZoneId,
-            GetCustomerTimeZoneId: GetCustomerTimeZoneId
+            GetCustomerTimeZoneId: GetCustomerTimeZoneId,
+            HasViewFinancialAccountPermission: HasViewFinancialAccountPermission,
+            HasUpdateFinancialAccountPermission: HasUpdateFinancialAccountPermission,
+            HasAddFinancialAccountPermission: HasAddFinancialAccountPermission
         });
     }
 

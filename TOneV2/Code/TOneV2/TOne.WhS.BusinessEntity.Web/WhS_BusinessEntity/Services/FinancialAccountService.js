@@ -2,9 +2,9 @@
 
     'use stict';
 
-    FinancialAccountService.$inject = ['VRModalService', 'VRNotificationService', 'WhS_BE_CarrierAccountService', 'WhS_BE_CarrierProfileService', 'VRUIUtilsService'];
+    FinancialAccountService.$inject = ['VRModalService', 'VRNotificationService', 'WhS_BE_CarrierAccountService', 'WhS_BE_CarrierProfileService', 'VRUIUtilsService', 'VR_AccountBalance_BillingTransactionAPIService', 'WhS_BE_FinancialAccountAPIService'];
 
-    function FinancialAccountService(VRModalService, VRNotificationService, WhS_BE_CarrierAccountService, WhS_BE_CarrierProfileService, VRUIUtilsService) {
+    function FinancialAccountService(VRModalService, VRNotificationService, WhS_BE_CarrierAccountService, WhS_BE_CarrierProfileService, VRUIUtilsService, VR_AccountBalance_BillingTransactionAPIService, WhS_BE_FinancialAccountAPIService) {
 
         function addFinancialAccount(carrierAccountId, carrierProfileId, onFinancialAccountAdded) {
             var parameters = {
@@ -36,7 +36,9 @@
 
             drillDownDefinition.title = "Financial Accounts";
             drillDownDefinition.directive = "whs-be-financialaccount-search";
-
+            drillDownDefinition.haspermission = function () {
+                return WhS_BE_FinancialAccountAPIService.HasViewFinancialAccountPermission();
+            };
             drillDownDefinition.loadDirective = function (directiveAPI, carrierAccountItem) {
                 carrierAccountItem.financialAccountGridAPI = directiveAPI;
                 var payload = {
@@ -57,7 +59,9 @@
 
             drillDownDefinition.title = "Financial Accounts";
             drillDownDefinition.directive = "whs-be-financialaccount-search";
-
+            drillDownDefinition.haspermission = function () {
+                return WhS_BE_FinancialAccountAPIService.HasViewFinancialAccountPermission();
+            };
             drillDownDefinition.loadDirective = function (directiveAPI, carrierProfileItem) {
                 carrierProfileItem.financialAccountGridAPI = directiveAPI;
                 var payload = {
@@ -88,7 +92,9 @@
 
                 drillDownTab.title = "Financial Transactions";
                 drillDownTab.directive = "vr-accountbalance-billingtransaction-search";
-
+                drillDownTab.haspermission = function () {
+                    return VR_AccountBalance_BillingTransactionAPIService.HasViewBillingTransactionPermission(financialAccount.BalanceAccountTypeId);
+                };
                 drillDownTab.loadDirective = function (billingTransactionSearchAPI, financialAccountObj) {
                     financialAccountObj.billingTransactionSearchAPI = billingTransactionSearchAPI;
 

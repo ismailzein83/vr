@@ -11,6 +11,9 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_AccountBalance_ModuleConfig.moduleName, controllerName, "GetFilteredBillingTransactions"), input);
         }
 
+        function HasViewBillingTransactionPermission(accountTypeId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_AccountBalance_ModuleConfig.moduleName, controllerName, 'DoesUserHaveViewAccess'), { accountTypeId: accountTypeId });
+        }
 
         function AddBillingTransaction(billingTransaction) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_AccountBalance_ModuleConfig.moduleName, controllerName, 'AddBillingTransaction'), billingTransaction);
@@ -25,6 +28,7 @@
 
         return {
             GetFilteredBillingTransactions: GetFilteredBillingTransactions,
+            HasViewBillingTransactionPermission: HasViewBillingTransactionPermission,
             AddBillingTransaction: AddBillingTransaction,
             HasAddBillingTransactionPermission: HasAddBillingTransactionPermission
         };

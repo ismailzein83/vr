@@ -33,6 +33,10 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
         function initializeController() {
             $scope.scopeModel = {};
 
+            $scope.scopeModel.hasAddFinancialAccountPermission = function () {
+                return WhS_BE_FinancialAccountAPIService.HasAddFinancialAccountPermission();
+            };
+
             $scope.scopeModel.addFinancialAccount = function () {
                 var onFinancialAccountAdded = function (obj) {
                     if (context != undefined) {
