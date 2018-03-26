@@ -7,7 +7,6 @@ using TOne.WhS.Deal.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.Common;
 using Vanrise.Entities;
-using static Vanrise.Common.Utilities;
 
 namespace TOne.WhS.Deal.BP.Activities
 {
