@@ -419,6 +419,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: "Upload Excel File",
                     class: "glyphicon glyphicon-circle-arrow-up"
                 };
+            case "Exclude":
+                return {
+                    text: "Exclude",
+                    class: "glyphicon glyphicon-ban-circle"
+                };
         }
     }
 }]);

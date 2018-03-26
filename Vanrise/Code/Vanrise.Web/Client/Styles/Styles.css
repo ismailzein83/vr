@@ -3374,6 +3374,10 @@ vr-validator[vr-input] > div:nth-child(1) {
 .vr-datagrid-celltext vr-button[standalone] span[class^="glyphicon"] {
     font-size: 17px !important;
 }
+.vr-datagrid-celltext vr-button[standalone][small] span[class^="glyphicon"] {
+    font-size: 12px !important;
+    top:2px
+}
 
 .vr-datagrid-celltext vr-validator[vr-input] > div:nth-child(1) {
     height: 21px;
