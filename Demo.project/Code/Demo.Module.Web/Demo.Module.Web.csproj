@@ -165,15 +165,12 @@
     <Content Include="Demo_Module\Services\APIServices\CollegeAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\CollegeInfoConfigsAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\CompanyAPIService.js" />
-    <Content Include="Demo_Module\Services\APIServices\BuildingAPIService.js" />
-    <Content Include="Demo_Module\Services\APIServices\RoomAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\SettingConfigsAPIService.js" />
     <Content Include="Demo_Module\Services\APIServices\UniversityAPIService.js" />
     <Content Include="Demo_Module\Services\BranchService.js" />
     <Content Include="Demo_Module\Services\CollegeService.js" />
     <Content Include="Demo_Module\Services\CompanyService.js" />
     <Content Include="Demo_Module\Services\DescriptionService.js" />
-    <Content Include="Demo_Module\Services\RoomService.js" />
     <Content Include="Demo_Module\Services\UniversityService.js" />
     <Content Include="Demo_Module\Templates\CodeGroupTemplate.xlsx" />
     <Content Include="Demo_Module\Views\AdvancedGridEditor.html" />
@@ -203,7 +200,6 @@
     <Compile Include="Controllers\CompanyController.cs" />
     <Compile Include="Controllers\SettingConfigsController.cs" />
     <Compile Include="Controllers\UniversityController.cs" />
-    <Content Include="Demo_Module\Services\BuildingService.js" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
