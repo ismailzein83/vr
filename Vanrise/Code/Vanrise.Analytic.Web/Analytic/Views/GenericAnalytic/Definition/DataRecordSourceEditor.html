@@ -42,6 +42,9 @@
                                             <vr-datagridcolumn headertext="'Field Title'" widthfactor="5" disablesorting="true">
                                                 <vr-textbox value="dataItem.FieldTitle" isrequired="true"></vr-textbox>
                                             </vr-datagridcolumn>
+                                            <vr-datagridcolumn headertext="'Hidden'" fixedwidth="50" disablesorting="true">
+                                                <vr-switch value="dataItem.isHidden"></vr-switch>
+                                            </vr-datagridcolumn>
                                             <vr-datagridcolumn headertext="'Width'" widthfactor="4" disablesorting="true">
                                                 <vr-common-gridcolumnwidth-editor on-ready="dataItem.onGridWidthFactorSelectorReady" hidelabel></vr-common-gridcolumnwidth-editor>
                                             </vr-datagridcolumn>

@@ -460,12 +460,13 @@
             if (payload) {
                 dataItem.FieldTitle = payload.FieldTitle;
                 dataItemPayload.data = payload.ColumnSettings;
+                dataItem.isHidden = payload.IsHidden;
             }
             dataItem.onGridWidthFactorSelectorReady = function (api) {
                 dataItem.gridWidthFactorAPI = api;
                 gridField.readyPromiseDeferred.resolve();
             };
-
+            console.log(dataItem)
             gridField.readyPromiseDeferred.promise
                 .then(function () {
                     VRUIUtilsService.callDirectiveLoad(dataItem.gridWidthFactorAPI, dataItemPayload, gridField.loadPromiseDeferred);
@@ -527,7 +528,7 @@
             var columns = [];
             for (var x = 0; x < $scope.selectedFieldsGrid.length; x++) {
                 var currentItem = $scope.selectedFieldsGrid[x];
-                columns.push({ FieldName: currentItem.FieldName, FieldTitle: currentItem.FieldTitle, ColumnSettings: currentItem.gridWidthFactorAPI.getData() });
+                columns.push({ FieldName: currentItem.FieldName, FieldTitle: currentItem.FieldTitle, ColumnSettings: currentItem.gridWidthFactorAPI.getData(), IsHidden: currentItem.isHidden });
             }
 
             var filters = [];

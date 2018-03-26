@@ -10,7 +10,7 @@
 
         <vr-datagridcolumn ng-repeat="measure in analyticrecordsctrl.measures" headertext="measure.Title" type="measure.Type" numberprecision="measure.NumberPrecision"
                            field="'MeasureValues.' + measure.MeasureName + '.Value'" tag="measure.MeasureName" summaryfield="'MeasureValues.' + measure.MeasureName + '.Value'"
-                           widthfactor="{{measure.Widthfactor}}" fixedwidth="measure.FixedWidth" getcolor="analyticrecordsctrl.getMeasureColor" cssclass="measure.cssClass">
+                           widthfactor="{{measure.Widthfactor}}" fixedwidth="measure.FixedWidth" getcolor="analyticrecordsctrl.getMeasureColor" cssclass="measure.cssClass" initiallyhidden="measure.IsHidden">
         </vr-datagridcolumn>
 
         <vr-datagridexpandablerow>

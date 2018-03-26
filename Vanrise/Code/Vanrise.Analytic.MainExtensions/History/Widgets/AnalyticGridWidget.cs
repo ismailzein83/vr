@@ -45,6 +45,7 @@ namespace Vanrise.Analytic.MainExtensions.History.Widgets
         public string Title { get; set; }
         public GridColumnSettings ColumnSettings { get; set; }
         public Guid? ColumnStyleId { get; set; }
+        public bool IsHidden { get; set; }
 
     }
 }
