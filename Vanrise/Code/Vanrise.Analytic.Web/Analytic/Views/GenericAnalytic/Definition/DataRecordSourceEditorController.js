@@ -466,7 +466,6 @@
                 dataItem.gridWidthFactorAPI = api;
                 gridField.readyPromiseDeferred.resolve();
             };
-            console.log(dataItem)
             gridField.readyPromiseDeferred.promise
                 .then(function () {
                     VRUIUtilsService.callDirectiveLoad(dataItem.gridWidthFactorAPI, dataItemPayload, gridField.loadPromiseDeferred);
