@@ -13,7 +13,7 @@ using Vanrise.Security.Entities;
 
 namespace Vanrise.Common.Business
 {
-    public class CountryManager : IBusinessEntityManager
+    public class CountryManager : BaseBusinessEntityManager
     {
         #region Public Methods
 
@@ -558,43 +558,43 @@ namespace Vanrise.Common.Business
 
         #region IBusinessEntityManager
 
-        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        public override string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
             return GetCountryName(Convert.ToInt32(context.EntityId));
         }
 
-        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        public override dynamic GetEntityId(IBusinessEntityIdContext context)
         {
             var country = context.Entity as Country;
             return country.CountryId;
         }
 
-        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        public override List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         {
             return GetAllCountries().Select(itm => itm as dynamic).ToList();
         }
 
-        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        public override bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
         }
 
-        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        public override dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
             return GetCountry(context.EntityId);
         }
 
-        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        public override dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        public override IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
         {
             throw new NotImplementedException();
         }
 
-        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        public override dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
         {
             throw new NotImplementedException();
         }

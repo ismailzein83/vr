@@ -10,7 +10,7 @@ using Vanrise.Common.Business;
 
 namespace Vanrise.Notification.Business
 {
-    public class VRAlertLevelManager : IBusinessEntityManager
+    public class VRAlertLevelManager : BaseBusinessEntityManager
     {
         VRNotificationTypeManager _vrnotificationTypeManager = new VRNotificationTypeManager();
         public VRAlertLevel GetAlertLevel(Guid alertLevelId)
@@ -222,42 +222,42 @@ namespace Vanrise.Notification.Business
         }
         #region IBusinessEntityManager
 
-        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        public override string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
             return GetAlertLevelName(Guid.Parse(context.EntityId.ToString()));
         }
 
-        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        public override dynamic GetEntityId(IBusinessEntityIdContext context)
         {
             var vrAlertLevel = context.Entity as VRAlertLevel;
             return vrAlertLevel.VRAlertLevelId;
         }
 
-        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        public override dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
             return GetAlertLevel(context.EntityId);
         }
 
-        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        public override dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
         {
             throw new NotImplementedException();
         }
 
-        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        public override List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         {
             return GetAllAlertLevels().Select(itm => itm as dynamic).ToList();
         }
-        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        public override bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
         {
             throw new NotImplementedException();
         }
 
-        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        public override dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        public override IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
         {
             throw new NotImplementedException();
         }

@@ -121,7 +121,7 @@ namespace Vanrise.GenericData.Business
 
             private class BEDefinitionCacheItem
             {
-                public IBusinessEntityManager BEManager { get; set; }
+                public BaseBusinessEntityManager BEManager { get; set; }
 
                 public DateTime? LastCheckTime { get; set; }
             }

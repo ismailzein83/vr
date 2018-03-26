@@ -99,6 +99,7 @@
     <Compile Include="VRActionAudit\VRLoggableEntityManager.cs" />
     <Compile Include="VRActionAudit\VRObjectTrackingManager.cs" />
     <Compile Include="VRApplicationVisibility\VRApplicationVisibilityManager.cs" />
+    <Compile Include="VRBulkActionDraft\VRBulkActionDraftManager.cs" />
     <Compile Include="VRConnections\SQLConnection.cs" />
     <Compile Include="VRConnections\VRConnectionManager.cs" />
     <Compile Include="DataGrouping\DataGroupingAnalysisInfoManager.cs" />

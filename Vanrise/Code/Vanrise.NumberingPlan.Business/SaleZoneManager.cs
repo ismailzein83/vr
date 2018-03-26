@@ -12,7 +12,7 @@ using Vanrise.Entities;
 
 namespace Vanrise.NumberingPlan.Business
 {
-    public class SaleZoneManager : IBusinessEntityManager
+    public class SaleZoneManager : BaseBusinessEntityManager
     {
         #region Public Methods
 
@@ -326,23 +326,23 @@ namespace Vanrise.NumberingPlan.Business
 
         #region IBusinessEntityManager
 
-        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        public override string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
             return GetSaleZoneName(Convert.ToInt64(context.EntityId));
         }
 
-        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        public override dynamic GetEntityId(IBusinessEntityIdContext context)
         {
             var saleZone = context.Entity as SaleZone;
             return saleZone.SaleZoneId;
         }
 
-        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        public override dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
             return GetSaleZone(context.EntityId);
         }
 
-        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        public override List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         {
             var allZones = GetCachedSaleZones();
             if (allZones == null)
@@ -351,12 +351,12 @@ namespace Vanrise.NumberingPlan.Business
                 return allZones.Values.Select(itm => itm as dynamic).ToList();
         }
 
-        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        public override bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
         }
 
-        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        public override IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
         {
             Func<SaleZone, bool> filter;
             switch (context.ParentEntityDefinition.Name)
@@ -368,7 +368,7 @@ namespace Vanrise.NumberingPlan.Business
             return GetCachedSaleZones().FindAllRecords(filter).MapRecords(zone => zone.SaleZoneId as dynamic);
         }
 
-        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        public override dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
         {
             var saleZone = context.Entity as SaleZone;
             if (saleZone == null)
@@ -381,7 +381,7 @@ namespace Vanrise.NumberingPlan.Business
             }
         }
 
-        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        public override dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
         {
             throw new NotImplementedException();
         }

@@ -220,7 +220,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return businessEntityDefinition;
         }
 
-        IBusinessEntityManager GetBusinessEntityManager()
+        BaseBusinessEntityManager GetBusinessEntityManager()
         {
             var beDefinitionManager = new BusinessEntityDefinitionManager();
             var beManagerInstance = beDefinitionManager.GetBusinessEntityManager(this.BusinessEntityDefinitionId);

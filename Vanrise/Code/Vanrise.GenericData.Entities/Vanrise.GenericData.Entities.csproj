@@ -214,7 +214,7 @@
     <Compile Include="GenericRules\RuleDefinition\GenericRuleDefinitionSettings.cs" />
     <Compile Include="GenericRules\RuleDefinition\GenericRuleTypeConfig.cs" />
     <Compile Include="GenericRules\RuleDefinition\GenericRuleViewSettings.cs" />
-    <Compile Include="BusinessEntities\IBusinessEntityManager.cs" />
+    <Compile Include="BusinessEntities\BaseBusinessEntityManager.cs" />
     <Compile Include="GenericRules\RuleDefinition\IGenericRuleDefinitionFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="DataRecords\DataRecordQuery.cs" />

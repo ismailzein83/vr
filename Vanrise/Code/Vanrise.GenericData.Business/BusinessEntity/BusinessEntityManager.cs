@@ -97,7 +97,7 @@ namespace Vanrise.GenericData.Business
             return MapEntityToInfo(businessEntityDefinitionId, infoType, entity, beManager);
         }
 
-        private Entities.IBusinessEntityManager GetBEManager(Guid businessEntityDefinitionId)
+        private BaseBusinessEntityManager GetBEManager(Guid businessEntityDefinitionId)
         {
             var beManager = (new BusinessEntityDefinitionManager()).GetBusinessEntityManager(businessEntityDefinitionId);
             if (beManager == null)
@@ -105,14 +105,14 @@ namespace Vanrise.GenericData.Business
             return beManager;
         }
 
-        private dynamic GetEntity(Guid businessEntityDefinitionId, dynamic entityId, Entities.IBusinessEntityManager beManager)
+        private dynamic GetEntity(Guid businessEntityDefinitionId, dynamic entityId, BaseBusinessEntityManager beManager)
         {
             var getByIdContext = new BusinessEntityGetByIdContext(businessEntityDefinitionId);
             getByIdContext.EntityId = entityId;
             return beManager.GetEntity(getByIdContext);
         }
 
-        private dynamic MapEntityToInfo(Guid businessEntityDefinitionId, string infoType, dynamic entity, Entities.IBusinessEntityManager beManager)
+        private dynamic MapEntityToInfo(Guid businessEntityDefinitionId, string infoType, dynamic entity, BaseBusinessEntityManager beManager)
         {
             var mapEntityToInfoContext = new BusinessEntityMapToInfoContext(businessEntityDefinitionId);
             mapEntityToInfoContext.InfoType = infoType;

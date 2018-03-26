@@ -82,7 +82,7 @@ namespace Vanrise.GenericData.Business
         {
             public Guid BusinessEntityDefinitionId { get; set; }
         }
-        public IBusinessEntityManager GetBusinessEntityManager(Guid businessEntityDefinitionId)
+        public BaseBusinessEntityManager GetBusinessEntityManager(Guid businessEntityDefinitionId)
         {
             var cacheName = new GetBusinessEntityManagerCacheName { BusinessEntityDefinitionId = businessEntityDefinitionId };// String.Format("GetBusinessEntityManager_{0}", businessEntityDefinitionId);
             Type beManagerType = Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject(cacheName,
@@ -106,7 +106,7 @@ namespace Vanrise.GenericData.Business
                     return beManagerType_Internal;
                 });
 
-            var beManagerInstance = Activator.CreateInstance(beManagerType) as IBusinessEntityManager;
+            var beManagerInstance = Activator.CreateInstance(beManagerType) as BaseBusinessEntityManager;
             if (beManagerInstance == null)
                 throw new NullReferenceException(String.Format("'{0}' does not implement IBusinessEntityManager", beManagerType.Name));
 

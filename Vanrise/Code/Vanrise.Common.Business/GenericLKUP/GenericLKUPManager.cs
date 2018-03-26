@@ -9,7 +9,7 @@ using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Common.Business
 {
-    public class GenericLKUPManager : IBusinessEntityManager
+    public class GenericLKUPManager : BaseBusinessEntityManager
     {
         public GenericLKUPItem GetGenericLKUPItem(Guid genericLKUPItemId)
         {
@@ -201,42 +201,42 @@ namespace Vanrise.Common.Business
        
         #region IBusinessEntityManager
 
-        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        public override string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
             return GetGenericLKUPItemName(Guid.Parse(context.EntityId.ToString()));
         }
 
-        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        public override dynamic GetEntityId(IBusinessEntityIdContext context)
         {
             var genericLKUPItem = context.Entity as GenericLKUPItem;
             return genericLKUPItem.GenericLKUPItemId;
         }
 
-        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        public override dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
             return GetGenericLKUPItem(context.EntityId);
         }
 
-        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        public override dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
         {
             throw new NotImplementedException();
         }
 
-        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        public override List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         {
             return GetAllGenericLKUPItems().Select(itm => itm as dynamic).ToList();
         }
-        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        public override bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
         {
             throw new NotImplementedException();
         }
 
-        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        public override dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        public override IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
         {
             throw new NotImplementedException();
         }
