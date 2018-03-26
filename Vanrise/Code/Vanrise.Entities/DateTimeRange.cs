@@ -12,4 +12,11 @@ namespace Vanrise.Entities
 
         public DateTime To { get; set; }
     }
+
+	public class VRDateTimeRange
+	{
+		public DateTime From { get; set; }
+
+		public DateTime? To { get; set; }
+	}
 }
