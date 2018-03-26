@@ -66,6 +66,9 @@
     <Reference Include="Vanrise.Common.Business">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Data, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
@@ -93,6 +96,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DaysToReprocessManager.cs" />
     <Compile Include="DealBillingSummary\DealBillingSummaryManager.cs" />
     <Compile Include="DealEvaluatorBPDefinitionSettings.cs" />
     <Compile Include="DealProgressManager.cs" />

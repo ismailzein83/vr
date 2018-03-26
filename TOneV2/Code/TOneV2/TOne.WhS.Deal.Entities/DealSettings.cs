@@ -4,34 +4,54 @@ using TOne.WhS.Deal.Entities;
 
 namespace TOne.WhS.Deal.Entities
 {
-    public abstract class DealSettings
-    {
-        public abstract Guid ConfigId { get; }
+	public abstract class DealSettings
+	{
+		public abstract Guid ConfigId { get; }
 
-        public DateTime BeginDate { get; set; }
+		public DateTime BeginDate { get; set; }
 
-        public DateTime? EndDate { get; set; }
+		public DateTime? EndDate { get; set; }
 
-        public abstract void GetZoneGroups(IDealGetZoneGroupsContext context);
+		public abstract int GetCarrierAccountId();
 
-        public abstract bool ValidateDataBeforeSave(IValidateBeforeSaveContext validateBeforeSaveContext);
-    }
+		public abstract void GetZoneGroups(IDealGetZoneGroupsContext context);
 
-    public interface IDealGetZoneGroupsContext
-    {
-        int DealId { get; }
+		public abstract bool ValidateDataBeforeSave(IValidateBeforeSaveContext validateBeforeSaveContext);
+	}
 
-        List<DealSaleZoneGroup> SaleZoneGroups { set; }
+	public enum DealZoneGroupPart { Both, Sale, Cost }
 
-        List<DealSupplierZoneGroup> SupplierZoneGroups { set; }
-    }
+	public interface IDealGetZoneGroupsContext
+	{
+		int DealId { get; }
 
-    public class DealGetZoneGroupsContext : IDealGetZoneGroupsContext
-    {
-        public int DealId { get; set; }
+		DealZoneGroupPart DealZoneGroupPart { get; }
 
-        public List<DealSaleZoneGroup> SaleZoneGroups { get; set; }
+		bool EvaluateRates { get; }
 
-        public List<DealSupplierZoneGroup> SupplierZoneGroups { get; set; }
-    }
+		List<BaseDealSaleZoneGroup> SaleZoneGroups { set; }
+
+		List<BaseDealSupplierZoneGroup> SupplierZoneGroups { set; }
+	}
+
+	public class DealGetZoneGroupsContext : IDealGetZoneGroupsContext
+	{
+		public DealGetZoneGroupsContext(int dealId, DealZoneGroupPart dealZoneGroupPart,bool evaluateRates)
+		{
+			this.DealId = dealId;
+			this.DealZoneGroupPart = dealZoneGroupPart;
+			this.EvaluateRates = evaluateRates;
+		}
+
+		public int DealId { get; set; }
+
+		public DealZoneGroupPart DealZoneGroupPart { get; set; }
+
+		public bool EvaluateRates { get; set; }
+
+		public List<BaseDealSaleZoneGroup> SaleZoneGroups { get; set; }
+
+		public List<BaseDealSupplierZoneGroup> SupplierZoneGroups { get; set; }
+
+	}
 }

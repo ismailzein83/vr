@@ -7,12 +7,14 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.Deal.BP.Activities
 {
-    public sealed class FinalizeDealEvaluator : CodeActivity
-    {
-        protected override void Execute(CodeActivityContext context)
-        {
-            DealProgressManager dealProgressManager = new DealProgressManager();
-            dealProgressManager.DeleteAffectedDealZoneGroups();
-        }
-    }
+	public sealed class FinalizeDealEvaluator : CodeActivity
+	{
+		protected override void Execute(CodeActivityContext context)
+		{
+			DealProgressManager dealProgressManager = new DealProgressManager();
+			dealProgressManager.DeleteAffectedDealZoneGroups();
+			var daysToReprocessManager = new DaysToReprocessManager();
+			daysToReprocessManager.DeleteDaysToReprocess();
+		}
+	}
 }

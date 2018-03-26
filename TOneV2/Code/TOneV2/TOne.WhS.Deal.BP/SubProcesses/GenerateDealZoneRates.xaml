@@ -1,0 +1,269 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="TOne.WhS.Deal.BP.SubProcesses.GenerateDealZoneRates"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:local="clr-namespace:TOne.WhS.Deal.BP.SubProcesses"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:twdba="clr-namespace:TOne.WhS.Deal.BP.Activities;assembly=TOne.WhS.Deal.BP.Activities"
+ xmlns:twde="clr-namespace:TOne.WhS.Deal.Entities;assembly=TOne.WhS.Deal.Entities"
+ xmlns:vbw="clr-namespace:Vanrise.BusinessProcess.WFActivities;assembly=Vanrise.BusinessProcess.WFActivities"
+ xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="DealEffectiveAfter" Type="InArgument(s:DateTime)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>TOne.WhS.Deal.BP.SubProcesses.GenerateDealZoneRates</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>TOne.WhS.Deal.Entities</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
+      <x:String>Vanrise.Queueing</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>PresentationCore</AssemblyReference>
+      <AssemblyReference>PresentationFramework</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Activities.Presentation</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Caching</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing.BP.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.Reprocess.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Vanrise.Reprocess.Entities</AssemblyReference>
+      <AssemblyReference>WindowsBase</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Deal.BP.Activities</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Deal.BP.Arguments</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Deal.Business</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Deal.Entities</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>TOne.WhS.Deal.BP</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="scg:IEnumerable(x:Int32)" Name="DealIdsToReevaluate" />
+      <Variable x:TypeArguments="scg:IEnumerable(x:Int32)" Name="DealIdsToKeep" />
+      <Variable x:TypeArguments="scg:IEnumerable(twde:DealDefinition)" Name="DealDefinitionsToReevaluate" />
+    </Sequence.Variables>
+    <twdba:GetDealDefinitionsToReevaluate sap2010:WorkflowViewState.IdRef="GetDealDefinitionsToReevaluate_1">
+      <twdba:GetDealDefinitionsToReevaluate.DealDefinitionsToReevaluate>
+        <OutArgument x:TypeArguments="scg:IEnumerable(twde:DealDefinition)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(twde:DealDefinition)">DealDefinitionsToReevaluate</mca:CSharpReference>
+        </OutArgument>
+      </twdba:GetDealDefinitionsToReevaluate.DealDefinitionsToReevaluate>
+      <twdba:GetDealDefinitionsToReevaluate.DealEffectiveAfter>
+        <InArgument x:TypeArguments="s:DateTime">
+          <mca:CSharpValue x:TypeArguments="s:DateTime">DealEffectiveAfter</mca:CSharpValue>
+        </InArgument>
+      </twdba:GetDealDefinitionsToReevaluate.DealEffectiveAfter>
+      <twdba:GetDealDefinitionsToReevaluate.DealIdsToKeep>
+        <OutArgument x:TypeArguments="scg:IEnumerable(x:Int32)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(x:Int32)">DealIdsToKeep</mca:CSharpReference>
+        </OutArgument>
+      </twdba:GetDealDefinitionsToReevaluate.DealIdsToKeep>
+      <twdba:GetDealDefinitionsToReevaluate.DealIdsToReevaluate>
+        <OutArgument x:TypeArguments="scg:IEnumerable(x:Int32)">
+          <mca:CSharpReference x:TypeArguments="scg:IEnumerable(x:Int32)">DealIdsToReevaluate</mca:CSharpReference>
+        </OutArgument>
+      </twdba:GetDealDefinitionsToReevaluate.DealIdsToReevaluate>
+    </twdba:GetDealDefinitionsToReevaluate>
+    <If sap2010:WorkflowViewState.IdRef="If_2">
+      <If.Condition>
+        <InArgument x:TypeArguments="x:Boolean">
+          <mca:CSharpValue x:TypeArguments="x:Boolean">DealIdsToReevaluate != null &amp;&amp; DealIdsToReevaluate.Count() != 0</mca:CSharpValue>
+        </InArgument>
+      </If.Condition>
+      <If.Then>
+        <Sequence sap2010:WorkflowViewState.IdRef="Sequence_3">
+          <twdba:InitializeDealZoneRateInsert sap2010:WorkflowViewState.IdRef="InitializeDealZoneRateInsert_1">
+            <twdba:InitializeDealZoneRateInsert.DealIdsToKeep>
+              <InArgument x:TypeArguments="scg:IEnumerable(x:Int32)">
+                <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:Int32)">DealIdsToKeep</mca:CSharpValue>
+              </InArgument>
+            </twdba:InitializeDealZoneRateInsert.DealIdsToKeep>
+          </twdba:InitializeDealZoneRateInsert>
+          <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+            <local:GenerateDealZoneRatesSubProcess DisplayName="Sale_GenerateDealZoneRates" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.WhS.Deal.BP.SubProcesses.GenerateDealZoneRatesSubProcess" IsSale="True">
+              <local:GenerateDealZoneRatesSubProcess.DealDefinitionsToReevaluate>
+                <InArgument x:TypeArguments="scg:IEnumerable(twde:DealDefinition)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twde:DealDefinition)">DealDefinitionsToReevaluate</mca:CSharpValue>
+                </InArgument>
+              </local:GenerateDealZoneRatesSubProcess.DealDefinitionsToReevaluate>
+              <local:GenerateDealZoneRatesSubProcess.DealIdsToReevaluate>
+                <InArgument x:TypeArguments="scg:IEnumerable(x:Int32)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:Int32)">DealIdsToReevaluate</mca:CSharpValue>
+                </InArgument>
+              </local:GenerateDealZoneRatesSubProcess.DealIdsToReevaluate>
+              <sap2010:WorkflowViewState.ViewStateManager>
+                <sap2010:ViewStateManager>
+                  <sap2010:ViewStateData Id="GenerateDealZoneRates_2" sap2010:WorkflowViewState.IdRef="ViewStateData_1" />
+                  <sap2010:ViewStateData Id="CompareNewAndExistingRates_2" sap2010:WorkflowViewState.IdRef="ViewStateData_2" />
+                  <sap2010:ViewStateData Id="InsertDaysToReprocess_2" sap2010:WorkflowViewState.IdRef="ViewStateData_3" />
+                  <sap2010:ViewStateData Id="GenerateDealZoneRatesForApply_2" sap2010:WorkflowViewState.IdRef="ViewStateData_4" />
+                  <sap2010:ViewStateData Id="PrepareDealZoneRatesForApply_2" sap2010:WorkflowViewState.IdRef="ViewStateData_5" />
+                  <sap2010:ViewStateData Id="ApplyDealZoneRatesToDB_2" sap2010:WorkflowViewState.IdRef="ViewStateData_6" />
+                  <sap2010:ViewStateData Id="Parallel_2" sap2010:WorkflowViewState.IdRef="ViewStateData_7" />
+                  <sap2010:ViewStateData Id="Sequence_4" sap2010:WorkflowViewState.IdRef="ViewStateData_8" />
+                  <sap2010:ViewStateData Id="If_3" sap2010:WorkflowViewState.IdRef="ViewStateData_9" />
+                  <sap2010:ViewStateData Id="Sequence_1" sap2010:WorkflowViewState.IdRef="ViewStateData_10" />
+                  <sap2010:ViewStateData Id="TOne.WhS.Deal.BP.SubProcesses.GenerateDealZoneRatesSubProcess" sap2010:WorkflowViewState.IdRef="ViewStateData_11" />
+                </sap2010:ViewStateManager>
+              </sap2010:WorkflowViewState.ViewStateManager>
+            </local:GenerateDealZoneRatesSubProcess>
+            <local:GenerateDealZoneRatesSubProcess DisplayName="Cost_GenerateDealZoneRates" sap2010:ExpressionActivityEditor.ExpressionActivityEditor="C#" sap2010:WorkflowViewState.IdRef="TOne.WhS.Deal.BP.SubProcesses.GenerateDealZoneRatesSubProcess" IsSale="False">
+              <local:GenerateDealZoneRatesSubProcess.DealDefinitionsToReevaluate>
+                <InArgument x:TypeArguments="scg:IEnumerable(twde:DealDefinition)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(twde:DealDefinition)">DealDefinitionsToReevaluate</mca:CSharpValue>
+                </InArgument>
+              </local:GenerateDealZoneRatesSubProcess.DealDefinitionsToReevaluate>
+              <local:GenerateDealZoneRatesSubProcess.DealIdsToReevaluate>
+                <InArgument x:TypeArguments="scg:IEnumerable(x:Int32)">
+                  <mca:CSharpValue x:TypeArguments="scg:IEnumerable(x:Int32)">DealIdsToReevaluate</mca:CSharpValue>
+                </InArgument>
+              </local:GenerateDealZoneRatesSubProcess.DealIdsToReevaluate>
+              <sap2010:WorkflowViewState.ViewStateManager>
+                <sap2010:ViewStateManager>
+                  <sap2010:ViewStateData Id="GenerateDealZoneRates_2" sap2010:WorkflowViewState.IdRef="ViewStateData_12" />
+                  <sap2010:ViewStateData Id="CompareNewAndExistingRates_2" sap2010:WorkflowViewState.IdRef="ViewStateData_13" />
+                  <sap2010:ViewStateData Id="InsertDaysToReprocess_2" sap2010:WorkflowViewState.IdRef="ViewStateData_14" />
+                  <sap2010:ViewStateData Id="GenerateDealZoneRatesForApply_2" sap2010:WorkflowViewState.IdRef="ViewStateData_15" />
+                  <sap2010:ViewStateData Id="PrepareDealZoneRatesForApply_2" sap2010:WorkflowViewState.IdRef="ViewStateData_16" />
+                  <sap2010:ViewStateData Id="ApplyDealZoneRatesToDB_2" sap2010:WorkflowViewState.IdRef="ViewStateData_17" />
+                  <sap2010:ViewStateData Id="Parallel_2" sap2010:WorkflowViewState.IdRef="ViewStateData_18" />
+                  <sap2010:ViewStateData Id="Sequence_4" sap2010:WorkflowViewState.IdRef="ViewStateData_19" />
+                  <sap2010:ViewStateData Id="If_3" sap2010:WorkflowViewState.IdRef="ViewStateData_20" />
+                  <sap2010:ViewStateData Id="Sequence_1" sap2010:WorkflowViewState.IdRef="ViewStateData_21" />
+                  <sap2010:ViewStateData Id="TOne.WhS.Deal.BP.SubProcesses.GenerateDealZoneRatesSubProcess" sap2010:WorkflowViewState.IdRef="ViewStateData_22" />
+                </sap2010:ViewStateManager>
+              </sap2010:WorkflowViewState.ViewStateManager>
+            </local:GenerateDealZoneRatesSubProcess>
+          </Parallel>
+          <twdba:FinalizeDealZoneRateInsert sap2010:WorkflowViewState.IdRef="FinalizeDealZoneRateInsert_1" />
+        </Sequence>
+      </If.Then>
+      <If.Else>
+        <vbw:WriteTrackingMessage sap2010:WorkflowViewState.IdRef="WriteTrackingMessage_1" Message="No deals to reeavluate">
+          <vbw:WriteTrackingMessage.Severity>
+            <InArgument x:TypeArguments="s:Nullable(ve:LogEntryType)">
+              <mca:CSharpValue x:TypeArguments="s:Nullable(ve:LogEntryType)">Vanrise.Entities.LogEntryType.Information</mca:CSharpValue>
+            </InArgument>
+          </vbw:WriteTrackingMessage.Severity>
+        </vbw:WriteTrackingMessage>
+      </If.Else>
+    </If>
+    <sads:DebugSymbol.Symbol>d1JDOlxURlNcVE9uZVYyXENvZGVcVE9uZVYyXFRPbmUuV2hTLkRlYWwuQlBcU3ViUHJvY2Vzc2VzXEdlbmVyYXRlRGVhbFpvbmVSYXRlcy54YW1sGEUDtgEOAgEBSwVgLAIBMGEFtAEKAgECXQtddAIBQFgLWG4CATtTC1NdAgE2TgtOiAECATFkC2SRAQIBA2gJqQEUAgEPrAEJsgEkAgEIaQtvMAIBKnALpwEWAgERqAELqAFuAgEQrwEPrwGJAQIBCqwBZKwBfAIBCWwRbGwCAStxDYsBNQIBHowBDaYBNQIBEnGDAnGJAgIBKXkTeXQCASR0E3SIAQIBH4wBgwKMAYoCAgEdlAETlAF0AgEYjwETjwGIAQIBEw==</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="GetDealDefinitionsToReevaluate_1" sap:VirtualizedContainerService.HintSize="801,22" />
+      <sap2010:ViewStateData Id="InitializeDealZoneRateInsert_1" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="ViewStateData_1" sap:VirtualizedContainerService.HintSize="941,22" />
+      <sap2010:ViewStateData Id="ViewStateData_2" sap:VirtualizedContainerService.HintSize="941,22" />
+      <sap2010:ViewStateData Id="ViewStateData_3" sap:VirtualizedContainerService.HintSize="794,22" />
+      <sap2010:ViewStateData Id="ViewStateData_4" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_5" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_6" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_7" sap:VirtualizedContainerService.HintSize="794,86">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ViewStateData_8" sap:VirtualizedContainerService.HintSize="816,272">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ViewStateData_9" sap:VirtualizedContainerService.HintSize="941,422" />
+      <sap2010:ViewStateData Id="ViewStateData_10" sap:VirtualizedContainerService.HintSize="963,670">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ViewStateData_11" sap:VirtualizedContainerService.HintSize="1003,750" />
+      <sap2010:ViewStateData Id="TOne.WhS.Deal.BP.SubProcesses.GenerateDealZoneRatesSubProcess" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_12" sap:VirtualizedContainerService.HintSize="941,22" />
+      <sap2010:ViewStateData Id="ViewStateData_13" sap:VirtualizedContainerService.HintSize="941,22" />
+      <sap2010:ViewStateData Id="ViewStateData_14" sap:VirtualizedContainerService.HintSize="794,22" />
+      <sap2010:ViewStateData Id="ViewStateData_15" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_16" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_17" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ViewStateData_18" sap:VirtualizedContainerService.HintSize="794,86">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+            <x:Boolean x:Key="IsPinned">False</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ViewStateData_19" sap:VirtualizedContainerService.HintSize="816,272">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ViewStateData_20" sap:VirtualizedContainerService.HintSize="941,422" />
+      <sap2010:ViewStateData Id="ViewStateData_21" sap:VirtualizedContainerService.HintSize="963,670">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="ViewStateData_22" sap:VirtualizedContainerService.HintSize="1003,750" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />
+      <sap2010:ViewStateData Id="FinalizeDealZoneRateInsert_1" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="Sequence_3" sap:VirtualizedContainerService.HintSize="576,334">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="WriteTrackingMessage_1" sap:VirtualizedContainerService.HintSize="200,22" />
+      <sap2010:ViewStateData Id="If_2" sap:VirtualizedContainerService.HintSize="801,484" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="823,670">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="TOne.WhS.Deal.BP.SubProcesses.GenerateDealZoneRates" sap:VirtualizedContainerService.HintSize="863,750" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

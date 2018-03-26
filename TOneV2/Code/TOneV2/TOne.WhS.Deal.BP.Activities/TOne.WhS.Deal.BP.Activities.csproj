@@ -65,11 +65,19 @@
     <Reference Include="Vanrise.Common">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Data, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Queueing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Reprocess.BP.Arguments">
       <HintPath>..\..\..\..\BusinessProcess\Code\Output\Vanrise.Reprocess.BP.Arguments.dll</HintPath>
@@ -83,23 +91,36 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DealZoneRate\ApplyDealZoneRatesToDB.cs" />
+    <Compile Include="DealZoneRate\CompareNewAndExistingRates.cs" />
+    <Compile Include="DealZoneRate\FinalizeDealZoneRateInsert.cs" />
+    <Compile Include="DealZoneRate\InitializeDealZoneRateInsert.cs" />
     <Compile Include="FinalizeDealEvaluator.cs" />
     <Compile Include="CalculateBeginDate.cs" />
     <Compile Include="ApplyExpectedDealTrafficRecordsToDB.cs" />
+    <Compile Include="DealZoneRate\GenerateDealZoneRatesForApply.cs" />
+    <Compile Include="DealZoneRate\GenerateDealZoneRates.cs" />
+    <Compile Include="GetDealDefinitionsToReevaluate.cs" />
     <Compile Include="GetDealTechnicalSettingData.cs" />
     <Compile Include="LoadDealDetailedProgresses.cs" />
     <Compile Include="LoadDealBillingSummaryRecords.cs" />
     <Compile Include="LoadPreviousAffectedDealZoneGroups.cs" />
     <Compile Include="LoadDealProgresses.cs" />
+    <Compile Include="DealZoneRate\PrepareDealZoneRatesForApply.cs" />
     <Compile Include="PrepareExpectedDealTrafficRecords.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SyncDealDetailProgressWithBS.cs" />
     <Compile Include="BuildDealEvaluatorProcessState.cs" />
+    <Compile Include="InsertDaysToReprocess.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.WhS.Deal.Business\TOne.WhS.Deal.Business.csproj">
       <Project>{fcc59d3d-6e58-4558-bc27-8c6a01223cb7}</Project>
       <Name>TOne.WhS.Deal.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.Deal.Data\TOne.WhS.Deal.Data.csproj">
+      <Project>{e938eae6-4107-4a69-8f06-59f7be730a3d}</Project>
+      <Name>TOne.WhS.Deal.Data</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.Deal.Entities\TOne.WhS.Deal.Entities.csproj">
       <Project>{564d6923-6b08-4721-b9c2-bd6c3d22c3df}</Project>

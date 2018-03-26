@@ -60,7 +60,7 @@ namespace TOne.WhS.Deal.BP.Activities
                         DealProgressData dealProgressData;
                         if (!dealProgressDataByZoneGroup.TryGetValue(dealZoneGroup, out dealProgressData)) //1st Tier
                         {
-                            DealZoneGroupTierDetails firstDealZoneGroupTierDetails = dealDefinitionManager.GetDealZoneGroupTierDetails(inputArgument.IsSale, dealZoneGroup.DealId, dealZoneGroup.ZoneGroupNb, 1);
+                            DealZoneGroupTierDetailsWithoutRate firstDealZoneGroupTierDetails = dealDefinitionManager.GetDealZoneGroupTierDetailsWithoutRate(inputArgument.IsSale, dealZoneGroup.DealId, dealZoneGroup.ZoneGroupNb, 1);
                             if (firstDealZoneGroupTierDetails == null)
                                 throw new VRBusinessException(string.Format("dealId '{0}' and ZoneGroupNb '{1}' should contains at least one Tier"));
 
@@ -153,7 +153,7 @@ namespace TOne.WhS.Deal.BP.Activities
                 }
 
                 //Editing DealProgressData memoryTable
-                DealZoneGroupTierDetails nextDealZoneGroupTierDetails = new DealDefinitionManager().GetDealZoneGroupTierDetails(isSale, dealZoneGroup.DealId, dealZoneGroup.ZoneGroupNb, dealProgressData.CurrentTierNb + 1);
+                DealZoneGroupTierDetailsWithoutRate nextDealZoneGroupTierDetails = new DealDefinitionManager().GetDealZoneGroupTierDetailsWithoutRate(isSale, dealZoneGroup.DealId, dealZoneGroup.ZoneGroupNb, dealProgressData.CurrentTierNb + 1);
                 if (nextDealZoneGroupTierDetails == null)
                 {
                     DealBillingSummary dealBillingSummary = BuildDealBillingSummary(isSale, dealZoneGroup, batchStart, null, null, remainingDurationInSec);
@@ -199,7 +199,7 @@ namespace TOne.WhS.Deal.BP.Activities
             dealBillingSummaries.Add(dealBillingSummary);
         }
 
-        private void CheckNextTierRetroActive(DealZoneGroup dealZoneGroup, DealZoneGroupTierDetails nextDealZoneGroupTierDetails,
+        private void CheckNextTierRetroActive(DealZoneGroup dealZoneGroup, DealZoneGroupTierDetailsWithoutRate nextDealZoneGroupTierDetails,
             Dictionary<DealZoneGroupTier, List<DealBillingSummary>> expectedDealBillingSummaryRecordByZoneGroupTier)
         {
             if (nextDealZoneGroupTierDetails.RetroActiveFromTierNb.HasValue)
