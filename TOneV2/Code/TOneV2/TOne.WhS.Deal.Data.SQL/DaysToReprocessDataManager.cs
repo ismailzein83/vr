@@ -43,11 +43,11 @@ namespace TOne.WhS.Deal.Data.SQL
 
 		#region  Mappers
 
-		private DaysToReprocess DaysToReprocessMapper(IDataReader reader)
+		private DayToReprocess DaysToReprocessMapper(IDataReader reader)
 		{
-			DaysToReprocess daysToReprocess = new DaysToReprocess
+			DayToReprocess daysToReprocess = new DayToReprocess
 			{
-				DaysToReprocessId = (int)reader["ID"],
+				DayToReprocessId = (int)reader["ID"],
 				Date = GetReaderValue<DateTime>(reader, "Date"),
 				IsSale = (bool)reader["IsSale"],
 				CarrierAccountId = (int)reader["CarrierAccountId"]
