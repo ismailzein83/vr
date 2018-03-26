@@ -29,7 +29,7 @@ namespace Vanrise.Notification.Business
 
         public List<VRAlertRule> GetActiveRules(Guid ruleTypeId)
         {
-            return GetCachedRulesByType().GetRecord(ruleTypeId);
+            return GetCachedActiveRulesByType().GetRecord(ruleTypeId);
         }
 
         public VRAlertRule GetVRAlertRule(long vrAlertRuleId)
@@ -316,6 +316,15 @@ namespace Vanrise.Notification.Business
                () =>
                {
                    return GetCachedVRAlertRules().Values.GroupBy(s => s.RuleTypeId).ToDictionary(x => x.Key, v => v.ToList());
+               });
+        }
+
+        private Dictionary<Guid, List<VRAlertRule>> GetCachedActiveRulesByType()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedActiveRulesByType",
+               () =>
+               {
+                   return GetCachedVRAlertRules().Values.GroupBy(s => s.RuleTypeId).ToDictionary(x => x.Key, v => v.FindAllRecords(itm => !itm.IsDisabled).ToList());
                });
         }
 
