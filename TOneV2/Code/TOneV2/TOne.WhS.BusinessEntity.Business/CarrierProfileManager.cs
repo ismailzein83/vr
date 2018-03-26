@@ -16,7 +16,7 @@ using Vanrise.Security.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class CarrierProfileManager : IBusinessEntityManager
+    public class CarrierProfileManager : BaseBusinessEntityManager
     {
         #region ctor/Local Variables
         #endregion
@@ -668,12 +668,12 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         #region IBusinessEntityManager
 
-        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        public override dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
             return GetCarrierProfile(context.EntityId);
         }
 
-        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        public override List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         {
             var allCarrierProfiles = GetCachedCarrierProfiles();
             if (allCarrierProfiles == null)
@@ -682,33 +682,33 @@ namespace TOne.WhS.BusinessEntity.Business
                 return allCarrierProfiles.Values.Select(itm => itm as dynamic).ToList();
         }
 
-        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        public override string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
             return GetCarrierProfileName(Convert.ToInt32(context.EntityId));
         }
 
-        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        public override dynamic GetEntityId(IBusinessEntityIdContext context)
         {
             var carrierProfile = context.Entity as CarrierProfile;
             return carrierProfile.CarrierProfileId;
         }
 
-        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        public override bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
         }
 
-        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        public override IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
         {
             throw new NotImplementedException();
         }
 
-        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        public override dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
         {
             throw new NotImplementedException();
         }
 
-        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        public override dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
         {
             throw new NotImplementedException();
         }

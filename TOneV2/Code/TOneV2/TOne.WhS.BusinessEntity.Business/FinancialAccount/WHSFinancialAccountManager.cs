@@ -15,7 +15,7 @@ using Vanrise.Security.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class WHSFinancialAccountManager : IBusinessEntityManager
+    public class WHSFinancialAccountManager : BaseBusinessEntityManager
     {
         #region Fields
 
@@ -117,13 +117,13 @@ namespace TOne.WhS.BusinessEntity.Business
                         {
                             foreach (var invoiceSettingData in financialAccountToEdit.InvoiceSettingsData)
                             {
-                               
+
                                 if (invoiceSettingData.InvoiceSettingId.HasValue)
                                 {
                                     Guid partnerInvoiceSettingId = invoiceSettingData.PartnerInvoiceSettingId.HasValue ? invoiceSettingData.PartnerInvoiceSettingId.Value : Guid.NewGuid();
                                     LinkPartnerToInvoiceSetting(partnerInvoiceSettingId, invoiceSettingData.InvoiceSettingId.Value, financialAccountToEdit.FinancialAccountId.ToString());
                                 }
-                                
+
                             }
                         }
                         Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -1386,43 +1386,43 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region IBusinessEntityManager
 
-        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        public override List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         {
             var currentBEAccounts = GetFinancialAccountsByDefinitionId(context.EntityDefinitionId);
             return currentBEAccounts != null ? currentBEAccounts.Select(itm => itm as dynamic).ToList() : null;
         }
 
-        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        public override dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
             throw new NotImplementedException();
         }
 
-        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        public override string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
             throw new NotImplementedException();
         }
 
-        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        public override dynamic GetEntityId(IBusinessEntityIdContext context)
         {
             throw new NotImplementedException();
         }
 
-        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        public override IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
         {
             throw new NotImplementedException();
         }
 
-        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        public override dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
         {
             throw new NotImplementedException();
         }
 
-        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        public override bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
         {
             throw new NotImplementedException();
         }
 
-        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        public override dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
         {
             throw new NotImplementedException();
         }

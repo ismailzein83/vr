@@ -16,7 +16,7 @@ using Vanrise.Security.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class CarrierAccountManager : IBusinessEntityManager, ICarrierAccountManager
+    public class CarrierAccountManager : BaseBusinessEntityManager, ICarrierAccountManager
     {
         #region ctor/Local Variables
 
@@ -1571,12 +1571,12 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region IBusinessEntityManager
 
-        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        public override dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
             return GetCarrierAccount(Convert.ToInt32(context.EntityId));
         }
 
-        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        public override List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         {
             var allCarrierAccounts = GetAllCarriers();
             if (allCarrierAccounts == null)
@@ -1585,23 +1585,23 @@ namespace TOne.WhS.BusinessEntity.Business
                 return allCarrierAccounts.Select(itm => itm as dynamic).ToList();
         }
 
-        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        public override string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
             return GetCarrierAccountName(Convert.ToInt32(context.EntityId));
         }
 
-        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        public override dynamic GetEntityId(IBusinessEntityIdContext context)
         {
             var carrierAccount = context.Entity as CarrierAccount;
             return carrierAccount.CarrierAccountId;
         }
 
-        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        public override bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
         }
 
-        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        public override IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
         {
             Func<CarrierAccount, bool> filter;
             switch (context.ParentEntityDefinition.Name)
@@ -1612,7 +1612,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return GetCachedCarrierAccounts().FindAllRecords(filter).MapRecords(ca => ca.CarrierAccountId as dynamic);
         }
 
-        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        public override dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
         {
             var carrierAccount = context.Entity as CarrierAccount;
             if (carrierAccount == null)
@@ -1624,7 +1624,7 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
 
-        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        public override dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
         {
             throw new NotImplementedException();
         }

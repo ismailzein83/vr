@@ -14,7 +14,7 @@ using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
-    public class SupplierZoneManager : IBusinessEntityManager, ISupplierZoneManager
+    public class SupplierZoneManager : BaseBusinessEntityManager, ISupplierZoneManager
     {
         #region Public Methods
         public Dictionary<long, SupplierZone> GetCachedSupplierZones()
@@ -360,12 +360,12 @@ namespace TOne.WhS.BusinessEntity.Business
         }
         #region IBusinessEntityManager
 
-        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        public override dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
             return GetSupplierZone(context.EntityId);
         }
 
-        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        public override List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         {
             var allZones = GetCachedSupplierZones();
             if (allZones == null)
@@ -374,23 +374,23 @@ namespace TOne.WhS.BusinessEntity.Business
                 return allZones.Values.Select(itm => itm as dynamic).ToList();
         }
 
-        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        public override string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
             return GetSupplierZoneName(Convert.ToInt64(context.EntityId));
         }
 
-        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        public override dynamic GetEntityId(IBusinessEntityIdContext context)
         {
             var supplierZone = context.Entity as SupplierZone;
             return supplierZone.SupplierZoneId;
         }
 
-        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        public override bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(ref lastCheckTime);
         }
 
-        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        public override IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
         {
             Func<SupplierZone, bool> filter;
             switch (context.ParentEntityDefinition.Name)
@@ -401,7 +401,7 @@ namespace TOne.WhS.BusinessEntity.Business
             return GetCachedSupplierZones().FindAllRecords(filter).MapRecords(zone => zone.SupplierZoneId as dynamic);
         }
 
-        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        public override dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
         {
             var supplierZone = context.Entity as SupplierZone;
             if (supplierZone == null)
@@ -413,7 +413,7 @@ namespace TOne.WhS.BusinessEntity.Business
             }
         }
 
-        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        public override dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
         {
             throw new NotImplementedException();
         }
