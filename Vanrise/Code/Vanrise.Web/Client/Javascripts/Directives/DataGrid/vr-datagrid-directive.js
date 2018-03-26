@@ -1296,6 +1296,10 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     ctrl.deleteRowClicked = function (dataItem) {
                         deleteRowFunction(dataItem);
                     };
+
+                    ctrl.getRowDeleteIconTitle = function () {
+                        return attrs.rowdeleteicontitle != undefined ? attrs.rowdeleteicontitle : "";
+                    }
                 }
             }
 

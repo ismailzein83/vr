@@ -100,7 +100,7 @@
             <span ng-style="::$parent.ctrl.cellLayoutStyle" class="span-summary" style="top: 50%; position: absolute; transform: translate(0%,-50%);">  {{ dataItem.actionType}}</span>
         </div>
         <div ng-if="ctrl.showDeleteRowSection &&  !ctrl.readOnly" ng-style="{'width': $parent.ctrl.deleteRowColumnWidth, 'display':'inline-block', 'position':'relative'}">
-            <span class="hand-cursor glyphicon glyphicon-remove vr-remove-row" ng-click="ctrl.deleteRowClicked(dataItem)"></span>
+            <span class="hand-cursor glyphicon glyphicon-remove vr-remove-row" ng-click="ctrl.deleteRowClicked(dataItem)" title="{{ctrl.getRowDeleteIconTitle()}}"></span>
         </div>
     </div>
     <div id="divExpandableRowContent_{{$index}}" ng-show="dataItem.isRowExpanded" style="border-top: 1px solid #D0D0D0; border-right:1px solid #D0D0D0;white-space:nowrap;background-color: #fff;">

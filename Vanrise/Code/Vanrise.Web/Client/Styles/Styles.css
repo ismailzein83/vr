@@ -351,11 +351,11 @@ vr-button .btn.active {
     box-shadow: none;
 }
 
-    vr-button .btn:focus, vr-button .btn:active:focus, vr-button .btn.active:focus, vr-button .btn.focus, vr-button .btn:active.focus, vr-button .btn.active.focus {
-        outline: none;
-        outline: none;
-        outline-offset: 0px;
-    }
+vr-button .btn:focus, vr-button .btn:active:focus, vr-button .btn.active:focus, vr-button .btn.focus, vr-button .btn:active.focus, vr-button .btn.active.focus {
+    outline: none;
+    outline: none;
+    outline-offset: 0px;
+}
 
 vr-button[type="Add"][standalone] div > span {
     color: #5cb85c;
@@ -369,6 +369,9 @@ vr-button[class*="divDisabled"][type="UploadExcel"][standalone] div > span {
 }
 vr-button[standalone] .loading-btn {
     opacity:0.3;
+}
+vr-button[type="Exclude"] span{
+    transform:scaleX(-1);
 }
 
 
@@ -855,6 +858,9 @@ add padding .left-addon input {
 .vr-select-disabled-item {
     color: #c1c1c1 !important;
     pointer-events: none;
+}
+div[disabled-item="true"]{    
+   cursor:not-allowed;
 }
 /*.modal-body  .vr-select-add{
     right : -15px ;

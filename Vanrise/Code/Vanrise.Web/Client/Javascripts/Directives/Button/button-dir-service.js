@@ -23,6 +23,7 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
         var customlabel = attrs.customlabel;
         var customLabelTag = (customlabel != undefined && customlabel != "") ? '<span class="btn-label" >' + customlabel + '</span>' : '';
         var buttonAttributes = getButtonAttributes(type);
+        var buttonTitle = attrs.buttontitle != undefined ? attrs.buttontitle : buttonAttributes.text;
         if (type == "Login") {
             return '<div style="position:relative;display:inline-block;width:100%" ng-mouseleave="ctrl.showMenuActions = false" ng-hide="ctrl.hideTemplate">'
                 + '<button style="width:100%" type="button" class="btn btn-danger login-btn"'
@@ -34,7 +35,7 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
 
         }
         else if (attrs.standalone != undefined) {
-            return '<div style="position:relative;display:inline-block;height:28px" ng-if="ctrl.isExculdedOnreadOnly()" ng-mouseleave="ctrl.showMenuActions = false"  title="' + buttonAttributes.text + '" '
+            return '<div style="position:relative;display:inline-block;height:28px" ng-if="ctrl.isExculdedOnreadOnly()" ng-mouseleave="ctrl.showMenuActions = false"  title="' + buttonTitle + '" '
            + ' aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()" ng-hide="ctrl.hideTemplate">'
                + '<span  style="font-size:24px" class="' + buttonAttributes.class + ' btn-label hand-cursor" aria-hidden="true" ng-show="ctrl.showIcon()"></span>'
                + '<img src="Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:20px;margin-top:3px;" class="img-loader" ng-show="ctrl.showLoader()" />'

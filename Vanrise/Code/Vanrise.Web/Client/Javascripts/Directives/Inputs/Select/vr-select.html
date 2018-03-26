@@ -40,8 +40,8 @@
                                 <!--<div ng-if="ctrl.isMultiple() && !ctrl.isRemoteLoad()" style="padding-left:5px;"><a href="" ng-click="ctrl.selectAll()">Select all </a></div>-->
                                 <div id="divDataSourceContainer{{ctrl.id}}" class="vr-select-height" ng-if="!ctrl.isMultiple()">
                                     <div id="divDataSourceBody{{ctrl.id}}">
-                                        <div id="{{::ctrl.getObjectValue(c)}}" dataindex="{{$index}}" style="position:relative" ng-mouseenter="showeye = true;" ng-mouseleave="showeye = false;" ng-repeat="c in ctrl.boundDataSource" title="{{ctrl.getTooltipValue(c)}}" ng-class="ctrl.getObjectStyle(c)">
-                                            <a href="" ng-if="!ctrl.isMultiple()" style="display: block; width:100%;padding:2px; white-space: normal;height:25px" ng-class=" ctrl.getobjectdisabled(c)==true?'vr-select-disabled-item':''" class="mark-select single-select" ng-click="ctrl.selectValue($event, c);">
+                                        <div id="{{::ctrl.getObjectValue(c)}}" dataindex="{{$index}}" style="position:relative" ng-mouseenter="showeye = true;" ng-mouseleave="showeye = false;" ng-repeat="c in ctrl.boundDataSource" title="{{ctrl.getTooltipValue(c)}}" ng-class="ctrl.getObjectStyle(c)" disabled-item="{{ctrl.getObjectDisabled(c)}}">
+                                            <a href="" ng-if="!ctrl.isMultiple()" style="display: block; width:100%;padding:2px; white-space: normal;height:25px" ng-class=" ctrl.getObjectDisabled(c)==true?'vr-select-disabled-item':''" class="mark-select single-select" ng-click="ctrl.selectValue($event, c);">
                                                 <div class="hand-cursor single-select{{ctrl.id}}" style="display: table-cell;  white-space: nowrap; text-overflow: ellipsis; overflow:hidden">{{::ctrl.getObjectText(c)}}</div>
                                             </a>
                                             <span ng-show="showeye" ng-if="ctrl.includeOnViewHandler() && ctrl.showViewButton" ng-click="ctrl.onViewHandler(c)" class=" glyphicon glyphicon-eye-open hand-cursor view-icon"></span>
@@ -50,7 +50,7 @@
                                 </div>
                                 <div id="divDataSourceContainer{{ctrl.id}}" class="vr-select-height vr-select-ds-container" ng-if="ctrl.isMultiple()" ng-class="ctrl.isEnFilter()? 'with-filter' : 'no-filter'">
                                     <div id="divDataSourceBody{{ctrl.id}}">
-                                        <div id="{{::ctrl.getObjectValue(c)}}" dataindex="{{$index}}" style="position:relative" ng-repeat="c in ctrl.boundDataSource" ng-mouseenter="showeye = true;" ng-mouseleave="showeye = false;" title="{{ctrl.getTooltipValue(c)}}" ng-class="ctrl.getObjectStyle(c)">
+                                        <div id="{{::ctrl.getObjectValue(c)}}" dataindex="{{$index}}" style="position:relative" ng-repeat="c in ctrl.boundDataSource" ng-mouseenter="showeye = true;" ng-mouseleave="showeye = false;" title="{{ctrl.getTooltipValue(c)}}" ng-class="ctrl.getObjectStyle(c)" disabled-item="{{ctrl.getObjectDisabled(c)}}">
                                             <a href="" class="mark-select select-item-container" ng-click="ctrl.selectValue($event, c); " ng-class="ctrl.getObjectDisabled(c)==true ?'vr-select-disabled-item':ctrl.findExsite(c) >-1 ?'selected':'' ">
                                                 <div class="hand-cursor" style="display: inline-block; width:170px; text-overflow: ellipsis; overflow:hidden">{{ ::ctrl.getObjectText(c)}}</div>
                                                 <div class="checked-item " ng-show="ctrl.findExsite(c) > -1 ">
@@ -75,7 +75,7 @@
                                 </div>
                                 <div id="divDataSourceContainer{{ctrl.id}}" class="vr-select-height source-container-{{ctrl.id}}">
                                     <div id="divDataSourceBody{{ctrl.id}}">
-                                        <div id="{{::ctrl.getObjectValue(c)}}" dataindex="{{$index}}" ng-repeat="c in ctrl.boundDataSource" style="position:relative" ng-mouseenter="showeye = true;" ng-mouseleave="showeye = false;" title="{{ctrl.getTooltipValue(c)}}" ng-class="ctrl.getObjectStyle(c)">
+                                        <div id="{{::ctrl.getObjectValue(c)}}" dataindex="{{$index}}" ng-repeat="c in ctrl.boundDataSource" style="position:relative" ng-mouseenter="showeye = true;" ng-mouseleave="showeye = false;" title="{{ctrl.getTooltipValue(c)}}" ng-class="ctrl.getObjectStyle(c)" disabled-item="{{ctrl.getObjectDisabled(c)}}">
                                             <a href="" ng-if="!ctrl.isContainerVisible()" ng-class="ctrl.getObjectDisabled(c)==true?'vr-select-disabled-item':''" class="mark-select single-select{{ctrl.id}}" ng-click="ctrl.selectValue($event, c)"
                                                style="display: block; width:100%;padding:2px; white-space: normal;">
                                                 <div class="hand-cursor single-select{{ctrl.id}}" style="display: table-cell; text-overflow: ellipsis; overflow:hidden">{{::ctrl.getObjectText(c)}} </div>
