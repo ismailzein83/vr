@@ -17,7 +17,7 @@ using Retail.BusinessEntity.APIEntities;
 
 namespace Retail.BusinessEntity.Business
 {
-    public class AccountBEManager : IBusinessEntityManager, IAccountBEManager
+    public class AccountBEManager : BaseBusinessEntityManager, IAccountBEManager
     {
         #region Ctor/Properties
 
@@ -1707,7 +1707,7 @@ namespace Retail.BusinessEntity.Business
 
         #region IBusinessEntityManager
 
-        public List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        public override List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
         {
             var cachedAccounts = GetCachedAccounts(context.EntityDefinitionId);
             if (cachedAccounts != null)
@@ -1715,32 +1715,32 @@ namespace Retail.BusinessEntity.Business
             else
                 return null;
         }
-        public dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        public override dynamic GetEntity(IBusinessEntityGetByIdContext context)
         {
             return GetAccount(context.EntityDefinitionId, context.EntityId);
         }
-        public string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        public override string GetEntityDescription(IBusinessEntityDescriptionContext context)
         {
             return GetAccountName(context.EntityDefinition.BusinessEntityDefinitionId, Convert.ToInt64(context.EntityId));
         }
-        public dynamic GetEntityId(IBusinessEntityIdContext context)
+        public override dynamic GetEntityId(IBusinessEntityIdContext context)
         {
             var account = context.Entity as Account;
             return account.AccountId;
         }
-        public bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        public override bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().IsCacheExpired(context.EntityDefinitionId, ref lastCheckTime);
         }
-        public IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        public override IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
         {
             throw new NotImplementedException();
         }
-        public dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        public override dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
         {
             throw new NotImplementedException();
         }
-        public dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        public override dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
         {
             switch (context.InfoType)
             {
