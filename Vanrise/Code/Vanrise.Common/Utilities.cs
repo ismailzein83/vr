@@ -707,7 +707,7 @@ namespace Vanrise.Common
 			return true;
 		}
 
-		public static IEnumerable<VRDateTimeRange> GenerateDateRanges<T, Q>(List<T> Tlist, List<Q> Qlist, Func<T, Q, VRDateTimeRange, bool> shouldAddRange)
+		public static IEnumerable<VRDateTimeRange> GenerateDateRanges<T, Q>(List<T> Tlist, List<Q> Qlist, Func<T, Q, bool> shouldAddRange)
 			where T : class, IDateEffectiveSettings
 			where Q : class, IDateEffectiveSettings
 		{
@@ -766,11 +766,10 @@ namespace Vanrise.Common
 						Qindex++;
 
 				}
-				if (shouldAddRange(Titem, Qitem, lastDateRange))
-				{
-					lastDateRange = dateRangeToAdd;
+				lastDateRange = dateRangeToAdd;
+
+				if (shouldAddRange(Titem, Qitem))
 					dateRanges.Add(dateRangeToAdd);
-				}
 			}
 
 			return dateRanges;
