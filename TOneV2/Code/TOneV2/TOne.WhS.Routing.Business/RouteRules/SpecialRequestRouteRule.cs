@@ -20,6 +20,8 @@ namespace TOne.WhS.Routing.Business
 
         public List<SpecialRequestRouteBackupOptionSettings> OverallBackupOptions { get; set; }
 
+        public Dictionary<int, ExcludedSpecialRequestOption> ExcludedOptions { get; set; }
+
         private HashSet<int> _optionSupplierIds;
         private HashSet<int> OptionsSupplierIds
         {
@@ -47,16 +49,50 @@ namespace TOne.WhS.Routing.Business
                 {
                     if (this.Options != null)
                     {
-                        _optionsWithBackups = Vanrise.Common.Utilities.CloneObject<List<SpecialRequestRouteOptionSettings>>(this.Options);
-
+                        List<SpecialRequestRouteBackupOptionSettings> _overallBackupOptions = null;
                         if (this.OverallBackupOptions != null)
                         {
-                            foreach (SpecialRequestRouteOptionSettings option in _optionsWithBackups)
+                            _overallBackupOptions = Vanrise.Common.Utilities.CloneObject<List<SpecialRequestRouteBackupOptionSettings>>(this.OverallBackupOptions);
+                            for (var i = _overallBackupOptions.Count - 1; i >= 0; i--)
+                            {
+                                SpecialRequestRouteBackupOptionSettings overallBackupOption = _overallBackupOptions[i];
+                                if (this.ExcludedOptions != null && this.ExcludedOptions.ContainsKey(overallBackupOption.SupplierId))
+                                    _overallBackupOptions.RemoveAt(i);
+                            }
+
+                            if (_overallBackupOptions.Count == 0)
+                                _overallBackupOptions = null;
+                        }
+
+                        _optionsWithBackups = Vanrise.Common.Utilities.CloneObject<List<SpecialRequestRouteOptionSettings>>(this.Options);
+                        for (var j = _optionsWithBackups.Count - 1; j >= 0; j--)
+                        {
+                            SpecialRequestRouteOptionSettings option = _optionsWithBackups[j];
+                            if (this.ExcludedOptions != null && this.ExcludedOptions.ContainsKey(option.SupplierId))
+                            {
+                                _optionsWithBackups.RemoveAt(j);
+                                continue;
+                            }
+
+                            if (option.Backups != null)
+                            {
+                                for (var k = option.Backups.Count - 1; k >= 0; k--)
+                                {
+                                    SpecialRequestRouteBackupOptionSettings backupOption = option.Backups[k];
+                                    if (this.ExcludedOptions != null && this.ExcludedOptions.ContainsKey(backupOption.SupplierId))
+                                        option.Backups.RemoveAt(k);
+                                }
+
+                                if (option.Backups.Count == 0)
+                                    option.Backups = null;
+                            }
+
+                            if (_overallBackupOptions != null)
                             {
                                 if (option.Backups != null)
-                                    option.Backups.AddRange(this.OverallBackupOptions);
+                                    option.Backups.AddRange(_overallBackupOptions);
                                 else
-                                    option.Backups = new List<SpecialRequestRouteBackupOptionSettings>(this.OverallBackupOptions);
+                                    option.Backups = new List<SpecialRequestRouteBackupOptionSettings>(_overallBackupOptions);
                             }
                         }
                     }
@@ -224,6 +260,9 @@ namespace TOne.WhS.Routing.Business
 
                 foreach (var supplierCodeMatch in allSuppliersCodeMatches)
                 {
+                    if (this.ExcludedOptions != null && this.ExcludedOptions.ContainsKey(supplierCodeMatch.CodeMatch.SupplierId))
+                        continue;
+
                     if (OptionsSupplierIds == null || !OptionsSupplierIds.Contains(supplierCodeMatch.CodeMatch.SupplierId))
                     {
                         SpecialRequestRouteOptionSettings optionSettings = new SpecialRequestRouteOptionSettings() { NumberOfTries = 1, SupplierId = supplierCodeMatch.CodeMatch.SupplierId };
@@ -295,6 +334,9 @@ namespace TOne.WhS.Routing.Business
                 List<RouteOptionRuleTarget> lcrOptions = new List<RouteOptionRuleTarget>();
                 foreach (var supplierCodeMatch in allSuppliersCodeMatches)
                 {
+                    if (this.ExcludedOptions != null && this.ExcludedOptions.ContainsKey(supplierCodeMatch.CodeMatch.SupplierId))
+                        continue;
+
                     if (OptionsSupplierIds == null || !OptionsSupplierIds.Contains(supplierCodeMatch.CodeMatch.SupplierId))
                     {
                         SpecialRequestRouteOptionSettings optionSettings = new SpecialRequestRouteOptionSettings() { NumberOfTries = 1, SupplierId = supplierCodeMatch.CodeMatch.SupplierId };
@@ -358,6 +400,15 @@ namespace TOne.WhS.Routing.Business
                 return false;
 
             return (saleRate.Value - supplierRate) < 0;
+        }
+
+        #endregion
+
+        #region Private Classes
+
+        public class ExcludedSpecialRequestOption
+        {
+            public int SupplierId { get; set; }
         }
 
         #endregion

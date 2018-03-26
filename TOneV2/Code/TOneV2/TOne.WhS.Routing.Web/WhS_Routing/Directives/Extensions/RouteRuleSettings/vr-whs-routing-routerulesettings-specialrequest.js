@@ -31,6 +31,7 @@ app.directive('vrWhsRoutingRouterulesettingsSpecialrequest', ['UtilsService', 'V
             this.initializeController = initializeController;
 
             var supplierFilterSettings;
+            var supplierZoneDetails;
 
             var gridAPI;
             var gridPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -41,7 +42,9 @@ app.directive('vrWhsRoutingRouterulesettingsSpecialrequest', ['UtilsService', 'V
             var overallBackupOptionsDirectiveAPI;
             var overallBackupOptionsDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-            var supplierZoneDetails;
+            var excludedSuppliersSelectorAPI;
+            var excludedSuppliersSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             var saleServiceViewerAPI;
 
             function initializeController() {
@@ -62,6 +65,11 @@ app.directive('vrWhsRoutingRouterulesettingsSpecialrequest', ['UtilsService', 'V
                 $scope.scopeModel.onOverallBackupOptionsDirectiveReady = function (api) {
                     overallBackupOptionsDirectiveAPI = api;
                     overallBackupOptionsDirectiveReadyPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onExcludedSuppliersSelectorReady = function (api) {
+                    excludedSuppliersSelectorAPI = api;
+                    excludedSuppliersSelectorReadyPromiseDeferred.resolve();
                 };
 
                 $scope.scopeModel.onSelectSupplier = function (selectedItem) {
@@ -144,6 +152,40 @@ app.directive('vrWhsRoutingRouterulesettingsSpecialrequest', ['UtilsService', 'V
                     return $scope.scopeModel.showBackupTabs;
                 };
 
+                $scope.scopeModel.excludeOption = function (dataItem) {
+                    removeExcludedCarrierAccountFromGrid(dataItem.SupplierId);
+
+                    if ($scope.scopeModel.suppliers.length == 0)
+                        $scope.scopeModel.showBackupTabs = false;
+
+                    if (excludedSuppliersSelectorAPI != undefined)
+                        excludedSuppliersSelectorAPI.selectItem(dataItem.SupplierId);
+
+                    excludeCarrierAccount(carrierAccountSelectorAPI, dataItem.SupplierId);
+                    excludeCarrierAccount(overallBackupOptionsDirectiveAPI, dataItem.SupplierId);
+                    excludeCarrierAccountFromDrillDownSelectors(dataItem.SupplierId);
+                };
+
+                $scope.scopeModel.onSelectExcludedSupplier = function (dataItem) {
+                    removeExcludedCarrierAccountFromGrid(dataItem.CarrierAccountId);
+
+                    excludeCarrierAccount(carrierAccountSelectorAPI, dataItem.CarrierAccountId);
+                    excludeCarrierAccount(overallBackupOptionsDirectiveAPI, dataItem.CarrierAccountId);
+                    excludeCarrierAccountFromDrillDownSelectors(dataItem.CarrierAccountId);
+                };
+
+                $scope.scopeModel.onDeselectExcludedSupplier = function (dataItem) {
+                    cancelExcludeCarrierAccount(carrierAccountSelectorAPI, dataItem.CarrierAccountId);
+                    cancelExcludeCarrierAccount(overallBackupOptionsDirectiveAPI, dataItem.CarrierAccountId);
+                    cancelExcludeCarrierAccountFromDrillDownSelectors(dataItem.CarrierAccountId);
+                };
+
+                $scope.scopeModel.onDeselectAllExcludedSuppliers = function (deselectedItems) {
+                    cancelExcludeCarrierAccounts(carrierAccountSelectorAPI, deselectedItems);
+                    cancelExcludeCarrierAccounts(overallBackupOptionsDirectiveAPI, deselectedItems);
+                    cancelExcludeCarrierAccountsFromDrillDownSelectors(deselectedItems);
+                };
+
                 defineAPI();
             }
             function defineAPI() {
@@ -156,20 +198,24 @@ app.directive('vrWhsRoutingRouterulesettingsSpecialrequest', ['UtilsService', 'V
 
                     var options;
                     var overallBackupOptions;
+                    var excludedOptionIds;
+                    var supplierFilterSettings;
                     var customerRouteData;
 
                     if (payload != undefined) {
+                        supplierFilterSettings = payload.SupplierFilterSettings;
                         customerRouteData = payload.customerRouteData;
                         supplierZoneDetails = payload.supplierZoneDetails;
-                        if (supplierZoneDetails != undefined)
-                            $scope.scopeModel.showRateServices = true;
-
-                        supplierFilterSettings = payload.SupplierFilterSettings;
 
                         if (payload.RouteRuleSettings != undefined) {
                             options = payload.RouteRuleSettings.Options;
                             overallBackupOptions = payload.RouteRuleSettings.OverallBackupOptions;
+                            excludedOptionIds = getExcludedOptionIds(payload.RouteRuleSettings.ExcludedOptions);
                         }
+                    }
+
+                    if (supplierZoneDetails != undefined) {
+                        $scope.scopeModel.showRateServices = true;
                     }
 
                     if (customerRouteData != undefined) {
@@ -192,7 +238,21 @@ app.directive('vrWhsRoutingRouterulesettingsSpecialrequest', ['UtilsService', 'V
                     var overallBackupOptionsDirectiveLoadPromise = getOverallBackupOptionsDirectiveLoadPromise();
                     promises.push(overallBackupOptionsDirectiveLoadPromise);
 
+                    //Loading ExcludedSuppliers Selector
+                    var excludedSuppliersSelectorLoadPromise = getExcludedSuppliersSelectorLoadPromise();
+                    promises.push(excludedSuppliersSelectorLoadPromise);
 
+                    function getExcludedOptionIds(excludedOptions) {
+                        if (excludedOptions == undefined)
+                            return;
+
+                        var excludedOptionIds = [];
+                        for (var key in excludedOptions) {
+                            if (key != '$type')
+                                excludedOptionIds.push(key);
+                        }
+                        return excludedOptionIds;
+                    }
                     function getOptionsSectionLoadPromise() {
                         //Loading CarrierAccount Selector
                         var carrierAccountSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -200,17 +260,11 @@ app.directive('vrWhsRoutingRouterulesettingsSpecialrequest', ['UtilsService', 'V
 
                             var carrierAccountPayload = {
                                 filter: { SupplierFilterSettings: supplierFilterSettings },
-                                //selectedIds: []
+                                selectedIds: []
                             };
                             if (options != undefined) {
-                                //for (var key in options) {
-                                //    if (key != "$type") {
-                                //        carrierAccountPayload.selectedIds.push(options[key].SupplierId); 
-                                //    }
-                                //}
                                 carrierAccountPayload.selectedIds = UtilsService.getPropValuesFromArray(options, "SupplierId");
                             }
-
                             VRUIUtilsService.callDirectiveLoad(carrierAccountSelectorAPI, carrierAccountPayload, carrierAccountSelectorLoadPromiseDeferred);
                         });
 
@@ -235,9 +289,7 @@ app.directive('vrWhsRoutingRouterulesettingsSpecialrequest', ['UtilsService', 'V
                                 loadOptionGridPromiseDeferred.resolve();
                             });
                         });
-                        return loadOptionGridPromiseDeferred.promise.then(function () {
-                            $scope.scopeModel.selectedSuppliers = [];
-                        });
+                        return loadOptionGridPromiseDeferred.promise;
                     }
                     function getOverallBackupOptionsDirectiveLoadPromise() {
                         var overallBackupOptionsDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -253,9 +305,29 @@ app.directive('vrWhsRoutingRouterulesettingsSpecialrequest', ['UtilsService', 'V
 
                         return overallBackupOptionsDirectiveLoadPromiseDeferred.promise;
                     }
+                    function getExcludedSuppliersSelectorLoadPromise() {
+                        var loadExcludedSuppliersSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        excludedSuppliersSelectorReadyPromiseDeferred.promise.then(function () {
+
+                            var excludedSuppliersSelectorPayload = {
+                                filter: { SupplierFilterSettings: supplierFilterSettings },
+                                selectedIds: []
+                            };
+                            if (excludedOptionIds != undefined) {
+                                excludedSuppliersSelectorPayload.selectedIds = excludedOptionIds;
+                            }
+                            VRUIUtilsService.callDirectiveLoad(excludedSuppliersSelectorAPI, excludedSuppliersSelectorPayload, loadExcludedSuppliersSelectorPromiseDeferred);
+                        });
+
+                        return loadExcludedSuppliersSelectorPromiseDeferred.promise;
+                    }
 
                     return UtilsService.waitMultiplePromises(promises).then(function () {
                         $scope.scopeModel.selectedSuppliers = [];
+                        excludeCarrierAccounts(carrierAccountSelectorAPI);
+                        excludeCarrierAccounts(overallBackupOptionsDirectiveAPI);
+                        excludeCarrierAccountsFromDrillDownSelectors();
                     });
                 };
 
@@ -286,10 +358,23 @@ app.directive('vrWhsRoutingRouterulesettingsSpecialrequest', ['UtilsService', 'V
                         return overallBackupOptionsDirectiveAPI.getData();
                     }
 
+                    function getExcludedOptions() {
+                        var excludedOptions = {};
+                        for (var i = 0; i < $scope.scopeModel.selectedExcludedSuppliers.length; i++) {
+                            var excludedSupplier = $scope.scopeModel.selectedExcludedSuppliers[i];
+                            var excludedOption = {
+                                SupplierId: excludedSupplier.CarrierAccountId
+                            };
+                            excludedOptions[excludedSupplier.CarrierAccountId] = excludedOption;
+                        }
+                        return excludedOptions;
+                    }
+
                     return {
                         $type: "TOne.WhS.Routing.Business.SpecialRequestRouteRule, TOne.WhS.Routing.Business",
                         Options: getOptions(),
-                        OverallBackupOptions: getOverallBackupOptions()
+                        OverallBackupOptions: getOverallBackupOptions(),
+                        ExcludedOptions: getExcludedOptions()
                     };
                 };
 
@@ -360,6 +445,95 @@ app.directive('vrWhsRoutingRouterulesettingsSpecialrequest', ['UtilsService', 'V
             function collapseRows() {
                 for (var i = 0; i < $scope.scopeModel.suppliers.length; i++) {
                     gridAPI.collapseRow($scope.scopeModel.suppliers[i]);
+                }
+            }
+
+            function excludeCarrierAccount(directiveAPI, carrierAccountId) {
+                if (directiveAPI == undefined)
+                    return;
+
+                if (directiveAPI.excludeItem != undefined) {
+                    directiveAPI.excludeItem(carrierAccountId);
+                    return;
+                }
+
+                if (directiveAPI.excludeBackupOption != undefined) {
+                    directiveAPI.excludeBackupOption(carrierAccountId);
+                    return;
+                }
+            }
+            function excludeCarrierAccounts(directiveAPI) {
+                if ($scope.scopeModel.selectedExcludedSuppliers == undefined)
+                    return;
+
+                if ($scope.scopeModel.selectedExcludedSuppliers.length == 0)
+                    return;
+
+                for (var index = 0; index < $scope.scopeModel.selectedExcludedSuppliers.length; index++) {
+                    var currentExcludedSupplier = $scope.scopeModel.selectedExcludedSuppliers[index];
+                    excludeCarrierAccount(directiveAPI, currentExcludedSupplier.CarrierAccountId);
+                }
+            }
+            function cancelExcludeCarrierAccount(directiveAPI, carrierAccountId) {
+                if (directiveAPI == undefined)
+                    return;
+
+                if (directiveAPI.cancelExcludeItem != undefined) {
+                    directiveAPI.cancelExcludeItem(carrierAccountId);
+                    return;
+                }
+
+                if (directiveAPI.cancelExcludeBackupOption != undefined) {
+                    directiveAPI.cancelExcludeBackupOption(carrierAccountId);
+                    return;
+                }
+            }
+            function cancelExcludeCarrierAccounts(directiveAPI, deselectedCarrierAccounts) {
+                if (deselectedCarrierAccounts == undefined || deselectedCarrierAccounts.length == 0)
+                    return;
+
+                for (var index = 0; index < deselectedCarrierAccounts.length; index++) {
+                    var deselectedCarrierAccount = deselectedCarrierAccounts[index];
+                    cancelExcludeCarrierAccount(directiveAPI, deselectedCarrierAccount.CarrierAccountId);
+                }
+            }
+
+            function excludeCarrierAccountFromDrillDownSelectors(carrierAccountId) {
+                for (var index = 0; index < $scope.scopeModel.suppliers.length; index++) {
+                    var currentSupplier = $scope.scopeModel.suppliers[index];
+                    if (currentSupplier && currentSupplier.backupOptionGridAPI)
+                        excludeCarrierAccount(currentSupplier.backupOptionGridAPI, carrierAccountId);
+                }
+            }
+            function excludeCarrierAccountsFromDrillDownSelectors() {
+                for (var index = 0; index < $scope.scopeModel.selectedExcludedSuppliers.length; index++) {
+                    var currentExcludedSupplier = $scope.scopeModel.selectedExcludedSuppliers[index];
+                    excludeCarrierAccountFromDrillDownSelectors(currentExcludedSupplier.CarrierAccountId);
+                }
+            }
+            function cancelExcludeCarrierAccountFromDrillDownSelectors(carrierAccountId) {
+                for (var index = 0; index < $scope.scopeModel.suppliers.length; index++) {
+                    var currentSupplier = $scope.scopeModel.suppliers[index];
+                    if (currentSupplier && currentSupplier.backupOptionGridAPI)
+                        cancelExcludeCarrierAccount(currentSupplier.backupOptionGridAPI, carrierAccountId);
+                }
+            }
+            function cancelExcludeCarrierAccountsFromDrillDownSelectors(deselectedCarrierAccounts) {
+                if (deselectedCarrierAccounts == undefined || deselectedCarrierAccounts.length == 0)
+                    return;
+
+                for (var index = 0; index < deselectedCarrierAccounts.length; index++) {
+                    var currentDeselectedCarrierAccount = deselectedCarrierAccounts[index];
+                    cancelExcludeCarrierAccountFromDrillDownSelectors(currentDeselectedCarrierAccount.CarrierAccountId);
+                }
+            }
+
+            function removeExcludedCarrierAccountFromGrid(carrierAccountId) {
+                for (var index = $scope.scopeModel.suppliers.length - 1; index >= 0; index--) {
+                    var currentItem = $scope.scopeModel.suppliers[index];
+                    if (currentItem.SupplierId == carrierAccountId) {
+                        $scope.scopeModel.suppliers.splice(index, 1);
+                    }
                 }
             }
         }

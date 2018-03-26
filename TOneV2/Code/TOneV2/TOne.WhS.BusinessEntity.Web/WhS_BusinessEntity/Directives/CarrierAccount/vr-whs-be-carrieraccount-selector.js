@@ -1,4 +1,5 @@
 ﻿'use strict';
+
 app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService', 'UtilsService', 'VRUIUtilsService', '$compile', 'WhS_BE_CarrierAccountService',
     function (WhS_BE_CarrierAccountAPIService, UtilsService, VRUIUtilsService, $compile, WhS_BE_CarrierAccountService) {
 
@@ -6,18 +7,19 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
             restrict: 'E',
             scope: {
                 onReady: '=',
+                onselectionchanged: '=',
+                onselectitem: "=",
+                ondeselectitem: "=",
+                ondeselectallitems: '=',
+                onblurdropdown: '=',
+                selectedvalues: "=",
                 getcustomers: "@",
                 getsuppliers: "@",
                 getexchangecarriers: '@',
+                isrequired: '=',
                 ismultipleselection: "@",
                 hideselectedvaluessection: '@',
-                onselectionchanged: '=',
-                onblurdropdown: '=',
-                isrequired: '=',
-                selectedvalues: "=",
                 hideremoveicon: "@",
-                onselectitem: "=",
-                ondeselectitem: "=",
                 normalColNum: '@',
                 customlabel: '@'
             },
@@ -98,8 +100,8 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
 
             return '<vr-columns colnum="{{ctrl.normalColNum}}"> ' +
                         '<vr-select hasviewpermission="ctrl.hasviewpermission"  isrequired="ctrl.isrequired" on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" '
-                            + ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" onblurdropdown="ctrl.onblurdropdown" onselectitem="ctrl.onselectitem" '
-                            + ' ondeselectitem="ctrl.ondeselectitem" datalockfield="Locked" datatextfield="Name" datavaluefield="CarrierAccountId" label="' + label + '" '
+                            + ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"  ondeselectallitems="ctrl.ondeselectallitems" onblurdropdown="ctrl.onblurdropdown" onselectitem="ctrl.onselectitem" '
+                            + ' ondeselectitem="ctrl.ondeselectitem" datalockfield="Locked" datatextfield="Name" datavaluefield="CarrierAccountId" datadisabledfield="IsDisabled" label="' + label + '" '
                             + hideselectedvaluessection + '  ' + hideremoveicon + ' ' + ismultipleselection + ' ' + viewCliked + ' >' +
                         '</vr-select>' +
                    '</vr-columns>';
@@ -176,6 +178,21 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
 
                 api.hasSingleItem = function () {
                     return ctrl.datasource.length == 1;
+                };
+
+                api.selectItem = function (carrierAccountId) {
+                    var carrierAccoutnItem = UtilsService.getItemByVal(ctrl.datasource, carrierAccountId, "CarrierAccountId");
+                    ctrl.selectedvalues.push(carrierAccoutnItem);
+                };
+
+                api.excludeItem = function (carrierAccountId) {
+                    var carrierAccoutnItem = UtilsService.getItemByVal(ctrl.datasource, carrierAccountId, "CarrierAccountId");
+                    carrierAccoutnItem.IsDisabled = true;
+                };
+
+                api.cancelExcludeItem = function (carrierAccountId) {
+                    var carrierAccoutnItem = UtilsService.getItemByVal(ctrl.datasource, carrierAccountId, "CarrierAccountId");
+                    carrierAccoutnItem.IsDisabled = false;
                 };
 
                 if (ctrl.onReady != null)
