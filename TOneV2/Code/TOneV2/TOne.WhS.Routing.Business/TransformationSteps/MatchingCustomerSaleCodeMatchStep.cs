@@ -67,7 +67,7 @@ namespace TOne.WhS.Routing.Business.TransformationSteps
 
             if (!String.IsNullOrEmpty(this.MatchingCustomerId))
             {
-                context.AddCodeToCurrentInstanceExecutionBlock("if({0}.CustomerId.HasValue != null)", customerSaleCodeMatch);
+                context.AddCodeToCurrentInstanceExecutionBlock("if({0}.CustomerId.HasValue)", customerSaleCodeMatch);
                 context.AddCodeToCurrentInstanceExecutionBlock("{");
                 context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.CustomerId.Value;", this.MatchingCustomerId, customerSaleCodeMatch);
                 context.AddCodeToCurrentInstanceExecutionBlock("}");
