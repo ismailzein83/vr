@@ -150,8 +150,8 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
             if (context.FieldDescription == null)
                 return;
-           
-               var choice = Choices.FindRecord(x=>x.Text.Equals(context.FieldDescription.ToString(), StringComparison.InvariantCultureIgnoreCase))
+
+            var choice = Choices.FindRecord(x => x.Text.Equals(context.FieldDescription.ToString(), StringComparison.InvariantCultureIgnoreCase));
              if(choice != null)
              {
                  context.FieldValue = choice.Value;
