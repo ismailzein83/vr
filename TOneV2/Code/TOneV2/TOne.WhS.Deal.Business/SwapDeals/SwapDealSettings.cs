@@ -289,7 +289,8 @@ namespace TOne.WhS.Deal.Business
                 GetCustomerZoneRatesFunc = getCustomerZoneRatesFunc,
                 DealBED = BeginDate,
                 DealEED = EndDate,
-                ZoneIds = swapDealInbound.SaleZones.Select(z => z.ZoneId)
+                ZoneIds = swapDealInbound.SaleZones.Select(z => z.ZoneId),
+                CurrencyId = CurrencyId
             };
             saleEvaluatedRate.EvaluateRate(context);
 
@@ -355,7 +356,8 @@ namespace TOne.WhS.Deal.Business
                 DealBED = BeginDate,
                 DealEED = EndDate,
                 ZoneIds = supplierZoneIds,
-                SupplierZoneRateByZoneId = supplierRates
+                SupplierZoneRateByZoneId = supplierRates,
+                CurrencyId = CurrencyId
             };
             var supplierEvaluatedRate = swapDealOutbound.EvaluatedRate as DealSupplierRateEvaluator;
 

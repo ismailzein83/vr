@@ -140,7 +140,8 @@ namespace TOne.WhS.Deal.Business
                 GetCustomerZoneRatesFunc = getCustomerZoneRatesFunc,
                 DealBED = BeginDate,
                 DealEED = EndDate,
-                ZoneIds = zoneIds
+                ZoneIds = zoneIds,
+                CurrencyId = CurrencyId
             };
 
             foreach (VolCommitmentDealItemTier volCommitmentDealItemTier in orderedVolCommitmentDealItemTiers)
@@ -233,7 +234,8 @@ namespace TOne.WhS.Deal.Business
             {
                 DealBED = BeginDate,
                 DealEED = EndDate,
-                SupplierZoneRateByZoneId = supplierRatesByZoneId
+                SupplierZoneRateByZoneId = supplierRatesByZoneId,
+                CurrencyId = CurrencyId
             };
 
             List<DealSupplierZoneGroupTier> dealSupplierZoneGroupTiers = new List<DealSupplierZoneGroupTier>();
