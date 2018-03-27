@@ -11,11 +11,13 @@ namespace TOne.WhS.Deal.MainExtensions
     public class DiscountSupplierRateEvaluator : DealSupplierRateEvaluator
     {
         public override Guid ConfigId { get { return new Guid("434BB6E0-A725-422E-A66A-BE839192AE5C"); } }
+
         public int Discount { get; set; }
+
         public override void EvaluateRate(IDealSupplierRateEvaluatorContext context)
         {
             var supplierRateManager = new SupplierRateManager();
-            var supplierDealRates = new List<DealRate>(); 
+            var supplierDealRates = new List<DealRate>();
 
             foreach (var zoneId in context.ZoneIds)
             {
@@ -24,16 +26,14 @@ namespace TOne.WhS.Deal.MainExtensions
                 if (supplierRate == null)
                     continue;
 
-                int supplierCurrencyId = supplierRateManager.GetCurrencyId(supplierRate);
-
-                var discountValue = (supplierRate.Rate * Discount) / 100;
-                var discountedRate = supplierRate.Rate - discountValue;
+                var supplierCurrencyId = supplierRateManager.GetCurrencyId(supplierRate);
 
                 supplierDealRates.Add(new DealRate
                 {
-                    Rate = discountedRate,
-                    BED = supplierRate.BED,
-                    EED = supplierRate.EED,
+                    ZoneId = zoneId,
+                    Rate = Business.Helper.GetDiscountedRateValue(supplierRate.Rate, Discount),
+                    BED = Utilities.Max(supplierRate.BED, context.DealBED),
+                    EED = supplierRate.EED.MaxDate(context.DealEED),
                     CurrencyId = supplierCurrencyId
                 });
             }

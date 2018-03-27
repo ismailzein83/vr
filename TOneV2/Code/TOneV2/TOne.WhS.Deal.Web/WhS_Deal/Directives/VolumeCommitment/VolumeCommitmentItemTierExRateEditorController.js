@@ -95,10 +95,17 @@
             var loadZonePromiseDeferred = UtilsService.createPromiseDeferred();
             zoneReadyPromiseDeferred.promise.then(function () {
                 var payload = context != undefined ? context.getZoneSelectorPayload(exRateEntity) : undefined;
+                var zoneIds = undefined;
+                if (exRateEntity != undefined) {
+                    zoneIds = [];
+                    for (var j = 0; j < exRateEntity.Zones.length; j++) {
+                        zoneIds.push(exRateEntity.Zones[i].ZoneId);
+                    }
+                }
                 var excZoneIds = exRateEntity != undefined ? exRateEntity.ZoneIds : undefined;
                 payload.filter = {
                     AvailableZoneIds: context.getSelectedZonesIds(),
-                    ExcludedZoneIds: context.getExceptionsZoneIds(excZoneIds),
+                    ExcludedZoneIds: zoneIds,
                     CountryIds: [context.getCountryId()]
                 };
                 VRUIUtilsService.callDirectiveLoad(zoneDirectiveAPI, payload, loadZonePromiseDeferred);
@@ -107,8 +114,16 @@
         }
 
         function builObjFromScope() {
+            var zones = [];
+            var zoneIds = zoneDirectiveAPI.getSelectedIds();
+            for (var j = 0; j < zoneIds.length; j++) {
+                zones.push(
+                {
+                    ZoneId: zoneIds[j]
+                });
+            }
             return {
-                ZoneIds: zoneDirectiveAPI.getSelectedIds(),
+                Zones: zones,
                 ZoneNames: context.getZonesNames(zoneDirectiveAPI.getSelectedIds()),
                 Rate: $scope.scopeModel.rate,
                 EvaluatedRate: rateEvaluatorSelectiveDirectiveAPI.getData()

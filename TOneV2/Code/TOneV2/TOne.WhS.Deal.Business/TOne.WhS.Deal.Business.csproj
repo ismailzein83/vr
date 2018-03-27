@@ -107,6 +107,7 @@
     <Compile Include="Context\SwapDealAnalysisInboundRateCalcMethodContext.cs" />
     <Compile Include="Context\SwapDealAnalysisOutboundRateCalcMethodContext.cs" />
     <Compile Include="DealZoneRateManager.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="SwapDeals\RouteRules\SwapDealBuyRouteRuleManager.cs" />
     <Compile Include="SwapDeals\SwapDealRouteBuildInterceptor.cs" />
     <Compile Include="SwapDeals\SwapDealSettings.cs" />

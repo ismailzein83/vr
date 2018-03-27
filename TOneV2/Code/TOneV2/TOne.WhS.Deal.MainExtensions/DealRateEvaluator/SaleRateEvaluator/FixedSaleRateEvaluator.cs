@@ -18,6 +18,7 @@ namespace TOne.WhS.Deal.MainExtensions
             {
                 saleRates.Add(new DealRate
                 {
+                    ZoneId = zoneId,
                     BED = context.DealBED,
                     EED = context.DealEED,
                     Rate = Rate,
