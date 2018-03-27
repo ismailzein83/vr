@@ -30,9 +30,11 @@ app.directive('vrCommonObjecttypepropertyGrid', ['VRCommon_VRObjectTypeDefinitio
                 gridAPI = api;
                 defineAPI();
             };
-
+            var isShowingMsg = false;
             $scope.scopeModel.copyValueExpression = function (dataItem, coldef, event) {
-              
+                if (isShowingMsg == true)
+                    return;
+                isShowingMsg = true;
                 var copyElement = document.createElement("textarea");
                 copyElement.style.position = 'fixed';
                 copyElement.style.opacity = '0';
@@ -55,10 +57,11 @@ app.directive('vrCommonObjecttypepropertyGrid', ['VRCommon_VRObjectTypeDefinitio
                 }, 100);
                
                 setTimeout(function () {
-                    $(divParent).find("#quickMsg").fadeOut(2000, function () {
+                    $(divParent).find("#quickMsg").fadeOut(1000, function () {
                         $(divParent).find("#quickMsg").remove();
+                        isShowingMsg = false;
                     });
-                },100)
+                }, 100);
             };
             defineMenuActions();
         }
