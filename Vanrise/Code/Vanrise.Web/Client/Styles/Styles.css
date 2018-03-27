@@ -2083,7 +2083,13 @@ loader .outer-loader {
     top: -7px;
     padding: 5px 2px;
 }
-
+.gid-cell-menu > li .mark-select:hover {
+    background-color: #D0D0D0 !important;
+    border-color: #D0D0D0 !important;
+    color: #fff !important;
+    cursor: pointer !important;
+    text-decoration: none;
+}
 .his-nav {
     position: fixed;
     z-index: 1050;
