@@ -169,5 +169,28 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             else
                 return Guid.Parse(originalValue.ToString());
         }
+
+        public override void GetValueByDescription(IDataRecordFieldTypeTryGetValueByDescriptionContext context)
+        {
+            
+            if (context.FieldDescription == null)
+                return;
+            else
+            {
+                if (context.FieldDescription is Guid)
+                    context.FieldValue = (Guid)context.FieldDescription;
+                else
+                {
+                    bool success;
+                    Guid result;
+                    success = Guid.TryParse(context.FieldDescription.ToString(), out result);
+                    if (success)
+                        context.FieldValue = result;
+                    else
+                        context.ErrorMessage = "Error while parsing field of Guid type.";
+                }
+            }
+                    
+        }
     }
 }

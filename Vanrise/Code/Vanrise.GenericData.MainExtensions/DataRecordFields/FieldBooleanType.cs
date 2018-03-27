@@ -97,5 +97,24 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
             return recordFilters.Count > 1 ? new RecordFilterGroup { LogicalOperator = RecordQueryLogicalOperator.Or, Filters = recordFilters } : recordFilters.First();
         }
+        public override void GetValueByDescription(IDataRecordFieldTypeTryGetValueByDescriptionContext context)
+        {
+
+            if (context.FieldDescription == null)
+                return;
+            else
+            {
+                if (context.FieldDescription is bool)
+                    context.FieldValue = (bool)context.FieldDescription;
+                else
+                {
+                    bool result;
+                    if (bool.TryParse(context.FieldDescription.ToString(), out result))
+                        context.FieldValue = result;
+                    else
+                        context.ErrorMessage = "Error while parsing field of boolean type.";
+                }
+            }
+        }
     }
 }

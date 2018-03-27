@@ -145,6 +145,19 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 FieldName = fieldName
             };
         }
+        public override void GetValueByDescription(IDataRecordFieldTypeTryGetValueByDescriptionContext context)
+        {
+
+            if (context.FieldDescription == null)
+                return;
+           
+               var choice = Choices.FindRecord(x=>x.Text.Equals(context.FieldDescription.ToString(), StringComparison.InvariantCultureIgnoreCase))
+             if(choice != null)
+             {
+                 context.FieldValue = choice.Value;
+             } else
+               context.ErrorMessage = "Could not find compatible description with variable at hand";
+        }
 
         List<Choice> GetChoices(Guid choiceDefinitionId)
         {

@@ -198,11 +198,5 @@ namespace Vanrise.GenericData.Entities
         string ErrorMessage { set; }
         Object FieldValue { set; }
     }
-    public class DataRecordFieldTypeTryGetValueByDescriptionContext: IDataRecordFieldTypeTryGetValueByDescriptionContext
-    {
-        public Object FieldDescription { get; set; }
-        public List<AdditionalField> AdditionalFields { get; set; }
-        public string ErrorMessage { get; set; }
-        public Object FieldValue { get; set; }
-    }
+  
 }
