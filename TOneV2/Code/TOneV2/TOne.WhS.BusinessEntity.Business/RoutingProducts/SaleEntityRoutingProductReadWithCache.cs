@@ -64,16 +64,20 @@ namespace TOne.WhS.BusinessEntity.Business
 
                     ISaleEntityRoutingProductDataManager dataManager = BEDataManagerFactory.GetDataManager<ISaleEntityRoutingProductDataManager>();
                     IEnumerable<DefaultRoutingProduct> defaultRoutingProducts = dataManager.GetEffectiveDefaultRoutingProducts(_effectiveOn);
+					var carrierAccountManager = new CarrierAccountManager();
 
-                    if (defaultRoutingProducts != null)
+					if (defaultRoutingProducts != null)
                     {
                         foreach (DefaultRoutingProduct defaultRoutingProduct in defaultRoutingProducts)
                         {
                             var cachedDefaultRP = cacheManager.CacheAndGetDefaultRP(defaultRoutingProduct);
-                            if (defaultRoutingProduct.OwnerType == SalePriceListOwnerType.SellingProduct)
-                                defaultRoutingProductsByOwner.DefaultRoutingProductsByProduct.Add(defaultRoutingProduct.OwnerId, cachedDefaultRP);
-                            else
-                                defaultRoutingProductsByOwner.DefaultRoutingProductsByCustomer.Add(defaultRoutingProduct.OwnerId, cachedDefaultRP);
+							if (defaultRoutingProduct.OwnerType == SalePriceListOwnerType.SellingProduct)
+								defaultRoutingProductsByOwner.DefaultRoutingProductsByProduct.Add(defaultRoutingProduct.OwnerId, cachedDefaultRP);
+							else
+							{
+								if (!carrierAccountManager.IsCarrierAccountDeleted(defaultRoutingProduct.OwnerId))
+									defaultRoutingProductsByOwner.DefaultRoutingProductsByCustomer.Add(defaultRoutingProduct.OwnerId, cachedDefaultRP);
+							}
                         }
                     }
 
