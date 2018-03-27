@@ -43,7 +43,7 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
 
                 if (sftpCollection.Count > 0)
                 {
-                    short numberOfFilesRead = 0;                    
+                    short numberOfFilesRead = 0;
 
                     SftpItemCollection sftpCollectionToProcess = CheckandGetFinalSftpCollection(SFTPAdapterArgument, sftp, sftpCollection);
                     bool newFilesStarted = false;
@@ -51,21 +51,18 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
                     {
                         if (!fileObj.IsDirectory && regEx.IsMatch(fileObj.Name))
                         {
-                            if (SFTPAdapterArgument.BasedOnLastModifiedTime)
+                            if (!newFilesStarted)
                             {
-                                if (!newFilesStarted)
+                                if (DateTime.Compare(SFTPAdapterState.LastRetrievedFileTime, fileObj.Modified) > 0)
                                 {
-                                    if (DateTime.Compare(SFTPAdapterState.LastRetrievedFileTime, fileObj.Modified) > 0)
-                                    {
-                                        continue;
-                                    }
-                                    else if (DateTime.Compare(SFTPAdapterState.LastRetrievedFileTime, fileObj.Modified) == 0)
-                                    {
-                                        if (!string.IsNullOrEmpty(SFTPAdapterState.LastRetrievedFileName) && SFTPAdapterState.LastRetrievedFileName.CompareTo(fileObj.Name) >= 0)
-                                            continue;
-                                    }
-                                    newFilesStarted = true;
+                                    continue;
                                 }
+                                else if (DateTime.Compare(SFTPAdapterState.LastRetrievedFileTime, fileObj.Modified) == 0)
+                                {
+                                    if (!string.IsNullOrEmpty(SFTPAdapterState.LastRetrievedFileName) && SFTPAdapterState.LastRetrievedFileName.CompareTo(fileObj.Name) >= 0)
+                                        continue;
+                                }
+                                newFilesStarted = true;
                             }
 
                             if (!string.IsNullOrEmpty(SFTPAdapterArgument.LastImportedFile) && SFTPAdapterArgument.LastImportedFile.CompareTo(fileObj.Name) >= 0)

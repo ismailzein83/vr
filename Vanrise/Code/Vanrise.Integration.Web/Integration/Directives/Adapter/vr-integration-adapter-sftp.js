@@ -64,7 +64,6 @@ function (UtilsService, VR_Integration_CompressionTypeEnum) {
                     Password: $scope.password,
                     DirectorytoMoveFile: $scope.directorytoMoveFile,
                     ActionAfterImport: $scope.selectedAction ? $scope.selectedAction.value : undefined,
-                    BasedOnLastModifiedTime: $scope.basedOnTime,
                     LastImportedFile: $scope.lastImportedFile,
                     CompressedFiles: $scope.compressed,
                     CompressionType: $scope.selectedCompressionType != undefined ? $scope.selectedCompressionType.value : undefined,
@@ -93,7 +92,6 @@ function (UtilsService, VR_Integration_CompressionTypeEnum) {
                         $scope.password = argumentData.Password;
                         $scope.directorytoMoveFile = argumentData.DirectorytoMoveFile;
                         $scope.selectedAction = UtilsService.getItemByVal($scope.actionsAfterImport, argumentData.ActionAfterImport, "value");
-                        $scope.basedOnTime = argumentData.BasedOnLastModifiedTime;
                         $scope.lastImportedFile = argumentData.LastImportedFile;
                         $scope.compressed = argumentData.CompressedFiles;
                         $scope.selectedCompressionType = UtilsService.getEnum(VR_Integration_CompressionTypeEnum, "value", argumentData.CompressionType);

@@ -27,7 +27,6 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter.Arguments
         public string Password { get; set; }
         public string DirectorytoMoveFile { get; set; }
         public int? ActionAfterImport { get; set; }
-        public bool BasedOnLastModifiedTime { get; set; }
         public string LastImportedFile { get; set; }
         public bool CompressedFiles { get; set; }
         public CompressionTypes CompressionType { get; set; }

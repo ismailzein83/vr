@@ -51,21 +51,18 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
 
                         if (!fileObj.IsDirectory && regEx.IsMatch(fileObj.Name))
                         {
-                            if (ftpAdapterArgument.BasedOnLastModifiedTime)
+                            if (!newFilesStarted)
                             {
-                                if (!newFilesStarted)
+                                if (DateTime.Compare(ftpAdapterState.LastRetrievedFileTime, fileObj.Modified) > 0)
                                 {
-                                    if (DateTime.Compare(ftpAdapterState.LastRetrievedFileTime, fileObj.Modified) > 0)
-                                    {
-                                        continue;
-                                    }
-                                    else if (DateTime.Compare(ftpAdapterState.LastRetrievedFileTime, fileObj.Modified) == 0)
-                                    {
-                                        if (!string.IsNullOrEmpty(ftpAdapterState.LastRetrievedFileName) && ftpAdapterState.LastRetrievedFileName.CompareTo(fileObj.Name) >= 0)
-                                            continue;
-                                    }
-                                    newFilesStarted = true;
+                                    continue;
                                 }
+                                else if (DateTime.Compare(ftpAdapterState.LastRetrievedFileTime, fileObj.Modified) == 0)
+                                {
+                                    if (!string.IsNullOrEmpty(ftpAdapterState.LastRetrievedFileName) && ftpAdapterState.LastRetrievedFileName.CompareTo(fileObj.Name) >= 0)
+                                        continue;
+                                }
+                                newFilesStarted = true;
                             }
 
                             if (!string.IsNullOrEmpty(ftpAdapterArgument.LastImportedFile) && ftpAdapterArgument.LastImportedFile.CompareTo(fileObj.Name) >= 0)
@@ -75,7 +72,7 @@ namespace Vanrise.Integration.Adapters.FTPReceiveAdapter
                             ImportedBatchProcessingOutput output = CreateStreamReader(context.OnDataReceived, ftp, fileObj, filePath, ftpAdapterArgument);
 
                             ftpAdapterState = SaveOrGetAdapterState(context, ftpAdapterArgument, fileObj.Name, fileObj.Modified);
-                            
+
 
                             AfterImport(ftp, fileObj, filePath, ftpAdapterArgument, output);
 
