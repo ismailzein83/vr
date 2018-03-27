@@ -474,23 +474,23 @@ inp .menu-to-top {
 }
 
 .empty-line-col {
-    top: 19px;
+    padding-top: 19px;
 }
 
 vr-columns[withemptyline="true"] .empty-line-col {
-    top: 19px !important;
+    padding-top: 19px !important;
 }
 
 vr-columns[withemptyline="false"] .empty-line-col {
-    top: 0px !important;
+    padding-top: 0px !important;
 }
 
 .vr-datagrid-celltext vr-columns[withemptyline="true"] .empty-line-col {
-    top: 18px !important;
+    padding-top: 18px !important;
 }
 
 .vr-datagrid-celltext vr-columns[withemptyline="false"] .empty-line-col {
-    top: 0px !important;
+    padding-top: 0px !important;
 }
 
 .vr-datagrid-celltext vr-button > div {
