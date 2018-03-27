@@ -31,6 +31,8 @@ namespace Vanrise.Common.Business
 
         internal BigDataManager()
         {
+            if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["BigDataCache_TimeIntervalToRemoveDataFromCache"], out _timeIntervalToRemoveDataFromCache))
+                _timeIntervalToRemoveDataFromCache = TimeSpan.FromMinutes(15);
             if (!long.TryParse(ConfigurationManager.AppSettings["BigDataCache_CleanRecordCountThreshold"], out _cleanCacheRecordCountThreshold))
                 _cleanCacheRecordCountThreshold = 10000000;
             if (!long.TryParse(ConfigurationManager.AppSettings["BigDataCache_CleanStopOnRecordCount"], out _cleanCacheStopOnRecordCount))
@@ -53,6 +55,8 @@ namespace Vanrise.Common.Business
         #region Local Variables
 
         internal bool _isBigDataHost;
+        
+        TimeSpan _timeIntervalToRemoveDataFromCache;
         long _cleanCacheRecordCountThreshold;
         long _cleanCacheStopOnRecordCount;
         int _cleanCacheSizePriorityFactor;
@@ -197,27 +201,49 @@ namespace Vanrise.Common.Business
 
         private void CleanCacheIfNeeded()
         {
-            if (_totalRecordsCount < _cleanCacheRecordCountThreshold)
-                return;
-            Double maxRecordsCount = _cachedData.Values.Max(itm => itm.RecordsCount);
-            Double maxAge = _cachedData.Values.Max(itm => (DateTime.Now - itm.LastAccessedTime).TotalSeconds);
-            //records count is big, it has more priority to keep in the cache
-            //age is big, it has less priority to keep in the cache
-            var orderedCachedObjects =
-                       _cachedData.Values.OrderByDescending(itm => (itm.RecordsCount * _cleanCacheSizePriorityFactor / maxRecordsCount) - ((DateTime.Now - itm.LastAccessedTime).TotalSeconds * _cleanCacheAgePriorityFactor / maxAge)).ToList();
-            foreach(var cacheObject in orderedCachedObjects)
+            lock (this)
             {
-                CachedBigData dummy;
-                _cachedData.TryRemove(cacheObject.CacheObjectId, out dummy);
-                lock(this)
+                IEnumerable<Guid> expiredCacheIds = _cachedData.Where(itm => DateTime.Now - itm.Value.LastAccessedTime > _timeIntervalToRemoveDataFromCache).Select(itm => itm.Key);
+                if (expiredCacheIds != null && expiredCacheIds.Count() > 0)
                 {
-                    _totalRecordsCount -= cacheObject.RecordsCount;
+                    foreach (var expiredCacheId in expiredCacheIds)
+                    {
+                        CachedBigData cacheObject;
+                        if (_cachedData.TryRemove(expiredCacheId, out cacheObject) && cacheObject != null)
+                        {
+                            lock (this)
+                            {
+                                _totalRecordsCount -= cacheObject.RecordsCount;
+                            }
+                        }
+                    }
+                    _isCachedDataChanged = true;
                 }
-                if(_totalRecordsCount <= _cleanCacheStopOnRecordCount)
-                    break;
+
+                if (_totalRecordsCount >= _cleanCacheRecordCountThreshold)
+                {
+                    Double maxRecordsCount = _cachedData.Values.Max(itm => itm.RecordsCount);
+                    Double maxAge = _cachedData.Values.Max(itm => (DateTime.Now - itm.LastAccessedTime).TotalSeconds);
+                    //records count is big, it has more priority to keep in the cache
+                    //age is big, it has less priority to keep in the cache
+                    var orderedCachedObjects =
+                               _cachedData.Values.OrderByDescending(itm => (itm.RecordsCount * _cleanCacheSizePriorityFactor / maxRecordsCount) - ((DateTime.Now - itm.LastAccessedTime).TotalSeconds * _cleanCacheAgePriorityFactor / maxAge)).ToList();
+                    foreach (var cacheObject in orderedCachedObjects)
+                    {
+                        CachedBigData dummy;
+                        _cachedData.TryRemove(cacheObject.CacheObjectId, out dummy);
+                        lock (this)
+                        {
+                            _totalRecordsCount -= cacheObject.RecordsCount;
+                        }
+                        if (_totalRecordsCount <= _cleanCacheStopOnRecordCount)
+                            break;
+                    }
+                    _isCachedDataChanged = true;
+                }
+                if (_isCachedDataChanged)
+                    GC.Collect();
             }
-            _isCachedDataChanged = true;
-            GC.Collect();
         }
 
         public IEnumerable<BigDataService> GetBigDataServicesByPriority(Guid cacheObjectId)
