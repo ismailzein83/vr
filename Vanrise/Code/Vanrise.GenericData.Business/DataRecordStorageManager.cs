@@ -599,8 +599,7 @@ namespace Vanrise.GenericData.Business
             foreach (SortColumn sortColumn in sortColumns)
             {
                 DataRecordField field = recordType.Fields.FirstOrDefault(itm => itm.Name == sortColumn.FieldName);
-                if (field == null)
-                    continue;
+                field.ThrowIfNull("field", sortColumn.FieldName);
 
                 switch (field.Type.OrderType)
                 {
@@ -654,7 +653,9 @@ namespace Vanrise.GenericData.Business
                     Data = null,
                     TotalCount = 0
                 };
-            IEnumerable<DataRecordDetail> allRecordsDetails = DataRecordDetailMapperList(allRecords, recordType);
+
+            HashSet<string> fieldsThatDescriptionUsedForOrdering = GetFieldsThatDescriptionUsedForOrdering(input, recordType);
+            IEnumerable<DataRecordDetail> allRecordsDetails = DataRecordDetailMapperList(allRecords, recordType, fieldsThatDescriptionUsedForOrdering);
 
             IOrderedEnumerable<DataRecordDetail> orderedRecords;
             if (!string.IsNullOrEmpty(input.SortByColumnName))
@@ -667,6 +668,8 @@ namespace Vanrise.GenericData.Business
 
             IEnumerable<DataRecordDetail> pagedRecords = orderedRecords.VRGetPage(input);
 
+            CompleteDataRecordDetailMapper(pagedRecords, recordType, fieldsThatDescriptionUsedForOrdering);
+
             var dataRecordBigResult = new Vanrise.Entities.BigResult<DataRecordDetail>()
             {
                 ResultKey = input.ResultKey,
@@ -677,19 +680,44 @@ namespace Vanrise.GenericData.Business
             return dataRecordBigResult;
         }
 
-        public List<DataRecordDetail> DataRecordDetailMapperList(IEnumerable<DataRecord> dataRecords, DataRecordType recordType)
+        private HashSet<string> GetFieldsThatDescriptionUsedForOrdering(DataRetrievalInput<DataRecordQuery> input, DataRecordType recordType)
+        {
+            HashSet<string> fieldNames = new HashSet<string>();
+            if(input.SortByColumnName != null)
+            {
+                if (input.SortByColumnName.EndsWith(".Description"))
+                {
+                    string sortFieldName = input.SortByColumnName.Replace("FieldValues[\"", "").Replace("\"].Description", "");
+                    fieldNames.Add(sortFieldName);
+                }
+            }
+
+            if(input.Query.SortColumns != null)
+            {
+                foreach (var sortColumn in input.Query.SortColumns)
+                {
+                    DataRecordField field = recordType.Fields.FirstOrDefault(itm => itm.Name == sortColumn.FieldName);
+                    field.ThrowIfNull("field", sortColumn.FieldName);
+                    if (field.Type.OrderType == DataRecordFieldOrderType.ByFieldDescription)
+                        fieldNames.Add(sortColumn.FieldName);
+                }
+            }
+            return fieldNames;
+        }
+
+        public List<DataRecordDetail> DataRecordDetailMapperList(IEnumerable<DataRecord> dataRecords, DataRecordType recordType, HashSet<string> fieldsToGetDescription)
         {
             if (dataRecords == null)
                 return null;
 
             List<DataRecordDetail> result = new List<DataRecordDetail>();
             foreach (DataRecord dataRecord in dataRecords)
-                result.Add(DataRecordDetail(dataRecord, recordType));
+                result.Add(DataRecordDetail(dataRecord, recordType, fieldsToGetDescription));
 
             return result;
         }
 
-        private DataRecordDetail DataRecordDetail(DataRecord entity, DataRecordType recordType)
+        private DataRecordDetail DataRecordDetail(DataRecord entity, DataRecordType recordType, HashSet<string> fieldsToGetDescription)
         {
             var dataRecordDetail = new DataRecordDetail() { RecordTime = entity.RecordTime, FieldValues = new Dictionary<string, DataRecordFieldValue>() };
             foreach (var fld in recordType.Fields)
@@ -700,11 +728,35 @@ namespace Vanrise.GenericData.Business
                 if (entity.FieldValues.TryGetValue(fld.Name, out value))
                 {
                     fldValueDetail.Value = value;
-                    fldValueDetail.Description = fld.Type.GetDescription(value);
+                    if (fieldsToGetDescription.Contains(fld.Name))
+                        fldValueDetail.Description = fld.Type.GetDescription(value);
                     dataRecordDetail.FieldValues.Add(fld.Name, fldValueDetail);
                 }
             }
             return dataRecordDetail;
+        }
+
+        public void CompleteDataRecordDetailMapper(IEnumerable<DataRecordDetail> dataRecordDetails, DataRecordType recordType, HashSet<string> fieldsHavingDescriptionAlreadySet)
+        {
+            if (dataRecordDetails == null)
+                return;
+
+            foreach (var dataRecordDetail in dataRecordDetails)
+            {
+                foreach (var fld in recordType.Fields)
+                {
+                    if (fieldsHavingDescriptionAlreadySet.Contains(fld.Name))
+                        continue;
+
+                    DataRecordFieldValue fldValueDetail;
+
+                    if (dataRecordDetail.FieldValues.TryGetValue(fld.Name, out fldValueDetail))
+                    {
+                        fldValueDetail.Description = fld.Type.GetDescription(fldValueDetail.Value);
+                    }
+                }
+            }
+
         }
 
         private Queue<string> GetFormulaDataRecordFieldNames(Dictionary<string, List<string>> dependentFieldsByFieldName, List<string> retrievedDataRecordFields)

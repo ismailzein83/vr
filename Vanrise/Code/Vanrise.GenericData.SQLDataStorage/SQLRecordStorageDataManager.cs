@@ -38,6 +38,22 @@ namespace Vanrise.GenericData.SQLDataStorage
             }
         }
 
+        Dictionary<string, DataRecordField> _dataRecordFieldsByName;
+        Dictionary<string, DataRecordField> DataRecordFieldsByName
+        {
+            get
+            {
+                if(_dataRecordFieldsByName == null)
+                {
+                    DataRecordTypeManager manager = new DataRecordTypeManager();
+                    _dataRecordFieldsByName = manager.GetDataRecordTypeFields(_dataRecordStorage.DataRecordTypeId);
+                    if (_dataRecordFieldsByName == null)
+                        throw new NullReferenceException(String.Format("_dataRecordFieldsByName ID '{0}'", _dataRecordStorage.DataRecordTypeId));
+                }
+                return _dataRecordFieldsByName;
+            }
+        }
+
         internal SQLRecordStorageDataManager(SQLDataStoreSettings dataStoreSettings, SQLDataRecordStorageSettings dataRecordStorageSettings, DataRecordStorage dataRecordStorage, SQLTempStorageInformation sqlTempStorageInformation)
             : base(GetConnectionStringName("ConfigurationDBConnStringKey", "ConfigurationDBConnString"))
         {
@@ -909,7 +925,8 @@ namespace Vanrise.GenericData.SQLDataStorage
             {
                 if (Columns.Contains(column.ColumnName))
                 {
-                    DataRecordField matchingField = DataRecordType.Fields.FindRecord(itm => itm.Name == column.ValueExpression);
+                    DataRecordField matchingField = DataRecordFieldsByName.GetRecord(column.ValueExpression);
+                    matchingField.ThrowIfNull("matchingField", column.ValueExpression);
                     var value = reader[column.ColumnName];
                     if (value == DBNull.Value)
                         value = null;
