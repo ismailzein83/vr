@@ -46,15 +46,25 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return newGuidValue.Equals(oldGuidValue);
         }
 
+        Type _runtimeType;
         public override Type GetRuntimeType()
         {
-            var type = GetNonNullableRuntimeType();
-            return (IsNullable) ? GetNullableType(type) : type;
+            if (_runtimeType == null)
+            {
+                var type = GetNonNullableRuntimeType();
+                lock (this)
+                {
+                    if (_runtimeType == null)
+                        _runtimeType = (IsNullable) ? GetNullableType(type) : type;
+                }
+            }
+            return _runtimeType;
         }
 
+        Type _nonNullableRuntimeType = typeof(Guid);
         public override Type GetNonNullableRuntimeType()
         {
-            return typeof(Guid);
+            return _nonNullableRuntimeType;
         }
 
         public override string GetDescription(Object value)

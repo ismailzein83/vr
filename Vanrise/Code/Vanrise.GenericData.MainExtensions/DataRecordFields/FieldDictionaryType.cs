@@ -24,9 +24,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return GetNonNullableRuntimeType();
         }
 
+        Type _nonNullableRuntimeType = typeof(Dictionary<string, string>);
         public override Type GetNonNullableRuntimeType()
         {
-            return typeof(Dictionary<string, string>);
+            return _nonNullableRuntimeType;
         }
 
         public override string GetDescription(Object value)

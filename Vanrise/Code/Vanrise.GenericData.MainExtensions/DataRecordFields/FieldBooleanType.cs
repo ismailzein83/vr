@@ -18,16 +18,27 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
         public bool IsNullable { get; set; }
         public override string ViewerEditor { get { return "vr-genericdata-fieldtype-boolean-viewereditor"; } }
 
+        Type _runtimeType;
         public override Type GetRuntimeType()
         {
-            var type = GetNonNullableRuntimeType();
-            return (IsNullable) ? GetNullableType(type) : type;
+            if (_runtimeType == null)
+            {
+                var type = GetNonNullableRuntimeType();
+                lock (this)
+                {
+                    if (_runtimeType == null)
+                        _runtimeType = (IsNullable) ? GetNullableType(type) : type;
+                }
+            }
+            return _runtimeType;
         }
 
+        Type _nonNullableRuntimeType = typeof(bool);
         public override Type GetNonNullableRuntimeType()
         {
-            return typeof(bool);
+            return _nonNullableRuntimeType;
         }
+
         public override bool AreEqual(Object newValue, Object oldValue)
         {
             if (newValue == null && oldValue == null)

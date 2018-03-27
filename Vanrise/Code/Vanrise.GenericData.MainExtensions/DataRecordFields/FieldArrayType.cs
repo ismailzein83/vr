@@ -21,10 +21,22 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return GetNonNullableRuntimeType();
         }
 
+        Type _nonNullableRuntimeType;
         public override Type GetNonNullableRuntimeType()
         {
-            Type fieldType = FieldType.GetRuntimeType();
-            return typeof(List<>).MakeGenericType(fieldType);
+            if (_nonNullableRuntimeType == null)
+            {
+                lock (this)
+                {
+                    if (_nonNullableRuntimeType == null)
+                    {
+                        Type fieldType = FieldType.GetRuntimeType();
+                        _nonNullableRuntimeType = typeof(List<>).MakeGenericType(fieldType);
+                    }
+                }
+
+            }
+            return _nonNullableRuntimeType;
         }
 
         public override string GetDescription(object value)

@@ -52,15 +52,25 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         #region Public Methods
 
+        Type _runtimeType;
         public override Type GetRuntimeType()
         {
-            var type = GetNonNullableRuntimeType();
-            return (IsNullable) ? GetNullableType(type) : type;
+            if (_runtimeType == null)
+            {
+                var type = GetNonNullableRuntimeType();
+                lock (this)
+                {
+                    if (_runtimeType == null)
+                        _runtimeType = (IsNullable) ? GetNullableType(type) : type;
+                }
+            }
+            return _runtimeType;
         }
 
+        Type _nonNullableRuntimeType = typeof(int);
         public override Type GetNonNullableRuntimeType()
         {
-            return typeof(int);
+            return _nonNullableRuntimeType;
         }
 
         public override string GetDescription(object value)

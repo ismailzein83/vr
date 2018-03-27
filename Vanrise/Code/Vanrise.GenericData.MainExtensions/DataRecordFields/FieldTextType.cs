@@ -39,10 +39,13 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
             return newLongValue.Equals(oldLongValue);
         }
+        
+        Type _nonNullableRuntimeType = typeof(string);
         public override Type GetNonNullableRuntimeType()
         {
-            return typeof(string);
+            return _nonNullableRuntimeType;
         }
+        
         public override string ViewerEditor { get { return "vr-genericdata-fieldtype-text-viewereditor"; } }
         public override string GetDescription(Object value)
         {

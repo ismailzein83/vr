@@ -48,18 +48,40 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 return false;
             return DateTime.Parse(newValue.ToString()) == DateTime.Parse(oldValue.ToString());
         }
+
+        Type _runtimeType;
         public override Type GetRuntimeType()
         {
-            var type = GetNonNullableRuntimeType();
-            return (IsNullable) ? GetNullableType(type) : type;
+            if (_runtimeType == null)
+            {
+                var type = GetNonNullableRuntimeType();
+                lock (this)
+                {
+                    if (_runtimeType == null)
+                        _runtimeType = (IsNullable) ? GetNullableType(type) : type;
+                }
+            }
+            return _runtimeType;
         }
-
+        
+        Type _nonNullableRuntimeType;
         public override Type GetNonNullableRuntimeType()
         {
-            var attributeInfo = Utilities.GetEnumAttribute<FieldDateTimeDataType, FieldDateTimeDataTypeInfoAttribute>(this.DataType);
-            if (attributeInfo == null)
-                throw new NullReferenceException("FieldDateTimeDataTypeInfoAttribute");
-            return attributeInfo.RuntimeType;
+            if (_nonNullableRuntimeType == null)
+            {
+                lock (this)
+                {
+                    if (_nonNullableRuntimeType == null)
+                    {
+                        var attributeInfo = Utilities.GetEnumAttribute<FieldDateTimeDataType, FieldDateTimeDataTypeInfoAttribute>(this.DataType);
+                        if (attributeInfo == null)
+                            throw new NullReferenceException("FieldDateTimeDataTypeInfoAttribute");
+                        _nonNullableRuntimeType = attributeInfo.RuntimeType;
+                    }
+                }
+
+            }
+            return _nonNullableRuntimeType;
         }
 
         public override string GetDescription(object value)

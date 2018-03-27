@@ -20,8 +20,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override Type GetRuntimeType()
         {
-            var type = GetNonNullableRuntimeType();
-            return (IsNullable) ? GetNullableType(type) : type;
+            return GetNonNullableRuntimeType();
         }
         public override bool TryResolveDifferences(IDataRecordFieldTypeTryResolveDifferencesContext context)
         {
@@ -117,9 +116,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
             return true;
         }
+
+        Type _nonNullableRuntimeType = typeof(AttachmentFieldTypeEntityCollection);
         public override Type GetNonNullableRuntimeType()
         {
-            return typeof(AttachmentFieldTypeEntityCollection);
+            return _nonNullableRuntimeType;
         }
         public override bool StoreValueSerialized { get { return true; } }
 

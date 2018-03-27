@@ -23,17 +23,39 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return base.AreEqual(newValue, oldValue);
         }
 
+        Type _runtimeType;
         public override Type GetRuntimeType()
         {
-            var type = GetNonNullableRuntimeType();
-            return (IsNullable) ? GetNullableType(type) : type;
+            if (_runtimeType == null)
+            {
+                var type = GetNonNullableRuntimeType();
+                lock (this)
+                {
+                    if (_runtimeType == null)
+                        _runtimeType = (IsNullable) ? GetNullableType(type) : type;
+                }
+            }
+            return _runtimeType;
         }
 
+        Type _nonNullableRuntimeType;
         public override Type GetNonNullableRuntimeType()
         {
-            this.Settings.ThrowIfNull("Settings");
-            return this.Settings.GetNonNullableRuntimeType();
+            if (_nonNullableRuntimeType == null)
+            {
+                lock (this)
+                {
+                    if (_nonNullableRuntimeType == null)
+                    {
+                        this.Settings.ThrowIfNull("Settings");
+                        _nonNullableRuntimeType = this.Settings.GetNonNullableRuntimeType();
+                    }
+                }
+
+            }
+            return _nonNullableRuntimeType;
         }
+
         public override bool StoreValueSerialized { get { return true; } }
 
         public override string GetDescription(object value)

@@ -34,11 +34,21 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         #region Public Methods
 
+        Type _runtimeType;
         public override Type GetRuntimeType()
         {
-            var type = GetNonNullableRuntimeType();
-            return (IsNullable) ? GetNullableType(type) : type;
+            if (_runtimeType == null)
+            {
+                var type = GetNonNullableRuntimeType();
+                lock (this)
+                {
+                    if (_runtimeType == null)
+                        _runtimeType = (IsNullable) ? GetNullableType(type) : type;
+                }
+            }
+            return _runtimeType;
         }
+
         public override bool AreEqual(Object newValue, Object oldValue)
         {
             if (newValue == null && oldValue == null)
@@ -61,13 +71,26 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 return newTypeValue.Equals(oldTypeValue);
             }
         }
+
+        Type _nonNullableRuntimeType;
         public override Type GetNonNullableRuntimeType()
         {
-            BusinessEntityDefinition beDefinition = GetBusinessEntityDefinition();
+            if (_nonNullableRuntimeType == null)
+            {
+                BusinessEntityDefinition beDefinition = GetBusinessEntityDefinition();
+                lock (this)
+                {
+                    if (_nonNullableRuntimeType == null)
+                    {
 
-            if (beDefinition.Settings.IdType == null)
-                throw new NullReferenceException("beDefinition.Settings.IdType");
-            return Type.GetType(beDefinition.Settings.IdType);
+                        if (beDefinition.Settings.IdType == null)
+                            throw new NullReferenceException("beDefinition.Settings.IdType");
+                        _nonNullableRuntimeType = Type.GetType(beDefinition.Settings.IdType);
+                    }
+                }
+
+            }
+            return _nonNullableRuntimeType;
         }
 
         public override string GetDescription(object value)
