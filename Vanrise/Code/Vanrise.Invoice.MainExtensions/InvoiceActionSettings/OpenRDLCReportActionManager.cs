@@ -13,6 +13,8 @@ using Vanrise.Invoice.Entities;
 using Vanrise.Common;
 using System.Threading;
 using System.IO;
+using Vanrise.Common.Business;
+
 namespace Vanrise.Invoice.MainExtensions
 {
     public class OpenRDLCReportActionManager
@@ -164,6 +166,10 @@ namespace Vanrise.Invoice.MainExtensions
                             invoiceReportParameters.Add(new ReportParameter(par.Key, par.Value.Value, par.Value.IsVisible));
                         }
                     }
+                }
+                if (reportParameters.Any(x => x.Name == "NormalPrecisionValue"))
+                {
+                    invoiceReportParameters.Add(new ReportParameter("NormalPrecisionValue", new GeneralSettingsManager().GetNormalPrecisionValue().ToString(), true));
                 }
             }
             return invoiceReportParameters;
