@@ -3380,7 +3380,7 @@ vr-validator[vr-input] > div:nth-child(1) {
 }
 
 .vr-datagrid-celltext .empty-line-col {
-    top: 18px;
+    padding-top: 18px;
 }
 
 .vr-datagrid-celltext vr-button[standalone] span[class^="glyphicon"] {
