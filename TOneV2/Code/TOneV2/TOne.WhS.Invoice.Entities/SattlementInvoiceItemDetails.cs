@@ -14,6 +14,9 @@ namespace TOne.WhS.Invoice.Entities
         public int TotalNumberOfCalls { get; set; }
         public int CurrencyId { get; set; }
         public Decimal DurationInSeconds { get; set; }
+        public decimal AmountWithCommission { get; set; }
+        public decimal? Commission { get; set; }
+      
         public SattlementInvoiceItemDetails() { }
         public IEnumerable<SattlementInvoiceItemDetails> GetSattlementInvoiceItemDetailsRDLCSchema()
         {

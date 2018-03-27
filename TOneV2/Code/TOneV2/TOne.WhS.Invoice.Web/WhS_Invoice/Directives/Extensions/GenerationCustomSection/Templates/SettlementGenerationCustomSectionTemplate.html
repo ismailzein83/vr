@@ -1,20 +1,8 @@
 ﻿<vr-row removeline>
-    <vr-columns colnum="{{ctrlSettlementGeneration.normalColNum/2}}">
+    <!--<vr-columns colnum="{{ctrlSettlementGeneration.normalColNum/2}}">
         <vr-textbox type="number" label="Commission (%)" value="scopeModel.commission" minvalue="-100" maxvalue="100" onblurtextbox="scopeModel.onCommissionFocusChanged"></vr-textbox>
-    </vr-columns>
-
-    <vr-columns colnum="{{ctrlSettlementGeneration.normalColNum/2}}">
-        <vr-select datasource="scopeModel.commissionTypes"
-                   datatextfield="description"
-                   datavaluefield="value"
-                   selectedvalues="scopeModel.selectedCommissionType"
-                   entityname="Commission Type"
-                   label="Commission Type"
-                   hideremoveicon onselectionchanged="scopeModel.onCommissionTypeSelectionChanged">
-        </vr-select>
-    </vr-columns>
-
-    <vr-columns width="fullrow" haschildcolumns>
+    </vr-columns>-->
+    <vr-columns width="fullrow" haschildcolumns withemptyline="true">
 
         <vr-columns colnum="10" ng-if="scopeModel.errorMessage != undefined">
             <vr-label class="alert alert-danger" vr-alert breakline>{{scopeModel.errorMessage}}</vr-label>

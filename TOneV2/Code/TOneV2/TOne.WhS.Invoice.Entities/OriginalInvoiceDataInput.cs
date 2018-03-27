@@ -12,5 +12,6 @@ namespace TOne.WhS.Invoice.Entities
         public decimal? OriginalAmount { get; set; }
         public string Reference { get; set; }
         public List<AttachementFile> AttachementFiles { get; set; }
+        public bool IncludeOriginalAmountInSettlement { get; set; }
     }
 }

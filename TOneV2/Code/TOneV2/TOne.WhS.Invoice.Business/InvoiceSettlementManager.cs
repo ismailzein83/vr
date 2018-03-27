@@ -19,7 +19,7 @@ namespace TOne.WhS.Invoice.Business
     {
         InvoiceItemManager _invoiceItemManager = new InvoiceItemManager();
         CurrencyManager _currencyManager = new CurrencyManager();
-        const string _groupingBySaleCurrencyItemSetName = "GroupingBySaleCurrency";
+        const string _groupingBySaleCurrencyItemSetName = "GroupingByCurrency";
 
         public SettlementGenerationCustomSectionPayloadSummary TryLoadInvoicesAndGetAmountByCurrency(Guid invoiceTypeId, List<long> selectedCustomerInvoices, List<long> selectedSupplierInvoices,DateTime fromDate,DateTime toDate)
         {
@@ -27,6 +27,7 @@ namespace TOne.WhS.Invoice.Business
             var settlementInvoiceSettings = invoiceTypeExtendedSettings.CastWithValidate<SettlementInvoiceSettings>("settlementInvoiceSettings", invoiceTypeId);
 
             Vanrise.Invoice.Business.InvoiceManager invoiceManager = new Vanrise.Invoice.Business.InvoiceManager();
+            var normalPrecisionValue = new GeneralSettingsManager().GetNormalPrecisionValue();
 
             SettlementGenerationCustomSectionPayloadSummary summary = new SettlementGenerationCustomSectionPayloadSummary();
             if (selectedCustomerInvoices != null && selectedCustomerInvoices.Count > 0)
@@ -38,7 +39,7 @@ namespace TOne.WhS.Invoice.Business
                 if (!ValidateInvoicesDates(customerInvoices, fromDate, toDate, out errorMessage))
                     summary.ErrorMessage = errorMessage;
               
-                summary.CustomerAmountByCurrency = LoadAndGetAmountByCurrency(settlementInvoiceSettings.CustomerInvoiceTypeId, selectedCustomerInvoices, _groupingBySaleCurrencyItemSetName);
+                summary.CustomerAmountByCurrency = LoadAndGetAmountByCurrency(settlementInvoiceSettings.CustomerInvoiceTypeId, selectedCustomerInvoices, _groupingBySaleCurrencyItemSetName,normalPrecisionValue);
             }
             if (selectedSupplierInvoices != null && selectedSupplierInvoices.Count > 0)
             {
@@ -47,7 +48,7 @@ namespace TOne.WhS.Invoice.Business
                 if (!ValidateInvoicesDates(supplierInvoices, fromDate, toDate, out errorMessage))
                     summary.ErrorMessage = errorMessage;
                 
-                summary.SupplierAmountByCurrency = LoadAndGetAmountByCurrency(settlementInvoiceSettings.SupplierInvoiceTypeId, selectedSupplierInvoices, _groupingBySaleCurrencyItemSetName);
+                summary.SupplierAmountByCurrency = LoadAndGetAmountByCurrency(settlementInvoiceSettings.SupplierInvoiceTypeId, selectedSupplierInvoices, _groupingBySaleCurrencyItemSetName,normalPrecisionValue);
 
             }
             return summary;
@@ -64,8 +65,6 @@ namespace TOne.WhS.Invoice.Business
         public SettlementGenerationCustomSectionPayload EvaluateGenerationCustomPayload(Guid customerInvoiceTypeId, Guid supplierInvoiceTypeId, IEnumerable<string> partnerIds, string currentPartnerId, Guid invoiceTypeId, DateTime fromDate, DateTime toDate, List<Vanrise.Invoice.Entities.Invoice> supplierInvoices, List<Vanrise.Invoice.Entities.Invoice> customerInvoices, long? currenctInvoiceId)
         {
             decimal? commission = null;
-            CommissionType commissionType = CommissionType.Display;
-
             WHSFinancialAccountManager whsFinancialAccountManager = new WHSFinancialAccountManager();
             var financialAccount = whsFinancialAccountManager.GetFinancialAccount(int.Parse(currentPartnerId));
             financialAccount.ThrowIfNull("financialAccount", currentPartnerId);
@@ -82,16 +81,15 @@ namespace TOne.WhS.Invoice.Business
                 if (financialAccountInvoiceSetting != null && financialAccountInvoiceSetting.FinancialAccountCommission != null)
                 {
                     commission = financialAccountInvoiceSetting.FinancialAccountCommission.Commission;
-                    commissionType = financialAccountInvoiceSetting.FinancialAccountCommission.CommissionType;
                 }
             }
+            var normalPrecisionValue = new GeneralSettingsManager().GetNormalPrecisionValue();
 
 
             var settlementGenerationCustomSectionPayload = new SettlementGenerationCustomSectionPayload
             {
                 IsCustomerApplicable = definition.ExtendedSettings.IsApplicableToCustomer,
                 IsSupplierApplicable = definition.ExtendedSettings.IsApplicableToSupplier,
-                CommissionType = commissionType,
                 Commission = commission,
                 Summary = new SettlementGenerationCustomSectionPayloadSummary()
             };
@@ -118,7 +116,7 @@ namespace TOne.WhS.Invoice.Business
 
                         var selectedInvoiceIds = availableCustomerInvoices.MapRecords(x => x.InvoiceId, x => x.IsSelected).ToList();
 
-                        settlementGenerationCustomSectionPayload.Summary.CustomerAmountByCurrency = LoadAndGetAmountByCurrency(customerInvoiceTypeId, selectedInvoiceIds, _groupingBySaleCurrencyItemSetName);
+                        settlementGenerationCustomSectionPayload.Summary.CustomerAmountByCurrency = LoadAndGetAmountByCurrency(customerInvoiceTypeId, selectedInvoiceIds, _groupingBySaleCurrencyItemSetName, normalPrecisionValue);
 
                     }
                 }
@@ -127,7 +125,7 @@ namespace TOne.WhS.Invoice.Business
 
             if (definition.ExtendedSettings.IsApplicableToSupplier)
             {
-                List<InvoiceAvailableForSettlement> availableSupplierInvoices;
+                List<InvoiceAvailableForSettlement> availableSupplierInvoices =null;
 
                 if (supplierInvoices == null)
                     supplierInvoices = LoadInvoices(supplierInvoiceTypeId, partnerIds, fromDate, toDate);
@@ -142,14 +140,51 @@ namespace TOne.WhS.Invoice.Business
                         if (ValidateInvoicesDates(supplierInvoices, fromDate, toDate, out errorMessage))
                             settlementGenerationCustomSectionPayload.Summary.ErrorMessage = errorMessage;
 
+                        List<long> selectedInvoiceIds = new List<long>();
+                        Dictionary<string, decimal> supplierAmountByCurrency = null;
+                        foreach (var partnerSupplierInvoice in partnerSupplierInvoices)
+                        {
+                            if (availableSupplierInvoices == null)
+                                availableSupplierInvoices = new List<InvoiceAvailableForSettlement>();
+                           
+                            var invoiceAvailableForSettlement = new InvoiceAvailableForSettlement
+                            { 
+                                InvoiceId = partnerSupplierInvoice.InvoiceId,
+                                IsSelected = !currenctInvoiceId.HasValue || partnerSupplierInvoice.SettlementInvoiceId.HasValue 
+                            };
 
-                        availableSupplierInvoices = partnerSupplierInvoices.MapRecords(x => new InvoiceAvailableForSettlement { InvoiceId = x.InvoiceId, IsSelected = !currenctInvoiceId.HasValue || x.SettlementInvoiceId.HasValue }).ToList();
+                            availableSupplierInvoices.Add(invoiceAvailableForSettlement);
+                            if(invoiceAvailableForSettlement.IsSelected)
+                            {
+                                var supplierInvoiceDetails = partnerSupplierInvoice.Details as SupplierInvoiceDetails;
+                                if (supplierInvoiceDetails != null && supplierInvoiceDetails.IncludeOriginalAmountInSettlement && supplierInvoiceDetails.OriginalAmount.HasValue)
+                                {
+                                    if (supplierAmountByCurrency == null)
+                                        supplierAmountByCurrency = new Dictionary<string, decimal>();
+
+                                     string currencySymbol = _currencyManager.GetCurrencySymbol(supplierInvoiceDetails.SupplierCurrencyId);
+                                    currencySymbol.ThrowIfNull("currencySymbol", supplierInvoiceDetails.SupplierCurrencyId);
+                                    supplierAmountByCurrency.Add(currencySymbol, Math.Round(supplierInvoiceDetails.OriginalAmount.Value, normalPrecisionValue));
+                                }
+                                else
+                                {
+                                    selectedInvoiceIds.Add(invoiceAvailableForSettlement.InvoiceId);
+                                }
+                            }
+                        }
 
                         settlementGenerationCustomSectionPayload.AvailableSupplierInvoices = availableSupplierInvoices;
-
-                        var selectedInvoiceIds = availableSupplierInvoices.MapRecords(x => x.InvoiceId, x => x.IsSelected).ToList();
-
-                        settlementGenerationCustomSectionPayload.Summary.SupplierAmountByCurrency = LoadAndGetAmountByCurrency(supplierInvoiceTypeId, selectedInvoiceIds, _groupingBySaleCurrencyItemSetName);
+                        var amountsByCurrency = LoadAndGetAmountByCurrency(supplierInvoiceTypeId, selectedInvoiceIds, _groupingBySaleCurrencyItemSetName, normalPrecisionValue);
+                        if(amountsByCurrency != null)
+                        {
+                            foreach(var amount in amountsByCurrency)
+                            {
+                                if (supplierAmountByCurrency == null)
+                                    supplierAmountByCurrency = new  Dictionary<string,decimal>();
+                                supplierAmountByCurrency.Add(amount.Key, amount.Value);
+                            }
+                        }
+                        settlementGenerationCustomSectionPayload.Summary.SupplierAmountByCurrency = supplierAmountByCurrency;
 
                     }
                 }
@@ -161,7 +196,7 @@ namespace TOne.WhS.Invoice.Business
         {
             return new Vanrise.Invoice.Business.InvoiceManager().GetPartnerInvoicesByDate(invoiceTypeId, partnerIds, fromDate, toDate);
         }
-        public Dictionary<string, decimal> LoadAndGetAmountByCurrency(Guid invoiceTypeId, List<long> selectedInvoiceIds, string itemSetName)
+        public Dictionary<string, decimal> LoadAndGetAmountByCurrency(Guid invoiceTypeId, List<long> selectedInvoiceIds, string itemSetName, int normalPrecisionValue)
         {
             Dictionary<string, decimal> amountByCurrency = null;
             if (selectedInvoiceIds != null && selectedInvoiceIds.Count > 0)
@@ -178,7 +213,14 @@ namespace TOne.WhS.Invoice.Business
                         {
                             string currencySymbol = _currencyManager.GetCurrencySymbol(invoiceBySaleCurrencyItemDetails.CurrencyId);
                             currencySymbol.ThrowIfNull("currencySymbol", invoiceBySaleCurrencyItemDetails.CurrencyId);
-                            amountByCurrency.Add(currencySymbol, invoiceBySaleCurrencyItemDetails.AmountAfterCommissionWithTaxes);
+                            decimal amount;
+                            if (amountByCurrency.TryGetValue(currencySymbol, out amount))
+                            {
+                                amountByCurrency[currencySymbol] += Math.Round(invoiceBySaleCurrencyItemDetails.AmountAfterCommissionWithTaxes,normalPrecisionValue);
+                            }else
+                            {
+                                amountByCurrency.Add(currencySymbol, Math.Round(invoiceBySaleCurrencyItemDetails.AmountAfterCommissionWithTaxes, normalPrecisionValue));
+                            }
                         }
                     }
                 }
@@ -188,7 +230,7 @@ namespace TOne.WhS.Invoice.Business
         }
         public SettlementGenerationCustomSectionInvoices LoadInvoicesDetails(Guid invoiceTypeId, string partnerId, List<long> customerInvoiceIds, List<long> supplierInvoiceIds)
         {
-
+            VRTimeZoneManager vrTimeZoneManager = new Vanrise.Common.Business.VRTimeZoneManager();
             SettlementGenerationCustomSectionInvoices settlementGenerationCustomSectionInvoices = new SettlementGenerationCustomSectionInvoices();
 
             var invoiceTypeExtendedSettings = new InvoiceTypeManager().GetInvoiceTypeExtendedSettings(invoiceTypeId);
@@ -226,7 +268,8 @@ namespace TOne.WhS.Invoice.Business
                             Duration = customerDetail.Duration,
                             Offset = customerDetail.Offset,
                             ToDate = customerInvoiceDetail.Entity.ToDate,
-                            SerialNumber = customerInvoiceDetail.Entity.SerialNumber
+                            SerialNumber = customerInvoiceDetail.Entity.SerialNumber,
+                            TimeZoneDescription = customerDetail.TimeZoneId.HasValue ? vrTimeZoneManager.GetVRTimeZoneName(customerDetail.TimeZoneId.Value) : null
                         });
                     }
                 }
@@ -252,7 +295,7 @@ namespace TOne.WhS.Invoice.Business
                             InvoiceId = supplierInvoiceDetail.Entity.InvoiceId,
                             TotalNumberOfCalls = supplierDetail.TotalNumberOfCalls,
                             TimeZoneId = supplierDetail.TimeZoneId,
-                            TotalAmountAfterCommission = supplierDetail.TotalAmountAfterCommission,
+                            TotalAmountAfterCommission = supplierDetail.IncludeOriginalAmountInSettlement && supplierDetail.OriginalAmount.HasValue?supplierDetail.OriginalAmount.Value: supplierDetail.TotalAmountAfterCommission,
                             SupplierCurrency = _currencyManager.GetCurrencySymbol(supplierDetail.SupplierCurrencyId),
                             DueDate = supplierInvoiceDetail.Entity.DueDate,
                             Commission = supplierDetail.Commission,
@@ -261,7 +304,8 @@ namespace TOne.WhS.Invoice.Business
                             Duration = supplierDetail.Duration,
                             Offset = supplierDetail.Offset,
                             ToDate = supplierInvoiceDetail.Entity.ToDate,
-                            SerialNumber = supplierInvoiceDetail.Entity.SerialNumber
+                            SerialNumber = supplierInvoiceDetail.Entity.SerialNumber,
+                            TimeZoneDescription = supplierDetail.TimeZoneId.HasValue ? vrTimeZoneManager.GetVRTimeZoneName(supplierDetail.TimeZoneId.Value) : null
                         });
                     }
                 }

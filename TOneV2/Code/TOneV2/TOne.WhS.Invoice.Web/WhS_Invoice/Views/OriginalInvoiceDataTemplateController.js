@@ -67,6 +67,7 @@
                 {
                     $scope.scopeModel.originalAmount = originalInvoiceDataRuntime.OriginalAmount;
                     $scope.scopeModel.reference = originalInvoiceDataRuntime.Reference;
+                    $scope.scopeModel.includeInSettlement = originalInvoiceDataRuntime.IncludeOriginalAmountInSettlement;
                     if(originalInvoiceDataRuntime.AttachementFilesRuntime != undefined)
                     {
                         for (var i = 0; i < originalInvoiceDataRuntime.AttachementFilesRuntime.length; i++)
@@ -90,6 +91,7 @@
 
             function loadStaticData() {
                 if (invoiceAccountEntity != undefined) {
+
                 }
             }
             return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData]).catch(function (error) {
@@ -132,7 +134,8 @@
                 OriginalAmount: $scope.scopeModel.originalAmount,
                 Reference: $scope.scopeModel.reference,
                 AttachementFiles: attachementFileIds,
-                InvoiceId :invoiceId,
+                InvoiceId: invoiceId,
+                IncludeOriginalAmountInSettlement: $scope.scopeModel.includeInSettlement,
             };
             return obj;
         }

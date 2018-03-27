@@ -30,9 +30,8 @@ app.directive("whsInvoicetypeGenerationcustomsectionSettlement", ["UtilsService"
             var context;
             var customPayload;
             var invoiceTypeId;
-            var oldCommission;
+          //  var oldCommission;
             var financialAccountId;
-            var selectedCommissionTypeReadyDeferred;
 
             var isCustomerApplicable;
             var isSupplierApplicable;
@@ -50,28 +49,15 @@ app.directive("whsInvoicetypeGenerationcustomsectionSettlement", ["UtilsService"
             function initializeController() {
                 $scope.scopeModel = {};
               
-                $scope.scopeModel.commissionTypes = UtilsService.getArrayEnum(WhS_BE_CommisssionTypeEnum);
-
-                $scope.scopeModel.selectedCommissionType = WhS_BE_CommisssionTypeEnum.Display;
-
                 $scope.scopeModel.showCustomerSummary = false;
                 $scope.scopeModel.showSupplierSummary = false;
 
 
-                $scope.scopeModel.onCommissionFocusChanged = function () {
-                    if (oldCommission != $scope.scopeModel.commission)
-                        onvaluechanged();
-                    oldCommission != $scope.scopeModel.commission;
-                };
-
-                $scope.scopeModel.onCommissionTypeSelectionChanged = function (value) {
-                    if (selectedCommissionTypeReadyDeferred != undefined) {
-                        selectedCommissionTypeReadyDeferred.resolve();
-                    }
-                    else {
-                        onvaluechanged();
-                    }
-                };
+                //$scope.scopeModel.onCommissionFocusChanged = function () {
+                //    if (oldCommission != $scope.scopeModel.commission)
+                //        onvaluechanged();
+                //    oldCommission != $scope.scopeModel.commission;
+                //};
 
                 $scope.scopeModel.openInvoicesEditor = function () {
                     var onIncludedInvoicesInSettlement = function (includedInvoicesInSettlement) {
@@ -119,11 +105,8 @@ app.directive("whsInvoicetypeGenerationcustomsectionSettlement", ["UtilsService"
                         }
                         if (customPayload != undefined) {
 
-                            selectedCommissionTypeReadyDeferred = UtilsService.createPromiseDeferred();
+                          //  oldCommission = $scope.scopeModel.commission = customPayload.Commission;
 
-                            oldCommission = $scope.scopeModel.commission = customPayload.Commission;
-
-                            $scope.scopeModel.selectedCommissionType = UtilsService.getItemByVal($scope.scopeModel.commissionTypes, customPayload.CommissionType, "value");
 
                             availableCustomerInvoices = customPayload.AvailableCustomerInvoices;
 
@@ -162,8 +145,7 @@ app.directive("whsInvoicetypeGenerationcustomsectionSettlement", ["UtilsService"
 
                             if (invoice.Details != undefined)
                             {
-                                oldCommission = $scope.scopeModel.commission = invoice.Details.Commission;
-                                $scope.scopeModel.selectedCommissionType = UtilsService.getItemByVal($scope.scopeModel.commissionTypes, invoice.Details.CommissionType, "value");
+                              //  oldCommission = $scope.scopeModel.commission = invoice.Details.Commission;
                             }
                             
                         }
@@ -171,7 +153,6 @@ app.directive("whsInvoicetypeGenerationcustomsectionSettlement", ["UtilsService"
                     }
 
                     return UtilsService.waitMultiplePromises(promises).then(function () {
-                        selectedCommissionTypeReadyDeferred = undefined;
                     });
                 };
 
@@ -185,8 +166,7 @@ app.directive("whsInvoicetypeGenerationcustomsectionSettlement", ["UtilsService"
                 api.getData = function () {
                     return {
                         $type: "TOne.WhS.Invoice.Entities.SettlementGenerationCustomSectionPayload,TOne.WhS.Invoice.Entities",
-                        Commission: $scope.scopeModel.commission,
-                        CommissionType: $scope.scopeModel.selectedCommissionType != undefined ? $scope.scopeModel.selectedCommissionType.value : undefined,
+                      //  Commission: $scope.scopeModel.commission,
                         AvailableCustomerInvoices: availableCustomerInvoices,
                         AvailableSupplierInvoices: availableSupplierInvoices,
                         Summary:{

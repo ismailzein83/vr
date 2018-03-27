@@ -239,6 +239,9 @@
     <EmbeddedResource Include="Reports\Zajil\InvoiceReportByCurrency.rdlc" />
     <EmbeddedResource Include="Reports\Zajil\ProfileInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="Reports\Zajil\ProfileInvoiceReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\SettlementInvoiceReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="WhS_Invoice\Reports\SupplierInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\SupplierInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\InvoiceItemsReportByCurrency.rdlc" />
@@ -249,7 +252,9 @@
     <EmbeddedResource Include="WhS_Invoice\Reports\SupplierProfileInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\ProfileInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\SupplierProfileInvoiceReport.rdlc" />
-    <EmbeddedResource Include="WhS_Invoice\Reports\ProfileInvoiceReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\ProfileInvoiceReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="WhS_Invoice\Reports\CustomerInvoiceReport.rdlc" />
   </ItemGroup>
   <ItemGroup>

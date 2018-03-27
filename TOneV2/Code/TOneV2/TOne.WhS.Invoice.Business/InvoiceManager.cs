@@ -92,6 +92,8 @@ namespace TOne.WhS.Invoice.Business
             supplierInvoiceDetails.OriginalAmount = input.OriginalAmount;
             supplierInvoiceDetails.Reference = input.Reference;
             supplierInvoiceDetails.AttachementFiles = input.AttachementFiles;
+            supplierInvoiceDetails.IncludeOriginalAmountInSettlement = input.IncludeOriginalAmountInSettlement;
+
             invoice.Details = supplierInvoiceDetails;
             return invoiceManager.TryUpdateInvoice(invoice);
         }
@@ -109,6 +111,8 @@ namespace TOne.WhS.Invoice.Business
             {
                 OriginalAmount = supplierInvoiceDetails.OriginalAmount,
                 Reference = supplierInvoiceDetails.Reference,
+                IncludeOriginalAmountInSettlement = supplierInvoiceDetails.IncludeOriginalAmountInSettlement,
+                
             };
 
             if (supplierInvoiceDetails.AttachementFiles != null && supplierInvoiceDetails.AttachementFiles.Count > 0)

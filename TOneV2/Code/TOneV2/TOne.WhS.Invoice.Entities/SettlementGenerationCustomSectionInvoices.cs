@@ -31,6 +31,8 @@ namespace TOne.WhS.Invoice.Entities
         public Decimal TotalAmountAfterCommission { get; set; }
         public decimal? Commission { get; set; }
         public string Offset { get; set; }
+        public string TimeZoneDescription { get; set; }
+
     }
     public class SupplierInvoiceDetail
     {
@@ -45,6 +47,7 @@ namespace TOne.WhS.Invoice.Entities
         public decimal Duration { get; set; }
         public string SupplierCurrency { get; set; }
         public int? TimeZoneId { get; set; }
+        public string TimeZoneDescription { get; set; }
         public Decimal TotalAmountAfterCommission { get; set; }
         public decimal? Commission { get; set; }
         public string Offset { get; set; }
