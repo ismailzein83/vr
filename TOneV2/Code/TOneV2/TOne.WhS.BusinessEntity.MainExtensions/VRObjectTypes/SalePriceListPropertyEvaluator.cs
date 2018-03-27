@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using Vanrise.Entities;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common.Business;
 
 namespace TOne.WhS.BusinessEntity.MainExtensions
 {
-    public enum SalePriceListField { PriceListDate = 0, PriceListType = 1 }
+    public enum SalePriceListField { PriceListDate = 0, PriceListType = 1 ,CurrencySymbol = 2}
 
     public class SalePriceListPropertyEvaluator : VRObjectPropertyEvaluator
     {
@@ -20,6 +21,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
         public SalePriceListField SalePriceListField { get; set; }
         public override dynamic GetPropertyValue(IVRObjectPropertyEvaluatorContext context)
         {
+            CurrencyManager currencyManager = new CurrencyManager();
             SalePriceList salePriceList = context.Object as SalePriceList;
 
             if (salePriceList == null)
@@ -31,6 +33,9 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
                     return salePriceList.CreatedTime;
                 case MainExtensions.SalePriceListField.PriceListType:
                     return salePriceList.PriceListType;
+                case MainExtensions.SalePriceListField.CurrencySymbol:
+                    return currencyManager.GetCurrencySymbol(salePriceList.CurrencyId);
+
             }
 
             return null;
