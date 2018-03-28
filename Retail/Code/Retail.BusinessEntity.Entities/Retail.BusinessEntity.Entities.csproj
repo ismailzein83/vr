@@ -135,6 +135,7 @@
     <Compile Include="FinancialAccount\FinancialAccountSettings.cs" />
     <Compile Include="FinancialAccount\FinancialAccountToEdit.cs" />
     <Compile Include="FinancialAccount\FinancialAccountToInsert.cs" />
+    <Compile Include="OperationDeclarationServices.cs" />
     <Compile Include="Package\Definition\PackageDefinitionFilter.cs" />
     <Compile Include="Package\IPackageFilter.cs" />
     <Compile Include="ProductFamily\ProductFamily.cs" />

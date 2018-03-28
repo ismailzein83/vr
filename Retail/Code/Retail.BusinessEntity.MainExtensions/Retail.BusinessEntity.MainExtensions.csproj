@@ -165,6 +165,10 @@
     <Compile Include="DataRecordFieldFormulas\ZoneEvaluatorFieldFormula.cs" />
     <Compile Include="FinancialAccount\PostpaidFinancialAccount.cs" />
     <Compile Include="FinancialAccount\PostpaidFinancialAccountDefinition.cs" />
+    <Compile Include="OperatorDeclarationServices\Enums.cs" />
+    <Compile Include="OperatorDeclarationServices\PostpaidCDR.cs" />
+    <Compile Include="OperatorDeclarationServices\PostpaidSMS.cs" />
+    <Compile Include="OperatorDeclarationServices\Topup.cs" />
     <Compile Include="PackageDefinitionExtendedSettings\PricingPackageDefinitionSettings.cs" />
     <Compile Include="PackageTypes\RecurChargePackageDefinitionSettings.cs" />
     <Compile Include="PackageTypes\RecurChargePackageSettings.cs" />
