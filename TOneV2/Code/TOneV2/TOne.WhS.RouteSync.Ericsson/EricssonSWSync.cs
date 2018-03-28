@@ -15,10 +15,10 @@ namespace TOne.WhS.RouteSync.Ericsson
         public int MaxCodeLength { get; set; }
         public string LocalCountryCode { get; set; }
         public int LocalNumberLength { get; set; }
-        public List<int> OutgoingTrafficCustomers { get; set; }
-        public List<int> IncomingTrafficSuppliers { get; set; }
-        public List<LocalSupplierMapping> LocalSupplierMappings { get; set; }
         public string InterconnectGeneralPrefix { get; set; }
+        public List<OutgoingTrafficCustomer> OutgoingTrafficCustomers { get; set; }
+        public List<IncomingTrafficSupplier> IncomingTrafficSuppliers { get; set; }
+        public List<LocalSupplierMapping> LocalSupplierMappings { get; set; }
         public Dictionary<string, CarrierMapping> CarrierMappings { get; set; }
 
 

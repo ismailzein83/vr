@@ -46,7 +46,9 @@
     <Compile Include="Entities\BOMapping.cs" />
     <Compile Include="Entities\CarrierMapping.cs" />
     <Compile Include="Entities\Enums.cs" />
+    <Compile Include="Entities\IncomingTrafficSupplier.cs" />
     <Compile Include="Entities\LocalSupplierMapping.cs" />
+    <Compile Include="Entities\OutgoingTrafficCustomer.cs" />
     <Compile Include="Entities\Trunk.cs" />
     <Compile Include="Entities\TrunkGroup.cs" />
     <Compile Include="EricssonConvertedRoute.cs" />
