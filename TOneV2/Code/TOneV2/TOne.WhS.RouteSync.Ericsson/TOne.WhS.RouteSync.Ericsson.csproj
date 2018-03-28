@@ -43,7 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Entities\BOMapping.cs" />
     <Compile Include="Entities\CarrierMapping.cs" />
     <Compile Include="Entities\Enums.cs" />
     <Compile Include="Entities\IncomingTrafficSupplier.cs" />

@@ -17,9 +17,13 @@ namespace TOne.WhS.RouteSync.Ericsson
 
     public class CustomerMapping
     {
-        public List<InTrunk> Trunks { get; set; }
+        public string BO { get; set; }
 
-        public Dictionary<BNT, BOMapping> BOMappings { get; set; }
+        public string NationalOBA { get; set; }
+
+        public string InternationalOBA { get; set; }
+
+        public List<InTrunk> Trunks { get; set; }
     }
 
     public class SupplierMapping
