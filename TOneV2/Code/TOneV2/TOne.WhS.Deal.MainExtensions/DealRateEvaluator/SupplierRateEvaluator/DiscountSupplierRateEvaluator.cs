@@ -33,7 +33,7 @@ namespace TOne.WhS.Deal.MainExtensions
                     ZoneId = zoneId,
                     Rate = Business.Helper.GetDiscountedRateValue(supplierRate.Rate, Discount),
                     BED = Utilities.Max(supplierRate.BED, context.DealBED),
-                    EED = supplierRate.EED.MaxDate(context.DealEED),
+                    EED = supplierRate.EED.MinDate(context.DealEED),
                     CurrencyId = supplierCurrencyId
                 });
             }

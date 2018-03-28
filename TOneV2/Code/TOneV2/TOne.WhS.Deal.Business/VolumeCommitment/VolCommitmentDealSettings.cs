@@ -117,7 +117,7 @@ namespace TOne.WhS.Deal.Business
 
             var customerZoneRateHistoryLocator =
                new CustomerZoneRateHistoryLocator(new CustomerZoneRateHistoryReader(new List<int> { CarrierAccountId }
-                   , new List<int> { sellingProductId }, zoneIds, true, false));
+                   , new List<int> { sellingProductId }, zoneIds, BeginDate, EndDate));
 
             getCustomerZoneRatesFunc = (zoneName, countryId) => customerZoneRateHistoryLocator.GetCustomerZoneRateHistory(CarrierAccountId, sellingProductId, zoneName, null, countryId, null, null);
         }
@@ -155,13 +155,19 @@ namespace TOne.WhS.Deal.Business
 
                 Dictionary<long, List<DealRate>> exceptionDealRates = null;
                 if (volCommitmentDealItemTier.ExceptionZoneRates != null && volCommitmentDealItemTier.ExceptionZoneRates.Any())
+                {
                     exceptionDealRates = GetExceptionSaleDealRate(volCommitmentDealItemTier.ExceptionZoneRates);
+                    context.ZoneIds = zoneIds.Except(exceptionDealRates.Keys); //exclude exception from zones to evaluat
+                }
 
-                //exclude exception from zones to evaluate
-                if (exceptionDealRates != null) context.ZoneIds = zoneIds.Except(exceptionDealRates.Keys);
-                saleEvaluatedRate.EvaluateRate(context);
+                Dictionary<long, List<DealRate>> dealRatesByZoneId = null;
+                if (context.ZoneIds != null && context.ZoneIds.Any())
+                {
+                    saleEvaluatedRate.EvaluateRate(context);
+                    dealRatesByZoneId = StructureDealRateByZoneId(context.SaleRates);
+                }
 
-                Dictionary<long, List<DealRate>> supplierDealRatesByZoneId = MergeExceptionAndDealRate(exceptionDealRates, context.SaleRates);
+                Dictionary<long, List<DealRate>> supplierDealRatesByZoneId = MergeExceptionAndDealRate(exceptionDealRates, dealRatesByZoneId);
 
                 DealSaleZoneGroupTier dealSaleZoneGroupTier = new DealSaleZoneGroupTier
                 {
@@ -256,10 +262,14 @@ namespace TOne.WhS.Deal.Business
                     context.ZoneIds = context.ZoneIds.Except(exceptionDealRates.Keys);  //exclude exception from zones to evaluate
                 }
 
+                Dictionary<long, List<DealRate>> supplierRateByZoneId = null;
                 if (context.ZoneIds != null && context.ZoneIds.Any())
+                {
                     supplierEvaluatedRate.EvaluateRate(context);
+                    supplierRateByZoneId = StructureDealRateByZoneId(context.SupplierRates);
+                }
 
-                Dictionary<long, List<DealRate>> supplierDealRatesByZoneId = MergeExceptionAndDealRate(exceptionDealRates, context.SupplierRates);
+                Dictionary<long, List<DealRate>> supplierDealRatesByZoneId = MergeExceptionAndDealRate(exceptionDealRates, supplierRateByZoneId);
                 DealSupplierZoneGroupTier dealSupplierZoneGroupTier = new DealSupplierZoneGroupTier
                 {
                     RetroActiveFromTierNumber = volCommitmentDealItemTier.RetroActiveFromTierNumber,
@@ -299,25 +309,18 @@ namespace TOne.WhS.Deal.Business
             return dealSupplierZoneGroupTiers.OrderBy(itm => itm.TierNumber);
         }
 
-        private Dictionary<long, List<DealRate>> MergeExceptionAndDealRate(Dictionary<long, List<DealRate>> exceptionDealRates, IEnumerable<DealRate> dealRates)
+        private Dictionary<long, List<DealRate>> MergeExceptionAndDealRate(Dictionary<long, List<DealRate>> exceptionDealRates, Dictionary<long, List<DealRate>> dealRatesByZoneId)
         {
-            if (exceptionDealRates == null && dealRates == null)
+            if (exceptionDealRates == null && dealRatesByZoneId == null)
                 return null;
+
             if (exceptionDealRates == null)
-                return StructureDealRateByZoneId(dealRates);
-            if (dealRates == null)
+                return dealRatesByZoneId;
+
+            if (dealRatesByZoneId == null)
                 return exceptionDealRates;
 
-            foreach (var dealRate in dealRates)
-            {
-                List<DealRate> supplierDealRates;
-                if (!exceptionDealRates.TryGetValue(dealRate.ZoneId, out supplierDealRates))
-                {
-                    supplierDealRates = new List<DealRate>();
-                    exceptionDealRates.Add(dealRate.ZoneId, supplierDealRates);
-                }
-            }
-            return exceptionDealRates;
+            return exceptionDealRates.Union(dealRatesByZoneId).ToDictionary(k => k.Key, v => v.Value); ;
         }
         private Dictionary<long, List<DealRate>> GetExceptionSaleDealRate(IEnumerable<VolCommitmentDealItemTierZoneRate> exceptionZoneRates)
         {

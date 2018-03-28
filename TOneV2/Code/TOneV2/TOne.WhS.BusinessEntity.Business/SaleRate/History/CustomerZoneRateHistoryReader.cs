@@ -21,9 +21,15 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
         #region Constructors
+
+        public CustomerZoneRateHistoryReader(IEnumerable<int> customerIds, IEnumerable<int> sellingProductIds, IEnumerable<long> zoneIds, DateTime BED, DateTime? EED)
+        {
+            ReadRates(customerIds, sellingProductIds, zoneIds, true, false, BED, EED);
+        }
+
         public CustomerZoneRateHistoryReader(IEnumerable<int> customerIds, IEnumerable<int> sellingProductIds, IEnumerable<long> zoneIds, bool getNormalRates, bool getOtherRates)
         {
-            ReadRates(customerIds, sellingProductIds, zoneIds, getNormalRates, getOtherRates);
+            ReadRates(customerIds, sellingProductIds, zoneIds, getNormalRates, getOtherRates, null, null);
         }
         public CustomerZoneRateHistoryReader(IEnumerable<SaleRate> productRates, IEnumerable<SaleRate> customerRates)
         {
@@ -43,9 +49,9 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         #region Private Methods
-        private void ReadRates(IEnumerable<int> customerIds, IEnumerable<int> sellingProductIds, IEnumerable<long> zoneIds, bool getNormalRates, bool getOtherRates)
+        private void ReadRates(IEnumerable<int> customerIds, IEnumerable<int> sellingProductIds, IEnumerable<long> zoneIds, bool getNormalRates, bool getOtherRates, DateTime? BED, DateTime? EED)
         {
-            IEnumerable<SaleRate> rates = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>().GetAllSaleRatesByOwners(sellingProductIds, customerIds, zoneIds, getNormalRates, getOtherRates);
+            IEnumerable<SaleRate> rates = BEDataManagerFactory.GetDataManager<ISaleRateDataManager>().GetAllSaleRatesByOwners(sellingProductIds, customerIds, zoneIds, getNormalRates, getOtherRates, BED, EED);
             StructureRates(rates);
         }
         private void StructureRates(IEnumerable<SaleRate> rates)
