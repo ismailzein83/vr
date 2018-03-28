@@ -282,7 +282,7 @@ namespace TOne.WhS.Deal.Business
             var saleEvaluatedRate = swapDealInbound.EvaluatedRate as DealSaleRateEvaluator;
 
             if (saleEvaluatedRate == null)
-                throw new NullReferenceException("Rate");
+                throw new NullReferenceException("DealSaleRateEvaluator");
 
             var context = new DealSaleRateEvaluatorContext
             {
@@ -294,7 +294,7 @@ namespace TOne.WhS.Deal.Business
             };
             saleEvaluatedRate.EvaluateRate(context);
 
-            Dictionary<long, List<DealRate>> saleRatesByZoneId = StructureDealRateByZoneId(context.SaleRates);
+            Dictionary<long, List<DealRate>> saleRatesByZoneId = Business.Helper.StructureDealRateByZoneId(context.SaleRates);
             DealSaleZoneGroupTier dealSaleZoneGroupTier = new DealSaleZoneGroupTier
             {
                 RatesByZoneId = saleRatesByZoneId,
@@ -365,7 +365,7 @@ namespace TOne.WhS.Deal.Business
                 throw new NullReferenceException("DealSupplierRateEvaluator");
 
             supplierEvaluatedRate.EvaluateRate(context);
-            Dictionary<long, List<DealRate>> supplierDealRatesByZoneId = StructureDealRateByZoneId(context.SupplierRates);
+            Dictionary<long, List<DealRate>> supplierDealRatesByZoneId = Business.Helper.StructureDealRateByZoneId(context.SupplierRates);
 
             DealSupplierZoneGroupTier dealSupplierZoneGroupTier = new DealSupplierZoneGroupTier()
             {
@@ -385,17 +385,6 @@ namespace TOne.WhS.Deal.Business
                 VolumeInSeconds = swapDealOutbound.Volume * 60
             };
             return new List<DealSupplierZoneGroupTierWithoutRate> { dealSupplierZoneGroupTierWithoutRate }.OrderBy(itm => itm.TierNumber);
-        }
-
-        private Dictionary<long, List<DealRate>> StructureDealRateByZoneId(IEnumerable<DealRate> dealRates)
-        {
-            var dealRateByZoneId = new Dictionary<long, List<DealRate>>();
-            foreach (var dealRate in dealRates)
-            {
-                List<DealRate> rates = dealRateByZoneId.GetOrCreateItem(dealRate.ZoneId);
-                rates.Add(dealRate);
-            }
-            return dealRateByZoneId;
         }
     }
 }
