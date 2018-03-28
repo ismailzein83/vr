@@ -17,11 +17,11 @@ namespace TOne.WhS.BusinessEntity.Business
             VRActionLogger.Current.LogGetFilteredAction(SupplierRateLoggableEntity.Instance, input);
             return BigDataManager.Instance.RetrieveData(input, new SupplierRateRequestHandler());
         }
-        public Dictionary<long, SupplierRate> GetSupplierRateByZoneId(List<long> supplierZoneIds, DateTime minimumDate)
+        public Dictionary<long, SupplierRate> GetSupplierRateByZoneId(List<long> supplierZoneIds, DateTime BeginDate, DateTime? EndDate)
         {
             var supplierRateByZoneId = new Dictionary<long, SupplierRate>();
             ISupplierRateDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierRateDataManager>();
-            var supplierRates = dataManager.GetSupplierRatesByZoneIds(supplierZoneIds, minimumDate);
+            var supplierRates = dataManager.GetSupplierRates(supplierZoneIds, BeginDate, EndDate);
             foreach (var supplierRate in supplierRates)
             {
                 if (!supplierRateByZoneId.ContainsKey(supplierRate.ZoneId))

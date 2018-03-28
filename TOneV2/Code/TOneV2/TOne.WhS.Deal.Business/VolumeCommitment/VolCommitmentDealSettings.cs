@@ -234,7 +234,7 @@ namespace TOne.WhS.Deal.Business
             IOrderedEnumerable<VolCommitmentDealItemTier> orderedVolCommitmentDealItemTiers = volCommitmentDealItemTiers.OrderBy(itm => itm.UpToVolume ?? Int32.MaxValue);
 
             var supplierRateManager = new SupplierRateManager();
-            var supplierRatesByZoneId = supplierRateManager.GetSupplierRateByZoneId(zoneIds.ToList(), BeginDate);
+            var supplierRatesByZoneId = supplierRateManager.GetSupplierRateByZoneId(zoneIds.ToList(), BeginDate,EndDate);
 
             var context = new DealSupplierRateEvaluatorContext
             {

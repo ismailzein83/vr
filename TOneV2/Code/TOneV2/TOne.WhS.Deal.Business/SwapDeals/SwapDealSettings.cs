@@ -248,7 +248,7 @@ namespace TOne.WhS.Deal.Business
 
             var customerZoneRateHistoryLocator =
                new CustomerZoneRateHistoryLocator(new CustomerZoneRateHistoryReader(new List<int> { CarrierAccountId }
-                   , new List<int> { sellingProductId }, zoneIds, true, false));
+                   , new List<int> { sellingProductId }, zoneIds, BeginDate, EndDate));
 
             getCustomerZoneRatesFunc = (zoneName, countryId) => customerZoneRateHistoryLocator.GetCustomerZoneRateHistory(CarrierAccountId, sellingProductId, zoneName, null, countryId, null, null);
         }
@@ -349,7 +349,7 @@ namespace TOne.WhS.Deal.Business
             SupplierRateManager supplierRateManager = new SupplierRateManager();
 
             List<long> supplierZoneIds = swapDealOutbound.SupplierZones.Select(z => z.ZoneId).ToList();
-            var supplierRates = supplierRateManager.GetSupplierRateByZoneId(supplierZoneIds, BeginDate);
+            var supplierRates = supplierRateManager.GetSupplierRateByZoneId(supplierZoneIds, BeginDate, EndDate);
 
             var context = new DealSupplierRateEvaluatorContext
             {
