@@ -120,6 +120,7 @@
     <Compile Include="Migrators\Rules\MarketPriceRuleMigrator.cs" />
     <Compile Include="Migrators\Rules\CommissionRuleMigrator.cs" />
     <Compile Include="Migrators\Rules\RouteOptionBlockFromOverrideRuleMigrator.cs" />
+    <Compile Include="Migrators\Rules\RulesMigrationHelper.cs" />
     <Compile Include="Migrators\Rules\SpecialRequestRuleMigrator.cs" />
     <Compile Include="Migrators\Rules\SwitchMappingRuleMigrator.cs" />
     <Compile Include="Migrators\Rules\SwitchRuleMigrator.cs" />

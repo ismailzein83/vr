@@ -30,6 +30,7 @@ namespace TOne.WhS.DBSync.Business
             var dbTableCarrierAccount = Context.MigrationContext.DBTables[DBTableName.CarrierAccount];
             _routeRuleTypeId = new RouteRuleManager().GetRuleTypeId();
             _allCarrierAccounts = (Dictionary<string, CarrierAccount>)dbTableCarrierAccount.Records;
+
         }
 
         public override IEnumerable<SourceRule> GetSourceRules()
@@ -39,7 +40,6 @@ namespace TOne.WhS.DBSync.Business
             IEnumerable<SourceSpecialRequest> sourceRules = dataManager.GetSpecialRequestRules();
 
             Dictionary<string, long> codeSaleZoneMappings = this.GetCodeSaleZoneMappings();
-            Dictionary<string, CodeGroup> codeGroups = new CodeGroupDBSyncDataManager(true).GetSingleCodeGroupContriesCodeGroups();
             Dictionary<string, FixedRuleSaleCodeZones> fixedRuleSaleCodeZonesByCustomerId = this.GetFixedRuleSaleCodeZonesByCustomerId();
 
             Dictionary<string, List<SourceSpecialRequest>> groupedSourceRules = GroupSpecialRequests(sourceRules);
@@ -54,7 +54,7 @@ namespace TOne.WhS.DBSync.Business
                         continue;
 
                     IEnumerable<SpecialRequestSupplierOption> supplierOptions = outputRule.SpecialRequests.Select(s => s.SupplierOption);
-                    SourceRule rule = GetSourceRule(modifiedSourceSpecialRequestRule, supplierOptions, outputRule.BED, outputRule.EED, codeGroups);
+                    SourceRule rule = GetSourceRule(modifiedSourceSpecialRequestRule, supplierOptions, outputRule.BED, outputRule.EED);
                     rules.Add(rule);
                 }
             }
@@ -214,9 +214,9 @@ namespace TOne.WhS.DBSync.Business
 
         private Dictionary<string, long> GetCodeSaleZoneMappings()
         {
-            List<SaleCodeZone> saleCodeZones = new SaleCodeDBSyncDataManager(true).GetDistinctSaleCodeZones();
-            List<SupplierCodeZone> supplierCodeZones = new SupplierCodeDBSyncDataManager(true).GetDictinctSupplierCodeZones();
-            Dictionary<long, SaleZone> saleZones = new SaleZoneDBSyncDataManager(true).GetSaleZonesById();
+            List<SaleCodeZone> saleCodeZones = new SaleCodeDBSyncDataManager(Context.MigrationContext.DBTables[DBTableName.SaleCode].MigrationRequested ? Context.MigrationContext.UseTempTables : false).GetDistinctSaleCodeZones();
+            List<SupplierCodeZone> supplierCodeZones = new SupplierCodeDBSyncDataManager(Context.MigrationContext.DBTables[DBTableName.SupplierCode].MigrationRequested ? Context.MigrationContext.UseTempTables : false).GetDictinctSupplierCodeZones();
+            Dictionary<long, SaleZone> saleZones = new SaleZoneDBSyncDataManager(Context.MigrationContext.DBTables[DBTableName.SaleZone].MigrationRequested ? Context.MigrationContext.UseTempTables : false).GetSaleZonesById();
             CodeIterator<SaleCodeZone> codeIterator = new CodeIterator<SaleCodeZone>(saleCodeZones);
 
             Dictionary<string, long> results = new Dictionary<string, long>();
@@ -293,20 +293,6 @@ namespace TOne.WhS.DBSync.Business
             return results;
         }
 
-        private bool IsSpecialRequestRuleByCountry(SourceSpecialRequest sourceSpecialRequest, Dictionary<string, CodeGroup> codeGroups, out int? countryId)
-        {
-            countryId = null;
-
-            if (!sourceSpecialRequest.IncludeSubCode)
-                return false;
-
-            CodeGroup codeGroup;
-            if (!codeGroups.TryGetValue(sourceSpecialRequest.Code, out codeGroup))
-                return false;
-
-            countryId = codeGroup.CountryId;
-            return true;
-        }
 
         private Dictionary<string, List<SourceSpecialRequest>> GroupSpecialRequests(IEnumerable<SourceSpecialRequest> sourceRules)
         {
@@ -379,9 +365,9 @@ namespace TOne.WhS.DBSync.Business
             return outputRules;
         }
 
-        private SourceRule GetSourceRule(SourceSpecialRequest defaultRule, IEnumerable<SpecialRequestSupplierOption> supplierOptions, DateTime bed, DateTime? eed, Dictionary<string, CodeGroup> codeGroups)
+        private SourceRule GetSourceRule(SourceSpecialRequest defaultRule, IEnumerable<SpecialRequestSupplierOption> supplierOptions, DateTime bed, DateTime? eed)
         {
-            RouteRule routeRule = GetRouteRuleDetails(defaultRule, supplierOptions, bed, eed, codeGroups);
+            RouteRule routeRule = GetRouteRuleDetails(defaultRule, supplierOptions, bed, eed);
             SourceRule rule = new SourceRule
             {
                 Rule = new Rule
@@ -395,7 +381,7 @@ namespace TOne.WhS.DBSync.Business
             return rule;
         }
 
-        private RouteRule GetRouteRuleDetails(SourceSpecialRequest defaultRule, IEnumerable<SpecialRequestSupplierOption> supplierOptions, DateTime bed, DateTime? eed, Dictionary<string, CodeGroup> codeGroups)
+        private RouteRule GetRouteRuleDetails(SourceSpecialRequest defaultRule, IEnumerable<SpecialRequestSupplierOption> supplierOptions, DateTime bed, DateTime? eed)
         {
             CarrierAccount customer;
             if (!_allCarrierAccounts.TryGetValue(defaultRule.CustomerId, out customer))
@@ -405,7 +391,7 @@ namespace TOne.WhS.DBSync.Business
             CountryCriteriaGroupSettings countryCriteriaGroupSettings = null;
 
             int? countryId;
-            if (IsSpecialRequestRuleByCountry(defaultRule, codeGroups, out countryId))
+            if (RulesMigrationHelper.IsRuleByCountry(defaultRule, out countryId))
                 countryCriteriaGroupSettings = new SelectiveCountryCriteriaGroup { CountryIds = new List<int>() { countryId.Value } };
             else
                 codeCriteriaGroupSettings = new SelectiveCodeCriteriaGroup { Codes = GetCodeCriteria(defaultRule) };

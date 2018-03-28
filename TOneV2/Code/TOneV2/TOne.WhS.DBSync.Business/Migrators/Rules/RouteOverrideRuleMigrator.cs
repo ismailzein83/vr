@@ -21,6 +21,7 @@ namespace TOne.WhS.DBSync.Business
     {
         readonly Dictionary<string, CarrierAccount> _allCarrierAccounts;
         readonly Dictionary<string, SaleZone> _allSaleZones;
+
         readonly int _routeRuleTypeId;
 
         public override string EntityName { get { return "Route Override"; } }
@@ -36,7 +37,10 @@ namespace TOne.WhS.DBSync.Business
 
             RouteRuleManager manager = new RouteRuleManager();
             _routeRuleTypeId = manager.GetRuleTypeId();
+
         }
+
+
 
         public override IEnumerable<SourceRule> GetSourceRules()
         {
@@ -274,7 +278,6 @@ namespace TOne.WhS.DBSync.Business
         IEnumerable<SourceRule> GetRulesWithCode(IEnumerable<SourceRouteOverrideRule> overrideRules)
         {
             var dicRules = GetRulesDictionary(overrideRules);
-            Dictionary<string, CodeGroup> codeGroups = new CodeGroupDBSyncDataManager(true).GetSingleCodeGroupContriesCodeGroups();
 
             List<SourceRule> routeRules = new List<SourceRule>();
 
@@ -284,7 +287,7 @@ namespace TOne.WhS.DBSync.Business
                 if (sourceRule == null)
                     continue;
 
-                var rule = GetSourceRuleFromCodes(rules, codeGroups);
+                var rule = GetSourceRuleFromCodes(rules);
                 if (rule == null)
                     this.TotalRowsFailed++;
                 else
@@ -294,10 +297,10 @@ namespace TOne.WhS.DBSync.Business
             return routeRules;
         }
 
-        SourceRule GetSourceRuleFromCodes(IEnumerable<SourceRouteOverrideRule> rules, Dictionary<string, CodeGroup> codeGroups)
+        SourceRule GetSourceRuleFromCodes(IEnumerable<SourceRouteOverrideRule> rules)
         {
             SourceRouteOverrideRule sourceRule = rules.First();
-            var details = GetRuleDetailsFromCode(rules, sourceRule, codeGroups);
+            var details = GetRuleDetailsFromCode(rules, sourceRule);
             if (details == null)
             {
                 return null;
@@ -317,9 +320,9 @@ namespace TOne.WhS.DBSync.Business
             }
         }
 
-        RouteRule GetRuleDetailsFromCode(IEnumerable<SourceRouteOverrideRule> rules, SourceRouteOverrideRule sourceRule, Dictionary<string, CodeGroup> codeGroups)
+        RouteRule GetRuleDetailsFromCode(IEnumerable<SourceRouteOverrideRule> rules, SourceRouteOverrideRule sourceRule)
         {
-            var criteria = GetRuleCodeCriteria(GetRuleCodeCriterias(rules), sourceRule, codeGroups);
+            var criteria = GetRuleCodeCriteria(GetRuleCodeCriterias(rules), sourceRule);
             if (criteria == null)
             {
                 return null;
@@ -355,7 +358,7 @@ namespace TOne.WhS.DBSync.Business
             return criterias;
         }
 
-        RouteRuleCriteria GetRuleCodeCriteria(List<CodeCriteria> codeCriterias, SourceRouteOverrideRule sourceRule, Dictionary<string, CodeGroup> codeGroups)
+        RouteRuleCriteria GetRuleCodeCriteria(List<CodeCriteria> codeCriterias, SourceRouteOverrideRule sourceRule)
         {
             CarrierAccount customer;
             if (!_allCarrierAccounts.TryGetValue(sourceRule.CustomerId, out customer))
@@ -369,7 +372,7 @@ namespace TOne.WhS.DBSync.Business
                 CountryCriteriaGroupSettings countryCriteriaGroupSettings = null;
 
                 int? countryId;
-                if (IsRouteOverrideRuleByCountry(sourceRule, codeGroups, out countryId))
+                if (RulesMigrationHelper.IsRuleByCountry(sourceRule, out countryId))
                     countryCriteriaGroupSettings = new SelectiveCountryCriteriaGroup { CountryIds = new List<int>() { countryId.Value } };
                 else
                     codeCriteriaGroupSettings = new SelectiveCodeCriteriaGroup { Codes = codeCriterias };
@@ -386,21 +389,6 @@ namespace TOne.WhS.DBSync.Business
 
                 return routeRuleCriteria;
             }
-        }
-
-        bool IsRouteOverrideRuleByCountry(SourceRouteOverrideRule sourceRouteOverrideRule, Dictionary<string, CodeGroup> codeGroups, out int? countryId)
-        {
-            countryId = default(int);
-
-            if (!sourceRouteOverrideRule.IncludeSubCode)
-                return false;
-
-            CodeGroup codeGroup;
-            if (!codeGroups.TryGetValue(sourceRouteOverrideRule.Code, out codeGroup))
-                return false;
-
-            countryId = codeGroup.CountryId;
-            return true;
         }
 
         #endregion

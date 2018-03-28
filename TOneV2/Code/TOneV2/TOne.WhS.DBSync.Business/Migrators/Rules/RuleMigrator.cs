@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.DBSync.Business.Migrators;
 using TOne.WhS.DBSync.Data.SQL;
 using TOne.WhS.DBSync.Entities;
@@ -22,6 +23,8 @@ namespace TOne.WhS.DBSync.Business
         readonly RulesDBSyncDataManager _dbSyncDataManager;
         RuleBaseMigrator _rulesBaseMigrator;
         CurrencySettingData _currencySettingData;
+        readonly Dictionary<string, CodeGroup> _allCodeGroups;
+
         internal static DateTime s_defaultRuleBED = DateTime.Parse("2000-01-01");
 
         public RuleMigrator(MigrationContext context)
@@ -33,6 +36,11 @@ namespace TOne.WhS.DBSync.Business
             SettingManager settingManager = new SettingManager();
             var _systemCurrencySetting = settingManager.GetSettingByType("VR_Common_BaseCurrency");
             _currencySettingData = (CurrencySettingData)_systemCurrencySetting.Data;
+
+            var dtTableCodeGroups = Context.DBTables[DBTableName.CodeGroup];
+            _allCodeGroups = (Dictionary<string, CodeGroup>)dtTableCodeGroups.Records;
+            RulesMigrationHelper.ClearSingleCodeGroupContriesCodeGroups();
+            RulesMigrationHelper.BuildSingleCodeGroupContriesCodeGroups(_allCodeGroups);
         }
         public override void FillTableInfo(bool useTempTables)
         {
