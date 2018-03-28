@@ -1,9 +1,6 @@
 ﻿<vr-row>
     <vr-invoicetype-selector normal-col-num="4" isrequired="true" on-ready="invoiceTypeSelectorReady" selectedvalues="selectedInvoiceType" hideremoveicon onselectionchanged="onInvoiceTypeSelectionChanged"></vr-invoicetype-selector>
     <vr-columns width="1/3row">
-        <vr-textbox value="endDateOffsetFromToday" label="End Date Offset From Today" minvalue="0" isrequired="true" type="number"></vr-textbox>
-    </vr-columns>
-    <vr-columns width="1/3row">
         <vr-textbox value="issueDateOffsetFromToday" label="Issue Date Offset From Today" minvalue="0" isrequired="true" type="number"></vr-textbox>
     </vr-columns>
     <vr-invoice-periodgapaction-selector on-ready="onInvoicePeriodGapActionReady" normal-col-num="4" isrequired="true"></vr-invoice-periodgapaction-selector>

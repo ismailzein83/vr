@@ -12,8 +12,8 @@ namespace Vanrise.Invoice.BP.Activities
         [RequiredArgument]
         public InArgument<Guid> InvoiceTypeId { get; set; }
 
-        [RequiredArgument]
-        public InArgument<int> EndDateOffsetFromToday { get; set; }
+     //   [RequiredArgument]
+    //    public InArgument<int> EndDateOffsetFromToday { get; set; }
 
         [RequiredArgument]
         public InArgument<int> IssueDateOffsetFromToday { get; set; }
@@ -47,8 +47,8 @@ namespace Vanrise.Invoice.BP.Activities
             int issueDateOffsetFromToday = this.IssueDateOffsetFromToday.Get(context.ActivityContext);
             DateTime issueDate = todayDate.AddDays(-issueDateOffsetFromToday);
 
-            int endDateOffsetFromToday = this.EndDateOffsetFromToday.Get(context.ActivityContext);
-            DateTime maximumToDate = DateTime.Today.AddDays(-endDateOffsetFromToday);
+          //  int endDateOffsetFromToday = this.EndDateOffsetFromToday.Get(context.ActivityContext);
+          //  DateTime maximumToDate = DateTime.Today.AddDays(-endDateOffsetFromToday);
 
             Guid invoiceGenerationIdentifier = Guid.NewGuid();
 
@@ -62,7 +62,7 @@ namespace Vanrise.Invoice.BP.Activities
                 Period = InvoicePartnerPeriod.FollowBillingCycle,
                 FromDate = null,
                 ToDate = null,
-                MaximumToDate = maximumToDate,
+                MaximumToDate = issueDate,
                 IssueDate = issueDate,
                 IsAutomatic = true,
                 InvoiceGenerationIdentifier = invoiceGenerationIdentifier

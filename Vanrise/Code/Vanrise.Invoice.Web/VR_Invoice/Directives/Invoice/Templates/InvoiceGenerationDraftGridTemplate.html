@@ -13,17 +13,17 @@
             <vr-datagridcolumn headertext="'Name'" type="'Text'" field="'PartnerName'" widthfactor="'2'"></vr-datagridcolumn>
             <vr-datagridcolumn headertext="'From'" type="'Date'" disablesorting="true" fixedwidth="100">
                 <vr-columns width="fullrow" haschildcolumns withemptyline="{{viewScope.generationCustomSectionDirective!=undefined}}" >
-                    <vr-datetimepicker value="dataItem.From" type="date" isrequired="true" onvaluechanged="dataItem.onItemChanged" customvalidate="dataItem.validateFromDate()"></vr-datetimepicker>
+                    <vr-datetimepicker value="dataItem.From" type="date" isrequired="true" onvaluechanged="dataItem.onDateChanged" customvalidate="dataItem.validateFromDate()"></vr-datetimepicker>
                 </vr-columns>
             </vr-datagridcolumn>
             <vr-datagridcolumn headertext="'To'" type="'Date'" disablesorting="true" fixedwidth="100">
                 <vr-columns width="fullrow" haschildcolumns withemptyline="{{viewScope.generationCustomSectionDirective!=undefined}}">
-                    <vr-datetimepicker value="dataItem.To" type="date" isrequired="true" onvaluechanged="dataItem.onItemChanged" customvalidate="dataItem.validateToDate()"></vr-datetimepicker>
+                    <vr-datetimepicker value="dataItem.To" type="date" isrequired="true" onvaluechanged="dataItem.onDateChanged" customvalidate="dataItem.validateToDate()"></vr-datetimepicker>
                 </vr-columns>
             </vr-datagridcolumn>
 
             <vr-datagridcolumn headertext="'Settings'" disablesorting="true" widthfactor="'6'" ng-if="generationCustomSectionDirective!=undefined" columnindex="5">
-                <span ng-if="viewScope.generationCustomSectionDirective!=undefined">
+                <span ng-if="viewScope.generationCustomSectionDirective!=undefined" vr-loader="viewScope.isCustomPayloadLoading">
                     <vr-directivewrapper directive="viewScope.generationCustomSectionDirective" on-ready="dataItem.onGenerationCustomSectionDirectiveReady" normal-col-num="4"></vr-directivewrapper>
                 </span>
             </vr-datagridcolumn>

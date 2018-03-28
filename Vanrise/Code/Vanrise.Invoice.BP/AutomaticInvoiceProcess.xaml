@@ -67,17 +67,12 @@
       <Variable x:TypeArguments="viba:InvoiceGenerationProcessOutput" Name="InvoiceGenerationProcessOutput" />
       <Variable x:TypeArguments="vie:InvoiceGenerationDraftOutput" Name="InvoiceGenerationDraftOutput" />
     </Sequence.Variables>
-    <viba1:GenerateAutomaticInvoiceGenerationDrafts sap2010:WorkflowViewState.IdRef="GenerateAutomaticInvoiceGenerationDrafts_1">
+    <viba1:GenerateAutomaticInvoiceGenerationDrafts  sap2010:WorkflowViewState.IdRef="GenerateAutomaticInvoiceGenerationDrafts_1">
       <viba1:GenerateAutomaticInvoiceGenerationDrafts.EffectiveDate>
         <InArgument x:TypeArguments="s:Nullable(s:DateTime)">
           <mca:CSharpValue x:TypeArguments="s:Nullable(s:DateTime)">Input.EffectiveDate</mca:CSharpValue>
         </InArgument>
       </viba1:GenerateAutomaticInvoiceGenerationDrafts.EffectiveDate>
-      <viba1:GenerateAutomaticInvoiceGenerationDrafts.EndDateOffsetFromToday>
-        <InArgument x:TypeArguments="x:Int32">
-          <mca:CSharpValue x:TypeArguments="x:Int32">Input.EndDateOffsetFromToday</mca:CSharpValue>
-        </InArgument>
-      </viba1:GenerateAutomaticInvoiceGenerationDrafts.EndDateOffsetFromToday>
       <viba1:GenerateAutomaticInvoiceGenerationDrafts.InvoiceGenerationDraftOutput>
         <OutArgument x:TypeArguments="vie:InvoiceGenerationDraftOutput">
           <mca:CSharpReference x:TypeArguments="vie:InvoiceGenerationDraftOutput">InvoiceGenerationDraftOutput</mca:CSharpReference>
@@ -203,7 +198,7 @@
         </vbw:WriteTrackingMessage>
       </If.Else>
     </If>
-    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxBdXRvbWF0aWNJbnZvaWNlUHJvY2Vzcy54YW1sIT4DzwEOAgEBRgV5NgIBWXoFzQEKAgECTgtOZAMBmQFdC11aAwGSAVMLU4UBAwGLAWwLbGYDAYQBWAtYagIBfWcLZ1wCAXZiC2JvAgFvSQtJagIBaHYLdl8CAWFxC3FjAgFafQt9lwECAQOBAQm9ARQCARnAAQnLASQCAQqCAQuNASYCAUqOAQukARwCATilAQuwARQCASmxAQu8ASYCARrIAQ/IAYUBAgESwwEPwwFxAgELigERigGLAQIBUoUBEYUBxgECAUuOAXmOAX8CAUmRARGcARQCAUKOAZMBjgHGAQIBQaEBEaEBhAECATqOAdwBjgHiAQIBOa0BEa0BsAECATGoARGoAZABAgEquQERuQGLAQIBIrQBEbQBdQIBGw==</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0NDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuSW52b2ljZS5CUFxBdXRvbWF0aWNJbnZvaWNlUHJvY2Vzcy54YW1sID4DygEOAgEBRgV0NgIBWXUFyAEKAgECWAtYWgMBkgFOC06FAQMBiwFnC2dmAwGEAVMLU2oCAX1iC2JcAgF2XQtdbwIBb0kLSWoCAWhxC3FfAgFhbAtsYwIBWngLeJcBAgEDfAm4ARQCARm7AQnGASQCAQp9C4gBJgIBSokBC58BHAIBOKABC6sBFAIBKawBC7cBJgIBGsMBD8MBhQECARK+AQ++AXECAQuFARGFAYsBAgFSgAERgAHGAQIBS4kBeYkBfwIBSYwBEZcBFAIBQokBkwGJAcYBAgFBnAERnAGEAQIBOokB3AGJAeIBAgE5qAERqAGwAQIBMaMBEaMBkAECASq0ARG0AYsBAgEirwERrwF1AgEb</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>

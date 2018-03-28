@@ -88,5 +88,10 @@ namespace Vanrise.Invoice.Data.SQL
             };
             return invoiceGenerationDraftSummary;
         }
+
+        public InvoiceGenerationDraft GetInvoiceGenerationDraft(long invoiceGenerationDraftId)
+        {
+            return GetItemSP("VR_Invoice.sp_InvoiceGenerationDraft_Get", InvoiceGenerationDraftMapper, invoiceGenerationDraftId);
+        }
     }
 }

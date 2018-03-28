@@ -12,7 +12,7 @@ namespace Vanrise.Invoice.BP.Arguments
     public class AutomaticInvoiceProcessInput : Vanrise.BusinessProcess.Entities.BaseProcessInputArgument
     {
         public Guid InvoiceTypeId { get; set; }
-        public int EndDateOffsetFromToday { get; set; }
+      // public int EndDateOffsetFromToday { get; set; }
         public int IssueDateOffsetFromToday { get; set; }
         public DateTime? EffectiveDate { get; set; }
         public bool? IsEffectiveInFuture { get; set; }

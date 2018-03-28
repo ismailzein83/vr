@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrInvoiceInvoicegenerationdraftGrid", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceAPIService", "VR_Invoice_InvoiceFieldEnum", "VRUIUtilsService", "VRValidationService", "VR_Invoice_InvoiceActionService", "VRDateTimeService",
-    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceAPIService, VR_Invoice_InvoiceFieldEnum, VRUIUtilsService, VRValidationService, VR_Invoice_InvoiceActionService, VRDateTimeService) {
+app.directive("vrInvoiceInvoicegenerationdraftGrid", ["UtilsService", "VRNotificationService", "VR_Invoice_InvoiceAPIService", "VR_Invoice_InvoiceFieldEnum", "VRUIUtilsService", "VRValidationService", "VR_Invoice_InvoiceActionService", "VRDateTimeService","UpdateOperationResultEnum",
+    function (UtilsService, VRNotificationService, VR_Invoice_InvoiceAPIService, VR_Invoice_InvoiceFieldEnum, VRUIUtilsService, VRValidationService, VR_Invoice_InvoiceActionService, VRDateTimeService, UpdateOperationResultEnum) {
 
         var directiveDefinitionObject = {
 
@@ -141,6 +141,50 @@ app.directive("vrInvoiceInvoicegenerationdraftGrid", ["UtilsService", "VRNotific
                                                 return null;
                                             };
 
+                                            currentItem.onDateChanged = function () {
+                                                currentItem.onItemChanged();
+                                                if ($scope.generationCustomSectionDirective != undefined && currentItem.validateToDate() == null)
+                                                {
+                                                    $scope.isLodingGrid = true;
+                                                    VR_Invoice_InvoiceAPIService.ReGenerateInvoiceGenerationDraft({
+                                                        InvoiceGenerationDraftId: currentItem.InvoiceGenerationDraftId,
+                                                        FromDate: currentItem.From,
+                                                        ToDate: currentItem.To,
+                                                        IssueDate: issueDate,
+                                                        InvoiceTypeId: invoiceTypeId,
+                                                        IsSelected: currentItem.IsSelected,
+                                                    }).then(function (response) {
+                                                        if (response.Result == UpdateOperationResultEnum.Succeeded.value) {
+                                                            var updatedObject = response.UpdatedObject;
+                                                            var payload = { partnerId: updatedObject.PartnerId, customPayload: updatedObject.CustomPayload, fromDate: updatedObject.From, toDate: updatedObject.To, context: { onvaluechanged: currentItem.onItemChanged }, invoiceTypeId: invoiceTypeId };
+                                                            var setLoader = function (value) {
+                                                                $scope.isCustomPayloadLoading = value;
+                                                            };
+                                                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, currentItem.generationCustomSectionDirectiveAPI, payload, setLoader);
+
+                                                           
+                                                            if (changedItems.length > 0) {
+                                                                var index = -1;
+                                                                for (var k = 0; k < changedItems.length; k++) {
+                                                                    var currentChangedItem = changedItems[k];
+                                                                    if (currentChangedItem.key == updatedObject.InvoiceGenerationDraftId) {
+                                                                        index = k;
+                                                                        break;
+                                                                    }
+                                                                }
+                                                                if (index != -1) {
+                                                                    changedItems.splice(index, 1);
+                                                                }
+                                                            }
+                                                            
+                                                        }
+                                                    }).finally(function () {
+                                                        $scope.isLodingGrid = false;
+                                                    });
+
+                                                }
+                                            };
+
                                             currentItem.onItemChanged = function () {
                                                 var alreadyAdded = false;
                                                 if (changedItems.length > 0) {
@@ -249,6 +293,7 @@ app.directive("vrInvoiceInvoicegenerationdraftGrid", ["UtilsService", "VRNotific
                                             }
 
                                             UtilsService.waitMultiplePromises([currentItem.generationCustomSectionDirectiveLoadDeferred.promise]).then(function () {
+                                                currentItem.generationCustomSectionDirectiveLoadDeferred = undefined;
                                                 extendInvoicePartnerPromiseDeferred.resolve();
                                             });
                                             return extendInvoicePartnerPromiseDeferred.promise;

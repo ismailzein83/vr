@@ -143,6 +143,93 @@ namespace Vanrise.Invoice.Business
             else
                 return new InvoiceGenerationDraftOutput() { Result = InvoiceGenerationDraftResult.Succeeded, Count = count, MinimumFrom = minimumFrom, MaximumTo = maximumTo, InvalidPartnerMessages = invalidPartnerMessages.Count > 0 ? invalidPartnerMessages : null };
         }
+
+        public UpdateOperationOutput<InvoiceGenerationDraft> ReGenerateInvoiceGenerationDraft(InvoiceGenerationPartnerDraftInput input)
+        {
+            UpdateOperationOutput<InvoiceGenerationDraft> updateOperationOutput = new UpdateOperationOutput<InvoiceGenerationDraft>();
+            updateOperationOutput.Result = UpdateOperationResult.Failed;
+            updateOperationOutput.UpdatedObject = null;
+
+            var invoiceGenerationDraft = GetInvoiceGenerationDraft(input.InvoiceGenerationDraftId);
+            invoiceGenerationDraft.ThrowIfNull("invoiceGenerationDraft", input.InvoiceGenerationDraftId);
+
+            var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoiceGenerationDraft.InvoiceTypeId);
+            GenerationCustomSection generationCustomSection = invoiceType.Settings.ExtendedSettings.GenerationCustomSection;
+
+            var invoiceTypePartnerManager = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
+
+            PartnerNameManagerContext partnerNameManagerContext = new PartnerNameManagerContext { PartnerId = invoiceGenerationDraft.PartnerId };
+            var partnerName = invoiceTypePartnerManager.GetFullPartnerName(partnerNameManagerContext);
+
+            if (!CheckIFShouldGenerateInvoice(input.ToDate, input.IssueDate))
+            {
+                updateOperationOutput.Message = "To Date should not be greater than issue date";
+                return updateOperationOutput;
+            }
+            List<InvoiceGenerationInfo> generationCustomPayloads = new List<InvoiceGenerationInfo>
+            {
+                new InvoiceGenerationInfo
+                {
+                    FromDate =  input.FromDate,
+                    PartnerId = invoiceGenerationDraft.PartnerId,
+                    ToDate = input.ToDate,
+                    PartnerName = partnerName
+                }
+            };
+
+            if (generationCustomSection != null)
+            {
+                var generationCustomPayloadContext = new Entities.GetGenerationCustomPayloadContext()
+                {
+                    InvoiceGenerationInfo = generationCustomPayloads,
+                    MinimumFrom = input.FromDate,
+                    MaximumTo = input.ToDate,
+                    InvoiceTypeId = invoiceGenerationDraft.InvoiceTypeId
+                };
+                generationCustomSection.EvaluateGenerationCustomPayload(generationCustomPayloadContext);
+                generationCustomPayloads = generationCustomPayloadContext.InvoiceGenerationInfo;
+
+                var invoiceGenerationInfo = generationCustomPayloads.First();
+                if (UpdateInvoiceGenerationDraftItem(invoiceGenerationInfo, input.InvoiceGenerationDraftId, input.IsSelected))
+                {
+                    updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                    updateOperationOutput.UpdatedObject = GetInvoiceGenerationDraft(input.InvoiceGenerationDraftId);
+                }
+
+            }
+            else
+            {
+                updateOperationOutput.Result = UpdateOperationResult.Succeeded;
+                updateOperationOutput.UpdatedObject = invoiceGenerationDraft;
+            }
+            return updateOperationOutput;
+        }
+
+        private InvoiceGenerationDraft GetInvoiceGenerationDraft(long invoiceGenerationDraftId)
+        {
+            IInvoiceGenerationDraftDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceGenerationDraftDataManager>();
+            return dataManager.GetInvoiceGenerationDraft(invoiceGenerationDraftId);
+        }
+        private bool UpdateInvoiceGenerationDraftItem(InvoiceGenerationInfo invoiceGenerationInfo, long invoiceGenerationDraftId, bool isSelected)
+        {
+            var invoiceGenerationDraftToEdit = new InvoiceGenerationDraftToEdit()
+            {
+                InvoiceGenerationDraftId = invoiceGenerationDraftId,
+                IsSelected = isSelected,
+                From = invoiceGenerationInfo.FromDate,
+                To = invoiceGenerationInfo.ToDate,
+                CustomPayload = invoiceGenerationInfo.CustomPayload,
+            };
+            return UpdateInvoiceGenerationDraft(invoiceGenerationDraftToEdit);
+        }
+
+
+        public bool UpdateInvoiceGenerationDraft(InvoiceGenerationDraftToEdit invoiceGenerationDraftToEdit)
+        {
+            IInvoiceGenerationDraftDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceGenerationDraftDataManager>();
+            return  dataManager.UpdateInvoiceGenerationDraft(invoiceGenerationDraftToEdit);
+        }
+
         private InsertOperationOutput<InvoiceGenerationDraft> AddInvoiceGenerationDraft(InvoiceGenerationInfo invoiceGenerationInfo, Guid invoiceGenerationIdentifier,Guid invoiceTypeId)
         {
             var invoiceGenerationDraft = new InvoiceGenerationDraft()

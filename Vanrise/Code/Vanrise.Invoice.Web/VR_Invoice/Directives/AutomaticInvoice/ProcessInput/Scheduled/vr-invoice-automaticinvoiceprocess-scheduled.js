@@ -101,11 +101,11 @@ app.directive("vrInvoiceAutomaticinvoiceprocessScheduled", ['UtilsService', 'VRU
 
                 if (payload != undefined && payload.data != undefined) {
                     isEditMode = true;
-                    $scope.endDateOffsetFromToday = payload.data.EndDateOffsetFromToday;
+                    //$scope.endDateOffsetFromToday = payload.data.EndDateOffsetFromToday;
                     $scope.issueDateOffsetFromToday = payload.data.IssueDateOffsetFromToday;
                 }
                 else {
-                    $scope.endDateOffsetFromToday = 0;
+                   // $scope.endDateOffsetFromToday = 0;
                     $scope.issueDateOffsetFromToday = 0;
                 }
 
@@ -198,7 +198,7 @@ app.directive("vrInvoiceAutomaticinvoiceprocessScheduled", ['UtilsService', 'VRU
                 return {
                     $type: "Vanrise.Invoice.BP.Arguments.AutomaticInvoiceProcessInput, Vanrise.Invoice.BP.Arguments",
                     InvoiceTypeId: invoiceTypeSelectorAPI.getSelectedIds(),
-                    EndDateOffsetFromToday: $scope.endDateOffsetFromToday,
+                   // EndDateOffsetFromToday: $scope.endDateOffsetFromToday,
                     IssueDateOffsetFromToday: $scope.issueDateOffsetFromToday,
                     EffectiveDate: accountStatusData.EffectiveDate,
                     IsEffectiveInFuture: accountStatusData.IsEffectiveInFuture,

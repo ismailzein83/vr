@@ -20,6 +20,15 @@ namespace Vanrise.Invoice.Entities
         public Guid InvoiceGenerationIdentifier { get; set; }
         public bool IsAutomatic { get; set; }
     }
+    public class InvoiceGenerationPartnerDraftInput
+    {
+        public long InvoiceGenerationDraftId { get; set; }
+        public bool IsSelected { get; set; }
+        public DateTime FromDate { get; set; }
+        public DateTime ToDate { get; set; }
+        public DateTime IssueDate { get; set; }
+        public Guid InvoiceTypeId { get; set; }
+    }
 
     public enum InvoiceGenerationDraftResult { Succeeded = 0, Failed = 1 }
     public class InvoiceGenerationDraftOutput

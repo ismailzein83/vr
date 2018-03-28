@@ -102,6 +102,9 @@
         function ExecuteMenualInvoiceActions(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'ExecuteMenualInvoiceActions'), input);
         }
+        function ReGenerateInvoiceGenerationDraft(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'ReGenerateInvoiceGenerationDraft'), input);
+        }
         return ({
             GetInvoice: GetInvoice,
             GenerateInvoice: GenerateInvoice,
@@ -121,7 +124,8 @@
             GetFilteredInvoiceGenerationDrafts: GetFilteredInvoiceGenerationDrafts,
             GenerateInvoices: GenerateInvoices,
             DeleteGeneratedInvoice: DeleteGeneratedInvoice,
-            ExecuteMenualInvoiceActions: ExecuteMenualInvoiceActions
+            ExecuteMenualInvoiceActions: ExecuteMenualInvoiceActions,
+            ReGenerateInvoiceGenerationDraft: ReGenerateInvoiceGenerationDraft
         });
     }
 

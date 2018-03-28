@@ -13,6 +13,7 @@ namespace Vanrise.Invoice.Data
         bool InsertInvoiceGenerationDraft(InvoiceGenerationDraft invoiceGenerationDraft, out long insertedId);
         bool UpdateInvoiceGenerationDraft(InvoiceGenerationDraftToEdit invoiceGenerationDraft);
         void DeleteInvoiceGenerationDraft(long invoiceGenerationDraftId);
+        InvoiceGenerationDraft GetInvoiceGenerationDraft(long invoiceGenerationDraftId);
         void ClearInvoiceGenerationDrafts(Guid invoiceGenerationIdentifier);
         InvoiceGenerationDraftSummary GetInvoiceGenerationDraftsSummary(Guid invoiceGenerationIdentifier);
     }
