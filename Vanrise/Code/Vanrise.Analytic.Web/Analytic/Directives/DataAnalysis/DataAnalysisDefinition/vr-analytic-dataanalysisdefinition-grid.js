@@ -1,5 +1,4 @@
-﻿
-'use strict';
+﻿'use strict';
 
 app.directive('vrAnalyticDataanalysisdefinitionGrid', ['VR_Analytic_DataAnalysisDefinitionAPIService', 'VR_Analytic_DataAnalysisDefinitionService','VRNotificationService',
     function (VR_Analytic_DataAnalysisDefinitionAPIService, VR_Analytic_DataAnalysisDefinitionService, VRNotificationService) {
