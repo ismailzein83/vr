@@ -1,0 +1,19 @@
+﻿
+<vr-select on-ready="onSelectorReady"
+           datasource="extensionConfigs"
+           selectedvalues="selectedExtensionConfig"
+           datavaluefield="ExtensionConfigurationId"
+           datatextfield="Title"
+           isrequired="true"
+           >
+</vr-select>
+<vr-datagrid datasource="scopeModel.accountTypes"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="scopeModel.onGridReady"
+             menuactions="scopeModel.menuActions"
+             idfield="Entity.AccountTypeId">
+    <vr-datagridcolumn headertext="'Title'" field="'Entity.AccountTypeId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Revenue'" field="'Entity.Name'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Settings'" field="'Entity.Title'"></vr-datagridcolumn>
+</vr-datagrid>
