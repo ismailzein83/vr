@@ -9,5 +9,6 @@ namespace Retail.Teles.Entities
     public class AccountEnterpriseDIDQuery
     {
         public List<long> AccountIds { get; set; }
+        public string DIDNumber { get; set; }
     }
 }

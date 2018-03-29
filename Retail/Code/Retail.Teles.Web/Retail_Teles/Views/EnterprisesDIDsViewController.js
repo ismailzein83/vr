@@ -1,14 +1,21 @@
 ﻿(function (appControllers) {
     "use strict";
-    EnterprisesDIDsViewController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'Retail_Teles_EnterpriseAPIService'];
-    function EnterprisesDIDsViewController($scope, UtilsService, VRNotificationService, Retail_Teles_EnterpriseAPIService) {
+    EnterprisesDIDsViewController.$inject = ['$scope', 'UtilsService', 'VRNotificationService', 'Retail_Teles_EnterpriseAPIService','VRUIUtilsService'];
+    function EnterprisesDIDsViewController($scope, UtilsService, VRNotificationService, Retail_Teles_EnterpriseAPIService, VRUIUtilsService) {
 
         var gridAPI;
+        var accountSelectorAPI;
+        var accountSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         defineScope();
         load();
 
         function defineScope() {
+
+            $scope.onAccountSelectorReady = function (api) {
+                accountSelectorAPI = api;
+                accountSelectorReadyDeferred.resolve();
+            };
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -30,10 +37,35 @@
             };
         }
         function load() {
+            $scope.isLoading = true;
+            loadAllControls();
+        }
+
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([loadAccountSelector]).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            }).finally(function () {
+                $scope.isLoading = false;
+            });
+        }
+
+        function loadAccountSelector() {
+            var accountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+            accountSelectorReadyDeferred.promise.then(function () {
+                var accountSelectorPayload = {
+                    AccountBEDefinitionId: "9a427357-cf55-4f33-99f7-745206dee7cd"
+                };
+                
+                VRUIUtilsService.callDirectiveLoad(accountSelectorAPI, accountSelectorPayload, accountSelectorLoadDeferred);
+            });
+            return accountSelectorLoadDeferred.promise;
         }
 
         function buildGridQuery() {
             return {
+                DIDNumber: $scope.didNumber,
+                AccountIds: accountSelectorAPI.getSelectedIds()
             };
         }
     }

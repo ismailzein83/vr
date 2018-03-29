@@ -1,8 +1,10 @@
-﻿<vr-panel ng-controller="Retail_Teles_EnterprisesDIDsViewController">
+﻿<vr-panel ng-controller="Retail_Teles_EnterprisesDIDsViewController" vr-loader="isLoading">
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
+               <retail-be-account-selector normal-col-num="2" on-ready="onAccountSelectorReady" ismultipleselection></retail-be-account-selector>
                 <vr-columns width="normal">
+                    <vr-textbox value="didNumber" label="Screen Number"></vr-textbox>
                 </vr-columns>
             </vr-row>
         </div>

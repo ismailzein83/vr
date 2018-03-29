@@ -574,7 +574,15 @@ namespace Retail.Teles.Business
             }
             public override IEnumerable<AccountEnterpriseDID> RetrieveAllData(DataRetrievalInput<AccountEnterpriseDIDQuery> input)
             {
-                return new TelesEnterpriseManager().GetAccountEnterprisesDIDs();
+                Func<AccountEnterpriseDID, bool> filterExpression = (accountEnterpriseDID) =>
+                {
+                    if (input.Query.DIDNumber != null && !accountEnterpriseDID.ScreenNumber.Contains(input.Query.DIDNumber))
+                        return false;
+                    if (input.Query.AccountIds != null && (!accountEnterpriseDID.AccountId.HasValue || !input.Query.AccountIds.Contains(accountEnterpriseDID.AccountId.Value)))
+                        return false;
+                    return true;
+                };
+                return new TelesEnterpriseManager().GetAccountEnterprisesDIDs().FindAllRecords(filterExpression);
             }
             protected override ResultProcessingHandler<AccountEnterpriseDIDDetail> GetResultProcessingHandler(DataRetrievalInput<AccountEnterpriseDIDQuery> input, BigResult<AccountEnterpriseDIDDetail> bigResult)
             {
