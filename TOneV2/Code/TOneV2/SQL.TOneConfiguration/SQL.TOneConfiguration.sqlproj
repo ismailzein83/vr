@@ -138,6 +138,7 @@
     <Folder Include="VR_AccountManager\" />
     <Folder Include="VR_AccountManager\Tables\" />
     <Folder Include="VR_AccountManager\Stored Procedures\" />
+    <Folder Include="common\User Defined Types\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="sec\Tables\WidgetDefinition.sql" />
@@ -745,6 +746,13 @@
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_GetSplitInvoiceGroupId.sql" />
     <Build Include="VRNotification\Stored Procedures\sp_VRAlertRule_SetEnable.sql" />
     <Build Include="VRNotification\Stored Procedures\sp_VRAlertRule_SetDisable.sql" />
+    <Build Include="common\Tables\VRBulkActionDraft.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_InvoiceGenerationDraft_Get.sql" />
+    <Build Include="common\Stored Procedures\sp_VRBulkActionDraft_Save.sql" />
+    <Build Include="common\Stored Procedures\sp_VRBulkActionDraft_GetByIdentifier.sql" />
+    <Build Include="common\Stored Procedures\sp_VRBulkActionDraft_Clear.sql" />
+    <Build Include="common\Stored Procedures\sp_VRBulkActionDraft_CheckIfExist.sql" />
+    <Build Include="common\User Defined Types\VRBulkActionDraftTable.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
