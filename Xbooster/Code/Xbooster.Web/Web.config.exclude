@@ -67,7 +67,7 @@
   <system.web>
     <compilation debug="true" targetFramework="4.5" />
     <customErrors mode="Off" defaultRedirect="" />
-    <httpRuntime targetFramework="4.5" executionTimeout="240" maxRequestLength="100000" />
+    <httpRuntime targetFramework="4.5" executionTimeout="240" maxRequestLength="100000" enableVersionHeader="false" />
   </system.web>
   <system.webServer>
     <validation validateIntegratedModeConfiguration="false" />
