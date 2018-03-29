@@ -41,10 +41,31 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data.SQL">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.SQL.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EricssonSQLDataManager.cs" />
+    <Compile Include="RouteDataManager.cs" />
+    <Compile Include="RouteCaseDataManager.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Entities\TOne.WhS.RouteSync.Entities.csproj">
+      <Project>{36ea3b9c-5ae0-4fe5-8ec2-8bfd1655776b}</Project>
+      <Name>TOne.WhS.RouteSync.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Ericsson\TOne.WhS.RouteSync.Ericsson.csproj">
+      <Project>{f0c17114-11c9-4d69-bfff-0a8ba62b7179}</Project>
+      <Name>TOne.WhS.RouteSync.Ericsson</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

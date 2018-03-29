@@ -41,13 +41,29 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Caching">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Caching.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Data">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Business\RouteCaseManager.cs" />
+    <Compile Include="Data\RouteSyncEricssonDataManagerFactory.cs" />
+    <Compile Include="Data\IDataManager.cs" />
+    <Compile Include="Data\IRouteCaseDataManager.cs" />
+    <Compile Include="Data\IRouteDataManager.cs" />
     <Compile Include="Entities\CarrierMapping.cs" />
     <Compile Include="Entities\Enums.cs" />
     <Compile Include="Entities\IncomingTrafficSupplier.cs" />
     <Compile Include="Entities\LocalSupplierMapping.cs" />
     <Compile Include="Entities\OutgoingTrafficCustomer.cs" />
+    <Compile Include="Entities\RouteCase.cs" />
     <Compile Include="Entities\Trunk.cs" />
     <Compile Include="Entities\TrunkGroup.cs" />
     <Compile Include="EricssonConvertedRoute.cs" />
@@ -60,6 +76,7 @@
       <Name>TOne.WhS.RouteSync.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

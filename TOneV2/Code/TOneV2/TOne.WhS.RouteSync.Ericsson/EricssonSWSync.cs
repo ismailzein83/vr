@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.RouteSync.Entities;
+using TOne.WhS.RouteSync.Ericsson.Data;
 
 namespace TOne.WhS.RouteSync.Ericsson
 {
@@ -26,7 +24,8 @@ namespace TOne.WhS.RouteSync.Ericsson
 
         public override void Initialize(ISwitchRouteSynchronizerInitializeContext context)
         {
-            throw new NotImplementedException();
+            IRouteDataManager dataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<IRouteDataManager>();
+            dataManager.Initialize(context);
         }
 
         public override void ConvertRoutes(ISwitchRouteSynchronizerConvertRoutesContext context)
