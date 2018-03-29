@@ -38,8 +38,7 @@ namespace TOne.WhS.DBSync.Business
             _currencySettingData = (CurrencySettingData)_systemCurrencySetting.Data;
 
             var dtTableCodeGroups = Context.DBTables[DBTableName.CodeGroup];
-            _allCodeGroups = (Dictionary<string, CodeGroup>)dtTableCodeGroups.Records;
-            RulesMigrationHelper.ClearSingleCodeGroupContriesCodeGroups();
+            _allCodeGroups = (Dictionary<string, CodeGroup>)dtTableCodeGroups.Records;           
             RulesMigrationHelper.BuildSingleCodeGroupContriesCodeGroups(_allCodeGroups);
         }
         public override void FillTableInfo(bool useTempTables)
@@ -100,7 +99,7 @@ namespace TOne.WhS.DBSync.Business
                     _rulesBaseMigrator.WriteFaildRowsLog();
                 }
             }
-
+            RulesMigrationHelper.ClearSingleCodeGroupContriesCodeGroups();
             return routeRules;
         }
         public override Rule BuildItemFromSource(SourceRule sourceItem)
