@@ -37,43 +37,44 @@
     <add name="MainDBConnString" connectionString=""/>
     <add name="RouteSyncDBConnString" connectionString="Server=localhost;Database=TOneV2_RouteSync;User ID=sa;Password= "/>
   </connectionStrings>
-  <appSettings>    
-    <add key="Web_ExtendedModulesNames" value="WhS_AccountBalance,VR_AccountBalance,VR_Notification,WhS_TOneV1Transition,WhS_InvToAccBalanceRelation,VR_InvToAccBalanceRelation"/><!-- , separated module names to include in web bundle (e.g. Common,VR_Notification,VRInvoice) -->
+  <appSettings>
+    <add key="Web_ExtendedModulesNames" value="WhS_AccountBalance,VR_AccountBalance,VR_Notification,WhS_TOneV1Transition,WhS_InvToAccBalanceRelation,VR_InvToAccBalanceRelation"/>
+    <!-- , separated module names to include in web bundle (e.g. Common,VR_Notification,VRInvoice) -->
     <add key="Vanrise License" value="28-22-92-DB-92-8B-8A-DE-78-FD-95-85-7B-E3-E8-19::==wMwkDM5EDMyMDM5ATNxAjM:kVGdwlncj5WR09mT"/>
     <add key="EncryptionSecretKey" value="V@nR!se-Se6r3tT0nE"/>
     <add key="TempPasswordValidity" value="24:00:00"/>
-    
+
     <add key="vs:EnableBrowserLink" value="false"/>
     <add key="webpages:Version" value="3.0.0.0" />
     <add key="webpages:Enabled" value="false" />
     <add key="ClientValidationEnabled" value="true" />
     <add key="UnobtrusiveJavaScriptEnabled" value="true" />
-    
+
     <add key="BICubeName" value="Tone Dev Test01 BI" />
     <add key="BIDBConnStringKey"                                value="ConfigurationDBConnString"/>
-    
+
     <add key="RuntimeConnStringKey"                             value="TransactionDBConnString"/>
     <add key="QueueDBConnStringKey"                             value="TransactionDBConnString"/>
     <add key="BusinessProcessDBConnStringKey"                   value="TransactionDBConnString"/>
     <add key="BigDataServiceDBConnStringKey"                    value="TransactionDBConnString"/>
     <add key="IntegrationConnStringKey"                         value="TransactionDBConnString"/>
     <add key="VRNotificationTransactionDBConnStringKey"         value="TransactionDBConnString"/>
-    
+
     <add key="QueueItemDBConnStringKey"                         value="QueueItemDBConnString"/>
-    
-    <add key="BusinessProcessTrackingDBConnStringKey"           value="LogDBConnString"/>    
+
+    <add key="BusinessProcessTrackingDBConnStringKey"           value="LogDBConnString"/>
     <add key="LoggingDBConnStringKey"                           value="LogDBConnString"/>
 
     <add key="SecurityDBConnStringKey"                          value="ConfigurationDBConnString"/>
     <add key="BusinessProcessConfigDBConnStringKey"             value="ConfigurationDBConnString"/>
     <add key="IntegrationConfigDBConnStringKey"                 value="ConfigurationDBConnString"/>
     <add key="RuntimeConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
-    <add key="QueueingConfigDBConnStringKey"                    value="ConfigurationDBConnString"/>    
-    <add key="ConfigurationDBConnStringKey"                     value="ConfigurationDBConnString"/>    
+    <add key="QueueingConfigDBConnStringKey"                    value="ConfigurationDBConnString"/>
+    <add key="ConfigurationDBConnStringKey"                     value="ConfigurationDBConnString"/>
     <add key="RulesDBConnStringKey"                             value="ConfigurationDBConnString"/>
     <add key="InvoiceDBConnStringKey"                           value="ConfigurationDBConnString"/>
     <add key="LoggingConfigDBConnStringKey"                     value="ConfigurationDBConnString"/>
-    
+
     <add key="TOneWhS_BE_DBConnStringKey"                       value="ConfigurationDBConnString"/>
     <add key="TOneWhS_SPL_DBConnStringKey"                      value="ConfigurationDBConnString"/>
     <add key="TOneWhS_TS_DBConnStringKey"                       value="ConfigurationDBConnString"/>
@@ -81,12 +82,12 @@
     <add key="VR_AccountBalance_TransactionDBConnStringKey"     value="ConfigurationDBConnString"/>
     <add key="WhS_AccountBalance_AccountBalanceDBConnStringKey" value="ConfigurationDBConnString"/>
     <add key="WhS_Invoice_InvoiceDBConnStringKey"               value="ConfigurationDBConnString"/>
-    
+
     <add key="TOneWhS_Routing_DBConnStringKey"                  value="RoutingDBConnStringTemplateKey"/>
     <add key="TOneWhS_CDR_DBConnStringKey"                      value="TOneCDRDBConnString"/>
     <add key="TOneWhS_Analytics_DBConnStringKey"                value="TOneAnalyticsDBConnString"/>
     <add key="TOneWhS_RouteSync_DBConnStringKey"                value="RouteSyncDBConnString"/>
-    
+
     <add key="StateBackupDatabase"                              value="TOneV2_StateBackup"/>
     
     <add key="ImportPriceListTemplatePath" value="/Client/Modules/WhS_SupplierPriceList/Template/Supplier Price List Sample.xls"/>
@@ -109,7 +110,7 @@
         <add extension=".rdlc" type="Microsoft.Reporting.RdlBuildProvider, Microsoft.ReportViewer.WebForms, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91" />
       </buildProviders>
     </compilation>
-    <httpRuntime targetFramework="4.5" maxRequestLength="1048576" />
+    <httpRuntime targetFramework="4.5" maxRequestLength="1048576" enableVersionHeader="false" />
     <customErrors mode="Off" defaultRedirect=""/>
   </system.web>
   <system.webServer>
