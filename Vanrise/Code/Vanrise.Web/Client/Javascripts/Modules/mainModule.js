@@ -1,9 +1,12 @@
 ﻿'use strict';
 
-
 var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCookies'])
 .controller('mainCtrl', ['$scope', '$rootScope', 'VR_Sec_MenuAPIService', 'SecurityService', 'BaseAPIService', 'VR_Sec_PermissionAPIService', 'notify', '$cookies', '$timeout', 'MenuItemTypeEnum', 'UtilsService', 'VRModalService', 'VRNavigationService', 'UISettingsService', '$location', '$window', "VRLocalizationService",
 function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, BaseAPIService, VR_Sec_PermissionAPIService, notify, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService, VRNavigationService, UISettingsService, $location, $window, VRLocalizationService) {
+    setTimeout(function () {
+        document.getElementById("mainBodyContainer").style.display = "block";
+    }, 200);
+ 
     Waves.displayEffect();
 
       $rootScope.$on("$destroy", function () {

@@ -15,7 +15,7 @@
             }, i[r].l = 1 * new Date(); a = s.createElement(o),
             m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
         })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-    </script>
+    </script>   
     @Styles.Render("~/Content/bootstrap")
     @Styles.Render("~/Content/AngularExtensions")
     @Styles.Render("~/Content/HandsonTable")
@@ -27,7 +27,7 @@
 </head>
 <body @ViewBag.RTLClass>
     <div ng-if="spinner" class="loading-container"><img src="Client/Images/loader-mask.gif" /></div>
-    <div ng-if="!spinner" ng-cloak>
+    <div ng-if="!spinner" ng-cloak id="mainBodyContainer" style="display:none" >
         <nav class="navbar navbar-inverse navbar-fixed-top vr-nav-custom">
             <div class="container">
                 <div class="navbar-header">
@@ -148,8 +148,8 @@
                     <div ng-mouseout="mouseout()" ng-mouseover="mouseover()">
                         <div ng-repeat="item in menuItems" class="dropdown dropdown-custom-serf leftdiv " ng-class="item.isSelected? 'bgcolor-grad-{{::item.keyclass}}':'bgcolor-{{::item.keyclass}}'" ng-mouseenter="showMenu($event,item.Id)" ng-mouseleave="hideMenu($event)">
                             <div class="dropdown-toggle hand-cursor glyphicon dll-menu-theme dropdown-item" id="dropdownMenuCu-{{::$index}}" style="top: 5px;" aria-expanded="true" data-toggle="dropdown">
-                            <img ng-src="{{::item.Icon}}" />
-                        </div>
+                                <img ng-src="{{::item.Icon}}" />
+                            </div>
                             <ul class="dropdown-menu dropdown-menu-custom-serf" role="menu" aria-labelledby="dropdownMenuCu-{{::$index}}" ng-if="currentMenuIndex==item.Id">
                                 <li class="title-groupe" role="presentation">
                                     <label class="title-label"> {{::item.Name}}</label>
