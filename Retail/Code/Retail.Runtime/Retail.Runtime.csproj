@@ -600,6 +600,7 @@
     <Compile Include="Tasks\AnthonyTask.cs" />
     <Compile Include="Tasks\ElHaririTask.cs" />
     <Compile Include="Tasks\IsmailTask.cs" />
+    <Compile Include="Tasks\MortadaTask.cs" />
     <Compile Include="Tasks\MostafaTask.cs" />
     <Compile Include="Tasks\RabihTask.cs" />
     <Compile Include="Tasks\SamerTask.cs" />
