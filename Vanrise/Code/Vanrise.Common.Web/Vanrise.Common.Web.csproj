@@ -129,7 +129,6 @@
     <Compile Include="Controllers\GenericLKUPDefinitionController.cs" />
     <Compile Include="Controllers\OverriddenConfigurationController.cs" />
     <Compile Include="Controllers\OverriddenConfigurationGroupController.cs" />
-    <Compile Include="Controllers\VRBulkActionDraftController.cs" />
     <Compile Include="Controllers\VRExclusiveSessionController.cs" />
     <Compile Include="Controllers\VRExclusiveSessionTypeController.cs" />
     <Compile Include="Controllers\VRLocalizationLanguageController.cs" />
@@ -487,7 +486,6 @@
     <Content Include="Common\Services\APIServices\ObjectTrackingAPIService.js" />
     <Content Include="Common\Services\APIServices\OverriddenConfigAPIService.js" />
     <Content Include="Common\Services\APIServices\OverriddenConfigGroupAPIService.js" />
-    <Content Include="Common\Services\APIServices\VRBulkActionDraftAPIService.js" />
     <Content Include="Common\Services\APIServices\VRExclusiveSessionAPIService.js" />
     <Content Include="Common\Services\APIServices\VRExclusiveSessionTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\VRLocalizationLanguageAPIService.js" />

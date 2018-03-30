@@ -8,5 +8,6 @@ namespace Vanrise.Entities
 {
     public class VRBulkActionDraft
     {
+        public string ItemId { get; set; }
     }
 }
