@@ -89,6 +89,9 @@
     <Reference Include="protobuf-net">
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\protobuf-net.dll</HintPath>
     </Reference>
+    <Reference Include="RazorEngine">
+      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\RazorEngine.dll</HintPath>
+    </Reference>
     <Reference Include="Rebex.Net.Ftp">
       <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Rebex.Net.Ftp.dll</HintPath>
     </Reference>
@@ -127,6 +130,10 @@
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Activities" />
+    <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\TOneV2\Code\TOneV2\packages\Microsoft.AspNet.Razor.3.0.0\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Workflow.Runtime" />
     <Reference Include="System.Xml.Linq" />
@@ -393,6 +400,9 @@
     <Reference Include="Vanrise.Security.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Security.MainExtensions">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.MainExtensions.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
