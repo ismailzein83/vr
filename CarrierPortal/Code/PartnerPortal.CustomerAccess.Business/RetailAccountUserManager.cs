@@ -49,9 +49,7 @@ namespace PartnerPortal.CustomerAccess.Business
         public UpdateOperationOutput<UserDetail> EnableUser(int userId)
         {
             UserManager userManager = new UserManager();
-            var user = userManager.GetUserbyId(userId);
-            user.ThrowIfNull("user");
-            return userManager.EnableUser(user);
+            return userManager.EnableUser(userId);
         }
         public UserStatus GetUserStatusByUserId(int userId)
         {
@@ -63,9 +61,7 @@ namespace PartnerPortal.CustomerAccess.Business
         public UpdateOperationOutput<UserDetail> DisableUser(int userId)
         {
             UserManager userManager = new UserManager();
-            var user = userManager.GetUserbyId(userId);
-            user.ThrowIfNull("user");
-            return userManager.DisableUser(user);
+            return userManager.DisableUser(userId);
         }
         public UpdateOperationOutput<UserDetail> UnlockPortalAccount(int userId)
         {
