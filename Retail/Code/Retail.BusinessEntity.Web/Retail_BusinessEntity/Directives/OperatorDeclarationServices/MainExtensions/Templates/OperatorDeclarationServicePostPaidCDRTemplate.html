@@ -1,19 +1,22 @@
-﻿<vr-row>
-    <vr-columns width="1/4row">
-        <retail-be-traffictype-selector on-ready="scopeModel.onTrafficTypeSelectorReady" selectedvalues="scopeModel.trafficType"></retail-be-traffictype-selector>
+﻿
+<vr-columns width="1/3row" haschildcolumns>
+    <vr-columns width="1/2row">
+        <retail-be-traffictype-selector on-ready="scopeModel.onTrafficTypeSelectorReady" selectedvalues="scopeModel.trafficType" isrequired=" true"></retail-be-traffictype-selector>
     </vr-columns>
-    <vr-columns width="1/4row">
-        <retail-be-trafficdirection-selector on-ready="scopeModel.onTrafficDirectionSelectorReady" selectedvalues="scopeModel.trafficDirection"></retail-be-trafficdirection-selector>
+    <vr-columns width="1/2row">
+        <retail-be-trafficdirection-selector on-ready="scopeModel.onTrafficDirectionSelectorReady" selectedvalues="scopeModel.trafficDirection" isrequired=" true"></retail-be-trafficdirection-selector>
+    </vr-columns>
 </vr-columns>
-</vr-row>
-<vr-row>
+<vr-columns width="2/3row" haschildcolumns>
     <vr-columns width="1/4row">
-        <vr-textbox value="scopeModel.successfulCalls" label="Successful Calls" type="number"></vr-textbox>
+        <vr-textbox value="scopeModel.successfulCalls" label="Successful Calls" type="number" isrequired></vr-textbox>
     </vr-columns>
     <vr-columns width="1/4row">
-        <vr-textbox value="scopeModel.totalDuration" label="Total Duration" type="number"></vr-textbox>
+        <vr-textbox value="scopeModel.totalDuration" label="Total Duration" type="number" isrequired></vr-textbox>
     </vr-columns>
     <vr-columns width="1/4row">
-        <vr-textbox value="scopeModel.totalChargedDuration" label="Total Charged Duration" type="number"></vr-textbox>
+        <vr-textbox value="scopeModel.totalChargedDuration" label="Total Charged Duration" type="number" isrequired></vr-textbox>
     </vr-columns>
-</vr-row>
+</vr-columns>
+
+

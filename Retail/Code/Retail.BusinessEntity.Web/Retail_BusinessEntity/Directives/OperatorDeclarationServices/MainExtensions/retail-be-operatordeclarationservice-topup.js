@@ -34,12 +34,11 @@
                 var api = {};
 
                 api.load = function (payload) {
-                  
                     var topupEntity;
 
                     if (payload != undefined) {
 
-                        topupEntity = payload.topupEntity;
+                        topupEntity = payload.settings;
 
                         $scope.scopeModel.numberOfTopups = topupEntity.NumberOfTopups;
                     }

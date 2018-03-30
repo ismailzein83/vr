@@ -25,6 +25,13 @@
 
         function OperatorDeclarationServicePostPaidSMSCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+
+            var trafficTypeSelectorAPI;
+            var trafficTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var trafficDirectionSelectorAPI;
+            var trafficDirectionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -49,7 +56,7 @@
 
                     if (payload != undefined) {
 
-                        postPaidSMSEntity = payload.postPaidSMSEntity;
+                        postPaidSMSEntity = payload.settings;
 
                         $scope.scopeModel.numberOfSMSs = postPaidSMSEntity.NumberOfSMSs;
                     }
@@ -94,9 +101,9 @@
                 api.getData = function () {
                     return {
                         $type: "Retail.BusinessEntity.MainExtensions.OperatorDeclarationServices.PostpaidSMS,Retail.BusinessEntity.MainExtensions",
-                        TrafficType: $scope.scopeModel.trafficType,
+                        TrafficType: trafficTypeSelectorAPI.getSelectedIds(),
 
-                        TrafficDirection: $scope.scopeModel.trafficDirection,
+                        TrafficDirection: trafficDirectionSelectorAPI.getSelectedIds(),
 
                         NumberOfSMSs: $scope.scopeModel.numberOfSMSs,
                     };

@@ -20,6 +20,9 @@ namespace Retail.BusinessEntity.Entities
 
     public class OperatorDeclarationServices
     {
-        public List<OperatorDeclarationService> Services { get; set; }
+        public OperatorDeclarationServicesCollection Services { get; set; }
+    }
+    public class OperatorDeclarationServicesCollection : List<OperatorDeclarationService>
+    {
     }
 }

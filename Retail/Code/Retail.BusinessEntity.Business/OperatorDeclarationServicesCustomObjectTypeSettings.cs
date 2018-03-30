@@ -29,11 +29,7 @@ namespace Retail.BusinessEntity.Business
         }
         public override dynamic ParseNonNullValueToFieldType(object originalValue)
         {
-            var castedOriginalValue = originalValue as List<OperatorDeclarationServices>;
-            if (castedOriginalValue != null)
-                return castedOriginalValue;
-            else
-                return Utilities.ConvertJsonToList<OperatorDeclarationServices>(originalValue);
+            return originalValue as OperatorDeclarationServices;
         }
 
     }

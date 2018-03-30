@@ -25,6 +25,13 @@
 
         function OperatorDeclarationServicePostPaidCDRCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
+
+            var trafficTypeSelectorAPI;
+            var trafficTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var trafficDirectionSelectorAPI;
+            var trafficDirectionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -49,18 +56,12 @@
 
                     if (payload != undefined) {
 
-                        postPaidCDREntity = payload.postPaidCDR;
+                        postPaidCDREntity = payload.settings;
 
                         $scope.scopeModel.successfulCalls = postPaidCDREntity.SuccessfulCalls;
                         $scope.scopeModel.totalDuration = postPaidCDREntity.TotalDuration;
                         $scope.scopeModel.totalChargedDuration = postPaidCDREntity.TotalChargedDuration;
                     }
-
-                    var trafficTypeSelectorLoadPromise = loadTrafficTypeSelector();
-                    var trafficDirectionSelectorLoadPromise = loadTrafficDirectionSelector();
-
-                    promises.push(trafficTypeSelectorLoadPromise);
-                    promises.push(trafficDirectionSelectorLoadPromise);
 
                     function loadTrafficTypeSelector() {
                         var trafficTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -76,6 +77,7 @@
                     }
 
                     function loadTrafficDirectionSelector() {
+
                         var trafficDirectionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                         trafficDirectionSelectorReadyDeferred.promise.then(function () {
                             var payload;
@@ -89,6 +91,14 @@
                         return trafficDirectionSelectorLoadDeferred.promise;
                     }
 
+                    var trafficTypeSelectorLoadPromise = loadTrafficTypeSelector();
+                    var trafficDirectionSelectorLoadPromise = loadTrafficDirectionSelector();
+
+                    promises.push(trafficTypeSelectorLoadPromise);
+                    promises.push(trafficDirectionSelectorLoadPromise);
+
+                    
+
                     return UtilsService.waitMultiplePromises(promises);
 
                 };
@@ -96,9 +106,9 @@
                 api.getData = function () {
                     return {
                         $type: "Retail.BusinessEntity.MainExtensions.OperatorDeclarationServices.PostpaidCDR,Retail.BusinessEntity.MainExtensions",
-                        TrafficType: $scope.scopeModel.trafficType,
+                        TrafficType: trafficTypeSelectorAPI.getSelectedIds(),
 
-                        TrafficDirection: $scope.scopeModel.trafficDirection,
+                        TrafficDirection: trafficDirectionSelectorAPI.getSelectedIds(),
 
                         SuccessfulCalls: $scope.scopeModel.successfulCalls,
 

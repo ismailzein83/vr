@@ -51,7 +51,7 @@ app.directive('retailBeTraffictypeSelector', ['Retail_Be_TrafficTypeEnum', 'Util
             }
 
             return '<div>'
-                + '<vr-select ' + multipleselection + '  datatextfield="type" datavaluefield="value" isrequired="ctrl.isrequired" '
+                + '<vr-select ' + multipleselection + '  datatextfield="description" datavaluefield="value" isrequired="ctrl.isrequired" '
                 + ' label="' + label + '"  datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" on-ready="onSelectorReady" vr-disabled="ctrl.isdisabled" onselectionchanged="ctrl.onselectionchanged" entityName="Type" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>'
                 + '</div>';
         }

@@ -8,7 +8,7 @@
         var controllerName = 'OperatorDirectionServices';
 
         function GetMappedCellsExtensionConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, 'GetMappedCellsExtensionConfigs'));
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, 'GetMappedCellsExtensionConfigs'));
         }
         return {
             GetMappedCellsExtensionConfigs: GetMappedCellsExtensionConfigs
