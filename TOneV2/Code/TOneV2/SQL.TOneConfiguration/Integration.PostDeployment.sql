@@ -61,13 +61,23 @@ END
 --[sec].[View]-----------------------------4001 to 5000-------------------------------------------------------
 BEGIN
 set nocount on;
-;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])as (select * from (values
+;with cte_data([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
+as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('FFC528C2-BF74-40E5-B7FE-A3B6F04B76ED','Data Sources','Data Sources','#/view/Integration/Views/DataSourceManagement','551E5CAE-69CA-478B-B823-8E2CEDBC1841','VR_Integration/DataSource/GetFilteredDataSources',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',1)
 --('3EBA3C0E-28CA-4003-959B-96D30D6747B7','Log','Log History','#/view/Integration/Views/DataSourceLogManagement','551E5CAE-69CA-478B-B823-8E2CEDBC1841','VR_Integration/DataSourceLog/GetFilteredDataSourceLogs',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',2),
 --('C0231D0B-93E8-45C5-9899-532923814C8C','Imported Batches','Imported Batches','#/view/Integration/Views/DataSourceImportedBatchManagement','551E5CAE-69CA-478B-B823-8E2CEDBC1841','VR_Integration/DataSourceImportedBatch/GetFilteredDataSourceImportedBatches',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',3)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-)c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))merge	[sec].[View] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]when not matched by target then	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
+)c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
+merge	[sec].[View] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[Url] = s.[Url],[Module] = s.[Module],[ActionNames] = s.[ActionNames],[Audience] = s.[Audience],[Content] = s.[Content],[Settings] = s.[Settings],[Type] = s.[Type],[Rank] = s.[Rank]
+when not matched by target then
+	insert([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank])
+	values(s.[ID],s.[Name],s.[Title],s.[Url],s.[Module],s.[ActionNames],s.[Audience],s.[Content],s.[Settings],s.[Type],s.[Rank]);
 --------------------------------------------------------------------------------------------------------------
 
 END
@@ -75,7 +85,22 @@ END
 
 --[sec].[BusinessEntity]-------------------901 to 1200--------------------------------------------------------
 BEGIN
-set nocount on;;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('CCD65B5B-53BB-4816-B7EA-D8DC58AA513E','VR_Integration_DataProcesses','Data Processes','B6B8F582-4759-43FB-9220-AA7662C366EA',0,'["View Data Sources","Add Data Sources","Edit Data Sources","View Logs","View Reprocess Logs","Start Reprocess"]')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))merge	[sec].[BusinessEntity] as tusing	cte_data as son		1=1 and t.[Id] = s.[Id]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]when not matched by target then	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
+set nocount on;
+;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('CCD65B5B-53BB-4816-B7EA-D8DC58AA513E','VR_Integration_DataProcesses','Data Processes','B6B8F582-4759-43FB-9220-AA7662C366EA',0,'["View Data Sources","Add Data Sources","Edit Data Sources","View Logs","View Reprocess Logs","Start Reprocess"]')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
+merge	[sec].[BusinessEntity] as t
+using	cte_data as s
+on		1=1 and t.[Id] = s.[Id]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[ModuleId] = s.[ModuleId],[BreakInheritance] = s.[BreakInheritance],[PermissionOptions] = s.[PermissionOptions]
+when not matched by target then
+	insert([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
+	values(s.[Id],s.[Name],s.[Title],s.[ModuleId],s.[BreakInheritance],s.[PermissionOptions]);
 --------------------------------------------------------------------------------------------------------------
 END
 
@@ -111,8 +136,125 @@ when not matched by target then
 ----------------------------------------------------------------------------------------------------
 END
 
---[runtime].[SchedulerTaskActionType]-------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[Name],[ActionTypeInfo])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('B7CF41B9-F1B3-4C02-980D-B9FAFB4CFF68','Data Source','{"URL":"","SystemType":true,"FQTN":"Vanrise.Integration.Business.DSSchedulerTaskAction, Vanrise.Integration.Business","Security":{"$type":"Vanrise.Runtime.Entities.ActionTypeInfoSecurity, Vanrise.Runtime.Entities","ViewPermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"CCD65B5B-53BB-4816-B7EA-D8DC58AA513E","PermissionOptions":["View Data Sources"]}]},"ConfigurePermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"CCD65B5B-53BB-4816-B7EA-D8DC58AA513E","PermissionOptions":["Edit Data Sources"]}]},"RunPermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"CCD65B5B-53BB-4816-B7EA-D8DC58AA513E","PermissionOptions":["Edit Data Sources"]}]}}}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[ActionTypeInfo]))merge	[runtime].[SchedulerTaskActionType] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[ActionTypeInfo] = s.[ActionTypeInfo]when not matched by target then	insert([ID],[Name],[ActionTypeInfo])	values(s.[ID],s.[Name],s.[ActionTypeInfo]);--[genericdata].[BusinessEntityDefinition]----------------------------------------------------------
-begin
-set nocount on;;with cte_data([ID],[Name],[Title],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('E522907C-AEBD-48B6-82F4-FE55238942F2','VR_Integration_DataSource','Data Source','{"$type":"Vanrise.GenericData.Entities.StaticBEDefinitionSettings, Vanrise.GenericData.Entities","SelectorUIControl":"vr-integration-datasource-selector","GroupSelectorUIControl":"","ManagerFQTN":"Vanrise.Integration.Business.DataSourceManager,Vanrise.Integration.Business","IdType":"System.Guid"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Title],[Settings]))merge	[genericdata].[BusinessEntityDefinition] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Title] = s.[Title],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Title],[Settings])	values(s.[ID],s.[Name],s.[Title],s.[Settings]);
+--[runtime].[SchedulerTaskActionType]---------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
-end--[logging].[LoggableEntity]----------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[UniqueName],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('3BD49160-FBB8-41B6-951D-CD7024CC2DB9','VR_Integration_DataSource','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Integration_DataSource_ViewHistoryItem"}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[UniqueName],[Settings]))merge	[logging].[LoggableEntity] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[UniqueName] = s.[UniqueName],[Settings] = s.[Settings]when not matched by target then	insert([ID],[UniqueName],[Settings])	values(s.[ID],s.[UniqueName],s.[Settings]);--common.[VRObjectTypeDefinition]-----------------------------------------------------------------------------------------------------------------------------------------------------------beginset nocount on;;with cte_data([ID],[Name],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('69B266CE-E309-426F-B672-B0E61D3211FC','Data Source Failed Batch Info','{"$type":"Vanrise.Entities.VRObjectTypeDefinitionSettings, Vanrise.Entities","ObjectType":{"$type":"Vanrise.Integration.MainExtensions.FailedBatchInfoObjectType, Vanrise.Integration.MainExtensions","ConfigId":"ea1f0775-08b9-4638-ac42-a2fd11e008ef"},"Properties":{"$type":"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities]], mscorlib","Message":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"Message","Description":"Message","PropertyEvaluator":{"$type":"Vanrise.Integration.MainExtensions.FailedBatchInfoPropertyEvaluator, Vanrise.Integration.MainExtensions","FailedBatchInfoField":0,"ConfigId":"708f5f03-f14e-4487-b916-5617013e8b3e"}},"IsEmpty":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"IsEmpty","Description":"Is Empty","PropertyEvaluator":{"$type":"Vanrise.Integration.MainExtensions.FailedBatchInfoPropertyEvaluator, Vanrise.Integration.MainExtensions","FailedBatchInfoField":1,"ConfigId":"708f5f03-f14e-4487-b916-5617013e8b3e"}},"DataSourceName":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"DataSourceName","Description":"Data Source Name","PropertyEvaluator":{"$type":"Vanrise.Integration.MainExtensions.FailedBatchInfoPropertyEvaluator, Vanrise.Integration.MainExtensions","FailedBatchInfoField":4,"ConfigId":"708f5f03-f14e-4487-b916-5617013e8b3e"}},"DataSourceId":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"DataSourceId","Description":"Data Source Id","PropertyEvaluator":{"$type":"Vanrise.Integration.MainExtensions.FailedBatchInfoPropertyEvaluator, Vanrise.Integration.MainExtensions","FailedBatchInfoField":3,"ConfigId":"708f5f03-f14e-4487-b916-5617013e8b3e"}},"BatchDescription":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"BatchDescription","Description":"Batch Description","PropertyEvaluator":{"$type":"Vanrise.Integration.MainExtensions.FailedBatchInfoPropertyEvaluator, Vanrise.Integration.MainExtensions","FailedBatchInfoField":2,"ConfigId":"708f5f03-f14e-4487-b916-5617013e8b3e"}}}}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Settings]))merge	[common].[VRObjectTypeDefinition] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Settings])	values(s.[ID],s.[Name],s.[Settings]);----------------------------------------------------------------------------------------------------end--[common].[MailMessageType]----------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[Name],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('0F64DA0B-E2D0-4421-BEB9-32C6E749F8F1','Data Source Failed Batch Mail Template Type','{"$type":"Vanrise.Entities.VRMailMessageTypeSettings, Vanrise.Entities","Objects":{"$type":"Vanrise.Entities.VRObjectVariableCollection, Vanrise.Entities","Failed Batch Info":{"$type":"Vanrise.Entities.VRObjectVariable, Vanrise.Entities","ObjectName":"Failed Batch Info","VRObjectTypeDefinitionId":"69b266ce-e309-426f-b672-b0e61d3211fc"},"User":{"$type":"Vanrise.Entities.VRObjectVariable, Vanrise.Entities","ObjectName":"User","VRObjectTypeDefinitionId":"e3887cc9-1fbb-44d1-b1e3-7a0922400550"}}}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[Settings]))merge	[common].[MailMessageType] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[Settings])	values(s.[ID],s.[Name],s.[Settings]);--[common].[MailMessageTemplate]------------------------------------------------------------------------------------------------------------------------------------------------------------------------set nocount on;;with cte_data([ID],[Name],[MessageTypeID],[Settings])as (select * from (values--//////////////////////////////////////////////////////////////////////////////////////////////////('8CDB71F5-02AB-442E-8E23-8ED3FD46446A','Default Data Source Error Mail Template','0F64DA0B-E2D0-4421-BEB9-32C6E749F8F1','{"$type":"Vanrise.Entities.VRMailMessageTemplateSettings, Vanrise.Entities","From":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities"},"To":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities","ExpressionString":"support@vanrise.com"},"CC":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities","ExpressionString":"@Model.GetVal(\"User\",\"Email\")"},"BCC":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities"},"Subject":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities","ExpressionString":"@Model.GetVal(\"Failed Batch Info\",\"DataSourceName\") Error"},"Body":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities","ExpressionString":"Dears,<div>Data Source&nbsp;<span style=\"background-color: rgb(215, 235, 238); color: rgb(35, 82, 124); font-family: &quot;Open Sans&quot;; font-size: 11px; text-decoration-line: underline; white-space: nowrap;\">@Model.GetVal(\"Failed Batch Info\",\"DataSourceName\")</span>&nbsp;raised the below error.</div><div>Data Source Id:<a ng-class=\"::dataItem.columnsValues.col_4.cellClass\" ng-click=\"$parent.ctrl.onColumnClicked($parent.ctrl.columnDefs[3], dataItem , $event)\" class=\"ng-binding span-summary\" style=\"box-sizing: border-box; background-color: rgb(215, 235, 238); color: rgb(35, 82, 124); text-decoration-line: underline; font-size: 11px; outline: 0px; font-family: &quot;Open Sans&quot;; white-space: nowrap; cursor: pointer;\">&nbsp;@Model.GetVal(\"Failed Batch Info\",\"DataSourceId\")</a></div><div>Batch:&nbsp;<a ng-class=\"::dataItem.columnsValues.col_4.cellClass\" ng-click=\"$parent.ctrl.onColumnClicked($parent.ctrl.columnDefs[3], dataItem , $event)\" class=\"ng-binding span-summary\" style=\"box-sizing: border-box; background-color: rgb(215, 235, 238); color: rgb(35, 82, 124); text-decoration-line: underline; font-size: 11px; outline: 0px; font-family: &quot;Open Sans&quot;; white-space: nowrap; cursor: pointer;\">@Model.GetVal(\"Failed Batch Info\",\"BatchDescription\")</a></div><div>Message:&nbsp;<span style=\"background-color: rgb(215, 235, 238); color: rgb(35, 82, 124); font-family: &quot;Open Sans&quot;; font-size: 11px; text-decoration-line: underline; white-space: nowrap;\">@Model.GetVal(\"Failed Batch Info\",\"Message\")</span></div>"}}')--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\)c([ID],[Name],[MessageTypeID],[Settings]))merge	[common].[MailMessageTemplate] as tusing	cte_data as son		1=1 and t.[ID] = s.[ID]when matched then	update set	[Name] = s.[Name],[MessageTypeID] = s.[MessageTypeID],[Settings] = s.[Settings]when not matched by target then	insert([ID],[Name],[MessageTypeID],[Settings])	values(s.[ID],s.[Name],s.[MessageTypeID],s.[Settings]);
+set nocount on;
+;with cte_data([ID],[Name],[ActionTypeInfo])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('B7CF41B9-F1B3-4C02-980D-B9FAFB4CFF68','Data Source','{"URL":"","SystemType":true,"FQTN":"Vanrise.Integration.Business.DSSchedulerTaskAction, Vanrise.Integration.Business","Security":{"$type":"Vanrise.Runtime.Entities.ActionTypeInfoSecurity, Vanrise.Runtime.Entities","ViewPermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"CCD65B5B-53BB-4816-B7EA-D8DC58AA513E","PermissionOptions":["View Data Sources"]}]},"ConfigurePermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"CCD65B5B-53BB-4816-B7EA-D8DC58AA513E","PermissionOptions":["Edit Data Sources"]}]},"RunPermission":{"$type":"Vanrise.Security.Entities.RequiredPermissionSettings, Vanrise.Security.Entities","Entries":[{"$type":"Vanrise.Security.Entities.RequiredPermissionEntry, Vanrise.Security.Entities","EntityId":"CCD65B5B-53BB-4816-B7EA-D8DC58AA513E","PermissionOptions":["Edit Data Sources"]}]}}}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[ActionTypeInfo]))
+merge	[runtime].[SchedulerTaskActionType] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[ActionTypeInfo] = s.[ActionTypeInfo]
+when not matched by target then
+	insert([ID],[Name],[ActionTypeInfo])
+	values(s.[ID],s.[Name],s.[ActionTypeInfo]);
+
+
+--[genericdata].[BusinessEntityDefinition]----------------------------------------------------------
+begin
+set nocount on;
+;with cte_data([ID],[Name],[Title],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('E522907C-AEBD-48B6-82F4-FE55238942F2','VR_Integration_DataSource','Data Source','{"$type":"Vanrise.GenericData.Entities.StaticBEDefinitionSettings, Vanrise.GenericData.Entities","SelectorUIControl":"vr-integration-datasource-selector","GroupSelectorUIControl":"","ManagerFQTN":"Vanrise.Integration.Business.DataSourceManager,Vanrise.Integration.Business","IdType":"System.Guid"}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Title],[Settings]))
+merge	[genericdata].[BusinessEntityDefinition] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Title] = s.[Title],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Title],[Settings])
+	values(s.[ID],s.[Name],s.[Title],s.[Settings]);
+----------------------------------------------------------------------------------------------------
+end
+
+--[logging].[LoggableEntity]------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[UniqueName],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('3BD49160-FBB8-41B6-951D-CD7024CC2DB9','VR_Integration_DataSource','{"$type":"Vanrise.Entities.VRLoggableEntitySettings, Vanrise.Entities","ViewHistoryItemClientActionName":"VR_Integration_DataSource_ViewHistoryItem"}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[UniqueName],[Settings]))
+merge	[logging].[LoggableEntity] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[UniqueName] = s.[UniqueName],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[UniqueName],[Settings])
+	values(s.[ID],s.[UniqueName],s.[Settings]);
+
+--common.[VRObjectTypeDefinition]-------------------------------------------------------------
+----------------------------------------------------------------------------------------------
+begin
+set nocount on;
+;with cte_data([ID],[Name],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('69B266CE-E309-426F-B672-B0E61D3211FC','Data Source Failed Batch Info','{"$type":"Vanrise.Entities.VRObjectTypeDefinitionSettings, Vanrise.Entities","ObjectType":{"$type":"Vanrise.Integration.MainExtensions.FailedBatchInfoObjectType, Vanrise.Integration.MainExtensions","ConfigId":"ea1f0775-08b9-4638-ac42-a2fd11e008ef"},"Properties":{"$type":"System.Collections.Generic.Dictionary`2[[System.String, mscorlib],[Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities]], mscorlib","Message":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"Message","Description":"Message","PropertyEvaluator":{"$type":"Vanrise.Integration.MainExtensions.FailedBatchInfoPropertyEvaluator, Vanrise.Integration.MainExtensions","FailedBatchInfoField":0,"ConfigId":"708f5f03-f14e-4487-b916-5617013e8b3e"}},"IsEmpty":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"IsEmpty","Description":"Is Empty","PropertyEvaluator":{"$type":"Vanrise.Integration.MainExtensions.FailedBatchInfoPropertyEvaluator, Vanrise.Integration.MainExtensions","FailedBatchInfoField":1,"ConfigId":"708f5f03-f14e-4487-b916-5617013e8b3e"}},"DataSourceName":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"DataSourceName","Description":"Data Source Name","PropertyEvaluator":{"$type":"Vanrise.Integration.MainExtensions.FailedBatchInfoPropertyEvaluator, Vanrise.Integration.MainExtensions","FailedBatchInfoField":4,"ConfigId":"708f5f03-f14e-4487-b916-5617013e8b3e"}},"DataSourceId":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"DataSourceId","Description":"Data Source Id","PropertyEvaluator":{"$type":"Vanrise.Integration.MainExtensions.FailedBatchInfoPropertyEvaluator, Vanrise.Integration.MainExtensions","FailedBatchInfoField":3,"ConfigId":"708f5f03-f14e-4487-b916-5617013e8b3e"}},"BatchDescription":{"$type":"Vanrise.Entities.VRObjectTypePropertyDefinition, Vanrise.Entities","Name":"BatchDescription","Description":"Batch Description","PropertyEvaluator":{"$type":"Vanrise.Integration.MainExtensions.FailedBatchInfoPropertyEvaluator, Vanrise.Integration.MainExtensions","FailedBatchInfoField":2,"ConfigId":"708f5f03-f14e-4487-b916-5617013e8b3e"}}}}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Settings]))
+merge	[common].[VRObjectTypeDefinition] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Settings])
+	values(s.[ID],s.[Name],s.[Settings]);
+----------------------------------------------------------------------------------------------------
+end
+
+
+--[common].[MailMessageType]------------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('0F64DA0B-E2D0-4421-BEB9-32C6E749F8F1','Data Source Failed Batch Mail Template Type','{"$type":"Vanrise.Entities.VRMailMessageTypeSettings, Vanrise.Entities","Objects":{"$type":"Vanrise.Entities.VRObjectVariableCollection, Vanrise.Entities","Failed Batch Info":{"$type":"Vanrise.Entities.VRObjectVariable, Vanrise.Entities","ObjectName":"Failed Batch Info","VRObjectTypeDefinitionId":"69b266ce-e309-426f-b672-b0e61d3211fc"},"User":{"$type":"Vanrise.Entities.VRObjectVariable, Vanrise.Entities","ObjectName":"User","VRObjectTypeDefinitionId":"e3887cc9-1fbb-44d1-b1e3-7a0922400550"}}}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[Settings]))
+merge	[common].[MailMessageType] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+when matched then
+	update set
+	[Name] = s.[Name],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[Settings])
+	values(s.[ID],s.[Name],s.[Settings]);
+
+
+
+--[common].[MailMessageTemplate]--------------------------------------------------------------------
+----------------------------------------------------------------------------------------------------
+set nocount on;
+;with cte_data([ID],[Name],[MessageTypeID],[Settings])
+as (select * from (values
+--//////////////////////////////////////////////////////////////////////////////////////////////////
+('8CDB71F5-02AB-442E-8E23-8ED3FD46446A','Data Source Error(Default)','0F64DA0B-E2D0-4421-BEB9-32C6E749F8F1','{"$type":"Vanrise.Entities.VRMailMessageTemplateSettings, Vanrise.Entities","From":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities"},"To":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities","ExpressionString":"support@vanrise.com"},"CC":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities","ExpressionString":"@Model.GetVal(\"User\",\"Email\")"},"BCC":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities"},"Subject":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities","ExpressionString":"@Model.GetVal(\"Failed Batch Info\",\"DataSourceName\") Error"},"Body":{"$type":"Vanrise.Entities.VRExpression, Vanrise.Entities","ExpressionString":"Dears,<div>Data Source&nbsp;<span style=\"background-color: rgb(215, 235, 238); color: rgb(35, 82, 124); font-family: &quot;Open Sans&quot;; font-size: 11px; text-decoration-line: underline; white-space: nowrap;\">@Model.GetVal(\"Failed Batch Info\",\"DataSourceName\")</span>&nbsp;raised the below error.</div><div>Data Source Id:<a ng-class=\"::dataItem.columnsValues.col_4.cellClass\" ng-click=\"$parent.ctrl.onColumnClicked($parent.ctrl.columnDefs[3], dataItem , $event)\" class=\"ng-binding span-summary\" style=\"box-sizing: border-box; background-color: rgb(215, 235, 238); color: rgb(35, 82, 124); text-decoration-line: underline; font-size: 11px; outline: 0px; font-family: &quot;Open Sans&quot;; white-space: nowrap; cursor: pointer;\">&nbsp;@Model.GetVal(\"Failed Batch Info\",\"DataSourceId\")</a></div><div>Batch:&nbsp;<a ng-class=\"::dataItem.columnsValues.col_4.cellClass\" ng-click=\"$parent.ctrl.onColumnClicked($parent.ctrl.columnDefs[3], dataItem , $event)\" class=\"ng-binding span-summary\" style=\"box-sizing: border-box; background-color: rgb(215, 235, 238); color: rgb(35, 82, 124); text-decoration-line: underline; font-size: 11px; outline: 0px; font-family: &quot;Open Sans&quot;; white-space: nowrap; cursor: pointer;\">@Model.GetVal(\"Failed Batch Info\",\"BatchDescription\")</a></div><div>Message:&nbsp;<span style=\"background-color: rgb(215, 235, 238); color: rgb(35, 82, 124); font-family: &quot;Open Sans&quot;; font-size: 11px; text-decoration-line: underline; white-space: nowrap;\">@Model.GetVal(\"Failed Batch Info\",\"Message\")</span></div>"}}')
+--\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+)c([ID],[Name],[MessageTypeID],[Settings]))
+merge	[common].[MailMessageTemplate] as t
+using	cte_data as s
+on		1=1 and t.[ID] = s.[ID]
+--when matched then
+--	update set
+--	[Name] = s.[Name],[MessageTypeID] = s.[MessageTypeID],[Settings] = s.[Settings]
+when not matched by target then
+	insert([ID],[Name],[MessageTypeID],[Settings])
+	values(s.[ID],s.[Name],s.[MessageTypeID],s.[Settings]);
