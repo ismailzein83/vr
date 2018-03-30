@@ -7,8 +7,6 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Entities;
-using Vanrise.GenericData.Normalization;
-using Vanrise.Rules.Normalization;
 using Vanrise.Security.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
@@ -31,36 +29,7 @@ namespace TOne.WhS.BusinessEntity.Business
             VRActionLogger.Current.LogGetFilteredAction(SwitchLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSwitches.ToBigResult(input, filterExpression, SwitchDetailMapper), handler);
         }
-        private class SwitchExcelExportHandler : ExcelExportHandler<SwitchDetail>
-        {
-            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SwitchDetail> context)
-            {
-                ExportExcelSheet sheet = new ExportExcelSheet()
-                {
-                    SheetName = "Switches",
-                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
-                };
 
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Switch Name" });
-
-                sheet.Rows = new List<ExportExcelRow>();
-                if (context.BigResult != null && context.BigResult.Data != null)
-                {
-                    foreach (var record in context.BigResult.Data)
-                    {
-                        if (record.Entity != null)
-                        {
-                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
-                            sheet.Rows.Add(row);
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.SwitchId });
-                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
-                        }
-                    }
-                }
-                context.MainSheet = sheet;
-            }
-        }
         public Switch GetSwitch(int switchId, bool isViewedFromUI)
         {
             var switches = GetCachedSwitches();
@@ -69,10 +38,12 @@ namespace TOne.WhS.BusinessEntity.Business
                 VRActionLogger.Current.LogObjectViewed(SwitchLoggableEntity.Instance, switchItem);
             return switchItem;
         }
+
         public Switch GetSwitch(int switchId)
         {
             return GetSwitch(switchId, false);
         }
+
         public List<Switch> GetAllSwitches()
         {
             var cachedSwitches = GetCachedSwitches();
@@ -282,70 +253,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #endregion
 
-        #region Private Classes
-
-        class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            DateTime? _SettingsCacheLastCheck;
-
-            ISwitchDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
-            object _updateHandle;
-
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return _dataManager.AreSwitchesUpdated(ref _updateHandle)
-                    |
-                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<SettingManager.CacheManager>().IsCacheExpired(ref _SettingsCacheLastCheck);
-            }
-        }
-        public class SwitchLoggableEntity : VRLoggableEntityBase
-        {
-            public static SwitchLoggableEntity Instance = new SwitchLoggableEntity();
-
-            private SwitchLoggableEntity()
-            {
-
-            }
-
-            static SwitchManager s_switchManager = new SwitchManager();
-
-            public override string EntityUniqueName
-            {
-                get { return "WhS_BusinessEntity_Switch"; }
-            }
-
-            public override string ModuleName
-            {
-                get { return "Business Entity"; }
-            }
-
-            public override string EntityDisplayName
-            {
-                get { return "Switch"; }
-            }
-
-            public override string ViewHistoryItemClientActionName
-            {
-                get { return "WhS_BusinessEntity_Switch_ViewHistoryItem"; }
-            }
-
-            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
-            {
-                Switch switchItem = context.Object.CastWithValidate<Switch>("context.Object");
-                return switchItem.SwitchId;
-            }
-
-            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
-            {
-                Switch switchItem = context.Object.CastWithValidate<Switch>("context.Object");
-                return s_switchManager.GetSwitchName(switchItem.SwitchId);
-            }
-        }
-        #endregion
-
         #region Private Methods
 
-        Dictionary<int, Switch> GetCachedSwitches()
+        private Dictionary<int, Switch> GetCachedSwitches()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetSwitches",
                () =>
@@ -412,6 +322,88 @@ namespace TOne.WhS.BusinessEntity.Business
             normalizationRuleManager.ApplyNormalizationRule(normalizeRuleContext, normalizationRuleDefinitionId, genericRuleTarget);
 
             return normalizeRuleContext.NormalizedValue;
+        }
+
+        #endregion
+
+        #region Classes
+
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            DateTime? _SettingsCacheLastCheck;
+
+            ISwitchDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISwitchDataManager>();
+            object _updateHandle;
+
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return _dataManager.AreSwitchesUpdated(ref _updateHandle)
+                    |
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<SettingManager.CacheManager>().IsCacheExpired(ref _SettingsCacheLastCheck);
+            }
+        }
+
+        private class SwitchExcelExportHandler : ExcelExportHandler<SwitchDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SwitchDetail> context)
+            {
+                ExportExcelSheet sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Switches",
+                    Header = new ExportExcelHeader { Cells = new List<ExportExcelHeaderCell>() }
+                };
+
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "ID" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Switch Name" });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow { Cells = new List<ExportExcelCell>() };
+                            sheet.Rows.Add(row);
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.SwitchId });
+                            row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
+                        }
+                    }
+                }
+                context.MainSheet = sheet;
+            }
+        }
+
+        public class SwitchLoggableEntity : VRLoggableEntityBase
+        {
+            public static SwitchLoggableEntity Instance = new SwitchLoggableEntity();
+
+            private SwitchLoggableEntity()
+            {
+
+            }
+
+            static SwitchManager s_switchManager = new SwitchManager();
+
+            public override string EntityUniqueName { get { return "WhS_BusinessEntity_Switch"; } }
+
+            public override string ModuleName { get { return "Business Entity"; } }
+
+            public override string EntityDisplayName { get { return "Switch"; } }
+
+            public override string ViewHistoryItemClientActionName { get { return "WhS_BusinessEntity_Switch_ViewHistoryItem"; } }
+
+            public override object GetObjectId(IVRLoggableEntityGetObjectIdContext context)
+            {
+                Switch switchItem = context.Object.CastWithValidate<Switch>("context.Object");
+                return switchItem.SwitchId;
+            }
+
+            public override string GetObjectName(IVRLoggableEntityGetObjectNameContext context)
+            {
+                Switch switchItem = context.Object.CastWithValidate<Switch>("context.Object");
+                return s_switchManager.GetSwitchName(switchItem.SwitchId);
+            }
         }
 
         #endregion
