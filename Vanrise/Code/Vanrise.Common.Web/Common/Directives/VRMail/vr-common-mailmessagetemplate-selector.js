@@ -126,7 +126,11 @@ app.directive('vrCommonMailmessagetemplateSelector', ['VRCommon_VRMailMessageTem
             if (attrs.showaddbutton != undefined)
                 addCliked = 'onaddclicked="addNewMailMessageTemplate"';
 
-            return '<vr-select ' + multipleselection + ' ' + addCliked + ' datatextfield="Name" datavaluefield="VRMailMessageTemplateId" isrequired="ctrl.isrequired" ' + label +
+            var hideremoveicon = '';
+            if (attrs.hideremoveicon != undefined)
+                hideremoveicon = 'hideremoveicon';
+
+            return '<vr-select ' + multipleselection + ' ' + addCliked + ' ' + hideremoveicon + ' datatextfield="Name" datavaluefield="VRMailMessageTemplateId" isrequired="ctrl.isrequired" ' + label +
                        '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" ' +
                        '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" customvalidate="ctrl.customvalidate" haspermission="ctrl.haspermission">' +
                    '</vr-select>';
