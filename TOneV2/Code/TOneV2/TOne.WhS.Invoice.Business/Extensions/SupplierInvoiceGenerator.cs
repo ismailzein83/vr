@@ -33,7 +33,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             int? timeZoneId = null;
             decimal? commission = null;
             CommissionType? commissionType = null;
-            if (supplierGenerationCustomSectionPayload != null && supplierGenerationCustomSectionPayload.TimeZoneId.HasValue)
+            if (supplierGenerationCustomSectionPayload != null)
             {
                 timeZoneId = supplierGenerationCustomSectionPayload.TimeZoneId;
                 if (supplierGenerationCustomSectionPayload.Commission.HasValue)
