@@ -133,7 +133,7 @@
                 return;
 
             $scope.scopeModel.name = vrAlertRuleEntity.Name;
-            $scope.scopeModel.isDisabled = vrAlertRuleEntity.IsDisabled;
+            $scope.scopeModel.isEnabled = vrAlertRuleEntity.IsDisabled == false;
 
         }
         function loadRuleTypeSection() {
@@ -223,7 +223,7 @@
             return {
                 VRAlertRuleId: vrAlertRuleId,
                 Name: $scope.scopeModel.name,
-                IsDisabled: $scope.scopeModel.isDisabled,
+                IsDisabled: $scope.scopeModel.isEnabled == false,
                 RuleTypeId: vrAlertRuleTypeSelectorAPI.getSelectedIds(),
                 Settings: {
                     RuleTypeId: null,
