@@ -1294,7 +1294,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     ctrl.showDeleteRowSection = true;
 
                     ctrl.deleteRowClicked = function (dataItem) {
-                        var onBeforeDeleteRowClicked = $scope.$parent.$eval(attrs.onbeforedeleterowclicked);
+                        var onBeforeDeleteRowClicked = scope.$parent.$eval(attrs.onbeforedeleterowclicked);
                         if (onBeforeDeleteRowClicked != undefined && typeof (onBeforeDeleteRowClicked) == 'function') {
                             var onBeforeDeleteRowClickedPromise = onBeforeDeleteRowClicked(dataItem);
                             if (onBeforeDeleteRowClickedPromise != undefined && onBeforeDeleteRowClickedPromise.then != undefined) {
