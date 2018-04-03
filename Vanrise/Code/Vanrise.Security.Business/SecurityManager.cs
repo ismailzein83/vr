@@ -35,7 +35,6 @@ namespace Vanrise.Security.Business
 
             if (user != null)
             {
-                authenticationOperationOutput.LoggedInUser = user;
 
                
 
@@ -84,6 +83,7 @@ namespace Vanrise.Security.Business
                     {
                         AuthenticationToken authToken = CreateAuthenticationToken(user);
                         authenticationOperationOutput.Result = AuthenticateOperationResult.Succeeded;
+                        authenticationOperationOutput.LoggedInUser = user;
                         authenticationOperationOutput.AuthenticationObject = authToken;
                         int lastModifiedBy = user.UserId;
                         dataManager.UpdateLastLogin(user.UserId, lastModifiedBy);
