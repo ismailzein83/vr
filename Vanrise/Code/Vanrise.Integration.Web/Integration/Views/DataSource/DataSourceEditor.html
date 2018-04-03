@@ -24,7 +24,7 @@
                     </vr-row>
                     <vr-row>
                         <vr-columns width="fullrow" ng-if="scopeModel.selectedAdapterType">
-                            <vr-section title="{{scopeModel.selectedAdapterType.Name}} Adapter" vr-loader="scopeModel.isLoadingAdapterDirective">
+                            <vr-section title="{{scopeModel.selectedAdapterType.Title}} Adapter" vr-loader="scopeModel.isLoadingAdapterDirective">
                                 <vr-directivewrapper directive="scopeModel.selectedAdapterType.Editor" on-ready="scopeModel.onAdapterTypeDirectiveReady"></vr-directivewrapper>
                             </vr-section>
                         </vr-columns>
