@@ -88,6 +88,14 @@
                         $scope.scopeModel.isLoading = false;
                     });
                 }
+                else {
+                    $scope.scopeModel.cc = undefined;
+                    $scope.scopeModel.to = undefined;
+                    $scope.scopeModel.subject = undefined;
+                    $scope.scopeModel.body = undefined;
+                    $scope.scopeModel.from = undefined;
+                    $scope.scopeModel.isLoading = false;
+                }
 
             };
 
