@@ -1294,7 +1294,28 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     ctrl.showDeleteRowSection = true;
 
                     ctrl.deleteRowClicked = function (dataItem) {
-                        deleteRowFunction(dataItem);
+                        var onBeforeDeleteRowClicked = $scope.$parent.$eval(attrs.onbeforedeleterowclicked);
+                        if (onBeforeDeleteRowClicked != undefined && typeof (onBeforeDeleteRowClicked) == 'function') {
+                            var onBeforeDeleteRowClickedPromise = onBeforeDeleteRowClicked(dataItem);
+                            if (onBeforeDeleteRowClickedPromise != undefined && onBeforeDeleteRowClickedPromise.then != undefined) {
+                                onBeforeDeleteRowClickedPromise.then(function (response) {
+                                    if (response)
+                                        deleteRowFunction(dataItem);
+                                    else
+                                        return;
+                                }).catch(function () {
+                                    return;
+                                });
+                            }
+                            else {
+                                deleteRowFunction(dataItem);
+                            }
+                        }
+                        else
+                            deleteRowFunction(dataItem);
+
+
+                       
                     };
 
                     ctrl.getRowDeleteIconTitle = function () {
