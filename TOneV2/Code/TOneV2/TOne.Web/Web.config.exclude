@@ -111,7 +111,7 @@
       </buildProviders>
     </compilation>
     <httpRuntime targetFramework="4.5" maxRequestLength="1048576" enableVersionHeader="false" />
-    <customErrors mode="Off" defaultRedirect=""/>
+    <customErrors mode="On" defaultRedirect="~/Client/Views/ErrorPage.htm"/>
   </system.web>
   <system.webServer>
     <validation validateIntegratedModeConfiguration="false" />
