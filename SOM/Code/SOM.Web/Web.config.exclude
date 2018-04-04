@@ -67,7 +67,7 @@
   
   <system.web>
     <compilation debug="true" targetFramework="4.5" />
-    <customErrors mode="Off" defaultRedirect="" />
+    <customErrors mode="On" defaultRedirect="~/Client/Views/ErrorPage.htm"/>
     <httpRuntime targetFramework="4.5" executionTimeout="240" maxRequestLength="100000" enableVersionHeader="false" />
   </system.web>
   <system.webServer>
