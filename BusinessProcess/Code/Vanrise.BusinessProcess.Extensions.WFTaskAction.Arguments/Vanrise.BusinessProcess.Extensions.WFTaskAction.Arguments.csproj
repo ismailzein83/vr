@@ -46,6 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomCodeBPArgument.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="WFTaskActionArgument.cs" />
     <Compile Include="WFTaskActionConstants.cs" />
