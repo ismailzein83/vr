@@ -213,11 +213,11 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
 
 		private Func<int, DealZoneGroupTierDetails> GetSupplierDealZoneGroupTierDetails(DealZoneGroup costDealZoneGroup, long supplierZoneId, DateTime attemptDateTime)
 		{
-			Func<int, DealZoneGroupTierDetails> getSaleDealZoneGroupTierDetails = (targetTierNumber) =>
+			Func<int, DealZoneGroupTierDetails> getSupplierDealZoneGroupTierDetails = (targetTierNumber) =>
 			{
 				return new DealDefinitionManager().GetSupplierDealZoneGroupTierDetails(costDealZoneGroup.DealId, costDealZoneGroup.ZoneGroupNb, targetTierNumber, supplierZoneId, attemptDateTime);
 			};
-			return getSaleDealZoneGroupTierDetails;
+			return getSupplierDealZoneGroupTierDetails;
 		}
 
 		private Dictionary<PropertyName, string> BuildPropertyNames(string prefixPropName, string secondaryPrefixPropName)
@@ -933,7 +933,7 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
 							int? saleOrigZoneGroupNb = record.OrigSaleDealZoneGroupNb;
 							if (saleOrigDealId.HasValue && saleOrigZoneGroupNb.HasValue)
 							{
-								var saleZoneId = record.GetFieldValue(costPropertyNames[PropertyName.Zone]);
+								var saleZoneId = record.GetFieldValue(salePropertyNames[PropertyName.Zone]);
 								DealZoneGroup saleDealZoneGroup = new DealZoneGroup() { DealId = saleOrigDealId.Value, ZoneGroupNb = saleOrigZoneGroupNb.Value };
 								Func<int, DealZoneGroupTierDetails> getSaleDealZoneGroupTierDetails = GetSaleDealZoneGroupTierDetails(saleDealZoneGroup, saleZoneId, attemptDateTime);
 								UpdateReprocessBillingCDRData(saleDealDetailedProgressesDict.GetRecord(saleDealZoneGroup), previousSaleDealDetailedProgressesDict.GetRecord(saleDealZoneGroup), record, true, salePropertyNames, batchStart, getSaleDealZoneGroupTierDetails, saleDealZoneGroup, context.From, out firstSaleCDR, out secondSaleCDR);
