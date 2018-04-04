@@ -84,7 +84,14 @@ function (WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService) 
                 return UtilsService.waitMultiplePromises(promises);
             };
             api.getData = function () {
-                return directiveAPI.getData();
+                var data = null;
+                if (selectiveCtrl.selectedTemplateConfig != undefined && directiveAPI != undefined) {
+                    data = directiveAPI.getData();
+                    if (data != undefined) {
+                        data.ConfigId = selectiveCtrl.selectedTemplateConfig.ExtensionConfigurationId;
+                    }
+                }
+                return data;
             };
             api.getDescription = function () {
                 if (directiveAPI != undefined) {

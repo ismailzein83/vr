@@ -95,17 +95,10 @@
             var loadZonePromiseDeferred = UtilsService.createPromiseDeferred();
             zoneReadyPromiseDeferred.promise.then(function () {
                 var payload = context != undefined ? context.getZoneSelectorPayload(exRateEntity) : undefined;
-                var zoneIds = undefined;
-                if (exRateEntity != undefined) {
-                    zoneIds = [];
-                    for (var j = 0; j < exRateEntity.Zones.length; j++) {
-                        zoneIds.push(exRateEntity.Zones[i].ZoneId);
-                    }
-                }
-                var excZoneIds = exRateEntity != undefined ? exRateEntity.ZoneIds : undefined;
+                var excZoneIds = exRateEntity != undefined ? UtilsService.getPropValuesFromArray(exRateEntity.Zones, "ZoneId") : undefined;
                 payload.filter = {
                     AvailableZoneIds: context.getSelectedZonesIds(),
-                    ExcludedZoneIds: zoneIds,
+                    ExcludedZoneIds: context.getExceptionsZoneIds(excZoneIds),
                     CountryIds: [context.getCountryId()]
                 };
                 VRUIUtilsService.callDirectiveLoad(zoneDirectiveAPI, payload, loadZonePromiseDeferred);
@@ -145,7 +138,7 @@
             }
             $scope.modalContext.closeModal();
         }
-
+        
     }
     app.controller('WhS_Deal_VolumeCommitmentItemTierExRateEditorController', VolumeCommitmentItemTierExRateEditorController);
 

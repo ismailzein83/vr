@@ -73,7 +73,7 @@
 
             $scope.scopeModel.addException = function () {
                 var onVolumeCommitmentItemTierExRateAdded = function (addedObj) {
-                    $scope.scopeModel.exceptions.push({ Entity: addedObj });
+                    $scope.scopeModel.exceptions.push(addedObj);
                 };
                 WhS_Deal_VolumeCommitmentService.addVolumeCommitmentItemTierExRate(onVolumeCommitmentItemTierExRateAdded, getContext());
             };
@@ -149,8 +149,8 @@
             if ($scope.scopeModel.exceptions.length > 0) {
                 var exceptions = [];
                 for (var i = 0, length = $scope.scopeModel.exceptions.length; i < length; i++) {
-                    var exception = $scope.scopeModel.exceptions[i];
-                    exceptions.push(exception.Entity);
+                    var exception = $scope.scopeModel.exceptions[i];                    
+                    exceptions.push(getExceptionsZoneBaseObject(exception));
                 }
                 volumeObject.ExceptionZoneRates = exceptions;
             }
@@ -176,19 +176,18 @@
         function editVolumeCommitmentItemTierException(dataItem) {
             var onVolumeCommitmentItemTierExRateUpdated = function (updatedItem) {
                 var index = $scope.scopeModel.exceptions.indexOf(dataItem);
-                $scope.scopeModel.exceptions[index] = { Entity: updatedItem };
+                $scope.scopeModel.exceptions[index] = updatedItem ;
             };
-            WhS_Deal_VolumeCommitmentService.editVolumeCommitmentItemTierExRate(dataItem.Entity, onVolumeCommitmentItemTierExRateUpdated, getContext());
+            WhS_Deal_VolumeCommitmentService.editVolumeCommitmentItemTierExRate(dataItem, onVolumeCommitmentItemTierExRateUpdated, getContext());
         };
 
         function buildExceptionZoneRatesDataSource(exceptionZoneRates) {
             for (var i = 0 ; i < exceptionZoneRates.length ; i++) {
                 var obj = filterExceptionsZoneRatesByZonesIds(exceptionZoneRates[i], getContext().getSelectedZonesIds());
-                if (obj && obj.ZoneIds) {
-                    obj.ZoneNames = getContext().getZonesNames(obj.ZoneIds);
-                    $scope.scopeModel.exceptions.push({ Entity: obj });
+                if (obj && obj.Zones) {
+                    obj.ZoneNames = getContext().getZonesNames(UtilsService.getPropValuesFromArray(obj.Zones, "ZoneId"));
+                    $scope.scopeModel.exceptions.push(obj);
                 }
-
             }
         }
 
@@ -220,12 +219,12 @@
 
         function getTierUsedZonesIds() {
             var zonesIds;
-            var length = $scope.scopeModel.exceptions;
+            var length = $scope.scopeModel.exceptions.length;
             if (length > 0) {
                 zonesIds = [];
                 for (var i = 0; i < length; i++) {
                     var exception = $scope.scopeModel.exceptions[i];
-                    zonesIds = zonesIds.concat(exception.Entity.ZoneIds);
+                    zonesIds = zonesIds.concat(UtilsService.getPropValuesFromArray(exception.Zones,"ZoneId"));
                 }
             }
             return zonesIds;
@@ -270,20 +269,38 @@
             if (ids == undefined)
                 return obj;
             var zoneIds = new Array();
-            for (var i = 0 ; i < excep.ZoneIds.length ; i++) {
-                if (ids.indexOf(excep.ZoneIds[i]) > -1)
-                    zoneIds.push(excep.ZoneIds[i]);
-            }
+            var zonesIds = UtilsService.getPropValuesFromArray(excep.Zones, "ZoneId");
+            if (zonesIds != undefined) {
+                for (var i = 0 ; i < zonesIds.length ; i++) {
+                    if (ids.indexOf(zonesIds[i]) > -1)
+                        zoneIds.push(zonesIds[i]);
+                }
+            }            
             if (zoneIds.length == 0)
                 return obj;
             else {
-                obj.ZoneIds = zoneIds;
+                obj.Zones = buildZonesArray(zoneIds);
                 obj.EvaluatedRate = excep.EvaluatedRate;
                 obj.Description = excep.Description;
             }
             return obj;
         }
+        function buildZonesArray(ids) {
+            var zones = [];
+            for (var i = 0 ; i < ids.length ; i++)
+                zones.push({ ZoneId: ids[i] });
+            return zones.length > 0 ? zones : undefined;
+        }
 
+        function getExceptionsZoneBaseObject(exception) {            
+            return {
+                Zones: exception.Zones,
+                ZoneNames: exception.ZoneNames,
+                Rate: exception.Rate,
+                EvaluatedRate: exception.EvaluatedRate
+            };
+        }
+        
     }
     app.controller('WhS_Deal_VolumeCommitmentItemTierEditorController', VolumeCommitmentItemTierEditorController);
 

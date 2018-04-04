@@ -313,10 +313,11 @@
 
             if (exrates) {
                 for (var i = 0 ; i < exrates.length; i++) {
-                    if (exrates[i].Zones != undefined && exrates[i].Zones.some(containesInZonesIds)) {
+
+                    if (exrates[i].Zones != undefined) {
                         newexrates[newexrates.length] = {
                             EvaluatedRate: exrates[i].EvaluatedRate,
-                            ZoneIds: exrates[i].ZoneIds.filter(containesInZonesIds),
+                            Zones: exrates[i].Zones,
                             Description: exrates[i].Description
                         }
                     }

@@ -38,8 +38,8 @@
                             <vr-button type="Add" data-onclick="scopeModel.addException" standalone vr-disabled="scopeModel.disabelAddException()"></vr-button>
                             <vr-datagrid datasource="scopeModel.exceptions" norowhighlightonclick="true" menuactions="scopeModel.exceptionGridMenuActions" maxheight="300px"
                                          on-ready="onGridReady" ondeleterow="scopeModel.removeException" hidegridmenu>
-                                <vr-datagridcolumn headertext="'Zones'" field="'Entity.ZoneNames'" widthfactor="7" disablesorting></vr-datagridcolumn>
-                                <vr-datagridcolumn headertext="'Rate/Discount'" field="'Entity.Description'" widthfactor="3"></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Zones'" field="'ZoneNames'" widthfactor="7" disablesorting></vr-datagridcolumn>
+                                <vr-datagridcolumn headertext="'Rate/Discount'" field="'Description'" widthfactor="3"></vr-datagridcolumn>
                             </vr-datagrid>
                         </vr-columns>
                     </vr-row>
