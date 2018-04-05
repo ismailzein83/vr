@@ -118,12 +118,14 @@
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\MappedTable\CodeOnEachRowMappedTable.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\MappedTable\CodesByZoneMappedTable.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\MappedTable\MappedTable.cs" />
+    <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\MappedValue\CodeOnEachRowOtherRatesMappedValue.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\MappedValue\CodesByZoneBEFieldMappedValue.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\MappedValue\CodeOnEachRowBEFieldMappedValue.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\MappedValue\CodesByZoneConstantMappedValue.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\MappedValue\CodeOnEachRowConstantMappedValue.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\MappedValue\CodeOnEachRowMappedValue.cs" />
     <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\MappedValue\CodesByZoneMappedValue.cs" />
+    <Compile Include="SalePriceListTemplate\SalePriceListTemplateSettings\MappedValue\CodesByZoneOtherRatesMappedValue.cs" />
     <Compile Include="SaleZoneGroups\AllExceptSaleZoneGroup.cs" />
     <Compile Include="SaleZoneGroups\SelectiveSaleZoneGroup.cs" />
     <Compile Include="SellingNumberPlan\SelectiveSellingNumberPlan.cs" />
