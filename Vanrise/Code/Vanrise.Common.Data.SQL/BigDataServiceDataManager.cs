@@ -68,7 +68,8 @@ namespace Vanrise.Common.Data.SQL
             {
                 foreach( var cachedObjectIdString in serializedCachedObjectIds.Split(','))
                 {
-                    instance.CachedObjectIds.Add(Guid.Parse(cachedObjectIdString));
+                    if (!String.IsNullOrEmpty(cachedObjectIdString))
+                        instance.CachedObjectIds.Add(Guid.Parse(cachedObjectIdString));
                 }
             }
             return instance;
