@@ -6,16 +6,18 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Runtime.Entities
 {
-    public class RuntimeConfigurationSet
+    public class RuntimeNode
     {
-        public Guid RuntimeConfigurationSetId { get; set; }
+        public Guid RuntimeNodeId { get; set; }
+
+        public Guid RuntimeNodeConfigurationId { get; set; }
 
         public string Name { get; set; }
 
-        public RuntimeConfigurationSetSettings Settings { get; set; }
+        public RuntimeNodeSettings Settings { get; set; }
     }
 
-    public class RuntimeConfigurationSetSettings
+    public class RuntimeNodeSettings
     {
 
     }

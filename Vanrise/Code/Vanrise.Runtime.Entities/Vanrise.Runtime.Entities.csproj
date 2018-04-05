@@ -43,13 +43,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RuntimeNodeState.cs" />
     <Compile Include="RuntimeService.cs" />
     <Compile Include="BaseTaskActionArgument.cs" />
     <Compile Include="BaseTaskTriggerArgument.cs" />
-    <Compile Include="Configuration\RuntimeConfigurationSet.cs" />
-    <Compile Include="Configuration\RuntimeHostConfiguration.cs" />
+    <Compile Include="RuntimeNode.cs" />
+    <Compile Include="Configuration\RuntimeNodeConfiguration.cs" />
     <Compile Include="Configuration\RuntimeServiceConfiguration.cs" />
-    <Compile Include="Configuration\RuntimeServiceGroupConfiguration.cs" />
+    <Compile Include="Configuration\RuntimeProcessConfiguration.cs" />
     <Compile Include="FreezedTransactionLock.cs" />
     <Compile Include="IRunningProcessManager.cs" />
     <Compile Include="ISchedulerTaskFilter.cs" />

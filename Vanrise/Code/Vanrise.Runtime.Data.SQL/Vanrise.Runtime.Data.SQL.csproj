@@ -49,6 +49,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunningProcessDataManager.cs" />
     <Compile Include="RuntimeManagerDataManager.cs" />
+    <Compile Include="RuntimeNodeConfigurationDataManager.cs" />
+    <Compile Include="RuntimeNodeDataManager.cs" />
+    <Compile Include="RuntimeNodeStateDataManager.cs" />
     <Compile Include="SchedulerTaskActionTypeDataManager.cs" />
     <Compile Include="SchedulerTaskStateDataManager.cs" />
     <Compile Include="SchedulerTaskDataManager.cs" />

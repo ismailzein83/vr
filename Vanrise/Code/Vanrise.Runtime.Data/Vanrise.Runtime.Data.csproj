@@ -48,6 +48,9 @@
     <Compile Include="ILockServiceDataManager.cs" />
     <Compile Include="IRunningProcessDataManager.cs" />
     <Compile Include="IRuntimeManagerDataManager.cs" />
+    <Compile Include="IRuntimeNodeConfigurationDataManager.cs" />
+    <Compile Include="IRuntimeNodeDataManager.cs" />
+    <Compile Include="IRuntimeNodeStateDataManager.cs" />
     <Compile Include="ISchedulerTaskActionTypeDataManager.cs" />
     <Compile Include="ISchedulerTaskStateDataManager.cs" />
     <Compile Include="ISchedulerTaskDataManager.cs" />

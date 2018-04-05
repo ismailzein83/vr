@@ -8,10 +8,6 @@ namespace Vanrise.Runtime.Entities
 {
     public class RuntimeServiceConfiguration
     {
-        public Guid RuntimeServiceConfigurationId { get; set; }
-
-        public Guid GroupConfigurationId { get; set; }
-
         public string Name { get; set; }
 
         public RuntimeServiceConfigurationSettings Settings { get; set; }
@@ -20,7 +16,5 @@ namespace Vanrise.Runtime.Entities
     public class RuntimeServiceConfigurationSettings
     {
         public RuntimeService RuntimeService { get; set; }
-
-        public TimeSpan ExecutionInterval { get; set; }
     }
 }
