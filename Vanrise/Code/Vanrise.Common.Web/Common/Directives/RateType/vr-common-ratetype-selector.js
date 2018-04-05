@@ -48,10 +48,14 @@ app.directive('vrCommonRatetypeSelector', ['VRCommon_RateTypeAPIService', 'VRCom
 
     };
     function getTemplate(attrs) {
-        var label;
-        if (attrs.hidelabel == undefined)
-            label = "Rate Type";
+   
+      
+        var hidelabel = "";
+        if (attrs.hidelabel != undefined)
+            hidelabel = "hidelabel";
+
         var disabled = "";
+        var label = "";
         if (attrs.customlabel != undefined)
             label = attrs.customlabel.replace(/'/g, "");
         if (attrs.isdisabled)
@@ -73,7 +77,7 @@ app.directive('vrCommonRatetypeSelector', ['VRCommon_RateTypeAPIService', 'VRCom
             multipleselection = "ismultipleselection";
 
         return ' <vr-select ' + multipleselection + ' customvalidate="ctrl.customvalidate"  on-ready="ctrl.onSelectorReady"  datasource="ctrl.datasource" ' + required + ' ' + hideselectedvaluessection + ' selectedvalues="ctrl.selectedvalues" ' + disabled + ' onselectionchanged="ctrl.onselectionchanged" datatextfield="Name" datavaluefield="RateTypeId"'
-               + 'entityname="RateType" ' + ' label="' + label + '" ' + addCliked + ' onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>';
+               + 'entityname="RateType" ' + ' label="' + label + '" ' + addCliked + ' ' + hidelabel + ' onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem"></vr-select>';
 
     }
     function rateTypeCtor(ctrl, $scope, VRCommon_RateTypeAPIService, $attrs) {
@@ -103,7 +107,7 @@ app.directive('vrCommonRatetypeSelector', ['VRCommon_RateTypeAPIService', 'VRCom
                 return VRUIUtilsService.getIdSelectedIds('RateTypeId', $attrs, ctrl);
             };
             api.load = function (payload) {
-
+                console.log("in load");
                 var selectedIds;
                 if (payload != undefined) {
                     selectedIds = payload.selectedIds;
