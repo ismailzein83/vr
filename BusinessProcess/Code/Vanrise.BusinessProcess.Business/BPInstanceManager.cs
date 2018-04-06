@@ -190,6 +190,9 @@ namespace Vanrise.BusinessProcess.Business
 
             public override IEnumerable<BPInstance> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<BPInstanceQuery> input)
             {
+                var maxTop = new Vanrise.Common.Business.ConfigManager().GetMaxSearchRecordCount();
+                if (input.Query.Top > maxTop)
+                    throw new VRBusinessException(string.Format("Top record count cannot be greater than {0}", maxTop));
                 return s_instanceManager.GetAllFilteredBPInstances(input.Query);
             }
 

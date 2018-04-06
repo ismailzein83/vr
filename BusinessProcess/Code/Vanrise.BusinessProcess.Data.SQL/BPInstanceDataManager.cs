@@ -49,7 +49,8 @@ namespace Vanrise.BusinessProcess.Data.SQL
                        query.EntityId,
                        query.DateFrom,
                        query.DateTo,
-                       grantedPermissionSetIdsAsString
+                       grantedPermissionSetIdsAsString,
+                       query.Top
                   );
         }
 

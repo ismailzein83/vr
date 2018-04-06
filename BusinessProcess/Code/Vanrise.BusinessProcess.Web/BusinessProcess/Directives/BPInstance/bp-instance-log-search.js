@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("bpInstanceLogSearch", ['UtilsService', 'VRUIUtilsService', 'BusinessProcess_BPInstanceService', 'VRValidationService', 'VRNotificationService', 'VRDateTimeService',
-function (UtilsService, VRUIUtilsService, BusinessProcess_BPInstanceService, VRValidationService, VRNotificationService, VRDateTimeService) {
+app.directive("bpInstanceLogSearch", ['UtilsService', 'VRUIUtilsService', 'BusinessProcess_BPInstanceService', 'VRValidationService', 'VRNotificationService', 'VRDateTimeService', 'UISettingsService',
+function (UtilsService, VRUIUtilsService, BusinessProcess_BPInstanceService, VRValidationService, VRNotificationService, VRDateTimeService, UISettingsService) {
 
     var directiveDefinitionObject = {
 
@@ -82,10 +82,20 @@ function (UtilsService, VRUIUtilsService, BusinessProcess_BPInstanceService, VRV
             fromDate.setHours(0, 0, 0, 0);
             $scope.fromDate = fromDate;
 
+            $scope.top = 100;
+            $scope.maxNumberOfRecords = UISettingsService.getMaxSearchRecordCount();
+
             $scope.validateTimeRange = function () {
                 return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
             };
-
+            $scope.checkMaxNumberResords = function () {
+                if ($scope.top <= $scope.maxNumberOfRecords || $scope.maxNumberOfRecords == undefined) {
+                    return null;
+                }
+                else {
+                    return "Max top value can be entered is: " + $scope.maxNumberOfRecords;
+                }
+            };
         }
 
         function load() {
@@ -97,7 +107,8 @@ function (UtilsService, VRUIUtilsService, BusinessProcess_BPInstanceService, VRV
                 DefinitionsId: bpDefinitionDirectiveApi.getSelectedIds(),
                 InstanceStatus: bpInstanceStatusDirectiveApi.getSelectedIds(),
                 DateFrom: $scope.fromDate,
-                DateTo: $scope.toDate
+                DateTo: $scope.toDate,
+                Top: $scope.top
             };
         }
 

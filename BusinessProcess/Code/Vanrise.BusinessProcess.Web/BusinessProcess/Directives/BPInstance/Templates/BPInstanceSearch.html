@@ -16,6 +16,9 @@
             <vr-columns width="normal">
                 <vr-datetimepicker label="To" value="toDate" type="dateTime" customvalidate="validateTimeRange()"></vr-datetimepicker>
             </vr-columns>
+            <vr-columns width="normal">
+                <vr-numeric label="Top" value="top" minvalue="1" customvalidate="checkMaxNumberResords()" isrequired="true"></vr-numeric>
+            </vr-columns>
         </vr-row>
     </div>
     <vr-row removeline>
