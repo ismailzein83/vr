@@ -31,7 +31,7 @@ namespace TOne.WhS.RouteSync.Ericsson
     {
         public Guid TrunkId { get; set; }
 
-        public int Percentage { get; set; }
+        public int? Percentage { get; set; }
 
         public int Priority { get; set; }
     }

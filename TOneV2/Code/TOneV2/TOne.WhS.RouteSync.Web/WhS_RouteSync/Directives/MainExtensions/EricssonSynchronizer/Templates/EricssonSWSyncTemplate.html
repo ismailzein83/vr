@@ -1,0 +1,86 @@
+﻿<vr-tabs>
+    <vr-tab header="'Routing'">
+        <vr-row>
+            <vr-columns width="1/4row">
+                <vr-textbox value="scopeModel.numberOfOptions" label="Number Of Options" type="number" decimalprecision="0" minvalue="1" isrequired></vr-textbox>
+            </vr-columns>
+            <vr-columns width="1/4row">
+                <vr-textbox value="scopeModel.minCodeLength" label="Min Code Length" type="number" decimalprecision="0" minvalue="1" isrequired></vr-textbox>
+            </vr-columns>
+            <vr-columns width="1/4row">
+                <vr-textbox value="scopeModel.maxCodeLength" label="Max Code Length" type="number" decimalprecision="0" minvalue="1" isrequired></vr-textbox>
+            </vr-columns>
+            <vr-columns width="1/4row">
+                <vr-textbox value="scopeModel.localCountryCode" label="Local Country Code" type="text" isrequired></vr-textbox>
+            </vr-columns>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="1/4row">
+                <vr-textbox value="scopeModel.interconnectGeneralPrefix" label="Interconnect General Prefix" type="text" isrequired></vr-textbox>
+            </vr-columns>
+            <vr-whs-be-customer-selector on-ready="scopeModel.onOutgoingTrafficCustomerSelectorReady" customlabel="Outgoing Traffic Customers"
+                                         normal-col-num="3" isrequired="true" ismultipleselection>
+            </vr-whs-be-customer-selector>
+            <vr-whs-be-supplier-selector on-ready="scopeModel.onIncomingTrafficSupplierSelectorReady" customlabel="Incoming Traffic Suppliers"
+                                         normal-col-num="3" isrequired="true" ismultipleselection>
+            </vr-whs-be-supplier-selector>
+        </vr-row>
+        <vr-section title="Local Suppliers">
+            <vr-row>
+                <vr-whs-be-supplier-selector on-ready="scopeModel.onLocalSuppliersSelectorReady" selectedvalues="scopeModel.selectedLocalSuppliers"
+                                             onselectitem="scopeModel.onSelectLocalSupplier" ondeselectitem="scopeModel.onDeselectLocalSupplier"
+                                             customlabel="Local Suppliers" normal-col-num="3" ismultipleselection hideselectedvaluessection>
+                </vr-whs-be-supplier-selector>
+                <vr-columns width="3/4row" simplecol>
+                    <vr-validator validate="scopeModel.isLocalSuppliersValid()">
+                        <vr-datagrid datasource="scopeModel.localSuppliers"
+                                     ondeleterow="scopeModel.onDeleteLocalSupplierRow"
+                                     hidegridmenu>
+
+                            <vr-datagridcolumn headertext="'Supplier'" field="'Name'" widthfactor="2"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'BO'" field="'BO'" widthfactor="1">
+                                <vr-textbox value="dataItem.BO" type="text" isrequired tonextinput></vr-textbox>
+                            </vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-validator>
+                </vr-columns>
+            </vr-row>
+        </vr-section>
+    </vr-tab>
+    <vr-tab header="'Carrier Mapping'">
+        <whs-routesync-ericsson-carrieraccountmapping-grid on-ready="scopeModel.onCarrierAccountMappingGridReady"></whs-routesync-ericsson-carrieraccountmapping-grid>
+    </vr-tab>
+</vr-tabs>
+
+
+
+
+
+
+<!--<vr-row>
+    <vr-columns width="1/2row">
+        <vr-section title="Local Suppliers">
+            <vr-row>
+                <vr-whs-be-carrieraccount-selector on-ready="scopeModel.onLocalSuppliersSelectorReady" selectedvalues="scopeModel.selectedLocalSuppliers"
+                                                   onselectitem="scopeModel.onSelectLocalSupplier" ondeselectitem="scopeModel.onDeselectLocalSupplier"
+                                                   customlabel="Local Suppliers" normal-col-num="6" ismultipleselection getsuppliers>
+                </vr-whs-be-carrieraccount-selector>
+            </vr-row>
+            <vr-row>
+                <vr-columns width="fullrow" simplecol>
+                    <vr-validator validate="scopeModel.isLocalSuppliersValid()">
+                        <vr-datagrid datasource="scopeModel.localSuppliers"
+                                     ondeleterow="scopeModel.onDeleteLocalSupplierRow"
+                                     hidegridmenu>
+
+                            <vr-datagridcolumn headertext="'Supplier'" field="'Name'" widthfactor="2"></vr-datagridcolumn>
+                            <vr-datagridcolumn headertext="'BO'" field="'BO'" widthfactor="1">
+                                <vr-textbox value="dataItem.BO" type="text" isrequired tonextinput></vr-textbox>
+                            </vr-datagridcolumn>
+                        </vr-datagrid>
+                    </vr-validator>
+                </vr-columns>
+            </vr-row>
+        </vr-section>
+    </vr-columns>
+</vr-row>-->

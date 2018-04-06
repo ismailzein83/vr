@@ -1,4 +1,5 @@
 ﻿'use strict';
+
 app.directive('vrWhsBeCustomerSelector', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
@@ -6,20 +7,21 @@ app.directive('vrWhsBeCustomerSelector', ['UtilsService', 'VRUIUtilsService',
             restrict: 'E',
             scope: {
                 onReady: '=',
-                ismultipleselection: '@',
+                onselectionchanged: "=",
+                onselectitem: "=",
+                ondeselectitem: "=",
+                ondeselectallitems: "=",
+                selectedvalues: "=",
                 isrequired: '=',
+                ismultipleselection: '@',
                 normalColNum: '@',
                 hideremoveicon: "@",
-                onselectionchanged: "=",
-                selectedvalues: "="
+                customlabel: '@'
             },
             controller: function ($scope, $element, $attrs) {
-
                 var ctrl = this;
-
-                var obj = new customerSelector(ctrl, $scope);
-                obj.initializeController();
-
+                var ctor = new customerSelectorCtor(ctrl, $scope);
+                ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -33,33 +35,48 @@ app.directive('vrWhsBeCustomerSelector', ['UtilsService', 'VRUIUtilsService',
             template: function (element, attrs) {
                 return getTemplate(attrs);
             }
-
         };
 
         function getTemplate(attrs) {
-            var multipleselection = "";
 
+            var multipleselection = "";
             if (attrs.ismultipleselection != undefined)
                 multipleselection = "ismultipleselection";
-
-            //var required = "";
-            //if (attrs.isrequired != undefined)
-            //    required = "isrequired";
 
             var hideremoveicon = "";
             if (attrs.hideremoveicon != undefined)
                 hideremoveicon = "hideremoveicon";
 
+            var hideselectedvaluessection = "";
+            if (attrs.hideselectedvaluessection != undefined)
+                hideselectedvaluessection = "hideselectedvaluessection";
 
-            return '<vr-whs-be-carrieraccount-selector onselectionchanged="ctrl.onselectionchanged"  normal-col-num="{{ctrl.normalColNum}}"   getcustomers on-ready="onCarrierAccountDirectiveReady" ' +
-                multipleselection + ' isrequired="ctrl.isrequired" selectedvalues="ctrl.selectedvalues" ' + hideremoveicon + '></vr-whs-be-carrieraccount-selector>';
+            var hidelabel = "";
+            if (attrs.hidelabel != undefined)
+                hidelabel = "hidelabel";
+
+            var customlabel = '';
+            if (attrs.customlabel != undefined)
+                customlabel = 'customlabel="{{ctrl.customlabel}}"';
+
+            var usefullcolumn = "";
+            if (attrs.usefullcolumn != undefined)
+                usefullcolumn = "usefullcolumn";
+
+            return '<vr-whs-be-carrieraccount-selector on-ready="onCarrierAccountDirectiveReady" onselectionchanged="ctrl.onselectionchanged" selectedvalues="ctrl.selectedvalues" ' +
+                         ' onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ondeselectallitems="ctrl.ondeselectallitems" isrequired="ctrl.isrequired"  normal-col-num="{{ctrl.normalColNum}}" getcustomers '
+                         + multipleselection + ' ' + hideremoveicon + ' ' + hideselectedvaluessection + ' ' + hidelabel + ' ' + customlabel + ' ' + usefullcolumn + '>' +
+                   '</vr-whs-be-carrieraccount-selector>';
         }
 
-        function customerSelector(ctrl, $scope) {
+        function customerSelectorCtor(ctrl, $scope) {
+            this.initializeController = initializeController;
+
             var carrierAccountDirectiveAPI;
             var carrierAccountReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
+
                 $scope.onCarrierAccountDirectiveReady = function (api) {
                     carrierAccountDirectiveAPI = api;
                     carrierAccountReadyPromiseDeferred.resolve();
@@ -88,11 +105,11 @@ app.directive('vrWhsBeCustomerSelector', ['UtilsService', 'VRUIUtilsService',
                 api.getSelectedValues = function () {
                     return carrierAccountDirectiveAPI.getSelectedValues();
                 };
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
-            this.initializeController = initializeController;
         }
+
         return directiveDefinitionObject;
     }]);

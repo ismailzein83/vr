@@ -142,12 +142,13 @@ app.directive('whsRoutesyncCarrieraccountmappingTelesidbGrid', ['VRNotificationS
                         var mappingSeparator = context != undefined ? context.getMappingSeparator() : undefined;
 
                         for (var i = 0; i < response.length; i++) {
+                            var currentCarrierAccountInfo = response[i];
 
                             var carrierAccountMapping = carrierMappings != undefined ? carrierMappings[response[i].CarrierAccountId] : undefined;
                             var carrierMapping = {
-                                CarrierAccountId: response[i].CarrierAccountId,
-                                CarrierAccountType: response[i].AccountType,
-                                CarrierAccountName: response[i].Name,
+                                CarrierAccountId: currentCarrierAccountInfo.CarrierAccountId,
+                                CarrierAccountType: currentCarrierAccountInfo.AccountType,
+                                CarrierAccountName: currentCarrierAccountInfo.Name,
                                 CustomerMapping: (carrierAccountMapping && carrierAccountMapping.CustomerMapping) ? carrierAccountMapping.CustomerMapping.join(mappingSeparator) : '',
                                 SupplierMapping: (carrierAccountMapping && carrierAccountMapping.SupplierMapping) ? carrierAccountMapping.SupplierMapping.join(mappingSeparator) : '',
                                 ShowCustomerMapping: showCustomerMappingFunction,

@@ -1,0 +1,31 @@
+﻿<vr-row>
+    <vr-columns width="1/4row">
+        <vr-select datasource="scopeModel.trunksInfo"
+                   selectedvalues="scopeModel.selectedTrunksInfo"
+                   datavaluefield="value"
+                   datatextfield="description"
+                   onselectitem="scopeModel.onSelectTrunk"
+                   ondeselectitem="scopeModel.onDeselectTrunk"
+                   isrequired="true" ismultipleselection hideselectedvaluessection>
+        </vr-select>
+    </vr-columns>
+    <vr-columns width="3/4row" simplecol>
+        <vr-validator validate="scopeModel.isTrunkTrunkGroupsValid()">
+            <vr-datagrid datasource="scopeModel.trunkTrunkGroups"
+                         ondeleterow="scopeModel.onDeleteTrunkTrunkGroup"
+                         hidegridmenu>
+
+                <vr-datagridcolumn headertext="'Trunk Name'" field="'TrunkName'" widthfactor="2"></vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Percentage'" widthfactor="1">
+                    <vr-textbox value="dataItem.Percentage" type="number" decimalprecision="0" minvalue="0" maxvalue="100"
+                                onvaluechanged="viewScope.scopeModel.updateSupplierDescriptions" tonextinput></vr-textbox>
+                </vr-datagridcolumn>
+                <vr-datagridcolumn headertext="'Priority'" widthfactor="1">
+                    <vr-textbox value="dataItem.Priority" type="number" decimalprecision="0" minvalue="1" 
+                                onvaluechanged="viewScope.scopeModel.updateSupplierDescriptions" isrequired tonextinput>
+                    </vr-textbox>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-validator>
+    </vr-columns>
+</vr-row>

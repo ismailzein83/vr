@@ -20,6 +20,7 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
                 ismultipleselection: "@",
                 hideselectedvaluessection: '@',
                 hideremoveicon: "@",
+                hidelabel: '@',
                 normalColNum: '@',
                 customlabel: '@'
             },
@@ -33,7 +34,6 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
                 ctrl.datasource = [];
                 var ctor = new carriersCtor(ctrl, $scope, WhS_BE_CarrierAccountAPIService, $attrs);
                 ctor.initializeController();
-
             },
             controllerAs: 'ctrl',
             bindToController: true,
@@ -76,33 +76,44 @@ app.directive('vrWhsBeCarrieraccountSelector', ['WhS_BE_CarrierAccountAPIService
                 }
             }
 
+            var hidelabel = "";
+            if (attrs.hidelabel != undefined)
+                hidelabel = "hidelabel";
+
+            var customlabel = '';
             if (attrs.customlabel != undefined)
-                label = attrs.customlabel;
+                customlabel = 'customlabel="{{ctrl.customlabel}}"';
+
+            var hideremoveicon = "";
+            if (attrs.hideremoveicon != undefined)
+                hideremoveicon = "hideremoveicon";
 
             var hideselectedvaluessection = "";
             if (attrs.hideselectedvaluessection != undefined)
                 hideselectedvaluessection = "hideselectedvaluessection";
 
-            var hideremoveicon = "";
-            if (attrs.hideremoveicon != undefined)
-                hideremoveicon = "hideremoveicon";
+            var haschildcolumns = "";
+            if (attrs.usefullcolumn != undefined)
+                haschildcolumns = "haschildcolumns";
+
             var viewCliked = '';
             if (attrs.showviewbutton != undefined)
                 viewCliked = 'onviewclicked="ctrl.ViewCarrierAccount"';
-
-            //To be added on multiple selection to add grouping functionality, the style section is to be added to the outer div
-            //var groupStyle = 'style="display:inline-block;width: calc(100% - 18px);"';
-            //var groupHtml = ' <span class="glyphicon glyphicon-th hand-cursor"  aria-hidden="true" ng-click="openTreePopup()"></span></div>';
 
             var ismultipleselection = "";
             if (attrs.ismultipleselection != undefined)
                 ismultipleselection = "ismultipleselection";
 
-            return '<vr-columns colnum="{{ctrl.normalColNum}}"> ' +
-                        '<vr-select hasviewpermission="ctrl.hasviewpermission"  isrequired="ctrl.isrequired" on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" '
-                            + ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"  ondeselectallitems="ctrl.ondeselectallitems" onblurdropdown="ctrl.onblurdropdown" onselectitem="ctrl.onselectitem" '
-                            + ' ondeselectitem="ctrl.ondeselectitem" datalockfield="Locked" datatextfield="Name" datavaluefield="CarrierAccountId" datadisabledfield="IsDisabled" label="' + label + '" '
-                            + hideselectedvaluessection + '  ' + hideremoveicon + ' ' + ismultipleselection + ' ' + viewCliked + ' >' +
+            //To be added on multiple selection to add grouping functionality, the style section is to be added to the outer div
+            //var groupStyle = 'style="display:inline-block;width: calc(100% - 18px);"';
+            //var groupHtml = ' <span class="glyphicon glyphicon-th hand-cursor"  aria-hidden="true" ng-click="openTreePopup()"></span></div>';
+
+            return '<vr-columns colnum="{{ctrl.normalColNum}}" ' + haschildcolumns + '> ' +
+                        '<vr-select hasviewpermission="ctrl.hasviewpermission"  isrequired="ctrl.isrequired" on-ready="ctrl.onSelectorReady" datasource="ctrl.datasource" ' +
+                            ' selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged"  ondeselectallitems="ctrl.ondeselectallitems" onblurdropdown="ctrl.onblurdropdown" ' +
+                            ' onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" datalockfield="Locked" datatextfield="Name" datavaluefield="CarrierAccountId" ' +
+                            ' datadisabledfield="IsDisabled" ' + ' label="' + label + '" ' + customlabel + ' ' + hidelabel + ' ' + hideselectedvaluessection + ' ' + hideremoveicon +
+                            ' ' + ismultipleselection + ' ' + viewCliked + '>' +
                         '</vr-select>' +
                    '</vr-columns>';
         }

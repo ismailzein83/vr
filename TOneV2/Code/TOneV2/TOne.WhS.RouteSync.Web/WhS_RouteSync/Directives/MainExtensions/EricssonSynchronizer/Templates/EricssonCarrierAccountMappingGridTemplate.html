@@ -1,0 +1,21 @@
+﻿<vr-datagrid on-ready="scopeModel.onGridReady"
+             datasource="scopeModel.carrierAccountMappingsGridDS"
+             loadmoredata="scopeModel.loadMoreData"
+             pagingtype="'PagingOnScroll'"
+             showexpand="scopeModel.showExpandIcon"
+             maxheight="500px">
+
+    <vr-datagridcolumn headertext="'ID'" field="'CarrierAccountId'" type="'Text'" widthfactor="1"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Account Name'" field="'CarrierAccountName'" type="'Text'" widthfactor="2" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Customer Mapping'" field="'CustomerMappingDescription'" widthfactor="2" isfielddynamic="true" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Supplier Mapping'" field="'SupplierMappingDescription'" widthfactor="2" isfielddynamic="true" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Error'" field="'ErrorDescription'" widthfactor="1" isfielddynamic="true" disablesorting>
+        <span ng-if="dataItem.isCustomerMappingInvalid && !dataItem.isSupplierMappingInvalid">Input Mapping Error</span>
+        <span ng-if="!dataItem.isCustomerMappingInvalid && dataItem.isSupplierMappingInvalid">Output Mapping Error</span>
+        <span ng-if="dataItem.isCustomerMappingInvalid && dataItem.isSupplierMappingInvalid">Input/Output Mapping Errors</span>
+    </vr-datagridcolumn>
+
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
+</vr-datagrid>

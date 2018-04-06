@@ -231,9 +231,9 @@ namespace TOne.WhS.BusinessEntity.Business
             return IsSwitchRouteSynchronizerValid(whsSwitch, out validationMessages);
         }
 
-        private void ValidateSwitch(string sName)
+        private void ValidateSwitch(string switchName)
         {
-            if (String.IsNullOrWhiteSpace(sName))
+            if (String.IsNullOrWhiteSpace(switchName))
                 throw new MissingArgumentValidationException("Switch.Name");
         }
 

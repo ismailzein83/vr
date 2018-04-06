@@ -145,9 +145,20 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="WhS_RouteSync\Constant\ModuleConfig.js" />
+    <Content Include="WhS_RouteSync\Constant\TrunkTypeEnum.js" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\Templates\CarrierAccountMappingTelesIdbGridTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-grid.js" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-telesidb-grid.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\Templates\EricssonCarrierAccountMappingGridTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\Templates\EricssonCustomerMappingTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\Templates\EricssonSupplierMappingTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\Templates\EricssonSWSyncTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\Templates\EricssonTrunkTrunkGroupTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericsson-carrieraccountmapping-grid.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericsson-customermapping.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericsson-suppliermapping.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericsson-swsync.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericsson-trunktrunkgroup.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\IdbDataManagers\Templates\TelesPostgresIdbSWDataManagerTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\IdbDataManagers\whs-routesync-telesidb-postgresdatamanager.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\IVSwitchSynchronizer\Templates\BuiltInIVSwitchSWSyncTemplate.html" />

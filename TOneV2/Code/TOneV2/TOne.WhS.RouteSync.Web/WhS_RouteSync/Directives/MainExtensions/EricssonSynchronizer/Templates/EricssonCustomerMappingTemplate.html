@@ -1,0 +1,48 @@
+﻿<!--<vr-validation-group validationcontext="validationContext">-->
+<vr-form name="validationContext">
+    <vr-row>
+        <vr-columns width="1/4row">
+            <vr-textbox value="scopeModel.bo" label="BO" type="text" onvaluechanged="scopeModel.isCustomerMappingExists" isrequired="scopeModel.customerMappingExists"></vr-textbox>
+        </vr-columns>
+        <vr-columns width="1/4row">
+            <vr-textbox value="scopeModel.nationalOBA" label="National OBA" type="text" onvaluechanged="scopeModel.isCustomerMappingExists" isrequired="scopeModel.customerMappingExists"></vr-textbox>
+        </vr-columns>
+        <vr-columns width="1/4row">
+            <vr-textbox value="scopeModel.internationalOBA" label="International OBA" type="text" onvaluechanged="scopeModel.isCustomerMappingExists" isrequired="scopeModel.customerMappingExists"></vr-textbox>
+        </vr-columns>
+    </vr-row>
+
+    <vr-validator validate="scopeModel.isTrunksValid()">
+        <vr-row removeline>
+            <vr-columns width="fullrow" simplecol>
+                <vr-button type="Add" data-onclick="scopeModel.onTrunkAdded" standalone></vr-button>
+            </vr-columns>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-datagrid on-ready="scopeModel.onTrunkGridReady"
+                             datasource="scopeModel.trunks"
+                             ondeleterow="scopeModel.onTrunkDeleted"
+                             pagingtype="'PagingOnScroll'" hidegridmenu>
+
+                    <vr-datagridcolumn headertext="'Trunk Name'" widthfactor="3" disablesorting>
+                        <vr-textbox value="dataItem.TrunkName" type="text" onvaluechanged="viewScope.scopeModel.isCustomerMappingExists" isrequired="true" tonextinput></vr-textbox>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Trunk Type'" widthfactor="2" disablesorting>
+                        <vr-select on-ready="dataItem.onTrunkTypeSelectorReady"
+                                   datasource="viewScope.scopeModel.trunkTypes"
+                                   selectedvalues="dataItem.selectedTrunkType"
+                                   datavaluefield="value"
+                                   datatextfield="description"
+                                   isrequired="true">
+                        </vr-select>
+                    </vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Routing'" widthfactor="1" disablesorting>
+                        <vr-switch value="dataItem.IsRouting"></vr-switch>
+                    </vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-columns>
+        </vr-row>
+    </vr-validator>
+</vr-form>
+<!--</vr-validation-group>-->
