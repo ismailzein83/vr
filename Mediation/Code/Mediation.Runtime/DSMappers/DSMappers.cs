@@ -141,89 +141,162 @@ namespace Mediation.Runtime
                     switch (recordType)
                     {
                         case "07": lengthToRead = 89; break;
+                        case "01": lengthToRead = 354; break;
                         default: lengthToRead = 115; break;
                     }
 
                     if (currentLine.Length < lengthToRead)
                         break;
 
-                    if (recordType != "07")
+                    switch (recordType)
                     {
-                        string cdrAsString = currentLine.Substring(0, lengthToRead);
+                        case "07": break;
 
-                        dynamic cdr = Activator.CreateInstance(mediationCDRRuntimeType) as dynamic;
+                        case "01":
+                            string cdrAsString_01 = currentLine.Substring(0, lengthToRead);
 
-                        cdr.DataSourceId = dataSourceId;
-                        cdr.FileName = importedData.Name;
-                        cdr.RecordType = cdrAsString.Substring(0, 2);
-                        cdr.CallStatus = cdrAsString.Substring(2, 1);
-                        cdr.CauseForOutput = cdrAsString.Substring(3, 1);
+                            dynamic cdr_01 = Activator.CreateInstance(mediationCDRRuntimeType) as dynamic;
+                            cdr_01.DataSourceId = dataSourceId;
+                            cdr_01.FileName = importedData.Name;
+                            cdr_01.RecordType = cdrAsString_01.Substring(0, 2);
+                            cdr_01.CallStatus = cdrAsString_01.Substring(2, 1);
+                            cdr_01.CauseForOutput = cdrAsString_01.Substring(3, 1);
 
-                        string aNumber = cdrAsString.Substring(4, 20);
-                        if (!string.IsNullOrEmpty(aNumber))
-                            cdr.ANumber = Utilities.ReplaceString(aNumber.TrimStart(), "F", "", StringComparison.OrdinalIgnoreCase);
+                            string aNumber_01 = cdrAsString_01.Substring(4, 18);
+                            if (!string.IsNullOrEmpty(aNumber_01))
+                                cdr_01.ANumber = Utilities.ReplaceString(aNumber_01.Trim(), "F", "", StringComparison.OrdinalIgnoreCase);
 
-                        string bNumber = cdrAsString.Substring(24, 20);
-                        if (!string.IsNullOrEmpty(bNumber))
-                            cdr.BNumber = Utilities.ReplaceString(bNumber.TrimStart(), "F", "", StringComparison.OrdinalIgnoreCase);
+                            string bNumber_01 = cdrAsString_01.Substring(22, 18);
+                            if (!string.IsNullOrEmpty(bNumber_01))
+                                cdr_01.BNumber = Utilities.ReplaceString(bNumber_01.Trim(), "F", "", StringComparison.OrdinalIgnoreCase);
 
-                        cdr.ACategory = cdrAsString.Substring(44, 2);
-                        cdr.BCategory = cdrAsString.Substring(46, 2);
-                        cdr.ChargedParty = cdrAsString.Substring(48, 1);
+                            cdr_01.ACategory = cdrAsString_01.Substring(40, 2);
+                            cdr_01.BCategory = cdrAsString_01.Substring(42, 2);
+                            cdr_01.ChargedParty = cdrAsString_01.Substring(44, 2);
 
-                        string dateForStartCharging = cdrAsString.Substring(49, 6);
-                        if (!string.IsNullOrEmpty(dateForStartCharging))
-                        {
-                            int year = Convert.ToInt32(dateForStartCharging.Substring(0, 2)) + 2000;
-                            int month = Convert.ToInt32(dateForStartCharging.Substring(2, 2));
-                            int day = Convert.ToInt32(dateForStartCharging.Substring(4, 2));
-                            cdr.DateForStartCharging = new DateTime(year, month, day);
-                        }
+                            string dateForStartCharging_01 = cdrAsString_01.Substring(46, 6);
+                            if (!string.IsNullOrEmpty(dateForStartCharging_01))
+                            {
+                                int year = Convert.ToInt32(dateForStartCharging_01.Substring(0, 2)) + 2000;
+                                int month = Convert.ToInt32(dateForStartCharging_01.Substring(2, 2));
+                                int day = Convert.ToInt32(dateForStartCharging_01.Substring(4, 2));
+                                cdr_01.DateForStartCharging = new DateTime(year, month, day);
+                            }
 
-                        string timeForStartCharging = cdrAsString.Substring(55, 6);
-                        if (!string.IsNullOrEmpty(timeForStartCharging))
-                        {
-                            int hour = Convert.ToInt32(timeForStartCharging.Substring(0, 2));
-                            int minute = Convert.ToInt32(timeForStartCharging.Substring(2, 2));
-                            int second = Convert.ToInt32(timeForStartCharging.Substring(4, 2));
-                            cdr.TimeForStartCharging = new Time(hour, minute, second, 0);
-                        }
+                            string timeForStartCharging_01 = cdrAsString_01.Substring(52, 6);
+                            if (!string.IsNullOrEmpty(timeForStartCharging_01))
+                            {
+                                int hour = Convert.ToInt32(timeForStartCharging_01.Substring(0, 2));
+                                int minute = Convert.ToInt32(timeForStartCharging_01.Substring(2, 2));
+                                int second = Convert.ToInt32(timeForStartCharging_01.Substring(4, 2));
+                                cdr_01.TimeForStartCharging = new Time(hour, minute, second, 0);
+                            }
 
-                        string chargeableDuration = cdrAsString.Substring(61, 6);
-                        if (!string.IsNullOrEmpty(chargeableDuration))
-                        {
-                            int hour = Convert.ToInt32(chargeableDuration.Substring(0, 2));
-                            int minute = Convert.ToInt32(chargeableDuration.Substring(2, 2));
-                            int second = Convert.ToInt32(chargeableDuration.Substring(4, 2));
-                            cdr.ChargeableDuration = (int)new TimeSpan(hour, minute, second).TotalSeconds;
-                        }
+                            string chargeableDuration_01 = cdrAsString_01.Substring(58, 6);
+                            if (!string.IsNullOrEmpty(chargeableDuration_01))
+                            {
+                                int hour = Convert.ToInt32(chargeableDuration_01.Substring(0, 2));
+                                int minute = Convert.ToInt32(chargeableDuration_01.Substring(2, 2));
+                                int second = Convert.ToInt32(chargeableDuration_01.Substring(4, 2));
+                                cdr_01.ChargeableDuration = (int)new TimeSpan(hour, minute, second).TotalSeconds;
+                            }
 
-                        string faultCode = cdrAsString.Substring(67, 5);
-                        if (!string.IsNullOrEmpty(faultCode))
-                            cdr.FaultCode = faultCode.TrimStart();
+                            string faultCode_01 = cdrAsString_01.Substring(64, 5);
+                            if (!string.IsNullOrEmpty(faultCode_01))
+                                cdr_01.FaultCode = faultCode_01.Trim();
 
-                        string exchangeIdentity = cdrAsString.Substring(72, 15);
-                        if (!string.IsNullOrEmpty(exchangeIdentity))
-                            cdr.ExchangeIdentity = exchangeIdentity.TrimStart();
+                            string exchangeIdentity_01 = cdrAsString_01.Substring(112, 17);
+                            if (!string.IsNullOrEmpty(exchangeIdentity_01))
+                                cdr_01.ExchangeIdentity = exchangeIdentity_01.Trim();
 
-                        string recordNumber = cdrAsString.Substring(87, 2);
-                        if (!string.IsNullOrEmpty(recordNumber))
-                            cdr.RecordNumber = Convert.ToInt32(recordNumber);
+                            string outgoingRoute_01 = cdrAsString_01.Substring(129, 7);
+                            if (!string.IsNullOrEmpty(outgoingRoute_01))
+                                cdr_01.OutgoingRoute = outgoingRoute_01.Trim();
 
-                        cdr.TariffClass = cdrAsString.Substring(89, 3);
-                        cdr.TariffSwitchingIndicator = cdrAsString.Substring(92, 1);
-                        cdr.OriginForCharging = cdrAsString.Substring(93, 4);
+                            string incomingRoute_01 = cdrAsString_01.Substring(136, 7);
+                            if (!string.IsNullOrEmpty(incomingRoute_01))
+                                cdr_01.IncomingRoute = incomingRoute_01.Trim();
 
-                        string outgoingRoute = cdrAsString.Substring(97, 7);
-                        if (!string.IsNullOrEmpty(outgoingRoute))
-                            cdr.OutgoingRoute = outgoingRoute.TrimStart();
+                            cdrs.Add(cdr_01);
+                            break;
 
-                        string incomingRoute = cdrAsString.Substring(104, 7);
-                        if (!string.IsNullOrEmpty(incomingRoute))
-                            cdr.IncomingRoute = incomingRoute.TrimStart();
+                        default:
+                            string cdrAsString = currentLine.Substring(0, lengthToRead);
 
-                        cdrs.Add(cdr);
+                            dynamic cdr = Activator.CreateInstance(mediationCDRRuntimeType) as dynamic;
+                            cdr.DataSourceId = dataSourceId;
+                            cdr.FileName = importedData.Name;
+                            cdr.RecordType = cdrAsString.Substring(0, 2);
+                            cdr.CallStatus = cdrAsString.Substring(2, 1);
+                            cdr.CauseForOutput = cdrAsString.Substring(3, 1);
+
+                            string aNumber = cdrAsString.Substring(4, 20);
+                            if (!string.IsNullOrEmpty(aNumber))
+                                cdr.ANumber = Utilities.ReplaceString(aNumber.Trim(), "F", "", StringComparison.OrdinalIgnoreCase);
+
+                            string bNumber = cdrAsString.Substring(24, 20);
+                            if (!string.IsNullOrEmpty(bNumber))
+                                cdr.BNumber = Utilities.ReplaceString(bNumber.Trim(), "F", "", StringComparison.OrdinalIgnoreCase);
+
+                            cdr.ACategory = cdrAsString.Substring(44, 2);
+                            cdr.BCategory = cdrAsString.Substring(46, 2);
+                            cdr.ChargedParty = cdrAsString.Substring(48, 1);
+
+                            string dateForStartCharging = cdrAsString.Substring(49, 6);
+                            if (!string.IsNullOrEmpty(dateForStartCharging))
+                            {
+                                int year = Convert.ToInt32(dateForStartCharging.Substring(0, 2)) + 2000;
+                                int month = Convert.ToInt32(dateForStartCharging.Substring(2, 2));
+                                int day = Convert.ToInt32(dateForStartCharging.Substring(4, 2));
+                                cdr.DateForStartCharging = new DateTime(year, month, day);
+                            }
+
+                            string timeForStartCharging = cdrAsString.Substring(55, 6);
+                            if (!string.IsNullOrEmpty(timeForStartCharging))
+                            {
+                                int hour = Convert.ToInt32(timeForStartCharging.Substring(0, 2));
+                                int minute = Convert.ToInt32(timeForStartCharging.Substring(2, 2));
+                                int second = Convert.ToInt32(timeForStartCharging.Substring(4, 2));
+                                cdr.TimeForStartCharging = new Time(hour, minute, second, 0);
+                            }
+
+                            string chargeableDuration = cdrAsString.Substring(61, 6);
+                            if (!string.IsNullOrEmpty(chargeableDuration))
+                            {
+                                int hour = Convert.ToInt32(chargeableDuration.Substring(0, 2));
+                                int minute = Convert.ToInt32(chargeableDuration.Substring(2, 2));
+                                int second = Convert.ToInt32(chargeableDuration.Substring(4, 2));
+                                cdr.ChargeableDuration = (int)new TimeSpan(hour, minute, second).TotalSeconds;
+                            }
+
+                            string faultCode = cdrAsString.Substring(67, 5);
+                            if (!string.IsNullOrEmpty(faultCode))
+                                cdr.FaultCode = faultCode.Trim();
+
+                            string exchangeIdentity = cdrAsString.Substring(72, 15);
+                            if (!string.IsNullOrEmpty(exchangeIdentity))
+                                cdr.ExchangeIdentity = exchangeIdentity.Trim();
+
+                            string recordNumber = cdrAsString.Substring(87, 2);
+                            if (!string.IsNullOrEmpty(recordNumber))
+                                cdr.RecordNumber = Convert.ToInt32(recordNumber);
+
+                            cdr.TariffClass = cdrAsString.Substring(89, 3);
+                            cdr.TariffSwitchingIndicator = cdrAsString.Substring(92, 1);
+                            cdr.OriginForCharging = cdrAsString.Substring(93, 4);
+
+                            string outgoingRoute = cdrAsString.Substring(97, 7);
+                            if (!string.IsNullOrEmpty(outgoingRoute))
+                                cdr.OutgoingRoute = outgoingRoute.Trim();
+
+                            string incomingRoute = cdrAsString.Substring(104, 7);
+                            if (!string.IsNullOrEmpty(incomingRoute))
+                                cdr.IncomingRoute = incomingRoute.Trim();
+
+                            cdrs.Add(cdr);
+                            break;
                     }
+
                     currentLine = currentLine.Remove(0, lengthToRead);
                 }
             }
