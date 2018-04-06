@@ -82,6 +82,10 @@ namespace Vanrise.Security.Business
         {
             return GetPasswordSettings().NotificationMailTemplateId;
         }
+        public bool GetExactExceptionMessage()
+        {
+            return GetAPISettings().ExactExceptionMessage;
+        }
 
         public PasswordComplexity? GetPasswordComplexity()
         {
@@ -118,6 +122,15 @@ namespace Vanrise.Security.Business
             passwordSettings.ThrowIfNull("passwordSettings");
 
             return passwordSettings;
+        }
+
+        private APISettings GetAPISettings()
+        {
+            APISettings apiSettings = GetSecuritySettings().APISettings;
+
+            apiSettings.ThrowIfNull("apiSettings");
+
+            return apiSettings;
         }
         private SecuritySettings GetSecuritySettings()
         {

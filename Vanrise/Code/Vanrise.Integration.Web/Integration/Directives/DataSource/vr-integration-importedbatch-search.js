@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrIntegrationImportedbatchSearch", ['VR_Integration_MappingResultEnum', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VRValidationService', 'VRDateTimeService', '$filter',
-function (VR_Integration_MappingResultEnum, UtilsService, VRNotificationService, VRUIUtilsService, VRValidationService, VRDateTimeService, $filter) {
+app.directive("vrIntegrationImportedbatchSearch", ['VR_Integration_MappingResultEnum', 'UtilsService', 'VRNotificationService', 'VRUIUtilsService', 'VRValidationService', 'VRDateTimeService', '$filter','UISettingsService',
+function (VR_Integration_MappingResultEnum, UtilsService, VRNotificationService, VRUIUtilsService, VRValidationService, VRDateTimeService, $filter, UISettingsService) {
 
     var directiveDefinitionObject = {
 
@@ -62,6 +62,8 @@ function (VR_Integration_MappingResultEnum, UtilsService, VRNotificationService,
             var fromDate = VRDateTimeService.getNowDateTime();
             fromDate.setHours(0, 0, 0, 0);
             $scope.selectedFromDateTime = fromDate;
+            $scope.top = 100;
+            $scope.maxNumberOfRecords = UISettingsService.getMaxSearchRecordCount();
             $scope.showGrid = false;
 
             $scope.gridReady = function (api) {
@@ -84,6 +86,14 @@ function (VR_Integration_MappingResultEnum, UtilsService, VRNotificationService,
 
             $scope.validateDateTime = function () {
                 return VRValidationService.validateTimeRange($scope.selectedFromDateTime, $scope.selectedToDateTime);
+            };
+            $scope.checkMaxNumberResords = function () {
+                if ($scope.top <= $scope.maxNumberOfRecords || $scope.maxNumberOfRecords == undefined) {
+                    return null;
+                }
+                else {
+                    return "Max top value can be entered is: " + $scope.maxNumberOfRecords;
+                }
             };
 
         }
@@ -108,7 +118,8 @@ function (VR_Integration_MappingResultEnum, UtilsService, VRNotificationService,
                 BatchName: ($scope.batchName != undefined && $scope.batchName != "") ? $scope.batchName : null,
                 MappingResults: getMappedMappingResults(),
                 From: $scope.selectedFromDateTime,
-                To: $scope.selectedToDateTime
+                To: $scope.selectedToDateTime,
+                Top: $scope.top
             };
             return query;
 

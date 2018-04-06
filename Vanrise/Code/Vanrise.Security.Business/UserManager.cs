@@ -795,7 +795,7 @@ namespace Vanrise.Security.Business
             return updateOperationOutput;
         }
 
-        public UpdateOperationOutput<object> ActivatePassword(string email, string password, string name, string tempPassword)
+        public UpdateOperationOutput<object> ActivatePassword(string email, string password, string tempPassword)
         {
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
 
@@ -820,7 +820,7 @@ namespace Vanrise.Security.Business
             string hashedPass = HashingUtility.ComputeHash(password, "", null);
 
             int lastModifiedBy = user.UserId;
-            bool updateActionSucc = dataManager.ActivatePassword(email, hashedPass, name, lastModifiedBy);
+            bool updateActionSucc = dataManager.ActivatePassword(email, hashedPass, lastModifiedBy);
 
 
             updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Failed;

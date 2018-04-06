@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrIntegrationLogSearch", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VRValidationService", 'VRDateTimeService', '$filter',
-function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationService, VRDateTimeService, $filter) {
+app.directive("vrIntegrationLogSearch", ["UtilsService", "VRNotificationService", "VRUIUtilsService", "VRValidationService", 'VRDateTimeService', '$filter', 'UISettingsService',
+function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationService, VRDateTimeService, $filter, UISettingsService) {
 
     var directiveDefinitionObject = {
 
@@ -62,9 +62,10 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationSer
             $scope.severities = [];
             $scope.selectedSeverities = [];
             var fromDate = VRDateTimeService.getNowDateTime();
-
             fromDate.setHours(0, 0, 0, 0);
             $scope.selectedFromDateTime = fromDate;
+            $scope.top = 100;
+            $scope.maxNumberOfRecords = UISettingsService.getMaxSearchRecordCount();
 
             $scope.gridReady = function (api) {
                 gridApi = api;
@@ -82,7 +83,14 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationSer
             $scope.validateDateTime = function () {
                 return VRValidationService.validateTimeRange($scope.selectedFromDateTime, $scope.selectedToDateTime);
             };
-
+            $scope.checkMaxNumberResords = function () {
+                if ($scope.top <= $scope.maxNumberOfRecords || $scope.maxNumberOfRecords == undefined) {
+                    return null;
+                }
+                else {
+                    return "Max top value can be entered is: " + $scope.maxNumberOfRecords;
+                }
+            };
         }
 
         function load() {
@@ -92,7 +100,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationSer
 
         function loadAllControls() {
             return UtilsService.waitMultipleAsyncOperations([loadSeverities, loadDatasourceSelector]).then(function () {
-              
+
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
                 $scope.isLoading = false;
@@ -116,10 +124,11 @@ function (UtilsService, VRNotificationService, VRUIUtilsService, VRValidationSer
 
         function getQueryGrid() {
             var query = {
-                DataSourceId:dataSourceDirectiveAPI.getSelectedIds(),
+                DataSourceId: dataSourceDirectiveAPI.getSelectedIds(),
                 Severities: getMappedSelectedSeverities(),
                 From: ($scope.selectedFromDateTime != undefined) ? $scope.selectedFromDateTime : null,
-                To: ($scope.selectedToDateTime != undefined) ? $scope.selectedToDateTime : null
+                To: ($scope.selectedToDateTime != undefined) ? $scope.selectedToDateTime : null,
+                Top: $scope.top
             };
             return query
         }

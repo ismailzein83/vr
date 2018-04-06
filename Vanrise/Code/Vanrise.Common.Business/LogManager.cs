@@ -41,6 +41,10 @@ namespace Vanrise.Common.Business
         }
         public Vanrise.Entities.IDataRetrievalResult<Vanrise.Entities.LogEntryDetail> GetFilteredLogs(Vanrise.Entities.DataRetrievalInput<Vanrise.Entities.LogEntryQuery> input)
         {
+            var maxTop = new ConfigManager().GetMaxSearchRecordCount();
+            if (input.Query.Top > maxTop)
+                throw new VRBusinessException(string.Format("Top record count cannot be greater than {0}", maxTop));
+
             List<int> grantedPermissionSetIds;
             var requiredPermissionSetManager = Vanrise.Security.Entities.BEManagerFactory.GetManager<IRequiredPermissionSetManager>();
             bool isUserGrantedAllModulePermissionSets = requiredPermissionSetManager.IsCurrentUserGrantedAllModulePermissionSets(LoggerFactory.LOGGING_REQUIREDPERMISSIONSET_MODULENAME, out grantedPermissionSetIds);

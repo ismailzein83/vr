@@ -12,7 +12,12 @@ namespace Vanrise.Web.App_Start
         public override void OnActionExecuted(System.Web.Http.Filters.HttpActionExecutedContext actionExecutedContext)
         {
             if (actionExecutedContext.Exception != null)
+            {
                 Common.LoggerFactory.GetExceptionLogger().WriteException(actionExecutedContext.Exception);
+                if (!new Security.Business.SecurityManager().GetExactExceptionMessage())
+                    throw new Exception("Unexpected error occurred. Please consult technical support.");
+            }
+
             try
             {
                 if (actionExecutedContext.Response != null && actionExecutedContext.Response.Headers != null)

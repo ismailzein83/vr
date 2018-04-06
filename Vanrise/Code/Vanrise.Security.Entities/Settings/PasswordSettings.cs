@@ -19,6 +19,12 @@ namespace Vanrise.Security.Entities
         public Guid? NotificationMailTemplateId { get; set; }
     }
 
+
+    public class APISettings
+    {
+        public bool ExactExceptionMessage { get; set; }
+    }
+
     public enum PasswordComplexity
     {
 

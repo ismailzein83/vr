@@ -14,5 +14,6 @@ namespace Vanrise.Integration.Entities
         public List<LogEntryType> Severities { get; set; }
         public DateTime? From { get; set; }
         public DateTime? To { get; set; }
+        public int Top { get; set; }
     }
 }

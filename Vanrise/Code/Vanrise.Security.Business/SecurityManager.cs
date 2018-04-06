@@ -36,7 +36,7 @@ namespace Vanrise.Security.Business
             if (user != null)
             {
 
-               
+
 
                 ConfigManager cManager = new ConfigManager();
 
@@ -83,7 +83,6 @@ namespace Vanrise.Security.Business
                     {
                         AuthenticationToken authToken = CreateAuthenticationToken(user);
                         authenticationOperationOutput.Result = AuthenticateOperationResult.Succeeded;
-                        authenticationOperationOutput.LoggedInUser = user;
                         authenticationOperationOutput.AuthenticationObject = authToken;
                         int lastModifiedBy = user.UserId;
                         dataManager.UpdateLastLogin(user.UserId, lastModifiedBy);
@@ -118,7 +117,7 @@ namespace Vanrise.Security.Business
             }
             else
             {
-                authenticationOperationOutput.Result = AuthenticateOperationResult.UserNotExists;
+                authenticationOperationOutput.Result = AuthenticateOperationResult.WrongCredentials;
                 LoggerFactory.GetLogger().WriteError("User '{0}' failed to login", email);
             }
 
@@ -128,9 +127,9 @@ namespace Vanrise.Security.Business
         public bool TryRenewCurrentAuthenticationToken(out AuthenticationToken newAuthenticationToken)
         {
             SecurityToken currentUserToken;
-            if(SecurityContext.TryGetSecurityToken(out currentUserToken))
+            if (SecurityContext.TryGetSecurityToken(out currentUserToken))
             {
-                if(currentUserToken.ExpiresAt >= DateTime.Now)
+                if (currentUserToken.ExpiresAt >= DateTime.Now)
                 {
                     newAuthenticationToken = CreateAuthenticationToken(currentUserToken.UserId);
                     return true;
@@ -316,7 +315,7 @@ namespace Vanrise.Security.Business
                 return authServer.Settings.AuthenticationCookieName;
             }
             else
-                return ConfigurationManager.AppSettings["Sec_AuthCookieName"];
+                return GetLocalCookieName();
         }
 
         public string GetLoginURL()
@@ -345,9 +344,9 @@ namespace Vanrise.Security.Business
         static Object s_GetLocalTokenDecryptionKey_LockObj = new object();
         private string GetLocalTokenDecryptionKey()
         {
-            if(s_localTokenDecryptionKey == null)
+            if (s_localTokenDecryptionKey == null)
             {
-                lock(s_GetLocalTokenDecryptionKey_LockObj)
+                lock (s_GetLocalTokenDecryptionKey_LockObj)
                 {
                     if (s_localTokenDecryptionKey == null)
                     {
@@ -358,6 +357,25 @@ namespace Vanrise.Security.Business
                 }
             }
             return s_localTokenDecryptionKey;
+        }
+
+        static string s_localCookieName;
+        static Object s_localCookieName_LockObj = new object();
+        private string GetLocalCookieName()
+        {
+            if (s_localCookieName == null)
+            {
+                lock (s_localCookieName_LockObj)
+                {
+                    if (s_localCookieName == null)
+                    {
+                        var dataManager = SecurityDataManagerFactory.GetDataManager<ICookieNameDataManager>();
+                        string cookieNameInsertIfNotExists = String.Concat("Vanrise_AccessCookie-", Guid.NewGuid().ToString());
+                        s_localCookieName = dataManager.InsertIfNotExistsAndGetCookieName(cookieNameInsertIfNotExists);
+                    }
+                }
+            }
+            return s_localCookieName;
         }
 
         CloudAuthServer GetAuthServer()
@@ -418,6 +436,13 @@ namespace Vanrise.Security.Business
 
             errorMessage = null;
             return true;
+        }
+
+
+        public bool GetExactExceptionMessage()
+        {           
+            ConfigManager configManager = new ConfigManager();
+            return configManager.GetExactExceptionMessage();
         }
 
         public PasswordValidationInfo GetPasswordValidationInfo()

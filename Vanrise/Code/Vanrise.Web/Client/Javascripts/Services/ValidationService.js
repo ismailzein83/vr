@@ -35,6 +35,10 @@
                         if (validateMinLength(value, validationOptions))
                             return ValidationMessagesEnum.invalidMinLength + " " + validationOptions.minLength + " characters.";
                     }
+                    if (validationOptions.specialCharacterValidation) {
+                        if (!validateSpecialCharacterMask(value))
+                            return ValidationMessagesEnum.invalidSpecialCharacter;
+                    }
                     if (validationOptions.numberValidation) {
                         var validationResult = validateNumber(value, validationOptions);
                         if (validationResult != undefined) {
@@ -79,6 +83,11 @@
             var rg2 = /^\./;
             var rg3 = /^(nul|prn|con|lpt[0-9]|com[0-9])(\.|$)/i;
             return rg1.test(value) && !rg2.test(value) && !rg3.test(value);
+        }
+
+        function validateSpecialCharacterMask(value) {
+            var maskRg = /^[-\w\-\_\@\.\s]+$/;            
+            return maskRg.test(value);
         }
         function validateMinLength(value, validationOptions) {
             if (value == undefined || value == null || value == "") return false;

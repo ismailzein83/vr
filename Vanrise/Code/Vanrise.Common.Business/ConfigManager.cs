@@ -26,7 +26,7 @@ namespace Vanrise.Common.Business
             SessionLockSettings sessionLockSettings = settingManager.GetSetting<SessionLockSettings>(Constants.SessionLockSettingsType);
 
             sessionLockSettings.ThrowIfNull("Session Lock Settings");
-            
+
             return sessionLockSettings.TimeOutInSeconds;
         }
 
@@ -56,7 +56,7 @@ namespace Vanrise.Common.Business
             SettingManager settingManager = new SettingManager();
             var generalSettings = settingManager.GetSetting<GeneralSettingData>(Constants.GeneralSettingType);
 
-         
+
             return generalSettings;
         }
 
@@ -90,7 +90,7 @@ namespace Vanrise.Common.Business
             BankDetailsSettings bankDetailsSettings = settingManager.GetSetting<BankDetailsSettings>(BankDetailsSettings.SETTING_TYPE);
             if (bankDetailsSettings == null)
                 return null;
-            if (bankDetailsSettings.BankDetails == null )
+            if (bankDetailsSettings.BankDetails == null)
                 return null;
             IEnumerable<BankDetail> bankDetails = bankDetailsSettings.BankDetails;
             return bankDetails;
@@ -123,14 +123,15 @@ namespace Vanrise.Common.Business
             SettingManager settingManager = new SettingManager();
             BankDetailsSettings bankDetailsSettings = settingManager.GetSetting<BankDetailsSettings>(BankDetailsSettings.SETTING_TYPE);
 
-            SettingToEdit bankSettingsToEdit = new SettingToEdit(){
+            SettingToEdit bankSettingsToEdit = new SettingToEdit()
+            {
                 Name = "Bank Details",
                 SettingId = new Guid("1cb20f2c-a835-4320-aec7-e034c5a756e9")
             };
             if (bankDetailsSettings == null)
                 bankDetailsSettings = new BankDetailsSettings();
             if (bankDetailsSettings.BankDetails == null)
-                bankDetailsSettings.BankDetails =  new List<BankDetail>();
+                bankDetailsSettings.BankDetails = new List<BankDetail>();
 
             bankDetailsSettings.BankDetails.Add(BankDetail);
             bankSettingsToEdit.Data = bankDetailsSettings;
@@ -157,7 +158,7 @@ namespace Vanrise.Common.Business
             if (companySettings.Settings == null)
                 companySettings.Settings = new List<CompanySetting>();
 
-            if (Company.IsDefault && companySettings.Settings.Select(x=>x.IsDefault==true).Count() > 0)
+            if (Company.IsDefault && companySettings.Settings.Select(x => x.IsDefault == true).Count() > 0)
             {
                 insertOperationOutput.InsertedObject = null;
                 insertOperationOutput.Result = InsertOperationResult.Failed;
@@ -191,7 +192,7 @@ namespace Vanrise.Common.Business
         public string GetDefaultCompanyName()
         {
             string name = null;
-            CompanySetting company =  null ;
+            CompanySetting company = null;
             SettingManager settingManager = new SettingManager();
             CompanySettings companySettings = settingManager.GetSetting<CompanySettings>(CompanySettings.SETTING_TYPE);
             if (companySettings != null && companySettings.Settings != null)
@@ -200,8 +201,8 @@ namespace Vanrise.Common.Business
                 if (company != null)
                     name = company.CompanyName;
             }
-                
-            return name;           
+
+            return name;
         }
 
         public string GetProductVersionNumber()
@@ -214,8 +215,20 @@ namespace Vanrise.Common.Business
             var companyContactTypes = new List<CompanyContactType>();
             var generalTechnicalSettingData = GetGeneralTechnicalSetting();
             if (generalTechnicalSettingData != null && generalTechnicalSettingData.CompanySettingDefinition != null)
-                 companyContactTypes =  generalTechnicalSettingData.CompanySettingDefinition.ContactTypes;
+                companyContactTypes = generalTechnicalSettingData.CompanySettingDefinition.ContactTypes;
             return companyContactTypes;
+        }
+
+        public long GetMaxSearchRecordCount()
+        {
+            var uiData = GetUISettingData();
+            return uiData.MaxSearchRecordCount;
+        }
+        public UISettingData GetUISettingData()
+        {
+            var generalSettingData = GetGeneralSetting();
+            generalSettingData.UIData.ThrowIfNull("generalSettingData.UIData");
+            return generalSettingData.UIData;
         }
 
         public Dictionary<Guid, CompanyDefinitionSetting> GetCompanyDefinitionSettings()
@@ -252,7 +265,7 @@ namespace Vanrise.Common.Business
 
             IEnumerable<CompanySetting> settings = GetCompanySetting();
 
-            foreach(var setting in settings)
+            foreach (var setting in settings)
             {
                 if (setting.IsDefault)
                     return setting;
@@ -267,7 +280,7 @@ namespace Vanrise.Common.Business
             return companySetting != null ? GetCompanyExtendedSettings<T>(companySetting) : default(T);
         }
 
-        public T GetCompanyExtendedSettings<T>(Guid companySettingId) 
+        public T GetCompanyExtendedSettings<T>(Guid companySettingId)
             where T : BaseCompanyExtendedSettings
         {
             CompanySetting companySetting = GetCompanySettingById(companySettingId);
@@ -289,7 +302,7 @@ namespace Vanrise.Common.Business
             else
                 return default(T);
         }
-         #endregion
+        #endregion
 
 
         #region Mappers

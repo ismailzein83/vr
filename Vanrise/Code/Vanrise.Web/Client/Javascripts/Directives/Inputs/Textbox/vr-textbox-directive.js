@@ -30,6 +30,8 @@
                     validationOptions.emailValidation = true;
                 if ($attrs.type === TextboxTypeEnum.Ip.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.Ip.name)
                     validationOptions.ipValidation = true;
+                if ($attrs.refusepecialcharacter != undefined)
+                    validationOptions.specialCharacterValidation = true;
                 if ($attrs.type === TextboxTypeEnum.FileName.name || $scope.$parent.$eval(ctrl.type) === TextboxTypeEnum.FileName.name)
                     validationOptions.filenameValidation = true;
                 if ($attrs.minlength != undefined) {

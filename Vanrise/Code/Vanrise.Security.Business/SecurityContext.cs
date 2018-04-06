@@ -145,7 +145,7 @@ namespace Vanrise.Security.Business
                         var cookies = HttpContext.Current.Request.Cookies;
                         foreach (var cookieKey in cookies.AllKeys)
                         {
-                            if (cookieKey.StartsWith("Vanrise_AccessCookie"))
+                            if (cookieKey.StartsWith(s_securityManager.GetCookieName()))
                             {
                                 var cookieValue = System.Web.HttpUtility.UrlDecode(cookies[cookieKey].Value);
                                 AuthenticationToken authenticationToken = Serializer.Deserialize<AuthenticationToken>(cookieValue);

@@ -1,15 +1,15 @@
 ﻿'use strict';
 
 var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCookies'])
-.controller('mainCtrl', ['$scope', '$rootScope', 'VR_Sec_MenuAPIService', 'SecurityService', 'BaseAPIService', 'VR_Sec_PermissionAPIService', 'notify', '$cookies', '$timeout', 'MenuItemTypeEnum', 'UtilsService', 'VRModalService', 'VRNavigationService', 'UISettingsService', '$location', '$window', "VRLocalizationService",
-function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, BaseAPIService, VR_Sec_PermissionAPIService, notify, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService, VRNavigationService, UISettingsService, $location, $window, VRLocalizationService) {
+.controller('mainCtrl', ['$scope', '$rootScope', 'VR_Sec_MenuAPIService', 'SecurityService', 'BaseAPIService', 'VR_Sec_PermissionAPIService', 'notify', '$cookies', '$timeout', 'MenuItemTypeEnum', 'UtilsService', 'VRModalService', 'VRNavigationService', 'UISettingsService', '$location', '$window', "VRLocalizationService", "Sec_CookieService",
+function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, BaseAPIService, VR_Sec_PermissionAPIService, notify, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService, VRNavigationService, UISettingsService, $location, $window, VRLocalizationService, Sec_CookieService) {
     (function () {
         document.getElementById("mainBodyContainer").style.display = "block";
     })();
 
     Waves.displayEffect();
-      $rootScope.$on("$destroy", function () {
-          $(window).off("resize.Viewport");
+    $rootScope.$on("$destroy", function () {
+        $(window).off("resize.Viewport");
     });
     $scope.$on("$destroy", function () {
         $(window).off("resize.Viewport");
@@ -179,7 +179,7 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
                 userInfo.PhotoFileId = response.PhotoFileId;
                 userInfo.UserDisplayName = response.Name;
 
-                SecurityService.createAccessCookieFromAuthToken(userInfo);
+                Sec_CookieService.createAccessCookieFromAuthToken(userInfo);
             };
         };
         VRModalService.showModal('/Client/Modules/Security/Views/User/EditProfile.html', null, modalSettings);
@@ -461,7 +461,7 @@ app.run(function ($rootScope, $window, UISettingsService) {
     else {
         registerToGoogleAccount();
     }
-        function registerToGoogleAccount() {
+    function registerToGoogleAccount() {
         var account = UISettingsService.getGoogleTrackingAccount();
         if (account != undefined && account != null)
             $window.ga('create', account, 'auto');

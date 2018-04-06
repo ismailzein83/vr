@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrLogEntrySearch", ['VRCommon_LogAttributeEnum', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService','VRValidationService','VRDateTimeService',
-function (VRCommon_LogAttributeEnum, VRNotificationService, UtilsService, VRUIUtilsService, VRValidationService, VRDateTimeService) {
+app.directive("vrLogEntrySearch", ['VRCommon_LogAttributeEnum', 'VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRValidationService', 'VRDateTimeService', 'UISettingsService',
+function (VRCommon_LogAttributeEnum, VRNotificationService, UtilsService, VRUIUtilsService, VRValidationService, VRDateTimeService, UISettingsService) {
 
     var directiveDefinitionObject = {
 
@@ -55,7 +55,7 @@ function (VRCommon_LogAttributeEnum, VRNotificationService, UtilsService, VRUIUt
 
         this.initializeController = initializeController;
         function initializeController() {
-            
+
             defineScope();
 
             if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
@@ -74,6 +74,8 @@ function (VRCommon_LogAttributeEnum, VRNotificationService, UtilsService, VRUIUt
         function defineScope() {
             $scope.showGrid = false;
             $scope.fromDate = VRDateTimeService.getNowDateTime();
+            $scope.top = 100;
+            $scope.maxNumberOfRecords = UISettingsService.getMaxSearchRecordCount();
             $scope.fromDate.setHours(0, 0, 0);
             $scope.searchClicked = function () {
                 $scope.showGrid = true;
@@ -111,11 +113,19 @@ function (VRCommon_LogAttributeEnum, VRNotificationService, UtilsService, VRUIUt
                 methodReadyPromiseDeferred.resolve();
             };
             $scope.onEventTypeDirectiveReady = function (api) {
-               eventTypeDirectiveApi = api;
-               eventTypeReadyPromiseDeferred.resolve();
+                eventTypeDirectiveApi = api;
+                eventTypeReadyPromiseDeferred.resolve();
             };
             $scope.validateDateTime = function () {
                 return VRValidationService.validateTimeRange($scope.fromDate, $scope.toDate);
+            };
+            $scope.checkMaxNumberResords = function () {
+                if ($scope.top <= $scope.maxNumberOfRecords || $scope.maxNumberOfRecords == undefined) {
+                    return null;
+                }
+                else {
+                    return "Max top value can be entered is: " + $scope.maxNumberOfRecords;
+                }
             };
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -227,7 +237,8 @@ function (VRCommon_LogAttributeEnum, VRNotificationService, UtilsService, VRUIUt
                 EventType: eventTypeDirectiveApi.getSelectedIds(),
                 Message: $scope.Message,
                 FromDate: $scope.fromDate,
-                ToDate: $scope.toDate
+                ToDate: $scope.toDate,
+                Top: $scope.top
             };
         }
 

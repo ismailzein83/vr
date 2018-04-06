@@ -25,9 +25,8 @@
                 };
 
                 return VR_Sec_UserAPIService.ForgotPassword(forgotPasswordInput).then(function (response) {
-                    if (VRNotificationService.notifyOnItemUpdated("User's password is", response)) {
-                        $scope.modalContext.closeModal();
-                    }
+                    VRNotificationService.showInformation("Your request has been sent.");
+                    $scope.modalContext.closeModal();
                 }).catch(function (error) {
                     VRNotificationService.notifyException(error, $scope);
                 });

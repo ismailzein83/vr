@@ -23,22 +23,21 @@ function ($rootScope, Sec_CookieService, UtilsService, VR_Sec_PermissionFlagEnum
         });
 
 
-        function onValidationNeeded(userObj) {
+        function onValidationNeeded() {
             var onPasswordActivated = function (passwordAfterActivation) {
                 if (reloginAfterPasswordActivation != undefined)
                     reloginAfterPasswordActivation(passwordAfterActivation);
             };
-            activatePassword(email, userObj, password, onPasswordActivated);
+            activatePassword(email, password, onPasswordActivated);
         }
 
 
         return deferred.promise;
     }
 
-    function activatePassword(email, userObj, tempPassword, onPasswordActivated) {
+    function activatePassword(email, tempPassword, onPasswordActivated) {
         var modalParameters = {
             email: email,
-            userObj: userObj,
             tempPassword: tempPassword
         };
 

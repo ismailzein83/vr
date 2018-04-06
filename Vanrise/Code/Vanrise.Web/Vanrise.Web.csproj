@@ -948,12 +948,10 @@
     <Content Include="Client\Libraries\Bower\jquery\src\wrap.js" />
     <Content Include="Client\Libraries\Bower\Sortable\.gitignore" />
     <Content Include="Client\Libraries\Bower\Sortable\Gruntfile.js" />
-    <Content Include="Client\Libraries\Bower\Sortable\index.html" />
     <Content Include="Client\Libraries\Bower\Sortable\jquery.binding.js" />
     <Content Include="Client\Libraries\Bower\Sortable\knockout-sortable.js" />
     <Content Include="Client\Libraries\Bower\Sortable\meteor\example\.meteor\.gitignore" />
     <Content Include="Client\Libraries\Bower\Sortable\meteor\example\client\define-object-type.css" />
-    <Content Include="Client\Libraries\Bower\Sortable\meteor\example\client\define-object-type.html" />
     <Content Include="Client\Libraries\Bower\Sortable\meteor\example\client\define-object-type.js" />
     <Content Include="Client\Libraries\Bower\Sortable\meteor\example\model.js" />
     <Content Include="Client\Libraries\Bower\Sortable\meteor\example\server\fixtures.js" />
@@ -962,7 +960,6 @@
     <Content Include="Client\Libraries\Bower\Sortable\meteor\methods-server.js" />
     <Content Include="Client\Libraries\Bower\Sortable\meteor\package.js" />
     <Content Include="Client\Libraries\Bower\Sortable\meteor\reactivize.js" />
-    <Content Include="Client\Libraries\Bower\Sortable\meteor\template.html" />
     <Content Include="Client\Libraries\Bower\Sortable\meteor\test.js" />
     <Content Include="Client\Libraries\Bower\Sortable\ng-sortable.js" />
     <Content Include="Client\Libraries\Bower\Sortable\react-sortable-mixin.js" />

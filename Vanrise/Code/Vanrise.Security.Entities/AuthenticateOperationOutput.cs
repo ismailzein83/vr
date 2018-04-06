@@ -15,7 +15,5 @@ namespace Vanrise.Security.Entities
         public string Message { get; set; }
 
         public T AuthenticationObject { get; set; }
-
-        public User LoggedInUser { get; set; }
     }
 }

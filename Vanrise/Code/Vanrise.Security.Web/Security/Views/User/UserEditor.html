@@ -6,7 +6,7 @@
                     <vr-textbox value="scopemodel.email" label="Email" localizedlabel="VRRes.Email.VREnd" type="email" isrequired vr-disabled="hasAuthServer && isInEditMode"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="1/2row" ng-if="!hasAuthServer">
-                    <vr-textbox value="scopemodel.name" label="Name" localizedlabel="VRRes.Name.VREnd" isrequired vr-disabled="hasAuthServer && isInEditMode"></vr-textbox>
+                    <vr-textbox value="scopemodel.name" label="Name" localizedlabel="VRRes.Name.VREnd" maxlength="40" refusepecialcharacter isrequired vr-disabled="hasAuthServer && isInEditMode"></vr-textbox>
                 </vr-columns>
                 <vr-columns width="1/2row">
                     <vr-textbox value="scopemodel.description" label="Description" localizedlabel="VRRes.Description.VREnd"></vr-textbox>

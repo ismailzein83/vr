@@ -38,7 +38,7 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
             return '<div style="position:relative;display:inline-block;height:28px" ng-if="ctrl.isExculdedOnreadOnly()" ng-mouseleave="ctrl.showMenuActions = false"  title="' + buttonTitle + '" '
            + ' aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()" ng-hide="ctrl.hideTemplate">'
                + '<span  style="font-size:24px" class="' + buttonAttributes.class + ' btn-label hand-cursor" aria-hidden="true" ng-show="ctrl.showIcon()"></span>'
-               + '<img src="Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:20px;margin-top:3px;" class="img-loader" ng-show="ctrl.showLoader()" />'
+               + '<img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" style="width:20px;margin-top:3px;" class="img-loader" ng-show="ctrl.showLoader()" />'
                 + actionsMenuTemplate + '</div>';
         }
         else {
@@ -46,7 +46,7 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                 + '<button style="border-radius: 0px; border-color: transparent;  background-color: transparent; color: #FFF; " type="button" class="btn btn-default btncustom"'
             + 'aria-label="Left Align" ng-click="ctrl.onInternalClick($event)" ng-disabled="ctrl.isDisabled()">' + buttonAttributes.text
                 + '<span  class="' + buttonAttributes.class + ' btn-label"  aria-hidden="true" ng-show="ctrl.showIcon()"></span>'
-                + '<img src="Client/Javascripts/Directives/Button/images/loader-mask.gif" class="img-loader" style="width:14px;" ng-show="ctrl.showLoader()" />'
+                + '<img src="../../Client/Javascripts/Directives/Button/images/loader-mask.gif" class="img-loader" style="width:14px;" ng-show="ctrl.showLoader()" />'
 
                 + '</button>'
                 + actionsMenuTemplate + '</div>';

@@ -92,9 +92,9 @@ namespace Vanrise.Security.Data.SQL
             return ExecuteNonQuerySP("sec.sp_User_UpdatePassword", userId, password, lastModifiedBy) > 0;
         }
 
-        public bool ActivatePassword(string email, string password, string name, int lastModifiedBy)
+        public bool ActivatePassword(string email, string password, int lastModifiedBy)
         {
-            return ExecuteNonQuerySP("sec.sp_User_ActivatePassword", email, password, name, lastModifiedBy) > 0;
+            return ExecuteNonQuerySP("sec.sp_User_ActivatePassword", email, password,  lastModifiedBy) > 0;
         }
 
         public bool UpdateTempPasswordById(int userId, string password, DateTime? passwordValidTill, int lastModifiedBy)

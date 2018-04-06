@@ -30,6 +30,9 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
             var passwordSettingsAPI;
             var passwordSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var apiSettingsAPI;
+            var apiSettingsReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             $scope.scopeModel = {};
 
             $scope.scopeModel.onMailMessageTemplateSettingsReady = function (api) {
@@ -41,7 +44,10 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                 passwordSettingsAPI = api;
                 passwordSettingsReadyPromiseDeferred.resolve();
             };
-
+            $scope.scopeModel.onAPISettingsReady = function (api) {
+                apiSettingsAPI = api;
+                apiSettingsReadyPromiseDeferred.resolve();
+            };
             function initializeController() {
                 defineAPI();
             }
@@ -52,9 +58,11 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                     var promises = [];
                     var mailMessageTemplateSettingsPayload;
                     var passwordSettingsPayload;
+                    var apiSettingsPayload;
                     if (payload != undefined && payload.data != undefined) {
                         mailMessageTemplateSettingsPayload = payload.data.MailMessageTemplateSettings;
                         passwordSettingsPayload = payload.data.PasswordSettings;
+                        apiSettingsPayload = payload.data.APISettings;
                         mailMessageTemplateSettingsPayload.SendEmailNewUser = payload.data.SendEmailNewUser;
                         mailMessageTemplateSettingsPayload.SendEmailOnResetPasswordByAdmin = payload.data.SendEmailOnResetPasswordByAdmin;
                         $scope.scopeModel.sessionExpirationInMinutes = payload.data.SessionExpirationInMinutes;
@@ -78,6 +86,13 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
 
                     promises.push(passwordSettingsLoadPromiseDeferred.promise);
 
+                    var apiSettingsLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+                    apiSettingsReadyPromiseDeferred.promise
+                        .then(function () {
+                            VRUIUtilsService.callDirectiveLoad(apiSettingsAPI, apiSettingsPayload, apiSettingsLoadPromiseDeferred);
+                        });
+                    promises.push(apiSettingsLoadPromiseDeferred.promise);
+
                     return UtilsService.waitMultiplePromises(promises);
 
 
@@ -88,6 +103,7 @@ app.directive('vrSecSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                         $type: "Vanrise.Security.Entities.SecuritySettings, Vanrise.Security.Entities",
                         MailMessageTemplateSettings: mailMessageTemplateSettingsAPI.getData(),
                         PasswordSettings: passwordSettingsAPI.getData(),
+                        APISettings:apiSettingsAPI.getData(),
                         SendEmailNewUser: mailMessageTemplateSettingsAPI.getSendEmailNewUser(),
                         SendEmailOnResetPasswordByAdmin: mailMessageTemplateSettingsAPI.getSendEmailOnResetPasswordByAdmin(),
                         SessionExpirationInMinutes: $scope.scopeModel.sessionExpirationInMinutes

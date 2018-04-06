@@ -20,6 +20,9 @@
             <vr-columns width="normal">
                 <vr-datetimepicker label="To" type="dateTime" value="selectedToDateTime" customvalidate="validateDateTime()"></vr-datetimepicker>
             </vr-columns>
+            <vr-columns width="normal">
+                <vr-numeric label="Top" value="top" minvalue="1" customvalidate="checkMaxNumberResords()" isrequired="true"></vr-numeric>
+            </vr-columns>
             <vr-columns width="normal" ng-show="usedInDrillDown" withemptyline>
                 <vr-button type="Search" data-onclick="searchClicked" isasynchronous="true" standalone vr-disabled="importedbatchSearchEditorGroup.validate() != null"></vr-button>
             </vr-columns>

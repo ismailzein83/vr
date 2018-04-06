@@ -143,9 +143,11 @@
     <Content Include="Security\Directives\RequiredPermission\Templates\RequiredPermissionTemplate.html" />
     <Content Include="Security\Directives\RequiredPermission\vr-sec-permissionoptions-selector.js" />
     <Content Include="Security\Directives\RequiredPermission\vr-sec-requiredpermission-grid.js" />
+    <Content Include="Security\Directives\Settings\Templates\APISettingsTemplate.html" />
     <Content Include="Security\Directives\Settings\Templates\PasswordSettingsTemplate.html" />
     <Content Include="Security\Directives\Settings\Templates\SecuritySettingsTemplate.html" />
     <Content Include="Security\Directives\Settings\Templates\MailMessageTemplateSettingsTemplate.html" />
+    <Content Include="Security\Directives\Settings\vr-sec-apisettings.js" />
     <Content Include="Security\Directives\Settings\vr-sec-passwordsettings.js" />
     <Content Include="Security\Directives\Settings\vr-sec-passwordcomplexity-selector.js" />
     <Content Include="Security\Directives\Settings\vr-sec-mailmessagetemplatesettings.js" />

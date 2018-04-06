@@ -45,6 +45,10 @@ namespace Vanrise.Common.Business
 
             public override IEnumerable<VRActionAudit> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<VRActionAuditQuery> input)
             {
+                var maxTop = new ConfigManager().GetMaxSearchRecordCount();
+                if (input.Query.TopRecord > maxTop)
+                    throw new VRBusinessException(string.Format("Top record count cannot be greater than {0}", maxTop));
+
                 IVRActionAuditDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRActionAuditDataManager>();
                 return dataManager.GetFilterdActionAudits(input.Query);
             }

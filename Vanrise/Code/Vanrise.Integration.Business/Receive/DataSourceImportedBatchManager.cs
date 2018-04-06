@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Integration.Data;
 using Vanrise.Integration.Entities;
@@ -21,6 +22,10 @@ namespace Vanrise.Integration.Business
 
         public Vanrise.Entities.IDataRetrievalResult<DataSourceImportedBatch> GetFilteredDataSourceImportedBatches(Vanrise.Entities.DataRetrievalInput<DataSourceImportedBatchQuery> input)
         {
+            var maxTop = new ConfigManager().GetMaxSearchRecordCount();
+            if (input.Query.Top > maxTop)
+                throw new VRBusinessException(string.Format("Top record count cannot be greater than {0}", maxTop));
+
             IDataSourceImportedBatchDataManager dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceImportedBatchDataManager>();
             Vanrise.Entities.BigResult<DataSourceImportedBatch> bigResult = dataManager.GetFilteredDataSourceImportedBatches(input);
 

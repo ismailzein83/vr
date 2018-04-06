@@ -190,13 +190,13 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
             case AuthenticateOperationResultEnum.Inactive.value:
                 showError(authenticateOperationOutput.Message != undefined ? authenticateOperationOutput.Message : "Login Failed. Inactive User"); break;
             case AuthenticateOperationResultEnum.WrongCredentials.value:
-                showError("Login Failed. Wrong Credentials"); break;
+                showError("Login Failed. Invalid Credentials"); break;
             case AuthenticateOperationResultEnum.UserNotExists.value:
                 showError("Login Failed. User does not exist"); break;
             case AuthenticateOperationResultEnum.Failed.value:
                 showError("Login Failed. An error occurred"); break;
             case AuthenticateOperationResultEnum.ActivationNeeded.value:
-                onValidationNeeded(authenticateOperationOutput.LoggedInUser);
+                onValidationNeeded();
                 showError("Activation Needed"); break;
         }
         return false;

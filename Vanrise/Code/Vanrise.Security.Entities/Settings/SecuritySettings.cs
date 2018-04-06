@@ -35,6 +35,27 @@ namespace Vanrise.Security.Entities
             }
         }
 
+        APISettings _apiSettings;
+        public APISettings APISettings
+        {
+            get
+            {
+                if (_apiSettings == null)
+                {
+                    _apiSettings = new APISettings
+                    {
+                        ExactExceptionMessage = false
+
+                    };
+                }
+                return _apiSettings;
+            }
+            set
+            {
+                _apiSettings = value;
+            }
+        }
+
         public bool SendEmailNewUser { get; set; }
 
         public bool SendEmailOnResetPasswordByAdmin { get; set; }

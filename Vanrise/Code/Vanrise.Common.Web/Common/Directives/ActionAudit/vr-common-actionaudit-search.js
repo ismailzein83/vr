@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrCommonActionauditSearch", ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRValidationService', 'VRCommon_ActionAuditLKUPEnum', 'VRDateTimeService',
-function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationService, VRCommon_ActionAuditLKUPEnum, VRDateTimeService) {
+app.directive("vrCommonActionauditSearch", ['VRNotificationService', 'UtilsService', 'VRUIUtilsService', 'VRValidationService', 'VRCommon_ActionAuditLKUPEnum', 'VRDateTimeService', 'UISettingsService',
+function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationService, VRCommon_ActionAuditLKUPEnum, VRDateTimeService, UISettingsService) {
 
     var directiveDefinitionObject = {
 
@@ -44,10 +44,11 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
         function initializeController() {
 
             $scope.scopeModel = {};
-            $scope.scopeModel.top = 1000;
             var fromTime = VRDateTimeService.getNowDateTime();
             fromTime.setHours(0, 0, 0);
             $scope.scopeModel.fromTime = fromTime;
+            $scope.scopeModel.top = 100;
+            var  maxNumberOfRecords = UISettingsService.getMaxSearchRecordCount();
             $scope.scopeModel.searchClicked = function () {
                 $scope.showGrid = true;
                 return gridAPI.loadGrid(getFilterObject());
@@ -74,7 +75,14 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
             $scope.scopeModel.onGridReady = function (api) {
                 gridAPI = api;
             };
-
+            $scope.scopeModel.checkMaxNumberResords = function () {
+                if ($scope.scopeModel.top <= maxNumberOfRecords || maxNumberOfRecords == undefined) {
+                    return null;
+                }
+                else {
+                    return "Max top value can be entered is: " + maxNumberOfRecords;
+                }
+            };
             UtilsService.waitMultiplePromises([userSelectorReadyPromiseDeferred.promise, actionReadyPromiseDeferred.promise, entityReadyPromiseDeferred.promise, moduleReadyPromiseDeferred.promise]).then(function () {
                 defineAPI();
             });

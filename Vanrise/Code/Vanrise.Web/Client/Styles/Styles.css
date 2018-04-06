@@ -135,11 +135,17 @@
     .vr-container div[ng-view] {
         padding: 0px 5px;
     }
-
+.flex-user-menu{
+    display:flex !important;
+}
 .vr-user-label {
     font-weight: bold;
     color: #635F5F;
     font-size: 14px !important;
+    max-width: 200px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .vr-user-icon {

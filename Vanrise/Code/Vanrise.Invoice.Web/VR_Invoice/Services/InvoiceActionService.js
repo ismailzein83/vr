@@ -23,7 +23,6 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService', 'UtilsService'
                     paramsurl += "invoiceActionContext=" + UtilsService.serializetoJson(context);
                     paramsurl += "&actionTypeName=" + "OpenRDLCReportAction";
                     paramsurl += "&actionId=" + payload.invoiceAction.InvoiceActionId;
-                    paramsurl += "&Auth-Token=" + encodeURIComponent(SecurityService.getUserToken());
 
                     var screenWidth = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
                     var left = ((screenWidth / 2) - (1000 / 2));

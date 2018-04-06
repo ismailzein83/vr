@@ -33,7 +33,7 @@ namespace Vanrise.Security.Data
 
         bool AreUsersUpdated(ref object updateHandle);
 
-        bool ActivatePassword(string email, string password, string name, int lastModifiedBy);
+        bool ActivatePassword(string email, string password, int lastModifiedBy);
 
         bool UpdateTempPasswordById(int userId, string password, DateTime? passwordValidTill, int lastModifiedBy);
         

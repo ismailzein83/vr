@@ -49,6 +49,8 @@ namespace Vanrise.Integration.Data.SQL
                     
                     cmd.Parameters.Add(new SqlParameter("@From", input.Query.From));
                     cmd.Parameters.Add(new SqlParameter("@To", input.Query.To));
+                    cmd.Parameters.Add(new SqlParameter("@Top", input.Query.Top));
+
                 });
             };
 
