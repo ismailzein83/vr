@@ -4,7 +4,8 @@
 	@EntityID nvarchar(50),
 	@DateFrom dateTime,
 	@DateTo dateTime,
-	@ViewRequiredPermissionSetIds varchar(max)
+	@ViewRequiredPermissionSetIds varchar(max),
+	@Top int
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -17,7 +18,7 @@ BEGIN
 	INSERT INTO @ViewRequiredPermissionSetTable (ViewRequiredPermissionSetId)
 	select Convert(int, ParsedString) from [bp].[ParseStringList](@ViewRequiredPermissionSetIds)
 
-	SELECT	[ID],[Title],[ParentID],[DefinitionID],[WorkflowInstanceID],[InputArgument], [CompletionNotifier],[ExecutionStatus], AssignmentStatus,
+	SELECT	TOP(@Top)[ID],[Title],[ParentID],[DefinitionID],[WorkflowInstanceID],[InputArgument], [CompletionNotifier],[ExecutionStatus], AssignmentStatus,
 			[LastMessage],[CreatedTime],[StatusUpdatedTime],[InitiatorUserId],EntityID,[ViewRequiredPermissionSetId], [ServiceInstanceID], TaskId, CancellationRequestUserId
 
 	FROM	bp.[BPInstance] as bps WITH(NOLOCK)
@@ -27,6 +28,6 @@ BEGIN
 			and (ViewRequiredPermissionSetId is null or ViewRequiredPermissionSetId in (select ViewRequiredPermissionSetId from @ViewRequiredPermissionSetTable))
 			and bps.CreatedTime >=  @DateFrom 
 			and (@DateTo is NULL or bps.CreatedTime < @DateTo)
-	ORDER BY CreatedTime DESC
+	ORDER BY ID DESC
 	END
 END

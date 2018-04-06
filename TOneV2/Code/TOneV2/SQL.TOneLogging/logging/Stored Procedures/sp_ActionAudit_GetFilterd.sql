@@ -53,5 +53,6 @@ SET NOCOUNT ON;
 	  AND   (@objName is null or ac.ObjectName like '%'+ @objName + '%')
 	  AND   (@objId is null or ac.ObjectID= @objId)
 	  AND  (ac.LogTime >= @FromTime AND (@ToTime  IS NULL OR  ac.LogTime <=  @ToTime))
+	  ORDER BY ID
 	END
 SET NOCOUNT OFF

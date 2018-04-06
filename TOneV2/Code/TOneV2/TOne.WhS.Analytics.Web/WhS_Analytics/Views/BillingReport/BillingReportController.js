@@ -159,7 +159,7 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
             paramsurl += "&currency=" + currencySelectorAPI.getSelectedIds();
             paramsurl += "&currencyDesc=" + (($scope.params.selectedCurrency == null) ? "United States Dollars" : encodeURIComponent($scope.params.selectedCurrency.Name));
             paramsurl += "&pageBreak=" + $scope.params.pageBreak;
-            paramsurl += "&Auth-Token=" + encodeURIComponent(SecurityService.getUserToken());
+            //paramsurl += "&Auth-Token=" + encodeURIComponent(SecurityService.getUserToken());
             var screenWidth = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
 
             var left = ((screenWidth / 2) - (1000 / 2));

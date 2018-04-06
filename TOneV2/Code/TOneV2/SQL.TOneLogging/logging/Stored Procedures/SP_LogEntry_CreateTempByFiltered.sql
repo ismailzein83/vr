@@ -15,8 +15,8 @@ CREATE PROCEDURE [logging].[SP_LogEntry_CreateTempByFiltered]
 @TypeIds VARCHAR(500) = NULL,
 @MethodIds VARCHAR(500) = NULL,
 @EventIds  VARCHAR(500) = NULL,
-@ViewRequiredPermissionSetIds varchar(max)
-
+@ViewRequiredPermissionSetIds varchar(max),
+@Top int
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -58,7 +58,7 @@ BEGIN
 			INSERT INTO @ViewRequiredPermissionSetTable (ViewRequiredPermissionSetId)
 			select Convert(int, ParsedString) from [bp].[ParseStringList](@ViewRequiredPermissionSetIds)
 
-			SELECT [ID]
+			SELECT TOP (@Top) [ID]
 				  ,[MachineNameId]
 				  ,[ApplicationNameId]
 				  ,[AssemblyNameId]
@@ -83,6 +83,7 @@ BEGIN
 				  (@FromDate IS NULL OR EventTime >= @FromDate) AND
 				  (@ToDate IS NULL OR EventTime <= @ToDate) AND
 				  (@Message IS NULL OR [Message] LIKE '%'+@Message+'%')
+				 ORDER BY ID DESC
 
 			DECLARE @sql VARCHAR(1000)
 			SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';

@@ -10,7 +10,8 @@ CREATE PROCEDURE [integration].[sp_DataSourceImportedBatch_CreateTempByFiltered]
 	@BatchName NVARCHAR(1000) = NULL,
 	@MappingResults [integration].[MappingResultType] READONLY,
 	@From DATETIME = NULL,
-	@To DATETIME = NULL
+	@To DATETIME = NULL,
+	@Top int
 )
 AS
 BEGIN
@@ -19,7 +20,7 @@ BEGIN
 	
 	IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 	    BEGIN
-			SELECT [ID],
+			SELECT TOP(@Top) [ID],
 			[BatchDescription],
 			[BatchSize],
 			[RecordsCount],
@@ -35,7 +36,7 @@ BEGIN
 				MappingResult IN (SELECT MappingResult FROM @MappingResults) AND
 				(@From IS NULL OR LogEntryTime >= @From) AND
 				(@To IS NULL OR LogEntryTime <= @To)
-			
+			ORDER BY ID			
 			DECLARE @sql VARCHAR(1000)
 			SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';
 			EXEC(@sql)

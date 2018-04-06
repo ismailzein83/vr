@@ -9,7 +9,8 @@ CREATE PROCEDURE [integration].[sp_DataSourceLog_CreateTempByFiltered]
 	@DataSourceId uniqueidentifier = NULL,
 	@Severities [integration].[SeverityType] READONLY,
 	@From DATETIME = NULL,
-	@To DATETIME = NULL
+	@To DATETIME = NULL,
+	@Top int
 )
 AS
 BEGIN
@@ -18,7 +19,7 @@ BEGIN
 	
 	IF NOT OBJECT_ID(@TempTableName, N'U') IS NOT NULL
 	    BEGIN
-			SELECT [ID],
+			SELECT TOP(@Top) [ID],
 			[DataSourceId],
 			[Severity],
 			[Message],
@@ -30,6 +31,7 @@ BEGIN
 				(Severity IN (SELECT Severity FROM @Severities)) AND
 				(@From IS NULL OR LogEntryTime >= @From) AND
 				(@To IS NULL OR LogEntryTime <= @To)
+			ORDER BY ID
 			
 			DECLARE @sql VARCHAR(1000)
 			SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';
