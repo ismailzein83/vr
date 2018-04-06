@@ -29,48 +29,15 @@ namespace Vanrise.Logging.SQL
             _columnMapper.Add("EventTypeName", "EventType");
         }
 
-        public void WriteEntries(Func<LogAttributeType, string, int> getAttributeId, string machineName, string applicationName, List<LogEntry> entries)
-        {
-            DataTable dtEntries = ConvertEntriesToTable(getAttributeId,machineName, applicationName, entries);
-            WriteDataTableToDB(dtEntries, System.Data.SqlClient.SqlBulkCopyOptions.KeepNulls);
-        }
-
-        private DataTable ConvertEntriesToTable(Func<LogAttributeType, string, int> getAttributeId, string machineName, string applicationName, List<LogEntry> entries)
+        public void AddEntry(Func<LogAttributeType, string, int> getAttributeId, string machineName, string applicationName, string assemblyName, string typeName,
+            string methodName, LogEntryType entryType, string eventType, int? viewRequiredPermissionSetId, string message, string exceptionDetail, DateTime eventTime)
         {
             int machineNameId = getAttributeId(LogAttributeType.MachineName, machineName);
             int applicationNameId = getAttributeId(LogAttributeType.ApplicationName, applicationName);
-            DataTable dt = new DataTable("logging.LogEntry");
-            dt.Columns.Add("MachineNameId", typeof(int));
-            dt.Columns.Add("ApplicationNameId", typeof(int));
-            dt.Columns.Add("AssemblyNameId", typeof(int));
-            dt.Columns.Add("TypeNameId", typeof(int));
-            dt.Columns.Add("MethodNameId", typeof(int));
-            dt.Columns.Add("EntryType", typeof(int));
-            dt.Columns.Add("EventType", typeof(int));
-            dt.Columns.Add("ViewRequiredPermissionSetId", typeof(int));
-            dt.Columns.Add("Message", typeof(string));
-            dt.Columns.Add("ExceptionDetail", typeof(string));
-            dt.Columns.Add("EventTime", typeof(DateTime));
-            dt.BeginLoadData();
-            foreach (var e in entries)
-            {
-                DataRow dr = dt.NewRow();
-                dr["MachineNameId"] = machineNameId;
-                dr["ApplicationNameId"] = applicationNameId;
-                dr["AssemblyNameId"] = getAttributeId(LogAttributeType.AssemblyName, e.AssemblyName);
-                dr["TypeNameId"] = getAttributeId(LogAttributeType.TypeName, e.TypeName);
-                dr["MethodNameId"] = getAttributeId(LogAttributeType.MethodName, e.MethodName);
-                dr["EntryType"] = (int)e.EntryType;
-                dr["EventType"] = getAttributeId(LogAttributeType.EventType, e.EventType);
-                dr["ViewRequiredPermissionSetId"] = e.ViewRequiredPermissionSetId.HasValue ? (Object)e.ViewRequiredPermissionSetId.Value : DBNull.Value;
-                dr["Message"] = e.Message;
-                dr["ExceptionDetail"] = e.ExceptionDetail;
-                dr["EventTime"] = e.EventTime;
-                dt.Rows.Add(dr);
-            }
-            dt.EndLoadData();
-
-            return dt;
+            ExecuteNonQuerySP("logging.sp_LogEntry_Insert", machineNameId, applicationNameId, getAttributeId(LogAttributeType.AssemblyName, assemblyName), getAttributeId(LogAttributeType.TypeName, typeName),
+                getAttributeId(LogAttributeType.MethodName, methodName), (int)entryType, getAttributeId(LogAttributeType.EventType, eventType),
+                viewRequiredPermissionSetId.HasValue ? (Object)viewRequiredPermissionSetId.Value : DBNull.Value,
+                message, exceptionDetail, eventTime);
         }
 
         public Vanrise.Entities.BigResult<Vanrise.Entities.LogEntry> GetFilteredLogs(Vanrise.Entities.DataRetrievalInput<Vanrise.Entities.LogEntryQuery> input, List<int> grantedPermissionSetIds)

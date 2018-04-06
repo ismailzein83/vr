@@ -69,63 +69,21 @@ namespace Vanrise.Logging.SQL
         {
             _machineName = Environment.MachineName;
             _applicationName = Process.GetCurrentProcess().ProcessName;
-            _timer = new Timer(1000);
-            _timer.Elapsed += s_timer_Elapsed;
-            _timer.Start();
         }
-
-        bool s_isRunning;
-        void s_timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            lock (this)
-            {
-                if (s_isRunning)
-                    return;
-                s_isRunning = true;
-            }
-
-            try
-            {
-                if (_qLogEntries.Count > 0)
-                {
-                    LogEntry logEntry;
-                    List<LogEntry> logEntries = new List<LogEntry>();
-                    while (_qLogEntries.TryDequeue(out logEntry))
-                    {
-                        logEntries.Add(logEntry);
-                    }
-                    if (logEntries.Count >= 0)
-                    {
-                        this.ConfigurationDataManager.LoadLogAttributesIfNotLoaded();
-                        this.LoggingDataManager.WriteEntries(this.ConfigurationDataManager.GetAttributeId, _machineName, _applicationName, logEntries);
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Common.HandleLoggerException.WriteException(ex);
-            }
-
-            lock (this)
-            {
-                s_isRunning = false;
-            }
-        }
+       
 
         protected override void WriteEntry(string eventType, int? viewRequiredPermissionSetId, string exceptionDetail, LogEntryType entryType, string message, string callingModule, string callingType, string callingMethod)
         {
-            _qLogEntries.Enqueue(new LogEntry
+            try
             {
-                AssemblyName = callingModule,
-                TypeName = callingType,
-                MethodName = callingMethod,
-                EntryType = entryType,
-                ViewRequiredPermissionSetId = viewRequiredPermissionSetId,
-                EventType = eventType,
-                Message = message,
-                ExceptionDetail = exceptionDetail,
-                EventTime = DateTime.Now
-            });
+                this.ConfigurationDataManager.LoadLogAttributesIfNotLoaded();
+                this.LoggingDataManager.AddEntry(this.ConfigurationDataManager.GetAttributeId, _machineName, _applicationName, callingModule, callingType, callingMethod, entryType,
+                    eventType, viewRequiredPermissionSetId, message, exceptionDetail, DateTime.Now);
+            }
+            catch(Exception ex)
+            {
+                Common.HandleLoggerException.WriteException(ex);
+            }
         }
     }
 }
