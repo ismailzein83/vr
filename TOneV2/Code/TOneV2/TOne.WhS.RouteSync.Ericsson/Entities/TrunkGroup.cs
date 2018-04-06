@@ -8,12 +8,31 @@ namespace TOne.WhS.RouteSync.Ericsson
 {
     public class TrunkGroup
     {
-        public List<string> TrunkNames { get; set; }
+        public List<CustomerTrunkGroup> CustomerTrunkGroups { get; set; }
 
-        public List<int> CustomerIds { get; set; }
+        public List<CodeGroupTrunkGroup> CodeGroupTrunkGroups { get; set; }
 
-        public List<string> CodeGroups { get; set; }
+        public List<TrunkTrunkGroup> TrunkTrunkGroups { get; set; }
 
         public bool IsBackup { get; set; }
+    }
+
+    public class CustomerTrunkGroup
+    {
+        public int CustomerId { get; set; }  
+    }
+
+    public class CodeGroupTrunkGroup
+    {
+        public string CodeGroup { get; set; }
+    }
+
+    public class TrunkTrunkGroup
+    {
+        public Guid TrunkId { get; set; }
+
+        public int Percentage { get; set; }
+
+        public int Priority { get; set; }
     }
 }

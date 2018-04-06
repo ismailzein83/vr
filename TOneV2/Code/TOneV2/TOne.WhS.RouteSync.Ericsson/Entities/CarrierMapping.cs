@@ -23,12 +23,12 @@ namespace TOne.WhS.RouteSync.Ericsson
 
         public string InternationalOBA { get; set; }
 
-        public List<InTrunk> Trunks { get; set; }
+        public List<InTrunk> InTrunks { get; set; }
     }
 
     public class SupplierMapping
     {
-        public List<OutTrunk> Trunks { get; set; }
+        public List<OutTrunk> OutTrunks { get; set; }
 
         public List<TrunkGroup> TrunkGroups { get; set; }
     }
