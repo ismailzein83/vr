@@ -40,7 +40,7 @@
                     childcolumnsclass = " parent-col-container ";
                 }
                 var otherCol = ' col-md-' + numberOfColumns + ' col-sm-' + nbrcolsm;
-                var newElement = '<div class="col-lg-' + numberOfColumns + otherCol + emptyline + childcolumnsclass  + ' " >' + tElement.context.innerHTML + '</div>';
+                var newElement = '<div class="col-lg-' + numberOfColumns + otherCol + emptyline + childcolumnsclass  + ' " >' + tElement.html() + '</div>';
                 tElement.html(newElement);
             }
         };

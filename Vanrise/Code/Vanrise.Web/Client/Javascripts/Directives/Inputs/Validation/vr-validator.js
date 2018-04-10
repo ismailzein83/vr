@@ -14,7 +14,7 @@ app.directive('vrValidator', ['$compile', 'UtilsService', function ($compile, Ut
             validationMessage += '<div style="white-space: pre-line;">{{' + tAttrs.validate + '}}</div></div>';
 
             var newElement = '<div validator-section id="validator-container"  ng-class="{\'required-inpute\' : ' + tAttrs.validate + ' != null }" ng-mouseenter="' + showTooltipVariableName + '=true;$root.onValidationMessageShown($event)" ng-mouseleave="' + showTooltipVariableName + '=false" >'
-                + '<div  >' + tElement.context.innerHTML + '</div>'
+                + '<div  >' + tElement.html() + '</div>'
             + validationMessage
             + '</div>';
             tElement.html(newElement);

@@ -57,7 +57,7 @@ app.directive('vrModalcontent', ['VRLocalizationService', function (VRLocalizati
                                       + '      <button type="button" class="close" aria-label="Close" ng-click="modalContext.closeModal()"><span aria-hidden="true">&times;</span></button>'
                                         + '    <h5 class="modal-title" ng-bind="title"></h5>'
                                         + '</div>'
-                                + tElement.context.innerHTML
+                                + tElement.html()
                                     + '</div>'
                                 + '</div>';
 

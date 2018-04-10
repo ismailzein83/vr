@@ -6,7 +6,7 @@ app.directive('vrPanel', [function () {
         restrict: 'E',
         scope: false,
         compile: function (tElement, tAttrs) {
-            var newElement = '<div class="panel panel-primary panel-over-color"><div class="panel-body">' + tElement.context.innerHTML + '</div></div>';
+            var newElement = '<div class="panel panel-primary panel-over-color"><div class="panel-body">' + tElement.html() + '</div></div>';
             tElement.html(newElement);
         }
 

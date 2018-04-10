@@ -19,7 +19,7 @@ app.directive('vrModalbody', [function () {
                 draggablemodal = '';
 
             var newElement = '<div class="modal-body"  ' + draggablemodal + ' ng-style="{ ' + maxHeightPart + ' }" >'
-                                +  tElement.context.innerHTML                             
+                                +  tElement.html()                             
                             + '</div>';
             tElement.html(newElement);
         }

@@ -4,7 +4,7 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
         restrict: 'E',
         require: '^vrDatagrid',
         compile: function (element, attrs) {
-            var cellTemplate = element.context.innerHTML.trim();
+            var cellTemplate = element.html().trim();
             element.html('');
             return {
                 pre: function ($scope, iElem, iAttrs, dataGridCtrl) {

@@ -9,7 +9,7 @@ app.directive('vrFieldset', ['VRLocalizationService', function (VRLocalizationSe
             var title = tAttrs.header || tAttrs.title;
             var localizedtitle = tAttrs.localizedtitle || tAttrs.localizedheader;
             title = VRLocalizationService.getResourceValue(localizedtitle, title);
-            var newElement = '<div class="panel-primary fieldset-vr"><div class="panel-heading"><span class="title">' + title + '</span></div><div class="panel-body">' + tElement.context.innerHTML + '</div></div>';
+            var newElement = '<div class="panel-primary fieldset-vr"><div class="panel-heading"><span class="title">' + title + '</span></div><div class="panel-body">' + tElement.html() + '</div></div>';
             tElement.html(newElement);
         }
 

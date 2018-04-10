@@ -19,7 +19,7 @@ app.directive('vrForm', [function () {
         compile: function (tElement, tAttrs) {
             var validationContext = tAttrs.validationcontext != undefined ? tAttrs.validationcontext : tAttrs.name;
             var validateOutputAttribute = validationContext != undefined ? (' validationcontext="' + validationContext + '" ') : '';
-            var newElement = '<div ng-keyup="onKeyUp($event)" ><vr-validation-group' + validateOutputAttribute + '>' + tElement.context.innerHTML + '</vr-validation-group></div>';
+            var newElement = '<div ng-keyup="onKeyUp($event)" ><vr-validation-group' + validateOutputAttribute + '>' + tElement.html() + '</vr-validation-group></div>';
             tElement.html(newElement);
         }
     };

@@ -4,7 +4,7 @@ app.directive('vrDatagridexpandablerow', [function () {
         restrict: 'E',
         require: '^vrDatagrid',
         compile: function (element, attrs) {
-            var htmlTemplate = element.context.innerHTML;
+            var htmlTemplate = element.html();
             element.html('');
             return {
                 pre: function ($scope, iElem, iAttrs, dataGridCtrl) {
