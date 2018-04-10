@@ -112,6 +112,7 @@
     <Folder Include="TOneWhS_Case\" />
     <Folder Include="TOneWhS_Case\Tables\" />
     <Folder Include="TOneWhS_Case\User Defined Types\" />
+    <Folder Include="TOneWhS_Deal\Functions\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TOneWhS_BE\Tables\CarrierAccount.sql" />
@@ -601,5 +602,10 @@
     <Build Include="TOneWhS_Deal\Stored Procedures\sp_DaysToReprocess_Delete.sql" />
     <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierRate_GetSupplierRatesForZones.sql" />
     <Build Include="TOneWhS_Deal\Stored Procedures\sp_DealZoneRate_GetDealZoneRatesByDate.sql" />
+    <Build Include="TOneWhS_Deal\Functions\ParseStringList.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_Deal_GetMaxTimeStamp.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_Deal_GetDealsModifiedAfterTimestamp.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_DaysToReprocess_GetAll.sql" />
+    <Build Include="TOneWhS_Deal\Stored Procedures\sp_DaysToReprocess_DeleteByDate.sql" />
   </ItemGroup>
 </Project>
