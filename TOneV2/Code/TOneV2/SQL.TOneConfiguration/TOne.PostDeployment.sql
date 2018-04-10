@@ -232,7 +232,10 @@ as (select * from (values
 
 ('B69F4C1B-FAE8-4352-BB9F-A5AA140F30EE','VR_WhS_Routing_QualityConfigurationDefinition','Quality Configuration Definition','VR_Common_VRComponentType','{"Editor":"vr-whs-routing-qualityconfigurationdefinition-settings"}'),
 ('E670425F-2F91-4C9A-BB03-8B85CD77BBD2','VR_WhS_Routing_QCDefinition_TrafficStatistic','Traffic Statistic','WhS_Routing_QualityConfigurationDefinitionExtendedSettings','{"Editor":"vr-whs-routing-qcdefinition-trafficstatistic-settings"}'),
-('94739CBC-00A7-4CEB-9285-B4CB35D7D003','WhS_RouteSync_SwitchRouteSynchronizer_Ericsson','Ericsson Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer','{"Editor":"whs-routesync-ericsson-swsync"}')
+('94739CBC-00A7-4CEB-9285-B4CB35D7D003','WhS_RouteSync_SwitchRouteSynchronizer_Ericsson','Ericsson Switch Synchronizer','WhS_RouteSync_SwitchRouteSynchronizer','{"Editor":"whs-routesync-ericsson-swsync"}'),
+
+('70500270-0BFD-4AEA-A20A-969BA0F6489B','WhS_BE_BasicSalePriceListTemplateSettingsMappedValue_OtherRates','Other Rates','WhS_BE_CodesOnEachRowMappedValue','{"Editor":"vr-whs-be-codesoneachrow-mappedvalue-otherrates"}'),
+('A2E3EBFB-15DC-42AB-B410-AD3328A89E32','WhS_BE_BasicSalePriceListTemplateSettingsMappedValue_OtherRates','Other Rates','WhS_BE_CodesByZoneMappedValue','{"Editor":"vr-whs-be-codesbyzone-mappedvalue-otherrates"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
