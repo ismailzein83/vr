@@ -9,5 +9,8 @@
     [CreatedTime]      DATETIME        NULL,
     [CreatedBy]        INT             NULL,
     [LastModifiedTime] DATETIME        NULL,
-    [LastModifiedBy]   INT             NULL);
+    [LastModifiedBy]   INT             NULL,
+    [Services]         VARCHAR (MAX)   NULL);
+
+
 

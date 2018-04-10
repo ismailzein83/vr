@@ -11,6 +11,9 @@
     [LastModifiedTime] DATETIME        NULL,
     [LastModifiedBy]   INT             NULL,
     [timestamp]        ROWVERSION      NULL,
+    [Services]         VARCHAR (MAX)   NULL,
     CONSTRAINT [PK_OperatorDeclaration] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
