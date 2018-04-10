@@ -365,6 +365,8 @@
                     var obj = {
                         UpToVolume: tier.UpToVolume,
                         DefaultRate: tier.DefaultRate,
+                        Description: tier.Description,
+                        EvaluatedRate: tier.EvaluatedRate,
                         RetroActiveFromTierNumber: tier.RetroActiveFromTierNumber != undefined ? deletedTierNb >= tier.RetroActiveFromTierNumber ? tier.RetroActiveFromTierNumber : (tier.RetroActiveFromTierNumber - 1) : undefined,
                         ExceptionZoneRates: tier.ExceptionZoneRates,
                         HasException: tier.ExceptionZoneRates != undefined && tier.ExceptionZoneRates.length > 0
