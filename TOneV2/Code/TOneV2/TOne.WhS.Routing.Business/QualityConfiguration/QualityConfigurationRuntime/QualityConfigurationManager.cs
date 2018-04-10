@@ -101,11 +101,22 @@ namespace TOne.WhS.Routing.Business
             return routeRuleQualityConfiguration.Settings.ValidateRouteRuleQualityConfigurationSettings(context);
         }
 
+        private struct GetCachedCustomerRouteQualityConfigurationDataCacheName
+        {
+            public int RoutingDatabaseId { get; set; }
+
+            public override int GetHashCode()
+            {
+                return this.RoutingDatabaseId.GetHashCode();
+            }
+        }
+
         public Dictionary<long, List<CustomerRouteQualityConfigurationData>> GetCachedCustomerRouteQualityConfigurationData(RoutingDatabase routingDatabase)
         {
             var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<QualityConfigurationDataCacheManager>();
+            var cacheName = new GetCachedCustomerRouteQualityConfigurationDataCacheName() { RoutingDatabaseId = routingDatabase.ID };
 
-            return cacheManager.GetOrCreateObject("GetCachedCustomerRouteQualityConfigurationData", routingDatabase.ID, QualityConfigurationDataCacheExpirationChecker.Instance,
+            return cacheManager.GetOrCreateObject(cacheName, QualityConfigurationDataCacheExpirationChecker.Instance,
                 () =>
                 {
                     ICustomerQualityConfigurationDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICustomerQualityConfigurationDataManager>();
@@ -127,11 +138,22 @@ namespace TOne.WhS.Routing.Business
                 });
         }
 
+        private struct GetCachedRPQualityConfigurationDataCacheName
+        {
+            public int RoutingDatabaseId { get; set; }
+
+            public override int GetHashCode()
+            {
+                return this.RoutingDatabaseId.GetHashCode();
+            }
+        }
+
         public Dictionary<SaleZoneSupplier, List<RPQualityConfigurationData>> GetCachedRPQualityConfigurationData(RoutingDatabase routingDatabase)
         {
             var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<QualityConfigurationDataCacheManager>();
+            var cacheName = new GetCachedRPQualityConfigurationDataCacheName() { RoutingDatabaseId = routingDatabase.ID };
 
-            return cacheManager.GetOrCreateObject("GetCachedRPQualityConfigurationData", routingDatabase.ID, QualityConfigurationDataCacheExpirationChecker.Instance,
+            return cacheManager.GetOrCreateObject(cacheName, QualityConfigurationDataCacheExpirationChecker.Instance,
                 () =>
                 {
                     IRPQualityConfigurationDataManager dataManager = RoutingDataManagerFactory.GetDataManager<IRPQualityConfigurationDataManager>();
@@ -183,7 +205,7 @@ namespace TOne.WhS.Routing.Business
 
         #region Private Classes
 
-        private class QualityConfigurationDataCacheManager : BaseCacheManager<int>
+        private class QualityConfigurationDataCacheManager : BaseCacheManager
         {
 
         }

@@ -63,11 +63,22 @@ namespace TOne.WhS.Routing.Data.SQL
             ApplySupplierZoneDetailsForDB(preparedSupplierZoneDetails);
         }
 
+        private struct GetCachedSupplierZoneDetailsCacheName
+        {
+            public int RoutingDatabaseId { get; set; }
+
+            public override int GetHashCode()
+            {
+                return this.RoutingDatabaseId.GetHashCode();
+            }
+        }
+
         public Dictionary<long, SupplierZoneDetail> GetCachedSupplierZoneDetails()
         {
             var cacheManager = Vanrise.Caching.CacheManagerFactory.GetCacheManager<SupplierZoneDetailsCacheManager>();
+            var cacheName = new GetCachedSupplierZoneDetailsCacheName() { RoutingDatabaseId = this.RoutingDatabase.ID };
 
-            return cacheManager.GetOrCreateObject("SupplierZoneDetails", this.RoutingDatabase.ID, SupplierZoneDetailsCacheExpirationChecker.Instance, () =>
+            return cacheManager.GetOrCreateObject(cacheName, SupplierZoneDetailsCacheExpirationChecker.Instance, () =>
            {
                string query = query_GetSupplierZoneDetails.Replace("#FILTER#", string.Empty);
                IEnumerable<SupplierZoneDetail> supplierZoneDetails = GetItemsText(query, SupplierZoneDetailMapper, null);
@@ -201,7 +212,7 @@ namespace TOne.WhS.Routing.Data.SQL
 
         #region Private Classes
 
-        private class SupplierZoneDetailsCacheManager : BaseCacheManager<int>
+        private class SupplierZoneDetailsCacheManager : BaseCacheManager
         {
 
         }
