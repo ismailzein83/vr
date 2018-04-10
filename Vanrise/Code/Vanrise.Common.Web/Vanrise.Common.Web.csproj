@@ -129,6 +129,8 @@
     <Compile Include="Controllers\GenericLKUPDefinitionController.cs" />
     <Compile Include="Controllers\OverriddenConfigurationController.cs" />
     <Compile Include="Controllers\OverriddenConfigurationGroupController.cs" />
+    <Compile Include="Controllers\SMSMessageTemplateController.cs" />
+    <Compile Include="Controllers\SMSMessageTypeController.cs" />
     <Compile Include="Controllers\VRExclusiveSessionController.cs" />
     <Compile Include="Controllers\VRExclusiveSessionTypeController.cs" />
     <Compile Include="Controllers\VRLocalizationLanguageController.cs" />

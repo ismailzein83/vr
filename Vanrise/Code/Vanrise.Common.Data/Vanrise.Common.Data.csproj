@@ -49,6 +49,8 @@
     <Compile Include="IGenericLKUPItemDataManager.cs" />
     <Compile Include="IOverriddenConfigurationDataManager.cs" />
     <Compile Include="IOverriddenConfigurationGroupDataManager.cs" />
+    <Compile Include="ISMSMessageTemplateDataManager.cs" />
+    <Compile Include="ISMSMessageTypeDataManager.cs" />
     <Compile Include="IUtilityDataManager.cs" />
     <Compile Include="IVRActionAuditDataManager.cs" />
     <Compile Include="IVRActionAuditLKUPDataManager.cs" />

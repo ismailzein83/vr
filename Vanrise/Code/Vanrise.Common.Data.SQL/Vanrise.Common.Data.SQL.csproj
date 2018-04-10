@@ -52,6 +52,8 @@
     <Compile Include="GenericLKUPItemDataManager.cs" />
     <Compile Include="OverriddenConfigurationDataManager.cs" />
     <Compile Include="OverriddenConfigurationGroupDataManage.cs" />
+    <Compile Include="SMSMessageTemplateDataManager.cs" />
+    <Compile Include="SMSMessageTypeDataManager.cs" />
     <Compile Include="StatusDefinitionDataManager.cs" />
     <Compile Include="VRActionAuditDataManager.cs" />
     <Compile Include="VRActionAuditLKUPDataManager.cs" />
