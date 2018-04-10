@@ -9,7 +9,7 @@ namespace Vanrise.Entities
     public class VRTaxSetting
     {
         public List<VRTaxItem> Items { get; set; }
-        public Decimal VAT { get; set; }
+        public Decimal? VAT { get; set; }
         public string VATId { get; set; }
     }
 }
