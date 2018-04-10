@@ -18,10 +18,5 @@ namespace Vanrise.Common.Business
         {
 
         }
-
-        public void SendSMS(SMSActionSettings actionSettings, SMSActionDefinitionSettings actionDefinitionSettings, Dictionary<string, Object> objects)
-        {
-
-        }
     }
 }

@@ -88,8 +88,6 @@
     <Compile Include="LabelColor.cs" />
     <Compile Include="ModalWidthEnum.cs" />
     <Compile Include="ObjectFactory.cs" />
-    <Compile Include="SMS\SMSActionDefinitionSettings.cs" />
-    <Compile Include="SMS\SMSActionSettings.cs" />
     <Compile Include="SMS\SMSEvaluatedTemplate.cs" />
     <Compile Include="SMS\SMSMessageTemplate.cs" />
     <Compile Include="SMS\SMSMessageType.cs" />

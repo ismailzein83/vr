@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    public abstract class SMSSendHandler
+    public class SMSSendHandler
+    {
+        public SMSSendHandlerSettings Settings { get; set; }
+    }
+
+    public abstract class SMSSendHandlerSettings
     {
         public abstract Guid ConfigId { get; }
 
