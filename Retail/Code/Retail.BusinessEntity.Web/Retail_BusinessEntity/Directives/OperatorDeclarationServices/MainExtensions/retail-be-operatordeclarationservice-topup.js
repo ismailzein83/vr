@@ -48,7 +48,6 @@
                 api.getData = function () {
                     return {
                         $type: "Retail.BusinessEntity.MainExtensions.OperatorDeclarationServices.Topup,Retail.BusinessEntity.MainExtensions",
-
                         NumberOfTopups: $scope.scopeModel.numberOfTopups,
                     };
                 };

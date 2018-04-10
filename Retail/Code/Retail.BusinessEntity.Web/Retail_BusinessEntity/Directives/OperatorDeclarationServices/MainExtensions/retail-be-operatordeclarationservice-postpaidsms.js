@@ -102,9 +102,7 @@
                     return {
                         $type: "Retail.BusinessEntity.MainExtensions.OperatorDeclarationServices.PostpaidSMS,Retail.BusinessEntity.MainExtensions",
                         TrafficType: trafficTypeSelectorAPI.getSelectedIds(),
-
                         TrafficDirection: trafficDirectionSelectorAPI.getSelectedIds(),
-
                         NumberOfSMSs: $scope.scopeModel.numberOfSMSs,
                     };
                 };

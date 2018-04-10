@@ -1,6 +1,6 @@
 ﻿
 <vr-columns width="1/3row" haschildcolumns>
-    <vr-columns width="1/2row">
+    <vr-columns width="1/2row" >
         <retail-be-traffictype-selector on-ready="scopeModel.onTrafficTypeSelectorReady" selectedvalues="scopeModel.trafficType" isrequired=" true"></retail-be-traffictype-selector>
     </vr-columns>
     <vr-columns width="1/2row">
@@ -12,10 +12,10 @@
         <vr-textbox value="scopeModel.successfulCalls" label="Successful Calls" type="number" decimalprecision="0" minvalue="0" isrequired></vr-textbox>
     </vr-columns>
     <vr-columns width="1/4row">
-        <vr-textbox value="scopeModel.totalDuration" label="Total Duration" type="number" isrequired></vr-textbox>
+        <vr-textbox value="scopeModel.totalDuration" label="Total Duration (Min)" type="number" isrequired></vr-textbox>
     </vr-columns>
     <vr-columns width="1/4row">
-        <vr-textbox value="scopeModel.totalChargedDuration" label="Total Charged Duration" type="number" isrequired></vr-textbox>
+        <vr-textbox value="scopeModel.totalChargedDuration" label="Total Charged Duration (Min)" type="number" isrequired></vr-textbox>
     </vr-columns>
 </vr-columns>
 

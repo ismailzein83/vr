@@ -107,13 +107,9 @@
                     return {
                         $type: "Retail.BusinessEntity.MainExtensions.OperatorDeclarationServices.PostpaidCDR,Retail.BusinessEntity.MainExtensions",
                         TrafficType: trafficTypeSelectorAPI.getSelectedIds(),
-
                         TrafficDirection: trafficDirectionSelectorAPI.getSelectedIds(),
-
                         SuccessfulCalls: $scope.scopeModel.successfulCalls,
-
                         TotalDuration: $scope.scopeModel.totalDuration,
-
                         TotalChargedDuration: $scope.scopeModel.totalChargedDuration,
                     };
                 };
