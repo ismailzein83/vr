@@ -70,7 +70,7 @@ app.directive('vrWhsBeCodesbyzoneMappedvalueOtherrates', ['UtilsService', 'VRUIU
             selectorReadyPromiseDeferred.promise.then(function () {
                 var payload = {
                     selectedIds: selectedRateTypeId
-                }
+                };
                 VRUIUtilsService.callDirectiveLoad(selectorAPI, payload, rateTypeSelectorLoadPromiseDeferred);
             });
             return rateTypeSelectorLoadPromiseDeferred.promise;

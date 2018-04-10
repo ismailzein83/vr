@@ -1244,8 +1244,6 @@
                         VRNotificationService.showWarning("Cannot start process because another instance is still running");
                     }
                     else {
-                        console.log("sellingProductId in ratePlanController");
-                        console.log(customerSellingProductId);
                         var ownerId = getOwnerId();
                         WhS_Sales_RatePlanService.applyDraftOnMultipleCustomers(executeApplyDraftOnMultipleCustomersProcess, ownerId, sellingNumberPlanId, customerSellingProductId);
                         applyOfferDeferred.resolve();

@@ -104,8 +104,6 @@
          function loadCarrierAccount() {
 
              var carrierAccountSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-             console.log("selling product id in apply for multiple");
-             console.log(customerSellingProductId);
              var carrierAccountPayload = {
                  filter: {
                      SellingNumberPlanId: sellingNumberPlanId,

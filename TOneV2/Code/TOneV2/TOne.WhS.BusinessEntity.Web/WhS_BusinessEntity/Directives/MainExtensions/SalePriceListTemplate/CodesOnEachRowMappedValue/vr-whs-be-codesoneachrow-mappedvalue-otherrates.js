@@ -43,7 +43,6 @@ app.directive('vrWhsBeCodesoneachrowMappedvalueOtherrates', ['UtilsService', 'VR
             var api = {};
 
             api.load = function (payload) {
-                console.log("in api . load")
                 $scope.scopeModel.isLoading = true;
                 var promises = [];
                 if (payload != undefined && payload.mappedValue != undefined) {
@@ -68,12 +67,11 @@ app.directive('vrWhsBeCodesoneachrowMappedvalueOtherrates', ['UtilsService', 'VR
         }
         function loadRateTypeSelector()
         {
-            console.log("in load func");
             var rateTypeSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
             selectorReadyPromiseDeferred.promise.then(function () {
                 var payload = {
                     selectedIds: selectedRateTypeId
-                }
+                };
                 VRUIUtilsService.callDirectiveLoad(selectorAPI, payload, rateTypeSelectorLoadPromiseDeferred);
             });
             return rateTypeSelectorLoadPromiseDeferred.promise;
