@@ -211,7 +211,7 @@
       </Textbox>
       <Rectangle Name="Rectangle4">
         <KeepTogether>true</KeepTogether>
-        <Top>2.95952in</Top>
+        <Top>2.70952in</Top>
         <Left>1.54103in</Left>
         <Height>0.02083in</Height>
         <Width>6.23251in</Width>
@@ -1002,7 +1002,7 @@
         <RepeatColumnHeaders>true</RepeatColumnHeaders>
         <RepeatRowHeaders>true</RepeatRowHeaders>
         <DataSetName>CustomerInvoiceItemDetails</DataSetName>
-        <Top>2.43695in</Top>
+        <Top>2.18695in</Top>
         <Left>0.04103in</Left>
         <Height>0.46875in</Height>
         <Width>7.73251in</Width>
@@ -1018,27 +1018,11 @@
           <FontSize>9pt</FontSize>
         </Style>
       </Tablix>
-      <Image Name="Image2">
-        <Source>Database</Source>
-        <Value>=Parameters!Image.Value</Value>
-        <MIMEType>image/png</MIMEType>
-        <Sizing>FitProportional</Sizing>
-        <Top>0.23146in</Top>
-        <Left>0.07396in</Left>
-        <Height>0.79514in</Height>
-        <Width>3.25573in</Width>
-        <ZIndex>8</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-        </Style>
-      </Image>
       <Tablix Name="Tablix2">
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.51705in</Width>
+              <Width>2.07095in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.71082in</Width>
@@ -1062,7 +1046,7 @@
               <Width>0.53707in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.5539in</Width>
+              <Width>0.9914in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1729,11 +1713,11 @@
         <RepeatColumnHeaders>true</RepeatColumnHeaders>
         <RepeatRowHeaders>true</RepeatRowHeaders>
         <DataSetName>CustomerInvoiceItemDetails</DataSetName>
-        <Top>2.38542in</Top>
+        <Top>2.13542in</Top>
         <Left>0.05499in</Left>
         <Height>0.46875in</Height>
-        <Width>7.71855in</Width>
-        <ZIndex>9</ZIndex>
+        <Width>7.70995in</Width>
+        <ZIndex>8</ZIndex>
         <Visibility>
           <Hidden>=iif(Parameters!DisplayCommission.Value = True, True, False)</Hidden>
         </Visibility>
@@ -1752,7 +1736,7 @@
               <Width>0.90277in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.71971in</Width>
+              <Width>1.27361in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.90134in</Width>
@@ -1767,7 +1751,7 @@
               <Width>0.53707in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.5539in</Width>
+              <Width>0.9914in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -1852,11 +1836,12 @@
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -1886,11 +1871,12 @@
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -1953,6 +1939,7 @@
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>9pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1987,6 +1974,7 @@
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -2029,11 +2017,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>CustomerInvoiceItemDetails</DataSetName>
-        <Top>3.13021in</Top>
+        <Top>2.88021in</Top>
         <Left>1.54103in</Left>
         <Height>0.25in</Height>
-        <Width>6.23251in</Width>
-        <ZIndex>10</ZIndex>
+        <Width>6.22391in</Width>
+        <ZIndex>9</ZIndex>
         <Visibility>
           <Hidden>=iif(Parameters!DisplayCommission.Value = True, True, False)</Hidden>
         </Visibility>
@@ -2153,11 +2141,12 @@
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -2187,11 +2176,12 @@
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -2220,6 +2210,7 @@
                               <Value />
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -2252,6 +2243,7 @@
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>9pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -2286,6 +2278,7 @@
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -2320,6 +2313,7 @@
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -2363,11 +2357,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>CustomerInvoiceItemDetails</DataSetName>
-        <Top>3.05729in</Top>
+        <Top>2.80729in</Top>
         <Left>1.54103in</Left>
         <Height>0.25in</Height>
         <Width>6.23251in</Width>
-        <ZIndex>11</ZIndex>
+        <ZIndex>10</ZIndex>
         <Visibility>
           <Hidden>=iif(Parameters!DisplayCommission.Value = True, False, True)</Hidden>
         </Visibility>
@@ -2377,6 +2371,22 @@
           </Border>
         </Style>
       </Tablix>
+      <Image Name="Image1">
+        <Source>Database</Source>
+        <Value>=Parameters!Image.Value</Value>
+        <MIMEType>image/png</MIMEType>
+        <Sizing>FitProportional</Sizing>
+        <Top>0.23563in</Top>
+        <Left>0.2185in</Left>
+        <Height>0.73542in</Height>
+        <Width>2.61826in</Width>
+        <ZIndex>11</ZIndex>
+        <Style>
+          <Border>
+            <Style>None</Style>
+          </Border>
+        </Style>
+      </Image>
     </ReportItems>
     <Height>9.98958in</Height>
     <Style />

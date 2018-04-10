@@ -968,7 +968,7 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
-        <Top>6.73278in</Top>
+        <Top>5.85778in</Top>
         <Left>0.1425in</Left>
         <Height>2.17431in</Height>
         <Width>6.56471in</Width>
@@ -998,8 +998,8 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox72</rd:DefaultName>
-        <Top>6.3432in</Top>
-        <Left>0.1425in</Left>
+        <Top>5.4682in</Top>
+        <Left>1.30917in</Left>
         <Height>0.17708in</Height>
         <Width>1.26042in</Width>
         <ZIndex>8</ZIndex>
@@ -1015,10 +1015,10 @@
       </Textbox>
       <Rectangle Name="Rectangle4">
         <KeepTogether>true</KeepTogether>
-        <Top>6.55917in</Top>
+        <Top>5.68417in</Top>
         <Left>0.1425in</Left>
         <Height>0.02083in</Height>
-        <Width>6.50846in</Width>
+        <Width>4.1629in</Width>
         <ZIndex>9</ZIndex>
         <Style>
           <Border>
@@ -1232,40 +1232,6 @@
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
-      <Textbox Name="Textbox19">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>Reg No.</Value>
-                <Style>
-                  <FontFamily>Verdana</FontFamily>
-                  <FontSize>8pt</FontSize>
-                  <FontWeight>Bold</FontWeight>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Textbox1</rd:DefaultName>
-        <Top>3.4802in</Top>
-        <Left>0.1425in</Left>
-        <Height>0.21875in</Height>
-        <Width>0.79166in</Width>
-        <ZIndex>16</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
       <Textbox Name="Textbox6">
         <CanGrow>true</CanGrow>
         <KeepTogether>true</KeepTogether>
@@ -1289,7 +1255,7 @@
         <Left>0.9304in</Left>
         <Height>0.33334in</Height>
         <Width>3.375in</Width>
-        <ZIndex>17</ZIndex>
+        <ZIndex>16</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1323,7 +1289,7 @@
         <Left>0.9304in</Left>
         <Height>0.1875in</Height>
         <Width>3.375in</Width>
-        <ZIndex>18</ZIndex>
+        <ZIndex>17</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1357,41 +1323,7 @@
         <Left>0.9304in</Left>
         <Height>0.36458in</Height>
         <Width>3.375in</Width>
-        <ZIndex>19</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
-      <Textbox Name="Textbox15">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>=Parameters!CustomerRegNo.Value</Value>
-                <Style>
-                  <FontStyle>Italic</FontStyle>
-                  <FontFamily>Verdana</FontFamily>
-                  <FontSize>8pt</FontSize>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>3.4802in</Top>
-        <Left>0.9304in</Left>
-        <Height>0.21875in</Height>
-        <Width>3.375in</Width>
-        <ZIndex>20</ZIndex>
+        <ZIndex>18</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1421,11 +1353,11 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox1</rd:DefaultName>
-        <Top>3.76839in</Top>
+        <Top>3.51839in</Top>
         <Left>0.1425in</Left>
         <Height>0.21875in</Height>
         <Width>0.79166in</Width>
-        <ZIndex>21</ZIndex>
+        <ZIndex>19</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1459,7 +1391,7 @@
         <Left>4.76624in</Left>
         <Height>0.16667in</Height>
         <Width>0.98958in</Width>
-        <ZIndex>22</ZIndex>
+        <ZIndex>20</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1493,7 +1425,7 @@
         <Left>4.76624in</Left>
         <Height>0.16667in</Height>
         <Width>0.98958in</Width>
-        <ZIndex>23</ZIndex>
+        <ZIndex>21</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1527,7 +1459,7 @@
         <Left>4.76624in</Left>
         <Height>0.16667in</Height>
         <Width>0.98958in</Width>
-        <ZIndex>24</ZIndex>
+        <ZIndex>22</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1561,7 +1493,7 @@
         <Left>5.84848in</Left>
         <Height>0.16667in</Height>
         <Width>2.27985in</Width>
-        <ZIndex>25</ZIndex>
+        <ZIndex>23</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1595,7 +1527,7 @@
         <Left>5.84849in</Left>
         <Height>0.16667in</Height>
         <Width>2.27984in</Width>
-        <ZIndex>26</ZIndex>
+        <ZIndex>24</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1629,7 +1561,7 @@
         <Left>5.84849in</Left>
         <Height>0.16667in</Height>
         <Width>2.27984in</Width>
-        <ZIndex>27</ZIndex>
+        <ZIndex>25</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1656,7 +1588,7 @@
               <Width>0.15in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.25in</Width>
+              <Width>1.1in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.15in</Width>
@@ -1668,7 +1600,7 @@
               <Width>0.15in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.8in</Width>
+              <Width>0.95in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.15in</Width>
@@ -1708,7 +1640,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Left</TextAlign>
+                            <TextAlign>Center</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -1785,7 +1717,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -1859,7 +1791,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -1933,7 +1865,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -2007,7 +1939,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -2080,7 +2012,9 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox59</rd:DefaultName>
@@ -2107,7 +2041,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!Currency.Value</Value>
+                              <Value />
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2294,7 +2228,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -2364,7 +2298,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -2434,7 +2368,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -2504,7 +2438,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -2574,7 +2508,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -2600,7 +2534,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
+                              <Value>=Parameters!Currency.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2609,7 +2543,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Left</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -2641,11 +2575,7 @@
             <TablixMember />
             <TablixMember />
             <TablixMember />
-            <TablixMember>
-              <Visibility>
-                <Hidden>=iif(Parameters!DisplayCommission.Value = True, false, True)</Hidden>
-              </Visibility>
-            </TablixMember>
+            <TablixMember />
             <TablixMember>
               <Visibility>
                 <Hidden>=iif(Parameters!DisplayCommission.Value = True, false, True)</Hidden>
@@ -2671,11 +2601,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>ItemsDetails</DataSetName>
-        <Top>4.20708in</Top>
+        <Top>3.95708in</Top>
         <Left>0.12596in</Left>
         <Height>0.5in</Height>
         <Width>7.95498in</Width>
-        <ZIndex>28</ZIndex>
+        <ZIndex>26</ZIndex>
         <Visibility>
           <Hidden>= iif(Parameters!DisplayCommission.Value = True, false, true)</Hidden>
         </Visibility>
@@ -2708,7 +2638,7 @@
         <Left>0.9304in</Left>
         <Height>0.21875in</Height>
         <Width>3.375in</Width>
-        <ZIndex>29</ZIndex>
+        <ZIndex>27</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2738,11 +2668,11 @@
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>3.76839in</Top>
+        <Top>3.51839in</Top>
         <Left>0.9304in</Left>
         <Height>0.21875in</Height>
         <Width>3.375in</Width>
-        <ZIndex>30</ZIndex>
+        <ZIndex>28</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2776,7 +2706,7 @@
         <Left>0.9304in</Left>
         <Height>0.1875in</Height>
         <Width>3.375in</Width>
-        <ZIndex>31</ZIndex>
+        <ZIndex>29</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2849,11 +2779,11 @@
           <BreakLocation>Start</BreakLocation>
         </PageBreak>
         <KeepTogether>true</KeepTogether>
-        <Top>8.97653in</Top>
+        <Top>8.10153in</Top>
         <Left>0.1425in</Left>
         <Height>3.18888in</Height>
         <Width>7.98583in</Width>
-        <ZIndex>32</ZIndex>
+        <ZIndex>30</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2964,11 +2894,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>TaxesDetails</DataSetName>
-        <Top>4.77652in</Top>
+        <Top>4.52652in</Top>
         <Left>3.47596in</Left>
         <Height>0.36458in</Height>
         <Width>2in</Width>
-        <ZIndex>33</ZIndex>
+        <ZIndex>31</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2998,7 +2928,7 @@
         <Left>5.84848in</Left>
         <Height>0.17in</Height>
         <Width>2.27985in</Width>
-        <ZIndex>34</ZIndex>
+        <ZIndex>32</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -3032,7 +2962,7 @@
         <Left>4.76624in</Left>
         <Height>0.17in</Height>
         <Width>0.98958in</Width>
-        <ZIndex>35</ZIndex>
+        <ZIndex>33</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -3065,10 +2995,10 @@
               <Width>0.16032in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.58598in</Width>
+              <Width>1.74514in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.53815in</Width>
+              <Width>0.32699in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -3163,7 +3093,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -3235,7 +3165,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -3307,7 +3237,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -3335,7 +3265,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
+                              <Value>=Parameters!Currency.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -3343,7 +3273,9 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox90</rd:DefaultName>
@@ -3372,11 +3304,7 @@
             <TablixMember />
             <TablixMember />
             <TablixMember />
-            <TablixMember>
-              <Visibility>
-                <Hidden>=iif(Parameters!DisplayCommission.Value = True, false, True)</Hidden>
-              </Visibility>
-            </TablixMember>
+            <TablixMember />
             <TablixMember />
             <TablixMember />
           </TablixMembers>
@@ -3387,11 +3315,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>ItemsDetails</DataSetName>
-        <Top>5.24875in</Top>
+        <Top>4.99875in</Top>
         <Left>0.81646in</Left>
         <Height>0.25in</Height>
-        <Width>7.31648in</Width>
-        <ZIndex>36</ZIndex>
+        <Width>7.26448in</Width>
+        <ZIndex>34</ZIndex>
         <Visibility>
           <Hidden>= iif(Parameters!DisplayCommission.Value = True, True, false)</Hidden>
         </Visibility>
@@ -3429,13 +3357,10 @@
               <Width>0.16032in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.41462in</Width>
+              <Width>1.74513in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.16032in</Width>
-            </TablixColumn>
-            <TablixColumn>
-              <Width>0.51032in</Width>
+              <Width>0.32699in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -3460,7 +3385,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Left</TextAlign>
+                            <TextAlign>Center</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -3537,7 +3462,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -3611,7 +3536,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -3685,7 +3610,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -3727,41 +3652,6 @@
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox55</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <BackgroundColor>LightGrey</BackgroundColor>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox91">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=Parameters!Currency.Value</Value>
-                              <Style>
-                                <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox57</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -3937,7 +3827,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -4007,7 +3897,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -4077,7 +3967,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -4103,7 +3993,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
+                              <Value>=Parameters!Currency.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -4112,46 +4002,11 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Left</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox56</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Style>None</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox100">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value />
-                              <Style>
-                                <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Center</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox58</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>None</Style>
@@ -4179,11 +4034,6 @@
             <TablixMember />
             <TablixMember />
             <TablixMember />
-            <TablixMember>
-              <Visibility>
-                <Hidden>=Microsoft.VisualBasic.Interaction.iif(Parameters!DisplayCommission.Value = True, False, True)</Hidden>
-              </Visibility>
-            </TablixMember>
             <TablixMember />
           </TablixMembers>
         </TablixColumnHierarchy>
@@ -4198,11 +4048,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>ItemsDetails</DataSetName>
-        <Top>4.15152in</Top>
+        <Top>3.90152in</Top>
         <Left>0.12875in</Left>
         <Height>0.5in</Height>
-        <Width>7.96533in</Width>
-        <ZIndex>37</ZIndex>
+        <Width>7.95219in</Width>
+        <ZIndex>35</ZIndex>
         <Visibility>
           <Hidden>= iif(Parameters!DisplayCommission.Value = True, True, false)</Hidden>
         </Visibility>
@@ -4216,34 +4066,34 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.10392in</Width>
+              <Width>1.10808in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.16603in</Width>
+              <Width>0.188in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.20926in</Width>
-            </TablixColumn>
-            <TablixColumn>
-              <Width>0.19074in</Width>
-            </TablixColumn>
-            <TablixColumn>
-              <Width>1.03397in</Width>
+              <Width>1.06342in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>0.15in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.81465in</Width>
+              <Width>1.05in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.03535in</Width>
+              <Width>0.15in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>0.95in</Width>
+            </TablixColumn>
+            <TablixColumn>
+              <Width>1.05in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.05498in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.51603in</Width>
+              <Width>0.5in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -4338,7 +4188,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -4410,7 +4260,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -4482,7 +4332,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -4554,7 +4404,7 @@
                             </TextRun>
                           </TextRuns>
                           <Style>
-                            <TextAlign>Center</TextAlign>
+                            <TextAlign>Right</TextAlign>
                           </Style>
                         </Paragraph>
                       </Paragraphs>
@@ -4582,7 +4432,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value />
+                              <Value>=Parameters!Currency.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -4590,7 +4440,9 @@
                               </Style>
                             </TextRun>
                           </TextRuns>
-                          <Style />
+                          <Style>
+                            <TextAlign>Left</TextAlign>
+                          </Style>
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox90</rd:DefaultName>
@@ -4625,11 +4477,7 @@
                 <Hidden>=Microsoft.VisualBasic.Interaction.iif(Parameters!DisplayCommission.Value = True, False, True)</Hidden>
               </Visibility>
             </TablixMember>
-            <TablixMember>
-              <Visibility>
-                <Hidden>=Microsoft.VisualBasic.Interaction.iif(Parameters!DisplayCommission.Value = True, False, True)</Hidden>
-              </Visibility>
-            </TablixMember>
+            <TablixMember />
             <TablixMember />
             <TablixMember />
           </TablixMembers>
@@ -4640,11 +4488,11 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>ItemsDetails</DataSetName>
-        <Top>5.2661in</Top>
-        <Left>0.82204in</Left>
+        <Top>5.0161in</Top>
+        <Left>0.81646in</Left>
         <Height>0.25in</Height>
-        <Width>7.27493in</Width>
-        <ZIndex>38</ZIndex>
+        <Width>7.26448in</Width>
+        <ZIndex>36</ZIndex>
         <Visibility>
           <Hidden>= iif(Parameters!DisplayCommission.Value = True, false, True)</Hidden>
         </Visibility>
@@ -4678,7 +4526,7 @@
         <Left>5.89124in</Left>
         <Height>0.24791in</Height>
         <Width>0.96211in</Width>
-        <ZIndex>39</ZIndex>
+        <ZIndex>37</ZIndex>
         <Style>
           <Border />
           <PaddingLeft>2pt</PaddingLeft>
@@ -4688,7 +4536,7 @@
         </Style>
       </Textbox>
     </ReportItems>
-    <Height>12.16542in</Height>
+    <Height>11.51959in</Height>
     <Style />
   </Body>
   <Width>8.26304in</Width>
