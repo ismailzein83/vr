@@ -30,7 +30,7 @@ namespace Vanrise.Common
             if (!int.TryParse(ConfigurationManager.AppSettings["WCFPortRangeEnd"], out _wcfPortRangeEnd))
                 _wcfPortRangeEnd = 50000;
             if (!int.TryParse(ConfigurationManager.AppSettings["WCFServiceHostingRetries"], out _wcfServiceHostingRetries))
-                _wcfServiceHostingRetries = 100;
+                _wcfServiceHostingRetries = 1000;
         }
 
         #endregion

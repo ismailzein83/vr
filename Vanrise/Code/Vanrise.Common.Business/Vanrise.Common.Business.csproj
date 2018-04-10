@@ -81,6 +81,7 @@
     <Compile Include="DataGrouping\RemoteDataGrouper.cs" />
     <Compile Include="DataGrouping\LocalDataGrouper.cs" />
     <Compile Include="ExcelFileParser\ExcelFileParserManger.cs" />
+    <Compile Include="SMSAction\SMSManager.cs" />
     <Compile Include="UtilityManager.cs" />
     <Compile Include="Filters\GenericLKUPBEDefinitionFilter.cs" />
     <Compile Include="GenericLKUP\GenericLKUPBEDefinitionSettings.cs" />

@@ -88,6 +88,12 @@
     <Compile Include="LabelColor.cs" />
     <Compile Include="ModalWidthEnum.cs" />
     <Compile Include="ObjectFactory.cs" />
+    <Compile Include="SMS\SMSActionDefinitionSettings.cs" />
+    <Compile Include="SMS\SMSActionSettings.cs" />
+    <Compile Include="SMS\SMSEvaluatedTemplate.cs" />
+    <Compile Include="SMS\SMSMessageTemplate.cs" />
+    <Compile Include="SMS\SMSMessageType.cs" />
+    <Compile Include="SMS\SMSSendHandler.cs" />
     <Compile Include="VRBulkActionDraft\BulkActionFinalState.cs" />
     <Compile Include="VRBulkActionDraft\BulkActionState.cs" />
     <Compile Include="VRBulkActionDraft\VRBulkActionDraft.cs" />
