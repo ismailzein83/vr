@@ -121,7 +121,7 @@ namespace Vanrise.Security.Business
         {
             SecurityToken securityToken;
             if (!TryGetSecurityToken(out securityToken))
-                throw new Exception("SecurityToken is not available in current context.");
+                throw new Exception("Session is no longer available. Please Login and try again!");
             return securityToken;
         }
 
