@@ -98,7 +98,7 @@ app.directive('retailInvoiceFinancialaccountSelector', ['UtilsService', 'VRUIUti
                 api.getData = function () {
                     var selectedIds = directiveReadyAPI.getSelectedIds();
                     return {
-                        partnerPrefix: selectedIds,
+                     //   partnerPrefix: selectedIds,
                         selectedIds: selectedIds,
                     };
                 };
