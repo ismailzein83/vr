@@ -239,6 +239,12 @@
     <EmbeddedResource Include="Reports\Zajil\InvoiceReportByCurrency.rdlc" />
     <EmbeddedResource Include="Reports\Zajil\ProfileInvoiceItemsReport.rdlc" />
     <EmbeddedResource Include="Reports\Zajil\ProfileInvoiceReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Sama\CustomerInvoiceItemsReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WhS_Invoice\Reports\Sama\CustomerInvoiceReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Sama\SupplierInvoiceItemsReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Sama\SupplierInvoiceReport.rdlc" />
     <EmbeddedResource Include="WhS_Invoice\Reports\SettlementInvoiceReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
@@ -256,6 +262,12 @@
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="WhS_Invoice\Reports\CustomerInvoiceReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\CustomerInvoiceItemsReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\CustomerInvoiceReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\SupplierInvoiceItemsReport.rdlc" />
+    <EmbeddedResource Include="WhS_Invoice\Reports\Vuetel\SupplierInvoiceReport.rdlc" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="JSLintNet.json" />

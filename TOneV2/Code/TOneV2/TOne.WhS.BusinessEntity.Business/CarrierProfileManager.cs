@@ -375,11 +375,15 @@ namespace TOne.WhS.BusinessEntity.Business
                 var carrierProfile = GetCarrierProfile(carrierProfileId);
                 if (carrierProfile.Settings.TaxSetting != null)
                 {
-                    taxItemDetails.Add(new VRTaxItemDetail
+                    if (carrierProfile.Settings.TaxSetting.VAT.HasValue)
                     {
-                        TaxName = "VAT",
-                        Value = carrierProfile.Settings.TaxSetting.VAT
-                    });
+                        taxItemDetails.Add(new VRTaxItemDetail
+                        {
+                            TaxName = "VAT",
+                            Value = carrierProfile.Settings.TaxSetting.VAT.Value
+                        });
+                    }
+                   
                     foreach (var tax in carrierProfile.Settings.TaxSetting.Items)
                     {
                         var taxDefinition = taxesDefinitions.FirstOrDefault(x => x.ItemId == tax.ItemId);
