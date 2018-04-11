@@ -31,7 +31,7 @@ BEGIN
 				(Severity IN (SELECT Severity FROM @Severities)) AND
 				(@From IS NULL OR LogEntryTime >= @From) AND
 				(@To IS NULL OR LogEntryTime <= @To)
-			ORDER BY ID
+			ORDER BY ID DESC
 			
 			DECLARE @sql VARCHAR(1000)
 			SET @sql = 'SELECT * INTO ' + @TempTableName + ' FROM #RESULT';
