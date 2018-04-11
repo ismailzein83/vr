@@ -24,6 +24,10 @@ namespace Vanrise.DataParser.Business
             var extensionConfiguration = new ExtensionConfigurationManager();
             return extensionConfiguration.GetExtensionConfigurations<HexTLVTagValueParserConfig>(HexTLVTagValueParserConfig.EXTENSION_TYPE);
         }
-
+        public IEnumerable<BinaryRecordReadersConfig> GetBinaryRecordReaderTemplateConfigs()
+        {
+            var extensionConfiguration = new ExtensionConfigurationManager();
+            return extensionConfiguration.GetExtensionConfigurations<BinaryRecordReadersConfig>(BinaryRecordReadersConfig.EXTENSION_TYPE);
+        }
     }
 }

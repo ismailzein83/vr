@@ -20,10 +20,16 @@
             return BaseAPIService.get(UtilsService.getServiceURL(VR_DataParser_ModuleConfig.moduleName, controllerName, "GetTagValueParserTemplateConfigs"));
         }
 
+        function GetBinaryRecordReaderTemplateConfigs() {
+
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_DataParser_ModuleConfig.moduleName, controllerName, "GetBinaryRecordReaderTemplateConfigs"));
+        }
+
         return ({
             GetParserTypeTemplateConfigs: GetParserTypeTemplateConfigs,
             GetRecordeReaderTemplateConfigs: GetRecordeReaderTemplateConfigs,
-            GetTagValueParserTemplateConfigs: GetTagValueParserTemplateConfigs
+            GetTagValueParserTemplateConfigs: GetTagValueParserTemplateConfigs,
+            GetBinaryRecordReaderTemplateConfigs: GetBinaryRecordReaderTemplateConfigs
         });
     }
 

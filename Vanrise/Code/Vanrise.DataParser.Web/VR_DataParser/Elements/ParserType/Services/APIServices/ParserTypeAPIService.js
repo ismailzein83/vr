@@ -11,6 +11,10 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_DataParser_ModuleConfig.moduleName, controllerName, "GetFilteredParserTypes"), input);
         }
 
+        function GetParserTypesInfo() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_DataParser_ModuleConfig.moduleName, controllerName, "GetParserTypesInfo"));
+        }
+
         function GetParserType(parserTypeId) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_DataParser_ModuleConfig.moduleName, controllerName, "GetParserType"), {
                 parserTypeId: parserTypeId
@@ -27,6 +31,7 @@
 
     return ({
         GetFilteredParserTypes: GetFilteredParserTypes,
+        GetParserTypesInfo: GetParserTypesInfo,
         GetParserType:GetParserType,
         UpdateParserType:UpdateParserType,
         AddParserType:AddParserType

@@ -36,5 +36,13 @@ namespace Vanrise.DataParser.Web.Controllers
         {
             return _manager.GetTagValueParserTemplateConfigs();
         }
+
+
+        [HttpGet]
+        [Route("GetBinaryRecordReaderTemplateConfigs")]
+        public IEnumerable<BinaryRecordReadersConfig> GetBinaryRecordReaderTemplateConfigs()
+        {
+            return _manager.GetBinaryRecordReaderTemplateConfigs();
+        }
     }
 }

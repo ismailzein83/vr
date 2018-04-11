@@ -1,0 +1,13 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-select on-ready="scopeModel.onRecordParserIdDirectiveReady"
+                   datasource="scopeModel.templateConfigs"
+                   selectedvalues="scopeModel.selectedTemplateConfig"
+                   datavaluefield="ExtensionConfigurationId"
+                   datatextfield="Name"
+                   label="Record Reader"
+                   hideremoveicon
+                   isrequired="ctrl.isrequired">
+        </vr-select>
+    </vr-columns>
+</vr-row>

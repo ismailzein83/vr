@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BinaryParser\BinaryRecordReadersConfig.cs" />
     <Compile Include="CompositeFieldsParser.cs" />
     <Compile Include="BinaryParser\BinaryFieldParser.cs" />
     <Compile Include="BinaryParser\BinaryFieldParserCollection.cs" />

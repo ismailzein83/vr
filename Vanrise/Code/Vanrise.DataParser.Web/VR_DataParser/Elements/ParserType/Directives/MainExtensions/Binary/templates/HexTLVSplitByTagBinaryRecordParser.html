@@ -1,0 +1,18 @@
+﻿<vr-dataparser-recordparser on-ready="scopeModel.onRecordParserDirective" normal-col-num="6"></vr-dataparser-recordparser>
+
+<vr-row>
+    <vr-columns width="1/2row">
+        <vr-textbox value="tagName" label="Tag Name"></vr-textbox>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-button type="Add" data-onclick="ctrl.addTagName" standalone></vr-button>
+    </vr-columns>
+</vr-row>
+<vr-datagrid datasource="tagNames"
+             pagingtype="'PagingOnScroll'"
+             defaultsortbyfieldname="true">
+    <vr-datagridcolumn headertext="'Tag Name'" field="'Name'" fixedwidth="'100'"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-dataparser-recordparser on-ready="dataItem.onTagRecordParserDirective" normal-col-num="6"></vr-dataparser-recordparser>
+    </vr-datagridexpandablerow>
+</vr-datagrid>

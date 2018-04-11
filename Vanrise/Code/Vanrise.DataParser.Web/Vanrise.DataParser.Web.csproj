@@ -120,6 +120,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="VR_DataParser\Constants\ModuleConfig.js" />
+    <Content Include="VR_DataParser\Constants\RecordTypeFieldType.js" />
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\TagValueParseIPV4.html" />
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\TagValueParserBool.html" />
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\Templates\TagValueParserSequence.html" />
@@ -138,6 +139,29 @@
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\vr-dataparser-hextlv-tag-type-grid.js" />
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\vr-dataparser-parsertype-hextlv.js" />
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-tagvalueparser-int.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\AlcatelHeaderBinaryRecordParser.html" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\HexTLVSplitByTagBinaryRecordParser.html" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\NokiaHeaderBinaryRecordParser.html" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\BinaryRecordParser.html" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\ExecuteTemplateBinaryRecordParser.html" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\PositionedBlockBinaryRecordParser.html" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\PositionedFieldsBinaryRecordParser.html" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\SkipBinaryRecordParser.html" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\SplitByBlockBinaryRecordParser.html" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\SplitByOffSetBinaryRecordParser.html" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\templates\SplitByPositionedTypeBinaryRecordParser.html" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-execute-template-binary-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-alcatel-header-binary-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-hextlv-split-by-tag-binary-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-nokia-header-binary-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-parsertype-binary.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-positioned-block-binary-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-positioned-fields-binary-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-recordparser.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-skip-binary-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-split-by-block-binary-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-split-by-offset-binary-record-parser-settings.js" />
+    <Content Include="VR_DataParser\Elements\ParserType\Directives\MainExtensions\Binary\vr-dataparser-split-by-positionedtype-binary-record-parser-settings.js" />
     <Content Include="VR_DataParser\Elements\ParserType\Directives\vr-dataparser-parsertype-extendedsettings.js" />
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\MainExtensions\TagRecordReader\MainExtensions\TagValueParser\vr-dataparser-hextlvtagtype-tagvalueparser.js" />
     <Content Include="VR_DataParser\Elements\HexTLV\Directives\MainExtensions\HexTLV\vr-dataparser-hextlv-recordreader.js" />
