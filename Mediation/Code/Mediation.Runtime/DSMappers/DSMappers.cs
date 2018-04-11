@@ -205,9 +205,25 @@ namespace Mediation.Runtime
                             if (!string.IsNullOrEmpty(faultCode_01))
                                 cdr_01.FaultCode = faultCode_01.Trim();
 
-                            string exchangeIdentity_01 = cdrAsString_01.Substring(112, 17);
-                            if (!string.IsNullOrEmpty(exchangeIdentity_01))
-                                cdr_01.ExchangeIdentity = exchangeIdentity_01.Trim();
+                            string staffUser_01 = cdrAsString_01.Substring(102, 5);
+                            if (!string.IsNullOrEmpty(staffUser_01))
+                                cdr_01.StaffUser = staffUser_01.Trim();
+
+                            string staffPass_01 = cdrAsString_01.Substring(107, 5);
+                            if (!string.IsNullOrEmpty(staffPass_01))
+                                cdr_01.StaffPass = staffPass_01.Trim();
+
+                            string call_01 = cdrAsString_01.Substring(112, 5);
+                            if (!string.IsNullOrEmpty(call_01))
+                                cdr_01.Call = call_01.Trim();
+
+                            string exchange_01 = cdrAsString_01.Substring(117, 5);
+                            if (!string.IsNullOrEmpty(exchange_01))
+                                cdr_01.Exchange = exchange_01.Trim();
+
+                            string code_01 = cdrAsString_01.Substring(122, 5);
+                            if (!string.IsNullOrEmpty(code_01))
+                                cdr_01.Code = code_01.Trim();
 
                             string outgoingRoute_01 = cdrAsString_01.Substring(129, 7);
                             if (!string.IsNullOrEmpty(outgoingRoute_01))
@@ -216,6 +232,14 @@ namespace Mediation.Runtime
                             string incomingRoute_01 = cdrAsString_01.Substring(136, 7);
                             if (!string.IsNullOrEmpty(incomingRoute_01))
                                 cdr_01.IncomingRoute = incomingRoute_01.Trim();
+
+                            string callingName_01 = cdrAsString_01.Substring(204, 2);
+                            if (!string.IsNullOrEmpty(callingName_01))
+                                cdr_01.CallingName = Convert.ToInt32(callingName_01);
+
+                            string calledName_01 = cdrAsString_01.Substring(206, 2);
+                            if (!string.IsNullOrEmpty(calledName_01))
+                                cdr_01.CalledName = Convert.ToInt32(calledName_01);
 
                             cdrs.Add(cdr_01);
                             break;
@@ -273,9 +297,18 @@ namespace Mediation.Runtime
                             if (!string.IsNullOrEmpty(faultCode))
                                 cdr.FaultCode = faultCode.Trim();
 
-                            string exchangeIdentity = cdrAsString.Substring(72, 15);
-                            if (!string.IsNullOrEmpty(exchangeIdentity))
-                                cdr.ExchangeIdentity = exchangeIdentity.Trim();
+
+                            string call = cdrAsString.Substring(72, 5);
+                            if (!string.IsNullOrEmpty(call))
+                                cdr.Call = call.Trim();
+
+                            string exchange = cdrAsString.Substring(77, 5);
+                            if (!string.IsNullOrEmpty(exchange))
+                                cdr.Exchange = exchange.Trim();
+
+                            string code = cdrAsString.Substring(82, 5);
+                            if (!string.IsNullOrEmpty(code))
+                                cdr.Code = code.Trim();
 
                             string recordNumber = cdrAsString.Substring(87, 2);
                             if (!string.IsNullOrEmpty(recordNumber))
