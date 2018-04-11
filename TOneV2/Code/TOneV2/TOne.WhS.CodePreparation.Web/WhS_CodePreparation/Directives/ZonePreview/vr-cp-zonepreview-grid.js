@@ -92,41 +92,7 @@ function (WhS_CP_CodePreparationPreviewAPIService, WhS_CP_ZoneChangeTypeEnum, VR
                 }
             };
 
-            var ratesTab = {
-                title: "Rates",
-                directive: "vr-cp-ratepreview-grid",
-                loadDirective: function (directiveAPI, zoneDataItem) {
-                    zoneDataItem.rateGridAPI = directiveAPI;
-
-                    var rateGridPayload = {
-                        ProcessInstanceId: processInstanceId,
-                        ZoneName: zoneDataItem.ZoneName
-                    };
-
-                    return zoneDataItem.rateGridAPI.load(rateGridPayload);
-                }
-            };
-
-            var zoneRoutingProductsTab = {
-                title: "Routing Products",
-                directive: "vr-cp-zoneroutingproductpreview-grid",
-                loadDirective: function (directiveAPI, zoneDataItem) {
-                    zoneDataItem.zoneRoutingProductsGridAPI = directiveAPI;
-
-                    var zoneRoutingProductsGridPayload = {
-                        isSubGrid: true,
-                            ProcessInstanceId: processInstanceId,
-                            ZoneName: zoneDataItem.ZoneName,
-                            OnlyModified: onlyModified
-                    };
-
-                    return zoneDataItem.zoneRoutingProductsGridAPI.load(zoneRoutingProductsGridPayload);
-                }
-            };
-
             directiveTabs.push(codesTab);
-            directiveTabs.push(ratesTab);
-            directiveTabs.push(zoneRoutingProductsTab);
             return directiveTabs;
         }
 

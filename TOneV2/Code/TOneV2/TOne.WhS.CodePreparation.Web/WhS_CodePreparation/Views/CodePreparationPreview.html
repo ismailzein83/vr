@@ -6,16 +6,21 @@
                     <vr-row ng-hide="filterSectionCollapsed">
                         <span>
                             <vr-cp-viewchangetype-selector on-ready="onViewChangeTypeSelectorReady"
-                                                            onselectitem="onViewChangeTypeSelectItem"
-                                                            normal-col-num="3"
-                                                            hideremoveicon="true">
+                                                           onselectitem="onViewChangeTypeSelectItem"
+                                                           normal-col-num="3"
+                                                           hideremoveicon="true">
                         </span>
                         <span>
                             <vr-cp-groupedby-selector on-ready="onGroupedBySelectorReady"
-                                                       normal-col-num="3"
-                                                       hideremoveicon="true"
-                                                       selectedvalues="selectedGroupedBy">
+                                                      normal-col-num="3"
+                                                      hideremoveicon="true"
+                                                      selectedvalues="selectedGroupedBy">
                         </span>
+                        <vr-columns colnum="6" withemptyline>
+                            <div class="pull-right">
+                                <vr-label isvalue ><a ng-click="scopeModal.openCheckPriceListPreview()" href="">Check PriceLists</a></vr-label>
+                            </div>
+                        </vr-columns>
                     </vr-row>
 
                     <vr-row>

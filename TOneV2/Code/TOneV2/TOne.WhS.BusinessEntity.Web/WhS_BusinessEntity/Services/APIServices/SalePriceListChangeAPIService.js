@@ -5,9 +5,15 @@
     function salePriceListChangeAPIService(baseApiService, utilsService, whSBeModuleConfig) {
 
         var controllerName = "SalePriceListChange";
-
+        
         function GetFilteredSalePriceListCodeChanges(input) {
             return baseApiService.post(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GetFilteredSalePriceListCodeChanges"), input);
+        }
+        function DoCustomerTemporaryPricelistsExists(processInstanceId) {
+            return baseApiService.get(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "DoCustomerTemporaryPricelistsExists"), { processInstanceId: processInstanceId });
+        }
+        function GetFilteredTemporarySalePriceLists(input) {
+            return baseApiService.post(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GetFilteredTemporarySalePriceLists"), input);
         }
         function GetFilteredSalePriceListRateChanges(input) {
             return baseApiService.post(utilsService.getServiceURL(whSBeModuleConfig.moduleName, controllerName, "GetFilteredSalePriceListRateChanges"), input);
@@ -84,7 +90,9 @@
             GetOwnerPricelistTemplateId: GetOwnerPricelistTemplateId,
             GetFilteredCustomerRatePreviews: GetFilteredCustomerRatePreviews,
             GetFilteredRoutingProductPreviews: GetFilteredRoutingProductPreviews,
-            GetSalePricelistCodes: GetSalePricelistCodes
+            GetSalePricelistCodes: GetSalePricelistCodes,
+            GetFilteredTemporarySalePriceLists: GetFilteredTemporarySalePriceLists,
+            DoCustomerTemporaryPricelistsExists: DoCustomerTemporaryPricelistsExists
         });
     }
 

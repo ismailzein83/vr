@@ -24,7 +24,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             SalePriceListChangeManager manager = new SalePriceListChangeManager();
             return GetWebResponse(input, manager.GetFilteredPricelistRateChanges(input));
         }
-
+        [HttpPost]
+        [Route("GetFilteredTemporarySalePriceLists")]
+        public object GetFilteredTemporarySalePriceLists(Vanrise.Entities.DataRetrievalInput<TemporarySalePriceListQuery> input)
+        {
+            SalePriceListChangeManager manager = new SalePriceListChangeManager();
+            return GetWebResponse(input, manager.GetFilteredTemporarySalePriceLists(input));
+        }
         [HttpPost]
         [Route("GetFilteredCustomerRatePreviews")]
         public object GetFilteredCustomerRatePreviews(Vanrise.Entities.DataRetrievalInput<CustomerRatePreviewQuery> input)
@@ -109,6 +115,13 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
             VRFileManager fileManager = new VRFileManager();
             VRFile vrFile = fileManager.GetFile(fileId);
             return GetExcelResponse(vrFile.Content, vrFile.Name);
+        }
+         [HttpGet]
+         [Route("DoCustomerTemporaryPricelistsExists")]
+        public bool DoesCustomerTemporaryPriceListsExists(long processInstanceId)
+        {
+            SalePriceListChangeManager manager = new SalePriceListChangeManager();
+            return manager.DoCustomerTemporaryPricelistsExists(processInstanceId);
         }
         [HttpGet]
         [Route("SetPriceListAsSent")]

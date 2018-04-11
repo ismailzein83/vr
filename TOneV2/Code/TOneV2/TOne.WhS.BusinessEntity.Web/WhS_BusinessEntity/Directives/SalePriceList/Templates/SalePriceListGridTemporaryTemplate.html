@@ -1,0 +1,11 @@
+﻿<vr-datagrid datasource="salePriceLists"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             enableautoexport="true" defaultsortbyfieldname="ctrl.defaultSortByFieldName" defaultsortdirection="ctrl.defaultSortDirection">
+    <vr-datagridcolumn headertext="'Customer Name'" field="'OwnerName'" type="'Text'" widthfactor="'7'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Description'" field="'Entity.Description'" type="'Text'" widthfactor="'5'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Type'" field="'PriceListTypeName'" type="'Text'" fixedwidth="'100'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Currency'" field="'CurrencyName'" type="'Text'" fixedwidth="'80'"></vr-datagridcolumn>
+</vr-datagrid>

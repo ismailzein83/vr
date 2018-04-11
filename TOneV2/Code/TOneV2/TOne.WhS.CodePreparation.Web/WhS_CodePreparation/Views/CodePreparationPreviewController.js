@@ -2,9 +2,9 @@
 
     "use strict";
 
-    CodePreparationPreviewController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'WhS_CP_PreviewChangeTypeEnum', 'WhS_CP_PreviewGroupedBy', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
+    CodePreparationPreviewController.$inject = ['$scope', 'BusinessProcess_BPTaskAPIService', 'WhS_CP_PreviewChangeTypeEnum', 'WhS_CP_PreviewGroupedBy', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService','WhS_BE_SalePriceListChangeService'];
 
-    function CodePreparationPreviewController($scope, BusinessProcess_BPTaskAPIService, WhS_CP_PreviewChangeTypeEnum, WhS_CP_PreviewGroupedBy, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function CodePreparationPreviewController($scope, BusinessProcess_BPTaskAPIService, WhS_CP_PreviewChangeTypeEnum, WhS_CP_PreviewGroupedBy, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService, WhS_BE_SalePriceListChangeService) {
         var bpTaskId;
         var processInstanceId;
         var changeType = true;
@@ -41,7 +41,12 @@
             $scope.scopeModal.continueTask = function () {
                 return executeTask(true);
             };
-
+            $scope.scopeModal.continueTask = function () {
+                return executeTask(true);
+            };
+            $scope.scopeModal.openCheckPriceListPreview = function () {
+                WhS_BE_SalePriceListChangeService.openCheckPriceListPreview(processInstanceId);
+            };
             $scope.scopeModal.stopTask = function () {
                 return executeTask(false);
             };

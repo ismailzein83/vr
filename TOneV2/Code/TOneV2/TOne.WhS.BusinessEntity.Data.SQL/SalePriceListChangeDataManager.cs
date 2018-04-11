@@ -44,6 +44,15 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
             return GetItemsSP("TOneWhS_BE.sp_SalePricelistCodeChange_GetFiltered", SalePricelistCodeChangeMapper,
                 pricelistId, strcountryIds);
         }
+        public List<Entities.SalePriceListNew> GetTemporaryPriceLists(TemporarySalePriceListQuery query)
+        {
+            return GetItemsSP("[TOneWhS_BE].[sp_SalePriceListNew_GetAll]", TemporarySalePriceListMapper,query.ProcessInstanceId);
+        }
+        public bool DoCustomerTemporaryPricelistsExists(long processInstanceId)
+        {
+          //  return GetItemSP("[TOneWhS_BE].[sp_SalePriceListNew_Exists]", (reader) => { return GetReaderValue<bool>(reader, "PriceListExists"); }, processInstanceId);
+             return (bool)ExecuteScalarSP("[TOneWhS_BE].[sp_SalePriceListNew_Exists]",  processInstanceId);
+        }
         public List<SalePricelistRateChange> GetFilteredSalePricelistRateChanges(int pricelistId, List<int> countryIds)
         {
             string strcountryIds = null;
@@ -381,6 +390,27 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 CurrencyId = GetReaderValue<int?>(reader, "CurrencyID"),
                 CustomerId = GetReaderValue<int>(reader, "OwnerID")
             };
+        }
+        SalePriceListNew TemporarySalePriceListMapper(IDataReader reader)
+        {
+            SalePriceListNew salePriceList = new SalePriceListNew
+            {
+                OwnerId = (int)reader["OwnerID"],
+                CurrencyId = (int)reader["CurrencyID"],
+                PriceListId = (int)reader["ID"],
+                OwnerType = (Entities.SalePriceListOwnerType)GetReaderValue<int>(reader, "OwnerType"),
+                EffectiveOn = GetReaderValue<DateTime>(reader, "EffectiveOn"),
+                PriceListType = (SalePriceListType?)GetReaderValue<byte?>(reader, "PriceListType"),
+                ProcessInstanceId = GetReaderValue<long>(reader, "ProcessInstanceID"),
+                FileId = GetReaderValue<long>(reader, "FileID"),
+                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
+                SourceId = GetReaderValue<string>(reader, "SourceID"),
+                UserId = GetReaderValue<int>(reader, "UserID"),
+                Description = GetReaderValue<string>(reader, "Description"),
+                PricelistStateBackupId = GetReaderValue<long?>(reader, "PricelistStateBackupID"),
+            };
+
+            return salePriceList;
         }
         #endregion
 

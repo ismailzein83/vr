@@ -352,8 +352,10 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\MappingSteps\GetCDPNsForZoneMatch\vr-whs-be-getcdpnsforzonematchstep.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\CodesByZoneMappedValue\vr-whs-be-codesbyzone-mappedvalue-befield.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\CodesByZoneMappedValue\vr-whs-be-codesbyzone-mappedvalue-constant.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\CodesByZoneMappedValue\vr-whs-be-codesbyzone-mappedvalue-otherrates.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\CodesOnEachRowMappedValue\vr-whs-be-codesoneachrow-mappedvalue-befield.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\CodesOnEachRowMappedValue\vr-whs-be-codesoneachrow-mappedvalue-constant.js" />
+    <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\CodesOnEachRowMappedValue\vr-whs-be-codesoneachrow-mappedvalue-otherrates.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\MappedCell\vr-whs-be-mappedcell-header.js" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\Templates\BasicSalePriceListTemplateSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\SalePriceListTemplate\vr-whs-be-salepricelisttemplate-settings-basic.js" />
@@ -418,7 +420,9 @@
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\MappedCell\vr-whs-be-pricelisttemplate-mappedcells.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListTemplate\MappedCell\vr-whs-be-salepricelisttemplate-mappedcells-selective.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceList\Templates\SalePricelistFilePreviewTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceList\Templates\SalePriceListGridTemporaryTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceList\vr-whs-be-salepricelistfilepreview-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceList\vr-whs-be-salepricelisttemporary-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceList\vr-whs-be-salepricelisttype-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceList\vr-whs-salepricelist-compressfile-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceList\vr-whs-salepricelist-includeclosedentities-selector.js" />
@@ -663,6 +667,7 @@
     <Content Include="WhS_BusinessEntity\Views\SalePriceListTemplate\SalePriceListTemplateEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\SalePriceListTemplate\SalePriceListTemplateManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SalePriceListTemplate\SalePriceListTemplateManagementController.js" />
+    <Content Include="WhS_BusinessEntity\Views\SalePricelist\TemporarySalePriceListsEditorController.js" />
     <Content Include="WhS_BusinessEntity\Views\SalePricelist\SalePricelistFilePreview.html" />
     <Content Include="WhS_BusinessEntity\Views\SalePricelist\SalePricelistFilePreviewController.js" />
     <Content Include="WhS_BusinessEntity\Views\SalePricelist\SalePricelistManagement.html" />
@@ -673,6 +678,7 @@
     <Content Include="WhS_BusinessEntity\Views\SalePricelist\SendSalePricelistConfirmation.html" />
     <Content Include="WhS_BusinessEntity\Views\SalePricelist\SendSalePricelistConfirmationController.js" />
     <Content Include="WhS_BusinessEntity\Views\SalePricelist\SendSalePriceListController.js" />
+    <Content Include="WhS_BusinessEntity\Views\SalePricelist\TemporarySalePriceListsEditorTemplate.html" />
     <Content Include="WhS_BusinessEntity\Views\SaleService\SaleServiceManagement.html" />
     <Content Include="WhS_BusinessEntity\Views\SaleService\SaleServiceManagementController.js" />
     <Content Include="WhS_BusinessEntity\Views\SaleRate\SaleRateManagement.html" />

@@ -6,16 +6,27 @@ using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.BusinessEntity.Entities.SalePricelistChanges;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Entities;
+using Vanrise.Security.Business;
 
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class SalePriceListChangeManager
     {
+        public IDataRetrievalResult<SalePriceListNewDetail> GetFilteredTemporarySalePriceLists(Vanrise.Entities.DataRetrievalInput<TemporarySalePriceListQuery> input)
+        {
+            return BigDataManager.Instance.RetrieveData(input, new SalePriceListNewPreviewRequestHandler());
+        }
         public Vanrise.Entities.IDataRetrievalResult<SalePricelistRateChangeDetail> GetFilteredPricelistRateChanges(Vanrise.Entities.DataRetrievalInput<SalePriceListChangeQuery> input)
         {
             ISalePriceListChangeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
             var salePriceListRateChanges = dataManager.GetFilteredSalePricelistRateChanges(input.Query.PriceListId, input.Query.Countries);
             return DataRetrievalManager.Instance.ProcessResult(input, salePriceListRateChanges.ToBigResult(input, null, SalePricelistRateChangeDetailMapper));
+        }
+        public bool DoCustomerTemporaryPricelistsExists(long processInstanceId)
+        {
+            ISalePriceListChangeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
+            return dataManager.DoCustomerTemporaryPricelistsExists(processInstanceId);
         }
         public Vanrise.Entities.IDataRetrievalResult<CustomerRatePreviewDetail> GetFilteredCustomerRatePreviews(Vanrise.Entities.DataRetrievalInput<CustomerRatePreviewQuery> input)
         {
@@ -183,6 +194,17 @@ namespace TOne.WhS.BusinessEntity.Business
                });
 
         }
+        private string GetCurrencyName(int? currencyId)
+        {
+            if (currencyId.HasValue)
+            {
+                CurrencyManager manager = new CurrencyManager();
+                return manager.GetCurrencySymbol(currencyId.Value);
+
+            }
+
+            return "Currency Not Found";
+        }
         private class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ISalePriceListChangeDataManager _dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
@@ -268,6 +290,88 @@ namespace TOne.WhS.BusinessEntity.Business
                 return dataManager.GetRoutingProductPreviews(input.Query);
             }
         }
+        private class SalePriceListNewPreviewRequestHandler : BigDataRequestHandler<TemporarySalePriceListQuery, SalePriceListNew, SalePriceListNewDetail>
+        {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            CurrencyManager currencyManager = new CurrencyManager();
+
+            public override SalePriceListNewDetail EntityDetailMapper(SalePriceListNew entity)
+            {
+
+                SalePriceListNewDetail pricelistDetail = new SalePriceListNewDetail
+                {
+                    Entity = entity,
+                    OwnerType = Vanrise.Common.Utilities.GetEnumDescription(entity.OwnerType),
+                    PriceListTypeName = entity.PriceListType.HasValue
+                        ? Vanrise.Common.Utilities.GetEnumDescription(entity.PriceListType.Value)
+                        : null,
+                    PricelistSourceName = entity.PricelistSource.HasValue
+                    ? Vanrise.Common.Utilities.GetEnumDescription(entity.PricelistSource.Value)
+                    : null,
+                };
+
+                if (entity.OwnerType != SalePriceListOwnerType.Customer)
+                {
+                    SellingProductManager productManager = new SellingProductManager();
+                    pricelistDetail.OwnerName = productManager.GetSellingProductName(entity.OwnerId);
+                }
+
+                else
+                    pricelistDetail.OwnerName = carrierAccountManager.GetCarrierAccountName(entity.OwnerId);
+
+                UserManager userManager = new UserManager();
+                pricelistDetail.UserName = userManager.GetUserName(entity.UserId);
+                pricelistDetail.CurrencyName = currencyManager.GetCurrencySymbol(entity.CurrencyId);
+
+                return pricelistDetail;
+            }
+
+            public override IEnumerable<SalePriceListNew> RetrieveAllData(Vanrise.Entities.DataRetrievalInput<TemporarySalePriceListQuery> input)
+            {
+                var dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
+                return dataManager.GetTemporaryPriceLists(input.Query);
+            }
+        }
+        private class SalePriceListExportExcelHandler : ExcelExportHandler<SalePriceListDetail>
+        {
+            public override void ConvertResultToExcelData(IConvertResultToExcelDataContext<SalePriceListDetail> context)
+            {
+                var sheet = new ExportExcelSheet()
+                {
+                    SheetName = "Sale Pricelists",
+                    Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }
+                };
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Customer Name", Width = 50 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Description", Width = 100 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Pricelist Type" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Currency" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Created By" });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Created Time", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.DateTime });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell() { Title = "Sent" });
+
+                sheet.Rows = new List<ExportExcelRow>();
+                if (context.BigResult != null && context.BigResult.Data != null)
+                {
+                    foreach (var record in context.BigResult.Data)
+                    {
+                        if (record.Entity != null)
+                        {
+                            var row = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
+                            row.Cells.Add(new ExportExcelCell() { Value = record.OwnerName });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.Description });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.PriceListTypeName });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.CurrencyName });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.UserName });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.CreatedTime });
+                            row.Cells.Add(new ExportExcelCell() { Value = record.Entity.IsSent });
+                            sheet.Rows.Add(row);
+                        }
+                    }
+                }
+
+                context.MainSheet = sheet;
+            }
+        }
 
         #region Mapper
 
@@ -340,6 +444,36 @@ namespace TOne.WhS.BusinessEntity.Business
                     : routingProductManager.GetZoneServiceIds(recentRoutingProductId, salePricelistRpChange.ZoneId.Value);
             }
             return salePricelistRpChangeDetail;
+        }
+        private SalePriceListDetail TemporarySalePricelistDetailMapper(SalePriceList priceList)
+        {
+            CarrierAccountManager _carrierAccountManager = new CarrierAccountManager();
+            SalePriceListDetail pricelistDetail = new SalePriceListDetail
+            {
+                Entity = priceList,
+                OwnerType = Vanrise.Common.Utilities.GetEnumDescription(priceList.OwnerType),
+                PriceListTypeName = priceList.PriceListType.HasValue
+                    ? Vanrise.Common.Utilities.GetEnumDescription(priceList.PriceListType.Value)
+                    : null,
+                PricelistSourceName = priceList.PricelistSource.HasValue
+                ? Vanrise.Common.Utilities.GetEnumDescription(priceList.PricelistSource.Value)
+                : null,
+            };
+
+            if (priceList.OwnerType != SalePriceListOwnerType.Customer)
+            {
+                SellingProductManager productManager = new SellingProductManager();
+                pricelistDetail.OwnerName = productManager.GetSellingProductName(priceList.OwnerId);
+            }
+
+            else
+                pricelistDetail.OwnerName = _carrierAccountManager.GetCarrierAccountName(priceList.OwnerId);
+
+            UserManager userManager = new UserManager();
+            pricelistDetail.UserName = userManager.GetUserName(priceList.UserId);
+            pricelistDetail.CurrencyName = GetCurrencyName(priceList.CurrencyId);
+
+            return pricelistDetail;
         }
 
         #endregion

@@ -1,0 +1,18 @@
+﻿<div vr-modalcontent ng-controller="WhS_BE_TemporarySalePriceListsEditorController" vr-loader="scopeModel.isLoading" size="large">
+    <vr-modalbody>
+        <vr-form name="formSendSalePricelistConfirmation">
+            <vr-row>
+                <vr-columns width="fullrow" ng-show="doCustomerPricelistsExist()">
+                    <vr-whs-be-salepricelisttemporary-grid on-ready="onPricelistGridReady"></vr-whs-be-salepricelisttemporary-grid>
+                </vr-columns>
+                <vr-columns width="fullrow" ng-hide="doCustomerPricelistsExist()">
+                    <vr-label isvalue>No customer pricelist(s) were found.</vr-label>
+                </vr-columns>
+            </vr-row>
+    </vr-modalbody>
+    <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+        <div transclude-to="buttons">
+            <vr-button type="Close" data-onclick="close"></vr-button>
+        </div>
+    </vr-actionbar>
+</div>

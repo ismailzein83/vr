@@ -9,7 +9,8 @@
             previewPriceList: previewPriceList,
             salePricelistFilePreview: salePricelistFilePreview,
             sendEmail: sendEmail,
-        showSendPricelistsConfirmation: showSendPricelistsConfirmation
+            showSendPricelistsConfirmation: showSendPricelistsConfirmation,
+            openCheckPriceListPreview: openCheckPriceListPreview
         });
 
         function previewPriceList(priceListId, onSalePriceListPreviewClosed, shouldOpenEmailPage) {
@@ -23,6 +24,13 @@
                 modalScope.onSalePriceListPreviewClosed = onSalePriceListPreviewClosed;
             };
             vrModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SalePricelist/SalePriceListChange.html', modalParameters, modalSettings);
+        }
+        function openCheckPriceListPreview(processInstanceId) {
+            var modalParameters = {
+                processInstanceId: processInstanceId
+            };
+            var modalSettings = {};
+            vrModalService.showModal('/Client/Modules/WhS_BusinessEntity/Views/SalePricelist/TemporarySalePriceListsEditorTemplate.html', modalParameters, modalSettings);
         }
         function salePricelistFilePreview(vrFiles) {
             var modalParameters = {

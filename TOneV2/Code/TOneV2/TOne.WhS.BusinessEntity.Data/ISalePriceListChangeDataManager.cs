@@ -16,6 +16,7 @@ namespace TOne.WhS.BusinessEntity.Data
         void SaveCustomerRateChangesToDb(IEnumerable<SalePricelistRateChange> rateChanges, long processInstanceId);
         void SaveSalePriceListSnapshotToDb(IEnumerable<SalePriceListSnapShot> salePriceListSaleCodeSnapshots);
         List<SalePricelistCodeChange> GetNotSentCodechanges(IEnumerable<int> customerIds);
+        List<Entities.SalePriceListNew> GetTemporaryPriceLists(TemporarySalePriceListQuery query);
         List<SalePricelistRateChange> GetNotSentRatechanges(IEnumerable<int> customerIds);
         IEnumerable<CustomerRatePreview> GetCustomerRatePreviews(CustomerRatePreviewQuery query);
         IEnumerable<RoutingProductPreview> GetRoutingProductPreviews(RoutingProductPreviewQuery query);
@@ -24,6 +25,7 @@ namespace TOne.WhS.BusinessEntity.Data
         IEnumerable<int> GetAffectedCustomerIdsChangedCountryChangesByProcessInstanceId(long ProcessInstanceId);
         IEnumerable<int> GetAffectedCustomerIdsRateChangesByProcessInstanceId(long ProcessInstanceId);
         bool AreSalePriceListCodeSnapShotUpdated(ref object updateHandle);
+        bool DoCustomerTemporaryPricelistsExists(long processInstanceId);
         
     }
 }
