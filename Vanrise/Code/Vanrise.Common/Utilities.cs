@@ -707,7 +707,7 @@ namespace Vanrise.Common
 			return true;
 		}
 
-		public static IEnumerable<VRDateTimeRange> GenerateDateRanges<T, Q>(List<T> Tlist, List<Q> Qlist, Func<T, Q, bool> shouldAddRange)
+		public static IEnumerable<VRDateTimeRange> GenerateDateRanges<T, Q>(List<T> Tlist, List<Q> Qlist, Func<T, Q, VRDateTimeRange, bool> shouldAddRange)
 			where T : class, IDateEffectiveSettings
 			where Q : class, IDateEffectiveSettings
 		{
@@ -731,44 +731,44 @@ namespace Vanrise.Common
 
 				if (Qitem == null)
 				{
-					dateRangeToAdd.From = lastDateRange == null || !lastDateRange.To.HasValue ? Titem.BED : Utilities.Max(lastDateRange.To.Value, Titem.BED);
-					dateRangeToAdd.To = Titem.EED;
+					dateRangeToAdd.BED = lastDateRange == null || !lastDateRange.EED.HasValue ? Titem.BED : Utilities.Max(lastDateRange.EED.Value, Titem.BED);
+					dateRangeToAdd.EED = Titem.EED;
 					Tindex++;
 				}
 
 				else if (Titem == null)
 				{
-					dateRangeToAdd.From = lastDateRange == null || !lastDateRange.To.HasValue ? Qitem.BED : Utilities.Max(lastDateRange.To.Value, Qitem.BED);
-					dateRangeToAdd.To = Qitem.EED;
+					dateRangeToAdd.BED = lastDateRange == null || !lastDateRange.EED.HasValue ? Qitem.BED : Utilities.Max(lastDateRange.EED.Value, Qitem.BED);
+					dateRangeToAdd.EED = Qitem.EED;
 					Qindex++;
 				}
 
 				else
 				{
 					DateTime itemMinBED = (Qitem.BED < Titem.BED) ? Qitem.BED : Titem.BED;
-					dateRangeToAdd.From = lastDateRange == null || !lastDateRange.To.HasValue ? itemMinBED : Utilities.Max(lastDateRange.To.Value, itemMinBED);
+					dateRangeToAdd.BED = lastDateRange == null || !lastDateRange.EED.HasValue ? itemMinBED : Utilities.Max(lastDateRange.EED.Value, itemMinBED);
 
 					DateTime? itemMinEED = Qitem.EED.MinDate(Titem.EED);
-					if (Qitem.BED > dateRangeToAdd.From)
+					if (Qitem.BED > dateRangeToAdd.BED)
 					{
-						dateRangeToAdd.To = itemMinEED.MinDate(Qitem.BED);
+						dateRangeToAdd.EED = itemMinEED.MinDate(Qitem.BED);
 					}
-					else if (Titem.BED > dateRangeToAdd.From)
+					else if (Titem.BED > dateRangeToAdd.BED)
 					{
-						dateRangeToAdd.To = itemMinEED.MinDate(Titem.BED);
+						dateRangeToAdd.EED = itemMinEED.MinDate(Titem.BED);
 					}
 					else
-						dateRangeToAdd.To = itemMinEED;
+						dateRangeToAdd.EED = itemMinEED;
 
-					if (Titem.EED.VRLessThanOrEqual(dateRangeToAdd.To))
+					if (Titem.EED.VRLessThanOrEqual(dateRangeToAdd.EED))
 						Tindex++;
-					if (Qitem.EED.VRLessThanOrEqual(dateRangeToAdd.To))
+					if (Qitem.EED.VRLessThanOrEqual(dateRangeToAdd.EED))
 						Qindex++;
 
 				}
 				lastDateRange = dateRangeToAdd;
 
-				if (shouldAddRange(Titem, Qitem))
+				if (shouldAddRange(Titem, Qitem, dateRangeToAdd))
 					dateRanges.Add(dateRangeToAdd);
 			}
 

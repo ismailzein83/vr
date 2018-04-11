@@ -13,10 +13,10 @@ namespace Vanrise.Entities
         public DateTime To { get; set; }
     }
 
-	public class VRDateTimeRange
+	public class VRDateTimeRange : IDateEffectiveSettings
 	{
-		public DateTime From { get; set; }
+		public DateTime BED { get; set; }
 
-		public DateTime? To { get; set; }
+		public DateTime? EED { get; set; }
 	}
 }
