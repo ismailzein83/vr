@@ -365,13 +365,13 @@
                     content.append(toolbar);
                 }
                 if (hasDate()) {
-                    content.append($('<li>').addClass((options.collapse && hasTime() ? 'collapse in' : '')).append(dateView));
+                    content.append($('<li class="date-section">').addClass((options.collapse && hasTime() ? 'collapse in': '')).append(dateView));
                 }
                 if (options.toolbarPlacement === 'default') {
                     content.append(toolbar);
                 }
                 if (hasTime()) {
-                    content.append($('<li>').addClass((options.collapse && hasDate() ? 'collapse' : '')).append(timeView));
+                    content.append($('<li class="time-section">').addClass((options.collapse && hasDate() ? 'collapse': '')).append(timeView));
                 }
                 if (options.toolbarPlacement === 'bottom') {
                     content.append(toolbar);
