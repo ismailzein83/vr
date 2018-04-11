@@ -5,7 +5,7 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.Deal.Entities
 {
-	public abstract class BaseDealSaleZoneGroup: IDateEffectiveSettings
+	public abstract class BaseDealSaleZoneGroup : IDateEffectiveSettings
 	{
 		public int DealId { get; set; }
 
@@ -30,11 +30,11 @@ namespace TOne.WhS.Deal.Entities
 		public IOrderedEnumerable<DealSaleZoneGroupTierWithoutRate> Tiers { get; set; }
 	}
 
-	public class DealSaleZoneGroupZoneItem
+	public class DealSaleZoneGroupZoneItem : IDateEffectiveSettings
 	{
 		public long ZoneId { get; set; }
-        public DateTime BED { get; set; }
-        public DateTime? EED { get; set; }
+		public DateTime BED { get; set; }
+		public DateTime? EED { get; set; }
 	}
 
 	public abstract class BaseDealSaleZoneGroupTier

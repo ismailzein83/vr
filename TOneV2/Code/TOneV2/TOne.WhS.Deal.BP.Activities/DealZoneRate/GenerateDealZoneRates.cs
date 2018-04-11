@@ -44,6 +44,8 @@ namespace TOne.WhS.Deal.BP.Activities
 				{
 					foreach (var dealSaleZoneGroup in dealSaleZoneGroups)
 					{
+						if (dealSaleZoneGroup == null || dealSaleZoneGroup.Tiers == null)
+							continue;
 						var dealZoneGroup = new DealZoneGroup() { DealId = dealSaleZoneGroup.DealId, ZoneGroupNb = dealSaleZoneGroup.DealSaleZoneGroupNb };
 						var dealZoneRatesByZone = dealZoneRatesByZoneGroup.GetOrCreateItem(dealZoneGroup);
 
@@ -62,6 +64,9 @@ namespace TOne.WhS.Deal.BP.Activities
 				{
 					foreach (var dealSupplierZoneGroup in dealSupplierZoneGroups)
 					{
+						if (dealSupplierZoneGroup == null || dealSupplierZoneGroup.Tiers == null)
+							continue;
+
 						var dealZoneGroup = new DealZoneGroup() { DealId = dealSupplierZoneGroup.DealId, ZoneGroupNb = dealSupplierZoneGroup.DealSupplierZoneGroupNb };
 						var dealZoneRatesByZone = dealZoneRatesByZoneGroup.GetOrCreateItem(dealZoneGroup);
 

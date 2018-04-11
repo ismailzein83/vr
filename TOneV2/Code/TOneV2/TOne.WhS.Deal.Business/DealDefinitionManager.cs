@@ -107,7 +107,11 @@ namespace TOne.WhS.Deal.Business
 			{
 				foreach (DealSaleZoneGroupWithoutRate dealSaleZoneGroup in dealSaleZoneGroups)
 				{
-					if (dealSaleZoneGroup.IsEffective(effectiveDate))
+					if (dealSaleZoneGroup.Zones == null)
+						continue;
+
+					if (dealSaleZoneGroup.IsEffective(effectiveDate)
+					&& dealSaleZoneGroup.Zones.Any(item => item.ZoneId == saleZoneId && item.IsEffective(effectiveDate)))
 						return dealSaleZoneGroup;
 				}
 			}
@@ -125,7 +129,11 @@ namespace TOne.WhS.Deal.Business
 			{
 				foreach (DealSupplierZoneGroupWithoutRate dealSupplierZoneGroup in dealSupplierZoneGroups)
 				{
-					if (dealSupplierZoneGroup.IsEffective(effectiveDate))
+					if (dealSupplierZoneGroup.Zones == null)
+						continue;
+
+					if (dealSupplierZoneGroup.IsEffective(effectiveDate)
+					&& dealSupplierZoneGroup.Zones.Any(item => item.ZoneId == supplierZoneId && item.IsEffective(effectiveDate)))
 						return dealSupplierZoneGroup;
 				}
 			}
@@ -209,7 +217,7 @@ namespace TOne.WhS.Deal.Business
 		{
 			return base.GetCachedDeals();
 		}
-
+		
 		public IEnumerable<DealSaleZoneGroup> GetDealSaleZoneGroupsByDealDefinitions(IEnumerable<DealDefinition> dealDefinitions)
 		{
 			if (dealDefinitions == null)

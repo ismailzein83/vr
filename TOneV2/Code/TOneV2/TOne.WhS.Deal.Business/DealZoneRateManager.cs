@@ -73,9 +73,9 @@ namespace TOne.WhS.Deal.Business
 
 		private DealZoneRateByZoneGroup GetCachedAllDealZoneRatesByDate(bool isSale, DateTime effectiveDate)
 		{
-			GetCachedDealZoneRatesCacheName cacheObjectName = new GetCachedDealZoneRatesCacheName() { EffectiveOn = effectiveDate, IsSale = isSale };
+			GetCachedDealZoneRatesCacheName cacheObjectName = new GetCachedDealZoneRatesCacheName() { EffectiveOn = effectiveDate.Date, IsSale = isSale };
 			//var cacheObjectName = (isSale) ? "GetSaleDealZoneRates" : "GetPurchaseDealZoneRates";
-			return Vanrise.Caching.CacheManagerFactory.GetCacheManager<DealZoneRateCacheManager>().GetOrCreateObject(cacheObjectName, effectiveDate, () =>
+			return Vanrise.Caching.CacheManagerFactory.GetCacheManager<DealZoneRateCacheManager>().GetOrCreateObject(cacheObjectName, () =>
 			{
 				var dealZoneRates = _dataManager.GetDealZoneRatesByDate(isSale, effectiveDate.Date, effectiveDate.Date.AddDays(1));
 				return StructureDealZoneRatesByZoneGroup(dealZoneRates);
@@ -121,7 +121,7 @@ namespace TOne.WhS.Deal.Business
 			}
 		}
 
-		public class DealZoneRateCacheManager : BaseCacheManager<DateTime>
+		public class DealZoneRateCacheManager : BaseCacheManager
 		{
 			IDealZoneRateDataManager _dataManager = DealDataManagerFactory.GetDataManager<IDealZoneRateDataManager>();
 			object _updateHandle;
@@ -134,14 +134,14 @@ namespace TOne.WhS.Deal.Business
 				}
 			}
 
-			public override T GetOrCreateObject<T>(object cacheName, DateTime parameter, Func<T> createObject)
-			{
-				return GetOrCreateObject(cacheName, parameter, BECacheExpirationChecker.Instance, createObject);
-			}
-
-			protected override bool ShouldSetCacheExpired(DateTime parameter)
+			protected override bool ShouldSetCacheExpired()
 			{
 				return _dataManager.AreDealZoneRateUpdated(ref _updateHandle);
+			}
+
+			public override T GetOrCreateObject<T>(object cacheName, Func<T> createObject)
+			{
+				return GetOrCreateObject(cacheName, BECacheExpirationChecker.Instance, createObject);
 			}
 		}
 		#endregion

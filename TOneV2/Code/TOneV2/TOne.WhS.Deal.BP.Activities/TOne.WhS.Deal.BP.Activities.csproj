@@ -95,11 +95,13 @@
     <Compile Include="DealZoneRate\CompareNewAndExistingRates.cs" />
     <Compile Include="DealZoneRate\FinalizeDealZoneRateInsert.cs" />
     <Compile Include="DealZoneRate\InitializeDealZoneRateInsert.cs" />
+    <Compile Include="DeleteDaysToReprocessByDate.cs" />
     <Compile Include="FinalizeDealEvaluator.cs" />
     <Compile Include="CalculateBeginDate.cs" />
     <Compile Include="ApplyExpectedDealTrafficRecordsToDB.cs" />
     <Compile Include="DealZoneRate\GenerateDealZoneRatesForApply.cs" />
     <Compile Include="DealZoneRate\GenerateDealZoneRates.cs" />
+    <Compile Include="GetDaysToReprocess.cs" />
     <Compile Include="GetDealDefinitionsToReevaluate.cs" />
     <Compile Include="GetDealTechnicalSettingData.cs" />
     <Compile Include="LoadDealDetailedProgresses.cs" />

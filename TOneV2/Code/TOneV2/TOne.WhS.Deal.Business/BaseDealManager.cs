@@ -114,10 +114,21 @@ namespace TOne.WhS.Deal.Business
 
         public abstract BaseDealLoggableEntity GetLoggableEntity();
 
-        #endregion
+		public Byte[] GetMaxTimestamp()
+		{
+			IDealDataManager _dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
+			return _dataManager.GetMaxTimestamp();
+		}
 
-        #region Protected Methods
-        protected Dictionary<Guid, List<DealDefinition>> GetCachedDealsByConfigId()
+		public DateTime? GetDealEvaluatorBeginDate(byte[] lastTimestamp, DateTime effectiveAfter)
+		{
+			IDealDataManager _dataManager = DealDataManagerFactory.GetDataManager<IDealDataManager>();
+			return _dataManager.GetDealEvaluatorBeginDate(lastTimestamp, effectiveAfter);
+		}
+		#endregion
+
+		#region Protected Methods
+		protected Dictionary<Guid, List<DealDefinition>> GetCachedDealsByConfigId()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetDealsByConfig", () =>
             {

@@ -10,6 +10,8 @@ namespace TOne.WhS.Deal.Entities
     {
         public byte[] DealDetailedProgressMaxTimestamp { get; set; }
 
-        public long? LastBPInstanceId { get; set; }
+		public byte[] DealDefinitionMaxTimestamp { get; set; }
+
+		public long? LastBPInstanceId { get; set; }
     }
 }

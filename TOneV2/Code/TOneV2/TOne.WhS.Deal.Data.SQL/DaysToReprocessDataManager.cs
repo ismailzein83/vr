@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.Deal.Entities;
 using Vanrise.Data.SQL;
 
@@ -22,6 +19,11 @@ namespace TOne.WhS.Deal.Data.SQL
 
 		#region Public Methods
 
+		public IEnumerable<DayToReprocess> GetAllDaysToReprocess()
+		{
+			return GetItemsSP("TOneWhS_Deal.sp_DaysToReprocess_GetAll", DaysToReprocessMapper);
+		}
+
 		public bool Insert(DateTime date, bool isSale, int carrierAccountId, out int insertedId)
 		{
 			object daysToReprocessId;
@@ -39,6 +41,11 @@ namespace TOne.WhS.Deal.Data.SQL
 		{
 			ExecuteNonQuerySP("TOneWhS_Deal.sp_DaysToReprocess_Delete");
 		}
+
+		public void DeleteDaysToReprocessByDate(DateTime date)
+		{
+			ExecuteNonQuerySP("TOneWhS_Deal.sp_DaysToReprocess_DeleteByDate", date);
+		}
 		#endregion
 
 		#region  Mappers
@@ -47,7 +54,7 @@ namespace TOne.WhS.Deal.Data.SQL
 		{
 			DayToReprocess daysToReprocess = new DayToReprocess
 			{
-				DayToReprocessId = (int)reader["ID"],
+				DayToReprocessId = (long)reader["ID"],
 				Date = GetReaderValue<DateTime>(reader, "Date"),
 				IsSale = (bool)reader["IsSale"],
 				CarrierAccountId = (int)reader["CarrierAccountId"]

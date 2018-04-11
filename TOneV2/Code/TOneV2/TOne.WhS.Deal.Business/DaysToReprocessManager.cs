@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.Deal.Data;
+using TOne.WhS.Deal.Entities;
 
 namespace TOne.WhS.Deal.Business
 {
@@ -16,6 +14,11 @@ namespace TOne.WhS.Deal.Business
 			_dataManager = DealDataManagerFactory.GetDataManager<IDaysToReprocessDataManager>();
 		}
 
+		public IEnumerable<DayToReprocess> GetAllDaysToReprocess()
+		{
+			return _dataManager.GetAllDaysToReprocess();
+		}
+
 		public bool Insert(DateTime date, bool isSale, int carrierAccountId, out int insertedId)
 		{
 			return _dataManager.Insert(date, isSale, carrierAccountId, out insertedId);
@@ -24,6 +27,11 @@ namespace TOne.WhS.Deal.Business
 		public void DeleteDaysToReprocess()
 		{
 			_dataManager.DeleteDaysToReprocess();
+		}
+
+		public void DeleteDaysToReprocessByDate(DateTime date)
+		{
+			_dataManager.DeleteDaysToReprocessByDate(date);
 		}
 	}
 }

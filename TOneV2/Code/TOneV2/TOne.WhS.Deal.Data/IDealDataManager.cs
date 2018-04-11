@@ -7,14 +7,18 @@ using TOne.WhS.Deal.Entities;
 
 namespace TOne.WhS.Deal.Data
 {
-    public interface IDealDataManager : IDataManager
-    {
-        IEnumerable<DealDefinition> GetDeals();
+	public interface IDealDataManager : IDataManager
+	{
+		IEnumerable<DealDefinition> GetDeals();
 
-        bool AreDealsUpdated(ref object updateHandle);
+		bool AreDealsUpdated(ref object updateHandle);
 
-        bool Insert(DealDefinition deal, out int insertedId);
+		bool Insert(DealDefinition deal, out int insertedId);
 
-        bool Update(DealDefinition deal);
-    }
+		bool Update(DealDefinition deal);
+
+		Byte[] GetMaxTimestamp();
+
+		DateTime? GetDealEvaluatorBeginDate(byte[] lastTimestamp, DateTime effectiveAfter);
+	}
 }

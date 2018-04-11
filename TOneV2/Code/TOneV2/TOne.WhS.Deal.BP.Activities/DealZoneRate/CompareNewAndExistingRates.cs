@@ -116,108 +116,120 @@ namespace TOne.WhS.Deal.BP.Activities
 
 		private IEnumerable<DateTime> GetRangeOfDaysByComparingTwoZoneGroupRates(DealZoneRateByZoneId newZoneGroupDealZoneRates, DealZoneRateByZoneId existingZoneGroupDealZoneRates)
 		{
-			List<DateTime> days = new List<DateTime>();
+			var days = new HashSet<DateTime>();
 			foreach (var newZoneDealZoneRates in newZoneGroupDealZoneRates)
 			{
 				DealZoneRateByTireNB existingZoneDealZoneRates;
 
 				if (!existingZoneGroupDealZoneRates.TryGetValue(newZoneDealZoneRates.Key, out existingZoneDealZoneRates)) //Zone found in new data and not in the existing data
-					days.AddRange(GetRangeOfDaysForZoneRates(newZoneDealZoneRates.Value));
+					days.UnionWith(GetRangeOfDaysForZoneRates(newZoneDealZoneRates.Value));
 				else //Zone found in new data and in the existing data
-					days.AddRange(GetRangeOfDaysByComparingTwoZoneRates(newZoneDealZoneRates.Value, existingZoneDealZoneRates));
+					days.UnionWith(GetRangeOfDaysByComparingTwoZoneRates(newZoneDealZoneRates.Value, existingZoneDealZoneRates));
 			}
 
 			foreach (var existingZoneRates in existingZoneGroupDealZoneRates)
 			{
 				if (!newZoneGroupDealZoneRates.ContainsKey(existingZoneRates.Key)) //Zone found in existing data and not in the new data
-					days.AddRange(GetRangeOfDaysForZoneRates(existingZoneRates.Value));
+					days.UnionWith(GetRangeOfDaysForZoneRates(existingZoneRates.Value));
 			}
 			return days;
 		}
 
 		private IEnumerable<DateTime> GetRangeOfDaysByComparingTwoZoneRates(DealZoneRateByTireNB newZoneDealZoneRates, DealZoneRateByTireNB existingZoneDealZoneRates)
 		{
-			List<DateTime> days = new List<DateTime>();
+			var days = new HashSet<DateTime>();
 			foreach (var newTierDealZoneRates in newZoneDealZoneRates)
 			{
 				List<DealZoneRate> existingTierDealZoneRates;
 
 				if (!existingZoneDealZoneRates.TryGetValue(newTierDealZoneRates.Key, out existingTierDealZoneRates)) //ZoneTier found in new data and not in the existing data
-					days.AddRange(GetRangeOfDaysForListOfRates(newTierDealZoneRates.Value));
+					days.UnionWith(GetRangeOfDaysForListOfRates(newTierDealZoneRates.Value));
 				else //ZoneTier found in new data and in the existing data
-					days.AddRange(GetRangeOfDaysByComparingTwoLists(newTierDealZoneRates.Value, existingTierDealZoneRates));
+					days.UnionWith(GetRangeOfDaysByComparingTwoLists(newTierDealZoneRates.Value, existingTierDealZoneRates));
 
 			}
 
 			foreach (var existingTierRates in existingZoneDealZoneRates)
 			{
 				if (!newZoneDealZoneRates.ContainsKey(existingTierRates.Key)) //ZoneTier found in existing data and not in the new data
-					days.AddRange(GetRangeOfDaysForListOfRates(existingTierRates.Value));
+					days.UnionWith(GetRangeOfDaysForListOfRates(existingTierRates.Value));
 			}
 			return days;
 		}
 
 		private IEnumerable<DateTime> GetRangeOfDaysByComparingTwoLists(List<DealZoneRate> newRates, List<DealZoneRate> existingRates)
 		{
-			var days = new List<DateTime>();
+			var days = new HashSet<DateTime>();
 			IEnumerable<VRDateTimeRange> dateRanges = Utilities.GenerateDateRanges<DealZoneRate, DealZoneRate>(newRates.ToList(), existingRates.ToList(), shouldAddRange);
 			foreach (var dateRange in dateRanges)
 			{
-				days.AddRange(GetRangeOfDaysBetweenTwoDates(dateRange.From, dateRange.To));
+				days.UnionWith(GetRangeOfDaysBetweenTwoDates(dateRange.BED, dateRange.EED));
 			}
 			return days;
 		}
 
-		Func<DealZoneRate, DealZoneRate, bool> shouldAddRange = (newRate, existingRate) =>
-	   {
-		   if (newRate == null && existingRate == null)
-			   return false;
-		   if (newRate == null || existingRate == null)
-			   return true;
-		   if (newRate.Rate != existingRate.Rate || newRate.CurrencyId != existingRate.CurrencyId)
-			   return true;
-		   return false;
-	   };
+		Func<DealZoneRate, DealZoneRate, VRDateTimeRange, bool> shouldAddRange = (newRate, existingRate, dateTimeRange) =>
+		{
+			if (newRate == null && existingRate == null)
+				return false;
+
+			if (newRate == null && existingRate != null && !existingRate.IsOverlappedWith(dateTimeRange))
+				return false;
+
+			if (newRate != null && existingRate == null && !newRate.IsOverlappedWith(dateTimeRange))
+				return false;
+
+			if (newRate != null && existingRate != null && !newRate.IsOverlappedWith(dateTimeRange) && !existingRate.IsOverlappedWith(dateTimeRange))
+				return false;
+
+			if (newRate == null || existingRate == null || !newRate.IsOverlappedWith(dateTimeRange) || !existingRate.IsOverlappedWith(dateTimeRange))
+				return true;
+
+			if (newRate.Rate != existingRate.Rate || newRate.CurrencyId != existingRate.CurrencyId)
+				return true;
+
+			return false;
+		};
 
 		private IEnumerable<DateTime> GetRangeOfDaysForZoneGroupRates(DealZoneRateByZoneId dealZoneRateByZoneId)
 		{
-			var days = new List<DateTime>();
+			var days = new HashSet<DateTime>();
 
 			if (dealZoneRateByZoneId != null)
 			{
 				foreach (var zoneDealZoneRates in dealZoneRateByZoneId)
-					days.AddRange(GetRangeOfDaysForZoneRates(zoneDealZoneRates.Value));
+					days.UnionWith(GetRangeOfDaysForZoneRates(zoneDealZoneRates.Value));
 			}
 			return days;
 		}
 
 		private IEnumerable<DateTime> GetRangeOfDaysForZoneRates(DealZoneRateByTireNB dealZoneRateByTireNB)
 		{
-			var days = new List<DateTime>();
+			var days = new HashSet<DateTime>();
 
 			if (dealZoneRateByTireNB != null)
 			{
 				foreach (var tierDealZoneRates in dealZoneRateByTireNB)
-					days.AddRange(GetRangeOfDaysForListOfRates(tierDealZoneRates.Value));
+					days.UnionWith(GetRangeOfDaysForListOfRates(tierDealZoneRates.Value));
 			}
 			return days;
 		}
 
 		private IEnumerable<DateTime> GetRangeOfDaysForListOfRates(IEnumerable<DealZoneRate> rates)
 		{
-			var days = new List<DateTime>();
+			var days = new HashSet<DateTime>();
 
 			if (rates != null)
 			{
 				foreach (var rate in rates)
-					days.AddRange(GetRangeOfDaysBetweenTwoDates(rate.BED, rate.EED));
+					days.UnionWith(GetRangeOfDaysBetweenTwoDates(rate.BED, rate.EED));
 			}
 			return days;
 		}
 
 		private IEnumerable<DateTime> GetRangeOfDaysBetweenTwoDates(DateTime from, DateTime? to)
 		{
-			var days = new List<DateTime>();
+			var days = new HashSet<DateTime>();
 
 			if (to.VRGreaterThan(DateTime.Today))
 				to = DateTime.Today;

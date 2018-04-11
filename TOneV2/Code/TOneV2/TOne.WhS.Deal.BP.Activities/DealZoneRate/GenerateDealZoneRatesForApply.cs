@@ -15,7 +15,6 @@ namespace TOne.WhS.Deal.BP.Activities
 	{
 		public DealZoneRateByZoneGroup NewDealZoneRatesByZoneGroup { get; set; }
 		public BaseQueue<DealZoneRateBatch> OutputQueue { get; set; }
-		public IEnumerable<int> DealIdsToReevaluate { get; set; }
 	}
 
 	public sealed class GenerateDealZoneRatesForApply : BaseAsyncActivity<GenerateInput>
@@ -25,9 +24,6 @@ namespace TOne.WhS.Deal.BP.Activities
 
 		[RequiredArgument]
 		public InOutArgument<BaseQueue<DealZoneRateBatch>> OutputQueue { get; set; }
-
-		[RequiredArgument]
-		public InArgument<IEnumerable<int>> DealIdsToReevaluate { get; set; }
 
 		protected override void DoWork(GenerateInput inputArgument, AsyncActivityHandle handle)
 		{

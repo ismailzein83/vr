@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Activities;
 using TOne.WhS.Deal.Business;
-using TOne.WhS.Deal.Entities;
-using Vanrise.BusinessProcess;
-using Vanrise.Entities;
 
 namespace TOne.WhS.Deal.BP.Activities
 {
@@ -13,8 +10,6 @@ namespace TOne.WhS.Deal.BP.Activities
 		{
 			DealProgressManager dealProgressManager = new DealProgressManager();
 			dealProgressManager.DeleteAffectedDealZoneGroups();
-			var daysToReprocessManager = new DaysToReprocessManager();
-			daysToReprocessManager.DeleteDaysToReprocess();
 		}
 	}
 }
