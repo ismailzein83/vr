@@ -2,50 +2,54 @@
 
 namespace Vanrise.Rules
 {
-    public abstract class BaseRule : IVRRule
-    {
-        public int RuleId { get; set; }
+	public abstract class BaseRule : IVRRule
+	{
+		public int RuleId { get; set; }
 
-        public string Description { get; set; }
+		public string Description { get; set; }
 
-        public DateTime BeginEffectiveTime { get; set; }
+		public DateTime BeginEffectiveTime { get; set; }
 
-        public DateTime? EndEffectiveTime { get; set; }
+		public DateTime? EndEffectiveTime { get; set; }
 
-        public DateTime? LastRefreshedTime { get; set; }
+		public DateTime? LastRefreshedTime { get; set; }
 
-        public virtual TimeSpan RefreshTimeSpan { get { return new TimeSpan(1, 0, 0); } }
+		public virtual TimeSpan RefreshTimeSpan { get { return new TimeSpan(1, 0, 0); } }
 
-        public virtual bool HasAdditionalInformation { get { return false; } }
+		public virtual bool HasAdditionalInformation { get { return false; } }
 
-        public bool IsDeleted { get; set; }
+		public bool IsDeleted { get; set; }
 
-        public virtual void RefreshRuleState(IRefreshRuleStateContext context)
-        {
-        }
+		public int? CreatedBy { get; set; }
 
-        public virtual bool IsAnyCriteriaExcluded(object target)
-        {
-            return false;
-        }
+		public int? LastModifiedBy { get; set; }
 
-        public virtual void UpdateAdditionalInformation(BaseRule existingRule, ref AdditionalInformation additionalInformation)
-        {
-        }
-    }
+		public virtual void RefreshRuleState(IRefreshRuleStateContext context)
+		{
+		}
 
-    public interface IVRRule
-    {
-        bool IsAnyCriteriaExcluded(object target);
+		public virtual bool IsAnyCriteriaExcluded(object target)
+		{
+			return false;
+		}
 
-        DateTime BeginEffectiveTime { get; set; }
+		public virtual void UpdateAdditionalInformation(BaseRule existingRule, ref AdditionalInformation additionalInformation)
+		{
+		}
+	}
 
-        DateTime? EndEffectiveTime { get; set; }
+	public interface IVRRule
+	{
+		bool IsAnyCriteriaExcluded(object target);
 
-        DateTime? LastRefreshedTime { get; set; }
+		DateTime BeginEffectiveTime { get; set; }
 
-        TimeSpan RefreshTimeSpan { get; }
+		DateTime? EndEffectiveTime { get; set; }
 
-        void RefreshRuleState(IRefreshRuleStateContext context);
-    }
+		DateTime? LastRefreshedTime { get; set; }
+
+		TimeSpan RefreshTimeSpan { get; }
+
+		void RefreshRuleState(IRefreshRuleStateContext context);
+	}
 }
