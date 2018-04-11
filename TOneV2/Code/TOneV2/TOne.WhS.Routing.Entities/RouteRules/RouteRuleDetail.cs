@@ -11,7 +11,9 @@ namespace TOne.WhS.Routing.Entities
 
         public string RouteRuleSettingsTypeName { get; set; }
 
-        public string Destinations
+		public string LastModifiedByUserName { get; set; }
+		
+		public string Destinations
         {
             get
             {

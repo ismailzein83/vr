@@ -15,8 +15,10 @@ namespace TOne.WhS.Routing.Entities
         public string CssClass { get; set; }
 
         public string RouteOptionRuleSettingsTypeName { get; set; }
-        
-        public string Destinations
+
+		public string LastModifiedByUserName { get; set; }
+		
+		public string Destinations
         {
             get
             {
