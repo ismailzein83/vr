@@ -204,7 +204,7 @@
                             ),
                     contTemplate = $('<tbody>')
                         .append($('<tr>')
-                            .append($('<td>').attr('colspan', (options.calendarWeeks ? '8' : '7')))
+                            .append($('<td style="white-space: initial;">').attr('colspan', (options.calendarWeeks ? '8' : '7')))
                             );
 
                 return [
@@ -1046,6 +1046,7 @@
                         day.add(1, 'M');
                     }
                     setValue(day.date(parseInt($(e.target).text(), 10)));
+                    hide();
                     if (!hasTime() && !options.keepOpen && !options.inline) {
                         hide();
                     }
@@ -1338,12 +1339,12 @@
                     'blur': options.debug ? '' : hide,
                     'keydown': keydown,
                     'keyup': keyup,
-                    'focus': options.allowInputToggle ? show : ''
+                    'focus': options.allowInputToggle == true ? show : ''
                 });
 
                 if (element.is('input')) {
                     input.on({
-                        'focus': show
+                        'focus': options.allowInputToggle == true ? show : ''
                     });
                 } else if (component) {
                     component.on('click', toggle);
@@ -1354,15 +1355,15 @@
             detachDatePickerElementEvents = function () {
                 input.off({
                     'change': change,
-                    'blur': blur,
+                    'blur': hide,
                     'keydown': keydown,
                     'keyup': keyup,
-                    'focus': options.allowInputToggle ? hide : ''
+                    'focus': options.allowInputToggle == true ? hide : ''
                 });
 
                 if (element.is('input')) {
                     input.off({
-                        'focus': show
+                        'focus': options.allowInputToggle == true ? hide : ''
                     });
                 } else if (component) {
                     component.off('click', toggle);
@@ -2625,7 +2626,7 @@
             }
         },
         debug: false,
-        allowInputToggle: false,
+        allowInputToggle: true,
         disabledTimeIntervals: false,
         disabledHours: false,
         enabledHours: false,
