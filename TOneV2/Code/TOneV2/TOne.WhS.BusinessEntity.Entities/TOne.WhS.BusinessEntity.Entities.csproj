@@ -130,6 +130,8 @@
     <Compile Include="CustomerSoldZones\CustomerSoldZones.cs" />
     <Compile Include="FaultTickets\CustomerFaultTicketSettings.cs" />
     <Compile Include="FaultTickets\SupplierFaultTicketSettingsInput.cs" />
+    <Compile Include="SalePriceList\SalePriceListNew.cs" />
+    <Compile Include="SalePriceList\SalePriceListNewDetail.cs" />
     <Compile Include="Settings\FaultTicketsSettingsData.cs" />
     <Compile Include="FinancialAccount\WHSFinancialAccountDefinitionInfoFilter.cs" />
     <Compile Include="FinancialAccount\WHSCarrierFinancialAccountData.cs" />
@@ -198,6 +200,7 @@
     <Compile Include="SwitchReleaseCause\UploadSwitchReleaseCauseLog.cs" />
     <Compile Include="Switch\InsertSwitchOperationOutput.cs" />
     <Compile Include="Switch\UpdateSwitchOperationOutput.cs" />
+    <Compile Include="TemporarySalePriceListQuery.cs" />
     <Compile Include="ZoneRoutingProduct\History\RoutingProductHistoryBySource.cs" />
     <Compile Include="ZoneRoutingProduct\History\SaleEntityRoutingProducts.cs" />
     <Compile Include="ZoneRoutingProduct\History\SaleEntityZoneRoutingProductHistoryQuery.cs" />
