@@ -788,7 +788,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         return;
                     if (gridQuery.CurrencyId != dataItem.CurrentRateCurrencyId) {
                         dataItem.currencyIconType = 'exchange';
-                        dataItem.currencyIconTooltip =  'The real currency for this rate is ' + dataItem.CurrentRateCurrencySymbol;
+                        dataItem.currencyIconTooltip = 'The real currency for this rate is ' + dataItem.CurrentRateCurrencySymbol;
                     }
                 }
             }
@@ -1044,8 +1044,10 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             zoneItemChanges.NewRates = [];
 
                         for (var i = 0; i < zoneItem.NewRates.length; i++) {
-                            if (zoneItem.NewRates[i].RateTypeId != null)
+                            if (zoneItem.NewRates[i].RateTypeId != null) {
+                                zoneItem.NewRates[i].BED = zoneItem.NewRateBED;
                                 zoneItemChanges.NewRates.push(zoneItem.NewRates[i]);
+                            }
                         }
                     }
 
