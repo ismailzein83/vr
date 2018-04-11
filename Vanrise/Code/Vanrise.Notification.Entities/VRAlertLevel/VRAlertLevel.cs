@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Vanrise.Notification.Entities
 {
@@ -18,4 +19,9 @@ namespace Vanrise.Notification.Entities
         public Guid StyleDefinitionId { get; set; }
         public int Weight { get; set; }
     }
+	public class VRAlertLevelWithStyleSettings
+	{
+		public VRAlertLevel Entity { get; set; }
+		public StyleFormatingSettings AlertLevelStyle { get; set; }
+	}
 }

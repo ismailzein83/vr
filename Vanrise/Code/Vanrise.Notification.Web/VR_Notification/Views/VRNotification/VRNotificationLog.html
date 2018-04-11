@@ -1,53 +1,59 @@
 ﻿<vr-panel ng-controller="VR_Notification_VRNotificationLogController" vr-loader="scopeModel.isLoading">
-    <vr-form name="formFilter">
+	<vr-form name="formFilter">
 
-        <div ng-hide="filterSectionCollapsed">
-            <vr-row>
-                <vr-columns width="fullrow">
-                    <vr-choices-filter selectedindex="selectedFilternIndex">
-                        <vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
-                        <vr-choice-filter isselected="advancedSelected">Advanced</vr-choice-filter>
-                    </vr-choices-filter>
-                </vr-columns>
-            </vr-row>
+		<div ng-hide="filterSectionCollapsed">
+			<vr-row>
+				<vr-columns width="fullrow">
+					<vr-choices-filter selectedindex="selectedFilternIndex">
+						<vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
+						<vr-choice-filter isselected="advancedSelected">Advanced</vr-choice-filter>
+					</vr-choices-filter>
+				</vr-columns>
+			</vr-row>
 
-            <vr-row removeline>
-                <vr-notification-notificationtypesetting-selector on-ready="scopeModel.onVRNotificationTypeSettingsSelectorReady" selectedvalues="scopeModel.selectedNotificationType"
-                                                                  onselectionchanged="scopeModel.onNotificationTypeSelectionChanged" normal-col-num="2" isrequired="true">
-                </vr-notification-notificationtypesetting-selector>
-                <span ng-show="scopeModel.isNotificationTypeSettingSelected">
-                    <vr-notification-alertlevel-selector on-ready="scopeModel.onVRNotificationAlertlevelSelectorReady" normal-col-num="2"
-                                                         isloading="scopeModel.isAlertLevelSelectorLoading" ismultipleselection>
-                    </vr-notification-alertlevel-selector>
-                    <!--<vr-columns colnum="2">
-                        <vr-textbox value="scopeModel.description" label="Description"></vr-textbox>
-                    </vr-columns>-->
-                    <vr-notification-notificationstatus-selector on-ready="scopeModel.onNotificationStatusSelectorReady" normal-col-num="2" ismultipleselection></vr-notification-notificationstatus-selector>
-                </span>
+			<vr-row removeline>
+				<vr-notification-notificationtypesetting-selector on-ready="scopeModel.onVRNotificationTypeSettingsSelectorReady" selectedvalues="scopeModel.selectedNotificationType"
+																  onselectionchanged="scopeModel.onNotificationTypeSelectionChanged" normal-col-num="2" isrequired="true">
+				</vr-notification-notificationtypesetting-selector>
+				<span ng-show="scopeModel.isNotificationTypeSettingSelected">
+					<vr-notification-alertlevel-selector on-ready="scopeModel.onVRNotificationAlertlevelSelectorReady" normal-col-num="2"
+														 isloading="scopeModel.isAlertLevelSelectorLoading" ismultipleselection>
+					</vr-notification-alertlevel-selector>
+					<!--<vr-columns colnum="2">
+						<vr-textbox value="scopeModel.description" label="Description"></vr-textbox>
+					</vr-columns>-->
+					<vr-notification-notificationstatus-selector on-ready="scopeModel.onNotificationStatusSelectorReady" normal-col-num="2" ismultipleselection></vr-notification-notificationstatus-selector>
+				</span>
 
-                <vr-columns colnum="2">
-                    <vr-datetimepicker value="scopeModel.from" type="longDateTime" label="From" customvalidate="scopeModel.validateDates()"></vr-datetimepicker>
-                </vr-columns>
+				<vr-columns colnum="2">
+					<vr-datetimepicker value="scopeModel.from" type="longDateTime" label="From" customvalidate="scopeModel.validateDates()"></vr-datetimepicker>
+				</vr-columns>
 
-                <vr-columns colnum="2">
-                    <vr-datetimepicker value="scopeModel.to" type="longDateTime" label="To" customvalidate="scopeModel.validateDates()"></vr-datetimepicker>
-                </vr-columns>
+				<vr-columns colnum="2">
+					<vr-datetimepicker value="scopeModel.to" type="longDateTime" label="To" customvalidate="scopeModel.validateDates()"></vr-datetimepicker>
+				</vr-columns>
 
-                <vr-directivewrapper directive="scopeModel.selectedNotificationType.SearchDirective" on-ready="scopeModel.onSearchDirectiveReady"></vr-directivewrapper>
-            </vr-row>
-        </div>
+				<vr-columns colnum="2" withemptyline>
+					<span vr-loader="scopeModel.isLegendLoading">
+						<vr-legend ng-if="scopeModel.showLegend" header={{scopeModel.legendHeader}} content={{scopeModel.legendContent}}></vr-legend>
+					</span>
+				</vr-columns>
 
-        <vr-row removeline>
-            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
-                <div transclude-to="buttons">
-                    <vr-button type="Search" formname="formFilter" data-onclick="scopeModel.searchClicked"></vr-button>
-                </div>
-            </vr-actionbar>
-        </vr-row>
+				<vr-directivewrapper directive="scopeModel.selectedNotificationType.SearchDirective" on-ready="scopeModel.onSearchDirectiveReady"></vr-directivewrapper>
+			</vr-row>
+		</div>
 
-        <vr-row>
-            <vr-directivewrapper directive="scopeModel.selectedNotificationType.BodyDirective" on-ready="scopeModel.onBodyDirectiveReady"></vr-directivewrapper>
-        </vr-row>
+		<vr-row removeline>
+			<vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
+				<div transclude-to="buttons">
+					<vr-button type="Search" formname="formFilter" data-onclick="scopeModel.searchClicked"></vr-button>
+				</div>
+			</vr-actionbar>
+		</vr-row>
 
-    </vr-form>
+		<vr-row>
+			<vr-directivewrapper directive="scopeModel.selectedNotificationType.BodyDirective" on-ready="scopeModel.onBodyDirectiveReady"></vr-directivewrapper>
+		</vr-row>
+
+	</vr-form>
 </vr-panel>

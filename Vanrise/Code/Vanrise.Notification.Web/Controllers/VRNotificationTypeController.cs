@@ -37,5 +37,14 @@ namespace Vanrise.Notification.Web.Controllers
             VRNotificationTypeManager manager = new VRNotificationTypeManager();
             return manager.GetNotificationTypeSettings(notificationTypeId);
         }
-    }
+
+
+		[HttpGet]
+		[Route("GetVRNotificationTypeLegendData")]
+		public List<VRAlertLevelWithStyleSettings> GetVRNotificationTypeLegendData(Guid notificationTypeId)
+		{
+			VRNotificationTypeManager manager = new VRNotificationTypeManager();
+			return manager.GetVRNotificationTypeLegendData(notificationTypeId);
+		}
+	}
 }

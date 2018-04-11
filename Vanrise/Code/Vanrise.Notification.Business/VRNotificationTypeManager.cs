@@ -8,155 +8,184 @@ using Vanrise.Notification.Entities;
 using Vanrise.Common;
 using Vanrise.Security.Entities;
 using Vanrise.Security.Business;
+using Vanrise.Entities;
 
 namespace Vanrise.Notification.Business
 {
-    public class VRNotificationTypeManager : IVRNotificationTypeManager
-    {
-        #region Ctor/Properties
+	public class VRNotificationTypeManager : IVRNotificationTypeManager
+	{
+		#region Ctor/Properties
 
-        VRComponentTypeManager _vrComponentTypeManager = new VRComponentTypeManager();
+		VRComponentTypeManager _vrComponentTypeManager = new VRComponentTypeManager();
 
-        #endregion
+		#endregion
 
-        #region Public Methods
+		#region Public Methods
 
-        public VRNotificationType GetNotificationType(Guid notificationTypeId)
-        {
-            return _vrComponentTypeManager.GetComponentType<VRNotificationTypeSettings, VRNotificationType>(notificationTypeId);
-        }
+		public VRNotificationType GetNotificationType(Guid notificationTypeId)
+		{
+			return _vrComponentTypeManager.GetComponentType<VRNotificationTypeSettings, VRNotificationType>(notificationTypeId);
+		}
 
-        public VRNotificationTypeSettings GetNotificationTypeSettings(Guid notificationTypeId)
-        {
-            return _vrComponentTypeManager.GetComponentTypeSettings<VRNotificationTypeSettings>(notificationTypeId);
-        }
+		public VRNotificationTypeSettings GetNotificationTypeSettings(Guid notificationTypeId)
+		{
+			return _vrComponentTypeManager.GetComponentTypeSettings<VRNotificationTypeSettings>(notificationTypeId);
+		}
 
-        public VRNotificationTypeExtendedSettings GetVRNotificationTypeExtendedSettings(Guid notificationTypeId)
-        {
-            VRNotificationTypeSettings vrNotificationTypeSettings = this.GetNotificationTypeSettings(notificationTypeId);
-            if (vrNotificationTypeSettings == null)
-                throw new NullReferenceException(string.Format("vrNotificationTypeSettings of vrNotificationTypeId: {0}", notificationTypeId));
+		public List<VRAlertLevelWithStyleSettings> GetVRNotificationTypeLegendData(Guid notificationTypeId)
+		{
+			var componentTypeSettings = _vrComponentTypeManager.GetComponentTypeSettings<VRNotificationTypeSettings>(notificationTypeId);
+			componentTypeSettings.ThrowIfNull("componentTypeSettings", notificationTypeId);
 
-            if (vrNotificationTypeSettings.ExtendedSettings == null)
-                throw new NullReferenceException(string.Format("vrNotificationTypeSettings.ExtendedSettings of vrNotificationTypeId: {0}", notificationTypeId));
+			var alertLevels = new VRAlertLevelManager().GetBusinessEntityDefinitionAlertLevels(componentTypeSettings.VRAlertLevelDefinitionId);
+			if (alertLevels == null || alertLevels.Count() == 0)
+				return null;
 
-            return vrNotificationTypeSettings.ExtendedSettings;
-        }
+			alertLevels = alertLevels.OrderByDescending(item => item.Settings.Weight);
+			
+			List<VRAlertLevelWithStyleSettings> alertLevelsWithColor = new List<VRAlertLevelWithStyleSettings>();
+			var styleDefinitionManager = new StyleDefinitionManager();
 
-        public T GetVRNotificationTypeExtendedSettings<T>(Guid notificationTypeId) where T : VRNotificationTypeExtendedSettings
-        {
-            T vrNotificationTypeExtendedSettings = this.GetVRNotificationTypeExtendedSettings(notificationTypeId) as T;
-            if (vrNotificationTypeExtendedSettings == null)
-                throw new NullReferenceException(string.Format("vrNotificationTypeExtendedSettings should be of type {0} and not of type {1}", typeof(T), vrNotificationTypeExtendedSettings.GetType()));
+			foreach (var alertLevel in alertLevels)
+			{
+				alertLevel.Settings.ThrowIfNull("alertLevel.Settings", alertLevel.VRAlertLevelId);
+				var styleDefinition = styleDefinitionManager.GetStyleDefinition(alertLevel.Settings.StyleDefinitionId);
 
-            return vrNotificationTypeExtendedSettings;
-        }
+				StyleFormatingSettings alertLevelStyle = null;
+				if (styleDefinition != null && styleDefinition.StyleDefinitionSettings != null)
+					alertLevelStyle = styleDefinition.StyleDefinitionSettings.StyleFormatingSettings;
 
-        public IEnumerable<VRNotificationTypeConfig> GetVRNotificationTypeDefinitionConfigSettings()
-        {
-            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
-            return manager.GetExtensionConfigurations<VRNotificationTypeConfig>(VRNotificationTypeConfig.EXTENSION_TYPE);
-        }
+				alertLevelsWithColor.Add(new VRAlertLevelWithStyleSettings() { Entity = alertLevel, AlertLevelStyle = alertLevelStyle });
+			}
+			return alertLevelsWithColor;
+		}
 
-        public IEnumerable<VRNotificationTypeSettingsInfo> GetVRNotificationTypeSettingsInfo(VRNotificationTypeSettingsFilter filter)
-        {
-            IEnumerable<VRNotificationType> vrNotificationTypeSettings = GetCachedVRNotificationTypeSettingsInfo();
+		public VRNotificationTypeExtendedSettings GetVRNotificationTypeExtendedSettings(Guid notificationTypeId)
+		{
+			VRNotificationTypeSettings vrNotificationTypeSettings = this.GetNotificationTypeSettings(notificationTypeId);
+			if (vrNotificationTypeSettings == null)
+				throw new NullReferenceException(string.Format("vrNotificationTypeSettings of vrNotificationTypeId: {0}", notificationTypeId));
 
-            Func<VRNotificationType, bool> filterExpression = null;
-            if (filter != null)
-            {
-                filterExpression = (vrNotificationType) =>
-                {
-                    if (filter.Filters != null && !CheckIfFilterIsMatch(vrNotificationType, filter.Filters))
-                        return false;
-                    return true;
-                };
-            }
-            return vrNotificationTypeSettings.MapRecords(VRNotificationTypeSettingInfoMapper, filterExpression).OrderBy(x => x.Name);
-        }
+			if (vrNotificationTypeSettings.ExtendedSettings == null)
+				throw new NullReferenceException(string.Format("vrNotificationTypeSettings.ExtendedSettings of vrNotificationTypeId: {0}", notificationTypeId));
 
-        #endregion
+			return vrNotificationTypeSettings.ExtendedSettings;
+		}
 
-        #region Private Methods
+		public T GetVRNotificationTypeExtendedSettings<T>(Guid notificationTypeId) where T : VRNotificationTypeExtendedSettings
+		{
+			T vrNotificationTypeExtendedSettings = this.GetVRNotificationTypeExtendedSettings(notificationTypeId) as T;
+			if (vrNotificationTypeExtendedSettings == null)
+				throw new NullReferenceException(string.Format("vrNotificationTypeExtendedSettings should be of type {0} and not of type {1}", typeof(T), vrNotificationTypeExtendedSettings.GetType()));
 
-        private bool CheckIfFilterIsMatch(VRNotificationType notificationType, List<IVRNotificationTypeFilter> filters)
-        {
-            VRNotificationTypeFilterContext context = new VRNotificationTypeFilterContext { VRNotificationType = notificationType };
-            foreach (var filter in filters)
-            {
-                if (!filter.IsMatched(context))
-                    return false;
-            }
-            return true;
-        }
+			return vrNotificationTypeExtendedSettings;
+		}
 
-        private IEnumerable<VRNotificationType> GetCachedVRNotificationTypeSettingsInfo()
-        {
-            VRComponentTypeManager vrComponentTypeManager = new Vanrise.Common.Business.VRComponentTypeManager();
-            return vrComponentTypeManager.GetComponentTypes<VRNotificationTypeSettings, VRNotificationType>();
-        }
+		public IEnumerable<VRNotificationTypeConfig> GetVRNotificationTypeDefinitionConfigSettings()
+		{
+			ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+			return manager.GetExtensionConfigurations<VRNotificationTypeConfig>(VRNotificationTypeConfig.EXTENSION_TYPE);
+		}
 
-        #endregion
+		public IEnumerable<VRNotificationTypeSettingsInfo> GetVRNotificationTypeSettingsInfo(VRNotificationTypeSettingsFilter filter)
+		{
+			IEnumerable<VRNotificationType> vrNotificationTypeSettings = GetCachedVRNotificationTypeSettingsInfo();
 
-        #region Mappers
+			Func<VRNotificationType, bool> filterExpression = null;
+			if (filter != null)
+			{
+				filterExpression = (vrNotificationType) =>
+				{
+					if (filter.Filters != null && !CheckIfFilterIsMatch(vrNotificationType, filter.Filters))
+						return false;
+					return true;
+				};
+			}
+			return vrNotificationTypeSettings.MapRecords(VRNotificationTypeSettingInfoMapper, filterExpression).OrderBy(x => x.Name);
+		}
 
-        private VRNotificationTypeSettingsInfo VRNotificationTypeSettingInfoMapper(VRNotificationType vrNotificationType)
-        {
-            return new VRNotificationTypeSettingsInfo
-            {
-                Id = vrNotificationType.VRComponentTypeId,
-                Name = vrNotificationType.Name,
-                BodyDirective = vrNotificationType.Settings.ExtendedSettings.BodyRuntimeEditor,
-                SearchDirective = vrNotificationType.Settings.ExtendedSettings.SearchRuntimeEditor
-            };
-        }
-        private bool DoesUserHaveAccess(RequiredPermissionSettings requiredPermission)
-        {
-            int userId =  ContextFactory.GetContext().GetLoggedInUserId();
-            return DoesUserHaveAccess(userId, requiredPermission);
+		#endregion
 
-        }
-        private bool DoesUserHaveAccess(int userId, RequiredPermissionSettings requiredPermission)
-        {
-            SecurityManager secManager = new SecurityManager();
-            if (!secManager.IsAllowed(requiredPermission, userId))
-                return false;
-            return true;
+		#region Private Methods
 
-        }
+		private bool CheckIfFilterIsMatch(VRNotificationType notificationType, List<IVRNotificationTypeFilter> filters)
+		{
+			VRNotificationTypeFilterContext context = new VRNotificationTypeFilterContext { VRNotificationType = notificationType };
+			foreach (var filter in filters)
+			{
+				if (!filter.IsMatched(context))
+					return false;
+			}
+			return true;
+		}
 
-        #endregion
+		private IEnumerable<VRNotificationType> GetCachedVRNotificationTypeSettingsInfo()
+		{
+			VRComponentTypeManager vrComponentTypeManager = new Vanrise.Common.Business.VRComponentTypeManager();
+			return vrComponentTypeManager.GetComponentTypes<VRNotificationTypeSettings, VRNotificationType>();
+		}
 
-        #region security
+		#endregion
 
-        public bool DoesUserHaveViewAccess(Guid vrNotificationTypeId)
-        {
-            int userId = SecurityContext.Current.GetLoggedInUserId();
-            var genericRuleDefinition = GetNotificationTypeSettings(vrNotificationTypeId);
-            return DoesUserHaveViewAccess(userId, genericRuleDefinition);
-        }
-        public bool DoesUserHaveViewAccess(VRNotificationTypeSettings vrNotificationTypeSettings)
-        {
-            int userId = SecurityContext.Current.GetLoggedInUserId();
-            return DoesUserHaveViewAccess(userId, vrNotificationTypeSettings);
-        }
-        public bool DoesUserHaveViewAccess(int userId, List<Guid> vrNotificationTypeIds)
-        {
-            foreach (var guid in vrNotificationTypeIds)
-            {
-                var genericRuleDefinition = GetNotificationTypeSettings(guid);
-                if (DoesUserHaveViewAccess(userId, genericRuleDefinition))
-                    return true;
-            }
-            return false;
-        }
-        public bool DoesUserHaveViewAccess(int userId, VRNotificationTypeSettings vrNotificationTypeSettings)
-        {
-            if (vrNotificationTypeSettings.Security != null && vrNotificationTypeSettings.Security.ViewRequiredPermission != null)
-                return DoesUserHaveAccess(userId, vrNotificationTypeSettings.Security.ViewRequiredPermission);
-            else
-                return true;
-        }
-        #endregion 
-    }
+		#region Mappers
+
+		private VRNotificationTypeSettingsInfo VRNotificationTypeSettingInfoMapper(VRNotificationType vrNotificationType)
+		{
+			return new VRNotificationTypeSettingsInfo
+			{
+				Id = vrNotificationType.VRComponentTypeId,
+				Name = vrNotificationType.Name,
+				BodyDirective = vrNotificationType.Settings.ExtendedSettings.BodyRuntimeEditor,
+				SearchDirective = vrNotificationType.Settings.ExtendedSettings.SearchRuntimeEditor
+			};
+		}
+		private bool DoesUserHaveAccess(RequiredPermissionSettings requiredPermission)
+		{
+			int userId = ContextFactory.GetContext().GetLoggedInUserId();
+			return DoesUserHaveAccess(userId, requiredPermission);
+
+		}
+		private bool DoesUserHaveAccess(int userId, RequiredPermissionSettings requiredPermission)
+		{
+			SecurityManager secManager = new SecurityManager();
+			if (!secManager.IsAllowed(requiredPermission, userId))
+				return false;
+			return true;
+
+		}
+
+		#endregion
+
+		#region security
+
+		public bool DoesUserHaveViewAccess(Guid vrNotificationTypeId)
+		{
+			int userId = SecurityContext.Current.GetLoggedInUserId();
+			var genericRuleDefinition = GetNotificationTypeSettings(vrNotificationTypeId);
+			return DoesUserHaveViewAccess(userId, genericRuleDefinition);
+		}
+		public bool DoesUserHaveViewAccess(VRNotificationTypeSettings vrNotificationTypeSettings)
+		{
+			int userId = SecurityContext.Current.GetLoggedInUserId();
+			return DoesUserHaveViewAccess(userId, vrNotificationTypeSettings);
+		}
+		public bool DoesUserHaveViewAccess(int userId, List<Guid> vrNotificationTypeIds)
+		{
+			foreach (var guid in vrNotificationTypeIds)
+			{
+				var genericRuleDefinition = GetNotificationTypeSettings(guid);
+				if (DoesUserHaveViewAccess(userId, genericRuleDefinition))
+					return true;
+			}
+			return false;
+		}
+		public bool DoesUserHaveViewAccess(int userId, VRNotificationTypeSettings vrNotificationTypeSettings)
+		{
+			if (vrNotificationTypeSettings.Security != null && vrNotificationTypeSettings.Security.ViewRequiredPermission != null)
+				return DoesUserHaveAccess(userId, vrNotificationTypeSettings.Security.ViewRequiredPermission);
+			else
+				return true;
+		}
+		#endregion
+	}
 }
