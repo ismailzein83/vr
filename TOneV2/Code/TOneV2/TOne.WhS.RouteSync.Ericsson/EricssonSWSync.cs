@@ -5,6 +5,7 @@ using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.Ericsson.Data;
 using Vanrise.Common;
 using System.Linq;
+using TOne.WhS.RouteSync.Ericsson.Entities;
 
 namespace TOne.WhS.RouteSync.Ericsson
 {
@@ -27,8 +28,14 @@ namespace TOne.WhS.RouteSync.Ericsson
 
         public override void Initialize(ISwitchRouteSynchronizerInitializeContext context)
         {
-            IRouteDataManager dataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<IRouteDataManager>();
-            dataManager.Initialize(context);
+            IWhSRouteSyncEricssonDataManager whSRouteSyncEricssonDataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<IWhSRouteSyncEricssonDataManager>();
+            whSRouteSyncEricssonDataManager.Initialize(new WhSRouteSyncEricssonInitializeContext());
+
+            IRouteDataManager routeDataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<IRouteDataManager>();
+            routeDataManager.Initialize(new RouteInitializeContext());
+
+            IRouteCaseDataManager routeCaseDataManager = RouteSyncEricssonDataManagerFactory.GetDataManager<IRouteCaseDataManager>();
+            routeCaseDataManager.Initialize(new RouteCaseInitializeContext());
         }
 
         public override void ConvertRoutes(ISwitchRouteSynchronizerConvertRoutesContext context)
@@ -56,7 +63,7 @@ namespace TOne.WhS.RouteSync.Ericsson
             if (this.CarrierMappings == null || this.CarrierMappings.Count == 0)
                 return true;
 
-            Dictionary<string, List<int>> carrierAccountIdsByTrunkName = new Dictionary<string, List<int>>(); 
+            Dictionary<string, List<int>> carrierAccountIdsByTrunkName = new Dictionary<string, List<int>>();
 
             foreach (var mapping in this.CarrierMappings.Values)
             {

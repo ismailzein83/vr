@@ -14,7 +14,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 
         public TrunkType TrunkType { get; set; }
 
-        public bool IsRouting { get; set; }
+        //public bool IsRouting { get; set; }
     }
 
     public class InTrunk : BaseTrunk

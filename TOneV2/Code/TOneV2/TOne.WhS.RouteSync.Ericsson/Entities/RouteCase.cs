@@ -1,17 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TOne.WhS.RouteSync.Ericsson.Entities
 {
     public class RouteCase
     {
-        public int RouteCaseId { get; set; }
         public int RouteCaseNumber { get; set; }
-        public List<RouteCaseOption> RouteCaseOptions { get; set; }
-        //public string Options { get; set; }
+
+        public string RouteCaseOptionsAsString { get; set; }
     }
 
     public class RouteCaseOption
@@ -22,8 +17,39 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
         public TrunkType Type { get; set; }
         public int BNT { get; set; }
         public short SP { get; set; }
-        public int TrunkPercentage { get; set; }
+        public int? TrunkPercentage { get; set; }
         public bool IsBackup { get; set; }
         public int GroupID { get; set; }
     }
+
+    public interface IRouteCaseInitializeContext
+    {
+
+    }
+
+    public class RouteCaseInitializeContext : IRouteCaseInitializeContext
+    {
+
+    }
+
+    public interface IWhSRouteSyncEricssonInitializeContext
+    {
+
+    }
+
+    public class WhSRouteSyncEricssonInitializeContext : IWhSRouteSyncEricssonInitializeContext
+    {
+
+    }
+
+    public interface IRouteInitializeContext
+    {
+
+    }
+
+    public class RouteInitializeContext : IRouteInitializeContext
+    {
+
+    }
+
 }

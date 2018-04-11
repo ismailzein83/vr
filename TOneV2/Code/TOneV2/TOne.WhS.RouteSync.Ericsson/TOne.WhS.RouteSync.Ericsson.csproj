@@ -57,9 +57,16 @@
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Runtime">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Entities">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business\RouteCaseManager.cs" />
+    <Compile Include="Data\IWhSRouteSyncEricssonDataManager.cs" />
     <Compile Include="Data\RouteSyncEricssonDataManagerFactory.cs" />
     <Compile Include="Data\IDataManager.cs" />
     <Compile Include="Data\IRouteCaseDataManager.cs" />
@@ -74,6 +81,7 @@
     <Compile Include="Entities\TrunkGroup.cs" />
     <Compile Include="EricssonConvertedRoute.cs" />
     <Compile Include="EricssonSWSync.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
