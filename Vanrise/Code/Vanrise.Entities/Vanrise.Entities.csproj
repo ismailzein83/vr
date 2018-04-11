@@ -92,6 +92,7 @@
     <Compile Include="SMS\SMSEvaluatedTemplate.cs" />
     <Compile Include="SMS\SMSMessageTemplate.cs" />
     <Compile Include="SMS\SMSMessageType.cs" />
+    <Compile Include="SMS\SMSMessageTypeInfo.cs" />
     <Compile Include="SMS\SMSSendHandler.cs" />
     <Compile Include="VRBulkActionDraft\BulkActionFinalState.cs" />
     <Compile Include="VRBulkActionDraft\BulkActionState.cs" />

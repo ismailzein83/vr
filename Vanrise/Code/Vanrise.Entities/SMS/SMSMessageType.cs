@@ -6,17 +6,22 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    public class SMSMessageType
+    public class SMSMessageType : Vanrise.Entities.VRComponentType<SMSMessageTypeSettings>
     {
-        public Guid SMSMessageTypeId { get; set; }
 
-        public string Name { get; set; }
-
-        public SMSMessageTypeSettings Settings { get; set; }
     }
 
-    public class SMSMessageTypeSettings
+    public class SMSMessageTypeSettings: VRComponentTypeSettings
     {
         public VRObjectVariableCollection Objects { get; set; }
+
+        public override Guid VRComponentTypeConfigId {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
     }
+   
+   
 }
