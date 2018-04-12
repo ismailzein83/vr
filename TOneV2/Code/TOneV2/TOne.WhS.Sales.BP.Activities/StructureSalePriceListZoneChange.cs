@@ -777,7 +777,7 @@ namespace TOne.WhS.Sales.BP.Activities
                             CurrencyId = rateChange.CurrencyId
                         };
         }
-        private void SetRateChangeType(SaleRate saleRate, decimal rateValue, List<NewRate> newRates, SalePricelistRateChange salePricelistRateChange, int currencyId, bool changeNewRateTypes)
+        private void SetRateChangeType(SaleRate saleRate, decimal currentRateValue, List<NewRate> newRates, SalePricelistRateChange salePricelistRateChange, int currencyId, bool changeNewRateTypes)
         {
             var currencyExchangeRateManager = new CurrencyExchangeRateManager();
             var saleRateManager = new SaleRateManager();
@@ -786,7 +786,7 @@ namespace TOne.WhS.Sales.BP.Activities
             Decimal convertedRate = UtilitiesManager.ConvertToCurrencyAndRound(saleRate.Rate, saleRateManager.GetCurrencyId(saleRate), currencyId, DateTime.Now, longPrecision,
                        currencyExchangeRateManager);
 
-            if (rateValue > convertedRate)
+            if (currentRateValue > convertedRate)
             {
                 salePricelistRateChange.ChangeType = RateChangeType.Increase;
                 if (changeNewRateTypes)
@@ -794,7 +794,7 @@ namespace TOne.WhS.Sales.BP.Activities
                         rate.ChangeType = RateChangeType.Increase;
             }
 
-            else if (rateValue < convertedRate)
+            else if (currentRateValue < convertedRate)
             {
                 salePricelistRateChange.ChangeType = RateChangeType.Decrease;
                 if (changeNewRateTypes)
@@ -921,73 +921,17 @@ namespace TOne.WhS.Sales.BP.Activities
                         ZoneName = normalRateToClose.ZoneName,
                         Rate = newRate.Rate.Rate,
                         RecentRate = UtilitiesManager.ConvertToCurrencyAndRound(recentRate.Rate.Rate,
-                            saleRateManager.GetCurrencyId(recentRate.Rate), context.CurrencyId, DateTime.Now,
-                            longPrecision,
-                            currencyExchangeRateManager),
+                            saleRateManager.GetCurrencyId(recentRate.Rate), saleRateManager.GetCurrencyId(newRate.Rate), DateTime.Now,
+                            longPrecision, currencyExchangeRateManager),
                         BED = normalRateToClose.CloseEffectiveDate,
                         EED = null,
                         CurrencyId = saleRateManager.GetCurrencyId(newRate.Rate)
                     };
 
-                    SetRateChangeType(recentRate.Rate, salePriceListRateChange.Rate, null, salePriceListRateChange, context.CurrencyId, false);
+                    SetRateChangeType(recentRate.Rate, newRate.Rate.Rate, null, salePriceListRateChange, saleRateManager.GetCurrencyId(newRate.Rate), false);
                     context.RateChangesOutArgument.Add(salePriceListRateChange);
 
-                    if (rateToClose.OtheRateToCloses != null)
-                    {
-                        var rateTypeIds = Helper.GetRateTypeIds(context.CustomerInfo.CustomerId, normalRateToClose.ZoneId, DateTime.Now);
-                        foreach (var otheRateToChange in rateToClose.OtheRateToCloses)
-                        {
-                            if (!rateTypeIds.Contains(otheRateToChange.RateTypeId.Value))
-                                continue;
-
-                            SaleRate customerOtherRate;
-                            if (!recentRate.RatesByRateType.TryGetValue(otheRateToChange.RateTypeId.Value, out customerOtherRate))
-                                continue;
-
-                            SalePriceListOwnerType rateOwnerType;
-                            if (!recentRate.SourcesByRateType.TryGetValue(otheRateToChange.RateTypeId.Value, out rateOwnerType) || rateOwnerType != SalePriceListOwnerType.Customer)
-                                continue;
-
-                            SaleRate sellingProductOtherRate;
-                            if (newRate.RatesByRateType.TryGetValue(otheRateToChange.RateTypeId.Value, out sellingProductOtherRate))
-                            {
-                                var salePricelistOtherRateChange = new SalePricelistRateChange
-                                {
-                                    CountryId = countryId.Value,
-                                    ZoneId = rateToClose.ZoneId,
-                                    ZoneName = normalRateToClose.ZoneName,
-                                    Rate = sellingProductOtherRate.Rate,
-                                    RecentRate =
-                                        UtilitiesManager.ConvertToCurrencyAndRound(customerOtherRate.Rate,
-                                            saleRateManager.GetCurrencyId(customerOtherRate), context.CurrencyId,
-                                            DateTime.Now,
-                                            longPrecision,
-                                            currencyExchangeRateManager),
-                                    BED = normalRateToClose.CloseEffectiveDate,
-                                    EED = null,
-                                    CurrencyId = saleRateManager.GetCurrencyId(sellingProductOtherRate)
-                                };
-                                SetRateChangeType(customerOtherRate, salePricelistOtherRateChange.Rate, null, salePricelistOtherRateChange, context.CurrencyId, false);
-                                context.RateChangesOutArgument.Add(salePricelistOtherRateChange);
-                            }
-                            //else
-                            {
-                                //close other rate
-                                context.RateChangesOutArgument.Add(new SalePricelistRateChange
-                                {
-                                    CountryId = countryId.Value,
-                                    ZoneId = rateToClose.ZoneId,
-                                    ZoneName = normalRateToClose.ZoneName,
-                                    Rate = customerOtherRate.Rate,
-                                    ChangeType = RateChangeType.Deleted,
-                                    RateTypeId = otheRateToChange.RateTypeId.Value,
-                                    BED = customerOtherRate.BED,
-                                    EED = normalRateToClose.CloseEffectiveDate,
-                                    CurrencyId = saleRateManager.GetCurrencyId(customerOtherRate)
-                                });
-                            }
-                        }
-                    }
+                    context.RateChangesOutArgument.AddRange(GetRateToCloseChanges(context.CustomerInfo.CustomerId, normalRateToClose, countryId.Value, recentRate, newRate, rateToClose.OtheRateToCloses));
                 }
             }
 
@@ -997,6 +941,69 @@ namespace TOne.WhS.Sales.BP.Activities
         #endregion
 
         #region Private Methods
+
+        private List<SalePricelistRateChange> GetRateToCloseChanges(int customerId, RateToClose rateToClose, int countryId, SaleEntityZoneRate customerRate, SaleEntityZoneRate sellingProductRate
+        , List<RateToClose> otherRatesToClose)
+        {
+            List<SalePricelistRateChange> otherRatesToChange = new List<SalePricelistRateChange>();
+            var saleRateManager = new SaleRateManager();
+            var currencyExchangeRateManager = new CurrencyExchangeRateManager();
+            int longPrecision = new GeneralSettingsManager().GetLongPrecisionValue();
+
+            if (otherRatesToClose != null)
+            {
+                var rateTypeIds = Helper.GetRateTypeIds(customerId, rateToClose.ZoneId, DateTime.Now);
+                foreach (var otheRateToChange in otherRatesToClose)
+                {
+                    if (!rateTypeIds.Contains(otheRateToChange.RateTypeId.Value))
+                        continue;
+
+                    SaleRate customerOtherRate;
+                    if (!customerRate.RatesByRateType.TryGetValue(otheRateToChange.RateTypeId.Value, out customerOtherRate))
+                        continue;
+
+                    SalePriceListOwnerType rateOwnerType;
+                    if (!customerRate.SourcesByRateType.TryGetValue(otheRateToChange.RateTypeId.Value, out rateOwnerType) || rateOwnerType != SalePriceListOwnerType.Customer)
+                        continue;
+
+                    SaleRate sellingProductOtherRate;
+                    if (sellingProductRate.RatesByRateType.TryGetValue(otheRateToChange.RateTypeId.Value, out sellingProductOtherRate))
+                    {
+                        var salePricelistOtherRateChange = new SalePricelistRateChange
+                        {
+                            CountryId = countryId,
+                            ZoneId = rateToClose.ZoneId,
+                            ZoneName = rateToClose.ZoneName,
+                            Rate = sellingProductOtherRate.Rate,
+                            RecentRate = UtilitiesManager.ConvertToCurrencyAndRound(customerOtherRate.Rate,
+                                    saleRateManager.GetCurrencyId(customerOtherRate), saleRateManager.GetCurrencyId(sellingProductOtherRate),
+                                    DateTime.Now, longPrecision, currencyExchangeRateManager),
+                            BED = rateToClose.CloseEffectiveDate,
+                            EED = null,
+                            CurrencyId = saleRateManager.GetCurrencyId(sellingProductOtherRate)
+                        };
+                        SetRateChangeType(customerOtherRate, sellingProductOtherRate.Rate, null, salePricelistOtherRateChange, saleRateManager.GetCurrencyId(sellingProductOtherRate), false);
+                        otherRatesToChange.Add(salePricelistOtherRateChange);
+                    }
+
+                    //close other rate
+                    otherRatesToChange.Add(new SalePricelistRateChange
+                    {
+                        CountryId = countryId,
+                        ZoneId = rateToClose.ZoneId,
+                        ZoneName = rateToClose.ZoneName,
+                        Rate = customerOtherRate.Rate,
+                        ChangeType = RateChangeType.Deleted,
+                        RateTypeId = otheRateToChange.RateTypeId.Value,
+                        BED = customerOtherRate.BED,
+                        EED = rateToClose.CloseEffectiveDate,
+                        CurrencyId = saleRateManager.GetCurrencyId(customerOtherRate)
+                    });
+
+                }
+            }
+            return otherRatesToChange;
+        }
 
         private void SetRoutingProductIdOnRateChange(int customerId, int sellingProductId, List<SalePricelistRateChange> rateChanges, IEnumerable<SalePricelistRPChange> routingProductChanges)
         {
