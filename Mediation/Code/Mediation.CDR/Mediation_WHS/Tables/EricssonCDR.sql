@@ -11,19 +11,27 @@
     [DateForStartCharging]     DATE             NULL,
     [TimeForStartCharging]     TIME (3)         NULL,
     [ChargeableDuration]       INT              NULL,
-    [FaultCode]                VARCHAR (20)     NULL,
-    [ExchangeIdentity]         VARCHAR (20)     NULL,
+    [FaultCode]                VARCHAR (5)      NULL,
+    [Call]                     VARCHAR (5)      NULL,
+    [Exchange]                 VARCHAR (5)      NULL,
+    [Code]                     VARCHAR (5)      NULL,
     [RecordNumber]             INT              NULL,
     [TariffClass]              VARCHAR (5)      NULL,
     [TariffSwitchingIndicator] VARCHAR (5)      NULL,
     [OriginForCharging]        VARCHAR (5)      NULL,
     [OutgoingRoute]            VARCHAR (20)     NULL,
     [IncomingRoute]            VARCHAR (20)     NULL,
+    [StaffUser]                VARCHAR (5)      NULL,
+    [StaffPass]                VARCHAR (5)      NULL,
+    [CallingName]              INT              NULL,
+    [CalledName]               INT              NULL,
     [Reserved]                 VARCHAR (10)     NULL,
     [FileName]                 VARCHAR (255)    NULL,
     [DataSourceId]             UNIQUEIDENTIFIER NULL,
     CONSTRAINT [PK_EricssonCDR] PRIMARY KEY CLUSTERED ([Id] ASC)
 );
+
+
 
 
 
