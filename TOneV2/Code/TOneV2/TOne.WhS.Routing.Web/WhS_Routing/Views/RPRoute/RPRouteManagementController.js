@@ -170,6 +170,8 @@
         function load() {
             $scope.isLoadingFilterData = true;
             $scope.limit = 1000;
+            $scope.includeBlockedSuppliers = true;
+
             $scope.routingProductFilters = UtilsService.getArrayEnum(WhS_Routing_RoutingProductFilterEnum);
             $scope.selectedRoutingProductFilter = $scope.routingProductFilters[0];
 

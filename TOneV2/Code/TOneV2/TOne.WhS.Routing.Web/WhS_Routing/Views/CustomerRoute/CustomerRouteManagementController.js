@@ -83,6 +83,7 @@
         function load() {
             $scope.isLoadingFilterData = true;
             $scope.limit = 1000;
+            $scope.includeBlockedSuppliers = true;
 
             return UtilsService.waitMultipleAsyncOperations([loadRoutingDatabaseSelector, loadSaleZoneSection, loadCustomersSection, loadRouteStatusSelector]).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
