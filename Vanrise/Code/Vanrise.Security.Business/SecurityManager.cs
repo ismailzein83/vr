@@ -199,7 +199,9 @@ namespace Vanrise.Security.Business
 
         public bool IsAllowed(RequiredPermissionSettings requiredPermissions, int userId)
         {
-            string requiredPermissionString = RequiredPermissionsToString(requiredPermissions.Entries);
+            string requiredPermissionString = null;
+            if (requiredPermissions != null)
+                requiredPermissionString = RequiredPermissionsToString(requiredPermissions.Entries);
             return IsAllowed(requiredPermissionString, userId);
         }
 
