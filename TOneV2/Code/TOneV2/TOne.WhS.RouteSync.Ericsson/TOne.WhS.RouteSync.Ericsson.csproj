@@ -66,6 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business\RouteCaseManager.cs" />
+    <Compile Include="Data\ICustomerMappingDataManager.cs" />
     <Compile Include="Data\IWhSRouteSyncEricssonDataManager.cs" />
     <Compile Include="Data\RouteSyncEricssonDataManagerFactory.cs" />
     <Compile Include="Data\IDataManager.cs" />
@@ -79,7 +80,7 @@
     <Compile Include="Entities\RouteCase.cs" />
     <Compile Include="Entities\Trunk.cs" />
     <Compile Include="Entities\TrunkGroup.cs" />
-    <Compile Include="EricssonConvertedRoute.cs" />
+    <Compile Include="Entities\EricssonConvertedRoute.cs" />
     <Compile Include="EricssonSWSync.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
