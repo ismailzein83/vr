@@ -888,7 +888,8 @@ namespace TOne.WhS.Sales.BP.Activities
                             salePricelistOtherRateChange.BED = otheRateToChange.BED;
                             salePricelistOtherRateChange.EED = otheRateToChange.EED;
                             var otherRate = recentRate.RatesByRateType.GetRecord(otheRateToChange.RateTypeId.Value);
-                            SetRateChangeType(otherRate, otheRateToChange.NormalRate, null, salePricelistOtherRateChange, context.CurrencyId, false);
+                            if (otherRate != null)
+                                SetRateChangeType(otherRate, otheRateToChange.NormalRate, null, salePricelistOtherRateChange, context.CurrencyId, false);
                             context.RateChangesOutArgument.Add(salePricelistOtherRateChange);
                         }
                     }
