@@ -22,6 +22,11 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
             ExecuteNonQueryText(query, null);
         }
 
+        public void Finalize(IRouteFinalizeContext context)
+        {
+            throw new NotImplementedException();
+        }
+
         public object FinishDBApplyStream(object dbApplyStream)
         {
             throw new NotImplementedException();

@@ -78,9 +78,12 @@
     <Compile Include="Entities\LocalSupplierMapping.cs" />
     <Compile Include="Entities\OutgoingTrafficCustomer.cs" />
     <Compile Include="Entities\RouteCase.cs" />
+    <Compile Include="Entities\Context\RouteCaseContext.cs" />
+    <Compile Include="Entities\Context\RouteContext.cs" />
     <Compile Include="Entities\Trunk.cs" />
     <Compile Include="Entities\TrunkGroup.cs" />
     <Compile Include="Entities\EricssonConvertedRoute.cs" />
+    <Compile Include="Entities\Context\WhSRouteSyncEricssonContext.cs" />
     <Compile Include="EricssonSWSync.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

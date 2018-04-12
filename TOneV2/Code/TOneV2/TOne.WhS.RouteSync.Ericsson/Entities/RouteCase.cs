@@ -21,35 +21,4 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
         public bool IsBackup { get; set; }
         public int GroupID { get; set; }
     }
-
-    public interface IRouteCaseInitializeContext
-    {
-
-    }
-
-    public class RouteCaseInitializeContext : IRouteCaseInitializeContext
-    {
-
-    }
-
-    public interface IWhSRouteSyncEricssonInitializeContext
-    {
-
-    }
-
-    public class WhSRouteSyncEricssonInitializeContext : IWhSRouteSyncEricssonInitializeContext
-    {
-
-    }
-
-    public interface IRouteInitializeContext
-    {
-
-    }
-
-    public class RouteInitializeContext : IRouteInitializeContext
-    {
-
-    }
-
 }

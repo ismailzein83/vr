@@ -12,6 +12,9 @@ namespace TOne.WhS.RouteSync.Ericsson.Data
     public interface IRouteDataManager : IBulkApplyDataManager<ConvertedRoute>, IDataManager
     {
         string SwitchId { get; set; }
+        
         void Initialize(IRouteInitializeContext context);
+
+        void Finalize(IRouteFinalizeContext context);
     }
 }
