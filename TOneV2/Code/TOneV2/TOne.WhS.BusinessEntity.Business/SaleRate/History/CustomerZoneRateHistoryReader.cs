@@ -22,9 +22,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
         #region Constructors
 
-        public CustomerZoneRateHistoryReader(IEnumerable<int> customerIds, IEnumerable<int> sellingProductIds, IEnumerable<long> zoneIds, DateTime BED, DateTime? EED)
+        public CustomerZoneRateHistoryReader(IEnumerable<int> customerIds, IEnumerable<int> sellingProductIds, IEnumerable<long> zoneIds, DateTime BED, DateTime? EED, bool getOtherRates)
         {
-            ReadRates(customerIds, sellingProductIds, zoneIds, true, false, BED, EED);
+            ReadRates(customerIds, sellingProductIds, zoneIds, true, getOtherRates, BED, EED);
         }
 
         public CustomerZoneRateHistoryReader(IEnumerable<int> customerIds, IEnumerable<int> sellingProductIds, IEnumerable<long> zoneIds, bool getNormalRates, bool getOtherRates)

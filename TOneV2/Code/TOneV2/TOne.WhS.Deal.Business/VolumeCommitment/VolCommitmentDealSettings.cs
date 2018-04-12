@@ -117,7 +117,7 @@ namespace TOne.WhS.Deal.Business
 
             var customerZoneRateHistoryLocator =
                new CustomerZoneRateHistoryLocator(new CustomerZoneRateHistoryReader(new List<int> { CarrierAccountId }
-                   , new List<int> { sellingProductId }, zoneIds, BeginDate, EndDate));
+                   , new List<int> { sellingProductId }, zoneIds, BeginDate, EndDate, false));
 
             getCustomerZoneRatesFunc = (zoneName, countryId) => customerZoneRateHistoryLocator.GetCustomerZoneRateHistory(CarrierAccountId, sellingProductId, zoneName, null, countryId, null, null);
         }
