@@ -45,7 +45,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 case "MailTemplate":
                     {
                         Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
-                        objects.Add("SupplierInvoice", context.Invoice);
+                        objects.Add("SettlementInvoice", context.Invoice);
                         CarrierProfile carrierProfile = null;
                         int carrierProfileId;
                         CompanySetting companySetting;

@@ -91,7 +91,6 @@ app.directive("whsInvoicetypeGenerationcustomsectionSettlement", ["UtilsService"
 
                     var invoice;
                     var promises = [];
-
                     if (payload != undefined) {
                         customPayload = payload.customPayload;
                         invoice = payload.invoice;
@@ -158,7 +157,7 @@ app.directive("whsInvoicetypeGenerationcustomsectionSettlement", ["UtilsService"
 
                 function loadCustomPayload(invoice)
                 {
-                    return WhS_Invoice_IncludedInvoicesInSettlementAPIService.EvaluatePartnerCustomPayload(invoice.PartnerId, invoice.InvoiceTypeId, invoice.FromDate, invoice.ToDate, invoice.InvoiceId).then(function (response) {
+                    return WhS_Invoice_IncludedInvoicesInSettlementAPIService.EvaluatePartnerCustomPayload(invoice.PartnerId, invoice.InvoiceTypeId, invoice.FromDate, invoice.ToDate).then(function (response) {
                         customPayload = response;
                     });
                 }

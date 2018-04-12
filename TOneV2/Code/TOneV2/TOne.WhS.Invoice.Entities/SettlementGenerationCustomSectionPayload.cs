@@ -9,7 +9,6 @@ namespace TOne.WhS.Invoice.Entities
 {
     public class SettlementGenerationCustomSectionPayload
     {
-        public decimal? Commission { get; set; }
         public List<InvoiceAvailableForSettlement> AvailableCustomerInvoices { get; set; }
         public List<InvoiceAvailableForSettlement> AvailableSupplierInvoices { get; set; }
         public bool IsCustomerApplicable { get; set; }
@@ -19,6 +18,7 @@ namespace TOne.WhS.Invoice.Entities
     public class InvoiceAvailableForSettlement
     {
         public long InvoiceId { get; set; }
+        public int CurrencyId { get; set; }
         public bool IsSelected { get; set; }
     }
     public class SettlementGenerationCustomSectionPayloadSummary

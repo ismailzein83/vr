@@ -27,6 +27,7 @@
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.uploadedAttachements = [];
+            $scope.scopeModel.originalDataCurrency = [];
             $scope.scopeModel.save = function () {
                 return updateOriginalInvoiceData();
             };
@@ -65,9 +66,26 @@
                 originalInvoiceDataRuntime = response;
                 if (originalInvoiceDataRuntime != undefined)
                 {
-                    $scope.scopeModel.originalAmount = originalInvoiceDataRuntime.OriginalAmount;
+                    if (originalInvoiceDataRuntime.OriginalDataCurrency != undefined)
+                    {
+                        for( var p in originalInvoiceDataRuntime.OriginalDataCurrency)
+                        {
+                            if (p != "$type")
+                            {
+                                var item = originalInvoiceDataRuntime.OriginalDataCurrency[p];
+                                $scope.scopeModel.originalDataCurrency.push({
+                                    Entity: {
+                                        Currency: item.CurrencySymbol,
+                                        CurrencyId: p,
+                                        IncludeOriginalAmountInSettlement: item.IncludeOriginalAmountInSettlement,
+                                        OriginalAmount: item.OriginalAmount,
+                                    }
+                                });
+                            }
+                            
+                        }
+                    }
                     $scope.scopeModel.reference = originalInvoiceDataRuntime.Reference;
-                    $scope.scopeModel.includeInSettlement = originalInvoiceDataRuntime.IncludeOriginalAmountInSettlement;
                     if(originalInvoiceDataRuntime.AttachementFilesRuntime != undefined)
                     {
                         for (var i = 0; i < originalInvoiceDataRuntime.AttachementFilesRuntime.length; i++)
@@ -130,12 +148,28 @@
                     });
                 }
             }
+
+            var originalDataCurrencyDic;
+            if ($scope.scopeModel.originalDataCurrency != undefined) {
+                originalDataCurrencyDic = {};
+                for (var i = 0; i < $scope.scopeModel.originalDataCurrency.length; i++) {
+                    var originalDataCurrency = $scope.scopeModel.originalDataCurrency[i];
+                    if (originalDataCurrency.Entity.OriginalAmount != undefined)
+                    {
+                        originalDataCurrencyDic[originalDataCurrency.Entity.CurrencyId] = {
+                            CurrencySymbol: originalDataCurrency.Entity.CurrencySymbol,
+                            OriginalAmount: originalDataCurrency.Entity.OriginalAmount,
+                            IncludeOriginalAmountInSettlement: originalDataCurrency.Entity.IncludeOriginalAmountInSettlement
+                        };
+                    }
+                }
+            }
+
             var obj = {
-                OriginalAmount: $scope.scopeModel.originalAmount,
+                OriginalDataCurrency: originalDataCurrencyDic,
                 Reference: $scope.scopeModel.reference,
                 AttachementFiles: attachementFileIds,
                 InvoiceId: invoiceId,
-                IncludeOriginalAmountInSettlement: $scope.scopeModel.includeInSettlement,
             };
             return obj;
         }

@@ -28,9 +28,9 @@ namespace TOne.WhS.Invoice.Web.Controllers
         }
         [HttpGet]
         [Route("EvaluatePartnerCustomPayload")]
-        public SettlementGenerationCustomSectionPayload EvaluatePartnerCustomPayload(string partnerId, Guid invoiceTypeId, DateTime fromDate, DateTime toDate, long? currentInvoiceId)
+        public SettlementGenerationCustomSectionPayload EvaluatePartnerCustomPayload(string partnerId, Guid invoiceTypeId, DateTime fromDate, DateTime toDate)
         {
-            return invoiceSettlementManager.EvaluatePartnerCustomPayload(currentInvoiceId,partnerId, invoiceTypeId, fromDate, toDate);
+            return invoiceSettlementManager.EvaluatePartnerCustomPayload(partnerId, invoiceTypeId, fromDate, toDate);
 
         }
     }
@@ -39,8 +39,8 @@ namespace TOne.WhS.Invoice.Web.Controllers
     {
         public string PartnerId { get; set; }
         public Guid InvoiceTypeId { get; set; }
-        public List<long> CustomerInvoiceIds { get; set; }
-        public List<long> SupplierInvoiceIds { get; set; }
+        public List<SelectedInvoiceItem> CustomerInvoiceIds { get; set; }
+        public List<SelectedInvoiceItem> SupplierInvoiceIds { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
     }

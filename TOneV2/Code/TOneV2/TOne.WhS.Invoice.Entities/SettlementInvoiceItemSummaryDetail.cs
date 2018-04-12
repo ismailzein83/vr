@@ -23,6 +23,10 @@ namespace TOne.WhS.Invoice.Entities
         public int DueToSystemNumberOfCalls { get; set; }
         public int DueToCarrierNumberOfCalls { get; set; }
 
+        public decimal DueToSystemDifference { get; set; }
+        public decimal DueToCarrierDifference { get; set; }
+
+
         public SettlementInvoiceItemSummaryDetail() { }
         public IEnumerable<SettlementInvoiceItemSummaryDetail> GetRDLCSettlementInvoiceDetailSchema()
         {

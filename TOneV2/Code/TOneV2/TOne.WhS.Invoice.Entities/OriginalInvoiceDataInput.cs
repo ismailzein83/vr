@@ -9,9 +9,9 @@ namespace TOne.WhS.Invoice.Entities
     public class OriginalInvoiceDataInput
     {
         public int InvoiceId { get; set; }
-        public decimal? OriginalAmount { get; set; }
         public string Reference { get; set; }
         public List<AttachementFile> AttachementFiles { get; set; }
-        public bool IncludeOriginalAmountInSettlement { get; set; }
+        public Dictionary<int, OriginalDataCurrrency> OriginalDataCurrency { get; set; }
+
     }
 }

@@ -1,23 +1,34 @@
-﻿<div vr-modalcontent ng-controller="WhS_Invoice_OriginalInvoiceDataTemplateController" width="'50%'" vr-loader="scopeModel.isLoading">
+﻿<div vr-modalcontent ng-controller="WhS_Invoice_OriginalInvoiceDataTemplateController" width="'30%'" vr-loader="scopeModel.isLoading">
     <vr-modalbody>
         <vr-form name="formInvoiceCompareEditor">
             <vr-row>
-                <vr-columns width="1/2row">
-                    <vr-textbox label="Amount" value="scopeModel.originalAmount" type="number"></vr-textbox>
+
+                <vr-columns width="1/2row" haschildcolumns>
+                    <vr-columns width="fullrow">
+                        <vr-textbox label="Reference" value="scopeModel.reference"></vr-textbox>
+                    </vr-columns>
+                    <vr-columns width="fullrow">
+                        <vr-fileupload extension="all" value="scopeModel.inPutFile"
+                                       label="Upload Attachement"
+                                       on-ready="scopeModel.onUploadedAttachementFileReady"
+                                       onvaluechanged="scopeModel.addUploadedAttachement" tempfile="true"></vr-fileupload>
+                    </vr-columns>
                 </vr-columns>
-                <vr-columns width="1/2row">
-                    <vr-switch label="Include in Settlement" value="scopeModel.includeInSettlement"></vr-switch>
-                </vr-columns>
-                <vr-columns width="1/2row">
-                    <vr-textbox label="Reference" value="scopeModel.reference"></vr-textbox>
-                </vr-columns>
-                <vr-columns width="1/2row">
-                    <vr-fileupload extension="all" value="scopeModel.inPutFile"
-                                   label="Upload Attachement"
-                                   on-ready="scopeModel.onUploadedAttachementFileReady"
-                                   onvaluechanged="scopeModel.addUploadedAttachement" tempfile="true"></vr-fileupload>
+
+                <vr-columns width="1/2row" ng-if="scopeModel.originalDataCurrency.length > 0" withemptyline>
+                    <vr-datagrid on-ready="scopeModel.onGridReady"
+                                 datasource="scopeModel.originalDataCurrency" hidegridmenu>
+                        <vr-datagridcolumn headertext="'Currency'" type="'Text'" field="'Entity.Currency'" widthfactor="5"></vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Original Amount'" widthfactor="10">
+                            <vr-textbox value="dataItem.Entity.OriginalAmount" isrequired="dataItem.Entity.IncludeOriginalAmountInSettlement" type="number"></vr-textbox>
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Include In Settlement'" widthfactor="10">
+                            <vr-switch value="dataItem.Entity.IncludeOriginalAmountInSettlement"></vr-switch>
+                        </vr-datagridcolumn>
+                    </vr-datagrid>
                 </vr-columns>
             </vr-row>
+          
             <vr-datalist maxitemsperrow="3" datasource="scopeModel.uploadedAttachements" autoremoveitem="true">
                 <a href="" ng-click="viewScope.scopeModel.downloadAttachement(dataItem.fileId)">{{dataItem.fileName}}</a>
             </vr-datalist>

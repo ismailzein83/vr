@@ -14,9 +14,8 @@ namespace TOne.WhS.Invoice.Entities
         public string PartnerType { get; set; }
         public Decimal SupplierDuration { get; set; }
         public int SupplierTotalNumberOfCalls { get; set; }
-        public decimal? Commission { get; set; }
-        public bool HasComission { get; set; }
-
+        public bool IsApplicableToSupplier { get; set; }
+        public bool IsApplicableToCustomer { get; set; }
         public SattlementInvoiceDetails() { }
         public IEnumerable<SattlementInvoiceDetails> GetSattlementInvoiceDetailsRDLCSchema()
         {

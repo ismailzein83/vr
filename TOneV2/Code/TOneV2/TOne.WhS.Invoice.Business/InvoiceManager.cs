@@ -89,11 +89,9 @@ namespace TOne.WhS.Invoice.Business
            
             var supplierInvoiceDetails = invoice.Details as SupplierInvoiceDetails;
             supplierInvoiceDetails.ThrowIfNull("supplierInvoiceDetails");
-            supplierInvoiceDetails.OriginalAmount = input.OriginalAmount;
+            supplierInvoiceDetails.OriginalAmountByCurrency = input.OriginalDataCurrency;
             supplierInvoiceDetails.Reference = input.Reference;
             supplierInvoiceDetails.AttachementFiles = input.AttachementFiles;
-            supplierInvoiceDetails.IncludeOriginalAmountInSettlement = input.IncludeOriginalAmountInSettlement;
-
             invoice.Details = supplierInvoiceDetails;
             return invoiceManager.TryUpdateInvoice(invoice);
         }
@@ -106,14 +104,44 @@ namespace TOne.WhS.Invoice.Business
             invoice.ThrowIfNull("invoice", invoiceId);
             var supplierInvoiceDetails = invoice.Details as SupplierInvoiceDetails;
             supplierInvoiceDetails.ThrowIfNull("supplierInvoiceDetails");
-
-            OriginalInvoiceDataRuntime originalInvoiceDataRuntime = new OriginalInvoiceDataRuntime
+            
+            
+            var originalInvoiceDataRuntime = new OriginalInvoiceDataRuntime
             {
-                OriginalAmount = supplierInvoiceDetails.OriginalAmount,
                 Reference = supplierInvoiceDetails.Reference,
-                IncludeOriginalAmountInSettlement = supplierInvoiceDetails.IncludeOriginalAmountInSettlement,
-                
             };
+            CurrencyManager currencyManager = new CurrencyManager();
+
+            InvoiceItemManager invoiceItemManager = new InvoiceItemManager();
+            var currencyItemSetName = invoiceItemManager.GetInvoiceItemsByItemSetNames(invoiceId, new List<string> { "GroupingByCurrency" }, CompareOperator.Equal);
+            if(currencyItemSetName != null)
+            {
+                originalInvoiceDataRuntime.OriginalDataCurrency = new Dictionary<int, OriginalDataCurrrency>();
+                foreach(var item in currencyItemSetName)
+                {
+                    var itemDetails = item.Details as InvoiceBySaleCurrencyItemDetails;
+                    if(itemDetails != null)
+                    {
+                        var currencySymbol = currencyManager.GetCurrencySymbol(itemDetails.CurrencyId);
+                        currencySymbol.ThrowIfNull("currencySymbol", itemDetails.CurrencyId);
+                        var originalDataCurrrency = originalInvoiceDataRuntime.OriginalDataCurrency.GetOrCreateItem(itemDetails.CurrencyId);
+                        originalDataCurrrency.CurrencySymbol = currencySymbol;
+                    }
+                }
+            }
+
+            if (supplierInvoiceDetails.OriginalAmountByCurrency != null)
+            {
+                foreach (var originalAmount in supplierInvoiceDetails.OriginalAmountByCurrency)
+                {
+                    var record = originalInvoiceDataRuntime.OriginalDataCurrency.GetRecord(originalAmount.Key);
+                    if (record != null)
+                    {
+                        record.OriginalAmount = originalAmount.Value.OriginalAmount;
+                        record.IncludeOriginalAmountInSettlement = originalAmount.Value.IncludeOriginalAmountInSettlement;
+                    }
+                }
+            }
 
             if (supplierInvoiceDetails.AttachementFiles != null && supplierInvoiceDetails.AttachementFiles.Count > 0)
             {

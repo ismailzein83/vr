@@ -18,6 +18,7 @@ namespace TOne.WhS.Invoice.Entities
     }
     public class CustomerInvoiceDetail
     {
+        public int CurrencyId { get; set; }
         public long InvoiceId { get; set; }
         public string SerialNumber { get; set; }
         public DateTime FromDate { get; set; }
@@ -32,12 +33,15 @@ namespace TOne.WhS.Invoice.Entities
         public decimal? Commission { get; set; }
         public string Offset { get; set; }
         public string TimeZoneDescription { get; set; }
+        public bool UseOriginalAmount { get; set; }
+        public decimal? OriginalAmount { get; set; }
+        public bool IsLocked { get; set; }
 
     }
     public class SupplierInvoiceDetail
     {
+        public int CurrencyId { get; set; }
         public long InvoiceId { get; set; }
-
         public string SerialNumber { get; set; }
         public DateTime FromDate { get; set; }
         public DateTime ToDate { get; set; }
@@ -51,5 +55,8 @@ namespace TOne.WhS.Invoice.Entities
         public Decimal TotalAmountAfterCommission { get; set; }
         public decimal? Commission { get; set; }
         public string Offset { get; set; }
+        public decimal? OriginalAmount { get; set; }
+        public bool UseOriginalAmount { get; set; }
+        public bool IsLocked { get; set; }
     }
 }

@@ -77,11 +77,37 @@
 
         function loadInvoicesDetails()
         {
-            var loadInvoicesDetailsInput= {
+
+            var customerInvoiceIds;
+            if (availableCustomerInvoices != undefined) {
+                customerInvoiceIds = [];
+                for (var i = 0; i < availableCustomerInvoices.length; i++) {
+                    var availableCustomerInvoice = availableCustomerInvoices[i];
+                    customerInvoiceIds.push({
+                        InvoiceId: availableCustomerInvoice.InvoiceId,
+                        CurrencyId: availableCustomerInvoice.CurrencyId
+                    });
+                }
+            }
+
+
+            var supplierInvoiceIds;
+            if (availableSupplierInvoices != undefined) {
+                supplierInvoiceIds = [];
+                for (var i = 0; i < availableSupplierInvoices.length; i++) {
+                    var availableSupplierInvoice = availableSupplierInvoices[i];
+                    supplierInvoiceIds.push({
+                        InvoiceId: availableSupplierInvoice.InvoiceId,
+                        CurrencyId: availableSupplierInvoice.CurrencyId
+                    });
+                }
+
+            }
+            var loadInvoicesDetailsInput = {
                 InvoiceTypeId: invoiceTypeId,
-                CustomerInvoiceIds: availableCustomerInvoices != undefined ? UtilsService.getPropValuesFromArray(availableCustomerInvoices, "InvoiceId") : undefined,
-                SupplierInvoiceIds: availableSupplierInvoices != undefined? UtilsService.getPropValuesFromArray(availableSupplierInvoices, "InvoiceId"):undefined,
-                PartnerId:partnerId
+                CustomerInvoiceIds: customerInvoiceIds,
+                SupplierInvoiceIds: supplierInvoiceIds,
+                PartnerId: partnerId
             };
             return WhS_Invoice_IncludedInvoicesInSettlementAPIService.LoadInvoicesDetails(loadInvoicesDetailsInput).then(function (response) {
                 invoicesDetails = response;
@@ -95,7 +121,6 @@
             }
 
             function loadStaticData() {
-
                 if(invoicesDetails != undefined)
                 {
                     if (invoicesDetails.CustomerInvoiceDetails != undefined)
@@ -103,10 +128,20 @@
                         $scope.scopeModel.customerInvoices = [];
                         $scope.scopeModel.showCustomerInvoiceGrid = true;
                         for (var i = 0; i < invoicesDetails.CustomerInvoiceDetails.length; i++) {
+
                             var customerInvoiceDetails = invoicesDetails.CustomerInvoiceDetails[i];
-                            var selectedCustomerInvoice = UtilsService.getItemByVal(availableCustomerInvoices, customerInvoiceDetails.InvoiceId, "InvoiceId");
-                            if (selectedCustomerInvoice != undefined && selectedCustomerInvoice.IsSelected)
-                                customerInvoiceDetails.isSelected = true;
+                            for (var j = 0; j < availableCustomerInvoices.length; j++)
+                            {
+                                var availableCustomerInvoice = availableCustomerInvoices[j];
+                                if(availableCustomerInvoice.InvoiceId == customerInvoiceDetails.InvoiceId && customerInvoiceDetails.CurrencyId == availableCustomerInvoice.CurrencyId)
+                                {
+                                    if (availableCustomerInvoice.IsSelected)
+                                    {
+                                        customerInvoiceDetails.isSelected = true;
+                                    }
+                                    break;
+                                }
+                            }
                             $scope.scopeModel.customerInvoices.push({ Entity: customerInvoiceDetails });
                         }
                     }
@@ -116,9 +151,15 @@
 
                         for (var i = 0; i < invoicesDetails.SupplierInvoiceDetails.length; i++) {
                             var supplierInvoiceDetails = invoicesDetails.SupplierInvoiceDetails[i];
-                            var selectedSupplierInvoice = UtilsService.getItemByVal(availableSupplierInvoices, supplierInvoiceDetails.InvoiceId, "InvoiceId");
-                            if (selectedSupplierInvoice != undefined && selectedSupplierInvoice.IsSelected)
-                                supplierInvoiceDetails.isSelected = true;
+                                for (var j = 0; j < availableSupplierInvoices.length; j++) {
+                                var availableSupplierInvoice = availableSupplierInvoices[j];
+                                if (availableSupplierInvoice.InvoiceId == supplierInvoiceDetails.InvoiceId && supplierInvoiceDetails.CurrencyId == availableSupplierInvoice.CurrencyId) {
+                                    if (availableSupplierInvoice.IsSelected) {
+                                        supplierInvoiceDetails.isSelected = true;
+                                    }
+                                    break;
+                                }
+                            }
                             $scope.scopeModel.supplierInvoices.push({Entity: supplierInvoiceDetails });
                         }
                     }
@@ -139,7 +180,10 @@
                 for (var i = 0; i < $scope.scopeModel.customerInvoices.length; i++) {
                     var customerInvoice = $scope.scopeModel.customerInvoices[i];
                     if (customerInvoice.Entity.isSelected)
-                        selectedCustomerInvoiceIds.push(customerInvoice.Entity.InvoiceId);
+                        selectedCustomerInvoiceIds.push({
+                            InvoiceId: customerInvoice.Entity.InvoiceId,
+                            CurrencyId: customerInvoice.Entity.CurrencyId
+                        });
                 }
             }
 
@@ -150,7 +194,10 @@
                 for (var i = 0; i < $scope.scopeModel.supplierInvoices.length; i++) {
                     var supplierInvoice = $scope.scopeModel.supplierInvoices[i];
                     if (supplierInvoice.Entity.isSelected)
-                        selectedSupplierInvoiceIds.push(supplierInvoice.Entity.InvoiceId);
+                        selectedSupplierInvoiceIds.push({
+                            InvoiceId: supplierInvoice.Entity.InvoiceId,
+                            CurrencyId: supplierInvoice.Entity.CurrencyId
+                        });
                 }
             }
 
@@ -190,6 +237,7 @@
                     var customerInvoice = $scope.scopeModel.customerInvoices[i];
                     availableCustomerInvoices.push({
                         InvoiceId: customerInvoice.Entity.InvoiceId,
+                        CurrencyId: customerInvoice.Entity.CurrencyId,
                         IsSelected: customerInvoice.Entity.isSelected
                     });
                 }
@@ -200,9 +248,9 @@
                 availableSupplierInvoices = [];
                 for (var i = 0; i < $scope.scopeModel.supplierInvoices.length; i++) {
                     var supplierInvoice = $scope.scopeModel.supplierInvoices[i];
-
                     availableSupplierInvoices.push({
                         InvoiceId: supplierInvoice.Entity.InvoiceId,
+                        CurrencyId: supplierInvoice.Entity.CurrencyId,
                         IsSelected: supplierInvoice.Entity.isSelected
                     });
 

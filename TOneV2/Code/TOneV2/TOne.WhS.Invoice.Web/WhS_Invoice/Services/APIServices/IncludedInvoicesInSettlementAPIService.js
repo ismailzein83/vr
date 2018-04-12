@@ -13,13 +13,12 @@
         function LoadInvoicesDetails(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(WhS_Invoice_ModuleConfig.moduleName, controllerName, "LoadInvoicesDetails"), input);
         }
-        function EvaluatePartnerCustomPayload(partnerId, invoiceTypeId, fromDate, toDate, invoiceId) {
+        function EvaluatePartnerCustomPayload(partnerId, invoiceTypeId, fromDate, toDate) {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_Invoice_ModuleConfig.moduleName, controllerName, "EvaluatePartnerCustomPayload"), {
                 partnerId: partnerId,
                 invoiceTypeId: invoiceTypeId,
                 fromDate: fromDate,
                 toDate: toDate,
-                currentInvoiceId: invoiceId
             });
         }
         return ({

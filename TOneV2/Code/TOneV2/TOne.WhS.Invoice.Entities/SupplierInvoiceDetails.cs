@@ -21,7 +21,6 @@ namespace TOne.WhS.Invoice.Entities
         public string OriginalSupplierCurrency { get; set; }
         public Decimal TotalAmount { get; set; }
         public int? TimeZoneId { get; set; }
-        public decimal? OriginalAmount { get; set; }
         public string Reference { get; set; }
         public List<AttachementFile> AttachementFiles { get; set; }
         public decimal AmountAfterCommission { get; set; }
@@ -33,7 +32,9 @@ namespace TOne.WhS.Invoice.Entities
         public decimal? Commission { get; set; }
         public bool DisplayComission { get; set; }
         public string Offset { get; set; }
-        public bool IncludeOriginalAmountInSettlement { get; set; }
+
+        public Dictionary<int, OriginalDataCurrrency> OriginalAmountByCurrency { get; set; }
+
         public SupplierInvoiceDetails() { }
         public IEnumerable<SupplierInvoiceDetails> GetSupplierInvoiceDetailsRDLCSchema()
         {

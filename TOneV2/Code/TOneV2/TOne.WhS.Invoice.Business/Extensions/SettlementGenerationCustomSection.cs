@@ -17,7 +17,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
         Guid _customerInvoiceTypeId;
         Guid _supplierInvoiceTypeId;
-        public SettlementGenerationCustomSection(Guid customerInvoiceTypeId,Guid sipplierInvoiceTypeId)
+        public SettlementGenerationCustomSection(Guid customerInvoiceTypeId, Guid sipplierInvoiceTypeId)
         {
             _customerInvoiceTypeId = customerInvoiceTypeId;
             _supplierInvoiceTypeId = sipplierInvoiceTypeId;
@@ -32,19 +32,19 @@ namespace TOne.WhS.Invoice.Business.Extensions
         public override void EvaluateGenerationCustomPayload(IGetGenerationCustomPayloadContext context)
         {
 
-            List<Vanrise.Invoice.Entities.Invoice> supplierInvoices = null;
+            List<Vanrise.Invoice.Entities.Invoice> supplierInvoices =  new List<Vanrise.Invoice.Entities.Invoice>();
 
-            List<Vanrise.Invoice.Entities.Invoice> customerInvoices = null;
+            List<Vanrise.Invoice.Entities.Invoice> customerInvoices = new List<Vanrise.Invoice.Entities.Invoice>();
+            List<InvoiceItem> supplierInvoiceItems = new List<InvoiceItem>(), customerInvoiceItems = new List<InvoiceItem>();
 
             IEnumerable<string> partnerIds = context.InvoiceGenerationInfo.MapRecords(x => x.PartnerId);
             if (context.InvoiceGenerationInfo != null)
             {
                 foreach (var generationCustomPayload in context.InvoiceGenerationInfo)
                 {
-                    generationCustomPayload.CustomPayload = _invoiceSettlementManager.EvaluateGenerationCustomPayload(_customerInvoiceTypeId, _supplierInvoiceTypeId,partnerIds, generationCustomPayload.PartnerId, context.InvoiceTypeId,  context.MinimumFrom, context.MaximumTo, supplierInvoices, customerInvoices, null);
+                    generationCustomPayload.CustomPayload = _invoiceSettlementManager.EvaluateGenerationCustomPayload(_customerInvoiceTypeId, _supplierInvoiceTypeId, partnerIds, generationCustomPayload.PartnerId, context.InvoiceTypeId, context.MinimumFrom, context.MaximumTo, supplierInvoices, supplierInvoiceItems, customerInvoices, customerInvoiceItems, true);
                 }
             }
         }
-
     }
 }
