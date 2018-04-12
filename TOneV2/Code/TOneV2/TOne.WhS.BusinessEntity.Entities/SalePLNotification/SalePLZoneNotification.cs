@@ -16,7 +16,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public List<SalePLCodeNotification> Codes { get { return this._codes; } }
         public SalePLRateNotification Rate { get; set; }
 
-
+        public Dictionary<int, SalePLOtherRateNotification> OtherRateByRateTypeId { get; set; }
 
         #region IBaseRates Implementation
 

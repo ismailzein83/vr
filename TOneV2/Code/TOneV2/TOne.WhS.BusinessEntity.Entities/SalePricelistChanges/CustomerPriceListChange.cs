@@ -103,6 +103,8 @@ namespace TOne.WhS.BusinessEntity.Entities
 
         private List<SalePricelistCodeChange> _codeChanges = new List<SalePricelistCodeChange>();
         public List<SalePricelistCodeChange> CodeChanges { get { return _codeChanges; } }
+        private List<SalePricelistRateChange> _otherRateChanges = new List<SalePricelistRateChange>();
+        public List<SalePricelistRateChange> OtherRateChanges { get { return _otherRateChanges; } }
         public SalePricelistRateChange RateChange { get; set; }
         public SalePricelistRPChange RPChange { get; set; }
     }

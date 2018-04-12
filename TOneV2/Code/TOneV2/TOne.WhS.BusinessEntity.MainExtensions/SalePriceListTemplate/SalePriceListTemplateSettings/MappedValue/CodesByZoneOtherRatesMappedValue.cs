@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Entities;
+using Vanrise.Common;
 
 namespace TOne.WhS.BusinessEntity.MainExtensions
 {
-   public class CodesByZoneOtherRatesMappedValue : CodesByZoneMappedValue
+    public class CodesByZoneOtherRatesMappedValue : CodesByZoneMappedValue
     {
         public override Guid ConfigId
         {
@@ -17,8 +18,10 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
         public int RateTypeId { get; set; }
         public override void Execute(ICodesByZoneMappedValueContext context)
         {
-            context.Value = null;
+            var otherRate = context.ZoneNotification.OtherRateByRateTypeId.GetRecord(RateTypeId);
+            if (otherRate != null && otherRate.EED == null)
+                context.Value = otherRate.Rate;
         }
-        
+
     }
 }

@@ -16,7 +16,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         };
         private readonly string[] _salePricelistRateChangeColumns =
         {
-            "PricelistId","Rate","RecentRate","CountryID","ZoneName","ZoneID","Change","ProcessInstanceID","BED","EED","RoutingProductID","CurrencyID"
+            "PricelistId","Rate","RateTypeId","RecentRate","CountryID","ZoneName","ZoneID","Change","ProcessInstanceID","BED","EED","RoutingProductID","CurrencyID"
         };
         private readonly string[] _salePricelistCustomerChangeColumns =
         {
@@ -46,12 +46,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         }
         public List<Entities.SalePriceListNew> GetTemporaryPriceLists(TemporarySalePriceListQuery query)
         {
-            return GetItemsSP("[TOneWhS_BE].[sp_SalePriceListNew_GetAll]", TemporarySalePriceListMapper,query.ProcessInstanceId);
+            return GetItemsSP("[TOneWhS_BE].[sp_SalePriceListNew_GetAll]", TemporarySalePriceListMapper, query.ProcessInstanceId);
         }
         public bool DoCustomerTemporaryPricelistsExists(long processInstanceId)
         {
-          //  return GetItemSP("[TOneWhS_BE].[sp_SalePriceListNew_Exists]", (reader) => { return GetReaderValue<bool>(reader, "PriceListExists"); }, processInstanceId);
-             return (bool)ExecuteScalarSP("[TOneWhS_BE].[sp_SalePriceListNew_Exists]",  processInstanceId);
+            //  return GetItemSP("[TOneWhS_BE].[sp_SalePriceListNew_Exists]", (reader) => { return GetReaderValue<bool>(reader, "PriceListExists"); }, processInstanceId);
+            return (bool)ExecuteScalarSP("[TOneWhS_BE].[sp_SalePriceListNew_Exists]", processInstanceId);
         }
         public List<SalePricelistRateChange> GetFilteredSalePricelistRateChanges(int pricelistId, List<int> countryIds)
         {
@@ -145,12 +145,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             List<int> lstAffectedCustomerIds = new List<int>();
             ExecuteReaderSP("TOneWhS_BE.SP_SalePricelistRPChangesNew_GetAffectedCustomerIds", (reader) =>
-           {
-               while (reader.Read())
-               {
-                   lstAffectedCustomerIds.Add(GetReaderValue<int>(reader, "CustomerId"));
-               }
-           }, ProcessInstanceId);
+            {
+                while (reader.Read())
+                {
+                    lstAffectedCustomerIds.Add(GetReaderValue<int>(reader, "CustomerId"));
+                }
+            }, ProcessInstanceId);
             return lstAffectedCustomerIds;
         }
         public IEnumerable<int> GetAffectedCustomerIdsNewCountryChangesByProcessInstanceId(long ProcessInstanceId)
@@ -181,12 +181,12 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             List<int> lstAffectedCustomerIds = new List<int>();
             ExecuteReaderSP("TOneWhS_BE.SP_SalePricelistRateChangesNew_GetAffectedCustomerIds", (reader) =>
-           {
-               while (reader.Read())
-               {
-                   lstAffectedCustomerIds.Add(GetReaderValue<int>(reader, "OwnerID"));
-               }
-           }, ProcessInstanceId);
+            {
+                while (reader.Read())
+                {
+                    lstAffectedCustomerIds.Add(GetReaderValue<int>(reader, "OwnerID"));
+                }
+            }, ProcessInstanceId);
             return lstAffectedCustomerIds;
         }
 
@@ -254,9 +254,10 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
             if (streamForBulkInsert != null)
-                streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}",
+                streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}",
                     record.PricelistId,
                     decimal.Round(record.Rate, 8),
+                    record.RateTypeId,
                     record.RecentRate.HasValue ? decimal.Round(record.RecentRate.Value, 8) : record.RecentRate,
                     record.CountryId,
                     record.ZoneName,
@@ -326,6 +327,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 CountryId = GetReaderValue<int>(reader, "CountryID"),
                 ZoneName = GetReaderValue<string>(reader, "ZoneName"),
                 Rate = GetReaderValue<decimal>(reader, "Rate"),
+                RateTypeId = GetReaderValue<int?>(reader, "RateTypeId"),
                 RecentRate = GetReaderValue<decimal>(reader, "RecentRate"),
                 ChangeType = (RateChangeType)GetReaderValue<byte>(reader, "Change"),
                 BED = GetReaderValue<DateTime>(reader, "BED"),

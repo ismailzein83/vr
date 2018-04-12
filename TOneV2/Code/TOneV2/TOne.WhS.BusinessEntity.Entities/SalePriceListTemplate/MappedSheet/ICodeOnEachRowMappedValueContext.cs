@@ -22,5 +22,6 @@ namespace TOne.WhS.BusinessEntity.Entities
         int CustomerId { get; set; }
         CodeChange CodeChangeType { get; set; }
         string Increment { get; set; }
+        Dictionary<int, SalePLOtherRateNotification> OtherRateByRateTypeId { get; set; }
     }
 }

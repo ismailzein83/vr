@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Vanrise.Common;
 using TOne.WhS.BusinessEntity.Entities;
 
 namespace TOne.WhS.BusinessEntity.MainExtensions
@@ -17,7 +14,9 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
         public int RateTypeId { get; set; }
         public override void Execute(ICodeOnEachRowMappedValueContext context)
         {
-            context.Value = null;
+            var otherRate = context.OtherRateByRateTypeId.GetRecord(RateTypeId);
+            if (otherRate != null && otherRate.EED == null)
+                context.Value = otherRate.Rate;
         }
 
     }

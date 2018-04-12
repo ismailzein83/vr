@@ -72,18 +72,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
         private IEnumerable<RateTypeInfo> GetCustomerZoneRateTypes(int customerId, long zoneId, IEnumerable<RateTypeInfo> allRateTypes)
         {
-            var genericRuleTarget = new Vanrise.GenericData.Entities.GenericRuleTarget()
-            {
-                TargetFieldValues = new Dictionary<string, object>()
-                {
-                    { "CustomerId", customerId },
-                    { "SaleZoneId", zoneId }
-                }
-            };
-
-            var rateTypeRuleDefinitionId = new Guid("8A637067-0056-4BAE-B4D5-F80F00C0141B");
-            IEnumerable<int> rateTypeIds = new Vanrise.GenericData.Pricing.RateTypeRuleManager().GetRateTypes(rateTypeRuleDefinitionId, genericRuleTarget);
-
+            IEnumerable<int> rateTypeIds = Helper.GetRateTypeIds(customerId, zoneId, null);
             return (rateTypeIds != null && rateTypeIds.Count() > 0) ? allRateTypes.FindAllRecords(x => rateTypeIds.Contains(x.RateTypeId)) : null;
         }
 

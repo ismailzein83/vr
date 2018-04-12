@@ -52,10 +52,11 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             if (zone == null)
                 throw new ArgumentNullException("zone");
 
-            var mappedValueContext = new CodeOnEachRowMappedValueContext()
+            var mappedValueContext = new CodeOnEachRowMappedValueContext
             {
                 Zone = zone.ZoneName,
-                CustomerId = customerId
+                CustomerId = customerId,
+                OtherRateByRateTypeId = zone.OtherRateByRateTypeId
             };
 
             if (code != null)

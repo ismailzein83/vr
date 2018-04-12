@@ -15,6 +15,7 @@ namespace TOne.WhS.BusinessEntity.Entities
         public Decimal Rate { get; set; }
         public Decimal? RecentRate { get; set; }
         public RateChangeType ChangeType { get; set; }
+        public int? RateTypeId { get; set; }
         public long PricelistId { get; set; }
         public DateTime BED { get; set; }
         public DateTime? EED { get; set; }
