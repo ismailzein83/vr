@@ -43,7 +43,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
                                                           end
                                                           
                                                           CREATE TABLE [WhS_RouteSync_Ericsson_{0}].[Route_temp](
-                                                                BO int NOT NULL,
+                                                                BO varchar(255) NOT NULL,
 	                                                            Code varchar(20) NOT NULL,
 	                                                            RCNumber int NOT NULL
                                                           CONSTRAINT [PK_WhS_RouteSync_Ericsson_{0}.Route_{1}] PRIMARY KEY CLUSTERED 
