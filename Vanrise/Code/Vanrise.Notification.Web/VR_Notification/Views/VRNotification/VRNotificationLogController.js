@@ -112,7 +112,7 @@
 						$scope.scopeModel.showLegend = false;
 						VR_Notification_VRNotificationTypeAPIService.GetVRNotificationTypeLegendData(notificationTypeId).then(function (response) {
 							if (response != null) {
-								var legendContent = '<div style="font-size:12px; margin:10px">'
+								var legendContent = '<div style="font-size:12px; margin:10px">';
 								angular.forEach(response, function (item) {
 									legendContent = legendContent +
 										'<div><div  class ="' + item.AlertLevelStyle.ClassName + '" style="display: inline-block; width: 20px; height: 10px; margin: 0px 3px"></div>' + item.Entity.Name + '</div>';
