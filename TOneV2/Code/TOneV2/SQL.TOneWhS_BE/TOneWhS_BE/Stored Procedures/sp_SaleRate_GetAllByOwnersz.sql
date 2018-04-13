@@ -3,7 +3,7 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE [TOneWhS_BE].[sp_SaleRate_GetAllByOwners]
+create PROCEDURE [TOneWhS_BE].[sp_SaleRate_GetAllByOwnersz]
 	@SellingProductIds nvarchar(max),
 	@CustomerIds nvarchar(max),
 	@ZoneIds nvarchar(max),

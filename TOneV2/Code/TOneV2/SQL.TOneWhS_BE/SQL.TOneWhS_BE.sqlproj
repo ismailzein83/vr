@@ -607,5 +607,11 @@
     <Build Include="TOneWhS_Deal\Stored Procedures\sp_Deal_GetDealsModifiedAfterTimestamp.sql" />
     <Build Include="TOneWhS_Deal\Stored Procedures\sp_DaysToReprocess_GetAll.sql" />
     <Build Include="TOneWhS_Deal\Stored Procedures\sp_DaysToReprocess_DeleteByDate.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_TemporarySalePriceList_GetAll.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SupplierRate_GetSupplierRates.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SaleRate_GetAllByOwnersz.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListNew_GetAll.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceListNew_Exists.sql" />
+    <Build Include="TOneWhS_BE\Stored Procedures\sp_SalePriceList_Test.sql" />
   </ItemGroup>
 </Project>

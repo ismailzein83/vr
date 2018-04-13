@@ -12,6 +12,7 @@ SELECT [PricelistId]
       ,[Rate]
 	  ,[ZoneID]
       ,[RecentRate]
+	  ,[RateTypeId]
       ,[CountryID]
       ,[ZoneName]
       ,[Change],
@@ -22,5 +23,5 @@ SELECT [PricelistId]
   FROM [TOneWhS_BE].[SalePricelistRateChange] SR WITH(NOLOCK)
   WHERE SR.PricelistId = @PriceListID
 		AND (@CountryIDs  is null or Sr.CountryID in (select CountryID from @CountryIDsTable))
-	
+		and RateTypeId is null	
 END

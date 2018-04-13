@@ -20,6 +20,7 @@ SELECT  scc.PricelistID
 		,scc.CustomerID
 		,spr.RecentRate
 		,spr.Rate
+		,[RateTypeId]
 		,spr.Change
 		,spr.ZoneName
 		,spr.BED

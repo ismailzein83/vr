@@ -23,6 +23,6 @@ SELECT @ProcessInstanceId  = @ProcessInstanceId_IN
 	join TOneWhS_BE.SalePriceList_New sp WITH(NOLOCK) on sp.ID = spr.PricelistId
 	where spr.ProcessInstanceID = @ProcessInstanceID
 		and ((@CustomerIds is null) or ( sp.OwnerID in (select CustomerID  from @CustomerIDsTable)))
-	
+	and RateTypeId is  null
 	SET NOCOUNT OFF
 END
