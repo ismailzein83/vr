@@ -51,22 +51,18 @@
                 </span>
             </vr-datagridcolumn>-->
             <vr-datagridcolumn headertext="'EED'" widthfactor="10">
-                <span vr-disabled="viewScope.isCountryEnded || viewScope.isZonePendingClosed">
-                    <span vr-disabled="viewScope.isSellingProductZone || !viewScope.areOtherRatesEditable()">
-                        <vr-span vr-disabled="!dataItem.IsCurrentRateEditable">
-                            <vr-datetimepicker type="date"
-                                               value="dataItem.CurrentRateNewEED"
-                                               onvaluechanged="viewScope.onCurrentRateNewEEDChanged()"
-                                               ng-hide="dataItem.NewRate != null">
-                            </vr-datetimepicker>
-                        </vr-span>
-                        <vr-datetimepicker type="date"
-                                           value="dataItem.NewRateEED"
-                                           customvalidate="viewScope.validateNewRateDates(dataItem)"
-                                           ng-show="dataItem.NewRate != null">
-                        </vr-datetimepicker>
-                    </span>
-                </span>
+                <vr-span vr-disabled="dataItem.IsEEDDisabled || !viewScope.areOtherRatesEditable()">
+                    <vr-datetimepicker type="date"
+                                       value="dataItem.CurrentRateNewEED"
+                                       onvaluechanged="viewScope.onCurrentRateNewEEDChanged()"
+                                       ng-hide="dataItem.NewRate != null">
+                    </vr-datetimepicker>
+                    <vr-datetimepicker type="date"
+                                       value="dataItem.NewRateEED"
+                                       customvalidate="viewScope.validateNewRateDates(dataItem)"
+                                       ng-show="dataItem.NewRate != null">
+                    </vr-datetimepicker>
+                </vr-span>
             </vr-datagridcolumn>
         </vr-datagrid>
     </vr-columns>

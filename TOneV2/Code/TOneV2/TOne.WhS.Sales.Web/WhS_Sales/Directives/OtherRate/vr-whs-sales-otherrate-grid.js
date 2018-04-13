@@ -1,6 +1,6 @@
 ﻿"use strict";
 
-app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService", 'WhS_Sales_RatePlanUtilsService', 'WhS_Sales_RatePlanService', function (UtilsService, VRNotificationService, WhS_Sales_RatePlanUtilsService, WhS_Sales_RatePlanService) {
+app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService", 'WhS_Sales_RatePlanUtilsService', 'WhS_Sales_RatePlanService', 'WhS_Sales_RateSourceEnum', 'VRDateTimeService', 'WhS_Sales_SalePriceListOwnerTypeEnum', function (UtilsService, VRNotificationService, WhS_Sales_RatePlanUtilsService, WhS_Sales_RatePlanService, WhS_Sales_RateSourceEnum, VRDateTimeService, WhS_Sales_SalePriceListOwnerTypeEnum) {
     return {
         restrict: "E",
         scope: {
@@ -26,6 +26,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
         var ownerCurrencyId;
         var saleAreaSetting;
         var ownerType;
+        var context;
 
         function initializeController() {
 
@@ -35,7 +36,6 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
                 gridAPI = api;
                 defineAPI();
             };
-
             $scope.areOtherRatesEditable = function () {
                 if (zoneItem.CurrentRate != null)
                     return true;
@@ -54,11 +54,15 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
 
             $scope.onNewRateChanged = function (dataItem) {
                 zoneItem.IsDirty = true;
+                dataItem.IsEEDDisabled = isEEDDisabled(dataItem)
+
                 WhS_Sales_RatePlanUtilsService.onNewRateChanged(dataItem);
             };
 
             $scope.onNewRateBlurred = function (dataItem) {
                 zoneItem.IsDirty = true;
+                if (dataItem.NewRate != undefined && dataItem.NewRate > 0)
+                    context.setNewRate(true);
                 WhS_Sales_RatePlanUtilsService.onNewRateBlurred(dataItem, settings);
             };
 
@@ -76,6 +80,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
 
             api.loadGrid = function (query) {
                 zoneItem = query.zoneItem;
+                context = query.context;
                 settings = query.settings;
                 ownerCurrencyId = query.ownerCurrencyId;
                 saleAreaSetting = query.saleAreaSetting;
@@ -101,29 +106,29 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
 
                 for (var i = 0; i < zoneItem.RateTypes.length; i++) {
                     var otherRate = {};
-
+                    var currentOtherRate;
                     otherRate.RateTypeId = zoneItem.RateTypes[i].RateTypeId;
+                    if (zoneItem.CurrentOtherRates != null)
+                        currentOtherRate = zoneItem.CurrentOtherRates[otherRate.RateTypeId];
                     otherRate.Name = zoneItem.RateTypes[i].Name;
-
                     otherRate.ZoneBED = zoneItem.ZoneBED;
                     otherRate.ZoneEED = zoneItem.ZoneEED;
-
                     otherRate.CountryBED = zoneItem.CountryBED;
                     otherRate.IsCountryNew = zoneItem.IsCountryNew;
 
-                    if (zoneItem.CurrentOtherRates != null) {
-                        var currentOtherRate = zoneItem.CurrentOtherRates[otherRate.RateTypeId];
-                        if (currentOtherRate != undefined) {
-                            otherRate.CurrentRate = currentOtherRate.Rate;
-                            otherRate.CurrentRateCurrencyId = currentOtherRate.CurrencyId;
-                            otherRate.IsCurrentRateEditable = currentOtherRate.IsRateEditable;
-                            otherRate.CurrentRateBED = currentOtherRate.BED;
-                            otherRate.CurrentRateEED = currentOtherRate.EED;
-                            otherRate.CurrentRateNewEED = currentOtherRate.EED;
-                            WhS_Sales_RatePlanUtilsService.setNormalRateIconProperties(otherRate, ownerType, saleAreaSetting);
-                        }
-                    }
+                    if (currentOtherRate != undefined) {
+                        otherRate.CurrentRate = currentOtherRate.Rate;
+                        otherRate.CurrentRateCurrencyId = currentOtherRate.CurrencyId;
+                        otherRate.IsCurrentRateEditable = currentOtherRate.IsRateEditable;
+                        otherRate.CurrentRateBED = currentOtherRate.BED;
+                        otherRate.CurrentRateEED = currentOtherRate.EED;
+                        otherRate.CurrentRateNewEED = currentOtherRate.EED;
+                        WhS_Sales_RatePlanUtilsService.setNormalRateIconProperties(otherRate, ownerType, saleAreaSetting);
 
+
+                    }
+                    if (ownerType == WhS_Sales_SalePriceListOwnerTypeEnum.Customer.value && zoneItem.CurrentOtherRates.length != 0)
+                        otherRate.IsEEDDisabled = isEEDDisabled(otherRate);
                     var newOtherRate = UtilsService.getItemByVal(zoneItem.NewRates, otherRate.RateTypeId, 'RateTypeId');
                     if (newOtherRate != null) {
                         zoneItem.IsDirty = true;
@@ -204,9 +209,13 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
                 }
                 return false;
             }
-
+            
             if (ctrl.onReady != null)
                 ctrl.onReady(api);
         }
+        function isEEDDisabled(otherRate) {
+            return ((otherRate.NewRate != undefined && otherRate.NewRate != "") || otherRate.CurrentRate == null || !otherRate.IsCurrentRateEditable || otherRate.CurrentRateBED > VRDateTimeService.getNowDateTime() || $scope.isCountryEnded || $scope.isZonePendingClosed)
+        }
+
     }
 }]);

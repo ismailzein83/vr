@@ -770,7 +770,8 @@
                                                                     <div style="display:inline-flex;vertical-align:top;width:100px" class="vr-datagrid-cell-container">
                                                                         <div class="vr-datagrid-cell">
                                                                             <div class="vr-datagrid-celltext ">
-                                                                                <span ng-hide="dataItem.NewRate != null" vr-disabled="{{::(dataItem.isSellingProductZone || dataItem.IsCountryEnded || dataItem.IsZonePendingClosed || !dataItem.IsCurrentRateEditable || (dataItem.currentRateEED != undefined))}}">
+                                                                                <span ng-hide="dataItem.NewRate != null" vr-disabled="{{::(dataItem.isSellingProductZone || dataItem.IsCountryEnded || dataItem.IsZonePendingClosed || !dataItem.IsCurrentRateEditable || (dataItem.currentRateEED != undefined))}}"
+>
                                                                                     <vr-datetimepicker type="date"
                                                                                                        value="dataItem.CurrentRateEED"
                                                                                                        onvaluechanged="dataItem.onCurrentRateEEDChanged(dataItem)"

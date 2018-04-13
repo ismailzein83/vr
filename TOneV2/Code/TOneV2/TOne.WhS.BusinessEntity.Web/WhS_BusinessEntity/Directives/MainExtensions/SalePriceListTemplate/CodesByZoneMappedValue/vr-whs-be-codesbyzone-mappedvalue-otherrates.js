@@ -78,7 +78,7 @@ app.directive('vrWhsBeCodesbyzoneMappedvalueOtherrates', ['UtilsService', 'VRUIU
     }
 
     function getTemplate() {
-        return '<vr-columns colnum="{{codesOnEachRowOtherRatesMappedValueCtrl.normalColNum}}"><vr-common-ratetype-selector on-ready="scopeModel.onSelectorReady" hidelabel selectedvalues="scopeModel.selectedOtherRate" isrequired = "true"> </vr-common-ratetype-selector></vr-columns>';
+        return '<vr-columns colnum="{{codesByZoneOtherRatesMappedValueCtrl.normalColNum}}"><vr-common-ratetype-selector on-ready="scopeModel.onSelectorReady" hidelabel selectedvalues="scopeModel.selectedOtherRate" isrequired = "true"> </vr-common-ratetype-selector></vr-columns>';
 
     }
 }]);

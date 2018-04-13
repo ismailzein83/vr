@@ -321,6 +321,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     loadDirective: function (rateTypeGridAPI, zoneItem) {
                         var query = {
                             zoneItem: zoneItem,
+                            context:zoneItem.context,
                             settings: {
                                 newRateDayOffset: newRateDayOffset,
                                 increasedRateDayOffset: increasedRateDayOffset,
@@ -530,6 +531,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                             var zoneItem = response[i];
                             zoneItem.isRowExpanded = false;
                             zoneItem.loadDrilldownTemplate = false;
+                            zoneItem.context = getContext(zoneItem);
                             extendZoneItem(zoneItem);
                             setDrillDownExtensionObject(zoneItem);
 
@@ -546,7 +548,18 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         loadDirectivesDeferred.reject(error);
                     });
                 });
-
+                function getContext(zoneItem)
+                {
+                    var context = {
+                        setNewRate: function (value) {
+                            if (value && zoneItem.CurrentRate != undefined) {
+                                zoneItem.NewRate = zoneItem.CurrentRate;
+                                $scope.onNewRateBlurred(zoneItem);
+                            }
+                        }
+                    };
+                    return context;
+                }
                 function setGridQueryProperties() {
                     gridQuery.IncludeBlockedSuppliers = gridQuery.Settings.IncludeBlockedSuppliers;
                     //var pageInfo = gridAPI.getPageInfo();

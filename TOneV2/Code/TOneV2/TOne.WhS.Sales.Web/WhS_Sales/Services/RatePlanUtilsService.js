@@ -122,8 +122,6 @@
                         return null;
                     if (dataItem.IsNewRateCancelling)
                         return null;
-                    if (dataItem.CurrentRateCurrencyId == ownerCurrencyId)
-                        return 'New rate must be different than the current rate';
                 }
             }
             return null;
