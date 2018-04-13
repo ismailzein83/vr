@@ -14,6 +14,7 @@ using Vanrise.Common.Business;
 using System.Collections.Concurrent;
 using Vanrise.Security.Business;
 using Retail.BusinessEntity.APIEntities;
+using Vanrise.GenericData.MainExtensions.DataRecordFields;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -294,6 +295,47 @@ namespace Retail.BusinessEntity.Business
                     accountInfos.Add(AccountInfoMapper(account));
             }
             return accountInfos.OrderBy(x => x.Name);
+        }
+
+        public override void GetIdByDescription(IBusinessEntityGetIdByDescriptionContext context)
+        {
+            if (context.FieldType != null)
+            {
+                var beFieldType = context.FieldType.CastWithValidate<FieldBusinessEntityType>("context.FieldType");
+                var beDefinitionId =beFieldType.BusinessEntityDefinitionId; 
+                var cachedAccountsByName = GetCachedAccountsByName(beDefinitionId);
+                
+                if (cachedAccountsByName != null)
+                {
+                    var matchingAccounts = cachedAccountsByName.GetRecord(context.FieldDescription.ToString().Trim().ToLower());
+                    if (matchingAccounts != null && matchingAccounts.Count != 0)
+                    {
+                        if (context.BERuntimeSelectorFilter == null)
+                        {
+                            context.FieldValue = matchingAccounts.First().AccountId;
+                        }
+                        else
+                        {
+                            foreach (var account in matchingAccounts)
+                            {
+                                var filterContext = new BERuntimeSelectorFilterSelectorFilterContext
+                                {
+                                    BusinessEntityId = account.AccountId,
+                                    BusinessEntityDefinitionId = beDefinitionId
+                                };
+                                if (context.BERuntimeSelectorFilter.IsMatched(filterContext))
+                                    context.FieldValue = account.AccountId;
+                                else
+                                    context.ErrorMessage = string.Format("The account {0} does not exist.", context.FieldDescription.ToString());
+                            }
+                        }
+                    }
+                    else
+                    {
+                        context.ErrorMessage = string.Format("The account {0} does not exist.", context.FieldDescription.ToString());
+                    }
+                }
+            }
         }
         public bool IsAccountMatchWithFilterGroup(Account account, RecordFilterGroup filterGroup)
         {
@@ -1103,6 +1145,22 @@ namespace Retail.BusinessEntity.Business
                 {
                     return GetCachedAccounts(accountBEDefinitionId).Where(v => !string.IsNullOrEmpty(v.Value.SourceId)).ToDictionary(kvp => kvp.Value.SourceId, kvp => kvp.Value);
                 });
+        }
+
+        public Dictionary<string, List<Account>> GetCachedAccountsByName(Guid accountBEDefinitionId)
+        {
+            return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedAccountsByName", accountBEDefinitionId,
+            () =>
+            {
+                Dictionary<string, List<Account>> cachedAccountsByName = new Dictionary<string, List<Account>>();
+                var cachedAccounts = GetCachedAccounts(accountBEDefinitionId);
+                foreach (var account in cachedAccounts.Values)
+                {
+                    var accountList = cachedAccountsByName.GetOrCreateItem(account.Name.ToLower());
+                    accountList.Add(account);
+                }
+                return cachedAccountsByName;
+            });
         }
         internal Dictionary<long, AccountTreeNode> GetCacheAccountTreeNodes(Guid accountBEDefinitionId)
         {
