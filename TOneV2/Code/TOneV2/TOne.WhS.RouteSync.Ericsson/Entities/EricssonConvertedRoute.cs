@@ -7,10 +7,16 @@ using TOne.WhS.RouteSync.Entities;
 
 namespace TOne.WhS.RouteSync.Ericsson
 {
+    public struct EricssonConvertedRouteIdentifier
+    {
+        public string BO { get; set; }
+        public string Code { get; set; }
+    }
+
     public class EricssonConvertedRoute : ConvertedRoute
     {
-		public string BO { get; set; }
-		public string Code { get; set; }
-		public string RCNumber { get; set; }
-	}
+        public string BO { get; set; }
+        public string Code { get; set; }
+        public int RCNumber { get; set; }
+    }
 }

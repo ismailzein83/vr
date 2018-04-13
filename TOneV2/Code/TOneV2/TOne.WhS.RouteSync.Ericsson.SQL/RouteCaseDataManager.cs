@@ -36,7 +36,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
         public void WriteRecordToStream(RouteCase record, object dbApplyStream)
         {
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-            streamForBulkInsert.WriteRecord("{0}^{1}", record.RouteCaseNumber, record.RouteCaseOptionsAsString);
+            streamForBulkInsert.WriteRecord("{0}^{1}", record.RCNumber, record.RouteCaseOptionsAsString);
         }
 
         public void ApplyRouteCaseForDB(object preparedRouteCase)
@@ -97,7 +97,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
         {
             return new RouteCase()
             {
-                RouteCaseNumber = (int)reader["RCNumber"],
+                RCNumber = (int)reader["RCNumber"],
                 RouteCaseOptionsAsString = reader["Options"] as string
             };
         }

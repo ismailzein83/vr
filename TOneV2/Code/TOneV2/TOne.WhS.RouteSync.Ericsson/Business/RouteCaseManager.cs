@@ -27,7 +27,7 @@ namespace TOne.WhS.RouteSync.Ericsson.Business
             Dictionary<string, RouteCase> routeCases = GetCachedRouteCasesGroupedByOptions(switchId);
             int lastCurrentRCNumber = 0;
             if (routeCases != null)
-                lastCurrentRCNumber = routeCases.Select(itm => itm.Value.RouteCaseNumber).Max();
+                lastCurrentRCNumber = routeCases.Select(itm => itm.Value.RCNumber).Max();
 
             while (retryCount < maxLockRetryCount)
             {
@@ -40,7 +40,7 @@ namespace TOne.WhS.RouteSync.Ericsson.Business
                     {
                         foreach (var newRouteCaseByOptionsKVP in newRouteCasesByOptions)
                         {
-                            rcNumber = Math.Max(rcNumber, newRouteCaseByOptionsKVP.Value.RouteCaseNumber);
+                            rcNumber = Math.Max(rcNumber, newRouteCaseByOptionsKVP.Value.RCNumber);
                             routeCases.Add(newRouteCaseByOptionsKVP.Key, newRouteCaseByOptionsKVP.Value);
                         }
                     }
@@ -51,7 +51,7 @@ namespace TOne.WhS.RouteSync.Ericsson.Business
                     {
                         if (newRouteCasesByOptions == null || !newRouteCasesByOptions.ContainsKey(routeCaseOption))
                         {
-                            RouteCase routeCaseToAdd = new RouteCase() { RouteCaseNumber = rcNumber, RouteCaseOptionsAsString = routeCaseOption };
+                            RouteCase routeCaseToAdd = new RouteCase() { RCNumber = rcNumber, RouteCaseOptionsAsString = routeCaseOption };
                             routeCases.Add(routeCaseOption, routeCaseToAdd);
                             dataManager.WriteRecordToStream(routeCaseToAdd, dbApplyStream);
                             rcNumber++;

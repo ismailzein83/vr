@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TOne.WhS.RouteSync.Ericsson
 {
@@ -14,6 +11,20 @@ namespace TOne.WhS.RouteSync.Ericsson
     public class RouteInitializeContext : IRouteInitializeContext
     {
 
+    }
+
+    public interface IRouteCompareTablesContext
+    {
+        List<EricssonConvertedRoute> RoutesToAdd { set; }
+        List<EricssonConvertedRoute> RoutesToUpdate { set; }
+        List<EricssonConvertedRoute> RoutesToDelete { set; }
+    }
+
+    public class RouteCompareTablesContext : IRouteCompareTablesContext
+    {
+        public List<EricssonConvertedRoute> RoutesToAdd { get; set; }
+        public List<EricssonConvertedRoute> RoutesToUpdate { get; set; }
+        public List<EricssonConvertedRoute> RoutesToDelete { get; set; }
     }
 
     public interface IRouteFinalizeContext
