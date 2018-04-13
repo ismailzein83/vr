@@ -48,7 +48,7 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRNotificationService', '
                         TrunkName: undefined,
                         NationalCountryCode: undefined,
                         selectedTrunkType: UtilsService.getEnum(WhS_RouteSync_TrunkTypeEnum, 'value', 0),
-                        IsRouting: true
+                        //IsRouting: true
                     });
 
                     $scope.scopeModel.updateSupplierDescriptions();
@@ -447,7 +447,7 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRNotificationService', '
                             TrunkName: currentTrunk.TrunkName,
                             NationalCountryCode: currentTrunk.NationalCountryCode,
                             TrunkType: currentTrunk.selectedTrunkType.value,
-                            IsRouting: currentTrunk.IsRouting
+                            //IsRouting: currentTrunk.IsRouting
                         });
                     }
                     return trunks.length > 0 ? trunks : undefined;
