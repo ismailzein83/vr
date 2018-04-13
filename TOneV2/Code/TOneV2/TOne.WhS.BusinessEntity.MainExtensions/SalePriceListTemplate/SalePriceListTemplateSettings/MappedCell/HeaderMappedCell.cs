@@ -82,7 +82,7 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
         private string getPricelistCurrencyName(int currencyId)
         {
             CurrencyManager currencyManager = new CurrencyManager();
-            return currencyManager.GetCurrencyName(currencyId);
+            return currencyManager.GetCurrencySymbol(currencyId);
         }
         private string getPricelistType(SalePriceListType pricelistType)
         {
@@ -107,8 +107,8 @@ namespace TOne.WhS.BusinessEntity.MainExtensions
             if (!carrierProfileId.HasValue)
                 throw new DataIntegrityValidationException(string.Format("Carrier account with Id {0} does not have carrier profile", customerId));
             var carrierProfile = carrierProfileManager.GetCarrierProfile(carrierProfileId.Value);
-            
-            if(carrierProfile.Settings != null && carrierProfile.Settings.Faxes != null)
+
+            if (carrierProfile.Settings != null && carrierProfile.Settings.Faxes != null)
                 return String.Join(" , ", carrierProfile.Settings.Faxes);
 
             return string.Empty;

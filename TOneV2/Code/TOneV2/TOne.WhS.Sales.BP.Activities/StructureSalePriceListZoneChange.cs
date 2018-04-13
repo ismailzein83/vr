@@ -931,9 +931,10 @@ namespace TOne.WhS.Sales.BP.Activities
 
                     SetRateChangeType(recentRate.Rate, newRate.Rate.Rate, null, salePriceListRateChange, saleRateManager.GetCurrencyId(newRate.Rate), false);
                     context.RateChangesOutArgument.Add(salePriceListRateChange);
-
-                    context.RateChangesOutArgument.AddRange(GetRateToCloseChanges(context.CustomerInfo.CustomerId, normalRateToClose, countryId.Value, recentRate, newRate, rateToClose.OtheRateToCloses));
                 }
+                if (rateToClose.OtheRateToCloses != null && rateToClose.OtheRateToCloses.Any())
+                    context.RateChangesOutArgument.AddRange(GetRateToCloseChanges(context.CustomerInfo.CustomerId, countryId.Value, recentRate, newRate, rateToClose.OtheRateToCloses));
+
             }
 
             #endregion
@@ -943,7 +944,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
         #region Private Methods
 
-        private List<SalePricelistRateChange> GetRateToCloseChanges(int customerId, RateToClose rateToClose, int countryId, SaleEntityZoneRate customerRate, SaleEntityZoneRate sellingProductRate
+        private List<SalePricelistRateChange> GetRateToCloseChanges(int customerId, int countryId, SaleEntityZoneRate customerRate, SaleEntityZoneRate sellingProductRate
         , List<RateToClose> otherRatesToClose)
         {
             List<SalePricelistRateChange> otherRatesToChange = new List<SalePricelistRateChange>();
@@ -953,9 +954,9 @@ namespace TOne.WhS.Sales.BP.Activities
 
             if (otherRatesToClose != null)
             {
-                var rateTypeIds = Helper.GetRateTypeIds(customerId, rateToClose.ZoneId, DateTime.Now);
                 foreach (var otheRateToChange in otherRatesToClose)
                 {
+                    var rateTypeIds = Helper.GetRateTypeIds(customerId, otheRateToChange.ZoneId, DateTime.Now);
                     if (!rateTypeIds.Contains(otheRateToChange.RateTypeId.Value))
                         continue;
 
@@ -973,13 +974,13 @@ namespace TOne.WhS.Sales.BP.Activities
                         var salePricelistOtherRateChange = new SalePricelistRateChange
                         {
                             CountryId = countryId,
-                            ZoneId = rateToClose.ZoneId,
-                            ZoneName = rateToClose.ZoneName,
+                            ZoneId = otheRateToChange.ZoneId,
+                            ZoneName = new SaleZoneManager().GetSaleZoneName(otheRateToChange.ZoneId),
                             Rate = sellingProductOtherRate.Rate,
                             RecentRate = UtilitiesManager.ConvertToCurrencyAndRound(customerOtherRate.Rate,
                                     saleRateManager.GetCurrencyId(customerOtherRate), saleRateManager.GetCurrencyId(sellingProductOtherRate),
                                     DateTime.Now, longPrecision, currencyExchangeRateManager),
-                            BED = rateToClose.CloseEffectiveDate,
+                            BED = otheRateToChange.CloseEffectiveDate,
                             EED = null,
                             CurrencyId = saleRateManager.GetCurrencyId(sellingProductOtherRate)
                         };
@@ -991,13 +992,13 @@ namespace TOne.WhS.Sales.BP.Activities
                     otherRatesToChange.Add(new SalePricelistRateChange
                     {
                         CountryId = countryId,
-                        ZoneId = rateToClose.ZoneId,
-                        ZoneName = rateToClose.ZoneName,
+                        ZoneId = otheRateToChange.ZoneId,
+                        ZoneName = new SaleZoneManager().GetSaleZoneName(otheRateToChange.ZoneId),
                         Rate = customerOtherRate.Rate,
                         ChangeType = RateChangeType.Deleted,
                         RateTypeId = otheRateToChange.RateTypeId.Value,
                         BED = customerOtherRate.BED,
-                        EED = rateToClose.CloseEffectiveDate,
+                        EED = otheRateToChange.CloseEffectiveDate,
                         CurrencyId = saleRateManager.GetCurrencyId(customerOtherRate)
                     });
 
@@ -1190,23 +1191,40 @@ namespace TOne.WhS.Sales.BP.Activities
 
             foreach (var rateToClose in structuredRateActions.RatesToClose)
             {
+                long zoneId;
+                DateTime closeEffectiveDate;
                 info.RateActionsExistingZoneIds.Add(rateToClose.ZoneId);
                 if (rateToClose.RateToClose != null)
-                    info.ActionDatesByZoneId.Add(rateToClose.ZoneId, rateToClose.RateToClose.CloseEffectiveDate);
+                {
+                    zoneId = rateToClose.ZoneId;
+                    closeEffectiveDate = rateToClose.RateToClose.CloseEffectiveDate;
 
+                }
                 else
                 {
                     var otherRate = rateToClose.OtheRateToCloses.First();
-                    info.ActionDatesByZoneId.Add(rateToClose.ZoneId, otherRate.CloseEffectiveDate);
+                    zoneId = rateToClose.ZoneId;
+                    closeEffectiveDate = otherRate.CloseEffectiveDate;
                 }
 
+                info.ActionDatesByZoneId.Add(zoneId, closeEffectiveDate);
                 IEnumerable<SaleRate> zoneCustomerRates = existingRatesByZoneId.GetRecord(rateToClose.ZoneId);
+                if (zoneCustomerRates != null && zoneCustomerRates.Any())
+                {
+                    var grouppedCustomerRate = zoneCustomerRates.GroupBy(r => r.RateTypeId).Select(group =>
+                        new
+                        {
+                            ZoneId = @group.Key,
+                            Items = @group.OrderBy(r => r.BED).ToList()
+                        });
 
-                SaleRate customerRateatClosingDate = zoneCustomerRates.FindRecord(x => x.IsInTimeRange(rateToClose.RateToClose.CloseEffectiveDate));
-                if (customerRateatClosingDate == null)
-                    throw new DataIntegrityValidationException(string.Format("Trying to close a rate for zone {0} that has no existing rate", rateToClose.RateToClose.ZoneName));
+                    IEnumerable<SaleRate> customerRatesatClosingDate = grouppedCustomerRate.Select(customerRate => customerRate.Items.First());
 
-                info.CustomerRates.Add(customerRateatClosingDate);
+                    if (customerRatesatClosingDate != null && customerRatesatClosingDate.Any())
+                        info.CustomerRates.AddRange(customerRatesatClosingDate);
+                    else
+                        throw new DataIntegrityValidationException(string.Format("Trying to close a rate for zone {0} that has no existing rate", rateToClose.ZoneId));
+                }
             }
 
             #endregion
