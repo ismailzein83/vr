@@ -54,7 +54,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
 
             $scope.onNewRateChanged = function (dataItem) {
                 zoneItem.IsDirty = true;
-                dataItem.IsEEDDisabled = isEEDDisabled(dataItem)
+                dataItem.IsEEDDisabled = isEEDDisabled(dataItem);
 
                 WhS_Sales_RatePlanUtilsService.onNewRateChanged(dataItem);
             };
@@ -214,7 +214,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
                 ctrl.onReady(api);
         }
         function isEEDDisabled(otherRate) {
-            return ((otherRate.NewRate != undefined && otherRate.NewRate != "") || otherRate.CurrentRate == null || !otherRate.IsCurrentRateEditable || otherRate.CurrentRateBED > VRDateTimeService.getNowDateTime() || $scope.isCountryEnded || $scope.isZonePendingClosed)
+            return ((otherRate.NewRate != undefined && otherRate.NewRate != "") || otherRate.CurrentRate == null || !otherRate.IsCurrentRateEditable || otherRate.CurrentRateBED > VRDateTimeService.getNowDateTime() || $scope.isCountryEnded || $scope.isZonePendingClosed);
         }
 
     }
