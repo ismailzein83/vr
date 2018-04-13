@@ -370,7 +370,7 @@ namespace Vanrise.Runtime.Business
                });
         }
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        public class CacheManager : Vanrise.Caching.BaseCacheManager
         {
             ISchedulerTaskDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<ISchedulerTaskDataManager>();
             object _updateHandle;
