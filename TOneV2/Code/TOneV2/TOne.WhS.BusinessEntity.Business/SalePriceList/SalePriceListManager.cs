@@ -715,7 +715,7 @@ namespace TOne.WhS.BusinessEntity.Business
                                 RateTypeId = otherRateChange.RateTypeId.Value
                             });
                         }
-                        else
+                        else if (existingSaleZone != null)
                         {
                             var recentOtherRateChange = GetOtherRateNotificationFromExistingData(customerId, sellingProductId,
                              rateTypeId, existingSaleZone.ZoneName, country.CountryId, customerZoneRateHistoryLocator);
