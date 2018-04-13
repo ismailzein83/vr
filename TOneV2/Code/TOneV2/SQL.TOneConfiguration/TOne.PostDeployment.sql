@@ -120,6 +120,7 @@ as (select * from (values
 
 
 ('FAD2C45F-FB61-4D65-9896-4CCADC2A656F','Carrier Invoice','Carrier Invoice','VR_Invoice_InvoiceType_InvoiceExtendedSettingsConfig'			,'{"Editor":"whs-invoice-invoicetype-carrierinvoicesettings"}'),
+('c7a1c706-2c07-42ce-9728-e47bee2a3129','Settlement Invoice','Settlement Invoice','VR_Invoice_InvoiceType_InvoiceExtendedSettingsConfig'			,'{"Editor":"whs-invoicetype-definition-settlementinvoicesettings"}'),
 ('BD4F7B2C-1C07-4037-8730-92768BD28900','Customer Invoice Generator','Customer Invoice Generator','VR_Invoice_InvoiceType_InvoiceGenerator'	,'{"Editor":"whs-invoice-invoicetype-customerinvoicegenerator"}'),
 ('432AF409-47C6-4CA2-9D1A-6D9D947F29F4','Supplier Invoice Generator','Supplier Invoice Generator','VR_Invoice_InvoiceType_InvoiceGenerator','{"Editor":"whs-invoice-invoicetype-supplierinvoicegenerator"}'),
 
