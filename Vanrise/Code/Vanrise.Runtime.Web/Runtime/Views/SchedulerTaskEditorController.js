@@ -96,7 +96,8 @@
                 var payload;
                 if (taskObject && taskObject.TaskSettings != undefined && taskActionDirectiveAPI != undefined) {
                     payload = {
-                        data: taskObject.TaskSettings.TaskActionArgument
+                        data: taskObject.TaskSettings.TaskActionArgument,
+                        context: getContext()
                     };
                     taskActionDirectiveAPI.load(payload);
                 }
@@ -177,12 +178,12 @@
 
         function loadActions() {
             var promises = [];
-            var actionPayload;
+            var actionPayload = {
+                context: getContext()
+            };
 
             if (taskObject != undefined && taskObject.TaskSettings != null) {
-                actionPayload = {
-                    data: taskObject.TaskSettings.TaskActionArgument
-                };
+                actionPayload.data = taskObject.TaskSettings.TaskActionArgument;
             }
 
             var loadActionTypesPromise = UtilsService.createPromiseDeferred();
@@ -296,6 +297,15 @@
                 $scope.isLoading = false;
             });;
         }
+
+        function getContext() {
+            var context = {
+                getTaskName: function () {
+                    return $scope.scopeModel.name;
+                }
+            };
+            return context;
+        };
     }
 
     appControllers.controller('Runtime_NewSchedulerTaskEditorController', newSchedulerTaskEditorController);

@@ -27,6 +27,7 @@ function (UtilsService, VRUIUtilsService) {
     };
 
     function DirectiveConstructor($scope, ctrl) {
+        var context;
         var bpDefenitionDirectiveAPI;
         var bpDefenitionDirectiveReadyPromiseDeferred;
 
@@ -42,7 +43,10 @@ function (UtilsService, VRUIUtilsService) {
                 var setLoader = function (value) {
                     $scope.isLoadingAction = value;
                 };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, bpDefenitionDirectiveAPI, undefined, setLoader, bpDefenitionDirectiveReadyPromiseDeferred);
+                var payloadDirective = {
+                    context: getContext()
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, bpDefenitionDirectiveAPI, payloadDirective, setLoader, bpDefenitionDirectiveReadyPromiseDeferred);
             };
 
             $scope.onBPDefinitionSelectorReady = function (api) {
@@ -55,8 +59,9 @@ function (UtilsService, VRUIUtilsService) {
 
         function defineAPI() {
             var api = {};
-            var bpDefinitionId;
+            var bpDefinitionId;           
             $scope.disableBPDefinitionColumn = false;
+           
             api.getData = function () {
 
                 return {
@@ -71,11 +76,16 @@ function (UtilsService, VRUIUtilsService) {
                     bpDefinitionId = additionalParameter.bpDefinitionID;
                 }
             };
+
             api.load = function (payload) {
                 var data;
-                if (payload != undefined && payload.data != undefined)
-                    data = payload.data;
 
+                if (payload != undefined){
+                    context = payload.context;
+                    if(payload.data != undefined)
+                        data = payload.data;
+                }
+                   
                 var promises = [];
 
                 var loadBPDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -104,14 +114,12 @@ function (UtilsService, VRUIUtilsService) {
                     bpDefenitionDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
                     bpDefenitionDirectiveReadyPromiseDeferred.promise.then(function () {
                         bpDefenitionDirectiveReadyPromiseDeferred = undefined;
-                        var payloadDirective;
-                        if (data != undefined) {
-                            payloadDirective = {
-                                data: data.ProcessInputArguments,
-                                rawExpressions: data.RawExpressions
-                                //selectedDateOption: (data != undefined && data.RawExpressions != null) ? 0 : 1
-                            };
-
+                        var payloadDirective = {
+                            context: getContext()
+                        };
+                        if (data != undefined) {                           
+                            payloadDirective.data = data.ProcessInputArguments;
+                            payloadDirective.rawExpressions = data.RawExpressions;
                         }
                         VRUIUtilsService.callDirectiveLoad(bpDefenitionDirectiveAPI, payloadDirective, loadBPDefinitionPromiseDeferred);
 
@@ -123,7 +131,14 @@ function (UtilsService, VRUIUtilsService) {
             };
 
             if (ctrl.onReady != null)
-                ctrl.onReady(api);
+                ctrl.onReady(api);           
+        }
+
+        function getContext() {
+            var currentContext = context;
+            if (currentContext == undefined)
+                currentContext = {};
+            return currentContext;
         }
 
         this.initializeController = initializeController;
