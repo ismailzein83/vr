@@ -1,0 +1,21 @@
+﻿<div vr-modalcontent ng-controller="BusinessProcess_BP_CustomCodeTaskCompilationResultController" width="'50%'">
+    <vr-modalbody vr-loader="isLoading" maxheight="'700px'">
+        <vr-form name="formValidateEditor">
+            <vr-datagrid datasource="dataSrouce" on-ready="onMainGridReady">
+                <vr-datagridcolumn headertext="'Error Messages'" isfielddynamic>
+                    <div class="responsive-container">
+                        {{dataItem.Error}}
+                    </div>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
+

@@ -16,11 +16,13 @@ namespace Vanrise.BusinessProcess.Extensions.WFTaskAction
 
             WFTaskActionArgument wfTaskActionArgument = (WFTaskActionArgument)taskActionArgument;
 
+            BaseProcessInputArgument inputArguments = wfTaskActionArgument.ProcessInputArguments.VRDeepCopy();
             if (evaluatedExpressions != null)
-                wfTaskActionArgument.ProcessInputArguments.MapExpressionValues(evaluatedExpressions);
+                inputArguments.MapExpressionValues(evaluatedExpressions);
+
+            inputArguments.PrepareArgumentForExecutionFromTask(null);
 
             BPInstanceManager bpInstanceManager = new BPInstanceManager();
-            BaseProcessInputArgument inputArguments = wfTaskActionArgument.ProcessInputArguments;
             int? userId;
             Vanrise.Security.Entities.ContextFactory.GetContext().TryGetLoggedInUserId(out userId);
             inputArguments.UserId = userId.HasValue ? userId.Value : task.OwnerId;

@@ -59,6 +59,14 @@
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Runtime.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Runtime.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Security.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Security.Business.dll</HintPath>
     </Reference>
@@ -67,6 +75,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomCodeTaskManager.cs" />
     <Compile Include="BPBusinessRuleSetManager.cs" />
     <Compile Include="BPBusinessRuleActionManager.cs" />
     <Compile Include="BPBusinessRuleActionTypeManager.cs" />
@@ -90,6 +99,10 @@
     <ProjectReference Include="..\Vanrise.BusinessProcess.Entities\Vanrise.BusinessProcess.Entities.csproj">
       <Project>{eb3cf5aa-ec32-4723-81e5-c4a0c0525d05}</Project>
       <Name>Vanrise.BusinessProcess.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments\Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.csproj">
+      <Project>{5ae9df20-7d4a-4b9d-93a2-bfbc2fb3334a}</Project>
+      <Name>Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

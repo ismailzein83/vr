@@ -17,6 +17,12 @@ namespace Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments
         public string ClassDefinitions { get; set; }
 
         public string TaskCode { get; set; }
+
+        public override void PrepareArgumentForExecutionFromTask(Entities.IProcessInputArgumentPrepareArgumentForExecutionFromTaskContext context)
+        {
+            this.ClassDefinitions = null;
+            this.TaskCode = null;
+        }
     }
 
     public interface ICustomCodeHandler

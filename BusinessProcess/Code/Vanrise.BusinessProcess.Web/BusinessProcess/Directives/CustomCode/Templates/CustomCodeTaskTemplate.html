@@ -1,0 +1,28 @@
+﻿<vr-row vr-loader="scopeModel.isLoadingDirective">
+    <vr-form name="formCustomCode">
+        <vr-row>
+            <vr-columns colnum="11">
+
+                <vr-tabs>
+                    <vr-tab header="'Task Code'">
+                        <vr-columns colnum="12">
+                            <vr-textarea value="scopeModel.taskCode" isrequired="true" rows="10" onvaluechanged="scopeModel.onTaskInputsValueChanged"></vr-textarea>
+                        </vr-columns>
+                    </vr-tab>
+                    <vr-tab header="'Class Definitions'">
+                        <vr-columns colnum="12">
+                            <vr-textarea value="scopeModel.classDefinitions" rows="10" onvaluechanged="scopeModel.onTaskInputsValueChanged"></vr-textarea>
+                        </vr-columns>
+                    </vr-tab>
+                </vr-tabs>
+            </vr-columns>
+            <vr-columns colnum="1" haschildcolumns>
+                <vr-validator validate="scopeModel.validateCustomCodeTask()">
+                    <a style="cursor:pointer;font-size:11px" ng-click="scopeModel.onCompileClick()">Compile</a>
+                </vr-validator>
+            </vr-columns>
+        </vr-row>
+    </vr-form>
+</vr-row>
+
+

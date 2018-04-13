@@ -103,6 +103,7 @@
     <Compile Include="BusinessRules\BPValidationMessageUpdateInput.cs" />
     <Compile Include="BusinessRules\BPValidationMessageBeforeIdInput.cs" />
     <Compile Include="BusinessRules\BPValidationMessageDetail.cs" />
+    <Compile Include="CustomCodeTaskCompilationOutput.cs" />
     <Compile Include="IBusinessRuleConditionValidateContext.cs" />
     <Compile Include="Tasks\BPTaskBeforeIdInput.cs" />
     <Compile Include="Tasks\BPTaskDetail.cs" />

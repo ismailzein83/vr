@@ -153,6 +153,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\CustomCodeTaskController.cs" />
     <Compile Include="Controllers\BPBusinessRuleDefinitionController.cs" />
     <Compile Include="Controllers\BPBusinessRuleSetController.cs" />
     <Compile Include="Controllers\BPValidationMessageController.cs" />
@@ -208,11 +209,16 @@
     <Content Include="BusinessProcess\Directives\BPValidationMessage\Templates\BPValidationMessageMonitorGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPTask\bp-task-monitor-grid.js" />
     <Content Include="BusinessProcess\Directives\BPTask\Templates\BPTaskMonitorGridTemplate.html" />
+    <Content Include="BusinessProcess\Directives\CustomCode\bp-customcode-task.js" />
+    <Content Include="BusinessProcess\Directives\CustomCode\Templates\CustomCodeTaskCompilationResult.html" />
+    <Content Include="BusinessProcess\Directives\CustomCode\CustomCodeTaskCompilationResultController.js" />
+    <Content Include="BusinessProcess\Directives\CustomCode\Templates\CustomCodeTaskTemplate.html" />
     <Content Include="BusinessProcess\Services\APIServices\BPBusinessRuleDefintionAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPBusinessRuleSetAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPInstanceTrackingAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPInstanceAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPDefinitionAPIService.js" />
+    <Content Include="BusinessProcess\Services\APIServices\CustomCodeTaskAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPValidationMessageAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPTaskTypeAPIService.js" />
     <Content Include="BusinessProcess\Services\APIServices\BPTaskAPIService.js" />
@@ -220,6 +226,7 @@
     <Content Include="BusinessProcess\Services\BPInstanceService.js" />
     <Content Include="BusinessProcess\Services\BPDefinitionService.js" />
     <Content Include="BusinessProcess\Services\BPSchedulerTaskService.js" />
+    <Content Include="BusinessProcess\Services\CustomCodeTaskService.js" />
     <Content Include="BusinessProcess\Services\BPValidationMessageService.js" />
     <Content Include="BusinessProcess\Services\BPTaskService.js" />
     <Content Include="BusinessProcess\Services\BusinessProcessLogService.js" />

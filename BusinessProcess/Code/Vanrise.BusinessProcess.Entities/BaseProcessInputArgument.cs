@@ -29,5 +29,15 @@ namespace Vanrise.BusinessProcess.Entities
         {
 
         }
+
+        public virtual void PrepareArgumentForExecutionFromTask(IProcessInputArgumentPrepareArgumentForExecutionFromTaskContext context)
+        {
+
+        }
+    }
+
+    public interface IProcessInputArgumentPrepareArgumentForExecutionFromTaskContext
+    {
+
     }
 }
