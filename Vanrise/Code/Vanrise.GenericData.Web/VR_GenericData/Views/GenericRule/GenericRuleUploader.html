@@ -1,0 +1,44 @@
+﻿<div vr-modalcontent ng-controller="VR_GenericData_GenericRuleUploaderController" vr-loader="isLoading" width="'50%'">
+    <vr-modalbody>
+        <vr-form name="formGenericRuleEditor">
+            <vr-row removeline>
+                <vr-columns width="1/2row">
+                    <vr-label>Upload File</vr-label>
+                    <vr-fileupload tempfile="true" extension="xls,xlsx" value="file" isrequired> </vr-fileupload>
+                </vr-columns>
+                <vr-columns width="1/2row">
+                    <vr-datetimepicker label="Effective Date" type="date" value="effectiveDate" isrequired></vr-datetimepicker>
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns width="fullrow" ng-if="!isErrorOccured && isUploadingComplete">
+                    <vr-label>Number of Generic Rules Added:</vr-label><vr-label isvalue>{{genericRulesAdded}}</vr-label>
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns width="fullrow" ng-if="!isErrorOccured && isUploadingComplete">
+                    <vr-label>Number of Generic Rules Failed:</vr-label><vr-label isvalue>{{genericRulesFailed}}</vr-label>
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns width="fullrow" ng-if="isErrorOccured">
+                    <label class="alert alert-danger" vr-alert>{{errorMessage}}</label>
+                </vr-columns>
+            </vr-row>
+            <vr-row removeline>
+                <vr-columns width="fullrow" ng-if="!isErrorOccured && isUploadingComplete">
+                    <vr-label>Download Result:</vr-label>
+                    <vr-button type="DownloadFile" data-onclick="downloadOutput" standalone></vr-button>
+                </vr-columns>
+            </vr-row>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Upload" formname="formGenericRuleEditor" data-onclick="uploadGenericRules" vr-disabled="disableUpload"></vr-button>
+                <vr-button type="Download" data-onclick="downloadTemplate"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

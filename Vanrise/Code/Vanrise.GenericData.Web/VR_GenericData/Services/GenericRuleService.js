@@ -13,7 +13,8 @@
             viewGenericRule: viewGenericRule,
             getDrillDownDefinition: getDrillDownDefinition,
             registerObjectTrackingDrillDownToGenericRule: registerObjectTrackingDrillDownToGenericRule,
-            getEntityUniqueName: getEntityUniqueName
+            getEntityUniqueName: getEntityUniqueName,
+            uploadGenericRules: uploadGenericRules
         });
 
         function addGenericRule(genericRuleDefinitionId, onGenericRuleAdded, preDefinedData, accessibility) {
@@ -112,6 +113,18 @@
         function getDrillDownDefinition() {
             return drillDownDefinitions;
         }
+
+        function uploadGenericRules(ruleDefinitionId, context, criteriaFieldsToHide, criteriaFieldsValues) {
+            var modalSettings = {};
+            var modalParameters = {
+                ruleDefinitionId: ruleDefinitionId,
+                context: context,
+                criteriaFieldsToHide: criteriaFieldsToHide,
+                criteriaFieldsValues: criteriaFieldsValues
+            };
+            VRModalService.showModal('/Client/Modules/VR_GenericData/Views/GenericRule/GenericRuleUploader.html', modalParameters, modalSettings);
+        }
+
     };
 
     appControllers.service('VR_GenericData_GenericRule', genericRule);

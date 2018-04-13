@@ -34,12 +34,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Cells, Version=8.2.2.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Resources\DLLs\Aspose.Cells.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Resources\DLLs\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -103,11 +108,14 @@
     <Compile Include="BusinessEntity\GenericBusinessEntity\GenericBusinessEntityManager.cs" />
     <Compile Include="BusinessEntity\Runtime\GenericUIRuntimeManager.cs" />
     <Compile Include="Filters\BEParentChildRelation\BERelationChildBaseFilter.cs" />
+    <Compile Include="GenericDataMainExtensionsFactory.cs" />
+    <Compile Include="GenericRules\CreateGenericRuleFromExcelContext.cs" />
     <Compile Include="GenericRules\GenericRuleDefinitionViewFilter.cs" />
     <Compile Include="GenericRules\GenericRuleDefinitionFilterContext.cs" />
     <Compile Include="GenericRules\GenericRuleDefinitionManager.cs" />
     <Compile Include="GenericRules\GenericRuleManager.cs" />
     <Compile Include="GenericRules\GenericRuleTypeConfigManager.cs" />
+    <Compile Include="GenericRules\IGenericRuleCriteriaManager.cs" />
     <Compile Include="GenericRules\IGenericRuleManager.cs" />
     <Compile Include="GenericRules\RuleStructureBehaviors\GenericRuleStructureBehaviorByKey.cs" />
     <Compile Include="GenericRules\RuleStructureBehaviors\GenericRuleStructureBehaviorByPrefix.cs" />

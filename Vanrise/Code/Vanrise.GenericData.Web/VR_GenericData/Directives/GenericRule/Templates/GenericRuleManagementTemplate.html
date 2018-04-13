@@ -19,6 +19,7 @@
         <vr-columns colnum="12" >
             <vr-button type="Search" standalone data-onclick="scopeModel.searchClicked"></vr-button>
             <vr-button type="Add" standalone data-onclick="scopeModel.addGenericRule" ng-show="scopeModel.hasAddRulePermission"></vr-button>
+            <vr-button type="Upload" standalone data-onclick="scopeModel.uploadGenericRules" ng-if="scopeModel.supportUpload"></vr-button>
         </vr-columns>
     </vr-row>
     <span>{{scopeModel.settingsFilterEditor}}</span>

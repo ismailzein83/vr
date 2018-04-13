@@ -531,6 +531,18 @@ namespace Vanrise.Common.Business
                    return dic;
                });
         }
+        public override void GetIdByDescription(IBusinessEntityGetIdByDescriptionContext context)
+        {
+            var cachedCountriesByName = GetCachedCountriesByNames();
+            if (cachedCountriesByName != null)
+            {
+                var matchingCountry = cachedCountriesByName.GetRecord(context.FieldDescription.ToString().Trim().ToLower());
+                if (matchingCountry != null)
+                    context.FieldValue = matchingCountry.CountryId;
+                else
+                    context.ErrorMessage = string.Format("The country {0} does not exist.", context.FieldDescription.ToString());
+            }
+        }
 
         private CountryDetail CountryDetailMapper(Country country)
         {

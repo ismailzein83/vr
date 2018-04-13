@@ -9,6 +9,8 @@ using Vanrise.GenericData.Entities;
 using Vanrise.NumberingPlan.Data;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.GenericData.MainExtensions.DataRecordFields;
+using Vanrise.GenericData.Business;
 
 namespace Vanrise.NumberingPlan.Business
 {
@@ -28,7 +30,21 @@ namespace Vanrise.NumberingPlan.Business
                 return allSaleZones.ToDictionary(itm => itm.SaleZoneId, itm => itm);
             });
         }
-
+        public Dictionary<string, List<SaleZone>> GetCachedSaleZonesByName()
+        {
+            return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedZonesByName",
+            () =>
+            {
+                Dictionary<string, List<SaleZone>> cachedZonesByName = new Dictionary<string, List<SaleZone>>();
+                var cachedZones = GetCachedSaleZones();
+                foreach (var zone in cachedZones.Values)
+                {
+                    var zoneList = cachedZonesByName.GetOrCreateItem(zone.Name.ToLower());
+                    zoneList.Add(zone);
+                }
+                return cachedZonesByName;
+            });
+        }
         public Vanrise.Entities.IDataRetrievalResult<SaleZoneDetail> GetFilteredSaleZones(Vanrise.Entities.DataRetrievalInput<SaleZoneQuery> input)
         {
             var saleZonesBySellingNumberPlan = GetSaleZonesBySellingNumberPlan(input.Query.SellingNumberId);
@@ -233,6 +249,56 @@ namespace Vanrise.NumberingPlan.Business
         public Type GetSaleZoneType()
         {
             return this.GetType();
+        }
+
+        public override void GetIdByDescription(IBusinessEntityGetIdByDescriptionContext context)
+        {
+            if (context.FieldType != null)
+            {
+                var beFieldType = context.FieldType.CastWithValidate<FieldBusinessEntityType>("context.FieldType");
+                var beDefinitionId = beFieldType.BusinessEntityDefinitionId;
+                if (beDefinitionId == SaleZone.MASTERPLAN_BUSINESSENTITY_DEFINITION_ID)
+                {
+                    var cachedSaleZonesByName = GetCachedSaleZonesByName();
+                    if (cachedSaleZonesByName != null)
+                    {
+                        var matchingSaleZones = cachedSaleZonesByName.GetRecord(context.FieldDescription.ToString().Trim().ToLower());
+                        if (matchingSaleZones != null && matchingSaleZones.Count != 0)
+                        {
+                            SellingNumberPlanManager sellingNumberPlanManager = new SellingNumberPlanManager();
+                            var masterSellingNumberPlan = sellingNumberPlanManager.GetMasterSellingNumberPlan();
+                            masterSellingNumberPlan.ThrowIfNull("masterSellingNumberPlan", masterSellingNumberPlan.SellingNumberPlanId);
+                            var masterSaleZoneList = matchingSaleZones.FindAllRecords(x => x.SellingNumberPlanId == masterSellingNumberPlan.SellingNumberPlanId);
+                            var orderedMasterSaleZoneList = masterSaleZoneList.OrderByDescending(x => x.BED);
+
+                            if (context.BERuntimeSelectorFilter == null)
+                            {
+                                context.FieldValue = orderedMasterSaleZoneList.First().SaleZoneId;
+                            }
+                            else
+                            {
+                                foreach (var saleZone in orderedMasterSaleZoneList)
+                                {
+                                    BERuntimeSelectorFilterSelectorFilterContext filterContext = new BERuntimeSelectorFilterSelectorFilterContext
+                                    {
+                                        BusinessEntityId = saleZone.SaleZoneId,
+                                        BusinessEntityDefinitionId = beDefinitionId
+                                    };
+
+                                    if (context.BERuntimeSelectorFilter.IsMatched(filterContext))
+                                        context.FieldValue = saleZone.SaleZoneId;
+                                    else
+                                        context.ErrorMessage = string.Format("The zone {0} does not exist.", context.FieldDescription.ToString());
+                                }
+                            }
+                        }
+                        else
+                        {
+                            context.ErrorMessage = string.Format("The zone {0} does not exist.", context.FieldDescription.ToString());
+                        }
+                    }
+                }
+            }
         }
 
         #endregion

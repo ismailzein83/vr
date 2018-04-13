@@ -21,4 +21,12 @@ namespace Vanrise.GenericData.Entities
     {
         GenericRuleCriteria Criteria { get; }
     }
+    public interface ICreateGenericRuleFromExcelContext
+    {
+        GenericRule GenericRule { set; }
+
+        string ErrorMessage { set; }
+
+        Dictionary<string, Object> ParsedGenericRulesFields { get; }
+    }
 }

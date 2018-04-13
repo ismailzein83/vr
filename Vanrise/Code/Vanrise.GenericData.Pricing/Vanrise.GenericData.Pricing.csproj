@@ -56,6 +56,7 @@
     <Compile Include="RateType\RateTypeRuleContext.cs" />
     <Compile Include="RateType\RateTypeRule.cs" />
     <Compile Include="RateType\RateTypeRuleManager.cs" />
+    <Compile Include="RateValue\RateTypeManager.cs" />
     <Compile Include="RateValue\RateValueRuleDefinitionSettings.cs" />
     <Compile Include="RateValue\RateValueMappingStep.cs" />
     <Compile Include="RateValue\RateValueRule.cs" />
@@ -72,6 +73,18 @@
     <Compile Include="Tax\TaxRuleManager.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Common.Business\Vanrise.Common.Business.csproj">
+      <Project>{571a68ec-2d45-4b5c-9e75-bb6fb7c0d7b7}</Project>
+      <Name>Vanrise.Common.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Common\Vanrise.Common.csproj">
+      <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
+      <Name>Vanrise.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
+      <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
+      <Name>Vanrise.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.GenericData.Business\Vanrise.GenericData.Business.csproj">
       <Project>{e196c862-be33-49dd-9e0d-2948fb289861}</Project>
       <Name>Vanrise.GenericData.Business</Name>
@@ -83,6 +96,10 @@
     <ProjectReference Include="..\Vanrise.GenericData.Transformation.Entities\Vanrise.GenericData.Transformation.Entities.csproj">
       <Project>{e8b1931e-f1f5-4937-9cb0-a7d0cf5edcb1}</Project>
       <Name>Vanrise.GenericData.Transformation.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Rules.Pricing.MainExtensions\Vanrise.Rules.Pricing.MainExtensions.csproj">
+      <Project>{d18e2992-89ea-4367-9eec-c737915bb438}</Project>
+      <Name>Vanrise.Rules.Pricing.MainExtensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Rules.Pricing\Vanrise.Rules.Pricing.csproj">
       <Project>{a8a1a6c8-be71-4b51-b5b8-490645c32bf2}</Project>

@@ -23,5 +23,10 @@ namespace Vanrise.GenericData.Entities
         public abstract dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context);
 
         public abstract IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context);
+
+        public virtual void GetIdByDescription(IBusinessEntityGetIdByDescriptionContext context)
+        {
+
+        }
     }
 }

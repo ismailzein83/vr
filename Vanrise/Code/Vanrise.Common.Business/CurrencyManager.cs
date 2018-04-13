@@ -52,8 +52,16 @@ namespace Vanrise.Common.Business
 
         public Currency GetCurrencyBySymbol(string currencySymbol)
         {
-            var currencies = GetCachedCurrenciesBySymbol();
-            return currencies.GetRecord(currencySymbol);
+            if (currencySymbol != null)
+            {
+                var currencies = GetCachedCurrenciesBySymbol();
+                return currencies.GetRecord(currencySymbol.ToLower());
+            }
+            else
+            {
+                return null;
+            }
+          
         }
 
         public Currency GetCurrencyBySourceId(string sourceId)
@@ -113,7 +121,7 @@ namespace Vanrise.Common.Business
             return CacheManagerFactory.GetCacheManager<CacheManager>().GetOrCreateObject("GetCachedCurrenciesBySymbol",
                 () =>
                 {
-                    return GetCachedCurrencies().Where(v => !string.IsNullOrEmpty(v.Value.Symbol)).ToDictionary(kvp => kvp.Value.Symbol, kvp => kvp.Value);
+                    return GetCachedCurrencies().Where(v => !string.IsNullOrEmpty(v.Value.Symbol)).ToDictionary(kvp => kvp.Value.Symbol.ToLower(), kvp => kvp.Value);
                 });
         }
 

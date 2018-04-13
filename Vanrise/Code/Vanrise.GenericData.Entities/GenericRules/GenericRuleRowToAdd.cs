@@ -9,7 +9,9 @@ namespace Vanrise.GenericData.Entities
     public class GenericRuleRowToAdd
     {
         public int RowIndex { get; set; }
-        public Dictionary<string, Object> CriteriasByFieldName { get; set; }
-        public string Description { get; set; }
+
+        public GenericRule RuleToAdd { get; set; }
+
+        public List<GenericRule> RulesToClose{ get; set; }
     }
 }

@@ -9,8 +9,12 @@ namespace Vanrise.GenericData.Entities
     public class UploadGenericRulesOutput
     {
         public int NumberOfGenericRulesAdded { get; set; }
+
         public int NumberOfGenericRulesFailed { get; set; }
-        public int FileId { get; set; }
+
+        public long FileId { get; set; }
+
+        public string ErrorMessage { get; set; }
     }
 
 }

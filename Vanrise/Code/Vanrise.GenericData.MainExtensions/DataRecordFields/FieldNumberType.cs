@@ -258,98 +258,86 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 default: throw new NotSupportedException(string.Format("FieldNumberDataType {0} not supported.", this.DataType));
             }
         }
-        public override void GetValueByDescription(IDataRecordFieldTypeTryGetValueByDescriptionContext context)
+        public override void GetValueByDescription(IGetValueByDescriptionContext context)
         {
-
             if (context.FieldDescription == null)
                 return;
-            else
+
+            switch (this.DataType)
             {
-                switch (this.DataType)
-                {
-                    case FieldNumberDataType.Decimal:
-                        Decimal outcome;
-                        if (context.FieldDescription is Decimal)
+                case FieldNumberDataType.Decimal:
+                    Decimal outcome;
+                    if (context.FieldDescription is Decimal)
+                    {
+                        outcome = (Decimal)context.FieldDescription;
+                        GeneralSettingsManager generalSettingsManager = new GeneralSettingsManager();
+                        switch (this.DataPrecision)
                         {
-                            outcome = (Decimal)context.FieldDescription;
-
-                            GeneralSettingsManager generalSettingsManager = new GeneralSettingsManager();
-                            switch (this.DataPrecision)
-                            {
-                                case FieldNumberPrecision.Normal:
-                                    int normalPrecision = generalSettingsManager.GetNormalPrecisionValue();
-                                    Math.Round(outcome, normalPrecision);
-                                    context.FieldValue = outcome;
-                                    break;
-                                case FieldNumberPrecision.Long:
-                                    int longPrecision = generalSettingsManager.GetLongPrecisionValue();
-                                    Math.Round(outcome, longPrecision);
-                                    context.FieldValue = outcome;
-                                    break;
-                                default: throw new NotSupportedException(string.Format("FieldNumberPrecision {0} not supported.", this.DataPrecision));
-                            }
-                        }
-                        else
-                        {
-                            bool success;
-
-                            success = Decimal.TryParse(context.FieldDescription.ToString(), out outcome);
-                            if (success)
-                            {
+                            case FieldNumberPrecision.Normal:
+                                int normalPrecision = generalSettingsManager.GetNormalPrecisionValue();
+                                Math.Round(outcome, normalPrecision);
                                 context.FieldValue = outcome;
-
-                                GeneralSettingsManager generalSettingsManager = new GeneralSettingsManager();
-                                switch (this.DataPrecision)
-                                {
-                                    case FieldNumberPrecision.Normal:
-                                        int normalPrecision = generalSettingsManager.GetNormalPrecisionValue();
-                                        Math.Round(outcome, normalPrecision);
-                                        context.FieldValue = outcome;
-                                        break;
-                                    case FieldNumberPrecision.Long:
-                                        int longPrecision = generalSettingsManager.GetLongPrecisionValue();
-                                        Math.Round(outcome, longPrecision);
-                                        context.FieldValue = outcome;
-                                        break;
-                                    default: throw new NotSupportedException(string.Format("FieldNumberPrecision {0} not supported.", this.DataPrecision));
-                                }
-                            }
-
+                                break;
+                            case FieldNumberPrecision.Long:
+                                int longPrecision = generalSettingsManager.GetLongPrecisionValue();
+                                Math.Round(outcome, longPrecision);
+                                context.FieldValue = outcome;
+                                break;
+                            default: throw new NotSupportedException(string.Format("FieldNumberPrecision {0} not supported.", this.DataPrecision));
                         }
-                        break;
-                    case FieldNumberDataType.Int:
-                         if (context.FieldDescription is int)
-                             context.FieldValue = (int)context.FieldDescription;
-                        else
+                    }
+                    else if (Decimal.TryParse(context.FieldDescription.ToString(), out outcome))
+                    {
+                        context.FieldValue = outcome;
+
+                        GeneralSettingsManager generalSettingsManager = new GeneralSettingsManager();
+                        switch (this.DataPrecision)
                         {
-                            bool success;
-                            int result;
-                            success = int.TryParse(context.FieldDescription.ToString(), out result);
-                            if (success)
-                                context.FieldValue = result;
- 
+                            case FieldNumberPrecision.Normal:
+                                int normalPrecision = generalSettingsManager.GetNormalPrecisionValue();
+                                Math.Round(outcome, normalPrecision);
+                                context.FieldValue = outcome;
+                                break;
+                            case FieldNumberPrecision.Long:
+                                int longPrecision = generalSettingsManager.GetLongPrecisionValue();
+                                Math.Round(outcome, longPrecision);
+                                context.FieldValue = outcome;
+                                break;
+                            default: throw new NotSupportedException(string.Format("FieldNumberPrecision {0} not supported.", this.DataPrecision));
                         }
-                        break;
+                    }
+                    break;
 
-                    case FieldNumberDataType.BigInt:
-                        if (context.FieldDescription is long)
-                            context.FieldValue = (long)context.FieldDescription;
-                        else
-                        {
-                            bool success;
-                            long result;
-                            success = long.TryParse(context.FieldDescription.ToString(), out result);
-                            if (success)
-                                context.FieldValue = result;
-                        }
-                        break;
-                    default: 
-                        context.ErrorMessage = "Error while parsing FieldNumberType";
-                        break;
-                        
-                }
+                case FieldNumberDataType.Int:
+                    if (context.FieldDescription is int)
+                    {
+                        context.FieldValue = (int)context.FieldDescription;
+                    }
+                    else
+                    {
+                        int result;
+                        if (int.TryParse(context.FieldDescription.ToString(), out result))
+                            context.FieldValue = result;
+                    }
+                    break;
+
+                case FieldNumberDataType.BigInt:
+                    if (context.FieldDescription is long)
+                    {
+                        context.FieldValue = (long)context.FieldDescription;
+                    }
+                    else
+                    {
+                        long result;
+                        if (long.TryParse(context.FieldDescription.ToString(), out result))
+                            context.FieldValue = result;
+                    }
+                    break;
+
+                default:
+                    context.ErrorMessage = "Error while parsing field of number type:" + context.FieldDescription.ToString();
+                    break;
             }
-
         }
 
         #endregion

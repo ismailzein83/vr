@@ -8,7 +8,12 @@ namespace Vanrise.GenericData.Entities
 {
     public class UploadGenericRulesInput
     {
+        public Guid GenericRuleDefinitionId { get; set; }
+
         public DateTime EffectiveDate { get; set; }
-        public int FileId { get; set; }
+
+        public long FileId { get; set; }
+
+        public Dictionary<string, CriteriaFieldsValues> CriteriaFieldsValues { get; set; }
     }
 }

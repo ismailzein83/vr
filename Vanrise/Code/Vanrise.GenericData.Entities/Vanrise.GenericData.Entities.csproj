@@ -117,7 +117,9 @@
     <Compile Include="GenericBusinessEntity\GenericBusinessEntityFilter.cs" />
     <Compile Include="GenericEditorDefinitionSetting\VRGenericEditorDefinitionSetting.cs" />
     <Compile Include="GenericRules\AdditionalField.cs" />
-    <Compile Include="GenericRules\DataRecordFieldTypeTryGetValueByDescriptionContext.cs" />
+    <Compile Include="GenericRules\CriteriaFieldsValues.cs" />
+    <Compile Include="GenericRules\GetValueByDescriptionContext.cs" />
+    <Compile Include="GenericRules\DownloadUploadTemplateInput.cs" />
     <Compile Include="GenericRules\GenericRuleInvalidRow.cs" />
     <Compile Include="GenericRules\GenericRuleRowToAdd.cs" />
     <Compile Include="GenericRules\ParsedGenericRuleRow.cs" />

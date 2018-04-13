@@ -97,6 +97,7 @@
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\StaticEditorDefinitionSetting.cs" />
     <Compile Include="GenericBusinessEntity\GenericEditorDefinitionSetting\TabsContainerEditorDefinitionSetting.cs" />
     <Compile Include="GenericRuleCriteriaFieldValues\BusinessEntityValues.cs" />
+    <Compile Include="GenericRuleCriteriaFieldValues\GenericRuleCritieria.cs" />
     <Compile Include="GenericRuleCriteriaFieldValues\StaticValues.cs" />
     <Compile Include="MappingSteps\BELookupRuleMappingStep.cs" />
     <Compile Include="MappingSteps\LoadBEByIDMappingStep.cs" />

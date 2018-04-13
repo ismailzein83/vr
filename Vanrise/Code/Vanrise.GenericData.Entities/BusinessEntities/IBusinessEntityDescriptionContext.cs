@@ -83,4 +83,16 @@ namespace Vanrise.GenericData.Entities
 
         dynamic ParentEntity { get; }
     }
+    public interface IBusinessEntityGetIdByDescriptionContext
+    {
+         Object FieldDescription { get; }
+
+         string ErrorMessage { set; }
+
+         Object FieldValue { set; }
+
+         DataRecordFieldType FieldType { get; }
+
+         BERuntimeSelectorFilter BERuntimeSelectorFilter { get; }
+    }
 }

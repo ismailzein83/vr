@@ -477,89 +477,95 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             
         }
 
-        public override void GetValueByDescription(IDataRecordFieldTypeTryGetValueByDescriptionContext context)
+        public override void GetValueByDescription(IGetValueByDescriptionContext context)
         {
 
             if (context.FieldDescription == null)
                 return;
-            else
+            switch (this.DataType)
             {
-                switch (this.DataType)
-                {
-                    case FieldDateTimeDataType.DateTime:
-                        if (context.FieldDescription is DateTime)
-                            context.FieldValue = (DateTime)context.FieldDescription;
-                        else
-                        {
-                            DateTime result;
-                            bool success;
-                            success = DateTime.TryParse(context.FieldDescription.ToString(), out result);
-                            if (success)
-                                context.FieldValue = result;
-                        }
-                        break;
-                    case FieldDateTimeDataType.Time:
-                        if (context.FieldDescription is Time)
-                            context.FieldValue = (Time)context.FieldDescription;
-                        else if (context.FieldDescription is TimeSpan)
-                            context.FieldValue = (TimeSpan)context.FieldDescription;
-                        else
-                        {
-                            Time result = new Time(context.FieldDescription.ToString());
+                case FieldDateTimeDataType.DateTime:
+                    if (context.FieldDescription is DateTime)
+                    {
+                        context.FieldValue = (DateTime)context.FieldDescription;
+                    }
+                    else
+                    {
+                        DateTime result;
+                        if (DateTime.TryParse(context.FieldDescription.ToString(), out result))
                             context.FieldValue = result;
-                        }
-                        break;
-                    case FieldDateTimeDataType.Date: 
-                        if (context.FieldDescription is DateTime)
-                            context.FieldValue = (DateTime)context.FieldDescription;
-                        else
-                        {
-                            DateTime result;
-                            bool success;
-                            success = DateTime.TryParse(context.FieldDescription.ToString(), out result);
-                            if (success)
-                                context.FieldValue = result;
-                        }
-                        break;
-                    case FieldDateTimeDataType.YearMonth:
-                        if (context.FieldDescription is DateTime)
-                            context.FieldValue = (DateTime)context.FieldDescription;
-                        else
-                        {
-                            DateTime result;
-                            bool success;
-                            success = DateTime.TryParse(context.FieldDescription.ToString(), out result);
-                            if (success)
-                                context.FieldValue = result;
-                        }
-                        break;
-                    case FieldDateTimeDataType.YearWeek:
-                        if (context.FieldDescription is DateTime)
-                            context.FieldValue = (DateTime)context.FieldDescription;
-                        else
-                        {
-                            DateTime result;
-                            bool success;
-                            success = DateTime.TryParse(context.FieldDescription.ToString(), out result);
-                            if (success)
-                                context.FieldValue = result;
-                        }
-                        break;
-                    case FieldDateTimeDataType.Hour:
-                        if (context.FieldDescription is Time)
-                            context.FieldValue = (Time)context.FieldDescription;
-                        else if(context.FieldDescription is TimeSpan)
-                            context.FieldValue = (TimeSpan)context.FieldDescription;
-                        else
-                        {
-                            Time result = new Time(context.FieldDescription.ToString());
+                    }
+                    break;
+                case FieldDateTimeDataType.Time:
+                    if (context.FieldDescription is Time)
+                    {
+                        context.FieldValue = (Time)context.FieldDescription;
+                    }
+                    else if (context.FieldDescription is TimeSpan)
+                    {
+                        context.FieldValue = (TimeSpan)context.FieldDescription;
+
+                    }
+                    else
+                    {
+                        Time result = new Time(context.FieldDescription.ToString());
+                        context.FieldValue = result;
+                    }
+                    break;
+                case FieldDateTimeDataType.Date:
+                    if (context.FieldDescription is DateTime)
+                    {
+                        context.FieldValue = (DateTime)context.FieldDescription;
+                    }
+                    else
+                    {
+                        DateTime result;
+                        if (DateTime.TryParse(context.FieldDescription.ToString(), out result))
                             context.FieldValue = result;
-                        }
-                        break;
-                    default:
-                        context.ErrorMessage = "Error while converting field of Datetime value";
-                        break;
-                }
+                    }
+                    break;
+                case FieldDateTimeDataType.YearMonth:
+                    if (context.FieldDescription is DateTime)
+                    {
+                        context.FieldValue = (DateTime)context.FieldDescription;
+                    }
+                    else
+                    {
+                        DateTime result;
+                        if (DateTime.TryParse(context.FieldDescription.ToString(), out result))
+                            context.FieldValue = result;
+                    }
+                    break;
+                case FieldDateTimeDataType.YearWeek:
+                    if (context.FieldDescription is DateTime)
+                    {
+                        context.FieldValue = (DateTime)context.FieldDescription;
+                    }
+                    else
+                    {
+                        DateTime result;
+                        if (DateTime.TryParse(context.FieldDescription.ToString(), out result))
+                            context.FieldValue = result;
+                    }
+                    break;
+                case FieldDateTimeDataType.Hour:
+                    if (context.FieldDescription is Time)
+                    {
+                        context.FieldValue = (Time)context.FieldDescription;
+                    }
+                    else if (context.FieldDescription is TimeSpan)
+                    {
+                        context.FieldValue = (TimeSpan)context.FieldDescription;
+                    }
+                    else
+                    {
+                        Time result = new Time(context.FieldDescription.ToString());
+                        context.FieldValue = result;
+                    }
+                    break;
+                default:
+                    context.ErrorMessage = "Error while converting field of Datetime value:" + context.FieldDescription.ToString();
+                    break;
             }
         }
 

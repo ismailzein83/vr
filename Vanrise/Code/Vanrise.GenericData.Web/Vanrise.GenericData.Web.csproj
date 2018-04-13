@@ -788,6 +788,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+    <Content Include="VR_GenericData\Views\GenericRule\GenericRuleUploader.html" />
+    <Content Include="VR_GenericData\Views\GenericRule\GenericRuleUploaderController.js" />
     <Content Include="VR_GenericData\Views\SummaryTransformationDefinition\SummaryGroupingColumnsEditor.html" />
     <Content Include="VR_GenericData\Views\SummaryTransformationDefinition\SummaryGroupingColumnsEditorController.js" />
     <Content Include="VR_GenericData\Views\SummaryTransformationDefinition\SummaryTransformationDefinitionEditor.html" />

@@ -218,4 +218,18 @@ namespace Vanrise.GenericData.Business
             get { return _businessEntityDefinitionId; }
         }
     }
+
+    public class BusinessEntityGetIdByDescriptionContext : IBusinessEntityGetIdByDescriptionContext
+    {
+        public Object FieldDescription { get; set; }
+
+        public string ErrorMessage { get; set; }
+
+        public Object FieldValue { get; set; }
+
+        public DataRecordFieldType FieldType { get; set; }
+
+        public BERuntimeSelectorFilter BERuntimeSelectorFilter { get; set; }
+    
+    }
 }

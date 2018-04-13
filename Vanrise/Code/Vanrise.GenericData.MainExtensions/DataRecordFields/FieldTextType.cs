@@ -137,16 +137,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             return originalValue;
         }
 
-        public override void GetValueByDescription(IDataRecordFieldTypeTryGetValueByDescriptionContext context)
+        public override void GetValueByDescription(IGetValueByDescriptionContext context)
         {
-
             if (context.FieldDescription == null)
                 return;
-            else if (context.FieldDescription is String)
-            {
-                context.FieldValue = context.FieldDescription.ToString();
-            }
-
+            context.FieldValue = context.FieldDescription.ToString().Trim();
         }
     }
 }

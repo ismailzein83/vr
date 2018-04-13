@@ -12,7 +12,11 @@
             DoesUserHaveAddAccess: DoesUserHaveAddAccess,
             UpdateGenericRule: UpdateGenericRule,
             DoesUserHaveEditAccess:DoesUserHaveEditAccess,
-            DeleteGenericRule: DeleteGenericRule
+            DeleteGenericRule: DeleteGenericRule,
+            DownloadGenericRulesTemplate: DownloadGenericRulesTemplate,
+            DoesRuleSupportUpload: DoesRuleSupportUpload,
+            UploadGenericRules: UploadGenericRules,
+            DownloadUploadGenericRulesOutput: DownloadUploadGenericRulesOutput
         };
 
         function GetFilteredGenericRules(input) {
@@ -48,6 +52,33 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericRule', 'DeleteGenericRule'), genericRule);
         }
 
+        function DownloadGenericRulesTemplate(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericRule', "DownloadGenericRulesTemplate"), input,
+            {
+            returnAllResponseParameters: true,
+            responseTypeAsBufferArray: true
+            });
+        }
+
+        function DoesRuleSupportUpload(ruleDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericRule', 'DoesRuleSupportUpload'), {
+                ruleDefinitionId: ruleDefinitionId
+            });
+        }
+        
+        function UploadGenericRules(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericRule', 'UploadGenericRules'), input);
+        }
+
+        function DownloadUploadGenericRulesOutput(fileId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'GenericRule', 'DownloadUploadGenericRulesOutput'), {
+                    fileId: fileId
+            },
+            {
+            returnAllResponseParameters: true,
+                    responseTypeAsBufferArray: true
+            });
+        }
     }
 
     appControllers.service('VR_GenericData_GenericRuleAPIService', GenericRuleAPIService);

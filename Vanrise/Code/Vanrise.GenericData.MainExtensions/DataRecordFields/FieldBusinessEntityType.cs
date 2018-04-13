@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 using Vanrise.GenericData.MainExtensions.DataRecordFields.Filters;
@@ -226,6 +227,25 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 return FieldGuidType.ParseNonNullValueToGuid(originalValue);
             else
                 return Convert.ChangeType(originalValue, type);
+        }
+
+        public override void GetValueByDescription(IGetValueByDescriptionContext context)
+        {
+            if (context.FieldDescription == null)
+                return;
+            var businessEntityContext = new BusinessEntityGetIdByDescriptionContext
+            {
+                FieldDescription = context.FieldDescription,
+                FieldType = context.FieldType
+            };
+           
+            var beManager = GetBusinessEntityManager();
+            beManager.GetIdByDescription(businessEntityContext);
+            if (businessEntityContext.ErrorMessage != null)
+                context.ErrorMessage = businessEntityContext.ErrorMessage;
+            else
+                context.FieldValue = businessEntityContext.FieldValue;
+            
         }
         #endregion
 

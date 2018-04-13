@@ -122,9 +122,17 @@
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Business\Vanrise.GenericData.Business.csproj">
+      <Project>{e196c862-be33-49dd-9e0d-2948fb289861}</Project>
+      <Name>Vanrise.GenericData.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
       <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
       <Name>Vanrise.GenericData.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.MainExtensions\Vanrise.GenericData.MainExtensions.csproj">
+      <Project>{9fba4641-edd5-4a59-a053-ce879f31ad14}</Project>
+      <Name>Vanrise.GenericData.MainExtensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.GenericData.Transformation.Entities\Vanrise.GenericData.Transformation.Entities.csproj">
       <Project>{e8b1931e-f1f5-4937-9cb0-a7d0cf5edcb1}</Project>

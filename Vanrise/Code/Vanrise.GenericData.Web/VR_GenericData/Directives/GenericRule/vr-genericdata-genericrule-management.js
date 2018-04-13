@@ -35,18 +35,20 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
         var ruleDefinitionId;
         var predefinedCriteriaFieldValues;
         var accessibility;
+        var context;
 
         this.initializeController = initializeController;
 
         function initializeController() {
             $scope.scopeModel = {};
-
+            
 
             $scope.scopeModel.filters = [];
             $scope.scopeModel.effectiveDate;
             $scope.scopeModel.settingsFilterEditor;
             $scope.scopeModel.hasAddRulePermission = false;
             $scope.scopeModel.ruleDefinition;
+            $scope.scopeModel.supportUpload = false;
 
             $scope.scopeModel.searchClicked = function () {
                 return loadGenericRuleGrid();
@@ -75,6 +77,14 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                 }
                 VR_GenericData_GenericRule.addGenericRule(ruleDefinitionId, onGenericRuleAdded, preDefinedData, accessibility);
             };
+            $scope.scopeModel.uploadGenericRules = function () {
+                var criteriaFieldsValues = {};
+                if (predefinedCriteriaFieldValues != undefined) {
+                    for (var key in predefinedCriteriaFieldValues)
+                        criteriaFieldsValues[key] = GetValues([predefinedCriteriaFieldValues[key]]);
+                }
+                VR_GenericData_GenericRule.uploadGenericRules(ruleDefinitionId, getContext(), criteriaFieldsToHide, criteriaFieldsValues);
+            };
 
             UtilsService.waitMultiplePromises([gridPromiseDeferred.promise]).then(function () {
                 defineAPI();
@@ -98,7 +108,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
             var api = {};
             api.loadDirective = function (payload) {
                 var promises = [];
-
+    
                 if (payload != undefined) {
                     ruleDefinitionId = payload.RuleDefinitionId;
                     criteriaFieldsToHide = payload.criteriaFieldsToHide;
@@ -107,6 +117,9 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
 
                     var hasAddGenericRulePermissionPromise = hasAddGenericRulePermission();
                     promises.push(hasAddGenericRulePermissionPromise);
+
+                    var supportUploadPromise = supportUpload();
+                    promises.push(supportUploadPromise);
 
                     var loadRuleDefinitionPromise = loadRuleDefinition();
                     promises.push(loadRuleDefinitionPromise);
@@ -157,6 +170,12 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                 $scope.scopeModel.hasAddRulePermission = response;
             });
         };
+
+        function supportUpload() {
+            return VR_GenericData_GenericRuleAPIService.DoesRuleSupportUpload(ruleDefinitionId).then(function (response) {
+                $scope.scopeModel.supportUpload = response;
+            });
+        }
 
         function getFilterObject() {
             var gridQuery = {
@@ -261,7 +280,6 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
             function getFilter(criteriaField) {
                 var filter;
                 var filterEditor = UtilsService.getItemByVal(fieldTypes, criteriaField.FieldType.ConfigId, 'ExtensionConfigurationId').FilterEditor;
-
                 if (filterEditor == null) return filter;
 
                 filter = {};
@@ -315,6 +333,13 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
             }
 
             return UtilsService.waitMultiplePromises(promises);
+        }
+
+        function getContext() {
+            var currentContext = context;
+            if (currentContext == undefined)
+                currentContext = {};
+            return currentContext;                                
         }
     }
 

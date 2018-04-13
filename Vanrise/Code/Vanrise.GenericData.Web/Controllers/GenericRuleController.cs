@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Web;
 using System.Web.Http;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
@@ -23,8 +25,8 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             if (!_manager.DoesUserHaveViewAccess(input.Query.RuleDefinitionId))
                 return GetUnauthorizedResponse();
-            
-            var manager = GetManager(input.Query.RuleDefinitionId);
+
+            var manager = _manager.GetManager(input.Query.RuleDefinitionId);
             return GetWebResponse(input, manager.GetFilteredRules(input));
         }
 
@@ -32,7 +34,7 @@ namespace Vanrise.GenericData.Web.Controllers
         [Route("GetGenericRule")]
         public GenericRule GetGenericRule(Guid ruleDefinitionId, int ruleId)
         {
-            var manager = GetManager(ruleDefinitionId);
+            var manager = _manager.GetManager(ruleDefinitionId);
             return manager.GetGenericRule(ruleId, true);
         }
 
@@ -43,7 +45,7 @@ namespace Vanrise.GenericData.Web.Controllers
             if (!DoesUserHaveAddAccess(rule.DefinitionId))
              return   GetUnauthorizedResponse();
 
-            var manager = GetManager(rule.DefinitionId);
+            var manager = _manager.GetManager(rule.DefinitionId);
             return manager.AddGenericRule(rule);
         }
 
@@ -61,7 +63,7 @@ namespace Vanrise.GenericData.Web.Controllers
             if (!DoesUserHaveEditAccess(rule.DefinitionId))
                 return GetUnauthorizedResponse();
 
-            var manager = GetManager(rule.DefinitionId);
+            var manager = _manager.GetManager(rule.DefinitionId);
             return manager.UpdateGenericRule(rule);
            
         }
@@ -72,25 +74,53 @@ namespace Vanrise.GenericData.Web.Controllers
         {
             return _manager.DoesUserHaveEditAccess(ruleDefinitionId);
         }
+        
+        [HttpGet]
+        [Route("DoesRuleSupportUpload")]
+        public bool DoesRuleSupportUpload(Guid ruleDefinitionId)
+        {
+            return _manager.DoesRuleSupportUpload(ruleDefinitionId);
+        }
 
         [HttpPost]
         [Route("DeleteGenericRule")]
         public Vanrise.Entities.DeleteOperationOutput<GenericRuleDetail> DeleteGenericRule(GenericRule rule)
         {
-            var manager = GetManager(rule.DefinitionId);
+            var manager = _manager.GetManager(rule.DefinitionId);
             return manager.DeleteGenericRule(rule.RuleId);
         }
 
-        IGenericRuleManager GetManager(Guid ruleDefinitionId)
+        [HttpPost]
+        [Route("DownloadGenericRulesTemplate")]
+        public object DownloadGenericRulesTemplate(DownloadUploadTemplateInput input)
+        {
+            Guid ruleDefinitionId = input.RuleDefinitionId;
+            List<string> criteriaFieldsToHide = input.CriteriaFieldsToHide;
+            GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
+            byte[] bytes = ruleDefinitionManager.DownloadGenericRulesTemplate(ruleDefinitionId, criteriaFieldsToHide);
+            MemoryStream memStreamRate = new System.IO.MemoryStream();
+            memStreamRate.Write(bytes, 0, bytes.Length);
+            memStreamRate.Seek(0, System.IO.SeekOrigin.Begin);
+            return GetExcelResponse(memStreamRate, "UploadGenericRulesTemplate.xls");
+        }
+
+        [HttpPost]
+        [Route("UploadGenericRules")]
+        public UploadGenericRulesOutput UploadGenericRules(UploadGenericRulesInput uploadInput)
+        {
+            return _manager.UploadGenericRules(uploadInput);
+        }
+
+        [HttpGet]
+        [Route("DownloadUploadGenericRulesOutput")]
+        public object DownloadUploadGenericRulesOutput(long fileId)
         {
             GenericRuleDefinitionManager ruleDefinitionManager = new GenericRuleDefinitionManager();
-            GenericRuleDefinition ruleDefinition = ruleDefinitionManager.GetGenericRuleDefinition(ruleDefinitionId);
-            
-            GenericRuleTypeConfigManager ruleTypeManager = new GenericRuleTypeConfigManager();
-            GenericRuleTypeConfig ruleTypeConfig = ruleTypeManager.GetGenericRuleTypeById(ruleDefinition.SettingsDefinition.ConfigId);
-
-            Type managerType = Type.GetType(ruleTypeConfig.RuleManagerFQTN);
-            return Activator.CreateInstance(managerType) as IGenericRuleManager;
+            byte[] bytes = ruleDefinitionManager.DownloadUploadGenericRulesOutput(fileId);
+            MemoryStream memStreamRate = new System.IO.MemoryStream();
+            memStreamRate.Write(bytes, 0, bytes.Length);
+            memStreamRate.Seek(0, System.IO.SeekOrigin.Begin);
+            return GetExcelResponse(memStreamRate, "GenericRulesUploadOutput.xls");
         }
     }
 }
