@@ -570,8 +570,8 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>RDLCRetail</DataSetName>
-        <Top>6.22681in</Top>
-        <Left>0.44125in</Left>
+        <Top>5.54598in</Top>
+        <Left>0.44123in</Left>
         <Height>1.4in</Height>
         <Width>7.24186in</Width>
         <ZIndex>1</ZIndex>
@@ -1981,8 +1981,8 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>RDLCRetail</DataSetName>
-        <Top>5.62542in</Top>
-        <Left>0.44125in</Left>
+        <Top>4.94459in</Top>
+        <Left>0.44123in</Left>
         <Height>0.6in</Height>
         <Width>7.24185in</Width>
         <ZIndex>6</ZIndex>
@@ -2015,16 +2015,13 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.228in</Width>
+              <Width>0.41284in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.53997in</Width>
+              <Width>1.36022in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>2.14676in</Width>
-            </TablixColumn>
-            <TablixColumn>
-              <Width>1.32714in</Width>
+              <Width>1.29323in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -2063,10 +2060,9 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
-                    <ColSpan>4</ColSpan>
+                    <ColSpan>3</ColSpan>
                   </CellContents>
                 </TablixCell>
-                <TablixCell />
                 <TablixCell />
                 <TablixCell />
               </TablixCells>
@@ -2083,7 +2079,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>ITEM NO</Value>
+                              <Value>S.NO</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2130,41 +2126,6 @@
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox15</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Style>Solid</Style>
-                          <Width>0.25pt</Width>
-                        </Border>
-                        <BackgroundColor>#e2eaf5</BackgroundColor>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox67">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>Payment Mode</Value>
-                              <Style>
-                                <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox25</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>Solid</Style>
@@ -2263,7 +2224,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!TransactionTime.Value</Value>
+                              <Value>=CDate(Fields!TransactionTime.Value).ToString("dd/MM/yyyy")</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2274,41 +2235,6 @@
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>BranchName</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Style>Solid</Style>
-                          <Width>0.25pt</Width>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Quantity5">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=Fields!TransactionTypeName.Value</Value>
-                              <Style>
-                                <FontFamily>Verdana</FontFamily>
-                                <FontSize>8pt</FontSize>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Right</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Quantity1</rd:DefaultName>
                       <Style>
                         <Border>
                           <Style>Solid</Style>
@@ -2366,7 +2292,6 @@
             <TablixMember />
             <TablixMember />
             <TablixMember />
-            <TablixMember />
           </TablixMembers>
         </TablixColumnHierarchy>
         <TablixRowHierarchy>
@@ -2379,14 +2304,17 @@
             </TablixMember>
             <TablixMember>
               <Group Name="Details8" />
+              <Visibility>
+                <Hidden>=iif(RowNumber(Nothing) &lt;7,false,true)</Hidden>
+              </Visibility>
             </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>PaymentDetails</DataSetName>
-        <Top>4.27792in</Top>
-        <Left>0.44125in</Left>
+        <Top>4.27515in</Top>
+        <Left>4.61681in</Left>
         <Height>0.6in</Height>
-        <Width>7.24187in</Width>
+        <Width>3.06629in</Width>
         <ZIndex>8</ZIndex>
         <Style>
           <Border>
@@ -2647,8 +2575,8 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>BankDetails</DataSetName>
-        <Top>7.78062in</Top>
-        <Left>0.44125in</Left>
+        <Top>7.09979in</Top>
+        <Left>0.44123in</Left>
         <Height>1.1081in</Height>
         <Width>7.24186in</Width>
         <ZIndex>9</ZIndex>
@@ -2662,16 +2590,16 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.22674in</Width>
+              <Width>0.41424in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>3.52829in</Width>
+              <Width>1.87204in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.54133in</Width>
+              <Width>1.14095in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.94549in</Width>
+              <Width>0.70591in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -2730,7 +2658,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>ITEM NO</Value>
+                              <Value>S.NO</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2765,7 +2693,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Serial Number</Value>
+                              <Value>Invoice Number</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -3031,10 +2959,10 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>LastInvoices</DataSetName>
-        <Top>4.94459in</Top>
+        <Top>4.27515in</Top>
         <Left>0.44125in</Left>
         <Height>0.6in</Height>
-        <Width>7.24185in</Width>
+        <Width>4.13313in</Width>
         <ZIndex>10</ZIndex>
         <Style>
           <Border>
@@ -3050,7 +2978,7 @@
             <TextRuns>
               <TextRun>
                 <Value>Note: *Kindly deduct withholding tax @8% of the bill amount and provide tax challan within 15 days. Incase, tax challan is not submitted to us within 15 day than, deducted amount will be charged in the next bill.Any leftover billing may be charged with upcoming invoices.
-Please Ignore the Previous Balance amount if you have already paid that amount.</Value>
+</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
                   <FontSize>8pt</FontSize>
@@ -3063,9 +2991,9 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
           </Paragraph>
         </Paragraphs>
         <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>9.00458in</Top>
-        <Left>0.44125in</Left>
-        <Height>0.68752in</Height>
+        <Top>8.32375in</Top>
+        <Left>0.44123in</Left>
+        <Height>0.52085in</Height>
         <Width>7.24187in</Width>
         <ZIndex>11</ZIndex>
         <Style>
@@ -3095,7 +3023,6 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
               </Parameter>
             </Parameters>
             <OmitBorderOnPageBreak>true</OmitBorderOnPageBreak>
-            <Top>0.0254in</Top>
             <Height>0.4375in</Height>
             <Width>7.24185in</Width>
             <Style>
@@ -3109,9 +3036,9 @@ Please Ignore the Previous Balance amount if you have already paid that amount.<
           <BreakLocation>Start</BreakLocation>
         </PageBreak>
         <KeepTogether>true</KeepTogether>
-        <Top>25.07655cm</Top>
-        <Left>1.12077cm</Left>
-        <Height>1.17578cm</Height>
+        <Top>22.71224cm</Top>
+        <Left>1.12071cm</Left>
+        <Height>1.13771cm</Height>
         <Width>18.39435cm</Width>
         <ZIndex>12</ZIndex>
         <Visibility>
