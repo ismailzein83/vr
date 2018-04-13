@@ -755,6 +755,9 @@
     <Build Include="sec\Stored Procedures\sp_CookieName_InsertIfNotExistsAndGetCookieName.sql" />
     <Build Include="runtime\Stored Procedures\sp_RuntimeNodeConfiguration_GetAll.sql" />
     <Build Include="runtime\Stored Procedures\sp_RuntimeNode_GetAll.sql" />
+    <Build Include="common\Tables\SMSMessageTemplate.sql" />
+    <Build Include="runtime\Stored Procedures\sp_RuntimeNodeConfiguration_Update.sql" />
+    <Build Include="runtime\Stored Procedures\sp_RuntimeNodeConfiguration_Insert.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
