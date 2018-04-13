@@ -56,7 +56,6 @@
     <Compile Include="RateType\RateTypeRuleContext.cs" />
     <Compile Include="RateType\RateTypeRule.cs" />
     <Compile Include="RateType\RateTypeRuleManager.cs" />
-    <Compile Include="RateValue\RateTypeManager.cs" />
     <Compile Include="RateValue\RateValueRuleDefinitionSettings.cs" />
     <Compile Include="RateValue\RateValueMappingStep.cs" />
     <Compile Include="RateValue\RateValueRule.cs" />
