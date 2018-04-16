@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Vanrise.BusinessProcess.Business.UCT
+namespace Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.UCT
 {
     public class UctMailMessage
     {

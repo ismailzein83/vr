@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="CustomCodeTaskActivity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UCT\UctMailMessage.cs" />
     <Compile Include="WFSchedulerTaskAction.cs" />
     <Compile Include="WFShcedulerTaskActionExtendedSettings.cs" />
   </ItemGroup>

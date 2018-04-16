@@ -10,7 +10,7 @@ using Vanrise.Runtime.Entities;
 using Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments;
 using Vanrise.Runtime.Business;
 using Vanrise.Entities;
-using Vanrise.BusinessProcess.Business.UCT;
+using Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.UCT;
 
 namespace Vanrise.BusinessProcess.WFActivities
 {

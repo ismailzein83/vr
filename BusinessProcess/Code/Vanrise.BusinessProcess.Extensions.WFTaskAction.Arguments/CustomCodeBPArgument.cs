@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Vanrise.BusinessProcess.Business.UCT;
+using Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.UCT;
 
 namespace Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments
 {

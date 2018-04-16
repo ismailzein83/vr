@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Vanrise.BusinessProcess.Data;
 using Vanrise.BusinessProcess.Entities;
 using System.Linq;
 using Vanrise.Common;
@@ -10,6 +9,7 @@ using Vanrise.Runtime.Business;
 using Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments;
 
 namespace Vanrise.BusinessProcess.Business
+
 {
     public class CustomCodeTaskManager
     {
@@ -69,7 +69,7 @@ namespace Vanrise.BusinessProcess.Business
                 using System.Data;
                 using System.Linq;
                 using Vanrise.Common;
-                using Vanrise.BusinessProcess.Business.UCT;
+                using Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments.UCT;
 
 
                 namespace #NAMESPACE#
