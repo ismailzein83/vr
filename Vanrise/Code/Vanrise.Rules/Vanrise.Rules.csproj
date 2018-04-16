@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IRuleGetPriorityContext.cs" />
     <Compile Include="RuleChangedData.cs" />
     <Compile Include="BaseRule.cs" />
     <Compile Include="BaseRuleStructureBehavior.cs" />

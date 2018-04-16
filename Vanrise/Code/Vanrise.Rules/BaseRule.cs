@@ -36,7 +36,13 @@ namespace Vanrise.Rules
 		public virtual void UpdateAdditionalInformation(BaseRule existingRule, ref AdditionalInformation additionalInformation)
 		{
 		}
-	}
+
+
+        public long GetPriorityIfSameCriteria(IRuleGetPriorityContext context)
+        {
+            return this.RuleId;
+        }
+    }
 
 	public interface IVRRule
 	{
@@ -51,5 +57,7 @@ namespace Vanrise.Rules
 		TimeSpan RefreshTimeSpan { get; }
 
 		void RefreshRuleState(IRefreshRuleStateContext context);
+
+        long GetPriorityIfSameCriteria(IRuleGetPriorityContext context);
 	}
 }

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
-using Vanrise.Notification.Data;
 using Vanrise.Notification.Entities;
 using Vanrise.Rules;
 
@@ -166,6 +163,11 @@ namespace Vanrise.Notification.Business
             public void RefreshRuleState(IRefreshRuleStateContext context)
             {
 
+            }
+
+            public long GetPriorityIfSameCriteria(IRuleGetPriorityContext context)
+            {
+                return this.OriginalAlertRule != null ? this.OriginalAlertRule.VRAlertRuleId : 0;
             }
         }
 

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using Vanrise.Common;
 
 namespace Vanrise.Rules
@@ -63,8 +61,14 @@ namespace Vanrise.Rules
 
         private void OrderRules(RuleNode node, Dictionary<int, List<IVRRule>> priorities)
         {
+            if (node.UnMatchedRulesNode != null)
+                node.UnMatchedRulesNode.Rules = OrderRulesByPriorityIfSameCriteria(node.UnMatchedRulesNode.Rules);
+
             if (priorities == null || priorities.Count == 0)
+            {
+                node.Rules = OrderRulesByPriorityIfSameCriteria(node.Rules);
                 return;
+            }
 
             if (node.Rules == null || node.Rules.Count == 0)
                 return;
@@ -72,7 +76,8 @@ namespace Vanrise.Rules
             HashSet<IVRRule> rules = new HashSet<IVRRule>();
             foreach (var priority in priorities)
             {
-                foreach (IVRRule rule in priority.Value)
+                var orderedRules = OrderRulesByPriorityIfSameCriteria(priority.Value);
+                foreach (IVRRule rule in orderedRules)
                 {
                     if (node.Rules.Contains(rule))
                         rules.Add(rule);
@@ -81,11 +86,17 @@ namespace Vanrise.Rules
             node.Rules = rules.ToList();
         }
 
+        private List<IVRRule> OrderRulesByPriorityIfSameCriteria(List<IVRRule> rules)
+        {
+            var context = new RuleGetPriorityContext();
+            return rules != null ? rules.OrderByDescending(itm => itm.GetPriorityIfSameCriteria(context)).ToList() : null;
+        }
+
         private Dictionary<int, List<IVRRule>> BuildPriorities(Dictionary<int, List<IVRRule>> priorities, Dictionary<IVRRule, int> nodePriorities)
         {
             Dictionary<int, List<IVRRule>> result = new Dictionary<int, List<IVRRule>>();
             int priority = 0;
-  
+
 
             if (nodePriorities == null || nodePriorities.Count == 0)
                 return priorities != null ? new Dictionary<int, List<IVRRule>>(priorities) : null;
