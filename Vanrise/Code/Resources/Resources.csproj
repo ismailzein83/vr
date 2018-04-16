@@ -494,6 +494,7 @@
     <None Include="BatchScripts\SOM\All.bat" />
     <None Include="BatchScripts\TOneV2\02-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\TOneV2\01-Runtime.bat" />
+    <None Include="BatchScripts\TOneV2\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\TOneV2\03-WebSite.bat" />
     <None Include="BatchScripts\TOneV2\05-CompressFiles.bat" />
     <None Include="BatchScripts\TOneV2\06-GroupJSFiles.bat" />
