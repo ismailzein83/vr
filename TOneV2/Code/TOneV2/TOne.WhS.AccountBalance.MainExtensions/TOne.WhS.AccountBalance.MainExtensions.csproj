@@ -102,6 +102,8 @@
     <Compile Include="VRBalanceAlertActions\BlockCustomerActionDefinition.cs" />
     <Compile Include="VRBalanceAlertActions\SendCustomerEmailAction.cs" />
     <Compile Include="VRBalanceAlertActions\SendCustomerEmailActionDefinition.cs" />
+    <Compile Include="VRBalanceAlertActions\SendCustomerSMSAction.cs" />
+    <Compile Include="VRBalanceAlertActions\SendCustomerSMSActionDefinition.cs" />
     <Compile Include="VRBalanceAlertActions\UnBlockCustomerAction.cs" />
     <Compile Include="VRBalanceAlertActions\UnBlockCustomerActionDefinition.cs" />
     <Compile Include="VRBalanceAlertThresholds\PrePaid\CustFixedThreshold.cs" />
