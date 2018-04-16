@@ -91,6 +91,8 @@
     <Compile Include="Settings\NationalSettings\NationalSettings.cs" />
     <Compile Include="SMS\SMSEvaluatedTemplate.cs" />
     <Compile Include="SMS\SMSMessageTemplate.cs" />
+    <Compile Include="SMS\SMSMessageTemplateDetail.cs" />
+    <Compile Include="SMS\SMSMessageTemplateQuery.cs" />
     <Compile Include="SMS\SMSMessageType.cs" />
     <Compile Include="SMS\SMSMessageTypeInfo.cs" />
     <Compile Include="SMS\SMSSendHandler.cs" />

@@ -18,7 +18,7 @@ namespace Vanrise.Entities
         public override Guid VRComponentTypeConfigId {
             get
             {
-                throw new NotImplementedException();
+                return new Guid("80791C8A-5F81-4D2E-B3D7-4240CF967FA0");
             }
         }
     }

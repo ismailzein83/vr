@@ -300,6 +300,11 @@
     <Content Include="Common\Directives\Settings\Templates\OverriddenConfigurationSettings.html" />
     <Content Include="Common\Directives\Settings\vr-common-overriddenconfiguration-settings.js" />
     <Content Include="Common\Directives\Settings\vr-common-settings-selector.js" />
+    <Content Include="Common\Directives\SMS\Templates\SMSMessageTemplateGridTemplate.html" />
+    <Content Include="Common\Directives\SMS\Templates\SMSMessageTypeSettings.html" />
+    <Content Include="Common\Directives\SMS\vr-common-smsmessagetemplate-grid.js" />
+    <Content Include="Common\Directives\SMS\vr-common-smsmessagetype-selector.js" />
+    <Content Include="Common\Directives\SMS\vr-common-smsmessagetype-settings.js" />
     <Content Include="Common\Directives\StartingFrom\vr-common-startingfrom-selector.js" />
     <Content Include="Common\Directives\StatusDefinition\StatusDefinitionBE\Templates\StatusDefinitionBEEditor.html" />
     <Content Include="Common\Directives\StatusDefinition\StatusDefinitionBE\vr-common-statusdefinitionbe-editor.js" />
@@ -490,6 +495,8 @@
     <Content Include="Common\Services\APIServices\ObjectTrackingAPIService.js" />
     <Content Include="Common\Services\APIServices\OverriddenConfigAPIService.js" />
     <Content Include="Common\Services\APIServices\OverriddenConfigGroupAPIService.js" />
+    <Content Include="Common\Services\APIServices\SMSMessageTemplateAPIService.js" />
+    <Content Include="Common\Services\APIServices\SMSMessageTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\VRExclusiveSessionAPIService.js" />
     <Content Include="Common\Services\APIServices\VRExclusiveSessionTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\VRLocalizationLanguageAPIService.js" />
@@ -532,6 +539,7 @@
     <Content Include="Common\Services\ObjectTrackingService.js" />
     <Content Include="Common\Services\OverriddenConfigGroupService.js" />
     <Content Include="Common\Services\OverriddenConfigService.js" />
+    <Content Include="Common\Services\SMSMessageTemplateService.js" />
     <Content Include="Common\Services\StatusDefinitionService.js" />
     <Content Include="Common\Services\VRApplicationVisibilityService.js" />
     <Content Include="Common\Services\VRBulkActionDraftService.js" />
@@ -637,6 +645,10 @@
     <Content Include="Common\Views\Samples\TABSSample\TabsController.js" />
     <Content Include="Common\Views\Settings\SettingsEditor.html" />
     <Content Include="Common\Views\Settings\SettingsEditorController.js" />
+    <Content Include="Common\Views\SMS\SMSMessageTemplateEditor.html" />
+    <Content Include="Common\Views\SMS\SMSMessageTemplateEditorController.js" />
+    <Content Include="Common\Views\SMS\SMSMessageTemplateManagement.html" />
+    <Content Include="Common\Views\SMS\SMSMessageTemplateManagementController.js" />
     <Content Include="Common\Views\StartupPage.html" />
     <Content Include="Common\Views\StatusDefinition\StatusDefinitionEditor.html" />
     <Content Include="Common\Views\StatusDefinition\StatusDefinitionEditorController.js" />

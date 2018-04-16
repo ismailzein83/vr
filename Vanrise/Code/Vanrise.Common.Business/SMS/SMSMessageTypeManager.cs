@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common.Data;
 using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
@@ -16,7 +17,7 @@ namespace Vanrise.Common.Business
         #endregion
 
         #region Public Methods
-       
+
         public string GetSMSMessageTypeName(Guid smsMessageTypeId)
         {
             var smsMessageType = _vrComponentTypeManager.GetComponentType<SMSMessageTypeSettings, SMSMessageType>(smsMessageTypeId);
@@ -44,7 +45,13 @@ namespace Vanrise.Common.Business
 
         #endregion
 
+        #region Private Classes
+       
+        #endregion
+
+
         #region Private Methods
+
 
         #endregion
 

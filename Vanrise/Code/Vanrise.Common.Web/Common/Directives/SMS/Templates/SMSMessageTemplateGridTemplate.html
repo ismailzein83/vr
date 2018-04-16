@@ -1,0 +1,12 @@
+﻿<vr-datagrid datasource="scopeModel.smsMessageTemplates"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="scopeModel.onGridReady"
+             menuactions="scopeModel.menuActions"
+             idfield="Entity.SMSMessageTemplateId">
+    <vr-datagridcolumn headertext="'ID'" localizedheadertext="'VRRes.ID.VREnd'" field="'Entity.SMSMessageTemplateId'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Name'" localizedheadertext="'VRRes.Name.VREnd'" field="'Entity.Name'"></vr-datagridcolumn>
+    <vr-datagridexpandablerow>
+        <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
+    </vr-datagridexpandablerow>
+</vr-datagrid>
