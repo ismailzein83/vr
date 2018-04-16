@@ -51,9 +51,8 @@
 
                 api.load = function (payload) {
                     var promises = [];
-                    console.log(payload);
 
-                    if (payload != undefined) {
+                    if (payload != undefined && payload.componentType != undefined) {
                         $scope.scopeModel.name = payload.componentType.Name;
                     }
 
