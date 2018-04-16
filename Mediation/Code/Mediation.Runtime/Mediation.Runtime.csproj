@@ -195,6 +195,9 @@
     <Reference Include="Vanrise.Common.Data.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Data.SQL.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Excel">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Excel.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common.MainExtensions">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.MainExtensions.dll</HintPath>
     </Reference>
