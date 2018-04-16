@@ -833,6 +833,7 @@
     <None Include="Mediation.Alcatel_ICX.PostDeployment.sql" />
     <None Include="Retail_RA.PostDeployment.sql" />
     <None Include="Retail_RA_Overridden.PostDeployment.sql" />
+    <None Include="Mediation_Jazz.Huawei.PostDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BI.PostDeployemnt.sql" />

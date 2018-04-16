@@ -63,7 +63,8 @@ set nocount on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('3ADD847F-311E-43FF-917B-38EBB1152A4B','BusinessProcess_BP_Mediation','Mediation','04493174-83F0-44D6-BBE4-DBEB8B57875A',0,'["View", "StartInstance", "ScheduleTask"]')
+('3ADD847F-311E-43FF-917B-38EBB1152A4B','BusinessProcess_BP_Mediation','Mediation','04493174-83F0-44D6-BBE4-DBEB8B57875A',0,'["View", "StartInstance", "ScheduleTask"]'),
+('DC444B19-8C84-4E7F-89A0-0A6344DAB783','Mediation_CDRRules','Mediation_CDRRules','9BBD7C00-011D-4AC9-8B25-36D3E2A8F7CF',0,'["Add","View","Edit"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
