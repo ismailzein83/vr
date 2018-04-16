@@ -11,5 +11,5 @@ BEGIN
 
 	select [ID], [OwnerID], [OwnerType], [CurrencyID], [EffectiveOn], [PriceListType], [ProcessInstanceID], [FileID], [CreatedTime],issent,SourceID,[UserID],[Description],[PricelistStateBackupID]
 	from [TOneWhS_BE].SalePriceList_New with(nolock)
-	where ProcessInstanceID = @ProcessInstanceId AND PriceListType != 3
+	where ProcessInstanceID = @ProcessInstanceId AND PriceListType != 3 And OwnerType = 1
 END
