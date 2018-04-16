@@ -394,9 +394,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.CaseManagement.Web"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Data.RDB", "Vanrise.Data.RDB\Vanrise.Data.RDB.csproj", "{2D7A8E74-A563-4752-866B-40E8FE14C7BC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Common.Excel", "Vanrise.Common.Excel\Vanrise.Common.Excel.csproj", "{5EEF4D8E-6588-4BAE-B447-09B0E3312E97}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 168
+		SccNumberOfProjects = 169
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -1068,6 +1070,10 @@ Global
 		SccProjectTopLevelParentUniqueName167 = Vanrise.sln
 		SccProjectName167 = Vanrise.Data.RDB
 		SccLocalPath167 = Vanrise.Data.RDB
+		SccProjectUniqueName168 = Vanrise.Common.Excel\\Vanrise.Common.Excel.csproj
+		SccProjectTopLevelParentUniqueName168 = Vanrise.sln
+		SccProjectName168 = Vanrise.Common.Excel
+		SccLocalPath168 = Vanrise.Common.Excel
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -2432,6 +2438,14 @@ Global
 		{2D7A8E74-A563-4752-866B-40E8FE14C7BC}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2D7A8E74-A563-4752-866B-40E8FE14C7BC}.Release|x64.ActiveCfg = Release|Any CPU
 		{2D7A8E74-A563-4752-866B-40E8FE14C7BC}.Release|x86.ActiveCfg = Release|Any CPU
+		{5EEF4D8E-6588-4BAE-B447-09B0E3312E97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5EEF4D8E-6588-4BAE-B447-09B0E3312E97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5EEF4D8E-6588-4BAE-B447-09B0E3312E97}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5EEF4D8E-6588-4BAE-B447-09B0E3312E97}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5EEF4D8E-6588-4BAE-B447-09B0E3312E97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5EEF4D8E-6588-4BAE-B447-09B0E3312E97}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5EEF4D8E-6588-4BAE-B447-09B0E3312E97}.Release|x64.ActiveCfg = Release|Any CPU
+		{5EEF4D8E-6588-4BAE-B447-09B0E3312E97}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2609,5 +2623,6 @@ Global
 		{A25A716C-29BE-4451-8120-CF5F381317EB} = {6D28C6A7-07AB-4AF3-8D3F-C8075872E76A}
 		{AA6C431D-6D95-4C38-B9BE-80049E248A6A} = {6D28C6A7-07AB-4AF3-8D3F-C8075872E76A}
 		{2D7A8E74-A563-4752-866B-40E8FE14C7BC} = {62511FE5-AFF2-4322-8963-47E6DCAAFAD1}
+		{5EEF4D8E-6588-4BAE-B447-09B0E3312E97} = {C8A0CD9D-DA6E-439D-B9EB-EC21B422C8C3}
 	EndGlobalSection
 EndGlobal
