@@ -119,9 +119,11 @@ namespace TOne.WhS.Sales.Entities
         SaleEntityZoneRoutingProduct GetSellingProductZoneRoutingProduct(long zoneId);
 
         decimal GetRoundedRate(decimal rate);
-    }
 
-    public interface IApplyBulkActionToZoneDraftContext
+		SaleEntityZoneRate ZoneCurrentRate { get; }
+	}
+
+	public interface IApplyBulkActionToZoneDraftContext
     {
         int NewRateDayOffset { get; }
         int IncreasedRateDayOffset { get; }
@@ -137,9 +139,11 @@ namespace TOne.WhS.Sales.Entities
         int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId);
 
         decimal GetRoundedRate(decimal rate);
-    }
 
-    public interface IApplyBulkActionToDefaultDraftContext
+		SaleEntityZoneRate ZoneCurrentRate { get; }
+	}
+
+	public interface IApplyBulkActionToDefaultDraftContext
     {
         SaleEntityZoneRoutingProduct GetCustomerDefaultRoutingProduct();
         DefaultChanges DefaultDraft { get; }

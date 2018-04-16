@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Business;
 using TOne.WhS.Sales.Entities;
@@ -88,19 +89,19 @@ namespace TOne.WhS.Sales.MainExtensions
 		public override void ApplyBulkActionToZoneItem(IApplyBulkActionToZoneItemContext context)
 		{
 			IEnumerable<DraftRateToChange> zoneDraftNewRates = (context.ZoneDraft != null) ? context.ZoneDraft.NewRates : null;
-			context.ZoneItem.NewRates = GetZoneItemNewRates(context.ZoneItem.ZoneId, zoneDraftNewRates, context.GetRoundedRate);
+			context.ZoneItem.NewRates = GetZoneItemNewRates(context.ZoneItem.ZoneId, zoneDraftNewRates, context.GetRoundedRate, context.ZoneCurrentRate);
 		}
 
 		public override void ApplyBulkActionToZoneDraft(IApplyBulkActionToZoneDraftContext context)
 		{
-			context.ZoneDraft.NewRates = GetZoneItemNewRates(context.ZoneDraft.ZoneId, context.ZoneDraft.NewRates, context.GetRoundedRate);
+			context.ZoneDraft.NewRates = GetZoneItemNewRates(context.ZoneDraft.ZoneId, context.ZoneDraft.NewRates, context.GetRoundedRate,context.ZoneCurrentRate);
 		}
 
 		#endregion
 
 		#region Private Methods
 
-		private IEnumerable<DraftRateToChange> GetZoneItemNewRates(long zoneId, IEnumerable<DraftRateToChange> zoneDraftNewRates, Func<decimal, decimal> getRoundedRate)
+		private IEnumerable<DraftRateToChange> GetZoneItemNewRates(long zoneId, IEnumerable<DraftRateToChange> zoneDraftNewRates, Func<decimal, decimal> getRoundedRate, SaleEntityZoneRate zoneCurrentRate)
 		{
 			ImportedDataValidationResult cachedValidationData = GetOrCreateObject();
 			ImportedRow importedRow = cachedValidationData.ValidDataByZoneId.GetRecord(zoneId);
@@ -110,47 +111,53 @@ namespace TOne.WhS.Sales.MainExtensions
 
 			var newRates = new List<DraftRateToChange>();
 
-			foreach (var otherRate in importedRow.OtherRates)
+			if (zoneDraftNewRates != null)
+				newRates.AddRange(zoneDraftNewRates);
+
+			if (importedRow.OtherRates != null && importedRow.OtherRates.Count > 0)
 			{
-				if (!string.IsNullOrEmpty(otherRate.Value))
+				foreach (var otherRate in importedRow.OtherRates)
 				{
-					var newOtherRate = new DraftRateToChange()
+					if (!string.IsNullOrEmpty(otherRate.Value) && !newRates.Any(item => item.RateTypeId == otherRate.TypeId))
+					{
+						var newOtherRate = new DraftRateToChange()
+						{
+							ZoneId = zoneId,
+							RateTypeId = otherRate.TypeId,
+							Rate = getRoundedRate(Convert.ToDecimal(otherRate.Value)),
+							BED = Convert.ToDateTime(importedRow.EffectiveDate)//Remove it
+						};
+						newRates.Add(newOtherRate);
+					}
+				}
+			}
+
+			if (!newRates.Any(item => item.RateTypeId == null))
+			{
+				if (!string.IsNullOrEmpty(importedRow.Rate))
+				{
+					var newNormalRate = new DraftRateToChange()
 					{
 						ZoneId = zoneId,
-						RateTypeId = otherRate.TypeId,
-						Rate = getRoundedRate(Convert.ToDecimal(otherRate.Value)),
+						RateTypeId = null,
+						Rate = getRoundedRate(Convert.ToDecimal(importedRow.Rate)),
 						BED = Convert.ToDateTime(importedRow.EffectiveDate)
 					};
-					newRates.Add(newOtherRate);
+					newRates.Add(newNormalRate);
+				}
+				else if (newRates.Count > 0)
+				{
+					var newNormalRate = new DraftRateToChange()
+					{
+						ZoneId = zoneId,
+						RateTypeId = null,
+						Rate = zoneCurrentRate.Rate.Rate,
+						BED = Convert.ToDateTime(importedRow.EffectiveDate)
+					};
+					newRates.Add(newNormalRate);
 				}
 			}
 
-			if (zoneDraftNewRates != null)
-			{
-				foreach (DraftRateToChange newRate in zoneDraftNewRates)
-				{
-					if (newRate.RateTypeId.HasValue && !newRates.Any(item => item.RateTypeId == newRate.RateTypeId))
-						newRates.Add(newRate);
-				}
-			}
-
-			DraftRateToChange newNormalRate = null;
-
-			if (!string.IsNullOrEmpty(importedRow.Rate))
-			{
-				newNormalRate = new DraftRateToChange()
-				{
-					ZoneId = zoneId,
-					RateTypeId = null,
-					Rate = getRoundedRate(Convert.ToDecimal(importedRow.Rate)),
-					BED = Convert.ToDateTime(importedRow.EffectiveDate)
-				};
-			}
-			else if (zoneDraftNewRates != null)
-				newNormalRate = zoneDraftNewRates.FindRecord(item => !item.RateTypeId.HasValue);
-
-			if (newNormalRate != null)
-				newRates.Add(newNormalRate);
 			return newRates;
 		}
 
