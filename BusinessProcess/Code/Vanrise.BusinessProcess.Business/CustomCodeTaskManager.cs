@@ -64,6 +64,7 @@ namespace Vanrise.BusinessProcess.Business
             string className = "CustomCodeHandlerExecutor";
             StringBuilder classDefinitionBuilder = new StringBuilder(@" 
                 using System;
+                using System.Text;
                 using System.Collections.Generic;
                 using System.IO;
                 using System.Data;
