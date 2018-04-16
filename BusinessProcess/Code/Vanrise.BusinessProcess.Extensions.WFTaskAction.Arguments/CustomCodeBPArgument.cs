@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.BusinessProcess.Business.UCT;
 
 namespace Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments
 {
@@ -40,6 +41,6 @@ namespace Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments
 
         void LogInfo(string messageFormat, params object[] args);
 
-        void SendMail(string from, string to, string cc, string subject, string body);
+        void SendMail(UctMailMessage mailMessage);
     }
 }

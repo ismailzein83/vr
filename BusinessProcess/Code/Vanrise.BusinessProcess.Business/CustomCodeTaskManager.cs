@@ -69,6 +69,8 @@ namespace Vanrise.BusinessProcess.Business
                 using System.Data;
                 using System.Linq;
                 using Vanrise.Common;
+                using Vanrise.BusinessProcess.Business.UCT;
+
 
                 namespace #NAMESPACE#
                 {

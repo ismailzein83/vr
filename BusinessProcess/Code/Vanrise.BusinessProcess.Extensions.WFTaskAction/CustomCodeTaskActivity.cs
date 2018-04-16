@@ -5,10 +5,12 @@ using Vanrise.BusinessProcess;
 using Vanrise.BusinessProcess.Entities;
 using Vanrise.BusinessProcess.Business;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Runtime.Entities;
 using Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments;
 using Vanrise.Runtime.Business;
 using Vanrise.Entities;
+using Vanrise.BusinessProcess.Business.UCT;
 
 namespace Vanrise.BusinessProcess.WFActivities
 {
@@ -23,7 +25,7 @@ namespace Vanrise.BusinessProcess.WFActivities
                 throw new NullReferenceException("Task Id");
             var executorType = _customCodeTaskManager.GetCachedCustomCodeTaskTypeByTaskId(taskId.Value);
             executorType.ThrowIfNull("Executor Type");
-            var executor = Activator.CreateInstance(executorType) as  ICustomCodeHandler;
+            var executor = Activator.CreateInstance(executorType) as ICustomCodeHandler;
             var customCodeContext = new CustomCodeExecutionContext(context);
             executor.Execute(customCodeContext);
         }
@@ -55,11 +57,22 @@ namespace Vanrise.BusinessProcess.WFActivities
                 _context.ActivityContext.WriteTrackingMessage(LogEntryType.Information, messageFormat, args);
             }
 
-            public void SendMail(string from, string to, string cc, string subject, string body)
+            public void SendMail(UctMailMessage mailMessage)
             {
-                throw new NotImplementedException();
+                List<VRMailAttachement> vrMailMessageAttachments = new List<VRMailAttachement>();
+                if(mailMessage.Attachments!=null)
+                {
+                    vrMailMessageAttachments = new List<VRMailAttachement>();
+                     foreach(var attachment in mailMessage.Attachments)
+                         vrMailMessageAttachments.Add(new VRMailAttachmentExcel(){
+                            Name= attachment.Name,
+                            Content = attachment.Content
+                         });
+                }
+                new VRMailManager().SendMail(mailMessage.From, mailMessage.To, mailMessage.Cc, null, mailMessage.Subject, mailMessage.Body, vrMailMessageAttachments, false);
             }
+
         }
-       
+
     }
 }
