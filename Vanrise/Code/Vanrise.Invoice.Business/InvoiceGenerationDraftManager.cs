@@ -166,13 +166,16 @@ namespace Vanrise.Invoice.Business
                 updateOperationOutput.Message = "To Date should not be greater than issue date";
                 return updateOperationOutput;
             }
+
+            var toDate =  new DateTime(input.ToDate.Year, input.ToDate.Month, input.ToDate.Day, 23, 59, 59, 997);
+
             List<InvoiceGenerationInfo> generationCustomPayloads = new List<InvoiceGenerationInfo>
             {
                 new InvoiceGenerationInfo
                 {
                     FromDate =  input.FromDate,
                     PartnerId = invoiceGenerationDraft.PartnerId,
-                    ToDate = input.ToDate,
+                    ToDate = toDate,
                     PartnerName = partnerName
                 }
             };
@@ -183,7 +186,7 @@ namespace Vanrise.Invoice.Business
                 {
                     InvoiceGenerationInfo = generationCustomPayloads,
                     MinimumFrom = input.FromDate,
-                    MaximumTo = input.ToDate,
+                    MaximumTo = toDate,
                     InvoiceTypeId = invoiceGenerationDraft.InvoiceTypeId
                 };
                 generationCustomSection.EvaluateGenerationCustomPayload(generationCustomPayloadContext);
