@@ -86,7 +86,9 @@
     <Compile Include="AccountDefinition\AccountActionDefinitionInfoFilter.cs" />
     <Compile Include="AccountDefinition\AccountBEDefinitionSettings.cs" />
     <Compile Include="AccountDefinition\AccountBEDefinitionViewSettings.cs" />
+    <Compile Include="AccountDefinition\AccountBulkActionRuntime.cs" />
     <Compile Include="AccountDefinition\AccountExtraFieldDefinitionConfig.cs" />
+    <Compile Include="AccountDefinition\HandlingErrorOption.cs" />
     <Compile Include="AccountManager\AccountManagerAssignmentDetail.cs" />
     <Compile Include="AccountManager\AccountManagerAssignmentQuery.cs" />
     <Compile Include="AccountManager\AccountManagerAssignmentRuntimeEditor.cs" />

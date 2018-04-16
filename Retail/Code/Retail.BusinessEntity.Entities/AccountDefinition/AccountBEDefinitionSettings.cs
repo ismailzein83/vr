@@ -25,7 +25,7 @@ namespace Retail.BusinessEntity.Entities
 
         public Guid? LocalServiceAccountTypeId { get; set; }
 
-        public List<AccountMenualBulkAction> AccountMenualBulkActions { get; set; }
+        public List<AccountBulkAction> AccountBulkActions { get; set; }
 
         public FinancialAccountLocator FinancialAccountLocator { get; set; }
 
@@ -50,11 +50,12 @@ namespace Retail.BusinessEntity.Entities
             return BEManagerFactory.GetManager<IAccountBEManager>().GetAccountLoggableEntity(context.BEDefinition.BusinessEntityDefinitionId);
         }
     }
-    public class AccountMenualBulkAction
+    public class AccountBulkAction
     {
-        public Guid AccountMenualBulkActionId { get; set; }
+        public Guid AccountBulkActionId { get; set; }
         public string Title { get; set; }
         public AccountBulkActionSettings Settings { get; set; }
+        public AccountCondition AccountCondition { get; set; }
     }
 
     public abstract class AccountBulkActionSettings
@@ -66,6 +67,10 @@ namespace Retail.BusinessEntity.Entities
     public interface IAccountBulkActionSettingsContext
     {
 
+    }
+
+    public abstract class AccountBulkActionRuntimeSettings
+    {
     }
     public class AccountExtraFieldDefinition
     {

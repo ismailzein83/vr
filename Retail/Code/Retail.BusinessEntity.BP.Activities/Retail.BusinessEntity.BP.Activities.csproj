@@ -76,6 +76,10 @@
     <Reference Include="Vanrise.GenericData.Entities">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Queueing, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Runtime, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.dll</HintPath>
@@ -91,6 +95,8 @@
     <Compile Include="EvaluateReccuringCharge.cs" />
     <Compile Include="ApplyRecurChargeBalanceUpdateSummaryToDB.cs" />
     <Compile Include="DeleteRecurChargeBalanceUpdateSummary.cs" />
+    <Compile Include="ExecuteAccountActions.cs" />
+    <Compile Include="LoadAccountBulkActionDrafts.cs" />
     <Compile Include="PrepareAndApplyRecurChargeToBalance.cs" />
     <Compile Include="PrepareRecurChargeBalanceUpdateSummary.cs" />
     <Compile Include="LoadRecurChargeBalanceUpdateSummaryListFromDB.cs" />

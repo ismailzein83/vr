@@ -44,8 +44,13 @@
     <Reference Include="Vanrise.BusinessProcess.Entities">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AccountBulkActionProcessInput.cs" />
     <Compile Include="ApplyRecurringChargeSubProcessInput.cs" />
     <Compile Include="AccountRecurringChargeEvaluatorProcessInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

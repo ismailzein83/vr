@@ -1,0 +1,136 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Retail.BusinessEntity.BP.AccountBulkActionProcess"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:rbba="clr-namespace:Retail.BusinessEntity.BP.Arguments;assembly=Retail.BusinessEntity.BP.Arguments"
+ xmlns:rbba1="clr-namespace:Retail.BusinessEntity.BP.Activities;assembly=Retail.BusinessEntity.BP.Activities"
+ xmlns:rbe="clr-namespace:Retail.BusinessEntity.Entities;assembly=Retail.BusinessEntity.Entities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:ve="clr-namespace:Vanrise.Entities;assembly=Vanrise.Entities"
+ xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(rbba:AccountBulkActionProcessInput)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>Retail.BusinessEntity.BP.AccountBulkActionProcess_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>Retail.BusinessEntity.BP.Arguments</x:String>
+      <x:String>Vanrise.Queueing</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>System.Data.DataSetExtensions</AssemblyReference>
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
+      <AssemblyReference>Vanrise.Common</AssemblyReference>
+      <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime</AssemblyReference>
+      <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
+      <AssemblyReference>Retail.BusinessEntity.BP.Activities</AssemblyReference>
+      <AssemblyReference>Retail.BusinessEntity.BP.Arguments</AssemblyReference>
+      <AssemblyReference>Retail.BusinessEntity.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Retail.BusinessEntity.BP</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+      <Parallel.Variables>
+        <Variable x:TypeArguments="vq:BaseQueue(rbe:Account)" Name="Accounts" />
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadAccountBulkActionStatus" />
+      </Parallel.Variables>
+      <rbba1:LoadAccountBulkActionDrafts sap2010:WorkflowViewState.IdRef="LoadAccountBulkActionDrafts_2">
+        <rbba1:LoadAccountBulkActionDrafts.BulkActionFinalState>
+          <InArgument x:TypeArguments="ve:BulkActionFinalState">
+            <mca:CSharpValue x:TypeArguments="ve:BulkActionFinalState">Input.BulkActionFinalState</mca:CSharpValue>
+          </InArgument>
+        </rbba1:LoadAccountBulkActionDrafts.BulkActionFinalState>
+        <rbba1:LoadAccountBulkActionDrafts.BulkActionIdentifier>
+          <InArgument x:TypeArguments="s:Guid">
+            <mca:CSharpValue x:TypeArguments="s:Guid">Input.BulkActionIdentifier</mca:CSharpValue>
+          </InArgument>
+        </rbba1:LoadAccountBulkActionDrafts.BulkActionIdentifier>
+        <rbba1:LoadAccountBulkActionDrafts.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(rbe:Account)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(rbe:Account)">Accounts</mca:CSharpReference>
+          </InOutArgument>
+        </rbba1:LoadAccountBulkActionDrafts.OutputQueue>
+        <rbba1:LoadAccountBulkActionDrafts.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">loadAccountBulkActionStatus</mca:CSharpReference>
+          </OutArgument>
+        </rbba1:LoadAccountBulkActionDrafts.Status>
+      </rbba1:LoadAccountBulkActionDrafts>
+      <rbba1:ExecuteAccountActions Status="{x:Null}" sap2010:WorkflowViewState.IdRef="ExecuteAccountActions_1">
+        <rbba1:ExecuteAccountActions.AccountBEDefinitionId>
+          <InArgument x:TypeArguments="s:Guid">
+            <mca:CSharpValue x:TypeArguments="s:Guid">Input.AccountBEDefinitionId</mca:CSharpValue>
+          </InArgument>
+        </rbba1:ExecuteAccountActions.AccountBEDefinitionId>
+        <rbba1:ExecuteAccountActions.AccountBulkActions>
+          <InArgument x:TypeArguments="scg:List(rbe:AccountBulkActionRuntime)">
+            <mca:CSharpValue x:TypeArguments="scg:List(rbe:AccountBulkActionRuntime)">Input.AccountBulkActions</mca:CSharpValue>
+          </InArgument>
+        </rbba1:ExecuteAccountActions.AccountBulkActions>
+        <rbba1:ExecuteAccountActions.HandlingErrorOption>
+          <InArgument x:TypeArguments="rbe:HandlingErrorOption">
+            <mca:CSharpValue x:TypeArguments="rbe:HandlingErrorOption">Input.HandlingErrorOption</mca:CSharpValue>
+          </InArgument>
+        </rbba1:ExecuteAccountActions.HandlingErrorOption>
+        <rbba1:ExecuteAccountActions.InputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(rbe:Account)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(rbe:Account)">Accounts</mca:CSharpReference>
+          </InOutArgument>
+        </rbba1:ExecuteAccountActions.InputQueue>
+        <rbba1:ExecuteAccountActions.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">loadAccountBulkActionStatus</mca:CSharpValue>
+          </InArgument>
+        </rbba1:ExecuteAccountActions.PreviousActivityStatus>
+      </rbba1:ExecuteAccountActions>
+    </Parallel>
+    <sads:DebugSymbol.Symbol>d0lDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkJ1c2luZXNzRW50aXR5LkJQXEFjY291bnRCdWxrQWN0aW9uUHJvY2Vzcy54YW1sDT8DeA4CAQFABXYQAgECRQdaKwIBGFsHdSUCAQNXDVd8AgElTQ1NYwIBIVINUmwCAR1IDUh0AgEZcg1ydAIBFG0NbWwCARBoDWhzAgEMXg1eZAIBCGMNY4EBAgEE</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="LoadAccountBulkActionDrafts_2" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="ExecuteAccountActions_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,210">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Retail.BusinessEntity.BP.AccountBulkActionProcess_1" sap:VirtualizedContainerService.HintSize="616,290" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

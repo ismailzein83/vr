@@ -142,6 +142,8 @@
     <Compile Include="AccountBEActionTypes\ChangeStatusActionController.cs" />
     <Compile Include="AccountBEActionTypes\ChangeStatusActionManager.cs" />
     <Compile Include="AccountBEActionTypes\ChangeStatusActionSettings.cs" />
+    <Compile Include="AccountBulkAction\SendEmailAccountBulkAction.cs" />
+    <Compile Include="AccountBulkAction\SendEmailAccountBulkActionDefinition.cs" />
     <Compile Include="AccountChargeEvaluators\FixedChargeAccountRecurringChargeEvaluator.cs" />
     <Compile Include="AccountCitySerialNumberPart.cs" />
     <Compile Include="AccountConditions\AssignableToPackageCondition.cs" />
