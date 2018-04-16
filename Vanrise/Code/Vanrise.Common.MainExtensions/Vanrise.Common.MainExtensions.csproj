@@ -60,6 +60,7 @@
     <Compile Include="ExchangeRateUpdateService\XigniteCurrencyReader.cs" />
     <Compile Include="POP3\ReceivedMailMessageConvertor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SMSSendHandler\ExecuteDatabaseCommandSMSHandler.cs" />
     <Compile Include="SourceCountryReader\CountryTOneV1SQLReader.cs" />
     <Compile Include="SourceCountryReader\CountryTOneV2SQLReader.cs" />
     <Compile Include="StyleFormatingSettings\CSSClass.cs" />
