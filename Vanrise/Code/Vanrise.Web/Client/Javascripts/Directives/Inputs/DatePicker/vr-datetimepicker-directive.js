@@ -302,9 +302,8 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
             var updatewatch = $scope.$watch('ctrl.value', function () {
                 if (ctrl.value == null)
                     $element.find('#divDatePicker').find('.vr-date-input').val('');
-                if (ctrl.value == undefined && selectedDate != undefined) {
+                if (ctrl.value == undefined) {
                     selectedDate = undefined;
-                    triggerOnvalueChange();
                     return;
                 }
                 var date;
@@ -335,21 +334,16 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
                         return;
                     isUserChange = false;//reset the flag
-                    triggerOnvalueChange();
 
+                    if ($attrs.onvaluechanged != undefined) {
+                        var onvaluechangedMethod = $scope.$parent.$eval($attrs.onvaluechanged);
+                        if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
+                            onvaluechangedMethod();
+                        }
+                    }
                 }
 
             });
-
-            function triggerOnvalueChange() {
-                if ($attrs.onvaluechanged != undefined) {
-                    var onvaluechangedMethod = $scope.$parent.$eval($attrs.onvaluechanged);
-                    if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
-                        onvaluechangedMethod();
-                    }
-                }
-            }
-
             $scope.ctrl.onBlurDirective = function (e) {
                 var dateTab = new Date(ctrl.value).toDateString().split(" ");
                 var year = parseInt(dateTab[3]);
