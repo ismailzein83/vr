@@ -508,6 +508,125 @@ namespace Mediation.Runtime
             return result;
         }
 
+        public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Huawei_Jazz(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
+        {
+            var cdrs = new List<dynamic>();
+            Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));
+            var dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
+            Type cdrRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType("Jazz_Huawei_CDR");
+
+            int batchSize = 0;
+
+            string fileName = ImportedData.Name;
+            var dataRecordVanriseType = new Vanrise.GenericData.Entities.DataRecordVanriseType("Jazz_Huawei_CDR");
+
+            System.IO.StreamReader sr = ImportedData.StreamReader;
+            while (!sr.EndOfStream)
+            {
+                string cdrLine = sr.ReadLine();
+                if (string.IsNullOrEmpty(cdrLine))
+                    continue;
+
+                cdrLine = cdrLine.Replace("\"", "");
+                batchSize++;
+                dynamic cdr = Activator.CreateInstance(cdrRuntimeType) as dynamic;
+
+                string[] fields = cdrLine.Split(',');
+                cdr.EventDirection = fields[0];
+                cdr.IncomingSwitch = fields[1];
+                cdr.OutgoingSwitch = fields[2];
+                cdr.IncTrunk = fields[3];
+                cdr.OutTrunk = fields[4];
+                cdr.IncProduct = fields[5];
+                cdr.OutProduct = fields[6];
+                cdr.OrigANumber = fields[7];
+                cdr.OrigBNumber = fields[8];
+
+                string startDateAsString = fields[9];
+                if (!string.IsNullOrEmpty(startDateAsString))
+                {
+                    int year = Convert.ToInt32(startDateAsString.Substring(0, 4));
+                    int month = Convert.ToInt32(startDateAsString.Substring(4, 2));
+                    int day = Convert.ToInt32(startDateAsString.Substring(6, 2));
+                    cdr.StartDate = new DateTime(year, month, day);
+                }
+
+                string startTimeAsString= fields[10];
+                if (!string.IsNullOrEmpty(startTimeAsString))
+                {
+                    int hour = Convert.ToInt32(startTimeAsString.Substring(0, 2));
+                    int minute = Convert.ToInt32(startTimeAsString.Substring(2, 2));
+                    int second = Convert.ToInt32(startTimeAsString.Substring(4, 2));
+                    int millisecond = Convert.ToInt32(startTimeAsString.Substring(6, 2));
+                    cdr.StartTime = new Time(hour, minute, second, millisecond);
+                }
+
+                string durationAsString = fields[11];
+                if (!string.IsNullOrEmpty(durationAsString))
+                {
+                    decimal duration = decimal.Parse(durationAsString);
+                    cdr.DurationInSeconds = duration / 1000;
+                }
+
+                string netStartDateAsString = fields[12];
+                if (!string.IsNullOrEmpty(netStartDateAsString))
+                {
+                    int year = Convert.ToInt32(netStartDateAsString.Substring(0, 4));
+                    int month = Convert.ToInt32(netStartDateAsString.Substring(4, 2));
+                    int day = Convert.ToInt32(netStartDateAsString.Substring(6, 2));
+                    cdr.NetStartDate = new DateTime(year, month, day);
+                }
+
+                string netStartTimeAsString = fields[13];
+                if (!string.IsNullOrEmpty(netStartTimeAsString))
+                {
+                    int hour = Convert.ToInt32(netStartTimeAsString.Substring(0, 2));
+                    int minute = Convert.ToInt32(netStartTimeAsString.Substring(2, 2));
+                    int second = Convert.ToInt32(netStartTimeAsString.Substring(4, 2));
+                    int millisecond = Convert.ToInt32(netStartTimeAsString.Substring(6, 2));
+                    cdr.NetStartTime = new Time(hour, minute, second, millisecond);
+                }
+
+                string netDurationAsString = fields[14];
+                if (!string.IsNullOrEmpty(netDurationAsString))
+                {
+                    decimal netDuration = decimal.Parse(netDurationAsString);
+                    cdr.NetDurationInSeconds = netDuration / 1000;
+                }
+
+                cdr.DataVolume = fields[15];
+                cdr.DataUnit = fields[16];
+                cdr.UserType = fields[18];
+                cdr.IMSINumber = fields[19];
+                cdr.ServiceClass = fields[20];
+
+                string teleServNumberAsString = fields[21];
+                if (!string.IsNullOrEmpty(teleServNumberAsString))
+                {
+                    cdr.TELEServNumber = int.Parse(teleServNumberAsString);
+                }
+                
+                cdr.Cell_Id = fields[22];
+                cdr.RecordType = fields[23];
+                cdr.FileName = fileName;
+
+                cdrs.Add(cdr);
+            }
+            long startingId;
+            Vanrise.Common.Business.IDManager.Instance.ReserveIDRange(dataRecordVanriseType, batchSize, out startingId);
+
+            foreach (var item in cdrs)
+                item.Id = startingId++;
+
+            var batch = Vanrise.GenericData.QueueActivators.DataRecordBatch.CreateBatchFromRecords(cdrs, "#RECORDSCOUNT# of CDRs", "Jazz_Huawei_CDR");
+            mappedBatches.Add("CDRTransformationStage", batch);
+
+            Vanrise.Integration.Entities.MappingOutput result = new Vanrise.Integration.Entities.MappingOutput();
+            result.Result = Vanrise.Integration.Entities.MappingResult.Valid;
+            LogVerbose("Finished");
+            return result;
+        }
+
         public static Vanrise.Integration.Entities.MappingOutput MapCDR_File_Huawi_WHS(Guid dataSourceId, IImportedData data, MappedBatchItemsToEnqueue mappedBatches)
         {
             Vanrise.Integration.Entities.StreamReaderImportedData ImportedData = ((Vanrise.Integration.Entities.StreamReaderImportedData)(data));

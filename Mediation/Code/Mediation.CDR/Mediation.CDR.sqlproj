@@ -132,5 +132,9 @@
     <Build Include="Mediation_ICX\Tables\AlcatelBadCDR.sql" />
     <Build Include="Mediation_ICX\User Defined Types\AlcatelCDRType.sql" />
     <Build Include="Mediation_ICX\User Defined Types\AlcatelBadCDRType.sql" />
+    <Build Include="Mediation_WHS\Tables\JazzHuaweiCDR.sql" />
+    <Build Include="Mediation_WHS\Tables\JazzHuaweiBadCDR.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\JazzHuaweiCDRType.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\JazzHuaweiBadCDRType.sql" />
   </ItemGroup>
 </Project>
