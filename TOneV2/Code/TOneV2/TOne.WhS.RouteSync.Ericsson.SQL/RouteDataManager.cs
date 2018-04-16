@@ -5,6 +5,7 @@ using TOne.WhS.RouteSync.Ericsson.Data;
 using TOne.WhS.RouteSync.Ericsson.Entities;
 using System.Data;
 using System.Collections.Generic;
+using Vanrise.Common;
 
 namespace TOne.WhS.RouteSync.Ericsson.SQL
 {
@@ -33,25 +34,58 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 
         public void CompareTables(IRouteCompareTablesContext context)
         {
-            context.RoutesToAdd = new List<EricssonConvertedRoute>();
-            context.RoutesToUpdate = new List<EricssonConvertedRoute>();
-            context.RoutesToDelete = new List<EricssonConvertedRoute>();
+            var differences = new Dictionary<EricssonConvertedRouteIdentifier, List<EricssonConvertedRouteByCompare>>();
 
-
-            Dictionary<EricssonConvertedRouteIdentifier, List<EricssonConvertedRouteByCompare>> result = new Dictionary<EricssonConvertedRouteIdentifier, List<EricssonConvertedRouteByCompare>>();
             string query = string.Format(query_CompareRouteTables, SwitchId, RouteTableName, RouteTempTableName);
             ExecuteReaderText(query, (reader) =>
             {
                 while (reader.Read())
                 {
-                    EricssonConvertedRouteByCompare ericssonConvertedRouteByCompare = new EricssonConvertedRouteByCompare()
-                    {
-                        EricssonConvertedRoute = EricssonConvertedRouteMapper(reader),
-                        TableName = reader["tableName"] as string
-                    };
-
+                    var convertedRouteByCompare = new EricssonConvertedRouteByCompare() { EricssonConvertedRoute = EricssonConvertedRouteMapper(reader), TableName = reader["tableName"] as string };
+                    var routeIdentifier = new EricssonConvertedRouteIdentifier() { BO = convertedRouteByCompare.EricssonConvertedRoute.BO, Code = convertedRouteByCompare.EricssonConvertedRoute.Code };
+                    List<EricssonConvertedRouteByCompare> tempRouteDifferences = differences.GetOrCreateItem(routeIdentifier);
+                    tempRouteDifferences.Add(convertedRouteByCompare);
                 }
             }, null);
+
+            if (differences.Count > 0)
+            {
+                List<EricssonConvertedRoute> routesToAdd = new List<EricssonConvertedRoute>();
+                List<EricssonConvertedRoute> routesToUpdate = new List<EricssonConvertedRoute>();
+                List<EricssonConvertedRoute> routesToDelete = new List<EricssonConvertedRoute>();
+                foreach (var differenceKvp in differences)
+                {
+                    var routeDifferences = differenceKvp.Value;
+                    if (routeDifferences.Count == 1)
+                    {
+                        var singleRouteDifference = differenceKvp.Value[0];
+                        if (singleRouteDifference.TableName == RouteTableName)
+                            routesToDelete.Add(singleRouteDifference.EricssonConvertedRoute);
+                        else
+                            routesToAdd.Add(singleRouteDifference.EricssonConvertedRoute);
+                    }
+                    else //routeDifferences.Count = 2
+                    {
+                        foreach (var routeDifference in routeDifferences)
+                        {
+                            if (routeDifference.TableName == RouteTempTableName)
+                            {
+                                routesToUpdate.Add(routeDifference.EricssonConvertedRoute);
+                                continue;
+                            }
+                        }
+                    }
+                }
+
+                if (routesToAdd.Count > 0)
+                    context.RoutesToAdd = routesToAdd;
+
+                if (routesToUpdate.Count > 0)
+                    context.RoutesToUpdate = routesToUpdate;
+
+                if (routesToDelete.Count > 0)
+                    context.RoutesToDelete = routesToDelete;
+            }
         }
 
         public object FinishDBApplyStream(object dbApplyStream)
