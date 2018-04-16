@@ -305,6 +305,9 @@
     <Reference Include="Vanrise.Common.Data.SQL">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Data.SQL.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Excel">
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Excel.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common.MainExtensions">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.MainExtensions.dll</HintPath>
     </Reference>
@@ -645,7 +648,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\PublishTOneV2.pubxml" />
-    <Content Include="appSettings.config" />
+	<Content Include="appSettings.config" />
     <Content Include="ConnectionStrings.config" />
     <Content Include="Web.config.CloudXPoint.exclude" />
     <Content Include="WebBI.config.exclude" />
