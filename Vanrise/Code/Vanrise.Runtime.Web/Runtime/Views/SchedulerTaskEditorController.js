@@ -79,7 +79,10 @@
                 var setLoader = function (value) {
                     $scope.isLoadingAction = value;
                 };
-                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, taskActionDirectiveAPI, undefined, setLoader, taskActionDirectiveReadyPromiseDeferred);
+                var payload = {                    
+                    context: getContext()
+                };
+                VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, taskActionDirectiveAPI, payload, setLoader, taskActionDirectiveReadyPromiseDeferred);
                 if (api.setAdditionalParamter != undefined && typeof (api.setAdditionalParamter) == "function") {
                     api.setAdditionalParamter(additionalParameter);
                 }
