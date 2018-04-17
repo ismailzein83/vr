@@ -293,7 +293,7 @@ namespace Vanrise.NumberingPlan.Business
                                         break;
                                     }
                                 }
-                                if(isMatched == false)
+                                if(!isMatched)
                                     context.ErrorMessage = string.Format("The zone {0} does not exist.", context.FieldDescription.ToString());
                             }
                         }
