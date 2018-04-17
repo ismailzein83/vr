@@ -151,6 +151,7 @@
     <Compile Include="Controllers\VRPop3MessageFilterController.cs" />
     <Compile Include="Controllers\VRPushNotificationController.cs" />
     <Compile Include="Controllers\VRRuleDefinitionController.cs" />
+    <Compile Include="Controllers\VRTempPayloadController.cs" />
     <Compile Include="Controllers\VRTileController.cs" />
     <Compile Include="Controllers\VRTimePeriodController.cs" />
     <Compile Include="Controllers\VRTimeZoneController.cs" />
@@ -505,6 +506,7 @@
     <Content Include="Common\Services\APIServices\VRLocalizationTextResourceTranslationAPIService.js" />
     <Content Include="Common\Services\APIServices\VRPop3MessageFilterAPIService.js" />
     <Content Include="Common\Services\APIServices\VRRuleDefinitionAPIService.js" />
+    <Content Include="Common\Services\APIServices\VRTempPayloadAPIService.js" />
     <Content Include="Common\Services\APIServices\VRTileAPIService.js" />
     <Content Include="Common\Services\APIServices\VRApplicationVisibilityAPIService.js" />
     <Content Include="Common\Services\APIServices\VRConnectionAPIService.js" />

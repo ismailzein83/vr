@@ -242,6 +242,7 @@
     <Compile Include="VRTax\VRTaxItem.cs" />
     <Compile Include="VRTax\VRTaxItemDefinition.cs" />
     <Compile Include="VRTax\VRTaxSetting.cs" />
+    <Compile Include="VRTempPayload\VRTempPayload.cs" />
     <Compile Include="VRTile\VRTile.cs" />
     <Compile Include="VRTile\VRTileExtendedSettingsConfig.cs" />
     <Compile Include="VRTile\VRTileSettings.cs" />

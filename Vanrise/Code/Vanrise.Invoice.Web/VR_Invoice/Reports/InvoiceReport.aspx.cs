@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Vanrise.Common;
+using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.GenericData.Business;
 using Vanrise.Invoice.Business;
@@ -32,19 +33,28 @@ namespace Vanrise.Invoice.Web.VR_Invoice.Reports
                    
                     OpenRDLCReportActionManager openRDLCReportActionManager = new MainExtensions.OpenRDLCReportActionManager();
                     string actionIdString = Request.QueryString["actionId"];
-                    string invoiceActionContext = Request.QueryString["invoiceActionContext"];
+                    Guid tempPayloadId;
+                    if (!Guid.TryParse(Request.QueryString["tempPayloadId"], out tempPayloadId))
+                    {
+                        throw new Exception("error while parsing tempPayloadId");
+                    }
+
+                    VRTempPayloadManager vrTempPayloadManager = new VRTempPayloadManager();
+                    var payload = vrTempPayloadManager.GetVRTempPayload(tempPayloadId);
+                    var invoiceActionPayloadSettings = payload.Settings as InvoiceActionPayloadSettings;
+                    invoiceActionPayloadSettings.ThrowIfNull("InvoiceActionPayloadSettings");
+                    invoiceActionPayloadSettings.Context.ThrowIfNull("InvoiceActionPayloadSettings.Context");
 
                     Guid actionId = actionIdString != null ? new Guid(actionIdString) : Guid.Empty;
-                    var context = Vanrise.Common.Serializer.Deserialize<IInvoiceActionContext>(invoiceActionContext);
 
-                    if (!context.DoesUserHaveAccess(actionId))
+                    if (!invoiceActionPayloadSettings.Context.DoesUserHaveAccess(actionId))
                         throw new UnauthorizedAccessException("you are not authorized to perform this request");
 
 
                     openRDLCReportActionManager.BuildRdlcReport(ReportViewer1, new ReportInput
                     {
                         ActionId = actionId,
-                        Context = context
+                        Context = invoiceActionPayloadSettings.Context
                     });
                 }
                 catch(Exception error)

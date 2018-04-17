@@ -1,6 +1,6 @@
 ﻿
-app.service('VR_Invoice_InvoiceActionService', ['VRModalService', 'UtilsService', 'VR_Invoice_InvoiceAPIService', 'VRNotificationService', 'SecurityService', 'FileAPIService',
-    function (VRModalService, UtilsService, VR_Invoice_InvoiceAPIService, VRNotificationService, SecurityService, FileAPIService) {
+app.service('VR_Invoice_InvoiceActionService', ['VRModalService', 'UtilsService', 'VR_Invoice_InvoiceAPIService', 'VRNotificationService', 'SecurityService', 'FileAPIService','VRCommon_VRTempPayloadAPIService','InsertOperationResultEnum',
+    function (VRModalService, UtilsService, VR_Invoice_InvoiceAPIService, VRNotificationService, SecurityService, FileAPIService, VRCommon_VRTempPayloadAPIService, InsertOperationResultEnum) {
 
         var actionTypes = [];
         function getActionTypeIfExist(actionTypeName) {
@@ -18,16 +18,30 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService', 'UtilsService'
             var actionType = {
                 ActionTypeName: "OpenRDLCReportAction",
                 actionMethod: function (payload) {
-                    var context = getInvoiceActionContext(payload);
-                    var paramsurl = "";
-                    paramsurl += "invoiceActionContext=" + UtilsService.serializetoJson(context);
-                    paramsurl += "&actionTypeName=" + "OpenRDLCReportAction";
-                    paramsurl += "&actionId=" + payload.invoiceAction.InvoiceActionId;
 
-                    var screenWidth = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
-                    var left = ((screenWidth / 2) - (1000 / 2));
+                    var promiseDeffered = UtilsService.createPromiseDeferred();
 
-                    window.open("Client/Modules/VR_Invoice/Reports/InvoiceReport.aspx?" + paramsurl, "_blank", "width=1000, height=600,scrollbars=1,top = 125, left = " + left + "");
+
+                    var varTempPayload = getInvoiceActionContext(payload);
+                    VRCommon_VRTempPayloadAPIService.AddVRTempPayload(varTempPayload).then(function (response) {
+                        promiseDeffered.resolve();
+                        if (response.Result == InsertOperationResultEnum.Succeeded.value) {
+                            var tempPayloadId = response.InsertedObject;
+
+                            var paramsurl = "";
+                            paramsurl += "tempPayloadId=" + tempPayloadId;
+                            paramsurl += "&actionTypeName=" + "OpenRDLCReportAction";
+                            paramsurl += "&actionId=" + payload.invoiceAction.InvoiceActionId;
+
+                            var screenWidth = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+                            var left = ((screenWidth / 2) - (1000 / 2));
+
+                            window.open("Client/Modules/VR_Invoice/Reports/InvoiceReport.aspx?" + paramsurl, "_blank", "width=1000, height=600,scrollbars=1,top = 125, left = " + left + "");
+                        }
+                    }).catch(function (error) {
+                        promiseDeffered.reject(error);
+                    });
+                    return promiseDeffered.promise;
                 }
             };
             registerActionType(actionType);
@@ -73,6 +87,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService', 'UtilsService'
         }
 
         function getInvoiceActionContext(payload) {
+
             var context;
             if (payload.isPreGenerateAction) {
                 context = {
@@ -90,7 +105,13 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService', 'UtilsService'
                     InvoiceId: payload.invoice.Entity.InvoiceId,
                 };
             }
-            return context;
+
+            return {
+                Settings: {
+                    $type: "Vanrise.Invoice.Entities.InvoiceActionPayloadSettings,Vanrise.Invoice.Entities",
+                    Context: context
+                }
+            };
         }
 
         function registerRecreateAction() {
