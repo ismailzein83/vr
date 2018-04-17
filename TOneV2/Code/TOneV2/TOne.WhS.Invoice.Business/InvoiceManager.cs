@@ -479,7 +479,7 @@ namespace TOne.WhS.Invoice.Business
                         invoiceItemsToCompare.Add(comparisonKey, invoiceItemToCompare);
                     }else
                     {
-                        throw new Exception("Same Period Exist.");
+                        throw new Exception(string.Format("Same Period Exist for {0} From: '{1}' To: '{2}'. ", invoiceItemToCompare.Destination, invoiceItemToCompare.From.Date, invoiceItemToCompare.To.Date));
                     }
                 }
 

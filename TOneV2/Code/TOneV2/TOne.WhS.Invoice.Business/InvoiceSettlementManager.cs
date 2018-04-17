@@ -21,7 +21,7 @@ namespace TOne.WhS.Invoice.Business
         CurrencyManager _currencyManager = new CurrencyManager();
         const string _groupingBySaleCurrencyItemSetName = "GroupingByCurrency";
 
-        #region Private Methods
+        #region Public Methods
 
         public SettlementGenerationCustomSectionPayloadSummary TryLoadInvoicesAndGetAmountByCurrency(Guid invoiceTypeId, List<SelectedInvoiceItem> selectedCustomerInvoices, List<SelectedInvoiceItem> selectedSupplierInvoices, DateTime fromDate, DateTime toDate)
         {
