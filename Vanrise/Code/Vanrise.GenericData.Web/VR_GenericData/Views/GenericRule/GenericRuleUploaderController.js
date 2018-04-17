@@ -81,6 +81,9 @@
                     });
                 }
             };
+            $scope.close = function () {
+                $scope.modalContext.closeModal();
+            };
         }
 
         function load() {
