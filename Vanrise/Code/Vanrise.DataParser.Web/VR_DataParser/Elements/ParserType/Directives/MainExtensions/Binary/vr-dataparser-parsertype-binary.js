@@ -88,7 +88,7 @@
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
-            };
+            }
 
             function getContext() {
                 var currentContext = context;

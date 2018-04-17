@@ -52,7 +52,7 @@
                     var promises = [];
 
                     if (payload.extendedSettings != undefined) {
-                        $scope.blockSize = payload.extendedSettings.BlockSize
+                        $scope.blockSize = payload.extendedSettings.BlockSize;
                     }
 
                     promises.push(loadRecordParserDirective());

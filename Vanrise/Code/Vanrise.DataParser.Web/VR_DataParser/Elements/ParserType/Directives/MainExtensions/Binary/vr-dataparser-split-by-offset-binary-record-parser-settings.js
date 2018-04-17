@@ -46,7 +46,7 @@
             }
 
             function defineAPI() {
-                var api = {}
+                var api = {};
                 var promises = [];
                 api.load = function (payload) {
 

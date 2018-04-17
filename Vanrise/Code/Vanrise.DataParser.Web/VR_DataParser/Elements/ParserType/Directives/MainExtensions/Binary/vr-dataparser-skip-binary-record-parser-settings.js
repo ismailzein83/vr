@@ -52,8 +52,8 @@
                     var promises = [];
 
                     if (payload.extendedSettings != undefined) {
-                        $scope.recordToSkipBytesLength = payload.extendedSettings.RecordToSkipBytesLength,
-                        $scope.recordStartingTag = payload.extendedSettings.RecordStartingTag
+                        $scope.recordToSkipBytesLength = payload.extendedSettings.RecordToSkipBytesLength;
+                        $scope.recordStartingTag = payload.extendedSettings.RecordStartingTag;
                     }
 
                     promises.push(loadRecordParserDirective());
