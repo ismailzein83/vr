@@ -255,8 +255,6 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                         divDatePicker.data("DateTimePicker").date($this.val());
                     }
                 }, 1);
-
-
             };
 
             if ($attrs.hint != undefined)
@@ -299,7 +297,11 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
 
                 }, 1);
             };
-            var updatewatch = $scope.$watch('ctrl.value', function () {
+
+            var updatewatch = $scope.$watch('ctrl.value', function (newValue, oldValue) {
+                if (newValue == null && oldValue != null && $attrs.firechangeifempty != undefined) {
+                    triggerOnDateTimeValueChangeEvent();
+                }
                 if (ctrl.value == null)
                     $element.find('#divDatePicker').find('.vr-date-input').val('');
                 if (ctrl.value == undefined) {
@@ -334,16 +336,18 @@ app.directive('vrDatetimepicker', ['BaseDirService', 'VRValidationService', 'Uti
                     if (!isUserChange)//this condition is used because the event will occurs in two cases: if the user changed the value, and if the value is received from the view controller
                         return;
                     isUserChange = false;//reset the flag
-
-                    if ($attrs.onvaluechanged != undefined) {
-                        var onvaluechangedMethod = $scope.$parent.$eval($attrs.onvaluechanged);
-                        if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
-                            onvaluechangedMethod();
-                        }
-                    }
+                    triggerOnDateTimeValueChangeEvent();
                 }
 
             });
+            function triggerOnDateTimeValueChangeEvent() {
+                if ($attrs.onvaluechanged != undefined) {
+                    var onvaluechangedMethod = $scope.$parent.$eval($attrs.onvaluechanged);
+                    if (onvaluechangedMethod != undefined && onvaluechangedMethod != null && typeof (onvaluechangedMethod) == 'function') {
+                        onvaluechangedMethod();
+                    }
+                }
+            }
             $scope.ctrl.onBlurDirective = function (e) {
                 var dateTab = new Date(ctrl.value).toDateString().split(" ");
                 var year = parseInt(dateTab[3]);
