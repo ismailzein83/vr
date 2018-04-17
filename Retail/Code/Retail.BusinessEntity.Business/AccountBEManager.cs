@@ -316,6 +316,7 @@ namespace Retail.BusinessEntity.Business
                         }
                         else
                         {
+                            bool isMatched = false;
                             foreach (var account in matchingAccounts)
                             {
                                 var filterContext = new BERuntimeSelectorFilterSelectorFilterContext
@@ -324,10 +325,14 @@ namespace Retail.BusinessEntity.Business
                                     BusinessEntityDefinitionId = beDefinitionId
                                 };
                                 if (context.BERuntimeSelectorFilter.IsMatched(filterContext))
+                                {
                                     context.FieldValue = account.AccountId;
-                                else
-                                    context.ErrorMessage = string.Format("The account {0} does not exist.", context.FieldDescription.ToString());
+                                    isMatched = true;
+                                    break;
+                                }
                             }
+                            if(isMatched==false)
+                                context.ErrorMessage = string.Format("The account {0} does not exist.", context.FieldDescription.ToString());
                         }
                     }
                     else
