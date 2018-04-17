@@ -16,10 +16,11 @@
 	@InvoiceSettingId uniqueidentifier,
 	@SentDate datetime = null,
 	@SplitInvoiceGroupId uniqueidentifier,
+	@NeedApproval bit,
 	@ID bigint out
 AS
 BEGIN
-	Insert INTO VR_Invoice.Invoice (UserId,InvoiceTypeId,PartnerID,SerialNumber,FromDate,ToDate,IssueDate,DueDate,Details,Notes, SourceId,IsDraft,IsAutomatic,Settings,InvoiceSettingID,SentDate,SplitInvoiceGroupId)
-	VALUES (@UserId, @InvoiceTypeId,@PartnerID,@SerialNumber,@FromDate,@ToDate,@IssueDate,@DueDate,@Details,@Notes, @SourceID,@IsDraft,@IsAutomatic,@Settings,@InvoiceSettingId,@SentDate,@SplitInvoiceGroupId)
+	Insert INTO VR_Invoice.Invoice (UserId,InvoiceTypeId,PartnerID,SerialNumber,FromDate,ToDate,IssueDate,DueDate,Details,Notes, SourceId,IsDraft,IsAutomatic,Settings,InvoiceSettingID,SentDate,SplitInvoiceGroupId,NeedApproval)
+	VALUES (@UserId, @InvoiceTypeId,@PartnerID,@SerialNumber,@FromDate,@ToDate,@IssueDate,@DueDate,@Details,@Notes, @SourceID,@IsDraft,@IsAutomatic,@Settings,@InvoiceSettingId,@SentDate,@SplitInvoiceGroupId,@NeedApproval)
 	SET @ID = @@Identity
 END

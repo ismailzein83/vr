@@ -34,7 +34,10 @@ BEGIN
 			vrIn.InvoiceSettingId,
 			vrIn.SentDate,
 			vrIn.SettlementInvoiceId,
-			vrIn.SplitInvoiceGroupId
+			vrIn.SplitInvoiceGroupId,
+			vrIn.ApprovedBy,
+			vrIn.ApprovedTime,
+			vrIn.NeedApproval
 	FROM	VR_Invoice.Invoice vrIn with(nolock)  
 	where	vrIn.InvoiceTypeId = @InvoiceTypeId AND  
 			vrIn.PartnerID  IN (select PartnerId from @PartnerIdsTable) AND 

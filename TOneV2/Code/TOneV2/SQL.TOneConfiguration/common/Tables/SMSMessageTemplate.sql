@@ -7,7 +7,9 @@
     [CreatedBy]        INT              NULL,
     [LastModifiedBy]   INT              NULL,
     [LastModifiedTime] DATETIME         NULL,
-    [timestamp]        NCHAR (10)       NULL,
+    [timestamp]        ROWVERSION       NULL,
     CONSTRAINT [PK_SMSMessageTemplate] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 

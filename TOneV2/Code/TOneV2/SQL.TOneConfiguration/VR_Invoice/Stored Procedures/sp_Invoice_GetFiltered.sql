@@ -42,7 +42,10 @@ select Convert(nvarchar(50), ParsedString) from [VR_Invoice].ParseStringList(@Pa
 			vrIn.IsAutomatic,
 			vrIn.InvoiceSettingId,
 			vrIn.SentDate,
-			vrIn.SplitInvoiceGroupId
+			vrIn.SplitInvoiceGroupId,
+			vrIn.ApprovedBy,
+			vrIn.ApprovedTime,
+			vrIn.NeedApproval
 			into #InvoicesResult
 	FROM	VR_Invoice.Invoice vrIn with(nolock)  
 	Inner Join VR_Invoice.InvoiceAccount vrInAcc 

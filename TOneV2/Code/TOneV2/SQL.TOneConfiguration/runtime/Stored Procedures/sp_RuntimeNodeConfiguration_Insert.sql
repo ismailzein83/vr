@@ -5,10 +5,11 @@
 -- =============================================
 CREATE PROCEDURE [runtime].[sp_RuntimeNodeConfiguration_Insert] 
 	@Id uniqueidentifier ,
-	@Name Nvarchar(255)
+	@Name Nvarchar(255),
+	@Setting nvarchar(max)
 AS
 BEGIN
-	Insert into runtime.RuntimeNodeConfiguration(Id,[Name])
-	values(@Id,@Name)
+	Insert into runtime.RuntimeNodeConfiguration(Id,[Name],Settings)
+	values(@Id,@Name,@Setting)
 
 END

@@ -21,9 +21,14 @@
     [SourceId]            NVARCHAR (50)    NULL,
     [IsDraft]             BIT              NULL,
     [IsAutomatic]         BIT              NULL,
+    [NeedApproval]        BIT              NULL,
+    [ApprovedTime]        DATETIME         NULL,
+    [ApprovedBy]          INT              NULL,
     [CreatedTime]         DATETIME         CONSTRAINT [DF_Invoice_CreatedTime] DEFAULT (getdate()) NULL,
     CONSTRAINT [PK_Invoice] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
+
+
 
 
 

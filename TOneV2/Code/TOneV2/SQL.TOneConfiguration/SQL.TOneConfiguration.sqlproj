@@ -762,6 +762,9 @@
     <Build Include="common\Stored Procedures\sp_VRTempPayload_Insert.sql" />
     <Build Include="common\Stored Procedures\sp_VRTempPayload_Get.sql" />
     <Build Include="common\Stored Procedures\sp_VRTempPayload_Delete.sql" />
+    <Build Include="common\Stored Procedures\sp_SMSMessageTemplate_Update.sql" />
+    <Build Include="common\Stored Procedures\sp_SMSMessageTemplate_Insert.sql" />
+    <Build Include="common\Stored Procedures\sp_SMSMessageTemplate_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />

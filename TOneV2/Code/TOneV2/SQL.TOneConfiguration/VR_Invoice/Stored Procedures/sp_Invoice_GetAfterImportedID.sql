@@ -29,7 +29,10 @@ BEGIN
 			InvoiceSettingID,
 			SentDate,
 			SettlementInvoiceId,
-			SplitInvoiceGroupId
+			SplitInvoiceGroupId,
+			ApprovedBy,
+			ApprovedTime,
+			NeedApproval
 	FROM	VR_Invoice.Invoice with(nolock)
 	where	(InvoiceTypeId = @InvoiceTypeId) 
 			AND (@LastImportedId is Null or ID > @LastImportedId)
