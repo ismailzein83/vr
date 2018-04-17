@@ -277,6 +277,7 @@ namespace Vanrise.NumberingPlan.Business
                             }
                             else
                             {
+                                bool isMatched = false;
                                 foreach (var saleZone in orderedMasterSaleZoneList)
                                 {
                                     BERuntimeSelectorFilterSelectorFilterContext filterContext = new BERuntimeSelectorFilterSelectorFilterContext
@@ -286,10 +287,14 @@ namespace Vanrise.NumberingPlan.Business
                                     };
 
                                     if (context.BERuntimeSelectorFilter.IsMatched(filterContext))
+                                    {
                                         context.FieldValue = saleZone.SaleZoneId;
-                                    else
-                                        context.ErrorMessage = string.Format("The zone {0} does not exist.", context.FieldDescription.ToString());
+                                        isMatched = true;
+                                        break;
+                                    }
                                 }
+                                if(isMatched == false)
+                                    context.ErrorMessage = string.Format("The zone {0} does not exist.", context.FieldDescription.ToString());
                             }
                         }
                         else

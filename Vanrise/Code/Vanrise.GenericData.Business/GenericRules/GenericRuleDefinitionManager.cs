@@ -204,9 +204,6 @@ namespace Vanrise.GenericData.Business
             Vanrise.Common.Utilities.ActivateAspose();
             GenericRuleTemplate.Worksheets.Clear();
             Worksheet GenericRuleWorksheet = GenericRuleTemplate.Worksheets.Add("Template");
-            ExportTableOptions options = new ExportTableOptions();
-            options.CheckMixedValueType = true;
-
             var genericRuleDefinition = new GenericRuleDefinitionManager().GetGenericRuleDefinition(genericRuleDefinitionId);
             genericRuleDefinition.ThrowIfNull("genericRuleDefinition", genericRuleDefinitionId);
             genericRuleDefinition.CriteriaDefinition.ThrowIfNull("genericRuleDefinition.CriteriaDefinition", genericRuleDefinitionId);
