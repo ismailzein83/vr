@@ -331,7 +331,7 @@ namespace Retail.BusinessEntity.Business
                                     break;
                                 }
                             }
-                            if(isMatched==false)
+                            if(!isMatched)
                                 context.ErrorMessage = string.Format("The account {0} does not exist.", context.FieldDescription.ToString());
                         }
                     }
