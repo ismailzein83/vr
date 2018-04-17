@@ -3,10 +3,13 @@
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-create PROCEDURE [common].[sp_VRTempPayload_Get]
+CREATE PROCEDURE [common].[sp_VRTempPayload_Get]
+	@VRTempPayloadId uniqueidentifier
 AS
 BEGIN
 
 	SELECT	ID, Settings,CreatedBy,CreatedTime
-	FROM	[common].VRTempPayload   WITH(NOLOCK) 
+	FROM	[common].VRTempPayload   WITH(NOLOCK)
+	WHERE ID = @VRTempPayloadId 
+
 END
