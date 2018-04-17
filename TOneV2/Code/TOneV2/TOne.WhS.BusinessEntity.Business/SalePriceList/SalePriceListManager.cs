@@ -706,7 +706,7 @@ namespace TOne.WhS.BusinessEntity.Business
                         var otherRateChange = zoneChange.OtherRateChanges.FirstOrDefault(r => r.RateTypeId == rateTypeId);
                         if (otherRateChange != null)
                         {
-                            otherRateNotifications.Add(new SalePLOtherRateNotification
+                            salePlZoneNotification.OtherRateByRateTypeId.Add(otherRateChange.RateTypeId.Value, new SalePLOtherRateNotification
                             {
                                 Rate = otherRateChange.Rate,
                                 CurrencyId = otherRateChange.CurrencyId,
@@ -720,14 +720,11 @@ namespace TOne.WhS.BusinessEntity.Business
                             var recentOtherRateChange = GetOtherRateNotificationFromExistingData(customerId, sellingProductId,
                              rateTypeId, existingSaleZone.ZoneName, country.CountryId, customerZoneRateHistoryLocator);
                             if (recentOtherRateChange != null)
-                                otherRateNotifications.Add(recentOtherRateChange);
+                                salePlZoneNotification.OtherRateByRateTypeId.Add(recentOtherRateChange.RateTypeId, recentOtherRateChange);
                         }
-
                     }
-                    if (otherRateNotifications.Any())
-                        salePlZoneNotification.OtherRateByRateTypeId = otherRateNotifications.ToDictionary(r => r.RateTypeId, r => r);
-
                 }
+
                 List<SalePLZoneNotification> countrySaleNotifications = countryZoneNotificationsByZoneId.Values.ToList();
                 //Add missing codes from existing data
                 foreach (var salePlzone in countrySaleNotifications)
@@ -789,16 +786,21 @@ namespace TOne.WhS.BusinessEntity.Business
                         ZoneId = salePlZoneNotification.ZoneId,
                         ZoneName = salePlZoneNotification.ZoneName,
                         Rate = salePlZoneNotification.Rate,
-                        Increment = salePlZoneNotification.Increment,
-                        OtherRateByRateTypeId = salePlZoneNotification.OtherRateByRateTypeId
+                        Increment = salePlZoneNotification.Increment
                     };
+
                     filteredZoneNotification.Codes.AddRange(filteredCodeNotifications);
+                    foreach (KeyValuePair<int, SalePLOtherRateNotification> kvp in salePlZoneNotification.OtherRateByRateTypeId)
+                    {
+                        filteredZoneNotification.OtherRateByRateTypeId.Add(kvp.Key, kvp.Value);
+                    }
                     filteredZoneNotifications.Add(filteredZoneNotification);
                 }
             }
 
             if (filteredZoneNotifications.Any())
                 return filteredZoneNotifications;
+
             return salePlZoneNotifications;
         }
 
@@ -840,19 +842,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 zoneNotification.Codes.AddRange(existingZone.Codes.Select(item => ExistingCodeToSalePLCodeNotificationMapper(item, countrySellDate, countryEED)));
                 zoneNotification.Rate = this.GetRateNotificationFromExistingData(customerId, sellingProductId, existingZone.ZoneId, existingZone.ZoneName, countryId, customerZoneRateHistoryLocator);
                 zoneNotification.Increment = GetIncrementDescription(customerId, existingZone.ZoneId, zoneNotification.Rate.BED);
-
-                IEnumerable<int> zoneOtherRateTypeIds = Helper.GetRateTypeIds(customerId, existingZone.ZoneId, DateTime.Now);
-
-                var otherRateNotifications = new List<SalePLOtherRateNotification>();
-                foreach (var rateTypeId in zoneOtherRateTypeIds)
-                {
-                    var otherRateChange = GetOtherRateNotificationFromExistingData(customerId, sellingProductId, rateTypeId, existingZone.ZoneName, countryId, customerZoneRateHistoryLocator);
-                    if (otherRateChange != null)
-                        otherRateNotifications.Add(otherRateChange);
-                }
-                if (otherRateNotifications.Any())
-                    zoneNotification.OtherRateByRateTypeId = otherRateNotifications.ToDictionary(r => r.RateTypeId, r => r);
-
+                this.AddExistingOtherRatesToNotification(zoneNotification, existingZone, sellingProductId, customerId, countryId, customerZoneRateHistoryLocator);
+                
                 salePlZoneNotifications.Add(zoneNotification);
             }
             return salePlZoneNotifications;
@@ -911,6 +902,9 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 zoneNotification.Codes.AddRange(existingZone.Codes.Select(item => ExistingCodeToSalePLCodeNotificationMapper(item, countrySellDate, null)));
                 zoneNotification.Rate = this.GetRateNotificationFromExistingData(customerId, sellingProductId, existingZone.ZoneId, existingZone.ZoneName, countryId, customerZoneRateHistoryLocator);
+
+                this.AddExistingOtherRatesToNotification(zoneNotification, existingZone, sellingProductId, customerId, countryId, customerZoneRateHistoryLocator);
+
                 zoneNotification.Increment = GetIncrementDescription(customerId, existingZone.ZoneId, zoneNotification.Rate.BED);
                 salePlZoneNotifications.Add(zoneNotification);
             }
@@ -941,6 +935,19 @@ namespace TOne.WhS.BusinessEntity.Business
             TariffRule tariffRule = tariffRuleManager.GetMatchRule(ruleDefinitionId, target);
             return tariffRule != null ? tariffRule.Settings.GetPricingDescription() : string.Empty;
         }
+
+        private void AddExistingOtherRatesToNotification(SalePLZoneNotification zoneNotification, ExistingSaleZone existingZone, int sellingProductId, int customerId, int countryId, CustomerZoneRateHistoryLocator customerZoneRateHistoryLocator)
+        {
+            IEnumerable<int> zoneOtherRateTypeIds = Helper.GetRateTypeIds(customerId, existingZone.ZoneId, DateTime.Now);
+
+            foreach (var rateTypeId in zoneOtherRateTypeIds)
+            {
+                var otherRateChange = GetOtherRateNotificationFromExistingData(customerId, sellingProductId, rateTypeId, existingZone.ZoneName, countryId, customerZoneRateHistoryLocator);
+                if (otherRateChange != null)
+                    zoneNotification.OtherRateByRateTypeId.Add(otherRateChange.RateTypeId, otherRateChange);
+            }
+        }
+
         #endregion
 
         #region Pricelist Management

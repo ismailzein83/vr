@@ -13,10 +13,13 @@ namespace TOne.WhS.BusinessEntity.Entities
         public string Increment { get; set; }
 
         private List<SalePLCodeNotification> _codes = new List<SalePLCodeNotification>();
+
         public List<SalePLCodeNotification> Codes { get { return this._codes; } }
         public SalePLRateNotification Rate { get; set; }
 
-        public Dictionary<int, SalePLOtherRateNotification> OtherRateByRateTypeId { get; set; }
+
+        private Dictionary<int, SalePLOtherRateNotification> _otherRateByRateTypeId = new Dictionary<int, SalePLOtherRateNotification>();
+        public Dictionary<int, SalePLOtherRateNotification> OtherRateByRateTypeId { get { return this._otherRateByRateTypeId; } }
 
         #region IBaseRates Implementation
 
