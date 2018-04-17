@@ -3,7 +3,7 @@ app.service('VR_DataParser_ParserTypeService', ['VRModalService',
     function (VRModalService) {  
         return ({
             editParserType: editParserType,
-            addParserType: addParserType,
+            addParserType: addParserType
         });
 
         function editParserType(parserTypeId, onParserTypeUpdated) {
@@ -12,7 +12,7 @@ app.service('VR_DataParser_ParserTypeService', ['VRModalService',
                 modalScope.onParserTypeUpdated = onParserTypeUpdated;
             };
             var parameters = {
-                parserTypeId: parserTypeId,
+                parserTypeId: parserTypeId
             };
             VRModalService.showModal('/Client/Modules/VR_DataParser/Elements/ParserType/Views/ParserTypeEditor.html', parameters, settings);
         }

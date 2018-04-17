@@ -10,7 +10,7 @@
             restrict: "E",
             scope:
             {
-                onReady: "=",
+                onReady: "="
             },
 
             controller: function ($scope, $element, $attrs) {
@@ -106,7 +106,7 @@
 
                         function addGridItem(gridItem) {
                             var dataItem = {
-                                Name: gridItem.payload.key,
+                                Name: gridItem.payload.key
                             };
 
                             dataItem.onTagRecordParserDirective = function (api) {

@@ -61,7 +61,7 @@ function (UtilsService, VRNotificationService, VR_DataParser_ParserTypeAPIServic
         function defineMenuActions() {
             $scope.gridMenuActions = [{
                 name: "Edit",
-                clicked: editParsertype,
+                clicked: editParsertype
 
             }];
         }
