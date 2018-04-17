@@ -32,7 +32,7 @@ namespace Vanrise.Common.Data.SQL
         }
         public VRTempPayload GetVRTempPayload(Guid vrTempPayloadId)
         {
-            return GetItemSP("[common].[sp_VRTempPayload_Get]", VRTempPayloadMapper);
+            return GetItemSP("[common].[sp_VRTempPayload_Get]", VRTempPayloadMapper, vrTempPayloadId);
         }
 
         VRTempPayload VRTempPayloadMapper(IDataReader reader)
