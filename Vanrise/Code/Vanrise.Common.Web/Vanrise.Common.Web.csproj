@@ -301,11 +301,16 @@
     <Content Include="Common\Directives\Settings\Templates\OverriddenConfigurationSettings.html" />
     <Content Include="Common\Directives\Settings\vr-common-overriddenconfiguration-settings.js" />
     <Content Include="Common\Directives\Settings\vr-common-settings-selector.js" />
+    <Content Include="Common\Directives\SMS\MainExtensions\Templates\ExecuteDatabaseCommandSMSHandlerTemplate.html" />
+    <Content Include="Common\Directives\SMS\Templates\SMSSendHandler.html" />
     <Content Include="Common\Directives\SMS\Templates\SMSMessageTemplateGridTemplate.html" />
     <Content Include="Common\Directives\SMS\Templates\SMSMessageTypeSettings.html" />
+    <Content Include="Common\Directives\SMS\MainExtensions\vr-common-executedatabasecommand-smshandler.js" />
     <Content Include="Common\Directives\SMS\vr-common-smsmessagetemplate-grid.js" />
     <Content Include="Common\Directives\SMS\vr-common-smsmessagetype-selector.js" />
     <Content Include="Common\Directives\SMS\vr-common-smsmessagetype-settings.js" />
+    <Content Include="Common\Directives\SMS\vr-common-smssendhandler-settings.js" />
+    <Content Include="Common\Directives\SMS\vr-common-smssendhandler.js" />
     <Content Include="Common\Directives\StartingFrom\vr-common-startingfrom-selector.js" />
     <Content Include="Common\Directives\StatusDefinition\StatusDefinitionBE\Templates\StatusDefinitionBEEditor.html" />
     <Content Include="Common\Directives\StatusDefinition\StatusDefinitionBE\vr-common-statusdefinitionbe-editor.js" />
