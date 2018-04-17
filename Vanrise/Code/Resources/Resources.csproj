@@ -261,6 +261,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="BatchScripts\BIV2\01-DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\BIV2\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\BIV2\02-WebSite.bat" />
     <None Include="BatchScripts\BIV2\08-GroupSQLFiles.bat" />
     <None Include="BatchScripts\BIV2\05-CompressFiles.bat" />
@@ -274,6 +275,7 @@
     <None Include="BatchScripts\CallGenerator\WebSite.bat" />
     <None Include="BatchScripts\CarrierPortal.MultinetPortal\01-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\CarrierPortal.MultinetPortal\02-Runtime.bat" />
+    <None Include="BatchScripts\CarrierPortal.MultinetPortal\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\CarrierPortal.MultinetPortal\03-WebSite.bat" />
     <None Include="BatchScripts\CarrierPortal.MultinetPortal\04-GroupSQLFiles.bat" />
     <None Include="BatchScripts\CarrierPortal.MultinetPortal\05-CompressFiles.bat" />
@@ -281,6 +283,7 @@
     <None Include="BatchScripts\CarrierPortal.MultinetPortal\All.bat" />
     <None Include="BatchScripts\CarrierPortal.PartnerPortal\01-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\CarrierPortal.PartnerPortal\02-Runtime.bat" />
+    <None Include="BatchScripts\CarrierPortal.PartnerPortal\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\CarrierPortal.PartnerPortal\03-WebSite.bat" />
     <None Include="BatchScripts\CarrierPortal.PartnerPortal\04-GroupSQLFiles.bat" />
     <None Include="BatchScripts\CarrierPortal.PartnerPortal\05-CompressFiles.bat" />
@@ -288,6 +291,7 @@
     <None Include="BatchScripts\CarrierPortal.PartnerPortal\All.bat" />
     <None Include="BatchScripts\CarrierPortal.RingoPortal\01-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\CarrierPortal.RingoPortal\02-Runtime.bat" />
+    <None Include="BatchScripts\CarrierPortal.RingoPortal\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\CarrierPortal.RingoPortal\03-WebSite.bat" />
     <None Include="BatchScripts\CarrierPortal.RingoPortal\04-GroupSQLFiles.bat" />
     <None Include="BatchScripts\CarrierPortal.RingoPortal\05-CompressFiles.bat" />
@@ -295,6 +299,7 @@
     <None Include="BatchScripts\CarrierPortal.RingoPortal\All.bat" />
     <None Include="BatchScripts\CarrierPortal.SupplierPricelist\01-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\CarrierPortal.SupplierPricelist\02-Runtime.bat" />
+    <None Include="BatchScripts\CarrierPortal.SupplierPricelist\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\CarrierPortal.SupplierPricelist\03-WebSite.bat" />
     <None Include="BatchScripts\CarrierPortal.SupplierPricelist\04-GroupSQLFiles.bat" />
     <None Include="BatchScripts\CarrierPortal.SupplierPricelist\05-CompressFiles.bat" />
@@ -302,6 +307,7 @@
     <None Include="BatchScripts\CarrierPortal.SupplierPricelist\All.bat" />
     <None Include="BatchScripts\CarrierPortal\01-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\CarrierPortal\02-Runtime.bat" />
+    <None Include="BatchScripts\CarrierPortal\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\CarrierPortal\03-WebSite.bat" />
     <None Include="BatchScripts\CarrierPortal\05-CompressFiles.bat" />
     <None Include="BatchScripts\CarrierPortal\06-GroupJSFiles.bat" />
@@ -310,6 +316,7 @@
     <None Include="BatchScripts\CarrierPortal\All.bat" />
     <None Include="BatchScripts\CDRAnalysis\01-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\CDRAnalysis\02-Runtime.bat" />
+    <None Include="BatchScripts\CDRAnalysis\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\CDRAnalysis\03-WebSite.bat" />
     <None Include="BatchScripts\CDRAnalysis\05-CompressFiles.bat" />
     <None Include="BatchScripts\CDRAnalysis\06-GroupJSFiles.bat" />
@@ -318,6 +325,7 @@
     <None Include="BatchScripts\CDRAnalysis\All.bat" />
     <None Include="BatchScripts\ClearVoice\01-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\ClearVoice\02-Runtime.bat" />
+    <None Include="BatchScripts\ClearVoice\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\ClearVoice\03-WebSite.bat" />
     <None Include="BatchScripts\ClearVoice\05-CompressFiles.bat" />
     <None Include="BatchScripts\ClearVoice\06-GroupJSFiles.bat" />
@@ -326,6 +334,7 @@
     <None Include="BatchScripts\ClearVoice\All.bat" />
     <None Include="BatchScripts\CloudXPointV2\01-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\CloudXPointV2\02-Runtime.bat" />
+    <None Include="BatchScripts\CloudXPointV2\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\CloudXPointV2\03-WebSite.bat" />
     <None Include="BatchScripts\CloudXPointV2\05-CompressFiles.bat" />
     <None Include="BatchScripts\CloudXPointV2\06-GroupJSFiles.bat" />
@@ -357,6 +366,7 @@
     <None Include="BatchScripts\FZero\WebSiteClient.bat" />
     <None Include="BatchScripts\INSOFT\01-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\INSOFT\02-Runtime.bat" />
+    <None Include="BatchScripts\INSOFT\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\INSOFT\03-WebSite.bat" />
     <None Include="BatchScripts\INSOFT\04-GroupSQLFiles.bat" />
     <None Include="BatchScripts\INSOFT\05-CompressFiles.bat" />
@@ -369,6 +379,7 @@
     <None Include="BatchScripts\Interconnect\WebSite.bat" />
     <None Include="BatchScripts\Mediation\02-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\Mediation\01-Runtime.bat" />
+    <None Include="BatchScripts\Mediation\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\Mediation\03-WebSite.bat" />
     <None Include="BatchScripts\Mediation\05-CompressFiles.bat" />
     <None Include="BatchScripts\Mediation\06-GroupJSFiles.bat" />
@@ -443,6 +454,7 @@
     <None Include="BatchScripts\Publishing_Data\Visual Studio Solutions\ZebraEmailService.sln.lnk" />
     <None Include="BatchScripts\RA\01-Runtime.bat" />
     <None Include="BatchScripts\RA\02-DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\RA\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\RA\03-WebSite.bat" />
     <None Include="BatchScripts\RA\05-CompressFiles.bat" />
     <None Include="BatchScripts\RA\06-GroupJSFiles.bat" />
@@ -451,6 +463,7 @@
     <None Include="BatchScripts\RA\All.bat" />
     <None Include="BatchScripts\Retail.MultiNet\02-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\Retail.MultiNet\01-Runtime.bat" />
+    <None Include="BatchScripts\Retail.MultiNet\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\Retail.MultiNet\03-WebSite.bat" />
     <None Include="BatchScripts\Retail.MultiNet\08-GroupSQLFiles.bat" />
     <None Include="BatchScripts\Retail.MultiNet\05-CompressFiles.bat" />
@@ -462,6 +475,7 @@
     <None Include="BatchScripts\Retail.NtegraV2\WebSiteThemes.bat" />
     <None Include="BatchScripts\Retail.Ringo\02-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\Retail.Ringo\01-Runtime.bat" />
+    <None Include="BatchScripts\Retail.Ringo\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\Retail.Ringo\03-WebSite.bat" />
     <None Include="BatchScripts\Retail.Ringo\08-GroupSQLFiles.bat" />
     <None Include="BatchScripts\Retail.Ringo\05-CompressFiles.bat" />
@@ -470,6 +484,7 @@
     <None Include="BatchScripts\Retail.Ringo\All.bat" />
     <None Include="BatchScripts\Retail.Zajil\02-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\Retail.Zajil\01-Runtime.bat" />
+    <None Include="BatchScripts\Retail.Zajil\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\Retail.Zajil\03-WebSite.bat" />
     <None Include="BatchScripts\Retail.Zajil\08-GroupSQLFiles.bat" />
     <None Include="BatchScripts\Retail.Zajil\05-CompressFiles.bat" />
@@ -478,6 +493,7 @@
     <None Include="BatchScripts\Retail.Zajil\All.bat" />
     <None Include="BatchScripts\Retail\02-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\Retail\01-Runtime.bat" />
+    <None Include="BatchScripts\Retail\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\Retail\03-WebSite.bat" />
     <None Include="BatchScripts\Retail\05-CompressFiles.bat" />
     <None Include="BatchScripts\Retail\06-GroupJSFiles.bat" />
@@ -486,6 +502,7 @@
     <None Include="BatchScripts\Retail\All.bat" />
     <None Include="BatchScripts\SOM\01-Runtime.bat" />
     <None Include="BatchScripts\SOM\02-DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\SOM\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\SOM\03-WebSite.bat" />
     <None Include="BatchScripts\SOM\05-CompressFiles.bat" />
     <None Include="BatchScripts\SOM\06-GroupJSFiles.bat" />
@@ -672,6 +689,7 @@
     <None Include="BatchScripts\WHSCDRAnalysis\WebSite.bat" />
     <None Include="BatchScripts\XBooster\02-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\XBooster\01-Runtime.bat" />
+    <None Include="BatchScripts\XBooster\30-WebSite_FullVersion.bat" />
     <None Include="BatchScripts\XBooster\03-WebSite.bat" />
     <None Include="BatchScripts\XBooster\05-CompressFiles.bat" />
     <None Include="BatchScripts\XBooster\06-GroupJSFiles.bat" />
