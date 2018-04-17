@@ -32,6 +32,11 @@ namespace Vanrise.Invoice.Entities
         public DateTime? SentDate { get; set; }
         public Guid? SplitInvoiceGroupId { get; set; }
         public InvoiceSettings Settings { get; set; }
+
+        public DateTime? ApprovedTime { get; set; }
+        public int? ApprovedBy { get; set; }
+        public bool? NeedApproval { get; set; }
+
         public Invoice() { }
         public IEnumerable<Invoice> GetInvoiceRDLCSchema()
         {

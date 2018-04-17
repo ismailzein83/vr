@@ -124,8 +124,9 @@ namespace Vanrise.Invoice.Business
                 List<long> invoiceToSettleIds;
                 string errorMessage;
                 GenerateInvoiceResult generateInvoiceResult;
+                bool needApproval;
 
-                GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, reGenerateInvoiceInput.PartnerId, reGenerateInvoiceInput.FromDate, reGenerateInvoiceInput.ToDate, reGenerateInvoiceInput.IssueDate, reGenerateInvoiceInput.CustomSectionPayload, reGenerateInvoiceInput.InvoiceId, duePeriod, invoiceAccountData, out billingTarnsactions, out invoiceToSettleIds, out errorMessage, out generateInvoiceResult);
+                GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, reGenerateInvoiceInput.PartnerId, reGenerateInvoiceInput.FromDate, reGenerateInvoiceInput.ToDate, reGenerateInvoiceInput.IssueDate, reGenerateInvoiceInput.CustomSectionPayload, reGenerateInvoiceInput.InvoiceId, duePeriod, invoiceAccountData, out billingTarnsactions, out invoiceToSettleIds, out errorMessage, out generateInvoiceResult, out needApproval);
 
                 switch (generateInvoiceResult)
                 {
@@ -146,7 +147,7 @@ namespace Vanrise.Invoice.Business
                 generatedInvoice.ThrowIfNull("generatedInvoice");
                 generatedInvoice.ThrowIfNull("generatedInvoice.InvoiceDetails");
 
-                Entities.Invoice invoice = BuildInvoice(invoiceType, reGenerateInvoiceInput.PartnerId, reGenerateInvoiceInput.FromDate, reGenerateInvoiceInput.ToDate, reGenerateInvoiceInput.IssueDate, generatedInvoice.InvoiceDetails, duePeriod, reGenerateInvoiceInput.IsAutomatic);
+                Entities.Invoice invoice = BuildInvoice(invoiceType, reGenerateInvoiceInput.PartnerId, reGenerateInvoiceInput.FromDate, reGenerateInvoiceInput.ToDate, reGenerateInvoiceInput.IssueDate, generatedInvoice.InvoiceDetails, duePeriod, reGenerateInvoiceInput.IsAutomatic, needApproval);
                 invoice.SerialNumber = currentInvocie.SerialNumber;
                 invoice.Note = currentInvocie.Note;
 
@@ -307,8 +308,8 @@ namespace Vanrise.Invoice.Business
                     List<long> invoiceToSettleIds;
                     string errorMessage;
                     GenerateInvoiceResult generateInvoiceResult;
-
-                    GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, fromDate, toDate, createInvoiceInput.IssueDate, item.CustomSectionPayload, item.InvoiceId, duePeriod, invoiceAccountData, out billingTransactions, out invoiceToSettleIds, out errorMessage, out generateInvoiceResult);
+                    bool needApproval;
+                    GeneratedInvoice generatedInvoice = BuildGeneratedInvoice(invoiceType, createInvoiceInput.PartnerId, fromDate, toDate, createInvoiceInput.IssueDate, item.CustomSectionPayload, item.InvoiceId, duePeriod, invoiceAccountData, out billingTransactions, out invoiceToSettleIds, out errorMessage, out generateInvoiceResult, out needApproval);
 
                     switch (generateInvoiceResult)
                     {
@@ -334,7 +335,7 @@ namespace Vanrise.Invoice.Business
                     generatedInvoice.ThrowIfNull("generatedInvoice");
                     generatedInvoice.ThrowIfNull("generatedInvoice.InvoiceDetails");
 
-                    var invoice = BuildInvoice(invoiceType, createInvoiceInput.PartnerId, item.FromDate, item.ToDate, createInvoiceInput.IssueDate, generatedInvoice.InvoiceDetails, duePeriod, createInvoiceInput.IsAutomatic);
+                    var invoice = BuildInvoice(invoiceType, createInvoiceInput.PartnerId, item.FromDate, item.ToDate, createInvoiceInput.IssueDate, generatedInvoice.InvoiceDetails, duePeriod, createInvoiceInput.IsAutomatic, needApproval);
 
                     preparedGenerateInvoiceInputs.Add(new PreparedGenerateInvoiceInput
                     {
@@ -1068,7 +1069,7 @@ namespace Vanrise.Invoice.Business
             return false;
         }
 
-        private Entities.Invoice BuildInvoice(InvoiceType invoiceType, string partnerId, DateTime fromDate, DateTime toDate, DateTime issueDate, dynamic invoiceDetails, int duePeriod, bool isAutomatic)
+        private Entities.Invoice BuildInvoice(InvoiceType invoiceType, string partnerId, DateTime fromDate, DateTime toDate, DateTime issueDate, dynamic invoiceDetails, int duePeriod, bool isAutomatic, bool needApproval)
         {
             var invoiceSetting = _partnerManager.GetInvoicePartnerSetting(invoiceType.InvoiceTypeId, partnerId);
             invoiceSetting.ThrowIfNull("invoiceSetting");
@@ -1082,19 +1083,21 @@ namespace Vanrise.Invoice.Business
                 ToDate = toDate,
                 IssueDate = issueDate,
                 IsAutomatic = isAutomatic,
-                InvoiceSettingId = invoiceSetting.InvoiceSetting.InvoiceSettingId
+                InvoiceSettingId = invoiceSetting.InvoiceSetting.InvoiceSettingId,
+                NeedApproval = needApproval
             };
             var partnerSettings = invoiceType.Settings.ExtendedSettings.GetPartnerManager();
             invoice.DueDate = issueDate.AddDays(duePeriod);
             return invoice;
         }
 
-        private GeneratedInvoice BuildGeneratedInvoice(InvoiceType invoiceType, string partnerId, DateTime fromDate, DateTime toDate, DateTime issueDate, dynamic customSectionPayload, long? invoiceId, int duePeriod, VRInvoiceAccountData invoiceAccountData, out IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions, out List<long> invoiceToSettleIds, out string errorMessage, out GenerateInvoiceResult generateInvoiceResult)
+        private GeneratedInvoice BuildGeneratedInvoice(InvoiceType invoiceType, string partnerId, DateTime fromDate, DateTime toDate, DateTime issueDate, dynamic customSectionPayload, long? invoiceId, int duePeriod, VRInvoiceAccountData invoiceAccountData, out IEnumerable<GeneratedInvoiceBillingTransaction> billingTransactions, out List<long> invoiceToSettleIds, out string errorMessage, out GenerateInvoiceResult generateInvoiceResult, out bool needApproval)
         {
             generateInvoiceResult = GenerateInvoiceResult.Succeeded;
             errorMessage = null;
             billingTransactions = null;
             invoiceToSettleIds = null;
+            needApproval = false;
 
             invoiceAccountData.ThrowIfNull("invoiceAccountData");
             if ((invoiceAccountData.BED.HasValue && fromDate < invoiceAccountData.BED.Value) || (invoiceAccountData.EED.HasValue && toDate > invoiceAccountData.EED.Value))
@@ -1133,6 +1136,8 @@ namespace Vanrise.Invoice.Business
             billingTransactions = context.BillingTransactions;
            
             invoiceToSettleIds = context.InvoiceToSettleIds;
+            needApproval = context.NeedApproval;
+
             return context.Invoice;
         }
 

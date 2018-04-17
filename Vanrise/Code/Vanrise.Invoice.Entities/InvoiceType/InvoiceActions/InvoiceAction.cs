@@ -38,7 +38,8 @@ namespace Vanrise.Invoice.Entities
         SetInvoiceLocked = 4,
         SetInvoiceDeleted = 5,
         Download = 6,
-        CustomActionType = 7
+        CustomActionType = 7,
+        Approve = 8
     }
 
     public interface IInvoiceActionSettingsCheckAccessContext

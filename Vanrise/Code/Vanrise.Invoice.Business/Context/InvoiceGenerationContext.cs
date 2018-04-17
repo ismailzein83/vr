@@ -21,6 +21,7 @@ namespace Vanrise.Invoice.Business
         public GenerateInvoiceResult GenerateInvoiceResult { get; set; }
         public List<GeneratedInvoiceBillingTransaction> BillingTransactions { get; set; }
         public List<long> InvoiceToSettleIds { get; set; }
+        public bool NeedApproval { get; set; }
         public int GetDuePeriod()
         {
             return DuePeriod;

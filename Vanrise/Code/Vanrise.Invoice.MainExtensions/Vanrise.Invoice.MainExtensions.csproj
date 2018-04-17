@@ -71,9 +71,11 @@
     <Compile Include="FilterCondition\ConditionGroupFilterCondition.cs" />
     <Compile Include="FilterCondition\FilterGroupCondition.cs" />
     <Compile Include="FilterCondition\AccountActivationCondition.cs" />
+    <Compile Include="FilterCondition\ApprovalGridFilterCondition.cs" />
     <Compile Include="FilterCondition\IsLockedGridFilterCondition.cs" />
     <Compile Include="FilterCondition\IsSentInvoiceFilterCondition.cs" />
     <Compile Include="FilterCondition\IsPaidFilterCondition.cs" />
+    <Compile Include="InvoiceActionSettings\ApproveInvoiceAction.cs" />
     <Compile Include="InvoiceActionSettings\EmailAction\InvoiceEmailActionController.cs" />
     <Compile Include="InvoiceActionSettings\EmailAction\InvoiceEmailActionManager.cs" />
     <Compile Include="InvoiceActionSettings\EmailAction\Configs\SendEmailAttachmentTypeConfig.cs" />

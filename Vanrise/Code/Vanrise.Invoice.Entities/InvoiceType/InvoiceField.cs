@@ -22,6 +22,9 @@ namespace Vanrise.Invoice.Entities
         Lock = 11,
         Note = 12,
         IsAutomatic = 15,
-        IsSent = 16
+        IsSent = 16,
+        NeedApproval = 18,
+        ApprovedTime = 19,
+        ApprovedBy = 20
     }
 }

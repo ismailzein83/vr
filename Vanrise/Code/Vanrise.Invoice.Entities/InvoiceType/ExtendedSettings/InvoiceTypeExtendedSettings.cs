@@ -57,6 +57,7 @@ namespace Vanrise.Invoice.Entities
         GenerateInvoiceResult GenerateInvoiceResult { set; }
         List<GeneratedInvoiceBillingTransaction> BillingTransactions { set; }
         List<long> InvoiceToSettleIds { set; }
+        bool NeedApproval { set; }
     }
     public interface IInvoiceTypeExtendedSettingsInfoContext
     {

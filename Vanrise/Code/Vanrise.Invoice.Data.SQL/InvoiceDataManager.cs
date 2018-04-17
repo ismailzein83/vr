@@ -193,7 +193,8 @@ namespace Vanrise.Invoice.Data.SQL
                         serializedSettings,
                         generateInvoiceInputToSave.Invoice.InvoiceSettingId,
                         generateInvoiceInputToSave.Invoice.SentDate,
-                        splitInvoiceGroupId
+                        splitInvoiceGroupId,
+                        generateInvoiceInputToSave.Invoice.NeedApproval
                     );
                     long insertedInvoiceId = Convert.ToInt64(invoiceId);
 
@@ -437,6 +438,9 @@ namespace Vanrise.Invoice.Data.SQL
                 SentDate = GetReaderValue<DateTime?>(reader, "SentDate"),
                 SettlementInvoiceId = GetReaderValue<long?>(reader, "SettlementInvoiceId"),
                 SplitInvoiceGroupId = GetReaderValue<Guid?>(reader, "SplitInvoiceGroupId"),
+                ApprovedBy = GetReaderValue<int?>(reader, "ApprovedBy"),
+                ApprovedTime = GetReaderValue<DateTime?>(reader, "ApprovedTime"),
+                NeedApproval = GetReaderValue<bool?>(reader, "NeedApproval"),
             };
             return invoice;
         }
