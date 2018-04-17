@@ -42,6 +42,7 @@
             };
 
             $scope.uploadGenericRules = function () {
+                $scope.isLoading = true;
                 var input = {
                     GenericRuleDefinitionId: genericRuleDefinitionId,
                     EffectiveDate: $scope.effectiveDate,
@@ -50,7 +51,7 @@
                 };
                 return VR_GenericData_GenericRuleAPIService.UploadGenericRules(input).then(function (response) {
                     $scope.isUploadingComplete = true;
-                   
+
                     $scope.genericRulesAdded = response.NumberOfGenericRulesAdded;
                     $scope.genericRulesFailed = response.NumberOfGenericRulesFailed;
                     fileId = response.FileId;
@@ -66,8 +67,10 @@
                         $scope.isErrorOccured = false;
                         VRNotificationService.showSuccess("Upload Process Complete");
                     }
-                }).catch(function(error){
-                VRNotificationService.showError(error.ExceptionMessage);
+                }).catch(function (error) {
+                    VRNotificationService.showError(error.ExceptionMessage);
+                }).finally(function () {
+                    $scope.isLoading = false;
                 });
             };
 
