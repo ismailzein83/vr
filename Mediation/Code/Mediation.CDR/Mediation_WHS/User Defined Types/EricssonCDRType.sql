@@ -21,13 +21,12 @@
     [OriginForCharging]        VARCHAR (5)      NULL,
     [OutgoingRoute]            VARCHAR (20)     NULL,
     [IncomingRoute]            VARCHAR (20)     NULL,
-    [StaffUser]                VARCHAR (5)      NULL,
-    [StaffPass]                VARCHAR (5)      NULL,
-    [CallingName]              INT              NULL,
-    [CalledName]               INT              NULL,
     [Reserved]                 VARCHAR (10)     NULL,
+    [ExtraFields]              VARCHAR (MAX)    NULL,
     [FileName]                 VARCHAR (255)    NULL,
     [DataSourceId]             UNIQUEIDENTIFIER NULL);
+
+
 
 
 
