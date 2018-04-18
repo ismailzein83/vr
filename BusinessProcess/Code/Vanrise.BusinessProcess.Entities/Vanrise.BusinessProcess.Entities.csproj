@@ -60,6 +60,7 @@
     <Compile Include="BaseProcessInputArgument.cs" />
     <Compile Include="BPDefinition.cs" />
     <Compile Include="BPDefinitionContexts\IBPDefinitionBPExecutionCompletedContext.cs" />
+    <Compile Include="BPDefinitionContexts\IBPDefinitionCanCancelBPInstanceContext.cs" />
     <Compile Include="BPDefinitionContexts\IBPDefinitionCanRunBPInstanceContext.cs" />
     <Compile Include="BPDefinitionContexts\IBPDefinitionShouldCreateScheduledInstanceContext.cs" />
     <Compile Include="BPDefinitionContexts\IBPDefinitionShouldPersistContext.cs" />
@@ -68,6 +69,7 @@
     <Compile Include="BPDefinitionDetail.cs" />
     <Compile Include="BPDefinitionInfo.cs" />
     <Compile Include="BPDefinitionInfoFilter.cs" />
+    <Compile Include="BPInstanceDefinitionDetail.cs" />
     <Compile Include="BPDefinitionQuery.cs" />
     <Compile Include="BPDefinitionSummary.cs" />
     <Compile Include="BPEvent.cs" />

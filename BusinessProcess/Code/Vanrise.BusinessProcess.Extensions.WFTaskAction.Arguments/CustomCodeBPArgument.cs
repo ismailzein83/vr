@@ -42,5 +42,7 @@ namespace Vanrise.BusinessProcess.Extensions.WFTaskAction.Arguments
         void LogInfo(string messageFormat, params object[] args);
 
         void SendMail(UctMailMessage mailMessage);
+
+        bool IsProcessCancelled();
     }
 }

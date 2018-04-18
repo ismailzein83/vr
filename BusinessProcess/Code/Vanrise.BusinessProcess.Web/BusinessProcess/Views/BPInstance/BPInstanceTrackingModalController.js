@@ -2,9 +2,9 @@
 
     "use strict";
 
-    bpTrackingModalController.$inject = ['$scope', 'VRNavigationService', 'BusinessProcess_BPInstanceAPIService', 'VRUIUtilsService', 'BusinessProcess_BPDefinitionAPIService', 'BusinessProcess_BPInstanceService', 'VRTimerService', 'UtilsService', 'BPInstanceStatusEnum', 'BusinessProcess_BPDefinitionService'];
+    bpTrackingModalController.$inject = ['$scope', 'VRNavigationService', 'BusinessProcess_BPInstanceAPIService', 'VRUIUtilsService', 'BusinessProcess_BPDefinitionAPIService', 'BusinessProcess_BPInstanceService', 'VRTimerService', 'UtilsService', 'BPInstanceStatusEnum', 'BusinessProcess_BPDefinitionService', 'VRNotificationService'];
 
-    function bpTrackingModalController($scope, VRNavigationService, BusinessProcess_BPInstanceAPIService, VRUIUtilsService, BusinessProcess_BPDefinitionAPIService, BusinessProcess_BPInstanceService, VRTimerService, UtilsService, BPInstanceStatusEnum, BusinessProcess_BPDefinitionService) {
+    function bpTrackingModalController($scope, VRNavigationService, BusinessProcess_BPInstanceAPIService, VRUIUtilsService, BusinessProcess_BPDefinitionAPIService, BusinessProcess_BPInstanceService, VRTimerService, UtilsService, BPInstanceStatusEnum, BusinessProcess_BPDefinitionService, VRNotificationService) {
 
         var filter;
         var instanceTrackingFilter;
@@ -44,7 +44,8 @@
         }
         function defineScope() {
             $scope.scopeModel = {};
-
+            $scope.scopeModel.cancelActionClicked = false;
+            $scope.scopeModel.allowCancel = false;
             $scope.scopeModel.onInstanceTrackingMonitorGridReady = function (api) {
                 instanceTrackingMonitorGridAPI = api;
                 instanceTrackingMonitorGridReadyDeferred.resolve();
@@ -70,6 +71,33 @@
                     return 'control-label vr-control-label ' + BusinessProcess_BPInstanceService.getStatusColor(bpInstance.Status);
                 }
                 return "";
+            };
+
+            $scope.scopeModel.showCancelAction = function () {
+                var statusEnumValue = UtilsService.getEnum(BPInstanceStatusEnum, 'value', bpInstanceStatusValue);
+                if (statusEnumValue != undefined && statusEnumValue.isOpened && bpInstanceStatusValue.value != BPInstanceStatusEnum.Cancelling.value)
+                    return true;
+                return false;
+            };
+
+            $scope.scopeModel.showCancelRequestLabel = function () {
+                var statusEnumValue = UtilsService.getEnum(BPInstanceStatusEnum, 'value', bpInstanceStatusValue);
+                if (statusEnumValue != undefined && statusEnumValue.isOpened && bpInstanceStatusValue.value != BPInstanceStatusEnum.Cancelling.value)
+                    return true;
+                return false;
+            };
+
+            $scope.scopeModel.cancelProcess = function () {
+                VRNotificationService.showConfirmation().then(function (confirmed) {
+                    if (confirmed) {
+                        $scope.scopeModel.isLoading = true;
+                        $scope.scopeModel.cancelActionClicked = true;
+                        return BusinessProcess_BPInstanceAPIService.CancelProcess({ BPInstanceId: bpInstanceID }).then(function (response) {                           
+                        }).finally(function () {                           
+                            $scope.scopeModel.isLoading = false;
+                        });
+                    }
+                });
             };
 
             $scope.scopeModel.openCompletionView = function () {
@@ -104,7 +132,7 @@
             var loadPromiseDeferred = UtilsService.createPromiseDeferred();
 
             getBPInstance().then(function () {
-                getBPDefinition().then(function () {
+                getBPInstanceDefinitionDetail().then(function () {
                     var promises = [];
 
                     var instanceTrackingMonitorGridLoadPromise = getInstanceTrackingMonitorGridLoadPromise();
@@ -160,13 +188,15 @@
                 $scope.title += $scope.scopeModel.process.Title;
             });
         }
-        function getBPDefinition() {
-            return BusinessProcess_BPDefinitionAPIService.GetBPDefintion(bpDefinitionID).then(function (response) {
-                $scope.scopeModel.process.HasChildProcesses = response.Configuration.HasChildProcesses;
-                $scope.scopeModel.process.HasBusinessRules = response.Configuration.HasBusinessRules;
+        function getBPInstanceDefinitionDetail() {
+            return BusinessProcess_BPInstanceAPIService.GetBPInstanceDefinitionDetail(bpDefinitionID, bpInstanceID).then(function (response) {
+                var configuration = response.Entity.Configuration;
+                $scope.scopeModel.allowCancel = response.AllowCancel;
+                $scope.scopeModel.process.HasChildProcesses = configuration.HasChildProcesses;
+                $scope.scopeModel.process.HasBusinessRules = configuration.HasBusinessRules;
 
-                completionViewURL = response.Configuration.CompletionViewURL;
-                $scope.scopeModel.completionViewLinkText = (response.Configuration.CompletionViewLinkText != null) ? response.Configuration.CompletionViewLinkText : defaultCompletionViewLinkText;
+                completionViewURL = configuration.CompletionViewURL;
+                $scope.scopeModel.completionViewLinkText = (configuration.CompletionViewLinkText != null) ? configuration.CompletionViewLinkText : defaultCompletionViewLinkText;
             });
         }
 
@@ -260,7 +290,8 @@
             return BusinessProcess_BPInstanceAPIService.GetBPInstance(bpInstanceID).then(function (response) {
                 $scope.scopeModel.process.Status = response.StatusDescription;
                 bpInstanceStatusValue = response.Status;
-
+                if (bpInstanceStatusValue == BPInstanceStatusEnum.Cancelling.value)
+                    $scope.scopeModel.allowCancel = false;
                 if (context != undefined && context.automaticCloseWhenCompleted && response.Status == BPInstanceStatusEnum.Completed.value) {
                     $scope.modalContext.closeModal();
                 }

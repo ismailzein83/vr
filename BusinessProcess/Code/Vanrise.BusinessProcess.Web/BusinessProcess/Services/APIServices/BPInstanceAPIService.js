@@ -33,6 +33,18 @@
         function GetBPDefinitionSummary() {
             return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPInstance", "GetBPDefinitionSummary"));
         }
+
+        function GetBPInstanceDefinitionDetail(bpDefinitionId, bpInstanceId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPInstance", "GetBPInstanceDefinitionDetail"), {
+                bpDefinitionId: bpDefinitionId,
+                bpInstanceId: bpInstanceId
+            });
+        }
+
+        function CancelProcess(cancelProcessInput) {
+            return BaseAPIService.post(UtilsService.getServiceURL(BusinessProcess_BP_ModuleConfig.moduleName, "BPInstance", "CancelProcess"), cancelProcessInput);
+        }
+
         return ({
             GetUpdated: GetUpdated,
             GetBeforeId: GetBeforeId,
@@ -41,7 +53,9 @@
             GetBPInstance: GetBPInstance,
             CreateNewProcess: CreateNewProcess,
             HasRunningInstances: HasRunningInstances,
-            GetBPDefinitionSummary: GetBPDefinitionSummary
+            GetBPDefinitionSummary: GetBPDefinitionSummary,
+            CancelProcess: CancelProcess,
+            GetBPInstanceDefinitionDetail: GetBPInstanceDefinitionDetail
         });
     }
 

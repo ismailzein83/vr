@@ -72,6 +72,11 @@ namespace Vanrise.BusinessProcess.WFActivities
                 new VRMailManager().SendMail(mailMessage.From, mailMessage.To, mailMessage.Cc, null, mailMessage.Subject, mailMessage.Body, vrMailMessageAttachments, false);
             }
 
+            public bool IsProcessCancelled()
+            {
+                return _context.ActivityContext.ShouldStop();
+            }
+
         }
 
     }

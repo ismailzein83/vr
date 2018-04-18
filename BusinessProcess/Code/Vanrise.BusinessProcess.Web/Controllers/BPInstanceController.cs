@@ -84,6 +84,13 @@ namespace Vanrise.BusinessProcess.Web.Controllers
             return s_instanceManager.DoesUserHaveCancelAccess(Security.Entities.ContextFactory.GetContext().GetLoggedInUserId(), bpInstanceId);
         }
 
+        [HttpGet]
+        [Route("GetBPInstanceDefinitionDetail")]
+        public BPInstanceDefinitionDetail GetBPInstanceDefinitionDetail(Guid bpDefinitionId, long bpInstanceId)
+        {
+            return s_instanceManager.GetBPInstanceDefinitionDetail(bpDefinitionId, bpInstanceId);
+        }
+
         [HttpPost]
         [Route("CancelProcess")]
         public object CancelProcess(CancelProcessInput input)

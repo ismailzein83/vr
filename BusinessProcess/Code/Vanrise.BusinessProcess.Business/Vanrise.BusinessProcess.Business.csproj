@@ -87,6 +87,7 @@
     <Compile Include="BPInstanceManager.cs" />
     <Compile Include="BPDefinitionManager.cs" />
     <Compile Include="CustomCodeTaskManager.cs" />
+    <Compile Include="CustomCodeTaskBPSettings.cs" />
     <Compile Include="DefaultBPDefinitionExtendedSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BPValidationMessageManager.cs" />

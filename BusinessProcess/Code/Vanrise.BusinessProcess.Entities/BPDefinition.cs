@@ -76,6 +76,11 @@ namespace Vanrise.BusinessProcess.Entities
             return true;
         }
 
+        public virtual bool CanCancelBPInstance(IBPDefinitionCanCancelBPInstanceContext context)
+        {
+            return false;
+        }
+
         public virtual List<BPInstanceProgressView> GetBPInstanceProgressViews(IGetBPInstanceProgressViewsContext context)
         {
             return null;

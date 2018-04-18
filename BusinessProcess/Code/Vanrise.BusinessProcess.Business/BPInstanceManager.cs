@@ -96,6 +96,13 @@ namespace Vanrise.BusinessProcess.Business
         {
             return CreateNewProcess(createProcessInput, false);
         }
+
+        public BPInstanceDefinitionDetail GetBPInstanceDefinitionDetail(Guid bpDefinitionId, long bpInstanceId)
+        {
+            var bpdefinition = s_definitionManager.GetBPDefinition(bpDefinitionId);
+            return BPInstanceDefinitionDetailMapper(bpdefinition, bpInstanceId);
+        }
+
         public CreateProcessOutput CreateNewProcess(CreateProcessInput createProcessInput, bool isViewedFromUI)
         {
             if (createProcessInput == null)
@@ -172,7 +179,7 @@ namespace Vanrise.BusinessProcess.Business
             bpInstance.InputArgument.ThrowIfNull("bpInstance.InputArgument", bpInstanceId);
             var bpDefinition = s_definitionManager.GetBPDefinition(bpInstance.DefinitionID);
             bpDefinition.ThrowIfNull("bpDefinition", bpInstance.DefinitionID);
-            return s_definitionManager.DoesUserHaveViewAccess(userId, bpDefinition, bpInstance.InputArgument) 
+            return s_definitionManager.DoesUserHaveViewAccess(userId, bpDefinition, bpInstance.InputArgument)
                 && s_definitionManager.DoesUserHaveStartNewInstanceAccess(userId, bpInstance.InputArgument);
         }
 
@@ -319,6 +326,15 @@ namespace Vanrise.BusinessProcess.Business
                 DefinitionTitle = bpDefinitionTitle,
                 UserName = userName
             };
+        }
+
+        private BPInstanceDefinitionDetail BPInstanceDefinitionDetailMapper(BPDefinition bpDefinition,long bpInstanceId)
+        {
+            BPInstanceDefinitionDetail detail = new BPInstanceDefinitionDetail();
+            detail.Entity = bpDefinition;
+            var extendedSettings = s_definitionManager.GetBPDefinitionExtendedSettings(bpDefinition);
+            detail.AllowCancel = extendedSettings.CanCancelBPInstance(null) && DoesUserHaveCancelAccess(SecurityContext.Current.GetLoggedInUserId(), bpInstanceId);
+            return detail;
         }
 
         #endregion
