@@ -740,8 +740,13 @@ namespace Mediation.Runtime
                 string durationAsString = fields[11];
                 if (!string.IsNullOrEmpty(durationAsString))
                 {
-                    decimal duration = decimal.Parse(durationAsString);
-                    cdr.DurationInSeconds = duration / 1000;
+                    int duration_hour = Convert.ToInt32(durationAsString.Substring(2, 2));
+                    int duration_minute = Convert.ToInt32(durationAsString.Substring(4, 2));
+                    int duration_second = Convert.ToInt32(durationAsString.Substring(6, 2));
+                    int duration_millisecond = Convert.ToInt32(durationAsString.Substring(8, 2));
+
+                    decimal duration = (decimal)(new TimeSpan(0, duration_hour, duration_minute, duration_second, duration_millisecond).TotalSeconds);
+                    cdr.DurationInSeconds = duration;
                 }
 
                 string netStartDateAsString = fields[12];
@@ -766,8 +771,13 @@ namespace Mediation.Runtime
                 string netDurationAsString = fields[14];
                 if (!string.IsNullOrEmpty(netDurationAsString))
                 {
-                    decimal netDuration = decimal.Parse(netDurationAsString);
-                    cdr.NetDurationInSeconds = netDuration / 1000;
+                    int netDuration_hour = Convert.ToInt32(netDurationAsString.Substring(2, 2));
+                    int netDuration_minute = Convert.ToInt32(netDurationAsString.Substring(4, 2));
+                    int netDuration_second = Convert.ToInt32(netDurationAsString.Substring(6, 2));
+                    int netDuration_millisecond = Convert.ToInt32(netDurationAsString.Substring(8, 2));
+
+                    decimal netDuration = (decimal)(new TimeSpan(0, netDuration_hour, netDuration_minute, netDuration_second, netDuration_millisecond).TotalSeconds);
+                    cdr.NetDurationInSeconds = netDuration;
                 }
 
                 cdr.DataVolume = fields[15];
