@@ -21,7 +21,10 @@ BEGIN
 			InvoiceSettingID,
 			SettlementInvoiceId,
 			SplitInvoiceGroupId,
-			SentDate
+			SentDate,
+			inv.ApprovedBy,
+			inv.ApprovedTime,
+			inv.NeedApproval
 	FROM	[VR_Invoice].InvoiceBulkActionDraft ibad  with(nolock)
 	JOIN  	VR_Invoice.Invoice inv with(nolock)
 	ON      inv.ID = ibad.InvoiceId   
