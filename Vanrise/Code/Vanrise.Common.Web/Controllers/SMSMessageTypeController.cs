@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Http;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.Entities.SMS;
 using Vanrise.Web.Base;
 
 namespace Vanrise.Common.Web.Controllers
@@ -28,6 +29,13 @@ namespace Vanrise.Common.Web.Controllers
         public SMSMessageTypeSettings GetSMSMessageType(Guid SMSMessageTypeId)
         {
             return _manager.GetSMSMessageTypeSettings(SMSMessageTypeId);
+        }
+
+        [HttpGet]
+        [Route("GetSMSHandlerSettings")]
+        public IEnumerable<SMSSendHandlerSettingsConfig> GetSMSHandlerSettings()
+        {
+            return _manager.GetSMSHandlerSettings();
         }
     }
 }

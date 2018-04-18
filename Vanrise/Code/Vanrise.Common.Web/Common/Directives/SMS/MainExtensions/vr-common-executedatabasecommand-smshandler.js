@@ -25,17 +25,23 @@
             compile: function (element, attrs) {
 
             },
-            templateUrl: "/Client/Modules/Common/Directives/SMS/Templates/SMSSendHandler.html"
+            templateUrl: "/Client/Modules/Common/Directives/SMS/MainExtensions/Templates/ExecuteDatabaseCommandSMSHandlerTemplate.html"
 
         };
 
         function ExecuteDatabaseCommandSMSHandlerDirective($scope, ctrl, $attrs) {
         
+            var connectionSelectorAPI;
+            var connectionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
             this.initializeController = initializeController;
 
             function initializeController() {
                 $scope.scopeModel = {};
-                
+                $scope.scopeModel.onConnectionSelectorReady = function (api) {
+                    connectionSelectorAPI = api;
+                    connectionSelectorReadyDeferred.resolve();
+                };
                 defineAPI();
             }
 
@@ -43,24 +49,45 @@
                 var api = {};
 
                 api.load = function (payload) {
-                   
+                    var promises = [];
+                    
+                    if (payload != undefined && payload.Settings != undefined)
+                        $scope.commandQuery = payload.Settings.CommandQuery;
+
+                    promises.push(loadConnectionSelector());
+
+                    function loadConnectionSelector() {
+                        var connectionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                        connectionSelectorReadyDeferred.promise.then(function () {
+                            var connectionSelectorPayload = {};
+                              if (payload != undefined && payload.Settings != undefined) {
+                                  connectionSelectorPayload.selectedIds = payload.Settings.VRConnectionId;
+                              }
+                            VRUIUtilsService.callDirectiveLoad(connectionSelectorAPI, connectionSelectorPayload, connectionSelectorLoadDeferred);
+                        });
+                        return connectionSelectorLoadDeferred.promise;
+                    }
+
+                    return UtilsService.waitMultiplePromises(promises);
                 };
 
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Common.MainExtensions.SMSSendHandler.ExecuteDatabaseCommandSMSHandler,Vanrise.Common.MainExtensions",
+                        VRConnectionId: connectionSelectorAPI.getSelectedIds(),
+                        CommandQuery: $scope.commandQuery
                     };
                 };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
-            };
+            }
             
         }
 
         return directiveDefinitionObject;
     }
 
-    app.directive('vrCommonExecutedatabasecommandSmshandler', SMSSendHandlerDirective);
+    app.directive('vrCommonExecutedatabasecommandSmshandler', ExecuteDatabaseCommandSMSHandlerDirective);
 
 })(app);

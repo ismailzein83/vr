@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SMSSendHandlerSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VRCommon_VRComponentTypeAPIService'];
+    SMSSendHandlerSettingsDirective.$inject = ['UtilsService', 'VRUIUtilsService', 'VRCommon_SMSMessageTypeAPIService'];
 
-    function SMSSendHandlerSettingsDirective(UtilsService, VRUIUtilsService, VRCommon_VRComponentTypeAPIService) {
+    function SMSSendHandlerSettingsDirective(UtilsService, VRUIUtilsService, VRCommon_SMSMessageTypeAPIService) {
         return {
             restrict: "E",
             scope: {
@@ -38,7 +38,7 @@
                 $scope.scopeModel = {};
                 $scope.scopeModel.templateConfigs = [];
                 $scope.scopeModel.selectedTemplateConfig;
-               
+
                 $scope.scopeModel.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
@@ -55,44 +55,36 @@
             }
 
             function defineAPI() {
-                
+
                 var api = {};
 
                 api.load = function (payload) {
-                    
-                    console.log(JSON.stringify(payload));
                     selectorAPI.clearDataSource();
                     var promises = [];
-                    var smsSendHandlerSettingsEntity;
 
-                    if (payload != undefined) {
-                        //smsSendHandlerSettingsEntity = payload.RecordParser;
+                    if (payload != undefined)
                         context = payload.context;
-                    }
 
-                    if (recordParserEntity != undefined) {
-                        var loadDirectivePromise = loadDirective();
-                        promises.push(loadDirectivePromise);
-                    }
-                    
+                    if (payload.HandlerSettings != undefined)
+                        promises.push(loadDirective());
+
                     promises.push(getSMSSendHandlerSettingsExtensionConfigs());
 
                     function getSMSSendHandlerSettingsExtensionConfigs() {
-                        return VRCommon_VRComponentTypeAPIService.GetVRComponentTypeExtensionConfigs().then(function (response) {
+                        return VRCommon_SMSMessageTypeAPIService.GetSMSHandlerSettings().then(function (response) {
                             if (response != null) {
-                                for (var i = 0; i < response.length; i++) 
+                                for (var i = 0; i < response.length; i++)
                                     $scope.scopeModel.templateConfigs.push(response[i]);
-                                                                
-                               /* if (recordParserEntity != undefined) {
 
+                                if (payload != undefined && payload.HandlerSettings != undefined)
                                     $scope.scopeModel.selectedTemplateConfig =
-                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, recordParserEntity.ConfigId, 'ExtensionConfigurationId');
-                                }*/
+                                        UtilsService.getItemByVal($scope.scopeModel.templateConfigs, payload.HandlerSettings.ConfigId, 'ExtensionConfigurationId');
+
                             }
                         });
                     }
 
-                  function loadDirective() {
+                    function loadDirective() {
                         directiveReadyDeferred = UtilsService.createPromiseDeferred();
 
                         var directiveLoadDeferred = UtilsService.createPromiseDeferred();
@@ -100,9 +92,9 @@
                         directiveReadyDeferred.promise.then(function () {
                             directiveReadyDeferred = undefined;
                             var directivePayload = { context: getContext() };
-                           /* if (recordParserEntity != undefined) {
-                                directivePayload.extendedSettings = recordParserEntity;
-                            }*/
+                            if (payload != undefined)
+                                directivePayload.Settings = payload.HandlerSettings;
+
                             VRUIUtilsService.callDirectiveLoad(directiveAPI, directivePayload, directiveLoadDeferred);
                         });
 
@@ -117,16 +109,14 @@
                     var data;
                     if ($scope.scopeModel.selectedTemplateConfig != undefined && directiveAPI != undefined) {
                         data = directiveAPI.getData();
-                        if (data != undefined) {
+                        if (data != undefined)
                             data.ConfigId = $scope.scopeModel.selectedTemplateConfig.ExtensionConfigurationId;
-                        }
                     }
                     return data;
                 };
 
-                if (ctrl.onReady != null) {
+                if (ctrl.onReady != null)
                     ctrl.onReady(api);
-                }
             }
 
             function getContext() {
@@ -144,7 +134,7 @@
             }
             var template =
                 '<vr-row>'
-                    + '<vr-columns width="1/2row">'
+                    + '<vr-columns width="fullrow">'
                         + ' <vr-select on-ready="scopeModel.onSelectorReady"'
                             + ' datasource="scopeModel.templateConfigs"'
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'

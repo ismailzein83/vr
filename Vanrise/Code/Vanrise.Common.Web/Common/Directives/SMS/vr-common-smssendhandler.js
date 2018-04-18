@@ -31,8 +31,8 @@
 
         function SMSSendHandler($scope, ctrl, $attrs) {
 
-            var smsSendHandlerDirectiveAPI;
-            var smsSendHandlerDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
+            var smsSendHandlerSelectorAPI;
+            var smsSendHandlerSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             var context;
 
@@ -40,9 +40,9 @@
 
             function initializeController() {
                 $scope.scopeModel = {};
-                $scope.scopeModel.onSMSSendHandlerDirectiveReady = function (api) {
-                    smsSendHandlerDirectiveAPI = api;
-                    smsSendHandlerDirectiveReadyDeferred.resolve();
+                $scope.scopeModel.onSMSSendHandlerSelectorReady = function (api) {
+                    smsSendHandlerSelectorAPI = api;
+                    smsSendHandlerSelectorReadyDeferred.resolve();
                 };
 
                 defineAPI();
@@ -50,27 +50,27 @@
 
             function defineAPI() {
                 var api = {};
-                
+
                 api.load = function (payload) {
-                    console.log("payload: " + JSON.stringify(payload));
+
                     var promises = [];
-                   
+
                     if (payload != undefined)
                         context = payload.context;
-                    
-                    promises.push(loadSMSSendHandlerDirective());
 
-                    function loadSMSSendHandlerDirective() {
-                        var smsSendHandlerDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-                        smsSendHandlerDirectiveReadyDeferred.promise.then(function () {
-                             var smsSendHandlerDirectivePayload = { context: getContext() };
-                            
-                          /*  if (binaryParserTypeEntity != undefined) {
-                                recordParserDirectivePayload.RecordParser = binaryParserTypeEntity.RecordParser;
-                            }*/
-                            VRUIUtilsService.callDirectiveLoad(smsSendHandlerDirectiveAPI, smsSendHandlerDirectivePayload, smsSendHandlerDirectiveLoadDeferred);
+                    promises.push(loadSMSSendHandlerSelector());
+
+                    function loadSMSSendHandlerSelector() {
+                        var smsSendHandlerSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+                        smsSendHandlerSelectorReadyDeferred.promise.then(function () {
+                            var smsSendHandlerSelectorPayload = { context: getContext() };
+
+                            if (payload != undefined && payload.Handler != undefined)
+                                smsSendHandlerSelectorPayload.HandlerSettings = payload.Handler.Settings;
+
+                            VRUIUtilsService.callDirectiveLoad(smsSendHandlerSelectorAPI, smsSendHandlerSelectorPayload, smsSendHandlerSelectorLoadDeferred);
                         });
-                        return smsSendHandlerDirectiveLoadDeferred.promise;
+                        return smsSendHandlerSelectorLoadDeferred.promise;
                     }
 
                     return UtilsService.waitMultiplePromises(promises);
@@ -79,13 +79,13 @@
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Entities.SMSSendHandler,Vanrise.Entities",
-                        Settings: smsSendHandlerDirectiveAPI.getData()
+                        Settings: smsSendHandlerSelectorAPI.getData()
                     };
                 };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
-            };
+            }
 
             function getContext() {
                 var currentContext = context;

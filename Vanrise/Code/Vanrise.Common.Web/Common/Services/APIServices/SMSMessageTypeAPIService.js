@@ -21,9 +21,16 @@
             });
         }
 
+        function GetSMSHandlerSettings() {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetSMSHandlerSettings"), {
+                
+            });
+        }
+
         return ({
             GetSMSMessageType: GetSMSMessageType,
             GetSMSMessageTypesInfo: GetSMSMessageTypesInfo,
+            GetSMSHandlerSettings: GetSMSHandlerSettings
         });
     }
 

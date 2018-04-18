@@ -90,6 +90,7 @@
     <Compile Include="ObjectFactory.cs" />
     <Compile Include="Settings\NationalSettings\NationalSettings.cs" />
     <Compile Include="SMS\SMSEvaluatedTemplate.cs" />
+    <Compile Include="SMS\SMSSendHandlerSettingsConfig.cs" />
     <Compile Include="SMS\SMSMessageTemplate.cs" />
     <Compile Include="SMS\SMSMessageTemplateDetail.cs" />
     <Compile Include="SMS\SMSMessageTemplateQuery.cs" />

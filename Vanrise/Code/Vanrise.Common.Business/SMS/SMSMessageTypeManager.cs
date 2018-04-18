@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
+using Vanrise.Entities.SMS;
 
 namespace Vanrise.Common.Business
 {
@@ -41,6 +42,12 @@ namespace Vanrise.Common.Business
         public SMSMessageTypeSettings GetSMSMessageTypeSettings(Guid smsMessageTypeId)
         {
             return _vrComponentTypeManager.GetComponentTypeSettings<SMSMessageTypeSettings>(smsMessageTypeId);
+        }
+
+        public IEnumerable<SMSSendHandlerSettingsConfig> GetSMSHandlerSettings()
+        {
+            ExtensionConfigurationManager manager = new ExtensionConfigurationManager();
+            return manager.GetExtensionConfigurations<SMSSendHandlerSettingsConfig>(SMSSendHandlerSettingsConfig.EXTENSION_TYPE);
         }
 
         #endregion
