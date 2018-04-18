@@ -207,6 +207,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Common\Constant\CompanySettingFieldEnum.js" />
+    <Content Include="Common\Constant\FTPTypeEnum.js" />
     <Content Include="Common\Constant\ModalWidthEnum.js" />
     <Content Include="Common\Constant\ActionAuditLKUPEnum.js" />
     <Content Include="Common\Constant\CompanySettingPropertyEnum.js" />
@@ -230,6 +231,10 @@
     <Content Include="Common\Directives\ActionAudit\vr-common-actionaudit-search.js" />
     <Content Include="Common\Directives\ActionAudit\vr-common-actionauditlkup-selector.js" />
     <Content Include="Common\Directives\BankDetail\vr-common-bank-detail-selector.js" />
+    <Content Include="Common\Directives\CommunicatorSettings\Templates\SSHCommunicatorSettings.html" />
+    <Content Include="Common\Directives\CommunicatorSettings\Templates\FTPCommunicatorSettings.html" />
+    <Content Include="Common\Directives\CommunicatorSettings\vr-common-communicatorsettings-ftp.js" />
+    <Content Include="Common\Directives\CommunicatorSettings\vr-common-communicatorsettings-ssh.js" />
     <Content Include="Common\Directives\ExcelFileParser\ExcelFileParserEditorController.js" />
     <Content Include="Common\Directives\ExcelFileParser\Templates\ExcelFileParserEditor.html" />
     <Content Include="Common\Directives\ExcelFileParser\vr-common-excelfileparser.js" />
