@@ -490,7 +490,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     {
                         zoneIdsWithExplicitRates.Add(rate.ZoneId);
 
-                        var explicitNormalRate = rate.RateToChange;
+                        var explicitNormalRate = rate.NormalRate;
                         if (explicitNormalRate != null)
                         {
                             SalePricelistRateChange salePricelistRateChange = CreateSalePricelistRateChange(explicitNormalRate, countryToAdd.CountryId);
@@ -500,10 +500,10 @@ namespace TOne.WhS.Sales.BP.Activities
                             context.RateChangesOutArgument.Add(salePricelistRateChange);
                         }
 
-                        if (rate.OtheRateToChanges != null && rate.OtheRateToChanges.Any())
+                        if (rate.OtheRates != null && rate.OtheRates.Any())
                         {
                             var rateTypeIds = Helper.GetRateTypeIds(context.CustomerInfo.CustomerId, rate.ZoneId, DateTime.Today);
-                            foreach (var otheRateToChange in rate.OtheRateToChanges)
+                            foreach (var otheRateToChange in rate.OtheRates)
                             {
                                 if (!rateTypeIds.Contains(otheRateToChange.RateTypeId.Value))
                                     continue;
@@ -820,31 +820,31 @@ namespace TOne.WhS.Sales.BP.Activities
                 if (countryId == null)
                     throw new DataIntegrityValidationException(string.Format("Zone with Id {0} is not assigned to any country", rateToChange.ZoneId));
 
-                var normalRateChange = rateToChange.RateToChange;
-                if (normalRateChange != null)
+                var normalRate = rateToChange.NormalRate;
+                if (normalRate != null)
                 {
-                    SalePricelistRateChange salePricelistRateChange = CreateSalePricelistRateChange(normalRateChange, countryId.Value);
-                    salePricelistRateChange.ChangeType = normalRateChange.ChangeType;
-                    salePricelistRateChange.BED = normalRateChange.BED;
-                    salePricelistRateChange.EED = normalRateChange.EED;
-                    salePricelistRateChange.RecentRate = normalRateChange.RecentExistingRate.ConvertedRate;
+                    SalePricelistRateChange salePricelistRateChange = CreateSalePricelistRateChange(normalRate, countryId.Value);
+                    salePricelistRateChange.ChangeType = normalRate.ChangeType;
+                    salePricelistRateChange.BED = normalRate.BED;
+                    salePricelistRateChange.EED = normalRate.EED;
+                    salePricelistRateChange.RecentRate = normalRate.RecentExistingRate.ConvertedRate;
                     context.RateChangesOutArgument.Add(salePricelistRateChange);
+                }
 
-                    if (rateToChange.OtheRateToChanges != null)
+                if (rateToChange.OtheRates != null)
+                {
+                    var rateTypIds = Helper.GetRateTypeIds(context.CustomerInfo.CustomerId, rateToChange.ZoneId, DateTime.Now);
+                    foreach (var otheRateToChange in rateToChange.OtheRates)
                     {
-                        var rateTypIds = Helper.GetRateTypeIds(context.CustomerInfo.CustomerId, rateToChange.ZoneId, DateTime.Now);
-                        foreach (var otheRateToChange in rateToChange.OtheRateToChanges)
-                        {
-                            if (!rateTypIds.Contains(otheRateToChange.RateTypeId.Value))
-                                continue;
+                        if (!rateTypIds.Contains(otheRateToChange.RateTypeId.Value))
+                            continue;
 
-                            SalePricelistRateChange salePricelistOtherRateChange = CreateSalePricelistRateChange(otheRateToChange, countryId.Value);
-                            salePricelistOtherRateChange.ChangeType = otheRateToChange.ChangeType;
-                            salePricelistOtherRateChange.BED = otheRateToChange.BED;
-                            salePricelistOtherRateChange.EED = otheRateToChange.EED;
-                            salePricelistOtherRateChange.RecentRate = otheRateToChange.RecentExistingRate.ConvertedRate;
-                            context.RateChangesOutArgument.Add(salePricelistOtherRateChange);
-                        }
+                        SalePricelistRateChange salePricelistOtherRateChange = CreateSalePricelistRateChange(otheRateToChange, countryId.Value);
+                        salePricelistOtherRateChange.ChangeType = otheRateToChange.ChangeType;
+                        salePricelistOtherRateChange.BED = otheRateToChange.BED;
+                        salePricelistOtherRateChange.EED = otheRateToChange.EED;
+                        salePricelistOtherRateChange.RecentRate = otheRateToChange.RecentExistingRate.ConvertedRate;
+                        context.RateChangesOutArgument.Add(salePricelistOtherRateChange);
                     }
                 }
             }
@@ -863,35 +863,36 @@ namespace TOne.WhS.Sales.BP.Activities
                 if (recentRate == null)
                     throw new VRBusinessException(string.Format("Zone {0} does neither have an explicit rate nor a default rate set for selling product", rateToAdd.ZoneId));
 
-                var normalRateChange = rateToAdd.RateToChange;
-                if (normalRateChange != null)
+                var normalRate = rateToAdd.NormalRate;
+
+                if (normalRate != null)
                 {
-                    SalePricelistRateChange salePricelistRateChange = CreateSalePricelistRateChange(normalRateChange, countryId.Value);
-                    salePricelistRateChange.ChangeType = normalRateChange.ChangeType;
-                    salePricelistRateChange.BED = normalRateChange.BED;
-                    salePricelistRateChange.EED = normalRateChange.EED;
+                    SalePricelistRateChange salePricelistRateChange = CreateSalePricelistRateChange(normalRate, countryId.Value);
+                    salePricelistRateChange.ChangeType = normalRate.ChangeType;
+                    salePricelistRateChange.BED = normalRate.BED;
+                    salePricelistRateChange.EED = normalRate.EED;
                     salePricelistRateChange.RecentRate = recentRate.Rate.Rate;
 
-                    SetRateChangeType(recentRate.Rate, normalRateChange.NormalRate, normalRateChange.NewRates, salePricelistRateChange, context.CurrencyId, true);
+                    SetRateChangeType(recentRate.Rate, normalRate.NormalRate, normalRate.NewRates, salePricelistRateChange, context.CurrencyId, true);
                     context.RateChangesOutArgument.Add(salePricelistRateChange);
+                }
 
-                    if (rateToAdd.OtheRateToChanges != null)
+                if (rateToAdd.OtheRates != null)
+                {
+                    var rateTypeIds = Helper.GetRateTypeIds(context.CustomerInfo.CustomerId, rateToAdd.ZoneId, DateTime.Now);
+                    foreach (var otheRateToChange in rateToAdd.OtheRates)
                     {
-                        var rateTypeIds = Helper.GetRateTypeIds(context.CustomerInfo.CustomerId, normalRateChange.ZoneId, DateTime.Now);
-                        foreach (var otheRateToChange in rateToAdd.OtheRateToChanges)
-                        {
-                            if (!rateTypeIds.Contains(otheRateToChange.RateTypeId.Value))
-                                continue;
+                        if (!rateTypeIds.Contains(otheRateToChange.RateTypeId.Value))
+                            continue;
 
-                            SalePricelistRateChange salePricelistOtherRateChange = CreateSalePricelistRateChange(otheRateToChange, countryId.Value);
-                            salePricelistOtherRateChange.ChangeType = otheRateToChange.ChangeType;
-                            salePricelistOtherRateChange.BED = otheRateToChange.BED;
-                            salePricelistOtherRateChange.EED = otheRateToChange.EED;
-                            var otherRate = recentRate.RatesByRateType.GetRecord(otheRateToChange.RateTypeId.Value);
-                            if (otherRate != null)
-                                SetRateChangeType(otherRate, otheRateToChange.NormalRate, null, salePricelistOtherRateChange, context.CurrencyId, false);
-                            context.RateChangesOutArgument.Add(salePricelistOtherRateChange);
-                        }
+                        SalePricelistRateChange salePricelistOtherRateChange = CreateSalePricelistRateChange(otheRateToChange, countryId.Value);
+                        salePricelistOtherRateChange.ChangeType = otheRateToChange.ChangeType;
+                        salePricelistOtherRateChange.BED = otheRateToChange.BED;
+                        salePricelistOtherRateChange.EED = otheRateToChange.EED;
+                        var otherRate = recentRate.RatesByRateType.GetRecord(otheRateToChange.RateTypeId.Value);
+                        if (otherRate != null)
+                            SetRateChangeType(otherRate, otheRateToChange.NormalRate, null, salePricelistOtherRateChange, context.CurrencyId, false);
+                        context.RateChangesOutArgument.Add(salePricelistOtherRateChange);
                     }
                 }
             }
@@ -912,7 +913,7 @@ namespace TOne.WhS.Sales.BP.Activities
 
                 var recentRate = context.RateChangeLocator.GetCustomerZoneRate(context.CustomerInfo.CustomerId, context.CustomerInfo.SellingProductId, rateToClose.ZoneId);
 
-                var normalRateToClose = rateToClose.RateToClose;
+                var normalRateToClose = rateToClose.NormalRateToClose;
                 if (normalRateToClose != null)
                 {
                     var salePriceListRateChange = new SalePricelistRateChange
@@ -1101,15 +1102,15 @@ namespace TOne.WhS.Sales.BP.Activities
                 };
 
                 if (zone.NormalRateToChange != null && zone.NormalRateToChange.RateTypeId == null && zone.NormalRateToChange.ChangeType == RateChangeType.New)
-                    rateToChangeSummary.RateToChange = zone.NormalRateToChange;
+                    rateToChangeSummary.NormalRate = zone.NormalRateToChange;
 
                 if (zone.OtherRatesToChange != null && zone.OtherRatesToChange.Any())
                 {
                     var rateChanges = zone.OtherRatesToChange.Where(otherRate => otherRate.ChangeType == RateChangeType.New);
                     if (rateChanges != null && rateChanges.Any())
-                        rateToChangeSummary.OtheRateToChanges = rateChanges.ToList();
+                        rateToChangeSummary.OtheRates = rateChanges.ToList();
                 }
-                if (rateToChangeSummary.RateToChange != null || rateToChangeSummary.OtheRateToChanges != null)
+                if (rateToChangeSummary.NormalRate != null || rateToChangeSummary.OtheRates != null)
                     ratesToChangeSummary.Add(rateToChangeSummary);
             }
 
@@ -1128,16 +1129,16 @@ namespace TOne.WhS.Sales.BP.Activities
 
                 if (zone.NormalRateToChange != null && zone.NormalRateToChange.RateTypeId == null &&
                     (zone.NormalRateToChange.ChangeType == RateChangeType.Increase || zone.NormalRateToChange.ChangeType == RateChangeType.Decrease || zone.NormalRateToChange.ChangeType == RateChangeType.NotChanged))
-                    rateToChangeSummary.RateToChange = zone.NormalRateToChange;
+                    rateToChangeSummary.NormalRate = zone.NormalRateToChange;
 
                 if (zone.OtherRatesToChange != null && zone.OtherRatesToChange.Any())
                 {
                     var rateChanges = zone.OtherRatesToChange.Where(otherRate => otherRate.ChangeType != RateChangeType.New);
                     if (rateChanges != null && rateChanges.Any())
-                        rateToChangeSummary.OtheRateToChanges = rateChanges.ToList();
+                        rateToChangeSummary.OtheRates = rateChanges.ToList();
 
                 }
-                if (rateToChangeSummary.RateToChange != null || rateToChangeSummary.OtheRateToChanges != null)
+                if (rateToChangeSummary.NormalRate != null || rateToChangeSummary.OtheRates != null)
                     ratesToChangeSummary.Add(rateToChangeSummary);
             }
             return ratesToChangeSummary;
@@ -1154,12 +1155,12 @@ namespace TOne.WhS.Sales.BP.Activities
                     ZoneId = zone.ZoneId
                 };
                 if (zone.NormalRateToClose != null && zone.NormalRateToClose.RateTypeId == null)
-                    rateToCloseSummary.RateToClose = zone.NormalRateToClose;
+                    rateToCloseSummary.NormalRateToClose = zone.NormalRateToClose;
 
                 if (zone.OtherRatesToClose != null && zone.OtherRatesToClose.Any())
                     rateToCloseSummary.OtheRateToCloses = zone.OtherRatesToClose;
 
-                if (rateToCloseSummary.RateToClose != null || rateToCloseSummary.OtheRateToCloses != null)
+                if (rateToCloseSummary.NormalRateToClose != null || rateToCloseSummary.OtheRateToCloses != null)
                     ratesToCloseSummary.Add(rateToCloseSummary);
             }
             return ratesToCloseSummary;
@@ -1176,11 +1177,11 @@ namespace TOne.WhS.Sales.BP.Activities
             foreach (var rateToAdd in structuredRateActions.RatesToAdd)
             {
                 info.RateActionsExistingZoneIds.Add(rateToAdd.ZoneId);
-                if (rateToAdd.RateToChange != null)
-                    info.ActionDatesByZoneId.Add(rateToAdd.ZoneId, rateToAdd.RateToChange.BED);
+                if (rateToAdd.NormalRate != null)
+                    info.ActionDatesByZoneId.Add(rateToAdd.ZoneId, rateToAdd.NormalRate.BED);
                 else
                 {
-                    var otherRate = rateToAdd.OtheRateToChanges.First();
+                    var otherRate = rateToAdd.OtheRates.First();
                     info.ActionDatesByZoneId.Add(rateToAdd.ZoneId, otherRate.BED);
                 }
             }
@@ -1194,10 +1195,10 @@ namespace TOne.WhS.Sales.BP.Activities
                 long zoneId;
                 DateTime closeEffectiveDate;
                 info.RateActionsExistingZoneIds.Add(rateToClose.ZoneId);
-                if (rateToClose.RateToClose != null)
+                if (rateToClose.NormalRateToClose != null)
                 {
                     zoneId = rateToClose.ZoneId;
-                    closeEffectiveDate = rateToClose.RateToClose.CloseEffectiveDate;
+                    closeEffectiveDate = rateToClose.NormalRateToClose.CloseEffectiveDate;
 
                 }
                 else
@@ -1588,13 +1589,13 @@ namespace TOne.WhS.Sales.BP.Activities
         private class RateToChangeSummary
         {
             public long ZoneId { get; set; }
-            public RateToChange RateToChange { get; set; }
-            public List<RateToChange> OtheRateToChanges { get; set; }
+            public RateToChange NormalRate { get; set; }
+            public List<RateToChange> OtheRates { get; set; }
         }
         private class RateToCloseSummary
         {
             public long ZoneId { get; set; }
-            public RateToClose RateToClose { get; set; }
+            public RateToClose NormalRateToClose { get; set; }
             public List<RateToClose> OtheRateToCloses { get; set; }
         }
         #endregion
