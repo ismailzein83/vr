@@ -1,33 +1,12 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <configuration>
   <configSections>
-    <section name="vanriseRuntime" type="Vanrise.Runtime.Configuration.RuntimeConfig, Vanrise.Runtime"/>
     <section name="vanriseLogging" type="Vanrise.Common.LoggingConfiguration.LoggingConfig, Vanrise.Common" />
   </configSections>
   <startup>
     <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5" />
   </startup>
 
-  <!-- Vanrise Runtime is configured as per client resources (mainly CPU \ RAM Memory) -->
-  <vanriseRuntime>
-    <runtimeServiceGroups>
-      <!-- Used for scheduling services for data sources, workflow. nbOfRuntimeInstances recommended to be equal to 1 or 2.-->
-      <runtimeServiceGroup name="group2" nbOfRuntimeInstances="1">
-        <runtimeServices>
-          <runtimeService name="Scheduler Service" type="Vanrise.Runtime.SchedulerService, Vanrise.Runtime" interval="00:00:02"></runtimeService>
-        </runtimeServices>
-      </runtimeServiceGroup>
-
-      <!-- Used to cache Data Result in Memory in order to handle Paging and sorting on the UI grids. nbOfRuntimeInstances depended on available resources.-->
-      <runtimeServiceGroup name="group7" nbOfRuntimeInstances="1">
-        <runtimeServices>
-          <runtimeService name="Big Data Runtime Service" type="Vanrise.Common.Business.BigDataRuntimeService, Vanrise.Common.Business" interval="00:00:02"></runtimeService>
-        </runtimeServices>
-      </runtimeServiceGroup>
-      
-    </runtimeServiceGroups>
-  </vanriseRuntime>
-  
   <vanriseLogging maxLogLevel="Information">
     <loggers>
       <logger name="SQLLogger" type="Vanrise.Logging.SQL.SQLLogger, Vanrise.Logging.SQL">
@@ -54,6 +33,7 @@
   </connectionStrings>
   <appSettings>
     <add key="IsRuntimeService" value="true"/>
+    <add key="RuntimeNodeId" value="481ffcd0-e0eb-48a1-badb-31658f700397"/>
     
     <add key="RuntimeConnStringKey"                             value="TransactionDBConnString"/>
     <add key="BigDataServiceDBConnStringKey"                    value="TransactionDBConnString"/>
