@@ -8,8 +8,8 @@ namespace Vanrise.Runtime.Data
 {
     public interface IRuntimeManagerDataManager : IDataManager
     {
-        string GetRuntimeManagerServiceURL();
+        string GetRuntimeManagerServiceURL(out Guid runtimeNodeInstanceId);
 
-        bool TryUpdateHeartBeat(Guid serviceInstanceId, string serviceURL, TimeSpan heartbeatTimeOut);
+        bool TryTakePrimaryNode(Guid serviceInstanceId, TimeSpan heartbeatTimeOut);
     }
 }

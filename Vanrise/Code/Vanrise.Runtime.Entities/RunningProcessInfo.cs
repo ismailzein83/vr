@@ -10,9 +10,11 @@ namespace Vanrise.Runtime.Entities
     {
         public int ProcessId { get; set; }
 
-        public string ProcessName { get; set; }
+        public int OSProcessId { get; set; }
 
-        public string MachineName { get; set; }
+        public Guid RuntimeNodeId { get; set; }
+
+        public Guid RuntimeNodeInstanceId { get; set; }
 
         public DateTime StartedTime { get; set; }
 

@@ -17,21 +17,39 @@ namespace Vanrise.Runtime
         static Dictionary<int, Dictionary<Guid, RuntimeServiceInstance>> s_runtimeServicesDictByTypeId;
         static Object s_lockObj = new object();
 
-        internal static void SetRuntimeServices(List<RuntimeServiceInstance> runtimeServices)
+        static bool s_areServicesChanged = true;
+        internal static void SetServicesChanged()
         {
-            var runtimeServicesLocal = new List<RuntimeServiceInstance>(runtimeServices);
-            Dictionary<int, List<RuntimeServiceInstance>> runtimeServicesByTypeId = new Dictionary<int, List<RuntimeServiceInstance>>();
-            Dictionary<int, Dictionary<Guid, RuntimeServiceInstance>> runtimeServicesDictByTypeId = new Dictionary<int, Dictionary<Guid, RuntimeServiceInstance>>();
-            foreach (var s in runtimeServicesLocal)
-            {
-                runtimeServicesByTypeId.GetOrCreateItem(s.ServiceTypeId).Add(s);
-                runtimeServicesDictByTypeId.GetOrCreateItem(s.ServiceTypeId).Add(s.ServiceInstanceId, s);
-            }
             lock (s_lockObj)
             {
-                s_runtimeServices = runtimeServicesLocal;
-                s_runtimeServicesByTypeId = runtimeServicesByTypeId;
-                s_runtimeServicesDictByTypeId = runtimeServicesDictByTypeId;
+                s_areServicesChanged = true;
+            }
+        }
+
+        private void RefreshServicesIfNeeded()
+        {
+            if (s_areServicesChanged)
+            {
+                lock (s_lockObj)
+                {
+                    if (s_areServicesChanged)
+                    {
+                        IRuntimeServiceInstanceDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<IRuntimeServiceInstanceDataManager>();
+                        var runtimeServices = dataManager.GetServices();
+                        Dictionary<int, List<RuntimeServiceInstance>> runtimeServicesByTypeId = new Dictionary<int, List<RuntimeServiceInstance>>();
+                        Dictionary<int, Dictionary<Guid, RuntimeServiceInstance>> runtimeServicesDictByTypeId = new Dictionary<int, Dictionary<Guid, RuntimeServiceInstance>>();
+                        foreach (var s in runtimeServices)
+                        {
+                            runtimeServicesByTypeId.GetOrCreateItem(s.ServiceTypeId).Add(s);
+                            runtimeServicesDictByTypeId.GetOrCreateItem(s.ServiceTypeId).Add(s.ServiceInstanceId, s);
+                        }
+
+                        s_runtimeServices = runtimeServices;
+                        s_runtimeServicesByTypeId = runtimeServicesByTypeId;
+                        s_runtimeServicesDictByTypeId = runtimeServicesDictByTypeId;
+                        s_areServicesChanged = false;
+                    }
+                }
             }
         }
 
@@ -58,7 +76,7 @@ namespace Vanrise.Runtime
         }
 
         public RuntimeServiceInstance GetServiceInstance(string serviceTypeUniqueName, Guid serviceInstanceId)
-        {
+        {            
             return GetServicesDictionary(serviceTypeUniqueName).GetRecord(serviceInstanceId);
         }
 
@@ -69,7 +87,8 @@ namespace Vanrise.Runtime
         }
 
         public Dictionary<Guid, RuntimeServiceInstance> GetServicesDictionary(string serviceTypeUniqueName)
-        { 
+        {
+            RefreshServicesIfNeeded();
             int serviceTypeId = GetServiceTypeId(serviceTypeUniqueName);
             return s_runtimeServicesDictByTypeId.GetRecord(serviceTypeId);
         }
@@ -77,11 +96,13 @@ namespace Vanrise.Runtime
 
         Dictionary<int, List<RuntimeServiceInstance>> GetServicesByType()
         {
+            RefreshServicesIfNeeded();
             return s_runtimeServicesByTypeId;
         }
 
         List<RuntimeServiceInstance> GetAllServices()
         {
+            RefreshServicesIfNeeded();
             return s_runtimeServices;
         }
     }

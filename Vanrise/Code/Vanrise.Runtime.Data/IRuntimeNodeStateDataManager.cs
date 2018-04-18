@@ -11,7 +11,7 @@ namespace Vanrise.Runtime.Data
     {
         bool TrySetInstanceStarted(Guid runtimeNodeId, Guid serviceInstanceId, string machineName, int osProcessId, string osProcessName, string serviceURL, TimeSpan heartBeatTimeout);
 
-        bool TryUpdateHeartBeat(Guid runtimeNodeId, Guid serviceInstanceId, Decimal cpuUsage, Decimal availableRAM, string diskInfos);
+        bool TryUpdateHeartBeat(Guid runtimeNodeId, Guid serviceInstanceId, Decimal cpuUsage, Decimal availableRAM, string diskInfos, int nbOfEnabledProcesses, int nbOfRunningProcesses);
 
         RuntimeNodeState GetNodeState(Guid runtimeNodeId);
 

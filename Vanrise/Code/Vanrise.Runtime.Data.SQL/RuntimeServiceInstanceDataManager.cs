@@ -31,9 +31,9 @@ namespace Vanrise.Runtime.Data.SQL
             return GetItemsSP("runtime.sp_RuntimeServiceInstance_GetAll", ServiceInstanceMapper);
         }
 
-        public void Delete(Guid serviceInstanceId)
+        public void DeleteByProcessId(int runtimeProcessId)
         {
-            ExecuteNonQuerySP("runtime.sp_RuntimeServiceInstance_Delete", serviceInstanceId);
+            ExecuteNonQuerySP("[runtime].[sp_RuntimeServiceInstance_DeleteByProcess]", runtimeProcessId);
         }
 
         #region Mappers

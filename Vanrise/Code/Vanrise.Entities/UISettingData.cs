@@ -22,7 +22,19 @@ namespace Vanrise.Entities
 
         public int? GridPageSize { get; set; }
 
-        public long MaxSearchRecordCount { get; set; }
+        long _maxSearchRecordCount = 10000;
+
+        public long MaxSearchRecordCount
+        {
+            get
+            {
+                return _maxSearchRecordCount;
+            }
+            set
+            {
+                _maxSearchRecordCount = value;
+            }
+        }
 
         public Guid? DefaultLanguageId { get; set; }
 

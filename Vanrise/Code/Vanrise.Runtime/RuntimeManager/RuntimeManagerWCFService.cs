@@ -8,12 +8,12 @@ using Vanrise.Runtime.Entities;
 
 namespace Vanrise.Runtime
 {
-   internal class RuntimeManagerWCFService : IRuntimeManagerWCFService
+    internal class RuntimeManagerWCFService : IRuntimeManagerWCFService
     {
-       public bool IsThisCurrentRuntimeManager()
-       {
-           return RuntimeManager.Current != null && RuntimeManager.Current._isCurrentRuntimeManagerReady;
-       }
+        public PingPrimaryNodeResponse PingPrimaryNode(PingPrimaryNodeRequest request)
+        {
+            return RuntimeManager.Current.PingPrimaryNodeRequestReceived(request);
+        }
 
         public void UnlockFreezedTransactions(List<TransactionLockItem> freezedTransactionLocks)
         {
@@ -64,16 +64,16 @@ namespace Vanrise.Runtime
 
         public GetServiceProcessIdResponse TryGetServiceProcessId(GetServiceProcessIdRequest request)
         {
-             int currentLockedProcessId;
-             if (s_runtimeServiceTypeProcessIds.TryGetValue(request.ServiceTypeUniqueName, out currentLockedProcessId))
-             {
-                 return new GetServiceProcessIdResponse
-                 {
-                     RuntimeProcessId = currentLockedProcessId
-                 };
-             }
-             else
-                 return null;
+            int currentLockedProcessId;
+            if (s_runtimeServiceTypeProcessIds.TryGetValue(request.ServiceTypeUniqueName, out currentLockedProcessId))
+            {
+                return new GetServiceProcessIdResponse
+                {
+                    RuntimeProcessId = currentLockedProcessId
+                };
+            }
+            else
+                return null;
         }
 
 
@@ -96,13 +96,19 @@ namespace Vanrise.Runtime
 
         public string RegisterRunningProcess(string serializedInput)
         {
-            var output = RuntimeManager.Current.RegisterRunningProcess(Serializer.Deserialize<RunningProcessRegistrationInput>(serializedInput));
+            var output = RuntimeManager.Current.RegisterRunningProcessRequestReceived(Serializer.Deserialize<RunningProcessRegistrationInput>(serializedInput));
             return Serializer.Serialize(output);
         }
 
-       public bool IsRunningProcessStillRegistered(int runningProcessId)
+        public bool IsThisRuntimeNodeInstance(Guid runtimeNodeId, Guid instanceId)
         {
-            return RuntimeManager.Current.IsRunningProcessStillRegistered(runningProcessId);
+            return RuntimeManager.Current.IsThisRuntimeNodeInstanceRequestReceived(runtimeNodeId, instanceId);
+        }
+
+
+        public void SetRuntimeProcessesAndServicesChanged()
+        {
+            RuntimeManager.Current.SetRuntimeProcessesAndServicesChanged();
         }
     }
 }

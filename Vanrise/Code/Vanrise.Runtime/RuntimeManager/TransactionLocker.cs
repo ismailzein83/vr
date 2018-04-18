@@ -74,7 +74,7 @@ namespace Vanrise.Runtime
             try
             {
                 var lockItem_local = lockItem;
-                RuntimeManagerClient.CreateClient((client) =>
+                RuntimeManagerClient.CreateClient((client, primaryNodeRuntimeNodeInstanceId) =>
                 {
                     isLocked = client.TryLock(lockItem_local, maxAllowedConcurrency);
                 });
@@ -95,14 +95,14 @@ namespace Vanrise.Runtime
         {
             try
             {
-                RuntimeManagerClient.CreateClient((client) =>
+                RuntimeManagerClient.CreateClient((client, primaryNodeRuntimeNodeInstanceId) =>
                 {
                     client.UnLock(lockItem);
                 });
             }
             catch (Exception ex)
             {
-                RuntimeHost.SetTransactionLockFreezed(lockItem);
+                RuntimeHost.Current.SetTransactionLockFreezed(lockItem);
                 LoggerFactory.GetExceptionLogger().WriteException(ex);
             }
         }

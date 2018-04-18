@@ -9,6 +9,8 @@ using System.Configuration;
 using Vanrise.Runtime.Data;
 using System.ServiceModel;
 using System.Threading;
+using System.Collections.Concurrent;
+using System.Diagnostics;
 
 namespace Vanrise.Runtime
 {
@@ -16,28 +18,16 @@ namespace Vanrise.Runtime
     {
         #region Static
 
-        static TimeSpan s_RuntimeManagerHeartBeatTimeout;
-        internal static TimeSpan s_RunningProcessHeartBeatTimeout;
+        static TimeSpan s_RuntimeNodeHeartBeatTimeout;
         static int s_hostingRuntimeManagerWCFServiceMaxRetryCount;
-        static int s_pingRunningProcessMaxRetryCount;
         static TimeSpan s_removeLocksForNotRunningProcessInterval;
-
-        List<RunningProcessInfo> _runningProcesses;
-        Dictionary<int, RunningProcessSyncInfo> _runningProcessSyncInfos;
-        List<RuntimeServiceInstance> _runtimeServiceInstances;
 
         static RuntimeManager()
         {
             if (!int.TryParse(ConfigurationManager.AppSettings["Runtime_HostingRuntimeManagerWCFServiceMaxRetryCount"], out s_hostingRuntimeManagerWCFServiceMaxRetryCount))
                 s_hostingRuntimeManagerWCFServiceMaxRetryCount = 10;
-            if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["Runtime_RuntimeManagerHeartBeatTimeout"], out s_RuntimeManagerHeartBeatTimeout))
-                s_RuntimeManagerHeartBeatTimeout = TimeSpan.FromSeconds(45);
-            if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["Runtime_RunningProcessHeartBeatTimeout"], out s_RunningProcessHeartBeatTimeout))
-                s_RunningProcessHeartBeatTimeout = TimeSpan.FromSeconds(90);
-            if (s_RunningProcessHeartBeatTimeout - s_RuntimeManagerHeartBeatTimeout < TimeSpan.FromSeconds(30))
-                throw new Exception("RunningProcessHeartBeatTimeout should be greater than RuntimeManagerHeartBeatTimeout by 30 sec at least");
-            if (!int.TryParse(ConfigurationManager.AppSettings["Runtime_PingRunningProcessMaxRetryCount"], out s_pingRunningProcessMaxRetryCount))
-                s_pingRunningProcessMaxRetryCount = 3;
+            if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["Runtime_RuntimeNodeHeartBeatTimeout"], out s_RuntimeNodeHeartBeatTimeout))
+                s_RuntimeNodeHeartBeatTimeout = TimeSpan.FromSeconds(45);
             if (!TimeSpan.TryParse(ConfigurationManager.AppSettings["Runtime_RemoveLocksForNotRunningProcessInterval"], out s_removeLocksForNotRunningProcessInterval))
                 s_removeLocksForNotRunningProcessInterval = TimeSpan.FromSeconds(60);
         }
@@ -59,11 +49,17 @@ namespace Vanrise.Runtime
 
         #endregion
 
-        Guid _serviceInstanceId;
-        string _serviceURL;
+        #region ctor
 
-        internal RuntimeManager()
+        internal RuntimeManager(RuntimeHost runtimeHost, Guid runtimeNodeId, Guid runtimeNodeInstanceId)
         {
+            _runtimeHost = runtimeHost;
+            _runtimeNodeId = runtimeNodeId;
+            _runtimeNodeInstanceId = runtimeNodeInstanceId;
+
+            _cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+            _ramCounter = new PerformanceCounter("Memory", "Available MBytes");
+
             int retryCount = 0;
             while (true)
             {
@@ -73,25 +69,53 @@ namespace Vanrise.Runtime
                 {
                     retryCount++;
                     if (retryCount >= s_hostingRuntimeManagerWCFServiceMaxRetryCount)
-                        throw new Exception(String.Format("Max Retry Count '{0}' reached when trying to host RuntimeManagerWCFService", s_hostingRuntimeManagerWCFServiceMaxRetryCount));
+                    {
+                        LoggerFactory.GetLogger().WriteError("Max Retry Count '{0}' reached when trying to host RuntimeManagerWCFService. Runtime Node '{1}'", s_hostingRuntimeManagerWCFServiceMaxRetryCount, _runtimeNodeId);
+                        Environment.Exit(0);
+                    }
                     System.Threading.Thread.Sleep(200);
                 }
             }
-            _serviceInstanceId = Guid.NewGuid();
-        }
-        private bool TryHostWCFService()
-        {
-            try
+            if (!TrySetNodeStarted())
             {
-                ServiceHostManager.Current.CreateAndOpenTCPServiceHost(typeof(RuntimeManagerWCFService), typeof(IRuntimeManagerWCFService), OnServiceHostCreated, OnServiceHostRemoved, out _serviceURL);
-                return true;
+                LoggerFactory.GetLogger().WriteError("Cannot Start Runtime Node. another Instance is already running for the Runtime Node '{0}'", _runtimeNodeId);
+                Environment.Exit(0);
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine(ex.ToString());
-                return false;
+                _lastHeartbeatTime = DateTime.Now;
             }
         }
+
+        #endregion
+
+        #region Local Variables
+
+        Guid _runtimeNodeId;
+        Guid _runtimeNodeInstanceId;
+        string _serviceURL;
+        RuntimeHost _runtimeHost;
+
+        PerformanceCounter _cpuCounter;
+        PerformanceCounter _ramCounter;
+
+        IRuntimeManagerDataManager _dataManager = RuntimeDataManagerFactory.GetDataManager<IRuntimeManagerDataManager>();
+        RunningProcessManager _runningProcessManager = new RunningProcessManager();
+        IRunningProcessDataManager _runningProcessDataManager = RuntimeDataManagerFactory.GetDataManager<IRunningProcessDataManager>();
+        IRuntimeServiceInstanceDataManager _runtimeServiceDataManager = RuntimeDataManagerFactory.GetDataManager<IRuntimeServiceInstanceDataManager>();
+        IRuntimeNodeStateDataManager _runtimeNodeStateDataManager = RuntimeDataManagerFactory.GetDataManager<IRuntimeNodeStateDataManager>();
+        List<int> _exitedChildProcessIds = new List<int>();
+
+        internal bool _isPrimaryNodeReady;
+        Object _runtimeManagerLockObj = new object();
+        DateTime? _nextTimeToCheckTimedOutNodes;
+        DateTime _lastHeartbeatTime;
+
+        Guid _primaryNodeRuntimeNodeInstanceId;
+        bool _areRuntimeProcessesChanged;
+        bool _receivedProcessesAndServicesChangedFromPrimaryNode;
+
+        #endregion
 
         #region WCF Host Events
 
@@ -133,195 +157,73 @@ namespace Vanrise.Runtime
 
         #endregion
 
-        IRuntimeManagerDataManager _dataManager = RuntimeDataManagerFactory.GetDataManager<IRuntimeManagerDataManager>();
-        IRunningProcessDataManager _runningProcessDataManager = RuntimeDataManagerFactory.GetDataManager<IRunningProcessDataManager>();
-        IRuntimeServiceInstanceDataManager _runtimeServiceDataManager = RuntimeDataManagerFactory.GetDataManager<IRuntimeServiceInstanceDataManager>();
+        #region Main Calls received from the RuntimeHost
 
-        static DateTime s_lastTimeLocksRemovedForNotRunningProcesses;
-
-        internal bool _isCurrentRuntimeManagerReady;
-        Object _runtimeManagerLockObj = new object();
-
-        internal void Execute(bool killTimedOutProcesses)
+        internal void Execute()
         {
-            if (IsCurrentRuntimeAManager())
+            if (IsThisThePrimaryNode())
             {
-                if (!_isCurrentRuntimeManagerReady)
+                if (!_isPrimaryNodeReady)
                 {
-                    TransactionLockHandler.InitializeCurrent();
-                    var runningProcesses = _runningProcessDataManager.GetRunningProcesses();
-                    var runtimeServiceInstances = _runtimeServiceDataManager.GetServices();
-
                     lock (_runtimeManagerLockObj)
                     {
-                        _runningProcesses = runningProcesses;
-                        _runtimeServiceInstances = runtimeServiceInstances;
-                        _runningProcessSyncInfos = _runningProcesses.ToDictionary(itm => itm.ProcessId, itm => new RunningProcessSyncInfo { RunningProcessInfo = itm, NeedsRunningProcessesUpdate = true });
-                        RunningProcessManager.SetRunningProcesses(_runningProcesses);
-                        RuntimeServiceInstanceManager.SetRuntimeServices(_runtimeServiceInstances);
-                        _isCurrentRuntimeManagerReady = true;
-                    }
-                    killTimedOutProcesses = true;
-                }
-                if ((DateTime.Now - s_lastTimeLocksRemovedForNotRunningProcesses) > s_removeLocksForNotRunningProcessInterval)
-                {
-                    List<int> runningProcessIds;
-                    lock (_runtimeManagerLockObj)
-                    {
-                        runningProcessIds = new List<int>(_runningProcessSyncInfos.Keys);
-                    }
-                    TransactionLockHandler.Current.RemoveLocksForNotRunningProcesses(runningProcessIds);
-                    s_lastTimeLocksRemovedForNotRunningProcesses = DateTime.Now;
-                }
-                if (killTimedOutProcesses)
-                {
-                    for (int i = 0; i < s_pingRunningProcessMaxRetryCount; i++)
-                    {
-                        PingRunningProcesses();
+                        TransactionLockHandler.InitializeCurrent();
+                        _areRuntimeProcessesChanged = true;
+                        _isPrimaryNodeReady = true;
                     }
                 }
-                else
-                {
-                    PingRunningProcesses();
-                }
+                UnregisterExitedChildProcesses();
+                DeleteRunningProcessesForTimedOutNodes();
+                NotifyRunningProcessesChangedIfNeeded();
             }
             else
             {
                 lock (_runtimeManagerLockObj)
                 {
                     TransactionLockHandler.RemoveCurrent();
-                    _runningProcesses = null;
-                    _runtimeServiceInstances = null;
-                    _runningProcessSyncInfos = null;
-                    _isCurrentRuntimeManagerReady = false;
+                    _isPrimaryNodeReady = false;
                 }
+                UnregisterExitedChildProcesses();
+                KillNotRegisteredChildProcessesIfProcessesChanged();
             }
         }
 
-        private bool IsCurrentRuntimeAManager()
+        internal void OnChildProcessExited(int processId)
         {
-            while (!_dataManager.TryUpdateHeartBeat(_serviceInstanceId, _serviceURL, s_RuntimeManagerHeartBeatTimeout))
+            lock (_exitedChildProcessIds)
             {
-                if (TryPingCurrentRuntimeManager())
-                {
-                    return false;
-                }
-                else
-                {
-                    Thread.Sleep(1000);
-                }
+                _exitedChildProcessIds.Add(processId);
             }
-            return true;
         }
 
-        private bool TryPingCurrentRuntimeManager()
-        {
-            bool pingSucceeded = false;
-            try
-            {
+        #endregion
 
-                RuntimeManagerClient.CreateClient((client) =>
-                    {
-                        pingSucceeded = client.IsThisCurrentRuntimeManager();
-                    });
-            }
-            catch
-            {
-                pingSucceeded = false;
-            }
-            return pingSucceeded;
+        #region Calls Received from other Nodes/Runtimes through the WCF service IRuntimeManagerWCFService
+
+        internal bool IsThisRuntimeNodeInstanceRequestReceived(Guid runtimeNodeId, Guid instanceId)
+        {
+            return _runtimeNodeId == runtimeNodeId && _runtimeNodeInstanceId == instanceId;
         }
 
-        private void PingRunningProcesses()
+        internal PingPrimaryNodeResponse PingPrimaryNodeRequestReceived(PingPrimaryNodeRequest request)
         {
-            List<RunningProcessSyncInfo> runningProcessSyncInfos;
-            lock (_runtimeManagerLockObj)
-            {
-                runningProcessSyncInfos = new List<RunningProcessSyncInfo>(_runningProcessSyncInfos.Values);
-            }
-            Parallel.ForEach(runningProcessSyncInfos, (runningProcessSyncInfo) =>
-            {
-                try
-                {
-                    if (!TryPing(runningProcessSyncInfo))
-                    {
-                        DeleteRunningProcess(runningProcessSyncInfo);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    runningProcessSyncInfo.FailedRetryCount++;
-                    if (runningProcessSyncInfo.FailedRetryCount >= s_pingRunningProcessMaxRetryCount && (DateTime.Now - runningProcessSyncInfo.LastHeartBeatTime) >= s_RunningProcessHeartBeatTimeout)
-                    {
-                        DeleteRunningProcess(runningProcessSyncInfo);
-                    }
-                }
-            });
-        }
+            if (!IsThisThePrimaryNodeAndItIsReady())
+                throw new Exception(String.Format("this is not the primary node. Node Id '{0}'", _runtimeNodeId));
+            var response = new PingPrimaryNodeResponse();
 
-        private bool TryPing(RunningProcessSyncInfo runningProcessSyncInfo)
-        {
-            PingRunningProcessServiceRequest pingRequest = new PingRunningProcessServiceRequest
-            {
-                RunningProcessId = runningProcessSyncInfo.RunningProcessInfo.ProcessId
-            };
-            if (runningProcessSyncInfo.NeedsRunningProcessesUpdate)
+            if (request.RunningProcessesChangedInCurrentNode)
             {
                 lock (_runtimeManagerLockObj)
                 {
-                    pingRequest.NewRunningProcesses = new List<RunningProcessInfo>(_runningProcesses);
-                    pingRequest.NewRuntimeServices = new List<RuntimeServiceInstance>(_runtimeServiceInstances);
+                    _areRuntimeProcessesChanged = true;
                 }
             }
-
-            var response = new InterRuntimeServiceManager().SendRequest(runningProcessSyncInfo.RunningProcessInfo.ProcessId, pingRequest);
-            if (response != null && response.Result == PingRunningProcessResult.Succeeded)
-            {
-                lock (_runtimeManagerLockObj)
-                {
-                    runningProcessSyncInfo.NeedsRunningProcessesUpdate = false;
-                    runningProcessSyncInfo.LastHeartBeatTime = DateTime.Now;
-                    runningProcessSyncInfo.FailedRetryCount = 0;
-                }
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return response;
         }
 
-        private void DeleteRunningProcess(RunningProcessSyncInfo runningProcessSyncInfo)
+        internal RunningProcessRegistrationOutput RegisterRunningProcessRequestReceived(RunningProcessRegistrationInput input)
         {
-            HashSet<RuntimeServiceInstance> runtimeServicesToDelete;
-            lock (_runtimeManagerLockObj)
-            {
-                runtimeServicesToDelete = new HashSet<RuntimeServiceInstance>(_runtimeServiceInstances.Where(itm => itm.ProcessId == runningProcessSyncInfo.RunningProcessInfo.ProcessId));
-            }
-            foreach (var runtimeService in runtimeServicesToDelete)
-            {
-                _runtimeServiceDataManager.Delete(runtimeService.ServiceInstanceId);
-            }
-            _runningProcessDataManager.DeleteRunningProcess(runningProcessSyncInfo.RunningProcessInfo.ProcessId);
-            lock (_runtimeManagerLockObj)
-            {
-                _runtimeServiceInstances.RemoveAll(itm => runtimeServicesToDelete.Contains(itm));
-                _runningProcessSyncInfos.Remove(runningProcessSyncInfo.RunningProcessInfo.ProcessId);
-                _runningProcesses.Remove(runningProcessSyncInfo.RunningProcessInfo);
-                RunningProcessManager.SetRunningProcesses(_runningProcesses);
-                RuntimeServiceInstanceManager.SetRuntimeServices(_runtimeServiceInstances);
-                foreach (var syncInfo in _runningProcessSyncInfos.Values)
-                {
-                    syncInfo.NeedsRunningProcessesUpdate = true;
-                }
-            }
-        }
-
-        internal RunningProcessRegistrationOutput RegisterRunningProcess(RunningProcessRegistrationInput input)
-        {
-            if (!_isCurrentRuntimeManagerReady)
-                throw new Exception("Runtime Manager is not current instance");
-            RunningProcessInfo runningProcessInfo = RuntimeDataManagerFactory.GetDataManager<IRunningProcessDataManager>().InsertProcessInfo(input.ProcessName, input.MachineName, input.AdditionalInfo);
+            RunningProcessInfo runningProcessInfo = RuntimeDataManagerFactory.GetDataManager<IRunningProcessDataManager>().InsertProcessInfo(input.RuntimeNodeId, input.RuntimeNodeInstanceId, input.OSProcessId, input.AdditionalInfo);
             RuntimeServiceInstanceManager runtimeServiceInstanceManager = new RuntimeServiceInstanceManager();
             List<RuntimeServiceInstance> registeredServices = new List<RuntimeServiceInstance>();
             foreach (var runtimeServiceInput in input.RuntimeServices)
@@ -329,56 +231,398 @@ namespace Vanrise.Runtime
                 var serviceInstance = runtimeServiceInstanceManager.RegisterServiceInstance(runtimeServiceInput.ServiceInstanceId, runningProcessInfo.ProcessId, runtimeServiceInput.ServiceTypeUniqueName, runtimeServiceInput.ServiceInstanceInfo);
                 registeredServices.Add(serviceInstance);
             }
-            lock (_runtimeManagerLockObj)
+            RunningProcessRegistrationOutput output = new RunningProcessRegistrationOutput
             {
-                _runningProcesses.Add(runningProcessInfo);
-                _runningProcessSyncInfos.Add(runningProcessInfo.ProcessId, new RunningProcessSyncInfo { RunningProcessInfo = runningProcessInfo });
-                _runtimeServiceInstances.AddRange(registeredServices);
-                RunningProcessManager.SetRunningProcesses(_runningProcesses);
-                RuntimeServiceInstanceManager.SetRuntimeServices(_runtimeServiceInstances);
-                foreach (var syncInfo in _runningProcessSyncInfos.Values)
-                {
-                    syncInfo.NeedsRunningProcessesUpdate = true;
-                }
-            }
-            RunningProcessRegistrationOutput output;
-            lock (_runtimeManagerLockObj)
+                RunningProcessInfo = runningProcessInfo,
+                RegisteredServices = registeredServices
+            };
+            if (_runtimeHost.IsHostForChildRuntimes())
             {
-                output = new RunningProcessRegistrationOutput
-                    {
-                        RunningProcessInfo = runningProcessInfo,
-                        RegisteredServices = registeredServices,
-                        AllRunningProcesses = new List<RunningProcessInfo>(_runningProcesses),
-                        AllRunningServices = new List<RuntimeServiceInstance>(_runtimeServiceInstances)
-                    };
+                bool isProcessIdAssignedToChildProcess = _runtimeHost.TrySetProcessIdOfChildProcess(input.OSProcessId, output.RunningProcessInfo.ProcessId);
+                if (!isProcessIdAssignedToChildProcess)
+                    OnChildProcessExited(runningProcessInfo.ProcessId);
             }
+            lock (_runtimeManagerLockObj)
+            {                
+                _areRuntimeProcessesChanged = true;
+            }
+
             return output;
         }
 
-        internal bool IsRunningProcessStillRegistered(int runningProcessId)
+        internal void SetRuntimeProcessesAndServicesChanged()
         {
-            bool isRunningProcessStillRegistered = false;
-            lock(_runtimeManagerLockObj)
+            lock (_runtimeManagerLockObj)
             {
-                RunningProcessSyncInfo runningProcessSyncInfo;
-                isRunningProcessStillRegistered = _runningProcessSyncInfos.TryGetValue(runningProcessId, out runningProcessSyncInfo);
-                if (isRunningProcessStillRegistered)
-                    runningProcessSyncInfo.LastHeartBeatTime = DateTime.Now;
+                _receivedProcessesAndServicesChangedFromPrimaryNode = true;
             }
-            return isRunningProcessStillRegistered;
+            RunningProcessManager.SetRunningProcessChanged();
+            RuntimeServiceInstanceManager.SetServicesChanged();
         }
 
-        #region Private Classes
+        #endregion
 
-        private class RunningProcessSyncInfo
+        #region Private Methods
+
+        private bool TryHostWCFService()
         {
-            public RunningProcessInfo RunningProcessInfo { get; set; }
+            try
+            {
+                ServiceHostManager.Current.CreateAndOpenTCPServiceHost(typeof(RuntimeManagerWCFService), typeof(IRuntimeManagerWCFService), OnServiceHostCreated, OnServiceHostRemoved, out _serviceURL);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return false;
+            }
+        }
 
-            public DateTime LastHeartBeatTime { get; set; }
+        private bool TrySetNodeStarted()
+        {
+            var currentProcess = System.Diagnostics.Process.GetCurrentProcess();
+            string machineName = Environment.MachineName;
+            RuntimeNodeState nodeExistingInstanceState = _runtimeNodeStateDataManager.GetNodeState(_runtimeNodeId);
+            if (nodeExistingInstanceState != null)
+            {
+                DateTime startOfTryingToSetStarted = DateTime.Now;
+                while ((DateTime.Now - startOfTryingToSetStarted) <= s_RuntimeNodeHeartBeatTimeout)
+                {
+                    bool isNodeExistingInstanceAlive = false;
+                    try
+                    {
+                        ServiceClientFactory.CreateTCPServiceClient<IRuntimeManagerWCFService>(nodeExistingInstanceState.ServiceURL,
+                            (client) =>
+                            {
+                                isNodeExistingInstanceAlive = client.IsThisRuntimeNodeInstance(nodeExistingInstanceState.RuntimeNodeId, nodeExistingInstanceState.InstanceId);
+                            });
+                        if (isNodeExistingInstanceAlive)
+                            return false;
+                    }
+                    catch
+                    {
 
-            public int FailedRetryCount { get; set; }
+                    }
+                    if (_runtimeNodeStateDataManager.TrySetInstanceStarted(_runtimeNodeId, _runtimeNodeInstanceId, machineName, currentProcess.Id, currentProcess.ProcessName, _serviceURL, s_RuntimeNodeHeartBeatTimeout))
+                        return true;
+                    else
+                        Thread.Sleep(2000);
+                }
+                return false;
+            }
+            else
+            {
+                return _runtimeNodeStateDataManager.TrySetInstanceStarted(_runtimeNodeId, _runtimeNodeInstanceId, machineName, currentProcess.Id, currentProcess.ProcessName, _serviceURL, s_RuntimeNodeHeartBeatTimeout);
+            }
+        }
 
-            public bool NeedsRunningProcessesUpdate { get; set; }
+        private bool IsThisThePrimaryNode()
+        {
+            TryUpdateNodeHeartBeat();
+            if (_isPrimaryNodeReady && _dataManager.TryTakePrimaryNode(_runtimeNodeInstanceId, s_RuntimeNodeHeartBeatTimeout))
+            {
+                return true;
+            }
+            else
+            {
+                DateTime startOfPing = DateTime.Now;
+                while (true)
+                {
+                    if (TryPingCurrentPrimaryNode())
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        if (DateTime.Now - startOfPing > GetTimeOutToConsiderNodeDown())
+                            KillAllRuntimeProcesses();
+
+                        if (_dataManager.TryTakePrimaryNode(_runtimeNodeInstanceId, s_RuntimeNodeHeartBeatTimeout))
+                            return true;
+                        else
+                            Thread.Sleep(1000);
+                    }
+                }
+            }
+        }
+
+        private bool IsThisThePrimaryNodeAndItIsReady()
+        {
+            bool isReady;
+            lock (_runtimeManagerLockObj)
+            {
+                isReady = _isPrimaryNodeReady;
+            }
+            return isReady;
+        }
+
+        private void TryUpdateNodeHeartBeat()
+        {
+            try
+            {
+                List<VRDiskInfo> diskInfos = GetDiskInfos();                
+                if (!_runtimeNodeStateDataManager.TryUpdateHeartBeat(_runtimeNodeId, _runtimeNodeInstanceId, (Decimal)_cpuCounter.NextValue(), (Decimal)_ramCounter.NextValue(),
+                    Serializer.Serialize(diskInfos), _runtimeHost.NbOfEnabledProcesses, _runtimeHost.GetAllRunningProcessIds().Count))
+                {
+                    LoggerFactory.GetLogger().WriteError("Cannot Update Heart in Node '{0}', Service InstanceID '{1}'. Node Shutdown", _runtimeNodeId, _runtimeNodeInstanceId);
+                    Environment.Exit(0);
+                }
+                else
+                {
+                    _lastHeartbeatTime = DateTime.Now;
+                }
+            }
+            catch
+            {
+                if (DateTime.Now - _lastHeartbeatTime > GetTimeOutToConsiderNodeDown())
+                    KillAllRuntimeProcesses();
+                throw;
+            }
+        }
+
+        private List<VRDiskInfo> GetDiskInfos()
+        {
+            List<VRDiskInfo> diskInfos = new List<VRDiskInfo>();
+            foreach (System.IO.DriveInfo d in System.IO.DriveInfo.GetDrives())
+            {
+                if (d.IsReady)
+                {
+                    diskInfos.Add(new VRDiskInfo
+                        {
+                            PartitionName = d.Name,
+                            AvailableFreeSpace = d.AvailableFreeSpace
+                        });
+                }
+            }
+            return diskInfos;
+        }
+
+        private void KillAllRuntimeProcesses()
+        {
+            _runtimeHost.KillAllChildProcesses();
+        }
+
+        private bool TryPingCurrentPrimaryNode()
+        {
+            try
+            {
+                var pingRequest = new PingPrimaryNodeRequest
+                {
+                    RuntimeNodeInstanceId = _runtimeNodeInstanceId,
+                };
+
+                RuntimeManagerClient.CreateClient((client, primaryNodeRuntimeNodeInstanceId) =>
+                    {
+                        if (primaryNodeRuntimeNodeInstanceId != _primaryNodeRuntimeNodeInstanceId//Primary Node is changed
+                            || _areRuntimeProcessesChanged)
+                        {
+                            lock (_runtimeManagerLockObj)
+                            {
+                                _areRuntimeProcessesChanged = false;//can be set here because it is not the Primary Node
+                            }
+                            pingRequest.RunningProcessesChangedInCurrentNode = true;
+                        }
+                        client.PingPrimaryNode(pingRequest);
+                        _primaryNodeRuntimeNodeInstanceId = primaryNodeRuntimeNodeInstanceId;
+
+                    });
+                return true;
+            }
+            catch
+            {
+                lock (_runtimeManagerLockObj)
+                {
+                    _areRuntimeProcessesChanged = true;
+                }
+                return false;
+            }
+        }
+
+        private TimeSpan GetTimeOutToConsiderNodeDown()
+        {
+            return s_RuntimeNodeHeartBeatTimeout + TimeSpan.FromSeconds(30);
+        }
+
+        private void DeleteRunningProcessesForTimedOutNodes()
+        {
+            if (_nextTimeToCheckTimedOutNodes.HasValue && _nextTimeToCheckTimedOutNodes.Value > DateTime.Now)
+                return;
+
+            double timeOutIntervalInSec = GetTimeOutToConsiderNodeDown().TotalSeconds;
+            var allNodeStates = _runtimeNodeStateDataManager.GetAllNodes();
+            allNodeStates.ThrowIfNull("allNodeStates");
+            var allNodeStatesByRuntimeNodeInstanceId = allNodeStates.ToDictionary(node => node.InstanceId, node => node);
+            var allRuntimeProcesses = _runningProcessManager.GetRunningProcesses();
+            foreach (var runtimeProcess in allRuntimeProcesses)
+            {
+                if (runtimeProcess.RuntimeNodeInstanceId == _runtimeNodeInstanceId)
+                    continue;
+                RuntimeNodeState nodeState;
+                if (!allNodeStatesByRuntimeNodeInstanceId.TryGetValue(runtimeProcess.RuntimeNodeInstanceId, out nodeState) 
+                    || nodeState.NbOfSecondsHeartBeatReceived > timeOutIntervalInSec)
+                {
+                    DeleteRunningProcess(runtimeProcess.ProcessId);
+                }
+            }
+
+            DateTime? soonestProbableNodeTimeOut = null;
+            foreach (var nodeState in allNodeStates)
+            {
+                if (nodeState.InstanceId == _runtimeNodeInstanceId)
+                    continue;
+                if (nodeState.NbOfSecondsHeartBeatReceived <= timeOutIntervalInSec)
+                {
+                    DateTime probableNodeTimeOut = DateTime.Now.AddSeconds(timeOutIntervalInSec - nodeState.NbOfSecondsHeartBeatReceived);
+                    if (!soonestProbableNodeTimeOut.HasValue || soonestProbableNodeTimeOut.Value > probableNodeTimeOut)
+                        soonestProbableNodeTimeOut = probableNodeTimeOut;
+                }
+            }
+
+            if (soonestProbableNodeTimeOut.HasValue)
+                _nextTimeToCheckTimedOutNodes = soonestProbableNodeTimeOut;
+            else
+                _nextTimeToCheckTimedOutNodes = DateTime.Now.AddSeconds(timeOutIntervalInSec);
+        }
+
+        private void UnregisterExitedChildProcesses()
+        {
+            while (_exitedChildProcessIds.Count > 0)
+            {
+                int firstChildProcessId = _exitedChildProcessIds[0];
+                DeleteRunningProcess(firstChildProcessId);
+                lock (_exitedChildProcessIds)
+                {
+                    _exitedChildProcessIds.Remove(firstChildProcessId);
+                }
+            }
+        }
+
+        private void NotifyRunningProcessesChangedIfNeeded()
+        {
+            if (_areRuntimeProcessesChanged)
+            {
+                try
+                {
+                    lock (_runtimeManagerLockObj)
+                    {
+                        _areRuntimeProcessesChanged = false;//clear the flag from the begining to handle the case when the running changes during the execution of this method
+                    }
+                    RunningProcessManager.SetRunningProcessChanged();
+                    RuntimeServiceInstanceManager.SetServicesChanged();
+                    Dictionary<int, RunningProcessInfo> allRegisteredRunningProcesses = _runningProcessManager.GetAllRunningProcesses();
+                    allRegisteredRunningProcesses.ThrowIfNull("allRegisteredRunningProcesses");
+                    foreach (var runningChildProcessId in _runtimeHost.GetAllRunningProcessIds())
+                    {
+                        if (!allRegisteredRunningProcesses.ContainsKey(runningChildProcessId))
+                            _runtimeHost.KillChildProcess(runningChildProcessId);
+                    }
+
+                    double timeOutIntervalInSec = GetTimeOutToConsiderNodeDown().TotalSeconds;
+                    List<RuntimeNodeState> otherRunningNodeStates = _runtimeNodeStateDataManager.GetAllNodes().Where(otherNodeState => otherNodeState.InstanceId != _runtimeNodeInstanceId && otherNodeState.NbOfSecondsHeartBeatReceived <= timeOutIntervalInSec).ToList();
+
+                    bool errorWhenCallingOtherNodesAndRuntimes = false;
+                    Parallel.ForEach(allRegisteredRunningProcesses.Values, (registeredProcess) =>
+                    {
+                        try
+                        {
+                            SetProcessesAndServicesChangedRequest setProcessesAndServicesChangedRequest = new SetProcessesAndServicesChangedRequest();
+                            new InterRuntimeServiceManager().SendRequest(registeredProcess.ProcessId, setProcessesAndServicesChangedRequest);
+
+                        }
+                        catch (Exception ex)
+                        {
+                            LoggerFactory.GetExceptionLogger().WriteException(ex);
+                            lock (_runtimeManagerLockObj)
+                            {
+                                errorWhenCallingOtherNodesAndRuntimes = true;
+                            }
+                        }
+                    });
+
+                    Parallel.ForEach(otherRunningNodeStates, (runningNodeState) =>
+                    {
+                        try
+                        {
+                            ServiceClientFactory.CreateTCPServiceClient<IRuntimeManagerWCFService>(runningNodeState.ServiceURL,
+                                (client) =>
+                                {
+                                    client.SetRuntimeProcessesAndServicesChanged();
+                                });
+
+                        }
+                        catch (Exception ex)
+                        {
+                            LoggerFactory.GetExceptionLogger().WriteException(ex);
+                            lock (_runtimeManagerLockObj)
+                            {
+                                errorWhenCallingOtherNodesAndRuntimes = true;
+                            }
+                        }
+                    });
+
+                    TransactionLockHandler.Current.RemoveLocksForNotRunningProcesses(allRegisteredRunningProcesses.Keys.ToList());
+
+                    if (errorWhenCallingOtherNodesAndRuntimes)
+                    {
+                        lock (_runtimeManagerLockObj)
+                        {
+                            _areRuntimeProcessesChanged = true;//rollback in case of exception
+                        }
+                    }
+                }
+                catch
+                {
+                    lock (_runtimeManagerLockObj)
+                    {
+                        _areRuntimeProcessesChanged = true;//rollback in case of exception
+                    }
+                    throw;
+                }
+            }
+        }
+
+        private void KillNotRegisteredChildProcessesIfProcessesChanged()
+        {
+            if (_receivedProcessesAndServicesChangedFromPrimaryNode)
+            {
+                lock (_runtimeManagerLockObj)
+                {
+                    if (_receivedProcessesAndServicesChangedFromPrimaryNode)
+                        _receivedProcessesAndServicesChangedFromPrimaryNode = false;
+                }
+                try
+                {
+                    Dictionary<int, RunningProcessInfo> allRegisteredRunningProcesses = _runningProcessManager.GetAllRunningProcesses();
+                    allRegisteredRunningProcesses.ThrowIfNull("allRegisteredRunningProcesses");
+                    foreach (var runningChildProcessId in _runtimeHost.GetAllRunningProcessIds())
+                    {
+                        if (!allRegisteredRunningProcesses.ContainsKey(runningChildProcessId))
+                            _runtimeHost.KillChildProcess(runningChildProcessId);
+                    }
+                }
+                catch
+                {
+                    lock (_runtimeManagerLockObj)
+                        _receivedProcessesAndServicesChangedFromPrimaryNode = true;
+                    throw;
+                }
+            }
+        }
+
+        private void DeleteRunningProcess(int processId)
+        {
+            try
+            {
+                _runtimeServiceDataManager.DeleteByProcessId(processId);
+                _runningProcessDataManager.DeleteRunningProcess(processId);
+            }
+            finally
+            {
+                lock (_runtimeManagerLockObj)
+                {
+                    _areRuntimeProcessesChanged = true;
+                }
+            }
         }
 
         #endregion
@@ -386,9 +630,11 @@ namespace Vanrise.Runtime
 
     public class RunningProcessRegistrationInput
     {
-        public string ProcessName { get; set; }
+        public int OSProcessId { get; set; }
 
-        public string MachineName { get; set; }
+        public Guid RuntimeNodeId { get; set; }
+
+        public Guid RuntimeNodeInstanceId { get; set; }
 
         public List<RegisterRuntimeServiceInput> RuntimeServices { get; set; }
 
@@ -408,10 +654,6 @@ namespace Vanrise.Runtime
     {
         public RunningProcessInfo RunningProcessInfo { get; set; }
 
-        public List<RunningProcessInfo> AllRunningProcesses { get; set; }
-
         public List<RuntimeServiceInstance> RegisteredServices { get; set; }
-
-        public List<RuntimeServiceInstance> AllRunningServices { get; set; }
     }
 }

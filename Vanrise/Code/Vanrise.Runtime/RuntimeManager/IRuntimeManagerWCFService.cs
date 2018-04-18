@@ -12,11 +12,10 @@ namespace Vanrise.Runtime
     internal interface IRuntimeManagerWCFService
     {
         [OperationContract]
-        bool IsThisCurrentRuntimeManager();
-
+        PingPrimaryNodeResponse PingPrimaryNode(PingPrimaryNodeRequest request);
+        
         [OperationContract]
         void UnlockFreezedTransactions(List<TransactionLockItem> freezedTransactionLocks);
-
 
         [OperationContract]
         bool TryLockRuntimeService(string serviceTypeUniqueName, int runtimeProcessId);
@@ -34,35 +33,21 @@ namespace Vanrise.Runtime
         string RegisterRunningProcess(string serializedInput);
 
         [OperationContract]
-        bool IsRunningProcessStillRegistered(int runningProcessId);
-    }    
+        bool IsThisRuntimeNodeInstance(Guid runtimeNodeId, Guid instanceId);
 
-    public class HeartBeatRequest
-    {
-        public int RunningProcessId { get; set; }
-
-        public List<TransactionLockItem> FreezedTransactionLocks { get; set; }
+        [OperationContract]
+        void SetRuntimeProcessesAndServicesChanged();
     }
 
-    public enum HeartBeatResult { Succeeded, ProcessNotExists }
-
-    public class HeartBeatResponse
+    public class PingPrimaryNodeRequest
     {
-        public HeartBeatResult Result { get; set; }
+        public Guid RuntimeNodeInstanceId { get; set; }
+
+        public bool RunningProcessesChangedInCurrentNode { get; set; }
     }
 
-    public class LockRuntimeServiceRequest
+    public class PingPrimaryNodeResponse
     {
-        public string ServiceTypeUniqueName { get; set; }
-
-        public int RuntimeProcessId { get; set; }
-    }
-
-    public enum LockRuntimeServiceResult { Succeeded, Failed }
-
-    public class LockRuntimeServiceResponse
-    {
-        public LockRuntimeServiceResult Result { get; set; }
     }
 
     public class GetServiceProcessIdRequest

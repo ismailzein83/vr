@@ -21,9 +21,9 @@ namespace Vanrise.Runtime.Data.SQL
             return (bool)ExecuteScalarSP("[runtime].[sp_RuntimeNodeState_TrySetInstanceStarted]", runtimeNodeId, serviceInstanceId, machineName, osProcessId, osProcessName, serviceURL, heartBeatTimeout.TotalSeconds);
         }
 
-        public bool TryUpdateHeartBeat(Guid runtimeNodeId, Guid serviceInstanceId, Decimal cpuUsage, Decimal availableRAM, string diskInfos)
+        public bool TryUpdateHeartBeat(Guid runtimeNodeId, Guid serviceInstanceId, Decimal cpuUsage, Decimal availableRAM, string diskInfos, int nbOfEnabledProcesses, int nbOfRunningProcesses)
         {
-            return ExecuteNonQuerySP("[runtime].[sp_RuntimeNodeState_TryUpdateHeartBeat]", runtimeNodeId, serviceInstanceId, cpuUsage, availableRAM, diskInfos) > 0;
+            return ExecuteNonQuerySP("[runtime].[sp_RuntimeNodeState_TryUpdateHeartBeat]", runtimeNodeId, serviceInstanceId, cpuUsage, availableRAM, diskInfos, nbOfEnabledProcesses, nbOfRunningProcesses) > 0;
         }
 
         public RuntimeNodeState GetNodeState(Guid runtimeNodeId)

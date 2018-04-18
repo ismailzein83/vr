@@ -17,9 +17,9 @@ namespace Vanrise.Runtime.Data.SQL
         {
         }
 
-        public Entities.RunningProcessInfo InsertProcessInfo(string processName, string machineName, RunningProcessAdditionalInfo additionalInfo)
+        public Entities.RunningProcessInfo InsertProcessInfo(Guid runtimeNodeId, Guid runtimeNodeInstanceId, int osProcessId, RunningProcessAdditionalInfo additionalInfo)
         {
-            return GetItemSP("runtime.sp_RunningProcess_Insert", RunningProcessInfoMapper, processName, machineName, additionalInfo != null ? Common.Serializer.Serialize(additionalInfo) : null);
+            return GetItemSP("runtime.sp_RunningProcess_Insert", RunningProcessInfoMapper, runtimeNodeId, runtimeNodeInstanceId, osProcessId, additionalInfo != null ? Common.Serializer.Serialize(additionalInfo) : null);
         }
         
         public bool AreRunningProcessesUpdated(ref object _updateHandle)
@@ -49,8 +49,9 @@ namespace Vanrise.Runtime.Data.SQL
             var runningProcessInfo = new RunningProcessInfo
             {
                 ProcessId = (int)reader["ID"],
-                ProcessName = reader["ProcessName"] as string,
-                MachineName = reader["MachineName"] as string,
+                OSProcessId = GetReaderValue<int>(reader, "OSProcessID"),
+                RuntimeNodeId = GetReaderValue<Guid>(reader, "RuntimeNodeID"),
+                RuntimeNodeInstanceId = GetReaderValue<Guid>(reader, "RuntimeNodeInstanceID"),
                 StartedTime = (DateTime)reader["StartedTime"]
             };
             string serializedAdditionInfo = reader["AdditionalInfo"] as string;

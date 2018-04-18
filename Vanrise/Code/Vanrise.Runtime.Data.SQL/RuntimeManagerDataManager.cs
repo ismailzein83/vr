@@ -14,14 +14,26 @@ namespace Vanrise.Runtime.Data.SQL
         {
         }
 
-        public string GetRuntimeManagerServiceURL()
+        public string GetRuntimeManagerServiceURL(out Guid runtimeNodeInstanceId)
         {
-            return ExecuteScalarSP("[runtime].[sp_RuntimeManager_GetServiceURL]") as string;
+            string serviceURL = null;
+            runtimeNodeInstanceId = Guid.Empty;
+            Guid runtimeNodeInstanceId_Local = Guid.Empty;
+            ExecuteReaderSP("[runtime].[sp_RuntimeManager_GetServiceURL]", (reader) =>
+                {
+                    if(reader.Read())
+                    {
+                        serviceURL = reader["ServiceURL"] as string;
+                        runtimeNodeInstanceId_Local = (Guid)reader["RuntimeNodeInstanceID"];
+                    }
+                });
+            runtimeNodeInstanceId = runtimeNodeInstanceId_Local;
+            return serviceURL;
         }
 
-        public bool TryUpdateHeartBeat(Guid serviceInstanceId, string serviceURL, TimeSpan heartbeatTimeOut)
+        public bool TryTakePrimaryNode(Guid serviceInstanceId, TimeSpan heartbeatTimeOut)
         {
-            return Convert.ToBoolean(ExecuteScalarSP("[runtime].[sp_RuntimeManager_TryUpdateHeartBeat]", serviceInstanceId, serviceURL, heartbeatTimeOut.TotalSeconds));
+            return Convert.ToBoolean(ExecuteScalarSP("[runtime].[sp_RuntimeManager_TryTakePrimaryNode]", serviceInstanceId, heartbeatTimeOut.TotalSeconds));
         }
     }
 }

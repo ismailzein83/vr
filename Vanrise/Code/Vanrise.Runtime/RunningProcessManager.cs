@@ -19,7 +19,8 @@ namespace Vanrise.Runtime
         static List<RunningProcessInfo> s_allRunningProcesses;
         static Dictionary<int, RunningProcessInfo> s_allRunningProcessesDict;
         static Object s_lockObj = new object();
-        static DateTime s_lastReceivedPingTime;
+        static bool s_areProcessesChanged = true;
+        
 
         public static RunningProcessInfo CurrentProcess
         {
@@ -35,21 +36,6 @@ namespace Vanrise.Runtime
             }
         }
 
-        internal static DateTime LastReceivedPingTime
-        {
-            get
-            {
-                return s_lastReceivedPingTime;
-            }
-            set
-            {
-                lock (s_lockObj)
-                {
-                    s_lastReceivedPingTime = value;
-                }
-            }
-        }
-
         public static bool IsCurrentProcessARuntime
         {
             get
@@ -58,26 +44,42 @@ namespace Vanrise.Runtime
             }
         }
 
-        internal static void SetRunningProcesses(List<RunningProcessInfo> allRunningProcesses)
+        internal static void SetRunningProcessChanged()
         {
-            var allRunningProcessesLocal = new List<RunningProcessInfo>(allRunningProcesses);
-            Dictionary<int, RunningProcessInfo> dict = allRunningProcesses.ToDictionary(itm => itm.ProcessId, itm => itm);
-            lock (s_lockObj)
+            lock(s_lockObj)
             {
-                s_allRunningProcesses = allRunningProcessesLocal;
-                s_allRunningProcessesDict = dict;
+                s_areProcessesChanged = true;
+            }
+        }
+
+        private void RefreshRunningProcessesIfNeeded()
+        {
+            if(s_areProcessesChanged)
+            {
+                lock(s_lockObj)
+                {
+                    if(s_areProcessesChanged)
+                    {
+                        IRunningProcessDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<IRunningProcessDataManager>();
+                        var allRunningProcesses = dataManager.GetRunningProcesses();
+                        Dictionary<int, RunningProcessInfo> allRunningProcessesDict = allRunningProcesses.ToDictionary(itm => itm.ProcessId, itm => itm);
+                        s_allRunningProcesses = allRunningProcesses;
+                        s_allRunningProcessesDict = allRunningProcessesDict;
+                        s_areProcessesChanged = false;
+                    }
+                }
             }
         }
 
         public Dictionary<int, RunningProcessInfo> GetAllRunningProcesses()
         {
-            s_allRunningProcessesDict.ThrowIfNull("s_allRunningProcessesDict");
+            RefreshRunningProcessesIfNeeded();
              return s_allRunningProcessesDict;
         }
 
         internal List<RunningProcessInfo> GetRunningProcessesFromDB()
         {
-            s_allRunningProcesses.ThrowIfNull("s_allRunningProcesses");
+            RefreshRunningProcessesIfNeeded();
             return s_allRunningProcesses;
         }
 
@@ -130,7 +132,7 @@ namespace Vanrise.Runtime
         public bool TryLockRuntimeService(string serviceTypeUniqueName)
         {
             bool isLocked = false;
-            RuntimeManagerClient.CreateClient((client) =>
+            RuntimeManagerClient.CreateClient((client, primaryNodeRuntimeNodeInstanceId) =>
                 {
                     isLocked = client.TryLockRuntimeService(serviceTypeUniqueName, CurrentProcess.ProcessId);
                 });
@@ -141,7 +143,7 @@ namespace Vanrise.Runtime
         {
             int? runtimeProcessId_Internal = null;
 
-            RuntimeManagerClient.CreateClient((client) =>
+            RuntimeManagerClient.CreateClient((client, primaryNodeRuntimeNodeInstanceId) =>
             {
                 var response = client.TryGetServiceProcessId(new GetServiceProcessIdRequest
                     {

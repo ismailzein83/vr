@@ -14,6 +14,15 @@ namespace Vanrise.Runtime.Configuration
             return System.Configuration.ConfigurationManager.GetSection("vanriseRuntime") as RuntimeConfig;
         }
 
+        [ConfigurationProperty("runtimeNodeId", IsRequired = true)]
+        public Guid RuntimeNodeId
+        {
+            get
+            {
+                return new Guid(this["runtimeNodeId"].ToString());
+            }
+        }
+
         [System.Configuration.ConfigurationProperty("runtimeServiceGroups")]
         [ConfigurationCollection(typeof(RuntimeServiceGroupCollection), AddItemName = "runtimeServiceGroup")]
         public RuntimeServiceGroupCollection RuntimeServiceGroups
