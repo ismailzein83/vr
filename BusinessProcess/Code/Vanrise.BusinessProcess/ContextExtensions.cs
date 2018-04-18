@@ -19,6 +19,11 @@ namespace Vanrise.BusinessProcess
             return sharedData;
         }
 
+        public static bool ShouldStop(this ActivityContext context)
+        {
+            return context.GetSharedInstanceData().InstanceInfo.Status != Entities.BPInstanceStatus.Running;
+        }
+
         public static void WriteTrackingMessage(this ActivityContext context, LogEntryType severity, string messageFormat, params object[] args)
         {
             context.GetSharedInstanceData().WriteTrackingMessage(severity, messageFormat, args);
