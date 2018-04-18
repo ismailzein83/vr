@@ -34,7 +34,7 @@ app.directive('whsAccountbalanceActiondefinitionSendCustomerSms', ['UtilsService
 
             function initializeController() {
                 $scope.scopeModel = {};
-
+                
                 $scope.scopeModel.onAccountSMSMessageTypeSelectorReady = function (api) {
                     accountSMSMessageTypeSelectorAPI = api;
                     accountSMSMessageTypeSelectorReadyDeferred.resolve();
