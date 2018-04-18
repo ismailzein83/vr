@@ -132,9 +132,10 @@
             if (attrs.hideremoveicon != undefined) {
                 hideremoveicon = 'hideremoveicon';
             }
+
             var template =
                 '<vr-row>'
-                    + '<vr-columns width="fullrow">'
+                    + '<vr-columns width="1/2row">'
                         + ' <vr-select on-ready="scopeModel.onSelectorReady"'
                             + ' datasource="scopeModel.templateConfigs"'
                             + ' selectedvalues="scopeModel.selectedTemplateConfig"'

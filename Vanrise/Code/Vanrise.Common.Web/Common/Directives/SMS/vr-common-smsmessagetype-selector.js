@@ -13,7 +13,6 @@ app.directive('vrCommonSmsmessagetypeSelector', ['VRCommon_SMSMessageTypeAPIServ
                 onselectitem: '=',
                 ondeselectitem: '=',
                 isrequired: '=',
-                hideremoveicon: '@',
                 normalColNum: '@',
                 customvalidate: '='
             },
@@ -91,6 +90,7 @@ app.directive('vrCommonSmsmessagetypeSelector', ['VRCommon_SMSMessageTypeAPIServ
 
             var multipleselection = "";
             var label = "SMS Message Type";
+            var hideremoveicon = '';
 
             if (attrs.ismultipleselection != undefined) {
                 label = "SMS Message Types";
@@ -99,9 +99,12 @@ app.directive('vrCommonSmsmessagetypeSelector', ['VRCommon_SMSMessageTypeAPIServ
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
 
+            if (attrs.hideremoveicon != undefined) 
+                hideremoveicon = 'hideremoveicon';
+            
             return '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="SMSMessageTypeId" isrequired="ctrl.isrequired" label="' + label +
                        '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
-                       '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" hideremoveicon="ctrl.hideremoveicon" customvalidate="ctrl.customvalidate">' +
+                       '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' customvalidate="ctrl.customvalidate">' +
                    '</vr-select>';
         }
 
