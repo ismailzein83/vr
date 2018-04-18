@@ -51,7 +51,7 @@ app.directive("vrInvoicetypeDatasourcesettingsBillingtransaction", ["UtilsServic
                         if(dataSourceEntity != undefined)
                         {
                             $scope.scopeModel.dataSourceName = dataSourceEntity.DataSourceName;
-
+                            $scope.scopeModel.topRecords = dataSourceEntity.TopRecords;
                         }
                     }
                     var promises = [];
@@ -70,7 +70,8 @@ app.directive("vrInvoicetypeDatasourcesettingsBillingtransaction", ["UtilsServic
                         $type: "Vanrise.AccountBalance.MainExtensions.BillingTransactionDataSourceSettings ,Vanrise.AccountBalance.MainExtensions",
                         DataSourceType:1,
                         DataSourceName:$scope.scopeModel.dataSourceName,
-                        TransactionTypesIds: transactionTypeSelectorAPI.getSelectedIds()
+                        TransactionTypesIds: transactionTypeSelectorAPI.getSelectedIds(),
+                        TopRecords: $scope.scopeModel.topRecords
                     };
                 };
 

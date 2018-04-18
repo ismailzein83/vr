@@ -23,12 +23,13 @@ namespace Vanrise.AccountBalance.MainExtensions
         public DataSourceType DataSourceType { get; set; }
         public string DataSourceName { get; set; }
         public List<Guid> TransactionTypesIds { get; set; }
+        public int? TopRecords { get; set; }
         public override IEnumerable<dynamic> GetDataSourceItems(IInvoiceDataSourceSettingsContext context)
         {
             switch (this.DataSourceType)
             {
                 case MainExtensions.DataSourceType.Invoice:
-                    var invoice = context.InvoiceActionContext.GetInvoice;
+                    var invoice = context.InvoiceActionContext.GetInvoice();
                     var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoice.InvoiceTypeId);
                     invoiceType.ThrowIfNull("invoiceType");
                     invoiceType.Settings.ThrowIfNull("invoiceType.Settings");
@@ -60,16 +61,31 @@ namespace Vanrise.AccountBalance.MainExtensions
                         {
                             CurrencyManager currencyManager = new CurrencyManager();
                             BillingTransactionTypeManager billingTransactionTypeManager = new BillingTransactionTypeManager();
-                            foreach (var billingTransaction in billingTransactions)
+                            var orderedBillingTransactions = billingTransactions.OrderByDescending(x => x.TransactionTime);
+                            if(orderedBillingTransactions != null)
                             {
-                                billingTransactionItems.Add(new BillingTransactionItem
+
+                               
+                                
+                                foreach (var billingTransaction in orderedBillingTransactions)
                                 {
-                                    Amount = billingTransaction.Amount,
-                                    Notes = billingTransaction.Notes,
-                                    TransactionTime = billingTransaction.TransactionTime,
-                                    CurrencySymbol = currencyManager.GetCurrencySymbol(billingTransaction.CurrencyId),
-                                    TransactionTypeName = billingTransactionTypeManager.GetBillingTransactionTypeName(billingTransaction.TransactionTypeId)
-                                });
+                                    if (this.TopRecords.HasValue)
+                                    {
+                                        if (billingTransactionItems.Count == this.TopRecords.Value)
+                                            return billingTransactionItems;
+                                    }
+
+                                    billingTransactionItems.Add(new BillingTransactionItem
+                                    {
+                                        Amount = billingTransaction.Amount,
+                                        Notes = billingTransaction.Notes,
+                                        TransactionTime = billingTransaction.TransactionTime,
+                                        CurrencySymbol = currencyManager.GetCurrencySymbol(billingTransaction.CurrencyId),
+                                        TransactionTypeName = billingTransactionTypeManager.GetBillingTransactionTypeName(billingTransaction.TransactionTypeId)
+                                    });
+
+                                   
+                                }
                             }
                            
                         }
