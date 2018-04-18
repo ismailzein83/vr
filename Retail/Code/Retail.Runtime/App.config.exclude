@@ -93,6 +93,7 @@
 
   <appSettings>
     <add key="IsRuntimeService" value="true"/>
+    <add key="RuntimeNodeId" value="ca664c3b-2e31-4542-beeb-89e7367e090c"/>
     <add key="BCPTempFilesDirectory" value="C:\BCPFiles" />
 
     <add key="RuntimeConnStringKey"                             value="TransactionDBConnString"/>
