@@ -4,25 +4,29 @@
 -- Description:	<Description,,>
 -- =============================================
 CREATE PROCEDURE [runtime].[sp_RunningProcess_Insert]
-	@ProcessName nvarchar(1000),
-	@MachineName nvarchar(1000),
+	@RuntimeNodeID uniqueidentifier,
+	@RuntimeNodeInstanceID uniqueidentifier,
+	@OSProcessID int,
 	@AdditionalInfo nvarchar(max)
 AS
 BEGIN
 	INSERT INTO [runtime].[RunningProcess]
-           ([ProcessName]
-           ,[MachineName]
+           (RuntimeNodeID
+		   ,RuntimeNodeInstanceID
+		   ,OSProcessID
            ,[StartedTime]
            ,AdditionalInfo)
      VALUES
-           (@ProcessName
-           ,@MachineName
+           (@RuntimeNodeID
+		   ,@RuntimeNodeInstanceID
+		   ,@OSProcessID
            ,GETDATE()
            ,@AdditionalInfo)
            
      SELECT [ID]
-      ,[ProcessName]
-      ,[MachineName]
+	  ,OSProcessID
+	  ,[RuntimeNodeID]
+	  ,RuntimeNodeInstanceID
       ,[StartedTime]
       ,AdditionalInfo
 	 FROM [runtime].[RunningProcess]

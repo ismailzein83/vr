@@ -4,8 +4,9 @@ AS
 BEGIN
            
      SELECT [ID]
-      ,[ProcessName]
-      ,[MachineName]
+	  ,OSProcessID
+	  ,[RuntimeNodeID]
+	  ,RuntimeNodeInstanceID
       ,[StartedTime]
       ,AdditionalInfo
 	 FROM [runtime].[RunningProcess] WITH(NOLOCK) 

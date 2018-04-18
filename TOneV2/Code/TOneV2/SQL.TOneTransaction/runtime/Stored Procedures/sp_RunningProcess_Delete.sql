@@ -10,7 +10,7 @@ BEGIN
      DECLARE @FirstID int
      SET @FirstID = (SELECT TOP 1 ID FROM [runtime].[RunningProcess])
      UPDATE [runtime].[RunningProcess]
-     SET ProcessName = ProcessName
+     SET [OSProcessID] = [OSProcessID]
      WHERE ID = @FirstID 
      
 END

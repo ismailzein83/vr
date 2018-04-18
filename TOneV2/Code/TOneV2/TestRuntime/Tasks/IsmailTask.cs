@@ -14,6 +14,214 @@ namespace TestRuntime
     {
         public void Execute()
         {
+            var runtimeNodeConfigSettings = new Vanrise.Runtime.Entities.RuntimeNodeConfigurationSettings
+            {
+                Processes = new Dictionary<Guid, RuntimeProcessConfiguration>()
+            };
+            var processSettings = new RuntimeProcessConfigurationSettings
+            {
+                NbOfInstances = 1, 
+                IsEnabled = true,
+                Services = new Dictionary<Guid, RuntimeServiceConfiguration>
+                    {
+                        {
+                        new Guid("5F63B435-4A1C-47E3-9E4C-13DDC7B1D9C3"),
+                         new RuntimeServiceConfiguration
+                         {
+                              Name = "Scheduler Service",
+                              Settings = new RuntimeServiceConfigurationSettings
+                              {                                   
+                                    RuntimeService = new Vanrise.Runtime.SchedulerService{ Interval = TimeSpan.FromSeconds(1) }
+                              }
+                         }
+                         }
+                    }
+            };
+            runtimeNodeConfigSettings.Processes.Add(new Guid("A8D9CA25-0954-4DE6-A994-6CA8A254D5EA"), new RuntimeProcessConfiguration
+                {
+                    Name = "Scheduler Service Process",
+                    Settings = processSettings
+                });
+
+            processSettings = new RuntimeProcessConfigurationSettings
+            {
+                NbOfInstances = 1,
+                IsEnabled = true,
+                Services = new Dictionary<Guid, RuntimeServiceConfiguration>
+                    {
+                        {
+                        new Guid("A2A41FB2-74E9-4886-A6F9-9A55FE88B79C"),
+                         new RuntimeServiceConfiguration
+                         {
+                              Name = "Business Process Regulator Service",
+                              Settings = new RuntimeServiceConfigurationSettings
+                              {                                   
+                                    RuntimeService = new Vanrise.BusinessProcess.BPRegulatorRuntimeService { Interval = TimeSpan.FromSeconds(1) }
+                              }
+                         }
+                         }
+                    }
+            };
+            runtimeNodeConfigSettings.Processes.Add(new Guid("F6F6E01D-48AA-494C-BDD6-2D90415C048D"), new RuntimeProcessConfiguration
+            {
+                Name = "Business Process Regulator Service Process",
+                Settings = processSettings
+            });
+
+            processSettings = new RuntimeProcessConfigurationSettings
+            {
+                NbOfInstances = 5,
+                IsEnabled = true,
+                Services = new Dictionary<Guid, RuntimeServiceConfiguration>
+                    {
+                        {
+                        new Guid("4A4A947D-E257-4612-96F9-EF45930A826E"),
+                         new RuntimeServiceConfiguration
+                         {
+                              Name = "Business Process Service",
+                              Settings = new RuntimeServiceConfigurationSettings
+                              {                                   
+                                    RuntimeService = new Vanrise.BusinessProcess.BusinessProcessService { Interval = TimeSpan.FromSeconds(1) }
+                              }
+                         }
+                         }
+                    }
+            };
+            runtimeNodeConfigSettings.Processes.Add(new Guid("4FBA5B9A-CDFC-46A6-94FF-9F4A5AA37E16"), new RuntimeProcessConfiguration
+            {
+                Name = "Business Process Services Process",
+                Settings = processSettings
+            });
+
+            var serializedNodeConfigSettings1 = Vanrise.Common.Serializer.Serialize(runtimeNodeConfigSettings);
+
+            processSettings = new RuntimeProcessConfigurationSettings
+            {
+                NbOfInstances = 1,
+                IsEnabled = true,
+                Services = new Dictionary<Guid, RuntimeServiceConfiguration>
+                    {
+                        {
+                        new Guid("260B6F9A-729D-4D2F-BDCA-E5E3D99EBE7B"),
+                         new RuntimeServiceConfiguration
+                         {
+                              Name = "Queue Regulator Service",
+                              Settings = new RuntimeServiceConfigurationSettings
+                              {                                   
+                                    RuntimeService = new Vanrise.Queueing.QueueRegulatorRuntimeService { Interval = TimeSpan.FromSeconds(1) }
+                              }
+                         }
+                         }
+                    }
+            };
+            runtimeNodeConfigSettings.Processes.Add(new Guid("53070A2A-ADC6-4E77-B4E4-14A437E057C3"), new RuntimeProcessConfiguration
+            {
+                Name = "Queue Regulator Service Process",
+                Settings = processSettings
+            });
+
+            processSettings = new RuntimeProcessConfigurationSettings
+            {
+                NbOfInstances = 3,
+                IsEnabled = true,
+                Services = new Dictionary<Guid, RuntimeServiceConfiguration>
+                    {
+                        {
+                        new Guid("0A6B4086-AE03-426B-80B4-EB20C69FEC25"),
+                         new RuntimeServiceConfiguration
+                         {
+                              Name = "Queue Activation Service",
+                              Settings = new RuntimeServiceConfigurationSettings
+                              {                                   
+                                    RuntimeService = new Vanrise.Queueing.QueueActivationRuntimeService { Interval = TimeSpan.FromSeconds(1) }
+                              }
+                         }
+                         }
+                    }
+            };
+            runtimeNodeConfigSettings.Processes.Add(new Guid("4A54E50D-8132-457C-8FB2-432FE95C5ACB"), new RuntimeProcessConfiguration
+            {
+                Name = "Queue Activation Services Process",
+                Settings = processSettings
+            });
+
+            processSettings = new RuntimeProcessConfigurationSettings
+            {
+                NbOfInstances = 3,
+                IsEnabled = true,
+                Services = new Dictionary<Guid, RuntimeServiceConfiguration>
+                    {
+                        {
+                        new Guid("9D8FCA9E-452D-4765-B553-C4065CA14E55"),
+                         new RuntimeServiceConfiguration
+                         {
+                              Name = "Summary Queue Activation Service",
+                              Settings = new RuntimeServiceConfigurationSettings
+                              {                                   
+                                    RuntimeService = new Vanrise.Queueing.SummaryQueueActivationRuntimeService { Interval = TimeSpan.FromSeconds(1) }
+                              }
+                         }
+                         }
+                    }
+            };
+            runtimeNodeConfigSettings.Processes.Add(new Guid("760A013C-1DA2-4710-8385-9A8E9A2F9DA7"), new RuntimeProcessConfiguration
+            {
+                Name = "Summary Queue Activation Services Process",
+                Settings = processSettings
+            });
+
+            processSettings = new RuntimeProcessConfigurationSettings
+            {
+                NbOfInstances = 3,
+                IsEnabled = true,
+                Services = new Dictionary<Guid, RuntimeServiceConfiguration>
+                    {
+                        {
+                        new Guid("9574E0DC-E692-40EC-A852-488E0A8DC5D0"),
+                         new RuntimeServiceConfiguration
+                         {
+                              Name = "Data Source Service",
+                              Settings = new RuntimeServiceConfigurationSettings
+                              {                                   
+                                    RuntimeService = new Vanrise.Integration.Business.DataSourceRuntimeService { Interval = TimeSpan.FromSeconds(1) }
+                              }
+                         }
+                         }
+                    }
+            };
+            runtimeNodeConfigSettings.Processes.Add(new Guid("9574E0DC-E692-40EC-A852-488E0A8DC5D0"), new RuntimeProcessConfiguration
+            {
+                Name = "Data Source Services Process",
+                Settings = processSettings
+            });
+
+            processSettings = new RuntimeProcessConfigurationSettings
+            {
+                NbOfInstances = 2,
+                IsEnabled = true,
+                Services = new Dictionary<Guid, RuntimeServiceConfiguration>
+                    {
+                        {
+                        new Guid("34DA6828-65E7-48DE-8F3B-A2A2F91E3BEA"),
+                         new RuntimeServiceConfiguration
+                         {
+                              Name = "Big Data Service",
+                              Settings = new RuntimeServiceConfigurationSettings
+                              {                                   
+                                    RuntimeService = new Vanrise.Common.Business.BigDataRuntimeService { Interval = TimeSpan.FromSeconds(1) }
+                              }
+                         }
+                         }
+                    }
+            };
+            runtimeNodeConfigSettings.Processes.Add(new Guid("765D932D-53FD-49FF-9704-C0DD86B7312B"), new RuntimeProcessConfiguration
+            {
+                Name = "Big Data Services Process",
+                Settings = processSettings
+            });
+
+            var serializedNodeConfigSettings = Vanrise.Common.Serializer.Serialize(runtimeNodeConfigSettings);
+
             var billingMeasureExternalSource = new Vanrise.Analytic.Entities.AnalyticMeasureExternalSourceConfig
             {
                 ExtendedSettings = new Vanrise.Analytic.MainExtensions.AnalyticMeasureExternalSources.AnalyticTable.AnalyticTableMeasureExternalSource
@@ -449,6 +657,7 @@ namespace TestRuntime
             //    }
             //});
         }
+                
 
         private static void Lock(string transactionName, int maxConcurrency = 1)
         {
