@@ -1,28 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <configuration>
   <configSections>
-    <section name="vanriseRuntime" type="Vanrise.Runtime.Configuration.RuntimeConfig, Vanrise.Runtime"/>
     <section name="vanriseLogging" type="Vanrise.Common.LoggingConfiguration.LoggingConfig, Vanrise.Common" />
   </configSections>
 
-  <!-- Vanrise Runtime is configured as per client resources (mainly CPU \ RAM Memory) -->
-  <vanriseRuntime>
-    <runtimeServiceGroups>
-      <!-- Regulator service manages Business Process service. nbOfRuntimeInstances Keep it 1-->
-      <runtimeServiceGroup name="groupA" nbOfRuntimeInstances="1">
-        <runtimeServices>
-          <runtimeService name="Business Process Regulator Service" type="Vanrise.BusinessProcess.BPRegulatorRuntimeService, Vanrise.BusinessProcess" interval="00:00:01"></runtimeService>
-        </runtimeServices>
-      </runtimeServiceGroup>
-      <!-- Used for Business Process (Reprocess, Route build, Product Cost Generation, etc...). nbOfRuntimeInstances depended on available resources.-->
-      <runtimeServiceGroup name="group1" nbOfRuntimeInstances="3">
-        <runtimeServices>
-          <runtimeService name="Business Process Service" type="Vanrise.BusinessProcess.BusinessProcessService, Vanrise.BusinessProcess" interval="00:00:01"></runtimeService>
-        </runtimeServices>
-      </runtimeServiceGroup>
-    </runtimeServiceGroups>
-  </vanriseRuntime>
-  
+ 
   <vanriseLogging maxLogLevel="Information">
     <loggers>
       <logger name="SQLLogger" type="Vanrise.Logging.SQL.SQLLogger, Vanrise.Logging.SQL">
@@ -48,6 +30,7 @@
   </connectionStrings>
   <appSettings>
     <add key="IsRuntimeService" value="true"/>
+    <add key="RuntimeNodeId" value="bee2d7c8-7217-4cc7-9aa8-a1fbb103f3c8"/>
     <add key="BCPTempFilesDirectory"  value="C:\BCPFiles" />
 
     <add key="RuntimeConnStringKey"                             value="TransactionDBConnString"/>
