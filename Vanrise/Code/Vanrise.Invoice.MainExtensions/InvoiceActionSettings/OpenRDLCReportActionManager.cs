@@ -36,7 +36,7 @@ namespace Vanrise.Invoice.MainExtensions
                 nonRepeatedReportItemsByDataSourceName = new Dictionary<string, IEnumerable<dynamic>>();
                 invoiceActionContext = reportInput.Context;
                 InvoiceManager invoiceManager = new InvoiceManager();
-                invoice = reportInput.Context.GetInvoice;
+                invoice = reportInput.Context.GetInvoice();
                 InvoiceTypeManager invoiceTypeManager = new Business.InvoiceTypeManager();
                 invoiceType = invoiceTypeManager.GetInvoiceType(invoice.InvoiceTypeId);
                 var invoiceAction = invoiceType.Settings.InvoiceActions.FirstOrDefault(x => x.InvoiceActionId == reportInput.ActionId);

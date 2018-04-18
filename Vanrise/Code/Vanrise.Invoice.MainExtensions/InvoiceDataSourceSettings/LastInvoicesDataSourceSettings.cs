@@ -18,7 +18,7 @@ namespace Vanrise.Invoice.MainExtensions
         public int LastInvoices { get; set; }
         public override IEnumerable<dynamic> GetDataSourceItems(IInvoiceDataSourceSettingsContext context)
         {
-            var currentInvoice = context.InvoiceActionContext.GetInvoice;
+            var currentInvoice = context.InvoiceActionContext.GetInvoice();
             var invoiceType = new InvoiceTypeManager().GetInvoiceType(currentInvoice.InvoiceTypeId);
             var invoiceManager = new InvoiceManager();
             DateTime? datetime = currentInvoice.CreatedTime == DateTime.MinValue ? default(DateTime?) : currentInvoice.CreatedTime;

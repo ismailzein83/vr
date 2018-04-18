@@ -19,7 +19,7 @@ namespace Vanrise.Invoice.MainExtensions
         public string GroupingClassFQTN { get; set; }
         public override IEnumerable<dynamic> GetDataSourceItems(IInvoiceDataSourceSettingsContext context)
         {
-            var invoice = context.InvoiceActionContext.GetInvoice;
+            var invoice = context.InvoiceActionContext.GetInvoice();
             if (invoice == null)
                 throw new NullReferenceException("invoice");
             InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();

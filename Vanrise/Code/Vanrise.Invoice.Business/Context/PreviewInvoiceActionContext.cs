@@ -104,14 +104,11 @@ namespace Vanrise.Invoice.Business
         }
         public GeneratedInvoice GeneratedInvoice { get; set; }
         private Entities.Invoice _Invoice { get; set; }
-        public Entities.Invoice GetInvoice
+        public Entities.Invoice GetInvoice()
         {
-            get
-            {
-                if (!this.IsLoaded)
-                    InitializeInvoiceActionContext();
-                return this._Invoice;
-            }
+            if (!this.IsLoaded)
+                InitializeInvoiceActionContext();
+            return this._Invoice;
         }
         public IEnumerable<InvoiceItem> GetInvoiceItems(List<string> itemSetNames, CompareOperator compareOperator)
         {

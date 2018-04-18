@@ -18,17 +18,16 @@ namespace Vanrise.Invoice.Business
             this.IsLoaded = true;
         }
         private Entities.Invoice _Invoice { get; set; }
-        public Entities.Invoice GetInvoice
+        public Entities.Invoice GetInvoice()
         {
-            get
+
+            if (this._Invoice == null)
             {
-                if (this._Invoice == null)
-                {
-                    InvoiceManager invoiceManager = new Business.InvoiceManager();
-                    return invoiceManager.GetInvoice(this.InvoiceId);
-                }
-                return this._Invoice;
+                InvoiceManager invoiceManager = new Business.InvoiceManager();
+                return invoiceManager.GetInvoice(this.InvoiceId);
             }
+            return this._Invoice;
+
         }
         public IEnumerable<Entities.InvoiceItem> GetInvoiceItems(List<string> itemSetNames, CompareOperator compareOperator)
         {

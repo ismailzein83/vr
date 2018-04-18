@@ -14,7 +14,7 @@ namespace Vanrise.Invoice.MainExtensions
         public override Guid ConfigId { get { return new Guid("B0F8D3C8-33C3-4FA6-AB7C-016C14575F47"); } }
         public override IEnumerable<dynamic> GetDataSourceItems(IInvoiceDataSourceSettingsContext context)
         {
-            var invoice = context.InvoiceActionContext.GetInvoice;
+            var invoice = context.InvoiceActionContext.GetInvoice();
             var invoiceType = new InvoiceTypeManager().GetInvoiceType(invoice.InvoiceTypeId);
             InvoiceTypeExtendedSettingsInfoContext InvoiceTypeExtendedSettingsInfoContext = new InvoiceTypeExtendedSettingsInfoContext
             {

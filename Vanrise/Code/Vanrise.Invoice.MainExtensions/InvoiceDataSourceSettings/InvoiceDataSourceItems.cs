@@ -15,7 +15,7 @@ namespace Vanrise.Invoice.MainExtensions
             List<dynamic> invoices = new List<dynamic>();
             if(context.InvoiceActionContext != null)
             {
-                var invoice = context.InvoiceActionContext.GetInvoice;
+                var invoice = context.InvoiceActionContext.GetInvoice();
                 invoices.Add(invoice.Details);
             }
             return invoices;
