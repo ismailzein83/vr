@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
+using TOne.WhS.Sales.Business.Reader;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Common;
 
@@ -110,7 +111,7 @@ namespace TOne.WhS.Sales.BP.Activities
             if (changes != null)
             {
                 SetDefaultActions(out defaultRoutingProductToAdd, out defaultRoutingProductToClose, out defaultServiceToAdd, out defaultServiceToClose, changes.DefaultChanges, ref minDate);
-                SetZoneActions(ref ratesToChange, ref ratesToClose, ref saleZoneRoutingProductsToAdd, ref saleZoneRoutingProductsToClose, ref saleZoneServicesToAdd, ref saleZoneServicesToClose, changes.ZoneChanges, currencyId, ref minDate);
+                SetZoneActions(ref ratesToChange, ref ratesToClose, ref saleZoneRoutingProductsToAdd, ref saleZoneRoutingProductsToClose, ref saleZoneServicesToAdd, ref saleZoneServicesToClose, changes.ZoneChanges, currencyId, ref minDate, ownerType,ownerId);
                 if (ownerType == SalePriceListOwnerType.Customer)
                     SetCustomerCountryActions(customerCountriesToAdd, customerCountriesToChange, changes.CountryChanges, ownerId, ref minDate);
             }
@@ -233,36 +234,43 @@ namespace TOne.WhS.Sales.BP.Activities
 
         #region Set Zone Actions
 
-        private void SetZoneActions(ref List<RateToChange> ratesToChange, ref List<RateToClose> ratesToClose, ref List<SaleZoneRoutingProductToAdd> saleZoneRoutingProductsToAdd, ref List<SaleZoneRoutingProductToClose> saleZoneRoutingProductsToClose, ref List<SaleZoneServiceToAdd> saleZoneServicesToAdd, ref List<SaleZoneServiceToClose> saleZoneServicesToClose, IEnumerable<ZoneChanges> zoneDrafts, int currencyId, ref DateTime minDate)
+        private void SetZoneActions(ref List<RateToChange> ratesToChange, ref List<RateToClose> ratesToClose, ref List<SaleZoneRoutingProductToAdd> saleZoneRoutingProductsToAdd, ref List<SaleZoneRoutingProductToClose> saleZoneRoutingProductsToClose, ref List<SaleZoneServiceToAdd> saleZoneServicesToAdd, ref List<SaleZoneServiceToClose> saleZoneServicesToClose, IEnumerable<ZoneChanges> zoneDrafts, int currencyId, ref DateTime minDate,SalePriceListOwnerType ownerType ,int ownerId)
         {
             if (zoneDrafts == null)
                 return;
 
             foreach (ZoneChanges zoneDraft in zoneDrafts)
             {
-                SetZoneRateActions(ref ratesToChange, ref ratesToClose, zoneDraft, currencyId, ref minDate);
+                SetZoneRateActions(ref ratesToChange, ref ratesToClose, zoneDraft, currencyId, ref minDate,ownerType,ownerId);
                 SetZoneRoutingProductActions(ref saleZoneRoutingProductsToAdd, ref saleZoneRoutingProductsToClose, zoneDraft, ref minDate);
                 SetZoneServiceActions(ref saleZoneServicesToAdd, ref saleZoneServicesToClose, zoneDraft, ref minDate);
             }
         }
 
-        private void SetZoneRateActions(ref List<RateToChange> ratesToChange, ref List<RateToClose> ratesToClose, ZoneChanges zoneChanges, int currencyId, ref DateTime minDate)
+        private void SetZoneRateActions(ref List<RateToChange> ratesToChange, ref List<RateToClose> ratesToClose, ZoneChanges zoneChanges, int currencyId, ref DateTime minDate, SalePriceListOwnerType ownerType,int ownerId)
         {
             if (zoneChanges.NewRates != null)
             {
-                foreach (DraftRateToChange newRate in zoneChanges.NewRates)
+                if (ownerType == SalePriceListOwnerType.Customer)
                 {
-                    ratesToChange.Add(new RateToChange()
+                    this.GetRatesToChangeForCustomer(zoneChanges, currencyId, ratesToChange, ref minDate,ownerId);
+                }
+                else
+                {
+                    foreach (DraftRateToChange newRate in zoneChanges.NewRates)
                     {
-                        ZoneId = zoneChanges.ZoneId,
-                        ZoneName = zoneChanges.ZoneName,
-                        RateTypeId = newRate.RateTypeId,
-                        NormalRate = newRate.Rate,
-                        CurrencyId = currencyId,
-                        BED = newRate.BED,
-                        EED = newRate.EED
-                    });
-                    minDate = Vanrise.Common.Utilities.Min(minDate, newRate.BED);
+                        ratesToChange.Add(new RateToChange()
+                        {
+                            ZoneId = zoneChanges.ZoneId,
+                            ZoneName = zoneChanges.ZoneName,
+                            RateTypeId = newRate.RateTypeId,
+                            NormalRate = newRate.Rate,
+                            CurrencyId = currencyId,
+                            BED = newRate.BED,
+                            EED = newRate.EED
+                        });
+                        minDate = Vanrise.Common.Utilities.Min(minDate, newRate.BED);
+                    }
                 }
             }
 
@@ -282,6 +290,87 @@ namespace TOne.WhS.Sales.BP.Activities
             }
         }
 
+
+        private void GetRatesToChangeForCustomer(ZoneChanges zoneChanges, int currencyId, List<RateToChange> ratesToChange, ref DateTime minDate,int customerId)
+        {
+            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            var otherRatesBEDsWithoutNormalRateByZoneId = new Dictionary<long, DateTime>();
+            var newRatesByZoneId = this.StructureNewRatesByZoneId(zoneChanges.NewRates);
+            var sellingProductId = carrierAccountManager.GetSellingProductId(customerId);
+            var locator = this.CreateLocatorByActionDates(newRatesByZoneId, customerId, sellingProductId, otherRatesBEDsWithoutNormalRateByZoneId);
+
+            foreach (var kvp in newRatesByZoneId)
+            {
+                var zoneId = kvp.Key;
+                if (otherRatesBEDsWithoutNormalRateByZoneId.ContainsKey(zoneId))
+                {
+                    var currentRate = locator.GetCustomerZoneRate(customerId, sellingProductId, zoneChanges.ZoneId);
+                    if (currentRate == null)
+                        throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Zone with id {0} does neither have a default rate nor an explicit rate for customer with id {1}", zoneId, customerId));
+                    if (!zoneChanges.NewOtherRateBED.HasValue)
+                        throw new Vanrise.Entities.VRBusinessException(string.Format("Other Rate(s) of zone with id '{0}' does not have BED", zoneId));
+                    ratesToChange.Add(new RateToChange()
+                    {
+                        ZoneId = zoneChanges.ZoneId,
+                        ZoneName = zoneChanges.ZoneName,
+                        NormalRate = currentRate.Rate.Rate,
+                        CurrencyId = currencyId,
+                        BED = zoneChanges.NewOtherRateBED.Value,
+                        EED = null
+                    });
+                }
+
+                foreach (var draftRateToChange in kvp.Value)
+                {
+                    ratesToChange.Add(new RateToChange()
+                    {
+                        ZoneId = zoneChanges.ZoneId,
+                        ZoneName = zoneChanges.ZoneName,
+                        RateTypeId = draftRateToChange.RateTypeId,
+                        NormalRate = draftRateToChange.Rate,
+                        CurrencyId = currencyId,
+                        BED = draftRateToChange.BED,
+                        EED = draftRateToChange.EED
+                    });
+
+                    minDate = Vanrise.Common.Utilities.Min(minDate, draftRateToChange.BED);
+                }
+            }
+        }
+
+        private SaleEntityZoneRateLocator CreateLocatorByActionDates(Dictionary<long, List<DraftRateToChange>> newRatesByZoneId, int customerId, int sellingProductId, Dictionary<long, DateTime> otherRatesBEDsWithoutNormalRateByZoneId)
+        {
+            DateTime minimumDate = DateTime.MaxValue;
+
+            foreach (var kvp in newRatesByZoneId)
+            {
+                if (!kvp.Value.Any(x => x.RateTypeId == null))
+                {
+                    var firstRecord = kvp.Value.FirstOrDefault();
+                    if (firstRecord != null)
+                    {
+                        DateTime firstRecordBED = firstRecord.BED;
+                        if (firstRecordBED < minimumDate)
+                            minimumDate = firstRecordBED;
+
+                        otherRatesBEDsWithoutNormalRateByZoneId.Add(kvp.Key, firstRecordBED);
+                    }
+                }
+            }
+
+            var reader = new SaleRateReadRPChanges(customerId, sellingProductId, otherRatesBEDsWithoutNormalRateByZoneId.Keys, minimumDate, otherRatesBEDsWithoutNormalRateByZoneId);
+            return new SaleEntityZoneRateLocator(reader);
+        }
+        private Dictionary<long, List<DraftRateToChange>> StructureNewRatesByZoneId(IEnumerable<DraftRateToChange> rates)
+        {
+            Dictionary<long, List<DraftRateToChange>> newRatesByZoneId = new Dictionary<long, List<DraftRateToChange>>();
+            foreach (var rate in rates)
+            {
+                List<DraftRateToChange> drafts = newRatesByZoneId.GetOrCreateItem(rate.ZoneId);
+                drafts.Add(rate);
+            }
+            return newRatesByZoneId;
+        }
         private void SetZoneRoutingProductActions(ref List<SaleZoneRoutingProductToAdd> saleZoneRoutingProductsToAdd, ref List<SaleZoneRoutingProductToClose> saleZoneRoutingProductsToClose, ZoneChanges zoneDraft, ref DateTime minDate)
         {
             if (zoneDraft.NewRoutingProduct != null)
@@ -325,8 +414,8 @@ namespace TOne.WhS.Sales.BP.Activities
                     if (!newNormalRateBED.HasValue)
                         throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("The routing product of zone '{0}' has been changed and has been set to follow the new normal rate's BED. However, the new normal rate was not found", zoneDraft.ZoneName));
                     zoneRPToClose.CloseEffectiveDate = newNormalRateBED.Value;
-					zoneDraft.RoutingProductChange.EED = newNormalRateBED.Value;
-				}
+                    zoneDraft.RoutingProductChange.EED = newNormalRateBED.Value;
+                }
                 else
                 {
                     zoneRPToClose.CloseEffectiveDate = DateTime.Today;
