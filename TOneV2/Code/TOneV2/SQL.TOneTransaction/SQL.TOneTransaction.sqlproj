@@ -241,16 +241,6 @@
     <Build Include="runtime\Stored Procedures\sp_RuntimeNodeState_GetAll.sql" />
   </ItemGroup>
   <ItemGroup>
-    <PostDeploy Include="TOne.PostDeployment.sql" />
-    <None Include="CDRAnalysis.PostDeployment.sql" />
-    <None Include="Common.PostDeployment.sql" />
-    <None Include="ClearVoice.PostDeployment.sql" />
-    <None Include="CarrierPortal.PostDeployment.sql" />
-    <None Include="Integration.PostDeployment.sql" />
     <None Include="BusinessProcess.PostDeployment.sql" />
-    <None Include="Runtime.PostDeployment.sql" />
-    <None Include="TOne.CDRImport.PostDeployment.sql" />
-    <None Include="Retail.CDRImport.PostDeployment.sql" />
-    <None Include="TOne.Mediation.PostDeployment.sql" />
   </ItemGroup>
 </Project>
