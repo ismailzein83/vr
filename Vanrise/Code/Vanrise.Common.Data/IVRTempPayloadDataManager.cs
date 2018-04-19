@@ -10,7 +10,7 @@ namespace Vanrise.Common.Data
     public interface IVRTempPayloadDataManager:IDataManager
     {
         bool Insert(VRTempPayload vrTempPayload);
-        VRTempPayload GetVRTempPayload(Guid vrTempPayloadId);
+        VRTempPayload GetVRTempPayload(Guid vrTempPayloadId, DateTime? deleteBeforeDate);
         bool DeleteVRTempPayload(Guid vrTempPayloadId);
     }
 }

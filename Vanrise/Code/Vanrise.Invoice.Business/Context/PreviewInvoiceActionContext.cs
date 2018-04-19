@@ -28,9 +28,11 @@ namespace Vanrise.Invoice.Business
           
             PartnerManager _partnerManager = new PartnerManager();
 
+            var toDate = new DateTime(this.ToDate.Year, this.ToDate.Month, this.ToDate.Day, 23, 59, 59, 999);
+
             var invoiceAccountData = _partnerManager.GetInvoiceAccountData(invoiceType.InvoiceTypeId, this.PartnerId);
             invoiceAccountData.ThrowIfNull("invoiceAccountData");
-            if ((invoiceAccountData.BED.HasValue && this.FromDate < invoiceAccountData.BED.Value) || (invoiceAccountData.EED.HasValue && this.ToDate > invoiceAccountData.EED.Value))
+            if ((invoiceAccountData.BED.HasValue && this.FromDate < invoiceAccountData.BED.Value) || (invoiceAccountData.EED.HasValue && toDate > invoiceAccountData.EED.Value))
                 throw new Exception("From date and To date should be within the effective date of invoice account.");
 
             PartnerManager partnerManager = new PartnerManager();
@@ -48,7 +50,7 @@ namespace Vanrise.Invoice.Business
                 FromDate = this.FromDate,
                 PartnerId = this.PartnerId,
                 IssueDate = this.IssueDate,
-                ToDate = this.ToDate,
+                ToDate = toDate,
                 DuePeriod = duePeriod
             };
 

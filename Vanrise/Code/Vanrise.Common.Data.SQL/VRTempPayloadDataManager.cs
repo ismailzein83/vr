@@ -30,9 +30,9 @@ namespace Vanrise.Common.Data.SQL
             int recordsEffected = ExecuteNonQuerySP("[common].[sp_VRTempPayload_Delete]", vrTempPayloadId);
             return (recordsEffected > 0);
         }
-        public VRTempPayload GetVRTempPayload(Guid vrTempPayloadId)
+        public VRTempPayload GetVRTempPayload(Guid vrTempPayloadId, DateTime? deleteBeforeDate)
         {
-            return GetItemSP("[common].[sp_VRTempPayload_Get]", VRTempPayloadMapper, vrTempPayloadId);
+            return GetItemSP("[common].[sp_VRTempPayload_Get]", VRTempPayloadMapper, vrTempPayloadId, deleteBeforeDate);
         }
 
         VRTempPayload VRTempPayloadMapper(IDataReader reader)

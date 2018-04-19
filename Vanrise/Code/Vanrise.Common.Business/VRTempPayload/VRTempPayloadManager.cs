@@ -14,9 +14,8 @@ namespace Vanrise.Common.Business
         public VRTempPayload GetVRTempPayload(Guid vrTempPayloadId)
         {
             IVRTempPayloadDataManager dataManager = CommonDataManagerFactory.GetDataManager<IVRTempPayloadDataManager>();
-            var vrTempPayload = dataManager.GetVRTempPayload(vrTempPayloadId);
-
-            DeleteVRTempPayload(vrTempPayloadId);
+            var deleteBeforeDate = DateTime.Now.AddDays(-1);
+            var vrTempPayload = dataManager.GetVRTempPayload(vrTempPayloadId, deleteBeforeDate);
 
             return vrTempPayload;
         }
