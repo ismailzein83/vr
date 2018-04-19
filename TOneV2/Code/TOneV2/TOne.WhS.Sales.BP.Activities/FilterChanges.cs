@@ -98,6 +98,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     ZoneId = zoneChange.ZoneId,
                     ZoneName = zoneChange.ZoneName,
                     CountryId = zoneChange.CountryId,
+                    NewOtherRateBED = zoneChange.NewOtherRateBED
                 };
 
                 if (zoneChange.NewRates != null && zoneChange.NewRates.Any())
