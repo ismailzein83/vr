@@ -53,7 +53,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
             $scope.onCurrentRateNewEEDChanged = function () {
                 zoneItem.IsDirty = true;
             };
-            $scope.validateNewRateDates = function (dataItem) {
+       /*    $scope.validateNewRateDates = function (dataItem) {
                 if (dataItem.CurrentRateNewEED != undefined) {
                     for (var j = 0; j < $scope.otherRates.length; j++) {
                         var otherRateChild = $scope.otherRates[j];
@@ -63,7 +63,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
                     }
                 }
                 return null;
-            };
+            };*/
 
             $scope.onNewRateChanged = function (dataItem) {
                 zoneItem.IsDirty = true;
