@@ -45,7 +45,7 @@ namespace TOne.WhS.Analytics.Data.SQL
                 toDate = DateTime.Now;
             else
                 toDate = input.Query.To;
-            return GetItemsText(GetQuery(input.Query.Filter, input.Query.CDRType, input.Query.RepeatedMorethan, input.Query.PhoneNumber), RepeatedNumberDataMapper, (cmd) =>
+            return GetItemsText(GetQuery(input.Query.Filter, input.Query.CDRType, input.Query.RepeatedMorethan, input.Query.PhoneNumberType, input.Query.PhoneNumber), RepeatedNumberDataMapper, (cmd) =>
             {
                 cmd.Parameters.Add(new SqlParameter("@FromDate", input.Query.From));
                 cmd.Parameters.Add(new SqlParameter("@ToDate", ToDBNullIfDefault(toDate)));
@@ -55,13 +55,13 @@ namespace TOne.WhS.Analytics.Data.SQL
         #endregion
 
         #region Private Methods
-        private string GetQuery(RepeatedNumberFilter filter, CDRType cdrType, int repeatedMorethan, string phoneNumber)
+        private string GetQuery(RepeatedNumberFilter filter, CDRType cdrType, int repeatedMorethan, string phoneNumberType, string phoneNumber)
         {
             string aliasTableName = "newtable";
             StringBuilder selectColumnBuilder = new StringBuilder();
             StringBuilder groupByBuilder = new StringBuilder();
             StringBuilder havingBuilder = new StringBuilder();
-            
+
             AddSelectColumnToQuery(selectColumnBuilder, aliasTableName);
             AddGroupingToQuery(groupByBuilder, aliasTableName);
             AddHavingToQuery(havingBuilder, aliasTableName, repeatedMorethan);
@@ -74,22 +74,22 @@ namespace TOne.WhS.Analytics.Data.SQL
             {
                 case CDRType.All:
                     queryData = String.Format(@"{0} UNION ALL {1}  UNION ALL {2} UNION ALL {3}",
-                        GetSingleQuery(mainCDRTableName, mainCDRTableAlias, filter, mainCDRTableIndex, repeatedMorethan, phoneNumber),
-                        GetSingleQuery(invalidCDRTableName, invalidCDRTableAlias, filter, invalidCDRTableIndex, repeatedMorethan, phoneNumber, invalidCDRTableAppendedFilter),
-                        GetSingleQuery(failedCDRTableName, failedCDRTableAlias, filter, failedCDRTableIndex, repeatedMorethan, phoneNumber),
-                        GetSingleQuery(partialPricedCDRTableName, partialPricedCDRTableAlias, filter, partialPricedCDRTableIndex, repeatedMorethan, phoneNumber));
+                        GetSingleQuery(mainCDRTableName, mainCDRTableAlias, filter, mainCDRTableIndex, repeatedMorethan, phoneNumberType, phoneNumber),
+                        GetSingleQuery(invalidCDRTableName, invalidCDRTableAlias, filter, invalidCDRTableIndex, repeatedMorethan, phoneNumberType, phoneNumber, invalidCDRTableAppendedFilter),
+                        GetSingleQuery(failedCDRTableName, failedCDRTableAlias, filter, failedCDRTableIndex, repeatedMorethan, phoneNumberType, phoneNumber),
+                        GetSingleQuery(partialPricedCDRTableName, partialPricedCDRTableAlias, filter, partialPricedCDRTableIndex, repeatedMorethan, phoneNumberType, phoneNumber));
                     break;
                 case CDRType.Invalid:
-                    queryData = GetSingleQuery(invalidCDRTableName, invalidCDRTableAlias, filter, invalidCDRTableIndex, repeatedMorethan, phoneNumber, invalidCDRTableAppendedFilter);
+                    queryData = GetSingleQuery(invalidCDRTableName, invalidCDRTableAlias, filter, invalidCDRTableIndex, repeatedMorethan, phoneNumberType, phoneNumber, invalidCDRTableAppendedFilter);
                     break;
                 case CDRType.Failed:
-                    queryData = GetSingleQuery(failedCDRTableName, failedCDRTableAlias, filter, failedCDRTableIndex, repeatedMorethan, phoneNumber);
+                    queryData = GetSingleQuery(failedCDRTableName, failedCDRTableAlias, filter, failedCDRTableIndex, repeatedMorethan, phoneNumberType, phoneNumber);
                     break;
                 case CDRType.Successful:
-                    queryData = GetSingleQuery(mainCDRTableName, mainCDRTableAlias, filter, mainCDRTableIndex, repeatedMorethan, phoneNumber);
+                    queryData = GetSingleQuery(mainCDRTableName, mainCDRTableAlias, filter, mainCDRTableIndex, repeatedMorethan, phoneNumberType, phoneNumber);
                     break;
                 case CDRType.PartialPriced:
-                    queryData = GetSingleQuery(partialPricedCDRTableName, partialPricedCDRTableAlias, filter, partialPricedCDRTableIndex, repeatedMorethan, phoneNumber);
+                    queryData = GetSingleQuery(partialPricedCDRTableName, partialPricedCDRTableAlias, filter, partialPricedCDRTableIndex, repeatedMorethan, phoneNumberType, phoneNumber);
                     break;
             }
 
@@ -105,7 +105,7 @@ namespace TOne.WhS.Analytics.Data.SQL
 
             return queryBuilder.ToString();
         }
-        private string GetSingleQuery(string tableName, string alias, RepeatedNumberFilter filter, string tableIndex, int repeatedMorethan, string phoneNumber, string appendedFilter = null)
+        private string GetSingleQuery(string tableName, string alias, RepeatedNumberFilter filter, string tableIndex, int repeatedMorethan, string phoneNumberType, string phoneNumber, string appendedFilter = null)
         {
             StringBuilder queryBuilder = new StringBuilder();
             StringBuilder selectQueryPart = new StringBuilder();
@@ -114,6 +114,7 @@ namespace TOne.WhS.Analytics.Data.SQL
             StringBuilder havingBuilder = new StringBuilder();
             AddFilterToQuery(filter, whereBuilder);
 
+
             queryBuilder.Append(String.Format(@"SELECT 
                                                #SELECTPART#
                                                FROM {0} {1} WITH(NOLOCK ,INDEX(#TABLEINDEX#))
@@ -121,11 +122,13 @@ namespace TOne.WhS.Analytics.Data.SQL
                                                GROUP BY #GROUPBYPART# ", tableName, alias));
 
             whereBuilder.Append(String.Format(@"{0}.AttemptDateTime>= @FromDate AND ({0}.AttemptDateTime<= @ToDate)", alias));
-            groupByBuilder.Append(String.Format(@"SaleZoneID, CustomerID, SupplierID, {0}", phoneNumber));
+            if (!string.IsNullOrEmpty(phoneNumber))
+                whereBuilder.Append(String.Format(@"And {0}.{1} like '{2}%' ", alias, phoneNumberType, phoneNumber));
+            groupByBuilder.Append(String.Format(@"SaleZoneID, CustomerID, SupplierID, {0}", phoneNumberType));
             havingBuilder.Append(String.Format(@"HAVING SUM(AttemptDateTime) >= {0} ", repeatedMorethan));
             selectQueryPart.Append(String.Format(@" {0}.SaleZoneID, {0}.CustomerID, {0}.SupplierID, Count({0}.AttemptDateTime) AS Attempt,
                                                     CONVERT(DECIMAL(10,2),SUM({0}.DurationInSeconds)/60.) AS DurationsInMinutes,
-		                                            {0}.{1}  AS PhoneNumber ", alias, phoneNumber));
+		                                            {0}.{1}  AS PhoneNumber ", alias, phoneNumberType));
 
             AddAppendedFilter(whereBuilder, appendedFilter);
 
@@ -150,7 +153,7 @@ namespace TOne.WhS.Analytics.Data.SQL
         private void AddHavingToQuery(StringBuilder groupBuilder, string aliasTableName, int repeatedMorethan)
         {
             groupBuilder.Append(String.Format(@"  SUM({0}.Attempt) >=  {1} ", aliasTableName, repeatedMorethan));
-        }        
+        }
         private void AddFilterToQuery(RepeatedNumberFilter filter, StringBuilder whereBuilder)
         {
             AddFilter(whereBuilder, filter.SwitchIds, "SwitchId");

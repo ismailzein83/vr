@@ -9,7 +9,11 @@
 
                 <vr-whs-analytics-callstatus-selector normal-col-num="2" on-ready="onCallStatusDirectiveReady" isrequired="true"></vr-whs-analytics-callstatus-selector>
 
-                <vr-whs-analytics-phonenumber-selector normal-col-num="2" on-ready="onPhoneNumberDirectiveReady" isrequired="true"></vr-whs-analytics-phonenumber-selector>
+                <vr-whs-analytics-phonenumber-selector normal-col-num="2" on-ready="onPhoneNumberDirectiveReady" isrequired="true" customlabel="Phone Number Type"></vr-whs-analytics-phonenumber-selector>
+
+                <vr-columns width="normal">
+                    <vr-textbox type="number" value="phoneNumber" label="Phone Number" decimalprecision="0"></vr-textbox>
+                </vr-columns>
 
                 <vr-columns width="normal">
                     <vr-textbox type="number" value="nRecords" label="Repeated More Than" minvalue="0" decimalprecision="0" isrequired></vr-textbox>

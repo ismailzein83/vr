@@ -13,6 +13,7 @@ namespace TOne.WhS.Analytics.Entities
         public DateTime To { get; set; }
         public int RepeatedMorethan { get; set; }
         public CDRType CDRType { get; set; }
+        public string PhoneNumberType { get; set; }
         public string PhoneNumber { get; set; }
     }
 }

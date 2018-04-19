@@ -74,8 +74,9 @@ function RepeatedNumberController($scope, UtilsService, VRNavigationService, VRN
             To: $scope.toDate,
             RepeatedMorethan: $scope.nRecords,
             CDRType: callStatusDirectiveAPI.getSelectedIds(),
-            PhoneNumber: phoneNumberDirectiveAPI.getSelectedValues(),
-            Period: $scope.selectedPeriod.value
+            PhoneNumberType: phoneNumberDirectiveAPI.getSelectedValues(),
+            Period: $scope.selectedPeriod.value,
+            PhoneNumber: $scope.phoneNumber
         };
         return query;
     }
