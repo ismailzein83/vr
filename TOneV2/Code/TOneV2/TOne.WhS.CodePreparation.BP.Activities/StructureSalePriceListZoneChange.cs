@@ -483,9 +483,10 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                             ZoneName = zoneToClose.ZoneName,
                             ZoneId = zoneToClose.ZoneId,
                             Rate = closedOtherRate.Rate,
+                            RateTypeId = closedOtherRate.RateTypeId,
                             ChangeType = RateChangeType.Deleted,
                             BED = closedOtherRate.BED,
-                            EED = (zoneToClose.EED > closedOtherRate.EED) ? zoneToClose.EED : closedOtherRate.EED,
+                            EED = (zoneToClose.EED > closedOtherRate.BED) ? zoneToClose.EED : closedOtherRate.BED,
                             CurrencyId = saleRateManager.GetCurrencyId(closedOtherRate)
                         });
                     }
