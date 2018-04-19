@@ -11,8 +11,10 @@
     <vr-textbox value="scopeModel.password" label="Password" isrequired="true" type="password"></vr-textbox>
 </vr-columns>
 <vr-columns colnum="{{sshCtrl.normalColNum}}">
-    <vr-textbox value="scopeModel.connectionTimeOutInSeconds" label="Connection Timeout(sec)" isrequired="true"></vr-textbox>
+    <vr-textbox value="scopeModel.connectionTimeOutInSeconds" label="Connection Timeout(sec)" isrequired="true"
+                type="number" decimalprecision="0" minvalue="1"></vr-textbox>
 </vr-columns>
 <vr-columns colnum="{{sshCtrl.normalColNum}}">
-    <vr-textbox value="scopeModel.readTimeOutInSeconds" label="Read Timeout(sec)" isrequired="true"></vr-textbox>
+    <vr-textbox value="scopeModel.readTimeOutInSeconds" label="Read Timeout(sec)" isrequired="true"
+                type="number" decimalprecision="0" minvalue="1"></vr-textbox>
 </vr-columns>

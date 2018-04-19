@@ -62,6 +62,21 @@
     <Reference Include="protobuf-net">
       <HintPath>..\Resources\DLLs\protobuf-net.dll</HintPath>
     </Reference>
+    <Reference Include="Rebex.Net.Ftp">
+      <HintPath>..\Resources\DLLs\Rebex.Net.Ftp.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.ProxySocket">
+      <HintPath>..\Resources\DLLs\Rebex.Net.ProxySocket.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.Sftp">
+      <HintPath>..\Resources\DLLs\Rebex.Net.Sftp.dll</HintPath>
+    </Reference>
+    <Reference Include="Rebex.Net.Ssh">
+      <HintPath>..\Resources\DLLs\Rebex.Net.Ssh.dll</HintPath>
+    </Reference>
+    <Reference Include="Renci.SshNet">
+      <HintPath>..\Resources\DLLs\Renci.SshNet.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -90,10 +105,12 @@
     <Compile Include="DataRetrieval\ConvertResultToExcelDataContext.cs" />
     <Compile Include="DataRetrieval\RemoteExcelManager.cs" />
     <Compile Include="DataRetrieval\ExcelManager.cs" />
+    <Compile Include="Communicator\FTPCommunicator.cs" />
     <Compile Include="LabelColorManager.cs" />
     <Compile Include="PathResolver.cs" />
     <Compile Include="ServiceClientFactory.cs" />
     <Compile Include="ServiceHostManager.cs" />
+    <Compile Include="Communicator\SSHCommunicator.cs" />
     <Compile Include="VRClock.cs" />
     <Compile Include="VRCodeIterator.cs" />
     <Compile Include="Compressor.cs" />

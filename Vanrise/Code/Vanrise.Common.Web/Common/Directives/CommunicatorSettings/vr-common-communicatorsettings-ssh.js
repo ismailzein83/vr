@@ -34,12 +34,12 @@ app.directive('vrCommonCommunicatorsettingsSsh', ['UtilsService', 'VRUIUtilsServ
 
                 api.load = function (payload) {
                     if (payload != undefined && payload.sshCommunicatorSettings != undefined) {
-                        $scope.scopeModel.host = payload.ftpCommunicatorSettings.Host;
-                        $scope.scopeModel.port = payload.ftpCommunicatorSettings.Port;
-                        $scope.scopeModel.username = payload.ftpCommunicatorSettings.UserName;
-                        $scope.scopeModel.password = payload.ftpCommunicatorSettings.Password;
-                        $scope.scopeModel.connectionTimeOutInSeconds = payload.ftpCommunicatorSettings.ConnectionTimeOutInSeconds;
-                        $scope.scopeModel.readTimeOutInSeconds = payload.ftpCommunicatorSettings.ReadTimeOutInSeconds;
+                        $scope.scopeModel.host = payload.sshCommunicatorSettings.Host;
+                        $scope.scopeModel.port = payload.sshCommunicatorSettings.Port;
+                        $scope.scopeModel.username = payload.sshCommunicatorSettings.Username;
+                        $scope.scopeModel.password = payload.sshCommunicatorSettings.Password;
+                        $scope.scopeModel.connectionTimeOutInSeconds = payload.sshCommunicatorSettings.ConnectionTimeOutInSeconds;
+                        $scope.scopeModel.readTimeOutInSeconds = payload.sshCommunicatorSettings.ReadTimeOutInSeconds;
                     }
                 };
 
@@ -47,7 +47,7 @@ app.directive('vrCommonCommunicatorsettingsSsh', ['UtilsService', 'VRUIUtilsServ
                     return {
                         Host: $scope.scopeModel.host,
                         Port: $scope.scopeModel.port,
-                        UserName: $scope.scopeModel.username,
+                        Username: $scope.scopeModel.username,
                         Password: $scope.scopeModel.password,
                         ConnectionTimeOutInSeconds: $scope.scopeModel.connectionTimeOutInSeconds,
                         ReadTimeOutInSeconds: $scope.scopeModel.readTimeOutInSeconds

@@ -34,12 +34,16 @@ app.directive('vrCommonCommunicatorsettingsFtp', ['UtilsService', 'VRUIUtilsServ
 
                 api.load = function (payload) {
                     $scope.scopeModel.ftpTypes = UtilsService.getArrayEnum(VRCommon_FTPTypeEnum);
+
                     if (payload != undefined && payload.ftpCommunicatorSettings != undefined) {
                         $scope.scopeModel.selectedFtpType = UtilsService.getItemByVal($scope.scopeModel.ftpTypes, payload.ftpCommunicatorSettings.FTPType, 'value');
                         $scope.scopeModel.directory = payload.ftpCommunicatorSettings.Directory;
                         $scope.scopeModel.serverIP = payload.ftpCommunicatorSettings.ServerIP;
-                        $scope.scopeModel.username = payload.ftpCommunicatorSettings.UserName;
+                        $scope.scopeModel.username = payload.ftpCommunicatorSettings.Username;
                         $scope.scopeModel.password = payload.ftpCommunicatorSettings.Password;
+                    }
+                    else {
+                        $scope.scopeModel.selectedFtpType = $scope.scopeModel.ftpTypes[0];
                     }
                 };
 
@@ -48,7 +52,7 @@ app.directive('vrCommonCommunicatorsettingsFtp', ['UtilsService', 'VRUIUtilsServ
                         FTPType: $scope.scopeModel.selectedFtpType.value,
                         Directory: $scope.scopeModel.directory,
                         ServerIP: $scope.scopeModel.serverIP,
-                        UserName: $scope.scopeModel.username,
+                        Username: $scope.scopeModel.username,
                         Password: $scope.scopeModel.password
                     };
                 };

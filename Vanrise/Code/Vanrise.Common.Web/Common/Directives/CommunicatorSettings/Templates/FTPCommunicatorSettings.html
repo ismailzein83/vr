@@ -1,5 +1,6 @@
 ﻿<vr-columns colnum="{{ftpCtrl.normalColNum}}">
-    <vr-select datasource="scopeModel.ftpTypes" datatextfield="description" datavaluefield="value" label="Type" isrequired="true" selectedvalues="scopeModel.selectedFtpType"></vr-select>
+    <vr-select datasource="scopeModel.ftpTypes" datatextfield="description" datavaluefield="value" label="Type" isrequired="true" 
+               selectedvalues="scopeModel.selectedFtpType" hideremoveicon></vr-select>
 </vr-columns>
 <vr-columns colnum="{{ftpCtrl.normalColNum}}">
     <vr-textbox value="scopeModel.serverIP" label="Server IP" isrequired="true"></vr-textbox>
