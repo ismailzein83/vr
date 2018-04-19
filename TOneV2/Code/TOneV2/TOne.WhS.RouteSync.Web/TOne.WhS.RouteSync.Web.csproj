@@ -139,6 +139,7 @@
     <Compile Include="Controllers\IdbDataManagerSettingsController.cs" />
     <Compile Include="Controllers\RouteSyncDefinitionController.cs" />
     <Compile Include="Controllers\RadiusDataManagerSettingsController.cs" />
+    <Compile Include="Controllers\SwitchCommunicationController.cs" />
     <Compile Include="Controllers\SwitchController.cs" />
     <Compile Include="Controllers\SwitchRouteSynchronizerController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -171,6 +172,10 @@
     <Content Include="WhS_RouteSync\Directives\MainExtensions\RadiusDataManagers\whs-routesync-mvtsradius-sqldatamanager.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\MVTSSynchronizer\Templates\MVTSRadiusSWSyncTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\MVTSSynchronizer\whs-routesync-mvtsradius-swsync.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\SwitchCommunication\Templates\SSHSwitchCommunicationTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\SwitchCommunication\Templates\FTPSwitchCommunicationTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\SwitchCommunication\whs-routesync-switchcommunication-ftp.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\SwitchCommunication\whs-routesync-switchcommunication-ssh.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\TelesSynchronizer\Templates\TelesIdbSWSyncTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\TelesSynchronizer\Templates\TelesRadiusSWSyncTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\TelesSynchronizer\whs-routesync-telesidb-swsync.js" />
@@ -189,6 +194,8 @@
     <Content Include="WhS_RouteSync\Directives\RouteSyncSettings\whs-routesync-settings-editor.js" />
     <Content Include="WhS_RouteSync\Directives\RouteSyncTechnicalSettings\Templates\RouteSyncTechnicalSettingsTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\RouteSyncTechnicalSettings\whs-routesync-technicalsettings-editor.js" />
+    <Content Include="WhS_RouteSync\Directives\SwitchCommunication\Templates\SwitchCommunicationTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\SwitchCommunication\whs-routesync-switchcommunication.js" />
     <Content Include="WhS_RouteSync\Directives\SwitchRouteSynchronizer\Templates\SwitchRouteSynchronizerTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\SwitchRouteSynchronizer\whs-routesync-switchroutesynchronizer-settings.js" />
     <Content Include="WhS_RouteSync\Directives\Switch\whs-routesync-switch-selector.js" />
@@ -198,6 +205,7 @@
     <Content Include="WhS_RouteSync\Services\APIServices\IdbDataManagerSettingAPIService.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\RouteSyncDefinitionAPIService.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\RadiusDataManagerSettingAPIService.js" />
+    <Content Include="WhS_RouteSync\Services\APIServices\SwitchCommunicationAPIService.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\SwitchAPIService.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\SwitchRouteSynchronizerAPIService.js" />
     <Content Include="WhS_RouteSync\Services\RouteSyncDefinitionService.js" />

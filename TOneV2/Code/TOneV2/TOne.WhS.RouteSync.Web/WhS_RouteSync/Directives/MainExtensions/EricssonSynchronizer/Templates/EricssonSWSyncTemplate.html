@@ -1,5 +1,8 @@
 ﻿<vr-tabs>
-    <vr-tab header="'Routing'">
+    <vr-tab header="'Communication'">
+        <whs-routesync-switchcommunication on-ready="scopeModel.onSwitchCommunicationReady"></whs-routesync-switchcommunication>
+    </vr-tab>
+    <vr-tab header="'Options'">
         <vr-row>
             <vr-columns width="1/4row">
                 <vr-textbox value="scopeModel.numberOfOptions" label="Number Of Options" type="number" decimalprecision="0" minvalue="1" isrequired></vr-textbox>
@@ -51,11 +54,6 @@
         <whs-routesync-ericsson-carrieraccountmapping-grid on-ready="scopeModel.onCarrierAccountMappingGridReady"></whs-routesync-ericsson-carrieraccountmapping-grid>
     </vr-tab>
 </vr-tabs>
-
-
-
-
-
 
 <!--<vr-row>
     <vr-columns width="1/2row">

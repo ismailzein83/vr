@@ -648,7 +648,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\PublishProfiles\PublishTOneV2.pubxml" />
-	<Content Include="appSettings.config" />
+    <Content Include="appSettings.config" />
     <Content Include="ConnectionStrings.config" />
     <Content Include="Web.config.CloudXPoint.exclude" />
     <Content Include="WebBI.config.exclude" />
@@ -1030,6 +1030,10 @@
     <ProjectReference Include="..\TOne.WhS.RouteSync.IVSwitch\TOne.WhS.RouteSync.IVSwitch.csproj">
       <Project>{c0da1a40-bf0e-4657-941e-e245bb82269f}</Project>
       <Name>TOne.WhS.RouteSync.IVSwitch</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.MainExtensions\TOne.WhS.RouteSync.MainExtensions.csproj">
+      <Project>{eb35e768-5037-4d5a-890f-f6c7270bb8a5}</Project>
+      <Name>TOne.WhS.RouteSync.MainExtensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.RouteSync.MVTSRadius.SQL\TOne.WhS.RouteSync.MVTSRadius.SQL.csproj">
       <Project>{89fe058f-9f8f-4afb-bda9-992941cb2140}</Project>

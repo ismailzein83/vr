@@ -25,6 +25,9 @@
 
             var carrierMappings;
 
+            var switchCommunicationAPI;
+            var switchCommunicationReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
             var outgoingTrafficCustomerSelectorAPI;
             var outgoingTrafficCustomerSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -41,6 +44,11 @@
             function initializeController() {
                 $scope.scopeModel = {};
                 $scope.scopeModel.localSuppliers = [];
+
+                $scope.scopeModel.onSwitchCommunicationReady = function (api) {
+                    switchCommunicationAPI = api;
+                    switchCommunicationReadyPromiseDeferred.resolve();
+                };
 
                 $scope.scopeModel.onOutgoingTrafficCustomerSelectorReady = function (api) {
                     outgoingTrafficCustomerSelectorAPI = api;
@@ -102,6 +110,7 @@
                     var incomingTrafficSuppliers;
                     var localSupplierMappings;
                     var carrierMappings;
+                    var switchCommunicationList;
 
                     if (payload != undefined) {
                         ericssonSWSync = payload.switchSynchronizerSettings;
@@ -113,12 +122,16 @@
                             $scope.scopeModel.localCountryCode = ericssonSWSync.LocalCountryCode;
                             $scope.scopeModel.interconnectGeneralPrefix = ericssonSWSync.InterconnectGeneralPrefix;
 
+                            switchCommunicationList = ericssonSWSync.SwitchCommunicationList;
                             outgoingTrafficCustomers = ericssonSWSync.OutgoingTrafficCustomers;
                             incomingTrafficSuppliers = ericssonSWSync.IncomingTrafficSuppliers;
                             localSupplierMappings = ericssonSWSync.LocalSupplierMappings;
                             carrierMappings = ericssonSWSync.CarrierMappings;
                         }
                     }
+                    //Loading Switch Communication
+                    var switchCommunicationLoadPromise = getSwitchCommunicationLoadPromise();
+                    promises.push(switchCommunicationLoadPromise);
 
                     //Loading OutgoingTrafficCustomers Selector
                     var outgoingTrafficCustomerSelectorLoadPromise = getOutgoingTrafficCustomerSelectorLoadPromise();
@@ -136,6 +149,20 @@
                     var carrierAccountMappingGridLoadPromise = getCarrierAccountMappingGridLoadPromise();
                     promises.push(carrierAccountMappingGridLoadPromise);
 
+
+                    function getSwitchCommunicationLoadPromise() {
+                        var switchCommunicationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        switchCommunicationReadyPromiseDeferred.promise.then(function () {
+                            var switchCommunicationPayload = undefined;
+                            if (switchCommunicationList != undefined) {
+                                switchCommunicationPayload = { switchCommunicationList: switchCommunicationList };
+                            }
+                            VRUIUtilsService.callDirectiveLoad(switchCommunicationAPI, switchCommunicationPayload, switchCommunicationLoadPromiseDeferred);
+                        });
+
+                        return switchCommunicationLoadPromiseDeferred.promise;
+                    }
 
                     function getOutgoingTrafficCustomerSelectorLoadPromise() {
                         var outgoingTrafficCustomerSelectorLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -248,7 +275,8 @@
                         IncomingTrafficSuppliers: getIncomingTrafficSuppliers(),
                         OutgoingTrafficCustomers: getOutgoingTrafficCustomers(),
                         LocalSupplierMappings: getLocalSupplierMappings(),
-                        CarrierMappings: carrierAccountMappingGridAPI.getData()
+                        CarrierMappings: carrierAccountMappingGridAPI.getData(),
+                        SwitchCommunicationList: switchCommunicationAPI.getData()
                     };
                     return data;
                 };
