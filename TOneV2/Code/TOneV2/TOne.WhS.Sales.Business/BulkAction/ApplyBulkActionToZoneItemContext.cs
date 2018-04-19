@@ -65,7 +65,5 @@ namespace TOne.WhS.Sales.Business
         {
             return _getRoundedRate(rate);
         }
-
-		public SaleEntityZoneRate ZoneCurrentRate { get; set; }
 	}
 }

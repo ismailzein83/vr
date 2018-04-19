@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Sales.Entities;
 using Vanrise.Entities;
@@ -69,7 +68,5 @@ namespace TOne.WhS.Sales.Business
         {
             return _getRoundedRate(rate);
         }
-
-		public SaleEntityZoneRate ZoneCurrentRate { get; set; }
 	}
 }
