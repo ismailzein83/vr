@@ -1,4 +1,17 @@
 ﻿<vr-row>
+    <vr-columns colnum ="2">
+        <span vr-disabled ="isNewRateBEDDisabled">
+        <vr-datetimepicker type="date"
+                           value="NewRateBED"
+                           label="BED"
+                           onvaluechanged="onCurrentRateBEDChanged()"
+                           firechangeifempty
+                           isrequired="isNewRateBEDRequired" disablefocus>
+        </vr-datetimepicker>
+            </span>
+        </vr-columns>
+    </vr-row>
+<vr-row>
     <vr-columns width="3/4row">
         <vr-datagrid datasource="otherRates"
                      on-ready="onGridReady"
@@ -54,7 +67,9 @@
                 <vr-span vr-disabled="dataItem.IsEEDDisabled || !viewScope.areOtherRatesEditable()">
                     <vr-datetimepicker type="date"
                                        value="dataItem.CurrentRateNewEED"
-                                       onvaluechanged="viewScope.onCurrentRateNewEEDChanged()"
+                                       onvaluechanged="viewScope.onCurrentRateNewEEDChanged(dataItem)"
+                                       onblurdatetime="viewScope.onCurrentRateNewEEDBlurred(dataItem)"
+                                       customvalidate="viewScope.validateNewRateDates(dataItem)"
                                        ng-hide="dataItem.NewRate != null">
                     </vr-datetimepicker>
                     <vr-datetimepicker type="date"

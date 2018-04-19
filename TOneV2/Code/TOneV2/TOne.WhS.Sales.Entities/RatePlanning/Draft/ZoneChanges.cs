@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace TOne.WhS.Sales.Entities
 {
@@ -8,10 +9,10 @@ namespace TOne.WhS.Sales.Entities
 
         public string ZoneName { get; set; }
 
-		public int CountryId { get; set; }
+        public int CountryId { get; set; }
 
         public IEnumerable<DraftRateToChange> NewRates { get; set; }
-
+        public DateTime? NewOtherRateBED { get; set; }
         public decimal? ProfitPerc { get; set; }
 
         public IEnumerable<DraftRateToClose> ClosedRates { get; set; }

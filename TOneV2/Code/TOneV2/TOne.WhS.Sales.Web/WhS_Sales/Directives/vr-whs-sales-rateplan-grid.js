@@ -56,8 +56,11 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             var sumFixedWidthes;
             var sumWidthFactors;
 
+            var otherRateGridAPI;
+
             var allZonesLetter = "ALL ZONES";
 
+            var isSellingProductGrid;
             function initializeController() {
 
                 $scope.scopeModel = {};
@@ -109,6 +112,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 $scope.isGridScope = true;
                 $scope.zoneItems = [];
                 $scope.costCalculationMethods = [];
+             
                 gridDrillDownDefinitions = getGridDrillDownDefinitions();
 
                 $scope.onFilterRoutingProductSelectorReady = function (api) {
@@ -164,6 +168,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         decreasedRateDayOffset: decreasedRateDayOffset
                     };
                     WhS_Sales_RatePlanUtilsService.onNewRateBlurred(dataItem, settings);
+                    dataItem.onNewRateBEDChanged(dataItem);
                 };
 
                 $scope.onEffectiveRPClicked = function (dataItem) {
@@ -298,7 +303,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
             }
 
             function setColumnsWidthesInCSS() {
-                //for (var colName in columnsConfig) {
+                //for (var colName in columnsConfig) {drilldowndefinitio
                 //    var column = columnsConfig[colName];
                 //    if (column.widthFactor != undefined) {
                 //        column.width = "calc(" + (100 * column.widthFactor / sumWidthFactors) + "% - " + (sumFixedWidthes * (100 * column.widthFactor / sumWidthFactors) / 100) + "px)";
@@ -315,25 +320,32 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         return zoneRoutingProductDirectiveAPI.load(payload);
                     }
                 };
-                otherRatesTab = {
-                    title: "Other Rates",
-                    directive: "vr-whs-sales-otherrate-grid",
-                    loadDirective: function (rateTypeGridAPI, zoneItem) {
-                        var query = {
-                            zoneItem: zoneItem,
-                            context:zoneItem.context,
-                            settings: {
-                                newRateDayOffset: newRateDayOffset,
-                                increasedRateDayOffset: increasedRateDayOffset,
-                                decreasedRateDayOffset: decreasedRateDayOffset
-                            },
-                            ownerType: gridQuery.OwnerType,
-                            ownerCurrencyId: gridQuery.CurrencyId,
-                            saleAreaSetting: gridQuery.SaleAreaSettings
-                        };
-                        return rateTypeGridAPI.loadGrid(query);
-                    }
-                };
+                    otherRatesTab = {
+                        title: "Other Rates",
+                        directive: "vr-whs-sales-otherrate-grid",
+                        loadDirective: function (rateTypeGridAPI, zoneItem) {
+                            var query = {
+                                zoneItem: zoneItem,
+                                context: zoneItem.context,
+                                settings: {
+                                    newRateDayOffset: newRateDayOffset,
+                                    increasedRateDayOffset: increasedRateDayOffset,
+                                    decreasedRateDayOffset: decreasedRateDayOffset
+                                },
+                                ownerType: gridQuery.OwnerType,
+                                ownerCurrencyId: gridQuery.CurrencyId,
+                                saleAreaSetting: gridQuery.SaleAreaSettings
+                            };
+                            zoneItem.rateTypeGridAPI = rateTypeGridAPI;
+                            return rateTypeGridAPI.loadGrid(query);
+                        },
+                        showTab: function () {
+                            if (isSellingProductGrid)
+                                return false;
+                            return true;
+                        }
+                    };
+              
                 return [routingProductTab, otherRatesTab];
             }
 
@@ -343,7 +355,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                 api.load = function (query) {
                     gridQuery = query;
-
+                    isSellingProductGrid = (gridQuery.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value);
                     if (query != undefined) {
                         ownerName = query.OwnerName;
                         setCostCalculationMethods(query.CostCalculationMethods, query.RateCalculationMethod);
@@ -354,7 +366,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                     resetGridFilter();
 
                     $scope.isCurrentRateSourceFilterHidden = (gridQuery.OwnerType == WhS_BE_SalePriceListOwnerTypeEnum.SellingProduct.value);
-
                     var promises = [];
                     $scope.isLoading = true;
 
@@ -525,7 +536,6 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 promises.push(loadDirectivesDeferred.promise);
 
                 getZoneItemsPromise.then(function (response) {
-
                     if (response != undefined) {
                         for (var i = 0; i < response.length; i++) {
                             var zoneItem = response[i];
@@ -548,14 +558,29 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                         loadDirectivesDeferred.reject(error);
                     });
                 });
-                function getContext(zoneItem)
-                {
+                function getContext(zoneItem) {
                     var context = {
                         setNewRate: function (value) {
-                            if (value && zoneItem.CurrentRate != undefined) {
+                            if (zoneItem.CurrentRate != undefined && zoneItem.NewRate == undefined) {
                                 zoneItem.NewRate = zoneItem.CurrentRate;
-                                $scope.onNewRateBlurred(zoneItem);
+                                if (value)
+                                    $scope.onNewRateBlurred(zoneItem);
                             }
+                        },
+                        setNewBED: function (date) {
+                            if (date != undefined) {
+                                if (zoneItem.NewRateBED == undefined)
+                                    zoneItem.NewRateBED = date;
+                                else {
+                                    var dates = [];
+                                    dates.push(date);
+                                    dates.push(zoneItem.NewRateBED);
+                                    zoneItem.NewRateBED = WhS_Sales_RatePlanUtilsService.getMaxDate(dates);
+                                }
+                            }
+                        },
+                        getZoneBED: function () {
+                            return zoneItem.NewRateBED;
                         }
                     };
                     return context;
@@ -633,7 +658,14 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
                 zoneItem.onCurrentRateEEDChanged = function (zoneItem) {
                     zoneItem.IsDirty = true;
                 };
-
+                zoneItem.onNewRateBEDChanged = function (zoneItem) {
+                    if (zoneItem.rateTypeGridAPI != undefined) {
+                        zoneItem.rateTypeGridAPI.setBED(zoneItem.NewRateBED);
+                    }
+                };
+                zoneItem.onCurrentRateEEDBlurred = function (zoneItem) {
+                   
+                };
                 zoneItem.refreshZoneItem = function (zoneItem) {
 
                     var promises = [];
@@ -816,13 +848,17 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
             function addDrillDownTab(drillDownDefinition, zoneItem) {
                 var drillDownDirectiveTab = {};
+                
+                if (drillDownDefinition.showTab == undefined || drillDownDefinition.showTab()) {
+                    drillDownDirectiveTab.title = drillDownDefinition.title;
+                    drillDownDirectiveTab.directive = drillDownDefinition.directive;
+                    drillDownDirectiveTab.loadDirective = function (directiveAPI) {
+                        //zoneItem.directiveAPI = directiveAPI;
+                        return drillDownDefinition.loadDirective(directiveAPI, zoneItem);
+                    };
 
-                drillDownDirectiveTab.title = drillDownDefinition.title;
-                drillDownDirectiveTab.directive = drillDownDefinition.directive;
-                drillDownDirectiveTab.loadDirective = function (directiveAPI) {
-                    return drillDownDefinition.loadDirective(directiveAPI, zoneItem);
-                };
-                zoneItem.drillDownExtensionObject.drillDownDirectiveTabs.push(drillDownDirectiveTab);
+                    zoneItem.drillDownExtensionObject.drillDownDirectiveTabs.push(drillDownDirectiveTab);
+                }
             }
 
             function getRouteOptionsDirectivePayload(dataItem) {
@@ -1058,7 +1094,7 @@ app.directive("vrWhsSalesRateplanGrid", ["WhS_Sales_RatePlanAPIService", "UtilsS
 
                         for (var i = 0; i < zoneItem.NewRates.length; i++) {
                             if (zoneItem.NewRates[i].RateTypeId != null) {
-                                zoneItem.NewRates[i].BED = zoneItem.NewRateBED;
+                                zoneItemChanges.NewOtherRateBED = zoneItem.NewOtherRateBED;
                                 zoneItemChanges.NewRates.push(zoneItem.NewRates[i]);
                             }
                         }

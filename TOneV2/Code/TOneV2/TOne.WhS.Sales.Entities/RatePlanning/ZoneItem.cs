@@ -18,6 +18,7 @@ namespace TOne.WhS.Sales.Entities
         public bool IsCountryEnded { get; set; }
         public DateTime? CountryBED { get; set; }
         public DateTime ZoneBED { get; set; }
+        public DateTime? NewOtherRateBED { get; set; }
         public DateTime? ZoneEED { get; set; }
         public bool IsZonePendingClosed
         {
