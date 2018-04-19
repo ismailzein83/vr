@@ -470,6 +470,27 @@ namespace TOne.WhS.CodePreparation.BP.Activities
                     EED = rateEED,
                     CurrencyId = saleRateManager.GetCurrencyId(closedRate.Rate)
                 });
+
+                if (closedRate.RatesByRateType != null && closedRate.RatesByRateType.Any())
+                {
+                    foreach (var kvp in closedRate.RatesByRateType)
+                    {
+                        var closedOtherRate = kvp.Value;
+
+                        rateChanges.Add(new SalePricelistRateChange
+                        {
+                            CountryId = countryId,
+                            ZoneName = zoneToClose.ZoneName,
+                            ZoneId = zoneToClose.ZoneId,
+                            Rate = closedOtherRate.Rate,
+                            ChangeType = RateChangeType.Deleted,
+                            BED = closedOtherRate.BED,
+                            EED = (zoneToClose.EED > closedOtherRate.EED) ? zoneToClose.EED : closedOtherRate.EED,
+                            CurrencyId = saleRateManager.GetCurrencyId(closedOtherRate)
+                        });
+                    }
+                }
+
                 zoneIdsWithRateBED.Add(zoneToClose.ZoneId, closedRate.Rate.BED);
             }
             //assign routing product id
