@@ -18,13 +18,14 @@ namespace Retail.BusinessEntity.BP.Activities
         public Guid BulkActionIdentifier { get; set; }
         public BaseQueue<Account> OutputQueue { get; set; }
         public BulkActionFinalState BulkActionFinalState { get; set; }
-
+        public Guid AccountBEDefinitionId { get; set; }
     }
     public class LoadAccountBulkActionDrafts : Vanrise.BusinessProcess.BaseAsyncActivity<LoadAccountBulkActionDraftInput>
     {
         
         #region Arguments
-     
+        [RequiredArgument]
+        public InArgument<Guid> AccountBEDefinitionId { get; set; }
         [RequiredArgument]
         public InArgument<Guid> BulkActionIdentifier { get; set; }
         
@@ -57,6 +58,7 @@ namespace Retail.BusinessEntity.BP.Activities
                 BulkActionIdentifier = this.BulkActionIdentifier.Get(context),
                 OutputQueue = this.OutputQueue.Get(context),
                 BulkActionFinalState = this.BulkActionFinalState.Get(context),
+                AccountBEDefinitionId = this.AccountBEDefinitionId.Get(context),
             };
 
         }

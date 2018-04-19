@@ -50,12 +50,12 @@
       <AssemblyReference>Vanrise.BusinessProcess.WFActivities</AssemblyReference>
       <AssemblyReference>Vanrise.Common</AssemblyReference>
       <AssemblyReference>Vanrise.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>Vanrise.Runtime</AssemblyReference>
       <AssemblyReference>Vanrise.Runtime.Entities</AssemblyReference>
       <AssemblyReference>Retail.BusinessEntity.BP.Activities</AssemblyReference>
       <AssemblyReference>Retail.BusinessEntity.BP.Arguments</AssemblyReference>
       <AssemblyReference>Retail.BusinessEntity.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
       <AssemblyReference>Retail.BusinessEntity.BP</AssemblyReference>
     </sco:Collection>
@@ -67,6 +67,11 @@
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="loadAccountBulkActionStatus" />
       </Parallel.Variables>
       <rbba1:LoadAccountBulkActionDrafts sap2010:WorkflowViewState.IdRef="LoadAccountBulkActionDrafts_2">
+        <rbba1:LoadAccountBulkActionDrafts.AccountBEDefinitionId>
+          <InArgument x:TypeArguments="s:Guid">
+            <mca:CSharpValue x:TypeArguments="s:Guid">Input.AccountBEDefinitionId</mca:CSharpValue>
+          </InArgument>
+        </rbba1:LoadAccountBulkActionDrafts.AccountBEDefinitionId>
         <rbba1:LoadAccountBulkActionDrafts.BulkActionFinalState>
           <InArgument x:TypeArguments="ve:BulkActionFinalState">
             <mca:CSharpValue x:TypeArguments="ve:BulkActionFinalState">Input.BulkActionFinalState</mca:CSharpValue>
@@ -116,7 +121,7 @@
         </rbba1:ExecuteAccountActions.PreviousActivityStatus>
       </rbba1:ExecuteAccountActions>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d0lDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkJ1c2luZXNzRW50aXR5LkJQXEFjY291bnRCdWxrQWN0aW9uUHJvY2Vzcy54YW1sDT8DeA4CAQFABXYQAgECRQdaKwIBGFsHdSUCAQNXDVd8AgElTQ1NYwIBIVINUmwCAR1IDUh0AgEZcg1ydAIBFG0NbWwCARBoDWhzAgEMXg1eZAIBCGMNY4EBAgEE</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0lDOlxURlNcUmV0YWlsXENvZGVcUmV0YWlsLkJ1c2luZXNzRW50aXR5LkJQXEFjY291bnRCdWxrQWN0aW9uUHJvY2Vzcy54YW1sDj8DfQ4CAQFABXsQAgECRQdfKwIBGGAHeiUCAQNcDVx8AgEpUg1SYwIBJVcNV2wCASFNDU10AgEdSA1IZAIBGXcNd3QCARRyDXJsAgEQbQ1tcwIBDGMNY2QCAQhoDWiBAQIBBA==</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
