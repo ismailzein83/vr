@@ -3,19 +3,19 @@
         <vr-form name="formBPTrackingModal">
             <vr-row>
                 <vr-columns colnum="1"><vr-label>Process Title:</vr-label></vr-columns>
-                <vr-columns colnum="7"><vr-label isvalue breakline>{{scopeModel.process.Title}}</vr-label></vr-columns>
-                <vr-columns colnum="1"></vr-columns>              
+                <vr-columns colnum="6"><vr-label isvalue breakline>{{scopeModel.process.Title}}</vr-label></vr-columns>
+                <vr-columns colnum="1"></vr-columns>
+                <vr-columns colnum="3" ng-show="scopeModel.showCompletionViewLink">
+                    <vr-label isvalue><a ng-click="scopeModel.openCompletionView()" href="">{{scopeModel.completionViewLinkText}}</a></vr-label>
+                </vr-columns>
             </vr-row>
             <vr-row>
                 <vr-columns colnum="1"><vr-label>Created On:</vr-label></vr-columns>
-                <vr-columns colnum="2"><vr-label isvalue>{{scopeModel.process.CreatedTime | date:'yyyy-MM-dd HH:mm:ss' }}</vr-label></vr-columns>
+                <vr-columns colnum="3"><vr-label isvalue>{{scopeModel.process.CreatedTime | date:'yyyy-MM-dd HH:mm:ss' }}</vr-label></vr-columns>
                 <vr-columns colnum="1"><vr-label>Updated On:</vr-label></vr-columns>
                 <vr-columns colnum="2"><vr-label isvalue>{{scopeModel.process.StatusUpdatedTime | date:'yyyy-MM-dd HH:mm:ss' }}</vr-label></vr-columns>
                 <vr-columns colnum="1"><vr-label>Status:</vr-label></vr-columns>
-                <vr-columns colnum="1"><span ng-class="scopeModel.getStatusColor()"><vr-label isvalue hasbackgroundcolor>{{scopeModel.process.Status}}</vr-label></span></vr-columns>
-                <vr-columns colnum="2" ng-show="scopeModel.showCompletionViewLink">
-                    <vr-label isvalue><a ng-click="scopeModel.openCompletionView()" href="">{{scopeModel.completionViewLinkText}}</a></vr-label>
-                </vr-columns>
+                <vr-columns colnum="2"><span ng-class="scopeModel.getStatusColor()"><vr-label isvalue hasbackgroundcolor>{{scopeModel.process.Status}}</vr-label></span></vr-columns>
                 <span ng-show="scopeModel.allowCancel">
                     <vr-columns colnum="2" ng-show="scopeModel.showCancelAction()">
                         <vr-label isvalue>
