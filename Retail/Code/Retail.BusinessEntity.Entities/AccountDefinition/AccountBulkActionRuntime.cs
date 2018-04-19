@@ -9,5 +9,6 @@ namespace Retail.BusinessEntity.Entities
     public class AccountBulkActionRuntime
     {
         public Guid AccountBulkActionId { get; set; }
+        public AccountBulkActionRuntimeSettings Settings { get; set; }
     }
 }
