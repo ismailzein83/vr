@@ -213,7 +213,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
                     zoneItem.ClosedRates = null;
             };
             api.setBED = function (date) {
-                $scope.NewRateBED = date
+                $scope.NewRateBED = date;
                 $scope.isNewRateBEDDisabled = date != null || $scope.isCountryEnded;
             };
 
