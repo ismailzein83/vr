@@ -1208,7 +1208,10 @@ namespace TOne.WhS.Sales.BP.Activities
                     closeEffectiveDate = otherRate.CloseEffectiveDate;
                 }
 
-                info.ActionDatesByZoneId.Add(zoneId, closeEffectiveDate);
+                //TODO: it will happen that the key exists only when a new normal rate is added and an other rate is being closed. We are taking for now the BED of normal rate as action date, later on we can enhance this by changing the locator of actions dates to take zone actions per other rates also.
+                if (!info.ActionDatesByZoneId.ContainsKey(zoneId)) 
+                    info.ActionDatesByZoneId.Add(zoneId, closeEffectiveDate);
+
                 IEnumerable<SaleRate> zoneCustomerRates = existingRatesByZoneId.GetRecord(rateToClose.ZoneId);
                 if (zoneCustomerRates != null && zoneCustomerRates.Any())
                 {
