@@ -101,9 +101,10 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
                 ownerCurrencyId = query.ownerCurrencyId;
                 saleAreaSetting = query.saleAreaSetting;
                 ownerType = query.ownerType;
-                if (context != undefined && context.getZoneBED()!= undefined)
+                if (context != undefined && context.getZoneBED() != undefined) {
                     $scope.NewRateBED = query.context.getZoneBED();
-                $scope.isNewRateBEDDisabled = $scope.NewRateBED != undefined || $scope.isCountryEnded;
+                    $scope.isNewRateBEDDisabled = $scope.NewRateBED != undefined || $scope.isCountryEnded;
+                }
                 $scope.isCountryEnded = query.zoneItem.IsCountryEnded;
                 $scope.isZonePendingClosed = query.zoneItem.IsZonePendingClosed;
                 $scope.isCountryNew = query.zoneItem.IsCountryNew;
@@ -117,7 +118,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
             };
 
             function loadGrid() {
-                $scope.isNewRateBEDDisabled = $scope.isCountryEnded || $scope.isZonePendingClosed;
+                $scope.isNewRateBEDDisabled = $scope.isCountryEnded || $scope.isZonePendingClosed || $scope.NewRateBED != undefined;
                 if (zoneItem.RateTypes == null)
                     return;
                 if ($scope.NewRateBED == undefined)
