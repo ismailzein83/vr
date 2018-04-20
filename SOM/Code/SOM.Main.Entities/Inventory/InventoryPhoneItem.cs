@@ -24,7 +24,7 @@ namespace SOM.Main.Entities
         public string Switch { get; set; }
         public string SwitchId { get; set; }
         public string SwitchOMC { get; set; }
-
+        public string  DPPortId { get; set; }
 
         public string DSlam { get; set; }
         public string DSlamPort { get; set; }
@@ -44,12 +44,20 @@ namespace SOM.Main.Entities
 
         public bool IsMultiplexed { get; set; }
 
+
+        public string DPId { get; set; }
     }
-    public class PhoneNumber
+    public class PhoneNumberItem
     {
+        public string Id { get; set; }
         public string Number { get; set; }
         public bool IsGold { get; set; }
         public bool IsISDN { get; set; }
+    }
+
+    public class DPPortItem {
+        public string Id { get; set; }
+        public string Name { get; set; }
     }
 
     public class NewPhoneItemDetail {

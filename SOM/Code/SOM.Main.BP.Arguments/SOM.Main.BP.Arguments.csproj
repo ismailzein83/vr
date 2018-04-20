@@ -46,8 +46,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Billing\NewCustomerCreationProcessInput.cs" />
     <Compile Include="LineSubscription\MoveLineProcessInput.cs" />
     <Compile Include="LineSubscription\LineSubscriptionProcessInput.cs" />
+    <Compile Include="LineSubscription\TelephonyLineSubscriptionProcessInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LineSubscription\LineSubscriptionTerminationProcessInput.cs" />
   </ItemGroup>
@@ -57,9 +59,7 @@
       <Name>SOM.Main.Entities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Billing\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

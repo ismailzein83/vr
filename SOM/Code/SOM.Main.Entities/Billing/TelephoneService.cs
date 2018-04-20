@@ -15,6 +15,13 @@ namespace SOM.Main.Entities
         public string Package { get; set; }
         public decimal SubscriptionFee { get; set; }
         public decimal UsageFee { get; set; }
+        public string RatePlanId { get; set; }
+        public List<ServiceParameters> ServiceParams { get; set; }
+    }
 
+    public class ServiceParameters
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
     }
 }

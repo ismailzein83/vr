@@ -81,18 +81,18 @@ namespace SOM.Main.Entities
             return result;
         }
 
-        public static Dictionary<string, List<PhoneNumber>> GetMockPhoneNumbers()
+        public static Dictionary<string, List<PhoneNumberItem>> GetMockPhoneNumbers()
         {
-            Dictionary<string, List<PhoneNumber>> result = new Dictionary<string, List<PhoneNumber>>();
+            Dictionary<string, List<PhoneNumberItem>> result = new Dictionary<string, List<PhoneNumberItem>>();
 
-            result.Add("DPPort15_DPSecondaryPorts10", new List<PhoneNumber> { new PhoneNumber { IsGold = true, IsISDN = false, Number = "555522" }, new PhoneNumber { IsGold = false, IsISDN = true, Number = "4655645" }, new PhoneNumber { IsGold = true, IsISDN = true, Number = "998877" } });
-            result.Add("DPPort22_DPSecondaryPorts54", new List<PhoneNumber> { new PhoneNumber { IsGold = true, IsISDN = false, Number = "888777" }, new PhoneNumber { IsGold = false, IsISDN = true, Number = "8745451" }, new PhoneNumber { IsGold = true, IsISDN = true, Number = "555666" } });
+            result.Add("DPPort15_DPSecondaryPorts10", new List<PhoneNumberItem> { new PhoneNumberItem { IsGold = true, IsISDN = false, Number = "555522" }, new PhoneNumberItem { IsGold = false, IsISDN = true, Number = "4655645" }, new PhoneNumberItem { IsGold = true, IsISDN = true, Number = "998877" } });
+            result.Add("DPPort22_DPSecondaryPorts54", new List<PhoneNumberItem> { new PhoneNumberItem { IsGold = true, IsISDN = false, Number = "888777" }, new PhoneNumberItem { IsGold = false, IsISDN = true, Number = "8745451" }, new PhoneNumberItem { IsGold = true, IsISDN = true, Number = "555666" } });
 
-            result.Add("DPPort5_DPSecondaryPorts11", new List<PhoneNumber> { new PhoneNumber { IsGold = true, IsISDN = false, Number = "111333" }, new PhoneNumber { IsGold = false, IsISDN = true, Number = "8954541" }, new PhoneNumber { IsGold = true, IsISDN = true, Number = "123456" } });
-            result.Add("DPPort3_DPSecondaryPorts4", new List<PhoneNumber> { new PhoneNumber { IsGold = true, IsISDN = false, Number = "444999" }, new PhoneNumber { IsGold = false, IsISDN = true, Number = "1215745" }, new PhoneNumber { IsGold = true, IsISDN = true, Number = "987654" } });
+            result.Add("DPPort5_DPSecondaryPorts11", new List<PhoneNumberItem> { new PhoneNumberItem { IsGold = true, IsISDN = false, Number = "111333" }, new PhoneNumberItem { IsGold = false, IsISDN = true, Number = "8954541" }, new PhoneNumberItem { IsGold = true, IsISDN = true, Number = "123456" } });
+            result.Add("DPPort3_DPSecondaryPorts4", new List<PhoneNumberItem> { new PhoneNumberItem { IsGold = true, IsISDN = false, Number = "444999" }, new PhoneNumberItem { IsGold = false, IsISDN = true, Number = "1215745" }, new PhoneNumberItem { IsGold = true, IsISDN = true, Number = "987654" } });
 
-            result.Add("DPPort1_DPSecondaryPorts1", new List<PhoneNumber> { new PhoneNumber { IsGold = true, IsISDN = false, Number = "887766" }, new PhoneNumber { IsGold = false, IsISDN = true, Number = "2154541" }, new PhoneNumber { IsGold = true, IsISDN = true, Number = "200500" } });
-            result.Add("DPPort2_DPSecondaryPorts5", new List<PhoneNumber> { new PhoneNumber { IsGold = true, IsISDN = false, Number = "100200" }, new PhoneNumber { IsGold = false, IsISDN = true, Number = "9865524" }, new PhoneNumber { IsGold = true, IsISDN = true, Number = "600200" } });
+            result.Add("DPPort1_DPSecondaryPorts1", new List<PhoneNumberItem> { new PhoneNumberItem { IsGold = true, IsISDN = false, Number = "887766" }, new PhoneNumberItem { IsGold = false, IsISDN = true, Number = "2154541" }, new PhoneNumberItem { IsGold = true, IsISDN = true, Number = "200500" } });
+            result.Add("DPPort2_DPSecondaryPorts5", new List<PhoneNumberItem> { new PhoneNumberItem { IsGold = true, IsISDN = false, Number = "100200" }, new PhoneNumberItem { IsGold = false, IsISDN = true, Number = "9865524" }, new PhoneNumberItem { IsGold = true, IsISDN = true, Number = "600200" } });
 
 
             return result;

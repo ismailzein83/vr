@@ -6,6 +6,7 @@ using System.Web.Http;
 using SOM.Main.Business;
 using SOM.Main.Entities;
 using Vanrise.Web.Base;
+using Vanrise.Common;
 
 namespace SOM.Main.Web.Controllers
 {
@@ -15,10 +16,10 @@ namespace SOM.Main.Web.Controllers
     {
         [HttpGet]
         [Route("GetServices")]
-        public List<TelephoneService> GetServices()
+        public List<TelephoneService> GetServices(string ratePlanId)
         {
             BillingManager manager = new BillingManager();
-            return manager.GetServices();
+            return manager.GetServices().FindAll(c => c.RatePlanId.ToLower() == ratePlanId.ToLower());
         }
         [HttpGet]
         [Route("GetRatePlans")]

@@ -23,10 +23,10 @@ namespace BPMExtended.Main.Common
         AuthenticationToken _authToken;
         public SOMClient()
         {
-            object email;
-            object password;
-            SysSettings.TryGetValue(this.BPM_UserConnection, "SOM_USER_ID", out email);
-            SysSettings.TryGetValue(this.BPM_UserConnection, "SOM_LOGIN_PASSWORD", out password);
+            object email = "admin@vanrise.com";
+            object password = "1";
+            //SysSettings.TryGetValue(this.BPM_UserConnection, "SOM_USER_ID", out email);
+            //SysSettings.TryGetValue(this.BPM_UserConnection, "SOM_LOGIN_PASSWORD", out password);
 
             CredentialsInput credentialsInput = new CredentialsInput() { Email = email as string, Password = password as string };
             var output = LocalWebAPIClient.Post<CredentialsInput, AuthenticateOperationOutput<AuthenticationToken>>(GetSOMBaseURL(),
@@ -54,10 +54,10 @@ namespace BPMExtended.Main.Common
 
         private string GetSOMBaseURL()
         {
-            object somBaseURL;
-            SysSettings.TryGetValue(this.BPM_UserConnection, "SOM_BASE_ADDRESS", out somBaseURL);
-            return somBaseURL as string;
-            //return "http://192.168.25.9:8089";
+        //    object somBaseURL;
+        //    SysSettings.TryGetValue(this.BPM_UserConnection, "SOM_BASE_ADDRESS", out somBaseURL);
+        //    return somBaseURL as string;
+            return "http://192.168.25.9:8089";
         }
 
         private void AddAuthenticationTokenToHeader(Dictionary<string, string> headers)

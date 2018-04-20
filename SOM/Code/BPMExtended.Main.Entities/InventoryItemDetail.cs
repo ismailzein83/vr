@@ -39,8 +39,15 @@ namespace BPMExtended.Main.Entities
         public string MSAN_EID { get; set; }
         public string MSAN_TID { get; set; }
         public string MSANType { get; set; }
-
-
+        public string DPId { get; set; }
+        public string DPPortId { get; set; }
         public bool IsMultiplexed { get; set; }
     }
+
+    public class DPPortItemDetail
+    {
+        public string Id { get; set; }
+        public string Name { get; set; }
+    }
+
 }

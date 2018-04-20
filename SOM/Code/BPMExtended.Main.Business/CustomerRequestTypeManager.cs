@@ -27,10 +27,17 @@ namespace BPMExtended.Main.Business
         public Dictionary<Guid, CustomerRequestType> GetCustomerRequestTypes()
         {
             List<CustomerRequestType> customerRequestTypes = new List<CustomerRequestType>();
+
             customerRequestTypes.Add(new CustomerRequestType
             {
                 CustomerRequestTypeId = new Guid("31E1AFF4-D7F2-4C30-BDF1-BC7D965E8B20"),
                 Name = "Line Subscription",
+                Settings = new CustomerRequestTypeSettings { PageURL = "/CustomerOrders/LineSubscription" }
+            });
+            customerRequestTypes.Add(new CustomerRequestType
+            {
+                CustomerRequestTypeId = new Guid("31E1AFF4-D7F2-4C30-BDF1-BC7D965E8B20"),
+                Name = "Telephony Line Subscription",
                 Settings = new CustomerRequestTypeSettings { PageURL = "/CustomerOrders/LineSubscription" }
             });
             customerRequestTypes.Add(new CustomerRequestType

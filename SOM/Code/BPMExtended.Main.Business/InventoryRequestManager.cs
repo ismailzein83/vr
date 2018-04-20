@@ -5,7 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using BPMExtended.Main.Common;
 using BPMExtended.Main.Entities;
+using SOM.Main.BP.Arguments;
 using SOM.Main.Entities;
+using Vanrise.Common;
 
 namespace BPMExtended.Main.Business
 {
@@ -43,18 +45,35 @@ namespace BPMExtended.Main.Business
                 SwitchOMC = item.SwitchOMC,
                 Transmitter = item.Transmitter,
                 TransmitterPort = item.TransmitterPort,
-                VerticalMDF = item.VerticalMDF
+                VerticalMDF = item.VerticalMDF,
+                DPPortId = item.DPPortId,
+                DPId = item.DPId
 
             };
+        }
+
+        public List<DPPortItemDetail> GetFreePorts(string dpPortId)
+        {
+            List<DPPortItem> apiResult;
+            using (SOMClient client = new SOMClient())
+            {
+                apiResult = client.Get<List<DPPortItem>>(String.Format("api/SOM_Main/Inventory/GetFreePorts?dpPortId={0}", dpPortId));
+            }
+
+            return apiResult == null ? null : apiResult.MapRecords(r => new DPPortItemDetail
+            {
+                Id = r.Id,
+                Name = r.Name
+            }).ToList();
         }
 
         public List<PhoneNumberDetail> GetAvailablePhoneNumbers(string cabinetPort, string dpPort, bool isGold, bool isISDN, string startsWith)
         {
             List<PhoneNumberDetail> result = new List<PhoneNumberDetail>();
-            List<PhoneNumber> phoneNumbers;
+            List<PhoneNumberItem> phoneNumbers;
             using (SOMClient client = new SOMClient())
             {
-                phoneNumbers = client.Get<List<PhoneNumber>>(String.Format("api/SOM_Main/Inventory/GetAvailableNumbers?cabinetPort={0}&dpPort={1}&isGold={2}&isISDN={3}&startsWith={4}", cabinetPort, dpPort, isGold, isISDN, startsWith));
+                phoneNumbers = client.Get<List<PhoneNumberItem>>(String.Format("api/SOM_Main/Inventory/GetAvailableNumbers?cabinetPort={0}&dpPort={1}&isGold={2}&isISDN={3}&startsWith={4}", cabinetPort, dpPort, isGold, isISDN, startsWith));
             }
 
             if (phoneNumbers != null)
@@ -72,6 +91,31 @@ namespace BPMExtended.Main.Business
             return result;
         }
 
+        public List<PhoneNumberDetail> GetAvailablePhoneNumbers(string switchId, string category, string type, int top)
+        {
+            List<PhoneNumberDetail> result = new List<PhoneNumberDetail>();
+            List<PhoneNumberItem> phoneNumbers;
+            using (SOMClient client = new SOMClient())
+            {
+                phoneNumbers = client.Get<List<PhoneNumberItem>>(String.Format("api/SOM_Main/Inventory/GetAvailableNumbers?switchId={0}&category={1}&type={2}&top={3}", switchId, category, type, top));
+            }
+
+            if (phoneNumbers != null)
+            {
+                foreach (var phoneNumber in phoneNumbers)
+                {
+                    result.Add(new PhoneNumberDetail
+                    {
+                        IsGold = phoneNumber.IsGold,
+                        IsISDN = phoneNumber.IsISDN,
+                        Number = phoneNumber.Number,
+                        Id = phoneNumber.Id
+                    });
+                }
+            }
+            return result;
+        }
+
         public ReserveLineRequestOutput ReservePhoneNumber(CustomerObjectType customerObjectType, Guid accountOrContactId, ReserveLineRequestInput reserveLineInput)
         {
             ReserveLineRequestOutput output = null;
@@ -81,6 +125,37 @@ namespace BPMExtended.Main.Business
                 output = client.Post<ReserveLineRequestInput, ReserveLineRequestOutput>("api/SOM_Main/Inventory/ReservePhoneNumber", reserveLineInput);
             }
             return output;
+        }
+
+        public CreateCustomerRequestOutput InitiateTelephonyLineSubscriptionRequest(CustomerObjectType customerObjectType, Guid accountOrContactId, TelephonyLineSubscriptionSomRequestSetting telephonyLineSubscriptionSomRequestSetting)
+        {
+            string title = string.Format("Telephony Line Subscription '{0}'", telephonyLineSubscriptionSomRequestSetting.PhoneNumber);
+
+            return Helper.CreateSOMRequest(customerObjectType, accountOrContactId, title, telephonyLineSubscriptionSomRequestSetting);
+        }
+
+        public string TestPhoneLine(string phoneNumber)
+        {
+            string result = null;
+
+            using (SOMClient client = new SOMClient())
+            {
+                result = client.Get<string>(String.Format("api/SOM_Main/Inventory/TestPhoneLine?phoneNumber={0}", phoneNumber));
+            }
+
+            return result;
+        }
+
+        public string GetTelephonyStatusDetails(string phoneNumber)
+        {
+            string result = null;
+
+            using (SOMClient client = new SOMClient())
+            {
+                result = client.Get<string>(String.Format("api/SOM_Main/Inventory/GetTelephonyStatusDetails?phoneNumber={0}", phoneNumber));
+            }
+
+            return result;
         }
     }
 }
