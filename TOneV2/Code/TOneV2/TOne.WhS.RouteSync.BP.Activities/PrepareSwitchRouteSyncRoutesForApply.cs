@@ -61,7 +61,8 @@ namespace TOne.WhS.RouteSync.BP.Activities
                             ConvertedRoutes = convertedRouteBatch.ConvertedRoutes,
                             RouteRangeType = inputArgument.RangeType,
                             RouteRangeInfo = inputArgument.RangeInfo,
-                            InitializationData = switchInProcess.InitializationData
+                            InitializationData = switchInProcess.InitializationData,
+							SwitchId = inputArgument.SwitchInProcess.Switch.SwitchId
                         };
                         Object preparedItemsForDBApply = switchInProcess.Switch.RouteSynchronizer.PrepareDataForApply(switchRouteSynchronizerPrepareDataForApplyContext);
                         inputArgument.SwitchInProcess.PreparedRoutesForApplyQueue.Enqueue(preparedItemsForDBApply);
@@ -100,7 +101,9 @@ namespace TOne.WhS.RouteSync.BP.Activities
             public SwitchRouteSyncInitializationData InitializationData { get; set; }
 
             public List<ConvertedRoute> ConvertedRoutes { get; set; }
-        }
+
+			public string SwitchId { get; set; }
+		}
 
         #endregion
     }

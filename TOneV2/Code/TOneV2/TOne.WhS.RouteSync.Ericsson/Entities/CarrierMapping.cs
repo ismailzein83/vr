@@ -6,30 +6,43 @@ using System.Threading.Tasks;
 
 namespace TOne.WhS.RouteSync.Ericsson
 {
-    public class CarrierMapping
-    {
-        public int CarrierId { get; set; }
+	public class CarrierMapping
+	{
+		public int CarrierId { get; set; }
 
-        public CustomerMapping CustomerMapping { get; set; }
+		public CustomerMapping CustomerMapping { get; set; }
 
-        public SupplierMapping SupplierMapping { get; set; }
-    }
+		public SupplierMapping SupplierMapping { get; set; }
+	}
 
-    public class CustomerMapping
-    {
-        public string BO { get; set; }
+	public class CustomerMapping
+	{
+		public string BO { get; set; }
 
-        public string NationalOBA { get; set; }
+		public string NationalOBA { get; set; }
 
-        public string InternationalOBA { get; set; }
+		public string InternationalOBA { get; set; }
 
-        public List<InTrunk> InTrunks { get; set; }
-    }
+		public List<InTrunk> InTrunks { get; set; }
+	}
 
-    public class SupplierMapping
-    {
-        public List<OutTrunk> OutTrunks { get; set; }
+	public class SupplierMapping
+	{
+		public List<OutTrunk> OutTrunks { get; set; }
 
-        public List<TrunkGroup> TrunkGroups { get; set; }
-    }
+		public List<TrunkGroup> TrunkGroups { get; set; }
+	}
+
+	public class CustomerMappingSerialized
+	{
+		public string BO { get; set; }
+
+		public string CustomerMappingAsString { get; set; }
+	}
+
+	public class CustomerMappingByCompare
+	{
+		public CustomerMappingSerialized CustomerMapping { get; set; }
+		public string TableName { get; set; }
+	}
 }

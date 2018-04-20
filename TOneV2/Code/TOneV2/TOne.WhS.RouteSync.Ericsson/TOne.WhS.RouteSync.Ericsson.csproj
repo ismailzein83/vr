@@ -65,6 +65,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Business\CustomerMappingManager.cs" />
     <Compile Include="Business\RouteCaseManager.cs" />
     <Compile Include="Data\ICustomerMappingDataManager.cs" />
     <Compile Include="Data\IWhSRouteSyncEricssonDataManager.cs" />
@@ -73,6 +74,8 @@
     <Compile Include="Data\IRouteCaseDataManager.cs" />
     <Compile Include="Data\IRouteDataManager.cs" />
     <Compile Include="Entities\CarrierMapping.cs" />
+    <Compile Include="Entities\EricssonCommands.cs" />
+    <Compile Include="Entities\Context\CustomerMappingContext.cs" />
     <Compile Include="Entities\Enums.cs" />
     <Compile Include="Entities\IncomingTrafficSupplier.cs" />
     <Compile Include="Entities\LocalSupplierMapping.cs" />

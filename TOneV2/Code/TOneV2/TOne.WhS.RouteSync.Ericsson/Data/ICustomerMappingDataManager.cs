@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Data;
 
 namespace TOne.WhS.RouteSync.Ericsson.Data
 {
-	public interface ICustomerMappingDataManager : IDataManager, IBulkApplyDataManager<CustomerMapping>
+	public interface ICustomerMappingDataManager : IDataManager, IBulkApplyDataManager<CustomerMappingSerialized>
 	{
-		
+		string SwitchId { get; set; }
+		void ApplyCustomerMappingForDB(object preparedCustomerMapping);
+		void Initialize(ICustomerMappingInitializeContext context);
+		/*Dictionary<string, List<CustomerMappingByCompare>> GetCustomerMappingDifferences();*/
+		void CompareTables(ICustomerMappingTablesContext context);
 	}
 }

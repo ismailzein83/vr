@@ -106,5 +106,43 @@ namespace TOne.WhS.RouteSync.Ericsson
 
             return routeCaseOption;
         }
-    }
+
+		public static TrunkGroup GetMatchedTrunkGroup(IEnumerable<TrunkGroup> trunkGroups, string code)
+		{
+			if (trunkGroups == null || !trunkGroups.Any() || string.IsNullOrEmpty(code))
+				return null;
+			int maxMatchLength = 0;
+			TrunkGroup matchedTrunkGroup = null;
+
+			foreach (var trunkGroup in trunkGroups)
+			{
+				if (trunkGroup.CodeGroupTrunkGroups == null || trunkGroup.CodeGroupTrunkGroups.Count == 0)
+					throw new Exception();
+				foreach (var codeGroup in trunkGroup.CodeGroupTrunkGroups)
+				{
+					if (codeGroup.CodeGroup.Length <= maxMatchLength)
+						continue;
+					var matchLength = GetCodeGroupAndCodeMatchLength(codeGroup.CodeGroup, code);
+					if (matchLength > maxMatchLength)
+					{
+						maxMatchLength = matchLength;
+						matchedTrunkGroup = trunkGroup;
+					}
+				}
+			}
+			return matchedTrunkGroup;
+		}
+
+		public static int GetCodeGroupAndCodeMatchLength(string codeGroup, string code)
+		{
+			int matchLength = 0;
+			for (int i = 0; i < codeGroup.Length && i < code.Length; i++)
+			{
+				if (codeGroup.ElementAt(i) == code.ElementAt(i))
+					matchLength++;
+				else break;
+			}
+			return matchLength;
+		}
+	}
 }

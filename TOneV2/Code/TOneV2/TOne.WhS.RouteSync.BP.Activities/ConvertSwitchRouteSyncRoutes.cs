@@ -67,7 +67,8 @@ namespace TOne.WhS.RouteSync.BP.Activities
                             Routes = routeBatch.Routes,
                             RouteRangeType = inputArgument.RangeType,
                             RouteRangeInfo = inputArgument.RangeInfo,
-                            InitializationData = switchInProcess.InitializationData
+                            InitializationData = switchInProcess.InitializationData,
+							SwitchId = inputArgument.SwitchInProcess.Switch.SwitchId
                         };
                         switchInProcess.Switch.RouteSynchronizer.ConvertRoutes(switchRouteSynchronizerConvertRoutesContext);
 

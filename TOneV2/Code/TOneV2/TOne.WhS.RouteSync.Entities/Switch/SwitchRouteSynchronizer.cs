@@ -96,7 +96,9 @@ namespace TOne.WhS.RouteSync.Entities
         SwitchRouteSyncInitializationData InitializationData { get; }
 
         List<ConvertedRoute> ConvertedRoutes { get; }
-    }
+
+		string SwitchId { get; }
+	}
 
     public interface ISwitchRouteSynchronizerApplyRoutesContext
     {
@@ -126,6 +128,8 @@ namespace TOne.WhS.RouteSync.Entities
         List<Route> Routes { get; }
 
         List<ConvertedRoute> ConvertedRoutes { set; }
+
+		string SwitchId { get; }
     }
     public class SwitchRouteSynchronizerConvertRoutesContext : ISwitchRouteSynchronizerConvertRoutesContext
     {
@@ -138,7 +142,9 @@ namespace TOne.WhS.RouteSync.Entities
         public List<Route> Routes { get; set; }
 
         public List<ConvertedRoute> ConvertedRoutes { get; set; }
-    }
+
+		public string SwitchId { get; set; }
+	}
 
     public interface ISwitchRouteSynchronizerApplyDifferentialRoutesContext
     {
