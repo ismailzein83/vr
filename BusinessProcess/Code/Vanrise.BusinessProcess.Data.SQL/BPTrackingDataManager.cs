@@ -137,7 +137,7 @@ namespace Vanrise.BusinessProcess.Data.SQL
             string severityIdsAsString = null;
             if (severities != null && severities.Count() > 0)
                 severityIdsAsString = string.Join<int>(",", severities.Select(n => ((int)n)));
-            return GetItemsSP("[bp].[sp_BPTrackings_GetBPInstanceRecent]", BPTrackingMapper, bpInstanceId, nbOfRecords, lessThanId, severityIdsAsString);
+            return GetItemsSP("[bp].[sp_BPTrackings_GetBeforeID]", BPTrackingMapper, lessThanId, nbOfRecords, bpInstanceId, severityIdsAsString);
         }
 
         #endregion
