@@ -40,17 +40,17 @@ namespace Mediation.Runtime.Tasks
             BPRegulatorRuntimeService bpRegulatorRuntimeService = new BPRegulatorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
             runtimeServices.Add(bpRegulatorRuntimeService);
 
-            CachingRuntimeService cachingRuntimeService = new CachingRuntimeService { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(cachingRuntimeService);
+            //CachingRuntimeService cachingRuntimeService = new CachingRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(cachingRuntimeService);
 
-            CachingDistributorRuntimeService cachingDistributorRuntimeService = new CachingDistributorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(cachingDistributorRuntimeService);
+            //CachingDistributorRuntimeService cachingDistributorRuntimeService = new CachingDistributorRuntimeService { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(cachingDistributorRuntimeService);
 
-            DataGroupingExecutorRuntimeService dataGroupingExecutorRuntimeService = new Vanrise.Common.Business.DataGroupingExecutorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(dataGroupingExecutorRuntimeService);
+            //DataGroupingExecutorRuntimeService dataGroupingExecutorRuntimeService = new Vanrise.Common.Business.DataGroupingExecutorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(dataGroupingExecutorRuntimeService);
 
-            DataGroupingDistributorRuntimeService dataGroupingDistributorRuntimeService = new Vanrise.Common.Business.DataGroupingDistributorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
-            runtimeServices.Add(dataGroupingDistributorRuntimeService);
+            //DataGroupingDistributorRuntimeService dataGroupingDistributorRuntimeService = new Vanrise.Common.Business.DataGroupingDistributorRuntimeService() { Interval = new TimeSpan(0, 0, 2) };
+            //runtimeServices.Add(dataGroupingDistributorRuntimeService);
 
             RuntimeHost host = new RuntimeHost(runtimeServices);
             host.Start();

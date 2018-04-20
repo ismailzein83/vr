@@ -502,6 +502,10 @@ namespace Mediation.Runtime
                             if (!string.IsNullOrWhiteSpace(incomingRoute))
                                 cdr.IncomingRoute = incomingRoute.Trim();
 
+                            string routeId = cdrAsString.Substring(111, 4);
+                            if (!string.IsNullOrWhiteSpace(routeId))
+                                cdr.RouteId = routeId.Trim();
+
                             cdrs.Add(cdr);
                             break;
                     }
