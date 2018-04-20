@@ -33,7 +33,7 @@
                 $scope.scopeModel.onGridReady = function (api) {
                     gridAPI = api;
                     gridReadyDeferred.resolve();
-                }
+                };
 
                 $scope.scopeModel.validate = function () {
                     var oneItemIsSelectedAndActive = false;
@@ -48,7 +48,7 @@
                         return 'At least one item should be activated';
 
                     return;
-                }
+                };
 
                 gridReadyDeferred.promise.then(function () {
                     defineAPI();
@@ -133,7 +133,7 @@
                         }
                     }
                     return result;
-                }
+                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
@@ -150,7 +150,7 @@
                         var setLoader = function (value) { switchCommunication.isLoading = value; };
                         VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, switchCommunication.api, undefined, setLoader);
                     }
-                }
+                };
 
                 switchCommunication.readyDeferred.promise.then(function () {
                     if (switchCommunication.loadDeferred != undefined) {
