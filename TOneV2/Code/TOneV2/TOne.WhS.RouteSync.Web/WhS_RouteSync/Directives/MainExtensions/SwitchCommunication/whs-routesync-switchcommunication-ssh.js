@@ -32,7 +32,7 @@
                 $scope.scopeModel.onSSHCommunicatorSettingsReady = function (api) {
                     sshCommunicatorSettingsReadyAPI = api;
                     sshCommunicatorSettingsReadyDeferred.resolve();
-                }
+                };
                 defineAPI();
             }
 
@@ -74,7 +74,7 @@
                         SSHCommunicatorSettings: sshCommunicatorSettingsReadyAPI.getData()
                     };
                     return data;
-                }
+                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);

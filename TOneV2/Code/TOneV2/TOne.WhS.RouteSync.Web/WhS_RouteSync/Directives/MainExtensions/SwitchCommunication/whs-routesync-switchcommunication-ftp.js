@@ -32,7 +32,7 @@
                 $scope.scopeModel.onFTPCommunicatorSettingsReady = function (api) {
                     ftpCommunicatorSettingsReadyAPI = api;
                     ftpCommunicatorSettingsReadyDeferred.resolve();
-                }
+                };
                 defineAPI();
             }
 
@@ -74,7 +74,7 @@
                         FTPCommunicatorSettings: ftpCommunicatorSettingsReadyAPI.getData()
                     };
                     return data;
-                }
+                };
 
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
                     ctrl.onReady(api);
