@@ -18,6 +18,12 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
             var ctrl = this;
             ctrl.datasource = [];
 
+            ctrl.label = "Country";
+            if ($attrs.ismultipleselection != undefined) {
+                ctrl.label = "Countries";
+            }
+
+
             ctrl.selectedvalues;
             if ($attrs.ismultipleselection != undefined)
                 ctrl.selectedvalues = [];
@@ -58,11 +64,10 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
     function getCountryTemplate(attrs) {
 
         var multipleselection = "";
-        var label = "Country";
         if (attrs.ismultipleselection != undefined) {
-            label = "Countries";
             multipleselection = "ismultipleselection";
         }
+    
 
         var addCliked = '';
         if (attrs.showaddbutton != undefined)
@@ -71,7 +76,7 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
         var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : undefined;
 
         return '<vr-columns colnum="{{ctrl.normalColNum}}"    ><vr-select  on-ready="scopeModel.onSelectorReady" ' + multipleselection + '  datatextfield="Name" datavaluefield="CountryId" isrequired="ctrl.isrequired"'
-            + ' label="' + label + '" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Country" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"' + hideremoveicon + '>'
+            + ' label="{{ctrl.label}}" ' + addCliked + ' datasource="ctrl.datasource" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="Country" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission"' + hideremoveicon + '>'
                
             +'</vr-select></vr-columns>';
     }
@@ -95,13 +100,17 @@ app.directive('vrCommonCountrySelector', ['VRCommon_CountryAPIService', 'VRCommo
             var api = {};
 
             api.load = function (payload) {
-
             	selectorAPI.clearDataSource();
 
             	var selectedIds;
             	var filter;
 
-                if (payload != undefined) {
+            	if (payload != undefined) {
+
+            	    if (payload.fieldTitle != undefined) {
+            	        ctrl.label = payload.fieldTitle;
+            	    }
+
                 	selectedIds = payload.selectedIds;
                 	filter = payload.filter;
                 }

@@ -25,5 +25,14 @@ namespace Vanrise.NumberingPlan.Business
 
             return distinctCodes;
         }
+
+        public static bool IsSaleZoneNational(long zoneId)
+        {
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
+            int countryId = saleZoneManager.GetSaleZoneCountryId(zoneId);
+
+            Vanrise.Common.Business.ConfigManager commonConfigManager = new Common.Business.ConfigManager();
+            return commonConfigManager.IsCountryNational(countryId);
+        }
     }
 }

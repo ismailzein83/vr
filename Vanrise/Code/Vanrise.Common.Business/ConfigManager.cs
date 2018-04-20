@@ -10,6 +10,20 @@ namespace Vanrise.Common.Business
     public class ConfigManager
     {
         #region Public Methods
+
+        public bool IsCountryNational(int countryId)
+        {
+            SettingManager settingManager = new SettingManager();
+            NationalSettings nationalSettings = settingManager.GetSetting<NationalSettings>(NationalSettings.SETTING_TYPE);
+
+            nationalSettings.ThrowIfNull("National Settings");
+
+            if (nationalSettings.NationalCountries == null || nationalSettings.NationalCountries.Count == 0)
+                throw new VRBusinessException("You need to choose at least one national country in National Settings");
+
+            return nationalSettings.NationalCountries.Contains(countryId);
+        }
+
         public int GetSystemCurrencyId()
         {
             SettingManager settingManager = new SettingManager();
