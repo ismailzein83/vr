@@ -45,10 +45,17 @@ namespace Retail.BusinessEntity.Entities
 
         public AccountBEDefinitionSecurity Security { get; set; }
 
+        public List<AccountBEClassification> Classifications { get; set; }
         public override Vanrise.Entities.VRLoggableEntityBase GetLoggableEntity(Vanrise.GenericData.Entities.IBusinessEntityDefinitionSettingsGetLoggableEntityContext context)
         {
             return BEManagerFactory.GetManager<IAccountBEManager>().GetAccountLoggableEntity(context.BEDefinition.BusinessEntityDefinitionId);
         }
+    }
+
+    public class AccountBEClassification
+    {
+        public string Title { get; set; }
+        public string Name { get; set; }
     }
     public class AccountBulkAction
     {
