@@ -23,7 +23,13 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFieldFormulas
             DataRecordFields.FieldBusinessEntityType childBEFieldType;
             GetFieldTypes(context, out currentBEFieldType, out childBEFieldType);
             BusinessEntityManager beManager = new BusinessEntityManager();
-            return beManager.GetParentEntityId(childBEFieldType.BusinessEntityDefinitionId, currentBEFieldType.BusinessEntityDefinitionId, context.GetFieldValue(this.ChildFieldName));
+            
+            dynamic entityId = context.GetFieldValue(this.ChildFieldName);
+            
+            if (entityId == null)
+                return null;
+
+            return beManager.GetParentEntityId(childBEFieldType.BusinessEntityDefinitionId, currentBEFieldType.BusinessEntityDefinitionId, entityId);
         }
 
         public override RecordFilter ConvertFilter(IDataRecordFieldFormulaConvertFilterContext context)
