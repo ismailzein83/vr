@@ -21,10 +21,12 @@
     [OriginForCharging]        VARCHAR (5)      NULL,
     [OutgoingRoute]            VARCHAR (20)     NULL,
     [IncomingRoute]            VARCHAR (20)     NULL,
-    [Reserved]                 VARCHAR (10)     NULL,
+    [Route_Id]                 VARCHAR (4)      NULL,
     [ExtraFields]              VARCHAR (MAX)    NULL,
     [FileName]                 VARCHAR (255)    NULL,
     [DataSourceId]             UNIQUEIDENTIFIER NULL);
+
+
 
 
 
