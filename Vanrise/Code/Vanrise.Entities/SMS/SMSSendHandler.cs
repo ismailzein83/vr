@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
+
+    public class SMSSettingData : SettingData
+    {
+        public SMSSendHandler SMSSendHandler { get; set; }
+    }
     public class SMSSendHandler
     {
         public SMSSendHandlerSettings Settings { get; set; }
