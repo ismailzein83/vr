@@ -21,6 +21,8 @@
 
         var countrySelectedPromiseDeferred;
 
+//        var context;
+
         loadParameters();
         defineScope();
         load();
@@ -30,6 +32,7 @@
             if (parameters != undefined && parameters != null) {
                 sellingNumberPlanId = parameters.sellingNumberPlanId;
                 swapDealInboundEntity = parameters.swapDealInbound;
+             //   context = parameters.context;
             }
 
             isEditMode = (swapDealInboundEntity != undefined);
