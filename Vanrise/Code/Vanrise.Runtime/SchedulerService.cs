@@ -18,6 +18,8 @@ namespace Vanrise.Runtime
         SchedulerTaskManager _scheduleTaskManager = new SchedulerTaskManager();
         IUserManager _userManager = Vanrise.Security.Entities.BEManagerFactory.GetManager<IUserManager>();
 
+        public override Guid ConfigId { get { return new Guid("2BB63679-43F1-4859-A883-5CA48009A8D1"); } }
+
         static int s_maxConcurrentTasks;
 
         static SchedulerService()

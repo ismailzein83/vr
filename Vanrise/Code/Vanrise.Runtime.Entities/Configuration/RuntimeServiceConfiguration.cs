@@ -8,6 +8,7 @@ namespace Vanrise.Runtime.Entities
 {
     public class RuntimeServiceConfiguration
     {
+        public Guid RuntimeServiceConfigurationId { get; set; }
         public string Name { get; set; }
 
         public RuntimeServiceConfigurationSettings Settings { get; set; }

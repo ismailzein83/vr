@@ -89,6 +89,8 @@ namespace Vanrise.Common.Business
         {
             DataGroupingExecutor.Current.ProcessItems();
         }
+
+        public override Guid ConfigId { get { return new Guid("7B035997-0941-48F1-B37D-F14A039DDB3E"); } }
     }
 
     internal class DataGroupingExecutorServiceInstanceInfo : Vanrise.Runtime.Entities.ServiceInstanceInfo

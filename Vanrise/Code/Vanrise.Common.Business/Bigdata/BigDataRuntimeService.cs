@@ -23,6 +23,8 @@ namespace Vanrise.Common.Business
         DateTime _deleteTimedOutServicesLastTime;
         string _serviceUrl;
 
+        public override Guid ConfigId { get { return new Guid("6B58776E-B72C-4852-A5A8-B1631A8873F1"); } }
+
         public BigDataRuntimeService()
         {
             

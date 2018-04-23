@@ -17,12 +17,31 @@ namespace Vanrise.Runtime.Data.SQL
         {
 
         }
-
         #region Public Methods
 
         public List<RuntimeNodeConfiguration> GetAllNodeConfigurations()
         {
             return GetItemsSP("[runtime].[sp_RuntimeNodeConfiguration_GetAll]", RuntimeNodeConfigurationMapper);
+        }
+
+        public bool Insert(RuntimeNodeConfiguration nodeConfig)
+        {
+
+            string serializedSetting = nodeConfig.Settings != null ? Vanrise.Common.Serializer.Serialize(nodeConfig.Settings) : null;
+            int nbOfRecordsAffected = ExecuteNonQuerySP("[runtime].[sp_RuntimeNodeConfiguration_Insert]", nodeConfig.RuntimeNodeConfigurationId, nodeConfig.Name, serializedSetting);
+            return (nbOfRecordsAffected > 0);
+        }
+
+        public bool Update(RuntimeNodeConfiguration nodeConfig)
+        {
+            string serializedSetting = nodeConfig.Settings != null ? Vanrise.Common.Serializer.Serialize(nodeConfig.Settings) : null;
+            int nbOfRecordsAffected = ExecuteNonQuerySP("[runtime].[sp_RuntimeNodeConfiguration_Update]", nodeConfig.RuntimeNodeConfigurationId, nodeConfig.Name, serializedSetting);
+            return (nbOfRecordsAffected > 0);
+        }
+
+        public bool AreRuntimeNodeConfigurationUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("[runtime].[RuntimeNodeConfiguration]", ref updateHandle);
         }
 
         #endregion
@@ -31,15 +50,13 @@ namespace Vanrise.Runtime.Data.SQL
 
         private RuntimeNodeConfiguration RuntimeNodeConfigurationMapper(IDataReader reader)
         {
-            var runtimeNodeConfiguration = new RuntimeNodeConfiguration
+            return new RuntimeNodeConfiguration
             {
+                Name = reader["Name"] as string,
                 RuntimeNodeConfigurationId = (Guid)reader["ID"],
-                Name = reader["Name"] as string
+                Settings = Serializer.Deserialize<RuntimeNodeConfigurationSettings>(reader["Settings"] as string);
+ 
             };
-            string serializedSettings = reader["Settings"] as string;
-            if (serializedSettings != null)
-                runtimeNodeConfiguration.Settings = Serializer.Deserialize<RuntimeNodeConfigurationSettings>(serializedSettings);
-            return runtimeNodeConfiguration;
         }
 
         #endregion

@@ -7,10 +7,11 @@ using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
+using Vanrise.Runtime.Entities;
 
 namespace Vanrise.Common.Business
 {
-    public class ExtensionConfigurationManager
+    public class ExtensionConfigurationManager : IExtensionConfigurationManager
     {
         #region Private Methods
         public Dictionary<Guid, T> GetExtensionConfigurationsByType<T>(string type) where T : ExtensionConfiguration

@@ -1,0 +1,23 @@
+﻿<div>
+    <vr-row removeline>
+        <vr-columns width="fullrow" simplecol>
+            <vr-button type="Add" data-onclick="ctrl.onAddRuntimeNodeConfiguration" standalone></vr-button>
+        </vr-columns>
+    </vr-row>
+    <vr-row>
+        <vr-columns width="fullrow" >
+            <vr-validator validate="ctrl.isValid()">
+                <vr-datagrid on-ready="ctrl.onGridReady"
+                             datasource="ctrl.datasource"
+                             menuactions="ctrl.gridMenuActions"
+                             ondeleterow="ctrl.onRemoveRuntimeNodeConfiguration"
+                             isrequired="true"
+                             hidegridmenu>
+                    <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'" widthfactor="5" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Number Of Instances'" field="'Entity.Settings.NbOfInstances'" widthfactor="5" disablesorting></vr-datagridcolumn>
+                    <vr-datagridcolumn headertext="'Enabled'" field="'Entity.Settings.IsEnabled'" widthfactor="5" disablesorting></vr-datagridcolumn>
+                </vr-datagrid>
+            </vr-validator>
+</vr-columns>
+    </vr-row>
+</div>

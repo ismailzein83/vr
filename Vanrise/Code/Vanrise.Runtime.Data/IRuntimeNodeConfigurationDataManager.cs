@@ -10,5 +10,8 @@ namespace Vanrise.Runtime.Data
     public interface IRuntimeNodeConfigurationDataManager : IDataManager
     {
         List<RuntimeNodeConfiguration> GetAllNodeConfigurations();
+        bool Insert(RuntimeNodeConfiguration runtimeNodeConfiguration);
+        bool Update(RuntimeNodeConfiguration runtimeNodeConfiguration);
+        bool AreRuntimeNodeConfigurationUpdated(ref object updateHandle);
     }
 }

@@ -47,5 +47,10 @@ namespace Vanrise.Caching.Runtime
                 }
             }
         }
+
+        public override Guid ConfigId
+        {
+            get { return new Guid("36B8C9C3-32D6-4232-859E-DBCC7E7E2B66"); }
+        }
     }
 }

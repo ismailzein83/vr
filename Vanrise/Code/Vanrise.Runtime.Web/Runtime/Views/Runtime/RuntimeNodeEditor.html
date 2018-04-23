@@ -1,0 +1,25 @@
+﻿<div vr-modalcontent ng-controller="VRRuntime_RuntimeNodeEditorController" vr-loader="isLoading">
+    <vr-modalbody>
+        <vr-form name="formRuntimeNodeEditor">
+
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox label="Name" value="scopeModel.name" isrequired></vr-textbox>
+                        </vr-columns>
+
+                        <vr-columns width="1/2row">
+                            <vr-label>Here We should have a selector with runtimenodeconfiguration data</vr-label>
+                        </vr-columns>
+                    </vr-row>
+
+        </vr-form>
+    </vr-modalbody>
+    <div>
+            <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+                <div transclude-to="buttons">
+                      <vr-button type="Save" formname="formRuntimeNodeEditor" data-onclick="saveRuntimeNode"></vr-button>
+                      <vr-button type="Close" data-onclick="close"></vr-button>
+                </div>
+            </vr-actionbar>
+    </div>
+</div>

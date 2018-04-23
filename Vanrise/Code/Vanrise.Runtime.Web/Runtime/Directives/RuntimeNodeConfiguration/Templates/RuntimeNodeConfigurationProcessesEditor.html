@@ -1,0 +1,38 @@
+﻿<div vr-modalcontent ng-controller="VRRuntime_RuntimeNodeConfigurationProcessesEditorController" vr-loader="isLoading">
+    <vr-modalbody>
+        <vr-form name="formRuntimeNodeConfigurationProcessesEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.Name" label="Name" localizedlabel="VRRes.Name.VREnd" isrequired></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-switch value="scopeModel.IsEnabled" label="Enabled" localizedlabel="VRRes.IsEnabled.VREnd"></vr-switch>
+                        </vr-columns>
+                        <vr-columns width="1/2row">
+                            <vr-textbox value="scopeModel.NbOfInstances" label="Number of Instances" type="number" decimalprecision="0" minvalue="0" localizedlabel="VRRes.NbOfInstances.VREnd" isrequired></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Settings'">
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-runtime-runtimenodeconfiguration-services on-ready="scopeModel.onServicesEditorReady"></vr-runtime-runtimenodeconfiguration-services>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formRuntimeNodeConfigurationProcessesEditor" data-onclick="saveRuntimeNodeConfiguration"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>
+

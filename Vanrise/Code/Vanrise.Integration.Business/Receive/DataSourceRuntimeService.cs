@@ -328,5 +328,7 @@ namespace Vanrise.Integration.Business
 
             return classDefinitionBuilder.ToString();
         }
+
+        public override Guid ConfigId { get { return new Guid("BDD330B6-3557-4AFC-8C69-A23890DA82E7"); } }
     }
 }

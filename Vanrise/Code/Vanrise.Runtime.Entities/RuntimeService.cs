@@ -8,6 +8,7 @@ namespace Vanrise.Runtime.Entities
 {
     public abstract class RuntimeService : IDisposable
     {
+        public abstract Guid ConfigId { get; }
         public virtual string ServiceTypeUniqueName
         {
             get

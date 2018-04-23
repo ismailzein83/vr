@@ -25,6 +25,10 @@ namespace Vanrise.Runtime.Data.SQL
             return GetItemsSP("[runtime].[sp_RuntimeNode_GetAll]", RuntimeNodeMapper);
         }
 
+        public bool AreRuntimeNodeUpdated(ref object updateHandle)
+        {
+            return base.IsDataUpdated("[runtime].[RuntimeNode]", ref updateHandle);
+        }
         #endregion
 
         #region Private Methods
