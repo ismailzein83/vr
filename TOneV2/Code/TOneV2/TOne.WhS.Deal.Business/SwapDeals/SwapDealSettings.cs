@@ -284,12 +284,13 @@ namespace TOne.WhS.Deal.Business
             if (saleEvaluatedRate == null)
                 throw new NullReferenceException("DealSaleRateEvaluator");
 
+            var zoneIds = swapDealInbound.SaleZones.Select(z => z.ZoneId);
             var context = new DealSaleRateEvaluatorContext
             {
                 GetCustomerZoneRatesFunc = getCustomerZoneRatesFunc,
                 DealBED = BeginDate,
                 DealEED = EndDate,
-                ZoneIds = swapDealInbound.SaleZones.Select(z => z.ZoneId),
+                ZoneIds = zoneIds,
                 CurrencyId = CurrencyId
             };
             saleEvaluatedRate.EvaluateRate(context);
@@ -302,7 +303,62 @@ namespace TOne.WhS.Deal.Business
                 TierNumber = 1,
                 VolumeInSeconds = swapDealInbound.Volume * 60
             };
-            return new List<DealSaleZoneGroupTier> { dealSaleZoneGroupTier }.OrderBy(itm => itm.TierNumber);
+            List<DealSaleZoneGroupTier> dealSaleZoneGroupTiers = new List<DealSaleZoneGroupTier>
+            {
+                dealSaleZoneGroupTier,
+                BuilSaleExtraVolumeTier(swapDealInbound.ExtraVolumeEvaluatedRate, zoneIds, getCustomerZoneRatesFunc)
+            };
+            return dealSaleZoneGroupTiers.OrderBy(itm => itm.TierNumber);
+        }
+
+        private DealSaleZoneGroupTier BuilSaleExtraVolumeTier(BaseDealRateEvaluator extraVolumeEvaluatedRate, IEnumerable<long> zoneIds, Func<string, int, IEnumerable<SaleRateHistoryRecord>> getCustomerZoneRatesFunc)
+        {
+            var saleEvaluatedRate = extraVolumeEvaluatedRate as DealSaleRateEvaluator;
+
+            if (saleEvaluatedRate == null)
+                throw new NullReferenceException("DealSaleRateEvaluator");
+
+            var context = new DealSaleRateEvaluatorContext
+            {
+                GetCustomerZoneRatesFunc = getCustomerZoneRatesFunc,
+                DealBED = BeginDate,
+                DealEED = EndDate,
+                ZoneIds = zoneIds,
+                CurrencyId = CurrencyId
+            };
+            saleEvaluatedRate.EvaluateRate(context);
+
+            Dictionary<long, List<DealRate>> saleRatesByZoneId = Business.Helper.StructureDealRateByZoneId(context.SaleRates);
+
+            return new DealSaleZoneGroupTier
+            {
+                RatesByZoneId = saleRatesByZoneId,
+                TierNumber = 2
+            };
+        }
+        private DealSupplierZoneGroupTier BuilSupplierExtraVolumeTier(BaseDealRateEvaluator extraVolumeEvaluatedRate, List<long> zoneIds, Dictionary<long, SupplierRate> supplierRates)
+        {
+            var context = new DealSupplierRateEvaluatorContext
+            {
+                DealBED = BeginDate,
+                DealEED = EndDate,
+                ZoneIds = zoneIds,
+                SupplierZoneRateByZoneId = supplierRates,
+                CurrencyId = CurrencyId
+            };
+            var supplierEvaluatedRate = extraVolumeEvaluatedRate as DealSupplierRateEvaluator;
+
+            if (supplierEvaluatedRate == null)
+                throw new NullReferenceException("DealSupplierRateEvaluator");
+
+            supplierEvaluatedRate.EvaluateRate(context);
+            Dictionary<long, List<DealRate>> supplierDealRatesByZoneId = Helper.StructureDealRateByZoneId(context.SupplierRates);
+
+            return new DealSupplierZoneGroupTier
+            {
+                RatesByZoneId = supplierDealRatesByZoneId,
+                TierNumber = 2
+            };
         }
 
         private List<BaseDealSupplierZoneGroup> BuildSupplierZoneGroups(int dealId, bool evaluateRates)
@@ -374,7 +430,12 @@ namespace TOne.WhS.Deal.Business
                 TierNumber = 1,
                 VolumeInSeconds = swapDealOutbound.Volume * 60
             };
-            return new List<DealSupplierZoneGroupTier> { dealSupplierZoneGroupTier }.OrderBy(itm => itm.TierNumber);
+            List<DealSupplierZoneGroupTier> dealSupplierZoneGroupTiers = new List<DealSupplierZoneGroupTier>
+            {
+                dealSupplierZoneGroupTier,
+                BuilSupplierExtraVolumeTier(swapDealOutbound.ExtraVolumeEvaluatedRate, supplierZoneIds, supplierRates)
+            };
+            return dealSupplierZoneGroupTiers.OrderBy(itm => itm.TierNumber);
         }
         private IOrderedEnumerable<DealSupplierZoneGroupTierWithoutRate> BuildSupplierTiersWithoutRate(SwapDealOutbound swapDealOutbound)
         {

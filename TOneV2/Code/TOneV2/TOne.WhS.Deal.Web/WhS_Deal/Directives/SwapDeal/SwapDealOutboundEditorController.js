@@ -19,6 +19,10 @@
         var rateEvaluatorSelectiveDirectiveAPI;
         var rateEvaluatorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+        var extraVolumeRateEvaluatorSelectiveDirectiveAPI;
+        var extraVolumeRateEvaluatorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+
         var countrySelectedPromiseDeferred;
 
 
@@ -64,6 +68,10 @@
                 rateEvaluatorSelectiveDirectiveAPI = api;
                 rateEvaluatorReadyPromiseDeferred.resolve();
             };
+            $scope.scopeModel.onExtraVolumeRateEvaluatorSelectiveReady = function (api) {
+                extraVolumeRateEvaluatorSelectiveDirectiveAPI = api;
+                extraVolumeRateEvaluatorReadyPromiseDeferred.resolve();
+            };
 
             $scope.onCountrySelectionChanged = function () {
                 var country = countryDirectiveApi.getSelectedIds();
@@ -103,13 +111,29 @@
         }
 
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCountrySupplierZoneSection, loadRateEvaluatorSelectiveDirective]).then(function () {
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadCountrySupplierZoneSection, loadRateEvaluatorSelectiveDirective, loadExtraVolumeRateEvaluatorSelective]).then(function () {
                 swapDealOutboundEntity = undefined;
             }).catch(function (error) {
                 VRNotificationService.notifyExceptionWithClose(error, $scope);
             }).finally(function () {
                 $scope.scopeModel.isLoading = false;
             });
+        }
+
+        function loadExtraVolumeRateEvaluatorSelective() {
+            var extraVolumePromiseDeferred = UtilsService.createPromiseDeferred();
+
+            extraVolumeRateEvaluatorReadyPromiseDeferred.promise.then(function () {
+
+                var payload = undefined;
+                if (swapDealOutboundEntity != undefined && swapDealOutboundEntity.ExtraVolumeEvaluatedRate != undefined)
+                    payload =
+                    {
+                        evaluatedRate: swapDealOutboundEntity.ExtraVolumeEvaluatedRate
+                    };
+                VRUIUtilsService.callDirectiveLoad(extraVolumeRateEvaluatorSelectiveDirectiveAPI, payload, extraVolumePromiseDeferred);
+            });
+            return extraVolumePromiseDeferred.promise;
         }
 
         function loadRateEvaluatorSelectiveDirective() {
@@ -222,6 +246,7 @@
                 SupplierZones: supplierZones,
                 Volume: $scope.scopeModel.volume,
                 EvaluatedRate: rateEvaluatorSelectiveDirectiveAPI.getData(),
+                ExtraVolumeEvaluatedRate: extraVolumeRateEvaluatorSelectiveDirectiveAPI.getData(),
                 CountryId: countryDirectiveApi.getSelectedIds()
 
             };

@@ -1,28 +1,43 @@
 ﻿<div vr-modalcontent ng-controller="WhS_Deal_SwapDealOutboundEditorController" vr-loader="scopeModel.isLoading" width="'45%'">
     <vr-modalbody>
         <vr-form name="formEditor">
-            <vr-row>
-                <vr-columns width="1/3row">
-                    <vr-textbox label="Group Name" value="scopeModel.name" isrequired="true"></vr-textbox>
-                </vr-columns>
-                <vr-columns width="1/3row" haschildcolumns>
-                    <vr-common-country-selector on-ready="onCountryDirectiveReady" selectedvalues="country" isrequired="true" onselectionchanged="onCountrySelectionChanged"></vr-common-country-selector>
-                </vr-columns>
-                <span vr-loader="isLoadingSaleZonesSelector" vr-disabled="country == undefined">
-                    <vr-whs-be-supplierzone-selector normal-col-num="4" selectedvalues="supplierzones" ismultipleselection isrequired="true" on-ready="onSupplierZoneDirectiveReady" />
-                </span>
-                <vr-columns width="1/3row">
-                    <vr-textbox label="Volume" value="scopeModel.volume" type="number" isrequired="true"></vr-textbox>
-                </vr-columns>
-                <span vr-loader="scopeModel.isLoadingDirective">
-                    <vr-whs-deal-supplierrateevaluator-selective selectedvalues="scopeModel.selectedValue"
-                                                                 on-ready="scopeModel.onrateEvaluatorSelectiveReady"
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="1/3row">
+                            <vr-textbox label="Group Name" value="scopeModel.name" isrequired="true"></vr-textbox>
+                        </vr-columns>
+                        <vr-columns width="1/3row" haschildcolumns>
+                            <vr-common-country-selector on-ready="onCountryDirectiveReady" selectedvalues="country" isrequired="true" onselectionchanged="onCountrySelectionChanged"></vr-common-country-selector>
+                        </vr-columns>
+                        <span vr-loader="isLoadingSaleZonesSelector" vr-disabled="country == undefined">
+                            <vr-whs-be-supplierzone-selector normal-col-num="4" selectedvalues="supplierzones" ismultipleselection isrequired="true" on-ready="onSupplierZoneDirectiveReady" />
+                        </span>
+                        <vr-columns width="1/3row">
+                            <vr-textbox label="Volume" value="scopeModel.volume" type="number" isrequired="true"></vr-textbox>
+                        </vr-columns>
+                        <span vr-loader="scopeModel.isLoadingDirective">
+                            <vr-whs-deal-supplierrateevaluator-selective selectedvalues="scopeModel.selectedValue"
+                                                                         on-ready="scopeModel.onrateEvaluatorSelectiveReady"
+                                                                         normal-col-num="4"
+                                                                         isrequired="true"
+                                                                         hideremoveicon="true">
+                            </vr-whs-deal-supplierrateevaluator-selective>
+                        </span>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Advanced'">
+                    <span vr-loader="scopeModel.isLoadingDirective">
+                        <vr-whs-deal-salerateevaluator-selective selectedvalues="scopeModel.extraVolumeRateSelectedValue"
+                                                                 on-ready="scopeModel.onExtraVolumeRateEvaluatorSelectiveReady"
                                                                  normal-col-num="4"
                                                                  isrequired="true"
+                                                                 customlabel="Extra Volume Rate Evaluator"
                                                                  hideremoveicon="true">
-                    </vr-whs-deal-supplierrateevaluator-selective>
-                </span>            
-            </vr-row>
+                        </vr-whs-deal-salerateevaluator-selective>
+                    </span>
+                </vr-tab>
+            </vr-tabs>
         </vr-form>
     </vr-modalbody>
     <div>
