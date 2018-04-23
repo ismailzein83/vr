@@ -12,6 +12,7 @@ function (WhS_Deal_VolCommitmentDealAPIService, UtilsService, VRUIUtilsService) 
         },
         controller: function ($scope, $element, $attrs) {
             var selectiveCtrl = this;
+            selectiveCtrl.customLabel = $attrs.customlabel != undefined ? $attrs.customlabel  : "Rate Evaluator";
             var saleRateEvaluator = new SaleRateEvaluator(selectiveCtrl, $scope);
             saleRateEvaluator.initializeController();
         },

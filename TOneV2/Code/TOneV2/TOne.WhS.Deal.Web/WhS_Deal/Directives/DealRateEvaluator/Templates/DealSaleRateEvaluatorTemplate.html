@@ -1,6 +1,6 @@
-﻿<vr-columns  colnum="{{selectiveCtrl.normalColNum}}">
+﻿<vr-columns colnum="{{selectiveCtrl.normalColNum}}">
+    <vr-label>{{selectiveCtrl.customLabel}}</vr-label>
     <vr-select on-ready="selectiveCtrl.onSaleRateEvaluatorSelectorReady"
-               label="Rate Evaluator"
                entityname="Rate Evaluator"
                datasource="selectiveCtrl.templateConfigs"
                selectedvalues="selectiveCtrl.selectedTemplateConfig"
