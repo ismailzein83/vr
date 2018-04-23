@@ -67,7 +67,6 @@
     <Compile Include="RouteSyncDefinition\RouteSyncDefinitionQuery.cs" />
     <Compile Include="Settings\RouteSyncSettings.cs" />
     <Compile Include="Settings\RouteSyncTechnicalSettings.cs" />
-    <Compile Include="SwitchCommunication.cs" />
     <Compile Include="Switch\SwitchInfoGetter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteEntities\Route.cs" />

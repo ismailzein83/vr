@@ -36,6 +36,10 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\packages\Microsoft.AspNet.WebApi.Core.5.0.0\lib\net45\System.Web.Http.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -47,6 +51,10 @@
     <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Data">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
@@ -63,10 +71,18 @@
     <Reference Include="Vanrise.Runtime.Entities">
       <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Web.Base, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Vanrise\Code\Output\Vanrise.Web.Base.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Business\CustomerMappingManager.cs" />
     <Compile Include="Business\RouteCaseManager.cs" />
+    <Compile Include="Business\FTPLogger.cs" />
+    <Compile Include="Business\SwitchLoggerManager.cs" />
+    <Compile Include="Constants.cs" />
+    <Compile Include="Controller\EricssonSwitchLoggerController.cs" />
     <Compile Include="Data\ICustomerMappingDataManager.cs" />
     <Compile Include="Data\IWhSRouteSyncEricssonDataManager.cs" />
     <Compile Include="Data\RouteSyncEricssonDataManagerFactory.cs" />
@@ -77,12 +93,14 @@
     <Compile Include="Entities\EricssonCommands.cs" />
     <Compile Include="Entities\Context\CustomerMappingContext.cs" />
     <Compile Include="Entities\Enums.cs" />
+    <Compile Include="Entities\EricssonSSHCommunication.cs" />
     <Compile Include="Entities\IncomingTrafficSupplier.cs" />
     <Compile Include="Entities\LocalSupplierMapping.cs" />
     <Compile Include="Entities\OutgoingTrafficCustomer.cs" />
     <Compile Include="Entities\RouteCase.cs" />
     <Compile Include="Entities\Context\RouteCaseContext.cs" />
     <Compile Include="Entities\Context\RouteContext.cs" />
+    <Compile Include="Entities\SwitchLogger.cs" />
     <Compile Include="Entities\Trunk.cs" />
     <Compile Include="Entities\TrunkGroup.cs" />
     <Compile Include="Entities\EricssonConvertedRoute.cs" />

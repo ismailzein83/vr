@@ -72,7 +72,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RouteSyncDefinitionManager.cs" />
     <Compile Include="SwitchInfoGetterContext.cs" />
-    <Compile Include="SwitchCommunicationManager.cs" />
     <Compile Include="SwitchManager.cs" />
     <Compile Include="SwitchRouteSynchronizerManager.cs" />
   </ItemGroup>

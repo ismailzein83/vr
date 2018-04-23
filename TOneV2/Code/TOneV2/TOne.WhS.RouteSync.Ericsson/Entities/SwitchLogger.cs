@@ -5,18 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 
-namespace TOne.WhS.RouteSync.Entities
+namespace TOne.WhS.RouteSync.Ericsson.Entities
 {
-    public abstract class SwitchCommunication
+    public abstract class SwitchLogger
     {
         public abstract Guid ConfigId { get; }
-
         public bool IsActive { get; set; }
     }
 
-    public class SwitchCommunicationConfig : ExtensionConfiguration
+    public class SwitchLoggerConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "WhS_RouteSync_SwitchCommunication";
+        public const string EXTENSION_TYPE = "WhS_RouteSync_EricssonSwitchLogger";
 
         public string Editor { get; set; }
     }

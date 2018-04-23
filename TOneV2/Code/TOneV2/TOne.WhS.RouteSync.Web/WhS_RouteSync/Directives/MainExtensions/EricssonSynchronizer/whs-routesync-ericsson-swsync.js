@@ -2,9 +2,9 @@
 
     'use strict';
 
-    EricssonSWSync.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService', 'WhS_BE_CarrierAccountAPIService'];
+    EricssonSWSync.$inject = ["UtilsService", 'VRUIUtilsService'];
 
-    function EricssonSWSync(UtilsService, VRUIUtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService) {
+    function EricssonSWSync(UtilsService, VRUIUtilsService) {
         return {
             restrict: "E",
             scope: {
@@ -22,8 +22,6 @@
 
         function EricssonSWSyncronizerCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
-
-            var carrierMappings;
 
             var switchCommunicationAPI;
             var switchCommunicationReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -45,7 +43,7 @@
                 $scope.scopeModel = {};
                 $scope.scopeModel.localSuppliers = [];
 
-                $scope.scopeModel.onSwitchCommunicationReady = function (api) {
+                $scope.scopeModel.onEricssonSwitchCommunicationReady = function (api) {
                     switchCommunicationAPI = api;
                     switchCommunicationReadyPromiseDeferred.resolve();
                 };
@@ -110,7 +108,8 @@
                     var incomingTrafficSuppliers;
                     var localSupplierMappings;
                     var carrierMappings;
-                    var switchCommunicationList;
+                    var sshCommunicationList;
+                    var switchLoggerList;
 
                     if (payload != undefined) {
                         ericssonSWSync = payload.switchSynchronizerSettings;
@@ -122,7 +121,8 @@
                             $scope.scopeModel.localCountryCode = ericssonSWSync.LocalCountryCode;
                             $scope.scopeModel.interconnectGeneralPrefix = ericssonSWSync.InterconnectGeneralPrefix;
 
-                            switchCommunicationList = ericssonSWSync.SwitchCommunicationList;
+                            sshCommunicationList = ericssonSWSync.SSHCommunicationList;
+                            switchLoggerList = ericssonSWSync.SwitchLoggerList;
                             outgoingTrafficCustomers = ericssonSWSync.OutgoingTrafficCustomers;
                             incomingTrafficSuppliers = ericssonSWSync.IncomingTrafficSuppliers;
                             localSupplierMappings = ericssonSWSync.LocalSupplierMappings;
@@ -149,14 +149,13 @@
                     var carrierAccountMappingGridLoadPromise = getCarrierAccountMappingGridLoadPromise();
                     promises.push(carrierAccountMappingGridLoadPromise);
 
-
                     function getSwitchCommunicationLoadPromise() {
                         var switchCommunicationLoadPromiseDeferred = UtilsService.createPromiseDeferred();
 
                         switchCommunicationReadyPromiseDeferred.promise.then(function () {
-                            var switchCommunicationPayload = undefined;
-                            if (switchCommunicationList != undefined) {
-                                switchCommunicationPayload = { switchCommunicationList: switchCommunicationList };
+                            var switchCommunicationPayload;
+                            if (ericssonSWSync != undefined) {
+                                switchCommunicationPayload = { sshCommunicationList: sshCommunicationList, switchLoggerList: switchLoggerList };
                             }
                             VRUIUtilsService.callDirectiveLoad(switchCommunicationAPI, switchCommunicationPayload, switchCommunicationLoadPromiseDeferred);
                         });
@@ -265,6 +264,8 @@
                         return localSupplierMappings;
                     }
 
+                    var switchCommunicationData = switchCommunicationAPI.getData();
+                    console.log(switchCommunicationData);
                     var data = {
                         $type: "TOne.WhS.RouteSync.Ericsson.EricssonSWSync, TOne.WhS.RouteSync.Ericsson",
                         NumberOfOptions: $scope.scopeModel.numberOfOptions,
@@ -276,7 +277,8 @@
                         OutgoingTrafficCustomers: getOutgoingTrafficCustomers(),
                         LocalSupplierMappings: getLocalSupplierMappings(),
                         CarrierMappings: carrierAccountMappingGridAPI.getData(),
-                        SwitchCommunicationList: switchCommunicationAPI.getData()
+                        SSHCommunicationList: switchCommunicationData != undefined ? switchCommunicationData.sshCommunicationList : undefined,
+                        SwitchLoggerList: switchCommunicationData != undefined ? switchCommunicationData.switchLoggerList : undefined
                     };
                     return data;
                 };
