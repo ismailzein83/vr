@@ -15,5 +15,12 @@ namespace Vanrise.Common.Excel
 
         public int ColumnIndex { get; set; }
 
+        public VRExcelCellStyle Style { get; set; }
+
+    }
+
+    public class VRExcelCellStyle : VRExcelContainerConfig
+    {
+       
     }
 }
