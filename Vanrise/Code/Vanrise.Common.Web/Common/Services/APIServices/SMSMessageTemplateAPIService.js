@@ -20,6 +20,12 @@
             });
         }
 
+        function GetSMSMessageTemplatesInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, "GetSMSMessageTemplatesInfo"), {
+                filter: filter
+            });
+        }
+
         function AddSMSMessageTemplate(smsMessageTemplateItem) {
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'AddSMSMessageTemplate'), smsMessageTemplateItem);
         }
@@ -39,6 +45,7 @@
         return ({
             GetFilteredSMSMessageTemplates: GetFilteredSMSMessageTemplates,
             GetSMSMessageTemplate: GetSMSMessageTemplate,
+            GetSMSMessageTemplatesInfo: GetSMSMessageTemplatesInfo,
             AddSMSMessageTemplate: AddSMSMessageTemplate,
             UpdateSMSMessageTemplate: UpdateSMSMessageTemplate,
             HasAddSMSMessageTemplatePermission: HasAddSMSMessageTemplatePermission,

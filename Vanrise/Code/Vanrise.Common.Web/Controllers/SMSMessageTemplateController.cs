@@ -30,6 +30,14 @@ namespace Vanrise.Common.Web.Controllers
             return _manager.GetSMSMessageTemplate(SMSMessageTemplateId, true);
         }
 
+        [HttpGet]
+        [Route("GetSMSMessageTemplatesInfo")]
+        public IEnumerable<SMSMessageTemplateInfo> GetSMSMessageTemplatesInfo(string filter = null)
+        {
+            SMSMessageTemplateFilter deserializedFilter = (filter != null) ? Vanrise.Common.Serializer.Deserialize<SMSMessageTemplateFilter>(filter) : null;
+            return _manager.GetSMSMessageTemplatesInfo(deserializedFilter);
+        }
+
         [HttpPost]
         [Route("AddSMSMessageTemplate")]
         public InsertOperationOutput<SMSMessageTemplateDetail> AddSMSMessageTemplate(SMSMessageTemplate smsMessageTemplateItem)

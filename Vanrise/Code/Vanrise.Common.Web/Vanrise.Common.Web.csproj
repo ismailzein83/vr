@@ -306,6 +306,7 @@
     <Content Include="Common\Directives\Settings\Templates\OverriddenConfigurationSettings.html" />
     <Content Include="Common\Directives\Settings\vr-common-overriddenconfiguration-settings.js" />
     <Content Include="Common\Directives\Settings\vr-common-settings-selector.js" />
+    <Content Include="Common\Directives\SMS\vr-common-smsmessagetemplate-selector.js" />
     <Content Include="Common\Directives\SMS\MainExtensions\Templates\ExecuteDatabaseCommandSMSHandlerTemplate.html" />
     <Content Include="Common\Directives\SMS\Templates\SMSSendHandler.html" />
     <Content Include="Common\Directives\SMS\Templates\SMSMessageTemplateGridTemplate.html" />
