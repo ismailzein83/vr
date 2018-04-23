@@ -54,7 +54,7 @@ namespace Vanrise.Runtime.Data.SQL
             {
                 Name = reader["Name"] as string,
                 RuntimeNodeConfigurationId = (Guid)reader["ID"],
-                Settings = Serializer.Deserialize<RuntimeNodeConfigurationSettings>(reader["Settings"] as string);
+                Settings = Serializer.Deserialize<RuntimeNodeConfigurationSettings>(reader["Settings"] as string)
  
             };
         }

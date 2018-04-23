@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
 
+
 namespace Vanrise.Common
 {
     public interface IExtensionConfigurationManager : IBEManager
