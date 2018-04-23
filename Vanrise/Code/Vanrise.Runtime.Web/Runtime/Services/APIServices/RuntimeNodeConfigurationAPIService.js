@@ -3,7 +3,7 @@
     "use strict";
     runtimeNodeConfigurationAPIService.$inject = ['BaseAPIService', 'UtilsService', 'VR_Runtime_ModuleConfig', 'SecurityService'];
 
-    function runtimeNodeConfigurationAPIService(BaseAPIService, UtilsService, VRRuntime_ModuleConfig, SecurityService) {
+    function runtimeNodeConfigurationAPIService(BaseAPIService, UtilsService, VRRuntime_ModuleConfig) {
 
         var controllerName = 'RuntimeNodeConfiguration';
 

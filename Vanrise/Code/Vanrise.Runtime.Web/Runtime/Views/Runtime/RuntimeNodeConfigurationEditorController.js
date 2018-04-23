@@ -1,9 +1,9 @@
 ﻿(function (appControllers) {
     'use strict';
 
-    RuntimeNodeConfigurationEditorController.$inject = ['$scope', 'VRRuntime_RuntimeNodeConfigurationService', 'VRRuntime_RuntimeNodeConfigurationAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
+    RuntimeNodeConfigurationEditorController.$inject = ['$scope', 'VRRuntime_RuntimeNodeConfigurationAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
 
-    function RuntimeNodeConfigurationEditorController($scope, VRRuntime_RuntimeNodeConfigurationService, VRRuntime_RuntimeNodeConfigurationAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function RuntimeNodeConfigurationEditorController($scope, VRRuntime_RuntimeNodeConfigurationAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
 
 
         var runtimeNodeConfigurationId;

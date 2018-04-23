@@ -2,9 +2,9 @@
 
     "use strict";
 
-    runtimeNodeConfigurationProcessesEditorController.$inject = ['$scope', 'VRRuntime_RuntimeNodeConfigurationAPIService', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
+    runtimeNodeConfigurationProcessesEditorController.$inject = ['$scope', 'VRNotificationService', 'VRNavigationService', 'UtilsService', 'VRUIUtilsService'];
 
-    function runtimeNodeConfigurationProcessesEditorController($scope, VRRuntime_RuntimeNodeConfigurationAPIService, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
+    function runtimeNodeConfigurationProcessesEditorController($scope, VRNotificationService, VRNavigationService, UtilsService, VRUIUtilsService) {
 
         var isEditMode;
         var runtimeNodeConfigurationEntity;

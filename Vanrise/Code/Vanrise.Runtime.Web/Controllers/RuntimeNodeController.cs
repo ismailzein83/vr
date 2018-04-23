@@ -19,7 +19,7 @@ namespace Vanrise.Runtime.Web.Controllers
 
 
         //[HttpGet]
-        //[Route("GetNodeConfiguration")]
+        //[Route("GetNode")]
         //public RuntimeNode GetNode(Guid nodeId)
         //{
         //    return manager.GetNode(nodeId);
@@ -32,15 +32,15 @@ namespace Vanrise.Runtime.Web.Controllers
         }
 
         //[HttpPost]
-        //[Route("AddRuntimeNodeConfiguration")]
-        //public Vanrise.Entities.InsertOperationOutput<RuntimeNode> AddRuntimeNodeConfiguration(RuntimeNode node)
+        //[Route("AddRuntimeNode")]
+        //public Vanrise.Entities.InsertOperationOutput<RuntimeNode> AddRuntimeNode(RuntimeNode node)
         //{
         //    return manager.AddRuntimeNode(node);
         //}
 
         //[HttpPost]
         //[Route("UpdateRuntimeNode")]
-        //public Vanrise.Entities.UpdateOperationOutput<RuntimeNode> UpdateRuntimeNodeConfiguration(RuntimeNode node)
+        //public Vanrise.Entities.UpdateOperationOutput<RuntimeNode> UpdateRuntimeNode(RuntimeNode node)
         //{
         //    return manager.UpdateRuntimeNode(node);
         //}

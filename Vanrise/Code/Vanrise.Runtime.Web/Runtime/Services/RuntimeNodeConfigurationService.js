@@ -1,7 +1,7 @@
 ﻿(function (appControllers) {
     'use stict';
-    RuntimeNodeConfigurationService.$inject = ['VRModalService', 'VRNotificationService', 'UtilsService', 'VRRuntime_RuntimeNodeConfigurationAPIService'];
-    function RuntimeNodeConfigurationService(VRModalService, VRNotificationService, UtilsService, VRRuntime_RuntimeNodeConfigurationAPIService) {
+    RuntimeNodeConfigurationService.$inject = ['VRModalService', 'VRNotificationService', 'UtilsService'];
+    function RuntimeNodeConfigurationService(VRModalService, VRNotificationService, UtilsService) {
 
 
         function addRuntimeNodeConfiguration(onRuntimeNodeConfigurationAdded) {

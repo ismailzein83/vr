@@ -1,6 +1,6 @@
 ﻿"use strict";
-app.directive("vrRuntimeRuntimenodeconfigurationScheduler", ["UtilsService", "VRNotificationService", "VRRuntime_RuntimeNodeConfigurationAPIService", "VRRuntime_RuntimeNodeConfigurationService", "VRUIUtilsService", "VRRuntime_RuntimeServiceConfigsAPIService",
-function (UtilsService, VRNotificationService, VRRuntime_RuntimeNodeConfigurationAPIService, VRRuntime_RuntimeNodeConfigurationService, VRUIUtilsService, VRRuntime_RuntimeServiceConfigsAPIService) {
+app.directive("vrRuntimeRuntimenodeconfigurationScheduler", ["UtilsService", "VRNotificationService",  "VRUIUtilsService",
+function (UtilsService, VRNotificationService, VRUIUtilsService) {
     var directiveDefinitionObject =  {
             restrict: "E",
             scope: {

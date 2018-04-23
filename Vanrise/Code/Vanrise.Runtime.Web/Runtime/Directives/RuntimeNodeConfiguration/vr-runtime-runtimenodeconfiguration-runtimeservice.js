@@ -1,7 +1,7 @@
 ﻿"use strict";
 
-app.directive("vrRuntimeRuntimenodeconfigurationRuntimeservice", ["UtilsService", "VRNotificationService", "VRRuntime_RuntimeNodeConfigurationAPIService", "VRUIUtilsService",
-function (UtilsService, VRNotificationService, VRRuntime_RuntimeNodeConfigurationAPIService, VRUIUtilsService) {
+app.directive("vrRuntimeRuntimenodeconfigurationRuntimeservice", ["UtilsService", "VRRuntime_RuntimeNodeConfigurationAPIService", "VRUIUtilsService",
+function (UtilsService, VRRuntime_RuntimeNodeConfigurationAPIService, VRUIUtilsService) {
     return {
         restrict: 'E',
         scope: {

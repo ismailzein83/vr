@@ -17,16 +17,7 @@ namespace Vanrise.Runtime.Business
     {
         static IRuntimeNodeConfigurationDataManager s_dataManager = RuntimeDataManagerFactory.GetDataManager<IRuntimeNodeConfigurationDataManager>();
 
-        private class CacheManager : Vanrise.Caching.BaseCacheManager
-        {
-            IRuntimeNodeConfigurationDataManager runtimeNodeConfigurationDataManager = RuntimeDataManagerFactory.GetDataManager<IRuntimeNodeConfigurationDataManager>();
-            object _updateHandle;
-            protected override bool ShouldSetCacheExpired(object parameter)
-            {
-                return runtimeNodeConfigurationDataManager.AreRuntimeNodeConfigurationUpdated(ref _updateHandle);
-            }
-        }
-
+        #region Public Methods
         public Dictionary<Guid, RuntimeNodeConfiguration> GetAllNodeConfigurations()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>()
@@ -92,12 +83,26 @@ namespace Vanrise.Runtime.Business
             }
             return updateOperationOutput;
         }
+        public IEnumerable<RuntimeServiceConfig> GetRuntimeServiceTypeTemplateConfigs()
+        {
+            return BusinessManagerFactory.GetManager<IExtensionConfigurationManager>().GetExtensionConfigurations<RuntimeServiceConfig>(RuntimeServiceConfig.EXTENSION_TYPE);
+        }
 
+        #endregion
 
+        #region Private Methods
+        private class CacheManager : Vanrise.Caching.BaseCacheManager
+        {
+            IRuntimeNodeConfigurationDataManager runtimeNodeConfigurationDataManager = RuntimeDataManagerFactory.GetDataManager<IRuntimeNodeConfigurationDataManager>();
+            object _updateHandle;
+            protected override bool ShouldSetCacheExpired(object parameter)
+            {
+                return runtimeNodeConfigurationDataManager.AreRuntimeNodeConfigurationUpdated(ref _updateHandle);
+            }
+        }
+        #endregion
 
-
-
-
+        #region Mapper
         private RuntimeNodeConfigurationDetails RuntimeNodeConfigurationDetailMapper(RuntimeNodeConfiguration nodeConfig)
         {
             RuntimeNodeConfigurationDetails runtimeNodeConfigurationDetails = new RuntimeNodeConfigurationDetails();
@@ -105,10 +110,6 @@ namespace Vanrise.Runtime.Business
             runtimeNodeConfigurationDetails.Name = nodeConfig.Name;
             return runtimeNodeConfigurationDetails;
         }
-
-        public IEnumerable<RuntimeServiceConfig> GetRuntimeServiceTypeTemplateConfigs()
-        {
-            return BusinessManagerFactory.GetManager<IExtensionConfigurationManager>().GetExtensionConfigurations<RuntimeServiceConfig>(RuntimeServiceConfig.EXTENSION_TYPE);
-        }
+        #endregion
     }
 }

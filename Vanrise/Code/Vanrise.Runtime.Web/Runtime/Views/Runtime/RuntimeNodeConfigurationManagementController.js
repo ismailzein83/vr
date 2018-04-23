@@ -2,9 +2,9 @@
 
     "use strict";
 
-    RuntimeNodeConfigurationManagementController.$inject = ['$scope', 'VRRuntime_RuntimeNodeConfigurationService', 'VRRuntime_RuntimeNodeConfigurationAPIService', 'UtilsService', 'VRUIUtilsService'];
+    RuntimeNodeConfigurationManagementController.$inject = ['$scope', 'VRRuntime_RuntimeNodeConfigurationService', 'UtilsService', 'VRUIUtilsService'];
 
-    function RuntimeNodeConfigurationManagementController($scope, VRRuntime_RuntimeNodeConfigurationService, VRRuntime_RuntimeNodeConfigurationAPIService, UtilsService, VRUIUtilsService) {
+    function RuntimeNodeConfigurationManagementController($scope, VRRuntime_RuntimeNodeConfigurationService, UtilsService, VRUIUtilsService) {
         var gridAPI;
         var filter = {};
 

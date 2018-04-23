@@ -1,6 +1,6 @@
 ﻿"use strict";
-app.directive("vrRuntimeRuntimenodeconfigurationGrid", ["UtilsService", "VRNotificationService", "VRRuntime_RuntimeNodeConfigurationAPIService", "VRRuntime_RuntimeNodeConfigurationService", "VRUIUtilsService",
-function (UtilsService, VRNotificationService, VRRuntime_RuntimeNodeConfigurationAPIService, VRRuntime_RuntimeNodeConfigurationService, VRUIUtilsService) {
+app.directive("vrRuntimeRuntimenodeconfigurationGrid", [ "VRNotificationService", "VRRuntime_RuntimeNodeConfigurationAPIService", "VRRuntime_RuntimeNodeConfigurationService",
+function ( VRNotificationService, VRRuntime_RuntimeNodeConfigurationAPIService, VRRuntime_RuntimeNodeConfigurationService) {
 
     var directiveDefinitionObject = {
         restrict: "E",
@@ -23,7 +23,7 @@ function (UtilsService, VRNotificationService, VRRuntime_RuntimeNodeConfiguratio
 
         function initializeController() {
 
-            $scope.runttimeNodesConfigurations = [];
+            $scope.runtimeNodesConfigurations = [];
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;

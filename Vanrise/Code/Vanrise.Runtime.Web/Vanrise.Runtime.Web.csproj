@@ -143,8 +143,8 @@
     <Content Include="Runtime\Services\APIServices\RuntimeNodeConfigurationAPIService.js" />
     <Content Include="Runtime\Services\APIServices\SchedulerTaskActionTypeAPIService.js" />
     <Content Include="Runtime\Services\APIServices\SchedulerTaskAPIService.js" />
-    <Content Include="Runtime\Services\RuntimeNodeService.js" />
     <Content Include="Runtime\Services\RuntimeNodeConfigurationService.js" />
+    <Content Include="Runtime\Services\RuntimeNodeService.js" />
     <Content Include="Runtime\Services\SchedulerTaskService.js" />
     <Content Include="Runtime\Views\ActionTemplates\WFActionTemplate.html" />
     <Content Include="Runtime\Views\ActionTemplates\WFActionTemplateController.js" />
