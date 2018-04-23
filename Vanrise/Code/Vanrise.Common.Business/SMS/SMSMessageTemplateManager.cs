@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vanrise.Common.Data;
 using Vanrise.Entities;
 using Vanrise.Entities.SMS;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.Common.Business
 {
@@ -43,6 +44,22 @@ namespace Vanrise.Common.Business
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allSMSMessageTemplates.ToBigResult(input, filterExpression, SMSMessageTemplateDetailMapper));
         }
 
+        public IEnumerable<SMSMessageTemplateInfo> GetSMSMessageTemplatesInfo(SMSMessageTemplateFilter filter)
+        {
+            Func<SMSMessageTemplate, bool> filterExpression = null;
+            filterExpression = (item) =>
+            {
+                if (filter == null)
+                    return true;
+
+                if (filter.SMSMessageTypeId != item.SMSMessageTypeId)
+                    return false;
+
+                return true;
+            };
+
+            return this.GetCachedSMSMessageTemplates().MapRecords(SMSMessageTemplateInfoMapper, filterExpression).OrderBy(x => x.Name);
+        }
         public string GetSMSMessageTemplateName(SMSMessageTemplate smsMessageTemplateId)
         {
             return smsMessageTemplateId != null ? smsMessageTemplateId.Name : null;
@@ -65,6 +82,10 @@ namespace Vanrise.Common.Business
 
             smsMessageTemplateItem.SMSMessageTemplateId = Guid.NewGuid();
 
+            int loggedInUserId = ContextFactory.GetContext().GetLoggedInUserId();
+            smsMessageTemplateItem.CreatedBy = loggedInUserId;
+            smsMessageTemplateItem.LastModifiedBy = loggedInUserId;
+            
             if (dataManager.Insert(smsMessageTemplateItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -94,6 +115,8 @@ namespace Vanrise.Common.Business
             }
 
             ISMSMessageTemplateDataManager dataManager = CommonDataManagerFactory.GetDataManager<ISMSMessageTemplateDataManager>();
+
+            smsMessageTemplateItem.LastModifiedBy = ContextFactory.GetContext().GetLoggedInUserId();
 
             if (dataManager.Update(smsMessageTemplateItem))
             {
@@ -229,6 +252,16 @@ namespace Vanrise.Common.Business
             return smsMessageTemplateDetail;
         }
 
+       public SMSMessageTemplateInfo SMSMessageTemplateInfoMapper(SMSMessageTemplate smsMessageTemplate)
+       {
+           SMSMessageTemplateInfo smsMessageTemplateInfo = new SMSMessageTemplateInfo()
+           {
+               SMSMessageTemplateId = smsMessageTemplate.SMSMessageTemplateId,
+               Name = smsMessageTemplate.Name
+           };
+           return smsMessageTemplateInfo;
+       }
+
         #endregion
 
     }
@@ -236,9 +269,9 @@ namespace Vanrise.Common.Business
     {
         VRObjectEvaluator vrObjectEvaluator;
 
-        public VRSMSContext(SMSMessageType smsMessageType, Dictionary<string, dynamic> objects)
+        public VRSMSContext(SMSMessageTypeSettings smsMessageTypeSettings, Dictionary<string, dynamic> objects)
         {
-            vrObjectEvaluator = new VRObjectEvaluator(smsMessageType.Settings.Objects, objects);
+            vrObjectEvaluator = new VRObjectEvaluator(smsMessageTypeSettings.Objects, objects);
         }
 
         public dynamic GetVal(string objectName, string propertyName)

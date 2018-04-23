@@ -33,7 +33,7 @@ namespace Vanrise.Common.Data.SQL
         public bool Insert(SMSMessageTemplate smsMessageTemplateItem)
         {
             string serializedSettings = smsMessageTemplateItem.Settings != null ? Vanrise.Common.Serializer.Serialize(smsMessageTemplateItem.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("common.sp_SMSMessageTemplate_Insert", smsMessageTemplateItem.SMSMessageTemplateId, smsMessageTemplateItem.Name, smsMessageTemplateItem.SMSMessageTypeId, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("common.sp_SMSMessageTemplate_Insert", smsMessageTemplateItem.SMSMessageTemplateId, smsMessageTemplateItem.Name, smsMessageTemplateItem.SMSMessageTypeId, serializedSettings, smsMessageTemplateItem.CreatedBy, smsMessageTemplateItem.LastModifiedBy);
 
             if (affectedRecords > 0)
             {
@@ -46,7 +46,7 @@ namespace Vanrise.Common.Data.SQL
         public bool Update(SMSMessageTemplate smsMessageTemplateItem)
         {
             string serializedSettings = smsMessageTemplateItem.Settings != null ? Vanrise.Common.Serializer.Serialize(smsMessageTemplateItem.Settings) : null;
-            int affectedRecords = ExecuteNonQuerySP("common.sp_SMSMessageTemplate_Update", smsMessageTemplateItem.SMSMessageTemplateId, smsMessageTemplateItem.Name, smsMessageTemplateItem.SMSMessageTypeId, serializedSettings);
+            int affectedRecords = ExecuteNonQuerySP("common.sp_SMSMessageTemplate_Update", smsMessageTemplateItem.SMSMessageTemplateId, smsMessageTemplateItem.Name, smsMessageTemplateItem.SMSMessageTypeId, serializedSettings, smsMessageTemplateItem.LastModifiedBy);
             return (affectedRecords > 0);
         }
 
@@ -61,7 +61,11 @@ namespace Vanrise.Common.Data.SQL
                 SMSMessageTemplateId = (Guid)reader["ID"],
                 Name = reader["Name"] as string,
                 SMSMessageTypeId = (Guid)reader["SMSMessageTypeId"],
-                Settings = Vanrise.Common.Serializer.Deserialize<SMSMessageTemplateSettings>(reader["Settings"] as string)
+                Settings = Vanrise.Common.Serializer.Deserialize<SMSMessageTemplateSettings>(reader["Settings"] as string),
+                CreatedBy = GetReaderValue<int>(reader, "CreatedBy"),
+                CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
+                LastModifiedBy = GetReaderValue<int>(reader, "LastModifiedBy"),
+                LastModifiedTime = GetReaderValue<DateTime>(reader, "LastModifiedTime")
             };
             return smsMessageTemplate;
         }

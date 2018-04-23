@@ -21,7 +21,7 @@ namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
         {
             get
             {
-                return "";
+                return "whs-accountbalance-action-send-customer-sms";
             }
         }
 

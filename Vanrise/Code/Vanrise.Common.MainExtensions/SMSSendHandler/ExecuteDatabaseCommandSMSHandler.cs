@@ -24,29 +24,31 @@ namespace Vanrise.Common.MainExtensions.SMSSendHandler
         public override void SendSMS(ISMSHandlerSendSMSContext context)
         {
 
-            //SQLConnection settings = new VRConnectionManager().GetVRConnection(VRConnectionId).Settings as SQLConnection;
-            //string connectionString = (settings != null) ? settings.ConnectionString : null;
-            //if (String.IsNullOrEmpty(connectionString))
-            //    throw new NullReferenceException(String.Format("connection string is null or empty"));
+            SQLConnection settings = new VRConnectionManager().GetVRConnection(VRConnectionId).Settings as SQLConnection;
+            string connectionString = (settings != null) ? settings.ConnectionString : null;
+            if (String.IsNullOrEmpty(connectionString))
+                throw new NullReferenceException(String.Format("connection string is null or empty"));
 
-            //using (SqlConnection connection = new SqlConnection(connectionString))
-            //{
-            //    if (connection.State == System.Data.ConnectionState.Closed)
-            //        connection.Open();
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                if (connection.State == System.Data.ConnectionState.Closed)
+                    connection.Open();
 
             //CommandQuery replace message and number in query 
+                string newCommandQuery = CommandQuery;
+                newCommandQuery = newCommandQuery.Replace("#MobileNumber#", context.MobileNumber);
+                newCommandQuery = newCommandQuery.Replace("#Message#", context.Message);
+                newCommandQuery = newCommandQuery.Replace("#MessageTime#", context.MessageTime.ToString());
 
-            //    var command = connection.CreateCommand();
-            //    command.CommandText = CommandQuery;
-            //    command.CommandTimeout = 60;
-            //    command.CommandType = System.Data.CommandType.Text;
-            //    command.ExecuteNonQuery();
-            //    connection.Close();
-            //}
-
-            throw new NotImplementedException();
+                var command = connection.CreateCommand();
+                command.CommandText = newCommandQuery;
+                command.CommandTimeout = 60;
+                command.CommandType = System.Data.CommandType.Text;
+                command.ExecuteNonQuery();
+                connection.Close();
+            }
+          
         }
-
       
     }
 }

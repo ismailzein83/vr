@@ -15,6 +15,14 @@ namespace Vanrise.Entities
         public Guid SMSMessageTypeId { get; set; }
 
         public SMSMessageTemplateSettings Settings { get; set; }
+
+        public int CreatedBy { get; set; }
+
+        public DateTime CreatedTime { get; set; }
+
+        public int LastModifiedBy { get; set; }
+
+        public DateTime LastModifiedTime { get; set; }
     }
 
     public class SMSMessageTemplateSettings
