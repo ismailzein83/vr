@@ -39,6 +39,7 @@
         function defineScope() {
             $scope.scopeModel = {};
             $scope.scopeModel.isAlertRuleTypeSelected = false;
+            $scope.scopeModel.isEnabled = true;
             $scope.scopeModel.selectedRuleType;
             $scope.scopeModel.SettingEditor;
 
