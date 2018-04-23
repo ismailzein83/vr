@@ -62,11 +62,12 @@
                     selectorAPI.clearDataSource();
                     var promises = [];
 
-                    if (payload != undefined)
+                    if (payload != undefined) {
                         context = payload.context;
 
-                    if (payload.HandlerSettings != undefined)
-                        promises.push(loadDirective());
+                        if (payload.HandlerSettings != undefined)
+                            promises.push(loadDirective());
+                    }
 
                     promises.push(getSMSSendHandlerSettingsExtensionConfigs());
 

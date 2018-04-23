@@ -65,6 +65,17 @@ namespace Vanrise.Common.Business
             return emailSettings;
         }
 
+        public SMSSettingData GetSystemSMS()
+        {
+            SettingManager settingManager = new SettingManager();
+            var smsSettings = settingManager.GetSetting<SMSSettingData>(Constants.SMSSettingType);
+
+            if (smsSettings == null)
+                throw new NullReferenceException("smsSettings");
+
+            return smsSettings;
+        }
+
         public GeneralSettingData GetGeneralSetting()
         {
             SettingManager settingManager = new SettingManager();

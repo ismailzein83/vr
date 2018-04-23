@@ -44,23 +44,18 @@ namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
             objects.Add("AccountBalance", currentBalance);
             objects.Add("Threshold", eventPayload.Threshold);
 
-            VRActionDefinitionManager definitionManager = new VRActionDefinitionManager();
-            VRComponentType<VRActionDefinitionSettings> smsComponent = (VRComponentType<VRActionDefinitionSettings>)definitionManager.GetVRActionDefinition(this.DefinitionId);
-            SendCustomerSMSActionDefinition smsDefinition = (SendCustomerSMSActionDefinition)smsComponent.Settings.ExtendedSettings;
-            SMSSendHandler handler = smsDefinition.Handler;
-          
             SMSManager smsManager = new SMSManager();
             if (financialAccount.CarrierAccountId.HasValue)
             {
                 var carrierAccount = new CarrierAccountManager().GetCarrierAccount(financialAccount.CarrierAccountId.Value);
                 objects.Add("Customer", carrierAccount);
-                smsManager.SendSMS(this.AccountSMSTemplateId, objects, handler);
+                smsManager.SendSMS(this.AccountSMSTemplateId, objects);
             }
             else
             {
                 var carrierProfile = new CarrierProfileManager().GetCarrierProfile(financialAccount.CarrierProfileId.Value);
                 objects.Add("Profile", carrierProfile);
-                smsManager.SendSMS(this.ProfileSMSTemplateId, objects, handler);
+                smsManager.SendSMS(this.ProfileSMSTemplateId, objects);
             }
 
         }

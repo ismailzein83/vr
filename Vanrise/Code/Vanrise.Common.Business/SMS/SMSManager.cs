@@ -10,26 +10,29 @@ namespace Vanrise.Common.Business
 {
     public class SMSManager
     {
-        public void SendSMS(string mobileNumber, string message, DateTime messageTime, SMSSendHandler smsSendHandler)
+        public void SendSMS(string mobileNumber, string message, DateTime messageTime)
         {
-            smsSendHandler.ThrowIfNull("smsSendHandler");
-            smsSendHandler.Settings.ThrowIfNull("smsSendHandler.Settings");
-
             SMSHandlerSendSMSContext context = new SMSHandlerSendSMSContext
             {
                 Message = message,
-               // MessageTime = messageTime,
-                MessageTime = DateTime.Now,
+                MessageTime = messageTime,
                 MobileNumber = mobileNumber
             };
-            
-            smsSendHandler.Settings.SendSMS(context);
+
+            ConfigManager configManager = new ConfigManager();
+            SMSSettingData smsSettingData = configManager.GetSystemSMS();
+
+            smsSettingData.ThrowIfNull("smsSettingData");
+            smsSettingData.SMSSendHandler.ThrowIfNull("smsSettingData.SMSSendHandler");
+            smsSettingData.SMSSendHandler.Settings.ThrowIfNull("smsSettingData.SMSSendHandler.Settings");
+
+            smsSettingData.SMSSendHandler.Settings.SendSMS(context);
         }
 
-        public void SendSMS(Guid smsTemplateId, Dictionary<string, dynamic> objects, SMSSendHandler smsSendHandler)
+        public void SendSMS(Guid smsTemplateId, Dictionary<string, dynamic> objects)
         {
             var evaluatedSMSTemplate = EvaluateSMSTemplate(smsTemplateId, objects);
-            SendSMS(evaluatedSMSTemplate.MobileNumber, evaluatedSMSTemplate.Message,DateTime.Now,smsSendHandler);
+            SendSMS(evaluatedSMSTemplate.MobileNumber, evaluatedSMSTemplate.Message,DateTime.Now);
         }
 
         public SMSEvaluatedTemplate EvaluateSMSTemplate(Guid smsMessageTemplateId, Dictionary<string, dynamic> objects)

@@ -12,7 +12,7 @@ namespace TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions
     {
         public Guid AccountSMSMessageTypeId { get; set; }
         public Guid ProfileSMSMessageTypeId { get; set; }
-        public Vanrise.Entities.SMSSendHandler Handler { get; set; }
+      
         public override Guid ConfigId
         {
             get { return new Guid("114CE0AC-4848-442A-B351-BE031F22E130"); }

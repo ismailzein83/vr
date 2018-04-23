@@ -28,10 +28,7 @@ app.directive('whsAccountbalanceActiondefinitionSendCustomerSms', ['UtilsService
 
             var profileSMSMessageTypeSelectorAPI;
             var profileSMSMessageTypeSelectorReadyDeferred = UtilsService.createPromiseDeferred();
-
-            var smsSendHanderDirectiveAPI;
-            var smsSendHanderDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-
+            
             function initializeController() {
                 $scope.scopeModel = {};
                 
@@ -44,12 +41,7 @@ app.directive('whsAccountbalanceActiondefinitionSendCustomerSms', ['UtilsService
                     profileSMSMessageTypeSelectorAPI = api;
                     profileSMSMessageTypeSelectorReadyDeferred.resolve();
                 };
-
-                $scope.scopeModel.onSMSSendHandlerReady = function (api) {
-                    smsSendHanderDirectiveAPI = api;
-                    smsSendHanderDirectiveReadyDeferred.resolve();
-                };
-
+                
                 defineAPI();
             }
             function defineAPI() {
@@ -61,7 +53,6 @@ app.directive('whsAccountbalanceActiondefinitionSendCustomerSms', ['UtilsService
 
                     promises.push(loadAccountSMSMessageTypeSelector());
                     promises.push(loadProfileSMSMessageTypeSelector());
-                    promises.push(loadSMSSendHandlerDirective());
 
                     function loadAccountSMSMessageTypeSelector() {
                         var accountSMSMessageTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
@@ -95,22 +86,6 @@ app.directive('whsAccountbalanceActiondefinitionSendCustomerSms', ['UtilsService
                         return profileSMSMessageTypeSelectorLoadDeferred.promise;
                     }
 
-                    function loadSMSSendHandlerDirective() {
-                        var smsSendHandlerDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-                        smsSendHanderDirectiveReadyDeferred.promise.then(function () {
-
-                            var smsSendHandlerDirectivePayload;
-
-                            if (payload != undefined && payload.Settings != undefined && payload.Settings.ExtendedSettings != undefined)
-                                smsSendHandlerDirectivePayload = {
-                                    Handler: payload.Settings.ExtendedSettings.Handler
-                                };
-
-                            VRUIUtilsService.callDirectiveLoad(smsSendHanderDirectiveAPI, smsSendHandlerDirectivePayload, smsSendHandlerDirectiveLoadDeferred);
-                        });
-                        return smsSendHandlerDirectiveLoadDeferred.promise;
-                    }
-
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -118,8 +93,7 @@ app.directive('whsAccountbalanceActiondefinitionSendCustomerSms', ['UtilsService
                     return {
                         $type: 'TOne.WhS.AccountBalance.MainExtensions.VRBalanceAlertActions.SendCustomerSMSActionDefinition, TOne.WhS.AccountBalance.MainExtensions',
                         AccountSMSMessageTypeId: accountSMSMessageTypeSelectorAPI.getSelectedIds(),
-                        ProfileSMSMessageTypeId: profileSMSMessageTypeSelectorAPI.getSelectedIds(),
-                        Handler: smsSendHanderDirectiveAPI.getData()
+                        ProfileSMSMessageTypeId: profileSMSMessageTypeSelectorAPI.getSelectedIds()
                     };
                 };
 

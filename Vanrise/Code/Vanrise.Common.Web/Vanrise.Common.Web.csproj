@@ -315,7 +315,6 @@
     <Content Include="Common\Directives\SMS\Templates\SMSTemplateSettings.html" />
     <Content Include="Common\Directives\SMS\vr-common-smsmessagetemplate-selector.js" />
     <Content Include="Common\Directives\SMS\MainExtensions\Templates\ExecuteDatabaseCommandSMSHandlerTemplate.html" />
-    <Content Include="Common\Directives\SMS\Templates\SMSSendHandler.html" />
     <Content Include="Common\Directives\SMS\Templates\SMSMessageTemplateGridTemplate.html" />
     <Content Include="Common\Directives\SMS\Templates\SMSMessageTypeSettings.html" />
     <Content Include="Common\Directives\SMS\MainExtensions\vr-common-executedatabasecommand-smshandler.js" />
@@ -323,7 +322,6 @@
     <Content Include="Common\Directives\SMS\vr-common-smsmessagetype-selector.js" />
     <Content Include="Common\Directives\SMS\vr-common-smsmessagetype-settings.js" />
     <Content Include="Common\Directives\SMS\vr-common-smssendhandler-settings.js" />
-    <Content Include="Common\Directives\SMS\vr-common-smssendhandler.js" />
     <Content Include="Common\Directives\SMS\vr-common-smstemplate-settings-editor.js" />
     <Content Include="Common\Directives\StartingFrom\vr-common-startingfrom-selector.js" />
     <Content Include="Common\Directives\StatusDefinition\StatusDefinitionBE\Templates\StatusDefinitionBEEditor.html" />
