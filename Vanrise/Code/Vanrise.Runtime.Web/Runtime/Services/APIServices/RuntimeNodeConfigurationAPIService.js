@@ -25,7 +25,7 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VRRuntime_ModuleConfig.moduleName, controllerName, "AddRuntimeNodeConfiguration"), nodeConfig);
         }
         function GetRuntimeServiceTypeTemplateConfigs() {
-            return BaseAPIService.get(UtilsService.getServiceURL(VRRuntime_ModuleConfig.moduleName, controller, 'GetRuntimeServiceTypeTemplateConfigs'));
+            return BaseAPIService.get(UtilsService.getServiceURL(VRRuntime_ModuleConfig.moduleName, controllerName, 'GetRuntimeServiceTypeTemplateConfigs'));
         }
         return ({
             GetFilteredRuntimeNodesConfigurations: GetFilteredRuntimeNodesConfigurations,
