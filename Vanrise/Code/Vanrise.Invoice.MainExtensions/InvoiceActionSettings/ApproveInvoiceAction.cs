@@ -17,6 +17,7 @@ namespace Vanrise.Invoice.MainExtensions
                 return new Guid("F2DBA69C-B86B-48DB-A49B-A30A72C50D1E");
             }
         }
+        public bool IsApproved { get; set; }
         public override InvoiceActionType Type
         {
             get { return InvoiceActionType.Approve; }
