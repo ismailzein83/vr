@@ -128,6 +128,12 @@
     <Content Include="Queueing\Directives\QueueItemHeader2\vr-queueing-queueitemheader2-grid.js" />
     <Content Include="Queueing\Directives\QueueItemHeader\Templates\QueueItemHeaderGridTemplate.html" />
     <Content Include="Queueing\Directives\QueueItemHeader\vr-queueing-queueitemheader-grid.js" />
+    <Content Include="Queueing\Directives\MainExtensions\RuntimeService\Templates\QueueActivationRuntimeServiceTemplate.html" />
+    <Content Include="Queueing\Directives\MainExtensions\RuntimeService\vr-queueing-runtimeservice-queueactivation.js" />
+    <Content Include="Queueing\Directives\MainExtensions\RuntimeService\Templates\QueueRegulatorRuntimeServiceTemplate.html" />
+    <Content Include="Queueing\Directives\MainExtensions\RuntimeService\vr-queueing-runtimeservice-queueregulator.js" />
+    <Content Include="Queueing\Directives\MainExtensions\RuntimeService\Templates\SummaryQueueActivationRuntimeServiceTemplate.html" />
+    <Content Include="Queueing\Directives\MainExtensions\RuntimeService\vr-queueing-runtimeservice-summaryqueueactivation.js" />
     <Content Include="Queueing\Services\APIServices\VR_Queueing_ExecutionFlowDefinitionAPIService.js" />
     <Content Include="Queueing\Services\APIServices\VR_Queueing_QueueActivatorConfigAPIService.js" />
     <Content Include="Queueing\Services\APIServices\VR_Queueing_QueueItemHeaderAPIService.js" />

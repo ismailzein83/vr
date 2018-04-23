@@ -16,6 +16,8 @@ namespace Vanrise.BusinessProcess
 {
     public class BPRegulatorRuntimeService : RuntimeService
     {
+        public override Guid ConfigId { get { return new Guid("FD6520DB-26DC-4473-BB7E-1F583BEC3A19"); } }
+
         static int s_defaultMaxConcurrentWorkflowsPerDefinition = BPDefinitionInitiator.s_defaultMaxConcurrentWorkflowsPerDefinition;
         static int s_maxWorkflowsPerServiceInstance;
         static int s_moreAssignableItemsToMaxConcurrentPerBPDefinition;

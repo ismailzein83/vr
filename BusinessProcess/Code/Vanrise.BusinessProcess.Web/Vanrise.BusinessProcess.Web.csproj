@@ -203,12 +203,15 @@
     <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceHistoryGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPInstance\Templates\BPInstanceMonitorGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPInstance\bp-instance-log-search.js" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\RuntimeService\Templates\BPRegulatorRuntimeServiceTemplate.html" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\RuntimeService\bp-regulator-runtimeservice.js" />
     <Content Include="BusinessProcess\Directives\BPValidationMessage\bp-validation-message-history-grid.js" />
     <Content Include="BusinessProcess\Directives\BPValidationMessage\bp-validation-message-monitor-grid.js" />
     <Content Include="BusinessProcess\Directives\BPValidationMessage\Templates\BPValidationMessageHistoryGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPValidationMessage\Templates\BPValidationMessageMonitorGridTemplate.html" />
     <Content Include="BusinessProcess\Directives\BPTask\bp-task-monitor-grid.js" />
     <Content Include="BusinessProcess\Directives\BPTask\Templates\BPTaskMonitorGridTemplate.html" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\RuntimeService\Templates\BusinessProcessServiceTemplate.html" />
     <Content Include="BusinessProcess\Directives\CustomCode\bp-customcode-task.js" />
     <Content Include="BusinessProcess\Directives\CustomCode\Templates\CustomCodeTaskCompilationResult.html" />
     <Content Include="BusinessProcess\Directives\CustomCode\CustomCodeTaskCompilationResultController.js" />
@@ -254,6 +257,7 @@
     <Content Include="BusinessProcess\Views\BPInstance\BPInstanceMonitorController.js" />
     <Content Include="BusinessProcess\Views\NewInstanceEditor\NewInstanceEditor.html" />
     <Content Include="BusinessProcess\Views\NewInstanceEditor\NewInstanceEditorController.js" />
+    <Content Include="BusinessProcess\Directives\MainExtensions\RuntimeService\vr-businessprocess-runtimeservice.js" />
     <Content Include="BusinessProcess\VR_BusinessProcess_ModuleInitialization.js" />
   </ItemGroup>
   <ItemGroup />

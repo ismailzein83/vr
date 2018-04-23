@@ -16,6 +16,12 @@ namespace Vanrise.Queueing
 {
     public class QueueActivationService : RuntimeService
     {
+
+        public override Guid ConfigId
+        {
+            get { return new Guid("BAF6F7EF-F61F-4F0F-B249-41D0D2C67518"); }
+        }
+
         //QueueInstanceManager _queueInstanceManager = new QueueInstanceManager();
         //ConcurrentDictionary<string, object> _nonEmptyQueueNames = new ConcurrentDictionary<string, object>(); 
         ////Task _taskKeepDequeueing;

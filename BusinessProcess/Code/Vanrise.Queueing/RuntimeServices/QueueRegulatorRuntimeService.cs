@@ -13,6 +13,9 @@ namespace Vanrise.Queueing
 {
     public class QueueRegulatorRuntimeService : RuntimeService
     {
+
+        public override Guid ConfigId { get { return new Guid("B08F3D51-CC02-4292-9AAB-FB9A8720EE16"); } }
+
         static int s_maxNumberOfItemsPerService = 5;
 
         IQueueItemDataManager _queueItemDataManager = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();

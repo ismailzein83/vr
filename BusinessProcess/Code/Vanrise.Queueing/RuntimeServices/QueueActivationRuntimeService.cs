@@ -14,6 +14,9 @@ namespace Vanrise.Queueing
 {
     public class QueueActivationRuntimeService : RuntimeService
     {
+
+        public override Guid ConfigId { get { return new Guid("40422995-F133-4EAB-BA64-D1EF9EB4E24A"); } }
+
         internal const string SERVICE_TYPE_UNIQUE_NAME = "VR_Queueing_QueueActivationRuntimeService";
 
         public override string ServiceTypeUniqueName
