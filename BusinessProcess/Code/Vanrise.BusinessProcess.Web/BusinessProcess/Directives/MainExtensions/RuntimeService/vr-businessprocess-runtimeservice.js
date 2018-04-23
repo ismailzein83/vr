@@ -13,7 +13,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
         },
         controllerAs: "ctrl",
         bindToController: true,
-        templateUrl: "/Client/Modules/BusinessProcess/Directives/MainExtensions/RuntimeService/BusinessProcessServiceTemplate.html"
+        templateUrl: "/Client/Modules/BusinessProcess/Directives/MainExtensions/RuntimeService/Templates/BusinessProcessServiceTemplate.html"
     };
 
 
