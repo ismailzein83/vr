@@ -7,7 +7,9 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
         public int RCNumber { get; set; }
 
         public string RouteCaseOptionsAsString { get; set; }
-    }
+
+		public bool Synced { get; set; }
+	}
 
     public class RouteCaseOption
     {

@@ -7,9 +7,16 @@ namespace TOne.WhS.RouteSync.Ericsson.Data
 	public interface ICustomerMappingDataManager : IDataManager, IBulkApplyDataManager<CustomerMappingSerialized>
 	{
 		string SwitchId { get; set; }
-		void ApplyCustomerMappingForDB(object preparedCustomerMapping);
 		void Initialize(ICustomerMappingInitializeContext context);
-		/*Dictionary<string, List<CustomerMappingByCompare>> GetCustomerMappingDifferences();*/
+		void Finalize(ICustomerMappingFinalizeContext context);
+		void ApplyCustomerMappingForDB(object preparedCustomerMapping);
 		void CompareTables(ICustomerMappingTablesContext context);
+	}
+
+	public interface ICustomerMappingSucceededDataManager : IDataManager, IBulkApplyDataManager<CustomerMappingSerialized>
+	{
+		string SwitchId { get; set; }
+		void Finalize(ICustomerMappingSucceededFinalizeContext context);
+		void ApplyCustomerMappingSucceededForDB(object preparedCustomerMapping);
 	}
 }

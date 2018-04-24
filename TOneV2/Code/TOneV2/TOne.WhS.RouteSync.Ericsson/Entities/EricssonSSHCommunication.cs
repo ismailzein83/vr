@@ -7,11 +7,6 @@ using Vanrise.Common;
 
 namespace TOne.WhS.RouteSync.Ericsson.Entities
 {
-    public class SwitchCommunication
-    {
-
-    }
-
     public class EricssonSSHCommunication
     {
         public bool IsActive { get; set; }

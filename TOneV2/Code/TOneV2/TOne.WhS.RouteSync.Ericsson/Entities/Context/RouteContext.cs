@@ -22,13 +22,32 @@ namespace TOne.WhS.RouteSync.Ericsson
 	{
 		public Dictionary<string, EricssonConvertedRouteDifferences> RouteDifferencesByBO { get; set; }
 	}
-
+	
 	public interface IRouteFinalizeContext
 	{
 
 	}
 
 	public class RouteFinalizeContext : IRouteFinalizeContext
+	{
+
+	}
+
+	public interface IRouteSucceededInitializeContext
+	{
+
+	}
+
+	public class RouteSucceededInitializeContext : IRouteSucceededInitializeContext
+	{
+
+	}
+	public interface IRouteSucceededFinalizeContext
+	{
+
+	}
+
+	public class RouteSucceededFinalizeContext : IRouteFinalizeContext
 	{
 
 	}

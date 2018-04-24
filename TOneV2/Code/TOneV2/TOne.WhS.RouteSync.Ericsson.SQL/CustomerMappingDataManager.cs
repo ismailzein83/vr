@@ -14,6 +14,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 	{
 		const string CustomerMappingTableName = "CustomerMapping";
 		const string CustomerMappingTempTableName = "CustomerMapping_temp";
+		const string CustomerMappingSucceededTableName = "CustomerMapping_Succeeded";
 		readonly string[] columns = { "BO", "CustomerMapping" };
 
 		public string SwitchId { get; set; }
@@ -27,10 +28,16 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 		public void Initialize(ICustomerMappingInitializeContext context)
 		{
 			Guid guid = Guid.NewGuid();
-			string query = string.Format(query_CreateRouteTempTable, SwitchId, CustomerMappingTempTableName, guid);
+			string createTempTableQuery = string.Format(query_CreateRouteTempTable, SwitchId, CustomerMappingTempTableName, guid);
+			ExecuteNonQueryText(createTempTableQuery, null);
+			string syncWithSucceededTableQuery = string.Format(query_SyncWithCustomerMappingSucceededTable, SwitchId, CustomerMappingTableName, CustomerMappingSucceededTableName, new Guid(), (int)ActionType.Delete, (int)ActionType.Update, (int)ActionType.Add);
+			ExecuteNonQueryText(syncWithSucceededTableQuery, null);
+		}
+		public void Finalize(ICustomerMappingFinalizeContext context)
+		{
+			string query = string.Format(query_SwapTables, SwitchId, CustomerMappingTableName, CustomerMappingTempTableName);
 			ExecuteNonQueryText(query, null);
 		}
-
 		public void CompareTables(ICustomerMappingTablesContext context)
 		{
 			var differences = new Dictionary<string, List<CustomerMappingByCompare>>();
@@ -158,7 +165,46 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 	                                                  SELECT [BO], [CustomerMapping], '{2}' as tableName FROM [WhS_RouteSync_Ericsson_{0}].[{2}]
                                                   END";
 
-		#endregion
+		const string query_SwapTables = @"IF  EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{1}') AND s.type in (N'U'))
+                                                          begin
+                                                              DROP TABLE WhS_RouteSync_Ericsson_{0}.{1}
+                                                          end
 
+	                                        EXEC sp_rename '[WhS_RouteSync_Ericsson_{0}].[{2}]', '{1}';";
+
+		const string query_SyncWithCustomerMappingSucceededTable = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{2}') AND s.type in (N'U'))
+                                                    BEGIN
+														DELETE WhS_RouteSync_Ericsson_{0}.{1}
+														FROM WhS_RouteSync_Ericsson_{0}.{1} as cm join WhS_RouteSync_Ericsson_{0}.{2} as cms 
+														ON cm.BO = cms.BO
+														WHERE cms.Action = {4}
+
+														MERGE INTO WhS_RouteSync_Ericsson_{0}.{1}  as cm 
+														USING WhS_RouteSync_Ericsson_{0}.{2} as cms
+														ON cm.BO = cms.BO and cms.Action={5}
+														WHEN MATCHED THEN
+														UPDATE 
+														SET cm.CustomerMapping = cms.CustomerMapping;
+
+														INSERT INTO  WhS_RouteSync_Ericsson_{0}.{1} (BO, CustomerMapping)
+														SELECT BO, CustomerMapping FROM WhS_RouteSync_Ericsson_{0}.{2} as cms
+														WHERE cms.Action = {6}
+
+                                                    END
+													
+													ELSE 
+														BEGIN
+														CREATE TABLE [WhS_RouteSync_Ericsson_{0}].[{2}](
+                                                                BO varchar(255) NOT NULL,
+	                                                            CustomerMapping varchar(max) NOT NULL,
+																Action tinyint NOT NULL,
+
+																CONSTRAINT [PK_WhS_RouteSync_Ericsson_{0}.CustomerMapping_{3}] PRIMARY KEY CLUSTERED 
+																(
+																	BO ASC
+																)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+                                                         ) ON [PRIMARY]
+													END";
+		#endregion
 	}
 }
