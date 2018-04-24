@@ -10,6 +10,7 @@ using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
 
 namespace Retail.BusinessEntity.Business
@@ -532,5 +533,96 @@ namespace Retail.BusinessEntity.Business
         }
 
         #endregion
+    }
+
+    public class OperatorWithLocalManager : BaseBusinessEntityManager
+    {
+        static BusinessEntityDefinitionManager s_businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
+
+        #region BaseBusinessEntityManager Members
+
+        public override List<dynamic> GetAllEntities(IBusinessEntityGetAllContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override dynamic GetEntity(IBusinessEntityGetByIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string GetEntityDescription(IBusinessEntityDescriptionContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override dynamic GetEntityId(IBusinessEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IEnumerable<dynamic> GetIdsByParentEntityId(IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override dynamic GetParentEntityId(IBusinessEntityGetParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool IsCacheExpired(IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override dynamic MapEntityToInfo(IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public IEnumerable<AccountInfo> GetOperatorsWithLocal(Guid businessEntityDefinitionId)
+        {
+            BusinessEntityDefinition businessEntityDefinition = s_businessEntityDefinitionManager.GetBusinessEntityDefinition(businessEntityDefinitionId);
+
+            if (businessEntityDefinition == null)
+                throw new NullReferenceException(string.Format("businessEntityDefinition Id : {0}", businessEntityDefinitionId));
+
+            if (businessEntityDefinition.Settings == null)
+                throw new NullReferenceException(string.Format("businessEntityDefinition.Settings Id : {0}", businessEntityDefinitionId));
+
+            var operatorWithLocalDefinition = businessEntityDefinition.Settings as OperatorWithLocalDefinitionSettings;
+
+            AccountBEManager accountBEManager = new AccountBEManager();
+            IEnumerable<AccountInfo> icxOperators = accountBEManager.GetAccountsInfo(operatorWithLocalDefinition.AccountBEDefintionId, null, null);
+
+            AccountInfo localAccount = new AccountInfo();
+            localAccount.AccountId = -99999;
+            localAccount.Name = "Ogero";
+
+
+            List<AccountInfo> accountsWithLocal = new List<AccountInfo>();
+            accountsWithLocal.AddRange(icxOperators);
+            accountsWithLocal.Add(localAccount);
+
+            return accountsWithLocal;
+        }
+
+        #endregion
+    }
+
+    public class OperatorWithLocalDefinitionSettings : Vanrise.GenericData.Entities.BusinessEntityDefinitionSettings
+    {
+        private static Guid s_configId = new Guid("C6F27953-BDDB-4F0C-BC8C-55A3E5AA0C85");
+        public override Guid ConfigId { get { return s_configId; } }
+
+        private static Guid s_accountBEDefintionId = new Guid("02FF70B8-8F3F-4281-9BF9-28BD8442FDAB");
+        public Guid AccountBEDefintionId { get { return s_accountBEDefintionId; } }
+
+        public override string SelectorUIControl { get { return "retail-be-icx-account-selector"; } }
     }
 }
