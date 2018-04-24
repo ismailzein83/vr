@@ -127,6 +127,9 @@
         <Height>0.1875in</Height>
         <Width>0.79166in</Width>
         <ZIndex>3</ZIndex>
+        <Visibility>
+          <Hidden>=iif(Parameters!Phone.Value is Nothing ,true,false)</Hidden>
+        </Visibility>
         <Style>
           <Border />
           <PaddingLeft>2pt</PaddingLeft>
@@ -159,6 +162,9 @@
         <Height>0.21875in</Height>
         <Width>0.79166in</Width>
         <ZIndex>4</ZIndex>
+        <Visibility>
+          <Hidden>=iif(Parameters!Fax.Value is Nothing ,true,false)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1197,41 +1203,6 @@
           <PaddingBottom>2pt</PaddingBottom>
         </Style>
       </Textbox>
-      <Textbox Name="Textbox14">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>=Parameters!VatID.Value</Value>
-                <Style>
-                  <FontStyle>Italic</FontStyle>
-                  <FontFamily>Times New Roman</FontFamily>
-                  <FontSize>9pt</FontSize>
-                  <TextDecoration>Underline</TextDecoration>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>1.16251in</Top>
-        <Left>6.92279in</Left>
-        <Height>0.21875in</Height>
-        <Width>1.20554in</Width>
-        <ZIndex>15</ZIndex>
-        <Style>
-          <Border>
-            <Style>None</Style>
-          </Border>
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
       <Textbox Name="Textbox6">
         <CanGrow>true</CanGrow>
         <KeepTogether>true</KeepTogether>
@@ -1255,7 +1226,7 @@
         <Left>0.9304in</Left>
         <Height>0.33334in</Height>
         <Width>3.375in</Width>
-        <ZIndex>16</ZIndex>
+        <ZIndex>15</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1289,7 +1260,7 @@
         <Left>0.9304in</Left>
         <Height>0.1875in</Height>
         <Width>3.375in</Width>
-        <ZIndex>17</ZIndex>
+        <ZIndex>16</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1323,7 +1294,7 @@
         <Left>0.9304in</Left>
         <Height>0.36458in</Height>
         <Width>3.375in</Width>
-        <ZIndex>18</ZIndex>
+        <ZIndex>17</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1357,7 +1328,10 @@
         <Left>0.1425in</Left>
         <Height>0.21875in</Height>
         <Width>0.79166in</Width>
-        <ZIndex>19</ZIndex>
+        <ZIndex>18</ZIndex>
+        <Visibility>
+          <Hidden>=iif(Parameters!CustomerVatID.Value is Nothing ,true,false)</Hidden>
+        </Visibility>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1391,7 +1365,7 @@
         <Left>4.76624in</Left>
         <Height>0.16667in</Height>
         <Width>0.98958in</Width>
-        <ZIndex>20</ZIndex>
+        <ZIndex>19</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1425,7 +1399,7 @@
         <Left>4.76624in</Left>
         <Height>0.16667in</Height>
         <Width>0.98958in</Width>
-        <ZIndex>21</ZIndex>
+        <ZIndex>20</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1459,7 +1433,7 @@
         <Left>4.76624in</Left>
         <Height>0.16667in</Height>
         <Width>0.98958in</Width>
-        <ZIndex>22</ZIndex>
+        <ZIndex>21</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1493,7 +1467,7 @@
         <Left>5.84848in</Left>
         <Height>0.16667in</Height>
         <Width>2.27985in</Width>
-        <ZIndex>23</ZIndex>
+        <ZIndex>22</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1527,7 +1501,7 @@
         <Left>5.84849in</Left>
         <Height>0.16667in</Height>
         <Width>2.27984in</Width>
-        <ZIndex>24</ZIndex>
+        <ZIndex>23</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1561,7 +1535,7 @@
         <Left>5.84849in</Left>
         <Height>0.16667in</Height>
         <Width>2.27984in</Width>
-        <ZIndex>25</ZIndex>
+        <ZIndex>24</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2219,7 +2193,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!TotalNumberOfCalls.Value,Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=FormatNumber(Fields!TotalNumberOfCalls.Value,Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2289,7 +2263,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!Duration.Value,Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=FormatNumber(Fields!Duration.Value,Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2359,7 +2333,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!SaleAmount.Value,Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=FormatNumber(Fields!SaleAmount.Value,Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2499,7 +2473,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!AmountAfterCommission.Value,Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=FormatNumber(Fields!AmountAfterCommission.Value,Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -2605,7 +2579,7 @@
         <Left>0.12596in</Left>
         <Height>0.5in</Height>
         <Width>7.95498in</Width>
-        <ZIndex>26</ZIndex>
+        <ZIndex>25</ZIndex>
         <Visibility>
           <Hidden>= iif(Parameters!DisplayCommission.Value = True, false, true)</Hidden>
         </Visibility>
@@ -2638,7 +2612,7 @@
         <Left>0.9304in</Left>
         <Height>0.21875in</Height>
         <Width>3.375in</Width>
-        <ZIndex>27</ZIndex>
+        <ZIndex>26</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2672,7 +2646,7 @@
         <Left>0.9304in</Left>
         <Height>0.21875in</Height>
         <Width>3.375in</Width>
-        <ZIndex>28</ZIndex>
+        <ZIndex>27</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2706,7 +2680,7 @@
         <Left>0.9304in</Left>
         <Height>0.1875in</Height>
         <Width>3.375in</Width>
-        <ZIndex>29</ZIndex>
+        <ZIndex>28</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2783,7 +2757,7 @@
         <Left>0.1425in</Left>
         <Height>3.18888in</Height>
         <Width>7.98583in</Width>
-        <ZIndex>30</ZIndex>
+        <ZIndex>29</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2898,7 +2872,7 @@
         <Left>3.47596in</Left>
         <Height>0.36458in</Height>
         <Width>2in</Width>
-        <ZIndex>31</ZIndex>
+        <ZIndex>30</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2928,7 +2902,7 @@
         <Left>5.84848in</Left>
         <Height>0.17in</Height>
         <Width>2.27985in</Width>
-        <ZIndex>32</ZIndex>
+        <ZIndex>31</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2962,7 +2936,7 @@
         <Left>4.76624in</Left>
         <Height>0.17in</Height>
         <Width>0.98958in</Width>
-        <ZIndex>33</ZIndex>
+        <ZIndex>32</ZIndex>
         <Style>
           <Border>
             <Style>None</Style>
@@ -3319,7 +3293,7 @@
         <Left>0.81646in</Left>
         <Height>0.25in</Height>
         <Width>7.26448in</Width>
-        <ZIndex>34</ZIndex>
+        <ZIndex>33</ZIndex>
         <Visibility>
           <Hidden>= iif(Parameters!DisplayCommission.Value = True, True, false)</Hidden>
         </Visibility>
@@ -3818,7 +3792,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=System.Math.Round(Fields!TotalNumberOfCalls.Value, Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=FormatNumber(Fields!TotalNumberOfCalls.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -3888,7 +3862,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=System.Math.Round(Fields!Duration.Value, Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=FormatNumber(Fields!Duration.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -3958,7 +3932,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!AmountAfterCommission.Value, Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=FormatNumber(Fields!AmountAfterCommission.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -4052,7 +4026,7 @@
         <Left>0.12875in</Left>
         <Height>0.5in</Height>
         <Width>7.95219in</Width>
-        <ZIndex>35</ZIndex>
+        <ZIndex>34</ZIndex>
         <Visibility>
           <Hidden>= iif(Parameters!DisplayCommission.Value = True, True, false)</Hidden>
         </Visibility>
@@ -4492,7 +4466,7 @@
         <Left>0.81646in</Left>
         <Height>0.25in</Height>
         <Width>7.26448in</Width>
-        <ZIndex>36</ZIndex>
+        <ZIndex>35</ZIndex>
         <Visibility>
           <Hidden>= iif(Parameters!DisplayCommission.Value = True, false, True)</Hidden>
         </Visibility>
@@ -4502,39 +4476,6 @@
           </Border>
         </Style>
       </Tablix>
-      <Textbox Name="Textbox26">
-        <CanGrow>true</CanGrow>
-        <KeepTogether>true</KeepTogether>
-        <Paragraphs>
-          <Paragraph>
-            <TextRuns>
-              <TextRun>
-                <Value>Vat ID</Value>
-                <Style>
-                  <FontStyle>Italic</FontStyle>
-                  <FontFamily>Times New Roman</FontFamily>
-                  <FontSize>9pt</FontSize>
-                  <TextDecoration>Underline</TextDecoration>
-                </Style>
-              </TextRun>
-            </TextRuns>
-            <Style />
-          </Paragraph>
-        </Paragraphs>
-        <rd:DefaultName>Textbox5</rd:DefaultName>
-        <Top>1.15556in</Top>
-        <Left>5.89124in</Left>
-        <Height>0.24791in</Height>
-        <Width>0.96211in</Width>
-        <ZIndex>37</ZIndex>
-        <Style>
-          <Border />
-          <PaddingLeft>2pt</PaddingLeft>
-          <PaddingRight>2pt</PaddingRight>
-          <PaddingTop>2pt</PaddingTop>
-          <PaddingBottom>2pt</PaddingBottom>
-        </Style>
-      </Textbox>
     </ReportItems>
     <Height>11.51959in</Height>
     <Style />

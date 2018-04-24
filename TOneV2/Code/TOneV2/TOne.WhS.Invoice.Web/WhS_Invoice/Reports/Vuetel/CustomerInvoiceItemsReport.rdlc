@@ -151,6 +151,7 @@
                 <Value>=Parameters!InvoiceNb.Value</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
+                  <FontSize>8pt</FontSize>
                 </Style>
               </TextRun>
             </TextRuns>
@@ -185,6 +186,7 @@
                 <Value>=CDate(Parameters!InvoiceDate.Value).ToString("dd/MM/yyyy")</Value>
                 <Style>
                   <FontFamily>Verdana</FontFamily>
+                  <FontSize>8pt</FontSize>
                 </Style>
               </TextRun>
             </TextRuns>
@@ -687,7 +689,8 @@
                             <TextRun>
                               <Value>=CDate(Fields!FromDate.Value).ToString("dd/MM/yyyy")</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -751,7 +754,8 @@
                             <TextRun>
                               <Value>=CDate(Fields!ToDate.Value).ToString("dd/MM/yyyy")</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -782,9 +786,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!Duration.Value,Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=FormatNumber(Fields!Duration.Value,Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -817,7 +822,8 @@
                             <TextRun>
                               <Value>=Fields!NumberOfCalls.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -850,7 +856,8 @@
                             <TextRun>
                               <Value>=Round(Fields!SaleRate.Value,4)</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -883,7 +890,8 @@
                             <TextRun>
                               <Value>=Fields!OriginalSaleCurrencyIdDescription.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -914,9 +922,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!OriginalSaleAmount.Value,Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=FormatNumber(Fields!OriginalSaleAmount.Value,Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -947,9 +956,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Round(Fields!OriginalAmountAfterCommission.Value,Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=FormatNumber(Fields!OriginalAmountAfterCommission.Value,Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1432,7 +1442,8 @@
                             <TextRun>
                               <Value>=CDate(Fields!FromDate.Value).ToString("dd/MM/yyyy")</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1496,7 +1507,8 @@
                             <TextRun>
                               <Value>=CDate(Fields!ToDate.Value).ToString("dd/MM/yyyy")</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1527,9 +1539,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=System.Math.Round(Fields!Duration.Value, Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=FormatNumber(Fields!Duration.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1562,7 +1575,8 @@
                             <TextRun>
                               <Value>=Fields!NumberOfCalls.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1593,9 +1607,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=System.Math.Round(Fields!SaleRate.Value, 4)</Value>
+                              <Value>=FormatNumber(Fields!SaleRate.Value, 4)</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1628,7 +1643,8 @@
                             <TextRun>
                               <Value>=Fields!OriginalSaleCurrencyIdDescription.Value</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -1659,9 +1675,10 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=System.Math.Round(Fields!OriginalAmountAfterCommission.Value, Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=FormatNumber(Fields!OriginalAmountAfterCommission.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
-                                <FontSize>9pt</FontSize>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
                               </Style>
                             </TextRun>
                           </TextRuns>
