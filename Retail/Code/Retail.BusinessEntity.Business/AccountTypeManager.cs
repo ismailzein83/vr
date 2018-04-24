@@ -535,7 +535,7 @@ namespace Retail.BusinessEntity.Business
         #endregion
     }
 
-    public class OperatorWithLocalManager : BaseBusinessEntityManager
+    public class OperatorsWithLocalManager : BaseBusinessEntityManager
     {
         static BusinessEntityDefinitionManager s_businessEntityDefinitionManager = new BusinessEntityDefinitionManager();
 
@@ -595,7 +595,7 @@ namespace Retail.BusinessEntity.Business
             if (businessEntityDefinition.Settings == null)
                 throw new NullReferenceException(string.Format("businessEntityDefinition.Settings Id : {0}", businessEntityDefinitionId));
 
-            var operatorWithLocalDefinition = businessEntityDefinition.Settings as OperatorWithLocalDefinitionSettings;
+            var operatorWithLocalDefinition = businessEntityDefinition.Settings as OperatorsWithLocalDefinitionSettings;
 
             AccountBEManager accountBEManager = new AccountBEManager();
             IEnumerable<AccountInfo> icxOperators = accountBEManager.GetAccountsInfo(operatorWithLocalDefinition.AccountBEDefintionId, null, null);
@@ -603,7 +603,6 @@ namespace Retail.BusinessEntity.Business
             AccountInfo localAccount = new AccountInfo();
             localAccount.AccountId = -99999;
             localAccount.Name = "Ogero";
-
 
             List<AccountInfo> accountsWithLocal = new List<AccountInfo>();
             accountsWithLocal.AddRange(icxOperators);
@@ -615,7 +614,7 @@ namespace Retail.BusinessEntity.Business
         #endregion
     }
 
-    public class OperatorWithLocalDefinitionSettings : Vanrise.GenericData.Entities.BusinessEntityDefinitionSettings
+    public class OperatorsWithLocalDefinitionSettings : Vanrise.GenericData.Entities.BusinessEntityDefinitionSettings
     {
         private static Guid s_configId = new Guid("C6F27953-BDDB-4F0C-BC8C-55A3E5AA0C85");
         public override Guid ConfigId { get { return s_configId; } }
@@ -623,6 +622,6 @@ namespace Retail.BusinessEntity.Business
         private static Guid s_accountBEDefintionId = new Guid("02FF70B8-8F3F-4281-9BF9-28BD8442FDAB");
         public Guid AccountBEDefintionId { get { return s_accountBEDefintionId; } }
 
-        public override string SelectorUIControl { get { return "retail-be-icx-account-selector"; } }
+        public override string SelectorUIControl { get { return "retail-be-icx-operatorswithlocal-selector"; } }
     }
 }

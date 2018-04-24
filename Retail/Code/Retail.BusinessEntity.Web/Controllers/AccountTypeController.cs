@@ -88,4 +88,19 @@ namespace Retail.BusinessEntity.Web.Controllers
 
         }
     }
+
+
+    [JSONWithTypeAttribute]
+    [RoutePrefix(Constants.ROUTE_PREFIX + "OperatorWithLocal")]
+    public class OperatorWithLocalController : BaseAPIController
+    {
+        private OperatorsWithLocalManager _operatorWithLocalManager = new OperatorsWithLocalManager();
+
+        [HttpGet]
+        [Route("GetOperatorsWithLocalInfo")]
+        public IEnumerable<AccountInfo> GetOperatorsWithLocalInfo(Guid businessEntityDefinitionId)
+        {
+            return _operatorWithLocalManager.GetOperatorsWithLocal(businessEntityDefinitionId);
+        }
+    }
 }
