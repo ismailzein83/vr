@@ -28,7 +28,7 @@ namespace Vanrise.Invoice.Business
           
             PartnerManager _partnerManager = new PartnerManager();
 
-            var toDate = new DateTime(this.ToDate.Year, this.ToDate.Month, this.ToDate.Day, 23, 59, 59, 999);
+            var toDate = new DateTime(this.ToDate.Year, this.ToDate.Month, this.ToDate.Day, 23, 59, 59, 998);
 
             var invoiceAccountData = _partnerManager.GetInvoiceAccountData(invoiceType.InvoiceTypeId, this.PartnerId);
             invoiceAccountData.ThrowIfNull("invoiceAccountData");
