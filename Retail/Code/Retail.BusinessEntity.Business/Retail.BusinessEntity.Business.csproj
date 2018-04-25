@@ -167,6 +167,8 @@
     <Compile Include="Extensions\AccountManager\RetailAccountAssignmentRuntime.cs" />
     <Compile Include="Extensions\AccountManager\RetailAccountAssignmentDefinition.cs" />
     <Compile Include="Extensions\AccountManager\RetailAccountAccountManagerSubViewDefinition.cs" />
+    <Compile Include="Extensions\OperatorsWithLocalDefinitionSettings.cs" />
+    <Compile Include="Extensions\OperatorsWithLocalManager.cs" />
     <Compile Include="OperatorDeclarationServicesCustomObjectTypeSettings.cs" />
     <Compile Include="OperatorDeclarationServicesManager.cs" />
     <Compile Include="RecurChargeBalanceUpdateSummaryManager.cs" />

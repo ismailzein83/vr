@@ -175,6 +175,7 @@
     <Compile Include="Controllers\FinancialAccountController.cs" />
     <Compile Include="Controllers\FinancialAccountDefinitionController.cs" />
     <Compile Include="Controllers\OperatorDirectionServicesController.cs" />
+    <Compile Include="Controllers\OperatorWithLocalController.cs" />
     <Compile Include="Controllers\PackageDefinitionController.cs" />
     <Compile Include="Controllers\OperatorDeclaredInfoController.cs" />
     <Compile Include="Controllers\AccountTypeController.cs" />
@@ -426,6 +427,7 @@
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\Templates\AccountSubViewDefinitionTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\Templates\AccountSubViewRuntimeSearchTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Extensions\AccountManager\Templates\AssignAccountManagerAccountActionSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Extensions\ICX\retail-be-icx-operatorwithlocal-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\MainExtensions\retail-be-financialaccount-postpaid.js" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\MainExtensions\retail-be-financialaccountdefinition-postpaid.js" />
     <Content Include="Retail_BusinessEntity\Directives\FinancialAccount\MainExtensions\Templates\PostpaidFinancialAccount.html" />
@@ -769,6 +771,7 @@
     <Content Include="Retail_BusinessEntity\Services\APIServices\FinancialAccountAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\FinancialAccountDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\OperatorDirectionServicesAPIService.js" />
+    <Content Include="Retail_BusinessEntity\Services\APIServices\OperatorsWithLocalAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\PackageDefinitionAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\DIDAPIService.js" />
     <Content Include="Retail_BusinessEntity\Services\APIServices\PopAPIService.js" />
