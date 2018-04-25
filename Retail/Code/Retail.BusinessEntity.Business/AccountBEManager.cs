@@ -15,6 +15,8 @@ using System.Collections.Concurrent;
 using Vanrise.Security.Business;
 using Retail.BusinessEntity.APIEntities;
 using Vanrise.GenericData.MainExtensions.DataRecordFields;
+using Retail.BusinessEntity.BP.Arguments;
+using Vanrise.BusinessProcess.Business;
 
 namespace Retail.BusinessEntity.Business
 {
@@ -116,6 +118,15 @@ namespace Retail.BusinessEntity.Business
                 {
                     return false;
                 }
+                if (input.Query.AccountBulkActionId.HasValue)
+                {
+                    var accountBEDefinitionSetting = _accountBEDefinitionManager.GetAccountBEDefinitionSettings(input.Query.AccountBEDefinitionId);
+                    accountBEDefinitionSetting.ThrowIfNull("accountBEDefinitionSetting", input.Query.AccountBEDefinitionId);
+                    var accountBulkAction = accountBEDefinitionSetting.AccountBulkActions.FindRecord(x => x.AccountBulkActionId == input.Query.AccountBulkActionId);
+                    accountBulkAction.ThrowIfNull("accountBulkAction", input.Query.AccountBEDefinitionId);
+                    if (!EvaluateAccountCondition(account, accountBulkAction.AccountCondition))
+                        return false;
+                }
                 return true;
             };
 
@@ -125,7 +136,29 @@ namespace Retail.BusinessEntity.Business
                 input.SortByColumnName = string.Format(@"{0}[""{1}""].{2}", fieldProperty[0], fieldProperty[1], fieldProperty[2]);
             }
 
-            var bigResult = cachedAccounts.ToBigResult(input, filterExpression, account => AccountDetailMapperStep1(input.Query.AccountBEDefinitionId, account, input.Query.Columns));
+            string resultKey = input.ResultKey;
+            VRBulkActionDraftManager bulkActionDraftManager = new VRBulkActionDraftManager();
+            var cachedAccountsWithSelectionHandling = bulkActionDraftManager.GetOrCreateCachedWithSelectionHandling<Account, CacheManager, Guid>(ref resultKey, input.Query.BulkActionState, () =>
+            {
+                return cachedAccounts.FindAllRecords(filterExpression);
+            }, (accounts) =>
+            {
+                List<BulkActionItem> bulkActionItems = new List<BulkActionItem>();
+
+                foreach (var account in accounts)
+                {
+                    bulkActionItems.Add(new BulkActionItem
+                    {
+                        ItemId = account.AccountId.ToString()
+                    });
+                }
+                return bulkActionItems;
+
+            }, input.Query.AccountBEDefinitionId);
+
+            input.ResultKey = resultKey;
+
+            var bigResult = cachedAccountsWithSelectionHandling.ToBigResult(input, null, account => AccountDetailMapperStep1(input.Query.AccountBEDefinitionId, account, input.Query.Columns));
 
             var filtredActionIds = _accountBEDefinitionManager.GetLoggedInUserAllowedActionIds(input.Query.AccountBEDefinitionId);
             var filterdViewIds = _accountBEDefinitionManager.GetLoggedInUserAllowedViewIds(input.Query.AccountBEDefinitionId);
@@ -1016,6 +1049,31 @@ namespace Retail.BusinessEntity.Business
             return null;
         }
 
+        public ExecuteAccountBulkActionProcessOutput ExecuteAccountBulkActions(ExecuteAccountBulkActionProcessInput input)
+        {
+            input.BulkActionFinalState.ThrowIfNull("input.BulkActionFinalState");
+            input.BulkActionFinalState.TargetItems.ThrowIfNull("input.BulkActionFinalState.TargetItems");
+            if (input.BulkActionFinalState.TargetItems.Count == 0 && !input.BulkActionFinalState.IsAllSelected)
+            {
+                return new ExecuteAccountBulkActionProcessOutput { Succeed = false, OutputMessage = "At least one account must be selected." };
+            }
+            int userId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+
+            AccountBulkActionProcessInput accountBulkActionProcessInput = new AccountBulkActionProcessInput()
+            {
+                AccountBEDefinitionId = input.AccountBEDefinitionId,
+                AccountBulkActions = input.AccountBulkActions,
+                BulkActionFinalState = input.BulkActionFinalState,
+                HandlingErrorOption = input.HandlingErrorOption,
+                UserId = userId
+            };
+            var createProcessInput = new Vanrise.BusinessProcess.Entities.CreateProcessInput
+            {
+                InputArguments = accountBulkActionProcessInput
+            };
+            var result = new BPInstanceManager().CreateNewProcess(createProcessInput);
+            return new ExecuteAccountBulkActionProcessOutput { Succeed = true, ProcessInstanceId = result.ProcessInstanceId };
+        }
         #endregion
 
         #region ExtendedSettings

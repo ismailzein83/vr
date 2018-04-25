@@ -76,6 +76,10 @@
                 accountBEDefinitionId: accountBEDefinitionId,
             });
         }
+        function GetAccountBulkActionSettingsConfigs() {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountBulkActionSettingsConfigs"));
+        }
+
         return {
             GetAccountBEDefinitionSettingsWithHidden: GetAccountBEDefinitionSettingsWithHidden,
             GetAccountViewDefinitionSettingsConfigs: GetAccountViewDefinitionSettingsConfigs,
@@ -89,7 +93,8 @@
             GetAccountExtraFieldDefinitionSettingsConfigs: GetAccountExtraFieldDefinitionSettingsConfigs,
             CheckUseRemoteSelector: CheckUseRemoteSelector,
             GetFinancialAccountLocatorConfigs: GetFinancialAccountLocatorConfigs,
-            GetAccountBEStatusDefinitionId: GetAccountBEStatusDefinitionId
+            GetAccountBEStatusDefinitionId: GetAccountBEStatusDefinitionId,
+            GetAccountBulkActionSettingsConfigs: GetAccountBulkActionSettingsConfigs,
         };
     }
 

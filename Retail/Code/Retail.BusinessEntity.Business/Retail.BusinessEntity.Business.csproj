@@ -160,6 +160,7 @@
     <Compile Include="AccountGenericFields\AccountIdGenericField.cs" />
     <Compile Include="AccountHandlers\BaseAccountEventPayload.cs" />
     <Compile Include="AccountPackageRecurChargeManager.cs" />
+    <Compile Include="Context\AccountBulkActionSettingsContext.cs" />
     <Compile Include="Extensions\AccountDIDMemoryAnalyticDataManager.cs" />
     <Compile Include="Extensions\AccountManager\AssignedAccountToAccountManagerFilter.cs" />
     <Compile Include="Extensions\AccountManager\RetailAccountManagerAssignmentManager.cs" />

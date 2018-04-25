@@ -20,7 +20,7 @@
             };
 
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/AccountEditor.html', parameters, settings);
-        };
+        }
 
         function editAccount(accountBEDefinitionId, accountId, parentAccountId, sourceId, onAccountUpdated) {
 
@@ -38,7 +38,7 @@
             };
 
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/AccountEditor.html', parameters, settings);
-        };
+        }
 
         function getEntityUniqueName(definitionId) {
             return "Retail_BusinessEntity_AccountBE_" + definitionId;
@@ -106,16 +106,32 @@
             };
 
             VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/Account360DegreeEditor.html', parameters, settings);
-        };
+        }
+
+        function openBulkActionsEditor(viewId, bulkAction, accountBEDefinitionId) {
+            var parameters = {
+                viewId: viewId,
+                bulkAction: bulkAction,
+                accountBEDefinitionId: accountBEDefinitionId,
+            };
+            var settings = {};
+
+            settings.onScopeReady = function (modalScope) {
+
+            };
+
+            VRModalService.showModal('/Client/Modules/Retail_BusinessEntity/Views/Account/BulkActionsEditor.html', parameters, settings);
+        }
 
         return {
             addAccount: addAccount,
             editAccount: editAccount,
             getEntityUniqueName: getEntityUniqueName,
             defineAccountViewTabs: defineAccountViewTabs,
-            openAccount360DegreeEditor: openAccount360DegreeEditor
+            openAccount360DegreeEditor: openAccount360DegreeEditor,
+            openBulkActionsEditor: openBulkActionsEditor
         };
-
+         
     }
 
     appControllers.service('Retail_BE_AccountBEService', AccountBEService);

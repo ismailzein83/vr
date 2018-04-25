@@ -106,7 +106,7 @@ namespace Retail.BusinessEntity.Business
         }
 
 
-        public ExcelResult ExportRates(Guid accountBEDefinitionId, long accountId, DateTime effectiveDate)
+        public ExcelResult ExportRates(Guid accountBEDefinitionId, long accountId, DateTime effectiveDate, bool createEmptySheetIfNoRates)
         {
             List<ExportExcelSheet> excelSheets = new List<ExportExcelSheet>();
 
@@ -155,12 +155,20 @@ namespace Retail.BusinessEntity.Business
                     }
                 }
             }
-            if (excelSheets.Count == 0)
+            if (excelSheets.Count == 0 && createEmptySheetIfNoRates)
             {
                 ExportExcelSheet dummySheet = new ExportExcelSheet() { Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }, Rows = new List<ExportExcelRow>() };
                 excelSheets.Add(dummySheet);
             }
-            return new ExcelManager().ExportExcel(excelSheets);
+
+            if (excelSheets.Count > 0)
+            {
+                return new ExcelManager().ExportExcel(excelSheets);
+            }
+            else
+            {
+                return null;
+            }
         }
 
         private ExportExcelSheet BuildExcelSheet(string sheetName, ExportRuleData exportRuleData)

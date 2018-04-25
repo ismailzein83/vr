@@ -1,0 +1,6 @@
+﻿<vr-button type="Add" data-onclick="ctrl.addAccountBulkAction" standalone></vr-button>
+
+<vr-datagrid datasource="ctrl.datasource" norowhighlightonclick="true" menuactions="gridMenuActions" maxheight="300px"
+             on-ready="onGridReady" enabledraggablerow="true" ondeleterow="ctrl.removeAccountBulkAction" hidegridmenu>
+    <vr-datagridcolumn headertext="'Title'" field="'Entity.Title'" widthfactor="10" disablesorting></vr-datagridcolumn>
+</vr-datagrid>

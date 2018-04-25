@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common.Business;
 
 namespace Retail.BusinessEntity.MainExtensions.AccountBulkAction
 {
@@ -17,12 +18,8 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBulkAction
 
         public override string RuntimeEditor
         {
-            get { return ""; }
+            get { return "retail-be-accountbulkactionsettings-sendemail-runtimeeditor"; }
         }
 
-        public override void Execute(IAccountBulkActionSettingsContext contex)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -1,5 +1,5 @@
 ﻿'use strict';
-
+ 
 app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
@@ -55,6 +55,9 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
             var accountConditionSelectiveDirectiveAPI;
             var accountConditionSelectiveDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var accountBulkActionsDirectiveAPI;
+            var accountBulkActionsDirectiveDeferred = UtilsService.createPromiseDeferred();
+
             function initializeController() {
                 $scope.scopeModel = {};
 
@@ -107,10 +110,14 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     accountConditionSelectiveDirectiveAPI = api;
                     accountConditionSelectiveDirectivePromiseDeferred.resolve();
                 };
+                $scope.scopeModel.onAccountBulkActionsReady = function (api) {
+                    accountBulkActionsDirectiveAPI = api;
+                    accountBulkActionsDirectiveDeferred.resolve();
+                };
 
                 UtilsService.waitMultiplePromises([statusBEDefinitionSelectorDeferred.promise, accountTypeSelectorDeferred.promise, financialAccountLocatorDeferred.promise,
                     accountGridDefinitionDirectiveDeferred.promise, accountViewDefinitionDirectiveDeferred.promise, accountActionDefinitionDirectiveDeferred.promise,
-                    accountGridDefinitionExportExcelDirectiveDeferred.promise, accountConditionSelectiveDirectivePromiseDeferred.promise]).then(function () {
+                    accountGridDefinitionExportExcelDirectiveDeferred.promise, accountConditionSelectiveDirectivePromiseDeferred.promise, accountBulkActionsDirectiveDeferred.promise]).then(function () {
                         defineAPI();
                     });
             }
@@ -131,6 +138,8 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                     var accountExtraFieldDefinitions;
                     var securityDefinition;
                     var packageAssignmentCondition;
+                    var accountBulkActions;
+
                     if (payload != undefined) {
                         accountBEDefinitionId = payload.businessEntityDefinitionId;
 
@@ -145,7 +154,8 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                             accountExtraFieldDefinitions = payload.businessEntityDefinitionSettings.AccountExtraFieldDefinitions;
                             securityDefinition = payload.businessEntityDefinitionSettings.Security;
                             packageAssignmentCondition = payload.businessEntityDefinitionSettings.PackageAssignmentCondition;
-                          
+                            accountBulkActions = payload.businessEntityDefinitionSettings.AccountBulkActions;
+
                             $scope.scopeModel.useFinancialAccountModule = payload.businessEntityDefinitionSettings.UseFinancialAccountModule;
 
                             $scope.scopeModel.useRemoteSelector = payload.businessEntityDefinitionSettings.UseRemoteSelector;
@@ -192,6 +202,9 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
 
                     var accountConditionSelectiveLoadPromise = getAccountConditionSelectiveDirectiveLoadPromise();
                     promises.push(accountConditionSelectiveLoadPromise);
+
+                    var accountBulkActionsLoadPromise = getAccountBulkActionsLoadPromise();
+                    promises.push(accountBulkActionsLoadPromise);
 
                     function getStatusDefinitionSelectorLoadPromise() {
                         var accountActionDefinitionPayload = {
@@ -277,6 +290,13 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                         return accountConditionSelectiveDirectiveAPI.load(accountConditionSelectivePayload);
                     }
 
+                    function getAccountBulkActionsLoadPromise() {
+                        var accountBulkActionsPayload = {
+                            accountBEDefinitionId: accountBEDefinitionId,
+                            accountBulkActions: accountBulkActions
+                        };
+                        return accountBulkActionsDirectiveAPI.load(accountBulkActionsPayload);
+                    }
 
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -299,7 +319,8 @@ app.directive('retailBeAccountbedefinitionsEditor', ['UtilsService', 'VRUIUtilsS
                         AccountExtraFieldDefinitions: accountExtraFieldDefinitionsDirectiveAPI.getData(),
                         PackageAssignmentCondition: accountConditionSelectiveDirectiveAPI.getData(),
                         UseFinancialAccountModule:$scope.scopeModel.useFinancialAccountModule,
-                        Security: securityDefinitionsDirectiveAPI.getData()
+                        Security: securityDefinitionsDirectiveAPI.getData(),
+                        AccountBulkActions: accountBulkActionsDirectiveAPI.getData()
                     };
                     return obj;
                 };

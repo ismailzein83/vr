@@ -86,7 +86,9 @@
     <Compile Include="AccountDefinition\AccountActionDefinitionInfoFilter.cs" />
     <Compile Include="AccountDefinition\AccountBEDefinitionSettings.cs" />
     <Compile Include="AccountDefinition\AccountBEDefinitionViewSettings.cs" />
+    <Compile Include="AccountDefinition\ExecuteAccountBulkActionProcessOutput.cs" />
     <Compile Include="AccountDefinition\AccountBulkActionRuntime.cs" />
+    <Compile Include="AccountDefinition\AccountBulkActionsSettingsConfig.cs" />
     <Compile Include="AccountDefinition\AccountExtraFieldDefinitionConfig.cs" />
     <Compile Include="AccountDefinition\HandlingErrorOption.cs" />
     <Compile Include="AccountManager\AccountManagerAssignmentDetail.cs" />
@@ -102,6 +104,7 @@
     <Compile Include="AccountProvisioner\ProvisionDefinitionPostActionConfig.cs" />
     <Compile Include="AccountStatusHistory\AccountStatusHistory.cs" />
     <Compile Include="AccountType\AccountTypeBESelectorFilter.cs" />
+    <Compile Include="AccountDefinition\ExecuteAccountBulkActionProcessInput.cs" />
     <Compile Include="Account\AccountFilter.cs" />
     <Compile Include="AccountSynchronizerHandler\AccountSynchronizerInsertHandler.cs" />
     <Compile Include="AccountSynchronizerHandler\AccountSynchronizerInsertHandlerConfig.cs" />

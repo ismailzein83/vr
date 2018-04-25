@@ -112,5 +112,12 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.CheckUseRemoteSelector(accountBEDefinitionId);
         }
+
+        [HttpGet]
+        [Route("GetAccountBulkActionSettingsConfigs")]
+        public IEnumerable<AccountBulkActionSettingsConfig> GetAccountBulkActionSettingsConfigs()
+        {
+            return _manager.GetAccountBulkActionSettingsConfigs();
+        }
     }
 }

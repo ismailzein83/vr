@@ -83,6 +83,10 @@
         //    });
         //}
 
+        function ExecuteAccountBulkActions(input) {
+            return BaseAPIService.post(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "ExecuteAccountBulkActions"), input);
+        }
+
         return {
             GetFilteredAccounts: GetFilteredAccounts,
             GetAccount: GetAccount,
@@ -93,10 +97,11 @@
             GetAccountsInfo: GetAccountsInfo,
             GetAccountsInfoByIds: GetAccountsInfoByIds,
             GetAccountEditorRuntime: GetAccountEditorRuntime,
-            DoesUserHaveAddAccess: DoesUserHaveAddAccess
+            DoesUserHaveAddAccess: DoesUserHaveAddAccess,
             //HasViewAccountsPermission: HasViewAccountsPermission,
             //HasAddAccountPermission: HasAddAccountPermission,
             //HasUpdateAccountPermission: HasUpdateAccountPermission,
+            ExecuteAccountBulkActions: ExecuteAccountBulkActions
         };
     }
 

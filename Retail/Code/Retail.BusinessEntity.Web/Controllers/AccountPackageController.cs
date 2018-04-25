@@ -60,7 +60,7 @@ namespace Retail.BusinessEntity.Web.Controllers
         [Route("ExportRates")]
         public object ExportRates(AccountDefinition accountDefinition)
         {
-            return GetExcelResponse(_manager.ExportRates(accountDefinition.AccountBEDefinitionId, accountDefinition.AccountId, DateTime.Now));
+            return GetExcelResponse(_manager.ExportRates(accountDefinition.AccountBEDefinitionId, accountDefinition.AccountId, DateTime.Now, true));
         }
     }
 }

@@ -1,0 +1,29 @@
+﻿<div vr-modalcontent ng-controller="Retail_BE_AccountBulkActionsEditorController" size="xlarge" vr-loader="scopeModel.isLoading">
+    <vr-modalbody>
+        <vr-form name="formAccountBulkActionsEditor">
+            <vr-tabs >
+                <vr-tab header="'Action Information'">
+                    <vr-row removeline>
+                        <vr-directivewrapper directive="scopeModel.bulkActionSettings.RuntimeEditor"
+                                                on-ready="scopeModel.onRuntimeDirectiveReady"
+                                                normal-col-num="6" isrequired="true">
+                        </vr-directivewrapper>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Account Filter'">
+                    <vr-row removeline>
+                        <retail-be-account-management on-ready="scopeModel.onAccountManagementDirectiveReady"></retail-be-account-management>
+                    </vr-row>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Execute" formname="formAccountBulkActionsEditor" data-onclick="scopeModel.execute"></vr-button>
+                <vr-button type="Close" data-onclick="scopeModel.close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

@@ -116,6 +116,12 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.GetClientChildAccountsInfo(accountBEDefinitionId, accountId, withSubChildren);
         }
+        [HttpPost]
+        [Route("ExecuteAccountBulkActions")]
+        public object ExecuteAccountBulkActions(ExecuteAccountBulkActionProcessInput input)
+        {
+            return _manager.ExecuteAccountBulkActions(input);
+        }
     }
 
     public class AccountInfoFilter

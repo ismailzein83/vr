@@ -69,15 +69,19 @@ namespace Retail.BusinessEntity.Entities
     {
         public abstract Guid ConfigId { get; }
         public abstract string RuntimeEditor { get; }
-        public abstract void Execute(IAccountBulkActionSettingsContext contex);
     }
     public interface IAccountBulkActionSettingsContext
     {
-
+        Account Account { get; set; }
+        Guid AccountBEDefinitionId { get; set; }
+        string ErrorMessage { get; set; }
+        bool IsErrorOccured { get; set; }
+        AccountBulkActionSettings DefinitionSettings { get; set; }
     }
 
     public abstract class AccountBulkActionRuntimeSettings
     {
+        public abstract void Execute(IAccountBulkActionSettingsContext context);
     }
     public class AccountExtraFieldDefinition
     {

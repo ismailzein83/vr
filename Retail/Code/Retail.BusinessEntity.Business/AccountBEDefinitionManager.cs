@@ -277,6 +277,12 @@ namespace Retail.BusinessEntity.Business
             return extensionConfigurationManager.GetExtensionConfigurations<AccountExtraFieldDefinitionConfig>(AccountExtraFieldDefinitionConfig.EXTENSION_TYPE);
         }
 
+        public IEnumerable<AccountBulkActionSettingsConfig> GetAccountBulkActionSettingsConfigs()
+        {
+            var extensionConfigurationManager = new ExtensionConfigurationManager();
+            return extensionConfigurationManager.GetExtensionConfigurations<AccountBulkActionSettingsConfig>(AccountBulkActionSettingsConfig.EXTENSION_TYPE);
+        }
+
         #endregion
 
         #region Private Methods

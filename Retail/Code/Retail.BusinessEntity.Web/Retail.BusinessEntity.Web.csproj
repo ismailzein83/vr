@@ -225,6 +225,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Retail_BusinessEntity\Constant\AccountBulkActionsHandlingErrorOptionsEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\AccountPartAvailabilityOptionsEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\AccountPartRequiredOptionsEnum.js" />
     <Content Include="Retail_BusinessEntity\Constant\AccountStatusEnum.js" />
@@ -286,6 +287,15 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\retail-be-accountactiondefinitions-backendexecutor-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\retail-be-accountactiondefinitions-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\Templates\BackendExecutorEditorTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountBulkActions\AccountBulkActionEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountBulkActions\MainExtensions\retail-be-accountbulkactionsettings-sendemail-runtimeeditor.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountBulkActions\MainExtensions\retail-be-accountbulkactionsettings-sendemail.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountBulkActions\MainExtensions\Templates\SendEmailBulkActionSettingsRuntimeEditorTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountBulkActions\MainExtensions\Templates\SendEmailBulkActionSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountBulkActions\retail-be-accountbulkactionsettings-selective.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountBulkActions\Templates\AccountBulkActionEditor.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountBulkActions\Templates\AccountBulkActionsManagementTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountBulkActions\retail-be-accountbulkactions-management.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountExtraFieldDefinition\AccountExtraFieldDefinitionEditorController.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountExtraFieldDefinition\retail-be-accountextrafielddefinitions-management.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountExtraFieldDefinition\retail-be-accountextrafielddefinitionsettings.js" />
@@ -388,6 +398,7 @@
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-synchronizer-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountEditor.html" />
+    <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountManagementTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountSynchronizerEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-roottype-selector.js" />
@@ -833,6 +844,8 @@
     <Content Include="Retail_BusinessEntity\Views\Account\AccountManagementController.js" />
     <Content Include="Retail_BusinessEntity\Views\AccountViews\PortalAccountEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\AccountViews\PortalAccountEditorController.js" />
+    <Content Include="Retail_BusinessEntity\Views\Account\BulkActionsEditor.html" />
+    <Content Include="Retail_BusinessEntity\Views\Account\BulkActionsEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\Account\ChangeStatusActionEditor.html" />
     <Content Include="Retail_BusinessEntity\Views\Account\ChangeStatusActionEditorController.js" />
     <Content Include="Retail_BusinessEntity\Views\FinancialAccount\FinancialAccountEditor.html" />

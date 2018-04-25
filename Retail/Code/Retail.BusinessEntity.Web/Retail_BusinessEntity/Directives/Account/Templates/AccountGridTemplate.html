@@ -4,10 +4,13 @@
              pagingtype="'Pager'"
              menuactions="scopeModel.menuActions"
              idfield="AccountId"
-             defaultsortbyfieldname="'AccountId'" enableautoexport="true" normalcell>
+             defaultsortbyfieldname="'AccountId'" enableautoexport="true" normalcell
+             showexpand="scopeModel.showExpandIcon">
+    <vr-datagridcolumn widthfactor="3" disablesorting isfielddynamic="true" ng-show="scopeModel.showMultipleSelection">
+        <vr-check value="dataItem.isSelected" onvaluechanged="viewScope.scopeModel.onAccountSelect(dataItem)"></vr-check>
+    </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'ID'" field="'AccountId'"></vr-datagridcolumn>
     <vr-datagridcolumn ng-repeat="column in scopeModel.columns" columnattributes="column"></vr-datagridcolumn>
-
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
     </vr-datagridexpandablerow>

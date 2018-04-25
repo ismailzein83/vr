@@ -9,13 +9,13 @@ using Vanrise.BusinessProcess;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
 using Vanrise.Queueing;
+using Retail.BusinessEntity.Business;
 
 namespace Retail.BusinessEntity.BP.Activities
 {
 
     public class LoadAccountBulkActionDraftInput
     {
-        public Guid BulkActionIdentifier { get; set; }
         public BaseQueue<Account> OutputQueue { get; set; }
         public BulkActionFinalState BulkActionFinalState { get; set; }
         public Guid AccountBEDefinitionId { get; set; }
@@ -26,8 +26,6 @@ namespace Retail.BusinessEntity.BP.Activities
         #region Arguments
         [RequiredArgument]
         public InArgument<Guid> AccountBEDefinitionId { get; set; }
-        [RequiredArgument]
-        public InArgument<Guid> BulkActionIdentifier { get; set; }
         
         [RequiredArgument]
         public InArgument<BulkActionFinalState> BulkActionFinalState { get; set; }
@@ -39,11 +37,28 @@ namespace Retail.BusinessEntity.BP.Activities
 
         protected override void DoWork(LoadAccountBulkActionDraftInput inputArgument, AsyncActivityHandle handle)
         {
-            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Started Loading Accounts ...");
-
+            handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Started loading accounts ...");
             VRBulkActionDraftManager vrBulkActionDraftManager = new VRBulkActionDraftManager();
-            var bulkActionDrafs = vrBulkActionDraftManager.GetVRBulkActionDrafts(inputArgument.BulkActionFinalState);
-            throw new NotImplementedException();
+            var bulkActionDrafts = vrBulkActionDraftManager.GetVRBulkActionDrafts(inputArgument.BulkActionFinalState);
+            AccountBEManager accountBEManager = new AccountBEManager();
+            
+            if (bulkActionDrafts != null && bulkActionDrafts.Count() != 0)
+            {
+                foreach (var bulkActionDraft in bulkActionDrafts)
+                {
+                    long accountId;
+                    if (long.TryParse(bulkActionDraft.ItemId, out accountId))
+                    {
+                        var account = accountBEManager.GetAccount(inputArgument.AccountBEDefinitionId, accountId);
+                        handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, string.Format("Loading account '{0}'.", account.Name));
+                        inputArgument.OutputQueue.Enqueue(account);
+                    }
+                    else
+                    {
+                        handle.SharedInstanceData.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Error, "An error had occured while loading.");
+                    }
+                }
+            }
         }
         protected override void OnBeforeExecute(AsyncCodeActivityContext context, AsyncActivityHandle handle)
         {
@@ -55,7 +70,6 @@ namespace Retail.BusinessEntity.BP.Activities
         {
             return new LoadAccountBulkActionDraftInput()
             {
-                BulkActionIdentifier = this.BulkActionIdentifier.Get(context),
                 OutputQueue = this.OutputQueue.Get(context),
                 BulkActionFinalState = this.BulkActionFinalState.Get(context),
                 AccountBEDefinitionId = this.AccountBEDefinitionId.Get(context),
