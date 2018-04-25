@@ -765,6 +765,9 @@
     <Build Include="common\Stored Procedures\sp_SMSMessageTemplate_Update.sql" />
     <Build Include="common\Stored Procedures\sp_SMSMessageTemplate_Insert.sql" />
     <Build Include="common\Stored Procedures\sp_SMSMessageTemplate_GetAll.sql" />
+    <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_UpdateInvoiceApproved.sql" />
+    <Build Include="runtime\Stored Procedures\sp_RuntimeNode_Update.sql" />
+    <Build Include="runtime\Stored Procedures\sp_RuntimeNode_Insert.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
