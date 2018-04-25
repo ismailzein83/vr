@@ -5,7 +5,7 @@
     VRBulkActionDraftService.$inject = ['VRModalService', 'UtilsService'];
 
     function VRBulkActionDraftService(VRModalService, UtilsService) {
-       
+
         function createBulkActionDraft(context) {
             return new BulkActionDraft(context.triggerRetrieveData, context.setSelectAllEnablity, context.setDeselectAllEnablity, context.setActionsEnablity, context.hasItems, UtilsService);
         }
@@ -24,7 +24,7 @@
         reEvaluateButtonsStatus();
 
         function onSelectItem(item, isSelected) {
-            if (isSelected) {
+         if (isSelected) {
                 if (isAllSelected) {
                     var index = UtilsService.getItemIndexByVal(targetItems, item.ItemId, "ItemId");
                     if (index > -1)
@@ -33,9 +33,9 @@
                 else {
                     if (UtilsService.getItemByVal(targetItems, item.ItemId, "ItemId") == undefined)
                         targetItems.push(item);
-                }
+                        }
 
-            } else {
+                } else {
                 if (isAllSelected) {
                     if (UtilsService.getItemByVal(targetItems, item.ItemId, "ItemId") == undefined)
                         targetItems.push(item);
@@ -96,7 +96,7 @@
             return {
                 IsAllSelected: isAllSelected,
                 BulkActionDraftIdentifier: bulkActionDraftIdentifier,
-                 ReflectedToDB: reflectedToDB
+                ReflectedToDB: reflectedToDB
             };
         }
 
@@ -158,7 +158,9 @@
             deselectAllItems: deselectAllItems,
             isItemSelected: isItemSelected,
             getBulkActionState: getBulkActionState,
-            finalizeBulkActionDraft: finalizeBulkActionDraft
+            finalizeBulkActionDraft: finalizeBulkActionDraft,
+            getBulkActionIdentifier: getBulkActionIdentifier,
+            reEvaluateButtonsStatus: reEvaluateButtonsStatus
         };
 
 

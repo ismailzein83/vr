@@ -37,7 +37,7 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
             isErrorOccured = false;
             if (invoice.SentDate.HasValue && !IncludeSentInvoices)
             {
-                errorMessage = "Cannot sent invoice email. Reason: 'Email' already sent.";
+                errorMessage = "Cannot send invoice email. Reason: 'Email' already sent.";
                 return false;
             }
             return true;
@@ -60,7 +60,7 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
 
                 if (EmailActionAttachmentSets == null || EmailActionAttachmentSets.Count == 0 || !EmailActionAttachmentSets.Any(x=>x.IsEnabled))
                 {
-                    context.ErrorMessage = "Cannot sent invoice email. Reason: no email options specified.";
+                    context.ErrorMessage = "Cannot send invoice email. Reason: no email options specified.";
                     context.IsErrorOccured = false;
                 }
                 bool actionExecuted = false;
@@ -129,7 +129,7 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
                             if (String.IsNullOrEmpty(emailTemplateEvaluator.To))
                             {
                                 context.IsErrorOccured = false;
-                                context.ErrorMessage = "Cannot sent invoice email. Reason: 'Email' is empty.";
+                                context.ErrorMessage = "Cannot send invoice email. Reason: 'Email' is empty.";
                                 return;
                             }
                             vrMailManager.SendMail(emailTemplateEvaluator.From,emailTemplateEvaluator.To, emailTemplateEvaluator.CC, emailTemplateEvaluator.BCC, emailTemplateEvaluator.Subject, emailTemplateEvaluator.Body, vrMailAttachments);
@@ -141,7 +141,7 @@ namespace Vanrise.Invoice.MainExtensions.AutomaticInvoiceActions
                 }
                 if (!actionExecuted)
                 {
-                    context.ErrorMessage = "Cannot sent invoice email. Reason: no email option specified.";
+                    context.ErrorMessage = "Cannot send invoice email. Reason: no email option specified.";
                     context.IsErrorOccured = false;
                 }
             }

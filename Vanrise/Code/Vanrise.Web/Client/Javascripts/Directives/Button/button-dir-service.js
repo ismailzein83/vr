@@ -425,6 +425,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: "Exclude",
                     class: "glyphicon glyphicon-ban-circle"
                 };
+            case "Execute":
+                return {
+                    text: "Execute",
+                    class: "glyphicon glyphicon-play"
+                };
         }
     }
 }]);
