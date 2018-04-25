@@ -270,6 +270,8 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\Templates\RecreateInvoiceBulkActionSettingsTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\vr-invoicetype-invoicebulkaction-recreateinvoice.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\AutomaticInvoiceAction\MainExtensions\vr-invoicetype-invoicebulkaction-recreateinvoice-runtime .js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\Templates\ApproveInvoiceActionTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceActions\MainExtensions\vr-invoicetype-gridactionsettings-approveinvoice.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceBulkAction\InvoiceBulkActionEditorController.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceBulkAction\Templates\InvoiceBulkActionEditor.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceBulkAction\Templates\InvoiceBulkActionsGridTemplate.html" />
@@ -344,10 +346,12 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceFileNameSettings\vr-invoicetype-filename-pattern.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceFilterCondition\FilterConditionItemEditorController.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceFilterCondition\Templates\AccountActivationConditionTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceFilterCondition\Templates\ApprovalInvoiceFilterConditionTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceFilterCondition\Templates\ConditionGroupTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceFilterCondition\Templates\FilterConditionItemEditor.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceFilterCondition\Templates\IsLockedInvoiceFilterConditionTemplate.html" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceFilterCondition\Templates\IsSentInvoiceFilterConditionTemplate.html" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceFilterCondition\vr-invoicetype-invoicefiltercondition-approvalinvoice.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceFilterCondition\vr-invoicetype-invoicefiltercondition-conditiongroup.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceFilterCondition\vr-invoicetype-invoicefiltercondition-accountactivation.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\MainExtensions\InvoiceFilterCondition\vr-invoicetype-invoicefiltercondition-islockedinvoice.js" />

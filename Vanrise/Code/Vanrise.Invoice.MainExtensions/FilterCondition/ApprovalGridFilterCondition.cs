@@ -7,19 +7,31 @@ using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.MainExtensions
 {
-    class ApprovalGridFilterCondition : InvoiceGridActionFilterCondition
+    public class ApprovalGridFilterCondition : InvoiceGridActionFilterCondition
     {
         public override Guid ConfigId
         {
-            get { return new Guid("B220DD18-D38E-4170-8E80-7508854C29F6"); }
+            get { return new Guid("18D88A5E-B148-4D2E-B2AE-F411757F5591"); }
         }
         public bool NeedApproval { get; set; }
         public override bool IsFilterMatch(IInvoiceGridActionFilterConditionContext context)
         {
             //is not NeedApproval when it does not need approval or approved
+            if (NeedApproval.Equals(false)) {
+                if (context.Invoice.NeedApproval.Equals(false) || context.Invoice.ApprovedTime.HasValue)
+                    return true;
+                else
+                    return false;
+            }
 
             //NeedApproval when need approval and not approved
-            throw new NotImplementedException();
+            else
+            {
+                if (context.Invoice.NeedApproval.Equals(true) && !context.Invoice.ApprovedTime.HasValue)
+                    return true;
+                else
+                    return false;
+            }
         }
     }
 }
