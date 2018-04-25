@@ -21,13 +21,8 @@
                      maxheight="300px"
                      hidegridmenu ="true"
                      menuactions="scopeModel.menuActions">
-            <vr-datagridcolumn headertext="'Title'" field="'Title'" fixedwidth="'120'"></vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Revenue'" fixedwidth="'120'">
-                <vr-columns width="fullrow" withemptyline haschildcolumns>
-                    <vr-textbox type="number" value="dataItem.Revenue" isrequired></vr-textbox>
-                </vr-columns>
-            </vr-datagridcolumn>
-            <vr-datagridcolumn headertext="'Settings'" widthfactor="'7'">
+            <vr-datagridcolumn headertext="'Title'" field="'Title'" fixedwidth="'60'"></vr-datagridcolumn>           
+            <vr-datagridcolumn headertext="'Settings'" >
                     <span vr-loader="dataItem.isLoadingDirective">
                         <vr-directivewrapper directive="dataItem.Editor" on-ready="dataItem.onDirectiveReady" isrequired="true"></vr-directivewrapper>
                     </span>
