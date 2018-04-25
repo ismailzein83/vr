@@ -62,7 +62,10 @@ app.directive('retailBeAccountbulkactionsettingsSendratesRuntimeeditor', ['Utils
                 };
 
                 api.getData = function () {
-                    return mailMessageTemplateSelectorAPI.getSelectedIds();
+                    return {
+                        $type: "Retail.BusinessEntity.MainExtensions.AccountBulkAction.SendRatesAccountBulkAction, Retail.BusinessEntity.MainExtensions",
+                        MailMessageTemplateId: mailMessageTemplateSelectorAPI.getSelectedIds()
+                        };
                 };
 
 

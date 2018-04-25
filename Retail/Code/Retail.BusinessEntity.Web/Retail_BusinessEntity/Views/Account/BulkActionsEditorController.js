@@ -66,15 +66,11 @@
                         AccountBEDefinitionId: accountBEDefinitionId,
                         AccountBulkActions: [{
                             AccountBulkActionId: bulkAction.AccountBulkActionId,
-                            Settings: {
-                                $type: "Retail.BusinessEntity.MainExtensions.AccountBulkAction.SendRatesAccountBulkAction, Retail.BusinessEntity.MainExtensions",
-                                MailMessageTemplateId: runtimeDirectiveAPI.getData()
-                            }
+                            Settings: runtimeDirectiveAPI.getData()
                         }],
                         HandlingErrorOption: $scope.scopeModel.selectedHandlingOnError.value,
                         BulkActionFinalState: bulkActionDraftFinalState
                     };
-
                    return Retail_BE_AccountBEAPIService.ExecuteAccountBulkActions(executeAccountBulkActionProcessInput).then(function (response) {
                         if (response.Succeed) {
                             $scope.modalContext.closeModal();

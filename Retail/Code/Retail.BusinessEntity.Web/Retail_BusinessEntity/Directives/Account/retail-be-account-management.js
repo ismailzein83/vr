@@ -286,7 +286,7 @@ app.directive('retailBeAccountManagement',['UtilsService', 'VRUIUtilsService', '
                 $scope.scopeModel.addBulkActions.length = 0;
                 return Retail_BE_AccountBEDefinitionAPIService.GetAccountBEDefinitionSettingsWithHidden(accountBEDefinitionId).then(function (response) {
                     accountBEDefinitionSettings = response;
-                    if (accountBEDefinitionSettings && accountBEDefinitionSettings.AccountBulkActions) {
+                    if (accountBEDefinitionSettings && accountBEDefinitionSettings.AccountBulkActions.length != 0) {
                         if (bulkActionId==undefined) {
                             $scope.scopeModel.showMenuActions = true;
                             var accountBulkActions = accountBEDefinitionSettings.AccountBulkActions;
