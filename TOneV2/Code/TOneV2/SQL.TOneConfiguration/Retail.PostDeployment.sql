@@ -145,8 +145,8 @@ as (select * from (values
 ('95183b89-056a-410a-b920-91ec6a134f82','Portal Account Extra Field','Portal Account Extra Field','Retail_BE_AccountExtraFieldDefinitionConfig','{"Editor":"retail-be-accountextrafield-portalaccount"}'),
 
 ('b573969d-05a2-4c92-a856-1f846557520c','Topup','Top Up','Retail_BE_OperatorDeclarationServiceConfig','{"Editor":"retail-be-operatordeclarationservice-topup"}'),
-('696fcb6c-ee81-4c34-a390-6793ecc7252d','PostPaidCDR','Postpaid CDR','Retail_BE_OperatorDeclarationServiceConfig','{"Editor":"retail-be-operatordeclarationservice-postpaidcdr"}'),
-('0f35bd74-81d4-4cf3-950d-98de8cdad7d9','PostPaidSMS','Postpaid SMS','Retail_BE_OperatorDeclarationServiceConfig','{"Editor":"retail-be-operatordeclarationservice-postpaidsms"}')
+('696fcb6c-ee81-4c34-a390-6793ecc7252d','Voice','Voice','Retail_BE_OperatorDeclarationServiceConfig','{"Editor":"retail-be-operatordeclarationservice-postpaidcdr"}'),
+('0f35bd74-81d4-4cf3-950d-98de8cdad7d9','SMS','SMS','Retail_BE_OperatorDeclarationServiceConfig','{"Editor":"retail-be-operatordeclarationservice-postpaidsms"}')
 
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
