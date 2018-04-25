@@ -115,6 +115,7 @@
     <add key="TOneWhS_Routing_ZoneServicesExplicitOnCustomer" value="false"/>
     
     <add key="ExposedConnectionStringNames" value="TOneCDRDBConnString,TOneAnalyticsDBConnString,ConfigurationDBConnString"/>
+    <add key="PostgresDataBaseOwnerName" value="pg_owner"/>
   </appSettings>
   <system.codedom>
     <compilers>

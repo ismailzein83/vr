@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,7 +35,7 @@ namespace TOne.WhS.DBSync.Business.SwitchMigration
                 MasterConnectionString = GetNodeValueAsString(parametersNode, "$Master_ConnectionString"),
                 TariffConnectionString = GetNodeValueAsString(parametersNode, "$Tariff_ConnectionString"),
                 NumberOfOptions = GetNodeValueAsInt(parametersNode, "$Routing_Maximum_Options"),
-                OwnerName = "",
+                OwnerName = System.Configuration.ConfigurationManager.AppSettings["PostgresDataBaseOwnerName"],
                 Separator = ";",
                 CarrierMappings = BuildCarrierMapping(xml.DocumentElement.SelectSingleNode("CarrierMapping"), allCarrierAccounts, context)
             };

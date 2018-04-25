@@ -1,9 +1,9 @@
 ﻿using NP.IVSwitch.Entities;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using TOne.WhS.BusinessEntity.Business;
+using System.Collections.Generic;
 using TOne.WhS.RouteSync.Entities;
+using TOne.WhS.BusinessEntity.Business;
 
 namespace TOne.WhS.RouteSync.IVSwitch
 {
@@ -28,8 +28,10 @@ namespace TOne.WhS.RouteSync.IVSwitch
         {
             if (context.Routes == null)
                 return;
+
             PreparedConfiguration preparedData = GetPreparedConfiguration();
-            List<ConvertedRoute> routes = new List<ConvertedRoute>();
+            var routes = new List<ConvertedRoute>();
+
             foreach (var route in context.Routes)
             {
                 CustomerDefinition customerDefiniton;
@@ -50,23 +52,21 @@ namespace TOne.WhS.RouteSync.IVSwitch
             {
                 IVSwitchConvertedRoute ivSwitchConvertedRoute = (IVSwitchConvertedRoute)convertedRoute;
 
-                PreparedRoute tempRoute;
-                if (customerRoutes.TryGetValue(ivSwitchConvertedRoute.CustomerID, out tempRoute))
+                PreparedRoute preparedRoute;
+                if (!customerRoutes.TryGetValue(ivSwitchConvertedRoute.CustomerID, out preparedRoute))
                 {
-                    tempRoute.Routes.AddRange(ivSwitchConvertedRoute.Routes);
-                    tempRoute.Tariffs.AddRange(ivSwitchConvertedRoute.Tariffs);
-                }
-                else
-                {
-                    tempRoute = new PreparedRoute
+                    preparedRoute = new PreparedRoute
                     {
-                        TariffTableName = ivSwitchConvertedRoute.TariffTableName,
+                        // TariffTableName = ivSwitchConvertedRoute.TariffTableName,
                         RouteTableName = ivSwitchConvertedRoute.RouteTableName,
-                        Routes = ivSwitchConvertedRoute.Routes,
-                        Tariffs = ivSwitchConvertedRoute.Tariffs
+                        Routes = new List<IVSwitchRoute>(),
+                        //Tariffs = new List<IVSwitchTariff>()
                     };
-                    customerRoutes[ivSwitchConvertedRoute.CustomerID] = tempRoute;
+                    customerRoutes.Add(ivSwitchConvertedRoute.CustomerID, preparedRoute);
                 }
+                preparedRoute.Routes.AddRange(ivSwitchConvertedRoute.Routes);
+                // preparedRoute.Tariffs.AddRange(ivSwitchConvertedRoute.Tariffs);
+
             }
             return customerRoutes;
         }
@@ -74,25 +74,30 @@ namespace TOne.WhS.RouteSync.IVSwitch
         {
             Dictionary<string, PreparedRoute> routes = (Dictionary<string, PreparedRoute>)context.PreparedItemsForApply;
             IVSwitchRouteDataManager routeDataManager = new IVSwitchRouteDataManager(RouteConnectionString, OwnerName);
-            IVSwitchTariffDataManager tariffDataManager = new IVSwitchTariffDataManager(TariffConnectionString, OwnerName);
+            //IVSwitchTariffDataManager tariffDataManager = new IVSwitchTariffDataManager(TariffConnectionString, OwnerName);
             foreach (var item in routes.Values)
             {
                 routeDataManager.Bulk(item.Routes, string.Format("{0}_temp", item.RouteTableName));
-                tariffDataManager.Bulk(item.Tariffs, string.Format("{0}_temp", item.TariffTableName));
+                //tariffDataManager.Bulk(item.Tariffs, string.Format("{0}_temp", item.TariffTableName));
             }
         }
         public override void Finalize(ISwitchRouteSynchronizerFinalizeContext context)
         {
             PreparedConfiguration preparedData = GetPreparedConfiguration();
             IVSwitchRouteDataManager routeDataManager = new IVSwitchRouteDataManager(RouteConnectionString, OwnerName);
-            IVSwitchTariffDataManager tariffDataManager = new IVSwitchTariffDataManager(TariffConnectionString, OwnerName);
+            //IVSwitchTariffDataManager tariffDataManager = new IVSwitchTariffDataManager(TariffConnectionString, OwnerName);
             foreach (var customerTable in preparedData.CustomerDefinitions)
             {
-                foreach (var gateway in customerTable.Value.EndPoints)
+                var endPoints = customerTable.Value.EndPoints;
+                if (endPoints != null && endPoints.Any())
                 {
-                    routeDataManager.CreatePrimaryKey(string.Format("rt{0}_temp", gateway.RouteTableId));
-                    routeDataManager.Swap(string.Format("rt{0}", gateway.RouteTableId));
-                    tariffDataManager.Swap(string.Format("trf{0}", gateway.TariffTableId));
+                    int routeTableId = endPoints.First().RouteTableId;
+                    routeDataManager.CreatePrimaryKey(string.Format("rt{0}_temp", routeTableId));
+                    routeDataManager.Swap(GetRouteTableName(routeTableId));
+                    context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Table for customer '{0}' for switch '{1}' is finalized"
+                        , new object[] { customerTable.Key, context.SwitchName });
+
+                    //tariffDataManager.Swap(GetTariffTableName(gateway.TariffTableId));
                 }
             }
         }
@@ -125,6 +130,15 @@ namespace TOne.WhS.RouteSync.IVSwitch
             return masterDataManager.UpdateEndPointState(suspendedEndPoints);
         }
 
+        private string GetRouteTableName(int routeTableId)
+        {
+            return string.Format("rt{0}", routeTableId);
+        }
+        private string GetTariffTableName(int tariffTableId)
+        {
+            return string.Format("trf{0}", tariffTableId);
+        }
+
         #region private functions
 
         private List<EndPointStatus> GetSuspendedEndPoints(List<EndPointStatus> endPointBlockingInfo, List<EndPointStatus> switchEndPointstatuses)
@@ -145,13 +159,13 @@ namespace TOne.WhS.RouteSync.IVSwitch
         private void BuildTempTables(PreparedConfiguration preparedData)
         {
             IVSwitchRouteDataManager routeDataManager = new IVSwitchRouteDataManager(RouteConnectionString, OwnerName);
-            IVSwitchTariffDataManager tariffDataManager = new IVSwitchTariffDataManager(TariffConnectionString, OwnerName);
+            //  IVSwitchTariffDataManager tariffDataManager = new IVSwitchTariffDataManager(TariffConnectionString, OwnerName);
             foreach (var customerTable in preparedData.CustomerDefinitions)
             {
                 foreach (var gateway in customerTable.Value.EndPoints)
                 {
-                    routeDataManager.BuildRouteTable(string.Format("rt{0}", gateway.RouteTableId));
-                    tariffDataManager.BuildTariffTable(string.Format("trf{0}", gateway.TariffTableId));
+                    routeDataManager.BuildRouteTable(GetRouteTableName(gateway.RouteTableId));
+                    //  tariffDataManager.BuildTariffTable(GetTariffTableName(gateway.TariffTableId));
                 }
             }
         }
@@ -160,43 +174,60 @@ namespace TOne.WhS.RouteSync.IVSwitch
             IVSwitchTariff tariff = new IVSwitchTariff
             {
                 DestinationCode = route.Code,
-                TimeFrame = "* * * * *",
-                InitCharge = route.SaleRate
+                TimeFrame = "* * * * *"
             };
-            SaleZoneManager manager = new SaleZoneManager();
+            if (route.SaleRate.HasValue)
+                tariff.InitCharge = Math.Round(route.SaleRate.Value, 4);
+
             if (route.SaleZoneId.HasValue)
-            {
-                tariff.DestinationName = manager.GetSaleZoneName(route.SaleZoneId.Value);
-            }
+                tariff.DestinationName = new SaleZoneManager().GetSaleZoneName(route.SaleZoneId.Value);
+
             return tariff;
         }
         private IVSwitchConvertedRoute BuildRouteAndRouteOptions(Entities.Route route, EndPoint endPoint, PreparedConfiguration preparedData)
         {
             if (route == null)
                 return null;
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            IVSwitchConvertedRoute ivSwitch = new IVSwitchConvertedRoute
+
+            if (preparedData.SupplierDefinitions == null)
+                return null;
+
+            var ivSwitch = new IVSwitchConvertedRoute
             {
                 CustomerID = route.CustomerId,
                 Routes = new List<IVSwitchRoute>(),
                 Tariffs = new List<IVSwitchTariff>(),
-                RouteTableName = string.Format("rt{0}", endPoint.RouteTableId),
-                TariffTableName = string.Format("trf{0}", endPoint.TariffTableId)
+                RouteTableName = GetRouteTableName(endPoint.RouteTableId),
+                TariffTableName = GetTariffTableName(endPoint.TariffTableId)
             };
             if (route.Options == null || route.Options.Count == 0)
             {
-                IVSwitchRoute ivSwitchRoute = BuildBlockedRoute(preparedData);
-                if (ivSwitchRoute != null) ivSwitchRoute.Destination = route.Code;
-                ivSwitch.Routes.Add(ivSwitchRoute);
+                ivSwitch.Routes.Add(BuildBlockedRoute(preparedData, route.Code));
                 return ivSwitch;
             }
-            decimal? optionsPercenatgeSum = route.Options.Sum(it => it.Percentage);
-            Decimal? maxPercentage = route.Options.Max(it => it.Percentage);
 
+            var nonBlockedOptions = route.Options.Where(r => !r.IsBlocked);
+            if (nonBlockedOptions == null || !nonBlockedOptions.Any())
+            {
+                ivSwitch.Routes.Add(BuildBlockedRoute(preparedData, route.Code));
+                return ivSwitch;
+            }
+
+            decimal? optionsPercenatgeSum = 0;
+            decimal? maxPercentage = 0;
+            int gatewayCount = 0;
             int priority = NumberOfOptions;
-            List<IVSwitchRoute> routes = new List<IVSwitchRoute>();
-            int gatewayCount = route.Options.Count;
-            foreach (var option in route.Options)
+
+            foreach (var option in nonBlockedOptions)
+            {
+                optionsPercenatgeSum += option.Percentage;
+                if (option.Percentage.HasValue && option.Percentage.Value > maxPercentage)
+                    maxPercentage = option.Percentage;
+                gatewayCount++;
+            }
+
+            var routes = new List<IVSwitchRoute>();
+            foreach (var option in nonBlockedOptions)
             {
                 int serial = 1;
                 SupplierDefinition supplier;
@@ -204,60 +235,99 @@ namespace TOne.WhS.RouteSync.IVSwitch
                 {
                     foreach (var supplierGateWay in supplier.Gateways)
                     {
-                        if (priority == 0) break;
-                        string name = carrierAccountManager.GetCarrierAccountName(int.Parse(option.SupplierId));
-                        IVSwitchRoute ivOption = new IVSwitchRoute
+                        if (priority == 0)
+                            break;
+
+                        var ivOption = new IVSwitchRoute
                         {
                             Destination = route.Code,
                             RouteId = supplierGateWay.RouteId,
-                            TimeFrame = "* * * * *",
-                            Preference = priority,
+                            Preference = priority--,
                             StateId = 1,
                             HuntStop = 0,
                             WakeUpTime = preparedData._switchTime,
-                            Description = name
+                            Description = new CarrierAccountManager().GetCarrierAccountName(int.Parse(option.SupplierId))
                         };
                         if (supplierGateWay.Percentage != 0)
                         {
                             ivOption.RoutingMode = 8;
                             ivOption.TotalBkts = gatewayCount;
-                            ivOption.Flag1 =
-                                BuildPercentage(supplierGateWay.Percentage, option.Percentage, optionsPercenatgeSum,
+                            ivOption.Flag1 = BuildPercentage(supplierGateWay.Percentage, option.Percentage, optionsPercenatgeSum,
                                     supplier.Gateways.Count);
                             ivOption.BktSerial = serial++;
-                            ivOption.BktCapacity = decimal.ToInt32(BuildScaledDownPercentage(ivOption.Flag1 ?? 0, 1,
-                                maxPercentage ?? 0, 1, optionsPercenatgeSum ?? 0));
+                            ivOption.BktCapacity = BuildScaledDownPercentage(ivOption.Flag1, 1, maxPercentage, 1, optionsPercenatgeSum);
                             ivOption.BktToken = ivOption.BktCapacity;
                         }
                         routes.Add(ivOption);
-                        priority--;
+                        routes.AddRange(GetBackupRoutes(route.Code, preparedData._switchTime, option.Backups, preparedData.SupplierDefinitions, priority));
                     }
                 }
             }
-            ivSwitch.Tariffs.Add(BuildTariff((route)));
+            //   ivSwitch.Tariffs.Add(BuildTariff((route)));
             ivSwitch.Routes.AddRange(routes);
             return ivSwitch;
         }
-        private IVSwitchRoute BuildBlockedRoute(PreparedConfiguration preparedConfiguration)
+
+        private List<IVSwitchRoute> GetBackupRoutes(string code, DateTime wakeUpTime, List<BackupRouteOption> backups, Dictionary<string, SupplierDefinition> suppliersDefinition, int priority)
         {
-            if (preparedConfiguration.SupplierDefinitions != null && preparedConfiguration.SupplierDefinitions.Count > 0)
+            var backupRoutes = new List<IVSwitchRoute>();
+
+            if (backups == null)
+                return backupRoutes;
+
+            foreach (var backupRouteOption in backups)
             {
-                return new IVSwitchRoute
+                if (priority == 0)
                 {
-                    Description = "BLK",
-                    RouteId = preparedConfiguration.BlockRouteId,
-                    WakeUpTime = preparedConfiguration._switchTime
-                };
+                    if (backupRoutes.Any())
+                        backupRoutes.Last().HuntStop = 1;
+
+                    break;
+                }
+
+                SupplierDefinition supplier;
+                if (suppliersDefinition.TryGetValue(backupRouteOption.SupplierId, out supplier) && supplier.Gateways != null)
+                {
+                    foreach (var supplierGateWay in supplier.Gateways)
+                    {
+                        backupRoutes.Add(new IVSwitchRoute
+                        {
+                            Destination = code,
+                            RouteId = supplierGateWay.RouteId,
+                            TimeFrame = "* * * * *",
+                            Preference = priority--,
+                            StateId = 1,
+                            HuntStop = 0,
+                            WakeUpTime = wakeUpTime,
+                            Description = new CarrierAccountManager().GetCarrierAccountName(int.Parse(backupRouteOption.SupplierId))
+                        });
+                    }
+                }
             }
-            return null;
+            return backupRoutes;
+        }
+
+        private IVSwitchRoute BuildBlockedRoute(PreparedConfiguration preparedConfiguration, string code)
+        {
+            return new IVSwitchRoute
+             {
+                 Description = "BLK",
+                 RouteId = preparedConfiguration.BlockRouteId,
+                 WakeUpTime = preparedConfiguration._switchTime,
+                 Destination = code
+             };
         }
 
         #endregion
 
         #region Percentage Routing
-        private decimal BuildScaledDownPercentage(decimal x, decimal z1, decimal z2, decimal y1, decimal y2)
+        private int BuildScaledDownPercentage(decimal? initialPercentage, decimal z1, decimal? maxPercentage, decimal y1, decimal? optionsPercenatgeSum)
         {
-            return Math.Ceiling(z1 * (1 - ((x - y1) / (y2 - y1))) + (z2 * ((x - y1) / (y2 - y1))));
+            decimal optionsPercenatgeSumTemp = optionsPercenatgeSum ?? 0;
+            decimal maxPercentageTemp = maxPercentage ?? 0;
+            decimal initialPercentageTemp = initialPercentage ?? 0;
+            var scaledDownPercentage = Math.Ceiling(z1 * (1 - ((initialPercentageTemp - y1) / (optionsPercenatgeSumTemp - y1))) + (maxPercentageTemp * ((initialPercentageTemp - y1) / (optionsPercenatgeSumTemp - y1))));
+            return decimal.ToInt32(scaledDownPercentage);
         }
         private decimal? BuildPercentagePerGateway(decimal gatewayPercentage, decimal? optionPercentage, decimal? optionsPercenatgeSum)
         {

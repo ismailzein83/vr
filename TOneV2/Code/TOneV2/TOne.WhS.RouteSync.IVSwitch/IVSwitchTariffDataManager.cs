@@ -4,6 +4,7 @@ using System.Data;
 using Vanrise.Data.Postgres;
 using System.Linq;
 using System;
+using System.Text;
 
 namespace TOne.WhS.RouteSync.IVSwitch
 {
@@ -60,14 +61,33 @@ namespace TOne.WhS.RouteSync.IVSwitch
         }
         public void Bulk(List<IVSwitchTariff> tariffs, string tableName)
         {
+            var tariffSb = new StringBuilder();
+            var tariffCounts = tariffs.Count;
+            for (int i = 0; i < tariffCounts; i++)
+            {
+                var tariff = tariffs[i];
+                AppendValueWithTabToBuilder(tariffSb, tariff.DestinationCode);
+                AppendValueWithTabToBuilder(tariffSb, tariff.TimeFrame);
+                AppendValueWithTabToBuilder(tariffSb, tariff.DestinationName);
+                AppendValueWithTabToBuilder(tariffSb, tariff.InitPeiod);
+                AppendValueWithTabToBuilder(tariffSb, tariff.NextPeriod);
+                AppendValueWithTabToBuilder(tariffSb, tariff.InitCharge);
+                tariffSb.Append(tariff.NextCharge);
+                if (i < tariffCounts - 1) tariffSb.AppendLine();
+            }
             using (NpgsqlConnection conn = new NpgsqlConnection(GetConnectionString()))
             {
                 if (conn.State == ConnectionState.Closed) conn.Open();
                 using (var inStream = conn.BeginTextImport(string.Format("COPY {0} FROM STDIN", tableName)))
                 {
-                    tariffs.ForEach(tariff => inStream.WriteLine(tariff));
+                    inStream.WriteLine(tariffSb);
                 }
             }
+        }
+        private void AppendValueWithTabToBuilder(StringBuilder tariffSb, object value)
+        {
+            tariffSb.Append(value);
+            tariffSb.Append("\t");
         }
         public void BuildTariffTable(string tariffTableName)
         {

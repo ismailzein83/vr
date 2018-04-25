@@ -2,8 +2,8 @@
 using Npgsql;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using Vanrise.Data.Postgres;
+using System.Text;
 
 namespace TOne.WhS.RouteSync.IVSwitch
 {
@@ -43,7 +43,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
                     while (reader.Read())
                     {
                         if (reader["tablename"] != DBNull.Value)
-                        {
+                        { 
                             string tableName = reader["tablename"].ToString();
                             if (!customerDictionary.ContainsKey(tableName)) customerDictionary[tableName] = tableName;
                         }
@@ -54,15 +54,48 @@ namespace TOne.WhS.RouteSync.IVSwitch
         }
         public void Bulk(List<IVSwitchRoute> routeLst, string tableName)
         {
+            var routesb = new StringBuilder();
+            var routeCount = routeLst.Count;
+            for (int i = 0; i < routeCount; i++)
+            {
+                var route = routeLst[i];
+                AppendValueWithTabToBuilder(routesb, route.Destination);
+                AppendValueWithTabToBuilder(routesb, route.RouteId);
+                AppendValueWithTabToBuilder(routesb, route.TimeFrame);
+                AppendValueWithTabToBuilder(routesb, route.Preference);
+                AppendValueWithTabToBuilder(routesb, route.HuntStop);
+                AppendValueWithTabToBuilder(routesb, route.HuntStopRc);
+                AppendValueWithTabToBuilder(routesb, route.MinProfit);
+                AppendValueWithTabToBuilder(routesb, route.StateId);
+                AppendValueWithTabToBuilder(routesb, route.WakeUpTime.ToString("yyyy-MM-dd HH:mm:ss"));
+                AppendValueWithTabToBuilder(routesb, route.Description);
+                AppendValueWithTabToBuilder(routesb, route.RoutingMode);
+                AppendValueWithTabToBuilder(routesb, route.TotalBkts);
+                AppendValueWithTabToBuilder(routesb, route.BktSerial);
+                AppendValueWithTabToBuilder(routesb, route.BktCapacity);
+                AppendValueWithTabToBuilder(routesb, route.BktToken);
+                AppendValueWithTabToBuilder(routesb, route.PScore);
+                AppendValueWithTabToBuilder(routesb, route.Flag1);
+                AppendValueWithTabToBuilder(routesb, route.Flag2);
+                AppendValueWithTabToBuilder(routesb, route.Flag3);
+                AppendValueWithTabToBuilder(routesb, route.Flag4);
+                AppendValueWithTabToBuilder(routesb, route.Flag5);
+                routesb.Append(route.TechPrefix);
+                if (i < routeCount - 1) routesb.AppendLine();
+            }
             using (NpgsqlConnection conn = new NpgsqlConnection(GetConnectionString()))
             {
                 if (conn.State == ConnectionState.Closed) conn.Open();
                 using (var inStream = conn.BeginTextImport(string.Format("COPY {0} FROM STDIN", tableName)))
                 {
-                    foreach (var route in routeLst)
-                        inStream.WriteLine(route);
+                    inStream.WriteLine(routesb.ToString());
                 }
             }
+        }
+        private void AppendValueWithTabToBuilder(StringBuilder routesb, object value)
+        {
+            routesb.Append(value);
+            routesb.Append("\t");
         }
         public void Swap(string tableName)
         {
