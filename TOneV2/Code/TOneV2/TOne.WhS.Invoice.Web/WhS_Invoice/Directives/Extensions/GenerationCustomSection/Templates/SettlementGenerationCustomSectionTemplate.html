@@ -8,15 +8,15 @@
             <vr-label class="alert alert-danger" vr-alert breakline>{{scopeModel.errorMessage}}</vr-label>
         </vr-columns>
 
-        <vr-columns colnum="5" ng-if="scopeModel.showCustomerSummary && scopeModel.errorMessage == undefined">
-            <vr-label breakline>{{scopeModel.customerCountSummary}}</vr-label>
+        <vr-columns colnum="5">
+            <vr-label breakline ng-if="scopeModel.showCustomerSummary && scopeModel.customerCountSummary != undefined  || scopeModel.errorMessage == undefined">{{scopeModel.customerCountSummary}}</vr-label>
         </vr-columns>
 
-        <vr-columns colnum="5" ng-if="scopeModel.showSupplierSummary && scopeModel.errorMessage == undefined">
-            <vr-label breakline>{{scopeModel.supplierCountSummary}}</vr-label>
+        <vr-columns colnum="5">
+            <vr-label breakline ng-if="scopeModel.showSupplierSummary && scopeModel.supplierCountSummary != undefined || scopeModel.errorMessage == undefined">{{scopeModel.supplierCountSummary}}</vr-label>
         </vr-columns>
 
-        <vr-columns colnum="2" >
+        <vr-columns colnum="2" ng-if="scopeModel.errorMessage == undefined && ((scopeModel.showCustomerSummary && scopeModel.customerCountSummary != undefined) || (scopeModel.showSupplierSummary && scopeModel.supplierCountSummary != undefined))">
             <vr-button type="Edit" standalone data-onclick="scopeModel.openInvoicesEditor"></vr-button>
         </vr-columns>
 

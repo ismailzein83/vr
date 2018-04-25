@@ -222,7 +222,8 @@ app.directive("whsInvoicetypeGenerationcustomsectionSettlement", ["UtilsService"
                     $scope.scopeModel.supplierCountSummary += ").";
 
                 }
-
+                if ($scope.scopeModel.supplierCountSummary == "")
+                    $scope.scopeModel.supplierCountSummary = undefined;
             }
 
             function buildCustomerSummary(summaryPayload) {
@@ -254,6 +255,8 @@ app.directive("whsInvoicetypeGenerationcustomsectionSettlement", ["UtilsService"
                     }
                     $scope.scopeModel.customerCountSummary += ").";
                 }
+                if ($scope.scopeModel.customerCountSummary == "")
+                    $scope.scopeModel.customerCountSummary = undefined;
             }
 
             function evaluateSummarySection(summary)
