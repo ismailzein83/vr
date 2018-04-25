@@ -245,7 +245,14 @@
                 }
 
                 function isHideRemoveIcon() {
-                    return $attrs.hideremoveicon != undefined;
+                    if ($attrs.hideremoveicon == undefined)
+                        return false;
+                    if ($attrs.hideremoveicon == "")
+                        return true;
+                    if ($scope.$eval($attrs.hideremoveicon) == false)
+                        return false;
+                    if ($scope.$eval($attrs.hideremoveicon) == true)
+                        return true;
                 }
 
                 function isMultiple() {
