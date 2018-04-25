@@ -53,6 +53,7 @@
     <Compile Include="CustomerRequestLogDetail.cs" />
     <Compile Include="CustomerRequestType.cs" />
     <Compile Include="CustomerRequestTypeInfo.cs" />
+    <Compile Include="DeviceItemDetail.cs" />
     <Compile Include="InventoryItemDetail.cs" />
     <Compile Include="LeasedLineContractInfo.cs" />
     <Compile Include="LineType.cs" />

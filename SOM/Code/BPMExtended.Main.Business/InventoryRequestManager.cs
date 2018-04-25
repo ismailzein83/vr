@@ -116,6 +116,29 @@ namespace BPMExtended.Main.Business
             return result;
         }
 
+        public List<DeviceItemDetail> GetDevices(string switchId, string type, int top)
+        {
+            List<DeviceItemDetail> result = new List<DeviceItemDetail>();
+            List<DeviceItem> deviceItems;
+            using (SOMClient client = new SOMClient())
+            {
+                deviceItems = client.Get<List<DeviceItem>>(String.Format("api/SOM_Main/Inventory/GetDevices?switchId={0}&type={1}&top={2}", switchId, type, top));
+            }
+
+            if (deviceItems != null)
+            {
+                foreach (var deviceItem in deviceItems)
+                {
+                    result.Add(new DeviceItemDetail
+                    {
+                        Id = deviceItem.Id,
+                        DeviceId = deviceItem.DeviceId
+                    });
+                }
+            }
+            return result;
+        }
+
         public ReserveLineRequestOutput ReservePhoneNumber(CustomerObjectType customerObjectType, Guid accountOrContactId, ReserveLineRequestInput reserveLineInput)
         {
             ReserveLineRequestOutput output = null;

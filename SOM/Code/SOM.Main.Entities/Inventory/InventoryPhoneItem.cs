@@ -24,7 +24,7 @@ namespace SOM.Main.Entities
         public string Switch { get; set; }
         public string SwitchId { get; set; }
         public string SwitchOMC { get; set; }
-        public string  DPPortId { get; set; }
+        public string DPPortId { get; set; }
 
         public string DSlam { get; set; }
         public string DSlamPort { get; set; }
@@ -55,12 +55,20 @@ namespace SOM.Main.Entities
         public bool IsISDN { get; set; }
     }
 
-    public class DPPortItem {
+    public class DeviceItem
+    {
+        public string Id { get; set; }
+        public string DeviceId { get; set; }
+    }
+
+    public class DPPortItem
+    {
         public string Id { get; set; }
         public string Name { get; set; }
     }
 
-    public class NewPhoneItemDetail {
+    public class NewPhoneItemDetail
+    {
 
         public PhoneType PhoneType { get; set; }
         public PhoneStatus PhoneStatus { get; set; }
@@ -72,7 +80,7 @@ namespace SOM.Main.Entities
         public string DP { get; set; }
         public List<string> DPPorts { get; set; }
         public List<string> DPSecondaryPorts { get; set; }
-      
+
 
         public string DSlam { get; set; }
         public string DSlamPort { get; set; }

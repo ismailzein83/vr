@@ -94,6 +94,21 @@ namespace SOM.Main.Business
             }).ToList();
         }
 
+        public List<DeviceItem> GetDevices(string switchId, string type, int top)
+        {
+            AktavaraConnector connector = new AktavaraConnector
+            {
+                BaseURL = "http://192.168.110.195:8901"
+            };
+            List<PhoneNumberItem> phoneNumbers = new List<PhoneNumberItem>();
+            List<AktavaraDevice> data = connector.Get<List<AktavaraDevice>>(string.Format("/FreeDevice/Get?switchid={0}&type={1}&top={2}", switchId, type, top));
+            return data == null ? null : data.MapRecords(c => new DeviceItem
+            {
+                Id = c.OBJECT_ID,
+                DeviceId = c.DEVICE_ID
+            }).ToList();
+        }
+
         public ReserveLineRequestOutput ReservePhoneNumber(ReserveLineRequestInput input)
         {
             return new ReserveLineRequestOutput

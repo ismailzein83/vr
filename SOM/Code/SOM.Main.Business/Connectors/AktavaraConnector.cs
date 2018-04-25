@@ -95,6 +95,12 @@ namespace SOM.Main.Business
         public string PHONE_NUMBER { get; set; }
     }
 
+    public class AktavaraDevice
+    {
+        public string OBJECT_ID { get; set; }
+        public string DEVICE_ID { get; set; }
+    }
+
     public class AktavaraPhoneStatusDetail
     {
 

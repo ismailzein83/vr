@@ -16,14 +16,14 @@ namespace BPMExtended.Main.Business
                  new TelephonyContractInfo
                  {
                      TelephonyContractId = "1",
-                     PhoneNumber= "4343465546",
+                     PhoneNumber= "1111",
                      Status = "Active",
                      ContractTime = DateTime.Today
                  },
                  new TelephonyContractInfo
                  {
                      TelephonyContractId = "2",
-                      PhoneNumber= "34598798767",
+                      PhoneNumber= "2222",
                       Status = "Active",
                        ContractTime = DateTime.Today
                  },
@@ -31,7 +31,7 @@ namespace BPMExtended.Main.Business
                  {
                      TelephonyContractId = "3",
                       Status = "Inactive",
-                      PhoneNumber= "439743444",
+                      PhoneNumber= "5555",
                        ContractTime = DateTime.Today
                  }
             };

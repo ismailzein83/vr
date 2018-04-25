@@ -37,13 +37,19 @@ namespace SOM.Main.Web.Controllers
             InventoryManager manager = new InventoryManager();
             return manager.GetAvailableNumbers(cabinetPort, dpPort, isGold, isISDN, startsWith);
         }
-
         [HttpGet]
         [Route("GetAvailableNumbers")]
         public List<PhoneNumberItem> GetAvailableNumbers(string switchId, string category, string type, int top)
         {
             InventoryManager manager = new InventoryManager();
             return manager.GetAvailableNumbers(switchId, category, type, top);
+        }
+        [HttpGet]
+        [Route("GetDevices")]
+        public List<DeviceItem> GetDevices(string switchId, string type, int top)
+        {
+            InventoryManager manager = new InventoryManager();
+            return manager.GetDevices(switchId, type, top);
         }
 
         [HttpPost]
