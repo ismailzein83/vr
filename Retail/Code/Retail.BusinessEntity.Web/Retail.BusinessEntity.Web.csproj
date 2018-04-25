@@ -396,6 +396,7 @@
     <Content Include="Retail_BusinessEntity\Directives\Account\MainExtensions\Templates\PortalAccountGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-genericfielddefinition-selector.js" />
+    <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-management.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-synchronizer-editor.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\retail-be-account-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\Account\Templates\AccountEditor.html" />
