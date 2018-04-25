@@ -288,10 +288,10 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\retail-be-accountactiondefinitions-selector.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\Templates\BackendExecutorEditorTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountBulkActions\AccountBulkActionEditorController.js" />
-    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountBulkActions\MainExtensions\retail-be-accountbulkactionsettings-sendemail-runtimeeditor.js" />
-    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountBulkActions\MainExtensions\retail-be-accountbulkactionsettings-sendemail.js" />
-    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountBulkActions\MainExtensions\Templates\SendEmailBulkActionSettingsRuntimeEditorTemplate.html" />
-    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountBulkActions\MainExtensions\Templates\SendEmailBulkActionSettingsTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountBulkActions\MainExtensions\retail-be-accountbulkactionsettings-sendrates-runtimeeditor.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountBulkActions\MainExtensions\retail-be-accountbulkactionsettings-sendrates.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountBulkActions\MainExtensions\Templates\SendRatesBulkActionSettingsRuntimeEditorTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountBulkActions\MainExtensions\Templates\SendRatesBulkActionSettingsTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountBulkActions\retail-be-accountbulkactionsettings-selective.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountBulkActions\Templates\AccountBulkActionEditor.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountBulkActions\Templates\AccountBulkActionsManagementTemplate.html" />

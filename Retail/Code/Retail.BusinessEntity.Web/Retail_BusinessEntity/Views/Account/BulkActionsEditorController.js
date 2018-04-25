@@ -67,7 +67,7 @@
                         AccountBulkActions: [{
                             AccountBulkActionId: bulkAction.AccountBulkActionId,
                             Settings: {
-                                $type: "Retail.BusinessEntity.MainExtensions.AccountBulkAction.SendEmailAccountBulkAction, Retail.BusinessEntity.MainExtensions",
+                                $type: "Retail.BusinessEntity.MainExtensions.AccountBulkAction.SendRatesAccountBulkAction, Retail.BusinessEntity.MainExtensions",
                                 MailMessageTemplateId: runtimeDirectiveAPI.getData()
                             }
                         }],

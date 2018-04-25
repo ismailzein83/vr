@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountbulkactionsettingsSendemailRuntimeeditor', ['UtilsService', 'VRUIUtilsService',
+app.directive('retailBeAccountbulkactionsettingsSendratesRuntimeeditor', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
@@ -9,15 +9,15 @@ app.directive('retailBeAccountbulkactionsettingsSendemailRuntimeeditor', ['Utils
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new SendEmailRuntimeEditorCtor($scope, ctrl, $attrs);
+                var ctor = new SendRatesRuntimeEditorCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountBulkActions/MainExtensions/Templates/SendEmailBulkActionSettingsRuntimeEditorTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountBulkActions/MainExtensions/Templates/SendRatesBulkActionSettingsRuntimeEditorTemplate.html'
         };
 
-        function SendEmailRuntimeEditorCtor($scope, ctrl, $attrs) {
+        function SendRatesRuntimeEditorCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var mailMessageTemplateSelectorAPI;

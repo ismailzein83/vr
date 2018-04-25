@@ -8,7 +8,7 @@ using Vanrise.Common.Business;
 
 namespace Retail.BusinessEntity.MainExtensions.AccountBulkAction
 {
-    public class SendEmailAccountBulkActionDefinition : AccountBulkActionSettings
+    public class SendRatesAccountBulkActionDefinition : AccountBulkActionSettings
     {
         public Guid MailMessageTypeId { get; set; }
         public override Guid ConfigId
@@ -18,7 +18,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBulkAction
 
         public override string RuntimeEditor
         {
-            get { return "retail-be-accountbulkactionsettings-sendemail-runtimeeditor"; }
+            get { return "retail-be-accountbulkactionsettings-sendrates-runtimeeditor"; }
         }
 
     }

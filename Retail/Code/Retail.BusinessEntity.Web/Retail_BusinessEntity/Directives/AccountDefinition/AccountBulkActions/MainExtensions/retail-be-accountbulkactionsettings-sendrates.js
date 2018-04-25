@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('retailBeAccountbulkactionsettingsSendemail', ['UtilsService', 'VRUIUtilsService',
+app.directive('retailBeAccountbulkactionsettingsSendrates', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
         return {
             restrict: 'E',
@@ -10,15 +10,15 @@ app.directive('retailBeAccountbulkactionsettingsSendemail', ['UtilsService', 'VR
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-                var ctor = new SendEmailBulkActionSettingsCtor($scope, ctrl, $attrs);
+                var ctor = new SendRatesBulkActionSettingsCtor($scope, ctrl, $attrs);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountBulkActions/MainExtensions/Templates/SendEmailBulkActionSettingsTemplate.html'
+            templateUrl: '/Client/Modules/Retail_BusinessEntity/Directives/AccountDefinition/AccountBulkActions/MainExtensions/Templates/SendRatesBulkActionSettingsTemplate.html'
         };
 
-        function SendEmailBulkActionSettingsCtor($scope, ctrl, $attrs) {
+        function SendRatesBulkActionSettingsCtor($scope, ctrl, $attrs) {
             this.initializeController = initializeController;
 
             var mailMessageTypeSelectorAPI;
@@ -63,7 +63,7 @@ app.directive('retailBeAccountbulkactionsettingsSendemail', ['UtilsService', 'VR
 
                 api.getData = function () {
                     return {
-                        $type: 'Retail.BusinessEntity.MainExtensions.AccountBulkAction.SendEmailAccountBulkActionDefinition, Retail.BusinessEntity.MainExtensions',
+                        $type: 'Retail.BusinessEntity.MainExtensions.AccountBulkAction.SendRatesAccountBulkActionDefinition, Retail.BusinessEntity.MainExtensions',
                         MailMessageTypeId: mailMessageTypeSelectorAPI.getSelectedIds()
                     };
                 };

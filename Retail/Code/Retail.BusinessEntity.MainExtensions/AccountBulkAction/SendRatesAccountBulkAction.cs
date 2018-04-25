@@ -11,7 +11,7 @@ using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.MainExtensions.AccountBulkAction
 {
-    public class SendEmailAccountBulkAction : AccountBulkActionRuntimeSettings
+    public class SendRatesAccountBulkAction : AccountBulkActionRuntimeSettings
     {
         public Guid MailMessageTemplateId { get; set; }
 
