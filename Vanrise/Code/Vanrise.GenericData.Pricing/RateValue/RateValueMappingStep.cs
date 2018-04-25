@@ -28,11 +28,15 @@ namespace Vanrise.GenericData.Pricing
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new Vanrise.GenericData.Pricing.RateValueRuleManager();", ruleManagerVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{0}.ApplyRateValueRule({1}, new Guid(\"{2}\"), {3});",
                 ruleManagerVariableName, ruleContextVariableName, this.RuleDefinitionId, ruleTargetVariableName);
+            context.AddCodeToCurrentInstanceExecutionBlock("if({0}.Rule != null) ", ruleContextVariableName);
+            context.AddCodeToCurrentInstanceExecutionBlock("{ ");
             context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.NormalRate;", this.NormalRate, ruleContextVariableName);
             if (this.CurrencyId != null)
                 context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.CurrencyId;", this.CurrencyId, ruleContextVariableName);
             if (this.RatesByRateType != null)
                 context.AddCodeToCurrentInstanceExecutionBlock("{0} = {1}.RatesByRateType;", this.RatesByRateType, ruleContextVariableName);
+            context.AddCodeToCurrentInstanceExecutionBlock("} ");
+
 
             base.SetIdRuleMatched(context, ruleContextVariableName);
         }
