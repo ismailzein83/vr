@@ -1,23 +1,34 @@
 ﻿<vr-panel ng-controller="VRRuntime_RuntimeNodeManagementController">
     <vr-form name="formFilter">
-        <div ng-hide="filterSectionCollapsed">
-            <vr-row removeline>
-                <vr-columns width="normal">
-                    <vr-textbox value="name" label="Name"></vr-textbox>
-                </vr-columns>
-            </vr-row>
-        </div>
-        <vr-row removeline>
-            <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">
-                <div transclude-to="buttons">
-                    <vr-button type="Search" formname="formFilter" data-onclick="searchClicked"></vr-button>
-                    <vr-button type="Add" data-onclick="addNewRuntimeNode"></vr-button>
-                </div>
-            </vr-actionbar>
-        </vr-row>
-        <vr-row>
-            <vr-columns width="fullrow">
-                <p ng-repeat="x in datasource">{{x.Name}}</p>
+        <vr-actionbar>
+            <div transclude-to="buttons">
+                <vr-button type="Add" data-onclick="addNewRuntimeNode"></vr-button>
+            </div>
+        </vr-actionbar>
+        <vr-row >
+            <vr-columns ng-repeat="x in datasource" width="1/2row">
+                <vr-section title="{{x.Name}}">
+                    <vr-columns class="pull-right">
+                        <button class="btn btn-xs btn-primary" ng-click="editRuntimeNode(x)">
+                            <i class="glyphicon glyphicon-edit"></i> Edit
+                        </button>
+                    </vr-columns>
+                    <vr-columns width="1/8row" class="pull-right">
+                        <button type="button" class="btn btn-xs btn-primary" ng-click="scopeModel.preview()">
+                            <i class="glyphicon glyphicon-picture"></i> Preview
+                        </button>
+                        <!--<vr-button type="Edit" data-onclick="editRuntimeNode" standalone></vr-button>
+                        <vr-button type="Preview" data-onclick="previewRuntimeNode" standalone></vr-button>-->
+                    </vr-columns>
+
+                    <vr-label>Machine Name : {{x.Name}}</vr-label><br />
+                    <vr-label>OSProcess Name: {{x.Name}}</vr-label><br />
+                    <vr-label>Service URL: {{x.Name}}</vr-label><br />
+                    <vr-label>Started Time: {{x.Name}}</vr-label><br />
+                    <vr-label>Last HeartBeat Time: {{x.Name}}</vr-label><br />
+                    <vr-label>Number of Seconds HeartBeat Received : 22</vr-label>
+
+                </vr-section>
             </vr-columns>
         </vr-row>
     </vr-form>

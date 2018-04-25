@@ -18,12 +18,14 @@ namespace Vanrise.Runtime.Web.Controllers
         RuntimeNodeManager manager = new RuntimeNodeManager();
 
 
-        //[HttpGet]
-        //[Route("GetNode")]
-        //public RuntimeNode GetNode(Guid nodeId)
-        //{
-        //    return manager.GetNode(nodeId);
-        //}
+        [HttpGet]
+        [Route("GetNode")]
+        public RuntimeNode GetNode(Guid nodeId)
+        {
+            return manager.GetNode(nodeId);
+        }
+
+
         [HttpGet]
         [Route("GetAllNodes")]
         public Dictionary<Guid, RuntimeNode> GetAllNodes()
@@ -31,18 +33,18 @@ namespace Vanrise.Runtime.Web.Controllers
             return manager.GetAllNodes();
         }
 
-        //[HttpPost]
-        //[Route("AddRuntimeNode")]
-        //public Vanrise.Entities.InsertOperationOutput<RuntimeNode> AddRuntimeNode(RuntimeNode node)
-        //{
-        //    return manager.AddRuntimeNode(node);
-        //}
+        [HttpPost]
+        [Route("AddRuntimeNode")]
+        public Vanrise.Entities.InsertOperationOutput<RuntimeNodeDetails> AddRuntimeNode(RuntimeNode node)
+        {
+            return manager.AddRuntimeNode(node);
+        }
 
-        //[HttpPost]
-        //[Route("UpdateRuntimeNode")]
-        //public Vanrise.Entities.UpdateOperationOutput<RuntimeNode> UpdateRuntimeNode(RuntimeNode node)
-        //{
-        //    return manager.UpdateRuntimeNode(node);
-        //}
+        [HttpPost]
+        [Route("UpdateRuntimeNode")]
+        public Vanrise.Entities.UpdateOperationOutput<RuntimeNodeDetails> UpdateRuntimeNode(RuntimeNode node)
+        {
+            return manager.UpdateRuntimeNode(node);
+        }
     }
 }

@@ -27,12 +27,19 @@
         function GetRuntimeServiceTypeTemplateConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(VRRuntime_ModuleConfig.moduleName, controllerName, 'GetRuntimeServiceTypeTemplateConfigs'));
         }
+
+        function GetRuntimeNodeConfigurationsInfo(filter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VRRuntime_ModuleConfig.moduleName, controllerName, "GetRuntimeNodeConfigurationsInfo"), {
+                filter: filter
+            });
+        }
         return ({
             GetFilteredRuntimeNodesConfigurations: GetFilteredRuntimeNodesConfigurations,
             GetRuntimeNodeConfiguration: GetRuntimeNodeConfiguration,
             UpdateRuntimeNodeConfiguration: UpdateRuntimeNodeConfiguration,
             AddRuntimeNodeConfiguration: AddRuntimeNodeConfiguration,
-            GetRuntimeServiceTypeTemplateConfigs: GetRuntimeServiceTypeTemplateConfigs
+            GetRuntimeServiceTypeTemplateConfigs: GetRuntimeServiceTypeTemplateConfigs,
+            GetRuntimeNodeConfigurationsInfo: GetRuntimeNodeConfigurationsInfo
         });
     }
 

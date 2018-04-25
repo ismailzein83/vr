@@ -46,6 +46,8 @@
     <Compile Include="Configuration\RuntimeNodeConfigurationDetails.cs" />
     <Compile Include="Configuration\RuntimeNodeConfigurationQuery.cs" />
     <Compile Include="Configuration\RuntimeServiceConfig.cs" />
+    <Compile Include="RuntimeNodeDetails.cs" />
+    <Compile Include="RuntimeNodeStateDetails.cs" />
     <Compile Include="RuntimeNodeState.cs" />
     <Compile Include="RuntimeService.cs" />
     <Compile Include="BaseTaskActionArgument.cs" />

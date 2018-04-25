@@ -32,6 +32,13 @@ namespace Vanrise.Runtime.Web.Controllers
             return manager.GetNodeConfiguration(nodeConfigurationId);
         }
 
+        [HttpGet]
+        [Route("GetRuntimeNodeConfigurationsInfo")]
+        public IEnumerable<RuntimeNodeConfigurationDetails> GetRuntimeNodeConfigurationsInfo(string filter = null)
+        {
+            return manager.GetRuntimeNodeConfigurationsInfo();
+        }
+
         [HttpPost]
         [Route("AddRuntimeNodeConfiguration")]
         public Vanrise.Entities.InsertOperationOutput<RuntimeNodeConfigurationDetails> AddRuntimeNodeConfiguration(RuntimeNodeConfiguration nodeConfig)

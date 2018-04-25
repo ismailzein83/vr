@@ -1,20 +1,19 @@
 ﻿(function (appControllers) {
     "use strict";
-    RuntimeNodeManagementController.$inject = ['$scope', 'VRRuntime_RuntimeNodeService', 'VRRuntime_RuntimeNodeAPIService', 'UtilsService', 'VRUIUtilsService'];
+    RuntimeNodeManagementController.$inject = ['$scope', 'VRRuntime_RuntimeNodeService', 'VRRuntime_RuntimeNodeAPIService', 'VRRuntime_RuntimeNodeStateAPIService', 'UtilsService', 'VRUIUtilsService'];
 
-    function RuntimeNodeManagementController($scope, VRRuntime_RuntimeNodeService, VRRuntime_RuntimeNodeAPIService, UtilsService, VRUIUtilsService) {
-       // var gridAPI;
+    function RuntimeNodeManagementController($scope, VRRuntime_RuntimeNodeService, VRRuntime_RuntimeNodeAPIService, VRRuntime_RuntimeNodeStateAPIService, UtilsService, VRUIUtilsService) {
+        var gridAPI;
         var filter = {};
         var nodeId;
         defineScope();
-        //load();
+        var runtimeNodeId;
 
         function defineScope() {
             $scope.datasource=[];
 
             $scope.searchClicked = function () {
                 getFilterObject();
-                //return gridAPI.loadGrid(filter);
             };
 
             function getFilterObject() {
@@ -24,33 +23,41 @@
             }
 
             VRRuntime_RuntimeNodeAPIService.GetAllNodes().then(function (response) {
+                if (response != null) {
                     for (var key in response) {
                         if (key != '$type') {
                             var item = response[key];
-                            //item.RuntimeServiceConfigurationId = key;
                             $scope.datasource.push({ Entity: item });
-
                         }
                     }
-                    console.log($scope.datasource);
+                }
+            });
+
+            VRRuntime_RuntimeNodeStateAPIService.GetAllNodesStates().then(function (response) {
+                console.log(response);
             });
 
 
-
-            //$scope.onGridReady = function (api) {
-            //    gridAPI = api;
-            //    api.loadGrid(filter);
-            //};
             $scope.addNewRuntimeNode = addNewRuntimeNode;
+            $scope.editRuntimeNode = editRuntimeNode;
         }
 
 
         function addNewRuntimeNode() {
             var onRuntimeNodeAdded = function (Obj) {
-               // gridAPI.onRuntimeNodeAdded(Obj);
             };
 
             VRRuntime_RuntimeNodeService.addRuntimeNode(onRuntimeNodeAdded);
+        }
+
+
+        function editRuntimeNode(nodeObj) {
+            var onRuntimeNodeUpdated = function (node) {
+                var index = $scope.datasource.indexOf(nodeObj);
+                $scope.datasource[index] = { Entity: node };
+            };
+
+            VRRuntime_RuntimeNodeService.editRuntimeNode(nodeObj.Entity.RuntimeNodeId, onRuntimeNodeUpdated);
         }
     }
 

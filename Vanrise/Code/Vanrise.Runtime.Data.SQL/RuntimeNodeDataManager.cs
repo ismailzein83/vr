@@ -24,11 +24,27 @@ namespace Vanrise.Runtime.Data.SQL
         {
             return GetItemsSP("[runtime].[sp_RuntimeNode_GetAll]", RuntimeNodeMapper);
         }
+        public bool Insert(RuntimeNode node)
+        {
+
+            string serializedSetting = node.Settings != null ? Vanrise.Common.Serializer.Serialize(node.Settings) : null;
+            int nbOfRecordsAffected = ExecuteNonQuerySP("[runtime].[sp_RuntimeNode_Insert]", node.RuntimeNodeId,node.RuntimeNodeConfigurationId, node.Name, serializedSetting);
+            return (nbOfRecordsAffected > 0);
+        }
+
+        public bool Update(RuntimeNode node)
+        {
+            string serializedSetting = node.Settings != null ? Vanrise.Common.Serializer.Serialize(node.Settings) : null;
+            int nbOfRecordsAffected = ExecuteNonQuerySP("[runtime].[sp_RuntimeNode_Update]", node.RuntimeNodeId, node.RuntimeNodeConfigurationId, node.Name, serializedSetting);
+            return (nbOfRecordsAffected > 0);
+        }
 
         public bool AreRuntimeNodeUpdated(ref object updateHandle)
         {
             return base.IsDataUpdated("[runtime].[RuntimeNode]", ref updateHandle);
         }
+
+
         #endregion
 
         #region Private Methods

@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\RuntimeNodeStateController.cs" />
     <Compile Include="Controllers\RuntimeNodeController.cs" />
     <Compile Include="Controllers\RuntimeNodeConfigurationController.cs" />
     <Compile Include="Controllers\SchedulerTaskActionTypeController.cs" />
@@ -115,15 +116,16 @@
     <Content Include="Runtime\Directives\RuntimeNodeConfiguration\Templates\RuntimeNodeConfigurationProcessesEditor.html" />
     <Content Include="Runtime\Directives\RuntimeNodeConfiguration\Templates\RuntimeNodeConfigurationTemplate.html" />
     <Content Include="Runtime\Directives\RuntimeNodeConfiguration\vr-runtime-runtimenodeconfiguration-runtimeservice.js" />
+    <Content Include="Runtime\Directives\RuntimeNodeConfiguration\vr-runtime-runtimenodeconfiguration-selector.js" />
     <Content Include="Runtime\Directives\RuntimeNodeConfiguration\vr-runtime-runtimenodeconfiguration-services.js" />
     <Content Include="Runtime\Directives\MainExtensions\vr-runtime-runtimenodeconfiguration-scheduler.js" />
     <Content Include="Runtime\Directives\RuntimeNodeConfiguration\vr-runtime-runtimenodeconfiguration-processes.js" />
     <Content Include="Runtime\Directives\RuntimeNodeConfiguration\vr-runtime-runtimenodeconfiguration-grid.js" />
-    <Content Include="Runtime\Directives\RuntimeNodeConfiguration\SchedulerTask\Templates\SchedulerTaskPanelTemplate.html" />
-    <Content Include="Runtime\Directives\RuntimeNodeConfiguration\SchedulerTask\Templates\SchedulerTaskGridTemplate.html" />
-    <Content Include="Runtime\Directives\RuntimeNodeConfiguration\SchedulerTask\vr-runtime-schedulertask-panel.js" />
-    <Content Include="Runtime\Directives\RuntimeNodeConfiguration\SchedulerTask\vr-runtime-schedulertask-selector.js" />
-    <Content Include="Runtime\Directives\RuntimeNodeConfiguration\SchedulerTask\vr-runtime-schedulertask-grid.js" />
+    <Content Include="Runtime\Directives\SchedulerTask\Templates\SchedulerTaskPanelTemplate.html" />
+    <Content Include="Runtime\Directives\SchedulerTask\Templates\SchedulerTaskGridTemplate.html" />
+    <Content Include="Runtime\Directives\SchedulerTask\vr-runtime-schedulertask-panel.js" />
+    <Content Include="Runtime\Directives\SchedulerTask\vr-runtime-schedulertask-selector.js" />
+    <Content Include="Runtime\Directives\SchedulerTask\vr-runtime-schedulertask-grid.js" />
     <Content Include="Runtime\Directives\TaskAction\Templates\TaskActionScheduleDailyRepricing.html" />
     <Content Include="Runtime\Directives\TaskAction\Templates\TaskActionWorkFlow.html" />
     <Content Include="Runtime\Directives\TaskAction\vr-runtime-taskactiontype-selector.js" />
@@ -139,6 +141,7 @@
     <Content Include="Runtime\Directives\TaskTrigger\vr-runtime-tasktrigger-timer.js" />
     <Content Include="Runtime\Directives\TaskTrigger\vr-runtime-tasktrigger-weekly.js" />
     <Content Include="Runtime\ModuleInitialization.js" />
+    <Content Include="Runtime\Services\APIServices\RuntimeNodeStateAPIService.js" />
     <Content Include="Runtime\Services\APIServices\RuntimeNodeAPIService.js" />
     <Content Include="Runtime\Services\APIServices\RuntimeNodeConfigurationAPIService.js" />
     <Content Include="Runtime\Services\APIServices\SchedulerTaskActionTypeAPIService.js" />

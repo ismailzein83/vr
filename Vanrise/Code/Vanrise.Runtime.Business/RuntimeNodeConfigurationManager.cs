@@ -33,12 +33,23 @@ namespace Vanrise.Runtime.Business
             return GetAllNodeConfigurations().GetRecord(nodeConfigurationId);
 
         }
+        public IEnumerable<RuntimeNodeConfigurationDetails> GetRuntimeNodeConfigurationsInfo()
+        {
+            var allRuntimeNodeConfigurations = GetAllNodeConfigurations();
+            Func<RuntimeNodeConfiguration, bool> filterFunc = (runtimeNodeConfiguration) =>
+            {
+                return true;
+            };
+            IEnumerable<RuntimeNodeConfiguration> filteredNodeConfigurations = (filterFunc != null) ? allRuntimeNodeConfigurations.FindAllRecords(filterFunc) : allRuntimeNodeConfigurations.MapRecords(u => u.Value);
+            return filteredNodeConfigurations.MapRecords(RuntimeNodeConfigurationDetailMapper).OrderBy(runtimeNodeConfiguration => runtimeNodeConfiguration.Name);
+        }
+
         public IDataRetrievalResult<RuntimeNodeConfigurationDetails> GetFilteredRuntimeNodesConfigurations(DataRetrievalInput<RuntimeNodeConfigurationQuery> input)
         {
             var allNodesConfigurations = GetAllNodeConfigurations();
-            Func<RuntimeNodeConfiguration, bool> filterExpression = (university) =>
+            Func<RuntimeNodeConfiguration, bool> filterExpression = (runtimeNodeConfiguration) =>
             {
-                if (input.Query.Name != null && !university.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                if (input.Query.Name != null && !runtimeNodeConfiguration.Name.ToLower().Contains(input.Query.Name.ToLower()))
                     return false;
                 return true;
             };
