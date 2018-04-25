@@ -7,13 +7,13 @@
                datavaluefield="ExtensionConfigurationId"
                datatextfield="Title"
                onselectionchanged="selectiveCtrl.onSaleRateEvaluatorSelectionChanged"
-               hideremoveicon
-               isrequired>
+               isrequired="selectiveCtrl.isrequired">
     </vr-select>
-</vr-columns>   
+</vr-columns>
 <vr-columns colnum="{{selectiveCtrl.normalColNum}}" vr-loader="selectiveCtrl.isLoadingDirective">
     <vr-directivewrapper directive="selectiveCtrl.selectedTemplateConfig.Editor"
-                         on-ready="selectiveCtrl.onDirectiveWrapperReady">
+                         on-ready="selectiveCtrl.onDirectiveWrapperReady"
+                         isrequired="selectiveCtrl.isrequired">
     </vr-directivewrapper>
 </vr-columns>
 

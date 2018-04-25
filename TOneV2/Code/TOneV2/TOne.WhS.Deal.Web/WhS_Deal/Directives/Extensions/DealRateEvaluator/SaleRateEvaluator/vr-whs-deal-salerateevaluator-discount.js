@@ -5,7 +5,8 @@ app.directive("vrWhsDealSalerateevaluatorDiscount", ['UtilsService', function (U
     return {
         restrict: "E",
         scope: {
-            onReady: "="
+            onReady: "=",
+            isrequired: "="
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;

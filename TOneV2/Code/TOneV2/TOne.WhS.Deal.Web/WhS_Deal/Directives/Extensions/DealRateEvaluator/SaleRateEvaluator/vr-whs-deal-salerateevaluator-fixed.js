@@ -5,7 +5,8 @@ app.directive("vrWhsDealSalerateevaluatorFixed", ['UtilsService', function (Util
     return {
         restrict: "E",
         scope: {
-            onReady: "="
+            onReady: "=",
+            isrequired: "="
         },
         controller: function ($scope, $element, $attrs) {
             var ctrl = this;
@@ -36,7 +37,7 @@ app.directive("vrWhsDealSalerateevaluatorFixed", ['UtilsService', function (Util
             };
 
             api.getDescription = function () {
-                return  $scope.scopeModel.Rate;
+                return $scope.scopeModel.Rate;
             };
 
             api.getData = function () {
