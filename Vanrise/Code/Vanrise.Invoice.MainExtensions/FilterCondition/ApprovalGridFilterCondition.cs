@@ -17,8 +17,8 @@ namespace Vanrise.Invoice.MainExtensions
         public override bool IsFilterMatch(IInvoiceGridActionFilterConditionContext context)
         {
             //is not NeedApproval when it does not need approval or approved
-            if (NeedApproval.Equals(false)) {
-                if (context.Invoice.NeedApproval.Equals(false) || context.Invoice.ApprovedTime.HasValue)
+            if (!NeedApproval) {
+                if ((context.Invoice.NeedApproval.HasValue && !context.Invoice.NeedApproval.Value) || context.Invoice.ApprovedTime.HasValue)
                     return true;
                 else
                     return false;
@@ -27,7 +27,7 @@ namespace Vanrise.Invoice.MainExtensions
             //NeedApproval when need approval and not approved
             else
             {
-                if (context.Invoice.NeedApproval.Equals(true) && !context.Invoice.ApprovedTime.HasValue)
+                if ((context.Invoice.NeedApproval.HasValue && context.Invoice.NeedApproval.Value) && !context.Invoice.ApprovedTime.HasValue)
                     return true;
                 else
                     return false;

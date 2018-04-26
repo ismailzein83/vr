@@ -129,10 +129,14 @@ namespace TOne.WhS.Invoice.Business.Extensions
 
                     ConfigManager configManager = new ConfigManager();
                     List<InvoiceTypeSetting> settings = configManager.GetInvoiceTypeSettings();
-                    
-                    foreach(InvoiceTypeSetting setting in settings){
-                        if (setting.InvoiceTypeId == context.InvoiceTypeId)
-                            context.NeedApproval = setting.NeedApproval;
+
+                    if (settings != null)
+                    {
+                        foreach (InvoiceTypeSetting setting in settings)
+                        {
+                            if (setting.InvoiceTypeId == context.InvoiceTypeId)
+                                context.NeedApproval = setting.NeedApproval;
+                        }
                     }
                     
                     context.Invoice = new GeneratedInvoice

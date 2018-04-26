@@ -61,20 +61,13 @@
                 };
 
                 ctrl.isInvoiceTypeValid = function () {
-
-                    for (var x = 0; x < ctrl.datasource.length; x++) {
-                        var currentItem = ctrl.datasource[x];
-                        for (var y = 0; y < ctrl.datasource.length; y++) {
-                            if (x == y)
-                                continue;
-                            var dataItem = ctrl.datasource[y];
-                            if (dataItem.InvoiceTypeId == currentItem.InvoiceTypeId)
-                                return 'This type already exists';
-                        }
+                    
+                   for (var x = 0; x < ctrl.datasource.length; x++) {
+                       if (ctrl.datasource[x] != UtilsService.getItemByVal(ctrl.datasource, ctrl.datasource[x].InvoiceTypeId, 'InvoiceTypeId'))
+                           return 'This type already exists';
                     }
                     return null;
                 };
-
 
                 ctrl.removeRow = function (dataItem) {
                     var index = UtilsService.getItemIndexByVal(ctrl.datasource, dataItem.id, 'id');
@@ -105,24 +98,24 @@
                         }
                     }
 
-                    function addItemToGrid(Item) {
+                    function addItemToGrid(item) {
                         
                         var dataItem = {
                             id: ctrl.datasource.length + 1,
-                            InvoiceTypeId : Item.payload.InvoiceTypeId,
-                            NeedApproval: Item.payload.NeedApproval
+                            InvoiceTypeId: item.payload.InvoiceTypeId,
+                            NeedApproval: item.payload.NeedApproval
                         };
 
-                        var dataItemPayload = { selectedIds: Item.payload.InvoiceTypeId };
+                        var dataItemPayload = { selectedIds: item.payload.InvoiceTypeId };
 
                         dataItem.onInvoiceTypeSelectorReady = function (api) {
                             dataItem.invoiceTypeSelectorAPI = api;
-                            Item.readyInvoiceTypeSelectorPromiseDeferred.resolve();
+                            item.readyInvoiceTypeSelectorPromiseDeferred.resolve();
                         };
 
-                        Item.readyInvoiceTypeSelectorPromiseDeferred.promise
+                        item.readyInvoiceTypeSelectorPromiseDeferred.promise
                             .then(function () {
-                                VRUIUtilsService.callDirectiveLoad(dataItem.invoiceTypeSelectorAPI, dataItemPayload, Item.loadInvoiceTypeSelectorPromiseDeferred);
+                                VRUIUtilsService.callDirectiveLoad(dataItem.invoiceTypeSelectorAPI, dataItemPayload, item.loadInvoiceTypeSelectorPromiseDeferred);
                             });
 
                         dataItem.saveDataItem = function () {

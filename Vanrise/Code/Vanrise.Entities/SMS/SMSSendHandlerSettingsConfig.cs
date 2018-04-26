@@ -8,7 +8,7 @@ namespace Vanrise.Entities.SMS
 {
     public class SMSSendHandlerSettingsConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "SMSSendHandlerSettings";
+        public const string EXTENSION_TYPE = "VRCommon_SMSSendHandlerSettings";
 
         public string Editor { get; set; }
     }

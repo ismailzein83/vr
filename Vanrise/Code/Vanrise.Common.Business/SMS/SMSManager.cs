@@ -19,14 +19,8 @@ namespace Vanrise.Common.Business
                 MobileNumber = mobileNumber
             };
 
-            ConfigManager configManager = new ConfigManager();
-            SMSSettingData smsSettingData = configManager.GetSystemSMS();
-
-            smsSettingData.ThrowIfNull("smsSettingData");
-            smsSettingData.SMSSendHandler.ThrowIfNull("smsSettingData.SMSSendHandler");
-            smsSettingData.SMSSendHandler.Settings.ThrowIfNull("smsSettingData.SMSSendHandler.Settings");
-
-            smsSettingData.SMSSendHandler.Settings.SendSMS(context);
+            SMSSendHandler handler = new ConfigManager().GetSMSSendHandler();
+            handler.Settings.SendSMS(context);
         }
 
         public void SendSMS(Guid smsTemplateId, Dictionary<string, dynamic> objects)

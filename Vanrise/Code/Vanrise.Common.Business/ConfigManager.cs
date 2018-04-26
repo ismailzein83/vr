@@ -76,6 +76,16 @@ namespace Vanrise.Common.Business
             return smsSettings;
         }
 
+        public SMSSendHandler GetSMSSendHandler() {
+
+            SMSSettingData smsSettingData = GetSystemSMS();
+
+            smsSettingData.ThrowIfNull("smsSettingData");
+            smsSettingData.SMSSendHandler.ThrowIfNull("smsSettingData.SMSSendHandler");
+            smsSettingData.SMSSendHandler.Settings.ThrowIfNull("smsSettingData.SMSSendHandler.Settings");
+
+            return smsSettingData.SMSSendHandler;
+        }
         public GeneralSettingData GetGeneralSetting()
         {
             SettingManager settingManager = new SettingManager();
