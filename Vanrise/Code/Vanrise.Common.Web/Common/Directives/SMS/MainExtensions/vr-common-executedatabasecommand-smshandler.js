@@ -34,6 +34,9 @@
             var connectionSelectorAPI;
             var connectionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+            ctrl.datasource = [{ Element: "#MobileNumber#", Description: "The mobile number to send the SMS message to" },
+                                { Element: "#Message#", Description: "SMS Message" }];
+
             this.initializeController = initializeController;
 
             function initializeController() {

@@ -1,8 +1,14 @@
 ﻿<vr-row>
-        <vr-common-connection-selector normal-col-num="6" on-ready="scopeModel.onConnectionSelectorReady" isrequired="true"></vr-common-connection-selector>
+    <vr-common-connection-selector normal-col-num="6" on-ready="scopeModel.onConnectionSelectorReady" isrequired="true"></vr-common-connection-selector>
 </vr-row>
 <vr-row>
     <vr-columns width="1/2row">
         <vr-textarea value="commandQuery" label=" Command Query" isrequired></vr-textarea>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <vr-datagrid datasource="ctrl.datasource">
+            <vr-datagridcolumn headertext="'ELements'" type="'Text'" field="'Element'" widthfactor="2"></vr-datagridcolumn>
+            <vr-datagridcolumn headertext="'Description'" type="'Text'" field="'Description'" widthfactor="4"></vr-datagridcolumn>
+        </vr-datagrid>
     </vr-columns>
 </vr-row>
