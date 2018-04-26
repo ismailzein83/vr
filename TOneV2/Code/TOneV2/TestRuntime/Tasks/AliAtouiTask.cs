@@ -140,7 +140,7 @@ namespace TOne.WhS.Runtime.Tasks
         }
 
         #endregion
-
+         
         #region Private Methods
 
         private void DisplayList(IEnumerable<CodePrefixInfo> codePrefixes)
@@ -208,13 +208,33 @@ namespace TOne.WhS.Runtime.Tasks
                         },
                         new TrunkGroup()
                         {
-                            CustomerTrunkGroups = null,
-                            CodeGroupTrunkGroups = new List<CodeGroupTrunkGroup>() { new CodeGroupTrunkGroup() { CodeGroupId = 376 } },
+                            CustomerTrunkGroups = new List<CustomerTrunkGroup>() { new CustomerTrunkGroup() { CustomerId = 2 } },
+                            CodeGroupTrunkGroups = new List<CodeGroupTrunkGroup>() { new CodeGroupTrunkGroup() { CodeGroupId = 263 } },
                             TrunkTrunkGroups = new List<TrunkTrunkGroup>()
                             {
-                                new TrunkTrunkGroup() { TrunkId = new Guid("acdc92ef-4d83-2708-1348-fed0445f0533"), Percentage = 20, Priority = 1},
+                                new TrunkTrunkGroup() { TrunkId = new Guid("acdc92ef-4d83-2708-1348-fed0445f0533"), Percentage = 90, Priority = 2}
+                            }
+                        },
+                        new TrunkGroup()
+                        {
+                            CustomerTrunkGroups = new List<CustomerTrunkGroup>() { new CustomerTrunkGroup() { CustomerId = 3 } },
+                            CodeGroupTrunkGroups = null,
+                            TrunkTrunkGroups = new List<TrunkTrunkGroup>()
+                            {
                                 new TrunkTrunkGroup() { TrunkId = new Guid("af4aff1a-04bb-74c9-2790-55c38cb0c390"), Percentage = 80, Priority = 2}
                             },
+                            IsBackup = true
+                        },
+                        new TrunkGroup()
+                        {
+                            CustomerTrunkGroups = null,
+                            CodeGroupTrunkGroups = null,
+                            TrunkTrunkGroups = new List<TrunkTrunkGroup>()
+                            {
+                                new TrunkTrunkGroup() { TrunkId = new Guid("acdc92ef-4d83-2708-1348-999999999999"), Percentage = 20, Priority = 1},
+                                new TrunkTrunkGroup() { TrunkId = new Guid("af4aff1a-04bb-74c9-2790-55c38cb0c390"), Percentage = 80, Priority = 2}
+                            },
+                            IsBackup = true
                         }
                     }
                 }
@@ -272,7 +292,7 @@ namespace TOne.WhS.Runtime.Tasks
 
             var carrierMappings = new Dictionary<string, RouteSync.Ericsson.CarrierMapping>();
             carrierMappings.Add("11", supplierMapping_11);
-            carrierMappings.Add("12", supplierMapping_12);
+            //carrierMappings.Add("12", supplierMapping_12);
 
             var ruleTree = new EricssonSWSync().BuildSupplierTrunkGroupTree(carrierMappings); //GetRuleTree(ruleDefinitionId);
             //List<CriteriaEvaluationInfo> criteriaEvaluationInfos = null; //GetCachedCriteriaEvaluationInfos(ruleDefinitionId);
@@ -280,8 +300,8 @@ namespace TOne.WhS.Runtime.Tasks
             GenericRuleTarget target = new GenericRuleTarget();
             target.TargetFieldValues = new Dictionary<string, object>();
             target.TargetFieldValues.Add("Supplier", 11);
-            target.TargetFieldValues.Add("CodeGroup", 376);
-            target.TargetFieldValues.Add("Customer", 5);
+            target.TargetFieldValues.Add("CodeGroup", 263);
+            target.TargetFieldValues.Add("Customer", 3);
             target.TargetFieldValues.Add("IsBackUp", false);
 
             TrunkGroupRuleAsGeneric matchingRule = Vanrise.GenericData.Business.GenericRuleManager<GenericRule>.GetMatchRule<TrunkGroupRuleAsGeneric>(ruleTree, null, target);
