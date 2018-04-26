@@ -25,8 +25,8 @@ namespace Vanrise.Common
 
             switch (FTPCommunicatorSettings.FTPType)
             {
-                case Common.FTPType.FTP: CommunicatorClient = new FTPClient(); break;
-                case Common.FTPType.SFTP: CommunicatorClient = new SFTPClient(); break;
+                case Common.FTPType.FTP: this.CommunicatorClient = new FTPClient(); break;
+                case Common.FTPType.SFTP: this.CommunicatorClient = new SFTPClient(); break;
                 default: throw new NotSupportedException(string.Format("FTPType '{0}' is not supported", FTPCommunicatorSettings.FTPType));
             }
         }
@@ -38,10 +38,11 @@ namespace Vanrise.Common
             bool tryOpenConnection = TryOpenConnection();
             if (!tryOpenConnection)
             {
-                errorMessage = string.Format("Unable to open connection ServerIP: {0}, Username: {1}, Password:{2}",
+                errorMessage = string.Format("Unable to open connection ServerIP: {0}, Username: {1}, Password: {2}",
                     FTPCommunicatorSettings.ServerIP, FTPCommunicatorSettings.Username, FTPCommunicatorSettings.Password);
                 return false;
             }
+
             try
             {
                 CreateFile(stream, fileName);
@@ -49,7 +50,7 @@ namespace Vanrise.Common
             catch (Exception ex)
             {
                 CloseConnection();
-                throw;
+                throw ex;
             }
 
             CloseConnection();
@@ -57,28 +58,31 @@ namespace Vanrise.Common
             return true;
         }
 
-        bool TryOpenConnection()
+        private bool TryOpenConnection()
         {
             return CommunicatorClient.TryOpenConnection(FTPCommunicatorSettings.ServerIP, FTPCommunicatorSettings.Username, FTPCommunicatorSettings.Password);
         }
 
-        void CloseConnection()
+        private void CreateFile(Stream stream, string fileName)
+        {
+            CommunicatorClient.CreateFile(stream, string.Format("{0}/{1}", FTPCommunicatorSettings.Directory, fileName));
+        }
+
+        private void CloseConnection()
         {
             CommunicatorClient.CloseConnection();
         }
 
-        void CreateFile(Stream stream, string fileName)
-        {
-            CommunicatorClient.CreateFile(stream, string.Format("{0}/{1}", FTPCommunicatorSettings.Directory, fileName));
-        }
+
+        #region Private Classes
 
         private abstract class FTPCommunicatorClient
         {
             public abstract bool TryOpenConnection(string serverIP, string userName, string password);
 
-            public abstract void CloseConnection();
-
             public abstract void CreateFile(Stream stream, string remotePath);
+
+            public abstract void CloseConnection();
         }
 
         private class FTPClient : FTPCommunicatorClient
@@ -97,14 +101,14 @@ namespace Vanrise.Common
                 return Ftp.GetConnectionState().Connected;
             }
 
-            public override void CloseConnection()
-            {
-                Ftp.Dispose();
-            }
-
             public override void CreateFile(Stream stream, string remotePath)
             {
                 Ftp.PutFile(stream, remotePath);
+            }
+
+            public override void CloseConnection()
+            {
+                Ftp.Dispose();
             }
         }
 
@@ -124,15 +128,17 @@ namespace Vanrise.Common
                 return Sftp.GetConnectionState().Connected;
             }
 
-            public override void CloseConnection()
-            {
-                Sftp.Dispose();
-            }
-
             public override void CreateFile(Stream stream, string remotePath)
             {
                 Sftp.PutFile(stream, remotePath);
             }
+
+            public override void CloseConnection()
+            {
+                Sftp.Dispose();
+            }
         }
+
+        #endregion
     }
 }
