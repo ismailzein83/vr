@@ -139,6 +139,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         }
         CustomerZoneDetail CustomerZoneDetailMapper(IDataReader reader)
         {
+            string saleZoneServiceIds = reader["SaleZoneServiceIds"] as string;
             return new CustomerZoneDetail()
             {
                 CustomerId = (int)reader["CustomerId"],
@@ -148,7 +149,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                 RoutingProductSource = GetReaderValue<SaleEntityZoneRoutingProductSource>(reader, "RoutingProductSource"),
                 SaleZoneId = (Int64)reader["SaleZoneId"],
                 SellingProductId = GetReaderValue<int>(reader, "SellingProductId"),
-                SaleZoneServiceIds = new HashSet<int>((reader["SaleZoneServiceIds"] as string).Split(',').Select(itm => int.Parse(itm)))
+                SaleZoneServiceIds = !string.IsNullOrEmpty(saleZoneServiceIds) ? new HashSet<int>(saleZoneServiceIds.Split(',').Select(itm => int.Parse(itm))) : null
             };
         }
 

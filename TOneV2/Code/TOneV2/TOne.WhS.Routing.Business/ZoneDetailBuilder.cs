@@ -25,7 +25,7 @@ namespace TOne.WhS.Routing.Business
             //SaleZone Services variables
             bool isZoneServicesExplicitOnCustomer = ConfigurationManager.AppSettings["TOneWhS_Routing_ZoneServicesExplicitOnCustomer"] == "true";
             SaleEntityServiceLocator customerServiceLocator = null;
-            HashSet<int> saleZoneServices = null;
+            
 
             var carrierAccountManager = new CarrierAccountManager();
 
@@ -81,6 +81,8 @@ namespace TOne.WhS.Routing.Business
 
                 foreach (var customerZone in customerSaleZones)
                 {
+                    HashSet<int> saleZoneServices = null;
+
                     SaleEntityZoneRate customerZoneRate = customerZoneRateLocator.GetCustomerZoneRate(customerInfo.CustomerId, customerInfo.SellingProductId, customerZone.SaleZoneId);
 
                     if (customerZoneRate != null && customerZoneRate.Rate != null)

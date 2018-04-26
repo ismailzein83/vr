@@ -55,7 +55,7 @@ namespace TOne.WhS.Routing.BP.Activities
             RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
             RoutingDatabase routingDatabase = routingDatabaseManager.GetRoutingDatabase(inputArgument.RoutingDatabaseId);
 
-            if (routingDatabase.Type == RoutingDatabaseType.Current)
+            if (routingDatabase!=null && routingDatabase.Type == RoutingDatabaseType.Current)
             {
                 IRoutingEntityDetailsDataManager routingEntityDetailsDataManager = RoutingDataManagerFactory.GetDataManager<IRoutingEntityDetailsDataManager>();
                 routingEntityDetailsDataManager.RoutingDatabase = routingDatabase;
