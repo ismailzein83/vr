@@ -62,14 +62,9 @@ namespace TOne.WhS.Deal.Data.SQL
 			return (Byte[])maxTimestamp;
 		}
 
-		public DateTime? GetDealEvaluatorBeginDate(byte[] lastTimestamp, DateTime effectiveAfter)
+		public IEnumerable<DealDefinition> GetDealsModifiedAfterTimestamp(byte[] lastTimestamp)
 		{
-			IEnumerable<DealDefinition> deals = GetItemsSP("TOneWhS_Deal.sp_Deal_GetDealsModifiedAfterTimestamp", DealMapper, lastTimestamp);
-			if (deals == null || !deals.Any())
-				return null;
-			var effectiveDeals = deals.Where(item => item.Settings.EndDate.VRGreaterThan(effectiveAfter));
-			return effectiveDeals.MinBy(item => item.Settings.BeginDate).Settings.BeginDate;
-			//return deals.Where(item => item.Settings.EndDate.VRGreaterThan(effectiveAfter)).MinBy(item => item.Settings.BeginDate).Settings.BeginDate;
+			return GetItemsSP("TOneWhS_Deal.sp_Deal_GetDealsModifiedAfterTimestamp", DealMapper, lastTimestamp);
 		}
 
 		#endregion

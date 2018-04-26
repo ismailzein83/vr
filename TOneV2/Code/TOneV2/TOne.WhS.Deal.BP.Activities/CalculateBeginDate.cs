@@ -51,8 +51,7 @@ namespace TOne.WhS.Deal.BP.Activities
 					var reProcessingProcessInput = bpInstance.InputArgument.CastWithValidate<ReProcessingProcessInput>("bpInstance.InputArgument", bpInstance.ProcessInstanceID);
 
 					var bpInstanceReprocessDefinition = reprocessDefinitionManager.GetReprocessDefinition(reProcessingProcessInput.ReprocessDefinitionId);
-					if (reProcessingProcessInput.ReprocessDefinitionId == dealTechnicalSettingData.ReprocessDefinitionId ||
-						bpInstanceReprocessDefinition == null || bpInstanceReprocessDefinition.Settings == null ||
+					if (bpInstanceReprocessDefinition == null || bpInstanceReprocessDefinition.Settings == null ||
 						bpInstanceReprocessDefinition.Settings.ExecutionFlowDefinitionId != dealEvaluatorReprocessDefinition.Settings.ExecutionFlowDefinitionId)
 						continue;
 

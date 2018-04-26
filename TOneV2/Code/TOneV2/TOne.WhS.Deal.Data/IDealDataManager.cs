@@ -19,6 +19,6 @@ namespace TOne.WhS.Deal.Data
 
 		Byte[] GetMaxTimestamp();
 
-		DateTime? GetDealEvaluatorBeginDate(byte[] lastTimestamp, DateTime effectiveAfter);
+		IEnumerable<DealDefinition> GetDealsModifiedAfterTimestamp(byte[] lastTimestamp);
 	}
 }
