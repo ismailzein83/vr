@@ -91,16 +91,18 @@ namespace TOne.WhS.Routing.Business
                         {
                             SaleEntityService customerService = customerServiceLocator.GetCustomerZoneService(customerInfo.CustomerId, customerInfo.SellingProductId, customerZone.SaleZoneId);
 
-                            if (customerService == null)
-                                throw new NullReferenceException(string.Format("customerService. Customer ID: {0} having Selling Product ID: {1} does not contain default services.", customerInfo.CustomerId, customerInfo.SellingProductId));
+                            //if (customerService == null)
+                            //    throw new NullReferenceException(string.Format("customerService. Customer ID: {0} having Selling Product ID: {1} does not contain default services.", customerInfo.CustomerId, customerInfo.SellingProductId));
 
-                            if (customerService.Services == null)
-                                throw new NullReferenceException(string.Format("customerService.Services. Customer ID: {0} having Selling Product ID: {1} does not contain default services.", customerInfo.CustomerId, customerInfo.SellingProductId));
+                            //if (customerService.Services == null)
+                            //    throw new NullReferenceException(string.Format("customerService.Services. Customer ID: {0} having Selling Product ID: {1} does not contain default services.", customerInfo.CustomerId, customerInfo.SellingProductId));
 
-                            if (customerService.Services.Count == 0)
-                                throw new Exception(string.Format("customerService.Services count is 0. Customer ID: {0} having Selling Product ID: {1} does not contain default services.", customerInfo.CustomerId, customerInfo.SellingProductId));
+                            //if (customerService.Services.Count == 0)
+                            //    throw new Exception(string.Format("customerService.Services count is 0. Customer ID: {0} having Selling Product ID: {1} does not contain default services.", customerInfo.CustomerId, customerInfo.SellingProductId));
 
-                            saleZoneServices = customerService.Services.Select(itm => itm.ServiceId).ToHashSet();
+                            //saleZoneServices = customerService.Services.Select(itm => itm.ServiceId).ToHashSet();
+                            if (customerService != null && customerService.Services != null && customerService.Services.Count > 0)
+                                saleZoneServices = customerService.Services.Select(itm => itm.ServiceId).ToHashSet();
                         }
                         else
                         {

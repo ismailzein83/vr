@@ -69,6 +69,20 @@ namespace TOne.WhS.Routing.Business
                         {
                             soldCustomers.Add(customerZoneDetail.CustomerId);
 
+                            if (customerZoneDetail.SaleZoneServiceIds == null)
+                            {
+                                customerRoutes.Add(new CustomerRoute() 
+                                { 
+                                    Code = routeCode,
+                                    CorrespondentType = CorrespondentType.Other, 
+                                    CustomerId = customerZoneDetail.CustomerId, 
+                                    SaleZoneId = saleZoneDefintion.SaleZoneId,
+                                    VersionNumber = context.VersionNumber,
+                                    Rate = customerZoneDetail.EffectiveRateValue
+                                });
+                                continue;
+                            }
+
                             var routeRuleTarget = new RouteRuleTarget
                             {
                                 CustomerId = customerZoneDetail.CustomerId,
