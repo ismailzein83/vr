@@ -296,6 +296,28 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService', 'UtilsService'
             };
             registerActionType(actionType);
         }
+
+        function registerApproveInvoiceAction() {
+         
+            var actionType = {
+                ActionTypeName: "ApproveInvoiceAction",
+                actionMethod: function (payload) {
+                    var promiseDeffered = UtilsService.createPromiseDeferred();
+                   VRNotificationService.showConfirmation().then(function (response) {
+                       if (response) {
+                            VR_Invoice_InvoiceAPIService.ApproveInvoice(payload.invoiceAction.InvoiceActionId, payload.invoice.Entity.InvoiceId, payload.invoiceAction.Settings.IsApproved).then(function (response) {
+                                promiseDeffered.resolve(response);
+                            });
+                        } else {
+                            promiseDeffered.resolve(response);
+                        }
+                    });
+                    return promiseDeffered.promise;
+                }
+            };
+            registerActionType(actionType);
+        }
+
         return ({
             addInvoiceAction: addInvoiceAction,
             editInvoiceAction: editInvoiceAction,
@@ -311,6 +333,7 @@ app.service('VR_Invoice_InvoiceActionService', ['VRModalService', 'UtilsService'
             reGenerateInvoice: reGenerateInvoice,
             registerSendEmailAction: registerSendEmailAction,
             registerDownloadFileInvoiceAction: registerDownloadFileInvoiceAction,
-            registerSetInvoiceDeletedAction: registerSetInvoiceDeletedAction
+            registerSetInvoiceDeletedAction: registerSetInvoiceDeletedAction,
+            registerApproveInvoiceAction: registerApproveInvoiceAction
         });
     }]);

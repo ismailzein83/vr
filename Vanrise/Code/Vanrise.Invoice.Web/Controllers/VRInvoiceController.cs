@@ -210,6 +210,17 @@ namespace Vanrise.Invoice.Web.Controllers
             return manager.ExecuteMenualInvoiceActions(input);
         }
 
+        [HttpGet]
+        [Route("ApproveInvoice")]
+        public object ApproveInvoice(Guid invoiceActionId, long invoiceId, bool isApproved)
+        {
+            InvoiceManager manager = new InvoiceManager();
+            if (!manager.DosesUserHaveActionAccess(InvoiceActionType.Approve, invoiceId, invoiceActionId))
+                return GetUnauthorizedResponse();
+
+            return manager.ApproveInvoice(invoiceId, isApproved);
+        }
+
 
     }
 

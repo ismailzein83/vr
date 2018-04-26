@@ -11,6 +11,17 @@ namespace TOne.WhS.Invoice.Business
     public class ConfigManager
     {
         #region Public Methods
+        public List<InvoiceTypeSetting> GetInvoiceTypeSettings()
+        {
+            SettingManager settingManager = new SettingManager();
+            InvoiceSettings invoiceSettings = settingManager.GetSetting<InvoiceSettings>(InvoiceSettings.SETTING_TYPE);
+
+            if (invoiceSettings == null)
+                throw new NullReferenceException("invoiceSettings");
+
+            return invoiceSettings.InvoiceTypeSettings;
+        }
+
         //public Guid GetDefaultCustomerInvoiceTemplateMessageId()
         //{
         //    CustomerInvoiceSettings customerInvoiceSettings = GetDefaultCustomerInvoiceSettings();

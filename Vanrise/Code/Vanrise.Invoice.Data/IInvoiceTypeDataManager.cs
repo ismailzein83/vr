@@ -14,5 +14,7 @@ namespace Vanrise.Invoice.Data
         bool InsertInvoiceType(InvoiceType invoiceType);
         bool UpdateInvoiceType(InvoiceType invoiceType);
 
+        bool ApproveInvoice(long invoiceId, DateTime? ApprovedDate, int? ApprovedBy);
+
     }
 }

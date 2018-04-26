@@ -105,6 +105,13 @@
         function ReGenerateInvoiceGenerationDraft(input) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'ReGenerateInvoiceGenerationDraft'), input);
         }
+        function ApproveInvoice(invoiceActionId, invoiceId, isApproved) {
+            return BaseAPIService.get(UtilsService.getServiceURL(VR_Invoice_ModuleConfig.moduleName, controllerName, 'ApproveInvoice'), {
+                invoiceActionId: invoiceActionId,
+                invoiceId: invoiceId,
+                isApproved: isApproved
+            });
+        } 
         return ({
             GetInvoice: GetInvoice,
             GenerateInvoice: GenerateInvoice,
@@ -125,7 +132,8 @@
             GenerateInvoices: GenerateInvoices,
             DeleteGeneratedInvoice: DeleteGeneratedInvoice,
             ExecuteMenualInvoiceActions: ExecuteMenualInvoiceActions,
-            ReGenerateInvoiceGenerationDraft: ReGenerateInvoiceGenerationDraft
+            ReGenerateInvoiceGenerationDraft: ReGenerateInvoiceGenerationDraft,
+            ApproveInvoice: ApproveInvoice
         });
     }
 

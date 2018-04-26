@@ -49,6 +49,12 @@ namespace Vanrise.Invoice.Data.SQL
             return (affectedRows > -1 );
         }
 
+        public bool ApproveInvoice(long invoiceId, DateTime? ApprovedDate, int? ApprovedBy)
+        {
+            int affectedRows = ExecuteNonQuerySP("VR_Invoice.sp_Invoice_UpdateInvoiceApproved", invoiceId, ApprovedDate, ApprovedBy);
+            return (affectedRows > -1);
+        }
+
         #endregion
         
         #region Mappers

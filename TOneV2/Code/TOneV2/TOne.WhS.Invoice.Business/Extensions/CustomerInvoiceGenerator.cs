@@ -13,6 +13,7 @@ using Vanrise.Entities;
 using Vanrise.Invoice.Entities;
 using Vanrise.Common;
 using Vanrise.Invoice.Business;
+
 namespace TOne.WhS.Invoice.Business.Extensions
 {
     public class CustomerInvoiceGenerator : InvoiceGenerator
@@ -126,6 +127,14 @@ namespace TOne.WhS.Invoice.Business.Extensions
                         SetInvoiceBillingTransactions(context, customerInvoiceDetails, financialAccount, fromDate, toDateForBillingTransaction);
                     }
 
+                    ConfigManager configManager = new ConfigManager();
+                    List<InvoiceTypeSetting> settings = configManager.GetInvoiceTypeSettings();
+                    
+                    foreach(InvoiceTypeSetting setting in settings){
+                        if (setting.InvoiceTypeId == context.InvoiceTypeId)
+                            context.NeedApproval = setting.NeedApproval;
+                    }
+                    
                     context.Invoice = new GeneratedInvoice
                     {
                         InvoiceDetails = customerInvoiceDetails,

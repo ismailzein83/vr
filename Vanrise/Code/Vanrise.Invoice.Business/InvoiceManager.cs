@@ -701,6 +701,20 @@ namespace Vanrise.Invoice.Business
             return dataManager.DeleteGeneratedInvoice(invoice.InvoiceId, invoice.InvoiceTypeId, invoice.PartnerId, invoice.FromDate, invoice.ToDate);
         }
 
+        public bool ApproveInvoice(long invoiceId, bool isApproved)
+        {
+            IInvoiceTypeDataManager dataManager = InvoiceDataManagerFactory.GetDataManager<IInvoiceTypeDataManager>();
+            DateTime? ApprovedDate = null;
+            int? ApprovedBy = null;
+            if (isApproved)
+            {
+                ApprovedDate = DateTime.Now;
+                int loggedInUserId = ContextFactory.GetContext().GetLoggedInUserId();
+                ApprovedBy = loggedInUserId;
+            }
+            return dataManager.ApproveInvoice(invoiceId, ApprovedDate, ApprovedBy);
+        }
+
         #endregion
 
         #region Security
