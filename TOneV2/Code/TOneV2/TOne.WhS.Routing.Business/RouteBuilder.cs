@@ -77,8 +77,7 @@ namespace TOne.WhS.Routing.Business
                                     CorrespondentType = CorrespondentType.Other, 
                                     CustomerId = customerZoneDetail.CustomerId, 
                                     SaleZoneId = saleZoneDefintion.SaleZoneId,
-                                    VersionNumber = context.VersionNumber,
-                                    Rate = customerZoneDetail.EffectiveRateValue
+                                    VersionNumber = context.VersionNumber
                                 });
                                 continue;
                             }
