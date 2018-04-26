@@ -145,7 +145,8 @@ namespace Vanrise.Security.Data.SQL
                 CreatedTime = GetReaderValue<DateTime?>(reader, "CreatedTime"),
                 CreatedBy = GetReaderValue<int?>(reader, "CreatedBy"),
                 LastModifiedBy = GetReaderValue<int?>(reader, "LastModifiedBy"),
-                LastModifiedTime = GetReaderValue<DateTime?>(reader, "LastModifiedTime")
+                LastModifiedTime = GetReaderValue<DateTime?>(reader, "LastModifiedTime"),
+                PasswordChangeTime = GetReaderValue<DateTime>(reader, "PasswordChangeTime")
             };
         }
 

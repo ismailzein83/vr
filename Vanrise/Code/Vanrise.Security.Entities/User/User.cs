@@ -47,11 +47,15 @@ namespace Vanrise.Security.Entities
 
         public DateTime? LastModifiedTime { get; set; }
 
+        public DateTime PasswordChangeTime { get; set; }
+
     }
     public class UserSetting
     {
         public Guid? LanguageId { get; set; }
 
         public long? PhotoFileId { get; set; }
+
+        public bool EnablePasswordExpiration { get; set; }
     }
 }

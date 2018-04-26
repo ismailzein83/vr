@@ -10,7 +10,7 @@ function ($rootScope, Sec_CookieService, UtilsService, VR_Sec_PermissionFlagEnum
             Password: password
         };
         VR_Sec_SecurityAPIService.Authenticate(credentialsObject).then(function (response) {
-            if (VRNotificationService.notifyOnUserAuthenticated(response, onValidationNeeded)) {
+            if (VRNotificationService.notifyOnUserAuthenticated(response, onValidationNeeded, onExpiredPasswordChangeNeeded)) {
 
                 Sec_CookieService.createAccessCookieFromAuthToken(response.AuthenticationObject);
                 deferred.resolve();
@@ -31,6 +31,13 @@ function ($rootScope, Sec_CookieService, UtilsService, VR_Sec_PermissionFlagEnum
             activatePassword(email, password, onPasswordActivated);
         }
 
+        function onExpiredPasswordChangeNeeded() {
+            var onExpiredPasswordChanged = function (passwordAfterChange) {
+                if (reloginAfterPasswordActivation != undefined)
+                    reloginAfterPasswordActivation(passwordAfterChange);
+            };
+            changeExpiredPassword(email, password, onExpiredPasswordChanged);
+        }
 
         return deferred.promise;
     }
@@ -47,6 +54,20 @@ function ($rootScope, Sec_CookieService, UtilsService, VR_Sec_PermissionFlagEnum
         };
 
         VRModalService.showModal('/Client/Modules/Security/Views/User/ActivatePasswordEditor.html', modalParameters, modalSettings);
+    }
+
+    function changeExpiredPassword(email, oldPassword, onExpiredPasswordChanged) {
+        var modalParameters = {
+            email: email,
+            oldPassword: oldPassword
+        };
+
+        var modalSettings = {};
+        modalSettings.onScopeReady = function (modalScope) {
+            modalScope.onExpiredPasswordChanged = onExpiredPasswordChanged;
+        };
+
+        VRModalService.showModal('/Client/Modules/Security/Views/User/ChangeExpiredPasswordEditor.html', modalParameters, modalSettings);
     }
 
     function IsAllowed(requiredPermissions) {

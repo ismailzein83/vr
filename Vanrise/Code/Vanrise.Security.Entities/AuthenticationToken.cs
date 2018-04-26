@@ -22,6 +22,8 @@ namespace Vanrise.Security.Entities
         public string Token { get; set; }
 
         public long? PhotoFileId { get; set; }
+
+        public int? PasswordExpirationDaysLeft { get; set; }
     }
 
     public class SecurityToken

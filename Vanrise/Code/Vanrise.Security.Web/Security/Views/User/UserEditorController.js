@@ -76,7 +76,7 @@
                     return 'Passwords do not match';
                 return null;
             };
-            $scope.hideTenantSelectorIfNotNeeded = function () {                
+            $scope.hideTenantSelectorIfNotNeeded = function () {
                 $scope.showTenantSelector = false;
             };
         }
@@ -88,10 +88,10 @@
                     getUserGroups().finally(function () {
                         loadAllControls().finally(function () {
                             userEntity = undefined;
-                            groupIds =  undefined;
+                            groupIds = undefined;
                         });
                     });
-                    
+
                 }).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                     $scope.isLoading = false;
@@ -132,7 +132,7 @@
             });
         }
         function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, hasAuthServer, loadTenantSelector, loadGroupSelector , loadPasswordHint])
+            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, hasAuthServer, loadTenantSelector, loadGroupSelector, loadPasswordHint])
                .catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
                })
@@ -169,10 +169,10 @@
         }
 
         function loadPasswordHint() {
-            if(isEditMode ==  true) return ;
+            if (isEditMode == true) return;
             return VR_Sec_SecurityAPIService.GetPasswordValidationInfo().then(function (response) {
                 $scope.passwordHint = response.RequirementsMessage;
-                $scope.requiredPassword = response.RequiredPassword  ;
+                $scope.requiredPassword = response.RequiredPassword;
             });
         }
 
@@ -201,12 +201,17 @@
             $scope.scopemodel.description = userEntity.Description;
             $scope.scopemodel.enabledTill = userEntity.EnabledTill;
 
-            if (userEntity.Settings!= undefined && userEntity.Settings.PhotoFileId != null)
-                $scope.scopemodel.userPhoto = {
-                    fileId: userEntity.Settings.PhotoFileId
-                };
-            else
-                $scope.scopemodel.userPhoto = null;
+            if (userEntity.Settings != undefined) {
+                $scope.scopemodel.enablePasswordExpiration = userEntity.Settings.EnablePasswordExpiration;
+                if (userEntity.Settings.PhotoFileId != null)
+                    $scope.scopemodel.userPhoto = {
+                        fileId: userEntity.Settings.PhotoFileId
+                    };
+                else
+                    $scope.scopemodel.userPhoto = null;
+            }
+
+
         }
 
         function buildUserObjFromScope() {
@@ -218,7 +223,8 @@
                 EnabledTill: $scope.scopemodel.enabledTill,
                 TenantId: tenantSelectorAPI.getSelectedIds(),
                 GroupIds: groupSelectorAPI.getSelectedIds(),
-                PhotoFileId: $scope.scopemodel.userPhoto != null ? $scope.scopemodel.userPhoto.fileId : null
+                PhotoFileId: $scope.scopemodel.userPhoto != null ? $scope.scopemodel.userPhoto.fileId : null,
+                EnablePasswordExpiration : $scope.scopemodel.enablePasswordExpiration
             };
             if (!isEditMode)
                 userObject.Password = $scope.password;

@@ -1,8 +1,8 @@
 ﻿'use strict';
 
 var app = angular.module('mainModule', ['appControllers', 'appRouting', 'ngCookies'])
-.controller('mainCtrl', ['$scope', '$rootScope', 'VR_Sec_MenuAPIService', 'SecurityService', 'BaseAPIService', 'VR_Sec_PermissionAPIService', 'notify', '$cookies', '$timeout', 'MenuItemTypeEnum', 'UtilsService', 'VRModalService', 'VRNavigationService', 'UISettingsService', '$location', '$window', "VRLocalizationService", "Sec_CookieService",
-function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, BaseAPIService, VR_Sec_PermissionAPIService, notify, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService, VRNavigationService, UISettingsService, $location, $window, VRLocalizationService, Sec_CookieService) {
+.controller('mainCtrl', ['$scope', '$rootScope', 'VR_Sec_MenuAPIService', 'SecurityService', 'BaseAPIService', 'VR_Sec_PermissionAPIService', 'notify', '$cookies', '$timeout', 'MenuItemTypeEnum', 'UtilsService', 'VRModalService', 'VRNavigationService', 'UISettingsService', '$location', '$window', "VRLocalizationService", "Sec_CookieService", "VRNotificationService",
+function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, BaseAPIService, VR_Sec_PermissionAPIService, notify, $cookies, $timeout, MenuItemTypeEnum, UtilsService, VRModalService, VRNavigationService, UISettingsService, $location, $window, VRLocalizationService, Sec_CookieService, VRNotificationService) {
     (function () {
         document.getElementById("mainBodyContainer").style.display = "block";
     })();
@@ -14,6 +14,7 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
     $scope.$on("$destroy", function () {
         $(window).off("resize.Viewport");
     });
+
     $rootScope.setCookieName = function (cookieName) {
         if (cookieName != undefined && cookieName != '')
             SecurityService.setAccessCookieName(cookieName);
@@ -23,6 +24,10 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
         if (userInfo === undefined) {
             SecurityService.redirectToLoginPage();
             return;
+        }
+        if ($cookies.get("passwordExpirationDays") != undefined) {
+            VRNotificationService.showWarning("Your password expires in " + userInfo.PasswordExpirationDaysLeft + " day(s).");
+            $cookies.put("passwordExpirationDays", undefined);
         }
         $scope.userDisplayName = userInfo.UserDisplayName;
         $scope.userPhotoFileId = userInfo.PhotoFileId;
@@ -48,6 +53,7 @@ function mainCtrl($scope, $rootScope, VR_Sec_MenuAPIService, SecurityService, Ba
     $rootScope.setVersionNumber = function (version) {
         $rootScope.version = version;
     };
+
     $rootScope.onValidationMessageShown = function (e) {
         var self = angular.element(e.currentTarget);
         var selfHeight = $(self).height();

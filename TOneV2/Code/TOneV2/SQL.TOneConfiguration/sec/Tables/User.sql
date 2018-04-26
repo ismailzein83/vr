@@ -18,9 +18,12 @@
     [CreatedBy]             INT             NULL,
     [LastModifiedBy]        INT             NULL,
     [LastModifiedTime]      DATETIME        NULL,
+    [PasswordChangeTime]    DATETIME        NULL,
     CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED ([ID] ASC),
     CONSTRAINT [IX_User_Email] UNIQUE NONCLUSTERED ([Email] ASC)
 );
+
+
 
 
 

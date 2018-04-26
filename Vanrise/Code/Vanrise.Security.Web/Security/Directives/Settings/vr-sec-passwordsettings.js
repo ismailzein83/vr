@@ -42,6 +42,16 @@ app.directive('vrSecPasswordsettings', ['UtilsService', 'VRUIUtilsService',
                 return null;
             };
 
+            $scope.scopeModel.passwordAgeCustomValidation = function () {
+                if (!$scope.scopeModel.passwordAgeInDays)
+                    return null;
+                if (!$scope.scopeModel.expirationDaysToNotify)
+                    return null;
+                if (parseInt($scope.scopeModel.expirationDaysToNotify) >= parseInt($scope.scopeModel.passwordAgeInDays))
+                    return "Expiration days to notify should be less then password age in days.";
+                return null;
+            };
+
             $scope.scopeModel.onMailMessageTemplateDirectiveReady = function (api) {
                 mailMessageTemplateSelectorAPI = api;
                 mailMessageTemplateSelectorReadyDeferred.resolve();
@@ -71,6 +81,8 @@ app.directive('vrSecPasswordsettings', ['UtilsService', 'VRUIUtilsService',
                         $scope.scopeModel.lockFor = payload.MinutesToLock == 0 ? undefined : payload.MinutesToLock;
                         $scope.scopeModel.notificationMailTemplateId = payload.NotificationMailTemplateId;
                         $scope.scopeModel.sendNotification = payload.NotificationMailTemplateId != undefined;
+                        $scope.scopeModel.passwordAgeInDays = payload.PasswordAgeInDays;
+                        $scope.scopeModel.expirationDaysToNotify = payload.PasswordExpirationDaysToNotify;
                     }
 
                     var promises = [];
@@ -114,7 +126,9 @@ app.directive('vrSecPasswordsettings', ['UtilsService', 'VRUIUtilsService',
                         UserPasswordHistoryCount: $scope.scopeModel.maxUserPasswordHistoryCount,
                         FailedInterval: $scope.scopeModel.lockInterval,
                         MinutesToLock: $scope.scopeModel.lockFor,
-                        NotificationMailTemplateId: $scope.scopeModel.sendNotification ? mailMessageTemplateSelectorAPI.getSelectedIds() : undefined
+                        NotificationMailTemplateId: $scope.scopeModel.sendNotification ? mailMessageTemplateSelectorAPI.getSelectedIds() : undefined,
+                        PasswordAgeInDays: $scope.scopeModel.passwordAgeInDays,
+                        PasswordExpirationDaysToNotify: $scope.scopeModel.expirationDaysToNotify
                     };
                 };
 

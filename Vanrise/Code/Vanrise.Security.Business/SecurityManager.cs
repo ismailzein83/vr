@@ -81,12 +81,24 @@ namespace Vanrise.Security.Business
 
                     if (HashingUtility.VerifyHash(password, "", loggedInUserPassword))
                     {
-                        AuthenticationToken authToken = CreateAuthenticationToken(user);
-                        authenticationOperationOutput.Result = AuthenticateOperationResult.Succeeded;
-                        authenticationOperationOutput.AuthenticationObject = authToken;
-                        int lastModifiedBy = user.UserId;
-                        dataManager.UpdateLastLogin(user.UserId, lastModifiedBy);
-                        VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Login successfully");
+                        int? passwordExpirationDaysLeft;
+                        bool passwordIsExpired = CheckIfPasswordExpired(user.UserId, out passwordExpirationDaysLeft);
+                        if (passwordIsExpired)
+                        {
+                            authenticationOperationOutput.Result = AuthenticateOperationResult.PasswordExpired;
+                            VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "User password is expired");
+                        }
+                        else
+                        {
+                            AuthenticationToken authToken = CreateAuthenticationToken(user);
+                            authToken.PasswordExpirationDaysLeft = passwordExpirationDaysLeft;
+                            authenticationOperationOutput.Result = AuthenticateOperationResult.Succeeded;
+                            authenticationOperationOutput.AuthenticationObject = authToken;
+                            int lastModifiedBy = user.UserId;
+                            dataManager.UpdateLastLogin(user.UserId, lastModifiedBy);
+                            VRActionLogger.Current.LogObjectCustomAction(UserManager.UserLoggableEntity.Instance, "Login", false, user, "Login successfully");
+                        }
+                       
 
                     }
                     else
@@ -196,7 +208,6 @@ namespace Vanrise.Security.Business
             }
         }
 
-
         public bool IsAllowed(RequiredPermissionSettings requiredPermissions, int userId)
         {
             string requiredPermissionString = null;
@@ -246,9 +257,20 @@ namespace Vanrise.Security.Business
             return new RequiredPermissionSettings { Entries = entitiesPermissions.Values.ToList() };
         }
 
+        public Vanrise.Entities.UpdateOperationOutput<object> ChangeExpiredPassword(string email,string oldPassword, string newPassword)
+        {
+            User user = s_userManager.GetUserbyEmail(email);
+            return ChangePassword(user.UserId, oldPassword, newPassword); ;
+        }
+
         public Vanrise.Entities.UpdateOperationOutput<object> ChangePassword(string oldPassword, string newPassword)
         {
             int loggedInUserId = SecurityContext.Current.GetLoggedInUserId();
+            return ChangePassword(loggedInUserId, oldPassword,newPassword);
+        }
+
+        public Vanrise.Entities.UpdateOperationOutput<object> ChangePassword(int userId, string oldPassword, string newPassword)
+        {
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
             UserManager manager = new UserManager();
 
@@ -263,14 +285,14 @@ namespace Vanrise.Security.Business
                 return updateOperationOutput;
             }
 
-            if (IsPasswordSame(loggedInUserId, newPassword, out validationMessage))
+            if (IsPasswordSame(userId, newPassword, out validationMessage))
             {
                 updateOperationOutput.Message = validationMessage;
                 return updateOperationOutput;
             }
 
-            User currentUser = manager.GetUserbyId(loggedInUserId);
-            string currentUserPassword = manager.GetUserPassword(loggedInUserId);
+            User currentUser = manager.GetUserbyId(userId);
+            string currentUserPassword = manager.GetUserPassword(userId);
 
             bool changePasswordActionSucc = false;
             bool oldPasswordIsCorrect = HashingUtility.VerifyHash(oldPassword, "", currentUserPassword);
@@ -278,14 +300,15 @@ namespace Vanrise.Security.Business
             if (oldPasswordIsCorrect)
             {
                 encryptedNewPassword = HashingUtility.ComputeHash(newPassword, "", null);
-                int lastModifiedBy = loggedInUserId;
-                changePasswordActionSucc = dataManager.ChangePassword(loggedInUserId, encryptedNewPassword, lastModifiedBy);
+                int lastModifiedBy = userId;
+                changePasswordActionSucc = dataManager.ChangePassword(userId, encryptedNewPassword, lastModifiedBy);
             }
 
             if (changePasswordActionSucc)
             {
-                new UserPasswordHistoryManager().AddPasswordHistory(loggedInUserId, encryptedNewPassword, false);
+                new UserPasswordHistoryManager().AddPasswordHistory(userId, encryptedNewPassword, false);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<UserManager.CacheManager>().SetCacheExpired();
             }
 
             return updateOperationOutput;
@@ -305,6 +328,32 @@ namespace Vanrise.Security.Business
                     validationMessage = string.Format("Password entered matches previous {0} history passwords. Please enter a new password", maxRecordCount);
                     return true;
                 }
+            }
+            return false;
+        }
+
+        public bool CheckIfPasswordExpired(int userId, out int? passwordExpirationDaysLeft)
+        {
+            var user = s_userManager.GetUserbyId(userId);
+            passwordExpirationDaysLeft = null;
+            ConfigManager configManager = new ConfigManager();
+            if (user.Settings== null || !user.Settings.EnablePasswordExpiration)
+                return false;
+
+            int? age = configManager.GetPasswordAgeInDays();
+            int? exparitionDaysToNotify = configManager.GetPasswordExpirationDaysToNotify();
+
+            if (age.HasValue)
+            {
+                int settingsPasswordAge = age.Value;
+                int passwordAge = (int)((DateTime.Now - user.PasswordChangeTime).TotalDays);
+                int totalDaysToExpirePassword = settingsPasswordAge - passwordAge;
+                int daysToNotify = exparitionDaysToNotify.HasValue ? exparitionDaysToNotify.Value : 0;
+                if (totalDaysToExpirePassword <= daysToNotify)
+                {
+                    passwordExpirationDaysLeft = totalDaysToExpirePassword;
+                }
+                return passwordAge >= settingsPasswordAge;
             }
             return false;
         }
@@ -343,6 +392,7 @@ namespace Vanrise.Security.Business
         }
 
         static string s_localTokenDecryptionKey;
+
         static Object s_GetLocalTokenDecryptionKey_LockObj = new object();
         private string GetLocalTokenDecryptionKey()
         {
@@ -362,6 +412,7 @@ namespace Vanrise.Security.Business
         }
 
         static string s_localCookieName;
+
         static Object s_localCookieName_LockObj = new object();
         private string GetLocalCookieName()
         {
@@ -442,7 +493,7 @@ namespace Vanrise.Security.Business
 
 
         public bool GetExactExceptionMessage()
-        {           
+        {
             ConfigManager configManager = new ConfigManager();
             return configManager.GetExactExceptionMessage();
         }

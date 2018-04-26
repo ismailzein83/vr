@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.service('Sec_CookieService', ['$cookies',
-function ($cookies) {
+app.service('Sec_CookieService', ['$cookies','VRNotificationService',
+function ($cookies, VRNotificationService) {
 
     function createAccessCookie(userInfo) {
         $cookies.put(getAccessCookieName(), userInfo, { path: '/', domain: location.hostname, expires: '', secure: false });
@@ -9,6 +9,9 @@ function ($cookies) {
 
     function createAccessCookieFromAuthToken(authToken) {
         authToken.cookieCreatedTime = new Date();
+        if (authToken.PasswordExpirationDaysLeft != null) {
+            $cookies.put("passwordExpirationDays", authToken.PasswordExpirationDaysLeft, { path: '/', domain: location.hostname, expires: '', secure: false });
+        }
         var userInfo = JSON.stringify(authToken);
         createAccessCookie(userInfo);
     }

@@ -51,6 +51,15 @@ namespace Vanrise.Security.Web.Controllers
             return manager.ChangePassword(changedPasswordObject.OldPassword,changedPasswordObject.NewPassword);
         }
 
+        [IsAnonymous]
+        [HttpPost]
+        [Route("ChangeExpiredPassword")]
+        public Vanrise.Entities.UpdateOperationOutput<object> ChangeExpiredPassword(ChangeExpiredPasswordInput changeExpiredPasswordObject)
+        {
+            SecurityManager manager = new SecurityManager();
+            return manager.ChangeExpiredPassword(changeExpiredPasswordObject.Email, changeExpiredPasswordObject.OldPassword, changeExpiredPasswordObject.Password);
+        }
+
         [HttpGet]
         [Route("IsAllowed")]
         public bool IsAllowed(string requiredPermissions)
@@ -89,5 +98,12 @@ namespace Vanrise.Security.Web.Controllers
         public bool IsSucceeded { get; set; }
 
         public AuthenticationToken NewAuthenticationToken { get; set; }
+    }
+
+    public class ChangeExpiredPasswordInput
+    {
+        public string Email { get; set; }
+        public string Password { get; set; }
+        public string OldPassword { get; set; }
     }
 }

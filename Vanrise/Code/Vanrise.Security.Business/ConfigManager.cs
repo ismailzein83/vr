@@ -82,6 +82,16 @@ namespace Vanrise.Security.Business
         {
             return GetPasswordSettings().NotificationMailTemplateId;
         }
+
+        public int? GetPasswordAgeInDays()
+        {
+            return GetPasswordSettings().PasswordAgeInDays;
+        }
+
+        public int? GetPasswordExpirationDaysToNotify()
+        {
+            return GetPasswordSettings().PasswordExpirationDaysToNotify;
+        }
         public bool GetExactExceptionMessage()
         {
             return GetAPISettings().ExactExceptionMessage;

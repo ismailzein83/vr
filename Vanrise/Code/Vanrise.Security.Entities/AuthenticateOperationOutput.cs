@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Security.Entities
 {
-    public enum AuthenticateOperationResult { Succeeded = 0, Failed = 1, Inactive = 2, WrongCredentials = 3, UserNotExists = 4, ActivationNeeded = 5 }
+    public enum AuthenticateOperationResult { Succeeded = 0, Failed = 1, Inactive = 2, WrongCredentials = 3, UserNotExists = 4, ActivationNeeded = 5, PasswordExpired = 6 }
 
     public class AuthenticateOperationOutput<T>
     {

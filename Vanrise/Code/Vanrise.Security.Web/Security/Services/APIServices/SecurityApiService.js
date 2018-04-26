@@ -14,7 +14,8 @@
             IsAllowed: IsAllowed,
             HasPermissionToActions: HasPermissionToActions,
             HasAuthServer: HasAuthServer,
-            GetPasswordValidationInfo: GetPasswordValidationInfo
+            GetPasswordValidationInfo: GetPasswordValidationInfo,
+            ChangeExpiredPassword: ChangeExpiredPassword
         });
 
         function Authenticate(credentialsObject) {
@@ -27,6 +28,10 @@
 
         function ChangePassword(changedPasswordObject) {
             return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'ChangePassword'), changedPasswordObject);
+        }
+
+        function ChangeExpiredPassword(changeExpiredPasswordObject) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_Sec_ModuleConfig.moduleName, controllerName, 'ChangeExpiredPassword'), changeExpiredPasswordObject);
         }
 
         function IsAllowed(requiredPermissions) {

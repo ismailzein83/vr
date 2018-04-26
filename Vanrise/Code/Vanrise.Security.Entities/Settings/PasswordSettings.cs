@@ -17,6 +17,8 @@ namespace Vanrise.Security.Entities
         public TimeSpan? FailedInterval { get; set; }
         public PasswordComplexity? PasswordComplexity { get; set; }
         public Guid? NotificationMailTemplateId { get; set; }
+        public int? PasswordAgeInDays { get; set; }
+        public int? PasswordExpirationDaysToNotify { get; set; }
     }
 
 

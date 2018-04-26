@@ -89,10 +89,10 @@ app.directive('vrSecPasswordcomplexitySelector', ['UtilsService', 'VRUIUtilsServ
         function getTemplate(attrs) {
 
             var multipleselection = "";
-            var label = "Password Complexity Level";
+            var label = "Complexity Level";
 
             if (attrs.ismultipleselection != undefined) {
-                label = "Password Complexity Levels";
+                label = "Complexity Levels";
                 multipleselection = "ismultipleselection";
             }
             if (attrs.customlabel != undefined)

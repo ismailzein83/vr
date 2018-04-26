@@ -279,7 +279,8 @@ namespace Vanrise.Security.Business
                     ExtendedSettings = userObject.ExtendedSettings,
                     Settings = new UserSetting()
                     {
-                        PhotoFileId = userObject.PhotoFileId
+                        PhotoFileId = userObject.PhotoFileId,
+                        EnablePasswordExpiration = userObject.EnablePasswordExpiration
                     },
                     CreatedBy = loggedInUserId,
                     LastModifiedBy = loggedInUserId
@@ -394,6 +395,7 @@ namespace Vanrise.Security.Business
                 if (settings == null)
                     settings = new UserSetting();
                 settings.PhotoFileId = userObject.PhotoFileId;
+                settings.EnablePasswordExpiration = userObject.EnablePasswordExpiration;
                 updatedUser = new User()
                 {
                     UserId = userObject.UserId,
@@ -801,6 +803,7 @@ namespace Vanrise.Security.Business
 
             UserManager userManager = new UserManager();
             var user = userManager.GetUserbyEmail(email);
+            int userId = user.UserId;
             if (user == null)
                 return new UpdateOperationOutput<object>() { Result = UpdateOperationResult.Failed };
             UpdateOperationOutput<object> updateOperationOutput = new Vanrise.Entities.UpdateOperationOutput<object>();
@@ -810,6 +813,12 @@ namespace Vanrise.Security.Business
             {
                 updateOperationOutput.Message = validationMessage;
                 updateOperationOutput.Result = UpdateOperationResult.Failed;
+                return updateOperationOutput;
+            }
+
+            if (_securityManager.IsPasswordSame(userId, password, out validationMessage))
+            {
+                updateOperationOutput.Message = validationMessage;
                 return updateOperationOutput;
             }
 
@@ -834,6 +843,8 @@ namespace Vanrise.Security.Business
 
             return updateOperationOutput;
         }
+
+
         public Vanrise.Entities.UpdateOperationOutput<UserProfile> EditUserProfile(UserProfile userProfileObject)
         {
             User currentUser = GetUserbyId(userProfileObject.UserId);

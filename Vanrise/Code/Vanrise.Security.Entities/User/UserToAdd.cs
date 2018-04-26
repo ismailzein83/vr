@@ -26,5 +26,7 @@ namespace Vanrise.Security.Entities
 
         public long? PhotoFileId { get; set; }
 
+        public bool EnablePasswordExpiration { get; set; }
+
     }
 }

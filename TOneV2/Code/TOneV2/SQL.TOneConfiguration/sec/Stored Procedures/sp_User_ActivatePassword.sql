@@ -6,7 +6,7 @@ AS
 BEGIN
 
 	UPDATE sec.[User]
-	SET Password = @NewPassword, TempPassword = null, TempPasswordValidTill = null, LastModifiedBy = @LastModifiedBy, LastModifiedTime = GETDATE()
+	SET Password = @NewPassword, TempPassword = null, TempPasswordValidTill = null, LastModifiedBy = @LastModifiedBy, LastModifiedTime = GETDATE(), PasswordChangeTime = GETDATE()
 	WHERE Email = @Email
 
 END
