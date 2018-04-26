@@ -76,6 +76,7 @@
   <ItemGroup>
     <Compile Include="CodeMatchesDataManager.cs" />
     <Compile Include="CodeSaleZoneDataManager.cs" />
+    <Compile Include="CustomerQualityConfigurationDataManager.cs" />
     <Compile Include="CustomerRouteDataManager.cs" />
     <Compile Include="CustomerZoneDetailsDataManager.cs" />
     <Compile Include="RoutingEntityDetailsDataManager.cs" />
@@ -83,6 +84,7 @@
     <Compile Include="RoutingDatabaseDataManager.cs" />
     <Compile Include="RoutingDataManager.cs" />
     <Compile Include="SupplierZoneDetailsDataManager.cs" />
+    <Compile Include="SwitchSyncDataDataManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\TOne.Data.SQL\TOne.Data.SQL.csproj">
