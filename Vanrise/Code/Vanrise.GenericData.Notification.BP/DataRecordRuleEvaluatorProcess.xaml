@@ -1,0 +1,165 @@
+﻿<Activity mc:Ignorable="sap sap2010 sads" x:Class="Vanrise.GenericData.Notification.BP.DataRecordRuleEvaluatorProcess"
+ xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities"
+ xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+ xmlns:mca="clr-namespace:Microsoft.CSharp.Activities;assembly=System.Activities"
+ xmlns:s="clr-namespace:System;assembly=mscorlib"
+ xmlns:sads="http://schemas.microsoft.com/netfx/2010/xaml/activities/debugger"
+ xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation"
+ xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation"
+ xmlns:scg="clr-namespace:System.Collections.Generic;assembly=mscorlib"
+ xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=mscorlib"
+ xmlns:vb="clr-namespace:Vanrise.BusinessProcess;assembly=Vanrise.BusinessProcess"
+ xmlns:vgba="clr-namespace:Vanrise.GenericData.BP.Activities;assembly=Vanrise.GenericData.BP.Activities"
+ xmlns:vge="clr-namespace:Vanrise.GenericData.Entities;assembly=Vanrise.GenericData.Entities"
+ xmlns:vgn="clr-namespace:Vanrise.GenericData.Notification;assembly=Vanrise.GenericData.Notification"
+ xmlns:vgna="clr-namespace:Vanrise.GenericData.Notification.Arguments;assembly=Vanrise.GenericData.Notification.Arguments"
+ xmlns:vq="clr-namespace:Vanrise.Queueing;assembly=Vanrise.Queueing"
+ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <x:Members>
+    <x:Property Name="Input" Type="InArgument(vgna:DataRecordRuleEvaluatorProcessInput)" />
+  </x:Members>
+  <sap2010:ExpressionActivityEditor.ExpressionActivityEditor>C#</sap2010:ExpressionActivityEditor.ExpressionActivityEditor>
+  <sap2010:WorkflowViewState.IdRef>Vanrise.GenericData.Notification.BP.DataRecordRuleEvaluatorProcess_1</sap2010:WorkflowViewState.IdRef>
+  <TextExpression.NamespacesForImplementation>
+    <sco:Collection x:TypeArguments="x:String">
+      <x:String>System</x:String>
+      <x:String>System.Collections.Generic</x:String>
+      <x:String>System.Data</x:String>
+      <x:String>System.Linq</x:String>
+      <x:String>System.Text</x:String>
+      <x:String>Vanrise.GenericData.Notification.Arguments</x:String>
+      <x:String>Vanrise.Queueing</x:String>
+      <x:String>Vanrise.BusinessProcess</x:String>
+    </sco:Collection>
+  </TextExpression.NamespacesForImplementation>
+  <TextExpression.ReferencesForImplementation>
+    <sco:Collection x:TypeArguments="AssemblyReference">
+      <AssemblyReference>Microsoft.CSharp</AssemblyReference>
+      <AssemblyReference>System</AssemblyReference>
+      <AssemblyReference>System.Activities</AssemblyReference>
+      <AssemblyReference>System.Core</AssemblyReference>
+      <AssemblyReference>System.Data</AssemblyReference>
+      <AssemblyReference>System.Runtime.Serialization</AssemblyReference>
+      <AssemblyReference>System.ServiceModel</AssemblyReference>
+      <AssemblyReference>System.ServiceModel.Activities</AssemblyReference>
+      <AssemblyReference>System.Xaml</AssemblyReference>
+      <AssemblyReference>System.Xml</AssemblyReference>
+      <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.BP.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.Notification</AssemblyReference>
+      <AssemblyReference>mscorlib</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.Notification.Arguments</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.Notification.BP</AssemblyReference>
+    </sco:Collection>
+  </TextExpression.ReferencesForImplementation>
+  <Sequence sap2010:WorkflowViewState.IdRef="Sequence_1">
+    <Sequence.Variables>
+      <Variable x:TypeArguments="scg:List(s:Guid)" Name="DataRecordStorageIds" />
+      <Variable x:TypeArguments="s:Guid" Name="AlertRuleTypeId" />
+    </Sequence.Variables>
+    <vgn:LoadDataRecordRuleEvaluatorDefinition sap2010:WorkflowViewState.IdRef="LoadDataRecordRuleEvaluatorDefinition_1">
+      <vgn:LoadDataRecordRuleEvaluatorDefinition.AlertRuleTypeId>
+        <OutArgument x:TypeArguments="s:Guid">
+          <mca:CSharpReference x:TypeArguments="s:Guid">AlertRuleTypeId</mca:CSharpReference>
+        </OutArgument>
+      </vgn:LoadDataRecordRuleEvaluatorDefinition.AlertRuleTypeId>
+      <vgn:LoadDataRecordRuleEvaluatorDefinition.DataRecordRuleEvaluatorDefinitionId>
+        <InArgument x:TypeArguments="s:Guid">
+          <mca:CSharpValue x:TypeArguments="s:Guid">Input.DataRecordRuleEvaluatorDefinitionId</mca:CSharpValue>
+        </InArgument>
+      </vgn:LoadDataRecordRuleEvaluatorDefinition.DataRecordRuleEvaluatorDefinitionId>
+      <vgn:LoadDataRecordRuleEvaluatorDefinition.DataRecordStorageIds>
+        <OutArgument x:TypeArguments="scg:List(s:Guid)">
+          <mca:CSharpReference x:TypeArguments="scg:List(s:Guid)">DataRecordStorageIds</mca:CSharpReference>
+        </OutArgument>
+      </vgn:LoadDataRecordRuleEvaluatorDefinition.DataRecordStorageIds>
+    </vgn:LoadDataRecordRuleEvaluatorDefinition>
+    <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
+      <Parallel.Variables>
+        <Variable x:TypeArguments="x:Int64" Name="EventCount" />
+        <Variable x:TypeArguments="vq:BaseQueue(vge:RecordBatch)" Name="RecordBatchQueue" />
+        <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="ActivityStatus" />
+      </Parallel.Variables>
+      <vgba:LoadRecordsFromStorages sap2010:WorkflowViewState.IdRef="LoadRecordsFromStorages_1">
+        <vgba:LoadRecordsFromStorages.EventCount>
+          <OutArgument x:TypeArguments="x:Int64">
+            <mca:CSharpReference x:TypeArguments="x:Int64">EventCount</mca:CSharpReference>
+          </OutArgument>
+        </vgba:LoadRecordsFromStorages.EventCount>
+        <vgba:LoadRecordsFromStorages.FromTime>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
+          </InArgument>
+        </vgba:LoadRecordsFromStorages.FromTime>
+        <vgba:LoadRecordsFromStorages.OutputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vge:RecordBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vge:RecordBatch)">RecordBatchQueue</mca:CSharpReference>
+          </InOutArgument>
+        </vgba:LoadRecordsFromStorages.OutputQueue>
+        <vgba:LoadRecordsFromStorages.RecordStorageIds>
+          <InArgument x:TypeArguments="scg:List(s:Guid)">
+            <mca:CSharpValue x:TypeArguments="scg:List(s:Guid)">DataRecordStorageIds</mca:CSharpValue>
+          </InArgument>
+        </vgba:LoadRecordsFromStorages.RecordStorageIds>
+        <vgba:LoadRecordsFromStorages.Status>
+          <OutArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpReference x:TypeArguments="vb:AsyncActivityStatus">ActivityStatus</mca:CSharpReference>
+          </OutArgument>
+        </vgba:LoadRecordsFromStorages.Status>
+        <vgba:LoadRecordsFromStorages.ToTime>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
+          </InArgument>
+        </vgba:LoadRecordsFromStorages.ToTime>
+      </vgba:LoadRecordsFromStorages>
+      <vgn:EvaluateDataRecordRule Status="{x:Null}" sap2010:WorkflowViewState.IdRef="EvaluateDataRecordRule_1">
+        <vgn:EvaluateDataRecordRule.AlertRuleTypeId>
+          <InArgument x:TypeArguments="s:Guid">
+            <mca:CSharpValue x:TypeArguments="s:Guid">AlertRuleTypeId</mca:CSharpValue>
+          </InArgument>
+        </vgn:EvaluateDataRecordRule.AlertRuleTypeId>
+        <vgn:EvaluateDataRecordRule.FromTime>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.FromDate</mca:CSharpValue>
+          </InArgument>
+        </vgn:EvaluateDataRecordRule.FromTime>
+        <vgn:EvaluateDataRecordRule.InputQueue>
+          <InOutArgument x:TypeArguments="vq:BaseQueue(vge:RecordBatch)">
+            <mca:CSharpReference x:TypeArguments="vq:BaseQueue(vge:RecordBatch)">RecordBatchQueue</mca:CSharpReference>
+          </InOutArgument>
+        </vgn:EvaluateDataRecordRule.InputQueue>
+        <vgn:EvaluateDataRecordRule.PreviousActivityStatus>
+          <InArgument x:TypeArguments="vb:AsyncActivityStatus">
+            <mca:CSharpValue x:TypeArguments="vb:AsyncActivityStatus">ActivityStatus</mca:CSharpValue>
+          </InArgument>
+        </vgn:EvaluateDataRecordRule.PreviousActivityStatus>
+        <vgn:EvaluateDataRecordRule.ToTime>
+          <InArgument x:TypeArguments="s:DateTime">
+            <mca:CSharpValue x:TypeArguments="s:DateTime">Input.ToDate</mca:CSharpValue>
+          </InArgument>
+        </vgn:EvaluateDataRecordRule.ToTime>
+      </vgn:EvaluateDataRecordRule>
+    </Parallel>
+    <sads:DebugSymbol.Symbol>d1tDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuR2VuZXJpY0RhdGEuTm90aWZpY2F0aW9uLkJQXERhdGFSZWNvcmRSdWxlRXZhbHVhdG9yUHJvY2Vzcy54YW1sEzsDlAEOAgEBQAVQMQIBUlEFkgEQAgECQwtDXgIBW0gLSHACAVdNC01tAgFTVwd2JgIBJ3cHkQEkAgEDWg1aXAIBS2kNaWcCAURuDW5vAgE9ZA1keAIBNl8NX1sCAS9zDXNZAgEoiQENiQFnAgEghAENhAF4AgEZeg16WAIBEn8Nf1sCAQuOAQ2OAVkCAQQ=</sads:DebugSymbol.Symbol>
+  </Sequence>
+  <sap2010:WorkflowViewState.ViewStateManager>
+    <sap2010:ViewStateManager>
+      <sap2010:ViewStateData Id="LoadDataRecordRuleEvaluatorDefinition_1" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="LoadRecordsFromStorages_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="EvaluateDataRecordRule_1" sap:VirtualizedContainerService.HintSize="200,40" />
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,272">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="Vanrise.GenericData.Notification.BP.DataRecordRuleEvaluatorProcess_1" sap:VirtualizedContainerService.HintSize="616,352" />
+    </sap2010:ViewStateManager>
+  </sap2010:WorkflowViewState.ViewStateManager>
+</Activity>

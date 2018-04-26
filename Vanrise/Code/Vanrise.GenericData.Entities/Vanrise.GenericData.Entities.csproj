@@ -97,6 +97,9 @@
     <Compile Include="DataRecordFieldChoice\DataRecordFieldChoiceDetail.cs" />
     <Compile Include="DataRecordFieldChoice\DataRecordFieldChoiceInfo.cs" />
     <Compile Include="DataRecordFieldChoice\DataRecordFieldChoiceQuery.cs" />
+    <Compile Include="DataRecordRuleEvaluatorDefinition\DataRecordRuleEvaluatorDefinition.cs" />
+    <Compile Include="DataRecordRuleEvaluatorDefinition\DataRecordRuleEvaluatorDefinitionConfig.cs" />
+    <Compile Include="DataRecordRuleEvaluatorDefinition\DataRecordRuleEvaluatorDefinitionInfoFilter.cs" />
     <Compile Include="DataRecords\DataRecord.cs" />
     <Compile Include="DataRecords\DataRecordColumn.cs" />
     <Compile Include="DataRecords\DataRecordDetailBigResult.cs" />

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Common", "Vanrise.Common\Vanrise.Common.csproj", "{1A350B7C-28EA-4824-B9A0-C60AD25F0EA9}"
 EndProject
@@ -396,9 +396,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Data.RDB", "Vanrise
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Common.Excel", "Vanrise.Common.Excel\Vanrise.Common.Excel.csproj", "{5EEF4D8E-6588-4BAE-B447-09B0E3312E97}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.GenericData.Notification.BP", "Vanrise.GenericData.Notification.BP\Vanrise.GenericData.Notification.BP.csproj", "{713D3C64-C9A2-43B3-964C-A69F3D35CADC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.GenericData.Notification.Arguments", "Vanrise.GenericData.Notification.Arguments\Vanrise.GenericData.Notification.Arguments.csproj", "{AFA97AFF-52F4-4C41-955C-0F43DB9B05B7}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 169
+		SccNumberOfProjects = 171
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -1074,6 +1078,14 @@ Global
 		SccProjectTopLevelParentUniqueName168 = Vanrise.sln
 		SccProjectName168 = Vanrise.Common.Excel
 		SccLocalPath168 = Vanrise.Common.Excel
+		SccProjectUniqueName169 = Vanrise.GenericData.Notification.BP\\Vanrise.GenericData.Notification.BP.csproj
+		SccProjectTopLevelParentUniqueName169 = Vanrise.sln
+		SccProjectName169 = Vanrise.GenericData.Notification.BP
+		SccLocalPath169 = Vanrise.GenericData.Notification.BP
+		SccProjectUniqueName170 = Vanrise.GenericData.Notification.Arguments\\Vanrise.GenericData.Notification.Arguments.csproj
+		SccProjectTopLevelParentUniqueName170 = Vanrise.sln
+		SccProjectName170 = Vanrise.GenericData.Notification.Arguments
+		SccLocalPath170 = Vanrise.GenericData.Notification.Arguments
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -2446,6 +2458,22 @@ Global
 		{5EEF4D8E-6588-4BAE-B447-09B0E3312E97}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5EEF4D8E-6588-4BAE-B447-09B0E3312E97}.Release|x64.ActiveCfg = Release|Any CPU
 		{5EEF4D8E-6588-4BAE-B447-09B0E3312E97}.Release|x86.ActiveCfg = Release|Any CPU
+		{713D3C64-C9A2-43B3-964C-A69F3D35CADC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{713D3C64-C9A2-43B3-964C-A69F3D35CADC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{713D3C64-C9A2-43B3-964C-A69F3D35CADC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{713D3C64-C9A2-43B3-964C-A69F3D35CADC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{713D3C64-C9A2-43B3-964C-A69F3D35CADC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{713D3C64-C9A2-43B3-964C-A69F3D35CADC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{713D3C64-C9A2-43B3-964C-A69F3D35CADC}.Release|x64.ActiveCfg = Release|Any CPU
+		{713D3C64-C9A2-43B3-964C-A69F3D35CADC}.Release|x86.ActiveCfg = Release|Any CPU
+		{AFA97AFF-52F4-4C41-955C-0F43DB9B05B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFA97AFF-52F4-4C41-955C-0F43DB9B05B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFA97AFF-52F4-4C41-955C-0F43DB9B05B7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{AFA97AFF-52F4-4C41-955C-0F43DB9B05B7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{AFA97AFF-52F4-4C41-955C-0F43DB9B05B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFA97AFF-52F4-4C41-955C-0F43DB9B05B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFA97AFF-52F4-4C41-955C-0F43DB9B05B7}.Release|x64.ActiveCfg = Release|Any CPU
+		{AFA97AFF-52F4-4C41-955C-0F43DB9B05B7}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -2624,5 +2652,7 @@ Global
 		{AA6C431D-6D95-4C38-B9BE-80049E248A6A} = {6D28C6A7-07AB-4AF3-8D3F-C8075872E76A}
 		{2D7A8E74-A563-4752-866B-40E8FE14C7BC} = {62511FE5-AFF2-4322-8963-47E6DCAAFAD1}
 		{5EEF4D8E-6588-4BAE-B447-09B0E3312E97} = {C8A0CD9D-DA6E-439D-B9EB-EC21B422C8C3}
+		{713D3C64-C9A2-43B3-964C-A69F3D35CADC} = {6B701700-ECEA-40F9-B034-5E5C41C1A85A}
+		{AFA97AFF-52F4-4C41-955C-0F43DB9B05B7} = {6B701700-ECEA-40F9-B034-5E5C41C1A85A}
 	EndGlobalSection
 EndGlobal
