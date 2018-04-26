@@ -170,25 +170,50 @@ namespace TOne.WhS.Sales.BP.Activities
                 int numberOfIncreasedRates = 0;
                 int numberOfDecreasedRates = 0;
 
+                int numberOfNewOtherRates = 0;
+                int numberOfIncreasedOtherRates = 0;
+                int numberOfDecreasedOtherRates = 0;
+
                 foreach (RateToChange rateToChange in ratesToChange)
                 {
-                    switch (rateToChange.ChangeType)
+                    if (rateToChange.RateTypeId == null)
                     {
-                        case BusinessEntity.Entities.RateChangeType.New:
-                            numberOfNewRates++;
-                            break;
-                        case BusinessEntity.Entities.RateChangeType.Increase:
-                            numberOfIncreasedRates++;
-                            break;
-                        case BusinessEntity.Entities.RateChangeType.Decrease:
-                            numberOfDecreasedRates++;
-                            break;
+                        switch (rateToChange.ChangeType)
+                        {
+                            case BusinessEntity.Entities.RateChangeType.New:
+                                numberOfNewRates++;
+                                break;
+                            case BusinessEntity.Entities.RateChangeType.Increase:
+                                numberOfIncreasedRates++;
+                                break;
+                            case BusinessEntity.Entities.RateChangeType.Decrease:
+                                numberOfDecreasedRates++;
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        switch (rateToChange.ChangeType)
+                        {
+                            case BusinessEntity.Entities.RateChangeType.New:
+                                numberOfNewOtherRates++;
+                                break;
+                            case BusinessEntity.Entities.RateChangeType.Increase:
+                                numberOfIncreasedOtherRates++;
+                                break;
+                            case BusinessEntity.Entities.RateChangeType.Decrease:
+                                numberOfDecreasedOtherRates++;
+                                break;
+                        }
                     }
                 }
 
                 summary.NumberOfNewRates = numberOfNewRates;
                 summary.NumberOfIncreasedRates = numberOfIncreasedRates;
                 summary.NumberOfDecreasedRates = numberOfDecreasedRates;
+                summary.NumberOfNewOtherRates = numberOfNewOtherRates;
+                summary.NumberOfIncreasedOtherRates = numberOfIncreasedOtherRates;
+                summary.NumberOfDecreasedOtherRates = numberOfDecreasedOtherRates;
             }
 
             if (ratesToClose != null)

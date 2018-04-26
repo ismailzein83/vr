@@ -84,6 +84,9 @@
                 $scope.scopeModel.numberOfNewRates = undefined;
                 $scope.scopeModel.numberOfIncreasedRates = undefined;
                 $scope.scopeModel.numberOfDecreasedRates = undefined;
+                $scope.scopeModel.numberOfNewOtherRates = undefined;
+                $scope.scopeModel.numberOfIncreasedOtherRates = undefined;
+                $scope.scopeModel.numberOfDecreasedOtherRates = undefined;
             };
             $scope.scopeModel.onCustomerRatePreviewGridReady = function (api) {
                 ratePreviewGridAPI = api;
@@ -117,6 +120,9 @@
                         $scope.scopeModel.numberOfNewRates = response.NumberOfNewRates;
                         $scope.scopeModel.numberOfIncreasedRates = response.NumberOfIncreasedRates;
                         $scope.scopeModel.numberOfDecreasedRates = response.NumberOfDecreasedRates;
+                        $scope.scopeModel.numberOfNewOtherRates = response.NumberOfNewOtherRates;
+                        $scope.scopeModel.numberOfIncreasedOtherRates = response.NumberOfIncreasedOtherRates;
+                        $scope.scopeModel.numberOfDecreasedOtherRates = response.NumberOfDecreasedOtherRates;
                     }
                 });
                 VRUIUtilsService.callDirectiveLoad(ratePreviewGridAPI, ratePreviewGridPayload, undefined);
@@ -371,6 +377,9 @@
                         $scope.scopeModel.numberOfNewRates = response.NumberOfNewRates;
                         $scope.scopeModel.numberOfIncreasedRates = response.NumberOfIncreasedRates;
                         $scope.scopeModel.numberOfDecreasedRates = response.NumberOfDecreasedRates;
+                        $scope.scopeModel.numberOfNewOtherRates = response.NumberOfNewOtherRates;
+                        $scope.scopeModel.numberOfIncreasedOtherRates = response.NumberOfIncreasedOtherRates;
+                        $scope.scopeModel.numberOfDecreasedOtherRates = response.NumberOfDecreasedOtherRates;
                     }
                 });
                 VRUIUtilsService.callDirectiveLoad(ratePreviewGridAPI, ratePreviewGridPayload, ratePreviewGridLoadDeferred);

@@ -67,7 +67,10 @@ namespace TOne.WhS.Sales.Data.SQL
                 summary.NumberOfNewSaleZoneServices,
                 summary.NumberOfClosedSaleZoneServices,
 				summary.NumberOfChangedCountries,
-                summary.NumberOfNewCountries
+                summary.NumberOfNewCountries,
+                summary.NumberOfNewOtherRates,
+                summary.NumberOfIncreasedOtherRates,
+                summary.NumberOfDecreasedOtherRates
             );
         }
         
@@ -114,6 +117,21 @@ namespace TOne.WhS.Sales.Data.SQL
                 {
                     ratePlanPreviewSummary.NumberOfClosedSaleZoneRoutingProducts = (int)reader["NumberOfClosedSaleZoneRoutingProducts"];
                 }
+            if (reader.NextResult())
+                while (reader.Read())
+                {
+                    ratePlanPreviewSummary.NumberOfNewOtherRates = (int)reader["NumberOfNewOtherRates"];
+                }
+            if (reader.NextResult())
+                while (reader.Read())
+                {
+                    ratePlanPreviewSummary.NumberOfIncreasedOtherRates = (int)reader["NumberOfIncreasedOtherRates"];
+                }
+            if (reader.NextResult())
+                while (reader.Read())
+                {
+                    ratePlanPreviewSummary.NumberOfDecreasedOtherRates = (int)reader["NumberOfDecreasedOtherRates"];
+                }
             return ratePlanPreviewSummary;
         }
 
@@ -136,7 +154,10 @@ namespace TOne.WhS.Sales.Data.SQL
                 NumberOfNewSaleZoneServices = (int)reader["NumberOfNewSaleZoneServices"],
                 NumberOfClosedSaleZoneServices = (int)reader["NumberOfClosedSaleZoneServices"],
                 NumberOfChangedCountries = (int)reader["NumberOfChangedCountries"],
-                NumberOfNewCountries = GetReaderValue<int>(reader, "NumberOfNewCountries")
+                NumberOfNewCountries = GetReaderValue<int>(reader, "NumberOfNewCountries"),
+                NumberOfNewOtherRates = (int)reader["NumberOfNewOtherRates"],
+                NumberOfIncreasedOtherRates = (int)reader["NumberOfIncreasedOtherRates"],
+                NumberOfDecreasedOtherRates = (int)reader["NumberOfDecreasedOtherRates"]
             };
         }
         

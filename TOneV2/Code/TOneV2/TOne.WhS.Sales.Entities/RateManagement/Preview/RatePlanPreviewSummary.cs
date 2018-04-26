@@ -36,5 +36,11 @@ namespace TOne.WhS.Sales.Entities
 		public int NumberOfChangedCountries { get; set; }
 
         public int NumberOfNewCountries { get; set; }
+
+        public int NumberOfNewOtherRates { get; set; }
+
+        public int NumberOfIncreasedOtherRates { get; set; }
+
+        public int NumberOfDecreasedOtherRates { get; set; }
     }
 }

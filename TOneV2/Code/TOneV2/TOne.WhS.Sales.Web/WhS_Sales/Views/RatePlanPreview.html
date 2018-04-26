@@ -28,21 +28,42 @@
                             </vr-columns>
                         </vr-row>
                         <vr-row>
-                            <vr-columns colnum="10" haschildcolumns>
-                                <vr-columns width="1/4row">
-                                    <vr-label>New: </vr-label>
-                                    <vr-label isvalue>{{scopeModel.numberOfNewRates}}</vr-label>
-                                </vr-columns>
-                                <vr-columns width="1/4row">
-                                    <vr-label>Increased: </vr-label>
-                                    <vr-label isvalue>{{scopeModel.numberOfIncreasedRates}}</vr-label>
-                                </vr-columns>
-                                <vr-columns width="1/4row">
-                                    <vr-label>Decreased: </vr-label>
-                                    <vr-label isvalue>{{scopeModel.numberOfDecreasedRates}}</vr-label>
-                                </vr-columns>
+                            <vr-columns colnum="6" >
+                                <vr-section header="Normal Rates">
+                                    <vr-columns colnum="12" haschildcolumns>
+                                        <vr-columns width="1/3row">
+                                            <vr-label>New: </vr-label>
+                                            <vr-label isvalue>{{scopeModel.numberOfNewRates}}</vr-label>
+                                        </vr-columns>
+                                        <vr-columns width="1/3row">
+                                            <vr-label>Increased: </vr-label>
+                                            <vr-label isvalue>{{scopeModel.numberOfIncreasedRates}}</vr-label>
+                                        </vr-columns>
+                                        <vr-columns width="1/3row">
+                                            <vr-label>Decreased: </vr-label>
+                                            <vr-label isvalue>{{scopeModel.numberOfDecreasedRates}}</vr-label>
+                                        </vr-columns>
+                                    </vr-columns>
+                                </vr-section>
                             </vr-columns>
-
+                            <vr-columns colnum="6" >
+                                <vr-section header="Other Rates">
+                                    <vr-columns colnum="12" haschildcolumns>
+                                        <vr-columns width="1/3row">
+                                            <vr-label>New: </vr-label>
+                                            <vr-label isvalue>{{scopeModel.numberOfNewOtherRates}}</vr-label>
+                                        </vr-columns>
+                                        <vr-columns width="1/3row">
+                                            <vr-label>Increased: </vr-label>
+                                            <vr-label isvalue>{{scopeModel.numberOfIncreasedOtherRates}}</vr-label>
+                                        </vr-columns>
+                                        <vr-columns width="1/3row">
+                                            <vr-label>Decreased: </vr-label>
+                                            <vr-label isvalue>{{scopeModel.numberOfDecreasedOtherRates}}</vr-label>
+                                        </vr-columns>
+                                    </vr-columns>
+                                </vr-section>
+                            </vr-columns>
                         </vr-row>
                         <vr-row>
                             <vr-columns width="fullrow">
