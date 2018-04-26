@@ -13,7 +13,7 @@ namespace TOne.WhS.Routing.Data.SQL
 {
     public class CustomerRouteDataManager : RoutingDataManager, ICustomerRouteDataManager
     {
-        readonly string[] columns = { "CustomerId", "Code", "SaleZoneId", "IsBlocked", "ExecutedRuleId", "RouteOptions", "VersionNumber" };
+        readonly string[] columns = { "CustomerId", "Code", "SaleZoneId", "IsBlocked", "ExecutedRuleId", "RouteOptions" };
 
         public int ParentWFRuntimeProcessId { get; set; }
 
@@ -39,8 +39,7 @@ namespace TOne.WhS.Routing.Data.SQL
 
             StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
 
-            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}", record.CustomerId, record.Code, record.SaleZoneId,
-               record.IsBlocked ? 1 : 0, record.ExecutedRuleId, serializedOptions, record.VersionNumber);
+            streamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}", record.CustomerId, record.Code, record.SaleZoneId, record.IsBlocked ? 1 : 0, record.ExecutedRuleId, serializedOptions);
         }
 
         public void ApplyCustomerRouteForDB(object preparedCustomerRoute)
@@ -86,7 +85,7 @@ namespace TOne.WhS.Routing.Data.SQL
             if (input.Query.RouteStatus.HasValue)
                 isBlocked = input.Query.RouteStatus.Value == RouteStatus.Blocked ? true : false;
 
-            queryBuilder.Replace("#FILTER#", string.Format("Where (@Code is null or Code like @Code) and (@IsBlocked is null or IsBlocked = @IsBlocked) {0} {1}", customerIdsFilter, saleZoneIdsFilter));
+            queryBuilder.Replace("#FILTER#", string.Format("Where (@Code is null or cr.Code like @Code) and (@IsBlocked is null or IsBlocked = @IsBlocked) {0} {1}", customerIdsFilter, saleZoneIdsFilter));
 
             IEnumerable<Entities.CustomerRoute> customerRoutes = GetItemsText(queryBuilder.ToString(), CustomerRouteMapper, (cmd) =>
             {
@@ -227,10 +226,10 @@ namespace TOne.WhS.Routing.Data.SQL
             ExecuteNonQueryText(query, null, commandTimeoutInSeconds);
             trackStep("Finished create Index on CustomerRoute table (SaleZoneId).");
 
-            trackStep("Starting create Index on CustomerRoute table (VersionNumber).");
-            query = string.Format(query_CreateIX_CustomerRoute_VersionNumber, maxDOPSyntax);
-            ExecuteNonQueryText(query, null, commandTimeoutInSeconds);
-            trackStep("Finished create Index on CustomerRoute table (VersionNumber).");
+            //trackStep("Starting create Index on CustomerRoute table (VersionNumber).");
+            //query = string.Format(query_CreateIX_CustomerRoute_VersionNumber, maxDOPSyntax);
+            //ExecuteNonQueryText(query, null, commandTimeoutInSeconds);
+            //trackStep("Finished create Index on CustomerRoute table (VersionNumber).");
 
             trackStep("Starting create CLUSTERED Index on CustomerRoute table (CustomerId and Code).");
             query = string.Format(query_CreateIX_CustomerRoute_CustomerId_Code, maxDOPSyntax);
@@ -242,7 +241,7 @@ namespace TOne.WhS.Routing.Data.SQL
         {
             StringBuilder queryBuilder = new StringBuilder(query_GetCustomerRoutes);
             queryBuilder.Replace("#LimitResult#", string.Empty);
-            queryBuilder.Replace("#FILTER#", string.Format("Where cr.VersionNumber > {0}", versionNb));
+            queryBuilder.Replace("#FILTER#", string.Format("Where mcr.VersionNumber > {0}", versionNb));
 
             List<CustomerRoute> customerRoutes = GetItemsText(queryBuilder.ToString(), CustomerRouteMapper, (cmd) => { });
             CompleteSupplierData(customerRoutes);
@@ -393,7 +392,7 @@ namespace TOne.WhS.Routing.Data.SQL
                     if (routingExcludedDestinationData.CodeRanges != null && routingExcludedDestinationData.CodeRanges.Count > 0)
                     {
                         foreach (var excludedDestinationData in routingExcludedDestinationData.CodeRanges)
-                            subConditions.Add(string.Format("(Len(cr.Code) <> Len('{0}') or Code < '{0}' or Code > '{1}')", excludedDestinationData.FromCode, excludedDestinationData.ToCode));
+                            subConditions.Add(string.Format("(Len(cr.Code) <> Len('{0}') or cr.Code < '{0}' or cr.Code > '{1}')", excludedDestinationData.FromCode, excludedDestinationData.ToCode));
                     }
                 }
 
@@ -473,7 +472,7 @@ namespace TOne.WhS.Routing.Data.SQL
                     if (routingExcludedDestinationData.CodeRanges != null && routingExcludedDestinationData.CodeRanges.Count > 0)
                     {
                         foreach (var excludedDestinationData in routingExcludedDestinationData.CodeRanges)
-                            subConditions.Add(string.Format("(Len(cr.Code) <> Len('{0}') or Code < '{0}' or Code > '{1}')", excludedDestinationData.FromCode, excludedDestinationData.ToCode));
+                            subConditions.Add(string.Format("(Len(cr.Code) <> Len('{0}') or cr.Code < '{0}' or cr.Code > '{1}')", excludedDestinationData.FromCode, excludedDestinationData.ToCode));
                     }
                 }
 
@@ -566,8 +565,9 @@ namespace TOne.WhS.Routing.Data.SQL
                                                                   ,cr.[IsBlocked]
                                                                   ,cr.[ExecutedRuleId]
                                                                   ,cr.[RouteOptions]
-                                                                  ,cr.[VersionNumber]
+                                                                  ,mcr.[VersionNumber]
                                                             FROM [dbo].[CustomerRoute] cr with(nolock) 
+                                                            LEFT JOIN [dbo].[ModifiedCustomerRoute] as mcr ON cr.CustomerId = mcr.CustomerId and cr.Code = mcr.Code
                                                             #CODESUPPLIERZONEMATCH#
                                                             Where #AFFECTEDROUTES#";
 
@@ -581,17 +581,22 @@ namespace TOne.WhS.Routing.Data.SQL
                                                         ,cr.IsBlocked
                                                         ,cr.ExecutedRuleId
                                                         ,cr.RouteOptions
-                                                        ,cr.VersionNumber
+                                                        ,mcr.VersionNumber
                                                   FROM [dbo].[CustomerRoute] cr with(nolock) 
+                                                  LEFT JOIN [dbo].[ModifiedCustomerRoute] as mcr ON cr.CustomerId = mcr.CustomerId and cr.Code = mcr.Code
                                                   JOIN [dbo].[SaleZone] as sz ON cr.SaleZoneId = sz.ID 
                                                   JOIN [dbo].[CarrierAccount] as ca ON cr.CustomerID = ca.ID
                                                   JOIN [dbo].[CustomerZoneDetail] as czd ON czd.SaleZoneId = cr.SaleZoneID and czd.CustomerId = cr.CustomerID
                                                   #FILTER#";
 
         const string query_UpdateCustomerRoutes = @"UPDATE customerRoute set customerRoute.IsBlocked = routes.IsBlocked, customerRoute.ExecutedRuleId = routes.ExecutedRuleId, 
-                                                           customerRoute.RouteOptions = routes.RouteOptions, customerRoute.VersionNumber = routes.VersionNumber
+                                                           customerRoute.RouteOptions = routes.RouteOptions
                                                     FROM [dbo].[CustomerRoute] customerRoute WITH(INDEX(IX_CustomerRoute_CustomerId_Code))
-                                                    JOIN @Routes routes on routes.CustomerId = customerRoute.CustomerId and routes.Code = customerRoute.Code";
+                                                    JOIN @Routes routes on routes.CustomerId = customerRoute.CustomerId and routes.Code = customerRoute.Code                                                    UPDATE modifiedCustomerRoute set modifiedCustomerRoute.VersionNumber = routes.VersionNumber
+                                                    FROM [dbo].[ModifiedCustomerRoute] modifiedCustomerRoute WITH(INDEX(IX_ModifiedCustomerRoute_CustomerId_Code))
+                                                    JOIN @Routes routes on routes.CustomerId = modifiedCustomerRoute.CustomerId and routes.Code = modifiedCustomerRoute.Code                                                    INSERT INTO [dbo].[ModifiedCustomerRoute](CustomerId, Code, VersionNumber)
+                                                    SELECT routes.CustomerId, routes.Code, routes.VersionNumber FROM @Routes routes 
+                                                    LEFT JOIN [dbo].[ModifiedCustomerRoute] mcr ON routes.CustomerId = mcr.CustomerId and routes.Code = mcr.Code                                                    WHERE mcr.CustomerId IS NULL";
 
         const string query_CreateIX_CustomerRoute_CustomerId = @"CREATE NONCLUSTERED INDEX [IX_CustomerRoute_CustomerId] ON dbo.CustomerRoute
                                                                 (

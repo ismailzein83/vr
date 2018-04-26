@@ -130,6 +130,7 @@ namespace TOne.WhS.Routing.Data.SQL
             query.AppendLine(query_CustomerQualityConfigurationTable);
             query.AppendLine(query_CustomerZoneDetailTable);
             query.AppendLine(query_CustomerRouteTable);
+            query.AppendLine(query_ModifiedCustomerRouteTable);
             query.AppendLine(query_TableTypes);
             query.AppendLine(query_CustomerZoneType);
             query.AppendLine(query_CustomerZoneDetailType);
@@ -252,9 +253,19 @@ namespace TOne.WhS.Routing.Data.SQL
 	                                                    [SaleZoneId] [bigint] NOT NULL,
 	                                                    [IsBlocked] [bit] NOT NULL,
 	                                                    [ExecutedRuleId] [int] NULL,
-	                                                    [RouteOptions] [varchar](max) NULL,
-                                                        [VersionNumber] [int] NOT NULL
+	                                                    [RouteOptions] [varchar](max) NULL
                                                 ) ON [PRIMARY] ";
+
+        const string query_ModifiedCustomerRouteTable = @"CREATE TABLE [dbo].[ModifiedCustomerRoute](
+	                                                        [CustomerId] [int] NOT NULL,
+	                                                        [Code] [varchar](20) NOT NULL,
+                                                            [VersionNumber] [int] NOT NULL
+                                                        ) ON [PRIMARY];
+                                                        CREATE UNIQUE CLUSTERED INDEX [IX_ModifiedCustomerRoute_CustomerId_Code] ON [dbo].[ModifiedCustomerRoute]
+                                                        (
+	                                                        [CustomerId] ASC,
+	                                                        [Code] ASC
+                                                        )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY];";
 
         private const string query_CodeSaleZoneMatchTable = @"CREATE TABLE [dbo].[CodeSaleZoneMatch](
 																[Code] [varchar](20) NOT NULL,
