@@ -24,7 +24,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 
     public class CodeGroupTrunkGroup
     {
-        public string CodeGroup { get; set; }
+        public int CodeGroupId { get; set; }
     }
 
     public class TrunkTrunkGroup

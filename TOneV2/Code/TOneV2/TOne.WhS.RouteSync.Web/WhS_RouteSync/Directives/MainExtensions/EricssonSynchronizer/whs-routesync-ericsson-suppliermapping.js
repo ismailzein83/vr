@@ -164,20 +164,23 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRNotificationService', '
                     if (!isFirstLoad) {
                         var trunkGroups = $scope.scopeModel.trunkGroups;
                         if (trunkGroups.length > 0) {
-                            var customerCodeGroupCombinations = [];
 
                             if ($scope.scopeModel.isTrunkGroupGridLoading)
                                 return null;
+
+                            var customerCodeGroupCombinations = [];
+                            var errorMessage = "you cannot define same combination at different trunk groups"; //(customer, code group, isBackup)
 
                             for (var index = 0; index < trunkGroups.length; index++) {
                                 var currentTrunkGroup = trunkGroups[index];
                                 var customerIds = currentTrunkGroup.trunkGroupCustomerSelectorAPI != undefined ? currentTrunkGroup.trunkGroupCustomerSelectorAPI.getSelectedIds() : undefined;
                                 var codeGroups = currentTrunkGroup.trunkGroupCodeGroupSelectorAPI != undefined ? currentTrunkGroup.trunkGroupCodeGroupSelectorAPI.getSelectedIds() : undefined;
+                                var isBackup = currentTrunkGroup.IsBackup ? "1" : "0";
 
                                 if (customerIds == undefined && codeGroups == undefined) {
-                                    var customerCodeGroupCombination = "-1,-1";
+                                    var customerCodeGroupCombination = "-1,-1," + isBackup;
                                     if (customerCodeGroupCombinations.includes(customerCodeGroupCombination)) {
-                                        return "you cannot define same (customer, code group) combination at different trunk groups";
+                                        return errorMessage;
                                     } else {
                                         customerCodeGroupCombinations.push(customerCodeGroupCombination);
                                     }
@@ -189,9 +192,9 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRNotificationService', '
                                         for (var j = 0; j < codeGroups.length; j++) {
                                             var currentCodeGroup = codeGroups[j];
 
-                                            var customerCodeGroupCombination = currentCustomerId + "," + currentCodeGroup;
+                                            var customerCodeGroupCombination = currentCustomerId + "," + currentCodeGroup + "," + isBackup;
                                             if (customerCodeGroupCombinations.includes(customerCodeGroupCombination)) {
-                                                return "you cannot define same (customer, code group) combination at different trunk groups";
+                                                return errorMessage;
                                             } else {
                                                 customerCodeGroupCombinations.push(customerCodeGroupCombination);
                                             }
@@ -201,9 +204,9 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRNotificationService', '
                                     for (var i = 0; i < customerIds.length; i++) {
                                         var currentCustomerId = customerIds[i];
 
-                                        var customerCodeGroupCombination = currentCustomerId + ",-1";
+                                        var customerCodeGroupCombination = currentCustomerId + ",-1," + isBackup;
                                         if (customerCodeGroupCombinations.includes(customerCodeGroupCombination)) {
-                                            return "you cannot define same (customer, code group) combination at different trunk groups";
+                                            return errorMessage;
                                         } else {
                                             customerCodeGroupCombinations.push(customerCodeGroupCombination);
                                         }
@@ -212,9 +215,9 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRNotificationService', '
                                     for (var i = 0; i < codeGroups.length; i++) {
                                         var currentCodeGroup = codeGroups[i];
 
-                                        var customerCodeGroupCombination = "-1," + currentCodeGroup;
+                                        var customerCodeGroupCombination = "-1," + currentCodeGroup + "," + isBackup;
                                         if (customerCodeGroupCombinations.includes(customerCodeGroupCombination)) {
-                                            return "you cannot define same (customer, code group) combination at different trunk groups";
+                                            return errorMessage;
                                         } else {
                                             customerCodeGroupCombinations.push(customerCodeGroupCombination);
                                         }
@@ -349,7 +352,7 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRNotificationService', '
 
                     var codeGroupSelectorPayload;
                     if (trunkGroup.CodeGroupTrunkGroups != undefined) {
-                        codeGroupSelectorPayload = { selectedIds: UtilsService.getPropValuesFromArray(trunkGroup.CodeGroupTrunkGroups, "CodeGroup") };
+                        codeGroupSelectorPayload = { selectedIds: UtilsService.getPropValuesFromArray(trunkGroup.CodeGroupTrunkGroups, "CodeGroupId") };
                     }
                     VRUIUtilsService.callDirectiveLoad(trunkGroup.trunkGroupCodeGroupSelectorAPI, codeGroupSelectorPayload, trunkGroupCodeGroupSelectorLoadDeferred);
                 };
@@ -480,11 +483,11 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRNotificationService', '
                     function getCodeGroupTrunkGroups(trunkGroup) {
                         var codeGroupTrunkGroups = [];
                         if (trunkGroup.trunkGroupCodeGroupSelectorAPI != undefined) {
-                            var codeGroups = trunkGroup.trunkGroupCodeGroupSelectorAPI.getSelectedIds();
-                            if (codeGroups != undefined) {
-                                for (var index = 0; index < codeGroups.length; index++) {
-                                    var currentCodeGroup = codeGroups[index];
-                                    codeGroupTrunkGroups.push({ CodeGroup: currentCodeGroup });
+                            var codeGroupIds = trunkGroup.trunkGroupCodeGroupSelectorAPI.getSelectedIds();
+                            if (codeGroupIds != undefined) {
+                                for (var index = 0; index < codeGroupIds.length; index++) {
+                                    var currentCodeGroupId = codeGroupIds[index];
+                                    codeGroupTrunkGroups.push({ CodeGroupId: currentCodeGroupId });
                                 }
                             }
                         }

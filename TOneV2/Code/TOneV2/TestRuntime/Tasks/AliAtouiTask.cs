@@ -7,6 +7,7 @@ using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.TelesIdb;
+using TOne.WhS.RouteSync.Ericsson;
 using TOne.WhS.Routing.Data.SQL;
 using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
@@ -18,6 +19,7 @@ using Vanrise.Queueing;
 using Vanrise.Rules.Normalization;
 using Vanrise.Runtime;
 using Vanrise.Runtime.Entities;
+using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.Runtime.Tasks
 {
@@ -27,6 +29,11 @@ namespace TOne.WhS.Runtime.Tasks
 
         public void Execute()
         {
+            #region EricssonSWSyncTask
+            EricssonSWSyncTask ericssonSWSyncTask = new EricssonSWSyncTask();
+            ericssonSWSyncTask.EricssonSWSyncTask_Main();
+            #endregion
+
             #region NormalizationRule RemoveAction
             //NormalizationRuleRemoveActionTask normalizationRuleRemoveActionTask = new NormalizationRuleRemoveActionTask();
             //normalizationRuleRemoveActionTask.NormalizationRuleRemoveActionTask_Main();
@@ -38,8 +45,8 @@ namespace TOne.WhS.Runtime.Tasks
             #endregion
 
             #region DeserializeTask
-            DeserializeTask deserializeTask = new DeserializeTask();
-            deserializeTask.DeserializeTask_Main();
+            //DeserializeTask deserializeTask = new DeserializeTask();
+            //deserializeTask.DeserializeTask_Main();
             #endregion
 
             #region VRMailMessageTemplateTask
@@ -155,6 +162,132 @@ namespace TOne.WhS.Runtime.Tasks
         #endregion
     }
 
+    public class EricssonSWSyncTask
+    {
+        public void EricssonSWSyncTask_Main()
+        {
+            #region supplierMapping_11
+
+            var supplierMapping_11 = new RouteSync.Ericsson.CarrierMapping()
+            {
+                CarrierId = 11,
+                SupplierMapping = new SupplierMapping()
+                {
+                    OutTrunks = new List<OutTrunk>()
+                    {
+                        new OutTrunk()
+                        {
+                            TrunkId = new Guid("c7cc9e7b-aed9-49d3-5851-348db6586b24"),
+                            TrunkName = "Trunk_1",
+                            TrunkType= 0                    
+                        },
+                        new OutTrunk()
+                        {
+                            TrunkId = new Guid("acdc92ef-4d83-2708-1348-fed0445f0533"),
+                            TrunkName = "Trunk_2",
+                            TrunkType= 0                    
+                        },
+                        new OutTrunk()
+                        {
+                            TrunkId = new Guid("af4aff1a-04bb-74c9-2790-55c38cb0c390"),
+                            TrunkName = "Trunk_3",
+                            TrunkType= 0                    
+                        },
+                    },
+                    TrunkGroups = new List<TrunkGroup>()
+                    {
+                        new TrunkGroup()
+                        {
+                            CustomerTrunkGroups = new List<CustomerTrunkGroup>() { new CustomerTrunkGroup() { CustomerId = 1 } },
+                            CodeGroupTrunkGroups = new List<CodeGroupTrunkGroup>() { new CodeGroupTrunkGroup() { CodeGroupId = 376 } },
+                            TrunkTrunkGroups = new List<TrunkTrunkGroup>()
+                            {
+                                new TrunkTrunkGroup() { TrunkId = new Guid("c7cc9e7b-aed9-49d3-5851-348db6586b24"), Percentage = 10, Priority = 1},
+                                new TrunkTrunkGroup() { TrunkId = new Guid("acdc92ef-4d83-2708-1348-fed0445f0533"), Percentage = 90, Priority = 2}
+                            }
+                        },
+                        new TrunkGroup()
+                        {
+                            CustomerTrunkGroups = null,
+                            CodeGroupTrunkGroups = new List<CodeGroupTrunkGroup>() { new CodeGroupTrunkGroup() { CodeGroupId = 376 } },
+                            TrunkTrunkGroups = new List<TrunkTrunkGroup>()
+                            {
+                                new TrunkTrunkGroup() { TrunkId = new Guid("acdc92ef-4d83-2708-1348-fed0445f0533"), Percentage = 20, Priority = 1},
+                                new TrunkTrunkGroup() { TrunkId = new Guid("af4aff1a-04bb-74c9-2790-55c38cb0c390"), Percentage = 80, Priority = 2}
+                            },
+                        }
+                    }
+                }
+            };
+
+            #endregion
+
+            #region supplierMapping_12
+
+            var supplierMapping_12 = new RouteSync.Ericsson.CarrierMapping()
+            {
+                CarrierId = 12,
+                SupplierMapping = new SupplierMapping()
+                {
+                    OutTrunks = new List<OutTrunk>()
+                    {
+                        new OutTrunk()
+                        {
+                            TrunkId = new Guid("F31DB509-8DC2-42B4-AEBE-1F43E6C27C8B"),
+                            TrunkName = "Trunk_1",
+                            TrunkType= 0                    
+                        },
+                        new OutTrunk()
+                        {
+                            TrunkId = new Guid("DEF376A4-1FAF-4627-B64D-3E3E48ACAC40"),
+                            TrunkName = "Trunk_2",
+                            TrunkType= 0                    
+                        },
+                    },
+                    TrunkGroups = new List<TrunkGroup>()
+                    {
+                        new TrunkGroup()
+                        {
+                            CustomerTrunkGroups = new List<CustomerTrunkGroup>() { new CustomerTrunkGroup() { CustomerId = 1 } },
+                            CodeGroupTrunkGroups = new List<CodeGroupTrunkGroup>() { new CodeGroupTrunkGroup() { CodeGroupId = 376 } },
+                            TrunkTrunkGroups = new List<TrunkTrunkGroup>()
+                            {
+                                new TrunkTrunkGroup() { TrunkId = new Guid("F31DB509-8DC2-42B4-AEBE-1F43E6C27C8B"), Percentage = 100, Priority = 1 }
+                            }
+                        },
+                        new TrunkGroup()
+                        {
+                            CustomerTrunkGroups = null,
+                            CodeGroupTrunkGroups = new List<CodeGroupTrunkGroup>() { new CodeGroupTrunkGroup() { CodeGroupId = 376 } },
+                            TrunkTrunkGroups = new List<TrunkTrunkGroup>()
+                            {
+                                new TrunkTrunkGroup() { TrunkId = new Guid("DEF376A4-1FAF-4627-B64D-3E3E48ACAC40"), Percentage = 100, Priority = 1 }
+                            }
+                        },
+                    }
+                }
+            };
+
+            #endregion
+
+            var carrierMappings = new Dictionary<string, RouteSync.Ericsson.CarrierMapping>();
+            carrierMappings.Add("11", supplierMapping_11);
+            carrierMappings.Add("12", supplierMapping_12);
+
+            var ruleTree = new EricssonSWSync().BuildSupplierTrunkGroupTree(carrierMappings); //GetRuleTree(ruleDefinitionId);
+            //List<CriteriaEvaluationInfo> criteriaEvaluationInfos = null; //GetCachedCriteriaEvaluationInfos(ruleDefinitionId);
+
+            GenericRuleTarget target = new GenericRuleTarget();
+            target.TargetFieldValues = new Dictionary<string, object>();
+            target.TargetFieldValues.Add("Supplier", 11);
+            target.TargetFieldValues.Add("CodeGroup", 376);
+            target.TargetFieldValues.Add("Customer", 5);
+            target.TargetFieldValues.Add("IsBackUp", false);
+
+            TrunkGroupRuleAsGeneric matchingRule = Vanrise.GenericData.Business.GenericRuleManager<GenericRule>.GetMatchRule<TrunkGroupRuleAsGeneric>(ruleTree, null, target);
+        }
+    }
+
     public class NormalizationRuleRemoveActionTask
     {
         public void NormalizationRuleRemoveActionTask_Main()
@@ -176,13 +309,13 @@ namespace TOne.WhS.Runtime.Tasks
     {
         public void TelesIdbSWSync_Main()
         {
-            CarrierMapping carrierMapping1 = new CarrierMapping() { CarrierId = 1, SupplierMapping = new List<string>() { "C001", "C002" } };
-            CarrierMapping carrierMapping2 = new CarrierMapping() { CarrierId = 1, SupplierMapping = new List<string>() { "C003" } };
-            CarrierMapping carrierMapping3 = new CarrierMapping() { CarrierId = 1, SupplierMapping = new List<string>() { "C005", "C006", "C007" } };
-            CarrierMapping carrierMapping4 = new CarrierMapping() { CarrierId = 1, SupplierMapping = new List<string>() { "C008" } };
-            CarrierMapping carrierMapping5 = new CarrierMapping() { CarrierId = 1, SupplierMapping = new List<string>() { "C009" } };
+            var carrierMapping1 = new RouteSync.TelesIdb.CarrierMapping() { CarrierId = 1, SupplierMapping = new List<string>() { "C001", "C002" } };
+            var carrierMapping2 = new RouteSync.TelesIdb.CarrierMapping() { CarrierId = 1, SupplierMapping = new List<string>() { "C003" } };
+            var carrierMapping3 = new RouteSync.TelesIdb.CarrierMapping() { CarrierId = 1, SupplierMapping = new List<string>() { "C005", "C006", "C007" } };
+            var carrierMapping4 = new RouteSync.TelesIdb.CarrierMapping() { CarrierId = 1, SupplierMapping = new List<string>() { "C008" } };
+            var carrierMapping5 = new RouteSync.TelesIdb.CarrierMapping() { CarrierId = 1, SupplierMapping = new List<string>() { "C009" } };
 
-            Dictionary<string, CarrierMapping> carrierMappings = new Dictionary<string, CarrierMapping>();
+            var carrierMappings = new Dictionary<string, RouteSync.TelesIdb.CarrierMapping>();
             carrierMappings.Add("1", carrierMapping1);
             carrierMappings.Add("2", carrierMapping2);
             carrierMappings.Add("3", carrierMapping3); carrierMappings.Add("4", carrierMapping4); carrierMappings.Add("5", carrierMapping5);

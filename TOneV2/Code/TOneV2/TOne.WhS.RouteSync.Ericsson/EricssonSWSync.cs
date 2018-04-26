@@ -34,7 +34,9 @@ namespace TOne.WhS.RouteSync.Ericsson
         public List<InterconnectOverrides> InterconnectOverrides { get; set; }
         public List<EricssonSSHCommunication> SwitchCommunicationList { get; set; }
         public List<SwitchLogger> SwitchLoggerList { get; set; }
+
         #region Public Methods
+
         public override void Initialize(ISwitchRouteSynchronizerInitializeContext context)
         {
             if (CarrierMappings == null || CarrierMappings.Count == 0)
@@ -79,11 +81,12 @@ namespace TOne.WhS.RouteSync.Ericsson
 
                 var codeGroupObject = codeGroupManager.GetMatchCodeGroup(route.Code);
                 codeGroupObject.ThrowIfNull(string.Format("No Code Group found for code '{0}'.", route.Code));
+                int routeCodeGroupId = codeGroupObject.CodeGroupId;
                 string routeCodeGroup = codeGroupObject.Code;
 
                 EricssonConvertedRoute ericssonConvertedRoute = new EricssonConvertedRoute() { BO = customerMapping.BO, Code = route.Code };
 
-                List<RouteCaseOption> routeCaseOptions = GetRouteCaseOptions(route, routeCodeGroup);
+                List<RouteCaseOption> routeCaseOptions = GetRouteCaseOptions(route, routeCodeGroupId, routeCodeGroup);
                 var routeCaseOptionsAsString = Helper.SerializeRouteCaseOptions(routeCaseOptions);
 
                 RouteCase routeCase;
@@ -699,9 +702,12 @@ namespace TOne.WhS.RouteSync.Ericsson
             context.ValidationMessages = validationMessages;
             return false;
         }
+
         #endregion
 
-        private List<RouteCaseOption> GetRouteCaseOptions(Route route, string codeGroup)
+        #region Private Methods
+
+        private List<RouteCaseOption> GetRouteCaseOptions(Route route, int codeGroupId, string routeCodeGroup)
         {
             List<RouteCaseOption> routeCaseOptions = new List<RouteCaseOption>();
             int numberOfOptions = 0;
@@ -720,11 +726,11 @@ namespace TOne.WhS.RouteSync.Ericsson
                 #endregion
 
                 var trunkGroups = supplierMapping.TrunkGroups.FindAllRecords(item => item.CustomerTrunkGroups.Any(ctgItem => ctgItem.CustomerId == int.Parse(route.CustomerId)));
-                var trunkGroup = trunkGroups.FindRecord(item => item.CodeGroupTrunkGroups.Any(cg => cg.CodeGroup == codeGroup));
+                var trunkGroup = trunkGroups.FindRecord(item => item.CodeGroupTrunkGroups.Any(cg => cg.CodeGroupId == codeGroupId));
 
                 foreach (var trunkGroupTrunk in trunkGroup.TrunkTrunkGroups)
                 {
-                    routeCaseOptions.Add(GetRouteCaseOption(codeGroup, option, supplierMapping, trunkGroup, trunkGroupTrunk));
+                    routeCaseOptions.Add(GetRouteCaseOption(routeCodeGroup, option, supplierMapping, trunkGroup, trunkGroupTrunk));
                     numberOfOptions++;
                     if (numberOfOptions == NumberOfOptions)
                         break;
@@ -759,5 +765,7 @@ namespace TOne.WhS.RouteSync.Ericsson
             }
             return routeCaseOption;
         }
+
+        #endregion
     }
 }
