@@ -31,17 +31,43 @@ namespace Vanrise.Common
             }
         }
 
-        public bool TryOpenConnection()
+        public bool TryWriteFile(Stream stream, string fileName, out string errorMessage)
+        {
+            errorMessage = null;
+
+            bool tryOpenConnection = TryOpenConnection();
+            if (!tryOpenConnection)
+            {
+                errorMessage = string.Format("Unable to open connection ServerIP: {0}, Username: {1}, Password:{2}",
+                    FTPCommunicatorSettings.ServerIP, FTPCommunicatorSettings.Username, FTPCommunicatorSettings.Password);
+                return false;
+            }
+            try
+            {
+                CreateFile(stream, fileName);
+            }
+            catch (Exception ex)
+            {
+                CloseConnection();
+                throw;
+            }
+
+            CloseConnection();
+
+            return true;
+        }
+
+        bool TryOpenConnection()
         {
             return CommunicatorClient.TryOpenConnection(FTPCommunicatorSettings.ServerIP, FTPCommunicatorSettings.Username, FTPCommunicatorSettings.Password);
         }
 
-        public void CloseConnection()
+        void CloseConnection()
         {
             CommunicatorClient.CloseConnection();
         }
 
-        public void CreateFile(Stream stream, string fileName)
+        void CreateFile(Stream stream, string fileName)
         {
             CommunicatorClient.CreateFile(stream, string.Format("{0}/{1}", FTPCommunicatorSettings.Directory, fileName));
         }
