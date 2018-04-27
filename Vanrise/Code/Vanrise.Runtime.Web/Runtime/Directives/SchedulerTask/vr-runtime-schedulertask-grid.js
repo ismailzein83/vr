@@ -135,7 +135,7 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
                             menuActions.push({
                                 name: "Run",
                                 clicked: runSchedulerTask
-                            })
+                            });
                         }
                         if (entity.IsEnabled && dataItem.AllowEdit == true) {
                             var menuAction1 = {
@@ -153,7 +153,7 @@ app.directive("vrRuntimeSchedulertaskGrid", ["VRUIUtilsService", "UtilsService",
                     }
 
                     return menuActions;
-                }
+                };
             }
 
             function defineStaticMenuActions(dataItem) {

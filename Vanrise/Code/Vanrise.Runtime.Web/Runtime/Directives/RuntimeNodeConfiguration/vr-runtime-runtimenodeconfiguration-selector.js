@@ -83,7 +83,7 @@ app.directive('vrRuntimeRuntimenodeconfigurationSelector', ['VRRuntime_RuntimeNo
                         return $scope.ctrl.selectedvalues.RuntimeNodeConfigurationId;
                     }
                     return null;
-                }
+                };
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

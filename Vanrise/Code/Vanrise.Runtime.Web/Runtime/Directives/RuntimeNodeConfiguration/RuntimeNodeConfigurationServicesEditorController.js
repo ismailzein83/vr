@@ -39,12 +39,12 @@
             };
 
             $scope.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
         }
         function load() {
             $scope.isLoading = true;
-            loadAllControls()
+            loadAllControls();
         }
 
         function loadAllControls() {
@@ -76,7 +76,7 @@
 
                 var directivePayload = {
                     runtimeService: runtimeNodeConfigurationEntity != undefined && runtimeNodeConfigurationEntity.Settings != undefined ? runtimeNodeConfigurationEntity.Settings.RuntimeService : undefined
-                }
+                };
 
                 VRUIUtilsService.callDirectiveLoad(runtimeServiceDirectiveAPI, directivePayload, runtimeServiceLoadPromiseDeferred);
 
