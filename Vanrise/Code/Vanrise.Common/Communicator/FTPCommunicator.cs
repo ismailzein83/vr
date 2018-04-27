@@ -31,7 +31,7 @@ namespace Vanrise.Common
             }
         }
 
-        public bool TryWriteFile(Stream stream, string fileName, out string errorMessage)
+        public bool TryWriteFile(Stream stream, string fileName, string subDirectory, out string errorMessage)
         {
             errorMessage = null;
 
@@ -43,17 +43,32 @@ namespace Vanrise.Common
                 return false;
             }
 
+            string directory = this.FTPCommunicatorSettings.Directory;
+            if (!string.IsNullOrEmpty(subDirectory))
+            {
+                try
+                {
+                    directory += "/" + subDirectory;
+                    this.CreateDirectoryIfNotExists(directory);
+                }
+                catch (Exception ex)
+                {
+                    this.CloseConnection();
+                    throw ex;
+                }
+            }
+
             try
             {
-                CreateFile(stream, fileName);
+                this.CreateFile(stream, fileName, directory);
             }
             catch (Exception ex)
             {
-                CloseConnection();
+                this.CloseConnection();
                 throw ex;
             }
 
-            CloseConnection();
+            this.CloseConnection();
 
             return true;
         }
@@ -63,16 +78,20 @@ namespace Vanrise.Common
             return CommunicatorClient.TryOpenConnection(FTPCommunicatorSettings.ServerIP, FTPCommunicatorSettings.Username, FTPCommunicatorSettings.Password);
         }
 
-        private void CreateFile(Stream stream, string fileName)
+        private void CreateFile(Stream stream, string fileName, string directory)
         {
-            CommunicatorClient.CreateFile(stream, string.Format("{0}/{1}", FTPCommunicatorSettings.Directory, fileName));
+            CommunicatorClient.CreateFile(stream, string.Format("{0}/{1}", directory, fileName));
+        }
+
+        private void CreateDirectoryIfNotExists(string directory)
+        {
+            CommunicatorClient.CreateDirectoryIfNotExists(directory);
         }
 
         private void CloseConnection()
         {
             CommunicatorClient.CloseConnection();
         }
-
 
         #region Private Classes
 
@@ -81,6 +100,8 @@ namespace Vanrise.Common
             public abstract bool TryOpenConnection(string serverIP, string userName, string password);
 
             public abstract void CreateFile(Stream stream, string remotePath);
+
+            public abstract void CreateDirectoryIfNotExists(string remotePath);
 
             public abstract void CloseConnection();
         }
@@ -104,6 +125,14 @@ namespace Vanrise.Common
             public override void CreateFile(Stream stream, string remotePath)
             {
                 Ftp.PutFile(stream, remotePath);
+            }
+
+            public override void CreateDirectoryIfNotExists(string remotePath)
+            {
+                if (Ftp.DirectoryExists(remotePath))
+                    return;
+
+                Ftp.CreateDirectory(remotePath);
             }
 
             public override void CloseConnection()
@@ -131,6 +160,11 @@ namespace Vanrise.Common
             public override void CreateFile(Stream stream, string remotePath)
             {
                 Sftp.PutFile(stream, remotePath);
+            }
+
+            public override void CreateDirectoryIfNotExists(string remotePath)
+            {
+                Sftp.CreateDirectory(remotePath);
             }
 
             public override void CloseConnection()
