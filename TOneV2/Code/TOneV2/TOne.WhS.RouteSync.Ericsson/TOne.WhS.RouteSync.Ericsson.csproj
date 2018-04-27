@@ -113,6 +113,7 @@
     <Compile Include="Entities\Context\RouteCaseContext.cs" />
     <Compile Include="Entities\Context\RouteContext.cs" />
     <Compile Include="Entities\SwitchLogger.cs" />
+    <Compile Include="Entities\SwitchLoggerConfig.cs" />
     <Compile Include="Entities\Trunk.cs" />
     <Compile Include="Entities\TrunkGroup.cs" />
     <Compile Include="Entities\EricssonConvertedRoute.cs" />

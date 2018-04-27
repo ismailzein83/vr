@@ -28,18 +28,77 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
         public List<string> Output { get; set; }
     }
 
-    public interface ILogRouteCasesContext { List<CommandResult> CommandResults { get; } }
-
-    public interface ILogCarrierMappingsContext { List<CommandResult> CommandResults { get; } }
-
-    public interface ILogRoutesContext { List<CommandResult> CommandResults { get; } }
-
-    public interface ILogCommandsContext { List<CommandResult> CommandResults { get; } }
-
-    public class SwitchLoggerConfig : ExtensionConfiguration
+    public interface ILogRouteCasesContext 
     {
-        public const string EXTENSION_TYPE = "WhS_RouteSync_EricssonSwitchLogger";
+        List<CommandResult> CommandResults { get; }
 
-        public string Editor { get; set; }
+        DateTime ExecutionDateTime { get; }
+
+        ExecutionStatus ExecutionStatus { get; }
     }
+
+    public class LogRouteCasesContext : ILogRouteCasesContext
+    {
+        public List<CommandResult> CommandResults { get; set; }
+
+        public DateTime ExecutionDateTime { get; set; }
+
+        public ExecutionStatus ExecutionStatus { get; set; }
+    }
+
+    public interface ILogCarrierMappingsContext 
+    {
+        List<CommandResult> CommandResults { get; }
+
+        DateTime ExecutionDateTime { get; }
+
+        ExecutionStatus ExecutionStatus { get; } 
+    }
+
+    public class LogCarrierMappingsContext : ILogCarrierMappingsContext
+    {
+        public List<CommandResult> CommandResults { get; set; }
+
+        public DateTime ExecutionDateTime { get; set; }
+
+        public ExecutionStatus ExecutionStatus { get; set; }
+    }
+
+    public interface ILogRoutesContext
+    {
+        List<CommandResult> CommandResults { get; }
+
+        DateTime ExecutionDateTime { get; }
+
+        ExecutionStatus ExecutionStatus { get; }
+
+        int BONumber { get; }
+    }
+
+    public class LogRoutesContext : ILogRoutesContext
+    {
+        public List<CommandResult> CommandResults { get; set; }
+
+        public DateTime ExecutionDateTime { get; set; }
+
+        public ExecutionStatus ExecutionStatus { get; set; }
+
+        public int BONumber { get; set; }
+    }
+
+    public interface ILogCommandsContext
+    {
+        List<CommandResult> CommandResults { get; }
+
+        DateTime ExecutionDateTime { get; }
+    }
+
+    public class LogCommandsContext : ILogCommandsContext
+    {
+        public List<CommandResult> CommandResults { get; set; }
+
+        public DateTime ExecutionDateTime { get; set; }
+    }
+
+    public enum ExecutionStatus { Failed = 0, Succeeded = 1 }
 }
