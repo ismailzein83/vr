@@ -1,29 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using TestRuntime;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.RouteSync.Entities;
-using TOne.WhS.RouteSync.TelesIdb;
 using TOne.WhS.RouteSync.Ericsson;
+using TOne.WhS.RouteSync.Ericsson.Business;
+using TOne.WhS.RouteSync.Ericsson.Entities;
+using TOne.WhS.RouteSync.TelesIdb;
 using TOne.WhS.Routing.Data.SQL;
 using TOne.WhS.Routing.Entities;
 using Vanrise.BusinessProcess;
 using Vanrise.Caching.Runtime;
+using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.GenericData.Entities;
 using Vanrise.Integration.Entities;
 using Vanrise.Integration.Mappers;
 using Vanrise.Queueing;
 using Vanrise.Rules.Normalization;
 using Vanrise.Runtime;
 using Vanrise.Runtime.Entities;
-using Vanrise.GenericData.Entities;
-using System.IO;
-using Vanrise.Common;
-using TOne.WhS.RouteSync.Ericsson.Entities;
-using TOne.WhS.RouteSync.Ericsson.Business;
 
 namespace TOne.WhS.Runtime.Tasks
 {
@@ -34,8 +34,8 @@ namespace TOne.WhS.Runtime.Tasks
         public void Execute()
         {
             #region EricssonFTPSwitchLoggerTask
-            EricssonFTPSwitchLoggerTask ericssonFTPSwitchLoggerTask = new EricssonFTPSwitchLoggerTask();
-            ericssonFTPSwitchLoggerTask.EricssonFTPSwitchLoggerTask_Main();
+            //EricssonFTPSwitchLoggerTask ericssonFTPSwitchLoggerTask = new EricssonFTPSwitchLoggerTask();
+            //ericssonFTPSwitchLoggerTask.EricssonFTPSwitchLoggerTask_Main();
             #endregion
 
             #region EricssonSWSyncTask
@@ -472,8 +472,8 @@ namespace TOne.WhS.Runtime.Tasks
         public void DeserializeTask_Main()
         {
             //CustomerRoutes
-            //string serializedCustomerRouteOptions = "88011~~~9664~~|8801~~~11457~~|88011~~~13620~~|88011~~~15414~~|88011~~~21776~~";
-            //string customerRouteOptionsAsJSON = this.DeserializeCustomerRouteOptions(serializedCustomerRouteOptions);
+            string serializedCustomerRouteOptions = "506~~~15543~~~~~|506~~~7715~~~~~|506~~~13899~~~~~|506~~~3195~~~~~|506~~~329683~~~~~";
+            string customerRouteOptionsAsJSON = this.DeserializeCustomerRouteOptions(serializedCustomerRouteOptions);
 
             //RoutingProductRoutes
             //string serializedRPOptionsDetailsBySupplier = "240~315094$0.01540000$1$$False$2515165#315095$0.01540000$1$$False$2515166#315096$0.01540000$1$$False$2515167#315091$0.01540000$1$$False$2515162#315092$0.01540000$1$$False$2515163#315090$0.01540000$1$$False$2515161~0~6~~1|564~322849$0.02250000$1$$False$2522986#322852$0.02250000$1$$False$2522989~0~2~~1|57~2712$0.03390000$1@2@5$$False$29107#2717$0.03390000$1@2@5$$False$29112#2718$0.03390000$1@2@5$$False$29113#2713$0.03390000$1@2@5$$False$29108#2714$0.03390000$1@2@5$$False$29109#2715$0.03390000$1@2@5$$False$29110~0~6~~20|66~9660$0.02600000$7@4$$False$115805#9664$0.03000000$7@4$$False$115803#9665$0.03000000$7@4$$False$115804~0~3~~79|559~315422$0.02250000$1$$False$2515559#315425$0.02250000$1$$False$2515562~0~2~~1|88~30370$0.02700000$7@4$$False$395295~0~1~~79|527~329529$0.01970000$4$$False$2529781#329528$0.02240000$4$$False$2529780~0~2~~15|60~7255$0.03390000$7@4$$False$86520#7261$0.03390000$7@4$$False$86526#7256$0.03390000$7@4$$False$86521#7260$0.03390000$7@4$$False$86525#7258$0.03390000$7@4$$False$86523#7257$0.03390000$7@4$$False$86522~0~6~~79|65~9536$0.38350000$7@4$$False$114463#9531$0.38350000$7@4$$False$114458#9533$0.38350000$7@4$$False$114460#9534$0.38350000$7@4$$False$114461#9535$0.38350000$7@4$$False$114462#9530$0.38350000$7@4$$False$114457~0~6~~79|70~15411$0.02700000$7@4$$False$187067#15414$0.04130000$7@4$$False$187074~0~2~~79|561~319138$0.02250000$1$$False$2519275#319141$0.02250000$1$$False$2519278~0~2~~1|69~13620$0.03390000$7@4$$False$164003#13622$0.03390000$7@4$$False$164005#13617$0.03390000$7@4$$False$164000#13623$0.03390000$7@4$$False$164006#13618$0.03390000$7@4$$False$164001#13619$0.03390000$7@4$$False$164002~0~6~~79|563~321615$0.02250000$1$$False$2521752#321612$0.02250000$1$$False$2521749~0~2~~1|145~331901$0.01680000$7@4$$False$2532162~0~1~~79|562~320378$0.02250000$1$$False$2520515#320375$0.02250000$1$$False$2520512~0~2~~1|558~316664$0.02250000$1$$False$2516801#316667$0.02250000$1$$False$2516804~0~2~~1|75~21776$0.01950000$1@2$$False$280981#21775$0.02150000$1@2$$False$280982~0~2~~4|560~317904$0.02250000$1$$False$2518041#317901$0.02250000$1$$False$2518038~0~2~~1|67~11457$0.03000000$7@4$$False$137632#11458$0.03000000$7@4$$False$137633#11459$0.03000000$7@4$$False$137634~0~3~~79";
@@ -490,11 +490,11 @@ namespace TOne.WhS.Runtime.Tasks
 
         #region Private Methods
 
-        //private string DeserializeCustomerRouteOptions(string serializedOptions)
-        //{
-        //    List<TOne.WhS.Routing.Entities.RouteOption> routeOptions = customerRouteDataManager.DeserializeOptions(serializedOptions);
-        //    return Vanrise.Common.Serializer.Serialize(routeOptions, true);
-        //}
+        private string DeserializeCustomerRouteOptions(string serializedOptions)
+        {
+            List<TOne.WhS.Routing.Entities.RouteOption> routeOptions = TOne.WhS.Routing.Entities.Helper.DeserializeOptions(serializedOptions);
+            return Vanrise.Common.Serializer.Serialize(routeOptions, true);
+        }
 
         private string DeserializeOptionsDetailsBySupplier(string serializedOptionsDetailsBySupplier)
         {
