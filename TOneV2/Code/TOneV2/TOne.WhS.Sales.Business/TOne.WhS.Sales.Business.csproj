@@ -121,6 +121,7 @@
     <Compile Include="BusinessRules\Conditions\DraftNewRateIsClosed.cs" />
     <Compile Include="BusinessRules\Conditions\NewRateIsGreaterThanMaximumRateCondition.cs" />
     <Compile Include="BusinessRules\Conditions\NormalRateBEDLessThanValidBEDCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\OtherRateBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\OtherRateBEDLessThanValidBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\RateIsLessThanOrEqualToZeroCondition.cs" />
     <Compile Include="BusinessRules\Conditions\SellingProductZoneRateIsEndedCondition.cs" />
