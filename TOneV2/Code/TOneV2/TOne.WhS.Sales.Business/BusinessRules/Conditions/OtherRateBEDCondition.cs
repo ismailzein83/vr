@@ -20,9 +20,9 @@ namespace TOne.WhS.Sales.Business
             //if (zoneData.NormalRateToChange != null && zoneData.OtherRatesToChange.Count() > 0 && zoneData.OtherRatesToChange.First().BED < zoneData.NormalRateToChange.BED)
             //{
             //    context.Message = string.Format("Other rate BED on  '{0}' must be after pending normal rate BED", zoneData.ZoneName);
-            //    return true;
+            //    return false;
             //}
-            return false;
+            return true;
            
         }
         public override string GetMessage(IRuleTarget target)
