@@ -20,6 +20,10 @@ using Vanrise.Rules.Normalization;
 using Vanrise.Runtime;
 using Vanrise.Runtime.Entities;
 using Vanrise.GenericData.Entities;
+using System.IO;
+using Vanrise.Common;
+using TOne.WhS.RouteSync.Ericsson.Entities;
+using TOne.WhS.RouteSync.Ericsson.Business;
 
 namespace TOne.WhS.Runtime.Tasks
 {
@@ -29,9 +33,14 @@ namespace TOne.WhS.Runtime.Tasks
 
         public void Execute()
         {
+            #region EricssonFTPSwitchLoggerTask
+            EricssonFTPSwitchLoggerTask ericssonFTPSwitchLoggerTask = new EricssonFTPSwitchLoggerTask();
+            ericssonFTPSwitchLoggerTask.EricssonFTPSwitchLoggerTask_Main();
+            #endregion
+
             #region EricssonSWSyncTask
-            EricssonSWSyncTask ericssonSWSyncTask = new EricssonSWSyncTask();
-            ericssonSWSyncTask.EricssonSWSyncTask_Main();
+            //EricssonSWSyncTask ericssonSWSyncTask = new EricssonSWSyncTask();
+            //ericssonSWSyncTask.EricssonSWSyncTask_Main();
             #endregion
 
             #region NormalizationRule RemoveAction
@@ -140,7 +149,7 @@ namespace TOne.WhS.Runtime.Tasks
         }
 
         #endregion
-         
+
         #region Private Methods
 
         private void DisplayList(IEnumerable<CodePrefixInfo> codePrefixes)
@@ -160,6 +169,99 @@ namespace TOne.WhS.Runtime.Tasks
         }
 
         #endregion
+    }
+
+    public class EricssonFTPSwitchLoggerTask
+    {
+        public void EricssonFTPSwitchLoggerTask_Main()
+        {
+            string baseDirectory = "/AADir"; //@"c:\AAADir"
+
+            DateTime now = DateTime.Now;
+
+            FTPCommunicatorSettings ftpCommunicatorSettings = new FTPCommunicatorSettings()
+            {
+                Directory = baseDirectory,
+                FTPType = FTPType.FTP,
+                ServerIP = "192.168.110.185",
+                Username = "devftpuser",
+                Password = "P@ssw0rd"
+            };
+            FTPLogger ftpLogger = new FTPLogger() { FTPCommunicatorSettings = ftpCommunicatorSettings };
+
+            //logRoutes
+            List<CommandResult> logRoutesCommandResults = new List<CommandResult>();
+            logRoutesCommandResults.Add(new CommandResult() { Command = "ANBSI:   B=51-100343,RC=6015,M=4,D=7-0,CC=3,L=7-15,CCL=2;" });
+            logRoutesCommandResults.Add(new CommandResult() { Command = "ANBSI:   B=51-1020965,RC=6012,M=4,D=7-0,CC=3,L=7-15,CCL=3;" });
+            logRoutesCommandResults.Add(new CommandResult() { Command = "ANBSI:   B=51-104492,RC=6013,M=4,D=7-0,CC=3,L=7-15,CCL=2;" });
+
+            LogRoutesContext logRoutesContext = new LogRoutesContext();
+            logRoutesContext.CommandResults = logRoutesCommandResults;
+            logRoutesContext.ExecutionDateTime = now;
+            logRoutesContext.ExecutionStatus = ExecutionStatus.Failed;
+            logRoutesContext.BONumber = 51;
+
+            ftpLogger.LogRoutes(logRoutesContext);
+
+            //logCarrierMappings
+            List<CommandResult> logCarrierMappingsCommandResults = new List<CommandResult>();
+            logCarrierMappingsCommandResults.Add(new CommandResult() { Command = "PNBSI: BO=200, NAPI=1, BNT=1, OBA=200;" });
+            logCarrierMappingsCommandResults.Add(new CommandResult() { Command = "PNBSI: BO=200, NAPI=1, BNT=4, OBA=201;" });
+            logCarrierMappingsCommandResults.Add(new CommandResult() { Command = "PNBSI: BO=210, NAPI=1, BNT=1, OBA=210;" });
+            logCarrierMappingsCommandResults.Add(new CommandResult() { Command = "PNBSI: BO=210, NAPI=1, BNT=4, OBA=211;" });
+
+            LogCarrierMappingsContext logCarrierMappingsContext = new LogCarrierMappingsContext();
+            logCarrierMappingsContext.CommandResults = logCarrierMappingsCommandResults;
+            logCarrierMappingsContext.ExecutionDateTime = now;
+            logCarrierMappingsContext.ExecutionStatus = ExecutionStatus.Failed;
+            
+            ftpLogger.LogCarrierMappings(logCarrierMappingsContext);
+
+            //logRouteCases
+            List<CommandResult> logRouteCasesCommandResults = new List<CommandResult>();
+            logRouteCasesCommandResults.Add(new CommandResult() { Command = "ANRPE;" });
+            logRouteCasesCommandResults.Add(new CommandResult() { Command = "ANRAI:RC=6001;" });
+            logRouteCasesCommandResults.Add(new CommandResult() { Command = "ANRSI: BR=CL-0&&-9&-11&&-15&TMR-0&-3, P01=1, R=TLQE1OO, BNT=4, SP=MM1;" });
+            logRouteCasesCommandResults.Add(new CommandResult() { Command = "ANRSI: BR=CL-0&&-9&-11&&-15&TMR-1, P02=1, R=TLQE1OO, BNT=4, SP=MM1;" });
+
+            LogRouteCasesContext logRouteCasesContext = new LogRouteCasesContext();
+            logRouteCasesContext.CommandResults = logCarrierMappingsCommandResults;
+            logRouteCasesContext.ExecutionDateTime = now;
+            logRouteCasesContext.ExecutionStatus = ExecutionStatus.Failed;
+
+            ftpLogger.LogRouteCases(logRouteCasesContext);
+
+            //LogCommands
+            List<CommandResult> LogCommandsCommandResults = new List<CommandResult>();
+            LogCommandsCommandResults.Add(new CommandResult() { Command = "8/5/2015 6:28:22 PM      Route Build: Start Full Route Update" });
+            LogCommandsCommandResults.Add(new CommandResult() { Command = "8/5/2015 6:28:22 PM      Swapped Routing Tables" });
+            LogCommandsCommandResults.Add(new CommandResult() { Command = "8/5/2015 6:28:22 PM      Table Created" });
+
+            LogCommandsContext LogCommandsContext = new LogCommandsContext();
+            LogCommandsContext.CommandResults = logCarrierMappingsCommandResults;
+            LogCommandsContext.ExecutionDateTime = now;
+
+            ftpLogger.LogCommands(LogCommandsContext);
+
+            //string directory = string.Concat(baseDirectory, now.ToString("yyyyMMdd-HHmmss"));
+            //this.CreateDirectory(directory);
+        }
+
+        public void CreateDirectory(string path)
+        {
+            try
+            {
+                if (Directory.Exists(path))
+                    return;
+
+                DirectoryInfo di = Directory.CreateDirectory(path);
+                //di.Delete();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 
     public class EricssonSWSyncTask
