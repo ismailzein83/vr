@@ -25,7 +25,7 @@ BEGIN
 	select rate.[ID], rate.[PriceListID], rate.[ZoneID], rate.[CurrencyID], rate.[RateTypeID], rate.[Rate], rate.[BED], rate.[EED], rate.[SourceID], rate.[Change]
 	from TOneWhS_BE.SaleRate rate
 	inner join TOneWhS_BE.SalePriceList priceList with(nolock) on rate.PriceListID = priceList.ID
-	where --(rate.EED is null or rate.EED > rate.BED) --and 
+	where (rate.EED is null or rate.EED > rate.BED) and 
 		((rate.RateTypeID is null and @GetNormalRates = 1) or (rate.RateTypeID is not null and @GetOtherRates = 1))
 		and ((OwnerType = 0 and OwnerID in (select SellingProductId from @SellingProductIdsTable)) or (OwnerType = 1 and OwnerID in (select CustomerId from @CustomerIdsTable)))
 		and (@ZoneIds is null or @ZoneIds = '' or rate.ZoneID in (select ZoneId from @ZoneIdsTable))

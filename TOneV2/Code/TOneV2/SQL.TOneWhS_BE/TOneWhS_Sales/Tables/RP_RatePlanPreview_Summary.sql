@@ -14,10 +14,12 @@
     [NumberOfClosedSaleZoneServices]        INT            NOT NULL,
     [NumberOfChangedCountries]              INT            NOT NULL,
     [NumberOfNewCountries]                  INT            NULL,
-    [NumberOfNewOtherRates]                 INT            NOT NULL,
-    [NumberOfIncreasedOtherRates]           INT            NOT NULL,
-    [NumberOfDecreasedOtherRates]           INT            NOT NULL
+    [NumberOfNewOtherRates]                 INT            NULL,
+    [NumberOfIncreasedOtherRates]           INT            NULL,
+    [NumberOfDecreasedOtherRates]           INT            NULL
 );
+
+
 
 
 
