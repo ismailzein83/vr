@@ -20,7 +20,7 @@ namespace TOne.WhS.BusinessEntity.Business
         public Vanrise.Entities.IDataRetrievalResult<SalePricelistRateChangeDetail> GetFilteredPricelistRateChanges(Vanrise.Entities.DataRetrievalInput<SalePriceListChangeQuery> input)
         {
             ISalePriceListChangeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISalePriceListChangeDataManager>();
-            var salePriceListRateChanges = dataManager.GetFilteredSalePricelistRateChanges(input.Query.PriceListId, input.Query.Countries);
+            var salePriceListRateChanges = dataManager.GetFilteredSalePricelistRateChanges(input.Query.PriceListId, input.Query.Countries).Where(r => r.RateTypeId == null);
             return DataRetrievalManager.Instance.ProcessResult(input, salePriceListRateChanges.ToBigResult(input, null, SalePricelistRateChangeDetailMapper));
         }
         public bool DoCustomerTemporaryPricelistsExists(long processInstanceId)
@@ -416,7 +416,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 BatchId = salePricelistCodeChange.BatchId,
                 RecentZoneName = salePricelistCodeChange.RecentZoneName
             };
-            codeChange.BED =salePricelistCodeChange.BED;
+            codeChange.BED = salePricelistCodeChange.BED;
             codeChange.EED = salePricelistCodeChange.EED.VRGreaterThan(codeChange.BED) ? salePricelistCodeChange.EED : codeChange.BED;
             return codeChange;
         }
