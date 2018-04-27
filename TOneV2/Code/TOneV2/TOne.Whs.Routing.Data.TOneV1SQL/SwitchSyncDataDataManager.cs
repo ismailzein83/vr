@@ -16,7 +16,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
 
         public void ApplySwitchesSyncData(List<string> switchIds, int versionNumber)
         {
-            throw new System.NotImplementedException();
+          
         }
     }
 }

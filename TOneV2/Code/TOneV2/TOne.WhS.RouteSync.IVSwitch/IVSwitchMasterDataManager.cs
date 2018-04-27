@@ -31,6 +31,14 @@ namespace TOne.WhS.RouteSync.IVSwitch
                         where route_table_id is not null and tariff_id is not null
                 ";
         }
+        private string GetCustomerQueryManual()
+        {
+            return
+                @" SELECT distinct u.type_id,u2.group_id,u2.account_id,u.table_name,al.route_table_id,al.tariff_id from user_types u
+                        JOIN ( SELECT type_id,group_id,account_id from users) u2 on u2.type_id=u.type_id
+                        join access_list al on al.account_id = u2.account_id and al.group_id = u2.group_id
+                ";
+        }
 
         private string GetSupplierQuery()
         {
@@ -46,6 +54,11 @@ namespace TOne.WhS.RouteSync.IVSwitch
         {
             string query = GetCustomerQuery();
             return GetItemsText(query, AccessListMapper, null);
+        }
+        public List<AccessListTable> GetAccessListTablesManual()
+        {
+            string query = GetCustomerQueryManual();
+            return GetItemsText(query, AccessListMapperManual, null);
         }
         public List<RouteTable> GetRouteTables()
         {
@@ -141,6 +154,26 @@ namespace TOne.WhS.RouteSync.IVSwitch
             {
                 int.TryParse(reader["user_id"].ToString(), out id);
                 endPoint.UserId = id;
+            }
+            return endPoint;
+        }
+        AccessListTable AccessListMapperManual(IDataReader reader)
+        {
+            AccessListTable endPoint = new AccessListTable
+            {
+                AccountId = reader["account_id"] != System.DBNull.Value ? reader["account_id"].ToString() : "",
+                GroupId = reader["group_id"] != System.DBNull.Value ? reader["group_id"].ToString() : ""
+            };
+            int id;
+            if (reader["route_table_id"] != System.DBNull.Value)
+            {
+                int.TryParse(reader["route_table_id"].ToString(), out id);
+                endPoint.RouteTableId = id;
+            }
+            if (reader["tariff_id"] != System.DBNull.Value)
+            {
+                int.TryParse(reader["tariff_id"].ToString(), out id);
+                endPoint.TariffTableId = id;
             }
             return endPoint;
         }

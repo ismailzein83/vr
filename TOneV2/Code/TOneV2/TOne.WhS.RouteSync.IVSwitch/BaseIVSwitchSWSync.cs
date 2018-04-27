@@ -77,7 +77,8 @@ namespace TOne.WhS.RouteSync.IVSwitch
             //IVSwitchTariffDataManager tariffDataManager = new IVSwitchTariffDataManager(TariffConnectionString, OwnerName);
             foreach (var item in routes.Values)
             {
-                routeDataManager.Bulk(item.Routes, string.Format("{0}_temp", item.RouteTableName));
+                if (item.Routes != null && item.Routes.Any())
+                    routeDataManager.Bulk(item.Routes, string.Format("{0}_temp", item.RouteTableName));
                 //tariffDataManager.Bulk(item.Tariffs, string.Format("{0}_temp", item.TariffTableName));
             }
         }

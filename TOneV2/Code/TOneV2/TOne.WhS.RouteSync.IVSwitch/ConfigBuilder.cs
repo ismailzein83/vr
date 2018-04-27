@@ -22,15 +22,15 @@ namespace TOne.WhS.RouteSync.IVSwitch
         }
         private Dictionary<string, AccessListTable> GetCustomers()
         {
-            Dictionary<string, AccessListTable> customerDictionary = new Dictionary<string, AccessListTable>();
+            var customerByMapping= new Dictionary<string, AccessListTable>();
             List<AccessListTable> customersLst = MasterDataManager.GetAccessListTables();
             foreach (var customer in customersLst)
             {
                 string key = string.Format("{0}_{1}", customer.AccountId, customer.GroupId);
-                if (!customerDictionary.ContainsKey(key))
-                    customerDictionary[key] = customer;
+                if (!customerByMapping.ContainsKey(key))
+                   customerByMapping.Add(key,customer);
             }
-            return customerDictionary;
+            return customerByMapping;
         }
         private Dictionary<string, RouteTable> GetSuppliers()
         {
