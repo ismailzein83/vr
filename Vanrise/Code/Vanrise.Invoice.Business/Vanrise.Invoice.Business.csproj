@@ -85,6 +85,9 @@
     <Compile Include="Context\RDLCReportDataSourceSettingsContext.cs" />
     <Compile Include="Context\RDLCReportParameterValueContext.cs" />
     <Compile Include="Context\StartDateCalculationMethodContext.cs" />
+    <Compile Include="Extensions\GenericData\InvoiceBusinessObjectDataProviderSettings.cs" />
+    <Compile Include="Extensions\GenericData\InvoiceRecordObject.cs" />
+    <Compile Include="Extensions\GenericData\InvoiceRecordTypeMainFields.cs" />
     <Compile Include="Extensions\InvoiceFileExtendedSetting.cs" />
     <Compile Include="Extensions\InvoiceItemSubSection.cs" />
     <Compile Include="Extensions\InvoiceSynchronizer.cs" />
@@ -128,6 +131,10 @@
       <Project>{1a350b7c-28ea-4824-b9a0-c60ad25f0ea9}</Project>
       <Name>Vanrise.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Data\Vanrise.Data.csproj">
+      <Project>{107dc891-2169-409f-9617-6d52723d05ce}</Project>
+      <Name>Vanrise.Data</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Entities\Vanrise.Entities.csproj">
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
@@ -165,6 +172,7 @@
       <Name>Vanrise.Security.Entities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /y $(TargetPath) ..\..\..\Output</PostBuildEvent>

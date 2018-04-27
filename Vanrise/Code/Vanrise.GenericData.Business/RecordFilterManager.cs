@@ -60,6 +60,12 @@ namespace Vanrise.GenericData.Business
             if (filterGroup != null)
                 return IsFilterGroupMatch(filterGroup, context);
 
+            if (filter is AlwaysTrueRecordFilter)
+                return true;
+
+            if (filter is AlwaysFalseRecordFilter)
+                return false;
+
             DataRecordFieldType fieldType;
             var fieldValue = context.GetFieldValue(filter.FieldName, out fieldType);
 
@@ -206,6 +212,38 @@ namespace Vanrise.GenericData.Business
         }
 
         #endregion
+
+        public RecordFilterGroup ReBuildRecordFilterGroupWithExcludedFields(RecordFilterGroup recordFilter, List<string> fieldsToExclude)
+        {
+            RecordFilterGroup newFilterGroup = new RecordFilterGroup
+            {
+                Filters = new List<RecordFilter>(),
+                LogicalOperator = recordFilter.LogicalOperator
+            };
+            if(recordFilter.Filters != null)
+            {
+                foreach(var childFilter in recordFilter.Filters)
+                {
+                    RecordFilterGroup childFilterGroup = childFilter as RecordFilterGroup;
+                    if(childFilterGroup != null)
+                    {
+                        newFilterGroup.Filters.Add(ReBuildRecordFilterGroupWithExcludedFields(childFilterGroup, fieldsToExclude));
+                    }
+                    else
+                    {
+                        if(childFilter.FieldName != null && fieldsToExclude.Contains(childFilter.FieldName))
+                        {
+                            newFilterGroup.Filters.Add(new AlwaysTrueRecordFilter());
+                        }
+                        else
+                        {
+                            newFilterGroup.Filters.Add(childFilter);
+                        }
+                    }
+                }
+            }
+            return newFilterGroup;
+        }
     }
 
     public interface IRecordFilterGenericFieldMatchContext
@@ -215,16 +253,24 @@ namespace Vanrise.GenericData.Business
 
     public class DataRecordFilterGenericFieldMatchContext : IRecordFilterGenericFieldMatchContext
     {
-        dynamic _dataRecord;
         Dictionary<string, DataRecordField> _recordTypeFieldsByName;
-        public DataRecordFilterGenericFieldMatchContext(dynamic dataRecord, Guid recordTypeId)
+        DataRecordObject _dataRecordObject;
+       
+
+        public DataRecordFilterGenericFieldMatchContext(DataRecordObject dataRecordObject)
         {
-            if (dataRecord == null)
-                throw new ArgumentNullException("dataRecord");
-            _dataRecord = dataRecord;
-            _recordTypeFieldsByName = (new DataRecordTypeManager()).GetDataRecordTypeFields(recordTypeId);
+            if (dataRecordObject == null)
+                throw new ArgumentNullException("dataRecordObject");
+            _dataRecordObject = dataRecordObject;
+            _recordTypeFieldsByName = (new DataRecordTypeManager()).GetDataRecordTypeFields(_dataRecordObject.DataRecordTypeId);
             if (_recordTypeFieldsByName == null)
                 throw new NullReferenceException("_recordTypeFieldsByName");
+        }
+
+        public DataRecordFilterGenericFieldMatchContext(dynamic dataRecord, Guid recordTypeId)
+            : this(new DataRecordObject(recordTypeId, dataRecord))
+        {
+
         }
 
         public object GetFieldValue(string fieldName, out DataRecordFieldType fieldType)
@@ -233,8 +279,7 @@ namespace Vanrise.GenericData.Business
             if (!_recordTypeFieldsByName.TryGetValue(fieldName, out field))
                 throw new NullReferenceException(String.Format("field. fieldName '{0}'", fieldName));
             fieldType = field.Type;
-            var propReader = Common.Utilities.GetPropValueReader(fieldName);
-            return propReader.GetPropertyValue(_dataRecord);
+            return _dataRecordObject.GetFieldValue(fieldName);
         }
     }
 

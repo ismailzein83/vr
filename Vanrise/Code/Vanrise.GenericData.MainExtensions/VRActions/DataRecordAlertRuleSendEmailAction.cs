@@ -30,8 +30,7 @@ namespace Vanrise.GenericData.MainExtensions.VRActions
                 DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
                 Type dataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(payload.DataRecordTypeId);
 
-                dynamic record = Activator.CreateInstance(dataRecordRuntimeType) as dynamic;
-                record.FillDataRecordTypeFromDictionary(payload.OutputRecords);
+                dynamic record = Activator.CreateInstance(dataRecordRuntimeType, payload.OutputRecords);
 
                 mailTemplateObjects.Add(dataRecordSendEmailDefinitionSettings.DataRecordObjectName, record);
             }

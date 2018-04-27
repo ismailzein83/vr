@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.Data
@@ -36,5 +37,7 @@ namespace Vanrise.Invoice.Data
         bool UpdateInvoiceSettings(long invoiceId, InvoiceSettings invoiceSettings);
         bool SetInvoiceSentDate(long invoiceId, DateTime? sentDate);
         bool DeleteGeneratedInvoice(long invoiceId, Guid invoiceTypeId, string partnerId, DateTime fromDate, DateTime toDate);
+
+        void LoadInvoices(Guid invoiceTypeId, DateTime from, DateTime to, RecordFilterGroup filterGroup, OrderDirection? orderDirection, Func<bool> shouldStop, Action<Entities.Invoice> onInvoiceLoaded);
     }
 }

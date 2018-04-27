@@ -24,9 +24,8 @@ namespace Vanrise.GenericData.MainExtensions.GenericBusinessEntity.GenericBEOnAf
             Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
             DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
             var dataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(context.DefinitionSettings.DataRecordTypeId);
-            var dataRecordFiller = Activator.CreateInstance(dataRecordRuntimeType) as IDataRecordFiller;
-            dataRecordFiller.FillDataRecordTypeFromDictionary(context.NewEntity.FieldValues);
-            objects.Add(EntityObjectName, dataRecordFiller);
+            var dataRecord = Activator.CreateInstance(dataRecordRuntimeType, context.NewEntity.FieldValues);
+            objects.Add(EntityObjectName, dataRecord);
             GenericBusinessEntityDefinitionManager genericBusinessEntityDefinitionManager = new GenericBusinessEntityDefinitionManager();
             if (SendEmailObjectsInfo != null)
             {

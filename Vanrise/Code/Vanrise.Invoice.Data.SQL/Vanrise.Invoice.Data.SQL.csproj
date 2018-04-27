@@ -86,6 +86,14 @@
       <Project>{cfecfd8a-51f6-4020-9f80-fb334684fa3d}</Project>
       <Name>Vanrise.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Data.SQL\Vanrise.GenericData.Data.SQL.csproj">
+      <Project>{00bce586-bffb-4679-92b7-9b65988fe346}</Project>
+      <Name>Vanrise.GenericData.Data.SQL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Vanrise.GenericData.Entities\Vanrise.GenericData.Entities.csproj">
+      <Project>{4ab1e86a-c33a-4fd4-bd00-6c5b12f5f337}</Project>
+      <Name>Vanrise.GenericData.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Invoice.Data\Vanrise.Invoice.Data.csproj">
       <Project>{3d178003-f8bb-4d06-acde-ddd1fe4c5b62}</Project>
       <Name>Vanrise.Invoice.Data</Name>

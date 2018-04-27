@@ -18,6 +18,9 @@ namespace Vanrise.Security.Entities
 
     public class User
     {
+        public const string BUSINESSENTITY_DEFINITION_NAME = "VR_Security_User";
+        public static Guid BUSINESSENTITY_DEFINITION_ID = new Guid("217A8F71-1DD6-4613-8AE2-540A510F5FF5");
+
         public int UserId { get; set; }
 
         public int TenantId { get; set; }

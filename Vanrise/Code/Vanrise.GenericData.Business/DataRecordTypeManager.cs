@@ -15,7 +15,6 @@ namespace Vanrise.GenericData.Business
     {
         void SetFieldValue(string fieldName, dynamic fieldValue);
         dynamic GetFieldValue(string fieldName);
-        void FillDataRecordTypeFromDictionary(Dictionary<string, dynamic> source);
         Dictionary<string, dynamic> GetDictionaryFromDataRecordType();
         dynamic CloneRecord(Guid dataRecordTypeId);
     }
@@ -321,7 +320,11 @@ namespace Vanrise.GenericData.Business
                        {
                            var extraFields = dataRecordType.ExtraFieldsEvaluator.GetFields(null);
                            if (extraFields != null)
+                           {
+                               extraFields = extraFields.VRDeepCopy();
+                               extraFields.ForEach((fld) => fld.IsInheritedFromExtraField = true);
                                dataRecordFields.AddRange(extraFields);
+                           }
                        }
                        if (dataRecordFields.Count == 0)
                            throw new Exception(String.Format("dataRecordType '{0}' doesn't have any Field", dataRecordType.DataRecordTypeId));
@@ -386,147 +389,145 @@ namespace Vanrise.GenericData.Business
                         {
                              Vanrise.Common.ProtoBufSerializer.AddSerializableType(typeof(#CLASSNAME#) #PROPERTIESTOSETSERIALIZED#);
                              var dummyTime = new Vanrise.Entities.Time(); //this is only to try declaring the ProtoBuf Serialization in the static constructor of the Time Type
+                             var recordType = new DataRecordTypeManager().GetDataRecordType(new Guid(""#RECORDTYPEID#""));
+                             s_dataRecordFieldDict = recordType.Fields.ToDictionary(itm => itm.Name, itm => itm);  
+                             s_dataRecordFieldTypeDict = recordType.Fields.ToDictionary(itm => itm.Name, itm => itm.Type);
+                             BuildSetFieldValueActions();
+                             BuildGetFieldValueActions();
                         }   
   
-                        DataRecordType recordType = new DataRecordTypeManager().GetDataRecordType(new Guid(""#RECORDTYPEID#""));
+                        private static Dictionary<string, DataRecordField> s_dataRecordFieldDict;
+                        private static Dictionary<string, DataRecordFieldType> s_dataRecordFieldTypeDict;
+                        private static Dictionary<string, Action<#NAMESPACE#.#CLASSNAME#, dynamic>> s_setFieldValueActions;
+                        private static Dictionary<string, Func<#NAMESPACE#.#CLASSNAME#, dynamic>> s_getFieldValueActions;
 
-                        private Dictionary<string, DataRecordField> _dataRecordFieldDict;
 
-                        private Dictionary<string, DataRecordField> DataRecordFieldDict
+                        public #CLASSNAME#()
                         {
-                            get
-                            {
-                                if (_dataRecordFieldDict == null)
-                                {
-                                    _dataRecordFieldDict = recordType.Fields.ToDictionary(itm => itm.Name, itm => itm);
-                                }
-                                return _dataRecordFieldDict;
-                            }
                         }
 
-                        private Dictionary<string, DataRecordFieldType> _dataRecordFieldTypeDict;
-
-                        private Dictionary<string, DataRecordFieldType> DataRecordFieldTypeDict
+                        public #CLASSNAME#(Dictionary<string, dynamic> sourceDictionary)
+                            : this()
                         {
-                            get
-                            {
-                                if (_dataRecordFieldTypeDict == null)
-                                {   
-                                    _dataRecordFieldTypeDict = recordType.Fields.ToDictionary(itm => itm.Name, itm => itm.Type);
-                                }
-                                return _dataRecordFieldTypeDict;
-                            }
+                            _sourceDictionary = sourceDictionary;
                         }
+
+                        public #CLASSNAME#(dynamic sourceObject) 
+                            : this()
+                        {
+                            _sourceObject = sourceObject;
+                        }
+
+                        private dynamic _sourceObject;
+                        private Dictionary<string, dynamic> _sourceDictionary;
 
                         public long QueueItemId { get; set; }
+
+                        private static void BuildSetFieldValueActions()
+                        {
+                            s_setFieldValueActions = new Dictionary<string, Action<#NAMESPACE#.#CLASSNAME#, dynamic>>(#FIELDCOUNT#);
+                            #BUILDSETFIELDVALUEACTIONS#
+                        }
+
+                        private static void BuildGetFieldValueActions()
+                        {
+                            s_getFieldValueActions = new Dictionary<string, Func<#NAMESPACE#.#CLASSNAME#, dynamic>>(#FIELDCOUNT#);
+                            #BUILDGETFIELDVALUEACTIONS#
+                        }
 
                         #GLOBALMEMBERS#
 
                         public void SetFieldValue(string fieldName, dynamic fieldValue)
                         {
-                            switch(fieldName)
-                            {
-                                #SETFIELDMEMBERS#
-                                default : break;
-                            }
+                            Action<#NAMESPACE#.#CLASSNAME#, dynamic> setFieldValueAction;
+                            if(!s_setFieldValueActions.TryGetValue(fieldName, out setFieldValueAction))
+                                throw new ArgumentException(String.Format(""fieldName '{0}'"", fieldName), ""fieldName"");
+                            setFieldValueAction(this, fieldValue);
                         } 
 
                         public dynamic GetFieldValue(string fieldName)
                         {
-                            switch(fieldName)
-                            {
-                                #GETFIELDMEMBERS#
-                                default : break;
-                            }
-                            return null;
-                        }
-
-                        public void FillDataRecordTypeFromDictionary(Dictionary<string, dynamic> source)
-                        {
-                            foreach(var item in source)
-                            {
-                                SetFieldValue(item.Key, item.Value);
-                            }
+                            Func<#NAMESPACE#.#CLASSNAME#, dynamic> getFieldValueAction;
+                            if(!s_getFieldValueActions.TryGetValue(fieldName, out getFieldValueAction))
+                                throw new ArgumentException(String.Format(""fieldName '{0}'"", fieldName), ""fieldName"");
+                            return getFieldValueAction(this);
                         }
 
                         public Dictionary<string, dynamic> GetDictionaryFromDataRecordType()
                         {
-                            Dictionary<string, dynamic> results = new Dictionary<string, dynamic>();
+                            Dictionary<string, dynamic> dic = new Dictionary<string, dynamic>(#FIELDCOUNT#);
 
-                            List<string> fieldNames =  new List<string>() { #FIELDNAMES# };
+                            #FILLDICTIONARYFROMDATARECORD#
 
-                            foreach(var fieldName in fieldNames)
-                            {
-                                if (!results.ContainsKey(fieldName))
-                                    results.Add(fieldName, GetFieldValue(fieldName));
-                            }
-
-                            return results;
+                            return dic;
                         }
                     
                         public dynamic CloneRecord(Guid dataRecordTypeId)
                         {
-                            Vanrise.GenericData.Business.DataRecordTypeManager dataRecordTypeManager = new Vanrise.GenericData.Business.DataRecordTypeManager();
-                            dynamic record = Activator.CreateInstance(dataRecordTypeManager.GetDataRecordRuntimeType(dataRecordTypeId));
+                            dynamic record = new #NAMESPACE#.#CLASSNAME#();
                             #CLONERECORDMEMBERS#
                             return record;
                         }
                     }
                 }");
-
+            
             StringBuilder propertiesToSetSerializedBuilder = new StringBuilder();
             StringBuilder globalMembersDefinitionBuilder = new StringBuilder();
 
-            StringBuilder setFieldValueBuilder = new StringBuilder();
-            StringBuilder getFieldValueBuilder = new StringBuilder();
+            StringBuilder setFieldValueActionsBuilder = new StringBuilder();
+            StringBuilder getFieldValueActionsBuilder = new StringBuilder();
+
+            StringBuilder fillDictionaryFromDataRecordBuilder = new StringBuilder();
 
             StringBuilder cloneRecordMembersBuilder = new StringBuilder();
 
-            List<string> fieldNames = new List<string>();
+            int fieldCount = dataRecordType.Fields.Count;
+
             foreach (var field in dataRecordType.Fields)
             {
                 string fieldRuntimeTypeAsString = CSharpCompiler.TypeToString(field.Type.GetRuntimeType());
 
                 globalMembersDefinitionBuilder.AppendLine(GetGlobalMemberDefinitionScript(fieldRuntimeTypeAsString, field));
-                getFieldValueBuilder.AppendFormat(@"case ""{0}"" : return {0};", field.Name);
 
+                getFieldValueActionsBuilder.AppendFormat(@"s_getFieldValueActions.Add(""{0}"", (dataRecord) => dataRecord.{0});", field.Name);
+                getFieldValueActionsBuilder.AppendLine();
 
+                fillDictionaryFromDataRecordBuilder.AppendFormat(@"dic.Add(""{0}"", this.{0});", field.Name);
+                fillDictionaryFromDataRecordBuilder.AppendLine();
+                StringBuilder addSetFieldValueActionBuilder;
                 if (field.Formula == null)
                 {
 
                     propertiesToSetSerializedBuilder.AppendFormat(", \"{0}\"", field.Name);
-
-                    setFieldValueBuilder.AppendFormat(@"case ""{0}"" : {0} = DataRecordFieldTypeDict.GetRecord(""{0}"").ParseValueToFieldType(new Vanrise.GenericData.Business.DataRecordFieldTypeParseValueToFieldTypeContext(fieldValue)); break;", field.Name);
-
-                    //if (field.Type.GetNonNullableRuntimeType() == typeof(Guid))
-                    //{
-                    //    setFieldValueBuilder.AppendFormat(@"case ""{0}"" : if(fieldValue != null) {0} = Guid.Parse(fieldValue.ToString()); else {0} = default({2}); break;", field.Name, CSharpCompiler.TypeToString(field.Type.GetNonNullableRuntimeType()), fieldRuntimeTypeAsString);
-
-                    //}
-                    //else if (!field.Type.GetNonNullableRuntimeType().IsValueType)
-                    //{
-                    //    setFieldValueBuilder.AppendFormat(@"case ""{0}"" : if(fieldValue != null) {0} = fieldValue as {1}; else {0} = default({2}); break;", field.Name, CSharpCompiler.TypeToString(field.Type.GetNonNullableRuntimeType()), fieldRuntimeTypeAsString);
-                    //}
-                    //else
-                    //{
-                    //    setFieldValueBuilder.AppendFormat(@"case ""{0}"" : if(fieldValue != null) {0} = ({1})Convert.ChangeType(fieldValue, typeof({1})); else {0} = default({2}); break;", field.Name, fieldRuntimeTypeAsString, fieldRuntimeTypeAsString);
-                    //}
-                   
-
+                    addSetFieldValueActionBuilder = new StringBuilder(@"s_setFieldValueActions.Add(""#FIELDNAME#"", (dataRecord, fieldValue) => 
+                                                                                                                    {
+                                                                                                                        if(fieldValue == null)
+                                                                                                                            dataRecord.#FIELDNAME# = default(#FIELDTYPE#);
+                                                                                                                        else if(fieldValue.GetType() == typeof(#FIELDTYPE#))
+                                                                                                                            dataRecord.#FIELDNAME# = fieldValue;
+                                                                                                                        else
+                                                                                                                            dataRecord.#FIELDNAME# = s_dataRecordFieldTypeDict.GetRecord(""#FIELDNAME#"").ParseValueToFieldType(new Vanrise.GenericData.Business.DataRecordFieldTypeParseValueToFieldTypeContext(fieldValue)); 
+                                                                                                                    });");
+                                        
                     cloneRecordMembersBuilder.AppendFormat("record.{0} = this.{0};", field.Name);
+                    cloneRecordMembersBuilder.AppendLine();
                 }
-
-                fieldNames.Add(field.Name);
+                else//if the field is Formula
+                {
+                    addSetFieldValueActionBuilder = new StringBuilder(@"s_setFieldValueActions.Add(""#FIELDNAME#"", (dataRecord, fieldValue) => { });");
+                }
+                addSetFieldValueActionBuilder.Replace("#FIELDNAME#", field.Name);
+                addSetFieldValueActionBuilder.Replace("#FIELDTYPE#", fieldRuntimeTypeAsString);
+                setFieldValueActionsBuilder.AppendLine(addSetFieldValueActionBuilder.ToString());
             }
 
             classDefinitionBuilder.Replace("#GLOBALMEMBERS#", globalMembersDefinitionBuilder.ToString());
             classDefinitionBuilder.Replace("#PROPERTIESTOSETSERIALIZED#", propertiesToSetSerializedBuilder.ToString());
-            classDefinitionBuilder.Replace("#SETFIELDMEMBERS#", setFieldValueBuilder.ToString());
-            classDefinitionBuilder.Replace("#GETFIELDMEMBERS#", getFieldValueBuilder.ToString());
+            classDefinitionBuilder.Replace("#BUILDSETFIELDVALUEACTIONS#", setFieldValueActionsBuilder.ToString());
+            classDefinitionBuilder.Replace("#BUILDGETFIELDVALUEACTIONS#", getFieldValueActionsBuilder.ToString());
+            classDefinitionBuilder.Replace("#FILLDICTIONARYFROMDATARECORD#", fillDictionaryFromDataRecordBuilder.ToString());
             classDefinitionBuilder.Replace("#CLONERECORDMEMBERS#", cloneRecordMembersBuilder.ToString());
-
-            string fieldNamesAsString = string.Format(@"""{0}""", string.Join<string>(@""",""", fieldNames));
-            classDefinitionBuilder.Replace("#FIELDNAMES#", fieldNamesAsString);
+            classDefinitionBuilder.Replace("#FIELDCOUNT#", fieldCount.ToString());
 
             classDefinitionBuilder.Replace("#RECORDTYPEID#", dataRecordType.DataRecordTypeId.ToString());
 
@@ -541,48 +542,75 @@ namespace Vanrise.GenericData.Business
 
         private string GetGlobalMemberDefinitionScript(string fieldRuntimeTypeAsString, DataRecordField dataRecordField)
         {
+            StringBuilder globalMemberDefinitionBuilder = new StringBuilder();
+
+            string isFieldFilledVariableName = string.Format("_is{0}Filled", dataRecordField.Name);
+            string _fieldVariableName = string.Format("_{0}", this.ToLowerFirstChar(dataRecordField.Name));
+
+            globalMemberDefinitionBuilder.AppendLine();
+            globalMemberDefinitionBuilder.Append(string.Format("private bool {0}; \n", isFieldFilledVariableName));
+            globalMemberDefinitionBuilder.Append(string.Format("private {0} {1};", fieldRuntimeTypeAsString, _fieldVariableName));
+
+                
             if (dataRecordField.Formula == null)
             {
-                return string.Format("public {0} {1} {{ get; set; }}", fieldRuntimeTypeAsString, dataRecordField.Name);
-            }
-            else
-            {
-                StringBuilder globalMemberDefinitionBuilder = new StringBuilder();
-
-                string isFieldFilled = string.Format("_is{0}Filled", dataRecordField.Name);
-                string _fieldName = string.Format("_{0}", this.ToLowerFirstChar(dataRecordField.Name));
-
-                globalMemberDefinitionBuilder.AppendLine();
-                globalMemberDefinitionBuilder.Append(string.Format("private bool {0}; \n", isFieldFilled));
-                globalMemberDefinitionBuilder.Append(string.Format("private {0} {1};", fieldRuntimeTypeAsString, _fieldName));
-
                 globalMemberDefinitionBuilder.Append(@"
                         public #FIELDRUNTIMETYPE# #FIELDNAME#
                         {
                             get
                             {
-                                if (#ISFIELDFILLED#)
+                                if (#PRIVATEFIELDNAME# == default(#FIELDRUNTIMETYPE#) && !#ISFIELDFILLED#)
                                 {
-                                    return #PRIVATEFIELDNAME#;
-                                }
-                                else
-                                {
-                                    var fieldFormulaCalculateValueContext = new DataRecordTypeFieldFormulaCalculateValueContext(DataRecordFieldTypeDict, this.GetFieldValue, DataRecordFieldTypeDict.GetRecord(""#FIELDNAME#""));
-                                    #PRIVATEFIELDNAME# = DataRecordFieldDict.GetRecord(""#FIELDNAME#"").Formula.CalculateValue(fieldFormulaCalculateValueContext);
+                                    dynamic fldValue = null;
+                                    if (_sourceDictionary != null)           
+                                        _sourceDictionary.TryGetValue(""#FIELDNAME#"", out fldValue);
+                                    else if (_sourceObject != null)
+                                        fldValue = _sourceObject.#FIELDNAME#;
+
+                                    if(fldValue != null)
+                                    {
+                                        if(fldValue.GetType() == typeof(#FIELDRUNTIMETYPE#))
+                                            #PRIVATEFIELDNAME# = fldValue;
+                                        else
+                                            #PRIVATEFIELDNAME# = s_dataRecordFieldTypeDict.GetRecord(""#FIELDNAME#"").ParseValueToFieldType(new Vanrise.GenericData.Business.DataRecordFieldTypeParseValueToFieldTypeContext(fldValue));
+                                    }
+
                                     #ISFIELDFILLED# = true;
-                                    return #PRIVATEFIELDNAME#;
                                 }
+                                return #PRIVATEFIELDNAME#;
+                            }
+                            set
+                            {
+                                #PRIVATEFIELDNAME# = value;
                             }
                         }");
-                globalMemberDefinitionBuilder.AppendLine();
-
-                globalMemberDefinitionBuilder.Replace("#FIELDRUNTIMETYPE#", fieldRuntimeTypeAsString);
-                globalMemberDefinitionBuilder.Replace("#FIELDNAME#", dataRecordField.Name);
-                globalMemberDefinitionBuilder.Replace("#ISFIELDFILLED#", isFieldFilled);
-                globalMemberDefinitionBuilder.Replace("#PRIVATEFIELDNAME#", _fieldName);
-
-                return globalMemberDefinitionBuilder.ToString();
             }
+            else
+            {
+                globalMemberDefinitionBuilder.Append(@"
+                        public #FIELDRUNTIMETYPE# #FIELDNAME#
+                        {
+                            get
+                            {
+                                if (!#ISFIELDFILLED#)
+                                {
+                                    var field = s_dataRecordFieldDict.GetRecord(""#FIELDNAME#"");
+                                    var fieldFormulaCalculateValueContext = new DataRecordTypeFieldFormulaCalculateValueContext(s_dataRecordFieldTypeDict, this.GetFieldValue, field.Type);
+                                    #PRIVATEFIELDNAME# = field.Formula.CalculateValue(fieldFormulaCalculateValueContext);
+                                    #ISFIELDFILLED# = true;
+                                }
+                                return #PRIVATEFIELDNAME#;
+                            }
+                        }");
+            }
+            globalMemberDefinitionBuilder.AppendLine();
+
+            globalMemberDefinitionBuilder.Replace("#FIELDRUNTIMETYPE#", fieldRuntimeTypeAsString);
+            globalMemberDefinitionBuilder.Replace("#FIELDNAME#", dataRecordField.Name);
+            globalMemberDefinitionBuilder.Replace("#ISFIELDFILLED#", isFieldFilledVariableName);
+            globalMemberDefinitionBuilder.Replace("#PRIVATEFIELDNAME#", _fieldVariableName);
+
+            return globalMemberDefinitionBuilder.ToString();
         }
 
         private string ToLowerFirstChar(string input)

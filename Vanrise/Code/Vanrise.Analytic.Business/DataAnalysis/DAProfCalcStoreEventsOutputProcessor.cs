@@ -48,8 +48,7 @@ namespace Vanrise.Analytic.Business
 
             //        foreach (DAProfCalcOutputRecord outputRecord in context.OutputRecords)
             //        {
-            //            dynamic record = Activator.CreateInstance(dataRecordRuntimeType) as dynamic;
-            //            record.FillDataRecordTypeFromDictionary(outputRecord.FieldValues);
+            //            dynamic record = Activator.CreateInstance(dataRecordRuntimeType, outputRecord.FieldValues);
 
             //            recordStorageDataManager.WriteRecordToStream(record as Object, dbApplyStream);
             //        }

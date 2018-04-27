@@ -82,12 +82,17 @@
     <Compile Include="BusinessEntity\VRRestAPIBEDefinitionSettings\VRRestAPIBEDefinitionSettings.cs" />
     <Compile Include="BusinessEntity\VRRestAPIBusinessEntityManager.cs" />
     <Compile Include="BusinessEntity\IExtensibleBEManager.cs" />
+    <Compile Include="BusinessObjectDataStore\BusinessObjectDataProviderSettings.cs" />
+    <Compile Include="BusinessObjectDataStore\BusinessObjectDataRecordDataManager.cs" />
+    <Compile Include="BusinessObjectDataStore\BusinessObjectDataRecordStorageSettings.cs" />
+    <Compile Include="BusinessObjectDataStore\BusinessObjectDataStoreSettings.cs" />
     <Compile Include="Constants.cs" />
     <Compile Include="DataRecordFieldFormulaCalculateValueContext.cs" />
     <Compile Include="DataRecordFieldFormulaGetDependentFieldsContext.cs" />
     <Compile Include="DataRecordFieldTypeOnBeforeSaveContext.cs" />
     <Compile Include="DataRecordFieldTypeParseValueToFieldTypeContext.cs" />
     <Compile Include="DataRecordFieldTypeTryResolveDifferencesContext.cs" />
+    <Compile Include="DataRecordObject.cs" />
     <Compile Include="DataRecordTypeFieldFormulaCalculateValueContext.cs" />
     <Compile Include="DataStorage\CreateTempStorageContext.cs" />
     <Compile Include="DataRecordFieldChoiceManager.cs" />

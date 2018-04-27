@@ -322,4 +322,12 @@ namespace Vanrise.GenericData.Entities
             throw new NotImplementedException();
         }
     }
+    
+    public class AlwaysTrueRecordFilter : RecordFilter
+    {
+        public override string GetDescription(IRecordFilterGetDescriptionContext context)
+        {
+            throw new NotImplementedException();
+        }
+    }
 }

@@ -19,18 +19,50 @@ namespace Vanrise.Entities
         public Time() { }
         public Time(string time)
         {
-            string[] timeArray = time.Split(':');
-            for (var i = 0; i < timeArray.Length; i++)
+            string[] dotParts = time.Split('.');
+            
+            if (dotParts.Length >= 1)
             {
-                switch (i)
+                string[] timeArray = dotParts[0].Split(':');
+                int length = timeArray.Length;
+                if (length >= 1)
                 {
-                    case 0: this.Hour = Int32.Parse(timeArray[i]); break;
-                    case 1: this.Minute = Int32.Parse(timeArray[i]); break;
-                    case 2: this.Second = Int32.Parse(timeArray[i]); break;
-                    case 3: this.MilliSecond = Int32.Parse(timeArray[i]); break;
+                    int hour;
+                    if (TryParseTimePart(timeArray[0], 23, out hour))
+                        this.Hour = hour;
+                    else
+                        throw new Exception(String.Format("Invalid hour in Time '{0}'", time));
+
+                    if (length >= 2)
+                    {
+                        int minute;
+                        if (TryParseTimePart(timeArray[1], 59, out minute))
+                            this.Minute = minute;
+                        else
+                            throw new Exception(String.Format("Invalid minute in Time '{0}'", time));
+
+                        if (length >= 3)
+                        {
+                            int second;
+                            if (TryParseTimePart(timeArray[2], 59, out second))
+                                this.Second = second;
+                            else
+                                throw new Exception(String.Format("Invalid second in Time '{0}'", time));
+                        }
+                    }
+                }
+
+                if (dotParts.Length >= 2)
+                {
+                    int millisecond;
+                    if (TryParseTimePart(dotParts[1], 999999999, out millisecond))
+                        this.MilliSecond = millisecond;
+                    else
+                        throw new Exception(String.Format("Invalid millisecond in Time '{0}'", time));
                 }
             }
         }
+
         public Time(DateTime time)
         {
             this.Hour = time.Hour;
@@ -93,6 +125,15 @@ namespace Vanrise.Entities
         #endregion
 
         #region Private Methods
+
+        private bool TryParseTimePart(string timePart, int maxValue, out int value)
+        {
+            if (int.TryParse(timePart, out value) && value >= 0 && value <= maxValue)
+                return true;
+            else
+                return false;
+        }
+
         private bool CompareTime(int hour, int minute, int second, int milliSecond)
         {
             if (this.Hour > hour)

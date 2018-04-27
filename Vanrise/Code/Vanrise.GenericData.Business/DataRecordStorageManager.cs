@@ -1000,8 +1000,17 @@ namespace Vanrise.GenericData.Business
 
                 var dataManager = manager.GetStorageDataManager(dataRecordStorage);
                 dataManager.ThrowIfNull("dataManager", dataRecordStorageId);
-
-                return dataManager.GetFilteredDataRecords(input);
+                var query = input.Query;
+                var context = new DataRecordDataManagerGetFilteredDataRecordsContext
+                {
+                    FromTime = query.FromTime,
+                    ToTime = query.ToTime,
+                    FilterGroup = query.FilterGroup,
+                    LimitResult = query.LimitResult,
+                    FieldNames = query.Columns,
+                    Direction = query.Direction
+                };
+                return dataManager.GetFilteredDataRecords(context);
             }
 
             #endregion
@@ -1057,6 +1066,47 @@ namespace Vanrise.GenericData.Business
                 context.MainSheet = sheet;
             }
         }
+
+        private class DataRecordDataManagerGetFilteredDataRecordsContext : IDataRecordDataManagerGetFilteredDataRecordsContext
+        {
+            public DateTime FromTime
+            {
+                get;
+                set;
+            }
+
+            public DateTime ToTime
+            {
+                get;
+                set;
+            }
+
+            public RecordFilterGroup FilterGroup
+            {
+                get;
+                set;
+            }
+
+
+            public List<string> FieldNames
+            {
+                get;
+                set;
+            }
+
+            public int LimitResult
+            {
+                get;
+                set;
+            }
+
+            public OrderDirection Direction
+            {
+                get;
+                set;
+            }
+        }
+
 
         #endregion
 

@@ -129,7 +129,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             DateTime? filterValue2 = null;
 
             bool hasSecondValue = Vanrise.Common.Utilities.GetEnumAttribute<DateTimeRecordFilterOperator, DateTimeRecordFilterOperatorAttribute>(dateTimeRecordFilter.CompareOperator).HasSecondValue;
-
+            int valueHour;
+            int valueMinute;
+            int valueSecond;
+            int valueMillisecond;
+                    
             switch (dateTimeRecordFilter.ComparisonPart)
             {
                 #region DateTime
@@ -159,9 +163,10 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 case DateTimeRecordFilterComparisonPart.TimeOnly:
                     DateTime timeOnlyNowDateTime = DateTime.Now;
 
-                    TimeSpan timeOnlyValueAsTimeSpan = (TimeSpan)fieldValue;
-                    valueAsDateTime = new DateTime(timeOnlyNowDateTime.Year, timeOnlyNowDateTime.Month, timeOnlyNowDateTime.Day, timeOnlyValueAsTimeSpan.Hours,
-                        timeOnlyValueAsTimeSpan.Minutes, timeOnlyValueAsTimeSpan.Seconds, timeOnlyValueAsTimeSpan.Milliseconds);
+                    ParseTimeValue(fieldValue, out valueHour, out valueMinute, out valueSecond, out valueMillisecond);
+
+                    valueAsDateTime = new DateTime(timeOnlyNowDateTime.Year, timeOnlyNowDateTime.Month, timeOnlyNowDateTime.Day, valueHour,
+                        valueMinute, valueSecond, valueMillisecond);
 
                     Time timeOnlyFilterValueAsTime = dateTimeRecordFilter.Value as Time;
                     filterValue = Vanrise.Common.Utilities.AppendTimeToDateTime(timeOnlyFilterValueAsTime, timeOnlyNowDateTime);
@@ -208,8 +213,11 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
                 case DateTimeRecordFilterComparisonPart.Hour:
                     DateTime hourNowDateTime = DateTime.Now;
 
-                    TimeSpan hourValueAsTimeSpan = (TimeSpan)fieldValue;
-                    valueAsDateTime = new DateTime(hourNowDateTime.Year, hourNowDateTime.Month, hourNowDateTime.Day, hourValueAsTimeSpan.Hours, 0, 0, 0);
+
+                    
+                    ParseTimeValue(fieldValue, out valueHour, out valueMinute, out valueSecond, out valueMillisecond);
+                                        
+                    valueAsDateTime = new DateTime(hourNowDateTime.Year, hourNowDateTime.Month, hourNowDateTime.Day, valueHour, 0, 0, 0);
 
                     Time hourFilterValueAsTime = dateTimeRecordFilter.Value as Time;
                     filterValue = Vanrise.Common.Utilities.AppendTimeToDateTime(hourFilterValueAsTime, hourNowDateTime);
@@ -254,6 +262,53 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             }
 
             return false;
+        }
+
+        private void ParseTimeValue(Object value, out int hour, out int minute, out int second, out int millisecond)
+        {
+            value.ThrowIfNull("value");
+            Vanrise.Entities.Time time = value as Vanrise.Entities.Time;
+            if (time != null)
+            {
+                ParseTimeValue(time, out hour, out minute, out second, out millisecond);
+                return;
+            }
+            else if (value is TimeSpan)
+            {
+                TimeSpan timeSpan = (TimeSpan)value;
+                hour = timeSpan.Hours;
+                minute = timeSpan.Minutes;
+                second = timeSpan.Seconds;
+                millisecond = timeSpan.Milliseconds;
+                return;
+            }
+            else if (value is DateTime)
+            {
+                DateTime dateTime = (DateTime)value;
+                hour = dateTime.Hour;
+                minute = dateTime.Minute;
+                second = dateTime.Second;
+                millisecond = dateTime.Millisecond;
+                return;
+            }
+            else
+            {
+                string timeString = value as string;
+                if (timeString != null)
+                {
+                    ParseTimeValue(new Time(timeString), out hour, out minute, out second, out millisecond);
+                    return;
+                }
+            }
+            throw new Exception(String.Format("value is not of valid Time/TimeSpan type. value type is '{0}'", value.GetType()));
+        }
+
+        private static void ParseTimeValue(Vanrise.Entities.Time time, out int hour, out int minute, out int second, out int millisecond)
+        {
+            hour = time.Hour;
+            minute = time.Minute;
+            second = time.Second;
+            millisecond = time.MilliSecond;
         }
 
         public override void SetExcelCellType(IDataRecordFieldTypeSetExcelCellTypeContext context)
@@ -362,15 +417,12 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         string GetHourDescription(object fieldValue)
         {
-            Time time;
-            if (fieldValue is TimeSpan)
-            {
-                TimeSpan ts = TimeSpan.Parse(fieldValue.ToString());
-                return ts.Hours.ToString();
-            }
-
-            time = fieldValue as Time;
-            return time.Hour.ToString();
+            int valueHour;
+            int valueMinute;
+            int valueSecond;
+            int valueMillisecond;
+            ParseTimeValue(fieldValue, out valueHour, out valueMinute, out valueSecond, out valueMillisecond);
+            return valueHour.ToString();
         }
 
         string GetTimeDescription(object fieldValue)
@@ -378,15 +430,17 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
             IEnumerable<Time> timeValues = FieldTypeHelper.ConvertFieldValueToList<Time>(fieldValue);
             if (timeValues == null)
             {
-                Time time;
-                if (fieldValue is TimeSpan)
-                {
-                    TimeSpan ts = TimeSpan.Parse(fieldValue.ToString());
-                    time = new Time(ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds);
-                    return time.ToShortTimeString();
-                }
 
-                time = fieldValue as Time;
+                Time time = fieldValue as Time;
+                if(time == null)
+                {
+                    int valueHour;
+                    int valueMinute;
+                    int valueSecond;
+                    int valueMillisecond;
+                    ParseTimeValue(fieldValue, out valueHour, out valueMinute, out valueSecond, out valueMillisecond);
+                    time = new Time(valueHour, valueMinute, valueSecond, valueMillisecond);
+                }
                 return time.ToShortTimeString();
             }
 

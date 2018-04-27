@@ -249,7 +249,7 @@ namespace Vanrise.GenericData.Business
                     ToTime = input.Query.ToTime.HasValue ? input.Query.ToTime.Value : DateTime.MaxValue,
                     ColumnTitles = columnTitles,
                     DataRecordStorageIds = new List<Guid> { genericBEDefinitionSetting.DataRecordStorageId },
-                    //Direction=,
+                    Direction = OrderDirection.Descending,
                     LimitResult = 1000,
                     //SortColumns=,
                     //ToTime

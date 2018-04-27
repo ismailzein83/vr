@@ -10,7 +10,7 @@ namespace Vanrise.GenericData.Entities
     {
         void ApplyStreamToDB(object stream);
 
-        List<DataRecord> GetFilteredDataRecords(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input);
+        List<DataRecord> GetFilteredDataRecords(IDataRecordDataManagerGetFilteredDataRecordsContext context);
 
         void GetDataRecords(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup, Action<dynamic> onItemReady);
 
@@ -21,6 +21,21 @@ namespace Vanrise.GenericData.Entities
         bool Insert(Dictionary<string, Object> fieldValues, int? createdUserId, int? modifiedUserId, out object insertedId);
         List<DataRecord> GetAllDataRecords(List<string> columns);
         bool AreDataRecordsUpdated(ref object updateHandle);
+    }
+
+    public interface IDataRecordDataManagerGetFilteredDataRecordsContext
+    {
+        DateTime FromTime { get; }
+
+        DateTime ToTime { get; }
+
+        RecordFilterGroup FilterGroup { get; }
+
+        List<string> FieldNames { get; }
+
+        int LimitResult { get; }
+
+        OrderDirection Direction { get; }
     }
 
     public interface ISummaryRecordDataManager

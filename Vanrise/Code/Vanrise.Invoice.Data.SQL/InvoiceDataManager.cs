@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Text;
 using System.Transactions;
 using Vanrise.Common;
 using Vanrise.Data.SQL;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.Data.SQL
@@ -468,5 +471,61 @@ namespace Vanrise.Invoice.Data.SQL
         #endregion
 
 
+        public void LoadInvoices(Guid invoiceTypeId, DateTime fromTime, DateTime toTime, RecordFilterGroup filterGroup, OrderDirection? orderDirection, Func<bool> shouldStop, Action<Entities.Invoice> onInvoiceLoaded)
+        {
+            int parameterIndex = 0;
+            Dictionary<string, Object> parameterValues = new Dictionary<string, object>();
+            Vanrise.GenericData.Data.SQL.RecordFilterSQLBuilder recordFilterSQLBuilder = new Vanrise.GenericData.Data.SQL.RecordFilterSQLBuilder(GetColumnNameFromFieldName);
+            String recordFilter = recordFilterSQLBuilder.BuildRecordFilter(filterGroup, ref parameterIndex, parameterValues);
+            string query = BuildQuery(recordFilter, orderDirection);
+
+            ExecuteReaderText(query,
+                (reader) =>
+                {
+                    while(reader.Read())
+                    {
+                        onInvoiceLoaded(InvoiceMapper(reader));
+                        if (shouldStop())
+                            break;
+                    }
+                }, (cmd) =>
+                {
+                    cmd.Parameters.Add(new SqlParameter("@InvoiceTypeId", invoiceTypeId));
+                    cmd.Parameters.Add(new SqlParameter("@FromTime", ToDBNullIfDefault(fromTime)));
+                    cmd.Parameters.Add(new SqlParameter("@ToTime", ToDBNullIfDefault(toTime)));
+                    foreach (var prm in parameterValues)
+                    {
+                        cmd.Parameters.Add(new SqlParameter(prm.Key, prm.Value));
+                    }
+                });
+        }
+
+
+        private string BuildQuery(string recordFilter, OrderDirection? orderDirection)
+        {
+            string queryRecordFilter = !string.IsNullOrEmpty(recordFilter) ? string.Format(" and {0} ", recordFilter) : string.Empty;
+            string queryOrder = orderDirection.HasValue ? string.Format(" Order By ID {0} ", orderDirection == OrderDirection.Ascending ? "ASC" : "DESC") : string.Empty;
+
+            StringBuilder str = new StringBuilder(string.Format(@"  select {0} from [VR_Invoice].[Invoice] WITH (NOLOCK)
+                                                                    where [InvoiceTypeID] = @InvoiceTypeId 
+                                                                    and (@FromTime is null or [CreatedTime] >= @FromTime) 
+                                                                    and (@ToTime is null or [CreatedTime] <= @ToTime) 
+                                                                    {1} 
+                                                                    {2}",
+                                                                    InvoiceSELECTCOLUMNS, queryRecordFilter, queryOrder));
+            return str.ToString();
+        }
+
+        string GetColumnNameFromFieldName(string fieldName)
+        {
+            switch(fieldName)
+            {
+                case "Partner": return "PartnerID";
+                case "User": return "UserId";
+                default: return fieldName;
+            }
+        }
+
+        const string InvoiceSELECTCOLUMNS = @" ID,InvoiceTypeID,PartnerID,SerialNumber,FromDate,ToDate,SplitInvoiceGroupId,IssueDate,DueDate,Details,PaidDate,UserId,CreatedTime,LockDate,Notes,IsAutomatic, SourceId,Settings,InvoiceSettingID,SentDate,SettlementInvoiceId,ApprovedBy,ApprovedTime,NeedApproval ";
     }
 }

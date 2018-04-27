@@ -38,8 +38,7 @@ namespace Vanrise.DataParser.Business
 
                 foreach (Vanrise.DataParser.Entities.FldDictParsedRecord item in parsedRecords.Value)
                 {
-                    dynamic record = Activator.CreateInstance(dataRecordRuntimeType) as dynamic;
-                    record.FillDataRecordTypeFromDictionary(item.FieldValues);
+                    dynamic record = Activator.CreateInstance(dataRecordRuntimeType, item.FieldValues);
                     records.Add(record);
                 }
 
@@ -85,10 +84,9 @@ namespace Vanrise.DataParser.Business
 
                 foreach (Vanrise.DataParser.Entities.FldDictParsedRecord item in parsedRecords.Value)
                 {
-                    dynamic record = Activator.CreateInstance(dataRecordRuntimeType) as dynamic;
                     if (options.GenerateIds && !string.IsNullOrEmpty(recordType.Settings.IdField))
                         item.SetFieldValue(recordType.Settings.IdField, currentId);
-                    record.FillDataRecordTypeFromDictionary(item.FieldValues);
+                    dynamic record = Activator.CreateInstance(dataRecordRuntimeType, item.FieldValues);
                     currentId++;
                     records.Add(record);
                 }

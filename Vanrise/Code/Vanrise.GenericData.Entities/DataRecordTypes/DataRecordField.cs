@@ -11,6 +11,8 @@ namespace Vanrise.GenericData.Entities
         public DataRecordFieldType Type { get; set; }
 
         public DataRecordFieldFormula Formula { get; set; }
+
+        public bool IsInheritedFromExtraField { get; set; }
     }
 
     public class DataRecordGridColumnAttribute

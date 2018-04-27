@@ -104,6 +104,13 @@ namespace Vanrise.GenericData.Data.SQL
                     builder.Append(BuildRecordFilter(alwaysFalseFilter, ref parameterIndex, parameterValues));
                     continue;
                 }
+
+                AlwaysTrueRecordFilter alwaysTrueFilter = filter as AlwaysTrueRecordFilter;
+                if (alwaysTrueFilter != null)
+                {
+                    builder.Append(BuildRecordFilter(alwaysTrueFilter, ref parameterIndex, parameterValues));
+                    continue;
+                }
             }
 
             return String.Format("({0})", builder);
@@ -539,7 +546,12 @@ namespace Vanrise.GenericData.Data.SQL
 
         private string BuildRecordFilter(AlwaysFalseRecordFilter alwaysFalseFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
         {
-            return string.Format("0 = 1");
+            return "0 = 1";
+        }
+
+        private string BuildRecordFilter(AlwaysTrueRecordFilter alwaysFalseFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
+        {
+            return "1 = 1";
         }
 
         string BuildRecordFilter<T>(ListRecordFilter<T> listFilter, ref int parameterIndex, Dictionary<string, Object> parameterValues)
