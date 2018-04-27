@@ -2065,6 +2065,7 @@ set nocount on;
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
 ('WhS_NOC','NOC',null,'{"$type":"Vanrise.Security.Business.StaticGroup, Vanrise.Security.Business","ConfigId":"be6619ae-687f-45e3-bd7b-90d1db4626b6"}'),
+(2,'WhS_NOC','NOC',null,'{"$type":"Vanrise.Security.Business.StaticGroup, Vanrise.Security.Business","ConfigId":"be6619ae-687f-45e3-bd7b-90d1db4626b6","MemberIds":{"$type":"System.Collections.Generic.List`1[[System.Int32, mscorlib]], mscorlib","$values":[3,2]}}'),
 ('WhS_Billing','Billing',null,'{"$type":"Vanrise.Security.Business.StaticGroup, Vanrise.Security.Business","ConfigId":"be6619ae-687f-45e3-bd7b-90d1db4626b6"}'),
 ('WhS_Routing','Routing',null,'{"$type":"Vanrise.Security.Business.StaticGroup, Vanrise.Security.Business","ConfigId":"be6619ae-687f-45e3-bd7b-90d1db4626b6"}'),
 ('WhS_AccountManagers','Account Managers',null,'{"$type":"Vanrise.Security.Business.StaticGroup, Vanrise.Security.Business","ConfigId":"be6619ae-687f-45e3-bd7b-90d1db4626b6"}'),
@@ -2095,7 +2096,7 @@ set nocount on;
 ;with cte_data([HolderType],[HolderId],[EntityType],[EntityId],[PermissionFlags])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-(1,@WhS_NOCGroupId,1,'a611a651-b60b-483d-bc83-1c2b667a120a','[{"Name":"View","Value":1}]'),
+(1,@WhS_NOCGroupId,0,'16419fe1-ed56-49ba-b609-284a5e21fc07','[{"Name":"View","Value":1},{"Name":"Add","Value":1},{"Name":"Edit","Value":1},{"Name":"Delete","Value":1},{"Name":"Full Control","Value":1}]'),(1,@WhS_NOCGroupId,1,'2f96aeb3-e0b2-43ba-8092-95f582c6b1ab','[{"Name":"Start Process","Value":2},{"Name":"View Process Logs","Value":2}]'),
 (1,@WhS_BillingGroupId,1,'2c404842-792f-4a6e-bc8a-3000455569c1','[{"Name":"View","Value":1},{"Name":"Add Financial Transactions","Value":1}]'),
 (1,@WhS_BillingGroupId,1,'3d6b033d-07a5-4f90-bf81-b295c95a27a7','[{"Name":"View Rules","Value":1},{"Name":"Add Rules","Value":1},{"Name":"Edit Rules","Value":1},{"Name":"View Alerts","Value":1}]'),
 (1,@WhS_BillingGroupId,1,'86699a30-0f8c-4f23-8cfc-9ea19297b06b','[{"Name":"View","Value":1},{"Name":"Generate","Value":1},{"Name":"Set_Paid","Value":1},{"Name":"Set_Unpaid","Value":1},{"Name":"Set_Lock","Value":1},{"Name":"Set_UnLock","Value":1},{"Name":"Recreate","Value":1},{"Name":"Send Email","Value":1}]'),
