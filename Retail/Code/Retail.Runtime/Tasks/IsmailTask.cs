@@ -20,6 +20,11 @@ namespace Retail.Runtime.Tasks
       
         public void Execute()
         {
+            Parallel.For(0, 1, (i) =>
+                {
+                    TestStringConcatenation();
+                });
+            Console.ReadKey();
             GenerateRuntimeNodeConfiguration();
             //TestAppDomain();
             //Console.ReadKey();
@@ -164,6 +169,73 @@ namespace Retail.Runtime.Tasks
 
             Console.WriteLine("DONE");
             Console.ReadKey();
+        }
+
+        private void TestStringConcatenation()
+        {
+            List<string> lst1 = new List<string>();
+
+            for (int i = 0; i < 23;i++)
+            {
+                lst1.Add("item " + i.ToString());
+            }
+
+            int nbOfRows = 2000000;
+
+            DateTime start = DateTime.Now;
+            StringBuilder str = new StringBuilder();
+            //for (int i = 0; i < nbOfRows; i++)
+            //{
+            //    str.AppendFormat(@"{0}{23}{1}{23}{2}{23}{3}{23}{4}{23}{5}{23}{6}{23}{7}{23}{8}{23}{9}{23}{10}{23}{11}{23}{12}{23}{13}{23}{14}{23}{15}{23}{16}{23}{17}{23}{18}{23}{19}{23}{20}{23}{21}{23}{22}",
+            //                            lst1[0], lst1[1], lst1[2],
+            //                            lst1[3], lst1[4], lst1[5],
+            //                            lst1[6], lst1[7], lst1[8],
+            //                            lst1[9],  lst1[10], lst1[11], lst1[12],
+            //                            lst1[13], lst1[14], lst1[15],
+            //                            lst1[16], lst1[17], lst1[18],
+            //                            lst1[19], lst1[20], lst1[21],lst1[22],"\t");
+                
+            //}
+            //Console.WriteLine("AppendFormat took '{0}'", DateTime.Now - start);
+
+            //str = new StringBuilder();
+            //GC.Collect();
+            start = DateTime.Now;
+            for (int i = 0; i < nbOfRows; i++)
+            {
+                foreach(var fld in lst1)
+                {
+                    str.Append(fld);
+                    str.Append("\t");
+                }
+                str.AppendLine();
+            }
+            Console.WriteLine("String Builder took '{0}'", DateTime.Now - start);
+
+            //str = new StringBuilder();
+            //GC.Collect();
+
+            //start = DateTime.Now;
+            //for (int i = 0; i < nbOfRows; i++)
+            //{
+            //    List<string> lst2 = new List<string>(lst1);
+            //    str.AppendLine(String.Join(",", lst2));
+            //}
+            //Console.WriteLine("String Builder Append with Join took '{0}'", DateTime.Now - start);
+            //str = new StringBuilder();
+            //GC.Collect();
+
+            //start = DateTime.Now;
+            //List<string> rows = new List<string>();
+            //for (int i = 0; i < nbOfRows; i++)
+            //{
+            //    List<string> lst2 = new List<string>(lst1);
+            //    rows.Add(String.Join(",", lst2));
+            //}
+            //string final = String.Join("\n", rows);
+            //Console.WriteLine("Join Only took '{0}'", DateTime.Now - start);
+
+           // Console.ReadKey();
         }
 
         private void GenerateRuntimeNodeConfiguration()
