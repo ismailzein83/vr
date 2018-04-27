@@ -36,9 +36,8 @@ namespace TOne.WhS.BusinessEntity.Business
                 case "TicketDetails":
                     DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
                     var dataRecordRuntimeType = dataRecordTypeManager.GetDataRecordRuntimeType(context.DefinitionSettings.DataRecordTypeId);
-                    var dataRecordFiller = Activator.CreateInstance(dataRecordRuntimeType) as IDataRecordFiller;
-                    dataRecordFiller.FillDataRecordTypeFromDictionary(context.GenericBusinessEntity.FieldValues);
-                    return dataRecordFiller;
+                    var dataRecord = Activator.CreateInstance(dataRecordRuntimeType, context.GenericBusinessEntity.FieldValues);
+                    return dataRecord;
                 default: return null;
             }
         }
