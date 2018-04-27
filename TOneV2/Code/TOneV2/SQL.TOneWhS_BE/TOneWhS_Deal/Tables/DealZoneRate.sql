@@ -10,7 +10,7 @@ CREATE TABLE [TOneWhS_Deal].[DealZoneRate] (
     [BED]         DATETIME        NOT NULL,
     [EED]         DATETIME        NULL,
     [timestamp]   ROWVERSION      NULL,
-    CONSTRAINT [PK_DealZoneRate_14258c99-a77f-4ff9-a2db-1bbb73e3707b] PRIMARY KEY CLUSTERED ([ID] ASC)
+    CONSTRAINT [PK_DealZoneRate_5ff8afc9-6018-48b2-a3cc-c122c82786bf] PRIMARY KEY CLUSTERED ([ID] ASC)
 );
 
 
@@ -22,12 +22,6 @@ CREATE TABLE [TOneWhS_Deal].[DealZoneRate] (
 
 
 
-GO
-
-
-
-GO
-
 
 
 GO
@@ -47,21 +41,41 @@ GO
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_DealZoneRate_IsSale_14258c99-a77f-4ff9-a2db-1bbb73e3707b]
+
+
+
+GO
+
+
+
+GO
+
+
+
+GO
+
+
+
+GO
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_DealZoneRate_IsSale_5ff8afc9-6018-48b2-a3cc-c122c82786bf]
     ON [TOneWhS_Deal].[DealZoneRate]([IsSale] ASC);
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_DealZoneRate_EED_14258c99-a77f-4ff9-a2db-1bbb73e3707b]
+CREATE NONCLUSTERED INDEX [IX_DealZoneRate_EED_5ff8afc9-6018-48b2-a3cc-c122c82786bf]
     ON [TOneWhS_Deal].[DealZoneRate]([EED] ASC);
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_DealZoneRate_DealId_14258c99-a77f-4ff9-a2db-1bbb73e3707b]
+CREATE NONCLUSTERED INDEX [IX_DealZoneRate_DealId_5ff8afc9-6018-48b2-a3cc-c122c82786bf]
     ON [TOneWhS_Deal].[DealZoneRate]([DealId] ASC);
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_DealZoneRate_BED_14258c99-a77f-4ff9-a2db-1bbb73e3707b]
+CREATE NONCLUSTERED INDEX [IX_DealZoneRate_BED_5ff8afc9-6018-48b2-a3cc-c122c82786bf]
     ON [TOneWhS_Deal].[DealZoneRate]([BED] ASC);
 

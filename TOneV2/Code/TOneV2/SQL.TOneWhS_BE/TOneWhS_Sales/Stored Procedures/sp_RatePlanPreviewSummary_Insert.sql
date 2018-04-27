@@ -18,7 +18,10 @@ CREATE PROCEDURE [TOneWhS_Sales].[sp_RatePlanPreviewSummary_Insert]
 	@NumberOfNewSaleZoneServices int,
 	@NumberOfClosedSaleZoneServices int,
 	@NumberOfChangedCountries int,
-	@NumberOfNewCountries int
+	@NumberOfNewCountries int,
+	@NumberOfNewOtherRates int,
+	@NumberOfIncreasedOtherRates int,
+	@NumberOfDecreasedOtherRates int
 AS
 BEGIN
 	insert into TOneWhS_Sales.RP_RatePlanPreview_Summary
@@ -37,7 +40,10 @@ BEGIN
 		NumberOfNewSaleZoneServices,
 		NumberOfClosedSaleZoneServices,
 		NumberOfChangedCountries,
-		NumberOfNewCountries
+		NumberOfNewCountries,
+		NumberOfNewOtherRates,
+		NumberOfIncreasedOtherRates,
+		NumberOfDecreasedOtherRates
 	)
 	
 	values
@@ -56,6 +62,9 @@ BEGIN
 		@NumberOfNewSaleZoneServices,
 		@NumberOfClosedSaleZoneServices,
 		@NumberOfChangedCountries,
-		@NumberOfNewCountries
+		@NumberOfNewCountries,
+		@NumberOfNewOtherRates ,
+	    @NumberOfIncreasedOtherRates ,
+	    @NumberOfDecreasedOtherRates 
 	)
 END
