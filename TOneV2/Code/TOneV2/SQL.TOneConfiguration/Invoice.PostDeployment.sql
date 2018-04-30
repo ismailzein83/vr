@@ -99,7 +99,9 @@ as (select * from (values
 
 ('CC4DFF84-25C3-4BF7-93BF-48E2F7438476','VR_InvoiceSettings','Specific Accounts','VR_Invoice_Partnergroup'	,'{"Editor":"vr-invoice-partnergroup-specificaccounts","RuntimeEditor":""}'),
 ('CF988AC3-FF1A-49F7-9293-4E7FD1E8E270','VR_InvoiceSettings','Invoice Setting','VR_Invoice_Partnergroup'	,'{"Editor":"vr-invoice-partnergroup-invoicesetting","RuntimeEditor":""}'),
-('fcfb637a-a6a4-4b2f-a817-9ff9c3af3bab','Min Amount','Min Amount','VR_Invoice_InvoiceSettingPartConfig'	,'{"RuntimeEditor":"vr-invoice-invoicesetting-runtime-minamountinvoicesettingpart"}')
+('fcfb637a-a6a4-4b2f-a817-9ff9c3af3bab','Min Amount','Min Amount','VR_Invoice_InvoiceSettingPartConfig'	,'{"RuntimeEditor":"vr-invoice-invoicesetting-runtime-minamountinvoicesettingpart"}'),
+('F2DBA69C-B86B-48DB-A49B-A30A72C50D1E','Approve Invoice','Approve Invoice','VR_Invoice_InvoiceType_InvoiceGridActionSettings'	,'{"Editor":"vr-invoicetype-gridactionsettings-approveinvoice"}'),
+('18d88a5e-b148-4d2e-b2ae-f411757f5591'	,'InvoiceApproved',	'Invoice Approved'	,'VR_Invoice_InvoiceType_InvoiceGridFilterConditionConfig'	,'{"Editor":"vr-invoicetype-invoicefiltercondition-approvalinvoice"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[extensionconfiguration] as t
