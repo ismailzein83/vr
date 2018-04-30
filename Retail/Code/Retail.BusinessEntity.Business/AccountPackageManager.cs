@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Vanrise.Caching;
 using Vanrise.Common;
 using Vanrise.Common.Business;
+using Vanrise.Common.Excel;
 using Vanrise.Entities;
 using Vanrise.Security.Business;
 
@@ -108,14 +109,202 @@ namespace Retail.BusinessEntity.Business
 
         public ExcelResult ExportRates(Guid accountBEDefinitionId, long accountId, DateTime effectiveDate, bool createEmptySheetIfNoRates)
         {
-            List<ExportExcelSheet> excelSheets = new List<ExportExcelSheet>();
+            List<VRExcelSheet> rateSheets = new List<VRExcelSheet>();
+            AccountBEManager accountManager = new AccountBEManager();
+            var companySettings = accountManager.GetCompanySetting(accountId);
+            companySettings.ThrowIfNull("companySettings");
+            VRFileManager fileManager = new VRFileManager();
+            Dictionary<Guid, VRExcelSheet> sheetsPerServiceType = new Dictionary<Guid, VRExcelSheet>();
+            
+            VRExcelSheet firstSheet = new VRExcelSheet()
+            {
+                SheetName = "Profile Information"
+            };
 
+            VRExcelCellStyle titlesStyle = new VRExcelCellStyle(){
+                FontColor = "Black",
+                FontSize=10,
+                IsBold=true,
+            };
+             VRExcelCellStyle valuesStyle = new VRExcelCellStyle(){
+                FontColor = "Black",
+                FontSize=10,
+                IsBold=false
+            };
+         
+            VRExcelCell logoCell = new VRExcelCell
+            {
+                RowIndex = 0,
+                ColumnIndex = 0,
+            };
+            firstSheet.AddCell(logoCell);
+
+            VRExcelCell companyName= new VRExcelCell
+            {
+                RowIndex = 9,
+                ColumnIndex = 0,
+                Value = companySettings.ProfileName,
+                Style = titlesStyle
+            };
+            firstSheet.AddCell(companyName);
+
+            VRExcelCell customerNameTitle = new VRExcelCell
+            {
+                RowIndex = 11,
+                ColumnIndex = 0,
+                Value = "Customer Name:",
+                Style = titlesStyle
+            };
+            firstSheet.AddCell(customerNameTitle);
+            var accountName =  accountManager.GetAccountName(accountBEDefinitionId, accountId);
+            VRExcelCell customerNameValue = new VRExcelCell
+            {
+                RowIndex = 11,
+                ColumnIndex = 1,
+                Value =accountName!=null ? accountName : "",
+                Style = valuesStyle
+            };
+            firstSheet.AddCell(customerNameValue);
+
+            VRExcelCell contactNameTitle = new VRExcelCell
+            {
+                RowIndex = 12,
+                ColumnIndex = 0,
+                Value = "Contact Name:",
+                Style = titlesStyle
+            };
+            firstSheet.AddCell(contactNameTitle);
+
+            VRExcelCell contactNameValue = new VRExcelCell
+            {
+                RowIndex = 12,
+                ColumnIndex = 1,
+                Value = "",
+                Style = titlesStyle
+            };
+            firstSheet.AddCell(contactNameValue);
+
+            VRExcelCell phoneNumberTitle = new VRExcelCell
+            {
+                RowIndex = 13,
+                ColumnIndex = 0,
+                Value = "Phone Number:",
+                Style = titlesStyle
+            };
+            firstSheet.AddCell(phoneNumberTitle);
+
+            IAccountProfile accountProfile;
+            if(accountManager.HasAccountProfile(accountBEDefinitionId, accountId, true, out accountProfile)){
+                if(accountProfile!=null){
+                    if(accountProfile.PhoneNumbers!=null && accountProfile.PhoneNumbers.Count!=0){
+                        VRExcelCell phoneNumberValue = new VRExcelCell
+                        {
+                            RowIndex = 13,
+                            ColumnIndex = 1,
+                            Value = string.Join(",", accountProfile.PhoneNumbers),
+                            Style = valuesStyle
+                        };
+                        firstSheet.AddCell(phoneNumberValue);
+                    }
+                }
+            }
+   
+            VRExcelCell dateTitle = new VRExcelCell
+            {
+                RowIndex = 14,
+                ColumnIndex = 0,
+                Value = "Date:",
+                Style = titlesStyle
+            };
+            firstSheet.AddCell(dateTitle);
+
+            VRExcelCell dateValue = new VRExcelCell
+            {
+                RowIndex = 14,
+                ColumnIndex = 1,
+                Value = DateTime.Now.TimeOfDay.ToString(),
+                Style = valuesStyle
+            };
+            firstSheet.AddCell(dateValue);
+
+            VRExcelCell currencyTitle = new VRExcelCell
+            {
+                RowIndex = 15,
+                ColumnIndex = 0,
+                Value = "Currency:",
+                Style = titlesStyle
+            };
+            firstSheet.AddCell(currencyTitle);
+
+            int accountCurrencyId = accountManager.GetCurrencyId(accountBEDefinitionId, accountId);
+            CurrencyManager currencyManager = new CurrencyManager();
+            var currencyName = currencyManager.GetCurrencyName(accountCurrencyId);
+            VRExcelCell currencyValue = new VRExcelCell
+            {
+                RowIndex = 15,
+                ColumnIndex = 1,
+                Value = currencyName!=null ? currencyName : "",
+                Style = valuesStyle
+            };
+            firstSheet.AddCell(currencyValue);
+
+            VRExcelCell notesTitle = new VRExcelCell
+            {
+                RowIndex = 16,
+                ColumnIndex = 0,
+                Value = "Notes:",
+                Style = titlesStyle
+            };
+            firstSheet.AddCell(notesTitle);
+
+            VRExcelCell notesfirstCell = new VRExcelCell
+            {
+                RowIndex = 16,
+                ColumnIndex = 1,
+                Value = "Please acknowledge reception of these rates by email.",
+                Style = valuesStyle
+            };
+            firstSheet.AddCell(notesfirstCell);
+
+            VRExcelCell notesSecondCell = new VRExcelCell
+            {
+                RowIndex = 17,
+                ColumnIndex = 1,
+                Value = "Notes to be added.",
+                Style = valuesStyle
+            };
+            firstSheet.AddCell(notesSecondCell);
+
+            VRExcelCell notesThirdCell = new VRExcelCell
+            {
+                RowIndex = 18,
+                ColumnIndex = 1,
+                Value = "Billing increment is per second unless specified.",
+                Style = valuesStyle
+            };
+
+            firstSheet.AddCell(notesThirdCell);
+
+            VRExcelColumnConfig titlesConfig = new VRExcelColumnConfig()
+            {
+                ColumnIndex = 0,
+                ColumnWidth = 20
+            };
+            firstSheet.SetColumnConfig(titlesConfig);
+
+            VRExcelColumnConfig valuesConfig = new VRExcelColumnConfig()
+            {
+                ColumnIndex = 1,
+                ColumnWidth = 50
+            };
+            firstSheet.SetColumnConfig(valuesConfig);
+
+            ServiceTypeManager serviceTypeManager = new ServiceTypeManager();
             List<ProcessedAccountPackage> processedAccountPackages = GetProcessedAccountPackagesByPriority(accountBEDefinitionId, accountId, effectiveDate, true);
+
             if (processedAccountPackages != null && processedAccountPackages.Count > 0)
             {
-                ServiceTypeManager serviceTypeManager = new ServiceTypeManager();
                 List<ServiceType> serviceTypes = serviceTypeManager.GetServiceTypes(accountBEDefinitionId);
-
                 if (serviceTypes != null && serviceTypes.Count > 0)
                 {
                     foreach (ServiceType serviceType in serviceTypes)
@@ -132,38 +321,58 @@ namespace Retail.BusinessEntity.Business
                             processedAccountPackage.Package.Settings.ExtendedSettings.ExportRates(context);
                             if (context.IsFinalPricingPackage)
                             {
-                                string rateSheetName = string.Format("{0} Rates", serviceType.Title);
-                                if (rateSheetName.Length > 31)
-                                    rateSheetName = rateSheetName.Substring(0, 31);
+                                string rateValueRuleHeader = string.Format("{0} Rates", serviceType.Title);
+                                string tariffRuleHeader = string.Format("{0} Tariffs", serviceType.Title);
 
-                                ExportExcelSheet rateSheet = BuildExcelSheet(rateSheetName, context.RateValueRuleData);
+                                VRExcelSheet rateSheet = BuildExcelSheet(rateValueRuleHeader, context.RateValueRuleData, tariffRuleHeader, context.TariffRuleData);
                                 if (rateSheet != null)
-                                    excelSheets.Add(rateSheet);
-
-                                string tariffSheetName = string.Format("{0} Tariffs", serviceType.Title);
-                                if (tariffSheetName.Length > 31)
-                                    tariffSheetName = tariffSheetName.Substring(0, 31);
-
-                                ExportExcelSheet tariffSheet = BuildExcelSheet(tariffSheetName, context.TariffRuleData);
-                                if (tariffSheet != null)
-                                    excelSheets.Add(tariffSheet);
-
+                                {
+                                    rateSheets.Add(rateSheet);
+                                    sheetsPerServiceType.Add(serviceType.ServiceTypeId, rateSheet);
+                                }
                                 break;
                             }
-
                         }
                     }
                 }
             }
-            if (excelSheets.Count == 0 && createEmptySheetIfNoRates)
+            if (rateSheets.Count == 0 && createEmptySheetIfNoRates)
             {
-                ExportExcelSheet dummySheet = new ExportExcelSheet() { Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() }, Rows = new List<ExportExcelRow>() };
-                excelSheets.Add(dummySheet);
+                VRExcelFile dummyFile = new VRExcelFile();
+                dummyFile.AddSheet(new VRExcelSheet
+                {
+                    SheetName = "Rates"
+                });
+
+                byte[] dummyExcel = dummyFile.GenerateExcelFile();
+                return new ExcelResult
+                {
+                    ExcelFileContent = dummyExcel
+                };
             }
 
-            if (excelSheets.Count > 0)
+            if (rateSheets.Count > 0)
             {
-                return new ExcelManager().ExportExcel(excelSheets);
+                VRExcelFile exportedExcel = new VRExcelFile();
+                exportedExcel.AddSheet(firstSheet);
+
+                for (int i = 0; i < rateSheets.Count; i++)
+                {
+                    var sheet = rateSheets[i];
+                    var sheetPerServiceType = sheetsPerServiceType.FindRecord(x => x.Value == sheet);
+                    if (sheetPerServiceType.Key != null)
+                    {
+                        var service = serviceTypeManager.GetServiceType(sheetPerServiceType.Key);
+                        sheet.SheetName = service.Title;
+                        exportedExcel.AddSheet(sheet);
+                    }
+                }
+                
+                byte[] generatedExcel = exportedExcel.GenerateExcelFile();
+                return new ExcelResult
+                {
+                    ExcelFileContent = generatedExcel
+                };
             }
             else
             {
@@ -171,37 +380,126 @@ namespace Retail.BusinessEntity.Business
             }
         }
 
-        private ExportExcelSheet BuildExcelSheet(string sheetName, ExportRuleData exportRuleData)
+        private VRExcelSheet BuildExcelSheet(string rateValueRuleHeader, ExportRuleData exportRateValueRuleData, string tarrifRuleHeader, ExportRuleData exportTarrifRuleData)
         {
-            if (exportRuleData == null || exportRuleData.Headers == null || exportRuleData.Headers.Count == 0)
+            if ((exportRateValueRuleData == null || exportRateValueRuleData.Headers == null || exportRateValueRuleData.Headers.Count == 0) && (exportTarrifRuleData == null || exportTarrifRuleData.Headers == null || exportTarrifRuleData.Headers.Count == 0))
                 return null;
 
-            ExportExcelSheet exportExcelSheet = new ExportExcelSheet()
+            VRExcelSheet exportExcelSheet = new VRExcelSheet();
+            List<int> configuredColumns = new List<int>();
+            int lastRowIndex = 0;
+            VRExcelCellStyle headerStyle = new VRExcelCellStyle()
             {
-                SheetName = sheetName,
-                Header = new ExportExcelHeader() { Cells = new List<ExportExcelHeaderCell>() },
-                Rows = new List<ExportExcelRow>(),
-                AutoFitColumns = true
+                FontColor = "Red",
+                FontSize = 10,
+                IsBold = true,
             };
-
-            foreach (string header in exportRuleData.Headers)
+            VRExcelCellStyle dataStyle = new VRExcelCellStyle()
             {
-                ExportExcelHeaderCell cellHeader = new ExportExcelHeaderCell() { Title = header };
-                exportExcelSheet.Header.Cells.Add(cellHeader);
+                FontColor = "Black",
+                FontSize = 10,
+                IsBold = false
+            };
+            VRExcelCell rateValueRuleHeaderCell = new VRExcelCell
+            {
+                RowIndex = 0,
+                ColumnIndex = 1,
+                Value = rateValueRuleHeader,
+                Style = headerStyle
+            };
+            lastRowIndex = rateValueRuleHeaderCell.RowIndex;
+            exportExcelSheet.AddCell(rateValueRuleHeaderCell);
+
+            for (int i = 0; i < exportRateValueRuleData.Headers.Count; i++)
+            {   
+                VRExcelCell rateValueRuleTitleCell = new VRExcelCell
+                {
+                    RowIndex = rateValueRuleHeaderCell.RowIndex + 1,
+                    ColumnIndex = i,
+                    Value = exportRateValueRuleData.Headers[i],
+                    Style = headerStyle
+                };
+                VRExcelColumnConfig rateValueConfig = new VRExcelColumnConfig
+                {
+                    ColumnIndex = i,
+                    ColumnWidth = 20
+                };
+                configuredColumns.Add(i);
+                exportExcelSheet.SetColumnConfig(rateValueConfig);
+                lastRowIndex = rateValueRuleTitleCell.RowIndex;
+                exportExcelSheet.AddCell(rateValueRuleTitleCell);
             }
 
-            if (exportRuleData.Data != null)
+            if (exportRateValueRuleData.Data != null)
             {
-                foreach (var rowData in exportRuleData.Data)
+                for (int i = 0; i < exportRateValueRuleData.Data.Count; i++)
                 {
-                    ExportExcelRow excelRow = new ExportExcelRow() { Cells = new List<ExportExcelCell>() };
-
-                    foreach (var rowDataCell in rowData)
+                    var rowData = exportRateValueRuleData.Data[i];
+                    for (int j = 0; j < rowData.Length; j++)
                     {
-                        ExportExcelCell excelCell = new ExportExcelCell() { Value = rowDataCell };
-                        excelRow.Cells.Add(excelCell);
+                        VRExcelCell rateValueRuleDataCell = new VRExcelCell
+                        {
+                            RowIndex = rateValueRuleHeaderCell.RowIndex + 2 + i,
+                            ColumnIndex = j,
+                            Value = rowData[j],
+                            Style = dataStyle
+                        };
+                        lastRowIndex = rateValueRuleDataCell.RowIndex;
+                        exportExcelSheet.AddCell(rateValueRuleDataCell);
                     }
-                    exportExcelSheet.Rows.Add(excelRow);
+                }
+            }
+
+            VRExcelCell tarrifRuleHeaderCell = new VRExcelCell
+            {
+                RowIndex = lastRowIndex+3,
+                ColumnIndex = 1,
+                Value = tarrifRuleHeader,
+                Style = headerStyle
+            };
+            lastRowIndex = tarrifRuleHeaderCell.RowIndex;
+            exportExcelSheet.AddCell(tarrifRuleHeaderCell);
+
+            for (int i = 0; i < exportTarrifRuleData.Headers.Count; i++)
+            {
+                VRExcelCell tarriffRuleTitleCell = new VRExcelCell
+                {
+                    RowIndex = tarrifRuleHeaderCell.RowIndex + 1,
+                    ColumnIndex = i,
+                    Value = exportTarrifRuleData.Headers[i],
+                    Style = headerStyle
+                };
+                if(!configuredColumns.Contains(i)){
+                    VRExcelColumnConfig tarrifConfig = new VRExcelColumnConfig
+                    {
+                        ColumnIndex = i,
+                        ColumnWidth = 20
+                    };
+                    configuredColumns.Add(i);
+                    exportExcelSheet.SetColumnConfig(tarrifConfig);
+                }
+         
+                lastRowIndex = tarriffRuleTitleCell.RowIndex;
+                exportExcelSheet.AddCell(tarriffRuleTitleCell);
+            }
+
+            if (exportTarrifRuleData.Data != null)
+            {
+                for (int i = 0; i < exportTarrifRuleData.Data.Count; i++)
+                {
+                    var rowData = exportTarrifRuleData.Data[i];
+                    for (int j = 0; j < rowData.Length; j++)
+                    {
+                        VRExcelCell tarrifRuleDataCell = new VRExcelCell
+                        {
+                            RowIndex = tarrifRuleHeaderCell.RowIndex + 2 + i,
+                            ColumnIndex = j,
+                            Value = rowData[j],
+                            Style = dataStyle
+                        };
+                        lastRowIndex = tarrifRuleDataCell.RowIndex;
+                        exportExcelSheet.AddCell(tarrifRuleDataCell);
+                    }
                 }
             }
             return exportExcelSheet;

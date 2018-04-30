@@ -23,7 +23,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountBulkAction
             var excelContent = accountPackageManager.ExportRates(context.AccountBEDefinitionId, context.Account.AccountId, DateTime.Now, false);
             List<VRMailAttachement> vrMailAttachments = new List<VRMailAttachement>();
 
-            if (excelContent == null)
+            if (excelContent == null || (excelContent.ExcelFileContent==null && excelContent.ExcelFileStream==null))
             {
                 context.IsErrorOccured = false;
                 context.ErrorMessage = string.Format("The account '{0}' does not have any rates", context.Account.Name);

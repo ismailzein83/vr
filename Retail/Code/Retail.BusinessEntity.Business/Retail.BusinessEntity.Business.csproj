@@ -84,6 +84,9 @@
     <Reference Include="Vanrise.Common.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common.Excel">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Excel.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Data">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
     </Reference>
