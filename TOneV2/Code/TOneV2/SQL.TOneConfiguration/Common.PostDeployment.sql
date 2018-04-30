@@ -276,7 +276,8 @@ as (select * from (values
 ('8AC4B99E-01A0-41D1-AE54-09E679309086','Status Definitions','Status Definitions','#/view/Common/Views/StatusDefinition/StatusDefinitionManagement'							,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/StatusDefinition/GetFilteredStatusDefinitions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',14),
 ('52C580DE-C91F-45E2-8E3A-46E0BA9E7EFD','Component Types','Component Types','#/view/Common/Views/VRComponentType/VRComponentTypeManagement'									,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRComponentType/GetFilteredVRComponentTypes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',4),
 ('2CF7E0BE-1396-4305-AA27-11070ACFC18F','Application Visibilities','Application Visibilities','#/view/Common/Views/VRApplicationVisibility/VRApplicationVisibilityManagement','D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRApplicationVisibility/GetFilteredVRApplicationVisibilities',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',26),
-('2D39B12D-8FBF-4D4E-B2A5-5E3FE57580DF','Locked Sessions','Locked Sessions','#/view/Common/Views/VRExclusiveSession/VRExclusiveSessionManagement'							,'525B77DC-F097-4BF1-930A-034B9BBE1AC4','VRCommon/VRExclusiveSession/GetFilteredVRExclusiveSessions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10)
+('2D39B12D-8FBF-4D4E-B2A5-5E3FE57580DF','Locked Sessions','Locked Sessions','#/view/Common/Views/VRExclusiveSession/VRExclusiveSessionManagement'							,'525B77DC-F097-4BF1-930A-034B9BBE1AC4','VRCommon/VRExclusiveSession/GetFilteredVRExclusiveSessions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10),
+('026e0eeb-69b7-4e5d-b1bb-9d4fb59111b1','SMS Message Template','SMS Message Template','#/view/Common/Views/SMS/SMSMessageTemplateManagement'							,'baaf681e-ab1c-4a64-9a35-3f3951398881',null,null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',5)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
@@ -303,7 +304,8 @@ as (select * from (values
 ('1C833B2D-8C97-4CDD-A1C1-C1B4D9D299DE','System Currency','VR_Common_BaseCurrency','General','{"Editor":"vr-common-currency-settings-editor"}',null,0),
 ('D8EC8190-A3AC-4384-A945-9AF18B933889','General','VR_Common_GeneralSetting','General','{"Editor":"vr-common-general-settings-editor"}','{"$type":"Vanrise.Entities.GeneralSettingData, Vanrise.Entities","UIData":{"$type":"Vanrise.Entities.UISettingData, Vanrise.Entities","NormalPrecision":2,"LongPrecision":4,"GridPageSize":10,"MaxSearchRecordCount":1000,"HorizontalLine":false,"AlternativeColor":true,"VerticalLine":false},"CacheData":{"$type":"Vanrise.Entities.CacheSettingData, Vanrise.Entities","ClientCacheNumber":1500}}',0),
 ('7E993C4A-F677-4201-BAB5-8AE58D2182A8','Google Analytics','VR_Common_GATechnicalSetting','General','{"Editor":"vr-common-ga-settings-editor"}','{"$type":"Vanrise.Entities.GoogleAnalyticsData, Vanrise.Entities","IsEnabled":false,"Account":"UA-xxxxxxxx-x"}',1),
-('4047054E-1CF4-4BE6-A005-6D4706757AD3','Session Lock','VR_Common_SessionLockSettings','General','{"Editor":"vr-common-sessionlock-settings-editor"}','{"$type":"Vanrise.Entities.SessionLockSettings, Vanrise.Entities","TimeOutInSeconds":600,"HeartbeatIntervalInSeconds":15}',0)
+('4047054E-1CF4-4BE6-A005-6D4706757AD3','Session Lock','VR_Common_SessionLockSettings','General','{"Editor":"vr-common-sessionlock-settings-editor"}','{"$type":"Vanrise.Entities.SessionLockSettings, Vanrise.Entities","TimeOutInSeconds":600,"HeartbeatIntervalInSeconds":15}',0),
+('26AA64F9-67C3-4BF6-BE94-6D59030B9BE3','System SMS','VR_Common_SMS','General','{"Editor":"vr-common-smstemplate-settings-editor"}',null,0)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical]))
 merge	[common].[Setting] as t
@@ -388,7 +390,11 @@ as (select * from (values
 ('6c4a3b8d-0e1e-4141-9a21-7f7a68dc25be','LastTimePeriod','Last Time','VRCommon_VRTimePeriod'																		,'{"Editor":"vr-common-timeperiod-last-time"}'),
 ('50ACE946-07FC-4D3E-B246-8622250ED0FC','VR_ExclusiveSession','Exclusive Session','VR_Common_VRComponentType'														,'{"Editor":"vr-common-exclusivesessiontype-settings"}'),
 
-('4EC42931-14E9-4807-9104-10985446D26B','Specific Countries','Specific Countries','VR_Common_CountryCriteriaGroup'													,'{"Editor":"vr-common-country-countrycriteriagroup-selective"}')
+('4EC42931-14E9-4807-9104-10985446D26B','Specific Countries','Specific Countries','VR_Common_CountryCriteriaGroup'													,'{"Editor":"vr-common-country-countrycriteriagroup-selective"}'),
+
+('80791C8A-5F81-4D2E-B3D7-4240CF967FA0','SMSMessageTypeSettings','SMS Message Type','VR_Common_VRComponentType'														,'{"Editor":"vr-common-smsmessagetype-settings"}'),
+
+('44E97625-1B35-478A-918E-60F9C58678B4','ExecuteDatabaseCommandSMSHandler','SQL SMS Handler','SMSSendHandlerSettings'														,'{"Editor":"vr-common-executedatabasecommand-smshandler"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[extensionconfiguration] as t

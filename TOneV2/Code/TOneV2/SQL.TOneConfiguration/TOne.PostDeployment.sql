@@ -241,7 +241,9 @@ as (select * from (values
 ('F89330E6-F3C2-4B85-B303-3C1FACAE6AC6','WhS_Deals_SupplierRateEvaluator_Fixed','Fixed','WhS_Deals_SupplierRateEvaluator'			,'{"Editor":"vr-whs-deal-supplierrateevaluator-fixed"}'),
 ('49AF4D76-C067-47DA-A600-A1EA0E1AAD99','WhS_Deals_SaleRateEvaluator_discount','Discount','WhS_Deals_SaleRateEvaluator'				,'{"Editor":"vr-whs-deal-salerateevaluator-discount"}'),
 ('434BB6E0-A725-422E-A66A-BE839192AE5C','WhS_Deals_SupplierRateEvaluator_discount','Discount','WhS_Deals_SupplierRateEvaluator'		,'{"Editor":"vr-whs-deal-supplierrateevaluator-discount"}'),
-('2349B728-30EF-46B0-B54A-F9350F66FF2F','WhS_Deals_SaleRateEvaluator_fixed','Fixed','WhS_Deals_SaleRateEvaluator'					,'{"Editor":"vr-whs-deal-salerateevaluator-fixed"}')
+('2349B728-30EF-46B0-B54A-F9350F66FF2F','WhS_Deals_SaleRateEvaluator_fixed','Fixed','WhS_Deals_SaleRateEvaluator'					,'{"Editor":"vr-whs-deal-salerateevaluator-fixed"}'),
+
+('114CE0AC-4848-442A-B351-BE031F22E130','WhS_AccountBalance_ActionDefinition_SendCustomerSMS','Send Customer SMS','VR_Notification_VRActionDefinition'					,'{"Editor":"whs-accountbalance-actiondefinition-send-customer-sms"}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[ConfigType],[Settings]))
 merge	[common].[ExtensionConfiguration] as t
