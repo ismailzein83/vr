@@ -42,6 +42,7 @@ namespace Vanrise.GenericData.Notification
         {
           
             var counter = 0;
+            List<dynamic> batchList = null;
             DoWhilePreviousRunning(previousActivityStatus, handle, () =>
             {
                 bool hasItems = false;
@@ -50,6 +51,9 @@ namespace Vanrise.GenericData.Notification
                     hasItems = inputArgument.InputQueue.TryDequeue(
                         (recordBatch) =>
                         {
+                            batchList.Add(recordBatch);
+                            DataRecordRuleEvaluationManager dataRecordRuleEvaluationManager = new DataRecordRuleEvaluationManager();
+                            dataRecordRuleEvaluationManager.EvaluateDataRecordRule(batchList, inputArgument.AlertRuleTypeId);
                             counter++;
 
                         });

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.GenericData.Notification
 {
@@ -20,9 +21,14 @@ namespace Vanrise.GenericData.Notification
 
         protected override void Execute(CodeActivityContext context)
         {
-
-           /// context.SetValue(this.AlertRuleTypeId, value);
-            throw new NotImplementedException();
+            Guid dataRecordRuleEvaluatorDefinitionId = this.DataRecordRuleEvaluatorDefinitionId.Get(context);
+           
+            DataRecordRuleEvaluatorDefinitionManager dataRecordRuleEvaluatorDefinitionManager = new DataRecordRuleEvaluatorDefinitionManager();
+            DataRecordRuleEvaluatorDefinitionSettings dataRecordRuleEvaluatorDefinitionSettings = dataRecordRuleEvaluatorDefinitionManager.GetDataRecordRuleEvaluatorDefinitionSettings(dataRecordRuleEvaluatorDefinitionId);
+           
+            this.AlertRuleTypeId.Set(context, dataRecordRuleEvaluatorDefinitionSettings.AlertRuleTypeId);
+            this.DataRecordStorageIds.Set(context, dataRecordRuleEvaluatorDefinitionSettings.DataRecordStorageIds);
+                        
         }
     }
 }

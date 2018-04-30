@@ -93,75 +93,9 @@ namespace Vanrise.GenericData.Notification
                 throw new Exception("current stage QueueItemType is not of type DataRecordBatchQueueItemType");
             var recordTypeId = queueItemType.DataRecordTypeId;
             var batchRecords = dataRecordBatch.GetBatchRecords(recordTypeId);
-
-            VRAlertRuleType vrAlertRuleType = new VRAlertRuleTypeManager().GetVRAlertRuleType(this.AlertRuleTypeId);
-            vrAlertRuleType.ThrowIfNull("vrAlertRuleType", this.AlertRuleTypeId);
-            DataRecordAlertRuleTypeSettings dataRecordAlertRuleTypeSettings = vrAlertRuleType.Settings.CastWithValidate<DataRecordAlertRuleTypeSettings>("vrAlertRuleType.Settings", this.AlertRuleTypeId);
-
-            List<VRAlertRule> vrAlertRules = new VRAlertRuleManager().GetActiveRules(this.AlertRuleTypeId);
-
-            Dictionary<long, AlertNotificationData> alertNotificationDataDict = new Dictionary<long, AlertNotificationData>();
-
-            Dictionary<string, DataRecordField> dataRecordFields = new DataRecordTypeManager().GetDataRecordTypeFields(recordTypeId);
-
-            foreach (var record in batchRecords)
-            {
-                Dictionary<string, dynamic> fieldValues = record.GetDictionaryFromDataRecordType();
-
-                DataRecordAlertRuleSettingsIsMatchedContext dataRecordAlertRuleSettingsIsMatchedContext = new DataRecordAlertRuleSettingsIsMatchedContext()
-                {
-                    RecordFilterContext = new DataRecordDictFilterGenericFieldMatchContext(fieldValues, dataRecordFields)
-                };
-
-                foreach (var vrAlertRule in vrAlertRules)
-                {
-                    AlertNotificationData alertNotificationData;
-                    if (!alertNotificationDataDict.TryGetValue(vrAlertRule.VRAlertRuleId, out alertNotificationData))
-                    {
-                        vrAlertRule.Settings.ThrowIfNull("vrAlertRule.Settings", vrAlertRule.VRAlertRuleId);
-                        DataRecordAlertRuleExtendedSettings dataRecordAlertRuleExtendedSettings =
-                            vrAlertRule.Settings.ExtendedSettings.CastWithValidate<DataRecordAlertRuleExtendedSettings>(string.Format("vrAlertRule.Settings.ExtendedSettings AlertRuleId:{0}", vrAlertRule.VRAlertRuleId));
-
-                        dataRecordAlertRuleExtendedSettings.AvailableIdentificationFields.ThrowIfNull("vrAlertRuleSettings.DataRecordAlertRuleExtendedSettings.AvailableIdentificationFields");
-                        alertNotificationData = new AlertNotificationData()
-                        {
-                            AvailableIdentificationFieldNames = dataRecordAlertRuleExtendedSettings.AvailableIdentificationFields.Select(itm => itm.Name),
-                            DataRecordAlertRuleExtendedSettings = dataRecordAlertRuleExtendedSettings,
-                            AlertRule = vrAlertRule
-                        };
-                        alertNotificationDataDict.Add(vrAlertRule.VRAlertRuleId, alertNotificationData);
-                    }
-
-                    string groupingKey;
-                    if (AreFieldValuesValid(alertNotificationData.AvailableIdentificationFieldNames, fieldValues, out groupingKey))
-                    {
-                        if (alertNotificationData.EventKeys.Contains(groupingKey))
-                            continue;
-
-                        if (alertNotificationData.DataRecordAlertRuleExtendedSettings.Settings.IsRuleMatched(dataRecordAlertRuleSettingsIsMatchedContext))
-                        {
-                            DataRecordAlertRuleNotification dataRecordAlertRuleNotification = new DataRecordAlertRuleNotification()
-                            {
-                                Actions = dataRecordAlertRuleSettingsIsMatchedContext.Actions,
-                                AlertLevelId = dataRecordAlertRuleSettingsIsMatchedContext.AlertLevelId,
-                                FieldValues = fieldValues,
-                                GroupingKey = groupingKey
-                            };
-                            alertNotificationData.DataRecordAlertRuleNotifications.Add(dataRecordAlertRuleNotification);
-                            alertNotificationData.EventKeys.Add(groupingKey);
-                        }
-                    }
-                }
-            }
-
-            DataRecordAlertRuleNotificationManager dataRecordAlertRuleNotificationManager = new DataRecordAlertRuleNotificationManager();
-
-            foreach (var alertNotificationDataItem in alertNotificationDataDict)
-            {
-                AlertNotificationData alertNotificationData = alertNotificationDataItem.Value;
-                dataRecordAlertRuleNotificationManager.CreateAlertRuleNotifications(alertNotificationData.DataRecordAlertRuleNotifications, alertNotificationData.EventKeys.ToList(), alertNotificationData.AlertRule.RuleTypeId, dataRecordAlertRuleTypeSettings.NotificationTypeId,
-                    alertNotificationData.AlertRule.VRAlertRuleId, alertNotificationData.DataRecordAlertRuleExtendedSettings.MinNotificationInterval, recordTypeId, string.Format("Alert Rule {0}", alertNotificationData.AlertRule.Name), alertNotificationData.AlertRule.UserId);
-            }
+           
+            DataRecordRuleEvaluationManager dataRecordRuleEvaluationManager = new DataRecordRuleEvaluationManager();
+            dataRecordRuleEvaluationManager.EvaluateDataRecordRule(batchRecords, this.AlertRuleTypeId);
         }
 
 

@@ -11,7 +11,13 @@ namespace Vanrise.GenericData.Notification
 {
     public class DataRecordRuleEvaluatorDefinitionManager
     {
-      
+
+        #region Ctor/Properties
+
+        Vanrise.Common.Business.VRComponentTypeManager _vrComponentTypeManager = new Common.Business.VRComponentTypeManager();
+
+        #endregion
+
         #region Public Methods
 
         public IEnumerable<DataRecordRuleEvaluatorDefinitionConfig> GetDataRecordRuleEvaluatorDefinitionConfigs()
@@ -33,6 +39,12 @@ namespace Vanrise.GenericData.Notification
             };
 
             return cachedDataRecordRuleEvaluatorDefinitions.MapRecords(DataRecordRuleEvaluatorDefinitionInfoMapper, filterExpression).OrderBy(x => x.Name);
+        }
+
+        public DataRecordRuleEvaluatorDefinitionSettings GetDataRecordRuleEvaluatorDefinitionSettings(Guid dataRecordRuleEvaluatorDefinitionId)
+        {
+            return _vrComponentTypeManager.GetComponentTypeSettings<DataRecordRuleEvaluatorDefinitionSettings>(dataRecordRuleEvaluatorDefinitionId);
+        
         }
 
         #endregion
