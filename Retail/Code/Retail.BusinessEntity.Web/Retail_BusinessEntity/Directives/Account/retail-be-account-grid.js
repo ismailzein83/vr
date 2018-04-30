@@ -84,7 +84,9 @@ function (VRNotificationService, UtilsService, Retail_BE_AccountBEService, Retai
             };
 
             $scope.scopeModel.onAccountSelect = function (account) {
-                bulkActionDraftInstance.onSelectItem({ ItemId: account.AccountId }, account.isSelected);
+                if (bulkActionDraftInstance != undefined) {
+                    bulkActionDraftInstance.onSelectItem({ ItemId: account.AccountId }, account.isSelected);
+                }
             };
 
             $scope.scopeModel.showExpandIcon = function (dataItem) {
