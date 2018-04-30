@@ -15,6 +15,11 @@ namespace Vanrise.GenericData.Entities
         public abstract string GetSettingsDescription(IGenericRuleSettingsDescriptionContext context);
 
         public abstract bool AreSettingsMatched(object ruleDefinitionSettings, object settingsFilterValue);
+
+        public virtual Dictionary<string, object> GetRateNamesAndValues()
+        {
+            return null;
+        }
     }
 
     public interface IGenericRule

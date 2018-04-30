@@ -41,5 +41,22 @@ namespace Vanrise.Rules.Pricing.MainExtensions.RateValue
             }
             return description.ToString();
         }
+
+        public override Dictionary<string, object> GetRateNamesAndValues()
+        {
+            Dictionary<string, object> ratesByNames = new Dictionary<string, object>();
+            ratesByNames.Add("Normal Rate", NormalRate);
+            if (RatesByRateType != null)
+            {
+                RateTypeManager rateTypeManager = new RateTypeManager();
+                foreach (KeyValuePair<int, Decimal> kvp in RatesByRateType)
+                {
+                    var rateType = rateTypeManager.GetRateType(kvp.Key);
+                    string rateTypeName = (rateType != null) ? rateType.Name : kvp.Key.ToString();
+                    ratesByNames.Add(rateTypeName, kvp.Value);
+                }
+            }
+            return ratesByNames;
+        }
     }
 }

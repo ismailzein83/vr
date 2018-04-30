@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Rules.Pricing
@@ -17,5 +18,10 @@ namespace Vanrise.Rules.Pricing
         }
 
         public abstract string GetDescription(IGenericRuleSettingsDescriptionContext context);
+
+        public virtual Dictionary<string, object> GetRateNamesAndValues()
+        {
+            return null;
+        }
     }
 }

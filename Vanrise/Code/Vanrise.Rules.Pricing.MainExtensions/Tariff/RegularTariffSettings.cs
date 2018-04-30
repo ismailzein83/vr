@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using Vanrise.Common.Business;
+using Vanrise.GenericData.Entities;
 
 namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
 {
@@ -147,6 +149,32 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
             var effectiveFractionUnit = FractionUnit == 0 ? 1 : FractionUnit;
             int firstFraction = FirstPeriod == 0 ? effectiveFractionUnit : FirstPeriod;
             return String.Format("{0}/{1}", firstFraction, effectiveFractionUnit);
+        }
+
+        public override Dictionary<string, object> GetRateNamesAndValues()
+        {
+            Dictionary<string, object> ratesByNames = new Dictionary<string, object>();
+            ratesByNames.Add("Call Fee", CallFee);
+            ratesByNames.Add("First Period", FirstPeriod);
+       
+            switch (FirstPeriodRateType)
+            {
+                case Tariff.FirstPeriodRateType.EffectiveRate:
+                    ratesByNames.Add("First Period Rate", "Effective Rate");
+                    break;
+
+                case Tariff.FirstPeriodRateType.FixedRate:
+                    if (!FirstPeriodRate.HasValue)
+                        throw new NullReferenceException("FirstPeriodRate");
+
+                    ratesByNames.Add("First Period Rate", FirstPeriodRate.Value);
+                    break;
+                default: throw new NotSupportedException(string.Format("FirstPeriodRateType has invalid value: {0}", FirstPeriodRateType));
+            }
+
+            ratesByNames.Add("Fraction Unit", FractionUnit);
+            ratesByNames.Add("Pricing Unit", PricingUnit);
+            return ratesByNames;
         }
     }
 }

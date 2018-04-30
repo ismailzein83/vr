@@ -20,5 +20,10 @@ namespace Vanrise.GenericData.Pricing
         {
             return true;
         }
+
+        public override Dictionary<string, object> GetRateNamesAndValues()
+        {
+            return Settings.GetRateNamesAndValues();
+        }
     }
 }

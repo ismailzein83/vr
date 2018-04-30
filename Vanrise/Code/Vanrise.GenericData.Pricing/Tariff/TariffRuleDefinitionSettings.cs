@@ -15,5 +15,15 @@ namespace Vanrise.GenericData.Pricing
         {
             get { return CONFIG_ID; }
         }
+        public override List<string> GetFieldNames()
+        {
+            List<string> fieldNames = new List<string>();
+            fieldNames.Add("Call Fee");
+            fieldNames.Add("First Period");
+            fieldNames.Add("First Period Rate");
+            fieldNames.Add("Fraction Unit");
+            fieldNames.Add("Pricing Unit");
+            return fieldNames;
+        }
     }
 }
