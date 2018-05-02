@@ -68,7 +68,7 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
                     RateValueRule rateValueRule = genericRule as RateValueRule;
                     List<string> settingData = new List<string>();
                     settingData.Add(currencyManager.GetCurrencySymbol(rateValueRule.Settings.CurrencyId));
-                    var rateNamesAndValues = genericRule.GetRateNamesAndValues();
+                    var rateNamesAndValues = genericRule.GetSettingsValuesByName();
                     if (rateNamesAndValues != null && rateNamesAndValues.Count != 0 && rateValueFieldNames!=null && rateValueFieldNames.Count!=0)
                     {
                         foreach (var rateName in rateValueFieldNames)
@@ -119,7 +119,7 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
                     TariffRule tariffRule = genericRule as TariffRule;
                     List<string> settingData = new List<string>();
                     settingData.Add(currencyManager.GetCurrencySymbol(tariffRule.Settings.CurrencyId));
-                    var rateNamesAndValues = genericRule.GetRateNamesAndValues();
+                    var rateNamesAndValues = genericRule.GetSettingsValuesByName();
                     if (rateNamesAndValues != null && rateNamesAndValues.Count!=0 && tarrifFieldNames!=null && tarrifFieldNames.Count!=0)
                     {
                         foreach (var rateName in tarrifFieldNames)
@@ -140,9 +140,10 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
             
             List<string> filteredCriteriaHeaders = new List<string>();
             List<GenericRuleDefinitionCriteriaField> filteredCriteria = new List<GenericRuleDefinitionCriteriaField>();
+            List<string> excludedCriteria = new List<string> { "Account", "ServiceType", "ChargingPolicy", "Package" };
             foreach (var criteriaField in genericRuleDefinition.CriteriaDefinition.Fields)
             {
-                if (!criteriaField.FieldName.Equals("Account") && !criteriaField.FieldName.Equals("ServiceType") && !criteriaField.FieldName.Equals("ChargingPolicy") && !criteriaField.FieldName.Equals("Package"))
+                if (!excludedCriteria.Contains(criteriaField.FieldName))
                 {
                     filteredCriteriaHeaders.Add(criteriaField.Title);
                     filteredCriteria.Add(criteriaField);
@@ -173,7 +174,7 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
                     {
                         foreach (GenericRuleDefinitionCriteriaField field in genericRuleDefinition.CriteriaDefinition.Fields)
                         {
-                            if (field.FieldName.Equals("ChargingPolicy") || field.FieldName.Equals("ServiceType") || field.FieldName.Equals("Package") || field.FieldName.Equals("Account"))
+                            if (excludedCriteria.Contains(field.FieldName))
                             {
                                 continue;
                             }

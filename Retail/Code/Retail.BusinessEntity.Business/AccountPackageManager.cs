@@ -201,7 +201,7 @@ namespace Retail.BusinessEntity.Business
                         {
                             RowIndex = 13,
                             ColumnIndex = 1,
-                            Value = string.Join(",", accountProfile.PhoneNumbers),
+                            Value = string.Join(", ", accountProfile.PhoneNumbers),
                             Style = valuesStyle
                         };
                         firstSheet.AddCell(phoneNumberValue);
@@ -412,11 +412,12 @@ namespace Retail.BusinessEntity.Business
 
             for (int i = 0; i < exportRateValueRuleData.Headers.Count; i++)
             {   
+                var currentHeader = exportRateValueRuleData.Headers[i];
                 VRExcelCell rateValueRuleTitleCell = new VRExcelCell
                 {
-                    RowIndex = rateValueRuleHeaderCell.RowIndex + 1,
+                    RowIndex = lastRowIndex + 1,
                     ColumnIndex = i,
-                    Value = exportRateValueRuleData.Headers[i],
+                    Value = currentHeader,
                     Style = headerStyle
                 };
                 VRExcelColumnConfig rateValueConfig = new VRExcelColumnConfig
@@ -426,10 +427,9 @@ namespace Retail.BusinessEntity.Business
                 };
                 configuredColumns.Add(i);
                 exportExcelSheet.SetColumnConfig(rateValueConfig);
-                lastRowIndex = rateValueRuleTitleCell.RowIndex;
                 exportExcelSheet.AddCell(rateValueRuleTitleCell);
             }
-
+            lastRowIndex= lastRowIndex+2;
             if (exportRateValueRuleData.Data != null)
             {
                 for (int i = 0; i < exportRateValueRuleData.Data.Count; i++)
@@ -437,16 +437,18 @@ namespace Retail.BusinessEntity.Business
                     var rowData = exportRateValueRuleData.Data[i];
                     for (int j = 0; j < rowData.Length; j++)
                     {
+                        var data = rowData[j];
                         VRExcelCell rateValueRuleDataCell = new VRExcelCell
                         {
-                            RowIndex = rateValueRuleHeaderCell.RowIndex + 2 + i,
+                            RowIndex = lastRowIndex,
                             ColumnIndex = j,
-                            Value = rowData[j],
+                            Value = data,
                             Style = dataStyle
                         };
-                        lastRowIndex = rateValueRuleDataCell.RowIndex;
+                        
                         exportExcelSheet.AddCell(rateValueRuleDataCell);
                     }
+                    lastRowIndex++;
                 }
             }
 
@@ -462,11 +464,12 @@ namespace Retail.BusinessEntity.Business
 
             for (int i = 0; i < exportTarrifRuleData.Headers.Count; i++)
             {
+                var currentHeader = exportTarrifRuleData.Headers[i];
                 VRExcelCell tarriffRuleTitleCell = new VRExcelCell
                 {
-                    RowIndex = tarrifRuleHeaderCell.RowIndex + 1,
+                    RowIndex = lastRowIndex + 1,
                     ColumnIndex = i,
-                    Value = exportTarrifRuleData.Headers[i],
+                    Value = currentHeader,
                     Style = headerStyle
                 };
                 if(!configuredColumns.Contains(i)){
@@ -479,9 +482,9 @@ namespace Retail.BusinessEntity.Business
                     exportExcelSheet.SetColumnConfig(tarrifConfig);
                 }
          
-                lastRowIndex = tarriffRuleTitleCell.RowIndex;
                 exportExcelSheet.AddCell(tarriffRuleTitleCell);
             }
+            lastRowIndex = lastRowIndex + 2;
 
             if (exportTarrifRuleData.Data != null)
             {
@@ -490,16 +493,18 @@ namespace Retail.BusinessEntity.Business
                     var rowData = exportTarrifRuleData.Data[i];
                     for (int j = 0; j < rowData.Length; j++)
                     {
+                        var data = rowData[j];
                         VRExcelCell tarrifRuleDataCell = new VRExcelCell
                         {
-                            RowIndex = tarrifRuleHeaderCell.RowIndex + 2 + i,
+                            RowIndex = lastRowIndex,
                             ColumnIndex = j,
-                            Value = rowData[j],
+                            Value = data,
                             Style = dataStyle
                         };
-                        lastRowIndex = tarrifRuleDataCell.RowIndex;
+                        
                         exportExcelSheet.AddCell(tarrifRuleDataCell);
                     }
+                    lastRowIndex++;
                 }
             }
             return exportExcelSheet;
