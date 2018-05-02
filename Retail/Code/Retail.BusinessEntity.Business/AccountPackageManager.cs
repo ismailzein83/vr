@@ -125,11 +125,13 @@ namespace Retail.BusinessEntity.Business
                 FontColor = "Black",
                 FontSize=10,
                 IsBold=true,
+                SetBorder = false
             };
              VRExcelCellStyle valuesStyle = new VRExcelCellStyle(){
                 FontColor = "Black",
                 FontSize=10,
-                IsBold=false
+                IsBold=false,
+                SetBorder = false
             };
          
             VRExcelCell logoCell = new VRExcelCell
@@ -174,16 +176,6 @@ namespace Retail.BusinessEntity.Business
                 Style = titlesStyle
             };
             firstSheet.AddCell(contactNameTitle);
-
-            VRExcelCell contactNameValue = new VRExcelCell
-            {
-                RowIndex = 12,
-                ColumnIndex = 1,
-                Value = "",
-                Style = titlesStyle
-            };
-            firstSheet.AddCell(contactNameValue);
-
             VRExcelCell phoneNumberTitle = new VRExcelCell
             {
                 RowIndex = 13,
@@ -196,15 +188,34 @@ namespace Retail.BusinessEntity.Business
             IAccountProfile accountProfile;
             if(accountManager.HasAccountProfile(accountBEDefinitionId, accountId, true, out accountProfile)){
                 if(accountProfile!=null){
-                    if(accountProfile.PhoneNumbers!=null && accountProfile.PhoneNumbers.Count!=0){
-                        VRExcelCell phoneNumberValue = new VRExcelCell
+                    AccountContact accountContact;
+                    if (accountProfile.TryGetContact("Main", out accountContact))
+                    {
+                        if (accountContact != null)
                         {
-                            RowIndex = 13,
-                            ColumnIndex = 1,
-                            Value = string.Join(", ", accountProfile.PhoneNumbers),
-                            Style = valuesStyle
-                        };
-                        firstSheet.AddCell(phoneNumberValue);
+                            if (accountContact.ContactName != null)
+                            {
+                                VRExcelCell contactNameValue = new VRExcelCell
+                                {
+                                    RowIndex = 12,
+                                    ColumnIndex = 1,
+                                    Value = accountContact.ContactName.ToString(),
+                                    Style = valuesStyle
+                                };
+                                firstSheet.AddCell(contactNameValue);
+                            }
+                            if (accountContact.PhoneNumbers != null && accountContact.PhoneNumbers.Count != 0)
+                            {
+                                VRExcelCell phoneNumberValue = new VRExcelCell
+                                {
+                                    RowIndex = 13,
+                                    ColumnIndex = 1,
+                                    Value = string.Join(", ", accountContact.PhoneNumbers),
+                                    Style = valuesStyle
+                                };
+                                firstSheet.AddCell(phoneNumberValue);
+                            }
+                        }
                     }
                 }
             }
@@ -284,7 +295,6 @@ namespace Retail.BusinessEntity.Business
             };
 
             firstSheet.AddCell(notesThirdCell);
-
             VRExcelColumnConfig titlesConfig = new VRExcelColumnConfig()
             {
                 ColumnIndex = 0,
@@ -386,24 +396,44 @@ namespace Retail.BusinessEntity.Business
                 return null;
 
             VRExcelSheet exportExcelSheet = new VRExcelSheet();
-            List<int> configuredColumns = new List<int>();
+            List<int> allColumnIndices = new List<int>();
             int lastRowIndex = 0;
             VRExcelCellStyle headerStyle = new VRExcelCellStyle()
             {
                 FontColor = "Red",
                 FontSize = 10,
                 IsBold = true,
+                SetBorder = false
+            };
+            VRExcelCellStyle titleStyle = new VRExcelCellStyle()
+            {
+                FontColor = "Red",
+                FontSize = 10,
+                IsBold = true,
+                SetBorder = true
             };
             VRExcelCellStyle dataStyle = new VRExcelCellStyle()
             {
                 FontColor = "Black",
                 FontSize = 10,
-                IsBold = false
+                IsBold = false,
+                SetBorder = true
             };
+            int rateValueHeaders = exportRateValueRuleData.Headers.Count;
+            int rateValueHeaderColumnIndex;
+            if (rateValueHeaders <= 3)
+            {
+                rateValueHeaderColumnIndex = (int)Math.Floor((decimal)(rateValueHeaders / 2));
+            }
+            else
+            {
+                rateValueHeaderColumnIndex = (int)Math.Floor((decimal)(rateValueHeaders / 2)-1);
+            }
+       
             VRExcelCell rateValueRuleHeaderCell = new VRExcelCell
             {
                 RowIndex = 0,
-                ColumnIndex = 1,
+                ColumnIndex = rateValueHeaderColumnIndex,
                 Value = rateValueRuleHeader,
                 Style = headerStyle
             };
@@ -418,15 +448,9 @@ namespace Retail.BusinessEntity.Business
                     RowIndex = lastRowIndex + 1,
                     ColumnIndex = i,
                     Value = currentHeader,
-                    Style = headerStyle
+                    Style = titleStyle
                 };
-                VRExcelColumnConfig rateValueConfig = new VRExcelColumnConfig
-                {
-                    ColumnIndex = i,
-                    ColumnWidth = 20
-                };
-                configuredColumns.Add(i);
-                exportExcelSheet.SetColumnConfig(rateValueConfig);
+                allColumnIndices.Add(i);
                 exportExcelSheet.AddCell(rateValueRuleTitleCell);
             }
             lastRowIndex= lastRowIndex+2;
@@ -445,17 +469,25 @@ namespace Retail.BusinessEntity.Business
                             Value = data,
                             Style = dataStyle
                         };
-                        
                         exportExcelSheet.AddCell(rateValueRuleDataCell);
                     }
                     lastRowIndex++;
                 }
             }
-
+            int tarrifHeaders = exportTarrifRuleData.Headers.Count;
+            int tarrifRuleHeaderColumnIndex;
+            if (tarrifHeaders <= 3)
+            {
+                tarrifRuleHeaderColumnIndex = (int)Math.Floor((decimal)(tarrifHeaders / 2));
+            }
+            else
+            {
+                tarrifRuleHeaderColumnIndex = (int)Math.Floor((decimal)(tarrifHeaders / 2) - 1);
+            }
             VRExcelCell tarrifRuleHeaderCell = new VRExcelCell
             {
                 RowIndex = lastRowIndex+3,
-                ColumnIndex = 1,
+                ColumnIndex = tarrifRuleHeaderColumnIndex,
                 Value = tarrifRuleHeader,
                 Style = headerStyle
             };
@@ -470,19 +502,13 @@ namespace Retail.BusinessEntity.Business
                     RowIndex = lastRowIndex + 1,
                     ColumnIndex = i,
                     Value = currentHeader,
-                    Style = headerStyle
+                    Style = titleStyle
                 };
-                if(!configuredColumns.Contains(i)){
-                    VRExcelColumnConfig tarrifConfig = new VRExcelColumnConfig
-                    {
-                        ColumnIndex = i,
-                        ColumnWidth = 20
-                    };
-                    configuredColumns.Add(i);
-                    exportExcelSheet.SetColumnConfig(tarrifConfig);
-                }
-         
                 exportExcelSheet.AddCell(tarriffRuleTitleCell);
+
+                if (!allColumnIndices.Contains(i))
+                    allColumnIndices.Add(i);
+
             }
             lastRowIndex = lastRowIndex + 2;
 
@@ -505,6 +531,18 @@ namespace Retail.BusinessEntity.Business
                         exportExcelSheet.AddCell(tarrifRuleDataCell);
                     }
                     lastRowIndex++;
+                }
+            }
+            if (allColumnIndices != null && allColumnIndices.Count != 0)
+            {
+                for (int i = 0; i < allColumnIndices.Count; i++)
+                {
+                    VRExcelColumnConfig columnConfig = new VRExcelColumnConfig
+                    {
+                        ColumnIndex = i,
+                        ColumnWidth = 20
+                    };
+                    exportExcelSheet.SetColumnConfig(columnConfig);
                 }
             }
             return exportExcelSheet;

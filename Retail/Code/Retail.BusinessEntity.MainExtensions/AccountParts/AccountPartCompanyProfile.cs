@@ -59,6 +59,27 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
 
 
         }
+        public bool TryGetContact(string contactType, out AccountContact accountContact)
+        {
+            if (this.Contacts != null && this.Contacts.Count != 0)
+            {
+                var mainContact = this.Contacts.GetRecord(contactType);
+                if (mainContact != null)
+                {
+                    accountContact = new AccountContact
+                    {
+                        ContactName = mainContact.ContactName,
+                        PhoneNumbers = mainContact.PhoneNumbers
+                    };
+                    return true;
+                }
+                accountContact = null;
+                return false;
+            }
+            accountContact = null;
+            return false;
+        }
+
 
         private int? GetRegionId()
         {
@@ -121,7 +142,4 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
         public SalutationType? Salutation { get; set; }
         public string Notes { get; set; }
     }
-
-   
-
 }

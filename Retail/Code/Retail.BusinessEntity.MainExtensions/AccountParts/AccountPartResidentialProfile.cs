@@ -77,5 +77,10 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
                 default: return null;
             }
         }
+        public bool TryGetContact(string contactType, out AccountContact accountContact)
+        {
+            accountContact=null;
+            return false;
+        }
     }
 }

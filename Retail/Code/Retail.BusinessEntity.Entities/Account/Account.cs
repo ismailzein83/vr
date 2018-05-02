@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 
 namespace Retail.BusinessEntity.Entities
 {
@@ -85,7 +86,11 @@ namespace Retail.BusinessEntity.Entities
         List<string> Faxes { get; }
 
         List<string> PhoneNumbers { get; }
+
         int? CityId { get; }
+
+        bool TryGetContact(string contactType, out AccountContact accountContact);
+
     }
 
     public interface IOperatorSetting
@@ -108,5 +113,21 @@ namespace Retail.BusinessEntity.Entities
     public abstract class BaseAccountExtendedSettings
     {
 
+    }
+    public class AccountContact
+    {
+        public string ContactName { get; set; }
+
+        public string Title { get; set; }
+
+        public string Email { get; set; }
+
+        public List<string> PhoneNumbers { get; set; }
+
+        public List<string> MobileNumbers { get; set; }
+
+        public SalutationType? Salutation { get; set; }
+
+        public string Notes { get; set; }
     }
 }

@@ -137,7 +137,6 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
         private void ExtractDataFromRule(Guid genericRuleDefinitionId, List<GenericRule> genericRules, List<string> settingHeaders, Func<GenericRuleDefinition, GenericRule, List<string>> getSettingDataList, out List<string> ruleDataHeaders, out List<string[]> exportRuleDataList)
         {
             GenericRuleDefinition genericRuleDefinition = new GenericRuleDefinitionManager().GetGenericRuleDefinition(genericRuleDefinitionId);
-            
             List<string> filteredCriteriaHeaders = new List<string>();
             List<GenericRuleDefinitionCriteriaField> filteredCriteria = new List<GenericRuleDefinitionCriteriaField>();
             List<string> excludedCriteria = new List<string> { "Account", "ServiceType", "ChargingPolicy", "Package" };
@@ -219,6 +218,22 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
                                 hasValueByColumn.Add(columnIndex, value != null);
                             }
                             columnIndex++;
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < genericRuleDefinitionFieldsCount; i++)
+                        {
+                            bool isValueExists;
+                            if (hasValueByColumn.TryGetValue(i, out isValueExists))
+                            {
+                                if (!isValueExists)
+                                    hasValueByColumn[i] = false;
+                            }
+                            else
+                            {
+                                hasValueByColumn.Add(i, false);
+                            }
                         }
                     }
                     if (settingHeaders != null)
