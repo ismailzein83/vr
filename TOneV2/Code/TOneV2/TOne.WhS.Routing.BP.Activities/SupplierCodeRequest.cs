@@ -47,7 +47,8 @@ namespace TOne.WhS.Routing.BP.Activities
 
         protected override LoadSupplierCodesOutput DoWorkWithResult(LoadSupplierCodesInput inputArgument, AsyncActivityHandle handle)
         {
-            SupplierCodeRequest.LoadSupplierCodes(inputArgument.EffectiveOn, inputArgument.IsFuture, inputArgument.SupplierInfo, inputArgument.Prefix, inputArgument.ParentWFRuntimeProcessId, handle.SharedInstanceData.InstanceInfo.ParentProcessID.Value);
+            SupplierCodeRequest.LoadSupplierCodes(inputArgument.EffectiveOn, inputArgument.IsFuture, inputArgument.SupplierInfo, inputArgument.Prefix, inputArgument.ParentWFRuntimeProcessId, 
+                handle.SharedInstanceData.InstanceInfo.ParentProcessID.Value, () => ShouldStop(handle));
             handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Loading Supplier Codes is done");
             return null;
         }
@@ -94,16 +95,17 @@ namespace TOne.WhS.Routing.BP.Activities
         }
     }
 
-
     public class SupplierCodeRequest : Vanrise.Runtime.Entities.InterRuntimeServiceRequest<List<SupplierCode>>
     {
         public string CodePrefix { get; set; }
 
         public long ParentProcessInstanceId { get; set; }
 
+
         static Dictionary<long, Dictionary<string, HashSet<SupplierCode>>> s_codesByPrefixByProcessInstanceId = new Dictionary<long,Dictionary<string,HashSet<SupplierCode>>>();
 
-        internal static void LoadSupplierCodes(DateTime? effectiveOn, bool isFuture, IEnumerable<RoutingSupplierInfo> activeSupplierInfo, string prefixOfCodesToLoad, int parentWFRuntimeProcessId, long parentProcessInstanceId)
+        internal static void LoadSupplierCodes(DateTime? effectiveOn, bool isFuture, IEnumerable<RoutingSupplierInfo> activeSupplierInfo, string prefixOfCodesToLoad, int parentWFRuntimeProcessId, 
+            long parentProcessInstanceId, Func<bool> shouldStop)
         {
             var codePrefixRequest = new CodePrefixRequest { ProcessInstanceId = parentProcessInstanceId, Prefix = prefixOfCodesToLoad };
             List<CodePrefix> codePrefixes = new Vanrise.Runtime.InterRuntimeServiceManager().SendRequest(parentWFRuntimeProcessId, codePrefixRequest);
@@ -112,7 +114,8 @@ namespace TOne.WhS.Routing.BP.Activities
             int minLength = int.MaxValue;
             int maxLength = 0;
             Dictionary<string, List<SupplierCode>> codesByCodeValue = new Dictionary<string, List<SupplierCode>>();
-            new SupplierCodeManager().LoadSupplierCodes(activeSupplierInfo, prefixOfCodesToLoad, effectiveOn, isFuture, (supplierCode) =>
+
+            new SupplierCodeManager().LoadSupplierCodes(activeSupplierInfo, prefixOfCodesToLoad, effectiveOn, isFuture, shouldStop, (supplierCode) =>
             {
                 var longestMatchCodePrefix = codePrefixesNeedsChildrenIterator.GetLongestMatch(supplierCode.Code);
                 if (longestMatchCodePrefix != null)
@@ -126,9 +129,11 @@ namespace TOne.WhS.Routing.BP.Activities
                     maxLength = codeLength;
             });
             
-
             foreach(var codePrefix in codePrefixes)
             {
+                if (shouldStop != null && shouldStop())
+                    break;
+
                 var codePrefixCodes = codesByPrefix.GetOrCreateItem(codePrefix.Code);
 
                 string prefix = codePrefix.Code.Substring(0, Math.Min(maxLength, codePrefix.Code.Length));

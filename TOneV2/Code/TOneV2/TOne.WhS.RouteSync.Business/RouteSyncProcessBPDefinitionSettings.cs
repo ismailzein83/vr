@@ -103,5 +103,10 @@ namespace TOne.WhS.RouteSync.Business
 
             return false;
         }
+
+        public override bool CanCancelBPInstance(Vanrise.BusinessProcess.Entities.IBPDefinitionCanCancelBPInstanceContext context)
+        {
+            return true;
+        }
     }
 }

@@ -44,7 +44,7 @@ namespace TOne.WhS.Routing.Business.Extensions
             Action<CustomerRoute> onCustomerRouteLoaded = BuildCustomerRouteLoadedAction(context);
 
             CustomerRouteManager routeManager = new CustomerRouteManager();
-            routeManager.LoadRoutesFromCurrentDB(customerId, codePrefix, onCustomerRouteLoaded);
+            routeManager.LoadRoutesFromCurrentDB(customerId, codePrefix, context.ShouldStop, onCustomerRouteLoaded);
         }
 
         private static Action<CustomerRoute> BuildCustomerRouteLoadedAction(IRouteReaderContext context)

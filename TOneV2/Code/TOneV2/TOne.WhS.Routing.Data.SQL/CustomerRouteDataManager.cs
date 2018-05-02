@@ -97,7 +97,7 @@ namespace TOne.WhS.Routing.Data.SQL
             return customerRoutes;
         }
 
-        public void LoadRoutes(int? customerId, string codePrefix, Action<CustomerRoute> onRouteLoaded)
+        public void LoadRoutes(int? customerId, string codePrefix, Func<bool> shouldStop, Action<CustomerRoute> onRouteLoaded)
         {
             StringBuilder queryBuilder = new StringBuilder(query_GetCustomerRoutes);
             queryBuilder.Replace("#LimitResult#", string.Empty);
@@ -116,11 +116,13 @@ namespace TOne.WhS.Routing.Data.SQL
             SupplierZoneDetailsDataManager supplierZoneDetailsDataManager = new SupplierZoneDetailsDataManager();
             supplierZoneDetailsDataManager.RoutingDatabase = RoutingDatabase;
 
-            ExecuteReaderText(queryBuilder.ToString(),
-                (reader) =>
+            ExecuteReaderText(queryBuilder.ToString(), (reader) =>
                 {
                     while (reader.Read())
                     {
+                        if (shouldStop != null && shouldStop())
+                            break;
+
                         CustomerRoute customerRoute = CustomerRouteMapper(reader);
 
                         if (customerRoute.Options != null && customerRoute.Options.Count > 0)
@@ -136,7 +138,7 @@ namespace TOne.WhS.Routing.Data.SQL
                         }
                         onRouteLoaded(customerRoute);
                     }
-                },
+                }, 
                 (cmd) =>
                 {
                     if (customerId.HasValue)

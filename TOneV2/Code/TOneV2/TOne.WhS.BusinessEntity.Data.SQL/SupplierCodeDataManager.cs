@@ -98,7 +98,7 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
         #endregion
 
 
-        public void LoadSupplierCodes(IEnumerable<RoutingSupplierInfo> activeSupplierInfo, string codePrefix, DateTime? effectiveOn, bool isFuture, Action<SupplierCode> onCodeLoaded)
+        public void LoadSupplierCodes(IEnumerable<RoutingSupplierInfo> activeSupplierInfo, string codePrefix, DateTime? effectiveOn, bool isFuture, Func<bool> shouldStop, Action<SupplierCode> onCodeLoaded)
         {
             DataTable dtActiveSuppliers = CarrierAccountDataManager.BuildRoutingSupplierInfoTable(activeSupplierInfo);
             ExecuteReaderSPCmd("[TOneWhS_BE].[sp_SupplierCode_GetActiveCodesBySuppliers]",
@@ -106,19 +106,22 @@ namespace TOne.WhS.BusinessEntity.Data.SQL
                 {
                     while(reader.Read())
                     {
+                        if (shouldStop != null && shouldStop())
+                            break;
+
                         onCodeLoaded(SupplierCodeMapper(reader));
                     }
                 },
                 (cmd) =>
-            {
-                var dtPrm = new SqlParameter("@ActiveSuppliersInfo", SqlDbType.Structured);
-                dtPrm.Value = dtActiveSuppliers;
-                cmd.Parameters.Add(dtPrm);
+                {
+                    var dtPrm = new SqlParameter("@ActiveSuppliersInfo", SqlDbType.Structured);
+                    dtPrm.Value = dtActiveSuppliers;
+                    cmd.Parameters.Add(dtPrm);
 
-                cmd.Parameters.Add(new SqlParameter("@CodePrefix", codePrefix));
-                cmd.Parameters.Add(new SqlParameter("@EffectiveOn", effectiveOn));
-                cmd.Parameters.Add(new SqlParameter("@IsFuture", isFuture));
-            });
+                    cmd.Parameters.Add(new SqlParameter("@CodePrefix", codePrefix));
+                    cmd.Parameters.Add(new SqlParameter("@EffectiveOn", effectiveOn));
+                    cmd.Parameters.Add(new SqlParameter("@IsFuture", isFuture));
+                });
         }
 
         #region State Backup Methods

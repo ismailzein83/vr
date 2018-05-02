@@ -214,7 +214,7 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
         }
 
 
-        public void LoadRoutes(int? customerId, string codePrefix, Action<CustomerRoute> onRouteLoaded)
+        public void LoadRoutes(int? customerId, string codePrefix, Func<bool> shouldStop, Action<CustomerRoute> onRouteLoaded)
         {
             throw new NotImplementedException();
         }

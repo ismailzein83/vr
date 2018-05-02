@@ -12,7 +12,6 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
-
     public class GenerateCustomerZoneDetailsInput
     {
         public BaseQueue<CustomerZoneDetailBatch> OutputQueue { get; set; }
@@ -40,7 +39,8 @@ namespace TOne.WhS.Routing.BP.Activities
             CustomerZoneDetailBatch customerZoneDetailBatch = new CustomerZoneDetailBatch();
             customerZoneDetailBatch.CustomerZoneDetails = new List<CustomerZoneDetail>();
             ZoneDetailBuilder zoneDetailBuilder = new ZoneDetailBuilder();
-            zoneDetailBuilder.BuildCustomerZoneDetails(inputArgument.CustomerInfos, inputArgument.EffectiveOn, inputArgument.IsEffectiveInFuture, inputArgument.VersionNumber, (customerZoneDetail) =>
+
+            zoneDetailBuilder.BuildCustomerZoneDetails(inputArgument.CustomerInfos, inputArgument.EffectiveOn, inputArgument.IsEffectiveInFuture, inputArgument.VersionNumber, () => { return ShouldStop(handle); }, (customerZoneDetail) =>
             {
                 customerZoneDetailBatch.CustomerZoneDetails.Add(customerZoneDetail);
                 //TODO: Batch Count Should be configuration parameter
@@ -53,11 +53,8 @@ namespace TOne.WhS.Routing.BP.Activities
             });
 
             if (customerZoneDetailBatch.CustomerZoneDetails.Count > 0)
-            {
                 inputArgument.OutputQueue.Enqueue(customerZoneDetailBatch);
-                customerZoneDetailBatch = new CustomerZoneDetailBatch();
-                customerZoneDetailBatch.CustomerZoneDetails = new List<CustomerZoneDetail>();
-            }
+
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Generating Customer Zone Details is done", null);
         }
 

@@ -7,10 +7,10 @@ using TOne.WhS.Routing.Business;
 using Vanrise.Queueing;
 using Vanrise.Entities;
 using System.Linq;
+using System;
 
 namespace TOne.WhS.Routing.BP.Activities
 {
-
     public class BuildCodeMatchesInput
     {
         public IEnumerable<CodePrefix> CodePrefixGroup { get; set; }
@@ -68,20 +68,23 @@ namespace TOne.WhS.Routing.BP.Activities
 
             BuildCodeMatchesContext codeMatchContext = new BuildCodeMatchesContext();
             codeMatchContext.SupplierZoneDetails = inputArgument.SupplierZoneDetails;
-            
 
             CodeMatchBuilder builder = new CodeMatchBuilder();
             //MemoryQueue<CodeMatches> outputQueueForCustomerRoutes = inputArgument.OutputQueueForCustomerRoutes as MemoryQueue<CodeMatches>;
 
             foreach (CodePrefix code in inputArgument.CodePrefixGroup)
             {
+                if (ShouldStop(handle))
+                    break;
+
                 IEnumerable<SaleCode> saleCodes = inputArgument.SaleCodes.FirstOrDefault(itm => itm.CodePrefix == code).SaleCodes.OrderBy(itm => itm.BED);
                 IEnumerable<SupplierCode> supplierCodes = inputArgument.SupplierCodes.FirstOrDefault(itm => itm.CodePrefix == code).SupplierCodes.OrderBy(itm => itm.BED);
                 codeMatchContext.CodePrefix = code.Code;
-                builder.BuildCodeMatches(codeMatchContext, saleCodes, supplierCodes, codeMatch =>
+                
+                builder.BuildCodeMatches(codeMatchContext, saleCodes, supplierCodes, () => { return ShouldStop(handle); }, codeMatch =>
                 {
                     codeMatch.CodePrefix = code.Code;
-                    if (inputArgument.IsCustomerRoutesProcess && inputArgument.OutputQueueForCustomerRoutes != null && codeMatch.SaleCodeMatches!=null && codeMatch.SaleCodeMatches.Count > 0)
+                    if (inputArgument.IsCustomerRoutesProcess && inputArgument.OutputQueueForCustomerRoutes != null && codeMatch.SaleCodeMatches != null && codeMatch.SaleCodeMatches.Count > 0)
                     {
                         RoutingCodeMatches routingCodeMatches = new RoutingCodeMatches()
                         {
@@ -94,7 +97,7 @@ namespace TOne.WhS.Routing.BP.Activities
 
                         foreach (SaleCodeMatch saleCodeMatch in codeMatch.SaleCodeMatches)
                         {
-                            SaleZoneDefintion saleZoneDefintion = new SaleZoneDefintion() 
+                            SaleZoneDefintion saleZoneDefintion = new SaleZoneDefintion()
                             {
                                 SaleZoneId = saleCodeMatch.SaleZoneId,
                                 SellingNumberPlanId = saleCodeMatch.SellingNumberPlanId
@@ -119,7 +122,6 @@ namespace TOne.WhS.Routing.BP.Activities
                     }
                 });
 
-
                 if (codeMatchesBatch != null && codeMatchesBatch.CodeMatches.Count > 0)
                 {
                     if (inputArgument.OutputQueue_1 != null)
@@ -129,6 +131,7 @@ namespace TOne.WhS.Routing.BP.Activities
                     codeMatchesBatch = new CodeMatchesBatch();
                 }
             }
+
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Building Code Matches is done", null);
         }
 

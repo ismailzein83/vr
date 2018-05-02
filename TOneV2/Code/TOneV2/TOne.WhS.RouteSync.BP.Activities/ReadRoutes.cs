@@ -62,13 +62,16 @@ namespace TOne.WhS.RouteSync.BP.Activities
             long totalRoutesRead = 0;
             List<SwitchRouteDelivery> switchesRouteDelivery = BuildSwitchesRouteDelivery(inputArgument.SwitchesInProcess);
             Action<Route, RouteReceivedContext> onRouteReceived = BuildOnRouteReceivedAction(deliverRoutesBatchSize, switchesRouteDelivery, ref totalBatchesRead, ref totalRoutesRead, handle);
-            RouteReaderContext routeReaderContext = new RouteReaderContext(onRouteReceived);
+            RouteReaderContext routeReaderContext = new RouteReaderContext(() => ShouldStop(handle), onRouteReceived);
             routeReaderContext.RouteRangeInfo = inputArgument.RangeInfo;
             routeReaderContext.RouteRangeType = inputArgument.RangeType;
             inputArgument.RouteReader.ReadRoutes(routeReaderContext);
 
             foreach (var switchRouteDelivery in switchesRouteDelivery)
             {
+                if (ShouldStop(handle))
+                    break;
+
                 if (switchRouteDelivery.PendingRoutes.Count > 0)
                 {
                     totalBatchesRead++;
@@ -76,6 +79,7 @@ namespace TOne.WhS.RouteSync.BP.Activities
                     switchRouteDelivery.SwitchInProcess.RouteQueue.Enqueue(new RouteBatch { Routes = switchRouteDelivery.PendingRoutes });
                 }
             }
+
             handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "{0} Batches Read, {1} Routes", totalBatchesRead, totalRoutesRead);
             return new ReadRoutesOutput { };
         }
@@ -134,23 +138,23 @@ namespace TOne.WhS.RouteSync.BP.Activities
 
         private class RouteReaderContext : IRouteReaderContext
         {
+            public RouteRangeType? RouteRangeType { get; set; }
+            public RouteRangeInfo RouteRangeInfo { get; set; }
+            
             Action<Route, RouteReceivedContext> _onRouteReceived;
-            public RouteReaderContext(Action<Route, RouteReceivedContext> onRouteReceived)
+            Func<bool> _shouldStop;
+
+            public RouteReaderContext(Func<bool> shouldStop, Action<Route, RouteReceivedContext> onRouteReceived)
             {
+                _shouldStop = shouldStop;
                 _onRouteReceived = onRouteReceived;
             }
-            public RouteRangeType? RouteRangeType
-            {
-                get;
-                set;
-            }
 
-            public RouteRangeInfo RouteRangeInfo
+            public bool ShouldStop()
             {
-                get;
-                set;
+                return _shouldStop();
             }
-
+            
             public void OnRouteReceived(Route route, RouteReceivedContext context)
             {
                 _onRouteReceived(route, context);

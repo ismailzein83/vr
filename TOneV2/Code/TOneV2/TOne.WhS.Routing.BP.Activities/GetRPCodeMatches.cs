@@ -38,13 +38,16 @@ namespace TOne.WhS.Routing.BP.Activities
             ICodeMatchesDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICodeMatchesDataManager>();
             dataManager.RoutingDatabase = routingDatabaseManager.GetRoutingDatabase(inputArgument.RoutingDatabaseId);
 
-            var codeMatches = dataManager.GetRPCodeMatches(inputArgument.FromZoneId, inputArgument.ToZoneId);
+            var codeMatches = dataManager.GetRPCodeMatches(inputArgument.FromZoneId, inputArgument.ToZoneId, () => ShouldStop(handle));
             
             long currentZoneId = 0;
             Dictionary<long, SupplierCodeMatchWithRate> currentSupplierCodeMatchesWithRate = null;
             
             foreach (var codeMatch in codeMatches.OrderBy(c => c.SaleZoneId))
             {
+                if (ShouldStop(handle))
+                    break;
+
                 if (currentZoneId != codeMatch.SaleZoneId)
                 {
                     if (currentSupplierCodeMatchesWithRate != null)
@@ -83,6 +86,7 @@ namespace TOne.WhS.Routing.BP.Activities
 
                 inputArgument.OutputQueue.Enqueue(codeMatchByZone);
             }
+
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Getting RP Code Matches is done", null);
         }
 

@@ -37,6 +37,8 @@ namespace TOne.WhS.RouteSync.Entities
 
         RouteRangeInfo RouteRangeInfo { get; }
 
+        bool ShouldStop();
+
         void OnRouteReceived(Route route, RouteReceivedContext context);
     }
 

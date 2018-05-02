@@ -14,7 +14,7 @@ namespace TOne.WhS.Routing.Business
     {
         #region Public Methods
 
-        public void BuildCustomerZoneDetails(IEnumerable<RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture, int versionNumber, Action<CustomerZoneDetail> onCustomerZoneDetailAvailable)
+        public void BuildCustomerZoneDetails(IEnumerable<RoutingCustomerInfo> customerInfos, DateTime? effectiveOn, bool isEffectiveInFuture, int versionNumber, Func<bool> shouldStop, Action<CustomerZoneDetail> onCustomerZoneDetailAvailable)
         {
             if (customerInfos == null)
                 return;
@@ -25,14 +25,12 @@ namespace TOne.WhS.Routing.Business
             //SaleZone Services variables
             bool isZoneServicesExplicitOnCustomer = ConfigurationManager.AppSettings["TOneWhS_Routing_ZoneServicesExplicitOnCustomer"] == "true";
             SaleEntityServiceLocator customerServiceLocator = null;
-            
 
             var carrierAccountManager = new CarrierAccountManager();
 
             foreach (RoutingCustomerInfo customerInfo in customerInfos)
             {
                 int? sellingProductId = carrierAccountManager.GetSellingProductId(customerInfo.CustomerId);
-
                 if (!sellingProductId.HasValue)
                     continue;
 
@@ -49,33 +47,30 @@ namespace TOne.WhS.Routing.Business
             SaleEntityZoneRateLocator customerZoneRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadAllNoCache(customerInfoDetails, effectiveOn, isEffectiveInFuture));
 
             if (isZoneServicesExplicitOnCustomer)
-            {
                 customerServiceLocator = new SaleEntityServiceLocator(new SaleEntityServiceReadAllNoCache(customerInfoDetails, effectiveOn, isEffectiveInFuture));
-            }
 
-            var saleZoneManager = new SaleZoneManager();
-
-            Vanrise.Common.Business.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
+            var currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
 
             DateTime currencyEffectiveDate = effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now;
 
-            Vanrise.Common.Business.ConfigManager commonConfigManager = new Vanrise.Common.Business.ConfigManager();
+            var commonConfigManager = new Vanrise.Common.Business.ConfigManager();
             int systemCurrencyId = commonConfigManager.GetSystemCurrencyId();
 
-            TOne.WhS.Routing.Business.ConfigManager routingConfigManager = new TOne.WhS.Routing.Business.ConfigManager();
+            var routingConfigManager = new TOne.WhS.Routing.Business.ConfigManager();
             Guid customerTransformationId = routingConfigManager.GetCustomerTransformationId();
-
             IncludedRulesConfiguration includedRulesConfiguration = routingConfigManager.GetIncludedRulesConfiguration();
 
-            DataTransformer dataTransformer = new DataTransformer();
-
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
             RPRouteManager rpRouteManager = new RPRouteManager();
+            DataTransformer dataTransformer = new DataTransformer();
 
             foreach (RoutingCustomerInfoDetails customerInfo in customerInfoDetails)
             {
+                if (shouldStop != null && shouldStop())
+                    return;
+
                 int sellingNumberPlanId = carrierAccountManager.GetSellingNumberPlanId(customerInfo.CustomerId, CarrierAccountType.Customer);
                 IEnumerable<SaleZone> customerSaleZones = saleZoneManager.GetCustomerSaleZones(customerInfo.CustomerId, effectiveOn, isEffectiveInFuture);
-
                 if (customerSaleZones == null)
                     continue;
 
@@ -159,30 +154,33 @@ namespace TOne.WhS.Routing.Business
         /// <param name="effectiveOn">Effective date for rates</param>
         /// <param name="isEffectiveInFuture">True if building process for Future.</param>
         /// <param name="onSupplierZoneDetailAvailable">Action that evalute a Supplier Zone Detail</param>
-        public void BuildSupplierZoneDetails(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<RoutingSupplierInfo> supplierInfos, int versionNumber, Action<SupplierZoneDetail> onSupplierZoneDetailAvailable)
+        public void BuildSupplierZoneDetails(DateTime? effectiveOn, bool isEffectiveInFuture, IEnumerable<RoutingSupplierInfo> supplierInfos, int versionNumber, Func<bool> shouldStop, Action<SupplierZoneDetail> onSupplierZoneDetailAvailable)
         {
-            SupplierRateManager supplierRateManager = new SupplierRateManager();
             SupplierZoneRateLocator supplierZoneRateLocator = new SupplierZoneRateLocator(new SupplierRateReadAllNoCache(supplierInfos, effectiveOn, isEffectiveInFuture));
             SupplierZoneServiceLocator supplierZoneServiceLocator = new SupplierZoneServiceLocator(new SupplierZoneServiceReadAllNoCache(supplierInfos, effectiveOn, isEffectiveInFuture));
 
-            Vanrise.Common.Business.ConfigManager commonConfigManager = new Vanrise.Common.Business.ConfigManager();
+            var commonConfigManager = new Vanrise.Common.Business.ConfigManager();
             int systemCurrencyId = commonConfigManager.GetSystemCurrencyId();
 
-            TOne.WhS.Routing.Business.ConfigManager routingConfigManager = new TOne.WhS.Routing.Business.ConfigManager();
+            var routingConfigManager = new TOne.WhS.Routing.Business.ConfigManager();
             Guid supplierTransformationId = routingConfigManager.GetSupplierTransformationId();
             IncludedRulesConfiguration includedRulesConfiguration = routingConfigManager.GetIncludedRulesConfiguration();
 
-            SupplierPriceListManager supplierPriceListManager = new SupplierPriceListManager();
-            Vanrise.Common.Business.CurrencyExchangeRateManager currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
+            var currencyExchangeRateManager = new Vanrise.Common.Business.CurrencyExchangeRateManager();
 
             DateTime currencyEffectiveDate = effectiveOn.HasValue ? effectiveOn.Value : DateTime.Now;
 
+            SupplierRateManager supplierRateManager = new SupplierRateManager();
+            SupplierPriceListManager supplierPriceListManager = new SupplierPriceListManager();
             ZoneServiceConfigManager zoneServiceConfigManager = new ZoneServiceConfigManager();
+            SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
             DataTransformer dataTransformer = new DataTransformer();
 
-            SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
             foreach (RoutingSupplierInfo supplierInfo in supplierInfos)
             {
+                if (shouldStop != null && shouldStop())
+                    return;
+
                 List<SupplierZone> supplierZones = supplierZoneManager.GetEffectiveSupplierZones(supplierInfo.SupplierId, effectiveOn, isEffectiveInFuture);
                 if (supplierZones == null)
                     continue;

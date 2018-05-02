@@ -193,10 +193,10 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
 
 
-        public void LoadSupplierCodes(IEnumerable<RoutingSupplierInfo> activeSupplierInfo, string codePrefix, DateTime? effectiveOn, bool isFuture, Action<SupplierCode> onCodeLoaded)
+        public void LoadSupplierCodes(IEnumerable<RoutingSupplierInfo> activeSupplierInfo, string codePrefix, DateTime? effectiveOn, bool isFuture, Func<bool> shouldStop, Action<SupplierCode> onCodeLoaded)
         {
             ISupplierCodeDataManager dataManager = BEDataManagerFactory.GetDataManager<ISupplierCodeDataManager>();
-            dataManager.LoadSupplierCodes(activeSupplierInfo, codePrefix, effectiveOn, isFuture, onCodeLoaded);
+            dataManager.LoadSupplierCodes(activeSupplierInfo, codePrefix, effectiveOn, isFuture, shouldStop, onCodeLoaded);
         }
     }
 }

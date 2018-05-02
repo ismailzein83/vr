@@ -25,8 +25,10 @@ namespace TOne.WhS.Routing.BP.Activities
     {
         [RequiredArgument]
         public InArgument<IEnumerable<RoutingSupplierInfo>> SupplierInfos { get; set; }
+
         [RequiredArgument]
         public InArgument<DateTime?> EffectiveOn { get; set; }
+
         [RequiredArgument]
         public InArgument<bool> IsEffectiveInFuture { get; set; }
 
@@ -41,7 +43,8 @@ namespace TOne.WhS.Routing.BP.Activities
             SupplierZoneDetailBatch supplierZoneDetailBatch = new SupplierZoneDetailBatch();
             supplierZoneDetailBatch.SupplierZoneDetails = new List<SupplierZoneDetail>();
             ZoneDetailBuilder zoneDetailBuilder = new ZoneDetailBuilder();
-            zoneDetailBuilder.BuildSupplierZoneDetails(inputArgument.EffectiveOn, inputArgument.IsEffectiveInFuture, inputArgument.SupplierInfos, inputArgument.VersionNumber, (supplierZoneDetail) =>
+
+            zoneDetailBuilder.BuildSupplierZoneDetails(inputArgument.EffectiveOn, inputArgument.IsEffectiveInFuture, inputArgument.SupplierInfos, inputArgument.VersionNumber, () => { return ShouldStop(handle); }, (supplierZoneDetail) =>
             {
                 supplierZoneDetailBatch.SupplierZoneDetails.Add(supplierZoneDetail);
                 //TODO: Batch Count Should be configuration parameter
@@ -54,11 +57,8 @@ namespace TOne.WhS.Routing.BP.Activities
             });
 
             if (supplierZoneDetailBatch.SupplierZoneDetails.Count > 0)
-            {
                 inputArgument.OutputQueue.Enqueue(supplierZoneDetailBatch);
-                supplierZoneDetailBatch = new SupplierZoneDetailBatch();
-                supplierZoneDetailBatch.SupplierZoneDetails = new List<SupplierZoneDetail>();
-            }
+
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Generating Supplier Zone Details is done", null);
         }
 

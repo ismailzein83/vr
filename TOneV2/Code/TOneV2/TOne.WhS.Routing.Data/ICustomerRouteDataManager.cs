@@ -22,7 +22,7 @@ namespace TOne.WhS.Routing.Data
 
         IEnumerable<Entities.CustomerRoute> GetFilteredCustomerRoutes(Vanrise.Entities.DataRetrievalInput<Entities.CustomerRouteQuery> input);
 
-        void LoadRoutes(int? customerId, string codePrefix, Action<CustomerRoute> onRouteLoaded);
+        void LoadRoutes(int? customerId, string codePrefix, Func<bool> shouldStop, Action<CustomerRoute> onRouteLoaded);
 
         List<CustomerRouteData> GetAffectedCustomerRoutes(List<AffectedRoutes> affectedRoutesList, List<AffectedRouteOptions> affectedRouteOptionsList, long partialRoutesNumberLimit, out bool maximumExceeded);
 

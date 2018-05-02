@@ -14,7 +14,7 @@ namespace TOne.WhS.Routing.Data
 
         void ApplyCodeMatchesForDB(object preparedCodeMatches);
 
-        IEnumerable<RPCodeMatches> GetRPCodeMatches(long fromZoneId, long toZoneId);
+        IEnumerable<RPCodeMatches> GetRPCodeMatches(long fromZoneId, long toZoneId, Func<bool> shouldStop);
 
         List<PartialCodeMatches> GetPartialCodeMatchesByRouteCodes(HashSet<string> routeCodes);
     }

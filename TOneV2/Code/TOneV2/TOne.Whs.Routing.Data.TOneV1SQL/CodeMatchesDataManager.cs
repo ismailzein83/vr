@@ -76,10 +76,11 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             }
         }
 
-        public IEnumerable<RPCodeMatches> GetRPCodeMatches(long fromZoneId, long toZoneId)
+        public IEnumerable<RPCodeMatches> GetRPCodeMatches(long fromZoneId, long toZoneId, Func<bool> shouldStop) 
         {
             throw new NotImplementedException();
         }
+
         public List<PartialCodeMatches> GetPartialCodeMatchesByRouteCodes(HashSet<string> routeCodes)
         {
             throw new NotImplementedException();

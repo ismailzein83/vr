@@ -17,7 +17,7 @@ namespace TOne.WhS.Routing.Business
     {
         #region Public Methods
 
-        public void BuildCodeMatches(IBuildCodeMatchesContext context, IEnumerable<SaleCode> saleCodes, IEnumerable<SupplierCode> supplierCodes, Action<CodeMatches> onCodeMatchesAvailable)
+        public void BuildCodeMatches(IBuildCodeMatchesContext context, IEnumerable<SaleCode> saleCodes, IEnumerable<SupplierCode> supplierCodes, Func<bool> shouldStop, Action<CodeMatches> onCodeMatchesAvailable)
         {
             List<SaleCodeIterator> saleCodeIterators;
             HashSet<string> distinctSaleCodes;
@@ -28,13 +28,20 @@ namespace TOne.WhS.Routing.Business
 
             foreach (string code in distinctSupplierCodes)
             {
+                if (shouldStop != null && shouldStop())
+                    break;
+
                 if (context.CodePrefix.Length > code.Length)
                     continue;
 
                 BuildAndAddCodeMatches(code, false, saleCodeIterators, supplierCodeIterators, context.SupplierZoneDetails, onCodeMatchesAvailable);
             }
+
             foreach (string code in distinctSaleCodes)
             {
+                if (shouldStop != null && shouldStop())
+                    break;
+
                 if (distinctSupplierCodes.Contains(code) || context.CodePrefix.Length > code.Length)
                     continue;
 
@@ -297,6 +304,7 @@ namespace TOne.WhS.Routing.Business
                         }
                     }
                 }
+
                 CodeMatches codeMatches = new CodeMatches
                 {
                     Code = code,
@@ -304,6 +312,7 @@ namespace TOne.WhS.Routing.Business
                     SupplierCodeMatches = supplierCodeMatches,
                     SupplierCodeMatchesBySupplier = supplierCodeMatchBySupplier
                 };
+
                 onCodeMatchesAvailable(codeMatches);
             }
         }

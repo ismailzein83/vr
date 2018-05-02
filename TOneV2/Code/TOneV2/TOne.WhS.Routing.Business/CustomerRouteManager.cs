@@ -36,7 +36,7 @@ namespace TOne.WhS.Routing.Business
             return BigDataManager.Instance.RetrieveData(input, new CustomerRouteRequestHandler());
         }
 
-        internal void LoadRoutesFromCurrentDB(int? customerId, string codePrefix, Action<CustomerRoute> onRouteLoaded)
+        internal void LoadRoutesFromCurrentDB(int? customerId, string codePrefix, Func<bool> shouldStop, Action<CustomerRoute> onRouteLoaded)
         {
             RoutingDatabaseManager routingDatabaseManager = new RoutingDatabaseManager();
             var routingDatabase = routingDatabaseManager.GetLatestRoutingDatabase(RoutingProcessType.CustomerRoute, RoutingDatabaseType.Current);
@@ -44,7 +44,7 @@ namespace TOne.WhS.Routing.Business
             {
                 ICustomerRouteDataManager dataManager = RoutingDataManagerFactory.GetDataManager<ICustomerRouteDataManager>();
                 dataManager.RoutingDatabase = routingDatabase;
-                dataManager.LoadRoutes(customerId, codePrefix, onRouteLoaded);
+                dataManager.LoadRoutes(customerId, codePrefix, shouldStop, onRouteLoaded);
             }
         }
 

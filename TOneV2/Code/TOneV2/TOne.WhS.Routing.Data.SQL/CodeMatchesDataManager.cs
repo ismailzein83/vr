@@ -27,6 +27,7 @@ namespace TOne.WhS.Routing.Data.SQL
         //const string ExactSupplierServicesSeparatorAsString = "#";
 
         //const string DateTimeFormat = "yyyy-MM-dd HH:mm:ss.fff";
+
         #region Public Methods
 
         public bool ShouldApplyCodeZoneMatch { get; set; }
@@ -137,13 +138,16 @@ namespace TOne.WhS.Routing.Data.SQL
             return codeMatchBulkInsertInfo;
         }
 
-        public IEnumerable<RPCodeMatches> GetRPCodeMatches(long fromZoneId, long toZoneId)
+        public IEnumerable<RPCodeMatches> GetRPCodeMatches(long fromZoneId, long toZoneId, Func<bool> shouldStop)
         {
             Dictionary<long, RPCodeMatches> result = new Dictionary<long, RPCodeMatches>();
             ExecuteReaderText(query_GetRPCodeMatchesByZone, (reader) =>
             {
                 while (reader.Read())
                 {
+                    if (shouldStop != null && shouldStop())
+                        break;
+
                     string code = reader["Code"] as string;
                     long saleZoneId = (long)reader["SaleZoneID"];
                     RPCodeMatches rpCodeMatches = result.GetOrCreateItem(saleZoneId, () =>
@@ -164,6 +168,7 @@ namespace TOne.WhS.Routing.Data.SQL
                 dtPrm.Value = toZoneId;
                 cmd.Parameters.Add(dtPrm);
             });
+
             return result.Values;
         }
 
