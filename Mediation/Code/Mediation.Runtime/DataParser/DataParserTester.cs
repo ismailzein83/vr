@@ -11546,6 +11546,7 @@ namespace Mediation.Runtime.DataParser
                              SubRecordsParsersByRecordType = GetHuaweiOgeroSubRecordsParsers(),
                              HeaderLength = 9
                          }
+
                     }
 
                 }
@@ -11579,7 +11580,8 @@ namespace Mediation.Runtime.DataParser
                     RecordType = "Ogero_Huawei_CDR",
                     FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
                      new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 10}
-                    }
+                    },
+                    CompositeFieldsParsers = GetFileNameCompositeParsers()
                 }
 
             });
@@ -12708,7 +12710,12 @@ namespace Mediation.Runtime.DataParser
             compositeParsers.Add(new DataSourceCompositeParser() { DataSourceFieldName = "DataSourceId" });
             return compositeParsers;
         }
-
+        private List<CompositeFieldsParser> GetFileNameCompositeParsers()
+        {
+            List<CompositeFieldsParser> compositeParsers = new List<CompositeFieldsParser>();
+            compositeParsers.Add(new FileNameCompositeParser() { FieldName = "FileName" });
+            return compositeParsers;
+        }
         #endregion
 
         #region Alcatel Ogero

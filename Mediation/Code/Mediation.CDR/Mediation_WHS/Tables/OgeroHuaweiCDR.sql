@@ -38,6 +38,9 @@
     [CallProperty]              INT           NULL,
     [AccountingRecordType]      INT           NULL,
     [OnlineChargingFlag]        INT           NULL,
-    [VisitedNetworkId]          VARCHAR (500) NULL
+    [VisitedNetworkId]          VARCHAR (500) NULL,
+    [FileName]                  VARCHAR (100) NULL
 );
+
+
 
