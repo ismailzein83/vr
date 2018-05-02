@@ -12,14 +12,18 @@ namespace Vanrise.GenericData.Entities
 
         List<DataRecord> GetFilteredDataRecords(IDataRecordDataManagerGetFilteredDataRecordsContext context);
 
-        void GetDataRecords(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup, Action<dynamic> onItemReady);
+        void GetDataRecords(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady);
 
         void DeleteRecords(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup);
 
         void DeleteRecords(DateTime dateTime, RecordFilterGroup recordFilterGroup);
+
         bool Update(Dictionary<string, Object> fieldValues, int? modifiedUserId);
+
         bool Insert(Dictionary<string, Object> fieldValues, int? createdUserId, int? modifiedUserId, out object insertedId);
+
         List<DataRecord> GetAllDataRecords(List<string> columns);
+
         bool AreDataRecordsUpdated(ref object updateHandle);
     }
 

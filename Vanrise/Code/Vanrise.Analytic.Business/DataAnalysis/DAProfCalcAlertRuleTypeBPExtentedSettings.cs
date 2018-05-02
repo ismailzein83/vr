@@ -39,6 +39,12 @@ namespace Vanrise.Analytic.Business
 
             return true;
         }
+
+        public override bool CanCancelBPInstance(IBPDefinitionCanCancelBPInstanceContext context)
+        {
+            return true;
+        }
+
         public override RequiredPermissionSettings GetViewInstanceRequiredPermissions(IBPDefinitionGetViewInstanceRequiredPermissionsContext context)
         {
             var daprofCalcGenerateAlertInput = context.InputArg.CastWithValidate<DAProfCalcGenerateAlertInput>("context.InputArg");
@@ -59,6 +65,7 @@ namespace Vanrise.Analytic.Business
         {
             return new DAProfCalcNotificationManager().DoesUserHaveStartNewInstanceAccess(context.UserId);
         }
+
         public override bool DoesUserHaveStartSpecificInstanceAccess(IBPDefinitionDoesUserHaveStartSpecificInstanceAccessContext context)
         {
             var daprofCalcGenerateAlertInput = context.InputArg.CastWithValidate<DAProfCalcGenerateAlertInput>("context.InputArg");

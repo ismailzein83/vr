@@ -74,7 +74,7 @@ namespace Vanrise.GenericData.Business
             return dataRecords;
         }
 
-        public void GetDataRecords(DateTime from, DateTime to, RecordFilterGroup filterGroup, Action<dynamic> onItemReady)
+        public void GetDataRecords(DateTime from, DateTime to, RecordFilterGroup filterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady)
         {
             var loadContext = new BusinessObjectDataProviderLoadRecordsContext
             {

@@ -387,7 +387,7 @@ namespace Vanrise.GenericData.Business
             return updateOperationOutput;
         }
 
-        public void GetDataRecords(Guid dataRecordStorageId, DateTime from, DateTime to, RecordFilterGroup recordFilterGroup, Action<dynamic> onItemReady)
+        public void GetDataRecords(Guid dataRecordStorageId, DateTime from, DateTime to, RecordFilterGroup recordFilterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady)
         {
             var dataRecordStorage = GetDataRecordStorage(dataRecordStorageId);
             if (dataRecordStorage == null)
@@ -399,7 +399,7 @@ namespace Vanrise.GenericData.Business
             if (dataManager == null)
                 throw new NullReferenceException(String.Format("dataManager. ID '{0}'", dataRecordStorageId));
 
-            dataManager.GetDataRecords(from, to, recordFilterGroup, onItemReady);
+            dataManager.GetDataRecords(from, to, recordFilterGroup, shouldStop, onItemReady);
         }
 
         public List<Guid> CheckRecordStoragesAccess(List<Guid> dataRecordStorages)

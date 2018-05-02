@@ -508,7 +508,7 @@ namespace Vanrise.GenericData.SQLDataStorage
             return base.IsDataUpdated(GetTableNameWithSchema(), ref updateHandle);
         }
 
-        public void GetDataRecords(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup, Action<dynamic> onItemReady)
+        public void GetDataRecords(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup, Func<bool> shouldStop, Action<dynamic> onItemReady)
         {
             var recortTypeManager = new DataRecordTypeManager();
             var recordRuntimeType = recortTypeManager.GetDataRecordRuntimeType(_dataRecordStorage.DataRecordTypeId);
@@ -532,10 +532,14 @@ namespace Vanrise.GenericData.SQLDataStorage
             string query = string.Format(@"select  * from {0} WITH (NOLOCK)
                                            where ({1} >= @FromTime) 
                                            and ({1} < @ToTime) {2}", tableName, dateTimeColumn, recordFilterResult);
+
             ExecuteReaderText(query, (reader) =>
             {
                 while (reader.Read())
                 {
+                    if (shouldStop != null && shouldStop())
+                        break;
+
                     dynamic item = Activator.CreateInstance(recordRuntimeType) as dynamic;
                     this.DynamicManager.FillDataRecordFromReader(item, reader);
                     onItemReady(item);

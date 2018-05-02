@@ -61,7 +61,7 @@ namespace Vanrise.GenericData.BP.Activities
 
             foreach (Guid recordStorageId in inputArgument.RecordStorageIds)
             {
-                manager.GetDataRecords(recordStorageId, inputArgument.FromTime, inputArgument.ToTime, null, ((itm) =>
+                manager.GetDataRecords(recordStorageId, inputArgument.FromTime, inputArgument.ToTime, null, () => ShouldStop(handle), ((itm) =>
                 {
                     eventCount++;
                     recordBatch.Records.Add(itm);
@@ -72,13 +72,11 @@ namespace Vanrise.GenericData.BP.Activities
                         recordBatch = new RecordBatch() { Records = new List<dynamic>() };
                     }
                 }));
-
-
             }
+
             if (recordBatch.Records.Count > 0)
-            {
                 inputArgument.OutputQueue.Enqueue(recordBatch);
-            }
+
             handle.SharedInstanceData.WriteTrackingMessage(LogEntryType.Information, "Loading Source Records is done. Events Count: {0}", eventCount);
 
             output.EventCount = eventCount;
