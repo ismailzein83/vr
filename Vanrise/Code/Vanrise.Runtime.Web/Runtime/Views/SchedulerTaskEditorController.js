@@ -54,7 +54,7 @@
             };
 
             $scope.close = function () {
-                $scope.modalContext.closeModal()
+                $scope.modalContext.closeModal();
             };
 
             $scope.triggerTypes = [];
@@ -142,7 +142,7 @@
                    taskObject = response;
                }).catch(function (error) {
                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-               })
+               });
         }
 
         function loadTriggers() {
@@ -280,7 +280,7 @@
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
-            });;
+            });
 
         }
 
@@ -298,7 +298,7 @@
                 VRNotificationService.notifyException(error, $scope);
             }).finally(function () {
                 $scope.isLoading = false;
-            });;
+            });
         }
 
         function getContext() {
@@ -308,7 +308,7 @@
                 }
             };
             return context;
-        };
+        }
     }
 
     appControllers.controller('Runtime_NewSchedulerTaskEditorController', newSchedulerTaskEditorController);
