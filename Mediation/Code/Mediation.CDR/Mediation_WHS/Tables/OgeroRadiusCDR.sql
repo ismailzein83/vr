@@ -63,3 +63,10 @@
     [FileName]               VARCHAR (50) NULL
 );
 
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_Radius_Id]
+    ON [Mediation_WHS].[OgeroRadiusCDR]([Id] ASC);
+
