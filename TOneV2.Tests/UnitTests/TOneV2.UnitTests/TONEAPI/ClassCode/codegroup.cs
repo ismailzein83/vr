@@ -25,12 +25,12 @@ namespace TONEAPI.ClassCode
 
 
             string codegroups = client.MakeRequested(parameters, token);
-          
+
             string result = "";
             try
             {
                 var objResponse1 =
-                            JsonConvert.DeserializeObject < jasonrespCG > (codegroups);
+                            JsonConvert.DeserializeObject<DataRetrievalObject<TOne.WhS.BusinessEntity.Entities.CodeGroupDetail>>(codegroups);
                 result = result + "Success: get codegroup  \n";
 
                 con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','Get CodeGroup','success','Success getting code group',getdate(),'API'");
@@ -46,40 +46,40 @@ namespace TONEAPI.ClassCode
                 List<EntityCG> LC = ds1.Tables[0].AsEnumerable().Select(row => new EntityCG
                 {
 
-                     Code = row.Field<string>("Code"),
-                     Id = row.Field<int>("ID"),
-                     CountryId= row.Field<int>("CountryID"),
+                    Code = row.Field<string>("Code"),
+                    Id = row.Field<int>("ID"),
+                    CountryId = row.Field<int>("CountryID"),
 
                 }).ToList();
 
 
-                
-                               List<DatumCG > ff = (List<DatumCG >)objResponse1.Data ;
 
-                               // check 1 
-                               if (LC.Count == ff.Count)
-                               {
-                                   result = result + " Success :  codegroup count correct  \n|";
-                                   con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','Code group count','success',' code group count is correct',getdate(),'API'");
-                               }
+                var ff = objResponse1.Data;
+
+                // check 1 
+                if (LC.Count == ff.Count)
+                {
+                    result = result + " Success :  codegroup count correct  \n|";
+                    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','Code group count','success',' code group count is correct',getdate(),'API'");
+                }
 
 
-                               bool correctcodegroup = false;
-                               foreach (EntityCG c in LC)
-                               {
-                                   if (ff.Any(countr => countr.Entity.Code == c.Code &&  countr.Entity.Id == c.Id &&  countr.Entity.CountryId == c.CountryId))
-                                   {
-                                       correctcodegroup = true;
-                                   }
-                                   else
-                                       correctcodegroup  = false;
-                               }
-                               if (correctcodegroup)
-                               {
-                                   result = result + " Success : CodeGroup equal CodeGroup in DB  \n|";
-                                   con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','Code group compare to DB','success',' code group equal to DB ',getdate(),'API'");
-                               }
-                 
+                //bool correctcodegroup = false;
+                //foreach (EntityCG c in LC)
+                //{
+                //    if (ff.Any(countr => countr.Entity.Code == c.Code && countr.Entity.Id == c.Id && countr.Entity.CountryId == c.CountryId))
+                //    {
+                //        correctcodegroup = true;
+                //    }
+                //    else
+                //        correctcodegroup = false;
+                //}
+                //if (correctcodegroup)
+                //{
+                //    result = result + " Success : CodeGroup equal CodeGroup in DB  \n|";
+                //    con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','Code group compare to DB','success',' code group equal to DB ',getdate(),'API'");
+                //}
+
 
             }
 
@@ -98,32 +98,32 @@ namespace TONEAPI.ClassCode
         // Add codegroup To database 
 
 
-        public String Addcodegroup(String _PostData, String _Token,Uri ur)
+        public String Addcodegroup(String _PostData, String _Token, Uri ur)
         {
             connect con = new connect();
-            string endPoint =  ur.ToString() + "/api/WhS_BE/CodeGroup/AddCodeGroup";
+            string endPoint = ur.ToString() + "/api/WhS_BE/CodeGroup/AddCodeGroup";
             string raddcountry;
 
             var client = new RestClient(endpoint: endPoint,
                             method: HttpVerb.POST);
             client.PostData = _PostData;
             client.ContentType = "application/json;charset=UTF-8";
-            raddcountry =  client.MakeRequested(_PostData, _Token);
+            raddcountry = client.MakeRequested(_PostData, _Token);
             con.updatedata("INSERT INTO [dbo].[logging]           ([module]           ,[Events]           ,[status]           ,[messages]           ,[eventdate],unit)    select 'CodeGroup','Code group create','success','success:code group create',getdate(),'API'");
-            return raddcountry; 
-        
-         
-        
+            return raddcountry;
+
+
+
         }
-  
-         
+
+
 
     }
 }
 
 
 
-     
+
 
 
 

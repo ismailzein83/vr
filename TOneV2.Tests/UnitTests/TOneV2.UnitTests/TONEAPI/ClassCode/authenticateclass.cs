@@ -122,4 +122,9 @@ namespace TONEAPI.ClassCode
         public AuthenticationObject AuthenticationObject { get; set; }
     }
     }
+
+    public class DataRetrievalObject<T>
+    {
+        public List<T> Data { get; set; }
+    }
     }

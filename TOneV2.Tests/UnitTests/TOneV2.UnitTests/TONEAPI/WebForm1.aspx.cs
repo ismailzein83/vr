@@ -2493,6 +2493,12 @@ namespace TONEAPI
 
         }
 
+        protected void Button7_Click(object sender, EventArgs e)
+        {
+
+            TextBox11.Text = Math.Round(Decimal.Parse(TextBox11.Text), 2, MidpointRounding.AwayFromZero).ToString();
+        }
+
 
     
     }

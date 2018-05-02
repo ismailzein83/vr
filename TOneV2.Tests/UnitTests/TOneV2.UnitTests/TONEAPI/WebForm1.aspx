@@ -119,6 +119,8 @@
         <asp:Button ID="Button2" runat="server" OnClick="Button2_Click" Text="Start All GUI" style="background-color: #00CC00;" BorderStyle="Groove" Height="37px" Width="147px" />
         <asp:Button ID="Button3" runat="server" OnClick="Button3_Click" Text="Unit Test" Width="144px" />
         <asp:TextBox ID="TextBox7" runat="server" Width="102px" Visible="False"></asp:TextBox>
+                    <asp:Button ID="Button7" runat="server" OnClick="Button7_Click" Text="Button" />
+                    <asp:TextBox ID="TextBox11" runat="server"></asp:TextBox>
                 </td>
             </tr>
         </table>
