@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Npgsql;
+using System;
 using System.Collections.Generic;
 using System.Data;
-using Npgsql;
 
 namespace Vanrise.Data.Postgres
 {
@@ -33,6 +33,7 @@ namespace Vanrise.Data.Postgres
         #endregion
 
         #region ExecuteReader
+
         protected void ExecuteReaderText(string cmdText, Action<IDataReader> onReaderReady, Action<NpgsqlCommand> prepareCommand, int? commandTimeout = null)
         {
             using (NpgsqlConnection conn = new NpgsqlConnection(this.GetConnectionString()))
@@ -56,6 +57,7 @@ namespace Vanrise.Data.Postgres
         #endregion
 
         #region GetItem(s)
+
         protected T GetItemText<T>(string cmdText, Func<IDataReader, T> objectBuilder, Action<NpgsqlCommand> prepareCommand)
         {
             T obj = default(T);
@@ -69,6 +71,7 @@ namespace Vanrise.Data.Postgres
                 prepareCommand);
             return obj;
         }
+
         protected List<T> GetItemsText<T>(string cmdText, Func<IDataReader, T> objectBuilder, Action<NpgsqlCommand> prepareCommand)
         {
             List<T> lst = new List<T>();
@@ -172,6 +175,7 @@ namespace Vanrise.Data.Postgres
         #endregion
 
         #region Private Functions
+
         private NpgsqlCommand CreateCommand(NpgsqlConnection conn, string sql, int? commandTimeout)
         {
             var cmd = conn.CreateCommand();
@@ -183,6 +187,7 @@ namespace Vanrise.Data.Postgres
         #endregion
 
         #region BulkCopy
+
         public void Bulk(IEnumerable<INpgBulkCopy> objectList, string tableName)
         {
             if (objectList == null)
