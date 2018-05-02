@@ -158,18 +158,16 @@
             var vrAlertRuleTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
             vrAlertRuleTypeSelectoReadyDeferred.promise.then(function () {
-                var vrAlertRuleTypeSelectorPayload;
-
+                var vrAlertRuleTypeSelectorPayload = {                    
+                    filter: {
+                        Filters: [{
+                            $type: "Vanrise.Notification.Business.VRAlertRuleTypeAddOrEditFilter, Vanrise.Notification.Business",
+                            EditMode: isEditMode
+                        }]
+                    }
+                };
                 if (vrAlertRuleEntity != undefined && vrAlertRuleEntity.RuleTypeId != undefined) {
-                    vrAlertRuleTypeSelectorPayload = {
-                        selectedIds: vrAlertRuleEntity.RuleTypeId,
-                        filter: {
-                            Filters: [{
-                                $type: "Vanrise.Notification.Business.VRAlertRuleTypeAddOrEditFilter, Vanrise.Notification.Business",
-                                EditMode: isEditMode
-                            }]
-                        }
-                    };
+                    vrAlertRuleTypeSelectorPayload.selectedIds = vrAlertRuleEntity.RuleTypeId;
                 }
                 VRUIUtilsService.callDirectiveLoad(vrAlertRuleTypeSelectorAPI, vrAlertRuleTypeSelectorPayload, vrAlertRuleTypeSelectorLoadDeferred);
             });

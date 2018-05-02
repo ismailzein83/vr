@@ -57,6 +57,7 @@
     <Compile Include="Filters\IVRAlertRuleTypeFilter\VRBalanceAlertRuleTypeFilter.cs" />
     <Compile Include="VRAlertLevelBEDefinitionSettings.cs" />
     <Compile Include="VRAlertLevelManager.cs" />
+    <Compile Include="VRAlertRuleTypeViewFilter.cs" />
     <Compile Include="VRAlertRuleTypeAddOrEditFilter.cs" />
     <Compile Include="Context\VRActionExecutionContext.cs" />
     <Compile Include="Filters\IVRNotificationViewFilter\VRNotificationTypeViewFilter.cs" />

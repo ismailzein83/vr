@@ -68,7 +68,14 @@
         function loadVRAlertRuleTypeSelector() {
             var vrAlertRuleTypeSelectorLoadDeferred = UtilsService.createPromiseDeferred();
             vrAlertRuleTypeSelectoReadyDeferred.promise.then(function () {
-                VRUIUtilsService.callDirectiveLoad(vrAlertRuleTypeSelectorAPI, undefined, vrAlertRuleTypeSelectorLoadDeferred);
+                var vrAlertRuleTypeSelectorPayload = {
+                    filter: {
+                        Filters: [{
+                            $type: "Vanrise.Notification.Business.VRAlertRuleTypeViewFilter, Vanrise.Notification.Business"
+                        }]
+                    }
+                };
+                VRUIUtilsService.callDirectiveLoad(vrAlertRuleTypeSelectorAPI, vrAlertRuleTypeSelectorPayload, vrAlertRuleTypeSelectorLoadDeferred);
             });
             return vrAlertRuleTypeSelectorLoadDeferred.promise;
         }
