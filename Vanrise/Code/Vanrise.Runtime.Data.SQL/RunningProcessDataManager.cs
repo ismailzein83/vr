@@ -33,7 +33,7 @@ namespace Vanrise.Runtime.Data.SQL
             return GetItemsSP("[runtime].[sp_RunningProcess_GetAll]", RunningProcessInfoMapper);
         }
 
-        public List<Entities.RunningProcessDetails> GetFilteredRunningProcesses(DataRetrievalInput<RunningProcessQuery> input) ////ADDED BY ME
+        public List<Entities.RunningProcessDetails> GetFilteredRunningProcesses(DataRetrievalInput<RunningProcessQuery> input)
         {
             return GetItemsSP("[runtime].[sp_RunningProcess_GetFiltered]", RunningProcessDetailsMapper, input.Query.RuntimeNodeInstanceId);
         }

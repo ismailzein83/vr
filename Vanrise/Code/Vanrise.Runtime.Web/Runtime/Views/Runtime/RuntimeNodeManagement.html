@@ -55,8 +55,8 @@
                     <vr-label>Machine Name : {{node.State.MachineName}}</vr-label><br />
                     <vr-label>OSProcess ID: {{node.State.OSProcessId}}</vr-label><br />
                     <vr-label>Service URL: {{node.State.ServiceURL}}</vr-label><br />
-                    <vr-label>Started Time: {{node.State.StartedTime}}</vr-label><br />
-                    <vr-label>Last HeartBeat Time: {{node.State.LastHeartBeatTime}}</vr-label><br />
+                    <vr-label>Started Time: {{node.State.StartedTimeFormatted}}</vr-label><br />
+                    <vr-label>Last HeartBeat Time: {{node.State.LastHeartBeatTimeFormatted}}</vr-label><br />
                     <vr-label>Number of Seconds HeartBeat Received : {{node.State.NbOfSecondsHeartBeatReceived}}</vr-label>
                 </div>
                 <div ng-if="node.State==null">

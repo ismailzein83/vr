@@ -18,7 +18,7 @@
             $scope.scopeModel = {};
             filter = {};
 
-                $scope.onGridReady = function (api) {
+            $scope.onGridReady = function (api) {
                     gridAPI = api;
                     api.loadGrid(filter);
                 };
@@ -81,9 +81,11 @@
                         for (var j = 0; j < $scope.datasource.length; j++) {
                             if ($scope.datasource[j].RuntimeNodeId == response[i].RuntimeNodeId) {
                                 $scope.datasource[j].State = response[i];
-                                //if($scope.datasource[i].preview==true){
-                                //    call the Grid
-                                //}
+
+                                if($scope.datasource[i].preview==true){
+                                   //gridAPI.getNewData(filter);
+                                   gridAPI.loadGrid(filter);
+                                }
                             }
                         }
                         getStates.resolve();

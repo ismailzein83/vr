@@ -80,7 +80,7 @@ namespace Vanrise.Runtime
         }
 
 
-        public IDataRetrievalResult<RunningProcessDetails> GetFilteredRunningProcesses(DataRetrievalInput<RunningProcessQuery> input)//ADDED BY ME
+        public IDataRetrievalResult<RunningProcessDetails> GetFilteredRunningProcesses(DataRetrievalInput<RunningProcessQuery> input)
         {
             IRunningProcessDataManager runningProcessDataManager = RuntimeDataManagerFactory.GetDataManager<IRunningProcessDataManager>();
             IEnumerable<RunningProcessDetails> runningProcesses = runningProcessDataManager.GetFilteredRunningProcesses(input);
@@ -178,7 +178,7 @@ namespace Vanrise.Runtime
         }
 
         #region Mapper
-        private RunningProcessDetails RunningProcessDetailMapper(RunningProcessDetails process) //ADDED BY ME
+        private RunningProcessDetails RunningProcessDetailMapper(RunningProcessDetails process)
         {
             return new RunningProcessDetails
             {
