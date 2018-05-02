@@ -35,6 +35,7 @@ xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Datasource_Mult
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Datasource_Namibia.PostDeployment.sql" /y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Jazz.Huawei.PostDeployment.sql" /y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Mediation_Ogero.Huawei.PostDeployment.sql" /y /v /z /i /Q /R	"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 
 xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\Configuration.txt" /y /v /z /i /Q /R									"\\192.168.110.185\Fixes\WebSite\Mediation\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
 
