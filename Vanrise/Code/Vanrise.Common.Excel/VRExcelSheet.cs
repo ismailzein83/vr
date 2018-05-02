@@ -53,6 +53,8 @@ namespace Vanrise.Common.Excel
         public bool IsBold { get; set; }
 
         public bool IsItalic { get; set; }
+
+        public bool SetBorder { get; set; }
     }
 
     public class VRExcelRowConfig : VRExcelContainerConfig

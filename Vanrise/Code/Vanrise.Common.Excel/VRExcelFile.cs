@@ -81,7 +81,20 @@ namespace Vanrise.Common.Excel
         Style BuildSheetContainerCommonConfigs(VRExcelContainerConfig config, Workbook excelTemplate)
         {
             Style style = excelTemplate.CreateStyle();
-
+            if (config.SetBorder == true)
+            {
+                style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.Black);
+                style.SetBorder(BorderType.TopBorder, CellBorderType.Thin, Color.Black);
+                style.SetBorder(BorderType.RightBorder, CellBorderType.Thin, Color.Black);
+                style.SetBorder(BorderType.BottomBorder, CellBorderType.Thin, Color.Black);
+            }
+            //if (config.SetBorder == true) 
+            //{
+            //    style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.LightGray); //Border color matching original cell border color
+            //    style.SetBorder(BorderType.TopBorder, CellBorderType.Thin, Color.LightGray);
+            //    style.SetBorder(BorderType.RightBorder, CellBorderType.Thin, Color.LightGray);
+            //    style.SetBorder(BorderType.BottomBorder, CellBorderType.Thin, Color.LightGray);
+            //}
             if (!string.IsNullOrEmpty(config.BGColor))
                 style.ForegroundColor = ColorTranslator.FromHtml(config.BGColor);
             style.Pattern = BackgroundType.Solid;
