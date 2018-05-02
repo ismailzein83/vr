@@ -166,12 +166,13 @@ namespace TOne.WhS.BusinessEntity.Business
             };
         }
 
-        public SwitchCDPNsForZoneMatch GetSwitchCDPNsForZoneMatch(int switchId, string cdpn, string cdpnIn, string cdpnOut, Guid normalizationRuleDefinitionId, DateTime effectiveTime)
+        public SwitchCDPNsForZoneMatch GetSwitchCDPNsForZoneMatch(string cdpn, string cdpnIn, string cdpnOut, Guid normalizationRuleDefinitionId, DateTime effectiveTime, 
+            int switchId, int? customerId, int? supplierId)
         {
             Dictionary<SwitchCDPN, CDPNIdentification> mappingResults = GetCachedMappingSwitchCDPNs(switchId);
 
-            string saleZoneCDPN = GetCDPNValueForZoneMatch(mappingResults.GetRecord(SwitchCDPN.SaleZoneCDPN), cdpn, cdpnIn, cdpnOut, normalizationRuleDefinitionId, effectiveTime, switchId);
-            string supplierZoneCDPN = GetCDPNValueForZoneMatch(mappingResults.GetRecord(SwitchCDPN.SupplierZoneCDPN), cdpn, cdpnIn, cdpnOut, normalizationRuleDefinitionId, effectiveTime, switchId);
+            string saleZoneCDPN = GetCDPNValueForZoneMatch(mappingResults.GetRecord(SwitchCDPN.SaleZoneCDPN), cdpn, cdpnIn, cdpnOut, normalizationRuleDefinitionId, effectiveTime, switchId, customerId, supplierId);
+            string supplierZoneCDPN = GetCDPNValueForZoneMatch(mappingResults.GetRecord(SwitchCDPN.SupplierZoneCDPN), cdpn, cdpnIn, cdpnOut, normalizationRuleDefinitionId, effectiveTime, switchId, customerId, supplierId);
 
             return new SwitchCDPNsForZoneMatch
             {
@@ -286,21 +287,21 @@ namespace TOne.WhS.BusinessEntity.Business
         }
 
         private string GetCDPNValueForZoneMatch(CDPNIdentification cdpnIdentification, string cdpn, string cdpnIn, string cdpnOut, Guid normalizationRuleDefinitionId,
-            DateTime effectiveTime, int switchId)
+            DateTime effectiveTime, int switchId, int? customerId, int? supplierId)
         {
             switch (cdpnIdentification)
             {
                 case CDPNIdentification.CDPN: return cdpn;
                 case CDPNIdentification.CDPNIn: return cdpnIn;
                 case CDPNIdentification.CDPNOut: return cdpnOut;
-                case CDPNIdentification.NormalizedCDPN: return GetCDPNNormalizedValue(cdpn, normalizationRuleDefinitionId, effectiveTime, switchId);
-                case CDPNIdentification.NormalizedCDPNIn: return GetCDPNNormalizedValue(cdpnIn, normalizationRuleDefinitionId, effectiveTime, switchId);
-                case CDPNIdentification.NormalizedCDPNOut: return GetCDPNNormalizedValue(cdpnOut, normalizationRuleDefinitionId, effectiveTime, switchId);
+                case CDPNIdentification.NormalizedCDPN: return GetCDPNNormalizedValue(cdpn, normalizationRuleDefinitionId, effectiveTime, switchId, customerId, supplierId);
+                case CDPNIdentification.NormalizedCDPNIn: return GetCDPNNormalizedValue(cdpnIn, normalizationRuleDefinitionId, effectiveTime, switchId, customerId, supplierId);
+                case CDPNIdentification.NormalizedCDPNOut: return GetCDPNNormalizedValue(cdpnOut, normalizationRuleDefinitionId, effectiveTime, switchId, customerId, supplierId);
                 default: throw new NotSupportedException("cdpnIdentification");
             }
         }
 
-        private string GetCDPNNormalizedValue(string cdpn, Guid normalizationRuleDefinitionId, DateTime effectiveTime, int switchId)
+        private string GetCDPNNormalizedValue(string cdpn, Guid normalizationRuleDefinitionId, DateTime effectiveTime, int switchId, int? customerId, int? supplierId)
         {
             int cdpnChoiceValue = 1;
 
@@ -312,6 +313,8 @@ namespace TOne.WhS.BusinessEntity.Business
             genericRuleTarget.TargetFieldValues = new Dictionary<string, object>();
             genericRuleTarget.TargetFieldValues.Add("NumberType", cdpnChoiceValue);
             genericRuleTarget.TargetFieldValues.Add("Switch", switchId);
+            genericRuleTarget.TargetFieldValues.Add("Customer", customerId);
+            genericRuleTarget.TargetFieldValues.Add("Supplier", supplierId);
             if (!string.IsNullOrEmpty(cdpn))
             {
                 genericRuleTarget.TargetFieldValues.Add("NumberPrefix", cdpn);

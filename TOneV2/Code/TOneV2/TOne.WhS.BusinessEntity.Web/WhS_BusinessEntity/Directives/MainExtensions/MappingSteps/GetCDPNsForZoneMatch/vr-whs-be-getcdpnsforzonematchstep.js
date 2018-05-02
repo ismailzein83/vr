@@ -30,6 +30,8 @@ app.directive('vrWhsBeGetcdpnsforzonematchstep', ['UtilsService', 'VRUIUtilsServ
         };
 
         function GetCDPNsForZoneMatchStepCtor(ctrl, $scope) {
+            this.initializeController = initializeController;
+
             var stepPayload;
 
             var ruleDefinitionDirectiveAPI;
@@ -37,9 +39,6 @@ app.directive('vrWhsBeGetcdpnsforzonematchstep', ['UtilsService', 'VRUIUtilsServ
 
             var effectiveTimeDirectiveAPI;
             var effectiveTimeDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
-
-            var switchIdDirectiveReadyAPI;
-            var switchIdDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var cdpnDirectiveReadyAPI;
             var cdpnDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -49,6 +48,15 @@ app.directive('vrWhsBeGetcdpnsforzonematchstep', ['UtilsService', 'VRUIUtilsServ
 
             var cdpnOutDirectiveReadyAPI;
             var cdpnOutDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var switchIdDirectiveReadyAPI;
+            var switchIdDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var customerIdDirectiveReadyAPI;
+            var customerIdDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var supplierIdDirectiveReadyAPI;
+            var supplierIdDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
             var saleZoneCDPNDirectiveReadyAPI;
             var saleZoneCDPNDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -67,10 +75,6 @@ app.directive('vrWhsBeGetcdpnsforzonematchstep', ['UtilsService', 'VRUIUtilsServ
                     effectiveTimeDirectiveAPI = api;
                     effectiveTimeDirectiveReadyPromiseDeferred.resolve();
                 };
-                $scope.scopeModel.onSwitchIdReady = function (api) {
-                    switchIdDirectiveReadyAPI = api;
-                    switchIdDirectiveReadyPromiseDeferred.resolve();
-                };
                 $scope.scopeModel.onCDPNReady = function (api) {
                     cdpnDirectiveReadyAPI = api;
                     cdpnDirectiveReadyPromiseDeferred.resolve();
@@ -82,6 +86,18 @@ app.directive('vrWhsBeGetcdpnsforzonematchstep', ['UtilsService', 'VRUIUtilsServ
                 $scope.scopeModel.onCDPNOutReady = function (api) {
                     cdpnOutDirectiveReadyAPI = api;
                     cdpnOutDirectiveReadyPromiseDeferred.resolve();
+                };
+                $scope.scopeModel.onSwitchIdReady = function (api) {
+                    switchIdDirectiveReadyAPI = api;
+                    switchIdDirectiveReadyPromiseDeferred.resolve();
+                };
+                $scope.scopeModel.onCustomerIdReady = function (api) {
+                    customerIdDirectiveReadyAPI = api;
+                    customerIdDirectiveReadyPromiseDeferred.resolve();
+                };
+                $scope.scopeModel.onSupplierIdReady = function (api) {
+                    supplierIdDirectiveReadyAPI = api;
+                    supplierIdDirectiveReadyPromiseDeferred.resolve();
                 };
 
                 $scope.scopeModel.onSaleZoneCDPNReady = function (api) {
@@ -111,10 +127,6 @@ app.directive('vrWhsBeGetcdpnsforzonematchstep', ['UtilsService', 'VRUIUtilsServ
                     var loadEffectiveTimeDirectivePromiseDeferred = getLoadEffectiveTimeDirectivePromiseDeferred();
                     promises.push(loadEffectiveTimeDirectivePromiseDeferred.promise);
 
-                    //Loading SwitchId Directive
-                    var loadSwitchIdDirectivePromiseDeferred = getLoadSwitchIdDirectivePromiseDeferred();
-                    promises.push(loadSwitchIdDirectivePromiseDeferred.promise);
-
                     //Loading CDPN Directive
                     var loadCDPNDirectivePromiseDeferred = getLoadCDPNDirectivePromiseDeferred();
                     promises.push(loadCDPNDirectivePromiseDeferred.promise);
@@ -126,6 +138,18 @@ app.directive('vrWhsBeGetcdpnsforzonematchstep', ['UtilsService', 'VRUIUtilsServ
                     //Loading CDPNOut Directive
                     var loadCDPNOutDirectivePromiseDeferred = getLoadCDPNOutDirectivePromiseDeferred();
                     promises.push(loadCDPNOutDirectivePromiseDeferred.promise);
+
+                    //Loading SwitchId Directive
+                    var loadSwitchIdDirectivePromiseDeferred = getLoadSwitchIdDirectivePromiseDeferred();
+                    promises.push(loadSwitchIdDirectivePromiseDeferred.promise);
+
+                    //Loading CustomerId Directive
+                    var loadCustomerIdDirectivePromiseDeferred = getLoadCustomerIdDirectivePromiseDeferred();
+                    promises.push(loadCustomerIdDirectivePromiseDeferred.promise);
+
+                    //Loading Supplier Directive
+                    var loadSupplierIdDirectivePromiseDeferred = getLoadSupplierIdDirectivePromiseDeferred();
+                    promises.push(loadSupplierIdDirectivePromiseDeferred.promise);
 
                     //Loading SaleZoneCDPN Directive
                     var loadSaleZoneCDPNDirectivePromiseDeferred = getLoadSaleZoneCDPNDirectivePromiseDeferred();
@@ -175,20 +199,6 @@ app.directive('vrWhsBeGetcdpnsforzonematchstep', ['UtilsService', 'VRUIUtilsServ
 
                         return loadEffectiveTimeDirectivePromiseDeferred;
                     }
-                    function getLoadSwitchIdDirectivePromiseDeferred() {
-                        var loadSwitchIdDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
-
-                        switchIdDirectiveReadyPromiseDeferred.promise.then(function () {
-
-                            var switchIdPayload = { context: payload.context };
-                            if (payload.stepDetails != undefined)
-                                switchIdPayload.selectedRecords = payload.stepDetails.SwitchId;
-
-                            VRUIUtilsService.callDirectiveLoad(switchIdDirectiveReadyAPI, switchIdPayload, loadSwitchIdDirectivePromiseDeferred);
-                        });
-
-                        return loadSwitchIdDirectivePromiseDeferred;
-                    }
                     function getLoadCDPNDirectivePromiseDeferred() {
                         var loadCDPNDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
 
@@ -231,6 +241,49 @@ app.directive('vrWhsBeGetcdpnsforzonematchstep', ['UtilsService', 'VRUIUtilsServ
 
                         return loadCDPNOutDirectivePromiseDeferred;
                     }
+                    function getLoadSwitchIdDirectivePromiseDeferred() {
+                        var loadSwitchIdDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        switchIdDirectiveReadyPromiseDeferred.promise.then(function () {
+
+                            var switchIdPayload = { context: payload.context };
+                            if (payload.stepDetails != undefined)
+                                switchIdPayload.selectedRecords = payload.stepDetails.SwitchId;
+
+                            VRUIUtilsService.callDirectiveLoad(switchIdDirectiveReadyAPI, switchIdPayload, loadSwitchIdDirectivePromiseDeferred);
+                        });
+
+                        return loadSwitchIdDirectivePromiseDeferred;
+                    }
+                    function getLoadCustomerIdDirectivePromiseDeferred() {
+                        var loadCustomerIdDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        customerIdDirectiveReadyPromiseDeferred.promise.then(function () {
+
+                            var customerIdPayload = { context: payload.context };
+                            if (payload.stepDetails != undefined)
+                                customerIdPayload.selectedRecords = payload.stepDetails.CustomerId;
+
+                            VRUIUtilsService.callDirectiveLoad(customerIdDirectiveReadyAPI, customerIdPayload, loadCustomerIdDirectivePromiseDeferred);
+                        });
+
+                        return loadCustomerIdDirectivePromiseDeferred;
+                    }
+                    function getLoadSupplierIdDirectivePromiseDeferred() {
+                        var loadSupplierIdDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        supplierIdDirectiveReadyPromiseDeferred.promise.then(function () {
+
+                            var supplierIdPayload = { context: payload.context };
+                            if (payload.stepDetails != undefined)
+                                supplierIdPayload.selectedRecords = payload.stepDetails.SupplierId;
+
+                            VRUIUtilsService.callDirectiveLoad(supplierIdDirectiveReadyAPI, supplierIdPayload, loadSupplierIdDirectivePromiseDeferred);
+                        });
+
+                        return loadSupplierIdDirectivePromiseDeferred;
+                    }
+
 
                     function getLoadSaleZoneCDPNDirectivePromiseDeferred() {
                         var loadSaleZoneCDPNDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
@@ -267,10 +320,12 @@ app.directive('vrWhsBeGetcdpnsforzonematchstep', ['UtilsService', 'VRUIUtilsServ
                         $type: "TOne.WhS.BusinessEntity.MainExtensions.MappingSteps.GetCDPNsForZoneMatchStep, TOne.WhS.BusinessEntity.MainExtensions",
                         NormalizationRuleDefinitionId: ruleDefinitionDirectiveAPI.getSelectedIds(),
                         EffectiveTime: effectiveTimeDirectiveAPI != undefined ? effectiveTimeDirectiveAPI.getData() : undefined,
-                        SwitchId: switchIdDirectiveReadyAPI.getData(),
                         CDPN: cdpnDirectiveReadyAPI.getData(),
                         CDPNIn: cdpnInDirectiveReadyAPI.getData(),
                         CDPNOut: cdpnOutDirectiveReadyAPI.getData(),
+                        SwitchId: switchIdDirectiveReadyAPI.getData(),
+                        CustomerId: customerIdDirectiveReadyAPI.getData(),
+                        SupplierId: supplierIdDirectiveReadyAPI.getData(),
 
                         SaleZoneCDPN: saleZoneCDPNDirectiveReadyAPI.getData(),
                         SupplierZoneCDPN: supplierZoneCDPNDirectiveReadyAPI.getData()
@@ -280,8 +335,6 @@ app.directive('vrWhsBeGetcdpnsforzonematchstep', ['UtilsService', 'VRUIUtilsServ
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
-            this.initializeController = initializeController;
         }
 
         return directiveDefinitionObject;

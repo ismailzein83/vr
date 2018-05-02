@@ -1,4 +1,5 @@
 ﻿'use strict';
+
 app.directive('vrWhsBeGetcdpnsforzonematchstepPreview', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
@@ -27,7 +28,6 @@ app.directive('vrWhsBeGetcdpnsforzonematchstepPreview', ['UtilsService', 'VRUIUt
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/MappingSteps/GetCDPNsForZoneMatch/Templates/GetCDPNsForZoneMatchStepPreviewTemplate.html';
             }
-
         };
 
         function GetCDPNsForZoneMatchStepPreviewCtor(ctrl, $scope) {
@@ -110,10 +110,6 @@ app.directive('vrWhsBeGetcdpnsforzonematchstepPreview', ['UtilsService', 'VRUIUt
                     Value: data.EffectiveTime
                 });
                 array.push({
-                    FieldName: "SwitchId",
-                    Value: data.SwitchId
-                });
-                array.push({
                     FieldName: "CDPN",
                     Value: data.CDPN
                 });
@@ -124,6 +120,18 @@ app.directive('vrWhsBeGetcdpnsforzonematchstepPreview', ['UtilsService', 'VRUIUt
                 array.push({
                     FieldName: "CDPN Out",
                     Value: data.CDPNOut
+                });
+                array.push({
+                    FieldName: "SwitchId",
+                    Value: data.SwitchId
+                });
+                array.push({
+                    FieldName: "CustomerId",
+                    Value: data.CustomerId
+                });
+                array.push({
+                    FieldName: "SupplierId",
+                    Value: data.SupplierId
                 });
             }
             function fillOutputFieldsArray(data, array) {

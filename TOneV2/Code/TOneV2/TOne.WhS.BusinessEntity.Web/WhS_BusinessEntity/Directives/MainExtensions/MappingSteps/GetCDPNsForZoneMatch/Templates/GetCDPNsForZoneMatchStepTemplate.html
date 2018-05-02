@@ -1,18 +1,18 @@
-﻿
-
-<vr-section title="Input Fields">
+﻿<vr-section title="Input Fields">
     <vr-row>
         <vr-columns width="fullrow">
             <vr-genericdata-genericruledefinition-selector on-ready="scopeModel.onRuleDefinitionReady" isrequired="true"></vr-genericdata-genericruledefinition-selector>
         </vr-columns>
     </vr-row>
     <vr-genericdata-expressionbuilder on-ready="scopeModel.onEffectiveTimeDirectiveReady" label="Effective Time" isrequired="true"></vr-genericdata-expressionbuilder>
-    <vr-genericdata-expressionbuilder on-ready="scopeModel.onSwitchIdReady" label="Switch Id" isrequired="true"></vr-genericdata-expressionbuilder>
+
     <vr-genericdata-expressionbuilder on-ready="scopeModel.onCDPNReady" label="CDPN" isrequired="true"></vr-genericdata-expressionbuilder>
     <vr-genericdata-expressionbuilder on-ready="scopeModel.onCDPNInReady" label="CDPN In" isrequired="true"></vr-genericdata-expressionbuilder>
     <vr-genericdata-expressionbuilder on-ready="scopeModel.onCDPNOutReady" label="CDPN Out" isrequired="true"></vr-genericdata-expressionbuilder>
+    <vr-genericdata-expressionbuilder on-ready="scopeModel.onSwitchIdReady" label="Switch Id" isrequired="true"></vr-genericdata-expressionbuilder>
+    <vr-genericdata-expressionbuilder on-ready="scopeModel.onCustomerIdReady" label="Customer Id" isrequired="true"></vr-genericdata-expressionbuilder>
+    <vr-genericdata-expressionbuilder on-ready="scopeModel.onSupplierIdReady" label="Supplier Id" isrequired="true"></vr-genericdata-expressionbuilder>
 </vr-section>
-
 <vr-section title="Output Fields">
     <vr-genericdata-expressionbuilder on-ready="scopeModel.onSaleZoneCDPNReady" label="Sale Zone CDPN" isrequired="true"></vr-genericdata-expressionbuilder>
     <vr-genericdata-expressionbuilder on-ready="scopeModel.onSupplierZoneCDPNReady" label="Supplier Zone CDPN" isrequired="true"></vr-genericdata-expressionbuilder>
