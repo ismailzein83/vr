@@ -42,7 +42,7 @@ namespace Vanrise.Rules.Pricing.MainExtensions.RateValue
             return description.ToString();
         }
 
-        public override Dictionary<string, object> GetRateNamesAndValues()
+        public override Dictionary<string, object> GetSettingsValuesByName()
         {
             Dictionary<string, object> ratesByNames = new Dictionary<string, object>();
             ratesByNames.Add("Normal Rate", NormalRate);

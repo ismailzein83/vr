@@ -151,7 +151,7 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
             return String.Format("{0}/{1}", firstFraction, effectiveFractionUnit);
         }
 
-        public override Dictionary<string, object> GetRateNamesAndValues()
+        public override Dictionary<string, object> GetSettingsValuesByName()
         {
             Dictionary<string, object> ratesByNames = new Dictionary<string, object>();
             ratesByNames.Add("Call Fee", CallFee);

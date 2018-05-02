@@ -16,7 +16,7 @@ namespace Vanrise.GenericData.Entities
 
         public abstract bool AreSettingsMatched(object ruleDefinitionSettings, object settingsFilterValue);
 
-        public virtual Dictionary<string, object> GetRateNamesAndValues()
+        public virtual Dictionary<string, object> GetSettingsValuesByName()
         {
             return null;
         }

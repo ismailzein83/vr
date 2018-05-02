@@ -19,7 +19,7 @@ namespace Vanrise.Rules.Pricing
 
         public abstract string GetDescription(IGenericRuleSettingsDescriptionContext context);
 
-        public virtual Dictionary<string, object> GetRateNamesAndValues()
+        public virtual Dictionary<string, object> GetSettingsValuesByName()
         {
             return null;
         }

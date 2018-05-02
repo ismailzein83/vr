@@ -23,7 +23,7 @@ namespace Vanrise.Rules.Pricing
         public abstract string GetDescription();
         public abstract string GetPricingDescription();
 
-        public virtual Dictionary<string, object> GetRateNamesAndValues()
+        public virtual Dictionary<string, object> GetSettingsValuesByName()
         {
             return null;
         }
