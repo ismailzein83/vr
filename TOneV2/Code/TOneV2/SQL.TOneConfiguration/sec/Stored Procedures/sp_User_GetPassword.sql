@@ -2,7 +2,7 @@
 	@ID int
 AS
 BEGIN
-	Select	[Password] 
+	Select	[Password] ,[PasswordChangeTime]
 	FROM	[sec].[User] WITH(NOLOCK) 
 	WHERE	ID = @ID
 END

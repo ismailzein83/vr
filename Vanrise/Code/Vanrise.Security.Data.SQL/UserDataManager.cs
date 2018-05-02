@@ -32,11 +32,29 @@ namespace Vanrise.Security.Data.SQL
         {
             int recordesEffected = ExecuteNonQuerySP("sec.sp_User_UpdateSetting", Serializer.Serialize(userSetting), userId, lastModifiedBy);
             return (recordesEffected > 0);
-        }
-        public string GetUserPassword(int userId)
+        }     
+
+        public string GetUserPassword(int userId, out DateTime passwordChangeTime)
         {
-            return ExecuteScalarSP("sec.sp_User_GetPassword", userId) as string;
+            string password = null;
+            passwordChangeTime = DateTime.MinValue;
+            DateTime passwordChangeTime_local = DateTime.MinValue;
+
+            ExecuteReaderSP("sec.sp_User_GetPassword", (reader) =>
+            {
+                if (reader.Read())
+                {
+                    password = reader["Password"] as string;
+                    if (reader["PasswordChangeTime"] != DBNull.Value)
+                    {
+                        passwordChangeTime_local = (DateTime)reader["PasswordChangeTime"];
+                    }                   
+                }
+            }, userId);
+            passwordChangeTime = passwordChangeTime_local;
+            return password;
         }
+
 
         public string GetUserTempPassword(int userId)
         {

@@ -186,10 +186,14 @@ namespace Vanrise.Security.Business
 
         public string GetUserPassword(int userId)
         {
-            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
-            return dataManager.GetUserPassword(userId);
+            DateTime passwordChangeTime;
+            return GetUserPassword(userId, out passwordChangeTime);
         }
-
+        public string GetUserPassword(int userId, out DateTime passwordChangeTime)
+        {
+            IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();
+            return dataManager.GetUserPassword(userId, out passwordChangeTime);
+        }
         public string GetUserTempPassword(int userId)
         {
             IUserDataManager dataManager = SecurityDataManagerFactory.GetDataManager<IUserDataManager>();

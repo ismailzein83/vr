@@ -11,7 +11,7 @@ namespace Vanrise.Security.Data
     {
         List<User> GetUsers();
 
-        string GetUserPassword(int userId);
+        string GetUserPassword(int userId , out DateTime passwordChangeTime);
 
         string GetUserTempPassword(int userId);
 

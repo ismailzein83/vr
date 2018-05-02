@@ -36,8 +36,6 @@ namespace Vanrise.Security.Business
             if (user != null)
             {
 
-
-
                 ConfigManager cManager = new ConfigManager();
 
                 TimeSpan? disableTillTime;
@@ -77,12 +75,13 @@ namespace Vanrise.Security.Business
                 }
                 else
                 {
-                    string loggedInUserPassword = manager.GetUserPassword(user.UserId);
+                    DateTime passwordChangeTime;
+                    string loggedInUserPassword = manager.GetUserPassword(user.UserId, out passwordChangeTime);
 
                     if (HashingUtility.VerifyHash(password, "", loggedInUserPassword))
                     {
                         int? passwordExpirationDaysLeft;
-                        bool passwordIsExpired = CheckIfPasswordExpired(user.UserId, out passwordExpirationDaysLeft);
+                        bool passwordIsExpired = CheckIfPasswordExpired(user.UserId, passwordChangeTime, out passwordExpirationDaysLeft);
                         if (passwordIsExpired)
                         {
                             authenticationOperationOutput.Result = AuthenticateOperationResult.PasswordExpired;
@@ -308,7 +307,6 @@ namespace Vanrise.Security.Business
             {
                 new UserPasswordHistoryManager().AddPasswordHistory(userId, encryptedNewPassword, false);
                 updateOperationOutput.Result = Vanrise.Entities.UpdateOperationResult.Succeeded;
-                Vanrise.Caching.CacheManagerFactory.GetCacheManager<UserManager.CacheManager>().SetCacheExpired();
             }
 
             return updateOperationOutput;
@@ -332,7 +330,7 @@ namespace Vanrise.Security.Business
             return false;
         }
 
-        public bool CheckIfPasswordExpired(int userId, out int? passwordExpirationDaysLeft)
+        public bool CheckIfPasswordExpired(int userId, DateTime passwordChangeTime, out int? passwordExpirationDaysLeft)
         {
             var user = s_userManager.GetUserbyId(userId);
             passwordExpirationDaysLeft = null;
@@ -346,7 +344,7 @@ namespace Vanrise.Security.Business
             if (age.HasValue)
             {
                 int settingsPasswordAge = age.Value;
-                int passwordAge = (int)((DateTime.Now - user.PasswordChangeTime).TotalDays);
+                int passwordAge = (int)((DateTime.Now - passwordChangeTime).TotalDays);
                 int totalDaysToExpirePassword = settingsPasswordAge - passwordAge;
                 int daysToNotify = exparitionDaysToNotify.HasValue ? exparitionDaysToNotify.Value : 0;
                 if (totalDaysToExpirePassword <= daysToNotify)
