@@ -85,7 +85,13 @@ namespace Vanrise.Reprocess.BP.Activities
             {
                 ReprocessFilterDefinition filterDefinition = inputArgument.ReprocessDefinition.Settings.FilterDefinition;
                 if (filterDefinition != null && filterDefinition.ApplyFilterToSourceData)
-                    recordFilterGroup = filterDefinition.GetFilterGroup(new ReprocessFilterGetFilterGroupContext() { ReprocessFilter = inputArgument.ReprocessFilter, TargetDataRecordTypeId = dataRecordStorage.DataRecordTypeId });
+                {
+                    recordFilterGroup = filterDefinition.GetFilterGroup(new ReprocessFilterGetFilterGroupContext() 
+                    { 
+                        ReprocessFilter = inputArgument.ReprocessFilter, 
+                        TargetDataRecordTypeId = dataRecordStorage.DataRecordTypeId 
+                    });
+                }
             }
 
             LoadDataToReprocessOutput output = new LoadDataToReprocessOutput() { EventCount = 0 };
@@ -93,13 +99,11 @@ namespace Vanrise.Reprocess.BP.Activities
             if (inputArgument.OutputStageNames == null || inputArgument.OutputStageNames.Count == 0)
                 throw new Exception("No output stages!");
 
-
             GenericDataRecordBatch batch = new GenericDataRecordBatch() { Records = new List<dynamic>() };
 
-            RecordFilterManager recordFilterManager = new RecordFilterManager();
             foreach (var recordStorageId in inputArgument.RecordStorageIds)
             {
-                manager.GetDataRecords(recordStorageId, inputArgument.FromTime, inputArgument.ToTime, recordFilterGroup, ((itm) =>
+                manager.GetDataRecords(recordStorageId, inputArgument.FromTime, inputArgument.ToTime, recordFilterGroup, () => ShouldStop(handle), ((itm) =>
                 {
                     output.EventCount++;
 
@@ -107,9 +111,8 @@ namespace Vanrise.Reprocess.BP.Activities
                     if (batch.Records.Count >= 10000)
                     {
                         foreach (string stageName in inputArgument.OutputStageNames)
-                        {
                             inputArgument.StageManager.EnqueueBatch(stageName, batch);
-                        }
+                        
                         batch = new GenericDataRecordBatch() { Records = new List<dynamic>() };
                     }
                 }));
@@ -118,10 +121,9 @@ namespace Vanrise.Reprocess.BP.Activities
             if (batch.Records.Count > 0)
             {
                 foreach (string stageName in inputArgument.OutputStageNames)
-                {
                     inputArgument.StageManager.EnqueueBatch(stageName, batch);
-                }
             }
+
             handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Loading Source Records is done. Events Count: {0}", output.EventCount);
             return output;
         }

@@ -15,6 +15,7 @@ namespace Vanrise.Reprocess.Business
             HoldRequestManager holdRequestManager = new HoldRequestManager();
             holdRequestManager.DeleteHoldRequestByBPInstanceId(context.BPInstance.ProcessInstanceID);
         }
+        
         public override bool CanRunBPInstance(BusinessProcess.Entities.IBPDefinitionCanRunBPInstanceContext context)
         {
             context.IntanceToRun.ThrowIfNull("context.IntanceToRun");
@@ -59,6 +60,11 @@ namespace Vanrise.Reprocess.Business
                 }
             }
 
+            return true;
+        }
+
+        public override bool CanCancelBPInstance(BusinessProcess.Entities.IBPDefinitionCanCancelBPInstanceContext context)
+        {
             return true;
         }
 

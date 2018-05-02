@@ -89,6 +89,9 @@ namespace Vanrise.Reprocess.BP.Activities
 
                 foreach (var dateTimeRange in dateTimeRanges)
                 {
+                    if (ShouldStop(handle))
+                        break;
+
                     //handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Starting Commit Changes for stage {0} Batch Start: {1}, Batch End : {2}",
                     //    inputArgument.Stage.StageName, dateTimeRange.From.ToString("yyyy-MM-dd HH:mm:ss"), dateTimeRange.To.ToString("yyyy-MM-dd HH:mm:ss"));
 
@@ -104,7 +107,6 @@ namespace Vanrise.Reprocess.BP.Activities
             }
 
             handle.SharedInstanceData.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Finished Commit Changes for stage {0} ", inputArgument.Stage.StageName);
-
             return new CommitChangesOutput();
         }
 
