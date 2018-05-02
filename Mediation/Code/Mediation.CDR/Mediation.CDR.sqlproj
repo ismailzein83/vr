@@ -138,5 +138,7 @@
     <Build Include="Mediation_WHS\User Defined Types\JazzHuaweiBadCDRType.sql" />
     <Build Include="Mediation_WHS\Tables\OgeroHuaweiCDR.sql" />
     <Build Include="Mediation_WHS\User Defined Types\OgeroHuaweiCDRType.sql" />
+    <Build Include="Mediation_WHS\Tables\OgeroRadiusCDR.sql" />
+    <Build Include="Mediation_WHS\User Defined Types\OgeroRadiusCDRType.sql" />
   </ItemGroup>
 </Project>
