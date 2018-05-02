@@ -29,6 +29,7 @@ namespace Vanrise.Common.Excel
             {
                 Worksheet templateSheet = excelTemplate.Worksheets.Add(string.Format("{0}", sheet.SheetName));
 
+                BuildImagesConfigs(templateSheet, sheet.Images);
                 BuildSheetRowsConfig(sheet.RowConfigs, excelTemplate, templateSheet.Cells);
                 BuildSheetColumnsConfig(sheet.ColumnConfigs, excelTemplate, templateSheet.Cells);
 
@@ -49,6 +50,17 @@ namespace Vanrise.Common.Excel
             return memoryStream.ToArray();
         }
 
+        void BuildImagesConfigs(Worksheet sheet, List<VRExcelImageConfig> images)
+        {
+            if (images != null && images.Count > 0)
+            {
+                foreach (var image in images)
+                {
+                    MemoryStream memoryStream = new MemoryStream(image.Value);
+                    sheet.Pictures.Add(image.StartingRowIndex, image.StartingColumnIndex, image.StartingRowIndex + image.NumberOFRows, image.StartingColumnIndex + image.NumberOfColumns, memoryStream);
+                }
+            }
+        }
         void BuildSheetRowsConfig(Dictionary<int, VRExcelRowConfig> rowConfigs, Workbook excelTemplate, Cells cells)
         {
             foreach (var config in rowConfigs.Values)

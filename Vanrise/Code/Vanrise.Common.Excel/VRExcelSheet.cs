@@ -13,12 +13,14 @@ namespace Vanrise.Common.Excel
             this.Cells = new List<VRExcelCell>();
             this.RowConfigs = new Dictionary<int, VRExcelRowConfig>();
             this.ColumnConfigs = new Dictionary<int, VRExcelColumnConfig>();
+            this.Images = new List<VRExcelImageConfig>();
         }
 
         public string SheetName { get; set; }
         internal List<VRExcelCell> Cells { get; set; }
         internal Dictionary<int, VRExcelRowConfig> RowConfigs { get; set; }
         internal Dictionary<int, VRExcelColumnConfig> ColumnConfigs { get; set; }
+        internal List<VRExcelImageConfig> Images { get; set; }
 
         public void SetRowConfig(VRExcelRowConfig rowConfig)
         {
@@ -40,7 +42,19 @@ namespace Vanrise.Common.Excel
 
             Cells.Add(cell);
         }
+        public void AddImage(VRExcelImageConfig image)
+        {
+            Images.Add(image);
+        }
 
+    }
+    public class VRExcelImageConfig
+    {
+        public int StartingColumnIndex { get; set; }
+        public int StartingRowIndex { get; set; }
+        public int NumberOfColumns { get; set; }
+        public int NumberOFRows { get; set; }
+        public byte[] Value { get; set; }
     }
     public class VRExcelContainerConfig
     {
