@@ -50,7 +50,7 @@ function (UtilsService, VRRuntime_RuntimeNodeConfigurationAPIService, VRUIUtilsS
                 };
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, directiveAPI, undefined, setLoader, directiveReadyDeferred);
             };
-        };
+        }
 
         function defineAPI() {
             var api = {};

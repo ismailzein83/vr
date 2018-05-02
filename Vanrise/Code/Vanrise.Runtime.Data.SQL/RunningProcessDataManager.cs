@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Data.SQL;
+using Vanrise.Entities;
 using Vanrise.Runtime.Entities;
 
 namespace Vanrise.Runtime.Data.SQL
@@ -30,6 +31,11 @@ namespace Vanrise.Runtime.Data.SQL
         public List<RunningProcessInfo> GetRunningProcesses()
         {
             return GetItemsSP("[runtime].[sp_RunningProcess_GetAll]", RunningProcessInfoMapper);
+        }
+
+        public List<Entities.RunningProcessDetails> GetFilteredRunningProcesses(DataRetrievalInput<RunningProcessQuery> input) ////ADDED BY ME
+        {
+            return GetItemsSP("[runtime].[sp_RunningProcess_GetFiltered]", RunningProcessDetailsMapper, input.Query.RuntimeNodeInstanceId);
         }
 
         public void DeleteRunningProcess(int runningProcessId)
@@ -58,6 +64,22 @@ namespace Vanrise.Runtime.Data.SQL
             if (serializedAdditionInfo != null)
                 runningProcessInfo.AdditionalInfo = Common.Serializer.Deserialize(serializedAdditionInfo) as RunningProcessAdditionalInfo;
             return runningProcessInfo;
+        }
+
+        private RunningProcessDetails RunningProcessDetailsMapper(IDataReader reader) //ADDED BY ME
+        {
+            var runningProcessDetails = new RunningProcessDetails
+            {
+                ProcessId = (int)reader["ID"],
+                OSProcessId = GetReaderValue<int>(reader, "OSProcessID"),
+                RuntimeNodeId = GetReaderValue<Guid>(reader, "RuntimeNodeID"),
+                RuntimeNodeInstanceId = GetReaderValue<Guid>(reader, "RuntimeNodeInstanceID"),
+                StartedTime = (DateTime)reader["StartedTime"]
+            };
+            string serializedAdditionInfo = reader["AdditionalInfo"] as string;
+            if (serializedAdditionInfo != null)
+                runningProcessDetails.AdditionalInfo = Common.Serializer.Deserialize(serializedAdditionInfo) as RunningProcessAdditionalInfo;
+            return runningProcessDetails;
         }
 
         #endregion

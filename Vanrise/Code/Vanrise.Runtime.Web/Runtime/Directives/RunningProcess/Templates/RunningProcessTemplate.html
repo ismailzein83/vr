@@ -1,0 +1,14 @@
+﻿<vr-datagrid datasource="runningProcesses"
+             on-ready="onGridReady"
+             dataretrievalfunction="dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             menuactions="gridMenuActions"
+             idfield="RunningProcessId" enableautoexport="true">
+    <vr-datagridcolumn headertext="'Id'" field="'ProcessId'" type="'Text'" isrequired></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Runtime Node Id'" field="'RuntimeNodeId'" type="'Text'" isrequired></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Runtime Node Instance Id'" field="'RuntimeNodeInstanceId'" type="'Text'" isrequired></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'OS Process Id'" field="'OSProcessId'" type="'Text'" isrequired></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Started Time'" field="'StartedTime'" type="'Datetime'" isrequired></vr-datagridcolumn>
+
+
+</vr-datagrid>

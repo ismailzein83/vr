@@ -24,19 +24,30 @@ namespace Vanrise.Runtime.Business
             }
         }
 
-        public Dictionary<Guid, RuntimeNode> GetAllNodes()
+        public Dictionary<Guid, RuntimeNode> GetCachedRuntimeNodes()
         {
             return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>()
-          .GetOrCreateObject("GetCacheRuntimeNodes", () =>
+          .GetOrCreateObject("GetCachedRuntimeNodes", () =>
           {
               var allNodes = s_dataManager.GetAllNodes();
               return allNodes != null ? allNodes.ToDictionary(n => n.RuntimeNodeId, n => n) : null;
           });
         }
 
+        public List<RuntimeNode> GetAllNodes()
+        {
+            var allNodes = GetCachedRuntimeNodes();
+            Func<RuntimeNode, bool> filterExpression = (itm) => (true);
+
+            IEnumerable<RuntimeNode> nodes = allNodes.FindAllRecords(filterExpression);
+            if (nodes == null)
+                return null;
+            return nodes.ToList();
+        }
+
         public RuntimeNode GetNode(Guid nodeId)
         {
-            return GetAllNodes().GetRecord(nodeId);
+            return GetCachedRuntimeNodes().GetRecord(nodeId);
         }
 
         public InsertOperationOutput<RuntimeNodeDetails> AddRuntimeNode(RuntimeNode runtimeNode)

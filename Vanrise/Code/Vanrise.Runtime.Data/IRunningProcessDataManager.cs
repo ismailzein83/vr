@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Entities;
 using Vanrise.Runtime.Entities;
 
 namespace Vanrise.Runtime.Data
@@ -16,6 +17,7 @@ namespace Vanrise.Runtime.Data
         List<RunningProcessInfo> GetRunningProcesses();
 
         void DeleteRunningProcess(int runningProcessId);
+        List<Entities.RunningProcessDetails> GetFilteredRunningProcesses(DataRetrievalInput<RunningProcessQuery> input);
 
         bool IsExists(int runningProcessId);
     }

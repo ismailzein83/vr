@@ -96,6 +96,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
+    <Compile Include="Controllers\RunningProcessController.cs" />
     <Compile Include="Controllers\RuntimeNodeStateController.cs" />
     <Compile Include="Controllers\RuntimeNodeController.cs" />
     <Compile Include="Controllers\RuntimeNodeConfigurationController.cs" />
@@ -121,6 +122,8 @@
     <Content Include="Runtime\Directives\MainExtensions\vr-runtime-runtimenodeconfiguration-scheduler.js" />
     <Content Include="Runtime\Directives\RuntimeNodeConfiguration\vr-runtime-runtimenodeconfiguration-processes.js" />
     <Content Include="Runtime\Directives\RuntimeNodeConfiguration\vr-runtime-runtimenodeconfiguration-grid.js" />
+    <Content Include="Runtime\Directives\RunningProcess\Templates\RunningProcessTemplate.html" />
+    <Content Include="Runtime\Directives\RunningProcess\vr-runtime-runningprocess-grid.js" />
     <Content Include="Runtime\Directives\SchedulerTask\Templates\SchedulerTaskPanelTemplate.html" />
     <Content Include="Runtime\Directives\SchedulerTask\Templates\SchedulerTaskGridTemplate.html" />
     <Content Include="Runtime\Directives\SchedulerTask\vr-runtime-schedulertask-panel.js" />
@@ -141,6 +144,7 @@
     <Content Include="Runtime\Directives\TaskTrigger\vr-runtime-tasktrigger-timer.js" />
     <Content Include="Runtime\Directives\TaskTrigger\vr-runtime-tasktrigger-weekly.js" />
     <Content Include="Runtime\ModuleInitialization.js" />
+    <Content Include="Runtime\Services\APIServices\RunningProcessAPIService.js" />
     <Content Include="Runtime\Services\APIServices\RuntimeNodeStateAPIService.js" />
     <Content Include="Runtime\Services\APIServices\RuntimeNodeAPIService.js" />
     <Content Include="Runtime\Services\APIServices\RuntimeNodeConfigurationAPIService.js" />
@@ -192,13 +196,17 @@
       <Project>{07b66e74-bd84-4023-b839-5bb522b7a98c}</Project>
       <Name>Vanrise.Runtime.Entities</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Runtime\Vanrise.Runtime.csproj">
+      <Project>{2cdddf60-45b6-4ce6-ac2b-4470bb9bfe96}</Project>
+      <Name>Vanrise.Runtime</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Web.Base\Vanrise.Web.Base.csproj">
       <Project>{c527c7b2-a481-4d1d-b25a-4a540e812153}</Project>
       <Name>Vanrise.Web.Base</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Runtime\Directives\RuntimeNode\Templates\" />
+    <Folder Include="Runtime\Directives\RuntimeNode\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

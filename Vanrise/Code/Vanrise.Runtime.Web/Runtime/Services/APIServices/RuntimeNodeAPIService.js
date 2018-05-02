@@ -27,7 +27,7 @@
         }
 
         return ({
-            GetAllNodes:GetAllNodes,
+            GetAllNodes: GetAllNodes,
             GetRuntimeNode: GetRuntimeNode,
             UpdateRuntimeNode: UpdateRuntimeNode,
             AddRuntimeNode: AddRuntimeNode,

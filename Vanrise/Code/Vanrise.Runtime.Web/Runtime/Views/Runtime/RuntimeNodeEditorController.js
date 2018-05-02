@@ -12,7 +12,6 @@
 
         var runtimeNodeConfigurationSelectorAPI;
         var runtimeNodeConfigurationSelectoReadyDeferred = UtilsService.createPromiseDeferred();
-        var onSMSMessageTypeSelectionChangedDeferred;
 
         loadParameters();
         defineScope();
@@ -100,9 +99,9 @@
         function loadRuntimeNodeConfigurationSelector() {
             var runtimeNodeConfigurationSelectorLoadDeferred = UtilsService.createPromiseDeferred();
             runtimeNodeConfigurationSelectoReadyDeferred.promise.then(function () {
-                var runtimeNodeConfigurationSelectorPayload =  {
+                var runtimeNodeConfigurationSelectorPayload = {
                     runtimeNodeConfiguration: runtimeNodeEntity != undefined ? runtimeNodeEntity : undefined
-                }
+                };
 
                 VRUIUtilsService.callDirectiveLoad(runtimeNodeConfigurationSelectorAPI, runtimeNodeConfigurationSelectorPayload, runtimeNodeConfigurationSelectorLoadDeferred);
             });

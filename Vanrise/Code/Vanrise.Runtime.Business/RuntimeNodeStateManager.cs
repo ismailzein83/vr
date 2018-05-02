@@ -12,53 +12,38 @@ namespace Vanrise.Runtime.Business
 {
     public class RuntimeNodeStateManager
     {
-        private Dictionary<Guid, RuntimeNodeState> GetCachedRuntimeNodesStates()
+        private Dictionary<Guid, RuntimeNodeState> GetRuntimeNodesStates()
         {
             IRuntimeNodeStateDataManager dataManager = RuntimeDataManagerFactory.GetDataManager<IRuntimeNodeStateDataManager>();
             IEnumerable<RuntimeNodeState> data = dataManager.GetAllNodes();
             return data.ToDictionary(cn => cn.RuntimeNodeId, cn => cn);
         }
 
-        public List<RuntimeNodeState> GetAllNodes()
+        public IEnumerable<RuntimeNodeStateDetails> GetAllNodes()
         {
-            var allNodes = GetCachedRuntimeNodesStates();
+            var allNodes = GetRuntimeNodesStates();
             Func<RuntimeNodeState, bool> filterExpression = (itm) => (true);
 
             IEnumerable<RuntimeNodeState> nodes = allNodes.FindAllRecords(filterExpression);
+
             if (nodes == null)
                 return null;
-            return nodes.ToList();
+            return nodes.MapRecords(RuntimeNodeStateDetailMapper, filterExpression);
         }
 
-        public Vanrise.Runtime.Entities.RuntimeNodeState GetNodeState(Guid nodeId)
+        public Vanrise.Runtime.Entities.RuntimeNodeStateDetails GetNodeState(Guid nodeId)
         {
-            var allNodes = GetCachedRuntimeNodesStates();
+            var allNodes = GetRuntimeNodesStates();
             RuntimeNodeState node;
             allNodes.TryGetValue(nodeId, out node);
-            return node;
+            return RuntimeNodeStateDetailMapper(node);
         }
 
-        //public Dictionary<Guid, RuntimeNodeState> GetAllNodes()
-        //{
-        //    return Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>()
-        //  .GetOrCreateObject("GetCacheRuntimeNodesState", () =>
-        //  {
-        //      var allNodes = s_dataManager.GetAllNodes();
-        //      return allNodes != null ? allNodes.ToDictionary(n => n.RuntimeNodeId, n => n) : null;
-        //  });
-        //}
-
-
-        //public RuntimeNodeState GetNodeState(Guid nodeId)
-        //{
-        //    return GetAllNodes().GetRecord(nodeId);
-        //}
 
 
         #region Mapper
-        private RuntimeNodeStateDetails RuntimeNodeStateDetailMapper(RuntimeNodeStateDetails nodeState)
+        private RuntimeNodeStateDetails RuntimeNodeStateDetailMapper(RuntimeNodeState nodeState)
         {
-
             return new RuntimeNodeStateDetails
             {
                 RuntimeNodeId = nodeState.RuntimeNodeId,
@@ -67,8 +52,8 @@ namespace Vanrise.Runtime.Business
                 OSProcessId = nodeState.OSProcessId,
                 OSProcessName = nodeState.OSProcessName,
                 ServiceURL = nodeState.ServiceURL,
-                StartedTime = nodeState.StartedTime,
-                LastHeartBeatTime = nodeState.LastHeartBeatTime,
+                StartedTimeFormatted = nodeState.StartedTime.ToString(Utilities.GetDateTimeFormat(DateTimeType.DateTime)),
+                LastHeartBeatTimeFormatted = nodeState.LastHeartBeatTime.ToString(Utilities.GetDateTimeFormat(DateTimeType.DateTime)),
                 NbOfSecondsHeartBeatReceived = nodeState.NbOfSecondsHeartBeatReceived
             };
        

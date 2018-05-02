@@ -89,6 +89,10 @@
       <Project>{7b928ba5-c19b-4d8c-912f-8d2d8a679718}</Project>
       <Name>Vanrise.Runtime.Business</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Vanrise.Runtime.Data.SQL\Vanrise.Runtime.Data.SQL.csproj">
+      <Project>{32a30290-186b-4f63-8411-42710dc3620b}</Project>
+      <Name>Vanrise.Runtime.Data.SQL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Runtime.Data\Vanrise.Runtime.Data.csproj">
       <Project>{2b79fccf-afbe-43f2-9ddc-3a91f5ff2489}</Project>
       <Name>Vanrise.Runtime.Data</Name>

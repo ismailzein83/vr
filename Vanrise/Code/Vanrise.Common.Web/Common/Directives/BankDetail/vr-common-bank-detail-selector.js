@@ -46,7 +46,7 @@ function (VRCommon_BankDetailAPIService, UtilsService, VRUIUtilsService, VRCommo
                 pre: function ($scope, iElem, iAttrs, ctrl) {
 
                 }
-            }
+            };
         },
         template: function (element, attrs) {
             return getTemplate(attrs);

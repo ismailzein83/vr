@@ -20,9 +20,9 @@ namespace Vanrise.Runtime.Entities
 
         public string ServiceURL { get; set; }
 
-        public DateTime StartedTime { get; set; }
+        public string StartedTimeFormatted { get; set; }
 
-        public DateTime LastHeartBeatTime { get; set; }
+        public string LastHeartBeatTimeFormatted { get; set; }
 
         public Double NbOfSecondsHeartBeatReceived { get; set; }
     }

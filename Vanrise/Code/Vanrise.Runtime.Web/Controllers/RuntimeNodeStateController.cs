@@ -20,14 +20,14 @@ namespace Vanrise.Runtime.Web.Controllers
 
         [HttpGet]
         [Route("GetNodeState")]
-        public RuntimeNodeState GetNodeState(Guid nodeId)
+        public RuntimeNodeStateDetails GetNodeState(Guid nodeId)
         {
             return manager.GetNodeState(nodeId);
         }
 
         [HttpGet]
         [Route("GetAllNodesStates")]
-        public List<RuntimeNodeState> GetAllNodesStates()
+        public IEnumerable<RuntimeNodeStateDetails> GetAllNodesStates()
         {
             return manager.GetAllNodes();
         }

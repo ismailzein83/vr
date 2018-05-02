@@ -5,31 +5,69 @@
                 <vr-button type="Add" data-onclick="addNewRuntimeNode"></vr-button>
             </div>
         </vr-actionbar>
-        <vr-row >
-            <vr-columns ng-repeat="x in datasource" width="1/2row">
-                <vr-section title="{{x.Name}}">
-                    <vr-columns class="pull-right">
-                        <button class="btn btn-xs btn-primary" ng-click="editRuntimeNode(x)">
-                            <i class="glyphicon glyphicon-edit"></i> Edit
-                        </button>
-                    </vr-columns>
-                    <vr-columns width="1/8row" class="pull-right">
-                        <button type="button" class="btn btn-xs btn-primary" ng-click="scopeModel.preview()">
-                            <i class="glyphicon glyphicon-picture"></i> Preview
-                        </button>
-                        <!--<vr-button type="Edit" data-onclick="editRuntimeNode" standalone></vr-button>
-                        <vr-button type="Preview" data-onclick="previewRuntimeNode" standalone></vr-button>-->
-                    </vr-columns>
 
-                    <vr-label>Machine Name : {{x.Name}}</vr-label><br />
-                    <vr-label>OSProcess Name: {{x.Name}}</vr-label><br />
-                    <vr-label>Service URL: {{x.Name}}</vr-label><br />
-                    <vr-label>Started Time: {{x.Name}}</vr-label><br />
-                    <vr-label>Last HeartBeat Time: {{x.Name}}</vr-label><br />
-                    <vr-label>Number of Seconds HeartBeat Received : 22</vr-label>
 
-                </vr-section>
+        <vr-row ng-if="Preview==true">
+            <vr-columns width="1/3row">
+                <vr-row ng-repeat="node in datasource">
+                    <vr-section title="{{node.Name}}">
+                        <vr-columns class="pull-right">
+                            <vr-button type="Edit" data-onclick="node.editRuntimeNode" standalone></vr-button>
+                        </vr-columns>
+
+                        <div ng-if="node.State!=null">
+                            <vr-columns class="pull-right">
+                                <vr-button type="Preview" data-onclick="node.previewRuntimeNode" standalone></vr-button>
+                            </vr-columns>
+                            <vr-label>Machine Name : {{node.State.MachineName}}</vr-label><br />
+                            <vr-label>InstanceId : {{node.State.InstanceId}}</vr-label><br />
+                            <vr-label>OSProcess ID: {{node.State.OSProcessId}}</vr-label><br />
+                            <vr-label>Service URL: {{node.State.ServiceURL}}</vr-label><br />
+                            <vr-label>Started Time: {{node.State.StartedTimeFormatted}}</vr-label><br />
+                            <vr-label>Last HeartBeat Time: {{node.State.LastHeartBeatTimeFormatted}}</vr-label><br />
+                            <vr-label>Number of Seconds HeartBeat Received : {{node.State.NbOfSecondsHeartBeatReceived}}</vr-label>
+                        </div>
+                        <div ng-if="node.State==null">
+                            <vr-label>No Matching State</vr-label><br />
+                        </div>
+                    </vr-section>
+                </vr-row>
+            </vr-columns>
+
+            <vr-columns ng-repeat="node in datasource" width="2/3row" ng-if="node.preview==true">
+                <vr-label> {{node.Name}}</vr-label>
+                <vr-runtime-runningprocess-grid on-ready="onGridReady"></vr-runtime-runningprocess-grid>
             </vr-columns>
         </vr-row>
+
+
+        <vr-columns ng-repeat="node in datasource" width="1/2row" ng-if="Preview!=true">
+            <vr-section title="{{node.Name}}">
+                <vr-columns class="pull-right">
+                    <vr-button type="Edit" data-onclick="node.editRuntimeNode" standalone></vr-button>
+                </vr-columns>
+
+
+                <div ng-if="node.State!=null">
+                    <vr-columns class="pull-right">
+                        <vr-button type="Preview" data-onclick="node.previewRuntimeNode" standalone></vr-button>
+                    </vr-columns>
+                    <vr-label>Machine Name : {{node.State.MachineName}}</vr-label><br />
+                    <vr-label>OSProcess ID: {{node.State.OSProcessId}}</vr-label><br />
+                    <vr-label>Service URL: {{node.State.ServiceURL}}</vr-label><br />
+                    <vr-label>Started Time: {{node.State.StartedTime}}</vr-label><br />
+                    <vr-label>Last HeartBeat Time: {{node.State.LastHeartBeatTime}}</vr-label><br />
+                    <vr-label>Number of Seconds HeartBeat Received : {{node.State.NbOfSecondsHeartBeatReceived}}</vr-label>
+                </div>
+                <div ng-if="node.State==null">
+                    <vr-label>No Matching State</vr-label><br />
+                </div>
+
+            </vr-section>
+        </vr-columns>
+
+
+
+
     </vr-form>
 </vr-panel>

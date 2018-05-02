@@ -7,6 +7,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
 using Vanrise.Common;
+using Vanrise.Common.Data;
+using Vanrise.Entities;
 using Vanrise.Runtime.Data;
 using Vanrise.Runtime.Entities;
 
@@ -76,6 +78,16 @@ namespace Vanrise.Runtime
             RefreshRunningProcessesIfNeeded();
              return s_allRunningProcessesDict;
         }
+
+
+        public IDataRetrievalResult<RunningProcessDetails> GetFilteredRunningProcesses(DataRetrievalInput<RunningProcessQuery> input)//ADDED BY ME
+        {
+            IRunningProcessDataManager runningProcessDataManager = RuntimeDataManagerFactory.GetDataManager<IRunningProcessDataManager>();
+            IEnumerable<RunningProcessDetails> runningProcesses = runningProcessDataManager.GetFilteredRunningProcesses(input);
+            runningProcesses.ToDictionary(runningProcess => runningProcess.ProcessId, runningProcess => runningProcess);
+            return DataRetrievalManager.Instance.ProcessResult(input, runningProcesses.ToBigResult(input, null, RunningProcessDetailMapper));
+        }
+
 
         internal List<RunningProcessInfo> GetRunningProcessesFromDB()
         {
@@ -164,5 +176,20 @@ namespace Vanrise.Runtime
                 return false;
             }
         }
+
+        #region Mapper
+        private RunningProcessDetails RunningProcessDetailMapper(RunningProcessDetails process) //ADDED BY ME
+        {
+            return new RunningProcessDetails
+            {
+                ProcessId = process.ProcessId,
+                OSProcessId = process.OSProcessId,
+                RuntimeNodeId = process.RuntimeNodeId,
+                RuntimeNodeInstanceId = process.RuntimeNodeInstanceId,
+                StartedTime = process.StartedTime,
+                AdditionalInfo = process.AdditionalInfo
+            };
+        }
+        #endregion
     }
 }

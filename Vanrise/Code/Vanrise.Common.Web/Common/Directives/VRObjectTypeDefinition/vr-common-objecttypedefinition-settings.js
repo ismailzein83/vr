@@ -40,7 +40,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                 if (propertyDirectiveAPI != undefined) {
 
                     var setLoader = function (value) {
-                        $scope.scopeModel.isLoading = value
+                        $scope.scopeModel.isLoading = value;
                     };
                     var payload = {};
                     payload.context = buildPropertyContext();
@@ -60,7 +60,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
             var vrObjectTypeDefinitionSettings;
             api.load = function (payload) {
                 if (payload != undefined) {
-                    vrObjectTypeDefinitionSettings = payload.vrObjectTypeDefinitionSettings
+                    vrObjectTypeDefinitionSettings = payload.vrObjectTypeDefinitionSettings;
                 }
                 function loadObjectTypeSelective() {
                     var objectTypeSelectiveLoadDeferred = UtilsService.createPromiseDeferred();

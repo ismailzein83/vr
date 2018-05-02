@@ -116,7 +116,7 @@
                     }
 
                     selectedPromiseDeferred.promise.then(function () {
-                        selectedPromiseDeferred = undefined
+                        selectedPromiseDeferred = undefined;
                     });
 
                     if ($scope.scopeModel.isSettingsOverridden) {
