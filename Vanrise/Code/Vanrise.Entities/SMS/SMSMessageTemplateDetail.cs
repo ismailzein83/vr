@@ -9,5 +9,9 @@ namespace Vanrise.Entities.SMS
     public class SMSMessageTemplateDetail
     {
         public SMSMessageTemplate Entity { get; set; }
+
+        public string CreatorName { get; set; }
+
+        public string LastModifierName { get; set; }
     }
 }

@@ -81,11 +81,11 @@ namespace Vanrise.Common.Business
             ISMSMessageTemplateDataManager dataManager = CommonDataManagerFactory.GetDataManager<ISMSMessageTemplateDataManager>();
 
             smsMessageTemplateItem.SMSMessageTemplateId = Guid.NewGuid();
-
+            
             int loggedInUserId = ContextFactory.GetContext().GetLoggedInUserId();
             smsMessageTemplateItem.CreatedBy = loggedInUserId;
             smsMessageTemplateItem.LastModifiedBy = loggedInUserId;
-            
+
             if (dataManager.Insert(smsMessageTemplateItem))
             {
                 Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
@@ -248,6 +248,8 @@ namespace Vanrise.Common.Business
             SMSMessageTemplateDetail smsMessageTemplateDetail = new SMSMessageTemplateDetail()
             {
                 Entity = smsMessageTemplate,
+                CreatorName = BEManagerFactory.GetManager<IUserManager>().GetUserName(smsMessageTemplate.CreatedBy),
+                LastModifierName = BEManagerFactory.GetManager<IUserManager>().GetUserName(smsMessageTemplate.LastModifiedBy)
             };
             return smsMessageTemplateDetail;
         }
