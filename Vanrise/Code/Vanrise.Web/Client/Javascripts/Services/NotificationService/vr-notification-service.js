@@ -182,7 +182,7 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
         return false;
     }
 
-    function notifyOnUserAuthenticated(authenticateOperationOutput, onValidationNeeded) {
+    function notifyOnUserAuthenticated(authenticateOperationOutput, onValidationNeeded, onExpiredPasswordChangeNeeded) {
         switch (authenticateOperationOutput.Result) {
             case AuthenticateOperationResultEnum.Succeeded.value:
                 return true;
@@ -198,6 +198,9 @@ app.service('VRNotificationService', function (VRModalService, VRNavigationServi
             case AuthenticateOperationResultEnum.ActivationNeeded.value:
                 onValidationNeeded();
                 showError("Activation Needed"); break;
+            case AuthenticateOperationResultEnum.PasswordExpired.value:
+                onExpiredPasswordChangeNeeded();
+                showError("Password has been expired"); break;
         }
         return false;
     }
