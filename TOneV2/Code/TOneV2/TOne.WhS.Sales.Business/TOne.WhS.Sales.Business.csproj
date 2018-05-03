@@ -123,11 +123,13 @@
     <Compile Include="BusinessRules\Conditions\NormalRateBEDLessThanValidBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\OtherRateBEDCondition.cs" />
     <Compile Include="BusinessRules\Conditions\OtherRateBEDLessThanValidBEDCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\OtherRateChangeOnlyCondition.cs" />
     <Compile Include="BusinessRules\Conditions\RateIsLessThanOrEqualToZeroCondition.cs" />
     <Compile Include="BusinessRules\Conditions\SellingProductZoneRateIsEndedCondition.cs" />
     <Compile Include="BusinessRules\Conditions\SPDefaultRPDoesNotExistCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ZoneCountryIsEndedAndZoneIsChangedCondition.cs" />
     <Compile Include="BusinessRules\Conditions\ZoneIsPendingClosedAndChangedCondition.cs" />
+    <Compile Include="BusinessRules\Conditions\OtherRateEEDCondition.cs" />
     <Compile Include="CarrierAccount\AffectedCarrierAccountFilterInChangedCountryChanges.cs" />
     <Compile Include="CarrierAccount\AffectedCarrierAccountFilterInNewCountryChanges.cs" />
     <Compile Include="CarrierAccount\AffectedCarrierAccountFilterInRateChanges.cs" />
