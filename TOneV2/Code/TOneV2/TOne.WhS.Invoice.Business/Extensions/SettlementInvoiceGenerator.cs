@@ -68,6 +68,14 @@ namespace TOne.WhS.Invoice.Business.Extensions
             ProcessItemSetName(customerInvoices, customerInvoiceItems, supplierInvoices, supplierInvoiceItems, availableCustomerInvoices,availableSupplierInvoices, out customerInvoiceItemSet, out supplierInvoiceItemSet, out settlementInvoiceItemSummaryByCurrency, out carrierSummary, out systemSummary, out settlementInvoiceCurrencyByInvoice);
 
             context.Invoice = BuildGeneratedInvoice(customerInvoiceItemSet, supplierInvoiceItemSet, settlementInvoiceItemSummaryByCurrency, carrierSummary, systemSummary,settlementInvoiceCurrencyByInvoice, partnerType,isApplicableToCustomer,isApplicableToSupplier);
+            
+            ConfigManager configManager = new ConfigManager();
+            InvoiceTypeSetting settings = configManager.GetInvoiceTypeSettingsById(context.InvoiceTypeId);
+
+            if (settings != null)
+            {
+                context.NeedApproval = settings.NeedApproval;
+            }
         }
 
 

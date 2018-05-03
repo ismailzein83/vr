@@ -132,6 +132,14 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
                 return;
             }
+
+            ConfigManager configManager = new ConfigManager();
+            InvoiceTypeSetting settings = configManager.GetInvoiceTypeSettingsById(context.InvoiceTypeId);
+
+            if (settings != null)
+            {
+                context.NeedApproval = settings.NeedApproval;
+            }
             #endregion
 
            
