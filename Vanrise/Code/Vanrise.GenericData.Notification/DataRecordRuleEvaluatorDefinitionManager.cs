@@ -43,7 +43,9 @@ namespace Vanrise.GenericData.Notification
 
         public DataRecordRuleEvaluatorDefinitionSettings GetDataRecordRuleEvaluatorDefinitionSettings(Guid dataRecordRuleEvaluatorDefinitionId)
         {
-            return _vrComponentTypeManager.GetComponentTypeSettings<DataRecordRuleEvaluatorDefinitionSettings>(dataRecordRuleEvaluatorDefinitionId);
+            Dictionary<Guid, DataRecordRuleEvaluatorDefinition> cachedDataRecordRuleEvaluatorDefinitions = GetCachedDataRecordRuleEvaluatorDefinitions();
+            DataRecordRuleEvaluatorDefinition dataRecordRuleEvaluatorDefinition = cachedDataRecordRuleEvaluatorDefinitions.GetRecord<Guid, DataRecordRuleEvaluatorDefinition>(dataRecordRuleEvaluatorDefinitionId);
+            return dataRecordRuleEvaluatorDefinition.Settings;
         
         }
 
