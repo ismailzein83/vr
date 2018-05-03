@@ -16,11 +16,6 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
     {
         public Guid ConfigId { get { return new Guid("34F3483D-2572-4349-A6ED-3504B2D9E714"); } }
 
-        public IdbPostgresDataManager()
-        {
-
-        }
-
         IdbConnectionString _connectionString;
         List<IdbConnectionString> _redundantConnectionStrings;
         Dictionary<int, TelesIdbPostgresDataManager> _telesIdbPostgresDataManagers;
