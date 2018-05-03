@@ -671,6 +671,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Images\iconheader.ico" />
+    <Content Include="Images\ICX-iconheader.ico" />
+    <Content Include="Images\ICX-login.png" />
+    <Content Include="Images\ICX-logoonheader.png" />
     <Content Include="Images\login.png" />
     <Content Include="Images\logoonheader.png" />
     <Content Include="Images\menu-icons\admin.png" />
