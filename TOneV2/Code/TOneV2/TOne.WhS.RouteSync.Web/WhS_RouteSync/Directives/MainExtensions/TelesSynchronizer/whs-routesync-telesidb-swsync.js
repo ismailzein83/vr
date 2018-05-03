@@ -2,9 +2,9 @@
 
     'use strict';
 
-    TelesIdbSWSync.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService', 'WhS_BE_CarrierAccountAPIService'];
+    TelesIdbSWSync.$inject = ["UtilsService", 'VRUIUtilsService', 'VRNotificationService'];
 
-    function TelesIdbSWSync(UtilsService, VRUIUtilsService, VRNotificationService, WhS_BE_CarrierAccountAPIService) {
+    function TelesIdbSWSync(UtilsService, VRUIUtilsService, VRNotificationService) {
         return {
             restrict: "E",
             scope: {
