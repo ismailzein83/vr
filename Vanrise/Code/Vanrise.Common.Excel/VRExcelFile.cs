@@ -123,8 +123,9 @@ namespace Vanrise.Common.Excel
         StyleFlag BuildSheetContainerCommonConfigs()
         {
             StyleFlag styleFlag = new StyleFlag();
-            styleFlag.All = true;
-            styleFlag.CellShading = true;
+            styleFlag.All = false;
+            styleFlag.Font = true;
+            styleFlag.Borders = true;
             return styleFlag;
         }
     }
