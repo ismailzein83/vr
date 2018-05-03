@@ -22,28 +22,15 @@ namespace Vanrise.Invoice.Business
             this.Invoice = invoice;
             invoice.ThrowIfNull("invoice");
             invoice.Details.ThrowIfNull("invoice.Details", invoice.InvoiceId);
-            Type invoiceDetailsRuntimeType = invoice.Details.GetType();
             var invoiceType = s_invoiceTypeManager.GetInvoiceType(invoice.InvoiceTypeId);
             invoiceType.ThrowIfNull("invoiceType", invoiceType.InvoiceTypeId);
             invoiceType.Settings.ThrowIfNull("invoiceType.Settings", invoiceType.InvoiceTypeId);
             var invoiceDataRecordType = s_dataRecordTypeManager.GetDataRecordType(invoiceType.Settings.InvoiceDetailsRecordTypeId);
             invoiceDataRecordType.ThrowIfNull("invoiceDataRecordType", invoiceType.Settings.InvoiceDetailsRecordTypeId);
-            invoiceDataRecordType.Fields.ThrowIfNull("invoiceDataRecordType.Fields", invoiceType.Settings.InvoiceDetailsRecordTypeId);
-            Dictionary<string, Object> invoiceFieldValues = new Dictionary<string, object>();
-            foreach (var field in invoiceDataRecordType.Fields)
-            {
-                if (!field.IsInheritedFromExtraField && field.Formula != null)
-                {
-                    string fieldName = field.Name;
-                    field.Type.ThrowIfNull("field.Type", fieldName);
-                    var fieldProperty = invoiceDetailsRuntimeType.GetProperty(fieldName);
-                    fieldProperty.ThrowIfNull("fieldProperty", fieldName);
-                    object fieldValue = fieldProperty.GetValue(invoice.Details);
-                    invoiceFieldValues.Add(fieldName, fieldValue);
-                }
-            }
+            Dictionary<string, Object> invoiceFieldValues = null;           
             if (invoiceDataRecordType.ExtraFieldsEvaluator != null && invoiceDataRecordType.ExtraFieldsEvaluator is InvoiceRecordTypeMainFields)
             {
+                invoiceFieldValues = new Dictionary<string, object>();
                 invoiceFieldValues.Add("ID", invoice.InvoiceId);
                 invoiceFieldValues.Add("Partner", invoice.PartnerId);
                 invoiceFieldValues.Add("SerialNumber", invoice.SerialNumber);
@@ -61,7 +48,12 @@ namespace Vanrise.Invoice.Business
                 invoiceFieldValues.Add("SentDate", invoice.SentDate);
                 invoiceFieldValues.Add("User", invoice.UserId);
             }
-            InvoiceDataRecordObject = new GenericData.Business.DataRecordObject(invoiceType.Settings.InvoiceDetailsRecordTypeId, invoiceFieldValues);
+
+            var _recordRuntimeType = s_dataRecordTypeManager.GetDataRecordRuntimeType(invoiceType.Settings.InvoiceDetailsRecordTypeId);
+            _recordRuntimeType.ThrowIfNull("recordRuntimeType", invoiceType.Settings.InvoiceDetailsRecordTypeId);
+            dynamic invoiceDataRecord = Activator.CreateInstance(_recordRuntimeType, invoiceFieldValues, invoice.Details);
+
+            InvoiceDataRecordObject = new GenericData.Business.DataRecordObject(invoiceType.Settings.InvoiceDetailsRecordTypeId, invoiceDataRecord);
         }
 
         public Entities.Invoice Invoice { get; private set; }

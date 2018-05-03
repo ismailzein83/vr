@@ -406,6 +406,13 @@ namespace Vanrise.GenericData.Business
                         {
                         }
 
+                        public #CLASSNAME#(Dictionary<string, dynamic> sourceDictionary, dynamic sourceObject)
+                            : this()
+                        {
+                            _sourceDictionary = sourceDictionary;
+                            _sourceObject = sourceObject;
+                        }
+
                         public #CLASSNAME#(Dictionary<string, dynamic> sourceDictionary)
                             : this()
                         {
@@ -562,10 +569,11 @@ namespace Vanrise.GenericData.Business
                                 if (#PRIVATEFIELDNAME# == default(#FIELDRUNTIMETYPE#) && !#ISFIELDFILLED#)
                                 {
                                     dynamic fldValue = null;
-                                    if (_sourceDictionary != null)           
-                                        _sourceDictionary.TryGetValue(""#FIELDNAME#"", out fldValue);
-                                    else if (_sourceObject != null)
-                                        fldValue = _sourceObject.#FIELDNAME#;
+                                    if (_sourceDictionary == null || !_sourceDictionary.TryGetValue(""#FIELDNAME#"", out fldValue))
+                                    {
+                                        if (_sourceObject != null)
+                                            fldValue = _sourceObject.#FIELDNAME#;
+                                    }
 
                                     if(fldValue != null)
                                     {
