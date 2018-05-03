@@ -120,6 +120,13 @@ namespace TOne.WhS.Invoice.Business.Extensions
                     SetInvoiceBillingTransactions(context, supplierInvoiceDetails, financialAccount, fromDate, toDateForBillingTransaction);
                 }
 
+                ConfigManager configManager = new ConfigManager();
+                InvoiceTypeSetting settings = configManager.GetInvoiceTypeSettingsById(context.InvoiceTypeId);
+
+                if (settings != null)
+                {
+                    context.NeedApproval = settings.NeedApproval;
+                }
                 context.Invoice = new GeneratedInvoice
                 {
                     InvoiceDetails = supplierInvoiceDetails,
@@ -133,16 +140,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
                 return;
             }
 
-            ConfigManager configManager = new ConfigManager();
-            InvoiceTypeSetting settings = configManager.GetInvoiceTypeSettingsById(context.InvoiceTypeId);
-
-            if (settings != null)
-            {
-                context.NeedApproval = settings.NeedApproval;
-            }
             #endregion
-
-           
         }
 
         private List<SupplierInvoiceBySaleCurrencyItemDetails> loadCurrencyItemSet(string dimentionName, int dimensionValue, DateTime fromDate, DateTime toDate, decimal? commission, CommissionType? commissionType, IEnumerable<VRTaxItemDetail> taxItemDetails)
