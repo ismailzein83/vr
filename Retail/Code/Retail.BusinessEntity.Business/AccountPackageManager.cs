@@ -133,14 +133,20 @@ namespace Retail.BusinessEntity.Business
                 IsBold=false,
                 SetBorder = false
             };
-         
-            VRExcelCell logoCell = new VRExcelCell
-            {
-                RowIndex = 0,
-                ColumnIndex = 0,
-            };
-            firstSheet.AddCell(logoCell);
-
+             var file = fileManager.GetFile(companySettings.CompanyLogo);
+             if (file != null && file.Content != null)
+             {
+                 VRExcelImageConfig image = new VRExcelImageConfig
+                 {
+                     StartingRowIndex = 0,
+                     StartingColumnIndex = 1,
+                     NumberOFRows = 8,
+                     NumberOfColumns = 1,
+                     Value = file.Content
+                 };
+                 firstSheet.AddImage(image);
+             }
+            
             VRExcelCell companyName= new VRExcelCell
             {
                 RowIndex = 9,
