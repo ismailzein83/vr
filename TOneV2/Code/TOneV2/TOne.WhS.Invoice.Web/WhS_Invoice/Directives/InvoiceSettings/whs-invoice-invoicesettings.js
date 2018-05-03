@@ -86,19 +86,25 @@
                 var api = {};
 
                 api.load = function (payload) {
-                    
+
                     var promises = [];
 
                     if (payload != undefined && payload.data != undefined && payload.data.InvoiceTypeSettings != undefined) {
-                       
-                        for (var i = 0; i < payload.data.InvoiceTypeSettings.length; i++) {
-                            var item = {
-                                payload: payload.data.InvoiceTypeSettings[i],
-                                readyInvoiceTypeSelectorPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                loadInvoiceTypeSelectorPromiseDeferred: UtilsService.createPromiseDeferred()
-                            };
-                            promises.push(item.loadInvoiceTypeSelectorPromiseDeferred.promise);
-                            addItemToGrid(item);
+                        for (var key in payload.data.InvoiceTypeSettings) {
+                            if (key != "$type")
+                            {
+                                var item =
+                                {
+                                    payload: {
+                                        InvoiceTypeId: key,
+                                        NeedApproval: payload.data.InvoiceTypeSettings[key].NeedApproval
+                                    },
+                                    readyInvoiceTypeSelectorPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                    loadInvoiceTypeSelectorPromiseDeferred: UtilsService.createPromiseDeferred()
+                                };
+                                promises.push(item.loadInvoiceTypeSelectorPromiseDeferred.promise);
+                                addItemToGrid(item);
+                            }
                         }
                     }
 
@@ -133,32 +139,30 @@
                 };
 
                 api.getData = function () {
-                    return {
+                 return {
                         $type: "TOne.WhS.Invoice.Business.InvoiceSettings,TOne.WhS.Invoice.Business",
                         InvoiceTypeSettings: getSettings()
                     };
                 };
 
                 function getSettings() {
-                    var settingsList = [];
+                    var settings = {};
 
                     angular.forEach(ctrl.datasource, function (item) {
-                        var dataItem = {
-                            InvoiceTypeId: item.invoiceTypeSelectorAPI.getSelectedIds(),
+                        var invoiceTypeSettings = {
                             NeedApproval: item.NeedApproval
                         };
 
-                        settingsList.push(dataItem);
+                        settings[item.invoiceTypeSelectorAPI.getSelectedIds()]= invoiceTypeSettings;
                     });
-                   
-                    return settingsList;
+
+                    return settings;
                 }
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
         }
-
     }
 
     app.directive('whsInvoiceInvoicesettings', whsInvoiceSettingsDirective);
