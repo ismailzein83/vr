@@ -623,6 +623,9 @@
     <None Include="App.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="App.config.Interconnect.exclude">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="App.config.RA.exclude">
       <SubType>Designer</SubType>
     </None>
