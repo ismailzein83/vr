@@ -18,7 +18,7 @@ namespace Vanrise.Invoice.MainExtensions
         {
             //is not NeedApproval when it does not need approval or approved
             if (!NeedApproval) {
-                if ((context.Invoice.NeedApproval.HasValue && !context.Invoice.NeedApproval.Value) || context.Invoice.ApprovedTime.HasValue)
+                if (!context.Invoice.NeedApproval.HasValue || (context.Invoice.NeedApproval.HasValue && !context.Invoice.NeedApproval.Value) || context.Invoice.ApprovedTime.HasValue)
                     return true;
                 else
                     return false;
