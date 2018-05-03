@@ -14,7 +14,7 @@
     Note: { value: 12, description: "Note", fieldName: "HasNote", type: "Text" },
     IsAutomatic: { value: 15, description: "Is Automatic", fieldName: "Entity.IsAutomatic", type: "Text" },
     IsSent: { value: 16, description: "Is Sent", fieldName: "IsSent", type: "Text" },
-    NeedApproval: { value: 16, description: "Need Approval", fieldName: "Entity.NeedApproval", type: "Text" },
-    ApprovedTime: { value: 16, description: "Approved Time", fieldName: "Entity.ApprovedTime", type: "Datetime" },
-    ApprovedBy: { value: 16, description: "Approved By", fieldName: "Entity.ApprovedBy", type: "Text" },
+    NeedApproval: { value: 18, description: "Need Approval", fieldName: "Entity.NeedApproval", type: "Text" },
+    ApprovedTime: { value: 19, description: "Approved Time", fieldName: "Entity.ApprovedTime", type: "Datetime" },
+    ApprovedBy: { value: 20, description: "Approved By", fieldName: "ApprovedByName", type: "Text" },
 });

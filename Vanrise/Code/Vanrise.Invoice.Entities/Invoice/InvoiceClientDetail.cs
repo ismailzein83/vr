@@ -16,6 +16,7 @@ namespace Vanrise.Invoice.Entities
         public string UserName { get; set; }
         public List<InvoiceDetailObject> Items { get; set; }
         public string PartnerName { get; set; }
+        public string ApprovedByName { get; set; }
 
     }
     public class InvoiceDetailObject

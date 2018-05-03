@@ -778,6 +778,7 @@ namespace Vanrise.Invoice.Business
                 Paid = invoice.PaidDate.HasValue,
                 Lock = invoice.LockDate.HasValue,
                 UserName = userManager.GetUserName(invoice.UserId),
+                ApprovedByName = invoice.ApprovedBy.HasValue? userManager.GetUserName(invoice.ApprovedBy.Value):null,
                 HasNote = invoice.Note != null,
                 IsSent = invoice.SentDate.HasValue
             };
