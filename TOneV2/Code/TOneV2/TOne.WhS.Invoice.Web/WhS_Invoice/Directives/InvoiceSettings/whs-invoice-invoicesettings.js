@@ -63,8 +63,12 @@
                 ctrl.isInvoiceTypeValid = function () {
                     
                    for (var x = 0; x < ctrl.datasource.length; x++) {
-                       if (ctrl.datasource[x] != UtilsService.getItemByVal(ctrl.datasource, ctrl.datasource[x].InvoiceTypeId, 'InvoiceTypeId'))
-                           return 'This type already exists';
+                       var currentItem = ctrl.datasource[x];
+                       for (var y = x + 1; y < ctrl.datasource.length; y++) {
+                           var dataItem = ctrl.datasource[y];
+                           if (dataItem.InvoiceTypeId == currentItem.InvoiceTypeId)
+                               return 'This type already exists';
+                       }
                     }
                     return null;
                 };

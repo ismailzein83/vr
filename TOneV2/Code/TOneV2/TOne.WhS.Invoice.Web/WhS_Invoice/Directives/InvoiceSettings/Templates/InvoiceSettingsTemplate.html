@@ -11,7 +11,7 @@
                  ondeleterow="ctrl.removeRow"
                  idfield="Entity.InvoiceTypeId">
         <vr-datagridcolumn headertext="'Invoice Type'">
-            <vr-invoicetype-selector on-ready="dataItem.onInvoiceTypeSelectorReady" normal-col-num="10" onselectionchanged="dataItem.saveDataItem"></vr-invoicetype-selector>
+            <vr-invoicetype-selector on-ready="dataItem.onInvoiceTypeSelectorReady" normal-col-num="10" onselectionchanged="dataItem.saveDataItem" isrequired="true"></vr-invoicetype-selector>
         </vr-datagridcolumn>
         <vr-datagridcolumn headertext="'Need Approval'">
             <vr-switch value="dataItem.NeedApproval" label="Need Approval"></vr-switch>
