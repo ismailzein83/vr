@@ -21,7 +21,7 @@
 
         };
         function IVSWSyncronizer($scope, ctrl, $attrs) {
-
+            console.log($scope.scopeModel.Separator);
             var gridAPI;
             function getCarrierMappings() {
                 var result = {};
@@ -30,8 +30,8 @@
                         var carrierMapping = $scope.scopeModel.carrierAccountMappings[i];
                         result[carrierMapping.CarrierAccountId] = {
                             CarrierId: carrierMapping.CarrierAccountId,
-                            CustomerMapping: carrierMapping.CustomerMapping == undefined ? null : carrierMapping.CustomerMapping.split($scope.scopeModel.separator),
-                            SupplierMapping: carrierMapping.SupplierMapping == undefined ? null : carrierMapping.SupplierMapping.split($scope.scopeModel.separator)
+                            CustomerMapping: carrierMapping.CustomerMapping == undefined ? null : carrierMapping.CustomerMapping.split($scope.scopeModel.Separator),
+                            SupplierMapping: carrierMapping.SupplierMapping == undefined ? null : carrierMapping.SupplierMapping.split($scope.scopeModel.Separator)
                         };
                     }
                 return result;
@@ -51,8 +51,8 @@
                                  carrierMapping = {
                                      CarrierAccountId: response[i].CarrierAccountId,
                                      CarrierAccountName: response[i].Name,
-                                     CustomerMapping: accountCarrierMappings != undefined && accountCarrierMappings.CustomerMapping != null ? accountCarrierMappings.CustomerMapping.join($scope.scopeModel.separator) : undefined,
-                                     SupplierMapping: accountCarrierMappings != undefined && accountCarrierMappings.SupplierMapping != null ? accountCarrierMappings.SupplierMapping.join($scope.scopeModel.separator) : undefined
+                                     CustomerMapping: accountCarrierMappings != undefined && accountCarrierMappings.CustomerMapping != null ? accountCarrierMappings.CustomerMapping.join($scope.scopeModel.Separator) : undefined,
+                                     SupplierMapping: accountCarrierMappings != undefined && accountCarrierMappings.SupplierMapping != null ? accountCarrierMappings.SupplierMapping.join($scope.scopeModel.Separator) : undefined
                                  };
                                  $scope.scopeModel.carrierAccountMappings.push(carrierMapping);
                              }

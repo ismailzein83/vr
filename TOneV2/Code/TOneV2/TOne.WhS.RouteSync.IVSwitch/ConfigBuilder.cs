@@ -22,13 +22,13 @@ namespace TOne.WhS.RouteSync.IVSwitch
         }
         private Dictionary<string, AccessListTable> GetCustomers()
         {
-            var customerByMapping= new Dictionary<string, AccessListTable>();
+            var customerByMapping = new Dictionary<string, AccessListTable>();
             List<AccessListTable> customersLst = MasterDataManager.GetAccessListTables();
             foreach (var customer in customersLst)
             {
                 string key = string.Format("{0}_{1}", customer.AccountId, customer.GroupId);
                 if (!customerByMapping.ContainsKey(key))
-                   customerByMapping.Add(key,customer);
+                    customerByMapping.Add(key, customer);
             }
             return customerByMapping;
         }
@@ -50,42 +50,29 @@ namespace TOne.WhS.RouteSync.IVSwitch
             {
                 CustomerDefinitions = new Dictionary<string, CustomerDefinition>(),
                 SupplierDefinitions = new Dictionary<string, SupplierDefinition>(),
+                RouteTableIdsHashSet = new HashSet<int>(),
                 _switchTime = MasterDataManager.GetSwitchDate()
             };
             Dictionary<string, string> routeTableIds = RouteDataManager.GetAccessListTableNames();
-            Dictionary<string, string> tariffTableIds = TariffDataManager.GetRoutesTableNames();
             Dictionary<string, AccessListTable> dataBaseEndPoints = GetCustomers();
             Dictionary<string, RouteTable> dataBaseVendors = GetSuppliers();
 
             foreach (var mapItem in _sync.CarrierMappings)
             {
                 var map = mapItem.Value;
-                if (map.CustomerMapping == null && map.SupplierMapping == null) continue;
+                if (map.CustomerMapping == null && map.SupplierMapping == null)
+                    continue;
 
                 if (map.CustomerMapping != null)
-                    foreach (var customerMapping in map.CustomerMapping)
+                {
+                    var customerDefinitions = BuildCustomerDefinition(map.CarrierId, map.CustomerMapping, routeTableIds, dataBaseEndPoints);
+                    if (customerDefinitions != null)
                     {
-                        AccessListTable definition;
-                        if (!dataBaseEndPoints.TryGetValue(customerMapping, out definition)) continue;
-                        if (!routeTableIds.ContainsKey(string.Format("rt{0}", definition.RouteTableId))) continue;
-                        if (!tariffTableIds.ContainsKey(string.Format("trf{0}", definition.TariffTableId))) continue;
-                        EndPoint endPoint = new EndPoint
-                        {
-                            RouteTableId = definition.RouteTableId,
-                            TariffTableId = definition.TariffTableId
-                        };
-                        CustomerDefinition customer;
-                        if (!preparedConfiguration.CustomerDefinitions.TryGetValue(map.CarrierId, out customer))
-                        {
-                            customer = new CustomerDefinition
-                            {
-                                EndPoints = new List<EndPoint>(),
-                                CustomerId = map.CarrierId
-                            };
-                            preparedConfiguration.CustomerDefinitions[map.CarrierId] = customer;
-                        }
-                        customer.EndPoints.Add(endPoint);
+                        preparedConfiguration.CustomerDefinitions.Add(map.CarrierId, customerDefinitions);
+                        customerDefinitions.EndPoints.ForEach(item => preparedConfiguration.RouteTableIdsHashSet.Add(item.RouteTableId));
                     }
+                }
+
                 if (map.SupplierMapping != null)
                     foreach (var supplierMapping in map.SupplierMapping)
                     {
@@ -110,7 +97,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
                                 SupplierId = map.CarrierId,
                                 Gateways = new List<GateWay>()
                             };
-                            preparedConfiguration.SupplierDefinitions[map.CarrierId] = supplier;
+                            preparedConfiguration.SupplierDefinitions.Add(map.CarrierId, supplier);
                         }
                         supplier.Gateways.Add(gateway);
                     }
@@ -121,5 +108,40 @@ namespace TOne.WhS.RouteSync.IVSwitch
             return preparedConfiguration;
         }
 
+        private CustomerDefinition BuildCustomerDefinition(string customerId, List<string> customerMappings, Dictionary<string, string> routeTableIds, Dictionary<string, AccessListTable> dataBaseEndPoints)
+        {
+            CustomerDefinition customerDefinition = null;
+            var endPointById = new Dictionary<int, EndPoint>();
+            foreach (var customerMapping in customerMappings)
+            {
+                AccessListTable definition;
+                if (!dataBaseEndPoints.TryGetValue(customerMapping, out definition))
+                    continue;
+
+                if (!routeTableIds.ContainsKey(string.Format("rt{0}", definition.RouteTableId)))
+                    continue;
+
+                EndPoint endPoint;
+                if (!endPointById.TryGetValue(definition.RouteTableId, out endPoint))
+                {
+                    endPoint = new EndPoint
+                    {
+                        RouteTableId = definition.RouteTableId,
+                        TariffTableId = definition.TariffTableId
+                    };
+                    endPointById.Add(definition.RouteTableId, endPoint);
+                }
+            }
+
+            if (endPointById.Any())
+            {
+                return new CustomerDefinition
+                    {
+                        CustomerId = customerId,
+                        EndPoints = endPointById.Values.ToList()
+                    };
+            }
+            return null;
+        }
     }
 }

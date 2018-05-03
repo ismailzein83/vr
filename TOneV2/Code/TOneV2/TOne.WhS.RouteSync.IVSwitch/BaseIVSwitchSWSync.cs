@@ -57,15 +57,12 @@ namespace TOne.WhS.RouteSync.IVSwitch
                 {
                     preparedRoute = new PreparedRoute
                     {
-                        // TariffTableName = ivSwitchConvertedRoute.TariffTableName,
                         RouteTableName = ivSwitchConvertedRoute.RouteTableName,
-                        Routes = new List<IVSwitchRoute>(),
-                        //Tariffs = new List<IVSwitchTariff>()
+                        Routes = new List<IVSwitchRoute>()
                     };
                     customerRoutes.Add(ivSwitchConvertedRoute.CustomerID, preparedRoute);
                 }
                 preparedRoute.Routes.AddRange(ivSwitchConvertedRoute.Routes);
-                // preparedRoute.Tariffs.AddRange(ivSwitchConvertedRoute.Tariffs);
 
             }
             return customerRoutes;
@@ -74,32 +71,21 @@ namespace TOne.WhS.RouteSync.IVSwitch
         {
             Dictionary<string, PreparedRoute> routes = (Dictionary<string, PreparedRoute>)context.PreparedItemsForApply;
             IVSwitchRouteDataManager routeDataManager = new IVSwitchRouteDataManager(RouteConnectionString, OwnerName);
-            //IVSwitchTariffDataManager tariffDataManager = new IVSwitchTariffDataManager(TariffConnectionString, OwnerName);
             foreach (var item in routes.Values)
             {
                 if (item.Routes != null && item.Routes.Any())
                     routeDataManager.Bulk(item.Routes, string.Format("{0}_temp", item.RouteTableName));
-                //tariffDataManager.Bulk(item.Tariffs, string.Format("{0}_temp", item.TariffTableName));
             }
         }
         public override void Finalize(ISwitchRouteSynchronizerFinalizeContext context)
         {
             PreparedConfiguration preparedData = GetPreparedConfiguration();
             IVSwitchRouteDataManager routeDataManager = new IVSwitchRouteDataManager(RouteConnectionString, OwnerName);
-            //IVSwitchTariffDataManager tariffDataManager = new IVSwitchTariffDataManager(TariffConnectionString, OwnerName);
-            foreach (var customerTable in preparedData.CustomerDefinitions)
+            foreach (var routeTableId in preparedData.RouteTableIdsHashSet)
             {
-                var endPoints = customerTable.Value.EndPoints;
-                if (endPoints != null && endPoints.Any())
-                {
-                    int routeTableId = endPoints.First().RouteTableId;
-                    routeDataManager.CreatePrimaryKey(string.Format("rt{0}_temp", routeTableId));
-                    routeDataManager.Swap(GetRouteTableName(routeTableId));
-                    context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Table for customer '{0}' for switch '{1}' is finalized"
-                        , new object[] { customerTable.Key, context.SwitchName });
-
-                    //tariffDataManager.Swap(GetTariffTableName(gateway.TariffTableId));
-                }
+                routeDataManager.CreatePrimaryKey(string.Format("rt{0}_temp", routeTableId));
+                routeDataManager.Swap(GetRouteTableName(routeTableId));
+                context.WriteTrackingMessage(Vanrise.Entities.LogEntryType.Information, "Table rt'{0}' for switch '{1}' is finalized", new object[] { routeTableId, context.SwitchName });
             }
         }
         public abstract PreparedConfiguration GetPreparedConfiguration();
@@ -160,14 +146,9 @@ namespace TOne.WhS.RouteSync.IVSwitch
         private void BuildTempTables(PreparedConfiguration preparedData)
         {
             IVSwitchRouteDataManager routeDataManager = new IVSwitchRouteDataManager(RouteConnectionString, OwnerName);
-            //  IVSwitchTariffDataManager tariffDataManager = new IVSwitchTariffDataManager(TariffConnectionString, OwnerName);
-            foreach (var customerTable in preparedData.CustomerDefinitions)
+            foreach (var routeTableId in preparedData.RouteTableIdsHashSet)
             {
-                foreach (var gateway in customerTable.Value.EndPoints)
-                {
-                    routeDataManager.BuildRouteTable(GetRouteTableName(gateway.RouteTableId));
-                    //  tariffDataManager.BuildTariffTable(GetTariffTableName(gateway.TariffTableId));
-                }
+                routeDataManager.BuildRouteTable(GetRouteTableName(routeTableId));
             }
         }
         private IVSwitchTariff BuildTariff(Entities.Route route)
@@ -249,14 +230,14 @@ namespace TOne.WhS.RouteSync.IVSwitch
                             WakeUpTime = preparedData._switchTime,
                             Description = new CarrierAccountManager().GetCarrierAccountName(int.Parse(option.SupplierId))
                         };
-                        if (supplierGateWay.Percentage != 0)
+                        if (option.Percentage != null && option.Percentage != 0)
                         {
                             ivOption.RoutingMode = 8;
                             ivOption.TotalBkts = gatewayCount;
                             ivOption.Flag1 = BuildPercentage(supplierGateWay.Percentage, option.Percentage, optionsPercenatgeSum,
                                     supplier.Gateways.Count);
                             ivOption.BktSerial = serial++;
-                            ivOption.BktCapacity = BuildScaledDownPercentage(ivOption.Flag1, 1, maxPercentage, 1, optionsPercenatgeSum);
+                            ivOption.BktCapacity = Convert.ToInt32(Math.Round(ivOption.Flag1.Value / 10, 0, MidpointRounding.AwayFromZero));
                             ivOption.BktToken = ivOption.BktCapacity;
                         }
                         routes.Add(ivOption);

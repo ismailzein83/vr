@@ -45,7 +45,8 @@ namespace TOne.WhS.RouteSync.IVSwitch
                         if (reader["tablename"] != DBNull.Value)
                         { 
                             string tableName = reader["tablename"].ToString();
-                            if (!customerDictionary.ContainsKey(tableName)) customerDictionary[tableName] = tableName;
+                            if (!customerDictionary.ContainsKey(tableName)) 
+                                customerDictionary[tableName] = tableName;
                         }
                     }
                 }

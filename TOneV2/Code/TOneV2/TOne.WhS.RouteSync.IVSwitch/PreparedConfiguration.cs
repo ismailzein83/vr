@@ -10,6 +10,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
     {
         public Dictionary<string, CustomerDefinition> CustomerDefinitions { get; set; }
         public Dictionary<string, SupplierDefinition> SupplierDefinitions { get; set; }
+        public HashSet<int> RouteTableIdsHashSet { get; set; }
 
         public int BlockRouteId;
         public DateTime _switchTime;
