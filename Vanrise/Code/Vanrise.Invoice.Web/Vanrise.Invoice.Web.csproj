@@ -229,10 +229,12 @@
     <Content Include="VR_Invoice\Directives\BillingCycle\vr-invoice-billingperiod.js" />
     <Content Include="VR_Invoice\Directives\BillingCycle\vr-invoice-startdatecalculationmethod.js" />
     <Content Include="VR_Invoice\Directives\Extensions\Invoice\Templates\InvoiceConvertorTemplate.html" />
+    <Content Include="VR_Invoice\Directives\Extensions\Invoice\Templates\InvoiceRecordTypeMainFieldTemplate.html" />
     <Content Include="VR_Invoice\Directives\Extensions\Invoice\Templates\InvoiceSourceReaderTemplate.html" />
     <Content Include="VR_Invoice\Directives\Extensions\Invoice\Templates\InvoiceSynchronizerTemplate.html" />
     <Content Include="VR_Invoice\Directives\Extensions\Invoice\vr-invoice-convertor-editor.js" />
     <Content Include="VR_Invoice\Directives\Extensions\Invoice\vr-invoice-reader-directive.js" />
+    <Content Include="VR_Invoice\Directives\Extensions\Invoice\vr-invoice-recordtypemainfield.js" />
     <Content Include="VR_Invoice\Directives\Extensions\Invoice\vr-invoice-synchronizer-editor.js" />
     <Content Include="VR_Invoice\Directives\Extensions\PartnerGroup\Templates\SpecificAccountsTemplate.html" />
     <Content Include="VR_Invoice\Directives\Extensions\PartnerGroup\Templates\InvoiceSettingTemplate.html" />

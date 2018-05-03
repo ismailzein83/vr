@@ -40,7 +40,7 @@ app.directive('vrGenericdataDatarecordtypefieldsSelector', ['VR_GenericData_Data
                     pre: function ($scope, iElem, iAttrs, ctrl) {
 
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getTemplate(attrs);
