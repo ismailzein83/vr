@@ -80,6 +80,11 @@ namespace TOne.WhS.RouteSync.TelesIdb
             return this.DataManager.PrepareDataForApply(context.ConvertedRoutes);
         }
 
+        public override void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context)
+        {
+            this.DataManager.ApplySwitchRouteSyncRoutes(context);
+        }
+
         public override void Finalize(ISwitchRouteSynchronizerFinalizeContext context)
         {
             SwapTableContext swapTableContext = new SwapTableContext()
@@ -93,11 +98,6 @@ namespace TOne.WhS.RouteSync.TelesIdb
             };
             this.DataManager.SwapTables(swapTableContext);
             context.SwitchSyncOutput = swapTableContext.SwitchSyncOutput;
-        }
-
-        public override void ApplySwitchRouteSyncRoutes(ISwitchRouteSynchronizerApplyRoutesContext context)
-        {
-            this.DataManager.ApplySwitchRouteSyncRoutes(context);
         }
 
         //public override bool TryBlockCustomer(ITryBlockCustomerContext context)
