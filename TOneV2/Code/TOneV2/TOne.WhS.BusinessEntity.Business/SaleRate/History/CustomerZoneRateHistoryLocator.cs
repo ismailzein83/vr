@@ -42,6 +42,11 @@ namespace TOne.WhS.BusinessEntity.Business
             IEnumerable<SaleRateHistoryRecord> customerZoneRateHistory = GetCustomerZoneRateHistory(customerId, sellingProductId, zoneName, rateTypeId, countryId, targetCurrencyId, longPrecision);
             return (customerZoneRateHistory != null) ? customerZoneRateHistory.FindRecord(x => x.IsEffective(effectiveOn)) : null;
         }
+        public SaleRateHistoryRecord GetLastCustomerRateHistoryRecord (int customerId, int sellingProductId, string zoneName, int? rateTypeId, int countryId, int? targetCurrencyId, int? longPrecision)
+        {
+            var customerZoneRateHistory = GetCustomerZoneRateHistory(customerId, sellingProductId, zoneName, rateTypeId, countryId, targetCurrencyId, longPrecision);
+            return customerZoneRateHistory.LastOrDefault();
+        }
 
         #region Private Methods
         private void InitializeFields(CustomerZoneRateHistoryReader reader)
