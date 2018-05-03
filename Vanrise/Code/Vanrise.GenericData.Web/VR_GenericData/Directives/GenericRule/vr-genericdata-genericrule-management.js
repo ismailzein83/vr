@@ -169,7 +169,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
             return VR_GenericData_GenericRuleAPIService.DoesUserHaveAddAccess(ruleDefinitionId).then(function (response) {
                 $scope.scopeModel.hasAddRulePermission = response;
             });
-        };
+        }; 
 
         function supportUpload() {
             return VR_GenericData_GenericRuleAPIService.DoesRuleSupportUpload(ruleDefinitionId).then(function (response) {
@@ -327,7 +327,7 @@ function (VRNotificationService, UtilsService, VRUIUtilsService, VRValidationSer
                                 };
                                 VRUIUtilsService.callDirectiveLoad(settingsFilterDirectiveAPI, settingsFilterDirectivePayload, settingsFilterEditorLoadDeferred);
                             });
-                        }, 1)
+                        }, 1);
                     }
                 });
             }

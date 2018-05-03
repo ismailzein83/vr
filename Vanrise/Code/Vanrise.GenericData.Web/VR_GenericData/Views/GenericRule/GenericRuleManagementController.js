@@ -13,6 +13,8 @@
         var settingsFilterDirectiveAPI;
         var settingsFilterDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
         var genericUIObj;
+        var context;
+        var ruleDefinition;
 
         loadParameters();
         defineScope();
@@ -34,6 +36,7 @@
 
             $scope.scopeModel.haveAddPermission = false;
             $scope.scopeModel.gridloadded = false;
+            $scope.scopeModel.ruleSupportsUpload = false;
 
             $scope.onGenericRuleDefinitionSelectorDirectiveReady = function (api) {
                 genericRuleDefinitionAPI = api;
@@ -61,6 +64,7 @@
                     loadAllControls().then(function () {
                         $scope.scopeModel.gridloadded = true;
                         hasAddGenericRulePermission();
+                        doesRuleSupportUpload();
                     });
                 }
             };
@@ -76,6 +80,10 @@
                 };
 
                 VR_GenericData_GenericRule.addGenericRule(genericRuleDefinitionAPI.getSelectedIds(), onGenericRuleAdded);
+            };
+
+            $scope.uploadGenericRules = function () {
+                VR_GenericData_GenericRule.uploadGenericRules(genericRuleDefinitionAPI.getSelectedIds(), getContext(), undefined, undefined);
             };
 
             function getFilterObject() {
@@ -106,6 +114,14 @@
                 }
 
                 return gridQuery;
+            }
+            
+            function getContext() {
+                var currentContext = context;
+                if (currentContext == undefined)
+                    currentContext = {
+                    };
+                return currentContext;
             }
         }
 
@@ -145,7 +161,6 @@
             function loadFilters() {
                 var promises = [];
 
-                var ruleDefinition;
                 var fieldTypes;
 
                 var getRuleDefinitionPromise = getRuleDefinition();
@@ -258,7 +273,7 @@
                                     };
                                     VRUIUtilsService.callDirectiveLoad(settingsFilterDirectiveAPI, settingsFilterDirectivePayload, settingsFilterEditorLoadDeferred);
                                 });
-                            }, 1)
+                            }, 1);
                         }
                     });
                 }
@@ -280,6 +295,13 @@
                 $scope.scopeModel.haveAddPermission = response;
             });
         };
+
+        function doesRuleSupportUpload() {
+            return VR_GenericData_GenericRuleAPIService.DoesRuleSupportUpload(genericRuleDefinitionAPI.getSelectedIds()).then(function (response) {
+                $scope.scopeModel.ruleSupportsUpload = response;
+            });
+        }
+        
     }
 
     appControllers.controller('VR_GenericData_GenericRuleManagementController', genericRuleManagementController);

@@ -36,6 +36,7 @@
                 <div transclude-to="buttons" ng-show="scopeModel.ruleDefinition" >
                     <vr-button type="Search" formname="formFilter" data-onclick="search"></vr-button>
                     <vr-button type="Add" data-onclick="addGenericRule" ng-show="scopeModel.haveAddPermission"></vr-button>
+                    <vr-button type="Upload" data-onclick="uploadGenericRules" ng-show="scopeModel.ruleSupportsUpload"></vr-button>
                 </div>
             </vr-actionbar>
         </vr-row>

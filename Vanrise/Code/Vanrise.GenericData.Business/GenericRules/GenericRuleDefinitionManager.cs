@@ -215,8 +215,11 @@ namespace Vanrise.GenericData.Business
 
             foreach(var criteria in criteriaFields)
             {
-                if (criteriaFieldsToHide.Contains(criteria.FieldName))
-                    continue;
+                if (criteriaFieldsToHide != null)
+                {
+                    if (criteriaFieldsToHide.Contains(criteria.FieldName))
+                        continue;
+                }
                 headers.Add(criteria.Title);
             }
             genericRuleDefinition.SettingsDefinition.ThrowIfNull("genericRuleDefinition.SettingsDefinition", genericRuleDefinitionId);
@@ -489,15 +492,18 @@ namespace Vanrise.GenericData.Business
                                 var values = criteriaManager.GetCriteriaFieldValues(criteria.Value);
                                 genericRule.Criteria.FieldsValues.Add(criteria.Key, values);
                             }
-                            foreach (var preDefinedCriteria in preDefinedValues)
+                            if (preDefinedValues != null)
                             {
-                                if (preDefinedCriteria.Value != null && preDefinedCriteria.Value.Values != null)
+                                foreach (var preDefinedCriteria in preDefinedValues)
                                 {
-                                    var predefinedCriteriaValue = preDefinedCriteria.Value.Values.First();
-                                    if (predefinedCriteriaValue != null)
+                                    if (preDefinedCriteria.Value != null && preDefinedCriteria.Value.Values != null)
                                     {
-                                        var values = criteriaManager.GetCriteriaFieldValues(predefinedCriteriaValue);
-                                        genericRule.Criteria.FieldsValues.Add(preDefinedCriteria.Key, values);
+                                        var predefinedCriteriaValue = preDefinedCriteria.Value.Values.First();
+                                        if (predefinedCriteriaValue != null)
+                                        {
+                                            var values = criteriaManager.GetCriteriaFieldValues(predefinedCriteriaValue);
+                                            genericRule.Criteria.FieldsValues.Add(preDefinedCriteria.Key, values);
+                                        }
                                     }
                                 }
                             }
