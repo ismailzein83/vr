@@ -5,14 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using TOne.WhS.Invoice.Entities;
 using Vanrise.Common.Business;
+using Vanrise.Common;
 
 namespace TOne.WhS.Invoice.Business
 {
     public class ConfigManager
     {
         #region Public Methods
-        public List<InvoiceTypeSetting> GetInvoiceTypeSettings()
-        {
+        public Dictionary<Guid, InvoiceTypeSetting> GetInvoiceTypeSettings()
+        { 
             SettingManager settingManager = new SettingManager();
             InvoiceSettings invoiceSettings = settingManager.GetSetting<InvoiceSettings>(InvoiceSettings.SETTING_TYPE);
 
@@ -20,6 +21,16 @@ namespace TOne.WhS.Invoice.Business
                 throw new NullReferenceException("invoiceSettings");
 
             return invoiceSettings.InvoiceTypeSettings;
+        }
+
+        public InvoiceTypeSetting GetInvoiceTypeSettingsById(Guid invoiceTypeId)
+        {
+            var invoiceTypeSettings = GetInvoiceTypeSettings();
+            if (invoiceTypeSettings != null && invoiceTypeSettings.Count != 0)
+            {
+                return invoiceTypeSettings.GetRecord(invoiceTypeId);
+            }
+            return null;
         }
 
         //public Guid GetDefaultCustomerInvoiceTemplateMessageId()
