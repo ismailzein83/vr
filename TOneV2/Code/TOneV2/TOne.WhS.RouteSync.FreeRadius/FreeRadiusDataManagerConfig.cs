@@ -7,9 +7,9 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.RouteSync.FreeRadius
 {
-    public class FreeRadiusPostgresDataManagerConfig : ExtensionConfiguration
+    public class FreeRadiusDataManagerConfig : ExtensionConfiguration
     {
-        public const string EXTENSION_TYPE = "WhS_RouteSync_FreeRadiusPostgresDataManager";
+        public const string EXTENSION_TYPE = "WhS_RouteSync_FreeRadiusDataManager";
 
         public string Editor { get; set; }
     }

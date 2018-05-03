@@ -7,9 +7,25 @@ using Vanrise.Data.Postgres;
 
 namespace TOne.WhS.RouteSync.FreeRadius
 {
-    public class FreeRadiusPostgresDataManager : BasePostgresDataManager, IFreeRadiusPostgresDataManager
+    public class FreeRadiusPostgresDataManager : BasePostgresDataManager, IFreeRadiusDataManager
     {
         public Guid ConfigId { get { return new Guid("EBAAB50D-CEF3-4C4B-AAC8-FC677DCEA5E7"); } }
+
+        FreeRadiusPostgresConnectionString _connectionString;
+        List<FreeRadiusPostgresConnectionString> _redundantConnectionStrings;
+        Dictionary<int, FreeRadiusPostgresConnectionString> _freeRadiusPostgresDataManagers;
+
+        public FreeRadiusPostgresConnectionString ConnectionString
+        {
+            get { return _connectionString; }
+            set { _connectionString = value; }
+        }
+
+        public List<FreeRadiusPostgresConnectionString> RedundantConnectionStrings
+        {
+            get { return _redundantConnectionStrings; }
+            set { _redundantConnectionStrings = value; }
+        }
 
         public void PrepareTables(Entities.ISwitchRouteSynchronizerInitializeContext context)
         {

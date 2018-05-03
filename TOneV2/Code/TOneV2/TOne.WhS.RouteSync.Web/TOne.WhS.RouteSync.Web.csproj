@@ -136,7 +136,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants.cs" />
-    <Compile Include="Controllers\FreeRadiusPostgresController.cs" />
+    <Compile Include="Controllers\FreeRadiusController.cs" />
     <Compile Include="Controllers\IdbDataManagerSettingsController.cs" />
     <Compile Include="Controllers\RouteSyncDefinitionController.cs" />
     <Compile Include="Controllers\RadiusDataManagerSettingsController.cs" />
@@ -147,9 +147,13 @@
   <ItemGroup>
     <Content Include="WhS_RouteSync\Constant\ModuleConfig.js" />
     <Content Include="WhS_RouteSync\Constant\TrunkTypeEnum.js" />
+    <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\Templates\CarrierAccountMappingFreeRadiusGridTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\Templates\CarrierAccountMappingTelesIdbGridTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-freeradius-grid.js" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-grid.js" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\whs-routesync-carrieraccountmapping-telesidb-grid.js" />
+    <Content Include="WhS_RouteSync\Directives\FreeRadius\FreeRadiusDataManagers\Templates\FreeRadiusDataManagersTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\FreeRadius\FreeRadiusDataManagers\whs-routesync-freeradiusdatamanagers.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSwitch\Communication\Templates\EricssonSwitchCommunicationTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\Templates\EricssonCarrierAccountMappingGridTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\Templates\EricssonCustomerMappingTemplate.html" />
@@ -161,6 +165,10 @@
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericsson-suppliermapping.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericsson-swsync.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericsson-trunktrunkgroup.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\FreeRadius\FreeRadiusDataManagers\Templates\FreeRadiusPostgresDataManagerTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\FreeRadius\FreeRadiusDataManagers\whs-routesync-freeradiuspostgres-datamanager.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\FreeRadius\FreeRadiusSynchronizer\Templates\FreeRadiusSWSyncTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\FreeRadius\FreeRadiusSynchronizer\whs-routesync-freeradius-swsync.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\IdbDataManagers\Templates\TelesPostgresIdbSWDataManagerTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\IdbDataManagers\whs-routesync-telesidb-postgresdatamanager.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\IVSwitchSynchronizer\Templates\BuiltInIVSwitchSWSyncTemplate.html" />
@@ -200,6 +208,7 @@
     <Content Include="WhS_RouteSync\Directives\IdbDataManagers\Templates\IdbDataManagersTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\IdbDataManagers\whs-routesync-idbdatamanagers-settings.js" />
     <Content Include="WhS_RouteSync\ModuleInitailization.js" />
+    <Content Include="WhS_RouteSync\Services\APIServices\FreeRadiusAPIService.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\IdbDataManagerSettingAPIService.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\RouteSyncDefinitionAPIService.js" />
     <Content Include="WhS_RouteSync\Services\APIServices\RadiusDataManagerSettingAPIService.js" />
@@ -214,7 +223,6 @@
     <Content Include="WhS_RouteSync\Views\RouteSyncDefinition\RouteSyncDefinitionManagementController.js" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="WhS_RouteSync\Directives\SwitchCommunication\" />
     <Folder Include="WhS_RouteSync\Directives\Switch\Templates\" />
   </ItemGroup>
   <ItemGroup>

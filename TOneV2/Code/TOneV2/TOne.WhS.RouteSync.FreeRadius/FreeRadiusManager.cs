@@ -7,12 +7,12 @@ using Vanrise.Common.Business;
 
 namespace TOne.WhS.RouteSync.FreeRadius
 {
-    public class FreeRadiusPostgresManager
+    public class FreeRadiusManager
     {
-        public IEnumerable<FreeRadiusPostgresDataManagerConfig> GetFreeRadiusPostgresDataManagerConfigs()
+        public IEnumerable<FreeRadiusDataManagerConfig> GetFreeRadiusDataManagerConfigs()
         {
             var templateConfigManager = new ExtensionConfigurationManager();
-            return templateConfigManager.GetExtensionConfigurations<FreeRadiusPostgresDataManagerConfig>(FreeRadiusPostgresDataManagerConfig.EXTENSION_TYPE);
+            return templateConfigManager.GetExtensionConfigurations<FreeRadiusDataManagerConfig>(FreeRadiusDataManagerConfig.EXTENSION_TYPE);
         }
     }
 }

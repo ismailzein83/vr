@@ -7,7 +7,7 @@ using TOne.WhS.RouteSync.Entities;
 
 namespace TOne.WhS.RouteSync.FreeRadius
 {
-    public interface IFreeRadiusPostgresDataManager
+    public interface IFreeRadiusDataManager
     {
         Guid ConfigId { get; }
         void PrepareTables(ISwitchRouteSynchronizerInitializeContext context);

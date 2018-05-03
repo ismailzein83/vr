@@ -13,7 +13,7 @@ namespace TOne.WhS.RouteSync.FreeRadius
 
         public override Guid ConfigId { get { return new Guid("99B59E02-1305-49E5-9342-1B4E08C91439"); } }
 
-        public IFreeRadiusPostgresDataManager DataManager { get; set; }
+        public IFreeRadiusDataManager DataManager { get; set; }
 
         public string MappingSeparator { get; set; }
 
@@ -58,9 +58,9 @@ namespace TOne.WhS.RouteSync.FreeRadius
     {
         public int CarrierId { get; set; }
 
-        public List<CustomerMapping> CustomerMapping { get; set; }
+        public List<CustomerMapping> CustomerMappings { get; set; }
 
-        public List<SupplierMapping> SupplierMapping { get; set; }
+        public List<SupplierMapping> SupplierMappings { get; set; }
     }
 
     public class CustomerMapping
