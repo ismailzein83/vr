@@ -60,6 +60,7 @@ namespace Vanrise.Runtime.Business
             bool insertActionSuccess = runtimeNodeDataManager.Insert(runtimeNode);
             if (insertActionSuccess)
             {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 insertOperationOutput.Result = InsertOperationResult.Succeeded;
                 insertOperationOutput.InsertedObject = RuntimeNodeDetailMapper(runtimeNode);
             }
@@ -79,6 +80,7 @@ namespace Vanrise.Runtime.Business
             bool updateActionSuccess = runtimeNodeDataManager.Update(runtimeNode); //insert to update
             if (updateActionSuccess)
             {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
                 updateOperationOutput.Result = UpdateOperationResult.Succeeded;
                 updateOperationOutput.UpdatedObject = RuntimeNodeDetailMapper(runtimeNode);
             }
