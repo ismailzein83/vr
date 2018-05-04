@@ -11,6 +11,10 @@ namespace TOne.WhS.RouteSync.Ericsson
 	{
 		public string BO { get; set; }
 		public string Code { get; set; }
+		public override int GetHashCode()
+		{
+			return BO.GetHashCode() + Code.GetHashCode();
+		}
 	}
 	public class EricssonConvertedRoute : ConvertedRoute
 	{
