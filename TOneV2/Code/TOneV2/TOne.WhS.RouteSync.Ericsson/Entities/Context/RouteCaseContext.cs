@@ -8,13 +8,13 @@ namespace TOne.WhS.RouteSync.Ericsson
 {
     public interface IRouteCaseInitializeContext
     {
-
+		int FirstRCNumber { get; }
     }
 
     public class RouteCaseInitializeContext : IRouteCaseInitializeContext
     {
-
-    }
+		public int FirstRCNumber { get; set; }
+	}
 
     public interface IRouteCaseFinalizeContext
     {

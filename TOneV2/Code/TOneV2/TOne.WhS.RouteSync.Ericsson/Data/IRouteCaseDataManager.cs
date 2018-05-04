@@ -16,5 +16,6 @@ namespace TOne.WhS.RouteSync.Ericsson.Data
         void Initialize(IRouteCaseInitializeContext context);
         void ApplyRouteCaseForDB(object preparedRouteCase);
         Dictionary<string, RouteCase> GetRouteCasesAfterRCNumber(int rcNumber);
-    }
+		void UpdateSyncedRouteCases(IEnumerable<int> rCNumbers);
+	}
 }

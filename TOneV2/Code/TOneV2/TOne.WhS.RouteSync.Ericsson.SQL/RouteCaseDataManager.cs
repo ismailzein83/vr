@@ -24,7 +24,8 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 
 		public void Initialize(IRouteCaseInitializeContext context)
 		{
-			string query = string.Format(query_CreateRouteCaseTable, SwitchId);
+			var blockedRCOption = Helper.SerializeRouteCaseOption(Helper.GetBlockedRouteCaseOption());
+			string query = string.Format(query_CreateRouteCaseTable, SwitchId, context.FirstRCNumber, blockedRCOption);
 			ExecuteNonQueryText(query, null);
 		}
 
@@ -63,7 +64,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 		{
 			Dictionary<string, RouteCase> routeCases = new Dictionary<string, RouteCase>();
 
-			string query = string.Format(query_GetRouteCases.Replace("FILTER", " WHERE rc.RCNumber > {1}"), SwitchId, routeCaseNumber);
+			string query = string.Format(query_GetRouteCases.Replace("#FILTER#", " WHERE rc.RCNumber > {1}"), SwitchId, routeCaseNumber);
 			ExecuteReaderText(query, (reader) =>
 			{
 				while (reader.Read())
@@ -76,11 +77,18 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 			return routeCases;
 		}
 
+		public void UpdateSyncedRouteCases(IEnumerable<int> rCNumbers)
+		{
+			string filter = string.Format(" Where RCNumber in ({0})", string.Join(",", rCNumbers));
+			string query = string.Format(query_UpdateSyncedRouteCases.Replace("#FILTER#", filter), SwitchId);
+			ExecuteNonQueryText(query, null);
+		}
+
 		public IEnumerable<RouteCase> GetAllRouteCases()
 		{
 			List<RouteCase> routeCases = new List<RouteCase>();
 
-			string query = string.Format(query_GetRouteCases.Replace("FILTER", ""), SwitchId);
+			string query = string.Format(query_GetRouteCases.Replace("#FILTER#", ""), SwitchId);
 			ExecuteReaderText(query, (reader) =>
 			{
 				while (reader.Read())
@@ -103,8 +111,8 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 			};
 		}
 
-		const string query_GetRouteCases = @"SELECT rc.RCNumber, rc.Options
-                                                    FROM [WhS_Ericsson_{0}].[RouteCase] rc with(nolock) 
+		const string query_GetRouteCases = @"SELECT rc.RCNumber, rc.Options, rc.Synced
+                                                    FROM [WhS_RouteSync_Ericsson_{0}].[RouteCase] rc with(nolock) 
                                                     #FILTER#";
 
 		const string query_CreateRouteCaseTable = @"IF  NOT EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.RouteCase') AND s.type in (N'U'))
@@ -112,12 +120,21 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 			                                            CREATE TABLE [WhS_RouteSync_Ericsson_{0}].[RouteCase](
 	                                                        [RCNumber] [int] NOT NULL,
 	                                                        [Options] [varchar](max) NOT NULL,
-															[Synced] bit NOT NULL,
+															[Synced] bit NOT NULL DEFAULT 0,
                                                          CONSTRAINT [PK_WhS_RouteSync_Ericsson_{0}.RouteCase] PRIMARY KEY CLUSTERED 
                                                         (
 	                                                        [RCNumber] ASC
                                                         )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
                                                         ) ON [PRIMARY]
-		                                            END";
+		                                            END
+													IF  NOT EXISTS( SELECT * FROM WhS_RouteSync_Ericsson_{0}.[RouteCase] WHERE RCNumber = {1})
+		                                            begin
+														INSERT INTO  WhS_RouteSync_Ericsson_{0}.[RouteCase] (RCNumber, Options) 
+														VALUES ({1}, '{2}');
+														END";
+
+		const string query_UpdateSyncedRouteCases = @"UPDATE [WhS_RouteSync_Ericsson_{0}].[RouteCase]
+														SET [Synced] = 1
+														#FILTER#";
 	}
 }
