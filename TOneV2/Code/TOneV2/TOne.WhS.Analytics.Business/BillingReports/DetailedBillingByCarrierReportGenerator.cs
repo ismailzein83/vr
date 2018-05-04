@@ -26,7 +26,7 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                 Query = new AnalyticQuery
                 {
                     DimensionFields = new List<string> { "Customer", "Supplier", "SaleZone", "SupplierZone", "CostRateConvCurr", "SaleRateConvCurr", "SaleRateType", "SaleRateChange", "SaleRateEffectiveDate", "CostRateType", "CostRateChange", "CostRateEffectiveDate" },
-                    MeasureFields = new List<string> { "SaleDuration", "SaleNetNotNULL", "CostDuration", "CostNetNotNULL", "ProfitNotNULL" },
+                    MeasureFields = new List<string> { "SaleDuration", "SaleNetNotNULL", "CostDuration", "CostNetNotNULL", "ProfitNotNULL", "DurationNet" },
                     TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
                     FromTime = parameters.FromTime,
                     ToTime = parameters.ToTime,
@@ -159,6 +159,11 @@ namespace TOne.WhS.Analytics.Business.BillingReports
                         analyticRecord.MeasureValues.TryGetValue("CostDuration", out costDuration);
                         carrierSummary.CostDuration = Convert.ToDecimal(costDuration.Value ?? 0.0);
                         carrierSummary.CostDurationFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.CostDuration);
+
+                        MeasureValue durationNet;
+                        analyticRecord.MeasureValues.TryGetValue("DurationNet", out durationNet);
+                        carrierSummary.DurationNet = Convert.ToDecimal(durationNet.Value ?? 0.0);
+                        carrierSummary.DurationNetFormatted = ReportHelpers.FormatNormalNumberDigit(carrierSummary.DurationNet);
 
                         MeasureValue costNet;
                         analyticRecord.MeasureValues.TryGetValue("CostNetNotNULL", out costNet);
