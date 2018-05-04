@@ -24,7 +24,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 
         const string query_CreateRouteCaseTable = @"IF  NOT EXISTS( SELECT * FROM sys.schemas s WHERE s.name = 'WhS_RouteSync_Ericsson_{0}')
 		                                            begin
-			                                            CREATE SCHEMA WhS_RouteSync_Ericsson_{0}
+			                                             EXEC ('CREATE SCHEMA WhS_RouteSync_Ericsson_{0}')
 		                                            end";
     }
 }
