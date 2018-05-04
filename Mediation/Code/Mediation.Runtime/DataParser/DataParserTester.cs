@@ -11980,7 +11980,7 @@ namespace Mediation.Runtime.DataParser
                                                                                                                                     {
                                                                                                                                          Settings = new StringParser
                                                                                                                                          {
-                                                                                                                                              FieldName = "SDPSessionDescription"
+                                                                                                                                              FieldName = "SDPMediaDescription"
                                        
                                                                                                                                          }                            
                                                                                                                                     }
