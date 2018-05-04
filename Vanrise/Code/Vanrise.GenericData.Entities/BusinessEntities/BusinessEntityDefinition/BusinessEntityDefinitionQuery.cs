@@ -9,5 +9,6 @@ namespace Vanrise.GenericData.Entities
     public class BusinessEntityDefinitionQuery
     {
         public string Name { get; set; }
+        public List<Guid> TypeIds { get; set; }
     }
 }
