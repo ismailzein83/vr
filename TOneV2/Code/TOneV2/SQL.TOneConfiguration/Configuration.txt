@@ -106,3 +106,6 @@ RA
 Retail_RA.PostDeployment.sql
 Retail_RA_Overridden.PostDeployment.sql
 
+Interconnect
+InterConnect.PostDeployment.sql
+
