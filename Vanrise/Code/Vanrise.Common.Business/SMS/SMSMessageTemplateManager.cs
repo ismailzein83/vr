@@ -245,11 +245,12 @@ namespace Vanrise.Common.Business
         #region Mappers
        public SMSMessageTemplateDetail SMSMessageTemplateDetailMapper(SMSMessageTemplate smsMessageTemplate)
         {
+            IUserManager userManager = BEManagerFactory.GetManager<IUserManager>();
             SMSMessageTemplateDetail smsMessageTemplateDetail = new SMSMessageTemplateDetail()
             {
                 Entity = smsMessageTemplate,
-                CreatorName = BEManagerFactory.GetManager<IUserManager>().GetUserName(smsMessageTemplate.CreatedBy),
-                LastModifierName = BEManagerFactory.GetManager<IUserManager>().GetUserName(smsMessageTemplate.LastModifiedBy)
+                CreatorName = userManager.GetUserName(smsMessageTemplate.CreatedBy),
+                LastModifierName = userManager.GetUserName(smsMessageTemplate.LastModifiedBy)
             };
             return smsMessageTemplateDetail;
         }
