@@ -350,6 +350,8 @@
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountActionDefinition\Templates\AccountActionDefinitionsManagementTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountIdentification\retail-be-accountidentification-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountDefinition\AccountIdentification\Templates\AccountIdentificationGridTemplate.html" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountIdentification\retail-be-accountidentification-grid.js" />
+    <Content Include="Retail_BusinessEntity\Directives\AccountIdentification\Templates\AccountIdentificationGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountPackage\retail-be-accountpackage-grid.js" />
     <Content Include="Retail_BusinessEntity\Directives\AccountPackage\Templates\AccountPackageGridTemplate.html" />
     <Content Include="Retail_BusinessEntity\Directives\AccountPartDefinition\retail-be-accountpartdefinition-grid.js" />
