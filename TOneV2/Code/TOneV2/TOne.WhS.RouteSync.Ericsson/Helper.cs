@@ -37,7 +37,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 			string percentage = routeCaseOption.Percentage.HasValue ? routeCaseOption.Percentage.Value.ToString() : string.Empty;
 			string trunkPercentage = routeCaseOption.TrunkPercentage.HasValue ? routeCaseOption.TrunkPercentage.Value.ToString() : string.Empty;
 
-			return string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}", percentage, routeCaseOption.Priority, routeCaseOption.OutTrunk, (int)routeCaseOption.Type,
+			return string.Format("{1}{0}{2}{0}{3}{0}{4}{0}{5}{0}{6}{0}{7}{0}{8}{0}{9}", OptionFieldsSeparator, percentage, routeCaseOption.Priority, routeCaseOption.OutTrunk, (int)routeCaseOption.Type,
 				routeCaseOption.BNT, routeCaseOption.SP, trunkPercentage, routeCaseOption.IsBackup ? 1 : 0, routeCaseOption.GroupID);
 		}
 
@@ -114,7 +114,10 @@ namespace TOne.WhS.RouteSync.Ericsson
 			return new RouteCaseOption()
 			{
 				BNT = 1,
-
+				SP = 1,
+				OutTrunk = "BLK",
+				Priority = 1,
+				GroupID = 1,
 			};
 		}
 		#endregion
@@ -150,7 +153,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 				return null;
 
 			string[] customerMappingPropertiesAsString = serializedCustomerMapping.Split(CustomerMappingPropertySeperator);
-			if (customerMappingPropertiesAsString == null || customerMappingPropertiesAsString.Count() != 9)
+			if (customerMappingPropertiesAsString == null || customerMappingPropertiesAsString.Count() != 4)
 				return null;
 
 			CustomerMapping customerMapping = new CustomerMapping();
@@ -167,7 +170,7 @@ namespace TOne.WhS.RouteSync.Ericsson
 				{
 					foreach (var trunkAsString in trunks)
 					{
-						if (!string.IsNullOrEmpty(trunkAsString))
+						if (string.IsNullOrEmpty(trunkAsString))
 							continue;
 						string[] trunkProperties = trunkAsString.Split(CustomerMappingTrunkPropertySeperator);
 						if (trunkProperties == null || !trunkProperties.Any())
