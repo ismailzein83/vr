@@ -20,7 +20,8 @@ namespace TOne.WhS.RouteSync.Ericsson.Business
             MemoryStream ms = GenerateStream(context.CommandResults);
 
             string fileName;
-            string executionDateTimeAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd HH-mm-ss-fff");
+			string executionDateTimeAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd HH-mm-ss-fff");
+			string executionDateAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd");
 
             switch (context.ExecutionStatus)
             {
@@ -31,7 +32,7 @@ namespace TOne.WhS.RouteSync.Ericsson.Business
 
             string errorMessage;
             FTPCommunicator communicator = new FTPCommunicator(this.FTPCommunicatorSettings);
-            communicator.TryWriteFile(ms, fileName, executionDateTimeAsString, out errorMessage);
+            communicator.TryWriteFile(ms, fileName, executionDateAsString, out errorMessage);
         }
 
         public override void LogCarrierMappings(ILogCarrierMappingsContext context)
@@ -39,9 +40,10 @@ namespace TOne.WhS.RouteSync.Ericsson.Business
             MemoryStream ms = GenerateStream(context.CommandResults);
 
             string fileName;
-            string executionDateTimeAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd HH-mm-ss-fff");
+			string executionDateTimeAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd HH-mm-ss-fff");
+			string executionDateAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd");
 
-            switch (context.ExecutionStatus)
+			switch (context.ExecutionStatus)
             {
                 case ExecutionStatus.Succeeded: fileName = string.Format("PreTableScript_Successful_{0}", executionDateTimeAsString); break;
                 case ExecutionStatus.Failed: fileName = string.Format("PreTableScript_Unsuccessful_{0}", executionDateTimeAsString); break;
@@ -50,7 +52,7 @@ namespace TOne.WhS.RouteSync.Ericsson.Business
 
             string errorMessage;
             FTPCommunicator communicator = new FTPCommunicator(this.FTPCommunicatorSettings);
-            communicator.TryWriteFile(ms, fileName, executionDateTimeAsString, out errorMessage);
+            communicator.TryWriteFile(ms, fileName, executionDateAsString, out errorMessage);
         }
 
         public override void LogRoutes(ILogRoutesContext context)
@@ -58,9 +60,10 @@ namespace TOne.WhS.RouteSync.Ericsson.Business
             MemoryStream ms = GenerateStream(context.CommandResults);
 
             string fileName;
-            string executionDateTimeAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd HH-mm-ss-fff");
+			string executionDateTimeAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd HH-mm-ss-fff");
+			string executionDateAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd");
 
-            switch (context.ExecutionStatus)
+			switch (context.ExecutionStatus)
             {
                 case ExecutionStatus.Succeeded: fileName = string.Format("RouteBO{0}_Successful_{1}", context.BONumber, executionDateTimeAsString); break;
                 case ExecutionStatus.Failed: fileName = string.Format("RouteBO{0}_Unsuccessful_{1}", context.BONumber, executionDateTimeAsString); break;
@@ -69,19 +72,20 @@ namespace TOne.WhS.RouteSync.Ericsson.Business
 
             string errorMessage;
             FTPCommunicator communicator = new FTPCommunicator(this.FTPCommunicatorSettings);
-            communicator.TryWriteFile(ms, fileName, executionDateTimeAsString, out errorMessage);
+            communicator.TryWriteFile(ms, fileName, executionDateAsString, out errorMessage);
         }
 
         public override void LogCommands(ILogCommandsContext context)
         {
             MemoryStream ms = GenerateStream(context.CommandResults);
 
-            string executionDateTimeAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd HH-mm-ss-fff");
-            string fileName = string.Format("CommandExecution_{0}", executionDateTimeAsString);
+			string executionDateTimeAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd HH-mm-ss-fff");
+			string executionDateAsString = context.ExecutionDateTime.ToString("yyyy-MM-dd");
+			string fileName = string.Format("CommandExecution_{0}", executionDateTimeAsString);
 
             string errorMessage;
             FTPCommunicator communicator = new FTPCommunicator(this.FTPCommunicatorSettings);
-            communicator.TryWriteFile(ms, fileName, executionDateTimeAsString, out errorMessage);
+            communicator.TryWriteFile(ms, fileName, executionDateAsString, out errorMessage);
         }
 
         private MemoryStream GenerateStream(List<CommandResult> commandResults)
@@ -93,12 +97,12 @@ namespace TOne.WhS.RouteSync.Ericsson.Business
             foreach (CommandResult commandResult in commandResults)
             {
                 strBuilder.AppendLine(commandResult.Command);
-                if (commandResult.Output != null && commandResult.Output.Any())
-                {
-                    foreach (string commandOutput in commandResult.Output)
-                        strBuilder.AppendLine(commandOutput);
-                }
-                strBuilder.AppendLine();
+				if (commandResult.Output != null && commandResult.Output.Any())
+				{
+					foreach (string commandOutput in commandResult.Output)
+						strBuilder.AppendLine(commandOutput);
+				}
+				strBuilder.AppendLine();
             }
 
             byte[] byteArray = Encoding.UTF8.GetBytes(strBuilder.ToString());
