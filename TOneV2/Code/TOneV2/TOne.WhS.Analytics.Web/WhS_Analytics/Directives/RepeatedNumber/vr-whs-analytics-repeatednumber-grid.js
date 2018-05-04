@@ -28,7 +28,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_RepeatedNumberAPISe
         var toDate;
         var gridAPI;
         var switchIds;
-        var phoneNumber;
+        var PhoneNumberType;
         var payloadPeriod;
         var sourceName;
         this.initializeController = initializeController;
@@ -58,7 +58,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_RepeatedNumberAPISe
                                     sourceName = cdrOption.cdrSourceName;
                                 }
                             }
-                            phoneNumber = query.PhoneNumber;
+                            PhoneNumberType = query.PhoneNumberType;
                             fromDate = query.From;
                             toDate = query.To;
                             payloadPeriod = query.Period;
@@ -123,7 +123,7 @@ function (UtilsService, VRNotificationService, WhS_Analytics_RepeatedNumberAPISe
             var fieldFilters = [];
 
             var phoneNumberFieldName;
-            if (phoneNumber == WhS_Analytics_PhoneNumberEnum.CDPN.propertyName) {
+            if (PhoneNumberType == WhS_Analytics_PhoneNumberEnum.CDPN.propertyName) {
                 phoneNumberFieldName = "CDPN";
             } else {
                 phoneNumberFieldName = "CGPN";
