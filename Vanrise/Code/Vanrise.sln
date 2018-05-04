@@ -38,6 +38,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Data.MySQL", "Vanrise.Data.MySQL\Vanrise.Data.MySQL.csproj", "{699CE5D8-27D5-4B2D-961D-459604664138}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{20A2407E-D892-41D2-8D77-6612045F9E51}"
+	ProjectSection(SolutionItems) = preProject
+		Vanrise.Invoice.Web\JSLintNet.json = Vanrise.Invoice.Web\JSLintNet.json
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Vanrise.Web", "Vanrise.Web\Vanrise.Web.csproj", "{3B35C6E1-FD21-4E32-A8BD-F11377A545A0}"
 EndProject
