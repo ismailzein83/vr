@@ -115,9 +115,6 @@ app.directive("retailBeExtendedsettingsFinancialaccountbalance", ["UtilsService"
                             };
                             selectedBusinessEntityDefinitionDeferred = undefined;
 
-                            var setLoader = function (value) {
-                                $scope.scopeModel.isClassificationSelectorLoading = value;
-                            };
                             VRUIUtilsService.callDirectiveLoad(classificationSelectorAPI, classificationSelectorPayload, classificationSelectorLoadDeferred);
                         });
                         return classificationSelectorLoadDeferred.promise;

@@ -64,7 +64,7 @@ function (UtilsService, VRUIUtilsService, Retail_BE_AccountBEDefinitionAPIServic
                 }
 
                 if (filter != undefined) {
-                    return Retail_BE_AccountBEDefinitionAPIService.GetClassifications(filter).then(function (response) {
+                    return Retail_BE_AccountBEDefinitionAPIService.GetAccountBEDefinitionClassificationsInfo(filter).then(function (response) {
                         selectorAPI.clearDataSource();
                         if (response != null) {
                             for (var i = 0; i < response.length; i++) {
@@ -106,10 +106,10 @@ function (UtilsService, VRUIUtilsService, Retail_BE_AccountBEDefinitionAPIServic
         if (attrs.hideremoveicon != undefined)
             hideremoveicon = 'hideremoveicon';
 
-        return '<vr-select ' + multipleselection + ' datatextfield="Title" datavaluefield="Name" isrequired="ctrl.isrequired" label="' + label +
+        return '<vr-columns colnum="{{ctrl.normalColNum}}"    ><vr-select ' + multipleselection + ' datatextfield="Title" datavaluefield="Name" isrequired="ctrl.isrequired" label="' + label +
                    '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
                    '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' customvalidate="ctrl.customvalidate">' +
-               '</vr-select>';
+               '</vr-select></vr-columns>';
     }
 
 }]);

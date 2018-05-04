@@ -121,10 +121,10 @@ namespace Retail.BusinessEntity.Web.Controllers
         }
 
         [HttpGet]
-        [Route("GetClassifications")]
-        public List<AccountBEClassification> GetClassifications(Guid accountBEDefinitionId)
+        [Route("GetAccountBEDefinitionClassificationsInfo")]
+        public List<AccountBEClassification> GetAccountBEDefinitionClassificationsInfo(Guid accountBEDefinitionId)
         {
-            return _manager.GetClassifications(accountBEDefinitionId);
+            return _manager.GetAccountBEDefinitionClassificationsInfo(accountBEDefinitionId);
         }
     }
 }

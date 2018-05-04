@@ -79,8 +79,8 @@
         function GetAccountBulkActionSettingsConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountBulkActionSettingsConfigs"));
         }
-        function GetClassifications(accountBEDefinitionId) {
-            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetClassifications"), {
+        function GetAccountBEDefinitionClassificationsInfo(accountBEDefinitionId) {
+            return BaseAPIService.get(UtilsService.getServiceURL(Retail_BE_ModuleConfig.moduleName, controllerName, "GetAccountBEDefinitionClassificationsInfo"), {
                 accountBEDefinitionId: accountBEDefinitionId
             });
         }
@@ -100,7 +100,7 @@
             GetFinancialAccountLocatorConfigs: GetFinancialAccountLocatorConfigs,
             GetAccountBEStatusDefinitionId: GetAccountBEStatusDefinitionId,
             GetAccountBulkActionSettingsConfigs: GetAccountBulkActionSettingsConfigs,
-            GetClassifications: GetClassifications,
+            GetAccountBEDefinitionClassificationsInfo: GetAccountBEDefinitionClassificationsInfo,
         };
     }
 
