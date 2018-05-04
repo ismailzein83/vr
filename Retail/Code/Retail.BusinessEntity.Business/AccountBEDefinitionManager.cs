@@ -291,6 +291,13 @@ namespace Retail.BusinessEntity.Business
             return extensionConfigurationManager.GetExtensionConfigurations<AccountBulkActionSettingsConfig>(AccountBulkActionSettingsConfig.EXTENSION_TYPE);
         }
 
+        public List<AccountBEClassification> GetClassifications(Guid accountBEDefinitionId)
+        {
+            var accountBEDefinitionSettings = GetAccountBEDefinitionSettings(accountBEDefinitionId);
+            accountBEDefinitionSettings.ThrowIfNull("accountBEDefinitionSettings", accountBEDefinitionId);
+            return accountBEDefinitionSettings.Classifications;
+        }
+
         #endregion
 
         #region Private Methods

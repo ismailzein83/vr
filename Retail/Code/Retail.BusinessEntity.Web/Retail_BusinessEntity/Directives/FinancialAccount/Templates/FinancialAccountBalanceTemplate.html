@@ -2,8 +2,14 @@
     <vr-columns width="1/2row">
         <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onBusinessEntityDefinitionSelectorReady"
                                                           customlabel="Account Definition"
+                                                          onselectionchanged="scopeModel.onBusinessEntityDefinitionSelectorChanged"
                                                           isrequired="true"
                                                           >
         </vr-genericdata-businessentitydefinition-selector>
+    </vr-columns>
+    <vr-columns width="1/2row">
+        <retail-be-accountbedefinition-classification-selector on-ready="scopeModel.onClassificationSelectorReady" 
+                                                               vr-loader="scopeModel.isClassificationSelectorLoading"
+                                                               normal-col-num="6" ismultipleselection isrequired="true"></retail-be-accountbedefinition-classification-selector>
     </vr-columns>
 </vr-row>

@@ -27,7 +27,8 @@ namespace Retail.BusinessEntity.Business
 
         public override VRActionTargetType GetActionTargetType()
         {
-            return new RetailAccountBalanceRuleTargetType { AccountBEDefinitionId = this.AccountBEDefinitionId };
+            return new RetailAccountBalanceRuleTargetType { AccountBEDefinitionId = this.AccountBEDefinitionId};
         }
+
     }
 }

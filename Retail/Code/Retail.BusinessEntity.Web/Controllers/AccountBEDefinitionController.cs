@@ -119,5 +119,12 @@ namespace Retail.BusinessEntity.Web.Controllers
         {
             return _manager.GetAccountBulkActionSettingsConfigs();
         }
+
+        [HttpGet]
+        [Route("GetClassifications")]
+        public List<AccountBEClassification> GetClassifications(Guid accountBEDefinitionId)
+        {
+            return _manager.GetClassifications(accountBEDefinitionId);
+        }
     }
 }

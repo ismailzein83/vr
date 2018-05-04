@@ -32,6 +32,7 @@ namespace Retail.BusinessEntity.Business
         {
             return new RetailAccountBalanceRuleTargetType { AccountBEDefinitionId = this.AccountBEDefinitionId };
         }
+
     }
     public class AccountBalanceClassification
     {

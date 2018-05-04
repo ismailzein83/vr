@@ -32,6 +32,10 @@ app.directive('retailBeFinancialaccountdefinitionSettings', ['UtilsService', 'VR
             var businessEntityDefinitionSelectorAPI;
             var businessEntityDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
+            var classificationSelectorAPI;
+            var classificationSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+
+            var selectedBusinessEntityDefinitionDeferred;
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -45,36 +49,61 @@ app.directive('retailBeFinancialaccountdefinitionSettings', ['UtilsService', 'VR
                     businessEntityDefinitionSelectorAPI = api;
                     businessEntityDefinitionSelectorReadyDeferred.resolve();
                 };
-
+                
                 $scope.scopeModel.onBalanceAccountTypeSelectorReady = function (api) {
                     balanceAccountTypeSelectorAPI = api;
                     balanceAccountTypeSelectorReadyDeferred.resolve();
                 };
 
+                $scope.scopeModel.onClassificationSelectorReady = function (api) {
+                    classificationSelectorAPI = api;
+                    classificationSelectorReadyDeferred.resolve();
+                };
+
+                $scope.scopeModel.onBusinessEntityDefinitionSelectorChanged = function (value) {
+                    if (value != undefined) {
+                        if (selectedBusinessEntityDefinitionDeferred != undefined)
+                            selectedBusinessEntityDefinitionDeferred.resolve();
+                        else {
+                            var classificationSelectorPayload = { AccountBEDefinitionId: businessEntityDefinitionSelectorAPI.getSelectedIds() };
+                            var setLoader = function (value) {
+                                $scope.scopeModel.isClassificationSelectorLoading = value;
+                            };
+                            VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, classificationSelectorAPI, classificationSelectorPayload, setLoader);
+                        }
+                    }
+                };
 
                 $scope.scopeModel.onExtendedSettingsDirectiveReady = function (api) {
                     extendedSettingsDirectiveAPI = api;
                     extendedSettingsDirectiveReadyDeferred.resolve();
                 };
-                UtilsService.waitMultiplePromises([invoiceTypeSelectorReadyDeferred.promise, balanceAccountTypeSelectorReadyDeferred.promise, extendedSettingsDirectiveReadyDeferred.promise]).then(function () {
+                UtilsService.waitMultiplePromises([invoiceTypeSelectorReadyDeferred.promise, balanceAccountTypeSelectorReadyDeferred.promise,
+                    extendedSettingsDirectiveReadyDeferred.promise]).then(function () {
                     defineAPI();
                 });
+
             }
 
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
+                    var promises = [];
+
                     var financialAccountDefinitionSettings;
                     if (payload != undefined) {
                         financialAccountDefinitionSettings = payload.componentType;
 
                         if (financialAccountDefinitionSettings != undefined) {
                             $scope.scopeModel.name = financialAccountDefinitionSettings.Name;
+                            if (financialAccountDefinitionSettings.Settings != undefined) {
+                                selectedBusinessEntityDefinitionDeferred = UtilsService.createPromiseDeferred();
+                                promises.push(loadClassificationSelector());
+                            }
                         }
                     }
 
-                    var promises = [];
 
                     var businessEntityDefinitionSelectorLoadPromise = loadBusinessEntityDefinitionSelector();
                     promises.push(businessEntityDefinitionSelectorLoadPromise);
@@ -109,6 +138,25 @@ app.directive('retailBeFinancialaccountdefinitionSettings', ['UtilsService', 'VR
                     }
                     promises.push(loadBalanceAccountTypeSelector());
 
+                    function loadClassificationSelector() {
+                        var classificationSelectorPayload;
+                        var classificationSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                        UtilsService.waitMultiplePromises([selectedBusinessEntityDefinitionDeferred.promise, classificationSelectorReadyDeferred.promise]).then(function () {
+                            classificationSelectorPayload = {
+                                AccountBEDefinitionId: financialAccountDefinitionSettings.Settings.AccountBEDefinitionId,
+                                selectedIds: financialAccountDefinitionSettings.Settings.ApplicableClassifications
+                            };
+                            selectedBusinessEntityDefinitionDeferred = undefined;
+                           
+                            var setLoader = function (value) {
+                                $scope.scopeModel.isClassificationSelectorLoading = value;
+                            };
+                            VRUIUtilsService.callDirectiveLoad(classificationSelectorAPI, classificationSelectorPayload, classificationSelectorLoadDeferred);
+                        });
+                        return classificationSelectorLoadDeferred.promise;
+                    }
+                    
                     function loadExtendedSettingsDirective() {
                         var extendedSettingsDirectivePayload;
                         if (financialAccountDefinitionSettings != undefined && financialAccountDefinitionSettings.Settings != undefined) {
@@ -129,6 +177,7 @@ app.directive('retailBeFinancialaccountdefinitionSettings', ['UtilsService', 'VR
                             InvoiceTypeId: invoiceTypeSelectorAPI.getSelectedIds(),
                             BalanceAccountTypeId: balanceAccountTypeSelectorAPI.getSelectedIds(),
                             AccountBEDefinitionId: businessEntityDefinitionSelectorAPI.getSelectedIds(),
+                            ApplicableClassifications: classificationSelectorAPI.getSelectedIds(),
                             ExtendedSettings: extendedSettingsDirectiveAPI.getData()
                         }
                     };

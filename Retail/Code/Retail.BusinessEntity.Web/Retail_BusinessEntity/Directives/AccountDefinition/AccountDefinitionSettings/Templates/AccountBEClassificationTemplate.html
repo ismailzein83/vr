@@ -1,0 +1,19 @@
+﻿<vr-row>
+    <vr-columns width="fullrow">
+        <vr-button type="Add" data-onclick="ctrl.onAddClassification" standalone></vr-button>
+    </vr-columns>
+</vr-row>
+
+<vr-validator validate="ctrl.isNameValid()">
+    <vr-datagrid datasource="ctrl.datasource"
+                 pagingtype="'PagingOnScroll'"
+                 on-ready="scopeModel.onGridReady"
+                 ondeleterow="ctrl.removeRow">
+        <vr-datagridcolumn headertext="'Title'">
+            <vr-textbox value="dataItem.title" isrequired></vr-textbox>
+        </vr-datagridcolumn>
+        <vr-datagridcolumn headertext="'Name'">
+            <vr-textbox value="dataItem.name" isrequired></vr-textbox>
+        </vr-datagridcolumn>
+    </vr-datagrid>
+</vr-validator>
