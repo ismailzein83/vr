@@ -736,4 +736,17 @@ namespace TOne.WhS.BusinessEntity.Business
         }
     }
 
+    public class CarrierProfileFilterPersonalizationItem : EntityPersonalizationItemSetting
+    {
+        public override string Title
+        {
+            get { return "Filter"; }
+        }
+
+        public string Name { get; set; }
+
+        public string Company { get; set; }
+
+        public List<int> CountryIds { get; set; }
+    }
 }
