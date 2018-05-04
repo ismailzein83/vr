@@ -8,6 +8,8 @@ using Vanrise.Common.Business;
 using Vanrise.Invoice.Business;
 using Vanrise.Invoice.Entities;
 using Vanrise.InvToAccBalanceRelation.Entities;
+using Vanrise.GenericData.Business;
+using Vanrise.Common;
 
 namespace Vanrise.InvToAccBalanceRelation.Business
 {
@@ -52,6 +54,9 @@ namespace Vanrise.InvToAccBalanceRelation.Business
                         foreach (var unpaidInvoice in unpaidInvoices)
                         {
                             var invoiceType = invoiceTypeManager.GetInvoiceType(unpaidInvoice.InvoiceTypeId);
+                            InvoiceRecordObject invoiceRecordObject = new InvoiceRecordObject(unpaidInvoice);
+                            invoiceRecordObject.ThrowIfNull("invoiceRecordObject");
+                            invoiceRecordObject.InvoiceDataRecordObject.ThrowIfNull("invoiceRecordObject.InvoiceDataRecordObject");
                             accountInvoiceDetails.Add(AccountInvoiceDetailMapper(
                                 new AccountInvoice
                                 {
@@ -62,8 +67,8 @@ namespace Vanrise.InvToAccBalanceRelation.Business
                                     Note = unpaidInvoice.Note,
                                     ToDate = unpaidInvoice.ToDate,
                                     DueDate = unpaidInvoice.DueDate,
-                                    Amount = Vanrise.Common.Utilities.GetPropValue(invoiceType.Settings.AmountFieldName, unpaidInvoice.Details),
-                                    CurrencyId = Vanrise.Common.Utilities.GetPropValue(invoiceType.Settings.CurrencyFieldName, unpaidInvoice.Details),
+                                    Amount = invoiceRecordObject.InvoiceDataRecordObject.GetFieldValue(invoiceType.Settings.AmountFieldName),
+                                    CurrencyId = invoiceRecordObject.InvoiceDataRecordObject.GetFieldValue(invoiceType.Settings.CurrencyFieldName)
                                 }));
                         }
                     }

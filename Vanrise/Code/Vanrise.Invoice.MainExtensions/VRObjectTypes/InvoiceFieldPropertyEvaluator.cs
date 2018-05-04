@@ -90,7 +90,10 @@ namespace Vanrise.Invoice.MainExtensions
                     InvoiceTypeManager invoiceTypeManager = new InvoiceTypeManager();
                     var invoiceType = invoiceTypeManager.GetInvoiceType(invoice.InvoiceTypeId);
                     var dataRecordTypeFields = dataRecordTypeManager.GetDataRecordTypeFields(invoiceType.Settings.InvoiceDetailsRecordTypeId);
-                    var fieldValue = Vanrise.Common.Utilities.GetPropValueReader(this.FieldName).GetPropertyValue(invoice.Details);
+                    InvoiceRecordObject invoiceRecordObject = new InvoiceRecordObject(invoice);
+                    invoiceRecordObject.ThrowIfNull("invoiceRecordObject");
+                    invoiceRecordObject.InvoiceDataRecordObject.ThrowIfNull("invoiceRecordObject.InvoiceDataRecordObject");
+                    var fieldValue = invoiceRecordObject.InvoiceDataRecordObject.GetFieldValue(this.FieldName);
                     if (this.UseDescription)
                     {
                         DataRecordField dataRecordField;

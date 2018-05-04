@@ -7,6 +7,7 @@ using Vanrise.Entities;
 using Vanrise.Invoice.Business;
 using Vanrise.Invoice.Business.Context;
 using Vanrise.Invoice.Entities;
+using Vanrise.Common;
 
 namespace Vanrise.Invoice.MainExtensions.InvoiceFileNamePart
 {
@@ -18,6 +19,9 @@ namespace Vanrise.Invoice.MainExtensions.InvoiceFileNamePart
         public string DateTimeFormat { get; set; }
         public override string GetPartText(IInvoiceFileNamePartContext context)
         {
+            InvoiceRecordObject invoiceRecordObject = new InvoiceRecordObject(context.Invoice);
+            invoiceRecordObject.ThrowIfNull("invoiceRecordObject");
+            invoiceRecordObject.InvoiceDataRecordObject.ThrowIfNull("invoiceRecordObject.InvoiceDataRecordObject");
             switch (this.Field)
             {
                 case Entities.InvoiceField.DueDate: return context.Invoice.DueDate.ToString(DateTimeFormat);
@@ -30,8 +34,7 @@ namespace Vanrise.Invoice.MainExtensions.InvoiceFileNamePart
                     return partnerManager.GetPartnerName(context.InvoiceTypeId, context.Invoice.PartnerId);
                 case Entities.InvoiceField.SerialNumber: return context.Invoice.SerialNumber;
                 case Entities.InvoiceField.ToDate: return context.Invoice.ToDate.ToString(DateTimeFormat);
-                case Entities.InvoiceField.CustomField: return context.Invoice.Details != null ? context.Invoice.Details.GetType().GetProperty(this.FieldName).GetValue(context.Invoice.Details, null)
-               : null;
+                case Entities.InvoiceField.CustomField: return invoiceRecordObject.InvoiceDataRecordObject.GetFieldValue(this.FieldName);
             }
             return null;
         }

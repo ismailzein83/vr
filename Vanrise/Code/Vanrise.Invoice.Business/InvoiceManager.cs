@@ -819,7 +819,10 @@ namespace Vanrise.Invoice.Business
 
         private static InvoiceDetailObject GetInvoiceDetailObject(InvoiceDetail invoiceDetail, DataRecordField dataRecordField, bool useDescription)
         {
-            var fieldValue = invoiceDetail.Entity.Details.GetType().GetProperty(dataRecordField.Name).GetValue(invoiceDetail.Entity.Details, null);
+            InvoiceRecordObject invoiceRecordObject = new InvoiceRecordObject(invoiceDetail.Entity);
+            invoiceRecordObject.ThrowIfNull("invoiceRecordObject");
+            invoiceRecordObject.InvoiceDataRecordObject.ThrowIfNull("invoiceRecordObject.InvoiceDataRecordObject");
+            var fieldValue = invoiceRecordObject.InvoiceDataRecordObject.GetFieldValue(dataRecordField.Name);
             string description = fieldValue != null ? dataRecordField.Type.GetDescription(fieldValue) : null;
             return new InvoiceDetailObject
             {
@@ -1020,10 +1023,12 @@ namespace Vanrise.Invoice.Business
                                         {
                                             if (gridColumn.Field == InvoiceField.CustomField && gridColumn.CustomFieldName == field.Name)
                                             {
-                                                var fieldValue = Utilities.GetPropValueReader(gridColumn.CustomFieldName).GetPropertyValue(item.Entity.Details);
+                                                InvoiceRecordObject invoiceRecordObject = new InvoiceRecordObject(item.Entity);
+                                                invoiceRecordObject.ThrowIfNull("invoiceRecordObject");
+                                                invoiceRecordObject.InvoiceDataRecordObject.ThrowIfNull("invoiceRecordObject.InvoiceDataRecordObject");
+                                                var fieldValue = invoiceRecordObject.InvoiceDataRecordObject.GetFieldValue(gridColumn.CustomFieldName);
                                                 string description = fieldValue != null ? field.Type.GetDescription(fieldValue) : null;
                                                 value = gridColumn.UseDescription ? description : fieldValue;
-
                                             }
                                         }
                                         break;

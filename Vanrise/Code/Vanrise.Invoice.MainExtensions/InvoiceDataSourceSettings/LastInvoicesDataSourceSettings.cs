@@ -32,8 +32,11 @@ namespace Vanrise.Invoice.MainExtensions
                 var currencyManager = new CurrencyManager();
                 foreach(var invoice in invoices)
                 {
-                    var currencyId = Utilities.GetPropValueReader(invoiceType.Settings.CurrencyFieldName).GetPropertyValue(invoice.Details);
-                    var amount = Utilities.GetPropValueReader(invoiceType.Settings.AmountFieldName).GetPropertyValue(invoice.Details);
+                    InvoiceRecordObject invoiceRecordObject = new InvoiceRecordObject(invoice);
+                    invoiceRecordObject.ThrowIfNull("invoiceRecordObject");
+                    invoiceRecordObject.InvoiceDataRecordObject.ThrowIfNull("invoiceRecordObject.InvoiceDataRecordObject");
+                    var currencyId = invoiceRecordObject.InvoiceDataRecordObject.GetFieldValue(invoiceType.Settings.CurrencyFieldName);
+                    var amount = invoiceRecordObject.InvoiceDataRecordObject.GetFieldValue(invoiceType.Settings.AmountFieldName);
                     invoiceDataSourceItems.Add(new InvoiceDataSourceItem
                     {
                         Amount = amount,

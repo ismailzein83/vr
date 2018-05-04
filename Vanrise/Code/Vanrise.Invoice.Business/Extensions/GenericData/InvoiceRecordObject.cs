@@ -21,7 +21,7 @@ namespace Vanrise.Invoice.Business
         {
             this.Invoice = invoice;
             invoice.ThrowIfNull("invoice");
-            invoice.Details.ThrowIfNull("invoice.Details", invoice.InvoiceId);
+            ExtensionMethods.ThrowIfNull(invoice.Details, "invoice.Details", invoice.InvoiceId);
             var invoiceType = s_invoiceTypeManager.GetInvoiceType(invoice.InvoiceTypeId);
             invoiceType.ThrowIfNull("invoiceType", invoiceType.InvoiceTypeId);
             invoiceType.Settings.ThrowIfNull("invoiceType.Settings", invoiceType.InvoiceTypeId);

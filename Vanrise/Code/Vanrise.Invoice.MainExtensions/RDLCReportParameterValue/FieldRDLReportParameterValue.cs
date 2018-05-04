@@ -7,6 +7,7 @@ using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.GenericData.Business;
 using Vanrise.GenericData.Entities;
+using Vanrise.Invoice.Business;
 using Vanrise.Invoice.Entities;
 
 namespace Vanrise.Invoice.MainExtensions
@@ -35,7 +36,10 @@ namespace Vanrise.Invoice.MainExtensions
                     DataRecordTypeManager dataRecordTypeManager = new DataRecordTypeManager();
 
                     var dataRecordTypeFields = dataRecordTypeManager.GetDataRecordTypeFields(context.InvoiceType.Settings.InvoiceDetailsRecordTypeId);
-                    var fieldValue = context.Invoice.Details.GetType().GetProperty(this.FieldName).GetValue(context.Invoice.Details, null);
+                    InvoiceRecordObject invoiceRecordObject = new InvoiceRecordObject(context.Invoice);
+                    invoiceRecordObject.ThrowIfNull("invoiceRecordObject");
+                    invoiceRecordObject.InvoiceDataRecordObject.ThrowIfNull("invoiceRecordObject.InvoiceDataRecordObject");
+                    var fieldValue = invoiceRecordObject.InvoiceDataRecordObject.GetFieldValue(this.FieldName);
                     if (this.UseFieldValue)
                     {
                         return fieldValue;
