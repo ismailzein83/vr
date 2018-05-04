@@ -80,6 +80,8 @@
     <Compile Include="Country\Criteria\CountryCriteria.cs" />
     <Compile Include="DataRetrieval\RemoteExcelResult.cs" />
     <Compile Include="EntityFilterEffectiveMode.cs" />
+    <Compile Include="EntityPersonalization\EntityPersonalization.cs" />
+    <Compile Include="EntityPersonalization\EntityPersonalizationItem.cs" />
     <Compile Include="Enumeration.cs" />
     <Compile Include="IBusinessManager.cs" />
     <Compile Include="ICompanySettingsManager.cs" />

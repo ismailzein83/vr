@@ -80,6 +80,8 @@
     <Compile Include="DataGrouping\DataGrouper.cs" />
     <Compile Include="DataGrouping\RemoteDataGrouper.cs" />
     <Compile Include="DataGrouping\LocalDataGrouper.cs" />
+    <Compile Include="EntityPersonalization\EntityPersonalizationManager.cs" />
+    <Compile Include="EntityPersonalization\PersonalizationItems\GridPersonalizationItem.cs" />
     <Compile Include="ExcelFileParser\ExcelFileParserManger.cs" />
     <Compile Include="SMS\SMSManager.cs" />
     <Compile Include="SMS\SMSMessageTemplateManager.cs" />
