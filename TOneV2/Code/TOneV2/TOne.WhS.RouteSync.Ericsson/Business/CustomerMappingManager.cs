@@ -15,7 +15,7 @@ namespace TOne.WhS.RouteSync.Ericsson.Business
 
 			dataManager.Initialize(new CustomerMappingInitializeContext());
 
-			var customerMappings = (carrierMappings != null) ? carrierMappings.FindAllRecords(item => item.CustomerMapping != null) : null;
+			var customerMappings = (carrierMappings != null) ? carrierMappings.FindAllRecords(item => item.CustomerMapping != null && !string.IsNullOrEmpty(item.CustomerMapping.BO)) : null;
 
 			if (customerMappings != null && customerMappings.Any())
 			{
