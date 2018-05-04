@@ -114,12 +114,14 @@
                     if (payload != undefined) {
                         ericssonSWSync = payload.switchSynchronizerSettings;
 
-                        if (ericssonSWSync != undefined) {
+						if (ericssonSWSync != undefined) {
+							$scope.scopeModel.isEditMode = true;
+							$scope.scopeModel.firstRCNumber = ericssonSWSync.FirstRCNumber;
                             $scope.scopeModel.numberOfOptions = ericssonSWSync.NumberOfOptions;
                             $scope.scopeModel.minCodeLength = ericssonSWSync.MinCodeLength;
                             $scope.scopeModel.maxCodeLength = ericssonSWSync.MaxCodeLength;
                             $scope.scopeModel.localCountryCode = ericssonSWSync.LocalCountryCode;
-                            $scope.scopeModel.interconnectGeneralPrefix = ericssonSWSync.InterconnectGeneralPrefix;
+							$scope.scopeModel.interconnectGeneralPrefix = ericssonSWSync.InterconnectGeneralPrefix;
 
                             sshCommunicationList = ericssonSWSync.SSHCommunicationList;
                             switchLoggerList = ericssonSWSync.SwitchLoggerList;
@@ -278,8 +280,9 @@
                         LocalSupplierMappings: getLocalSupplierMappings(),
                         CarrierMappings: carrierAccountMappingGridAPI.getData(),
                         SSHCommunicationList: switchCommunicationData != undefined ? switchCommunicationData.sshCommunicationList : undefined,
-                        SwitchLoggerList: switchCommunicationData != undefined ? switchCommunicationData.switchLoggerList : undefined
-                    };
+                        SwitchLoggerList: switchCommunicationData != undefined ? switchCommunicationData.switchLoggerList : undefined,
+						FirstRCNumber: $scope.scopeModel.firstRCNumber
+					};
                     return data;
                 };
 
