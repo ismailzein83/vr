@@ -52,6 +52,13 @@
     <Compile Include="AnalyticMeasureExternalSources\AnalyticTable\DimensionMappingRules\SpecificDimensionMapping.cs" />
     <Compile Include="AnalyticMeasureExternalSources\AnalyticTable\MeasureMappingRule.cs" />
     <Compile Include="AnalyticMeasureExternalSources\MeasureMappingRules\SpecificMapping.cs" />
+    <Compile Include="AutomatedReport\FileGenerators\AdvancedExcelFileGenerator.cs" />
+    <Compile Include="AutomatedReport\FileGenerators\BasicExcelFileGenerator.cs" />
+    <Compile Include="AutomatedReport\Handlers\SendEmailHandler.cs" />
+    <Compile Include="AutomatedReport\Queries\AnalyticTableQueryDefinitionSettings.cs" />
+    <Compile Include="AutomatedReport\Queries\AnalyticTableQuerySettings.cs" />
+    <Compile Include="AutomatedReport\Queries\RecordSearchQueryDefinitionSettings.cs" />
+    <Compile Include="AutomatedReport\Queries\RecordSearchQuerySettings.cs" />
     <Compile Include="DARecordAggregates\CountAggregate.cs" />
     <Compile Include="DARecordAggregates\DistinctCountAggregate.cs" />
     <Compile Include="DARecordAggregates\SumAggregate.cs" />
