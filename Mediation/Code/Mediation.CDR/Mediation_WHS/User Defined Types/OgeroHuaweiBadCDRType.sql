@@ -1,5 +1,5 @@
-﻿CREATE TABLE [Mediation_WHS].[OgeroHuaweiCDR] (
-    [Id]                        BIGINT        NOT NULL,
+﻿CREATE TYPE [Mediation_WHS].[OgeroHuaweiBadCDRType] AS TABLE (
+    [Id]                        BIGINT        NULL,
     [RecordType]                INT           NULL,
     [SipMethod]                 VARCHAR (100) NULL,
     [NodeRole]                  INT           NULL,
@@ -39,15 +39,5 @@
     [AccountingRecordType]      INT           NULL,
     [OnlineChargingFlag]        INT           NULL,
     [VisitedNetworkId]          VARCHAR (500) NULL,
-    [FileName]                  VARCHAR (100) NULL
-);
-
-
-
-
-
-
-GO
-CREATE CLUSTERED INDEX [IX_OgeroHuaweiCDR_ID]
-    ON [Mediation_WHS].[OgeroHuaweiCDR]([Id] ASC);
+    [FileName]                  VARCHAR (100) NULL);
 
