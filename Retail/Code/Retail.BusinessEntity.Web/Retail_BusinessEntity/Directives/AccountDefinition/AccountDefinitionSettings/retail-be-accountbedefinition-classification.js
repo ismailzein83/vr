@@ -42,14 +42,15 @@
                     var dataItem;
                     dataItem = {
                         id: ctrl.datasource.length + 1,
-                        title: "",
-                        name: ""
+                        name: "",
+                        title: ""
                     };
                     ctrl.datasource.push(dataItem);
                 };
 
                 ctrl.isNameValid = function () {
-                    
+                    if (ctrl.datasource.length == 0)
+                        return 'At least one entry is required';
                    for (var x = 0; x < ctrl.datasource.length; x++) {
                         var currentItem = ctrl.datasource[x];
                         for (var y = x + 1; y < ctrl.datasource.length; y++) {
@@ -76,6 +77,14 @@
                 api.load = function (payload) {
                     
                     var promises = [];
+                    
+                    if (payload.classifications == undefined) {
+                        ctrl.datasource.push({
+                            id:1,
+                            name: "Customer",
+                            title: "Customer"
+                        });
+                    }
 
                     if (payload != undefined && payload.classifications != undefined) {
 
@@ -91,8 +100,8 @@
                         
                         var dataItem = {
                             id: ctrl.datasource.length + 1,
-                            title: item.payload.Title,
-                            name: item.payload.Name
+                            name: item.payload.Name,
+                            title: item.payload.Title
                         };
                         
                         ctrl.datasource.push(dataItem);
@@ -105,8 +114,8 @@
                     var classifications = [];
                     angular.forEach(ctrl.datasource, function (item) {
                         var dataItem = {
-                            Title: item.title,
-                            Name: item.name
+                            Name: item.name,
+                            Title: item.title
                         };
                         classifications.push(dataItem);
                     });
