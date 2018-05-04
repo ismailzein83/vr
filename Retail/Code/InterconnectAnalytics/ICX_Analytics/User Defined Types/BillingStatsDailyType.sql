@@ -5,6 +5,8 @@
     [OperatorTypeID]                UNIQUEIDENTIFIER NULL,
     [OperatorID]                    BIGINT           NULL,
     [NumberOfCDRs]                  INT              NULL,
+    [OriginationCountryID]          INT              NULL,
+    [DestinationCountryID]          INT              NULL,
     [OriginationZoneID]             BIGINT           NULL,
     [DestinationZoneID]             BIGINT           NULL,
     [TrafficDirection]              INT              NULL,
@@ -19,4 +21,6 @@
     [TotalAmount]                   DECIMAL (26, 10) NULL,
     [MinimumDurationInSeconds]      DECIMAL (20, 4)  NULL,
     [MaximumDurationInSeconds]      DECIMAL (20, 4)  NULL);
+
+
 

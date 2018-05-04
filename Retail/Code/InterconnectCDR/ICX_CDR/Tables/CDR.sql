@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [ICX_CDR].[CDR] (
-    [ID]                 BIGINT           NULL,
-    [DataSourceID]       UNIQUEIDENTIFIER NULL,
-    [SwitchId]           INT              NULL,
+    [ID]                 BIGINT           NOT NULL,
+    [DataSourceID]       UNIQUEIDENTIFIER NOT NULL,
+    [SwitchId]           INT              NOT NULL,
     [IDOnSwitch]         VARCHAR (255)    NULL,
     [AttemptDateTime]    DATETIME         NULL,
     [AlertDateTime]      DATETIME         NULL,
@@ -16,6 +16,14 @@
     [OutTrunk]           VARCHAR (50)     NULL,
     [OutIP]              VARCHAR (50)     NULL,
     [ExtraFields]        NVARCHAR (MAX)   NULL,
-    [QueueItemId]        BIGINT           NULL
+    [QueueItemId]        BIGINT           NULL,
+    CONSTRAINT [IX_CDR_ID] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_CDR_AttemptDateTime]
+    ON [ICX_CDR].[CDR]([AttemptDateTime] ASC);
 

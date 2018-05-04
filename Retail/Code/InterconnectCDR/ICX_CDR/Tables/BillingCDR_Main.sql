@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [ICX_CDR].[BillingCDR_Main] (
-    [CDRID]                    BIGINT           NULL,
+    [CDRID]                    BIGINT           NOT NULL,
     [DataSourceID]             UNIQUEIDENTIFIER NULL,
     [SwitchID]                 INT              NULL,
     [IDOnSwitch]               VARCHAR (255)    NULL,
@@ -28,6 +28,14 @@
     [OriginationZoneId]        BIGINT           NULL,
     [DestinationZoneId]        BIGINT           NULL,
     [CallType]                 INT              NULL,
-    [CDRType]                  INT              NULL
+    [CDRType]                  INT              NULL,
+    CONSTRAINT [IX_BillingCDR_Main_CDRID] UNIQUE NONCLUSTERED ([CDRID] ASC)
 );
+
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_BillingCDR_Main_Attempt_Operator]
+    ON [ICX_CDR].[BillingCDR_Main]([AttemptDateTime] ASC, [OperatorID] ASC);
 

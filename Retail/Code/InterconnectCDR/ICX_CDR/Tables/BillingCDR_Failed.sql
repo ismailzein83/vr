@@ -1,5 +1,5 @@
 ﻿CREATE TABLE [ICX_CDR].[BillingCDR_Failed] (
-    [CDRID]                    BIGINT           NULL,
+    [CDRID]                    BIGINT           NOT NULL,
     [DataSourceID]             UNIQUEIDENTIFIER NULL,
     [SwitchId]                 INT              NULL,
     [IDOnSwitch]               VARCHAR (255)    NULL,
@@ -27,6 +27,14 @@
     [OriginationZoneId]        BIGINT           NULL,
     [DestinationZoneId]        BIGINT           NULL,
     [CallType]                 INT              NULL,
-    [CDRType]                  INT              NULL
+    [CDRType]                  INT              NULL,
+    CONSTRAINT [IX_BillingCDR_Failed_CDRID] UNIQUE NONCLUSTERED ([CDRID] ASC)
 );
+
+
+
+
+GO
+CREATE CLUSTERED INDEX [IX_BillingCDR_Failed_Attempt_Operator]
+    ON [ICX_CDR].[BillingCDR_Failed]([AttemptDateTime] ASC, [OperatorID] ASC);
 
