@@ -46,7 +46,7 @@ app.directive("vrInvoicetypeInvoicefilterconditionApprovalinvoice", ["UtilsServi
                         context = payload.context;
                     }
                     if (invoiceFilterConditionEntity != undefined) {
-                        $scope.scopeModel.isApproved = invoiceFilterConditionEntity.NeedApproval;
+                        $scope.scopeModel.needApproval = invoiceFilterConditionEntity.NeedApproval;
                     }
 
                     var promises = [];
@@ -57,7 +57,7 @@ app.directive("vrInvoicetypeInvoicefilterconditionApprovalinvoice", ["UtilsServi
                 api.getData = function () {
                     return {
                         $type: "Vanrise.Invoice.MainExtensions.ApprovalGridFilterCondition ,Vanrise.Invoice.MainExtensions",
-                        NeedApproval: $scope.scopeModel.isApproved
+                        NeedApproval: $scope.scopeModel.needApproval
                     };
                 };
 
