@@ -21,7 +21,6 @@
 
         };
         function IVSWSyncronizer($scope, ctrl, $attrs) {
-            console.log($scope.scopeModel.Separator);
             var gridAPI;
             function getCarrierMappings() {
                 var result = {};
