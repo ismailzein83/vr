@@ -31,11 +31,14 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 			string createTempTableQuery = string.Format(query_CreateRouteTempTable, SwitchId, guid, RouteTempTableName);
 			ExecuteNonQueryText(createTempTableQuery, null);
 
+			string createTableQuery = string.Format(query_CreateRouteTable, SwitchId, guid, RouteTableName);
+			ExecuteNonQueryText(createTableQuery, null);
+
 			#region Deleted
 			string syncWithDeletedDataQuery = string.Format(query_SyncWithRouteDeletedTable, SwitchId, RouteTableName, RouteDeletedTableName);
 			ExecuteNonQueryText(syncWithDeletedDataQuery, null);
 
-			string createDeletedTableQuery = string.Format(query_CreateRouteTable, SwitchId, guid, RouteDeletedTableName);
+			string createDeletedTableQuery = string.Format(query_CreateSucceedRouteTable, SwitchId, guid, RouteDeletedTableName);
 			ExecuteNonQueryText(createDeletedTableQuery, null);
 			#endregion
 
@@ -43,7 +46,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 			string syncWithUpdatedDataQuery = string.Format(query_SyncWithRouteUpdatedTable, SwitchId, RouteTableName, RouteUpdatedTableName);
 			ExecuteNonQueryText(syncWithUpdatedDataQuery, null);
 
-			string createUpdatedTableQuery = string.Format(query_CreateRouteTable, SwitchId, guid, RouteUpdatedTableName);
+			string createUpdatedTableQuery = string.Format(query_CreateSucceedRouteTable, SwitchId, guid, RouteUpdatedTableName);
 			ExecuteNonQueryText(createUpdatedTableQuery, null);
 			#endregion
 
@@ -51,15 +54,31 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 			string syncWithAddedDataQuery = string.Format(query_SyncWithRouteAddedTable, SwitchId, RouteTableName, RouteAddedTableName);
 			ExecuteNonQueryText(syncWithAddedDataQuery, null);
 
-			string createAddedTableQuery = string.Format(query_CreateRouteTable, SwitchId, guid, RouteAddedTableName);
+			string createAddedTableQuery = string.Format(query_CreateSucceedRouteTable, SwitchId, guid, RouteAddedTableName);
 			ExecuteNonQueryText(createAddedTableQuery, null);
 			#endregion
 		}
 
-		public void Finalize(IRouteFinalizeContext context)
+		public void Swap(IRouteFinalizeContext context)
 		{
 			string query = string.Format(query_SwapTables, SwitchId, RouteTableName, RouteTempTableName);
 			ExecuteNonQueryText(query, null);
+		}
+
+		public void Finalize(IRouteFinalizeContext context)
+		{
+			string syncWithDeletedDataQuery = string.Format(query_SyncWithRouteDeletedTable, SwitchId, RouteTableName, RouteDeletedTableName);
+			ExecuteNonQueryText(syncWithDeletedDataQuery, null);
+
+			string syncWithUpdatedDataQuery = string.Format(query_SyncWithRouteUpdatedTable, SwitchId, RouteTableName, RouteUpdatedTableName);
+			ExecuteNonQueryText(syncWithUpdatedDataQuery, null);
+
+			string syncWithAddedDataQuery = string.Format(query_SyncWithRouteAddedTable, SwitchId, RouteTableName, RouteAddedTableName);
+			ExecuteNonQueryText(syncWithAddedDataQuery, null);
+
+			string query = string.Format(query_DeleteRouteTable, SwitchId, RouteTempTableName);
+			ExecuteNonQueryText(query, null);
+
 		}
 
 		public void CompareTables(IRouteCompareTablesContext context)
@@ -92,7 +111,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 							difference.RoutesToDelete.Add(singleRouteDifference.EricssonConvertedRoute);
 
 						else
-							difference.RoutesToDelete.Add(singleRouteDifference.EricssonConvertedRoute);
+							difference.RoutesToAdd.Add(singleRouteDifference.EricssonConvertedRoute);
 					}
 					else //routeDifferences.Count = 2
 					{
@@ -162,17 +181,17 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
                                                     BEGIN
                                                         DROP TABLE WhS_RouteSync_Ericsson_{0}.{2}
                                                     END
-                                                    
+
                                                     CREATE TABLE [WhS_RouteSync_Ericsson_{0}].[{2}](
                                                           BO varchar(255) NOT NULL,
 	                                                      Code varchar(20) NOT NULL,
 	                                                      RCNumber int NOT NULL
-                                                    CONSTRAINT [PK_WhS_RouteSync_Ericsson_{0}.Route_{1}] PRIMARY KEY CLUSTERED 
+                                                    CONSTRAINT [PK_WhS_RouteSync_Ericsson_{0}.Route_{2}{1}] PRIMARY KEY CLUSTERED 
                                                     (
                                                         BO ASC,
 	                                                    Code ASC
                                                     )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-                                                    ) ON [PRIMARY]";
+													) ON [PRIMARY]";
 
 		const string query_CompareRouteTables = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{1}') AND s.type in (N'U'))
                                                   BEGIN
@@ -196,14 +215,14 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 
 	                                        EXEC sp_rename '[WhS_RouteSync_Ericsson_{0}].[{2}]', '{1}';";
 
-		const string query_SyncWithRouteDeletedTable = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{2}') AND s.type in (N'U'))
-                                                    BEGIN
-														DELETE WhS_RouteSync_Ericsson_{0}.{1}
-														FROM WhS_RouteSync_Ericsson_{0}.{1} as routes join WhS_RouteSync_Ericsson_{0}.{2} as deletedRoutes 
-														ON routes.BO = deletedRoutes.BO and routes.Code = deletedRoutes.Code
+		const string query_SyncWithRouteDeletedTable = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{2}') AND s.type in (N'U')) 
+		BEGIN
+		DELETE WhS_RouteSync_Ericsson_{0}.{1} 
+		FROM WhS_RouteSync_Ericsson_{0}.{1} as routes join WhS_RouteSync_Ericsson_{0}.{2} as deletedRoutes  
+		ON routes.BO = deletedRoutes.BO and routes.Code = deletedRoutes.Code 
 
-														DROP TABLE WhS_RouteSync_Ericsson_{0}.{2}
-                                                    END";
+		DROP TABLE WhS_RouteSync_Ericsson_{0}.{2} 
+		END";
 
 		const string query_SyncWithRouteUpdatedTable = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{2}') AND s.type in (N'U'))
                                                     BEGIN
@@ -225,16 +244,36 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 														DROP TABLE WhS_RouteSync_Ericsson_{0}.{2}
                                                     END";
 
-		const string query_CreateRouteTable = @"CREATE TABLE [WhS_RouteSync_Ericsson_{0}].[{2}](
+		const string query_CreateRouteTable = @"IF NOT EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{2}') AND s.type in (N'U'))
+                                                    BEGIN
+                                                    CREATE TABLE [WhS_RouteSync_Ericsson_{0}].[{2}](
+                                                          BO varchar(255) NOT NULL,
+	                                                      Code varchar(20) NOT NULL,
+	                                                      RCNumber int NOT NULL
+                                                    CONSTRAINT [PK_WhS_RouteSync_Ericsson_{0}.Route_{2}{1}] PRIMARY KEY CLUSTERED 
+                                                    (
+                                                        BO ASC,
+	                                                    Code ASC
+                                                    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+                                                    ) ON [PRIMARY]
+													END";
+
+		const string query_CreateSucceedRouteTable = @"CREATE TABLE [WhS_RouteSync_Ericsson_{0}].[{2}](
                                             BO varchar(255) NOT NULL,
 	                                        Code varchar(20) NOT NULL,
 	                                        RCNumber int NOT NULL
-                                            CONSTRAINT [PK_WhS_RouteSync_Ericsson_{0}.{2}_{1}] PRIMARY KEY CLUSTERED 
+                                            CONSTRAINT [PK_WhS_RouteSync_Ericsson_{0}.{2}{1}] PRIMARY KEY CLUSTERED 
                                                 (
                                                   BO ASC,
 	                                              Code ASC
                                                  )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
                                             ) ON [PRIMARY]";
+
+
+		const string query_DeleteRouteTable = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{1}') AND s.type in (N'U'))
+													BEGIN 
+														DROP TABLE WhS_RouteSync_Ericsson_{0}.{1} 
+													END";
 		#endregion
 	}
 }

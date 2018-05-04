@@ -8,14 +8,14 @@ namespace TOne.WhS.RouteSync.Ericsson.Data
     {
         string SwitchId { get; set; }
         void Initialize(IRouteInitializeContext context);
-        void Finalize(IRouteFinalizeContext context);
+		void Swap(IRouteFinalizeContext context);
+		void Finalize(IRouteFinalizeContext context);
 		void ApplyRouteForDB(object preparedRoute);
 		void CompareTables(IRouteCompareTablesContext context);
 	}
 	public interface IRouteSucceededDataManager : IBulkApplyDataManager<EricssonConvertedRoute>, IDataManager
 	{
 		string SwitchId { get; set; }
-		void Finalize(IRouteSucceededFinalizeContext context);
-		void ApplyRouteSucceededForDB(object preparedRoute);
+		void SaveRoutesSucceededToDB(IEnumerable<EricssonConvertedRoute> routes, RouteActionType actionType);
 	}
 }

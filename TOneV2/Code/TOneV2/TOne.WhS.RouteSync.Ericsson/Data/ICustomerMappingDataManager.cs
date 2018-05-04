@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using TOne.WhS.RouteSync.Ericsson.Entities;
 using Vanrise.Data;
 
 namespace TOne.WhS.RouteSync.Ericsson.Data
@@ -8,15 +9,15 @@ namespace TOne.WhS.RouteSync.Ericsson.Data
 	{
 		string SwitchId { get; set; }
 		void Initialize(ICustomerMappingInitializeContext context);
+		void Swap(ICustomerMappingFinalizeContext context);
 		void Finalize(ICustomerMappingFinalizeContext context);
 		void ApplyCustomerMappingForDB(object preparedCustomerMapping);
 		void CompareTables(ICustomerMappingTablesContext context);
 	}
 
-	public interface ICustomerMappingSucceededDataManager : IDataManager, IBulkApplyDataManager<CustomerMappingSerialized>
+	public interface ICustomerMappingSucceededDataManager : IDataManager, IBulkApplyDataManager<CustomerMappingWithActionType>
 	{
 		string SwitchId { get; set; }
-		void Finalize(ICustomerMappingSucceededFinalizeContext context);
-		void ApplyCustomerMappingSucceededForDB(object preparedCustomerMapping);
+		void SaveCustomerMappingsSucceededToDB(IEnumerable<CustomerMappingWithActionType> customerMappingsSucceeded);
 	}
 }

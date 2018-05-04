@@ -28,14 +28,31 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 		public void Initialize(ICustomerMappingInitializeContext context)
 		{
 			Guid guid = Guid.NewGuid();
-			string createTempTableQuery = string.Format(query_CreateRouteTempTable, SwitchId, CustomerMappingTempTableName, guid);
+			string createTempTableQuery = string.Format(query_CreateCustomerMappingTempTable, SwitchId, CustomerMappingTempTableName, guid);
 			ExecuteNonQueryText(createTempTableQuery, null);
-			string syncWithSucceededTableQuery = string.Format(query_SyncWithCustomerMappingSucceededTable, SwitchId, CustomerMappingTableName, CustomerMappingSucceededTableName, new Guid(), (int)ActionType.Delete, (int)ActionType.Update, (int)ActionType.Add);
+
+			string createTableQuery = string.Format(query_CreateCustomerMappingTable, SwitchId, CustomerMappingTableName, guid);
+			ExecuteNonQueryText(createTableQuery, null);
+
+			string syncWithSucceededTableQuery = string.Format(query_SyncWithCustomerMappingSucceededTable, SwitchId, CustomerMappingTableName, CustomerMappingSucceededTableName);
 			ExecuteNonQueryText(syncWithSucceededTableQuery, null);
+
+			string createSucceedTableQuery = string.Format(query_CreateSucceedCustomerMappingTable, SwitchId, CustomerMappingSucceededTableName, guid);
+			ExecuteNonQueryText(createSucceedTableQuery, null);
 		}
-		public void Finalize(ICustomerMappingFinalizeContext context)
+
+		public void Swap(ICustomerMappingFinalizeContext context)
 		{
 			string query = string.Format(query_SwapTables, SwitchId, CustomerMappingTableName, CustomerMappingTempTableName);
+			ExecuteNonQueryText(query, null);
+		}
+
+		public void Finalize(ICustomerMappingFinalizeContext context)
+		{
+			string syncWithSucceededTableQuery = string.Format(query_SyncWithCustomerMappingSucceededTable, SwitchId, CustomerMappingTableName, CustomerMappingSucceededTableName, Guid.NewGuid());
+			ExecuteNonQueryText(syncWithSucceededTableQuery, null);
+
+			string query = string.Format(query_DeleteCustomerMappingTable, SwitchId, CustomerMappingTempTableName);
 			ExecuteNonQueryText(query, null);
 		}
 		public void CompareTables(ICustomerMappingTablesContext context)
@@ -78,10 +95,10 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 				}
 
 				if (customerMappingsToAdd.Count > 0)
-					context.CustomerMappingsToDelete = customerMappingsToDelete;
+					context.CustomerMappingsToAdd = customerMappingsToAdd;
 
 				if (customerMappingsToUpdate.Count > 0)
-					context.CustomerMappingsToDelete = customerMappingsToDelete;
+					context.CustomerMappingsToUpdate = customerMappingsToUpdate;
 
 				if (customerMappingsToDelete.Count > 0)
 					context.CustomerMappingsToDelete = customerMappingsToDelete;
@@ -135,7 +152,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 
 		#region queries
 
-		const string query_CreateRouteTempTable = @"IF  EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{1}') AND s.type in (N'U'))
+		const string query_CreateCustomerMappingTempTable = @"IF  EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{1}') AND s.type in (N'U'))
                                                           begin
                                                               DROP TABLE WhS_RouteSync_Ericsson_{0}.{1}
                                                           end
@@ -144,11 +161,25 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
                                                                 BO varchar(255) NOT NULL,
 	                                                            CustomerMapping varchar(max) NOT NULL,
 
-                                                          CONSTRAINT [PK_WhS_RouteSync_Ericsson_{0}.CustomerMapping_{2}] PRIMARY KEY CLUSTERED 
+                                                          CONSTRAINT [PK_WhS_RouteSync_Ericsson_{0}.CustomerMapping_{1}{2}] PRIMARY KEY CLUSTERED 
                                                          (
                                                              BO ASC
                                                          )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
                                                          ) ON [PRIMARY]";
+
+		const string query_CreateCustomerMappingTable = @"IF  NOT EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{1}') AND s.type in (N'U'))
+                                                          BEGIN
+                                                             
+                                                          CREATE TABLE [WhS_RouteSync_Ericsson_{0}].[{1}](
+                                                                BO varchar(255) NOT NULL,
+	                                                            CustomerMapping varchar(max) NOT NULL,
+
+                                                          CONSTRAINT [PK_WhS_RouteSync_Ericsson_{0}.CustomerMapping_{1}{2}] PRIMARY KEY CLUSTERED 
+                                                         (
+                                                             BO ASC
+                                                         )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+                                                         ) ON [PRIMARY]
+														 END";
 
 		const string query_CompareCustomerMappingTables = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{1}') AND s.type in (N'U'))
                                                   BEGIN
@@ -177,34 +208,38 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 														DELETE WhS_RouteSync_Ericsson_{0}.{1}
 														FROM WhS_RouteSync_Ericsson_{0}.{1} as cm join WhS_RouteSync_Ericsson_{0}.{2} as cms 
 														ON cm.BO = cms.BO
-														WHERE cms.Action = {4}
+														WHERE cms.Action = 2
 
 														MERGE INTO WhS_RouteSync_Ericsson_{0}.{1}  as cm 
 														USING WhS_RouteSync_Ericsson_{0}.{2} as cms
-														ON cm.BO = cms.BO and cms.Action={5}
+														ON cm.BO = cms.BO and cms.Action=1
 														WHEN MATCHED THEN
 														UPDATE 
 														SET cm.CustomerMapping = cms.CustomerMapping;
 
 														INSERT INTO  WhS_RouteSync_Ericsson_{0}.{1} (BO, CustomerMapping)
 														SELECT BO, CustomerMapping FROM WhS_RouteSync_Ericsson_{0}.{2} as cms
-														WHERE cms.Action = {6}
+														WHERE cms.Action = 0
 
-                                                    END
-													
-													ELSE 
-														BEGIN
-														CREATE TABLE [WhS_RouteSync_Ericsson_{0}].[{2}](
+														DROP TABLE WhS_RouteSync_Ericsson_{0}.{2}
+
+                                                    END";
+
+		const string query_CreateSucceedCustomerMappingTable = @"CREATE TABLE [WhS_RouteSync_Ericsson_{0}].[{1}](
                                                                 BO varchar(255) NOT NULL,
 	                                                            CustomerMapping varchar(max) NOT NULL,
 																Action tinyint NOT NULL,
 
-																CONSTRAINT [PK_WhS_RouteSync_Ericsson_{0}.CustomerMapping_{3}] PRIMARY KEY CLUSTERED 
+																CONSTRAINT [PK_WhS_RouteSync_Ericsson_{0}.CustomerMapping_{1}{2}] PRIMARY KEY CLUSTERED 
 																(
 																	BO ASC
-																)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-                                                         ) ON [PRIMARY]
-													END";
+																)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON)
+																ON [PRIMARY])";
+
+		const string query_DeleteCustomerMappingTable = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{1}') AND s.type in (N'U'))
+                                                    BEGIN
+                                                        DROP TABLE WhS_RouteSync_Ericsson_{0}.{1}
+                                                    END";
 		#endregion
 	}
 }

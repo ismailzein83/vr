@@ -33,11 +33,57 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
 		public static string ANBAR_Command = "ANBAR";
 
 		public static string ANBSE_Command = "ANBSE";
+
+		public static string PNBAR_Command = "PNBAR";
+
+		public static string ANRAR_Command = "ANRAR";
+
+		public static string ANRZI_Command = "ANRZI";
+
+		public static string ANBZI_Command = "ANBZI";
+
+		public static string ANBCI_Command = "ANBCI";
+
+		public static string Exit_Command = "exit;";
+
+		public static string MML_Command = "mml";
+
+		public static string PROTECTION_PERIOD_ELAPSED = "PROTECTION_PERIOD_ELAPSED";
+
+		public static string PROTECTIVE_PERIOD_ELAPSED = "PROTECTIVE PERIOD ELAPSED";
+
+		public static string EXECUTED = "EXECUTED";
+
+		public static string ORDERED = "ORDERED";
+
+		public static string FUNCTION_BUSY = "FUNCTION BUSY";
+
 	}
 
 	#region Commands Classes
-	public class CustomerMappingCommands : List<string> { }
-	public class RouteCaseCommands : List<string> { }
-	public class RouteCommands : List<string> { }
+	public class RouteCaseWithCommands
+	{
+		public RouteCase RouteCase { get; set; }
+		public List<string> Commands { get; set; }
+	}
+
+	public class EricssonRouteWithCommands
+	{
+		public EricssonConvertedRoute Route { get; set; }
+		public List<string> Commands { get; set; }
+		public RouteActionType ActionType { get; set; }
+	}
+
+	public class CustomerMappingWithCommands
+	{
+		public CustomerMappingWithActionType CustomerMappingWithActionType { get; set; }
+		public List<string> Commands { get; set; }
+	}
+
+	public class CustomerMappingWithActionType
+	{
+		public CustomerMappingSerialized CustomerMappingSerialized { get; set; }
+		public CustomerMappingActionType ActionType { get; set; }
+	}
 	#endregion
 }

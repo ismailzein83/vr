@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Data;
 using Vanrise.Data.SQL;
 using TOne.WhS.RouteSync.Ericsson.Data;
+using TOne.WhS.RouteSync.Ericsson.Entities;
 
 namespace TOne.WhS.RouteSync.Ericsson.SQL
 {
-	class CustomerMappingSucceededDataManager : BaseSQLDataManager, ICustomerMappingSucceededDataManager
+	public class CustomerMappingSucceededDataManager : BaseSQLDataManager, ICustomerMappingSucceededDataManager
 	{
 		const string CustomerMappingSucceededTableName = "CustomerMapping_Succeeded";
 		readonly string[] columns = { "BO", "CustomerMapping" };
@@ -15,13 +16,6 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 		public CustomerMappingSucceededDataManager()
 			: base(GetConnectionStringName("TOneWhS_RouteSync_DBConnStringKey", "RouteSyncDBConnString"))
 		{ }
-
-
-		public void Finalize(ICustomerMappingSucceededFinalizeContext context)
-		{
-			string query = string.Format(query_DropCustomerMappingSucceededTable, SwitchId, CustomerMappingSucceededTableName);
-			ExecuteNonQueryText(query, null);
-		}
 
 		public object FinishDBApplyStream(object dbApplyStream)
 		{
@@ -43,10 +37,10 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 			return base.InitializeStreamForBulkInsert();
 		}
 
-		public void WriteRecordToStream(CustomerMappingSerialized record, object dbApplyStream)
+		public void WriteRecordToStream(CustomerMappingWithActionType record, object dbApplyStream)
 		{
 			StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-			streamForBulkInsert.WriteRecord("{0}^{1}", record.BO, record.CustomerMappingAsString);
+			streamForBulkInsert.WriteRecord("{0}^{1}^{2}", record.CustomerMappingSerialized.BO, record.CustomerMappingSerialized.CustomerMappingAsString, record.ActionType);
 		}
 
 		public void ApplyCustomerMappingSucceededForDB(object preparedCustomerMapping)
@@ -54,20 +48,13 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 			InsertBulkToTable(preparedCustomerMapping as BaseBulkInsertInfo);
 		}
 
-		CustomerMappingSerialized CustomerMappingSerializedMapper(IDataReader reader)
+		public void SaveCustomerMappingsSucceededToDB(IEnumerable<CustomerMappingWithActionType> customerMappingsSucceeded)
 		{
-			return new CustomerMappingSerialized()
-			{
-				BO = reader["BO"] as string,
-				CustomerMappingAsString = reader["CustomerMapping"] as string
-			};
+			Object dbApplyStream = InitialiazeStreamForDBApply();
+			foreach (var customerMappingSucceeded in customerMappingsSucceeded)
+				WriteRecordToStream(customerMappingSucceeded, dbApplyStream);
+			Object preparedInvalidCDRs = FinishDBApplyStream(dbApplyStream);
+			ApplyCustomerMappingSucceededForDB(preparedInvalidCDRs);
 		}
-
-		#region Queries
-		const string query_DropCustomerMappingSucceededTable = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{1}') AND s.type in (N'U'))
-                                                    BEGIN
-                                                        DROP TABLE WhS_RouteSync_Ericsson_{0}.{1}
-                                                    END";
-		#endregion
 	}
 }

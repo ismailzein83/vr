@@ -9,26 +9,17 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 {
 	class RouteSucceededDataManager : BaseSQLDataManager, IRouteSucceededDataManager
 	{
+		const string RouteAddedTableName = "Route_Added";
+		const string RouteUpdatedTableName = "Route_Updated";
+		const string RouteDeletedTableName = "Route_Deleted";
 
-		const string RouteSucceededTableName = "Route_Succeeded";
 		readonly string[] columns = { "BO", "Code", "RCNumber" };
 		public string SwitchId { get; set; }
-
+		public string RouteSucceededTableName { get; set; }
 		public RouteSucceededDataManager()
 			: base(GetConnectionStringName("TOneWhS_RouteSync_DBConnStringKey", "RouteSyncDBConnString"))
 		{ }
-		
-		public void Finalize(IRouteSucceededFinalizeContext context)
-		{
-			string query = string.Format(query_DropRouteSucceededTable, SwitchId, RouteSucceededTableName);
-			ExecuteNonQueryText(query, null);
-		}
 
-		public IEnumerable<EricssonConvertedRoute> GetSucceededRoutes()
-		{
-			string query = string.Format(query_GetAllRouteSucceeded, SwitchId, RouteSucceededTableName);
-			return GetItemsText(query, EricssonConvertedRouteSucceededMapper, null);
-		}
 
 		public object FinishDBApplyStream(object dbApplyStream)
 		{
@@ -56,43 +47,31 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 			streamForBulkInsert.WriteRecord("{0}^{1}^{2}", record.BO, record.Code, record.RCNumber);
 		}
 
-		public void ApplyRouteSucceededForDB(object preparedRoute)
+		public void ApplyRoutesSucceededForDB(object preparedRoute)
 		{
 			InsertBulkToTable(preparedRoute as BaseBulkInsertInfo);
 		}
 
-		EricssonConvertedRoute EricssonConvertedRouteSucceededMapper(IDataReader reader)
+		public void SaveRoutesSucceededToDB(IEnumerable<EricssonConvertedRoute> routes, RouteActionType actionType)
 		{
-			return new EricssonConvertedRoute()
+			switch (actionType)
 			{
-				BO = reader["BO"] as string,
-				Code = reader["Code"] as string,
-				RCNumber = (int)reader["RCNumber"]
-			};
+				case RouteActionType.Add:
+					RouteSucceededTableName = RouteAddedTableName;
+					break;
+				case RouteActionType.Update:
+					RouteSucceededTableName = RouteUpdatedTableName;
+					break;
+				case RouteActionType.Delete:
+					RouteSucceededTableName = RouteDeletedTableName;
+					break;
+				default: break;
+			}
+			Object dbApplyStream = InitialiazeStreamForDBApply();
+			foreach (var route in routes)
+				WriteRecordToStream(route, dbApplyStream);
+			Object preparedInvalidCDRs = FinishDBApplyStream(dbApplyStream);
+			ApplyRoutesSucceededForDB(preparedInvalidCDRs);
 		}
-
-		#region Queries
-		const string query_CreateRouteSucceededTable = @"IF NOT EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{2}') AND s.type in (N'U'))
-                                                    BEGIN
-                                                    CREATE TABLE [WhS_RouteSync_Ericsson_{0}].[{2}](
-                                                          BO varchar(255) NOT NULL,
-	                                                      Code varchar(20) NOT NULL,
-	                                                      RCNumber int NOT NULL
-                                                    CONSTRAINT [PK_WhS_RouteSync_Ericsson_{0}.Route_{1}] PRIMARY KEY CLUSTERED 
-                                                    (
-                                                        BO ASC,
-	                                                    Code ASC
-                                                    )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
-                                                    ) ON [PRIMARY]
-                                                    END";
-
-		const string query_DropRouteSucceededTable = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{1}') AND s.type in (N'U'))
-                                                    BEGIN
-                                                        DROP TABLE WhS_RouteSync_Ericsson_{0}.{1}
-                                                    END";
-
-		const string query_GetAllRouteSucceeded = @"	SELECT BO, Code, RCNumber
-							FROM WhS_RouteSync_Ericsson_{0}.{1}";
-		#endregion
 	}
 }
