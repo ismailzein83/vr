@@ -30,11 +30,14 @@ namespace TOne.WhS.RouteSync.IVSwitch
         }
         public PreparedConfiguration Build()
         {
+            HashSet<int> routeTableIds;
+            Dictionary<string, CustomerDefinition> customerDefinitions = GetConfiguredCustomers(out routeTableIds);
             PreparedConfiguration prepredConfiguration = new PreparedConfiguration
             {
-                CustomerDefinitions = GetConfiguredCustomers(),
+                CustomerDefinitions = customerDefinitions,
                 SupplierDefinitions = GetConfiguredSuppliers(),
-                _switchTime = MasterDataManager.GetSwitchDate()
+                _switchTime = MasterDataManager.GetSwitchDate(),
+                RouteTableIdsHashSet = routeTableIds
             };
             int id;
             int.TryParse(BlockedMapping, out id);
@@ -42,23 +45,27 @@ namespace TOne.WhS.RouteSync.IVSwitch
             return prepredConfiguration;
         }
 
-        public Dictionary<string, CustomerDefinition> GetConfiguredCustomers()
+        public Dictionary<string, CustomerDefinition> GetConfiguredCustomers(out HashSet<int> routeTableIds)
         {
+            routeTableIds = new HashSet<int>();
             Dictionary<int, AccessListTable> dataBaseCustomers = GetCustomersGroupedByUser();
-            Dictionary<string, CustomerDefinition> customers = new Dictionary<string, CustomerDefinition>();
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
+            var customers = new Dictionary<string, CustomerDefinition>();
+            var carrierAccountManager = new CarrierAccountManager();
             var allCustomers = carrierAccountManager.GetAllCustomers();
+
             foreach (var customer in allCustomers)
             {
-                EndPointCarrierAccountExtension ivCustomer =
-                    carrierAccountManager.GetExtendedSettings<EndPointCarrierAccountExtension>(customer);
-                if (ivCustomer == null || ivCustomer.AclEndPointInfo == null) continue;
+                EndPointCarrierAccountExtension ivCustomer = carrierAccountManager.GetExtendedSettings<EndPointCarrierAccountExtension>(customer);
+
+                if (ivCustomer == null || ivCustomer.AclEndPointInfo == null)
+                    continue;
+
                 CustomerDefinition definition = new CustomerDefinition
                 {
                     CustomerId = customer.CarrierAccountId.ToString(),
                     EndPoints = new List<EndPoint>()
                 };
-                Dictionary<int, EndPoint> tempDictionary = new Dictionary<int, EndPoint>();
+                Dictionary<int, EndPoint> endPointsById = new Dictionary<int, EndPoint>();
                 foreach (var elt in ivCustomer.AclEndPointInfo)
                 {
                     AccessListTable access;
@@ -69,12 +76,15 @@ namespace TOne.WhS.RouteSync.IVSwitch
                             TariffTableId = access.TariffTableId,
                             RouteTableId = access.RouteTableId
                         };
-                        if (!tempDictionary.ContainsKey(endPoint.RouteTableId))
-                            tempDictionary[endPoint.RouteTableId] = endPoint;
+                        if (!endPointsById.ContainsKey(endPoint.RouteTableId))
+                        {
+                            endPointsById.Add(endPoint.RouteTableId, endPoint);
+                            routeTableIds.Add(endPoint.RouteTableId);
+                        }
                     }
                 }
-                definition.EndPoints = tempDictionary.Values.ToList();
-                customers[definition.CustomerId] = definition;
+                definition.EndPoints = endPointsById.Values.ToList();
+                customers.Add(definition.CustomerId, definition);
             }
             return customers;
         }
