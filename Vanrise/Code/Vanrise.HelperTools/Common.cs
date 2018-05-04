@@ -387,6 +387,12 @@ when not matched by target then
                 sb = sb.Replace(mainItem, "StandardRAStructure");
             }
 
+            if (projectName == "Interconnect")
+            {
+                sb = sb.Replace(mainItem, "StandardInterconnectStructure");
+            }
+            
+
             if (!Directory.Exists(sqlFilesOutputPath))
             {
                 Directory.CreateDirectory(sqlFilesOutputPath);

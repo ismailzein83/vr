@@ -1,5 +1,0 @@
-﻿Security		0 to 100
-Generic			101 to 200
-Analytic		201 to 300
-BI				301 to 400
-Invoice			401 to 500

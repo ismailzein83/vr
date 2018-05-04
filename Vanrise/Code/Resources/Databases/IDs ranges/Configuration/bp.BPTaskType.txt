@@ -1,4 +1,0 @@
-﻿TOne			1 to 10000
-CDRAnalysis		10001 to 20000
-CarrierPortal	20001 to 30000
-XBooster		30001 to 40000

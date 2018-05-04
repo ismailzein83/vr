@@ -1,8 +1,0 @@
-﻿Common			1 to 100
-TOne			101 to 200
-Retail			201 to 300
-ClearVoice		301 to 400
-XBooster		401 to 500
-Mediation		501 to 600
-CDR Analysis	601 to 700
-Carrier Portal	701 to 800

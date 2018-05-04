@@ -1,6 +1,0 @@
-﻿Integration		1 to 100
-Runtime			101 to 200
-ClearVoice		201 to 300
-CarrierPortal	301 to 400
-common			401 to 500
-TOne			501 to 600

@@ -1,3 +1,0 @@
-﻿TOne		1 to 100
-Retail		101 to 200
-Mediation	201 to 300
