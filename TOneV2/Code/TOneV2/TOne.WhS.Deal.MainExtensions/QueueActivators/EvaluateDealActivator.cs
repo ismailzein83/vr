@@ -517,7 +517,7 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
 			{
 				TargetTime = record.GetFieldValue(propertyNames[PropertyName.AttemptDateTime]),
 				DestinationCurrencyId = record.GetFieldValue(propertyNames[PropertyName.CurrencyId]),
-				Rate = record.GetFieldValue(propertyNames[PropertyName.RateValue]),
+				Rate = record.GetFieldValue(propertyNames[PropertyName.OrigRateValue]),
 				DurationInSeconds = durationInSeconds,
 				ExtraChargeRate = extraChargeRate.HasValue ? extraChargeRate.Value : 0,
 				SourceCurrencyId = tarrifRule.Settings.CurrencyId
