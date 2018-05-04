@@ -1020,6 +1020,10 @@
       <Project>{f0c17114-11c9-4d69-bfff-0a8ba62b7179}</Project>
       <Name>TOne.WhS.RouteSync.Ericsson</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.FreeRadius\TOne.WhS.RouteSync.FreeRadius.csproj">
+      <Project>{87790317-4035-4fb8-be4f-88d44fd02abe}</Project>
+      <Name>TOne.WhS.RouteSync.FreeRadius</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.RouteSync.Idb\TOne.WhS.RouteSync.Idb.csproj">
       <Project>{d961eebd-058d-4419-b6ca-e1d53412c159}</Project>
       <Name>TOne.WhS.RouteSync.Idb</Name>
