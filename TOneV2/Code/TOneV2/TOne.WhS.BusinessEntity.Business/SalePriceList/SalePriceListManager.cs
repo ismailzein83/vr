@@ -538,6 +538,9 @@ namespace TOne.WhS.BusinessEntity.Business
             List<SalePLZoneNotification> saleNotifications;
             Dictionary<int, List<SalePLZoneNotification>> zoneNotifictionByCurrencyId = GetFullSalePlZoneNotification(customerId, sellingProductId, existingDataByCountryId, countryChanges, customerCountriesSellDatesByCountryId, customerZoneRateHistoryLocator);
 
+            if (zoneNotifictionByCurrencyId.Count() > 1)
+                overiddenPriceListType = SalePriceListType.Country;
+
             if (!zoneNotifictionByCurrencyId.TryGetValue(changesCurrency, out saleNotifications))
             {
                 overiddenPriceListType = SalePriceListType.Country;
@@ -843,7 +846,7 @@ namespace TOne.WhS.BusinessEntity.Business
                 zoneNotification.Rate = this.GetRateNotificationFromExistingData(customerId, sellingProductId, existingZone.ZoneId, existingZone.ZoneName, countryId, customerZoneRateHistoryLocator);
                 zoneNotification.Increment = GetIncrementDescription(customerId, existingZone.ZoneId, zoneNotification.Rate.BED);
                 this.AddExistingOtherRatesToNotification(zoneNotification, existingZone, sellingProductId, customerId, countryId, customerZoneRateHistoryLocator);
-                
+
                 salePlZoneNotifications.Add(zoneNotification);
             }
             return salePlZoneNotifications;
