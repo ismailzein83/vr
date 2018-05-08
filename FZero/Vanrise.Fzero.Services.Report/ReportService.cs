@@ -64,22 +64,36 @@ namespace Vanrise.Fzero.Services.Report
                         if (i.AutoReport && i.User.ClientID != null)
                         {
                             HashSet<string> DistinctCLIs = new HashSet<string>();
+                            HashSet<string> DistinctCLIsWitoutCountryCode = new HashSet<string>();
+
                             List<ViewGeneratedCall> listFraudCases = GeneratedCall.GetFraudCases(i.User.ClientID, i.ID);
                             List<int> listDistinctFraudCases = new List<int>();
                             List<int> listRepeatedFraudCases = new List<int>();
                             foreach (ViewGeneratedCall v in listFraudCases)
                             {
                                 string cli = v.CLI;
+                                string cliWithoutCountryCode = v.CLI;
+
                                 if (i.User.ClientID == (int)Enums.Clients.ITPC)
                                 {
                                     if (cli.StartsWith("0"))
                                     {
                                         cli = string.Format("964{0}", v.CLI.Substring(1));
+                                        cliWithoutCountryCode = string.Format("{0}", v.CLI.Substring(1));
                                     }
                                 }
+                            
+                                if (!DistinctCLIsWitoutCountryCode.Contains(cli))
+                                {
+                                    DistinctCLIsWitoutCountryCode.Add(cliWithoutCountryCode);
+                                }
+
                                 if (!DistinctCLIs.Contains(cli))
                                 {
                                     DistinctCLIs.Add(cli);
+
+                                    DistinctCLIsWitoutCountryCode.Add(cliWithoutCountryCode);
+
                                     listDistinctFraudCases.Add(v.ID);
                                 }
                                 else
@@ -98,12 +112,12 @@ namespace Vanrise.Fzero.Services.Report
                             if (listDistinctFraudCases.Count > 0)
                             {
                                 GeneratedCall.UpdateReportStatus(listDistinctFraudCases, (int)Enums.ReportingStatuses.TobeReported, null);
+                                string reportCounter;
+                                SendReport(DistinctCLIs, listDistinctFraudCases, i.User.FullName, (int)Enums.Statuses.Fraud, i.ID, i.User.EmailAddress, i.User.ClientID.Value, (i.User.GMT - SysParameter.Global_GMT), out  reportCounter);
                                 if (i.EnableFTP.HasValue && i.EnableFTP.Value)
                                 {
-                                    SaveToFTPFile(i.FTPAddress, i.FTPUserName, i.FTPPassword,i.FTPPort,i.FTPType, i.User.FullName, listDistinctFraudCases);
+                                    SaveToFTPFile(i.FTPAddress, i.FTPUserName, i.FTPPassword, i.FTPPort, i.FTPType, i.User.FullName, DistinctCLIsWitoutCountryCode, reportCounter);
                                 }
-                                SendReport(DistinctCLIs, listDistinctFraudCases, i.User.FullName, (int)Enums.Statuses.Fraud, i.ID, i.User.EmailAddress, i.User.ClientID.Value, (i.User.GMT - SysParameter.Global_GMT));
-
                             }
                         }
 
@@ -168,27 +182,19 @@ namespace Vanrise.Fzero.Services.Report
         }
 
 
-        private void SaveToFTPFile(string ftpAddress, string ftpUserName, string ftpPassword, string ftpPort, int? ftpType, string mobileOperatorName, List<int> listDistinctFraudCases)
+        private void SaveToFTPFile(string ftpAddress, string ftpUserName, string ftpPassword, string ftpPort, int? ftpType, string mobileOperatorName, HashSet<string> distinctCLIs, string reportCounter)
         {
 
             try
             {
+                if (reportCounter == null)
+                    return;
+
                 if (ftpAddress != null && ftpUserName != null & ftpPassword != null)
                 {
-                    string counter;
-                    string ReportIDBeforeCounter = "FZ" + mobileOperatorName.Substring(0, 1) + "S" + DateTime.Now.Year.ToString("D2").Substring(2) + DateTime.Now.Month.ToString("D2") + DateTime.Now.Day.ToString("D2");
-                    Vanrise.Fzero.Bypass.Report LastReport = Vanrise.Fzero.Bypass.Report.Load(ReportIDBeforeCounter);
-                    if (LastReport == null)
-                    {
-                        counter = "0001";
-                    }
-                    else
-                    {
-                        counter = (int.Parse(LastReport.ReportID.Replace("- Repeated Numbers", "").Substring(10)) + 1).ToString("D4");
-                    }
-                    string fileName = string.Format("AutoSuspend_{0:yyyyMMdd}_{1}_Vanrise.txt", DateTime.Now, counter);
+                    string fileName = string.Format("AutoSuspend_{0:yyyyMMdd}_{1}_Vanrise.txt", DateTime.Now, reportCounter);
                     StringBuilder stringBuilder = new StringBuilder();
-                    foreach (var item in listDistinctFraudCases)
+                    foreach (var item in distinctCLIs)
                     {
                         stringBuilder.AppendLine(item.ToString());
                     }
@@ -248,14 +254,14 @@ namespace Vanrise.Fzero.Services.Report
 
         }
 
-        private void SendReport(HashSet<string> CLIs, List<int> ListIds, string MobileOperatorName, int StatusID, int MobileOperatorID, string EmailAddress, int ClientID, int DifferenceInGMT)
+        private void SendReport(HashSet<string> CLIs, List<int> ListIds, string MobileOperatorName, int StatusID, int MobileOperatorID, string EmailAddress, int ClientID, int DifferenceInGMT, out string reportCounter)
         {
+            reportCounter = null;
             try
             {
                 ReportViewer rvToOperator = new ReportViewer();
                 ReportViewer rvToOperator2 = new ReportViewer();
                 Vanrise.Fzero.Bypass.Report report = new Vanrise.Fzero.Bypass.Report();
-
 
                 report.SentDateTime = DateTime.Now;
 
@@ -278,14 +284,21 @@ namespace Vanrise.Fzero.Services.Report
 
 
                 Vanrise.Fzero.Bypass.Report LastReport = Vanrise.Fzero.Bypass.Report.Load(ReportIDBeforeCounter);
+
+                string counter;
                 if (LastReport == null)
                 {
-                    ReportID = ReportIDBeforeCounter + "0001";
+                    counter = "0001";
+                   
                 }
                 else
                 {
-                    ReportID = ReportIDBeforeCounter + (int.Parse(LastReport.ReportID.Replace("- Repeated Numbers", "").Substring(9)) + 1).ToString("D4");
+                    counter = (int.Parse(LastReport.ReportID.Replace("- Repeated Numbers", "").Substring(10)) + 1).ToString("D4");
                 }
+                reportCounter = counter;
+                ReportID = ReportIDBeforeCounter + counter;
+              
+
                 ErrorLog("ReportID: " + ReportID);
                 report.ReportID = ReportID;
 
