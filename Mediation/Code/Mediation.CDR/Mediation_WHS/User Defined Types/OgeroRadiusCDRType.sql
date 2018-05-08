@@ -20,7 +20,7 @@
     [EventTimestamp]         DATETIME     NULL,
     [PortLimit]              VARCHAR (50) NULL,
     [NASPortType]            INT          NULL,
-    [ConnectInfo]            INT          NULL,
+    [ConnectInfo]            VARCHAR (50) NULL,
     [FramedProtocol]         INT          NULL,
     [ServiceType]            INT          NULL,
     [AuthenticationType]     INT          NULL,
@@ -33,9 +33,9 @@
     [EAPFriendlyName]        VARCHAR (50) NULL,
     [AcctStatusType]         INT          NULL,
     [AcctDelayTime]          INT          NULL,
-    [AcctInputOctets]        INT          NULL,
-    [AcctOutputOctets]       INT          NULL,
-    [AcctSessionId]          INT          NULL,
+    [AcctInputOctets]        BIGINT       NULL,
+    [AcctOutputOctets]       BIGINT       NULL,
+    [AcctSessionId]          VARCHAR (50) NULL,
     [AcctAuthentic]          INT          NULL,
     [AcctSessionTime]        VARCHAR (50) NULL,
     [AcctInputPackets]       INT          NULL,
@@ -61,4 +61,8 @@
     [MSMPPEEncryptionTypes]  INT          NULL,
     [MSMPPEEncryptionPolicy] INT          NULL,
     [FileName]               VARCHAR (50) NULL);
+
+
+
+
 

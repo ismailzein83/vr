@@ -11581,7 +11581,7 @@ namespace Mediation.Runtime.DataParser
                     FieldConstantValues = new List<ParsedRecordFieldConstantValue> { 
                      new ParsedRecordFieldConstantValue{ FieldName = "SwitchId", Value = 10}
                     },
-                    CompositeFieldsParsers = GetFileNameCompositeParsers()
+                    CompositeFieldsParsers = GetOgeroHuaweiFileNameCompositeParsers()
                 }
 
             });
@@ -12710,10 +12710,11 @@ namespace Mediation.Runtime.DataParser
             compositeParsers.Add(new DataSourceCompositeParser() { DataSourceFieldName = "DataSourceId" });
             return compositeParsers;
         }
-        private List<CompositeFieldsParser> GetFileNameCompositeParsers()
+        private List<CompositeFieldsParser> GetOgeroHuaweiFileNameCompositeParsers()
         {
             List<CompositeFieldsParser> compositeParsers = new List<CompositeFieldsParser>();
             compositeParsers.Add(new FileNameCompositeParser() { FieldName = "FileName" });
+            compositeParsers.Add(new DataSourceCompositeParser() { DataSourceFieldName = "DataSourceId" });
             return compositeParsers;
         }
         #endregion
