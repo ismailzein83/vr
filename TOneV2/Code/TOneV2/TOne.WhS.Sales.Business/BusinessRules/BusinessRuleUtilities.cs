@@ -95,7 +95,7 @@ namespace TOne.WhS.Sales.Business
             IEnumerable<ExistingZone> countryZones = ratePlanContext.EffectiveAndFutureExistingZonesByCountry.GetRecord(countryData.CountryId);
 
             if (countryZones == null || countryZones.Count() == 0)
-                throw new Vanrise.Entities.DataIntegrityValidationException("countryZones");
+                throw new Vanrise.Entities.DataIntegrityValidationException(String.Format("Country with Id {0} does not have any effective zones", countryData.CountryId));
 
             var newRates = new List<RateToChange>();
             var closedRates = new List<RateToClose>();
