@@ -1,0 +1,5 @@
+﻿CREATE SCHEMA [ICX_BE]
+    AUTHORIZATION [dbo];
+
+
+
