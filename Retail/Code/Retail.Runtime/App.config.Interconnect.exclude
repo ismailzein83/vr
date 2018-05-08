@@ -71,7 +71,7 @@
     <add key="RetailCDRDBConnStringKey"                         value="RetailCDRDBConnString"/>
     <add key="Retail_Analytics_DBConnStringKey"                 value="RetailAnalyticsDBConnString"/>
     
-    <add key="ExposedConnectionStringNames" value="ICXCDRDBConnString,ICXAnalyticsDBConnString"/>
+    <add key="ExposedConnectionStringNames" value="ICXCDRDBConnString,ICXAnalyticsDBConnString,ConfigurationDBConnString"/>
   </appSettings>
   <runtime>
     <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
