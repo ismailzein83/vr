@@ -1,7 +1,7 @@
 ﻿"use strict";
-BillingReportsController.$inject = ['$scope', 'WhS_Analytics_ReportDefinitionAPIService', 'VRNotificationService', 'UtilsService', 'SecurityService', 'VRUIUtilsService', 'PeriodEnum', 'WhS_Analytics_BillingReportAPIService'];
+BillingReportsController.$inject = ['$scope', 'WhS_Analytics_ReportDefinitionAPIService', 'VRNotificationService', 'UtilsService', 'SecurityService', 'VRUIUtilsService', 'PeriodEnum', 'WhS_Analytics_BillingReportAPIService', 'VRCommon_VRTempPayloadAPIService', 'InsertOperationResultEnum'];
 
-function BillingReportsController($scope, ReportDefinitionAPIService, VRNotificationService, UtilsService, SecurityService, VRUIUtilsService, PeriodEnum, BillingReportAPIService) {
+function BillingReportsController($scope, ReportDefinitionAPIService, VRNotificationService, UtilsService, SecurityService, VRUIUtilsService, PeriodEnum, BillingReportAPIService, VRCommon_VRTempPayloadAPIService, InsertOperationResultEnum) {
 
 
     var typeSelectorAPI;
@@ -134,38 +134,23 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
         };
 
         $scope.openReport = function () {
-            var customers = (customerAccountDirectiveAPI != undefined && customerAccountDirectiveAPI.getSelectedIds() != undefined) ? customerAccountDirectiveAPI.getSelectedIds() : "";
 
-            var suppliers = (supplierAccountDirectiveAPI != undefined && supplierAccountDirectiveAPI.getSelectedIds() != undefined) ? supplierAccountDirectiveAPI.getSelectedIds() : "";
 
-            var zones = (saleZoneDirectiveAPI != undefined && saleZoneDirectiveAPI.getSelectedIds() != undefined) ? saleZoneDirectiveAPI.getSelectedIds() : "";
-
-            var paramsurl = "";
-            paramsurl += "reportId=" + $scope.reporttype.ReportDefinitionId;
-            paramsurl += "&fromDate=" + UtilsService.dateToServerFormat($scope.fromDate);
-            paramsurl += "&toDate=" + ($scope.toDate ? UtilsService.dateToServerFormat($scope.toDate) : "");
-            paramsurl += "&groupByCustomer=" + $scope.params.groupByCustomer;
-            paramsurl += "&groupByProfile=" + $scope.params.groupByProfile;
-            paramsurl += "&isCost=" + typeSelectorAPI.getSelectedIds();
-            paramsurl += "&service=" + $scope.params.service;
-            paramsurl += "&commission=" + $scope.params.commission;
-            paramsurl += "&bySupplier=" + $scope.params.bySupplier;
-            paramsurl += "&isExchange=" + $scope.params.isExchange;
-            paramsurl += "&margin=" + $scope.params.margin;
-            paramsurl += "&top=" + $scope.params.top;
-            paramsurl += "&zone=" + zones;
-            paramsurl += "&customer=" + customers;
-            paramsurl += "&supplier=" + suppliers;
-            paramsurl += "&currency=" + currencySelectorAPI.getSelectedIds();
-            paramsurl += "&currencyDesc=" + (($scope.params.selectedCurrency == null) ? "United States Dollars" : encodeURIComponent($scope.params.selectedCurrency.Name));
-            paramsurl += "&pageBreak=" + $scope.params.pageBreak;
-            //paramsurl += "&Auth-Token=" + encodeURIComponent(SecurityService.getUserToken());
-            var screenWidth = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
-
-            var left = ((screenWidth / 2) - (1000 / 2));
-
-            if (!$scope.reporttype.ParameterSettings.CustomerIdNotOptional)
-                window.open("Client/Modules/WhS_Analytics/Reports/Analytics/BillingReports.aspx?" + paramsurl, "_blank", "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no,width=1000, height=600,scrollbars=1 , top = 40, left = " + left + "");
+            if (!$scope.reporttype.ParameterSettings.CustomerIdNotOptional) {
+                var obj = buildReportParameter();
+                return VRCommon_VRTempPayloadAPIService.AddVRTempPayload(obj).then(function (response) {
+                    if (response.Result == InsertOperationResultEnum.Succeeded.value) {
+                        var tempPayloadId = response.InsertedObject;
+                        var paramsurl = "";
+                        paramsurl += "tempPayloadId=" + tempPayloadId;
+                        paramsurl += "&reportId=" + $scope.reporttype.ReportDefinitionId;
+                        var screenWidth = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+                        var left = ((screenWidth / 2) - (1000 / 2));
+                        window.open("Client/Modules/WhS_Analytics/Reports/Analytics/BillingReports.aspx?" + paramsurl, "_blank", "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=yes, copyhistory=no,width=1000, height=600,scrollbars=1 , top = 40, left = " + left + "");
+                    }
+                }).catch(function (error) {
+                });
+            }
             else
                 return $scope.export();
         };
@@ -223,6 +208,32 @@ function BillingReportsController($scope, ReportDefinitionAPIService, VRNotifica
             .finally(function () {
                 $scope.isLoading = false;
             });
+    }
+
+    function buildReportParameter() {
+        return {
+            Settings: {
+                $type: "TOne.WhS.Analytics.Entities.BillingReport.ReportParameters, TOne.WhS.Analytics.Entities",
+                FromTime: $scope.fromDate,
+                ToTime: $scope.toDate,
+                GroupByCustomer: $scope.params.groupByCustomer,
+                CustomersId: customerAccountDirectiveAPI.getSelectedIds() != undefined ? customerAccountDirectiveAPI.getSelectedIds().join(",") : "",
+                SuppliersId: supplierAccountDirectiveAPI.getSelectedIds() != undefined ? supplierAccountDirectiveAPI.getSelectedIds().join(",") : "",
+                IsCost: typeSelectorAPI.getSelectedIds(),
+                IsService: $scope.params.service,
+                IsCommission: $scope.params.commission,
+                GroupBySupplier: $scope.params.bySupplier,
+                CurrencyId: currencySelectorAPI.getSelectedIds(),
+                Margin: $scope.params.margin,
+                ZonesId: saleZoneDirectiveAPI.getSelectedIds() != undefined ? saleZoneDirectiveAPI.getSelectedIds().join(",") : "",
+                IsExchange: $scope.params.isExchange,
+                Top: $scope.params.top,
+                CurrencyDescription: $scope.selectedCurrency == null ? "United States Dollars" : $scope.selectedCurrency.Name,
+                PageBreak: $scope.params.pageBreak,
+                GroupByProfile: $scope.params.groupByProfile
+            }
+        };
+
     }
 
     function loadBillingReportTypeSelector() {
