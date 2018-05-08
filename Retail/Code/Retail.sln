@@ -201,9 +201,11 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "InterconnectAnalytics", "In
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "InterconnectCDR", "InterconnectCDR\InterconnectCDR.sqlproj", "{5302A42C-1A23-4D70-A100-3D9497B15F99}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Interconnect", "Interconnect\Interconnect.sqlproj", "{6CE8ADA2-381D-44ED-B043-FE17F8B5B8BF}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 83
+		SccNumberOfProjects = 84
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -535,6 +537,10 @@ Global
 		SccProjectTopLevelParentUniqueName82 = Retail.sln
 		SccProjectName82 = InterconnectCDR
 		SccLocalPath82 = InterconnectCDR
+		SccProjectUniqueName83 = Interconnect\\Interconnect.sqlproj
+		SccProjectTopLevelParentUniqueName83 = Retail.sln
+		SccProjectName83 = Interconnect
+		SccLocalPath83 = Interconnect
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -887,6 +893,12 @@ Global
 		{5302A42C-1A23-4D70-A100-3D9497B15F99}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5302A42C-1A23-4D70-A100-3D9497B15F99}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5302A42C-1A23-4D70-A100-3D9497B15F99}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{6CE8ADA2-381D-44ED-B043-FE17F8B5B8BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CE8ADA2-381D-44ED-B043-FE17F8B5B8BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CE8ADA2-381D-44ED-B043-FE17F8B5B8BF}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{6CE8ADA2-381D-44ED-B043-FE17F8B5B8BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CE8ADA2-381D-44ED-B043-FE17F8B5B8BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6CE8ADA2-381D-44ED-B043-FE17F8B5B8BF}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -986,5 +998,6 @@ Global
 		{2EF5FB77-F394-4846-B89D-DC9283380D51} = {DBCF7D23-8951-4886-9024-282788E5D24F}
 		{C5702D9A-3E26-4C4B-8041-DD1B679F805F} = {DBCF7D23-8951-4886-9024-282788E5D24F}
 		{5302A42C-1A23-4D70-A100-3D9497B15F99} = {DBCF7D23-8951-4886-9024-282788E5D24F}
+		{6CE8ADA2-381D-44ED-B043-FE17F8B5B8BF} = {DBCF7D23-8951-4886-9024-282788E5D24F}
 	EndGlobalSection
 EndGlobal
