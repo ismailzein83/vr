@@ -119,7 +119,6 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             bool hasOptionBlock = false;
 
             CustomerRouteBulkInsert customerRouteBulkInsert = dbApplyStream as CustomerRouteBulkInsert;
-            int counter = 10;
 
             int isToDAffected = 0;
             int isSpecialRequestAffected = 0;
@@ -137,6 +136,14 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             }
             if (record.Options != null)
             {
+                int counter = 0;
+                foreach (RouteOption routeOption in record.Options)
+                {
+                    counter++;
+                    if (routeOption.Backups != null)
+                        counter += routeOption.Backups.Count;
+                }
+
                 foreach (RouteOption option in record.Options)
                 {
                     int priority;
@@ -157,11 +164,23 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
                     {
                         customerRouteBulkInsert.RouteOptionStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}", routeId, supplier.SourceId, supplierZone.SourceId, option.SupplierRate,
                             supplierServiceFlag, priority, option.NumberOfTries, option.IsBlocked ? 0 : 1, GetDateTimeForBCP(now), option.Percentage.HasValue ? option.Percentage.Value : 0, option.ExecutedRuleId);
+
+                        WriteBackupsRecord((backup, backupSupplier, backupSupplierZone, backupSupplierServiceFlag, backupPriority) =>
+                        {
+                            customerRouteBulkInsert.RouteOptionStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}", routeId, backupSupplier.SourceId, backupSupplierZone.SourceId, backup.SupplierRate,
+                                backupSupplierServiceFlag, backupPriority, backup.NumberOfTries, backup.IsBlocked ? 0 : 1, GetDateTimeForBCP(now), 0, backup.ExecutedRuleId);
+                        }, option.Backups, ref counter, ref hasOptionBlock);
                     }
                     else
                     {
                         customerRouteBulkInsert.RouteOptionStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}", routeId, supplier.SourceId, supplierZone.SourceId, option.SupplierRate,
                             supplierServiceFlag, priority, option.NumberOfTries, option.IsBlocked ? 0 : 1, GetDateTimeForBCP(now), option.Percentage.HasValue ? option.Percentage.Value : 0);
+
+                        WriteBackupsRecord((backup, backupSupplier, backupSupplierZone, backupSupplierServiceFlag, backupPriority) =>
+                        {
+                            customerRouteBulkInsert.RouteOptionStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}", routeId, backupSupplier.SourceId, backupSupplierZone.SourceId, backup.SupplierRate,
+                                backupSupplierServiceFlag, backupPriority, backup.NumberOfTries, backup.IsBlocked ? 0 : 1, GetDateTimeForBCP(now), 0);
+                        }, option.Backups, ref counter, ref hasOptionBlock);
                     }
                 }
             }
@@ -174,6 +193,32 @@ namespace TOne.Whs.Routing.Data.TOneV1SQL
             {
                 customerRouteBulkInsert.RouteStreamForBulkInsert.WriteRecord("{0}^{1}^{2}^{3}^{4}^{5}^{6}^{7}^{8}^{9}^{10}^{11}^{12}^{13}^{14}", routeId, customer.SourceId, profile.SourceId, record.Code, saleZone.SourceId,
                      record.Rate.HasValue ? record.Rate.Value : -1, customerServiceFlag, record.IsBlocked ? 0 : 1, GetDateTimeForBCP(now), isToDAffected, isSpecialRequestAffected, isOverrideAffected, isBlockAffected, hasOptionBlock ? 1 : 0, 0);
+            }
+        }
+
+        private void WriteBackupsRecord(Action<RouteBackupOption, CarrierAccount, SupplierZone, int, int> writeRecord, List<RouteBackupOption> backups, ref int counter, ref bool hasOptionBlock)
+        {
+            if (backups == null)
+                return;
+
+            foreach (RouteBackupOption backup in backups)
+            {
+                int backupPriority;
+                if (backup.IsBlocked)
+                {
+                    hasOptionBlock = true;
+                    backupPriority = 0;
+                }
+                else
+                {
+                    backupPriority = Math.Max(0, counter--);
+                }
+
+                CarrierAccount backupSupplier = _allCarriers.GetRecord(backup.SupplierId);
+                SupplierZone backupSupplierZone = _allSupplierZones.GetRecord(backup.SupplierZoneId);
+                int backupSupplierServiceFlag = GetServiceFlag(backup.ExactSupplierServiceIds, _allZoneServiceConfigs);
+
+                writeRecord(backup, backupSupplier, backupSupplierZone, backupSupplierServiceFlag, backupPriority);
             }
         }
 
