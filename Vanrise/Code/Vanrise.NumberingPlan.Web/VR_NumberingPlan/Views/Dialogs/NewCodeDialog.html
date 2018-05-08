@@ -14,7 +14,9 @@
                 <vr-columns width="fullrow">
                     <vr-validator validate="validateCodes()">
                         <vr-datalist maxitemsperrow="4" datasource="codes" autoremoveitem="true" enabletitle>
-                            {{dataItem.code}}
+                            <vr-validator validate="dataItem.message" normalheight>
+                                {{dataItem.code}}
+                            </vr-validator>
                         </vr-datalist>
                     </vr-validator>
                 </vr-columns>

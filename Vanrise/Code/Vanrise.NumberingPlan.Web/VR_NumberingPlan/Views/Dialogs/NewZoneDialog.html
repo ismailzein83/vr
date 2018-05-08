@@ -15,7 +15,9 @@
                 <vr-columns width="fullrow">
                     <vr-validator validate="validateZones()">
                         <vr-datalist maxitemsperrow="4" datasource="zones" autoremoveitem="true" enabletitle>
-                            {{dataItem.zone}}
+                            <vr-validator validate="dataItem.message">
+                                {{dataItem.zone}}
+                            </vr-validator>                            
                         </vr-datalist>
                     </vr-validator>
                 </vr-columns>
