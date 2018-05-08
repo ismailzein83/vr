@@ -542,7 +542,7 @@
         }
 
         function mapZoneToNode(zoneInfo) {
-            var icon = "Client/Modules/WhS_BusinessEntity/Images/Zone.png";
+            var icon = "Client/Modules/VR_NumberingPlan/Images/Zone.png";
             if ($scope.hasState) {
                 switch (zoneInfo.DraftStatus) {
                     case Vr_NP_ZoneItemDraftStatusEnum.ExistingClosed.value:
