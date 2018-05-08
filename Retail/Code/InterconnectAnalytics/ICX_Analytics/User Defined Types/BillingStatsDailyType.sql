@@ -11,8 +11,8 @@
     [DestinationZoneID]             BIGINT           NULL,
     [TrafficDirection]              INT              NULL,
     [BillingType]                   INT              NULL,
-    [Rate]                          DECIMAL (20, 8)  NULL,
     [RateTypeID]                    INT              NULL,
+    [Rate]                          DECIMAL (20, 8)  NULL,
     [CurrencyID]                    INT              NULL,
     [CDRType]                       INT              NULL,
     [CallType]                      INT              NULL,
@@ -21,6 +21,8 @@
     [TotalAmount]                   DECIMAL (26, 10) NULL,
     [MinimumDurationInSeconds]      DECIMAL (20, 4)  NULL,
     [MaximumDurationInSeconds]      DECIMAL (20, 4)  NULL);
+
+
 
 
 

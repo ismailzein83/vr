@@ -11,8 +11,8 @@
     [DestinationZoneID]             BIGINT           NULL,
     [TrafficDirection]              INT              NULL,
     [BillingType]                   INT              NULL,
-    [Rate]                          DECIMAL (20, 8)  NULL,
     [RateTypeID]                    INT              NULL,
+    [Rate]                          DECIMAL (20, 8)  NULL,
     [CurrencyID]                    INT              NULL,
     [CDRType]                       INT              NULL,
     [CallType]                      INT              NULL,
@@ -23,6 +23,8 @@
     [MaximumDurationInSeconds]      DECIMAL (20, 4)  NULL,
     CONSTRAINT [IX_BillingStatsDaily_Id] UNIQUE NONCLUSTERED ([ID] ASC)
 );
+
+
 
 
 

@@ -65,6 +65,10 @@
     <Folder Include="ICX_Analytics\Tables\" />
     <Folder Include="ICX_Analytics\User Defined Types\" />
     <Folder Include="Security\" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="COMMON\" />
+    <Folder Include="COMMON\Functions\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="ICX_Analytics\Tables\TrafficStats15Min.sql" />
@@ -72,5 +76,9 @@
     <Build Include="ICX_Analytics\User Defined Types\TrafficStats15MinType.sql" />
     <Build Include="ICX_Analytics\User Defined Types\BillingStatsDailyType.sql" />
     <Build Include="Security\ICX_Analytics.sql" />
+    <Build Include="dbo\Tables\CurrencyExchangeRate.sql" />
+    <Build Include="COMMON\Functions\getExchangeRatesConvertedToCurrency.sql" />
+    <Build Include="COMMON\Functions\getExchangeRates.sql" />
+    <Build Include="Security\COMMON.sql" />
   </ItemGroup>
 </Project>
