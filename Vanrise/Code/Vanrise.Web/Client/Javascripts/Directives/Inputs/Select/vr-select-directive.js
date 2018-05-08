@@ -465,7 +465,7 @@
                     includeOnViewHandler: includeOnViewHandler,
                     isSelected: isSelected
                 });
-
+                controller.selectedValuespageSize = 20;
                 var afterShowDropdown = function (id) {
                     var dropdown = $('div[name=' + id + ']');
                     var menuPosition = getDropDownDirection(id);
@@ -520,13 +520,14 @@
                     vrSelectSharedObject.onCloseDropDown(id);
                     found = false;
                     controller.showSearchSection = false;
+                    controller.selectedValuespageSize = 20;
                 };
                 controller.focusFilterInput = function () {
                     setTimeout(function () {
                         $('.filter-input').focus();
                     }, 100);
                 };
-                function getDropDownDirection(id,getTopDirection) {
+                function getDropDownDirection(id, getTopDirection) {
                     cleanUpPositionClass(id);
                     var self = $('div[name=' + id + ']').find('.dropdown-toggle').first();
                     var dropDown = $('div[name=' + id + ']').find('.dropdown-menu');
@@ -588,16 +589,16 @@
                             $(dropDown).addClass('dropdown-top-left');
                             if ($(self).parent().width() < ddwidth) {
                                 ddleft = baseleft;
-                                if (controller.selectedSectionVisible() )
+                                if (controller.selectedSectionVisible())
                                     $(dropDown).addClass('top-max');
-                                else if(!controller.selectedSectionVisible() && $attrs.smallselect != undefined)
+                                else if (!controller.selectedSectionVisible() && $attrs.smallselect != undefined)
                                     ddleft = baseleft - 135;
                                 else
                                     $(dropDown).removeClass('top-max');
                             }
                         }
 
-                        if ( baseleft < 468  && controller.includeAdvancedSearch) {
+                        if (baseleft < 468 && controller.includeAdvancedSearch) {
                             $(dropDown).find('.data-presentation').addClass('advance-search-top-left');
                             $(dropDown).find('.vr-select-advance-search').addClass('advance-search-top-left');
                         }
@@ -608,7 +609,7 @@
                         left: ddleft
                     };
                 };
-                function hideAllOtherDropDown(currentId) {                   
+                function hideAllOtherDropDown(currentId) {
                     var dropdowns = $('.dropdown-menu');
                     var len = dropdowns.length;
                     var i;
@@ -623,7 +624,7 @@
                                 $('div[name=' + id + ']').find('.dropdown-menu').hide();
                             }
                             else {
-                                if (getDropDownDirection(id,true).toTop == true) {
+                                if (getDropDownDirection(id, true).toTop == true) {
                                     $('div[name=' + id + ']').find('.dropdown-menu').hide();
                                 }
                                 else {
@@ -640,15 +641,15 @@
                         if ($('div[name=' + $attrs.id + ']').hasClass('changing-state'))
                             return;
                         $('div[name=' + $attrs.id + ']').addClass("changing-state");
-                        if (!$('div[name=' +$attrs.id + ']').hasClass('open-select')) {
-                             $rootScope.$broadcast("hide-all-menu");
+                        if (!$('div[name=' + $attrs.id + ']').hasClass('open-select')) {
+                            $rootScope.$broadcast("hide-all-menu");
                             $('div[name=' + $attrs.id + ']').addClass("open-select");
                             vrSelectSharedObject.onOpenDropDown($attrs.id);
                             afterShowDropdown($attrs.id);
                             $(document).bind('click', boundDocumentSeclectOutside);
                         }
                         else {
-                            var menuPosition = getDropDownDirection($attrs.id,true);
+                            var menuPosition = getDropDownDirection($attrs.id, true);
                             $('div[name=' + $attrs.id + ']').removeClass("open-select");
                             if (menuPosition.toTop == true) {
                                 $('div[name=' + $attrs.id + ']').find('.dropdown-menu').hide(function () {
@@ -669,6 +670,36 @@
                     });
                 }, 100);
 
+                controller.initializeSelectedValuesPaging = function () {
+                    setTimeout(function () {
+                        var selectedLastScrollTop;
+                        var dropdown = $('div[name=' + $attrs.id + ']');
+                        dropdown.find("#divSelectedValuesContainer" + $attrs.id).scroll(function (e) {
+                            var scrollTop = dropdown.find("#divSelectedValuesContainer" + $attrs.id).scrollTop();
+                            var scrollPercentage = 100 * scrollTop / (dropdown.find('#divSelectedValuesBody' + $attrs.id).height() - dropdown.find("#divSelectedValuesContainer" + $attrs.id).height());
+                            if (scrollTop > selectedLastScrollTop) {
+                                if (scrollPercentage > 80) {
+                                    addSelectedValuesPage();
+                                }
+                            }
+                            selectedLastScrollTop = scrollTop;
+                        });
+                    }, 1);
+                };
+                var isAddingSelectedvaluesPage = false;
+                function addSelectedValuesPage() {
+                    if (isAddingSelectedvaluesPage)
+                        return;
+                    isAddingSelectedvaluesPage = true;
+                    selectService.disableScroll();
+                    setTimeout(function () {
+                        $scope.$apply(function () {
+                            controller.selectedValuespageSize += 20;
+                            isAddingSelectedvaluesPage = false;
+                            selectService.enableScroll();
+                        });
+                    }, 1);
+                }
                 function boundDocumentSeclectOutside(e) {
                     var button = $('div[name=' + $attrs.id + ']');
                     if ($(e.target).attr('open-trriger') != undefined && $(e.target).attr('open-trriger') == $attrs.id)
@@ -875,7 +906,7 @@
                         //baseDirService.addScopeValidationMethods(ctrl, iAttrs.id, formCtrl);
 
                         ctrl.clearAllSelected = function (e, isSingle) {
-                           
+
                             if (isSingle != undefined) {
                                 //$('.dropdown-menu').hide();
                                 ctrl.selectedvalues = undefined;
@@ -949,6 +980,26 @@
                                 }, 10);
                             }
                         }
+
+                        ctrl.selectAll = function () {
+                            if (!ctrl.selectedSectionVisible())
+                                ctrl.selectedValuespageSize = 20;
+                            var dataSourceArray = ctrl.getdatasource();
+                            var isRemote = ctrl.isRemoteLoad();
+                            var len = dataSourceArray.length;
+                            if (!isRemote)
+                                ctrl.selectedvalues.length = 0;
+                            for (var i = 0; i < len; i++) {
+                                var item = dataSourceArray[i];
+                                if (isRemote) {
+                                    var index = baseDirService.findExsite(ctrl.selectedvalues, ctrl.getObjectValue(item), ctrl.datavaluefield);
+                                    if (index >= 0)
+                                        continue;
+                                }
+                                if (!ctrl.getObjectDisabled(item))
+                                    ctrl.selectedvalues.push(item);
+                            }
+                        };
 
                         ctrl.selectValue = function (e, item, removeselection) {
                             if (ctrl.getObjectDisabled(item) == true || ctrl.readOnly)
@@ -1041,4 +1092,6 @@
     app.directive('vrSelect', vrSelectDirective);
 
 })(app);
+
+
 

@@ -2786,7 +2786,6 @@ vr-pagination .dropdown-menu {
 .remove-selection {
     position: absolute;
     right: 5px;
-    top: 15px;
 }
 
 .vr-select-remove {
@@ -3376,7 +3375,7 @@ vr-validator[vr-input] > div[validator-section] > div:nth-child(1) {
     min-height: initial !important;
 }
 
-vr-validator[vr-input] > div:nth-child(1) {
+vr-validator[vr-input] > div:nth-child(1) {   
     height: 29px;
     min-height: initial !important;
 }

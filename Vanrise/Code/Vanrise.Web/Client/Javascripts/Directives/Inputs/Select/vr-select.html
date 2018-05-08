@@ -37,7 +37,6 @@
                                 <div style="position:absolute" ng-if="ctrl.isRemoteLoad()" ng-show="!ctrl.showloading && ctrl.filtername.length < ctrl.limitcharactercount">Please type {{ctrl.limitcharactercount - ctrl.filtername.length}} character(s)..</div>
                                 <div style="position:absolute" ng-if="ctrl.isRemoteLoad()" ng-show="ctrl.showloading">Loading..</div>
 
-                                <!--<div ng-if="ctrl.isMultiple() && !ctrl.isRemoteLoad()" style="padding-left:5px;"><a href="" ng-click="ctrl.selectAll()">Select all </a></div>-->
                                 <div id="divDataSourceContainer{{ctrl.id}}" class="vr-select-height" ng-if="!ctrl.isMultiple()">
                                     <div id="divDataSourceBody{{ctrl.id}}">
                                         <div id="{{::ctrl.getObjectValue(c)}}" dataindex="{{$index}}" style="position:relative" ng-mouseenter="showeye = true;" ng-mouseleave="showeye = false;" ng-repeat="c in ctrl.boundDataSource" title="{{ctrl.getTooltipValue(c)}}" ng-class="ctrl.getObjectStyle(c)" disabled-item="{{ctrl.getObjectDisabled(c)}}">
@@ -53,14 +52,20 @@
                                         <div id="{{::ctrl.getObjectValue(c)}}" dataindex="{{$index}}" style="position:relative" ng-repeat="c in ctrl.boundDataSource" ng-mouseenter="showeye = true;" ng-mouseleave="showeye = false;" title="{{ctrl.getTooltipValue(c)}}" ng-class="ctrl.getObjectStyle(c)" disabled-item="{{ctrl.getObjectDisabled(c)}}">
                                             <a href="" class="mark-select select-item-container" ng-click="ctrl.selectValue($event, c); " ng-class="ctrl.getObjectDisabled(c)==true ?'vr-select-disabled-item':ctrl.findExsite(c) >-1 ?'selected':'' ">
                                                 <div class="hand-cursor" style="display: inline-block; width:170px; text-overflow: ellipsis; overflow:hidden">{{ ::ctrl.getObjectText(c)}}</div>
-                                                <div class="checked-item " ng-show="ctrl.findExsite(c) > -1 ">
-                                                    <span ng-if="!ctrl.itemLocked(c)">✔</span>
+                                                <div class="checked-item ">
+                                                    <span ng-if="!ctrl.itemLocked(c)" ng-show="ctrl.findExsite(c) > -1 ">✔</span>
                                                     <span ng-if="ctrl.itemLocked(c)" class="glyphicon glyphicon-lock" style="font-size: 10px;"></span>
                                                 </div>
                                             </a>
                                             <span ng-show="showeye" ng-if="ctrl.includeOnViewHandler() && ctrl.showViewButton" ng-click="ctrl.onViewHandler(c)" class=" glyphicon glyphicon-eye-open hand-cursor view-icon"></span>
                                         </div>
                                     </div>
+                                </div>
+                                <div ng-if="ctrl.isMultiple()" style="padding-left:5px;position:relative; top: 3px;">
+                                    <span class="hand-cursor">
+                                        <a href="" class="link" ng-click="ctrl.selectAll()">Select all</a>
+                                        <a href="" class="link remove-selection" ng-click="ctrl.clearAllSelected($event); ">Clear all</a>
+                                    </span>
                                 </div>
                             </div>
                             <!-- filter -->
@@ -87,32 +92,32 @@
                             </div>
 
                             <!-- Add DIV in case of multiple -->
-                            <div class="selected-container" ng-if="ctrl.selectedSectionVisible()" ng-show="ctrl.selectedSectionVisible()">
+                            <div class="selected-container" ng-if="ctrl.selectedSectionVisible()" ng-init="ctrl.initializeSelectedValuesPaging()" ng-show="ctrl.selectedSectionVisible()">
                                 <div style="padding:5px ;height:29px">
                                     {{ctrl.selectlbl}}
-                                    <a href="" class="link remove-selection" ng-click="ctrl.clearAllSelected($event); ">
-                                        Clear all
-                                        <i class="glyphicon glyphicon-trash hand-cursor "></i>
-                                    </a>
                                 </div>
-                                <div style="height: 210px; overflow: auto;padding-top:5px;white-space: pre-line;">
-                                    <span class="label custom-label" style="position:relative" ng-repeat="obj in ctrl.selectedvalues" ng-mouseenter="showeye = true;" ng-mouseleave="showeye = false;" title="{{ctrl.getTooltipValue(obj)}}">
-                                        {{::ctrl.getObjectText(obj)}}
-                                        <span class="glyphicon glyphicon-eye-open hand-cursor view-selected-item" ng-click="ctrl.onViewHandler(obj)" ng-if="ctrl.includeOnViewHandler() && ctrl.showViewButton"></span>
-                                        <span ng-if="!ctrl.itemLocked(obj)" class="glyphicon glyphicon-remove hand-cursor remove-selected-item" aria-hidden="true" ng-click="ctrl.selectValue($event,obj);"></span>
-                                    </span>
+                                <div style="height: 208px; overflow-y: auto;padding-top:5px;overflow-x: hidden;" id="divSelectedValuesContainer{{ctrl.id}}">
+                                    <div id="divSelectedValuesBody{{ctrl.id}}">
+                                        <span class="label custom-label" style="position:relative;white-space:normal;text-align:unset" ng-repeat="obj in ctrl.selectedvalues | limitTo: ctrl.selectedValuespageSize " ng-mouseenter="showeye = true;" ng-mouseleave="showeye = false;" title="{{ctrl.getTooltipValue(obj)}}">
+                                            {{::ctrl.getObjectText(obj)}}
+                                            <span class="glyphicon glyphicon-eye-open hand-cursor view-selected-item" ng-click="ctrl.onViewHandler(obj)" ng-if="ctrl.includeOnViewHandler() && ctrl.showViewButton"></span>
+                                            <span ng-if="!ctrl.itemLocked(obj)" class="glyphicon glyphicon-remove hand-cursor remove-selected-item" aria-hidden="true" ng-click="ctrl.selectValue($event,obj);"></span>
+                                        </span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div ng-if="ctrl.readOnly" style="border-left:1px solid #f0f0f0;display: inline-block; max-width: 220px; overflow: auto; white-space:normal">
+                        <div ng-if="ctrl.readOnly" style="border-left:1px solid #f0f0f0;display: inline-block; max-width: 220px; overflow: auto; white-space:normal" ng-init="ctrl.initializeSelectedValuesPaging()">
                             <div style="padding:5px ;height:29px">
                                 {{ctrl.selectlbl}}
                             </div>
-                            <div style="height: 200px; overflow: auto;padding-top:5px">
-                                <span class="label custom-label" style="position:relative" ng-repeat="obj in ctrl.selectedvalues" ng-mouseenter="showeye = true;" ng-mouseleave="showeye = false;">
-                                    {{::ctrl.getObjectText(obj)}}
-                                    <span ng-show="showeye" ng-if="ctrl.includeOnViewHandler() && ctrl.showViewButton" ng-click="ctrl.onViewHandler(obj)" class="glyphicon glyphicon-eye-open view-icon"></span>
-                                </span>
+                            <div style="height: 208px; overflow-y: auto;padding-top:5px;overflow-x: hidden;" id="divSelectedValuesContainer{{ctrl.id}}">
+                                <div id="divSelectedValuesBody{{ctrl.id}}">
+                                    <span class="label custom-label" style="position:relative" ng-repeat="obj in ctrl.selectedvalues | limitTo: ctrl.selectedValuespageSize " ng-mouseenter="showeye = true;" ng-mouseleave="showeye = false;">
+                                        {{::ctrl.getObjectText(obj)}}
+                                        <span ng-show="showeye" ng-if="ctrl.includeOnViewHandler() && ctrl.showViewButton" ng-click="ctrl.onViewHandler(obj)" class="glyphicon glyphicon-eye-open view-icon"></span>
+                                    </span>
+                                </div>
                             </div>
                         </div>
 
@@ -121,9 +126,9 @@
                 </ul>
             </div>
         </vr-validator>
-        <span ng-if="ctrl.hint!=undefined" ng-show="ctrl.hint!=undefined && ctrl.hint!=''" ng-mouseenter="ctrl.adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" html="true"  placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>
+        <span ng-if="ctrl.hint!=undefined" ng-show="ctrl.hint!=undefined && ctrl.hint!=''" ng-mouseenter="ctrl.adjustTooltipPosition($event)" bs-tooltip class="glyphicon glyphicon-question-sign hand-cursor vr-hint-input" html="true" placement="bottom" trigger="hover" data-type="info" data-title="{{ctrl.hint}}"></span>
     </div>
-    <span ng-if="ctrl.includeOnAddHandler() && ctrl.isDropDownOpened()" ng-click="ctrl.onAddhandler()" class="glyphicon glyphicon-plus-sign hand-cursor vr-select-add"  ng-hide="ctrl.hideAddButton || ctrl.readOnly"></span>
+    <span ng-if="ctrl.includeOnAddHandler() && ctrl.isDropDownOpened()" ng-click="ctrl.onAddhandler()" class="glyphicon glyphicon-plus-sign hand-cursor vr-select-add" ng-hide="ctrl.hideAddButton || ctrl.readOnly"></span>
 </div>
 
 
