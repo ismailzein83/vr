@@ -88,7 +88,10 @@ namespace Vanrise.Analytic.Business
                 {
                     DAProfCalcNotificationData daProfCalcNotificationData = daProfCalcNotificationDataItem.Value;
 
-                    string description = string.Format("Analysis Period: {0}, Period End: {1:yyyy-MM-dd HH:mm:ss}, Rule: {2}", daProfCalcNotificationData.DAProfCalcAlertRuleSettings.DAProfCalcAnalysisPeriod.GetDescription(), EffectiveDate, daProfCalcNotificationData.AlertRule.Name);
+                    int numberOfMinutes = daProfCalcNotificationData.DAProfCalcAlertRuleSettings.DAProfCalcAnalysisPeriod.GetPeriodInMinutes();
+                    DateTime periodStart = EffectiveDate.AddMinutes(-1 * numberOfMinutes);
+
+                    string description = string.Format("Analysis Period: {0}, Period Start: {1:yyyy-MM-dd HH:mm:ss}, Period End: {2:yyyy-MM-dd HH:mm:ss}, Rule: {3}", daProfCalcNotificationData.DAProfCalcAlertRuleSettings.DAProfCalcAnalysisPeriod.GetDescription(), periodStart, EffectiveDate, daProfCalcNotificationData.AlertRule.Name);
 
                     DataRecordAlertRuleNotificationManager dataRecordAlertRuleNotificationManager = new DataRecordAlertRuleNotificationManager();
                     dataRecordAlertRuleNotificationManager.CreateAlertRuleNotifications(daProfCalcNotificationData.DataRecordAlertRuleNotifications, daProfCalcNotificationData.EventKeys, daProfCalcNotificationData.AlertRule.RuleTypeId, notificationTypeId, daProfCalcNotificationDataItem.Key,
