@@ -33,7 +33,11 @@ namespace Retail.BusinessEntity.MainExtensions.DataRecordFieldFormulas
             FieldBusinessEntityType accountFieldType = context.FieldType as FieldBusinessEntityType;
             accountFieldType.ThrowIfNull("accountFieldType");
 
-            return new AccountBEManager().GetSelfOrParentAccountOfType(accountFieldType.BusinessEntityDefinitionId, accountId, ParentAccountTypeId);
+            Account account = new AccountBEManager().GetSelfOrParentAccountOfType(accountFieldType.BusinessEntityDefinitionId, accountId, ParentAccountTypeId);
+            if (account == null)
+                return null;
+
+            return account.AccountId;
         }
 
         public override RecordFilter ConvertFilter(IDataRecordFieldFormulaConvertFilterContext context)
