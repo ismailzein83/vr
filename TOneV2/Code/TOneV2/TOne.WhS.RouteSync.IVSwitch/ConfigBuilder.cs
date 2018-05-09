@@ -76,19 +76,28 @@ namespace TOne.WhS.RouteSync.IVSwitch
                 if (map.SupplierMapping != null)
                     foreach (var supplierMapping in map.SupplierMapping)
                     {
+                        decimal? percentagePart = null;
+                        string supplierMappingValue = supplierMapping;
+                        string[] mappingWithPercentage = supplierMapping.Split(':');
+                        if (mappingWithPercentage.Length > 1)
+                        {
+                            supplierMappingValue = mappingWithPercentage[0];
+                            int percentage;
+                            if (int.TryParse(mappingWithPercentage[1], out percentage))
+                                percentagePart = percentage;
+                        }
+
                         RouteTable supplierDefinition;
-                        if (!dataBaseVendors.TryGetValue(supplierMapping, out supplierDefinition)) continue;
+                        if (!dataBaseVendors.TryGetValue(supplierMappingValue, out supplierDefinition)) 
+                            continue;
+
                         GateWay gateway = new GateWay
                         {
                             RouteId = supplierDefinition.RouteId
                         };
-                        string[] parts = supplierMapping.Split(':');
-                        if (parts.Length > 1)
-                        {
-                            int percentage;
-                            int.TryParse(parts[1], out percentage);
-                            gateway.Percentage = percentage;
-                        }
+                        if (percentagePart.HasValue)
+                            gateway.Percentage = percentagePart.Value;
+
                         SupplierDefinition supplier;
                         if (!preparedConfiguration.SupplierDefinitions.TryGetValue(map.CarrierId, out supplier))
                         {

@@ -53,14 +53,14 @@ namespace TOne.WhS.RouteSync.IVSwitch
                 IVSwitchConvertedRoute ivSwitchConvertedRoute = (IVSwitchConvertedRoute)convertedRoute;
 
                 PreparedRoute preparedRoute;
-                if (!customerRoutes.TryGetValue(ivSwitchConvertedRoute.CustomerID, out preparedRoute))
+                if (!customerRoutes.TryGetValue(ivSwitchConvertedRoute.RouteTableName, out preparedRoute))
                 {
                     preparedRoute = new PreparedRoute
                     {
                         RouteTableName = ivSwitchConvertedRoute.RouteTableName,
                         Routes = new List<IVSwitchRoute>()
                     };
-                    customerRoutes.Add(ivSwitchConvertedRoute.CustomerID, preparedRoute);
+                    customerRoutes.Add(ivSwitchConvertedRoute.RouteTableName, preparedRoute);
                 }
                 preparedRoute.Routes.AddRange(ivSwitchConvertedRoute.Routes);
 
