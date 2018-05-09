@@ -8,12 +8,12 @@
 
         var controllerName = "DataRecordRuleEvaluatorDefinition";
 
-        function GetDataRecordTypeInfo(filter) {
+        function GetDataRecordRuleEvaluatorDefinitionsInfo(filter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, controllerName, "GetDataRecordRuleEvaluatorDefinitionsInfo"), { filter: filter });
         }
         
         return ({
-            GetDataRecordTypeInfo: GetDataRecordTypeInfo
+            GetDataRecordRuleEvaluatorDefinitionsInfo: GetDataRecordRuleEvaluatorDefinitionsInfo
         });
     }
 

@@ -44,7 +44,7 @@ namespace Vanrise.GenericData.Notification
         public DataRecordRuleEvaluatorDefinitionSettings GetDataRecordRuleEvaluatorDefinitionSettings(Guid dataRecordRuleEvaluatorDefinitionId)
         {
             Dictionary<Guid, DataRecordRuleEvaluatorDefinition> cachedDataRecordRuleEvaluatorDefinitions = GetCachedDataRecordRuleEvaluatorDefinitions();
-            DataRecordRuleEvaluatorDefinition dataRecordRuleEvaluatorDefinition = cachedDataRecordRuleEvaluatorDefinitions.GetRecord<Guid, DataRecordRuleEvaluatorDefinition>(dataRecordRuleEvaluatorDefinitionId);
+            DataRecordRuleEvaluatorDefinition dataRecordRuleEvaluatorDefinition = cachedDataRecordRuleEvaluatorDefinitions.GetRecord(dataRecordRuleEvaluatorDefinitionId);
             return dataRecordRuleEvaluatorDefinition.Settings;
         
         }

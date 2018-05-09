@@ -45,14 +45,15 @@
       <AssemblyReference>System.Xaml</AssemblyReference>
       <AssemblyReference>System.Xml</AssemblyReference>
       <AssemblyReference>System.Xml.Linq</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
+      <AssemblyReference>Vanrise.BusinessProcess.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
+      <AssemblyReference>Vanrise.Queueing.Entities</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.BP.Activities</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.Entities</AssemblyReference>
+      <AssemblyReference>Vanrise.GenericData.Notification.Arguments</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.Notification</AssemblyReference>
       <AssemblyReference>mscorlib</AssemblyReference>
-      <AssemblyReference>Vanrise.GenericData.Notification.Arguments</AssemblyReference>
-      <AssemblyReference>Vanrise.Queueing.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.Queueing</AssemblyReference>
-      <AssemblyReference>Vanrise.GenericData.Entities</AssemblyReference>
-      <AssemblyReference>Vanrise.BusinessProcess</AssemblyReference>
       <AssemblyReference>Vanrise.GenericData.Notification.BP</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
@@ -81,7 +82,11 @@
     <Parallel sap2010:WorkflowViewState.IdRef="Parallel_1">
       <Parallel.Variables>
         <Variable x:TypeArguments="x:Int64" Name="EventCount" />
-        <Variable x:TypeArguments="vq:BaseQueue(vge:RecordBatch)" Name="RecordBatchQueue" />
+        <Variable x:TypeArguments="vq:BaseQueue(vge:RecordBatch)" Name="RecordBatchQueue">
+          <Variable.Default>
+            <mca:CSharpValue x:TypeArguments="vq:BaseQueue(vge:RecordBatch)">new MemoryQueue&lt;Vanrise.GenericData.Entities.RecordBatch&gt;()</mca:CSharpValue>
+          </Variable.Default>
+        </Variable>
         <Variable x:TypeArguments="vb:AsyncActivityStatus" Name="ActivityStatus" />
       </Parallel.Variables>
       <vgba:LoadRecordsFromStorages sap2010:WorkflowViewState.IdRef="LoadRecordsFromStorages_1">
@@ -144,22 +149,22 @@
         </vgn:EvaluateDataRecordRule.ToTime>
       </vgn:EvaluateDataRecordRule>
     </Parallel>
-    <sads:DebugSymbol.Symbol>d1tDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuR2VuZXJpY0RhdGEuTm90aWZpY2F0aW9uLkJQXERhdGFSZWNvcmRSdWxlRXZhbHVhdG9yUHJvY2Vzcy54YW1sEzsDlAEOAgEBQAVQMQIBUlEFkgEQAgECQwtDXgIBW0gLSHACAVdNC01tAgFTVwd2JgIBJ3cHkQEkAgEDWg1aXAIBS2kNaWcCAURuDW5vAgE9ZA1keAIBNl8NX1sCAS9zDXNZAgEoiQENiQFnAgEghAENhAF4AgEZeg16WAIBEn8Nf1sCAQuOAQ2OAVkCAQQ=</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d1tDOlxURlNcVmFucmlzZVxDb2RlXFZhbnJpc2UuR2VuZXJpY0RhdGEuTm90aWZpY2F0aW9uLkJQXERhdGFSZWNvcmRSdWxlRXZhbHVhdG9yUHJvY2Vzcy54YW1sFDwDmQEOAgEBQQVRMQIBWVIFlwEQAgECRAtEXgIBYkkLSXACAV5OC05tAgFaVw1XoQECAQNcB3smAgEufAeWASQCAQpfDV9cAgFSbg1uZwIBS3MNc28CAURpDWl4AgE9ZA1kWwIBNngNeFkCAS+OAQ2OAWcCASeJAQ2JAXgCASB/DX9YAgEZhAENhAFbAgESkwENkwFZAgEL</sads:DebugSymbol.Symbol>
   </Sequence>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
-      <sap2010:ViewStateData Id="LoadDataRecordRuleEvaluatorDefinition_1" sap:VirtualizedContainerService.HintSize="554,22" />
+      <sap2010:ViewStateData Id="LoadDataRecordRuleEvaluatorDefinition_1" sap:VirtualizedContainerService.HintSize="553.6,22.4" />
       <sap2010:ViewStateData Id="LoadRecordsFromStorages_1" sap:VirtualizedContainerService.HintSize="200,40" />
       <sap2010:ViewStateData Id="EvaluateDataRecordRule_1" sap:VirtualizedContainerService.HintSize="200,40" />
-      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="554,86" />
-      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,272">
+      <sap2010:ViewStateData Id="Parallel_1" sap:VirtualizedContainerService.HintSize="553.6,86.4" />
+      <sap2010:ViewStateData Id="Sequence_1" sap:VirtualizedContainerService.HintSize="576,273.6">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Vanrise.GenericData.Notification.BP.DataRecordRuleEvaluatorProcess_1" sap:VirtualizedContainerService.HintSize="616,352" />
+      <sap2010:ViewStateData Id="Vanrise.GenericData.Notification.BP.DataRecordRuleEvaluatorProcess_1" sap:VirtualizedContainerService.HintSize="616,353.6" />
     </sap2010:ViewStateManager>
   </sap2010:WorkflowViewState.ViewStateManager>
 </Activity>

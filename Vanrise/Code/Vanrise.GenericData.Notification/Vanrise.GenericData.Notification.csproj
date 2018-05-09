@@ -37,6 +37,7 @@
     <Reference Include="System" />
     <Reference Include="System.Activities" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.DurableInstancing" />
     <Reference Include="System.Web.Http, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.0.0\lib\net45\System.Web.Http.dll</HintPath>
@@ -88,6 +89,10 @@
     <Compile Include="DataRecord\QueueActivators\DataRecordCheckAlertRulesQueueActivator.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Vanrise.Caching\Vanrise.Caching.csproj">
+      <Project>{c00d0633-b945-4edb-8348-5c91aaac19c7}</Project>
+      <Name>Vanrise.Caching</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Vanrise.Common.Business\Vanrise.Common.Business.csproj">
       <Project>{571a68ec-2d45-4b5c-9e75-bb6fb7c0d7b7}</Project>
       <Name>Vanrise.Common.Business</Name>

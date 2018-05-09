@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('vrGenericdataDataRecordRuleEvaluatorDefinitionSelector', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordRuleEvaluatorDefinitionAPIService',
+app.directive('vrGenericdataDatarecordruleevaluatordefinitionSelector', ['UtilsService', 'VRUIUtilsService', 'VR_GenericData_DataRecordRuleEvaluatorDefinitionAPIService',
 
 function (UtilsService, VRUIUtilsService, VR_GenericData_DataRecordRuleEvaluatorDefinitionAPIService) {
         return {
@@ -43,6 +43,7 @@ function (UtilsService, VRUIUtilsService, VR_GenericData_DataRecordRuleEvaluator
             var selectorAPI;
 
             function initializeController() {
+              
                 ctrl.onSelectorReady = function (api) {
                     selectorAPI = api;
                     defineAPI();
@@ -53,7 +54,6 @@ function (UtilsService, VRUIUtilsService, VR_GenericData_DataRecordRuleEvaluator
                 var api = {};
 
                 api.load = function (payload) {
-
                     var selectedIds;
                     var filter;
 
@@ -68,7 +68,7 @@ function (UtilsService, VRUIUtilsService, VR_GenericData_DataRecordRuleEvaluator
                             for (var i = 0; i < response.length; i++) {
                                 ctrl.datasource.push(response[i]);
                             }
-
+                           
                             if (selectedIds != undefined) {
                                 VRUIUtilsService.setSelectedValues(selectedIds, 'DataRecordRuleEvaluatorDefinitionId', attrs, ctrl);
                             }
@@ -102,10 +102,10 @@ function (UtilsService, VRUIUtilsService, VR_GenericData_DataRecordRuleEvaluator
             if (attrs.hideremoveicon != undefined)
                 hideremoveicon = 'hideremoveicon';
 
-            return '<vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="DataRecordRuleEvaluatorDefinitionId" isrequired="ctrl.isrequired" label="' + label +
+            return '<vr-columns colnum="{{ctrl.normalColNum}}"    ><vr-select ' + multipleselection + ' datatextfield="Name" datavaluefield="DataRecordRuleEvaluatorDefinitionId" isrequired="ctrl.isrequired" label="' + label +
                        '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
                        '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' customvalidate="ctrl.customvalidate">' +
-                   '</vr-select>';
+                   '</vr-select></vr-columns>';
         }
 
     }]);

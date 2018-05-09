@@ -31,10 +31,12 @@ app.directive("vrGenericdataDatarecordruleevaluatorManual", ['UtilsService', 'VR
         var datarecordruleevaluatordefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
         function initializeController() {
-            
-            $scope.scopeModel.datarecordruleevaluatordefinitionSelectorReady = function (api) {
+            $scope.scopeModel = {};
+
+            $scope.scopeModel.dataRecordRuleEvaluatorDefinitionSelectorReady = function (api) {
                 datarecordruleevaluatordefinitionSelectorAPI = api;
                 datarecordruleevaluatordefinitionSelectorReadyDeferred.resolve();
+            
             };
 
             defineAPI();
@@ -55,6 +57,7 @@ app.directive("vrGenericdataDatarecordruleevaluatorManual", ['UtilsService', 'VR
                 promises.push(loadDataRecordRuleEvaluatorDefinitionSelector());
 
                 function loadDataRecordRuleEvaluatorDefinitionSelector() {
+                    
                     var datarecordruleevaluatordefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                     datarecordruleevaluatordefinitionSelectorReadyDeferred.promise.then(function () {
                         VRUIUtilsService.callDirectiveLoad(datarecordruleevaluatordefinitionSelectorAPI, undefined, datarecordruleevaluatordefinitionSelectorLoadDeferred);
