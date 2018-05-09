@@ -225,7 +225,7 @@ set nocount on;
 ;with cte_data([ID],[Name],[Settings])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('0F64DA0B-E2D0-4421-BEB9-32C6E749F8F1','Data Source Failed Batch Mail Template Type','{"$type":"Vanrise.Entities.VRMailMessageTypeSettings, Vanrise.Entities","Objects":{"$type":"Vanrise.Entities.VRObjectVariableCollection, Vanrise.Entities","Failed Batch Info":{"$type":"Vanrise.Entities.VRObjectVariable, Vanrise.Entities","ObjectName":"Failed Batch Info","VRObjectTypeDefinitionId":"69b266ce-e309-426f-b672-b0e61d3211fc"},"User":{"$type":"Vanrise.Entities.VRObjectVariable, Vanrise.Entities","ObjectName":"User","VRObjectTypeDefinitionId":"e3887cc9-1fbb-44d1-b1e3-7a0922400550"}}}')
+('0F64DA0B-E2D0-4421-BEB9-32C6E749F8F1','Data Source Failed Batch','{"$type":"Vanrise.Entities.VRMailMessageTypeSettings, Vanrise.Entities","Objects":{"$type":"Vanrise.Entities.VRObjectVariableCollection, Vanrise.Entities","Failed Batch Info":{"$type":"Vanrise.Entities.VRObjectVariable, Vanrise.Entities","ObjectName":"Failed Batch Info","VRObjectTypeDefinitionId":"69b266ce-e309-426f-b672-b0e61d3211fc"},"User":{"$type":"Vanrise.Entities.VRObjectVariable, Vanrise.Entities","ObjectName":"User","VRObjectTypeDefinitionId":"e3887cc9-1fbb-44d1-b1e3-7a0922400550"}}}')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Settings]))
 merge	[common].[MailMessageType] as t
