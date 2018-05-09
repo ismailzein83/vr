@@ -9,11 +9,11 @@ using Vanrise.Security.Entities;
 
 namespace Vanrise.Security.MainExtensions.VRObjectTypes
 {
-    public enum UserField { Email = 0, Name = 1, Description = 2, Status = 3, ExtendedSettings = 4 }
+    public enum UserField { Email = 0, Name = 1, Description = 2, Status = 3, ExtendedSettings = 4, DisabledTill = 5 }
 
     public class UserProfilePropertyEvaluator : VRObjectPropertyEvaluator
     {
-        public override Guid ConfigId { get { return  new Guid("2A2F21E2-1B3E-456D-9D91-B0898B3F6D49"); } }
+        public override Guid ConfigId { get { return new Guid("2A2F21E2-1B3E-456D-9D91-B0898B3F6D49"); } }
 
         public UserField UserField { get; set; }
 
@@ -36,6 +36,8 @@ namespace Vanrise.Security.MainExtensions.VRObjectTypes
                 case UserField.Status: return UserManager.IsUserEnable(user) ? UserStatus.Active : UserStatus.Inactive;
 
                 case UserField.ExtendedSettings: return user.ExtendedSettings;
+
+                case UserField.DisabledTill: return user.DisabledTill;
             }
 
             return null;
