@@ -3,7 +3,7 @@
 
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
             <vr-row removeline>
-                <vr-timerange on-ready="onTimeRangeDirectiveReady" type="longDateTime" width="normal" period="today" from="fromDate" to="toDate"></vr-timerange>
+                <vr-timerange on-ready="onTimeRangeDirectiveReady" type="longDateTime" width="normal" period="selectedPeriod" from="fromDate" to="toDate"></vr-timerange>
                 <vr-whs-be-switch-selector normal-col-num="2" on-ready="onSwitchDirectiveReady" ismultipleselection></vr-whs-be-switch-selector>
                 <vr-whs-be-customer-selector normal-col-num="2" ismultipleselection on-ready="onCustomerAccountDirectiveReady"></vr-whs-be-customer-selector>
                 <vr-whs-be-salezone-selector normal-col-num="2" ismultipleselection on-ready="onSaleZoneDirectiveReady" ></vr-whs-be-salezone-selector>

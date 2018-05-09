@@ -26,7 +26,7 @@ function BlockedAttemptsController($scope, UtilsService, VRNavigationService, Wh
         $scope.fromDate;
         $scope.toDate;
 
-        $scope.today = PeriodEnum.Today;
+        $scope.selectedPeriod = PeriodEnum.Today;
 
         $scope.onTimeRangeDirectiveReady = function (api) {
             timeRangeDirectiveAPI = api;
@@ -63,7 +63,8 @@ function BlockedAttemptsController($scope, UtilsService, VRNavigationService, Wh
         var query = {
             Filter: filter,
             From: $scope.fromDate,
-            To: $scope.toDate
+            To: $scope.toDate,
+            Period: $scope.selectedPeriod.value
         };
         return query;
     }
