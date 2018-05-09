@@ -104,6 +104,10 @@
                 label = attrs.customlabel;
             }
 
+            var hidelabel = "";
+            if (attrs.hidelabel != undefined)
+                hidelabel = "hidelabel";
+
             var hideselectedvaluessection = (attrs.hideselectedvaluessection != undefined) ? 'hideselectedvaluessection' : '';
 
             var hideremoveicon = (attrs.hideremoveicon != undefined) ? 'hideremoveicon' : '';
@@ -123,8 +127,9 @@
                         + ' isrequired="ctrl.isrequired"'
                         + ' ' + hideremoveicon
                         + ' label="' + label + '"'
-                        + ' entityName="' + label + '"'
-                    + '</vr-select>'
+                        + ' entityName="' + label + '" '
+                        + hidelabel 
+                    + ' </vr-select>'
                 + '</span>'
             + '</vr-columns>';
         }
