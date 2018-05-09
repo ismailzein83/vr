@@ -37,8 +37,11 @@ app.directive('retailBeFinancialaccountdefinitionSettings', ['UtilsService', 'VR
 
             var selectedBusinessEntityDefinitionDeferred;
 
+
             function initializeController() {
                 $scope.scopeModel = {};
+
+                $scope.scopeModel.datasource = [];
 
                 $scope.scopeModel.onInvoiceTypeSelectorReady = function (api) {
                     invoiceTypeSelectorAPI = api;
@@ -49,7 +52,7 @@ app.directive('retailBeFinancialaccountdefinitionSettings', ['UtilsService', 'VR
                     businessEntityDefinitionSelectorAPI = api;
                     businessEntityDefinitionSelectorReadyDeferred.resolve();
                 };
-                
+
                 $scope.scopeModel.onBalanceAccountTypeSelectorReady = function (api) {
                     balanceAccountTypeSelectorAPI = api;
                     balanceAccountTypeSelectorReadyDeferred.resolve();
@@ -65,6 +68,7 @@ app.directive('retailBeFinancialaccountdefinitionSettings', ['UtilsService', 'VR
                         if (selectedBusinessEntityDefinitionDeferred != undefined)
                             selectedBusinessEntityDefinitionDeferred.resolve();
                         else {
+                            $scope.scopeModel.datasource.length = 0;
                             var classificationSelectorPayload = { AccountBEDefinitionId: businessEntityDefinitionSelectorAPI.getSelectedIds() };
                             var setLoader = function (value) {
                                 $scope.scopeModel.isClassificationSelectorLoading = value;
@@ -78,10 +82,43 @@ app.directive('retailBeFinancialaccountdefinitionSettings', ['UtilsService', 'VR
                     extendedSettingsDirectiveAPI = api;
                     extendedSettingsDirectiveReadyDeferred.resolve();
                 };
+
+                $scope.scopeModel.onAddInvoiceTypes = function () {
+               
+                   var dataItem = {
+                       id: $scope.scopeModel.datasource.length + 1,
+                   };
+
+                    dataItem.onInvoiceTypeSelectorReady = function (api) {
+                        dataItem.invoiceTypeSelectorAPI = api;
+                        var setLoader = function (value) { $scope.scopeModel.isLoadingDirective = value; };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.invoiceTypeSelectorAPI, undefined, setLoader);
+                    };
+
+                    dataItem.onApplicableClassificationsSelectorReady = function (api) {
+                        dataItem.applicableClassificationsSelectorAPI = api;
+                        var dataItemApplicableClassificationSelectorPayload = {
+                            AccountBEDefinitionId: businessEntityDefinitionSelectorAPI.getSelectedIds()
+                        };
+                        var setLoader = function (value) {
+                            $scope.scopeModel.isClassificationSelectorLoading = value;
+                        };
+                        VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.applicableClassificationsSelectorAPI, dataItemApplicableClassificationSelectorPayload, setLoader);
+                       
+                    };
+
+                    $scope.scopeModel.datasource.push(dataItem);
+                };
+
+                $scope.scopeModel.removeRow = function (dataItem) {
+                    var index = UtilsService.getItemIndexByVal($scope.scopeModel.datasource, dataItem.id, 'id');
+                    $scope.scopeModel.datasource.splice(index, 1);
+                };
+
                 UtilsService.waitMultiplePromises([invoiceTypeSelectorReadyDeferred.promise, balanceAccountTypeSelectorReadyDeferred.promise,
                     extendedSettingsDirectiveReadyDeferred.promise]).then(function () {
-                    defineAPI();
-                });
+                        defineAPI();
+                    });
 
             }
 
@@ -90,7 +127,7 @@ app.directive('retailBeFinancialaccountdefinitionSettings', ['UtilsService', 'VR
 
                 api.load = function (payload) {
                     var promises = [];
-
+                    
                     var financialAccountDefinitionSettings;
                     if (payload != undefined) {
                         financialAccountDefinitionSettings = payload.componentType;
@@ -100,10 +137,26 @@ app.directive('retailBeFinancialaccountdefinitionSettings', ['UtilsService', 'VR
                             if (financialAccountDefinitionSettings.Settings != undefined) {
                                 selectedBusinessEntityDefinitionDeferred = UtilsService.createPromiseDeferred();
                                 promises.push(loadClassificationSelector());
+
+                                if (financialAccountDefinitionSettings.Settings.InvoiceTypes != undefined) {
+
+                                    for (var i = 0; i < financialAccountDefinitionSettings.Settings.InvoiceTypes.length ; i++) {
+                                        var invoiceType = financialAccountDefinitionSettings.Settings.InvoiceTypes[i];
+                                        var gridItem = {
+                                            payload: invoiceType,
+                                            readyInvoiceTypeSelectorPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                            loadInvoiceTypeSelectorPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                            readyApplicableClassificationsSelectorPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                            loadApplicableClassificationsSelectorPromiseDeferred: UtilsService.createPromiseDeferred()
+                                        };
+                                        promises.push(gridItem.loadInvoiceTypeSelectorPromiseDeferred.promise);
+                                        promises.push(gridItem.loadApplicableClassificationsSelectorPromiseDeferred.promise);
+                                        addItemToGrid(gridItem);
+                                    }
+                                }
                             }
                         }
                     }
-
 
                     var businessEntityDefinitionSelectorLoadPromise = loadBusinessEntityDefinitionSelector();
                     promises.push(businessEntityDefinitionSelectorLoadPromise);
@@ -147,16 +200,11 @@ app.directive('retailBeFinancialaccountdefinitionSettings', ['UtilsService', 'VR
                                 AccountBEDefinitionId: financialAccountDefinitionSettings.Settings.AccountBEDefinitionId,
                                 selectedIds: financialAccountDefinitionSettings.Settings.ApplicableClassifications
                             };
-                            selectedBusinessEntityDefinitionDeferred = undefined;
-                           
-                            var setLoader = function (value) {
-                                $scope.scopeModel.isClassificationSelectorLoading = value;
-                            };
                             VRUIUtilsService.callDirectiveLoad(classificationSelectorAPI, classificationSelectorPayload, classificationSelectorLoadDeferred);
                         });
                         return classificationSelectorLoadDeferred.promise;
                     }
-                    
+
                     function loadExtendedSettingsDirective() {
                         var extendedSettingsDirectivePayload;
                         if (financialAccountDefinitionSettings != undefined && financialAccountDefinitionSettings.Settings != undefined) {
@@ -166,7 +214,41 @@ app.directive('retailBeFinancialaccountdefinitionSettings', ['UtilsService', 'VR
                     }
                     promises.push(loadExtendedSettingsDirective());
 
-                    return UtilsService.waitMultiplePromises(promises);
+                    function addItemToGrid(gridItem) {
+                        var dataItem = {
+                            id: $scope.scopeModel.datasource.length + 1,
+                        };
+                        dataItem.onInvoiceTypeSelectorReady = function (api) {
+                            dataItem.invoiceTypeSelectorAPI = api;
+                            gridItem.readyInvoiceTypeSelectorPromiseDeferred.resolve();
+                        };
+                        UtilsService.waitMultiplePromises([selectedBusinessEntityDefinitionDeferred.promise, gridItem.readyInvoiceTypeSelectorPromiseDeferred.promise]).then(function () {
+                            var dataItemPayload = { selectedIds: gridItem.payload.InvoiceTypeId };
+                            VRUIUtilsService.callDirectiveLoad(dataItem.invoiceTypeSelectorAPI, dataItemPayload, gridItem.loadInvoiceTypeSelectorPromiseDeferred);
+                        });
+
+                        dataItem.onApplicableClassificationsSelectorReady = function (api) {
+                            dataItem.applicableClassificationsSelectorAPI = api;
+                            gridItem.readyApplicableClassificationsSelectorPromiseDeferred.resolve();
+                        };
+                        
+
+                        UtilsService.waitMultiplePromises([selectedBusinessEntityDefinitionDeferred.promise, gridItem.readyApplicableClassificationsSelectorPromiseDeferred.promise]).then(function () {
+
+                            var dataItemApplicableClassificationSelectorPayload = {
+                                AccountBEDefinitionId: financialAccountDefinitionSettings.Settings.AccountBEDefinitionId,
+                                selectedIds: gridItem.payload.ApplicableClassifications
+                            };
+                            VRUIUtilsService.callDirectiveLoad(dataItem.applicableClassificationsSelectorAPI, dataItemApplicableClassificationSelectorPayload, gridItem.loadApplicableClassificationsSelectorPromiseDeferred);
+                        });
+
+                        $scope.scopeModel.datasource.push(dataItem);
+
+                    }
+
+                    return UtilsService.waitMultiplePromises(promises).then(function () {
+                        selectedBusinessEntityDefinitionDeferred = undefined;
+                    });
                 };
 
                 api.getData = function () {
@@ -177,11 +259,28 @@ app.directive('retailBeFinancialaccountdefinitionSettings', ['UtilsService', 'VR
                             InvoiceTypeId: invoiceTypeSelectorAPI.getSelectedIds(),
                             BalanceAccountTypeId: balanceAccountTypeSelectorAPI.getSelectedIds(),
                             AccountBEDefinitionId: businessEntityDefinitionSelectorAPI.getSelectedIds(),
+                            InvoiceTypes: getInvoiceTypes(),
                             ApplicableClassifications: classificationSelectorAPI.getSelectedIds(),
                             ExtendedSettings: extendedSettingsDirectiveAPI.getData()
                         }
                     };
                 };
+
+                function getInvoiceTypes() {
+                    var invoiceTypes;
+                    if ($scope.scopeModel.datasource != undefined && $scope.scopeModel.datasource.length > 0) {
+                        invoiceTypes = [];
+                        for (var i = 0; i < $scope.scopeModel.datasource.length; i++) {
+                            var dataItem = $scope.scopeModel.datasource[i];
+                            var financialAccountInvoiceType = {
+                                InvoiceTypeId: dataItem.invoiceTypeSelectorAPI.getSelectedIds(),
+                                ApplicableClassifications: dataItem.applicableClassificationsSelectorAPI.getSelectedIds()
+                            };
+                            invoiceTypes.push(financialAccountInvoiceType);
+                        }
+                    }
+                    return invoiceTypes;
+                }
 
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);

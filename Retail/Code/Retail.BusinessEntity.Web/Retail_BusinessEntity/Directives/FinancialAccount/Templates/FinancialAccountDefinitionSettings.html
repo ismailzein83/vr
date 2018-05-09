@@ -7,14 +7,41 @@
             <vr-columns width="1/2row">
                 <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onBusinessEntityDefinitionSelectorReady"
                                                                   onselectionchanged="scopeModel.onBusinessEntityDefinitionSelectorChanged"
+                                                                  selectedvalues="scopeModel.selectedAccountBEDefinition"
                                                                   customlabel="Account Definition" isrequired="true" hideremoveicon>
                 </vr-genericdata-businessentitydefinition-selector>
             </vr-columns>
             <vr-invoicetype-selector on-ready="scopeModel.onInvoiceTypeSelectorReady" normal-col-num="6"></vr-invoicetype-selector>
             <vr-accountbalance-accounttype-selector on-ready="scopeModel.onBalanceAccountTypeSelectorReady" normal-col-num="6"></vr-accountbalance-accounttype-selector>
 
-                <retail-be-accountbedefinition-classification-selector on-ready="scopeModel.onClassificationSelectorReady" vr-loader="scopeModel.isClassificationSelectorLoading" 
-                                                                       normal-col-num="6" ismultipleselection isrequired="true"></retail-be-accountbedefinition-classification-selector>
+            <retail-be-accountbedefinition-classification-selector on-ready="scopeModel.onClassificationSelectorReady" vr-loader="scopeModel.isClassificationSelectorLoading"
+                                                                   normal-col-num="6" ismultipleselection isrequired="true"></retail-be-accountbedefinition-classification-selector>
+      
+        </vr-row>
+        <vr-row>
+            <vr-columns width="fullrow">
+                <vr-button type="Add" data-onclick="scopeModel.onAddInvoiceTypes" standalone vr-disabled="scopeModel.selectedAccountBEDefinition == undefined"></vr-button>
+            </vr-columns>
+        </vr-row>
+        <vr-row>
+            <vr-columns width="1/2row">
+                <vr-validator validate="scopeModel.isInvoiceTypeValid()">
+                    <vr-datagrid datasource="scopeModel.datasource"
+                                 pagingtype="'PagingOnScroll'"
+                                 on-ready="scopeModel.onGridReady"
+                                 ondeleterow="scopeModel.removeRow"
+                                 idfield="Entity.InvoiceTypeId">
+                        <vr-datagridcolumn headertext="'Invoice Types'">
+                            <vr-invoicetype-selector hidelabel on-ready="dataItem.onInvoiceTypeSelectorReady" normal-col-num="12" isrequired="true" hidelabel></vr-invoicetype-selector>
+                        </vr-datagridcolumn>
+                        <vr-datagridcolumn headertext="'Applicable Classifications'">
+                            <retail-be-accountbedefinition-classification-selector hidelabel on-ready="dataItem.onApplicableClassificationsSelectorReady" vr-loader="dataItem.isClassificationSelectorLoading"
+                                                                                   normal-col-num="12" ismultipleselection isrequired="true"></retail-be-accountbedefinition-classification-selector>
+                        </vr-datagridcolumn>
+                    </vr-datagrid>
+                </vr-validator>
+
+            </vr-columns>
         </vr-row>
     </vr-tab>
     <vr-tab header="'Settings'">

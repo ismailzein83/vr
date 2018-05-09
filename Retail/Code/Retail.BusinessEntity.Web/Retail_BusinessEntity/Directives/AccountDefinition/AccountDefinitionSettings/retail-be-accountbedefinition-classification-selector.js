@@ -102,12 +102,15 @@ function (UtilsService, VRUIUtilsService, Retail_BE_AccountBEDefinitionAPIServic
         }
         if (attrs.customlabel != undefined)
             label = attrs.customlabel;
+        var hidelabel = "";
+        if (attrs.hidelabel != undefined)
+            hidelabel = "hidelabel";
 
         if (attrs.hideremoveicon != undefined)
             hideremoveicon = 'hideremoveicon';
 
         return '<vr-columns colnum="{{ctrl.normalColNum}}"    ><vr-select ' + multipleselection + ' datatextfield="Title" datavaluefield="Name" isrequired="ctrl.isrequired" label="' + label +
-                   '" datasource="ctrl.datasource" on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
+                   '" datasource="ctrl.datasource"  ' + hidelabel + '  on-ready="ctrl.onSelectorReady" selectedvalues="ctrl.selectedvalues" onselectionchanged="ctrl.onselectionchanged" entityName="' + label +
                    '" onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" ' + hideremoveicon + ' customvalidate="ctrl.customvalidate">' +
                '</vr-select></vr-columns>';
     }
