@@ -97,6 +97,9 @@
     <Compile Include="RequiredPermissionSettings.cs" />
     <Compile Include="RequiredPermissionSet\RequiredPermissionSet.cs" />
     <Compile Include="ResetPassword.cs" />
+    <Compile Include="SecurityProvider\SecurityProvider.cs" />
+    <Compile Include="SecurityProvider\SecurityProviderDefinition.cs" />
+    <Compile Include="SecurityProvider\SecurityProviderDefinitionSettings.cs" />
     <Compile Include="Settings\MailMessageTemplateSettings.cs" />
     <Compile Include="Settings\PasswordSettings.cs" />
     <Compile Include="Settings\SecuritySettings.cs" />
