@@ -15,6 +15,8 @@
         <vr-columns width="1/4row">
             <vr-switch label="Extra Fields" value="ctrl.hasExtraFields" isrequired></vr-switch>
         </vr-columns>
+    </vr-row>
+    <vr-row>
         <span ng-if="ctrl.hasExtraFields">
             <vr-genericdata-datarecordtypeextrafields-template on-ready="ctrl.onDataRecordTypeExtraFieldsReady" isrequired="true" normal-col-num="3" vr-loader="ctrl.isDirectiveLoading"></vr-genericdata-datarecordtypeextrafields-template>
         </span>

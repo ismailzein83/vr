@@ -1,7 +1,12 @@
-﻿<vr-columns width="1/4row">
-    <vr-textbox label="Partner Field Title" value="scopeModel.partnerFieldTitle" type="text"></vr-textbox>
+﻿
+<vr-columns width="fullrow" haschildcolumns>
+        <vr-columns width="1/4row">
+            <vr-textbox label="Partner Field Title" value="scopeModel.partnerFieldTitle" type="text"></vr-textbox>
+        </vr-columns>
+        <vr-columns width="fullrow" haschildcolumns>
+            <vr-genericdata-fieldtype-selective on-ready="scopeModel.onDataRecordTypeSelectorReady" isrequired vr-loader="scopeModel.isDirectiveLoading"></vr-genericdata-fieldtype-selective>
+        </vr-columns>
 </vr-columns>
 
-<vr-columns width ="fullrow">
-    <vr-genericdata-fieldtype-selective on-ready="scopeModel.onDataRecordTypeSelectorReady" isrequired vr-loader="scopeModel.isDirectiveLoading"></vr-genericdata-fieldtype-selective>
-    </vr-columns>
+
+
