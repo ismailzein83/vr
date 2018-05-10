@@ -38,6 +38,7 @@ namespace TOne.WhS.Routing.Entities
         public string CurrencySymbol { get; set; }
         public int? ExecutedRuleId { get; set; }
         public RouteOptionEvaluatedStatus? EvaluatedStatus { get; set; }
+        public bool SupplierZoneMatchHasClosedRate { get; set; }
     }
     public class RPRouteOptionByCodeDetail : BaseRPRouteOptionByCodeDetail
     {
