@@ -13,7 +13,7 @@ namespace Retail.BusinessEntity.Entities
         public Guid AccountBEDefinitionId { get; set; }
         public Guid? BalanceAccountTypeId { get; set; }
 
-        public Guid? InvoiceTypeId { get; set; }
+  //      public Guid? InvoiceTypeId { get; set; }
         public List<FinancialAccountInvoiceType> InvoiceTypes { get; set; }
         public List<string> ApplicableClassifications { get; set; }
         public FinancialAccountDefinitionExtendedSettings ExtendedSettings { get; set; }

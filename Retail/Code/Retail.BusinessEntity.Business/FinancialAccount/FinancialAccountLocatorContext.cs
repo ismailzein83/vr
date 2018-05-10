@@ -27,5 +27,6 @@ namespace Retail.BusinessEntity.Business
                 _balanceAccountTypeId = value;
             }
         }
+        public string Classification { get; set; }
     }
 }

@@ -3,8 +3,8 @@
         <vr-form name="formFinancialAccountEditor">
             <vr-tabs>
                 <vr-tab header="'Definition'">
-                    <vr-row>
-                        <retail-be-financialaccountdefinition-selector normal-col-num="6" on-ready="scopeModel.onFinancialAccountDefinitionSelectorReady" selectedvalues="scopeModel.selectedFinancialAccountDefinition" onselectionchanged="    scopeModel.onFinancialAccountDefinitionSelectionChanged" isrequired="true"></retail-be-financialaccountdefinition-selector>
+                    <vr-row >
+                        <retail-be-financialaccountdefinition-selector vr-disabled="scopeModel.isEditMode" normal-col-num="6" on-ready="scopeModel.onFinancialAccountDefinitionSelectorReady" selectedvalues="scopeModel.selectedFinancialAccountDefinition" onselectionchanged="    scopeModel.onFinancialAccountDefinitionSelectionChanged" isrequired="true"></retail-be-financialaccountdefinition-selector>
                     </vr-row>
                     <vr-directivewrapper ng-if="scopeModel.financialAccountTypeRuntimeDirective != undefined" vr-loader="scopeModel.isLoadingDirective" directive="scopeModel.financialAccountTypeRuntimeDirective"
                                          on-ready="scopeModel.onDirectiveReady" isrequired="true">

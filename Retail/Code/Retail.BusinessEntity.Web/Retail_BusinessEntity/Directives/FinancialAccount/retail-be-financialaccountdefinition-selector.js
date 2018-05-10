@@ -1,6 +1,6 @@
 ﻿'use strict';
-app.directive('retailBeFinancialaccountdefinitionSelector', ['Retail_BE_FinancialAccountDefinitionAPIService', 'VRUIUtilsService',
-    function (Retail_BE_FinancialAccountDefinitionAPIService, VRUIUtilsService) {
+app.directive('retailBeFinancialaccountdefinitionSelector', ['Retail_BE_FinancialAccountDefinitionAPIService', 'VRUIUtilsService','UtilsService',
+function (Retail_BE_FinancialAccountDefinitionAPIService, VRUIUtilsService,UtilsService) {
 
         var directiveDefinitionObject = {
             restrict: 'E',
@@ -98,7 +98,7 @@ app.directive('retailBeFinancialaccountdefinitionSelector', ['Retail_BE_Financia
                         selectfirstitem = payload.selectfirstitem != undefined && payload.selectfirstitem == true;
                     }
 
-                    return Retail_BE_FinancialAccountDefinitionAPIService.GetFinancialAccountDefinitionsInfo(filter).then(function (response) {
+                    return Retail_BE_FinancialAccountDefinitionAPIService.GetFinancialAccountDefinitionsInfo(UtilsService.serializetoJson(filter)).then(function (response) {
                         if (response != null) {
                             for (var i = 0; i < response.length; i++) {
                                 ctrl.datasource.push(response[i]);

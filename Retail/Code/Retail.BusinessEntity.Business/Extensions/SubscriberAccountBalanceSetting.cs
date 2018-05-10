@@ -11,7 +11,7 @@ namespace Retail.BusinessEntity.Business
     public class SubscriberAccountBalanceSetting : AccountTypeExtendedSettings
     {
         public Guid AccountBEDefinitionId { get; set; }
-        public List<AccountBalanceClassification> Classifications { get; set; }
+     //   public List<AccountBalanceClassification> Classifications { get; set; }
 
         public override Guid ConfigId
         {
@@ -34,10 +34,10 @@ namespace Retail.BusinessEntity.Business
         }
 
     }
-    public class AccountBalanceClassification
-    {
-        public string AccountClassification { get; set; }
-    }
+    //public class AccountBalanceClassification
+    //{
+    //    public string AccountClassification { get; set; }
+    //}
 
     public class RetailAccountBalanceRuleTargetType : VRActionTargetType
     {

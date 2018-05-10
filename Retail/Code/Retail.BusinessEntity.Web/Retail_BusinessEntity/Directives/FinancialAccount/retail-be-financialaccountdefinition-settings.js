@@ -43,10 +43,6 @@ app.directive('retailBeFinancialaccountdefinitionSettings', ['UtilsService', 'VR
 
                 $scope.scopeModel.datasource = [];
 
-                $scope.scopeModel.onInvoiceTypeSelectorReady = function (api) {
-                    invoiceTypeSelectorAPI = api;
-                    invoiceTypeSelectorReadyDeferred.resolve();
-                };
 
                 $scope.scopeModel.onBusinessEntityDefinitionSelectorReady = function (api) {
                     businessEntityDefinitionSelectorAPI = api;
@@ -115,7 +111,7 @@ app.directive('retailBeFinancialaccountdefinitionSettings', ['UtilsService', 'VR
                     $scope.scopeModel.datasource.splice(index, 1);
                 };
 
-                UtilsService.waitMultiplePromises([invoiceTypeSelectorReadyDeferred.promise, balanceAccountTypeSelectorReadyDeferred.promise,
+                UtilsService.waitMultiplePromises([balanceAccountTypeSelectorReadyDeferred.promise,
                     extendedSettingsDirectiveReadyDeferred.promise]).then(function () {
                         defineAPI();
                     });
@@ -173,14 +169,6 @@ app.directive('retailBeFinancialaccountdefinitionSettings', ['UtilsService', 'VR
                         return businessEntityDefinitionSelectorAPI.load(payloadSelector);
                     }
 
-                    function loadInvoiceTypeSelector() {
-                        var invoiceTypeSelectorPayload;
-                        if (financialAccountDefinitionSettings != undefined && financialAccountDefinitionSettings.Settings != undefined) {
-                            invoiceTypeSelectorPayload = { selectedIds: financialAccountDefinitionSettings.Settings.InvoiceTypeId };
-                        }
-                        return invoiceTypeSelectorAPI.load(invoiceTypeSelectorPayload);
-                    }
-                    promises.push(loadInvoiceTypeSelector());
 
                     function loadBalanceAccountTypeSelector() {
                         var balanceAccountTypeSelectorPayload;
@@ -256,7 +244,6 @@ app.directive('retailBeFinancialaccountdefinitionSettings', ['UtilsService', 'VR
                         Name: $scope.scopeModel.name,
                         Settings: {
                             $type: "Retail.BusinessEntity.Entities.FinancialAccountDefinitionSettings, Retail.BusinessEntity.Entities",
-                            InvoiceTypeId: invoiceTypeSelectorAPI.getSelectedIds(),
                             BalanceAccountTypeId: balanceAccountTypeSelectorAPI.getSelectedIds(),
                             AccountBEDefinitionId: businessEntityDefinitionSelectorAPI.getSelectedIds(),
                             InvoiceTypes: getInvoiceTypes(),

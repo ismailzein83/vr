@@ -26,5 +26,6 @@ namespace Retail.BusinessEntity.Entities
         string BalanceAccountId { set; }
 
         Guid BalanceAccountTypeId { set; }
+        string Classification { get; }
     }
 }

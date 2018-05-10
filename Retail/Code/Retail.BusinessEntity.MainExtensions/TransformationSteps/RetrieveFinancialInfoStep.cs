@@ -21,8 +21,8 @@ namespace Retail.BusinessEntity.MainExtensions.TransformationSteps
 
         //Output
         public string FinancialAccountId { get; set; }
-        public string BalanceAccountId { get; set; } 
-
+        public string BalanceAccountId { get; set; }
+        public string Classification { get; set; }
 
         public override void GenerateExecutionCode(IDataTransformationCodeGenerationContext context)
         {
@@ -36,8 +36,8 @@ namespace Retail.BusinessEntity.MainExtensions.TransformationSteps
 
 
             var financialAccountRuntimeDataVariableName = context.GenerateUniqueMemberName("accountfinancialInfo");
-            context.AddCodeToCurrentInstanceExecutionBlock("Retail.BusinessEntity.Entities.FinancialAccountRuntimeData {0} = new Retail.BusinessEntity.Business.FinancialAccountManager().GetAccountFinancialInfo({1},{2},{3});",
-                financialAccountRuntimeDataVariableName, AccountBEDefinitionId, AccountId, EffectiveOn);
+            context.AddCodeToCurrentInstanceExecutionBlock("Retail.BusinessEntity.Entities.FinancialAccountRuntimeData {0} = new Retail.BusinessEntity.Business.FinancialAccountManager().GetAccountFinancialInfo({1},{2},{3},\"{4}\");",
+                financialAccountRuntimeDataVariableName, AccountBEDefinitionId, AccountId, EffectiveOn, Classification != null?Classification:"Customer");
 
             context.AddCodeToCurrentInstanceExecutionBlock("if({0} != null)", financialAccountRuntimeDataVariableName);
             context.AddCodeToCurrentInstanceExecutionBlock("{");

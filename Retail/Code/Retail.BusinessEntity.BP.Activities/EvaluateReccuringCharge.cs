@@ -99,7 +99,10 @@ namespace Retail.BusinessEntity.BP.Activities
                             ChargeableEntitySettings chargeableEntitySettings = chargeableEntityManager.GetChargeableEntitySettings(recurringChargeEvaluatorOutput.ChargeableEntityId);
                             chargeableEntitySettings.ThrowIfNull("chargeableEntitySettings", recurringChargeEvaluatorOutput.ChargeableEntityId);
 
-                            FinancialAccountRuntimeData financialAccountRuntimeData = financialAccountManager.GetAccountFinancialInfo(accountBEDefinitionId, accountPackageRecurChargeData.AccountPackage.AccountId, chargeDay);
+
+                            string classification = "Customer";
+
+                            FinancialAccountRuntimeData financialAccountRuntimeData = financialAccountManager.GetAccountFinancialInfo(accountBEDefinitionId, accountPackageRecurChargeData.AccountPackage.AccountId, chargeDay, classification);
                             AccountPackageRecurCharge accountPackageRecurCharge = BuildAccountPackageRecurCharge(accountPackageRecurChargeData, accountBEDefinitionId, chargeDay, recurringChargeEvaluatorOutput, chargeableEntitySettings, financialAccountRuntimeData);
 
                             List<AccountPackageRecurCharge> dateAccountPackageRecurChargeList = accountPackageRecurChargesByDate.GetOrCreateItem(accountPackageRecurCharge.ChargeDay);

@@ -30,6 +30,22 @@ namespace Retail.BusinessEntity.Business
             {
                 if (financialAccountDefinitionFilter == null)
                     return true;
+                if (financialAccountDefinition.Settings.AccountBEDefinitionId != financialAccountDefinitionFilter.AccountBEDefinitionId)
+                    return false;
+                if (financialAccountDefinitionFilter.Filters != null)
+                {
+                    var FinancialAccountDefinitionFilterContext = new FinancialAccountDefinitionFilterContext
+                        {
+                            FinancialAccountDefinitionId = financialAccountDefinition.VRComponentTypeId,
+                            DefinitionSettings = financialAccountDefinition.Settings,
+                        };
+                    foreach (var filter in financialAccountDefinitionFilter.Filters)
+                    {
+
+                        if (!filter.IsMatched(FinancialAccountDefinitionFilterContext))
+                            return false;
+                    }
+                }
                 return true;
             };
             return s_componentTypeManager.GetComponentTypes<FinancialAccountDefinitionSettings, FinancialAccountDefinition>().MapRecords(FinancialAccountDefinitionInfoMapper,filterExpression);

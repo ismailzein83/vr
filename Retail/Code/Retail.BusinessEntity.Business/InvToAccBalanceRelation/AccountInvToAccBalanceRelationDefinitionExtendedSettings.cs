@@ -24,13 +24,17 @@ namespace Retail.BusinessEntity.Business
             List<InvoiceAccountInfo> invoiceAccountInfo = new List<InvoiceAccountInfo>();
             FinancialAccountDefinitionManager financialAccountDefinitionManager = new FinancialAccountDefinitionManager();
             var accountBalanceSettings = financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccountData.FinancialAccount.FinancialAccountDefinitionId);
-            if(accountBalanceSettings.InvoiceTypeId.HasValue)
+
+            if (accountBalanceSettings.InvoiceTypes != null)
             {
-                invoiceAccountInfo.Add(new InvoiceAccountInfo
+                foreach(var invoiceType in  accountBalanceSettings.InvoiceTypes)
                 {
-                    InvoiceTypeId = accountBalanceSettings.InvoiceTypeId.Value,
-                    PartnerId = context.AccountId
-                });
+                    invoiceAccountInfo.Add(new InvoiceAccountInfo
+                    {
+                        InvoiceTypeId = invoiceType.InvoiceTypeId,
+                        PartnerId = context.AccountId
+                    });
+                }
             }
             return invoiceAccountInfo;
         }

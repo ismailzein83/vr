@@ -16,19 +16,17 @@ namespace Retail.BusinessEntity.Business
 
         public bool IsExcluded(IAccountFilterContext context)
         {
-            FinancialAccountData financialAccountData;
-            if(s_financialAccountManager.TryGetFinancialAccount(context.AccountBEDefinitionId, context.Account.AccountId, false, DateTime.Now, out financialAccountData))
+            var financialAccounts = s_financialAccountManager.GetFinancialAccounts(context.AccountBEDefinitionId, context.Account.AccountId, false);
+            if (financialAccounts != null)
             {
-                var financialAccountDefinitionSettings = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccountData.FinancialAccount.FinancialAccountDefinitionId);
-                if (financialAccountDefinitionSettings.BalanceAccountTypeId.HasValue && financialAccountDefinitionSettings.BalanceAccountTypeId.Value == this.AccountTypeId)
-                    return false;//dont exclude
-                else
-                    return true;
+                foreach (var financialAccount in financialAccounts)
+                {
+                    var financialAccountDefinitionSettings = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccount.FinancialAccount.FinancialAccountDefinitionId);
+                    if (financialAccountDefinitionSettings.BalanceAccountTypeId.HasValue  && financialAccountDefinitionSettings.BalanceAccountTypeId.Value == this.AccountTypeId)
+                        return false;//dont exclude
+                }
             }
-            else
-            {
-                return true;
-            }
+            return true;
         }
     }
 }

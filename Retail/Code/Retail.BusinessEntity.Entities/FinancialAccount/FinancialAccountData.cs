@@ -21,6 +21,8 @@ namespace Retail.BusinessEntity.Entities
 
         public Guid? BalanceAccountTypeId { get; set; }
 
-        public Guid? InvoiceTypeId { get; set; }
+       // public Guid? InvoiceTypeId { get; set; }
+        public List<Guid> InvoiceTypeIds { get; set; }
+
     }
 }

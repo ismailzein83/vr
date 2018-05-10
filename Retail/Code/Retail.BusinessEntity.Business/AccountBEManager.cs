@@ -37,6 +37,10 @@ namespace Retail.BusinessEntity.Business
 
         #region Public Methods
 
+        public List<string> GetAccountClassifications(Guid accountBEDefinition,long accountId)
+        {
+           return _accountBEDefinitionManager.GetAccountBEDefinitionClassifications(accountBEDefinition);
+        }
         public Vanrise.Entities.IDataRetrievalResult<AccountClientDetail> GetFilteredClientAccounts(Vanrise.Entities.DataRetrievalInput<AccountQuery> input)
         {
             Dictionary<long, Account> cachedAccounts = this.GetCachedAccounts(input.Query.AccountBEDefinitionId);

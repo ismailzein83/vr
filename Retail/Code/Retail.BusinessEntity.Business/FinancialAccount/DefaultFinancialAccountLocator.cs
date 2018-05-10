@@ -22,7 +22,7 @@ namespace Retail.BusinessEntity.Business
             {
                 FinancialAccountManager financialAccountManager = new FinancialAccountManager();
                 FinancialAccountData financialAccountData;
-                if(financialAccountManager.TryGetFinancialAccount(context.AccountDefinitionId, context.AccountId, true, context.EffectiveOn, out financialAccountData))
+                if(financialAccountManager.TryGetFinancialAccount(context.AccountDefinitionId, context.AccountId, true, context.EffectiveOn,context.Classification, out financialAccountData))
                 {
                     context.FinancialAccountId = financialAccountData.Account.AccountId;
                     var financialAccountDefinitionSettings = s_financialAccountDefinitionManager.GetFinancialAccountDefinitionSettings(financialAccountData.FinancialAccount.FinancialAccountDefinitionId);

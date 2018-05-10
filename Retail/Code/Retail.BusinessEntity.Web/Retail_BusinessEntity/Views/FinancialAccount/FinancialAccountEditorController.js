@@ -138,12 +138,15 @@
                 var loadFinancialAccountDefinitionSelectorPromiseDeferred = UtilsService.createPromiseDeferred();
                 financialAccountDefinitionSelectorDirectiveReadyDeferred.promise.then(function () {
                     var payload = {
-                        //filter: {
-                        //    Filters: [{
-                        //        $type: "Retail.BE.AccountBalance.Business.FinancialAccountTypeFilter, Retail.BE.AccountBalance.Business",
-                        //        IsEditMode: $scope.scopeModel.isEditMode
-                        //    }]
-                        //},
+                        filter: {
+                            AccountBEDefinitionId: accountBEDefinitionId,
+                            Filters: [{
+                                $type: "Retail.BusinessEntity.Business.FinancialAccountDefinitionFilter ,Retail.BusinessEntity.Business",
+                                AccountBEDefinitionId: accountBEDefinitionId,
+                                AccountId: accountId,
+                                SequenceNumber: sequenceNumber
+                            }]
+                        },
                         selectedIds: financialAccountEntity != undefined && financialAccountEntity.FinancialAccount != undefined ? financialAccountEntity.FinancialAccount.FinancialAccountDefinitionId : undefined
                     };
                     VRUIUtilsService.callDirectiveLoad(financialAccountDefinitionSelectorDirectiveAPI, payload, loadFinancialAccountDefinitionSelectorPromiseDeferred);
