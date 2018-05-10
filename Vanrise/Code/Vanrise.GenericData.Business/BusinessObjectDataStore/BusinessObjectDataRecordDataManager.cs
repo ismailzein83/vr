@@ -71,6 +71,7 @@ namespace Vanrise.GenericData.Business
                         loadContext.StopLoadingRecords();
                 }
             };
+            _businessObjectDataRecordStorageSettings.Settings.ExtendedSettings.LoadRecords(loadContext);
             return dataRecords;
         }
 
@@ -96,6 +97,7 @@ namespace Vanrise.GenericData.Business
                     onItemReady(record.Object);
                 }
             };
+            _businessObjectDataRecordStorageSettings.Settings.ExtendedSettings.LoadRecords(loadContext);
         }
 
         public void DeleteRecords(DateTime from, DateTime to, RecordFilterGroup recordFilterGroup)
