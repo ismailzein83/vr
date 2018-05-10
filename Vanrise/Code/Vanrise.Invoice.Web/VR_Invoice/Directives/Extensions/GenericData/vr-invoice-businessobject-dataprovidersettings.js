@@ -36,13 +36,8 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                     $scope.scopeModel.isDirectiveLoading = value;
                 };
 
-                var daPayload = {
-                    filter: {
-                        Filters: []
-                    },
-                };
-                daPayload.filter.Filters.push({ $type: "Vanrise.Invoice.Business.InvoiceBusinessObjectDataProviderSettings, Vanrise.Invoice.Business" });
-
+                var daPayload = { };
+         
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataProviderSettingsDirectiveAPI, daPayload, setLoader, dataProviderSettingsSelectorReadyPromiseDeferred);
             };
 
@@ -59,13 +54,8 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
 
                 dataProviderSettingsSelectorReadyPromiseDeferred.promise.then(function () {
 
-                    var dataProviderSettingsPayload = {
-                        filter: {
-                            Filters: []
-                        }
-                    };
+                    var dataProviderSettingsPayload = {    };
 
-                    dataProviderSettingsPayload.filter.Filters.push({ $type: "Vanrise.GenericData.Business.BusinessObjectDataRecordStorageSettings, Vanrise.GenericData.Business" });
 
                     if (payload != undefined) {
 

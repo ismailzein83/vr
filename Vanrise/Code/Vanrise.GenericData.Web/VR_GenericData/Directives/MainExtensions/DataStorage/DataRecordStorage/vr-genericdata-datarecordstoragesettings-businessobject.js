@@ -35,12 +35,10 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
                 };
 
                 var daPayload = {
-                    filter: {
-                        Filters: []
-                    },
+
                     extendedSettings: dataProviderSettingsDirectiveAPI.getData()
                 };
-                 daPayload.filter.Filters.push({ $type: "Vanrise.GenericData.Business.BusinessObjectDataRecordStorageSettings, Vanrise.GenericData.Business" });
+
 
                 VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataProviderSettingsDirectiveAPI, daPayload, setLoader, dataProviderSettingsSelectorReadyPromiseDeferred);
             };
