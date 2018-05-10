@@ -241,8 +241,8 @@ namespace TOne.WhS.RouteSync.IVSwitch
                             ivOption.BktToken = ivOption.BktCapacity;
                         }
                         routes.Add(ivOption);
-                        routes.AddRange(GetBackupRoutes(route.Code, preparedData._switchTime, option.Backups, preparedData.SupplierDefinitions, priority));
                     }
+                    routes.AddRange(GetBackupRoutes(route.Code, preparedData._switchTime, option.Backups, preparedData.SupplierDefinitions, ref priority));
                 }
             }
             //   ivSwitch.Tariffs.Add(BuildTariff((route)));
@@ -250,7 +250,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
             return ivSwitch;
         }
 
-        private List<IVSwitchRoute> GetBackupRoutes(string code, DateTime wakeUpTime, List<BackupRouteOption> backups, Dictionary<string, SupplierDefinition> suppliersDefinition, int priority)
+        private List<IVSwitchRoute> GetBackupRoutes(string code, DateTime wakeUpTime, List<BackupRouteOption> backups, Dictionary<string, SupplierDefinition> suppliersDefinition, ref int priority)
         {
             var backupRoutes = new List<IVSwitchRoute>();
 
@@ -260,12 +260,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
             foreach (var backupRouteOption in backups)
             {
                 if (priority == 0)
-                {
-                    if (backupRoutes.Any())
-                        backupRoutes.Last().HuntStop = 1;
-
                     break;
-                }
 
                 SupplierDefinition supplier;
                 if (suppliersDefinition.TryGetValue(backupRouteOption.SupplierId, out supplier) && supplier.Gateways != null)
@@ -274,6 +269,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
                     {
                         backupRoutes.Add(new IVSwitchRoute
                         {
+                            RoutingMode = 8,
                             Destination = code,
                             RouteId = supplierGateWay.RouteId,
                             TimeFrame = "* * * * *",
@@ -286,6 +282,8 @@ namespace TOne.WhS.RouteSync.IVSwitch
                     }
                 }
             }
+            if (backupRoutes.Any())
+                backupRoutes.Last().HuntStop = 1;
             return backupRoutes;
         }
 
