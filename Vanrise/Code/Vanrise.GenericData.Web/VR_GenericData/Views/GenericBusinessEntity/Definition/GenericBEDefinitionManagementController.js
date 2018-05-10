@@ -8,10 +8,15 @@
         var gridAPI;
         var filter = {};
 
+
+
         defineScope();
         load();
 
         function defineScope() {
+            $scope.scopeModel = {};
+            $scope.scopeModel.bEDefinitionSettingConfigs = [];
+            $scope.scopeModel.selectedSettingsTypeConfig = [];
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
@@ -36,20 +41,41 @@
 
         function load() {
             $scope.isLoading = true;
-            loadAllControls();
-            function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([]).then(function () {
-                }).finally(function () {
-                    $scope.isLoading = false;
-                }).catch(function (error) {
-                    VRNotificationService.notifyExceptionWithClose(error, $scope);
-                });
-            }
+            getBEDefinitionSettingConfigs().then(function () {
+                loadAllControls();
+            });
+        }
+
+        function getBEDefinitionSettingConfigs() {
+
+            return businessEntityDefinitionAPIService.GetBEDefinitionSettingConfigs().then(function (response) {
+                if (response) {
+                    for (var i = 0; i < response.length; i++) {
+                        $scope.scopeModel.bEDefinitionSettingConfigs[i] = response[i];
+                    }
+                }
+            });
+        }
+
+
+
+        function loadAllControls() {
+            return UtilsService.waitMultipleAsyncOperations([]).then(function () {
+            }).finally(function () {
+                $scope.isLoading = false;
+            }).catch(function (error) {
+                VRNotificationService.notifyExceptionWithClose(error, $scope);
+            });
         }
 
         function getFilterObject() {
+            var typeIds = [];
+            for (var i = 0; i < $scope.scopeModel.selectedSettingsTypeConfig.length; i++) {
+                typeIds.push($scope.scopeModel.selectedSettingsTypeConfig[i].ExtensionConfigurationId);
+            }
             filter = {
                 Name: $scope.name,
+                TypeIds: typeIds,
             };
         }
     }

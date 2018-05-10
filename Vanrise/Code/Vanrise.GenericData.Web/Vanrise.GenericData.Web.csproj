@@ -127,6 +127,7 @@
     <Compile Include="Controllers\BEParentChildRelationController.cs" />
     <Compile Include="Controllers\BEParentChildRelationDefinitionController.cs" />
     <Compile Include="Controllers\BusinessEntityController.cs" />
+    <Compile Include="Controllers\BusinessObjectDataRecordStorageController.cs" />
     <Compile Include="Controllers\DataRecordFieldChoiceController.cs" />
     <Compile Include="Controllers\DataRecordFieldController.cs" />
     <Compile Include="Controllers\DataRecordRuleEvaluatorDefinitionController.cs" />
@@ -217,6 +218,7 @@
     <Content Include="VR_GenericData\Directives\BEParentChildRelation\BEParentChildRelationDefinition\vr-genericdata-beparentchildrelationdefinition-settings.js" />
     <Content Include="VR_GenericData\Directives\BEParentChildRelation\BEParentChildRelationRuntime\Templates\BEParentChildRelationGridTemplate.html" />
     <Content Include="VR_GenericData\Directives\BEParentChildRelation\BEParentChildRelationRuntime\vr-genericdata-beparentchildrelation-grid.js" />
+    <Content Include="VR_GenericData\Directives\DataProviderExtendedSettings\vr-genericdata-dataproviderextendedsettings-selector.js" />
     <Content Include="VR_GenericData\Directives\DataRecordRuleEvaluator\Templates\DataRecordRuleEvaluatorDefinitionSettingsTemplate.html" />
     <Content Include="VR_GenericData\Directives\DataRecordRuleEvaluator\vr-genericdata-datarecordruleevaluatordefinition-selector.js" />
     <Content Include="VR_GenericData\Directives\DataRecordRuleEvaluator\vr-genericdata-datarecordruleevaluatordefinition-settings.js" />
@@ -400,9 +402,13 @@
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecord\VRActionDefinition\vr-genericdata-datarecord-vractiondefinition-extendedsettings-sendemail.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecord\VRActionRuntime\Templates\SendEmail.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataRecord\VRActionRuntime\vr-genericdata-datarecord-vraction-sendemail.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\Templates\DataRecordStorageSettingsBusinessObjectTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\Templates\DataRecordStorageSettingsRestAPITemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\vr-genericdata-datarecordstoragesettings-restapi.js" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataStorage\DataRecordStorage\vr-genericdata-datarecordstoragesettings-businessobject.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\Templates\RestAPITemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\Templates\BusinessObjectTemplate.html" />
+    <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\vr-genericdata-datastoresetting-businessobject.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\DataStoreSetting\vr-genericdata-datastoresetting-restapi.js" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Attachment\Templates\AttachmentFieldTypeEntityManagementTemplate.html" />
     <Content Include="VR_GenericData\Directives\MainExtensions\FieldType\Attachment\Templates\AttachmentFieldTypeTemplate.html" />
@@ -679,6 +685,7 @@
     <Content Include="VR_GenericData\Services\APIServices\BEParentChildRelationAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\BEParentChildRelationDefinitionAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\BusinessEntityDefinitionAPIService.js" />
+    <Content Include="VR_GenericData\Services\APIServices\BusinessObjectDataRecordStorageAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordFieldAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordFieldChoiceAPIService.js" />
     <Content Include="VR_GenericData\Services\APIServices\DataRecordObjectTypeConfigAPIService.js" />

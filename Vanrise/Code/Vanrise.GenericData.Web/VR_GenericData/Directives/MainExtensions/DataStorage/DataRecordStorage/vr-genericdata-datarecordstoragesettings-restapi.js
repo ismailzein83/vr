@@ -148,7 +148,7 @@
                             connectionId: connectionId
                         };
                         if (remoteDataRecordTypeId != undefined) {
-                            payload.selectedIds = remoteDataRecordTypeId
+                            payload.selectedIds = remoteDataRecordTypeId;
                         }
                         VRUIUtilsService.callDirectiveLoad(dataRecordTypeSelectorAPI, payload, dataRecordTypeSelectorLoadDeferred);
 
@@ -170,7 +170,7 @@
                                 connectionId: connectionId
                             };
                             if (remoteDataRecordStorageIds != undefined) {
-                                payload.selectedIds = remoteDataRecordStorageIds
+                                payload.selectedIds = remoteDataRecordStorageIds;
                             }
                             VRUIUtilsService.callDirectiveLoad(dataRecordStorageSelectorAPI, payload, dataRecordStorageSelectorLoadDeferred);
                         });

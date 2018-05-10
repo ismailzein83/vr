@@ -16,6 +16,10 @@
             });
         }
 
+        function GetDataRecordStorageList(DataRecordStorageIdsList) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataRecordStorage', 'GetDataRecordStorageList'), DataRecordStorageIdsList);
+        }
+
         function GetRemoteDataRecordsStorageInfo(connectionId, serializedFilter) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_GenericData_ModuleConfig.moduleName, 'DataRecordStorage', 'GetRemoteDataRecordsStorageInfo'), {
                 connectionId: connectionId,
@@ -64,7 +68,8 @@
             UpdateDataRecordStorage: UpdateDataRecordStorage,
             HasUpdateDataRecordStorage: HasUpdateDataRecordStorage,
             CheckRecordStoragesAccess: CheckRecordStoragesAccess,
-            GetVRRestAPIRecordQueryInterceptorConfigs: GetVRRestAPIRecordQueryInterceptorConfigs
+            GetVRRestAPIRecordQueryInterceptorConfigs: GetVRRestAPIRecordQueryInterceptorConfigs,
+            GetDataRecordStorageList: GetDataRecordStorageList
         };
     }
 

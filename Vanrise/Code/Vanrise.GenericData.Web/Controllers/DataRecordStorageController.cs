@@ -38,6 +38,15 @@ namespace Vanrise.GenericData.Web.Controllers
             return _manager.GetRemoteDataRecordsStorageInfo(connectionId, serializedFilter);
         }
 
+        
+
+        [HttpPost]
+        [Route("GetDataRecordStorageList")]
+        public List<DataRecordStorage> GetDataRecordStorageList(List<Guid> DataRecordStorageIdsList)
+        {
+            return _manager.GetDataRecordStorageList(DataRecordStorageIdsList);
+        }
+
         [HttpGet]
         [Route("GetDataRecordStorage")]
         public DataRecordStorage GetDataRecordStorage(Guid dataRecordStorageId)

@@ -2,10 +2,23 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed">
             <vr-row removeline>
-                <vr-columns width="normal">
+
+                <vr-columns width="1/4row">
                     <vr-textbox value="name" label="Name"></vr-textbox>
                 </vr-columns>
-            </vr-row>
+
+                <vr-columns width="1/4row">
+                    <vr-select datasource="scopeModel.bEDefinitionSettingConfigs"
+                               selectedvalues="scopeModel.selectedSettingsTypeConfig"
+                               datavaluefield="ExtensionConfigurationId"
+                               datatextfield="Title"
+                               label="Type" text="None"
+                               ismultipleselection="true"
+                               hideremoveicon>
+                    </vr-select>
+               </vr-columns>
+
+          </vr-row>
         </div>
         <vr-row removeline>
             <vr-actionbar showcollapsebutton="true" issectioncollapsed="filterSectionCollapsed">

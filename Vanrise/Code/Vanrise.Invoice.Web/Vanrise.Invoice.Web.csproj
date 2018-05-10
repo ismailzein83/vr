@@ -228,6 +228,8 @@
     <Content Include="VR_Invoice\Directives\BillingCycle\MainExtensions\StartDateCalculationMethod\vr-invoice-startdatecalculationmethod-periodaccumulation.js" />
     <Content Include="VR_Invoice\Directives\BillingCycle\vr-invoice-billingperiod.js" />
     <Content Include="VR_Invoice\Directives\BillingCycle\vr-invoice-startdatecalculationmethod.js" />
+    <Content Include="VR_Invoice\Directives\Extensions\GenericData\Templates\InvoiceBusinessObjectDataProviderSettingsTemplate.html" />
+    <Content Include="VR_Invoice\Directives\Extensions\GenericData\vr-invoice-businessobject-dataprovidersettings.js" />
     <Content Include="VR_Invoice\Directives\Extensions\Invoice\Templates\InvoiceConvertorTemplate.html" />
     <Content Include="VR_Invoice\Directives\Extensions\Invoice\Templates\InvoiceRecordTypeMainFieldTemplate.html" />
     <Content Include="VR_Invoice\Directives\Extensions\Invoice\Templates\InvoiceSourceReaderTemplate.html" />
@@ -444,9 +446,9 @@
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\vr-invoicetype-invoicesubsectiongridcolumns.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\InvoiceUISubSectionSettings\vr-invoicetype-invoiceuisubsectionsettings.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceGridSettings\vr-invoicetype-maingridcolumns.js" />
+    <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-selector.js" />
     <Content Include="VR_Invoice\Directives\Invoice\vr-invoice-periodgapaction-selector.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-ordertype-selective.js" />
-    <Content Include="VR_Invoice\Directives\InvoiceType\vr-invoicetype-selector.js" />
     <Content Include="VR_Invoice\Directives\InvoiceType\InvoiceSubSectionSettings\vr-invoicetype-subsections.js" />
     <Content Include="VR_Invoice\Directives\Extensions\VRObjectTypes\Templates\InvoiceObjectTypeTemplate.html" />
     <Content Include="VR_Invoice\Directives\Extensions\VRObjectTypes\Templates\InvoicePropertyEvaluatorTemplate.html" />

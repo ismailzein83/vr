@@ -23,7 +23,13 @@ namespace Vanrise.GenericData.Business
             var cachedBEDefinitions = GetCachedBusinessEntityDefinitions();
 
             Func<BusinessEntityDefinition, bool> filterExpression = (dataRecordStorage) =>
-                (input.Query.Name == null || dataRecordStorage.Name.ToLower().Contains(input.Query.Name.ToLower()));
+            {
+                if (input.Query.Name != null && !dataRecordStorage.Name.ToLower().Contains(input.Query.Name.ToLower()))
+                    return false;
+                if (input.Query.TypeIds != null && !input.Query.TypeIds.Contains(dataRecordStorage.Settings.ConfigId))
+                    return false;
+                return true;
+            };
             VRActionLogger.Current.LogGetFilteredAction(BusinessEntityDefinitionLoggableEntity.Instance, input);
             return DataRetrievalManager.Instance.ProcessResult(input, cachedBEDefinitions.ToBigResult(input, filterExpression, BusinessEntityDefinitionDetailMapper));
         }

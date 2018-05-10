@@ -17,7 +17,7 @@ namespace Vanrise.GenericData.Business
 
         public override void UpdateRecordStorage(IUpdateRecordStorageContext context)
         {
-            throw new NotImplementedException();
+           // throw new NotImplementedException();
         }
 
         public override IDataRecordDataManager GetDataRecordDataManager(IGetRecordStorageDataManagerContext context)

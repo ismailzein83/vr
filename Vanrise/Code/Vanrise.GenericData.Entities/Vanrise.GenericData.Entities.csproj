@@ -92,6 +92,7 @@
     <Compile Include="BusinessManagers\IBusinessEntityDefinitionManager.cs" />
     <Compile Include="BusinessManagers\IGenericRuleDefinitionManager.cs" />
     <Compile Include="BusinessManagers\IDataRecordTypeManager.cs" />
+    <Compile Include="DataStorage\DataRecordStorage\BusinessObjectDataRecordStorageConfig.cs" />
     <Compile Include="DataRecordCondition.cs" />
     <Compile Include="DataRecordFieldChoice\DataRecordFieldChoice.cs" />
     <Compile Include="DataRecordFieldChoice\DataRecordFieldChoiceDetail.cs" />

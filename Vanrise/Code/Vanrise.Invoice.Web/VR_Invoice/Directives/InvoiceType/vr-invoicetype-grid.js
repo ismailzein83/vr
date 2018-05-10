@@ -87,7 +87,7 @@ app.directive("vrInvoicetypeGrid", ["UtilsService", "VRNotificationService", "VR
                     gridDrillDownTabsObj.setDrillDownExtensionObject(invoiceType);
                     gridAPI.itemUpdated(invoiceType);
                 };
-                VR_Invoice_InvoiceTypeService.editInvoiceType(onInvoiceTypeUpdated,dataItem.Entity.InvoiceTypeId)
+                VR_Invoice_InvoiceTypeService.editInvoiceType(onInvoiceTypeUpdated, dataItem.Entity.InvoiceTypeId);
             }
         }
 

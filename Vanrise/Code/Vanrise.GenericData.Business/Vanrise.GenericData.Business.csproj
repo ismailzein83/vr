@@ -82,6 +82,7 @@
     <Compile Include="BusinessEntity\VRRestAPIBEDefinitionSettings\VRRestAPIBEDefinitionSettings.cs" />
     <Compile Include="BusinessEntity\VRRestAPIBusinessEntityManager.cs" />
     <Compile Include="BusinessEntity\IExtensibleBEManager.cs" />
+    <Compile Include="BusinessObjectDataRecordStorageManager.cs" />
     <Compile Include="BusinessObjectDataStore\BusinessObjectDataProviderSettings.cs" />
     <Compile Include="BusinessObjectDataStore\BusinessObjectDataRecordDataManager.cs" />
     <Compile Include="BusinessObjectDataStore\BusinessObjectDataRecordStorageSettings.cs" />

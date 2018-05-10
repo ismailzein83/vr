@@ -415,6 +415,12 @@ namespace Vanrise.GenericData.Business
             return filterdRecrodsIds;
         }
 
+        public List<DataRecordStorage> GetDataRecordStorageList(List<Guid> DataRecordStorageIdsList)
+        {
+            var allRecordStorages = GetCachedDataRecordStorages().Where(k => DataRecordStorageIdsList.Contains(k.Key)).Select(v => v.Value).ToList();
+            return allRecordStorages;
+        }
+
         public bool DoesUserHaveAccess(Vanrise.Entities.DataRetrievalInput<DataRecordQuery> input)
         {
             return this.DoesUserHaveAccess(SecurityContext.Current.GetLoggedInUserId(), input.Query.DataRecordStorageIds);
@@ -1134,5 +1140,7 @@ namespace Vanrise.GenericData.Business
         }
 
         #endregion
+
+
     }
 }
