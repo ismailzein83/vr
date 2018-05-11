@@ -76,7 +76,7 @@ namespace Retail.BusinessEntity.Entities
     {
         public List<string> Headers { get; set; }
         
-        public  List<string[]> Data { get; set; }
+        public List<object[]> Data { get; set; }
     }
 
     public interface IPackageSettingsCanAssignPackageContext

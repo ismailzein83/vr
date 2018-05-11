@@ -234,12 +234,12 @@ namespace Retail.BusinessEntity.Business
                 Style = titlesStyle
             };
             firstSheet.AddCell(dateTitle);
-
+            var dateTimeFormat = Utilities.GetDateTimeFormat(DateTimeType.Date);
             VRExcelCell dateValue = new VRExcelCell
             {
                 RowIndex = 14,
                 ColumnIndex = 1,
-                Value = DateTime.Now.TimeOfDay.ToString(),
+                Value = DateTime.Today.ToString(dateTimeFormat),
                 Style = valuesStyle
             };
             firstSheet.AddCell(dateValue);
@@ -255,12 +255,12 @@ namespace Retail.BusinessEntity.Business
 
             int accountCurrencyId = accountManager.GetCurrencyId(accountBEDefinitionId, accountId);
             CurrencyManager currencyManager = new CurrencyManager();
-            var currencyName = currencyManager.GetCurrencyName(accountCurrencyId);
+            var currencySymbol = currencyManager.GetCurrencySymbol(accountCurrencyId);
             VRExcelCell currencyValue = new VRExcelCell
             {
                 RowIndex = 15,
                 ColumnIndex = 1,
-                Value = currencyName!=null ? currencyName : "",
+                Value = currencySymbol != null ? currencySymbol : "",
                 Style = valuesStyle
             };
             firstSheet.AddCell(currencyValue);
@@ -468,6 +468,10 @@ namespace Retail.BusinessEntity.Business
                     for (int j = 0; j < rowData.Length; j++)
                     {
                         var data = rowData[j];
+                        if (data is double)
+                        {
+                            dataStyle.HorizontalAlignment = VRExcelContainerHorizontalAlignment.Right;
+                        }
                         VRExcelCell rateValueRuleDataCell = new VRExcelCell
                         {
                             RowIndex = lastRowIndex,

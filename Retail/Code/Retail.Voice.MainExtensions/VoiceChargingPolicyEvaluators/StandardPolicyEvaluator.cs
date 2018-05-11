@@ -48,7 +48,7 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
 
             List<RateValueRule> rateValueRules = new RateValueRuleManager().GetApplicableFilteredRules(rateValueRuleDefinitionId, rateValueRuleGenericRuleQuery);
             List<string> exportRateValueRuleDataHeaders;
-            List<string[]> exportRateValueRuleDataList;
+            List<object[]> exportRateValueRuleDataList;
             List<string> rateValueRuleSettingHeaders = new List<string>();
             GenericRuleDefinitionManager genericRuleDefinitionManager = new GenericRuleDefinitionManager();
             var rateValueRuleDefinition = genericRuleDefinitionManager.GetGenericRuleDefinition(rateValueRuleDefinitionId);
@@ -66,7 +66,7 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
                 (genericRuleDefinition, genericRule) =>
                 {
                     RateValueRule rateValueRule = genericRule as RateValueRule;
-                    List<string> settingData = new List<string>();
+                    List<object> settingData = new List<object>();
                     settingData.Add(currencyManager.GetCurrencySymbol(rateValueRule.Settings.CurrencyId));
                     var rateNamesAndValues = genericRule.GetSettingsValuesByName();
                     if (rateNamesAndValues != null && rateNamesAndValues.Count != 0 && rateValueFieldNames!=null && rateValueFieldNames.Count!=0)
@@ -76,7 +76,7 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
                             if(!rateName.Equals("Currency", StringComparison.InvariantCultureIgnoreCase))
                             {
                                 var data = rateNamesAndValues.GetRecord(rateName);
-                                settingData.Add(data != null ? data.ToString() : null);
+                                settingData.Add(data);
                             }
                         }
                     }
@@ -99,42 +99,28 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
 
             List<TariffRule> tariffRules = new TariffRuleManager().GetApplicableFilteredRules(tariffRuleDefinitionId, tariffRuleGenericRuleQuery);
             List<string> exportTariffRuleDataHeaders;
-            List<string[]> exportTariffRuleDataList;
-            List<string> tariffRuleSettingHeaders = new List<string>() { "Currency" };
+            List<object[]> exportTariffRuleDataList;
+            List<string> tariffRuleSettingHeaders = new List<string>() { "Currency", "Settings" };
 
             var tarrifRuleDefinition = genericRuleDefinitionManager.GetGenericRuleDefinition(tariffRuleDefinitionId);
             tarrifRuleDefinition.ThrowIfNull("tarrifRuleDefinition", tarrifRuleDefinition);
             tarrifRuleDefinition.SettingsDefinition.ThrowIfNull("tarrifRuleDefinition.SettingsDefinition");
-            var tarrifFieldNames = tarrifRuleDefinition.SettingsDefinition.GetFieldNames();
-            if (tarrifFieldNames != null && tarrifFieldNames.Count != 0)
-            {
-                foreach (var rateName in tarrifFieldNames)
-                {
-                    tariffRuleSettingHeaders.Add(rateName);
-                }
-            }
+         
             ExtractDataFromRule(tariffRuleDefinitionId, tariffRules != null ? tariffRules.Select(itm => itm as GenericRule).ToList() : null, tariffRuleSettingHeaders,
                 (genericRuleDefinition, genericRule) =>
                 {
                     TariffRule tariffRule = genericRule as TariffRule;
-                    List<string> settingData = new List<string>();
+                    List<object> settingData = new List<object>();
+                    tariffRule.Settings.ThrowIfNull("tariffRule.Settings");
                     settingData.Add(currencyManager.GetCurrencySymbol(tariffRule.Settings.CurrencyId));
-                    var rateNamesAndValues = genericRule.GetSettingsValuesByName();
-                    if (rateNamesAndValues != null && rateNamesAndValues.Count!=0 && tarrifFieldNames!=null && tarrifFieldNames.Count!=0)
-                    {
-                        foreach (var rateName in tarrifFieldNames)
-                        {
-                            var data = rateNamesAndValues.GetRecord(rateName);
-                            settingData.Add(data != null ? data.ToString() : null);
-                        }
-                    }
+                    settingData.Add(tariffRule.Settings.GetPricingDescription());
                     return settingData;
                 }
                 , out exportTariffRuleDataHeaders, out exportTariffRuleDataList);
             context.TariffRuleData = new ExportRuleData() { Headers = exportTariffRuleDataHeaders, Data = exportTariffRuleDataList };
         }
 
-        private void ExtractDataFromRule(Guid genericRuleDefinitionId, List<GenericRule> genericRules, List<string> settingHeaders, Func<GenericRuleDefinition, GenericRule, List<string>> getSettingDataList, out List<string> ruleDataHeaders, out List<string[]> exportRuleDataList)
+        private void ExtractDataFromRule(Guid genericRuleDefinitionId, List<GenericRule> genericRules, List<string> settingHeaders, Func<GenericRuleDefinition, GenericRule, List<object>> getSettingDataList, out List<string> ruleDataHeaders, out List<object[]> exportRuleDataList)
         {
             GenericRuleDefinition genericRuleDefinition = new GenericRuleDefinitionManager().GetGenericRuleDefinition(genericRuleDefinitionId);
             List<string> filteredCriteriaHeaders = new List<string>();
@@ -159,15 +145,15 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
 
             if (genericRules != null && genericRules.Count > 0)
             {
-                exportRuleDataList = new List<string[]>();
-                List<string[]> exportRuleDataListEdited = new List<string[]>();
+                exportRuleDataList = new List<object[]>();
+                List<object[]> exportRuleDataListEdited = new List<object[]>();
                 Dictionary<int, bool> hasValueByColumn = new Dictionary<int, bool>();
                 int totalColumns = 0;
 
                 foreach (GenericRule genericRule in genericRules)
                 {
                     int columnIndex = 0;
-                    string[] rowData = new string[ruleDataHeaders.Count];
+                    object[] rowData = new object[ruleDataHeaders.Count];
 
                     if (genericRule.Criteria != null && genericRule.Criteria.FieldsValues != null && genericRule.Criteria.FieldsValues.Count > 0)
                     {
@@ -238,11 +224,11 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
                     }
                     if (settingHeaders != null)
                     {
-                        List<string> settingData = getSettingDataList(genericRuleDefinition, genericRule);
+                        List<object> settingData = getSettingDataList(genericRuleDefinition, genericRule);
                         settingData.ThrowIfNull("settingData", genericRule.RuleId);
 
                         columnIndex = genericRuleDefinitionFieldsCount;
-                        foreach (string settingValue in settingData)
+                        foreach (var settingValue in settingData)
                         {
                             rowData[columnIndex] = settingValue;
                           
@@ -281,7 +267,7 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
                 bool ruleDataHeadersEdited = false;
                 foreach (var exportedRule in exportRuleDataList)
                 {
-                    List<string> rowDataEditedList = new List<string>();
+                    List<object> rowDataEditedList = new List<object>();
                     for (int i = 0; i < exportedRule.Length; i++)
                     {
                         if(!hasValueByColumn[i])
@@ -303,7 +289,7 @@ namespace Retail.Voice.MainExtensions.VoiceChargingPolicyEvaluators
                     }
                     ruleDataHeadersEdited = true;
                     int newLength = rowDataEditedList.Count;
-                    string[] rowDataEditedArray = new string[newLength];
+                    object[] rowDataEditedArray = new object[newLength];
                     for (int i = 0; i < newLength; i++)
                     {
                         rowDataEditedArray[i] = rowDataEditedList[i];
