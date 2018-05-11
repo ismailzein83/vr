@@ -71,7 +71,7 @@ namespace Vanrise.Common.Excel
 
         public bool SetBorder { get; set; }
 
-        public VRExcelContainerHorizontalAlignment HorizontalAlignment { get; set; }
+        public VRExcelContainerHorizontalAlignment? HorizontalAlignment { get; set; }
     }
 
     public class VRExcelRowConfig : VRExcelContainerConfig

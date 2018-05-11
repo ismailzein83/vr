@@ -101,18 +101,22 @@ namespace Vanrise.Common.Excel
                 style.SetBorder(BorderType.BottomBorder, CellBorderType.Thin, Color.Black);
             }
 
-            switch (config.HorizontalAlignment)
+            if (config.HorizontalAlignment.HasValue)
             {
-                case VRExcelContainerHorizontalAlignment.Left:
-                    style.HorizontalAlignment = TextAlignmentType.Left;
-                    break;
-                case VRExcelContainerHorizontalAlignment.Center:
-                    style.HorizontalAlignment = TextAlignmentType.Center;
-                    break;
-                case VRExcelContainerHorizontalAlignment.Right:
-                    style.HorizontalAlignment = TextAlignmentType.Right;
-                    break;
+                switch (config.HorizontalAlignment.Value)
+                {
+                    case VRExcelContainerHorizontalAlignment.Left:
+                        style.HorizontalAlignment = TextAlignmentType.Left;
+                        break;
+                    case VRExcelContainerHorizontalAlignment.Center:
+                        style.HorizontalAlignment = TextAlignmentType.Center;
+                        break;
+                    case VRExcelContainerHorizontalAlignment.Right:
+                        style.HorizontalAlignment = TextAlignmentType.Right;
+                        break;
+                }
             }
+            
             //if (config.SetBorder == true) 
             //{
             //    style.SetBorder(BorderType.LeftBorder, CellBorderType.Thin, Color.LightGray); //Border color matching original cell border color
