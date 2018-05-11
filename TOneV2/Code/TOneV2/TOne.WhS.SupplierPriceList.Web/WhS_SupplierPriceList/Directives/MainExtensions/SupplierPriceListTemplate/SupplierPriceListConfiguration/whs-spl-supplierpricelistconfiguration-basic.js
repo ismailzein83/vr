@@ -323,7 +323,7 @@
                         }
                         else {
                             codeRateMappingSelectionChangedDeferred.resolve();
-                            $scope.scopeModel.includeServices = true;
+                            $scope.scopeModel.includeServices = false;
                         }
                     }
                     setTimeout(function () {
