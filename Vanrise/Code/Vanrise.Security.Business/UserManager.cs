@@ -513,6 +513,7 @@ namespace Vanrise.Security.Business
         public bool IsUserEnable(int userId, out  UserStatus userStatus)
         {
             var user = GetUserbyId(userId);
+            user.ThrowIfNull("user", userId);
             return IsUserEnable(user, out userStatus);
         }
         public bool IsUserEnable(User user, out UserStatus userStatus)
