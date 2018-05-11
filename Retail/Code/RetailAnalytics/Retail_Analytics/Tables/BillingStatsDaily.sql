@@ -1,4 +1,4 @@
-﻿CREATE TABLE [Retail_Analytics].[BillingStatsDaily] (
+CREATE TABLE [Retail_Analytics].[BillingStatsDaily] (
     [Id]                      BIGINT           NULL,
     [BatchStart]              DATETIME         NULL,
     [SubscriberAccountTypeId] UNIQUEIDENTIFIER NULL,
@@ -65,7 +65,14 @@
 
 
 
+
+
 GO
-CREATE CLUSTERED INDEX [IX_BillingStatsDaily_BatchStart]
-    ON [Retail_Analytics].[BillingStatsDaily]([BatchStart] ASC);
+CREATE NONCLUSTERED INDEX [IX_BillingStatsDaily_FinancialAccountId]
+    ON [Retail_Analytics].[BillingStatsDaily]([FinancialAccountId] ASC);
+
+
+GO
+CREATE CLUSTERED INDEX [IX_BillingStatsDaily_BatchStartAndAccountId]
+    ON [Retail_Analytics].[BillingStatsDaily]([BatchStart] ASC, [SubscriberAccountId] ASC);
 

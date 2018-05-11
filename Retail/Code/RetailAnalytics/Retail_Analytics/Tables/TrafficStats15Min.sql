@@ -1,4 +1,4 @@
-﻿CREATE TABLE [Retail_Analytics].[TrafficStats15Min] (
+CREATE TABLE [Retail_Analytics].[TrafficStats15Min] (
     [Id]                      BIGINT           NULL,
     [BatchStart]              DATETIME         NULL,
     [SubscriberAccountTypeId] UNIQUEIDENTIFIER NULL,
@@ -49,7 +49,14 @@
 
 
 
+
+
 GO
-CREATE CLUSTERED INDEX [IX_TrafficStats15Min_BatchStart]
-    ON [Retail_Analytics].[TrafficStats15Min]([BatchStart] ASC);
+CREATE NONCLUSTERED INDEX [IX_TrafficStats15Min_FinancialAccountId]
+    ON [Retail_Analytics].[TrafficStats15Min]([FinancialAccountId] ASC);
+
+
+GO
+CREATE CLUSTERED INDEX [IX_TrafficStats15Min_BatchStartAndAccountId]
+    ON [Retail_Analytics].[TrafficStats15Min]([BatchStart] ASC, [SubscriberAccountId] ASC);
 
