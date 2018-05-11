@@ -295,7 +295,7 @@ namespace Vanrise.Security.Business
                 if (insertActionSucc)
                 {
                     addedUser.UserId = userId;
-
+                    new UserPasswordHistoryManager().AddPasswordHistory(userId, encryptedPassword, false);
                     Guid newUserId = _configManager.GetNewUserId();
                     if (_configManager.ShouldSendEmailOnNewUser())
                     {
@@ -617,7 +617,7 @@ namespace Vanrise.Security.Business
                 updateOperationOutput.Message = validationMessage;
                 return updateOperationOutput;
             }
-
+           
             User user = GetUserbyId(userId);
 
             bool updateActionSucc;
