@@ -63,6 +63,9 @@ namespace Retail.BusinessEntity.Business
                 }
                 if (!checkIfClassificationDoesNotHaveEED)
                     return true;
+            }else
+            {
+                return true;
             }
             return false;
         }
