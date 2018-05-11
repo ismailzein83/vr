@@ -1,4 +1,4 @@
-﻿CREATE TABLE [Retail_CDR].[BillingCDR_Main] (
+CREATE TABLE [Retail_CDR].[BillingCDR_Main] (
     [CDRID]                    BIGINT           NULL,
     [Call_Id]                  VARCHAR (200)    NULL,
     [AttemptDateTime]          DATETIME         NULL,
@@ -81,12 +81,19 @@
 
 
 
+
+
 GO
 CREATE NONCLUSTERED INDEX [IX_BillingCDR_Main_CDRId]
     ON [Retail_CDR].[BillingCDR_Main]([CDRID] ASC);
 
 
 GO
-CREATE CLUSTERED INDEX [IX_BillingCDR_Main_AttemptDateTime]
-    ON [Retail_CDR].[BillingCDR_Main]([AttemptDateTime] ASC);
+CREATE NONCLUSTERED INDEX [IX_BillingCDR_Main_FinancialAccountId]
+    ON [Retail_CDR].[BillingCDR_Main]([FinancialAccountId] ASC);
+
+
+GO
+CREATE CLUSTERED INDEX [IX_BillingCDR_Main_AttemptDateTimeAndAccountId]
+    ON [Retail_CDR].[BillingCDR_Main]([AttemptDateTime] ASC, [SubscriberAccountId] ASC);
 
