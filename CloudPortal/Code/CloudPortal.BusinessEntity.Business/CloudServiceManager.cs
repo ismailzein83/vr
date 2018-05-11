@@ -156,12 +156,11 @@ namespace CloudPortal.BusinessEntity.Business
             var user = userManager.GetUserbyEmail(userEmail);
             if (user == null)
             {
-                var addUserOutput = userManager.AddUser(new VRSecEntities.User
+                var addUserOutput = userManager.AddUser(new VRSecEntities.UserToAdd
                     {
                         Email = userEmail,
                         Name = userEmail,
                         Description = appUserDescription,
-                        Status = VRSecEntities.UserStatus.Active,
                         TenantId = tenantId
                     });
                 if (addUserOutput == null || addUserOutput.Result == Vanrise.Entities.InsertOperationResult.Succeeded)
@@ -232,7 +231,7 @@ namespace CloudPortal.BusinessEntity.Business
             if (user == null)
                 return new UpdateOperationOutput<object>() { Result = UpdateOperationResult.Failed };
 
-            Vanrise.Common.PasswordGenerator pwdGenerator = new Vanrise.Common.PasswordGenerator();
+            PasswordGenerator pwdGenerator = new PasswordGenerator();
             string pwd = pwdGenerator.Generate();
 
 
@@ -255,7 +254,7 @@ namespace CloudPortal.BusinessEntity.Business
             if (user == null)
                 return new UpdateOperationOutput<object>() { Result = UpdateOperationResult.Failed };
 
-            Vanrise.Common.PasswordGenerator pwdGenerator = new Vanrise.Common.PasswordGenerator();
+            PasswordGenerator pwdGenerator = new PasswordGenerator();
             string pwd = pwdGenerator.Generate();
 
             UpdateOperationOutput<object> result = userManager.UpdateTempPasswordByEmail(email, pwd, DateTime.Now.Add(s_resetPasswordValidity));
@@ -297,7 +296,7 @@ namespace CloudPortal.BusinessEntity.Business
             };
             if (appUser.Settings != null)
             {
-                cloudAppUser.Status = appUser.Settings.Status;
+                //cloudAppUser.Status = appUser.Settings.Status;
                 cloudAppUser.Description = appUser.Settings.Description;
             }
             return cloudAppUser;

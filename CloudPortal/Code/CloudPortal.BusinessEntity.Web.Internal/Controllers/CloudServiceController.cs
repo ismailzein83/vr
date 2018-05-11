@@ -23,7 +23,7 @@ namespace CloudPortal.BusinessEntity.Web.Internal.Controllers
         {
             var applicationIdentification = GetApplicationIdentification();
             var output = new AddUserToApplicationOutput();
-             output.OperationOutput = _manager.AddUserToApplication(applicationIdentification, input.Email, input.Status, input.Description, input.TenantId);
+             output.OperationOutput = _manager.AddUserToApplication(applicationIdentification, input.Email, UserStatus.Active, input.Description, input.TenantId);
             return output;
         }
 
@@ -60,7 +60,7 @@ namespace CloudPortal.BusinessEntity.Web.Internal.Controllers
         {
             var applicationIdentification = GetApplicationIdentification();
             var output = new UpdateUserToApplicationOutput();
-            output.OperationOutput = _manager.UpdateUserToApplication(applicationIdentification, input.UserId, input.Status, input.Description);
+            output.OperationOutput = _manager.UpdateUserToApplication(applicationIdentification, input.UserId, UserStatus.Active, input.Description);
             return output;
         }
 
