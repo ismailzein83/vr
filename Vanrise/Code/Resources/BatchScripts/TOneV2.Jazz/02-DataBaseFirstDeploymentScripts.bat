@@ -7,4 +7,4 @@ For /F %PARSEARG% %%i in (%CURRDATE%) Do SET YYYYMMDD=%%l%%j%%k
 
 ECHO TOneV2.Jazz DataBase First Deployment Scripts
 
-xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\TOne_Jazz.PostDeployment.sql" /y /v /z /i /Q /R		"\\192.168.110.185\Fixes\WebSite\TOneV2\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
+xcopy "C:\TFS\TOneV2\Code\TOneV2\SQL.TOneConfiguration\TOne_Jazz.PostDeployment.sql" /y /v /z /i /Q /R		"\\192.168.110.185\Fixes\WebSite\TOneV2.Jazz\%YYYYMMDD%\DataBaseFirstDeploymentScripts\Configuration\"
