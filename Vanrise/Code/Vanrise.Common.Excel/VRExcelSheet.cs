@@ -56,6 +56,7 @@ namespace Vanrise.Common.Excel
         public int NumberOFRows { get; set; }
         public byte[] Value { get; set; }
     }
+    public enum VRExcelContainerHorizontalAlignment { Left = 0, Center = 1, Right = 2 }
     public class VRExcelContainerConfig
     {
         public string BGColor { get; set; }
@@ -69,6 +70,8 @@ namespace Vanrise.Common.Excel
         public bool IsItalic { get; set; }
 
         public bool SetBorder { get; set; }
+
+        public VRExcelContainerHorizontalAlignment HorizontalAlignment { get; set; }
     }
 
     public class VRExcelRowConfig : VRExcelContainerConfig
