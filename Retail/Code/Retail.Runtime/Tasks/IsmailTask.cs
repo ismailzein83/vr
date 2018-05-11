@@ -20,12 +20,12 @@ namespace Retail.Runtime.Tasks
       
         public void Execute()
         {
-            Parallel.For(0, 1, (i) =>
-                {
-                    TestStringConcatenation();
-                });
-            Console.ReadKey();
-            GenerateRuntimeNodeConfiguration();
+            //Parallel.For(0, 1, (i) =>
+            //    {
+            //        TestStringConcatenation();
+            //    });
+            //Console.ReadKey();
+            //GenerateRuntimeNodeConfiguration();
             //TestAppDomain();
             //Console.ReadKey();
             //TestRDBSelectQuery();
