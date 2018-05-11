@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Vanrise.Common.Business;
 using Vanrise.Common;
 using Vanrise.GenericData.Entities;
+using System.Security;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.GenericData.Notification
 {
@@ -15,7 +17,7 @@ namespace Vanrise.GenericData.Notification
         #region Ctor/Properties
 
         Vanrise.Common.Business.VRComponentTypeManager _vrComponentTypeManager = new Common.Business.VRComponentTypeManager();
-
+        Vanrise.Security.Business.SecurityManager s_securityManager = new Vanrise.Security.Business.SecurityManager();
         #endregion
 
         #region Public Methods
@@ -47,6 +49,57 @@ namespace Vanrise.GenericData.Notification
             DataRecordRuleEvaluatorDefinition dataRecordRuleEvaluatorDefinition = cachedDataRecordRuleEvaluatorDefinitions.GetRecord(dataRecordRuleEvaluatorDefinitionId);
             return dataRecordRuleEvaluatorDefinition.Settings;
         
+        }
+
+        private bool DoesUserHaveAccess(int userId, DataRecordRuleEvaluatorDefinitionSettings dataRecordRuleEvaluatorDefinitionSettings, Func<DataRecordRuleEvaluatorDefinitionSecurity, Vanrise.Security.Entities.RequiredPermissionSettings> getRequiredPermissionSetting)
+        {
+            if (dataRecordRuleEvaluatorDefinitionSettings != null && dataRecordRuleEvaluatorDefinitionSettings.Security != null)
+                return s_securityManager.IsAllowed(getRequiredPermissionSetting(dataRecordRuleEvaluatorDefinitionSettings.Security), userId);
+            return true;
+
+        }
+
+        public bool DoesUserHaveStartInstanceAccess(Guid dataRecordRuleEvaluatorDefinitionId)
+        {
+            int userId = Vanrise.Security.Business.SecurityContext.Current.GetLoggedInUserId();
+            var beRecieveDefinition = GetDataRecordRuleEvaluatorDefinitionSettings(dataRecordRuleEvaluatorDefinitionId);
+            return DoesUserHaveAccess(userId, beRecieveDefinition, (sec) => sec.StartInstancePermission);
+        }
+        public bool DoesUserHaveViewAccess(int userId)
+        {
+            var alldef = GetCachedDataRecordRuleEvaluatorDefinitions();
+            foreach (var def in alldef)
+            {
+                if (DoesUserHaveAccess(userId, def.Value.Settings, (sec) => sec.ViewPermission))
+                    return true;
+            }
+            return false;
+        }
+        public bool DoesUserHaveStartNewInstanceAccess(int userId)
+        {
+            var alldef = GetCachedDataRecordRuleEvaluatorDefinitions();
+            foreach (var def in alldef)
+            {
+                if (DoesUserHaveAccess(userId, def.Value.Settings, (sec) => sec.StartInstancePermission))
+                    return true;
+            }
+            return false;
+        }
+
+        public bool DoesUserHaveStartSpecificInstanceAccess(int userId, Guid dataRecordRuleEvaluatorDefinitionId)
+        {
+            var def = GetDataRecordRuleEvaluatorDefinitionSettings(dataRecordRuleEvaluatorDefinitionId);
+            if (!DoesUserHaveAccess(userId, def, (sec) => sec.StartInstancePermission))
+                return false;
+            return true;
+        }
+        public RequiredPermissionSettings GetViewInstanceRequiredPermissions(Guid dataRecordRuleEvaluatorDefinitionId)
+        {
+            List<RequiredPermissionSettings> readInstanceRequiredPermissions = new List<RequiredPermissionSettings>();
+            var def = GetDataRecordRuleEvaluatorDefinitionSettings(dataRecordRuleEvaluatorDefinitionId);
+            if (def.Security != null && def.Security.ViewPermission != null)
+                readInstanceRequiredPermissions.Add(def.Security.ViewPermission);
+            return new Vanrise.Security.Business.SecurityManager().MergeRequiredPermissions(readInstanceRequiredPermissions);
         }
 
         #endregion

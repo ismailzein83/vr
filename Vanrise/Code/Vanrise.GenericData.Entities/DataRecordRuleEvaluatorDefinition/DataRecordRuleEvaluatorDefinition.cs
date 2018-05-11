@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Security.Entities;
 
 namespace Vanrise.GenericData.Entities
 {
@@ -18,5 +19,13 @@ namespace Vanrise.GenericData.Entities
 
         public List<Guid> DataRecordStorageIds { get; set; }
         public Guid AlertRuleTypeId { get; set; }
+        public DataRecordRuleEvaluatorDefinitionSecurity Security { get; set; }
+
+    }
+
+    public class DataRecordRuleEvaluatorDefinitionSecurity
+    {
+        public RequiredPermissionSettings ViewPermission { get; set; }
+        public RequiredPermissionSettings StartInstancePermission { get; set; }
     }
 }
