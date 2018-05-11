@@ -135,6 +135,9 @@
     <Content Include="BatchScripts\SOM\Client-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\SOM\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\SOM\runtime-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\TOneV2.Jazz\Client-list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\TOneV2.Jazz\list-of-excluded-files.txt" />
+    <Content Include="BatchScripts\TOneV2.Jazz\runtime-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\TOneV2\Client-list-of-excluded-files.txt" />
     <Content Include="BatchScripts\TOneV2\list-of-excluded-files.txt" />
     <Content Include="BatchScripts\TOneV2\runtime-list-of-excluded-files.txt" />
@@ -489,6 +492,15 @@
     <None Include="BatchScripts\SOM\07-CreateStandardDBs.bat" />
     <None Include="BatchScripts\SOM\08-GroupSQLFiles.bat" />
     <None Include="BatchScripts\SOM\All.bat" />
+    <None Include="BatchScripts\TOneV2.Jazz\01-Runtime.bat" />
+    <None Include="BatchScripts\TOneV2.Jazz\02-DataBaseFirstDeploymentScripts.bat" />
+    <None Include="BatchScripts\TOneV2.Jazz\03-WebSite.bat" />
+    <None Include="BatchScripts\TOneV2.Jazz\05-CompressFiles.bat" />
+    <None Include="BatchScripts\TOneV2.Jazz\06-GroupJSFiles.bat" />
+    <None Include="BatchScripts\TOneV2.Jazz\07-CreateStandardDBs.bat" />
+    <None Include="BatchScripts\TOneV2.Jazz\08-GroupSQLFiles.bat" />
+    <None Include="BatchScripts\TOneV2.Jazz\30-WebSite_FullVersion.bat" />
+    <None Include="BatchScripts\TOneV2.Jazz\All.bat" />
     <None Include="BatchScripts\TOneV2\02-DataBaseFirstDeploymentScripts.bat" />
     <None Include="BatchScripts\TOneV2\01-Runtime.bat" />
     <None Include="BatchScripts\TOneV2\30-WebSite_FullVersion.bat" />
