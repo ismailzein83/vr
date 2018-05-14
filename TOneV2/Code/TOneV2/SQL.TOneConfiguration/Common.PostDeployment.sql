@@ -121,10 +121,7 @@ as (select * from (values
 ('VRCommon/VRExclusiveSession/ForceReleaseAllSessions','VR_System_Administration: Manage'),
 ('VRCommon/VRExclusiveSession/ForceReleaseSession','VR_System_Administration: Manage'),
 
-('VRCommon/SMSMessageTemplate/GetFilteredSMSMessageTemplates','VR_SystemConfiguration: View'),('VRCommon/SMSMessageTemplate/AddSMSMessageTemplate','VR_SystemConfiguration: Add'),('VRCommon/SMSMessageTemplate/UpdateSMSMessageTemplate','VR_SystemConfiguration: Edit'),
-
-('VR_Runtime/RuntimeNode/GetAllNodes','VR_SystemConfiguration: View'),
-('VR_Runtime/RuntimeNodeConfiguration/GetFilteredRuntimeNodesConfigurations','VR_SystemConfiguration: View')
+('VRCommon/SMSMessageTemplate/GetFilteredSMSMessageTemplates','VR_SystemConfiguration: View'),('VRCommon/SMSMessageTemplate/AddSMSMessageTemplate','VR_SystemConfiguration: Add'),('VRCommon/SMSMessageTemplate/UpdateSMSMessageTemplate','VR_SystemConfiguration: Edit')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
@@ -223,7 +220,6 @@ as (select * from (values
 
 ('A28351BA-A5D7-4651-913C-6C9E09B92AC1','System',null				,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,1,0),
 ('FC9D12D3-9CBF-4D99-8748-5C2BDD6C5ED9','System Processes',null		,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,20,0),
-('EEA077E8-CE38-4E87-89ED-34612D47A998','Runtime',null				,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,21,0),
 ('A459D3D0-35AE-4B0E-B267-54436FDA729A','Entities Definition',null	,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8',null,65,0),
 
 ('50624672-CD25-44FD-8580-0E3AC8E34C71','Administration',null,null,'/Client/Images/menu-icons/admin.png',5,0),
@@ -283,9 +279,7 @@ as (select * from (values
 ('8AC4B99E-01A0-41D1-AE54-09E679309086','Status Definitions','Status Definitions','#/view/Common/Views/StatusDefinition/StatusDefinitionManagement'							,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/StatusDefinition/GetFilteredStatusDefinitions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',23),
 ('52C580DE-C91F-45E2-8E3A-46E0BA9E7EFD','Component Types','Component Types','#/view/Common/Views/VRComponentType/VRComponentTypeManagement'									,'D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRComponentType/GetFilteredVRComponentTypes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',24),
 ('2CF7E0BE-1396-4305-AA27-11070ACFC18F','Application Visibilities','Application Visibilities','#/view/Common/Views/VRApplicationVisibility/VRApplicationVisibilityManagement','D018C0CD-F15F-486D-80C3-F9B87C3F47B8','VRCommon/VRApplicationVisibility/GetFilteredVRApplicationVisibilities',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',26),
-('2D39B12D-8FBF-4D4E-B2A5-5E3FE57580DF','Locked Sessions','Locked Sessions','#/view/Common/Views/VRExclusiveSession/VRExclusiveSessionManagement'							,'525B77DC-F097-4BF1-930A-034B9BBE1AC4','VRCommon/VRExclusiveSession/GetFilteredVRExclusiveSessions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10),
-('0FBE2511-A7C6-441F-BEA7-9FA5CADADF96','Runtime Node Configurations','Runtime Node Configurations','#/view/Runtime/Views/Runtime/RuntimeNodeConfigurationManagement'	,'EEA077E8-CE38-4E87-89ED-34612D47A998','VR_Runtime/RuntimeNodeConfiguration/GetFilteredRuntimeNodesConfigurations',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',5),
-('CFEF119F-5527-4675-A3C9-0FF2C44E6C73','Runtime Nodes','Runtime Nodes','#/view/Runtime/Views/Runtime/RuntimeNodeManagement'											,'EEA077E8-CE38-4E87-89ED-34612D47A998','VR_Runtime/RuntimeNode/GetAllNodes',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10)
+('2D39B12D-8FBF-4D4E-B2A5-5E3FE57580DF','Locked Sessions','Locked Sessions','#/view/Common/Views/VRExclusiveSession/VRExclusiveSessionManagement'							,'525B77DC-F097-4BF1-930A-034B9BBE1AC4','VRCommon/VRExclusiveSession/GetFilteredVRExclusiveSessions',null,null,null,'372ED3CB-4B7B-4464-9ABF-59CD7B08BD23',10)
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([ID],[Name],[Title],[Url],[Module],[ActionNames],[Audience],[Content],[Settings],[Type],[Rank]))
 merge	[sec].[View] as t
