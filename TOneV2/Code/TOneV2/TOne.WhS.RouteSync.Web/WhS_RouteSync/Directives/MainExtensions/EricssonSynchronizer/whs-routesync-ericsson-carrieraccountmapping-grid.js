@@ -82,7 +82,7 @@ app.directive('whsRoutesyncEricssonCarrieraccountmappingGrid', ['VRNotificationS
                                 SupplierMapping: carrierAccountMapping.supplierMappingGridAPI != undefined ? carrierAccountMapping.supplierMappingGridAPI.getData() : undefined
                             };
                         } else {
-                            results[carrierAccountMapping.CarrierAccountId] = carrierMappings[carrierAccountMapping.CarrierAccountId];
+                            results[carrierAccountMapping.CarrierAccountId] = carrierMappings != undefined ? carrierMappings[carrierAccountMapping.CarrierAccountId] : undefined;
                         }
                     }
                     return results;
