@@ -209,7 +209,7 @@
 
                             var dataAnalysisRecordFilterDirectivePayload = {
                                 context: buildRecordFilterContext(response),
-                                criteria: criteria != undefined ? criteria.DataAnalysisFilterGroup : undefined
+                                FilterGroup: criteria != undefined ? criteria.DataAnalysisFilterGroup : undefined
                             };
                             VRUIUtilsService.callDirectiveLoad(dataAnalysisRecordFilterDirectiveAPI, dataAnalysisRecordFilterDirectivePayload, dataAnalysisRecordFilterDirectiveLoadDeferred);
                         });
