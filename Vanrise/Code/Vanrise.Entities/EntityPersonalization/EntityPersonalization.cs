@@ -8,6 +8,14 @@ namespace Vanrise.Entities
 {
     public class EntityPersonalization
     {
-        public Dictionary<string, EntityPersonalizationItem> Items { get; set; }
+        public long EntityPersonalizationId { get; set; }
+        public int? UserId { get; set; }
+        public string EntityUniqueName { get; set; }
+        public EntityPersonalizationData Details { get; set; }
+        public DateTime? CreatedTime { get; set; }
+        public int? CreatedBy { get; set; }
+        public DateTime? LastModifiedTime { get; set; }
+        public int? LastModifiedBy { get; set; }
+
     }
 }
