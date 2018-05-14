@@ -824,6 +824,8 @@ namespace Vanrise.Security.Business
             if (_securityManager.IsPasswordSame(userId, password, out validationMessage))
             {
                 updateOperationOutput.Message = validationMessage;
+                updateOperationOutput.Result = UpdateOperationResult.Failed;
+                updateOperationOutput.ShowExactMessage = true;
                 return updateOperationOutput;
             }
 
