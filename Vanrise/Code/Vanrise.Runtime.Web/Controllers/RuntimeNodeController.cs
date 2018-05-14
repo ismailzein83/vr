@@ -27,7 +27,7 @@ namespace Vanrise.Runtime.Web.Controllers
 
         [HttpGet]
         [Route("GetAllNodes")]
-        public List<RuntimeNode> GetAllNodesStates()
+        public List<RuntimeNode> GetAllNodes()
         {
             return manager.GetAllNodes();
         }
