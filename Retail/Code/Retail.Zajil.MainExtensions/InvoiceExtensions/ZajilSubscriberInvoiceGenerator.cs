@@ -56,6 +56,12 @@ namespace Retail.Zajil.MainExtensions
             Dictionary<string, List<InvoiceBillingRecord>> itemSetNamesDic = ConvertAnalyticDataToDictionary(analyticResult.Data);
             List<GeneratedInvoiceItemSet> generatedInvoiceItemSets = BuildGeneratedInvoiceItemSet(itemSetNamesDic);
 
+            if(generatedInvoiceItemSets == null || generatedInvoiceItemSets.Count == 0)
+            {
+                context.GenerateInvoiceResult = GenerateInvoiceResult.NoData;
+                return;
+            }
+
             InvoiceDetails retailSubscriberInvoiceDetails = BuildInvoiceDetails(itemSetNamesDic, context.FromDate, context.ToDate, currencyId);
             retailSubscriberInvoiceDetails.DuePeriod = context.GetDuePeriod();
             AccountPart accountPart;
@@ -132,6 +138,7 @@ namespace Retail.Zajil.MainExtensions
                             Name = "GroupedByServiceType"
                         });
                     }
+                    if (generatedInvoiceItemSet.Items.Count > 0)
                     generatedInvoiceItemSets.Add(generatedInvoiceItemSet);
 
                 }
