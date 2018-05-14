@@ -1,6 +1,6 @@
 ﻿'use strict';
 
-app.directive('whsRoutesyncEricssonCarrieraccountmappingGrid', ['VRNotificationService', 'VRUIUtilsService', 'UtilsService', 'WhS_BE_CarrierAccountAPIService', 'WhS_BE_CarrierAccountTypeEnum',
+app.directive('whsRoutesyncCarrieraccountmappingEricssonGrid', ['VRNotificationService', 'VRUIUtilsService', 'UtilsService', 'WhS_BE_CarrierAccountAPIService', 'WhS_BE_CarrierAccountTypeEnum',
     function (VRNotificationService, VRUIUtilsService, UtilsService, WhS_BE_CarrierAccountAPIService, WhS_BE_CarrierAccountTypeEnum) {
         return {
             restrict: 'E',
@@ -14,7 +14,7 @@ app.directive('whsRoutesyncEricssonCarrieraccountmappingGrid', ['VRNotificationS
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            templateUrl: '/Client/Modules/WhS_RouteSync/Directives/MainExtensions/EricssonSynchronizer/Templates/EricssonCarrierAccountMappingGridTemplate.html'
+            templateUrl: '/Client/Modules/WhS_RouteSync/Directives/CarrierAccountMapping/Templates/CarrierAccountMappingEricssonGridTemplate.html'
         };
 
         function EricssonCarrierAccountMappingGridCtor($scope, ctrl, $attrs) {
