@@ -9,25 +9,23 @@
                     </vr-choices-filter>
                 </vr-columns>
             </vr-row>
-            <vr-row removeline>
+            <vr-row ng-show="basicSelected || advancedSelected" removeline>
                 <vr-columns width="normal" ng-show="scopeModel.showBusinessEntityDefinitionSelector">
                     <vr-directivewrapper ng-if="scopeModel.BEDefinitionSelectorLabel != undefined" directive="'vr-genericdata-businessentitydefinition-selector'"
                                          on-ready="scopeModel.onBusinessEntityDefinitionSelectorReady" onselectionchanged="scopeModel.onBusinessEntityDefinitionSelectionChanged"
                                          customlabel="{{scopeModel.BEDefinitionSelectorLabel}}" hideremoveicon>
                     </vr-directivewrapper>
                 </vr-columns>
-                <div ng-show="basicSelected || advancedSelected">
-                    <vr-columns ng-show="scopeModel.isAccountBEDefinitionSelected" width="normal">
-                        <vr-textbox label="Name" value="scopeModel.name"></vr-textbox>
-                    </vr-columns>
-                    <vr-columns ng-show="scopeModel.isAccountBEDefinitionSelected" width="normal">
-                        <retail-be-account-roottype-selector on-ready="scopeModel.onAccountRootTypeSelectorReady" onselectionchanged="scopeModel.onlyRootAccountValueChanged"></retail-be-account-roottype-selector>
-                    </vr-columns>
-                    <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady" ng-show="scopeModel.isAccountBEDefinitionSelected"
-                                                    vr-loader="scopeModel.isAccountTypeSelectorLoading" normal-col-num="2" ismultipleselection="true">
-                    </retail-be-accounttype-selector>
-                    <vr-common-statusdefinition-selector on-ready="scopeModel.onStatusSelectorReady" ismultipleselection customlabel="Status" normal-col-num="2"></vr-common-statusdefinition-selector>
-                </div>
+                <vr-columns ng-show="scopeModel.isAccountBEDefinitionSelected" width="normal">
+                    <vr-textbox label="Name" value="scopeModel.name"></vr-textbox>
+                </vr-columns>
+                <vr-columns ng-show="scopeModel.isAccountBEDefinitionSelected" width="normal">
+                    <retail-be-account-roottype-selector on-ready="scopeModel.onAccountRootTypeSelectorReady" onselectionchanged="scopeModel.onlyRootAccountValueChanged"></retail-be-account-roottype-selector>
+                </vr-columns>
+                <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady" ng-show="scopeModel.isAccountBEDefinitionSelected"
+                                                vr-loader="scopeModel.isAccountTypeSelectorLoading" normal-col-num="2" ismultipleselection="true">
+                </retail-be-accounttype-selector>
+                <vr-common-statusdefinition-selector on-ready="scopeModel.onStatusSelectorReady" ismultipleselection customlabel="Status" normal-col-num="2"></vr-common-statusdefinition-selector>
             </vr-row>
             <vr-row ng-show="advancedSelected && scopeModel.isAccountBEDefinitionSelected" removeline>
                 <vr-columns width="fullrow">
@@ -37,12 +35,12 @@
                 </vr-columns>
             </vr-row>
             <vr-row ng-show="actionInformationSelected && scopeModel.isAccountBEDefinitionSelected" removeline>
-                <vr-columns width="3/4row">
+                
                     <vr-directivewrapper directive="scopeModel.bulkActionSettings.RuntimeEditor"
                                          on-ready="scopeModel.onRuntimeDirectiveReady"
-                                         isrequired="true">
+                                         isrequired="true" normal-col-num="2">
                     </vr-directivewrapper>
-                </vr-columns>
+           
             </vr-row>
         </div>
 
