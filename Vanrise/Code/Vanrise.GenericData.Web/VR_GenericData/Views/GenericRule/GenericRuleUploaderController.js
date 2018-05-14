@@ -60,12 +60,12 @@
                     if ($scope.errorMessage != undefined) {
                         $scope.disableUpload = false;
                         $scope.isErrorOccured = true;
-                        VRNotificationService.showError("Upload Process Failed");
+                      //  VRNotificationService.showError("Upload Process Failed");
                     }
                     else {
                         $scope.disableUpload = true;
                         $scope.isErrorOccured = false;
-                        VRNotificationService.showSuccess("Upload Process Complete");
+                       // VRNotificationService.showSuccess("Upload Process Complete");
                     }
                 }).catch(function (error) {
                     VRNotificationService.showError(error.ExceptionMessage);
