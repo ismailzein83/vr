@@ -239,6 +239,7 @@
     <Build Include="runtime\Stored Procedures\sp_RuntimeManager_TryTakePrimaryNode.sql" />
     <Build Include="runtime\Stored Procedures\sp_RuntimeServiceInstance_DeleteByProcess.sql" />
     <Build Include="runtime\Stored Procedures\sp_RuntimeNodeState_GetAll.sql" />
+    <Build Include="runtime\Stored Procedures\sp_RunningProcess_GetFiltered.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BusinessProcess.PostDeployment.sql" />
