@@ -9,7 +9,6 @@ app.directive("vrWhsRoutingBuildrouteprocess", ['UtilsService', 'WhS_Routing_Rou
             },
             controller: function ($scope, $element, $attrs) {
                 var ctrl = this;
-
                 var directiveConstructor = new DirectiveConstructor($scope, ctrl);
                 directiveConstructor.initializeController();
             },
@@ -26,29 +25,14 @@ app.directive("vrWhsRoutingBuildrouteprocess", ['UtilsService', 'WhS_Routing_Rou
         };
 
         function DirectiveConstructor($scope, ctrl) {
+            this.initializeController = initializeController;
 
             var gridAPI;
-            this.initializeController = initializeController;
 
             var switchSelectorAPI;
             var switchSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
             function initializeController() {
-                defineAPI();
-            }
-
-            function loadSwitchSelector() {
-                var switchSelectorLoadDeferred = UtilsService.createPromiseDeferred();
-
-                switchSelectorReadyDeferred.promise.then(function () {
-                    VRUIUtilsService.callDirectiveLoad(switchSelectorAPI, undefined, switchSelectorLoadDeferred);
-                });
-
-                return switchSelectorLoadDeferred.promise;
-            }
-
-            function defineAPI() {
-
                 $scope.routingDatabaseTypes = UtilsService.getArrayEnum(WhS_Routing_RoutingDatabaseTypeEnum);
                 $scope.selectedRoutingDatabaseType = UtilsService.getEnum(WhS_Routing_RoutingDatabaseTypeEnum, 'value', WhS_Routing_RoutingDatabaseTypeEnum.Current.value);
 
@@ -60,9 +44,24 @@ app.directive("vrWhsRoutingBuildrouteprocess", ['UtilsService', 'WhS_Routing_Rou
                     switchSelectorAPI = api;
                     switchSelectorReadyDeferred.resolve();
                 };
-                /* directive API definition */
+
+                defineAPI();
+            }
+
+            function defineAPI() {
 
                 var api = {};
+
+                api.load = function (payload) {
+
+                    if (!$scope.isFuture)
+                        $scope.effectiveOn = VRDateTimeService.getNowDateTime();
+
+                    var promises = [];
+                    promises.push(loadSwitchSelector());
+                    return UtilsService.waitMultiplePromises(promises);
+                };
+
                 api.getData = function () {
                     return {
                         InputArguments: {
@@ -76,18 +75,18 @@ app.directive("vrWhsRoutingBuildrouteprocess", ['UtilsService', 'WhS_Routing_Rou
                     };
                 };
 
-                api.load = function (payload) {
-                    var promises = [];
-
-                    if (!$scope.isFuture)
-                        $scope.effectiveOn = VRDateTimeService.getNowDateTime();
-
-                    promises.push(loadSwitchSelector());
-                    return UtilsService.waitMultiplePromises(promises);
-                };
-
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
+            }
+
+            function loadSwitchSelector() {
+                var switchSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+
+                switchSelectorReadyDeferred.promise.then(function () {
+                    VRUIUtilsService.callDirectiveLoad(switchSelectorAPI, undefined, switchSelectorLoadDeferred);
+                });
+
+                return switchSelectorLoadDeferred.promise;
             }
         }
 
