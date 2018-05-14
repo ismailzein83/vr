@@ -14,9 +14,6 @@
         var accountManagementDirectiveAPI;
         var accountManagementDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
-        var runtimeDirectiveAPI;
-        var runtimeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
-
         loadParameters();
         defineScope();
         load();
@@ -43,18 +40,9 @@
                 accountManagementDirectiveReadyDeferred.resolve();
             };
 
-            $scope.scopeModel.onRuntimeDirectiveReady = function (api) {
-                runtimeDirectiveAPI = api;
-                runtimeDirectiveReadyDeferred.resolve();
-                
-            };
-
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
-
-
-            $scope.scopeModel.bulkActionSettings = bulkAction.Settings;
 
             $scope.scopeModel.execute = function () {
 
@@ -66,7 +54,7 @@
                         AccountBEDefinitionId: accountBEDefinitionId,
                         AccountBulkActions: [{
                             AccountBulkActionId: bulkAction.AccountBulkActionId,
-                            Settings: runtimeDirectiveAPI.getData()
+                            Settings: accountManagementDirectiveAPI.getRuntimeDirectiveData()
                         }],
                         HandlingErrorOption: $scope.scopeModel.selectedHandlingOnError.value,
                         BulkActionFinalState: bulkActionDraftFinalState
@@ -81,7 +69,7 @@
                         }
                     });
                 });
-            };
+        };
 
         }
 
@@ -93,45 +81,28 @@
 
                 function loadAccountManagementDirective() {
                     var accountManagementDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-
                     accountManagementDirectiveReadyDeferred.promise.then(function () {
-
                         var payload = {
                             viewId: viewId,
-                            bulkActionId: bulkAction != undefined ? bulkAction.AccountBulkActionId : undefined,
-                            accountBEDefinitionId: accountBEDefinitionId
+                            accountBEDefinitionId: accountBEDefinitionId,
+                            bulkAction: bulkAction
                         };
                         VRUIUtilsService.callDirectiveLoad(accountManagementDirectiveAPI, payload, accountManagementDirectiveLoadDeferred);
                     });
                     return accountManagementDirectiveLoadDeferred.promise;
-                    
                 }
 
                 function setTitle() {
                     $scope.title = 'Bulk Action: ' + bulkAction.Title;
                 }
 
-                function loadRuntimeDirective() {
-                    var runtimeDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
-                    runtimeDirectiveReadyDeferred.promise.then(function () {
-                        var directivePayload = {
-                            mailMessageTypeId: bulkAction.Settings != undefined ? bulkAction.Settings.MailMessageTypeId : undefined
-                        };
-                        VRUIUtilsService.callDirectiveLoad(runtimeDirectiveAPI, directivePayload, runtimeDirectiveLoadDeferred);
-                    });
-                    return runtimeDirectiveLoadDeferred.promise;
-                }
-
-                return UtilsService.waitMultipleAsyncOperations([loadAccountManagementDirective, setTitle, loadRuntimeDirective]).catch(function (error) {
+                return UtilsService.waitMultipleAsyncOperations([loadAccountManagementDirective, setTitle]).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
                 });
             }
         }
-
-
-
     }
     appControllers.controller('Retail_BE_AccountBulkActionsEditorController', AccountBulkActionsController);
 

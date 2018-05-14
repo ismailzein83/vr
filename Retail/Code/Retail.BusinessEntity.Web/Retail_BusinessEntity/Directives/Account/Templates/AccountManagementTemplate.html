@@ -2,9 +2,10 @@
         <div ng-hide="filterSectionCollapsed" vr-loader="scopeModel.isLoading">
             <vr-row removeline>
                 <vr-columns width="fullrow">
-                    <vr-choices-filter selectedindex="selectedFilternIndex">
+                    <vr-choices-filter selectedindex="scopeModel.selectedFilternIndex">
                         <vr-choice-filter isselected="basicSelected">Basic</vr-choice-filter>
                         <vr-choice-filter isselected="advancedSelected">Advanced</vr-choice-filter>
+                        <vr-choice-filter isselected="actionInformationSelected" ng-show="scopeModel.showActionInformation">Action Information</vr-choice-filter>
                     </vr-choices-filter>
                 </vr-columns>
             </vr-row>
@@ -15,22 +16,32 @@
                                          customlabel="{{scopeModel.BEDefinitionSelectorLabel}}" hideremoveicon>
                     </vr-directivewrapper>
                 </vr-columns>
-                <vr-columns ng-show="scopeModel.isAccountBEDefinitionSelected" width="normal">
-                    <vr-textbox label="Name" value="scopeModel.name"></vr-textbox>
-                </vr-columns>
-                <vr-columns ng-show="scopeModel.isAccountBEDefinitionSelected" width="normal">
-                    <retail-be-account-roottype-selector on-ready="scopeModel.onAccountRootTypeSelectorReady" onselectionchanged="scopeModel.onlyRootAccountValueChanged"></retail-be-account-roottype-selector>
-                </vr-columns>
-                <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady" ng-show="scopeModel.isAccountBEDefinitionSelected"
-                                                vr-loader="scopeModel.isAccountTypeSelectorLoading" normal-col-num="2" ismultipleselection="true">
-                </retail-be-accounttype-selector>
-                <vr-common-statusdefinition-selector on-ready="scopeModel.onStatusSelectorReady" ismultipleselection customlabel="Status" normal-col-num="2"></vr-common-statusdefinition-selector>
+                <div ng-show="basicSelected || advancedSelected">
+                    <vr-columns ng-show="scopeModel.isAccountBEDefinitionSelected" width="normal">
+                        <vr-textbox label="Name" value="scopeModel.name"></vr-textbox>
+                    </vr-columns>
+                    <vr-columns ng-show="scopeModel.isAccountBEDefinitionSelected" width="normal">
+                        <retail-be-account-roottype-selector on-ready="scopeModel.onAccountRootTypeSelectorReady" onselectionchanged="scopeModel.onlyRootAccountValueChanged"></retail-be-account-roottype-selector>
+                    </vr-columns>
+                    <retail-be-accounttype-selector on-ready="scopeModel.onAccountTypeSelectorReady" ng-show="scopeModel.isAccountBEDefinitionSelected"
+                                                    vr-loader="scopeModel.isAccountTypeSelectorLoading" normal-col-num="2" ismultipleselection="true">
+                    </retail-be-accounttype-selector>
+                    <vr-common-statusdefinition-selector on-ready="scopeModel.onStatusSelectorReady" ismultipleselection customlabel="Status" normal-col-num="2"></vr-common-statusdefinition-selector>
+                </div>
             </vr-row>
             <vr-row ng-show="advancedSelected && scopeModel.isAccountBEDefinitionSelected" removeline>
                 <vr-columns width="fullrow">
                     <vr-section title="Advanced Filter" collapsible>
                         <vr-genericdata-recordfilter on-ready="scopeModel.onRecordFilterDirectiveReady"></vr-genericdata-recordfilter>
                     </vr-section>
+                </vr-columns>
+            </vr-row>
+            <vr-row ng-show="actionInformationSelected && scopeModel.isAccountBEDefinitionSelected" removeline>
+                <vr-columns width="3/4row">
+                    <vr-directivewrapper directive="scopeModel.bulkActionSettings.RuntimeEditor"
+                                         on-ready="scopeModel.onRuntimeDirectiveReady"
+                                         isrequired="true">
+                    </vr-directivewrapper>
                 </vr-columns>
             </vr-row>
         </div>

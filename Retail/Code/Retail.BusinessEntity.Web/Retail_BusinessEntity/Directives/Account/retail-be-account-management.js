@@ -28,6 +28,8 @@ app.directive('retailBeAccountManagement',['UtilsService', 'VRUIUtilsService', '
             var accountBEDefinitionId;
             var accountFields;
             var accountBEDefinitionSettings;
+            var mailMessageTypeId;
+            var bulkAction;
 
             var businessEntityDefinitionSelectorAPI;
             var businessEntityDefinitionSelectorReadyDeferred = UtilsService.createPromiseDeferred();
@@ -43,6 +45,9 @@ app.directive('retailBeAccountManagement',['UtilsService', 'VRUIUtilsService', '
 
             var statusSelectorAPI;
             var statusSelectorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
+            var runtimeDirectiveAPI;
+            var runtimeDirectiveReadyDeferred = UtilsService.createPromiseDeferred();
 
             var gridAPI;
             var context;
@@ -126,6 +131,11 @@ app.directive('retailBeAccountManagement',['UtilsService', 'VRUIUtilsService', '
                     }
                 };
 
+                $scope.scopeModel.onRuntimeDirectiveReady = function (api) {
+                    runtimeDirectiveAPI = api;
+                    runtimeDirectiveReadyDeferred.resolve();
+                };
+
                 $scope.scopeModel.search = function () {
 
                     var gridPayload = {
@@ -166,17 +176,26 @@ app.directive('retailBeAccountManagement',['UtilsService', 'VRUIUtilsService', '
                 api.load = function (payload) {
                     if (payload != undefined) {
                         viewId = payload.viewId;
-                        bulkActionId = payload.bulkActionId;
                         accountBEDefinitionId = payload.accountBEDefinitionId;
+                        bulkAction = payload.bulkAction;
                     }
+
+                    bulkActionId =  bulkAction != undefined ? bulkAction.AccountBulkActionId : undefined;
+                    mailMessageTypeId = (bulkAction != undefined && bulkAction.Settings != undefined) ? bulkAction.Settings.MailMessageTypeId : undefined;
+
                     if (bulkActionId != undefined) {
                         $scope.scopeModel.showActionButtons = true;
+                        $scope.scopeModel.showActionInformation = true;
                     }
+
                     $scope.scopeModel.isLoading = true;
                     loadBEDefinitionSelectorLabel().then(function () {
                         loadBusinessEntityDefinitionSelector();
                     });
 
+                    $scope.scopeModel.selectedFilternIndex = bulkActionId != undefined ? 2 : 0;
+
+                    $scope.scopeModel.bulkActionSettings = bulkAction != undefined ? bulkAction.Settings : undefined;
                     function loadBEDefinitionSelectorLabel() {
                         return VR_Sec_ViewAPIService.GetView(viewId).then(function (response) {
                             if (response != undefined && response.Settings != undefined) {
@@ -219,12 +238,21 @@ app.directive('retailBeAccountManagement',['UtilsService', 'VRUIUtilsService', '
                     return gridAPI.finalizeBulkActionDraft();
                 };
 
+                api.getRuntimeDirectiveData = function () {
+                    return runtimeDirectiveAPI.getData(); 
+                };
+
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
 
             function loadAllControls() {
-                return UtilsService.waitMultipleAsyncOperations([loadRootAccountTypeSelector, loadRecordFilterDirective, loadStatusSelector, loadBulkActions]).catch(function (error) {
+                var promises = [loadRootAccountTypeSelector, loadRecordFilterDirective, loadStatusSelector, loadBulkActions];
+                
+                if (bulkActionId != undefined)
+                    promises.push(loadRuntimeDirective);
+                
+                return UtilsService.waitMultipleAsyncOperations(promises).catch(function (error) {
                     VRNotificationService.notifyExceptionWithClose(error, $scope);
                 }).finally(function () {
                     $scope.scopeModel.isLoading = false;
@@ -271,7 +299,7 @@ app.directive('retailBeAccountManagement',['UtilsService', 'VRUIUtilsService', '
                         };
                         VRUIUtilsService.callDirectiveLoad(recordFilterDirectiveAPI, recordFilterDirectivePayload, recordFilterDirectiveLoadDeferred);
                     });
-                });
+            });
 
                 return recordFilterDirectiveLoadDeferred.promise;
             }
@@ -280,6 +308,17 @@ app.directive('retailBeAccountManagement',['UtilsService', 'VRUIUtilsService', '
                 return Retail_BE_AccountTypeAPIService.GetGenericFieldDefinitionsInfo(accountBEDefinitionId).then(function (response) {
                     accountFields = response;
                 });
+            }
+
+            function loadRuntimeDirective() {
+                var runtimeDirectiveLoadDeferred = UtilsService.createPromiseDeferred();
+                runtimeDirectiveReadyDeferred.promise.then(function () {
+                var directivePayload = {
+                    mailMessageTypeId: mailMessageTypeId
+                };
+                VRUIUtilsService.callDirectiveLoad(runtimeDirectiveAPI, directivePayload, runtimeDirectiveLoadDeferred);
+                });
+                return runtimeDirectiveLoadDeferred.promise;
             }
 
             function loadBulkActions() {
