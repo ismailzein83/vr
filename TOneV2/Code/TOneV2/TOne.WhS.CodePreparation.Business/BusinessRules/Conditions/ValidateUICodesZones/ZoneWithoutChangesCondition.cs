@@ -27,7 +27,7 @@ namespace TOne.WhS.CodePreparation.Business
             }
             if (invalidZones.Count > 0)
             {
-                context.Message = string.Format("Can not create zone with out codes. Violated zone(s): {0}.", string.Join(", ", invalidZones));
+                context.Message = string.Format("Can not create zone without codes. Violated zone(s): {0}.", string.Join(", ", invalidZones));
                 return false;
             }
             return true;
