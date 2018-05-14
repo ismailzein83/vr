@@ -468,7 +468,7 @@ namespace Retail.BusinessEntity.Business
                     for (int j = 0; j < rowData.Length; j++)
                     {
                         var data = rowData[j];
-                        if (data is double)
+                        if (data is double || data is int || data is long || data is decimal)
                         {
                             dataStyle.HorizontalAlignment = VRExcelContainerHorizontalAlignment.Right;
                         }
