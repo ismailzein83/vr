@@ -41,11 +41,35 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Vanrise.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.GenericData.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Entities.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Invoice.Business">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Business.dll</HintPath>
+    </Reference>
+    <Reference Include="Vanrise.Invoice.Entities">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Entities.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssignedFinancialAccountToInvoiceSettingFilter.cs" />
+    <Compile Include="InterconnectInvoiceGenerator.cs" />
+    <Compile Include="InterconnectInvoiceSettings.cs" />
+    <Compile Include="InterconnectPartnerSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Retail.BusinessEntity.Business\Retail.BusinessEntity.Business.csproj">
+      <Project>{194f2715-17dc-49fa-b701-2386aaa9eddf}</Project>
+      <Name>Retail.BusinessEntity.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.Entities\Retail.BusinessEntity.Entities.csproj">
+      <Project>{c08fd318-049c-49ce-8bc4-85bf296cbab9}</Project>
+      <Name>Retail.BusinessEntity.Entities</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.Interconnect.Entities\Retail.Interconnect.Entities.csproj">
       <Project>{ed0cd3d2-1e3f-4399-ba99-0ebf76746a34}</Project>
       <Name>Retail.Interconnect.Entities</Name>
