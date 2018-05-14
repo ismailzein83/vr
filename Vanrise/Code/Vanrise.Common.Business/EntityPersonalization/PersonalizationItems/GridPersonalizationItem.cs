@@ -14,11 +14,13 @@ namespace Vanrise.Common.Business
             get { return "Grid"; }
         }
 
-        public List<GridColumnPersonalization> Columns { get; set; }
+        public List<GridColumnVisibilityPersonalization> ColumnVisibilities { get; set; }
     }
 
-    public class GridColumnPersonalization
+    public class GridColumnVisibilityPersonalization
     {
         public string FieldName { get; set; }
+
+        public bool IsVisible { get; set; }
     }
 }
