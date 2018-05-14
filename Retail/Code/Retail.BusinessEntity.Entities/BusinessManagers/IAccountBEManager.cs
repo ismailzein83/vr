@@ -9,7 +9,7 @@ namespace Retail.BusinessEntity.Entities
 {
     public interface IAccountBEManager : IBEManager
     {
-        string GetAccountName(Guid accountBEDefinitionId, long accountId);
+        string GetAccountName(Guid accountBEDefinitionId, long accountId, bool showConcatenatedName = false);
 
         VRLoggableEntityBase GetAccountLoggableEntity(Guid accountBEDefinitionId);
     }

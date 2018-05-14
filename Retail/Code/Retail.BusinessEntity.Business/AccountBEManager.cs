@@ -187,23 +187,23 @@ namespace Retail.BusinessEntity.Business
             Dictionary<long, Account> cachedAccounts = this.GetCachedAccounts(accountBEDefinitionId);
             return cachedAccounts.GetRecord(accountId);
         }
-        public string GetAccountName(Guid accountBEDefinitionId, long accountId)
+        public string GetAccountName(Guid accountBEDefinitionId, long accountId, bool showConcatenatedName = false)
         {
             Account account = this.GetAccount(accountBEDefinitionId, accountId);
             if (account != null)
             {
-                return GetAccountName(account);
+                return GetAccountName(account, showConcatenatedName);
             }
             return null;
         }
-        public string GetAccountName(Account account)
+        public string GetAccountName(Account account, bool showConcatenatedName = false)
         {
             if (account != null)
             {
                 AccountType accountType = new AccountTypeManager().GetAccountType(account.TypeId);
                 accountType.ThrowIfNull("accountType", account.TypeId);
                 string name = account.Name;
-                if (accountType.Settings.ShowConcatenatedName && account.ParentAccountId.HasValue)
+                if ((accountType.Settings.ShowConcatenatedName || showConcatenatedName) && account.ParentAccountId.HasValue)
                 {
                     name = BuildAccountFullName(accountType.AccountBEDefinitionId, account.ParentAccountId.Value, name);
                 }

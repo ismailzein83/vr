@@ -164,7 +164,7 @@ namespace Retail.BusinessEntity.Business
                 Style = titlesStyle
             };
             firstSheet.AddCell(customerNameTitle);
-            var accountName =  accountManager.GetAccountName(accountBEDefinitionId, accountId);
+            var accountName =  accountManager.GetAccountName(accountBEDefinitionId, accountId,true);
             VRExcelCell customerNameValue = new VRExcelCell
             {
                 RowIndex = 11,
