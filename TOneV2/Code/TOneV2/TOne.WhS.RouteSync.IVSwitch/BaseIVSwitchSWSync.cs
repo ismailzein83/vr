@@ -231,7 +231,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
                             ivOption.Flag1 = BuildPercentage(supplierGateWay.Percentage, option.Percentage, optionsPercenatgeSum,
                                     supplier.Gateways.Count);
                             ivOption.BktSerial = serial++;
-                            ivOption.BktCapacity = Convert.ToInt32(Math.Round(ivOption.Flag1.Value / 10, 0, MidpointRounding.AwayFromZero));
+                            ivOption.BktCapacity = (int)Math.Ceiling(ivOption.Flag1.Value / 10);
                             ivOption.BktToken = ivOption.BktCapacity;
                         }
                         routes.Add(ivOption);
@@ -263,27 +263,29 @@ namespace TOne.WhS.RouteSync.IVSwitch
                     break;
 
                 if (backupRouteOption.IsBlocked)
-                {
                     backupRoutes.Add(BuildBlockedRoute(blockedRouteId, wakeUpTime, code));
-                }
-                SupplierDefinition supplier;
-                if (suppliersDefinition.TryGetValue(backupRouteOption.SupplierId, out supplier) && supplier.Gateways != null)
+
+                else
                 {
-                    foreach (var supplierGateWay in supplier.Gateways)
+                    SupplierDefinition supplier;
+                    if (suppliersDefinition.TryGetValue(backupRouteOption.SupplierId, out supplier) && supplier.Gateways != null)
                     {
-                        backupRoutes.Add(new IVSwitchRoute
+                        foreach (var supplierGateWay in supplier.Gateways)
                         {
-                            RoutingMode = 8,
-                            Destination = code,
-                            RouteId = supplierGateWay.RouteId,
-                            TimeFrame = "* * * * *",
-                            Preference = priority--,
-                            BktSerial = serial++,
-                            StateId = 1,
-                            HuntStop = 0,
-                            WakeUpTime = wakeUpTime,
-                            Description = new CarrierAccountManager().GetCarrierAccountName(int.Parse(backupRouteOption.SupplierId))
-                        });
+                            backupRoutes.Add(new IVSwitchRoute
+                            {
+                                RoutingMode = 8,
+                                Destination = code,
+                                RouteId = supplierGateWay.RouteId,
+                                TimeFrame = "* * * * *",
+                                Preference = priority--,
+                                BktSerial = serial++,
+                                StateId = 1,
+                                HuntStop = 0,
+                                WakeUpTime = wakeUpTime,
+                                Description = new CarrierAccountManager().GetCarrierAccountName(int.Parse(backupRouteOption.SupplierId))
+                            });
+                        }
                     }
                 }
             }
