@@ -406,9 +406,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FreeRadius", "FreeRadius", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TOne.WhS.RouteSync.FreeRadius", "TOne.WhS.RouteSync.FreeRadius\TOne.WhS.RouteSync.FreeRadius.csproj", "{87790317-4035-4FB8-BE4F-88D44FD02ABE}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "SQL.TOneRouteSync", "SQL.TOneRouteSync\SQL.TOneRouteSync.sqlproj", "{BDFA4C3C-4E23-4477-96A5-2486734F4777}"
+EndProject
 Global
 	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 167
+		SccNumberOfProjects = 168
 		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
 		SccTeamFoundationServer = http://developmentvlan:8585/tfs/vanrise.collection
 		SccLocalPath0 = .
@@ -1076,6 +1078,10 @@ Global
 		SccProjectTopLevelParentUniqueName166 = TOneV2.sln
 		SccProjectName166 = TOne.WhS.RouteSync.FreeRadius
 		SccLocalPath166 = TOne.WhS.RouteSync.FreeRadius
+		SccProjectUniqueName167 = SQL.TOneRouteSync\\SQL.TOneRouteSync.sqlproj
+		SccProjectTopLevelParentUniqueName167 = TOneV2.sln
+		SccProjectName167 = SQL.TOneRouteSync
+		SccLocalPath167 = SQL.TOneRouteSync
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CD_ROM|Any CPU = CD_ROM|Any CPU
@@ -7209,6 +7215,54 @@ Global
 		{87790317-4035-4FB8-BE4F-88D44FD02ABE}.SingleImage|Mixed Platforms.Build.0 = Release|Any CPU
 		{87790317-4035-4FB8-BE4F-88D44FD02ABE}.SingleImage|x64.ActiveCfg = Release|Any CPU
 		{87790317-4035-4FB8-BE4F-88D44FD02ABE}.SingleImage|x86.ActiveCfg = Release|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.CD_ROM|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.CD_ROM|Any CPU.Build.0 = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.CD_ROM|Any CPU.Deploy.0 = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.CD_ROM|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.CD_ROM|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.CD_ROM|Mixed Platforms.Deploy.0 = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.CD_ROM|x64.ActiveCfg = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.CD_ROM|x86.ActiveCfg = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.Debug|Mixed Platforms.Deploy.0 = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.DVD-5|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.DVD-5|Any CPU.Build.0 = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.DVD-5|Any CPU.Deploy.0 = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.DVD-5|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.DVD-5|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.DVD-5|Mixed Platforms.Deploy.0 = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.DVD-5|x64.ActiveCfg = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.DVD-5|x86.ActiveCfg = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.Optimized|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.Optimized|Any CPU.Build.0 = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.Optimized|Any CPU.Deploy.0 = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.Optimized|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.Optimized|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.Optimized|Mixed Platforms.Deploy.0 = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.Optimized|x64.ActiveCfg = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.Optimized|x86.ActiveCfg = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.Release|Mixed Platforms.Deploy.0 = Release|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.Release|x64.ActiveCfg = Release|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.Release|x86.ActiveCfg = Release|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.SingleImage|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.SingleImage|Any CPU.Build.0 = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.SingleImage|Any CPU.Deploy.0 = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.SingleImage|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.SingleImage|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.SingleImage|Mixed Platforms.Deploy.0 = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.SingleImage|x64.ActiveCfg = Debug|Any CPU
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777}.SingleImage|x86.ActiveCfg = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -7408,5 +7462,6 @@ Global
 		{EB35E768-5037-4D5A-890F-F6C7270BB8A5} = {AFCE007F-63FD-4982-A774-461D14440BEC}
 		{BD7B8190-77BD-461E-955A-7BBB7E8194E8} = {AFCE007F-63FD-4982-A774-461D14440BEC}
 		{87790317-4035-4FB8-BE4F-88D44FD02ABE} = {BD7B8190-77BD-461E-955A-7BBB7E8194E8}
+		{BDFA4C3C-4E23-4477-96A5-2486734F4777} = {BEBEE4C8-BB5C-4493-91C7-3690C6AEA3B0}
 	EndGlobalSection
 EndGlobal
