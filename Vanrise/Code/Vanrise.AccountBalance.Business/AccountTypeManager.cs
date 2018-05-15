@@ -5,6 +5,7 @@ using Vanrise.AccountBalance.Entities;
 using Vanrise.Common;
 using Vanrise.Common.Business;
 using Vanrise.Entities;
+using Vanrise.GenericData.Entities;
 using Vanrise.Security.Business;
 
 namespace Vanrise.AccountBalance.Business
@@ -208,8 +209,13 @@ namespace Vanrise.AccountBalance.Business
                             var matchField = sourceFields.FirstOrDefault(x => x.Name == column.FieldName);
                             if (matchField.FieldType == null)
                                 throw new NullReferenceException(string.Format("{0} is not mapped to field type.", matchField.Name));
-                            var gridAttribute = matchField.FieldType.GetGridColumnAttribute(null);
-                            gridAttribute.Field = matchField.Name;
+                           
+                            FieldTypeGetGridColumnAttributeContext context = new FieldTypeGetGridColumnAttributeContext();
+                            context.ValueFieldPath = "Items." + column.FieldName + ".Value";
+                            context.DescriptionFieldPath = "Items." + column.FieldName + ".Description";
+
+                            var gridAttribute = matchField.FieldType.GetGridColumnAttribute(context);
+                          //  gridAttribute.Field = matchField.Name;
                             gridAttribute.Tag = matchField.Name;
                             gridAttribute.HeaderText = column.UseEmptyHeader ? "" : column.Title;
                             gridAttribute.GridColCSSClassValue = column.GridColCSSValue;

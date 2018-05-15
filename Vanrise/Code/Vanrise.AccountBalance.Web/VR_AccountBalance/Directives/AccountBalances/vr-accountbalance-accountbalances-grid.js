@@ -96,8 +96,8 @@ app.directive('vrAccountbalanceAccountbalancesGrid', ['VR_AccountBalance_LiveBal
                         var gridAttribute = gridAttributes[i];
                         if (gridAttribute != undefined) {
                             if ($scope.scopeModel.sortField === "" || $scope.scopeModel.sortField === undefined)
-                                $scope.scopeModel.sortField = 'Entity.Items.' + gridAttribute.Field;
-                            gridAttribute.Field = "Entity.Items." + gridAttribute.Field + ".Description";
+                                $scope.scopeModel.sortField = 'Entity.' + gridAttribute.Field;
+                            gridAttribute.Field = "Entity." + gridAttribute.Field;
                             $scope.gridFields.push(gridAttribute);
                            
                         }

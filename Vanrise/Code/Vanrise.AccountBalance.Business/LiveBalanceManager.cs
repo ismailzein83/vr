@@ -53,7 +53,7 @@ namespace Vanrise.AccountBalance.Business
             if (input.SortByColumnName != null && input.SortByColumnName.Contains("Items"))
             {
                 string[] itemProperty = input.SortByColumnName.Split('.');
-                input.SortByColumnName = string.Format(@"Entity.{0}[""{1}""].Description", itemProperty[1], itemProperty[2]);
+                input.SortByColumnName = string.Format(@"Entity.{0}[""{1}""].{2}", itemProperty[1], itemProperty[2], itemProperty[3]);
             }
             return BigDataManager.Instance.RetrieveData(input, new AccountBalanceRequestHandler());
         }
