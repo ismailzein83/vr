@@ -22,7 +22,7 @@ namespace TOne.WhS.Sales.Business
             var ratePlanContext = context.GetExtension<IRatePlanContext>();
             if (ratePlanContext.OwnerType == SalePriceListOwnerType.Customer)
             {
-                List<string> zoneWithInvalidEED = new List<string>();
+                HashSet<string> zoneWithInvalidEED = new HashSet<string>();
                 foreach (var zoneData in allZoneData.DataByZoneList)
                 {
                     var otherRatesToClose = zoneData.OtherRatesToClose;

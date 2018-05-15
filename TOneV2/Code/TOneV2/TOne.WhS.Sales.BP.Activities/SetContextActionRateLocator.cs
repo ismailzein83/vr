@@ -35,8 +35,8 @@ namespace TOne.WhS.Sales.BP.Activities
             if (ratesToClose == null || ratesToClose.Count() == 0)
                 return;
 
-            IEnumerable<RateToClose> normalRatesToClose = ratesToClose.FindAllRecords(x => !x.RateTypeId.HasValue);
-            if (normalRatesToClose == null || normalRatesToClose.Count() == 0)
+            IEnumerable<RateToClose> otherRatesToClose = ratesToClose.FindAllRecords(x => x.RateTypeId.HasValue);
+            if (otherRatesToClose == null || otherRatesToClose.Count() == 0)
                 return;
 
             IEnumerable<SaleRate> existingSaleRates = ExistingSaleRates.Get(context);
@@ -52,7 +52,7 @@ namespace TOne.WhS.Sales.BP.Activities
             var actionDatesByZoneId = new Dictionary<long, DateTime>();
             DateTime minimumDate;
 
-            SetData(normalRatesToClose, zoneIds, actionDatesByZoneId, out minimumDate);
+            SetData(otherRatesToClose, zoneIds, actionDatesByZoneId, out minimumDate);
 
             var reader = new SaleRateReadRPChanges(existingSaleRates, routingCustomerInfo, zoneIds, minimumDate, actionDatesByZoneId);
             ratePlanContext.ActionRateLocator = new SaleEntityZoneRateLocator(reader);
@@ -60,19 +60,19 @@ namespace TOne.WhS.Sales.BP.Activities
 
         #region Private Methods
 
-        private void SetData(IEnumerable<RateToClose> normalRatesToClose, List<long> zoneIds, Dictionary<long, DateTime> actionDatesByZoneId, out DateTime minimumDate)
+        private void SetData(IEnumerable<RateToClose> otherRatesToClose, List<long> zoneIds, Dictionary<long, DateTime> actionDatesByZoneId, out DateTime minimumDate)
         {
             minimumDate = DateTime.MaxValue;
 
-            foreach (RateToClose normalRateToClose in normalRatesToClose)
+            foreach (RateToClose otherRateToClose in otherRatesToClose)
             {
-                zoneIds.Add(normalRateToClose.ZoneId);
+                zoneIds.Add(otherRateToClose.ZoneId);
 
-                if (!actionDatesByZoneId.ContainsKey(normalRateToClose.ZoneId))
-                    actionDatesByZoneId.Add(normalRateToClose.ZoneId, normalRateToClose.CloseEffectiveDate);
+                if (!actionDatesByZoneId.ContainsKey(otherRateToClose.ZoneId))
+                    actionDatesByZoneId.Add(otherRateToClose.ZoneId, otherRateToClose.CloseEffectiveDate);
 
-                if (normalRateToClose.CloseEffectiveDate < minimumDate)
-                    minimumDate = normalRateToClose.CloseEffectiveDate;
+                if (otherRateToClose.CloseEffectiveDate < minimumDate)
+                    minimumDate = otherRateToClose.CloseEffectiveDate;
             }
         }
 

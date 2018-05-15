@@ -145,6 +145,7 @@
     <Compile Include="ImportRatePlan\ImportedRowValidator.cs" />
     <Compile Include="ImportRatePlan\IsImportedRowValidContext.cs" />
     <Compile Include="ImportRatePlan\ZoneValidationContext.cs" />
+    <Compile Include="RPOtherRatesPreviewHandler.cs" />
     <Compile Include="Preview\ChangedCustomerCountryPreviewManager.cs" />
     <Compile Include="Preview\NewCustomerCountryPreviewManager.cs" />
     <Compile Include="Preview\SubscriberPreviewManager.cs" />

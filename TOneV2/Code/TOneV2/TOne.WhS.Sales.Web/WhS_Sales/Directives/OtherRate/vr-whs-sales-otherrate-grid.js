@@ -29,6 +29,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
         var context;
         var normalRateEED;
         var increasedRateDayOffset;
+        var isCurrentRateEditable;
 
         function initializeController() {
 
@@ -74,19 +75,31 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
 
             $scope.onNewRateBlurred = function (dataItem) {
                 zoneItem.IsDirty = true;
-                if ($scope.NewRateBED == undefined && dataItem.NewRate > 0) {
+                if ($scope.NewRateBED == undefined && dataItem.NewRate > 0 && zoneItem.CurrentRateEED == undefined) {
                     var today = VRDateTimeService.getNowDateTime();
                     var newDateValue = new Date(today.getFullYear(), today.getMonth(), today.getDate() + increasedRateDayOffset);
                     $scope.NewRateBED = newDateValue;
                 };
+                if (zoneItem.CurrentRateEED != undefined && dataItem.NewRate > 0)
+                {
+                    $scope.NewRateBED = zoneItem.CurrentRateEED;
+                }
                 WhS_Sales_RatePlanUtilsService.onNewRateBlurred(dataItem, settings);
             };
-
             $scope.validateNewRate = function (otherRate) {
-                return WhS_Sales_RatePlanUtilsService.validateNewRate(otherRate, ownerCurrencyId);
+                    return WhS_Sales_RatePlanUtilsService.validateNewRate(otherRate, ownerCurrencyId);
             };
 
-          
+            $scope.validateNewRateBED = function () {
+                var currentEED = UtilsService.createDateFromString(zoneItem.CurrentRateEED);
+                if ($scope.NewRateBED != undefined) {
+                    if (zoneItem.CurrentRateEED != undefined && $scope.NewRateBED < currentEED.getTime()) {
+                        return "BED of the other rate must be greater than or equal to " + zoneItem.CurrentRateEED + " BED of the  last normal rate of the zone";
+                    }
+                }
+                else
+                    return null;
+            };
         }
         function defineAPI() {
 
@@ -96,6 +109,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
                 if (query.settings != undefined)
                     increasedRateDayOffset = query.settings.increasedRateDayOffset;
                 zoneItem = query.zoneItem;
+                isCurrentRateEditable = zoneItem.IsCurrentRateEditable;
                 context = query.context;
                 settings = query.settings;
                 ownerCurrencyId = query.ownerCurrencyId;
@@ -145,8 +159,6 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
                         if (normalRateEED != undefined && otherRate.CurrentRateNewEED == undefined)
                             otherRate.CurrentRateNewEED = normalRateEED;
                         WhS_Sales_RatePlanUtilsService.setNormalRateIconProperties(otherRate, ownerType, saleAreaSetting);
-
-
                     }
                   
                     var newOtherRate = UtilsService.getItemByVal(zoneItem.NewRates, otherRate.RateTypeId, 'RateTypeId');
@@ -189,7 +201,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
                     if (otherRate.NewRate != null) {
                         zoneItem.NewRates.push({
                             ZoneId: zoneItem.ZoneId,
-                            RateTypeId: otherRate.RateTypeId,
+                            RateTypeId: otherRate.RateTypeId,   
                             Rate: otherRate.NewRate,
                             BED: $scope.NewRateBED,
                             EED: otherRate.NewRateEED
@@ -203,10 +215,7 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
                             EED: otherRate.CurrentRateNewEED
                         });
                     }
-                   
-                
                 }
-
                 if (zoneItem.NewRates != null && zoneItem.NewRates.length == 0)
                     zoneItem.NewRates = null;
                 if (zoneItem.ClosedRates != null && zoneItem.ClosedRates.length == 0)
@@ -246,7 +255,18 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
                 ctrl.onReady(api);
         }
         function isEEDDisabled(otherRate) {
-            return ((otherRate.NewRate != undefined && otherRate.NewRate != "") || otherRate.CurrentRate == null || !otherRate.IsCurrentRateEditable || otherRate.CurrentRateBED > VRDateTimeService.getNowDateTime() || $scope.isCountryEnded || $scope.isZonePendingClosed || otherRate.CurrentRateNewEED != undefined);
+            var isEEDLoadedFromDrafts = false;
+            console.log(otherRate);
+            if (zoneItem.ClosedRates.length > 0)
+            {
+                for(var i = 0; i < zoneItem.ClosedRates.length; i++)
+                {
+                    var closedRate = zoneItem.ClosedRates[i];
+                    if (closedRate.RateTypeId == otherRate.RateTypeId)
+                        isEEDLoadedFromDrafts = true;
+                }
+            }
+            return ((otherRate.NewRate != undefined && otherRate.NewRate != "") || otherRate.CurrentRate == null || !otherRate.IsCurrentRateEditable || otherRate.CurrentRateBED > VRDateTimeService.getNowDateTime() || $scope.isCountryEnded || $scope.isZonePendingClosed || (otherRate.CurrentRateNewEED != undefined && !isEEDLoadedFromDrafts) );
         }
         function isNewRateBEDRequired(date,rate) {
             return (date == undefined && rate > 0);

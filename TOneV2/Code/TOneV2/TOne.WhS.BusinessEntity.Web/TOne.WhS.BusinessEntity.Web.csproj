@@ -152,6 +152,7 @@
     <Compile Include="Controllers\ANumberSaleCodeController.cs" />
     <Compile Include="Controllers\FaultTicketController.cs" />
     <Compile Include="Controllers\CustomerSoldZonesController.cs" />
+    <Compile Include="Controllers\OtherRatesPreviewController.cs" />
     <Compile Include="Controllers\SwitchReleaseCauseController.cs" />
     <Compile Include="Controllers\WHSFinancialAccountController.cs" />
     <Compile Include="Controllers\WHSFinancialAccountDefinitionController.cs" />
@@ -406,10 +407,12 @@
     <Content Include="WhS_BusinessEntity\Directives\SaleAreaTechnicalSettings\Templates\SaleAreaTechnicalSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SaleAreaTechnicalSettings\vr-whs-be-salearea-technical-settings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListChange\Templates\CustomerRatePreviewGrid.html" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceListChange\Templates\OtherRatesPreviewGridTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListChange\Templates\RoutingProductPreviewGrid.html" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListChange\Templates\SalePricelistCodeTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListChange\Templates\SalePriceListRoutingProductChangeTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListChange\vr-whs-be-customerratepreview-grid.js" />
+    <Content Include="WhS_BusinessEntity\Directives\SalePriceListChange\vr-whs-be-otherratespreview-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListChange\vr-whs-be-routingproductpreview-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListChange\vr-whs-be-salepricelistcode-grid.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListChange\vr-whs-be-salepricelistroutingproductchange-grid.js" />
@@ -570,6 +573,7 @@
     <Content Include="WhS_BusinessEntity\Services\APIServices\FaultTicketAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\FinancialAccountAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\FinancialAccountDefinitionAPIService.js" />
+    <Content Include="WhS_BusinessEntity\Services\APIServices\OtherRatesPreviewAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\OtherSaleRateAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleEntityZoneAPIService.js" />
     <Content Include="WhS_BusinessEntity\Services\APIServices\SaleEntityZoneRoutingProductHistoryAPIService.js" />

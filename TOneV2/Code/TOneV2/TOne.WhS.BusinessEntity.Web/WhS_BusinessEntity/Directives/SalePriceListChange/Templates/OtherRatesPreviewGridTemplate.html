@@ -1,0 +1,15 @@
+﻿<vr-datagrid datasource="scopeModel.ratePreviews"
+             dataretrievalfunction="scopeModel.dataRetrievalFunction"
+             pagingtype="'PagingOnScroll'"
+             on-ready="scopeModel.onGridReady"
+             menuactions="scopeModel.menuActions">
+    <vr-datagridcolumn headertext="'Rate Type'" field="'RateTypeName'" type="'Text'" ></vr-datagridcolumn>
+    <vr-datagridcolumn field="'RecentRate'" headertext="'Current Rate'" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="'100'">      
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'New Rate'" field="'Rate'" type="'Number'" numberprecision="'LongPrecision'" fixedwidth="'100'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Change Type'" fixedwidth="'100'" field="'Change'">
+        <vr-icon icontype="dataItem.RateChangeTypeIconType" iconurl="dataItem.RateChangeTypeIconUrl" tooltip="dataItem.RateChangeTypeIconTooltip"></vr-icon>
+    </vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'BED'" field="'BED'" type="'Date'" fixedwidth="'100'"></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'EED'" field="'EED'" type="'Date'" fixedwidth="'100'"></vr-datagridcolumn>
+</vr-datagrid>

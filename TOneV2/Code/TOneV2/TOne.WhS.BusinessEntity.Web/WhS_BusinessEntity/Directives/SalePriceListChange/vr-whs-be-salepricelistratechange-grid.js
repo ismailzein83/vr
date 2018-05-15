@@ -127,6 +127,22 @@ function (utilsService, vrNotificationService, whSBeSalePricelistChangeApiServic
                     return directiveAPI.loadGrid(payload);
                 }
             });
+            drillDownDefinitions.push({
+                title: "Other Rates",
+                directive: "vr-whs-be-otherratespreview-grid",
+                loadDirective: function (otherRatePreviewGridAPI, dataItem) {
+                    dataItem.otherRatePreviewGridAPI = otherRatePreviewGridAPI;
+                    var queryHandler = {
+                        $type: "TOne.WhS.BusinessEntity.Business.OtherRatesPreviewHandler, TOne.WhS.BusinessEntity.Business"
+                    };
+                    queryHandler.Query = {
+                        PriceListId: pricelistId,
+                        ZoneName: dataItem.ZoneName
+                    };
+
+                    return otherRatePreviewGridAPI.load(queryHandler);
+                }
+            });
             return drillDownDefinitions;
         }
 

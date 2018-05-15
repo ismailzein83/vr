@@ -237,8 +237,8 @@ namespace TOne.WhS.BusinessEntity.Business
                   ? routingProductManager.GetDefaultServiceIds(entity.RoutingProductId)
                   : routingProductManager.GetZoneServiceIds(entity.RoutingProductId,
                       entity.ZoneId.Value),
-                    CustomerName = carrierAccountManager.GetCarrierAccountName(entity.CustomerId)
-
+                    CustomerName = carrierAccountManager.GetCarrierAccountName(entity.CustomerId),
+                    CustomerId = entity.CustomerId
                 };
                 if (entity.CurrencyId.HasValue)
                     entityDetail.CurrencySymbol = currencyManager.GetCurrencySymbol(entity.CurrencyId.Value);

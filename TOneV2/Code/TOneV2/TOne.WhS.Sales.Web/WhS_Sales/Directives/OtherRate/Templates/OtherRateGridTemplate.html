@@ -1,13 +1,14 @@
 ﻿<vr-row>
     <vr-columns colnum ="2">
         <span vr-disabled ="isNewRateBEDDisabled">
-        <vr-datetimepicker type="date"
-                           value="NewRateBED"
-                           label="BED"
-                           onvaluechanged="onCurrentRateBEDChanged()"
-                           firechangeifempty
-                           isrequired="isNewRateBEDRequired" disablefocus>
-        </vr-datetimepicker>
+            <vr-datetimepicker type="date"
+                               value="NewRateBED"
+                               label="BED"
+                               onvaluechanged="onCurrentRateBEDChanged()"
+                               customvalidate="validateNewRateBED()"
+                               firechangeifempty
+                               isrequired="isNewRateBEDRequired" disablefocus>
+            </vr-datetimepicker>
             </span>
         </vr-columns>
     </vr-row>
@@ -41,6 +42,7 @@
                                     onvaluechanged="viewScope.onNewRateChanged(dataItem)"
                                     onblurtextbox="viewScope.onNewRateBlurred(dataItem)"
                                     customvalidate="viewScope.validateNewRate(dataItem)"
+                                    decimalprecision="4"
                                     tonextinput>
                         </vr-textbox>
                     </span>

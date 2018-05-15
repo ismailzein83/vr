@@ -70,6 +70,7 @@
     <Compile Include="CarrierProfileDataManager.cs" />
     <Compile Include="CustomerSellingProductDataManager.cs" />
     <Compile Include="CustomerZoneDataManager.cs" />
+    <Compile Include="OtherRatesPreviewDataManager.cs" />
     <Compile Include="SaleEntityRoutingProductDataManager.cs" />
     <Compile Include="SaleEntityServiceDataManager.cs" />
     <Compile Include="SalePriceListChangeDataManager.cs" />

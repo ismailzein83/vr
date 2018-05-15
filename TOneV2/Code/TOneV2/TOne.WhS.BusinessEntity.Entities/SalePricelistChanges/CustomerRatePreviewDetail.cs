@@ -17,5 +17,6 @@ namespace TOne.WhS.BusinessEntity.Entities.SalePricelistChanges
         public RateChangeType ChangeType { get; set; }
         public string CurrencySymbol { get; set; }
         public string CustomerName { get; set; }
+        public int CustomerId { get; set; }
     }
 }
