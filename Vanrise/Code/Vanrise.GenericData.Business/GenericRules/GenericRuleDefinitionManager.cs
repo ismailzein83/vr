@@ -578,8 +578,11 @@ namespace Vanrise.GenericData.Business
                             }
                             if (count == genericRow.RuleToAdd.Criteria.FieldsValues.Count)
                             {
-                                rule.EndEffectiveTime = Utilities.Max(rule.BeginEffectiveTime, effectiveDate);
-                                genericRow.RulesToClose.Add(rule);
+                                if (rule.EndEffectiveTime.VRGreaterThan(effectiveDate))
+                                {
+                                    rule.EndEffectiveTime = Utilities.Max(rule.BeginEffectiveTime, effectiveDate);
+                                    genericRow.RulesToClose.Add(rule);
+                                }
                             }
                         }
                     }
