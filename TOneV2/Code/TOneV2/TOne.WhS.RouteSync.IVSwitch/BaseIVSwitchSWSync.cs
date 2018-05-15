@@ -274,7 +274,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
                         {
                             backupRoutes.Add(new IVSwitchRoute
                             {
-                                RoutingMode = 8,
+                                RoutingMode = 1,
                                 Destination = code,
                                 RouteId = supplierGateWay.RouteId,
                                 TimeFrame = "* * * * *",
