@@ -570,9 +570,33 @@ namespace Vanrise.GenericData.Business
                                 if (commonCriteriaExists != false)
                                 {
                                     var existingRuleValues = rule.Criteria.FieldsValues[fieldValue.Key].GetValues();
-                                    var currentRuleValues = genericRow.RuleToAdd.Criteria.FieldsValues[fieldValue.Key].GetValues();
+                                    var newRuleValues = genericRow.RuleToAdd.Criteria.FieldsValues[fieldValue.Key].GetValues();
+                                    var isMatch = false;
+                                    if (existingRuleValues != null && newRuleValues != null && newRuleValues.Count() == existingRuleValues.Count())
+                                    {
+                                        isMatch = true;
+                                        foreach (var newRuleValue in newRuleValues)
+                                        {
+                                            if (!existingRuleValues.Any(x => x.ToString().Equals(newRuleValue.ToString(), StringComparison.InvariantCultureIgnoreCase)))
+                                            {
+                                                isMatch = false;
+                                                break;
+                                            }
+                                        }
+                                        if(isMatch)
+                                        {
+                                            foreach (var existingRuleValue in existingRuleValues)
+                                            {
+                                                if (!newRuleValues.Any(x => x.ToString().Equals(existingRuleValue.ToString(), StringComparison.InvariantCultureIgnoreCase)))
+                                                {
+                                                    isMatch = false;
+                                                    break;
+                                                }
+                                            }
+                                        }
+                                    }
 
-                                    if (existingRuleValues.All(x=> currentRuleValues.Any(y=>y.ToString().Equals(x.ToString(), StringComparison.InvariantCultureIgnoreCase  ))))
+                                    if (isMatch)
                                         count++;
                                 }
                             }
