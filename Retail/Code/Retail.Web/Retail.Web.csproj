@@ -780,6 +780,18 @@
       <Project>{f5b44646-ba9c-408f-be4f-cc37d0860616}</Project>
       <Name>Retail.Data.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Retail.Interconnect.Business\Retail.Interconnect.Business.csproj">
+      <Project>{2ae6da00-8341-4dbe-b7e7-53e27d06b2c9}</Project>
+      <Name>Retail.Interconnect.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Interconnect.Entities\Retail.Interconnect.Entities.csproj">
+      <Project>{ed0cd3d2-1e3f-4399-ba99-0ebf76746a34}</Project>
+      <Name>Retail.Interconnect.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Interconnect.Web\Retail.Interconnect.Web.csproj">
+      <Project>{0711c943-582d-49c8-b1f1-e1f6f2eb7ff4}</Project>
+      <Name>Retail.Interconnect.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Retail.Invoice.Business\Retail.Invoice.Business.csproj">
       <Project>{6e17f958-24a2-4166-bb5d-7e26031b8afc}</Project>
       <Name>Retail.Invoice.Business</Name>
