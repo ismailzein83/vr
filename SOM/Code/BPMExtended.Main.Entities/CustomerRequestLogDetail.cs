@@ -13,6 +13,8 @@ namespace BPMExtended.Main.Entities
 
         public LogEntryType Severity { get; set; }
 
+        public string SeverityDescription { get; set; }
+
         public string Message { get; set; }
 
         public string ExceptionDetail { get; set; }

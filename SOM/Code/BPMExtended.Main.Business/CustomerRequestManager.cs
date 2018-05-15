@@ -66,6 +66,7 @@ namespace BPMExtended.Main.Business
                 {
                     RequestLogId = somLog.SOMRequestLogId,
                     Severity = somLog.Severity,
+                    SeverityDescription = somLog.Severity.ToString(),
                     Message = somLog.Message,
                     ExceptionDetail = somLog.ExceptionDetail,
                     EventTime = somLog.EventTime
