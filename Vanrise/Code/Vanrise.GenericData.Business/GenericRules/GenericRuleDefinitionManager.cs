@@ -569,11 +569,11 @@ namespace Vanrise.GenericData.Business
                                 var commonCriteriaExists = genericRow.RuleToAdd.Criteria.FieldsValues.ContainsKey(fieldValue.Key);
                                 if (commonCriteriaExists != false)
                                 {
-                                    foreach (var value in rule.Criteria.FieldsValues[fieldValue.Key].GetValues())
-                                    {
-                                        if (genericRow.RuleToAdd.Criteria.FieldsValues[fieldValue.Key].GetValues().Any(x => x.ToString().Equals(value.ToString(), StringComparison.InvariantCultureIgnoreCase)))
-                                            count++;
-                                    }
+                                    var existingRuleValues = rule.Criteria.FieldsValues[fieldValue.Key].GetValues();
+                                    var currentRuleValues = genericRow.RuleToAdd.Criteria.FieldsValues[fieldValue.Key].GetValues();
+
+                                    if (existingRuleValues.All(x=> currentRuleValues.Any(y=>y.ToString().Equals(x.ToString(), StringComparison.InvariantCultureIgnoreCase  ))))
+                                        count++;
                                 }
                             }
                             if (count == genericRow.RuleToAdd.Criteria.FieldsValues.Count)
