@@ -180,6 +180,8 @@
     <Content Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SupplierRateEvaluator\Templates\DealSupplierRateEvaluatorFixed.html" />
     <Content Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SupplierRateEvaluator\vr-whs-deal-supplierrateevaluator-discount.js" />
     <Content Include="WhS_Deal\Directives\Extensions\DealRateEvaluator\SupplierRateEvaluator\vr-whs-deal-supplierrateevaluator-fixed.js" />
+    <Content Include="WhS_Deal\Directives\Extensions\SwapDealProgress\Templates\SwapDealBusinessObjectDataProviderSettingsTemplate.html" />
+    <Content Include="WhS_Deal\Directives\Extensions\SwapDealProgress\vr-whs-swapdeal-businessobject-dataprovidersettings.js" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDeal\RouteRuleCriteria\Templates\SwapDealRouteRuleCriteriaDirective.html" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDeal\RouteRuleCriteria\vr-whs-deal-swapdealanalysis-routerulecriteria.js" />
     <Content Include="WhS_Deal\Directives\Extensions\SwapDealAnalysis\Inbound\RateCalcMethod\Templates\FixedInboundRateCalcMethodItemEditorTemplate.html" />
