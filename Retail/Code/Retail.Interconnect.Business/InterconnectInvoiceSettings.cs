@@ -14,7 +14,7 @@ namespace Retail.Interconnect.Business
         public List<Guid> UsageTransactionTypeIds { get;set; }
         public override Guid ConfigId
         {
-            get { throw new NotImplementedException(); }
+            get { return new Guid("D2776CD1-0900-4FF6-99BC-454866EAAD74"); }
         }
 
         public override dynamic GetInfo(Vanrise.Invoice.Entities.IInvoiceTypeExtendedSettingsInfoContext context)
