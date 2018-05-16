@@ -290,8 +290,9 @@
                                 };
                                 if (item != undefined) {
                                     var zoneIds = [];
-                                    for (var x = 0; x < item.SaleZones.length; x++) {
-                                        zoneIds.push(item.SaleZones[x].ZoneId);
+                                    var itemZones = item.SaleZones != undefined ? item.SaleZones : item.Zones;
+                                    for (var x = 0; x < itemZones.length; x++) {
+                                        zoneIds.push(itemZones[x].ZoneId);
                                     }
                                     payload.selectedIds = zoneIds;
                                     payload.filter = {
@@ -311,8 +312,9 @@
                                 };
                                 if (item != undefined) {
                                     var sellZoneIds = [];
-                                    for (var j = 0; j < item.SaleZones.length; j++) {
-                                        sellZoneIds.push(item.SaleZones[j].ZoneId);
+                                    var itemZones = item.SaleZones != undefined ? item.SaleZones : item.Zones;
+                                    for (var j = 0; j < itemZones.length; j++) {
+                                        sellZoneIds.push(itemZones[j].ZoneId);
                                     }
                                     payload.selectedIds = sellZoneIds;
                                     payload.filter = {

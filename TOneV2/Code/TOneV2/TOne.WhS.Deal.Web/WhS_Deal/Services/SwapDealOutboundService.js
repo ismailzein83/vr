@@ -7,10 +7,11 @@
     function SwapDealOutboundService(VRModalService, VRNotificationService, UtilsService) {
         var editorUrl = '/Client/Modules/WhS_Deal/Directives/SwapDeal/Templates/SwapDealOutboundEditor.html';
 
-        function addSwapDealOutbound(onSwapDealOutboundAdded, supplierId) {
+        function addSwapDealOutbound(onSwapDealOutboundAdded, supplierId,context) {
             var settings = {};
             var parameters = {
-                supplierId: supplierId
+                supplierId: supplierId,
+                context:context
             };
 
             settings.onScopeReady = function (modalScope) {
@@ -33,10 +34,11 @@
             VRModalService.showModal(editorUrl, parameters, settings);
         }
 
-        function editSwapDealOutbound(swapDealOutbound, supplierId, onSwapDealOutboundUpdated) {
+        function editSwapDealOutbound(swapDealOutbound, supplierId, onSwapDealOutboundUpdated,context) {
             var parameters = {
                 swapDealOutbound: swapDealOutbound,
-                supplierId: supplierId
+                supplierId: supplierId,
+                context:context
             };
 
             var settings = {};

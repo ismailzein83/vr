@@ -31,6 +31,8 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
             var gridApi;
             var mainPayload;
             var lastInboundGroupNumber = 0;
+            var context;
+
             function initializeController() {
 
                 ctrl.datasource = [];
@@ -42,7 +44,7 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
                         addedSwapDealInbound.ZoneGroupNumber = lastInboundGroupNumber;
                         ctrl.datasource.push(addedSwapDealInbound);
                     };
-                    WhS_Deal_SwapDealInboundService.addSwapDealInbound(onSwapDealInboundAdded, sellingNumberPlanId);
+                    WhS_Deal_SwapDealInboundService.addSwapDealInbound(onSwapDealInboundAdded, sellingNumberPlanId,context);
                 };
 
                 $scope.onGridReady = function (api) {
@@ -57,7 +59,8 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
 
                 api.load = function (payload) {
                     mainPayload = payload;
-
+                    if (mainPayload != undefined)
+                        context = mainPayload.context;
                     if (payload != undefined && payload.Inbounds != undefined) {
                         ctrl.datasource = payload.Inbounds;
                     }
@@ -134,7 +137,7 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
                 };
                 var sellingNumberPlanId = mainPayload != undefined ? mainPayload.sellingNumberPlanId : undefined;
 
-                WhS_Deal_SwapDealInboundService.editSwapDealInbound(dealInboundObj, sellingNumberPlanId, onDealInboundUpdated);
+                WhS_Deal_SwapDealInboundService.editSwapDealInbound(dealInboundObj, sellingNumberPlanId, onDealInboundUpdated,context);
             }
 
             function viewSwapDealInbound(dealInboundObj) {

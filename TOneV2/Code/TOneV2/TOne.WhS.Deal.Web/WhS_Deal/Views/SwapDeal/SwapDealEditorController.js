@@ -60,10 +60,12 @@
                 var carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
                 if (carrierAccountInfo != undefined) {
                     var payload = {
-                        sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId
+                        sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId,
+                        context: getContext()
                     };
                     var payloadOutbound = {
-                        supplierId: carrierAccountInfo.CarrierAccountId
+                        supplierId: carrierAccountInfo.CarrierAccountId,
+                        context: getContext()
                     };
                     if (carrierAccountSelectedPromise != undefined) {
                         carrierAccountSelectedPromise.resolve();
@@ -261,13 +263,15 @@
                     var payload = {
                         sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId,
                         Inbounds: dealEntity.Settings.Inbounds,
-                        lastInboundGroupNumber: dealEntity.Settings.LastInboundGroupNumber
+                        lastInboundGroupNumber: dealEntity.Settings.LastInboundGroupNumber,
+                        context:getContext()
                     };
 
                     var payloadOutbound = {
                         supplierId: carrierAccountInfo.CarrierAccountId,
                         Outbounds: dealEntity.Settings.Outbounds,
-                        lastOutboundGroupNumber: dealEntity.Settings.LastOutboundGroupNumber
+                        lastOutboundGroupNumber: dealEntity.Settings.LastOutboundGroupNumber,
+                        context: getContext()
                     };
                     if (dealEntity != undefined && dealEntity.Settings != undefined)
                         payloadOutbound.Outbounds = dealEntity.Settings.Outbounds;
@@ -352,7 +356,6 @@
         function buildSwapDealObjFromScope() {
             var inboundData = dealInboundAPI.getData();
             var outboundData = dealOutboundAPI.getData();
-
             var obj = {
                 DealId: dealId,
                 Name: $scope.scopeModel.description,
@@ -374,6 +377,118 @@
             };
             return obj;
         }
+
+        function getContext() {
+            return {
+                getSupplierZoneSelectorPayload: function (item) {
+                        var payload;
+                        payload = {
+                            supplierId: carrierAccountSelectorAPI.getSelectedIds()
+                        };
+                        if (item != undefined) {
+                            var zoneIds = [];
+                            var itemZones = item.SaleZones != undefined ? item.SaleZones : item.Zones;
+                            for (var x = 0; x < itemZones.length; x++) {
+                                zoneIds.push(itemZones[x].ZoneId);
+                            }
+                            payload.selectedIds = zoneIds;
+                            payload.filter = {
+                                ExcludedZoneIds: getSelectedSupplierZonesIdsFromItems(zoneIds),
+                                CountryIds: (item.CountryId != undefined) ? [item.CountryId] : undefined
+                            };
+                        }
+                        else
+                            payload.filter = {
+                                ExcludedZoneIds: getSelectedSupplierZonesIdsFromItems()
+                            };
+                        return payload;
+                },
+
+                getSaleZoneSelectorPayload: function (item) {                  
+                    var carrierAccount = carrierAccountSelectorAPI.getSelectedValues();
+                    var payload;
+                    payload = {
+                        sellingNumberPlanId: carrierAccount != undefined ? carrierAccount.SellingNumberPlanId : undefined
+                    };
+                    if (item != undefined) {
+                        var sellZoneIds = [];
+                        var itemZones = item.SaleZones != undefined ? item.SaleZones : item.Zones;
+                        for (var j = 0; j < itemZones.length; j++) {
+                            sellZoneIds.push(itemZones[j].ZoneId);
+                        }
+                        payload.selectedIds = sellZoneIds;
+                        payload.filter = {
+                            ExcludedZoneIds: getSelectedSaleZonesIdsFromItems(sellZoneIds),
+                            CountryIds: (item.CountryId != undefined) ? [item.CountryId] : undefined
+                        };
+                    }
+                    else
+                        payload.filter = {
+                            ExcludedZoneIds: getSelectedSaleZonesIdsFromItems()
+                        };
+                    return payload;
+                }
+
+            }
+        };
+        function getSelectedSaleZonesIdsFromItems(includedIds) {
+            var ids = getUsedSaleZonesIds();
+            var filterdIds;
+            if (ids != undefined) {
+                filterdIds = [];
+                for (var x = 0; x < ids.length; x++) {
+                    if (includedIds != undefined && includedIds.indexOf(ids[x]) < 0)
+                        filterdIds.push(ids[x]);
+                    else if (includedIds == undefined)
+                        filterdIds.push(ids[x]);
+                }
+            }           
+            return filterdIds;
+        };
+        function getSelectedSupplierZonesIdsFromItems(includedIds) {
+            var ids = getUsedSupplierZonesIds();
+            var filterdIds;
+            if (ids != undefined) {
+                filterdIds = [];
+                for (var x = 0; x < ids.length; x++) {
+                    if (includedIds != undefined && includedIds.indexOf(ids[x]) < 0)
+                        filterdIds.push(ids[x]);
+                    else if (includedIds == undefined)
+                        filterdIds.push(ids[x]);
+                }
+            }
+            return filterdIds;
+        };
+        function getUsedSaleZonesIds() {
+            var zonesIds;
+            var items = dealInboundAPI.getData();
+            if (items.inbounds.length > 0) {
+                zonesIds = [];
+                for (var i = 0; i < items.inbounds.length; i++) {
+                    var zoneIds = [];
+                    for (var x = 0; x < items.inbounds[i].SaleZones.length; x++) {
+                        zoneIds.push(items.inbounds[i].SaleZones[x].ZoneId);
+                    }
+                    zonesIds = zonesIds.concat(zoneIds);
+                }
+            }
+            return zonesIds;
+        };
+        function getUsedSupplierZonesIds() {
+            var zonesIds;
+            var items = dealOutboundAPI.getData();
+            if (items.outbounds.length > 0) {
+                zonesIds = [];
+                for (var i = 0; i < items.outbounds.length; i++) {
+                    var zoneIds = [];
+                    for (var x = 0; x < items.outbounds[i].SupplierZones.length; x++) {
+                        zoneIds.push(items.outbounds[i].SupplierZones[x].ZoneId);
+                    }
+                    zonesIds = zonesIds.concat(zoneIds);
+                }
+            }
+            return zonesIds;
+        };
     }
 
     app.controller('WhS_Deal_SwapDealEditorController', SwapDealEditorController);

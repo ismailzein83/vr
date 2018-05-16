@@ -25,6 +25,8 @@
 
         var countrySelectedPromiseDeferred;
 
+        var context;
+
 
         loadParameters();
         defineScope();
@@ -35,6 +37,7 @@
             if (parameters != undefined) {
                 supplierId = parameters.supplierId;
                 swapDealOutboundEntity = parameters.swapDealOutbound;
+                context = parameters.context;
             }
 
 
@@ -84,10 +87,18 @@
                         }
                     }
                     var setLoader = function (value) { $scope.isLoadingSelector = value };
-                    var payload = {
-                        supplierId: supplierId,
-                        filter: { CountryIds: [countryDirectiveApi.getSelectedIds()] },
-                        selectedIds: zoneIds
+                    var payload = context != undefined ? context.getSupplierZoneSelectorPayload(swapDealOutboundEntity != undefined ? swapDealOutboundEntity : undefined) : undefined;
+                    if (payload != undefined) {
+                        payload.supplierId = supplierId;
+                        payload.filter.CountryIds = [countryDirectiveApi.getSelectedIds()];
+                        payload.selectedIds = zoneIds;
+                    }
+                    else {
+                        payload = {
+                            supplierId: supplierId,
+                            filter: { CountryIds: [countryDirectiveApi.getSelectedIds()] },
+                            selectedIds: zoneIds
+                    } 
 
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierZoneDirectiveAPI, payload, setLoader, countrySelectedPromiseDeferred);
@@ -184,13 +195,21 @@
                             zoneIds.push(swapDealOutboundEntity.SupplierZones[i].ZoneId);
                         }
                     }
-                    var supplierZonePayload = {
-                        supplierId: supplierId,
-                        filter: { CountryIds: [swapDealOutboundEntity.CountryId] },
-                        selectedIds: zoneIds
-                    };
+                    var payload = context != undefined ? context.getSupplierZoneSelectorPayload(swapDealOutboundEntity != undefined ? swapDealOutboundEntity : undefined) : undefined;
+                    if (payload != undefined) {
+                        payload.supplierId = supplierId;
+                        payload.filter.CountryIds = [swapDealOutboundEntity.CountryId];
+                        payload.selectedIds = zoneIds;
 
-                    VRUIUtilsService.callDirectiveLoad(supplierZoneDirectiveAPI, supplierZonePayload, loadSupplierZonePromiseDeferred);
+                    }
+                    else {
+                        payload = {
+                            supplierId: supplierId,
+                            filter: { CountryIds: [swapDealOutboundEntity.CountryId] },
+                            selectedIds: zoneIds
+                        };
+                    }
+                    VRUIUtilsService.callDirectiveLoad(supplierZoneDirectiveAPI, payload, loadSupplierZonePromiseDeferred);
                     countrySelectedPromiseDeferred = undefined;
                 });
             }

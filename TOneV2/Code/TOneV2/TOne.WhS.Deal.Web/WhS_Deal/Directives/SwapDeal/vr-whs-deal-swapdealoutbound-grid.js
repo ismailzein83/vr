@@ -30,6 +30,7 @@ app.directive("vrWhsDealSwapdealoutboundGrid", ["UtilsService", "VRNotificationS
             this.initializeController = initializeController;
             var mainPayload;
             var lastOutboundGroupNumber = 0;
+            var context;
             function initializeController() {
 
                 ctrl.datasource = [];
@@ -41,7 +42,7 @@ app.directive("vrWhsDealSwapdealoutboundGrid", ["UtilsService", "VRNotificationS
                         addedSwapDealOutbound.ZoneGroupNumber = lastOutboundGroupNumber;
                         ctrl.datasource.push(addedSwapDealOutbound);
                     };
-                    WhS_Deal_SwapDealOutboundService.addSwapDealOutbound(onSwapDealOutboundAdded, supplierId);
+                    WhS_Deal_SwapDealOutboundService.addSwapDealOutbound(onSwapDealOutboundAdded, supplierId,context);
                 };
 
                 defineMenuActions();
@@ -53,7 +54,8 @@ app.directive("vrWhsDealSwapdealoutboundGrid", ["UtilsService", "VRNotificationS
 
                 api.load = function (payload) {
                     mainPayload = payload;
-
+                    if (mainPayload != undefined)
+                        context = mainPayload.context;
                     if (payload != undefined && payload.Outbounds != undefined) {
                         ctrl.datasource = payload.Outbounds;
                     }
@@ -126,7 +128,7 @@ app.directive("vrWhsDealSwapdealoutboundGrid", ["UtilsService", "VRNotificationS
                 };
                 var supplierId = mainPayload != undefined ? mainPayload.supplierId : undefined;
 
-                WhS_Deal_SwapDealOutboundService.editSwapDealOutbound(swapDealOutboundObj, supplierId, onSwapDealOutboundUpdated);
+                WhS_Deal_SwapDealOutboundService.editSwapDealOutbound(swapDealOutboundObj, supplierId, onSwapDealOutboundUpdated,context);
 
             }
 
