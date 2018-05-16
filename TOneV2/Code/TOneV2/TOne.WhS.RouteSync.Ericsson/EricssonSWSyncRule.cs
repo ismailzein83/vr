@@ -117,7 +117,7 @@ namespace TOne.WhS.RouteSync.Ericsson
                 tempGenericRuleCriteria.FieldsValues.Add("Supplier", new StaticValues() { Values = new List<object>() { SupplierId } });
                 tempGenericRuleCriteria.FieldsValues.Add("IsBackUp", new StaticValues() { Values = new List<object>() { TrunkGroup.IsBackup } });
 
-                if (TrunkGroup.CodeGroupTrunkGroups != null)
+                if (TrunkGroup.CodeGroupTrunkGroups != null && TrunkGroup.CodeGroupTrunkGroups.Count > 0)
                 {
                     List<object> codeGroupValues = new List<object>();
                     foreach (var CodeGroupTrunkGroup in TrunkGroup.CodeGroupTrunkGroups)
@@ -127,7 +127,7 @@ namespace TOne.WhS.RouteSync.Ericsson
                     tempGenericRuleCriteria.FieldsValues.Add("CodeGroup", new StaticValues() { Values = codeGroupValues });
                 }
 
-                if (TrunkGroup.CustomerTrunkGroups != null)
+                if (TrunkGroup.CustomerTrunkGroups != null && TrunkGroup.CustomerTrunkGroups.Count > 0)
                 {
                     tempGenericRuleCriteria.FieldsValues.Add("Customer", new StaticValues() { Values = TrunkGroup.CustomerTrunkGroups.Select(itm => itm.CustomerId as object).ToList() });
                 }
