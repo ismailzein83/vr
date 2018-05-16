@@ -478,7 +478,7 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRNotificationService', '
                                 }
                             }
                         }
-                        return customerTrunkGroups;
+                        return customerTrunkGroups.length > 0 ? customerTrunkGroups : undefined;
                     }
                     function getCodeGroupTrunkGroups(trunkGroup) {
                         var codeGroupTrunkGroups = [];
@@ -491,15 +491,20 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRNotificationService', '
                                 }
                             }
                         }
-                        return codeGroupTrunkGroups;
+                        return codeGroupTrunkGroups.length > 0 ? codeGroupTrunkGroups : undefined;
                     }
 
                     return trunkGroups.length > 0 ? trunkGroups : undefined;
                 }
 
+                var trunks = getTrunks();
+                var trunkGroups = getTrunkGroups();
+                if (trunks == undefined && trunkGroups == undefined)
+                    return null;
+
                 return {
-                    OutTrunks: getTrunks(),
-                    TrunkGroups: getTrunkGroups()
+                    OutTrunks: trunks,
+                    TrunkGroups: trunkGroups
                 };
             }
         }

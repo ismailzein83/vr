@@ -224,11 +224,15 @@ app.directive('whsRoutesyncEricssonCustomermapping', ['VRNotificationService', '
                     return trunks.length > 0 ? trunks : undefined;
                 }
 
+                var inTrunks = getTrunks();
+                if($scope.scopeModel.bo == undefined &&  $scope.scopeModel.nationalOBA == undefined && $scope.scopeModel.internationalOBA == undefined && inTrunks == undefined)
+                    return undefined;
+
                 return {
                     BO: $scope.scopeModel.bo,
                     NationalOBA: $scope.scopeModel.nationalOBA,
                     InternationalOBA: $scope.scopeModel.internationalOBA,
-                    InTrunks: getTrunks()
+                    InTrunks: inTrunks
                 };
             }
         }
