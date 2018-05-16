@@ -70,6 +70,9 @@
                     });
                 };
 
+                api.getValidationMessage = function () {
+                    return $scope.formSaleCodes.validate();
+                };
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == "function")
                     ctrl.onReady(api);
             }

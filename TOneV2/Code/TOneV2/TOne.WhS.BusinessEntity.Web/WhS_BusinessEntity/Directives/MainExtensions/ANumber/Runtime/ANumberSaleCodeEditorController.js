@@ -66,6 +66,14 @@
             $scope.scopeModel.onCodeValueChange = function (value) {
                 $scope.scopeModel.disabledAddSaleCode = (value == undefined && $scope.scopeModel.codeValue.length - 1 < 1) || UtilsService.getItemIndexByVal($scope.scopeModel.saleCodes, $scope.scopeModel.codeValue, "code") != -1;
             };
+
+            $scope.scopeModel.getImportedSaleCodes = function (values) {
+                $scope.scopeModel.saleCodes.length = 0;
+                for (var i = 0; i < values.length ; i++) {
+                    if (UtilsService.getItemIndexByVal($scope.scopeModel.saleCodes, values[i], "code") == -1)
+                        $scope.scopeModel.saleCodes.push({ code: values[i], message: null });
+                }
+            };
             $scope.scopeModel.validateSaleCodes = function () {
                 if ($scope.scopeModel.saleCodes.length == 0)
                     return "Enter at least one code.";

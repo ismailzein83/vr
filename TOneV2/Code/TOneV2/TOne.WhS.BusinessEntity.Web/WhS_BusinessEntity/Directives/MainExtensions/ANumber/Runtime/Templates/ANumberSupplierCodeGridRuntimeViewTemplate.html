@@ -1,10 +1,12 @@
 ﻿<vr-row vr-loader="scopeModel.isLoading">
-    <vr-whs-be-supplier-selector on-ready="scopeModel.onSupplierReady" normal-col-num="2" ismultipleselection> </vr-whs-be-supplier-selector>
-    <vr-columns colnum="2">
-        <vr-datetimepicker type="date" label="Effective On" value="scopeModel.effectiveOn" isrequired="true"></vr-datetimepicker>
-    </vr-columns>
+    <vr-form name="formSupplierCodes">
+        <vr-whs-be-supplier-selector on-ready="scopeModel.onSupplierReady" normal-col-num="2" ismultipleselection> </vr-whs-be-supplier-selector>
+        <vr-columns colnum="2">
+            <vr-datetimepicker type="date" label="Effective On" value="scopeModel.effectiveOn" isrequired="true"></vr-datetimepicker>
+        </vr-columns>
+    </vr-form>
     <vr-columns colnum="1" withemptyline>
-        <vr-button type="Search" standalone data-onclick="scopeModel.searchClicked"></vr-button>
+        <vr-button type="Search" standalone data-onclick="scopeModel.searchClicked" vr-disabled="formSupplierCodes.validate()!=null"></vr-button>
         <vr-button type="Add" standalone data-onclick="scopeModel.addSupplierCodes"></vr-button>
     </vr-columns>
 </vr-row>
