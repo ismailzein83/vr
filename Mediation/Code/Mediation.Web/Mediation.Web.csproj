@@ -24,6 +24,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -190,9 +192,6 @@
     </Reference>
     <Reference Include="Vanrise.Common.Web">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Web.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Components.Security">
-      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Vanrise.Components.Security.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Data">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
