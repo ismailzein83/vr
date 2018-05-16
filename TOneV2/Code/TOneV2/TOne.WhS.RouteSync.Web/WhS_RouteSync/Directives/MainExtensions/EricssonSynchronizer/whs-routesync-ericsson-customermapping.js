@@ -226,7 +226,7 @@ app.directive('whsRoutesyncEricssonCustomermapping', ['VRNotificationService', '
 
                 var inTrunks = getTrunks();
                 if($scope.scopeModel.bo == undefined &&  $scope.scopeModel.nationalOBA == undefined && $scope.scopeModel.internationalOBA == undefined && inTrunks == undefined)
-                    return undefined;
+                    return null;
 
                 return {
                     BO: $scope.scopeModel.bo,
