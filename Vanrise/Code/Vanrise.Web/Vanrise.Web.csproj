@@ -122,9 +122,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Output\Vanrise.Common.Business.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Components.Security">
-      <HintPath>..\Resources\DLLs\Vanrise.Components.Security.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.Entities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Output\Vanrise.Entities.dll</HintPath>

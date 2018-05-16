@@ -215,7 +215,6 @@
     <Content Include="DLLs\Rebex.TerminalEmulation.dll" />
     <Content Include="DLLs\Rebex.TerminalEmulation.xml" />
     <Content Include="DLLs\Renci.SshNet.dll" />
-    <Content Include="DLLs\Vanrise.Components.Security.dll" />
     <Content Include="Install-Packages\Install-Package.txt" />
     <Content Include="LKUPtable_GenerateMergeScript\Readme.txt" />
     <Content Include="LKUPtable_GenerateMergeScript\Script.txt" />
