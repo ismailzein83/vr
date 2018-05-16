@@ -70,6 +70,7 @@
     <Compile Include="DealSaleZoneGroup.cs" />
     <Compile Include="DealSupplierZoneGroup.cs" />
     <Compile Include="DealProcess\DealZoneRate.cs" />
+    <Compile Include="DealZoneInfo.cs" />
     <Compile Include="InsertDealOperationOutput.cs" />
     <Compile Include="Settings\DealTechnicalSettingData.cs" />
     <Compile Include="Settings\SwapDealTechnicalSettingData.cs" />
