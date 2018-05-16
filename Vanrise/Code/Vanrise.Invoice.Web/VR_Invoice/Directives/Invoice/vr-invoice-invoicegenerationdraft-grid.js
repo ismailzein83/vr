@@ -142,7 +142,6 @@ app.directive("vrInvoiceInvoicegenerationdraftGrid", ["UtilsService", "VRNotific
                                             };
 
                                             currentItem.onDateChanged = function () {
-                                                currentItem.onItemChanged();
                                                 if ($scope.generationCustomSectionDirective != undefined && currentItem.validateToDate() == null)
                                                 {
                                                     $scope.isLodingGrid = true;
@@ -179,10 +178,15 @@ app.directive("vrInvoiceInvoicegenerationdraftGrid", ["UtilsService", "VRNotific
                                                             
                                                         }
                                                     }).finally(function () {
+                                                        currentItem.onItemChanged();
                                                         $scope.isLodingGrid = false;
                                                     });
 
+                                                } else
+                                                {
+                                                    currentItem.onItemChanged();
                                                 }
+
                                             };
 
                                             currentItem.onItemChanged = function () {
