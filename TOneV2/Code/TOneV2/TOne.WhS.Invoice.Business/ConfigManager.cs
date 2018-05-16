@@ -18,7 +18,7 @@ namespace TOne.WhS.Invoice.Business
             InvoiceSettings invoiceSettings = settingManager.GetSetting<InvoiceSettings>(InvoiceSettings.SETTING_TYPE);
 
             if (invoiceSettings == null)
-                throw new NullReferenceException("invoiceSettings");
+                return null;
 
             return invoiceSettings.InvoiceTypeSettings;
         }
