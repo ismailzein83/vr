@@ -315,9 +315,6 @@
     <Reference Include="Vanrise.Common.Web">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Web.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Components.Security">
-      <HintPath>..\..\..\Vanrise\Code\Resources\DLLs\Vanrise.Components.Security.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.Data">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Data.dll</HintPath>
     </Reference>
