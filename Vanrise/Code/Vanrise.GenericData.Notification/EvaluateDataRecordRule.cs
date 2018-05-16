@@ -50,7 +50,7 @@ namespace Vanrise.GenericData.Notification
                     hasItems = inputArgument.InputQueue.TryDequeue(
                         (recordBatch) =>
                         {
-                            handle.SharedInstanceData.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Information, "Evaluating Record {0}", counter);
+                            handle.SharedInstanceData.WriteBusinessTrackingMsg(Vanrise.Entities.LogEntryType.Information, "Evaluating Record {0}", recordBatch.Records);
                             DataRecordRuleEvaluationManager dataRecordRuleEvaluationManager = new DataRecordRuleEvaluationManager();
                             dataRecordRuleEvaluationManager.EvaluateDataRecordRule(recordBatch.Records, inputArgument.AlertRuleTypeId);
                             counter++;

@@ -24,8 +24,6 @@ namespace Vanrise.GenericData.Notification.Arguments
             if (evaluatedExpressions.ContainsKey("ScheduleTime") && evaluatedExpressions.ContainsKey("VRTimePeriod"))
             {
                 DateTime defaultDate = new DateTime(0001,1,1);
-                if (DateTime.Compare(this.FromDate.Date, defaultDate) == 0 && DateTime.Compare(this.ToDate.Date, defaultDate) == 0)
-                {
                     var effectiveDate = (DateTime)evaluatedExpressions["ScheduleTime"];
                     this.TimePeriod = (VRTimePeriod)evaluatedExpressions["VRTimePeriod"];
 
@@ -35,7 +33,6 @@ namespace Vanrise.GenericData.Notification.Arguments
 
                     this.FromDate = context.FromTime;
                     this.ToDate = context.ToTime;
-                }
             }
         }
     }
