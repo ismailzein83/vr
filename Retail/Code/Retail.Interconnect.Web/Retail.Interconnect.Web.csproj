@@ -82,7 +82,6 @@
   <ItemGroup>
     <Folder Include="Controllers\" />
     <Folder Include="Retail_Interconnect\Constant\" />
-    <Folder Include="Retail_Interconnect\Directives\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Retail.Interconnect.Business\Retail.Interconnect.Business.csproj">
@@ -93,6 +92,10 @@
       <Project>{ed0cd3d2-1e3f-4399-ba99-0ebf76746a34}</Project>
       <Name>Retail.Interconnect.Entities</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Retail_Interconnect\Directives\retail-invoice-invoicetype-interconnectinvoicesettings.js" />
+    <Content Include="Retail_Interconnect\Directives\Templates\InterconnectInvoiceSettingsTemplate.html" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

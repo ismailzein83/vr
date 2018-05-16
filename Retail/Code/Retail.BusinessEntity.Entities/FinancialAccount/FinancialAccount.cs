@@ -20,6 +20,7 @@ namespace Retail.BusinessEntity.Entities
 
         public FinancialAccountExtendedSettings ExtendedSettings { get; set; }
     }
+    public enum CommissionType { Display = 0, DoNotDisplay = 1 }
 
     public abstract class FinancialAccountExtendedSettings
     {

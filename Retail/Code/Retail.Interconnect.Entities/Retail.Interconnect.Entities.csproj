@@ -43,7 +43,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InterconnectGenerationCustomSectionPayload.cs" />
+    <Compile Include="InterconnectInvoiceBySaleCurrencyItemDetails.cs" />
+    <Compile Include="InterconnectInvoiceDetails.cs" />
+    <Compile Include="InterconnectInvoiceItemDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Retail.BusinessEntity.Entities\Retail.BusinessEntity.Entities.csproj">
+      <Project>{c08fd318-049c-49ce-8bc4-85bf296cbab9}</Project>
+      <Name>Retail.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.Invoice.Entities\Retail.Invoice.Entities.csproj">
+      <Project>{324f5b0b-84e3-403f-9b0b-a53eb997c941}</Project>
+      <Name>Retail.Invoice.Entities</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,0 +1,19 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onBusinessEntityDefinitionSelectorReady"
+                                                          customlabel="Account Definitions"
+                                                          isrequired="true">
+        </vr-genericdata-businessentitydefinition-selector>
+    </vr-columns>
+</vr-row>
+<vr-row>
+    <vr-accountbalance-billingtransactiontype-selector on-ready="scopeModel.onSingleBillingTransactionTypeSelector"
+                                                       normal-col-num="6"
+                                                       isrequired="true">
+    </vr-accountbalance-billingtransactiontype-selector>
+    <vr-accountbalance-billingtransactiontype-selector on-ready="scopeModel.onMultiBillingTransactionTypeSelector"
+                                                       normal-col-num="6"
+                                                       ismultipleselection
+                                                       isrequired="true">
+    </vr-accountbalance-billingtransactiontype-selector>
+</vr-row>
