@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Security.Entities
 {
+    public enum SecurityProviderAuthenticateResult { Succeeded = 0, WrongCredentials = 1, UserNotExists = 2, ActivationNeeded = 3 }
     public class SecurityProvider
     {
         public Guid SecurityProviderId { get; set; }
@@ -28,7 +29,7 @@ namespace Vanrise.Security.Entities
 
         public virtual string AuthenticateUserEditor { get; set; }
 
-        public abstract bool Authenticate(ISecurityProviderAuthenticateContext context);
+        public abstract SecurityProviderAuthenticateResult Authenticate(ISecurityProviderAuthenticateContext context);
     }
 
     public interface ISecurityProviderAuthenticateContext
@@ -37,7 +38,16 @@ namespace Vanrise.Security.Entities
 
         User AuthenticatedUser { set; }
 
-        string FailureMessage { get; }
+        string FailureMessage { set; }
+    }
+
+    public class SecurityProviderAuthenticateContext : ISecurityProviderAuthenticateContext
+    {
+        public SecurityProviderAuthenticationPayload Payload { get; set; }
+
+        public User AuthenticatedUser { get; set; }
+
+        public string FailureMessage { get; set; }
     }
 
     public abstract class SecurityProviderAuthenticationPayload
