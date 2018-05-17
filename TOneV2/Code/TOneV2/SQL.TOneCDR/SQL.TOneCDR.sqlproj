@@ -67,6 +67,10 @@
     <Folder Include="Security\" />
     <Folder Include="TOneWhS_CDR\User Defined Types\" />
     <Folder Include="TOneWhS_CDR\Views\" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="COMMON\" />
+    <Folder Include="COMMON\Functions\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="TOneWhS_CDR\Tables\CDRMain.sql" />
@@ -87,5 +91,9 @@
     <Build Include="TOneWhS_CDR\User Defined Types\BillingCDR_InterconnectType.sql" />
     <Build Include="TOneWhS_CDR\Views\vw_CDRProblems.sql" />
     <Build Include="TOneWhS_CDR\Views\vw_CDRInvalidAndRaw.sql" />
+    <Build Include="dbo\Tables\CurrencyExchangeRate.sql" />
+    <Build Include="COMMON\Functions\getExchangeRatesConvertedToCurrency.sql" />
+    <Build Include="COMMON\Functions\getExchangeRates.sql" />
+    <Build Include="Security\COMMON.sql" />
   </ItemGroup>
 </Project>
