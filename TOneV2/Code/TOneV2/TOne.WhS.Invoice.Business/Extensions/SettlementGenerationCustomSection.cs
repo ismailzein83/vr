@@ -42,7 +42,7 @@ namespace TOne.WhS.Invoice.Business.Extensions
             {
                 foreach (var generationCustomPayload in context.InvoiceGenerationInfo)
                 {
-                    generationCustomPayload.CustomPayload = _invoiceSettlementManager.EvaluateGenerationCustomPayload(_customerInvoiceTypeId, _supplierInvoiceTypeId, partnerIds, generationCustomPayload.PartnerId, context.InvoiceTypeId, context.MinimumFrom, context.MaximumTo, supplierInvoices, supplierInvoiceItems, customerInvoices, customerInvoiceItems, true);
+                    generationCustomPayload.CustomPayload = _invoiceSettlementManager.EvaluateGenerationCustomPayload(_customerInvoiceTypeId, _supplierInvoiceTypeId, partnerIds, generationCustomPayload.PartnerId, context.InvoiceTypeId, context.MinimumFrom, context.MaximumTo, supplierInvoices, supplierInvoiceItems, customerInvoices, customerInvoiceItems, false);
                 }
             }
         }
