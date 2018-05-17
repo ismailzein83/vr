@@ -182,9 +182,10 @@ namespace TOne.WhS.RouteSync.IVSwitch
                 RouteTableName = GetRouteTableName(endPoint.RouteTableId),
                 TariffTableName = GetTariffTableName(endPoint.TariffTableId)
             };
+            int priority = 0;
             if (route.Options == null || route.Options.Count == 0)
             {
-                ivSwitch.Routes.Add(BuildBlockedRoute(preparedData.BlockRouteId, preparedData._switchTime, route.Code));
+                ivSwitch.Routes.Add(BuildBlockedRoute(preparedData.BlockRouteId, preparedData._switchTime, route.Code, ref priority));
                 return ivSwitch;
             }
 
@@ -193,7 +194,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
             decimal? optionsPercenatgeSum = 0;
             decimal? maxPercentage = 0;
             int gatewayCount = 0;
-            int priority = NumberOfOptions;
+            priority = NumberOfOptions;
 
             foreach (var option in nonBlockedOptions)
             {
@@ -263,7 +264,7 @@ namespace TOne.WhS.RouteSync.IVSwitch
                     break;
 
                 if (backupRouteOption.IsBlocked)
-                    backupRoutes.Add(BuildBlockedRoute(blockedRouteId, wakeUpTime, code));
+                    backupRoutes.Add(BuildBlockedRoute(blockedRouteId, wakeUpTime, code, ref priority));
 
                 else
                 {
@@ -292,14 +293,15 @@ namespace TOne.WhS.RouteSync.IVSwitch
             return backupRoutes;
         }
 
-        private IVSwitchRoute BuildBlockedRoute(int blockedRouteId, DateTime switchDate, string code)
+        private IVSwitchRoute BuildBlockedRoute(int blockedRouteId, DateTime switchDate, string code, ref int priority)
         {
             return new IVSwitchRoute
              {
                  Description = "BLK",
                  RouteId = blockedRouteId,
                  WakeUpTime = switchDate,
-                 Destination = code
+                 Destination = code,
+                 Preference = priority--
              };
         }
 
