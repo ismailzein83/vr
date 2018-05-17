@@ -11,6 +11,12 @@ namespace TOne.WhS.RouteSync.Business
             return routeSyncProcess.RouteBatchSize;
         }
 
+        public int GetRouteSyncProcessDifferentialRoutesPerTransaction()
+        {
+            RouteSyncProcess routeSyncProcess = GetRouteSyncProcessSettings();
+            return routeSyncProcess.DifferentialRoutesPerTransaction;
+        }
+
         public int GetRouteSyncProcessIndexesCommandTimeoutInSeconds()
         {
             RouteSyncProcess routeSyncProcess = GetRouteSyncProcessSettings();

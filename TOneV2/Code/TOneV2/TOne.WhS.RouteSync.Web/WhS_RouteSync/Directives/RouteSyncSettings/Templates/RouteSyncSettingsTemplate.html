@@ -2,16 +2,19 @@
     <vr-tabs>
         <vr-tab header="'Route Sync Process'">
             <vr-columns colnum="3">
-                <vr-textbox label="Route Batch Size" value="scopeModel.routeBatchSize" isrequired type="number" minvalue="1" decimalprecision="0"></vr-textbox>
+                <vr-textbox label="Route Batch Size" value="scopeModel.routeBatchSize" type="number" minvalue="1" decimalprecision="0" isrequired></vr-textbox>
             </vr-columns>
             <vr-columns colnum="3">
-                <vr-textbox value="scopeModel.indexCommandTimeoutInMinutes" type="number" label="DB Indexes Timeout(Mins)" isrequired minvalue="0" decimalprecision="0"></vr-textbox>
+                <vr-textbox value="scopeModel.indexCommandTimeoutInMinutes" type="number" label="DB Indexes Timeout(Mins)" minvalue="0" decimalprecision="0" isrequired></vr-textbox>
             </vr-columns>
             <vr-columns colnum="1" withemptyline haschildcolumns>
                 <vr-hint value="A value of 0 indicates no limit (an attempt to execute a command will wait indefinitely)"></vr-hint>
             </vr-columns>
             <vr-columns colnum="5">
                 <vr-switch value="scopeModel.executeFullRouteSyncWhenPartialNotSupported" label="Execute Full Route Sync when Partial Not Supported"></vr-switch>
+            </vr-columns>
+            <vr-columns colnum="3">
+                <vr-textbox label="Differential Routes Per Transaction" value="scopeModel.differentialRoutesPerTransaction" type="number" minvalue="1" decimalprecision="0" isrequired></vr-textbox>
             </vr-columns>
         </vr-tab>
     </vr-tabs>

@@ -15,9 +15,6 @@ app.directive('whsRoutesyncSettingsEditor', ['UtilsService', 'VRUIUtilsService',
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            compile: function (element, attrs) {
-
-            },
             templateUrl: "/Client/Modules/WhS_RouteSync/Directives/RouteSyncSettings/Templates/RouteSyncSettingsTemplate.html"
         };
 
@@ -29,12 +26,14 @@ app.directive('whsRoutesyncSettingsEditor', ['UtilsService', 'VRUIUtilsService',
 
                 defineAPI();
             }
+
             function defineAPI() {
                 var api = {};
 
                 api.load = function (payload) {
                     if (payload != undefined && payload.data != undefined) {
                         $scope.scopeModel.routeBatchSize = payload.data.RouteSyncProcess.RouteBatchSize;
+                        $scope.scopeModel.differentialRoutesPerTransaction = payload.data.RouteSyncProcess.DifferentialRoutesPerTransaction;
                         $scope.scopeModel.indexCommandTimeoutInMinutes = payload.data.RouteSyncProcess.IndexCommandTimeoutInMinutes;
                         $scope.scopeModel.executeFullRouteSyncWhenPartialNotSupported = payload.data.RouteSyncProcess.ExecuteFullRouteSyncWhenPartialNotSupported;
                     }
@@ -45,6 +44,7 @@ app.directive('whsRoutesyncSettingsEditor', ['UtilsService', 'VRUIUtilsService',
                         $type: "TOne.WhS.RouteSync.Entities.RouteSyncSettings, TOne.WhS.RouteSync.Entities",
                         RouteSyncProcess: {
                             RouteBatchSize: $scope.scopeModel.routeBatchSize,
+                            DifferentialRoutesPerTransaction: $scope.scopeModel.differentialRoutesPerTransaction,
                             IndexCommandTimeoutInMinutes: $scope.scopeModel.indexCommandTimeoutInMinutes,
                             ExecuteFullRouteSyncWhenPartialNotSupported: $scope.scopeModel.executeFullRouteSyncWhenPartialNotSupported
                         }
