@@ -75,12 +75,14 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
 
             $scope.onNewRateBlurred = function (dataItem) {
                 zoneItem.IsDirty = true;
+                console.log($scope.NewRateBED);
                 if ($scope.NewRateBED == undefined && dataItem.NewRate > 0 && zoneItem.CurrentRateEED == undefined) {
+                    console.log("in if");
                     var today = VRDateTimeService.getNowDateTime();
                     var newDateValue = new Date(today.getFullYear(), today.getMonth(), today.getDate() + increasedRateDayOffset);
                     $scope.NewRateBED = newDateValue;
                 };
-                if (zoneItem.CurrentRateEED != undefined && dataItem.NewRate > 0)
+                if (zoneItem.CurrentRateEED != undefined && dataItem.NewRate > 0 && zoneItem.NewRateBED == undefined)
                 {
                     $scope.NewRateBED = zoneItem.CurrentRateEED;
                 }
@@ -90,16 +92,16 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
                     return WhS_Sales_RatePlanUtilsService.validateNewRate(otherRate, ownerCurrencyId);
             };
 
-            $scope.validateNewRateBED = function () {
-                var currentEED = UtilsService.createDateFromString(zoneItem.CurrentRateEED);
-                if ($scope.NewRateBED != undefined) {
-                    if (zoneItem.CurrentRateEED != undefined && $scope.NewRateBED < currentEED.getTime()) {
-                        return "BED of the other rate must be greater than or equal to " + zoneItem.CurrentRateEED + " BED of the  last normal rate of the zone";
-                    }
-                }
-                else
-                    return null;
-            };
+           // $scope.validateNewRateBED = function () {
+              //  var currentEED = UtilsService.createDateFromString(zoneItem.CurrentRateEED);
+               // if ($scope.NewRateBED != undefined) {
+                 //   if (zoneItem.CurrentRateEED != undefined && $scope.NewRateBED < currentEED.getTime()) {
+                    //    return "BED of the other rate must be greater than or equal to " + zoneItem.CurrentRateEED + " BED of the  last normal rate of the zone";
+                   // }
+               // }
+               // else
+                 //   return null;
+        //    };
         }
         function defineAPI() {
 

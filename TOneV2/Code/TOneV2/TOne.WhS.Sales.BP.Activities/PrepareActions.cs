@@ -307,10 +307,7 @@ namespace TOne.WhS.Sales.BP.Activities
                     var currentRate = locator.GetCustomerZoneRate(customerId, sellingProductId, zoneChanges.ZoneId);
                     if (currentRate == null)
                     {
-                        SaleZoneManager saleZoneManager = new SaleZoneManager();
-                        var customerName = carrierAccountManager.GetCarrierAccountName(customerId);
-                        var zoneName = saleZoneManager.GetSaleZoneName(zoneId);
-                        throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Zone {0} does neither have a default rate nor an explicit rate for customer {1}", zoneName, customerName));
+                        throw new Vanrise.Entities.DataIntegrityValidationException(string.Format("Zone with id {0} does neither have a default rate nor an explicit rate for customer with id {1}", zoneId, customerId));
                     }
                     if (!zoneChanges.NewOtherRateBED.HasValue)
                         throw new Vanrise.Entities.VRBusinessException(string.Format("Other Rate(s) of zone with id '{0}' does not have BED", zoneId));

@@ -431,13 +431,9 @@ namespace TOne.WhS.Sales.BP.Activities
 
         private DateTime GetRateChangeBED(int customerId, int sellingProductId, long zoneId, DateTime originalBED, SaleEntityZoneRateLocator futurelocator)
         {
-            SaleZoneManager saleZoneManager = new SaleZoneManager();
-            CarrierAccountManager carrierAccountManager = new CarrierAccountManager();
-            var customerName = carrierAccountManager.GetCarrierAccountName(customerId);
-            var zoneName = saleZoneManager.GetSaleZoneName(zoneId);
             SaleEntityZoneRate zoneRate = futurelocator.GetCustomerZoneRate(customerId, sellingProductId, zoneId);
             if (zoneRate == null)
-                throw new DataIntegrityValidationException(string.Format("Zone {0} does neither have a default rate nor an explicit rate for customer {1}", zoneName, customerName));
+                throw new DataIntegrityValidationException(string.Format("Zone with id {0} does neither have a default rate nor an explicit rate for customer with id {1}", zoneId, customerId));
             if (zoneRate.Source == SalePriceListOwnerType.Customer)
             {
                 DateTime? currentEEd = zoneRate.Rate.EED;
