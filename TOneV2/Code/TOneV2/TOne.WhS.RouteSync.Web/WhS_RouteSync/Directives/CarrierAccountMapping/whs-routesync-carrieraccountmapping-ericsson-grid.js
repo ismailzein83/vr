@@ -78,13 +78,33 @@ app.directive('whsRoutesyncCarrieraccountmappingEricssonGrid', ['VRNotificationS
                         if (carrierAccountMapping.customerMappingGridAPI != undefined || carrierAccountMapping.supplierMappingGridAPI != undefined) {
                             results[carrierAccountMapping.CarrierAccountId] = {
                                 CarrierId: carrierAccountMapping.CarrierAccountId,
-                                CustomerMapping: carrierAccountMapping.customerMappingGridAPI != undefined ? carrierAccountMapping.customerMappingGridAPI.getData() : undefined,
-                                SupplierMapping: carrierAccountMapping.supplierMappingGridAPI != undefined ? carrierAccountMapping.supplierMappingGridAPI.getData() : undefined
+                                CustomerMapping: getCustomerMapping(carrierAccountMapping.customerMappingGridAPI, carrierAccountMapping.CarrierAccountId),
+                                SupplierMapping: getSupplierMapping(carrierAccountMapping.supplierMappingGridAPI, carrierAccountMapping.CarrierAccountId)
                             };
                         } else {
                             results[carrierAccountMapping.CarrierAccountId] = carrierMappings != undefined ? carrierMappings[carrierAccountMapping.CarrierAccountId] : undefined;
                         }
                     }
+
+                    function getCustomerMapping(customerMappingGridAPI, carrierAccountId) {
+                        if (customerMappingGridAPI != undefined)
+                            return customerMappingGridAPI.getData();
+
+                        if (carrierMappings != undefined && carrierMappings[carrierAccountId] != undefined)
+                            return carrierMappings[carrierAccountId].CustomerMapping;
+
+                        return null;
+                    }
+                    function getSupplierMapping(supplierMappingGridAPI, carrierAccountId) {
+                        if (supplierMappingGridAPI != undefined)
+                            return supplierMappingGridAPI.getData();
+
+                        if (carrierMappings != undefined && carrierMappings[carrierAccountId] != undefined)
+                            return carrierMappings[carrierAccountId].SupplierMapping;
+
+                        return null;
+                    }
+
                     return results;
                 };
 
