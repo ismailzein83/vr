@@ -32,7 +32,7 @@ namespace Vanrise.Common.Data.SQL
         }
         public bool Save(EntityPersonalization entityPersonalization)
         {
-            string serializedDetails = entityPersonalization.Details != null ? Vanrise.Common.Serializer.Serialize(entityPersonalization.Details) : null;
+            string serializedDetails = entityPersonalization.Setting != null ? Vanrise.Common.Serializer.Serialize(entityPersonalization.Setting) : null;
             int affectedRecords = ExecuteNonQuerySP("Common.[sp_EntityPersonalization_InsertIfNotExistsOrUpdate]", entityPersonalization.EntityUniqueName, entityPersonalization.UserId, serializedDetails, entityPersonalization.CreatedBy);
 
             if (affectedRecords > 0)
@@ -52,7 +52,7 @@ namespace Vanrise.Common.Data.SQL
                 EntityPersonalizationId = (long)reader["ID"],
                 UserId = GetReaderValue<int?>(reader, "UserId"),
                 EntityUniqueName = reader["EntityUniqueName"] as string,
-                Details = reader["Details"] as string != null ? Vanrise.Common.Serializer.Deserialize<EntityPersonalizationData>(reader["Details"] as string) : null,
+                Setting = reader["Details"] as string != null ? Vanrise.Common.Serializer.Deserialize<EntityPersonalizationExtendedSetting>(reader["Details"] as string) : null,
                 CreatedTime = GetReaderValue<DateTime>(reader, "CreatedTime"),
                 CreatedBy = GetReaderValue<int?>(reader, "CreatedBy"),
                 LastModifiedBy = GetReaderValue<int?>(reader, "LastModifiedBy"),

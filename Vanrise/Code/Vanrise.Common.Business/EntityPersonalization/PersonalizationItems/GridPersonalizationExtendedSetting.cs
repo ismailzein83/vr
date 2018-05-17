@@ -7,19 +7,14 @@ using Vanrise.Entities;
 
 namespace Vanrise.Common.Business
 {
-    public class GridPersonalizationItem : EntityPersonalizationItemSetting
-    {
-        public override string Title
-        {
-            get { return "Grid"; }
-        }
-
+    public class GridPersonalizationExtendedSetting : EntityPersonalizationExtendedSetting
+    {     
         public List<GridColumnVisibilityPersonalization> ColumnVisibilities { get; set; }
     }
 
     public class GridColumnVisibilityPersonalization
     {
-        public string FieldName { get; set; }
+        public string SysName { get; set; }
 
         public bool IsVisible { get; set; }
     }

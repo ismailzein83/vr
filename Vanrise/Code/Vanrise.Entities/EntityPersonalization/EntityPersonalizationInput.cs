@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Entities
 {
-    public class EntityPersonalizationItem
+    public class EntityPersonalizationInput
     {
+        public string EntityUniqueName { get; set; }
         public EntityPersonalizationExtendedSetting ExtendedSetting { get; set; }
-    }
-
-    public abstract class EntityPersonalizationExtendedSetting
-    {
-
     }
 }

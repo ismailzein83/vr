@@ -129,6 +129,8 @@
     <Compile Include="Controllers\GenericLKUPDefinitionController.cs" />
     <Compile Include="Controllers\OverriddenConfigurationController.cs" />
     <Compile Include="Controllers\OverriddenConfigurationGroupController.cs" />
+    <Compile Include="Controllers\EntityPersonalizationController.cs" />
+    <Compile Include="Controllers\LicenseController.cs" />
     <Compile Include="Controllers\SMSMessageTemplateController.cs" />
     <Compile Include="Controllers\SMSMessageTypeController.cs" />
     <Compile Include="Controllers\VRExclusiveSessionController.cs" />
@@ -266,6 +268,9 @@
     <Content Include="Common\Directives\MainExtensions\VRObjectTypes\vr-common-companysettingobjecttype.js" />
     <Content Include="Common\Directives\MainExtensions\VRObjectTypes\vr-common-companysettingpropertyevaluator.js" />
     <Content Include="Common\Directives\ModalWidth\vr-common-modalwidth-selector.js" />
+    <Content Include="Common\Directives\Personalization\PersonilizationEditorController.js" />
+    <Content Include="Common\Directives\Personalization\Templates\PersonilizationEditor.html" />
+    <Content Include="Common\Directives\Personalization\vr-common-personalization.js" />
     <Content Include="Common\Directives\Region\Templates\RegionGridTemplate.html" />
     <Content Include="Common\Directives\Region\vr-common-region-grid.js" />
     <Content Include="Common\Directives\Region\vr-common-region-selector.js" />
@@ -513,8 +518,10 @@
     <Content Include="Common\Services\APIServices\ObjectTrackingAPIService.js" />
     <Content Include="Common\Services\APIServices\OverriddenConfigAPIService.js" />
     <Content Include="Common\Services\APIServices\OverriddenConfigGroupAPIService.js" />
+    <Content Include="Common\Services\APIServices\LicenseAPIService.js" />
     <Content Include="Common\Services\APIServices\SMSMessageTemplateAPIService.js" />
     <Content Include="Common\Services\APIServices\SMSMessageTypeAPIService.js" />
+    <Content Include="Common\Services\APIServices\EntityPersonalizationAPIService.js" />
     <Content Include="Common\Services\APIServices\VRExclusiveSessionAPIService.js" />
     <Content Include="Common\Services\APIServices\VRExclusiveSessionTypeAPIService.js" />
     <Content Include="Common\Services\APIServices\VRLocalizationLanguageAPIService.js" />

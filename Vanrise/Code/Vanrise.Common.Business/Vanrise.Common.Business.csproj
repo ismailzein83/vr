@@ -70,6 +70,7 @@
     <Compile Include="BigData\BigDataWCFService.cs" />
     <Compile Include="BigData\IBigDataRequest.cs" />
     <Compile Include="CacheRefreshManager.cs" />
+    <Compile Include="LicenseManager.cs" />
     <Compile Include="CityManager.cs" />
     <Compile Include="CompanyDefinitionManager.cs" />
     <Compile Include="CompanySettingsManager.cs" />
@@ -81,7 +82,7 @@
     <Compile Include="DataGrouping\RemoteDataGrouper.cs" />
     <Compile Include="DataGrouping\LocalDataGrouper.cs" />
     <Compile Include="EntityPersonalization\EntityPersonalizationManager.cs" />
-    <Compile Include="EntityPersonalization\PersonalizationItems\GridPersonalizationItem.cs" />
+    <Compile Include="EntityPersonalization\PersonalizationItems\GridPersonalizationExtendedSetting.cs" />
     <Compile Include="ExcelFileParser\ExcelFileParserManger.cs" />
     <Compile Include="SMS\SMSManager.cs" />
     <Compile Include="SMS\SMSMessageTemplateManager.cs" />

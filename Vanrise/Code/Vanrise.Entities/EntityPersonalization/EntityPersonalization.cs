@@ -11,7 +11,7 @@ namespace Vanrise.Entities
         public long EntityPersonalizationId { get; set; }
         public int? UserId { get; set; }
         public string EntityUniqueName { get; set; }
-        public EntityPersonalizationData Details { get; set; }
+        public EntityPersonalizationExtendedSetting Setting { get; set; }
         public DateTime? CreatedTime { get; set; }
         public int? CreatedBy { get; set; }
         public DateTime? LastModifiedTime { get; set; }

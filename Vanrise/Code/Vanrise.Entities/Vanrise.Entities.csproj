@@ -83,7 +83,8 @@
     <Compile Include="DBReplication\DBReplicationSettings.cs" />
     <Compile Include="EntityFilterEffectiveMode.cs" />
     <Compile Include="EntityPersonalization\EntityPersonalization.cs" />
-    <Compile Include="EntityPersonalization\EntityPersonalizationData.cs" />
+    <Compile Include="EntityPersonalization\EntityPersonalizationDetail.cs" />
+    <Compile Include="EntityPersonalization\EntityPersonalizationInput.cs" />
     <Compile Include="EntityPersonalization\EntityPersonalizationItem.cs" />
     <Compile Include="Enumeration.cs" />
     <Compile Include="IBusinessManager.cs" />

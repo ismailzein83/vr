@@ -1,7 +1,7 @@
 ﻿'use strict';
 
-app.directive('vrCommonProductinfotechnicalsettingsEditor', ['UtilsService', 'VRUIUtilsService',
-    function (UtilsService, VRUIUtilsService) {
+app.directive('vrCommonProductinfotechnicalsettingsEditor', ['UtilsService', 'VRUIUtilsService','VRCommon_LicenseAPIService',
+    function (UtilsService, VRUIUtilsService, VRCommon_LicenseAPIService) {
 
         return {
             restrict: 'E',
@@ -34,16 +34,19 @@ app.directive('vrCommonProductinfotechnicalsettingsEditor', ['UtilsService', 'VR
                 var api = {};
 
                 api.load = function (payload) {
+                    VRCommon_LicenseAPIService.GetLicenseExpiryDate().then(function (expiryDate) {
+                        $scope.scopeModel.expiryDate = expiryDate;
+                        var productInfoTechnicalSettingsPayload;
+                        if (payload != undefined && payload.data != undefined) {
+                            productInfoTechnicalSettingsPayload = payload.data;
+                        }
 
-                    var productInfoTechnicalSettingsPayload;
-                    if (payload != undefined && payload.data != undefined) {
-                        productInfoTechnicalSettingsPayload = payload.data;
-                    }
-
-                    if (productInfoTechnicalSettingsPayload != undefined && productInfoTechnicalSettingsPayload.ProductInfo != undefined) {
-                        $scope.scopeModel.productName = productInfoTechnicalSettingsPayload.ProductInfo.ProductName;
-                        $scope.scopeModel.versionNumber = productInfoTechnicalSettingsPayload.ProductInfo.VersionNumber;
-                    }
+                        if (productInfoTechnicalSettingsPayload != undefined && productInfoTechnicalSettingsPayload.ProductInfo != undefined) {
+                            $scope.scopeModel.productName = productInfoTechnicalSettingsPayload.ProductInfo.ProductName;
+                            $scope.scopeModel.versionNumber = productInfoTechnicalSettingsPayload.ProductInfo.VersionNumber;
+                        }
+                    });
+                   
                 };
 
                 api.getData = function () {
