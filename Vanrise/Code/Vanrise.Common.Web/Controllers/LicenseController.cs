@@ -15,7 +15,7 @@ namespace Vanrise.Common.Web.Controllers
     {
         [HttpGet]
         [Route("GetLicenseExpiryDate")]
-        public DateTime GetLicenseExpiryDate()
+        public string GetLicenseExpiryDate()
         {
             LicenseManager manager = new LicenseManager();
             return manager.GetLicenseExpiryDate();

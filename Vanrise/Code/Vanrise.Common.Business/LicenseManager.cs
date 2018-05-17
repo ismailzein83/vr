@@ -12,9 +12,10 @@ namespace Vanrise.Common.Business
 {
     public class LicenseManager
     {
-        public DateTime GetLicenseExpiryDate()
+        public string GetLicenseExpiryDate()
         {
-            return LicenceManagerControl.ExpiryDate;
-        }      
+            DateTime value = LicenceManagerControl.ExpiryDate;
+            return value == DateTime.MinValue ? null : value.ToString("yyyy-MM-dd");
+        }
     }
 }
