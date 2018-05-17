@@ -83,7 +83,7 @@ app.directive('retailBeAccountFinancialaccountSelector', ['Retail_BE_FinancialAc
                     if (selectedIds != undefined) {
                         var accountIds = [selectedIds];
                         if (attrs.ismultipleselection != undefined) {
-                            accountIds = selectedIds
+                            accountIds = selectedIds;
                         }
                         if (accountIds.length > 0)
                         {

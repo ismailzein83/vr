@@ -94,6 +94,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Retail_Interconnect\Directives\retail-interconnect-account-invoice-selector.js" />
     <Content Include="Retail_Interconnect\Directives\retail-invoice-invoicetype-interconnectinvoicesettings.js" />
     <Content Include="Retail_Interconnect\Directives\Templates\InterconnectInvoiceSettingsTemplate.html" />
   </ItemGroup>
