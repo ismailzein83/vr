@@ -75,7 +75,6 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
 
             $scope.onNewRateBlurred = function (dataItem) {
                 zoneItem.IsDirty = true;
-                console.log($scope.NewRateBED);
                 if ($scope.NewRateBED == undefined && dataItem.NewRate > 0 && zoneItem.CurrentRateEED == undefined) {
                     var today = VRDateTimeService.getNowDateTime();
                     var newDateValue = new Date(today.getFullYear(), today.getMonth(), today.getDate() + increasedRateDayOffset);
@@ -257,7 +256,6 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
         }
         function isEEDDisabled(otherRate) {
             var isEEDLoadedFromDrafts = false;
-            console.log(otherRate);
             if (zoneItem.ClosedRates.length > 0)
             {
                 for(var i = 0; i < zoneItem.ClosedRates.length; i++)
