@@ -130,6 +130,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Data.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.AccountBalance.Data.RDB">
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Data.RDB.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.AccountBalance.Data.SQL">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Data.SQL.dll</HintPath>
     </Reference>
