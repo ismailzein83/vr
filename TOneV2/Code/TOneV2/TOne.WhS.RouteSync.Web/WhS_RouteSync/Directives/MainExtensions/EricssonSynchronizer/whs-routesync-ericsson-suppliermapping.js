@@ -135,7 +135,7 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRNotificationService', '
 
                     var addedTrunkGroup = {
                         TrunkGroupNb: $scope.scopeModel.trunkGroups.length + 1,
-                        IsBackup: true,
+                        IsBackup: false,
                         selectedTrunksInfo: []
                     };
 
@@ -300,6 +300,7 @@ app.directive('whsRoutesyncEricssonSuppliermapping', ['VRNotificationService', '
                                     _promises.push(trunkGroupLoadDirectivesDeferred.promise);
                                     extendTrunkGroupEntity(currentTrunkGroup, trunkGroupLoadDirectivesDeferred);
                                     defineTrunkTrunkGroupTabs(currentTrunkGroup, trunks);
+                                    trunkGroupGridAPI.expandRow(currentTrunkGroup);
                                     $scope.scopeModel.trunkGroups.push(currentTrunkGroup);
                                 }
                             }
