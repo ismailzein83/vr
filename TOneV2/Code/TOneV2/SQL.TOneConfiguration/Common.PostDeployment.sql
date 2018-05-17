@@ -121,7 +121,9 @@ as (select * from (values
 ('VRCommon/VRExclusiveSession/ForceReleaseAllSessions','VR_System_Administration: Manage'),
 ('VRCommon/VRExclusiveSession/ForceReleaseSession','VR_System_Administration: Manage'),
 
-('VRCommon/SMSMessageTemplate/GetFilteredSMSMessageTemplates','VR_SystemConfiguration: View'),('VRCommon/SMSMessageTemplate/AddSMSMessageTemplate','VR_SystemConfiguration: Add'),('VRCommon/SMSMessageTemplate/UpdateSMSMessageTemplate','VR_SystemConfiguration: Edit')
+('VRCommon/SMSMessageTemplate/GetFilteredSMSMessageTemplates','VR_System_Administration: View'),
+('VRCommon/SMSMessageTemplate/AddSMSMessageTemplate','VR_System_Administration: Manage'),
+('VRCommon/SMSMessageTemplate/UpdateSMSMessageTemplate','VR_System_Administration: Manage')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Name],[RequiredPermissions]))
 merge	[sec].[SystemAction] as t
