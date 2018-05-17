@@ -65,6 +65,10 @@
     <Folder Include="ICX_CDR\Tables\" />
     <Folder Include="ICX_CDR\User Defined Types\" />
     <Folder Include="Security\" />
+    <Folder Include="dbo\" />
+    <Folder Include="dbo\Tables\" />
+    <Folder Include="COMMON\" />
+    <Folder Include="COMMON\Functions\" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="ICX_CDR\Tables\BillingCDR_Main.sql" />
@@ -76,5 +80,9 @@
     <Build Include="ICX_CDR\User Defined Types\BillingCDR_InvalidType.sql" />
     <Build Include="ICX_CDR\User Defined Types\BillingCDR_FailedType.sql" />
     <Build Include="Security\ICX_CDR.sql" />
+    <Build Include="dbo\Tables\CurrencyExchangeRate.sql" />
+    <Build Include="COMMON\Functions\getExchangeRatesConvertedToCurrency.sql" />
+    <Build Include="COMMON\Functions\getExchangeRates.sql" />
+    <Build Include="Security\COMMON.sql" />
   </ItemGroup>
 </Project>
