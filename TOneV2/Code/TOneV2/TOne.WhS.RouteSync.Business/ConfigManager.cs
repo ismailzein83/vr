@@ -5,16 +5,22 @@ namespace TOne.WhS.RouteSync.Business
 {
     public class ConfigManager
     {
-        public bool GetRouteSyncProcessExecuteFullRouteSyncWhenPartialNotSupported()
+        public int GetRouteSyncProcessRouteBatchSize()
         {
             RouteSyncProcess routeSyncProcess = GetRouteSyncProcessSettings();
-            return routeSyncProcess.ExecuteFullRouteSyncWhenPartialNotSupported;
+            return routeSyncProcess.RouteBatchSize;
         }
 
         public int GetRouteSyncProcessIndexesCommandTimeoutInSeconds()
         {
             RouteSyncProcess routeSyncProcess = GetRouteSyncProcessSettings();
             return routeSyncProcess.IndexCommandTimeoutInMinutes * 60;
+        }
+
+        public bool GetRouteSyncProcessExecuteFullRouteSyncWhenPartialNotSupported()
+        {
+            RouteSyncProcess routeSyncProcess = GetRouteSyncProcessSettings();
+            return routeSyncProcess.ExecuteFullRouteSyncWhenPartialNotSupported;
         }
 
         public SwitchInfoGetter GetSwitchInfoGetter()
@@ -30,7 +36,7 @@ namespace TOne.WhS.RouteSync.Business
                 });
         }
 
-        public RouteSyncProcess GetRouteSyncProcessSettings()
+        private RouteSyncProcess GetRouteSyncProcessSettings()
         {
             Vanrise.Common.Business.SettingManager settingManager = new Vanrise.Common.Business.SettingManager();
             return settingManager.GetCachedOrCreate("WhS_RouteSync_ConfigurationManager_GetRouteSyncProcessSettings",

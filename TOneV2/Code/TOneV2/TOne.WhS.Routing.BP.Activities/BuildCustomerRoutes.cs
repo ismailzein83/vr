@@ -64,7 +64,7 @@ namespace TOne.WhS.Routing.BP.Activities
             {
                 InitialiseSwitchesInProcessQueues(inputArgument.SwitchesInProcess);
                 RouteSync.Business.ConfigManager routeSyncConfigManager = new RouteSync.Business.ConfigManager();
-                routeBatchSize = routeSyncConfigManager.GetRouteSyncProcessSettings().RouteBatchSize;
+                routeBatchSize = routeSyncConfigManager.GetRouteSyncProcessRouteBatchSize();
             }
 
             CustomerRoutesBatch customerRoutesBatch = new CustomerRoutesBatch();
