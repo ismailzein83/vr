@@ -909,6 +909,10 @@
       <Project>{b64a7cba-3d66-4c61-813b-f19df288d069}</Project>
       <Name>TOne.WhS.Analytics.Web</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.BusinessEntity.Business\TOne.WhS.BusinessEntity.Business.csproj">
+      <Project>{5635598e-8526-4bb4-9d1b-87a6b3b1ce72}</Project>
+      <Name>TOne.WhS.BusinessEntity.Business</Name>
+    </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Data.SQL\TOne.WhS.BusinessEntity.Data.SQL.csproj">
       <Project>{c483ccbc-de5f-4fe0-a837-24d7e5b60273}</Project>
       <Name>TOne.WhS.BusinessEntity.Data.SQL</Name>

@@ -1632,13 +1632,8 @@ namespace TOne.WhS.BusinessEntity.Business
         #endregion
     }
 
-    public class CarrierAccountFilterPersonalizationItem : EntityPersonalizationItemSetting
+    public class CarrierAccountFilterPersonalizationItem : EntityPersonalizationExtendedSetting
     {
-        public override string Title
-        {
-            get { return "Filter"; }
-        }
-
         public string Name { get; set; }
 
         public List<int> CarrierProfilesIds { get; set; }
