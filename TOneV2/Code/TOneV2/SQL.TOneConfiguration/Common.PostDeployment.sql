@@ -96,7 +96,7 @@ as (select * from (values
 ('VRCommon/StatusDefinition/GetStatusDefinitionsInfo',null),
 
 ('VRCommon/VRComponentType/GetFilteredVRComponentTypes','VR_SystemConfiguration: View'),
-('VRCommon/VRComponentType/GetVRComponentType','VR_SystemConfiguration: View'),
+('VRCommon/VRComponentType/GetVRComponentType',null),
 ('VRCommon/VRComponentType/AddVRComponentType','VR_SystemConfiguration: Add'),
 ('VRCommon/VRComponentType/UpdateVRComponentType','VR_SystemConfiguration: Edit'),
 ('VRCommon/VRComponentType/GetVRComponentTypeExtensionConfigs',null),
