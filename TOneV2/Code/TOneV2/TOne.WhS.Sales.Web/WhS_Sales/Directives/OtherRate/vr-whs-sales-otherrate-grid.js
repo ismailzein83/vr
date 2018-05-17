@@ -77,7 +77,6 @@ app.directive("vrWhsSalesOtherrateGrid", ["UtilsService", "VRNotificationService
                 zoneItem.IsDirty = true;
                 console.log($scope.NewRateBED);
                 if ($scope.NewRateBED == undefined && dataItem.NewRate > 0 && zoneItem.CurrentRateEED == undefined) {
-                    console.log("in if");
                     var today = VRDateTimeService.getNowDateTime();
                     var newDateValue = new Date(today.getFullYear(), today.getMonth(), today.getDate() + increasedRateDayOffset);
                     $scope.NewRateBED = newDateValue;
