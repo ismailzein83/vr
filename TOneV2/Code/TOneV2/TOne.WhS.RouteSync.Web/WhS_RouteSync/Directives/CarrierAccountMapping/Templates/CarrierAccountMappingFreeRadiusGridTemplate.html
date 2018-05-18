@@ -7,11 +7,12 @@
     <vr-datagridcolumn headertext="'ID'" field="'CarrierAccountId'" type="'Text'" widthfactor="2"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Account Name'" field="'CarrierAccountName'" type="'Text'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Customer Mapping'" disablesorting>
-        <vr-textbox ng-if="dataItem.ShowCustomerMapping(dataItem)" value="dataItem.CustomerMappings" type="text" tonextinput></vr-textbox>
+        <vr-textbox ng-if="dataItem.ShowCustomerMapping(dataItem)" value="dataItem.CustomerMappings" type="text"
+                    customvalidate="dataItem.CustomerMappingValidation(dataItem.CustomerMappings)" tonextinput></vr-textbox>
     </vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Supplier Mapping'" disablesorting>
         <vr-textbox ng-if="dataItem.ShowSupplierMapping(dataItem)" value="dataItem.SupplierMappings" type="text"
-                    customvalidate="dataItem.SupplierMappingValidation(dataItem.SupplierMapping)" tonextinput>
+                    customvalidate="dataItem.SupplierMappingValidation(dataItem.SupplierMappings)" tonextinput>
         </vr-textbox>
     </vr-datagridcolumn>
 </vr-datagrid>

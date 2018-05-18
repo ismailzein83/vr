@@ -83,7 +83,15 @@ app.directive("vrWhsRoutingBuildrouteprocess", ['UtilsService', 'WhS_Routing_Rou
                 var switchSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
                 switchSelectorReadyDeferred.promise.then(function () {
-                    VRUIUtilsService.callDirectiveLoad(switchSelectorAPI, undefined, switchSelectorLoadDeferred);
+
+                    var selectorPayload = {
+                        filter: {
+                            Filters: [{
+                                $type: "TOne.WhS.BusinessEntity.Business.SyncWithinRouteBuildSwitchFilter, TOne.WhS.BusinessEntity.Business"
+                            }]
+                        }
+                    };
+                    VRUIUtilsService.callDirectiveLoad(switchSelectorAPI, selectorPayload, switchSelectorLoadDeferred);
                 });
 
                 return switchSelectorLoadDeferred.promise;

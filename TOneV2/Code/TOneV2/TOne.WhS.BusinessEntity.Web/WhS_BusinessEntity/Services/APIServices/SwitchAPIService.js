@@ -1,6 +1,7 @@
 ﻿(function (appControllers) {
 
     "use strict";
+
     switchAPIService.$inject = ["BaseAPIService", "UtilsService", "WhS_BE_ModuleConfig", "SecurityService"];
 
     function switchAPIService(BaseAPIService, UtilsService, WhS_BE_ModuleConfig, SecurityService) {
@@ -16,8 +17,11 @@
                 switchId: switchId
             });
         }
-        function GetSwitchesInfo() {
-            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetSwitchesInfo"));
+
+        function GetSwitchesInfo(serializedFilter) {
+            return BaseAPIService.get(UtilsService.getServiceURL(WhS_BE_ModuleConfig.moduleName, controllerName, "GetSwitchesInfo"), {
+                serializedFilter: serializedFilter
+            });
         }
 
         function AddSwitch(switchObject) {

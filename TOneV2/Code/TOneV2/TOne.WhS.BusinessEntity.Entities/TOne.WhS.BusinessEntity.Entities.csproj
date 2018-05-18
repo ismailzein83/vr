@@ -202,6 +202,8 @@
     <Compile Include="SwitchReleaseCause\SwitchReleaseCauseQuery.cs" />
     <Compile Include="SwitchReleaseCause\UploadSwitchReleaseCauseLog.cs" />
     <Compile Include="Switch\InsertSwitchOperationOutput.cs" />
+    <Compile Include="Switch\ISwitchFilter.cs" />
+    <Compile Include="Switch\SwitchFilter.cs" />
     <Compile Include="Switch\UpdateSwitchOperationOutput.cs" />
     <Compile Include="TemporarySalePriceListQuery.cs" />
     <Compile Include="ZoneRoutingProduct\History\RoutingProductHistoryBySource.cs" />

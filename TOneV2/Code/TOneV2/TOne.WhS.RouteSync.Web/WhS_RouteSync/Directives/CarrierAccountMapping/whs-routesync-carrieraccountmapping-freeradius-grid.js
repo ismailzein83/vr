@@ -23,10 +23,12 @@ app.directive('whsRoutesyncCarrieraccountmappingFreeradiusGrid', ['VRNotificatio
             var carrierMappings;
             var context;
 
+            var oneCustomerMappingLength = 3;
+            var oneSupplierMappingLength = 4;
+            var customerMappingValidationFunction;
             var supplierMappingValidationFunction;
             var showCustomerMappingFunction;
             var showSupplierMappingFunction;
-            //var oneSupplierMappingLength = 4;
 
             var gridAPI;
 
@@ -44,41 +46,74 @@ app.directive('whsRoutesyncCarrieraccountmappingFreeradiusGrid', ['VRNotificatio
                     return loadMoreCarrierMappings();
                 };
 
+                customerMappingValidationFunction = function (customerMappingValue) {
+
+                    if (customerMappingValue == undefined || customerMappingValue == '' || context == undefined)
+                        return null;
+
+                    var mappingSeparator = context.getMappingSeparator();
+                    if (mappingSeparator == undefined || mappingSeparator == '')
+                        return null;
+
+                    if (customerMappingValue.length == oneCustomerMappingLength)
+                        return null;
+
+                    var customerMappingValues = customerMappingValue.split(mappingSeparator);
+                    var customerMappingWithoutSeparatorsLength = customerMappingValue.length - (mappingSeparator.length * (customerMappingValues.length - 1));
+
+                    if (customerMappingWithoutSeparatorsLength % oneCustomerMappingLength == 0) {
+                        if (customerMappingValues.length >= 2) {
+                            var isValid = true;
+
+                            for (var index = 0; index < customerMappingValues.length; index++) {
+                                var customerMappingValue = customerMappingValues[index];
+                                if (customerMappingValue.length != oneCustomerMappingLength) {
+                                    isValid = false;
+                                    break;
+                                }
+                            }
+
+                            if (isValid)
+                                return null;
+                        }
+                    }
+
+                    return 'Invalid Mapping';
+                };
+
                 supplierMappingValidationFunction = function (supplierMappingValue) {
 
-                    return null;
+                    if (supplierMappingValue == undefined || supplierMappingValue == '' || context == undefined)
+                        return null;
 
-                    //if (supplierMappingValue == undefined || supplierMappingValue == '' || context == undefined)
-                    //    return null;
+                    var mappingSeparator = context.getMappingSeparator();
+                    if (mappingSeparator == undefined || mappingSeparator == '')
+                        return null;
 
-                    //var mappingSeparator = context.getMappingSeparator();
-                    //if (mappingSeparator == undefined || mappingSeparator == '')
-                    //    return null;
+                    if (supplierMappingValue.length == oneSupplierMappingLength)
+                        return null;
 
-                    //if (supplierMappingValue.length == oneSupplierMappingLength)
-                    //    return null;
+                    var supplierMappingValues = supplierMappingValue.split(mappingSeparator);
+                    var supplierMappingWithoutSeparatorsLength = supplierMappingValue.length - (mappingSeparator.length * (supplierMappingValues.length - 1));
 
-                    //var supplierMappingValues = supplierMappingValue.split(mappingSeparator);
-                    //var supplierMappingWithoutSeparatorsLength = supplierMappingValue.length - (mappingSeparator.length * (supplierMappingValues.length - 1));
+                    if (supplierMappingWithoutSeparatorsLength % oneSupplierMappingLength == 0) {
+                        if (supplierMappingValues.length >= 2) {
+                            var isValid = true;
 
-                    //if (supplierMappingWithoutSeparatorsLength % oneSupplierMappingLength == 0) {
-                    //    if (supplierMappingValues.length >= 2) {
-                    //        var isValid = true;
+                            for (var index = 0; index < supplierMappingValues.length; index++) {
+                                var supplierMappingValue = supplierMappingValues[index];
+                                if (supplierMappingValue.length != oneSupplierMappingLength) {
+                                    isValid = false;
+                                    break;
+                                }
+                            }
 
-                    //        for (var index = 0; index < supplierMappingValues.length; index++) {
-                    //            var supplierMappingValue = supplierMappingValues[index];
-                    //            if (supplierMappingValue.length != oneSupplierMappingLength) {
-                    //                isValid = false;
-                    //                break;
-                    //            }
-                    //        }
+                            if (isValid)
+                                return null;
+                        }
+                    }
 
-                    //        if (isValid)
-                    //            return null;
-                    //    }
-                    //}
-
-                    //return 'Invalid Mapping';
+                    return 'Invalid Mapping';
                 };
 
                 showCustomerMappingFunction = function (carrierMappingIem) {
@@ -134,6 +169,7 @@ app.directive('whsRoutesyncCarrieraccountmappingFreeradiusGrid', ['VRNotificatio
                                         SupplierMappings: supplierMappings != undefined ? supplierMappings.join(mappingSeparator) : '',
                                         ShowCustomerMapping: showCustomerMappingFunction,
                                         ShowSupplierMapping: showSupplierMappingFunction,
+                                        CustomerMappingValidation: customerMappingValidationFunction,
                                         SupplierMappingValidation: supplierMappingValidationFunction
                                     };
                                     $scope.scopeModel.carrierAccountMappings.push(carrierMapping);
@@ -199,7 +235,6 @@ app.directive('whsRoutesyncCarrieraccountmappingFreeradiusGrid', ['VRNotificatio
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
 
             function loadMoreCarrierMappings() {
 

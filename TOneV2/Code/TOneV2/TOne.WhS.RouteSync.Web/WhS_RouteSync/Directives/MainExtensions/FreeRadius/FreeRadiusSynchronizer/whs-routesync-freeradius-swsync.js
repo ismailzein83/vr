@@ -61,7 +61,6 @@
 
                         if (freeRadiusSWSync != undefined) {
                             $scope.scopeModel.mappingSeparator = freeRadiusSWSync.MappingSeparator;
-                            $scope.scopeModel.numberOfMappings = freeRadiusSWSync.NumberOfMappings;
                             $scope.scopeModel.supplierOptionsSeparator = freeRadiusSWSync.SupplierOptionsSeparator;
                             $scope.scopeModel.numberOfOptions = freeRadiusSWSync.NumberOfOptions;
                             freeRadiusDataManager = freeRadiusSWSync.DataManager;
@@ -113,7 +112,6 @@
                         $type: "TOne.WhS.RouteSync.FreeRadius.FreeRadiusSWSync, TOne.WhS.RouteSync.FreeRadius",
                         DataManager: freeRadiusDataManagerDirectiveAPI.getData(),
                         MappingSeparator: $scope.scopeModel.mappingSeparator,
-                        NumberOfMappings: $scope.scopeModel.numberOfMappings,
                         SupplierOptionsSeparator: $scope.scopeModel.supplierOptionsSeparator,
                         NumberOfOptions: $scope.scopeModel.numberOfOptions,
                         CarrierMappings: freeRadiusCarrierAccountMappingGridAPI.getData(),

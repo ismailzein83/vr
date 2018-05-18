@@ -50,9 +50,21 @@ namespace TOne.WhS.BusinessEntity.Business
             return cachedSwitches != null ? cachedSwitches.Values.ToList() : null;
         }
 
-        public IEnumerable<SwitchInfo> GetSwitchesInfo()
+        public IEnumerable<SwitchInfo> GetSwitchesInfo(SwitchFilter filter)
         {
-            return GetCachedSwitches().MapRecords(SwitchInfoMapper).OrderBy(x => x.Name);
+            Func<Switch, bool> filterExpression = null;
+            if (filter != null)
+            {
+                filterExpression = (switchObj) =>
+                {
+                    if (filter.Filters != null && !CheckIfFilterIsMatch(switchObj, filter.Filters))
+                        return false;
+
+                    return true;
+                };
+            }
+
+            return GetCachedSwitches().MapRecords(SwitchInfoMapper, filterExpression).OrderBy(x => x.Name);
         }
 
         public string GetSwitchName(int switchId)
@@ -166,7 +178,7 @@ namespace TOne.WhS.BusinessEntity.Business
             };
         }
 
-        public SwitchCDPNsForZoneMatch GetSwitchCDPNsForZoneMatch(string cdpn, string cdpnIn, string cdpnOut, Guid normalizationRuleDefinitionId, DateTime effectiveTime, 
+        public SwitchCDPNsForZoneMatch GetSwitchCDPNsForZoneMatch(string cdpn, string cdpnIn, string cdpnOut, Guid normalizationRuleDefinitionId, DateTime effectiveTime,
             int switchId, int? customerId, int? supplierId)
         {
             Dictionary<SwitchCDPN, CDPNIdentification> mappingResults = GetCachedMappingSwitchCDPNs(switchId);
@@ -325,6 +337,17 @@ namespace TOne.WhS.BusinessEntity.Business
             normalizationRuleManager.ApplyNormalizationRule(normalizeRuleContext, normalizationRuleDefinitionId, genericRuleTarget);
 
             return normalizeRuleContext.NormalizedValue;
+        }
+
+        private bool CheckIfFilterIsMatch(Switch switchObj, List<ISwitchFilter> filters)
+        {
+            SwitchFilterContext context = new SwitchFilterContext { Switch = switchObj };
+            foreach (var filter in filters)
+            {
+                if (!filter.IsMatched(context))
+                    return false;
+            }
+            return true;
         }
 
         #endregion

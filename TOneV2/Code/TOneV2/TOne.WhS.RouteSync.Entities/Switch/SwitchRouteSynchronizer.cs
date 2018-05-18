@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.Entities;
 
 namespace TOne.WhS.RouteSync.Entities
@@ -11,9 +8,16 @@ namespace TOne.WhS.RouteSync.Entities
     {
         public abstract Guid ConfigId { get; }
 
+        public virtual bool SupportSyncWithinRouteBuild { get { return true; } }
+
         public abstract void Initialize(ISwitchRouteSynchronizerInitializeContext context);
 
         public abstract void ConvertRoutes(ISwitchRouteSynchronizerConvertRoutesContext context);
+
+        public virtual void onAllRoutesConverted(ISwitchRouteSynchronizerOnAllRoutesConvertedContext context)
+        {
+
+        }
 
         public abstract Object PrepareDataForApply(ISwitchRouteSynchronizerPrepareDataForApplyContext context);
 
@@ -97,8 +101,8 @@ namespace TOne.WhS.RouteSync.Entities
 
         List<ConvertedRoute> ConvertedRoutes { get; }
 
-		string SwitchId { get; }
-	}
+        string SwitchId { get; }
+    }
 
     public interface ISwitchRouteSynchronizerApplyRoutesContext
     {
@@ -119,6 +123,8 @@ namespace TOne.WhS.RouteSync.Entities
 
     public interface ISwitchRouteSynchronizerConvertRoutesContext
     {
+        string SwitchId { get; }
+
         RouteRangeType? RouteRangeType { get; }
 
         RouteRangeInfo RouteRangeInfo { get; }
@@ -129,10 +135,12 @@ namespace TOne.WhS.RouteSync.Entities
 
         List<ConvertedRoute> ConvertedRoutes { set; }
 
-		string SwitchId { get; }
+        Object ConvertedRoutesPayload { get; set; }
     }
     public class SwitchRouteSynchronizerConvertRoutesContext : ISwitchRouteSynchronizerConvertRoutesContext
     {
+        public string SwitchId { get; set; }
+
         public RouteRangeType? RouteRangeType { get; set; }
 
         public RouteRangeInfo RouteRangeInfo { get; set; }
@@ -143,33 +151,20 @@ namespace TOne.WhS.RouteSync.Entities
 
         public List<ConvertedRoute> ConvertedRoutes { get; set; }
 
-		public string SwitchId { get; set; }
-	}
-
-    public interface ISwitchRouteSynchronizerApplyDifferentialRoutesContext
-    {
-        string SwitchId { get; }
-
-        string SwitchName { get; }
-
-        List<Route> UpdatedRoutes { get; }
-
-        Action<Exception, bool> WriteBusinessHandledException { get; }
-
-        SwitchSyncOutput SwitchSyncOutput { set; }
-
+        public object ConvertedRoutesPayload { get; set; }
     }
-    public class SwitchRouteSynchronizerApplyDifferentialRoutesContext : ISwitchRouteSynchronizerApplyDifferentialRoutesContext
+
+    public interface ISwitchRouteSynchronizerOnAllRoutesConvertedContext
     {
-        public string SwitchId { get; set; }
+        Object ConvertedRoutesPayload { get; }
 
-        public string SwitchName { get; set; }
+        List<ConvertedRoute> ConvertedRoutes { set; }
+    }
+    public class SwitchRouteSynchronizerOnAllRoutesConvertedContext : ISwitchRouteSynchronizerOnAllRoutesConvertedContext
+    {
+        public Object ConvertedRoutesPayload { get; set; }
 
-        public List<Route> UpdatedRoutes { get; set; }
-
-        public Action<Exception, bool> WriteBusinessHandledException { get; set; }
-
-        public SwitchSyncOutput SwitchSyncOutput { get; set; }
+        public List<ConvertedRoute> ConvertedRoutes { get; set; }
     }
 
     public interface ITryBlockCustomerContext
@@ -209,5 +204,31 @@ namespace TOne.WhS.RouteSync.Entities
     public class IsSwitchRouteSynchronizerValidContext : IIsSwitchRouteSynchronizerValidContext
     {
         public List<string> ValidationMessages { get; set; }
+    }
+
+    public interface ISwitchRouteSynchronizerApplyDifferentialRoutesContext
+    {
+        string SwitchId { get; }
+
+        string SwitchName { get; }
+
+        List<Route> UpdatedRoutes { get; }
+
+        Action<Exception, bool> WriteBusinessHandledException { get; }
+
+        SwitchSyncOutput SwitchSyncOutput { set; }
+
+    }
+    public class SwitchRouteSynchronizerApplyDifferentialRoutesContext : ISwitchRouteSynchronizerApplyDifferentialRoutesContext
+    {
+        public string SwitchId { get; set; }
+
+        public string SwitchName { get; set; }
+
+        public List<Route> UpdatedRoutes { get; set; }
+
+        public Action<Exception, bool> WriteBusinessHandledException { get; set; }
+
+        public SwitchSyncOutput SwitchSyncOutput { get; set; }
     }
 }

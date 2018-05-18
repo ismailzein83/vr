@@ -187,6 +187,7 @@
     <Compile Include="StateBackup\StateBackupCanRestoreContext.cs" />
     <Compile Include="SupplierRate\QueryHandlers\SupplierRateForZoneQueryHandler.cs" />
     <Compile Include="SwitchReleaseCause\SwitchReleaseCauseManager.cs" />
+    <Compile Include="Switch\SyncWithinRouteBuildSwitchFilter.cs" />
     <Compile Include="ZoneRoutingProduct\History\CustomerZoneRoutingProductHistoryLocator.cs" />
     <Compile Include="ZoneRoutingProduct\History\CustomerZoneRoutingProductHistoryReader.cs" />
     <Compile Include="ZoneRoutingProduct\History\ProductZoneRoutingProductHistoryLocator.cs" />

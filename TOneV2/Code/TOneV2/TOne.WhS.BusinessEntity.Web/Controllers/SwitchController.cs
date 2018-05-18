@@ -9,46 +9,45 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
 {
     [JSONWithTypeAttribute]
     [RoutePrefix(Constants.ROUTE_PREFIX + "Switch")]
-
     public class WhSBE_SwitchController : BaseAPIController
     {
+        SwitchManager _manager = new SwitchManager();
+
+
         [HttpPost]
         [Route("GetFilteredSwitches")]
         public object GetFilteredSwitches(Vanrise.Entities.DataRetrievalInput<SwitchQuery> input)
         {
-            SwitchManager manager = new SwitchManager();
-            return GetWebResponse(input, manager.GetFilteredSwitches(input));
+            return GetWebResponse(input, _manager.GetFilteredSwitches(input));
         }
 
         [HttpGet]
         [Route("GetSwitch")]
         public Switch GetSwitch(int switchId)
         {
-            SwitchManager manager = new SwitchManager();
-            return manager.GetSwitch(switchId);
+            return _manager.GetSwitch(switchId);
         }
 
         [HttpGet]
         [Route("GetSwitchesInfo")]
-        public IEnumerable<SwitchInfo> GetSwitchesInfo()
+        public IEnumerable<SwitchInfo> GetSwitchesInfo(string serializedFilter = null)
         {
-            SwitchManager manager = new SwitchManager();
-            return manager.GetSwitchesInfo();
+            var deserializedFilter = serializedFilter != null ? Vanrise.Common.Serializer.Deserialize<SwitchFilter>(serializedFilter) : null;
+            return _manager.GetSwitchesInfo(deserializedFilter);
         }
 
         [HttpPost]
         [Route("AddSwitch")]
         public InsertOperationOutput<SwitchDetail> AddSwitch(Switch whsSwitch)
         {
-            SwitchManager manager = new SwitchManager();
-            return manager.AddSwitch(whsSwitch);
+            return _manager.AddSwitch(whsSwitch);
         }
+
         [HttpPost]
         [Route("UpdateSwitch")]
         public UpdateOperationOutput<SwitchDetail> UpdateSwitch(SwitchToEdit whsSwitch)
         {
-            SwitchManager manager = new SwitchManager();
-            return manager.UpdateSwitch(whsSwitch);
+            return _manager.UpdateSwitch(whsSwitch);
         }
 
 
@@ -56,12 +55,7 @@ namespace TOne.WhS.BusinessEntity.Web.Controllers
         [Route("DeleteSwitch")]
         public DeleteOperationOutput<SwitchDetail> DeleteSwitch(int switchId)
         {
-
-            SwitchManager manager = new SwitchManager();
-            return manager.DeleteSwitch(switchId);
+            return _manager.DeleteSwitch(switchId);
         }
-
-      
-
     }
 }
