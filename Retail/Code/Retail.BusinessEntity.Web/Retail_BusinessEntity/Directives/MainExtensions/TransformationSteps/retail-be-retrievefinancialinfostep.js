@@ -60,6 +60,9 @@ app.directive('retailBeRetrievefinancialinfostep', ['UtilsService', 'VRUIUtilsSe
             var balanceAccountIdDirectiveReadyAPI;
             var balanceAccountIdDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
+            var classificationDirectiveReadyAPI;
+            var classificationDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+
 
             function initializeController() {
                 $scope.scopeModel = {};
@@ -98,6 +101,11 @@ app.directive('retailBeRetrievefinancialinfostep', ['UtilsService', 'VRUIUtilsSe
                 $scope.scopeModel.onBalanceAccountIdReady = function (api) {
                     balanceAccountIdDirectiveReadyAPI = api;
                     balanceAccountIdDirectiveReadyPromiseDeferred.resolve();
+                };
+
+                $scope.scopeModel.onClassificationReady = function (api) {
+                    classificationDirectiveReadyAPI = api;
+                    classificationDirectiveReadyPromiseDeferred.resolve();
                 };
 
                 defineAPI();
@@ -144,6 +152,9 @@ app.directive('retailBeRetrievefinancialinfostep', ['UtilsService', 'VRUIUtilsSe
                     var balanceAccountIdDirectivePromiseDeferred = getBalanceAccountIdDirectivePromiseDeferred();
                     promises.push(balanceAccountIdDirectivePromiseDeferred.promise);
 
+                    //Loading Classification Directive
+                    var classificationDirectivePromiseDeferred = getBalanceAccountIdDirectivePromiseDeferred();
+                    promises.push(classificationDirectivePromiseDeferred.promise);
 
                     function getAccountBEDefinitionIdDirectiveLoadPromiseDeferred() {
                         var accountBEDefinitionIdDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
@@ -259,6 +270,21 @@ app.directive('retailBeRetrievefinancialinfostep', ['UtilsService', 'VRUIUtilsSe
                         return balanceAccountIdDirectiveLoadPromiseDeferred;
                     }
 
+                    function getClassificationDirectivePromiseDeferred() {
+                        var classificationDirectiveLoadPromiseDeferred = UtilsService.createPromiseDeferred();
+
+                        classificationDirectiveReadyPromiseDeferred.promise.then(function () {
+
+                            var classificationPayload = { context: payload.context };
+                            if (payload.stepDetails != undefined)
+                                classificationPayload.selectedRecords = payload.stepDetails.Classification;
+
+                            VRUIUtilsService.callDirectiveLoad(classificationDirectiveReadyAPI, classificationPayload, classificationDirectiveReadyPromiseDeferred);
+                        });
+
+                        return classificationDirectiveReadyPromiseDeferred;
+                    }
+
                     return UtilsService.waitMultiplePromises(promises);
                 };
 
@@ -271,7 +297,7 @@ app.directive('retailBeRetrievefinancialinfostep', ['UtilsService', 'VRUIUtilsSe
                         Amount: amountDirectiveReadyAPI.getData(),
                         CurrencyId: currencyIdDirectiveReadyAPI.getData(),
                         UpdateBalanceRecordList: updateBalanceRecordListDirectiveReadyAPI.getData(),
-
+                        Classification: classificationDirectiveReadyAPI.getData(),
                         FinancialAccountId: financialAccountIdDirectiveReadyAPI.getData(),
                         BalanceAccountId: balanceAccountIdDirectiveReadyAPI.getData()
                     };

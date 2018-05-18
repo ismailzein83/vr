@@ -18,11 +18,11 @@ namespace Retail.BusinessEntity.MainExtensions.TransformationSteps
         public string Amount { get; set; }
         public string CurrencyId { get; set; }
         public string UpdateBalanceRecordList { get; set; }
+        public string Classification { get; set; }
 
         //Output
         public string FinancialAccountId { get; set; }
         public string BalanceAccountId { get; set; }
-        public string Classification { get; set; }
 
         public override void GenerateExecutionCode(IDataTransformationCodeGenerationContext context)
         {

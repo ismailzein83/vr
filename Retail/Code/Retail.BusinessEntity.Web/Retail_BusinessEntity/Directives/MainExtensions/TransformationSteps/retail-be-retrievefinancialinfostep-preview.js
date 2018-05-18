@@ -129,6 +129,10 @@ app.directive('retailBeRetrievefinancialinfostepPreview', ['UtilsService', 'VRUI
                     FieldName: "UpdateBalanceRecordList",
                     Value: data.UpdateBalanceRecordList
                 });
+                array.push({
+                    FieldName: "Classification",
+                    Value: data.Classification
+                });
             }
             function fillOutputFieldsArray(data, array) {
 
