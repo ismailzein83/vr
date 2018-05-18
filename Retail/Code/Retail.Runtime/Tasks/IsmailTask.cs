@@ -12,6 +12,8 @@ using Vanrise.Common;
 using Vanrise.Security.Data.SQL;
 using Vanrise.Data.RDB;
 using Vanrise.Runtime.Entities;
+using Vanrise.AccountBalance.Data.RDB;
+using Vanrise.AccountBalance.Entities;
 
 namespace Retail.Runtime.Tasks
 {
@@ -28,7 +30,7 @@ namespace Retail.Runtime.Tasks
             //GenerateRuntimeNodeConfiguration();
             //TestAppDomain();
             //Console.ReadKey();
-            //TestRDBSelectQuery();
+            TestRDBSelectQuery();
             //var analyticTableMeasureExternalSource =
             //    new Vanrise.Analytic.Entities.AnalyticMeasureExternalSourceConfig
             //    {
@@ -479,100 +481,254 @@ namespace Retail.Runtime.Tasks
 
         void TestRDBSelectQuery()
         {
-            RDBSchemaManager.Current.RegisterDefaultTableDefinition("SEC_User", _userTable);
-            RDBSchemaManager.Current.RegisterDefaultTableDefinition("SEC_Group", _groupTable);
-            RDBSchemaManager.Current.OverrideTableInfo(new Vanrise.Data.RDB.DataProvider.Providers.MSSQLRDBDataProvider().UniqueName, "SEC_User", null, "[User]");
-            int? id = 6;
-
             var dataProvider = new Vanrise.Data.RDB.DataProvider.Providers.MSSQLRDBDataProvider("Data Source=.;Initial Catalog=test;User ID=sa; Password=p@ssw0rd");
-            Dictionary<string, Object> parameterValues;
-
-            Dictionary<string, Object> outputParameters;
-
-            var nbOfRows = new RDBQueryContext(dataProvider).Insert().IntoTable("SEC_User").GenerateIdAndAssignToParameter("UserId").ColumnValue("Name", "Ismail").EndInsert().ExecuteNonQuery(out outputParameters);
-
-            var selectQuery = new RDBQueryContext(dataProvider).Select().FromTable("SEC_User")
-                .Join().JoinOnEqualOtherTableColumn("SEC_Group", "ID", "SEC_User", "GroupID").EndJoin()
-                .Where().And()
-                            .ConditionIf(() => id.HasValue, (conditionContext) => conditionContext.EqualsCondition("ID", 5))
-                            .EqualsCondition("Name", "5dddd")
-                            .Or()
-                                .ConditionIf(() => id.HasValue, (conditionContext) => conditionContext.EqualsCondition("SEC_Group", "ID", 3))
-                                .EqualsCondition("SEC_Group", "ID", 4)
-                                .ConditionIf(() => id.HasValue, (conditionContext) => conditionContext.EqualsCondition("SEC_Group", "ID", id.Value))
-                                .ConditionIfNotDefaultValue(DateTime.Now, (conditionContext) => conditionContext.EqualsCondition("Name", "fdsgf"))
-                                .ContainsCondition("Name", "sa")
-                            .EndOr()
-                            .CompareCondition("Age", RDBCompareConditionOperator.GEq, 45)
-                            .ListCondition("CityID", RDBListConditionOperator.IN, new List<int> { 3, 5, 7, 85, 6, 5 })
-                            .ListCondition("Name", RDBListConditionOperator.NotIN, new List<string> { "Admin", "Sales", "Billing", "Technical" })
-                        .EndAnd()
-                .SelectColumns().Columns("ID", "Name").Column("SEC_Group", "Name", "GroupName").EndColumns().EndSelect();
-
-
-            var resolvedSelectquery = selectQuery.GetResolvedQuery();
-
-            var insertQuery = new RDBQueryContext(dataProvider).Insert().IntoTable("SEC_User")
-                .IfNotExists().EqualsCondition("Email", "test@nodomain.com")
-                .GenerateIdAndAssignToParameter("UserId").ColumnValue("Name", "test").ColumnValue("Email", "test@nodomain.com").ColumnValue("GroupID", 5).EndInsert();
-            var resolvedInsertQuery = insertQuery.GetResolvedQuery();
-
-
-            var updateQuery = new RDBQueryContext(dataProvider).Update().FromTable("SEC_User")
-            .IfNotExists().And().CompareCondition("ID", RDBCompareConditionOperator.NEq, 5).EqualsCondition("Email", "test@nodomain.com").EndAnd()
-            .Where().EqualsCondition("ID", 5)
-            .ColumnValue("Name", "test").ColumnValue("Email", "test@nodomain.com").ColumnValue("GroupID", 5).EndUpdate()
-            ;
-            var resolvedUpdateQuery = updateQuery.GetResolvedQuery();
-
-            Dictionary<string, RDBTableColumnDefinition> tempUserColumns = new Dictionary<string, RDBTableColumnDefinition>
+            Vanrise.AccountBalance.Entities.BillingTransactionQuery query = new Vanrise.AccountBalance.Entities.BillingTransactionQuery
             {
-                {"ID", new RDBTableColumnDefinition { DBColumnName = "DBID", DataType = RDBDataType.Int}},
-                  {"Name", new RDBTableColumnDefinition { DBColumnName = "DBName", DataType = RDBDataType.NVarchar, Size = 255}},
-                   {"GroupID", new RDBTableColumnDefinition { DBColumnName = "DBGroupID", DataType = RDBDataType.Int}},
-                   {"Age", new RDBTableColumnDefinition { DBColumnName = "DBAge", DataType = RDBDataType.Decimal, Size=20, Precision = 8}},
-                   {"CityID", new RDBTableColumnDefinition { DBColumnName = "DBCityID", DataType = RDBDataType.Int}},
-                   {"Email", new RDBTableColumnDefinition { DBColumnName = "DBEmail", DataType = RDBDataType.NVarchar, Size = 255}}
+                AccountTypeId = new Guid("BB50E990-AFDD-4561-B0A0-973FA79D58B4"),
+                AccountsIds = new List<string> { "Ar1", "acc3", "acc555" },
+                TransactionTypeIds = new List<Guid> { new Guid("69D9C78A-BE92-4E14-AF9D-0D12228AC9FD"), new Guid("E26B10F9-EB37-4448-A900-13A2BA454C0F"), new Guid("AF4E26F2-FBEA-42F9-BB2D-2EF14B97BD83") },
+                EffectiveDate = DateTime.Now,
+                FromTime = DateTime.Parse("2017-04-03"),
+                IsEffectiveInFuture = false,
+                Status = Vanrise.Entities.VRAccountStatus.Active,
+                ToTime = DateTime.Now
             };
 
-            var tempUserTable = new RDBTempTableQuery(tempUserColumns);
+            Guid accountId = new Guid("E02A4F97-7E0E-46FB-995D-29C126D0B039");
+            string TABLE_NAME = "VR_AccountBalance_BillingTransaction";
+            new BillingTransactionDataManager();
+            var getFilteredQuery = new RDBQueryContext(dataProvider)
+                   .Select()
+                   .From(TABLE_NAME, "bt")
+                   .Join()
+                   .JoinLiveBalance("liveBalance", "bt")
+                   .EndJoin()
+                   .Where().And()
+                                .ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false)
+                                .ConditionIf(() => query.AccountsIds != null && query.AccountsIds.Count() > 0, ctx => ctx.ListCondition("AccountID", RDBListConditionOperator.IN, query.AccountsIds))
+                                .ConditionIf(() => query.TransactionTypeIds != null && query.TransactionTypeIds.Count() > 0, ctx => ctx.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, query.TransactionTypeIds))
+                                .CompareCondition("TransactionTime", RDBCompareConditionOperator.GEq, query.FromTime)
+                                .ConditionIf(() => query.ToTime.HasValue, ctx => ctx.CompareCondition("TransactionTime", RDBCompareConditionOperator.LEq, query.ToTime.Value))
+                                .EqualsCondition("AccountTypeID", query.AccountTypeId)
+                                .LiveBalanceActiveAndEffectiveCondition("liveBalance", query.Status, query.EffectiveDate, query.IsEffectiveInFuture)
+                           .EndAnd()
+                   .SelectColumns().AllTableColumns("bt").EndColumns()
+                   .EndSelect()
+                   .GetResolvedQuery().QueryText;
 
-           var batchQuery = new RDBQueryContext(dataProvider)
-               .StartBatchQuery()
-                    .AddQuery().CreateTempTable(tempUserTable)
-                    .AddQuery().Insert().IntoTable(tempUserTable).ColumnValue("ID", 2).ColumnValue("GroupID", 4).ColumnValue("Age", 34).EndInsert()
-                    .AddQuery().Insert().IntoTable(tempUserTable).ColumnValue("ID", 4).ColumnValue("GroupID", 5).ColumnValue("Age", 32).EndInsert()
-                    .AddQuery().Insert().IntoTable(tempUserTable).ColumnValue("ID", 3).ColumnValue("GroupID", 4).ColumnValue("Age", 22).EndInsert()
-                    .AddQuery().Insert().IntoTable(tempUserTable).ColumnValue("ID", 5).ColumnValue("GroupID", 4).ColumnValue("Age", 57).EndInsert()
-                    .AddQuery().Update().FromTable("SEC_User")
-                                .Join().JoinOnEqualOtherTableColumn(tempUserTable, "ID", new RDBTableDefinitionQuerySource("SEC_User"), "ID").EndJoin()
-                                //.ColumnValue("Name", new RDBColumnExpression { Table = tempUserTable, ColumnName = "Name" })
-                                .ColumnValue("GroupID", new RDBColumnExpression { Table = tempUserTable, ColumnName = "GroupID" })
-                                .ColumnValue("Age", new RDBColumnExpression { Table = tempUserTable, ColumnName = "Age" })
-                                .ColumnValue("CityID", new RDBColumnExpression { Table = tempUserTable, ColumnName = "CityID" })
-                                .EndUpdate()
-               .EndBatchQuery()
-                                //.ColumnValue("Email", new RDBColumnExpression { Table = tempUserTable, ColumnName = "Email" })
-                                ;
 
-             var resolvedBatchQuery = batchQuery.GetResolvedQuery();
+            BillingTransaction billingTransaction = new BillingTransaction
+                {
+                     AccountId = "acc2",
+                      TransactionTime = DateTime.Now,
+                       Notes  ="this is the notes"
+                };
+                long? invoiceId = null;
+            var insertQuery = new RDBQueryContext(dataProvider)
+                .Insert()
+                .IntoTable(TABLE_NAME)
+                .GenerateIdAndAssignToParameter("BillingTransactionId")
+                .ColumnValue("AccountID", billingTransaction.AccountId)
+                .ColumnValue("AccountTypeID", billingTransaction.AccountTypeId)
+                .ColumnValue("Amount", billingTransaction.Amount)
+                .ColumnValue("CurrencyId", billingTransaction.CurrencyId)
+                .ColumnValue("TransactionTypeID", billingTransaction.TransactionTypeId)
+                .ColumnValue("TransactionTime", billingTransaction.TransactionTime)
+                .ColumnValue("Notes", billingTransaction.Notes)
+                .ColumnValue("Reference", billingTransaction.Reference)
+                .ColumnValue("SourceID", billingTransaction.SourceId)
+                .ColumnValue("Settings", (billingTransaction.Settings != null) ? Vanrise.Common.Serializer.Serialize(billingTransaction.Settings) : null)
+                .ColumnValueIf(() => invoiceId.HasValue, ctx => ctx.ColumnValue("CreatedByInvoiceID", invoiceId.Value))
+                .EndInsert().GetResolvedQuery().QueryText;
 
-             var selectQueryWithGrouping = new RDBQueryContext(dataProvider).Select().FromTable("SEC_User")//.StartSelectAggregates().Count("count").Avg("SEC_User", "Age", "AvgAge").EndSelectAggregates()
-                 .GroupBy()
-                     .Select().Column("CityID").Column("GroupID").EndColumns()
-                     .SelectAggregates().Count("Nb").Aggregate(RDBNonCountAggregateType.AVG, "Age", "AvgAge").EndSelectAggregates()
-                     .Having().And().CompareCount(RDBCompareConditionOperator.G, 1).CompareAggregate(RDBNonCountAggregateType.SUM, "Age", RDBCompareConditionOperator.G, 5).EndAnd()
-                 .EndGroupBy()
-                 .Sort().ByColumn("CityID", RDBSortDirection.ASC).ByAlias("AvgAge", RDBSortDirection.DESC).EndSort().EndSelect();
-             var resolvedSelectWithGroupingquery = selectQueryWithGrouping.GetResolvedQuery();
+            Guid accountTypeId = new Guid("BB50E990-AFDD-4561-B0A0-973FA79D58B4");
+            var GetBillingTransactionsByBalanceUpdated = new RDBQueryContext(dataProvider)
+                   .Select()
+                   .From(TABLE_NAME, "bt")
+                   .Where().And()
+                                .EqualsCondition("AccountTypeID", accountTypeId)
+                                .Or()
+                                    .And()
+                                        .ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false)
+                                        .ConditionIfColumnNotNull("IsBalanceUpdated").EqualsCondition("IsBalanceUpdated", false)
+                                    .EndAnd()
+                                    .And()
+                                        .ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", true)
+                                        .ConditionIfColumnNotNull("IsBalanceUpdated").EqualsCondition("IsBalanceUpdated", true)
+                                        .ConditionIfColumnNotNull("IsSubtractedFromBalance").EqualsCondition("IsSubtractedFromBalance", false)
+                                    .EndAnd()
+                                .EndOr()
+                           .EndAnd()
+                    .SelectColumns().AllTableColumns("bt").EndColumns()
+                    .EndSelect().GetResolvedQuery().QueryText;
+
+            List<Guid> billingTransactionTypeIds = new List<Guid> { new Guid("69D9C78A-BE92-4E14-AF9D-0D12228AC9FD"), new Guid("E26B10F9-EB37-4448-A900-13A2BA454C0F"), new Guid("AF4E26F2-FBEA-42F9-BB2D-2EF14B97BD83") };
+
+           var GetBillingTransactionsForSynchronizerProcess = new RDBQueryContext(dataProvider)
+                   .Select()
+                   .From(TABLE_NAME, "bt")
+                   .Where().And()
+                                .EqualsCondition("AccountTypeID", accountTypeId)
+                                .ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false)
+                                .NotNullCondition("SourceID")
+                                .ConditionIf(() => billingTransactionTypeIds != null && billingTransactionTypeIds.Count() > 0, ctx => ctx.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, billingTransactionTypeIds))
+                           .EndAnd()
+                    .SelectColumns().AllTableColumns("bt").EndColumns()
+                    .EndSelect()
+                    .GetResolvedQuery().QueryText;
+
+
+            var btAccountTimesTempTableColumns = new Dictionary<string, RDBTableColumnDefinition>();
+            btAccountTimesTempTableColumns.Add("AccountID", new RDBTableColumnDefinition { DataType = RDBDataType.Varchar, Size = 50 });
+            btAccountTimesTempTableColumns.Add("TransactionTime", new RDBTableColumnDefinition { DataType = RDBDataType.DateTime });
+            var btAccountTimesTempTableQuery = new RDBTempTableQuery(btAccountTimesTempTableColumns);
+
+            List<BillingTransactionByTime> billingTransactionsByTime = new List<BillingTransactionByTime>();
+            billingTransactionsByTime.Add(new BillingTransactionByTime { AccountId = "acc1", TransactionTime = DateTime.Parse("2015-03-02") });
+            billingTransactionsByTime.Add(new BillingTransactionByTime { AccountId = "acc2", TransactionTime = DateTime.Parse("2015-03-04") });
+            billingTransactionsByTime.Add(new BillingTransactionByTime { AccountId = "acc3", TransactionTime = DateTime.Parse("2015-03-06") });
+            billingTransactionsByTime.Add(new BillingTransactionByTime { AccountId = "acc4", TransactionTime = DateTime.Parse("2015-03-07") });
+
+            var GetBillingTransactionsByTransactionTypes = new RDBQueryContext(dataProvider)
+                .StartBatchQuery()
+                .AddQuery().CreateTempTable(btAccountTimesTempTableQuery)
+                .Foreach(billingTransactionsByTime, (item, batchQuery) =>
+                    {
+                        batchQuery.AddQuery().Insert().IntoTable(btAccountTimesTempTableQuery).ColumnValue("AccountID", item.AccountId).ColumnValue("TransactionTime", item.TransactionTime);
+                    })
+                .AddQuery()
+                    .Select()
+                    .From(TABLE_NAME, "bt")
+                    .Join()
+                    .Join(RDBJoinType.Inner, btAccountTimesTempTableQuery, "btAccountTimes")
+                        .And()
+                            .EqualsCondition("bt", "AccountID", new RDBColumnExpression { TableAlias = "btAccountTimes", ColumnName = "AccountID" })
+                            .CompareCondition("bt", "TransactionTime", RDBCompareConditionOperator.G, new RDBColumnExpression { TableAlias = "btAccountTimes", ColumnName = "TransactionTime" })
+                        .EndAnd()
+                    .EndJoin()
+                    .Where().And()
+                                .EqualsCondition("AccountTypeID", accountTypeId)
+                                .ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false)
+                                .ConditionIf(() => billingTransactionTypeIds != null && billingTransactionTypeIds.Count() > 0, ctx => ctx.ListCondition("TransactionTypeID", RDBListConditionOperator.IN, billingTransactionTypeIds))
+                            .EndAnd()
+                    .SelectColumns().Columns("AccountID", "Amount", "CurrencyId", "TransactionTime", "TransactionTypeID").EndColumns()
+                    .EndSelect()
+                .EndBatchQuery()
+                .GetResolvedQuery().QueryText;
+
+            TABLE_NAME = "VR_AccountBalance_LiveBalance";
+
+            var TryAddLiveBalanceAndGet = new RDBQueryContext(dataProvider)
+                    .StartBatchQuery()
+                    .AddQuery().DeclareParameters().AddParameter("ID", RDBDataType.BigInt).AddParameter("CurrencyIdToReturn", RDBDataType.Int).EndParameterDeclaration()
+                    .AddQuery().Select()
+                                .From(TABLE_NAME, "lv")
+                                .Where().And()
+                                            .EqualsCondition("AccountTypeID", accountTypeId)
+                                            .EqualsCondition("AccountID", accountId)
+                                            .ConditionIfColumnNotNull("IsDeleted").EqualsCondition("IsDeleted", false)
+                                        .EndAnd()
+                                .SelectColumns().ColumnToParameter("ID", "ID").ColumnToParameter("CurrencyID", "CurrencyIdToReturn").EndColumns()
+                                .EndSelect()
+                    .EndBatchQuery()
+                .GetResolvedQuery().QueryText;
+
             Console.ReadKey();
-            //var query = new RDBQueryBuilder().Select().FromTable("User", "u").Columns("ID", "u.Name", "Settings", "g.Name")
-            //    .Join("Group", "g", RDBJoinType.Inner)
-            //    .IntCondition("", RDBConditionOperator.G, 0).And().DecimalCondition("", RDBConditionOperator.G, 3).EndJoin()
-            //    .Where()
-            //    .TextCondition("Name", RDBConditionOperator.Eq, "Sami")
-            //    .And().ConditionGroup().IntCondition("ID", RDBConditionOperator.L, 5).Or().IntCondition("ID", RDBConditionOperator.G, 10).EndConditionGroup()
-            //    .And().DecimalCondition("Age", RDBConditionOperator.G, 24).EndWhere();
+            //RDBSchemaManager.Current.RegisterDefaultTableDefinition("SEC_User", _userTable);
+            //RDBSchemaManager.Current.RegisterDefaultTableDefinition("SEC_Group", _groupTable);
+            //RDBSchemaManager.Current.OverrideTableInfo(new Vanrise.Data.RDB.DataProvider.Providers.MSSQLRDBDataProvider().UniqueName, "SEC_User", null, "[User]");
+            //int? id = 6;
+
+
+            
+           // Dictionary<string, Object> parameterValues;
+
+           // Dictionary<string, Object> outputParameters;
+
+           // var nbOfRows = new RDBQueryContext(dataProvider).Insert().IntoTable("SEC_User").GenerateIdAndAssignToParameter("UserId").ColumnValue("Name", "Ismail").EndInsert().ExecuteNonQuery(out outputParameters);
+
+           // var selectQuery = new RDBQueryContext(dataProvider).Select().FromTable("SEC_User")
+           //     .Join().JoinOnEqualOtherTableColumn("SEC_Group", "ID", "SEC_User", "GroupID").EndJoin()
+           //     .Where().And()
+           //                 .ConditionIf(() => id.HasValue).EqualsCondition("ID", 5)
+           //                 .EqualsCondition("Name", "5dddd")
+           //                 .Or()
+           //                     .ConditionIf(() => id.HasValue).EqualsCondition("SEC_Group", "ID", 3)
+           //                     .EqualsCondition("SEC_Group", "ID", 4)
+           //                     .ConditionIf(() => id.HasValue).EqualsCondition("SEC_Group", "ID", id.Value)
+           //                     .ConditionIfNotDefaultValue(DateTime.Now).EqualsCondition("Name", "fdsgf")
+           //                     .ContainsCondition("Name", "sa")
+           //                 .EndOr()
+           //                 .CompareCondition("Age", RDBCompareConditionOperator.GEq, 45)
+           //                 .ListCondition("CityID", RDBListConditionOperator.IN, new List<int> { 3, 5, 7, 85, 6, 5 })
+           //                 .ListCondition("Name", RDBListConditionOperator.NotIN, new List<string> { "Admin", "Sales", "Billing", "Technical" })
+           //             .EndAnd()
+           //     .SelectColumns().Columns("ID", "Name").Column("SEC_Group", "Name", "GroupName").EndColumns().EndSelect();
+
+
+           // var resolvedSelectquery = selectQuery.GetResolvedQuery();
+
+           // var insertQuery = new RDBQueryContext(dataProvider).Insert().IntoTable("SEC_User")
+           //     .IfNotExists().EqualsCondition("Email", "test@nodomain.com")
+           //     .GenerateIdAndAssignToParameter("UserId").ColumnValue("Name", "test").ColumnValue("Email", "test@nodomain.com").ColumnValue("GroupID", 5).EndInsert();
+           // var resolvedInsertQuery = insertQuery.GetResolvedQuery();
+
+
+           // var updateQuery = new RDBQueryContext(dataProvider).Update().FromTable("SEC_User")
+           // .IfNotExists().And().CompareCondition("ID", RDBCompareConditionOperator.NEq, 5).EqualsCondition("Email", "test@nodomain.com").EndAnd()
+           // .Where().EqualsCondition("ID", 5)
+           // .ColumnValue("Name", "test").ColumnValue("Email", "test@nodomain.com").ColumnValue("GroupID", 5).EndUpdate()
+           // ;
+           // var resolvedUpdateQuery = updateQuery.GetResolvedQuery();
+
+           // Dictionary<string, RDBTableColumnDefinition> tempUserColumns = new Dictionary<string, RDBTableColumnDefinition>
+           // {
+           //     {"ID", new RDBTableColumnDefinition { DBColumnName = "DBID", DataType = RDBDataType.Int}},
+           //       {"Name", new RDBTableColumnDefinition { DBColumnName = "DBName", DataType = RDBDataType.NVarchar, Size = 255}},
+           //        {"GroupID", new RDBTableColumnDefinition { DBColumnName = "DBGroupID", DataType = RDBDataType.Int}},
+           //        {"Age", new RDBTableColumnDefinition { DBColumnName = "DBAge", DataType = RDBDataType.Decimal, Size=20, Precision = 8}},
+           //        {"CityID", new RDBTableColumnDefinition { DBColumnName = "DBCityID", DataType = RDBDataType.Int}},
+           //        {"Email", new RDBTableColumnDefinition { DBColumnName = "DBEmail", DataType = RDBDataType.NVarchar, Size = 255}}
+           // };
+
+           // var tempUserTable = new RDBTempTableQuery(tempUserColumns);
+
+           //var batchQuery = new RDBQueryContext(dataProvider)
+           //    .StartBatchQuery()
+           //         .AddQuery().CreateTempTable(tempUserTable)
+           //         .AddQuery().Insert().IntoTable(tempUserTable).ColumnValue("ID", 2).ColumnValue("GroupID", 4).ColumnValue("Age", 34).EndInsert()
+           //         .AddQuery().Insert().IntoTable(tempUserTable).ColumnValue("ID", 4).ColumnValue("GroupID", 5).ColumnValue("Age", 32).EndInsert()
+           //         .AddQuery().Insert().IntoTable(tempUserTable).ColumnValue("ID", 3).ColumnValue("GroupID", 4).ColumnValue("Age", 22).EndInsert()
+           //         .AddQuery().Insert().IntoTable(tempUserTable).ColumnValue("ID", 5).ColumnValue("GroupID", 4).ColumnValue("Age", 57).EndInsert()
+           //         .AddQuery().Update().FromTable("SEC_User")
+           //                     .Join().JoinOnEqualOtherTableColumn(tempUserTable, "ID", new RDBTableDefinitionQuerySource("SEC_User"), "ID").EndJoin()
+           //                     //.ColumnValue("Name", new RDBColumnExpression { Table = tempUserTable, ColumnName = "Name" })
+           //                     .ColumnValue("GroupID", new RDBColumnExpression { Table = tempUserTable, ColumnName = "GroupID" })
+           //                     .ColumnValue("Age", new RDBColumnExpression { Table = tempUserTable, ColumnName = "Age" })
+           //                     .ColumnValue("CityID", new RDBColumnExpression { Table = tempUserTable, ColumnName = "CityID" })
+           //                     .EndUpdate()
+           //    .EndBatchQuery()
+           //                     //.ColumnValue("Email", new RDBColumnExpression { Table = tempUserTable, ColumnName = "Email" })
+           //                     ;
+
+           //  var resolvedBatchQuery = batchQuery.GetResolvedQuery();
+
+           //  var selectQueryWithGrouping = new RDBQueryContext(dataProvider).Select().FromTable("SEC_User")//.StartSelectAggregates().Count("count").Avg("SEC_User", "Age", "AvgAge").EndSelectAggregates()
+           //      .GroupBy()
+           //          .Select().Column("CityID").Column("GroupID").EndColumns()
+           //          .SelectAggregates().Count("Nb").Aggregate(RDBNonCountAggregateType.AVG, "Age", "AvgAge").EndSelectAggregates()
+           //          .Having().And().CompareCount(RDBCompareConditionOperator.G, 1).CompareAggregate(RDBNonCountAggregateType.SUM, "Age", RDBCompareConditionOperator.G, 5).EndAnd()
+           //      .EndGroupBy()
+           //      .Sort().ByColumn("CityID", RDBSortDirection.ASC).ByAlias("AvgAge", RDBSortDirection.DESC).EndSort().EndSelect();
+           //  var resolvedSelectWithGroupingquery = selectQueryWithGrouping.GetResolvedQuery();
+           // Console.ReadKey();
+           // //var query = new RDBQueryBuilder().Select().FromTable("User", "u").Columns("ID", "u.Name", "Settings", "g.Name")
+           // //    .Join("Group", "g", RDBJoinType.Inner)
+           // //    .IntCondition("", RDBConditionOperator.G, 0).And().DecimalCondition("", RDBConditionOperator.G, 3).EndJoin()
+           // //    .Where()
+           // //    .TextCondition("Name", RDBConditionOperator.Eq, "Sami")
+           // //    .And().ConditionGroup().IntCondition("ID", RDBConditionOperator.L, 5).Or().IntCondition("ID", RDBConditionOperator.G, 10).EndConditionGroup()
+           // //    .And().DecimalCondition("Age", RDBConditionOperator.G, 24).EndWhere();
         }
 
 
