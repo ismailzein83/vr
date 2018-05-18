@@ -38,3 +38,7 @@
 \bin\Retail.Teles.Business.dll
 \bin\Retail.Teles.Entities.dll
 \bin\Retail.Teles.Web.dll
+
+\bin\Retail.Interconnect.Business.dll
+\bin\Retail.Interconnect.Entities.dll
+\bin\Retail.Interconnect.Web.dll
