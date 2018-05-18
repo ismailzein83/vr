@@ -9,12 +9,12 @@ namespace Vanrise.Data.RDB
     public class RDBIfQuery<T> : BaseRDBQuery, IRDBIfQuery<T>, IRDBIfQueryReady<T>, IRDBIfQueryConditionDefined<T>, IRDBIfQueryTrueQueryDefined<T>, IRDBIfQueryFalseQueryDefined<T>
     {
         T _parent;
-        BaseRDBQueryContext _queryContext;
+        RDBQueryBuilderContext _queryBuilderContext;
 
-        public RDBIfQuery(T parent, BaseRDBQueryContext queryContext)
+        public RDBIfQuery(T parent, RDBQueryBuilderContext queryBuilderContext)
         {
             _parent = parent;
-            _queryContext = queryContext;
+            _queryBuilderContext = queryBuilderContext;
         }
 
         public BaseRDBCondition Condition { get; set; }
@@ -27,14 +27,14 @@ namespace Vanrise.Data.RDB
         {
             StringBuilder queryBuilder = new StringBuilder();
             queryBuilder.Append(" IF ");
-            var conditionContext = new RDBConditionToDBQueryContext(context, true);
+            var conditionContext = new RDBConditionToDBQueryContext(context, _queryBuilderContext);
             queryBuilder.Append(this.Condition.ToDBQuery(conditionContext));
-            var trueQueryContext = new RDBQueryGetResolvedQueryContext(context, true);
+            var trueQueryContext = new RDBQueryGetResolvedQueryContext(context);
             queryBuilder.Append(this.TrueQuery.GetResolvedQuery(trueQueryContext).QueryText);
             if(FalseQuery != null)
             {
                 queryBuilder.Append(" ELSE ");
-                var falseQueryContext = new RDBQueryGetResolvedQueryContext(context, true);
+                var falseQueryContext = new RDBQueryGetResolvedQueryContext(context);
                 queryBuilder.Append(this.FalseQuery.GetResolvedQuery(falseQueryContext).QueryText);
             }
             return new RDBResolvedQuery
@@ -51,7 +51,7 @@ namespace Vanrise.Data.RDB
 
         public RDBQueryContext<IRDBIfQueryTrueQueryDefined<T>> ThenQuery()
             {
-                var queryContext = new RDBQueryContext<IRDBIfQueryTrueQueryDefined<T>>(this, _queryContext);
+                var queryContext = new RDBQueryContext<IRDBIfQueryTrueQueryDefined<T>>(this, _queryBuilderContext.CreateChildContext());
                 this.TrueQuery = queryContext.Query;
                 return queryContext;
             }
@@ -59,7 +59,7 @@ namespace Vanrise.Data.RDB
 
         public RDBQueryContext<IRDBIfQueryFalseQueryDefined<T>> ElseQuery()
             {
-                var queryContext = new RDBQueryContext<IRDBIfQueryFalseQueryDefined<T>>(this, _queryContext);
+                var queryContext = new RDBQueryContext<IRDBIfQueryFalseQueryDefined<T>>(this, _queryBuilderContext.CreateChildContext());
                 this.FalseQuery = queryContext.Query;
                 return queryContext;
             }

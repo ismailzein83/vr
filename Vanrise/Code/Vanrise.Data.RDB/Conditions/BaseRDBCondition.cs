@@ -13,20 +13,22 @@ namespace Vanrise.Data.RDB
 
     public interface IRDBConditionToDBQueryContext : IBaseRDBResolveQueryContext
     {
+        RDBQueryBuilderContext QueryBuilderContext { get; }
     }
 
 
     public class RDBConditionToDBQueryContext : BaseRDBResolveQueryContext, IRDBConditionToDBQueryContext
     {
-        public RDBConditionToDBQueryContext(BaseRDBQueryContext queryContext, BaseRDBDataProvider dataProvider, Dictionary<string, Object> parameterValues)
-            : base(queryContext, dataProvider, parameterValues)
-        {   
+        public RDBConditionToDBQueryContext(IBaseRDBResolveQueryContext parentContext, RDBQueryBuilderContext queryBuilderContext)
+            : base(parentContext)
+        {
+            this.QueryBuilderContext = queryBuilderContext;
         }
 
-        public RDBConditionToDBQueryContext(IBaseRDBResolveQueryContext parentContext, bool newQueryScope)
-            : base(parentContext, newQueryScope)
+        public RDBQueryBuilderContext QueryBuilderContext
         {
-
+            get;
+            private set;
         }
     }
 

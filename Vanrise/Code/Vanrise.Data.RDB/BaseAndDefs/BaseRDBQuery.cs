@@ -22,13 +22,13 @@ namespace Vanrise.Data.RDB
 
     public class RDBQueryGetResolvedQueryContext : BaseRDBResolveQueryContext, IRDBQueryGetResolvedQueryContext
     {
-        public RDBQueryGetResolvedQueryContext(BaseRDBQueryContext queryContext, BaseRDBDataProvider dataProvider, Dictionary<string, Object> parameterValues)
-            : base(queryContext, dataProvider, parameterValues)
+        public RDBQueryGetResolvedQueryContext(BaseRDBDataProvider dataProvider)
+            : base(dataProvider)
         {
         }
 
-        public RDBQueryGetResolvedQueryContext(IBaseRDBResolveQueryContext parentContext, bool newQueryScope)
-            : base(parentContext, newQueryScope)
+        public RDBQueryGetResolvedQueryContext(IBaseRDBResolveQueryContext parentContext)
+            : base(parentContext)
         {
 
         }

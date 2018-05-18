@@ -23,13 +23,8 @@ namespace Vanrise.Data.RDB
 
     public class RDBTableQuerySourceToDBQueryContext : BaseRDBResolveQueryContext, IRDBTableQuerySourceToDBQueryContext
     {
-        public RDBTableQuerySourceToDBQueryContext(BaseRDBQueryContext queryContext, BaseRDBDataProvider dataProvider, Dictionary<string, Object> parameterValues)
-            : base(queryContext, dataProvider, parameterValues)
-        {            
-        }
-
-        public RDBTableQuerySourceToDBQueryContext(IBaseRDBResolveQueryContext parentContext, bool newQueryScope)
-            : base(parentContext, newQueryScope)
+        public RDBTableQuerySourceToDBQueryContext(IBaseRDBResolveQueryContext parentContext)
+            : base(parentContext)
         {
 
         }
@@ -42,14 +37,8 @@ namespace Vanrise.Data.RDB
 
     public class RDBTableQuerySourceGetDBColumnNameContext : BaseRDBResolveQueryContext, IRDBTableQuerySourceGetDBColumnNameContext
     {
-        public RDBTableQuerySourceGetDBColumnNameContext(BaseRDBQueryContext queryContext, string columnName, BaseRDBDataProvider dataProvider, Dictionary<string, Object> parameterValues)
-            : base(queryContext, dataProvider, parameterValues)
-        {
-            this.ColumnName = columnName;
-        }
-
-        public RDBTableQuerySourceGetDBColumnNameContext(string columnName, IBaseRDBResolveQueryContext parentContext, bool newQueryScope)
-            : base(parentContext, newQueryScope)
+        public RDBTableQuerySourceGetDBColumnNameContext(string columnName, IBaseRDBResolveQueryContext parentContext)
+            : base(parentContext)
         {
             this.ColumnName = columnName;
         }

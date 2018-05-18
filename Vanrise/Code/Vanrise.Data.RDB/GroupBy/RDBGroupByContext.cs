@@ -9,30 +9,35 @@ namespace Vanrise.Data.RDB
     public class RDBGroupByContext<T> : IRDBGroupByContextReady<T>, IRDBGroupByHavingDefined<T>, IRDBGroupByColumnsSelected<T>, IRDBGroupByAggregateColumnsSelected<T>
     {
         T _parent;
+        RDBQueryBuilderContext _queryBuilderContext;
         RDBGroupBy _groupBy;
         IRDBTableQuerySource _table;
-        public RDBGroupByContext(T parent, RDBGroupBy groupBy, IRDBTableQuerySource table)
+        string _tableAlias;
+
+        public RDBGroupByContext(T parent, RDBQueryBuilderContext queryBuilderContext, RDBGroupBy groupBy, IRDBTableQuerySource table, string tableAlias)
         {
             _parent = parent;
+            _queryBuilderContext = queryBuilderContext;
             _groupBy = groupBy;
             _table = table;
+            _tableAlias = tableAlias;
         }
 
         public RDBSelectColumnsContext<IRDBGroupByColumnsSelected<T>> Select()
             {
-                return new RDBSelectColumnsContext<IRDBGroupByColumnsSelected<T>>(this, _groupBy.Columns, _table);
+                return new RDBSelectColumnsContext<IRDBGroupByColumnsSelected<T>>(this, _queryBuilderContext, _groupBy.Columns, _table, _tableAlias);
             }
         
 
         RDBSelectAggregateContext<IRDBGroupByAggregateColumnsSelected<T>> IRDBGroupByCanSelectAggregateColumns<T>.SelectAggregates()
             {
-                return new RDBSelectAggregateContext<IRDBGroupByAggregateColumnsSelected<T>>(this, _groupBy.AggregateColumns, _table);
+                return new RDBSelectAggregateContext<IRDBGroupByAggregateColumnsSelected<T>>(this, _groupBy.AggregateColumns, _table, _tableAlias);
             }
         
 
         RDBGroupByHavingContext<IRDBGroupByHavingDefined<T>> IRDBGroupByCanDefineHaving<T>.Having()
             {
-                return new RDBGroupByHavingContext<IRDBGroupByHavingDefined<T>>(this, (condition) => _groupBy.HavingCondition = condition, _table);
+                return new RDBGroupByHavingContext<IRDBGroupByHavingDefined<T>>(this, (condition) => _groupBy.HavingCondition = condition, _table, _tableAlias);
             }
         
 

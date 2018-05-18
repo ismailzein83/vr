@@ -11,12 +11,14 @@ namespace Vanrise.Data.RDB
         T _parent;
         Action<BaseRDBCondition> _setCondition;
         IRDBTableQuerySource _table;
+        string _tableAlias;
 
-        public RDBGroupByHavingContext(T parent, Action<BaseRDBCondition> setCondition, IRDBTableQuerySource table)
+        public RDBGroupByHavingContext(T parent, Action<BaseRDBCondition> setCondition, IRDBTableQuerySource table, string tableAlias)
         {
             _parent = parent;
             _setCondition = setCondition;
             _table = table;
+            _tableAlias = tableAlias;
         }
 
 
@@ -82,19 +84,14 @@ namespace Vanrise.Data.RDB
             return CompareAggregate(aggregateType, valueToAggregate, oper, new RDBFixedDecimalExpression { Value = value});
         }
 
-        public T CompareAggregate(RDBNonCountAggregateType aggregateType, IRDBTableQuerySource table, string columnName, RDBCompareConditionOperator oper, Decimal value)
+        public T CompareAggregate(RDBNonCountAggregateType aggregateType, string tableAlias, string columnName, RDBCompareConditionOperator oper, Decimal value)
         {
-            return CompareAggregate(aggregateType, new RDBColumnExpression { Table = table, ColumnName = columnName }, oper, value);
-        }
-
-        public T CompareAggregate(RDBNonCountAggregateType aggregateType, string tableName, string columnName, RDBCompareConditionOperator oper, Decimal value)
-        {
-            return CompareAggregate(aggregateType, new RDBTableDefinitionQuerySource(tableName), columnName, oper, value);
+            return CompareAggregate(aggregateType, new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName }, oper, value);
         }
 
         public T CompareAggregate(RDBNonCountAggregateType aggregateType, string columnName, RDBCompareConditionOperator oper, Decimal value)
         {
-            return CompareAggregate(aggregateType, _table, columnName, oper, value);
+            return CompareAggregate(aggregateType, _tableAlias, columnName, oper, value);
         }
 
         public RDBGroupByHavingAndConditionContext<T> And()

@@ -10,6 +10,8 @@ namespace Vanrise.Data.RDB
     {
         public IRDBTableQuerySource Table { get; set; }
 
+        public string TableAlias { get; set; }
+
         public RDBJoinType JoinType { get; set; }
 
         public BaseRDBCondition Condition { get; set; }

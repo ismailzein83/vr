@@ -29,16 +29,44 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
         }
 
         SQLDataManager _dataManager;
+
+        public override string ConvertToDBParameterName(string parameterName)
+        {
+            return string.Concat("@", parameterName);
+        }
+
+        public override RDBResolvedQuery ResolveParameterDeclarations(IRDBDataProviderResolveParameterDeclarationsContext context)
+        {
+            StringBuilder builder = null;
+            if (context.Parameters != null)
+            {
+                foreach (var prm in context.Parameters.Values)
+                {
+                    if (prm.Direction == RDBParameterDirection.Declared)
+                    {
+                        if (builder == null)
+                            builder = new StringBuilder("DECLARE ");
+                        else
+                            builder.Append(", ");
+                        builder.AppendFormat("{0} {1}", prm.DBParameterName, GetColumnDBType(prm.DBParameterName, prm.Type, prm.Size, prm.Precision));
+                    }
+                }
+            }
+            return builder != null ? new RDBResolvedQuery { QueryText = builder.ToString() } : null;
+        }
+
         public override RDBResolvedQuery ResolveSelectQuery(IRDBDataProviderResolveSelectQueryContext context)
         {
             context.Table.ThrowIfNull("context.Table");
             StringBuilder queryBuilder = new StringBuilder("");
-            var rdbExpressionToDBQueryContext = new RDBExpressionToDBQueryContext(context, false);
-            var rdbConditionToDBQueryContext = new RDBConditionToDBQueryContext(context, false);
+            var rdbExpressionToDBQueryContext = new RDBExpressionToDBQueryContext(context, context.QueryBuilderContext);
+            var rdbConditionToDBQueryContext = new RDBConditionToDBQueryContext(context, context.QueryBuilderContext);
 
-            queryBuilder.Append(" FROM ");
-            AddTableToDBQueryBuilder(queryBuilder, context.Table, context, true);
-
+            if (context.Table != null)
+            {
+                queryBuilder.Append(" FROM ");
+                AddTableToDBQueryBuilder(queryBuilder, context.Table, context.TableAlias, context);
+            }
             if (context.Joins != null && context.Joins.Count > 0)
                 AddJoinsToQuery(context, queryBuilder, context.Joins, rdbConditionToDBQueryContext);
 
@@ -67,6 +95,11 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 if (colIndex > 0)
                     columnQueryBuilder.Append(", ");
                 colIndex++;
+                if (column.SetDBParameterName != null)
+                {
+                    columnQueryBuilder.Append(column.SetDBParameterName);
+                    columnQueryBuilder.Append(" = ");
+                }
                 columnQueryBuilder.Append(column.Expression.ToDBQuery(rdbExpressionToDBQueryContext));
                 columnQueryBuilder.Append(" ");
                 columnQueryBuilder.Append(column.Alias);
@@ -135,7 +168,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 if (join.JoinType == RDBJoinType.Left)
                     queryBuilder.Append(" LEFT ");
                 queryBuilder.Append(" JOIN ");
-                AddTableToDBQueryBuilder(queryBuilder, join.Table, context, true);
+                AddTableToDBQueryBuilder(queryBuilder, join.Table, join.TableAlias, context);
                 string joinConditionDBQuery = join.Condition.ToDBQuery(rdbConditionToDBQueryContext);
                 joinConditionDBQuery.ThrowIfNull("joinConditionDBQuery");
                 queryBuilder.Append(" ON ");
@@ -148,10 +181,10 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             context.Table.ThrowIfNull("context.Table");
             StringBuilder queryBuilder = new StringBuilder();
             queryBuilder.Append("INSERT INTO ");
-            AddTableToDBQueryBuilder(queryBuilder, context.Table, context, false);
+            AddTableToDBQueryBuilder(queryBuilder, context.Table, null, context);
             queryBuilder.Append(" (");
-            var rdbExpressionToDBQueryContext = new RDBExpressionToDBQueryContext(context, false);
-            var rdbConditionToDBQueryContext = new RDBConditionToDBQueryContext(context, false);
+            var rdbExpressionToDBQueryContext = new RDBExpressionToDBQueryContext(context, context.QueryBuilderContext);
+            var rdbConditionToDBQueryContext = new RDBConditionToDBQueryContext(context, context.QueryBuilderContext);
 
             StringBuilder valueBuilder = new StringBuilder();
             int colIndex = 0;
@@ -163,7 +196,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                     valueBuilder.Append(",");
                 }
                 colIndex++;
-                var getDBColumnNameContext = new RDBTableQuerySourceGetDBColumnNameContext(colVal.ColumnName, context, false);
+                var getDBColumnNameContext = new RDBTableQuerySourceGetDBColumnNameContext(colVal.ColumnName, context);
                 queryBuilder.Append(context.Table.GetDBColumnName(getDBColumnNameContext));
                 valueBuilder.Append(colVal.Value.ToDBQuery(rdbExpressionToDBQueryContext));
             }
@@ -207,20 +240,20 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
         {
             context.Table.ThrowIfNull("context.Table");
             context.ColumnValues.ThrowIfNull("context.ColumnValues");
-            
-            var rdbExpressionToDBQueryContext = new RDBExpressionToDBQueryContext(context, false);
-            var rdbConditionToDBQueryContext = new RDBConditionToDBQueryContext(context, false);
+
+            var rdbExpressionToDBQueryContext = new RDBExpressionToDBQueryContext(context, context.QueryBuilderContext);
+            var rdbConditionToDBQueryContext = new RDBConditionToDBQueryContext(context, context.QueryBuilderContext);
 
             StringBuilder queryBuilder = new StringBuilder();
             if (context.Joins != null && context.Joins.Count > 0)
             {
                 queryBuilder.Append(" FROM ");
-                AddTableToDBQueryBuilder(queryBuilder, context.Table, context, true);
+                AddTableToDBQueryBuilder(queryBuilder, context.Table, context.TableAlias, context);
                 AddJoinsToQuery(context, queryBuilder, context.Joins, rdbConditionToDBQueryContext);
             }
             else
             {
-                AddTableToDBQueryBuilder(queryBuilder, context.Table, context, false);
+                AddTableToDBQueryBuilder(queryBuilder, context.Table, null, context);
             }
 
             StringBuilder columnQueryBuilder = new StringBuilder(" SET ");
@@ -231,7 +264,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 if (colIndex > 0)
                     columnQueryBuilder.Append(", ");
                 colIndex++;
-                var getDBColumnNameContext = new RDBTableQuerySourceGetDBColumnNameContext(colVal.ColumnName, context, false);
+                var getDBColumnNameContext = new RDBTableQuerySourceGetDBColumnNameContext(colVal.ColumnName, context);
                 columnQueryBuilder.Append(context.Table.GetDBColumnName(getDBColumnNameContext));
                 columnQueryBuilder.Append(" = ");
                 columnQueryBuilder.Append(colVal.Value.ToDBQuery(rdbExpressionToDBQueryContext));
@@ -252,7 +285,7 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
 
             if (context.Joins != null && context.Joins.Count > 0)
             {
-                queryBuilder.Insert(0, String.Format("UPDATE {0} {1}", context.GetTableAlias(context.Table), columnQueryBuilder.ToString()));
+                queryBuilder.Insert(0, String.Format("UPDATE {0} {1}", context.TableAlias, columnQueryBuilder.ToString()));
             }
             else
             {
@@ -290,9 +323,9 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                     queryBuilder.Append(",");
                 colIndex++;
                 queryBuilder.AppendLine();
-                queryBuilder.Append(colDefEntry.Value.DBColumnName);
+                queryBuilder.Append(RDBSchemaManager.Current.GetColumnDBName(context.DataProvider, colDefEntry.Key, colDefEntry.Value));
                 queryBuilder.Append(" ");
-                queryBuilder.Append(GetColumnDBType(colDefEntry.Value));
+                queryBuilder.Append(GetColumnDBType(colDefEntry.Key, colDefEntry.Value));
             }
             queryBuilder.Append(" ) ");
             return new RDBResolvedQuery
@@ -301,12 +334,12 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             };
         }
 
-        private string GetColumnDBType(RDBTableColumnDefinition columnDef)
+        private string GetColumnDBType(string columnName, RDBTableColumnDefinition columnDef)
         {
-            return GetColumnDBType(columnDef.DBColumnName, columnDef.DataType, columnDef.Size, columnDef.Precision);
+            return GetColumnDBType(columnName, columnDef.DataType, columnDef.Size, columnDef.Precision);
         }
 
-        public static string GetColumnDBType(string name, RDBDataType dataType, int? size, int? precision)
+        public static string GetColumnDBType(string columnName, RDBDataType dataType, int? size, int? precision)
         {
             switch (dataType)
             {
@@ -314,32 +347,33 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                 case RDBDataType.BigInt: return "bigint";
                 case RDBDataType.Decimal:
                     if (!size.HasValue)
-                        throw new NullReferenceException(String.Format("Size of '{0}'", name));
+                        throw new NullReferenceException(String.Format("Size of '{0}'", columnName));
                     if (!precision.HasValue)
-                        throw new NullReferenceException(String.Format("Precision of '{0}'", name));
+                        throw new NullReferenceException(String.Format("Precision of '{0}'", columnName));
                     return String.Format("DECIMAL({0}, {1})", size.Value, precision.Value);
                 case RDBDataType.DateTime: return "datetime";
                 case RDBDataType.Varchar:
                     if (!size.HasValue)
-                        throw new NullReferenceException(String.Format("Size of '{0}'", name));
+                        throw new NullReferenceException(String.Format("Size of '{0}'", columnName));
                     return String.Format("varchar({0})", size.Value);
                 case RDBDataType.NVarchar:
                     if (!size.HasValue)
-                        throw new NullReferenceException(String.Format("Size of '{0}'", name));
+                        throw new NullReferenceException(String.Format("Size of '{0}'", columnName));
                     return String.Format("nvarchar({0})", size.Value);
+                case RDBDataType.UniqueIdentifier: return "uniqueidentifier";
+                case RDBDataType.Boolean: return "bit";
                 default:
                     throw new NotSupportedException(String.Format("DataType '{0}'", dataType.ToString()));
             }
         }
 
-        private void AddTableToDBQueryBuilder(StringBuilder queryBuilder, IRDBTableQuerySource table, IBaseRDBResolveQueryContext parentContext, bool assignAlias)
+        private void AddTableToDBQueryBuilder(StringBuilder queryBuilder, IRDBTableQuerySource table, string tableAlias, IBaseRDBResolveQueryContext parentContext)
         {
-            var tableQuerySourceContext = new RDBTableQuerySourceToDBQueryContext(parentContext, false);
+            var tableQuerySourceContext = new RDBTableQuerySourceToDBQueryContext(parentContext);
             queryBuilder.Append(table.ToDBQuery(tableQuerySourceContext));
-            if (assignAlias)
+            if (tableAlias != null)
             {
                 queryBuilder.Append(" ");
-                string tableAlias = tableQuerySourceContext.GenerateTableAliasIfNotExists(table);
                 queryBuilder.Append(tableAlias);
             }
             queryBuilder.Append(" ");
@@ -454,6 +488,8 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
                     case RDBDataType.DateTime: return DbType.DateTime;
                     case RDBDataType.Varchar: return DbType.String;
                     case RDBDataType.NVarchar: return DbType.String;
+                    case RDBDataType.UniqueIdentifier: return DbType.Guid;
+                    case RDBDataType.Boolean: return DbType.Boolean;
                     default:
                         throw new NotSupportedException(String.Format("DataType '{0}'", dataType.ToString()));
                 }
@@ -515,6 +551,68 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
             }
 
             public DateTime? GetNullableDateTime(string fieldName)
+            {
+                throw new NotImplementedException();
+            }
+
+
+            public int GetIntWithNullHandling(string fieldName)
+            {
+                throw new NotImplementedException();
+            }
+
+            public long GetLongWithNullHandling(string fieldName)
+            {
+                throw new NotImplementedException();
+            }
+
+            public DateTime GetDateTimeWithNullHandling(string fieldName)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Guid GetGuid(string fieldName)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Guid GetGuidWithNullHandling(string fieldName)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Guid? GetNullableGuid(string fieldName)
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool GetBoolean(string fieldName)
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool GetBooleanWithNullHandling(string fieldName)
+            {
+                throw new NotImplementedException();
+            }
+
+            public bool? GetNullableBoolean(string fieldName)
+            {
+                throw new NotImplementedException();
+            }
+
+
+            public decimal GetDecimal(string fieldName)
+            {
+                throw new NotImplementedException();
+            }
+
+            public decimal GetDecimalWithNullHandling(string fieldName)
+            {
+                throw new NotImplementedException();
+            }
+
+            public decimal? GetNullableDecimal(string fieldName)
             {
                 throw new NotImplementedException();
             }

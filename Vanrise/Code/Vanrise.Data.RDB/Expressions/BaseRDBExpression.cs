@@ -12,20 +12,22 @@ namespace Vanrise.Data.RDB
     }
 
     public interface IRDBExpressionToDBQueryContext : IBaseRDBResolveQueryContext
-    {        
+    {
+        RDBQueryBuilderContext QueryBuilderContext { get; }
     }
 
     public class RDBExpressionToDBQueryContext : BaseRDBResolveQueryContext, IRDBExpressionToDBQueryContext
     {
-        public RDBExpressionToDBQueryContext(BaseRDBQueryContext queryContext, BaseRDBDataProvider dataProvider, Dictionary<string, Object> parameterValues)
-            : base(queryContext, dataProvider, parameterValues)
-        {   
+        public RDBExpressionToDBQueryContext(IBaseRDBResolveQueryContext parentContext, RDBQueryBuilderContext queryBuilderContext)
+            : base(parentContext)
+        {
+            this.QueryBuilderContext = queryBuilderContext;
         }
 
-        public RDBExpressionToDBQueryContext(IBaseRDBResolveQueryContext parentContext, bool newQueryScope)
-            : base(parentContext, newQueryScope)
+        public RDBQueryBuilderContext QueryBuilderContext
         {
-
+            get;
+            private set;
         }
     }
 }

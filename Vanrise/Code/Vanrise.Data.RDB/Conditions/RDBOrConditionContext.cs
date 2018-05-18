@@ -12,14 +12,14 @@ namespace Vanrise.Data.RDB
         Action<BaseRDBCondition> _setCondition;
         List<BaseRDBCondition> _conditions;
 
-        public RDBOrConditionContext(T parent, Action<BaseRDBCondition> setCondition, IRDBTableQuerySource table)
+        public RDBOrConditionContext(T parent, Action<BaseRDBCondition> setCondition, string tableAlias)
         {
             _parent = parent;
             _setCondition = setCondition;
             _conditions = new List<BaseRDBCondition>();
             base.Parent = this;
             base.SetConditionAction = (condition) => _conditions.Add(condition);
-            base.Table = table;
+            base.TableAlias = tableAlias;
         }
 
         public T EndOr()

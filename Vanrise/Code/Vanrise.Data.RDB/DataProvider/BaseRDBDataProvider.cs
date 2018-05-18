@@ -16,6 +16,10 @@ namespace Vanrise.Data.RDB
 
         public abstract string NowDateTimeFunction { get; }
 
+        public abstract string ConvertToDBParameterName(string parameterName);
+
+        public abstract RDBResolvedQuery ResolveParameterDeclarations(IRDBDataProviderResolveParameterDeclarationsContext context);
+
         public abstract RDBResolvedQuery ResolveSelectQuery(IRDBDataProviderResolveSelectQueryContext context);
 
         public abstract RDBResolvedQuery ResolveInsertQuery(IRDBDataProviderResolveInsertQueryContext context);
@@ -33,9 +37,29 @@ namespace Vanrise.Data.RDB
         public abstract BaseRDBStreamForBulkInsert InitializeStreamForBulkInsert(IRDBDataProviderInitializeStreamForBulkInsertContext context);
     }
 
+    public interface IRDBDataProviderResolveParameterDeclarationsContext : IBaseRDBResolveQueryContext
+    {
+
+    }
+
+    public class RDBDataProviderResolveParameterDeclarationsContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveParameterDeclarationsContext
+    {
+        public RDBDataProviderResolveParameterDeclarationsContext(IBaseRDBResolveQueryContext parentContext)
+            : base(parentContext)
+        {            
+        }
+    }
+
     public interface IRDBDataProviderResolveSelectQueryContext : IBaseRDBResolveQueryContext
     {
+        RDBQueryBuilderContext QueryBuilderContext { get; }
+
         IRDBTableQuerySource Table
+        {
+            get;
+        }
+
+        string TableAlias
         {
             get;
         }
@@ -67,11 +91,27 @@ namespace Vanrise.Data.RDB
     
     public class RDBDataProviderResolveSelectQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveSelectQueryContext
     {
-        public RDBDataProviderResolveSelectQueryContext(IRDBTableQuerySource table, long? nbOfRecords, List<RDBSelectColumn> columns, List<RDBJoin> joins,
-            BaseRDBCondition condition, RDBGroupBy groupBy, List<RDBSelectSortColumn> sortColumns, BaseRDBQueryContext queryContext, BaseRDBDataProvider dataProvider, Dictionary<string, Object> parameterValues)
-            : base(queryContext, dataProvider, parameterValues)
+        //public RDBDataProviderResolveSelectQueryContext(IRDBTableQuerySource table, string tableAlias, long? nbOfRecords, List<RDBSelectColumn> columns, List<RDBJoin> joins,
+        //    BaseRDBCondition condition, RDBGroupBy groupBy, List<RDBSelectSortColumn> sortColumns, BaseRDBQueryContext queryContext, BaseRDBDataProvider dataProvider, Dictionary<string, Object> parameterValues)
+        //    : base(queryContext, dataProvider, parameterValues)
+        //{
+        //    this.Table = table;
+        //    this.TableAlias = tableAlias;
+        //    this.NbOfRecords = nbOfRecords;
+        //    this.Columns = columns;
+        //    this.Joins = joins;
+        //    this.Condition = condition;
+        //    this.GroupBy = groupBy;
+        //    this.SortColumns = sortColumns;
+        //}
+
+        public RDBDataProviderResolveSelectQueryContext(IRDBTableQuerySource table, string tableAlias, long? nbOfRecords, List<RDBSelectColumn> columns, List<RDBJoin> joins,
+            BaseRDBCondition condition, RDBGroupBy groupBy, List<RDBSelectSortColumn> sortColumns, IBaseRDBResolveQueryContext parentContext, RDBQueryBuilderContext queryBuilderContext)
+            : base(parentContext)
         {
+            this.QueryBuilderContext = queryBuilderContext;
             this.Table = table;
+            this.TableAlias = tableAlias;
             this.NbOfRecords = nbOfRecords;
             this.Columns = columns;
             this.Joins = joins;
@@ -80,20 +120,19 @@ namespace Vanrise.Data.RDB
             this.SortColumns = sortColumns;
         }
 
-        public RDBDataProviderResolveSelectQueryContext(IRDBTableQuerySource table, long? nbOfRecords, List<RDBSelectColumn> columns, List<RDBJoin> joins,
-            BaseRDBCondition condition, RDBGroupBy groupBy, List<RDBSelectSortColumn> sortColumns, IBaseRDBResolveQueryContext parentContext, bool newQueryScope)
-            : base(parentContext, newQueryScope)
+        public RDBQueryBuilderContext QueryBuilderContext
         {
-            this.Table = table;
-            this.NbOfRecords = nbOfRecords;
-            this.Columns = columns;
-            this.Joins = joins;
-            this.Condition = condition;
-            this.GroupBy = groupBy;
-            this.SortColumns = sortColumns;
+            get;
+            private set;
         }
 
         public IRDBTableQuerySource Table
+        {
+            get;
+            private set;
+        }
+
+        public string TableAlias
         {
             get;
             private set;
@@ -126,6 +165,7 @@ namespace Vanrise.Data.RDB
         public RDBGroupBy GroupBy { get; private set; }
 
         public List<RDBSelectSortColumn> SortColumns { get; private set; }
+
     }
     
     public class RDBResolvedQuery
@@ -135,6 +175,7 @@ namespace Vanrise.Data.RDB
 
     public interface IRDBDataProviderResolveInsertQueryContext : IBaseRDBResolveQueryContext
     {
+        RDBQueryBuilderContext QueryBuilderContext { get; }
         IRDBTableQuerySource Table { get; }
 
         List<RDBInsertColumn> ColumnValues { get;  }
@@ -143,20 +184,28 @@ namespace Vanrise.Data.RDB
     }
     public class RDBDataProviderResolveInsertQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveInsertQueryContext
     {
-        public RDBDataProviderResolveInsertQueryContext(IRDBTableQuerySource table, List<RDBInsertColumn> columnValues, string idOutputParameterName, BaseRDBQueryContext queryContext, BaseRDBDataProvider dataProvider, Dictionary<string, Object> parameterValues)
-            : base(queryContext, dataProvider, parameterValues)
+        //public RDBDataProviderResolveInsertQueryContext(IRDBTableQuerySource table, List<RDBInsertColumn> columnValues, string idOutputParameterName, BaseRDBQueryContext queryContext, BaseRDBDataProvider dataProvider, Dictionary<string, Object> parameterValues)
+        //    : base(queryContext, dataProvider, parameterValues)
+        //{
+        //    this.Table = table;
+        //    this.ColumnValues = columnValues;
+        //    this.IdOutputParameterName = idOutputParameterName;
+        //}
+
+        public RDBDataProviderResolveInsertQueryContext(IRDBTableQuerySource table, List<RDBInsertColumn> columnValues, string idOutputParameterName,
+            IBaseRDBResolveQueryContext parentContext, RDBQueryBuilderContext queryBuilderContext)
+            : base(parentContext)
         {
+            this.QueryBuilderContext = queryBuilderContext;
             this.Table = table;
             this.ColumnValues = columnValues;
             this.IdOutputParameterName = idOutputParameterName;
         }
 
-        public RDBDataProviderResolveInsertQueryContext(IRDBTableQuerySource table, List<RDBInsertColumn> columnValues, string idOutputParameterName, IBaseRDBResolveQueryContext parentContext, bool newQueryScope)
-            : base(parentContext, newQueryScope)
+        public RDBQueryBuilderContext QueryBuilderContext
         {
-            this.Table = table;
-            this.ColumnValues = columnValues;
-            this.IdOutputParameterName = idOutputParameterName;
+            get;
+            private set;
         }
 
         public IRDBTableQuerySource Table { get; set; }
@@ -167,7 +216,11 @@ namespace Vanrise.Data.RDB
     }
     public interface IRDBDataProviderResolveUpdateQueryContext : IBaseRDBResolveQueryContext
     {
+        RDBQueryBuilderContext QueryBuilderContext { get; }
+        
         IRDBTableQuerySource Table { get; }
+
+        string TableAlias { get; }
 
         List<RDBUpdateColumn> ColumnValues { get; }
 
@@ -178,25 +231,41 @@ namespace Vanrise.Data.RDB
 
     public class RDBDataProviderResolveUpdateQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveUpdateQueryContext
     {
-        public RDBDataProviderResolveUpdateQueryContext(IRDBTableQuerySource table, List<RDBUpdateColumn> columnValues, BaseRDBCondition condition, List<RDBJoin> joins, BaseRDBQueryContext queryContext, BaseRDBDataProvider dataProvider, Dictionary<string, Object> parameterValues)
-            : base(queryContext, dataProvider, parameterValues)
+        //public RDBDataProviderResolveUpdateQueryContext(IRDBTableQuerySource table, string tableAlias, List<RDBUpdateColumn> columnValues, BaseRDBCondition condition, List<RDBJoin> joins, BaseRDBQueryContext queryContext, BaseRDBDataProvider dataProvider, Dictionary<string, Object> parameterValues)
+        //    : base(queryContext, dataProvider, parameterValues)
+        //{
+        //    this.Table = table;
+        //    this.TableAlias = tableAlias;
+        //    this.ColumnValues = columnValues;
+        //    this.Condition = condition;
+        //    this.Joins = joins;
+        //}
+
+        public RDBDataProviderResolveUpdateQueryContext(IRDBTableQuerySource table, string tableAlias, List<RDBUpdateColumn> columnValues, BaseRDBCondition condition,
+            List<RDBJoin> joins, IBaseRDBResolveQueryContext parentContext, RDBQueryBuilderContext queryBuilderContext)
+            : base(parentContext)
         {
+            this.QueryBuilderContext = queryBuilderContext;
             this.Table = table;
+            this.TableAlias = tableAlias;
             this.ColumnValues = columnValues;
             this.Condition = condition;
             this.Joins = joins;
         }
 
-        public RDBDataProviderResolveUpdateQueryContext(IRDBTableQuerySource table, List<RDBUpdateColumn> columnValues, BaseRDBCondition condition, List<RDBJoin> joins, IBaseRDBResolveQueryContext parentContext, bool newQueryScope)
-            : base(parentContext, newQueryScope)
+        public RDBQueryBuilderContext QueryBuilderContext
         {
-            this.Table = table;
-            this.ColumnValues = columnValues;
-            this.Condition = condition;
-            this.Joins = joins;
+            get;
+            private set;
         }
 
         public IRDBTableQuerySource Table { get; private set; }
+
+        public string TableAlias
+        {
+            get;
+            private set;
+        }
 
         public List<RDBUpdateColumn> ColumnValues { get; private set; }
 
@@ -214,15 +283,15 @@ namespace Vanrise.Data.RDB
 
     public class RDBDataProviderResolveTempTableCreationQueryContext : BaseRDBResolveQueryContext, IRDBDataProviderResolveTempTableCreationQueryContext
     {
-        public RDBDataProviderResolveTempTableCreationQueryContext(Dictionary<string, RDBTableColumnDefinition> columns, BaseRDBQueryContext queryContext, BaseRDBDataProvider dataProvider, Dictionary<string, Object> parameterValues)
-            : base(queryContext, dataProvider, parameterValues)
-        {
-            this.Columns = columns;
+        //public RDBDataProviderResolveTempTableCreationQueryContext(Dictionary<string, RDBTableColumnDefinition> columns, BaseRDBQueryContext queryContext, BaseRDBDataProvider dataProvider, Dictionary<string, Object> parameterValues)
+        //    : base(queryContext, dataProvider, parameterValues)
+        //{
+        //    this.Columns = columns;
 
-        }
+        //}
 
-        public RDBDataProviderResolveTempTableCreationQueryContext(Dictionary<string, RDBTableColumnDefinition> columns, IBaseRDBResolveQueryContext parentContext, bool newQueryScope)
-            : base(parentContext, newQueryScope)
+        public RDBDataProviderResolveTempTableCreationQueryContext(Dictionary<string, RDBTableColumnDefinition> columns, IBaseRDBResolveQueryContext parentContext)
+            : base(parentContext)
         {
             this.Columns = columns;
         }
@@ -243,8 +312,10 @@ namespace Vanrise.Data.RDB
     }
 
     public interface IBaseRDBDataProviderExecuteQueryContext
-    {
+    {        
         RDBResolvedQuery ResolvedQuery { get; }
+
+        bool ExecuteTransactional { get; }
 
         Dictionary<string, Object> ParameterValues { get; }
 
@@ -255,15 +326,23 @@ namespace Vanrise.Data.RDB
 
     public abstract class BaseRDBDataProviderExecuteQueryContext : IBaseRDBDataProviderExecuteQueryContext
     {
-        public BaseRDBDataProviderExecuteQueryContext(RDBResolvedQuery resolvedQuery, Dictionary<string, object> parameterValues, Dictionary<string, RDBDataType> outputParameters)
+        public BaseRDBDataProviderExecuteQueryContext(RDBResolvedQuery resolvedQuery, bool executeTransactional, Dictionary<string, object> parameterValues, Dictionary<string, RDBDataType> outputParameters)
         {
             this.ResolvedQuery = resolvedQuery;
+            this.ExecuteTransactional = executeTransactional;
             this.ParameterValues = parameterValues;
             this.OutputParameters = outputParameters;
             this.OutputParameterValues = new Dictionary<string, object>();
         }
 
         public RDBResolvedQuery ResolvedQuery
+        {
+            get;
+            private set;
+        }
+
+
+        public bool ExecuteTransactional
         {
             get;
             private set;

@@ -35,6 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -44,11 +45,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseAndDefs\IBaseRDBResolveQueryContext.cs" />
+    <Compile Include="BaseRDBDataManager.cs" />
     <Compile Include="BulkInsert\BaseRDBStreamForBulkInsert.cs" />
     <Compile Include="Conditions\BaseRDBCondition.cs" />
+    <Compile Include="Conditions\RDBNullOrConditionContext.cs" />
     <Compile Include="DataProvider\BaseRDBDataProvider.cs" />
     <Compile Include="DataProvider\Providers\MSSQLRDBDataProvider.cs" />
     <Compile Include="ExecuteNonQuery\RDBIfQuery.cs" />
+    <Compile Include="ExecuteNonQuery\RDBParameterDeclarationQuery.cs" />
+    <Compile Include="ExecuteNonQuery\SetParameterValuesQuery.cs" />
     <Compile Include="Expressions\BaseRDBExpression.cs" />
     <Compile Include="BaseAndDefs\BaseRDBQuery.cs" />
     <Compile Include="BaseAndDefs\IRDBDataReader.cs" />
@@ -58,6 +63,7 @@
     <Compile Include="GroupBy\RDBGroupByHavingContext.cs" />
     <Compile Include="GroupBy\RDBGroupByHavingOrConditionContext.cs" />
     <Compile Include="BulkInsert\RDBBulkInsertQueryContext.cs" />
+    <Compile Include="RDBDataProviderFactory.cs" />
     <Compile Include="RDBQueryContext.cs" />
     <Compile Include="RDBSchemaManager.cs" />
     <Compile Include="SelectAggregate\RDBSelectAggregateContext.cs" />

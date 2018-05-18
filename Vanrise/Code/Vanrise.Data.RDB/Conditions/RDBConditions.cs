@@ -18,7 +18,7 @@ namespace Vanrise.Data.RDB
 
         public override string ToDBQuery(IRDBConditionToDBQueryContext context)
         {
-            var expressionContext = new RDBExpressionToDBQueryContext(context, false);
+            var expressionContext = new RDBExpressionToDBQueryContext(context, context.QueryBuilderContext);
             string expression1String = this.Expression1.ToDBQuery(expressionContext);
             string expression2String = this.Expression2.ToDBQuery(expressionContext);
             string expr2Prefix;
@@ -70,7 +70,7 @@ namespace Vanrise.Data.RDB
 
         public override string ToDBQuery(IRDBConditionToDBQueryContext context)
         {
-            var expressionContext = new RDBExpressionToDBQueryContext(context, false);
+            var expressionContext = new RDBExpressionToDBQueryContext(context, context.QueryBuilderContext);
             return String.Concat(this.Expression.ToDBQuery(expressionContext), this.Operator == RDBListConditionOperator.IN ? " IN (" : " NOT IN (", String.Join(",", this.Values.Select(itm => itm.ToDBQuery(expressionContext))), ")");
         }
     }
@@ -109,7 +109,7 @@ namespace Vanrise.Data.RDB
         public BaseRDBExpression Expression { get; set; }
         public override string ToDBQuery(IRDBConditionToDBQueryContext context)
         {
-            var expressionContext = new RDBExpressionToDBQueryContext(context, false);
+            var expressionContext = new RDBExpressionToDBQueryContext(context, context.QueryBuilderContext);
             return string.Concat(this.Expression.ToDBQuery(expressionContext), " IS NULL ");
         }
     }
@@ -119,7 +119,7 @@ namespace Vanrise.Data.RDB
         public BaseRDBExpression Expression { get; set; }
         public override string ToDBQuery(IRDBConditionToDBQueryContext context)
         {
-            var expressionContext = new RDBExpressionToDBQueryContext(context, false);
+            var expressionContext = new RDBExpressionToDBQueryContext(context, context.QueryBuilderContext);
             return string.Concat(this.Expression.ToDBQuery(expressionContext), " IS NOT NULL ");
         }
     }
@@ -130,7 +130,7 @@ namespace Vanrise.Data.RDB
 
         public override string ToDBQuery(IRDBConditionToDBQueryContext context)
         {
-            var selectQueryAsDB = this.SelectQuery.ToDBQuery(new RDBTableQuerySourceToDBQueryContext(context, false));
+            var selectQueryAsDB = this.SelectQuery.ToDBQuery(new RDBTableQuerySourceToDBQueryContext(context));
             return string.Concat(" EXISTS ", selectQueryAsDB);
         }
     }
@@ -141,8 +141,17 @@ namespace Vanrise.Data.RDB
 
         public override string ToDBQuery(IRDBConditionToDBQueryContext context)
         {
-            var selectQueryAsDB = this.SelectQuery.ToDBQuery(new RDBTableQuerySourceToDBQueryContext(context, false));
+            var selectQueryAsDB = this.SelectQuery.ToDBQuery(new RDBTableQuerySourceToDBQueryContext(context));
             return string.Concat(" NOT EXISTS (", selectQueryAsDB, ")");
         }
     }
+
+    public class RDBAlwaysTrueCondition : BaseRDBCondition
+    {
+        public override string ToDBQuery(IRDBConditionToDBQueryContext context)
+        {
+            return " 1 = 1 ";
+        }
+    }
+
 }

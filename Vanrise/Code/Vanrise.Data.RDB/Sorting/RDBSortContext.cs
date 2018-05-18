@@ -11,12 +11,14 @@ namespace Vanrise.Data.RDB
         T _parent;
         List<RDBSelectSortColumn> _columns;
         IRDBTableQuerySource _table;
+        string _tableAlias;
 
-        public RDBSortContext(T parent, List<RDBSelectSortColumn> columns, IRDBTableQuerySource table)
+        public RDBSortContext(T parent, List<RDBSelectSortColumn> columns, IRDBTableQuerySource table, string tableAlias)
         {
             _parent = parent;
             _columns = columns;
             _table = table;
+            _tableAlias = tableAlias;
         }
 
         public IRDBSortContextReady<T> ByExpression(BaseRDBExpression expression, RDBSortDirection direction)
@@ -29,19 +31,14 @@ namespace Vanrise.Data.RDB
             return this;
         }
 
-        public IRDBSortContextReady<T> ByColumn(IRDBTableQuerySource table, string columnName, RDBSortDirection direction)
+        public IRDBSortContextReady<T> ByColumn(string tableAlias, string columnName, RDBSortDirection direction)
         {
-            return ByExpression(new RDBColumnExpression { Table = table, ColumnName = columnName }, direction);
-        }
-
-        public IRDBSortContextReady<T> ByColumn(string tableName, string columnName, RDBSortDirection direction)
-        {
-            return ByColumn(new RDBTableDefinitionQuerySource(tableName), columnName, direction);
+            return ByExpression(new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName }, direction);
         }
 
         public IRDBSortContextReady<T> ByColumn(string columnName, RDBSortDirection direction)
         {
-            return ByColumn(_table, columnName, direction);
+            return ByColumn(this._tableAlias, columnName, direction);
         }
 
         public IRDBSortContextReady<T> ByAlias(string alias, RDBSortDirection direction)
@@ -64,9 +61,7 @@ namespace Vanrise.Data.RDB
     {
         IRDBSortContextReady<T> ByExpression(BaseRDBExpression expression, RDBSortDirection direction);
 
-        IRDBSortContextReady<T> ByColumn(IRDBTableQuerySource table, string columnName, RDBSortDirection direction);
-
-        IRDBSortContextReady<T> ByColumn(string tableName, string columnName, RDBSortDirection direction);
+        IRDBSortContextReady<T> ByColumn(string tableAlias, string columnName, RDBSortDirection direction);
 
         IRDBSortContextReady<T> ByColumn(string columnName, RDBSortDirection direction);
 

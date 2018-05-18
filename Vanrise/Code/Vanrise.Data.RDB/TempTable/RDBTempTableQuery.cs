@@ -20,7 +20,7 @@ namespace Vanrise.Data.RDB
         protected override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
         {
             Dictionary<string, object> parameterValues = new Dictionary<string, object>();
-            var resolveQueryContext = new RDBDataProviderResolveTempTableCreationQueryContext(_columns, context, true);
+            var resolveQueryContext = new RDBDataProviderResolveTempTableCreationQueryContext(_columns, context);
             var resolvedQuery = context.DataProvider.ResolveTempTableCreationQuery(resolveQueryContext);
             _tempTableName = resolveQueryContext.TempTableName;
             return resolvedQuery;
@@ -50,7 +50,7 @@ namespace Vanrise.Data.RDB
             RDBTableColumnDefinition columnDef;
             if (!_columns.TryGetValue(context.ColumnName, out columnDef))
                 throw new Exception(String.Format("Column '{0}' not found", context.ColumnName));
-            return columnDef.DBColumnName;
+            return RDBSchemaManager.Current.GetColumnDBName(context.DataProvider, context.ColumnName, columnDef);
         }
     }
 }

@@ -3,22 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Vanrise.Common;
 
 namespace Vanrise.Data.RDB
 {
     public class RDBColumnExpression : BaseRDBExpression
     {
-        public IRDBTableQuerySource Table { get; set; }
+        //public IRDBTableQuerySource Table { get; set; }
+
+        public string TableAlias { get; set; }
 
         public string ColumnName { get; set; }
 
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
         {
-            var getColumnDBNameContext = new RDBTableQuerySourceGetDBColumnNameContext(this.ColumnName, context, false);
-            string dbColumnName = this.Table.GetDBColumnName(getColumnDBNameContext);
-            string tableAlias = context.GetTableAlias(this.Table);
-            if (tableAlias != null)
-                return String.Concat(tableAlias, ".", dbColumnName);
+            var getColumnDBNameContext = new RDBTableQuerySourceGetDBColumnNameContext(this.ColumnName, context);
+            string dbColumnName = context.QueryBuilderContext.GetTableFromAlias(this.TableAlias).GetDBColumnName(getColumnDBNameContext);
+            if (this.TableAlias != null)
+                return String.Concat(this.TableAlias, ".", dbColumnName);
             else
                 return dbColumnName;
         }
@@ -30,8 +32,15 @@ namespace Vanrise.Data.RDB
 
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
         {
-            string parameterName = context.GenerateParameterName();
-            context.AddParameterValue(parameterName, this.Value);
+            string parameterName = context.GenerateUniqueDBParameterName();
+            context.AddParameter(new RDBParameter
+            {
+                Name = parameterName,
+                DBParameterName = parameterName,
+                Type = RDBDataType.NVarchar,
+                Direction = RDBParameterDirection.In,
+                Value = this.Value
+            });
             return parameterName;
         }
     }
@@ -82,8 +91,53 @@ namespace Vanrise.Data.RDB
 
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
         {
-            string parameterName = context.GenerateParameterName();
-            context.AddParameterValue(parameterName, this.Value);
+            string parameterName = context.GenerateUniqueDBParameterName();
+            context.AddParameter(new RDBParameter
+            {
+                Name = parameterName,
+                DBParameterName = parameterName,
+                Type = RDBDataType.DateTime,
+                Direction = RDBParameterDirection.In,
+                Value = this.Value
+            });
+            return parameterName;
+        }
+    }
+
+    public class RDBFixedGuidExpression : BaseRDBExpression
+    {
+        public Guid Value { get; set; }
+
+        public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
+        {
+            string parameterName = context.GenerateUniqueDBParameterName();
+            context.AddParameter(new RDBParameter
+            {
+                Name = parameterName,
+                DBParameterName = parameterName,
+                Type = RDBDataType.UniqueIdentifier,
+                Direction = RDBParameterDirection.In,
+                Value = this.Value
+            });
+            return parameterName;
+        }
+    }
+
+    public class RDBFixedBooleanExpression : BaseRDBExpression
+    {
+        public bool Value { get; set; }
+
+        public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
+        {
+            string parameterName = context.GenerateUniqueDBParameterName();
+            context.AddParameter(new RDBParameter
+                {
+                    Name = parameterName,
+                    DBParameterName = parameterName,
+                    Type = RDBDataType.Boolean,
+                    Direction = RDBParameterDirection.In,
+                    Value = this.Value
+                });
             return parameterName;
         }
     }
@@ -106,7 +160,7 @@ namespace Vanrise.Data.RDB
         {
             StringBuilder builder = new StringBuilder();
             int whenIndex = 0;
-            var conditionContext = new RDBConditionToDBQueryContext(context, false);
+            var conditionContext = new RDBConditionToDBQueryContext(context, context.QueryBuilderContext);
             foreach (var when in this.Whens)
             {
                 if (whenIndex == 0)
@@ -213,6 +267,16 @@ namespace Vanrise.Data.RDB
         public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
         {
             return String.Concat("MIN(", this.Expression.ToDBQuery(context), ")");
+        }
+    }
+
+    public class RDBParameterExpression : BaseRDBExpression
+    {
+        public string ParameterName { get; set; }
+
+        public override string ToDBQuery(IRDBExpressionToDBQueryContext context)
+        {
+            return context.GetParameterWithValidate(this.ParameterName).DBParameterName;
         }
     }
 }

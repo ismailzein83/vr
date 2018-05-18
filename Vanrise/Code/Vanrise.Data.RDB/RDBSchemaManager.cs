@@ -84,16 +84,33 @@ namespace Vanrise.Data.RDB
         internal string GetTableDBName(BaseRDBDataProvider provider, string tableName)
         {
             RDBTableDefinition tableDefinition = GetTableDefinitionWithValidate(provider, tableName);
+            return GetTableDBName(provider, tableDefinition);
+        }
+
+        internal string GetTableDBName(BaseRDBDataProvider provider, RDBTableDefinition tableDefinition)
+        {
             if (!String.IsNullOrEmpty(tableDefinition.DBSchemaName))
                 return String.Concat(tableDefinition.DBSchemaName, ".", tableDefinition.DBTableName);
             else
                 return tableDefinition.DBTableName;
         }
 
+        internal List<string> GetTableColumns(string tableName)
+        {
+            var tableDefinition = _defaultTableDefinitionsByName.GetRecord(tableName);
+            tableDefinition.ThrowIfNull("tableDefinition", tableName);
+            return tableDefinition.Columns.Select(colEntry => colEntry.Key).ToList();
+        }
+
         internal string GetColumnDBName(BaseRDBDataProvider provider, string tableName, string columnName)
         {
             RDBTableColumnDefinition columnDefinition = GetColumnDefinitionWithValidate(provider, tableName, columnName);
-            return columnDefinition.DBColumnName;
+            return GetColumnDBName(provider, columnName, columnDefinition);
+        }
+
+        internal string GetColumnDBName(BaseRDBDataProvider provider, string columnName, RDBTableColumnDefinition columnDefinition)
+        {
+            return columnDefinition.DBColumnName != null ? columnDefinition.DBColumnName : columnName;
         }
 
         internal RDBTableColumnDefinition GetColumnDefinitionWithValidate(BaseRDBDataProvider provider, string tableName, string columnName)

@@ -12,12 +12,14 @@ namespace Vanrise.Data.RDB
         T _parent;
         List<RDBSelectColumn> _columns;
         IRDBTableQuerySource _table;
+        string _tableAlias;
 
-        public RDBSelectAggregateContext(T parent, List<RDBSelectColumn> columns, IRDBTableQuerySource table)
+        public RDBSelectAggregateContext(T parent, List<RDBSelectColumn> columns, IRDBTableQuerySource table, string tableAlias)
         {
             _parent = parent;
             _columns = columns;
             _table = table;
+            _tableAlias = tableAlias;
         }
 
         IRDBSelectAggregateContextReady<T> Column(BaseRDBExpression expression, string alias)
@@ -55,19 +57,14 @@ namespace Vanrise.Data.RDB
             return aggregateExpression;
         }
 
-        public IRDBSelectAggregateContextReady<T> Aggregate(RDBNonCountAggregateType aggregateType, IRDBTableQuerySource table, string columnName, string alias)
+        public IRDBSelectAggregateContextReady<T> Aggregate(RDBNonCountAggregateType aggregateType, string tableAlias, string columnName, string alias)
         {
-            return Aggregate(aggregateType, new RDBColumnExpression { Table = table, ColumnName = columnName }, alias);
-        }
-
-        public IRDBSelectAggregateContextReady<T> Aggregate(RDBNonCountAggregateType aggregateType, string tableName, string columnName, string alias)
-        {
-            return Aggregate(aggregateType, new RDBTableDefinitionQuerySource(tableName), columnName, alias);
+            return Aggregate(aggregateType, new RDBColumnExpression { TableAlias = tableAlias, ColumnName = columnName }, alias);
         }
 
         public IRDBSelectAggregateContextReady<T> Aggregate(RDBNonCountAggregateType aggregateType, string columnName, string alias)
         {
-            return Aggregate(aggregateType, _table, columnName, alias);
+            return Aggregate(aggregateType, _tableAlias, columnName, alias);
         }
 
         public IRDBSelectAggregateContextReady<T> Aggregate(RDBNonCountAggregateType aggregateType, string columnName)
@@ -87,9 +84,7 @@ namespace Vanrise.Data.RDB
 
         IRDBSelectAggregateContextReady<T> Aggregate(RDBNonCountAggregateType aggregateType, BaseRDBExpression expression, string alias);
 
-        IRDBSelectAggregateContextReady<T> Aggregate(RDBNonCountAggregateType aggregateType, IRDBTableQuerySource table, string columnName, string alias);
-
-        IRDBSelectAggregateContextReady<T> Aggregate(RDBNonCountAggregateType aggregateType, string tableName, string columnName, string alias);
+        IRDBSelectAggregateContextReady<T> Aggregate(RDBNonCountAggregateType aggregateType, string tableAlias, string columnName, string alias);
 
         IRDBSelectAggregateContextReady<T> Aggregate(RDBNonCountAggregateType aggregateType, string columnName, string alias);
 

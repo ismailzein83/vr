@@ -8,27 +8,24 @@ namespace Vanrise.Data.RDB
 {
     public interface IBaseRDBResolveQueryContext
     {
-        BaseRDBQueryContext QueryContext { get; }
-
         BaseRDBDataProvider DataProvider { get; }
-
-        Dictionary<string, string> TableAliases { get; }
 
         Dictionary<string, Object> ParameterValues { get; }
 
         Dictionary<string, RDBDataType> OutputParameters { get; }
 
+        Dictionary<string, RDBParameter> Parameters { get; }
+
+        RDBParameter GetParameterWithValidate(string parameterName);
+
         int PrmIndex { get; set; }
-
-        int TableAliasIndex { get; set; }
-
-        string GetTableAlias(IRDBTableQuerySource table);
-
-        string GenerateTableAliasIfNotExists(IRDBTableQuerySource table);
 
         void AddParameterValue(string parameterName, Object value);
 
-        string GenerateParameterName();
+        string GenerateUniqueDBParameterName();
+
+
+        void AddParameter(RDBParameter parameter);
 
         void AddOutputParameter(string parameterName, RDBDataType dataType);
     }
@@ -36,39 +33,30 @@ namespace Vanrise.Data.RDB
     public abstract class BaseRDBResolveQueryContext : IBaseRDBResolveQueryContext
     {
         BaseRDBDataProvider _dataProvider;
-        Dictionary<string, string> _tableAliases;
         Dictionary<string, Object> _parameterValues;
         IBaseRDBResolveQueryContext _parentContext;
         Dictionary<string, RDBDataType> _outputParameters;
 
-        public BaseRDBResolveQueryContext(BaseRDBQueryContext queryContext, BaseRDBDataProvider dataProvider, Dictionary<string, Object> parameterValues)
+        public BaseRDBResolveQueryContext(BaseRDBDataProvider dataProvider)
         {
-            this.QueryContext = queryContext;
             _dataProvider = dataProvider;
-            _tableAliases = new Dictionary<string,string>();
             _outputParameters = new Dictionary<string, RDBDataType>();
-            _parameterValues = parameterValues;
+            _parameterValues = new Dictionary<string,object>();
+            this.Parameters = new Dictionary<string, RDBParameter>();
         }
 
-        public BaseRDBResolveQueryContext(IBaseRDBResolveQueryContext parentContext, bool newQueryScope)
-            : this(parentContext.QueryContext, parentContext.DataProvider, parentContext.ParameterValues)
+        public BaseRDBResolveQueryContext(IBaseRDBResolveQueryContext parentContext)
         {
             _parentContext = parentContext;
+            this._dataProvider = parentContext.DataProvider;
             this._outputParameters = parentContext.OutputParameters;
-            if (newQueryScope)
-                this._tableAliases = new Dictionary<string, string>();
-            else
-                this._tableAliases = parentContext.TableAliases;
+            this._parameterValues = parentContext.ParameterValues;
+            this.Parameters = parentContext.Parameters;
         }
 
         public BaseRDBDataProvider DataProvider
         {
             get { return _dataProvider; }
-        }
-
-        public Dictionary<string, string> TableAliases
-        {
-            get { return _tableAliases; }
         }
 
         public Dictionary<string, Object> ParameterValues
@@ -88,28 +76,9 @@ namespace Vanrise.Data.RDB
             }
         }
 
-        public int TableAliasIndex
-        {
-            get { return this._parentContext != null ? this._parentContext.TableAliasIndex : _tableAliasIndex; }
-            set
-            {
-                if (this._parentContext != null)
-                    this._parentContext.TableAliasIndex++;
-                else
-                    _tableAliasIndex++;
-            }
-        }
-
         public Dictionary<string, RDBDataType> OutputParameters
         {
             get { return _outputParameters; }
-        }
-
-        public string GetTableAlias(IRDBTableQuerySource table)
-        {
-            string tableAlias;
-            _tableAliases.TryGetValue(table.GetUniqueName(), out tableAlias);
-            return tableAlias;
         }
 
         public void AddParameterValue(string parameterName, object value)
@@ -121,34 +90,58 @@ namespace Vanrise.Data.RDB
 
         int _prmIndex;
 
-        public string GenerateParameterName()
+        public string GenerateUniqueDBParameterName()
         {
-            return String.Concat(_dataProvider.ParameterNamePrefix, "Prm_", this.PrmIndex++);
+            return this.DataProvider.ConvertToDBParameterName(String.Concat("Prm_", this.PrmIndex++));
         }
 
-        int _tableAliasIndex;
-        public string GenerateTableAliasIfNotExists(IRDBTableQuerySource table)
+        public void AddOutputParameter(string parameterName, RDBDataType dataType)
         {
-            string tableQuerySourceUniqueName = table.GetUniqueName();
-            string tableAlias;
-            if (!_tableAliases.TryGetValue(tableQuerySourceUniqueName, out tableAlias))
-            {
-                tableAlias = string.Concat("Table_", this.TableAliasIndex++);
-                _tableAliases.Add(tableQuerySourceUniqueName, tableAlias);
-            }
-            return tableAlias;
+            _outputParameters.Add(this.DataProvider.ConvertToDBParameterName(parameterName), dataType);
         }
 
-        public BaseRDBQueryContext QueryContext
+
+        public Dictionary<string, RDBParameter> Parameters
         {
             get;
             private set;
         }
 
-
-        public void AddOutputParameter(string parameterName, RDBDataType dataType)
+        public void AddParameter(RDBParameter parameter)
         {
-            _outputParameters.Add(String.Concat(this.DataProvider.ParameterNamePrefix, parameterName), dataType);
+            if (this.Parameters.ContainsKey(parameter.Name))
+                throw new Exception(String.Format("Parameter Name '{0}' already exists", parameter.Name));
+            this.Parameters.Add(parameter.Name, parameter);
         }
+
+
+
+
+        public RDBParameter GetParameterWithValidate(string parameterName)
+        {
+            RDBParameter parameter;
+            if (!this.Parameters.TryGetValue(parameterName, out parameter))
+                throw new Exception(String.Format("Parameter '{0}' not found", parameterName));
+            return parameter;
+        }
+    }
+
+    public enum RDBParameterDirection { Declared = 0, In = 1 }
+
+    public class RDBParameter
+    {
+        public string Name { get; set; }
+
+        public string DBParameterName { get; set; }
+
+        public RDBDataType Type { get; set; }
+
+        public int? Size { get; set; }
+
+        public int? Precision { get; set; }
+
+        public RDBParameterDirection Direction { get; set; }
+
+        public Object Value { get; set; }
     }
 }

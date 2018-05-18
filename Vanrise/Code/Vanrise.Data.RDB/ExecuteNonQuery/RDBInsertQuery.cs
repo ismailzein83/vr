@@ -10,21 +10,24 @@ namespace Vanrise.Data.RDB
     public class RDBInsertQuery<T> : BaseRDBQuery, IInsertQuery<T>, IInsertQueryGenerateIdCalled<T>, IInsertQueryTableDefined<T>, IInsertQueryReady<T>, IInsertQueryColumnsAssigned<T>, IInsertQueryNotExistsConditionDefined<T>
     {
         T _parent;
-        BaseRDBQueryContext _queryContext;
+        RDBQueryBuilderContext _queryBuilderContext;
 
-        public RDBInsertQuery(T parent, BaseRDBQueryContext queryContext)
+        string _notExistConditionTableAlias;
+
+        public RDBInsertQuery(T parent, RDBQueryBuilderContext queryBuilderContext)
         {
             _parent = parent;
-            _queryContext = queryContext;
+            _queryBuilderContext = queryBuilderContext;
         }
 
         public RDBInsertQuery(RDBInsertQuery<T> original)
         {
             this._parent = original._parent;
-            this._queryContext = original._queryContext;
+            this._queryBuilderContext = original._queryBuilderContext.CreateChildContext();
             this.Table = original.Table;
             this.ColumnValues = original.ColumnValues;
             this.NotExistCondition = original.NotExistCondition;
+            this._notExistConditionTableAlias = original._notExistConditionTableAlias;
             this._idOutputParameterName = original._idOutputParameterName;
         }
 
@@ -48,10 +51,11 @@ namespace Vanrise.Data.RDB
             return IntoTable(new RDBTableDefinitionQuerySource(tableName));
         }
 
-        public RDBConditionContext<IInsertQueryNotExistsConditionDefined<T>> IfNotExists()
-            {
-                return new RDBConditionContext<IInsertQueryNotExistsConditionDefined<T>>(this, (condition) => this.NotExistCondition = condition, this.Table);
-            }
+        public RDBConditionContext<IInsertQueryNotExistsConditionDefined<T>> IfNotExists(string tableAlias)
+        {
+            this._notExistConditionTableAlias = tableAlias;
+            return new RDBConditionContext<IInsertQueryNotExistsConditionDefined<T>>(this, (condition) => this.NotExistCondition = condition, this._notExistConditionTableAlias);
+        }
 
         public IInsertQueryGenerateIdCalled<T> GenerateIdAndAssignToParameter(string outputParameterName)
         {
@@ -99,19 +103,48 @@ namespace Vanrise.Data.RDB
             return this.ColumnValue(columnName, new RDBFixedDateTimeExpression { Value = value });
         }
 
+        public IInsertQueryColumnsAssigned<T> ColumnValue(string columnName, Guid value)
+        {
+            return this.ColumnValue(columnName, new RDBFixedGuidExpression { Value = value });
+        }
+
+        public IInsertQueryColumnsAssigned<T> ColumnValue(string columnName, bool value)
+        {
+            return this.ColumnValue(columnName, new RDBFixedBooleanExpression { Value = value });
+        }
+
+        public IInsertQueryColumnsAssigned<T> ColumnValueIf(Func<bool> shouldAddColumnValue, Action<IInsertQueryColumnsAssigned<T>> trueAction, Action<IInsertQueryColumnsAssigned<T>> falseAction)
+        {
+            if (shouldAddColumnValue())
+                trueAction(this);
+            else if (falseAction != null)
+                falseAction(this);
+            return this;
+        }
+
+        public IInsertQueryColumnsAssigned<T> ColumnValueIf(Func<bool> shouldAddColumnValue, Action<IInsertQueryColumnsAssigned<T>> trueAction)
+        {
+            return ColumnValueIf(shouldAddColumnValue, trueAction, null);
+        }
+
+        public IInsertQueryColumnsAssigned<T> ColumnValueIfNotDefaultValue<Q>(Q value, Action<IInsertQueryColumnsAssigned<T>> trueAction)
+        {
+            return ColumnValueIf(() => value != null && !value.Equals(default(Q)), trueAction);
+        }
+
         protected override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
         {
             if (this.NotExistCondition != null)
             {
-                var selectQuery = new RDBSelectQuery<RDBInsertQuery<T>>(this, _queryContext);
-                selectQuery.From(this.Table, 1).Where().Condition(this.NotExistCondition).SelectColumns().Column(new RDBNullExpression(), "nullColumn").EndColumns();
+                var selectQuery = new RDBSelectQuery<RDBInsertQuery<T>>(this, _queryBuilderContext.CreateChildContext());
+                selectQuery.From(this.Table, _notExistConditionTableAlias, 1).Where().Condition(this.NotExistCondition).SelectColumns().Column(new RDBNullExpression(), "nullColumn").EndColumns();
                 var rdbNotExistsCondition = new RDBNotExistsCondition<RDBInsertQuery<T>>()
                 {
                     SelectQuery = selectQuery
                 };
                 var clonedInsertQuery = new RDBInsertQuery<T>(this);
                 clonedInsertQuery.NotExistCondition = null;
-                IRDBQueryReady ifQuery = new RDBIfQuery<RDBInsertQuery<T>>(this, _queryContext)
+                IRDBQueryReady ifQuery = new RDBIfQuery<RDBInsertQuery<T>>(this, _queryBuilderContext.CreateChildContext())
                 {
                     Condition = rdbNotExistsCondition,
                     TrueQuery = clonedInsertQuery
@@ -120,7 +153,7 @@ namespace Vanrise.Data.RDB
             }
             else
             {
-                var resolveInsertQueryContext = new RDBDataProviderResolveInsertQueryContext(this.Table, this.ColumnValues, _idOutputParameterName, context, true);
+                var resolveInsertQueryContext = new RDBDataProviderResolveInsertQueryContext(this.Table, this.ColumnValues, _idOutputParameterName, context, _queryBuilderContext);
                 return context.DataProvider.ResolveInsertQuery(resolveInsertQueryContext);
             }
         }
@@ -201,10 +234,20 @@ namespace Vanrise.Data.RDB
         IInsertQueryColumnsAssigned<T> ColumnValue(string columnName, float value);
 
         IInsertQueryColumnsAssigned<T> ColumnValue(string columnName, DateTime value);
+
+        IInsertQueryColumnsAssigned<T> ColumnValue(string columnName, Guid value);
+
+        IInsertQueryColumnsAssigned<T> ColumnValue(string columnName, bool value);
+
+        IInsertQueryColumnsAssigned<T> ColumnValueIf(Func<bool> shouldAddColumnValue, Action<IInsertQueryColumnsAssigned<T>> trueAction, Action<IInsertQueryColumnsAssigned<T>> falseAction);
+
+        IInsertQueryColumnsAssigned<T> ColumnValueIf(Func<bool> shouldAddColumnValue, Action<IInsertQueryColumnsAssigned<T>> trueAction);
+
+        IInsertQueryColumnsAssigned<T> ColumnValueIfNotDefaultValue<Q>(Q value, Action<IInsertQueryColumnsAssigned<T>> trueAction);
     }
 
     public interface IInsertQueryCanDefineNotExistsCondition<T>
     {
-        RDBConditionContext<IInsertQueryNotExistsConditionDefined<T>> IfNotExists();
+        RDBConditionContext<IInsertQueryNotExistsConditionDefined<T>> IfNotExists(string tableAlias);
     }
 }

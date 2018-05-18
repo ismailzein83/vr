@@ -6,5 +6,5 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Data.RDB
 {
-    public enum RDBDataType { Varchar, NVarchar, Int, BigInt, Decimal, DateTime }
+    public enum RDBDataType { Varchar, NVarchar, Int, BigInt, Decimal, DateTime, UniqueIdentifier, Boolean }
 }

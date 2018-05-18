@@ -11,12 +11,12 @@ namespace Vanrise.Data.RDB
         List<IRDBQueryReady> _queries = new List<IRDBQueryReady>();
 
         T _parent;
-        BaseRDBQueryContext _queryContext;
+        RDBQueryBuilderContext _queryBuilderContext;
 
-        public RDBBatchQuery(T parent, BaseRDBQueryContext queryContext)
+        public RDBBatchQuery(T parent, RDBQueryBuilderContext queryBuilderContext)
         {
             _parent = parent;
-            _queryContext = queryContext;
+            _queryBuilderContext = queryBuilderContext;
         }
 
         protected override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
@@ -24,7 +24,7 @@ namespace Vanrise.Data.RDB
             StringBuilder queryBuilder = new StringBuilder();
             foreach (var subQuery in _queries)
             {
-                var subQueryContext = new RDBQueryGetResolvedQueryContext(context, true);
+                var subQueryContext = new RDBQueryGetResolvedQueryContext(context);
                 RDBResolvedQuery resolvedSubQuery = subQuery.GetResolvedQuery(subQueryContext);
                 queryBuilder.AppendLine(resolvedSubQuery.QueryText);
                 queryBuilder.AppendLine();
@@ -36,19 +36,22 @@ namespace Vanrise.Data.RDB
                 };
         }
 
-        //public IRDBBatchQueryReady AddQuery(IRDBQueryReady query)
-        //{
-        //    this._queries.Add(query);
-        //    return this;
-        //}
-
         RDBQueryContext<IRDBBatchQueryReady<T>> _lastQueryContext;
         public RDBQueryContext<IRDBBatchQueryReady<T>> AddQuery()
         {
             if (_lastQueryContext != null)
                 this._queries.Add(_lastQueryContext.Query);
-            _lastQueryContext = new RDBQueryContext<IRDBBatchQueryReady<T>>(this, _queryContext);
+            _lastQueryContext = new RDBQueryContext<IRDBBatchQueryReady<T>>(this, _queryBuilderContext.CreateChildContext());
             return _lastQueryContext;
+        }
+
+        public IRDBBatchQueryReady<T> Foreach<Q>(IEnumerable<Q> items, Action<Q, IRDBBatchQuery<T>> action)
+        {
+            foreach(var item in items)
+            {
+                action(item, this);
+            }
+            return this;
         }
 
         public T EndBatchQuery()
@@ -62,11 +65,15 @@ namespace Vanrise.Data.RDB
     public interface IRDBBatchQuery<T>
     {
         RDBQueryContext<IRDBBatchQueryReady<T>> AddQuery();
+
+        IRDBBatchQueryReady<T> Foreach<Q>(IEnumerable<Q> items, Action<Q, IRDBBatchQuery<T>> action);
     }
 
     public interface IRDBBatchQueryReady<T>
     {
         RDBQueryContext<IRDBBatchQueryReady<T>> AddQuery();
+
+        IRDBBatchQueryReady<T> Foreach<Q>(IEnumerable<Q> items, Action<Q, IRDBBatchQuery<T>> action);
 
         T EndBatchQuery();
     }
