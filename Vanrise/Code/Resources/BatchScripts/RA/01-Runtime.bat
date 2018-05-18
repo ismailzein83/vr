@@ -13,5 +13,6 @@ xcopy "C:\TFS\Retail\Code\Retail.Runtime\App.config.RA.exclude" /y /v /z /i /Q /
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.dll" /y /v /z /i /Q /R		"\\192.168.110.185\Fixes\WebSite\RA\Runtime\%YYYYMMDD%\"
 xcopy "C:\TFS\Vanrise\Code\Resources\DLLs\Aspose.Cells.lic" /y /v /z /i /Q /R		"\\192.168.110.185\Fixes\WebSite\RA\Runtime\%YYYYMMDD%\"
 
-rename "\\192.168.110.185\Fixes\WebSite\RA\Runtime\%YYYYMMDD%\App.config.RA.exclude" "Retail.Runtime.exe.config"
+rename "\\192.168.110.185\Fixes\WebSite\RA\Runtime\%YYYYMMDD%\App.config.RA.exclude" "RevenueAssurance.Runtime.exe.config"
+rename "\\192.168.110.185\Fixes\WebSite\RA\Runtime\%YYYYMMDD%\Retail.Runtime.exe" "RevenueAssurance.Runtime.exe"
 del /s /q /f "\\192.168.110.185\Fixes\WebSite\RA\Runtime\%YYYYMMDD%\*.pdb"
