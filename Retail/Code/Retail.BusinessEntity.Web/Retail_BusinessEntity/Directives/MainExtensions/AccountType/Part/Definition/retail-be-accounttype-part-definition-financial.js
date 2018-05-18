@@ -31,12 +31,15 @@ app.directive('retailBeAccounttypePartDefinitionFinancial', [function () {
             var api = {};
 
             api.load = function (payload) {
-                
+                if (payload != undefined) {
+                    $scope.scopeModel.hideProductSelector = payload.partDefinitionSettings != undefined && payload.partDefinitionSettings.HideProductSelector || false;
+                }
             };
 
             api.getData = function () {
                 return {
-                    $type: 'Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartFinancialDefinition,Retail.BusinessEntity.MainExtensions'
+                    $type: 'Retail.BusinessEntity.MainExtensions.AccountParts.AccountPartFinancialDefinition,Retail.BusinessEntity.MainExtensions',
+                    HideProductSelector: $scope.scopeModel.hideProductSelector
                 };
             };
 

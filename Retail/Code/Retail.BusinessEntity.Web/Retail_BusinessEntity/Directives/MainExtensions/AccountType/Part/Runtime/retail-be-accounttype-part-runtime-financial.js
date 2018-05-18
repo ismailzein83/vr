@@ -54,6 +54,10 @@ app.directive('retailBeAccounttypePartRuntimeFinancial', ["UtilsService", "VRUIU
                         accountBEDefinitionId = payload.accountBEDefinitionId;
                         accountId = payload.accountId;
                         partSettings = payload.partSettings;
+
+                        if (payload.partDefinition != undefined && payload.partDefinition.Settings != undefined) {
+                            $scope.scopeModel.hideProductSelector = payload.partDefinition.Settings.HideProductSelector;
+                        }
                     }
 
                     //Loading Currency Selector

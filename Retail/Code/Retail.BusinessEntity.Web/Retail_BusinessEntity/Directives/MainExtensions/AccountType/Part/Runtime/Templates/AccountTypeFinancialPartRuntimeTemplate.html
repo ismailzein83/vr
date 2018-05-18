@@ -5,9 +5,11 @@
                                      selectedvalues="scopeModel.currency" 
                                      normal-col-num="4" isrequired="true">
         </vr-common-currency-selector>
-        <retail-be-product-selector on-ready="scopeModel.onProductDirectiveReady"
-                                    normal-col-num="4"
-                                    isrequired="true">
-        </retail-be-product-selector>
+        <span ng-show="!scopeModel.hideProductSelector">
+            <retail-be-product-selector on-ready="scopeModel.onProductDirectiveReady"
+                                        normal-col-num="4"
+                                        isrequired="!scopeModel.hideProductSelector">
+            </retail-be-product-selector>
+        </span>
     </vr-row>
 </vr-tab>

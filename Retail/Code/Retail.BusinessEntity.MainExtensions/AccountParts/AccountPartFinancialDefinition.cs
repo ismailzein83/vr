@@ -15,6 +15,8 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
     {
         public override Guid ConfigId { get { return new Guid("ba425fa1-13ca-4f44-883a-2a12b7e3f988"); } }
 
+        public bool HideProductSelector { get; set; }
+
         static CurrencyManager s_currencyManager = new CurrencyManager();
         static ProductManager s_productManager = new ProductManager();
 
@@ -45,7 +47,7 @@ namespace Retail.BusinessEntity.MainExtensions.AccountParts
                 context.ErrorMessage = String.Format("Currency '{0}' not found", part.CurrencyId);
                 return false;
             }
-            if (s_productManager.GetProduct(part.ProductId) == null)
+            if (!this.HideProductSelector && s_productManager.GetProduct(part.ProductId) == null)
             {
                 context.ErrorMessage = String.Format("Product '{0}' not found", part.ProductId);
                 return false;
