@@ -105,6 +105,7 @@
     <Compile Include="Data\IRouteCaseDataManager.cs" />
     <Compile Include="Data\IRouteDataManager.cs" />
     <Compile Include="Entities\CarrierMapping.cs" />
+    <Compile Include="Entities\EricssonSwitchRouteSynchronizerSettings.cs" />
     <Compile Include="Entities\EricssonCommands.cs" />
     <Compile Include="Entities\Context\CustomerMappingContext.cs" />
     <Compile Include="Entities\Enums.cs" />
@@ -134,6 +135,10 @@
     <ProjectReference Include="..\TOne.WhS.BusinessEntity.Entities\TOne.WhS.BusinessEntity.Entities.csproj">
       <Project>{0923754d-484c-48f7-9284-be9b6b9d5449}</Project>
       <Name>TOne.WhS.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TOne.WhS.RouteSync.Business\TOne.WhS.RouteSync.Business.csproj">
+      <Project>{31466bbd-3579-4033-b991-12d044564a32}</Project>
+      <Name>TOne.WhS.RouteSync.Business</Name>
     </ProjectReference>
     <ProjectReference Include="..\TOne.WhS.RouteSync.Entities\TOne.WhS.RouteSync.Entities.csproj">
       <Project>{36ea3b9c-5ae0-4fe5-8ec2-8bfd1655776b}</Project>

@@ -9,10 +9,12 @@ namespace TOne.WhS.RouteSync.Ericsson.Data
 	{
 		string SwitchId { get; set; }
 		void Initialize(ICustomerMappingInitializeContext context);
-		void Swap(ICustomerMappingFinalizeContext context);
 		void Finalize(ICustomerMappingFinalizeContext context);
 		void ApplyCustomerMappingForDB(object preparedCustomerMapping);
 		void CompareTables(ICustomerMappingTablesContext context);
+		void RemoveCutomerMappingsFromTempTable(IEnumerable<string> failedRecordsBO);
+		void UpdateCustomerMappingsInTempTable(IEnumerable<CustomerMapping> customerMappings);
+		void InsertCutomerMappingsToTempTable(IEnumerable<CustomerMapping> customerMappings);
 	}
 
 	public interface ICustomerMappingSucceededDataManager : IDataManager, IBulkApplyDataManager<CustomerMappingWithActionType>

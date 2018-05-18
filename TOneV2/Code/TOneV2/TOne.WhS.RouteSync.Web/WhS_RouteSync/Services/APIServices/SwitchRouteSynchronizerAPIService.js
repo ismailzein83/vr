@@ -8,10 +8,14 @@
 
         function GetSwitchRouteSynchronizerExtensionConfigs() {
             return BaseAPIService.get(UtilsService.getServiceURL(WhS_RouteSync_ModuleConfig.moduleName, controllerName, "GetSwitchRouteSynchronizerExtensionConfigs"));
-        }
+		}
+
+		function GetSwitchRouteSynchronizerHaveSettingsExtensionConfigs() {
+			return BaseAPIService.get(UtilsService.getServiceURL(WhS_RouteSync_ModuleConfig.moduleName, controllerName, "GetSwitchRouteSynchronizerHaveSettingsExtensionConfigs"));
+		}
 
         return ({
-            GetSwitchRouteSynchronizerExtensionConfigs: GetSwitchRouteSynchronizerExtensionConfigs
+			GetSwitchRouteSynchronizerHaveSettingsExtensionConfigs: GetSwitchRouteSynchronizerHaveSettingsExtensionConfigs
         });
     }
 

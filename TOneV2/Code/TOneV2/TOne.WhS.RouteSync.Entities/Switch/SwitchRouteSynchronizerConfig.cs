@@ -12,5 +12,7 @@ namespace TOne.WhS.RouteSync.Entities
         public const string EXTENSION_TYPE = "WhS_RouteSync_SwitchRouteSynchronizer";
 
         public string Editor { get; set; }
-    }
+
+		public string SettingsEditor { get; set; }
+	}
 }

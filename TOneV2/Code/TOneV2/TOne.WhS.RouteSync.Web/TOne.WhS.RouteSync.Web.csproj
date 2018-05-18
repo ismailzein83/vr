@@ -25,6 +25,8 @@
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
     <WebGreaseLibPath>..\packages\WebGrease.1.5.2\lib</WebGreaseLibPath>
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -157,6 +159,7 @@
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSwitch\Communication\Templates\EricssonSwitchCommunicationTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\CarrierAccountMapping\Templates\CarrierAccountMappingEricssonGridTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\Templates\EricssonCustomerMappingTemplate.html" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\Templates\EricssonRouteSyncSetting.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\Templates\EricssonSupplierMappingTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\Templates\EricssonSWSyncTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\Templates\EricssonTrunkTrunkGroupTemplate.html" />
@@ -165,6 +168,7 @@
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericsson-suppliermapping.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericsson-swsync.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericsson-trunktrunkgroup.js" />
+    <Content Include="WhS_RouteSync\Directives\MainExtensions\EricssonSynchronizer\whs-routesync-ericssonsettings-editor.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\FreeRadius\FreeRadiusDataManagers\Templates\FreeRadiusPostgresDataManagerTemplate.html" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\FreeRadius\FreeRadiusDataManagers\whs-routesync-freeradiuspostgres-datamanager.js" />
     <Content Include="WhS_RouteSync\Directives\MainExtensions\FreeRadius\FreeRadiusSynchronizer\Templates\FreeRadiusSWSyncTemplate.html" />

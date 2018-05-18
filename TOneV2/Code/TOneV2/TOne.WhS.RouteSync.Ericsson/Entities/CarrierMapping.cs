@@ -38,6 +38,8 @@ namespace TOne.WhS.RouteSync.Ericsson
 		public string BO { get; set; }
 
 		public string CustomerMappingAsString { get; set; }
+
+		public string CustomerMappingOldValueAsString { get; set; }
 	}
 
 	public class CustomerMappingByCompare

@@ -79,6 +79,8 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 
 		public void UpdateSyncedRouteCases(IEnumerable<int> rCNumbers)
 		{
+			if (rCNumbers == null || !rCNumbers.Any())
+				return;
 			string filter = string.Format(" Where RCNumber in ({0})", string.Join(",", rCNumbers));
 			string query = string.Format(query_UpdateSyncedRouteCases.Replace("#FILTER#", filter), SwitchId);
 			ExecuteNonQueryText(query, null);
@@ -131,7 +133,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 		                                            begin
 														INSERT INTO  WhS_RouteSync_Ericsson_{0}.[RouteCase] (RCNumber, Options) 
 														VALUES ({1}, '{2}');
-														END";
+													END";
 
 		const string query_UpdateSyncedRouteCases = @"UPDATE [WhS_RouteSync_Ericsson_{0}].[RouteCase]
 														SET [Synced] = 1

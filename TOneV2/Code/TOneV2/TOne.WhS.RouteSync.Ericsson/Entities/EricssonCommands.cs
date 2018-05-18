@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TOne.WhS.RouteSync.Ericsson.Entities
 {
@@ -77,12 +74,13 @@ namespace TOne.WhS.RouteSync.Ericsson.Entities
 	public class CustomerMappingWithCommands
 	{
 		public CustomerMappingWithActionType CustomerMappingWithActionType { get; set; }
-		public List<string> Commands { get; set; }
+		public List<string> OBACommands { get; set; }
+		public Dictionary<Guid, string> TrunkCommandsByTrunkId { get; set; }
 	}
-
 	public class CustomerMappingWithActionType
 	{
-		public CustomerMappingSerialized CustomerMappingSerialized { get; set; }
+		public CustomerMapping CustomerMapping { get; set; }
+		public CustomerMapping CustomerMappingOldValue { get; set; }
 		public CustomerMappingActionType ActionType { get; set; }
 	}
 	#endregion

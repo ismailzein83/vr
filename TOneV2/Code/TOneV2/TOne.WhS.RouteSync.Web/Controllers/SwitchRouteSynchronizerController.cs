@@ -19,5 +19,13 @@ namespace TOne.WhS.RouteSync.Web.Controllers
             SwitchRouteSynchronizerManager manager = new SwitchRouteSynchronizerManager();
             return manager.GetSwitchRouteSynchronizerExtensionConfigs();
         }
-    }
+
+		[HttpGet]
+		[Route("GetSwitchRouteSynchronizerHaveSettingsExtensionConfigs")]
+		public IEnumerable<SwitchRouteSynchronizerConfig> GetSwitchRouteSynchronizerHaveSettingsExtensionConfigs()
+		{
+			SwitchRouteSynchronizerManager manager = new SwitchRouteSynchronizerManager();
+			return manager.GetSwitchRouteSynchronizerHaveSettingsExtensionConfigs();
+		}
+	}
 }

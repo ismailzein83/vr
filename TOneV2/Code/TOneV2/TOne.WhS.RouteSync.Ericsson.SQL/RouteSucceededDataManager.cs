@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Data;
 using Vanrise.Data;
 using Vanrise.Data.SQL;
 using TOne.WhS.RouteSync.Ericsson.Data;
+using TOne.WhS.RouteSync.Ericsson.Entities;
 
 namespace TOne.WhS.RouteSync.Ericsson.SQL
 {
@@ -16,6 +18,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 		readonly string[] columns = { "BO", "Code", "RCNumber" };
 		public string SwitchId { get; set; }
 		public string RouteSucceededTableName { get; set; }
+		private string BCPTableName;
 		public RouteSucceededDataManager()
 			: base(GetConnectionStringName("TOneWhS_RouteSync_DBConnStringKey", "RouteSyncDBConnString"))
 		{ }
@@ -27,7 +30,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 			streamForBulkInsert.Close();
 			return new StreamBulkInsertInfo
 			{
-				TableName = string.Format("[WhS_RouteSync_Ericsson_{0}].[{1}]", SwitchId, RouteSucceededTableName),
+				TableName = string.Format("[WhS_RouteSync_Ericsson_{0}].[{1}]", SwitchId, BCPTableName),
 				Stream = streamForBulkInsert,
 				TabLock = true,
 				KeepIdentity = false,
@@ -52,26 +55,43 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 			InsertBulkToTable(preparedRoute as BaseBulkInsertInfo);
 		}
 
-		public void SaveRoutesSucceededToDB(IEnumerable<EricssonConvertedRoute> routes, RouteActionType actionType)
+		public void SaveRoutesSucceededToDB(Dictionary<string, List<EricssonRouteWithCommands>> routesWithCommandsByBO)
 		{
-			switch (actionType)
+			Object dbApplyAddStream = InitialiazeStreamForDBApply();
+			Object dbApplyUpdateStream = InitialiazeStreamForDBApply();
+			Object dbApplyDeleteStream = InitialiazeStreamForDBApply();
+
+			foreach (var routeKVP in routesWithCommandsByBO)
 			{
-				case RouteActionType.Add:
-					RouteSucceededTableName = RouteAddedTableName;
-					break;
-				case RouteActionType.Update:
-					RouteSucceededTableName = RouteUpdatedTableName;
-					break;
-				case RouteActionType.Delete:
-					RouteSucceededTableName = RouteDeletedTableName;
-					break;
-				default: break;
+				foreach (var route in routeKVP.Value)
+				{
+					switch (route.ActionType)
+					{
+						case RouteActionType.Add:
+							WriteRecordToStream(route.Route, dbApplyAddStream);
+							break;
+						case RouteActionType.Update:
+							WriteRecordToStream(route.Route, dbApplyUpdateStream);
+							break;
+						case RouteActionType.Delete:
+							WriteRecordToStream(route.Route, dbApplyDeleteStream);
+							break;
+						default: break;
+					}
+				}
 			}
-			Object dbApplyStream = InitialiazeStreamForDBApply();
-			foreach (var route in routes)
-				WriteRecordToStream(route, dbApplyStream);
-			Object preparedInvalidCDRs = FinishDBApplyStream(dbApplyStream);
-			ApplyRoutesSucceededForDB(preparedInvalidCDRs);
+
+			BCPTableName = RouteAddedTableName;
+			Object preparedAddRoutes = FinishDBApplyStream(dbApplyAddStream);
+			ApplyRoutesSucceededForDB(preparedAddRoutes);
+
+			BCPTableName = RouteUpdatedTableName;
+			Object preparedUpdatedRoutes = FinishDBApplyStream(dbApplyUpdateStream);
+			ApplyRoutesSucceededForDB(preparedUpdatedRoutes);
+
+			BCPTableName = RouteDeletedTableName;
+			Object preparedDeletedRoutes = FinishDBApplyStream(dbApplyDeleteStream);
+			ApplyRoutesSucceededForDB(preparedDeletedRoutes);
 		}
 	}
 }

@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using TOne.WhS.RouteSync.Ericsson.Data;
 using Vanrise.Data.SQL;
 using Vanrise.Common;
+using TOne.WhS.RouteSync.Ericsson.Entities;
+using System.Data.SqlClient;
 
 namespace TOne.WhS.RouteSync.Ericsson.SQL
 {
@@ -41,20 +43,14 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 			ExecuteNonQueryText(createSucceedTableQuery, null);
 		}
 
-		public void Swap(ICustomerMappingFinalizeContext context)
+		public void Finalize(ICustomerMappingFinalizeContext context)
 		{
 			string query = string.Format(query_SwapTables, SwitchId, CustomerMappingTableName, CustomerMappingTempTableName);
 			ExecuteNonQueryText(query, null);
+			string deleteSucceededTableQuery = string.Format(query_DeleteCustomerMappingTable, SwitchId, CustomerMappingSucceededTableName);
+			ExecuteNonQueryText(deleteSucceededTableQuery, null);
 		}
 
-		public void Finalize(ICustomerMappingFinalizeContext context)
-		{
-			string syncWithSucceededTableQuery = string.Format(query_SyncWithCustomerMappingSucceededTable, SwitchId, CustomerMappingTableName, CustomerMappingSucceededTableName, Guid.NewGuid());
-			ExecuteNonQueryText(syncWithSucceededTableQuery, null);
-
-			string query = string.Format(query_DeleteCustomerMappingTable, SwitchId, CustomerMappingTempTableName);
-			ExecuteNonQueryText(query, null);
-		}
 		public void CompareTables(ICustomerMappingTablesContext context)
 		{
 			var differences = new Dictionary<string, List<CustomerMappingByCompare>>();
@@ -88,9 +84,18 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 					}
 					else
 					{
-						var customerMappingToUpdate = customerMappingDifferences.FindRecord(item => (string.Compare(item.TableName, CustomerMappingTempTableName, true) == 0));
-						if (customerMappingToUpdate != null)
-							customerMappingsToUpdate.Add(customerMappingToUpdate.CustomerMapping);
+						var customerMapping = customerMappingDifferences.FindRecord(item => (string.Compare(item.TableName, CustomerMappingTempTableName, true) == 0));
+						var customerMappingOldValue = customerMappingDifferences.FindRecord(item => (string.Compare(item.TableName, CustomerMappingTableName, true) == 0));
+						var customerMappingToUpdate = new CustomerMappingSerialized();
+						if (customerMapping != null)
+						{
+							customerMappingToUpdate.BO = customerMapping.CustomerMapping.BO;
+							customerMappingToUpdate.CustomerMappingAsString = customerMapping.CustomerMapping.CustomerMappingAsString;
+							if (customerMappingOldValue != null)
+								customerMappingToUpdate.CustomerMappingOldValueAsString = customerMappingOldValue.CustomerMapping.CustomerMappingAsString;
+
+							customerMappingsToUpdate.Add(customerMappingToUpdate);
+						}
 					}
 				}
 
@@ -105,6 +110,29 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 			}
 		}
 
+		#region handleFailedRecords
+		public void RemoveCutomerMappingsFromTempTable(IEnumerable<string> failedRecordsBO)
+		{
+			if (failedRecordsBO == null || !failedRecordsBO.Any())
+				return;
+			string filter = string.Format(" Where BO in ({0})", string.Join(",", failedRecordsBO));
+			string query = string.Format(query_RemoveFailedRecords.Replace("#FILTER#", filter), SwitchId, CustomerMappingTableName, CustomerMappingTempTableName);
+			ExecuteNonQueryText(query, null);
+		}
+
+		public void UpdateCustomerMappingsInTempTable(IEnumerable<CustomerMapping> customerMappingsToUpdate)
+		{
+			DataTable dtCustomerMappings = BuildCustomerMappingsTable(customerMappingsToUpdate);
+			ExecuteNonQueryText(query_UpdateRecordsWithFailedTrunk, (cmd) =>
+			{
+				var dtPrm = new SqlParameter("@UpdatedCustomerMappings", SqlDbType.Structured);
+				dtPrm.TypeName = "CustomerRouteType";
+				dtPrm.Value = dtCustomerMappings;
+				cmd.Parameters.Add(dtPrm);
+			});
+		}
+
+		#endregion
 
 		#region BCP
 		public object InitialiazeStreamForDBApply()
@@ -137,6 +165,21 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 				ColumnNames = columns
 			};
 		}
+
+		public void InsertCutomerMappingsToTempTable(IEnumerable<CustomerMapping> customerMappings)
+		{
+			if (customerMappings != null && customerMappings.Any())
+			{
+				object dbApplyStream = InitialiazeStreamForDBApply();
+				foreach (var customerMapping in customerMappings)
+				{
+					CustomerMappingSerialized customerMappingSerialized = new CustomerMappingSerialized() { BO = customerMapping.BO, CustomerMappingAsString = Helper.SerializeCustomerMapping(customerMapping) };
+					WriteRecordToStream(customerMappingSerialized, dbApplyStream);
+				}
+				object obj = FinishDBApplyStream(dbApplyStream);
+				ApplyCustomerMappingForDB(obj);
+			}
+		}
 		#endregion
 
 		#region Mappers
@@ -150,6 +193,39 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 		}
 		#endregion
 
+		private DataTable BuildCustomerMappingsUpdateTable(IEnumerable<CustomerMappingWithActionType> customerMappingsToUpdate)
+		{
+			DataTable dtCustomerMappings = new DataTable();
+			dtCustomerMappings.Columns.Add("BO", typeof(string));
+			dtCustomerMappings.Columns.Add("CustomerMapping", typeof(string));
+			dtCustomerMappings.BeginLoadData();
+			foreach (var customerMappingToUpdate in customerMappingsToUpdate)
+			{
+				DataRow dr = dtCustomerMappings.NewRow();
+				dr["BO"] = customerMappingToUpdate.CustomerMapping.BO;
+				dr["CustomerMapping"] = Helper.SerializeCustomerMapping(customerMappingToUpdate.CustomerMappingOldValue);
+				dtCustomerMappings.Rows.Add(dr);
+			}
+			dtCustomerMappings.EndLoadData();
+			return dtCustomerMappings;
+		}
+
+		private DataTable BuildCustomerMappingsTable(IEnumerable<CustomerMapping> customerMappingsToUpdate)
+		{
+			DataTable dtCustomerMappings = new DataTable();
+			dtCustomerMappings.Columns.Add("BO", typeof(string));
+			dtCustomerMappings.Columns.Add("CustomerMapping", typeof(string));
+			dtCustomerMappings.BeginLoadData();
+			foreach (var customerMappingToUpdate in customerMappingsToUpdate)
+			{
+				DataRow dr = dtCustomerMappings.NewRow();
+				dr["BO"] = customerMappingToUpdate.BO;
+				dr["CustomerMapping"] = Helper.SerializeCustomerMapping(customerMappingToUpdate);
+				dtCustomerMappings.Rows.Add(dr);
+			}
+			dtCustomerMappings.EndLoadData();
+			return dtCustomerMappings;
+		}
 		#region queries
 
 		const string query_CreateCustomerMappingTempTable = @"IF  EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{1}') AND s.type in (N'U'))
@@ -169,7 +245,6 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 
 		const string query_CreateCustomerMappingTable = @"IF  NOT EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{1}') AND s.type in (N'U'))
                                                           BEGIN
-                                                             
                                                           CREATE TABLE [WhS_RouteSync_Ericsson_{0}].[{1}](
                                                                 BO varchar(255) NOT NULL,
 	                                                            CustomerMapping varchar(max) NOT NULL,
@@ -198,10 +273,14 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 
 		const string query_SwapTables = @"IF  EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{1}') AND s.type in (N'U'))
                                                           begin
-                                                              DROP TABLE WhS_RouteSync_Ericsson_{0}.{1}
-                                                          end
+																IF  EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{1}_old') AND s.type in (N'U'))
+																	begin
+																		DROP TABLE WhS_RouteSync_Ericsson_{0}.{1}_old
+																	end
+																EXEC sp_rename '[WhS_RouteSync_Ericsson_{0}].[{1}]', '[WhS_RouteSync_Ericsson_{0}].[{1}]_old';
+														  end
 
-	                                        EXEC sp_rename '[WhS_RouteSync_Ericsson_{0}].[{2}]', '{1}';";
+	                                        EXEC sp_rename '[WhS_RouteSync_Ericsson_{0}].[{2}]', '[WhS_RouteSync_Ericsson_{0}].[{1}]';";
 
 		const string query_SyncWithCustomerMappingSucceededTable = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{2}') AND s.type in (N'U'))
                                                     BEGIN
@@ -240,6 +319,45 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
                                                     BEGIN
                                                         DROP TABLE WhS_RouteSync_Ericsson_{0}.{1}
                                                     END";
+
+		const string query_RemoveFailedRecords = @"DELETE FROM [WhS_RouteSync_Ericsson_{0}].[{1}]
+														#FILTER#";
+
+		const string query_CopyRecordsFromBaseToTempTable = @"INSERT INTO  WhS_RouteSync_Ericsson_{0}.{2} (BO, CustomerMapping)
+														SELECT BO, CustomerMapping FROM WhS_RouteSync_Ericsson_{0}.{1}
+														#FILTER#";
+
+		const string query_UpdateTempTableFromBaseTable = @"MERGE INTO WhS_RouteSync_Ericsson_{0}.{2}  as cm 
+														USING WhS_RouteSync_Ericsson_{0}.{1} as cms
+														ON cm.BO = cms.BO and cms.Action=1
+														WHEN MATCHED AND cm.BO IN #Filter# THEN
+														UPDATE 
+														SET cm.CustomerMapping = cms.CustomerMapping;";
+
+		const string query_UpdateTempTableFromBaseTable1 = @"UPDATE tempTable set tempTable.CustomerMapping = baseTable.CustomerMapping 
+														   FROM tempTable JOIN baseTable on tempTable.BO = tempTable.BO 
+														   #FILTER#";
+
+		const string query_UpdateRecordsWithFailedTrunk = @"UPDATE  [WhS_RouteSync_Ericsson_{0}].[{1}] set [WhS_RouteSync_Ericsson_{0}].[{1}].CustomerMapping = updatedCustomerMappings.CustomerMapping
+                                                    FROM [WhS_RouteSync_Ericsson_{0}].[{1}]
+                                                    JOIN @UpdatedCustomerMappings updatedCustomerMappings on updatedCustomerMappings.BO = [WhS_RouteSync_Ericsson_{0}].[{1}].BO";
+
+		const string query_EricssonCustomerMappingTableType = @"IF NOT EXISTS (SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'LongIDType')
+                                         CREATE TYPE [EricssonCustomerMappingTableType] AS TABLE(
+	                                     [BO] [varchar](255) NOT NULL,
+	                                     [CustomerMapping] [varchar](max) NOT NULL,
+	                                     PRIMARY KEY CLUSTERED 
+                                         (
+                                             [BO] ASC
+                                         )WITH (IGNORE_DUP_KEY = OFF)
+                                         )";
+
+		const string query_UpdateTempTable = @"UPDATE  tempCustomerMapping
+														set tempCustomerMapping.CustomerMapping = customerMapping.CustomerMapping
+                                                    FROM [WhS_RouteSync_Ericsson_{0}].[{1}] as tempRoutes
+                                                    JOIN @UpdatedCustomerMapping as updatedCustomerMapping on tempCustomerMapping.BO = updatedCustomerMapping.BO
+													JOIN [WhS_RouteSync_Ericsson_{0}].[{2}] as customerMapping on customerMapping.BO = updatedCustomerMapping.BO";
+
 		#endregion
 	}
 }

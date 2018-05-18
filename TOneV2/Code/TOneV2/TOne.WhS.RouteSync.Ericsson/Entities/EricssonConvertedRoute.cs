@@ -21,8 +21,8 @@ namespace TOne.WhS.RouteSync.Ericsson
 		public string BO { get; set; }
 		public string Code { get; set; }
 		public int RCNumber { get; set; }
+		public EricssonConvertedRoute OldValue { get; set; }
 	}
-
 
 	public class EricssonConvertedRouteDifferences
 	{
@@ -83,5 +83,22 @@ namespace TOne.WhS.RouteSync.Ericsson
 		public string D { get; set; }
 		public string CC { get; set; }
 		public string Prefix { get; set; }
+	}
+	public class EricssonRouteProperties
+	{
+		public string IBNT { get; set; }
+		public string NBNT { get; set; }
+		public string IOBA { get; set; }
+		public string NOBA { get; set; }
+		public string M { get; set; }
+		public string CC { get; set; }
+		public string CCL { get; set; }
+		public string L { get; set; }
+		public string D { get; set; }
+		public EricssonConvertedRouteType Type { get; set; }
+		public string NationalM { get; set; }
+		public string FBO { get; set; }
+		public bool IsOverride { get; set; }
+		public bool IsInterconnectOverride { get; set; }
 	}
 }

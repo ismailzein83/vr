@@ -1,11 +1,13 @@
 ﻿using System;
 using Vanrise.Data.SQL;
+using System.Linq;
 using TOne.WhS.RouteSync.Entities;
 using TOne.WhS.RouteSync.Ericsson.Data;
 using TOne.WhS.RouteSync.Ericsson.Entities;
 using System.Data;
 using System.Collections.Generic;
 using Vanrise.Common;
+using System.Data.SqlClient;
 
 namespace TOne.WhS.RouteSync.Ericsson.SQL
 {
@@ -59,26 +61,16 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 			#endregion
 		}
 
-		public void Swap(IRouteFinalizeContext context)
+		public void Finalize(IRouteFinalizeContext context)
 		{
 			string query = string.Format(query_SwapTables, SwitchId, RouteTableName, RouteTempTableName);
 			ExecuteNonQueryText(query, null);
-		}
-
-		public void Finalize(IRouteFinalizeContext context)
-		{
-			string syncWithDeletedDataQuery = string.Format(query_SyncWithRouteDeletedTable, SwitchId, RouteTableName, RouteDeletedTableName);
-			ExecuteNonQueryText(syncWithDeletedDataQuery, null);
-
-			string syncWithUpdatedDataQuery = string.Format(query_SyncWithRouteUpdatedTable, SwitchId, RouteTableName, RouteUpdatedTableName);
-			ExecuteNonQueryText(syncWithUpdatedDataQuery, null);
-
-			string syncWithAddedDataQuery = string.Format(query_SyncWithRouteAddedTable, SwitchId, RouteTableName, RouteAddedTableName);
-			ExecuteNonQueryText(syncWithAddedDataQuery, null);
-
-			string query = string.Format(query_DeleteRouteTable, SwitchId, RouteTempTableName);
-			ExecuteNonQueryText(query, null);
-
+			string deleteAddedTabeQuery = string.Format(query_DeleteRouteTable, SwitchId, RouteAddedTableName);
+			ExecuteNonQueryText(deleteAddedTabeQuery, null);
+			string deleteUpdatedTabeQuery = string.Format(query_DeleteRouteTable, SwitchId, RouteUpdatedTableName);
+			ExecuteNonQueryText(deleteUpdatedTabeQuery, null);
+			string deleteDeletedTabeQuery = string.Format(query_DeleteRouteTable, SwitchId, RouteDeletedTableName);
+			ExecuteNonQueryText(deleteDeletedTabeQuery, null);
 		}
 
 		public void CompareTables(IRouteCompareTablesContext context)
@@ -115,13 +107,18 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 					}
 					else //routeDifferences.Count = 2
 					{
-						foreach (var routeDifference in routeDifferences)
+						var route = routeDifferences.FindRecord(item => (string.Compare(item.TableName, RouteTempTableName, true) == 0));
+						var routeOldValue = routeDifferences.FindRecord(item => (string.Compare(item.TableName, RouteTableName, true) == 0));
+
+						if (route != null)
 						{
-							if (routeDifference.TableName == RouteTempTableName)
+							difference.RoutesToUpdate.Add(new EricssonConvertedRoute()
 							{
-								difference.RoutesToUpdate.Add(routeDifference.EricssonConvertedRoute);
-								continue;
-							}
+								BO = route.EricssonConvertedRoute.BO,
+								Code = route.EricssonConvertedRoute.Code,
+								RCNumber = route.EricssonConvertedRoute.RCNumber,
+								OldValue = (routeOldValue != null) ? routeOldValue.EricssonConvertedRoute : null,
+							});
 						}
 					}
 				}
@@ -158,6 +155,76 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 		public void ApplyRouteForDB(object preparedRoute)
 		{
 			InsertBulkToTable(preparedRoute as BaseBulkInsertInfo);
+		}
+
+		public void InsertRoutesToTempTable(IEnumerable<EricssonConvertedRoute> routes)
+		{
+			if (routes != null && routes.Any())
+			{
+				object dbApplyStream = InitialiazeStreamForDBApply();
+				foreach (var route in routes)
+				{
+					WriteRecordToStream(route, dbApplyStream);
+				}
+				object obj = FinishDBApplyStream(dbApplyStream);
+				ApplyRouteForDB(obj);
+			}
+		}
+
+		public void RemoveRoutesFromTempTable(IEnumerable<EricssonConvertedRoute> routes)
+		{
+			ExecuteNonQueryText(query_EricssonRouteTableType, null);
+			DataTable dtRoutes = BuildRouteTable(routes);
+			string query = string.Format(query_UpdateTempTable, SwitchId, RouteTempTableName, RouteTableName);
+			ExecuteNonQueryText(query, (cmd) =>
+			{
+				var dtPrm = new SqlParameter("@Routes", SqlDbType.Structured);
+				dtPrm.TypeName = "EricssonConvertedRouteType";
+				dtPrm.Value = dtRoutes;
+				cmd.Parameters.Add(dtPrm);
+			});
+		}
+
+		public void UpdateRoutesInTempTable(IEnumerable<EricssonConvertedRoute> routes)
+		{
+			ExecuteNonQueryText(query_EricssonRouteTableType, null);
+			DataTable dtRoutes = BuildRouteTable(routes);
+			string query = string.Format(query_UpdateTempTable, SwitchId, RouteTempTableName, RouteTableName);
+			ExecuteNonQueryText(query, (cmd) =>
+			{
+				var dtPrm = new SqlParameter("@Routes", SqlDbType.Structured);
+				dtPrm.TypeName = "EricssonConvertedRouteType";
+				dtPrm.Value = dtRoutes;
+				cmd.Parameters.Add(dtPrm);
+			});
+		}
+
+		public void CopyCustomerRoutesToTempTable(IEnumerable<string> customerBOs)
+		{
+			if (customerBOs == null || !customerBOs.Any())
+				return;
+			string filter = string.Format(" Where BO in ({0})", string.Join(",", customerBOs));
+			string query = string.Format(query_CopyFromBaseTableToTempTable.Replace("#FILTER#", filter), SwitchId, RouteTableName, RouteTempTableName);
+			ExecuteNonQueryText(query, null);
+		}
+
+		private DataTable BuildRouteTable(IEnumerable<EricssonConvertedRoute> routes)
+		{
+			DataTable dtRoutes = new DataTable();
+			dtRoutes.Columns.Add("BO", typeof(string));
+			dtRoutes.Columns.Add("Code", typeof(string));
+			dtRoutes.Columns.Add("RCNumber", typeof(int));
+			dtRoutes.BeginLoadData();
+			foreach (var route in routes)
+			{
+				DataRow dr = dtRoutes.NewRow();
+				dr["BO"] = route.BO;
+				dr["Code"] = route.Code;
+				dr["RCNumber"] = route.RCNumber;
+				dtRoutes.Rows.Add(dr);
+			}
+			dtRoutes.EndLoadData();
+			return dtRoutes;
 		}
 
 		private class EricssonConvertedRouteByCompare
@@ -210,19 +277,23 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 
 		const string query_SwapTables = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{2}') AND s.type in (N'U'))
                                                     BEGIN
-                                                        DROP TABLE WhS_RouteSync_Ericsson_{0}.{1}
+															IF  EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{1}_old') AND s.type in (N'U'))
+																	begin
+																		DROP TABLE WhS_RouteSync_Ericsson_{0}.{1}_old
+																	end
+														EXEC sp_rename '[WhS_RouteSync_Ericsson_{0}].[{1}]', '[WhS_RouteSync_Ericsson_{0}].[{1}]_old';
                                                     END
 
-	                                        EXEC sp_rename '[WhS_RouteSync_Ericsson_{0}].[{2}]', '{1}';";
+	                                        EXEC sp_rename '[WhS_RouteSync_Ericsson_{0}].[{2}]', '[WhS_RouteSync_Ericsson_{0}].[{1}]';";
 
 		const string query_SyncWithRouteDeletedTable = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{2}') AND s.type in (N'U')) 
-		BEGIN
-		DELETE WhS_RouteSync_Ericsson_{0}.{1} 
-		FROM WhS_RouteSync_Ericsson_{0}.{1} as routes join WhS_RouteSync_Ericsson_{0}.{2} as deletedRoutes  
-		ON routes.BO = deletedRoutes.BO and routes.Code = deletedRoutes.Code 
+															BEGIN
+																DELETE WhS_RouteSync_Ericsson_{0}.{1} 
+																FROM WhS_RouteSync_Ericsson_{0}.{1} as routes join WhS_RouteSync_Ericsson_{0}.{2} as deletedRoutes  
+																ON routes.BO = deletedRoutes.BO and routes.Code = deletedRoutes.Code 
 
-		DROP TABLE WhS_RouteSync_Ericsson_{0}.{2} 
-		END";
+																DROP TABLE WhS_RouteSync_Ericsson_{0}.{2} 
+															END";
 
 		const string query_SyncWithRouteUpdatedTable = @"IF EXISTS( SELECT * FROM sys.objects s WHERE s.OBJECT_ID = OBJECT_ID(N'WhS_RouteSync_Ericsson_{0}.{2}') AND s.type in (N'U'))
                                                     BEGIN
@@ -274,6 +345,34 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 													BEGIN 
 														DROP TABLE WhS_RouteSync_Ericsson_{0}.{1} 
 													END";
+
+		const string query_CopyFromBaseTableToTempTable = @"INSERT INTO  WhS_RouteSync_Ericsson_{0}.{2} (BO, Code, RCNumber)
+														SELECT BO, Code, RCNumber FROM WhS_RouteSync_Ericsson_{0}.{1}
+														#FILTER#";
+
+		const string query_EricssonRouteTableType = @"IF NOT EXISTS (SELECT * FROM sys.types WHERE is_table_type = 1 AND name = 'LongIDType')
+                                         CREATE TYPE [EricssonRouteTableType] AS TABLE(
+	                                     [BO] [varchar](255) NOT NULL,
+	                                     [Code] [varchar](20) NOT NULL,
+	                                     [RCNumber] [int] NOT NULL,
+	                                     PRIMARY KEY CLUSTERED 
+                                         (
+											[BO] ASC,
+	                                        [Code] ASC
+                                         )WITH (IGNORE_DUP_KEY = OFF)
+                                         )";
+
+		const string query_DeleteFromTempTableTable = @"DELETE WhS_RouteSync_Ericsson_{0}.{1}
+																FROM WhS_RouteSync_Ericsson_{0}.{1} as tempRoute join @Routes as route
+																ON route.BO = tempRoute.BO
+																and route.Code = tempRoute.Code
+																and route.RCNumber = tempRoute.RCNumber";
+
+		const string query_UpdateTempTable = @"UPDATE  tempRoutes 
+														set tempRoutes.RCNumber = routes.RCNumber
+                                                    FROM [WhS_RouteSync_Ericsson_{0}].[{1}] as tempRoutes
+                                                    JOIN @Routes as routesToUpdate on routesToUpdate.BO = tempRoutes.BO and routesToUpdate.Code = tempRoutes.Code
+													JOIN [WhS_RouteSync_Ericsson_{0}].[{2}] as routes on routes.BO = routesToUpdate.BO and routes.Code = routesToUpdate.Code";
 		#endregion
 	}
 }

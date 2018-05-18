@@ -4,13 +4,14 @@ using System.Data;
 using Vanrise.Data.SQL;
 using TOne.WhS.RouteSync.Ericsson.Data;
 using TOne.WhS.RouteSync.Ericsson.Entities;
+using System.Linq;
 
 namespace TOne.WhS.RouteSync.Ericsson.SQL
 {
 	public class CustomerMappingSucceededDataManager : BaseSQLDataManager, ICustomerMappingSucceededDataManager
 	{
 		const string CustomerMappingSucceededTableName = "CustomerMapping_Succeeded";
-		readonly string[] columns = { "BO", "CustomerMapping" };
+		readonly string[] columns = { "BO", "CustomerMapping", "Action" };
 		public string SwitchId { get; set; }
 
 		public CustomerMappingSucceededDataManager()
@@ -40,7 +41,7 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 		public void WriteRecordToStream(CustomerMappingWithActionType record, object dbApplyStream)
 		{
 			StreamForBulkInsert streamForBulkInsert = dbApplyStream as StreamForBulkInsert;
-			streamForBulkInsert.WriteRecord("{0}^{1}^{2}", record.CustomerMappingSerialized.BO, record.CustomerMappingSerialized.CustomerMappingAsString, record.ActionType);
+			streamForBulkInsert.WriteRecord("{0}^{1}^{2}", record.CustomerMapping.BO, Helper.SerializeCustomerMapping(record.CustomerMapping), (int)record.ActionType);
 		}
 
 		public void ApplyCustomerMappingSucceededForDB(object preparedCustomerMapping)
@@ -50,6 +51,8 @@ namespace TOne.WhS.RouteSync.Ericsson.SQL
 
 		public void SaveCustomerMappingsSucceededToDB(IEnumerable<CustomerMappingWithActionType> customerMappingsSucceeded)
 		{
+			if (customerMappingsSucceeded == null || !customerMappingsSucceeded.Any())
+				return;
 			Object dbApplyStream = InitialiazeStreamForDBApply();
 			foreach (var customerMappingSucceeded in customerMappingsSucceeded)
 				WriteRecordToStream(customerMappingSucceeded, dbApplyStream);
