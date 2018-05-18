@@ -33,6 +33,11 @@ namespace TOne.WhS.Runtime.Tasks
 
         public void Execute()
         {
+            #region FreeRadiusSWSync
+            //FreeRadiusSWSyncTask freeRadiusSWSyncTask = new FreeRadiusSWSyncTask();
+            //freeRadiusSWSyncTask.FreeRadiusSWSyncTask_Main();
+            #endregion
+
             #region EricssonFTPSwitchLoggerTask
             //EricssonFTPSwitchLoggerTask ericssonFTPSwitchLoggerTask = new EricssonFTPSwitchLoggerTask();
             //ericssonFTPSwitchLoggerTask.EricssonFTPSwitchLoggerTask_Main();
@@ -171,6 +176,63 @@ namespace TOne.WhS.Runtime.Tasks
         #endregion
     }
 
+    public class FreeRadiusSWSyncTask
+    {
+        public void FreeRadiusSWSyncTask_Main()
+        {
+            //var convertedRouteOptions = new List<TOne.WhS.RouteSync.FreeRadius.FreeRadiusConvertedRouteOption>()
+            //{
+            //    new TOne.WhS.RouteSync.FreeRadius.FreeRadiusConvertedRouteOption() { Code = "C001", Percentage = 32 },
+            //    new TOne.WhS.RouteSync.FreeRadius.FreeRadiusConvertedRouteOption() { Code = "C002", Percentage = 34 },
+            //    new TOne.WhS.RouteSync.FreeRadius.FreeRadiusConvertedRouteOption() { Code = "C003", Percentage = 32 },
+            //    //new TOne.WhS.RouteSync.FreeRadius.FreeRadiusConvertedRouteOption() { Code = "C004", Percentage = 10 },
+            //};
+
+            //var freeRadiusSWSync = new TOne.WhS.RouteSync.FreeRadius.FreeRadiusSWSync();
+            //freeRadiusSWSync.RedistributePercentages(convertedRouteOptions);
+
+            //var convertedRoutesByCodeLastDigit1 = new RouteSync.FreeRadius.ConvertedRoutesByCodeLastDigit();
+            //convertedRoutesByCodeLastDigit1.Add("1", new RouteSync.FreeRadius.FreeRadiusConvertedRoute() { Customer_id = "C001", Cldsid = "9611", Code = "S1", Min_perc = 0, Max_perc = 1 });
+            //convertedRoutesByCodeLastDigit1.Add("2", new RouteSync.FreeRadius.FreeRadiusConvertedRoute() { Customer_id = "C001", Cldsid = "9612", Code = "S1", Min_perc = 0, Max_perc = 0.5M });
+            //convertedRoutesByCodeLastDigit1.Add("4", new RouteSync.FreeRadius.FreeRadiusConvertedRoute() { Customer_id = "C001", Cldsid = "9614", Code = "S1", Min_perc = 0, Max_perc = 1 });
+            //convertedRoutesByCodeLastDigit1.Add("5", new RouteSync.FreeRadius.FreeRadiusConvertedRoute() { Customer_id = "C001", Cldsid = "9615", Code = "S12", Min_perc = 0, Max_perc = 1 });
+            //convertedRoutesByCodeLastDigit1.Add("9", new RouteSync.FreeRadius.FreeRadiusConvertedRoute() { Customer_id = "C001", Cldsid = "9619", Code = "S1", Min_perc = 0, Max_perc = 1 });
+
+            //var convertedRoutesByCodeLastDigit2 = new RouteSync.FreeRadius.ConvertedRoutesByCodeLastDigit();
+            //convertedRoutesByCodeLastDigit2.Add("1", new RouteSync.FreeRadius.FreeRadiusConvertedRoute() { Customer_id = "C001", Cldsid = "9621", Code = "S1", Min_perc = 0, Max_perc = 1 });
+            //convertedRoutesByCodeLastDigit2.Add("2", new RouteSync.FreeRadius.FreeRadiusConvertedRoute() { Customer_id = "C001", Cldsid = "9622", Code = "S1", Min_perc = 0, Max_perc = 0.5M });
+            //convertedRoutesByCodeLastDigit2.Add("4", new RouteSync.FreeRadius.FreeRadiusConvertedRoute() { Customer_id = "C001", Cldsid = "9624", Code = "S1", Min_perc = 0, Max_perc = 1 });
+            //convertedRoutesByCodeLastDigit2.Add("5", new RouteSync.FreeRadius.FreeRadiusConvertedRoute() { Customer_id = "C001", Cldsid = "9625", Code = "S1", Min_perc = 0, Max_perc = 1 });
+            //convertedRoutesByCodeLastDigit2.Add("9", new RouteSync.FreeRadius.FreeRadiusConvertedRoute() { Customer_id = "C001", Cldsid = "9629", Code = "S1", Min_perc = 0, Max_perc = 1 });
+
+            //var convertedRoutesByCode = new RouteSync.FreeRadius.ConvertedRoutesByCode();
+            //convertedRoutesByCode.Add("961", convertedRoutesByCodeLastDigit1);
+            //convertedRoutesByCode.Add("962", convertedRoutesByCodeLastDigit2);
+
+            //var convertedRoutesBuffer = new Dictionary<string, RouteSync.FreeRadius.ConvertedRoutesByCode>();
+            //convertedRoutesBuffer.Add("C001", convertedRoutesByCode);
+
+            //var context = new SwitchRouteSynchronizerOnAllRoutesConvertedContext()
+            //{
+            //    ConvertedRoutesPayload = new TOne.WhS.RouteSync.FreeRadius.FreeRadiusConvertedRoutesPayload() { ConvertedRoutesBuffer = convertedRoutesBuffer }
+            //};
+            //var freeRadiusSWSync = new TOne.WhS.RouteSync.FreeRadius.FreeRadiusSWSync();
+            //freeRadiusSWSync.onAllRoutesConverted(context);
+            //var freeRadiusConvertedRoute = context.ConvertedRoutes.Select(itm => itm as TOne.WhS.RouteSync.FreeRadius.FreeRadiusConvertedRoute).ToList();
+
+            //var customerCodes = new HashSet<TOne.WhS.RouteSync.FreeRadius.CustomerCode>() { new TOne.WhS.RouteSync.FreeRadius.CustomerCode() { CustomerId = "199", Code = "8801" } };
+            //var singleNodeDataManager = new TOne.WhS.RouteSync.FreeRadius.SingleNodeDataManager(new TOne.WhS.RouteSync.FreeRadius.FreeRadiusPostgresConnectionString()
+            //{
+            //    SchemaName = "freeRadius",
+            //    ConnectionString = "Server=192.168.25.231;Database=teles;Userid=postgres;Password=postgres;"
+            //});
+            //List<TOne.WhS.RouteSync.FreeRadius.FreeRadiusConvertedRoute> affectedRoutes = singleNodeDataManager.GetAffectedRoutes(customerCodes);
+            //List<TOne.WhS.RouteSync.FreeRadius.FreeRadiusConvertedRoute> decompressConvertedRoutes = singleNodeDataManager.DecompressConvertedRoutes(affectedRoutes);
+
+            //int a = 1;
+        }
+    }
+
     public class EricssonFTPSwitchLoggerTask
     {
         public void EricssonFTPSwitchLoggerTask_Main()
@@ -214,7 +276,7 @@ namespace TOne.WhS.Runtime.Tasks
             logCarrierMappingsContext.CommandResults = logCarrierMappingsCommandResults;
             logCarrierMappingsContext.ExecutionDateTime = now;
             logCarrierMappingsContext.ExecutionStatus = ExecutionStatus.Failed;
-            
+
             ftpLogger.LogCarrierMappings(logCarrierMappingsContext);
 
             //logRouteCases
@@ -300,44 +362,44 @@ namespace TOne.WhS.Runtime.Tasks
                     {
                         new TrunkGroup()
                         {
-                            CustomerTrunkGroups = new List<CustomerTrunkGroup>() { new CustomerTrunkGroup() { CustomerId = 1 } },
-                            CodeGroupTrunkGroups = new List<CodeGroupTrunkGroup>() { new CodeGroupTrunkGroup() { CodeGroupId = 376 } },
+                            //CustomerTrunkGroups = new List<CustomerTrunkGroup>() { new CustomerTrunkGroup() { CustomerId = 1 } },
+                            //CodeGroupTrunkGroups = new List<CodeGroupTrunkGroup>() { new CodeGroupTrunkGroup() { CodeGroupId = 376 } },
                             TrunkTrunkGroups = new List<TrunkTrunkGroup>()
                             {
                                 new TrunkTrunkGroup() { TrunkId = new Guid("c7cc9e7b-aed9-49d3-5851-348db6586b24"), Percentage = 10, Priority = 1},
                                 new TrunkTrunkGroup() { TrunkId = new Guid("acdc92ef-4d83-2708-1348-fed0445f0533"), Percentage = 90, Priority = 2}
                             }
                         },
-                        new TrunkGroup()
-                        {
-                            CustomerTrunkGroups = new List<CustomerTrunkGroup>() { new CustomerTrunkGroup() { CustomerId = 2 } },
-                            CodeGroupTrunkGroups = new List<CodeGroupTrunkGroup>() { new CodeGroupTrunkGroup() { CodeGroupId = 263 } },
-                            TrunkTrunkGroups = new List<TrunkTrunkGroup>()
-                            {
-                                new TrunkTrunkGroup() { TrunkId = new Guid("acdc92ef-4d83-2708-1348-fed0445f0533"), Percentage = 90, Priority = 2}
-                            }
-                        },
-                        new TrunkGroup()
-                        {
-                            CustomerTrunkGroups = new List<CustomerTrunkGroup>() { new CustomerTrunkGroup() { CustomerId = 3 } },
-                            CodeGroupTrunkGroups = null,
-                            TrunkTrunkGroups = new List<TrunkTrunkGroup>()
-                            {
-                                new TrunkTrunkGroup() { TrunkId = new Guid("af4aff1a-04bb-74c9-2790-55c38cb0c390"), Percentage = 80, Priority = 2}
-                            },
-                            IsBackup = true
-                        },
-                        new TrunkGroup()
-                        {
-                            CustomerTrunkGroups = null,
-                            CodeGroupTrunkGroups = null,
-                            TrunkTrunkGroups = new List<TrunkTrunkGroup>()
-                            {
-                                new TrunkTrunkGroup() { TrunkId = new Guid("acdc92ef-4d83-2708-1348-999999999999"), Percentage = 20, Priority = 1},
-                                new TrunkTrunkGroup() { TrunkId = new Guid("af4aff1a-04bb-74c9-2790-55c38cb0c390"), Percentage = 80, Priority = 2}
-                            },
-                            IsBackup = true
-                        }
+                        //new TrunkGroup()
+                        //{
+                        //    CustomerTrunkGroups = new List<CustomerTrunkGroup>() { new CustomerTrunkGroup() { CustomerId = 2 } },
+                        //    CodeGroupTrunkGroups = new List<CodeGroupTrunkGroup>() { new CodeGroupTrunkGroup() { CodeGroupId = 263 } },
+                        //    TrunkTrunkGroups = new List<TrunkTrunkGroup>()
+                        //    {
+                        //        new TrunkTrunkGroup() { TrunkId = new Guid("acdc92ef-4d83-2708-1348-fed0445f0533"), Percentage = 90, Priority = 2}
+                        //    }
+                        //},
+                        //new TrunkGroup()
+                        //{
+                        //    CustomerTrunkGroups = new List<CustomerTrunkGroup>() { new CustomerTrunkGroup() { CustomerId = 3 } },
+                        //    CodeGroupTrunkGroups = null,
+                        //    TrunkTrunkGroups = new List<TrunkTrunkGroup>()
+                        //    {
+                        //        new TrunkTrunkGroup() { TrunkId = new Guid("af4aff1a-04bb-74c9-2790-55c38cb0c390"), Percentage = 80, Priority = 2}
+                        //    },
+                        //    IsBackup = true
+                        //},
+                        //new TrunkGroup()
+                        //{
+                        //    CustomerTrunkGroups = null,
+                        //    CodeGroupTrunkGroups = null,
+                        //    TrunkTrunkGroups = new List<TrunkTrunkGroup>()
+                        //    {
+                        //        new TrunkTrunkGroup() { TrunkId = new Guid("acdc92ef-4d83-2708-1348-999999999999"), Percentage = 20, Priority = 1},
+                        //        new TrunkTrunkGroup() { TrunkId = new Guid("af4aff1a-04bb-74c9-2790-55c38cb0c390"), Percentage = 80, Priority = 2}
+                        //    },
+                        //    IsBackup = true
+                        //}
                     }
                 }
             };
@@ -393,8 +455,8 @@ namespace TOne.WhS.Runtime.Tasks
             #endregion
 
             var carrierMappings = new Dictionary<string, RouteSync.Ericsson.CarrierMapping>();
-            carrierMappings.Add("11", supplierMapping_11);
-            //carrierMappings.Add("12", supplierMapping_12);
+            carrierMappings.Add("11", supplierMapping_11); 
+            //carrierMappings.Add("12", supplierMapping_12); 
 
             var ruleTree = new EricssonSWSync().BuildSupplierTrunkGroupTree(carrierMappings); //GetRuleTree(ruleDefinitionId);
             //List<CriteriaEvaluationInfo> criteriaEvaluationInfos = null; //GetCachedCriteriaEvaluationInfos(ruleDefinitionId);
