@@ -32,6 +32,15 @@ namespace TOne.WhS.Sales.BP.Activities
             IEnumerable<SaleRate> mappedCustomerRates = (customerRates != null) ? customerRates.MapRecords(x => x.RateEntity) : null;
 
             ratePlanContext.CustomerZoneRateHistoryReader = new CustomerZoneRateHistoryReader(ratePlanContext.InheritedRates, mappedCustomerRates);
+
+            RoutingCustomerInfoDetails customerInfo = new RoutingCustomerInfoDetails
+            {
+                CustomerId = ratePlanContext.OwnerId,
+                SellingProductId = new CarrierAccountManager().GetSellingProductId(ratePlanContext.OwnerId)
+            };
+            List<RoutingCustomerInfoDetails> customerInfos = new List<RoutingCustomerInfoDetails> { customerInfo };
+            ratePlanContext.LastRateLocator = new SaleEntityZoneRateLocator(new SaleRateReadLastRateNoCache(customerInfos, ratePlanContext.EffectiveDate));
+
         }
     }
 }

@@ -49,6 +49,8 @@ namespace TOne.WhS.Sales.Business
         public SaleEntityZoneRateLocator RateLocator { get; set; }
         public SaleEntityZoneRateLocator FutureRateLocator { get; set; }
         public SaleEntityZoneRateLocator ActionRateLocator { get; set; }
+        public SaleEntityZoneRateLocator LastRateLocator { get; set; }
+
         public DateTime RetroactiveDate
         {
             get
@@ -158,6 +160,7 @@ namespace TOne.WhS.Sales.Business
         bool IsSubscriberOwner { get; }
         long RootProcessInstanceId { get; }
         CustomerZoneRateHistoryReader CustomerZoneRateHistoryReader { get; }
+        SaleEntityZoneRateLocator LastRateLocator { get; }
 
         #endregion
 

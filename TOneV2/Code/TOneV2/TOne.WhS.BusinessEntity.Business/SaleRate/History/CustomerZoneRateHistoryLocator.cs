@@ -33,7 +33,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             List<TimeInterval> customerCountryTimeIntervals = customerCountries.MapRecords(RateHistoryUtilities.CountryTimeIntervalMapper).ToList();
             RateHistoryUtilities.AddProductZoneRateHistory(rateHistoryBySource, sellingProductId, zoneName, rateTypeId, customerCountryTimeIntervals, _reader);
-            RateHistoryUtilities.AddCustomerZoneRateHistory(rateHistoryBySource, customerId, zoneName, rateTypeId,_reader);
+            RateHistoryUtilities.AddCustomerZoneRateHistory(rateHistoryBySource, customerId, zoneName, rateTypeId, _reader);
 
             return RateHistoryUtilities.GetZoneRateHistory(rateHistoryBySource, _orderedRateSources, targetCurrencyId, longPrecision);
         }
@@ -42,10 +42,12 @@ namespace TOne.WhS.BusinessEntity.Business
             IEnumerable<SaleRateHistoryRecord> customerZoneRateHistory = GetCustomerZoneRateHistory(customerId, sellingProductId, zoneName, rateTypeId, countryId, targetCurrencyId, longPrecision);
             return (customerZoneRateHistory != null) ? customerZoneRateHistory.FindRecord(x => x.IsEffective(effectiveOn)) : null;
         }
-        public SaleRateHistoryRecord GetLastCustomerRateHistoryRecord (int customerId, int sellingProductId, string zoneName, int? rateTypeId, int countryId, int? targetCurrencyId, int? longPrecision)
+        public SaleRateHistoryRecord GetLastCustomerRateHistoryRecord(int customerId, int sellingProductId, string zoneName, int? rateTypeId, int countryId, int? targetCurrencyId, int? longPrecision)
         {
             var customerZoneRateHistory = GetCustomerZoneRateHistory(customerId, sellingProductId, zoneName, rateTypeId, countryId, targetCurrencyId, longPrecision);
-            return customerZoneRateHistory.LastOrDefault();
+            if (customerZoneRateHistory != null)
+                return customerZoneRateHistory.LastOrDefault();
+            return null;
         }
 
         #region Private Methods
