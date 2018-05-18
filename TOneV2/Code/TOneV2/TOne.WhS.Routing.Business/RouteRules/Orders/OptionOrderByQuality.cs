@@ -21,12 +21,15 @@ namespace TOne.WhS.Routing.Business.RouteRules.Orders
 
             decimal? supplierTQI;
             decimal maxTQI = 0;
+
+            var defaultRouteRuleQualityConfiguration = new ConfigManager().GetDefaultRouteRuleQualityConfiguration();
+
             foreach (IRouteOptionOrderTarget option in context.Options)
             {
                 if (option.SupplierZoneId.HasValue)
-                    supplierTQI = this.GetCustomerRouteQualityValue(option.SupplierZoneId.Value, manager, context.RoutingDatabase);
+                    supplierTQI = this.GetCustomerRouteQualityValue(option.SupplierZoneId.Value, manager, context.RoutingDatabase, defaultRouteRuleQualityConfiguration);
                 else
-                    supplierTQI = this.GetRoutingProductQualityValue(option.SaleZoneId.Value, option.SupplierId, manager, context.RoutingDatabase);
+                    supplierTQI = this.GetRoutingProductQualityValue(option.SaleZoneId.Value, option.SupplierId, manager, context.RoutingDatabase, defaultRouteRuleQualityConfiguration);
 
                 if (supplierTQI.HasValue)
                 {
@@ -46,7 +49,7 @@ namespace TOne.WhS.Routing.Business.RouteRules.Orders
             }
         }
 
-        private decimal? GetCustomerRouteQualityValue(long supplierZoneId, QualityConfigurationManager manager, RoutingDatabase routingDatabase)
+        private decimal? GetCustomerRouteQualityValue(long supplierZoneId, QualityConfigurationManager manager, RoutingDatabase routingDatabase, RouteRuleQualityConfiguration defaultRouteRuleQualityConfiguration)
         {
             Dictionary<long, List<CustomerRouteQualityConfigurationData>> customerRouteQualityConfigurationData = manager.GetCachedCustomerRouteQualityConfigurationData(routingDatabase);
             if (customerRouteQualityConfigurationData == null)
@@ -60,14 +63,23 @@ namespace TOne.WhS.Routing.Business.RouteRules.Orders
 
             foreach (var itm in customerRouteQualityConfigurationsData)
             {
-                if (this.QualityConfigurationIds.Contains(itm.QualityConfigurationId))
-                    qualityValue += itm.QualityData;
-            }
+                if (this.QualityConfigurationIds == null)
+                {
+                    if (itm.QualityConfigurationId == defaultRouteRuleQualityConfiguration.QualityConfigurationId)
+                        qualityValue += itm.QualityData;
+                }
 
+                else
+                {
+                    if (this.QualityConfigurationIds.Contains(itm.QualityConfigurationId))
+                        qualityValue += itm.QualityData;
+                }
+
+            }
             return qualityValue;
         }
 
-        private decimal? GetRoutingProductQualityValue(long saleZoneId, int supplierId, QualityConfigurationManager manager, RoutingDatabase routingDatabase)
+        private decimal? GetRoutingProductQualityValue(long saleZoneId, int supplierId, QualityConfigurationManager manager, RoutingDatabase routingDatabase, RouteRuleQualityConfiguration defaultRouteRuleQualityConfiguration)
         {
             Dictionary<SaleZoneSupplier, List<RPQualityConfigurationData>> rpQualityConfigurationData = manager.GetCachedRPQualityConfigurationData(routingDatabase);
             if (rpQualityConfigurationData == null)
@@ -83,8 +95,18 @@ namespace TOne.WhS.Routing.Business.RouteRules.Orders
 
             foreach (var itm in rpQualityConfigurationsData)
             {
-                if (this.QualityConfigurationIds.Contains(itm.QualityConfigurationId))
-                    qualityValue += itm.QualityData;
+                if (this.QualityConfigurationIds == null)
+                {
+                    if (itm.QualityConfigurationId == defaultRouteRuleQualityConfiguration.QualityConfigurationId)
+                        qualityValue += itm.QualityData;
+                }
+
+                else
+                {
+                    if (this.QualityConfigurationIds.Contains(itm.QualityConfigurationId))
+                        qualityValue += itm.QualityData;
+                }
+
             }
 
             return qualityValue;

@@ -132,6 +132,20 @@ namespace TOne.WhS.Routing.Business
             return productRouteDatabaseConfiguration;
         }
 
+        public RouteRuleQualityConfiguration GetDefaultRouteRuleQualityConfiguration()
+        {
+            var qualityConfiguration = GetQualityConfiguration();
+            qualityConfiguration.RouteRuleQualityConfigurationList.ThrowIfNull("qualityConfiguration.RouteRuleQualityConfigurationList");
+
+            foreach (var itm in qualityConfiguration.RouteRuleQualityConfigurationList)
+            {
+                if (itm.IsDefault)
+                    return itm;
+            }
+
+            throw new NullReferenceException("No Default Route Rule Quality Configuration");
+        }
+
         public QualityConfiguration GetQualityConfiguration()
         {
             RouteSettingsData routeSettingsData = GetRouteSettingData();
