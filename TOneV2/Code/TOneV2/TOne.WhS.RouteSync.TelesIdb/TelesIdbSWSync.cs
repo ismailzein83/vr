@@ -43,7 +43,6 @@ namespace TOne.WhS.RouteSync.TelesIdb
             if (context.Routes == null || CarrierMappings == null)
                 return;
 
-            List<string> invalidRoutes = new List<string>();
             CarrierMapping carrierMapping;
             List<ConvertedRoute> idbRoutes = new List<ConvertedRoute>();
 
@@ -55,7 +54,7 @@ namespace TOne.WhS.RouteSync.TelesIdb
                         continue;
 
                     string supplierOptionsSeparator = !string.IsNullOrEmpty(this.SupplierOptionsSeparator) ? this.SupplierOptionsSeparator : string.Empty;
-                    string concatenatedOptions = BuildOptions(route, invalidRoutes, supplierOptionsSeparator);
+                    string concatenatedOptions = BuildOptions(route, supplierOptionsSeparator);
 
                     foreach (string customerMapping in carrierMapping.CustomerMapping)
                     {
@@ -219,18 +218,17 @@ namespace TOne.WhS.RouteSync.TelesIdb
 
         #region Private Methods
 
-        private string BuildOptions(Route route, List<string> invalidRoutes, string supplierOptionsSeparator)
+        private string BuildOptions(Route route, string supplierOptionsSeparator)
         {
             if (route.Options == null || route.Options.Count == 0)
                 return "BLK";
 
+            int numberOfAddedOptions = 0;
+            CarrierMapping carrierMapping;
             StringBuilder strBuilder = new StringBuilder();
 
             List<RouteOption> routeOptions = route.Options;
             bool isPercentageOption = routeOptions.FirstOrDefault(itm => itm.Percentage.HasValue && itm.Percentage.Value > 0) != null;
-
-            int numberOfAddedOptions = 0;
-            CarrierMapping carrierMapping;
 
             if (!isPercentageOption)
             {
