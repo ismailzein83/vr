@@ -501,12 +501,13 @@ namespace TOne.WhS.BusinessEntity.Business
                 return salePlZoneNotifications;
 
             int changesCurrency = salePlZoneNotifications.First().Rate.CurrencyId.Value;
-            List<SalePLZoneNotification> saleNotifications;
+            var saleNotifications = new List<SalePLZoneNotification>();
 
             Dictionary<int, List<SalePLZoneNotification>> zoneNotificationByCurrencyId = GetFullSalePlZoneNotification(customerId, sellingProductId, existingDataByCountryId, countryChanges,
                     customerCountriesSellDatesByCountryId, customerZoneRateHistoryLocator);
 
-            if (zoneNotificationByCurrencyId.Count > 1 || !zoneNotificationByCurrencyId.TryGetValue(changesCurrency, out saleNotifications))
+            int notificationByCurrencyCount = zoneNotificationByCurrencyId.Count;
+            if (notificationByCurrencyCount != 0 && (notificationByCurrencyCount > 1 || !zoneNotificationByCurrencyId.TryGetValue(changesCurrency, out saleNotifications)))
             {
                 overiddenPriceListType = SalePriceListType.Country;
                 return salePlZoneNotifications;
@@ -572,6 +573,7 @@ namespace TOne.WhS.BusinessEntity.Business
             {
                 if (changedCountryIds.Contains(soldCountry.CountryId))
                     continue;
+
                 DateTime countrySellDate;
                 if (!customerCountriesSellDatesByCountryId.TryGetValue(soldCountry.CountryId, out countrySellDate))
                     countrySellDate = DateTime.MinValue;
