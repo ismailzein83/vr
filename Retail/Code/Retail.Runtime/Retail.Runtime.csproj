@@ -143,9 +143,6 @@
     <Reference Include="Vanrise.AccountBalance.MainExtensions">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.MainExtensions.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.AccountBalance.Web">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountBalance.Web.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.AccountManager.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountManager.Business.dll</HintPath>
     </Reference>
@@ -160,9 +157,6 @@
     </Reference>
     <Reference Include="Vanrise.AccountManager.MainExtensions">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountManager.MainExtensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.AccountManager.Web">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.AccountManager.Web.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Analytic.BP">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.BP.dll</HintPath>
@@ -247,9 +241,6 @@
     </Reference>
     <Reference Include="Vanrise.BusinessProcess.MainExtensions">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.MainExtensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.BusinessProcess.Web">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.Web.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.BusinessProcess.WFActivities">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.BusinessProcess.WFActivities.dll</HintPath>
@@ -350,9 +341,6 @@
     <Reference Include="Vanrise.GenericData.Transformation.MainExtensions">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Transformation.MainExtensions.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.GenericData.Web">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.GenericData.Web.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.Integration.Adapters.DBBaseReceiveAdapter, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Adapters.DBBaseReceiveAdapter.dll</HintPath>
@@ -412,9 +400,6 @@
     <Reference Include="Vanrise.Integration.Mappers">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Mappers.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Integration.Web">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Integration.Web.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.Invoice.BP">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.BP.dll</HintPath>
     </Reference>
@@ -438,9 +423,6 @@
     </Reference>
     <Reference Include="Vanrise.Invoice.MainExtensions">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.MainExtensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Invoice.Web">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Invoice.Web.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.InvToAccBalanceRelation.Business">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.InvToAccBalanceRelation.Business.dll</HintPath>
@@ -512,9 +494,6 @@
     <Reference Include="Vanrise.Queueing.Extensions">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Extensions.dll</HintPath>
     </Reference>
-    <Reference Include="Vanrise.Queueing.Web">
-      <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Queueing.Web.dll</HintPath>
-    </Reference>
     <Reference Include="Vanrise.Reprocess.BP">
       <HintPath>..\..\..\BusinessProcess\Code\Output\Vanrise.Reprocess.BP.dll</HintPath>
     </Reference>
@@ -578,9 +557,6 @@
     </Reference>
     <Reference Include="Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments">
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Triggers.TimeTaskTrigger.Arguments.dll</HintPath>
-    </Reference>
-    <Reference Include="Vanrise.Runtime.Web">
-      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Runtime.Web.dll</HintPath>
     </Reference>
     <Reference Include="Vanrise.Security.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -740,10 +716,6 @@
     <ProjectReference Include="..\Retail.Interconnect.Entities\Retail.Interconnect.Entities.csproj">
       <Project>{ed0cd3d2-1e3f-4399-ba99-0ebf76746a34}</Project>
       <Name>Retail.Interconnect.Entities</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Retail.Interconnect.Web\Retail.Interconnect.Web.csproj">
-      <Project>{0711c943-582d-49c8-b1f1-e1f6f2eb7ff4}</Project>
-      <Name>Retail.Interconnect.Web</Name>
     </ProjectReference>
     <ProjectReference Include="..\Retail.Invoice.Business\Retail.Invoice.Business.csproj">
       <Project>{6e17f958-24a2-4166-bb5d-7e26031b8afc}</Project>
