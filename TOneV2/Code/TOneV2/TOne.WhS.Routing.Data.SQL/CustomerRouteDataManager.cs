@@ -134,11 +134,23 @@ namespace TOne.WhS.Routing.Data.SQL
                                 routeOption.SupplierId = supplierZoneDetail.SupplierId;
                                 routeOption.SupplierRate = supplierZoneDetail.EffectiveRateValue;
                                 routeOption.ExactSupplierServiceIds = supplierZoneDetail.ExactSupplierServiceIds;
+
+                                if (routeOption.Backups == null || routeOption.Backups.Count == 0)
+                                    continue;
+
+                                foreach (RouteBackupOption backup in routeOption.Backups)
+                                {
+                                    SupplierZoneDetail backupSupplierZoneDetail = cachedSupplierZoneDetails.GetRecord(backup.SupplierZoneId);
+                                    backup.SupplierId = backupSupplierZoneDetail.SupplierId;
+                                    backup.SupplierRate = backupSupplierZoneDetail.EffectiveRateValue;
+                                    backup.ExactSupplierServiceIds = backupSupplierZoneDetail.ExactSupplierServiceIds;
+                                }
                             }
                         }
+
                         onRouteLoaded(customerRoute);
                     }
-                }, 
+                },
                 (cmd) =>
                 {
                     if (customerId.HasValue)
