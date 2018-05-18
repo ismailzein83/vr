@@ -109,8 +109,6 @@ namespace TOne.WhS.RouteSync.TelesIdb.Postgres
 
         public void ApplyDifferentialRoutes(IApplyDifferentialRoutesContext context)
         {
-            PrepareDataManagers();
-            
             List<IdbConvertedRoute> idbRoutes = context.ConvertedUpdatedRoutes.Select(itm => itm as IdbConvertedRoute).ToList();
 
             SwitchSyncOutput switchSyncOutput;
