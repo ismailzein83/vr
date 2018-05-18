@@ -361,6 +361,8 @@
     <Content Include="Common\Directives\VRDocument\Templates\VRDocumentGridTemplate.html" />
     <Content Include="Common\Directives\VRDocument\vr-common-document-grid.js" />
     <Content Include="Common\Directives\VRDocument\vr-common-documentcategory-selector.js" />
+    <Content Include="Common\Directives\VREffectivePeriod\Templates\EffectivePeriodDirectiveTemplate.html" />
+    <Content Include="Common\Directives\VREffectivePeriod\vr-common-effectiveperiod.js" />
     <Content Include="Common\Directives\VRExclusiveSessionType\Templates\VRExclusiveSessionTypeExtendedSettingsTemplate.html" />
     <Content Include="Common\Directives\VRExclusiveSessionType\Templates\VRExclusiveSessionTypeSettingsTemplate.html" />
     <Content Include="Common\Directives\VRExclusiveSessionType\vr-common-exclusivesessiontype-selector.js" />

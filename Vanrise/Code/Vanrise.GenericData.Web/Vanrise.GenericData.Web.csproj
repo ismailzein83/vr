@@ -286,6 +286,8 @@
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\OnAfterSaveHandler\vr-genericdata-genericbe-aftersavehandler-sendemail.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Security\vr-genericdata-genericbe-security.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Definition\Security\Templates\GenericBeSecurityTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\Editor\Templates\EffectivePeriodEditorTemplate.html" />
+    <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Runtime\Editor\vr-genericdata-genericbe-effectiveperiod-editor.js" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\Templates\GenericBusinessEntityEditor.html" />
     <Content Include="VR_GenericData\Directives\GenericBusinessEntity\vr-genericdata-genericbusinessentity-runtimeeditor.js" />
     <Content Include="VR_GenericData\Directives\BusinessEntityDefinition\MainExtensions\GenericEditorDefinitionSetting\Templates\GenericBETabContainerEditorController.html" />
