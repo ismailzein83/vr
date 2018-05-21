@@ -14,7 +14,8 @@
 			return BaseAPIService.get(UtilsService.getServiceURL(WhS_RouteSync_ModuleConfig.moduleName, controllerName, "GetSwitchRouteSynchronizerHaveSettingsExtensionConfigs"));
 		}
 
-        return ({
+		return ({
+			GetSwitchRouteSynchronizerExtensionConfigs: GetSwitchRouteSynchronizerExtensionConfigs,
 			GetSwitchRouteSynchronizerHaveSettingsExtensionConfigs: GetSwitchRouteSynchronizerHaveSettingsExtensionConfigs
         });
     }
