@@ -76,13 +76,13 @@
 					var promises = [];
 
 					if (payload != undefined) {
-						$scope.scopeModel.numberOfRetries = payload.settings.NumberOfRetries
+						$scope.scopeModel.numberOfRetries = payload.settings.NumberOfRetries;
 						if (payload.settings.FaultCodes != undefined) {
 							$scope.scopeModel.faultCodesA = payload.settings.FaultCodes;
 
 						}
 					}
-				}
+				};
 				api.getData = function () {
 					var data = {
 						$type: "TOne.WhS.RouteSync.Ericsson.EricssonSwitchRouteSynchronizerSettings, TOne.WhS.RouteSync.Ericsson",

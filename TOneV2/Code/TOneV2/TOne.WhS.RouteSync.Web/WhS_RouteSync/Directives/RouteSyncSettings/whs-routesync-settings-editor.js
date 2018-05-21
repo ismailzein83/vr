@@ -50,7 +50,7 @@ app.directive('whsRoutesyncSettingsEditor', ['UtilsService', 'VRUIUtilsService',
 
 				$scope.scopeModel.onSwitchSettingsGridReady = function () {
 					switchSettingsGridReadyPromise.resolve();
-				}
+				};
 
 				defineAPI();
 			}
