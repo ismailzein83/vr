@@ -57,7 +57,6 @@ namespace Vanrise.Data.RDB.DataProvider.Providers
 
         public override RDBResolvedQuery ResolveSelectQuery(IRDBDataProviderResolveSelectQueryContext context)
         {
-            context.Table.ThrowIfNull("context.Table");
             StringBuilder queryBuilder = new StringBuilder("");
             var rdbExpressionToDBQueryContext = new RDBExpressionToDBQueryContext(context, context.QueryBuilderContext);
             var rdbConditionToDBQueryContext = new RDBConditionToDBQueryContext(context, context.QueryBuilderContext);

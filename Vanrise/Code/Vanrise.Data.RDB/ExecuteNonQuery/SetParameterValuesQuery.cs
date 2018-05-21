@@ -73,9 +73,11 @@ namespace Vanrise.Data.RDB
         protected override RDBResolvedQuery GetResolvedQuery(IRDBQueryGetResolvedQueryContext context)
         {
             StringBuilder builder = new StringBuilder();
+            if (_parameterValues.Count > 0)
+                builder.Append("SELECT ");
             foreach(var prmValueEntry in _parameterValues)
             {
-                builder.Append(context.GetParameterWithValidate(prmValueEntry.Key));
+                builder.Append(context.GetParameterWithValidate(prmValueEntry.Key).DBParameterName);
                 builder.Append(" = ");
                 builder.Append(prmValueEntry.Value.ToDBQuery(new RDBExpressionToDBQueryContext(context, _queryBuilderContext)));
             }
