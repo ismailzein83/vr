@@ -25,7 +25,7 @@ namespace TOne.WhS.RouteSync.Entities
         public bool ExecuteFullRouteSyncWhenPartialNotSupported { get; set; }
 
 
-        public int _differentialRoutesPerTransaction = 100;
+        private int _differentialRoutesPerTransaction = 100;
         public int DifferentialRoutesPerTransaction
         {
             get { return _differentialRoutesPerTransaction; }
