@@ -14,6 +14,7 @@ using Vanrise.Data.RDB;
 using Vanrise.Runtime.Entities;
 using Vanrise.AccountBalance.Data.RDB;
 using Vanrise.AccountBalance.Entities;
+using Vanrise.Entities;
 
 namespace Retail.Runtime.Tasks
 {
@@ -618,6 +619,15 @@ namespace Retail.Runtime.Tasks
 
             TABLE_NAME = "VR_AccountBalance_LiveBalance";
 
+            
+
+            decimal initialBalance = 33;
+                 int currencyId = 3;
+            decimal currentBalance = 54;
+            DateTime? bed = null; DateTime? eed = null;
+            VRAccountStatus status =  VRAccountStatus.Active;
+            bool isDeleted = false;
+
             var TryAddLiveBalanceAndGet = new RDBQueryContext(dataProvider)
                     .StartBatchQuery()
                     .AddQuery().DeclareParameters().AddParameter("ID", RDBDataType.BigInt).AddParameter("CurrencyIdToReturn", RDBDataType.Int).EndParameterDeclaration()
@@ -630,8 +640,26 @@ namespace Retail.Runtime.Tasks
                                         .EndAnd()
                                 .SelectColumns().ColumnToParameter("ID", "ID").ColumnToParameter("CurrencyID", "CurrencyIdToReturn").EndColumns()
                                 .EndSelect()
-                    .EndBatchQuery()
-                .GetResolvedQuery().QueryText;
+                    .AddQuery().If().IfCondition().NullCondition(new RDBParameterExpression { ParameterName = "ID" })
+                                .ThenQuery().StartBatchQuery()
+                                            .AddQuery().Insert()
+                                                        .IntoTable(TABLE_NAME)
+                                                        .GenerateIdAndAssignToParameter("ID")
+                                                        .ColumnValue("AccountTypeID", accountTypeId)
+                                                        .ColumnValue("AccountID", accountId)
+                                                        .ColumnValue("InitialBalance", initialBalance)
+                                                        .ColumnValue("CurrentBalance", currentBalance)
+                                                        .ColumnValue("CurrencyID", currencyId)
+                                                        .ColumnValueIfNotDefaultValue(bed, ctx => ctx.ColumnValue("BED", bed.Value))
+                                                        .ColumnValueIfNotDefaultValue(eed, ctx => ctx.ColumnValue("EED", eed.Value))
+                                                        .ColumnValue("Status", (int)status)
+                                                        .ColumnValue("IsDeleted", isDeleted)
+                                                       .EndInsert()
+                                            .AddQuery().SetParameterValues().ParamValue("CurrencyIdToReturn", currencyId).EndParameterValues()
+                                            .EndBatchQuery()
+                                .EndIf()
+                     .AddQuery().Select().FromNoTable().SelectColumns().Parameter("ID", "ID").FixedValue(accountId, "AccountID").EndColumns().EndSelect()
+                    .EndBatchQuery().GetResolvedQuery().QueryText;
 
             Console.ReadKey();
             //RDBSchemaManager.Current.RegisterDefaultTableDefinition("SEC_User", _userTable);
