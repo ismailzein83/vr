@@ -404,6 +404,10 @@
     <Content Include="WhS_BusinessEntity\Directives\MainExtensions\VRObjectTypes\whs-be-financialaccountpropertyevaluator.js" />
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\SupplierCase\whs-be-supplierfaultticket-settings.js" />
     <Content Include="WhS_BusinessEntity\Directives\Period\vr-whs-be-period-selector.js" />
+    <Content Include="WhS_BusinessEntity\Directives\PointOfInterconnect\Templates\PointOfInterconnectCustomObjectSettings.html" />
+    <Content Include="WhS_BusinessEntity\Directives\PointOfInterconnect\Templates\PointOfInterconnectStaticEditorTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\PointOfInterconnect\whs-be-pointofinterconnect-trunks-customobjectsettings.js" />
+    <Content Include="WhS_BusinessEntity\Directives\PointOfInterconnect\whs-be-pointofinterconnect-trunks-staticeditor.js" />
     <Content Include="WhS_BusinessEntity\Directives\SaleAreaTechnicalSettings\Templates\SaleAreaTechnicalSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\SaleAreaTechnicalSettings\vr-whs-be-salearea-technical-settings-editor.js" />
     <Content Include="WhS_BusinessEntity\Directives\SalePriceListChange\Templates\CustomerRatePreviewGrid.html" />
