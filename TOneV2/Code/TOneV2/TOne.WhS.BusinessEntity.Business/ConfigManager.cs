@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Vanrise.Common.Business;
-using Vanrise.Entities;
 using TOne.WhS.BusinessEntity.Entities;
 using Vanrise.Common;
+using Vanrise.Common.Business;
+using Vanrise.Entities;
+
 namespace TOne.WhS.BusinessEntity.Business
 {
     public class ConfigManager
     {
         #region Public Methods
-
 
         public int GetOffPeakRateTypeId()
         {
@@ -67,6 +64,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return setting.RateTypeConfiguration.HolidayRateTypeId;
         }
+
         public CDPNIdentification GetGeneralCDPNIndentification()
         {
             SwitchCDRMappingConfiguration switchCDRMappingConfiguration = GetSwitchCDRMappingConfiguration();
@@ -279,6 +277,7 @@ namespace TOne.WhS.BusinessEntity.Business
             faultTicketsSettingsData.SupplierSetting.ThrowIfNull("faultTicketsSettingsData.SupplierSetting");
             return faultTicketsSettingsData.SupplierSetting.InitialSequence;
         }
+
         public PricingSettings MergePricingSettings(PricingSettings pricingSettingsParent, PricingSettings pricingSettingsChild)
         {
             PricingSettings result = new PricingSettings();
@@ -320,7 +319,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return result;
         }
-
         public PricelistSettings MergePricelistSettings(PricelistSettings pricelistSettingsParent, PricelistSettings pricelistSettingsChild)
         {
             PricelistSettings result = new PricelistSettings();
@@ -383,7 +381,6 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return result;
         }
-
         public RateChangeTypeDescriptions MergeRateChangeTypeDescriptions(RateChangeTypeDescriptions parentRateChangeTypeDescriptions, RateChangeTypeDescriptions childRateChangeTypeDescriptions)
         {
             RateChangeTypeDescriptions result = new RateChangeTypeDescriptions();
@@ -441,6 +438,7 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return setting.DocumentCategoryDefinition.ItemDefinitions;
         }
+
         #endregion
 
         #region Private Methods
@@ -526,7 +524,6 @@ namespace TOne.WhS.BusinessEntity.Business
         {
             return GetSettings<PurchaseAreaSettingsData>(Constants.PurchaseAreaSettings);
         }
-
         private FaultTicketsSettingsData GetFaultTicketsSettingsData()
         {
             SettingManager manager = new SettingManager();
