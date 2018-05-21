@@ -274,7 +274,20 @@ namespace TOne.WhS.Deal.Business
                 TierNumber = 1,
                 VolumeInSeconds = swapDealInbound.Volume * 60
             };
-            return new List<DealSaleZoneGroupTierWithoutRate> { dealSaleZoneGroupTier }.OrderBy(itm => itm.TierNumber);
+            
+            var dealSaleTiers = new List<DealSaleZoneGroupTierWithoutRate>
+            {
+                dealSaleZoneGroupTier
+            };
+
+            var extraRateEvaluator = swapDealInbound.ExtraVolumeEvaluatedRate as DealSaleRateEvaluator;
+            if (extraRateEvaluator != null)
+                dealSaleTiers.Add(new DealSaleZoneGroupTierWithoutRate
+                {
+                    TierNumber = 2
+                });
+
+            return dealSaleTiers.OrderBy(itm => itm.TierNumber);
         }
 
         private IOrderedEnumerable<DealSaleZoneGroupTier> BuildSaleTiers(SwapDealInbound swapDealInbound, Func<string, int, IEnumerable<SaleRateHistoryRecord>> getCustomerZoneRatesFunc)
@@ -446,7 +459,20 @@ namespace TOne.WhS.Deal.Business
                 TierNumber = 1,
                 VolumeInSeconds = swapDealOutbound.Volume * 60
             };
-            return new List<DealSupplierZoneGroupTierWithoutRate> { dealSupplierZoneGroupTierWithoutRate }.OrderBy(itm => itm.TierNumber);
+
+            var dealSupplierTiers = new List<DealSupplierZoneGroupTierWithoutRate>
+            {
+                dealSupplierZoneGroupTierWithoutRate
+            };
+
+            var extraRateEvaluator = swapDealOutbound.ExtraVolumeEvaluatedRate as DealSupplierRateEvaluator;
+            if (extraRateEvaluator != null)
+                dealSupplierTiers.Add(new DealSupplierZoneGroupTierWithoutRate
+                {
+                    TierNumber = 2
+                });
+
+            return dealSupplierTiers.OrderBy(itm => itm.TierNumber);
         }
     }
 }
