@@ -508,18 +508,31 @@ namespace TOne.WhS.Deal.MainExtensions.QueueActivators
 
 		private void ApplyTariffRule(dynamic record, Dictionary<PropertyName, string> propertyNames, decimal durationInSeconds, out decimal totalAmount, out decimal effectiveRate, out decimal pricedDuration)
 		{
-			int tariffRuleId = record.GetFieldValue(propertyNames[PropertyName.TariffRuleId]);
+			CurrencyExchangeRateManager currencyRateManager = new CurrencyExchangeRateManager();
 			TariffRuleManager tarrifRuleManager = new TariffRuleManager();
+
+			int tariffRuleId = record.GetFieldValue(propertyNames[PropertyName.TariffRuleId]);
 			TariffRule tarrifRule = tarrifRuleManager.GetRule(tariffRuleId);
 
+			DateTime attemptDateTime = record.GetFieldValue(propertyNames[PropertyName.AttemptDateTime]);
+			int origCurrencyId = record.GetFieldValue(propertyNames[PropertyName.OrigCurrencyId]);
+			int currencyId = record.GetFieldValue(propertyNames[PropertyName.CurrencyId]);
+
 			decimal? extraChargeRate = record.GetFieldValue(propertyNames[PropertyName.ExtraChargeRateValue]);
+			decimal convertedExtraChargeRate = 0;
+			if (extraChargeRate.HasValue)
+				convertedExtraChargeRate = currencyRateManager.ConvertValueToCurrency(extraChargeRate.Value, origCurrencyId, currencyId, attemptDateTime);
+
+			decimal origRate = record.GetFieldValue(propertyNames[PropertyName.OrigRateValue]);
+			decimal convertedOrigRate = currencyRateManager.ConvertValueToCurrency(origRate, origCurrencyId, currencyId, attemptDateTime);
+
 			TariffRuleContext context = new TariffRuleContext()
 			{
-				TargetTime = record.GetFieldValue(propertyNames[PropertyName.AttemptDateTime]),
-				DestinationCurrencyId = record.GetFieldValue(propertyNames[PropertyName.CurrencyId]),
-				Rate = record.GetFieldValue(propertyNames[PropertyName.OrigRateValue]),
+				TargetTime = attemptDateTime,
+				DestinationCurrencyId = currencyId,
+				Rate = convertedOrigRate,
 				DurationInSeconds = durationInSeconds,
-				ExtraChargeRate = extraChargeRate.HasValue ? extraChargeRate.Value : 0,
+				ExtraChargeRate = convertedExtraChargeRate,
 				SourceCurrencyId = tarrifRule.Settings.CurrencyId
 			};
 			tarrifRule.Settings.ApplyTariffRule(context);
