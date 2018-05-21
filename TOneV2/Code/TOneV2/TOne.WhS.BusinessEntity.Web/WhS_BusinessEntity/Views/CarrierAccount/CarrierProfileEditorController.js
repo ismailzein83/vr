@@ -416,7 +416,7 @@
                     var matchedItem = UtilsService.getItemByVal($scope.scopeModal.contacts, item.Type, 'value');
 
                     if (matchedItem != null) {
-                        if (matchedItem.inputetype == 'text')
+                        if (matchedItem.inputetype == 'text' || matchedItem.inputetype == 'number')
                             matchedItem.description = item.Description;
                         else {
                             if (item.Description != null && item.Description != "") {
