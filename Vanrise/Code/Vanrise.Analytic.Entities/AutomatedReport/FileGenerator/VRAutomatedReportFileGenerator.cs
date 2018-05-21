@@ -8,6 +8,8 @@ namespace Vanrise.Analytic.Entities
 {
     public class VRAutomatedReportFileGenerator
     {
+        public Guid VRAutomatedReportFileGeneratorId { get; set; }
+        public string Name { get; set; }
         public VRAutomatedReportFileGeneratorSettings Settings { get; set; }
     }
 }
