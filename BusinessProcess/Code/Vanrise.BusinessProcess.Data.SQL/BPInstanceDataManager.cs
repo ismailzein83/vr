@@ -265,12 +265,11 @@ namespace Vanrise.BusinessProcess.Data.SQL
         
         public List<BPDefinitionSummary> GetBPDefinitionSummary(IEnumerable<BPInstanceStatus> executionStatus)
         {
-
-            string excutionStatusIdsAsString = null;
-            if (executionStatus != null && executionStatus.Count() > 0)
-                excutionStatusIdsAsString = string.Join<int>(",", executionStatus.Select(itm => (int)itm));
-
-            return GetItemsSP("[bp].[sp_BPDefinitionSummary_GetUpdated]", BPDefinitionSummaryMapper, excutionStatusIdsAsString);
+            StringBuilder queryBuilder = new StringBuilder();
+            queryBuilder.Append("SELECT bp.[DefinitionID],count(*) as RunningProcessNumber , max(bp.CreatedTime) as LastProcessCreatedTime FROM [BP].[BPInstance] bp WITH(NOLOCK) WHERE 1=1 AND ");
+            queryBuilder.Append(BuildStatusesFilter(executionStatus));
+            queryBuilder.Append(" GROUP BY [DefinitionID] ");
+            return GetItemsText(queryBuilder.ToString(), BPDefinitionSummaryMapper, null);
 
         }
 
