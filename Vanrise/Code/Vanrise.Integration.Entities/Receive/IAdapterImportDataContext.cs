@@ -13,5 +13,7 @@ namespace Vanrise.Integration.Entities
         ImportedBatchProcessingOutput OnDataReceived(IImportedData data);
 
         void StartNewInstanceIfAllowed();
+
+        bool ShouldStopImport();
     }
 }

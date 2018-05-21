@@ -10,6 +10,7 @@ using Vanrise.Integration.Data;
 using Vanrise.Integration.Entities;
 using Vanrise.Queueing;
 using Vanrise.Queueing.Entities;
+using Vanrise.Runtime.Business;
 
 namespace Vanrise.Integration.Business
 {
@@ -371,10 +372,13 @@ namespace Vanrise.Integration.Business
         {
             IDataSourceDataManager _dataManager = IntegrationDataManagerFactory.GetDataManager<IDataSourceDataManager>();
             object _updateHandle;
+            DateTime? _schedulerTaskCacheLastCheck;
 
             protected override bool ShouldSetCacheExpired(object parameter)
             {
-                return _dataManager.AreDataSourcesUpdated(ref _updateHandle);
+                return _dataManager.AreDataSourcesUpdated(ref _updateHandle)
+                     |
+                    Vanrise.Caching.CacheManagerFactory.GetCacheManager<SchedulerTaskManager.CacheManager>().IsCacheExpired(ref _schedulerTaskCacheLastCheck);
             }
         }
 

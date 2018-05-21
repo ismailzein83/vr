@@ -7,7 +7,7 @@ namespace Vanrise.Integration.Business
     {
         DataSource _dataSource;
         Func<IImportedData, ImportedBatchProcessingOutput> _onDataReceivedAction;
-
+        DataSourceManager _dataSourceManager = new DataSourceManager();
         DataSourceStateManager _dsStateManager = new DataSourceStateManager();
         DataSourceRuntimeInstanceManager _dsRuntimeInstanceManager = new DataSourceRuntimeInstanceManager();
 
@@ -39,8 +39,16 @@ namespace Vanrise.Integration.Business
 
         public void StartNewInstanceIfAllowed()
         {
-            _dsRuntimeInstanceManager.TryAddNewInstance(this.DataSourceId, this.AdapterArgument.MaxParallelRuntimeInstances);
+            if (!ShouldStopImport())
+                _dsRuntimeInstanceManager.TryAddNewInstance(this.DataSourceId, this.AdapterArgument.MaxParallelRuntimeInstances);
         }
 
+
+
+        public bool ShouldStopImport()
+        {
+            var refreshedDataSource = _dataSourceManager.GetDataSource(_dataSource.DataSourceId);
+            return !refreshedDataSource.IsEnabled;
+        }
     }
 }

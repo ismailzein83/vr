@@ -49,6 +49,8 @@ namespace Vanrise.Integration.Adapters.SFTPReceiveAdapter
                     bool newFilesStarted = false;
                     foreach (var fileObj in sftpCollectionToProcess.OrderBy(c => c.Modified).ThenBy(c => c.Name))
                     {
+                        if (context.ShouldStopImport())
+                            break;
                         if (!fileObj.IsDirectory && regEx.IsMatch(fileObj.Name))
                         {
                             if (!newFilesStarted)

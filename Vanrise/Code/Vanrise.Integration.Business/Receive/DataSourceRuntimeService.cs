@@ -38,15 +38,17 @@ namespace Vanrise.Integration.Business
 
                                 try
                                 {
-                                    ExecuteDataSource(dataSource);
+                                    if (dataSource.Entity.IsEnabled)
+                                    {
+                                        ExecuteDataSource(dataSource);
+                                        isInstanceLockedAndExecuted = true;
+                                    }
                                 }
                                 finally
                                 {
                                     _dataManager.DeleteInstance(dsRuntimeInstance.DataSourceRuntimeInstanceId);
                                 }
-
-                                isInstanceLockedAndExecuted = true;
-                            }
+                            }                            
                         });
                     if (isInstanceLockedAndExecuted)
                         break;
@@ -96,6 +98,7 @@ namespace Vanrise.Integration.Business
             Func<IImportedData, ImportedBatchProcessingOutput> onDataReceivedAction = (data) =>
             {
                 lastReceivedBatchData = data;
+                logger.WriteInformation("New batch '{0}' imported", data.Description);
                 logger.WriteVerbose("Executing the custom code written for the mapper");
                 MappedBatchItemsToEnqueue outputItems = new MappedBatchItemsToEnqueue();
                 MappingOutput outputResult = this.ExecuteCustomCode(dataSource.Entity.DataSourceId, dataSource.Entity.Settings.MapperCustomCode, data, outputItems, logger);

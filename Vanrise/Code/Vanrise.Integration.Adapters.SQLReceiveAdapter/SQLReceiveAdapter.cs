@@ -63,9 +63,16 @@ namespace Vanrise.Integration.Adapters.SQLReceiveAdapter
                         rangeTransactionLockItem = null;
                     }
 
-                    rangeToRead = GetAndLockNextRangeToRead(context, rangeToRead, dbAdapterArgument, out isLastRange, out rangeTransactionLockItem);
-                    if (rangeToRead == null)
-                        LogInformation("No More Ranges to read");
+                    if (!context.ShouldStopImport())
+                    {
+                        rangeToRead = GetAndLockNextRangeToRead(context, rangeToRead, dbAdapterArgument, out isLastRange, out rangeTransactionLockItem);
+                        if (rangeToRead == null)
+                            LogInformation("No More Ranges to read");
+                    }
+                    else
+                    {
+                        rangeToRead = null;
+                    }
                 }
                 while (rangeToRead != null);
             }
@@ -155,8 +162,9 @@ namespace Vanrise.Integration.Adapters.SQLReceiveAdapter
                     context.StartNewInstanceIfAllowed();
                     anotherInstanceIsStarted = true;
                 }
-            } while (hasMoreRecords);
+            } while (hasMoreRecords && !context.ShouldStopImport());
 
+            command.Cancel();
             data.OnDisposed();
             data = null;
 
