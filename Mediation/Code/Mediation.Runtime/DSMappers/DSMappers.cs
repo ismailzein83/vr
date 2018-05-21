@@ -142,6 +142,7 @@ namespace Mediation.Runtime
                     switch (recordType)
                     {
                         case "07": lengthToRead = 89; break;
+                        case "08": lengthToRead = 41; break;
                         case "01": lengthToRead = 354; break;
                         default: lengthToRead = 115; break;
                     }
@@ -152,6 +153,7 @@ namespace Mediation.Runtime
                     switch (recordType)
                     {
                         case "07": break;
+                        case "08": break;
 
                         case "01":
                             string cdrAsString_01 = currentLine.Substring(0, lengthToRead);
