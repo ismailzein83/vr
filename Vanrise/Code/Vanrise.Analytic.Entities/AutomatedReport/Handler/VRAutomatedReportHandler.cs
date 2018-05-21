@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Vanrise.Analytic.Entities
 {
-    public abstract class VRAutomatedReportHandler
+    public class VRAutomatedReportHandler
     {
         public VRAutomatedReportHandlerSettings Settings { get; set; }
     }
