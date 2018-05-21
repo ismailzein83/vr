@@ -182,18 +182,26 @@ namespace TOne.WhS.RouteSync.IVSwitch
                 RouteTableName = GetRouteTableName(endPoint.RouteTableId),
                 TariffTableName = GetTariffTableName(endPoint.TariffTableId)
             };
-            int priority = 0;
-            if (route.Options == null || route.Options.Count == 0)
-            {
-                ivSwitch.Routes.Add(BuildBlockedRoute(preparedData.BlockRouteId, preparedData._switchTime, route.Code, ref priority));
-                return ivSwitch;
-            }
 
+            int priority = 0;
+            var routes = new List<IVSwitchRoute>();
+            if (route.Options != null && route.Options.Count > 0)
+                routes = BuildIVSwitchRoutes(route, ref priority, preparedData);
+
+            if (routes.Count == 0)
+                routes.Add(BuildBlockedRoute(preparedData.BlockRouteId, preparedData._switchTime, route.Code, ref priority));
+
+            ivSwitch.Routes.AddRange(routes);
+            return ivSwitch;
+        }
+
+        private List<IVSwitchRoute> BuildIVSwitchRoutes(Entities.Route route, ref int priority, PreparedConfiguration preparedData)
+        {
+            var routes = new List<IVSwitchRoute>();
             var nonBlockedOptions = route.Options.Where(r => !r.IsBlocked);
 
             decimal? optionsPercenatgeSum = 0;
             decimal? maxPercentage = 0;
-            int gatewayCount = 0;
             priority = NumberOfOptions;
 
             foreach (var option in nonBlockedOptions)
@@ -204,7 +212,6 @@ namespace TOne.WhS.RouteSync.IVSwitch
             }
             int totalBkt = 0;
             int serial = 1;
-            var routes = new List<IVSwitchRoute>();
             foreach (var option in nonBlockedOptions)
             {
                 SupplierDefinition supplier;
@@ -247,10 +254,8 @@ namespace TOne.WhS.RouteSync.IVSwitch
                         routes.Last().HuntStop = 1;
                 }
             }
-            ivSwitch.Routes.AddRange(routes);
-            return ivSwitch;
+            return routes;
         }
-
         private List<IVSwitchRoute> GetBackupRoutes(string code, DateTime wakeUpTime, int blockedRouteId, List<BackupRouteOption> backups, Dictionary<string, SupplierDefinition> suppliersDefinition, ref int priority, ref int serial)
         {
             var backupRoutes = new List<IVSwitchRoute>();
