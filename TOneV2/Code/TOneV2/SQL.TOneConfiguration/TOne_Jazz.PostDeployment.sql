@@ -48,9 +48,9 @@ as (select * from (values
 merge	[common].[Connection] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Settings] = s.[Settings]
+--when matched then
+--	update set
+--	[Name] = s.[Name],[Settings] = s.[Settings]
 when not matched by target then
 	insert([ID],[Name],[Settings])
 	values(s.[ID],s.[Name],s.[Settings]);
@@ -67,9 +67,9 @@ as (select * from (values
 merge	[common].[Setting] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]
+--when matched then
+--	update set
+--	[Name] = s.[Name],[Type] = s.[Type],[Category] = s.[Category],[Settings] = s.[Settings],[Data] = s.[Data],[IsTechnical] = s.[IsTechnical]
 when not matched by target then
 	insert([ID],[Name],[Type],[Category],[Settings],[Data],[IsTechnical])
 	values(s.[ID],s.[Name],s.[Type],s.[Category],s.[Settings],s.[Data],s.[IsTechnical]);
@@ -89,9 +89,9 @@ as (select * from (values
 merge	[common].[SMSMessageTemplate] as t
 using	cte_data as s
 on		1=1 and t.[ID] = s.[ID]
-when matched then
-	update set
-	[Name] = s.[Name],[SMSMessageTypeId] = s.[SMSMessageTypeId],[Settings] = s.[Settings],[CreatedBy] = s.[CreatedBy],[LastModifiedBy] = s.[LastModifiedBy],[LastModifiedTime] = s.[LastModifiedTime]
+--when matched then
+--	update set
+--	[Name] = s.[Name],[SMSMessageTypeId] = s.[SMSMessageTypeId],[Settings] = s.[Settings],[CreatedBy] = s.[CreatedBy],[LastModifiedBy] = s.[LastModifiedBy],[LastModifiedTime] = s.[LastModifiedTime]
 when not matched by target then
 	insert([ID],[Name],[SMSMessageTypeId],[Settings],[CreatedBy],[LastModifiedBy],[LastModifiedTime])
 	values(s.[ID],s.[Name],s.[SMSMessageTypeId],s.[Settings],s.[CreatedBy],s.[LastModifiedBy],s.[LastModifiedTime]);
