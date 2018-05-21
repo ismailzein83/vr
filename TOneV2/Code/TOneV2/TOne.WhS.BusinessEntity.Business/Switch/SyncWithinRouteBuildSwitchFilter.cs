@@ -12,10 +12,10 @@ namespace TOne.WhS.BusinessEntity.Business
     {
         public bool IsMatched(ISwitchFilterContext context)
         {
-            context.Switch.ThrowIfNull("context.Switch");
-            context.Switch.Settings.ThrowIfNull("context.Switch.Settings");
-            context.Switch.Settings.RouteSynchronizer.ThrowIfNull("context.Switch.Settings.RouteSynchronizer");
-            return context.Switch.Settings.RouteSynchronizer.SupportSyncWithinRouteBuild;
+            if (context.Switch != null && context.Switch.Settings != null && context.Switch.Settings.RouteSynchronizer != null)
+                return context.Switch.Settings.RouteSynchronizer.SupportSyncWithinRouteBuild;
+
+            return false;
         }
     }
 }
