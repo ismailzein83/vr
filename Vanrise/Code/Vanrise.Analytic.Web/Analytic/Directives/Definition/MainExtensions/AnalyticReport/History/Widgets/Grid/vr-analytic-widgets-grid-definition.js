@@ -221,7 +221,7 @@
                                     };
                                     selectedMeasureIds.push(measure.MeasureName);
                                     promises.push(measureGridField.loadPromiseDeferred.promise);
-                                    promises.push(dimensionGridField.styleLoadPromiseDeferred.promise);
+                                    promises.push(measureGridField.styleLoadPromiseDeferred.promise);
                                     addMeasureGridWidthAPI(measureGridField);
                                 }
                             }
