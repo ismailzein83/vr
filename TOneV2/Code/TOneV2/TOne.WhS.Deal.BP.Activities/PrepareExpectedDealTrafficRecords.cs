@@ -62,7 +62,7 @@ namespace TOne.WhS.Deal.BP.Activities
                         {
                             DealZoneGroupTierDetailsWithoutRate firstDealZoneGroupTierDetails = dealDefinitionManager.GetDealZoneGroupTierDetailsWithoutRate(inputArgument.IsSale, dealZoneGroup.DealId, dealZoneGroup.ZoneGroupNb, 1);
                             if (firstDealZoneGroupTierDetails == null)
-                                throw new VRBusinessException(string.Format("dealId '{0}' and ZoneGroupNb '{1}' should contains at least one Tier"));
+                                throw new VRBusinessException(string.Format("dealId '{0}' and ZoneGroupNb '{1}' should contains at least one Tier",dealZoneGroup.DealId,dealZoneGroup.ZoneGroupNb));
 
                             dealProgressData = new DealProgressData();
                             dealProgressData.DealId = dealZoneGroup.DealId;
