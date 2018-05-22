@@ -10,8 +10,8 @@ namespace TOne.WhS.Routing.Business.TransformationSteps
         public string Number { get; set; }
         public string CustomerId { get; set; }
         public string EffectiveOn { get; set; }
-        public string CustomerSellingNumberPlanId { get; set; }
 
+        public string CustomerSellingNumberPlanId { get; set; }
         public string SaleCode { get; set; }
         public string SaleZoneId { get; set; }
         public string MasterSaleCode { get; set; }
