@@ -320,6 +320,25 @@ namespace TOne.WhS.Routing.Business
 
         }
 
+        private SupplierCodeIteratorInfo GetSupplierCodeIterator(int supplierId, DateTime effectiveOn)
+        {
+            List<SupplierCodeIteratorInfo> supplierCodeIteratorInfos = GetSupplierCodeIterators(supplierId, effectiveOn);
+            return TOne.WhS.BusinessEntity.Business.Helper.GetBusinessEntityInfo<SupplierCodeIteratorInfo>(supplierCodeIteratorInfos, effectiveOn);
+        }
+
+        private bool IsCountrySoldToCustomer(int customerId, long saleZoneId, DateTime effectiveOn)
+        {
+            int? saleZoneCountryId = new SaleZoneManager().GetSaleZoneCountryId(saleZoneId);
+            if (!saleZoneCountryId.HasValue)
+                throw new NullReferenceException(string.Format("saleZoneCountryId of saleZoneId: {0}", saleZoneId));
+
+            CustomerCountry2 customerCountry = new CustomerCountryManager().GetCustomerCountry(customerId, saleZoneCountryId.Value, effectiveOn, false);
+            if (customerCountry == null)
+                return false;
+
+            return true;
+        }
+
         private struct GetSellingNumberPlanSaleCodeIteratorCacheName : IBEDayFilterCacheName
         {
             public int SettingNumberPlanId { get; set; }
@@ -331,7 +350,6 @@ namespace TOne.WhS.Routing.Business
                 get { return EffectiveOn; }
             }
         }
-
         private SaleCodeIterator GetSellingNumberPlanSaleCodeIterator(int sellingNumberPlanId, DateTime effectiveOn)
         {
             var cacheName = new GetSellingNumberPlanSaleCodeIteratorCacheName { SettingNumberPlanId = sellingNumberPlanId, EffectiveOn = effectiveOn.Date };// String.Concat("GetSellingNumberPlanSaleCodeIterator_", sellingNumberPlanId, "_", effectiveOn.Date);
@@ -364,7 +382,6 @@ namespace TOne.WhS.Routing.Business
                 get { return EffectiveOn; }
             }
         }
-
         private Dictionary<int, List<SaleCode>> GetCachedSaleCodes(DateTime effectiveOn)
         {
             var cacheName = new GetCachedSaleCodesCacheName { EffectiveOn = effectiveOn.Date };
@@ -383,25 +400,6 @@ namespace TOne.WhS.Routing.Business
                 }
                 return rslt;
             });
-        }
-
-        private SupplierCodeIteratorInfo GetSupplierCodeIterator(int supplierId, DateTime effectiveOn)
-        {
-            List<SupplierCodeIteratorInfo> supplierCodeIteratorInfos = GetSupplierCodeIterators(supplierId, effectiveOn);
-            return TOne.WhS.BusinessEntity.Business.Helper.GetBusinessEntityInfo<SupplierCodeIteratorInfo>(supplierCodeIteratorInfos, effectiveOn);
-        }
-
-        private bool IsCountrySoldToCustomer(int customerId, long saleZoneId, DateTime effectiveOn)
-        {
-            int? saleZoneCountryId = new SaleZoneManager().GetSaleZoneCountryId(saleZoneId);
-            if (!saleZoneCountryId.HasValue)
-                throw new NullReferenceException(string.Format("saleZoneCountryId of saleZoneId: {0}", saleZoneId));
-
-            CustomerCountry2 customerCountry = new CustomerCountryManager().GetCustomerCountry(customerId, saleZoneCountryId.Value, effectiveOn, false);
-            if (customerCountry == null)
-                return false;
-
-            return true;
         }
 
         private struct GetSupplierCodeIteratorCacheName : IBEDayFilterCacheName
