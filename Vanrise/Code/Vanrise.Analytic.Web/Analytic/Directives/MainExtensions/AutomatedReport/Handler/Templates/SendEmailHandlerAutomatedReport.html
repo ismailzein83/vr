@@ -1,0 +1,41 @@
+﻿<vr-row>
+
+
+    <vr-columns width="1/2row">
+        <vr-textbox label="To" value="scopeModel.to" isrequired></vr-textbox>
+    </vr-columns>
+
+    <vr-columns width="1/2row">
+        <vr-textbox label="Subject" value="scopeModel.subject" isrequired></vr-textbox>
+    </vr-columns>
+
+    <vr-columns width="1/2row">
+        <vr-textbox label="Body" value="scopeModel.body" isrequired></vr-textbox>
+    </vr-columns>
+    <br />
+    <br />
+</vr-row>
+        <vr-row>
+            <vr-columns width="1/3row">
+                <vr-button type="Add" data-onclick="scopeModel.addAttachementGenerator" standalone></vr-button>
+            </vr-columns>
+        </vr-row>
+        <vr-row removeline>
+            <vr-columns width="fullrow">
+                <vr-validator validate="scopeModel.validateColumns()">
+                    <vr-datagrid on-ready="scopeModel.onGridReady"
+                                 datasource="scopeModel.columns"
+                                 enabledraggablerow="true"
+                                 ondeleterow="scopeModel.removeColumn"
+                                 menuactions="scopeModel.gridMenuActions"
+                                 maxheight="400px"
+                                 hidegridmenu>
+                        <!--id-->
+                        <vr-datagridcolumn headertext="'Name'" disablesorting>
+                            <label value="dataItem.Name">{{dataItem.Name}}</label>
+                        </vr-datagridcolumn>
+
+                    </vr-datagrid>
+                </vr-validator>
+            </vr-columns>
+        </vr-row>

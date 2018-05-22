@@ -29,7 +29,7 @@ app.directive('vrGenericdataFieldtypeChoicesRuntimeeditor', ['UtilsService', 'VR
                 return {
                     pre: function ($scope, iElem, iAttrs, ctrl) {
                     }
-                }
+                };
             },
             template: function (element, attrs) {
                 return getTemplate(attrs);

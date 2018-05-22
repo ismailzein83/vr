@@ -16,7 +16,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.Queries
 
         public List<RecordSearchQueryDefinitionDataRecordStorage> DataRecordStorages { get; set; }
 
-        public override string RuntimeEditor { get { return ""; } }
+        public override string RuntimeEditor { get { return "vr-analytic-recordsearchquerydefinitionsettings-runtimeeditor"; } }
     }
 
     public class RecordSearchQueryDefinitionDataRecordStorage

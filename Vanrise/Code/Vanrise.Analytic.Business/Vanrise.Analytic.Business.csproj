@@ -75,6 +75,9 @@
     <Compile Include="MemoryAnalyticDataProvider\MemoryAnalyticDataProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StyleRuleConditionContext.cs" />
+    <Compile Include="VRAutomatedReportHandlerManager.cs" />
+    <Compile Include="VRAutomatedReportFileGeneratorManager.cs" />
+    <Compile Include="VRAutomatedReportQueryDefinitionManager.cs" />
     <Compile Include="VRRestAPIDataProvider\GetRemoteAnalyticDataProviderContext.cs" />
     <Compile Include="VRRestAPIDataProvider\RemoteAnalyticDataProvider.cs" />
     <Compile Include="VRRestAPIDataProvider\VRRestAPIAnalyticDataProvider.cs" />

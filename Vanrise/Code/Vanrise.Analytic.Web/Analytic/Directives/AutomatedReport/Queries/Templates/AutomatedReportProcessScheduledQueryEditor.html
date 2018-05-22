@@ -1,0 +1,35 @@
+﻿<div vr-modalcontent ng-controller="VRAnalytic_AutomatedReportProcessScheduledQueryEditorController" vr-loader="isLoading">
+    <vr-modalbody>
+        <vr-form name="formAutomatedReportProcessScheduledQueryEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox label="Query Name" value="scopeModel.Name" isrequired></vr-textbox>
+                        </vr-columns>
+
+                        <vr-columns width="1/2row">
+                            <vr-analytic-automatedreportprocessquery-selector selectedvalues="scopeModel.selectedAutomatedReportProcess"
+                                                                              on-ready="scopeModel.onAutomatedReportProcessScheduledSelectorReady"
+                                                                              onselectionchanged="scopeModel.onAutomatedReportProcessScheduledSelectionChanged"
+                                                                              isrequired="true"></vr-analytic-automatedreportprocessquery-selector>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Settings'">
+                            <vr-directivewrapper ng-if="scopeModel.selectedAutomatedReportProcess !=undefined" directive="scopeModel.selectedAutomatedReportProcess.RuntimeEditor"
+                                                 on-ready="scopeModel.onRuntimeDirectiveReady" isrequired>
+                            </vr-directivewrapper>
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formAutomatedReportProcessScheduledQueryEditor" data-onclick="saveQuery"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

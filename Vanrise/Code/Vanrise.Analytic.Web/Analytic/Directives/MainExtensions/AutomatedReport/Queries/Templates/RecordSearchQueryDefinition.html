@@ -1,0 +1,33 @@
+﻿<vr-row>
+    <vr-columns width="1/2row">
+        <vr-genericdata-datarecordstorage-selector on-ready="scopeModel.onDataRecordStorageSelectorReady" onselectionchanged ="scopeModel.onDataRecordStorageSelectionChanged" selectedvalues="scopeModel.selectedDataRecordStorage"></vr-genericdata-datarecordstorage-selector>
+    </vr-columns>
+    <vr-columns width="1/3row"  withemptyline>
+        <vr-button type="Add" data-onclick="scopeModel.addColumn" standalone vr-disabled="scopeModel.selectedDataRecordStorage == undefined"></vr-button>
+    </vr-columns>
+</vr-row>
+
+<vr-row removeline>
+    <vr-columns width="fullrow">
+        <vr-validator validate="scopeModel.validateColumns()">
+            <vr-datagrid on-ready="scopeModel.onGridReady"
+                         datasource="scopeModel.columns"
+                         ondeleterow="scopeModel.removeColumn"
+                         maxheight="400px"
+                         hidegridmenu>
+
+                <vr-datagridcolumn headertext="'ID'" disablesorting>
+                    <label value="dataItem.columnId">{{dataItem.columnId}}</label>
+                </vr-datagridcolumn>
+
+                <vr-datagridcolumn headertext="'Name'" disablesorting>
+                    <label value="dataItem.columnName">{{dataItem.columnName}}</label>
+                </vr-datagridcolumn>
+
+                <vr-datagridcolumn headertext="'Selected'" disablesorting>
+                    <vr-switch value="dataItem.isSelected"></vr-switch>
+                </vr-datagridcolumn>
+            </vr-datagrid>
+        </vr-validator>
+    </vr-columns>
+</vr-row>

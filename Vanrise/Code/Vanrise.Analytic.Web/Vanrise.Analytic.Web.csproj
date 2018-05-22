@@ -70,6 +70,8 @@
   <ItemGroup>
     <Compile Include="Constants.cs" />
     <Compile Include="Controllers\AnalyticConfigurationController.cs" />
+    <Compile Include="Controllers\AutomatedReportHandlerSettingsController.cs" />
+    <Compile Include="Controllers\AutomatedReportQueryDefinitionSettingsController.cs" />
     <Compile Include="Controllers\AnalyticController.cs" />
     <Compile Include="Controllers\AnalyticItemActionController.cs" />
     <Compile Include="Controllers\AnalyticItemConfigController.cs" />
@@ -79,9 +81,11 @@
     <Compile Include="Controllers\DAProfCalcOutputSettingsController.cs" />
     <Compile Include="Controllers\DataAnalysisDefinitionController.cs" />
     <Compile Include="Controllers\DataAnalysisItemDefinitionController.cs" />
+    <Compile Include="Controllers\SendEmailHandlerController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Analytic\Directives\AutomatedReport\Handler\Templates\" />
     <Folder Include="Analytic\Directives\MainExtensions\MeasureExternalSource\Templates\" />
   </ItemGroup>
   <ItemGroup>
@@ -134,6 +138,28 @@
     <Content Include="Analytic\Constants\DAProfCalcChunkTimeEnum.js" />
     <Content Include="Analytic\Constants\DAProfCalcTimeUnitEnum.js" />
     <Content Include="Analytic\Constants\TimeUnitEnum.js" />
+    <Content Include="Analytic\Directives\AutomatedReport\Handler\vr_analytic_handlersettings_automatedreport.js" />
+    <Content Include="Analytic\Directives\AutomatedReport\Queries\AutomatedReportProcessScheduledQueryEditorController.js" />
+    <Content Include="Analytic\Directives\AutomatedReport\Queries\Templates\AutomatedReportProcessScheduledQueryEditor.html" />
+    <Content Include="Analytic\Directives\AutomatedReport\Templates\AutomatedReportProcessScheduled.html" />
+    <Content Include="Analytic\Directives\AutomatedReport\Queries\Templates\AutomatedReportQueryDefinitionSettings.html" />
+    <Content Include="Analytic\Directives\AutomatedReport\vr-analytic-automatedreportprocess-schedualed.js" />
+    <Content Include="Analytic\Directives\AutomatedReport\Queries\vr-analytic-automatedreportquerydefinition-settings.js" />
+    <Content Include="Analytic\Directives\AutomatedReport\Queries\vr-analytic-querydefinition-automatedreport.js" />
+    <Content Include="Analytic\Directives\AutomatedReport\Queries\vr-analytic-automatedreportprocessquery-selector.js" />
+    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\AdvancedExcelFileGeneratorEditorController.js" />
+    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\Templates\AdvancedExcelFileGeneratorEditorTemplate.html" />
+    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\Templates\AdvancedExcelFileGeneratorTemplate.html" />
+    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\FileGenerator\vr-analytic-advancedexcel-filegenerator.js" />
+    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\SendEmailHandlerAutomatedReportEditorController.js" />
+    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\Templates\SendEmailHandlerAutomatedReport.html" />
+    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\Templates\SendEmailHandlerAutomatedReportEditor.html" />
+    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Handler\vr-analytic-sendemailhandler-automatedreporthandler.js" />
+    <Content Include="Analytic\Directives\AutomatedReport\FileGenerator\vr-analytic-sendemailhandler-filegenerator.js" />
+    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Queries\Templates\RecordSearchQueryDefinition.html" />
+    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Queries\Templates\RecordSearchQueryDefinitionSettingsRuntimeEditorTemplate.html" />
+    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Queries\vr-analytic-recordsearchquerydefinitionsettings-runtimeeditor.js" />
+    <Content Include="Analytic\Directives\MainExtensions\AutomatedReport\Queries\vr-recordsearchquerydefinition-automatedreport.js" />
     <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\AnalyticDimensionMappingRulesGridEditorController.js" />
     <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\Templates\AnalyticDimensionMappingRulesGridTemplate.html" />
     <Content Include="Analytic\Directives\MainExtensions\MeasureExternalSource\AnalyticMeasureExternalSource\Templates\AnalyticTableMeasureExternalSourceTemplate.html" />
@@ -318,6 +344,10 @@
     <Content Include="Analytic\Services\AnalyticItemActionService.js" />
     <Content Include="Analytic\Services\AnalyticItemConfigService.js" />
     <Content Include="Analytic\Services\AnalyticReportService.js" />
+    <Content Include="Analytic\Services\APIServices\AutomatedReportHandlerSettingsAPIService.js" />
+    <Content Include="Analytic\Services\APIServices\AutomatedReportQueryDefinitionSettingsAPIService.js" />
+    <Content Include="Analytic\Services\APIServices\SendEmailHandlerAPIService.js" />
+    <Content Include="Analytic\Services\AutomatedReportProcessScheduledService.js" />
     <Content Include="Analytic\Services\DimensionMappingRulesService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticItemActionAPIService.js" />
     <Content Include="Analytic\Services\APIServices\DAProfCalcNotitificationAPIService.js" />
@@ -337,6 +367,8 @@
     <Content Include="Analytic\Services\APIServices\AnalyticItemConfigAPIService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticReportAPIService.js" />
     <Content Include="Analytic\Services\APIServices\AnalyticTableAPIService.js" />
+    <Content Include="Analytic\Services\AdvancedExcelFileGeneratorService.js" />
+    <Content Include="Analytic\Services\SendEmailHandlerService.js" />
     <Content Include="Analytic\Views\DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionEditor.html" />
     <Content Include="Analytic\Views\DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionEditorController.js" />
     <Content Include="Analytic\Views\DataAnalysis\DataAnalysisDefinition\DataAnalysisDefinitionManagement.html" />

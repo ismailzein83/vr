@@ -1,0 +1,27 @@
+﻿<div vr-modalcontent ng-controller="VRAnalytic_SendEmailHandlerAutomatedReportEditorController" vr-loader="isLoading">
+    <vr-modalbody>
+        <vr-form name="formSendEmailHandlerAutomatedReportEditor">
+            <vr-tabs>
+                <vr-tab header="'Definition'">
+                    <vr-row>
+                        <vr-columns width="1/2row">
+                            <vr-textbox label="Attachement Generator Name" value="scopeModel.Name" isrequired></vr-textbox>
+                        </vr-columns>
+                    </vr-row>
+                </vr-tab>
+                <vr-tab header="'Settings'">
+                    <vr-analytic-sendemailhandler-filegenerator on-ready="scopeModel.onFileGeneratorSelectorReady"></vr-analytic-sendemailhandler-filegenerator>
+                   
+                </vr-tab>
+            </vr-tabs>
+        </vr-form>
+    </vr-modalbody>
+    <div>
+        <vr-actionbar showcollapsebutton="false" issectioncollapsed="false">
+            <div transclude-to="buttons">
+                <vr-button type="Save" formname="formSendEmailHandlerAutomatedReportEditor" data-onclick="saveAttachementGenerator"></vr-button>
+                <vr-button type="Close" data-onclick="close"></vr-button>
+            </div>
+        </vr-actionbar>
+    </div>
+</div>

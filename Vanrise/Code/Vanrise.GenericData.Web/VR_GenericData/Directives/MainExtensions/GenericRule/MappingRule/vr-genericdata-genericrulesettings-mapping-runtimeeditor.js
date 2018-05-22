@@ -23,7 +23,7 @@ app.directive('vrGenericdataGenericrulesettingsMappingRuntimeeditor', ['UtilsSer
                 return {
                     pre: function ($scope, iElem, iAttrs, ctrl) {
                     }
-                }
+                };
             },
             templateUrl: "/Client/Modules/VR_GenericData/Directives/MainExtensions/GenericRule/MappingRule/Templates/MappingRuleSettingsRuntimeEditor.html"
         };
