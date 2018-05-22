@@ -6,7 +6,7 @@
     function GenericBEDefinitionManagementController($scope, VR_GenericData_BusinessEntityDefinitionService, businessEntityDefinitionAPIService, UtilsService) {
 
         var gridAPI;
-        var filter = {};
+       
 
 
 
@@ -20,12 +20,11 @@
 
             $scope.onGridReady = function (api) {
                 gridAPI = api;
-                gridAPI.loadGrid(filter);
+                gridAPI.loadGrid(getFilterObject());
             };
 
             $scope.search = function () {
-                getFilterObject();
-                return gridAPI.loadGrid(filter);
+                return gridAPI.loadGrid(getFilterObject());
             };
             $scope.hasAddGenericBEPermission = function () {
                 return businessEntityDefinitionAPIService.HasAddBusinessEntityDefinition();
@@ -69,11 +68,15 @@
         }
 
         function getFilterObject() {
-            var typeIds = [];
-            for (var i = 0; i < $scope.scopeModel.selectedSettingsTypeConfig.length; i++) {
-                typeIds.push($scope.scopeModel.selectedSettingsTypeConfig[i].ExtensionConfigurationId);
+            var typeIds;
+            if ($scope.scopeModel.selectedSettingsTypeConfig.length > 0) {
+                typeIds = [];
+                for (var i = 0; i < $scope.scopeModel.selectedSettingsTypeConfig.length; i++) {
+                    typeIds.push($scope.scopeModel.selectedSettingsTypeConfig[i].ExtensionConfigurationId);
+                }
             }
-            filter = {
+
+            return {
                 Name: $scope.name,
                 TypeIds: typeIds,
             };

@@ -2,9 +2,9 @@
     <vr-form name="formFilter">
         <div ng-hide="filterSectionCollapsed" vr-loader="isLoading">
             <vr-row removeline>
-                <vr-genericdata-genericbedefinition-selector ng-hide="scopeModel.hideBusinessEntityDefinitionSelector" normal-col-num="2" on-ready="scopeModel.onBusinessEntityDefinitionSelectorReady" selectedvalues="scopeModel.caseDefinition"
+                <vr-genericdata-genericbedefinition-selector ng-hide="scopeModel.hideBusinessEntityDefinitionSelector" normal-col-num="2" hideremoveicon on-ready="scopeModel.onBusinessEntityDefinitionSelectorReady" selectedvalues="scopeModel.caseDefinition"
                                                              onselectionchanged="scopeModel.onBusinessEntityDefinitionSelectionChange"
-                                                             isrequired="true" hideremoveicon></vr-genericdata-genericbedefinition-selector>
+                                                             isrequired="true" hideremoveicon customlabel="Type"></vr-genericdata-genericbedefinition-selector>
             </vr-row>
             <vr-row>
                 <vr-directivewrapper ng-if="scopeModel.filterDirective != undefined" directive="scopeModel.filterDirective" on-ready="scopeModel.onFilterDirectiveReady"></vr-directivewrapper>

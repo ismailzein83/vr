@@ -52,12 +52,40 @@ namespace Vanrise.Invoice.Business
                 Title = "Due Date",
                 Type = new FieldDateTimeType { DataType = FieldDateTimeDataType.Date }
             });
+
+            extraFields.Add(new GenericData.Entities.DataRecordField
+            {
+                Name = "DaysToDue",
+                Title = "Days To Due",
+                Type = new FieldNumberType { DataType = FieldNumberDataType.Int, }
+            });
+            extraFields.Add(new GenericData.Entities.DataRecordField
+            {
+                Name = "Due",
+                Title = "Due",
+                Type = new FieldBooleanType ()
+            });
+            extraFields.Add(new GenericData.Entities.DataRecordField
+            {
+                Name = "Overdue",
+                Title = "Overdue",
+                Type = new FieldBooleanType()
+            });
+
+            extraFields.Add(new GenericData.Entities.DataRecordField
+            {
+                Name = "OverdueFor",
+                Title = "Overdue For",
+                Type = new FieldNumberType { DataType = FieldNumberDataType.Int }
+            });
+
             extraFields.Add(new GenericData.Entities.DataRecordField
             {
                 Name = "FromDate",
                 Title = "From Date",
                 Type = new FieldDateTimeType { DataType = FieldDateTimeDataType.DateTime }
             });
+
             extraFields.Add(new GenericData.Entities.DataRecordField
             {
                 Name = "ToDate",
@@ -68,7 +96,7 @@ namespace Vanrise.Invoice.Business
             {
                 Name = "PaidDate",
                 Title = "Paid Date",
-                Type = new FieldDateTimeType { DataType = FieldDateTimeDataType.DateTime }
+                Type = new FieldDateTimeType { DataType = FieldDateTimeDataType.DateTime,IsNullable = true }
             });
             extraFields.Add(new GenericData.Entities.DataRecordField
             {
@@ -80,13 +108,13 @@ namespace Vanrise.Invoice.Business
             {
                 Name = "ApprovedBy",
                 Title = "Approved By",
-                Type = new FieldBusinessEntityType { BusinessEntityDefinitionId = Vanrise.Security.Entities.User.BUSINESSENTITY_DEFINITION_ID }
+                Type = new FieldBusinessEntityType { BusinessEntityDefinitionId = Vanrise.Security.Entities.User.BUSINESSENTITY_DEFINITION_ID, IsNullable = true }
             });
             extraFields.Add(new GenericData.Entities.DataRecordField
             {
                 Name = "ApprovedTime",
                 Title = "Approved Time",
-                Type = new FieldDateTimeType { DataType = FieldDateTimeDataType.DateTime }
+                Type = new FieldDateTimeType { DataType = FieldDateTimeDataType.DateTime, IsNullable = true }
             });
             extraFields.Add(new GenericData.Entities.DataRecordField
             {
@@ -99,7 +127,8 @@ namespace Vanrise.Invoice.Business
             {
                 Name = "NeedApproval",
                 Title = "Need Approval",
-                Type = new FieldBooleanType()
+                Type = new FieldBooleanType(),
+
             });
             extraFields.Add(new GenericData.Entities.DataRecordField
             {
@@ -111,7 +140,7 @@ namespace Vanrise.Invoice.Business
             {
                 Name = "SentDate",
                 Title = "Sent Date",
-                Type = new FieldDateTimeType { DataType = FieldDateTimeDataType.DateTime }
+                Type = new FieldDateTimeType { DataType = FieldDateTimeDataType.DateTime, IsNullable = true }
             });
             extraFields.Add(new GenericData.Entities.DataRecordField
             {

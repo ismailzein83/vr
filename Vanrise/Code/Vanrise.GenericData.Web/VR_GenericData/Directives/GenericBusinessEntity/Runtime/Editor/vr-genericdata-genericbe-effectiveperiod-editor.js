@@ -68,7 +68,7 @@
 
                 api.setData = function (obj) {
                     var effectivePeriod = effectivePeriodAPI.getData();
-                    if (effectivePeriod != undefined) {
+                    if (obj != undefined && effectivePeriod != undefined) {
                         obj.BED = effectivePeriod.BED;
                         obj.EED = effectivePeriod.EED;
                     }

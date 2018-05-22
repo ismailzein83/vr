@@ -115,12 +115,17 @@
             }
             if (attrs.customlabel != undefined)
                 label = attrs.customlabel;
+
+            var hideremoveicon = "";
+            if (attrs.hideremoveicon != undefined)
+                hideremoveicon = ' hideremoveicon ';
             return '<vr-columns colnum="{{ctrl.normalColNum}}"> '
                   + ' <vr-genericdata-businessentitydefinition-selector on-ready="scopeModel.onBusinessEntityDefinitionSelectorReady"'
                  + ' isrequired="ctrl.isrequired" '
                   + ' selectedvalues="ctrl.selectedvalues" '
                    + 'customlabel="' + label + '"'
                        + ismultipleselection
+                + hideremoveicon
                   + ' onselectionchanged="ctrl.onselectionchanged">'
                 + ' </vr-genericdata-businessentitydefinition-selector>'
                    + ' </vr-columns>';

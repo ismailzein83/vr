@@ -47,6 +47,32 @@ namespace Vanrise.Invoice.Business
                 invoiceFieldValues.Add("Notes", invoice.Note);
                 invoiceFieldValues.Add("SentDate", invoice.SentDate);
                 invoiceFieldValues.Add("User", invoice.UserId);
+
+
+                var duePeriod = (invoice.DueDate).Subtract(invoice.IssueDate);
+
+                double? daysToDue = 0;
+                bool isDue = false;
+                bool isOverdue = false;
+                double? overdueFor = 0;
+
+
+                if (DateTime.Today.Date < invoice.DueDate.Date)
+                {
+                    daysToDue = invoice.DueDate.Subtract(DateTime.Today).TotalDays;
+                }
+                else
+                {
+                    overdueFor = DateTime.Today.Subtract(invoice.DueDate).TotalDays;
+                    isDue = overdueFor >= 0;
+                    isOverdue = overdueFor >= 1;
+                }
+
+                invoiceFieldValues.Add("DaysToDue", daysToDue);
+                invoiceFieldValues.Add("Due", isDue);
+                invoiceFieldValues.Add("Overdue", isOverdue);
+                invoiceFieldValues.Add("OverdueFor", overdueFor);
+
             }
 
             var _recordRuntimeType = s_dataRecordTypeManager.GetDataRecordRuntimeType(invoiceType.Settings.InvoiceDetailsRecordTypeId);
