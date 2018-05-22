@@ -1,4 +1,5 @@
 ﻿'use strict';
+
 app.directive('vrWhsBeGetcdpnsforidentificationstepPreview', ['UtilsService', 'VRUIUtilsService',
     function (UtilsService, VRUIUtilsService) {
 
@@ -8,29 +9,20 @@ app.directive('vrWhsBeGetcdpnsforidentificationstepPreview', ['UtilsService', 'V
                 onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
-
                 var ctrl = this;
-
                 var ctor = new GetCDPNsForIdentificationStepPreviewCtor(ctrl, $scope);
                 ctor.initializeController();
-
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            compile: function (element, attrs) {
-                return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {
-
-                    }
-                };
-            },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/MappingSteps/GetCDPNsForIdentification/Templates/GetCDPNsForIdentificationStepPreviewTemplate.html';
             }
-
         };
 
         function GetCDPNsForIdentificationStepPreviewCtor(ctrl, $scope) {
+            this.initializeController = initializeController;
+
             var stepObj = {};
 
             function initializeController() {
@@ -86,8 +78,7 @@ app.directive('vrWhsBeGetcdpnsforidentificationstepPreview', ['UtilsService', 'V
 
                 var misisngFieldsArray = [];
 
-                for (var index = 0 ; index < ctrl.inputFields.length; index++)
-                {
+                for (var index = 0 ; index < ctrl.inputFields.length; index++) {
                     if (ctrl.inputFields[index].Value == undefined) {
                         misisngFieldsArray.push(ctrl.inputFields[index].FieldName);
                     }
@@ -142,7 +133,6 @@ app.directive('vrWhsBeGetcdpnsforidentificationstepPreview', ['UtilsService', 'V
                 });
             }
 
-            this.initializeController = initializeController;
         }
 
         return directiveDefinitionObject;

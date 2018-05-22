@@ -5,33 +5,24 @@ app.directive('vrWhsBeGetcdpnsforidentificationstep', ['UtilsService', 'VRUIUtil
 
         var directiveDefinitionObject = {
             restrict: 'E',
-            scope:
-            {
+            scope: {
                 onReady: '='
             },
             controller: function ($scope, $element, $attrs) {
-
                 var ctrl = this;
-
                 var ctor = new GetCDPNsForIdentificationStepCtor(ctrl, $scope);
                 ctor.initializeController();
             },
             controllerAs: 'ctrl',
             bindToController: true,
-            compile: function (element, attrs) {
-                return {
-                    pre: function ($scope, iElem, iAttrs, ctrl) {
-
-                    }
-                };
-            },
             templateUrl: function (element, attrs) {
                 return '/Client/Modules/WhS_BusinessEntity/Directives/MainExtensions/MappingSteps/GetCDPNsForIdentification/Templates/GetCDPNsForIdentificationStepTemplate.html';
             }
-
         };
 
         function GetCDPNsForIdentificationStepCtor(ctrl, $scope) {
+            this.initializeController = initializeController;
+
             var stepPayload;
 
             var switchIdDirectiveReadyAPI;
@@ -241,8 +232,6 @@ app.directive('vrWhsBeGetcdpnsforidentificationstep', ['UtilsService', 'VRUIUtil
                 if (ctrl.onReady != null)
                     ctrl.onReady(api);
             }
-
-            this.initializeController = initializeController;
         }
 
         return directiveDefinitionObject;
