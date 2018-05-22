@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TOne.WhS.BusinessEntity.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.Routing.Entities;
-using Vanrise.Caching;
-using Vanrise.Caching.Runtime;
 using Vanrise.Common;
 using Vanrise.Entities;
 
@@ -390,6 +385,25 @@ namespace TOne.WhS.Routing.Business
             });
         }
 
+        private SupplierCodeIteratorInfo GetSupplierCodeIterator(int supplierId, DateTime effectiveOn)
+        {
+            List<SupplierCodeIteratorInfo> supplierCodeIteratorInfos = GetSupplierCodeIterators(supplierId, effectiveOn);
+            return TOne.WhS.BusinessEntity.Business.Helper.GetBusinessEntityInfo<SupplierCodeIteratorInfo>(supplierCodeIteratorInfos, effectiveOn);
+        }
+
+        private bool IsCountrySoldToCustomer(int customerId, long saleZoneId, DateTime effectiveOn)
+        {
+            int? saleZoneCountryId = new SaleZoneManager().GetSaleZoneCountryId(saleZoneId);
+            if (!saleZoneCountryId.HasValue)
+                throw new NullReferenceException(string.Format("saleZoneCountryId of saleZoneId: {0}", saleZoneId));
+
+            CustomerCountry2 customerCountry = new CustomerCountryManager().GetCustomerCountry(customerId, saleZoneCountryId.Value, effectiveOn, false);
+            if (customerCountry == null)
+                return false;
+
+            return true;
+        }
+
         private struct GetSupplierCodeIteratorCacheName : IBEDayFilterCacheName
         {
             public int SupplierId { get; set; }
@@ -401,13 +415,6 @@ namespace TOne.WhS.Routing.Business
                 get { return this.EffectiveOn; }
             }
         }
-
-        private SupplierCodeIteratorInfo GetSupplierCodeIterator(int supplierId, DateTime effectiveOn)
-        {
-            List<SupplierCodeIteratorInfo> supplierCodeIteratorInfos = GetSupplierCodeIterators(supplierId, effectiveOn);
-            return TOne.WhS.BusinessEntity.Business.Helper.GetBusinessEntityInfo<SupplierCodeIteratorInfo>(supplierCodeIteratorInfos, effectiveOn);
-        }
-
         private List<SupplierCodeIteratorInfo> GetSupplierCodeIterators(int supplierId, DateTime effectiveOn)
         {
             DateTimeRange dateTimeRange = TOne.WhS.BusinessEntity.Business.Helper.GetDateTimeRangeWithOffset(effectiveOn);
@@ -453,7 +460,6 @@ namespace TOne.WhS.Routing.Business
                 get { return this.EffectiveOn; }
             }
         }
-
         private Dictionary<int, List<SupplierCode>> GetCachedSupplierCodes(DateTime from, DateTime to)
         {
             var cacheName = new GetCachedSupplierCodesCacheName { EffectiveOn = from };
@@ -472,19 +478,6 @@ namespace TOne.WhS.Routing.Business
                  }
                  return rslt;
              });
-        }
-
-        private bool IsCountrySoldToCustomer(int customerId, long saleZoneId, DateTime effectiveOn)
-        {
-            int? saleZoneCountryId = new SaleZoneManager().GetSaleZoneCountryId(saleZoneId);
-            if (!saleZoneCountryId.HasValue)
-                throw new NullReferenceException(string.Format("saleZoneCountryId of saleZoneId: {0}", saleZoneId));
-
-            CustomerCountry2 customerCountry = new CustomerCountryManager().GetCustomerCountry(customerId, saleZoneCountryId.Value, effectiveOn, false);
-            if (customerCountry == null)
-                return false;
-
-            return true;
         }
 
         #endregion
