@@ -12,15 +12,30 @@
             return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'UpdateCurrentUserEntityPersonalization'), inputs);
         }
 
+        function UpdateGlobalEntityPersonalization(inputs) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'UpdateGlobalEntityPersonalization'), inputs);
+        }
+
         function GetCurrentUserEntityPersonalization(entityUniqueNames) {
             return BaseAPIService.get(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'GetCurrentUserEntityPersonalization'), {
                 entityUniqueNames: entityUniqueNames
             });
         }
 
+        function DeleteCurrentUserEntityPersonalization(entityUniqueNames) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'DeleteCurrentUserEntityPersonalization'), entityUniqueNames);
+        }
+
+        function DeleteGlobalEntityPersonalization(entityUniqueNames) {
+            return BaseAPIService.post(UtilsService.getServiceURL(VRCommon_ModuleConfig.moduleName, controllerName, 'DeleteGlobalEntityPersonalization'), entityUniqueNames);
+        }
+
         return ({
             UpdateCurrentUserEntityPersonalization: UpdateCurrentUserEntityPersonalization,
-            GetCurrentUserEntityPersonalization: GetCurrentUserEntityPersonalization
+            UpdateGlobalEntityPersonalization: UpdateGlobalEntityPersonalization,
+            GetCurrentUserEntityPersonalization: GetCurrentUserEntityPersonalization,
+            DeleteCurrentUserEntityPersonalization: DeleteCurrentUserEntityPersonalization,
+            DeleteGlobalEntityPersonalization: DeleteGlobalEntityPersonalization
         });
     }
 

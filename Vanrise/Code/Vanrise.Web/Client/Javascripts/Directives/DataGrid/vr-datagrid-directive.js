@@ -6,6 +6,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
         var paddingDirection = VRLocalizationService.isLocalizationRTL() ? "'padding-left'" : "'padding-right'";
         var normaltextDirection = VRLocalizationService.isLocalizationRTL() ? "right" : "left";
         var numbertextDirection = "right";
+        var columnVisibilities = [];
         var directiveDefinitionObject = {
             restrict: 'E',
             scope: {
@@ -24,7 +25,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 margin: '=',
                 dragdropsetting: '='
             },
-            controller: function ($scope, $element, $attrs) {
+             controller: function ($scope, $element, $attrs) {
+                columnVisibilities = [];
                 $scope.$on("$destroy", function () {
                     $('.vr-grid-menu').parents('div').unbind('scroll', hideGridColumnsMenu);
                     $(window).unbind('scroll', hideGridColumnsMenu);
@@ -244,9 +246,8 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                     expendableColumnDescription: col.expendableColumnDescription,
                     fixedWidth: col.fixedWidth,
                     invisibleHeader: col.invisibleheader,
-                    cssClass: col.cssclass
-
-
+                    cssClass: col.cssclass,
+                    sysName: col.sysName
                 };
                 lastAddedColumnId++;
                 colDef.columnId = lastAddedColumnId;
@@ -567,8 +568,19 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
 
                 ctrl.switchColumnVisibility = function (colDef) {
                     colDef.isHidden = !colDef.isHidden;
+                    updateColumnVisibilitiesData(colDef, !colDef.isHidden);
                     calculateColumnsWidth();
                 };
+                function updateColumnVisibilitiesData(colDef, isVisible) {
+                    var index = UtilsService.getItemIndexByVal(columnVisibilities, colDef.sysName, 'SysName');
+                    if(index >= 0)
+                        columnVisibilities.splice(index, 1);
+                    else
+                        columnVisibilities.push({
+                            SysName: colDef.sysName,
+                            IsVisible: isVisible
+                        });
+                }
 
                 ctrl.isExporting = false;
                 ctrl.onExportClicked = function () {
@@ -877,6 +889,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                 ctrl.viewSelectionChanged();
             }
             function defineAPI() {
+
                 gridApi.resetSorting = function () {
                     if (lastSortColumnDef != undefined) {
                         lastSortColumnDef.sortDirection = undefined;
@@ -1036,6 +1049,44 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                         return getPageSize();
                     else if (ctrl.showPager)
                         return ctrl.pagerSettings.itemsPerPage;
+                };
+
+                function getColDefBySyName(sysNameValue) {
+                    var colDef = UtilsService.getItemByVal(ctrl.columnDefs, sysNameValue, 'sysName');
+                    return colDef;
+                }
+
+                gridApi.setPersonalizationItem = function (settings) {
+                    if (settings != undefined) {
+                        var payloadColumnVisibilities = settings.ColumnVisibilities;
+                        if (payloadColumnVisibilities == undefined || payloadColumnVisibilities == null)
+                            columnVisibilities.length = 0;
+                        else {
+                            for (var i = 0; i < payloadColumnVisibilities.length; i++) {
+                                var colItem = payloadColumnVisibilities[i];
+                                var colDef = getColDefBySyName(colItem.SysName);
+                                if (colDef == null)
+                                    continue;
+                                if (colItem.IsVisible == true) {
+                                    ctrl.showColumn(colDef);
+                                }
+                                else
+                                    ctrl.hideColumn(colDef);
+                               columnVisibilities.push(colItem);
+                            }
+                        }
+                    }
+                };
+
+                gridApi.getPersonalizationItem = function () {
+                    var setting = null;
+                    if (columnVisibilities.length > 0) {
+                        setting = {
+                            "$type": "Vanrise.Common.Business.GridPersonalizationExtendedSetting, Vanrise.Common.Business",
+                             ColumnVisibilities: columnVisibilities
+                        };
+                    }
+                    return setting;
                 };
             }
 
@@ -1315,7 +1366,7 @@ app.directive('vrDatagrid', ['UtilsService', 'SecurityService', 'DataRetrievalRe
                             deleteRowFunction(dataItem);
 
 
-                       
+
                     };
 
                     ctrl.getRowDeleteIconTitle = function () {

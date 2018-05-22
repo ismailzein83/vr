@@ -15,5 +15,6 @@ namespace Vanrise.Common.Data
 
         bool Save(EntityPersonalization entityPersonalization);
 
+        bool Delete(long entityPersonalizationId);
     }
 }

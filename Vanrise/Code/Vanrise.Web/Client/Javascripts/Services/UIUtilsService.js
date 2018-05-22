@@ -18,9 +18,9 @@
         }
 
         function callDirectiveLoad(directiveAPI, directiveLoadPayload, loadPromiseDeferred) {
-            UtilsService.convertToPromiseIfUndefined(directiveAPI.load(directiveLoadPayload)).then(function () {
+            UtilsService.convertToPromiseIfUndefined(directiveAPI.load(directiveLoadPayload)).then(function (response) {
                 if (loadPromiseDeferred != undefined)
-                    loadPromiseDeferred.resolve();
+                    loadPromiseDeferred.resolve(response);
             }).catch(function (error) {
                 if (loadPromiseDeferred != undefined)
                     loadPromiseDeferred.reject(error);

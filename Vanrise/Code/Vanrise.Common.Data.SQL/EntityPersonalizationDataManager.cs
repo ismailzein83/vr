@@ -42,6 +42,17 @@ namespace Vanrise.Common.Data.SQL
 
             return false;
         }
+
+        public bool Delete(long entityPersonalizationId)
+        {
+            int affectedRecords = ExecuteNonQuerySP("Common.[sp_EntityPersonalization_Delete]", entityPersonalizationId);
+
+            if (affectedRecords > 0)
+            {
+                return true;
+            }
+            return false;
+        }
         #endregion
 
         #region Mappers

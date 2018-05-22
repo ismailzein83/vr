@@ -430,6 +430,11 @@ app.service('ButtonDirService', ['BaseDirService', function (BaseDirService) {
                     text: "Execute",
                     class: "glyphicon glyphicon-play"
                 };
+            case "Personalization":
+                return {
+                    text: "Personalization",
+                    class: "glyphicon glyphicon-user"
+                };
         }
     }
 }]);

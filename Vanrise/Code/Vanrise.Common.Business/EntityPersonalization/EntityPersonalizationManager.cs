@@ -10,35 +10,55 @@ namespace Vanrise.Common.Business
 {
     public class EntityPersonalizationManager
     {
-        public List<EntityPersonalizationDetail> GetCurrentUserEntityPersonalization(List<string> entityUniqueNames)
+        public EntityPersonalizationData GetCurrentUserEntityPersonalization(List<string> entityUniqueNames)
         {
-            List<EntityPersonalizationDetail> entityPersonalizationItemSettings = new List<EntityPersonalizationDetail>();
+            EntityPersonalizationData entityPersonalization = new EntityPersonalizationData();
+
+            List<EntityPersonalizationDetail> userPersonalizationItemSettings = new List<EntityPersonalizationDetail>();
+            List<EntityPersonalizationDetail> globalPersonalizationItemSettings = new List<EntityPersonalizationDetail>();
+
             int userId = ContextFactory.GetContext().GetLoggedInUserId();
             var entityPersonalizationsDictionaryByUser = GetCachedEntityPersonalizationsByUser().GetRecord(userId);
-            if (entityPersonalizationsDictionaryByUser == null || entityPersonalizationsDictionaryByUser.Count == 0)
-                return null;
             foreach (var entityUniqueName in entityUniqueNames)
             {
-                var userEntityPersonalizationUniqueKey = entityPersonalizationsDictionaryByUser.GetRecord(entityUniqueName);
-                if (userEntityPersonalizationUniqueKey != null && userEntityPersonalizationUniqueKey.Setting != null)
-                    entityPersonalizationItemSettings.Add(new EntityPersonalizationDetail()
+                var userEntityPersonalization = entityPersonalizationsDictionaryByUser.GetRecord(entityUniqueName);
+                var globalEntityPersonalization = GetGlobalEntityPersonalization(entityUniqueName);
+                if (userEntityPersonalization != null && userEntityPersonalization.Setting != null)
+                {
+                    userPersonalizationItemSettings.Add(new EntityPersonalizationDetail()
                     {
                         EntityUniqueName = entityUniqueName,
-                        ExtendedSetting = userEntityPersonalizationUniqueKey.Setting
+                        ExtendedSetting = userEntityPersonalization.Setting
                     });
+                }
+
+                if (globalEntityPersonalization != null && globalEntityPersonalization.Setting != null)
+                {
+                    var globalEntityItemSettings = new EntityPersonalizationDetail()
+                    {
+                        EntityUniqueName = entityUniqueName,
+                        ExtendedSetting = globalEntityPersonalization.Setting,
+                        IsGlobal = true
+                    };
+                    if (userEntityPersonalization == null)
+                        userPersonalizationItemSettings.Add(globalEntityItemSettings);
+                    globalPersonalizationItemSettings.Add(globalEntityItemSettings);
+                }
             }
 
-            return entityPersonalizationItemSettings;
+            entityPersonalization.UserEntityPersonalizations = userPersonalizationItemSettings;
+            entityPersonalization.GlobalEntityPersonalizations = globalPersonalizationItemSettings;
+
+            return entityPersonalization;
         }
-        public EntityPersonalizationExtendedSetting GetGlobalEntityPersonalization(string entityUniqueKey)
+        public EntityPersonalization GetGlobalEntityPersonalization(string entityUniqueKey)
         {
-            return GetCachedGlobalEntityPersonalizations().GetRecord(entityUniqueKey).Setting;
+            return GetCachedGlobalEntityPersonalizations().GetRecord(entityUniqueKey);
         }
 
         public void UpdateCurrentUserEntityPersonalization(List<EntityPersonalizationInput> inputs)
         {
             int userId = ContextFactory.GetContext().GetLoggedInUserId();
-            IEntityPersonalizationDataManager dataManager = CommonDataManagerFactory.GetDataManager<IEntityPersonalizationDataManager>();
             foreach (var input in inputs)
             {
                 EntityPersonalization entity = new EntityPersonalization()
@@ -47,25 +67,73 @@ namespace Vanrise.Common.Business
                     EntityUniqueName = input.EntityUniqueName,
                     Setting = input.ExtendedSetting,
                     CreatedBy = userId
-                };               
-                dataManager.Save(entity);
+                };
+                SaveEntityPersonalization(entity);
             }
-
         }
+
+
 
         public void UpdateGlobalEntityPersonalization(List<EntityPersonalizationInput> inputs)
         {
-            throw new NotImplementedException();
+            foreach (var input in inputs)
+            {
+                EntityPersonalization entity = new EntityPersonalization()
+                {
+                    EntityUniqueName = input.EntityUniqueName,
+                    Setting = input.ExtendedSetting,
+                    CreatedBy = ContextFactory.GetContext().GetLoggedInUserId()
+                };
+                SaveEntityPersonalization(entity);
+            }
         }
 
-        public void DeleteCurrentUserEntityPersonalization(string entityUniqueKey)
+        public void DeleteCurrentUserEntityPersonalization(List<string> entityUniqueNames)
         {
-            throw new NotImplementedException();
+            int userId = ContextFactory.GetContext().GetLoggedInUserId();
+            var entityPersonalizationsDictionaryByUser = GetCachedEntityPersonalizationsByUser().GetRecord(userId);
+
+            foreach (var entityUniqueName in entityUniqueNames)
+            {
+                var userEntityPersonalizationUniqueKey = entityPersonalizationsDictionaryByUser.GetRecord(entityUniqueName);
+                if (userEntityPersonalizationUniqueKey != null )
+                {
+                    long entityPersonalizationId = userEntityPersonalizationUniqueKey.EntityPersonalizationId;
+                    Delete(entityPersonalizationId);
+                }
+            }
         }
 
-        public void DeleteGlobalEntityPersonalization(string entityUniqueKey)
+        public void DeleteGlobalEntityPersonalization(List<string> entityUniqueNames)
         {
-            throw new NotImplementedException();
+            foreach (var entityUniqueName in entityUniqueNames)
+            {
+                var entity = GetGlobalEntityPersonalization(entityUniqueName);
+                if (entity != null)
+                {
+                    long entityPersonalizationId = entity.EntityPersonalizationId;
+                    Delete(entityPersonalizationId);
+                }
+            }
+           
+        }
+
+        void SaveEntityPersonalization(EntityPersonalization entity)
+        {
+            IEntityPersonalizationDataManager dataManager = CommonDataManagerFactory.GetDataManager<IEntityPersonalizationDataManager>();
+            dataManager.Save(entity);
+        }
+
+        void Delete(long entityPersonalizationId)
+        {
+            IEntityPersonalizationDataManager dataManager = CommonDataManagerFactory.GetDataManager<IEntityPersonalizationDataManager>();
+            bool deleteActionSucc = dataManager.Delete(entityPersonalizationId);
+
+            if (deleteActionSucc)
+            {
+                Vanrise.Caching.CacheManagerFactory.GetCacheManager<CacheManager>().SetCacheExpired();
+            }
+            
         }
 
         public Dictionary<string, EntityPersonalization> GetCachedGlobalEntityPersonalizations()

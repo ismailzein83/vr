@@ -26,6 +26,7 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
                             type: gridColumnAttribute.Type,
                             numberPrecision: gridColumnAttribute.NumberPrecision,
                             tag: gridColumnAttribute.Tag,
+                            sysName: gridColumnAttribute.SysName,
 
                         };
                         if (gridColumnAttribute.GridColCSSClassValue != undefined)
@@ -85,7 +86,8 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
                     //fixedWidth
                     if (iAttrs.fixedwidth != undefined)
                         col.fixedWidth = $scope.$eval(iAttrs.fixedwidth);
-
+                    if (iAttrs.sysname != undefined)
+                        col.sysName = $scope.$eval(iAttrs.sysname);
                     if (iAttrs.getcolor != undefined)
                         col.getcolor = $scope.$eval(iAttrs.getcolor);
                     col.cellTemplate = cellTemplate;
@@ -138,7 +140,7 @@ app.directive('vrDatagridcolumn', ['$parse', 'VR_GridColCSSClassEnum', 'UtilsSer
                         ngshowWatch = $scope.$watch(function () {
                             return $parse(expr)($scope);
                         }, function (value) {
-                            if (colDef != undefined) {
+                            if (colDef != undefined) {                                
                                 if (value)
                                     dataGridCtrl.showColumn(colDef);
                                 else

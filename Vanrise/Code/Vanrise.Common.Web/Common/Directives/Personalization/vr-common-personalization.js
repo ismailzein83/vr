@@ -28,40 +28,64 @@ function (UtilsService, VRNotificationService, VR_Common_EntityPersonalizationAP
         var context;
         var uniqueKeys;
         var currentPersonilizationItems;
+        var globalPersonilizationItems;
         ctrl.personalizationMenu = [
             {
                 name: "Save Settings",
-                clicked: savePersonalizationSettings
+                clicked: function () {
+                    savePersonalizationSettings(true);
+                }
             },
              {
                  name: "Reset to Default",
                  clicked: function () {
-
+                     resetPersonalizationSettings(true);
                  }
              },
             {
                 name: "Save as Global",
                 clicked: function () {
-
+                    savePersonalizationSettings(false);
                 }
             },
             {
                 name: "Reset Global",
                 clicked: function () {
+                    resetPersonalizationSettings(false);
+                },
+                disable: globalPersonilizationItems != undefined && globalPersonilizationItems.length > 0
 
-                }
             }
         ];
 
-        function savePersonalizationSettings() {
+        function savePersonalizationSettings(isUser) {
+            var title = isUser ? "Save User Settings" : "Save Global Settings";
             var changedItems = getEntityPersonalizationChangedItems();
             if (changedItems.length == 0)
-                VRNotificationService.showInformation("No user settings has been changed.");
-            else
-                openPersonilizationEditor("Save User Settings", changedItems);
+                VRNotificationService.showInformation("No settings has been changed.");
+            else {
+                var onSavePesonilization = function (checkedEntityUniqueNames) {
+                    var checkedItemsSettingsInputs = buildEntityUniqueInputs(checkedEntityUniqueNames);
+                    return UpdateCurrentEntityPersonalization(isUser, checkedItemsSettingsInputs);
+                };
+                openPersonilizationEditor(title, changedItems, onSavePesonilization);
+            }
         }
 
-        function openPersonilizationEditor(title, changedItems) {
+        function resetPersonalizationSettings(isUser) {
+            var title = isUser ? "Reset User Settings" : "Reset Global Settings";
+            var items = getLoadedEntityPersonalizationItems(isUser);
+            if (items.length == 0)
+                VRNotificationService.showInformation("No settings has been loaded.");
+            else {
+                var onSavePesonilization = function (checkedEntityUniqueNames) {
+                    return ResetCurrentEntityPersonalization(isUser, checkedEntityUniqueNames);
+                };
+                openPersonilizationEditor(title, items, onSavePesonilization);
+            }
+        }
+
+        function openPersonilizationEditor(title, changedItems, onSavePesonilization) {
             var settings = {
 
             };
@@ -70,12 +94,8 @@ function (UtilsService, VRNotificationService, VR_Common_EntityPersonalizationAP
                 modalScope.onSavePesonilization = function (checkedEntityUniqueNames) {
                     if (checkedEntityUniqueNames.length == 0)
                         return;
-                    else {
-                        var checkedItemsSettingsInputs = buildEntityUniqueInputs(changedItems, checkedEntityUniqueNames);
-                        VR_Common_EntityPersonalizationAPIService.UpdateCurrentUserEntityPersonalization(checkedItemsSettingsInputs).then(function (response) {
-                           // currentPersonilizationItems = response;
-                           // return response;
-                        });
+                    else if (onSavePesonilization != undefined && typeof (onSavePesonilization) == 'function') {
+                        onSavePesonilization(checkedEntityUniqueNames);
                     }
                 };
             };
@@ -84,6 +104,8 @@ function (UtilsService, VRNotificationService, VR_Common_EntityPersonalizationAP
             };
             VRModalService.showModal('/Client/Modules/Common/Directives/Personalization/Templates/PersonilizationEditor.html', parameters, settings);
         };
+
+
 
         function initializeController() {
             defineAPI();
@@ -100,10 +122,7 @@ function (UtilsService, VRNotificationService, VR_Common_EntityPersonalizationAP
                     }
                     context = payload.context;
                 }
-                return VR_Common_EntityPersonalizationAPIService.GetCurrentUserEntityPersonalization(entityUniqueKeys).then(function (response) {
-                    currentPersonilizationItems = response;
-                    return response;
-                });
+                return GetCurrentUserEntityPersonalization(entityUniqueKeys);
             };
 
             if (ctrl.onReady != null)
@@ -124,12 +143,39 @@ function (UtilsService, VRNotificationService, VR_Common_EntityPersonalizationAP
             return entityUniqueKeys;
         }
 
+        function UpdateCurrentEntityPersonalization(isUser, checkedItemsSettingsInputs) {
+            var method = isUser ? "UpdateCurrentUserEntityPersonalization" : "UpdateGlobalEntityPersonalization";
+            return VR_Common_EntityPersonalizationAPIService[method](checkedItemsSettingsInputs).then(function (response) {
+                GetCurrentUserEntityPersonalization(buildEntityUniqueKeys(uniqueKeys));
+            });
+        }
 
-        function buildEntityUniqueInputs(changedItems, checkedEntityUniqueNames) {
+        function ResetCurrentEntityPersonalization(isUser, resetEntityUniqueNames) {
+            var method = isUser ? "DeleteCurrentUserEntityPersonalization" : "DeleteGlobalEntityPersonalization";
+            return VR_Common_EntityPersonalizationAPIService[method](resetEntityUniqueNames).then(function (response) {
+                GetCurrentUserEntityPersonalization(buildEntityUniqueKeys(uniqueKeys));
+            });
+        }
+
+        function GetCurrentUserEntityPersonalization(entityUniqueKeys) {
+            return VR_Common_EntityPersonalizationAPIService.GetCurrentUserEntityPersonalization(entityUniqueKeys).then(function (response) {
+                var userEntityPersonalizations = [];
+                currentPersonilizationItems = response.UserEntityPersonalizations;
+                globalPersonilizationItems = response.GlobalEntityPersonalizations;
+                if (response != null) {
+                    userEntityPersonalizations = response.UserEntityPersonalizations;
+                }
+                return userEntityPersonalizations;
+            });
+        }
+
+        function buildEntityUniqueInputs(checkedEntityUniqueNames) {
+            var changedItems = getContext().getPersonalizationItems()
             var inputs = [];
-            for (var i = 0 ; i < changedItems.length ; i++)
+            for (var i = 0 ; i < changedItems.length ; i++) {
                 if (checkedEntityUniqueNames.indexOf(changedItems[i].EntityUniqueName) > -1)
                     inputs.push(changedItems[i]);
+            }
             return inputs;
         }
 
@@ -140,24 +186,24 @@ function (UtilsService, VRNotificationService, VR_Common_EntityPersonalizationAP
                 var entityUniqueName = uniqueKeys[i].EntityUniqueName;
                 var currentItem = UtilsService.getItemByVal(currentPersonilizationItems, entityUniqueName, "EntityUniqueName");
                 var newItem = UtilsService.getItemByVal(newPersonilizationItems, entityUniqueName, "EntityUniqueName");
+                if (currentItem != null && newItem != null)
+                    newItem.IsGlobal = currentItem.IsGlobal;
+
 
                 if (currentItem == null && newItem == null) {
                     continue;
                 }
-
-                if (currentItem.ExtendedSetting == null && newItem.ExtendedSetting == null) {
+                if (currentItem == null && newItem != null) {
+                    changedItems.push(uniqueKeys[i]);
                     continue;
                 }
 
-                if (currentItem.ExtendedSetting != null && newItem.ExtendedSetting == null) {
+                if (currentItem != null && currentItem.ExtendedSetting == null && newItem != null && newItem.ExtendedSetting != null) {
                     changedItems.push(uniqueKeys[i]);
+                    continue;
                 }
 
-                if (currentItem.ExtendedSetting == null && newItem.ExtendedSetting != null) {
-                    changedItems.push(uniqueKeys[i]);
-                }
-
-                if (currentItem.ExtendedSetting != null && newItem.ExtendedSetting != null) {
+                if (currentItem != null && currentItem.ExtendedSetting != null && newItem != null && newItem.ExtendedSetting != null) {
                     var currentItemSettings = UtilsService.serializetoJson(currentItem.ExtendedSetting);
                     var newItemSettings = UtilsService.serializetoJson(newItem.ExtendedSetting);
                     if (newItemSettings != currentItemSettings)
@@ -165,6 +211,23 @@ function (UtilsService, VRNotificationService, VR_Common_EntityPersonalizationAP
                 }
             }
             return changedItems;
+        }
+
+        function getLoadedEntityPersonalizationItems(isUser) {
+            var items = [];
+            var filterItems = isUser == true ? currentPersonilizationItems : globalPersonilizationItems;
+            if (filterItems != undefined && filterItems.length > 0) {
+                for (var i = 0; i < filterItems.length; i++) {
+                    var item = UtilsService.getItemByVal(uniqueKeys, filterItems[i].EntityUniqueName, "EntityUniqueName");
+                    if (item != null) {
+                        if (isUser == true && filterItems[i].IsGlobal == false)
+                            items.push(item);
+                        else if (isUser == false)
+                            items.push(item);
+                    }
+                }
+            }
+            return items;
         }
     }
 
