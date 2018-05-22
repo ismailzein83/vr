@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Vanrise.GenericData.Transformation.Entities;
 
 namespace TOne.WhS.Routing.Business.TransformationSteps
@@ -27,6 +23,7 @@ namespace TOne.WhS.Routing.Business.TransformationSteps
         {
             var codeMatchManagerName = context.GenerateUniqueMemberName("codeMatchBuilder");
             context.AddCodeToCurrentInstanceExecutionBlock("var {0} = new TOne.WhS.Routing.Business.CodeMatchBuilder();", codeMatchManagerName);
+
             var customerSaleCodeMatch = context.GenerateUniqueMemberName("customerSaleCodeMatch");
             context.AddCodeToCurrentInstanceExecutionBlock("TOne.WhS.Routing.Entities.CustomerSaleCodeMatchWithMaster {0} = {1}.GetCustomerSaleCodeMatchWithMaster({2}, {3}, {4}, {5});",
                 customerSaleCodeMatch, codeMatchManagerName, this.Number, !String.IsNullOrEmpty(this.CustomerId) ? this.CustomerId : "null",
