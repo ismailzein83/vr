@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Vanrise.Invoice.Business.InvoicePartnerFilter;
+using Retail.BusinessEntity.Business;
 
 namespace Retail.Interconnect.Business
 {
@@ -12,12 +13,20 @@ namespace Retail.Interconnect.Business
     {
         public bool IsExcluded(IAccountFilterContext context)
         {
-            throw new NotImplementedException();
+            FinancialAccountManager manager = new FinancialAccountManager();
+            var financialAccounts = manager.GetFinancialAccounts(context.AccountBEDefinitionId, context.Account.AccountId, false);
+            if (financialAccounts != null && financialAccounts.All(x => !base.IsMatched(x.FinancialAccountId)))
+                return true;
+            return false;
         }
 
         public bool IsMatched(IFinancialAccountFilterContext context)
         {
-            throw new NotImplementedException();
+            if (this.EditablePartnerId != null && context.FinancialAccountId == this.EditablePartnerId)
+                return true;
+            if (!base.IsMatched(context.FinancialAccountId))
+                return false;
+            return true;
         }
     }
 }

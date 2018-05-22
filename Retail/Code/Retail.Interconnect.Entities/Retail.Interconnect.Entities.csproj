@@ -43,8 +43,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="InterconnectGenerationCustomSectionPayload.cs" />
-    <Compile Include="InterconnectInvoiceBySaleCurrencyItemDetails.cs" />
     <Compile Include="InterconnectInvoiceDetails.cs" />
     <Compile Include="InterconnectInvoiceItemDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

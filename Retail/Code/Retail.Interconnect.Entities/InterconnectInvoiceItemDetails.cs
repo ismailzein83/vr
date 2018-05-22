@@ -11,10 +11,17 @@ namespace Retail.Interconnect.Entities
         public decimal Duration { get; set; }
         public decimal Amount { get; set; }
         public long DestinationZoneId { get; set; }
+        public long OriginationZoneId { get; set; }
         public long OperatorId { get; set; }
         public decimal Rate { get; set; }
         public int RateTypeId { get; set; }
         public int TrafficDirection { get; set; }
         public int CurrencyId { get; set; }
+
+        public InterconnectInvoiceItemDetails() { }
+        public IEnumerable<InterconnectInvoiceItemDetails> GetCustomerInvoiceItemDetailsRDLCSchema()
+        {
+            return null;
+        }
     }
 }

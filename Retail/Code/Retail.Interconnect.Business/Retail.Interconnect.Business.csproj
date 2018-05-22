@@ -71,7 +71,6 @@
     <Compile Include="InterconnectInvoiceGenerator.cs" />
     <Compile Include="InterconnectInvoiceSettings.cs" />
     <Compile Include="InterconnectPartnerSettings.cs" />
-    <Compile Include="InvoiceSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
