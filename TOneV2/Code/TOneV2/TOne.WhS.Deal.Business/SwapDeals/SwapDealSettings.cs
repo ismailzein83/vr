@@ -164,7 +164,32 @@ namespace TOne.WhS.Deal.Business
                 default: throw new NotSupportedException(string.Format("DealZoneGroupPart {0} not supported.", context.DealZoneGroupPart));
             }
         }
-
+        public override List<long> GetDealSaleZoneIds()
+        {
+            List<long> zoneIds = new List<long>();
+            foreach (var inbound in Inbounds)
+            {
+                var saleZones = inbound.SaleZones;
+                foreach (var saleZone in saleZones)
+                {
+                    zoneIds.Add(saleZone.ZoneId);
+                }
+            }
+            return zoneIds;
+        }
+        public override List<long> GetDealSupplierZoneIds()
+        {
+            List<long> zoneIds = new List<long>();
+            foreach (var outbound in Outbounds)
+            {
+                var supplierZones = outbound.SupplierZones;
+                foreach (var supplierZone in supplierZones)
+                {
+                    zoneIds.Add(supplierZone.ZoneId);
+                }
+            }
+            return zoneIds;
+        }
         //TODO: ASA Check if inbounds can have null value and throw exception if not
         public decimal? GetSaleAmount()
         {

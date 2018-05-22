@@ -15,7 +15,8 @@ namespace TOne.WhS.Deal.Entities
 		public abstract int GetCarrierAccountId();
 
 		public abstract void GetZoneGroups(IDealGetZoneGroupsContext context);
-
+        public abstract List<long> GetDealSaleZoneIds();
+        public abstract List<long> GetDealSupplierZoneIds();
 		public abstract bool ValidateDataBeforeSave(IValidateBeforeSaveContext validateBeforeSaveContext);
 	}
 

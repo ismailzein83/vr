@@ -34,7 +34,42 @@ namespace TOne.WhS.Deal.Business
             return true;
         }
 
-
+        public override List<long> GetDealSaleZoneIds()
+        {
+            if (DealType == VolCommitmentDealType.Buy)
+                return null;
+            else
+            {
+                List<long> zoneIds = new List<long>();
+                foreach(var item in Items)
+                {
+                    var zones = item.SaleZones;
+                    foreach(var zone in zones)
+                    {
+                        zoneIds.Add(zone.ZoneId);
+                    }
+                }
+                    return zoneIds;
+            }
+        }
+        public override List<long> GetDealSupplierZoneIds()
+        {
+            if (DealType == VolCommitmentDealType.Sell)
+                return null;
+            else
+            {
+                List<long> zoneIds = new List<long>();
+                foreach (var item in Items)
+                {
+                    var zones = item.SaleZones;
+                    foreach (var zone in zones)
+                    {
+                        zoneIds.Add(zone.ZoneId);
+                    }
+                }
+                return zoneIds;
+            }
+        }
         public override void GetZoneGroups(IDealGetZoneGroupsContext context)
         {
             switch (DealType)
