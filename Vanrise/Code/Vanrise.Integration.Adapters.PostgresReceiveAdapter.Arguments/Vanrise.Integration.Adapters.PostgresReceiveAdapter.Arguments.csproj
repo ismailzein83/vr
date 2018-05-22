@@ -47,9 +47,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Vanrise.Integration.Adapters.DBBaseReceiveAdapter\Vanrise.Integration.Adapters.DBBaseReceiveAdapter.csproj">
-      <Project>{0f3ae743-a034-406d-a341-021029b8ef1b}</Project>
-      <Name>Vanrise.Integration.Adapters.DBBaseReceiveAdapter</Name>
+    <ProjectReference Include="..\Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments\Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments.csproj">
+      <Project>{cb9c51d9-f3e9-4025-80b7-60207980ac9c}</Project>
+      <Name>Vanrise.Integration.Adapters.DBReceiveAdapter.Arguments</Name>
     </ProjectReference>
     <ProjectReference Include="..\Vanrise.Integration.Entities\Vanrise.Integration.Entities.csproj">
       <Project>{bc343c8c-a1ba-4d9e-b4da-c59029594d50}</Project>

@@ -7,6 +7,9 @@ using Vanrise.Integration.Entities;
 
 namespace Vanrise.Integration.Adapters.DBBaseReceiveAdapter
 {
+    /// <summary>
+    /// this class is not used anymore for adapters. but it should NOT be DELETED because existing serialized states might exist in the customer database(s) before refactoring
+    /// </summary>
     public class DbAdapterRangesState : BaseAdapterState
     {
         public List<DbAdapterRangeState> Ranges { get; set; }

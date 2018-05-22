@@ -74,6 +74,8 @@ namespace Vanrise.Integration.Adapters.FileReceiveAdapter
                     base.LogInformation("{0} files are ready to be imported", Files.Length);
                     foreach (FileInfo file in Files)
                     {
+                        if (context.ShouldStopImport())
+                            break;
                         if (regEx.IsMatch(file.Name))
                         {
                             CreateStreamReader(fileAdapterArgument, context.OnDataReceived, file);
