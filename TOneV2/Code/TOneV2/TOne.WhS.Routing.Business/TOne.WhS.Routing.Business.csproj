@@ -151,6 +151,7 @@
     <Compile Include="SupplierZoneToRPOptionPolicyExecutionContext.cs" />
     <Compile Include="TransformationSteps\MatchingCustomerSaleCodeMatchStep.cs" />
     <Compile Include="TransformationSteps\MatchingSupplierCodeMatchStep.cs" />
+    <Compile Include="TransformationSteps\SaleCodeMatchByPlanStep.cs" />
     <Compile Include="TransformationSteps\SaleCodeMatchStep.cs" />
     <Compile Include="TransformationSteps\SupplierCodeMatchStep.cs" />
     <Compile Include="ZoneDetailBuilder.cs" />

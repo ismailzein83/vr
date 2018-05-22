@@ -53,6 +53,15 @@ namespace TOne.WhS.Routing.Business
                 return null;
         }
 
+        public SaleCodeMatch GetSaleCodeMatchByPlan(string number, int sellingNumberPlanId, DateTime effectiveOn)
+        {
+            SaleCodeIterator saleCodeIterator = GetSellingNumberPlanSaleCodeIterator(sellingNumberPlanId, effectiveOn);
+            if (saleCodeIterator != null)
+                return saleCodeIterator.GetCodeMatch(number, false);
+            else
+                return null;
+        }
+
         public CustomerSaleCodeMatchWithMaster GetCustomerSaleCodeMatchWithMaster(string number, int? customerId, int? customerANumberId, DateTime effectiveOn)
         {
             CustomerSaleCodeMatchWithMaster customerSaleCodeMatchWithMaster = new CustomerSaleCodeMatchWithMaster() { CustomerId = customerId, SaleCodeMatchWithMaster = GetSaleCodeMatchWithMaster(number, customerId, effectiveOn) };

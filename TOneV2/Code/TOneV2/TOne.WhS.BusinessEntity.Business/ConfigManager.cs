@@ -105,6 +105,15 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return switchCDRMappingConfiguration.SupplierZoneIdentification.Value;
         }
+        public int? GetSecondarySellingNumberPlanId()
+        {
+            CDRImportZoneIdentification cdrImportZoneIdentification = GetCDRImportZoneIdentification();
+            if (cdrImportZoneIdentification == null)
+                return null;
+
+            return cdrImportZoneIdentification.SecondarySellingNumberPlanId;
+        }
+
         public CachingExpirationIntervals GetCachingExpirationIntervals()
         {
             BusinessEntitySettingsData businessEntitySettingsData = GetBusinessEntitySettingsData();
@@ -497,6 +506,14 @@ namespace TOne.WhS.BusinessEntity.Business
                 throw new NullReferenceException("cdrImportSettings.SwitchCDRMappingConfiguration");
 
             return cdrImportSettings.SwitchCDRMappingConfiguration;
+        }
+        private CDRImportZoneIdentification GetCDRImportZoneIdentification()
+        {
+            CDRImportSettings cdrImportSettings = GetCDRImportSettings();
+            if (cdrImportSettings.SwitchCDRMappingConfiguration == null)
+                throw new NullReferenceException("cdrImportSettings.SwitchCDRMappingConfiguration");
+
+            return cdrImportSettings.CDRImportZoneIdentification;
         }
         private BusinessEntitySettingsData GetBusinessEntitySettingsData()
         {

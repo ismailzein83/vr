@@ -12,6 +12,8 @@ namespace TOne.WhS.BusinessEntity.Entities
     public class CDRImportSettings : SettingData
     {
         public SwitchCDRMappingConfiguration SwitchCDRMappingConfiguration { get; set; }
+
+        public CDRImportZoneIdentification CDRImportZoneIdentification { get; set; }
     }
 
     public class SwitchCDRMappingConfiguration
@@ -25,5 +27,10 @@ namespace TOne.WhS.BusinessEntity.Entities
         public CDPNIdentification? SaleZoneIdentification { get; set; }
 
         public CDPNIdentification? SupplierZoneIdentification { get; set; }
+    }
+
+    public class CDRImportZoneIdentification
+    {
+        public int? SecondarySellingNumberPlanId { get; set; }
     }
 }

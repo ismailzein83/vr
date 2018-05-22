@@ -276,9 +276,11 @@
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\SupplierCase\whs-be-casemanagement-suppliercase-staticeditor.js" />
     <Content Include="WhS_BusinessEntity\Directives\CaseManagement\SupplierCase\whs-be-supplierfaultticket-customobjectsettings.js" />
     <Content Include="WhS_BusinessEntity\Directives\CDRImportSettings\Templates\CDRImportSettingsTemplate.html" />
+    <Content Include="WhS_BusinessEntity\Directives\CDRImportSettings\Templates\CDRImportZoneIdentificationTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CDRImportSettings\Templates\SwitchCDRMappingConfigurationTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CDRImportSettings\vr-whs-be-cdpn-selector.js" />
     <Content Include="WhS_BusinessEntity\Directives\CDRImportSettings\vr-whs-be-cdrimport-settings-editor.js" />
+    <Content Include="WhS_BusinessEntity\Directives\CDRImportSettings\vr-whs-be-cdrimport-zoneidentification.js" />
     <Content Include="WhS_BusinessEntity\Directives\CDRImportSettings\vr-whs-be-switchcdrmappingconfiguration.js" />
     <Content Include="WhS_BusinessEntity\Directives\CDRImportTechnicalSettings\Templates\CDRImportTechnicalSettingsTemplate.html" />
     <Content Include="WhS_BusinessEntity\Directives\CDRImportTechnicalSettings\vr-whs-be-cdrimport-technical-settings-editor.js" />

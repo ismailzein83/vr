@@ -1,10 +1,13 @@
-﻿
-
-<vr-tabs>
+﻿<vr-tabs>
     <vr-tab header="'CDR Mapping'">
         <vr-section title="Source Fields">
             <vr-row>
-                <vr-whs-be-switchcdrmappingconfiguration on-ready="scopeModel.onSwitchCDRMappingConfiguration" isrequired="true" normal-col-num="6"></vr-whs-be-switchcdrmappingconfiguration>
+                <vr-whs-be-switchcdrmappingconfiguration on-ready="scopeModel.onSwitchCDRMappingConfigurationReady" isrequired="true" normal-col-num="6"></vr-whs-be-switchcdrmappingconfiguration>
+            </vr-row>
+        </vr-section>
+        <vr-section title="Zone Identification">
+            <vr-row>
+                <vr-whs-be-cdrimport-zoneidentification on-ready="scopeModel.onCDRImportZoneIdentificationReady"></vr-whs-be-cdrimport-zoneidentification>
             </vr-row>
         </vr-section>
     </vr-tab>

@@ -335,6 +335,10 @@
     <Content Include="WhS_Routing\Directives\TransformationSteps\MatchingCustomerSaleCodeMatchStep\Templates\MatchingCustomerSaleCodeMatchStepTemplate.html" />
     <Content Include="WhS_Routing\Directives\TransformationSteps\MatchingCustomerSaleCodeMatchStep\vr-whs-routing-datatransformation-matchingcustomersalecodematch-preview.js" />
     <Content Include="WhS_Routing\Directives\TransformationSteps\MatchingCustomerSaleCodeMatchStep\vr-whs-routing-datatransformation-matchingcustomersalecodematch.js" />
+    <Content Include="WhS_Routing\Directives\TransformationSteps\SaleCodeMatchStepByPlan\Templates\SaleCodeMatchByPlanStepPreviewTemplate.html" />
+    <Content Include="WhS_Routing\Directives\TransformationSteps\SaleCodeMatchStepByPlan\Templates\SaleCodeMatchByPlanStepTemplate.html" />
+    <Content Include="WhS_Routing\Directives\TransformationSteps\SaleCodeMatchStepByPlan\vr-whs-routing-salecodematchbyplanstep-preview.js" />
+    <Content Include="WhS_Routing\Directives\TransformationSteps\SaleCodeMatchStepByPlan\vr-whs-routing-salecodematchbyplanstep.js" />
     <Content Include="WhS_Routing\Directives\TransformationSteps\SaleCodeMatchStep\Templates\SaleCodeMatchStepTemplate.html" />
     <Content Include="WhS_Routing\Directives\TransformationSteps\SaleCodeMatchStep\Templates\SaleCodeMatchStepPreviewTemplate.html" />
     <Content Include="WhS_Routing\Directives\TransformationSteps\SaleCodeMatchStep\vr-whs-routing-datatransformation-salecodematch-preview.js" />

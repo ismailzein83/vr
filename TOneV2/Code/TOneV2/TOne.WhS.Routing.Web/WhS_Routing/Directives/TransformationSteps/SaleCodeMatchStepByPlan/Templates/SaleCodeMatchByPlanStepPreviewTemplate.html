@@ -1,0 +1,18 @@
+﻿<vr-columns width="fullrow">
+    <vr-list maxitemsperrow="1" ng-show="ctrl.inputFields.length > 0">
+        <vr-listitem>
+            <vr-label>Input Fields</vr-label>
+            <vr-list maxitemsperrow="1" ng-repeat="field in ctrl.inputFields">
+                <vr-listitem><vr-label>{{field.FieldName}} = {{field.Value}}</vr-label></vr-listitem>
+            </vr-list>
+        </vr-listitem>
+    </vr-list>
+    <vr-list maxitemsperrow="1" ng-show="ctrl.outputFields.length > 0">
+        <vr-listitem>
+            <vr-label>Output Fields</vr-label>
+            <vr-list maxitemsperrow="1" ng-repeat="field in ctrl.outputFields">
+                <vr-listitem><vr-label>{{field.FieldName}} = {{field.Value}}</vr-label></vr-listitem>
+            </vr-list>
+        </vr-listitem>
+    </vr-list>
+</vr-columns>
