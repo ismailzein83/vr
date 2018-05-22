@@ -85,9 +85,7 @@ namespace TOne.WhS.Sales.Business
                 }
                 else if (_costCalculationMethods != null)
                     zoneItem.Costs = emptyCosts;
-                if (_numberOfOptions.HasValue && route != null && route.RouteOptionsDetails != null && _numberOfOptions < route.RouteOptionsDetails.Count())
-                    zoneItem.RPRouteDetail.RouteOptionsDetails = route.RouteOptionsDetails.Take(_numberOfOptions.Value);
-            }
+           }
         }
 
         #region Private Methods

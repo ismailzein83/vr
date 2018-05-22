@@ -1,284 +1,288 @@
 ﻿(function (appControllers) {
 
-    'use strict';
+	'use strict';
 
-    TQIEditor.$inject = ['$scope', 'WhS_Sales_MarginTypesEnum', 'WhS_Sales_RatePlanAPIService', 'WhS_Sales_PeriodTypesEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService'];
+	TQIEditor.$inject = ['$scope', 'WhS_Sales_MarginTypesEnum', 'WhS_Sales_RatePlanAPIService', 'WhS_Sales_PeriodTypesEnum', 'UtilsService', 'VRUIUtilsService', 'VRNotificationService', 'VRNavigationService'];
 
-    function TQIEditor($scope, WhS_Sales_MarginTypesEnum, WhS_Sales_RatePlanAPIService, WhS_Sales_PeriodTypesEnum, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService) {
-        var tqiSelectiveDirectiveAPI;
-        var tqiSelectiveDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+	function TQIEditor($scope, WhS_Sales_MarginTypesEnum, WhS_Sales_RatePlanAPIService, WhS_Sales_PeriodTypesEnum, UtilsService, VRUIUtilsService, VRNotificationService, VRNavigationService) {
+		var tqiSelectiveDirectiveAPI;
+		var tqiSelectiveDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var servicesDirectiveAPI;
-        var servicesDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+		var servicesDirectiveAPI;
+		var servicesDirectiveReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var rpRouteDetail;
-        var ownerName;
-        var zoneItem;
-        var routingDatabaseId;
-        var currencyId;
-        var ratePlanSettings;
+		var rpRouteDetail;
+		var ownerName;
+		var zoneItem;
+		var routingDatabaseId;
+		var currencyId;
+		var ratePlanSettings;
 
-        var longPrecision;
+		var longPrecision;
 
-        var tqiGridAPI;
-        var tqiGridAPIReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+		var tqiGridAPI;
+		var tqiGridAPIReadyPromiseDeferred = UtilsService.createPromiseDeferred();
 
-        var periodSelectorAPI;
-        var periodSelectorReadyDeferred = UtilsService.createPromiseDeferred();
+		var periodSelectorAPI;
+		var periodSelectorReadyDeferred = UtilsService.createPromiseDeferred();
 
-        loadParameters();
-        defineScope();
-        load();
+		loadParameters();
+		defineScope();
+		load();
 
-        function loadParameters() {
-            var parameters = VRNavigationService.getParameters($scope);
+		function loadParameters() {
+			var parameters = VRNavigationService.getParameters($scope);
 
-            if (parameters != undefined && parameters != null) {
-                zoneItem = parameters.context.zoneItem;
-                rpRouteDetail = parameters.context.zoneItem.RPRouteDetail;
-                ownerName = parameters.context.ownerName;
-                routingDatabaseId = parameters.context.routingDatabaseId;
-                currencyId = parameters.context.currencyId;
-                ratePlanSettings = parameters.context.ratePlanSettings;
-                longPrecision = parameters.context.longPrecision;
-            }
-        }
-        function defineScope() {
+			if (parameters != undefined && parameters != null) {
+				zoneItem = parameters.context.zoneItem;
+				rpRouteDetail = parameters.context.zoneItem.RPRouteDetail;
+				ownerName = parameters.context.ownerName;
+				routingDatabaseId = parameters.context.routingDatabaseId;
+				currencyId = parameters.context.currencyId;
+				ratePlanSettings = parameters.context.ratePlanSettings;
+				longPrecision = parameters.context.longPrecision;
 
-            $scope.marginTypes = UtilsService.getArrayEnum(WhS_Sales_MarginTypesEnum);
-            $scope.selectedMarginType = UtilsService.getItemByVal($scope.marginTypes, WhS_Sales_MarginTypesEnum.Percentage.value, 'value');
-            $scope.showMarginPercentage = false;
+				if (parameters.context.zoneItem.RPRouteDetail != null && parameters.context.zoneItem.RPRouteDetail.RouteOptionsDetails != null && parameters.context.zoneItem.RPRouteDetail.RouteOptionsDetails.length > parameters.context.numberOfOptions) {
+					rpRouteDetail.RouteOptionsDetails = parameters.context.zoneItem.RPRouteDetail.RouteOptionsDetails.slice(0, parameters.context.numberOfOptions);
+				}
+			}
+		}
+		function defineScope() {
 
-            $scope.onTQISelectiveReady = function (api) {
-                tqiSelectiveDirectiveAPI = api;
-                tqiSelectiveDirectiveReadyPromiseDeferred.resolve();
-            };
+			$scope.marginTypes = UtilsService.getArrayEnum(WhS_Sales_MarginTypesEnum);
+			$scope.selectedMarginType = UtilsService.getItemByVal($scope.marginTypes, WhS_Sales_MarginTypesEnum.Percentage.value, 'value');
+			$scope.showMarginPercentage = false;
 
-            $scope.onTQIGridReady = function (api) {
-                tqiGridAPI = api;
-                tqiGridAPIReadyPromiseDeferred.resolve();
-            };
+			$scope.onTQISelectiveReady = function (api) {
+				tqiSelectiveDirectiveAPI = api;
+				tqiSelectiveDirectiveReadyPromiseDeferred.resolve();
+			};
 
-            $scope.close = function () {
-                $scope.modalContext.closeModal();
-            };
+			$scope.onTQIGridReady = function (api) {
+				tqiGridAPI = api;
+				tqiGridAPIReadyPromiseDeferred.resolve();
+			};
 
-            $scope.disableSaveBtn = function () {
-                return $scope.calculatedRate == undefined;
-            };
+			$scope.close = function () {
+				$scope.modalContext.closeModal();
+			};
 
-            $scope.evaluate = function () {
-                return WhS_Sales_RatePlanAPIService.GetTQIEvaluatedRate(buildTQIEvaluatedRateObjFromScope()).then(function (response) {
-                    if (response != undefined) {
-                        $scope.evaluatedRate = getRoundedNumber(response.EvaluatedRate);
-                        if ($scope.evaluatedRate != undefined)
-                            calculateRate();
-                    }
-                });
-            };
+			$scope.disableSaveBtn = function () {
+				return $scope.calculatedRate == undefined;
+			};
 
-            $scope.calculateRate = function () {
-                calculateRate();
-            };
+			$scope.evaluate = function () {
+				return WhS_Sales_RatePlanAPIService.GetTQIEvaluatedRate(buildTQIEvaluatedRateObjFromScope()).then(function (response) {
+					if (response != undefined) {
+						$scope.evaluatedRate = getRoundedNumber(response.EvaluatedRate);
+						if ($scope.evaluatedRate != undefined)
+							calculateRate();
+					}
+				});
+			};
 
-            $scope.onServiceReady = function (api) {
-                servicesDirectiveAPI = api;
-                servicesDirectiveReadyPromiseDeferred.resolve();
-            };
+			$scope.calculateRate = function () {
+				calculateRate();
+			};
 
-            $scope.searchClicked = function () {
-                return loadTQIGrid();
-            };
+			$scope.onServiceReady = function (api) {
+				servicesDirectiveAPI = api;
+				servicesDirectiveReadyPromiseDeferred.resolve();
+			};
 
-            $scope.save = function () {
-                $scope.onTQIEvaluated($scope.calculatedRate);
-                $scope.modalContext.closeModal();
-            };
+			$scope.searchClicked = function () {
+				return loadTQIGrid();
+			};
 
-            $scope.onTQIMethodSelectionChanged = function (selectedTQIMethod) {
-                if (selectedTQIMethod)
-                    resetData();
-            };
+			$scope.save = function () {
+				$scope.onTQIEvaluated($scope.calculatedRate);
+				$scope.modalContext.closeModal();
+			};
 
-            $scope.onPeriodSelectorReady = function (api) {
-                periodSelectorAPI = api;
-                periodSelectorReadyDeferred.resolve();
-            };
-        }
-        function load() {
-            loadAllControls();
-        }
+			$scope.onTQIMethodSelectionChanged = function (selectedTQIMethod) {
+				if (selectedTQIMethod)
+					resetData();
+			};
 
-        function loadAllControls() {
-            return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTQISelectiveDirective, loadServicesDirective, loadPeriodSelector]).catch(function (error) {
-                VRNotificationService.notifyExceptionWithClose(error, $scope);
-            }).finally(function () {
+			$scope.onPeriodSelectorReady = function (api) {
+				periodSelectorAPI = api;
+				periodSelectorReadyDeferred.resolve();
+			};
+		}
+		function load() {
+			loadAllControls();
+		}
 
-            });
-        }
-        function setTitle() {
-            $scope.title = 'TQI';
-        }
-        function loadStaticData() {
-            $scope.saleEntityName = ownerName;
+		function loadAllControls() {
+			return UtilsService.waitMultipleAsyncOperations([setTitle, loadStaticData, loadTQISelectiveDirective, loadServicesDirective, loadPeriodSelector]).catch(function (error) {
+				VRNotificationService.notifyExceptionWithClose(error, $scope);
+			}).finally(function () {
 
-            if (zoneItem != undefined) {
-                $scope.zoneName = zoneItem.ZoneName;
-                $scope.rate = getRoundedNumber(zoneItem.CurrentRate);
-                $scope.rateBED = zoneItem.CurrentRateBED;
-                $scope.newRate = getRoundedNumber(zoneItem.NewRate);
-            }
-        }
-        function loadTQISelectiveDirective() {
-            var loadTQISelectiveDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+			});
+		}
+		function setTitle() {
+			$scope.title = 'TQI';
+		}
+		function loadStaticData() {
+			$scope.saleEntityName = ownerName;
 
-            tqiSelectiveDirectiveReadyPromiseDeferred.promise.then(function () {
+			if (zoneItem != undefined) {
+				$scope.zoneName = zoneItem.ZoneName;
+				$scope.rate = getRoundedNumber(zoneItem.CurrentRate);
+				$scope.rateBED = zoneItem.CurrentRateBED;
+				$scope.newRate = getRoundedNumber(zoneItem.NewRate);
+			}
+		}
+		function loadTQISelectiveDirective() {
+			var loadTQISelectiveDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
 
-                var payload = {
-                    rpRouteDetail: rpRouteDetail,
-                    context: getContext()
-                };
+			tqiSelectiveDirectiveReadyPromiseDeferred.promise.then(function () {
 
-                VRUIUtilsService.callDirectiveLoad(tqiSelectiveDirectiveAPI, payload, loadTQISelectiveDirectivePromiseDeferred);
-            });
+				var payload = {
+					rpRouteDetail: rpRouteDetail,
+					context: getContext()
+				};
 
-            return loadTQISelectiveDirectivePromiseDeferred.promise;
-        }
-        function loadServicesDirective() {
-            var loadServicesDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
+				VRUIUtilsService.callDirectiveLoad(tqiSelectiveDirectiveAPI, payload, loadTQISelectiveDirectivePromiseDeferred);
+			});
 
-            servicesDirectiveReadyPromiseDeferred.promise.then(function () {
+			return loadTQISelectiveDirectivePromiseDeferred.promise;
+		}
+		function loadServicesDirective() {
+			var loadServicesDirectivePromiseDeferred = UtilsService.createPromiseDeferred();
 
-                var payload = {
-                    selectedIds: zoneItem.EffectiveServiceIds
-                };
+			servicesDirectiveReadyPromiseDeferred.promise.then(function () {
 
-                VRUIUtilsService.callDirectiveLoad(servicesDirectiveAPI, payload, loadServicesDirectivePromiseDeferred);
-            });
+				var payload = {
+					selectedIds: zoneItem.EffectiveServiceIds
+				};
 
-            return loadServicesDirectivePromiseDeferred.promise;
-        }
-        function loadTQIGrid() {
-            var loadTQIGridPromiseDeferred = UtilsService.createPromiseDeferred();
+				VRUIUtilsService.callDirectiveLoad(servicesDirectiveAPI, payload, loadServicesDirectivePromiseDeferred);
+			});
 
-            tqiGridAPIReadyPromiseDeferred.promise.then(function () {
+			return loadServicesDirectivePromiseDeferred.promise;
+		}
+		function loadTQIGrid() {
+			var loadTQIGridPromiseDeferred = UtilsService.createPromiseDeferred();
 
-                var tqiGridPayload = {
-                    rpRouteDetail: rpRouteDetail,
-                    currencyId: currencyId,
-                    routingDatabaseId: routingDatabaseId,
-                    routingProductId: zoneItem.EffectiveRoutingProductId,
-                    saleZoneId: zoneItem.ZoneId
-                };
+			tqiGridAPIReadyPromiseDeferred.promise.then(function () {
 
-                var period = periodSelectorAPI.getData();
-                if (period != undefined) {
-                    tqiGridPayload.periodValue = period.periodValue;
-                    tqiGridPayload.periodType = period.periodType;
-                }
+				var tqiGridPayload = {
+					rpRouteDetail: rpRouteDetail,
+					currencyId: currencyId,
+					routingDatabaseId: routingDatabaseId,
+					routingProductId: zoneItem.EffectiveRoutingProductId,
+					saleZoneId: zoneItem.ZoneId
+				};
 
-                VRUIUtilsService.callDirectiveLoad(tqiGridAPI, tqiGridPayload, loadTQIGridPromiseDeferred);
-            });
+				var period = periodSelectorAPI.getData();
+				if (period != undefined) {
+					tqiGridPayload.periodValue = period.periodValue;
+					tqiGridPayload.periodType = period.periodType;
+				}
 
-            return loadTQIGridPromiseDeferred.promise;
-        }
-        function loadPeriodSelector() {
-            var periodSelectorLoadDeferred = UtilsService.createPromiseDeferred();
+				VRUIUtilsService.callDirectiveLoad(tqiGridAPI, tqiGridPayload, loadTQIGridPromiseDeferred);
+			});
 
-            periodSelectorReadyDeferred.promise.then(function () {
-                var periodSelectorPayload = {
-                    period: {}
-                };
-                if (ratePlanSettings != undefined) {
-                    periodSelectorPayload.period.periodValue = ratePlanSettings.TQIPeriodValue;
-                    periodSelectorPayload.period.periodType = ratePlanSettings.TQIPeriodType;
-                }
-                VRUIUtilsService.callDirectiveLoad(periodSelectorAPI, periodSelectorPayload, periodSelectorLoadDeferred);
-            });
+			return loadTQIGridPromiseDeferred.promise;
+		}
+		function loadPeriodSelector() {
+			var periodSelectorLoadDeferred = UtilsService.createPromiseDeferred();
 
-            return periodSelectorLoadDeferred.promise;
-        }
+			periodSelectorReadyDeferred.promise.then(function () {
+				var periodSelectorPayload = {
+					period: {}
+				};
+				if (ratePlanSettings != undefined) {
+					periodSelectorPayload.period.periodValue = ratePlanSettings.TQIPeriodValue;
+					periodSelectorPayload.period.periodType = ratePlanSettings.TQIPeriodType;
+				}
+				VRUIUtilsService.callDirectiveLoad(periodSelectorAPI, periodSelectorPayload, periodSelectorLoadDeferred);
+			});
 
-        function buildTQIEvaluatedRateObjFromScope() {
-            return {
-                TQIMethod: tqiSelectiveDirectiveAPI.getData(),
-                RPRouteDetail: rpRouteDetail
-            };
-        }
+			return periodSelectorLoadDeferred.promise;
+		}
 
-        function calculateRate() {
+		function buildTQIEvaluatedRateObjFromScope() {
+			return {
+				TQIMethod: tqiSelectiveDirectiveAPI.getData(),
+				RPRouteDetail: rpRouteDetail
+			};
+		}
 
-            var isMarginEmpty = isEmpty($scope.margin);
-            if (isMarginEmpty) {
-                $scope.calculatedRate = undefined;
-            }
+		function calculateRate() {
 
-            $scope.calculatedRate = $scope.evaluatedRate;
+			var isMarginEmpty = isEmpty($scope.margin);
+			if (isMarginEmpty) {
+				$scope.calculatedRate = undefined;
+			}
 
-            if ($scope.selectedMarginType != undefined && $scope.evaluatedRate != undefined && !isMarginEmpty) {
-                if ($scope.selectedMarginType.value == WhS_Sales_MarginTypesEnum.Fixed.value) {
-                    $scope.marginPercentage = (parseFloat($scope.margin) * 100 / parseFloat($scope.evaluatedRate)).toFixed(2) + "%";
-                    $scope.showMarginPercentage = true;
-                }
-                else {
-                    clearMarginPercentage();
-                }
+			$scope.calculatedRate = $scope.evaluatedRate;
 
-                if ($scope.selectedMarginType.value == WhS_Sales_MarginTypesEnum.Fixed.value) {
-                    $scope.calculatedRate = UtilsService.addFloats($scope.evaluatedRate, $scope.margin);
-                }
-                else if ($scope.selectedMarginType.value == WhS_Sales_MarginTypesEnum.Percentage.value) {
-                    $scope.calculatedRate = UtilsService.addFloats($scope.evaluatedRate, (Number($scope.margin) * $scope.evaluatedRate) / 100);
-                }
-            }
-            else {
-                clearMarginPercentage();
-            }
+			if ($scope.selectedMarginType != undefined && $scope.evaluatedRate != undefined && !isMarginEmpty) {
+				if ($scope.selectedMarginType.value == WhS_Sales_MarginTypesEnum.Fixed.value) {
+					$scope.marginPercentage = (parseFloat($scope.margin) * 100 / parseFloat($scope.evaluatedRate)).toFixed(2) + "%";
+					$scope.showMarginPercentage = true;
+				}
+				else {
+					clearMarginPercentage();
+				}
 
-            if ($scope.calculatedRate != undefined)
-                $scope.calculatedRate = getRoundedNumber($scope.calculatedRate);
+				if ($scope.selectedMarginType.value == WhS_Sales_MarginTypesEnum.Fixed.value) {
+					$scope.calculatedRate = UtilsService.addFloats($scope.evaluatedRate, $scope.margin);
+				}
+				else if ($scope.selectedMarginType.value == WhS_Sales_MarginTypesEnum.Percentage.value) {
+					$scope.calculatedRate = UtilsService.addFloats($scope.evaluatedRate, (Number($scope.margin) * $scope.evaluatedRate) / 100);
+				}
+			}
+			else {
+				clearMarginPercentage();
+			}
 
-            function clearMarginPercentage() {
-                $scope.marginPercentage = undefined;
-                $scope.showMarginPercentage = false;
-            }
-        }
-        function resetData() {
-            $scope.evaluatedRate = undefined;
-            $scope.margin = undefined;
-            $scope.calculatedRate = undefined;
-            $scope.marginPercentage = undefined;
-        }
-        function getContext() {
-            var context = {
-                longPrecision: longPrecision,
-                getDuration: function () {
-                    var duration = {};
+			if ($scope.calculatedRate != undefined)
+				$scope.calculatedRate = getRoundedNumber($scope.calculatedRate);
 
-                    var period = periodSelectorAPI.getData();
-                    if (period != undefined) {
-                        duration.periodValue = period.periodValue;
-                        duration.periodType = period.periodType;
-                    }
+			function clearMarginPercentage() {
+				$scope.marginPercentage = undefined;
+				$scope.showMarginPercentage = false;
+			}
+		}
+		function resetData() {
+			$scope.evaluatedRate = undefined;
+			$scope.margin = undefined;
+			$scope.calculatedRate = undefined;
+			$scope.marginPercentage = undefined;
+		}
+		function getContext() {
+			var context = {
+				longPrecision: longPrecision,
+				getDuration: function () {
+					var duration = {};
 
-                    return duration;
-                }
-            };
+					var period = periodSelectorAPI.getData();
+					if (period != undefined) {
+						duration.periodValue = period.periodValue;
+						duration.periodType = period.periodType;
+					}
 
-            return context;
-        }
-        function isEmpty(value) {
-            return (value == undefined || value == null || value == '');
-        }
-        function getRoundedNumber(number) {
-            if (!isEmpty(number)) {
-                var castedNumber = Number(number);
-                if (!isNaN(castedNumber))
-                    return UtilsService.round(castedNumber, longPrecision);
-            }
-        }
-    }
+					return duration;
+				}
+			};
 
-    appControllers.controller('WhS_Sales_TQIEditor', TQIEditor);
+			return context;
+		}
+		function isEmpty(value) {
+			return (value == undefined || value == null || value == '');
+		}
+		function getRoundedNumber(number) {
+			if (!isEmpty(number)) {
+				var castedNumber = Number(number);
+				if (!isNaN(castedNumber))
+					return UtilsService.round(castedNumber, longPrecision);
+			}
+		}
+	}
+
+	appControllers.controller('WhS_Sales_TQIEditor', TQIEditor);
 
 })(appControllers);
