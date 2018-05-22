@@ -8,7 +8,7 @@
                  defaultsortdirection="ctrl.sortDirection"
                  showexpand="ctrl.isExpandable" enableautoexport="true" normalcell>
         <vr-datagridcolumn ng-repeat="column in ctrl.columns" headertext="column.FieldTitle" type="column.type" field="column.Field" tag="column"
-                           numberprecision="column.numberprecision" columnindex="$index" widthfactor="column.Widthfactor" fixedwidth="column.ColumnSettings.FixedWidth" initiallyhidden="column.IsHidden">
+                           numberprecision="column.numberprecision" columnindex="$index" widthfactor="column.Widthfactor" fixedwidth="column.ColumnSettings.FixedWidth" initiallyhidden="column.IsHidden" cssclass="column.cssClass">
         </vr-datagridcolumn>
 
         <vr-datagridexpandablerow>

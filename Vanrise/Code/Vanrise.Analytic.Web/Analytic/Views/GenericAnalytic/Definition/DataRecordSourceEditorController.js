@@ -134,6 +134,14 @@
                     var setLoader = function (value) { $scope.isLoadingDirective = value };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.gridWidthFactorAPI, dataItemPayload, setLoader);
                 };
+
+                dataItem.onDataRecordGridStyleDefinitionReady = function (api) {
+                    dataItem.dataRecordGridStyleAPI = api;
+                    var dataItemPayload;
+                    var setLoader = function (value) { $scope.isLoadingDirective = value };
+                    VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, dataItem.dataRecordGridStyleAPI, dataItemPayload, setLoader);
+                };
+
                 $scope.selectedFieldsGrid.push(dataItem);
             };
             $scope.onSelectedFilter = function (selectedFilter) {
@@ -345,9 +353,12 @@
                             var gridColumnItem = {
                                 payload: selectedField,
                                 readyPromiseDeferred: UtilsService.createPromiseDeferred(),
-                                loadPromiseDeferred: UtilsService.createPromiseDeferred()
+                                loadPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                styleReadyPromiseDeferred: UtilsService.createPromiseDeferred(),
+                                styleLoadPromiseDeferred: UtilsService.createPromiseDeferred()
                             };
                             promises.push(gridColumnItem.loadPromiseDeferred.promise);
+                            promises.push(gridColumnItem.styleLoadPromiseDeferred.promise);
                             addGridColumnAPI(gridColumnItem, currentColumn);
                         }
                     }
@@ -457,18 +468,29 @@
                 FieldName: gridField.payload.Name,
                 FieldTitle: gridField.payload.Title,
             };
+            var stylePayload;
             if (payload) {
                 dataItem.FieldTitle = payload.FieldTitle;
                 dataItemPayload.data = payload.ColumnSettings;
                 dataItem.isHidden = payload.IsHidden;
+                stylePayload = { selectedIds: payload.ColumnStyleId }
+
             }
             dataItem.onGridWidthFactorSelectorReady = function (api) {
                 dataItem.gridWidthFactorAPI = api;
                 gridField.readyPromiseDeferred.resolve();
             };
+            dataItem.onDataRecordGridStyleDefinitionReady = function (api) {
+                dataItem.dataRecordGridStyleAPI = api;
+                gridField.styleReadyPromiseDeferred.resolve();
+            };
             gridField.readyPromiseDeferred.promise
                 .then(function () {
                     VRUIUtilsService.callDirectiveLoad(dataItem.gridWidthFactorAPI, dataItemPayload, gridField.loadPromiseDeferred);
+                });
+            gridField.styleReadyPromiseDeferred.promise
+                .then(function () {
+                    VRUIUtilsService.callDirectiveLoad(dataItem.dataRecordGridStyleAPI, stylePayload, gridField.styleLoadPromiseDeferred);
                 });
             $scope.selectedFieldsGrid.push(dataItem);
         }
@@ -527,7 +549,7 @@
             var columns = [];
             for (var x = 0; x < $scope.selectedFieldsGrid.length; x++) {
                 var currentItem = $scope.selectedFieldsGrid[x];
-                columns.push({ FieldName: currentItem.FieldName, FieldTitle: currentItem.FieldTitle, ColumnSettings: currentItem.gridWidthFactorAPI.getData(), IsHidden: currentItem.isHidden });
+                columns.push({ FieldName: currentItem.FieldName, FieldTitle: currentItem.FieldTitle, ColumnSettings: currentItem.gridWidthFactorAPI.getData(), IsHidden: currentItem.isHidden, ColumnStyleId: currentItem.dataRecordGridStyleAPI.getSelectedIds() });
             }
 
             var filters = [];

@@ -53,7 +53,9 @@ namespace Vanrise.Analytic.Entities
         public string FieldName { get; set; }
         public string FieldTitle { get; set; }
         public GridColumnSettings ColumnSettings { get; set; }
-       public bool IsHidden { get; set; }
+        public bool IsHidden { get; set; }
+        public Guid? ColumnStyleId { get; set; }
+
     }
 
     public class DRSearchPageItemDetail
@@ -71,7 +73,7 @@ namespace Vanrise.Analytic.Entities
 
     public class DRSearchPageSubviewDefinition
     {
-        public Guid SubviewDefinitionId { get; set; }  
+        public Guid SubviewDefinitionId { get; set; }
 
         public string Name { get; set; }
 

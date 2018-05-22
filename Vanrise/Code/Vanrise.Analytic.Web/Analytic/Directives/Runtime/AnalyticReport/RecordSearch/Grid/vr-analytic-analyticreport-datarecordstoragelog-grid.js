@@ -2,9 +2,9 @@
 
     'use strict';
 
-    DataRecordStorageLogGridDirective.$inject = ['VR_GenericData_DataRecordStorageLogAPIService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService', 'UtilsService', 'VR_Analytic_GridWidthEnum', 'ColumnWidthEnum', 'VRUIUtilsService'];
+    DataRecordStorageLogGridDirective.$inject = ['VR_GenericData_DataRecordStorageLogAPIService', 'VRNotificationService', 'VR_GenericData_DataRecordFieldAPIService', 'UtilsService', 'VR_Analytic_GridWidthEnum', 'ColumnWidthEnum', 'VRUIUtilsService', 'VRCommon_StyleDefinitionAPIService'];
 
-    function DataRecordStorageLogGridDirective(VR_GenericData_DataRecordStorageLogAPIService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, UtilsService, VR_Analytic_GridWidthEnum, ColumnWidthEnum, VRUIUtilsService) {
+    function DataRecordStorageLogGridDirective(VR_GenericData_DataRecordStorageLogAPIService, VRNotificationService, VR_GenericData_DataRecordFieldAPIService, UtilsService, VR_Analytic_GridWidthEnum, ColumnWidthEnum, VRUIUtilsService, VRCommon_StyleDefinitionAPIService) {
         return {
             restrict: 'E',
             scope: {
@@ -42,6 +42,7 @@
                 ctrl.sortField = 'DateTimeField';
                 ctrl.sortDirection = undefined;
                 ctrl.dataRecordStorageLogs = [];
+                ctrl.classStyleDefinitions = [];
                 ctrl.columns = [];
 
                 gridWidths = UtilsService.getArrayEnum(VR_Analytic_GridWidthEnum);
@@ -114,38 +115,41 @@
                     }
 
                     var promiseDeffer = UtilsService.createPromiseDeferred();
-                    getDataRecordAttributes(query).then(function () {
+                    loadStyleDefinitions().then(function () {
+                        getDataRecordAttributes(query).then(function () {
+                            searchQuery = {
+                                DataRecordStorageIds: query.DataRecordStorageIds,
+                                FromTime: query.FromTime,
+                                ToTime: query.ToTime,
+                                FilterGroup: query.FilterGroup,
+                                LimitResult: query.LimitResult,
+                                Direction: query.Direction,
+                                Filters: query.Filters
+                            };
 
-                        searchQuery = {
-                            DataRecordStorageIds: query.DataRecordStorageIds,
-                            FromTime: query.FromTime,
-                            ToTime: query.ToTime,
-                            FilterGroup: query.FilterGroup,
-                            LimitResult: query.LimitResult,
-                            Direction: query.Direction,
-                            Filters: query.Filters
-                        };
+                            fillQueryColumns(searchQuery, query.GridColumns, query.ItemDetails);
 
-                        fillQueryColumns(searchQuery, query.GridColumns, query.ItemDetails);
-
-                        if (query.SortColumns && query.SortColumns.length > 0) {
-                            searchQuery.SortColumns = [];
-                            for (var t = 0; t < query.SortColumns.length; t++) {
-                                var currentSortColumn = query.SortColumns[t];
-                                var sortColumnItem = {
-                                    FieldName: currentSortColumn.FieldName,
-                                    IsDescending: currentSortColumn.IsDescending
-                                };
-                                searchQuery.SortColumns.push(sortColumnItem);
+                            if (query.SortColumns && query.SortColumns.length > 0) {
+                                searchQuery.SortColumns = [];
+                                for (var t = 0; t < query.SortColumns.length; t++) {
+                                    var currentSortColumn = query.SortColumns[t];
+                                    var sortColumnItem = {
+                                        FieldName: currentSortColumn.FieldName,
+                                        IsDescending: currentSortColumn.IsDescending
+                                    };
+                                    searchQuery.SortColumns.push(sortColumnItem);
+                                }
                             }
-                        }
 
-                        gridAPI.retrieveData(searchQuery).finally(function () {
-                            promiseDeffer.resolve();
-                        }).catch(function (error) {
-                            promiseDeffer.reject(error);
+                            gridAPI.retrieveData(searchQuery).finally(function () {
+                                promiseDeffer.resolve();
+                            }).catch(function (error) {
+                                promiseDeffer.reject(error);
+                            });
                         });
                     });
+
+
 
                     return promiseDeffer.promise;
                 };
@@ -176,6 +180,16 @@
                             gridWidth = UtilsService.getItemByVal(gridWidths, column.ColumnSettings.Width, "value");
                         if (gridWidth != undefined)
                             column.Widthfactor = gridWidth.widthFactor;
+
+                        var classStyleItem;
+                        if (column.ColumnStyleId != null)
+                            classStyleItem = UtilsService.getItemByVal(ctrl.classStyleDefinitions, column.ColumnStyleId, "StyleDefinitionId");
+                        if (classStyleItem != undefined) {
+                            if (classStyleItem.StyleDefinitionSettings != undefined && classStyleItem.StyleDefinitionSettings.StyleFormatingSettings != undefined && classStyleItem.StyleDefinitionSettings.StyleFormatingSettings.ClassName != undefined) {
+                                column.cssClass = classStyleItem.StyleDefinitionSettings.StyleFormatingSettings.ClassName;
+                            }
+                        }
+
 
                         ctrl.columns.push(column);
                     });
@@ -232,6 +246,16 @@
                         }
                     }
                 }
+            }
+
+            function loadStyleDefinitions() {
+                return VRCommon_StyleDefinitionAPIService.GetAllStyleDefinitions().then(function (response) {
+                    if (response) {
+                        for (var i = 0; i < response.length; i++) {
+                            ctrl.classStyleDefinitions.push(response[i]);
+                        }
+                    }
+                });
             }
 
             function defineDataRecordStorageLogTabs(gridAPI, dataRecordStorageLog, subviewDefinitions, parentDataRecordTypeId, limitResult) {

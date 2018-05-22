@@ -48,6 +48,9 @@
                                             <vr-datagridcolumn headertext="'Width'" widthfactor="4" disablesorting="true">
                                                 <vr-common-gridcolumnwidth-editor on-ready="dataItem.onGridWidthFactorSelectorReady" hidelabel></vr-common-gridcolumnwidth-editor>
                                             </vr-datagridcolumn>
+                                            <vr-datagridcolumn headertext="'Column Style'" fixedwidth="'100'" disablesorting="true">
+                                                <vr-common-styledefinition-selector on-ready="dataItem.onDataRecordGridStyleDefinitionReady" hidelabel usefullcolumn></vr-common-styledefinition-selector>
+                                            </vr-datagridcolumn>
                                         </vr-datagrid>
                                     </vr-validator>
                                 </vr-columns>
