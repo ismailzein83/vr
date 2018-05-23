@@ -387,7 +387,7 @@
                         };
                         if (item != undefined) {
                             var zoneIds = [];
-                            var itemZones = item.SaleZones != undefined ? item.SaleZones : item.Zones;
+                            var itemZones = item.SupplierZones != undefined ? item.SupplierZones : item.Zones;
                             for (var x = 0; x < itemZones.length; x++) {
                                 zoneIds.push(itemZones[x].ZoneId);
                             }
