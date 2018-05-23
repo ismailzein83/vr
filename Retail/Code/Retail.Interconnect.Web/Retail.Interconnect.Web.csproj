@@ -78,6 +78,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Retail_Interconnect\Reports\Reporting.aspx.cs">
+      <DependentUpon>Reporting.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Retail_Interconnect\Reports\Reporting.aspx.designer.cs">
+      <DependentUpon>Reporting.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
@@ -97,6 +104,15 @@
     <Content Include="Retail_Interconnect\Directives\retail-interconnect-account-invoice-selector.js" />
     <Content Include="Retail_Interconnect\Directives\retail-invoice-invoicetype-interconnectinvoicesettings.js" />
     <Content Include="Retail_Interconnect\Directives\Templates\InterconnectInvoiceSettingsTemplate.html" />
+    <Content Include="Retail_Interconnect\Reports\Reporting.aspx" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Retail_Interconnect\Reports\InterconnectInvoiceItemsReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Retail_Interconnect\Reports\InterconnectInvoiceReport.rdlc">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
