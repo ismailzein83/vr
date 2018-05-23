@@ -30,8 +30,12 @@ namespace Vanrise.Queueing
         IQueueItemDataManager _queueItemDataManager = QDataManagerFactory.GetDataManager<IQueueItemDataManager>();
         QueueInstanceManager _queueManager = new QueueInstanceManager();
         QueueExecutionFlowManager _executionFlowManager = new QueueExecutionFlowManager();
+
+        ExecutionControlManager _executionControlManager = new ExecutionControlManager();
         public override void Execute()
         {
+            if (_executionControlManager.IsExecutionPaused())
+                return;
             int queueIdToProcess;
             while (PendingItemsHandler.Current.TryGetPendingQueueToProcess(base.ServiceInstance.ServiceInstanceId, out queueIdToProcess))
             {

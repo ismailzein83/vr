@@ -58,6 +58,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ExecutionControlDataManager.cs" />
     <Compile Include="QueueActivatorConfigDataManager.cs" />
     <Compile Include="QueueExecutionFlowDataManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

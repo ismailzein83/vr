@@ -69,6 +69,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseQueue.cs" />
+    <Compile Include="ExecutionControlManager.cs" />
     <Compile Include="ExecutionFlowRuntimeCacheManager.cs" />
     <Compile Include="PersistentQueueDequeueContext.cs" />
     <Compile Include="PersistentQueueFactory.cs" />

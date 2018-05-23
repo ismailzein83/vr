@@ -27,14 +27,19 @@ namespace Vanrise.Queueing
 
         RuntimeServiceInstanceManager _serviceInstanceManager = new RuntimeServiceInstanceManager();
 
+        ExecutionControlManager _executionControlManager = new ExecutionControlManager();
+
         public override void Execute()
         {
             TransactionLocker.Instance.TryLock("QueueRegulatorRuntimeService_Execute", () =>
             {
-                List<Runtime.Entities.RuntimeServiceInstance> queueRuntimeServiceInstances = _serviceInstanceManager.GetServices(QueueActivationRuntimeService.SERVICE_TYPE_UNIQUE_NAME);
-                AssignQueueItemsToServices(queueRuntimeServiceInstances);
-                List<Runtime.Entities.RuntimeServiceInstance> summaryQueueRuntimeServiceInstances = _serviceInstanceManager.GetServices(SummaryQueueActivationRuntimeService.SERVICE_TYPE_UNIQUE_NAME);
-                AssignSummaryBatchesToServices(summaryQueueRuntimeServiceInstances);
+                if (!_executionControlManager.IsExecutionPaused())
+                {
+                    List<Runtime.Entities.RuntimeServiceInstance> queueRuntimeServiceInstances = _serviceInstanceManager.GetServices(QueueActivationRuntimeService.SERVICE_TYPE_UNIQUE_NAME);
+                    AssignQueueItemsToServices(queueRuntimeServiceInstances);
+                    List<Runtime.Entities.RuntimeServiceInstance> summaryQueueRuntimeServiceInstances = _serviceInstanceManager.GetServices(SummaryQueueActivationRuntimeService.SERVICE_TYPE_UNIQUE_NAME);
+                    AssignSummaryBatchesToServices(summaryQueueRuntimeServiceInstances);
+                }
                 TryUpdateHoldRequests();
             });
         }

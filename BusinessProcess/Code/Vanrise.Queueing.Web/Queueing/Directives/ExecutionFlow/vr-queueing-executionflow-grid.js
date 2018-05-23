@@ -33,14 +33,29 @@ function (VR_Queueing_QueueItemHeaderAPIService,VR_Queueing_ExecutionFlowAPIServ
             function initializeController() {
 
 
-                $scope.getNotProcessedColor = function (dataItem) {
+                $scope.getNewItemsColor = function (dataItem) {
                     var color = undefined;
-                    var notProcessedCount = dataItem.notProcessedCount;
-                    if (notProcessedCount != undefined) {
+                    var newItemsCount = dataItem.newItemsCount;
+                    if (newItemsCount != undefined) {
 
-                        if (notProcessedCount >= 15 && notProcessedCount < 30)
+                        if (newItemsCount >= 15 && newItemsCount < 30)
                             color = LabelColorsEnum.Warning.color;
-                        else if (notProcessedCount >= 30)
+                        else if (newItemsCount >= 30)
+                            color = LabelColorsEnum.Error.color;
+                    }
+
+                    return color;
+                };
+
+
+                $scope.getUnderProcessingColor = function (dataItem) {
+                    var color = undefined;
+                    var underProcessingCount = dataItem.underProcessingCount;
+                    if (underProcessingCount != undefined) {
+
+                        if (underProcessingCount >= 15 && underProcessingCount < 30)
+                            color = LabelColorsEnum.Warning.color;
+                        else if (underProcessingCount >= 30)
                             color = LabelColorsEnum.Error.color;
                     }
 
@@ -122,16 +137,21 @@ function (VR_Queueing_QueueItemHeaderAPIService,VR_Queueing_ExecutionFlowAPIServ
             function refreshExecutionFlowGrid() {
                 VR_Queueing_QueueItemHeaderAPIService.GetExecutionFlowStatusSummary().then(function (response) {
                     if ($scope.executionFlows != undefined) {
-                        var notProcessedCount;
+                        var newItemsCount;
+                        var underProcessingCount;
                         var suspendedCount;
                         for (var i = 0; i < $scope.executionFlows.length; i++) {
-                            notProcessedCount = 0;
+                            newItemsCount = 0;
+                            underProcessingCount = 0;
                             suspendedCount = 0;
                             for (var j = 0; j < response.length; j++) {
                                 if ($scope.executionFlows[i].Entity.ExecutionFlowId == response[j].ExecutionFlowId) {
                                     var status = response[j].Status;
-                                    if (status == VR_Queueing_QueueItemStatusEnum.New.value || status == VR_Queueing_QueueItemStatusEnum.Processing.value || status == VR_Queueing_QueueItemStatusEnum.Failed.value) {
-                                        notProcessedCount += response[j].Count;
+                                    if (status == VR_Queueing_QueueItemStatusEnum.New.value) {
+                                        newItemsCount += response[j].Count;
+                                    }
+                                    else if (status == VR_Queueing_QueueItemStatusEnum.Processing.value || status == VR_Queueing_QueueItemStatusEnum.Failed.value) {
+                                        underProcessingCount += response[j].Count;
                                     }
                                     else if (status == VR_Queueing_QueueItemStatusEnum.Suspended.value) {
                                         suspendedCount += response[j].Count;
@@ -139,7 +159,8 @@ function (VR_Queueing_QueueItemHeaderAPIService,VR_Queueing_ExecutionFlowAPIServ
 
                                 }
                             }
-                            $scope.executionFlows[i].notProcessedCount = notProcessedCount;
+                            $scope.executionFlows[i].newItemsCount = newItemsCount;
+                            $scope.executionFlows[i].underProcessingCount = underProcessingCount;
                             $scope.executionFlows[i].suspendedCount = suspendedCount;
 
                         }

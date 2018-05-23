@@ -27,9 +27,12 @@ namespace Vanrise.Queueing
 
         QueueInstanceManager _queueManager = new QueueInstanceManager();
         ISummaryBatchActivatorDataManager _summaryBatchActivatorDataManager = QDataManagerFactory.GetDataManager<ISummaryBatchActivatorDataManager>();
+        ExecutionControlManager _executionControlManager = new ExecutionControlManager();
 
         public override void Execute()
         {
+            if (_executionControlManager.IsExecutionPaused())
+                return;
             if (PendingItemsHandler.Current.HasSummaryItemsToProcess(base.ServiceInstance.ServiceInstanceId))
             {
                 List<SummaryBatchActivator> summaryBatchActivators = _summaryBatchActivatorDataManager.GetSummaryBatchActivators(base.ServiceInstance.ServiceInstanceId);

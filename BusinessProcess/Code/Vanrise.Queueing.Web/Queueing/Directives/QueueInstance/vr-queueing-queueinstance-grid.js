@@ -31,15 +31,31 @@ app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIServi
 
             function initializeController() {
 
-                $scope.getNotProcessedColor = function (dataItem) {
+                $scope.getNewItemsColor = function (dataItem) {
                     var color = undefined;
-                    var notProcessedCount = dataItem.notProcessedCount;
-                    if (notProcessedCount != undefined) {
+                    var newItemsCount = dataItem.newItemsCount;
+                    if (newItemsCount != undefined) {
 
-                        if (notProcessedCount >= 5 && notProcessedCount < 15)
+                        if (newItemsCount >= 5 && newItemsCount < 15)
                             color = LabelColorsEnum.Warning.color;
 
-                        else if (notProcessedCount > 15)
+                        else if (newItemsCount > 15)
+                            color = LabelColorsEnum.Error.color;
+
+                    }
+
+                    return color;
+                };
+
+                $scope.getUnderProcessingColor = function (dataItem) {
+                    var color = undefined;
+                    var underProcessingCount = dataItem.underProcessingCount;
+                    if (underProcessingCount != undefined) {
+
+                        if (underProcessingCount >= 5 && underProcessingCount < 15)
+                            color = LabelColorsEnum.Warning.color;
+
+                        else if (underProcessingCount > 15)
                             color = LabelColorsEnum.Error.color;
 
                     }
@@ -115,17 +131,22 @@ app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIServi
 
                 if ($scope.queueInstances != undefined) {
                     VR_Queueing_QueueItemHeaderAPIService.GetItemStatusSummary().then(function (itemStatusSummaryResponse) {
-                        var notProcessedCount = 0;
+                        var newItemsCount = 0;
+                        var underProcessingCount = 0;
                         var suspendedCount = 0;
                         if ($scope.queueInstances != undefined) {
                             for (var i = 0; i < $scope.queueInstances.length; i++) {
-                                notProcessedCount = 0;
+                                newItemsCount = 0;
+                                underProcessingCount = 0;
                                 suspendedCount = 0;
                                 for (var j = 0; j < itemStatusSummaryResponse.length; j++) {
                                     var status = itemStatusSummaryResponse[j].Status;
                                     if (itemStatusSummaryResponse[j].QueueId == $scope.queueInstances[i].Entity.QueueInstanceId) {
-                                        if (status == VR_Queueing_QueueItemStatusEnum.New.value || status == VR_Queueing_QueueItemStatusEnum.Processing.value || status == VR_Queueing_QueueItemStatusEnum.Failed.value) {
-                                            notProcessedCount += itemStatusSummaryResponse[j].Count;
+                                        if (status == VR_Queueing_QueueItemStatusEnum.New.value) {
+                                            newItemsCount += itemStatusSummaryResponse[j].Count;
+                                        }
+                                        else if (status == VR_Queueing_QueueItemStatusEnum.Processing.value || status == VR_Queueing_QueueItemStatusEnum.Failed.value) {
+                                            underProcessingCount += itemStatusSummaryResponse[j].Count;
                                         }
                                         else if (status == VR_Queueing_QueueItemStatusEnum.Suspended.value) {
                                             suspendedCount += itemStatusSummaryResponse[j].Count;
@@ -133,7 +154,8 @@ app.directive("vrQueueingQueueinstanceGrid", ["VR_Queueing_QueueInstanceAPIServi
                                     }
                                 }
 
-                                $scope.queueInstances[i].notProcessedCount = notProcessedCount;
+                                $scope.queueInstances[i].newItemsCount = newItemsCount;
+                                $scope.queueInstances[i].underProcessingCount = underProcessingCount;
                                 $scope.queueInstances[i].suspendedCount = suspendedCount;
                             }
                         }

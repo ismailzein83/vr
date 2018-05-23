@@ -8,7 +8,8 @@
     <vr-datagridcolumn headertext="'ID'" field="'Entity.ExecutionFlowId'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Name'" field="'Entity.Name'"></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Title'" field="'Title'"></vr-datagridcolumn>
-    <vr-datagridcolumn headertext="'Not Processed'" field="'notProcessedCount'" isfielddynamic="true" getcolor="getNotProcessedColor" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'New Items'" field="'newItemsCount'" isfielddynamic="true" getcolor="getNewItemsColor" disablesorting></vr-datagridcolumn>
+    <vr-datagridcolumn headertext="'Under Processing'" field="'underProcessingCount'" isfielddynamic="true" getcolor="getUnderProcessingColor" disablesorting></vr-datagridcolumn>
     <vr-datagridcolumn headertext="'Suspended'" field="'suspendedCount'" isfielddynamic="true" getcolor="getSuspendedColor" disablesorting></vr-datagridcolumn>
     <vr-datagridexpandablerow>
         <vr-directivetabs tabitems="dataItem.drillDownExtensionObject.drillDownDirectiveTabs"></vr-directivetabs>
