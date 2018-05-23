@@ -768,6 +768,10 @@
     <Build Include="VR_Invoice\Stored Procedures\sp_Invoice_UpdateInvoiceApproved.sql" />
     <Build Include="runtime\Stored Procedures\sp_RuntimeNode_Update.sql" />
     <Build Include="runtime\Stored Procedures\sp_RuntimeNode_Insert.sql" />
+    <Build Include="common\Tables\EntityPersonalization.sql" />
+    <Build Include="common\Stored Procedures\sp_EntityPersonalization_InsertIfNotExistsOrUpdate.sql" />
+    <Build Include="common\Stored Procedures\sp_EntityPersonalization_GetAll.sql" />
+    <Build Include="common\Stored Procedures\sp_EntityPersonalization_Delete.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Common.PostDeployment.sql" />
