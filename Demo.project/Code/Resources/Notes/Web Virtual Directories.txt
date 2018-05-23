@@ -1,4 +1,8 @@
-﻿Expand the IIS web site of OperatorPortal.Web project:
+﻿- Open IIS > Create a new web site Demo.Web > Make the physical directory point to Demo.Web Project > assign
+ new port (8xxx for example)
+- Make sure the Application Pool of the newly created site is set to .Net FWK 4.0
+Expand the IIS web site of Demo.Web project:
+
  - Add the following virtual directory under the root site:
 Client			C:\TFS\Vanrise\Code\Vanrise.Web\Client
 
