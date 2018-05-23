@@ -9,5 +9,6 @@ namespace Vanrise.Queueing.Data
     public interface IExecutionControlDataManager : IDataManager
     {
         bool IsExecutionPaused();
+        bool UpdateExecutionPaused(bool isPaused);
     }
 }

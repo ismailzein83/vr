@@ -23,5 +23,11 @@ namespace Vanrise.Queueing.Data.SQL
             var value = ExecuteScalarSP("[queue].[sp_ExecutionControl_IsExecutionPaused]");
             return value != null && value != DBNull.Value ? Convert.ToBoolean(value) : false;
         }
+
+        public bool UpdateExecutionPaused(bool isPaused)
+        {
+            int affectedRecords = ExecuteNonQuerySP("[queue].[sp_ExecutionControl_UpdateExecutionPaused]", isPaused);            
+            return affectedRecords > 0;
+        }
     }
 }

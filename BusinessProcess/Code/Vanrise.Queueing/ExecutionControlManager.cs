@@ -15,5 +15,11 @@ namespace Vanrise.Queueing
         {
             return s_dataManager.IsExecutionPaused();
         }
+
+        public bool UpdateExecutionPaused(bool isPaused)
+        {            
+            s_dataManager.UpdateExecutionPaused(isPaused);
+            return IsExecutionPaused();
+        }
     }
 }
