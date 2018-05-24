@@ -14,6 +14,8 @@ namespace TOne.WhS.Sales.Entities
 
         public Dictionary<int, InvalidImportedRow> InvalidDataByRowIndex { get; set; }
 
+		public Dictionary<int, DateTime> AdditionalCountryBEDsByCountryId { get; set; }
+
 		public bool FileIsEmpty;
 
         public ImportedDataValidationResult()
@@ -21,6 +23,7 @@ namespace TOne.WhS.Sales.Entities
 			ApplicableZoneIds = new HashSet<long>();
 			ValidDataByZoneId = new Dictionary<long, ImportedRow>();
             InvalidDataByRowIndex = new Dictionary<int, InvalidImportedRow>();
-        }
+			AdditionalCountryBEDsByCountryId = new Dictionary<int, DateTime>();
+		}
     }
 }

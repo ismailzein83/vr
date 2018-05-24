@@ -9,149 +9,158 @@ using Vanrise.Entities;
 
 namespace TOne.WhS.Sales.Entities
 {
-    public abstract class BulkActionType
-    {
-        public abstract Guid ConfigId { get; }
+	public abstract class BulkActionType
+	{
+		public abstract Guid ConfigId { get; }
 
-        public abstract void ValidateZone(IZoneValidationContext context);
+		public abstract void ValidateZone(IZoneValidationContext context);
 
-        public abstract bool IsApplicableToCountry(IBulkActionApplicableToCountryContext context);
+		public abstract bool IsApplicableToCountry(IBulkActionApplicableToCountryContext context);
 
-        public abstract bool IsApplicableToZone(IActionApplicableToZoneContext context);
+		public abstract bool IsApplicableToZone(IActionApplicableToZoneContext context);
 
-        public abstract void ApplyBulkActionToZoneItem(IApplyBulkActionToZoneItemContext context);
+		public virtual Dictionary<int, DateTime> PreApplyBulkActionToZoneItem()
+		{
+			return null;
+		}
 
-        public abstract void ApplyBulkActionToZoneDraft(IApplyBulkActionToZoneDraftContext context);
+		public abstract void ApplyBulkActionToZoneItem(IApplyBulkActionToZoneItemContext context);
 
-        public virtual void ApplyBulkActionToDefaultDraft(IApplyBulkActionToDefaultDraftContext context)
-        {
+		public abstract void ApplyBulkActionToZoneDraft(IApplyBulkActionToZoneDraftContext context);
 
-        }
+		public virtual void ApplyBulkActionToDefaultDraft(IApplyBulkActionToDefaultDraftContext context)
+		{
 
-        public virtual void ApplyCorrectedData(IApplyCorrectedDataContext context)
-        {
+		}
 
-        }
-    }
+		public virtual void ApplyCorrectedData(IApplyCorrectedDataContext context)
+		{
 
-    public interface IBulkActionApplicableToCountryContext
-    {
-        Country Country { get; }
+		}
+	}
 
-        int OwnerSellingNumberPlanId { get; }
+	public interface IBulkActionApplicableToCountryContext
+	{
+		Country Country { get; }
 
-        SalePriceListOwnerType OwnerType { get; }
+		int OwnerSellingNumberPlanId { get; }
 
-        int OwnerId { get; }
+		SalePriceListOwnerType OwnerType { get; }
 
-        Dictionary<long, ZoneChanges> ZoneDraftsByZoneId { get; }
+		int OwnerId { get; }
 
-        Dictionary<int, DateTime> CountryBEDsByCountryId { get; }
+		Dictionary<long, ZoneChanges> ZoneDraftsByZoneId { get; }
 
-        Dictionary<int, DateTime> CountryEEDsByCountryId { get; }
+		Dictionary<int, DateTime> CountryBEDsByCountryId { get; }
 
-        SaleEntityZoneRoutingProduct GetCurrentSellingProductZoneRP(int sellingProductId, long saleZoneId);
+		Dictionary<int, DateTime> CountryEEDsByCountryId { get; }
 
-        SaleEntityZoneRoutingProduct GetCurrentCustomerZoneRP(int customerId, int sellingProductId, long saleZoneId);
+		SaleEntityZoneRoutingProduct GetCurrentSellingProductZoneRP(int sellingProductId, long saleZoneId);
 
-        SaleEntityZoneRate GetSellingProductZoneRate(int sellingProductId, long zoneId, bool getFutureRate);
+		SaleEntityZoneRoutingProduct GetCurrentCustomerZoneRP(int customerId, int sellingProductId, long saleZoneId);
 
-        SaleEntityZoneRate GetCustomerZoneRate(int customerId, int sellingProductId, long zoneId, bool getFutureRate);
+		SaleEntityZoneRate GetSellingProductZoneRate(int sellingProductId, long zoneId, bool getFutureRate);
 
-        DateTime GetRateBED(decimal? currentRateValue, decimal newRateValue);
-    }
+		SaleEntityZoneRate GetCustomerZoneRate(int customerId, int sellingProductId, long zoneId, bool getFutureRate);
 
-    public interface IZoneValidationContext
-    {
-        long ZoneId { get; }
+		DateTime GetRateBED(decimal? currentRateValue, decimal newRateValue);
+	}
 
-        ZoneItem GetContextZoneItem(long zoneId);
+	public interface IZoneValidationContext
+	{
+		long ZoneId { get; }
 
-        int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId);
+		ZoneItem GetContextZoneItem(long zoneId);
 
-        BulkActionValidationResult ValidationResult { get; set; }
+		int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId);
 
-        decimal GetRoundedRate(decimal rate);
-    }
+		BulkActionValidationResult ValidationResult { get; set; }
 
-    public interface IActionApplicableToZoneContext
-    {
-        SalePriceListOwnerType OwnerType { get; }
+		decimal GetRoundedRate(decimal rate);
+	}
 
-        int OwnerId { get; }
+	public interface IActionApplicableToZoneContext
+	{
+		SalePriceListOwnerType OwnerType { get; }
 
-        SaleZone SaleZone { get; }
+		int OwnerId { get; }
 
-        ZoneChanges ZoneDraft { get; }
+		SaleZone SaleZone { get; }
 
-        SaleEntityZoneRoutingProduct GetCurrentSellingProductZoneRP(int sellingProductId, long saleZoneId);
+		ZoneChanges ZoneDraft { get; }
 
-        SaleEntityZoneRoutingProduct GetCurrentCustomerZoneRP(int customerId, int sellingProductId, long saleZoneId);
+		SaleEntityZoneRoutingProduct GetCurrentSellingProductZoneRP(int sellingProductId, long saleZoneId);
 
-        SaleEntityZoneRate GetSellingProductZoneRate(int sellingProductId, long zoneId, bool getFutureRate);
+		SaleEntityZoneRoutingProduct GetCurrentCustomerZoneRP(int customerId, int sellingProductId, long saleZoneId);
 
-        SaleEntityZoneRate GetCustomerZoneRate(int customerId, int sellingProductId, long zoneId, bool getFutureRate);
+		SaleEntityZoneRate GetSellingProductZoneRate(int sellingProductId, long zoneId, bool getFutureRate);
 
-        DateTime GetRateBED(decimal? currentRateValue, decimal newRateValue);
+		SaleEntityZoneRate GetCustomerZoneRate(int customerId, int sellingProductId, long zoneId, bool getFutureRate);
 
-        DateTime? GetCountryBED(int countryId);
+		DateTime GetRateBED(decimal? currentRateValue, decimal newRateValue);
 
-        DateTime? GetCountryEED(int countryId);
-    }
+		DateTime? GetCountryBED(int countryId);
 
-    public interface IApplyBulkActionToZoneItemContext
-    {
-        int NewRateDayOffset { get; }
-        int IncreasedRateDayOffset { get; }
-        int DecreasedRateDayOffset { get; }
+		DateTime? GetCountryEED(int countryId);
+	}
 
-        int OwnerId { get; }
-        SalePriceListOwnerType OwnerType { get; }
+	public interface IPreApplyBulkActionToZoneItemContext
+	{
+	}
 
-        ZoneItem ZoneItem { get; }
+	public interface IApplyBulkActionToZoneItemContext
+	{
+		int NewRateDayOffset { get; }
+		int IncreasedRateDayOffset { get; }
+		int DecreasedRateDayOffset { get; }
 
-        ZoneChanges ZoneDraft { get; set; }
+		int OwnerId { get; }
+		SalePriceListOwnerType OwnerType { get; }
 
-        ZoneItem GetContextZoneItem(long zoneId);
+		ZoneItem ZoneItem { get; }
 
-        int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId);
+		ZoneChanges ZoneDraft { get; set; }
 
-        SaleEntityZoneRoutingProduct GetSellingProductZoneRoutingProduct(long zoneId);
+		ZoneItem GetContextZoneItem(long zoneId);
 
-        decimal GetRoundedRate(decimal rate);
+		int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId);
+
+		SaleEntityZoneRoutingProduct GetSellingProductZoneRoutingProduct(long zoneId);
+
+		decimal GetRoundedRate(decimal rate);
 	}
 
 	public interface IApplyBulkActionToZoneDraftContext
-    {
-        int NewRateDayOffset { get; }
-        int IncreasedRateDayOffset { get; }
-        int DecreasedRateDayOffset { get; }
+	{
+		int NewRateDayOffset { get; }
+		int IncreasedRateDayOffset { get; }
+		int DecreasedRateDayOffset { get; }
 
-        int OwnerId { get; }
-        SalePriceListOwnerType OwnerType { get; }
+		int OwnerId { get; }
+		SalePriceListOwnerType OwnerType { get; }
 
-        ZoneChanges ZoneDraft { get; }
+		ZoneChanges ZoneDraft { get; }
 
-        ZoneItem GetZoneItem(long zoneId);
+		ZoneItem GetZoneItem(long zoneId);
 
-        int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId);
+		int? GetCostCalculationMethodIndex(Guid costCalculationMethodConfigId);
 
-        decimal GetRoundedRate(decimal rate);
+		decimal GetRoundedRate(decimal rate);
 	}
 
 	public interface IApplyBulkActionToDefaultDraftContext
-    {
-        SaleEntityZoneRoutingProduct GetCustomerDefaultRoutingProduct();
-        DefaultChanges DefaultDraft { get; }
-    }
+	{
+		SaleEntityZoneRoutingProduct GetCustomerDefaultRoutingProduct();
+		DefaultChanges DefaultDraft { get; }
+	}
 
-    public interface IApplyCorrectedDataContext
-    {
-        SalePriceListOwnerType OwnerType { get; }
-        BulkActionCorrectedData CorrectedData { get; }
-        int NewRateDayOffset { get; }
-        int IncreasedRateDayOffset { get; }
-        int DecreasedRateDayOffset { get; }
-        ZoneChanges GetZoneDraft(long zoneId);
-    }
+	public interface IApplyCorrectedDataContext
+	{
+		SalePriceListOwnerType OwnerType { get; }
+		BulkActionCorrectedData CorrectedData { get; }
+		int NewRateDayOffset { get; }
+		int IncreasedRateDayOffset { get; }
+		int DecreasedRateDayOffset { get; }
+		ZoneChanges GetZoneDraft(long zoneId);
+	}
 }

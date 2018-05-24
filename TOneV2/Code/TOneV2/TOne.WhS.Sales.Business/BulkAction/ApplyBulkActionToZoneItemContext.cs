@@ -66,4 +66,9 @@ namespace TOne.WhS.Sales.Business
             return _getRoundedRate(rate);
         }
 	}
+
+	public class PreApplyBulkActionToZoneItemContext : IPreApplyBulkActionToZoneItemContext
+	{
+		public Dictionary<int,DateTime> AdditionalCountryBEDsByCountryId { get; set; }
+	}
 }

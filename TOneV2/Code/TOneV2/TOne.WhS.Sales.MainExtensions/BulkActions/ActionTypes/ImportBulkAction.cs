@@ -85,6 +85,12 @@ namespace TOne.WhS.Sales.MainExtensions
 			return cachedValidationData.ApplicableZoneIds.Contains(context.SaleZone.SaleZoneId);
 		}
 
+		public override Dictionary<int,DateTime> PreApplyBulkActionToZoneItem()
+		{
+			ImportedDataValidationResult cachedValidationData = GetOrCreateObject();
+			return cachedValidationData.AdditionalCountryBEDsByCountryId;
+		}
+
 		public override void ApplyBulkActionToZoneItem(IApplyBulkActionToZoneItemContext context)
 		{
 			IEnumerable<DraftRateToChange> zoneDraftNewRates = (context.ZoneDraft != null) ? context.ZoneDraft.NewRates : null;

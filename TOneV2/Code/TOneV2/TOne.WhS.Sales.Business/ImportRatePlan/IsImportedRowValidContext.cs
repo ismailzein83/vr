@@ -29,7 +29,9 @@ namespace TOne.WhS.Sales.Business
         public string DateTimeFormat { get; set; }
 
         public string ErrorMessage { get; set; }
-    }
+
+		public Dictionary<int, DateTime> AdditionalCountryBEDsByCountryId { get; set; }
+	}
 
     public class IsValidContext : IIsValidContext
     {
@@ -52,5 +54,7 @@ namespace TOne.WhS.Sales.Business
         public string DateTimeFormat { get; set; }
 
         public string ErrorMessage { get; set; }
-    }
+		
+		public Dictionary<int, DateTime> AdditionalCountryBEDsByCountryId { get; set; }
+	}
 }
