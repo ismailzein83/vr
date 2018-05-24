@@ -5,9 +5,9 @@
       <Rectangle Name="Rectangle4">
         <KeepTogether>true</KeepTogether>
         <Top>2.63958in</Top>
-        <Left>2.19416in</Left>
+        <Left>0.28833in</Left>
         <Height>0.02083in</Height>
-        <Width>5.12751in</Width>
+        <Width>7.03334in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -435,7 +435,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!DestinationZoneId.Value</Value>
+                              <Value>=Fields!DestinationZoneIdDescription.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -505,7 +505,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Rate.Value</Value>
+                              <Value>=FormatNumber(Fields!RateDescription.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -575,7 +575,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!CurrencyId.Value</Value>
+                              <Value>=Fields!CurrencyIdDescription.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -640,22 +640,19 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.05833in</Width>
+              <Width>1.80833in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.425in</Width>
+              <Width>1.34166in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1.08583in</Width>
+              <Width>1.28333in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>0.43333in</Width>
+              <Width>1.30833in</Width>
             </TablixColumn>
             <TablixColumn>
-              <Width>1in</Width>
-            </TablixColumn>
-            <TablixColumn>
-              <Width>1.125in</Width>
+              <Width>1.29166in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -682,37 +679,6 @@
                         </Paragraph>
                       </Paragraphs>
                       <rd:DefaultName>Textbox13</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                    <rd:Selected>true</rd:Selected>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
-                    <Textbox Name="Textbox15">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value />
-                              <Style />
-                            </TextRun>
-                          </TextRuns>
-                          <Style />
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox15</rd:DefaultName>
                       <Style>
                         <Border>
                           <Color>LightGrey</Color>
@@ -800,42 +766,6 @@
                 </TablixCell>
                 <TablixCell>
                   <CellContents>
-                    <Textbox Name="Textbox25">
-                      <CanGrow>true</CanGrow>
-                      <KeepTogether>true</KeepTogether>
-                      <Paragraphs>
-                        <Paragraph>
-                          <TextRuns>
-                            <TextRun>
-                              <Value>=Parameters!Currency.Value</Value>
-                              <Style>
-                                <FontFamily>Verdana</FontFamily>
-                                <FontSize>9pt</FontSize>
-                                <FontWeight>Bold</FontWeight>
-                              </Style>
-                            </TextRun>
-                          </TextRuns>
-                          <Style>
-                            <TextAlign>Right</TextAlign>
-                          </Style>
-                        </Paragraph>
-                      </Paragraphs>
-                      <rd:DefaultName>Textbox25</rd:DefaultName>
-                      <Style>
-                        <Border>
-                          <Color>LightGrey</Color>
-                          <Style>Solid</Style>
-                        </Border>
-                        <PaddingLeft>2pt</PaddingLeft>
-                        <PaddingRight>2pt</PaddingRight>
-                        <PaddingTop>2pt</PaddingTop>
-                        <PaddingBottom>2pt</PaddingBottom>
-                      </Style>
-                    </Textbox>
-                  </CellContents>
-                </TablixCell>
-                <TablixCell>
-                  <CellContents>
                     <Textbox Name="Textbox26">
                       <CanGrow>true</CanGrow>
                       <KeepTogether>true</KeepTogether>
@@ -870,13 +800,48 @@
                     </Textbox>
                   </CellContents>
                 </TablixCell>
+                <TablixCell>
+                  <CellContents>
+                    <Textbox Name="Textbox25">
+                      <CanGrow>true</CanGrow>
+                      <KeepTogether>true</KeepTogether>
+                      <Paragraphs>
+                        <Paragraph>
+                          <TextRuns>
+                            <TextRun>
+                              <Value>=Parameters!Currency.Value</Value>
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>9pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
+                            </TextRun>
+                          </TextRuns>
+                          <Style>
+                            <TextAlign>Right</TextAlign>
+                          </Style>
+                        </Paragraph>
+                      </Paragraphs>
+                      <rd:DefaultName>Textbox25</rd:DefaultName>
+                      <Style>
+                        <Border>
+                          <Color>LightGrey</Color>
+                          <Style>Solid</Style>
+                        </Border>
+                        <PaddingLeft>2pt</PaddingLeft>
+                        <PaddingRight>2pt</PaddingRight>
+                        <PaddingTop>2pt</PaddingTop>
+                        <PaddingBottom>2pt</PaddingBottom>
+                      </Style>
+                    </Textbox>
+                  </CellContents>
+                </TablixCell>
               </TablixCells>
             </TablixRow>
           </TablixRows>
         </TablixBody>
         <TablixColumnHierarchy>
           <TablixMembers>
-            <TablixMember />
             <TablixMember />
             <TablixMember />
             <TablixMember />
@@ -891,9 +856,9 @@
         </TablixRowHierarchy>
         <DataSetName>InterconnectInvoiceItemDetails</DataSetName>
         <Top>2.78834in</Top>
-        <Left>2.19416in</Left>
+        <Left>0.28833in</Left>
         <Height>0.25in</Height>
-        <Width>5.12749in</Width>
+        <Width>7.03331in</Width>
         <ZIndex>8</ZIndex>
         <Style>
           <Border>
@@ -921,7 +886,7 @@
     <Height>6.36424in</Height>
     <Style />
   </Body>
-  <Width>7.56in</Width>
+  <Width>8.32164in</Width>
   <Page>
     <PageFooter>
       <Height>0.6in</Height>
@@ -1015,29 +980,57 @@
           <DataField>DestinationZoneId</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
+        <Field Name="DestinationZoneIdDescription">
+          <DataField>DestinationZoneIdDescription</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="OriginationZoneId">
           <DataField>OriginationZoneId</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
+        </Field>
+        <Field Name="OriginationZoneIdDescription">
+          <DataField>OriginationZoneIdDescription</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="OperatorId">
           <DataField>OperatorId</DataField>
           <rd:TypeName>System.Int64</rd:TypeName>
         </Field>
+        <Field Name="OperatorIdDescription">
+          <DataField>OperatorIdDescription</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="Rate">
           <DataField>Rate</DataField>
           <rd:TypeName>System.Decimal</rd:TypeName>
+        </Field>
+        <Field Name="RateDescription">
+          <DataField>RateDescription</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="RateTypeId">
           <DataField>RateTypeId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
+        <Field Name="RateTypeIdDescription">
+          <DataField>RateTypeIdDescription</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="TrafficDirection">
           <DataField>TrafficDirection</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
         </Field>
+        <Field Name="TrafficDirectionDescription">
+          <DataField>TrafficDirectionDescription</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="CurrencyId">
           <DataField>CurrencyId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
+        </Field>
+        <Field Name="CurrencyIdDescription">
+          <DataField>CurrencyIdDescription</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
         </Field>
       </Fields>
     </DataSet>

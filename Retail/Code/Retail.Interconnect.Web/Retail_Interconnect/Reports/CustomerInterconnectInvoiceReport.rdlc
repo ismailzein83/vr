@@ -162,7 +162,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.38333in</Width>
+              <Width>1.16944in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.38333in</Width>
@@ -183,8 +183,9 @@
                             <TextRun>
                               <Value>Customer Name:</Value>
                               <Style>
+                                <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <FontWeight>SemiBold</FontWeight>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -255,8 +256,9 @@
                             <TextRun>
                               <Value>ATTN:</Value>
                               <Style>
+                                <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <FontWeight>SemiBold</FontWeight>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -327,8 +329,9 @@
                             <TextRun>
                               <Value>Address:</Value>
                               <Style>
+                                <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <FontWeight>SemiBold</FontWeight>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -399,8 +402,9 @@
                             <TextRun>
                               <Value>Tel:</Value>
                               <Style>
+                                <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <FontWeight>SemiBold</FontWeight>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -471,8 +475,9 @@
                             <TextRun>
                               <Value>Invoice Date:</Value>
                               <Style>
+                                <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
-                                <FontWeight>SemiBold</FontWeight>
+                                <FontWeight>Bold</FontWeight>
                               </Style>
                             </TextRun>
                           </TextRuns>
@@ -557,7 +562,7 @@
         <Top>1.83833in</Top>
         <Left>0.155in</Left>
         <Height>1.25in</Height>
-        <Width>2.76666in</Width>
+        <Width>2.55277in</Width>
         <ZIndex>5</ZIndex>
         <Style>
           <Border>
@@ -569,7 +574,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>1.575in</Width>
+              <Width>1.3in</Width>
             </TablixColumn>
             <TablixColumn>
               <Width>1.575in</Width>
@@ -1122,9 +1127,9 @@
         </TablixRowHierarchy>
         <DataSetName>InterconnectInvoiceDetails</DataSetName>
         <Top>1.83833in</Top>
-        <Left>3.98in</Left>
+        <Left>4.255in</Left>
         <Height>1.75in</Height>
-        <Width>3.15in</Width>
+        <Width>2.875in</Width>
         <ZIndex>6</ZIndex>
         <Style>
           <Border>
@@ -1186,6 +1191,7 @@
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
+                        <BackgroundColor>LightGrey</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1225,6 +1231,7 @@
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
+                        <BackgroundColor>LightGrey</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1261,6 +1268,7 @@
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
+                        <BackgroundColor>LightGrey</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1297,6 +1305,7 @@
                           <Color>LightGrey</Color>
                           <Style>Solid</Style>
                         </Border>
+                        <BackgroundColor>LightGrey</BackgroundColor>
                         <PaddingLeft>2pt</PaddingLeft>
                         <PaddingRight>2pt</PaddingRight>
                         <PaddingTop>2pt</PaddingTop>
@@ -1319,7 +1328,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!FromDate.Value</Value>
+                              <Value>=CDate(Parameters!FromDate.Value).ToString("dd/MM/yyyy")</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1356,7 +1365,11 @@
                           <TextRuns>
                             <TextRun>
                               <Value>-</Value>
-                              <Style />
+                              <Style>
+                                <FontFamily>Verdana</FontFamily>
+                                <FontSize>8pt</FontSize>
+                                <FontWeight>Bold</FontWeight>
+                              </Style>
                             </TextRun>
                           </TextRuns>
                           <Style>
@@ -1387,7 +1400,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Parameters!ToDate.Value</Value>
+                              <Value>=CDate(Parameters!ToDate.Value).ToString("dd/MM/yyyy")</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
