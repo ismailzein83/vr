@@ -1,28 +1,30 @@
 ﻿using System;
-using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using Vanrise.Reprocess.Entities;
+using System.Linq;
+using TOne.WhS.Deal.Business;
+using TOne.WhS.Deal.Entities;
 using Vanrise.Common;
-using Vanrise.Entities;
-using Vanrise.Rules.Pricing;
 using Vanrise.Common.Business;
-using Vanrise.Queueing.Entities;
+using Vanrise.Entities;
 using Vanrise.GenericData.Pricing;
 using Vanrise.GenericData.QueueActivators;
-using TOne.WhS.Deal.Entities;
-using TOne.WhS.Deal.Business;
+using Vanrise.Queueing.Entities;
+using Vanrise.Reprocess.Entities;
+using Vanrise.Rules.Pricing;
 
 namespace TOne.WhS.Deal.MainExtensions.QueueActivators
 {
     public class EvaluateDealActivator : QueueActivator, IReprocessStageActivator
     {
+        private List<int> cdrTypesToEvaluate = new List<int>() { 1, 4 };
+
         public List<string> MainOutputStages { get; set; }
         public List<string> PartialPricedOutputStages { get; set; }
         public List<string> BillingOutputStages { get; set; }
         public List<string> TrafficOutputStages { get; set; }
 
-        private List<int> cdrTypesToEvaluate = new List<int>() { 1, 4 };
+
         #region QueueActivator
 
         public override void OnDisposed()
