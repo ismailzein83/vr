@@ -34,6 +34,9 @@
   <connectionStrings>
     <add name="TOneCDRDBConnString" connectionString="Server=localhost;Database=TOneV2_CDR;User ID=sa;Password= "/>
     <add name="TOneAnalyticsDBConnString" connectionString="Server=localhost;Database=TOneV2_Analytics;User ID=sa;Password= "/>
+
+    <add name="TOneSMSDBConnString" connectionString="Server=localhost;Database=TOneV2_SMS;User ID=sa;Password= "/>
+    <add name="TOneSMSAnalyticsDBConnString" connectionString="Server=localhost;Database=TOneV2_SMSAnalytics;User ID=sa;Password= "/>
     
     <add name="QueueItemDBConnString" connectionString="Server=localhost;Database=TOneV2_Queueing;User ID=sa;Password= "/>
     <add name="TransactionDBConnString" connectionString="Server=localhost;Database=TOneV2_Transaction;User ID=sa;Password= "/>
@@ -114,7 +117,7 @@
     <!--USE THIS KEY ONLY IF THE ROUTING PROCESS IS USED TO GENERATE CUSTOMER ROUTE FOR CURRENT TONE (TONE V1). Enable this option to link customer to sale zone services directly since there is no routing product in current TOne.-->
     <add key="TOneWhS_Routing_ZoneServicesExplicitOnCustomer" value="false"/>
     
-    <add key="ExposedConnectionStringNames" value="TOneCDRDBConnString,TOneAnalyticsDBConnString,ConfigurationDBConnString"/>
+    <add key="ExposedConnectionStringNames" value="TOneCDRDBConnString,TOneAnalyticsDBConnString,ConfigurationDBConnString,TOneSMSDBConnString,TOneSMSAnalyticsDBConnString"/>
     <add key="PostgresDataBaseOwnerName" value="pg_owner"/>
   </appSettings>
   <system.codedom>
