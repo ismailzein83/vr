@@ -8,7 +8,8 @@
 
         return ({            
             IsExecutionPaused: IsExecutionPaused,
-            UpdateExecutionPaused: UpdateExecutionPaused
+            UpdateExecutionPaused: UpdateExecutionPaused,
+            HasUpdateExecutionPausedPermission: HasUpdateExecutionPausedPermission
         });
 
         function IsExecutionPaused() {
@@ -18,7 +19,9 @@
         function UpdateExecutionPaused(isPaused) {
             return BaseAPIService.get(UtilsService.getServiceURL(VR_Queueing_ModuleConfig.moduleName, 'ExecutionControlData', 'UpdateExecutionPaused'), { isPaused: isPaused });
         }
-        
+        function HasUpdateExecutionPausedPermission() {
+            return SecurityService.HasPermissionToActions(UtilsService.getSystemActionNames(VR_Queueing_ModuleConfig.moduleName, "ExecutionControlData", ['UpdateExecutionPaused']));
+        }
     }
 
     appControllers.service('VR_Queueing_ExecutionControlDataAPIService', ExecutionControlDataAPIService);
