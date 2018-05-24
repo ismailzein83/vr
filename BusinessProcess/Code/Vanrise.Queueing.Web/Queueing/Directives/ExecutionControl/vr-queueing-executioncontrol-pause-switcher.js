@@ -23,8 +23,8 @@ app.directive('vrQueueingExecutioncontrolPauseSwitcher', ['VR_Queueing_Execution
 
 
         function getExecutionControl(attrs) {
-            return ' <vr-button type="Pause" data-onclick="ctrl.pauseExecution" vr-disabled="!ctrl.isPaused"></vr-button>'
-                    + ' <vr-button type="Resume" data-onclick="ctrl.resumeExecution" vr-disabled="ctrl.isPaused"></vr-button>';
+            return ' <vr-button type="Pause" data-onclick="ctrl.pauseExecution" vr-disabled="ctrl.isPaused"></vr-button>'
+                    + ' <vr-button type="Resume" data-onclick="ctrl.resumeExecution" vr-disabled="!ctrl.isPaused"></vr-button>';
         }
 
         function executionControlCtor(ctrl, $scope, attrs) {
@@ -35,13 +35,13 @@ app.directive('vrQueueingExecutioncontrolPauseSwitcher', ['VR_Queueing_Execution
 
             ctrl.pauseExecution = function () {
                 return VR_Queueing_ExecutionControlDataAPIService.UpdateExecutionPaused(true).then(function (response) {
-                    ctrl.isPaused = !response;
+                    ctrl.isPaused = response;
                 });
             };
 
             ctrl.resumeExecution = function () {
                 return VR_Queueing_ExecutionControlDataAPIService.UpdateExecutionPaused(false).then(function (response) {
-                    ctrl.isPaused = !response;
+                    ctrl.isPaused = response;
                 });
             };
             function initializeController() {
