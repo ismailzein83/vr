@@ -80,11 +80,11 @@ app.directive('vrWhsRoutingSalecodematchbyplanstepPreview', ['UtilsService', 'VR
                     }
                 }
 
-                for (var index = 0 ; index < ctrl.outputFields.length; index++) {
-                    if (ctrl.outputFields[index].FieldName == undefined) {
-                        misisngFieldsArray.push(ctrl.outputFields[index].Value);
-                    }
-                }
+                //for (var index = 0 ; index < ctrl.outputFields.length; index++) {
+                //    if (ctrl.outputFields[index].FieldName == undefined) {
+                //        misisngFieldsArray.push(ctrl.outputFields[index].Value);
+                //    }
+                //}
 
                 if (misisngFieldsArray.length == 1)
                     return "Field " + misisngFieldsArray[0] + " is required!!";
@@ -98,39 +98,50 @@ app.directive('vrWhsRoutingSalecodematchbyplanstepPreview', ['UtilsService', 'VR
 
                 array.push({
                     FieldName: "EffectiveOn",
-                    Value: data.CDPNOut
+                    Value: data.EffectiveOn
                 });
                 array.push({
-                    FieldName: "SellingNumberPlan",
-                    Value: data.CDPNIn
+                    FieldName: "Selling Number Plan Id",
+                    Value: data.SellingNumberPlanId
                 });
                 array.push({
                     FieldName: "CDPN",
-                    Value: data.SwitchId
+                    Value: data.CDPN
                 });
                 array.push({
                     FieldName: "CGPN",
-                    Value: data.InputCDPN
+                    Value: data.CGPN
                 });
             }
             function fillOutputFieldsArray(data, array) {
 
-                array.push({
-                    FieldName: data.CustomerCDPN,
-                    Value: "SaleCode"
-                });
-                array.push({
-                    FieldName: data.SupplierCDPN,
-                    Value: "SaleZoneId"
-                });
-                array.push({
-                    FieldName: data.CustomerCDPN,
-                    Value: "OriginatingSaleCode"
-                });
-                array.push({
-                    FieldName: data.SupplierCDPN,
-                    Value: "OriginatingSaleZoneId"
-                });
+                if (data.SaleCode != undefined) {
+                    array.push({
+                        FieldName: data.SaleCode,
+                        Value: "Sale Code"
+                    });
+                }
+
+                if (data.SaleZoneId != undefined) {
+                    array.push({
+                        FieldName: data.SaleZoneId,
+                        Value: "Sale Zone Id"
+                    });
+                }
+
+                if (data.OriginatingSaleCode != undefined) {
+                    array.push({
+                        FieldName: data.OriginatingSaleCode,
+                        Value: "Originating Sale Code"
+                    });
+                }
+
+                if (data.OriginatingSaleZoneId != undefined) {
+                    array.push({
+                        FieldName: data.OriginatingSaleZoneId,
+                        Value: "Originating Sale Zone Id"
+                    });
+                }
             }
         }
 

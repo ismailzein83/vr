@@ -139,7 +139,7 @@ app.directive('vrWhsRoutingSalecodematchbyplanstep', ['UtilsService', 'VRUIUtils
                             if (payload.stepDetails != undefined)
                                 effectiveOnPayload.selectedRecords = payload.stepDetails.EffectiveOn;
 
-                            VRUIUtilsService.callDirectiveLoad(switchIdDirectiveReadyAPI, effectiveOnPayload, loadEffectiveOnDirectivePromiseDeferred);
+                            VRUIUtilsService.callDirectiveLoad(effectiveOnDirectiveReadyAPI, effectiveOnPayload, loadEffectiveOnDirectivePromiseDeferred);
                         });
 
                         return loadEffectiveOnDirectivePromiseDeferred;
@@ -250,7 +250,7 @@ app.directive('vrWhsRoutingSalecodematchbyplanstep', ['UtilsService', 'VRUIUtils
 
                 api.getData = function () {
                     return {
-                        $type: "TOne.WhS.Routing.Business.TransformationSteps.SaleCodeMatchByPlanStep, TOne.WhS.Routing.Business.TransformationSteps.",
+                        $type: "TOne.WhS.Routing.Business.TransformationSteps.SaleCodeMatchByPlanStep, TOne.WhS.Routing.Business",
                         EffectiveOn: effectiveOnDirectiveReadyAPI.getData(),
                         SellingNumberPlanId: sellingNumberPlanIdDirectiveReadyAPI.getData(),
                         CDPN: cdpnDirectiveReadyAPI.getData(),
