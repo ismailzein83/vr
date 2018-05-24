@@ -237,6 +237,7 @@
                 var reprocessDefinitionSettings = reprocessDefinitionEntity.Settings;
                 if (reprocessDefinitionSettings != undefined) {
                     $scope.scopeModel.forceUseTempStorage = reprocessDefinitionSettings.ForceUseTempStorage;
+                    $scope.scopeModel.cannotBeTriggeredManually = reprocessDefinitionSettings.CannotBeTriggeredManually;
                     if (reprocessDefinitionSettings.RecordCountPerTransaction > 0) {
                         $scope.scopeModel.recordCountPerTransaction = reprocessDefinitionSettings.RecordCountPerTransaction;
                     }
@@ -399,6 +400,7 @@
                 StagesToProcessNames: stagesToProcessAPI.getSelectedIds(),
                 RecordCountPerTransaction: $scope.scopeModel.recordCountPerTransaction,
                 ForceUseTempStorage: $scope.scopeModel.forceUseTempStorage,
+                CannotBeTriggeredManually: $scope.scopeModel.cannotBeTriggeredManually,
                 PostExecution: { ReprocessDefinitionIds: reprocessDefinitionSelectorAPI.getSelectedIds() },
                 FilterDefinition: reprocessFilterDefinitionSettingsAPI != undefined ? reprocessFilterDefinitionSettingsAPI.getData() : undefined
             };

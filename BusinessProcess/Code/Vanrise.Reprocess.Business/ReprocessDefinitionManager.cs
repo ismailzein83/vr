@@ -95,6 +95,16 @@ namespace Vanrise.Reprocess.Business
                     {
                         if (filter.ExcludedReprocessDefinitionIds != null && filter.ExcludedReprocessDefinitionIds.Contains(reprocessDefinition.ReprocessDefinitionId))
                             return false;
+
+                        if (filter.Filters != null)
+                        {
+                            ReprocessDefinitionFilterContext context = new ReprocessDefinitionFilterContext() { ReprocessDefinition = reprocessDefinition };
+                            foreach (IReprocessDefinitionFilter reprocessDefinitionFilter in filter.Filters)
+                            {
+                                if (!reprocessDefinitionFilter.IsMatched(context))
+                                    return false;
+                            }
+                        }
                     }
                     return true;
                 };

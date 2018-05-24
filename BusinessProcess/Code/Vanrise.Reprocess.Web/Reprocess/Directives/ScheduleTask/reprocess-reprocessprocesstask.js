@@ -116,12 +116,18 @@ app.directive("reprocessReprocessprocesstask", ['UtilsService', 'VRUIUtilsServic
 
                     var reprocessDefinitionSelectorLoadDeferred = UtilsService.createPromiseDeferred();
                     reprocessDefinitionSelectorReadyDeferred.promise.then(function () {
-                        var reprocessPayload;
+                        var reprocessPayload = {
+                            filter: {
+                                Filters: [{
+                                    $type: "Vanrise.Reprocess.Business.ManualTriggerReprocessDefinitionFilter, Vanrise.Reprocess.Business"
+                                }]
+                            }
+                        };
+
                         if (payload != undefined && payload.data != undefined) {
-                            reprocessPayload = {
-                                selectedIds: payload.data.ReprocessDefinitionId
-                            };
+                            reprocessPayload.selectedIds = payload.data.ReprocessDefinitionId;
                         }
+
                         VRUIUtilsService.callDirectiveLoad(reprocessDefinitionSelectorAPI, reprocessPayload, reprocessDefinitionSelectorLoadDeferred);
                     });
                     promises.push(reprocessDefinitionSelectorLoadDeferred.promise);

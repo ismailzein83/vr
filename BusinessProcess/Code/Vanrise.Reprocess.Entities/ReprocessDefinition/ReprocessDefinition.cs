@@ -41,6 +41,8 @@ namespace Vanrise.Reprocess.Entities
 
         public bool ForceUseTempStorage { get; set; }
 
+        public bool CannotBeTriggeredManually { get; set; }
+
         public PostExecution PostExecution { get; set; }
 
         //public List<ReprocessDefinitionStage> Stages { get; set; }
