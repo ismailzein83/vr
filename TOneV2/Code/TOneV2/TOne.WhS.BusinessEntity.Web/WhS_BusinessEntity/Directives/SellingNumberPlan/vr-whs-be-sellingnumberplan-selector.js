@@ -15,7 +15,8 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
                 isdisabled: "=",
                 normalColNum: '@',
                 hideremoveicon: '@',
-                onbeforeselectionchanged: '='
+                onbeforeselectionchanged: '=',
+                customlabel: '@'
             },
             controller: function ($scope, $element, $attrs) {
 
@@ -77,10 +78,14 @@ app.directive('vrWhsBeSellingnumberplanSelector', ['WhS_BE_SellingNumberPlanAPIS
             if (attrs.hideremoveicon)
                 hideremoveicon = "hideremoveicon";
 
+            var customlabel = '';
+            if (attrs.customlabel != undefined)
+                customlabel = 'customlabel="{{ctrl.customlabel}}"';
+
             return '<vr-columns colnum="{{ctrl.normalColNum}}" >'
                        + '<vr-select ' + multipleselection + ' ' + addCliked + '  isrequired="ctrl.isrequired" datatextfield="Name" datavaluefield="SellingNumberPlanId" on-ready="ctrl.onSelectorReady" '
                            + ' label="' + label + '" datasource="ctrl.datasource"  selectedvalues="ctrl.selectedvalues" onbeforeselectionchanged="ctrl.onbeforeselectionchanged" onselectionchanged="ctrl.onselectionchanged"'
-                           + ' onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission" ' + hideremoveicon + '>'
+                           + ' onselectitem="ctrl.onselectitem" ondeselectitem="ctrl.ondeselectitem" haspermission="ctrl.haspermission" ' + hideremoveicon + ' ' + customlabel + '>'
                        + '</vr-select>' +
                    '</vr-columns>';
         }
