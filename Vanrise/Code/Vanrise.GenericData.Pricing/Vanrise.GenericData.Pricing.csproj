@@ -61,6 +61,7 @@
     <Compile Include="RateValue\RateValueRule.cs" />
     <Compile Include="RateValue\RateValueRuleContext.cs" />
     <Compile Include="RateValue\RateValueRuleManager.cs" />
+    <Compile Include="Tariff\TariffRuleCalculateAmountContext.cs" />
     <Compile Include="Tariff\TariffRuleDefinitionSettings.cs" />
     <Compile Include="Tariff\TariffMappingStep.cs" />
     <Compile Include="Tariff\TariffRuleContext.cs" />

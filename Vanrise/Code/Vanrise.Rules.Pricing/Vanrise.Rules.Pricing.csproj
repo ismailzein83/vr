@@ -60,6 +60,7 @@
     <Compile Include="RateValue\IPricingRuleRateValueContext.cs" />
     <Compile Include="RateValue\PricingRuleRateValueSettings.cs" />
     <Compile Include="RateValue\PricingRuleRateValueSettingsConfig.cs" />
+    <Compile Include="Tariff\IPricingRuleTariffSettingsCalculateAmountContext.cs" />
     <Compile Include="Tariff\IPricingRuleTariffContext.cs" />
     <Compile Include="Tariff\PricingRuleTariffSettings.cs" />
     <Compile Include="Tariff\PricingRuleTariffSettingsConfig.cs" />

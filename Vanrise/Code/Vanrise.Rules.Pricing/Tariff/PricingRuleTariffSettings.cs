@@ -22,6 +22,7 @@ namespace Vanrise.Rules.Pricing
 
         public abstract string GetDescription();
         public abstract string GetPricingDescription();
+        public abstract void CalculateAmount(IPricingRuleTariffSettingsCalculateAmountContext context);
 
         public virtual Dictionary<string, object> GetSettingsValuesByName()
         {

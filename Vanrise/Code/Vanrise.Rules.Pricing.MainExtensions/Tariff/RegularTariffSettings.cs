@@ -23,6 +23,11 @@ namespace Vanrise.Rules.Pricing.MainExtensions.Tariff
 
         public int PricingUnit { get; set; }
 
+        public override void CalculateAmount(IPricingRuleTariffSettingsCalculateAmountContext context)
+        {
+            context.Amount = context.DurationInSeconds * context.EffectiveRate / PricingUnit;
+        }
+
         protected override void Execute(IPricingRuleTariffContext context)
         {
             if (FractionUnit < 0)
