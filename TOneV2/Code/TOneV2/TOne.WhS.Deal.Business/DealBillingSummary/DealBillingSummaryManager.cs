@@ -38,7 +38,7 @@ namespace TOne.WhS.Deal.Business
                     int? dealZoneGroupNb = (int?)analyticRecord.DimensionValues[dimensionFieldsDict[PropertyName.DealZoneGroupNb]].Value;
                     int? dealTierNb = (int?)analyticRecord.DimensionValues[dimensionFieldsDict[PropertyName.DealTierNb]].Value;
                     int? dealRateTierNb = (int?)analyticRecord.DimensionValues[dimensionFieldsDict[PropertyName.DealRateTierNb]].Value;
-                    decimal durationInSeconds = (decimal)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.DurationInSec]).Value;
+                    decimal durationInSeconds = (decimal)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.PricedDurationInSec]).Value;
                     decimal? dealDurationInSeconds = (decimal?)analyticRecord.MeasureValues.GetRecord(propertyNames[PropertyName.DealDurationInSec]).Value;
 
                     BatchDealZoneGroup batchDealZoneGroup = new BatchDealZoneGroup() { DealId = origDealId, DealZoneGroupNb = origDealZoneGroupNb, BatchStart = batchStart };
@@ -87,7 +87,7 @@ namespace TOne.WhS.Deal.Business
                     TableId = Guid.Parse("4C1AAA1B-675B-420F-8E60-26B0747CA79B"),
                     DimensionFields = new List<string> { propertyNames[PropertyName.HalfHour], propertyNames[PropertyName.OrigDeal], propertyNames[PropertyName.OrigDealZoneGroupNb], propertyNames[PropertyName.Deal], 
                                                          propertyNames[PropertyName.DealZoneGroupNb], propertyNames[PropertyName.DealTierNb], propertyNames[PropertyName.DealRateTierNb] },
-                    MeasureFields = new List<string>() { propertyNames[PropertyName.DurationInSec], propertyNames[PropertyName.DealDurationInSec] },
+                    MeasureFields = new List<string>() { propertyNames[PropertyName.PricedDurationInSec], propertyNames[PropertyName.DealDurationInSec] },
                     
                     FromTime = beginDate,
                     FilterGroup = new Vanrise.GenericData.Entities.RecordFilterGroup()
@@ -126,7 +126,7 @@ namespace TOne.WhS.Deal.Business
             propertyNames.Add(PropertyName.HalfHour, "HalfHour");
             propertyNames.Add(PropertyName.OrigDeal, string.Format("Orig{0}Deal", prefixPropName));
             propertyNames.Add(PropertyName.OrigDealZoneGroupNb, string.Format("Orig{0}DealZoneGroupNb", prefixPropName));
-            propertyNames.Add(PropertyName.DurationInSec, "DurationNetInSec");
+            propertyNames.Add(PropertyName.PricedDurationInSec, string.Format("{0}DurationInSec", prefixPropName));
             propertyNames.Add(PropertyName.Deal, string.Format("{0}Deal", prefixPropName));
             propertyNames.Add(PropertyName.DealZoneGroupNb, string.Format("{0}DealZoneGroupNb", prefixPropName));
             propertyNames.Add(PropertyName.DealTierNb, string.Format("{0}DealTierNb", prefixPropName));
@@ -155,7 +155,7 @@ namespace TOne.WhS.Deal.Business
 
         #region Private Classes
 
-        private enum PropertyName { HalfHour, OrigDeal, OrigDealZoneGroupNb, DurationInSec, Deal, DealZoneGroupNb, DealTierNb, DealRateTierNb, DealDurationInSec }
+        private enum PropertyName { HalfHour, OrigDeal, OrigDealZoneGroupNb, PricedDurationInSec, Deal, DealZoneGroupNb, DealTierNb, DealRateTierNb, DealDurationInSec }
 
         private struct BatchDealZoneGroup
         {

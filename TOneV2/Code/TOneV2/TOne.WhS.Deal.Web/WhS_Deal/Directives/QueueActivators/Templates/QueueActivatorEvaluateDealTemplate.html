@@ -22,3 +22,11 @@
                ismultipleselection label="Billing Output Stages">
     </vr-select>
 </vr-columns>
+<vr-columns width="1/3row">
+    <vr-select datasource="scopeModel.outputStages"
+               datavaluefield="stageName"
+               datatextfield="stageName"
+               selectedvalues="scopeModel.selectedTrafficOutputStages"
+               ismultipleselection label="Traffic Output Stages">
+    </vr-select>
+</vr-columns>

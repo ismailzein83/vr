@@ -31,7 +31,7 @@
 
         function EvaluateDealActivatorCtor(ctrl, $scope) {
             this.initializeController = initializeController;
-            $scope.scopeModel = { outputStages: [], selectedMainOutputStages: [], selectedBillingOutputStages: [], selectedPartialPricedOutputStages: [] };
+            $scope.scopeModel = { outputStages: [], selectedMainOutputStages: [], selectedBillingOutputStages: [], selectedPartialPricedOutputStages: [], selectedTrafficOutputStages: [] };
 
             function initializeController() {
                 if (ctrl.onReady != undefined && typeof (ctrl.onReady) == 'function') {
@@ -86,6 +86,13 @@
                                 $scope.scopeModel.selectedPartialPricedOutputStages.push({ stageName: currentPartialPricedOutputStage })
                             }
                         }
+
+                        if (payload.QueueActivator.TrafficOutputStages != undefined) {
+                            for (var i = 0; i < payload.QueueActivator.TrafficOutputStages.length; i++) {
+                                var currentTrafficOutputStage = payload.QueueActivator.TrafficOutputStages[i];
+                                $scope.scopeModel.selectedTrafficOutputStages.push({ stageName: currentTrafficOutputStage })
+                            }
+                        }
                     }
                     return UtilsService.waitMultiplePromises(promises);
                 };
@@ -110,11 +117,18 @@
                         selectedPartialPricedNextStages.push(currentPartialPricedSelectedOutputStage.stageName);
                     }
 
+                    var selectedTrafficNextStages = [];
+                    for (var i = 0; i < $scope.scopeModel.selectedTrafficOutputStages.length; i++) {
+                        var currentTrafficSelectedOutputStage = $scope.scopeModel.selectedTrafficOutputStages[i];
+                        selectedTrafficNextStages.push(currentTrafficSelectedOutputStage.stageName);
+                    }
+
                     return {
                         $type: 'TOne.WhS.Deal.MainExtensions.QueueActivators.EvaluateDealActivator, TOne.WhS.Deal.MainExtensions',
                         MainOutputStages: selectedMainNextStages,
                         BillingOutputStages: selectedBillingNextStages,
-                        PartialPricedOutputStages: selectedPartialPricedNextStages
+                        PartialPricedOutputStages: selectedPartialPricedNextStages,
+                        TrafficOutputStages: selectedTrafficNextStages
                     };
                 };
 
