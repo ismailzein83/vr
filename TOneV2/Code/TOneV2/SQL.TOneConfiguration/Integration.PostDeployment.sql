@@ -89,7 +89,7 @@ set nocount on;
 ;with cte_data([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions])
 as (select * from (values
 --//////////////////////////////////////////////////////////////////////////////////////////////////
-('CCD65B5B-53BB-4816-B7EA-D8DC58AA513E','VR_Integration_DataProcesses','Data Processes','B6B8F582-4759-43FB-9220-AA7662C366EA',0,'["View Data Sources","Add Data Sources","Edit Data Sources","View Logs","View Reprocess Logs","Start Reprocess"]')
+('CCD65B5B-53BB-4816-B7EA-D8DC58AA513E','VR_Integration_DataProcesses','Data Processes','B6B8F582-4759-43FB-9220-AA7662C366EA',0,'["View Data Sources","Add Data Sources","Edit Data Sources","View Logs","View Reprocess Logs","Start Reprocess", "Manage Import Process"]')
 --\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 )c([Id],[Name],[Title],[ModuleId],[BreakInheritance],[PermissionOptions]))
 merge	[sec].[BusinessEntity] as t
