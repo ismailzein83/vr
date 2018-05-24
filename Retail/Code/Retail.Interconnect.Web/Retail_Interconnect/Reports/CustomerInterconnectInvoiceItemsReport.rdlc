@@ -624,10 +624,11 @@
             </TablixMember>
           </TablixMembers>
         </TablixRowHierarchy>
+        <DataSetName>InterconnectInvoiceItemDetails</DataSetName>
         <Top>2.07013in</Top>
         <Left>0.28833in</Left>
         <Height>0.5in</Height>
-        <Width>7.03332in</Width>
+        <Width>7.03331in</Width>
         <ZIndex>7</ZIndex>
         <Style>
           <Border>
@@ -692,6 +693,7 @@
                         <PaddingBottom>2pt</PaddingBottom>
                       </Style>
                     </Textbox>
+                    <rd:Selected>true</rd:Selected>
                   </CellContents>
                 </TablixCell>
                 <TablixCell>
@@ -733,7 +735,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Microsoft.VisualBasic.Strings.FormatNumber(Parameters!TotalDuration.Value, Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=FormatNumber(Parameters!TotalDuration.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -887,6 +889,7 @@
             <TablixMember />
           </TablixMembers>
         </TablixRowHierarchy>
+        <DataSetName>InterconnectInvoiceItemDetails</DataSetName>
         <Top>2.78834in</Top>
         <Left>2.19416in</Left>
         <Height>0.25in</Height>

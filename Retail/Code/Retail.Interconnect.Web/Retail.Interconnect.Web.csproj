@@ -107,10 +107,10 @@
     <Content Include="Retail_Interconnect\Reports\Reporting.aspx" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Retail_Interconnect\Reports\InterconnectInvoiceItemsReport.rdlc">
+    <EmbeddedResource Include="Retail_Interconnect\Reports\CustomerInterconnectInvoiceItemsReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="Retail_Interconnect\Reports\InterconnectInvoiceReport.rdlc">
+    <EmbeddedResource Include="Retail_Interconnect\Reports\CustomerInterconnectInvoiceReport.rdlc">
       <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>

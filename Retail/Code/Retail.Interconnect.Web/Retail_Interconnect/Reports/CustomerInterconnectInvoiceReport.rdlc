@@ -10,7 +10,7 @@
         <Top>0.13833in</Top>
         <Left>0.155in</Left>
         <Height>0.875in</Height>
-        <Width>1.38333in</Width>
+        <Width>2.53958in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -2387,8 +2387,8 @@
       </Line>
       <Rectangle Name="Rectangle1">
         <ReportItems>
-          <Subreport Name="InterconnectInvoiceItemsReportName">
-            <ReportName>InterconnectInvoiceItemsReport</ReportName>
+          <Subreport Name="CustomerInterconnectInvoiceItemsReportName">
+            <ReportName>CustomerInterconnectInvoiceItemsReport</ReportName>
             <Parameters>
               <Parameter Name="Title">
                 <Value>=Parameters!Title.Value</Value>
@@ -2407,6 +2407,15 @@
               </Parameter>
               <Parameter Name="InvoiceDate">
                 <Value>=Parameters!InvoiceDate.Value</Value>
+              </Parameter>
+              <Parameter Name="Currency">
+                <Value>=Parameters!Currency.Value</Value>
+              </Parameter>
+              <Parameter Name="CarrierCompanyName">
+                <Value>=Parameters!CompanyName.Value</Value>
+              </Parameter>
+              <Parameter Name="NormalPrecisionValue">
+                <Value>=Parameters!NormalPrecisionValue.Value</Value>
               </Parameter>
             </Parameters>
             <Top>0.1in</Top>

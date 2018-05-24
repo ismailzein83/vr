@@ -19,16 +19,25 @@ namespace Retail.Interconnect.Business
 
         public override dynamic GetInfo(Vanrise.Invoice.Entities.IInvoiceTypeExtendedSettingsInfoContext context)
         {
+            AccountBEManager accountBEManager = new AccountBEManager();
+            FinancialAccountManager financialAccountManager = new FinancialAccountManager();
+            var financialAccountData = financialAccountManager.GetFinancialAccountData(this.AccountBEDefinitionId, context.Invoice.PartnerId);
+
             switch (context.InfoType)
             {
                 case "MailTemplate":
                     long accountId = Convert.ToInt32(context.Invoice.PartnerId);
-                    AccountBEManager accountBEManager = new AccountBEManager();
                     var account = accountBEManager.GetAccount(this.AccountBEDefinitionId, accountId);
                     Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
                     objects.Add("Account", account);
                     objects.Add("Invoice", context.Invoice);
                     return objects;
+                case "BankDetails":
+                    {
+                        #region BankDetails
+                        return accountBEManager.GetBankDetailsIds(financialAccountData.Account.AccountId);
+                        #endregion
+                    }
             }
             return null;
         }

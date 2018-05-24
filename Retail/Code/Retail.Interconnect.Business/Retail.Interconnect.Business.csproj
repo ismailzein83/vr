@@ -49,6 +49,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Analytic.Entities.dll</HintPath>
     </Reference>
+    <Reference Include="Vanrise.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.dll</HintPath>
+    </Reference>
     <Reference Include="Vanrise.Common.Business, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Vanrise\Code\Output\Vanrise.Common.Business.dll</HintPath>
@@ -81,6 +85,10 @@
     <ProjectReference Include="..\Retail.BusinessEntity.Entities\Retail.BusinessEntity.Entities.csproj">
       <Project>{c08fd318-049c-49ce-8bc4-85bf296cbab9}</Project>
       <Name>Retail.BusinessEntity.Entities</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Retail.BusinessEntity.MainExtensions\Retail.BusinessEntity.MainExtensions.csproj">
+      <Project>{e4c4ef32-adfb-48c3-a3d3-489a4fc53b89}</Project>
+      <Name>Retail.BusinessEntity.MainExtensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\Retail.Interconnect.Entities\Retail.Interconnect.Entities.csproj">
       <Project>{ed0cd3d2-1e3f-4399-ba99-0ebf76746a34}</Project>

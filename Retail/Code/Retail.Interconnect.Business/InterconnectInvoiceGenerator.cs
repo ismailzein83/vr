@@ -39,16 +39,24 @@ namespace Retail.Interconnect.Business
         public override void GenerateInvoice(IInvoiceGenerationContext context)
         {
             List<string> listMeasures = new List<string> { "TotalBillingDuration", "Amount"};
-            List<string> listDimensions = new List<string> { "DestinationZone", "OriginationZone", "Operator", "Rate", "RateType", "TrafficDirection", "Currency" };
+            List<string> listDimensions = new List<string> { "DestinationZone", "OriginationZone", "Operator", "Rate", "RateType", "BillingType", "Currency" };
 
             FinancialAccountData financialAccountData = _financialAccountManager.GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
+
+            if (context.FromDate < financialAccountData.FinancialAccount.BED || context.ToDate > financialAccountData.FinancialAccount.EED)
+            {
+                context.ErrorMessage = "From date and To date should be within the effective date of financial account.";
+                context.GenerateInvoiceResult = GenerateInvoiceResult.Failed;
+                return;
+
+            }
                    
             DateTime fromDate = context.FromDate;
             DateTime toDate = context.ToDate;
             DateTime toDateForBillingTransaction = context.ToDate.Date.AddDays(1);
-           
-            string dimentionName = "CostFinancialAccount";
-            int dimensionValue = Int32.Parse(financialAccountData.FinancialAccountId);
+
+            string dimentionName = "BillingAccountId";
+            string dimensionValue = financialAccountData.FinancialAccountId;
             int currencyId = _accountBEManager.GetCurrencyId(this._acountBEDefinitionId, financialAccountData.Account.AccountId);
            
             var analyticResult = GetFilteredRecords(listDimensions, listMeasures, dimentionName, dimensionValue, fromDate, toDate, currencyId);
@@ -178,7 +186,12 @@ namespace Retail.Interconnect.Business
                 Dimension = dimentionFilterName,
                 FilterValues = new List<object> { dimentionFilterValue }
             };
-            analyticQuery.Query.Filters.Add(dimensionFilter);
+            DimensionFilter billingTypeFilter = new DimensionFilter()
+            {
+                Dimension = "BillingType",
+                FilterValues = new List<object> { 1 }
+            };
+            analyticQuery.Query.Filters.Add(billingTypeFilter);
             return analyticManager.GetFilteredRecords(analyticQuery) as Vanrise.Analytic.Entities.AnalyticSummaryBigResult<AnalyticRecord>;
         }
         private MeasureValue GetMeasureValue(AnalyticRecord analyticRecord, string measureName)
