@@ -10,19 +10,19 @@
                                                                selectedvalues="scopeModel.carrierAccount" normal-col-num="4" isrequired="true"
                                                                hideremoveicon="true" getexchangecarriers>
                             </vr-whs-be-carrieraccount-selector>
-                            </span>
-                            <span vr-disabled="scopeModel.isCommitmentAgreement">
-                                <vr-columns width="1/3row">
-                                    <vr-select label="Deal Contract"
-                                               datasource="scopeModel.contractTypes"
-                                               datavaluefield="value"
-                                               datatextfield="description"
-                                               selectedvalues="scopeModel.selectedContractType"
-                                               isrequired="true"
-                                               hideremoveicon="true">
-                                    </vr-select>
-                                </vr-columns>
-                            </span>
+                        </span>
+                        <span vr-disabled="scopeModel.isCommitmentAgreement">
+                            <vr-columns width="1/3row">
+                                <vr-select label="Deal Contract"
+                                           datasource="scopeModel.contractTypes"
+                                           datavaluefield="value"
+                                           datatextfield="description"
+                                           selectedvalues="scopeModel.selectedContractType"
+                                           isrequired="true"
+                                           hideremoveicon="true">
+                                </vr-select>
+                            </vr-columns>
+                        </span>
                         <span vr-disabled="scopeModel.disabelType">
                             <vr-columns width="1/3row">
                                 <vr-select label="Deal Type"
@@ -34,11 +34,11 @@
                                            hideremoveicon="true">
                                 </vr-select>
                             </vr-columns>
-                            </span>
+                        </span>
 
-                       
 
-</vr-row>
+
+                    </vr-row>
                     <span vr-disabled="scopeModel.isCommitmentAgreement">
                         <vr-row>
                             <vr-columns width="1/3row">
@@ -51,21 +51,28 @@
                             <vr-columns width="1/3row">
                                 <vr-textbox label="Grace Period" value="scopeModel.gracePeriod" type="number" decimalprecision="0" isrequired="true" customvalidate="scopeModel.validateGracePeriod()"></vr-textbox>
                             </vr-columns>
-
+                            <vr-columns width="1/3row">
+                                <vr-select label="Deal Status"
+                                           datasource="scopeModel.dealStatus"
+                                           datavaluefield="value"
+                                           datatextfield="description"
+                                           onselectionchanged="scopeModel.onDealStatusChanged"
+                                           selectedvalues="scopeModel.selectedDealStatus"
+                                           isrequired="true"
+                                           hideremoveicon="true">
+                                </vr-select>
+                            </vr-columns>
+                            <span ng-if="scopeModel.isInactiveStatus()">
+                                <vr-row>
+                                    <vr-columns width="1/3row">
+                                        <vr-datetimepicker label="DeActivation Date" type="date" value="scopeModel.deActivationDate" isrequired="true" customvalidate="scopeModel.validateDealStatusDate()"></vr-datetimepicker>
+                                    </vr-columns>
+                            </span>
                             <vr-columns width="1/3row" ng-if="scopeModel.selectedContractType && (scopeModel.selectedContractType.value == 0 || scopeModel.selectedContractType.value == 1 ) ">
                                 <vr-textbox type="number" minvalue="0" maxvalue="100" value="scopeModel.difference" label="Difference %" isrequired="true">  </vr-textbox>
                             </vr-columns>
                         </vr-row>
                     </span>
-                    <vr-columns width="1/3row">
-                        <vr-select label="Deal Status"
-                                   datasource="scopeModel.dealStatus"
-                                   datavaluefield="value"
-                                   datatextfield="description"
-                                   selectedvalues="scopeModel.selectedDealStatus"
-                                   hideremoveicon="true">
-                        </vr-select>
-                    </vr-columns>
                     <span vr-disabled="scopeModel.isCommitmentAgreement">
                         <vr-row>
                             <vr-columns width="fullrow">
@@ -73,26 +80,26 @@
                             </vr-columns>
                         </vr-row>
                     </span>
-                   
+
                 </vr-tab>
                 <vr-tab header="'Selling Part'" vr-loader="scopeModel.isLoadingInbound">
-                        <vr-row>
-                            <vr-columns width="fullrow">
-                                <vr-validator validate="scopeModel.validateSwapDealInbounds()">
-                                    <vr-whs-deal-swapdealinbound-grid on-ready="scopeModel.onSwapDealInboundDirectiveReady" ng-show="scopeModel.carrierAccount"></vr-whs-deal-swapdealinbound-grid>
-                                </vr-validator>
-                            </vr-columns>
-                        </vr-row>
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-validator validate="scopeModel.validateSwapDealInbounds()">
+                                <vr-whs-deal-swapdealinbound-grid on-ready="scopeModel.onSwapDealInboundDirectiveReady" ng-show="scopeModel.carrierAccount"></vr-whs-deal-swapdealinbound-grid>
+                            </vr-validator>
+                        </vr-columns>
+                    </vr-row>
                 </vr-tab>
                 <vr-tab header="'Buying Part'" vr-loader="scopeModel.isLoadingOutbound">
-                        <vr-row>
-                            <vr-columns width="fullrow">
-                                 <vr-validator validate="scopeModel.validateSwapDealOutbounds()">
+                    <vr-row>
+                        <vr-columns width="fullrow">
+                            <vr-validator validate="scopeModel.validateSwapDealOutbounds()">
 
                                 <vr-whs-deal-swapdealoutbound-grid on-ready="scopeModel.onSwapDealOutboundDirectiveReady" ng-show="scopeModel.carrierAccount"></vr-whs-deal-swapdealoutbound-grid>
-                              </vr-validator>
-                            </vr-columns>
-                        </vr-row>
+                            </vr-validator>
+                        </vr-columns>
+                    </vr-row>
                 </vr-tab>
             </vr-tabs>
             <vr-row ng-if="validationMessages != undefined && validationMessages.length > 0">
@@ -102,7 +109,7 @@
                             <li ng-repeat="message in validationMessages">{{message}}</li>
                         </ul>
                     </label>
-                    </vr-columns>
+                </vr-columns>
 
             </vr-row>
         </vr-form>

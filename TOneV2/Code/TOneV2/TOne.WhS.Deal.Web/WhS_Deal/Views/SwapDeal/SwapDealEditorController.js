@@ -119,7 +119,7 @@
                 dealInboundAPI = api;
                 dealInboundReadyPromiseDeferred.resolve();
             };
-
+            $scope.scopeModel.selectedDealStatus = WhS_Deal_DealStatusTypeEnum.Draft;
             $scope.scopeModel.onSwapDealOutboundDirectiveReady = function (api) {
                 dealOutboundAPI = api;
                 dealOutboundReadyPromiseDeferred.resolve();
@@ -133,11 +133,20 @@
             $scope.scopeModel.save = function () {
                 return (isEditMode) ? updateSwapDeal() : insertSwapDeal();
             };
-
+            $scope.scopeModel.isInactiveStatus = function () {
+                if ($scope.scopeModel.selectedDealStatus != undefined)
+                return ( $scope.scopeModel.selectedDealStatus.value == WhS_Deal_DealStatusTypeEnum.Inactive.value)
+            }
             $scope.scopeModel.close = function () {
                 $scope.modalContext.closeModal();
             };
-
+            $scope.scopeModel.validateDealStatusDate = function () {
+                if ($scope.scopeModel.deActivationDate < $scope.scopeModel.beginDate)
+                    return "Deactivation date must be greater than deal BED";
+                if ($scope.scopeModel.deActivationDate > $scope.scopeModel.endDate)
+                    return "Deactivation date must be less than deal EED";
+                return null;
+            };
             $scope.scopeModel.validateDatesRange = function () {
                 return VRValidationService.validateTimeRange($scope.scopeModel.beginDate, $scope.scopeModel.endDate);
             };
@@ -165,6 +174,10 @@
                     return 'Please,one record must be added at least.';
                 return null;
             };
+            $scope.scopeModel.onDealStatusChanged = function () {
+                if ($scope.scopeModel.selectedDealStatus != undefined && $scope.scopeModel.selectedDealStatus.value != WhS_Deal_DealStatusTypeEnum.Inactive.value)
+                    $scope.scopeModel.deActivationDate = undefined;
+            }
         }
         function load() {
             $scope.scopeModel.isLoading = true;
@@ -234,11 +247,14 @@
             //if (isCommitmentAgreement())
             //    UtilsService.setContextReadOnly($scope);
             $scope.scopeModel.description = dealEntity.Name;
+            console.log(dealEntity);
             //$scope.scopeModel.gracePeriod = dealEntity.Settings.GracePeriod;
             $scope.scopeModel.selectedContractType = UtilsService.getItemByVal($scope.scopeModel.contractTypes, dealEntity.Settings.DealContract, 'value');
             $scope.scopeModel.selectedAgreementType = UtilsService.getItemByVal($scope.scopeModel.agreementTypes, dealEntity.Settings.DealType, 'value');
+            $scope.scopeModel.selectedDealStatus = UtilsService.getItemByVal($scope.scopeModel.dealStatus, dealEntity.Settings.Status, 'value');
             $scope.scopeModel.beginDate = dealEntity.Settings.BeginDate;
             $scope.scopeModel.endDate = dealEntity.Settings.EndDate;
+            $scope.scopeModel.deActivationDate = dealEntity.Settings.DeActivationDate;
             $scope.scopeModel.active = dealEntity.Settings.Active;
             $scope.scopeModel.difference = dealEntity.Settings.Difference;
         }
@@ -371,6 +387,7 @@
         }
 
         function buildSwapDealObjFromScope() {
+            console.log($scope.scopeModel.selectedDealStatus.value);
             var inboundData = dealInboundAPI.getData();
             var outboundData = dealOutboundAPI.getData();
             var obj = {
@@ -384,12 +401,14 @@
                     GracePeriod: $scope.scopeModel.gracePeriod,
                     DealContract: $scope.scopeModel.selectedContractType.value,
                     DealType: $scope.scopeModel.selectedAgreementType.value,
+                    Status: $scope.scopeModel.selectedDealStatus.value,
                     Inbounds: inboundData != undefined ? inboundData.inbounds : undefined,
                     Outbounds: outboundData != undefined ? outboundData.outbounds : undefined,
                     LastInboundGroupNumber: inboundData != undefined ? inboundData.lastInboundGroupNumber : undefined,
                     LastOutboundGroupNumber: outboundData != undefined ? outboundData.lastOutboundGroupNumber : undefined,
                     Difference: $scope.scopeModel.difference,
-                    CurrencyId: currencyDirectiveAPI.getSelectedIds()
+                    CurrencyId: currencyDirectiveAPI.getSelectedIds(),
+                    DeActivationDate: $scope.scopeModel.deActivationDate
                 }
             };
             return obj;
