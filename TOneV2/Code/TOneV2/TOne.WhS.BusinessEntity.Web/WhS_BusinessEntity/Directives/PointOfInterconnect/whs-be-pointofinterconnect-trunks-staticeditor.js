@@ -26,24 +26,28 @@ app.directive('whsBePointofinterconnectTrunksStaticeditor', ['UtilsService', 'VR
             function initializeController() {
 
                 $scope.scopeModel = {};
+
                 $scope.scopeModel.trunks = [];
+
                 $scope.scopeModel.disabledAddTrunk = true;
 
                 $scope.scopeModel.addTrunk = function () {
-                    $scope.scopeModel.trunks.push({ trunk: $scope.scopeModel.TrunkValue, message: null });
-                    $scope.scopeModel.TrunkValue = undefined;
+                    $scope.scopeModel.trunks.push({ trunk: $scope.scopeModel.trunkValue, message: null });
+                    $scope.scopeModel.trunkValue = undefined;
                     $scope.scopeModel.disabledAddTrunk = true;
                 };
 
                 $scope.scopeModel.onTrunkValueChange = function (value) {
-                    $scope.scopeModel.disabledAddTrunk = (value == undefined && $scope.scopeModel.TrunkValue.length - 1 < 1) || UtilsService.getItemIndexByVal($scope.scopeModel.trunks, $scope.scopeModel.TrunkValue, "trunk") != -1;
+                    $scope.scopeModel.disabledAddTrunk = (value == undefined && $scope.scopeModel.trunkValue.length - 1 < 1) || UtilsService.getItemIndexByVal($scope.scopeModel.trunks, $scope.scopeModel.trunkValue, "trunk") != -1;
                 };
 
                 $scope.scopeModel.getImportedTrunks = function (values) {
-                    $scope.scopeModel.Trunk.length = 0;
-                    for (var i = 0; i < values.length ; i++) {
-                        if (UtilsService.getItemIndexByVal($scope.scopeModel.trunks, values[i], "trunk") == -1)
-                            $scope.scopeModel.trunks.push({ trunk: values[i], message: null });
+                    if (values != undefined)
+                    {
+                        for (var i = 0; i < values.length ; i++) {
+                            if (UtilsService.getItemIndexByVal($scope.scopeModel.trunks, values[i], "trunk") == -1)
+                                $scope.scopeModel.trunks.push({ trunk: values[i], message: null });
+                        }
                     }
                 };
 
@@ -54,10 +58,8 @@ app.directive('whsBePointofinterconnectTrunksStaticeditor', ['UtilsService', 'VR
                         return "Invalid trunks inputs.";
                     return null;
                 };
-
            
                 defineApi();
-
             }
 
 
@@ -75,31 +77,41 @@ app.directive('whsBePointofinterconnectTrunksStaticeditor', ['UtilsService', 'VR
                 var api = {};
 
                 api.load = function (payload) {
-
                     if (payload != undefined) {
-                        selectedValues = payload.selectedValues;
-
+                      var  selectedValues = payload.selectedValues;
                         if (selectedValues != undefined) {
-
-                            for (var i = 0; i < selectedValues.trunks.length ; i++) {
-                                $scope.scopeModel.trunks.push({ trunk: selectedValues.trunks[i], message: null });
+                            if (selectedValues.TrunkDetails != undefined && selectedValues.TrunkDetails.Trunks != undefined)
+                            {
+                                for (var i = 0; i < selectedValues.TrunkDetails.Trunks.length ; i++) {
+                                    $scope.scopeModel.trunks.push({ trunk: selectedValues.TrunkDetails.Trunks[i].Trunk, message: null });
+                                }
                             }
-
                         }
                     }
-   
-            };
+
+                };
 
                 api.setData = function (obj) {
-
-                    console.log("setdata");
-
-                        obj.trunksDetails = {
-
-                            trunks: $scope.scopeModel.trunks         
-                    }
-                   
+                    obj.TrunkDetails = {
+                        $type: "TOne.WhS.BusinessEntity.Entities.PointOfInterconnect, TOne.WhS.BusinessEntity.Entities",
+                        Trunks:getTruncks() 
+                    };
                 };
+
+                function getTruncks() {
+                    var trunks;
+                    if ($scope.scopeModel.trunks != null) {
+                        trunks = [];
+                        for (var i = 0; i < $scope.scopeModel.trunks.length; i++) {
+                            var trunk = $scope.scopeModel.trunks[i];
+                            trunks.push({
+                                $type: "TOne.WhS.BusinessEntity.Entities.PointOfInterconnectTrunk, TOne.WhS.BusinessEntity.Entities",
+                                Trunk: trunk.trunk
+                            });
+                        }
+                    }
+                    return trunks;
+                }
 
                 if (ctrl.onReady != null) {
                     ctrl.onReady(api);

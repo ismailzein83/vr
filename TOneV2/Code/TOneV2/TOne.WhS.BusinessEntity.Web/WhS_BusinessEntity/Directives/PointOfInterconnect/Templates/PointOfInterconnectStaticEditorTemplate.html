@@ -1,31 +1,26 @@
 ﻿
 <vr-row>
-
-    <vr-columns colnum="5">
-        <vr-textbox label="Trunk" onvaluechanged="scopeModel.onTrunkValueChange" value="scopeModel.TrunkValue" type="number" minvalue="0" decimalprecision="0"></vr-textbox>
+    <vr-columns width="1/3row">
+        <vr-textbox label="Trunk" onvaluechanged="scopeModel.onTrunkValueChange" value="scopeModel.trunkValue"></vr-textbox>
     </vr-columns>
     <vr-columns withemptyline colnum="1" haschildcolumns>
         <vr-button type="Add" data-onclick="scopeModel.addTrunk" vr-disabled="scopeModel.disabledAddTrunk" standalone></vr-button>
-    </vr-columns>
-
-    <vr-columns withemptyline colnum="1" haschildcolumns>
         <vr-common-excelfileparser type="string" fieldname="Trunk" onokclicked="scopeModel.getImportedTrunks" standalone></vr-common-excelfileparser>
     </vr-columns>
-
 </vr-row>
 
-    <vr-row removeline>
-        <vr-columns width="fullrow">
-            <vr-section level="2" header="Trunks" vr-loader="scopeModel.isLoadingTrunks">
-                <div style="height:110px; overflow : auto;padding: 10px 5px ;">
-                    <vr-validator validate="scopeModel.validateTrunks()">
-                        <vr-datalist maxitemsperrow="4" datasource="scopeModel.trunks" autoremoveitem="true">
-                            <vr-validator validate="dataItem.message" normalheight>
-                                {{dataItem.trunk}}
-                            </vr-validator>
-                        </vr-datalist>
-                    </vr-validator>
-                </div>
-            </vr-section>
-        </vr-columns>
-    </vr-row>
+<vr-row removeline>
+    <vr-columns width="fullrow">
+        <vr-section level="2" header="Trunks" vr-loader="scopeModel.isLoadingTrunks">
+            <div>
+                <vr-validator validate="scopeModel.validateTrunks()">
+                    <vr-datalist maxitemsperrow="4" datasource="scopeModel.trunks" autoremoveitem="true">
+                        <vr-validator validate="dataItem.message" normalheight>
+                            {{dataItem.trunk}}
+                        </vr-validator>
+                    </vr-datalist>
+                </vr-validator>
+            </div>
+        </vr-section>
+    </vr-columns>
+</vr-row>
