@@ -1,25 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
-using TOne.WhS.Deal.Entities;
 
 namespace TOne.WhS.Deal.Entities
 {
 	public abstract class DealSettings
 	{
 		public abstract Guid ConfigId { get; }
-
+        public DateTime? DeActivationDate { get; set; }
+        public DealStatus Status { get; set; }
 		public DateTime BeginDate { get; set; }
-
 		public DateTime? EndDate { get; set; }
-
 		public abstract int GetCarrierAccountId();
-
 		public abstract void GetZoneGroups(IDealGetZoneGroupsContext context);
         public abstract List<long> GetDealSaleZoneIds();
         public abstract List<long> GetDealSupplierZoneIds();
 		public abstract bool ValidateDataBeforeSave(IValidateBeforeSaveContext validateBeforeSaveContext);
 	}
-
+    public enum DealStatus { Active, Inactive, Draft }
 	public enum DealZoneGroupPart { Both, Sale, Cost }
 
 	public interface IDealGetZoneGroupsContext
