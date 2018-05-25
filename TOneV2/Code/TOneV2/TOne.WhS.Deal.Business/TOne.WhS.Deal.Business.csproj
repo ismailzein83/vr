@@ -114,6 +114,8 @@
     <Compile Include="DealZoneRateManager.cs" />
     <Compile Include="Extensions\DealBusinessObjectDataProviderSettings.cs" />
     <Compile Include="Helper.cs" />
+    <Compile Include="SaleZoneFilter.cs" />
+    <Compile Include="SupplierZoneFilter.cs" />
     <Compile Include="SwapDeals\RouteRules\SwapDealBuyRouteRuleManager.cs" />
     <Compile Include="SwapDeals\SwapDealRouteBuildInterceptor.cs" />
     <Compile Include="SwapDeals\SwapDealSettings.cs" />

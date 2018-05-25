@@ -69,7 +69,17 @@ namespace TOne.WhS.BusinessEntity.Business
 
             return updateOperationOutput;
         }
-
+        public List<string> GetSaleZoneNames(List<long> saleZoneIds)
+        {
+            List<string> zoneNames = new List<string>();
+            foreach (var zoneId in saleZoneIds)
+            {
+                var zoneName = GetSaleZoneName(zoneId);
+                if (zoneName != null)
+                    zoneNames.Add(zoneName);
+            }
+            return zoneNames;
+        }
         public Vanrise.Entities.IDataRetrievalResult<SaleZoneDetail> GetFilteredSaleZones(Vanrise.Entities.DataRetrievalInput<SaleZoneQuery> input)
         {
             IEnumerable<SaleZone> saleZones = GetSaleZonesBySellingNumberPlan(input.Query.SellingNumberId);

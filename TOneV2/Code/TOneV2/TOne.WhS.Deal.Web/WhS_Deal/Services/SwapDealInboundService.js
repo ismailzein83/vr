@@ -22,11 +22,15 @@
             VRModalService.showModal(editorUrl, parameters, settings);
         }
 
-        function addSwapDealInbound(onSwapDealInboundAdded, sellingNumberPlanId,context) {
+        function addSwapDealInbound(onSwapDealInboundAdded, sellingNumberPlanId, context, carrierAccountId, dealId, dealBED, dealEED) {
             var settings = {};
             var parameters = {
                 sellingNumberPlanId: sellingNumberPlanId,
-                context:context
+                context: context,
+                carrierAccountId: carrierAccountId,
+                dealId: dealId,
+                dealBED: dealBED,
+                dealEED: dealEED
             };
 
             settings.onScopeReady = function (modalScope) {
@@ -35,11 +39,15 @@
             VRModalService.showModal(editorUrl, parameters, settings);
         }
 
-        function editSwapDealInbound(swapDealInbound, sellingNumberPlanId, onSwapDealInboundUpdated,context) {
+        function editSwapDealInbound(swapDealInbound, sellingNumberPlanId, onSwapDealInboundUpdated, context, carrierAccountId,dealId,dealBED,dealEED) {
             var parameters = {
                 swapDealInbound: swapDealInbound,
                 sellingNumberPlanId: sellingNumberPlanId,
-                context:context
+                context: context,
+                carrierAccountId: carrierAccountId,
+                dealId: dealId,
+                dealBED: dealBED,
+                dealEED:dealEED
             };
 
             var settings = {};

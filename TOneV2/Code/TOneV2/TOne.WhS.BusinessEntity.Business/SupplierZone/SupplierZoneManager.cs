@@ -45,6 +45,17 @@ namespace TOne.WhS.BusinessEntity.Business
             VRActionLogger.Current.LogGetFilteredAction(SupplierZoneLoggableEntity.Instance, input);
             return Vanrise.Common.DataRetrievalManager.Instance.ProcessResult(input, allsupplierZones.ToBigResult(input, filterExpression, SupplierZoneDetailMapper), handler);
         }
+        public List<string> GetSupplierZoneNames(List<long> supplierZoneIds)
+        {
+            List<string> zoneNames = new List<string>();
+            foreach (var zoneId in supplierZoneIds)
+            {
+                var zoneName = GetSupplierZoneName(zoneId);
+                if (zoneName != null)
+                    zoneNames.Add(zoneName);
+            }
+            return zoneNames;
+        }
 
         public IEnumerable<SupplierZoneInfo> GetSupplierZoneInfo(SupplierZoneInfoFilter filter, int supplierId, string searchValue)
         {
@@ -69,6 +80,24 @@ namespace TOne.WhS.BusinessEntity.Business
 
                 if (filter.ExcludedZoneIds != null && filter.ExcludedZoneIds.Contains(supplierZone.SupplierZoneId))
                     return false;
+
+                var customObjects = new List<object>();
+                if (filter.Filters != null)
+                {
+                    foreach (ISupplierZoneFilter supplierZoneFilter in filter.Filters)
+                        customObjects.Add(null);
+                }
+                if (filter.Filters != null)
+                {
+                    for (int i = 0; i < filter.Filters.Count(); i++)
+                    {
+                        var supplierZoneFilterContext = new SupplierZoneFilterContext() { SupplierZone = supplierZone, CustomData = customObjects[i] };
+                        bool filterResult = filter.Filters.ElementAt(i).IsExcluded(supplierZoneFilterContext);
+                        customObjects[i] = supplierZoneFilterContext.CustomData;
+                        if (filterResult)
+                            return false;
+                    }
+                }
 
                 return true;
             };

@@ -2,9 +2,9 @@
 
     'use strict';
 
-    SwapDealEditorController.$inject = ['$scope', 'WhS_Deal_SwapDealAPIService', 'WhS_Deal_DealContractTypeEnum', 'WhS_Deal_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_SwapDealService', 'WhS_Deal_SwapDealAnalysisService', 'VRValidationService'];
+    SwapDealEditorController.$inject = ['$scope', 'WhS_Deal_SwapDealAPIService', 'WhS_Deal_DealContractTypeEnum', 'WhS_Deal_DealAgreementTypeEnum', 'UtilsService', 'VRUIUtilsService', 'VRNavigationService', 'VRNotificationService', 'WhS_Deal_SwapDealService', 'WhS_Deal_SwapDealAnalysisService', 'VRValidationService', 'WhS_Deal_DealStatusTypeEnum'];
 
-    function SwapDealEditorController($scope, WhS_Deal_SwapDealAPIService, WhS_Deal_DealContractTypeEnum, WhS_Deal_DealAgreementTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_SwapDealService, WhS_Deal_SwapDealService, VRValidationService) {
+    function SwapDealEditorController($scope, WhS_Deal_SwapDealAPIService, WhS_Deal_DealContractTypeEnum, WhS_Deal_DealAgreementTypeEnum, UtilsService, VRUIUtilsService, VRNavigationService, VRNotificationService, WhS_BE_SwapDealService, WhS_Deal_SwapDealService, VRValidationService, WhS_Deal_DealStatusTypeEnum) {
         var isEditMode;
 
         var dealId;
@@ -50,6 +50,7 @@
             $scope.scopeModel.disabelType = isEditMode;
             $scope.scopeModel.contractTypes = UtilsService.getArrayEnum(WhS_Deal_DealContractTypeEnum);
             $scope.scopeModel.agreementTypes = UtilsService.getArrayEnum(WhS_Deal_DealAgreementTypeEnum);
+            $scope.scopeModel.dealStatus = UtilsService.getArrayEnum(WhS_Deal_DealStatusTypeEnum);
 
             $scope.scopeModel.onCarrierAccountSelectorReady = function (api) {
                 carrierAccountSelectorAPI = api;
@@ -60,12 +61,20 @@
                 var carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
                 if (carrierAccountInfo != undefined) {
                     var payload = {
+                        carrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
                         sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId,
-                        context: getContext()
+                        context: getContext(),
+                        dealId: dealId,
+                        bed: $scope.scopeModel.beginDate,
+                        eed: $scope.scopeModel.endDate
                     };
                     var payloadOutbound = {
+                        carrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
                         supplierId: carrierAccountInfo.CarrierAccountId,
-                        context: getContext()
+                        context: getContext(),
+                        dealId: dealId,
+                        bed: $scope.scopeModel.beginDate,
+                        eed: $scope.scopeModel.endDate
                     };
                     if (carrierAccountSelectedPromise != undefined) {
                         carrierAccountSelectedPromise.resolve();
@@ -261,17 +270,25 @@
                 UtilsService.waitMultiplePromises([dealInboundReadyPromiseDeferred.promise, dealOutboundReadyPromiseDeferred.promise, carrierAccountSelectedPromise.promise]).then(function () {
                     var carrierAccountInfo = carrierAccountSelectorAPI.getSelectedValues();
                     var payload = {
+                        carrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
                         sellingNumberPlanId: carrierAccountInfo.SellingNumberPlanId,
                         Inbounds: dealEntity.Settings.Inbounds,
                         lastInboundGroupNumber: dealEntity.Settings.LastInboundGroupNumber,
-                        context:getContext()
+                        context: getContext(),
+                        dealId: dealId,
+                        bed: $scope.scopeModel.beginDate,
+                        eed: $scope.scopeModel.endDate
                     };
 
                     var payloadOutbound = {
+                        carrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
                         supplierId: carrierAccountInfo.CarrierAccountId,
                         Outbounds: dealEntity.Settings.Outbounds,
                         lastOutboundGroupNumber: dealEntity.Settings.LastOutboundGroupNumber,
-                        context: getContext()
+                        context: getContext(),
+                        dealId: dealId,
+                        bed: $scope.scopeModel.beginDate,
+                        eed: $scope.scopeModel.endDate
                     };
                     if (dealEntity != undefined && dealEntity.Settings != undefined)
                         payloadOutbound.Outbounds = dealEntity.Settings.Outbounds;
@@ -381,30 +398,30 @@
         function getContext() {
             return {
                 getSupplierZoneSelectorPayload: function (item) {
-                        var payload;
-                        payload = {
-                            supplierId: carrierAccountSelectorAPI.getSelectedIds()
-                        };
-                        if (item != undefined) {
-                            var zoneIds = [];
-                            var itemZones = item.SupplierZones != undefined ? item.SupplierZones : item.Zones;
-                            for (var x = 0; x < itemZones.length; x++) {
-                                zoneIds.push(itemZones[x].ZoneId);
-                            }
-                            payload.selectedIds = zoneIds;
-                            payload.filter = {
-                                ExcludedZoneIds: getSelectedSupplierZonesIdsFromItems(zoneIds),
-                                CountryIds: (item.CountryId != undefined) ? [item.CountryId] : undefined
-                            };
+                    var payload;
+                    payload = {
+                        supplierId: carrierAccountSelectorAPI.getSelectedIds()
+                    };
+                    if (item != undefined) {
+                        var zoneIds = [];
+                        var itemZones = item.SupplierZones != undefined ? item.SupplierZones : item.Zones;
+                        for (var x = 0; x < itemZones.length; x++) {
+                            zoneIds.push(itemZones[x].ZoneId);
                         }
-                        else
-                            payload.filter = {
-                                ExcludedZoneIds: getSelectedSupplierZonesIdsFromItems()
-                            };
-                        return payload;
+                        payload.selectedIds = zoneIds;
+                        payload.filter = {
+                            ExcludedZoneIds: getSelectedSupplierZonesIdsFromItems(zoneIds),
+                            CountryIds: (item.CountryId != undefined) ? [item.CountryId] : undefined
+                        };
+                    }
+                    else
+                        payload.filter = {
+                            ExcludedZoneIds: getSelectedSupplierZonesIdsFromItems()
+                        };
+                    return payload;
                 },
 
-                getSaleZoneSelectorPayload: function (item) {                  
+                getSaleZoneSelectorPayload: function (item) {
                     var carrierAccount = carrierAccountSelectorAPI.getSelectedValues();
                     var payload;
                     payload = {
@@ -442,7 +459,7 @@
                     else if (includedIds == undefined)
                         filterdIds.push(ids[x]);
                 }
-            }           
+            }
             return filterdIds;
         };
         function getSelectedSupplierZonesIdsFromItems(includedIds) {

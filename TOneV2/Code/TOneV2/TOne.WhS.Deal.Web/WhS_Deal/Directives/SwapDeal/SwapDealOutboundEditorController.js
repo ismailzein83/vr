@@ -21,7 +21,11 @@
 
         var extraVolumeRateEvaluatorSelectiveDirectiveAPI;
         var extraVolumeRateEvaluatorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var carrierAccountId;
 
+        var dealId;
+        var dealBED;
+        var dealEED;
 
         var countrySelectedPromiseDeferred;
 
@@ -38,6 +42,10 @@
                 supplierId = parameters.supplierId;
                 swapDealOutboundEntity = parameters.swapDealOutbound;
                 context = parameters.context;
+                carrierAccountId = parameters.carrierAccountId;
+                dealId = parameters.dealId;
+                dealBED = parameters.dealBED;
+                dealEED = parameters.dealEED;
             }
 
 
@@ -92,13 +100,27 @@
                         payload.supplierId = supplierId;
                         payload.filter.CountryIds = [countryDirectiveApi.getSelectedIds()];
                         payload.selectedIds = zoneIds;
+                        payload.filter.Filters = [{
+                            $type: "TOne.WhS.Deal.Business.SupplierZoneFilter, TOne.WhS.Deal.Business",
+                            CarrierAccountId: carrierAccountId,
+                            DealId: dealId,
+                            BED: dealBED,
+                            EED: dealEED
+                        }];
                     }
                     else {
                         payload = {
                             supplierId: supplierId,
                             filter: { CountryIds: [countryDirectiveApi.getSelectedIds()] },
-                            selectedIds: zoneIds
-                    } 
+                            selectedIds: zoneIds,
+                            Filters: [{
+                                $type: "TOne.WhS.Deal.Business.SupplierZoneFilter, TOne.WhS.Deal.Business",
+                                CarrierAccountId: carrierAccountId,
+                                DealId: dealId,
+                                BED: dealBED,
+                                EED: dealEED
+                            }]
+                        }
 
                     };
                     VRUIUtilsService.callDirectiveLoadOrResolvePromise($scope, supplierZoneDirectiveAPI, payload, setLoader, countrySelectedPromiseDeferred);

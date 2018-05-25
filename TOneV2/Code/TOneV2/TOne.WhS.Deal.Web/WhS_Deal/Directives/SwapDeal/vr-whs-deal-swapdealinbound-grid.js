@@ -32,6 +32,10 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
             var mainPayload;
             var lastInboundGroupNumber = 0;
             var context;
+            var carrierAccountId;
+            var dealId;
+            var dealBED;
+            var dealEED;
 
             function initializeController() {
 
@@ -44,7 +48,7 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
                         addedSwapDealInbound.ZoneGroupNumber = lastInboundGroupNumber;
                         ctrl.datasource.push(addedSwapDealInbound);
                     };
-                    WhS_Deal_SwapDealInboundService.addSwapDealInbound(onSwapDealInboundAdded, sellingNumberPlanId,context);
+                    WhS_Deal_SwapDealInboundService.addSwapDealInbound(onSwapDealInboundAdded, sellingNumberPlanId, context, carrierAccountId, dealId, dealBED, dealEED);
                 };
 
                 $scope.onGridReady = function (api) {
@@ -59,6 +63,10 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
 
                 api.load = function (payload) {
                     mainPayload = payload;
+                    carrierAccountId = mainPayload.carrierAccountId;
+                    dealId = mainPayload.dealId;
+                    dealBED = mainPayload.bed;
+                    dealEED = mainPayload.eed;
                     if (mainPayload != undefined)
                         context = mainPayload.context;
                     if (payload != undefined && payload.Inbounds != undefined) {
@@ -71,8 +79,6 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
                     if (payload != undefined && payload.lastInboundGroupNumber != undefined) {
                         lastInboundGroupNumber = payload.lastInboundGroupNumber;
                     }
-
-
 
                 };
 
@@ -137,7 +143,7 @@ app.directive("vrWhsDealSwapdealinboundGrid", ["UtilsService", "VRNotificationSe
                 };
                 var sellingNumberPlanId = mainPayload != undefined ? mainPayload.sellingNumberPlanId : undefined;
 
-                WhS_Deal_SwapDealInboundService.editSwapDealInbound(dealInboundObj, sellingNumberPlanId, onDealInboundUpdated,context);
+                WhS_Deal_SwapDealInboundService.editSwapDealInbound(dealInboundObj, sellingNumberPlanId, onDealInboundUpdated, context, carrierAccountId,dealId,dealBED,dealEED);
             }
 
             function viewSwapDealInbound(dealInboundObj) {

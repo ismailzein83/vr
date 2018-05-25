@@ -70,7 +70,7 @@
             VRModalService.showModal('/Client/Modules/WhS_Deal/Views/VolumeCommitment/VolumeCommitmentEditor.html', parameters, settings);
         }
 
-        function addVolumeCommitmentItem(onVolumeCommitmentItemAdded,context) {
+        function addVolumeCommitmentItem(onVolumeCommitmentItemAdded, context, carrierAccountId, dealId, dealBED, dealEED, volumeCommitmentType) {
             var settings = {
             };
 
@@ -78,13 +78,18 @@
                 modalScope.onVolumeCommitmentItemAdded = onVolumeCommitmentItemAdded;
             };
             var parameters = {
-                context: context
+                context: context,
+                carrierAccountId: carrierAccountId,
+                dealId: dealId,
+                dealBED: dealBED,
+                dealEED: dealEED,
+                volumeCommitmentType: volumeCommitmentType
             };
 
             VRModalService.showModal('/Client/Modules/WhS_Deal/Directives/VolumeCommitment/Templates/VolumeCommitmentItemEditor.html', parameters, settings);
         }
 
-        function editVolumeCommitmentItem(volumeCommitmentItemEntity, onVolumeCommitmentItemUpdated, context) {
+        function editVolumeCommitmentItem(volumeCommitmentItemEntity, onVolumeCommitmentItemUpdated, context, carrierAccountId, dealId, dealBED, dealEED, volumeCommitmentType) {
             var settings = {
             };
             settings.onScopeReady = function (modalScope) {
@@ -92,7 +97,12 @@
             };
             var parameters = {
                 volumeCommitmentItemEntity: volumeCommitmentItemEntity,
-                context: context
+                context: context,
+                carrierAccountId: carrierAccountId,
+                dealId: dealId,
+                dealBED: dealBED,
+                dealEED: dealEED,
+                volumeCommitmentType: volumeCommitmentType
             };
 
             VRModalService.showModal('/Client/Modules/WhS_Deal/Directives/VolumeCommitment/Templates/VolumeCommitmentItemEditor.html', parameters, settings);

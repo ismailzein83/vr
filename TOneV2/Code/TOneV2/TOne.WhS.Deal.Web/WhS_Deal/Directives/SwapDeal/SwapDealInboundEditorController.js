@@ -21,7 +21,11 @@
 
         var extraVolumerateEvaluatorSelectiveDirectiveAPI;
         var extraVolumerateEvaluatorReadyPromiseDeferred = UtilsService.createPromiseDeferred();
+        var carrierAccountId;
 
+        var dealId;
+        var dealBED;
+        var dealEED;
 
         var countrySelectedPromiseDeferred;
         var saleZoneSelectorPayload;
@@ -35,8 +39,11 @@
                 sellingNumberPlanId = parameters.sellingNumberPlanId;
                 swapDealInboundEntity = parameters.swapDealInbound;
                 context = parameters.context;
-                saleZoneSelectorPayload = parameters.context != undefined? parameters.context.getSaleZoneSelectorPayload():undefined;
-                console.log(saleZoneSelectorPayload);
+                saleZoneSelectorPayload = parameters.context != undefined ? parameters.context.getSaleZoneSelectorPayload() : undefined;
+                carrierAccountId = parameters.carrierAccountId;
+                dealId = parameters.dealId;
+                dealBED = parameters.dealBED;
+                dealEED = parameters.dealEED;
             }
 
             isEditMode = (swapDealInboundEntity != undefined);
@@ -72,12 +79,28 @@
                         payload.sellingNumberPlanId = sellingNumberPlanId;
                         payload.filter.CountryIds= [countryDirectiveApi.getSelectedIds()];
                         payload.selectedIds = swapDealInboundEntity != undefined ? swapDealInboundEntity.SaleZoneIds : undefined;
+                        payload.filter.Filters = [{
+                            $type: "TOne.WhS.Deal.Business.SaleZoneFilter, TOne.WhS.Deal.Business",
+                            CarrierAccountId: carrierAccountId,
+                            DealId: dealId,
+                            BED: dealBED,
+                            EED:dealEED
+                        }];
 
                     }
                     else
                      payload = {
                         sellingNumberPlanId: sellingNumberPlanId,
-                        filter: { CountryIds: [countryDirectiveApi.getSelectedIds()] },
+                        filter: {
+                            CountryIds: [countryDirectiveApi.getSelectedIds()],
+                            Filters: [{
+                                $type: "TOne.WhS.Deal.Business.SaleZoneFilter, TOne.WhS.Deal.Business",
+                                CarrierAccountId: carrierAccountId,
+                                DealId: dealId,
+                                BED: dealBED,
+                                EED: dealEED
+                            }]
+                        },
                         selectedIds: swapDealInboundEntity != undefined ? swapDealInboundEntity.SaleZoneIds : undefined,
                     };
                     //console.log(payload.excludedZoneIds);
@@ -228,7 +251,6 @@
             $scope.scopeModel.isLoading = true;
 
             var swapDealInboundObject = buildSwapDealInboundObjFromScope();
-            console.log(swapDealInboundObject);
             if ($scope.onSwapDealInboundAdded != undefined)
                 $scope.onSwapDealInboundAdded(swapDealInboundObject);
             $scope.modalContext.closeModal();

@@ -23,6 +23,7 @@
 
         var volumeCommitmenetItemsAPI;
         var volumeCommitmenetItemsReadyDeferred = UtilsService.createPromiseDeferred();
+        var volumeCommitmentType;
 
         loadParameters();
         defineScope();
@@ -67,7 +68,14 @@
                     if (carrierAccountSelectedPromise != undefined)
                         carrierAccountSelectedPromise.resolve();
                     else {
-                        var payload = { context: getContext() };
+                        var payload = {
+                            context: getContext(),
+                            carrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
+                            dealId: dealId,
+                            bed: $scope.scopeModel.beginDate,
+                            eed: $scope.scopeModel.endDate,
+                            volumeCommitmentType: $scope.scopeModel.selectedVolumeCommitmentType
+                        };
                         volumeCommitmenetItemsAPI.load(payload);
                         updateDescription()
                     }
@@ -190,7 +198,14 @@
                 promises.push(volumeCommitmenetItemsLoadDeferred.promise);
                 UtilsService.waitMultiplePromises([volumeCommitmenetItemsReadyDeferred.promise, carrierAccountSelectedPromise.promise]).then(function () {
 
-                    var payload = { context: getContext() };
+                    var payload = {
+                        context: getContext(),
+                        carrierAccountId: carrierAccountSelectorAPI.getSelectedIds(),
+                        dealId: dealId,
+                        bed: $scope.scopeModel.beginDate,
+                        eed: $scope.scopeModel.endDate,
+                        volumeCommitmentType: $scope.scopeModel.selectedVolumeCommitmentType
+                    };
                     if (volumeCommitmentEntity != undefined) {
                         payload.volumeCommitmentItems = volumeCommitmentEntity.Settings.Items;
                     }

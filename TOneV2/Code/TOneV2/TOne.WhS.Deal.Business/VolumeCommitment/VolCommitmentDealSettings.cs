@@ -31,7 +31,28 @@ namespace TOne.WhS.Deal.Business
 
         public override bool ValidateDataBeforeSave(IValidateBeforeSaveContext validateBeforeSaveContext)
         {
-            return true;
+            SwapDealManager swapDealManager = new SwapDealManager();
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
+            SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
+
+            validateBeforeSaveContext.ValidateMessages = new List<string>();
+            bool validationResult = true;
+
+            var excludedSaleZones = swapDealManager.GetExcludedSaleZones(validateBeforeSaveContext);
+            var excludedSupplierZones = swapDealManager.GetExcludedSupplierZones(validateBeforeSaveContext);
+
+            if (excludedSaleZones.Count() > 0 || excludedSupplierZones.Count > 0)
+            {
+                var excludedSaleZoneNames = saleZoneManager.GetSaleZoneNames(excludedSaleZones);
+                var excludedSupplierZoneNames = supplierZoneManager.GetSupplierZoneNames(excludedSupplierZones);
+                validationResult = false;
+                if (excludedSaleZoneNames.Count() > 0)
+                    validateBeforeSaveContext.ValidateMessages.Add(string.Format("The following sale zone(s) {0} are overlapping with zones in other deals", string.Join(",", excludedSaleZoneNames)));
+                if (excludedSupplierZoneNames.Count() > 0)
+                    validateBeforeSaveContext.ValidateMessages.Add(string.Format("The following supplier zone(s) {0} are overlapping with zones in other deals", string.Join(",", excludedSupplierZoneNames)));
+            }
+
+            return validationResult;
         }
 
         public override List<long> GetDealSaleZoneIds()
@@ -129,6 +150,30 @@ namespace TOne.WhS.Deal.Business
                     }
                     break;
             }
+        }
+        private List<string> GetSaleZoneNames(List<long> saleZoneIds)
+        {
+            List<string> zoneNames = new List<string>();
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
+            foreach (var zoneId in saleZoneIds)
+            {
+                var zoneName = saleZoneManager.GetSaleZoneName(zoneId);
+                if (zoneName != null)
+                    zoneNames.Add(zoneName);
+            }
+            return zoneNames;
+        }
+        private List<string> GetSupplierZoneNames(List<long> supplierZoneIds)
+        {
+            List<string> zoneNames = new List<string>();
+            SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
+            foreach (var zoneId in supplierZoneIds)
+            {
+                var zoneName = supplierZoneManager.GetSupplierZoneName(zoneId);
+                if (zoneName != null)
+                    zoneNames.Add(zoneName);
+            }
+            return zoneNames;
         }
 
         #region Sale Methods

@@ -31,6 +31,12 @@ app.directive("vrWhsDealSwapdealoutboundGrid", ["UtilsService", "VRNotificationS
             var mainPayload;
             var lastOutboundGroupNumber = 0;
             var context;
+
+            var carrierAccountId;
+            var dealId;
+            var dealBED;
+            var dealEED;
+
             function initializeController() {
 
                 ctrl.datasource = [];
@@ -42,7 +48,7 @@ app.directive("vrWhsDealSwapdealoutboundGrid", ["UtilsService", "VRNotificationS
                         addedSwapDealOutbound.ZoneGroupNumber = lastOutboundGroupNumber;
                         ctrl.datasource.push(addedSwapDealOutbound);
                     };
-                    WhS_Deal_SwapDealOutboundService.addSwapDealOutbound(onSwapDealOutboundAdded, supplierId,context);
+                    WhS_Deal_SwapDealOutboundService.addSwapDealOutbound(onSwapDealOutboundAdded, supplierId, context, carrierAccountId, dealId, dealBED, dealEED);
                 };
 
                 defineMenuActions();
@@ -54,6 +60,10 @@ app.directive("vrWhsDealSwapdealoutboundGrid", ["UtilsService", "VRNotificationS
 
                 api.load = function (payload) {
                     mainPayload = payload;
+                    carrierAccountId = mainPayload.carrierAccountId;
+                    dealId = mainPayload.dealId;
+                    dealBED = mainPayload.bed;
+                    dealEED = mainPayload.eed;
                     if (mainPayload != undefined)
                         context = mainPayload.context;
                     if (payload != undefined && payload.Outbounds != undefined) {
@@ -128,7 +138,7 @@ app.directive("vrWhsDealSwapdealoutboundGrid", ["UtilsService", "VRNotificationS
                 };
                 var supplierId = mainPayload != undefined ? mainPayload.supplierId : undefined;
 
-                WhS_Deal_SwapDealOutboundService.editSwapDealOutbound(swapDealOutboundObj, supplierId, onSwapDealOutboundUpdated,context);
+                WhS_Deal_SwapDealOutboundService.editSwapDealOutbound(swapDealOutboundObj, supplierId, onSwapDealOutboundUpdated, context, carrierAccountId, dealId, dealBED, dealEED);
 
             }
 

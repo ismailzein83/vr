@@ -62,6 +62,9 @@ namespace TOne.WhS.Deal.Business
 
         public override bool ValidateDataBeforeSave(IValidateBeforeSaveContext validateBeforeSaveContext)
         {
+            SwapDealManager swapDealManager = new SwapDealManager();
+            SaleZoneManager saleZoneManager = new SaleZoneManager();
+            SupplierZoneManager supplierZoneManager = new SupplierZoneManager();
             validateBeforeSaveContext.ValidateMessages = new List<string>();
             bool validationResult = true;
             if (validateBeforeSaveContext.IsEditMode)
@@ -84,7 +87,6 @@ namespace TOne.WhS.Deal.Business
                         validationResult = false;
                     }
 
-
                     if (DealType == DealType.Commitment)
                     {
                         validateBeforeSaveContext.ValidateMessages.Add("You Cannot update a deal of type commitment");
@@ -93,6 +95,18 @@ namespace TOne.WhS.Deal.Business
                 }
 
             }
+            var excludedSaleZones = swapDealManager.GetExcludedSaleZones(validateBeforeSaveContext);
+            var excludedSupplierZones = swapDealManager.GetExcludedSupplierZones(validateBeforeSaveContext);
+            if (excludedSaleZones.Count() > 0 || excludedSupplierZones.Count > 0)
+            {
+                var excludedSaleZoneNames = saleZoneManager.GetSaleZoneNames(excludedSaleZones);
+                var excludedSupplierZoneNames = supplierZoneManager.GetSupplierZoneNames(excludedSupplierZones);
+                validationResult = false;
+                validateBeforeSaveContext.ValidateMessages.Add(string.Format("The following sale zone(s) {0} are overlapping with zones in other deals", string.Join(",", excludedSaleZoneNames)));
+                validateBeforeSaveContext.ValidateMessages.Add(string.Format("The following supplier zone(s) {0} are overlapping with zones in other deals", string.Join(",", excludedSupplierZoneNames)));
+            }
+
+
             if (GracePeriod > (EndDate.Value - BeginDate).Days)
             {
                 validationResult = false;
@@ -499,5 +513,6 @@ namespace TOne.WhS.Deal.Business
 
             return dealSupplierTiers.OrderBy(itm => itm.TierNumber);
         }
+      
     }
 }

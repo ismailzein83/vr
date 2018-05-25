@@ -72,6 +72,7 @@
     <Compile Include="DealProcess\DealZoneRate.cs" />
     <Compile Include="DealZoneInfo.cs" />
     <Compile Include="InsertDealOperationOutput.cs" />
+    <Compile Include="OverLappedZonesContext.cs" />
     <Compile Include="Settings\DealTechnicalSettingData.cs" />
     <Compile Include="Settings\SwapDealTechnicalSettingData.cs" />
     <Compile Include="SwapDealAnalysis\Input\CalculateInboundRateInput.cs" />

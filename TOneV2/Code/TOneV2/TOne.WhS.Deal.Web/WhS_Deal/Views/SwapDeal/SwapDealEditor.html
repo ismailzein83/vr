@@ -36,6 +36,8 @@
                             </vr-columns>
                             </span>
 
+                       
+
 </vr-row>
                     <span vr-disabled="scopeModel.isCommitmentAgreement">
                         <vr-row>
@@ -55,6 +57,15 @@
                             </vr-columns>
                         </vr-row>
                     </span>
+                    <vr-columns width="1/3row">
+                        <vr-select label="Deal Status"
+                                   datasource="scopeModel.dealStatus"
+                                   datavaluefield="value"
+                                   datatextfield="description"
+                                   selectedvalues="scopeModel.selectedDealStatus"
+                                   hideremoveicon="true">
+                        </vr-select>
+                    </vr-columns>
                     <span vr-disabled="scopeModel.isCommitmentAgreement">
                         <vr-row>
                             <vr-columns width="fullrow">
@@ -62,6 +73,7 @@
                             </vr-columns>
                         </vr-row>
                     </span>
+                   
                 </vr-tab>
                 <vr-tab header="'Selling Part'" vr-loader="scopeModel.isLoadingInbound">
                         <vr-row>
