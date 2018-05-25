@@ -142,8 +142,8 @@ namespace Vanrise.BusinessProcess
             }
             else
             {
-                BPInstance bpInstance = s_instanceDataManager.GetBPInstance(bpInstanceId);
-                if(!BPInstanceStatusAttribute.GetAttribute(bpInstance.Status).IsClosed)
+                BPInstance bpInstance = s_instanceDataManager.GetBPInstance(bpInstanceId, false);
+                if (bpInstance != null && !BPInstanceStatusAttribute.GetAttribute(bpInstance.Status).IsClosed)
                 {
                     BPTrackingChannel.Current.WriteTrackingMessage(new BPTrackingMessage
                     {

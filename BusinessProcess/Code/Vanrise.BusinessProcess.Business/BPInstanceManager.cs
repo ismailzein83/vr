@@ -15,13 +15,17 @@ namespace Vanrise.BusinessProcess.Business
     {
         static BPDefinitionManager s_definitionManager = new BPDefinitionManager();
         static IBPInstanceDataManager s_dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
+
         #region public methods
 
         public BPInstance GetBPInstance(long bpInstanceId)
         {
-            IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
-            return dataManager.GetBPInstance(bpInstanceId);
+            var bpInstance = s_dataManager.GetBPInstance(bpInstanceId, false);
+            if (bpInstance == null)
+                bpInstance = s_dataManager.GetBPInstance(bpInstanceId, true);//get from archive
+            return bpInstance;
         }
+
         public string GetBPInstanceName(long bpInstanceId)
         {
             BPInstance bpInstance = GetBPInstance(bpInstanceId);
@@ -42,7 +46,14 @@ namespace Vanrise.BusinessProcess.Business
             List<int> grantedPermissionSetIds;
             bool isUserGrantedAllModulePermissionSets = requiredPermissionSetManager.IsCurrentUserGrantedAllModulePermissionSets(BPInstance.REQUIREDPERMISSIONSET_MODULENAME, out grantedPermissionSetIds);
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
-            return dataManager.GetAllBPInstances(query, grantedPermissionSetIds);
+            List<BPInstance> bpInstances = dataManager.GetFilteredBPInstances(query, grantedPermissionSetIds, false);
+            List<BPInstance> bpInstancesArchived = dataManager.GetFilteredBPInstances(query, grantedPermissionSetIds, true);
+            if(bpInstancesArchived != null && bpInstancesArchived.Count > 0)
+            {
+                bpInstances.AddRange(bpInstancesArchived);
+                bpInstances = bpInstances.OrderByDescending(bp => bp.ProcessInstanceID).Take(query.Top).ToList();
+            }
+            return bpInstances;
         }
 
         public BPInstanceUpdateOutput GetUpdated(ref byte[] maxTimeStamp, int nbOfRows, List<Guid> definitionsId, int parentId, List<string> entityIds)
@@ -52,9 +63,22 @@ namespace Vanrise.BusinessProcess.Business
             var requiredPermissionSetManager = new RequiredPermissionSetManager();
             List<int> grantedPermissionSetIds;
             bool isUserGrantedAllModulePermissionSets = requiredPermissionSetManager.IsCurrentUserGrantedAllModulePermissionSets(BPInstance.REQUIREDPERMISSIONSET_MODULENAME, out grantedPermissionSetIds);
-            IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
-
-            List<BPInstance> bpInstances = dataManager.GetUpdated(ref maxTimeStamp, nbOfRows, definitionsId, parentId, entityIds, grantedPermissionSetIds);
+            
+            List<BPInstance> bpInstances;
+            if(maxTimeStamp == null) //first page
+            {
+                bpInstances = s_dataManager.GetFirstPage(out maxTimeStamp, nbOfRows, definitionsId, parentId, entityIds, grantedPermissionSetIds);
+                List<BPInstance> bpInstancesArchived = s_dataManager.GetFirstPageFromArchive(nbOfRows, definitionsId, parentId, entityIds, grantedPermissionSetIds);
+                if(bpInstancesArchived != null && bpInstancesArchived.Count > 0)
+                {
+                    bpInstances.AddRange(bpInstancesArchived);
+                    bpInstances = bpInstances.OrderByDescending(bp => bp.ProcessInstanceID).Take(nbOfRows).ToList();
+                }
+            }
+            else
+            {
+                bpInstances = s_dataManager.GetUpdated(ref maxTimeStamp, nbOfRows, definitionsId, parentId, entityIds, grantedPermissionSetIds);
+            }
             List<BPInstanceDetail> bpInstanceDetails = new List<BPInstanceDetail>();
             foreach (BPInstance bpInstance in bpInstances)
             {
@@ -72,7 +96,13 @@ namespace Vanrise.BusinessProcess.Business
             var requiredPermissionSetManager = new RequiredPermissionSetManager();
             List<int> grantedPermissionSetIds;
             bool isUserGrantedAllModulePermissionSets = requiredPermissionSetManager.IsCurrentUserGrantedAllModulePermissionSets(BPInstance.REQUIREDPERMISSIONSET_MODULENAME, out grantedPermissionSetIds);
-            List<BPInstance> bpInstances = dataManager.GetBeforeId(input, grantedPermissionSetIds);
+            List<BPInstance> bpInstances = dataManager.GetBeforeId(input, grantedPermissionSetIds, false);
+            List<BPInstance> bpInstancesArchived = dataManager.GetBeforeId(input, grantedPermissionSetIds, true);
+            if(bpInstancesArchived != null && bpInstancesArchived.Count > 0)
+            {
+                bpInstances.AddRange(bpInstancesArchived);
+                bpInstances = bpInstances.OrderByDescending(bp => bp.ProcessInstanceID).Take(input.NbOfRows).ToList();
+            }
             List<BPInstanceDetail> bpInstanceDetails = new List<BPInstanceDetail>();
             foreach (BPInstance bpInstance in bpInstances)
             {
@@ -84,7 +114,11 @@ namespace Vanrise.BusinessProcess.Business
         public List<BPInstance> GetAfterId(long? processInstanceId, Guid bpDefinitionId)
         {
             IBPInstanceDataManager dataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
-            return dataManager.GetAfterId(processInstanceId, bpDefinitionId);
+            var bpInstances = dataManager.GetAfterId(processInstanceId, bpDefinitionId, false);
+            var bpInstancesArchived = dataManager.GetAfterId(processInstanceId, bpDefinitionId, true);
+            if (bpInstancesArchived != null && bpInstancesArchived.Count > 0)
+                bpInstances.AddRange(bpInstancesArchived);
+            return bpInstances;
         }
 
         public bool HasRunningInstances(Guid definitionId, List<string> entityIds)

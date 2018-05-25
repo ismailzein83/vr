@@ -22,6 +22,9 @@ namespace Vanrise.BusinessProcess
         static int s_maxWorkflowsPerServiceInstance;
         static int s_moreAssignableItemsToMaxConcurrentPerBPDefinition;
 
+        static int s_archiveBeforeNbOfDays;
+        static int s_nbOfInstancesToArchivePerQuery;
+
         BPDefinitionManager _bpDefinitionManager = new BPDefinitionManager();
         IBPInstanceDataManager _bpInstanceDataManager = BPDataManagerFactory.GetDataManager<IBPInstanceDataManager>();
         IBPEventDataManager _bpEventDataManager = BPDataManagerFactory.GetDataManager<IBPEventDataManager>();
@@ -34,6 +37,10 @@ namespace Vanrise.BusinessProcess
                 s_maxWorkflowsPerServiceInstance = 50;
             if (!int.TryParse(ConfigurationManager.AppSettings["BusinessProcess_MoreAssignableItemsToMaxConcurrentPerBPDefinition"], out s_moreAssignableItemsToMaxConcurrentPerBPDefinition))
                 s_moreAssignableItemsToMaxConcurrentPerBPDefinition = 0;
+            if (!int.TryParse(ConfigurationManager.AppSettings["BusinessProcess_ArchiveBeforeNbOfDays"], out s_archiveBeforeNbOfDays))
+                s_archiveBeforeNbOfDays = 5;
+            if (!int.TryParse(ConfigurationManager.AppSettings["BusinessProcess_NbOfInstancesToArchivePerQuery"], out s_nbOfInstancesToArchivePerQuery))
+                s_nbOfInstancesToArchivePerQuery = 100;
         }
 
         public override void Execute()
@@ -44,6 +51,7 @@ namespace Vanrise.BusinessProcess
                 if (bpServiceInstances == null || bpServiceInstances.Count == 0)
                     return;
                 AssignPendingInstancesToServices(bpServiceInstances);
+                _bpInstanceDataManager.ArchiveInstances(BPInstanceStatusAttribute.GetClosedStatuses(), DateTime.Today.AddDays(-s_archiveBeforeNbOfDays), s_nbOfInstancesToArchivePerQuery);
             });
         }
 
