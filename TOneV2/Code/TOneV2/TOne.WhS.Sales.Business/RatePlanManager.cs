@@ -43,8 +43,8 @@ namespace TOne.WhS.Sales.Business
 		{
 			List<SaleZone> saleZones = new List<SaleZone>();
 
-			Dictionary<int, DateTime> AdditionalCountryBEDsByCountryId;
-			var additionalSaleZones = GetBulkActionAdditionalSaleZones(input.BulkAction, input.OwnerType, input.OwnerId, out AdditionalCountryBEDsByCountryId);
+			Dictionary<int, DateTime> additionalCountryBEDsByCountryId;
+			var additionalSaleZones = GetBulkActionAdditionalSaleZones(input.BulkAction, input.OwnerType, input.OwnerId, out additionalCountryBEDsByCountryId);
 			if (additionalSaleZones != null)
 				saleZones.AddRange(additionalSaleZones);
 
@@ -67,7 +67,7 @@ namespace TOne.WhS.Sales.Business
 
 				int sellingProductId;
 				Dictionary<int, DateTime> countryBEDsByCountryId;
-				ISaleRateReader currentRateReader = GetCurrentRateReader(input.OwnerType, input.OwnerId, saleZones, input.EffectiveOn, out sellingProductId, out countryBEDsByCountryId, AdditionalCountryBEDsByCountryId);
+				ISaleRateReader currentRateReader = GetCurrentRateReader(input.OwnerType, input.OwnerId, saleZones, input.EffectiveOn, out sellingProductId, out countryBEDsByCountryId, additionalCountryBEDsByCountryId);
 
 				SaleEntityZoneRateLocator currentRateLocator;
 				Func<int, long, SaleEntityZoneRate> getSellingProductZoneRate;
@@ -606,6 +606,7 @@ namespace TOne.WhS.Sales.Business
 				RoutingProductReader = zoneRoutingProductReader,
 				CurrentRateLocator = currentRateLocator,
 				IncludeBlockedSuppliers = input.IncludeBlockedSuppliers,
+				AdditionalCountryIds = additionalCountryBEDsByCountryId.Select(item => item.Key),
 			};
 
 			return BuildZoneItems(ratePlanZoneCreationInput);
@@ -818,7 +819,8 @@ namespace TOne.WhS.Sales.Business
 						CountryBEDsByCountryId = countryBEDsByCountryId,
 						RoutingProductLocator = routingProductLocator,
 						RoutingProductReader = zoneRoutingProductReader,
-						CurrentRateLocator = currentRateLocator
+						CurrentRateLocator = currentRateLocator,
+						AdditionalCountryIds = additionalCountryBEDsByCountryId.Select(item => item.Key),
 					};
 
 					zoneItems = BuildZoneItems(ratePlanZoneCreationInput);
@@ -876,7 +878,7 @@ namespace TOne.WhS.Sales.Business
 			if (additionalCountries != null && additionalCountries.Count > 0)
 			{
 				if (newDraft.CountryChanges != null && newDraft.CountryChanges.NewCountries != null)
-					newDraft.CountryChanges.NewCountries = newDraft.CountryChanges.NewCountries.Concat(additionalCountries);
+					newDraft.CountryChanges.NewCountries = newDraft.CountryChanges.NewCountries.Concat(additionalCountries).ToList();
 				else if (newDraft.CountryChanges != null)
 					newDraft.CountryChanges.NewCountries = additionalCountries;
 				else newDraft.CountryChanges = new CountryChanges() { NewCountries = additionalCountries };
@@ -1169,7 +1171,7 @@ namespace TOne.WhS.Sales.Business
 					rpManager.SetCustomerZoneRP(zoneItem, input.OwnerId, input.SellingProductId.Value, zoneDraft);
 				}
 
-				zoneItem.IsCountryNew = newCountryIds.Contains(zoneItem.CountryId);
+				zoneItem.IsCountryNew = newCountryIds.Contains(zoneItem.CountryId) || (input.AdditionalCountryIds != null && input.AdditionalCountryIds.Contains(zoneItem.CountryId));
 				zoneItem.IsCountryEnded = closedCountryIds.Contains(zoneItem.CountryId);
 				zoneItem.ProfitPerc = (zoneDraft != null) ? zoneDraft.ProfitPerc : 0;
 				if (zoneItem.NewOtherRateBED == null)
@@ -1303,7 +1305,7 @@ namespace TOne.WhS.Sales.Business
 				{
 					foreach (var item in additionalCountryBEDsByCountryId)
 					{
-						countryBEDsByCountryIdValue[item.Key] = item.Value;
+						countryBEDsByCountryIdValue.Add(item.Key, item.Value);
 					}
 				}
 				Dictionary<long, DateTime> customerZoneEffectiveDatesByZoneId = UtilitiesManager.GetZoneEffectiveDatesByZoneId(saleZones, countryBEDsByCountryIdValue);
@@ -1334,6 +1336,7 @@ namespace TOne.WhS.Sales.Business
 			public SaleEntityRoutingProductReadByRateBED RoutingProductReader { get; set; }
 			public SaleEntityZoneRateLocator CurrentRateLocator { get; set; }
 			public bool IncludeBlockedSuppliers { get; set; }
+			public IEnumerable<int> AdditionalCountryIds { get; set; }
 		}
 
 		private void SetNumberPrecisionValues(out int normalPrecisionValue, out int longPrecisionValue)

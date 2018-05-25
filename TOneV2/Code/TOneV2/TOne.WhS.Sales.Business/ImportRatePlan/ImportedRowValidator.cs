@@ -158,7 +158,7 @@ namespace TOne.WhS.Sales.Business
 		public Dictionary<string, SaleZone> SaleZonesByZoneName { get; set; }
 
 		public IEnumerable<InvalidImportedRow> InvalidImportedRows { get; set; }
-		}
+	}
 
 	public class CountryValidator : IImportedRowValidator
 	{
@@ -268,8 +268,11 @@ namespace TOne.WhS.Sales.Business
 						DateTime newCountryBED;
 						if (context.AdditionalCountryBEDsByCountryId.TryGetValue(context.ExistingZone.CountryId, out newCountryBED))
 						{
-							if (effectiveDateAsDateTime < newCountryBED)
-								context.AdditionalCountryBEDsByCountryId[context.ExistingZone.CountryId] = effectiveDateAsDateTime;
+							if (effectiveDateAsDateTime != newCountryBED)
+							{
+								context.ErrorMessage = string.Format("Country '{0}' is sold to the Customer on '{1}' which is different than the zone effective date '{2}'", context.ExistingZone.CountryId, UtilitiesManager.GetDateTimeAsString(newCountryBED), UtilitiesManager.GetDateTimeAsString(effectiveDateAsDateTime));
+								return false;
+							}
 						}
 						else
 						{
