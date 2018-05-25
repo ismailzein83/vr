@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Vanrise.Caching;
@@ -68,11 +69,10 @@ namespace Vanrise.GenericData.Business
 
                 if (dataRecordStorage.Settings.EnableUseCaching)
                 {
-                    var orderedData = GetDataRecordsFinalResult(recordType, input, (id, cloneInput) =>
-                    {
-                        return GetCachedDataRecords(id);
-                    });
-
+                    if (input.Query.DataRecordStorageIds.Count > 1)
+                        throw new Exception("Only one DataRecordStorage is supported in Cache Mode");
+                    var allDataRecords = GetCachedDataRecords(dataRecordStorage.DataRecordStorageId);
+                    var dataRecords = GetTopOrderedResults(allDataRecords, input);
                     RecordFilterManager recordFilterManager = new RecordFilterManager();
 
                     Func<DataRecord, bool> filterExpression = (dataRecord) =>
@@ -87,7 +87,7 @@ namespace Vanrise.GenericData.Business
                         return true;
                     };
 
-                    var dataRecordBigResult = AllRecordsToBigResult(input, orderedData.FindAllRecords(filterExpression), recordType);
+                    var dataRecordBigResult = AllRecordsToBigResult(input, dataRecords.FindAllRecords(filterExpression), recordType);
 
                     var handler = new ResultProcessingHandler<DataRecordDetail>()
                     {
@@ -575,7 +575,7 @@ namespace Vanrise.GenericData.Business
         #endregion
 
         #region Private Methods Data Record
-        private IEnumerable<DataRecord> GetCachedDataRecords(Guid dataRecordStorageId)
+        private List<DataRecord> GetCachedDataRecords(Guid dataRecordStorageId)
         {
             return CacheManagerFactory.GetCacheManager<RecordCacheManager>().GetOrCreateObject("GetCachedDataRecords", dataRecordStorageId,
                 () =>
@@ -590,7 +590,23 @@ namespace Vanrise.GenericData.Business
                     dataRecordTypeFields.ThrowIfNull("dataRecordTypeFields", dataRecordStorage.DataRecordTypeId);
 
                     var columns = dataRecordTypeFields.FindAllRecords(itm => itm.Formula == null).Select(x => x.Name).ToList();
-                    return dataManager.GetAllDataRecords(columns);
+
+                    var formulaColumns = dataRecordTypeFields.FindAllRecords(itm => itm.Formula != null).Select(fld => fld.Name).ToList();
+
+                    var dataRecords = dataManager.GetAllDataRecords(columns);
+                    
+                    if(formulaColumns.Count > 0)
+                    {
+                        foreach(var dataRecord in dataRecords)
+                        {
+                            var dataRecordObject = new DataRecordObject(dataRecordStorage.DataRecordTypeId, dataRecord.FieldValues);
+                            foreach(var formulaColumn in formulaColumns)
+                            {
+                                dataRecord.FieldValues.Add(formulaColumn, dataRecordObject.GetFieldValue(formulaColumn));
+                            }
+                        }
+                    }
+                    return dataRecords;
                 });
         }
 
@@ -878,12 +894,20 @@ namespace Vanrise.GenericData.Business
         {
 
             DataRecordStorageManager dataRecordStorageManager = new DataRecordStorageManager();
-            object _updateHandle;
+           
+
+            ConcurrentDictionary<Guid, Object> _updateHandlesByDataStorage = new ConcurrentDictionary<Guid, Object>();
 
             protected override bool ShouldSetCacheExpired(Guid dataRecordStorageId)
             {
-                var _dataManager = dataRecordStorageManager.GetStorageDataManager(dataRecordStorageId);
-                return _dataManager.AreDataRecordsUpdated(ref _updateHandle);
+                Object updateHandle;
+
+                _updateHandlesByDataStorage.TryGetValue(dataRecordStorageId, out updateHandle);
+                var dataManager = dataRecordStorageManager.GetStorageDataManager(dataRecordStorageId);
+                bool isCacheExpired = dataManager.AreDataRecordsUpdated(ref updateHandle);
+                _updateHandlesByDataStorage.AddOrUpdate(dataRecordStorageId, updateHandle, (key, existingHandle) => updateHandle);
+
+                return isCacheExpired;
             }
         }
         #endregion
