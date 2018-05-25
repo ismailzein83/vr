@@ -124,7 +124,6 @@
     <Build Include="Security\queue.sql" />
     <Build Include="Security\bp.sql" />
     <Build Include="queue\User Defined Types\IDIntType.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPInstance_GetByID.sql" />
     <Build Include="bp\User Defined Types\IDIntType.sql" />
     <Build Include="bp\User Defined Types\IDBigIntType.sql" />
     <Build Include="bp\Functions\ParseStringList.sql" />
@@ -197,7 +196,6 @@
     <Build Include="runtime\Stored Procedures\sp_TransactionLock_GetForNotRunningProcesses.sql" />
     <Build Include="runtime\Stored Procedures\sp_TransactionLock_GetAll.sql" />
     <Build Include="runtime\Stored Procedures\sp_TransactionLock_Delete.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPInstance_GetFiltered.sql" />
     <Build Include="VRNotification\Stored Procedures\sp_VRNotifications_GetUpdated.sql" />
     <Build Include="VRNotification\Stored Procedures\sp_VRNotifications_GetBeforeID.sql" />
     <Build Include="runtime\Stored Procedures\sp_SchedulerTaskState_RunSchedulerTask.sql" />
@@ -212,7 +210,6 @@
     <Build Include="queue\Stored Procedures\sp_HoldRequest_Insert.sql" />
     <Build Include="queue\Stored Procedures\sp_HoldRequest_GetAll.sql" />
     <Build Include="queue\Stored Procedures\sp_HoldRequest_Delete.sql" />
-    <Build Include="bp\Stored Procedures\sp_BPInstance_GetAfterID.sql" />
     <Build Include="bp\Stored Procedures\sp_BPTask_CancelNotCompleted.sql" />
     <Build Include="bp\Tables\BPInstancePersistence.sql" />
     <Build Include="integration\Stored Procedures\sp_DataSourceState_Update.sql" />
@@ -239,6 +236,7 @@
     <Build Include="runtime\Stored Procedures\sp_RuntimeServiceInstance_DeleteByProcess.sql" />
     <Build Include="runtime\Stored Procedures\sp_RuntimeNodeState_GetAll.sql" />
     <Build Include="runtime\Stored Procedures\sp_RunningProcess_GetFiltered.sql" />
+    <Build Include="bp\Tables\BPInstance_Archived.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="BusinessProcess.PostDeployment.sql" />
