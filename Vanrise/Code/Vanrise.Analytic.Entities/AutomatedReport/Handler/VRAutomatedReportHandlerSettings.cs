@@ -15,8 +15,8 @@ namespace Vanrise.Analytic.Entities
 
     public interface IVRAutomatedReportHandlerExecuteContext
     {
-        VRAutomatedReportResolvedDataList GetDataList(string queryName, string listName);
+        VRAutomatedReportResolvedDataList GetDataList(Guid vrAutomatedReportQueryId, string listName);
 
-        VRAutomatedReportResolvedDataFieldValue GetDataField(string queryName, string fieldName);
+        VRAutomatedReportResolvedDataFieldValue GetDataField(Guid vrAutomatedReportQueryId, string fieldName);
     }
 }

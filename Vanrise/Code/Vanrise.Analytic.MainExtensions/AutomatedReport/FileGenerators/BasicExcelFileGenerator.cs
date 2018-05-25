@@ -14,7 +14,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             get { return new Guid("7134E751-BFE1-4118-A7E5-AFE32F52B199"); }
         }
 
-        public string QueryName { get; set; }
+        public Guid VRAutomatedReportQueryId { get; set; }
 
         public string ListName { get; set; }
 

@@ -25,8 +25,8 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
             {
                 foreach (var tableDef in this.TableDefinitions)
                 {
-                    var dataList = context.HandlerContext.GetDataList(tableDef.QueryName, tableDef.ListName);
-                    string dataListIdentifier = string.Format("{0}_{1}", tableDef.QueryName, tableDef.ListName);
+                    var dataList = context.HandlerContext.GetDataList(tableDef.VRAutomatedReportQueryId, tableDef.ListName);
+                    string dataListIdentifier = string.Format("{0}_{1}", tableDef.VRAutomatedReportQueryId, tableDef.ListName);
                     dataList.ThrowIfNull("dataList", dataListIdentifier);
                     dataList.Items.ThrowIfNull("dataList.Items", dataListIdentifier);
 
@@ -42,7 +42,7 @@ namespace Vanrise.Analytic.MainExtensions.AutomatedReport.FileGenerators
 
     public class AdvancedExcelFileGeneratorTableDefinition
     {
-        public string QueryName { get; set; }
+        public Guid VRAutomatedReportQueryId { get; set; }
 
         public string ListName { get; set; }
 
