@@ -31,7 +31,7 @@ namespace Retail.Runtime.Tasks
             //GenerateRuntimeNodeConfiguration();
             //TestAppDomain();
             //Console.ReadKey();
-            TestRDBSelectQuery();
+            //TestRDBSelectQuery();
             //var analyticTableMeasureExternalSource =
             //    new Vanrise.Analytic.Entities.AnalyticMeasureExternalSourceConfig
             //    {

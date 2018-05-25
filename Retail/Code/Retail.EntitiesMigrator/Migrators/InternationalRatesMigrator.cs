@@ -32,12 +32,12 @@ namespace Retail.EntitiesMigrator.Migrators
             IEnumerable<InternationalRate> internationalRates = dataManager.GetInternationalRates();
 
 
-            List<GenericRule> tariffRules = new List<GenericRule>();
+            //List<GenericRule> tariffRules = new List<GenericRule>();
             List<GenericRule> rateRules = new List<GenericRule>();
 
             //var defaultRateRule = Helper.CreateRateValueRule(Helper.OnNetRuleDefinition, GetDefaultCriteriaFieldValues(), new RateDetails { Rate = 0 });
-            var defaultTariffRule = Helper.CreateTariffRule(Helper.IntlRuleDefinition, GetDefaultCriteriaFieldValues(), new RateDetails { FractionUnit = 60 });
-            tariffRules.Add(defaultTariffRule);
+            //var defaultTariffRule = Helper.CreateTariffRule(Helper.IntlRuleDefinition, GetDefaultCriteriaFieldValues(), new RateDetails { FractionUnit = 60 });
+            //tariffRules.Add(defaultTariffRule);
             //rateRules.Add(defaultRateRule);
             HashSet<long> addedZones = new HashSet<long>();
             foreach (InternationalRate internationalRate in internationalRates)
@@ -47,21 +47,21 @@ namespace Retail.EntitiesMigrator.Migrators
                 if (_Zones.TryGetValue(internationalRate.ZoneName, out saleZone) && !addedZones.Contains(saleZone.SaleZoneId))
                 {
                     addedZones.Add(saleZone.SaleZoneId);
-                    rateRules.Add(GetRateValueRuleDetails(saleZone.SaleZoneId, internationalRate.InternationalRateDetail));
-                    if (internationalRate.InternationalRateDetail.FractionUnit != 60)
-                        tariffRules.Add(GetTariffRuleDetails(saleZone.SaleZoneId, internationalRate.InternationalRateDetail));
+                    rateRules.Add(GetRateValueRuleDetails(saleZone.SaleZoneId, internationalRate.InternationalRateDetail, internationalRate.BED));
+                    //if (internationalRate.InternationalRateDetail.FractionUnit != 60)
+                    //    tariffRules.Add(GetTariffRuleDetails(saleZone.SaleZoneId, internationalRate.InternationalRateDetail));
                 }
 
 
             }
-            Helper.SaveTariffRules(tariffRules);
+            //Helper.SaveTariffRules(tariffRules);
             Helper.SaveRateValueRules(rateRules);
 
         }
 
-        private RateValueRule GetRateValueRuleDetails(long zoneId, RateDetails rateDetails)
+        private RateValueRule GetRateValueRuleDetails(long zoneId, RateDetails rateDetails, DateTime bed)
         {
-            return Helper.CreateRateValueRule(Helper.IntlRuleDefinition, GetCriteriaFieldsValues(zoneId), rateDetails);
+            return Helper.CreateRateValueRule(Helper.IntlRuleDefinition, GetCriteriaFieldsValues(zoneId), rateDetails, bed, null);
         }
         private TariffRule GetTariffRuleDetails(long zoneId, RateDetails rateDetails)
         {

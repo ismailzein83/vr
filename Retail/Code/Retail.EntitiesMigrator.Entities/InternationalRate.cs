@@ -11,6 +11,8 @@ namespace Retail.EntitiesMigrator.Entities
         public RateDetails InternationalRateDetail { get; set; }
         public string ZoneName { get; set; }
         public long SubscriberId { get; set; }
+
+        public DateTime BED { get; set; }
         public DateTime ActivationDate { get; set; }
     }
 

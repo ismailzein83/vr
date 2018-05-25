@@ -62,6 +62,7 @@ namespace Retail.EntitiesMigrator
         }
         private void btnImportIntlRates_Click(object sender, EventArgs e)
         {
+            Vanrise.Security.Entities.ContextFactory.GetContext().SetContextUserId(-1);
             btnImportIntlRates.Enabled = false;
             InternationalRatesMigrator migrator = new InternationalRatesMigrator(GetZones(), (int)numInternationalChargingPolicy.Value);
             migrator.MigrateInternationalRates();
@@ -135,7 +136,14 @@ namespace Retail.EntitiesMigrator
         Dictionary<string, SaleZone> GetZones()
         {
             SaleZoneManager manager = new SaleZoneManager();
-            return manager.GetSaleZonesEffectiveAfter(Helper.NumberPlanId, DateTime.Now).ToDictionary(z => z.Name, z => z);
+            IEnumerable<SaleZone> zones = manager.GetSaleZonesEffectiveAfter(Helper.NumberPlanId, DateTime.Now);
+            Dictionary<string, SaleZone> zoneDic = new Dictionary<string, SaleZone>();
+            foreach(var z in zones.OrderByDescending(itm => itm.BED))
+            {
+                if (!zoneDic.ContainsKey(z.Name))
+                    zoneDic.Add(z.Name, z);
+            }
+            return zoneDic;
         }
         private List<RuleDefinitionDetails> GetIncomingRuleDefinitions(int onNetPolicy, int offNetPolicy, int mobilePolicy, int internationalPolicy)
         {
