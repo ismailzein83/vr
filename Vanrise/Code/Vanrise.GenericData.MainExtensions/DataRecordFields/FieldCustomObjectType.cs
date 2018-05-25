@@ -80,7 +80,7 @@ namespace Vanrise.GenericData.MainExtensions.DataRecordFields
 
         public override Vanrise.Entities.GridColumnAttribute GetGridColumnAttribute(FieldTypeGetGridColumnAttributeContext context)
         {
-            throw new NotImplementedException();
+            return new Vanrise.Entities.GridColumnAttribute() { Type = "Text", NumberPrecision = "NoDecimal", Field = context != null ? context.DescriptionFieldPath : null };
         }
 
         public override RecordFilter ConvertToRecordFilter(string fieldName, List<object> filterValues)

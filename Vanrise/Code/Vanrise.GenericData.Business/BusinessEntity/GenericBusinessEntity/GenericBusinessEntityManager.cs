@@ -196,6 +196,35 @@ namespace Vanrise.GenericData.Business
             return null;
         }
 
+        public List<GenericBusinessEntity> GetAllGenericBusinessEntities(Guid businessEntityDefinitionId)
+        {
+            var genericBEDefinitionSetting = _genericBEDefinitionManager.GetGenericBEDefinitionSettings(businessEntityDefinitionId);
+            genericBEDefinitionSetting.ThrowIfNull("genericBEDefinitionSetting", businessEntityDefinitionId);
+
+            var dataRecords = _dataRecordStorageManager.GetAllDataRecords(genericBEDefinitionSetting.DataRecordStorageId);
+            List<GenericBusinessEntity> results = new List<GenericBusinessEntity>();
+
+            if (dataRecords != null)
+            {
+                foreach (var storageRecord in dataRecords)
+                {
+                    GenericBusinessEntity genericBusinessEntity = new GenericBusinessEntity();
+                    if (storageRecord.FieldValues != null)
+                    {
+                        genericBusinessEntity.FieldValues = new Dictionary<string, object>();
+
+                        foreach (var fieldValue in storageRecord.FieldValues)
+                        {
+                            genericBusinessEntity.FieldValues.Add(fieldValue.Key, fieldValue.Value);
+                        }
+                    }
+                    results.Add(genericBusinessEntity);
+                }
+            }
+
+            return results;
+        }
+
         public IDataRetrievalResult<GenericBusinessEntityDetail> GetFilteredGenericBusinessEntities(DataRetrievalInput<GenericBusinessEntityQuery> input)
         {
 

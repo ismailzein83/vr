@@ -101,6 +101,14 @@ namespace Vanrise.GenericData.Business
                 }
             }
         }
+        public List<DataRecord> GetAllDataRecords(Guid dataRecordStorageId)
+        {
+            var dataRecordStorage = GetDataRecordStorage(dataRecordStorageId);
+            dataRecordStorage.ThrowIfNull("dataRecordStorage",dataRecordStorageId);
+            if (!dataRecordStorage.Settings.EnableUseCaching)
+                throw new NotSupportedException("This method only available for cached record storages");
+            return GetCachedDataRecords(dataRecordStorageId);
+        }
 
         public IEnumerable<DataRecord> GetDataRecordsFinalResult(DataRecordType recordType, DataRetrievalInput<DataRecordQuery> input, Func<Guid, DataRetrievalInput<DataRecordQuery>, IEnumerable<DataRecord>> retrieveDataRecordFunction)
         {
