@@ -38,7 +38,7 @@ namespace Retail.Interconnect.Business
 
         public override void GenerateInvoice(IInvoiceGenerationContext context)
         {
-            List<string> listMeasures = new List<string> { "TotalBillingDuration", "Amount", "CountCDRs", "BillingPeriodTo", "BillingPeriodFrom", };
+            List<string> listMeasures = new List<string> { "TotalBillingDuration", "Amount", "CountCDRs", "BillingPeriodTo", "BillingPeriodFrom", "Amount_OrigCurr" };
             List<string> listDimensions = new List<string> { "DestinationZone", "OriginationZone", "Operator", "Rate", "RateType", "BillingType", "Currency" };
 
             FinancialAccountData financialAccountData = _financialAccountManager.GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
@@ -151,6 +151,7 @@ namespace Retail.Interconnect.Business
                             NumberOfCalls = item.InvoiceMeasures.NumberOfCalls,
                             FromDate = item.InvoiceMeasures.FromDate,
                             ToDate = item.InvoiceMeasures.ToDate,
+                            OriginalAmount = item.InvoiceMeasures.Amount_OrigCurr,
                         };
                         generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
                         {
@@ -225,6 +226,7 @@ namespace Retail.Interconnect.Business
                     MeasureValue countCDRs = GetMeasureValue(analyticRecord, "CountCDRs");
                     MeasureValue billingPeriodTo = GetMeasureValue(analyticRecord, "BillingPeriodTo");
                     MeasureValue billingPeriodFrom = GetMeasureValue(analyticRecord, "BillingPeriodFrom");
+                    MeasureValue amount_OrigCurr = GetMeasureValue(analyticRecord, "Amount_OrigCurr");
 
                     #endregion
 
@@ -247,6 +249,7 @@ namespace Retail.Interconnect.Business
                                 ToDate = billingPeriodTo != null ? Convert.ToDateTime(billingPeriodTo.Value) : default(DateTime),
                                 TotalBillingDuration = Convert.ToDecimal(totalBillingDuration.Value ?? 0.0),
                                 Amount = amountValue,
+                                Amount_OrigCurr = Convert.ToDecimal(amount_OrigCurr == null ? 0.0 : amount_OrigCurr.Value ?? 0.0),
                                 NumberOfCalls = Convert.ToInt32(countCDRs.Value ?? 00),
                             }
                         };
@@ -281,6 +284,7 @@ namespace Retail.Interconnect.Business
             public DateTime ToDate { get; set; }
             public Decimal TotalBillingDuration { get; set; }
             public decimal Amount { get; set; }
+            public decimal Amount_OrigCurr { get; set; }
             public int NumberOfCalls { get; set; }
         }
         public class InvoiceBillingRecord
