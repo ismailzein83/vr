@@ -404,7 +404,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>Number of Calls</Value>
+                              <Value>Calls</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontWeight>Bold</FontWeight>
@@ -721,7 +721,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=Fields!Duration.Value</Value>
+                              <Value>=FormatNumber(Fields!Duration.Value, Parameters!NormalPrecisionValue.Value)</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
@@ -1128,7 +1128,7 @@
                         <Paragraph>
                           <TextRuns>
                             <TextRun>
-                              <Value>=FormatNumber(Parameters!NumberOfCalls.Value, Parameters!NormalPrecisionValue.Value)</Value>
+                              <Value>=Parameters!NumberOfCalls.Value</Value>
                               <Style>
                                 <FontFamily>Verdana</FontFamily>
                                 <FontSize>8pt</FontSize>
