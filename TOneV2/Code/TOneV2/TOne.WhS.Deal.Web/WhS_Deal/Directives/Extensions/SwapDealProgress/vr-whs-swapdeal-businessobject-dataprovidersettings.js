@@ -1,6 +1,6 @@
 ﻿"use strict";
-app.directive("vrWhsSwapdealBusinessobjectDataprovidersettings", ["UtilsService", "VRNotificationService", "VRUIUtilsService",
-function (UtilsService, VRNotificationService, VRUIUtilsService) {
+app.directive("vrWhsSwapdealBusinessobjectDataprovidersettings", [
+function () {
     var directiveDefinitionObject = {
         restrict: "E",
         scope: {
@@ -13,7 +13,7 @@ function (UtilsService, VRNotificationService, VRUIUtilsService) {
         },
         controllerAs: "ctrl",
         bindToController: true,
-        templateUrl: '/Client/Modules/WhS_Deal/Directives/Extensions/SwapDealAnalysis/Outbound/SwapDealProgress/Templates/SwapDealBusinessObjectDataProviderSettingsTemplate.html'
+        templateUrl: '/Client/Modules/WhS_Deal/Directives/Extensions/SwapDealProgress/Templates/SwapDealBusinessObjectDataProviderSettingsTemplate.html'
     };
 
 

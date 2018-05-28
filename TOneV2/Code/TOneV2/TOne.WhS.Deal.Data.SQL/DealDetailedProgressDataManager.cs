@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using TOne.WhS.Deal.Entities;
 using Vanrise.Data.SQL;
 
@@ -20,6 +21,15 @@ namespace TOne.WhS.Deal.Data.SQL
         #endregion
 
         #region Public Methods
+
+        public List<DealDetailedProgress> GetDealsDetailedProgress(List<int> dealIds, DateTime fromDate, DateTime toDate)
+        {
+            string dealIdsParameter = null;
+            if (dealIds != null && dealIds.Any())
+                dealIdsParameter = string.Join(",", dealIds);
+
+            return GetItemsSP("[TOneWhS_Deal].[sp_DealDetailedProgress_GetByDealId]", DealDetailedProgressMapper, dealIdsParameter, fromDate, toDate);
+        }
 
         public List<DealDetailedProgress> GetDealDetailedProgresses(HashSet<DealZoneGroup> dealZoneGroups, bool isSale, DateTime? beginDate, DateTime? endDate)
         {

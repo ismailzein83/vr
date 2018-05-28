@@ -12,7 +12,7 @@ namespace TOne.WhS.Deal.Business
     public class VolCommitmentDealManager : BaseDealManager
     {
         #region Public Methods
-        
+
         public Vanrise.Entities.IDataRetrievalResult<DealDefinitionDetail> GetFilteredVolCommitmentDeals(Vanrise.Entities.DataRetrievalInput<VolCommitmentDealQuery> input)
         {
             var cachedEntities = this.GetCachedVolCommitmentDeals();
@@ -83,10 +83,10 @@ namespace TOne.WhS.Deal.Business
                 };
 
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Id" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description", Width = 40});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Description", Width = 40 });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Type" });
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Carrier", Width = 25});
-                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date});
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Carrier", Width = 25 });
+                sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "BED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "EED", CellType = ExcelCellType.DateTime, DateTimeType = DateTimeType.Date });
                 sheet.Header.Cells.Add(new ExportExcelHeaderCell { Title = "Effective" });
 
@@ -101,7 +101,7 @@ namespace TOne.WhS.Deal.Business
                             sheet.Rows.Add(row);
                             if (record.Entity != null && record.Entity.Settings != null)
                             {
-                                var settings = (VolCommitmentDealSettings) record.Entity.Settings;
+                                var settings = (VolCommitmentDealSettings)record.Entity.Settings;
                                 row.Cells.Add(new ExportExcelCell { Value = record.Entity.DealId });
                                 row.Cells.Add(new ExportExcelCell { Value = record.Entity.Name });
                                 row.Cells.Add(new ExportExcelCell { Value = Vanrise.Common.Utilities.GetEnumDescription(settings.DealType) });
@@ -116,7 +116,7 @@ namespace TOne.WhS.Deal.Business
                 context.MainSheet = sheet;
             }
         }
-      
+
         private class VolCommitmentDealLoggableEntity : BaseDealLoggableEntity
         {
             public static VolCommitmentDealLoggableEntity Instance = new VolCommitmentDealLoggableEntity();
@@ -145,6 +145,49 @@ namespace TOne.WhS.Deal.Business
                 return s_volCommitmentDealManager.GetDealName(dealDefinition);
             }
         }
+        #endregion
+
+        #region IBusinessEntityManager
+        public override List<dynamic> GetAllEntities(Vanrise.GenericData.Entities.IBusinessEntityGetAllContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override dynamic GetEntity(Vanrise.GenericData.Entities.IBusinessEntityGetByIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string GetEntityDescription(Vanrise.GenericData.Entities.IBusinessEntityDescriptionContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override dynamic GetEntityId(Vanrise.GenericData.Entities.IBusinessEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IEnumerable<dynamic> GetIdsByParentEntityId(Vanrise.GenericData.Entities.IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override dynamic GetParentEntityId(Vanrise.GenericData.Entities.IBusinessEntityGetParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool IsCacheExpired(Vanrise.GenericData.Entities.IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override dynamic MapEntityToInfo(Vanrise.GenericData.Entities.IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
+        }
+
         #endregion
     }
 }

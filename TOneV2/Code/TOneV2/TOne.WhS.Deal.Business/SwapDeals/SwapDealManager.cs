@@ -42,6 +42,12 @@ namespace TOne.WhS.Deal.Business
             };
         }
 
+        public IEnumerable<DealDefinition> GetSwapDealsEffectiveAfterDate(DateTime effectiveAfter)
+        {
+            var deals = GetCachedSwapDeals();
+            return deals.Where(deal => deal.Settings.Status != DealStatus.Draft
+                                       && deal.Settings.BeginDate >= effectiveAfter);
+        }
         public Vanrise.Entities.IDataRetrievalResult<DealDefinitionDetail> GetFilteredSwapDeals(Vanrise.Entities.DataRetrievalInput<SwapDealQuery> input)
         {
             var cachedEntities = this.GetCachedSwapDeals();
@@ -113,9 +119,16 @@ namespace TOne.WhS.Deal.Business
 
         protected IEnumerable<DealDefinition> GetCachedSwapDeals()
         {
-            return GetCachedDealsByConfigId().GetRecord(SwapDealSettings.SwapDealSettingsConfigId); ;
+            return GetCachedDealsByConfigId().GetRecord(SwapDealSettings.SwapDealSettingsConfigId);
         }
 
+        protected DealDefinition GetDeal(long dealId)
+        {
+            var deals = GetCachedSwapDeals();
+            if (deals != null && deals.Any())
+                return deals.FirstOrDefault(d => d.DealId == dealId);
+            return null;
+        }
         #endregion
 
         #region Private Classes
@@ -204,6 +217,55 @@ namespace TOne.WhS.Deal.Business
             }
         }
 
+        #endregion
+
+
+        #region IBusinessEntityManager
+        public override List<dynamic> GetAllEntities(Vanrise.GenericData.Entities.IBusinessEntityGetAllContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override dynamic GetEntity(Vanrise.GenericData.Entities.IBusinessEntityGetByIdContext context)
+        {
+            long dealId = Convert.ToInt32(context.EntityId);
+            return GetDeal(dealId);
+        }
+
+        public override string GetEntityDescription(Vanrise.GenericData.Entities.IBusinessEntityDescriptionContext context)
+        {
+            long dealId = Convert.ToInt32(context.EntityId);
+            DealDefinition deal = GetDeal(dealId);
+            if (deal != null)
+                return deal.Name;
+            return null;
+        }
+
+        public override dynamic GetEntityId(Vanrise.GenericData.Entities.IBusinessEntityIdContext context)
+        {
+            var deal = context.Entity as DealDefinition;
+            return deal.DealId;
+        }
+
+        public override IEnumerable<dynamic> GetIdsByParentEntityId(Vanrise.GenericData.Entities.IBusinessEntityGetIdsByParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override dynamic GetParentEntityId(Vanrise.GenericData.Entities.IBusinessEntityGetParentEntityIdContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool IsCacheExpired(Vanrise.GenericData.Entities.IBusinessEntityIsCacheExpiredContext context, ref DateTime? lastCheckTime)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override dynamic MapEntityToInfo(Vanrise.GenericData.Entities.IBusinessEntityMapToInfoContext context)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
     }
 }

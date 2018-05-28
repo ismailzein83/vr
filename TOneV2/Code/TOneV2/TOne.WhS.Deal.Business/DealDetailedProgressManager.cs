@@ -27,6 +27,11 @@ namespace TOne.WhS.Deal.Business
 
         #region Public Methods
 
+        public IEnumerable<DealDetailedProgress> GetDealsDetailedProgress(List<int> dealIds, DateTime fromDate, DateTime ToDate)
+        {
+            var dealDetailedProgressDataManager = DealDataManagerFactory.GetDataManager<IDealDetailedProgressDataManager>();
+            return dealDetailedProgressDataManager.GetDealsDetailedProgress(dealIds, fromDate, ToDate);
+        }
         public Dictionary<DealDetailedZoneGroupTier, DealDetailedProgress> GetDealDetailedProgresses(HashSet<DealZoneGroup> dealZoneGroups, bool isSale, DateTime? beginDate = null, DateTime? endDate = null)
         {
             if (dealZoneGroups == null)

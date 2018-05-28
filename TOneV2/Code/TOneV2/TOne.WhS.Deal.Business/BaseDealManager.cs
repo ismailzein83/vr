@@ -7,13 +7,13 @@ using Vanrise.Entities;
 using TOne.WhS.Deal.Entities;
 using TOne.WhS.Deal.Data;
 using Vanrise.Caching;
-using TOne.WhS.Deal.Business;
 using TOne.WhS.BusinessEntity.Entities;
 using TOne.WhS.BusinessEntity.Business;
+using Vanrise.GenericData.Entities;
 
 namespace TOne.WhS.Deal.Business
 {
-    public abstract class BaseDealManager
+    public abstract class BaseDealManager : BaseBusinessEntityManager
     {
         #region Public Methods
         public DealDefinition GetDeal(int dealId)
