@@ -38,7 +38,7 @@ namespace Retail.Interconnect.Business
 
         public override void GenerateInvoice(IInvoiceGenerationContext context)
         {
-            List<string> listMeasures = new List<string> { "TotalBillingDuration", "Amount"};
+            List<string> listMeasures = new List<string> { "TotalBillingDuration", "Amount","CountCDRs"};
             List<string> listDimensions = new List<string> { "DestinationZone", "OriginationZone", "Operator", "Rate", "RateType", "BillingType", "Currency" };
 
             FinancialAccountData financialAccountData = _financialAccountManager.GetFinancialAccountData(_acountBEDefinitionId, context.PartnerId);
@@ -111,6 +111,7 @@ namespace Retail.Interconnect.Business
                             interconnectInvoiceDetails.Duration += invoiceBillingRecord.InvoiceMeasures.TotalBillingDuration;
                             interconnectInvoiceDetails.Amount += invoiceBillingRecord.InvoiceMeasures.Amount;
                             interconnectInvoiceDetails.InterconnectCurrencyId = invoiceBillingRecord.CurrencyId;
+                            interconnectInvoiceDetails.TotalNumberOfCalls += invoiceBillingRecord.InvoiceMeasures.NumberOfCalls;
                         }
                     };
                 }
@@ -147,6 +148,7 @@ namespace Retail.Interconnect.Business
                             RateTypeId = item.RateTypeId,
                             TrafficDirection = item.TrafficDirection,
                             CurrencyId = item.CurrencyId,
+                            NumberOfCalls = item.InvoiceMeasures.NumberOfCalls
                         };
                         generatedInvoiceItemSet.Items.Add(new GeneratedInvoiceItem
                         {
@@ -218,6 +220,9 @@ namespace Retail.Interconnect.Business
 
                     MeasureValue totalBillingDuration = GetMeasureValue(analyticRecord, "TotalBillingDuration");
                     MeasureValue amount = GetMeasureValue(analyticRecord, "Amount");
+                    MeasureValue countCDRs = GetMeasureValue(analyticRecord, "CountCDRs");
+
+
                     #endregion
 
                     var amountValue = Convert.ToDecimal(amount == null ? 0.0 : amount.Value ?? 0.0);
@@ -236,6 +241,7 @@ namespace Retail.Interconnect.Business
                             {
                                 TotalBillingDuration = Convert.ToDecimal(totalBillingDuration.Value ?? 0.0),
                                 Amount = amountValue,
+                                NumberOfCalls = Convert.ToInt32(countCDRs.Value ?? 00),
                             }
                         };
                         AddItemToDictionary(itemSetNamesDic, "GroupedByDestinationZone", invoiceBillingRecord);
@@ -267,6 +273,7 @@ namespace Retail.Interconnect.Business
         {
             public Decimal TotalBillingDuration { get; set; }
             public decimal Amount { get; set; }
+            public int NumberOfCalls { get; set; }
         }
         public class InvoiceBillingRecord
         {

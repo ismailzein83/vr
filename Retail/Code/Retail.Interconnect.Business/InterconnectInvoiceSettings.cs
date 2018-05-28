@@ -26,10 +26,10 @@ namespace Retail.Interconnect.Business
             switch (context.InfoType)
             {
                 case "MailTemplate":
-                    long accountId = Convert.ToInt32(context.Invoice.PartnerId);
+                    long accountId = Convert.ToInt32(financialAccountData.Account.AccountId);
                     var account = accountBEManager.GetAccount(this.AccountBEDefinitionId, accountId);
                     Dictionary<string, dynamic> objects = new Dictionary<string, dynamic>();
-                    objects.Add("Account", account);
+                    objects.Add("Operator", account);
                     objects.Add("Invoice", context.Invoice);
                     return objects;
                 case "BankDetails":

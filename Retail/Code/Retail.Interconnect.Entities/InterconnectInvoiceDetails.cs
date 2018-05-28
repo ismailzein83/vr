@@ -13,7 +13,7 @@ namespace Retail.Interconnect.Entities
         public decimal Duration { get; set; }
         public int InterconnectCurrencyId { get; set; }
         public string InterconnectCurrency { get; set; }
-
+        public int TotalNumberOfCalls { get; set; }
         public InterconnectInvoiceDetails() { }
         public IEnumerable<InterconnectInvoiceDetails> GetInterconnectInvoiceDetailsRDLCSchema()
         {
